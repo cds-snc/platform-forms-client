@@ -1,8 +1,6 @@
 import { GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { logMessage } from "./logger";
 import { sqsClient } from "./integration/awsServicesConnector";
-import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
-import { BatchGetCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 
 export enum AuditLogEvent {
   // Form Events
@@ -58,6 +56,8 @@ export enum AuditLogEvent {
   DeleteAPIKey = "DeleteAPIKey",
   IncreaseThrottlingRate = "IncreaseThrottlingRate",
   ResetThrottlingRate = "ResetThrottlingRate",
+  // Audi Log events
+  AuditLogsRead = "AuditLogsRead",
 }
 export type AuditLogEventStrings = keyof typeof AuditLogEvent;
 
@@ -66,8 +66,6 @@ export enum AuditSubjectType {
   ServiceAccount = "ServiceAccount",
   Form = "Form",
   Response = "Response",
-  DeliveryOption = "DeliveryOption",
-  SecurityAttribute = "SecurityAttribute",
   Privilege = "Privilege",
   Flag = "Flag",
   Setting = "Setting",
@@ -124,104 +122,4 @@ export const logEvent = async (
     // Ensure the audit event is not lost by sending to console
     logMessage.warn(`AuditLog:${auditLog}`);
   }
-};
-
-export const getEventsForUser = async (userId: string) => {
-  const request = new QueryCommand({
-    TableName: "AuditLogs",
-    IndexName: "UserByTime",
-    Limit: 100,
-    KeyConditionExpression: "UserID = :userId",
-    ExpressionAttributeValues: {
-      ":userId": userId,
-    },
-    ScanIndexForward: false,
-  });
-  const { Items: eventsIndex, Count: eventsIndexCount } = await dynamoDBDocumentClient.send(
-    request
-  );
-  if (eventsIndexCount === 0 || eventsIndex === undefined) {
-    return [];
-  }
-  const eventItems = await retrieveAuditLogs(eventsIndex);
-
-  return eventItems
-    .map((record) => {
-      return {
-        userId: record.UserID,
-        event: record.Event,
-        timestamp: record.TimeStamp,
-        description: record.Description,
-        subject: record.Subject,
-      };
-    })
-    .sort((a, b) => {
-      return b.timestamp - a.timestamp;
-    });
-};
-
-const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
-  let retries = 0;
-  const maxRetries = 3;
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-  const auditLogs: Array<{
-    UserID: string;
-    Event: string;
-    TimeStamp: number;
-    Description: string;
-    Subject: string;
-  }> = [];
-
-  const batchRequest = new BatchGetCommand({
-    RequestItems: {
-      AuditLogs: {
-        Keys: keys.map((event) => ({
-          UserID: event.UserID,
-          "Event#SubjectID#TimeStamp": event["Event#SubjectID#TimeStamp"],
-        })),
-      },
-    },
-  });
-
-  await dynamoDBDocumentClient.send(batchRequest).then(async (data) => {
-    auditLogs.push(
-      ...(data?.Responses?.AuditLogs?.map((item) => ({
-        UserID: item.UserID,
-        Event: item.Event,
-        TimeStamp: item.TimeStamp,
-        Description: item.Description,
-        Subject: item.Subject,
-      })) ?? [])
-    );
-
-    if (data.UnprocessedKeys?.AuditLogs) {
-      while (retries < maxRetries) {
-        // eslint-disable-next-line no-await-in-loop
-        await delay(200); // Wait for 200ms second before retrying
-        const retryRequest = new BatchGetCommand({
-          RequestItems: {
-            AuditLogs: {
-              Keys: data.UnprocessedKeys.AuditLogs.Keys,
-            },
-          },
-        });
-        // eslint-disable-next-line no-await-in-loop
-        const retryResponse = await dynamoDBDocumentClient.send(retryRequest);
-        auditLogs.push(
-          ...(retryResponse.Responses?.AuditLogs.map((item) => ({
-            UserID: item.UserID,
-            Event: item.Event,
-            TimeStamp: item.TimeStamp,
-            Description: item.Description,
-            Subject: item.Subject,
-          })) ?? [])
-        );
-        if (!retryResponse.UnprocessedKeys?.AuditLogs) {
-          break; // Exit the loop if there are no more unprocessed keys
-        }
-        retries++;
-      }
-    }
-  });
-  return auditLogs;
 };
