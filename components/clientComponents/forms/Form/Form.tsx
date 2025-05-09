@@ -303,7 +303,6 @@ export const Form = withFormik<FormProps, Responses>({
         } else if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
           formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
         } else if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
-          logMessage.info("Showing Captcha fail screen for failed Captcha verification");
           formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
           formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
         } else {
