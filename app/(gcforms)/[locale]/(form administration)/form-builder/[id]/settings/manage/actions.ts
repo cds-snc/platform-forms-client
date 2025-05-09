@@ -76,6 +76,8 @@ export const updateNotificationsInterval = AuthenticatedAction(
       updateNotificationsSetting(formId, notificationsInterval),
       // Remove old cache value to allow a new one with the new ttl to be created when the next submission is sent
       removeMarker(formId),
-    ]);
+    ]).catch((_) => {
+      return { error: "There was an error. Please try again later." } as ServerActionError;
+    });
   }
 );

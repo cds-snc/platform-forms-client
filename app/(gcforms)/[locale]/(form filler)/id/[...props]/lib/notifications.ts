@@ -51,6 +51,16 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
   }
 };
 
+export const validateNotificationsInterval = (notificationsInterval: NotificationsInterval) => {
+  let isValid = true;
+  Object.values(NotificationsInterval).forEach((interval) => {
+    if (notificationsInterval !== interval) {
+      isValid = false;
+    }
+  });
+  return isValid;
+};
+
 async function getUsersAndNotificationsInterval(formID: string): Promise<{
   notificationsInterval: number | null | undefined;
   users: { email: string }[];
@@ -221,11 +231,11 @@ ${t("settings.notifications.email.multipleSubmissions.paragraph1", { title: form
 
 [${t(
     "settings.notifications.email.multipleSubmissions.paragraph2"
-  )}](${HOST}/form-builder/${formId}/responses)
+  )}](${HOST}/form-builder/${formId}/settings/manage)
 
 [${t(
     "settings.notifications.email.multipleSubmissions.paragraph3"
-  )}](${HOST}/form-builder/${formId}/settings)
+  )}](${HOST}/form-builder/${formId}/settings/manage)
 
 ---
 
@@ -233,10 +243,10 @@ ${t_fr("settings.notifications.email.multipleSubmissions.paragraph1", { title: f
 
 [${t_fr(
     "settings.notifications.email.multipleSubmissions.paragraph2"
-  )}](${HOST}/form-builder/${formId}/responses)
+  )}](${HOST}/form-builder/${formId}/settings/manage)
 
 [${t_fr(
     "settings.notifications.email.multipleSubmissions.paragraph3"
-  )}](${HOST}/form-builder/${formId}/settings)
+  )}](${HOST}/form-builder/${formId}/settings/manage)
     `;
 };

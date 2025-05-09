@@ -71,7 +71,7 @@ export const Notifications = ({
       <Button
         dataTestId="form-notifications-save"
         theme="secondary"
-        onClick={() => saveNotificationsValue()}
+        onClick={saveNotificationsValue}
         disabled={disabled}
       >
         {t("settings.notifications.save")}

@@ -23,6 +23,7 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { NotificationsInterval } from "packages/types/src/form-types";
+import { validateNotificationsInterval } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/notifications";
 
 // ******************************************
 // Internal Module Functions
@@ -1478,7 +1479,7 @@ export const checkIfClosed = async (formId: string) => {
 
 export const updateNotificationsSetting = async (
   formId: string,
-  notificationsInterval: number | null
+  notificationsInterval: NotificationsInterval
 ) => {
   const { user } = await authorization.canEditForm(formId).catch((e) => {
     logEvent(
@@ -1490,10 +1491,7 @@ export const updateNotificationsSetting = async (
     throw e;
   });
 
-  if (
-    notificationsInterval !== null &&
-    (typeof notificationsInterval !== "number" || notificationsInterval < 0)
-  ) {
+  if (!validateNotificationsInterval(notificationsInterval)) {
     throw new Error(`Invalid notifications interval: ${notificationsInterval}`);
   }
 
