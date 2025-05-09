@@ -43,7 +43,7 @@ export const PanelBodyRoot = ({
   const isRepeatingSet = item.type === "dynamicRow";
 
   return (
-    <div className={cn(!isRepeatingSet && "mx-7 py-7")}>
+    <div className={cn(!isRepeatingSet && "mx-7 py-12")}>
       <PanelBody
         item={item}
         onQuestionChange={onQuestionChange}

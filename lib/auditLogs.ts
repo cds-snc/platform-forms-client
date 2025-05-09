@@ -55,6 +55,8 @@ export enum AuditLogEvent {
   DeleteAPIKey = "DeleteAPIKey",
   IncreaseThrottlingRate = "IncreaseThrottlingRate",
   ResetThrottlingRate = "ResetThrottlingRate",
+  // Audi Log events
+  AuditLogsRead = "AuditLogsRead",
 }
 export type AuditLogEventStrings = keyof typeof AuditLogEvent;
 
@@ -63,8 +65,6 @@ export enum AuditSubjectType {
   ServiceAccount = "ServiceAccount",
   Form = "Form",
   Response = "Response",
-  DeliveryOption = "DeliveryOption",
-  SecurityAttribute = "SecurityAttribute",
   Privilege = "Privilege",
   Flag = "Flag",
   Setting = "Setting",

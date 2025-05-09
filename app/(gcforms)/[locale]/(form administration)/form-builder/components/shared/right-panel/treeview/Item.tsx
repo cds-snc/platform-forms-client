@@ -138,6 +138,30 @@ export const Item = ({
                 isSectionElement && sectionElementClasses,
                 isFormElement && formElementClasses
               )}
+              {...(isLocked && {
+                onClick: () => {
+                  if (
+                    item.index === "intro" ||
+                    item.index === "policy" ||
+                    item.index === "end" ||
+                    item.index === "confirmation"
+                  ) {
+                    let index = item.index;
+                    if (index === "confirmation") {
+                      index = "end";
+                    }
+
+                    // add small delay to allow the click to be registered
+                    setTimeout(() => {
+                      const el = document.getElementById(index);
+                      if (el) {
+                        (el as HTMLDetailsElement).open = true;
+                        el.scrollIntoView({ behavior: "smooth", block: "center" });
+                      }
+                    }, 200);
+                  }
+                },
+              })}
               {...(allowRename && {
                 onDoubleClick: () => {
                   context.startRenamingItem();

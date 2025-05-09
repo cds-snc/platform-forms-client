@@ -52,11 +52,11 @@ const AddOptions = ({ index }: AddOptionsProps) => {
   );
 };
 
-type RenderIcon = (index: number) => ReactElement | string | undefined;
+type RenderIcon = ((index: number) => ReactElement | string) | undefined;
 
 interface OptionsProps {
   item: FormElementWithIndex;
-  renderIcon: RenderIcon;
+  renderIcon?: RenderIcon;
   formId: string;
 }
 
