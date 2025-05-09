@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.41.0](https://github.com/cds-snc/platform-forms-client/compare/v3.40.1...v3.41.0) (2025-05-09)
+
+
+### Features
+
+* User and Form Audit Logs ([#5516](https://github.com/cds-snc/platform-forms-client/issues/5516)) ([a895d81](https://github.com/cds-snc/platform-forms-client/commit/a895d8110112893ddef34369e9544ca50c8439e4))
+
+
+### Miscellaneous Chores
+
+* adds field to schema for notifications ([#5521](https://github.com/cds-snc/platform-forms-client/issues/5521)) ([98cf6c8](https://github.com/cds-snc/platform-forms-client/commit/98cf6c8c80f3afbafe3a6bf75380ab2f596494fb))
+* Update to Next 15.3.2 ([#5523](https://github.com/cds-snc/platform-forms-client/issues/5523)) ([4a850e9](https://github.com/cds-snc/platform-forms-client/commit/4a850e99bff3420f7f68f28a964c3690f8981689))
+
 ## [3.40.1](https://github.com/cds-snc/platform-forms-client/compare/v3.40.0...v3.40.1) (2025-05-08)
 
 
