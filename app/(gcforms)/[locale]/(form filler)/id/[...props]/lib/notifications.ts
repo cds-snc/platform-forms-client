@@ -111,13 +111,14 @@ export const removeMarker = async (formId: string) => {
     .catch((err) => logMessage.error(`removeMarker with ${formId} failed to delete ${err}`));
 };
 
+// Creates or updates an existing marker in Redis. Note to remove a marker, use removeMarker
 const setMarker = async (
   formId: string,
   notificationsInterval: NotificationsInterval,
   status: Status = Status.SINGLE_EMAIL_SENT
 ) => {
-  if (!notificationsInterval) {
-    logMessage.error(`setMarker missing notificationsInterval for formId ${formId}`);
+  if (!notificationsInterval || !validateNotificationsInterval(notificationsInterval)) {
+    logMessage.error(`setMarker has an invalid notificationsInterval for formId ${formId}`);
     return;
   }
   const ttl = notificationsInterval * 60; // convert from minutes to seconds
