@@ -1,10 +1,6 @@
 "use client";
 import React, { useCallback, useState, useEffect } from "react";
-import {
-  LocalizedFormProperties,
-  FormServerError,
-  FormServerErrorCodes,
-} from "@lib/types/form-builder-types";
+import { FormServerError, FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { Radio } from "@formBuilder/components/shared/MultipleChoice";
@@ -16,11 +12,7 @@ import {
   ClassificationType,
   ClassificationSelect,
 } from "@formBuilder/components/ClassificationSelect";
-import {
-  sendResponsesToVault,
-  updateTemplateSecurityAttribute,
-  updateTemplateFormPurpose,
-} from "@formBuilder/actions";
+import { updateTemplateSecurityAttribute, updateTemplateFormPurpose } from "@formBuilder/actions";
 import { useRefresh } from "@lib/hooks/useRefresh";
 
 import Markdown from "markdown-to-jsx";
@@ -60,26 +52,20 @@ export const ResponseDelivery = () => {
   const { Event } = useCustomEvent();
 
   const {
-    email,
     id,
-    resetDeliveryOption,
+    email,
+    formPurpose,
     updateField,
     securityAttribute,
     updateSecurityAttribute,
     isPublished,
-    formPurpose,
   } = useTemplateStore((s) => ({
     id: s.id,
     email: s.deliveryOption?.emailAddress,
-    subjectEn: s.deliveryOption?.emailSubjectEn,
-    subjectFr: s.deliveryOption?.emailSubjectFr,
-    defaultSubjectEn: s.form[s.localizeField(LocalizedFormProperties.TITLE, "en")] + " - Response",
-    defaultSubjectFr: s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
-    resetDeliveryOption: s.resetDeliveryOption,
     formPurpose: s.formPurpose,
     updateField: s.updateField,
-    updateSecurityAttribute: s.updateSecurityAttribute,
     securityAttribute: s.securityAttribute,
+    updateSecurityAttribute: s.updateSecurityAttribute,
     isPublished: s.isPublished,
   }));
 
@@ -88,6 +74,7 @@ export const ResponseDelivery = () => {
   );
 
   const protectedBSelected = classification === "Protected B";
+
   const emailLabel = protectedBSelected ? (
     <>
       <span className="block">{t("formSettingsModal.emailOption.label")}</span>
@@ -110,39 +97,20 @@ export const ResponseDelivery = () => {
   const [deliveryOptionValue, setDeliveryOptionValue] = useState(
     initialDeliveryOption as DeliveryOption
   );
+
   const [purposeOption, setPurposeOption] = useState(formPurpose as PurposeOption);
-
-  /*--------------------------------------------*
-   * Set as Database Storage
-   *--------------------------------------------*/
-  const setToDatabaseDelivery = useCallback(async () => {
-    const result = await sendResponsesToVault({
-      id: id,
-    });
-
-    if (!result.error) {
-      // Update the template store
-      resetDeliveryOption();
-      updateSecurityAttribute(classification);
-    }
-
-    return result;
-  }, [id, resetDeliveryOption, classification, updateSecurityAttribute]);
 
   /*--------------------------------------------*
    * Save Delivery Option
    *--------------------------------------------*/
   const saveDeliveryOptions = useCallback(async () => {
-    const resultDelivery = (await setToDatabaseDelivery()) as FormServerError;
-    if (resultDelivery?.error) {
-      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
-      return;
-    }
+    updateSecurityAttribute(classification);
 
     const resultAttribute = (await updateTemplateSecurityAttribute({
       id,
       securityAttribute: classification,
     })) as FormServerError;
+
     if (resultAttribute?.error) {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
       return;
@@ -151,7 +119,7 @@ export const ResponseDelivery = () => {
     toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
     refreshData && refreshData();
-  }, [t, refreshData, id, classification, setToDatabaseDelivery]);
+  }, [t, refreshData, id, classification, updateSecurityAttribute]);
 
   /*--------------------------------------------*
    * Save form purpose option
