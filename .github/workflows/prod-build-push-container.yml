@@ -44,7 +44,7 @@ jobs:
 
       - name: Login to Production Amazon ECR
         id: login-ecr-production
-        uses: aws-actions/amazon-ecr-login@2888f7af7b6a0fd9d214b4e4dee805e79f4ac0e6
+        uses: aws-actions/amazon-ecr-login@41024dce940db1142d80e2cc57337506aed01562
 
       - name: Tag Images for Production
         env:
