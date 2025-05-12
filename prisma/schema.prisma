@@ -42,27 +42,28 @@ model Session {
 }
 
 model Template {
-  id                String          @id @default(cuid())
-  created_at        DateTime        @default(now()) @db.Timestamptz(6)
-  updated_at        DateTime        @updatedAt @db.Timestamptz(6)
-  name              String          @default("")
-  jsonConfig        Json
-  isPublished       Boolean         @default(false)
-  formPurpose       String          @default("")
-  publishReason     String          @default("")
-  publishFormType   String          @default("")
-  publishDesc       String          @default("")
-  deliveryOption    DeliveryOption?
-  apiServiceAccount ApiServiceAccount?
-  securityAttribute String          @default("Protected A")
+  id                    String          @id @default(cuid())
+  created_at            DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime        @updatedAt @db.Timestamptz(6)
+  name                  String          @default("")
+  jsonConfig            Json
+  isPublished           Boolean         @default(false)
+  formPurpose           String          @default("")
+  publishReason         String          @default("")
+  publishFormType       String          @default("")
+  publishDesc           String          @default("")
+  deliveryOption        DeliveryOption?
+  apiServiceAccount     ApiServiceAccount?
+  securityAttribute     String          @default("Protected A")
   // @todo  Need to remove this field
-  bearerToken       String?
-  ttl               DateTime?
-  users             User[]
-  closingDate       DateTime?       @db.Timestamptz(6)
-  closedDetails     Json?
-  saveAndResume     Boolean         @default(true)
-  invitations       Invitation[]
+  bearerToken           String?
+  ttl                   DateTime?
+  users                 User[]
+  closingDate           DateTime?       @db.Timestamptz(6)
+  closedDetails         Json?
+  saveAndResume         Boolean         @default(true)
+  invitations           Invitation[]
+  notificationsInterval Int?            @default(1440)
 }
 
 model DeliveryOption {
