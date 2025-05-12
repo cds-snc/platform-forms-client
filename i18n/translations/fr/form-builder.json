@@ -512,12 +512,12 @@
     },
     "questionId": {
       "title": "Identifiant de la question",
-      "description": "Valeur unique permettant de se référer de manière cohérente à un élément de formulaire afin qu'ils puissent correspondre entre les versions de formulaires republiées, les structures de données et les systèmes.",
+      "description": "Vous pouvez définir une valeur unique permettant de se référer de manière cohérente à un élément de formulaire afin qu'ils puissent correspondre entre les versions de formulaires republiées, les structures de données et les systèmes.",
       "uniqueWarning": "Choisissez une valeur unique qui diffère des autres questions."
     },
     "tags": {
       "title": "Balises supplémentaires",
-      "description": "Étiquettes flexibles permettant d'ajouter des métadonnées aux éléments du formulaire afin de catégoriser les questions connexes ou de transformer les données.",
+      "description": "Vous pouvez ajouter des étiquettes flexibles  pour inclure des métadonnées aux éléments du formulaire afin de catégoriser les questions connexes ou de transformer les données.",
       "errorTagTooLong": "La balise ne peut pas dépasser 50 caractères"
     }
   },
