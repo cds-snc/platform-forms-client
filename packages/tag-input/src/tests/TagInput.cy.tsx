@@ -71,16 +71,6 @@ describe("<TagInput />", () => {
     cy.get(".gc-tag").should("contain", "New Tag");
   });
 
-  it("applies an aria-label to a tag", () => {
-    cy.mount(
-      <div>
-        <TagInput initialTags={["Tag 1"]} />
-      </div>
-    );
-
-    cy.get(".gc-tag").should("have.attr", "aria-label", `Tag "Tag 1"`);
-  });
-
   it("announces that a tag was added", () => {
     cy.mount(
       <div>

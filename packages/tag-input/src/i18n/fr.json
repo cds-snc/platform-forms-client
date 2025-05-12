@@ -1,10 +1,10 @@
 {
-  "tag": "Tag \"{tag}\"",
-  "duplicateTag": "\"{tag}\" est une balise dupliquée",
-  "invalidTag": "Balise invalide : \"{tag}\" ({reasons})",
-  "tagAdded": "Balise \"{tag}\" ajoutée",
-  "tagRemoved": "Balise \"{tag}\" supprimée",
-  "tagSelected": "Tag \"{tag}\" selected. Press delete to remove.",
+  "announceDuplicateTag": "\"{tag}\" est une balise dupliquée",
+  "announceInvalidTag": "Balise invalide : \"{tag}\" ({reasons})",
+  "announceTagAdded": "Balise \"{tag}\" ajoutée",
+  "announceTagRemoved": "Balise \"{tag}\" supprimée",
+  "announceTagSelected": "Tag \"{tag}\" selected. Press delete to remove.",
+  "duplicateTag": "La balise a déjà été ajoutée",
   "inputLabel": "{tags} tags. Use left and right arrow keys to navigate, enter, tab or comma to create, backspace or delete to delete tags.",
   "maxTagsReached": "Le nombre maximal de balises a été atteint ({max})"
 }

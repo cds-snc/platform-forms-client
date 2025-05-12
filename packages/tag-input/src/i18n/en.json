@@ -1,10 +1,10 @@
 {
-  "tag": "Tag \"{tag}\"",
-  "duplicateTag": "\"{tag}\" is a duplicate tag",
-  "invalidTag": "Invalid tag: \"{tag}\" ({reasons})",
-  "tagAdded": "Tag \"{tag}\" added",
-  "tagRemoved": "Tag \"{tag}\" removed",
-  "tagSelected": "Tag \"{tag}\" selected. Press delete to remove.",
+  "announceDuplicateTag": "\"{tag}\" is a duplicate tag",
+  "announceInvalidTag": "Invalid tag: \"{tag}\" ({reasons})",
+  "announceTagAdded": "Tag \"{tag}\" added",
+  "announceTagRemoved": "Tag \"{tag}\" removed",
+  "announceTagSelected": "Tag \"{tag}\" selected. Press delete to remove.",
+  "duplicateTag": "Tag already added",
   "inputLabel": "{tags} tags. Use left and right arrow keys to navigate, enter, tab or comma to create, backspace or delete to delete tags.",
   "maxTagsReached": "Maximum number of tags reached ({max})"
 }

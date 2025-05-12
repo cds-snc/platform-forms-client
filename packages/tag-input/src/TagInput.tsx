@@ -78,7 +78,7 @@ export const TagInput = ({
       const { isValid, errors } = validateTag(tag);
       if (!isValid) {
         // Announce invalid tag
-        say(t("invalidTag", { tag, errors: errors?.join(", ") || "" }));
+        say(t("announceInvalidTag", { tag, errors: errors?.join(", ") || "" }));
 
         // Display validation errors
         setErrorMessages(errors || []);
@@ -88,7 +88,7 @@ export const TagInput = ({
 
     if (restrictDuplicates && selectedTags.includes(tag)) {
       // Announce duplicate tag
-      say(t("duplicateTag", { tag }));
+      say(t("announceDuplicateTag", { tag }));
 
       // Highlight the duplicate tag momentarily
       const duplicateTagIndex = selectedTags.indexOf(tag);
@@ -111,7 +111,7 @@ export const TagInput = ({
     }
 
     // Announce tag added
-    say(t("tagAdded", { tag }));
+    say(t("announceTagAdded", { tag }));
 
     // Add the tag to the selected tags
     setSelectedTags((prevTags) => [...prevTags, tag]);
@@ -126,7 +126,7 @@ export const TagInput = ({
     }
 
     // Announce tag removed
-    say(t("tagRemoved", { tag }));
+    say(t("announceTagRemoved", { tag }));
 
     // Remove the tag from the selected tags
     setSelectedTags((prevTags) => prevTags.filter((_, i) => i !== index));
@@ -183,11 +183,14 @@ export const TagInput = ({
     if (event.currentTarget.value === "") {
       if (key === keys.ARROW_LEFT) {
         if (selectedTags.length) {
+          let newTagIndex = 0;
           if (selectedTagIndex === null) {
-            setSelectedTagIndex(selectedTags.length - 1);
+            newTagIndex = selectedTags.length - 1;
           } else if (selectedTagIndex > 0) {
-            setSelectedTagIndex(selectedTagIndex - 1);
+            newTagIndex = selectedTagIndex - 1;
           }
+          setSelectedTagIndex(newTagIndex);
+          say(t("announceTagSelected", { tag: selectedTags[newTagIndex] }));
         }
       }
 
@@ -197,6 +200,7 @@ export const TagInput = ({
             setSelectedTagIndex(0);
           } else if (selectedTagIndex < selectedTags.length - 1) {
             setSelectedTagIndex(selectedTagIndex + 1);
+            say(t("announceTagSelected", { tag: selectedTags[selectedTagIndex + 1] }));
           }
         }
       }
@@ -218,7 +222,6 @@ export const TagInput = ({
             key={`${tag}-${index}`}
             id={`tag-${index}`}
             className={`gc-tag ${selectedTagIndex === index ? "gc-selected-tag" : ""}`}
-            aria-label={t("tag", { tag })}
           >
             <div>{tag}</div>
             <button type="button" onClick={() => handleRemoveTag(index)}>
