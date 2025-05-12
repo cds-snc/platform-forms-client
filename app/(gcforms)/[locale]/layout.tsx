@@ -11,6 +11,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     FeatureFlags.formTimer,
     FeatureFlags.hCaptcha,
     FeatureFlags.caretakerPeriod,
+    FeatureFlags.fileUpload,
   ]);
 
   return (

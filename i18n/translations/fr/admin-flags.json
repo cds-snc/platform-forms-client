@@ -29,6 +29,10 @@
     "caretakerPeriod": {
       "title": "caretakerPeriod",
       "description": "Activer l'avertissement de période de garde pour qu'il soit visible"
+    },
+    "fileUpload": {
+      "title": "File Upload [FR]",
+      "description": "Enable file upload for forms [FR]"
     }
   }
 }
