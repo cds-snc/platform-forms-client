@@ -27,7 +27,7 @@
       "description": "Activer la prévention anti-spam hCaptcha"
     },
     "banner": {
-      "title": "Banner",
+      "title": "Bannière",
       "description": "Activer la bannière d'avertissement pour qu'elle soit visible"
     },
     "fileUpload": {
