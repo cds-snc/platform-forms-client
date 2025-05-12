@@ -106,12 +106,12 @@ describe("<TagInput />", () => {
   it("announces that a duplicate tag was added", () => {
     cy.mount(
       <div>
-        <TagInput initialTags={["Tag 1"]} restrictDuplicates={true} />
+        <TagInput restrictDuplicates={true} />
       </div>
     );
 
-    cy.get("[data-testid='tag-input']").type("Tag 1{enter}");
-    cy.get("#tag-input-live-region").should("exist").and("contain", `Duplicate tag "Tag 1"`);
+    cy.get("[data-testid='tag-input']").type("Tag 1{enter}Tag 1{enter}");
+    cy.get("#tag-input-live-region").should("exist").and("contain", `"Tag 1" is a duplicate tag`);
   });
 
   it("allows duplicates", () => {
