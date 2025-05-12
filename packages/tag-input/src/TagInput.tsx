@@ -18,7 +18,7 @@ const keys = {
 };
 
 export const TagInput = ({
-  tags,
+  initialTags,
   name = "tag-input",
   id = "tag-input",
   label = "Tags",
@@ -31,7 +31,7 @@ export const TagInput = ({
   onTagRemove,
   validateTag,
 }: {
-  tags?: string[];
+  initialTags?: string[];
   name?: string;
   id?: string;
   label?: string;
@@ -48,7 +48,7 @@ export const TagInput = ({
   };
 }) => {
   const tagInputRef = useRef<HTMLInputElement>(null);
-  const [selectedTags, setSelectedTags] = useState<string[]>(tags || []);
+  const [selectedTags, setSelectedTags] = useState<string[]>(initialTags || []);
   const [selectedTagIndex, setSelectedTagIndex] = useState<number | null>(null);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [ariaLiveRegionText, setAriaLiveRegionText] = useState<string | null>(null);
@@ -69,7 +69,7 @@ export const TagInput = ({
       // Announce max tags reached
       say(t("maxTagsReached", { maxTags: maxTags.toString() }));
 
-      // Highlight the input field momentarily
+      // Display a validation error
       setErrorMessages([t("maxTagsReached", { max: maxTags.toString() })]);
       return;
     }
@@ -77,10 +77,11 @@ export const TagInput = ({
     if (validateTag) {
       const { isValid, errors } = validateTag(tag);
       if (!isValid) {
-        setErrorMessages(errors || []);
         // Announce invalid tag
         say(t("invalidTag", { tag, errors: errors?.join(", ") || "" }));
 
+        // Display validation errors
+        setErrorMessages(errors || []);
         return;
       }
     }
@@ -98,6 +99,8 @@ export const TagInput = ({
           duplicateTagElement.classList.remove("duplicate");
         }, 4000); // Remove the class after 4 seconds
       }
+
+      // Display a validation error
       setErrorMessages([t("duplicateTag", { tag })]);
       return;
     }

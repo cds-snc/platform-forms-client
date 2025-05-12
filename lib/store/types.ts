@@ -21,6 +21,7 @@ import { type Indexes } from "@lib/utils/form-builder/getPath";
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
+  setHasTransformed: () => void;
   setHasHydrated: () => void;
   getFocusInput: () => boolean;
   moveUp: (index: number, groupId?: string) => void;
@@ -71,6 +72,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   unsetField: (path: string) => void;
   duplicateElement: (id: number, groupId?: string, copyEn?: string, copyFr?: string) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
+  transform: () => void;
   getSchema: () => string;
   getIsPublished: () => boolean;
   setIsPublished: (isPublished: boolean) => void;
@@ -103,6 +105,7 @@ export interface TemplateStoreProps {
   translationLanguagePriority: Language;
   focusInput: boolean;
   hasHydrated: boolean;
+  hasTransformed: boolean;
   form: FormProperties;
   isPublished: boolean;
   name: string;

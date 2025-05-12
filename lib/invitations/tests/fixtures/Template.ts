@@ -22,6 +22,7 @@ interface Template {
   ttl: Date;
   closedDetails: string;
   saveAndResume: boolean;
+  notificationsInterval: number;
 }
 
 export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
@@ -43,6 +44,7 @@ export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
     ttl: new Date(),
     closedDetails: "",
     saveAndResume: false,
+    notificationsInterval: 0,
   };
 
   return { ...defaultTemplate, ...overrides };

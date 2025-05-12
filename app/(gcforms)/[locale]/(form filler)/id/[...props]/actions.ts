@@ -35,14 +35,6 @@ export async function submitForm(
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined
 ): Promise<{ id: string; submissionId?: string; error?: Error }> {
-  const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
-  if (captchaEnabled) {
-    const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
-    if (CAPTCHA_BLOCKABLE_MODE && !captchaVerified) {
-      throw new Error(FormStatus.CAPTCHA_VERIFICATION_ERROR);
-    }
-  }
-
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
@@ -57,6 +49,20 @@ export async function submitForm(
         id: formId,
         error: { name: FormStatus.FORM_CLOSED_ERROR, message: "Form is closed" },
       };
+    }
+
+    const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
+    if (captchaEnabled) {
+      const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
+      if (CAPTCHA_BLOCKABLE_MODE && !captchaVerified) {
+        return {
+          id: formId,
+          error: {
+            name: FormStatus.CAPTCHA_VERIFICATION_ERROR,
+            message: "Captcha verification failure",
+          },
+        };
+      }
     }
 
     const validateResponsesResult = await validateResponses(values, template);

@@ -27,8 +27,12 @@
       "description": "Activer la prévention anti-spam hCaptcha"
     },
     "caretakerPeriod": {
-      "title": "caretakerPeriod",
+      "title": "Banner",
       "description": "Activer l'avertissement de période de garde pour qu'il soit visible"
+    },
+    "fileUpload": {
+      "title": "Téléversement de fichier",
+      "description": "Activer le téléverseur de fichier en tant qu'élément pouvant être ajouté à un formulaire"
     }
   }
 }

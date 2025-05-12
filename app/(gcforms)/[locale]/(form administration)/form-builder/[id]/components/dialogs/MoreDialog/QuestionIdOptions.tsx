@@ -32,7 +32,7 @@ export const QuestionIdOptions = ({
       setError(true);
       setIsValid(false);
     }
-  }, [item.properties.questionId, form.elements, item]);
+  }, [item.properties.questionId, form.elements, item, setIsValid]);
 
   if (item.type === FormElementTypes.richText) {
     return null;

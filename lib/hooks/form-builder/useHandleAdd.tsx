@@ -34,8 +34,8 @@ export const useHandleAdd = () => {
   const groupId = useGroupStore((state) => state.id);
 
   const create = useCallback(async (type: FormElementTypes) => {
+    defaultField.uuid = uuid();
     const defaults = JSON.parse(JSON.stringify(defaultField));
-    defaults.uuid = uuid();
 
     const labels = await getTranslatedElementProperties(type);
     const descriptionEn = labels.description.en;

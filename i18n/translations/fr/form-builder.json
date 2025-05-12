@@ -511,14 +511,14 @@
       "infoLine2": "Par exemple, lorsque vous demandez la date exacte d'un passeport, d'une carte ou d'un autre document, faites en sorte que les champs correspondent au format de l'original. Il est ainsi plus facile pour les utilisateurs de recopier la date avec précision."
     },
     "questionId": {
-      "title": "[FR] Question ID",
-      "description": "[FR] Unique value to consistently refer to a form element so that they can match across republished form versions, data structures and systems.",
-      "uniqueWarning": "[FR] Choose a unique value that differs from other questions."
+      "title": "Identifiant de la question",
+      "description": "Valeur unique permettant de se référer de manière cohérente à un élément de formulaire afin qu'ils puissent correspondre entre les versions de formulaires republiées, les structures de données et les systèmes.",
+      "uniqueWarning": "Choisissez une valeur unique qui diffère des autres questions."
     },
     "tags": {
-      "title": "[FR] Additional tags",
-      "description": "[FR] Flexible labels to add metadata to form elements so that related questions can be categorized or so that data can be transformed.",
-      "errorTagTooLong": "[FR] Tag must be no longer than 50 characters."
+      "title": "Balises supplémentaires",
+      "description": "Étiquettes flexibles permettant d'ajouter des métadonnées aux éléments du formulaire afin de catégoriser les questions connexes ou de transformer les données.",
+      "errorTagTooLong": "La balise ne peut pas dépasser 50 caractères"
     }
   },
   "moreOptions": "Plus d'options  ",
@@ -760,7 +760,6 @@
     "selectClassification": "Classification des données",
     "beforePublishMessage": "Ces paramètres ne peuvent être modifiés qu’avant la publication.",
     "deleteApiKeyMessage": "Vous devez supprimer la clé API avant de pouvoir modifier l'option de livraison.",
-    "protectedBMessage": "Les réponses classifiées PROTÉGÉ B doivent être téléchargées de Formulaires GC.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
     "title": "Option de livraison",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
@@ -819,7 +818,7 @@
       },
       "api": {
         "title": "Récupération des réponses par API",
-        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A (Bientôt disponible : PROTÉGÉ B).",
+        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B",
         "text2": "Appels à l'API pour extraire les réponses de formulaire.",
         "text3": "Possibilité de passer à la méthode de téléchargement après la publication.",
         "text4": "Une clé API par formulaire",

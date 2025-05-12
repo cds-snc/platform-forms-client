@@ -53,6 +53,7 @@ import {
   localizeField,
   getFormElementIndexes,
 } from "./helpers/elements";
+import { transform } from "./helpers/elements/transformFormProperties";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -109,7 +110,16 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             importTemplate: importTemplate(set),
             getHighestElementId: getHighestElementId(set, get),
             generateElementId: generateElementId(set, get),
+            transform: transform(set, get),
             getSchema: () => {
+              // hasHydrated should work here but we get an error. leaving this timeout for now.
+              setTimeout(() => {
+                if (!get().hasTransformed) {
+                  get().transform();
+                }
+                set({ hasTransformed: true });
+              }, 100);
+
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
             },
             getId: () => get().id,
@@ -138,6 +148,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             },
             updateSecurityAttribute: (value) => set({ securityAttribute: value }),
             resetDeliveryOption: () => set({ deliveryOption: undefined }),
+            setHasTransformed: () => set({ hasTransformed: true }),
           }),
 
           storageOptions

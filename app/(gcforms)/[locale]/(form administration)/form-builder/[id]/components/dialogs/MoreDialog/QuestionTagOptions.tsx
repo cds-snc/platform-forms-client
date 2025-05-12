@@ -38,7 +38,7 @@ export const QuestionTagOptions = ({
             },
           });
         }}
-        tags={item.properties.tags || []}
+        initialTags={item.properties.tags || []}
         restrictDuplicates={true}
         validateTag={(tag) => {
           let isValid = true;

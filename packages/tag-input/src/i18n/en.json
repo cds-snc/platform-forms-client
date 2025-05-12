@@ -1,7 +1,7 @@
 {
   "tag": "Tag \"{tag}\"",
-  "duplicateTag": "Duplicate tag \"{tag}\"",
-  "invalidTag": "Invalid tag \"{tag}\" ({reasons})",
+  "duplicateTag": "\"{tag}\" is a duplicate tag",
+  "invalidTag": "Invalid tag: \"{tag}\" ({reasons})",
   "tagAdded": "Tag \"{tag}\" added",
   "tagRemoved": "Tag \"{tag}\" removed",
   "tagSelected": "Tag \"{tag}\" selected. Press delete to remove.",
