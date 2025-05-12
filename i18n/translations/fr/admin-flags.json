@@ -27,8 +27,8 @@
       "description": "Activer la prévention anti-spam hCaptcha"
     },
     "banner": {
-      "title": "Banner",
-      "description": "Activer l'avertissement de période de garde pour qu'il soit visible"
+      "title": "Bannière",
+      "description": "Activer la bannière d'avertissement pour qu'elle soit visible"
     },
     "fileUpload": {
       "title": "Téléversement de fichier",
