@@ -1,6 +1,6 @@
 {
   "announceDuplicateTag": "\"{tag}\" is a duplicate tag",
-  "announceInvalidTag": "Invalid tag: \"{tag}\" ({reasons})",
+  "announceInvalidTag": "Invalid tag: \"{tag}\"",
   "announceTagAdded": "Tag \"{tag}\" added",
   "announceTagRemoved": "Tag \"{tag}\" removed",
   "announceTagSelected": "Tag \"{tag}\" selected.",

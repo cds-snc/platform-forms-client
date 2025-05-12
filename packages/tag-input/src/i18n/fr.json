@@ -1,6 +1,6 @@
 {
   "announceDuplicateTag": "\"{tag}\" est une balise dupliquée",
-  "announceInvalidTag": "Balise invalide : \"{tag}\" ({reasons})",
+  "announceInvalidTag": "Balise invalide : \"{tag}\"",
   "announceTagAdded": "Balise \"{tag}\" ajoutée",
   "announceTagRemoved": "Balise \"{tag}\" supprimée",
   "announceTagSelected": "Tag \"{tag}\" selected.",
