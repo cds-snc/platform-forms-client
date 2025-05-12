@@ -37,8 +37,8 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
   useEffect(() => {
     async function fetchBannerData() {
       setBannerData(isEnabled);
-      setBannerMessage(t("campaignBanner.message3"));
-      setBannerType(t("campaignBanner.type3"));
+      setBannerMessage(t("campaignBanner.message4"));
+      setBannerType(t("campaignBanner.type4"));
     }
     fetchBannerData();
   }, [t, isEnabled]);
