@@ -26,7 +26,7 @@
       "title": "hCaptcha",
       "description": "Activer la prévention anti-spam hCaptcha"
     },
-    "caretakerPeriod": {
+    "banner": {
       "title": "Banner",
       "description": "Activer l'avertissement de période de garde pour qu'il soit visible"
     },

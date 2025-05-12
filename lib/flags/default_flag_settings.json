@@ -2,6 +2,6 @@
   "addressComplete": false,
   "formTimer": false,
   "hCaptcha": false,
-  "caretakerPeriod": false,
+  "banner": false,
   "fileUpload": false
 }

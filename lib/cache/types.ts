@@ -3,7 +3,7 @@ export const FeatureFlags = {
   addressComplete: "addressComplete",
   formTimer: "formTimer",
   hCaptcha: "hCaptcha",
-  caretakerPeriod: "caretakerPeriod",
+  banner: "banner",
   fileUpload: "fileUpload",
 } as const;
 

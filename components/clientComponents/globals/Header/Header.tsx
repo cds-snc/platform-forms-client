@@ -32,7 +32,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
   const [bannerMessage, setBannerMessage] = useState("");
 
   const { getFlag } = useFeatureFlags();
-  const isEnabled = getFlag(FeatureFlags.caretakerPeriod);
+  const isEnabled = getFlag(FeatureFlags.banner);
 
   useEffect(() => {
     async function fetchBannerData() {
