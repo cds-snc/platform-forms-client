@@ -97,6 +97,15 @@ export const deleteKey = async (templateId: string) => {
       serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
     }`
   );
+
+  logEvent(
+    user.id,
+    { type: "Form", id: templateId },
+    "DeleteAPIKey",
+    `User :${user.id} deleted service account ${
+      serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
+    }`
+  );
 };
 
 export const checkMachineUserExists = async (templateId: string) => {
@@ -190,6 +199,12 @@ export const createKey = async (templateId: string) => {
   logEvent(
     user.id,
     { type: "ServiceAccount" },
+    "CreateAPIKey",
+    `User :${user.id} created API key for service account ${serviceAccountId}`
+  );
+  logEvent(
+    user.id,
+    { type: "Form", id: templateId },
     "CreateAPIKey",
     `User :${user.id} created API key for service account ${serviceAccountId}`
   );

@@ -17,6 +17,7 @@ export const EditButton = ({
   return (
     <Button
       theme={theme}
+      className="text-left leading-10"
       onClick={() => {
         setGroup(reviewItemId);
         clearHistoryAfterId(reviewItemId);

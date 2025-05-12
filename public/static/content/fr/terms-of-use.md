@@ -33,7 +33,7 @@ Vous avez pour responsabilité :
 - de répondre aux conséquences opérationnelles ou aux conséquences sur le service du téléversement par des utilisateurs finaux ou utilisatrices finales de documents en guise de soumission à des fins de pollupostage.
 - d’accepter [les conditions d’utilisation de Notification GC](https://notification.canada.ca/conditions-dutilisation).
 
-### Réponses récupérées via l'API (jusqu'à Protégé A inclus)
+### Réponses récupérées via l'API (jusqu'à Protégé B inclus)
 
 Vous avez pour responsabilité de veiller à ce que la clé API associée à votre formulaire soit sécurisée afin de protéger l'accès aux réponses du formulaire. Cela inclut :
 

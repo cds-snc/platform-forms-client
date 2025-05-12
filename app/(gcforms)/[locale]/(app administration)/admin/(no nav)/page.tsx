@@ -62,6 +62,9 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
             <li>
               <Link href={`/${locale}/admin/view-templates`}>{t("viewTemplates")}</Link>
             </li>
+            <li>
+              <Link href={`/${locale}/admin/events`}>{t("auditLogs")}</Link>
+            </li>
           </ul>
           <hr className="my-10" />
           <ul className="list-none pl-0">

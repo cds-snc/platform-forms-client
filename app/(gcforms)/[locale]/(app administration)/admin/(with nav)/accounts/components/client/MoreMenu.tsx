@@ -35,15 +35,6 @@ export const MoreMenu = ({
           {canManageUser ? t("managePermissions") : t("viewPermissions")}
         </DropdownMenuPrimitive.Item>
 
-        <DropdownMenuPrimitive.Item
-          className={`mt-2 ${themes.htmlLink} ${themes.base} !block !cursor-pointer`}
-          onClick={() => {
-            router.push(`/${language}/admin/accounts/${user.id}/events`);
-          }}
-        >
-          {t("viewAuditLogs")}
-        </DropdownMenuPrimitive.Item>
-
         {/* Deactivate Account  */}
         {canManageUser && !isCurrentUser && user.active && (
           <>

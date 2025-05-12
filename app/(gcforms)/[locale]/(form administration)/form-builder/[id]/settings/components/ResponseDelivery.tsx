@@ -313,12 +313,15 @@ export const ResponseDelivery = () => {
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
 
   // Update local state
-  const handleUpdateClassification = useCallback((value: ClassificationType) => {
-    if (value === "Protected B") {
-      setDeliveryOptionValue(DeliveryOption.vault);
-    }
-    setClassification(value);
-  }, []);
+  const handleUpdateClassification = useCallback(
+    (value: ClassificationType) => {
+      if (value === "Protected B" && deliveryOptionValue === DeliveryOption.email) {
+        setDeliveryOptionValue(DeliveryOption.vault);
+      }
+      setClassification(value);
+    },
+    [deliveryOptionValue]
+  );
 
   const handleDeleteApiKey = useCallback(() => {
     if (deliveryOptionValue === DeliveryOption.vault) {
@@ -358,11 +361,6 @@ export const ResponseDelivery = () => {
 
             <div className="mb-10">
               <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
-              {protectedBSelected ? (
-                <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
-                  {t("settingsResponseDelivery.protectedBMessage")}
-                </p>
-              ) : null}
 
               {/* Email Option */}
               {!hasApiKey && (
@@ -422,7 +420,7 @@ export const ResponseDelivery = () => {
                   <div className="mb-10">
                     <div>
                       <Radio
-                        disabled={isPublished || protectedBSelected || hasApiKey}
+                        disabled={isPublished || hasApiKey}
                         id={`delivery-option-${DeliveryOption.api}`}
                         checked={deliveryOptionValue === DeliveryOption.api}
                         name="response-delivery"
@@ -454,7 +452,7 @@ export const ResponseDelivery = () => {
               {deliveryOptionValue === DeliveryOption.api && (
                 <div>
                   <DeleteKeyToChangeOptionsNote hasApiKey={hasApiKey} />
-                  <ApiKeyButton showDelete />
+                  <ApiKeyButton showDelete classification={classification} />
                   <ApiDocNotes />
                 </div>
               )}
