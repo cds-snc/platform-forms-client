@@ -78,7 +78,7 @@ export const TagInput = ({
       const { isValid, errors } = validateTag(tag);
       if (!isValid) {
         // Announce invalid tag
-        say(t("announceInvalidTag", { tag, errors: errors?.join(", ") || "" }));
+        say(t("announceInvalidTag", { tag }));
 
         // Display validation errors
         setErrorMessages(errors || []);
@@ -250,16 +250,20 @@ export const TagInput = ({
           {ariaLiveRegionText}
         </span>
       </div>
-      {errorMessages.length > 0 && (
-        <div role="alert" className="gc-tag-input-error" data-testid="tag-input-error">
-          {errorMessages.map((error, index) => (
+      <div
+        role="alert"
+        aria-live="assertive"
+        className="gc-tag-input-error"
+        data-testid="tag-input-error"
+      >
+        {errorMessages.length > 0 &&
+          errorMessages.map((error, index) => (
             <div key={`error-${index}`}>
               <WarningIcon />
               {error}
             </div>
           ))}
-        </div>
-      )}
+      </div>
     </div>
   );
 };
