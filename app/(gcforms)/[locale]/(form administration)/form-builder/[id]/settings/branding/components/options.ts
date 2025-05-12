@@ -278,4 +278,13 @@ export const options = [
     logoTitleEn: "Prairies Economic Development Canada",
     logoTitleFr: "Développement économique Canada pour les Prairies",
   },
+  {
+    name: "heritage",
+    urlEn: "https://www.canada.ca/en/canadian-heritage/campaigns/canada-day.html",
+    urlFr: "https://www.canada.ca/fr/patrimoine-canadien/campagnes/fete-canada.html",
+    logoEn: "/img/branding/canada-heritage-en.svg",
+    logoFr: "/img/branding/canada-heritage-fr.svg",
+    logoTitleEn: "Lien vers la page d'accueil en anglais",
+    logoTitleFr: "Lien vers la page d'accueil en français",
+  },
 ];
