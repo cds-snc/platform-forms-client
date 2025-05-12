@@ -31,8 +31,8 @@
       "description": "Enable care taker period warning to be visible"
     },
     "fileUpload": {
-      "title": "File Upload",
-      "description": "Enable file upload for forms"
+      "title": "File upload",
+      "description": "Enable file upload to be added as an element to a form"
     }
   }
 }
