@@ -29,6 +29,10 @@
     "caretakerPeriod": {
       "title": "caretakerPeriod",
       "description": "Enable care taker period warning to be visible"
+    },
+    "fileUpload": {
+      "title": "File Upload",
+      "description": "Enable file upload for forms"
     }
   }
 }
