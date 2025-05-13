@@ -720,14 +720,14 @@
         },
         "multipleSubmissions": {
           "subject": "New form responses | Nouvelles réponses au formulaire",
-          "paragraph1": "[FR]TODO",
-          "paragraph2": "[FR]TODO",
-          "paragraph3": "[FR]TODO"
+          "paragraph1": "Votre formulaire a reçu des nouvelles soumissions :",
+          "paragraph2": "Allez à Formulaires GC",
+          "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
         }
       },
-      "savedSuccessMessage": "[FR] Your changes have been saved.",
+      "savedSuccessMessage": "Vos modifications ont été enregistrées.",
       "errors": {
-        "updateNotificationsInterval": "[FR]There was an error updating notifications. Please try again later."
+        "updateNotificationsInterval": "Il y a eu une erreur dans la mise à jour des notifications. Veuillez réessayer plus tard."
       }
     }
   },
