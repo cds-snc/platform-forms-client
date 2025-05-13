@@ -704,7 +704,7 @@
     "notifications": {
       "title": "Recevoir des notifications",
       "description1": "Obtenez des notifications par courriel pour les nouvelles réponses",
-      "description2": "Vous serez informé lorsques de nouvelles réponses sont disponibles et peuvent être téléchargées.",
+      "description2": "Tous les membres de votre équipe ayant accès au formulaire seront informés lorsque de nouvelles réponses au formulaire sont disponibles et peuvent être téléchargées.",
       "optionsDescription": "Activer les notifications pour les nouvelles réponses au formulaire",
       "options": {
         "on": "Activé",
