@@ -16,6 +16,7 @@ export enum AuditLogEvent {
   ChangeSecurityAttribute = "ChangeSecurityAttribute",
   GrantFormAccess = "GrantFormAccess",
   RevokeFormAccess = "RevokeFormAccess",
+  UpdateNotificationsInterval = "UpdateNotificationsInterval",
   // Invitations
   InvitationCreated = "InvitationCreated",
   InvitationAccepted = "InvitationAccepted",
@@ -50,7 +51,6 @@ export enum AuditLogEvent {
   CreateSetting = "CreateSetting",
   DeleteSetting = "DeleteSetting",
   AccessDenied = "AccessDenied",
-  UpdateNotificationsInterval = "UpdateNotificationsInterval",
   // API Management
   CreateAPIKey = "CreateAPIKey",
   DeleteAPIKey = "DeleteAPIKey",
