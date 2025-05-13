@@ -707,8 +707,8 @@
       "description2": "Vous serez informé lorsques de nouvelles réponses sont disponibles et peuvent être téléchargées.",
       "optionsDescription": "[FR]Enable to get notified by email about new form responses",
       "options": {
-        "on": "[FR]On",
-        "off": "[FR]Off"
+        "on": "Activé",
+        "off": "Désactivé"
       },
       "save": "Enregistrer",
       "email": {
