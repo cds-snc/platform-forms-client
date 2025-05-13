@@ -11,7 +11,7 @@ import { ServerActionError } from "@lib/types/form-builder-types";
 import { logEvent } from "@lib/auditLogs";
 import { updateNotificationsSetting } from "@lib/templates";
 import { removeMarker } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/notifications";
-import { NotificationsInterval } from "packages/types/src/form-types";
+import { NotificationsInterval } from "@gcforms/types";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 

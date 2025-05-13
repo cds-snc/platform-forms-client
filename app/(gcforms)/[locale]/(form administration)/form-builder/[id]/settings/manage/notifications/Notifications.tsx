@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { NotificationsInterval } from "packages/types/src/form-types";
+import { NotificationsInterval } from "@gcforms/types";
 import { updateNotificationsInterval } from "../actions";
 import { NotificationsToggle } from "./NotificationsToggle";
 import { Button } from "@clientComponents/globals";

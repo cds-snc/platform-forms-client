@@ -18,7 +18,7 @@ import {
 import { BrandProperties } from "@lib/types";
 
 import { type Indexes } from "@lib/utils/form-builder/getPath";
-import { NotificationsInterval } from "packages/types/src/form-types";
+import { NotificationsInterval } from "@gcforms/types";
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;

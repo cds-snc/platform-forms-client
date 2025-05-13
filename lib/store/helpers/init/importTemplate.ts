@@ -2,7 +2,7 @@ import { type TemplateStore } from "../../types";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 import { defaultForm } from "../../defaults";
-import { NotificationsIntervalDefault } from "packages/types/src/form-types";
+import { NotificationsIntervalDefault } from "@gcforms/types";
 
 export const importTemplate: TemplateStore<"importTemplate"> = (set) => async (jsonConfig) => {
   set((state) => {

@@ -3,7 +3,7 @@ import { initializeGroups } from "@formBuilder/components/shared/right-panel/tre
 import { defaultForm } from "../../defaults";
 import { Language } from "../../../types/form-builder-types";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
-import { NotificationsIntervalDefault } from "packages/types/src/form-types";
+import { NotificationsIntervalDefault } from "@gcforms/types";
 
 export const initialize: TemplateStore<"initialize"> =
   (set) =>

@@ -1,4 +1,4 @@
-import { NotificationsInterval, NotificationsIntervalDefault } from "packages/types/src/form-types";
+import { NotificationsInterval, NotificationsIntervalDefault } from "@gcforms/types";
 
 interface User {
   id: string;

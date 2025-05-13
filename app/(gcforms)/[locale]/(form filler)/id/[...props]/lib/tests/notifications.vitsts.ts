@@ -1,4 +1,4 @@
-import { NotificationsInterval } from "packages/types/src/form-types";
+import { NotificationsInterval } from "@gcforms/types";
 import { validateNotificationsInterval } from "../notifications";
 
 const validIntervals = [
