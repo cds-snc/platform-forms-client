@@ -1508,7 +1508,7 @@ export const updateNotificationsSetting = async (
 
   logEvent(
     user.id,
-    { type: "Form" },
+    { type: "Form", id: formId },
     "UpdateNotificationsInterval",
     `User :${user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
   );
