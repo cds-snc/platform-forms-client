@@ -118,7 +118,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   get().transform();
                 }
                 set({ hasTransformed: true });
-              }, 100);
+              }, 500);
 
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
             },
