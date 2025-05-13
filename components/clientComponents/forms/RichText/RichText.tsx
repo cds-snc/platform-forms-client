@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { cn } from "@lib/utils";
-import Markdown from "markdown-to-jsx";
+import Markdown, { RuleType } from "markdown-to-jsx";
 
 interface RichTextProps {
   children?: string | undefined;
@@ -69,6 +69,12 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
         options={{
           forceBlock: true,
           disableParsingRawHTML: true,
+          renderRule(next, node) {
+            if (node.type === RuleType.text) {
+              return node.text.replace(/&#32;/g, " ");
+            }
+            return next();
+          },
           overrides: {
             h1: { component: H1 },
             a: { component: A },
