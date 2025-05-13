@@ -10,7 +10,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     FeatureFlags.addressComplete,
     FeatureFlags.formTimer,
     FeatureFlags.hCaptcha,
-    FeatureFlags.banner,
+    FeatureFlags.topBanner,
     FeatureFlags.fileUpload,
   ]);
 
