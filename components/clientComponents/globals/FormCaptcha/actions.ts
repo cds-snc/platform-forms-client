@@ -64,11 +64,12 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
 // Looks at the success and score to determine a pass or fail. We can tweak the score over time.
 // See https://docs.hcaptcha.com/enterprise#handling-siteverify-responses
 const checkIfVerified = (success: boolean, score: number) => {
-  if (score >= 0.8) {
-    // Session is bad - identifying separately for potential future use
-    return false;
-  }
-  if (score >= 0.7) {
+  // if (score >= 0.8) {
+  //   // Session is bad - identifying separately for potential future use
+  //   return false;
+  // }
+  // Temp to make sure sus score is more accomodating
+  if (score >= 0.79) {
     // Score is suspicious - we may want to tweak this to 0.79 if we have too many false positives
     return false;
   }
