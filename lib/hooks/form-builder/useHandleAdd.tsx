@@ -63,6 +63,21 @@ export const useHandleAdd = () => {
     async (index: number, type?: FormElementTypes) => {
       let id;
 
+      if (type === "customJson") {
+        const el = document.getElementById("custom-elements") as HTMLTextAreaElement;
+        if (el) {
+          // get content of the textArea
+          const content = el.value;
+
+          // parse the content to JSON
+          const data = JSON.parse(content);
+
+          id = await add(index, data.type, data, groupId);
+
+          return id;
+        }
+      }
+
       if (allowedTemplates.includes(type as TemplateTypes)) {
         try {
           await blockLoader(type as TemplateTypes, index, async (data, position) => {

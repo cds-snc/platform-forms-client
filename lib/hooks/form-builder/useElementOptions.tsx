@@ -220,8 +220,8 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: groups.other,
     },
     {
-      id: "custom",
-      value: t("custom"),
+      id: "customJson",
+      value: t("addElementDialog.customJson.label"),
       icon: AddIcon,
       description: Custom,
       className: "",
