@@ -23,7 +23,6 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { NotificationsInterval } from "@gcforms/types";
-import { validateNotificationsInterval } from "./notifications";
 
 // ******************************************
 // Internal Module Functions
@@ -1475,41 +1474,4 @@ export const checkIfClosed = async (formId: string) => {
   } catch (e) {
     return null;
   }
-};
-
-export const updateNotificationsSetting = async (
-  formId: string,
-  notificationsInterval: NotificationsInterval
-) => {
-  const { user } = await authorization.canEditForm(formId).catch((e) => {
-    logEvent(
-      e.user.id,
-      { type: "Form", id: formId },
-      "AccessDenied",
-      "Attempted to update notifications interval for Form"
-    );
-    throw e;
-  });
-
-  if (!validateNotificationsInterval(notificationsInterval)) {
-    throw new Error(`Invalid notifications interval: ${notificationsInterval}`);
-  }
-
-  await prisma.template
-    .update({
-      where: {
-        id: formId,
-      },
-      data: {
-        notificationsInterval,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  logEvent(
-    user.id,
-    { type: "Form", id: formId },
-    "UpdateNotificationsInterval",
-    `User :${user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
-  );
 };
