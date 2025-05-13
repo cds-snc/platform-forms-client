@@ -5,7 +5,6 @@ import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { logEvent } from "@lib/auditLogs";
 
 export const Status = {
   SINGLE_EMAIL_SENT: "SINGLE_EMAIL_SENT",
@@ -89,13 +88,6 @@ async function getUsersAndNotificationsInterval(formID: string): Promise<{
     .catch((e) => prismaErrors(e, null));
 
   if (!usersAndNotificationsInterval) return null;
-
-  logEvent(
-    "unknown",
-    { type: "Form", id: formID },
-    "ReadForm",
-    "Retrieved users emails and notificationsInterval associated with Form"
-  );
 
   return {
     users: usersAndNotificationsInterval.users,
