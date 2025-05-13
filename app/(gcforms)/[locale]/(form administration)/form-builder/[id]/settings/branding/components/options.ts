@@ -284,7 +284,7 @@ export const options = [
     urlFr: "https://www.canada.ca/fr/patrimoine-canadien/campagnes/fete-canada.html",
     logoEn: "/img/branding/canada-heritage-en.svg",
     logoFr: "/img/branding/canada-heritage-fr.svg",
-    logoTitleEn: "Lien vers la page d'accueil en anglais",
+    logoTitleEn: "Canadian Heritage",
     logoTitleFr: "Patrimoine canadien",
   },
 ];
