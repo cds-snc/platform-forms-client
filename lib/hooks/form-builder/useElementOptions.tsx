@@ -36,6 +36,7 @@ import {
   Departments,
   Combobox,
   FormattedDate,
+  Custom,
 } from "@formBuilder/[id]/edit/components/elements/element-dialog";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFeatureFlags } from "../useFeatureFlags";
@@ -215,6 +216,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("dyanamicRow"),
       icon: AddIcon,
       description: QuestionSet,
+      className: "",
+      group: groups.other,
+    },
+    {
+      id: "custom",
+      value: t("custom"),
+      icon: AddIcon,
+      description: Custom,
       className: "",
       group: groups.other,
     },
