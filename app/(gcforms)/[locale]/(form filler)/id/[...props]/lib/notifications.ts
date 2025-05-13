@@ -24,8 +24,7 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
 
   const { users } = usersAndNotifications;
 
-  const notificationsInterval =
-    usersAndNotifications.notificationsInterval as NotificationsInterval;
+  const notificationsInterval = usersAndNotifications.notificationsInterval;
   if (!validateNotificationsInterval(notificationsInterval)) {
     logMessage.error(
       `sendNotification template ${formId} has an invalid notificationsInterval ${notificationsInterval}`
@@ -59,14 +58,12 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
   }
 };
 
-export const validateNotificationsInterval = (notificationsInterval: NotificationsInterval) => {
-  let isValid = false;
-  Object.values(NotificationsInterval).forEach((interval) => {
-    if (notificationsInterval === interval) {
-      isValid = true;
-    }
-  });
-  return isValid;
+export const validateNotificationsInterval = (
+  notificationsInterval: number | null | undefined
+): notificationsInterval is NotificationsInterval => {
+  return Object.values(NotificationsInterval).includes(
+    notificationsInterval as NotificationsInterval
+  );
 };
 
 async function _getUsersAndNotificationsInterval(formID: string): Promise<{
