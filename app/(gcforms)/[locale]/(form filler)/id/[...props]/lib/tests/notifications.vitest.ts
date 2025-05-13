@@ -7,7 +7,7 @@ const validIntervals = [
   NotificationsInterval.OFF,
 ];
 
-const invalidIntervals = [0, "0", "day", "INVALID_INTERVAL", {}];
+const invalidIntervals = [undefined, 0, "0", "day", "INVALID_INTERVAL", {}];
 
 describe("verifyNotificationsInterval", () => {
   it("should return true for valid notifications intervals", () => {

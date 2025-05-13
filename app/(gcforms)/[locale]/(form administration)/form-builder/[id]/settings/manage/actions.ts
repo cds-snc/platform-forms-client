@@ -71,7 +71,7 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
 });
 
 export const updateNotificationsInterval = AuthenticatedAction(
-  async (session, formId: string, notificationsInterval: NotificationsInterval) => {
+  async (_, formId: string, notificationsInterval: NotificationsInterval) => {
     try {
       await Promise.all([
         updateNotificationsSetting(formId, notificationsInterval),
