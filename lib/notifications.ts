@@ -8,11 +8,11 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logEvent } from "./auditLogs";
 import { authorization } from "./privileges";
 
-export const Status = {
+const Status = {
   SINGLE_EMAIL_SENT: "SINGLE_EMAIL_SENT",
   MULTIPLE_EMAIL_SENT: "MULTIPLE_EMAIL_SENT",
 } as const;
-export type Status = (typeof Status)[keyof typeof Status];
+type Status = (typeof Status)[keyof typeof Status];
 
 // Sends an email notification when a user has new form submissions
 export const sendNotification = async (formId: string, titleEn: string, titleFr: string) => {
