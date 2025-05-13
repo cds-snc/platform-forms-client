@@ -198,15 +198,15 @@ const singleSubmissionEmailTemplate = async (
   formTitleEn: string,
   formTitleFr: string
 ) => {
-  const { t } = await serverTranslation("form-builder");
+  const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
   const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
   return `
-${t("settings.notifications.email.singleSubmission.paragraph1")}
+${t_en("settings.notifications.email.singleSubmission.paragraph1")}
 ${formTitleEn}
 
-**[${t("settings.notifications.email.singleSubmission.paragraph2")}](${HOST}/auth/login)**
+**[${t_en("settings.notifications.email.singleSubmission.paragraph2")}](${HOST}/auth/login)**
 
-*${t("settings.notifications.email.singleSubmission.paragraph3")}*
+*${t_en("settings.notifications.email.singleSubmission.paragraph3")}*
 
 ---
 
@@ -224,15 +224,15 @@ const multipleSubmissionsEmailTemplate = async (
   formTitleEn: string,
   formTitleFr: string
 ) => {
-  const { t } = await serverTranslation("form-builder");
+  const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
   const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
   return `
-  ${t("settings.notifications.email.multipleSubmissions.paragraph1")}
+  ${t_en("settings.notifications.email.multipleSubmissions.paragraph1")}
   ${formTitleEn}
   
-  **[${t("settings.notifications.email.multipleSubmissions.paragraph2")}](${HOST}/auth/login)**
+  **[${t_en("settings.notifications.email.multipleSubmissions.paragraph2")}](${HOST}/auth/login)**
   
-  *${t("settings.notifications.email.multipleSubmissions.paragraph3")}*
+  *${t_en("settings.notifications.email.multipleSubmissions.paragraph3")}*
   
   ---
   
