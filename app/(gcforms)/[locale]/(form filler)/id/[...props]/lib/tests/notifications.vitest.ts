@@ -1,5 +1,5 @@
 import { NotificationsInterval } from "@gcforms/types";
-import { validateNotificationsInterval } from "../notifications";
+import { validateNotificationsInterval } from "@lib/notifications";
 
 const validIntervals = [
   NotificationsInterval.DAY,

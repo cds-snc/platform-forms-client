@@ -23,7 +23,7 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { NotificationsInterval } from "@gcforms/types";
-import { validateNotificationsInterval } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/notifications";
+import { validateNotificationsInterval } from "./notifications";
 
 // ******************************************
 // Internal Module Functions

@@ -7,6 +7,7 @@ import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { validateNotificationsInterval } from "@lib/notifications";
 
 export const Status = {
   SINGLE_EMAIL_SENT: "SINGLE_EMAIL_SENT",
@@ -58,18 +59,12 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
   }
 };
 
-export const validateNotificationsInterval = (
-  notificationsInterval: number | null | undefined
-): notificationsInterval is NotificationsInterval => {
-  return Object.values(NotificationsInterval).includes(
-    notificationsInterval as NotificationsInterval
-  );
-};
-
-async function _getUsersAndNotificationsInterval(formID: string): Promise<{
+const _getUsersAndNotificationsInterval = async (
+  formID: string
+): Promise<{
   notificationsInterval: number | null | undefined;
   users: { email: string }[];
-} | null> {
+} | null> => {
   const usersAndNotificationsInterval = await prisma.template
     .findUnique({
       where: {
@@ -92,7 +87,7 @@ async function _getUsersAndNotificationsInterval(formID: string): Promise<{
     users: usersAndNotificationsInterval.users,
     notificationsInterval: usersAndNotificationsInterval.notificationsInterval,
   };
-}
+};
 
 export const removeMarker = async (formId: string) => {
   const redis = await getRedisInstance();
