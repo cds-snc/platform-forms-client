@@ -46,20 +46,18 @@ export const BackButtonGroup = ({
           tryFocusOnPageLoad(focusHeadding);
         }}
         type="button"
-        className="group mr-4"
+        className="group mr-4 "
         theme="secondary"
       >
         {!saveAndResumeEnabled ? (
           t("goBack", { lng: language })
         ) : (
           <>
-            <span className="hidden tablet:block">{t("goBack", { lng: language })}</span>
-            <span className="block tablet:hidden">
-              <BackArrowIcon24x24
-                className="group-focus:fill-white group-active:fill-white"
-                title={t("goBack", { lng: language })}
-              />
-            </span>
+            <BackArrowIcon24x24
+              className="group-focus:fill-white group-active:fill-white"
+              title={t("goBack", { lng: language })}
+            />
+            <span className="hidden laptop:block">{t("goBack", { lng: language })}</span>
           </>
         )}
       </Button>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
@@ -29,10 +29,14 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
-
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
 import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
+import { FormStatus } from "@gcforms/types";
+import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
+import { ga } from "@lib/client/clientHelpers";
+
+import { FocusHeader } from "app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -57,7 +61,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
-  const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
@@ -68,10 +71,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
 
   const formStatusError =
-    props.status === "FileError"
+    props.status === FormStatus.FILE_ERROR
       ? t("input-validation.file-submission")
-      : props.status === "Error"
+      : props.status === FormStatus.ERROR
       ? t("server-error")
+      : props.status === FormStatus.FORM_CLOSED_ERROR
+      ? (language === "en"
+          ? props.formRecord.closedDetails?.messageEn
+          : props.formRecord.closedDetails?.messageFr) || t("form-closed-error")
       : null;
 
   //  If there are errors on the page, set focus the first error field
@@ -109,6 +116,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     };
   }, [handleSessionSave]);
 
+  // Show the Captcha fail screen when hCAPTCHA detects a suspicous user
+  // Note: check done here vs higher in the tree so the Form session will still exist on the screen
+  if (props.captchaFail) {
+    return <CaptchaFail />;
+  }
+
   return status === "submitting" ? (
     <>
       <title>{t("loading")}</title>
@@ -121,7 +134,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       )}
 
       {/* ServerId error */}
-      {props.status === "ServerIDError" && (
+      {props.status === FormStatus.SERVER_ID_ERROR && (
         <StatusError formId={formID} language={language as Language} />
       )}
 
@@ -132,6 +145,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           validation={true}
           id={errorId}
           tabIndex={0}
+          focussable={true}
         >
           {errorList}
         </Alert>
@@ -161,16 +175,16 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             handleSubmit={handleSubmit}
             noValidate={true}
             hCaptchaSiteKey={props.hCaptchaSiteKey}
-            blockableMode={false}
             isPreview={props.isPreview}
+            captchaToken={props.captchaToken}
           >
             {isGroupsCheck &&
               isShowReviewPage &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <h2 className="pb-8" tabIndex={-1} ref={groupsHeadingRef}>
+                <FocusHeader headingTag="h2">
                   {getGroupTitle(currentGroup, language as Language)}
-                </h2>
+                </FocusHeader>
               )}
 
             {children}
@@ -271,34 +285,38 @@ export const Form = withFormik<FormProps, Responses>({
       const result = await submitForm(
         formValues,
         formikBag.props.language,
-        formikBag.props.formRecord.id
+        formikBag.props.formRecord.id,
+        formikBag.props.captchaToken?.current
       );
 
       // Failed to find Server Action (likely due to newer deployment)
       if (result === undefined) {
         formikBag.props.saveSessionProgress();
         logMessage.info("Failed to find Server Action caught and session saved");
-        formikBag.setStatus("ServerIDError");
+        formikBag.setStatus(FormStatus.SERVER_ID_ERROR);
         return;
       }
 
       if (result.error) {
         if (result.error.message.includes("FileValidationResult")) {
-          formikBag.setStatus("FileError");
+          formikBag.setStatus(FormStatus.FILE_ERROR);
+        } else if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
+          formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
+        } else if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
+          formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
+          formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
         } else {
-          formikBag.setStatus("Error");
+          formikBag.setStatus(FormStatus.ERROR);
         }
       } else {
-        formikBag.props.onSuccess(result.id, result?.submissionId || undefined);
+        formikBag.props.onSuccess(result.id, result?.submissionId);
       }
     } catch (err) {
       logMessage.error(err as Error);
       formikBag.setStatus("Error");
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "form_submission_trigger",
+        ga("form_submission_trigger", {
           formID: formikBag.props.formRecord.id,
           formTitle: formikBag.props.formRecord.form.titleEn,
         });

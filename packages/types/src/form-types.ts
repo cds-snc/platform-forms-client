@@ -94,6 +94,14 @@ export interface DeliveryOption {
   [key: string]: string | undefined;
 }
 
+export const SortOption = {
+  NONE: "none",
+  ASCENDING: "ascending",
+  DESCENDING: "descending",
+} as const;
+
+export type SortValue = (typeof SortOption)[keyof typeof SortOption];
+
 // used to define attributes for the properties of an element in the form
 export interface ElementProperties {
   titleEn: string;
@@ -116,6 +124,7 @@ export interface ElementProperties {
   full?: boolean;
   addressComponents?: AddressComponents | undefined;
   dynamicRow?: dynamicRowType;
+  sortOrder?: SortValue;
   [key: string]:
     | string
     | number
@@ -214,3 +223,13 @@ export type ClosedDetails = {
 
 // defines the fields for the form record that is available to unauthenticated users
 export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption">;
+
+export const FormStatus = {
+  ERROR: "Error",
+  FILE_ERROR: "FileError",
+  FORM_CLOSED_ERROR: "FormClosedError",
+  SERVER_ID_ERROR: "ServerIDError",
+  CAPTCHA_VERIFICATION_ERROR: "CaptchaVerificationError",
+} as const;
+
+export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];

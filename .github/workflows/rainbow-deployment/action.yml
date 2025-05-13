@@ -1,0 +1,106 @@
+name: Rainbow deployment
+
+inputs:
+  deployment-identifier:
+    required: true
+  ecr-registry-uri:
+    required: true
+  ecr-registry-form-viewer-repository-name:
+    required: true
+  cognito-app-client-id:
+    required: true
+  cognito-user-pool-id:
+    required: true
+  load-balancer-listener-arn:
+    required: true
+  forms-lambda-client-role-arn:
+    required: true
+  forms-lambda-client-subnet-ids:
+    required: true
+  forms-lambda-client-security-group-ids:
+    required: true
+  hostname:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Highlighting deployment identifier
+      shell: bash
+      run: echo -e "\033[0;32mDeployment identifier => ${{ inputs.deployment-identifier }}\033[0m"
+
+    - name: Find latest release identifier
+      id: latest-release-identifier
+      shell: bash
+      run: |
+        latest_release_identifier=$(
+          aws ecr describe-images \
+            --repository-name ${{ inputs.ecr-registry-form-viewer-repository-name }} \
+            --query 'sort_by(imageDetails, &imagePushedAt)[-2]' \
+            | jq -r ".imageTags[0]"
+        )
+        
+        echo "value=$latest_release_identifier" >> $GITHUB_OUTPUT
+
+    - name: Build Rainbow Lambda image
+      shell: bash
+      run: |
+        docker build -t rainbow \
+          -f Dockerfile.rainbow \
+          --build-arg BASE_IMAGE=${{ inputs.ecr-registry-uri }}/${{ inputs.ecr-registry-form-viewer-repository-name }}:${{ steps.latest-release-identifier.outputs.value }} \
+          --build-arg COGNITO_APP_CLIENT_ID=${{ inputs.cognito-app-client-id }} \
+          --build-arg COGNITO_USER_POOL_ID=${{ inputs.cognito-user-pool-id }} .
+
+    - name: Tag and Push Rainbow Lambda image
+      shell: bash
+      run: |
+        docker tag rainbow ${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-identifier }}
+        docker push ${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-identifier }}
+
+    - name: Rainbow magic
+      shell: bash
+      run: |
+        ./scripts/bump-load-balancer-listener-rainbow-rules-priority.sh ${{ inputs.load-balancer-listener-arn }} > /dev/null 2>&1
+
+        lambda_arn=$(
+          aws lambda create-function \
+            --function-name rainbow-${{ inputs.deployment-identifier }} \
+            --logging-config LogFormat=Text,LogGroup=Forms \
+            --package-type Image \
+            --role ${{ inputs.forms-lambda-client-role-arn }} \
+            --timeout 15 \
+            --memory-size 2048 \
+            --code ImageUri=${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-identifier }} \
+            --vpc-config SubnetIds=${{ inputs.forms-lambda-client-subnet-ids }},SecurityGroupIds=${{ inputs.forms-lambda-client-security-group-ids }} \
+            | jq -r ".FunctionArn"
+        )
+
+        aws lambda wait function-active --function-name rainbow-${{ inputs.deployment-identifier }}
+
+        ./scripts/set-rainbow-lambda-env-vars.sh rainbow-${{ inputs.deployment-identifier }} > /dev/null 2>&1
+
+        aws lambda add-permission \
+          --function-name rainbow-${{ inputs.deployment-identifier }} \
+          --statement-id rainbow-elb-invoke-permission \
+          --principal elasticloadbalancing.amazonaws.com \
+          --action lambda:InvokeFunction > /dev/null 2>&1
+
+        editable_deployment_identifier=${{ inputs.deployment-identifier }}
+
+        target_group_arn=$(
+          aws elbv2 create-target-group \
+            --name rainbow-${editable_deployment_identifier:0:24} \
+            --target-type lambda \
+            | jq -r ".TargetGroups[0].TargetGroupArn"
+        )
+
+        aws elbv2 register-targets \
+          --target-group-arn $target_group_arn \
+          --targets Id=$lambda_arn
+
+        aws elbv2 create-rule \
+          --listener-arn ${{ inputs.load-balancer-listener-arn }} \
+          --conditions "[{\"Field\":\"host-header\",\"Values\":[\"${{ inputs.hostname }}\"]},{\"Field\":\"http-header\",\"HttpHeaderConfig\":{\"HttpHeaderName\":\"x-deployment-id\",\"Values\":[\"${{ steps.latest-release-identifier.outputs.value }}\"]}}]" \
+          --priority 1 \
+          --actions Type=forward,TargetGroupArn=$target_group_arn \
+          --tags Key=Name,Value=rainbow-${{ inputs.deployment-identifier }} > /dev/null 2>&1

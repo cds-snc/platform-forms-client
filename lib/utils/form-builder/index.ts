@@ -214,6 +214,15 @@ export const formatDateTimeUTC = (timestamp: number | undefined, includeSeconds 
   return date.toISOString().replace("T", " ").slice(0, arrayOffset) + " UTC";
 };
 
+export const formatDateTimeUTCFr = (timestamp: number | undefined) => {
+  const date = formatDateTimeUTC(timestamp);
+  const parts = date.split(" ");
+  const dateParts = parts[0].split("-");
+  const timeParts = parts[1].split(":");
+  const formattedDate = `${dateParts[0]}-${dateParts[1]}-${dateParts[2]} ${timeParts[0]}h ${timeParts[1]} UTC`;
+  return formattedDate;
+};
+
 export const autoCompleteFields = [
   "name",
   "given-name",

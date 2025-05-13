@@ -9,6 +9,7 @@ import { Close } from "@serverComponents/icons";
 import { Button } from "@clientComponents/globals";
 import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { cn } from "@lib/utils";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
@@ -104,7 +105,8 @@ export const SubOption = ({
 
   return (
     <div className="mt-3 flex" data-id={id}>
-      <div className="mt-2 flex w-5 justify-end">{icon}</div>
+      {icon && <div className="mt-2 flex w-5 justify-end">{icon}</div>}
+
       <Input
         id={`option--${id}--${index + 1}`}
         ref={input}
@@ -115,7 +117,7 @@ export const SubOption = ({
           updateValue(Number(indexes[0]), subIndex, index, e.target.value);
         }}
         onKeyDown={handleKeyDown}
-        className="!my-0 ml-5 max-h-9 w-full"
+        className={cn("!my-0 max-h-9 w-full", icon && "ml-5")}
         {...getLocalizationAttribute()}
       />
       <Button

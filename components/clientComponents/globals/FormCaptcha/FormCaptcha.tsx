@@ -1,7 +1,5 @@
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
-import { verifyHCaptchaToken } from "./actions";
-import { useRouter } from "next/navigation";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { hCaptchaEnabled } from "./helpers";
 import { FormEvent, useRef } from "react";
@@ -16,7 +14,6 @@ import { FormEvent, useRef } from "react";
 export const FormCaptcha = ({
   children,
   hCaptchaSiteKey = "",
-  blockableMode = false,
   handleSubmit,
   lang,
   id = "",
@@ -24,6 +21,7 @@ export const FormCaptcha = ({
   className = "",
   isPreview = false,
   noValidate = true,
+  captchaToken,
 }: {
   children: React.ReactNode;
   hCaptchaSiteKey: string | undefined;
@@ -36,8 +34,8 @@ export const FormCaptcha = ({
   className?: string;
   isPreview?: boolean;
   noValidate?: boolean;
+  captchaToken: React.RefObject<string> | undefined;
 }) => {
-  const router = useRouter();
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
 
@@ -49,25 +47,11 @@ export const FormCaptcha = ({
     return null;
   }
 
-  // Verify the hCAPTCHA token on the server side and then call the callback handleSubmit
   const onVerified = async (token: string) => {
-    try {
-      const success = await verifyHCaptchaToken(token);
-      if (success) {
-        logMessage.info(`hCaptcha: success`);
-        handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
-      } else if (blockableMode) {
-        logMessage.info(`hCaptcha: failed and submission blocked`);
-        router.push(`/${lang}/unable-to-process`);
-      } else {
-        logMessage.info(`hCaptcha: failed and submission allowed`);
-        handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
-      }
-    } catch (err) {
-      logMessage.error(`hCaptcha: system error ${err}`);
-      // Don't block the user from submitting on a system error
-      handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
+    if (captchaToken) {
+      captchaToken.current = token;
     }
+    handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
 
   if (!captchaEnabled) {
@@ -117,6 +101,7 @@ export const FormCaptcha = ({
         // Component will reset immediately after a Client sends bad data.
         // Note: An invalid sitekey will cause the HCaptcha component to fail without calling onError
         onError={(code: string) => {
+          // @TODO investigate cases where the submission should be allowed through based on error code
           // see https://docs.hcaptcha.com/#siteverify-error-codes-table
           logMessage.warn(`hCatpcha: clientComponentError error ${code}`);
         }}

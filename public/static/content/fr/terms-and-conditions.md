@@ -1,4 +1,5 @@
 # Conditions générales
+
 Les présentes conditions d’utilisation définissent les rôles et responsabilités d'[Emploi et Développement social Canada (EDSC)](https://www.canada.ca/fr/emploi-developpement-social.html) quant à l’hébergement de ce formulaire au nom d’un ministère ou organisme.
 
 Pour savoir comment le ministère ou l’organisme gère vos soumissions du formulaire, revenez au formulaire que vous consultiez.  
@@ -12,6 +13,10 @@ Lorsque vous soumettez un formulaire, ce dernier est temporairement conservé da
 Le ministère ou l’organisme avec lequel vous communiquez protège également vos renseignements personnels. L’avis de confidentialité figurant sur le formulaire devrait préciser comment ils procèdent.  
 
 Les renseignements personnels sont recueillis conformément à la [Loi sur la protection des renseignements personnels](https://laws.justice.gc.ca/fra/lois/p-21/index.html).
+
+### hCaptcha pour protéger la sécurité des formulaires
+
+L'utilisation de [hCaptcha](https://www.hcaptcha.com/) nous aide à détecter le spam, les abus automatisés et les menaces des robots. Apprenez-en plus sur la [politique de confidentialité](https://www.hcaptcha.com/privacy) et les [conditions d'utilisation](https://www.hcaptcha.com/terms) de ce fournisseur de services tiers.
 
 ### Analytique Web pour améliorer votre expérience  
 
@@ -116,4 +121,4 @@ Bon nombre de plateformes de médias sociaux offrent plusieurs choix de langues 
 
 
 
-**Dernière mise à jour :** 24 Avril 2024
+**Dernière mise à jour :** 19 mars 2025

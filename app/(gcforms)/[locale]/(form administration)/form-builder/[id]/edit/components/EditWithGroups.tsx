@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel } from ".";
 import { ConfirmationDescriptionWithGroups } from "./ConfirmationDescriptionWithGroups";
-import { RichTextLockedWithGroups } from "./elements/RichTextLockedWithGroups";
+import { RichTextLocked } from "./elements/RichTextLocked";
 import { ExpandingInput } from "@formBuilder/components/shared/ExpandingInput";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useRehydrate } from "@lib/store/hooks/useRehydrate";
@@ -127,7 +127,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   return (
     <>
       <h1 className="sr-only">{t("edit")}</h1>
-      <div className="flex w-[800px]">
+      <div className="flex w-[700px]">
         <h2 id="editPagesHeading" className="whitespace-nowrap" tabIndex={-1}>
           {t("groups.editPagesHeading")}
         </h2>
@@ -142,7 +142,9 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       </div>
       {/* Form Intro + Title Panel */}
       {groupId === "start" && (
-        <RichTextLockedWithGroups
+        <RichTextLocked
+          id="intro"
+          maxLength={20000}
           hydrated={hasHydrated}
           className="rounded-t-lg"
           summaryText={t("startFormIntro")}
@@ -180,7 +182,9 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       )}
       {/* Privacy Panel */}
       {groupId === "start" && (
-        <RichTextLockedWithGroups
+        <RichTextLocked
+          id="policy"
+          maxLength={50000}
           beforeContent={<PrivacyDescriptionBefore />}
           summaryText={t("groups.privacy.summary")}
           detailsText={
@@ -208,7 +212,9 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       </div>
       {/* Confirmation*/}
       {groupId === "end" && (
-        <RichTextLockedWithGroups
+        <RichTextLocked
+          id={"end"}
+          maxLength={20000}
           summaryText={t("groups.confirmation.summary")}
           beforeContent={
             <div>

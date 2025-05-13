@@ -59,11 +59,18 @@ const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
 
   const selected = elementOptions.filter((item) => item.id === selectedType);
 
-  return filterSelected(
+  const filteredItem = filterSelected(
     item,
     selected && selected.length ? selected[0] : elementOptions[1],
     elementOptions
   );
+
+  // For non-standard types, we want to set the id to the type as the type isn't avaliable in the elementOptions
+  if (selectedType === "email") {
+    filteredItem.id = "textField";
+  }
+
+  return filteredItem;
 };
 
 export const SelectedElement = ({
@@ -101,7 +108,7 @@ export const SelectedElement = ({
         element = (
           <>
             <ShortAnswer>{t("addElementDialog.radio.title")}</ShortAnswer>
-            <Options item={item} renderIcon={() => <RadioEmptyIcon />} formId={formId} />
+            <Options item={item} formId={formId} />
           </>
         );
       }
@@ -127,9 +134,15 @@ export const SelectedElement = ({
       if (elIndex !== -1) {
         element = <SubOptions item={item} renderIcon={(index) => `${index + 1}.`} />;
       } else {
+        const sortOrder = item.properties.sortOrder;
+        const sortOptions = sortOrder ? t(`sortOptions.${sortOrder}`) : t("sortOptions.none");
         element = (
           <>
             <ShortAnswer>{t("addElementDialog.dropdown.title")}</ShortAnswer>
+            <div className="inline-block text-sm text-slate-600">
+              <span className="mr-2 inline-block">{t("sortOptions.label")}</span>
+              {sortOptions}
+            </div>
             {!item.properties.managedChoices && (
               <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />
             )}
@@ -142,18 +155,14 @@ export const SelectedElement = ({
         element = (
           <>
             <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
-            {!item.properties.managedChoices && (
-              <SubOptions item={item} renderIcon={(index) => `${index + 1}.`} />
-            )}
+            {!item.properties.managedChoices && <SubOptions item={item} />}
           </>
         );
       } else {
         element = (
           <>
             <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
-            {!item.properties.managedChoices && (
-              <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />
-            )}
+            {!item.properties.managedChoices && <Options item={item} formId={formId} />}
           </>
         );
       }

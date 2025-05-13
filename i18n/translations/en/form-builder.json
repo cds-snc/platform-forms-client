@@ -444,7 +444,7 @@
   "formDeleteDialogTitleFailed": "Error",
   "formDownload": {
     "btnText": "What can I do with a form file?",
-    "description": "Keep a version of your form on your computer",
+    "description": "Keep a version of your form on your computer.",
     "dialog": {
       "downloadButtonText": "Download a copy",
       "message1": "Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
@@ -646,7 +646,7 @@
       },
       "deleteKeySuccess": {
         "title": "API key deleted",
-        "message": "New responses can now be downloaded on the",
+        "message": "New responses can now be downloaded on the ",
         "responseLinkText": "Responses page"
       },
       "generateKeySuccess": {
@@ -750,7 +750,6 @@
     "selectClassification": "Data classification",
     "beforePublishMessage": "These settings can only be changed before publishing.",
     "deleteApiKeyMessage": "You must delete the API key before you can change the delivery option.",
-    "protectedBMessage": "PROTECTED B responses must be downloaded from GC Forms.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
     "title": "Delivery option",
     "vaultOption": "Download responses from GC Forms",
@@ -809,7 +808,7 @@
       },
       "api": {
         "title": "API response retrieval",
-        "text1": "For up to PROTECTED A forms. (PROTECTED B coming soon)",
+        "text1": "For up to PROTECTED B forms",
         "text2": "API calls to extract (pull) form responses",
         "text3": "Can be switched to the download delivery method after publishing",
         "text4": "One API key per form",
@@ -819,15 +818,15 @@
   },
   "loggedOutTab": {
     "publish": {
-      "title": "You cannot publish",
+      "title": "You can't publish yet",
       "text1": "To publish this form,"
     },
     "responses": {
-      "title": "You cannot access responses",
+      "title": "You can't access responses yet",
       "text1": "To access form responses,"
     },
     "settings": {
-      "title": "You cannot change settings",
+      "title": "You can't change settings yet",
       "text1": "To change the settings of this form,"
     },
     "text2": "sign in to your account",
@@ -884,6 +883,7 @@
   "signInToTest": "<a href=\"/en/auth/login\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Radio buttons",
   "start": "Start",
+  "startErrorTemplateSize": "The form file is too large",
   "startErrorParse": "Failed to read form file",
   "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",
@@ -1307,14 +1307,25 @@
   "saveAndResume": {
     "savedErrorMessage": "There was an error saving your changes.",
     "savedSuccessMessage": "Your changes have been saved.",
-    "title": "Resume filling out the form later",
+    "title": "Enable saving answers",
     "toggleOn": "On",
     "toggleOff": "Off",
     "toggleDescription": {
-      "text1": "Enable saving answers in progress",
-      "text2": "Allow people to pause and resume the form later. With the option to save a copy of their answers so far on their device. These can then be uploaded into the form later."
+      "text1": "Resuming filling out a form in progress",
+      "text2": "Gives users the option to pause and finish filling out the form later. People filling out the form can get a copy of their answers filled in so far, as well as a copy of their answers once the form has been submitted."
     },
-    "a11yDescription": "Save progress and resume form later",
+    "a11yDescription": "Save progress and resume the form later",
     "saveButton": "Save"
-  }
+  },
+  "sortOptions": {
+    "label": "Order list:",
+    "none": "as entered",
+    "ascending": "alphabetically (A-Z)",
+    "descending": "reverse alphabetical (Z-A)"
+  },
+  "translations": {
+    "formDescription": "Form description"
+  },
+  "en": "English",
+  "fr": "Français"
 }

@@ -5,18 +5,10 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
 import { SaveAndResumeToggle } from "./SaveAndResumeToggle";
 import { updateTemplateFormSaveAndResume } from "@formBuilder/actions";
 
-export const SetSaveAndResume = ({
-  formId,
-  isPublished,
-}: {
-  formId: string;
-  isPublished: boolean;
-}) => {
+export const SetSaveAndResume = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
 
   const { saveAndResume, setSaveAndResume } = useTemplateStore((s) => ({
@@ -33,8 +25,6 @@ export const SetSaveAndResume = ({
   const saveFormStatus = useCallback(async () => {
     const saveAndResume = status === "off" ? false : true;
 
-    if (isPublished) return;
-
     const result = await updateTemplateFormSaveAndResume({
       id: formId,
       saveAndResume,
@@ -47,15 +37,7 @@ export const SetSaveAndResume = ({
 
     setSaveAndResume(status === "off" ? false : true);
     toast.success(t("saveAndResume.savedSuccessMessage"));
-  }, [status, t, setSaveAndResume, formId, isPublished]);
-
-  const { getFlag } = useFeatureFlags();
-  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
-
-  // Disable save and resume panel if the feature flag is not enabled
-  if (!saveAndResumeEnabled) {
-    return null;
-  }
+  }, [status, t, setSaveAndResume, formId]);
 
   return (
     <div className="mb-10">
@@ -63,28 +45,19 @@ export const SetSaveAndResume = ({
       <p className="mb-2 font-bold">{t("saveAndResume.toggleDescription.text1")}</p>
       <p>{t("saveAndResume.toggleDescription.text2")}</p>
 
-      <div className="mb-4" data-flag-enabled={saveAndResumeEnabled}>
-        {isPublished ? (
-          <ul>
-            <li className="mt-4 italic">
-              {status === "off" ? t("saveAndResume.toggleOff") : t("saveAndResume.toggleOn")}
-            </li>
-          </ul>
-        ) : (
-          <SaveAndResumeToggle
-            isChecked={status === "off" ? false : true}
-            setIsChecked={handleToggle}
-            onLabel={t("saveAndResume.toggleOn")}
-            offLabel={t("saveAndResume.toggleOff")}
-            description={t("saveAndResume.a11yDescription")}
-          />
-        )}
+      <div className="mb-4">
+        <SaveAndResumeToggle
+          isChecked={status === "off" ? false : true}
+          setIsChecked={handleToggle}
+          onLabel={t("saveAndResume.toggleOn")}
+          offLabel={t("saveAndResume.toggleOff")}
+          description={t("saveAndResume.a11yDescription")}
+        />
       </div>
-      {!isPublished && (
-        <Button theme="secondary" onClick={saveFormStatus}>
-          {t("saveAndResume.saveButton")}
-        </Button>
-      )}
+
+      <Button theme="secondary" onClick={saveFormStatus}>
+        {t("saveAndResume.saveButton")}
+      </Button>
     </div>
   );
 };

@@ -39,7 +39,7 @@ const nextConfig = {
     // removeConsole: false,
   },
   output: isOutputStandalone ? "standalone" : undefined,
-  ...(process.env.REVIEW_ENV && {
+  ...(process.env.LAMBDA_ENV && {
     cacheHandler: require.resolve("./nextCacheHandler.mjs"),
     cacheMaxMemorySize: 0, // disable default in-memory caching
   }),
@@ -87,17 +87,18 @@ const nextConfig = {
     // PPR is only supported in Next.js Canary branches
     // ppr: true,
     serverActions: {
+      // Note: we match this value in constants.ts
       bodySizeLimit: "5mb",
     },
-    turbo: {
-      rules: {
-        "*.md": {
-          loaders: ["raw-loader"],
-          as: "*.js",
-        },
+  },
+  turbopack: {
+    rules: {
+      "*.md": {
+        loaders: ["raw-loader"],
+        as: "*.js",
       },
     },
-  },
+  }
 };
 
 export default nextConfig;

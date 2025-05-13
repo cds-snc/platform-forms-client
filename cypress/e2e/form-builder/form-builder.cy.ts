@@ -13,7 +13,7 @@ describe("Test FormBuilder", () => {
     cy.visitPage("/en/form-builder/0000/edit");
     cy.typeInField("#formTitle", "Cypress Test Form");
 
-    cy.get("button").contains("Form set-up").click();
+    cy.get('button[aria-label="Form set-up"]').click();
 
     // Form description
     cy.contains("summary", "Add a description to your form to help set expectations").click();
@@ -74,7 +74,7 @@ describe("Test FormBuilder", () => {
 
     // publish form
     cy.get('[data-testid="publish"]').click();
-    cy.get("h1").should("contain", "You cannot publish");
+    cy.get("h1").should("contain", "You can't publish yet");
     cy.get("a").contains("create one now").click();
 
     // can visit create account

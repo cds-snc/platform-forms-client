@@ -15,6 +15,8 @@ import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { ForwardArrowIcon24x24 } from "@serverComponents/icons";
+import { isFormClosed } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
+import { useRouter } from "next/navigation";
 
 export const NextButton = ({
   validateForm,
@@ -32,6 +34,13 @@ export const NextButton = ({
   const { currentGroup, hasNextAction, handleNextAction, isOffBoardSection } = useGCFormsContext();
   const { updateFormDelay } = useFormDelay();
   const { t } = useTranslation("form-builder");
+  const router = useRouter();
+
+  const checkIfFormClosed = async () => {
+    if (await isFormClosed(formRecord.id)) {
+      router.refresh();
+    }
+  };
 
   const handleValidation = async () => {
     let errors = {};
@@ -93,6 +102,9 @@ export const NextButton = ({
       <Button
         onClick={async (e) => {
           e.preventDefault();
+
+          checkIfFormClosed();
+
           if (await handleValidation()) {
             updateFormDelay(formRecord.form, currentGroup);
             handleNextAction();
@@ -104,10 +116,8 @@ export const NextButton = ({
           t("next", { lng: language })
         ) : (
           <>
-            <span className="hidden tablet:block">{t("next", { lng: language })}</span>
-            <span className="block tablet:hidden">
-              <ForwardArrowIcon24x24 className="fill-white" title={t("next", { lng: language })} />
-            </span>
+            <span className="hidden laptop:block">{t("next", { lng: language })}</span>
+            <ForwardArrowIcon24x24 className="fill-white" title={t("next", { lng: language })} />
           </>
         )}
       </Button>

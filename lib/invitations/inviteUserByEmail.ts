@@ -68,9 +68,9 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
 
   // check if user is already invited to the form
   const invitation = await _retrieveFormInvitationByEmail(email, formId)
-    .then((previousInvitation) => {
+    .then(async (previousInvitation) => {
       if (previousInvitation && previousInvitation.expires < new Date()) {
-        _deleteInvitation(previousInvitation.id);
+        await _deleteInvitation(previousInvitation.id);
         return _createInvitation(email, formId, user.id);
       }
       if (previousInvitation === null) {
@@ -189,10 +189,14 @@ const _sendInvitationEmail = async (
       formUrlFr
     );
 
-    await sendEmail(email, {
-      subject: "Invitation to access form | Invitation pour accéder au formulaire",
-      formResponse: emailContent,
-    });
+    await sendEmail(
+      email,
+      {
+        subject: "Invitation to access form | Invitation pour accéder au formulaire",
+        formResponse: emailContent,
+      },
+      "formInvitationToExistingUser"
+    );
 
     return;
   }
@@ -208,10 +212,14 @@ const _sendInvitationEmail = async (
     registerUrlFr
   );
 
-  await sendEmail(email, {
-    subject: "Invitation to access form | Invitation pour accéder au formulaire",
-    formResponse: emailContent,
-  });
+  await sendEmail(
+    email,
+    {
+      subject: "Invitation to access form | Invitation pour accéder au formulaire",
+      formResponse: emailContent,
+    },
+    "formInvitationToFutureUser"
+  );
 };
 
 /**

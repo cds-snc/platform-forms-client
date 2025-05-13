@@ -21,6 +21,7 @@ import { ownerAddedEmailTemplate } from "./invitations/emailTemplates/ownerAdded
 import { isValidISODate } from "./utils/date/isValidISODate";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
+import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 
 // ******************************************
 // Internal Module Functions
@@ -152,6 +153,17 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
     throw new InvalidFormConfigError();
   }
 
+  const isValid = validateTemplateSize(JSON.stringify(command.formConfig));
+
+  if (!isValid) {
+    logMessage.warn(
+      `[templates][createTemplate] Template size exceeds the limit.\nConfig: ${JSON.stringify(
+        command.formConfig
+      )}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
   const createdTemplate = await prisma.template
     .create({
       data: {
@@ -221,7 +233,6 @@ export async function getAllTemplates(options?: {
       .findMany({
         where: {
           ...(requestedWhere && requestedWhere),
-          ttl: null,
         },
         select: {
           id: true,
@@ -277,7 +288,6 @@ export async function getAllTemplatesForUser(
       .findMany({
         where: {
           ...(requestedWhere && requestedWhere),
-          ttl: null,
           users: {
             some: {
               id: ability.user.id,
@@ -490,6 +500,17 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     throw new InvalidFormConfigError();
   }
 
+  const isValid = validateTemplateSize(JSON.stringify(command.formConfig));
+
+  if (!isValid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Template size exceeds the limit.\nConfig: ${JSON.stringify(
+        command.formConfig
+      )}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
   const updatedTemplate = await prisma.template
     .update({
       where: {
@@ -540,7 +561,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   command.deliveryOption &&
     logEvent(
       user.id,
-      { type: "DeliveryOption", id: command.formID },
+      { type: "Form", id: command.formID },
       "ChangeDeliveryOption",
       `Change Delivery Option to: ${Object.keys(command.deliveryOption)
         .map((key) => `${key}: ${command.deliveryOption && command.deliveryOption[key]}`)
@@ -549,7 +570,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   command.securityAttribute &&
     logEvent(
       user.id,
-      { type: "SecurityAttribute", id: command.formID },
+      { type: "Form", id: command.formID },
       "ChangeSecurityAttribute",
       `Updated security attribute to ${command.securityAttribute}`
     );
@@ -802,10 +823,14 @@ export const notifyOwnersOwnerAdded = async (
   );
 
   users.forEach((owner) => {
-    sendEmail(owner.email, {
-      subject: "Ownership change notification | Notification de changement de propriété",
-      formResponse: emailContent,
-    });
+    sendEmail(
+      owner.email,
+      {
+        subject: "Ownership change notification | Notification de changement de propriété",
+        formResponse: emailContent,
+      },
+      "notifyAddedOwner"
+    );
   });
 };
 
@@ -827,10 +852,14 @@ export const notifyOwnersOwnerRemoved = async (
     form.titleFr
   );
 
-  sendEmail(userToRemove.email, {
-    subject: "Form access removed | Accès au formulaire supprimé",
-    formResponse: youHaveBeenRemovedEmailContent,
-  });
+  sendEmail(
+    userToRemove.email,
+    {
+      subject: "Form access removed | Accès au formulaire supprimé",
+      formResponse: youHaveBeenRemovedEmailContent,
+    },
+    "notifyRemovedOwner"
+  );
 
   // Send email to remaining owners
   users.forEach((owner) => {
@@ -840,10 +869,14 @@ export const notifyOwnersOwnerRemoved = async (
       userToRemove.name || "An owner"
     );
 
-    sendEmail(owner.email, {
-      subject: "Form access removed | Accès au formulaire supprimé",
-      formResponse: ownerRemovedEmailContent,
-    });
+    sendEmail(
+      owner.email,
+      {
+        subject: "Form access removed | Accès au formulaire supprimé",
+        formResponse: ownerRemovedEmailContent,
+      },
+      "notifyOtherOwnersOfRemovedOwner"
+    );
   });
 };
 
@@ -1058,7 +1091,6 @@ export async function updateFormSaveAndResume(
     .update({
       where: {
         id: formID,
-        isPublished: false,
       },
       data: {
         saveAndResume: saveAndResume ?? false,
@@ -1080,11 +1112,6 @@ export async function updateFormSaveAndResume(
       },
     })
     .catch((e) => {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === "P2025") {
-          throw new TemplateAlreadyPublishedError();
-        }
-      }
       return prismaErrors(e, null);
     });
 
@@ -1233,8 +1260,10 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
   const numOfUnprocessedSubmissions = await unprocessedSubmissions(formID, true);
   if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
 
-  const dateIn30Days = new Date(Date.now() + 2592000000); // 30 days = 60 (seconds) * 60 (minutes) * 24 (hours) * 30 (days) * 1000 (to ms)
+  // Check and delete any API keys from IDP
+  await deleteKey(formID);
 
+  const dateIn30Days = new Date(Date.now() + 2592000000); // 30 days = 60 (seconds) * 60 (minutes) * 24 (hours) * 30 (days) * 1000 (to ms)
   const templateMarkedAsDeleted = await prisma.template
     .update({
       where: {
@@ -1265,9 +1294,6 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
   if (templateMarkedAsDeleted === null) return templateMarkedAsDeleted;
 
   logEvent(user.id, { type: "Form", id: formID }, "DeleteForm");
-
-  // Check and delete any API keys from IDP
-  await deleteKey(formID);
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 

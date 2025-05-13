@@ -1,0 +1,67 @@
+.gc-link-editor {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  max-width: 400px;
+  width: 100%;
+  opacity: 0;
+  background-color: #fff;
+  border-radius: 4px;
+  transition: opacity 0.5s;
+  will-change: transform;
+}
+
+.gc-link-editor-container {
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  width: 100%;
+  padding: 8px;
+  gap: 4px;
+  display: flex;
+  justify-content: space-between;
+  input {
+    font-size: 0.9rem;
+    padding: 2px 6px;
+    width: 100%;
+  }
+  .link {
+    padding: 2px 4px;
+    font-size: 0.9rem;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+.gc-link-editor-button-disabled {
+  cursor: not-allowed;
+  svg {
+    fill: #ccc !important;
+  }
+}
+
+.gc-link-editor-actions {
+  display: flex;
+  gap: 4px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 6px 12px;
+  svg {
+    fill: #1e293b;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

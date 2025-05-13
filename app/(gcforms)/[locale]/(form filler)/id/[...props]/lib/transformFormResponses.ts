@@ -6,7 +6,7 @@ const IGNORED_KEYS = ["formID", "securityAttribute"];
 
 type DynamicRowResponse = TransformedResponse[];
 
-interface TransformedResponse {
+export interface TransformedResponse {
   [key: string]: Response | DynamicRowResponse;
 }
 

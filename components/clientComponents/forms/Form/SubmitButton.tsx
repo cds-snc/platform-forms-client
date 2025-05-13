@@ -5,18 +5,29 @@ import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { ga } from "@lib/client/clientHelpers";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
   formID: string;
   formTitle: string;
+  disabled: boolean;
+  submissionError?: boolean;
 }
-export const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID, formTitle }) => {
+export const SubmitButton: React.FC<SubmitButtonProps> = ({
+  getFormDelay,
+  formID,
+  formTitle,
+  disabled,
+  submissionError,
+}) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
   const formDelay = useRef(getFormDelay());
+  // Used to show a spinner for the initial validation and hCAPTCHA loading steps
+  const [loading, setLoading] = useState(false);
 
   const { getFlag } = useFeatureFlags();
   const timerEnabled = getFlag("formTimer");
@@ -51,6 +62,12 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID
       };
     }
   }, [checkTimer, formTimerState.remainingTime, formTimerEnabled]);
+
+  useEffect(() => {
+    if (submissionError) {
+      setLoading(false);
+    }
+  }, [submissionError]);
 
   return (
     <>
@@ -89,14 +106,13 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID
       <Button
         id="form-submit-button"
         type="submit"
+        disabled={disabled}
         onClick={(e) => {
           if (formTimerEnabled) checkTimer();
           screenReaderRemainingTime.current = formTimerState.remainingTime;
           if (!formTimerState.canSubmit) {
             e.preventDefault();
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-              event: "form_submission_spam_trigger",
+            ga("form_submission_spam_trigger", {
               formID: formID,
               formTitle: formTitle,
               submitTime: formTimerState.remainingTime,
@@ -108,7 +124,9 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID
           }
           // Only change state if submitTooEarly is already set to true
           submitTooEarly && setSubmitTooEarly(false);
+          setLoading(true);
         }}
+        loading={loading}
       >
         {t("submitButton")}
       </Button>

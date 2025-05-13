@@ -58,6 +58,14 @@ export const tryFocusOnPageLoad = (fallbackSelector = "H1") => {
     }
 
     focusEl?.focus();
+    // scrollItem into view if it is not visible
+    if (focusEl && focusEl.scrollIntoView) {
+      focusEl.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    }
   }, NEXT_TICK);
 };
 
@@ -164,4 +172,16 @@ export async function runPromisesSynchronously<T>(
 export const truncateString = (str: string, maxLength: number = 50): string => {
   if (!str) return "";
   return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
+};
+
+// Google Analytics util to simplify firing an event
+export const ga = (eventName: string, data?: object) => {
+  if (!window || !eventName) {
+    return;
+  }
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: eventName,
+    ...data,
+  });
 };

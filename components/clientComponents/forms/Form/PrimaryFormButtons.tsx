@@ -4,6 +4,11 @@ import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
 import { SubmitButton } from "./SubmitButton";
 import { InnerFormProps } from "./types";
 import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
+import { FormStatus } from "@gcforms/types";
+
+const isFormClosed = (status: FormStatus) => {
+  return status === FormStatus.FORM_CLOSED_ERROR;
+};
 
 export const PrimaryFormButtons = ({
   isGroupsCheck,
@@ -24,6 +29,8 @@ export const PrimaryFormButtons = ({
   getFormDelay: () => number;
   saveAndResumeEnabled?: boolean;
 }) => {
+  const submissionError =
+    Object.entries(props.errors).length > 0 || props.status === FormStatus.ERROR;
   return (
     <div className="flex">
       {isGroupsCheck && isShowReviewPage && (
@@ -46,13 +53,25 @@ export const PrimaryFormButtons = ({
                     onClick={() => tryFocusOnPageLoad("h2")}
                   />
                 )}
-                <SubmitButton getFormDelay={getFormDelay} formID={formId} formTitle={formTitle} />
+                <SubmitButton
+                  disabled={isFormClosed(props.status)}
+                  getFormDelay={getFormDelay}
+                  formID={formId}
+                  formTitle={formTitle}
+                  submissionError={submissionError}
+                />
               </div>
             );
           },
         })
       ) : (
-        <SubmitButton getFormDelay={getFormDelay} formID={formId} formTitle={formTitle} />
+        <SubmitButton
+          disabled={isFormClosed(props.status)}
+          getFormDelay={getFormDelay}
+          formID={formId}
+          formTitle={formTitle}
+          submissionError={submissionError}
+        />
       )}
     </div>
   );

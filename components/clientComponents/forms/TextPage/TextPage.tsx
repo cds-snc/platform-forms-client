@@ -7,8 +7,7 @@ import { PublicFormRecord } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { SaveResponse } from "@clientComponents/forms/SaveAndResume/SaveResponse";
 import { Language } from "@lib/types/form-builder-types";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
+import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -27,13 +26,11 @@ interface PageContextProps {
   language: Language;
 }
 
-const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageContextProps) => {
+const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextProps) => {
   const { t } = useTranslation("confirmation");
   const { submissionId, submissionDate } = useGCFormsContext();
 
-  const { getFlag } = useFeatureFlags();
-  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
-  const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
+  const saveAndResume = formRecord?.saveAndResume;
 
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
@@ -42,14 +39,7 @@ const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageC
         <input type="hidden" value={submissionId} name="submissionId" />
         <input type="hidden" value={submissionDate} name="submissionDate" />
         <RichText className="confirmation">{pageText}</RichText>
-        {saveAndResume && (
-          <SaveResponse
-            formId={formId}
-            formTitleEn={formRecord.form.titleEn}
-            formTitleFr={formRecord.form.titleFr}
-            language={language}
-          />
-        )}
+        {saveAndResume && <SaveResponse language={language} />}
       </>
     );
   }
@@ -89,7 +79,7 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
 
   return (
     <>
-      <h1 tabIndex={-1}>{t("title")}</h1>
+      <GcdsH1 tabIndex={-1}>{t("title")}</GcdsH1>
       <PageContent
         formId={props.formId}
         formRecord={props.formRecord}

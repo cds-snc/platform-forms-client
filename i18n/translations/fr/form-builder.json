@@ -444,7 +444,7 @@
   "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {
     "btnText": "Que puis-je faire avec un fichier de formulaire?",
-    "description": "Conservez une version du formulaire sur votre ordinateur",
+    "description": "Conservez une version du formulaire sur votre ordinateur.",
     "dialog": {
       "downloadButtonText": "Télécharger une copie",
       "message1": "Téléchargez un fichier de formulaire pour partager l’ébauche avec d'autres personnes. Les collaborateur·rice·s peuvent ainsi ouvrir le fichier dans Formulaires GC et visualiser les progrès réalisés.",
@@ -642,7 +642,7 @@
       },
       "deleteKeySuccess": {
         "title": "La clé API a été supprimée",
-        "message": "Les nouvelles réponses peuvent maintenant être téléchargées sur la",
+        "message": "Les nouvelles réponses peuvent maintenant être téléchargées sur la ",
         "responseLinkText": "page Réponses"
       },
       "deleteApiKeyToChangeOptions": {
@@ -750,7 +750,6 @@
     "selectClassification": "Classification des données",
     "beforePublishMessage": "Ces paramètres ne peuvent être modifiés qu’avant la publication.",
     "deleteApiKeyMessage": "Vous devez supprimer la clé API avant de pouvoir modifier l'option de livraison.",
-    "protectedBMessage": "Les réponses classifiées PROTÉGÉ B doivent être téléchargées de Formulaires GC.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
     "title": "Option de livraison",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
@@ -809,7 +808,7 @@
       },
       "api": {
         "title": "Récupération des réponses par API",
-        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A (Bientôt disponible : PROTÉGÉ B).",
+        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B",
         "text2": "Appels à l'API pour extraire les réponses de formulaire.",
         "text3": "Possibilité de passer à la méthode de téléchargement après la publication.",
         "text4": "Une clé API par formulaire",
@@ -819,15 +818,15 @@
   },
   "loggedOutTab": {
     "publish": {
-      "title": "Vous ne pouvez pas publier",
+      "title": "Vous ne pouvez pas encore publier",
       "text1": "Pour publier ce formulaire,"
     },
     "responses": {
-      "title": "Vous ne pouvez pas accéder aux réponses",
+      "title": "Vous ne pouvez pas encore accéder aux réponses",
       "text1": "Pour accéder aux réponses du formulaire,"
     },
     "settings": {
-      "title": "Vous ne pouvez pas modifier les paramètres",
+      "title": "Vous ne pouvez pas encore modifier les paramètres",
       "text1": "Pour modifier les paramètres de ce formulaire,"
     },
     "text2": "connectez-vous",
@@ -884,6 +883,7 @@
   "signInToTest": "<a href=\"/fr/auth/login\">Connectez-vous</a> pour tester comment vous pouvez soumettre et visualiser les réponses.",
   "singleChoice": "Boutons radio",
   "start": "Commencer",
+  "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
   "startFormIntro": "Ajoutez une description à votre formulaire pour aider à définir les attentes",
   "startH2": "Créer un formulaire",
@@ -1307,14 +1307,25 @@
   "saveAndResume": {
     "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications.",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "title": "Reprendre le remplissage du formulaire",
+    "title": "Permettre la sauvegarde des réponses",
     "toggleOn": "Activé",
     "toggleOff": "Désactivé",
     "toggleDescription": {
-      "text1": "Permettre l'enregistrement des réponses en cours",
-      "text2": "Permettre aux personnes de prendre une pause et de reprendre le formulaire plus tard. Avec la possibilité d'enregistré une copie des réponses remplies jusqu’à présent sur leur appareil. Celles-ci peuvent être téléversées dans le formulaire plus tard."
+      "text1": "Reprendre le remplissage d'un formulaire en cours",
+      "text2": "Donne la possiblité aux utilisateur·rice·s de prendre une pause et de compléter le formulaire plus tard. Les personnes qui remplissent le formulaire peuvent obtenir une copie des réponses remplies jusqu’à présent, ainsi qu'une copie de leur réponses une fois le formulaire soumis."
     },
     "a11yDescription": "Enregistrer la progression et reprendre le formulaire plus tard",
     "saveButton": "Enregistrer"
-  }
+  },
+  "sortOptions": {
+    "label": "Ordonner la liste :",
+    "none": "telle que saisie",
+    "ascending": "alphabétique (A-Z)",
+    "descending": "alphabétique inversé (Z-A)"
+  },
+  "translations": {
+    "formDescription": "Description du formulaire"
+  },
+  "en": "English",
+  "fr": "Français"
 }

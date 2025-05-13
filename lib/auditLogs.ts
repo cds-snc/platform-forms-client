@@ -55,6 +55,8 @@ export enum AuditLogEvent {
   DeleteAPIKey = "DeleteAPIKey",
   IncreaseThrottlingRate = "IncreaseThrottlingRate",
   ResetThrottlingRate = "ResetThrottlingRate",
+  // Audi Log events
+  AuditLogsRead = "AuditLogsRead",
 }
 export type AuditLogEventStrings = keyof typeof AuditLogEvent;
 
@@ -63,8 +65,6 @@ export enum AuditSubjectType {
   ServiceAccount = "ServiceAccount",
   Form = "Form",
   Response = "Response",
-  DeliveryOption = "DeliveryOption",
-  SecurityAttribute = "SecurityAttribute",
   Privilege = "Privilege",
   Flag = "Flag",
   Setting = "Setting",
@@ -113,7 +113,6 @@ export const logEvent = async (
     );
   } catch (e) {
     // Only log the error in Production environment.
-    // Development may be running without LocalStack setup
     if (process.env.NODE_ENV === "development" || process.env.APP_ENV === "test")
       return logMessage.info(`AuditLog:${auditLog}`);
 

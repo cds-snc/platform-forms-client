@@ -37,7 +37,6 @@ import {
   Combobox,
   FormattedDate,
 } from "@formBuilder/[id]/edit/components/elements/element-dialog";
-import { useIsAdminUser } from "./useIsAdminUser";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFeatureFlags } from "../useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
@@ -63,10 +62,9 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     });
   };
 
-  // default to off unless the user is an admin
-  const allowFileInput = useIsAdminUser();
-
   const { getFlag } = useFeatureFlags();
+
+  const allowFileInput = getFlag(FeatureFlags.fileUpload);
 
   const fileInputOption: ElementOption = {
     id: "fileInput",

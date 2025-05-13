@@ -20,9 +20,7 @@ describe("CDS Platform Intake Form functionality", () => {
     cy.typeInField("input[id='7']", "Call me at my work number");
 
     cy.get("[type='submit']").click();
-    cy.url().should("include", `/confirmation`);
     cy.get("h1").contains("Your form has been submitted");
-    cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/sig-blk-en.svg");
     cy.get("#content").contains("Thank you. Our team will contact you by email shortly.");
   });
 });

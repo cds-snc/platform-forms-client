@@ -21,8 +21,8 @@ ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
 
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
-RUN corepack enable && yarn set version berry
-RUN yarn workspaces focus gcforms flag_initialization
+RUN corepack enable && yarn set version stable
+RUN yarn workspaces focus gcforms
 RUN yarn build
 
 FROM node:22-alpine as final
@@ -46,8 +46,12 @@ ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
 ENV AWS_LWA_ENABLE_COMPRESSION=true
 ENV HOSTNAME=localhost
 ENV PORT=3000
-# Use the REVIEW_ENV environment variable to determine if the app is running in a review environment
+
+# Use the LAMBDA_ENV environment variable to determine if the app is running in a Lambda environment
 # Enables memory caching for the prerendering of pages
+ENV LAMBDA_ENV=1
+
+# Use the REVIEW_ENV environment variable to determine if the app is running in a Review environment
 ENV REVIEW_ENV=1
 
 WORKDIR /src
@@ -59,9 +63,9 @@ COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
 COPY .yarn ./.yarn
 COPY public ./public
 COPY prisma ./prisma
-COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
+COPY scripts/pr-review-entrypoint.sh ./entrypoint.sh
 # Update to latest yarn version
-RUN corepack enable && yarn set version berry
+RUN corepack enable && yarn set version stable
 # Required by the entrypoint.sh to load the SSM ParameterStore environment variables
 RUN apk update && apk add --no-cache aws-cli
 

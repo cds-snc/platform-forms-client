@@ -32,7 +32,7 @@ export default async function Page() {
       <h3 className="!mb-2">{t("accountCreated.unlockPublishing.title")}</h3>
       <p className="mb-4">{t("accountCreated.unlockPublishing.paragraph1")}</p>
       <p>{t("accountCreated.unlockPublishing.paragraph2")}</p>
-      <div className="mt-20">
+      <div className="mt-20 flex flex-wrap gap-2">
         <LinkButton.Primary href={`/${i18n.language}/unlock-publishing/`} className="mr-4">
           {t("accountCreated.unlockPublishingButton")}
         </LinkButton.Primary>

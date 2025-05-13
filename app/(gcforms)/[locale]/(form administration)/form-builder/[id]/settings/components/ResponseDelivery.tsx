@@ -13,7 +13,6 @@ import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
-import { ResponseDeliveryHelpButton } from "./dialogs/ResponseDeliveryHelpDialog";
 import { FormPurposeHelpButton } from "./dialogs/FormPurposeHelpButton";
 import { ResponseDeliveryHelpButtonWithApi } from "./dialogs/ResponseDeliveryHelpDialogApiWithApi";
 import {
@@ -27,8 +26,6 @@ import {
   updateTemplateFormPurpose,
 } from "@formBuilder/actions";
 import { useRefresh } from "@lib/hooks/useRefresh";
-
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 import Markdown from "markdown-to-jsx";
 
@@ -58,7 +55,7 @@ export enum PurposeOption {
   nonAdmin = "nonAdmin",
 }
 
-export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) => {
+export const ResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const session = useSession();
@@ -99,13 +96,6 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
     securityAttribute ? (securityAttribute as ClassificationType) : "Protected A"
   );
 
-  const { getFlag } = useFeatureFlags();
-  let apiAccess = getFlag("apiAccess");
-
-  if (isFormsAdmin) {
-    apiAccess = true;
-  }
-
   const protectedBSelected = classification === "Protected B";
   const emailLabel = protectedBSelected ? (
     <>
@@ -119,7 +109,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
   const userEmail = session.data?.user.email ?? "";
   let initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
 
-  const hasApiKey = apiKeyId && apiAccess ? true : false;
+  const hasApiKey = apiKeyId ? true : false;
 
   // Check for API key -- if a key is present, set the initial delivery option to API
   if (hasApiKey) {
@@ -323,12 +313,15 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
 
   // Update local state
-  const handleUpdateClassification = useCallback((value: ClassificationType) => {
-    if (value === "Protected B") {
-      setDeliveryOptionValue(DeliveryOption.vault);
-    }
-    setClassification(value);
-  }, []);
+  const handleUpdateClassification = useCallback(
+    (value: ClassificationType) => {
+      if (value === "Protected B" && deliveryOptionValue === DeliveryOption.email) {
+        setDeliveryOptionValue(DeliveryOption.vault);
+      }
+      setClassification(value);
+    },
+    [deliveryOptionValue]
+  );
 
   const handleDeleteApiKey = useCallback(() => {
     if (deliveryOptionValue === DeliveryOption.vault) {
@@ -368,11 +361,6 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
 
             <div className="mb-10">
               <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
-              {protectedBSelected ? (
-                <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
-                  {t("settingsResponseDelivery.protectedBMessage")}
-                </p>
-              ) : null}
 
               {/* Email Option */}
               {!hasApiKey && (
@@ -429,44 +417,42 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                   {/* End Vault Option */}
 
                   {/* API Option */}
-                  {apiAccess && (
-                    <div className="mb-10">
-                      <div>
-                        <Radio
-                          disabled={isPublished || protectedBSelected || hasApiKey}
-                          id={`delivery-option-${DeliveryOption.api}`}
-                          checked={deliveryOptionValue === DeliveryOption.api}
-                          name="response-delivery"
-                          value={DeliveryOption.api}
-                          label={t("formSettingsModal.apiOption.label")}
-                          onChange={updateDeliveryOption}
-                          className="mb-0"
-                        >
-                          <span className="ml-3 block text-sm">
-                            {t("formSettingsModal.apiOption.note")}
-                          </span>
-                        </Radio>
-                      </div>
-                      {/* End API Option */}
-
-                      {/*  API note */}
-                      {deliveryOptionValue === DeliveryOption.api && (
-                        <div className="mb-10 ml-4 border-l-4 pl-8">
-                          <span className="block py-6 font-bold">
-                            {t("formSettingsModal.apiOption.startNote")}
-                          </span>
-                        </div>
-                      )}
-                      {/*  End API note */}
+                  <div className="mb-10">
+                    <div>
+                      <Radio
+                        disabled={isPublished || hasApiKey}
+                        id={`delivery-option-${DeliveryOption.api}`}
+                        checked={deliveryOptionValue === DeliveryOption.api}
+                        name="response-delivery"
+                        value={DeliveryOption.api}
+                        label={t("formSettingsModal.apiOption.label")}
+                        onChange={updateDeliveryOption}
+                        className="mb-0"
+                      >
+                        <span className="ml-3 block text-sm">
+                          {t("formSettingsModal.apiOption.note")}
+                        </span>
+                      </Radio>
                     </div>
-                  )}
+                    {/* End API Option */}
+
+                    {/*  API note */}
+                    {deliveryOptionValue === DeliveryOption.api && (
+                      <div className="mb-10 ml-4 border-l-4 pl-8">
+                        <span className="block py-6 font-bold">
+                          {t("formSettingsModal.apiOption.startNote")}
+                        </span>
+                      </div>
+                    )}
+                    {/*  End API note */}
+                  </div>
                 </>
               )}
 
-              {apiAccess && deliveryOptionValue === DeliveryOption.api && (
+              {deliveryOptionValue === DeliveryOption.api && (
                 <div>
                   <DeleteKeyToChangeOptionsNote hasApiKey={hasApiKey} />
-                  <ApiKeyButton showDelete />
+                  <ApiKeyButton showDelete classification={classification} />
                   <ApiDocNotes />
                 </div>
               )}
@@ -479,11 +465,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                   >
                     {t("settingsResponseDelivery.saveButton")}
                   </Button>
-                  {apiAccess ? (
-                    <ResponseDeliveryHelpButtonWithApi />
-                  ) : (
-                    <ResponseDeliveryHelpButton />
-                  )}
+                  <ResponseDeliveryHelpButtonWithApi />
                 </>
               )}
             </div>
@@ -510,7 +492,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
               />
               <div className="mb-4 ml-12 text-sm">
                 <div>
-                  <Markdown options={{ forceBlock: true }}>
+                  <Markdown options={{ forceBlock: false }}>
                     {t("settingsPurposeAndUse.personalInfoDetails")}
                   </Markdown>
                 </div>
@@ -531,7 +513,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
               />
               <div className="mb-4 ml-12 text-sm">
                 <div>
-                  <Markdown options={{ forceBlock: true }}>
+                  <Markdown options={{ forceBlock: false }}>
                     {t("settingsPurposeAndUse.nonAdminInfoDetails")}
                   </Markdown>
                 </div>

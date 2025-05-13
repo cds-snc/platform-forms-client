@@ -20,6 +20,7 @@ interface TemplateApiType {
         name,
         deliveryOption,
         securityAttribute,
+        saveAndResume,
       }: CreateOrUpdateTemplateType) => Promise<{
         formRecord: { id: string; updatedAt: string | undefined } | null;
         error?: string;

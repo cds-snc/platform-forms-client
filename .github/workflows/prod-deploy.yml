@@ -7,6 +7,7 @@ on:
       - completed
 
 env:
+  AWS_ACCOUNT_ID: ${{ vars.PRODUCTION_AWS_ACCOUNT_ID }}
   AWS_REGION: ca-central-1
 
 permissions:
@@ -37,14 +38,28 @@ jobs:
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
-          role-to-assume: arn:aws:iam::957818836222:role/platform-forms-client-apply
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
           role-session-name: ECSDeploy
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@2d7337f0d3b7665fe22167bece86286325804cb6
+        uses: aws-actions/amazon-ecr-login@41024dce940db1142d80e2cc57337506aed01562
+
+      - name: Rainbow deployment
+        uses: ./.github/workflows/rainbow-deployment
+        with:
+          deployment-identifier: ${{ github.sha }}
+          ecr-registry-uri: ${{ steps.login-ecr.outputs.registry }}
+          ecr-registry-form-viewer-repository-name: form_viewer_production
+          cognito-app-client-id: ${{ secrets.PRODUCTION_COGNITO_APP_CLIENT_ID }}
+          cognito-user-pool-id: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID }}
+          load-balancer-listener-arn: ${{ vars.PRODUCTION_LOAD_BALANCER_LISTENER_ARN }}
+          forms-lambda-client-role-arn: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/forms-lambda-client
+          forms-lambda-client-subnet-ids: ${{ secrets.PRODUCTION_FORMS_LAMBDA_CLIENT_SUBNET_IDS }}
+          forms-lambda-client-security-group-ids: ${{ secrets.PRODUCTION_FORMS_LAMBDA_CLIENT_SECURITY_GROUP_IDS }}
+          hostname: forms-formulaires.alpha.canada.ca
 
       - name: Download Form Viewer task definition
         id: download-taskdef-form-viewer
@@ -55,7 +70,7 @@ jobs:
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@f8c43f6ac1655838457eae6236759f09b7b18558
+        uses: aws-actions/amazon-ecs-render-task-definition@46b22093c80fbdef8827430593380ce49c9aa36f
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
@@ -68,10 +83,18 @@ jobs:
           TASKDEF_ARN=`jq -r '.taskDefinitionArn' form_viewer.json | cut -f 1-6 -d "/"`
           jq --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json
 
+      - name: Run Prisma Migrations
+        id: prisma-migration
+        uses: ./.github/workflows/prisma-migration
+        with:
+          aws-account-id: ${{ env.AWS_ACCOUNT_ID }}
+          aws-region: ${{ env.AWS_REGION }}
+          app-env: production
+
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
         # v1.4.11
-        uses: aws-actions/amazon-ecs-deploy-task-definition@ba4c50ff72022c29eca99b2b348bca524e6c1b0f
+        uses: aws-actions/amazon-ecs-deploy-task-definition@196ff9dff9d098565a7be8db93b3e3ab70180079
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer

@@ -1,0 +1,9 @@
+{
+  "title": "Votre formulaire n'a pas pu être soumis",
+  "helpOptions": {
+    "title": "Vous pouvez essayer de :",
+    "item1": "Désactiver un réseau privé virtuel (VPN), un pare-feu ou un serveur proxy, si vous en utilisez un.",
+    "item2": "Utiliser un autre navigateur, un autre appareil ou un autre réseau, si une alternative est disponible.",
+    "item3": "Soumettre à nouveau votre formulaire plus tard ou contacter directement le programme ou le service."
+  }
+}

@@ -4,7 +4,7 @@ import { notifyCatcher } from "@lib/notifyCatcher";
 
 const gcNotifyConnector = GCNotifyConnector.default(process.env.NOTIFY_API_KEY ?? "");
 
-export const sendEmail = async (email: string, personalisation: Personalisation) => {
+export const sendEmail = async (email: string, personalisation: Personalisation, type: string) => {
   try {
     if (process.env.APP_ENV === "test") {
       logMessage.info("Mock Notify email sent.");
@@ -38,14 +38,11 @@ export const sendEmail = async (email: string, personalisation: Personalisation)
     logMessage.info("HealthCheck: send email failure");
 
     logMessage.error(
-      JSON.stringify({
-        level: "error",
-        severity: 2,
-        msg: `Failed to send email to ${email}.`,
-        error: (error as Error).message,
-      })
+      `Failed to send ${type} email to ${email} through GC Notify. Reason: ${
+        (error as Error).message
+      }`
     );
 
-    throw new Error(`Failed to send email to ${email}.`);
+    throw error;
   }
 };

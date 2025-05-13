@@ -17,8 +17,7 @@ import { SubmitButton } from "../../../components/client/SubmitButton";
 import { useState } from "react";
 import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
 import { Success } from "../../../components/client/Success";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
+import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 export const SupportForm = () => {
   const {
@@ -28,9 +27,6 @@ export const SupportForm = () => {
 
   const [errors, setErrors] = useState<ErrorStates>({ validationErrors: [] });
   const [submitted, setSubmitted] = useState(false);
-
-  const { getFlag } = useFeatureFlags();
-  const apiFlag = getFlag(FeatureFlags.apiAccess);
 
   const getError = (fieldKey: string) => {
     return errors.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
@@ -106,8 +102,8 @@ export const SupportForm = () => {
             </ValidationMessage>
           )}
 
-          <h1>{t("support.title")}</h1>
-          <p className="-mt-8 mb-6">
+          <GcdsH1>{t("support.title")}</GcdsH1>
+          <p className="mb-6">
             {t("support.experience")}
             <Link href={`https://articles.alpha.canada.ca/forms-formulaires/${language}/guidance`}>
               {t("support.guidanceLink")}
@@ -179,16 +175,11 @@ export const SupportForm = () => {
                     name: "technical",
                     label: t("support.request.option2"),
                   },
-                  ...(apiFlag
-                    ? [
-                        {
-                          id: "request-technical-api",
-                          name: "technical-api",
-                          label: t("support.request.apiOption"),
-                        },
-                      ]
-                    : []),
-
+                  {
+                    id: "request-technical-api",
+                    name: "technical-api",
+                    label: t("support.request.apiOption"),
+                  },
                   {
                     id: "request-form",
                     name: "form",

@@ -95,125 +95,137 @@ export const ConfirmDialog = ({
           handleClose={handleClose}
           className="max-w-[800px]"
         >
-          <div className="px-8 py-4">
+          <div>
             <div>
-              {status === DialogStates.MIN_ERROR && (
-                <Alert.Danger className="mb-2">
-                  <Alert.Title headingTag="h3">
-                    {t("downloadResponsesModals.confirmReceiptDialog.errors.minEntries.title")}
-                  </Alert.Title>
-                  <p>
-                    {t(
-                      "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.description"
-                    )}
-                  </p>
-                </Alert.Danger>
-              )}
-              {status === DialogStates.MAX_ERROR && (
-                <Alert.Danger className="mb-2">
-                  <Alert.Title headingTag="h3">
-                    {t("downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.title", {
-                      max: maxEntries,
-                    })}
-                  </Alert.Title>
-                  <p>
-                    {t(
-                      "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.description",
-                      {
-                        max: maxEntries,
-                      }
-                    )}
-                  </p>
-                </Alert.Danger>
-              )}
-              {status === DialogStates.FORMAT_ERROR && (
-                <Alert.Danger className="mb-2">
-                  <Alert.Title headingTag="h3">
-                    {t("downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.title")}
-                  </Alert.Title>
-                  <p>
+              <div className="p-4">
+                <div className="">
+                  {status === DialogStates.MIN_ERROR && (
+                    <Alert.Danger className="mb-2">
+                      <Alert.Title headingTag="h3">
+                        {t("downloadResponsesModals.confirmReceiptDialog.errors.minEntries.title")}
+                      </Alert.Title>
+                      <p>
+                        {t(
+                          "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.description"
+                        )}
+                      </p>
+                    </Alert.Danger>
+                  )}
+                  {status === DialogStates.MAX_ERROR && (
+                    <Alert.Danger className="mb-2">
+                      <Alert.Title headingTag="h3">
+                        {t("downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.title", {
+                          max: maxEntries,
+                        })}
+                      </Alert.Title>
+                      <p>
+                        {t(
+                          "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.description",
+                          {
+                            max: maxEntries,
+                          }
+                        )}
+                      </p>
+                    </Alert.Danger>
+                  )}
+                  {status === DialogStates.FORMAT_ERROR && (
+                    <Alert.Danger className="mb-2">
+                      <Alert.Title headingTag="h3">
+                        {t(
+                          "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.title"
+                        )}
+                      </Alert.Title>
+                      <p>
+                        <Trans
+                          ns="form-builder-responses"
+                          i18nKey="downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.description"
+                          defaults="<italic></italic>" // indicate to translator: text with italic HTML element
+                          components={{ italic: <i /> }}
+                        ></Trans>
+                      </p>
+                    </Alert.Danger>
+                  )}
+                  {status === DialogStates.FAILED_ERROR && (
+                    <Alert.Danger className="mb-2">
+                      <Alert.Title headingTag="h3">
+                        {t(
+                          "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.title"
+                        )}
+                      </Alert.Title>
+                      <p>
+                        {t(
+                          "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.description"
+                        )}
+                      </p>
+                    </Alert.Danger>
+                  )}
+
+                  {status === DialogStates.UNKNOWN_ERROR && (
+                    <Alert.Danger className="mb-2">
+                      <Alert.Title headingTag="h3">
+                        {t("downloadResponsesModals.confirmReceiptDialog.errors.unknown.title")}
+                      </Alert.Title>
+                      <p>
+                        {t(
+                          "downloadResponsesModals.confirmReceiptDialog.errors.unknown.description"
+                        )}
+                        <Link href={`${language}/support`}>
+                          {t(
+                            "downloadResponsesModals.confirmReceiptDialog.errors.unknown.descriptionLink"
+                          )}
+                        </Link>
+                        .
+                      </p>
+                    </Alert.Danger>
+                  )}
+                </div>
+                <div className="py-4">
+                  <p className="font-bold" id={confirmInstructionId}>
                     <Trans
                       ns="form-builder-responses"
-                      i18nKey="downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.description"
+                      i18nKey="downloadResponsesModals.confirmReceiptDialog.copyCode"
                       defaults="<italic></italic>" // indicate to translator: text with italic HTML element
                       components={{ italic: <i /> }}
                     ></Trans>
                   </p>
-                </Alert.Danger>
-              )}
-              {status === DialogStates.FAILED_ERROR && (
-                <Alert.Danger className="mb-2">
-                  <Alert.Title headingTag="h3">
-                    {t("downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.title")}
-                  </Alert.Title>
-                  <p>
-                    {t(
-                      "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.description"
-                    )}
+                  <p className="mb-4">
+                    {t("downloadResponsesModals.confirmReceiptDialog.copyCodeNote")}
                   </p>
-                </Alert.Danger>
-              )}
 
-              {status === DialogStates.UNKNOWN_ERROR && (
-                <Alert.Danger className="mb-2">
-                  <Alert.Title headingTag="h3">
-                    {t("downloadResponsesModals.confirmReceiptDialog.errors.unknown.title")}
-                  </Alert.Title>
-                  <p>
-                    {t("downloadResponsesModals.confirmReceiptDialog.errors.unknown.description")}
-                    <Link href={`${language}/support`}>
-                      {t(
-                        "downloadResponsesModals.confirmReceiptDialog.errors.unknown.descriptionLink"
-                      )}
-                    </Link>
-                    .
+                  <LineItemEntries
+                    inputs={entries}
+                    setInputs={setEntries}
+                    validateInput={inputRegex}
+                    inputLabelId={confirmInstructionId}
+                    maxEntries={maxEntries}
+                    errorEntriesList={errorEntriesList}
+                    status={status}
+                    setStatus={setStatus}
+                  ></LineItemEntries>
+
+                  <p className="mb-2 mt-10 font-bold">
+                    {t("downloadResponsesModals.confirmReceiptDialog.contentHeading")}
                   </p>
-                </Alert.Danger>
-              )}
-            </div>
-            <div className="py-4">
-              <p className="font-bold" id={confirmInstructionId}>
-                <Trans
-                  ns="form-builder-responses"
-                  i18nKey="downloadResponsesModals.confirmReceiptDialog.copyCode"
-                  defaults="<italic></italic>" // indicate to translator: text with italic HTML element
-                  components={{ italic: <i /> }}
-                ></Trans>
-              </p>
-              <p className="mb-4">
-                {t("downloadResponsesModals.confirmReceiptDialog.copyCodeNote")}
-              </p>
+                  <p>{t("downloadResponsesModals.confirmReceiptDialog.contentBody")}</p>
+                </div>
+              </div>
 
-              <LineItemEntries
-                inputs={entries}
-                setInputs={setEntries}
-                validateInput={inputRegex}
-                inputLabelId={confirmInstructionId}
-                maxEntries={maxEntries}
-                errorEntriesList={errorEntriesList}
-                status={status}
-                setStatus={setStatus}
-              ></LineItemEntries>
-
-              <p className="mb-2 mt-10 font-bold">
-                {t("downloadResponsesModals.confirmReceiptDialog.contentHeading")}
-              </p>
-              <p>{t("downloadResponsesModals.confirmReceiptDialog.contentBody")}</p>
-
-              <div className="mt-4 flex gap-4">
-                <Button theme="secondary" onClick={handleClose}>
-                  {t("downloadResponsesModals.cancel")}
-                </Button>
-                <Button
-                  onClick={handleSubmit}
-                  disabled={
-                    status === DialogStates.SENDING || DialogStates[status].includes("ERROR")
-                  }
-                >
-                  {status === DialogStates.SENDING
-                    ? t("downloadResponsesModals.sending")
-                    : t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
-                </Button>
+              <div className="sticky bottom-0 flex border-t-[0.5px] border-slate-500 bg-white p-4">
+                <div className="mt-4 flex gap-4">
+                  <Button theme="secondary" onClick={handleClose}>
+                    {t("downloadResponsesModals.cancel")}
+                  </Button>
+                  <Button
+                    onClick={handleSubmit}
+                    disabled={
+                      status === DialogStates.SENDING || DialogStates[status].includes("ERROR")
+                    }
+                  >
+                    {status === DialogStates.SENDING
+                      ? t("downloadResponsesModals.sending")
+                      : t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

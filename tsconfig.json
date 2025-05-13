@@ -10,7 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -27,7 +27,9 @@
       "@i18n": ["i18n"],
       "@i18n/*": ["i18n/*"],
       "@content/*": ["public/static/content/*"],
-      "@public/*": ["public/*"]
+      "@public/*": ["public/*"],
+      "@gcforms/*": ["packages/*/src"],
+      "@toast/*": ["node_modules/react-toastify/dist/*"]
     },
     "incremental": true,
     "plugins": [
@@ -52,7 +54,6 @@
     "cypress.config.ts",
     "**/*.cy.ts",
     "**/*.cy.tsx",
-    "__tests__",
-    "packages"
+    "__tests__"
   ]
 }

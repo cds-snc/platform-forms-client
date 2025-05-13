@@ -6,7 +6,6 @@ export const FormActions = ({
   children,
   language,
   saveAndResumeEnabled,
-  form,
   formId,
   dirty,
 }: {
@@ -22,15 +21,10 @@ export const FormActions = ({
   }
 
   return (
-    <div className="sticky bottom-0 mt-10 flex border-gcds-blue-900 bg-gcds-blue-100 p-4">
+    <div className="sticky bottom-0 -mx-5 mt-10 flex border-gcds-blue-900 bg-gcds-blue-100 p-4">
       <div className="flex w-full justify-between">
         {children}
-        <SaveAndResume
-          formTitleEn={form.titleEn}
-          formTitleFr={form.titleFr}
-          language={language as Language}
-          formId={formId}
-        />
+        <SaveAndResume language={language as Language} formId={formId} />
       </div>
     </div>
   );

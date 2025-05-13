@@ -1,4 +1,5 @@
 # Terms and conditions
+
 These terms and conditions outline the roles and responsibilities of [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html) in hosting this form.  
 
 To learn about how a department or agency manages your form submissions, return to the form you were viewing.
@@ -12,6 +13,10 @@ When you submit a form, it is temporarily stored in a secure database managed by
 The department or agency you’re communicating with also protects your personal information. The Privacy Notice on the form should explain how they do this.
 
 Personal information is also collected in compliance with the [Privacy Act](https://laws.justice.gc.ca/eng/acts/P-21/index.html).
+
+### We use hCaptcha to protect form security
+
+The use of [hCaptcha](https://www.hcaptcha.com/) helps us detect spam and automated abuse or threats from bots. Learn more about this third-party provider's [privacy policy](https://www.hcaptcha.com/privacy) and [terms of service](https://www.hcaptcha.com/terms).
 
 ### We use web analytics to help improve your experience
 
@@ -116,4 +121,4 @@ Many social media platforms have multiple language options and provide instructi
 
 
 
-**Last update:** April 24, 2024
+**Last update:** March 19, 2025

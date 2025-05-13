@@ -9,6 +9,10 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
+import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
+import { cleanRules } from "@lib/formContext";
+import { logMessage } from "@lib/logger";
+import { ga } from "@lib/client/clientHelpers";
 
 export const Start = () => {
   const {
@@ -42,7 +46,17 @@ export const Start = () => {
       fileReader.readAsText(e.target.files[0], "UTF-8");
       fileReader.onload = (e) => {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
-        const data = safeJSONParse<FormProperties>(e.target.result, cleaner);
+
+        const result = e.target.result;
+        const isValidSize = validateTemplateSize(result);
+
+        if (!isValidSize) {
+          setErrors([{ message: t("startErrorTemplateSize") }]);
+          target.value = "";
+          return;
+        }
+
+        const data = safeJSONParse<FormProperties>(result, cleaner);
         if (!data) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
@@ -57,12 +71,26 @@ export const Start = () => {
           return;
         }
 
+        // Clean rules
+        data.elements.forEach((element) => {
+          if (element.properties?.conditionalRules) {
+            const elementRules = element.properties.conditionalRules;
+            const updatedRules = cleanRules(data.elements, elementRules);
+            if (updatedRules.length !== elementRules.length) {
+              logMessage.info(
+                `cleaned imported rules:${JSON.stringify(elementRules)} -> ${JSON.stringify(
+                  updatedRules
+                )}`
+              );
+              element.properties.conditionalRules = updatedRules;
+            }
+          }
+        });
+        // set the form id to the one in the template
+
         importTemplate(data);
 
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "open_form_file",
-        });
+        ga("open_form_file");
         router.push(`/${language}/form-builder/0000/preview`);
       };
     } catch (e) {
