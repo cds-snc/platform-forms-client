@@ -285,6 +285,6 @@ export const options = [
     logoEn: "/img/branding/canada-heritage-en.svg",
     logoFr: "/img/branding/canada-heritage-fr.svg",
     logoTitleEn: "Lien vers la page d'accueil en anglais",
-    logoTitleFr: "Lien vers la page d'accueil en français",
+    logoTitleFr: "Patrimoine canadien",
   },
 ];
