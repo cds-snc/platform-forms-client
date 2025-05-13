@@ -1,3 +1,5 @@
+"use server";
+
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "@lib/integration/redisConnector";
@@ -14,7 +16,7 @@ export type Status = (typeof Status)[keyof typeof Status];
 
 // Sends an email notification when a user has new form submissions
 export const sendNotification = async (formId: string, titleEn: string, titleFr: string) => {
-  const usersAndNotifications = await getUsersAndNotificationsInterval(formId);
+  const usersAndNotifications = await _getUsersAndNotificationsInterval(formId);
   if (!usersAndNotifications) {
     logMessage.error(`sendNotification template not found with id ${formId}`);
     return;
@@ -60,14 +62,14 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
 export const validateNotificationsInterval = (notificationsInterval: NotificationsInterval) => {
   let isValid = false;
   Object.values(NotificationsInterval).forEach((interval) => {
-    if (notificationsInterval !== interval) {
+    if (notificationsInterval === interval) {
       isValid = true;
     }
   });
   return isValid;
 };
 
-async function getUsersAndNotificationsInterval(formID: string): Promise<{
+async function _getUsersAndNotificationsInterval(formID: string): Promise<{
   notificationsInterval: number | null | undefined;
   users: { email: string }[];
 } | null> {
