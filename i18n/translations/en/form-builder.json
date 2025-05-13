@@ -516,12 +516,12 @@
     },
     "questionId": {
       "title": "Question ID",
-      "description": "Unique value to consistently refer to a form element so that they can match across republished form versions, data structures and systems.",
+      "description": "Set a custom unique value to consistently refer to a form element so that they can match across republished form versions, data structures, and systems.",
       "uniqueWarning": "Choose a unique value that differs from other questions."
     },
     "tags": {
       "title": "Additional tags",
-      "description": "Flexible labels to add metadata to form elements so that related questions can be categorized or so that data can be transformed.",
+      "description": "Add flexible labels to include metadata for form elements so that related questions can be categorized or so that data can be transformed.",
       "errorTagTooLong": "Tag cannot exceed 50 characters"
     }
   },

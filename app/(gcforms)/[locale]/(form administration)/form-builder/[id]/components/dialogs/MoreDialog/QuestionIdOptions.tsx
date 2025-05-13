@@ -25,7 +25,13 @@ export const QuestionIdOptions = ({
 
   useEffect(() => {
     const questionId = item.properties.questionId;
-    if (questionId && isUniqueQuestionId(form.elements, questionId, item)) {
+    if (!questionId || questionId === "") {
+      setError(false);
+      setIsValid(true);
+      return;
+    }
+
+    if (isUniqueQuestionId(form.elements, questionId, item)) {
       setError(false);
       setIsValid(true);
     } else {

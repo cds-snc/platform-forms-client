@@ -3,8 +3,8 @@
   "announceInvalidTag": "Balise invalide : \"{tag}\"",
   "announceTagAdded": "Balise \"{tag}\" ajoutée",
   "announceTagRemoved": "Balise \"{tag}\" supprimée",
-  "announceTagSelected": "Tag \"{tag}\" selected.",
+  "announceTagSelected": "Tag \"{tag}\" sélectionnée",
   "duplicateTag": "La balise a déjà été ajoutée",
-  "inputLabel": "{tags} tags. Use enter, tab or comma to create, left and right arrow keys to navigate, backspace or delete to remove.",
+  "inputLabel": "Balises {tags}. Utilisez Entrée, la touche Tab ou une virgule pour créer une balise. Utilisez les touches fléchées gauche et droite pour naviguer dans les balises. Utilisez le retour en arrière ou Supprimer  pour enlever une balise.",
   "maxTagsReached": "Le nombre maximal de balises a été atteint ({max})"
 }

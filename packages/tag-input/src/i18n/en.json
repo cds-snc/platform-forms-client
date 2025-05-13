@@ -3,8 +3,8 @@
   "announceInvalidTag": "Invalid tag: \"{tag}\"",
   "announceTagAdded": "Tag \"{tag}\" added",
   "announceTagRemoved": "Tag \"{tag}\" removed",
-  "announceTagSelected": "Tag \"{tag}\" selected.",
+  "announceTagSelected": "Tag \"{tag}\" selected",
   "duplicateTag": "Tag already added",
-  "inputLabel": "{tags} tags. Use enter, tab or comma to create, left and right arrow keys to navigate, backspace or delete to remove.",
+  "inputLabel": "{tags} tags. Use Enter, Tab, or a comma to create a tag. Use left and right arrow keys to navigate tags. Use Backspace or Delete to remove a tag.",
   "maxTagsReached": "Maximum number of tags reached ({max})"
 }
