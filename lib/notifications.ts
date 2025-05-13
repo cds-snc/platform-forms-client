@@ -58,36 +58,6 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
   }
 };
 
-const _getUsersAndNotificationsInterval = async (
-  formID: string
-): Promise<{
-  notificationsInterval: number | null | undefined;
-  users: { email: string }[];
-} | null> => {
-  const usersAndNotificationsInterval = await prisma.template
-    .findUnique({
-      where: {
-        id: formID,
-      },
-      select: {
-        notificationsInterval: true,
-        users: {
-          select: {
-            email: true,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (!usersAndNotificationsInterval) return null;
-
-  return {
-    users: usersAndNotificationsInterval.users,
-    notificationsInterval: usersAndNotificationsInterval.notificationsInterval,
-  };
-};
-
 export const removeMarker = async (formId: string) => {
   const redis = await getRedisInstance();
   await redis
@@ -236,6 +206,36 @@ export const validateNotificationsInterval = (
   return Object.values(NotificationsInterval).includes(
     notificationsInterval as NotificationsInterval
   );
+};
+
+const _getUsersAndNotificationsInterval = async (
+  formID: string
+): Promise<{
+  notificationsInterval: number | null | undefined;
+  users: { email: string }[];
+} | null> => {
+  const usersAndNotificationsInterval = await prisma.template
+    .findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        notificationsInterval: true,
+        users: {
+          select: {
+            email: true,
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!usersAndNotificationsInterval) return null;
+
+  return {
+    users: usersAndNotificationsInterval.users,
+    notificationsInterval: usersAndNotificationsInterval.notificationsInterval,
+  };
 };
 
 export const updateNotificationsSetting = async (
