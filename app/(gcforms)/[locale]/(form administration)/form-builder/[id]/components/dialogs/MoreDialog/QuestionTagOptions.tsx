@@ -40,6 +40,7 @@ export const QuestionTagOptions = ({
         }}
         initialTags={item.properties.tags || []}
         restrictDuplicates={true}
+        maxTags={20}
         validateTag={(tag) => {
           let isValid = true;
           const errors: string[] = [];
