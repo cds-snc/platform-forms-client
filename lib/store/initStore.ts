@@ -11,6 +11,7 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
     translationLanguagePriority: (initProps?.locale as Language) || "en",
     focusInput: false,
     hasHydrated: false,
+    hasTransformed: false,
     form: defaultForm,
     isPublished: false,
     name: "",
