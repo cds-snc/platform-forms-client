@@ -700,6 +700,35 @@
           }
         }
       }
+    },
+    "notifications": {
+      "title": "Recevoir des notifications",
+      "description1": "Obtenez des notifications par courriel pour les nouvelles réponses",
+      "description2": "Tous les membres de votre équipe ayant accès au formulaire seront informés lorsque de nouvelles réponses au formulaire sont disponibles et peuvent être téléchargées.",
+      "optionsDescription": "Activer les notifications pour les nouvelles réponses au formulaire",
+      "options": {
+        "on": "Activé",
+        "off": "Désactivé"
+      },
+      "save": "Enregistrer",
+      "email": {
+        "singleSubmission": {
+          "subject": "New form response | Nouvelle réponse au formulaire",
+          "paragraph1": "Votre formulaire a reçu une nouvelle soumission :",
+          "paragraph2": "Allez à Formulaires GC",
+          "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
+        },
+        "multipleSubmissions": {
+          "subject": "New form responses | Nouvelles réponses au formulaire",
+          "paragraph1": "Votre formulaire a reçu des nouvelles soumissions :",
+          "paragraph2": "Allez à Formulaires GC",
+          "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
+        }
+      },
+      "savedSuccessMessage": "Vos modifications ont été enregistrées.",
+      "errors": {
+        "updateNotificationsInterval": "Il y a eu une erreur dans la mise à jour des notifications. Veuillez réessayer plus tard."
+      }
     }
   },
   "settingsDeleteButton": "Supprimer le formulaire",
