@@ -770,22 +770,6 @@
       "title": "French response subject line",
       "hint": "When form responses are submitted in French."
     },
-    "responseDeliveryHelp": {
-      "cta": "Help choosing an option",
-      "title": "Choosing a response delivery option",
-      "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
-      "inbox": {
-        "title": "Email to an inbox",
-        "text1": "For up to PROTECTED A forms",
-        "text2": "Responses are delivered directly to an inbox in real time",
-        "text3": "One email address can receive response emails. This can be a shared inbox."
-      },
-      "vault": {
-        "title": "Download from GC Forms",
-        "text1": "For up to PROTECTED B forms",
-        "text2": "Download responses within 30 days"
-      }
-    },
     "responseDeliveryHelpWithApi": {
       "cta": "Help choosing an option",
       "title": "Choosing a response delivery option",
@@ -802,7 +786,7 @@
         "title": "Download from GC Forms",
         "text1": "For up to PROTECTED B forms",
         "text2": "Download responses within 30 days",
-        "text3": "Can be switched to API delivery after publishing",
+        "text3": "Cannot be switched after publishing",
         "text4": "Multiple account holders can access responses.",
         "text5": "No software development resources required."
       },
