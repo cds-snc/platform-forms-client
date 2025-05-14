@@ -63,6 +63,13 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
   }
 
   const classes = cn("gc-richText", className);
+
+  const SPACE_ENTITY_REGEX = /&#32;/g;
+
+  const replaceSpaceEntities = (text: string) => {
+    return text.replace(SPACE_ENTITY_REGEX, " ");
+  };
+
   return (
     <div data-testid="richText" className={classes} id={id} {...(lang && { lang: lang })}>
       <Markdown
@@ -71,7 +78,7 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
           disableParsingRawHTML: true,
           renderRule(next, node) {
             if (node.type === RuleType.text) {
-              return node.text.replace(/&#32;/g, " ");
+              return replaceSpaceEntities(node.text);
             }
             return next();
           },
