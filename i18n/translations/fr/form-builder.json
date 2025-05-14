@@ -511,8 +511,8 @@
       "infoLine2": "Par exemple, lorsque vous demandez la date exacte d'un passeport, d'une carte ou d'un autre document, faites en sorte que les champs correspondent au format de l'original. Il est ainsi plus facile pour les utilisateurs de recopier la date avec précision."
     },
     "apiOptionsSection": {
-      "title": "Customize API data attributes",
-      "description": "Modify how your form fields get encoded for the API integration."
+      "title": "Personnaliser les attributs des données de l'API",
+      "description": "Modifiez la façon dont les champs de votre formulaire sont encodés pour l'intégration de l'API."
     },
     "questionId": {
       "title": "Identifiant de la question",
