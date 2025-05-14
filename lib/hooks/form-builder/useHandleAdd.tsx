@@ -3,6 +3,8 @@ import { useCallback } from "react";
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { blockLoader } from "../../utils/form-builder/blockLoader";
+import { elementLoader } from "@lib/utils/form-builder/elementLoader";
+
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import {
   defaultField,
@@ -64,18 +66,15 @@ export const useHandleAdd = () => {
       let id;
 
       if (type === "customJson") {
-        const el = document.getElementById("custom-elements") as HTMLTextAreaElement;
-        if (el) {
-          // get content of the textArea
-          const content = el.value;
-
-          // parse the content to JSON
-          const data = JSON.parse(content);
-
-          id = await add(index, data.type, data, groupId);
-
-          return id;
+        try {
+          await elementLoader(index, async (data, position) => {
+            id = await add(position, data.type, data, groupId);
+          });
+        } catch (e) {
+          toast.error(loadError);
         }
+
+        return id;
       }
 
       if (allowedTemplates.includes(type as TemplateTypes)) {
