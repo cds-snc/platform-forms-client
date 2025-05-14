@@ -510,6 +510,10 @@
       "infoLine1": "Le format standard de la date au Canada est AAAA-MM-JJ et devrait être votre premier choix, à moins qu'il n'y ait une raison de choisir un format différent.",
       "infoLine2": "Par exemple, lorsque vous demandez la date exacte d'un passeport, d'une carte ou d'un autre document, faites en sorte que les champs correspondent au format de l'original. Il est ainsi plus facile pour les utilisateurs de recopier la date avec précision."
     },
+    "apiOptionsSection": {
+      "title": "Customize API data attributes",
+      "description": "Modify how your form fields get encoded for the API integration."
+    },
     "questionId": {
       "title": "Identifiant de la question",
       "description": "Vous pouvez définir une valeur unique permettant de se référer de manière cohérente à un élément de formulaire afin qu'ils puissent correspondre entre les versions de formulaires republiées, les structures de données et les systèmes.",
