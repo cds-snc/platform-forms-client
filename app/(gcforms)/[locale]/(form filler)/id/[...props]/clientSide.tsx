@@ -79,6 +79,7 @@ export const FormWrapper = ({
   if (submissionId && submissionDate) {
     return (
       <div className="gc-form-wrapper">
+        <style dangerouslySetInnerHTML={{ __html: `.gc-date-modified { display: none; }` }} />
         <TextPage formId={formRecord.id} formRecord={formRecord} />
         {saveAndResume && (
           <ToastContainer limit={1} autoClose={5000} containerId="public-facing-form" />
@@ -130,6 +131,7 @@ export const FormWrapper = ({
       >
         {currentForm}
       </Form>
+
       {saveAndResume && (
         <ToastContainer limit={1} autoClose={false} containerId="public-facing-form" />
       )}

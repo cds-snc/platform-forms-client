@@ -12,7 +12,7 @@ export const DateModified = ({ updatedAt }: { updatedAt: string | undefined }) =
   formattedDate = date.toISOString().slice(0, 10);
 
   return (
-    <div className="mt-10">
+    <div className="gc-date-modified mt-10">
       {t("dateModified")}: {formattedDate}
     </div>
   );

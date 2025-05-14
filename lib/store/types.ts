@@ -18,6 +18,7 @@ import {
 import { BrandProperties } from "@lib/types";
 
 import { type Indexes } from "@lib/utils/form-builder/getPath";
+import { NotificationsInterval } from "@gcforms/types";
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
@@ -92,6 +93,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setGroupsLayout: (layout: string[]) => void;
   getHighestElementId: () => number;
   generateElementId: () => number;
+  notificationsInterval?: NotificationsInterval;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
@@ -117,4 +119,5 @@ export interface TemplateStoreProps {
   changeKey: string;
   allowGroupsFlag: boolean;
   saveAndResume: boolean;
+  notificationsInterval?: NotificationsInterval;
 }
