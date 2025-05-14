@@ -13,6 +13,7 @@ import { verifyHCaptchaToken } from "@clientComponents/globals/FormCaptcha/actio
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
+import { sendNotification } from "@lib/notifications";
 
 //  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
 const CAPTCHA_BLOCKABLE_MODE = false;
@@ -87,6 +88,12 @@ export async function submitForm(
     const data = await parseRequestData(formDataObject as SubmissionRequestBody);
 
     const submissionId = await processFormData(data.fields, data.files, language);
+
+    // Avoid spamming users with emails by only sending one type of email, either an email
+    // delivery or a notification
+    if (!template.deliveryOption) {
+      sendNotification(formId, template.form.titleEn, template.form.titleFr);
+    }
 
     return { id: formId, submissionId };
   } catch (e) {

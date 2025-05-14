@@ -1,3 +1,5 @@
+import { NotificationsInterval, NotificationsIntervalDefault } from "@gcforms/types";
+
 interface User {
   id: string;
   name: string | null;
@@ -22,7 +24,7 @@ interface Template {
   ttl: Date;
   closedDetails: string;
   saveAndResume: boolean;
-  notificationsInterval: number;
+  notificationsInterval: NotificationsInterval;
 }
 
 export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
@@ -44,7 +46,7 @@ export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
     ttl: new Date(),
     closedDetails: "",
     saveAndResume: false,
-    notificationsInterval: 0,
+    notificationsInterval: NotificationsIntervalDefault,
   };
 
   return { ...defaultTemplate, ...overrides };

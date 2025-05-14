@@ -700,6 +700,35 @@
           }
         }
       }
+    },
+    "notifications": {
+      "title": "Receive notifications",
+      "description1": "Get notified by email about new form responses",
+      "description2": "All team members with access to the form will be informed when there are new form responses available to download.",
+      "optionsDescription": "Enable notifications for new form responses",
+      "options": {
+        "on": "On",
+        "off": "Off"
+      },
+      "save": "Save",
+      "email": {
+        "singleSubmission": {
+          "subject": "New form response | Nouvelle réponse au formulaire",
+          "paragraph1": "Your form received a new submission:",
+          "paragraph2": "Retrieve response from GC Forms",
+          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
+        },
+        "multipleSubmissions": {
+          "subject": "New form responses | Nouvelles réponses au formulaire",
+          "paragraph1": "Your form received new submissions:",
+          "paragraph2": "Retrieve responses from GC Forms",
+          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
+        }
+      },
+      "savedSuccessMessage": "Your changes have been saved.",
+      "errors": {
+        "updateNotificationsInterval": "There was an error updating notifications. Please try again later."
+      }
     }
   },
   "settingsDeleteButton": "Delete",
