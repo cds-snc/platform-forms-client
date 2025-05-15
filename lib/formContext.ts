@@ -150,13 +150,13 @@ export const getElementById = (elements: FormElement[], id: string) => {
  *
  * This function checks if the provided element should be visible by evaluating its conditional rules.
  * If the element has no conditional rules, it is considered visible.
- * For each rule, it ensures that the parent element (referenced by the rule's choiceId) is also visible,
- * and that the rule itself matches the current form values.
- * At least one rule must be satisfied for the element to be visible.
+ * If the element has rules, at least one rule must be satisfied for the element to be visible.
+ * When a matching rule is identified, it additionally ensures that the parent element (referenced
+ * by the rule's choiceId) is also visible, and it continues checking any further ancestors.
  *
- * @param formRecord - The complete form record containing all form elements.
+ * @param formRecord - The form record.
  * @param element - The form element whose visibility is being determined.
- * @param values - The current form values, typically from Formik.
+ * @param values - The current form values from Formik.
  * @returns `true` if the element should be visible, `false` otherwise.
  */
 export const checkVisibilityRecursive = (
@@ -164,7 +164,6 @@ export const checkVisibilityRecursive = (
   element: FormElement,
   values: FormValues
 ): boolean => {
-  // console.log({formRecord, element, values});
   const rules = element.properties.conditionalRules;
   if (!rules || rules.length === 0) return true;
 
