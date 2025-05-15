@@ -66,6 +66,11 @@ export const Notifications = ({
     updateNotificationsIntervalSuccess,
   ]);
 
+  // Note: in the rare case this happens if ever, alternatively an error could also be shown
+  if (notificationsInterval === undefined) {
+    return;
+  }
+
   return (
     <div className="mb-10" data-testid="form-notifications">
       <h2>{t("settings.notifications.title")}</h2>
