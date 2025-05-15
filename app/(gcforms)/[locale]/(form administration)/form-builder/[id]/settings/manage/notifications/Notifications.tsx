@@ -6,19 +6,16 @@ import { NotificationsToggle } from "./NotificationsToggle";
 import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { isVaultDelivery } from "@lib/utils/form-builder";
 
-export const Notifications = ({
-  formId,
-  notificationsInterval,
-  disabled = false,
-  off = false,
-}: {
-  formId: string;
-  notificationsInterval: NotificationsInterval | undefined;
-  disabled?: boolean;
-  off?: boolean;
-}) => {
+export const Notifications = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
+  const { notificationsInterval, getDeliveryOption } = useTemplateStore((s) => ({
+    notificationsInterval: s.notificationsInterval,
+    getDeliveryOption: s.getDeliveryOption,
+  }));
+  const isVault = isVaultDelivery(getDeliveryOption());
   const [notificationValue, setNotificationValue] = useState<string>(
     notificationsInterval ? String(notificationsInterval) : String(NotificationsInterval.OFF)
   );
@@ -66,11 +63,6 @@ export const Notifications = ({
     updateNotificationsIntervalSuccess,
   ]);
 
-  // Note: in the rare case this happens if ever, alternatively an error could also be shown
-  if (notificationsInterval === undefined) {
-    return;
-  }
-
   return (
     <div className="mb-10" data-testid="form-notifications">
       <h2>{t("settings.notifications.title")}</h2>
@@ -78,19 +70,21 @@ export const Notifications = ({
       <p className="mb-8">{t("settings.notifications.description2")}</p>
       <div className="mb-4">
         <NotificationsToggle
-          isChecked={!off && notificationValue === String(NotificationsInterval.DAY) ? true : false}
+          isChecked={
+            isVault && notificationValue === String(NotificationsInterval.DAY) ? true : false
+          }
           toggleChecked={toggleChecked}
           onLabel={t("settings.notifications.options.off")}
           offLabel={t("settings.notifications.options.on")}
           description={t("settings.notifications.optionsDescription")}
-          disabled={disabled}
+          disabled={!isVault}
         />
       </div>
       <Button
         dataTestId="form-notifications-save"
         theme="secondary"
         onClick={saveNotificationsValue}
-        disabled={disabled}
+        disabled={!isVault}
       >
         {t("settings.notifications.save")}
       </Button>

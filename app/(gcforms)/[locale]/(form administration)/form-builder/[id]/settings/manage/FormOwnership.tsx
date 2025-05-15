@@ -4,6 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { Alert } from "@clientComponents/globals";
 import { Button } from "@clientComponents/globals";
 import { FormOwnerSelect, usersToOptions } from "./FormOwnerSelect";
+import { SettingsApplicationsIcon } from "@serverComponents/icons";
 
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import createCache from "@emotion/cache";
@@ -75,7 +76,10 @@ export const FormOwnership = ({
   return (
     <>
       <div className="mb-10" data-testid="form-ownership">
-        <h2>{t("title")}</h2>
+        <h2>
+          {" "}
+          <SettingsApplicationsIcon className="-mt-10px mr-1 inline-block" /> {t("title")}
+        </h2>
         {message && message}
         <p className="mb-4">{t("assignUsersToTemplate")}</p>
         <p className="mb-2 font-bold">{t("enterOwnersEmail")} </p>

@@ -33,6 +33,15 @@ You are responsible for:
 - Addressing service or operational impacts due to end users uploading documents to submissions for the purpose of spamming.
 - Accepting [GC Notify's terms of use](https://notification.canada.ca/terms).
 
+### Responses downloaded from GC Forms (up to and including PROTECTED B)
+
+You are responsible for:
+
+- Adhering to your departmental guidance for acceptable device and network use.
+- Saving a copy and confirming receipt of your form responses within 45 days of receiving a submission.
+- Reporting any problems with saved form responses.
+- Handling, opening, and saving form responses in accordance with your retention and disposition schedule.
+
 ### Responses retrieved via the API (up to and including Protected B)
 
 You are responsible for:
@@ -43,15 +52,6 @@ Ensuring the API key associated with your form is secure to protect access to fo
 - Not sharing the API key by email, support requests, or in a plain text file in a source repository as this would compromise the privacy and security of responses.
 - Using encrypted email on the Government of Canada network, if there is an absolute need to transfer the private API key to authorized staff, for the purpose of setting up the API integration.
 - Deleting and re-creating your form's API key, if it's suspected to have been compromised.
-
-### Responses downloaded from GC Forms (up to and including PROTECTED B)
-
-You are responsible for:
-
-- Adhering to your departmental guidance for acceptable device and network use.
-- Saving a copy and confirming receipt of your form responses within 45 days of receiving a submission.
-- Reporting any problems with saved form responses.
-- Handling, opening, and saving form responses in accordance with your retention and disposition schedule.
 
 ## Practice continuous security
 
@@ -81,7 +81,7 @@ You are responsible for:
   - the Government of Canada signature in the top left corner of the header.
   - the Canada wordmark in the bottom right corner of the footer.
 
-You may replace the Government of Canada signature with your department or agency’s signature. If you are unsure about your department or agency’s signature, contact your [Federal Identity Program coordinator](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-eng.asp).
+You may replace the Government of Canada signature with your department or agency’s signature, if you have permission to use alternate branding. The use of branding without permission or misuse of branding from other departments or agencies may result in the deactivation of your form and/or account. If you are unsure about your department or agency’s signature, contact your [Federal Identity Program coordinator](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-eng.asp).
 
 We ask that clients not interfere with the format of JSON files, as any updates can compromise both the accessibility of the form as well as embedded design standards for the federal identity program. We will not be providing support for forms where the JSON file has been manipulated.
 
