@@ -15,7 +15,6 @@ interface FormOwnerSettingsProps {
 
 export const FormOwnerSettings = ({
   id,
-  formRecord,
   canSetClosingDate,
   closedDetails,
 }: FormOwnerSettingsProps) => {
@@ -23,12 +22,7 @@ export const FormOwnerSettings = ({
     <>
       {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
       <SetSaveAndResume formId={id} />
-      <Notifications
-        formId={id}
-        notificationsInterval={formRecord?.notificationsInterval}
-        disabled={formRecord?.deliveryOption !== undefined}
-        off={formRecord?.deliveryOption !== undefined}
-      />
+      <Notifications formId={id} />
       <DownloadForm />
     </>
   );
