@@ -146,7 +146,10 @@ export const getElementById = (elements: FormElement[], id: string) => {
 };
 
 /**
- * Recursively determines the visibility of a form element based on its conditional rules and the current form values.
+ * Recursively determines the "visibility" of a form element for the purposes of validation
+ * based on its conditional rules and the current form values.
+ *
+ * Note that this does not take into account the visibility of the element in the UI based on pages/groups.
  *
  * This function checks if the provided element should be visible by evaluating its conditional rules.
  * If the element has no conditional rules, it is considered visible.
