@@ -10,6 +10,7 @@ import { ManageApiKey } from "./ManageApiKey";
 import { ThrottlingRate } from "./ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
+import { Notifications } from "./notifications/Notifications";
 
 interface User {
   id: string;
@@ -42,11 +43,18 @@ export const ManageForm = (props: ManageFormProps) => {
 
   const { apiKeyId } = useFormBuilderConfig();
 
+  // Careful about the permissions check below and adding related components for all users
   if (!canManageAllForms) {
     return (
       <div>
         {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
         <SetSaveAndResume formId={id} />
+        <Notifications
+          formId={id}
+          notificationsInterval={formRecord?.notificationsInterval}
+          disabled={formRecord?.deliveryOption !== undefined}
+          off={formRecord?.deliveryOption !== undefined}
+        />
         <DownloadForm />
       </div>
     );
@@ -60,6 +68,12 @@ export const ManageForm = (props: ManageFormProps) => {
     <>
       {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
       <SetSaveAndResume formId={id} />
+      <Notifications
+        formId={id}
+        notificationsInterval={formRecord.notificationsInterval}
+        disabled={formRecord.deliveryOption !== undefined}
+        off={formRecord.deliveryOption !== undefined}
+      />
       <FormOwnership
         nonce={nonce}
         formRecord={formRecord}

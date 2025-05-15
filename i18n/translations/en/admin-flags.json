@@ -26,9 +26,9 @@
       "title": "hCaptcha",
       "description": "Enable hCaptcha spam prevention"
     },
-    "caretakerPeriod": {
-      "title": "caretakerPeriod",
-      "description": "Enable care taker period warning to be visible"
+    "topBanner": {
+      "title": "Banner",
+      "description": "Enable warning banner to be visible"
     },
     "fileUpload": {
       "title": "File upload",

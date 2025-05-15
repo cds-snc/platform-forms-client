@@ -480,6 +480,7 @@ describe("Template CRUD functions", () => {
             securityAttribute: true,
             users: true,
             saveAndResume: true,
+            notificationsInterval: true,
           },
         })
       );
@@ -575,6 +576,7 @@ describe("Template CRUD functions", () => {
             publishDesc: true,
             securityAttribute: true,
             saveAndResume: true,
+            notificationsInterval: true,
           },
         })
       );
