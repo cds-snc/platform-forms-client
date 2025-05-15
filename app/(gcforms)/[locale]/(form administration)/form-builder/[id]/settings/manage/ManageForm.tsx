@@ -42,6 +42,17 @@ export const ManageForm = (props: ManageFormProps) => {
 
   const { apiKeyId } = useFormBuilderConfig();
 
+  if (!canManageAllForms) {
+    return (
+      <FormOwnerSettings
+        id={id}
+        formRecord={formRecord}
+        canSetClosingDate={canSetClosingDate}
+        closedDetails={closedDetails}
+      />
+    );
+  }
+
   if (!formRecord || !usersAssignedToFormRecord || !allUsers) {
     return <ErrorPanel>There has been an error.</ErrorPanel>;
   }
