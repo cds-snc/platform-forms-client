@@ -89,11 +89,7 @@ export async function submitForm(
 
     const submissionId = await processFormData(data.fields, data.files, language);
 
-    // Avoid spamming users with emails by only sending one type of email, either an email
-    // delivery or a notification
-    if (!template.deliveryOption) {
-      sendNotification(formId, template.form.titleEn, template.form.titleFr);
-    }
+    sendNotification(formId, template.form.titleEn, template.form.titleFr);
 
     return { id: formId, submissionId };
   } catch (e) {
