@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.41.3](https://github.com/cds-snc/platform-forms-client/compare/v3.41.2...v3.41.3) (2025-05-15)
+
+
+### Bug Fixes
+
+* fixes issue with permissions and notifications toggling ([#5558](https://github.com/cds-snc/platform-forms-client/issues/5558)) ([df51b36](https://github.com/cds-snc/platform-forms-client/commit/df51b360340302e3f51846f028c6d0bbdceb5858))
+
+
+### Miscellaneous Chores
+
+* Update terms of use to include branding misuse ([#5555](https://github.com/cds-snc/platform-forms-client/issues/5555)) ([ad762f4](https://github.com/cds-snc/platform-forms-client/commit/ad762f435652c04330aff0bc6a20adf760cf8367))
+
 ## [3.41.2](https://github.com/cds-snc/platform-forms-client/compare/v3.41.1...v3.41.2) (2025-05-15)
 
 
