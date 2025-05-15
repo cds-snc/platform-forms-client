@@ -1,16 +1,15 @@
 "use client";
 
 import { FormRecord, ClosedDetails } from "@lib/types";
-import { DownloadForm } from "./DownloadForm";
-import { SetClosingDate } from "./close/SetClosingDate";
+
 import { FormOwnership } from "./FormOwnership";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { updateTemplateUsers } from "@formBuilder/actions";
 import { ManageApiKey } from "./ManageApiKey";
 import { ThrottlingRate } from "./ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
-import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
-import { Notifications } from "./notifications/Notifications";
+
+import { FormOwnerSettings } from "./FormOwnerSettings";
 
 interface User {
   id: string;
@@ -43,37 +42,20 @@ export const ManageForm = (props: ManageFormProps) => {
 
   const { apiKeyId } = useFormBuilderConfig();
 
-  // Careful about the permissions check below and adding related components for all users
-  if (!canManageAllForms) {
-    return (
-      <div>
-        {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
-        <SetSaveAndResume formId={id} />
-        <Notifications
-          formId={id}
-          notificationsInterval={formRecord?.notificationsInterval}
-          disabled={formRecord?.deliveryOption !== undefined}
-          off={formRecord?.deliveryOption !== undefined}
-        />
-        <DownloadForm />
-      </div>
-    );
-  }
-
   if (!formRecord || !usersAssignedToFormRecord || !allUsers) {
     return <ErrorPanel>There has been an error.</ErrorPanel>;
   }
 
   return (
     <>
-      {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
-      <SetSaveAndResume formId={id} />
-      <Notifications
-        formId={id}
-        notificationsInterval={formRecord.notificationsInterval}
-        disabled={formRecord.deliveryOption !== undefined}
-        off={formRecord.deliveryOption !== undefined}
+      <FormOwnerSettings
+        id={id}
+        formRecord={formRecord}
+        canSetClosingDate={canSetClosingDate}
+        closedDetails={closedDetails}
       />
+
+      {/* ADMIN USER SETTINGS BELOW */}
       <FormOwnership
         nonce={nonce}
         formRecord={formRecord}
@@ -83,7 +65,7 @@ export const ManageForm = (props: ManageFormProps) => {
       />
       {canManageAllForms && apiKeyId && <ThrottlingRate formId={id} />}
       {canManageAllForms && formRecord.isPublished && <ManageApiKey />}
-      <DownloadForm />
+      {/* End ADMIN USER SETTINGS */}
     </>
   );
 };
