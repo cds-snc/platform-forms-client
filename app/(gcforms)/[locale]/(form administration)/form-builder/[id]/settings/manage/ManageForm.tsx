@@ -43,11 +43,18 @@ export const ManageForm = (props: ManageFormProps) => {
 
   const { apiKeyId } = useFormBuilderConfig();
 
+  // Careful about the permissions check below and adding related components for all users
   if (!canManageAllForms) {
     return (
       <div>
         {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
         <SetSaveAndResume formId={id} />
+        <Notifications
+          formId={id}
+          notificationsInterval={formRecord?.notificationsInterval}
+          disabled={formRecord?.deliveryOption !== undefined}
+          off={formRecord?.deliveryOption !== undefined}
+        />
         <DownloadForm />
       </div>
     );
