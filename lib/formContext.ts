@@ -136,6 +136,53 @@ export const matchRule = (
 };
 
 /**
+ * Finds an element by its id in the form elements array.
+ * @param elements - The form elements to search
+ * @param id - The id of the element to find
+ * @returns The element with the specified id, or undefined if not found
+ */
+export const getElementById = (elements: FormElement[], id: string) => {
+  return elements.find((el) => el.id.toString() === id);
+};
+
+/**
+ * Recursively determines the visibility of a form element based on its conditional rules and the current form values.
+ *
+ * This function checks if the provided element should be visible by evaluating its conditional rules.
+ * If the element has no conditional rules, it is considered visible.
+ * For each rule, it ensures that the parent element (referenced by the rule's choiceId) is also visible,
+ * and that the rule itself matches the current form values.
+ * At least one rule must be satisfied for the element to be visible.
+ *
+ * @param formRecord - The complete form record containing all form elements.
+ * @param element - The form element whose visibility is being determined.
+ * @param values - The current form values, typically from Formik.
+ * @returns `true` if the element should be visible, `false` otherwise.
+ */
+export const checkVisibilityRecursive = (
+  formRecord: PublicFormRecord,
+  element: FormElement,
+  values: FormValues
+): boolean => {
+  // console.log({formRecord, element, values});
+  const rules = element.properties.conditionalRules;
+  if (!rules || rules.length === 0) return true;
+
+  // At least one rule must be satisfied for the element to be visible
+  return rules.some((rule) => {
+    const [elementId] = rule.choiceId.split(".");
+    const ruleParent = getElementById(formRecord.form.elements, elementId);
+    if (!ruleParent) return matchRule(rule, formRecord, values as FormValues);
+
+    // Parent must be visible and this rule must match
+    return (
+      checkVisibilityRecursive(formRecord, ruleParent, values) &&
+      matchRule(rule, formRecord, values as FormValues)
+    );
+  });
+};
+
+/**
  * Checks if an element exists within a group.
  * @param groupId - The id of the group to check
  * @param elementId - The id of the element to check
