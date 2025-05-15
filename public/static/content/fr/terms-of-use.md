@@ -33,15 +33,6 @@ Vous avez pour responsabilité :
 - de répondre aux conséquences opérationnelles ou aux conséquences sur le service du téléversement par des utilisateurs finaux ou utilisatrices finales de documents en guise de soumission à des fins de pollupostage.
 - d’accepter [les conditions d’utilisation de Notification GC](https://notification.canada.ca/conditions-dutilisation).
 
-### Réponses récupérées via l'API (jusqu'à Protégé B inclus)
-
-Vous avez pour responsabilité de veiller à ce que la clé API associée à votre formulaire soit sécurisée afin de protéger l'accès aux réponses du formulaire. Cela inclut :
-
-- enregistrer la clé API dans un endroit sûr d'une machine du gouvernement du Canada.
-- ne pas partager la clé API par courriel, dans les demandes de soutien ou dans un fichier de texte dans un référentiel source, car cela pourrait compromettre la confidentialité et la sécurité des réponses.
-- utiliser un courriel crypté sur le réseau du gouvernement du Canada, s'il est absolument nécessaire de transférer la clé privée de l'API au personnel autorisé, dans le but de configurer l'intégration de l'API.
-- supprimer et recréer la clé API de votre formulaire, si l’on soupçonne qu’elle a été compromise.
-
 ### Réponses téléchargées à partir de Formulaires GC (jusqu'à Protégé B inclus)
 
 Vous avez pour responsabilité :
@@ -50,6 +41,15 @@ Vous avez pour responsabilité :
 - d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 45 jours suivant la réception d’une réponse. Formulaires GC ne sert qu’à stocker temporairement des données. Si les réponses ne sont pas sauvegardées et confirmées dans les 45 jours, nous prendrons les mesures nécessaires pour qu’elles soient récupérées par le programme ou le service responsable.
 - de signaler tout problème lié aux réponses enregistrées.
 - de traiter, d'ouvrir et d’enregistrer les réponses aux formulaires conformément à votre calendrier de conservation et d’élimination.
+
+### Réponses récupérées via l'API (jusqu'à Protégé B inclus)
+
+Vous avez pour responsabilité de veiller à ce que la clé API associée à votre formulaire soit sécurisée afin de protéger l'accès aux réponses du formulaire. Cela inclut :
+
+- enregistrer la clé API dans un endroit sûr d'une machine du gouvernement du Canada.
+- ne pas partager la clé API par courriel, dans les demandes de soutien ou dans un fichier de texte dans un référentiel source, car cela pourrait compromettre la confidentialité et la sécurité des réponses.
+- utiliser un courriel crypté sur le réseau du gouvernement du Canada, s'il est absolument nécessaire de transférer la clé privée de l'API au personnel autorisé, dans le but de configurer l'intégration de l'API.
+- supprimer et recréer la clé API de votre formulaire, si l’on soupçonne qu’elle a été compromise.
 
 ## Pratique de sécurité en continu
 
@@ -79,7 +79,7 @@ Vous avez pour responsabilité :
   - la signature du gouvernement du Canada dans le coin supérieur gauche de l’en-tête.
   - le mot-symbole « Canada » dans le coin inférieur droit du pied de page.
 
-Vous pouvez remplacer la signature du gouvernement du Canada par la signature de votre ministère ou organisme. Si vous ne connaissez pas la signature de votre ministère ou organisme, veuillez contacter [le coordonnateur ou la coordonnatrice du Programme fédéral de l’image de marque](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-fra.asp).
+Vous pouvez remplacer la signature du gouvernement du Canada par la signature de votre ministère ou organisme, si vous avez l'autorisation d'utiliser une autre image de marque. L'utilisation d'images de marque sans autorisation ou l'utilisation abusive d'image de marque d'autres ministères ou organismes pourrait entraîner la désactivation de votre formulaire et/ou de votre compte. Si vous ne connaissez pas la signature de votre ministère ou organisme, veuillez contacter [le coordonnateur ou la coordonnatrice du Programme fédéral de l’image de marque](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-fra.asp).
 
 Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car toute mise à jour peut compromettre à la fois l’accessibilité du formulaire et les normes de conception intégrées pour le programme de coordination de l’image de marque. Nous ne pourrons pas offrir de soutien pour les formulaires dont le fichier JSON a été manipulé.
 
