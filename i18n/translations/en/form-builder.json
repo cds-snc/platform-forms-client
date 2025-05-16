@@ -30,7 +30,8 @@
       "richText": "Add page text",
       "departments": "Add department",
       "combobox": "Add searchable list",
-      "formattedDate": "Add date"
+      "formattedDate": "Add date",
+      "customJson": "Add custom json"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
@@ -93,6 +94,16 @@
       "basic": "Basic",
       "preset": "Preset",
       "other": "Other"
+    },
+    "customJson": {
+      "description": "JSON schema to create a custom element.",
+      "title": "Custom element",
+      "label": "JSON",
+      "placeholder": "Custom element placeholder",
+      "field": {
+        "label": "JSON format",
+        "description": "Paste your JSON schema here"
+      }
     },
     "checkbox": {
       "description": "A list of options for a single or multiple selections.",

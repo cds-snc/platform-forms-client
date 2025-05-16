@@ -17,6 +17,8 @@ import {
   DepartmentsIcon,
 } from "@serverComponents/icons";
 
+import { useIsAdminUser } from "./useIsAdminUser";
+
 import {
   RichText,
   Radio,
@@ -36,6 +38,7 @@ import {
   Departments,
   Combobox,
   FormattedDate,
+  CustomJson,
 } from "@formBuilder/[id]/edit/components/elements/element-dialog";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFeatureFlags } from "../useFeatureFlags";
@@ -71,6 +74,18 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     value: t("addElementDialog.fileInput.title"),
     icon: UploadIcon,
     description: FileInput,
+    className: "",
+    group: groups.other,
+  };
+
+  // Custom json is only available to admin users
+  const allowCustomJson = useIsAdminUser();
+
+  const customJsonOption: ElementOption = {
+    id: "customJson",
+    value: t("addElementDialog.customJson.label"),
+    icon: AddIcon,
+    description: CustomJson,
     className: "",
     group: groups.other,
   };
@@ -218,6 +233,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "",
       group: groups.other,
     },
+    ...(allowCustomJson ? [{ ...(customJsonOption as ElementOption) }] : []),
   ];
 
   return filterElements

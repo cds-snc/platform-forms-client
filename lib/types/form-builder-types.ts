@@ -65,7 +65,8 @@ export interface ElementOption {
     | "contact"
     | "address"
     | "addressComplete"
-    | "departments";
+    | "departments"
+    | "customJson";
   value: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon?: JSXElementConstructor<any> | ComponentType | JSX.Element | any;

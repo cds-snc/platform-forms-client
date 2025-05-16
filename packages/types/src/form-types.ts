@@ -56,6 +56,7 @@ export enum FormElementTypes {
   contact = "contact",
   combobox = "combobox",
   formattedDate = "formattedDate",
+  customJson = "customJson",
 }
 
 export type ConditionalRule = {
