@@ -96,10 +96,10 @@
       "other": "Autre"
     },
     "customJson": {
-      "description": "JSON schema to create a custom element. [FR]",
-      "title": "Custom element [FR]",
-      "label": "Custom element label [FR]",
-      "placeholder": "Custom element placeholder [FR]"
+      "description": "Schéma JSON pour créer un élément sur mesure.",
+      "title": "Élément sur mesure",
+      "label": "JSON",
+      "placeholder": "Espace réservé pour l'élément sur mesure"
     },
     "checkbox": {
       "description": "Une liste d’options en vue de sélection unique ou multiple.",
