@@ -36,7 +36,7 @@ import {
   Departments,
   Combobox,
   FormattedDate,
-  Custom,
+  CustomJson,
 } from "@formBuilder/[id]/edit/components/elements/element-dialog";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFeatureFlags } from "../useFeatureFlags";
@@ -223,7 +223,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       id: "customJson",
       value: t("addElementDialog.customJson.label"),
       icon: AddIcon,
-      description: Custom,
+      description: CustomJson,
       className: "",
       group: groups.other,
     },

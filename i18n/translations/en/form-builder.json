@@ -99,7 +99,11 @@
       "description": "JSON schema to create a custom element.",
       "title": "Custom element",
       "label": "JSON",
-      "placeholder": "Custom element placeholder"
+      "placeholder": "Custom element placeholder",
+      "field": {
+        "label": "JSON",
+        "placeholder": "Paste your JSON schema here"
+      }
     },
     "checkbox": {
       "description": "A list of options for a single or multiple selections.",

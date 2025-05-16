@@ -99,7 +99,11 @@
       "description": "Schéma JSON pour créer un élément sur mesure.",
       "title": "Élément sur mesure",
       "label": "JSON",
-      "placeholder": "Espace réservé pour l'élément sur mesure"
+      "placeholder": "Espace réservé pour l'élément sur mesure",
+      "field": {
+        "label": "JSON",
+        "placeholder": "Paste your JSON schema here"
+      }
     },
     "checkbox": {
       "description": "Une liste d’options en vue de sélection unique ou multiple.",
