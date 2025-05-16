@@ -61,6 +61,47 @@ export const validateElement = (element: unknown) => {
   return true;
 };
 
+export const parseElementJson = (content: string) => {
+  // trim and remove unnecessary whitespace
+  const trimmedContent = content.trim().replace(/\s+/g, " ");
+
+  // check for valid JSON
+  if (!trimmedContent.startsWith("{") && !trimmedContent.startsWith("[")) {
+    throw new Error("Invalid JSON format");
+  }
+
+  // check if the content is empty
+  if (trimmedContent.length === 0) {
+    throw new Error("Empty content");
+  }
+  // check if the content is too long
+  if (trimmedContent.length > 10000) {
+    throw new Error("Content is too long");
+  }
+  // check if the content is too short
+  if (trimmedContent.length < 10) {
+    throw new Error("Content is too short");
+  }
+
+  try {
+    // Parse the JSON string
+    const parsed = JSON.parse(content);
+    // Check if the parsed data is an object
+    if (typeof parsed !== "object" || parsed === null) {
+      throw new Error("Parsed data is not a valid object");
+    }
+
+    return parsed;
+  } catch (error) {
+    // Handle JSON parsing errors
+    if (error instanceof SyntaxError) {
+      throw new Error("Invalid JSON format");
+    } else {
+      throw error; // Rethrow other errors
+    }
+  }
+};
+
 // Check if the element has a valid id
 export const elementLoader = async (
   startIndex: number,
@@ -73,42 +114,7 @@ export const elementLoader = async (
     // get content of the textArea
     const content = el.value;
 
-    // trim and remove unnecessary whitespace
-    const trimmedContent = content.trim().replace(/\s+/g, " ");
-
-    // check for valid JSON
-    if (!trimmedContent.startsWith("{") && !trimmedContent.startsWith("[")) {
-      throw new Error("Invalid JSON format");
-    }
-
-    // check if the content is empty
-    if (trimmedContent.length === 0) {
-      throw new Error("Empty content");
-    }
-    // check if the content is too long
-    if (trimmedContent.length > 10000) {
-      throw new Error("Content is too long");
-    }
-    // check if the content is too short
-    if (trimmedContent.length < 10) {
-      throw new Error("Content is too short");
-    }
-
-    // parse the content to JSON
-    let data;
-
-    try {
-      // escape the content to make it valid JSON
-      data = JSON.stringify(trimmedContent);
-      data = JSON.parse(trimmedContent);
-    } catch (error) {
-      throw new Error("Invalid JSON format");
-    }
-
-    // validate the data
-    if (!data || typeof data !== "object") {
-      throw new Error("Invalid data format");
-    }
+    const data = parseElementJson(content);
 
     // check if the data is an array
     if (!Array.isArray(data)) {
