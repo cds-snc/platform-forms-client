@@ -1,23 +1,61 @@
 import { FormElement, FormElementTypes } from "@lib/types";
 
-export const validateElement = (element: FormElement) => {
-  // no need to check for id - it is auto generated
+// Helper to check property existence
+const has = (obj: object, prop: string) => Object.prototype.hasOwnProperty.call(obj, prop);
+
+export const validateElement = (element: unknown) => {
+  // Accepts any JS object, but expects a FormElement shape at runtime
+
+  if (!element || typeof element !== "object") {
+    throw new Error("Element must be an object");
+  }
+
+  // Type assertion for runtime checks
+  const el = element as { type?: unknown; properties?: unknown };
 
   // check that element had a valid type - FormElementTypes
-  if (!element.type) {
+  if (!("type" in el) || typeof el.type !== "string") {
     throw new Error("Element type is required");
   }
-  if (!Object.values(FormElementTypes).includes(element.type)) {
+  if (!Object.values(FormElementTypes).includes(el.type as FormElementTypes)) {
     throw new Error("Element type is invalid");
   }
 
-  if (!element.properties) {
+  if (!("properties" in el) || typeof el.properties !== "object" || el.properties === null) {
     throw new Error("Element properties are required");
   }
 
   // check for titleEn and titleFr
-  if (!("titleEn" in element.properties) || !("titleFr" in element.properties)) {
+  if (!has(el.properties as object, "titleEn") || !has(el.properties as object, "titleFr")) {
     throw new Error("Element properties must have titleEn and titleFr");
+  }
+
+  // Additional validation based on element type
+  switch (el.type) {
+    case "radio":
+    case "checkbox":
+    case "dropdown":
+    case "combobox":
+      if (
+        !has(el.properties as object, "choices") ||
+        !Array.isArray((el.properties as { choices?: unknown }).choices)
+      ) {
+        throw new Error(`Element of type ${el.type} must have a 'choices' array in properties`);
+      }
+      (el.properties as { choices: unknown[] }).choices.forEach((choice, idx) => {
+        if (
+          typeof choice !== "object" ||
+          choice === null ||
+          !has(choice, "en") ||
+          !has(choice, "fr")
+        ) {
+          throw new Error(`Choice at index ${idx} in ${el.type} is missing 'en' or 'fr'`);
+        }
+      });
+      break;
+    default:
+      // No extra validation for other types
+      break;
   }
 
   return true;
