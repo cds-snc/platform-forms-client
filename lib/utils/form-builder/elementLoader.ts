@@ -76,8 +76,32 @@ export const elementLoader = async (
     // trim and remove unnecessary whitespace
     const trimmedContent = content.trim().replace(/\s+/g, " ");
 
+    // check for valid JSON
+    if (!trimmedContent.startsWith("{") && !trimmedContent.startsWith("[")) {
+      throw new Error("Invalid JSON format");
+    }
+
+    // check if the content is empty
+    if (trimmedContent.length === 0) {
+      throw new Error("Empty content");
+    }
+    // check if the content is too long
+    if (trimmedContent.length > 10000) {
+      throw new Error("Content is too long");
+    }
+    // check if the content is too short
+    if (trimmedContent.length < 10) {
+      throw new Error("Content is too short");
+    }
+
     // parse the content to JSON
-    const data = JSON.parse(trimmedContent);
+    let data;
+
+    try {
+      data = JSON.parse(trimmedContent);
+    } catch (error) {
+      throw new Error("Invalid JSON format");
+    }
 
     // validate the data
     if (!data || typeof data !== "object") {
