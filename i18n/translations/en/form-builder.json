@@ -101,7 +101,7 @@
       "label": "JSON",
       "placeholder": "Custom element placeholder",
       "field": {
-        "label": "JSON",
+        "label": "JSON format",
         "description": "Paste your JSON schema here"
       }
     },
