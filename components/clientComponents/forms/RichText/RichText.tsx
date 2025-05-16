@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { cn } from "@lib/utils";
-import Markdown from "markdown-to-jsx";
+import Markdown, { RuleType } from "markdown-to-jsx";
 
 interface RichTextProps {
   children?: string | undefined;
@@ -63,12 +63,25 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
   }
 
   const classes = cn("gc-richText", className);
+
+  const SPACE_ENTITY_REGEX = /&#32;/g;
+
+  const replaceSpaceEntities = (text: string) => {
+    return text.replace(SPACE_ENTITY_REGEX, " ");
+  };
+
   return (
     <div data-testid="richText" className={classes} id={id} {...(lang && { lang: lang })}>
       <Markdown
         options={{
           forceBlock: true,
           disableParsingRawHTML: true,
+          renderRule(next, node) {
+            if (node.type === RuleType.text) {
+              return replaceSpaceEntities(node.text);
+            }
+            return next();
+          },
           overrides: {
             h1: { component: H1 },
             a: { component: A },
