@@ -136,6 +136,63 @@ export const matchRule = (
 };
 
 /**
+ * Finds an element by its id in the form elements array.
+ * @param elements - The form elements to search
+ * @param id - The id of the element to find
+ * @returns The element with the specified id, or undefined if not found
+ */
+export const getElementById = (elements: FormElement[], id: string) => {
+  return elements.find((el) => el.id.toString() === id);
+};
+
+/**
+ * Recursively determines the "visibility" of a form element for the purposes of validation
+ * based on its conditional rules and the current form values.
+ *
+ * Note that this does not take into account the visibility of the element in the UI based on pages/groups.
+ *
+ * This function checks if the provided element should be visible by evaluating its conditional rules.
+ * If the element has no conditional rules, it is considered visible.
+ * If the element has rules, at least one rule must be satisfied for the element to be visible.
+ * When a matching rule is identified, it additionally ensures that the parent element (referenced
+ * by the rule's choiceId) is also visible, and it continues checking any further ancestors.
+ *
+ * @param formRecord - The form record.
+ * @param element - The form element whose visibility is being determined.
+ * @param values - The current form values from Formik.
+ * @returns `true` if the element should be visible, `false` otherwise.
+ */
+export const checkVisibilityRecursive = (
+  formRecord: PublicFormRecord,
+  element: FormElement,
+  values: FormValues,
+  checked: Set<string> = new Set()
+): boolean => {
+  const rules = element.properties.conditionalRules;
+  if (!rules || rules.length === 0) return true;
+
+  // Prevent circular references by checking if the element ID is already in the visited set
+  if (checked.has(element.id.toString())) {
+    // Circular reference detected, terminate this branch
+    return false;
+  }
+  checked.add(element.id.toString());
+
+  // At least one rule must be satisfied for the element to be visible
+  return rules.some((rule) => {
+    const [elementId] = rule.choiceId.split(".");
+    const ruleParent = getElementById(formRecord.form.elements, elementId);
+    if (!ruleParent) return matchRule(rule, formRecord, values as FormValues);
+
+    // Parent must be visible and this rule must match
+    return (
+      checkVisibilityRecursive(formRecord, ruleParent, values, checked) &&
+      matchRule(rule, formRecord, values as FormValues)
+    );
+  });
+};
+
+/**
  * Checks if an element exists within a group.
  * @param groupId - The id of the group to check
  * @param elementId - The id of the element to check
