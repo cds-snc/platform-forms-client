@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.41.5](https://github.com/cds-snc/platform-forms-client/compare/v3.41.4...v3.41.5) (2025-05-16)
+
+
+### Bug Fixes
+
+* RichText renderer inserting HTML entity for space char ([#5548](https://github.com/cds-snc/platform-forms-client/issues/5548)) ([f22c807](https://github.com/cds-snc/platform-forms-client/commit/f22c807cf38f6407919ed5e40d062c9dad82753a))
+
+
+### Miscellaneous Chores
+
+* adds invcanada as a valid gov email ([#5563](https://github.com/cds-snc/platform-forms-client/issues/5563)) ([bc79b62](https://github.com/cds-snc/platform-forms-client/commit/bc79b6290aaed96a785af2d188c9a6139d5a6826))
+
 ## [3.41.4](https://github.com/cds-snc/platform-forms-client/compare/v3.41.3...v3.41.4) (2025-05-15)
 
 
