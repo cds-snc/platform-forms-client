@@ -2,7 +2,7 @@ import { sendEmail } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
-import { NotificationsInterval } from "@gcforms/types";
+import { DeliveryOption, NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logEvent } from "./auditLogs";
@@ -22,7 +22,13 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
     return;
   }
 
-  const { users } = usersAndNotifications;
+  const { users, deliveryOption } = usersAndNotifications;
+
+  // Avoid spamming users with emails by only sending one type of email, either an email
+  // delivery or a notification
+  if (deliveryOption) {
+    return;
+  }
 
   const notificationsInterval = usersAndNotifications.notificationsInterval;
   if (!validateNotificationsInterval(notificationsInterval)) {
@@ -213,6 +219,7 @@ const _getUsersAndNotificationsInterval = async (
 ): Promise<{
   notificationsInterval: number | null | undefined;
   users: { email: string }[];
+  deliveryOption: DeliveryOption | null;
 } | null> => {
   const usersAndNotificationsInterval = await prisma.template
     .findUnique({
@@ -221,6 +228,7 @@ const _getUsersAndNotificationsInterval = async (
       },
       select: {
         notificationsInterval: true,
+        deliveryOption: true,
         users: {
           select: {
             email: true,
@@ -235,6 +243,7 @@ const _getUsersAndNotificationsInterval = async (
   return {
     users: usersAndNotificationsInterval.users,
     notificationsInterval: usersAndNotificationsInterval.notificationsInterval,
+    deliveryOption: usersAndNotificationsInterval.deliveryOption as DeliveryOption,
   };
 };
 
