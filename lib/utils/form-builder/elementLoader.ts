@@ -98,6 +98,8 @@ export const elementLoader = async (
     let data;
 
     try {
+      // escape the content to make it valid JSON
+      data = JSON.stringify(trimmedContent);
       data = JSON.parse(trimmedContent);
     } catch (error) {
       throw new Error("Invalid JSON format");
