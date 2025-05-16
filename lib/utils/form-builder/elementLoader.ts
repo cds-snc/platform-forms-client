@@ -16,7 +16,7 @@ export const validateElement = (element: FormElement) => {
   }
 
   // check for titleEn and titleFr
-  if (!element.properties.titleEn || !element.properties.titleFr) {
+  if (!("titleEn" in element.properties) || !("titleFr" in element.properties)) {
     throw new Error("Element properties must have titleEn and titleFr");
   }
 

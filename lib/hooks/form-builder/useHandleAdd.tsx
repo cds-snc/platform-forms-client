@@ -4,6 +4,7 @@ import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { blockLoader } from "../../utils/form-builder/blockLoader";
 import { elementLoader } from "@lib/utils/form-builder/elementLoader";
+import { logMessage } from "@lib/logger";
 
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import {
@@ -71,6 +72,7 @@ export const useHandleAdd = () => {
             id = await add(position, data.type, data, groupId);
           });
         } catch (e) {
+          logMessage.info(`${(e as Error).message}`);
           toast.error(loadError);
         }
 
