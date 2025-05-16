@@ -19,6 +19,8 @@ import {
   FormStatus,
   SortValue,
   SortOption,
+  NotificationsInterval,
+  NotificationsIntervalDefault,
 } from "./form-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
@@ -41,6 +43,8 @@ export type { AddressComponents };
 export type { ClosedDetails };
 export { FormElementTypes };
 export { FormStatus };
+export { NotificationsInterval };
+export { NotificationsIntervalDefault };
 
 export { SortOption };
 export type { SortValue };
