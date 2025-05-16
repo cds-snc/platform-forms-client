@@ -73,8 +73,11 @@ export const elementLoader = async (
     // get content of the textArea
     const content = el.value;
 
+    // trim and remove unnecessary whitespace
+    const trimmedContent = content.trim().replace(/\s+/g, " ");
+
     // parse the content to JSON
-    const data = JSON.parse(content);
+    const data = JSON.parse(trimmedContent);
 
     // validate the data
     if (!data || typeof data !== "object") {
