@@ -165,10 +165,18 @@ export const getElementById = (elements: FormElement[], id: string) => {
 export const checkVisibilityRecursive = (
   formRecord: PublicFormRecord,
   element: FormElement,
-  values: FormValues
+  values: FormValues,
+  checked: Set<string> = new Set()
 ): boolean => {
   const rules = element.properties.conditionalRules;
   if (!rules || rules.length === 0) return true;
+
+  // Prevent circular references by checking if the element ID is already in the visited set
+  if (checked.has(element.id.toString())) {
+    // Circular reference detected, terminate this branch
+    return false;
+  }
+  checked.add(element.id.toString());
 
   // At least one rule must be satisfied for the element to be visible
   return rules.some((rule) => {
@@ -178,7 +186,7 @@ export const checkVisibilityRecursive = (
 
     // Parent must be visible and this rule must match
     return (
-      checkVisibilityRecursive(formRecord, ruleParent, values) &&
+      checkVisibilityRecursive(formRecord, ruleParent, values, checked) &&
       matchRule(rule, formRecord, values as FormValues)
     );
   });
