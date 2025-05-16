@@ -102,7 +102,7 @@
       "placeholder": "Custom element placeholder",
       "field": {
         "label": "JSON",
-        "placeholder": "Paste your JSON schema here"
+        "description": "Paste your JSON schema here"
       }
     },
     "checkbox": {

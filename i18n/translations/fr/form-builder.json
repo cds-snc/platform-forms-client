@@ -101,8 +101,8 @@
       "label": "JSON",
       "placeholder": "Espace réservé pour l'élément sur mesure",
       "field": {
-        "label": "JSON",
-        "placeholder": "Paste your JSON schema here"
+        "label": "JSON [FR]",
+        "description": "Paste your JSON schema here [FR]"
       }
     },
     "checkbox": {
