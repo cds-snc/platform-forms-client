@@ -30,7 +30,8 @@
       "richText": "Ajouter du texte de page",
       "departments": "Ajouter un ministère",
       "combobox": "Ajouter une liste avec recherche",
-      "formattedDate": "Ajouter une date"
+      "formattedDate": "Ajouter une date",
+      "customJson": "Ajouter un élément personnalisé"
     },
     "address": {
       "whatIsYourAddress": "Quelle est votre adresse?",
@@ -93,6 +94,16 @@
       "basic": "De base",
       "preset": "Prédéfini",
       "other": "Autre"
+    },
+    "customJson": {
+      "description": "Schéma JSON pour créer un élément sur mesure.",
+      "title": "Élément sur mesure",
+      "label": "JSON",
+      "placeholder": "Espace réservé pour l'élément sur mesure",
+      "field": {
+        "label": "Format JSON",
+        "description": "Copiez-collez votre schéma JSON ici"
+      }
     },
     "checkbox": {
       "description": "Une liste d’options en vue de sélection unique ou multiple.",
