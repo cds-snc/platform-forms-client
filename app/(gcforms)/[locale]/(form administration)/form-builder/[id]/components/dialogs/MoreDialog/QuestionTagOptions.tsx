@@ -9,7 +9,7 @@ export const QuestionTagOptions = ({
   item: FormElement;
   setItem: (item: FormElement) => void;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
 
   if (item.type === FormElementTypes.richText) {
     return null;
@@ -18,6 +18,7 @@ export const QuestionTagOptions = ({
   return (
     <section className="mb-4 mt-8">
       <TagInput
+        locale={i18n.language}
         label={t("moreDialog.tags.title")}
         description={t("moreDialog.tags.description")}
         onTagAdd={(tag) => {
@@ -40,6 +41,7 @@ export const QuestionTagOptions = ({
         }}
         initialTags={item.properties.tags || []}
         restrictDuplicates={true}
+        maxTags={20}
         validateTag={(tag) => {
           let isValid = true;
           const errors: string[] = [];

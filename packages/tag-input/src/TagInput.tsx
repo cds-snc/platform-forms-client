@@ -213,7 +213,7 @@ export const TagInput = ({
         {label}
       </label>
       {description && <p className="gc-tag-input-description">{description}</p>}
-      <span id="input-instructions" aria-live="polite" className="visually-hidden">
+      <span id="input-instructions" className="gc-visually-hidden">
         {t("inputLabel", { tags: selectedTags.length.toString() })}
       </span>
       <div className="gc-tag-input">
@@ -224,7 +224,7 @@ export const TagInput = ({
             className={`gc-tag ${selectedTagIndex === index ? "gc-selected-tag" : ""}`}
           >
             <div>{tag}</div>
-            <button type="button" onClick={() => handleRemoveTag(index)}>
+            <button type="button" onClick={() => handleRemoveTag(index)} aria-label={t("delete")}>
               <CancelIcon />
             </button>
           </div>
