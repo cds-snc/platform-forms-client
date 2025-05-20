@@ -133,7 +133,7 @@ export const Option = ({
       <Button
         className="ml-2 flex max-h-9 max-w-9 items-center justify-center !rounded-full border-1 border-slate-800 bg-gray-selected !p-1.5 text-center  [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
         id={`remove--${id}--${index + 1}`}
-        icon={<Close className="ml-[12px] " />}
+        icon={<Close className="ml-[12px]" />}
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
           cleanUpRules(String(id), index);
