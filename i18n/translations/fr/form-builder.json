@@ -30,7 +30,8 @@
       "richText": "Ajouter du texte de page",
       "departments": "Ajouter un ministère",
       "combobox": "Ajouter une liste avec recherche",
-      "formattedDate": "Ajouter une date"
+      "formattedDate": "Ajouter une date",
+      "customJson": "Ajouter un élément personnalisé"
     },
     "address": {
       "whatIsYourAddress": "Quelle est votre adresse?",
@@ -93,6 +94,16 @@
       "basic": "De base",
       "preset": "Prédéfini",
       "other": "Autre"
+    },
+    "customJson": {
+      "description": "Schéma JSON pour créer un élément sur mesure.",
+      "title": "Élément sur mesure",
+      "label": "JSON",
+      "placeholder": "Espace réservé pour l'élément sur mesure",
+      "field": {
+        "label": "Format JSON",
+        "description": "Copiez-collez votre schéma JSON ici"
+      }
     },
     "checkbox": {
       "description": "Une liste d’options en vue de sélection unique ou multiple.",
@@ -714,6 +725,35 @@
           }
         }
       }
+    },
+    "notifications": {
+      "title": "Recevoir des notifications",
+      "description1": "Obtenez des notifications par courriel pour les nouvelles réponses",
+      "description2": "Tous les membres de votre équipe ayant accès au formulaire seront informés lorsque de nouvelles réponses au formulaire sont disponibles et peuvent être téléchargées.",
+      "optionsDescription": "Activer les notifications pour les nouvelles réponses au formulaire",
+      "options": {
+        "on": "Activé",
+        "off": "Désactivé"
+      },
+      "save": "Enregistrer",
+      "email": {
+        "singleSubmission": {
+          "subject": "New form response | Nouvelle réponse au formulaire",
+          "paragraph1": "Votre formulaire a reçu une nouvelle soumission :",
+          "paragraph2": "Allez à Formulaires GC",
+          "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
+        },
+        "multipleSubmissions": {
+          "subject": "New form responses | Nouvelles réponses au formulaire",
+          "paragraph1": "Votre formulaire a reçu des nouvelles soumissions :",
+          "paragraph2": "Allez à Formulaires GC",
+          "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
+        }
+      },
+      "savedSuccessMessage": "Vos modifications ont été enregistrées.",
+      "errors": {
+        "updateNotificationsInterval": "Il y a eu une erreur dans la mise à jour des notifications. Veuillez réessayer plus tard."
+      }
     }
   },
   "settingsDeleteButton": "Supprimer le formulaire",
@@ -784,22 +824,6 @@
       "title": "Ligne d'objet en français",
       "hint": "Lorsque les réponses au formulaire sont soumises en français."
     },
-    "responseDeliveryHelp": {
-      "cta": "Conseils pour le choix d’une option",
-      "title": "Choisir une option de livraison des réponses",
-      "description": "Il y a deux options pour obtenir les réponses des formulaires soumis. Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins.",
-      "inbox": {
-        "title": "Courriel à une boîte de réception",
-        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A",
-        "text2": "Les réponses sont envoyées directement dans une boîte de réception en temps réel",
-        "text3": "Une seule adresse courriel peut recevoir les courriel de réponses. Il peut s'agir d'une boîte de réception partagée."
-      },
-      "vault": {
-        "title": "Téléchargement des réponses",
-        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B",
-        "text2": "Téléchargement des réponses de Formulaires GC dans un délai de 30 jours"
-      }
-    },
     "responseDeliveryHelpWithApi": {
       "cta": "Conseils pour le choix d'une option",
       "title": "Choisir une option de livraison des réponses",
@@ -816,7 +840,7 @@
         "title": "Téléchargement des réponses dans Formulaires GC",
         "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B.",
         "text2": "Téléchargement des réponses de Formulaires GC dans un délai de 30 jours.",
-        "text3": "Possibilité de passer à la livraison par API après la publication.",
+        "text3": "Aucune possibilité de changer la méthode de livraison après la publication.",
         "text4": "Plusieurs titulaires de comptes peuvent accéder aux réponses.",
         "text5": "Aucune ressource de développement de logiciel n'est requise."
       },

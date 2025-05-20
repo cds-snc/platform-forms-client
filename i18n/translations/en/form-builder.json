@@ -30,7 +30,8 @@
       "richText": "Add page text",
       "departments": "Add department",
       "combobox": "Add searchable list",
-      "formattedDate": "Add date"
+      "formattedDate": "Add date",
+      "customJson": "Add custom json"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
@@ -93,6 +94,16 @@
       "basic": "Basic",
       "preset": "Preset",
       "other": "Other"
+    },
+    "customJson": {
+      "description": "JSON schema to create a custom element.",
+      "title": "Custom element",
+      "label": "JSON",
+      "placeholder": "Custom element placeholder",
+      "field": {
+        "label": "JSON format",
+        "description": "Paste your JSON schema here"
+      }
     },
     "checkbox": {
       "description": "A list of options for a single or multiple selections.",
@@ -714,6 +725,35 @@
           }
         }
       }
+    },
+    "notifications": {
+      "title": "Receive notifications",
+      "description1": "Get notified by email about new form responses",
+      "description2": "All team members with access to the form will be informed when there are new form responses available to download.",
+      "optionsDescription": "Enable notifications for new form responses",
+      "options": {
+        "on": "On",
+        "off": "Off"
+      },
+      "save": "Save",
+      "email": {
+        "singleSubmission": {
+          "subject": "New form response | Nouvelle réponse au formulaire",
+          "paragraph1": "Your form received a new submission:",
+          "paragraph2": "Retrieve response from GC Forms",
+          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
+        },
+        "multipleSubmissions": {
+          "subject": "New form responses | Nouvelles réponses au formulaire",
+          "paragraph1": "Your form received new submissions:",
+          "paragraph2": "Retrieve responses from GC Forms",
+          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
+        }
+      },
+      "savedSuccessMessage": "Your changes have been saved.",
+      "errors": {
+        "updateNotificationsInterval": "There was an error updating notifications. Please try again later."
+      }
     }
   },
   "settingsDeleteButton": "Delete",
@@ -784,22 +824,6 @@
       "title": "French response subject line",
       "hint": "When form responses are submitted in French."
     },
-    "responseDeliveryHelp": {
-      "cta": "Help choosing an option",
-      "title": "Choosing a response delivery option",
-      "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
-      "inbox": {
-        "title": "Email to an inbox",
-        "text1": "For up to PROTECTED A forms",
-        "text2": "Responses are delivered directly to an inbox in real time",
-        "text3": "One email address can receive response emails. This can be a shared inbox."
-      },
-      "vault": {
-        "title": "Download from GC Forms",
-        "text1": "For up to PROTECTED B forms",
-        "text2": "Download responses within 30 days"
-      }
-    },
     "responseDeliveryHelpWithApi": {
       "cta": "Help choosing an option",
       "title": "Choosing a response delivery option",
@@ -816,7 +840,7 @@
         "title": "Download from GC Forms",
         "text1": "For up to PROTECTED B forms",
         "text2": "Download responses within 30 days",
-        "text3": "Can be switched to API delivery after publishing",
+        "text3": "Cannot be switched after publishing",
         "text4": "Multiple account holders can access responses.",
         "text5": "No software development resources required."
       },

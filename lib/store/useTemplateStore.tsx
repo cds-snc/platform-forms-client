@@ -150,7 +150,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             resetDeliveryOption: () => set({ deliveryOption: undefined }),
             setHasTransformed: () => set({ hasTransformed: true }),
           }),
-
           storageOptions
         )
       )
