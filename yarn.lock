@@ -2958,6 +2958,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@gcforms/tag-input@workspace:*, @gcforms/tag-input@workspace:packages/tag-input":
+  version: 0.0.0-use.local
+  resolution: "@gcforms/tag-input@workspace:packages/tag-input"
+  peerDependencies:
+    react: ^19.1.0
+    react-dom: ^19.1.0
+  languageName: unknown
+  linkType: soft
+
 "@gcforms/types@workspace:*, @gcforms/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@gcforms/types@workspace:packages/types"
@@ -12656,6 +12665,7 @@ __metadata:
     "@eslint/eslintrc": "npm:^3"
     "@gcforms/connectors": "workspace:*"
     "@gcforms/editor": "workspace:*"
+    "@gcforms/tag-input": "workspace:*"
     "@gcforms/types": "workspace:*"
     "@hcaptcha/react-hcaptcha": "npm:^1.12.0"
     "@hcaptcha/types": "npm:^1.0.4"
