@@ -16,6 +16,9 @@ import { TextFieldOptions } from "./TextFieldOptions";
 import { CharacterLimitOptions } from "./CharacterLimitOptions";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FormElement } from "@lib/types";
+import { QuestionTagOptions } from "./QuestionTagOptions";
+import { QuestionIdOptions } from "./QuestionIdOptions";
+import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 
 export const MoreDialog = () => {
   const { getPathString, updateField, setChangeKey, getFormElementById } = useTemplateStore(
@@ -31,6 +34,7 @@ export const MoreDialog = () => {
 
   const [item, setItem] = React.useState<FormElement | undefined>(undefined);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isValid, setIsValid] = React.useState(true);
   const { Event } = useCustomEvent();
   const dialog = useDialogRef();
   const { refs } = useRefsContext();
@@ -82,6 +86,7 @@ export const MoreDialog = () => {
         data-testid="more-modal-save-button"
         className="ml-5"
         theme="primary"
+        disabled={!isValid}
         onClick={() => {
           updateField(getPathString(item.id), item.properties);
           setChangeKey(String(new Date().getTime()));
@@ -92,18 +97,21 @@ export const MoreDialog = () => {
       </Button>
     </>
   );
+  const dialogTitle = t("moreOptions");
 
   return (
     <>
       {isOpen && (
-        <Dialog
-          dialogRef={dialog}
-          actions={actions}
-          handleClose={handleClose}
-          title={t("moreOptions")}
-        >
+        <Dialog dialogRef={dialog} actions={actions} handleClose={handleClose} title={dialogTitle}>
           <div className="p-5">
-            <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
+            <form
+              onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                updateField(getPathString(item.id), item.properties);
+                setChangeKey(String(new Date().getTime()));
+                handleClose();
+                e.preventDefault();
+              }}
+            >
               <section>
                 <Question item={item} setItem={setItem} />
                 <Description item={item} setItem={setItem} />
@@ -122,6 +130,15 @@ export const MoreDialog = () => {
               <CharacterLimitOptions item={item} setItem={setItem} />
 
               <SortOptions item={item} setItem={setItem} />
+
+              {item.type !== "dynamicRow" && (
+                <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
+                  <p className="mt-6">{t("moreDialog.apiOptionsSection.description")}</p>
+                  <QuestionIdOptions setIsValid={setIsValid} item={item} setItem={setItem} />
+                  <QuestionTagOptions item={item} setItem={setItem} />
+                </InfoDetails>
+              )}
+              <input type="submit" className="hidden" />
             </form>
           </div>
         </Dialog>
