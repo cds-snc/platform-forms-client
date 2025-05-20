@@ -46,10 +46,10 @@ export const QuestionIdOptions = ({
 
   return (
     <section className="mb-4 mt-6">
-      <Label htmlFor={`title--modal--${item.id}`}>{t("moreDialog.questionId.title")}</Label>
+      <Label htmlFor={`questionId-${item.id}`}>{t("moreDialog.questionId.title")}</Label>
       <p>{t("moreDialog.questionId.description")}</p>
       <Input
-        id={`title--modal--${item.id}`}
+        id={`questionId-${item.id}`}
         name={`item${item.id}`}
         value={item.properties.questionId || ""}
         className={`w-11/12` + (error ? " !border-red-700 outline-2 !outline-red-700" : "")}
