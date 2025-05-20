@@ -56,6 +56,7 @@ export enum FormElementTypes {
   contact = "contact",
   combobox = "combobox",
   formattedDate = "formattedDate",
+  customJson = "customJson",
 }
 
 export type ConditionalRule = {
@@ -214,7 +215,16 @@ export type FormRecord = {
   closingDate?: string;
   closedDetails?: ClosedDetails;
   saveAndResume?: boolean;
-  [key: string]: string | boolean | FormProperties | DeliveryOption | ClosedDetails | undefined;
+  notificationsInterval?: NotificationsInterval;
+  [key: string]:
+    | string
+    | boolean
+    | number
+    | FormProperties
+    | DeliveryOption
+    | ClosedDetails
+    | undefined
+    | null;
 };
 
 export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
@@ -237,3 +247,15 @@ export const FormStatus = {
 } as const;
 
 export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];
+
+// Interval in minutes for sending email notifications. These are converted to seconds for the Redis ttl
+export const NotificationsInterval = {
+  OFF: null,
+  DAY: 1440,
+  WEEK: 10080,
+} as const;
+
+export const NotificationsIntervalDefault = NotificationsInterval.DAY; // Default in prisma also
+
+export type NotificationsInterval =
+  (typeof NotificationsInterval)[keyof typeof NotificationsInterval];

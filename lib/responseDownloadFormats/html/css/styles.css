@@ -69,6 +69,8 @@
     font-variant-ligatures: no-common-ligatures;
     -webkit-font-smoothing: antialiased;
     @apply font-lato font-bold;
+    @apply leading-10;
+    
   }
 
   h1 {
