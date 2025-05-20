@@ -8,7 +8,6 @@ export const parseElementJson = (content: string) => {
   let sanitizedContent = content
     // Only add quotes around keys that are unquoted (not already preceded by a quote)
     .replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, (_match, p1, p2, p3) => {
-      // If the key is already quoted, don't add quotes
       if (p2.startsWith('"') && p2.endsWith('"')) return `${p1}${p2}${p3}`;
       return `${p1}"${p2}"${p3}`;
     });
@@ -19,8 +18,14 @@ export const parseElementJson = (content: string) => {
   // remove trailing newlines // multiple newlines
   sanitizedContent = sanitizedContent.replace(/[\r\n]+/g, "");
 
-  // replace  trailing semicolon
+  // replace trailing semicolon
   sanitizedContent = sanitizedContent.replace(/;\s*([}\]])/g, "$1");
+
+  // Remove trailing semicolon at end of input (common in pasted JS arrays)
+  sanitizedContent = sanitizedContent.replace(/;+\s*$/, "");
+
+  // Remove trailing commas before array/object end (extra safety)
+  sanitizedContent = sanitizedContent.replace(/,(\s*[}\]])/g, "$1");
 
   // trim and remove unnecessary whitespace
   sanitizedContent = sanitizedContent.trim().replace(/\s+/g, " ");
