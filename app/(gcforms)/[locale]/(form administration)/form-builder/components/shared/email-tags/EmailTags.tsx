@@ -14,12 +14,22 @@ export const EmailTags = ({
   return (
     <section className="mb-4 mt-8">
       <TagInput
-        restrictDuplicates={true}
         validateTag={(tag) => {
+          let isValid = true;
+          const errors: string[] = [];
+
           if (!tag || !isValidEmail(tag)) {
-            return { isValid: false, errors: [t("input-validation.email")] };
+            isValid = false;
+            errors.push(t("input-validation.email"));
           }
-          return { isValid: true };
+
+          // Restrict duplicates
+          if (tags.includes(tag)) {
+            isValid = false;
+            errors.push(t("input-validation.duplicateEmail"));
+          }
+
+          return { isValid, errors };
         }}
         label={t("share.emailLabel", { ns: "form-builder" })}
         description=""
@@ -29,7 +39,7 @@ export const EmailTags = ({
         onTagRemove={(tag) => {
           setTags(tags.filter((t) => t !== tag));
         }}
-        tags={tags}
+        initialTags={tags}
       />
     </section>
   );
