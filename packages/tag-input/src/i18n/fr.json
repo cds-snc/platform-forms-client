@@ -4,6 +4,7 @@
   "announceTagAdded": "Balise \"{tag}\" ajoutée",
   "announceTagRemoved": "Balise \"{tag}\" supprimée",
   "announceTagSelected": "Tag \"{tag}\" sélectionnée",
+  "delete": "Supprimer",
   "duplicateTag": "La balise a déjà été ajoutée",
   "inputLabel": "Balises {tags}. Utilisez Entrée, la touche Tab ou une virgule pour créer une balise. Utilisez les touches fléchées gauche et droite pour naviguer dans les balises. Utilisez le retour en arrière ou Supprimer  pour enlever une balise.",
   "maxTagsReached": "Le nombre maximal de balises a été atteint ({max})"

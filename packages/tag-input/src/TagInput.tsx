@@ -224,7 +224,7 @@ export const TagInput = ({
             className={`gc-tag ${selectedTagIndex === index ? "gc-selected-tag" : ""}`}
           >
             <div>{tag}</div>
-            <button type="button" onClick={() => handleRemoveTag(index)}>
+            <button type="button" onClick={() => handleRemoveTag(index)} aria-label={t("delete")}>
               <CancelIcon />
             </button>
           </div>
