@@ -97,16 +97,12 @@ export const MoreDialog = () => {
       </Button>
     </>
   );
+  const dialogTitle = t("moreOptions");
 
   return (
     <>
       {isOpen && (
-        <Dialog
-          dialogRef={dialog}
-          actions={actions}
-          handleClose={handleClose}
-          title={t("moreOptions")}
-        >
+        <Dialog dialogRef={dialog} actions={actions} handleClose={handleClose} title={dialogTitle}>
           <div className="p-5">
             <form
               onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
