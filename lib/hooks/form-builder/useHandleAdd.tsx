@@ -21,6 +21,7 @@ import {
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTranslation } from "@i18n/client";
+import { v4 as uuid } from "uuid";
 
 export const useHandleAdd = () => {
   const { add, addSubItem, setChangeKey } = useTemplateStore((s) => ({
@@ -36,7 +37,7 @@ export const useHandleAdd = () => {
   const groupId = useGroupStore((state) => state.id);
 
   const create = useCallback(async (type: FormElementTypes) => {
-    const defaults = JSON.parse(JSON.stringify(defaultField));
+    const defaults = { ...defaultField, uuid: uuid() };
 
     const labels = await getTranslatedElementProperties(type);
     const descriptionEn = labels.description.en;

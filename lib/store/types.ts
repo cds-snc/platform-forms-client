@@ -22,6 +22,7 @@ import { NotificationsInterval } from "@gcforms/types";
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
+  setHasTransformed: () => void;
   setHasHydrated: () => void;
   getFocusInput: () => boolean;
   moveUp: (index: number, groupId?: string) => void;
@@ -72,7 +73,8 @@ export interface TemplateStoreState extends TemplateStoreProps {
   unsetField: (path: string) => void;
   duplicateElement: (id: number, groupId?: string, copyEn?: string, copyFr?: string) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
-  getSchema: (cleanRules?: boolean) => string;
+  transform: () => void;
+  getSchema: () => string;
   getIsPublished: () => boolean;
   setIsPublished: (isPublished: boolean) => void;
   getFormElementById: (id: number) => FormElement | undefined;
@@ -87,7 +89,6 @@ export interface TemplateStoreState extends TemplateStoreProps {
   initialize: (language?: string) => void;
   removeChoiceFromRules: (elId: string, choiceIndex: number) => void;
   removeChoiceFromNextActions: (elId: string, choiceIndex: number) => void;
-  cleanElementRules: () => void;
   setChangeKey: (key: string) => void;
   getGroupsEnabled: () => boolean;
   setGroupsLayout: (layout: string[]) => void;
@@ -106,6 +107,7 @@ export interface TemplateStoreProps {
   translationLanguagePriority: Language;
   focusInput: boolean;
   hasHydrated: boolean;
+  hasTransformed: boolean;
   form: FormProperties;
   isPublished: boolean;
   name: string;

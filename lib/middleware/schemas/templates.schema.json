@@ -137,8 +137,11 @@
         },
         {
           "id": 2,
+          "uuid": "12345678-1234-1234-1234-123456789012",
           "type": "radio",
           "properties": {
+            "questionId": "my_custom_id",
+            "tags": ["radio", "nomination"],
             "choices": [
               {
                 "en": "Team nomination",
@@ -213,6 +216,11 @@
           "type": "integer",
           "minimum": 1
         },
+        "uuid": {
+          "description": "A unique id for the object (future use)",
+          "type": "string",
+          "format": "uuid"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -233,6 +241,17 @@
         "properties": {
           "type": "object",
           "properties": {
+            "questionId": {
+              "description": "A user-defined unique id for the question",
+              "type": "string"
+            },
+            "tags": {
+              "description": "A list of tags that can be used to group elements together.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "titleEN": {
               "description": "Input label in English",
               "type": "string"
