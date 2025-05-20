@@ -43,7 +43,7 @@ const ResponseDeliveryHelpWithApiDialogWithApi = ({ handleClose }: { handleClose
                 <th className="p-2 text-left">
                   {t("settingsResponseDelivery.responseDeliveryHelpWithApi.inbox.title")}
                 </th>
-                <th className="whitespace-nowrap p-2 text-left">
+                <th className="p-2 text-left">
                   {t("settingsResponseDelivery.responseDeliveryHelpWithApi.vault.title")}
                 </th>
                 <th className="p-2 text-left">

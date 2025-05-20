@@ -18,6 +18,7 @@ import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import Skeleton from "react-loading-skeleton";
 import { formClosingDateEst } from "@lib/utils/date/utcToEst";
 import { logMessage } from "@lib/logger";
+import { SettingsApplicationsIcon } from "@serverComponents/icons";
 
 const THROTTLE_EXPIRY = {
   weeks: "weeks",
@@ -146,7 +147,10 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   return (
     <div className="mb-10">
       <form onSubmit={handleSubmit}>
-        <h2>{t("throttling.title")}</h2>
+        <h2>
+          <SettingsApplicationsIcon className="-mt-10px mr-1 inline-block" />{" "}
+          {t("throttling.title")}
+        </h2>
         <div role="alert">
           {success &&
             (success === THROTTLE_EXPIRY.weeks || success === THROTTLE_EXPIRY.permanent) && (

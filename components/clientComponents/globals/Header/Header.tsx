@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
-
 import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "./FileName";
 import { ShareDropdown } from "./ShareDropdown";
@@ -32,13 +31,13 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
   const [bannerMessage, setBannerMessage] = useState("");
 
   const { getFlag } = useFeatureFlags();
-  const isEnabled = getFlag(FeatureFlags.caretakerPeriod);
+  const isEnabled = getFlag(FeatureFlags.topBanner);
 
   useEffect(() => {
     async function fetchBannerData() {
       setBannerData(isEnabled);
-      setBannerMessage(t("campaignBanner.message3"));
-      setBannerType(t("campaignBanner.type3"));
+      setBannerMessage(t("campaignBanner.message4"));
+      setBannerType(t("campaignBanner.type4"));
     }
     fetchBannerData();
   }, [t, isEnabled]);
