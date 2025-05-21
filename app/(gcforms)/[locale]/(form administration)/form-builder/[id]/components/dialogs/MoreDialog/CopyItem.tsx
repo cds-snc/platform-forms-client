@@ -3,6 +3,7 @@
 import React, { useCallback, useState } from "react";
 
 import { CopyIcon } from "@serverComponents/icons/CopyIcon";
+import { CheckIcon } from "@serverComponents/icons/CheckIcon";
 import { FormElement } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "react-i18next";
@@ -27,8 +28,10 @@ export const CopyItem = ({ item }: { item: FormElement | undefined }) => {
         placeholderEn: item?.properties.placeholderEn || "",
         placeholderFr: item?.properties.placeholderFr || "",
         conditionalRules: undefined,
+        autoComplete: item?.properties.autoComplete,
       },
     };
+
     navigator.clipboard.writeText(JSON.stringify(itemJson, null, 2));
 
     setCopied(true);
@@ -36,15 +39,16 @@ export const CopyItem = ({ item }: { item: FormElement | undefined }) => {
   }, [item]);
 
   return (
-    <div className="flex items-center">
+    <div className="mr-6 flex w-full justify-end">
       <Button
         theme="secondary"
-        className=""
+        className="[&_svg]:focus:fill-white"
         onClick={copyToClipboard}
         data-testid="copy-item-button"
       >
         <>
-          <CopyIcon className="mr-2" />
+          {copied ? <CheckIcon className="mr-2 size-4" /> : <CopyIcon className="mr-2 size-4" />}
+
           {copied ? (
             <span>{t("element.copyButton.copied")}</span>
           ) : (

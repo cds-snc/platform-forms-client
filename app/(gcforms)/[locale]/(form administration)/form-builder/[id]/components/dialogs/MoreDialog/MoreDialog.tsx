@@ -97,6 +97,8 @@ export const MoreDialog = () => {
       >
         {t("save")}
       </Button>
+
+      <CopyItem item={item} />
     </>
   );
   const dialogTitle = t("moreOptions");
@@ -140,8 +142,6 @@ export const MoreDialog = () => {
                   <QuestionTagOptions item={item} setItem={setItem} />
                 </InfoDetails>
               )}
-
-              <CopyItem item={item} />
 
               <input type="submit" className="hidden" />
             </form>
