@@ -26,7 +26,7 @@ interface PageContextProps {
 }
 
 const PageContent = ({ title, language, pageText }: PageContextProps) => {
-  const { t } = useTranslation("form");
+  const { t } = useTranslation("form-closed");
 
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
