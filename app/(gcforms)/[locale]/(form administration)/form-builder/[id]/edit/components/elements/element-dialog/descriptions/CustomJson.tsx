@@ -18,7 +18,7 @@ export const CustomJson = () => {
             {t("addElementDialog.customJson.field.label")}
           </Label>
           <Description>{t("addElementDialog.customJson.field.description")}</Description>
-          <textarea id="custom-elements" className="gcds-textarea h-[200px]"></textarea>
+          <textarea rows={7} id="custom-elements" className="gcds-textarea"></textarea>
         </div>
       </div>
     </div>
