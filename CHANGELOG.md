@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.42.0](https://github.com/cds-snc/platform-forms-client/compare/v3.41.4...v3.42.0) (2025-05-21)
+
+
+### Features
+
+* Custom IDs and Tags ([#5448](https://github.com/cds-snc/platform-forms-client/issues/5448)) ([0be7ba7](https://github.com/cds-snc/platform-forms-client/commit/0be7ba71bb19b73edad78697e9f0664d985b2d9e))
+
+
+### Bug Fixes
+
+* **deps:** update all patch dependencies ([#5566](https://github.com/cds-snc/platform-forms-client/issues/5566)) ([594de1e](https://github.com/cds-snc/platform-forms-client/commit/594de1ea7e056f07131a389b8b1036b3b9214595))
+* RichText renderer inserting HTML entity for space char ([#5548](https://github.com/cds-snc/platform-forms-client/issues/5548)) ([f22c807](https://github.com/cds-snc/platform-forms-client/commit/f22c807cf38f6407919ed5e40d062c9dad82753a))
+
+
+### Miscellaneous Chores
+
+* add element loader for admins ([#5547](https://github.com/cds-snc/platform-forms-client/issues/5547)) ([faee972](https://github.com/cds-snc/platform-forms-client/commit/faee9722269f0782a0ecab580defabe033d52c15))
+* adds invcanada as a valid gov email ([#5563](https://github.com/cds-snc/platform-forms-client/issues/5563)) ([bc79b62](https://github.com/cds-snc/platform-forms-client/commit/bc79b6290aaed96a785af2d188c9a6139d5a6826))
+* **deps:** lock file maintenance ([#5567](https://github.com/cds-snc/platform-forms-client/issues/5567)) ([ec13e56](https://github.com/cds-snc/platform-forms-client/commit/ec13e5647790318a2ea05582a668fc6835a50318))
+* **deps:** update all non-major docker images ([#5565](https://github.com/cds-snc/platform-forms-client/issues/5565)) ([b258a96](https://github.com/cds-snc/platform-forms-client/commit/b258a96c4e0f23076d037d1ed8435866e22d770f))
+* **deps:** update all non-major github action dependencies ([#5564](https://github.com/cds-snc/platform-forms-client/issues/5564)) ([d309e2e](https://github.com/cds-snc/platform-forms-client/commit/d309e2e453cf89d0933c26370cfebe39a58f937f))
+* fix styles for remove option  ([#5569](https://github.com/cds-snc/platform-forms-client/issues/5569)) ([4d04376](https://github.com/cds-snc/platform-forms-client/commit/4d043764710ab42c5b575264c2baaa200c6edd77))
+
 ## [3.41.4](https://github.com/cds-snc/platform-forms-client/compare/v3.41.3...v3.41.4) (2025-05-15)
 
 

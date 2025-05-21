@@ -30,7 +30,8 @@
       "richText": "Add page text",
       "departments": "Add department",
       "combobox": "Add searchable list",
-      "formattedDate": "Add date"
+      "formattedDate": "Add date",
+      "customJson": "Add custom json"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
@@ -93,6 +94,16 @@
       "basic": "Basic",
       "preset": "Preset",
       "other": "Other"
+    },
+    "customJson": {
+      "description": "JSON schema to create a custom element.",
+      "title": "Custom element",
+      "label": "JSON",
+      "placeholder": "Custom element placeholder",
+      "field": {
+        "label": "JSON format",
+        "description": "Paste your JSON schema here"
+      }
     },
     "checkbox": {
       "description": "A list of options for a single or multiple selections.",
@@ -509,6 +520,20 @@
       "infoBox": "Which date format should you use?",
       "infoLine1": "Canada’s date standard format is YYYY-MM-DD and should be your first choice unless there is a reason to choose a different format.",
       "infoLine2": "For example, when asking for a date exactly as it’s shown on a passport, card or other document, make the fields match the format of the original. This makes it easier for users to copy the date across accurately."
+    },
+    "apiOptionsSection": {
+      "title": "Customize API data attributes",
+      "description": "Modify how your form fields get encoded for the API integration."
+    },
+    "questionId": {
+      "title": "Question ID",
+      "description": "Set a custom unique value to consistently refer to a form element so that they can match across republished form versions, data structures, and systems.",
+      "uniqueWarning": "Choose a unique value that differs from other questions."
+    },
+    "tags": {
+      "title": "Additional tags",
+      "description": "Add flexible labels to include metadata for form elements so that related questions can be categorized or so that data can be transformed.",
+      "errorTagTooLong": "Tag cannot exceed 50 characters"
     }
   },
   "moreOptions": "More options",
@@ -897,6 +922,7 @@
   "singleChoice": "Radio buttons",
   "start": "Start",
   "startErrorTemplateSize": "The form file is too large",
+  "startErrorDuplicateQuestionId": "Question IDs must be unique",
   "startErrorParse": "Failed to read form file",
   "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",
