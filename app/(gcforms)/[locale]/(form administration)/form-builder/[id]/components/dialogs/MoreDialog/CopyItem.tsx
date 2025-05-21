@@ -7,8 +7,11 @@ import { CheckIcon } from "@serverComponents/icons/CheckIcon";
 import { FormElement } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "react-i18next";
+import { useIsAdminUser } from "@lib/hooks/form-builder/useIsAdminUser";
 
 export const CopyItem = ({ item }: { item: FormElement | undefined }) => {
+  const allowCopyButton = useIsAdminUser();
+
   const { t } = useTranslation("form-builder");
   const [copied, setCopied] = useState(false);
 
@@ -37,6 +40,10 @@ export const CopyItem = ({ item }: { item: FormElement | undefined }) => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, [item]);
+
+  if (!allowCopyButton) {
+    return null;
+  }
 
   return (
     <div className="mr-6 flex w-full justify-end">
