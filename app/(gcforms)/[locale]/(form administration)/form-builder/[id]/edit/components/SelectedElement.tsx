@@ -120,7 +120,7 @@ export const SelectedElement = ({
         element = (
           <>
             <ShortAnswer>
-              <div className="flex items-center ">
+              <div className="flex items-center">
                 <CheckIcon />
                 <span className="ml-2 text-lg">{t("addElementDialog.checkbox.title")}</span>
               </div>
@@ -154,14 +154,36 @@ export const SelectedElement = ({
       if (elIndex !== -1) {
         element = (
           <>
-            <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
+            <ShortAnswer>
+              <>
+                {t("addElementDialog.combobox.title")}
+
+                {item.properties.strictValue && (
+                  <div className="ml-2 inline-block text-sm text-slate-600">
+                    - {t("strictValue.description")}
+                  </div>
+                )}
+              </>
+            </ShortAnswer>
+
             {!item.properties.managedChoices && <SubOptions item={item} />}
           </>
         );
       } else {
         element = (
           <>
-            <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
+            <ShortAnswer>
+              <>
+                {t("addElementDialog.combobox.title")}
+
+                {item.properties.strictValue && (
+                  <div className="ml-2 inline-block text-sm text-slate-600">
+                    - {t("strictValue.description")}
+                  </div>
+                )}
+              </>
+            </ShortAnswer>
+
             {!item.properties.managedChoices && <Options item={item} formId={formId} />}
           </>
         );

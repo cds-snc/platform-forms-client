@@ -1538,7 +1538,8 @@
   "fr": "Français",
   "strictValue": {
     "title": "Ensure choice value",
-    "label": "Strict value"
+    "label": "Strict value",
+    "description": "strict value"
   },
   "beta": {
     "tag": "New:",
