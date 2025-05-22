@@ -1,8 +1,8 @@
 {
   "element": {
     "copy": {
-      "text": "Copy element",
-      "toastSuccess": "Element copied"
+      "text": "Copier l'élément",
+      "toastSuccess": "Élément copié"
     }
   },
   "addElement": "Ajouter un élément",
