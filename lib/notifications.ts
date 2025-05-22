@@ -112,8 +112,8 @@ const sendEmailNotificationsToAllUsers = async (
   formTitleFr: string,
   multipleSubmissions: boolean = false
 ) => {
+  // Some older forms may not have any users, skip since we don't have any emails to send
   if (!Array.isArray(users) || users.length === 0) {
-    logMessage.error("sendEmailNotificationsToAllUsers missing users");
     return;
   }
   users.forEach(({ email }) =>
