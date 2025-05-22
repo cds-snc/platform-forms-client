@@ -1366,5 +1366,9 @@
     "formDescription": "Form description"
   },
   "en": "English",
-  "fr": "Français"
+  "fr": "Français",
+  "strictValue": {
+    "title": "Ensure choice value",
+    "label": "Strict value"
+  }
 }

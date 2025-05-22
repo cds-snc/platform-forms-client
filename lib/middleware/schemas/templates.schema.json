@@ -348,6 +348,10 @@
               "type": "integer",
               "minimum": 1
             },
+            "strictValue": {
+              "description": "If set to true, the element will only accept values that are in the choices list.",
+              "type": "boolean"
+            },
             "validation": {
               "type": "object",
               "properties": {

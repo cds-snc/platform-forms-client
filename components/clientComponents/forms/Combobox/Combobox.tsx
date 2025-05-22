@@ -72,6 +72,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
             className={`${!(isOpen && items.length >= 1 && items[0] !== "") ? "hidden" : ""}`}
             {...getMenuProps()}
             data-testid="combobox-listbox"
+            data-is-strict={props.strictValue}
             hidden={!isOpen}
           >
             {isOpen &&
