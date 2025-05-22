@@ -8,6 +8,7 @@ import { cn } from "@lib/utils";
 
 interface ComboboxProps extends InputFieldProps {
   choices?: string[];
+  strictValue?: boolean;
 }
 
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
@@ -18,6 +19,21 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const { setValue } = helpers;
 
   const [items, setItems] = React.useState(choices);
+
+  // Clear the field on blur if value does not match a choice (full match only)
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const hasFullMatch = choices.some(
+      (choice) => choice.toLowerCase() === inputValue.toLowerCase()
+    );
+    if (inputValue && !hasFullMatch) {
+      setValue("");
+    }
+    if (typeof field.onBlur === "function") {
+      field.onBlur(e);
+    }
+  };
+
   const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
     useCombobox({
       onInputValueChange({ inputValue }) {
@@ -41,7 +57,9 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
         <input
-          {...getInputProps()}
+          {...getInputProps(
+            props.strictValue ? { onBlur: handleBlur, value: field.value || "" } : {}
+          )}
           aria-describedby={ariaDescribedBy}
           id={id}
           required={required}
