@@ -31,6 +31,7 @@ import { isValidEmail } from "@lib/validation/isValidEmail";
 import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
+import { NotificationsIntervalDefault } from "@gcforms/types";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -80,6 +81,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
         deliveryOption: deliveryOption,
         securityAttribute: securityAttribute,
         formPurpose: formPurpose,
+        notificationsInterval: NotificationsIntervalDefault,
       });
 
       if (!formRecord) {
