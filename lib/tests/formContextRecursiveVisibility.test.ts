@@ -190,10 +190,10 @@ describe("Recursive visibility check", () => {
         ]
         }
 
-        const isVisible = checkVisibilityRecursive(formRecord, element, valuesHidden6);
+        const isVisible = checkVisibilityRecursive(formRecord.form.elements, element, valuesHidden6);
         expect(isVisible).toEqual(false);
 
-        const isVisible2 = checkVisibilityRecursive(formRecord, element, valuesVisible6);
+        const isVisible2 = checkVisibilityRecursive(formRecord.form.elements, element, valuesVisible6);
         expect(isVisible2).toEqual(true);
     });
 
@@ -579,9 +579,9 @@ describe("Recursive visibility check", () => {
             "10": "",
             "matchedIds": ["1.0"]
         };
-        expect(checkVisibilityRecursive(formRecord, getElement(2), valuesOne)).toBe(true);
-        expect(checkVisibilityRecursive(formRecord, getElement(3), valuesOne)).toBe(false);
-        expect(checkVisibilityRecursive(formRecord, getElement(4), valuesOne)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(2), valuesOne)).toBe(true);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(3), valuesOne)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(4), valuesOne)).toBe(false);
 
         // 2. "Three" selected, should show element 4, not 2 or 3
         const valuesThree = {
@@ -597,9 +597,9 @@ describe("Recursive visibility check", () => {
             "10": "",
             "matchedIds": ["1.2"]
         };
-        expect(checkVisibilityRecursive(formRecord, getElement(4), valuesThree)).toBe(true);
-        expect(checkVisibilityRecursive(formRecord, getElement(2), valuesThree)).toBe(false);
-        expect(checkVisibilityRecursive(formRecord, getElement(3), valuesThree)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(4), valuesThree)).toBe(true);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(2), valuesThree)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(3), valuesThree)).toBe(false);
 
         // 3. "Three" selected, "A" selected in element 4, should show element 5
         const valuesThreeA = {
@@ -607,8 +607,8 @@ describe("Recursive visibility check", () => {
             "4": "A",
             "matchedIds": ["1.2", "4.0"]
         };
-        expect(checkVisibilityRecursive(formRecord, getElement(5), valuesThreeA)).toBe(true);
-        expect(checkVisibilityRecursive(formRecord, getElement(6), valuesThreeA)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(5), valuesThreeA)).toBe(true);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(6), valuesThreeA)).toBe(false);
 
         // 4. "Three" selected, "B" selected in element 4, should show element 6
         const valuesThreeB = {
@@ -616,8 +616,8 @@ describe("Recursive visibility check", () => {
             "4": "B",
             "matchedIds": ["1.2", "4.1"]
         };
-        expect(checkVisibilityRecursive(formRecord, getElement(6), valuesThreeB)).toBe(true);
-        expect(checkVisibilityRecursive(formRecord, getElement(5), valuesThreeB)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(6), valuesThreeB)).toBe(true);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(5), valuesThreeB)).toBe(false);
 
         // 5. "Three" selected, "C" selected in element 4, "2" selected in element 7, should show element 9
         const valuesThreeC2 = {
@@ -626,10 +626,10 @@ describe("Recursive visibility check", () => {
             "7": "2",
             "matchedIds": ["1.2", "4.2", "7.1"]
         };
-        expect(checkVisibilityRecursive(formRecord, getElement(7), valuesThreeC2)).toBe(true);
-        expect(checkVisibilityRecursive(formRecord, getElement(9), valuesThreeC2)).toBe(true);
-        expect(checkVisibilityRecursive(formRecord, getElement(8), valuesThreeC2)).toBe(false);
-        expect(checkVisibilityRecursive(formRecord, getElement(10), valuesThreeC2)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(7), valuesThreeC2)).toBe(true);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(9), valuesThreeC2)).toBe(true);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(8), valuesThreeC2)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(10), valuesThreeC2)).toBe(false);
 
         // 6. "Three" selected, "C" selected in element 4, "3" selected in element 7, should show element 10
         const valuesThreeC3 = {
@@ -638,18 +638,18 @@ describe("Recursive visibility check", () => {
             "7": "3",
             "matchedIds": ["1.2", "4.2", "7.2"]
         };
-        expect(checkVisibilityRecursive(formRecord, getElement(10), valuesThreeC3)).toBe(true);
-        expect(checkVisibilityRecursive(formRecord, getElement(8), valuesThreeC3)).toBe(false);
-        expect(checkVisibilityRecursive(formRecord, getElement(9), valuesThreeC3)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(10), valuesThreeC3)).toBe(true);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(8), valuesThreeC3)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(9), valuesThreeC3)).toBe(false);
 
         // 7. "Two" selected, should show element 3, not 2 or 4
         const valuesTwo = {
             "1": "Two",
             "matchedIds": ["1.1"]
         };
-        expect(checkVisibilityRecursive(formRecord, getElement(3), valuesTwo)).toBe(true);
-        expect(checkVisibilityRecursive(formRecord, getElement(2), valuesTwo)).toBe(false);
-        expect(checkVisibilityRecursive(formRecord, getElement(4), valuesTwo)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(3), valuesTwo)).toBe(true);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(2), valuesTwo)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(4), valuesTwo)).toBe(false);
 
         // 8. "Three" selected, "C" selected in element 4, "1" selected in element 7, should show element 8
         const valuesThreeC1 = {
@@ -658,8 +658,8 @@ describe("Recursive visibility check", () => {
             "7": "1",
             "matchedIds": ["1.2", "4.2", "7.0"]
         };
-        expect(checkVisibilityRecursive(formRecord, getElement(8), valuesThreeC1)).toBe(true);
-        expect(checkVisibilityRecursive(formRecord, getElement(9), valuesThreeC1)).toBe(false);
-        expect(checkVisibilityRecursive(formRecord, getElement(10), valuesThreeC1)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(8), valuesThreeC1)).toBe(true);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(9), valuesThreeC1)).toBe(false);
+        expect(checkVisibilityRecursive(formRecord.form.elements, getElement(10), valuesThreeC1)).toBe(false);
     });
 })

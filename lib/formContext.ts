@@ -1,5 +1,5 @@
 import { FormElement, Response, Responses } from "@lib/types";
-import { PublicFormRecord, ConditionalRule } from "@lib/types";
+import { ConditionalRule } from "@lib/types";
 
 export type Group = {
   name: string;
@@ -72,8 +72,8 @@ export function findChoiceIndexByValue(
  *  }
  * @returns {Array} - An array of choiceIds that match the values
  */
-export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues): string[] => {
-  const elementIds = formRecord.form.elements.map((element) => element.id);
+export const mapIdsToValues = (formElements: FormElement[], values: FormValues): string[] => {
+  const elementIds = formElements.map((element) => element.id);
 
   // Find elementIds that are in the current form values object
   const valueIds = elementIds.filter((id) => values[id] && values[id].length > 0);
@@ -87,7 +87,7 @@ export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues)
     const value = values[id];
 
     if (!Array.isArray(value)) {
-      const choiceId = findChoiceIndexByValue(formRecord.form.elements, id, value);
+      const choiceId = findChoiceIndexByValue(formElements, id, value);
       if (choiceId > -1) {
         return `${id}.${choiceId}`;
       }
@@ -95,7 +95,7 @@ export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues)
     }
 
     return value.map((val) => {
-      const choiceId = findChoiceIndexByValue(formRecord.form.elements, id, val);
+      const choiceId = findChoiceIndexByValue(formElements, id, val);
       if (choiceId > -1) {
         return `${id}.${choiceId}`;
       }
@@ -121,17 +121,17 @@ export function idArraysMatch(a: string[], b: string[]) {
  * Checks if a rule matches against conditional rule for a choiceId.
  *
  * @param {Object} rule - The rule to match.
- * @param {Object} formRecord - The form record to match against.
  * @param {Object} values - The form values from Formik.
  * @returns {boolean} - Returns true if the rule matches, false otherwise.
  */
 export const matchRule = (
   rule: ConditionalRule,
-  formRecord: PublicFormRecord,
+  formElements: FormElement[],
   values: FormValues
 ) => {
-  const matchedIds = mapIdsToValues(formRecord, values);
+  const matchedIds = mapIdsToValues(formElements, values);
   if (matchedIds.includes(rule?.choiceId)) return true;
+
   return false;
 };
 
@@ -163,7 +163,7 @@ export const getElementById = (elements: FormElement[], id: string) => {
  * @returns `true` if the element should be visible, `false` otherwise.
  */
 export const checkVisibilityRecursive = (
-  formRecord: PublicFormRecord,
+  formElements: FormElement[],
   element: FormElement,
   values: FormValues,
   checked: Set<string> = new Set()
@@ -181,13 +181,13 @@ export const checkVisibilityRecursive = (
   // At least one rule must be satisfied for the element to be visible
   return rules.some((rule) => {
     const [elementId] = rule.choiceId.split(".");
-    const ruleParent = getElementById(formRecord.form.elements, elementId);
-    if (!ruleParent) return matchRule(rule, formRecord, values as FormValues);
+    const ruleParent = getElementById(formElements, elementId);
+    if (!ruleParent) return matchRule(rule, formElements, values as FormValues);
 
     // Parent must be visible and this rule must match
     return (
-      checkVisibilityRecursive(formRecord, ruleParent, values, checked) &&
-      matchRule(rule, formRecord, values as FormValues)
+      checkVisibilityRecursive(formElements, ruleParent, values, checked) &&
+      matchRule(rule, formElements, values as FormValues)
     );
   });
 };
@@ -695,28 +695,14 @@ export const checkRelatedRulesAsBoolean = (
   return getRelatedIdsPassingRules(elements, rules, matchedIds).length > 0;
 };
 
-export const filterShownElements = (elements: FormElement[], matchedIds: string[]) => {
+export const filterShownElements = (elements: FormElement[], values: FormValues) => {
+  const matchedIds = values.matchedIds || [];
+
   if (!Array.isArray(elements) || !Array.isArray(matchedIds)) {
     return elements;
   }
   return elements.filter((element) => {
-    const elementWithConditionalRules =
-      element.properties.conditionalRules && element.properties.conditionalRules.length > 0;
-    if (!elementWithConditionalRules) {
-      return true;
-    }
-
-    const elementHasConditionalRules = validConditionalRules(element, matchedIds);
-    const elementValueIncludedInShowHide = checkRelatedRulesAsBoolean(
-      elements,
-      element.properties.conditionalRules,
-      matchedIds
-    );
-    if (elementHasConditionalRules && elementValueIncludedInShowHide) {
-      return true;
-    }
-
-    return false;
+    return checkVisibilityRecursive(elements, element, values);
   });
 };
 

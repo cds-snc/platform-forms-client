@@ -191,7 +191,7 @@ describe("Form Context", () => {
   });
 
   describe("Map Ids to Values", () => {
-    const form = {
+    const formRecord = {
       id: "test0form00000id000asdf11",
       form: validFormTemplate,
       isPublished: true,
@@ -204,7 +204,7 @@ describe("Form Context", () => {
     } as PublicFormRecord;
 
     expect(
-      mapIdsToValues(form, {
+      mapIdsToValues(formRecord.form.elements, {
         2: ["Individual Nomination"],
         3: ["60 Years of Service Special Award (Individual only)"],
         15: ["Saskatchewan"],
@@ -214,7 +214,7 @@ describe("Form Context", () => {
   });
 
   describe("Match rule", () => {
-    const form = {
+    const formRecord = {
       id: "test0form00000id000asdf11",
       form: validFormTemplate,
       isPublished: true,
@@ -228,7 +228,7 @@ describe("Form Context", () => {
 
     // False -> Pass Value that isn't in the list of values
     expect(
-      matchRule({ choiceId: "2.0" }, form as PublicFormRecord, {
+      matchRule({ choiceId: "2.0" }, formRecord.form.elements, {
         2: ["Individual Nomination"],
         3: ["60 Years of Service Special Award (Individual only)"],
         15: ["Saskatchewan"],
@@ -238,7 +238,7 @@ describe("Form Context", () => {
 
     // True -> Pass Value that is in the list of values
     expect(
-      matchRule({ choiceId: "2.1" }, form, {
+      matchRule({ choiceId: "2.1" }, formRecord.form.elements, {
         2: ["Individual Nomination"],
         3: ["60 Years of Service Special Award (Individual only)"],
         15: ["Saskatchewan"],

@@ -361,7 +361,9 @@ export const validateOnSubmit = (
       continue;
     }
 
-    if (!checkVisibilityRecursive(props.formRecord, formElement, values as FormValues)) {
+    if (
+      !checkVisibilityRecursive(props.formRecord.form.elements, formElement, values as FormValues)
+    ) {
       continue;
     }
 
