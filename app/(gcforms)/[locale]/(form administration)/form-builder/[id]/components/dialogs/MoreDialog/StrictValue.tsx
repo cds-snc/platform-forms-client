@@ -1,6 +1,6 @@
 import { useTranslation } from "@i18n/client";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
-import { FormElement } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 
 export const StrictValue = ({
   item,
@@ -12,7 +12,7 @@ export const StrictValue = ({
   const { t } = useTranslation("form-builder");
 
   // ⚠️ Early return if not combobox
-  if (item.type !== "combobox") {
+  if (item.type !== FormElementTypes.combobox) {
     return null;
   }
 
