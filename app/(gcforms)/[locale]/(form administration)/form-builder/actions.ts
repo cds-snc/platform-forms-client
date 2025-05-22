@@ -31,7 +31,7 @@ import { isValidEmail } from "@lib/validation/isValidEmail";
 import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
-import { NotificationsIntervalDefault } from "@gcforms/types";
+import { NotificationsInterval } from "@gcforms/types";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -41,6 +41,7 @@ export type CreateOrUpdateTemplateType = {
   securityAttribute?: SecurityAttribute;
   formPurpose?: FormPurpose;
   saveAndResume?: boolean;
+  notificationsInterval?: NotificationsInterval;
 };
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -55,6 +56,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       deliveryOption,
       securityAttribute,
       formPurpose,
+      notificationsInterval,
     }: CreateOrUpdateTemplateType
   ): Promise<{
     formRecord: { id: string; updatedAt: string | undefined } | null;
@@ -81,7 +83,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
         deliveryOption: deliveryOption,
         securityAttribute: securityAttribute,
         formPurpose: formPurpose,
-        notificationsInterval: NotificationsIntervalDefault,
+        notificationsInterval,
       });
 
       if (!formRecord) {
