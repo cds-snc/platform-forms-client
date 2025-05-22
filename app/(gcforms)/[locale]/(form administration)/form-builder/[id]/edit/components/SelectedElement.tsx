@@ -154,14 +154,36 @@ export const SelectedElement = ({
       if (elIndex !== -1) {
         element = (
           <>
-            <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
+            <ShortAnswer>
+              <>
+                {t("addElementDialog.combobox.title")}
+
+                {item.properties.strictValue && (
+                  <div className="ml-2 inline-block text-sm text-slate-600">
+                    - {t("strictValue.description")}
+                  </div>
+                )}
+              </>
+            </ShortAnswer>
+
             {!item.properties.managedChoices && <SubOptions item={item} />}
           </>
         );
       } else {
         element = (
           <>
-            <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
+            <ShortAnswer>
+              <>
+                {t("addElementDialog.combobox.title")}
+
+                {item.properties.strictValue && (
+                  <div className="ml-2 inline-block text-sm text-slate-600">
+                    - {t("strictValue.description")}
+                  </div>
+                )}
+              </>
+            </ShortAnswer>
+
             {!item.properties.managedChoices && <Options item={item} formId={formId} />}
           </>
         );
