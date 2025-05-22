@@ -10,11 +10,13 @@ export const StrictValue = ({
   setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const checked = item.properties.strictValue;
 
+  // ⚠️ Early return if not combobox
   if (item.type !== "combobox") {
     return null;
   }
+
+  const checked = item.properties.strictValue;
 
   return (
     <section className="mb-4">
