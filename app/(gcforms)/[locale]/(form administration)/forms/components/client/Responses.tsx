@@ -16,8 +16,11 @@ export const Responses = ({ formId }: { formId: string }) => {
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | null = null;
     let cancelled = false;
+    let checked = false;
 
     const getSubmissions = async () => {
+      if (checked) return;
+      checked = true;
       const hasNewResponses = await newResponsesExist(formId);
       const hasUnconfirmedResponses = await unConfirmedResponsesExist(formId);
 
