@@ -14,9 +14,14 @@ export const Responses = ({ formId }: { formId: string }) => {
   const [hasUnconfirmedSubmissions, setHasUnconfirmedSubmissions] = useState(false);
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout | null = null;
+    let cancelled = false;
+
     const getSubmissions = async () => {
       const hasNewResponses = await newResponsesExist(formId);
       const hasUnconfirmedResponses = await unConfirmedResponsesExist(formId);
+
+      if (cancelled) return;
 
       if (hasNewResponses === true) {
         setHasSubmissions(true);
@@ -31,7 +36,14 @@ export const Responses = ({ formId }: { formId: string }) => {
       }
     };
 
-    isOnScreen && getSubmissions();
+    if (isOnScreen) {
+      timeoutId = setTimeout(getSubmissions, 3000); // 3 sec delay
+    }
+
+    return () => {
+      cancelled = true;
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [isOnScreen, formId]);
 
   return (
