@@ -287,6 +287,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <Combobox
+            strictValue={element.properties.strictValue}
             id={`${id}`}
             name={`${id}`}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
