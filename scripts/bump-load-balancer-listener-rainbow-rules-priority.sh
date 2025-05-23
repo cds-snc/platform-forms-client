@@ -5,7 +5,7 @@ set -euo pipefail
 LISTENER_ARN=$1
 
 rules_priority_to_bump=""
-priority_number=2
+priority_number=3
 
 rules=$(aws elbv2 describe-rules \
   --listener-arn $LISTENER_ARN \
