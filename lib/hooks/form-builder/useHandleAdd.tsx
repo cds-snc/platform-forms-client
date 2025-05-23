@@ -119,6 +119,23 @@ export const useHandleAdd = () => {
       const closeAll = new CustomEvent("close-all-panel-menus");
       window && window.dispatchEvent(closeAll);
 
+      //
+
+      if (type === "customJson") {
+        try {
+          await elementLoader(subIndex, async (data, position) => {
+            id = addSubItem(elId, position, data.type, data);
+          });
+        } catch (e) {
+          logMessage.info(`${(e as Error).message}`);
+          toast.error(loadError);
+        }
+
+        return id;
+      }
+
+      //
+
       if (allowedTemplates.includes(type as TemplateTypes)) {
         try {
           blockLoader(type as TemplateTypes, subIndex, (data, position) => {
