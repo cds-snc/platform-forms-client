@@ -701,12 +701,6 @@ export const filterShownElements = (elements: FormElement[], values: FormValues)
     return elements;
   }
 
-  const matchedIds = values.matchedIds || [];
-
-  if (!Array.isArray(matchedIds)) {
-    return elements;
-  }
-
   return elements.filter((element) => {
     return checkVisibilityRecursive(elements, element, values);
   });
