@@ -6,12 +6,18 @@ import {
   newResponsesExist,
   unConfirmedResponsesExist,
 } from "@formBuilder/[id]/responses/[[...statusFilter]]/actions";
+import { useTranslation } from "@i18n/client";
+
+import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 
 export const Responses = ({ formId }: { formId: string }) => {
-  const [ref, isOnScreen] = useOnScreen({ threshold: 1 });
+  const { t } = useTranslation("my-forms");
+
+  const [ref, isOnScreen] = useOnScreen({ threshold: 0.75 });
 
   const [hasSubmissions, setHasSubmissions] = useState(false);
   const [hasUnconfirmedSubmissions, setHasUnconfirmedSubmissions] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | null = null;
@@ -21,10 +27,13 @@ export const Responses = ({ formId }: { formId: string }) => {
     const getSubmissions = async () => {
       if (checked) return;
       checked = true;
-      const hasNewResponses = await newResponsesExist(formId);
-      const hasUnconfirmedResponses = await unConfirmedResponsesExist(formId);
 
       if (cancelled) return;
+
+      setLoading(true);
+
+      const hasNewResponses = await newResponsesExist(formId);
+      const hasUnconfirmedResponses = await unConfirmedResponsesExist(formId);
 
       if (hasNewResponses === true) {
         setHasSubmissions(true);
@@ -37,6 +46,8 @@ export const Responses = ({ formId }: { formId: string }) => {
       } else {
         setHasUnconfirmedSubmissions(false);
       }
+
+      setLoading(false);
     };
 
     if (isOnScreen) {
@@ -50,11 +61,14 @@ export const Responses = ({ formId }: { formId: string }) => {
   }, [isOnScreen, formId]);
 
   return (
-    <div className="ml-2 inline-block" ref={ref}>
-      {hasSubmissions && <div className="text-green-500">New responses exist</div>}
-      {hasUnconfirmedSubmissions && (
-        <div className="text-yellow-500">Unconfirmed responses exist</div>
+    <div className="relative ml-7 mt-2 inline-block text-sm" ref={ref}>
+      {loading && (
+        <div role="status" className="flex items-center justify-center ">
+          <SpinnerIcon className="size-4 animate-spin fill-slate-400 text-white " />
+        </div>
       )}
+      {hasSubmissions && <div>{t("card.responses.hasNewResponses")}</div>}
+      {hasUnconfirmedSubmissions && <div>{t("card.responses.hasUnconfirmedResponses")}</div>}
     </div>
   );
 };

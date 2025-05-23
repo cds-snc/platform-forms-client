@@ -83,8 +83,8 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: Card
               >
                 <MessageIcon className="ml-px mr-2 inline-block" />
                 {t("card.deliveryOption.vault", { ns: "my-forms" })}
-                {!overdue && <Responses formId={id} />}
               </Link>
+              {!overdue && <Responses formId={id} />}
             </>
           )}
         </>
