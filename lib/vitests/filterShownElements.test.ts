@@ -202,13 +202,14 @@ describe("formContext filterShownElements()", () => {
           }
       }
     ];
-    const result = filterShownElements(withConditionalRules.elements as FormElement[], withConditionalRules.matchedIds);
+    const result = filterShownElements(withConditionalRules.elements as FormElement[], withConditionalRules.values);
+
     expect(result).toEqual(expectedOutput);
   });
 
   it("Handles a legacy form (doesn't touch it)", () => {
     const expectedOutput = withoutConditionalRules.elements;
-    const result = filterShownElements(withoutConditionalRules.elements as FormElement[], withoutConditionalRules.matchedIds);
+    const result = filterShownElements(withoutConditionalRules.elements as FormElement[], withoutConditionalRules.values);
     expect(result).toEqual(expectedOutput);
   });
 

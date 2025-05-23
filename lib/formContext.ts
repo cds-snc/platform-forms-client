@@ -188,6 +188,7 @@ export const checkVisibilityRecursive = (
     return (
       checkVisibilityRecursive(formElements, ruleParent, values, checked) &&
       matchRule(rule, formElements, values as FormValues)
+      // @TODO: && checkPageVisibility
     );
   });
 };
@@ -696,11 +697,16 @@ export const checkRelatedRulesAsBoolean = (
 };
 
 export const filterShownElements = (elements: FormElement[], values: FormValues) => {
-  const matchedIds = values.matchedIds || [];
-
-  if (!Array.isArray(elements) || !Array.isArray(matchedIds)) {
+  if (!values || !Array.isArray(elements)) {
     return elements;
   }
+
+  const matchedIds = values.matchedIds || [];
+
+  if (!Array.isArray(matchedIds)) {
+    return elements;
+  }
+
   return elements.filter((element) => {
     return checkVisibilityRecursive(elements, element, values);
   });
