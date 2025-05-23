@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.42.1](https://github.com/cds-snc/platform-forms-client/compare/v3.42.0...v3.42.1) (2025-05-23)
+
+
+### Bug Fixes
+
+* fix closed message strings for preview page ([#5571](https://github.com/cds-snc/platform-forms-client/issues/5571)) ([948f956](https://github.com/cds-snc/platform-forms-client/commit/948f9564a97102c82f8ac7729438a00c0686a02f))
+* Rainbow deployment add new lb rule for non actions ([#5580](https://github.com/cds-snc/platform-forms-client/issues/5580)) ([45aa785](https://github.com/cds-snc/platform-forms-client/commit/45aa785c229748e88dc71083a5c7c5b975d8fd50))
+
+
+### Miscellaneous Chores
+
+* Add copy element button for admins ([#5570](https://github.com/cds-snc/platform-forms-client/issues/5570)) ([8b4f2c7](https://github.com/cds-snc/platform-forms-client/commit/8b4f2c73281b560e8d1522d74b80792575cb24b0))
+* update share tag modal ([#5498](https://github.com/cds-snc/platform-forms-client/issues/5498)) ([55ff0ca](https://github.com/cds-snc/platform-forms-client/commit/55ff0ca77f40f6eda8edbdf56a6f2b2fd381de73))
+
 ## [3.42.0](https://github.com/cds-snc/platform-forms-client/compare/v3.41.4...v3.42.0) (2025-05-21)
 
 
