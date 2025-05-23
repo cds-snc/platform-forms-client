@@ -13,7 +13,7 @@ existing_load_balancer_listener_rules=$(
   aws elbv2 describe-rules \
     --listener-arn $LISTENER_ARN \
     --no-paginate \
-    --query "Rules[?contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, '/rainbows-$shorter_deployment_identifier/')].RuleArn" \
+    --query "Rules[?contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, '/rainbow-$shorter_deployment_identifier/')].RuleArn" \
     | jq -r ".[]"
 )
 
