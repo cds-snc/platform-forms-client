@@ -14,12 +14,12 @@ export const isUniqueQuestionId = (
   currentItem: FormElement
 ) => {
   const questionIds = getQuestionIds(elements, String(currentItem.id));
-
+  
   return !questionIds.includes(questionId);
 };
 
 export const validateUniqueQuestionIds = (elements: FormElement[]) => {
   const questionIds = getQuestionIds(elements);
-
+  
   return questionIds.length === new Set(questionIds).size;
 };
