@@ -3,7 +3,7 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
 import { logEvent } from "@lib/auditLogs";
 import { authorization } from "@lib/privileges";
-import { getZitadelClient } from "@lib/integration/zitadelConnector";
+import * as ZitadelConnector from "@lib/integration/zitadelConnector";
 
 type ApiPrivateKey = {
   type: string;
@@ -13,72 +13,13 @@ type ApiPrivateKey = {
   formId: string;
 };
 
-const createMachineUser = async (templateId: string) => {
-  const zitadel = await getZitadelClient();
-  const { userId } = await zitadel
-    .addMachineUser({
-      userName: templateId,
-      name: templateId,
-      description: `API Service account for form ${templateId}`,
-      // Access Token Type 1 is JWT
-      accessTokenType: 1,
-    })
-    .catch((err) => {
-      logMessage.error(err);
-      throw new Error(`Could not create User ${templateId} on Identity Provider`);
-    });
-  return userId;
-};
-
-const getMachineUser = async (templateId: string) => {
-  const zitadel = await getZitadelClient();
-  const { user } = await zitadel
-    .getUserByLoginNameGlobal({
-      loginName: templateId,
-    })
-    .catch(() => {
-      // getUserByLoginNameGlobal throws if it cannot find the user
-      return { user: undefined };
-    });
-  return user?.id;
-};
-
-const deleteMachineUser = async (userId: string) => {
-  const zitadel = await getZitadelClient();
-  await zitadel
-    .removeUser({
-      id: userId,
-    })
-    .catch((err) => {
-      logMessage.error(err);
-      throw new Error(`Could not delete User ${userId} on Identity Provider`);
-    });
-};
-
-const uploadKey = async (publicKey: string, userId: string): Promise<string> => {
-  const zitadel = await getZitadelClient();
-  const { keyId } = await zitadel
-    .addMachineKey({
-      userId: userId,
-      // Key type 1 is JSON
-      type: 1,
-      expirationDate: undefined,
-      publicKey: Buffer.from(publicKey),
-    })
-    .catch((err) => {
-      logMessage.error(err);
-      throw new Error(`Failed to create key for form ${userId}`);
-    });
-  return keyId;
-};
-
 export const deleteKey = async (templateId: string) => {
   const { user } = await authorization.canEditForm(templateId);
 
   const serviceAccountID = await checkMachineUserExists(templateId);
 
   if (serviceAccountID) {
-    await deleteMachineUser(serviceAccountID);
+    await ZitadelConnector.deleteMachineUser(serviceAccountID);
   }
 
   await prisma.apiServiceAccount
@@ -110,7 +51,7 @@ export const deleteKey = async (templateId: string) => {
 
 export const checkMachineUserExists = async (templateId: string) => {
   await authorization.canEditForm(templateId);
-  return getMachineUser(templateId);
+  return ZitadelConnector.getMachineUser(templateId).then((r) => r?.userId);
 };
 
 /*
@@ -150,24 +91,18 @@ const _getApiUserPublicKeyId = async (templateId: string) => {
  */
 export const checkKeyExists = async (templateId: string) => {
   await authorization.canEditForm(templateId);
+
   const { userId, publicKeyId } = await _getApiUserPublicKeyId(templateId);
+
   if (!userId || !publicKeyId) {
     return false;
   }
+
   try {
-    const zitadel = await getZitadelClient();
-    const remoteKey = await zitadel.getMachineKeyByIDs({
-      userId,
-      keyId: publicKeyId,
-    });
-
-    if (publicKeyId === remoteKey?.key?.id) {
-      return remoteKey?.key?.id;
-    }
-
-    return false;
-  } catch (e) {
-    logMessage.error(e);
+    const remoteKey = await ZitadelConnector.getMachineUserKeyById(userId, publicKeyId);
+    return remoteKey.keyId === publicKeyId ? remoteKey.keyId : false;
+  } catch (error) {
+    logMessage.error(error);
     return false;
   }
 };
@@ -175,17 +110,22 @@ export const checkKeyExists = async (templateId: string) => {
 export const createKey = async (templateId: string) => {
   const { user } = await authorization.canEditForm(templateId);
 
-  const serviceAccountId = await getMachineUser(templateId).then((user) => {
+  const serviceAccountId = await ZitadelConnector.getMachineUser(templateId).then((user) => {
     // If a user does not exist then create one
     if (!user) {
-      return createMachineUser(templateId);
+      return ZitadelConnector.createMachineUser(
+        templateId,
+        `API Service account for form ${templateId}`
+      ).then((r) => r.userId);
     }
-    return user;
+    return user.userId;
   });
 
   const { privateKey, publicKey } = generateKeys();
 
-  const keyId = await uploadKey(publicKey, serviceAccountId);
+  const keyId = await ZitadelConnector.createMachineKey(serviceAccountId, publicKey).then(
+    (r) => r.keyId
+  );
 
   await prisma.apiServiceAccount.create({
     data: {
