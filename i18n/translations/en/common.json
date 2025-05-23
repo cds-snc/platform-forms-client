@@ -38,6 +38,7 @@
     "heading": "Please correct the errors on the page.",
     "required": "Complete the required field to continue.",
     "alphanumeric": "Enter letters and numbers only.",
+    "duplicateEmail": "This email address was already added.",
     "text": "",
     "number": "Enter a number.",
     "email": "Enter a valid email address.",
