@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
+import { Responses } from "../client/Responses";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { DeliveryOption } from "@lib/types";
@@ -74,14 +75,17 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: Card
               <a href={responsesLink}>{t("card.actionRequired.linkText")}</a>
             </span>
           ) : (
-            <Link
-              className="mt-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
-              href={responsesLink}
-              prefetch={false}
-            >
-              <MessageIcon className="ml-px mr-2 inline-block" />
-              {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
-            </Link>
+            <>
+              <Link
+                className="mt-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
+                href={responsesLink}
+                prefetch={false}
+              >
+                <MessageIcon className="ml-px mr-2 inline-block" />
+                {t("card.deliveryOption.vault", { ns: "my-forms" })}
+                <Responses formId={id} />
+              </Link>
+            </>
           )}
         </>
       )}
