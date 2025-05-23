@@ -1,6 +1,6 @@
 # Terms of use
 
-The following terms apply to the use of GC Forms, a product operated by the Canadian Digital Service (CDS) at [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html). GC Forms is available for use by Canadian federal departments and agencies to create online forms.
+The following terms apply to the use of GC Forms, a product operated by the Canadian Digital Service (CDS) at [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html). GC Forms is available for use by public servants in Canadian federal departments and agencies to create online forms.
 
 ## Accept all conditions and risks
 
