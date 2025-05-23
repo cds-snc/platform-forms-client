@@ -67,8 +67,15 @@ export const Responses = ({ formId }: { formId: string }) => {
           <SpinnerIcon className="size-4 animate-spin fill-slate-400 text-white " />
         </div>
       )}
-      {hasSubmissions && <div>{t("card.responses.hasNewResponses")}</div>}
-      {hasUnconfirmedSubmissions && <div>{t("card.responses.hasUnconfirmedResponses")}</div>}
+      {!loading && hasSubmissions && (
+        <div className="text-gcds-green-700">{t("card.responses.hasNewResponses")}</div>
+      )}
+      {!loading && hasUnconfirmedSubmissions && (
+        <div className="text-gcds-red-700">{t("card.responses.hasUnconfirmedResponses")}</div>
+      )}
+      {!loading && !hasSubmissions && !hasUnconfirmedSubmissions && (
+        <div>{t("card.responses.noResponses")}</div>
+      )}
     </div>
   );
 };

@@ -44,6 +44,7 @@
       "linkText": "Sign off on responses"
     },
     "responses": {
+      "noResponses": "No new responses",
       "hasNewResponses": "You have new responses",
       "hasUnconfirmedResponses": "You have unconfirmed responses"
     },
