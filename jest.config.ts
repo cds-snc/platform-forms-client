@@ -50,7 +50,7 @@ const customJestConfig: Config = {
 
 const jestConfig = async () => ({
   ...(await createJestConfig(customJestConfig)()),
-  transformIgnorePatterns: ["/node_modules/(?!(next-auth|@auth)/)"],
+  transformIgnorePatterns: ["/node_modules/(?!(next-auth|@auth|jose)/)"],
 });
 
 export default jestConfig;
