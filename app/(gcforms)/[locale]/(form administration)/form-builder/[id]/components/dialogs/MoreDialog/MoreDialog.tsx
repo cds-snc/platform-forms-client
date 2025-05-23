@@ -21,6 +21,8 @@ import { QuestionTagOptions } from "./QuestionTagOptions";
 import { QuestionIdOptions } from "./QuestionIdOptions";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 
+import { CopyItem } from "./CopyItem";
+
 export const MoreDialog = () => {
   const { getPathString, updateField, setChangeKey, getFormElementById } = useTemplateStore(
     (s) => ({
@@ -96,6 +98,8 @@ export const MoreDialog = () => {
       >
         {t("save")}
       </Button>
+
+      <CopyItem item={item} />
     </>
   );
   const dialogTitle = t("moreOptions");
@@ -141,6 +145,7 @@ export const MoreDialog = () => {
                   <QuestionTagOptions item={item} setItem={setItem} />
                 </InfoDetails>
               )}
+
               <input type="submit" className="hidden" />
             </form>
           </div>

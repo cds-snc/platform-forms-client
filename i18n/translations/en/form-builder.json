@@ -1,4 +1,10 @@
 {
+  "element": {
+    "copyButton": {
+      "text": "Copy element",
+      "copied": "Element copied"
+    }
+  },
   "addElement": "Add form element",
   "addElementDialog": {
     "example": "example",

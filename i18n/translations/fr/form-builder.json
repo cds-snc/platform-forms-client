@@ -1,4 +1,10 @@
 {
+  "element": {
+    "copy": {
+      "text": "Copier l'élément",
+      "toastSuccess": "Élément copié"
+    }
+  },
   "addElement": "Ajouter un élément",
   "addElementDialog": {
     "example": "exemple",
