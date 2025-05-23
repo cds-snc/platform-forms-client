@@ -21,7 +21,6 @@ export const useFormSubmissionData = ({
     getValues,
     formRecord,
     getGroupHistory,
-    matchedIds,
     getProgressData,
     submissionId,
     submissionDate,
@@ -36,7 +35,6 @@ export const useFormSubmissionData = ({
     formValues,
     groups,
     groupHistoryIds,
-    matchedIds,
     language,
   });
 

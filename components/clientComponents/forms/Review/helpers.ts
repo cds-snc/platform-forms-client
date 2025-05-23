@@ -79,8 +79,7 @@ export const getGroupsWithElementIds = (
   formElements: FormElement[],
   formValues: FormValues | void,
   groups: GroupsType | undefined,
-  groupHistoryIds: string[],
-  matchedIds: string[]
+  groupHistoryIds: string[]
 ) => {
   if (!formValues || !groups || !Array.isArray(groupHistoryIds)) {
     return [] as GroupsWithElementIds[];
@@ -92,7 +91,7 @@ export const getGroupsWithElementIds = (
       const group: Group = groups[groupId as keyof typeof groups] || {};
 
       // Remove any hidden elements from Show-Hide (only include elements interacted with by the user)
-      const shownFormElements = filterShownElements(formElements, matchedIds);
+      const shownFormElements = filterShownElements(formElements, formValues);
       const elementIds = getElementIdsAsNumber(
         filterValuesForShownElements(group.elements, shownFormElements)
       );
@@ -129,14 +128,12 @@ export const getReviewItems = ({
   formValues,
   groups,
   groupHistoryIds,
-  matchedIds,
   language,
 }: {
   formElements: FormElement[];
   formValues: FormValues;
   groups: GroupsType;
   groupHistoryIds: string[];
-  matchedIds: string[];
   language: Language;
 }) => {
   // Get Review Items that are used below to print out each question-answer by element type
@@ -144,8 +141,7 @@ export const getReviewItems = ({
     formElements,
     formValues,
     groups,
-    groupHistoryIds,
-    matchedIds
+    groupHistoryIds
   );
 
   const getGroupTitle = (groupId: string | null) => groupTitle({ groups, groupId, language });

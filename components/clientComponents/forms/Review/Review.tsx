@@ -14,7 +14,7 @@ import { EditButton } from "./EditButton";
 import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 
 export const Review = ({ language }: { language: Language }): React.ReactElement | null => {
-  const { groups, getValues, formRecord, getGroupHistory, matchedIds } = useGCFormsContext();
+  const { groups, getValues, formRecord, getGroupHistory } = useGCFormsContext();
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   const { t } = useTranslation(["review", "common"]);
 
@@ -30,7 +30,6 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     formValues,
     groups,
     groupHistoryIds,
-    matchedIds,
     language,
   });
 

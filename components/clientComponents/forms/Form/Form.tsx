@@ -25,7 +25,7 @@ import {
   removeFormContextValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
+import { filterShownElements, filterValuesByShownElements, FormValues } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
@@ -266,7 +266,7 @@ export const Form = withFormik<FormProps, Responses>({
       );
       const shownElements = filterShownElements(
         formikBag.props.formRecord.form.elements,
-        values.matchedIds as string[]
+        values as FormValues
       );
       return filterValuesByShownElements(inputHistoryValues, shownElements);
     };

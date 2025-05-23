@@ -14,7 +14,7 @@ import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorLis
 import { hasOwnProperty, isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
-import { matchRule, FormValues, GroupsType } from "@lib/formContext";
+import { FormValues, GroupsType, checkVisibilityRecursive } from "@lib/formContext";
 import { inGroup } from "@lib/formContext";
 import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClientSide";
 import { DateObject } from "@clientComponents/forms/FormattedDate/types";
@@ -362,14 +362,9 @@ export const validateOnSubmit = (
     }
 
     if (
-      formElement.properties.conditionalRules &&
-      formElement.properties.conditionalRules.length > 0
+      !checkVisibilityRecursive(props.formRecord.form.elements, formElement, values as FormValues)
     ) {
-      // check if a conditional rule is met
-      const rules = formElement.properties.conditionalRules;
-      if (!rules.some((rule) => matchRule(rule, props.formRecord, values as FormValues))) {
-        continue;
-      }
+      continue;
     }
 
     if (formElement.properties.validation) {
