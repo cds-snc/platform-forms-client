@@ -442,9 +442,14 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
       return "";
     }
     const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
-    const dateObject = JSON.parse(answer as string) as DateObject;
 
-    return getFormattedDateFromObject(dateFormat, dateObject);
+    try {
+      const dateObject = JSON.parse(answer as string) as DateObject;
+      return getFormattedDateFromObject(dateFormat, dateObject);
+    } catch (e) {
+      // If the answer is somehow not parseable as JSON, return it as is
+      return answer as string;
+    }
   }
 
   if (question && question.type === "addressComplete") {
@@ -456,8 +461,13 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
       return answer as string; //Address was split, return as is.
     }
 
-    const addressObject = JSON.parse(answer as string) as AddressElements;
-    return getAddressAsString(addressObject);
+    try {
+      const addressObject = JSON.parse(answer as string) as AddressElements;
+      return getAddressAsString(addressObject);
+    } catch (e) {
+      // If the answer is somehow not parseable as JSON, return it as is
+      return answer as string;
+    }
   }
 
   return answer as string;
