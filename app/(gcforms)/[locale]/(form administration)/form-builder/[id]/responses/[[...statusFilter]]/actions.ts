@@ -213,7 +213,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                         const subQuestion = subQuestions[index];
 
                         return {
-                          questionId: question?.id,
+                          questionId: subQuestion.id,
                           type: subQuestion.type,
                           questionEn: subQuestion.properties.titleEn,
                           questionFr: subQuestion.properties.titleFr,
