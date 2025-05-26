@@ -287,4 +287,13 @@ export const options = [
     logoTitleEn: "Canadian Heritage",
     logoTitleFr: "Patrimoine canadien",
   },
+  {
+    name: "ocl",
+    urlEn: "https://lobbycanada.gc.ca/en",
+    urlFr: "https://lobbycanada.gc.ca/fr",
+    logoEn: "/img/branding/ocl-en.svg",
+    logoFr: "/img/branding/ocl-fr.svg",
+    logoTitleEn: "Office of the Commissioner of Lobbying of Canada",
+    logoTitleFr: "Commissariat au lobbying du Canada",
+  },
 ];
