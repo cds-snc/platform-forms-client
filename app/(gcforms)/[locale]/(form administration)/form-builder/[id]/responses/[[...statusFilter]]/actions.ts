@@ -190,8 +190,24 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                           }
                         );
 
+                        // We have seen this happen on Draft forms when a dynamic row is modified
+                        // after a submission and the submission is subsequently downloaded.
+                        // If the subQuestions array is empty or the index is out of bounds, return an empty answer
                         if (!subQuestions.length || !subQuestions[index]) {
-                          throw new Error("No subQuestions found for dynamicRow");
+                          // If this happens on a published form, we should log it
+                          if (fullFormTemplate.isPublished) {
+                            logMessage.error(
+                              `Dynamic row submission for form ${formID} has an invalid index ${index} for subQuestions.`
+                            );
+                          }
+
+                          return {
+                            questionId: index,
+                            type: "-",
+                            questionEn: "-",
+                            questionFr: "-",
+                            answer: value as string,
+                          };
                         }
 
                         const subQuestion = subQuestions[index];
