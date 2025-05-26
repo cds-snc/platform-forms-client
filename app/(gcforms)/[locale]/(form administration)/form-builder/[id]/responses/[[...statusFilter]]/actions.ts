@@ -190,9 +190,9 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                           }
                         );
 
-                        // We have seen this happen on Draft forms when a dynamic row is modified
+                        // The question does not exist for the given index.
+                        // This can happen on Draft forms when a dynamic row is modified
                         // after a submission and the submission is subsequently downloaded.
-                        // If the subQuestions array is empty or the index is out of bounds, return an empty answer
                         if (!subQuestions.length || !subQuestions[index]) {
                           // If this happens on a published form, we should log it
                           if (fullFormTemplate.isPublished) {
