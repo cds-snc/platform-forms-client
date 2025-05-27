@@ -69,8 +69,7 @@ const checkIfVerified = (success: boolean, score: number) => {
   //   return false;
   // }
   // Temp to make sure sus score is more accomodating
-  if (score >= 0.79) {
-    // Score is suspicious - we may want to tweak this to 0.79 if we have too many false positives
+  if (score > 0.79) {
     return false;
   }
   if (!success) {
