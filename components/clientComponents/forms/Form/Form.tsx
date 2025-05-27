@@ -302,9 +302,6 @@ export const Form = withFormik<FormProps, Responses>({
           formikBag.setStatus(FormStatus.FILE_ERROR);
         } else if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
           formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
-        } else if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
-          formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
-          formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
         } else {
           formikBag.setStatus(FormStatus.ERROR);
         }
@@ -312,6 +309,13 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.onSuccess(result.id, result?.submissionId);
       }
     } catch (err) {
+      // Captcha found a likely bot, show the Captcha fail screen
+      if ((err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
+        formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
+        formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
+        return;
+      }
+
       logMessage.error(err as Error);
       formikBag.setStatus("Error");
     } finally {
