@@ -13,6 +13,7 @@ import { verifyHCaptchaToken } from "@clientComponents/globals/FormCaptcha/actio
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
+import { sendNotification } from "@lib/notifications";
 
 //  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
 const CAPTCHA_BLOCKABLE_MODE = true;
@@ -35,14 +36,6 @@ export async function submitForm(
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined
 ): Promise<{ id: string; submissionId?: string; error?: Error }> {
-  const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
-  if (captchaEnabled) {
-    const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
-    if (CAPTCHA_BLOCKABLE_MODE && !captchaVerified) {
-      throw new Error(FormStatus.CAPTCHA_VERIFICATION_ERROR);
-    }
-  }
-
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
@@ -57,6 +50,20 @@ export async function submitForm(
         id: formId,
         error: { name: FormStatus.FORM_CLOSED_ERROR, message: "Form is closed" },
       };
+    }
+
+    const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
+    if (captchaEnabled) {
+      const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
+      if (CAPTCHA_BLOCKABLE_MODE && !captchaVerified) {
+        return {
+          id: formId,
+          error: {
+            name: FormStatus.CAPTCHA_VERIFICATION_ERROR,
+            message: "Captcha verification failure",
+          },
+        };
+      }
     }
 
     const validateResponsesResult = await validateResponses(values, template);
@@ -81,6 +88,8 @@ export async function submitForm(
     const data = await parseRequestData(formDataObject as SubmissionRequestBody);
 
     const submissionId = await processFormData(data.fields, data.files, language);
+
+    sendNotification(formId, template.form.titleEn, template.form.titleFr);
 
     return { id: formId, submissionId };
   } catch (e) {

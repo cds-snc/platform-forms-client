@@ -108,6 +108,7 @@ export default async function Page(props0: {
   // Note: We can look to remove this route in the future
   // With save and resume enabled we will re-render the form vs have a confirmation page route
   if (step === "confirmation") {
+    dateModified = false;
     pageContent = (
       <div className={classes}>
         <TextPage formId={formId} formRecord={formRecord} />

@@ -38,6 +38,7 @@
     "heading": "Veuillez corriger les erreurs sur la page.",
     "required": "Compléter le champ obligatoire afin de continuer.",
     "alphanumeric": "Entrer uniquement des lettres et des chiffres.",
+    "duplicateEmail": "Cette adresse courriel a déjà été ajoutée.",
     "text": "",
     "number": "Entrer un numéro.",
     "email": "Entrer une adresse courriel valide.",
@@ -211,7 +212,9 @@
     "type2": "NOUVEAUTÉ",
     "message2": "Créez des formulaires complexes de plusieurs pages avec logique d’affichage et d’embranchement. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/configurer-formulaire-avec-logique/' className='text-white hover:text-white'>En savoir plus</a>",
     "type3": "Élection fédérale",
-    "message3": "Veuillez vous renseigner auprès de l’équipe des communications de votre ministère au sujet d'annonces durant la <a href='https://www.canada.ca/fr/conseil-prive/services/publications/lignes-directrices-regissant-conduite-ministres-etat-membres-personnel-exonere-fonctionnaires-periode-electorale.html' className='text-white hover:text-white'>période de transition</a>"
+    "message3": "Veuillez vous renseigner auprès de l’équipe des communications de votre ministère au sujet d'annonces durant la <a href='https://www.canada.ca/fr/conseil-prive/services/publications/lignes-directrices-regissant-conduite-ministres-etat-membres-personnel-exonere-fonctionnaires-periode-electorale.html' className='text-white hover:text-white'>période de transition</a>",
+    "type4": "Retraite de livraison par courriel",
+    "message4": "Les formulaires publiés ne sont pas affectés. Les nouveaux formulaires n’auront pas l’option de livraison par courriel. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/obtenir-les-reponses-aux-formulaires/' className='text-white hover:text-white'>En savoir plus</a>"
   },
   "closingNotice": {
     "title": "Fermeture du formulaire",

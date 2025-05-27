@@ -278,4 +278,22 @@ export const options = [
     logoTitleEn: "Prairies Economic Development Canada",
     logoTitleFr: "Développement économique Canada pour les Prairies",
   },
+  {
+    name: "heritage",
+    urlEn: "https://www.canada.ca/en/canadian-heritage/campaigns/canada-day.html",
+    urlFr: "https://www.canada.ca/fr/patrimoine-canadien/campagnes/fete-canada.html",
+    logoEn: "/img/branding/canada-heritage-en.svg",
+    logoFr: "/img/branding/canada-heritage-fr.svg",
+    logoTitleEn: "Canadian Heritage",
+    logoTitleFr: "Patrimoine canadien",
+  },
+  {
+    name: "ocl",
+    urlEn: "https://lobbycanada.gc.ca/en",
+    urlFr: "https://lobbycanada.gc.ca/fr",
+    logoEn: "/img/branding/ocl-en.svg",
+    logoFr: "/img/branding/ocl-fr.svg",
+    logoTitleEn: "Office of the Commissioner of Lobbying of Canada",
+    logoTitleFr: "Commissariat au lobbying du Canada",
+  },
 ];

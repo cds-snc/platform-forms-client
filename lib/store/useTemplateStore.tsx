@@ -52,8 +52,8 @@ import {
   getChoice,
   localizeField,
   getFormElementIndexes,
-  cleanElementRules,
 } from "./helpers/elements";
+import { transform } from "./helpers/elements/transformFormProperties";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -100,7 +100,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             addSubChoice: addSubChoice(set),
             removeChoiceFromRules: removeChoiceFromRules(set),
             removeChoiceFromNextActions: removeChoiceFromNextActions(set),
-            cleanElementRules: cleanElementRules(set),
             remove: remove(set),
             removeSubItem: removeSubItem(set),
             removeChoice: removeChoice(set),
@@ -111,10 +110,16 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             importTemplate: importTemplate(set),
             getHighestElementId: getHighestElementId(set, get),
             generateElementId: generateElementId(set, get),
-            getSchema: (cleanRules?: boolean) => {
-              if (cleanRules) {
-                get().cleanElementRules();
-              }
+            transform: transform(set, get),
+            getSchema: () => {
+              // hasHydrated should work here but we get an error. leaving this timeout for now.
+              setTimeout(() => {
+                if (!get().hasTransformed) {
+                  get().transform();
+                }
+                set({ hasTransformed: true });
+              }, 500);
+
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
             },
             getId: () => get().id,
@@ -143,8 +148,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             },
             updateSecurityAttribute: (value) => set({ securityAttribute: value }),
             resetDeliveryOption: () => set({ deliveryOption: undefined }),
+            setHasTransformed: () => set({ hasTransformed: true }),
           }),
-
           storageOptions
         )
       )

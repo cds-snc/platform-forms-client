@@ -38,6 +38,7 @@
     "heading": "Please correct the errors on the page.",
     "required": "Complete the required field to continue.",
     "alphanumeric": "Enter letters and numbers only.",
+    "duplicateEmail": "This email address was already added.",
     "text": "",
     "number": "Enter a number.",
     "email": "Enter a valid email address.",
@@ -211,7 +212,9 @@
     "type2": "NEW",
     "message2": "Build complex multi-page forms with display logic and branching. <a href='https://articles.alpha.canada.ca/forms-formulaires/setting-up-form-logic/' className='text-white hover:text-white'>Learn more</a>",
     "type3": "Federal election",
-    "message3": "Check with your department’s communications team about announcements during the <a href='https://www.canada.ca/en/privy-council/services/publications/guidelines-conduct-ministers-state-exempt-staff-public-servants-election.html' className='text-white hover:text-white'>caretaker period</a>"
+    "message3": "Check with your department’s communications team about announcements during the <a href='https://www.canada.ca/en/privy-council/services/publications/guidelines-conduct-ministers-state-exempt-staff-public-servants-election.html' className='text-white hover:text-white'>caretaker period</a>",
+    "type4": "Retiring email delivery",
+    "message4": "Published forms are unaffected. New forms will not have email data delivery as an option. <a href='https://articles.alpha.canada.ca/forms-formulaires/getting-form-responses/' className='text-white hover:text-white'>Learn more</a>"
   },
   "closingNotice": {
     "title": "Form closing",
