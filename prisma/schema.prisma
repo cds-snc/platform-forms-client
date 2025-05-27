@@ -64,6 +64,7 @@ model Template {
   saveAndResume         Boolean         @default(true)
   invitations           Invitation[]
   notificationsInterval Int?            @default(1440)
+  notificationsUsers    User[]          @relation("TemplateNotificationsUsers")
 }
 
 model DeliveryOption {
@@ -101,6 +102,7 @@ model User {
   notes           String?
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   invitations     Invitation[]
+  notificationsTemplates  Template[] @relation("TemplateNotificationsUsers")
 }
 
 model VerificationToken {
