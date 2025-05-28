@@ -41,7 +41,7 @@ export const ManageForm = (props: ManageFormProps) => {
     closedDetails,
   } = props;
 
-  logMessage.debug(`~~~~formRecord=${JSON.stringify(formRecord)}`);
+  logMessage.info(`~~~~formRecord=${JSON.stringify(formRecord)}`);
 
   const { apiKeyId } = useFormBuilderConfig();
 
