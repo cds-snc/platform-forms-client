@@ -659,7 +659,7 @@ export const filterShownElements = (
 
   const elements = formRecord.form.elements;
 
-  if (!values || !Array.isArray(elements)) {
+  if (!values) {
     return elements;
   }
 
