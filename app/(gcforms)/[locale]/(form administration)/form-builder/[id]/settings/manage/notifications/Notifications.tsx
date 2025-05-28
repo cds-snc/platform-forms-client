@@ -8,16 +8,28 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { isVaultDelivery } from "@lib/utils/form-builder";
+import { logMessage } from "@lib/logger";
 
-export const Notifications = ({ formId }: { formId: string }) => {
+export const Notifications = ({
+  formId,
+  notificationsInterval,
+}: {
+  formId: string;
+  notificationsInterval?: NotificationsInterval;
+}) => {
   const { t } = useTranslation("form-builder");
-  const { notificationsInterval, getDeliveryOption } = useTemplateStore((s) => ({
-    notificationsInterval: s.notificationsInterval,
+  const { getDeliveryOption } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
   }));
+
   const isVault = isVaultDelivery(getDeliveryOption());
   const [notificationValue, setNotificationValue] = useState<string>(
     notificationsInterval ? String(notificationsInterval) : String(NotificationsInterval.OFF)
+  );
+
+  //TEMP
+  logMessage.info(
+    `Notifications component - notificationsInterval=${notificationsInterval}, notificationValue=${notificationValue}, isVault=${isVault}`
   );
 
   const toggleChecked = useCallback(

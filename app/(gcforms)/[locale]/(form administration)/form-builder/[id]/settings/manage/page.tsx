@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 import { AuthenticatedPage } from "@lib/pages/auth";
+import { logMessage } from "@lib/logger";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -61,6 +62,13 @@ export default AuthenticatedPage(async (props: { params: Promise<{ id: string }>
   }
 
   const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(id);
+
+  // TEMP
+  logMessage.info(
+    `DB form record notificationsInterval=${JSON.stringify(
+      templateWithAssociatedUsers?.formRecord.notificationsInterval
+    )}`
+  );
 
   if (!templateWithAssociatedUsers) {
     throw new Error("Template not found");
