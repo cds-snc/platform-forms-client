@@ -10,6 +10,7 @@ import { ThrottlingRate } from "./ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 import { FormOwnerSettings } from "./FormOwnerSettings";
+import { logMessage } from "@lib/logger";
 
 interface User {
   id: string;
@@ -39,6 +40,11 @@ export const ManageForm = (props: ManageFormProps) => {
     id,
     closedDetails,
   } = props;
+
+  // TODO:TEMP:
+  logMessage.info(
+    ` Notifications component formRecord.notificationsInterval=${formRecord?.notificationsInterval}`
+  );
 
   const { apiKeyId } = useFormBuilderConfig();
 
