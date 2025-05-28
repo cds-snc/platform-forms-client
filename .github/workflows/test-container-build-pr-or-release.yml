@@ -1,0 +1,33 @@
+name: "Test container build (pull request and release)"
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_run:
+    workflows: ["Release Generator"]
+    types:
+      - completed
+
+jobs:
+  build-container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Build container (pull request)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          docker build -t base \
+            --build-arg COGNITO_APP_CLIENT_ID=${{ secrets.STAGING_COGNITO_APP_CLIENT_ID }} \
+            --build-arg COGNITO_USER_POOL_ID=${{ secrets.STAGING_COGNITO_USER_POOL_ID}} \
+            --build-arg NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=${{ secrets.STAGING_NEXT_SERVER_ACTIONS_ENCRYPTION_KEY }} .
+
+      - name: Build container (release)
+        if: ${{ github.event_name == 'workflow_run' }}
+        run: |
+          docker build -t base \
+          --build-arg COGNITO_APP_CLIENT_ID=${{ secrets.PRODUCTION_COGNITO_APP_CLIENT_ID }} \
+          --build-arg COGNITO_USER_POOL_ID=${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}} \
+          --build-arg INDEX_SITE=true \
+          --build-arg NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=${{ secrets.PRODUCTION_NEXT_SERVER_ACTIONS_ENCRYPTION_KEY }} .
