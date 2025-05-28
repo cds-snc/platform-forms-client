@@ -31,7 +31,7 @@ export const useFormSubmissionData = ({
   if (!formValues || !groups) throw new Error("Form values or groups are missing");
 
   const reviewItems = getReviewItems({
-    formElements: formRecord.form.elements,
+    formRecord: formRecord,
     formValues,
     groups,
     groupHistoryIds,

@@ -264,10 +264,7 @@ export const Form = withFormik<FormProps, Responses>({
         values.groupHistory as string[],
         formikBag.props.formRecord.form.groups
       );
-      const shownElements = filterShownElements(
-        formikBag.props.formRecord.form.elements,
-        values as FormValues
-      );
+      const shownElements = filterShownElements(formikBag.props.formRecord, values as FormValues);
       return filterValuesByShownElements(inputHistoryValues, shownElements);
     };
 

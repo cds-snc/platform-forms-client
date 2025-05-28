@@ -95,7 +95,7 @@ export const GCFormsProvider = ({
     (history.current || []) as string[],
     groups
   );
-  const shownElements = filterShownElements(formRecord.form.elements, values.current);
+  const shownElements = filterShownElements(formRecord, values.current);
   const filteredResponses = filterValuesByShownElements(inputHistoryValues, shownElements);
   const filteredMatchedIds = matchedIds.filter((id) => {
     const parentId = id.split(".")[0];

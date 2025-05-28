@@ -38,7 +38,7 @@ export const ConditionalWrapper = ({
 
   const values = getValues() || {};
 
-  const isVisible = checkVisibilityRecursive(formRecord.form.elements, element, values);
+  const isVisible = checkVisibilityRecursive(formRecord, element, values);
 
   if (!isVisible) {
     return null;

@@ -1,4 +1,4 @@
-import { FormElement, Response, Responses } from "@lib/types";
+import { FormElement, FormRecord, PublicFormRecord, Response, Responses } from "@lib/types";
 import { ConditionalRule } from "@lib/types";
 
 export type Group = {
@@ -163,13 +163,15 @@ export const getElementById = (elements: FormElement[], id: string) => {
  * @returns `true` if the element should be visible, `false` otherwise.
  */
 export const checkVisibilityRecursive = (
-  formElements: FormElement[],
+  formRecord: PublicFormRecord,
   element: FormElement,
   values: FormValues,
   checked: Set<string> = new Set()
 ): boolean => {
   const rules = element.properties.conditionalRules;
   if (!rules || rules.length === 0) return true;
+
+  const formElements = formRecord.form.elements;
 
   // Prevent circular references by checking if the element ID is already in the visited set
   if (checked.has(element.id.toString())) {
@@ -182,13 +184,13 @@ export const checkVisibilityRecursive = (
   return rules.some((rule) => {
     const [elementId] = rule.choiceId.split(".");
     const ruleParent = getElementById(formElements, elementId);
-    if (!ruleParent) return matchRule(rule, formElements, values as FormValues);
+    if (!ruleParent) return matchRule(rule, formElements, values);
 
     // Parent must be visible and this rule must match
     return (
-      checkVisibilityRecursive(formElements, ruleParent, values, checked) &&
-      matchRule(rule, formElements, values as FormValues)
-      // @TODO: && checkPageVisibility
+      checkVisibilityRecursive(formRecord, ruleParent, values, checked) &&
+      matchRule(rule, formElements, values)
+      // @TODO: && checkPageVisibilityRecursive
     );
   });
 };
@@ -646,13 +648,22 @@ export const validConditionalRules = (element: FormElement, matchedIds: string[]
   return true;
 };
 
-export const filterShownElements = (elements: FormElement[], values: FormValues) => {
+export const filterShownElements = (
+  formRecord: FormRecord | PublicFormRecord,
+  values: FormValues
+) => {
+  if (!formRecord || !formRecord.form || !formRecord.form.elements) {
+    return [];
+  }
+
+  const elements = formRecord.form.elements;
+
   if (!values || !Array.isArray(elements)) {
     return elements;
   }
 
   return elements.filter((element) => {
-    return checkVisibilityRecursive(elements, element, values);
+    return checkVisibilityRecursive(formRecord, element, values);
   });
 };
 
