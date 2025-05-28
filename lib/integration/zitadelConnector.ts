@@ -17,13 +17,16 @@ type ZitadelConnectionInformation = {
 
 let connectionInformationCache: ZitadelConnectionInformation | undefined = undefined;
 
-export function createMachineUser(
+export async function createMachineUser(
   userName: string,
   description: string
 ): Promise<{ userId: string }> {
   const connectionInformation = getConnectionInformation();
-  return getApiManagementAccessToken(connectionInformation).then((accessToken) => {
-    return got
+
+  try {
+    const accessToken = await getApiManagementAccessToken(connectionInformation);
+
+    const response = await got
       .post(`${connectionInformation.url}/management/v1/users/machine`, {
         ...getDefaultGotRequestOptions(connectionInformation, accessToken),
         json: {
@@ -33,19 +36,22 @@ export function createMachineUser(
           accessTokenType: "ACCESS_TOKEN_TYPE_JWT",
         },
       })
-      .json<{ userId: string }>()
-      .then((response) => ({ userId: response.userId }))
-      .catch((error) => {
-        logMessage.error(error);
-        throw new Error(`Failed to create machine user ${userName} in Zitadel`);
-      });
-  });
+      .json<{ userId: string }>();
+
+    return { userId: response.userId };
+  } catch (error) {
+    logMessage.error(error);
+    throw new Error(`Failed to create machine user ${userName} in Zitadel`);
+  }
 }
 
-export function getMachineUser(loginName: string): Promise<{ userId: string } | undefined> {
+export async function getMachineUser(loginName: string): Promise<{ userId: string } | undefined> {
   const connectionInformation = getConnectionInformation();
-  return getApiManagementAccessToken(connectionInformation).then((accessToken) => {
-    return got
+
+  try {
+    const accessToken = await getApiManagementAccessToken(connectionInformation);
+
+    const response = await got
       .post(`${connectionInformation.url}/v2/users`, {
         ...getDefaultGotRequestOptions(connectionInformation, accessToken),
         json: {
@@ -62,41 +68,45 @@ export function getMachineUser(loginName: string): Promise<{ userId: string } | 
           ],
         },
       })
-      .json<{ result?: { userId: string }[] }>()
-      .then((response) => {
-        if (response.result !== undefined && response.result.length > 0) {
-          return { userId: response.result[0].userId };
-        } else {
-          return undefined;
-        }
-      })
-      .catch((error) => {
-        logMessage.error(error);
-        throw new Error(`Failed to get machine user by login name ${loginName} in Zitadel`);
-      });
-  });
+      .json<{ result?: { userId: string }[] }>();
+
+    if (response.result !== undefined && response.result.length > 0) {
+      return { userId: response.result[0].userId };
+    } else {
+      return undefined;
+    }
+  } catch (error) {
+    logMessage.error(error);
+    throw new Error(`Failed to get machine user by login name ${loginName} in Zitadel`);
+  }
 }
 
-export function deleteMachineUser(userId: string): Promise<void> {
+export async function deleteMachineUser(userId: string): Promise<void> {
   const connectionInformation = getConnectionInformation();
-  return getApiManagementAccessToken(connectionInformation).then((accessToken) => {
-    return got
-      .delete(
-        `${connectionInformation.url}/v2/users/${userId}`,
-        getDefaultGotRequestOptions(connectionInformation, accessToken)
-      )
-      .then(() => {})
-      .catch((error) => {
-        logMessage.error(error);
-        throw new Error(`Failed to delete machine user ${userId} in Zitadel`);
-      });
-  });
+
+  try {
+    const accessToken = await getApiManagementAccessToken(connectionInformation);
+
+    await got.delete(
+      `${connectionInformation.url}/v2/users/${userId}`,
+      getDefaultGotRequestOptions(connectionInformation, accessToken)
+    );
+  } catch (error) {
+    logMessage.error(error);
+    throw new Error(`Failed to delete machine user ${userId} in Zitadel`);
+  }
 }
 
-export function createMachineKey(userId: string, publicKey: string): Promise<{ keyId: string }> {
+export async function createMachineKey(
+  userId: string,
+  publicKey: string
+): Promise<{ keyId: string }> {
   const connectionInformation = getConnectionInformation();
-  return getApiManagementAccessToken(connectionInformation).then((accessToken) => {
-    return got
+
+  try {
+    const accessToken = await getApiManagementAccessToken(connectionInformation);
+
+    const response = await got
       .post(`${connectionInformation.url}/management/v1/users/${userId}/keys`, {
         ...getDefaultGotRequestOptions(connectionInformation, accessToken),
         json: {
@@ -104,25 +114,35 @@ export function createMachineKey(userId: string, publicKey: string): Promise<{ k
           publicKey: Buffer.from(publicKey).toString("base64"),
         },
       })
-      .json<{ keyId: string }>()
-      .then((response) => ({ keyId: response.keyId }))
-      .catch((error) => {
-        logMessage.error(error);
-        throw new Error(`Failed to create machine key for user ${userId}`);
-      });
-  });
+      .json<{ keyId: string }>();
+
+    return { keyId: response.keyId };
+  } catch (error) {
+    logMessage.error(error);
+    throw new Error(`Failed to create machine key for user ${userId}`);
+  }
 }
 
-export function getMachineUserKeyById(userId: string, keyId: string): Promise<{ keyId: string }> {
+export async function getMachineUserKeyById(
+  userId: string,
+  keyId: string
+): Promise<{ keyId: string } | undefined> {
   const connectionInformation = getConnectionInformation();
-  return getApiManagementAccessToken(connectionInformation).then((accessToken) => {
-    return got
+
+  try {
+    const accessToken = await getApiManagementAccessToken(connectionInformation);
+
+    const response = await got
       .get(`${connectionInformation.url}/management/v1/users/${userId}/keys/${keyId}`, {
         ...getDefaultGotRequestOptions(connectionInformation, accessToken),
       })
-      .json<{ key: { id: string } }>()
-      .then((response) => ({ keyId: response.key.id }));
-  });
+      .json<{ key: { id: string } }>();
+
+    return { keyId: response.key.id };
+  } catch (error) {
+    logMessage.error(error);
+    return undefined;
+  }
 }
 
 function getConnectionInformation(): ZitadelConnectionInformation {
@@ -143,7 +163,7 @@ function getConnectionInformation(): ZitadelConnectionInformation {
   return connectionInformationCache;
 }
 
-function getApiManagementAccessToken(
+async function getApiManagementAccessToken(
   connectionInformation: ZitadelConnectionInformation
 ): Promise<string> {
   const privateKey = createPrivateKey({
@@ -161,25 +181,23 @@ function getApiManagementAccessToken(
     .setAudience(`https://${connectionInformation.trustedDomain}`) // Expected audience for the JWT token is the IdP external domain
     .setExpirationTime("1 minute"); // long enough for the introspection to happen
 
-  return jwtSigner.sign(privateKey).then((jwtSignedToken) => {
-    return got
-      .post(`${connectionInformation.url}/oauth/v2/token`, {
-        http2: true,
-        timeout: { request: 5000 },
-        headers: {
-          Host: connectionInformation.trustedDomain, // This is required by Zitadel to accept requests. See https://zitadel.com/docs/self-hosting/manage/custom-domain#standard-config
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          assertion: jwtSignedToken,
-          grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-          scope: "urn:zitadel:iam:org:project:id:zitadel:aud",
-        }).toString(),
-      })
-      .then((response) => {
-        return JSON.parse(response.body).access_token;
-      });
+  const jwtSignedToken = await jwtSigner.sign(privateKey);
+
+  const response = await got.post(`${connectionInformation.url}/oauth/v2/token`, {
+    http2: true,
+    timeout: { request: 5000 },
+    headers: {
+      Host: connectionInformation.trustedDomain, // This is required by Zitadel to accept requests. See https://zitadel.com/docs/self-hosting/manage/custom-domain#standard-config
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      assertion: jwtSignedToken,
+      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+      scope: "urn:zitadel:iam:org:project:id:zitadel:aud",
+    }).toString(),
   });
+
+  return JSON.parse(response.body).access_token;
 }
 
 function getDefaultGotRequestOptions(
@@ -192,6 +210,9 @@ function getDefaultGotRequestOptions(
     headers: {
       Host: connectionInformation.trustedDomain, // This is required by Zitadel to accept requests. See https://zitadel.com/docs/self-hosting/manage/custom-domain#standard-config
       Authorization: `Bearer ${accessToken}`,
+    },
+    retry: {
+      limit: 1,
     },
   };
 }
