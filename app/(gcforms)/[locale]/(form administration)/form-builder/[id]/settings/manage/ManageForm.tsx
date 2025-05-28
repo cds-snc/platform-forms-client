@@ -64,6 +64,7 @@ export const ManageForm = (props: ManageFormProps) => {
         formRecord={formRecord}
         canSetClosingDate={canSetClosingDate}
         closedDetails={closedDetails}
+        notificationsInterval={formRecord.notificationsInterval}
       />
 
       {/* ADMIN USER SETTINGS BELOW */}

@@ -9,13 +9,21 @@ import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { isVaultDelivery } from "@lib/utils/form-builder";
 
-export const Notifications = ({ formId }: { formId: string }) => {
+export const Notifications = ({
+  formId,
+  notificationsInterval,
+}: {
+  formId: string;
+  notificationsInterval?: NotificationsInterval;
+}) => {
   const { t } = useTranslation("form-builder");
-  const { notificationsInterval, getDeliveryOption } = useTemplateStore((s) => ({
-    notificationsInterval: s.notificationsInterval,
+  const { getDeliveryOption } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
   }));
   const isVault = isVaultDelivery(getDeliveryOption());
+
+  // Note: using DB value because templateStore was not syncing correctly
+  // this code will be reomved and greatly change with the next version of Notifications
   const [notificationValue, setNotificationValue] = useState<string>(
     notificationsInterval ? String(notificationsInterval) : String(NotificationsInterval.OFF)
   );
