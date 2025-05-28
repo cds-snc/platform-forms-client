@@ -121,6 +121,7 @@ export function idArraysMatch(a: string[], b: string[]) {
  * Checks if a rule matches against conditional rule for a choiceId.
  *
  * @param {Object} rule - The rule to match.
+ * @param {Array} formElements - The form elements to search.
  * @param {Object} values - The form values from Formik.
  * @returns {boolean} - Returns true if the rule matches, false otherwise.
  */
