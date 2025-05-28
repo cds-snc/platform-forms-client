@@ -1,6 +1,5 @@
 import crypto from "crypto";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { logMessage } from "@lib/logger";
 import { logEvent } from "@lib/auditLogs";
 import { authorization } from "@lib/privileges";
 import * as ZitadelConnector from "@lib/integration/zitadelConnector";
@@ -98,13 +97,8 @@ export const checkKeyExists = async (templateId: string) => {
     return false;
   }
 
-  try {
-    const remoteKey = await ZitadelConnector.getMachineUserKeyById(userId, publicKeyId);
-    return remoteKey.keyId === publicKeyId ? remoteKey.keyId : false;
-  } catch (error) {
-    logMessage.error(error);
-    return false;
-  }
+  const remoteKey = await ZitadelConnector.getMachineUserKeyById(userId, publicKeyId);
+  return remoteKey?.keyId === publicKeyId ? remoteKey.keyId : false;
 };
 
 export const createKey = async (templateId: string) => {
