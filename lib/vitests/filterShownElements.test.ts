@@ -1,6 +1,5 @@
 import { expect } from 'vitest'
 import { filterShownElements } from "@lib/formContext";
-import { FormElement, FormRecord } from "@lib/types";
 
 // Fixtures captured by adding a break point in Forms.tsx and copying the values from the debugger
 import {withConditionalRules, withoutConditionalRules} from "../../__fixtures__/getRulesElementsHiddenRemoved.json";
