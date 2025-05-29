@@ -255,7 +255,7 @@ export const NotificationsInterval = {
   WEEK: 10080,
 } as const;
 
-export const NotificationsIntervalDefault = NotificationsInterval.OFF; // Prisma default in prisma is 1440
+export const NotificationsIntervalDefault = NotificationsInterval.OFF; // Default in prisma is 1440 (daily)
 
 export type NotificationsInterval =
   (typeof NotificationsInterval)[keyof typeof NotificationsInterval];
