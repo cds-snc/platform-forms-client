@@ -18,8 +18,9 @@ export const Notifications = ({
   notificationsInterval?: NotificationsInterval;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { getDeliveryOption } = useTemplateStore((s) => ({
+  const { getDeliveryOption, setNotificationsInterval } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
+    setNotificationsInterval: s.setNotificationsInterval,
   }));
 
   const isVault = isVaultDelivery(getDeliveryOption());
@@ -66,6 +67,7 @@ export const Notifications = ({
     if (result && result.error) {
       toast.error(updateNotificationsIntervalError);
     } else {
+      setNotificationsInterval(newNotificationsInterval);
       toast.success(updateNotificationsIntervalSuccess);
     }
   }, [
