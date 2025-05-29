@@ -1,6 +1,6 @@
 import { createPrivateKey } from "crypto";
 import { SignJWT } from "jose";
-import got, { OptionsOfTextResponseBody } from "got";
+import got from "got";
 import { logMessage } from "@lib/logger";
 
 type ZitadelAdministrationKey = {
@@ -16,6 +16,38 @@ type ZitadelConnectionInformation = {
 };
 
 let connectionInformationCache: ZitadelConnectionInformation | undefined = undefined;
+let apiManagementAccessTokenCache: { token: string; timestamp: number } | undefined = undefined;
+
+const zitadelApiManagementGotInstance = got.extend({
+  hooks: {
+    beforeRequest: [
+      async (options) => {
+        const connectionInformation = getConnectionInformation();
+        const apiManagementAccessToken = await getApiManagementAccessToken(connectionInformation);
+
+        options.http2 = true;
+        options.timeout = { request: 5000 };
+        options.headers["Host"] = connectionInformation.trustedDomain; // This is required by Zitadel to accept requests. See https://zitadel.com/docs/self-hosting/manage/custom-domain#standard-config
+        options.headers["Authorization"] = `Bearer ${apiManagementAccessToken}`;
+        options.retry.limit = 1;
+        options.retry.errorCodes = ["ETIMEDOUT"];
+      },
+    ],
+    beforeError: [
+      (error) => {
+        /**
+         * Clear API management access token in case it is not valid while it should have been.
+         * In practice this should never happen but if for some unknown reasons the token is revoked
+         * we will not be blocking API features in the application for up to 25 minutes (cache TTL).
+         */
+        if (error.response?.statusCode === 401) {
+          apiManagementAccessTokenCache = undefined;
+        }
+        return error;
+      },
+    ],
+  },
+});
 
 export async function createMachineUser(
   userName: string,
@@ -24,11 +56,8 @@ export async function createMachineUser(
   const connectionInformation = getConnectionInformation();
 
   try {
-    const accessToken = await getApiManagementAccessToken(connectionInformation);
-
-    const response = await got
+    const response = await zitadelApiManagementGotInstance
       .post(`${connectionInformation.url}/management/v1/users/machine`, {
-        ...getDefaultGotRequestOptions(connectionInformation, accessToken),
         json: {
           userName: userName,
           name: userName,
@@ -49,11 +78,8 @@ export async function getMachineUser(loginName: string): Promise<{ userId: strin
   const connectionInformation = getConnectionInformation();
 
   try {
-    const accessToken = await getApiManagementAccessToken(connectionInformation);
-
-    const response = await got
+    const response = await zitadelApiManagementGotInstance
       .post(`${connectionInformation.url}/v2/users`, {
-        ...getDefaultGotRequestOptions(connectionInformation, accessToken),
         json: {
           query: {
             limit: 1,
@@ -85,12 +111,7 @@ export async function deleteMachineUser(userId: string): Promise<void> {
   const connectionInformation = getConnectionInformation();
 
   try {
-    const accessToken = await getApiManagementAccessToken(connectionInformation);
-
-    await got.delete(
-      `${connectionInformation.url}/v2/users/${userId}`,
-      getDefaultGotRequestOptions(connectionInformation, accessToken)
-    );
+    await zitadelApiManagementGotInstance.delete(`${connectionInformation.url}/v2/users/${userId}`);
   } catch (error) {
     logMessage.error(error);
     throw new Error(`Failed to delete machine user ${userId} in Zitadel`);
@@ -104,11 +125,8 @@ export async function createMachineKey(
   const connectionInformation = getConnectionInformation();
 
   try {
-    const accessToken = await getApiManagementAccessToken(connectionInformation);
-
-    const response = await got
+    const response = await zitadelApiManagementGotInstance
       .post(`${connectionInformation.url}/management/v1/users/${userId}/keys`, {
-        ...getDefaultGotRequestOptions(connectionInformation, accessToken),
         json: {
           type: "KEY_TYPE_JSON",
           publicKey: Buffer.from(publicKey).toString("base64"),
@@ -130,12 +148,8 @@ export async function getMachineUserKeyById(
   const connectionInformation = getConnectionInformation();
 
   try {
-    const accessToken = await getApiManagementAccessToken(connectionInformation);
-
-    const response = await got
-      .get(`${connectionInformation.url}/management/v1/users/${userId}/keys/${keyId}`, {
-        ...getDefaultGotRequestOptions(connectionInformation, accessToken),
-      })
+    const response = await zitadelApiManagementGotInstance
+      .get(`${connectionInformation.url}/management/v1/users/${userId}/keys/${keyId}`)
       .json<{ key: { id: string } }>();
 
     return { keyId: response.key.id };
@@ -164,6 +178,23 @@ function getConnectionInformation(): ZitadelConnectionInformation {
 }
 
 async function getApiManagementAccessToken(
+  connectionInformation: ZitadelConnectionInformation
+): Promise<string> {
+  if (
+    apiManagementAccessTokenCache !== undefined &&
+    Date.now() - apiManagementAccessTokenCache.timestamp < 1500000 // 25 minutes in milliseconds
+  ) {
+    return apiManagementAccessTokenCache.token;
+  }
+
+  const apiManagementAccessToken = await generateApiManagementAccessToken(connectionInformation);
+
+  apiManagementAccessTokenCache = { token: apiManagementAccessToken, timestamp: Date.now() };
+
+  return apiManagementAccessTokenCache.token;
+}
+
+async function generateApiManagementAccessToken(
   connectionInformation: ZitadelConnectionInformation
 ): Promise<string> {
   const privateKey = createPrivateKey({
@@ -198,21 +229,4 @@ async function getApiManagementAccessToken(
   });
 
   return JSON.parse(response.body).access_token;
-}
-
-function getDefaultGotRequestOptions(
-  connectionInformation: ZitadelConnectionInformation,
-  accessToken: string
-): OptionsOfTextResponseBody {
-  return {
-    http2: true,
-    timeout: { request: 5000 },
-    headers: {
-      Host: connectionInformation.trustedDomain, // This is required by Zitadel to accept requests. See https://zitadel.com/docs/self-hosting/manage/custom-domain#standard-config
-      Authorization: `Bearer ${accessToken}`,
-    },
-    retry: {
-      limit: 1,
-    },
-  };
 }
