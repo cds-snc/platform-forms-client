@@ -46,6 +46,7 @@ export const ManageForm = (props: ManageFormProps) => {
     return (
       <FormOwnerSettings
         id={id}
+        formRecord={formRecord}
         canSetClosingDate={canSetClosingDate}
         closedDetails={closedDetails}
       />
