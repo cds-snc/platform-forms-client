@@ -5,6 +5,11 @@
       "toastSuccess": "Élément copié"
     }
   },
+  "fileTypes": {
+    "more": {
+      "label": "Allow files of type(s) [FR]"
+    }
+  },
   "addElement": "Ajouter un élément",
   "addElementDialog": {
     "example": "exemple",

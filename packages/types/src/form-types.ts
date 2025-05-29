@@ -117,7 +117,7 @@ export interface ElementProperties {
   choices?: PropertyChoices[];
   managedChoices?: string;
   subElements?: FormElement[];
-  fileType?: string | undefined;
+  fileType?: string | string[] | undefined;
   headingLevel?: string | undefined;
   isSectional?: boolean;
   maxNumberOfRows?: number;
