@@ -12129,7 +12129,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fetch-blob@npm:^3.1.2, fetch-blob@npm:^3.1.4":
+"fetch-blob@npm:^3.1.2, fetch-blob@npm:^3.1.4, fetch-blob@npm:^3.2.0":
   version: 3.2.0
   resolution: "fetch-blob@npm:3.2.0"
   dependencies:
@@ -15387,6 +15387,18 @@ __metadata:
   bin:
     napi-postinstall: lib/cli.js
   checksum: 10c0/e8c357d7e27848c4af7becf2796afff245a2fc8ba176e1b133410bb1c9934a66d4bc542d0c9f04c73b0ba34ee0486b30b6cd1c62ed3aa36797d394200c9a2a8b
+  languageName: node
+  linkType: hard
+
+"native-file-system-adapter@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "native-file-system-adapter@npm:3.0.1"
+  dependencies:
+    fetch-blob: "npm:^3.2.0"
+  dependenciesMeta:
+    fetch-blob:
+      optional: true
+  checksum: 10c0/2a60cd7fa6b92a85b1fc9dbbda91135f66af424e240e36c7c3708b987330844fb689e29a92a8a472d7216f685423e863af8acfb4b9a7bd73c0f6093fff4bf2fd
   languageName: node
   linkType: hard
 
