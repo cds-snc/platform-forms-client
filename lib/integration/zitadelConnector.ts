@@ -180,6 +180,10 @@ function getConnectionInformation(): ZitadelConnectionInformation {
 async function getApiManagementAccessToken(
   connectionInformation: ZitadelConnectionInformation
 ): Promise<string> {
+  /**
+   * Cache is invalidated after 25 minutes while the actual token is valid for 30 minutes.
+   * This is done to avoid having to wait for a Zitadel API request to fail because the token is invalid.
+   */
   if (
     apiManagementAccessTokenCache !== undefined &&
     Date.now() - apiManagementAccessTokenCache.timestamp < 1500000 // 25 minutes in milliseconds
