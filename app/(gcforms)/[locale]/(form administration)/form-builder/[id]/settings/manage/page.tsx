@@ -48,7 +48,9 @@ export default AuthenticatedPage(async (props: { params: Promise<{ id: string }>
     closedDetails = closedData?.closedDetails;
   }
 
-  if (id === "0000") {
+  // ⚠️ This is the main entry point for the manage form page. Code below this if is only
+  // reached if the user is an "admin" (can manage all forms)
+  if (!manageAllForms || id === "0000") {
     return (
       <ManageForm
         nonce={nonce}
@@ -64,20 +66,6 @@ export default AuthenticatedPage(async (props: { params: Promise<{ id: string }>
 
   if (!templateWithAssociatedUsers) {
     throw new Error("Template not found");
-  }
-
-  // :warning: almost all users will enter here, only admin users will get past
-  if (!manageAllForms) {
-    return (
-      <ManageForm
-        nonce={nonce}
-        id={id}
-        formRecord={templateWithAssociatedUsers.formRecord}
-        canManageAllForms={false}
-        canSetClosingDate={canSetClosingDate}
-        closedDetails={closedDetails}
-      />
-    );
   }
 
   const allUsers = await getUsers().then((users) =>

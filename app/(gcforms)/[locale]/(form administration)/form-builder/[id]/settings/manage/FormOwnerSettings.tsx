@@ -17,13 +17,12 @@ export const FormOwnerSettings = ({
   id,
   canSetClosingDate,
   closedDetails,
-  formRecord,
 }: FormOwnerSettingsProps) => {
   return (
     <>
       {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
       <SetSaveAndResume formId={id} />
-      <Notifications formId={id} notificationsInterval={formRecord?.notificationsInterval} />
+      <Notifications formId={id} />
       <DownloadForm />
     </>
   );

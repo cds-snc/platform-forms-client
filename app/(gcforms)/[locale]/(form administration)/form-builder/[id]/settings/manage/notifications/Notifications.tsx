@@ -9,18 +9,15 @@ import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { isVaultDelivery } from "@lib/utils/form-builder";
 
-export const Notifications = ({
-  formId,
-  notificationsInterval,
-}: {
-  formId: string;
-  notificationsInterval?: NotificationsInterval;
-}) => {
+export const Notifications = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
-  const { getDeliveryOption, setNotificationsInterval } = useTemplateStore((s) => ({
-    getDeliveryOption: s.getDeliveryOption,
-    setNotificationsInterval: s.setNotificationsInterval,
-  }));
+  const { getDeliveryOption, setNotificationsInterval, notificationsInterval } = useTemplateStore(
+    (s) => ({
+      getDeliveryOption: s.getDeliveryOption,
+      setNotificationsInterval: s.setNotificationsInterval,
+      notificationsInterval: s.notificationsInterval,
+    })
+  );
 
   const isVault = isVaultDelivery(getDeliveryOption());
   const [notificationValue, setNotificationValue] = useState<string>(
