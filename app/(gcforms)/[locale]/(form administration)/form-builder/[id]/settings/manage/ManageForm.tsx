@@ -39,6 +39,7 @@ export const ManageForm = (props: ManageFormProps) => {
     id,
     closedDetails,
   } = props;
+
   const { apiKeyId } = useFormBuilderConfig();
 
   if (!canManageAllForms) {
