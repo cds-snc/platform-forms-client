@@ -75,6 +75,7 @@ export const Notifications = ({
     notificationValue,
     updateNotificationsIntervalError,
     updateNotificationsIntervalSuccess,
+    setNotificationsInterval,
   ]);
 
   return (
