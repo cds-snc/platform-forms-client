@@ -64,8 +64,11 @@ export default AuthenticatedPage(async (props: { params: Promise<{ id: string }>
   const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(id);
 
   // TEMP
-  logMessage.debug(
-    `DB form record notificationsInterval=${JSON.stringify(
+  logMessage.info(
+    `~~~~~~~~DB form record notificationsInterval=${JSON.stringify(templateWithAssociatedUsers)}`
+  );
+  logMessage.info(
+    `~~~~~~~~DB form record notificationsInterval=${JSON.stringify(
       templateWithAssociatedUsers?.formRecord.notificationsInterval
     )}`
   );
