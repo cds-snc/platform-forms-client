@@ -18,7 +18,7 @@ env:
   AWS_ACCOUNT_ID: ${{ vars.PRODUCTION_AWS_ACCOUNT_ID }}
   AWS_REGION: ca-central-1
   LOAD_BALANCER_LISTENER_ARN: ${{ vars.PRODUCTION_LOAD_BALANCER_LISTENER_ARN }}
-  MAXIMUM_NUMBER_OF_RAINBOW_DEPLOYMENTS_TO_KEEP_ALIVE: 6
+  MAXIMUM_NUMBER_OF_RAINBOW_DEPLOYMENTS_TO_KEEP_ALIVE: 12
 
 permissions:
   id-token: write
@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@f24d7193d98baebaeacc7e2227925dd47cc267f5 # v4.2.0
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
           role-session-name: RainbowCleanup
@@ -57,7 +57,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@f24d7193d98baebaeacc7e2227925dd47cc267f5 # v4.2.0
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
           role-session-name: RainbowCleanup
@@ -96,7 +96,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@f24d7193d98baebaeacc7e2227925dd47cc267f5 # v4.2.0
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
           role-session-name: RainbowCleanup

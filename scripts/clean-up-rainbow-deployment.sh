@@ -14,12 +14,13 @@ existing_load_balancer_listener_rules=$(
     --listener-arn $LISTENER_ARN \
     --no-paginate \
     --query "Rules[?contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, '/rainbow-$shorter_deployment_identifier/')].RuleArn" \
-    | jq -r ".[0]"
+    | jq -r ".[]"
 )
 
-if [ "$existing_load_balancer_listener_rules" != "null" ]; then
-  aws elbv2 delete-rule --rule-arn $existing_load_balancer_listener_rules > /dev/null 2>&1
-fi
+
+for rule_arn in $existing_load_balancer_listener_rules; do
+ aws elbv2 delete-rule --rule-arn $rule_arn > /dev/null 2>&1
+done
 
 last_command_output=$(
   aws elbv2 describe-target-groups --names rainbow-$shorter_deployment_identifier 2>/dev/null || echo "null"
@@ -35,3 +36,4 @@ aws lambda delete-function --function-name rainbow-$DEPLOYMENT_IDENTIFIER > /dev
 aws ecr batch-delete-image \
   --repository-name forms_app_legacy \
   --image-ids imageTag=$DEPLOYMENT_IDENTIFIER > /dev/null 2>&1
+
