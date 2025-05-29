@@ -5,6 +5,11 @@
       "copied": "Element copied"
     }
   },
+  "fileTypes": {
+    "more": {
+      "label": "Allow files of type(s)"
+    }
+  },
   "addElement": "Add form element",
   "addElementDialog": {
     "example": "example",

@@ -41,9 +41,9 @@ export const FileTypeOptions = ({
   return (
     <section className="mb-4">
       <div className="mb-2">
-        <h3>{t("fileTypeOptions")}</h3>
+        <h3>{t("fileTypes.more.label")}</h3>
       </div>
-      <div className="">
+      <div className="grid grid-cols-2 gap-2">
         {ALLOWED_FILE_TYPES.map((type) => (
           <div className="gc-input-checkbox" key={type.extensions[0]}>
             <input
