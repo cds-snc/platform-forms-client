@@ -8,7 +8,6 @@ import { headers } from "next/headers";
 import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 import { AuthenticatedPage } from "@lib/pages/auth";
-import { logMessage } from "@lib/logger";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -49,7 +48,7 @@ export default AuthenticatedPage(async (props: { params: Promise<{ id: string }>
     closedDetails = closedData?.closedDetails;
   }
 
-  if (!manageAllForms || id === "0000") {
+  if (id === "0000") {
     return (
       <ManageForm
         nonce={nonce}
@@ -63,18 +62,22 @@ export default AuthenticatedPage(async (props: { params: Promise<{ id: string }>
 
   const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(id);
 
-  // TEMP
-  logMessage.info(
-    `~~~~~~~~DB form record notificationsInterval=${JSON.stringify(templateWithAssociatedUsers)}`
-  );
-  logMessage.info(
-    `~~~~~~~~DB form record notificationsInterval=${JSON.stringify(
-      templateWithAssociatedUsers?.formRecord.notificationsInterval
-    )}`
-  );
-
   if (!templateWithAssociatedUsers) {
     throw new Error("Template not found");
+  }
+
+  // :warning: almost all users will enter here, only admin users will get past
+  if (!manageAllForms) {
+    return (
+      <ManageForm
+        nonce={nonce}
+        id={id}
+        formRecord={templateWithAssociatedUsers.formRecord}
+        canManageAllForms={false}
+        canSetClosingDate={canSetClosingDate}
+        closedDetails={closedDetails}
+      />
+    );
   }
 
   const allUsers = await getUsers().then((users) =>

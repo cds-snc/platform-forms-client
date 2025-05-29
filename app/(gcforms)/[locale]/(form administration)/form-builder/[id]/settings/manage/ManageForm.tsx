@@ -10,7 +10,6 @@ import { ThrottlingRate } from "./ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 import { FormOwnerSettings } from "./FormOwnerSettings";
-import { logMessage } from "@lib/logger";
 
 interface User {
   id: string;
@@ -40,9 +39,6 @@ export const ManageForm = (props: ManageFormProps) => {
     id,
     closedDetails,
   } = props;
-
-  logMessage.info(`~~~~ManageForm formRecord=${JSON.stringify(formRecord)}`);
-
   const { apiKeyId } = useFormBuilderConfig();
 
   if (!canManageAllForms) {
