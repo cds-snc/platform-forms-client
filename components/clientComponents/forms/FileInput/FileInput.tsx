@@ -5,14 +5,14 @@ import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
-import { htmlInputAccept } from "@lib/validation/fileValidationClientSide";
+import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
 import { CancelIcon } from "@serverComponents/icons";
 import { themes } from "@clientComponents/globals/Buttons/themes";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
   hint?: React.ReactNode;
-  fileType?: string | undefined;
+  fileType?: string | string[] | undefined;
   allowMulti?: boolean;
 }
 export type FileEventTarget = React.ChangeEvent<HTMLInputElement> & {
@@ -78,6 +78,30 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     }
   };
 
+  // Ensure fileType is an array so we can map over it
+  const itemFileTypes: string[] =
+    typeof props.fileType === "string" ? [props.fileType] : props.fileType || [];
+
+  let allowedFileTypes = "";
+
+  // Map itemFileTypes to match ALLOWED_FILE_TYPES format and create a string for the accept attribute
+  allowedFileTypes = itemFileTypes
+    .map((type) => {
+      const fileType = ALLOWED_FILE_TYPES.find((t) =>
+        Array.isArray(t.extensions) ? t.extensions.includes(type) : t.extensions === type
+      );
+      return fileType
+        ? [fileType.mime, ...fileType.extensions.map((ext: string) => `.${ext}`)].join(",")
+        : "";
+    })
+    .filter(Boolean)
+    .join(",");
+
+  if (!allowedFileTypes) {
+    // If no fileType is specified, use our default allowed file types
+    allowedFileTypes = htmlInputAccept;
+  }
+
   return (
     <>
       {meta.error && <ErrorMessage id={`${name}_error`}>{meta.error}</ErrorMessage>}
@@ -110,7 +134,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             id={`${name}_hidden`}
             tabIndex={-1}
             type="file"
-            accept={htmlInputAccept}
+            accept={allowedFileTypes}
             onChange={_onChange}
             onClick={(e) => e.stopPropagation()}
             disabled={disabled}

@@ -1,6 +1,21 @@
 import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
-import { ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
+
+const ALLOWED_FILE_TYPES = [
+  "pdf",
+  "txt",
+  "csv",
+  "doc",
+  "docx",
+  "xls",
+  "xlsx",
+  "numbers",
+  "jpg",
+  "jpeg",
+  "png",
+  "svg",
+  "xml",
+];
 
 export const FileTypeOptions = ({
   item,
@@ -45,21 +60,17 @@ export const FileTypeOptions = ({
       </div>
       <div className="grid grid-cols-2 gap-2">
         {ALLOWED_FILE_TYPES.map((type) => (
-          <div className="gc-input-checkbox" key={type.extensions[0]}>
+          <div className="gc-input-checkbox" key={type}>
             <input
-              id={`file-type-checkbox-${type.extensions[0]}`}
+              id={`file-type-checkbox-${type}`}
               type="checkbox"
-              checked={selectedTypes.includes(type.extensions[0])}
-              onChange={(e) => handleCheckboxChange(type.extensions[0], e.target.checked)}
+              checked={selectedTypes.includes(type)}
+              onChange={(e) => handleCheckboxChange(type, e.target.checked)}
               className="gc-input-checkbox__input"
               data-testid={`file-type-checkbox-${type}`}
             />
-            <label
-              key={type.extensions[0]}
-              className="gc-checkbox-label"
-              htmlFor={`file-type-checkbox-${type.extensions[0]}`}
-            >
-              <span className="checkbox-label-text"> {type.extensions[0]}</span>
+            <label key={type} className="gc-checkbox-label" htmlFor={`file-type-checkbox-${type}`}>
+              <span className="checkbox-label-text"> {type}</span>
             </label>
           </div>
         ))}
