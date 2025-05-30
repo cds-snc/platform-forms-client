@@ -95,7 +95,7 @@ export const GCFormsProvider = ({
     (history.current || []) as string[],
     groups
   );
-  const shownElements = filterShownElements(formRecord.form.elements, matchedIds as string[]);
+  const shownElements = filterShownElements(formRecord, values.current);
   const filteredResponses = filterValuesByShownElements(inputHistoryValues, shownElements);
   const filteredMatchedIds = matchedIds.filter((id) => {
     const parentId = id.split(".")[0];
@@ -154,7 +154,7 @@ export const GCFormsProvider = ({
     formValues: Record<string, string[] | string>;
   }): void => {
     values.current = formValues;
-    const valueIds = mapIdsToValues(formRecord, formValues);
+    const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
     if (!idArraysMatch(matchedIds, valueIds)) {
       setMatchedIds(valueIds);
     }

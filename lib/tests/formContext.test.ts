@@ -12,9 +12,7 @@ import {
   getElementsUsingChoiceId,
   cleanChoiceIdsFromRules,
   removeChoiceFromRules,
-  getRelatedElementsFromRule,
   validConditionalRules,
-  getRelatedIdsPassingRules,
   cleanRules,
 } from "../formContext";
 
@@ -191,7 +189,7 @@ describe("Form Context", () => {
   });
 
   describe("Map Ids to Values", () => {
-    const form = {
+    const formRecord = {
       id: "test0form00000id000asdf11",
       form: validFormTemplate,
       isPublished: true,
@@ -204,7 +202,7 @@ describe("Form Context", () => {
     } as PublicFormRecord;
 
     expect(
-      mapIdsToValues(form, {
+      mapIdsToValues(formRecord.form.elements, {
         2: ["Individual Nomination"],
         3: ["60 Years of Service Special Award (Individual only)"],
         15: ["Saskatchewan"],
@@ -214,7 +212,7 @@ describe("Form Context", () => {
   });
 
   describe("Match rule", () => {
-    const form = {
+    const formRecord = {
       id: "test0form00000id000asdf11",
       form: validFormTemplate,
       isPublished: true,
@@ -228,7 +226,7 @@ describe("Form Context", () => {
 
     // False -> Pass Value that isn't in the list of values
     expect(
-      matchRule({ choiceId: "2.0" }, form as PublicFormRecord, {
+      matchRule({ choiceId: "2.0" }, formRecord.form.elements, {
         2: ["Individual Nomination"],
         3: ["60 Years of Service Special Award (Individual only)"],
         15: ["Saskatchewan"],
@@ -238,7 +236,7 @@ describe("Form Context", () => {
 
     // True -> Pass Value that is in the list of values
     expect(
-      matchRule({ choiceId: "2.1" }, form, {
+      matchRule({ choiceId: "2.1" }, formRecord.form.elements, {
         2: ["Individual Nomination"],
         3: ["60 Years of Service Special Award (Individual only)"],
         15: ["Saskatchewan"],
@@ -440,12 +438,6 @@ describe("Form Context", () => {
       },
     ];
 
-    test("Gets related elements from rule", async () => {
-      const rules = elements[2].properties?.conditionalRules;
-      const relatedElements = getRelatedElementsFromRule(elements, rules);
-      expect(relatedElements[0]).toEqual(elements[0]);
-    });
-
     test("Element with no rules", async () => {
       expect(validConditionalRules(elements[0], [])).toEqual(true);
     });
@@ -463,18 +455,6 @@ describe("Form Context", () => {
     test("Nested element with rules when matched values", async () => {
       // Valid as 2.2 is selected -- not testing parent rule
       expect(validConditionalRules(elements[3], ["2.2"])).toEqual(true);
-    });
-
-    test("Related IDs - element selected but not parent", async () => {
-      const rules = elements[3].properties?.conditionalRules;
-      // Expect empty array as 2.2 is selected but 1.0 is not
-      expect(getRelatedIdsPassingRules(elements, rules, ["2.2"])).toEqual([]);
-    });
-
-    test("Related IDs - element selected and parent selected", async () => {
-      const rules = elements[3].properties?.conditionalRules;
-      // Expect parent element id to be returned
-      expect(getRelatedIdsPassingRules(elements, rules, ["1.0", "2.2"])).toEqual([2]);
     });
   });
 
