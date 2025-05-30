@@ -11,10 +11,14 @@ import { isVaultDelivery } from "@lib/utils/form-builder";
 
 export const Notifications = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
-  const { notificationsInterval, getDeliveryOption } = useTemplateStore((s) => ({
-    notificationsInterval: s.notificationsInterval,
-    getDeliveryOption: s.getDeliveryOption,
-  }));
+  const { getDeliveryOption, setNotificationsInterval, notificationsInterval } = useTemplateStore(
+    (s) => ({
+      getDeliveryOption: s.getDeliveryOption,
+      setNotificationsInterval: s.setNotificationsInterval,
+      notificationsInterval: s.notificationsInterval,
+    })
+  );
+
   const isVault = isVaultDelivery(getDeliveryOption());
   const [notificationValue, setNotificationValue] = useState<string>(
     notificationsInterval ? String(notificationsInterval) : String(NotificationsInterval.OFF)
@@ -54,6 +58,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
     if (result && result.error) {
       toast.error(updateNotificationsIntervalError);
     } else {
+      setNotificationsInterval(newNotificationsInterval);
       toast.success(updateNotificationsIntervalSuccess);
     }
   }, [
@@ -61,6 +66,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
     notificationValue,
     updateNotificationsIntervalError,
     updateNotificationsIntervalSuccess,
+    setNotificationsInterval,
   ]);
 
   return (
