@@ -26,6 +26,8 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
     allowGroupsFlag: initProps?.allowGroupsFlag || false,
     saveAndResume: true,
     notificationsInterval: NotificationsIntervalDefault,
+    notificationsUsers: [],
+    users: [],
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm

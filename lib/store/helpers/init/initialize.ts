@@ -33,5 +33,7 @@ export const initialize: TemplateStore<"initialize"> =
       state.closingDate = null;
       state.saveAndResume = true;
       state.notificationsInterval = NotificationsIntervalDefault;
+      state.notificationsUsers = [];
+      state.users = [];
     });
   };

@@ -23,6 +23,7 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { NotificationsInterval } from "@gcforms/types";
+import { User } from "packages/types/src/form-types";
 
 // ******************************************
 // Internal Module Functions
@@ -48,6 +49,8 @@ const _parseTemplate = (template: {
   closedDetails?: Prisma.JsonValue | null;
   saveAndResume: boolean;
   notificationsInterval?: number | null;
+  notificationsUsers?: User[];
+  users?: User[];
 }): FormRecord => {
   return {
     id: template.id,
@@ -82,6 +85,8 @@ const _parseTemplate = (template: {
     closedDetails: template.closedDetails as ClosedDetails,
     saveAndResume: template.saveAndResume,
     notificationsInterval: template.notificationsInterval as NotificationsInterval,
+    notificationsUsers: template.notificationsUsers || [],
+    users: template.users || [],
   };
 };
 
@@ -258,6 +263,7 @@ export async function getAllTemplates(options?: {
           publishDesc: true,
           saveAndResume: true,
           notificationsInterval: true,
+          notificationsUsers: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -319,6 +325,7 @@ export async function getAllTemplatesForUser(
           publishDesc: true,
           saveAndResume: true,
           notificationsInterval: true,
+          notificationsUsers: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -383,6 +390,7 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
           saveAndResume: true,
           ttl: true,
           notificationsInterval: true,
+          notificationsUsers: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -391,6 +399,8 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
     if (!template || template.ttl) return null;
 
     const parsedTemplate = _parseTemplate(template);
+
+    // TODO Review public properties and what to include
     const publicFormRecord = onlyIncludePublicProperties(parsedTemplate);
 
     if (formCache.cacheAvailable) formCache.set(formID, publicFormRecord);
@@ -426,6 +436,20 @@ export async function getFullTemplateByID(formID: string): Promise<FormRecord | 
         },
         include: {
           deliveryOption: true,
+          users: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+          notificationsUsers: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -461,6 +485,13 @@ export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
       include: {
         deliveryOption: true,
         users: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        notificationsUsers: {
           select: {
             id: true,
             name: true,
