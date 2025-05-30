@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.42.0",
+  "version": "3.42.1",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -19,6 +19,7 @@
   },
   "scripts": {
     "dev": "yarn prisma:dev && next dev --turbopack",
+    "dev:debug": "next dev --turbopack",
     "dev:secure": "yarn prisma:dev && next dev --experimental-https --turbopack",
     "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
     "start": "yarn prisma:deploy && NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
