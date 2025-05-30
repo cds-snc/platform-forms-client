@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.42.2](https://github.com/cds-snc/platform-forms-client/compare/v3.42.1...v3.42.2) (2025-05-30)
+
+
+### Miscellaneous Chores
+
+* allow file upload for admin users and forms with api key ([#5622](https://github.com/cds-snc/platform-forms-client/issues/5622)) ([7c30811](https://github.com/cds-snc/platform-forms-client/commit/7c30811f42e9c2321d9e40fc9e796746000035f1))
+
 ## [3.42.1](https://github.com/cds-snc/platform-forms-client/compare/v3.42.0...v3.42.1) (2025-05-30)
 
 
