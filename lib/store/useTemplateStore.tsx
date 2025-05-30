@@ -142,6 +142,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             setClosingDate: (value) => set({ closingDate: value }),
             setSaveAndResume: (value) => set({ saveAndResume: value }),
             setNotificationsInterval: (value) => set({ notificationsInterval: value }),
+            setNotificationsUsers: (users) => set({ notificationsUsers: users }),
             setGroupsLayout: (layout) => {
               set((state) => {
                 state.form.groupsLayout = layout;

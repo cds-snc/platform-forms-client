@@ -216,6 +216,8 @@ export type FormRecord = {
   closedDetails?: ClosedDetails;
   saveAndResume?: boolean;
   notificationsInterval?: NotificationsInterval;
+  notificationsUsers?: User[];
+  users?: User[];
   [key: string]:
     | string
     | boolean
@@ -223,6 +225,7 @@ export type FormRecord = {
     | FormProperties
     | DeliveryOption
     | ClosedDetails
+    | User[]
     | undefined
     | null;
 };
@@ -259,3 +262,11 @@ export const NotificationsIntervalDefault = NotificationsInterval.OFF; // Defaul
 
 export type NotificationsInterval =
   (typeof NotificationsInterval)[keyof typeof NotificationsInterval];
+
+// TODO: can an existing type be used here? If not this should probably be more complete
+// based on schema.prisma model User
+export type User = {
+  id: string;
+  name: string | null;
+  email: string;
+};

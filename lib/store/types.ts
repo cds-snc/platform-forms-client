@@ -19,6 +19,7 @@ import { BrandProperties } from "@lib/types";
 
 import { type Indexes } from "@lib/utils/form-builder/getPath";
 import { NotificationsInterval } from "@gcforms/types";
+import { User } from "packages/types/src/form-types";
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
@@ -87,6 +88,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setClosingDate: (closingDate: string | null) => void;
   setSaveAndResume: (val: boolean | undefined) => void;
   setNotificationsInterval: (interval: NotificationsInterval) => void;
+  setNotificationsUsers: (users: User[]) => void;
   initialize: (language?: string) => void;
   removeChoiceFromRules: (elId: string, choiceIndex: number) => void;
   removeChoiceFromNextActions: (elId: string, choiceIndex: number) => void;
@@ -96,6 +98,8 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getHighestElementId: () => number;
   generateElementId: () => number;
   notificationsInterval?: NotificationsInterval;
+  notificationsUsers?: User[];
+  users?: User[];
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
@@ -123,4 +127,6 @@ export interface TemplateStoreProps {
   allowGroupsFlag: boolean;
   saveAndResume: boolean;
   notificationsInterval?: NotificationsInterval;
+  notificationsUsers?: User[];
+  users?: User[];
 }

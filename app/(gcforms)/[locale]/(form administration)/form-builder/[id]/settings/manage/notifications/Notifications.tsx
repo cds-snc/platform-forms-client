@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { NotificationsInterval } from "@gcforms/types";
 import { updateNotificationsInterval } from "../actions";
@@ -11,13 +11,19 @@ import { isVaultDelivery } from "@lib/utils/form-builder";
 
 export const Notifications = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
-  const { getDeliveryOption, setNotificationsInterval, notificationsInterval } = useTemplateStore(
-    (s) => ({
-      getDeliveryOption: s.getDeliveryOption,
-      setNotificationsInterval: s.setNotificationsInterval,
-      notificationsInterval: s.notificationsInterval,
-    })
-  );
+  const {
+    getDeliveryOption,
+    setNotificationsInterval,
+    notificationsInterval,
+    notificationsUsers,
+    users,
+  } = useTemplateStore((s) => ({
+    getDeliveryOption: s.getDeliveryOption,
+    setNotificationsInterval: s.setNotificationsInterval,
+    notificationsInterval: s.notificationsInterval,
+    notificationsUsers: s.notificationsUsers,
+    users: s.users,
+  }));
 
   const isVault = isVaultDelivery(getDeliveryOption());
   const [notificationValue, setNotificationValue] = useState<string>(
@@ -69,12 +75,48 @@ export const Notifications = ({ formId }: { formId: string }) => {
     setNotificationsInterval,
   ]);
 
+  const notificationsUsersSettings = useMemo(() => {
+    if (!users || !notificationsUsers) {
+      return [];
+    }
+    return users.map((user) => {
+      const notificationSettingOn = notificationsUsers.find(
+        (notificationUser) => notificationUser.id === user.id
+      );
+      return {
+        id: user.id,
+        name: user.name || "",
+        email: user.email || "",
+        notificationsEnabled: notificationSettingOn ? true : false,
+      };
+    });
+  }, [users, notificationsUsers]);
+
   return (
     <div className="mb-10" data-testid="form-notifications">
       <h2>{t("settings.notifications.title")}</h2>
       <p className="mb-2 font-bold">{t("settings.notifications.description1")}</p>
       <p className="mb-8">{t("settings.notifications.description2")}</p>
-      <div className="mb-4">
+
+      <h3>Notifications User Settings</h3>
+      <ul className="mb-4 w-3/5 list-none pl-1">
+        {notificationsUsersSettings.map((user) => (
+          <li key={user.id} className="mb-2 flex items-center">
+            <div className="flex-1">{user.email}</div>
+            <div className="flex-1">
+              <NotificationsToggle
+                isChecked={user.notificationsEnabled}
+                toggleChecked={toggleChecked}
+                onLabel={t("settings.notifications.options.off")}
+                offLabel={t("settings.notifications.options.on")}
+                description={t("settings.notifications.optionsDescription")}
+                disabled={!isVault}
+              />
+            </div>
+          </li>
+        ))}
+      </ul>
+      {/* <div className="mb-4">
         <NotificationsToggle
           isChecked={
             isVault && notificationValue === String(NotificationsInterval.DAY) ? true : false
@@ -85,7 +127,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
           description={t("settings.notifications.optionsDescription")}
           disabled={!isVault}
         />
-      </div>
+      </div> */}
       <Button
         dataTestId="form-notifications-save"
         theme="secondary"
