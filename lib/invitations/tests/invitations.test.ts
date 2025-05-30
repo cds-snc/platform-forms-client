@@ -313,6 +313,10 @@ describe("Invitations", () => {
         })
       ); // user exists
 
+      prismaMock.template.findUnique.mockResolvedValueOnce(
+        mockTemplate()
+      ); // template exists
+
       prismaMock.template.update.mockResolvedValueOnce(
         mockTemplate({
           id: "template-id",

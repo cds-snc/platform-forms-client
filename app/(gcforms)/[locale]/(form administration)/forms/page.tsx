@@ -93,6 +93,9 @@ export default async function Page(props: {
         expires: {
           gt: new Date(),
         },
+        template: {
+          ttl: null,
+        },
       },
       select: {
         id: true,
