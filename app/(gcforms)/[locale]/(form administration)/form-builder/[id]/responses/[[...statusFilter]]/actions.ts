@@ -190,14 +190,30 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                           }
                         );
 
+                        // The question does not exist for the given index.
+                        // This can happen on Draft forms when a dynamic row is modified
+                        // after a submission and the submission is subsequently downloaded.
                         if (!subQuestions.length || !subQuestions[index]) {
-                          throw new Error("No subQuestions found for dynamicRow");
+                          // If this happens on a published form, we should log it
+                          if (fullFormTemplate.isPublished) {
+                            logMessage.error(
+                              `Dynamic row submission for form ${formID} has an invalid index ${index} for subQuestions.`
+                            );
+                          }
+
+                          return {
+                            questionId: index,
+                            type: "-",
+                            questionEn: "-",
+                            questionFr: "-",
+                            answer: value as string,
+                          };
                         }
 
                         const subQuestion = subQuestions[index];
 
                         return {
-                          questionId: question?.id,
+                          questionId: subQuestion.id,
                           type: subQuestion.type,
                           questionEn: subQuestion.properties.titleEn,
                           questionFr: subQuestion.properties.titleFr,
@@ -426,9 +442,14 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
       return "";
     }
     const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
-    const dateObject = JSON.parse(answer as string) as DateObject;
 
-    return getFormattedDateFromObject(dateFormat, dateObject);
+    try {
+      const dateObject = JSON.parse(answer as string) as DateObject;
+      return getFormattedDateFromObject(dateFormat, dateObject);
+    } catch (e) {
+      // If the answer is somehow not parseable as JSON, return it as is
+      return answer as string;
+    }
   }
 
   if (question && question.type === "addressComplete") {
@@ -440,8 +461,13 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
       return answer as string; //Address was split, return as is.
     }
 
-    const addressObject = JSON.parse(answer as string) as AddressElements;
-    return getAddressAsString(addressObject);
+    try {
+      const addressObject = JSON.parse(answer as string) as AddressElements;
+      return getAddressAsString(addressObject);
+    } catch (e) {
+      // If the answer is somehow not parseable as JSON, return it as is
+      return answer as string;
+    }
   }
 
   return answer as string;
