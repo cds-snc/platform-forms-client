@@ -181,6 +181,14 @@ const {
         );
       }
 
+      // Update lastLogin in the database
+      if (user.email) {
+        await prisma.user.update({
+          where: { email: user.email },
+          data: { lastLogin: new Date() },
+        });
+      }
+
       logEvent(
         internalUser.id,
         { type: "User", id: internalUser.id },
