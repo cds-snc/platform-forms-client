@@ -8,7 +8,7 @@ import { FILE_GROUPS } from "./constants";
  * If a file type does not belong to any group, it is ignored.
  * @returns An array of unique file groups (e.g., ["documents", "images", "spreadsheets"]).
  */
-export const fileTypesToFileGroups = (fileTypes: string[]) => {
+export const fileTypesToFileGroups = (fileTypes: string[]): (keyof typeof FILE_GROUPS)[] => {
   const fileGroups = new Set<string>();
   fileTypes.forEach((fileType) => {
     const group = toFileGroup(fileType);
@@ -16,7 +16,17 @@ export const fileTypesToFileGroups = (fileTypes: string[]) => {
       fileGroups.add(group);
     }
   });
-  return Array.from(fileGroups);
+
+  // Ensure key is in the FILE_GROUPS constant
+  const validFileGroups = Object.keys(FILE_GROUPS) as (keyof typeof FILE_GROUPS)[];
+
+  fileGroups.forEach((group) => {
+    if (!validFileGroups.includes(group as keyof typeof FILE_GROUPS)) {
+      fileGroups.delete(group);
+    }
+  });
+
+  return Array.from(fileGroups) as (keyof typeof FILE_GROUPS)[];
 };
 
 /**
