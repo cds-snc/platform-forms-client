@@ -21,6 +21,10 @@ export function sanitizeUrl(url: string): string {
   return url.trim();
 }
 
+/**
+ * Validates if a string is a well-formed URL.
+ * Supports http, https, mailto, tel, and sms protocols.
+ */
 const urlRegExp = new RegExp(
   /^(https?:\/\/([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}(\/[^\s]*)?|mailto:[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\?[^\s]*)?|tel:\+?[0-9\-().]{3,}|sms:\+?[0-9\-().]{3,})$/
 );
