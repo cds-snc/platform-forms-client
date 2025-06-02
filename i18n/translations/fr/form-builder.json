@@ -7,7 +7,19 @@
   },
   "fileTypes": {
     "more": {
-      "label": "Allow files of type(s) [FR]"
+      "label": "Allow only specific file types [FR]"
+    },
+    "documents": {
+      "label": "Documents [FR]",
+      "description": "pdf, txt, doc, docx [FR]"
+    },
+    "images": {
+      "label": "Images [FR]",
+      "description": "jpg, jpeg, png, svg [FR]"
+    },
+    "spreadsheets": {
+      "label": "Spreadsheets [FR]",
+      "description": "xls, xlsx, csv, numbers [FR]"
     }
   },
   "addElement": "Ajouter un élément",
