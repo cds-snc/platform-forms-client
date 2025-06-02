@@ -6,25 +6,25 @@
  *
  */
 
+const SUPPORTED_URL_PROTOCOLS = new Set(["http:", "https:", "mailto:"]);
+
 export function sanitizeUrl(url: string): string {
-  /** A pattern that matches safe  URLs. */
-  const SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^&:/?#]*(?:[/?#]|$))/gi;
+  try {
+    const parsedUrl = new URL(url);
 
-  /** A pattern that matches safe data URLs. */
-  const DATA_URL_PATTERN =
-    /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[a-z0-9+/]+=*$/i;
-
-  url = String(url).trim();
-
-  if (url.match(SAFE_URL_PATTERN) || url.match(DATA_URL_PATTERN)) return url;
-
-  return url;
+    if (!SUPPORTED_URL_PROTOCOLS.has(parsedUrl.protocol)) {
+      return "about:blank";
+    }
+  } catch {
+    return url.trim();
+  }
+  return url.trim();
 }
 
-/**
- * A pattern that matches a valid URL.
- */
-const urlRegExp = new RegExp(/^(https?:\/\/)?([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/);
+const urlRegExp = new RegExp(
+  /^(https?:\/\/([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}(\/[^\s]*)?|mailto:[^\s@]+@[^\s@]+\.[^\s@]{2,})$/
+);
+
 export function isValidUrl(url: string): boolean {
   return urlRegExp.test(url);
 }
