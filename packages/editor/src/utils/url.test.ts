@@ -6,7 +6,7 @@ describe("sanitizeUrl", () => {
     expect(sanitizeUrl("https://example.com")).toBe("https://example.com");
   });
 
-  it("returns safe mailto, ftp, tel, file, sms URLs unchanged", () => {
+  it("returns safe mailto", () => {
     expect(sanitizeUrl("mailto:test@example.com")).toBe("mailto:test@example.com");
   });
 
@@ -65,7 +65,7 @@ describe("isValidUrl", () => {
     expect(isValidUrl("")).toBe(false);
   });
 
-  it("returns true for mailto with display name and query params", () => {
+  it("returns true for mailto with query params", () => {
     expect(isValidUrl("mailto:user@example.com?subject=Hello")).toBe(true);
   });
 

@@ -22,7 +22,7 @@ export function sanitizeUrl(url: string): string {
 }
 
 const urlRegExp = new RegExp(
-  /^(https?:\/\/([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}(\/[^\s]*)?|mailto:[^\s@]+@[^\s@]+\.[^\s@]{2,})$/
+  /^(https?:\/\/([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}(\/[^\s]*)?|mailto:[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\?[^\s]*)?)$/
 );
 
 export function isValidUrl(url: string): boolean {
