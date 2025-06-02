@@ -64,6 +64,8 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
         // react dispatch functions will not work within reader callbacks
         // this we need to wait for reader readyState to be true
         reader.onloadend = () => {
+          fileInputRef.current!.value = ""; // Reset the input value to allow re-uploading the same file
+
           if (newFile.name !== fileName) {
             setFileName(newFile.name);
             setFileSize(newFile.size);
@@ -108,6 +110,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
       <div className={classes} data-testid="file">
         <div
+          key={name}
           id={name}
           role="button"
           tabIndex={0}
