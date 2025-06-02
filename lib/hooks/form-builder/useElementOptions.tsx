@@ -43,6 +43,7 @@ import {
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFeatureFlags } from "../useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 export enum Groups {
   BASIC = "basic",
@@ -67,7 +68,12 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
 
   const { getFlag } = useFeatureFlags();
 
-  const allowFileInput = getFlag(FeatureFlags.fileUpload);
+  const { hasApiKeyId } = useFormBuilderConfig();
+
+  const isAdminUser = useIsAdminUser();
+
+  // Allow via feature flag or if the user is an admin and forms has an API key
+  const allowFileInput = getFlag(FeatureFlags.fileUpload) || (hasApiKeyId && isAdminUser);
 
   const fileInputOption: ElementOption = {
     id: "fileInput",
@@ -79,7 +85,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   };
 
   // Custom json is only available to admin users
-  const allowCustomJson = useIsAdminUser();
+  const allowCustomJson = isAdminUser;
 
   const customJsonOption: ElementOption = {
     id: "customJson",
