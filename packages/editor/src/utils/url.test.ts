@@ -35,7 +35,6 @@ describe("sanitizeUrl", () => {
 
   it("returns about:blank for unsupported protocols", () => {
     expect(sanitizeUrl("ftp://example.com")).toBe("about:blank");
-    expect(sanitizeUrl("tel:123456789")).toBe("about:blank");
   });
 
   it("handles empty string", () => {
@@ -53,12 +52,28 @@ describe("isValidUrl", () => {
     expect(isValidUrl("mailto:test@example.com")).toBe(true);
   });
 
+  it("returns true for valid tel URLs", () => {
+    expect(isValidUrl("tel:+1234567890")).toBe(true);
+    expect(isValidUrl("tel:123-456-7890")).toBe(true);
+    expect(isValidUrl("tel:(123)456-7890")).toBe(true);
+  });
+
+  it("returns true for valid sms URLs", () => {
+    expect(isValidUrl("sms:+1234567890")).toBe(true);
+    expect(isValidUrl("sms:123-456-7890")).toBe(true);
+    expect(isValidUrl("sms:(123)456-7890")).toBe(true);
+  });
+
   it("returns false for invalid URLs", () => {
     expect(isValidUrl("notaurl")).toBe(false);
     expect(isValidUrl("http:/bad")).toBe(false);
     expect(isValidUrl("ftp://example.com")).toBe(false); // ftp is not in regexp
     expect(isValidUrl("javascript:alert(1)")).toBe(false);
     expect(isValidUrl("data:image/png;base64,abc")).toBe(false);
+    expect(isValidUrl("tel:")).toBe(false);
+    expect(isValidUrl("sms:")).toBe(false);
+    expect(isValidUrl("tel:abc-def-ghij")).toBe(false);
+    expect(isValidUrl("sms:abc-def-ghij")).toBe(false);
   });
 
   it("returns false for empty string", () => {
@@ -78,6 +93,8 @@ describe("isValidUrl", () => {
   it("returns false for URLs with internal whitespace", () => {
     expect(isValidUrl("http://exa mple.com")).toBe(false);
     expect(isValidUrl("mailto:test@ example.com")).toBe(false);
+    expect(isValidUrl("tel:123 456 7890")).toBe(false);
+    expect(isValidUrl("sms:123 456 7890")).toBe(false);
   });
 
   it("returns false for internationalized domain names (unicode)", () => {
