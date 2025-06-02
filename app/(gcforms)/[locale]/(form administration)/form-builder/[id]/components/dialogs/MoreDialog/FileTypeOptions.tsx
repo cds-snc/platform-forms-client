@@ -76,7 +76,7 @@ export const FileTypeOptions = ({
               data-testid={`file-type-checkbox-${type}`}
             />
             <label key={type} className="gc-checkbox-label" htmlFor={`file-type-checkbox-${type}`}>
-              <span className="checkbox-label-text">{FILE_GROUPS[type].label}</span>
+              <span className="checkbox-label-text">{t(`fileTypes.more.${type}.label`)}</span>
             </label>
           </div>
         ))}
