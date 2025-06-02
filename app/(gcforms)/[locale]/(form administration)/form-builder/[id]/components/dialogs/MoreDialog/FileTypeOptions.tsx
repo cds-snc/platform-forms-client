@@ -1,38 +1,6 @@
 import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
-
-/*
-const FILE_GROUPS = [
-  {
-    label: "Documents",
-    types: ["pdf", "txt", "doc", "docx"],
-  },
-  {
-    label: "Images",
-    types: ["jpg", "jpeg", "png", "svg"],
-  },
-  {
-    label: "Spreadsheets",
-    types: ["xls", "xlsx", "csv", "numbers"]
-  },
-];
-*/
-
-const ALLOWED_FILE_TYPES = [
-  "pdf",
-  "txt",
-  "doc",
-  "docx",
-  "csv",
-  "xls",
-  "xlsx",
-  "numbers",
-  "jpg",
-  "jpeg",
-  "png",
-  "svg",
-  "xml",
-];
+import { ALLOWED_FILE_TYPES } from "@lib/fileInput/constants";
 
 export const FileTypeOptions = ({
   item,
