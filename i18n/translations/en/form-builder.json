@@ -379,7 +379,7 @@
     "number": "Enter a number",
     "phone": "For example: 111-222-3333",
     "combobox": "Start typing to narrow down the list.",
-    "fileInput": "Files must not exceed 3.5 MB in total."
+    "fileInput": "Files must not exceed 10 MB in total."
   },
   "defaultElementLabel": {
     "addressComplete": "Address"

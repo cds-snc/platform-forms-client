@@ -1,5 +1,7 @@
 import { FileInputResponse, Responses } from "@lib/types";
 
+import { logMessage } from "@lib/logger";
+
 export const ALLOWED_FILE_TYPES = [
   { mime: "application/pdf", extensions: ["pdf"] },
   { mime: "text/plain", extensions: ["txt"] },
@@ -21,7 +23,7 @@ export const ALLOWED_FILE_TYPES = [
   { mime: "application/xml", extensions: ["xml"] },
 ];
 
-const MAXIMUM_FILE_SIZE_IN_BYTES = 5 * 1024 * 1024; // 5MB
+const MAXIMUM_FILE_SIZE_IN_BYTES = 10 * 1024 * 1024; // 5MB
 
 // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept
 export const htmlInputAccept = ALLOWED_FILE_TYPES.map((t) =>
@@ -85,6 +87,11 @@ export function isAllFilesSizeValid(values: Responses): boolean {
       // in file size so we multiply by 1.35.
       const totalSize = files.reduce((sum, file) => Number(sum) + Number(file.size) * 1.35, 0);
       if (totalSize > MAXIMUM_FILE_SIZE_IN_BYTES) {
+        logMessage.info(
+          `Total file size exceeds the limit of ${MAXIMUM_FILE_SIZE_IN_BYTES} bytes. Current size: ${Math.floor(
+            totalSize
+          )} bytes`
+        );
         return false;
       }
     }
