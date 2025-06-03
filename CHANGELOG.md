@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.43.0](https://github.com/cds-snc/platform-forms-client/compare/v3.42.1...v3.43.0) (2025-06-03)
+
+
+### Features
+
+* Allow form builders to limit file upload extensions  ([#5609](https://github.com/cds-snc/platform-forms-client/issues/5609)) ([57f970b](https://github.com/cds-snc/platform-forms-client/commit/57f970bfca1aa7b8473158ea13d44c909096e6cf))
+* enable local IdP communication ([#5576](https://github.com/cds-snc/platform-forms-client/issues/5576)) ([d1a84c8](https://github.com/cds-snc/platform-forms-client/commit/d1a84c84fc2c133a3c0108cee11488d1076c22e1))
+
+
+### Bug Fixes
+
+* Better Response download error handling on modified Draft forms ([#5595](https://github.com/cds-snc/platform-forms-client/issues/5595)) ([9571dea](https://github.com/cds-snc/platform-forms-client/commit/9571dea4fdf26e628c74d8baf76643d483bbec16))
+* Cancel + re-select file says no file selected ([#5642](https://github.com/cds-snc/platform-forms-client/issues/5642)) ([27d12f9](https://github.com/cds-snc/platform-forms-client/commit/27d12f9815422ad3a83edf515cd281b6940ab8e5))
+* **deps:** update all patch dependencies ([#5638](https://github.com/cds-snc/platform-forms-client/issues/5638)) ([05defd6](https://github.com/cds-snc/platform-forms-client/commit/05defd6f014369134b231ef4f353b7cedfa9d97b))
+* Prevent accepting invitations for forms that have been deleted ([#5596](https://github.com/cds-snc/platform-forms-client/issues/5596)) ([2838215](https://github.com/cds-snc/platform-forms-client/commit/2838215191dad9def2f6bbb54458981c2a29c7db))
+* Remove redundant aria-labelledby prop from Combobox input ([#5646](https://github.com/cds-snc/platform-forms-client/issues/5646)) ([3c65fe4](https://github.com/cds-snc/platform-forms-client/commit/3c65fe40e5da5241b01c7ef8147363edcbbc6d0d))
+* Update link editor to allow mailto: links ([#5641](https://github.com/cds-snc/platform-forms-client/issues/5641)) ([6d0b088](https://github.com/cds-snc/platform-forms-client/commit/6d0b088100c1da2e20114df9e6276b8363ebea04))
+
+
+### Miscellaneous Chores
+
+* add description for file options ([#5643](https://github.com/cds-snc/platform-forms-client/issues/5643)) ([d2083c9](https://github.com/cds-snc/platform-forms-client/commit/d2083c92a515aa17ed2d1ba810136f9803f73571))
+* allow file upload for admin users and forms with api key ([#5622](https://github.com/cds-snc/platform-forms-client/issues/5622)) ([7c30811](https://github.com/cds-snc/platform-forms-client/commit/7c30811f42e9c2321d9e40fc9e796746000035f1))
+* **deps:** lock file maintenance ([#5639](https://github.com/cds-snc/platform-forms-client/issues/5639)) ([b0def3c](https://github.com/cds-snc/platform-forms-client/commit/b0def3c7355e022a37f182f2c65860151d0b872a))
+* **deps:** update aws-actions/amazon-ecs-render-task-definition digest to 6bb1712 ([#5636](https://github.com/cds-snc/platform-forms-client/issues/5636)) ([ad217c9](https://github.com/cds-snc/platform-forms-client/commit/ad217c9b0eeb4d84328f25c7f7c5b014a272d2f5))
+* **deps:** update redis docker digest to dbf3e4b ([#5637](https://github.com/cds-snc/platform-forms-client/issues/5637)) ([7848d84](https://github.com/cds-snc/platform-forms-client/commit/7848d84ec7d3f5f6e049469629da217b7d02461a))
+* handle file mis-match issues for save progress  ([#5644](https://github.com/cds-snc/platform-forms-client/issues/5644)) ([55963b8](https://github.com/cds-snc/platform-forms-client/commit/55963b832167766af52fef730a0c2abbf873b9f6))
+* update lock file ([#5645](https://github.com/cds-snc/platform-forms-client/issues/5645)) ([405f1f1](https://github.com/cds-snc/platform-forms-client/commit/405f1f1436317f0cb7cac025911a386697632b46))
+
 ## [3.42.1](https://github.com/cds-snc/platform-forms-client/compare/v3.42.0...v3.42.1) (2025-05-30)
 
 
