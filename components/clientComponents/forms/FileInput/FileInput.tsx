@@ -8,6 +8,7 @@ import { InputFieldProps } from "@lib/types";
 import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
 import { CancelIcon } from "@serverComponents/icons";
 import { themes } from "@clientComponents/globals/Buttons/themes";
+import { Button } from "@clientComponents/globals/Buttons/Button";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -154,9 +155,16 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               )}: ${fileName}`}</span>
               <span aria-hidden={true}>
                 {fileName} ({(fileSize / 1024 / 1024).toFixed(2)} {t("input-validation.MB")}){" "}
-                <span className="ml-3 cursor-pointer" onClick={() => resetInput()}>
-                  <CancelIcon className="inline-block" /> {t("cancel")}
-                </span>
+                <Button
+                  theme="link"
+                  className="ml-3   [&_svg]:focus:fill-white"
+                  onClick={resetInput}
+                >
+                  <div className="group ml-1 p-2 pr-3">
+                    <CancelIcon className="inline-block" />
+                    <span className="ml-1 inline-block group-hover:underline">{t("cancel")}</span>
+                  </div>
+                </Button>
               </span>
             </>
           ) : (
