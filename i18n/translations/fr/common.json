@@ -238,6 +238,11 @@
       "description": "Essayez de téléverser à nouveau le fichier ou recommencez un nouveau formulaire et copiez-collez vos réponses du fichier.",
       "errorCode": "Code d'erreur : {{code}}"
     },
+    "problemLoadingAnswers": {
+      "title": "Problème de téléversement du fichier",
+      "description": "Vérifiez que vous avez sélectionné le bon fichier. Essayez de téléverser à nouveau, ou recommencez un nouveau formulaire et copiez-collez vos réponses à partir de votre fichier.",
+      "errorCode": "Error code: {{code}}"
+    },
     "resumePage": {
       "upload": {
         "title": "Téléversez vos réponses",
