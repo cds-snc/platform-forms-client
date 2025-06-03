@@ -238,6 +238,11 @@
       "description": "Try uploading the file again or restart a new form and copy-paste your answers from the file.",
       "errorCode": "Error code: {{code}}"
     },
+    "problemLoadingAnswers": {
+      "title": "Problem loading answers from file",
+      "description": "Make sure you're selecting the right file. Try uploading again, or restart a new form and copy-paste your answers from your file.",
+      "errorCode": "Error code: {{code}}"
+    },
     "resumePage": {
       "upload": {
         "title": "Load your answers",
