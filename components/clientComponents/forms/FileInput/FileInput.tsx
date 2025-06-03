@@ -8,6 +8,7 @@ import { InputFieldProps } from "@lib/types";
 import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
 import { CancelIcon } from "@serverComponents/icons";
 import { themes } from "@clientComponents/globals/Buttons/themes";
+import { Button } from "@clientComponents/globals/Buttons/Button";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -64,6 +65,8 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
         // react dispatch functions will not work within reader callbacks
         // this we need to wait for reader readyState to be true
         reader.onloadend = () => {
+          fileInputRef.current!.value = ""; // Reset the input value to allow re-uploading the same file
+
           if (newFile.name !== fileName) {
             setFileName(newFile.name);
             setFileSize(newFile.size);
@@ -108,6 +111,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
       <div className={classes} data-testid="file">
         <div
+          key={name}
           id={name}
           role="button"
           tabIndex={0}
@@ -151,9 +155,12 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               )}: ${fileName}`}</span>
               <span aria-hidden={true}>
                 {fileName} ({(fileSize / 1024 / 1024).toFixed(2)} {t("input-validation.MB")}){" "}
-                <span className="ml-3 cursor-pointer" onClick={() => resetInput()}>
-                  <CancelIcon className="inline-block" /> {t("cancel")}
-                </span>
+                <Button theme="link" className="ml-3 [&_svg]:focus:fill-white" onClick={resetInput}>
+                  <div className="group ml-1 p-2 pr-3">
+                    <CancelIcon className="inline-block" />
+                    <span className="ml-1 inline-block group-hover:underline">{t("cancel")}</span>
+                  </div>
+                </Button>
               </span>
             </>
           ) : (
