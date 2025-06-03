@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.42.0",
+  "version": "3.42.1",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -73,7 +73,6 @@
     "@radix-ui/react-tooltip": "^1.1.6",
     "@types/body-scroll-lock": "^3.1.2",
     "@types/mdx": "^2.0.13",
-    "@zitadel/node": "2.0.37",
     "axios": "1.9.0",
     "body-scroll-lock": "^4.0.0-beta.0",
     "clsx": "^2.1.1",
@@ -83,12 +82,14 @@
     "downshift": "^8.3.1",
     "file-type": "^19.0.0",
     "formik": "2.4.6",
+    "got": "11",
     "htmlparser2": "8.0.2",
     "i18next": "^23.16.4",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-resources-to-backend": "^1.2.1",
     "immer": "10.0.3",
     "ioredis": "5.3.2",
+    "jose": "^6.0.11",
     "jsonschema": "1.4.1",
     "jszip": "^3.10.1",
     "lodash.debounce": "4.0.8",
@@ -123,7 +124,7 @@
     "usehooks-ts": "3.1.1",
     "uuid": "9.0.1",
     "valibot": "^0.30.0",
-    "zustand": "5.0.4"
+    "zustand": "5.0.5"
   },
   "devDependencies": {
     "@aws-sdk/types": "3.734.0",
@@ -150,7 +151,7 @@
     "@types/node": "^20.11.6",
     "@types/node-fetch": "^2.6.9",
     "@types/pg": "^8.10.9",
-    "@types/react": "19.1.4",
+    "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5",
     "@types/react-transition-group": "^4",
     "@types/unorm": "^1",
@@ -205,7 +206,7 @@
   ],
   "packageManager": "yarn@4.9.1",
   "resolutions": {
-    "@types/react": "19.1.4",
+    "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5"
   }
 }

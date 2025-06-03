@@ -19,6 +19,7 @@ import { FormElement } from "@lib/types";
 import { QuestionTagOptions } from "./QuestionTagOptions";
 import { QuestionIdOptions } from "./QuestionIdOptions";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
+import { FileTypeOptions } from "./FileTypeOptions";
 
 import { CopyItem } from "./CopyItem";
 
@@ -134,6 +135,8 @@ export const MoreDialog = () => {
               <CharacterLimitOptions item={item} setItem={setItem} />
 
               <SortOptions item={item} setItem={setItem} />
+
+              <FileTypeOptions item={item} setItem={setItem} />
 
               {item.type !== "dynamicRow" && (
                 <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
