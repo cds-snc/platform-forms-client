@@ -155,11 +155,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               )}: ${fileName}`}</span>
               <span aria-hidden={true}>
                 {fileName} ({(fileSize / 1024 / 1024).toFixed(2)} {t("input-validation.MB")}){" "}
-                <Button
-                  theme="link"
-                  className="ml-3   [&_svg]:focus:fill-white"
-                  onClick={resetInput}
-                >
+                <Button theme="link" className="ml-3 [&_svg]:focus:fill-white" onClick={resetInput}>
                   <div className="group ml-1 p-2 pr-3">
                     <CancelIcon className="inline-block" />
                     <span className="ml-1 inline-block group-hover:underline">{t("cancel")}</span>
