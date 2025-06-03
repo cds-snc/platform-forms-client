@@ -63,7 +63,7 @@ export const FileTypeOptions = ({
       <div className="mb-2">
         <h3>{t("fileTypes.more.label")}</h3>
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="">
         {/* Render checkboxes for each file group */}
         {FILE_GROUP_KEYS.map((type) => (
           <div className="gc-input-checkbox" key={type}>
@@ -76,7 +76,12 @@ export const FileTypeOptions = ({
               data-testid={`file-type-checkbox-${type}`}
             />
             <label key={type} className="gc-checkbox-label" htmlFor={`file-type-checkbox-${type}`}>
-              <span className="checkbox-label-text">{t(`fileTypes.more.${type}.label`)}</span>
+              <div className="checkbox-label-text">
+                {t(`fileTypes.more.${type}.label`)}
+                <span className="relative block text-base font-normal text-slate-700">
+                  {t(`fileTypes.more.${type}.description`)}
+                </span>
+              </div>
             </label>
           </div>
         ))}
