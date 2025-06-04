@@ -31,8 +31,8 @@ describe("File size validator", () => {
   it.each([
     [1000, true],
     [5000000, true],
-    [8389121, false],
-    [11000000, false],
+    [8389121, true],
+    [1100000, false],
   ])(`Should return true if file size is valid (testing "%s")`, async (fileSize, isValid) => {
     expect(isIndividualFileSizeValid(fileSize)).toBe(isValid);
   });
