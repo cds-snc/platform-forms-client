@@ -4,7 +4,7 @@ import { validateFileToUpload } from "@lib/validation/fileValidationServerSide";
 jest.mock("file-type");
 const mockFileTypeFromBuffer = jest.mocked(fileTypeFromBuffer, { shallow: true });
 
-describe("Regarless of the MIME type detection, it", () => {
+describe("Regardless of the MIME type detection, it", () => {
   beforeAll(() => {
     mockFileTypeFromBuffer.mockResolvedValueOnce(undefined);
   });
@@ -22,24 +22,24 @@ describe("Regarless of the MIME type detection, it", () => {
   it("should return a SIZE_IS_TOO_LARGE result if the given size is too large", async () => {
     const sut = await validateFileToUpload(
       "fileName.txt",
-      8389121,
+      12582912,
       Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
     );
 
     expect(sut).toStrictEqual({
       status: "size-is-too-large",
-      fileSizeInBytes: 8389121,
+      fileSizeInBytes: 12582912,
       sizeOfProcessedFileDataBuffer: 24,
     });
   });
 
   it("should return a SIZE_IS_TOO_LARGE result if the buffer size is too large", async () => {
-    const sut = await validateFileToUpload("fileName.txt", 100, Buffer.alloc(8389121));
+    const sut = await validateFileToUpload("fileName.txt", 100, Buffer.alloc(12582912));
 
     expect(sut).toStrictEqual({
       status: "size-is-too-large",
       fileSizeInBytes: 100,
-      sizeOfProcessedFileDataBuffer: 8389121,
+      sizeOfProcessedFileDataBuffer: 12582912,
     });
   });
 
