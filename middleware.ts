@@ -92,7 +92,7 @@ export default async function middleware(req: NextRequest, ctx: AppRouteHandlerF
     const body = await req.text();
 
     // Allow larger body size for requests with base64 encoded data (e.g. images)
-    const sizeLimit = body.includes("base64") ? bodySizeLimitWithFiles : bodySizeLimit;
+    const sizeLimit = body.includes("based64EncodedFile") ? bodySizeLimitWithFiles : bodySizeLimit;
 
     // Check body size
     if (body.length > sizeLimit) {
