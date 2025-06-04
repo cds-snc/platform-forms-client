@@ -9,8 +9,8 @@ describe("validateTemplateSize", () => {
   });
 
   it("returns false for a template size exceeding the limit", () => {
-    const largeTemplate = { key: "x".repeat(6 * 1024 * 1024) }; // 6 MB template
-    const result = validateTemplateSize(JSON.stringify(largeTemplate)); // 5 MB limit
+    const largeTemplate = { key: "x".repeat(11 * 1024 * 1024) }; // 11 MB template
+    const result = validateTemplateSize(JSON.stringify(largeTemplate)); // 10 MB limit
     expect(result).toBe(false);
   });
 
