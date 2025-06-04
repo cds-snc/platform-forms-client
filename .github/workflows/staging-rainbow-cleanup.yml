@@ -89,6 +89,7 @@ jobs:
     needs: cleanup-schedule-1
     if: ${{ needs.cleanup-schedule-1.outputs.ids != '' }}
     strategy:
+      max-parallel: 1
       matrix:
         deployment-identifier: ${{ fromJSON(needs.cleanup-schedule-1.outputs.ids) }}
     steps:
