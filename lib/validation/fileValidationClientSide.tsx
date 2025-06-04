@@ -23,8 +23,6 @@ export const ALLOWED_FILE_TYPES = [
   { mime: "application/xml", extensions: ["xml"] },
 ];
 
-const MAXIMUM_FILE_SIZE_IN_BYTES = BODY_SIZE_LIMIT_WITH_FILES;
-
 // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept
 export const htmlInputAccept = ALLOWED_FILE_TYPES.map((t) =>
   [t.mime].concat(t.extensions.map((e) => `.${e}`))
@@ -43,7 +41,7 @@ export function isFileExtensionValid(fileName: string): boolean {
 }
 
 export function isIndividualFileSizeValid(sizeInBytes: number): boolean {
-  return sizeInBytes <= MAXIMUM_FILE_SIZE_IN_BYTES;
+  return sizeInBytes <= BODY_SIZE_LIMIT_WITH_FILES;
 }
 
 /**
@@ -86,7 +84,7 @@ export function isAllFilesSizeValid(values: Responses): boolean {
       // Since we are base64 encoding the file prior to transfer, there is a ~35% overhead
       // in file size so we multiply by 1.35.
       const totalSize = files.reduce((sum, file) => Number(sum) + Number(file.size) * 1.35, 0);
-      if (totalSize > MAXIMUM_FILE_SIZE_IN_BYTES) {
+      if (totalSize > BODY_SIZE_LIMIT_WITH_FILES) {
         return false;
       }
     }
