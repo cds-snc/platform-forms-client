@@ -1,18 +1,22 @@
-name: Jest Tests
+name: Unit tests (Jest + Vitest)
+
 on:
   pull_request:
     branches: [main, feature/*]
 
 jobs:
-  jest-run:
-    name: Jest
+  run-tests:
+    name: Vitest
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
       - name: Node.JS Setup
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: .nvmrc
+
       - name: Yarn update to V4
         run: corepack enable && yarn set version stable
 
@@ -33,3 +37,6 @@ jobs:
 
       - name: Jest Tests
         run: yarn test
+
+      - name: Vitest Tests
+        run: yarn test:vitest
