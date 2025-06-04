@@ -1,5 +1,6 @@
 import { fileTypeFromBuffer } from "file-type";
 import { validateFileToUpload } from "@lib/validation/fileValidationServerSide";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "../../../constants";
 
 jest.mock("file-type");
 const mockFileTypeFromBuffer = jest.mocked(fileTypeFromBuffer, { shallow: true });
@@ -22,24 +23,24 @@ describe("Regardless of the MIME type detection, it", () => {
   it("should return a SIZE_IS_TOO_LARGE result if the given size is too large", async () => {
     const sut = await validateFileToUpload(
       "fileName.txt",
-      12582912,
+      BODY_SIZE_LIMIT_WITH_FILES + 1,
       Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
     );
 
     expect(sut).toStrictEqual({
       status: "size-is-too-large",
-      fileSizeInBytes: 12582912,
+      fileSizeInBytes: BODY_SIZE_LIMIT_WITH_FILES + 1,
       sizeOfProcessedFileDataBuffer: 24,
     });
   });
 
   it("should return a SIZE_IS_TOO_LARGE result if the buffer size is too large", async () => {
-    const sut = await validateFileToUpload("fileName.txt", 100, Buffer.alloc(12582912));
+    const sut = await validateFileToUpload("fileName.txt", 100, Buffer.alloc(BODY_SIZE_LIMIT_WITH_FILES + 1));
 
     expect(sut).toStrictEqual({
       status: "size-is-too-large",
       fileSizeInBytes: 100,
-      sizeOfProcessedFileDataBuffer: 12582912,
+      sizeOfProcessedFileDataBuffer: BODY_SIZE_LIMIT_WITH_FILES + 1,
     });
   });
 

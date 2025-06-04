@@ -1,4 +1,4 @@
-import { bodySizeLimit as maxSize } from "../../constants";
+import { BODY_SIZE_LIMIT as maxSize } from "../../constants";
 
 export const validateTemplateSize = (formConfig: string, bodySizeLimit: number = maxSize) => {
   try {

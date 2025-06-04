@@ -1,6 +1,6 @@
 import { FileInputResponse, Responses } from "@lib/types";
 
-import { bodySizeLimitWithFiles } from "../../constants";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "../../constants";
 
 export const ALLOWED_FILE_TYPES = [
   { mime: "application/pdf", extensions: ["pdf"] },
@@ -23,7 +23,7 @@ export const ALLOWED_FILE_TYPES = [
   { mime: "application/xml", extensions: ["xml"] },
 ];
 
-const MAXIMUM_FILE_SIZE_IN_BYTES = bodySizeLimitWithFiles;
+const MAXIMUM_FILE_SIZE_IN_BYTES = BODY_SIZE_LIMIT_WITH_FILES;
 
 // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept
 export const htmlInputAccept = ALLOWED_FILE_TYPES.map((t) =>
