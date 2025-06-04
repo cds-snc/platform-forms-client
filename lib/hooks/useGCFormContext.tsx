@@ -37,6 +37,7 @@ interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
   matchedIds: string[];
+  totalFileSize: number;
   filteredMatchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
@@ -85,6 +86,7 @@ export const GCFormsProvider = ({
   const values = React.useRef({});
   const history = React.useRef<string[]>([LockedSections.START]);
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
+  const [totalFileSize, setTotalFileSize] = React.useState<number>(0);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
@@ -158,6 +160,25 @@ export const GCFormsProvider = ({
     if (!idArraysMatch(matchedIds, valueIds)) {
       setMatchedIds(valueIds);
     }
+
+    // Check values for files and calc current total size
+    const fileInputs = Object.values(formValues).filter(
+      (value) => typeof value === "object" && "size" in value
+    );
+
+    // Calculate the total file size
+    const totalFileSize = fileInputs.reduce((total, file) => {
+      if (typeof file === "object" && "size" in file && file.size !== null) {
+        // check if file.size is a number
+        if (typeof file.size !== "number") {
+          return total;
+        }
+        return total + (file.size || 0);
+      }
+      return total;
+    }, 0);
+
+    setTotalFileSize(totalFileSize);
   };
 
   // Helper to not expose the setter
@@ -244,6 +265,7 @@ export const GCFormsProvider = ({
         updateValues,
         getValues,
         matchedIds,
+        totalFileSize,
         filteredMatchedIds,
         groups,
         currentGroup,
@@ -285,6 +307,7 @@ export const useGCFormsContext = () => {
       submissionDate: undefined,
       setSubmissionDate: () => void 0,
       matchedIds: [""],
+      totalFileSize: 0,
       filteredMatchedIds: [""],
       groups: {},
       currentGroup: "",
