@@ -86,6 +86,8 @@ const isFieldResponseValid = (
     return t("input-validation.too-many-characters");
   }
 
+  const bodySizeLimitWithFiles = "17MB"; // @todo replace this with constant from constants.ts
+
   switch (componentType) {
     case FormElementTypes.textField: {
       const typedValue = value as string;
@@ -146,7 +148,7 @@ const isFieldResponseValid = (
         return t("input-validation.required");
 
       if (fileInputResponse.size && !isAllFilesSizeValid(values)) {
-        return t("input-validation.file-size-too-large-all-files");
+        return t("input-validation.file-size-too-large-all-files", { bodySizeLimitWithFiles });
       }
 
       if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
