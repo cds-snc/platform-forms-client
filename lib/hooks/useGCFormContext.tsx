@@ -169,7 +169,6 @@ export const GCFormsProvider = ({
     // Calculate the total file size
     const totalFileSize = fileInputs.reduce((total, file) => {
       if (typeof file === "object" && "size" in file && file.size !== null) {
-        // check if file.size is a number
         if (typeof file.size !== "number") {
           return total;
         }
