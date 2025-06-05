@@ -1,6 +1,8 @@
 import { FileInputResponse, Responses } from "@lib/types";
 
 import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
+import { ga } from "../client/clientHelpers";
+import { fileSizeWithBase64Overhead } from "../utils/fileSize";
 
 export const ALLOWED_FILE_TYPES = [
   { mime: "application/pdf", extensions: ["pdf"] },
@@ -80,11 +82,17 @@ export function isAllFilesSizeValid(values: Responses): boolean {
       }
     }
     if (files) {
-      // file.size is the size reported by the browser which is the original file size.
-      // Since we are base64 encoding the file prior to transfer, there is a ~35% overhead
-      // in file size so we multiply by 1.35.
-      const totalSize = files.reduce((sum, file) => Number(sum) + Number(file.size) * 1.35, 0);
+      const totalSize = files.reduce(
+        (sum, file) => Number(sum) + fileSizeWithBase64Overhead(Number(file.size)),
+        0
+      );
       if (totalSize > BODY_SIZE_LIMIT_WITH_FILES) {
+        // @TODO: Setup on GA
+        ga("file_upload_size_exceeded", {
+          size: totalSize,
+          limit: BODY_SIZE_LIMIT_WITH_FILES,
+          filesCount: files.length,
+        });
         return false;
       }
     }

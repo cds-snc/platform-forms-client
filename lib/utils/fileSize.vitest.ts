@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { bytesToMb, kbToBytes, mbToBytes } from "./fileSize";
+import { bytesToKbOrMbString, bytesToMb, fileSizeWithBase64Overhead, kbToBytes, mbToBytes } from "./fileSize";
 
 describe("bytesToMb", () => {
   it("converts 0 bytes to 0 MB", () => {
@@ -132,5 +132,63 @@ describe("kbToBytes", () => {
 
   it("handles small KB values", () => {
     expect(kbToBytes(0.001)).toBe(Math.round(0.001 * 1024));
+  });
+});
+
+
+describe("bytesToKbOrMbString", () => {
+  it("returns bytes for values less than 500", () => {
+    expect(bytesToKbOrMbString(0)).toEqual({ size: 0, unit: "bytes" });
+    expect(bytesToKbOrMbString(499)).toEqual({ size: 499, unit: "bytes" });
+    expect(bytesToKbOrMbString(250)).toEqual({ size: 250, unit: "bytes" });
+  });
+
+  it("returns KB for values between 500 and 1040000", () => {
+    expect(bytesToKbOrMbString(500)).toEqual({ size: Math.round((500 / 1024) * 2) / 2, unit: "KB" });
+    expect(bytesToKbOrMbString(1024)).toEqual({ size: 1, unit: "KB" });
+    expect(bytesToKbOrMbString(1536)).toEqual({ size: 1.5, unit: "KB" });
+    expect(bytesToKbOrMbString(1040000 - 1)).toEqual({ size: Math.round(((1040000 - 1) / 1024) * 2) / 2, unit: "KB" });
+  });
+
+  it("returns MB for values >= 1040000", () => {
+    expect(bytesToKbOrMbString(1040000)).toEqual({ size: Math.round((1040000 / 1048576) * 2) / 2, unit: "MB" });
+    expect(bytesToKbOrMbString(1048576)).toEqual({ size: 1, unit: "MB" });
+    expect(bytesToKbOrMbString(1572864)).toEqual({ size: 1.5, unit: "MB" });
+    expect(bytesToKbOrMbString(2097152)).toEqual({ size: 2, unit: "MB" });
+  });
+
+  it("handles negative values", () => {
+    expect(bytesToKbOrMbString(-100)).toEqual({ size: -100, unit: "bytes" });
+    expect(bytesToKbOrMbString(-1048576)).toEqual({ size: -1, unit: "MB" });
+  });
+
+  it("handles edge cases", () => {
+    expect(bytesToKbOrMbString(500)).toEqual({ size: Math.round((500 / 1024) * 2) / 2, unit: "KB" });
+    expect(bytesToKbOrMbString(1040000)).toEqual({ size: Math.round((1040000 / 1048576) * 2) / 2, unit: "MB" });
+  });
+});
+
+describe("fileSizeWithBase64Overhead", () => {
+  it("returns 0 for 0 bytes", () => {
+    expect(fileSizeWithBase64Overhead(0)).toBe(0);
+  });
+
+  it("calculates base64 overhead for small files", () => {
+    expect(fileSizeWithBase64Overhead(1000)).toBe(Math.round(1000 * 1.35));
+    expect(fileSizeWithBase64Overhead(500)).toBe(Math.round(500 * 1.35));
+  });
+
+  it("calculates base64 overhead for large files", () => {
+    expect(fileSizeWithBase64Overhead(1048576)).toBe(Math.round(1048576 * 1.35));
+    expect(fileSizeWithBase64Overhead(10000000)).toBe(Math.round(10000000 * 1.35));
+  });
+
+  it("handles negative values", () => {
+    expect(fileSizeWithBase64Overhead(-1000)).toBe(Math.round(-1000 * 1.35));
+  });
+
+  it("returns integer values (rounded)", () => {
+    const result = fileSizeWithBase64Overhead(1234);
+    expect(Number.isInteger(result)).toBe(true);
   });
 });
