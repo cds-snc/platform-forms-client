@@ -563,7 +563,7 @@ describe("Recursive visibility check", () => {
 
         // Helper to get element by id
         const getElement = (id: number) =>
-            formRecord.form.elements.find((el: FormElement) => el.id === id);
+            formRecord.form.elements.find((el: FormElement) => el.id === id) as FormElement;
 
         // 1. Only "One" selected, should show element 2, not 3 or 4
         const valuesOne = {
