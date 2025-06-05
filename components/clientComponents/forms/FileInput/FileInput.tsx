@@ -27,7 +27,7 @@ export type FileEventTarget = React.ChangeEvent<HTMLInputElement> & {
 
 export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
-  const { setValue } = helpers;
+  const { setValue, setError, setTouched } = helpers;
 
   const { name, disabled, allowMulti, required, ariaDescribedBy, lang } = props;
 
@@ -42,6 +42,9 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     setFileName("");
     setFileSize(0);
     setValue({});
+
+    setError(undefined); // Clear the error
+    setTouched(false); // Reset the touched state
   };
   const classes = cn(
     "gc-file-input",
