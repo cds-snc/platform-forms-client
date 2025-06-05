@@ -228,6 +228,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
               className={isRequired ? "required" : ""}
               required={isRequired}
               lang={lang}
+              htmlFor={`${id}`}
             >
               {labelText}
             </Label>

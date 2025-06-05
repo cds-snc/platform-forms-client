@@ -117,7 +117,7 @@ export interface ElementProperties {
   choices?: PropertyChoices[];
   managedChoices?: string;
   subElements?: FormElement[];
-  fileType?: string | undefined;
+  fileType?: string | string[] | undefined;
   headingLevel?: string | undefined;
   isSectional?: boolean;
   maxNumberOfRows?: number;
@@ -255,7 +255,7 @@ export const NotificationsInterval = {
   WEEK: 10080,
 } as const;
 
-export const NotificationsIntervalDefault = NotificationsInterval.DAY; // Default in prisma also
+export const NotificationsIntervalDefault = NotificationsInterval.OFF; // Default in prisma is 1440 (daily)
 
 export type NotificationsInterval =
   (typeof NotificationsInterval)[keyof typeof NotificationsInterval];
