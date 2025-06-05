@@ -6,7 +6,7 @@ import {
   Group,
   GroupsType,
 } from "@lib/formContext";
-import { FileInputResponse, FormElement, FormElementTypes } from "@lib/types";
+import { FileInputResponse, FormElement, FormElementTypes, PublicFormRecord } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 import { DateObject } from "../FormattedDate/types";
@@ -76,11 +76,10 @@ export const getFormElements = (elementIds: number[], formElements: FormElement[
 };
 
 export const getGroupsWithElementIds = (
-  formElements: FormElement[],
+  formRecord: PublicFormRecord,
   formValues: FormValues | void,
   groups: GroupsType | undefined,
-  groupHistoryIds: string[],
-  matchedIds: string[]
+  groupHistoryIds: string[]
 ) => {
   if (!formValues || !groups || !Array.isArray(groupHistoryIds)) {
     return [] as GroupsWithElementIds[];
@@ -92,7 +91,7 @@ export const getGroupsWithElementIds = (
       const group: Group = groups[groupId as keyof typeof groups] || {};
 
       // Remove any hidden elements from Show-Hide (only include elements interacted with by the user)
-      const shownFormElements = filterShownElements(formElements, matchedIds);
+      const shownFormElements = filterShownElements(formRecord, formValues);
       const elementIds = getElementIdsAsNumber(
         filterValuesForShownElements(group.elements, shownFormElements)
       );
@@ -125,27 +124,25 @@ export const createFormItems = (
 };
 
 export const getReviewItems = ({
-  formElements,
+  formRecord,
   formValues,
   groups,
   groupHistoryIds,
-  matchedIds,
   language,
 }: {
-  formElements: FormElement[];
+  formRecord: PublicFormRecord;
   formValues: FormValues;
   groups: GroupsType;
   groupHistoryIds: string[];
-  matchedIds: string[];
   language: Language;
 }) => {
+  const formElements = formRecord.form.elements;
   // Get Review Items that are used below to print out each question-answer by element type
   const groupsWithElementIds = getGroupsWithElementIds(
-    formElements,
+    formRecord,
     formValues,
     groups,
-    groupHistoryIds,
-    matchedIds
+    groupHistoryIds
   );
 
   const getGroupTitle = (groupId: string | null) => groupTitle({ groups, groupId, language });

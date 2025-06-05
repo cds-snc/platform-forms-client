@@ -9,6 +9,8 @@ import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidat
 import { CancelIcon } from "@serverComponents/icons";
 import { themes } from "@clientComponents/globals/Buttons/themes";
 import { Button } from "@clientComponents/globals/Buttons/Button";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
+import { bytesToMb, bytesToKbOrMbString } from "@lib/utils/fileSize";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -25,7 +27,7 @@ export type FileEventTarget = React.ChangeEvent<HTMLInputElement> & {
 
 export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
-  const { setValue } = helpers;
+  const { setValue, setError, setTouched } = helpers;
 
   const { name, disabled, allowMulti, required, ariaDescribedBy, lang } = props;
 
@@ -34,12 +36,18 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { value } = field;
   const [fileName, setFileName] = useState(value.name);
-  const [fileSize, setFileSize] = useState(value.size);
+  const [fileSize, setFileSize] = useState<{
+    size: number;
+    unit: "bytes" | "KB" | "MB";
+  }>(bytesToKbOrMbString(value.size));
 
   const resetInput = () => {
     setFileName("");
-    setFileSize(0);
+    setFileSize({ size: 0, unit: "bytes" });
     setValue({});
+
+    setError(undefined); // Clear the error
+    setTouched(false); // Reset the touched state
   };
   const classes = cn(
     "gc-file-input",
@@ -69,7 +77,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
           if (newFile.name !== fileName) {
             setFileName(newFile.name);
-            setFileSize(newFile.size);
+            setFileSize(bytesToKbOrMbString(newFile.size));
             setValue({
               name: newFile.name,
               size: newFile.size,
@@ -109,7 +117,11 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     <>
       {meta.error && <ErrorMessage id={`${name}_error`}>{meta.error}</ErrorMessage>}
 
-      <div className={classes} data-testid="file">
+      <div
+        className={classes}
+        data-testid="file"
+        data-limit={bytesToMb(BODY_SIZE_LIMIT_WITH_FILES)}
+      >
         <div
           key={name}
           id={name}
@@ -154,7 +166,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
                 "file-upload-sr-only-file-selected"
               )}: ${fileName}`}</span>
               <span aria-hidden={true}>
-                {fileName} ({(fileSize / 1024 / 1024).toFixed(2)} {t("input-validation.MB")}){" "}
+                {fileName} ({fileSize.size} {t(`input-validation.${fileSize.unit}`)}){" "}
               </span>
               <Button theme="link" className="ml-3 [&_svg]:focus:fill-white" onClick={resetInput}>
                 <div className="group ml-1 p-2 pr-3">
