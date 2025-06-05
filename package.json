@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.42.1",
+  "version": "3.43.0",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -80,7 +80,7 @@
     "csv-writer": "^1.6.0",
     "d3-hierarchy": "^3.1.2",
     "downshift": "^8.3.1",
-    "file-type": "^19.0.0",
+    "file-type": "^21.0.0",
     "formik": "2.4.6",
     "got": "11",
     "htmlparser2": "8.0.2",

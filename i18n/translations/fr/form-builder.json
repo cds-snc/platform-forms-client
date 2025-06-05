@@ -379,7 +379,7 @@
     "number": "Saisissez un chiffre",
     "phone": "Par exemple : 111-222-3333",
     "combobox": "Commencez à taper pour réduire la liste.",
-    "fileInput": "Les fichiers ne doivent pas dépasser 3.5 Mo au total."
+    "fileInput": ""
   },
   "defaultElementLabel": {
     "addressComplete": "Adresse"

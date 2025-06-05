@@ -47,7 +47,7 @@
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
     "file-size-too-large": "Sélectionner un fichier plus petit.",
-    "file-size-too-large-all-files": "Les fichiers dépassent le maximum de 3.5 Mo. Téléversez des fichiers plus petits.",
+    "file-size-too-large-all-files": "Les fichiers dépassent le maximum de {{maxSizeInMb}} Mo. Téléversez des fichiers plus petits.",
     "file-submission": "Il y a eu un problème avec le fichier soumis. Essayez de téléverser un autre format de fichier, tel que PDF.",
     "file-type-invalid": "Sélectionner un autre type de fichier.",
     "too-many-characters": "Raccourcir la réponse.",
@@ -56,6 +56,8 @@
     "notSameAsUserEmail": "Il ne peut s'agir de votre propre adresse courriel. Entrez le courriel de la personne responsable de votre équipe. S'il s'agit de vous, ajoutez un·e collègue.",
     "min-length-4-characters": "Doit comporter au moins 4 caractères.",
     "MB": "Mo",
+    "KB": "Ko",
+    "bytes": "octets",
     "error-list": {
       "default": "Saisissez une réponse pour : {{question}}",
       "select": "Sélectionnez une option pour : {{question}}",
