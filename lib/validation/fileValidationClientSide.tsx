@@ -47,11 +47,12 @@ export function isIndividualFileSizeValid(sizeInBytes: number): boolean {
 }
 
 /**
- * There is a 8.5MB bodySizeLimit that applies to the entire POST payload, including
+ * There is a bodySizeLimit that applies to the entire POST payload, including
  * all uploaded files, configured in next.config.mjs
  *
- * Since uploaded files are serialized to base64, there is a ~35% overhead in file size,
- * making the limit for all files approximately 6MB.
+ * We also have a const for BODY_SIZE_LIMIT_WITH_FILES for payloads with files
+ *
+ * Since uploaded files are serialized to base64, there is a ~35% overhead in file size.
  *
  * @param values
  * @param item

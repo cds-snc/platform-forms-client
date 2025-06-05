@@ -1,4 +1,4 @@
-import { BODY_SIZE_LIMIT } from "../../constants";
+import { BODY_SIZE_LIMIT } from "@root/constants";
 
 export const validateTemplateSize = (
   formConfig: string,

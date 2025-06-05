@@ -37,7 +37,6 @@ interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
   matchedIds: string[];
-  totalFileSize: number;
   filteredMatchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
@@ -86,7 +85,6 @@ export const GCFormsProvider = ({
   const values = React.useRef({});
   const history = React.useRef<string[]>([LockedSections.START]);
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
-  const [totalFileSize, setTotalFileSize] = React.useState<number>(0);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
@@ -97,7 +95,7 @@ export const GCFormsProvider = ({
     (history.current || []) as string[],
     groups
   );
-  const shownElements = filterShownElements(formRecord.form.elements, matchedIds as string[]);
+  const shownElements = filterShownElements(formRecord, values.current);
   const filteredResponses = filterValuesByShownElements(inputHistoryValues, shownElements);
   const filteredMatchedIds = matchedIds.filter((id) => {
     const parentId = id.split(".")[0];
@@ -156,28 +154,10 @@ export const GCFormsProvider = ({
     formValues: Record<string, string[] | string>;
   }): void => {
     values.current = formValues;
-    const valueIds = mapIdsToValues(formRecord, formValues);
+    const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
     if (!idArraysMatch(matchedIds, valueIds)) {
       setMatchedIds(valueIds);
     }
-
-    // Check values for files and calc current total size
-    const fileInputs = Object.values(formValues).filter(
-      (value) => typeof value === "object" && "size" in value
-    );
-
-    // Calculate the total file size
-    const totalFileSize = fileInputs.reduce((total, file) => {
-      if (typeof file === "object" && "size" in file && file.size !== null) {
-        if (typeof file.size !== "number") {
-          return total;
-        }
-        return total + (file.size || 0);
-      }
-      return total;
-    }, 0);
-
-    setTotalFileSize(totalFileSize);
   };
 
   // Helper to not expose the setter
@@ -264,7 +244,6 @@ export const GCFormsProvider = ({
         updateValues,
         getValues,
         matchedIds,
-        totalFileSize,
         filteredMatchedIds,
         groups,
         currentGroup,
@@ -306,7 +285,6 @@ export const useGCFormsContext = () => {
       submissionDate: undefined,
       setSubmissionDate: () => void 0,
       matchedIds: [""],
-      totalFileSize: 0,
       filteredMatchedIds: [""],
       groups: {},
       currentGroup: "",
