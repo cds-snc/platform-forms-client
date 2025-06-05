@@ -16,6 +16,7 @@ export const FilterButton = ({
   return (
     <RoundedButton
       theme={active ? "primary" : "secondary"}
+      className=""
       onClick={() => {
         router.push(url);
       }}
