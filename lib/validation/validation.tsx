@@ -20,6 +20,8 @@ import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClien
 import { DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
 import { isValidEmail } from "@lib/validation/isValidEmail";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
+import { bytesToMb } from "@lib/utils/fileSize";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -146,7 +148,9 @@ const isFieldResponseValid = (
         return t("input-validation.required");
 
       if (fileInputResponse.size && !isAllFilesSizeValid(values)) {
-        return t("input-validation.file-size-too-large-all-files");
+        return t("input-validation.file-size-too-large-all-files", {
+          maxSizeInMb: bytesToMb(BODY_SIZE_LIMIT_WITH_FILES),
+        });
       }
 
       if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
