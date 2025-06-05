@@ -1,6 +1,6 @@
 import { fileTypeFromBuffer } from "file-type";
 import { validateFileToUpload } from "@lib/validation/fileValidationServerSide";
-import { BODY_SIZE_LIMIT_WITH_FILES } from "../../../constants";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 
 jest.mock("file-type");
 const mockFileTypeFromBuffer = jest.mocked(fileTypeFromBuffer, { shallow: true });

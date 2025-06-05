@@ -8,7 +8,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
 import type { AppRouteHandlerFnContext } from "next-auth/lib/types";
 import { JWT } from "next-auth/jwt";
-import { BODY_SIZE_LIMIT, BODY_SIZE_LIMIT_WITH_FILES } from "./constants";
+import { BODY_SIZE_LIMIT, BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 
 const verboseDebug = false;
 

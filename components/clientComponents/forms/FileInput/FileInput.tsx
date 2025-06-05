@@ -9,6 +9,8 @@ import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidat
 import { CancelIcon } from "@serverComponents/icons";
 import { themes } from "@clientComponents/globals/Buttons/themes";
 import { Button } from "@clientComponents/globals/Buttons/Button";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
+import { bytesToMb } from "@lib/utils/fileSize";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -109,7 +111,11 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     <>
       {meta.error && <ErrorMessage id={`${name}_error`}>{meta.error}</ErrorMessage>}
 
-      <div className={classes} data-testid="file">
+      <div
+        className={classes}
+        data-testid="file"
+        data-limit={bytesToMb(BODY_SIZE_LIMIT_WITH_FILES)}
+      >
         <div
           key={name}
           id={name}

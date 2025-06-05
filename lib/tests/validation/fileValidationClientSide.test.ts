@@ -2,7 +2,7 @@ import {
   isFileExtensionValid,
   isIndividualFileSizeValid,
 } from "@lib/validation/fileValidationClientSide";
-import { BODY_SIZE_LIMIT_WITH_FILES } from "../../../constants";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 
 describe("File extension validator", () => {
   it.each([

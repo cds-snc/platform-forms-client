@@ -4,6 +4,9 @@ FROM $BASE_IMAGE as base
 FROM node:22-alpine as final
 LABEL maintainer="-"
 
+# 10 MB
+ENV NEXT_PUBLIC_BODY_SIZE_LIMIT_WITH_FILES=10485760 
+
 # Lambda web adapter: https://github.com/awslabs/aws-lambda-web-adapter
 # The public.ecr.aws/awsguru/aws-lambda-adapter:0.9.0 image reference in the docs has
 # been pushed to the public CDS ECR to avoid rate limiting when pulling the image.

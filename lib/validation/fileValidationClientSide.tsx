@@ -1,6 +1,6 @@
 import { FileInputResponse, Responses } from "@lib/types";
 
-import { BODY_SIZE_LIMIT_WITH_FILES } from "../../constants";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 
 export const ALLOWED_FILE_TYPES = [
   { mime: "application/pdf", extensions: ["pdf"] },

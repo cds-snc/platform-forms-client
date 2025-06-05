@@ -17,6 +17,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
+      "@root/*": ["*"],
       "@lib/*": ["lib/*"],
       "@api/*": ["app/api/*"],
       "@formBuilder/*": ["app/(gcforms)/[locale]/(form administration)/form-builder/*"],

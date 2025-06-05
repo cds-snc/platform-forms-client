@@ -20,7 +20,7 @@ import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClien
 import { DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
 import { isValidEmail } from "@lib/validation/isValidEmail";
-import { BODY_SIZE_LIMIT_WITH_FILES } from "../../constants";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 import { bytesToMb } from "@lib/utils/fileSize";
 
 /**
