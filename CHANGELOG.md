@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.43.1](https://github.com/cds-snc/platform-forms-client/compare/v3.43.0...v3.43.1) (2025-06-06)
+
+
+### Bug Fixes
+
+* Cancelling a file upload shows a dev tools a11y warning ([#5651](https://github.com/cds-snc/platform-forms-client/issues/5651)) ([90463c4](https://github.com/cds-snc/platform-forms-client/commit/90463c433b190ae5856edffcc0decbb0412fea9f))
+* FormattedDate component: set upper limit for Year ([#5656](https://github.com/cds-snc/platform-forms-client/issues/5656)) ([79623ac](https://github.com/cds-snc/platform-forms-client/commit/79623acffbd601313e8746a5fa8d4478e64f7c3b))
+* Recursively check conditional rules to determine visibility/validation ([#5559](https://github.com/cds-snc/platform-forms-client/issues/5559)) ([af54bb4](https://github.com/cds-snc/platform-forms-client/commit/af54bb44b7b5a48c1dd4bc20c8105ddcbb99aae8))
+* testing possible fix for Rainbow cleanup Github action failing while still succeeding ([#5648](https://github.com/cds-snc/platform-forms-client/issues/5648)) ([f662205](https://github.com/cds-snc/platform-forms-client/commit/f66220500ca0c5364747070444d52c8607306417))
+
+
+### Miscellaneous Chores
+
+* Add flag to Submission Lambda call if there are attached files ([#5659](https://github.com/cds-snc/platform-forms-client/issues/5659)) ([4e49b54](https://github.com/cds-snc/platform-forms-client/commit/4e49b5445ec0ec0d1c33e0308ae96dc0224e716e))
+* bump file type package ([#5652](https://github.com/cds-snc/platform-forms-client/issues/5652)) ([3ede726](https://github.com/cds-snc/platform-forms-client/commit/3ede7266e8f35c9d9d323396ebac9300f8a75c93))
+* differentiate between timeouts and other type of errors when no Axios response is available in our GC Notify connector ([#5663](https://github.com/cds-snc/platform-forms-client/issues/5663)) ([7cfd6cb](https://github.com/cds-snc/platform-forms-client/commit/7cfd6cbd9e08dbf1d7f9f29e5a94a13e23584b09))
+* Fix recursive visibility tests linting errors ([#5657](https://github.com/cds-snc/platform-forms-client/issues/5657)) ([fbf1068](https://github.com/cds-snc/platform-forms-client/commit/fbf106855c09b4fde71fc2594b8f00b870582d1b))
+* update file size limits ([#5647](https://github.com/cds-snc/platform-forms-client/issues/5647)) ([f660e50](https://github.com/cds-snc/platform-forms-client/commit/f660e50e5e0f3502aeac2f53647e9b255aef7405))
+* Update to Next 15.3.3 ([#5658](https://github.com/cds-snc/platform-forms-client/issues/5658)) ([d54b225](https://github.com/cds-snc/platform-forms-client/commit/d54b22552ea9e3cc14392dc1759b84122f3fce71))
+
 ## [3.43.0](https://github.com/cds-snc/platform-forms-client/compare/v3.42.1...v3.43.0) (2025-06-03)
 
 
