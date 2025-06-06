@@ -27,7 +27,7 @@ CDS can suspend a service at any time for anything deemed as inappropriate use. 
 
 ### GC Forms infrastructure providers are responsible for:
 
-- Delivering emails with end-user data to the provided government email addresses.
+- Delivering emails with end-user data to the provided government email addresses, if forms were published forms prior to June 11, 2025.
 - Providing AWS service cloud infrastructure.
 - Enforcing the [AWS terms of service](https://aws.amazon.com/service-terms/).
 
