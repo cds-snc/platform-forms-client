@@ -29,26 +29,24 @@ export const parseRequestData = async (
       // in the case of an array we need to determine if this is a file array or a string array
       // which determines if the keypair is a file or a field
       else if (Array.isArray(keyPairValue)) {
-        // copy array to avoid mutating raw request data
-        const arrayValue = [...keyPairValue];
         // if its an empty array or the first value is a string type we just assume that it's a field
-        if (arrayValue.length === 0 || typeof arrayValue[0] === "string") {
+        if (keyPairValue.length === 0 || typeof keyPairValue[0] === "string") {
           return {
             ...previousValueResolved,
             fields: {
               ...previousValueResolved.fields,
-              [current]: arrayValue as string[],
+              [current]: keyPairValue as string[],
             },
           };
         }
         // otherwise we assume its a file
-        else if (typeof arrayValue[0] === "object") {
+        else if (typeof keyPairValue[0] === "object") {
           return {
             ...previousValueResolved,
             files: {
               ...previousValueResolved.files,
               [current]: await Promise.all(
-                arrayValue.map(async (fileObj) => {
+                keyPairValue.map(async (fileObj) => {
                   return processFileInputResponse(fileObj as FileInputResponse);
                 })
               ),

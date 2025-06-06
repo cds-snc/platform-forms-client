@@ -104,3 +104,10 @@ runs:
           --priority 1 \
           --actions Type=forward,TargetGroupArn=$target_group_arn \
           --tags Key=Name,Value=rainbow-${{ inputs.deployment-identifier }} > /dev/null 2>&1
+
+        aws elbv2 create-rule \
+          --listener-arn ${{ inputs.load-balancer-listener-arn }} \
+          --conditions "[{\"Field\":\"host-header\",\"Values\":[\"${{ inputs.hostname }}\"]},{\"Field\":\"query-string\",\"QueryStringConfig\":{\"Values\":[{\"Key\":\"dpl\",\"Value\":\"${{ steps.latest-release-identifier.outputs.value }}\"}]}}]" \
+          --priority 2 \
+          --actions Type=forward,TargetGroupArn=$target_group_arn \
+          --tags Key=Name,Value=rainbow-${{ inputs.deployment-identifier }} > /dev/null 2>&1

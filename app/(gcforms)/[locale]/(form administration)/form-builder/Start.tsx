@@ -10,9 +10,9 @@ import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
-import { cleanRules } from "@lib/formContext";
-import { logMessage } from "@lib/logger";
 import { ga } from "@lib/client/clientHelpers";
+import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds";
+import { transformFormProperties } from "@lib/store/helpers/elements/transformFormProperties";
 
 export const Start = () => {
   const {
@@ -56,7 +56,14 @@ export const Start = () => {
           return;
         }
 
-        const data = safeJSONParse<FormProperties>(result, cleaner);
+        const data = transformFormProperties(safeJSONParse<FormProperties>(result, cleaner));
+
+        if (data && !validateUniqueQuestionIds(data.elements)) {
+          setErrors([{ message: t("startErrorDuplicateQuestionId") }]);
+          target.value = "";
+          return;
+        }
+
         if (!data) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
@@ -70,23 +77,6 @@ export const Start = () => {
           target.value = "";
           return;
         }
-
-        // Clean rules
-        data.elements.forEach((element) => {
-          if (element.properties?.conditionalRules) {
-            const elementRules = element.properties.conditionalRules;
-            const updatedRules = cleanRules(data.elements, elementRules);
-            if (updatedRules.length !== elementRules.length) {
-              logMessage.info(
-                `cleaned imported rules:${JSON.stringify(elementRules)} -> ${JSON.stringify(
-                  updatedRules
-                )}`
-              );
-              element.properties.conditionalRules = updatedRules;
-            }
-          }
-        });
-        // set the form id to the one in the template
 
         importTemplate(data);
 

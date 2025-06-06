@@ -5,6 +5,107 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.43.0](https://github.com/cds-snc/platform-forms-client/compare/v3.42.1...v3.43.0) (2025-06-03)
+
+
+### Features
+
+* Allow form builders to limit file upload extensions  ([#5609](https://github.com/cds-snc/platform-forms-client/issues/5609)) ([57f970b](https://github.com/cds-snc/platform-forms-client/commit/57f970bfca1aa7b8473158ea13d44c909096e6cf))
+* enable local IdP communication ([#5576](https://github.com/cds-snc/platform-forms-client/issues/5576)) ([d1a84c8](https://github.com/cds-snc/platform-forms-client/commit/d1a84c84fc2c133a3c0108cee11488d1076c22e1))
+
+
+### Bug Fixes
+
+* Better Response download error handling on modified Draft forms ([#5595](https://github.com/cds-snc/platform-forms-client/issues/5595)) ([9571dea](https://github.com/cds-snc/platform-forms-client/commit/9571dea4fdf26e628c74d8baf76643d483bbec16))
+* Cancel + re-select file says no file selected ([#5642](https://github.com/cds-snc/platform-forms-client/issues/5642)) ([27d12f9](https://github.com/cds-snc/platform-forms-client/commit/27d12f9815422ad3a83edf515cd281b6940ab8e5))
+* **deps:** update all patch dependencies ([#5638](https://github.com/cds-snc/platform-forms-client/issues/5638)) ([05defd6](https://github.com/cds-snc/platform-forms-client/commit/05defd6f014369134b231ef4f353b7cedfa9d97b))
+* Prevent accepting invitations for forms that have been deleted ([#5596](https://github.com/cds-snc/platform-forms-client/issues/5596)) ([2838215](https://github.com/cds-snc/platform-forms-client/commit/2838215191dad9def2f6bbb54458981c2a29c7db))
+* Remove redundant aria-labelledby prop from Combobox input ([#5646](https://github.com/cds-snc/platform-forms-client/issues/5646)) ([3c65fe4](https://github.com/cds-snc/platform-forms-client/commit/3c65fe40e5da5241b01c7ef8147363edcbbc6d0d))
+* Update link editor to allow mailto: links ([#5641](https://github.com/cds-snc/platform-forms-client/issues/5641)) ([6d0b088](https://github.com/cds-snc/platform-forms-client/commit/6d0b088100c1da2e20114df9e6276b8363ebea04))
+
+
+### Miscellaneous Chores
+
+* add description for file options ([#5643](https://github.com/cds-snc/platform-forms-client/issues/5643)) ([d2083c9](https://github.com/cds-snc/platform-forms-client/commit/d2083c92a515aa17ed2d1ba810136f9803f73571))
+* allow file upload for admin users and forms with api key ([#5622](https://github.com/cds-snc/platform-forms-client/issues/5622)) ([7c30811](https://github.com/cds-snc/platform-forms-client/commit/7c30811f42e9c2321d9e40fc9e796746000035f1))
+* **deps:** lock file maintenance ([#5639](https://github.com/cds-snc/platform-forms-client/issues/5639)) ([b0def3c](https://github.com/cds-snc/platform-forms-client/commit/b0def3c7355e022a37f182f2c65860151d0b872a))
+* **deps:** update aws-actions/amazon-ecs-render-task-definition digest to 6bb1712 ([#5636](https://github.com/cds-snc/platform-forms-client/issues/5636)) ([ad217c9](https://github.com/cds-snc/platform-forms-client/commit/ad217c9b0eeb4d84328f25c7f7c5b014a272d2f5))
+* **deps:** update redis docker digest to dbf3e4b ([#5637](https://github.com/cds-snc/platform-forms-client/issues/5637)) ([7848d84](https://github.com/cds-snc/platform-forms-client/commit/7848d84ec7d3f5f6e049469629da217b7d02461a))
+* handle file mis-match issues for save progress  ([#5644](https://github.com/cds-snc/platform-forms-client/issues/5644)) ([55963b8](https://github.com/cds-snc/platform-forms-client/commit/55963b832167766af52fef730a0c2abbf873b9f6))
+* update lock file ([#5645](https://github.com/cds-snc/platform-forms-client/issues/5645)) ([405f1f1](https://github.com/cds-snc/platform-forms-client/commit/405f1f1436317f0cb7cac025911a386697632b46))
+
+## [3.42.1](https://github.com/cds-snc/platform-forms-client/compare/v3.42.0...v3.42.1) (2025-05-30)
+
+
+### Bug Fixes
+
+* Addding textField sometimes adds Number field ([#5631](https://github.com/cds-snc/platform-forms-client/issues/5631)) ([e0b3d67](https://github.com/cds-snc/platform-forms-client/commit/e0b3d67cb6efcea9e2de5a1ed8e9343af92d09b0))
+* debug config that works ([#5606](https://github.com/cds-snc/platform-forms-client/issues/5606)) ([16144be](https://github.com/cds-snc/platform-forms-client/commit/16144be26425e886d2bdf755a5e0e86e191020aa))
+* fix closed message strings for preview page ([#5571](https://github.com/cds-snc/platform-forms-client/issues/5571)) ([948f956](https://github.com/cds-snc/platform-forms-client/commit/948f9564a97102c82f8ac7729438a00c0686a02f))
+* Rainbow deployment add new lb rule for non actions ([#5580](https://github.com/cds-snc/platform-forms-client/issues/5580)) ([45aa785](https://github.com/cds-snc/platform-forms-client/commit/45aa785c229748e88dc71083a5c7c5b975d8fd50))
+
+
+### Miscellaneous Chores
+
+* Add branding for Office of the Commissioner of Lobbying ([#5581](https://github.com/cds-snc/platform-forms-client/issues/5581)) ([b013dd8](https://github.com/cds-snc/platform-forms-client/commit/b013dd805f8c11d41b6c47742d698da2f29128b0))
+* Add copy element button for admins ([#5570](https://github.com/cds-snc/platform-forms-client/issues/5570)) ([8b4f2c7](https://github.com/cds-snc/platform-forms-client/commit/8b4f2c73281b560e8d1522d74b80792575cb24b0))
+* **deps:** lock file maintenance ([#5584](https://github.com/cds-snc/platform-forms-client/issues/5584)) ([ef26bc6](https://github.com/cds-snc/platform-forms-client/commit/ef26bc68ed2d09bfd488fb68d5a3a4d861f7d802))
+* **deps:** update all non-major docker images ([#5582](https://github.com/cds-snc/platform-forms-client/issues/5582)) ([d0d535c](https://github.com/cds-snc/platform-forms-client/commit/d0d535cf64e3e6070f426b4b7c6957ce4f3192d0))
+* **deps:** update all non-major github action dependencies ([#5583](https://github.com/cds-snc/platform-forms-client/issues/5583)) ([a10bf08](https://github.com/cds-snc/platform-forms-client/commit/a10bf08e96e0e934e927d2e1d71345f23df79b29))
+* synced file(s) with cds-snc/site-reliability-engineering ([#5454](https://github.com/cds-snc/platform-forms-client/issues/5454)) ([9cb7187](https://github.com/cds-snc/platform-forms-client/commit/9cb71876c3f7530e84dcd3f59db8fea1cfbf84da))
+* synced local '.github/workflows/backstage-catalog-helper.yml' with remote 'tools/sre_file_sync/backstage-catalog-helper.yml' ([9cb7187](https://github.com/cds-snc/platform-forms-client/commit/9cb71876c3f7530e84dcd3f59db8fea1cfbf84da))
+* update share tag modal ([#5498](https://github.com/cds-snc/platform-forms-client/issues/5498)) ([55ff0ca](https://github.com/cds-snc/platform-forms-client/commit/55ff0ca77f40f6eda8edbdf56a6f2b2fd381de73))
+* Updates notifications to be off for newly created forms ([#5605](https://github.com/cds-snc/platform-forms-client/issues/5605)) ([a4ca16b](https://github.com/cds-snc/platform-forms-client/commit/a4ca16b3deb69b01615bf7210894745a4be23e57))
+
+## [3.42.0](https://github.com/cds-snc/platform-forms-client/compare/v3.41.4...v3.42.0) (2025-05-21)
+
+
+### Features
+
+* Custom IDs and Tags ([#5448](https://github.com/cds-snc/platform-forms-client/issues/5448)) ([0be7ba7](https://github.com/cds-snc/platform-forms-client/commit/0be7ba71bb19b73edad78697e9f0664d985b2d9e))
+
+
+### Bug Fixes
+
+* **deps:** update all patch dependencies ([#5566](https://github.com/cds-snc/platform-forms-client/issues/5566)) ([594de1e](https://github.com/cds-snc/platform-forms-client/commit/594de1ea7e056f07131a389b8b1036b3b9214595))
+* RichText renderer inserting HTML entity for space char ([#5548](https://github.com/cds-snc/platform-forms-client/issues/5548)) ([f22c807](https://github.com/cds-snc/platform-forms-client/commit/f22c807cf38f6407919ed5e40d062c9dad82753a))
+
+
+### Miscellaneous Chores
+
+* add element loader for admins ([#5547](https://github.com/cds-snc/platform-forms-client/issues/5547)) ([faee972](https://github.com/cds-snc/platform-forms-client/commit/faee9722269f0782a0ecab580defabe033d52c15))
+* adds invcanada as a valid gov email ([#5563](https://github.com/cds-snc/platform-forms-client/issues/5563)) ([bc79b62](https://github.com/cds-snc/platform-forms-client/commit/bc79b6290aaed96a785af2d188c9a6139d5a6826))
+* **deps:** lock file maintenance ([#5567](https://github.com/cds-snc/platform-forms-client/issues/5567)) ([ec13e56](https://github.com/cds-snc/platform-forms-client/commit/ec13e5647790318a2ea05582a668fc6835a50318))
+* **deps:** update all non-major docker images ([#5565](https://github.com/cds-snc/platform-forms-client/issues/5565)) ([b258a96](https://github.com/cds-snc/platform-forms-client/commit/b258a96c4e0f23076d037d1ed8435866e22d770f))
+* **deps:** update all non-major github action dependencies ([#5564](https://github.com/cds-snc/platform-forms-client/issues/5564)) ([d309e2e](https://github.com/cds-snc/platform-forms-client/commit/d309e2e453cf89d0933c26370cfebe39a58f937f))
+* fix styles for remove option  ([#5569](https://github.com/cds-snc/platform-forms-client/issues/5569)) ([4d04376](https://github.com/cds-snc/platform-forms-client/commit/4d043764710ab42c5b575264c2baaa200c6edd77))
+
+## [3.41.4](https://github.com/cds-snc/platform-forms-client/compare/v3.41.3...v3.41.4) (2025-05-15)
+
+
+### Bug Fixes
+
+* fixes notifications sending when delivery is email ([#5560](https://github.com/cds-snc/platform-forms-client/issues/5560)) ([b81b84c](https://github.com/cds-snc/platform-forms-client/commit/b81b84c2ec0c213d0f1efafdcd3fe0f8f5e1395f))
+
+## [3.41.3](https://github.com/cds-snc/platform-forms-client/compare/v3.41.2...v3.41.3) (2025-05-15)
+
+
+### Bug Fixes
+
+* fixes issue with permissions and notifications toggling ([#5558](https://github.com/cds-snc/platform-forms-client/issues/5558)) ([df51b36](https://github.com/cds-snc/platform-forms-client/commit/df51b360340302e3f51846f028c6d0bbdceb5858))
+
+
+### Miscellaneous Chores
+
+* Update terms of use to include branding misuse ([#5555](https://github.com/cds-snc/platform-forms-client/issues/5555)) ([ad762f4](https://github.com/cds-snc/platform-forms-client/commit/ad762f435652c04330aff0bc6a20adf760cf8367))
+
+## [3.41.2](https://github.com/cds-snc/platform-forms-client/compare/v3.41.1...v3.41.2) (2025-05-15)
+
+
+### Code Refactoring
+
+* Split out form owner settings ([#5554](https://github.com/cds-snc/platform-forms-client/issues/5554)) ([4060303](https://github.com/cds-snc/platform-forms-client/commit/4060303b8c8560e6cdee32298b0b1f8e73dbdc9c))
+
 ## [3.41.1](https://github.com/cds-snc/platform-forms-client/compare/v3.41.0...v3.41.1) (2025-05-15)
 
 
