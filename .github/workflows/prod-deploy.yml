@@ -45,7 +45,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@0a67558866f6caa88dc86a206959e1c086db6f71
+        uses: aws-actions/amazon-ecr-login@95069fcfe2b0566b1f89c0ea2fec6e6166faa021
 
       - name: Rainbow deployment
         uses: ./.github/workflows/rainbow-deployment
@@ -70,7 +70,7 @@ jobs:
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@6bb171240ff2b056ea6c599c9d2370c043f200be
+        uses: aws-actions/amazon-ecs-render-task-definition@fa48d2a940f14ee760f7d4a3d1a45a923bef4ec0
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
