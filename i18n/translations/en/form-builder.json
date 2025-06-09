@@ -24,10 +24,6 @@
   },
   "addElement": "Add form element",
   "addElementDialog": {
-    "beta": {
-      "tag": "Beta:",
-      "text": "Trial feature "
-    },
     "example": "example",
     "filters": {
       "all": "All",
@@ -1412,5 +1408,12 @@
     "formDescription": "Form description"
   },
   "en": "English",
-  "fr": "Français"
+  "fr": "Français",
+  "beta": {
+    "tag": "Beta:",
+    "text": "Trial feature "
+  },
+  "fileUploadApiWarning": {
+    "text": "Delivery method is not set to API. This element will not be shown."
+  }
 }

@@ -9,6 +9,7 @@ import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 import { bytesToMb } from "@lib/utils/fileSize";
+import { BetaBadge } from "@clientComponents/globals/BetaBadge";
 
 export const FileInput = ({ title }: { title: string }) => {
   const { hasApiKeyId } = useFormBuilderConfig();
@@ -21,7 +22,7 @@ export const FileInput = ({ title }: { title: string }) => {
   const link = `/${translationLanguagePriority}/form-builder/${id}/settings`;
 
   return hasApiKeyId ? (
-    <WithApiDescription title={title} link={link} />
+    <WithApiDescription title={title} />
   ) : (
     <DefaultDescription title={title} link={link} />
   );
@@ -36,17 +37,34 @@ const Title = ({ title }: { title: string }) => {
   );
 };
 
-const BetaBadge = () => {
+export const FileInputTrialDescription = () => {
+  const { translationLanguagePriority, id } = useTemplateStore((s) => ({
+    id: s.id,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const link = `/${translationLanguagePriority}/form-builder/${id}/settings`;
+
   const { t } = useTranslation("form-builder");
   return (
-    <div className="ml-2 inline-block rounded border-1 border-indigo-700 bg-indigo-500 px-2 py-1 text-sm text-white">
-      <span className="font-bold"> {t("addElementDialog.beta.tag")}</span>
-      <span className="font-normal"> {t("addElementDialog.beta.text")}</span>
+    <div>
+      <p className="mb-4">{t("addElementDialog.fileInputWithApi.trialFeature.text1")}</p>
+      <ul className="mb-8">
+        <li>
+          <Link href={link}>{t("addElementDialog.fileInputWithApi.trialFeature.bullet1")}</Link>
+        </li>
+        <li>
+          {t("addElementDialog.fileInputWithApi.trialFeature.bullet2", {
+            BODY_SIZE_LIMIT_WITH_FILES: bytesToMb(BODY_SIZE_LIMIT_WITH_FILES),
+          })}
+        </li>
+        <li>{t("addElementDialog.fileInputWithApi.trialFeature.bullet3")}</li>
+      </ul>
     </div>
   );
 };
 
-const WithApiDescription = ({ title, link }: { title: string; link: string }) => {
+const WithApiDescription = ({ title }: { title: string }) => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
@@ -59,23 +77,11 @@ const WithApiDescription = ({ title, link }: { title: string; link: string }) =>
         <FileInputComponent label="title" id="name" name={"name"} className="mb-0" />
       </ExampleWrapper>
 
+      <h4 className="mb-2 font-medium">
+        {t("addElementDialog.fileInputWithApi.trialFeature.title")}
+      </h4>
+      <FileInputTrialDescription />
       <div className="mb-4 mt-8">
-        <h4 className="mb-2 font-medium">
-          {t("addElementDialog.fileInputWithApi.trialFeature.title")}
-        </h4>
-        <p className="mb-4">{t("addElementDialog.fileInputWithApi.trialFeature.text1")}</p>
-        <ul className="mb-8">
-          <li>
-            <Link href={link}>{t("addElementDialog.fileInputWithApi.trialFeature.bullet1")}</Link>
-          </li>
-          <li>
-            {t("addElementDialog.fileInputWithApi.trialFeature.bullet2", {
-              BODY_SIZE_LIMIT_WITH_FILES: bytesToMb(BODY_SIZE_LIMIT_WITH_FILES),
-            })}
-          </li>
-          <li>{t("addElementDialog.fileInputWithApi.trialFeature.bullet3")}</li>
-        </ul>
-
         <h4 className="mb-2 font-medium">
           {t("addElementDialog.fileInputWithApi.recommendations.title")}
         </h4>

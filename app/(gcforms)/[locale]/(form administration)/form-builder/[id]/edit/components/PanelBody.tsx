@@ -16,6 +16,9 @@ import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { Button } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { BetaBadge } from "@clientComponents/globals/BetaBadge";
+import { FileInputTrialDescription } from "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FileInput";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 export const PanelBody = ({
   item,
@@ -36,6 +39,9 @@ export const PanelBody = ({
 
   const isAddressComplete = item.type === "addressComplete";
   const isFormattedDate = item.type === "formattedDate";
+  const isFileUpload = item.type === "fileInput";
+
+  const { hasApiKeyId } = useFormBuilderConfig();
 
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
@@ -101,6 +107,7 @@ export const PanelBody = ({
                   </div>
                 )}
               </div>
+
               {maxLength && (
                 <div className="disabled pointer-events-none">
                   {t("maxCharacterLength")}
@@ -146,6 +153,21 @@ export const PanelBody = ({
               )}
             </div>
           </div>
+
+          {isFileUpload && (
+            <div className="mt-4 border-t border-dotted border-slate-800 pt-4">
+              <BetaBadge className="inline-block" />
+              {!hasApiKeyId && (
+                <div className="ml-2 inline-block text-sm font-bold text-red-700">
+                  {t("fileUploadApiWarning.text")}
+                </div>
+              )}
+              <div className="mt-4 text-sm">
+                <FileInputTrialDescription />
+              </div>
+            </div>
+          )}
+
           <div>
             {isAddressComplete && (
               <div className="flex text-sm">
