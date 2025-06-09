@@ -894,6 +894,10 @@
         "text4": "Une clé API par formulaire",
         "text5": "Ressources de développement de logiciel requises pour l'intégration API."
       }
+    },
+    "emailDeliveryDeprecated": {
+      "title": "La livraison de données par courriel n’est plus disponible.",
+      "description": "Vous ne pourrez pas sélectionner cette option pour les formulaires à venir."
     }
   },
   "loggedOutTab": {
