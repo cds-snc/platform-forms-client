@@ -160,24 +160,30 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             aria-hidden={true}
           />
         </div>
-        <span id={`${name}_file_selected`} className="gc-file-input-file-selected">
+        <span id={`${name}_file_selected`} className="block">
           {fileName ? (
-            <>
+            <div className="my-4 max-w-fit border-2 border-gray-500 p-2">
               <span className="sr-only">{`${t(
                 "file-upload-sr-only-file-selected"
               )}: ${fileName}`}</span>
               <span aria-hidden={true}>
                 {fileName} ({fileSize.size} {t(`input-validation.${fileSize.unit}`)}){" "}
               </span>
-              <Button theme="link" className="ml-3 [&_svg]:focus:fill-white" onClick={resetInput}>
+              <Button
+                theme="link"
+                className="ml-3 text-red-destructive focus:text-white [&_svg]:fill-red [&_svg]:focus:fill-white"
+                onClick={resetInput}
+              >
                 <div className="group ml-1 p-2 pr-3">
-                  <CancelIcon className="inline-block" />
-                  <span className="ml-1 inline-block group-hover:underline">{t("cancel")}</span>
+                  <span className="mr-1 inline-block  underline focus:text-white group-hover:no-underline">
+                    {t("remove", { lng: lang })}
+                  </span>
+                  <CancelIcon className="inline-block " />
                 </div>
               </Button>
-            </>
+            </div>
           ) : (
-            t("file-upload-no-file-selected")
+            <div className="my-4 max-w-fit p-2">{t("file-upload-no-file-selected")}</div>
           )}
         </span>
       </div>

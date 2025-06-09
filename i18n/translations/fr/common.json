@@ -318,5 +318,6 @@
   "conditional": {
     "activated": "L'élément {{title}} a été ajouté au formulaire"
   },
-  "version": "Version "
+  "version": "Version ",
+  "remove": "Remove [FR]"
 }
