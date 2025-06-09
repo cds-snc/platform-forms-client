@@ -1,7 +1,7 @@
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
-export const BetaBadge = ({ className }: { className: string }) => {
+export const BetaBadge = ({ className }: { className?: string }) => {
   const { t } = useTranslation("form-builder");
 
   const classes = cn(
