@@ -101,6 +101,10 @@ export const useAllowPublish = () => {
     (element) => element.type === FormElementTypes.fileInput
   );
 
+  const firstFileInputElement = form?.elements?.find(
+    (element) => element.type === FormElementTypes.fileInput
+  );
+
   // Note the key names here can be anthing but
   // the values must be booleans
   const data = useMemo(
@@ -131,5 +135,13 @@ export const useAllowPublish = () => {
     return hasData(fields);
   }, [data, hasData]);
 
-  return { data, hasData, hasFileInputElement, hasApiKeyId, isPublishable, userCanPublish };
+  return {
+    data,
+    hasData,
+    hasFileInputElement,
+    hasApiKeyId,
+    firstFileInputElement,
+    isPublishable,
+    userCanPublish,
+  };
 };
