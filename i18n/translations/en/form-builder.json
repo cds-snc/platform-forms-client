@@ -5,6 +5,23 @@
       "copied": "Element copied"
     }
   },
+  "fileTypes": {
+    "more": {
+      "label": "Allowable file types",
+      "documents": {
+        "label": "Documents",
+        "description": "pdf, txt, doc, docx"
+      },
+      "images": {
+        "label": "Images",
+        "description": "jpg, jpeg, png, svg"
+      },
+      "spreadsheets": {
+        "label": "Spreadsheets",
+        "description": "xls, xlsx, csv, numbers"
+      }
+    }
+  },
   "addElement": "Add form element",
   "addElementDialog": {
     "example": "example",
@@ -362,7 +379,7 @@
     "number": "Enter a number",
     "phone": "For example: 111-222-3333",
     "combobox": "Start typing to narrow down the list.",
-    "fileInput": "Files must not exceed 3.5 MB in total."
+    "fileInput": ""
   },
   "defaultElementLabel": {
     "addressComplete": "Address"

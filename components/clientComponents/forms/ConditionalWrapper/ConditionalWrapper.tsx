@@ -2,7 +2,7 @@
 import React from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { ConditionalRule, FormElement } from "@lib/types";
-import { inGroup, validConditionalRules, checkRelatedRulesAsBoolean } from "@lib/formContext";
+import { inGroup, checkVisibilityRecursive } from "@lib/formContext";
 import { Announce } from "./Announce";
 
 export const ConditionalWrapper = ({
@@ -16,7 +16,7 @@ export const ConditionalWrapper = ({
   rules: ConditionalRule[] | null;
   lang: string;
 }) => {
-  const { matchedIds, currentGroup, groups, formRecord } = useGCFormsContext();
+  const { getValues, currentGroup, groups, formRecord } = useGCFormsContext();
 
   // Check if the element is a child of a dynamic element
   if (element.subId) {
@@ -36,20 +36,17 @@ export const ConditionalWrapper = ({
   // If there's no rule or no choiceId, just return the children
   if (!rules || rules.length < 1) return children;
 
-  const hasMatchedRule = validConditionalRules(element, matchedIds);
+  const values = getValues() || {};
 
-  if (hasMatchedRule) {
-    // Ensure rules for elements tied to the element are also matched.
-    if (checkRelatedRulesAsBoolean(formRecord.form.elements, rules, matchedIds)) {
-      // Announce conditional shown. The check above ensures the element is on the current page
-      return (
-        <Announce element={element} lang={lang}>
-          {children}
-        </Announce>
-      );
-    }
+  const isVisible = checkVisibilityRecursive(formRecord, element, values);
+
+  if (!isVisible) {
+    return null;
   }
 
-  // Otherwise, return null
-  return null;
+  return (
+    <Announce element={element} lang={lang}>
+      {children}
+    </Announce>
+  );
 };

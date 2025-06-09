@@ -2,6 +2,7 @@ import {
   isFileExtensionValid,
   isIndividualFileSizeValid,
 } from "@lib/validation/fileValidationClientSide";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 
 describe("File extension validator", () => {
   it.each([
@@ -29,10 +30,10 @@ describe("File extension validator", () => {
 
 describe("File size validator", () => {
   it.each([
-    [1000, true],
-    [5000000, true],
-    [8389121, false],
-    [10000000, false],
+    [1000, 1000 <= Number(BODY_SIZE_LIMIT_WITH_FILES)],
+    [5000000, 5000000 <= BODY_SIZE_LIMIT_WITH_FILES],
+    [8389121, 8389121 <= BODY_SIZE_LIMIT_WITH_FILES],
+    [11534336, 11534336 <= BODY_SIZE_LIMIT_WITH_FILES],
   ])(`Should return true if file size is valid (testing "%s")`, async (fileSize, isValid) => {
     expect(isIndividualFileSizeValid(fileSize)).toBe(isValid);
   });

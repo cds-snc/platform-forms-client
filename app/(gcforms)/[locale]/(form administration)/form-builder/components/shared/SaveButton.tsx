@@ -92,6 +92,7 @@ export const SaveButton = () => {
     getDeliveryOption,
     securityAttribute,
     setId,
+    notificationsInterval,
   } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
@@ -101,6 +102,7 @@ export const SaveButton = () => {
     getDeliveryOption: s.getDeliveryOption,
     securityAttribute: s.securityAttribute,
     setId: s.setId,
+    notificationsInterval: s.notificationsInterval,
   }));
 
   const { templateIsDirty, createOrUpdateTemplate, resetState, updatedAt, setUpdatedAt } =
@@ -137,6 +139,7 @@ export const SaveButton = () => {
         name: getName(),
         deliveryOption: getDeliveryOption(),
         securityAttribute: securityAttribute,
+        notificationsInterval: notificationsInterval,
       });
 
       if (operationResult.formRecord === null) {
