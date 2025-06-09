@@ -18,7 +18,7 @@ import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
-import { FormElement } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
 import { Group } from "@lib/formContext";
@@ -124,7 +124,7 @@ const Element = ({
 
   const { t } = useTranslation("form-builder");
 
-  if (element.type === "dynamicRow") {
+  if (element.type === FormElementTypes.dynamicRow) {
     subElements = element.properties.subElements?.map((subElement) => {
       return (
         <Element
@@ -141,16 +141,21 @@ const Element = ({
     <>
       {questionNumber && (
         <SectionTitle>
-          {element.type === "richText" && <>{t("pageText")}</>}
-          {element.type !== "richText" && <>{"Question " + questionNumber}</>}
+          {element.type === FormElementTypes.richText && <>{t("pageText")}</>}
+          {element.type !== FormElementTypes.richText && <>{"Question " + questionNumber}</>}
         </SectionTitle>
       )}
 
-      {element.type === "richText" && (
+      {element.type === FormElementTypes.richText && (
         <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
       )}
 
-      {["radio", "checkbox", "dropdown", "fileInput", "combobox"].includes(element.type) && (
+      {[
+        FormElementTypes.radio,
+        FormElementTypes.checkbox,
+        FormElementTypes.dropdown,
+        FormElementTypes.combobox,
+      ].includes(element.type) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
           {(element.properties.descriptionEn || element.properties.descriptionFr) && (
@@ -160,7 +165,13 @@ const Element = ({
         </>
       )}
 
-      {["textField", "textArea", "formattedDate", "addressComplete"].includes(element.type) && (
+      {[
+        FormElementTypes.textField,
+        FormElementTypes.textArea,
+        FormElementTypes.formattedDate,
+        FormElementTypes.addressComplete,
+        FormElementTypes.fileInput,
+      ].includes(element.type) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
           {(element.properties.descriptionEn || element.properties.descriptionFr) && (
@@ -178,7 +189,7 @@ const Element = ({
           {subElements}
         </>
       )}
-      {element.type === "dynamicRow" && (
+      {element.type === FormElementTypes.dynamicRow && (
         <>
           <TranslateCustomizeSet
             element={element}
