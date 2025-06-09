@@ -203,6 +203,12 @@
       "label": "Téléverser un fichier",
       "title": "Téléverseur de fichier"
     },
+    "fileInputDefault": {
+      "text1": "A way to add supporting documentation. You must",
+      "text2": "set  your response delivery to API",
+      "text3": "to use this form element."
+    },
+    "fileInputWithApi": {},
     "firstMiddleLastName": {
       "whatIsYourName": "Quel est votre nom?",
       "description": "Les champs séparés pour le prénom, le deuxième prénom et le nom de famille. Ce format est conventionnel et pourrait être nécessaire pour le traitement de formulaires.",

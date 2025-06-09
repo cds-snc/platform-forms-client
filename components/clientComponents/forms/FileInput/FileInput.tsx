@@ -52,7 +52,8 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const classes = cn(
     "gc-file-input",
     disabled ? "is-disabled" : "",
-    allowMulti ? "file-up--compact" : ""
+    allowMulti ? "file-up--compact" : "",
+    props.className ? props.className : ""
   );
 
   const _onChange = (e: FileEventTarget) => {
