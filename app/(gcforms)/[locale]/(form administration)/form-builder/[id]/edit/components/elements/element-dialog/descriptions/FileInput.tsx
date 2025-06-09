@@ -27,13 +27,31 @@ export const FileInput = ({ title }: { title: string }) => {
   );
 };
 
-export const WithApiDescription = ({ title, link }: { title: string; link: string }) => {
+const Title = ({ title }: { title: string }) => {
+  return (
+    <div className="mb-4 flex items-center space-x-4">
+      <h3 className="mb-0">{title}</h3>
+      <BetaBadge />
+    </div>
+  );
+};
+
+const BetaBadge = () => {
+  const { t } = useTranslation("form-builder");
+  return (
+    <div className="ml-2 inline-block rounded border-1 border-indigo-700 bg-indigo-500 px-2 py-1 text-sm text-white">
+      <span className="font-bold"> {t("addElementDialog.beta.tag")}</span>
+      <span className="font-normal"> {t("addElementDialog.beta.text")}</span>
+    </div>
+  );
+};
+
+const WithApiDescription = ({ title, link }: { title: string; link: string }) => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
-      <h3 className="mb-0">{title}</h3>
+      <Title title={title} />
       <p>{t("addElementDialog.fileInputWithApi.description")}</p>
-
       <ExampleWrapper className="mt-4">
         <Label htmlFor="name" className="gc-label">
           {t("addElementDialog.fileInput.label")}
@@ -42,9 +60,9 @@ export const WithApiDescription = ({ title, link }: { title: string; link: strin
       </ExampleWrapper>
 
       <div className="mb-4 mt-8">
-        <h2 className="text-2xl font-normal">
+        <h4 className="mb-2 font-medium">
           {t("addElementDialog.fileInputWithApi.trialFeature.title")}
-        </h2>
+        </h4>
         <p className="mb-4">{t("addElementDialog.fileInputWithApi.trialFeature.text1")}</p>
         <ul className="mb-8">
           <li>
@@ -58,9 +76,9 @@ export const WithApiDescription = ({ title, link }: { title: string; link: strin
           <li>{t("addElementDialog.fileInputWithApi.trialFeature.bullet3")}</li>
         </ul>
 
-        <h2 className="text-2xl font-normal">
+        <h4 className="mb-2 font-medium">
           {t("addElementDialog.fileInputWithApi.recommendations.title")}
-        </h2>
+        </h4>
         <ul className="mb-4">
           <li>{t("addElementDialog.fileInputWithApi.recommendations.text1")}</li>
         </ul>
@@ -69,11 +87,11 @@ export const WithApiDescription = ({ title, link }: { title: string; link: strin
   );
 };
 
-export const DefaultDescription = ({ title, link }: { title: string; link: string }) => {
+const DefaultDescription = ({ title, link }: { title: string; link: string }) => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
-      <h3 className="mb-0">{title}</h3>
+      <Title title={title} />
       <p className="mb-8">
         {t("addElementDialog.fileInputDefault.text1")}{" "}
         <Link href={link}>{t("addElementDialog.fileInputDefault.text2")}</Link>{" "}

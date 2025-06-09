@@ -24,6 +24,10 @@
   },
   "addElement": "Add form element",
   "addElementDialog": {
+    "beta": {
+      "tag": "Beta:",
+      "text": "Trial feature "
+    },
     "example": "example",
     "filters": {
       "all": "All",
@@ -215,7 +219,7 @@
         "text1": "This feature has some limitations in the short term as we learn more. In order to use File upload, you must:",
         "bullet1": "Set your response delivery to API.",
         "bullet2": "Files uploaded to an individual form will have a maximum file size of {{BODY_SIZE_LIMIT_WITH_FILES}} MB.",
-        "bullet3": "All files will be scanned on submission. Please share the form with people you trust. "
+        "bullet3": "All files will be scanned on submission. Please share the form with people you trust."
       },
       "recommendations": {
         "title": "Recommendations",
