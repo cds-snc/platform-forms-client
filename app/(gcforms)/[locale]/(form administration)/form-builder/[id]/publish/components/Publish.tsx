@@ -40,7 +40,6 @@ export const Publish = ({ id }: { id: string }) => {
     hasFileInputElement,
     hasApiKeyId,
     isPublishable,
-    firstFileInputElement,
   } = useAllowPublish();
 
   const [error, setError] = useState(false);
@@ -289,9 +288,7 @@ export const Publish = ({ id }: { id: string }) => {
         {hasFileInputElement && (
           <li className="my-4">
             {hasHydrated ? <Icon checked={hasFileInputAndApiKey} /> : IconLoading}
-            <Link
-              href={`/${i18n.language}/form-builder/${id}/edit#item-${firstFileInputElement?.id}`}
-            >
+            <Link href={`/${i18n.language}/form-builder/${id}/settings`}>
               {t("hasFileInputAndApiDelivery")}
             </Link>
           </li>
