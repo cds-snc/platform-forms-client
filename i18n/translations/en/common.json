@@ -47,7 +47,7 @@
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
     "file-size-too-large": "Select a smaller file.",
-    "file-size-too-large-all-files": "Files exceed the 3.5 MB maximum. Upload smaller files.",
+    "file-size-too-large-all-files": "Files exceed the {{maxSizeInMb}} MB maximum. Upload smaller files.",
     "file-submission": "There was a problem with the file submitted. Try uploading a different file format, such as PDF.",
     "file-type-invalid": "Select a different file type.",
     "too-many-characters": "Shorten the response.",
@@ -56,6 +56,8 @@
     "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. Enter the email of the person in charge of your team. If that's you, add a colleague.",
     "min-length-4-characters": "Must be at least 4 characters.",
     "MB": "MB",
+    "KB": "KB",
+    "bytes": "bytes",
     "error-list": {
       "default": "Enter an answer for: {{question}}",
       "select": "Select an option for: {{question}}",
@@ -236,6 +238,11 @@
     "resumeUploadError": {
       "title": "Problem loading answers",
       "description": "Try uploading the file again or restart a new form and copy-paste your answers from the file.",
+      "errorCode": "Error code: {{code}}"
+    },
+    "problemLoadingAnswers": {
+      "title": "Problem loading answers from file",
+      "description": "Make sure you're selecting the right file. Try uploading again, or restart a new form and copy-paste your answers from your file.",
       "errorCode": "Error code: {{code}}"
     },
     "resumePage": {

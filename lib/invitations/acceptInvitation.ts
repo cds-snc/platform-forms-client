@@ -54,6 +54,20 @@ export const acceptInvitation = async (invitationId: string) => {
     throw new UserNotFoundError();
   }
 
+  // Check if the Template exists and is not deleted
+  const template = await prisma.template.findUnique({
+    where: {
+      id: invitation.templateId,
+    },
+  });
+
+  if (!template) {
+    logMessage.error(
+      `Template with ID ${invitation.templateId} not found for invitation ${invitationId}`
+    );
+    throw new UnableToAssignUserToTemplateError();
+  }
+
   // Ensures the logged in user is the user that was invited
   const ability = await getAbility();
   if (ability.user.id !== user.id) {

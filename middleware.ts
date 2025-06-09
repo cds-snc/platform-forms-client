@@ -8,7 +8,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
 import type { AppRouteHandlerFnContext } from "next-auth/lib/types";
 import { JWT } from "next-auth/jwt";
-import { bodySizeLimit } from "./constants";
+import { BODY_SIZE_LIMIT, BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 
 const verboseDebug = false;
 
@@ -91,10 +91,15 @@ export default async function middleware(req: NextRequest, ctx: AppRouteHandlerF
   if (req.headers.get("next-action") !== null) {
     const body = await req.text();
 
+    // Allow larger body size for requests with base64 encoded data (e.g. images)
+    const sizeLimit = body.includes("based64EncodedFile")
+      ? BODY_SIZE_LIMIT_WITH_FILES
+      : BODY_SIZE_LIMIT;
+
     // Check body size
-    if (body.length > bodySizeLimit) {
+    if (body.length > sizeLimit) {
       logMessage.info(
-        `Middleware: Request payload size exceeds the limit of ${bodySizeLimit} bytes. Path: ${pathname}`
+        `Middleware: Request payload size exceeds the limit of ${sizeLimit} bytes. Path: ${pathname}`
       );
       return NextResponse.json(
         { error: "Request payload size exceeds the limit." },
