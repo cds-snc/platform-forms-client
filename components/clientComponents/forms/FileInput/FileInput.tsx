@@ -35,11 +35,12 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { value } = field;
-  const [fileName, setFileName] = useState(value.name);
+
+  const [fileName, setFileName] = useState(value?.name);
   const [fileSize, setFileSize] = useState<{
     size: number;
     unit: "bytes" | "KB" | "MB";
-  }>(bytesToKbOrMbString(value.size));
+  }>(bytesToKbOrMbString(value?.size));
 
   const resetInput = () => {
     setFileName("");
