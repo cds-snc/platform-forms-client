@@ -1,14 +1,13 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { useField } from "formik";
+
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
-import { CancelIcon } from "@serverComponents/icons";
 import { themes } from "@clientComponents/globals/Buttons/themes";
-import { Button } from "@clientComponents/globals/Buttons/Button";
 import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 import { bytesToMb, bytesToKbOrMbString } from "@lib/utils/fileSize";
 
@@ -18,10 +17,13 @@ interface FileInputProps extends InputFieldProps {
   fileType?: string | string[] | undefined;
   allowMulti?: boolean;
 }
+
 export type FileEventTarget = React.ChangeEvent<HTMLInputElement> & {
   files: FileList;
   target: HTMLInputElement;
 };
+
+import { ResetButton } from "./ResetButton";
 
 // Heavily inspired by https://scottaohara.github.io/a11y_styled_form_controls/src/file-upload/
 
@@ -50,10 +52,12 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     setError(undefined); // Clear the error
     setTouched(false); // Reset the touched state
   };
+
   const classes = cn(
     "gc-file-input",
     disabled ? "is-disabled" : "",
-    allowMulti ? "file-up--compact" : ""
+    allowMulti ? "file-up--compact" : "",
+    props.className ? props.className : ""
   );
 
   const _onChange = (e: FileEventTarget) => {
@@ -160,24 +164,19 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             aria-hidden={true}
           />
         </div>
-        <span id={`${name}_file_selected`} className="gc-file-input-file-selected">
+        <span id={`${name}_file_selected`} className="block">
           {fileName ? (
-            <>
+            <div className="my-4 max-w-fit border-2 border-gray-500 p-2">
               <span className="sr-only">{`${t(
                 "file-upload-sr-only-file-selected"
               )}: ${fileName}`}</span>
               <span aria-hidden={true}>
                 {fileName} ({fileSize.size} {t(`input-validation.${fileSize.unit}`)}){" "}
               </span>
-              <Button theme="link" className="ml-3 [&_svg]:focus:fill-white" onClick={resetInput}>
-                <div className="group ml-1 p-2 pr-3">
-                  <CancelIcon className="inline-block" />
-                  <span className="ml-1 inline-block group-hover:underline">{t("cancel")}</span>
-                </div>
-              </Button>
-            </>
+              <ResetButton resetInput={resetInput} lang={lang} />
+            </div>
           ) : (
-            t("file-upload-no-file-selected")
+            <span className="my-4 inline-block max-w-fit">{t("file-upload-no-file-selected")}</span>
           )}
         </span>
       </div>

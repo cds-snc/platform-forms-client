@@ -203,6 +203,25 @@
       "label": "Add file",
       "title": "File upload"
     },
+    "fileInputDefault": {
+      "text1": "A way to add supporting documentation. You must",
+      "text2": "set  your response delivery to API",
+      "text3": "to use this form element."
+    },
+    "fileInputWithApi": {
+      "description": "A way to add supporting documentation.",
+      "trialFeature": {
+        "title": "Trial feature",
+        "text1": "This feature has some limitations in the short term as we learn more. In order to use File upload, you must:",
+        "bullet1": "Set your response delivery to API.",
+        "bullet2": "Files uploaded to an individual form will have a maximum file size of {{BODY_SIZE_LIMIT_WITH_FILES}} MB.",
+        "bullet3": "All files will be scanned on submission. Please share the form with people you trust."
+      },
+      "recommendations": {
+        "title": "Recommendations",
+        "text1": "Add fields to gather contact information in case you need to support those with the files they have attached."
+      }
+    },
     "firstMiddleLastName": {
       "whatIsYourName": "What is your name?",
       "description": "Separate fields for first, middle, and last names. This follows a conventional format that might be needed to process forms.",
@@ -511,6 +530,7 @@
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
+  "hasFileInputAndApiDelivery": "Has FileInput and API delivery enabled",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -1393,5 +1413,12 @@
     "formDescription": "Form description"
   },
   "en": "English",
-  "fr": "Français"
+  "fr": "Français",
+  "beta": {
+    "tag": "Beta:",
+    "text": "Trial feature "
+  },
+  "fileUploadApiWarning": {
+    "text": "Delivery method is not set to API."
+  }
 }
