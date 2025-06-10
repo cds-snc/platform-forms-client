@@ -1419,6 +1419,6 @@
     "text": "Trial feature "
   },
   "fileUploadApiWarning": {
-    "text": "Delivery method is not set to API. This element will not be shown."
+    "text": "Delivery method is not set to API."
   }
 }

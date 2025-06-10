@@ -1415,10 +1415,10 @@
   "en": "English",
   "fr": "Français",
   "beta": {
-    "tag": "Beta:",
-    "text": "Trial feature "
+    "tag": "Beta: [FR]",
+    "text": "Trial feature [FR]"
   },
   "fileUploadApiWarning": {
-    "text": "Delivery method is not set to API. This element will not be shown. [FR]"
+    "text": "Delivery method is not set to API [FR]."
   }
 }
