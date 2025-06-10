@@ -209,13 +209,13 @@
       "text3": "to use this form element."
     },
     "fileInputWithApi": {
-      "description": "A way to add supporting documentation. [FR]",
+      "description": "Un moyen d'ajouter de la documentation à l'appui.",
       "trialFeature": {
-        "title": "Trial feature [FR]",
-        "text1": "This feature has some limitations in the short term as we learn more. In order to use File upload, you must: [FR]",
-        "bullet1": "Set your response delivery to API.",
-        "bullet2": "Files uploaded to an individual form will have a maximum file size of {{BODY_SIZE_LIMIT_WITH_FILES}} MB. [FR]",
-        "bullet3": "All files will be scanned on submission. Please share the form with people you trust. [FR]"
+        "title": "Fonctionnalité à l'essai",
+        "text1": "Certaines limitations s'appliquent. Pour utiliser le téléverseur de fichiers, vous devez :",
+        "bullet1": "Récupérer les réponses au formulaire par API.",
+        "bullet2": "Les fichiers téléversés dans un formulaire peuvent avoir une taille maximale combinée de {{BODY_SIZE_LIMIT_WITH_FILES}} MB.",
+        "bullet3": "Tous les fichiers seront analysés après avoir été soumis afin d'identifier des fichiers malveillants."
       },
       "recommendations": {
         "title": "Recommendations",
@@ -1415,10 +1415,10 @@
   "en": "English",
   "fr": "Français",
   "beta": {
-    "tag": "Beta: [FR]",
-    "text": "Trial feature [FR]"
+    "tag": "Bêta :",
+    "text": "Fonctionnalité à l'essai"
   },
   "fileUploadApiWarning": {
-    "text": "Delivery method is not set to API [FR]."
+    "text": "La méthode de livraison n'est pas configurée sur API."
   }
 }

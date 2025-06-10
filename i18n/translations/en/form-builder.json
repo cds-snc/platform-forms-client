@@ -212,10 +212,10 @@
       "description": "A way to add supporting documentation.",
       "trialFeature": {
         "title": "Trial feature",
-        "text1": "This feature has some limitations in the short term as we learn more. In order to use File upload, you must:",
-        "bullet1": "Set your response delivery to API.",
-        "bullet2": "Files uploaded to an individual form will have a maximum file size of {{BODY_SIZE_LIMIT_WITH_FILES}} MB.",
-        "bullet3": "All files will be scanned on submission. Please share the form with people you trust."
+        "text1": "Some limitations apply. To use file upload, you must:",
+        "bullet1": "Retrieve form responsse via API.",
+        "bullet2": "Files uploaded to a form can have a maximum combined size of {{BODY_SIZE_LIMIT_WITH_FILES}} MB.",
+        "bullet3": "All files will be scanned once submitted to identify and flag malicious files."
       },
       "recommendations": {
         "title": "Recommendations",

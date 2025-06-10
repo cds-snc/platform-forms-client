@@ -319,9 +319,9 @@
     "activated": "L'élément {{title}} a été ajouté au formulaire"
   },
   "version": "Version ",
-  "remove": "Remove [FR]",
+  "remove": "Supprimer",
   "fileInput": {
-    "addedMessage": "{{fileName}} was added to the form [FR]",
-    "removedMessage": "{{fileName}} removed [FR]"
+    "addedMessage": "{{fileName}} a été ajouté au formulaire",
+    "removedMessage": "{{fileName}} a été supprimé"
   }
 }
