@@ -89,10 +89,11 @@ export const SaveButton = () => {
     getSchema,
     getId,
     getName,
-    getDeliveryOption,
+    // getDeliveryOption,
     securityAttribute,
     setId,
     notificationsInterval,
+    resetDeliveryOption,
   } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
@@ -103,6 +104,7 @@ export const SaveButton = () => {
     securityAttribute: s.securityAttribute,
     setId: s.setId,
     notificationsInterval: s.notificationsInterval,
+    resetDeliveryOption: s.resetDeliveryOption,
   }));
 
   const { templateIsDirty, createOrUpdateTemplate, resetState, updatedAt, setUpdatedAt } =
@@ -137,7 +139,8 @@ export const SaveButton = () => {
         id: getId(),
         formConfig,
         name: getName(),
-        deliveryOption: getDeliveryOption(),
+        deliveryOption: undefined,
+        // deliveryOption: getDeliveryOption(),
         securityAttribute: securityAttribute,
         notificationsInterval: notificationsInterval,
       });
@@ -162,10 +165,11 @@ export const SaveButton = () => {
 
   useEffect(() => {
     return () => {
+      resetDeliveryOption();
       handleSave();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [resetDeliveryOption]);
 
   if (isPublished) {
     return null;

@@ -12,6 +12,7 @@ import { DeliveryOption } from "@lib/types";
 import { getOverdueTemplateIds } from "@lib/overdue";
 import { Invitations } from "./components/Invitations/Invitations";
 import { prisma } from "@lib/integration/prismaConnector";
+import { logMessage } from "@root/lib/logger";
 
 export type FormsTemplate = {
   id: string;
@@ -83,7 +84,7 @@ export default async function Page(props: {
         overdue: false,
       };
     });
-
+    logMessage.info(`~~~~~templates=${JSON.stringify(templates)}`);
     const invitations = await prisma.invitation.findMany({
       where: {
         email: {

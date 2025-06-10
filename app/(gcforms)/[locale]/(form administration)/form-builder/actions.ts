@@ -343,6 +343,7 @@ export const updateTemplateUsers = AuthenticatedAction(
   }
 );
 
+// TODO: remove this since it is no longer used
 export const updateTemplateDeliveryOption = AuthenticatedAction(
   async (
     _,
