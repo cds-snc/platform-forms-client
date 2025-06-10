@@ -319,5 +319,9 @@
     "activated": "The form element {{title}} was added to the form"
   },
   "version": "Version",
-  "remove": "Remove"
+  "remove": "Remove",
+  "fileInput": {
+    "addedMessage": "{{fileName}} was added to the form",
+    "removedMessage": "{{fileName}} removed"
+  }
 }
