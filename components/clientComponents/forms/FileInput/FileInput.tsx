@@ -1,14 +1,13 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { useField } from "formik";
+
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
-import { CancelIcon } from "@serverComponents/icons";
 import { themes } from "@clientComponents/globals/Buttons/themes";
-import { Button } from "@clientComponents/globals/Buttons/Button";
 import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 import { bytesToMb, bytesToKbOrMbString } from "@lib/utils/fileSize";
 
@@ -18,10 +17,13 @@ interface FileInputProps extends InputFieldProps {
   fileType?: string | string[] | undefined;
   allowMulti?: boolean;
 }
+
 export type FileEventTarget = React.ChangeEvent<HTMLInputElement> & {
   files: FileList;
   target: HTMLInputElement;
 };
+
+import { ResetButton } from "./ResetButton";
 
 // Heavily inspired by https://scottaohara.github.io/a11y_styled_form_controls/src/file-upload/
 
@@ -50,6 +52,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     setError(undefined); // Clear the error
     setTouched(false); // Reset the touched state
   };
+
   const classes = cn(
     "gc-file-input",
     disabled ? "is-disabled" : "",
@@ -170,21 +173,10 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               <span aria-hidden={true}>
                 {fileName} ({fileSize.size} {t(`input-validation.${fileSize.unit}`)}){" "}
               </span>
-              <Button
-                theme="link"
-                className="ml-3 text-red-destructive focus:text-white [&_svg]:fill-red [&_svg]:focus:fill-white"
-                onClick={resetInput}
-              >
-                <div className="group ml-1 p-2 pr-3">
-                  <span className="mr-1 inline-block  underline focus:text-white group-hover:no-underline">
-                    {t("remove", { lng: lang })}
-                  </span>
-                  <CancelIcon className="inline-block " />
-                </div>
-              </Button>
+              <ResetButton resetInput={resetInput} lang={lang} />
             </div>
           ) : (
-            <div className="my-4 max-w-fit p-2">{t("file-upload-no-file-selected")}</div>
+            <span className="my-4 inline-block max-w-fit">{t("file-upload-no-file-selected")}</span>
           )}
         </span>
       </div>
