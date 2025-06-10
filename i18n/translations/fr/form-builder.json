@@ -870,7 +870,7 @@
     "responseDeliveryHelpWithApi": {
       "cta": "Conseils pour le choix d'une option",
       "title": "Choisir une option de livraison des réponses",
-      "description": "Il y a trois options pour obtenir les réponses des formulaires soumis. Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins.",
+      "description": "Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins pour obtenir les réponses des formulaires soumis.",
       "inbox": {
         "title": "Courriel à une boîte de réception",
         "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A.",

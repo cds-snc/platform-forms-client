@@ -870,7 +870,7 @@
     "responseDeliveryHelpWithApi": {
       "cta": "Help choosing an option",
       "title": "Choosing a response delivery option",
-      "description": "There are three options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
+      "description": "Use the chart below to help pick which option best fits your needs for getting submitted form responses.",
       "inbox": {
         "title": "Email to an inbox",
         "text1": "For up to PROTECTED A forms",
