@@ -70,7 +70,7 @@ const WithApiDescription = ({ title }: { title: string }) => {
     <div>
       <Title title={title} />
       <p>{t("addElementDialog.fileInputWithApi.description")}</p>
-      <ExampleWrapper className="mt-4">
+      <ExampleWrapper className="my-4">
         <Label htmlFor="name" className="gc-label">
           {t("addElementDialog.fileInput.label")}
         </Label>
