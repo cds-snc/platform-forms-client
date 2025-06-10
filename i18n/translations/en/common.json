@@ -318,5 +318,6 @@
   "conditional": {
     "activated": "The form element {{title}} was added to the form"
   },
-  "version": "Version"
+  "version": "Version",
+  "remove": "Remove"
 }
