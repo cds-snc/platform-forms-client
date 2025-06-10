@@ -296,11 +296,9 @@ export const Publish = ({ id }: { id: string }) => {
 
         <li className="my-4">
           {hasHydrated ? <Icon checked={formPurpose != ""} /> : IconLoading}
-          <strong>
-            <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
-              {t("publishYourFormInstructions.settings")}
-            </LinkButton>
-          </strong>
+          <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
+            {t("publishYourFormInstructions.settings")}
+          </LinkButton>
           <div>
             <ul>
               <li>
