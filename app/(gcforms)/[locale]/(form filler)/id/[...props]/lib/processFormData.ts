@@ -53,7 +53,15 @@ export const processFormData = async (
             uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
             const splitKey = _key.split("-");
             if (splitKey.length > 1) {
+              if (!fields[splitKey[0]]) {
+                fields[splitKey[0]] = [];
+              }
+
+              // Note:
+              // currentValue is a reference to the fields object,
+              // updating currentValue will mutate the fields object.
               const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
+
               if (!currentValue[Number(splitKey[1])]) {
                 currentValue[Number(splitKey[1])] = {};
               }

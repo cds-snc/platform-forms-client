@@ -22,7 +22,6 @@ import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { PrePublishDialog } from "../PrePublishDialog";
 import { FormProperties } from "@lib/types";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
-import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { ga } from "@lib/client/clientHelpers";
 
 export const Publish = ({ id }: { id: string }) => {
@@ -30,7 +29,16 @@ export const Publish = ({ id }: { id: string }) => {
   const router = useRouter();
   const {
     userCanPublish,
-    data: { title, questions, privacyPolicy, translate, confirmationMessage },
+    data: {
+      title,
+      questions,
+      privacyPolicy,
+      translate,
+      confirmationMessage,
+      hasFileInputAndApiKey,
+    },
+    hasFileInputElement,
+    hasApiKeyId,
     isPublishable,
   } = useAllowPublish();
 
@@ -79,8 +87,6 @@ export const Publish = ({ id }: { id: string }) => {
   let securityAttributeText: string = securityOption?.[lang] || securityAttribute;
   // remove (default) from the string
   securityAttributeText = securityAttributeText.replace(/\(.*?\)/g, "");
-
-  const { hasApiKeyId } = useFormBuilderConfig();
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
@@ -279,14 +285,20 @@ export const Publish = ({ id }: { id: string }) => {
           {hasHydrated ? <Icon checked={translate} /> : IconLoading}
           <Link href={`/${i18n.language}/form-builder/${id}/edit/translate`}>{t("translate")}</Link>
         </li>
+        {hasFileInputElement && (
+          <li className="my-4">
+            {hasHydrated ? <Icon checked={hasFileInputAndApiKey} /> : IconLoading}
+            <Link href={`/${i18n.language}/form-builder/${id}/settings`}>
+              {t("hasFileInputAndApiDelivery")}
+            </Link>
+          </li>
+        )}
 
         <li className="my-4">
           {hasHydrated ? <Icon checked={formPurpose != ""} /> : IconLoading}
-          <strong>
-            <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
-              {t("publishYourFormInstructions.settings")}
-            </LinkButton>
-          </strong>
+          <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
+            {t("publishYourFormInstructions.settings")}
+          </LinkButton>
           <div>
             <ul>
               <li>
