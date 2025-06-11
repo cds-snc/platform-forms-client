@@ -5,6 +5,7 @@ import { FormElement, FormElementTypes, FormProperties, PropertyChoices } from "
 import { Description, publishRequiredFields, Title } from "../../types/form-builder-types";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useAccessControl } from "../useAccessControl";
+import { useFormBuilderConfig } from "../useFormBuilderConfig";
 
 export class MissingTranslation extends Error {
   constructor(message?: string) {
@@ -94,6 +95,11 @@ export const useAllowPublish = () => {
   }));
 
   const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
+  const { hasApiKeyId } = useFormBuilderConfig();
+
+  const hasFileInputElement = form?.elements?.some(
+    (element) => element.type === FormElementTypes.fileInput
+  );
 
   // Note the key names here can be anthing but
   // the values must be booleans
@@ -106,8 +112,9 @@ export const useAllowPublish = () => {
         !!form?.confirmation?.descriptionEn || !!form?.confirmation?.descriptionFr,
       purpose: !!formPurpose,
       translate: isFormTranslated(form),
+      hasFileInputAndApiKey: hasFileInputElement ? hasApiKeyId : true,
     }),
-    [form, formPurpose]
+    [form, formPurpose, hasApiKeyId, hasFileInputElement]
   );
 
   const hasData = useCallback(
@@ -124,5 +131,12 @@ export const useAllowPublish = () => {
     return hasData(fields);
   }, [data, hasData]);
 
-  return { data, hasData, isPublishable, userCanPublish };
+  return {
+    data,
+    hasData,
+    hasFileInputElement,
+    hasApiKeyId,
+    isPublishable,
+    userCanPublish,
+  };
 };

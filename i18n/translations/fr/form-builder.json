@@ -203,6 +203,25 @@
       "label": "Téléverser un fichier",
       "title": "Téléverseur de fichier"
     },
+    "fileInputDefault": {
+      "text1": "A way to add supporting documentation. You must",
+      "text2": "set  your response delivery to API",
+      "text3": "to use this form element."
+    },
+    "fileInputWithApi": {
+      "description": "Un moyen d'ajouter de la documentation à l'appui.",
+      "trialFeature": {
+        "title": "Fonctionnalité à l'essai",
+        "text1": "Certaines limitations s'appliquent. Pour utiliser le téléverseur de fichiers, vous devez :",
+        "bullet1": "Récupérer les réponses au formulaire par API.",
+        "bullet2": "Les fichiers téléversés dans un formulaire peuvent avoir une taille maximale combinée de {{BODY_SIZE_LIMIT_WITH_FILES}} MB.",
+        "bullet3": "Tous les fichiers seront analysés après avoir été soumis afin d'identifier des fichiers malveillants."
+      },
+      "recommendations": {
+        "title": "Recommendations",
+        "text1": "Ajoutez des champs à votre formulaire pour recueillir des coordonnées au cas où vous auriez besoin d'aider ces personnes avec les fichiers ajoutés."
+      }
+    },
     "firstMiddleLastName": {
       "whatIsYourName": "Quel est votre nom?",
       "description": "Les champs séparés pour le prénom, le deuxième prénom et le nom de famille. Ce format est conventionnel et pourrait être nécessaire pour le traitement de formulaires.",
@@ -511,6 +530,8 @@
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
+  "hasFileInputAndApiDelivery": "Livraison de réponse avec l'API",
+  "hasFileInputAndApiDeliveryNote": "Choix obligatoire lors de l'utilisation du téléverseur de fichiers.",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
@@ -1393,5 +1414,12 @@
     "formDescription": "Description du formulaire"
   },
   "en": "English",
-  "fr": "Français"
+  "fr": "Français",
+  "beta": {
+    "tag": "Bêta :",
+    "text": "Fonctionnalité à l'essai"
+  },
+  "fileUploadApiWarning": {
+    "text": "La méthode de livraison n'est pas configurée sur API."
+  }
 }

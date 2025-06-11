@@ -24,7 +24,7 @@ export const ExampleWrapper = ({
 
   return (
     <fieldset className={cn("relative rounded-lg border border-slate-400 bg-white p-4", className)}>
-      <legend className="absolute -top-4 right-6 rounded border border-slate-400 bg-violet-700 px-2 py-1 text-white">
+      <legend className="absolute -top-4 right-6 rounded border border-slate-500 bg-gray-50 px-2 py-1 text-slate-950">
         {t("addElementDialog.tryIt")}
       </legend>
       <FormikProvider value={formik}>{children}</FormikProvider>
