@@ -530,7 +530,7 @@
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
-  "hasFileInputAndApiDelivery": "[FR] Has FileInput and API delivery enabled",
+  "hasFileInputAndApiDelivery": "Has FileInput and API delivery enabled [FR]",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
