@@ -211,11 +211,11 @@
     "fileInputWithApi": {
       "description": "Un moyen d'ajouter de la documentation à l'appui.",
       "trialFeature": {
-        "title": "Fonctionnalité à l'essai",
-        "text1": "Certaines limitations s'appliquent. Pour utiliser le téléverseur de fichiers, vous devez :",
-        "bullet1": "Récupérer les réponses au formulaire par API.",
-        "bullet2": "Les fichiers téléversés dans un formulaire peuvent avoir une taille maximale combinée de {{BODY_SIZE_LIMIT_WITH_FILES}} MB.",
-        "bullet3": "Tous les fichiers seront analysés après avoir été soumis afin d'identifier des fichiers malveillants."
+        "title": "Fonctionnalité Bêta",
+        "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
+        "bullet1": "La récupération des réponses au formulaire via l'API",
+        "bullet2": "Une taille maximale combinée de tous les fichiers téléversés :  {{BODY_SIZE_LIMIT_WITH_FILES}} Mo",
+        "bullet3": "Les fichiers seront analysés pour du contenu malveillant une fois soumis"
       },
       "recommendations": {
         "title": "Recommendations",

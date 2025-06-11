@@ -211,11 +211,11 @@
     "fileInputWithApi": {
       "description": "A way to add supporting documentation.",
       "trialFeature": {
-        "title": "Trial feature",
-        "text1": "Some limitations apply. To use file upload, you must:",
-        "bullet1": "Retrieve form response via API.",
-        "bullet2": "Files uploaded to a form can have a maximum combined size of {{BODY_SIZE_LIMIT_WITH_FILES}} MB.",
-        "bullet3": "All files will be scanned once submitted to identify and flag malicious files."
+        "title": "Beta feature",
+        "text1": "This trial feature is limited and requires:",
+        "bullet1": "Retrieval of form responses via API",
+        "bullet2": "{{BODY_SIZE_LIMIT_WITH_FILES}} MB maximum combined size of all files uploaded",
+        "bullet3": "Files to be scanned for malicious content once submitted"
       },
       "recommendations": {
         "title": "Recommendations",
