@@ -18,6 +18,7 @@ import {
 } from "@serverComponents/icons";
 
 import { useIsAdminUser } from "./useIsAdminUser";
+import { useAllowFileUpload } from "./useAllowFileUpload";
 
 import {
   RichText,
@@ -43,7 +44,6 @@ import {
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFeatureFlags } from "../useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
-import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 export enum Groups {
   BASIC = "basic",
@@ -68,12 +68,10 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
 
   const { getFlag } = useFeatureFlags();
 
-  const { hasApiKeyId } = useFormBuilderConfig();
-
   const isAdminUser = useIsAdminUser();
 
   // Allow via feature flag or if the user is an admin and forms has an API key
-  const allowFileInput = getFlag(FeatureFlags.fileUpload) || (hasApiKeyId && isAdminUser);
+  const allowFileInput = useAllowFileUpload();
 
   const fileInputOption: ElementOption = {
     id: "fileInput",

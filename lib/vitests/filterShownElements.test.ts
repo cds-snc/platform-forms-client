@@ -3,6 +3,7 @@ import { filterShownElements } from "@lib/formContext";
 
 // Fixtures captured by adding a break point in Forms.tsx and copying the values from the debugger
 import {withConditionalRules, withoutConditionalRules} from "../../__fixtures__/getRulesElementsHiddenRemoved.json";
+import { FormElement } from '../types';
 
 describe("formContext filterShownElements()", () => {
   it("Handles filtering out correct element", () => {
@@ -201,19 +202,39 @@ describe("formContext filterShownElements()", () => {
           }
       }
     ];
-    const result = filterShownElements({ form: { elements: withConditionalRules.elements } }, withConditionalRules.values);
+    const result = filterShownElements({
+        form: {
+            elements: withConditionalRules.elements as FormElement[],
+            titleEn: '',
+            titleFr: '',
+            layout: []
+        },
+        id: '',
+        isPublished: false,
+        securityAttribute: 'Unclassified'
+    }, withConditionalRules.values);
 
     expect(result).toEqual(expectedOutput);
   });
 
   it("Handles a legacy form (doesn't touch it)", () => {
     const expectedOutput = withoutConditionalRules.elements;
-    const result = filterShownElements({ form: { elements: withoutConditionalRules.elements } }, withoutConditionalRules.values);
+    const result = filterShownElements({
+        form: {
+            elements: withoutConditionalRules.elements as FormElement[],
+            titleEn: '',
+            titleFr: '',
+            layout: []
+        },
+        id: '',
+        isPublished: false,
+        securityAttribute: 'Unclassified'
+    }, withoutConditionalRules.values);
     expect(result).toEqual(expectedOutput);
   });
 
   it("Handles bad input", () => {
-    const expectedOutput = [];
+    const expectedOutput: FormElement[] = [];
     // @ts-expect-error - testing invalid input
     const result = filterShownElements();
     expect(result).toEqual(expectedOutput);
