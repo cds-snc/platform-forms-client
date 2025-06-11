@@ -30,7 +30,7 @@ export const FileInput = ({ title }: { title: string }) => {
 
 const Title = ({ title }: { title: string }) => {
   return (
-    <div className="mb-4 flex items-center space-x-4">
+    <div className="mb-4 flex items-center space-x-3">
       <h3 className="mb-0">{title}</h3>
       <BetaBadge />
     </div>
