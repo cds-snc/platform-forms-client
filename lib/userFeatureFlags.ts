@@ -7,20 +7,25 @@ import { featureFlagsCheck, featureFlagsPut } from "@lib/cache/userFeatureFlagsC
  * @returns Array of feature flag keys (strings)
  */
 export const getUserFeatureFlags = async (userId: string): Promise<string[]> => {
-  // Try cache first
-  const cachedFlags = await featureFlagsCheck(userId);
-  if (cachedFlags?.length) return cachedFlags;
+  try {
+    // Try cache first
+    const cachedFlags = await featureFlagsCheck(userId);
+    if (cachedFlags?.length) return cachedFlags;
 
-  // Query DB for enabled features
-  const userFeatures = await prisma.userFeature.findMany({
-    where: { userId },
-    select: { feature: true },
-  });
+    // Query DB for enabled features
+    const userFeatures = await prisma.userFeature.findMany({
+      where: { userId },
+      select: { feature: true },
+    });
 
-  const featureKeys = userFeatures.map((uf) => uf.feature);
+    const featureKeys = userFeatures.map((uf) => uf.feature);
 
-  // Cache result
-  await featureFlagsPut(userId, featureKeys);
+    // Cache result
+    await featureFlagsPut(userId, featureKeys);
 
-  return featureKeys;
+    return featureKeys;
+  } catch (error) {
+    // If there's an error, return an empty array
+    return [];
+  }
 };
