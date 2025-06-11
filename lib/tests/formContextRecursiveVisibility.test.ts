@@ -2,200 +2,200 @@ import { FormElement, PublicFormRecord } from "@gcforms/types";
 import { checkVisibilityRecursive } from "@lib/formContext";
 
 describe("Recursive visibility check", () => {
-    // test("Simple recursive test", async () => {
-    //     const formRecord = {
-    //     "id": "cmao5j1b20001wpd1pwtch9bb",
-    //     "form": {
-    //         "titleEn": "Test",
-    //         "titleFr": "",
-    //         "introduction": {
-    //             "descriptionEn": "",
-    //             "descriptionFr": ""
-    //         },
-    //         "privacyPolicy": {
-    //             "descriptionEn": "Test",
-    //             "descriptionFr": ""
-    //         },
-    //         "confirmation": {
-    //             "descriptionEn": "",
-    //             "descriptionFr": "",
-    //             "referrerUrlEn": "",
-    //             "referrerUrlFr": ""
-    //         },
-    //         "layout": [
-    //             1,
-    //             2,
-    //             6
-    //         ],
-    //         "elements": [
-    //             {
-    //                 "id": 1,
-    //                 "type": "radio",
-    //                 "properties": {
-    //                     "subElements": [],
-    //                     "choices": [
-    //                         {
-    //                             "en": "In Canada",
-    //                             "fr": ""
-    //                         },
-    //                         {
-    //                             "en": "Outside of Canada",
-    //                             "fr": ""
-    //                         }
-    //                     ],
-    //                     "titleEn": "Location",
-    //                     "titleFr": "",
-    //                     "validation": {
-    //                         "required": false
-    //                     },
-    //                     "descriptionEn": "",
-    //                     "descriptionFr": "",
-    //                     "placeholderEn": "",
-    //                     "placeholderFr": "",
-    //                     "conditionalRules": []
-    //                 }
-    //             },
-    //             {
-    //                 "id": 2,
-    //                 "type": "radio",
-    //                 "properties": {
-    //                     "subElements": [],
-    //                     "choices": [
-    //                         {
-    //                             "en": "Ottawa",
-    //                             "fr": ""
-    //                         },
-    //                         {
-    //                             "en": "Montreal",
-    //                             "fr": ""
-    //                         },
-    //                         {
-    //                             "en": "Other",
-    //                             "fr": ""
-    //                         }
-    //                     ],
-    //                     "titleEn": "Location in Canada",
-    //                     "titleFr": "",
-    //                     "validation": {
-    //                         "required": false
-    //                     },
-    //                     "descriptionEn": "",
-    //                     "descriptionFr": "",
-    //                     "placeholderEn": "",
-    //                     "placeholderFr": "",
-    //                     "conditionalRules": [
-    //                         {
-    //                             "choiceId": "1.0"
-    //                         }
-    //                     ]
-    //                 }
-    //             },
-    //             {
-    //                 "id": 6,
-    //                 "type": "combobox",
-    //                 "properties": {
-    //                     "subElements": [],
-    //                     "choices": [
-    //                         {
-    //                             "en": "First location",
-    //                             "fr": ""
-    //                         },
-    //                         {
-    //                             "en": "Second location",
-    //                             "fr": ""
-    //                         },
-    //                         {
-    //                             "en": "Third location",
-    //                             "fr": ""
-    //                         }
-    //                     ],
-    //                     "titleEn": "Location?",
-    //                     "titleFr": "",
-    //                     "validation": {
-    //                         "required": true
-    //                     },
-    //                     "descriptionEn": "Start typing to narrow down the list.",
-    //                     "descriptionFr": "Commencez à taper pour réduire la liste.",
-    //                     "placeholderEn": "",
-    //                     "placeholderFr": "",
-    //                     "conditionalRules": [
-    //                         {
-    //                             "choiceId": "2.2"
-    //                         }
-    //                     ]
-    //                 }
-    //             }
-    //         ],
-    //         "groups": {
-    //             "start": {
-    //                 "name": "Start",
-    //                 "titleEn": "Start page",
-    //                 "titleFr": "Start page",
-    //                 "elements": [
-    //                     "1",
-    //                     "2",
-    //                     "6"
-    //                 ],
-    //                 "nextAction": "review"
-    //             },
-    //             "review": {
-    //                 "name": "Review",
-    //                 "titleEn": "End (Review page and Confirmation)",
-    //                 "titleFr": "End (Review page and Confirmation)",
-    //                 "elements": [],
-    //                 "nextAction": "end"
-    //             },
-    //             "end": {
-    //                 "name": "End",
-    //                 "titleEn": "Confirmation page",
-    //                 "titleFr": "Confirmation page",
-    //                 "elements": []
-    //             }
-    //         },
-    //         "groupsLayout": [],
-    //         "lastGeneratedElementId": 6
-    //     },
-    //     "isPublished": false,
-    //     "securityAttribute": "Protected A"
-    //     } as PublicFormRecord;
+    test("Simple recursive test", async () => {
+        const formRecord = {
+        "id": "cmao5j1b20001wpd1pwtch9bb",
+        "form": {
+            "titleEn": "Test",
+            "titleFr": "",
+            "introduction": {
+                "descriptionEn": "",
+                "descriptionFr": ""
+            },
+            "privacyPolicy": {
+                "descriptionEn": "Test",
+                "descriptionFr": ""
+            },
+            "confirmation": {
+                "descriptionEn": "",
+                "descriptionFr": "",
+                "referrerUrlEn": "",
+                "referrerUrlFr": ""
+            },
+            "layout": [
+                1,
+                2,
+                6
+            ],
+            "elements": [
+                {
+                    "id": 1,
+                    "type": "radio",
+                    "properties": {
+                        "subElements": [],
+                        "choices": [
+                            {
+                                "en": "In Canada",
+                                "fr": ""
+                            },
+                            {
+                                "en": "Outside of Canada",
+                                "fr": ""
+                            }
+                        ],
+                        "titleEn": "Location",
+                        "titleFr": "",
+                        "validation": {
+                            "required": false
+                        },
+                        "descriptionEn": "",
+                        "descriptionFr": "",
+                        "placeholderEn": "",
+                        "placeholderFr": "",
+                        "conditionalRules": []
+                    }
+                },
+                {
+                    "id": 2,
+                    "type": "radio",
+                    "properties": {
+                        "subElements": [],
+                        "choices": [
+                            {
+                                "en": "Ottawa",
+                                "fr": ""
+                            },
+                            {
+                                "en": "Montreal",
+                                "fr": ""
+                            },
+                            {
+                                "en": "Other",
+                                "fr": ""
+                            }
+                        ],
+                        "titleEn": "Location in Canada",
+                        "titleFr": "",
+                        "validation": {
+                            "required": false
+                        },
+                        "descriptionEn": "",
+                        "descriptionFr": "",
+                        "placeholderEn": "",
+                        "placeholderFr": "",
+                        "conditionalRules": [
+                            {
+                                "choiceId": "1.0"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 6,
+                    "type": "combobox",
+                    "properties": {
+                        "subElements": [],
+                        "choices": [
+                            {
+                                "en": "First location",
+                                "fr": ""
+                            },
+                            {
+                                "en": "Second location",
+                                "fr": ""
+                            },
+                            {
+                                "en": "Third location",
+                                "fr": ""
+                            }
+                        ],
+                        "titleEn": "Location?",
+                        "titleFr": "",
+                        "validation": {
+                            "required": true
+                        },
+                        "descriptionEn": "Start typing to narrow down the list.",
+                        "descriptionFr": "Commencez à taper pour réduire la liste.",
+                        "placeholderEn": "",
+                        "placeholderFr": "",
+                        "conditionalRules": [
+                            {
+                                "choiceId": "2.2"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "groups": {
+                "start": {
+                    "name": "Start",
+                    "titleEn": "Start page",
+                    "titleFr": "Start page",
+                    "elements": [
+                        "1",
+                        "2",
+                        "6"
+                    ],
+                    "nextAction": "review"
+                },
+                "review": {
+                    "name": "Review",
+                    "titleEn": "End (Review page and Confirmation)",
+                    "titleFr": "End (Review page and Confirmation)",
+                    "elements": [],
+                    "nextAction": "end"
+                },
+                "end": {
+                    "name": "End",
+                    "titleEn": "Confirmation page",
+                    "titleFr": "Confirmation page",
+                    "elements": []
+                }
+            },
+            "groupsLayout": [],
+            "lastGeneratedElementId": 6
+        },
+        "isPublished": false,
+        "securityAttribute": "Protected A"
+        } as PublicFormRecord;
 
-    //     const element = formRecord.form.elements[2];
+        const element = formRecord.form.elements[2];
 
-    //     const valuesHidden6 = {
-    //     "1": "Outside of Canada",
-    //     "2": "Other",
-    //     "6": "",
-    //     "currentGroup": "start",
-    //     "groupHistory": [
-    //         "start"
-    //     ],
-    //     "matchedIds": [
-    //         "1.1",
-    //         "2.2"
-    //     ]
-    //     };
+        const valuesHidden6 = {
+        "1": "Outside of Canada",
+        "2": "Other",
+        "6": "",
+        "currentGroup": "start",
+        "groupHistory": [
+            "start"
+        ],
+        "matchedIds": [
+            "1.1",
+            "2.2"
+        ]
+        };
 
-    //     const valuesVisible6 = {
-    //     "1": "In Canada",
-    //     "2": "Other",
-    //     "6": "First location",
-    //     "currentGroup": "start",
-    //     "groupHistory": [
-    //         "start"
-    //     ],
-    //     "matchedIds": [
-    //         "1.0",
-    //         "2.2",
-    //         "6.0"
-    //     ]
-    //     }
+        const valuesVisible6 = {
+        "1": "In Canada",
+        "2": "Other",
+        "6": "First location",
+        "currentGroup": "start",
+        "groupHistory": [
+            "start"
+        ],
+        "matchedIds": [
+            "1.0",
+            "2.2",
+            "6.0"
+        ]
+        }
 
-    //     const isVisible = checkVisibilityRecursive(formRecord, element, valuesHidden6);
-    //     expect(isVisible).toEqual(false);
+        const isVisible = checkVisibilityRecursive(formRecord, element, valuesHidden6);
+        expect(isVisible).toEqual(false);
 
-    //     const isVisible2 = checkVisibilityRecursive(formRecord, element, valuesVisible6);
-    //     expect(isVisible2).toEqual(true);
-    // });
+        const isVisible2 = checkVisibilityRecursive(formRecord, element, valuesVisible6);
+        expect(isVisible2).toEqual(true);
+    });
 
     test("Complex recursive test", async () => {
         const formRecord = {
