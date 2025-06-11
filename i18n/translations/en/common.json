@@ -70,7 +70,7 @@
   "required": "required",
   "all-required": "all checkboxes required",
   "required-field": "Required field",
-  "file-upload-button-text": "Select file",
+  "file-upload-button-text": "Choose file",
   "file-upload-sr-only-file-selected": "Currently selected file is",
   "file-upload-no-file-selected": "No file currently selected",
   "dropdown-initial-option-text": "No selection",
@@ -318,5 +318,10 @@
   "conditional": {
     "activated": "The form element {{title}} was added to the form"
   },
-  "version": "Version"
+  "version": "Version",
+  "remove": "Remove",
+  "fileInput": {
+    "addedMessage": "{{fileName}} was added to the form",
+    "removedMessage": "{{fileName}} removed"
+  }
 }
