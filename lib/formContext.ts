@@ -147,6 +147,34 @@ export const getElementById = (elements: FormElement[], id: string) => {
 };
 
 /**
+ * Checks a page/group visibility based on the current form values groupHistory.
+ *
+ * @param formRecord - The form record containing the form and its groups.
+ * @param element - The form element to check visibility for.
+ * @param values - The current form values from Formik, which should include groupHistory.
+ * @returns {boolean} - Returns true if the page/group is visible based on the groupHistory, false otherwise.
+ */
+export const checkPageVisibility = (
+  formRecord: PublicFormRecord,
+  element: FormElement,
+  values: FormValues
+): boolean => {
+  if (!formRecord.form.groups) {
+    return true;
+  }
+
+  const groups = formRecord.form.groups as GroupsType;
+
+  // Get the current element's group ID
+  const groupId = Object.keys(groups).find((groupKey) => inGroup(groupKey, element.id, groups));
+
+  const groupHistory = Array.isArray(values.groupHistory)
+    ? values.groupHistory
+    : [values.groupHistory];
+  return !!groupHistory.find((visitedGroupId: string | undefined) => visitedGroupId === groupId);
+};
+
+/**
  * Recursively determines the "visibility" of a form element for the purposes of validation
  * based on its conditional rules and the current form values.
  *
@@ -161,7 +189,7 @@ export const getElementById = (elements: FormElement[], id: string) => {
  * @param formRecord - The form record.
  * @param element - The form element whose visibility is being determined.
  * @param values - The current form values from Formik.
- * @returns `true` if the element should be visible, `false` otherwise.
+ * @returns {boolean} -Returns `true` if the element should be visible, `false` otherwise.
  */
 export const checkVisibilityRecursive = (
   formRecord: PublicFormRecord,
@@ -169,6 +197,13 @@ export const checkVisibilityRecursive = (
   values: FormValues,
   checked: Set<string> = new Set()
 ): boolean => {
+  // If the current page is not visible, the element is not visible
+  const pageVisible = checkPageVisibility(formRecord, element, values);
+
+  if (!pageVisible) {
+    return false;
+  }
+
   const rules = element.properties.conditionalRules;
   if (!rules || rules.length === 0) return true;
 
@@ -191,7 +226,6 @@ export const checkVisibilityRecursive = (
     return (
       checkVisibilityRecursive(formRecord, ruleParent, values, checked) &&
       matchRule(rule, formElements, values)
-      // @TODO: && checkPageVisibilityRecursive
     );
   });
 };
