@@ -291,6 +291,9 @@ export const Publish = ({ id }: { id: string }) => {
             <Link href={`/${i18n.language}/form-builder/${id}/settings`}>
               {t("hasFileInputAndApiDelivery")}
             </Link>
+            <ul>
+              <li>{t("hasFileInputAndApiDeliveryNote")}</li>
+            </ul>
           </li>
         )}
 
