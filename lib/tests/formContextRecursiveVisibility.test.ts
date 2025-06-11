@@ -1090,7 +1090,7 @@ describe("Recursive visibility check", () => {
             formRecord.form.elements.find((el: FormElement) => el.id === id) as FormElement;
 
 
-        const valuesOne = {
+        const valuesHasAccountReferYes = {
             "1": "yes",
             "3": "",
             "4": "",
@@ -1112,13 +1112,20 @@ describe("Recursive visibility check", () => {
                 "12.0",
                 "1.0"
             ]
-        }
+        };
 
-        expect(checkVisibilityRecursive(formRecord, getElement(13), valuesOne)).toBe(true);
+        // Should show refer field (13), not if refer=no
+        expect(checkVisibilityRecursive(formRecord, getElement(13), valuesHasAccountReferYes)).toBe(true);
+        // Should show discount code (11) only if "Do you have an account?" is "yes"
+        expect(checkVisibilityRecursive(formRecord, getElement(11), valuesHasAccountReferYes)).toBe(true);
+        // Should not show refer field if refer=no
+        const valuesHasAccountReferNo = { ...valuesHasAccountReferYes, "12": "no", "matchedIds": ["12.1", "1.0"] };
+        expect(checkVisibilityRecursive(formRecord, getElement(13), valuesHasAccountReferNo)).toBe(false);
 
 
-        const valuesTwo = {
-            "1": "yes",
+        // --- No account flow ---
+        const valuesNoAccount = {
+            "1": "no",
             "3": "",
             "4": "",
             "5": "",
@@ -1127,21 +1134,32 @@ describe("Recursive visibility check", () => {
             "9": "",
             "10": "",
             "11": "",
-            "12": "no",
+            "12": "",
             "13": "",
-            "currentGroup": "598121d4-5439-4b58-a3e0-517579aafb0e",
+            "currentGroup": "f695c318-73c3-4ba1-8807-6594992ac528",
             "groupHistory": [
                 "start",
-                "598121d4-5439-4b58-a3e0-517579aafb0e",
+                "f695c318-73c3-4ba1-8807-6594992ac528",
                 "73db1af9-96e3-4f6e-89d5-45e0afff39d1"
             ],
             "matchedIds": [
-                "12.1",
-                "1.0"
+                "1.1"
             ]
-        }
+        };
+        // Should not show refer field (13) in this flow
+        expect(checkVisibilityRecursive(formRecord, getElement(13), valuesNoAccount)).toBe(false);
+        // Should not show discount code (11) in this flow
+        expect(checkVisibilityRecursive(formRecord, getElement(11), valuesNoAccount)).toBe(false);
 
-        expect(checkVisibilityRecursive(formRecord, getElement(13), valuesTwo)).toBe(false);
+        // --- Start group, only element 1 visible ---
+        const valuesStart = {
+            "1": "",
+            "currentGroup": "start",
+            "groupHistory": ["start"],
+            "matchedIds": []
+        };
+        expect(checkVisibilityRecursive(formRecord, getElement(1), valuesStart)).toBe(true);
+        expect(checkVisibilityRecursive(formRecord, getElement(3), valuesStart)).toBe(false);
 
         const valuesThree = {
             "1": "no",
@@ -1167,5 +1185,24 @@ describe("Recursive visibility check", () => {
         }
 
         expect(checkVisibilityRecursive(formRecord, getElement(13), valuesThree)).toBe(false);
+
+        // --- Edge case: missing groupHistory ---
+        const valuesMissingHistory = {
+            "1": "yes",
+            "12": "yes",
+            "currentGroup": "598121d4-5439-4b58-a3e0-517579aafb0e",
+            "matchedIds": ["12.0", "1.0"]
+        };
+        expect(checkVisibilityRecursive(formRecord, getElement(13), valuesMissingHistory)).toBe(false);
+
+        // --- Edge case: wrong group, should not show ---
+        const valuesWrongGroup = {
+            "1": "yes",
+            "12": "yes",
+            "currentGroup": "start",
+            "groupHistory": ["start"],
+            "matchedIds": ["12.0", "1.0"]
+        };
+        expect(checkVisibilityRecursive(formRecord, getElement(13), valuesWrongGroup)).toBe(false);
     })
 })
