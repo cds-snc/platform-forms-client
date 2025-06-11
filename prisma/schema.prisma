@@ -64,6 +64,7 @@ model Template {
   saveAndResume         Boolean         @default(true)
   invitations           Invitation[]
   notificationsInterval Int?            @default(1440)
+  notificationsUsers    User[]          @relation("TemplateNotificationsUsers")
 }
 
 model DeliveryOption {
@@ -86,21 +87,22 @@ model Privilege {
 }
 
 model User {
-  id              String           @id @default(cuid())
-  name            String?
-  email           String           @unique
-  image           String?
-  emailVerified   DateTime?
-  lastLogin       DateTime         @default(now()) @db.Timestamptz(6)
-  active          Boolean          @default(true)
-  privileges      Privilege[]
-  accounts        Account[]
-  sessions        Session[]
-  templates       Template[]
-  securityAnswers SecurityAnswer[]
-  notes           String?
-  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
-  invitations     Invitation[]
+  id                      String           @id @default(cuid())
+  name                    String?
+  email                   String           @unique
+  image                   String?
+  emailVerified           DateTime?
+  lastLogin               DateTime         @default(now()) @db.Timestamptz(6)
+  active                  Boolean          @default(true)
+  privileges              Privilege[]
+  accounts                Account[]
+  sessions                Session[]
+  templates               Template[]
+  securityAnswers         SecurityAnswer[]
+  notes                   String?
+  createdAt               DateTime         @default(now()) @db.Timestamptz(6)
+  invitations             Invitation[]
+  notificationsTemplates  Template[]       @relation("TemplateNotificationsUsers")
 }
 
 model VerificationToken {
