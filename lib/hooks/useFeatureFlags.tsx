@@ -24,8 +24,6 @@ export const FeatureFlagsProvider = ({
   Object.keys(flags).forEach((key) => {
     if (userFlags.includes(key)) {
       flags[key as keyof typeof flags] = true;
-    } else {
-      flags[key as keyof typeof flags] = false;
     }
   });
 
