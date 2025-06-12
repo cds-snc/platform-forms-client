@@ -25,7 +25,7 @@ export const EventKeys = {
   openDeactivateUserDialog: "open-deactivate-user-dialog",
   liveMessage: "live-message",
   liveMessageObject: "live-message-object",
-  SubmitProgress: "submit-progress",
+  submitProgress: "submit-progress",
 } as const;
 
 export const useCustomEvent = () => {

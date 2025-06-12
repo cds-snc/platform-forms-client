@@ -22,12 +22,12 @@ export const SubmitProgress = ({ spinner = true }: { spinner?: boolean }) => {
   };
 
   useEffect(() => {
-    Event.on(EventKeys.openAddUserNoteDialog, handleProgressUpdate);
+    Event.on(EventKeys.submitProgress, handleProgressUpdate);
 
     return () => {
-      Event.off(EventKeys.openAddUserNoteDialog, handleProgressUpdate);
+      Event.off(EventKeys.submitProgress, handleProgressUpdate);
     };
-  });
+  }, [Event]);
 
   return (
     <div
