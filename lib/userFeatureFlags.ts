@@ -17,9 +17,9 @@ export const getUserFeatureFlags = async (userId: string): Promise<string[]> => 
       .findUnique({
         where: { id: userId },
       })
-      .features({ select: { feature: true } });
+      ?.features({ select: { feature: true } });
 
-    const featureKeys = userFeatures.map((uf) => uf.feature);
+    const featureKeys = userFeatures ? userFeatures.map((uf) => uf.feature) : [];
 
     // Cache result
     await featureFlagsPut(userId, featureKeys);
