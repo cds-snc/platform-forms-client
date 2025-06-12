@@ -33,6 +33,7 @@ export const EmailTags = ({
         }}
         label={t("share.emailLabel", { ns: "form-builder" })}
         description=""
+        allowSpacesInTags={false}
         onTagAdd={(tag) => {
           setTags([...new Set([...tags, tag])]);
         }}
