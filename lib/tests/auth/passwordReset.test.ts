@@ -63,7 +63,7 @@ describe.skip("Test Password Reset library", () => {
 
       await expect(async () => {
         await sendPasswordResetLink("email@test.com");
-      }).rejects.toThrowError(
+      }).rejects.toThrow(
         new Error(
           "Failed to send password reset link. Reason: Missing security questions for user email@test.com."
         )
@@ -81,7 +81,7 @@ describe.skip("Test Password Reset library", () => {
 
       await expect(async () => {
         await sendPasswordResetLink("email");
-      }).rejects.toThrowError(
+      }).rejects.toThrow(
         new Error(
           "Failed to send password reset link. Reason: Notify failed to send the password reset email."
         )
@@ -122,7 +122,7 @@ describe.skip("Test Password Reset library", () => {
 
       await expect(async () => {
         await getPasswordResetAuthenticatedUserEmailAddress("token");
-      }).rejects.toThrowError(PasswordResetInvalidLink);
+      }).rejects.toThrow(PasswordResetInvalidLink);
     });
 
     it("Throws exception if password reset token is expired", async () => {
@@ -134,7 +134,7 @@ describe.skip("Test Password Reset library", () => {
 
       await expect(async () => {
         await getPasswordResetAuthenticatedUserEmailAddress("token");
-      }).rejects.toThrowError(PasswordResetExpiredLink);
+      }).rejects.toThrow(PasswordResetExpiredLink);
 
       expect(prismaMock.magicLink.deleteMany).toHaveBeenCalledWith({
         where: {
