@@ -103,7 +103,7 @@ export default async function Page(props0: {
   }
 
   if (step === "progress") {
-    pageContent = <SubmitProgress />;
+    pageContent = <SubmitProgress progress={30} spinner={false} />;
   }
 
   // Confirmation
