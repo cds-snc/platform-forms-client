@@ -325,6 +325,6 @@
     "removedMessage": "{{fileName}} a été supprimé"
   },
   "submitProgress": {
-    "text": "Submitting form... [FR]"
+    "text": "Envoi du formulaire en cours..."
   }
 }
