@@ -26,6 +26,7 @@ export const TagInput = ({
   placeholder,
   description,
   restrictDuplicates = true,
+  allowSpacesInTags = true,
   maxTags,
   onTagAdd,
   onTagRemove,
@@ -39,6 +40,7 @@ export const TagInput = ({
   placeholder?: string;
   description?: string;
   restrictDuplicates?: boolean;
+  allowSpacesInTags?: boolean;
   maxTags?: number;
   onTagAdd?: (tag: string) => void;
   onTagRemove?: (tag: string) => void;
@@ -136,7 +138,12 @@ export const TagInput = ({
     resetMessages();
 
     const { key } = event;
-    const acceptKeys = [keys.ENTER, keys.TAB, keys.COMMA];
+    const acceptKeys = [
+      keys.ENTER,
+      keys.TAB,
+      keys.COMMA,
+      ...(allowSpacesInTags ? [] : [keys.SPACE]),
+    ];
     const navigateKeys = [keys.ARROW_LEFT, keys.ARROW_RIGHT];
 
     // Clear selection when entering text input
