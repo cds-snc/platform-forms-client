@@ -19,6 +19,8 @@ import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
 
+import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
+
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
 }): Promise<Metadata> {
@@ -98,6 +100,10 @@ export default async function Page(props0: {
         formId={formId}
       />
     );
+  }
+
+  if (step === "progress") {
+    pageContent = <SubmitProgress />;
   }
 
   // Confirmation

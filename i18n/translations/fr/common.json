@@ -323,5 +323,8 @@
   "fileInput": {
     "addedMessage": "{{fileName}} a été ajouté au formulaire",
     "removedMessage": "{{fileName}} a été supprimé"
+  },
+  "submitProgress": {
+    "text": "Submitting form... [FR]"
   }
 }
