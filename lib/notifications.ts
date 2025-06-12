@@ -283,3 +283,50 @@ export const updateNotificationsSetting = async (
     `User :${user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
   );
 };
+
+export const getNotificationsUsers = async (
+  formId: string
+): Promise<{ email: string; enabled: boolean }[] | null> => {
+  // No auth check since this may be requested from a non-signed-in user
+  // e.g. sending notifications on a form submission
+  const usersAndNotifications = await _getUsersAndNotificationsUsers(formId);
+  if (!usersAndNotifications) {
+    logMessage.error(`getNotificationsUsers template not found with id ${formId}`);
+    return null;
+  }
+
+  const { users, notificationsUsers } = usersAndNotifications;
+  return users.map((user) => {
+    const found = notificationsUsers.find((nUser) => nUser.email === user.email);
+    return {
+      email: user.email,
+      enabled: found ? true : false,
+    };
+  });
+};
+
+const _getUsersAndNotificationsUsers = async (
+  formId: string
+): Promise<{ users: { email: string }[]; notificationsUsers: { email: string }[] } | null> => {
+  // No auth check since this may be requested from a non-signed-in user
+  // e.g. sending notifications on a form submission
+  return prisma.template
+    .findUnique({
+      where: {
+        id: formId,
+      },
+      select: {
+        users: {
+          select: {
+            email: true,
+          },
+        },
+        notificationsUsers: {
+          select: {
+            email: true,
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+};

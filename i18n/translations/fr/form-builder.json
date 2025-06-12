@@ -772,13 +772,6 @@
     },
     "notifications": {
       "title": "Recevoir des notifications",
-      "description1": "Obtenez des notifications par courriel pour les nouvelles réponses",
-      "description2": "Tous les membres de votre équipe ayant accès au formulaire seront informés lorsque de nouvelles réponses au formulaire sont disponibles et peuvent être téléchargées.",
-      "optionsDescription": "Activer les notifications pour les nouvelles réponses au formulaire",
-      "options": {
-        "on": "Activé",
-        "off": "Désactivé"
-      },
       "save": "Enregistrer",
       "email": {
         "singleSubmission": {
@@ -793,6 +786,21 @@
           "paragraph2": "Allez à Formulaires GC",
           "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
         }
+      },
+      "sessionUser": {
+        "title": "Obtenez des notifications par courriel pour les nouvelles réponses",
+        "description": "[FR]Find out when there are new form responses available to download.",
+        "toggle": {
+          "title": "[FR]Notifications for {{email}}",
+          "on": "On",
+          "off": "Off"
+        },
+        "noSessionUser": "[FR]No users are added to this form yet."
+      },
+      "usersList": {
+        "title": "[FR]Notification status for others on the form",
+        "enabled": "[FR]Notifications enabled",
+        "disabled": "[FR]Notifications disabled"
       },
       "savedSuccessMessage": "Vos modifications ont été enregistrées.",
       "errors": {

@@ -772,13 +772,6 @@
     },
     "notifications": {
       "title": "Receive notifications",
-      "description1": "Get notified by email about new form responses",
-      "description2": "All team members with access to the form will be informed when there are new form responses available to download.",
-      "optionsDescription": "Enable notifications for new form responses",
-      "options": {
-        "on": "On",
-        "off": "Off"
-      },
       "save": "Save",
       "email": {
         "singleSubmission": {
@@ -793,6 +786,21 @@
           "paragraph2": "Retrieve responses from GC Forms",
           "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
         }
+      },
+      "sessionUser": {
+        "title": "Get notified by email about new form responses",
+        "description": "Find out when there are new form responses available to download.",
+        "toggle": {
+          "title": "Notifications for {{email}}",
+          "on": "On",
+          "off": "Off"
+        },
+        "noSessionUser": "No users are added to this form yet."
+      },
+      "usersList": {
+        "title": "Notification status for others on the form",
+        "enabled": "Notifications enabled",
+        "disabled": "Notifications disabled"
       },
       "savedSuccessMessage": "Your changes have been saved.",
       "errors": {
