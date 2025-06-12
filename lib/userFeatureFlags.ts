@@ -13,10 +13,11 @@ export const getUserFeatureFlags = async (userId: string): Promise<string[]> => 
     if (cachedFlags?.length) return cachedFlags;
 
     // Query DB for enabled features
-    const userFeatures = await prisma.userFeature.findMany({
-      where: { userId },
-      select: { feature: true },
-    });
+    const userFeatures = await prisma.user
+      .findUnique({
+        where: { id: userId },
+      })
+      .features({ select: { feature: true } });
 
     const featureKeys = userFeatures.map((uf) => uf.feature);
 
