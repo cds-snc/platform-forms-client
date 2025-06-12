@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.826.0",
-    "got": "11",
+    "got": "^11.8.6",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
