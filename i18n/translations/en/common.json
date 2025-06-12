@@ -323,5 +323,8 @@
   "fileInput": {
     "addedMessage": "{{fileName}} was added to the form",
     "removedMessage": "{{fileName}} removed"
+  },
+  "submitProgress": {
+    "text": "Submitting form..."
   }
 }
