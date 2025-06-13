@@ -16,7 +16,7 @@ export const FilterButton = ({
   return (
     <RoundedButton
       theme={active ? "primary" : "secondary"}
-      className=""
+      className="flex min-w-[100px] justify-center"
       onClick={() => {
         router.push(url);
       }}
