@@ -11,8 +11,7 @@ import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { isVaultDelivery } from "@lib/utils/form-builder";
-import { getNotificationsSettings } from "./action";
+import { getNotificationsUsersAndSettings } from "./action";
 import { CheckNoBorderIcon, XIcon } from "@root/components/serverComponents/icons";
 
 export const Notifications = ({ formId }: { formId: string }) => {
@@ -25,7 +24,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
   useEffect(() => {
     const getSettings = async () => {
       try {
-        const notificationsSettings = await getNotificationsSettings(formId);
+        const notificationsSettings = await getNotificationsUsersAndSettings(formId);
         if ("error" in notificationsSettings || !notificationsSettings) {
           throw new Error();
         }
@@ -44,17 +43,15 @@ export const Notifications = ({ formId }: { formId: string }) => {
     getSettings();
   }, [formId, toastError]);
 
-  const { getDeliveryOption, setNotificationsInterval, notificationsInterval } = useTemplateStore(
-    (s) => ({
-      getDeliveryOption: s.getDeliveryOption,
-      setNotificationsInterval: s.setNotificationsInterval,
-      notificationsInterval: s.notificationsInterval,
-    })
-  );
+  // TODO: remove from template store: setNotificationsInterval, notificationsInterval
+  const { getDeliveryOption } = useTemplateStore((s) => ({
+    getDeliveryOption: s.getDeliveryOption,
+  }));
 
-  const isVault = isVaultDelivery(getDeliveryOption());
+  //TEMP
   const [notificationValue, setNotificationValue] = useState<string>(
-    notificationsInterval ? String(notificationsInterval) : String(NotificationsInterval.OFF)
+    // notificationsInterval ? String(notificationsInterval) : String(NotificationsInterval.OFF)
+    String(NotificationsInterval.OFF)
   );
 
   const toggleChecked = useCallback(
@@ -91,7 +88,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
     if (result && result.error) {
       toast.error(updateNotificationsIntervalError);
     } else {
-      setNotificationsInterval(newNotificationsInterval);
+      // setNotificationsInterval(newNotificationsInterval);
       toast.success(updateNotificationsIntervalSuccess);
     }
   }, [
@@ -99,8 +96,13 @@ export const Notifications = ({ formId }: { formId: string }) => {
     notificationValue,
     updateNotificationsIntervalError,
     updateNotificationsIntervalSuccess,
-    setNotificationsInterval,
+    // setNotificationsInterval,
   ]);
+
+  // This is a published form with email delivery. Don't show notifications settings.
+  if (getDeliveryOption()) {
+    return null;
+  }
 
   return (
     <div className="mb-10" data-testid="form-notifications">
@@ -117,7 +119,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
             description={t("settings.notifications.sessionUser.toggle.title", {
               email: sessionUser.email,
             })}
-            disabled={!isVault}
+            // disabled={!isVault}
           />
         </div>
       ) : (
@@ -150,7 +152,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
         dataTestId="form-notifications-save"
         theme="secondary"
         onClick={saveNotificationsValue}
-        disabled={!isVault}
+        // disabled={!isVault}
       >
         {t("settings.notifications.save")}
       </Button>
