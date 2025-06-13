@@ -210,7 +210,7 @@ export const requestNew2FAVerificationCode = async (
     logMessage.info("HealthCheck: request new 2fa code failure");
     if (error instanceof Missing2FASession) {
       logMessage.warn(
-        `Failed to send new verificaiton code. User ${email} does not have an existing authentication flow token`
+        `Failed to send new verification code. User ${email} does not have an existing authentication flow token`
       );
       throw error;
     } else {
