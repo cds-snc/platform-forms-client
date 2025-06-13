@@ -58,5 +58,11 @@
   "userAdministration": "User administration",
   "error": {
     "permissions": "Failed to update permissions."
+  },
+  "search": {
+    "label": "Search",
+    "placeholder": "Search by name or email address",
+    "noResults": "No results found",
+    "ariaLabel": "Search accounts by name or email address"
   }
 }
