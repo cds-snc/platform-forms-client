@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.44.0](https://github.com/cds-snc/platform-forms-client/compare/v3.43.1...v3.44.0) (2025-06-13)
+
+
+### Features
+
+* Add User based Feature Toggle ([#5682](https://github.com/cds-snc/platform-forms-client/issues/5682)) ([9217c28](https://github.com/cds-snc/platform-forms-client/commit/9217c28d661a2114dbcecabc8e03d0b2272341e1))
+* replace Axios with Got in connectors package ([#5691](https://github.com/cds-snc/platform-forms-client/issues/5691)) ([7f41a0a](https://github.com/cds-snc/platform-forms-client/commit/7f41a0a64c7bc2ddd25e35fb8b329a835b562024))
+
+
+### Bug Fixes
+
+* Check page visibility while checking rules for element visibility/validation ([#5678](https://github.com/cds-snc/platform-forms-client/issues/5678)) ([f877312](https://github.com/cds-snc/platform-forms-client/commit/f877312edb06fa63d2297e4663fdabc9014afff3))
+* Set language of validation summary heading ([#5698](https://github.com/cds-snc/platform-forms-client/issues/5698)) ([0525bfc](https://github.com/cds-snc/platform-forms-client/commit/0525bfc84b1025adba8ed0126b3028fa9f4c1afc))
+* TagInput - allow spaces in tags, enable space to close tags ([#5697](https://github.com/cds-snc/platform-forms-client/issues/5697)) ([a281f65](https://github.com/cds-snc/platform-forms-client/commit/a281f6506a8e6c8c736dfcf5cb4bd42cc8b4622c))
+* Trim trailing/leading whitespace from passwords ([#5693](https://github.com/cds-snc/platform-forms-client/issues/5693)) ([ab329ee](https://github.com/cds-snc/platform-forms-client/commit/ab329ee64885e8f5b602f04e7fd53adf9edb7e7b))
+
+
+### Miscellaneous Chores
+
+* add new notifications users field to template schema ([#5686](https://github.com/cds-snc/platform-forms-client/issues/5686)) ([ad1496d](https://github.com/cds-snc/platform-forms-client/commit/ad1496daf10f194c06fda74c89233fff7baa4fc7))
+* Add search to accounts page ([#5699](https://github.com/cds-snc/platform-forms-client/issues/5699)) ([ceec372](https://github.com/cds-snc/platform-forms-client/commit/ceec372f219d36ed6d4b7a785cfe7b0cfe452390))
+* add submit progress bar ([#5689](https://github.com/cds-snc/platform-forms-client/issues/5689)) ([45b213c](https://github.com/cds-snc/platform-forms-client/commit/45b213cb09c720e9ad526a8032b78af279a652a5))
+* Clarify and improve file upload content ([#5681](https://github.com/cds-snc/platform-forms-client/issues/5681)) ([e6ea707](https://github.com/cds-snc/platform-forms-client/commit/e6ea707cfc3fa732d89a680e8601cc9a72ddddc5))
+* fix heading spacing for contact us ([#5690](https://github.com/cds-snc/platform-forms-client/issues/5690)) ([093a4fe](https://github.com/cds-snc/platform-forms-client/commit/093a4fe5f8b3ef61e1b933f05c0eaa425225e5d7))
+* fix initial form id for element dialog upload link ([#5700](https://github.com/cds-snc/platform-forms-client/issues/5700)) ([05d4be5](https://github.com/cds-snc/platform-forms-client/commit/05d4be5e83cf2b0025702e21076a5dd58238f371))
+* update Jest to 30.0.0 ([#5694](https://github.com/cds-snc/platform-forms-client/issues/5694)) ([729c8bb](https://github.com/cds-snc/platform-forms-client/commit/729c8bb91a6571cd02b3c15d6fbba9e02af99f21))
+
 ## [3.43.1](https://github.com/cds-snc/platform-forms-client/compare/v3.43.0...v3.43.1) (2025-06-11)
 
 
