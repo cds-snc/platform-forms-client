@@ -20,7 +20,7 @@ export const NavigtationFrame = async ({
 
   return (
     <>
-      <div className="mb-5">
+      <div className="my-5">
         <ul
           id="accountsFilterList"
           className="flex list-none px-0 text-base"

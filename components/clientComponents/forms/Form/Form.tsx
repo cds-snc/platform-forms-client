@@ -12,8 +12,6 @@ import { type Responses } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 
-import Loader from "../../globals/Loader";
-
 import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
@@ -37,6 +35,8 @@ import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
 
 import { FocusHeader } from "app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
+
+import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -125,7 +125,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   return status === "submitting" ? (
     <>
       <title>{t("loading")}</title>
-      <Loader message={t("loading")} />
+      <SubmitProgress />
     </>
   ) : (
     <>
@@ -141,7 +141,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       {errorList && (
         <Alert
           type={ErrorStatus.ERROR}
-          heading={t("input-validation.heading")}
+          heading={t("input-validation.heading", {
+            lng: language,
+          })}
           validation={true}
           id={errorId}
           tabIndex={0}

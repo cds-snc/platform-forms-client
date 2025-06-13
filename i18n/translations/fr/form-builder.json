@@ -209,17 +209,17 @@
       "text3": "to use this form element."
     },
     "fileInputWithApi": {
-      "description": "A way to add supporting documentation. [FR]",
+      "description": "Un moyen d'ajouter de la documentation à l'appui.",
       "trialFeature": {
-        "title": "Trial feature [FR]",
-        "text1": "This feature has some limitations in the short term as we learn more. In order to use File upload, you must: [FR]",
-        "bullet1": "Set your response delivery to API.",
-        "bullet2": "Files uploaded to an individual form will have a maximum file size of {{BODY_SIZE_LIMIT_WITH_FILES}} MB. [FR]",
-        "bullet3": "All files will be scanned on submission. Please share the form with people you trust. [FR]"
+        "title": "Fonctionnalité Bêta",
+        "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
+        "bullet1": "La récupération des réponses au formulaire via l'API",
+        "bullet2": "Une taille maximale combinée de tous les fichiers téléversés :  {{BODY_SIZE_LIMIT_WITH_FILES}} Mo",
+        "bullet3": "Les fichiers seront analysés pour du contenu malveillant une fois soumis"
       },
       "recommendations": {
         "title": "Recommendations",
-        "text1": "Add fields to gather contact information in case you need to support those with the files they have attached. [FR]"
+        "text1": "Ajoutez des champs à votre formulaire pour recueillir des coordonnées au cas où vous auriez besoin d'aider ces personnes avec les fichiers ajoutés."
       }
     },
     "firstMiddleLastName": {
@@ -530,7 +530,8 @@
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
-  "hasFileInputAndApiDelivery": "[FR] Has FileInput and API delivery enabled",
+  "hasFileInputAndApiDelivery": "Livraison de réponse avec l'API",
+  "hasFileInputAndApiDeliveryNote": "Choix obligatoire lors de l'utilisation du téléverseur de fichiers.",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
@@ -1415,10 +1416,10 @@
   "en": "English",
   "fr": "Français",
   "beta": {
-    "tag": "Beta: [FR]",
-    "text": "Trial feature [FR]"
+    "tag": "Bêta :",
+    "text": "Fonctionnalité à l'essai"
   },
   "fileUploadApiWarning": {
-    "text": "Delivery method is not set to API [FR]."
+    "text": "La méthode de livraison n'est pas configurée sur API."
   }
 }
