@@ -19,7 +19,9 @@ export const FileInput = ({ title }: { title: string }) => {
     translationLanguagePriority: s.translationLanguagePriority,
   }));
 
-  const link = `/${translationLanguagePriority}/form-builder/${id}/settings`;
+  const formId = id || "0000";
+
+  const link = `/${translationLanguagePriority}/form-builder/${formId}/settings`;
 
   return hasApiKeyId ? (
     <WithApiDescription title={title} />
