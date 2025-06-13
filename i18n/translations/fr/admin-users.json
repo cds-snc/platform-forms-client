@@ -60,9 +60,9 @@
     "permissions": "Les autorisations n'ont pas pu être mises à jour."
   },
   "search": {
-    "label": "Search [FR]",
-    "placeholder": "Search by name or email address [FR]",
-    "noResults": "No results found [FR]",
-    "ariaLabel": "Search accounts by name or email address [FR]"
+    "label": "Recherche",
+    "placeholder": "Rechercher par nom ou adresse courriel",
+    "noResults": "Aucun résultat trouvé",
+    "ariaLabel": "Recherche de comptes par nom ou par adresse courriel"
   }
 }
