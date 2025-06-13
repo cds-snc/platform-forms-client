@@ -39,7 +39,7 @@ export const UsersList = async ({ filter, query }: { filter?: string; query?: st
       threshold: 0.3, // Lower threshold for more accurate matches
       distance: 100, // Allow matching terms that are further apart
       ignoreLocation: true, // Match anywhere in the string
-      minMatchCharLength: 3,
+      minMatchCharLength: 2,
       shouldSort: true, // Sort results by score
       useExtendedSearch: true, // see: https://www.fusejs.io/examples.html#extended-search
     });
