@@ -43,6 +43,11 @@
       "description": "Action requise : ",
       "linkText": "Approuver la suppression de réponses"
     },
+    "responses": {
+      "noResponses": "No new responses",
+      "hasNewResponses": "You have new responses",
+      "hasUnconfirmedResponses": "You have unconfirmed responses"
+    },
     "unnamedForm": "Fichier sans nom"
   },
   "responseTemplate": {
