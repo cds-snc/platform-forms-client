@@ -266,6 +266,7 @@ const validatePasswordResetForm = async (
         v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
       ]),
       password: v.string([
+        v.toTrimmed(),
         v.minLength(8, t("account.fields.password.error.minLength", { ns: "common" })),
         v.maxLength(50, t("account.fields.password.error.maxLength", { ns: "common" })),
         v.custom(
@@ -286,6 +287,7 @@ const validatePasswordResetForm = async (
         ),
       ]),
       passwordConfirmation: v.string([
+        v.toTrimmed(),
         v.minLength(1, t("input-validation.required", { ns: "common" })),
       ]),
     },

@@ -87,21 +87,22 @@ model Privilege {
 }
 
 model User {
-  id                      String           @id @default(cuid())
-  name                    String?
-  email                   String           @unique
-  image                   String?
-  emailVerified           DateTime?
-  lastLogin               DateTime         @default(now()) @db.Timestamptz(6)
-  active                  Boolean          @default(true)
-  privileges              Privilege[]
-  accounts                Account[]
-  sessions                Session[]
-  templates               Template[]
-  securityAnswers         SecurityAnswer[]
-  notes                   String?
-  createdAt               DateTime         @default(now()) @db.Timestamptz(6)
-  invitations             Invitation[]
+  id              String           @id @default(cuid())
+  name            String?
+  email           String           @unique
+  image           String?
+  emailVerified   DateTime?
+  lastLogin       DateTime         @default(now()) @db.Timestamptz(6)
+  active          Boolean          @default(true)
+  privileges      Privilege[]
+  accounts        Account[]
+  sessions        Session[]
+  templates       Template[]
+  securityAnswers SecurityAnswer[]
+  notes           String?
+  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+  invitations     Invitation[]
+  features        UserFeature[]
   notificationsTemplates  Template[]       @relation("TemplateNotificationsUsers")
 }
 
@@ -165,4 +166,13 @@ model Invitation {
   user         User?    @relation(fields: [invitedBy], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([email, templateId])
+}
+
+model UserFeature {
+  id        String   @id @default(cuid())
+  userId    String
+  feature   String   // Must match a key from FeatureFlags in code
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, feature])
 }

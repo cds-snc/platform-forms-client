@@ -135,6 +135,7 @@ const validate = async (
         v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
       ]),
       password: v.string([
+        v.toTrimmed(),
         v.minLength(1, t("input-validation.required", { ns: "common" })),
         v.minLength(8, t("account.fields.password.error.minLength", { ns: "common" })),
         v.maxLength(50, t("account.fields.password.error.maxLength", { ns: "common" })),
@@ -156,6 +157,7 @@ const validate = async (
         ),
       ]),
       passwordConfirmation: v.string([
+        v.toTrimmed(),
         v.minLength(1, t("input-validation.required", { ns: "common" })),
       ]),
     },
