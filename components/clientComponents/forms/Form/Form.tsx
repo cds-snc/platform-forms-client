@@ -141,7 +141,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       {errorList && (
         <Alert
           type={ErrorStatus.ERROR}
-          heading={t("input-validation.heading")}
+          heading={t("input-validation.heading", {
+            lng: language,
+          })}
           validation={true}
           id={errorId}
           tabIndex={0}
