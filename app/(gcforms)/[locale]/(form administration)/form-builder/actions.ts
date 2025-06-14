@@ -18,7 +18,6 @@ import {
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
   updateSecurityAttribute,
-  updateResponseDeliveryOption,
   updateFormPurpose,
   updateFormSaveAndResume,
 } from "@lib/templates";
@@ -339,39 +338,6 @@ export const updateTemplateUsers = AuthenticatedAction(
       return { success: true };
     } catch (error) {
       return { success: false, error: (error as Error).message };
-    }
-  }
-);
-
-export const updateTemplateDeliveryOption = AuthenticatedAction(
-  async (
-    _,
-    {
-      id: formID,
-      deliveryOption,
-    }: {
-      id: string;
-      deliveryOption: DeliveryOption | undefined;
-    }
-  ): Promise<{
-    formRecord: FormRecord | null;
-    error?: string;
-  }> => {
-    try {
-      if (!deliveryOption) {
-        throw new Error("Require Delivery Option Data");
-      }
-
-      const response = await updateResponseDeliveryOption(formID, deliveryOption);
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { ${formID}, ${deliveryOption} }`
-        );
-      }
-
-      return { formRecord: response };
-    } catch (error) {
-      return { formRecord: null, error: (error as Error).message };
     }
   }
 );

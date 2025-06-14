@@ -9,8 +9,8 @@ import {
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logEvent } from "@lib/auditLogs";
-import { removeMarker, updateNotificationsSetting } from "@lib/notifications";
-import { NotificationsInterval } from "@gcforms/types";
+import { getNotificationsSettings, updateNotificationsSettings } from "@root/lib/notifications";
+import { logMessage } from "@root/lib/logger";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -69,16 +69,52 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
   }
 });
 
-export const updateNotificationsInterval = AuthenticatedAction(
-  async (_, formId: string, notificationsInterval: NotificationsInterval) => {
+export const saveNotificationsSettings = AuthenticatedAction(
+  async (_, formId: string, user: { email: string; enabled: boolean } | null) => {
     try {
-      await Promise.all([
-        updateNotificationsSetting(formId, notificationsInterval),
-        // Remove old cache value to allow a new one with the new ttl to be created when the next submission is sent
-        removeMarker(formId),
-      ]);
+      if (!user || !user.email) {
+        logMessage.warn("No user provided for notifications settings update");
+        throw new Error();
+      }
+
+      await updateNotificationsSettings(formId, user);
     } catch (_) {
       return { error: "There was an error. Please try again later." } as ServerActionError;
+    }
+  }
+);
+
+export const getNotificationsUsersAndSettings = AuthenticatedAction(
+  async (session, formId: string) => {
+    try {
+      const notificationsSettings = await getNotificationsSettings(formId);
+
+      // TODO case of no users is possible on older I think so allow?
+      // if (!Array.isArray(notificationsUsers) || notificationsUsers.length === 0) {
+      //   throw new Error("No notifications users found");
+      // }
+
+      const sessionUser = notificationsSettings?.users.find(
+        (user) => user.email === session.user.email
+      );
+
+      const usersWithoutSessionUser =
+        notificationsSettings?.users.filter((user) => user.email !== session.user.email) || [];
+
+      // TODO case of no users is possible on older I think so allow?
+      // if (!sessionUser) {
+      //   throw new Error("Session user not found in notifications users");
+      // }
+
+      return {
+        users: usersWithoutSessionUser,
+        sessionUser,
+      };
+    } catch (error) {
+      logMessage.warn(`Error fetching notifications settings: ${(error as Error).message}`);
+      return {
+        error: (error as Error).message || "There was an error. Please try again later.",
+      } as ServerActionError;
     }
   }
 );
