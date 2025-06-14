@@ -9,8 +9,9 @@ import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { getNotificationsUsersAndSettings, saveNotificationsSettings } from "./actions";
+
 import { CheckNoBorderIcon, XIcon } from "@root/components/serverComponents/icons";
+import { getNotificationsUsersAndSettings, saveNotificationsSettings } from "../actions";
 
 export const Notifications = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
