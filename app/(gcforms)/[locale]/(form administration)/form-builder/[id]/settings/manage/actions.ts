@@ -69,6 +69,21 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
   }
 });
 
+export const saveNotificationsSettings = AuthenticatedAction(
+  async (_, formId: string, user: { email: string; enabled: boolean } | null) => {
+    try {
+      if (!user || !user.email) {
+        logMessage.warn("No user provided for notifications settings update");
+        throw new Error();
+      }
+
+      await updateNotificationsSettings(formId, user);
+    } catch (_) {
+      return { error: "There was an error. Please try again later." } as ServerActionError;
+    }
+  }
+);
+
 export const getNotificationsUsersAndSettings = AuthenticatedAction(
   async (session, formId: string) => {
     try {
@@ -100,21 +115,6 @@ export const getNotificationsUsersAndSettings = AuthenticatedAction(
       return {
         error: (error as Error).message || "There was an error. Please try again later.",
       } as ServerActionError;
-    }
-  }
-);
-
-export const saveNotificationsSettings = AuthenticatedAction(
-  async (_, formId: string, user: { email: string; enabled: boolean } | null) => {
-    try {
-      if (!user || !user.email) {
-        logMessage.warn("No user provided for notifications settings update");
-        throw new Error();
-      }
-
-      await updateNotificationsSettings(formId, user);
-    } catch (_) {
-      return { error: "There was an error. Please try again later." } as ServerActionError;
     }
   }
 );
