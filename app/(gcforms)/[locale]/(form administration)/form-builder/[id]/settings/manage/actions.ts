@@ -9,8 +9,8 @@ import {
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logEvent } from "@lib/auditLogs";
-import { removeMarker, updateNotificationsSetting } from "@lib/notifications";
-import { NotificationsInterval } from "@gcforms/types";
+// import { removeMarker, updateNotificationsSetting } from "@lib/notifications";
+// import { NotificationsInterval } from "@gcforms/types";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -68,17 +68,3 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
     return { error: "There was an error. Please try again later." } as ServerActionError;
   }
 });
-
-export const updateNotificationsInterval = AuthenticatedAction(
-  async (_, formId: string, notificationsInterval: NotificationsInterval) => {
-    try {
-      await Promise.all([
-        updateNotificationsSetting(formId, notificationsInterval),
-        // Remove old cache value to allow a new one with the new ttl to be created when the next submission is sent
-        removeMarker(formId),
-      ]);
-    } catch (_) {
-      return { error: "There was an error. Please try again later." } as ServerActionError;
-    }
-  }
-);

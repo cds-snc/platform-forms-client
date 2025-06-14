@@ -794,17 +794,19 @@
           "title": "[FR]Notifications for {{email}}",
           "on": "On",
           "off": "Off"
-        },
-        "noSessionUser": "[FR]No users are added to this form yet."
+        }
       },
       "usersList": {
         "title": "[FR]Notification status for others on the form",
         "enabled": "[FR]Notifications enabled",
         "disabled": "[FR]Notifications disabled"
       },
-      "savedSuccessMessage": "Vos modifications ont été enregistrées.",
+      "success": {
+        "updateNotifications": "[FR - AI generated]Vos préférences de notification ont été mises à jour."
+      },
       "errors": {
-        "updateNotificationsInterval": "Il y a eu une erreur dans la mise à jour des notifications. Veuillez réessayer plus tard."
+        "getNotifcations": "[FR]There was an error retrieving Notifications. Please try again later.",
+        "updateNotifications": "Il y a eu une erreur dans la mise à jour des notifications. Veuillez réessayer plus tard."
       }
     }
   },

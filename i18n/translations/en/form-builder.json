@@ -794,17 +794,19 @@
           "title": "Notifications for {{email}}",
           "on": "On",
           "off": "Off"
-        },
-        "noSessionUser": "No users are added to this form yet."
+        }
       },
       "usersList": {
         "title": "Notification status for others on the form",
         "enabled": "Notifications enabled",
         "disabled": "Notifications disabled"
       },
-      "savedSuccessMessage": "Your changes have been saved.",
+      "success": {
+        "updateNotifications": "Your changes have been saved."
+      },
       "errors": {
-        "updateNotificationsInterval": "There was an error updating notifications. Please try again later."
+        "getNotifcations": "There was an error retrieving Notifications. Please try again later.",
+        "updateNotifications": "There was an error updating notifications. Please try again later."
       }
     }
   },

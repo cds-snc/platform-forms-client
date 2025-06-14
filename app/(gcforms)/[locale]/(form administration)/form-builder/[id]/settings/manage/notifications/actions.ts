@@ -2,14 +2,12 @@
 
 import { AuthenticatedAction } from "@root/lib/actions";
 import { logMessage } from "@root/lib/logger";
-import { getNotificationsSettings } from "@root/lib/notifications";
+import { getNotificationsSettings, updateNotificationsSettings } from "@root/lib/notifications";
 import { ServerActionError } from "@root/lib/types/form-builder-types";
 
 export const getNotificationsUsersAndSettings = AuthenticatedAction(
   async (session, formId: string) => {
     try {
-      //TODO use getNotificationsSettings() and remove this function
-      // const notificationsUsers = await getNotificationsUsers(formId);
       const notificationsSettings = await getNotificationsSettings(formId);
 
       // TODO case of no users is possible on older I think so allow?
@@ -38,6 +36,21 @@ export const getNotificationsUsersAndSettings = AuthenticatedAction(
       return {
         error: (error as Error).message || "There was an error. Please try again later.",
       } as ServerActionError;
+    }
+  }
+);
+
+export const saveNotificationsSettings = AuthenticatedAction(
+  async (_, formId: string, user: { email: string; enabled: boolean } | null) => {
+    try {
+      if (!user || !user.email) {
+        logMessage.warn("No user provided for notifications settings update");
+        throw new Error();
+      }
+
+      await updateNotificationsSettings(formId, user);
+    } catch (_) {
+      return { error: "There was an error. Please try again later." } as ServerActionError;
     }
   }
 );

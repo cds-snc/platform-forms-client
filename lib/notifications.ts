@@ -238,7 +238,7 @@ export const getNotificationsSettings = async (formId: string) => {
   // ): Promise<{ users: { email: string; enabled:boolean; }[]; notificationsInterval: number | null | undefined; deliveryOption: DeliveryOption; } | null> => {
   const notificationsSettings = await _getNotificationsSettings(formId);
   if (!notificationsSettings) {
-    logMessage.error(`getNotificationsUsers template not found with id ${formId}`);
+    logMessage.warn(`getNotificationsSettings template not found with id ${formId}`);
     return null;
   }
 
@@ -284,49 +284,11 @@ const _getNotificationsSettings = async (formId: string) => {
     .catch((e) => prismaErrors(e, null));
 };
 
-// DEPRECATE
-// const _getUsersAndNotificationsInterval = async (
-//   formID: string
-// ): Promise<{
-//   notificationsInterval: number | null | undefined;
-//   users: { email: string }[];
-//   deliveryOption: DeliveryOption | null;
-// } | null> => {
-//   const usersAndNotificationsInterval = await prisma.template
-//     .findUnique({
-//       where: {
-//         id: formID,
-//       },
-//       select: {
-//         notificationsInterval: true,
-//         deliveryOption: true,
-//         users: {
-//           select: {
-//             email: true,
-//           },
-//         },
-//       },
-//     })
-//     .catch((e) => prismaErrors(e, null));
-
-//   if (!usersAndNotificationsInterval) return null;
-
-//   return {
-//     users: usersAndNotificationsInterval.users,
-//     notificationsInterval: usersAndNotificationsInterval.notificationsInterval,
-//     deliveryOption: usersAndNotificationsInterval.deliveryOption as DeliveryOption,
-//   };
-// };
-
-// TODO: updateNotificationsUsers
-// right here
-
-// updateNotificationsInterval
-export const updateNotificationsSetting = async (
+export const updateNotificationsSettings = async (
   formId: string,
-  notificationsInterval: NotificationsInterval
+  user: { email: string; enabled: boolean }
 ) => {
-  const { user } = await authorization.canEditForm(formId).catch((e) => {
+  const { user: sessionUser } = await authorization.canEditForm(formId).catch((e) => {
     logEvent(
       e.user.id,
       { type: "Form", id: formId },
@@ -336,75 +298,78 @@ export const updateNotificationsSetting = async (
     throw e;
   });
 
-  if (!validateNotificationsInterval(notificationsInterval)) {
-    throw new Error(`Invalid notifications interval: ${notificationsInterval}`);
-  }
-
-  await prisma.template
-    .update({
-      where: {
-        id: formId,
-      },
-      data: {
-        notificationsInterval,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  logEvent(
-    user.id,
-    { type: "Form", id: formId },
-    "UpdateNotificationsInterval",
-    `User :${user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
-  );
-};
-
-// DEPRECATE
-export const getNotificationsUsers = async (
-  formId: string
-): Promise<{ email: string; enabled: boolean }[] | null> => {
-  // No auth check since this may be requested from a non-signed-in user
-  // e.g. sending notifications on a form submission
-  const usersAndNotifications = await _getUsersAndNotificationsUsers(formId);
-  if (!usersAndNotifications) {
-    logMessage.error(`getNotificationsUsers template not found with id ${formId}`);
+  if (!user || !user.email) {
+    logMessage.warn("No user provided for notifications settings update");
     return null;
   }
 
-  const { users, notificationsUsers } = usersAndNotifications;
-  return users.map((user) => {
-    const found = notificationsUsers.find((nUser) => nUser.email === user.email);
-    return {
-      email: user.email,
-      enabled: found ? true : false,
-    };
-  });
-};
-
-// DEPRECATE
-const _getUsersAndNotificationsUsers = async (
-  formId: string
-): Promise<{ users: { email: string }[]; notificationsUsers: { email: string }[] } | null> => {
-  // No auth check since this may be requested from a non-signed-in user
-  // e.g. sending notifications on a form submission
-  return prisma.template
-    .findUnique({
+  const template = await prisma.template
+    .findFirst({
       where: {
         id: formId,
       },
-      select: {
-        users: {
-          select: {
-            email: true,
-          },
-        },
-        notificationsUsers: {
-          select: {
-            email: true,
-          },
-        },
-        //notificationsInterval: true,
+      include: {
+        users: true,
+        notificationsUsers: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
+
+  if (template === null) {
+    logMessage.warn(
+      `Can not notifications setting for user with email ${user.email}
+       on template ${formId}.  Template does not exist`
+    );
+    return null;
+  }
+
+  const userToUpdate = template.users.find((u) => u.email === user.email);
+  if (!userToUpdate) {
+    logMessage.warn(
+      `Can not notifications setting for user with email ${user.email}
+       on template ${formId}.  User does not exist`
+    );
+    return null;
+  }
+
+  const updatedUsers = template.notificationsUsers;
+  if (user.enabled) {
+    if (!updatedUsers.some((u) => u.email === user.email)) {
+      updatedUsers.push(userToUpdate);
+    }
+  } else {
+    const index = updatedUsers.findIndex((u) => u.email === user.email);
+    if (index !== -1) {
+      updatedUsers.splice(index, 1);
+    }
+  }
+
+  // TODO
+  // await prisma.template
+  //   .update({
+  //     where: {
+  //       id: formId,
+  //     },
+  //     data: {
+  //       notificationsInterval,
+  //     },
+  //   })
+  //   .catch((e) => prismaErrors(e, null));
+
+  logMessage.info(
+    `saveNotificationsSettings updated notifications settings for user with email ${
+      user.email
+    } on template ${formId} to ${user.enabled ? "enabled" : "disabled"}`
+  );
+
+  // TODO remove event UpdateNotificationsInterval
+  // TODO worth logging this update?
+  logEvent(
+    sessionUser.id,
+    { type: "Form", id: formId },
+    "UpdateNotificationsInterval",
+    `User :${sessionUser.id} updated notifications setting on form ${formId} to ${
+      user.enabled ? "enabled" : "disabled"
+    }`
+  );
 };

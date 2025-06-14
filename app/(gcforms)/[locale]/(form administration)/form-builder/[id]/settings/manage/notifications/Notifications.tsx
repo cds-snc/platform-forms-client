@@ -4,19 +4,19 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { NotificationsInterval } from "@gcforms/types";
-import { updateNotificationsInterval } from "../actions";
 import { NotificationsToggle } from "./NotificationsToggle";
 import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { getNotificationsUsersAndSettings } from "./action";
+import { getNotificationsUsersAndSettings, saveNotificationsSettings } from "./actions";
 import { CheckNoBorderIcon, XIcon } from "@root/components/serverComponents/icons";
 
 export const Notifications = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
-  const toastError = t("settings.notifications.errors.noNotificationsSettings");
+  const generalError = t("settings.notifications.error.general");
+  const updateNotificationsError = t("settings.notifications.error.updateNotifications");
+  const updateNotificationsSuccess = t("settings.notifications.success.updateNotifications");
 
   const [users, setUsers] = useState<{ email: string; enabled: boolean }[] | null>(null);
   const [sessionUser, setSessionUser] = useState<{ email: string; enabled: boolean } | null>(null);
@@ -37,67 +37,41 @@ export const Notifications = ({ formId }: { formId: string }) => {
           setSessionUser(notificationsSettings.sessionUser);
         }
       } catch (error) {
-        toast.error(toastError);
+        toast.error(generalError);
       }
     };
     getSettings();
-  }, [formId, toastError]);
+  }, [formId, generalError]);
 
   // TODO: remove from template store: setNotificationsInterval, notificationsInterval
   const { getDeliveryOption } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
   }));
 
-  //TEMP
-  const [notificationValue, setNotificationValue] = useState<string>(
-    // notificationsInterval ? String(notificationsInterval) : String(NotificationsInterval.OFF)
-    String(NotificationsInterval.OFF)
-  );
-
   const toggleChecked = useCallback(
     () =>
-      setNotificationValue(
-        notificationValue === String(NotificationsInterval.OFF)
-          ? String(NotificationsInterval.DAY)
-          : String(NotificationsInterval.OFF)
-      ),
-    [notificationValue]
+      setSessionUser((prev) => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          enabled: !prev.enabled,
+        };
+      }),
+    []
   );
 
-  const updateNotificationsIntervalError = t(
-    "settings.notifications.errors.updateNotificationsInterval"
-  );
-
-  const updateNotificationsIntervalSuccess = t("settings.notifications.savedSuccessMessage");
-
-  const saveNotificationsValue = useCallback(async () => {
-    const newNotificationsInterval: NotificationsInterval =
-      notificationValue === String(NotificationsInterval.DAY)
-        ? NotificationsInterval.DAY
-        : NotificationsInterval.OFF;
-    // To help track if many users are disabling notifications - yes, then default to off
-    if (newNotificationsInterval === NotificationsInterval.OFF) {
+  const updateNotifications = useCallback(async () => {
+    const result = await saveNotificationsSettings(formId, sessionUser);
+    if (result && !result.error) {
       ga("form_notifications", {
         formId,
-        action: "disabled",
+        action: sessionUser?.enabled ? "enabled" : "disabled",
       });
-    }
-
-    const result = await updateNotificationsInterval(formId, newNotificationsInterval);
-
-    if (result && result.error) {
-      toast.error(updateNotificationsIntervalError);
+      toast.success(updateNotificationsSuccess);
     } else {
-      // setNotificationsInterval(newNotificationsInterval);
-      toast.success(updateNotificationsIntervalSuccess);
+      toast.error(updateNotificationsError);
     }
-  }, [
-    formId,
-    notificationValue,
-    updateNotificationsIntervalError,
-    updateNotificationsIntervalSuccess,
-    // setNotificationsInterval,
-  ]);
+  }, [formId, sessionUser, updateNotificationsError, updateNotificationsSuccess]);
 
   // This is a published form with email delivery. Don't show notifications settings.
   if (getDeliveryOption()) {
@@ -151,7 +125,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
       <Button
         dataTestId="form-notifications-save"
         theme="secondary"
-        onClick={saveNotificationsValue}
+        onClick={updateNotifications}
         // disabled={!isVault}
       >
         {t("settings.notifications.save")}
