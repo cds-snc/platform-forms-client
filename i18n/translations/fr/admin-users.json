@@ -58,5 +58,11 @@
   "userAdministration": "Administration des l’utilisateurs",
   "error": {
     "permissions": "Les autorisations n'ont pas pu être mises à jour."
+  },
+  "search": {
+    "label": "Recherche",
+    "placeholder": "Rechercher par nom ou adresse courriel",
+    "noResults": "Aucun résultat trouvé",
+    "ariaLabel": "Recherche de comptes par nom ou par adresse courriel"
   }
 }

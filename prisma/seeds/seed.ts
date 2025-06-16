@@ -128,6 +128,21 @@ async function createSecurityQuestions() {
   });
 }
 
+// Can be removed once we know that the migration is completed
+async function deliveryOptionMigration() {
+  const deliveryOptions = await prisma.deliveryOption.deleteMany({
+    where: {
+      template: {
+        isPublished: false, // Only remove the delivery option for draft templates
+      },
+    },
+  });
+
+  console.log(
+    `${deliveryOptions.count} were migrated for move email Delivery Option to Vault migration`
+  );
+}
+
 async function main(environment: string) {
   try {
     console.log(`Seeding Database for ${environment} enviroment`);
@@ -153,6 +168,9 @@ async function main(environment: string) {
         }
       }
     }
+
+    console.log("Running 'deliveryOptionMigration' migration");
+    deliveryOptionMigration();
   } catch (e) {
     console.error(e);
   } finally {

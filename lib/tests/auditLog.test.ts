@@ -94,8 +94,8 @@ describe("Audit Log Tests", () => {
       jest.spyOn(global.Date, "now").mockImplementationOnce(() => currentTimeStamp);
 
       await logEvent("1", { type: "User", id: "1" }, "UserSignIn");
-      expect(mockedSQSClient.prototype.send).toBeCalledTimes(1);
-      expect(mockedSendMessageCommand).toBeCalledWith({
+      expect(mockedSQSClient.prototype.send).toHaveBeenCalledTimes(1);
+      expect(mockedSendMessageCommand).toHaveBeenCalledWith({
         MessageBody: JSON.stringify({
           userId: "1",
           event: "UserSignIn",

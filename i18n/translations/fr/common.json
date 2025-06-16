@@ -47,7 +47,7 @@
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
     "file-size-too-large": "Sélectionner un fichier plus petit.",
-    "file-size-too-large-all-files": "Les fichiers dépassent le maximum de 3.5 Mo. Téléversez des fichiers plus petits.",
+    "file-size-too-large-all-files": "Les fichiers dépassent le maximum de {{maxSizeInMb}} Mo. Téléversez des fichiers plus petits.",
     "file-submission": "Il y a eu un problème avec le fichier soumis. Essayez de téléverser un autre format de fichier, tel que PDF.",
     "file-type-invalid": "Sélectionner un autre type de fichier.",
     "too-many-characters": "Raccourcir la réponse.",
@@ -56,6 +56,8 @@
     "notSameAsUserEmail": "Il ne peut s'agir de votre propre adresse courriel. Entrez le courriel de la personne responsable de votre équipe. S'il s'agit de vous, ajoutez un·e collègue.",
     "min-length-4-characters": "Doit comporter au moins 4 caractères.",
     "MB": "Mo",
+    "KB": "Ko",
+    "bytes": "octets",
     "error-list": {
       "default": "Saisissez une réponse pour : {{question}}",
       "select": "Sélectionnez une option pour : {{question}}",
@@ -68,7 +70,7 @@
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
   "required-field": "Champ obligatoire",
-  "file-upload-button-text": "Sélectionner un fichier",
+  "file-upload-button-text": "Choisir un fichier",
   "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "dropdown-initial-option-text": "Pas de sélection",
@@ -238,6 +240,11 @@
       "description": "Essayez de téléverser à nouveau le fichier ou recommencez un nouveau formulaire et copiez-collez vos réponses du fichier.",
       "errorCode": "Code d'erreur : {{code}}"
     },
+    "problemLoadingAnswers": {
+      "title": "Problème de téléversement du fichier",
+      "description": "Vérifiez que vous avez sélectionné le bon fichier. Essayez de téléverser à nouveau, ou recommencez un nouveau formulaire et copiez-collez vos réponses à partir de votre fichier.",
+      "errorCode": "Error code: {{code}}"
+    },
     "resumePage": {
       "upload": {
         "title": "Téléversez vos réponses",
@@ -311,5 +318,13 @@
   "conditional": {
     "activated": "L'élément {{title}} a été ajouté au formulaire"
   },
-  "version": "Version "
+  "version": "Version ",
+  "remove": "Supprimer",
+  "fileInput": {
+    "addedMessage": "{{fileName}} a été ajouté au formulaire",
+    "removedMessage": "{{fileName}} a été supprimé"
+  },
+  "submitProgress": {
+    "text": "Envoi du formulaire en cours..."
+  }
 }

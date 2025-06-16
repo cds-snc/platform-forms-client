@@ -27,7 +27,7 @@ Le SNC peut suspendre le service à tout moment en cas d’utilisation jugée in
 
 ### Les fournisseurs d’infrastructure de Formulaires GC sont responsables :
 
-- d’envoyer des courriels comprenant les données des utilisateurs finaux et utilisatrices finales aux adresses courriel gouvernementales fournies.
+- d’envoyer des courriels comprenant les données des utilisateurs finaux et utilisatrices finales aux adresses courriel gouvernementales fournies, si les formulaires ont été publiés avant le 11 juin 2025.
 - de fournir l’infrastructure infonuagique d’AWS.
 - de faire appliquer les [conditions de service d'AWS](https://d1.awsstatic.com/legal/awsserviceterms/AWS_Service_Terms_French_2022-10-14.pdf).
 

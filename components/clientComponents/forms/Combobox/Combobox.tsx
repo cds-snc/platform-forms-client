@@ -51,15 +51,28 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       initialInputValue: field.value || "",
     });
 
+  /**
+   * aria-lablledby is provided by getInputProps(). Since we're not creating a lablel
+   * for the input here, we need to remove it to avoid accessibility issues.
+   */
+  const inputProps = getInputProps();
+  if ("aria-labelledby" in inputProps) {
+    delete inputProps["aria-labelledby"];
+  }
+
+  if (props.strictValue) {
+    inputProps.onBlur = handleBlur;
+  }
+
+  inputProps.value = field.value || "";
+
   return (
     <>
       <div className={classes} data-testid="combobox">
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
         <input
-          {...getInputProps(
-            props.strictValue ? { onBlur: handleBlur, value: field.value || "" } : {}
-          )}
+          {...inputProps}
           aria-describedby={ariaDescribedBy}
           id={id}
           required={required}
