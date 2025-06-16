@@ -1,6 +1,5 @@
 "use client";
-// Above to avoid an error. Needed because a useEffect forces a client context but a server icon
-// is used below. Even though the parent component has a declaration an explicit one is requred.
+// Errors without the above because of both an icon server component and a useEffect hook.
 
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
@@ -9,7 +8,6 @@ import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-
 import { CheckNoBorderIcon, XIcon } from "@root/components/serverComponents/icons";
 import { getNotificationsUsersAndSettings, saveNotificationsSettings } from "../actions";
 
@@ -19,8 +17,14 @@ export const Notifications = ({ formId }: { formId: string }) => {
   const updateNotificationsError = t("settings.notifications.error.updateNotifications");
   const updateNotificationsSuccess = t("settings.notifications.success.updateNotifications");
 
-  const [users, setUsers] = useState<{ email: string; enabled: boolean }[] | null>(null);
-  const [sessionUser, setSessionUser] = useState<{ email: string; enabled: boolean } | null>(null);
+  const [users, setUsers] = useState<{ id: string; email: string; enabled: boolean }[] | null>(
+    null
+  );
+  const [sessionUser, setSessionUser] = useState<{
+    id: string;
+    email: string;
+    enabled: boolean;
+  } | null>(null);
 
   useEffect(() => {
     const getSettings = async () => {
@@ -75,8 +79,9 @@ export const Notifications = ({ formId }: { formId: string }) => {
     }
   }, [formId, sessionUser, updateNotificationsError, updateNotificationsSuccess]);
 
-  // This is a published form with email delivery. Don't show notifications settings.
-  if (getDeliveryOption()) {
+  // This is a published form with email delivery or a legacy form has no users.
+  // Don't show notifications settings.
+  if (getDeliveryOption() || !sessionUser) {
     return null;
   }
 
@@ -85,24 +90,17 @@ export const Notifications = ({ formId }: { formId: string }) => {
       <h2>{t("settings.notifications.title")}</h2>
       <p className="mb-2 font-bold">{t("settings.notifications.sessionUser.title")}</p>
       <p className="mb-4">{t("settings.notifications.sessionUser.description")}</p>
-      {sessionUser ? (
-        <div className="mb-4">
-          <NotificationsToggle
-            isChecked={sessionUser.enabled}
-            toggleChecked={toggleChecked}
-            onLabel={t("settings.notifications.sessionUser.toggle.off")}
-            offLabel={t("settings.notifications.sessionUser.toggle.on")}
-            description={t("settings.notifications.sessionUser.toggle.title", {
-              email: sessionUser.email,
-            })}
-            // disabled={!isVault}
-          />
-        </div>
-      ) : (
-        <div className="mb-4">
-          <em>{t("settings.notifications.sessionUser.noSessionUser")}</em>
-        </div>
-      )}
+      <div className="mb-4">
+        <NotificationsToggle
+          isChecked={sessionUser.enabled}
+          toggleChecked={toggleChecked}
+          onLabel={t("settings.notifications.sessionUser.toggle.off")}
+          offLabel={t("settings.notifications.sessionUser.toggle.on")}
+          description={t("settings.notifications.sessionUser.toggle.title", {
+            email: sessionUser.email,
+          })}
+        />
+      </div>
       {users && users.length > 0 && (
         <>
           <p className="mb-2 font-bold">{t("settings.notifications.usersList.title")}</p>
@@ -124,12 +122,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
           </ul>
         </>
       )}
-      <Button
-        dataTestId="form-notifications-save"
-        theme="secondary"
-        onClick={updateNotifications}
-        // disabled={!isVault}
-      >
+      <Button dataTestId="form-notifications-save" theme="secondary" onClick={updateNotifications}>
         {t("settings.notifications.save")}
       </Button>
     </div>

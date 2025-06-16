@@ -70,9 +70,9 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
 });
 
 export const saveNotificationsSettings = AuthenticatedAction(
-  async (_, formId: string, user: { email: string; enabled: boolean } | null) => {
+  async (_, formId: string, user: { id: string; email: string; enabled: boolean } | null) => {
     try {
-      if (!user || !user.email) {
+      if (!user || !user.id) {
         logMessage.warn("No user provided for notifications settings update");
         throw new Error();
       }
@@ -89,22 +89,10 @@ export const getNotificationsUsersAndSettings = AuthenticatedAction(
     try {
       const notificationsSettings = await getNotificationsSettings(formId);
 
-      // TODO case of no users is possible on older I think so allow?
-      // if (!Array.isArray(notificationsUsers) || notificationsUsers.length === 0) {
-      //   throw new Error("No notifications users found");
-      // }
-
-      const sessionUser = notificationsSettings?.users.find(
-        (user) => user.email === session.user.email
-      );
+      const sessionUser = notificationsSettings?.users.find((user) => user.id === session.user.id);
 
       const usersWithoutSessionUser =
-        notificationsSettings?.users.filter((user) => user.email !== session.user.email) || [];
-
-      // TODO case of no users is possible on older I think so allow?
-      // if (!sessionUser) {
-      //   throw new Error("Session user not found in notifications users");
-      // }
+        notificationsSettings?.users.filter((user) => user.id !== session.user.id) || [];
 
       return {
         users: usersWithoutSessionUser,

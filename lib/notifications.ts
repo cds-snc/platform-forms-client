@@ -235,7 +235,6 @@ export const validateNotificationsInterval = (
 };
 
 export const getNotificationsSettings = async (formId: string) => {
-  // ): Promise<{ users: { email: string; enabled:boolean; }[]; notificationsInterval: number | null | undefined; deliveryOption: DeliveryOption; } | null> => {
   const notificationsSettings = await _getNotificationsSettings(formId);
   if (!notificationsSettings) {
     logMessage.warn(`getNotificationsSettings template not found with id ${formId}`);
@@ -246,7 +245,7 @@ export const getNotificationsSettings = async (formId: string) => {
     notificationsSettings;
 
   const allUsersWithSettings = users.map((user) => {
-    const found = notificationsUsers.find((nUser) => nUser.email === user.email);
+    const found = notificationsUsers.find((notificationUser) => notificationUser.id === user.id);
     return {
       id: user.id,
       email: user.email,
@@ -276,6 +275,7 @@ const _getNotificationsSettings = async (formId: string) => {
         },
         notificationsUsers: {
           select: {
+            id: true,
             email: true,
           },
         },
@@ -288,7 +288,7 @@ const _getNotificationsSettings = async (formId: string) => {
 
 export const updateNotificationsSettings = async (
   formId: string,
-  user: { email: string; enabled: boolean }
+  user: { id: string; email: string; enabled: boolean }
 ) => {
   const { user: sessionUser } = await authorization.canEditForm(formId).catch((e) => {
     logEvent(
@@ -300,8 +300,16 @@ export const updateNotificationsSettings = async (
     throw e;
   });
 
-  if (!user || !user.email) {
+  if (!user || !user.id) {
     logMessage.warn("No user provided for notifications settings update");
+    return null;
+  }
+
+  // A user can only update their own notifications settings
+  if (sessionUser.id !== user.id) {
+    logMessage.warn(
+      `User with id ${sessionUser.id} attempted to update notifications settings for user id ${user.id} that does not belong to them`
+    );
     return null;
   }
 
@@ -319,17 +327,17 @@ export const updateNotificationsSettings = async (
 
   if (template === null) {
     logMessage.warn(
-      `Can not notifications setting for user with email ${user.email}
-       on template ${formId}.  Template does not exist`
+      `Can not notifications setting for user with id ${user.id}
+       on template ${formId}. Template does not exist`
     );
     return null;
   }
 
-  const userToUpdate = template.users.find((u) => u.email === user.email);
+  const userToUpdate = template.users.find((u) => u.id === user.id);
   if (!userToUpdate) {
     logMessage.warn(
-      `Can not notifications setting for user with email ${user.email}
-       on template ${formId}.  User does not exist`
+      `Can not find notifications setting for user with id ${user.id}
+       on template ${formId}. User does not exist`
     );
     return null;
   }
@@ -353,12 +361,10 @@ export const updateNotificationsSettings = async (
     } on template ${formId} to ${user.enabled ? "enabled" : "disabled"}`
   );
 
-  // TODO remove event UpdateNotificationsInterval
-  // TODO worth logging this update?
   logEvent(
     sessionUser.id,
     { type: "Form", id: formId },
-    "UpdateNotificationsInterval",
+    "UpdateNotificationsSettings",
     `User :${sessionUser.id} updated notifications setting on form ${formId} to ${
       user.enabled ? "enabled" : "disabled"
     }`
