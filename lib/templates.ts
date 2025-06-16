@@ -611,7 +611,16 @@ export async function updateIsPublishedForTemplate(
 
   // Delete all form responses created during draft mode
   if (isPublished && process.env.APP_ENV !== "test") {
-    await deleteDraftFormResponses(formID);
+    try {
+      // Don't await this call, as it is not critical to the publishing process
+      deleteDraftFormResponses(formID);
+    } catch (e) {
+      logMessage.error(
+        `Error deleting draft form responses for form ${formID}: ${
+          e instanceof Error ? e.message : e
+        }`
+      );
+    }
   }
 
   // We use a where unique input to ensure we are only updating the form if it is not published
