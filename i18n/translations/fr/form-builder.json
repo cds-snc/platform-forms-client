@@ -1416,9 +1416,9 @@
   "en": "English",
   "fr": "Français",
   "strictValue": {
-    "title": "Ensure choice value",
-    "label": "Strict value",
-    "description": "strict value"
+    "title": "Ensure choice value [FR]",
+    "label": "Strict value [FR]",
+    "description": "strict value [FR]"
   },
   "beta": {
     "tag": "Bêta :",
