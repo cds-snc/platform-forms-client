@@ -5,23 +5,8 @@ import { LoginMenu } from "./components/client/LoginMenu";
 import { FormsLink } from "./components/client/FormsLink";
 import { SiteLogo } from "@serverComponents/icons";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
-import { headers } from "next/headers";
-import { Info as AlertInfo } from "@clientComponents/globals/Alert/Alert";
-import { Alert } from "@clientComponents/globals";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
-
-const Info = async ({ locale }: { locale: string }) => {
-  const { t } = await serverTranslation(["setup-security-questions"], { lang: locale });
-  return (
-    <div className="mx-auto mt-10 w-[850px]">
-      <AlertInfo>
-        <Alert.Title headingTag="h3">{t("banner.title")}</Alert.Title>
-        <p className="mb-2">{t("banner.body")}</p>
-      </AlertInfo>
-    </div>
-  );
-};
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -34,13 +19,10 @@ export default async function Layout(props: {
   const { children } = props;
 
   const { t } = await serverTranslation("common", { lang: locale });
-  const headersList = await headers();
-  const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "");
 
   return (
     <div className="flex min-h-full flex-col bg-gray-soft">
       <SkipLink />
-
       <header className="mb-4 bg-white px-16 py-6 laptop:px-32">
         <div className="flex justify-between">
           <div className="canada-flag">
@@ -62,8 +44,6 @@ export default async function Layout(props: {
         </div>
       </header>
       <div id="page-container" className="gc-authpages">
-        {/* Until a better solution is found this adds the banner before the content on the setup security questions page */}
-        {currentPath?.startsWith("/auth/setup-security-questions") && <Info locale={locale} />}
         <div className="account-wrapper mt-10 flex items-center justify-center">
           <div
             className={`rounded-2xl border-1 border-[#D1D5DB] bg-white p-10 tablet:w-[768px] has-[#auth-panel]:tablet:w-[658px] laptop:w-[850px]`}
