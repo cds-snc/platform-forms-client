@@ -45,7 +45,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@95069fcfe2b0566b1f89c0ea2fec6e6166faa021
+        uses: aws-actions/amazon-ecr-login@a5bbe73ce77ea9c288698ad5757299f18b5a420c
 
       - name: Rainbow deployment
         uses: ./.github/workflows/rainbow-deployment
