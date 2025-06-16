@@ -53,6 +53,7 @@ import {
   localizeField,
   getFormElementIndexes,
 } from "./helpers/elements";
+import { transform } from "./helpers/elements/transformFormProperties";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -109,8 +110,18 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             importTemplate: importTemplate(set),
             getHighestElementId: getHighestElementId(set, get),
             generateElementId: generateElementId(set, get),
-            getSchema: () =>
-              JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2),
+            transform: transform(set, get),
+            getSchema: () => {
+              // hasHydrated should work here but we get an error. leaving this timeout for now.
+              setTimeout(() => {
+                if (!get().hasTransformed) {
+                  get().transform();
+                }
+                set({ hasTransformed: true });
+              }, 500);
+
+              return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
+            },
             getId: () => get().id,
             getIsPublished: () => get().isPublished,
             getFormElementById: getFormElementById(set, get),
@@ -130,6 +141,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             setIsPublished: (isPublished) => set({ isPublished }),
             setClosingDate: (value) => set({ closingDate: value }),
             setSaveAndResume: (value) => set({ saveAndResume: value }),
+            setNotificationsInterval: (value) => set({ notificationsInterval: value }),
             setGroupsLayout: (layout) => {
               set((state) => {
                 state.form.groupsLayout = layout;
@@ -137,6 +149,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             },
             updateSecurityAttribute: (value) => set({ securityAttribute: value }),
             resetDeliveryOption: () => set({ deliveryOption: undefined }),
+            setHasTransformed: () => set({ hasTransformed: true }),
           }),
           storageOptions
         )

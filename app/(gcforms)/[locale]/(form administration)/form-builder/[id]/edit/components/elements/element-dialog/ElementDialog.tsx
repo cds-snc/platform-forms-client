@@ -9,6 +9,8 @@ import { ElementFilters } from "./ElementFilters";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { ListBox } from "@formBuilder/components/shared/ListBox";
 
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+
 export type SelectedGroupState = {
   group: Groups | "all";
   ref: React.RefObject<HTMLElement | null>;
@@ -34,7 +36,7 @@ const Body = ({ children }: { children: React.ReactNode }) => {
   return <div className="flex w-full py-[70px]">{children}</div>;
 };
 
-const Footer = ({ children }: { children: React.ReactNode }) => {
+const ElementDialogFooter = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="absolute bottom-0 z-[100] flex min-h-[60px] w-full gap-4 border-t border-slate-800 bg-white p-4">
       {children}
@@ -119,6 +121,12 @@ export const ElementDialog = ({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleAdd]);
 
+  const { hasApiKeyId } = useFormBuilderConfig();
+
+  // Check if the file input should be disabled
+  // In this case, it should only be enabled if the form has an API key
+  const disabled = id === "fileInput" && !hasApiKeyId;
+
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose} className="flex max-w-[800px]">
       <div className="relative flex w-full">
@@ -168,8 +176,12 @@ export const ElementDialog = ({
           {/* /DESCRIPTION */}
         </Body>
 
-        <Footer>
-          <Button dataTestId="element-description-add-element" onClick={handleAdd}>
+        <ElementDialogFooter>
+          <Button
+            disabled={disabled}
+            dataTestId="element-description-add-element"
+            onClick={handleAdd}
+          >
             <>
               {id
                 ? `${t(`addElementDialog.addElement.${id}`)}`
@@ -179,7 +191,7 @@ export const ElementDialog = ({
           <Button theme="secondary" dataTestId="cancel-button" onClick={handleClose}>
             {t("addElementDialog.cancel")}
           </Button>
-        </Footer>
+        </ElementDialogFooter>
       </div>
     </Dialog>
   );

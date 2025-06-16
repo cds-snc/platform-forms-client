@@ -2,15 +2,23 @@
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
-import axios from "axios";
 
 import { useDialogRef, Dialog } from "./shared/Dialog";
-import { TagInput } from "./shared/tag-input/TagInput";
 import { InfoDetails } from "./shared/InfoDetails";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
+
+import { shareForm } from "../actions";
+import { Loader } from "@clientComponents/globals/Loader";
+import { EmailTags } from "./shared/email-tags/EmailTags";
+
+const Loading = () => (
+  <div className="flex h-full items-center justify-center ">
+    <Loader />
+  </div>
+);
 
 export const ShareModal = ({
   handleClose,
@@ -28,15 +36,11 @@ export const ShareModal = ({
   const currentLanguage = i18n.language;
   const alternateLanguage = i18n.language === "en" ? "fr" : "en";
 
-  const { getSchema, name, form } = useTemplateStore((s) => ({
-    getSchema: s.getSchema,
+  const { formId, name, form } = useTemplateStore((s) => ({
+    formId: s.id,
     name: s.name,
     form: s.form,
   }));
-
-  const validateEmail = (email: string) => {
-    return new RegExp(/^[\w-\.]+(\+[\w-]*)?@([\w-]+\.)+[\w-]{2,4}$/).test(email);
-  };
 
   const handleSend = async () => {
     setStatus("sending");
@@ -47,15 +51,12 @@ export const ShareModal = ({
         return;
       }
 
-      await axios({
-        url: "/api/share",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: { name, form: getSchema(), emails: emails, filename },
-        timeout: 5000,
-      });
+      const result = await shareForm({ emails, formId, filename });
+
+      if (result.error) {
+        setStatus("error");
+        return;
+      }
 
       setStatus("sent");
     } catch (err) {
@@ -68,6 +69,7 @@ export const ShareModal = ({
       <Button
         data-share="form-builder-email"
         theme="primary"
+        disabled={status === "sending" || !emails.length}
         onClick={() => {
           handleSend();
           setEmails([]);
@@ -126,6 +128,9 @@ export const ShareModal = ({
               <p className="text-red-default">{t("share.messageError")}</p>
             </>
           )}
+
+          {status === "sending" && <Loading />}
+
           {status === "sent" && (
             <>
               <p>{t("share.messageSent")}</p>
@@ -134,12 +139,9 @@ export const ShareModal = ({
           {status === "ready" && (
             <>
               <p>{t("share.message")}</p>
-              <div className="my-5">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  {t("share.emailLabel")}
-                </label>
-                <TagInput tags={emails} setTags={setEmails} validateTag={validateEmail} />
-              </div>
+
+              <EmailTags tags={emails} setTags={setEmails} />
+
               <InfoDetails summary={t("share.seePreview")}>
                 <div className="mt-4 border-4 border-dashed border-blue-focus p-5">
                   <h4>{t("share.someoneHasShared", { name: data?.user.name })}</h4>

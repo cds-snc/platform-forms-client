@@ -14,11 +14,14 @@ import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorLis
 import { hasOwnProperty, isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
-import { matchRule, FormValues, GroupsType } from "@lib/formContext";
+import { FormValues, GroupsType, checkVisibilityRecursive } from "@lib/formContext";
 import { inGroup } from "@lib/formContext";
 import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClientSide";
 import { DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
+import { isValidEmail } from "@lib/validation/isValidEmail";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
+import { bytesToMb } from "@lib/utils/fileSize";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -145,7 +148,9 @@ const isFieldResponseValid = (
         return t("input-validation.required");
 
       if (fileInputResponse.size && !isAllFilesSizeValid(values)) {
-        return t("input-validation.file-size-too-large-all-files");
+        return t("input-validation.file-size-too-large-all-files", {
+          maxSizeInMb: bytesToMb(BODY_SIZE_LIMIT_WITH_FILES),
+        });
       }
 
       if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
@@ -222,6 +227,14 @@ const isFieldResponseValid = (
   return null;
 };
 
+export const getFieldType = (formElement: FormElement) => {
+  if (formElement.properties.autoComplete === "email") {
+    return "email";
+  }
+
+  return formElement.type;
+};
+
 const valueMatchesType = (value: unknown, type: string, formElement: FormElement) => {
   switch (type) {
     case FormElementTypes.formattedDate:
@@ -229,6 +242,13 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
         return true;
       }
       return false;
+    case FormElementTypes.textField:
+      if (formElement.properties.autoComplete === "email") {
+        if (value && !isValidEmail(value as string)) {
+          return false;
+        }
+      }
+      return true;
     case FormElementTypes.checkbox: {
       if (Array.isArray(value)) {
         return true;
@@ -298,8 +318,14 @@ export const validateResponses = async (values: Responses, formRecord: PublicFor
     // Check if the incoming value matches the type of the form element
     const result = valueMatchesType(values[item], formElement.type, formElement);
 
-    if (!result) {
-      errors[item] = "invalid-response-data-type";
+    // Only invalidate the response if the type has a value
+    // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
+    if (values[item] && !result) {
+      errors[item] = {
+        type: getFieldType(formElement),
+        value: values[item],
+        message: "response-type-mismatch",
+      };
     }
   }
 
@@ -339,15 +365,8 @@ export const validateOnSubmit = (
       continue;
     }
 
-    if (
-      formElement.properties.conditionalRules &&
-      formElement.properties.conditionalRules.length > 0
-    ) {
-      // check if a conditional rule is met
-      const rules = formElement.properties.conditionalRules;
-      if (!rules.some((rule) => matchRule(rule, props.formRecord, values as FormValues))) {
-        continue;
-      }
+    if (!checkVisibilityRecursive(props.formRecord, formElement, values as FormValues)) {
+      continue;
     }
 
     if (formElement.properties.validation) {
@@ -448,7 +467,7 @@ export const setFocusOnErrorMessage = (props: FormikProps<Responses>, errorId: s
  */
 export const isValidGovEmail = (email: string): boolean => {
   const regex =
-    /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+(\+[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]*)?)@((?:[a-zA-Z0-9-.]+\.gc\.ca|cds-snc\.freshdesk\.com)|(canada|cds-snc|elections|rcafinnovation|canadacouncil|nfb|debates-debats)\.ca)$/;
+    /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+(\+[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]*)?)@((?:[a-zA-Z0-9-.]+\.gc\.ca|cds-snc\.freshdesk\.com)|(canada|cds-snc|elections|rcafinnovation|canadacouncil|nfb|debates-debats|invcanada)\.ca)$/;
   return regex.test(email);
 };
 

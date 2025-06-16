@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
       - name: Node.JS Setup
-        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: .nvmrc
 
@@ -34,7 +34,7 @@ jobs:
         run: yarn workspaces focus gcforms
 
       - name: Cypress Component Tests
-        uses: cypress-io/github-action@108b8684ae52e735ff7891524cbffbcd4be5b19f # v6.7.16
+        uses: cypress-io/github-action@615dcf65299b63c35268d795f4dfb79532388f64 # v6.10.0
         with:
           # we have already installed all dependencies above
           install: false

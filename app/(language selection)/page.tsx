@@ -2,10 +2,11 @@
 import { languages } from "@i18n/settings";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
-import { Fip } from "@clientComponents/globals";
 import { themes, ReactHydrationCheck } from "@clientComponents/globals";
 
 import { SiteLogo } from "@serverComponents/icons";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
+import { Language } from "@lib/types/form-builder-types";
 
 const Home = () => {
   // With the automatic language detection we can hopefully remove this page in the
@@ -25,31 +26,29 @@ const Home = () => {
 
   const SiteLink = () => {
     return (
-      <Link href={`${i18n.language}/form-builder`} legacyBehavior>
-        <a className="mr-10 inline-flex no-underline focus:bg-white">
-          <span className="">
-            <SiteLogo title={languageT[browserLanguage]("title")} />
-          </span>
-          <h1 className="!mb-6 !ml-3 inline-block whitespace-nowrap border-none !font-noto-sans !text-[24px] font-semibold leading-10 text-[#1B00C2]">
-            <span lang={browserLanguage}>{languageT[browserLanguage]("title")}</span> -{" "}
-            <span lang={secondLanguage}>{languageT[secondLanguage]("title")}</span>
-          </h1>
-        </a>
+      <Link
+        href={`${i18n.language}/form-builder`}
+        className="mr-10 inline-flex no-underline focus:bg-white"
+      >
+        <span className="">
+          <SiteLogo title={languageT[browserLanguage]("title")} />
+        </span>
+        <h1 className="!mb-6 !ml-3 inline-block whitespace-nowrap border-none !font-noto-sans !text-[24px] font-semibold leading-10 text-[#1B00C2]">
+          <span lang={browserLanguage}>{languageT[browserLanguage]("title")}</span> -{" "}
+          <span lang={secondLanguage}>{languageT[secondLanguage]("title")}</span>
+        </h1>
       </Link>
     );
   };
 
   return (
     <>
-      <header>
-        {" "}
-        <Fip className="my-0 py-6" />
-      </header>
+      <GcdsHeader showLanguageToggle={false} pathname="" language={browserLanguage as Language} />
       <ReactHydrationCheck />
       <div className="flex h-full flex-col">
         <div id="page-container">
           <main id="content">
-            <div className="mt-10 flex items-center justify-center">
+            <div className="container-xl mt-10 flex items-center justify-center">
               <div className="w-[622px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-8">
                 <div className="flex  flex-col items-center">
                   <SiteLink />

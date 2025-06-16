@@ -2,7 +2,7 @@
 import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import React from "react";
-import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
+import { RichTextEditor } from "../../components/elements/RichTextEditor";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
@@ -33,12 +33,6 @@ export const RichText = ({
         <FieldsetLegend>{t(element.type)}</FieldsetLegend>
         <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
           <div className="relative w-1/2 flex-1">
-            <LanguageLabel
-              id={`elements-${index}-description-${primaryLanguage}-language`}
-              lang={primaryLanguage}
-            >
-              <>{primaryLanguage}</>
-            </LanguageLabel>
             <RichTextEditor
               path={propertyPath(element.id, field, primaryLanguage)}
               content={element.properties[fieldEn] ?? ""}
@@ -46,14 +40,14 @@ export const RichText = ({
               ariaLabel={t("pageText") + " " + t(primaryLanguage)}
               ariaDescribedBy={`elements-${index}-description-${primaryLanguage}-language`}
             />
+            <LanguageLabel
+              id={`elements-${index}-description-${primaryLanguage}-language`}
+              lang={primaryLanguage}
+            >
+              <>{primaryLanguage}</>
+            </LanguageLabel>
           </div>
           <div className="relative w-1/2 flex-1">
-            <LanguageLabel
-              id={`elements-${index}-description-${secondaryLanguage}-language`}
-              lang={secondaryLanguage}
-            >
-              <>{secondaryLanguage}</>
-            </LanguageLabel>
             <RichTextEditor
               path={propertyPath(element.id, field, secondaryLanguage)}
               content={element.properties[fieldFr] ?? ""}
@@ -61,6 +55,12 @@ export const RichText = ({
               ariaLabel={t("pageText") + " " + secondaryLanguage}
               ariaDescribedBy={`elements-${index}-description-${secondaryLanguage}-language`}
             />
+            <LanguageLabel
+              id={`elements-${index}-description-${secondaryLanguage}-language`}
+              lang={secondaryLanguage}
+            >
+              <>{secondaryLanguage}</>
+            </LanguageLabel>
           </div>
         </div>
       </div>

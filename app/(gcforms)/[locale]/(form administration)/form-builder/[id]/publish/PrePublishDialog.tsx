@@ -184,9 +184,10 @@ export const PrePublishDialog = ({
                 className={cn(
                   "center-right-15px p-2 form-builder-dropdown my-0 inline-block min-w-[400px] text-black-default border-1 border-black"
                 )}
+                value={formType}
                 onChange={(e) => onFormTypeChange(e)}
               >
-                <option value="" selected disabled hidden>
+                <option value="" disabled hidden>
                   {t("logic.choiceSelect.selectOption")}
                 </option>
                 {elementOptions.map((option) => (

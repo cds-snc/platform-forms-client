@@ -48,6 +48,8 @@ export default AuthenticatedPage(async (props: { params: Promise<{ id: string }>
     closedDetails = closedData?.closedDetails;
   }
 
+  // ⚠️ This is the main entry point for the manage form page. Code beyond this if block
+  // is only reached if the user is an "admin" (can manage all forms)
   if (!manageAllForms || id === "0000") {
     return (
       <ManageForm

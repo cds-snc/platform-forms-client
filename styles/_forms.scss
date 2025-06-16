@@ -57,7 +57,6 @@
 .gc-richText {
   p {
     @extend .gc-p;
-    @apply text-base;
   }
 
   p:has(+ ul, + ol) {
@@ -205,10 +204,6 @@
 
 .gc-file-input-upload-button {
   @apply text-center inline-block mb-0;
-}
-
-.gc-file-input-file-selected {
-  @apply inline-block;
 }
 
 .gc-file-input [type="file"] {

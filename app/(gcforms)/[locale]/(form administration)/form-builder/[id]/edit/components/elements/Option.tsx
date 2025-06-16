@@ -8,8 +8,9 @@ import { Button } from "@clientComponents/globals";
 import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
+import { cn } from "@lib/utils";
 
-type RenderIcon = (index: number) => ReactElement | string | undefined;
+type RenderIcon = ((index: number) => ReactElement | string) | undefined;
 
 interface OptionProps {
   parentIndex: number;
@@ -108,9 +109,11 @@ export const Option = ({
 
   return (
     <div className="mt-3 flex">
-      <div className="mt-2 flex w-5 justify-end" role="presentation">
-        {icon}
-      </div>
+      {icon && (
+        <div className="mt-2 flex w-5 justify-end" role="presentation">
+          {icon}
+        </div>
+      )}
       <Input
         id={`option--${id}--${index + 1}`}
         ref={input}
@@ -122,16 +125,15 @@ export const Option = ({
           updateValue(parentIndex, e.target.value)
         }
         onKeyDown={handleKeyDown}
-        className="!my-0 ml-5 max-h-9 w-full"
+        className={cn("!my-0 max-h-9 w-full", icon && "ml-5")}
         {...getLocalizationAttribute()}
         onFocus={onFocus}
         onBlur={onBlur}
       />
       <Button
-        theme="icon"
-        className="group bg-gray-selected hover:bg-gray-600"
+        className="ml-2 flex max-h-9 max-w-9 items-center justify-center !rounded-full border-1 border-slate-800 bg-gray-selected !p-1.5 text-center  [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
         id={`remove--${id}--${index + 1}`}
-        icon={<Close className="group-focus:fill-white-default" />}
+        icon={<Close className="ml-[12px]" />}
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
           cleanUpRules(String(id), index);

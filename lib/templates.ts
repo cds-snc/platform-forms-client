@@ -21,6 +21,8 @@ import { ownerAddedEmailTemplate } from "./invitations/emailTemplates/ownerAdded
 import { isValidISODate } from "./utils/date/isValidISODate";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
+import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
+import { NotificationsInterval } from "@gcforms/types";
 
 // ******************************************
 // Internal Module Functions
@@ -45,6 +47,7 @@ const _parseTemplate = (template: {
   closingDate?: Date | null;
   closedDetails?: Prisma.JsonValue | null;
   saveAndResume: boolean;
+  notificationsInterval?: number | null;
 }): FormRecord => {
   return {
     id: template.id,
@@ -78,6 +81,7 @@ const _parseTemplate = (template: {
     }),
     closedDetails: template.closedDetails as ClosedDetails,
     saveAndResume: template.saveAndResume,
+    notificationsInterval: template.notificationsInterval as NotificationsInterval,
   };
 };
 
@@ -95,6 +99,7 @@ export type CreateTemplateCommand = {
   publishReason?: string;
   publishFormType?: string;
   publishDesc?: string;
+  notificationsInterval?: NotificationsInterval;
 };
 
 export type UpdateTemplateCommand = {
@@ -107,6 +112,7 @@ export type UpdateTemplateCommand = {
   publishReason?: string;
   publishFormType?: string;
   publishDesc?: string;
+  notificationsInterval?: NotificationsInterval;
 };
 
 export class InvalidFormConfigError extends Error {
@@ -152,6 +158,17 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
     throw new InvalidFormConfigError();
   }
 
+  const isValid = validateTemplateSize(JSON.stringify(command.formConfig));
+
+  if (!isValid) {
+    logMessage.warn(
+      `[templates][createTemplate] Template size exceeds the limit.\nConfig: ${JSON.stringify(
+        command.formConfig
+      )}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
   const createdTemplate = await prisma.template
     .create({
       data: {
@@ -175,6 +192,9 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
           connect: { id: command.userID },
         },
         ...(command.formPurpose && { formPurpose: command.formPurpose }),
+        ...(command.notificationsInterval !== undefined && {
+          notificationsInterval: command.notificationsInterval,
+        }),
       },
       select: {
         id: true,
@@ -190,6 +210,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -236,6 +257,7 @@ export async function getAllTemplates(options?: {
           publishFormType: true,
           publishDesc: true,
           saveAndResume: true,
+          notificationsInterval: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -296,6 +318,7 @@ export async function getAllTemplatesForUser(
           publishFormType: true,
           publishDesc: true,
           saveAndResume: true,
+          notificationsInterval: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -359,6 +382,7 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
           closedDetails: true,
           saveAndResume: true,
           ttl: true,
+          notificationsInterval: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -488,6 +512,17 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     throw new InvalidFormConfigError();
   }
 
+  const isValid = validateTemplateSize(JSON.stringify(command.formConfig));
+
+  if (!isValid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Template size exceeds the limit.\nConfig: ${JSON.stringify(
+        command.formConfig
+      )}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
   const updatedTemplate = await prisma.template
     .update({
       where: {
@@ -517,6 +552,9 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           securityAttribute: command.securityAttribute as string,
         }),
         ...(command.formPurpose && { formPurpose: command.formPurpose }),
+        ...(command.notificationsInterval !== undefined && {
+          notificationsInterval: command.notificationsInterval as NotificationsInterval,
+        }),
       },
       include: {
         deliveryOption: true,
@@ -538,7 +576,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   command.deliveryOption &&
     logEvent(
       user.id,
-      { type: "DeliveryOption", id: command.formID },
+      { type: "Form", id: command.formID },
       "ChangeDeliveryOption",
       `Change Delivery Option to: ${Object.keys(command.deliveryOption)
         .map((key) => `${key}: ${command.deliveryOption && command.deliveryOption[key]}`)
@@ -547,7 +585,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   command.securityAttribute &&
     logEvent(
       user.id,
-      { type: "SecurityAttribute", id: command.formID },
+      { type: "Form", id: command.formID },
       "ChangeSecurityAttribute",
       `Updated security attribute to ${command.securityAttribute}`
     );
@@ -800,10 +838,14 @@ export const notifyOwnersOwnerAdded = async (
   );
 
   users.forEach((owner) => {
-    sendEmail(owner.email, {
-      subject: "Ownership change notification | Notification de changement de propriété",
-      formResponse: emailContent,
-    });
+    sendEmail(
+      owner.email,
+      {
+        subject: "Ownership change notification | Notification de changement de propriété",
+        formResponse: emailContent,
+      },
+      "notifyAddedOwner"
+    );
   });
 };
 
@@ -825,10 +867,14 @@ export const notifyOwnersOwnerRemoved = async (
     form.titleFr
   );
 
-  sendEmail(userToRemove.email, {
-    subject: "Form access removed | Accès au formulaire supprimé",
-    formResponse: youHaveBeenRemovedEmailContent,
-  });
+  sendEmail(
+    userToRemove.email,
+    {
+      subject: "Form access removed | Accès au formulaire supprimé",
+      formResponse: youHaveBeenRemovedEmailContent,
+    },
+    "notifyRemovedOwner"
+  );
 
   // Send email to remaining owners
   users.forEach((owner) => {
@@ -838,10 +884,14 @@ export const notifyOwnersOwnerRemoved = async (
       userToRemove.name || "An owner"
     );
 
-    sendEmail(owner.email, {
-      subject: "Form access removed | Accès au formulaire supprimé",
-      formResponse: ownerRemovedEmailContent,
-    });
+    sendEmail(
+      owner.email,
+      {
+        subject: "Form access removed | Accès au formulaire supprimé",
+        formResponse: ownerRemovedEmailContent,
+      },
+      "notifyOtherOwnersOfRemovedOwner"
+    );
   });
 };
 
@@ -921,6 +971,7 @@ export async function updateAssignedUsersForTemplate(
         publishDesc: true,
         users: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1015,6 +1066,7 @@ export async function updateFormPurpose(
         publishFormType: true,
         publishReason: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => {
@@ -1074,6 +1126,7 @@ export async function updateFormSaveAndResume(
         publishFormType: true,
         publishReason: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => {
@@ -1142,6 +1195,7 @@ export async function updateResponseDeliveryOption(
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => {
@@ -1251,6 +1305,7 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1372,6 +1427,7 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));

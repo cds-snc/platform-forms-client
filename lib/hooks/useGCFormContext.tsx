@@ -31,6 +31,8 @@ import {
 
 import { toggleSavedValues } from "@i18n/toggleSavedValues";
 
+import { type FileInputResponse } from "@lib/types";
+
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
@@ -93,7 +95,7 @@ export const GCFormsProvider = ({
     (history.current || []) as string[],
     groups
   );
-  const shownElements = filterShownElements(formRecord.form.elements, matchedIds as string[]);
+  const shownElements = filterShownElements(formRecord, values.current);
   const filteredResponses = filterValuesByShownElements(inputHistoryValues, shownElements);
   const filteredMatchedIds = matchedIds.filter((id) => {
     const parentId = id.split(".")[0];
@@ -152,7 +154,7 @@ export const GCFormsProvider = ({
     formValues: Record<string, string[] | string>;
   }): void => {
     values.current = formValues;
-    const valueIds = mapIdsToValues(formRecord, formValues);
+    const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
     if (!idArraysMatch(matchedIds, valueIds)) {
       setMatchedIds(valueIds);
     }
@@ -187,9 +189,23 @@ export const GCFormsProvider = ({
   const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
 
   const getProgressData = () => {
+    const cleanedValues = {} as unknown as FormValues;
+
+    Object.entries(values.current).map(([key, value]) => {
+      let cleanedValue = value;
+
+      // For file inputs reset the values to null
+      if (value && typeof value === "object" && "size" in value) {
+        cleanedValue = { name: null, size: null, based64EncodedFile: null } as FileInputResponse;
+      }
+
+      // For all other inputs just return the value
+      cleanedValues[key] = cleanedValue as string | string[];
+    });
+
     return {
       id: formRecord.id,
-      values: values.current,
+      values: cleanedValues,
       history: history.current,
       currentGroup: currentGroup || "",
     };

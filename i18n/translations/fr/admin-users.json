@@ -17,6 +17,7 @@
   "save": "Enregistrer",
   "managePermissions": "Gérer les permissions",
   "viewPermissions": "Afficher les permissions",
+  "viewAuditLogs": "Afficher les journaux d'audit",
   "managePermissionsFor": "Gère les permissions de",
   "assignUsersToTemplate": "Ajouter, enlever ou transférer la propriété à un autre compte Formulaires GC dans votre ministère.",
   "enterOwnersEmail": "Entrez l’adresse courriel du propriétaire du formulaire",
@@ -57,5 +58,11 @@
   "userAdministration": "Administration des l’utilisateurs",
   "error": {
     "permissions": "Les autorisations n'ont pas pu être mises à jour."
+  },
+  "search": {
+    "label": "Recherche",
+    "placeholder": "Rechercher par nom ou adresse courriel",
+    "noResults": "Aucun résultat trouvé",
+    "ariaLabel": "Recherche de comptes par nom ou par adresse courriel"
   }
 }

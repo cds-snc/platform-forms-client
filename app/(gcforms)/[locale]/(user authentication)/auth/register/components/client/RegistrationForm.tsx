@@ -9,6 +9,7 @@ import { ErrorStates, register } from "../../action";
 import Link from "next/link";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { useRouter } from "next/navigation";
+import { ga } from "@lib/client/clientHelpers";
 
 const SubmitButton = () => {
   const { t } = useTranslation("signup");
@@ -20,9 +21,7 @@ const SubmitButton = () => {
       disabled={pending}
       aria-disabled={pending}
       onClick={() => {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "sign_up",
+        ga("sign_up", {
           method: "cognito",
         });
       }}

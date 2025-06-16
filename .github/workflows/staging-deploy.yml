@@ -38,7 +38,7 @@ jobs:
           fetch-depth: 0
 
       - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
           role-session-name: ECSDeploy
@@ -71,7 +71,7 @@ jobs:
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@4e77a598b3101abcb76f2c9082132e904d3a9e65
+        uses: aws-actions/amazon-ecs-render-task-definition@fa48d2a940f14ee760f7d4a3d1a45a923bef4ec0
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
@@ -107,7 +107,7 @@ jobs:
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
         # v1.4.11
-        uses: aws-actions/amazon-ecs-deploy-task-definition@ce3fac882039ebc21b0a5787c57c684aacb7cda8
+        uses: aws-actions/amazon-ecs-deploy-task-definition@d32c66a232260d9bb046751620411e28cc119733
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer

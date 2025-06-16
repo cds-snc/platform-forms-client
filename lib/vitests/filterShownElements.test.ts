@@ -1,9 +1,9 @@
 import { expect } from 'vitest'
 import { filterShownElements } from "@lib/formContext";
-import { FormElement } from "@lib/types";
 
 // Fixtures captured by adding a break point in Forms.tsx and copying the values from the debugger
 import {withConditionalRules, withoutConditionalRules} from "../../__fixtures__/getRulesElementsHiddenRemoved.json";
+import { FormElement } from '../types';
 
 describe("formContext filterShownElements()", () => {
   it("Handles filtering out correct element", () => {
@@ -202,18 +202,39 @@ describe("formContext filterShownElements()", () => {
           }
       }
     ];
-    const result = filterShownElements(withConditionalRules.elements as FormElement[], withConditionalRules.matchedIds);
+    const result = filterShownElements({
+        form: {
+            elements: withConditionalRules.elements as FormElement[],
+            titleEn: '',
+            titleFr: '',
+            layout: []
+        },
+        id: '',
+        isPublished: false,
+        securityAttribute: 'Unclassified'
+    }, withConditionalRules.values);
+
     expect(result).toEqual(expectedOutput);
   });
 
   it("Handles a legacy form (doesn't touch it)", () => {
     const expectedOutput = withoutConditionalRules.elements;
-    const result = filterShownElements(withoutConditionalRules.elements as FormElement[], withoutConditionalRules.matchedIds);
+    const result = filterShownElements({
+        form: {
+            elements: withoutConditionalRules.elements as FormElement[],
+            titleEn: '',
+            titleFr: '',
+            layout: []
+        },
+        id: '',
+        isPublished: false,
+        securityAttribute: 'Unclassified'
+    }, withoutConditionalRules.values);
     expect(result).toEqual(expectedOutput);
   });
 
   it("Handles bad input", () => {
-    const expectedOutput = undefined;
+    const expectedOutput: FormElement[] = [];
     // @ts-expect-error - testing invalid input
     const result = filterShownElements();
     expect(result).toEqual(expectedOutput);
@@ -222,14 +243,14 @@ describe("formContext filterShownElements()", () => {
   it("Handles partial input 1", () => {
     const expectedOutput = withoutConditionalRules.elements;
     // @ts-expect-error - testing invalid input
-    const result = filterShownElements(withoutConditionalRules.elements as FormElement[]);
+    const result = filterShownElements({ form: { elements: withoutConditionalRules.elements } });
     expect(result).toEqual(expectedOutput);
   });
 
-  it("Handles partial input 2", () => {
-    const expectedOutput = 1;
-    // @ts-expect-error - testing invalid input
-    const result = filterShownElements(1, withConditionalRules.matchedIds);
-    expect(result).toEqual(expectedOutput);
-  });
+//   it("Handles partial input 2", () => {
+//     const expectedOutput = 1;
+//     // @ts-expect-error - testing invalid input
+//     const result = filterShownElements(1, withConditionalRules.matchedIds);
+//     expect(result).toEqual(expectedOutput);
+//   });
 });

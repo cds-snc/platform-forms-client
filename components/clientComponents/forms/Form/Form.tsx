@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
@@ -12,8 +12,6 @@ import { type Responses } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 
-import Loader from "../../globals/Loader";
-
 import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
@@ -25,7 +23,7 @@ import {
   removeFormContextValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
+import { filterShownElements, filterValuesByShownElements, FormValues } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
@@ -34,6 +32,11 @@ import { PrimaryFormButtons } from "./PrimaryFormButtons";
 import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
 import { FormStatus } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
+import { ga } from "@lib/client/clientHelpers";
+
+import { FocusHeader } from "app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
+
+import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -58,7 +61,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
-  const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
@@ -123,7 +125,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   return status === "submitting" ? (
     <>
       <title>{t("loading")}</title>
-      <Loader message={t("loading")} />
+      <SubmitProgress />
     </>
   ) : (
     <>
@@ -139,7 +141,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       {errorList && (
         <Alert
           type={ErrorStatus.ERROR}
-          heading={t("input-validation.heading")}
+          heading={t("input-validation.heading", {
+            lng: language,
+          })}
           validation={true}
           id={errorId}
           tabIndex={0}
@@ -180,9 +184,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               isShowReviewPage &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <h2 className="pb-8" tabIndex={-1} ref={groupsHeadingRef}>
+                <FocusHeader headingTag="h2">
                   {getGroupTitle(currentGroup, language as Language)}
-                </h2>
+                </FocusHeader>
               )}
 
             {children}
@@ -262,10 +266,7 @@ export const Form = withFormik<FormProps, Responses>({
         values.groupHistory as string[],
         formikBag.props.formRecord.form.groups
       );
-      const shownElements = filterShownElements(
-        formikBag.props.formRecord.form.elements,
-        values.matchedIds as string[]
-      );
+      const shownElements = filterShownElements(formikBag.props.formRecord, values as FormValues);
       return filterValuesByShownElements(inputHistoryValues, shownElements);
     };
 
@@ -300,6 +301,9 @@ export const Form = withFormik<FormProps, Responses>({
           formikBag.setStatus(FormStatus.FILE_ERROR);
         } else if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
           formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
+        } else if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
+          formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
+          formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
         } else {
           formikBag.setStatus(FormStatus.ERROR);
         }
@@ -307,20 +311,11 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.onSuccess(result.id, result?.submissionId);
       }
     } catch (err) {
-      // Captcha found a likely bot, show the Captcha fail screen
-      if ((err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
-        formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
-        formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
-        return;
-      }
-
       logMessage.error(err as Error);
       formikBag.setStatus("Error");
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "form_submission_trigger",
+        ga("form_submission_trigger", {
           formID: formikBag.props.formRecord.id,
           formTitle: formikBag.props.formRecord.form.titleEn,
         });

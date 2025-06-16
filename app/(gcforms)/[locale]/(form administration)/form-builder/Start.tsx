@@ -9,6 +9,10 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
+import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
+import { ga } from "@lib/client/clientHelpers";
+import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds";
+import { transformFormProperties } from "@lib/store/helpers/elements/transformFormProperties";
 
 export const Start = () => {
   const {
@@ -42,7 +46,24 @@ export const Start = () => {
       fileReader.readAsText(e.target.files[0], "UTF-8");
       fileReader.onload = (e) => {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
-        const data = safeJSONParse<FormProperties>(e.target.result, cleaner);
+
+        const result = e.target.result;
+        const isValidSize = validateTemplateSize(result);
+
+        if (!isValidSize) {
+          setErrors([{ message: t("startErrorTemplateSize") }]);
+          target.value = "";
+          return;
+        }
+
+        const data = transformFormProperties(safeJSONParse<FormProperties>(result, cleaner));
+
+        if (data && !validateUniqueQuestionIds(data.elements)) {
+          setErrors([{ message: t("startErrorDuplicateQuestionId") }]);
+          target.value = "";
+          return;
+        }
+
         if (!data) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
@@ -59,10 +80,7 @@ export const Start = () => {
 
         importTemplate(data);
 
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "open_form_file",
-        });
+        ga("open_form_file");
         router.push(`/${language}/form-builder/0000/preview`);
       };
     } catch (e) {

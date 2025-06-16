@@ -1,5 +1,5 @@
-import { FormElement, Response, Responses } from "@lib/types";
-import { PublicFormRecord, ConditionalRule } from "@lib/types";
+import { FormElement, FormRecord, PublicFormRecord, Response, Responses } from "@lib/types";
+import { ConditionalRule } from "@lib/types";
 
 export type Group = {
   name: string;
@@ -72,8 +72,8 @@ export function findChoiceIndexByValue(
  *  }
  * @returns {Array} - An array of choiceIds that match the values
  */
-export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues): string[] => {
-  const elementIds = formRecord.form.elements.map((element) => element.id);
+export const mapIdsToValues = (formElements: FormElement[], values: FormValues): string[] => {
+  const elementIds = formElements.map((element) => element.id);
 
   // Find elementIds that are in the current form values object
   const valueIds = elementIds.filter((id) => values[id] && values[id].length > 0);
@@ -87,7 +87,7 @@ export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues)
     const value = values[id];
 
     if (!Array.isArray(value)) {
-      const choiceId = findChoiceIndexByValue(formRecord.form.elements, id, value);
+      const choiceId = findChoiceIndexByValue(formElements, id, value);
       if (choiceId > -1) {
         return `${id}.${choiceId}`;
       }
@@ -95,7 +95,7 @@ export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues)
     }
 
     return value.map((val) => {
-      const choiceId = findChoiceIndexByValue(formRecord.form.elements, id, val);
+      const choiceId = findChoiceIndexByValue(formElements, id, val);
       if (choiceId > -1) {
         return `${id}.${choiceId}`;
       }
@@ -121,18 +121,113 @@ export function idArraysMatch(a: string[], b: string[]) {
  * Checks if a rule matches against conditional rule for a choiceId.
  *
  * @param {Object} rule - The rule to match.
- * @param {Object} formRecord - The form record to match against.
+ * @param {Array} formElements - The form elements to search.
  * @param {Object} values - The form values from Formik.
  * @returns {boolean} - Returns true if the rule matches, false otherwise.
  */
 export const matchRule = (
   rule: ConditionalRule,
-  formRecord: PublicFormRecord,
+  formElements: FormElement[],
   values: FormValues
 ) => {
-  const matchedIds = mapIdsToValues(formRecord, values);
+  const matchedIds = mapIdsToValues(formElements, values);
   if (matchedIds.includes(rule?.choiceId)) return true;
+
   return false;
+};
+
+/**
+ * Finds an element by its id in the form elements array.
+ * @param elements - The form elements to search
+ * @param id - The id of the element to find
+ * @returns The element with the specified id, or undefined if not found
+ */
+export const getElementById = (elements: FormElement[], id: string) => {
+  return elements.find((el) => el.id.toString() === id);
+};
+
+/**
+ * Checks a page/group visibility based on the current form values groupHistory.
+ *
+ * @param formRecord - The form record containing the form and its groups.
+ * @param element - The form element to check visibility for.
+ * @param values - The current form values from Formik, which should include groupHistory.
+ * @returns {boolean} - Returns true if the page/group is visible based on the groupHistory, false otherwise.
+ */
+export const checkPageVisibility = (
+  formRecord: PublicFormRecord,
+  element: FormElement,
+  values: FormValues
+): boolean => {
+  if (!formRecord.form.groups) {
+    return true;
+  }
+
+  const groups = formRecord.form.groups as GroupsType;
+
+  // Get the current element's group ID
+  const groupId = Object.keys(groups).find((groupKey) => inGroup(groupKey, element.id, groups));
+
+  const groupHistory = Array.isArray(values.groupHistory)
+    ? values.groupHistory
+    : [values.groupHistory];
+  return !!groupHistory.find((visitedGroupId: string | undefined) => visitedGroupId === groupId);
+};
+
+/**
+ * Recursively determines the "visibility" of a form element for the purposes of validation
+ * based on its conditional rules and the current form values.
+ *
+ * Note that this does not take into account the visibility of the element in the UI based on pages/groups.
+ *
+ * This function checks if the provided element should be visible by evaluating its conditional rules.
+ * If the element has no conditional rules, it is considered visible.
+ * If the element has rules, at least one rule must be satisfied for the element to be visible.
+ * When a matching rule is identified, it additionally ensures that the parent element (referenced
+ * by the rule's choiceId) is also visible, and it continues checking any further ancestors.
+ *
+ * @param formRecord - The form record.
+ * @param element - The form element whose visibility is being determined.
+ * @param values - The current form values from Formik.
+ * @returns {boolean} -Returns `true` if the element should be visible, `false` otherwise.
+ */
+export const checkVisibilityRecursive = (
+  formRecord: PublicFormRecord,
+  element: FormElement,
+  values: FormValues,
+  checked: Set<string> = new Set()
+): boolean => {
+  // If the current page is not visible, the element is not visible
+  const pageVisible = checkPageVisibility(formRecord, element, values);
+
+  if (!pageVisible) {
+    return false;
+  }
+
+  const rules = element.properties.conditionalRules;
+  if (!rules || rules.length === 0) return true;
+
+  const formElements = formRecord.form.elements;
+
+  // Prevent circular references by checking if the element ID is already in the visited set
+  if (checked.has(element.id.toString())) {
+    // Circular reference detected, terminate this branch
+    return false;
+  }
+  checked.add(element.id.toString());
+
+  // At least one rule must be satisfied for the element to be visible
+  return rules.some((rule) => {
+    const [elementId] = rule.choiceId.split(".");
+    const ruleParent = getElementById(formElements, elementId);
+    if (!ruleParent) return matchRule(rule, formElements, values);
+
+    // Parent must be visible and this rule must match
+    return (
+      checkVisibilityRecursive(formRecord, ruleParent, values, checked) &&
+      matchRule(rule, formElements, values)
+    );
+  });
 };
 
 /**
@@ -575,20 +670,6 @@ export const decrementChoiceIds = ({
 };
 
 /**
- * @param elements - The form elements to search.
- * @param rules - The rules to search
- * @returns {Array} - Returns an array of parentIds from the rules
- */
-export const getRelatedElementsFromRule = (
-  elements: FormElement[],
-  rules: ConditionalRule[] | undefined
-) => {
-  if (!rules) return [];
-  const ids = rules.map((rule) => Number(rule?.choiceId.split(".")[0]));
-  return elements.filter((el) => Array.from(new Set(ids)).includes(el.id));
-};
-
-/**
  * @param elements: FormElement[],
  * @param matchedIds - The matchedIds from the form context
  * @returns {boolean} - Returns true if the related element has a matched rule, false otherwise
@@ -602,64 +683,22 @@ export const validConditionalRules = (element: FormElement, matchedIds: string[]
   return true;
 };
 
-/**
- * @param elements - The form elements to search.
- * @param rules - The rules to search
- * @param matchedIds - The matchedIds from the form context
- * @returns {Array} - Returns an array of parentIds from the rules
- */
-export const getRelatedIdsPassingRules = (
-  elements: FormElement[],
-  rules: ConditionalRule[] | undefined,
-  matchedIds: string[]
+export const filterShownElements = (
+  formRecord: FormRecord | PublicFormRecord,
+  values: FormValues
 ) => {
-  const relatedElements = getRelatedElementsFromRule(elements, rules);
+  if (!formRecord || !formRecord.form || !formRecord.form.elements) {
+    return [];
+  }
 
-  const ids = relatedElements.map((el) => {
-    if (validConditionalRules(el, matchedIds)) {
-      return el.id;
-    }
-  });
+  const elements = formRecord.form.elements;
 
-  return ids.filter((id) => id);
-};
-
-/**
- * @param elements - The form elements to search.
- * @param rules - The rules to search
- * @param matchedIds - The matchedIds from the form context
- * @returns {boolean} - Returns true if the related element has a matched rule, false otherwise
- */
-export const checkRelatedRulesAsBoolean = (
-  elements: FormElement[],
-  rules: ConditionalRule[] | undefined,
-  matchedIds: string[]
-) => {
-  return getRelatedIdsPassingRules(elements, rules, matchedIds).length > 0;
-};
-
-export const filterShownElements = (elements: FormElement[], matchedIds: string[]) => {
-  if (!Array.isArray(elements) || !Array.isArray(matchedIds)) {
+  if (!values) {
     return elements;
   }
+
   return elements.filter((element) => {
-    const elementWithConditionalRules =
-      element.properties.conditionalRules && element.properties.conditionalRules.length > 0;
-    if (!elementWithConditionalRules) {
-      return true;
-    }
-
-    const elementHasConditionalRules = validConditionalRules(element, matchedIds);
-    const elementValueIncludedInShowHide = checkRelatedRulesAsBoolean(
-      elements,
-      element.properties.conditionalRules,
-      matchedIds
-    );
-    if (elementHasConditionalRules && elementValueIncludedInShowHide) {
-      return true;
-    }
-
-    return false;
+    return checkVisibilityRecursive(formRecord, element, values);
   });
 };
 
@@ -866,4 +905,27 @@ export const decrementNextActionChoiceIds = (groups: GroupsType, choiceId: strin
   });
 
   return updatedGroups;
+};
+
+/**
+ * Cleans up the rules for elements that have been removed
+ * @param elements - The form elements to search.
+ * @param rules - The rules to search
+ * @returns {Array} - Returns an array of rules that are still valid
+ */
+export const cleanRules = (elements: FormElement[], rules: ConditionalRule[]) => {
+  const updatedRules = rules.filter((rule) => {
+    const parentId = rule.choiceId.split(".")[0];
+    const parentElement = elements.find((el) => el.id === Number(parentId));
+
+    // Remove the rule if the parent element is not found
+    // This can happen if the element was removed but the rule was not cleaned up
+    if (!parentElement) {
+      return false;
+    }
+
+    return true;
+  });
+
+  return updatedRules;
 };

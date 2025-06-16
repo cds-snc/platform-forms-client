@@ -17,6 +17,9 @@ import {
   DepartmentsIcon,
 } from "@serverComponents/icons";
 
+import { useIsAdminUser } from "./useIsAdminUser";
+import { useAllowFileUpload } from "./useAllowFileUpload";
+
 import {
   RichText,
   Radio,
@@ -36,8 +39,8 @@ import {
   Departments,
   Combobox,
   FormattedDate,
+  CustomJson,
 } from "@formBuilder/[id]/edit/components/elements/element-dialog";
-import { useIsAdminUser } from "./useIsAdminUser";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFeatureFlags } from "../useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
@@ -63,16 +66,30 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     });
   };
 
-  // default to off unless the user is an admin
-  const allowFileInput = useIsAdminUser();
-
   const { getFlag } = useFeatureFlags();
+
+  const isAdminUser = useIsAdminUser();
+
+  // Allow via feature flag or if the user is an admin and forms has an API key
+  const allowFileInput = useAllowFileUpload();
 
   const fileInputOption: ElementOption = {
     id: "fileInput",
     value: t("addElementDialog.fileInput.title"),
     icon: UploadIcon,
     description: FileInput,
+    className: "",
+    group: groups.other,
+  };
+
+  // Custom json is only available to admin users
+  const allowCustomJson = isAdminUser;
+
+  const customJsonOption: ElementOption = {
+    id: "customJson",
+    value: t("addElementDialog.customJson.label"),
+    icon: AddIcon,
+    description: CustomJson,
     className: "",
     group: groups.other,
   };
@@ -220,6 +237,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "",
       group: groups.other,
     },
+    ...(allowCustomJson ? [{ ...(customJsonOption as ElementOption) }] : []),
   ];
 
   return filterElements

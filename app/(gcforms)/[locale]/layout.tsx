@@ -8,11 +8,10 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const session = await auth();
   const featureFlags = await getSomeFlags([
     FeatureFlags.addressComplete,
-    FeatureFlags.apiAccess,
-    FeatureFlags.saveAndResume,
     FeatureFlags.formTimer,
     FeatureFlags.hCaptcha,
-    FeatureFlags.caretakerPeriod,
+    FeatureFlags.topBanner,
+    FeatureFlags.fileUpload,
   ]);
 
   return (

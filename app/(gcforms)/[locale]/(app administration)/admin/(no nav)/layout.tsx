@@ -26,15 +26,14 @@ export default AuthenticatedLayout(
           <header className={"mb-5 border-b-1 border-gray-500 bg-white px-0 py-2"}>
             <div className="grid w-full grid-flow-col">
               <div className="flex">
-                <Link href={`/${locale}/form-builder`} legacyBehavior>
-                  <a
-                    id="logo"
-                    className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline focus:bg-white"
-                  >
-                    <div className="inline-block h-[45px] w-[46px] p-2">
-                      <SiteLogo title={t("title")} />
-                    </div>
-                  </a>
+                <Link
+                  id="logo"
+                  href={`/${locale}/form-builder`}
+                  className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline focus:bg-white"
+                >
+                  <div className="inline-block h-[45px] w-[46px] p-2">
+                    <SiteLogo title={t("title")} />
+                  </div>
                 </Link>
 
                 <div className="mt-3 box-border block h-[40px] px-2 py-1 text-xl font-semibold">

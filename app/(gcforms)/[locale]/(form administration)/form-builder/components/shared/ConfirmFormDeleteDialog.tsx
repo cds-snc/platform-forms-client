@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import useSWR from "swr";
+import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import Image from "next/image";
 import { getDate, slugify } from "@lib/client/clientHelpers";
@@ -9,26 +8,7 @@ import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import Loader from "@clientComponents/globals/Loader";
 import { Button, Alert } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
-
-const fetcher = async (url: string) => {
-  try {
-    const res = await axios({
-      url,
-      method: "GET",
-      responseType: "json",
-      timeout: 5000,
-    });
-
-    if (res.data?.numberOfUnprocessedSubmissions > 0) {
-      return { error: "unprocessed" };
-    } else {
-      return res.data;
-    }
-  } catch (e) {
-    // handle using swr error
-    throw new Error("Something went wrong");
-  }
-};
+import { checkUnprocessed } from "@lib/unprocessed/actions";
 
 async function downloadForm(lang: string, id: string) {
   const url = `/api/templates/${id}`;
@@ -62,7 +42,35 @@ export const ConfirmFormDeleteDialog = ({
 }) => {
   const dialog = useDialogRef();
   const { t, i18n } = useTranslation("form-builder");
-  const { data, isLoading, error } = useSWR(`/api/id/${formId}/submission/unprocessed`, fetcher);
+  const [unprocessed, setUnprocessed] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
+
+  const checkForUnprocessed = useCallback(async () => {
+    setIsLoading(true);
+    setUnprocessed(false);
+
+    const result = await checkUnprocessed({ formId });
+    if (result.error) {
+      setUnprocessed(false);
+      setError(true);
+    } else {
+      setUnprocessed(false);
+      setError(false);
+      result.unprocessedSubmissions && setUnprocessed(true);
+    }
+  }, [formId]);
+
+  useEffect(() => {
+    checkForUnprocessed()
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+        setError(true);
+      });
+  }, [checkForUnprocessed]);
 
   if (isLoading) {
     return (
@@ -117,7 +125,7 @@ export const ConfirmFormDeleteDialog = ({
 
   const responsesLink = `/${i18n.language}/form-builder/${formId}/responses`;
 
-  if (data && data.error === "unprocessed") {
+  if (unprocessed) {
     return (
       <Dialog handleClose={handleClose} dialogRef={dialog}>
         <div className="p-5">
@@ -126,7 +134,7 @@ export const ConfirmFormDeleteDialog = ({
               width={"326"}
               height={"228"}
               alt=""
-              className="center block"
+              className="block"
               src="/img/form-builder-download-responses.png"
             />
           </div>
@@ -160,7 +168,7 @@ export const ConfirmFormDeleteDialog = ({
             width={"288"}
             height={"206"}
             alt=""
-            className="center block"
+            className="block"
             src="/img/form-builder-delete-dialog.svg"
           />
         </div>

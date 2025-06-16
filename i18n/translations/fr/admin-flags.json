@@ -18,14 +18,6 @@
       "title": "Adresse complète",
       "description": "Activer la complétion d'adresse CanadaPost pour les formulaires"
     },
-    "apiAccess": {
-      "title": "Accès API",
-      "description": "Activer les écrans et fonctionnalités d'accès à l'API"
-    },
-    "saveAndResume": {
-      "title": "Enregistrer et reprendre plus tard",
-      "description": "Activer la fonctionnalité d'enregistrement et de reprise"
-    },
     "formTimer": {
       "title": "formTimer",
       "description": "Activez formTimer pour retarder l'envoi d'un formulaire et contribuer à prévenir le spam"
@@ -34,9 +26,13 @@
       "title": "hCaptcha",
       "description": "Activer la prévention anti-spam hCaptcha"
     },
-    "caretakerPeriod": {
-      "title": "caretakerPeriod",
-      "description": "Activer l'avertissement de période de garde pour qu'il soit visible"
+    "topBanner": {
+      "title": "Bannière",
+      "description": "Activer la bannière d'avertissement pour qu'elle soit visible"
+    },
+    "fileUpload": {
+      "title": "Téléversement de fichier",
+      "description": "Activer le téléverseur de fichier en tant qu'élément pouvant être ajouté à un formulaire"
     }
   }
 }

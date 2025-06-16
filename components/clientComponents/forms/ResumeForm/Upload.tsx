@@ -8,6 +8,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorResuming } from "./ErrorResuming";
+import { ErrorLoading } from "./ErrorLoading";
 import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
 import { ResumeUploadIcon } from "@serverComponents/icons/ResumeUploadIcon";
 
@@ -121,6 +122,20 @@ export const Upload = ({ formId }: { formId: string }) => {
         router.push(`/${language}/id/${id}`);
       } catch (e) {
         const timestamp = Date.now();
+
+        if (
+          errorCode === FormServerErrorCodes.FORM_RESUME_INVALID_MISMATCHED_FORM_ID ||
+          errorCode === FormServerErrorCodes.FORM_RESUME_NO_TARGET ||
+          errorCode === FormServerErrorCodes.FORM_RESUME_NO_DATA ||
+          errorCode === FormServerErrorCodes.FORM_RESUME_NO_ELEMENT ||
+          errorCode === FormServerErrorCodes.FORM_RESUME_NO_FORM_ELEMENT_DATA
+        ) {
+          // Do not log these errors as they are expected in some cases
+          // (e.g. user uploads a file with a different form ID or wrong file).
+          toast.error(<ErrorLoading errorCode={`${errorCode}-${timestamp}`} />, "resume");
+          return;
+        }
+
         logClientError({ code: errorCode as FormServerErrorCodes, formId, timestamp });
         toast.error(<ErrorResuming errorCode={`${errorCode}-${timestamp}`} />, "resume");
       }
