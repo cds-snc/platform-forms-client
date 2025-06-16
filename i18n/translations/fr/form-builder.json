@@ -804,7 +804,7 @@
       "success": {
         "updateNotifications": "[FR - AI generated]Vos préférences de notification ont été mises à jour."
       },
-      "errors": {
+      "error": {
         "getNotifcations": "[FR]There was an error retrieving Notifications. Please try again later.",
         "updateNotifications": "Il y a eu une erreur dans la mise à jour des notifications. Veuillez réessayer plus tard."
       }

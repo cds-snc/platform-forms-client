@@ -248,6 +248,7 @@ export const getNotificationsSettings = async (formId: string) => {
   const allUsersWithSettings = users.map((user) => {
     const found = notificationsUsers.find((nUser) => nUser.email === user.email);
     return {
+      id: user.id,
       email: user.email,
       enabled: found ? true : false,
     };
@@ -269,6 +270,7 @@ const _getNotificationsSettings = async (formId: string) => {
       select: {
         users: {
           select: {
+            id: true,
             email: true,
           },
         },
@@ -332,29 +334,18 @@ export const updateNotificationsSettings = async (
     return null;
   }
 
-  const updatedUsers = template.notificationsUsers;
-  if (user.enabled) {
-    if (!updatedUsers.some((u) => u.email === user.email)) {
-      updatedUsers.push(userToUpdate);
-    }
-  } else {
-    const index = updatedUsers.findIndex((u) => u.email === user.email);
-    if (index !== -1) {
-      updatedUsers.splice(index, 1);
-    }
-  }
-
-  // TODO
-  // await prisma.template
-  //   .update({
-  //     where: {
-  //       id: formId,
-  //     },
-  //     data: {
-  //       notificationsInterval,
-  //     },
-  //   })
-  //   .catch((e) => prismaErrors(e, null));
+  await prisma.template
+    .update({
+      where: {
+        id: formId,
+      },
+      data: {
+        notificationsUsers: {
+          ...(user.enabled ? { connect: userToUpdate } : { disconnect: [{ id: userToUpdate.id }] }),
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
 
   logMessage.info(
     `saveNotificationsSettings updated notifications settings for user with email ${

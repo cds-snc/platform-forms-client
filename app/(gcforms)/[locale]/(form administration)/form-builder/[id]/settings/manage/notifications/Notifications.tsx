@@ -63,14 +63,15 @@ export const Notifications = ({ formId }: { formId: string }) => {
 
   const updateNotifications = useCallback(async () => {
     const result = await saveNotificationsSettings(formId, sessionUser);
-    if (result && !result.error) {
+    // TODO better way to do this?
+    if (result !== undefined && "error" in result) {
+      toast.error(updateNotificationsError);
+    } else {
       ga("form_notifications", {
         formId,
         action: sessionUser?.enabled ? "enabled" : "disabled",
       });
       toast.success(updateNotificationsSuccess);
-    } else {
-      toast.error(updateNotificationsError);
     }
   }, [formId, sessionUser, updateNotificationsError, updateNotificationsSuccess]);
 
