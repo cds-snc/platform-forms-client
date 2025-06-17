@@ -604,13 +604,16 @@ export async function updateIsPublishedForTemplate(
   publishFormType: string,
   publishDescription: string
 ): Promise<FormRecord | null> {
+  // Alias the isPublished value to newPublishStatus for clarity within the function
+  const newPublishStatus = isPublished;
+
   const { user } = await authorization.canPublishForm(formID).catch((e) => {
     logEvent(e.user.id, { type: "Form", id: formID }, "AccessDenied", "Attempted to publish form");
     throw e;
   });
 
   // Delete all form responses created during draft mode
-  if (isPublished && process.env.APP_ENV !== "test") {
+  if (newPublishStatus && process.env.APP_ENV !== "test") {
     try {
       await deleteDraftFormResponses(formID);
     } catch (e) {
@@ -623,17 +626,16 @@ export async function updateIsPublishedForTemplate(
     }
   }
 
-  // We use a where unique input to ensure we are only updating the form if it is not published
   const updatedTemplate = await prisma.template
     .update({
       where: {
         id: formID,
         isPublished: {
-          not: isPublished,
+          not: newPublishStatus, // Only update if the current publish status is different from the new one,
         },
       },
       data: {
-        isPublished: isPublished,
+        isPublished: newPublishStatus,
         publishReason: publishReason,
         publishFormType: publishFormType,
         publishDesc: publishDescription,

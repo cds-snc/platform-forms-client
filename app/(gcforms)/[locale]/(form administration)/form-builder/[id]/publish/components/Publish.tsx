@@ -43,6 +43,7 @@ export const Publish = ({ id }: { id: string }) => {
   } = useAllowPublish();
 
   const [error, setError] = useState(false);
+  const [publishing, setPublishing] = useState(false);
   const [errorCode, setErrorCode] = useState<null | number>(null);
   const lang = i18n.language;
 
@@ -131,6 +132,8 @@ export const Publish = ({ id }: { id: string }) => {
   const handlePublish = async () => {
     setError(false);
     setErrorCode(null);
+    setPublishing(true);
+
     try {
       const { formRecord, error } = await updateTemplatePublishedStatus({
         id,
@@ -145,12 +148,14 @@ export const Publish = ({ id }: { id: string }) => {
       setId(formRecord?.id);
       setIsPublished(formRecord?.isPublished);
 
+      // Note we don't reset setPublishing(false) here as we're navigating away
       ga("publish_form");
       router.replace(`/${i18n.language}/form-builder/${id}/published`);
     } catch (e) {
       logMessage.error(e);
       setError(true);
       setErrorCode(500);
+      setPublishing(false);
     }
   };
 
@@ -337,7 +342,11 @@ export const Publish = ({ id }: { id: string }) => {
 
       {userCanPublish && isPublishable() && (
         <>
-          <Button className="mt-5" onClick={handleOpenPrePublish}>
+          <Button
+            disabled={publishing || showPrePublishDialog}
+            className="mt-5"
+            onClick={handleOpenPrePublish}
+          >
             {t("publish")}
           </Button>
           <div
