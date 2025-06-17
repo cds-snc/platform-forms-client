@@ -59,14 +59,20 @@ export const APIIntegration = () => {
     }
   }, [apiClient]);
 
+  if (!isCompatible) {
+    return (
+      <div className="flex size-full flex-col items-center justify-center">
+        <h1 className="text-2xl font-bold">API Integration</h1>
+        <div className="m-10">
+          This browser does not support the File System Access API. Please use a compatible browser.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex size-full flex-col items-center justify-center">
       <h1 className="text-2xl font-bold">API Integration</h1>
-      <div className="m-10">
-        {isCompatible
-          ? "This browser supports the File System Access API."
-          : "This browser does not support the File System Access API."}
-      </div>
       <div className="m-4">
         <p>{`Form Id from Key: ${userKey?.formId} `}</p>
         <p>{`Access Token: ${apiClient ? "Created" : "null"}`}</p>
