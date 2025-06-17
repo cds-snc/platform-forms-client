@@ -612,14 +612,14 @@ export async function updateIsPublishedForTemplate(
   // Delete all form responses created during draft mode
   if (isPublished && process.env.APP_ENV !== "test") {
     try {
-      // Don't await this call, as it is not critical to the publishing process
-      deleteDraftFormResponses(formID);
+      await deleteDraftFormResponses(formID);
     } catch (e) {
-      logMessage.error(
-        `Error deleting draft form responses for form ${formID}: ${
-          e instanceof Error ? e.message : e
-        }`
-      );
+      if (e instanceof TemplateAlreadyPublishedError) {
+        // Already published, so we can just return the full template
+        return getFullTemplateByID(formID);
+      }
+
+      throw e;
     }
   }
 
