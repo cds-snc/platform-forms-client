@@ -141,9 +141,7 @@ const isFieldResponseValid = (
 
       if (
         validator.required &&
-        (!fileInputResponse.name ||
-          !fileInputResponse.size ||
-          !fileInputResponse.based64EncodedFile)
+        (!fileInputResponse.name || !fileInputResponse.size || !fileInputResponse.content)
       )
         return t("input-validation.required");
 
@@ -256,12 +254,12 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
       return false;
     }
     case FormElementTypes.fileInput: {
-      const fileInputResponse = value as FileInputResponse;
       if (
-        fileInputResponse &&
-        hasOwnProperty(fileInputResponse, "name") &&
-        hasOwnProperty(fileInputResponse, "size") &&
-        hasOwnProperty(fileInputResponse, "based64EncodedFile")
+        value !== null &&
+        typeof value == "object" &&
+        hasOwnProperty(value, "name") &&
+        hasOwnProperty(value, "size") &&
+        hasOwnProperty(value, "key")
       ) {
         return true;
       }

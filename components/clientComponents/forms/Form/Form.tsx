@@ -35,6 +35,7 @@ import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
 
 import { FocusHeader } from "app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
+import { uploadFiles } from "@root/lib/utils/form-builder/fileUploader";
 
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 
@@ -280,6 +281,9 @@ export const Form = withFormik<FormProps, Responses>({
         hasGroups && hasShowHideRules
           ? removeFormContextValues(getValuesForConditionalLogic())
           : removeFormContextValues(values);
+
+      // Extract files from formValues and upload them to S3 in seperate function
+      await uploadFiles(formValues);
 
       const result = await submitForm(
         formValues,

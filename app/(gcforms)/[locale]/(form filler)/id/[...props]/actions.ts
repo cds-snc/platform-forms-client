@@ -1,10 +1,9 @@
 "use server";
 
-import { PublicFormRecord, Responses, SubmissionRequestBody } from "@lib/types";
-import { buildFormDataObject } from "./lib/buildFormDataObject";
-import { parseRequestData } from "./lib/parseRequestData";
+import { PublicFormRecord, Responses } from "@lib/types";
+
+import { buildCompleteFormDataObject } from "./lib/parseRequestData";
 import { processFormData } from "./lib/processFormData";
-import { MissingFormDataError } from "./lib/exceptions";
 import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
 import { dateHasPast } from "@lib/utils";
@@ -14,6 +13,7 @@ import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
 import { sendNotification } from "@lib/notifications";
+import { generateSignedUrl } from "@root/lib/s3-upload";
 
 //  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
 const CAPTCHA_BLOCKABLE_MODE = false;
@@ -79,15 +79,9 @@ export async function submitForm(
       // throw new MissingFormDataError("Form data validation failed");
     }
 
-    const formDataObject = buildFormDataObject(template, values);
+    const { formData, fileKeys } = buildCompleteFormDataObject(template, values);
 
-    if (Object.entries(formDataObject).length <= 2) {
-      throw new MissingFormDataError("No form data submitted with request");
-    }
-
-    const data = await parseRequestData(formDataObject as SubmissionRequestBody);
-
-    const submissionId = await processFormData(data.fields, data.files, language);
+    const submissionId = await processFormData(formData, fileKeys, language);
 
     sendNotification(formId, template.form.titleEn, template.form.titleFr);
 
@@ -100,3 +94,6 @@ export async function submitForm(
     return { id: formId, error: { name: (e as Error).name, message: (e as Error).message } };
   }
 }
+
+export const getSignedS3Urls = async (files: string[]) =>
+  Promise.all(files.map(async (file) => generateSignedUrl(file)));
