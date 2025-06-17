@@ -20,10 +20,6 @@
     "answerLength": "Doit être au moins 4 caractères.",
     "duplicateAnswer": "Les réponses ne peuvent pas être identiques. Créez une réponse unique pour cette question."
   },
-  "banner": {
-    "title": "Nous renforçons la sécurité de votre compte et de vos formulaires.",
-    "body": "Des questions de sécurité vous seront posées si vous réinitialisez votre mot de passe."
-  },
   "success": {
     "title": "Vos questions de sécurité ont été enregistrées"
   }
