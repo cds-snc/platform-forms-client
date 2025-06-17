@@ -10,6 +10,10 @@ ENV NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY=UR78-BU29-RU35-EP49
 # 6 MB
 ENV NEXT_PUBLIC_BODY_SIZE_LIMIT_WITH_FILES=6291456
 
+# Temp for API Integration Feature
+ENV NEXT_PUBLIC_ZITADEL_URL=https://auth.forms-staging.cdssandbox.xyz
+ENV NEXT_PUBLIC_API_URL=https://api.forms-staging.cdssandbox.xyz
+
 COPY . /src
 WORKDIR /src
 
