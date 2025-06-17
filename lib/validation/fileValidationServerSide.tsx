@@ -31,7 +31,7 @@ export type FileValidationResult =
 export async function validateFileToUpload(
   fileName: string,
   fileSizeInBytes: number,
-  fileAsBuffer: Buffer
+  fileAsBuffer: ArrayBuffer
 ): Promise<FileValidationResult> {
   const sizeOfBufferInBytes = Buffer.byteLength(fileAsBuffer);
 

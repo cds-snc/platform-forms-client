@@ -14,7 +14,7 @@ describe("Regardless of the MIME type detection, it", () => {
     const sut = await validateFileToUpload(
       "fileName.txt",
       100,
-      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
+      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=").buffer
     );
 
     expect(sut).toStrictEqual({ status: "valid" });
@@ -24,7 +24,7 @@ describe("Regardless of the MIME type detection, it", () => {
     const sut = await validateFileToUpload(
       "fileName.txt",
       BODY_SIZE_LIMIT_WITH_FILES + 1,
-      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
+      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=").buffer
     );
 
     expect(sut).toStrictEqual({
@@ -35,7 +35,11 @@ describe("Regardless of the MIME type detection, it", () => {
   });
 
   it("should return a SIZE_IS_TOO_LARGE result if the buffer size is too large", async () => {
-    const sut = await validateFileToUpload("fileName.txt", 100, Buffer.alloc(BODY_SIZE_LIMIT_WITH_FILES + 1));
+    const sut = await validateFileToUpload(
+      "fileName.txt",
+      100,
+      Buffer.alloc(BODY_SIZE_LIMIT_WITH_FILES + 1).buffer
+    );
 
     expect(sut).toStrictEqual({
       status: "size-is-too-large",
@@ -48,7 +52,7 @@ describe("Regardless of the MIME type detection, it", () => {
     const sut = await validateFileToUpload(
       "fileName.zip",
       100,
-      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
+      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=").buffer
     );
 
     expect(sut).toStrictEqual({
@@ -65,7 +69,7 @@ describe("When given file has detectable MIME type", () => {
     const sut = await validateFileToUpload(
       "fileName.pdf",
       100,
-      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
+      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=").buffer
     );
 
     expect(sut).toStrictEqual({ status: "valid" });
@@ -77,7 +81,7 @@ describe("When given file has detectable MIME type", () => {
     const sut = await validateFileToUpload(
       "fileName.pdf",
       100,
-      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
+      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=").buffer
     );
 
     expect(sut).toStrictEqual({
@@ -93,7 +97,7 @@ describe("When given file has detectable MIME type", () => {
     const sut = await validateFileToUpload(
       "fileName.pdf",
       100,
-      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
+      Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=").buffer
     );
 
     expect(sut).toStrictEqual({
