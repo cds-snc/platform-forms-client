@@ -235,7 +235,30 @@ export const validateNotificationsInterval = (
 };
 
 export const getNotificationsSettings = async (formId: string) => {
-  const notificationsSettings = await _getNotificationsSettings(formId);
+  const notificationsSettings = await prisma.template
+    .findUnique({
+      where: {
+        id: formId,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+        notificationsUsers: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+        notificationsInterval: true,
+        deliveryOption: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
   if (!notificationsSettings) {
     logMessage.warn(`getNotificationsSettings template not found with id ${formId}`);
     return null;
@@ -260,33 +283,9 @@ export const getNotificationsSettings = async (formId: string) => {
   };
 };
 
-const _getNotificationsSettings = async (formId: string) => {
-  return prisma.template
-    .findUnique({
-      where: {
-        id: formId,
-      },
-      select: {
-        users: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-        notificationsUsers: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-        notificationsInterval: true,
-        deliveryOption: true,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-};
-
-export const updateNotificationsSettings = async (formId: string, enabled: boolean) => {
+// Adds or removes the session user from the notificationsUsers list for a form. Users in
+// the notificationsUsers list will receive email notifications when a form has new submissions.
+export const updateNotificationsUser = async (formId: string, enabled: boolean) => {
   const { user } = await authorization.canEditForm(formId).catch((e) => {
     logEvent(
       e.user.id,
