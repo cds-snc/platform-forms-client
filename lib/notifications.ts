@@ -286,11 +286,8 @@ const _getNotificationsSettings = async (formId: string) => {
     .catch((e) => prismaErrors(e, null));
 };
 
-export const updateNotificationsSettings = async (
-  formId: string,
-  user: { id: string; email: string; enabled: boolean }
-) => {
-  const { user: sessionUser } = await authorization.canEditForm(formId).catch((e) => {
+export const updateNotificationsSettings = async (formId: string, enabled: boolean) => {
+  const { user } = await authorization.canEditForm(formId).catch((e) => {
     logEvent(
       e.user.id,
       { type: "Form", id: formId },
@@ -299,19 +296,6 @@ export const updateNotificationsSettings = async (
     );
     throw e;
   });
-
-  if (!user || !user.id) {
-    logMessage.warn("No user provided for notifications settings update");
-    return null;
-  }
-
-  // A user can only update their own notifications settings
-  if (sessionUser.id !== user.id) {
-    logMessage.warn(
-      `User with id ${sessionUser.id} attempted to update notifications settings for user id ${user.id} that does not belong to them`
-    );
-    return null;
-  }
 
   const template = await prisma.template
     .findFirst({
@@ -333,6 +317,7 @@ export const updateNotificationsSettings = async (
     return null;
   }
 
+  // A user can only update their own notifications settings
   const userToUpdate = template.users.find((u) => u.id === user.id);
   if (!userToUpdate) {
     logMessage.warn(
@@ -349,7 +334,7 @@ export const updateNotificationsSettings = async (
       },
       data: {
         notificationsUsers: {
-          ...(user.enabled ? { connect: userToUpdate } : { disconnect: { id: userToUpdate.id } }),
+          ...(enabled ? { connect: userToUpdate } : { disconnect: { id: userToUpdate.id } }),
         },
       },
     })
@@ -358,15 +343,15 @@ export const updateNotificationsSettings = async (
   logMessage.info(
     `saveNotificationsSettings updated notifications settings for user with email ${
       user.email
-    } on template ${formId} to ${user.enabled ? "enabled" : "disabled"}`
+    } on template ${formId} to ${enabled ? "enabled" : "disabled"}`
   );
 
   logEvent(
-    sessionUser.id,
+    user.id,
     { type: "Form", id: formId },
     "UpdateNotificationsSettings",
-    `User :${sessionUser.id} updated notifications setting on form ${formId} to ${
-      user.enabled ? "enabled" : "disabled"
+    `User :${user.id} updated notifications setting on form ${formId} to ${
+      enabled ? "enabled" : "disabled"
     }`
   );
 };

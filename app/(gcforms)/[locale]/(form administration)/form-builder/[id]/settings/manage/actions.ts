@@ -77,7 +77,7 @@ export const saveNotificationsSettings = AuthenticatedAction(
         throw new Error();
       }
 
-      await updateNotificationsSettings(formId, user);
+      await updateNotificationsSettings(formId, user.enabled);
     } catch (_) {
       return { error: "There was an error. Please try again later." } as ServerActionError;
     }
