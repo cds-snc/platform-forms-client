@@ -349,7 +349,7 @@ export const updateNotificationsSettings = async (
       },
       data: {
         notificationsUsers: {
-          ...(user.enabled ? { connect: userToUpdate } : { disconnect: [{ id: userToUpdate.id }] }),
+          ...(user.enabled ? { connect: userToUpdate } : { disconnect: { id: userToUpdate.id } }),
         },
       },
     })

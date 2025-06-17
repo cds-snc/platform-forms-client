@@ -8,8 +8,14 @@ import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { CheckNoBorderIcon, XIcon } from "@root/components/serverComponents/icons";
 import { getNotificationsUsersAndSettings, saveNotificationsSettings } from "../actions";
+import { NotificationsUsersList } from "./NotificationsUsersList";
+
+export type NotificationsUser = {
+  id: string;
+  email: string;
+  enabled: boolean;
+};
 
 export const Notifications = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
@@ -17,14 +23,8 @@ export const Notifications = ({ formId }: { formId: string }) => {
   const updateNotificationsError = t("settings.notifications.error.updateNotifications");
   const updateNotificationsSuccess = t("settings.notifications.success.updateNotifications");
 
-  const [users, setUsers] = useState<{ id: string; email: string; enabled: boolean }[] | null>(
-    null
-  );
-  const [sessionUser, setSessionUser] = useState<{
-    id: string;
-    email: string;
-    enabled: boolean;
-  } | null>(null);
+  const [users, setUsers] = useState<NotificationsUser[] | null>(null);
+  const [sessionUser, setSessionUser] = useState<NotificationsUser | null>(null);
 
   useEffect(() => {
     const getSettings = async () => {
@@ -79,7 +79,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
     }
   }, [formId, sessionUser, updateNotificationsError, updateNotificationsSuccess]);
 
-  // This is a published form with email delivery or a legacy form has no users.
+  // This is a published form with email delivery or a legacy form that has no users.
   // Don't show notifications settings.
   if (getDeliveryOption() || !sessionUser) {
     return null;
@@ -101,27 +101,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
           })}
         />
       </div>
-      {users && users.length > 0 && (
-        <>
-          <p className="mb-2 font-bold">{t("settings.notifications.usersList.title")}</p>
-          <ul className="m-0 mb-4 list-none p-0">
-            {users.map((notificationUser) => {
-              return (
-                <li key={notificationUser.email} className="flex h-8 items-center align-middle">
-                  <span className="mr-2">
-                    {notificationUser.enabled ? (
-                      <CheckNoBorderIcon title={t("settings.notifications.usersList.enabled")} />
-                    ) : (
-                      <XIcon title={t("settings.notifications.usersList.disabled")} />
-                    )}
-                  </span>
-                  {notificationUser.email}
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
+      {users && users.length > 0 && <NotificationsUsersList users={users} />}
       <Button dataTestId="form-notifications-save" theme="secondary" onClick={updateNotifications}>
         {t("settings.notifications.save")}
       </Button>

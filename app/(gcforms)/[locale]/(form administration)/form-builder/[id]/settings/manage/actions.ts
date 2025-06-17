@@ -88,9 +88,7 @@ export const getNotificationsUsersAndSettings = AuthenticatedAction(
   async (session, formId: string) => {
     try {
       const notificationsSettings = await getNotificationsSettings(formId);
-
       const sessionUser = notificationsSettings?.users.find((user) => user.id === session.user.id);
-
       const usersWithoutSessionUser =
         notificationsSettings?.users.filter((user) => user.id !== session.user.id) || [];
 
