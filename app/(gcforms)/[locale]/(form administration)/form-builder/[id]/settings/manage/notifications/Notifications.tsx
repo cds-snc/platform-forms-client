@@ -1,6 +1,3 @@
-"use client";
-// Errors without the above because of both an icon server component and a useEffect hook.
-
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { NotificationsToggle } from "./NotificationsToggle";
@@ -10,6 +7,7 @@ import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { getNotificationsUsers, updateNotificationsUserSetting } from "../actions";
 import { NotificationsUsersList } from "./NotificationsUsersList";
+import { useSession } from "next-auth/react";
 
 export type NotificationsUser = {
   id: string;
@@ -19,6 +17,8 @@ export type NotificationsUser = {
 
 export const Notifications = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
+  const { data } = useSession();
+
   const generalError = t("settings.notifications.error.general");
   const updateNotificationsError = t("settings.notifications.error.updateNotifications");
   const updateNotificationsSuccess = t("settings.notifications.success.updateNotifications");
@@ -31,28 +31,21 @@ export const Notifications = ({ formId }: { formId: string }) => {
   useEffect(() => {
     const getSettings = async () => {
       try {
-        const notificationsUsers = await getNotificationsUsers(formId);
-        if (
-          "error" in notificationsUsers ||
-          !notificationsUsers ||
-          !notificationsUsers.sessionUserWithSetting
-        ) {
+        const users = await getNotificationsUsers(formId);
+        if ("error" in users || !users) {
           throw new Error();
         }
-        if (notificationsUsers.users && notificationsUsers.users.length > 0) {
-          setUsers(notificationsUsers.users);
-        }
-        if (notificationsUsers.sessionUserWithSetting) {
-          setSessionUserWithSetting(notificationsUsers.sessionUserWithSetting);
-        }
+        setUsers(users);
+
+        const sessionUserWithSetting = users.find((user) => user.id === data?.user.id) || null;
+        setSessionUserWithSetting(sessionUserWithSetting);
       } catch (error) {
         toast.error(generalError);
       }
     };
     getSettings();
-  }, [formId, generalError]);
+  }, [formId, generalError, data?.user]);
 
-  // TODO: remove from template store: setNotificationsInterval, notificationsInterval
   const { getDeliveryOption } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
   }));

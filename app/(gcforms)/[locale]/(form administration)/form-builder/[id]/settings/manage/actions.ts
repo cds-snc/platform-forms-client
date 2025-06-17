@@ -75,7 +75,7 @@ export const updateNotificationsUserSetting = AuthenticatedAction(
     try {
       if (!user || !user.id) {
         logMessage.warn("No user provided for notifications settings update");
-        throw new Error();
+        throw new Error("No user provided for notifications settings update");
       }
 
       await updateNotificationsUser(formId, user.enabled);
@@ -85,7 +85,7 @@ export const updateNotificationsUserSetting = AuthenticatedAction(
   }
 );
 
-export const getNotificationsUsers = AuthenticatedAction(async (session, formId: string) => {
+export const getNotificationsUsers = AuthenticatedAction(async (_, formId: string) => {
   try {
     const usersAndNotificationsUsers = await prisma.template
       .findUnique({
@@ -108,13 +108,15 @@ export const getNotificationsUsers = AuthenticatedAction(async (session, formId:
         },
       })
       .catch((e) => prismaErrors(e, null));
+
     if (!usersAndNotificationsUsers) {
       logMessage.warn(`getNotificationsUsers template not found with id ${formId}`);
       throw new Error("Template not found");
     }
+
     const { users, notificationsUsers } = usersAndNotificationsUsers;
 
-    const usersWithSetting = users.map((user) => {
+    return users.map((user) => {
       const found = notificationsUsers.find((notificationUser) => notificationUser.id === user.id);
       return {
         id: user.id,
@@ -122,14 +124,6 @@ export const getNotificationsUsers = AuthenticatedAction(async (session, formId:
         enabled: found ? true : false,
       };
     });
-    const sessionsUser = usersWithSetting.find((user) => user.id === session.user.id);
-    const usersWithoutSessionUser =
-      usersWithSetting.filter((user) => user.id !== session.user.id) || [];
-
-    return {
-      users: usersWithoutSessionUser,
-      sessionUserWithSetting: sessionsUser,
-    };
   } catch (error) {
     logMessage.warn(`Error fetching notifications settings: ${(error as Error).message}`);
     return {

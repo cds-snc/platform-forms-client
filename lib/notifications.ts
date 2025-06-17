@@ -286,7 +286,7 @@ export const getNotificationsSettings = async (formId: string) => {
 // Adds or removes the session user from the notificationsUsers list for a form. Users in
 // the notificationsUsers list will receive email notifications when a form has new submissions.
 export const updateNotificationsUser = async (formId: string, enabled: boolean) => {
-  const { user } = await authorization.canEditForm(formId).catch((e) => {
+  const { user: sessionUser } = await authorization.canEditForm(formId).catch((e) => {
     logEvent(
       e.user.id,
       { type: "Form", id: formId },
@@ -301,26 +301,36 @@ export const updateNotificationsUser = async (formId: string, enabled: boolean) 
       where: {
         id: formId,
       },
-      include: {
-        users: true,
-        notificationsUsers: true,
+      select: {
+        users: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+        notificationsUsers: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
       },
     })
     .catch((e) => prismaErrors(e, null));
 
   if (template === null) {
     logMessage.warn(
-      `Can not notifications setting for user with id ${user.id}
+      `Can not notifications setting for user with id ${sessionUser.id}
        on template ${formId}. Template does not exist`
     );
     return null;
   }
 
   // A user can only update their own notifications settings
-  const userToUpdate = template.users.find((u) => u.id === user.id);
+  const userToUpdate = template.users.find((u) => u.id === sessionUser.id);
   if (!userToUpdate) {
     logMessage.warn(
-      `Can not find notifications setting for user with id ${user.id}
+      `Can not find notifications setting for user with id ${sessionUser.id}
        on template ${formId}. User does not exist`
     );
     return null;
@@ -341,15 +351,15 @@ export const updateNotificationsUser = async (formId: string, enabled: boolean) 
 
   logMessage.info(
     `saveNotificationsSettings updated notifications settings for user with email ${
-      user.email
+      sessionUser.email
     } on template ${formId} to ${enabled ? "enabled" : "disabled"}`
   );
 
   logEvent(
-    user.id,
+    sessionUser.id,
     { type: "Form", id: formId },
     "UpdateNotificationsSettings",
-    `User :${user.id} updated notifications setting on form ${formId} to ${
+    `User :${sessionUser.id} updated notifications setting on form ${formId} to ${
       enabled ? "enabled" : "disabled"
     }`
   );
