@@ -209,8 +209,10 @@ export const checkVisibilityRecursive = (
 
   const formElements = formRecord.form.elements;
 
-  if (checked[element.id.toString()]) {
-    return checked[element.id.toString()];
+  const elID = element.id.toString();
+
+  if (checked[elID]) {
+    return checked[elID];
   }
 
   // At least one rule must be satisfied for the element to be visible
@@ -224,7 +226,7 @@ export const checkVisibilityRecursive = (
       matchRule(rule, formElements, values);
 
     // Prevents re-checking the same element
-    checked[element.id.toString()] = isVisible;
+    checked[elID] = isVisible;
 
     return isVisible;
   });
