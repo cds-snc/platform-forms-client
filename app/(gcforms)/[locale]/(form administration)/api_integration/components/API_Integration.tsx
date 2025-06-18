@@ -31,6 +31,7 @@ export const APIIntegration = () => {
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [responsesProcessed, setResponsesProcessed] = useState(0);
   const [completed, setCompleted] = useState(false);
+  const [tokenRate, setTokenRate] = useState<boolean>(false);
 
   useEffect(() => {
     // Check if the File System Access API is supported
@@ -125,9 +126,7 @@ export const APIIntegration = () => {
                           }
                         } catch (error) {
                           if (error instanceof TokenRateLimitError) {
-                            alert(
-                              "Token rate limit hit. Please try again later or contact support."
-                            );
+                            setTokenRate(true);
                           }
                           break;
                         }
@@ -146,6 +145,11 @@ export const APIIntegration = () => {
                       {responsesProcessed > 0 ? `Processing ${responsesProcessed} responses` : null}
                     </p>
                   )}
+                  {tokenRate ? (
+                    <p className="mt-5 text-red-600">
+                      You have hit the token rate limit. Please try again later.
+                    </p>
+                  ) : null}
                 </>
               ) : (
                 <>
