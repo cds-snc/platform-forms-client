@@ -24,6 +24,8 @@ import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
 import { Group } from "@lib/formContext";
 import { TranslateCustomizeSet } from "./TranslateCustomizeSet";
 
+import { ExitUrl } from "./ExitUrl";
+
 const GroupSection = ({
   groupId,
   group,
@@ -435,6 +437,14 @@ export const TranslateWithGroups = () => {
                   <SectionTitle>
                     {t("logic.pageTitle")} <em>{groupName}</em>
                   </SectionTitle>
+                  {/* EXIT URL */}
+                  {thisGroup.exitUrlEn || thisGroup.exitUrlFr ? (
+                    <ExitUrl
+                      groupId={groupKey}
+                      group={thisGroup}
+                      primaryLanguage={primaryLanguage}
+                    />
+                  ) : null}
                   <GroupSection
                     group={thisGroup}
                     groupId={groupKey}
