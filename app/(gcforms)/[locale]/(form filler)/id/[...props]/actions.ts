@@ -82,7 +82,6 @@ export async function submitForm(
     } catch (e) {
       const message = (e as Error).message;
       if (message.includes(FormStatus.REPEATING_SET_ERROR)) {
-        console.warn("actions.ts: Repeating set error detected, returning early");
         return {
           id: formId,
           error: { name: (e as Error).name, message: FormStatus.REPEATING_SET_ERROR },

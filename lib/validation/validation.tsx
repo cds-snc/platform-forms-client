@@ -277,11 +277,6 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
 
       for (const row of value as Array<Responses>) {
         if (row === undefined || row === null || typeof row !== "object") {
-          console.warn(
-            `validation.tsx === Dynamic row validation failed for value: ${JSON.stringify(
-              row
-            )}. Expected an object with key-value pairs.`
-          );
           valid = false;
           break;
         }

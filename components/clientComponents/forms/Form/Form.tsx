@@ -306,7 +306,6 @@ export const Form = withFormik<FormProps, Responses>({
         } else if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
           formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
         } else if (result.error.message.includes(FormStatus.REPEATING_SET_ERROR)) {
-          console.warn("Form.tsx: Repeating set error caught in Form component");
           formikBag.setStatus(FormStatus.REPEATING_SET_ERROR);
         } else if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
           formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
