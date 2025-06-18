@@ -70,7 +70,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
 
-  const formStatusError =
+  let formStatusError =
     props.status === FormStatus.FILE_ERROR
       ? t("input-validation.file-submission")
       : props.status === FormStatus.ERROR
@@ -82,7 +82,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       : null;
 
   if (FormStatus.REPEATING_SET_ERROR === props.status) {
-    props.status === FormStatus.REPEATING_SET_ERROR;
+    formStatusError = FormStatus.REPEATING_SET_ERROR;
   }
 
   //  If there are errors on the page, set focus the first error field
