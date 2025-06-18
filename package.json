@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.43.1",
+  "version": "3.44.0",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -79,7 +79,7 @@
     "copy-to-clipboard": "3.3.3",
     "csv-writer": "^1.6.0",
     "d3-hierarchy": "^3.1.2",
-    "downshift": "^8.3.1",
+    "downshift": "^9.0.9",
     "file-type": "^21.0.0",
     "formik": "2.4.6",
     "fuse.js": "^7.1.0",
@@ -181,7 +181,7 @@
     "jest-css-modules": "^2.1.0",
     "jest-environment-jsdom": "^30.0.0",
     "jest-environment-node": "^30.0.0",
-    "jest-mock-extended": "^3.0.5",
+    "jest-mock-extended": "^4.0.0",
     "lint-staged": "^15.2.2",
     "pino-pretty": "^11.0.0",
     "postcss": "^8.4.32",

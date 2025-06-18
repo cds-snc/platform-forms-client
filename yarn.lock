@@ -1566,10 +1566,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.17.9, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.22.15, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.17.9, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
   version: 7.27.4
   resolution: "@babel/runtime@npm:7.27.4"
   checksum: 10c0/ca99e964179c31615e1352e058cc9024df7111c829631c90eec84caba6703cc32acc81503771847c306b3c70b815609fe82dde8682936debe295b0b283b2dc6e
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.24.5":
+  version: 7.27.6
+  resolution: "@babel/runtime@npm:7.27.6"
+  checksum: 10c0/89726be83f356f511dcdb74d3ea4d873a5f0cf0017d4530cb53aa27380c01ca102d573eff8b8b77815e624b1f8c24e7f0311834ad4fb632c90a770fda00bd4c8
   languageName: node
   linkType: hard
 
@@ -10031,7 +10038,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compute-scroll-into-view@npm:^3.0.3":
+"compute-scroll-into-view@npm:^3.1.0":
   version: 3.1.1
   resolution: "compute-scroll-into-view@npm:3.1.1"
   checksum: 10c0/59761ed62304a9599b52ad75d0d6fbf0669ee2ab7dd472fdb0ad9da36628414c014dea7b5810046560180ad30ffec52a953d19297f66a1d4f3aa0999b9d2521d
@@ -10931,18 +10938,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"downshift@npm:^8.3.1":
-  version: 8.5.0
-  resolution: "downshift@npm:8.5.0"
+"downshift@npm:^9.0.9":
+  version: 9.0.9
+  resolution: "downshift@npm:9.0.9"
   dependencies:
-    "@babel/runtime": "npm:^7.22.15"
-    compute-scroll-into-view: "npm:^3.0.3"
+    "@babel/runtime": "npm:^7.24.5"
+    compute-scroll-into-view: "npm:^3.1.0"
     prop-types: "npm:^15.8.1"
-    react-is: "npm:^18.2.0"
+    react-is: "npm:18.2.0"
     tslib: "npm:^2.6.2"
   peerDependencies:
     react: ">=16.12.0"
-  checksum: 10c0/f572affe0884d6fb6523352fcb230db42875b557d972a74d15ef8a1b72702733bb5f329911d2810f9880e4b8ba1c6b6e10eb4bf6d8160ab4975c1e65c42c6da2
+  checksum: 10c0/9102d498286e7ec41d0036aa753c3865096d307e91b56e5eb466e0f3c54b13cfcb900f91bae50e079ab0888eb00fd46dcd83b78ec126a8dd3ea86d94a26685cc
   languageName: node
   linkType: hard
 
@@ -12504,7 +12511,7 @@ __metadata:
     cypress-terminal-report: "npm:^7.1.0"
     cypress-wait-until: "npm:^3.0.2"
     d3-hierarchy: "npm:^3.1.2"
-    downshift: "npm:^8.3.1"
+    downshift: "npm:^9.0.9"
     eslint: "npm:^9.17.0"
     eslint-config-next: "npm:15.3.3"
     eslint-config-prettier: "npm:^9.1.0"
@@ -12525,7 +12532,7 @@ __metadata:
     jest-css-modules: "npm:^2.1.0"
     jest-environment-jsdom: "npm:^30.0.0"
     jest-environment-node: "npm:^30.0.0"
-    jest-mock-extended: "npm:^3.0.5"
+    jest-mock-extended: "npm:^4.0.0"
     jose: "npm:^6.0.11"
     jsonschema: "npm:1.4.1"
     jszip: "npm:^3.10.1"
@@ -14078,15 +14085,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-mock-extended@npm:^3.0.5":
-  version: 3.0.7
-  resolution: "jest-mock-extended@npm:3.0.7"
+"jest-mock-extended@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "jest-mock-extended@npm:4.0.0"
   dependencies:
-    ts-essentials: "npm:^10.0.0"
+    ts-essentials: "npm:^10.0.2"
   peerDependencies:
-    jest: ^24.0.0 || ^25.0.0 || ^26.0.0 || ^27.0.0 || ^28.0.0 || ^29.0.0
+    "@jest/globals": ^28.0.0 || ^29.0.0 || ^30.0.0
+    jest: ^24.0.0 || ^25.0.0 || ^26.0.0 || ^27.0.0 || ^28.0.0 || ^29.0.0 || ^30.0.0
     typescript: ^3.0.0 || ^4.0.0 || ^5.0.0
-  checksum: 10c0/17d2e816eae8e95933817102987ba9f700890c4b1223495012bca2ec76644cd203336843a4c381a662e03bde0b637767ad8e2c13b490e9a5eaeb87d211994647
+  checksum: 10c0/ba51e8e49dba995a54bd9c45aa4d27e6b64a6199289c92292a286117d3f8a733fe480fc56b6d356505696fc79af193625892f5022ea69243525e706515a93249
   languageName: node
   linkType: hard
 
@@ -17170,6 +17178,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-is@npm:18.2.0":
+  version: 18.2.0
+  resolution: "react-is@npm:18.2.0"
+  checksum: 10c0/6eb5e4b28028c23e2bfcf73371e72cd4162e4ac7ab445ddae2afe24e347a37d6dc22fae6e1748632cd43c6d4f9b8f86dcf26bf9275e1874f436d129952528ae0
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.13.1, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -17184,7 +17199,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^18.0.0, react-is@npm:^18.2.0, react-is@npm:^18.3.1":
+"react-is@npm:^18.0.0, react-is@npm:^18.3.1":
   version: 18.3.1
   resolution: "react-is@npm:18.3.1"
   checksum: 10c0/f2f1e60010c683479e74c63f96b09fb41603527cd131a9959e2aee1e5a8b0caf270b365e5ca77d4a6b18aae659b60a86150bb3979073528877029b35aecd2072
@@ -19187,15 +19202,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-essentials@npm:^10.0.0":
-  version: 10.0.4
-  resolution: "ts-essentials@npm:10.0.4"
+"ts-essentials@npm:^10.0.2":
+  version: 10.1.1
+  resolution: "ts-essentials@npm:10.1.1"
   peerDependencies:
     typescript: ">=4.5.0"
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/99a5dd3ae6ed885e0f6cdb9556c07ba5c9e00d447a58a3308440739d624bcd92d370f8bb060ae7a2992023b4a03acdf669ac8f1e0427b3fbc792a2857f85ab0d
+  checksum: 10c0/8c59148a03eae086e7b1454fa6895e94e2f71385089ccda7e1f720a586749ede7e49ff7338e5f27e44a79f4bed740cc5dc3ad59313769bec028a85fa985685ff
   languageName: node
   linkType: hard
 
