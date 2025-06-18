@@ -1245,7 +1245,7 @@
       "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
     },
     "exitUrl": {
-      "label": "Exit URL"
+      "label": "Exit Url"
     },
     "noPages": {
       "text1": "Add a <strong>New page</strong> from the",

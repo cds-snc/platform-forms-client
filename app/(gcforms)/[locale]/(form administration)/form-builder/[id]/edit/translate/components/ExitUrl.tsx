@@ -13,15 +13,18 @@ import { type Group } from "@lib/formContext";
 const FieldInput = ({ groupId, val, lang }: { groupId: string; val: string; lang: Language }) => {
   const setExitButtonUrl = useGroupStore((state) => state.setExitButtonUrl);
 
+  const elementId = `element-${groupId}-text-${lang}`;
+
   return (
-    <>
-      <LanguageLabel id={`element-${groupId}-en-language`} lang={lang}>
+    <div className="relative w-1/2 flex-1">
+      <LanguageLabel id={`${elementId}-description`} lang={lang}>
         <>{lang}</>
       </LanguageLabel>
+
       <input
         className="w-full p-4"
-        id={`element-${groupId}-text-${lang}`}
-        aria-describedby={`element-${groupId}-choice-en-language`}
+        id={elementId}
+        aria-describedby={`${elementId}-description`}
         type="text"
         value={val}
         placeholder={"https://"}
@@ -29,7 +32,7 @@ const FieldInput = ({ groupId, val, lang }: { groupId: string; val: string; lang
           setExitButtonUrl({ id: groupId, locale: lang, url: e.target.value });
         }}
       />
-    </>
+    </div>
   );
 };
 
