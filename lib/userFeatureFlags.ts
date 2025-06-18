@@ -30,3 +30,64 @@ export const getUserFeatureFlags = async (userId: string): Promise<string[]> => 
     return [];
   }
 };
+
+// Remove a specific feature flag for a user
+export const removeUserFeatureFlag = async (userId: string, flag: string): Promise<void> => {
+  try {
+    // Get current flags
+    const currentFlags = await getUserFeatureFlags(userId);
+
+    // Filter out the flag to be removed
+    const updatedFlags = currentFlags.filter((f) => f !== flag);
+
+    if (updatedFlags.length > 0) {
+      // Update the database with the remaining features
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          features: {
+            set: updatedFlags.map((feature) => ({ userId_feature: { userId, feature } })),
+          },
+        },
+      });
+    } else {
+      // If no features left, disconnect all features
+      await prisma.userFeature.deleteMany({
+        where: { userId },
+      });
+    }
+
+    // Update the cache
+    await featureFlagsPut(userId, updatedFlags);
+  } catch (error) {
+    throw new Error(`Failed to remove feature flag: ${error}`);
+  }
+};
+
+// Add a specific feature flag for a user
+export const addUserFeatureFlag = async (userId: string, flag: string): Promise<void> => {
+  try {
+    // Get current flags
+    const currentFlags = await getUserFeatureFlags(userId);
+
+    // Add the new flag if it doesn't already exist
+    if (!currentFlags.includes(flag)) {
+      const updatedFlags = [...currentFlags, flag];
+
+      // Update the database
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          features: {
+            set: updatedFlags.map((feature) => ({ userId_feature: { userId, feature } })),
+          },
+        },
+      });
+
+      // Update the cache
+      await featureFlagsPut(userId, updatedFlags);
+    }
+  } catch (error) {
+    throw new Error(`Failed to add feature flag: ${error}`);
+  }
+};
