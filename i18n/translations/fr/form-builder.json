@@ -531,7 +531,7 @@
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
   "hasFileInputAndApiDelivery": "Livraison de réponse avec l'API",
-  "hasFileInputAndApiDeliveryNote": "Choix obligatoire lors de l'utilisation du téléverseur de fichiers.",
+  "hasFileInputAndApiDeliveryNote": "Choix obligatoire lors de l'utilisation du téléverseur de fichiers",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",

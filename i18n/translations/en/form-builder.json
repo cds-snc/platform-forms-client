@@ -531,7 +531,7 @@
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
   "hasFileInputAndApiDelivery": "API delivery enabled",
-  "hasFileInputAndApiDeliveryNote": "Required when using file uploads.",
+  "hasFileInputAndApiDeliveryNote": "Required when using file upload",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -645,7 +645,7 @@
     "purpose": {
       "admin": "Administrative purposes",
       "nonAdmin": "Non-administrative purposes",
-      "unset": "Unset"
+      "unset": "Not set"
     },
     "formtypes": {
       "Collect": "Collect feedback or statistics",
@@ -840,7 +840,7 @@
     "purpose": {
       "admin": "Administrative purposes",
       "nonAdmin": "Non-administrative purposes",
-      "unset": "Unset"
+      "unset": "Not set"
     },
     "saveButton": "Save changes"
   },
