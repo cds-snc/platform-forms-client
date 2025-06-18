@@ -431,6 +431,10 @@ export const TranslateWithGroups = () => {
             Object.keys(groups).map((groupKey) => {
               const thisGroup = groups[groupKey];
               const groupName = thisGroup.name;
+
+              const nextAction = groups[groupKey]?.nextAction;
+              const isExitPage = nextAction === "exit" ? true : false;
+
               if (groupKey == "review" || groupKey == "end" || groupKey == "start") return null;
               return (
                 <div key={groupKey}>
@@ -445,8 +449,7 @@ export const TranslateWithGroups = () => {
                     secondaryLanguage={secondaryLanguage}
                   />
 
-                  {/* EXIT URL */}
-                  {thisGroup.exitUrlEn || thisGroup.exitUrlFr ? (
+                  {isExitPage ? (
                     <ExitUrl
                       groupId={groupKey}
                       group={thisGroup}
