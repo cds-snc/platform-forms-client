@@ -82,7 +82,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       : null;
 
   if (FormStatus.REPEATING_SET_ERROR === props.status) {
-    formStatusError = FormStatus.REPEATING_SET_ERROR;
+    formStatusError = t("form-repeating-set-error");
   }
 
   //  If there are errors on the page, set focus the first error field
