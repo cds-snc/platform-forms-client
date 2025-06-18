@@ -437,6 +437,14 @@ export const TranslateWithGroups = () => {
                   <SectionTitle>
                     {t("logic.pageTitle")} <em>{groupName}</em>
                   </SectionTitle>
+
+                  <GroupSection
+                    group={thisGroup}
+                    groupId={groupKey}
+                    primaryLanguage={primaryLanguage}
+                    secondaryLanguage={secondaryLanguage}
+                  />
+
                   {/* EXIT URL */}
                   {thisGroup.exitUrlEn || thisGroup.exitUrlFr ? (
                     <ExitUrl
@@ -445,12 +453,7 @@ export const TranslateWithGroups = () => {
                       primaryLanguage={primaryLanguage}
                     />
                   ) : null}
-                  <GroupSection
-                    group={thisGroup}
-                    groupId={groupKey}
-                    primaryLanguage={primaryLanguage}
-                    secondaryLanguage={secondaryLanguage}
-                  />
+
                   {sortGroup({ form, group: thisGroup }).map((element, index) => {
                     return (
                       <div className="section" id={`section-${index}`} key={element.id}>
