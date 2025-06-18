@@ -4,7 +4,6 @@ import { NotificationsUser } from "./Notifications";
 
 export const NotificationsUsersList = ({ users }: { users: NotificationsUser[] }) => {
   const { t } = useTranslation("form-builder");
-
   return (
     <>
       <p className="mb-2 font-bold">{t("settings.notifications.usersList.title")}</p>

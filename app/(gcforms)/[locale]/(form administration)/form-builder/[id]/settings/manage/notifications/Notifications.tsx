@@ -27,6 +27,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
   const [sessionUserWithSetting, setSessionUserWithSetting] = useState<NotificationsUser | null>(
     null
   );
+  const usersWithoutSessionUser = users?.filter((user) => user.id !== data?.user.id);
 
   useEffect(() => {
     const getSettings = async () => {
@@ -98,7 +99,9 @@ export const Notifications = ({ formId }: { formId: string }) => {
           })}
         />
       </div>
-      {users && users.length > 0 && <NotificationsUsersList users={users} />}
+      {usersWithoutSessionUser && usersWithoutSessionUser.length > 0 && (
+        <NotificationsUsersList users={usersWithoutSessionUser} />
+      )}
       <Button dataTestId="form-notifications-save" theme="secondary" onClick={updateNotifications}>
         {t("settings.notifications.save")}
       </Button>
