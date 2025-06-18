@@ -113,7 +113,7 @@ export const Pagination = ({
           aria-disabled={isFirstPage}
         >
           <>
-            <BackArrowIcon className="inline-block size-6 group-focus:fill-white" />
+            <BackArrowIcon className="inline-block size-6 " />
             {t("downloadResponsesTable.header.pagination.previous")}
           </>
         </Link>
@@ -129,7 +129,7 @@ export const Pagination = ({
         >
           <>
             {t("downloadResponsesTable.header.pagination.next")}
-            <ForwardArrowIcon className="inline-block size-6 group-focus:fill-white" />
+            <ForwardArrowIcon className="inline-block size-6" />
           </>
         </Link>
       </div>
