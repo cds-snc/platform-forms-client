@@ -81,6 +81,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           : props.formRecord.closedDetails?.messageFr) || t("form-closed-error")
       : null;
 
+  if (FormStatus.REPEATING_SET_ERROR === props.status) {
+    props.status === FormStatus.REPEATING_SET_ERROR;
+  }
+
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
     if (formStatusError) {
@@ -301,6 +305,9 @@ export const Form = withFormik<FormProps, Responses>({
           formikBag.setStatus(FormStatus.FILE_ERROR);
         } else if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
           formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
+        } else if (result.error.message.includes(FormStatus.REPEATING_SET_ERROR)) {
+          console.warn("Form.tsx: Repeating set error caught in Form component");
+          formikBag.setStatus(FormStatus.REPEATING_SET_ERROR);
         } else if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
           formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
           formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);

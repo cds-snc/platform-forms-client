@@ -244,6 +244,7 @@ export const FormStatus = {
   FORM_CLOSED_ERROR: "FormClosedError",
   SERVER_ID_ERROR: "ServerIDError",
   CAPTCHA_VERIFICATION_ERROR: "CaptchaVerificationError",
+  REPEATING_SET_ERROR: "RepeatingSetError",
 } as const;
 
 export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];

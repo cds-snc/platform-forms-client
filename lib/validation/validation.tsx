@@ -22,6 +22,7 @@ import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
 import { isValidEmail } from "@lib/validation/isValidEmail";
 import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 import { bytesToMb } from "@lib/utils/fileSize";
+import { FormStatus } from "@root/packages/types/src";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -275,6 +276,16 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
       let valid = true;
 
       for (const row of value as Array<Responses>) {
+        if (row === undefined || row === null || typeof row !== "object") {
+          console.warn(
+            `validation.tsx === Dynamic row validation failed for value: ${JSON.stringify(
+              row
+            )}. Expected an object with key-value pairs.`
+          );
+          valid = false;
+          break;
+        }
+
         for (const [responseKey, responseValue] of Object.entries(row)) {
           if (
             formElement.properties.subElements &&
@@ -318,14 +329,18 @@ export const validateResponses = async (values: Responses, formRecord: PublicFor
     // Check if the incoming value matches the type of the form element
     const result = valueMatchesType(values[item], formElement.type, formElement);
 
-    // Only invalidate the response if the type has a value
-    // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
-    if (values[item] && !result) {
-      errors[item] = {
-        type: getFieldType(formElement),
-        value: values[item],
-        message: "response-type-mismatch",
-      };
+    if (!result && formElement.type === FormElementTypes.dynamicRow) {
+      throw new Error(FormStatus.REPEATING_SET_ERROR);
+    } else {
+      // Only invalidate the response if the type has a value
+      // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
+      if (values[item] && !result) {
+        errors[item] = {
+          type: getFieldType(formElement),
+          value: values[item],
+          message: "response-type-mismatch",
+        };
+      }
     }
   }
 

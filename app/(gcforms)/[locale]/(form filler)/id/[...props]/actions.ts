@@ -66,17 +66,28 @@ export async function submitForm(
       }
     }
 
-    const validateResponsesResult = await validateResponses(values, template);
+    try {
+      const validateResponsesResult = await validateResponses(values, template);
 
-    if (Object.keys(validateResponsesResult).length !== 0) {
-      // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
-      logMessage.info(
-        `[server-action][submitForm] Detected invalid response(s) in submission on form ${formId}. Errors: ${JSON.stringify(
-          validateResponsesResult
-        )}`
-      );
-      // Turn this on after we've monitored the logs for a while
-      // throw new MissingFormDataError("Form data validation failed");
+      if (Object.keys(validateResponsesResult).length !== 0) {
+        // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
+        logMessage.info(
+          `[server-action][submitForm] Detected invalid response(s) in submission on form ${formId}. Errors: ${JSON.stringify(
+            validateResponsesResult
+          )}`
+        );
+        // Turn this on after we've monitored the logs for a while
+        // throw new MissingFormDataError("Form data validation failed");
+      }
+    } catch (e) {
+      const message = (e as Error).message;
+      if (message.includes(FormStatus.REPEATING_SET_ERROR)) {
+        console.warn("actions.ts: Repeating set error detected, returning early");
+        return {
+          id: formId,
+          error: { name: (e as Error).name, message: FormStatus.REPEATING_SET_ERROR },
+        };
+      }
     }
 
     const formDataObject = buildFormDataObject(template, values);
