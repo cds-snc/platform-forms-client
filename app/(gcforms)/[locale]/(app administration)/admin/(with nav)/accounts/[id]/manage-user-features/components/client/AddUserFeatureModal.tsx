@@ -39,11 +39,11 @@ export const AddUserFeatureModal = ({
         {t("Add User Feature")}
       </Button>
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-          <div className="bg-white rounded shadow-lg p-6 min-w-[300px]">
-            <h2 className="text-lg font-semibold mb-4">{t("Select Features")}</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+          <div className="min-w-[300px] rounded bg-white p-6 shadow-lg">
+            <h2 className="mb-4 text-lg font-semibold">{t("Select Features")}</h2>
             <form>
-              <div className="flex flex-col gap-2 mb-6">
+              <div className="mb-6 flex flex-col gap-2">
                 {flags.map((flag) => (
                   <label key={flag} className="flex items-center gap-2">
                     <input
