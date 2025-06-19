@@ -33,7 +33,9 @@ export const Pagination = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { statusFilter } = useParams<{ statusFilter: string }>();
+
   const queryKeys = searchParams.get("keys");
+
   const lastEvaluatedResponse = startFromExclusiveResponse
     ? `${startFromExclusiveResponse.name}_${startFromExclusiveResponse.createdAt}`
     : "end"; // If startFromExclusiveResponse is null, we're on the last page
@@ -42,7 +44,9 @@ export const Pagination = ({
 
   // Update our keys state when the query param changes
   useEffect(() => {
-    if (queryKeys) {
+    if (!queryKeys) {
+      setKeys(["start", lastEvaluatedResponse]);
+    } else {
       try {
         const decodedQueryKeys = decodeBase64Url(queryKeys).split(",");
 
