@@ -17,6 +17,7 @@ import {
 import { isValidGovEmail } from "@lib/validation/validation";
 import { AuthenticatedAction } from "@lib/actions";
 import { authorization } from "@lib/privileges";
+import { getOrigin } from "@lib/origin";
 
 export interface ErrorStates {
   validationErrors: {
@@ -44,8 +45,13 @@ export const unlockPublishing = AuthenticatedAction(
 
     const { managerEmail, department, goals } = validatedData.output;
 
+    const HOST = await getOrigin();
+    const manageUsersLink = `admin/accounts?query=${session.user.email}`;
+
     const emailBody = `
     ${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.<br/>
+    <br/>
+    <a href="${HOST}/en/${manageUsersLink}" target="_blank">Manage permissions</a>.<br/>
     <br/>
     Goals:<br/>
     ${goals}<br/>
@@ -53,6 +59,8 @@ export const unlockPublishing = AuthenticatedAction(
     Manager email address: ${managerEmail} .<br/><br/>
     ****<br/><br/>
     ${session.user.name} (${session.user.email}) du ${department} a demandé l'autorisation de publier des formulaires.<br/>
+    <br/>
+    <a href="${HOST}/fr/${manageUsersLink}" target="_blank">Gérer les autorisations</a>.<br/>
     <br/>
     Objectifs:<br/>
     ${goals}<br/>
