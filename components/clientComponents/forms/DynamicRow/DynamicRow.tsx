@@ -89,8 +89,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     if (hasReachedMaxNumberOfRows) return;
     // Set the newly added row'initial value (plucked out of initialValues)
     const newValue = [...field.value];
-    // @todo check if the next line is needed.
-    // newValue.push(meta.initialValue ? {} : {});
+    newValue.push({}); // Push an empty object to the value array
     helpers.setValue(newValue);
     // Add the new row to the rows state
     setRows([...rows, rowElements]);
