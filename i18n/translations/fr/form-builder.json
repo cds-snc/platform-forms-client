@@ -1245,7 +1245,7 @@
       "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :"
     },
     "exitUrl": {
-      "label": "Exit Url [FR]"
+      "label": "Lien URL pour le bouton de sortie"
     },
     "noPages": {
       "text1": "Ajoutez une <strong>Nouvelle page</strong> dans",
