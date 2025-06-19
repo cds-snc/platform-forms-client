@@ -36,7 +36,7 @@ export const AddUserFeatureModal = ({
   return (
     <div>
       <Button type="button" theme="primary" className="mt-4" onClick={() => setShowModal(true)}>
-        {t("Add User Feature")}
+        {t("addFlag")}
       </Button>
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
