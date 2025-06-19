@@ -1244,6 +1244,9 @@
       "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
       "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
     },
+    "exitUrl": {
+      "label": "Exit button URL link"
+    },
     "noPages": {
       "text1": "Add a <strong>New page</strong> from the",
       "text2": "Pages tab",
