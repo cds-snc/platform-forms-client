@@ -46,12 +46,14 @@ export const unlockPublishing = AuthenticatedAction(
     const { managerEmail, department, goals } = validatedData.output;
 
     const HOST = await getOrigin();
-    const manageUsersLink = `admin/accounts?query=${session.user.email}`;
+    const manageUsersLink = `admin/accounts?query=${encodeURIComponent(session.user.email)}`;
 
     const emailBody = `
     ${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.<br/>
     <br/>
-    <a href="${HOST}/en/${manageUsersLink}" target="_blank">Manage permissions</a>.<br/>
+    <br/>
+    <a href="${HOST}/en/${manageUsersLink}" target="_blank">Update account</a><br/>
+    <br/>
     <br/>
     Goals:<br/>
     ${goals}<br/>
@@ -60,7 +62,9 @@ export const unlockPublishing = AuthenticatedAction(
     ****<br/><br/>
     ${session.user.name} (${session.user.email}) du ${department} a demandé l'autorisation de publier des formulaires.<br/>
     <br/>
-    <a href="${HOST}/fr/${manageUsersLink}" target="_blank">Gérer les autorisations</a>.<br/>
+    <br/>
+    <a href="${HOST}/fr/${manageUsersLink}" target="_blank">Mettre à jour le compte</a>.<br/>
+    <br/>
     <br/>
     Objectifs:<br/>
     ${goals}<br/>
