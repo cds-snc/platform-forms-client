@@ -30,7 +30,7 @@ export default AuthenticatedPage([authorization.canAccessFlags], async () => {
       <Suspense fallback={<Loader />}>
         <FlagList />
       </Suspense>
-      <h1 className="mb-10 mt-10 border-0">User Specific Feature Flag Control</h1>
+      <h1 className="my-10 border-0">User Specific Feature Flag Control</h1>
       <p className="pb-8">
         This setting overrides Feature Flag status, and will provide a specific user access to a
         feature.
