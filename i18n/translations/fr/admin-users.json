@@ -64,5 +64,6 @@
     "placeholder": "Rechercher par nom ou adresse courriel",
     "noResults": "Aucun résultat trouvé",
     "ariaLabel": "Recherche de comptes par nom ou par adresse courriel"
-  }
+  },
+  "manageUserFeatures": "Manage user features [FR]"
 }
