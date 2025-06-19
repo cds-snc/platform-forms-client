@@ -23,29 +23,35 @@ export const Notifications = ({ formId }: { formId: string }) => {
   const updateNotificationsError = t("settings.notifications.error.updateNotifications");
   const updateNotificationsSuccess = t("settings.notifications.success.updateNotifications");
 
-  const [users, setUsers] = useState<NotificationsUser[] | null>(null);
-  const [sessionUserWithSetting, setSessionUserWithSetting] = useState<NotificationsUser | null>(
-    null
-  );
-  const usersWithoutSessionUser = users?.filter((user) => user.id !== data?.user.id);
+  const [notificationsUsers, setNotificationsUsers] = useState<{
+    users: NotificationsUser[] | null;
+    sessionUser: NotificationsUser | null;
+  }>({
+    users: [],
+    sessionUser: null,
+  });
 
   useEffect(() => {
     const getSettings = async () => {
       try {
-        const users = await getNotificationsUsers(formId);
-        if ("error" in users || !users) {
+        const allUsers = await getNotificationsUsers(formId);
+        if ("error" in allUsers || !allUsers) {
           throw new Error();
         }
-        setUsers(users);
 
-        const sessionUserWithSetting = users.find((user) => user.id === data?.user.id) || null;
-        setSessionUserWithSetting(sessionUserWithSetting);
+        const usersWithoutSessionUser =
+          allUsers.filter((user) => user.id !== data?.user.id) || null;
+        const sessionUserWithSetting = allUsers.find((user) => user.id === data?.user.id) || null;
+        setNotificationsUsers({
+          users: usersWithoutSessionUser,
+          sessionUser: sessionUserWithSetting,
+        });
       } catch (error) {
         toast.error(generalError);
       }
     };
     getSettings();
-  }, [formId, generalError, data?.user]);
+  }, [formId, generalError, data?.user.id]);
 
   const { getDeliveryOption } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
@@ -53,33 +59,43 @@ export const Notifications = ({ formId }: { formId: string }) => {
 
   const toggleChecked = useCallback(
     () =>
-      setSessionUserWithSetting((prev) => {
-        if (!prev) return null;
+      setNotificationsUsers((prev) => {
+        if (!prev || !prev.sessionUser) {
+          return prev;
+        }
         return {
           ...prev,
-          enabled: !prev.enabled,
+          sessionUser: {
+            ...prev.sessionUser,
+            enabled: !prev.sessionUser.enabled,
+          },
         };
       }),
     []
   );
 
   const updateNotifications = useCallback(async () => {
-    const result = await updateNotificationsUserSetting(formId, sessionUserWithSetting);
-    // TODO better way to do this?
+    const result = await updateNotificationsUserSetting(formId, notificationsUsers.sessionUser);
     if (result !== undefined && "error" in result) {
       toast.error(updateNotificationsError);
-    } else {
-      ga("form_notifications", {
-        formId,
-        action: sessionUserWithSetting?.enabled ? "enabled" : "disabled",
-      });
-      toast.success(updateNotificationsSuccess);
+      return;
     }
-  }, [formId, sessionUserWithSetting, updateNotificationsError, updateNotificationsSuccess]);
+
+    toast.success(updateNotificationsSuccess);
+    ga("form_notifications", {
+      formId,
+      action: notificationsUsers.sessionUser?.enabled ? "enabled" : "disabled",
+    });
+  }, [
+    formId,
+    notificationsUsers.sessionUser,
+    updateNotificationsError,
+    updateNotificationsSuccess,
+  ]);
 
   // This is a published form with email delivery or a legacy form that has no users.
-  // Don't show notifications settings.
-  if (getDeliveryOption() || !sessionUserWithSetting) {
+  // Don't show the Notifications settings.
+  if (getDeliveryOption() || !notificationsUsers.sessionUser) {
     return null;
   }
 
@@ -90,17 +106,17 @@ export const Notifications = ({ formId }: { formId: string }) => {
       <p className="mb-4">{t("settings.notifications.sessionUser.description")}</p>
       <div className="mb-4">
         <NotificationsToggle
-          isChecked={sessionUserWithSetting.enabled}
+          isChecked={notificationsUsers.sessionUser.enabled}
           toggleChecked={toggleChecked}
           onLabel={t("settings.notifications.sessionUser.toggle.off")}
           offLabel={t("settings.notifications.sessionUser.toggle.on")}
           description={t("settings.notifications.sessionUser.toggle.title", {
-            email: sessionUserWithSetting.email,
+            email: notificationsUsers.sessionUser.email,
           })}
         />
       </div>
-      {usersWithoutSessionUser && usersWithoutSessionUser.length > 0 && (
-        <NotificationsUsersList users={usersWithoutSessionUser} />
+      {notificationsUsers.users && notificationsUsers.users.length > 0 && (
+        <NotificationsUsersList users={notificationsUsers.users} />
       )}
       <Button dataTestId="form-notifications-save" theme="secondary" onClick={updateNotifications}>
         {t("settings.notifications.save")}
