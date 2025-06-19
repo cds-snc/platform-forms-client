@@ -51,7 +51,7 @@ export const AddUserFeatureModal = ({
                       checked={selectedFlags.includes(flag)}
                       onChange={() => handleCheckboxChange(flag)}
                     />
-                    {flag}
+                    {t(`features.${flag}.title`)}
                   </label>
                 ))}
               </div>
