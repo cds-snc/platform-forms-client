@@ -1,5 +1,5 @@
 "use server";
-import { addUserFeatureFlag, removeUserFeatureFlag } from "@lib/userFeatureFlags";
+import { addUserFeatureFlags, removeUserFeatureFlag } from "@lib/userFeatureFlags";
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
 
@@ -8,7 +8,7 @@ import { AuthenticatedAction } from "@lib/actions";
 // Note: any thrown errors will be caught in the Error boundary/component
 
 export const setUserFlags = AuthenticatedAction(async (_, userId: string, flags: string[]) => {
-  await Promise.all(flags.map((flag) => addUserFeatureFlag(userId, flag)));
+  await addUserFeatureFlags(userId, flags);
   revalidatePath(
     "(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-user-features",
     "page"

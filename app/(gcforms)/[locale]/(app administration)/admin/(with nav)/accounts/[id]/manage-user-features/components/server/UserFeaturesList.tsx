@@ -1,6 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { AppUser } from "@lib/types/user-types";
 import { featureFlagsCheck } from "@lib/cache/userFeatureFlagsCache";
+import { RemoveFeatureButton } from "../client/RemoveFeatureButton";
 
 export const UserFeaturesList = async ({ formUser }: { formUser: AppUser }) => {
   const { t } = await serverTranslation("admin-flags");
@@ -19,7 +20,9 @@ export const UserFeaturesList = async ({ formUser }: { formUser: AppUser }) => {
         {Object.entries(userFlags ?? {}).map(([flag, value]) => (
           <tr key={flag}>
             <td className="border-2 p-2">{value}</td>
-            <td className="border-2 p-2">Remove</td>
+            <td className="border-2 p-2">
+              <RemoveFeatureButton formUser={formUser} flag={value} />
+            </td>
           </tr>
         ))}
         {(userFlags?.length === 0 || !userFlags) && (

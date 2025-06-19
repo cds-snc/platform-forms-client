@@ -91,3 +91,33 @@ export const addUserFeatureFlag = async (userId: string, flag: string): Promise<
     throw new Error(`Failed to add feature flag: ${error}`);
   }
 };
+
+// Add multiple feature flags for a user
+export const addUserFeatureFlags = async (userId: string, flags: string[]): Promise<void> => {
+  try {
+    // Get current flags
+    const currentFlags = await getUserFeatureFlags(userId);
+
+    // Filter out any flags that are already set
+    const newFlags = flags.filter((flag) => !currentFlags.includes(flag));
+
+    if (newFlags.length > 0) {
+      const updatedFlags = [...currentFlags, ...newFlags];
+
+      // Update the database
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          features: {
+            set: updatedFlags.map((feature) => ({ userId_feature: { userId, feature } })),
+          },
+        },
+      });
+
+      // Update the cache
+      await featureFlagsPut(userId, updatedFlags);
+    }
+  } catch (error) {
+    throw new Error(`Failed to add feature flags: ${error}`);
+  }
+};
