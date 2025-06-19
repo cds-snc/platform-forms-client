@@ -5,6 +5,7 @@ import { getUser } from "@lib/users";
 import { UserFeaturesList } from "./components/server/UserFeaturesList";
 import { AddUserFeatureModal } from "./components/client/AddUserFeatureModal";
 import { checkAll } from "@lib/cache/flags";
+import { featureFlagsCheck } from "@lib/cache/userFeatureFlagsCache";
 
 export default AuthenticatedPage<{ id: string }>(
   [authorization.canViewAllUsers, authorization.canAccessFlags],
@@ -16,6 +17,7 @@ export default AuthenticatedPage<{ id: string }>(
     const formUser = await getUser(id);
 
     const flags = await checkAll();
+    const userFlags = await featureFlagsCheck(formUser.id);
 
     return (
       <div>
@@ -24,9 +26,9 @@ export default AuthenticatedPage<{ id: string }>(
           {t("user")}: {formUser?.name} ({formUser?.email})
         </p>
 
-        <UserFeaturesList formUser={formUser} />
+        <UserFeaturesList formUser={formUser} userFlags={userFlags} />
 
-        <AddUserFeatureModal formUser={formUser} flags={Object.keys(flags)} />
+        <AddUserFeatureModal formUser={formUser} flags={Object.keys(flags)} userFlags={userFlags} />
       </div>
     );
   }

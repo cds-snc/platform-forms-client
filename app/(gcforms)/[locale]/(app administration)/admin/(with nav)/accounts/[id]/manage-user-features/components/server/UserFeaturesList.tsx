@@ -1,12 +1,15 @@
 import { serverTranslation } from "@i18n";
 import { AppUser } from "@lib/types/user-types";
-import { featureFlagsCheck } from "@lib/cache/userFeatureFlagsCache";
 import { RemoveFeatureButton } from "../client/RemoveFeatureButton";
 
-export const UserFeaturesList = async ({ formUser }: { formUser: AppUser }) => {
+export const UserFeaturesList = async ({
+  formUser,
+  userFlags,
+}: {
+  formUser: AppUser;
+  userFlags: string[] | null;
+}) => {
   const { t } = await serverTranslation("admin-flags");
-
-  const userFlags = await featureFlagsCheck(formUser.id);
 
   return (
     <table className="my-4 table-auto border-4">

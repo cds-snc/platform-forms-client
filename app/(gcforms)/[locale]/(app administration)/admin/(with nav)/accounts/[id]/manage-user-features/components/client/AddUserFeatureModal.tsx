@@ -10,16 +10,18 @@ import { UserFeatureFlags, UserFeatureFlagKeys } from "@lib/cache/types";
 export const AddUserFeatureModal = ({
   formUser,
   flags,
+  userFlags,
 }: {
   formUser: AppUser;
   flags: string[];
+  userFlags: string[] | null;
 }) => {
   const { t } = useTranslation("admin-flags");
   const [showModal, setShowModal] = useState(false);
   const [selectedFlags, setSelectedFlags] = useState<string[]>([]);
 
   // Filter the list of flags to only include user level feature flags
-  const userFlags = flags.filter((flag) =>
+  const availableFeatureFlags = flags.filter((flag) =>
     Object.values(UserFeatureFlags).includes(flag as UserFeatureFlagKeys)
   );
 
@@ -42,7 +44,15 @@ export const AddUserFeatureModal = ({
 
   return (
     <div>
-      <Button type="button" theme="primary" className="mt-4" onClick={() => setShowModal(true)}>
+      <Button
+        type="button"
+        theme="primary"
+        className="mt-4"
+        onClick={() => {
+          setShowModal(true);
+          setSelectedFlags(availableFeatureFlags.filter((flag) => userFlags?.includes(flag)));
+        }}
+      >
         {t("addFlag")}
       </Button>
       {showModal && (
@@ -51,7 +61,7 @@ export const AddUserFeatureModal = ({
             <h2 className="mb-4 text-lg font-semibold">{t("select-features")}</h2>
             <form>
               <div className="mb-6 flex flex-col gap-2">
-                {userFlags.map((flag) => (
+                {availableFeatureFlags.map((flag) => (
                   <label key={flag} className="flex items-center gap-2">
                     <input
                       type="checkbox"
