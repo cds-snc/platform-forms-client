@@ -8,7 +8,7 @@ export const UserFeaturesList = async ({ formUser }: { formUser: AppUser }) => {
   const userFlags = await featureFlagsCheck(formUser.id);
 
   return (
-    <table className="table-auto mb-20 mt-4 border-4">
+    <table className="table-auto mb-4 mt-4 border-4">
       <thead>
         <tr>
           <th className="border-2 p-2">{t("Flag")}</th>
@@ -18,8 +18,8 @@ export const UserFeaturesList = async ({ formUser }: { formUser: AppUser }) => {
       <tbody>
         {Object.entries(userFlags ?? {}).map(([flag, value]) => (
           <tr key={flag}>
-            <td className="border-2 p-2">{flag}</td>
             <td className="border-2 p-2">{value}</td>
+            <td className="border-2 p-2">Remove</td>
           </tr>
         ))}
         {(userFlags?.length === 0 || !userFlags) && (

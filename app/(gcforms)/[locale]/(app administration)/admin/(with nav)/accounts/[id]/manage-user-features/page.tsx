@@ -2,6 +2,8 @@ import { AuthenticatedPage } from "@lib/pages/auth";
 import { authorization } from "@lib/privileges";
 import { getUser } from "@lib/users";
 import { UserFeaturesList } from "./components/server/UserFeaturesList";
+import { AddUserFeatureModal } from "./components/client/AddUserFeatureModal";
+import { checkAll } from "@lib/cache/flags";
 
 export default AuthenticatedPage<{ id: string }>(
   [authorization.canViewAllUsers, authorization.canAccessFlags],
@@ -9,6 +11,8 @@ export default AuthenticatedPage<{ id: string }>(
     const { id } = await params;
 
     const formUser = await getUser(id);
+
+    const flags = await checkAll();
 
     return (
       <div>
@@ -18,6 +22,8 @@ export default AuthenticatedPage<{ id: string }>(
         </p>
 
         <UserFeaturesList formUser={formUser} />
+
+        <AddUserFeatureModal formUser={formUser} flags={Object.keys(flags)} />
       </div>
     );
   }
