@@ -11,7 +11,7 @@
     },
     "documents": {
       "label": "Documents",
-      "description": "pdf, txt, doc, docx"
+      "description": "pdf, txt, doc, docx, xml"
     },
     "images": {
       "label": "Images",
