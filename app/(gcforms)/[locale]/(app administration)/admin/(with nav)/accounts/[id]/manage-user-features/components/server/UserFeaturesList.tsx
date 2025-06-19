@@ -19,7 +19,7 @@ export const UserFeaturesList = async ({ formUser }: { formUser: AppUser }) => {
       <tbody>
         {Object.entries(userFlags ?? {}).map(([flag, value]) => (
           <tr key={flag}>
-            <td className="border-2 p-2">{value}</td>
+            <td className="border-2 p-2">{t(`features.${value}.title`)}</td>
             <td className="border-2 p-2">
               <RemoveFeatureButton formUser={formUser} flag={value} />
             </td>
