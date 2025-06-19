@@ -24,6 +24,8 @@ import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
 import { Group } from "@lib/formContext";
 import { TranslateCustomizeSet } from "./TranslateCustomizeSet";
 
+import { ExitUrl } from "./ExitUrl";
+
 const GroupSection = ({
   groupId,
   group,
@@ -429,18 +431,32 @@ export const TranslateWithGroups = () => {
             Object.keys(groups).map((groupKey) => {
               const thisGroup = groups[groupKey];
               const groupName = thisGroup.name;
+
+              const nextAction = groups[groupKey]?.nextAction;
+              const isExitPage = nextAction === "exit" ? true : false;
+
               if (groupKey == "review" || groupKey == "end" || groupKey == "start") return null;
               return (
                 <div key={groupKey}>
                   <SectionTitle>
                     {t("logic.pageTitle")} <em>{groupName}</em>
                   </SectionTitle>
+
                   <GroupSection
                     group={thisGroup}
                     groupId={groupKey}
                     primaryLanguage={primaryLanguage}
                     secondaryLanguage={secondaryLanguage}
                   />
+
+                  {isExitPage ? (
+                    <ExitUrl
+                      groupId={groupKey}
+                      group={thisGroup}
+                      primaryLanguage={primaryLanguage}
+                    />
+                  ) : null}
+
                   {sortGroup({ form, group: thisGroup }).map((element, index) => {
                     return (
                       <div className="section" id={`section-${index}`} key={element.id}>

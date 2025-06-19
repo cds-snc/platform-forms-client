@@ -1254,6 +1254,9 @@
       "buttonDescription": "Un bouton de sortie renvoie les personnes vers le site Web de l'organisation correspondant à l'image de marque du formulaire.",
       "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :"
     },
+    "exitUrl": {
+      "label": "Lien URL pour le bouton de sortie"
+    },
     "noPages": {
       "text1": "Ajoutez une <strong>Nouvelle page</strong> dans",
       "text2": "l'onglet Pages",
