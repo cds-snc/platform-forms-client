@@ -5,6 +5,8 @@ import { useState } from "react";
 import { AppUser } from "@lib/types/user-types";
 import { setUserFlags } from "../../actions";
 
+import { UserFeatureFlags, UserFeatureFlagKeys } from "@lib/cache/types";
+
 export const AddUserFeatureModal = ({
   formUser,
   flags,
@@ -15,6 +17,11 @@ export const AddUserFeatureModal = ({
   const { t } = useTranslation("admin-flags");
   const [showModal, setShowModal] = useState(false);
   const [selectedFlags, setSelectedFlags] = useState<string[]>([]);
+
+  // Filter the list of flags to only include user level feature flags
+  const userFlags = flags.filter((flag) =>
+    Object.values(UserFeatureFlags).includes(flag as UserFeatureFlagKeys)
+  );
 
   const handleCheckboxChange = (flag: string) => {
     setSelectedFlags((prev) =>
@@ -44,7 +51,7 @@ export const AddUserFeatureModal = ({
             <h2 className="mb-4 text-lg font-semibold">{t("Select Features")}</h2>
             <form>
               <div className="mb-6 flex flex-col gap-2">
-                {flags.map((flag) => (
+                {userFlags.map((flag) => (
                   <label key={flag} className="flex items-center gap-2">
                     <input
                       type="checkbox"
