@@ -35,5 +35,8 @@
       "description": "Activer le téléverseur de fichier en tant qu'élément pouvant être ajouté à un formulaire"
     }
   },
-  "addFlag": "Add user feature flag [FR]"
+  "addFlag": "Add user feature flag [FR]",
+  "flag": "Flag",
+  "actions": "Actions",
+  "no-flags-set": "No flags are set for this user. [FR]"
 }

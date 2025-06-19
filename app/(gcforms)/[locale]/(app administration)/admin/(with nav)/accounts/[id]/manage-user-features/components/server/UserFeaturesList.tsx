@@ -9,11 +9,11 @@ export const UserFeaturesList = async ({ formUser }: { formUser: AppUser }) => {
   const userFlags = await featureFlagsCheck(formUser.id);
 
   return (
-    <table className="table-auto mb-4 mt-4 border-4">
+    <table className="my-4 table-auto border-4">
       <thead>
         <tr>
-          <th className="border-2 p-2">{t("Flag")}</th>
-          <th className="border-2 p-2">{t("Actions")}</th>
+          <th className="border-2 p-2">{t("flag")}</th>
+          <th className="border-2 p-2">{t("actions")}</th>
         </tr>
       </thead>
       <tbody>
@@ -28,7 +28,7 @@ export const UserFeaturesList = async ({ formUser }: { formUser: AppUser }) => {
         {(userFlags?.length === 0 || !userFlags) && (
           <tr>
             <td className="border-2 p-2" colSpan={3}>
-              {t("No flags are set for this user.")}
+              {t("no-flags-set")}
             </td>
           </tr>
         )}

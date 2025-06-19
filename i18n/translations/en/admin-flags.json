@@ -35,5 +35,8 @@
       "description": "Enable file upload to be added as an element to a form"
     }
   },
-  "addFlag": "Add user feature flag"
+  "addFlag": "Add user feature flag",
+  "flag": "Flag",
+  "actions": "Actions",
+  "no-flags-set": "No flags are set for this user."
 }
