@@ -21,7 +21,7 @@ export const UserList = async () => {
   });
 
   return (
-    <table className="table-auto border-4 mb-20">
+    <table className="mb-20 table-auto border-4">
       <thead>
         <tr>
           <th className="border-2 p-2">{t("User")}</th>
