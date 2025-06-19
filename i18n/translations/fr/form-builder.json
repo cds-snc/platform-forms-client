@@ -1418,6 +1418,11 @@
   },
   "en": "English",
   "fr": "Français",
+  "strictValue": {
+    "title": "Ensure choice value [FR]",
+    "label": "Strict value [FR]",
+    "description": "strict value [FR]"
+  },
   "beta": {
     "tag": "Bêta :",
     "text": "Fonctionnalité à l'essai"

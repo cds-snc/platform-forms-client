@@ -128,6 +128,7 @@ export interface ElementProperties {
   addressComponents?: AddressComponents | undefined;
   dynamicRow?: dynamicRowType;
   sortOrder?: SortValue;
+  strictValue?: boolean;
   [key: string]:
     | string
     | string[]
