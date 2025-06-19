@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { BackArrowIcon, ForwardArrowIcon, StartIcon } from "@serverComponents/icons";
@@ -33,29 +33,33 @@ export const Pagination = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { statusFilter } = useParams<{ statusFilter: string }>();
-
+  const queryKeys = searchParams.get("keys");
   const lastEvaluatedResponse = startFromExclusiveResponse
     ? `${startFromExclusiveResponse.name}_${startFromExclusiveResponse.createdAt}`
     : "end"; // If startFromExclusiveResponse is null, we're on the last page
 
-  // Keep track of the startFromExclusiveResponse for each of our pages.
-  // The first item in the array is always "start" and the last item is always "end"
-  const [keys, setKeys] = useState<string[]>(() => {
-    try {
-      // Get the "page" keys as base64 encoded string from url
-      const queryKeys = searchParams.get("keys");
+  const [keys, setKeys] = useState<string[]>(["start", lastEvaluatedResponse]);
 
-      // Decode the base64url encoded keys or we're at the "start"
-      return queryKeys ? decodeBase64Url(queryKeys).split(",") : ["start"];
-    } catch (e) {
-      // If the base64 encoded string has been tampered with, redirect to the first page
-      router.push(
-        `/${language}/form-builder/${formId}/responses/${statusFilter ? `/${statusFilter}` : "/"}`
-      );
-      // Needed to satisfy typescript as router.push returns void and not never
-      return ["start"];
+  // Update our keys state when the query param changes
+  useEffect(() => {
+    if (queryKeys) {
+      try {
+        const decodedQueryKeys = decodeBase64Url(queryKeys).split(",");
+
+        // If current lastEvaluatedResponse is not in the keys array, append it
+        if (!decodedQueryKeys.includes(lastEvaluatedResponse)) {
+          decodedQueryKeys.push(lastEvaluatedResponse);
+        }
+
+        setKeys(decodedQueryKeys);
+      } catch (e) {
+        // If the base64 encoded string has been tampered with, redirect to the first page
+        router.push(
+          `/${language}/form-builder/${formId}/responses/${statusFilter ? `/${statusFilter}` : "/"}`
+        );
+      }
     }
-  });
+  }, [formId, language, lastEvaluatedResponse, queryKeys, router, statusFilter]);
 
   // When going back, we pop the last item off the keys array
   const previousKeys = keys.slice(0, -1);
@@ -74,11 +78,6 @@ export const Pagination = ({
     )}&lastKey=${previousLastEvaluatedResponse}`;
   }
 
-  // Only append the lastEvaluatedResponse to the keys array if it's not already there
-  if (!keys.includes(lastEvaluatedResponse)) {
-    setKeys([...keys, lastEvaluatedResponse]);
-  }
-
   // startFromExclusiveResponse is null when we're on the last page
   const isLastPage = startFromExclusiveResponse === null;
 
@@ -90,7 +89,7 @@ export const Pagination = ({
   const end = currentPageNumber * responseDownloadLimit - (responseDownloadLimit - recordCount);
 
   return (
-    <>
+    <div>
       <Link
         href={`/${language}/form-builder/${formId}/responses${
           statusFilter ? `/${statusFilter}` : "/"
@@ -133,6 +132,6 @@ export const Pagination = ({
           </>
         </Link>
       </div>
-    </>
+    </div>
   );
 };
