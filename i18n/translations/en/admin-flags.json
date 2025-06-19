@@ -34,5 +34,6 @@
       "title": "File upload",
       "description": "Enable file upload to be added as an element to a form"
     }
-  }
+  },
+  "addFlag": "Add user feature flag"
 }

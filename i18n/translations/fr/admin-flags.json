@@ -34,5 +34,6 @@
       "title": "Téléversement de fichier",
       "description": "Activer le téléverseur de fichier en tant qu'élément pouvant être ajouté à un formulaire"
     }
-  }
+  },
+  "addFlag": "Add user feature flag [FR]"
 }

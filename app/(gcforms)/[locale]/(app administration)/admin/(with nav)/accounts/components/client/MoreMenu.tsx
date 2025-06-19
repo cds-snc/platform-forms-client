@@ -27,7 +27,7 @@ export const MoreMenu = ({
     <>
       <Dropdown>
         <DropdownMenuPrimitive.Item
-          className={`${themes.htmlLink} ${themes.base} !block !cursor-pointer`}
+          className={`${themes.htmlLink} ${themes.base} mb-2 !block !cursor-pointer`}
           onClick={() => {
             router.push(`/${language}/admin/accounts/${user.id}/manage-permissions`);
           }}
