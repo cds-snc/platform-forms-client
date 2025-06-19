@@ -35,6 +35,15 @@ export const MoreMenu = ({
           {canManageUser ? t("managePermissions") : t("viewPermissions")}
         </DropdownMenuPrimitive.Item>
 
+        <DropdownMenuPrimitive.Item
+          className={`${themes.htmlLink} ${themes.base} !block !cursor-pointer`}
+          onClick={() => {
+            router.push(`/${language}/admin/accounts/${user.id}/manage-user-features`);
+          }}
+        >
+          {canManageUser ? t("manageUserFeatures") : t("viewUserFeatures")}
+        </DropdownMenuPrimitive.Item>
+
         {/* Deactivate Account  */}
         {canManageUser && !isCurrentUser && user.active && (
           <>
