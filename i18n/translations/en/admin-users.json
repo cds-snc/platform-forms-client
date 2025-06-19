@@ -64,5 +64,6 @@
     "placeholder": "Search by name or email address",
     "noResults": "No results found",
     "ariaLabel": "Search accounts by name or email address"
-  }
+  },
+  "manageUserFeatures": "Manage user features"
 }
