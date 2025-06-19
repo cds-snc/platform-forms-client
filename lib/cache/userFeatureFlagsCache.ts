@@ -1,5 +1,6 @@
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "../integration/redisConnector";
+import { removeUserFeatureFlag, addUserFeatureFlag } from "@lib/userFeatureFlags";
 
 // If NODE_ENV is in test mode (Jest Tests) do not use the cache
 const cacheAvailable: boolean = process.env.APP_ENV !== "test" && Boolean(process.env.REDIS_URL);
@@ -38,5 +39,58 @@ export const featureFlagsPut = async (userID: string, flags: string[]): Promise<
   } catch (e) {
     logMessage.error(e as Error);
     throw new Error("Could not connect to cache");
+  }
+};
+
+// Gets all users that have feature flags set
+export const featureFlagsGetAll = async (): Promise<{ userID: string; flag: string }[]> => {
+  if (!cacheAvailable) return [];
+
+  try {
+    const redis = await getRedisInstance();
+    const keys = await redis.keys("auth:featureFlags:*");
+    if (keys.length === 0) return [];
+
+    const values = await redis.mget(keys);
+
+    // Flatten each user's flags into separate entries
+    const result: { userID: string; flag: string }[] = [];
+    keys.forEach((key, idx) => {
+      const userID = key.replace("auth:featureFlags:", "");
+      const flags = values[idx] ? JSON.parse(values[idx] as string) : [];
+      for (const flag of flags) {
+        result.push({ userID, flag });
+      }
+    });
+    return result;
+  } catch (e) {
+    logMessage.error(e as Error);
+    throw new Error("Could not connect to cache");
+  }
+};
+
+// Remove a feature flag for a user (hit the DB and then update the cache)
+export const featureFlagsRemove = async (userID: string, flag: string): Promise<void> => {
+  if (!cacheAvailable) return;
+
+  try {
+    await removeUserFeatureFlag(userID, flag);
+    await featureFlagsPut(userID, (await featureFlagsCheck(userID)) || []);
+  } catch (e) {
+    logMessage.error(e as Error);
+    throw new Error("Could not update feature flags in cache");
+  }
+};
+
+// Add a feature flag for a user (hit the DB and then update the cache)
+export const featureFlagsAdd = async (userID: string, flag: string): Promise<void> => {
+  if (!cacheAvailable) return;
+
+  try {
+    await addUserFeatureFlag(userID, flag);
+    await featureFlagsPut(userID, (await featureFlagsCheck(userID)) || []);
+  } catch (e) {
+    logMessage.error(e as Error);
+    throw new Error("Could not update feature flags in cache");
   }
 };
