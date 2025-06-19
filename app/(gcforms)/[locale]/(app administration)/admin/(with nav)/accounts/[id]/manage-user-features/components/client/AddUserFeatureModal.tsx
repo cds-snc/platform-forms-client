@@ -48,7 +48,7 @@ export const AddUserFeatureModal = ({
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
           <div className="min-w-[300px] rounded bg-white p-6 shadow-lg">
-            <h2 className="mb-4 text-lg font-semibold">{t("Select Features")}</h2>
+            <h2 className="mb-4 text-lg font-semibold">{t("select-features")}</h2>
             <form>
               <div className="mb-6 flex flex-col gap-2">
                 {userFlags.map((flag) => (
@@ -64,7 +64,7 @@ export const AddUserFeatureModal = ({
               </div>
               <div className="flex justify-end gap-2">
                 <Button type="button" theme="secondary" onClick={handleCancel}>
-                  {t("Cancel")}
+                  {t("cancel")}
                 </Button>
                 <Button
                   type="button"
@@ -72,7 +72,7 @@ export const AddUserFeatureModal = ({
                   onClick={handleAdd}
                   disabled={selectedFlags.length === 0}
                 >
-                  {t("Add")}
+                  {t("add")}
                 </Button>
               </div>
             </form>

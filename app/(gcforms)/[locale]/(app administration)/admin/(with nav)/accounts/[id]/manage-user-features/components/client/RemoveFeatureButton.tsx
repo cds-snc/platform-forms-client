@@ -14,7 +14,7 @@ export const RemoveFeatureButton = ({ formUser, flag }: { formUser: AppUser; fla
   return (
     <div>
       <Button type="button" theme="primary" className="mt-4" onClick={handleRemove}>
-        {t("Remove")}
+        {t("remove")}
       </Button>
     </div>
   );

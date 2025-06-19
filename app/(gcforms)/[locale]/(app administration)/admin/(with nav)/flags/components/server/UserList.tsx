@@ -24,9 +24,9 @@ export const UserList = async () => {
     <table className="mb-20 table-auto border-4">
       <thead>
         <tr>
-          <th className="border-2 p-2">{t("User")}</th>
-          <th className="border-2 p-2">{t("Flag")}</th>
-          <th className="border-2 p-2">{t("Actions")}</th>
+          <th className="border-2 p-2">{t("user")}</th>
+          <th className="border-2 p-2">{t("flag")}</th>
+          <th className="border-2 p-2">{t("actions")}</th>
         </tr>
       </thead>
       <tbody>
@@ -41,7 +41,7 @@ export const UserList = async () => {
         {usersWithDetails.length === 0 && (
           <tr>
             <td className="border-2 p-2" colSpan={3}>
-              {t("No users have feature flags set.")}
+              {t("noUserFlags")}
             </td>
           </tr>
         )}
