@@ -8,6 +8,8 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logEvent } from "./auditLogs";
 import { authorization } from "./privileges";
 
+// TODO move into /Notifcations directory as actions.ts
+
 // Most functions do not include an auth check since the request may be triggered from a
 // non-signed-in user, e.g. sending notifications on a form submission.
 
@@ -19,7 +21,7 @@ type Status = (typeof Status)[keyof typeof Status];
 
 // Sends an email notification when a user has new form submissions
 export const sendNotification = async (formId: string, titleEn: string, titleFr: string) => {
-  const notificationsSettings = await getNotificationsSettings(formId);
+  const notificationsSettings = await _getNotificationsSettings(formId);
   if (!notificationsSettings) {
     logMessage.error(`sendNotification template not found with id ${formId}`);
     return;
@@ -41,6 +43,7 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
     return;
   }
 
+  // set to 1440 instead of returning
   // Notifications are turned off for this form, do nothing. This should never happen with the current
   // logic that looks at each user's setting and uses this for how frequent to send emails.
   if (!notificationsInterval) {
@@ -234,7 +237,8 @@ export const validateNotificationsInterval = (
   );
 };
 
-export const getNotificationsSettings = async (formId: string) => {
+// TODO Update to be a unique feature and only needs to get notificationsUsers, not users
+const _getNotificationsSettings = async (formId: string) => {
   const notificationsSettings = await prisma.template
     .findUnique({
       where: {
@@ -253,7 +257,7 @@ export const getNotificationsSettings = async (formId: string) => {
             email: true,
           },
         },
-        notificationsInterval: true,
+        notificationsInterval: true, // todo hard code
         deliveryOption: true,
       },
     })

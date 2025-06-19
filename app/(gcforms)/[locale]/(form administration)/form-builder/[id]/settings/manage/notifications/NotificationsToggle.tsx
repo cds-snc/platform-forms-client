@@ -2,6 +2,7 @@ import React from "react";
 import { ToggleLeft, ToggleRight } from "@serverComponents/icons";
 
 interface NotificationsToggleProps {
+  className?: string;
   isChecked: boolean;
   toggleChecked: () => void;
   onLabel: string;
@@ -12,6 +13,7 @@ interface NotificationsToggleProps {
 }
 
 export const NotificationsToggle = ({
+  className = "",
   isChecked,
   toggleChecked,
   onLabel,
@@ -24,7 +26,7 @@ export const NotificationsToggle = ({
 
   return (
     <div
-      className="inline-block"
+      className={className}
       role="switch"
       aria-checked={isChecked}
       {...(disabled && { "aria-disabled": true })}
