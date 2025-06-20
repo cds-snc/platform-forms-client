@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { BackArrowIcon, ForwardArrowIcon, StartIcon } from "@serverComponents/icons";
@@ -42,6 +42,15 @@ export const Pagination = ({
 
   const [keys, setKeys] = useState<string[]>(["start", lastEvaluatedResponse]);
 
+  const redirectToFirstPageUrl = `/${language}/form-builder/${formId}/responses/${
+    statusFilter ? `/${statusFilter}` : "/"
+  }`;
+
+  // Memoize the redirect function
+  const handleRedirectToFirstPage = useCallback(() => {
+    router.push(redirectToFirstPageUrl);
+  }, [router, redirectToFirstPageUrl]);
+
   // Update our keys state when the query param changes
   useEffect(() => {
     if (!queryKeys) {
@@ -58,12 +67,17 @@ export const Pagination = ({
         setKeys(decodedQueryKeys);
       } catch (e) {
         // If the base64 encoded string has been tampered with, redirect to the first page
-        router.push(
-          `/${language}/form-builder/${formId}/responses/${statusFilter ? `/${statusFilter}` : "/"}`
-        );
+        handleRedirectToFirstPage();
       }
     }
-  }, [formId, language, lastEvaluatedResponse, queryKeys, router, statusFilter]);
+  }, [
+    formId,
+    language,
+    lastEvaluatedResponse,
+    queryKeys,
+    redirectToFirstPageUrl,
+    handleRedirectToFirstPage,
+  ]);
 
   // When going back, we pop the last item off the keys array
   const previousKeys = keys.slice(0, -1);
