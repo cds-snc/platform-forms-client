@@ -94,7 +94,7 @@ export default async function middleware(req: NextRequest, ctx: AppRouteHandlerF
     // Check body size
     if (body.length > BODY_SIZE_LIMIT) {
       logMessage.info(
-        `Middleware: Request payload size exceeds the limit of ${sizeLimit} bytes. Path: ${pathname}`
+        `Middleware: Request payload size exceeds the limit of ${BODY_SIZE_LIMIT} bytes. Path: ${pathname}`
       );
       return NextResponse.json(
         { error: "Request payload size exceeds the limit." },
