@@ -1,11 +1,7 @@
 import { PresignedPost } from "@aws-sdk/s3-presigned-post";
-import { logMessage } from "@root/lib/logger";
 import { Responses, FileInputResponse } from "@root/lib/types";
+import { logMessage } from "@lib/logger";
 import { getSignedS3Urls } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
-
-// Upload file to S3 using signed URL
-
-// Return file URL
 
 interface FileInput extends FileInputResponse {
   name: string;
@@ -13,29 +9,49 @@ interface FileInput extends FileInputResponse {
   content: ArrayBuffer;
 }
 
-interface ProcessedFile extends FileInput {
+interface ProcessedFile {
+  name: string;
+  size: number;
   key: string;
+  content?: ArrayBuffer; // content is removed after upload
 }
 
-const isFileResponse = (response: unknown): response is FileInputResponse => {
+const isFileInput = (response: unknown): response is FileInput => {
   return (
     response !== null &&
     typeof response === "object" &&
     "name" in response &&
     "size" in response &&
-    "content" in response
+    "content" in response &&
+    response.name !== null &&
+    response.size !== null &&
+    response.content !== null &&
+    !("key" in response) // Ensure it does not have a key property
   );
 };
 
-const fileExtractor = (originalObj: unknown): FileInput[] => {
-  const fileInputObjectList: FileInputResponse[] = [];
+const isProcessedFile = (response: unknown): response is ProcessedFile => {
+  return (
+    response !== null &&
+    typeof response === "object" &&
+    "name" in response &&
+    "size" in response &&
+    "key" in response &&
+    response.name !== null &&
+    response.size !== null &&
+    response.key !== null
+  );
+};
 
-  const extractorLogic = (originalObj: unknown, fileObjs: FileInputResponse[]) => {
+const fileExtractor = (originalObj: unknown) => {
+  const fileInputRefList: Array<FileInput | ProcessedFile> = [];
+
+  const extractorLogic = (originalObj: unknown, fileObjs: Array<FileInput | ProcessedFile>) => {
     // If it's not an {}, or [] stop now
     if (originalObj === null || typeof originalObj !== "object") return;
 
     // If it's a File Input object add it to the list and return
-    if (isFileResponse(originalObj)) {
+    if (isFileInput(originalObj) || isProcessedFile(originalObj)) {
       return fileObjs.push(originalObj);
     }
 
@@ -45,32 +61,81 @@ const fileExtractor = (originalObj: unknown): FileInput[] => {
     }
   };
   // Let the recursive logic aka snake eating tail begin
-  extractorLogic(originalObj, fileInputObjectList);
+  extractorLogic(originalObj, fileInputRefList);
 
-  return fileInputObjectList.filter(
-    (file) => file.name && file.size && file.content
-  ) as FileInput[];
+  return fileInputRefList.reduce(
+    (acc, fileRef) => {
+      if (isFileInput(fileRef)) {
+        acc.unprocessedFiles.push(fileRef);
+      }
+      if (isProcessedFile(fileRef)) {
+        acc.processedFiles.push(fileRef);
+      }
+      return acc;
+    },
+    { unprocessedFiles: [] as FileInput[], processedFiles: [] as ProcessedFile[] }
+  );
 };
 
 export const uploadFiles = async (responses: Responses) => {
   // Extract file responses by memory reference
   const fileInputReferences = fileExtractor(responses);
-  // Get signed URLs for file upload
-  const presignedURLS = await getSignedS3Urls(fileInputReferences.map((file) => file.name));
 
-  if (presignedURLS.length !== fileInputReferences.length) {
+  // Get signed URLs for file upload
+  const presignedURLS = await getSignedS3Urls(
+    fileInputReferences.unprocessedFiles.map((file) => file.name)
+  );
+
+  if (presignedURLS.length !== fileInputReferences.unprocessedFiles.length) {
     throw new Error("Mismatch between number of files and pre-signed URLs");
   }
 
   // Upload each file to S3 using the pre-signed URLs
-  await Promise.all(
-    fileInputReferences.map((file, index) => uploadFile(file, presignedURLS[index]))
+  const fileKeys = await Promise.allSettled(
+    fileInputReferences.unprocessedFiles.map((file, index) =>
+      uploadFile(file, presignedURLS[index])
+    )
   );
 
-  return responses;
+  // Add keys to the processed files
+  let fileRefsRemoved = 0; // Counter for removed files references from unprocessedFiles
+  fileKeys.forEach((result, index) => {
+    if (result.status === "rejected") {
+      logMessage.error(
+        `Failed to upload file: ${fileInputReferences.unprocessedFiles[index].name}`
+      );
+      return; // Skip this file if the upload failed
+    }
+    const file = fileInputReferences.unprocessedFiles[index - fileRefsRemoved] as ProcessedFile;
+    file.key = result.value; // Assign the key to the file
+    fileInputReferences.processedFiles.push(file); // Add the processed file to the list
+    fileInputReferences.unprocessedFiles.splice(index - fileRefsRemoved, 1); // Remove the file from unprocessed files
+    fileRefsRemoved++; // Increment the counter for removed files
+  });
+
+  // Remove the content from the processed files to prepare for form submission
+  fileInputReferences.processedFiles.forEach((fileRef) => {
+    if (fileRef.content) {
+      delete fileRef.content; // Remove content after upload to save memory
+    }
+  });
+
+  // Now we can throw an error if there are any unprocessed files left
+  if (fileInputReferences.unprocessedFiles.length > 0) {
+    throw new Error(
+      `Some files could not be processed: ${fileInputReferences.unprocessedFiles
+        .map((file) => file.name)
+        .join(", ")}`
+    );
+  }
 };
 
-const uploadFile = async (file: FileInput, preSigned: PresignedPost) => {
+const uploadFile = async (file: FileInput | ProcessedFile, preSigned: PresignedPost) => {
+  // If the file has already been uploaded and has a key, we can skip the upload
+  if (isProcessedFile(file)) {
+    return file.key; // If the file already has a key, return it
+  }
+
   const formData = new FormData();
   Object.entries(preSigned.fields).forEach(([key, value]) => {
     formData.append(key, value);
@@ -85,7 +150,6 @@ const uploadFile = async (file: FileInput, preSigned: PresignedPost) => {
   if (!response.ok) {
     throw new Error(`Failed to upload file: ${file.name}, file status ${response.status}`);
   }
-  logMessage.info(`File uploaded successfully: ${file.name}`);
-  (file as ProcessedFile).key = preSigned.fields.key;
-  (file as FileInputResponse).content = null;
+  // Return the key for further error handling or confirmation
+  return preSigned.fields.key;
 };
