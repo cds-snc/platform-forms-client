@@ -9,9 +9,18 @@ import axios from "axios";
 import { StatusFilter } from "../../types";
 
 jest.mock("next/navigation", () => ({
-  useSearchParams: () => jest.fn(),
-  usePathname: () => jest.fn(),
-  useParams: () => jest.fn(),
+  useSearchParams: () => ({
+    get: (key: string) => {
+      if (key === "keys") {
+        return "start";
+      }
+      return undefined;
+    },
+  }),
+  usePathname: jest.fn(),
+  useParams: jest.fn(() => ({
+    statusFilter: [],
+  })),
   useRouter: () => ({
     push: jest.fn(),
     replace: jest.fn(),

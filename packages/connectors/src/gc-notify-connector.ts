@@ -1,5 +1,5 @@
 import { getAwsSecret } from "./getAwsSecret";
-import got, { HTTPError, RequestError, TimeoutError } from "got";
+import axios, { AxiosError } from "axios";
 
 const API_URL: string = "https://api.notification.canada.ca";
 
@@ -40,14 +40,15 @@ export class GCNotifyConnector {
     reference?: string
   ): Promise<void> {
     try {
-      await got.post(`${this.apiUrl}/v2/notifications/email`, {
-        timeout: { request: this.timeout },
-        retry: { limit: 0 },
+      await axios({
+        url: `${this.apiUrl}/v2/notifications/email`,
+        method: "POST",
+        timeout: this.timeout,
         headers: {
           "Content-Type": "application/json",
           Authorization: `ApiKey-v1 ${this.apiKey}`,
         },
-        json: {
+        data: {
           email_address: emailAddress,
           template_id: templateId,
           personalisation,
@@ -57,32 +58,33 @@ export class GCNotifyConnector {
     } catch (error) {
       let errorMessage = "";
 
-      if (error instanceof HTTPError) {
-        try {
-          // Here is an example of an error being returned by GC Notify:
-          // body: '{"status_code": 400, "errors": [{"error": "ValidationError", "message": "email_address 10 is not of type string"}]}',
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          /*
+           * The request was made and the server responded with a
+           * status code that falls out of the range of 2xx
+           */
+          const notifyErrors = Array.isArray(error.response.data.errors)
+            ? JSON.stringify(error.response.data.errors)
+            : error.response.data.errors;
+          errorMessage = `GC Notify errored with status code ${error.response.status} and returned the following detailed errors ${notifyErrors}`;
+        } else if (error.request) {
+          /*
+           * The request was made but no response was received, `error.request`
+           * is an instance of XMLHttpRequest in the browser and an instance
+           * of http.ClientRequest in Node.js
+           */
 
-          const gcNotifyError: {
-            status_code: number;
-            errors: { error: string; message: string }[];
-          } = JSON.parse(error.response.body as string);
-
-          errorMessage = `GC Notify errored with status code ${
-            gcNotifyError.status_code
-          } and returned the following detailed errors ${JSON.stringify(gcNotifyError.errors)}`;
-        } catch (parseError) {
-          errorMessage = `GC Notify errored with a message we could not parse due to ${
-            (parseError as Error).message
-          }. Error => Code: ${(error as RequestError).code} / Message: ${
-            (error as RequestError).message
-          }`;
+          if (error.code === AxiosError.ECONNABORTED) {
+            errorMessage = `Request timed out`;
+          } else {
+            errorMessage = `Error code: ${error.code ?? "n/a"} / Error stack: ${
+              error.stack ?? "n/a"
+            }`;
+          }
         }
-      } else if (error instanceof TimeoutError) {
-        errorMessage = `Request timed out`;
-      } else {
-        errorMessage = `Error => Code: ${(error as RequestError).code} / Message: ${
-          (error as RequestError).message
-        }`;
+      } else if (error instanceof Error) {
+        errorMessage = `${(error as Error).message}`;
       }
 
       throw new Error(errorMessage);
