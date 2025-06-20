@@ -1,6 +1,5 @@
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "../integration/redisConnector";
-import { removeUserFeatureFlag, addUserFeatureFlag } from "@lib/userFeatureFlags";
 
 // If NODE_ENV is in test mode (Jest Tests) do not use the cache
 const cacheAvailable: boolean = process.env.APP_ENV !== "test" && Boolean(process.env.REDIS_URL);
@@ -66,31 +65,5 @@ export const featureFlagsGetAll = async (): Promise<{ userID: string; flag: stri
   } catch (e) {
     logMessage.error(e as Error);
     throw new Error("Could not connect to cache");
-  }
-};
-
-// Remove a feature flag for a user (hit the DB and then update the cache)
-export const featureFlagsRemove = async (userID: string, flag: string): Promise<void> => {
-  if (!cacheAvailable) return;
-
-  try {
-    await removeUserFeatureFlag(userID, flag);
-    await featureFlagsPut(userID, (await featureFlagsCheck(userID)) || []);
-  } catch (e) {
-    logMessage.error(e as Error);
-    throw new Error("Could not update feature flags in cache");
-  }
-};
-
-// Add a feature flag for a user (hit the DB and then update the cache)
-export const featureFlagsAdd = async (userID: string, flag: string): Promise<void> => {
-  if (!cacheAvailable) return;
-
-  try {
-    await addUserFeatureFlag(userID, flag);
-    await featureFlagsPut(userID, (await featureFlagsCheck(userID)) || []);
-  } catch (e) {
-    logMessage.error(e as Error);
-    throw new Error("Could not update feature flags in cache");
   }
 };
