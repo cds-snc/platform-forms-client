@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.45.0](https://github.com/cds-snc/platform-forms-client/compare/v3.44.0...v3.45.0) (2025-06-20)
+
+
+### Features
+
+* Add basic Admin Panel feature flag management ([#5723](https://github.com/cds-snc/platform-forms-client/issues/5723)) ([f116d34](https://github.com/cds-snc/platform-forms-client/commit/f116d3470c6c7f93794f71caefeb090850170a19))
+
+
+### Bug Fixes
+
+* Fix dynamic row empty rows error ([#5726](https://github.com/cds-snc/platform-forms-client/issues/5726)) ([475a0c9](https://github.com/cds-snc/platform-forms-client/commit/475a0c953353707ae98600bbec1cf1f17f11e75c))
+* Responses pagination ([#5732](https://github.com/cds-snc/platform-forms-client/issues/5732)) ([ed53b32](https://github.com/cds-snc/platform-forms-client/commit/ed53b32d005bc40c923fd143f6d5d53b60d6824a))
+
+
+### Miscellaneous Chores
+
+* Add exit page url to translate page ([#5721](https://github.com/cds-snc/platform-forms-client/issues/5721)) ([32fe50b](https://github.com/cds-snc/platform-forms-client/commit/32fe50b3daebe6a1c907aaeebf9f5c8820aaa0af))
+* Add link to account page from request publish ticket ([#5733](https://github.com/cds-snc/platform-forms-client/issues/5733)) ([ee9d092](https://github.com/cds-snc/platform-forms-client/commit/ee9d092f4a925c90c4132ab866efdbe14744f42b))
+* revert Axios/Got switch in connectors package ([#5738](https://github.com/cds-snc/platform-forms-client/issues/5738)) ([d213675](https://github.com/cds-snc/platform-forms-client/commit/d2136755ad010bb06edce246de96e2b8e6a8d42a))
+* Update next.js to 15.3.4 ([#5736](https://github.com/cds-snc/platform-forms-client/issues/5736)) ([15dced3](https://github.com/cds-snc/platform-forms-client/commit/15dced30e0dd56efa190f18528ad310afc850d88))
+
 ## [3.44.0](https://github.com/cds-snc/platform-forms-client/compare/v3.43.1...v3.44.0) (2025-06-17)
 
 
