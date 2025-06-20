@@ -90,7 +90,7 @@ const isFieldResponseValid = (
 
   switch (componentType) {
     case FormElementTypes.textField: {
-      const typedValue = value as string;
+      const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
       const currentRegex = getRegexByType(validator.type, t, value as string);
       if (validator.type && currentRegex && currentRegex.regex) {
@@ -105,7 +105,7 @@ const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.textArea: {
-      const typedValue = value as string;
+      const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
       if (validator.maxLength && (value as string).length > validator.maxLength)
         return t("input-validation.too-many-characters");
@@ -129,13 +129,21 @@ const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.radio:
-    case FormElementTypes.combobox:
     case FormElementTypes.dropdown: {
       if (validator.required && (value === undefined || value === "")) {
         return t("input-validation.required");
       }
       break;
     }
+
+    case FormElementTypes.combobox: {
+      const trimmedValue = String(value).trim();
+      if (validator.required && (trimmedValue === undefined || trimmedValue === "")) {
+        return t("input-validation.required");
+      }
+      break;
+    }
+
     case FormElementTypes.fileInput: {
       const fileInputResponse = value as FileInputResponse;
 
