@@ -8,8 +8,7 @@ export const invokeSubmissionLambda = async (
   formID: string,
   fields: Responses,
   language: string,
-  securityAttribute: string,
-  containsFiles: boolean
+  securityAttribute: string
 ): Promise<string> => {
   try {
     const lambdaInvokeResponse = await lambdaClient.send(
@@ -20,7 +19,6 @@ export const invokeSubmissionLambda = async (
           language,
           responses: fields,
           securityAttribute,
-          containsFiles,
         }),
       })
     );

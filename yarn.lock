@@ -383,7 +383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:^3.826.0":
+"@aws-sdk/client-s3@npm:3.832.0, @aws-sdk/client-s3@npm:^3.826.0":
   version: 3.832.0
   resolution: "@aws-sdk/client-s3@npm:3.832.0"
   dependencies:
@@ -988,6 +988,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/s3-presigned-post@npm:^3.828.0":
+  version: 3.832.0
+  resolution: "@aws-sdk/s3-presigned-post@npm:3.832.0"
+  dependencies:
+    "@aws-sdk/client-s3": "npm:3.832.0"
+    "@aws-sdk/types": "npm:3.821.0"
+    "@aws-sdk/util-format-url": "npm:3.821.0"
+    "@smithy/middleware-endpoint": "npm:^4.1.11"
+    "@smithy/signature-v4": "npm:^5.1.2"
+    "@smithy/types": "npm:^4.3.1"
+    "@smithy/util-hex-encoding": "npm:^4.0.0"
+    "@smithy/util-utf8": "npm:^4.0.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/15478fe4268abb10d27cf5a34e1054fb8b70cba2659b363b76cad7c60638a90803f8f83a95f0e4e24ba500b31fc83fa6392a056384ab81cea82956241d92bd6c
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/signature-v4-multi-region@npm:3.826.0":
   version: 3.826.0
   resolution: "@aws-sdk/signature-v4-multi-region@npm:3.826.0"
@@ -1056,6 +1073,18 @@ __metadata:
     "@smithy/util-endpoints": "npm:^3.0.6"
     tslib: "npm:^2.6.2"
   checksum: 10c0/650a8bd823f22c6fb1ebc21bf418af9de99c969a8b856721dcadf563b7699971db475ce1c725b9e5423dd8c30801c1cd9e0a5cbe17bb71b5fe74740669c213cf
+  languageName: node
+  linkType: hard
+
+"@aws-sdk/util-format-url@npm:3.821.0":
+  version: 3.821.0
+  resolution: "@aws-sdk/util-format-url@npm:3.821.0"
+  dependencies:
+    "@aws-sdk/types": "npm:3.821.0"
+    "@smithy/querystring-builder": "npm:^4.0.4"
+    "@smithy/types": "npm:^4.3.1"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/bb574930dc0e940665836aefbc32307955bad2d7c05d4b3e632eae62b8e4f6d5209c6c9ebc095897120461f4588225e0bfd661e07b7efe8af18a390f946bce19
   languageName: node
   linkType: hard
 
@@ -12296,6 +12325,7 @@ __metadata:
     "@aws-sdk/client-s3": "npm:^3.826.0"
     "@aws-sdk/client-sqs": "npm:^3.826.0"
     "@aws-sdk/lib-dynamodb": "npm:^3.826.0"
+    "@aws-sdk/s3-presigned-post": "npm:^3.828.0"
     "@aws-sdk/types": "npm:^3.821.0"
     "@babel/core": "npm:^7.23.6"
     "@babel/preset-typescript": "npm:^7.24.7"
@@ -19906,9 +19936,9 @@ __metadata:
   linkType: hard
 
 "webpack-sources@npm:^3.2.3":
-  version: 3.3.2
-  resolution: "webpack-sources@npm:3.3.2"
-  checksum: 10c0/b5308d8acba4c7c6710b6df77187b274800afe0856c1508cba8aa310304558634e745b7eac4991ea086175ea6da3c64d11d958cf508980e6cb7506aa5983913e
+  version: 3.3.3
+  resolution: "webpack-sources@npm:3.3.3"
+  checksum: 10c0/ab732f6933b513ba4d505130418995ddef6df988421fccf3289e53583c6a39e205c4a0739cee98950964552d3006604912679c736031337fb4a9d78d8576ed40
   languageName: node
   linkType: hard
 

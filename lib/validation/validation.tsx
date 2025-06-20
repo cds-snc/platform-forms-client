@@ -11,7 +11,7 @@ import { FormikProps } from "formik";
 import { TFunction } from "i18next";
 import { ErrorListItem } from "@clientComponents/forms";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
-import { hasOwnProperty, isServer } from "../tsUtils";
+import { isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import { FormValues, GroupsType, checkVisibilityRecursive } from "@lib/formContext";
@@ -141,9 +141,7 @@ const isFieldResponseValid = (
 
       if (
         validator.required &&
-        (!fileInputResponse.name ||
-          !fileInputResponse.size ||
-          !fileInputResponse.based64EncodedFile)
+        (!fileInputResponse.name || !fileInputResponse.size || !fileInputResponse.content)
       )
         return t("input-validation.required");
 
@@ -256,12 +254,12 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
       return false;
     }
     case FormElementTypes.fileInput: {
-      const fileInputResponse = value as FileInputResponse;
       if (
-        fileInputResponse &&
-        hasOwnProperty(fileInputResponse, "name") &&
-        hasOwnProperty(fileInputResponse, "size") &&
-        hasOwnProperty(fileInputResponse, "based64EncodedFile")
+        value !== null &&
+        typeof value == "object" &&
+        "name" in value &&
+        "size" in value &&
+        "key" in value
       ) {
         return true;
       }
