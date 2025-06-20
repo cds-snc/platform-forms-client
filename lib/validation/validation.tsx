@@ -11,7 +11,7 @@ import { FormikProps } from "formik";
 import { TFunction } from "i18next";
 import { ErrorListItem } from "@clientComponents/forms";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
-import { hasOwnProperty, isServer } from "../tsUtils";
+import { isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import { FormValues, GroupsType, checkVisibilityRecursive } from "@lib/formContext";
@@ -257,9 +257,9 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
       if (
         value !== null &&
         typeof value == "object" &&
-        hasOwnProperty(value, "name") &&
-        hasOwnProperty(value, "size") &&
-        hasOwnProperty(value, "key")
+        "name" in value &&
+        "size" in value &&
+        "key" in value
       ) {
         return true;
       }
