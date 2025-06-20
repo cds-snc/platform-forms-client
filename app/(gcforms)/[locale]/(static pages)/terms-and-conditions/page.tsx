@@ -5,6 +5,10 @@ import { serverTranslation } from "@i18n";
 import frContent from "@content/fr/terms-and-conditions.md";
 import enContent from "@content/en/terms-and-conditions.md";
 
+export function generateStaticParams() {
+  return [{ locale: "en" }, { locale: "fr" }];
+}
+
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {

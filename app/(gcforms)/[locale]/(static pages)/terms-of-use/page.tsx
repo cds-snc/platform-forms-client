@@ -23,6 +23,10 @@ export async function generateMetadata(props: {
   };
 }
 
+export function generateStaticParams() {
+  return [{ locale: "en" }, { locale: "fr" }];
+}
+
 const TermsOfUse = async (props: TermsOfUseProps) => {
   const params = await props.params;
 
