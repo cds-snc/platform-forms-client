@@ -15,5 +15,4 @@ export type FileInputResponse = {
   name: string | null;
   size: number | null;
   content: ArrayBuffer | null;
-  key: string | null;
 };
