@@ -6,10 +6,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.9.2",
   "dependencies": {
-    "@lexical/react": "^0.31.2",
-    "lexical": "^0.31.2"
+    "@lexical/react": "^0.32.0",
+    "lexical": "^0.32.0"
   },
   "peerDependencies": {
     "react": "^19.1.0",
