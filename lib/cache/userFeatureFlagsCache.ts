@@ -9,8 +9,6 @@ const cacheAvailable: boolean = process.env.APP_ENV !== "test" && Boolean(proces
 const randomCacheExpiry = () => Math.floor(Math.random() * 300 + 300);
 
 export const featureFlagsCheck = async (userID: string): Promise<string[] | null> => {
-  //const canManage = await authorization.canManageUser(userID);
-
   const checkParameter = `auth:featureFlags:${userID}`;
 
   if (cacheAvailable) {
