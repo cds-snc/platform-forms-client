@@ -285,7 +285,8 @@ export const Form = withFormik<FormProps, Responses>({
         formValues,
         formikBag.props.language,
         formikBag.props.formRecord.id,
-        formikBag.props.captchaToken?.current
+        formikBag.props.captchaToken?.current,
+        formikBag.props.isPreview
       );
 
       // Failed to find Server Action (likely due to newer deployment)

@@ -15,9 +15,6 @@ import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
 import { sendNotification } from "@lib/notifications";
 
-//  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
-const CAPTCHA_BLOCKABLE_MODE = false;
-
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function isFormClosed(formId: string): Promise<boolean> {
@@ -34,7 +31,8 @@ export async function submitForm(
   values: Responses,
   language: string,
   formRecordOrId: PublicFormRecord | string,
-  captchaToken?: string | undefined
+  captchaToken?: string | undefined,
+  isPreview: boolean = false
 ): Promise<{ id: string; submissionId?: string; error?: Error }> {
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
@@ -52,10 +50,10 @@ export async function submitForm(
       };
     }
 
-    const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
-    if (captchaEnabled) {
+    const hCaptcha = await checkOne(FeatureFlags.hCaptcha);
+    if (!isPreview && hCaptcha) {
       const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
-      if (CAPTCHA_BLOCKABLE_MODE && !captchaVerified) {
+      if (!captchaVerified) {
         return {
           id: formId,
           error: {

@@ -61,15 +61,22 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   return true;
 };
 
-// Looks at the success and score to determine a pass or fail. We can tweak the score over time.
-// See https://docs.hcaptcha.com/enterprise#handling-siteverify-responses
+/**
+ * Looks at the success and score to determine a pass or fail. We can tweak the score over time.
+ * Currently, we are only taking the action of blocking users for highly suspicious scores above
+ * 0.79. In the future we could also look at the score range of 0.7 to 0.79 for more sensitive
+ * areas like and potentially block those as well.
+ *
+ * See https://docs.hcaptcha.com/enterprise#handling-siteverify-responses
+ * @param success
+ * @param score
+ * @returns
+ */
+//
+//
 const checkIfVerified = (success: boolean, score: number) => {
-  if (score >= 0.8) {
-    // Session is bad - identifying separately for potential future use
-    return false;
-  }
-  if (score >= 0.7) {
-    // Score is suspicious - we may want to tweak this to 0.79 if we have too many false positives
+  if (score > 0.79) {
+    // Very suspicious score, retun a fail
     return false;
   }
   if (!success) {

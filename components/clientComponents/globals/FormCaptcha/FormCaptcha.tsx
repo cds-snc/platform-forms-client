@@ -1,15 +1,14 @@
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { hCaptchaEnabled } from "./helpers";
 import { FormEvent, useRef } from "react";
 
 /**
- * Acts as a HCaptcha wrapper to simplify the wiring around adding hCaptcha to a form. When hCaptcha
- * is enable a form is wired up to use hCaptcha and returned. Otherwise a default form is returned.
- *
- * Note: hCaptcha is currently running in "100% Passive" mode that will never challenge users. The
- * mode is set at account level.
+ * Acts as a HCaptcha wrapper to simplify the wiring around adding hCaptcha to a form.
+ * For the form-builder preview mode or if a published form and hCaptcha is not enabled, the
+ * form will not include hCaptcha and will not block users from submitting the form. Otherwise
+ * the hCAPTCHA related form will be shown and perform the hCAPTCHA token passing from
+ * hCAPTCHA api to client to server action used to block suspicious users from submitting a form.
  */
 export const FormCaptcha = ({
   children,
@@ -40,11 +39,14 @@ export const FormCaptcha = ({
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
 
   const { getFlag } = useFeatureFlags();
-  const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"), hCaptchaSiteKey, isPreview);
+  const hCaptcha = getFlag("hCaptcha");
+  const disableHCaptcha = !hCaptcha || isPreview || process.env.NEXT_PUBLIC_APP_ENV === "test";
 
-  if (captchaEnabled && !hCaptchaSiteKey) {
-    logMessage.error("hCaptcha: hCaptchaSiteKey is missing");
-    return null;
+  // Help developers understand when there is a configuration issue
+  if (process.env.NODE_ENV === "development" && hCaptcha && !isPreview && !hCaptchaSiteKey) {
+    logMessage.info(`hCaptcha: flag is enabled but hCaptchaSiteKey is missing. This will cause 
+      hCaptcha to fail. Add the hCaptchaSiteKey to the App settings and make sure the
+      HCAPTCHA_SITE_VERIFY_KEY is in your .env`);
   }
 
   const onVerified = async (token: string) => {
@@ -54,7 +56,8 @@ export const FormCaptcha = ({
     handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
 
-  if (!captchaEnabled) {
+  // Use Form without hCaptcha for Form-Builder Preview and for all forms when hCaptcha is not enabled
+  if (disableHCaptcha) {
     return (
       <form
         {...(id ? { id } : {})}
