@@ -7,7 +7,8 @@ import { useSearchParams } from "next/navigation";
 /**
  * Acts as a hCaptcha wrapper to help simplify the wiring around adding hCaptcha to a form.
  *
- * Test hCapcha failing by adding `?hCaptchaForceFail` to the URL.
+ * Test hCapcha failing by adding `?hCaptchaForceFail` to the URL. This will redirect the
+ * user to the fail page and result in a log message with `client error ["invalid-input-response"]`
  */
 export const FormCaptcha = ({
   children,
@@ -37,7 +38,9 @@ export const FormCaptcha = ({
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
 
-  const hCaptchaForceFail = useSearchParams().has("hCaptchaForceFail");
+  const searchParams = useSearchParams();
+  const hCaptchaForceFail =
+    typeof searchParams?.has === "function" && searchParams.has("hCaptchaForceFail");
 
   const { getFlag } = useFeatureFlags();
   const hCaptcha = getFlag("hCaptcha");
