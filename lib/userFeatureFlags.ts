@@ -105,13 +105,9 @@ export const addUserFeatureFlags = async (userId: string, flags: string[]): Prom
       const updatedFlags = [...currentFlags, ...newFlags];
 
       // Update the database
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          features: {
-            set: updatedFlags.map((feature) => ({ userId_feature: { userId, feature } })),
-          },
-        },
+      await prisma.userFeature.createMany({
+        data: newFlags.map((feature) => ({ userId, feature })),
+        skipDuplicates: true, // avoids error if the (userId, feature) already exists
       });
 
       // Update the cache
