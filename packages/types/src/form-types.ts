@@ -244,9 +244,16 @@ export const FormStatus = {
   FORM_CLOSED_ERROR: "FormClosedError",
   SERVER_ID_ERROR: "ServerIDError",
   CAPTCHA_VERIFICATION_ERROR: "CaptchaVerificationError",
+  SERVER_VALIDATION_ERROR: "ServerValidationError",
 } as const;
 
 export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];
+
+export type SubmitFormError = {
+  name: string;
+  message?: string;
+  messages?: Record<string, string>;
+};
 
 // Interval in minutes for sending email notifications. These are converted to seconds for the Redis ttl
 export const NotificationsInterval = {
