@@ -1,4 +1,3 @@
-import { authorization } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "../integration/redisConnector";
 
@@ -28,9 +27,6 @@ export const featureFlagsCheck = async (userID: string): Promise<string[] | null
 };
 
 export const featureFlagsPut = async (userID: string, flags: string[]): Promise<void> => {
-  await authorization.canManageFlags();
-  await authorization.canManageUser(userID);
-
   const modifyParameter = `auth:featureFlags:${userID}`;
 
   if (!cacheAvailable) return;
