@@ -4,11 +4,7 @@ import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FormEvent, useRef } from "react";
 
 /**
- * Acts as a HCaptcha wrapper to simplify the wiring around adding hCaptcha to a form.
- * For the form-builder preview mode or if a published form and hCaptcha is not enabled, the
- * form will not include hCaptcha and will not block users from submitting the form. Otherwise
- * the hCAPTCHA related form will be shown and perform the hCAPTCHA token passing from
- * hCAPTCHA api to client to server action used to block suspicious users from submitting a form.
+ * Acts as a hCaptcha wrapper to help simplify the wiring around adding hCaptcha to a form.
  */
 export const FormCaptcha = ({
   children,
@@ -56,7 +52,8 @@ export const FormCaptcha = ({
     handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
 
-  // Use Form without hCaptcha for Form-Builder Preview and for all forms when hCaptcha is not enabled
+  // For cases hCAPTCHA is intentionally disable, like in Preview mode, use the legacy form
+  // without the hCaptcha flow.
   if (disableHCaptcha) {
     return (
       <form
