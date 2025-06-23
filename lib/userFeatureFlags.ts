@@ -46,11 +46,11 @@ export const removeUserFeatureFlag = async (userId: string, flag: string): Promi
 
     if (updatedFlags.length > 0) {
       // Update the database with the remaining features
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          features: {
-            set: updatedFlags.map((feature) => ({ userId_feature: { userId, feature } })),
+      await prisma.userFeature.delete({
+        where: {
+          userId_feature: {
+            userId,
+            feature: flag,
           },
         },
       });
