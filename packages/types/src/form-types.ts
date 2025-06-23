@@ -250,7 +250,7 @@ export const FormStatus = {
 export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];
 
 export type SubmitFormError = {
-  name: string;
+  name: FormStatus | string;
   message?: string;
   messages?: Record<string, string>;
 };
