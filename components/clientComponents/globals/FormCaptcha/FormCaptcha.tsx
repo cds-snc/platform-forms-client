@@ -2,9 +2,12 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FormEvent, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 
 /**
  * Acts as a hCaptcha wrapper to help simplify the wiring around adding hCaptcha to a form.
+ *
+ * Test hCapcha failing by adding `?hCaptchaForceFail` to the URL.
  */
 export const FormCaptcha = ({
   children,
@@ -34,6 +37,8 @@ export const FormCaptcha = ({
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
 
+  const hCaptchaForceFail = useSearchParams().has("hCaptchaForceFail");
+
   const { getFlag } = useFeatureFlags();
   const hCaptcha = getFlag("hCaptcha");
   const disableHCaptcha = !hCaptcha || isPreview || process.env.NEXT_PUBLIC_APP_ENV === "test";
@@ -47,7 +52,7 @@ export const FormCaptcha = ({
 
   const onVerified = async (token: string) => {
     if (captchaToken) {
-      captchaToken.current = token;
+      captchaToken.current = hCaptchaForceFail ? "INVALID_TOKEN_TEST" : token;
     }
     handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
