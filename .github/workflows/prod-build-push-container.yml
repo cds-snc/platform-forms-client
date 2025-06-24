@@ -11,7 +11,7 @@ env:
   TAG_VERSION: ${{  github.ref_name }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
-  NEXT_PUBLIC_HCAPTCHA_SITE_KEY: ${{ vars.PRODUCTION_HCAPTCHA_SITE_KEY }}
+  HCAPTCHA_SITE_KEY: ${{ vars.PRODUCTION_HCAPTCHA_SITE_KEY }}
 
 permissions:
   id-token: write
@@ -32,7 +32,7 @@ jobs:
           --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
           --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
           --build-arg INDEX_SITE=true \
-          --build-arg NEXT_PUBLIC_HCAPTCHA_SITE_KEY=$NEXT_PUBLIC_HCAPTCHA_SITE_KEY \
+          --build-arg HCAPTCHA_SITE_KEY=$HCAPTCHA_SITE_KEY \
           --build-arg NEXT_DEPLOYMENT_ID=$TAG_VERSION .
 
       - name: Configure AWS credentials using OIDC
