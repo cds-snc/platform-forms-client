@@ -31,8 +31,7 @@ export async function submitForm(
   values: Responses,
   language: string,
   formRecordOrId: PublicFormRecord | string,
-  captchaToken?: string | undefined,
-  isPreview: boolean = false
+  captchaToken?: string | undefined
 ): Promise<{ id: string; submissionId?: string; error?: Error }> {
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
@@ -50,10 +49,12 @@ export async function submitForm(
       };
     }
 
-    const hCaptcha = await checkOne(FeatureFlags.hCaptcha);
-    if (!isPreview && hCaptcha) {
+    const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
+    // Skip hCaptcha verification for form-builder Preview (drafts)
+    if (template?.isPublished) {
+      // hCaptcha runs regardless but only block submissions if the feature flag is enabled
       const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
-      if (!captchaVerified) {
+      if (hCaptchaBlockingMode && !captchaVerified) {
         return {
           id: formId,
           error: {
