@@ -47,22 +47,6 @@ export const FormCaptcha = ({
     handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
 
-  if (process.env.APP_ENV === "test") {
-    return (
-      <form
-        {...(dataTestId ? { "data-testid": dataTestId } : {})}
-        method="POST"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit(e);
-        }}
-        {...rest}
-      >
-        {children}
-      </form>
-    );
-  }
-
   // see https://github.com/hCaptcha/react-hcaptcha
   return (
     <form
@@ -70,6 +54,13 @@ export const FormCaptcha = ({
       method="POST"
       onSubmit={(e) => {
         e.preventDefault();
+
+        if (process.env.APP_ENV === "test") {
+          // Skip the hCaptcha submission flow so the test can be run in isolation
+          handleSubmit(e);
+          return;
+        }
+
         // The submit event is captured here so it can be used later in the passed in handleSubmit(e)
         // that is called in onVerified() that is triggerd below via hCaptchaRef.current.execute()
         // and later called from HCaptcha component event onVerify.
