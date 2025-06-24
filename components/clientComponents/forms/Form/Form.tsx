@@ -176,7 +176,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             lang={language}
             handleSubmit={handleSubmit}
             noValidate={true}
-            hCaptchaSiteKey={props.hCaptchaSiteKey}
             captchaToken={props.captchaToken}
           >
             {isGroupsCheck &&

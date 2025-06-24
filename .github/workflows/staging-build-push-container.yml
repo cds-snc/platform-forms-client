@@ -16,6 +16,7 @@ env:
   GITHUB_SHA: ${{ github.sha }}
   COGNITO_APP_CLIENT_ID: ${{secrets.STAGING_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.STAGING_COGNITO_USER_POOL_ID}}
+  NEXT_PUBLIC_HCAPTCHA_SITE_KEY: ${{ vars.STAGING_HCAPTCHA_SITE_KEY }}
 
 permissions:
   id-token: write
@@ -34,6 +35,7 @@ jobs:
           docker build -t base \
             --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
             --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
+            --build-arg NEXT_PUBLIC_HCAPTCHA_SITE_KEY=TODO \
             --build-arg NEXT_DEPLOYMENT_ID=$GITHUB_SHA .
 
       - name: Configure AWS credentials using OIDC

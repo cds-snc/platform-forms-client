@@ -8,7 +8,6 @@ import { FormEvent, useRef } from "react";
  */
 export const FormCaptcha = ({
   children,
-  hCaptchaSiteKey = "",
   handleSubmit,
   lang,
   id = "",
@@ -18,7 +17,6 @@ export const FormCaptcha = ({
   captchaToken,
 }: {
   children: React.ReactNode;
-  hCaptchaSiteKey: string | undefined;
   handleSubmit: (e?: FormEvent<HTMLFormElement>) => void;
   lang: string;
   id?: string;
@@ -33,7 +31,12 @@ export const FormCaptcha = ({
   // Help developers understand when there is a configuration issue
   const { getFlag } = useFeatureFlags();
   const hCaptcha = getFlag("hCaptcha");
-  if (process.env.NODE_ENV === "development" && hCaptcha && !hCaptchaSiteKey) {
+
+  if (
+    process.env.NODE_ENV === "development" &&
+    hCaptcha &&
+    !process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY
+  ) {
     logMessage.info(`hCaptcha: flag is enabled but hCaptchaSiteKey is missing. This will cause 
       hCaptcha to fail. Add the hCaptchaSiteKey to the App settings and make sure the
       HCAPTCHA_SITE_VERIFY_KEY is in your .env`);
@@ -65,7 +68,7 @@ export const FormCaptcha = ({
     >
       {children}
       <HCaptcha
-        sitekey={hCaptchaSiteKey}
+        sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
         onVerify={onVerified}
         // Component will reset immediately after a Client sends bad data.
         // Note: An invalid sitekey will cause the HCaptcha component to fail without calling onError

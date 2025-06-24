@@ -11,6 +11,7 @@ env:
   TAG_VERSION: ${{  github.ref_name }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
+  NEXT_PUBLIC_HCAPTCHA_SITE_KEY: ${{ vars.PRODUCTION_HCAPTCHA_SITE_KEY }}
 
 permissions:
   id-token: write

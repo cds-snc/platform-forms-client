@@ -8,7 +8,6 @@ import { ClientContainer } from "./ClientContainer";
 import { checkIfClosed } from "@lib/templates";
 import { ClosedDetails } from "@lib/types";
 import { PreviewClosed } from "./PreviewClosed";
-import { getAppSetting } from "@root/lib/appSettings";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -38,8 +37,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const formID = id;
 
-  const hCaptchaSiteKey = (await getAppSetting("hCaptchaSiteKey")) || "";
-
   if (!session?.user && formID !== "0000") {
     return notFound();
   }
@@ -53,11 +50,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <ClientContainer>
-      <Preview
-        disableSubmit={disableSubmit}
-        allowGrouping={isAllowGrouping}
-        hCaptchaSiteKey={hCaptchaSiteKey}
-      />
+      <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />
     </ClientContainer>
   );
 }

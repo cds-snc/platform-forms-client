@@ -32,11 +32,9 @@ import { PreviewFormWrapper } from "./PreviewFormWrapper";
 export const Preview = ({
   disableSubmit = true,
   allowGrouping = false,
-  hCaptchaSiteKey = "",
 }: {
   disableSubmit?: boolean;
   allowGrouping?: boolean;
-  hCaptchaSiteKey?: string;
 }) => {
   const { status } = useSession();
   const { i18n } = useTranslation(["common", "confirmation"]);
@@ -193,7 +191,6 @@ export const Preview = ({
                   disableSubmit={disableSubmit}
                   allowGrouping={allowGrouping}
                   setSent={setSent}
-                  hCaptchaSiteKey={hCaptchaSiteKey}
                 >
                   {currentForm}
                 </PreviewFormWrapper>
