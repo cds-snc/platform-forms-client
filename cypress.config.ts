@@ -27,7 +27,7 @@ export default defineConfig({
       framework: "next",
       bundler: "webpack",
     },
-    excludeSpecPattern: "**/release-test/**",
+    excludeSpecPattern: ["**/release-test/**", "**/cypress-test/**"],
   },
   retries: {
     // Configure retry attempts for `cypress run`
