@@ -10,11 +10,9 @@ export const FormCaptcha = ({
   children,
   handleSubmit,
   lang,
-  id = "",
   dataTestId = "",
-  className = "",
-  noValidate = true,
   captchaToken,
+  ...rest
 }: {
   children: React.ReactNode;
   handleSubmit: (e?: FormEvent<HTMLFormElement>) => void;
@@ -24,7 +22,7 @@ export const FormCaptcha = ({
   className?: string;
   noValidate?: boolean;
   captchaToken: React.RefObject<string> | undefined;
-}) => {
+} & React.FormHTMLAttributes<HTMLFormElement>) => {
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
 
@@ -49,28 +47,36 @@ export const FormCaptcha = ({
     handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
 
+  if (process.env.APP_ENV === "test") {
+    return (
+      <form
+        {...(dataTestId ? { "data-testid": dataTestId } : {})}
+        method="POST"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit(e);
+        }}
+        {...rest}
+      >
+        {children}
+      </form>
+    );
+  }
+
   // see https://github.com/hCaptcha/react-hcaptcha
   return (
     <form
-      {...(id ? { id } : {})}
       {...(dataTestId ? { "data-testid": dataTestId } : {})}
-      {...(className ? { className } : {})}
-      {...(noValidate ? { noValidate } : {})}
       method="POST"
       onSubmit={(e) => {
         e.preventDefault();
-
-        if (process.env.APP_ENV === "test") {
-          handleSubmit(e);
-          return;
-        }
-
         // The submit event is captured here so it can be used later in the passed in handleSubmit(e)
         // that is called in onVerified() that is triggerd below via hCaptchaRef.current.execute()
         // and later called from HCaptcha component event onVerify.
         formSubmitEventRef.current = e;
         hCaptchaRef.current?.execute();
       }}
+      {...rest}
     >
       {children}
       <HCaptcha
