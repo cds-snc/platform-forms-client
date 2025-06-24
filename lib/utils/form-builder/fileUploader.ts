@@ -16,6 +16,16 @@ interface ProcessedFile {
   content?: ArrayBuffer; // content is removed after upload
 }
 
+const isFileInputResponse = (response: unknown): response is FileInputResponse => {
+  return (
+    response !== null &&
+    typeof response === "object" &&
+    "name" in response &&
+    "size" in response &&
+    "content" in response
+  );
+};
+
 const isFileInput = (response: unknown): response is FileInput => {
   return (
     response !== null &&
@@ -46,12 +56,15 @@ const isProcessedFile = (response: unknown): response is ProcessedFile => {
 const fileExtractor = (originalObj: unknown) => {
   const fileInputRefList: Array<FileInput | ProcessedFile> = [];
 
-  const extractorLogic = (originalObj: unknown, fileObjs: Array<FileInput | ProcessedFile>) => {
+  const extractorLogic = (
+    originalObj: unknown,
+    fileObjs: Array<FileInputResponse | ProcessedFile>
+  ) => {
     // If it's not an {}, or [] stop now
     if (originalObj === null || typeof originalObj !== "object") return;
 
     // If it's a File Input object add it to the list and return
-    if (isFileInput(originalObj) || isProcessedFile(originalObj)) {
+    if (isFileInputResponse(originalObj) || isProcessedFile(originalObj)) {
       return fileObjs.push(originalObj);
     }
 
@@ -67,13 +80,23 @@ const fileExtractor = (originalObj: unknown) => {
     (acc, fileRef) => {
       if (isFileInput(fileRef)) {
         acc.unprocessedFiles.push(fileRef);
+        return acc;
       }
       if (isProcessedFile(fileRef)) {
         acc.processedFiles.push(fileRef);
+        return acc;
       }
+      // If it's neither a FileInput nor a ProcessedFile, we assume it's a blank file response
+      // This could happen if the file was not filled in the form, so we add it
+
+      acc.blankFiles.push(fileRef);
       return acc;
     },
-    { unprocessedFiles: [] as FileInput[], processedFiles: [] as ProcessedFile[] }
+    {
+      unprocessedFiles: [] as FileInput[],
+      processedFiles: [] as ProcessedFile[],
+      blankFiles: [] as FileInputResponse[],
+    }
   );
 };
 
@@ -118,6 +141,13 @@ export const uploadFiles = async (responses: Responses) => {
     if (fileRef.content) {
       delete fileRef.content; // Remove content after upload to save memory
     }
+  });
+
+  // Prep the blank file inputs for form submission
+  fileInputReferences.blankFiles.forEach((fileRef) => {
+    const processedFileRef = fileRef as ProcessedFile;
+    processedFileRef.key = ""; // Set key to empty string for blank files
+    delete processedFileRef.content; // Remove content property from blank files
   });
 
   // Now we can throw an error if there are any unprocessed files left
