@@ -14,32 +14,26 @@ export const FormCaptcha = ({
   id = "",
   dataTestId = "",
   className = "",
-  isPreview = false,
   noValidate = true,
   captchaToken,
 }: {
   children: React.ReactNode;
   hCaptchaSiteKey: string | undefined;
-  // Determines whether or not to block a user marked as a bot by siteverify from submitting a form
-  blockableMode?: boolean;
   handleSubmit: (e?: FormEvent<HTMLFormElement>) => void;
   lang: string;
   id?: string;
   dataTestId?: string;
   className?: string;
-  isPreview?: boolean;
   noValidate?: boolean;
   captchaToken: React.RefObject<string> | undefined;
 }) => {
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
 
+  // Help developers understand when there is a configuration issue
   const { getFlag } = useFeatureFlags();
   const hCaptcha = getFlag("hCaptcha");
-  const disableHCaptcha = !hCaptcha || isPreview || process.env.NEXT_PUBLIC_APP_ENV === "test";
-
-  // Help developers understand when there is a configuration issue
-  if (process.env.NODE_ENV === "development" && hCaptcha && !isPreview && !hCaptchaSiteKey) {
+  if (process.env.NODE_ENV === "development" && hCaptcha && !hCaptchaSiteKey) {
     logMessage.info(`hCaptcha: flag is enabled but hCaptchaSiteKey is missing. This will cause 
       hCaptcha to fail. Add the hCaptchaSiteKey to the App settings and make sure the
       HCAPTCHA_SITE_VERIFY_KEY is in your .env`);
@@ -51,31 +45,6 @@ export const FormCaptcha = ({
     }
     handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
-
-  // For cases hCAPTCHA is intentionally disable, like in Preview mode, use the legacy form
-  // without the hCaptcha flow.
-  if (disableHCaptcha) {
-    return (
-      <form
-        {...(id ? { id } : {})}
-        {...(dataTestId ? { "data-testid": dataTestId } : {})}
-        {...(className ? { className } : {})}
-        {...(noValidate ? { noValidate } : {})}
-        /**
-         * method attribute needs to stay here in case javascript does not load
-         * otherwise GET request will be sent which will result in leaking all the user data
-         * to the URL
-         */
-        method="POST"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit(e);
-        }}
-      >
-        {children}
-      </form>
-    );
-  }
 
   // see https://github.com/hCaptcha/react-hcaptcha
   return (

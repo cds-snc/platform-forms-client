@@ -20,12 +20,14 @@ export const PreviewFormWrapper = ({
   disableSubmit,
   allowGrouping,
   setSent,
+  hCaptchaSiteKey,
 }: {
   children: React.JSX.Element[];
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
   allowGrouping: boolean;
   disableSubmit: boolean;
   setSent: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+  hCaptchaSiteKey?: string;
 }) => {
   const { status } = useSession();
   const { saveSessionProgress, currentGroup } = useGCFormsContext();
@@ -94,6 +96,7 @@ export const PreviewFormWrapper = ({
       }}
       allowGrouping={allowGrouping}
       currentGroup={currentGroup}
+      hCaptchaSiteKey={hCaptchaSiteKey}
     >
       {children}
     </Form>

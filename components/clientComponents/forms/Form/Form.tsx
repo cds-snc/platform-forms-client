@@ -177,7 +177,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             handleSubmit={handleSubmit}
             noValidate={true}
             hCaptchaSiteKey={props.hCaptchaSiteKey}
-            isPreview={props.isPreview}
             captchaToken={props.captchaToken}
           >
             {isGroupsCheck &&
@@ -285,8 +284,7 @@ export const Form = withFormik<FormProps, Responses>({
         formValues,
         formikBag.props.language,
         formikBag.props.formRecord.id,
-        formikBag.props.captchaToken?.current,
-        formikBag.props.isPreview
+        formikBag.props.captchaToken?.current
       );
 
       // Failed to find Server Action (likely due to newer deployment)
