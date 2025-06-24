@@ -57,7 +57,7 @@
     "@aws-sdk/lib-dynamodb": "^3.826.0",
     "@bufbuild/protobuf": "^2.2.3",
     "@casl/ability": "6.7.3",
-    "@cdssnc/gcds-tokens": "2.10.0",
+    "@cdssnc/gcds-tokens": "2.12.0",
     "@gcforms/connectors": "workspace:*",
     "@gcforms/editor": "workspace:*",
     "@gcforms/tag-input": "workspace:*",
@@ -124,7 +124,7 @@
     "unorm": "^1.6.0",
     "usehooks-ts": "3.1.1",
     "uuid": "9.0.1",
-    "valibot": "^0.30.0",
+    "valibot": "^0.42.0",
     "zustand": "5.0.5"
   },
   "devDependencies": {
