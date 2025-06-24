@@ -979,7 +979,6 @@
   "startP2": "Modifiez un formulaire qui a été créé et téléchargé à partir de Formulaires GC.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
-  "submittedResponsesChange": "Modifier l'option de livraison",
   "submittedResponsesTextVault": {
     "text1": "En cliquant sur « Soumettre », la réponse sera disponible pour récupération :",
     "text2": "Allez aux Réponses"
