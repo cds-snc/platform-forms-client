@@ -20,5 +20,5 @@
   "devDependencies": {
     "pino-pretty": "^11.2.2"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.9.2"
 }

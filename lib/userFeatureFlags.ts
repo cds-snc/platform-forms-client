@@ -1,3 +1,4 @@
+import { authorization } from "@lib/privileges";
 import { prisma } from "@lib/integration/prismaConnector";
 import { featureFlagsCheck, featureFlagsPut } from "@lib/cache/userFeatureFlagsCache";
 
@@ -33,6 +34,9 @@ export const getUserFeatureFlags = async (userId: string): Promise<string[]> => 
 
 // Remove a specific feature flag for a user
 export const removeUserFeatureFlag = async (userId: string, flag: string): Promise<void> => {
+  await authorization.canManageFlags();
+  await authorization.canManageUser(userId);
+
   try {
     // Get current flags
     const currentFlags = await getUserFeatureFlags(userId);
@@ -42,11 +46,11 @@ export const removeUserFeatureFlag = async (userId: string, flag: string): Promi
 
     if (updatedFlags.length > 0) {
       // Update the database with the remaining features
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          features: {
-            set: updatedFlags.map((feature) => ({ userId_feature: { userId, feature } })),
+      await prisma.userFeature.delete({
+        where: {
+          userId_feature: {
+            userId,
+            feature: flag,
           },
         },
       });
@@ -64,36 +68,11 @@ export const removeUserFeatureFlag = async (userId: string, flag: string): Promi
   }
 };
 
-// Add a specific feature flag for a user
-export const addUserFeatureFlag = async (userId: string, flag: string): Promise<void> => {
-  try {
-    // Get current flags
-    const currentFlags = await getUserFeatureFlags(userId);
-
-    // Add the new flag if it doesn't already exist
-    if (!currentFlags.includes(flag)) {
-      const updatedFlags = [...currentFlags, flag];
-
-      // Update the database
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          features: {
-            set: updatedFlags.map((feature) => ({ userId_feature: { userId, feature } })),
-          },
-        },
-      });
-
-      // Update the cache
-      await featureFlagsPut(userId, updatedFlags);
-    }
-  } catch (error) {
-    throw new Error(`Failed to add feature flag: ${error}`);
-  }
-};
-
 // Add multiple feature flags for a user
 export const addUserFeatureFlags = async (userId: string, flags: string[]): Promise<void> => {
+  await authorization.canManageFlags();
+  await authorization.canManageUser(userId);
+
   try {
     // Get current flags
     const currentFlags = await getUserFeatureFlags(userId);
@@ -105,13 +84,9 @@ export const addUserFeatureFlags = async (userId: string, flags: string[]): Prom
       const updatedFlags = [...currentFlags, ...newFlags];
 
       // Update the database
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          features: {
-            set: updatedFlags.map((feature) => ({ userId_feature: { userId, feature } })),
-          },
-        },
+      await prisma.userFeature.createMany({
+        data: newFlags.map((feature) => ({ userId, feature })),
+        skipDuplicates: true, // avoids error if the (userId, feature) already exists
       });
 
       // Update the cache
