@@ -8,7 +8,10 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logEvent } from "./auditLogs";
 import { authorization } from "./privileges";
 
-// TODO move into /Notifcations directory as actions.ts
+// TODO replace prisma calls in file with focussed reusable functions
+// getNotificationUser
+// getNotificationsUsers
+// getDeliveryOption
 
 // Most functions do not include an auth check since the request may be triggered from a
 // non-signed-in user, e.g. sending notifications on a form submission.
@@ -19,7 +22,93 @@ const Status = {
 } as const;
 type Status = (typeof Status)[keyof typeof Status];
 
-// Sends an email notification when a user has new form submissions
+/**
+ * Adds or removes the session user from the notificationsUsers list for a form. Users in
+ * the notificationsUsers list will receive email notifications when a form has new submissions.
+ */
+export const updateNotificationsUser = async (formId: string, enabled: boolean) => {
+  const { user: sessionUser } = await authorization.canEditForm(formId).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formId },
+      "AccessDenied",
+      "Attempted to update notifications interval for Form"
+    );
+    throw e;
+  });
+
+  const template = await prisma.template
+    .findFirst({
+      where: {
+        id: formId,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+        notificationsUsers: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (template === null) {
+    logMessage.warn(
+      `Can not notifications setting for user with id ${sessionUser.id}
+       on template ${formId}. Template does not exist`
+    );
+    return null;
+  }
+
+  // A user can only update their own notifications settings
+  const userToUpdate = template.users.find((u) => u.id === sessionUser.id);
+  if (!userToUpdate) {
+    logMessage.warn(
+      `Can not find notifications setting for user with id ${sessionUser.id}
+       on template ${formId}. User does not exist`
+    );
+    return null;
+  }
+
+  await prisma.template
+    .update({
+      where: {
+        id: formId,
+      },
+      data: {
+        notificationsUsers: {
+          ...(enabled ? { connect: userToUpdate } : { disconnect: { id: userToUpdate.id } }),
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  logMessage.info(
+    `saveNotificationsSettings updated notifications settings for user with email ${
+      sessionUser.email
+    } on template ${formId} to ${enabled ? "enabled" : "disabled"}`
+  );
+
+  logEvent(
+    sessionUser.id,
+    { type: "Form", id: formId },
+    "UpdateNotificationsSettings",
+    `User :${sessionUser.id} updated notifications setting on form ${formId} to ${
+      enabled ? "enabled" : "disabled"
+    }`
+  );
+};
+
+/**
+ * Sends an email notification when a user has new form submissions
+ */
 export const sendNotification = async (formId: string, titleEn: string, titleFr: string) => {
   const notificationsSettings = await _getNotificationsSettings(formId);
   if (!notificationsSettings) {
@@ -85,15 +174,11 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
   }
 };
 
-export const removeMarker = async (formId: string) => {
-  const redis = await getRedisInstance();
-  await redis
-    .del(`notification:formId:${formId}`)
-    .then(() => logMessage.debug(`removeMarker: notification:formId:${formId} deleted`))
-    .catch((err) => logMessage.error(`removeMarker with ${formId} failed to delete ${err}`));
-};
+// const getNotificationsUsers
 
-// Creates or updates an existing marker in Redis. Note to remove a marker, use removeMarker
+/**
+ * Creates or updates an existing marker in Redis. Note to remove a marker, use removeMarker
+ */
 const setMarker = async (
   formId: string,
   notificationsInterval: NotificationsInterval,
@@ -115,6 +200,14 @@ const setMarker = async (
     .catch((err) =>
       logMessage.error(`setMarker: notification:formId:${formId} failed to set ${err}`)
     );
+};
+
+const validateNotificationsInterval = (
+  notificationsInterval: number | null | undefined
+): notificationsInterval is NotificationsInterval => {
+  return Object.values(NotificationsInterval).includes(
+    notificationsInterval as NotificationsInterval
+  );
 };
 
 const getMarker = async (formId: string) => {
@@ -229,14 +322,6 @@ const multipleSubmissionsEmailTemplate = async (
     `;
 };
 
-export const validateNotificationsInterval = (
-  notificationsInterval: number | null | undefined
-): notificationsInterval is NotificationsInterval => {
-  return Object.values(NotificationsInterval).includes(
-    notificationsInterval as NotificationsInterval
-  );
-};
-
 // TODO Update to be a unique feature and only needs to get notificationsUsers, not users
 const _getNotificationsSettings = async (formId: string) => {
   const notificationsSettings = await prisma.template
@@ -285,86 +370,4 @@ const _getNotificationsSettings = async (formId: string) => {
     notificationsInterval,
     deliveryOption,
   };
-};
-
-// Adds or removes the session user from the notificationsUsers list for a form. Users in
-// the notificationsUsers list will receive email notifications when a form has new submissions.
-export const updateNotificationsUser = async (formId: string, enabled: boolean) => {
-  const { user: sessionUser } = await authorization.canEditForm(formId).catch((e) => {
-    logEvent(
-      e.user.id,
-      { type: "Form", id: formId },
-      "AccessDenied",
-      "Attempted to update notifications interval for Form"
-    );
-    throw e;
-  });
-
-  const template = await prisma.template
-    .findFirst({
-      where: {
-        id: formId,
-      },
-      select: {
-        users: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-        notificationsUsers: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (template === null) {
-    logMessage.warn(
-      `Can not notifications setting for user with id ${sessionUser.id}
-       on template ${formId}. Template does not exist`
-    );
-    return null;
-  }
-
-  // A user can only update their own notifications settings
-  const userToUpdate = template.users.find((u) => u.id === sessionUser.id);
-  if (!userToUpdate) {
-    logMessage.warn(
-      `Can not find notifications setting for user with id ${sessionUser.id}
-       on template ${formId}. User does not exist`
-    );
-    return null;
-  }
-
-  await prisma.template
-    .update({
-      where: {
-        id: formId,
-      },
-      data: {
-        notificationsUsers: {
-          ...(enabled ? { connect: userToUpdate } : { disconnect: { id: userToUpdate.id } }),
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  logMessage.info(
-    `saveNotificationsSettings updated notifications settings for user with email ${
-      sessionUser.email
-    } on template ${formId} to ${enabled ? "enabled" : "disabled"}`
-  );
-
-  logEvent(
-    sessionUser.id,
-    { type: "Form", id: formId },
-    "UpdateNotificationsSettings",
-    `User :${sessionUser.id} updated notifications setting on form ${formId} to ${
-      enabled ? "enabled" : "disabled"
-    }`
-  );
 };
