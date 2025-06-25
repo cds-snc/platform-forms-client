@@ -9,7 +9,7 @@ import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
 import { dateHasPast } from "@lib/utils";
 import { FormStatus } from "@gcforms/types";
-import { verifyHCaptchaToken } from "@root/lib/validation/hCaptcha";
+import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
