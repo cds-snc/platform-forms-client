@@ -52,7 +52,7 @@ export const FormCaptcha = ({
         e.preventDefault();
 
         if (process.env.NEXT_PUBLIC_APP_ENV === "test") {
-          // Skip the hCaptcha flow so the form can be submitted in tests
+          // Skip the hCaptcha flow or the tests will fail
           handleSubmit(e);
           return;
         }
