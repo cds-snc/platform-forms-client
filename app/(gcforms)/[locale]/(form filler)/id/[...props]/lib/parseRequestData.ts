@@ -1,121 +1,134 @@
-import { FileInputResponse, SubmissionRequestBody } from "@lib/types";
-import { ProcessedFile, SubmissionParsedRequest } from "@lib/types/submission-types";
-import { FileObjectInvalid, FileSizeError, FileTypeError } from "./exceptions";
-import { validateFileToUpload } from "@lib/validation/fileValidationServerSide";
+import {
+  FileInputResponse,
+  PublicFormRecord,
+  Responses,
+  FormElement,
+  FormElementTypes,
+  Response,
+} from "@lib/types";
 
-/**
- * This function takes raw request JSON and parses the fields and files.
- * Base64 from the JSON will be transformed into File objects in which the underlying
- * file will be located in a temporary folder which is created using the tmp package.
- * @param requestBody {SubmissionRequestBody} - the raw request data to process
- */
-export const parseRequestData = async (
-  requestBody: SubmissionRequestBody
-): Promise<SubmissionParsedRequest> => {
-  return Object.keys(requestBody).reduce(
-    async (prev, current) => {
-      const previousValueResolved = await prev;
-      const keyPairValue = requestBody[current];
-      // in the case that the value is a string value this is a field
-      if (typeof keyPairValue === "string" || typeof keyPairValue === "number") {
-        return {
-          ...previousValueResolved,
-          fields: {
-            ...previousValueResolved.fields,
-            [current]: keyPairValue,
-          },
-        };
-      }
-      // in the case of an array we need to determine if this is a file array or a string array
-      // which determines if the keypair is a file or a field
-      else if (Array.isArray(keyPairValue)) {
-        // if its an empty array or the first value is a string type we just assume that it's a field
-        if (keyPairValue.length === 0 || typeof keyPairValue[0] === "string") {
-          return {
-            ...previousValueResolved,
-            fields: {
-              ...previousValueResolved.fields,
-              [current]: keyPairValue as string[],
-            },
-          };
-        }
-        // otherwise we assume its a file
-        else if (typeof keyPairValue[0] === "object") {
-          return {
-            ...previousValueResolved,
-            files: {
-              ...previousValueResolved.files,
-              [current]: await Promise.all(
-                keyPairValue.map(async (fileObj) => {
-                  return processFileInputResponse(fileObj as FileInputResponse);
-                })
-              ),
-            },
-          };
-        }
-      } else if (typeof keyPairValue === "object") {
-        return {
-          ...previousValueResolved,
-          files: {
-            ...previousValueResolved.files,
-            [current]: await processFileInputResponse(keyPairValue as FileInputResponse),
-          },
-        };
-      }
-      return previousValueResolved;
-    },
-    Promise.resolve({
-      fields: {},
-      files: {},
-    } as SubmissionParsedRequest)
+interface FileInput extends FileInputResponse {
+  name: string;
+  size: number;
+  key: string;
+}
+
+const isFileResponse = (response: unknown): response is FileInput => {
+  return (
+    response !== null &&
+    typeof response === "object" &&
+    "name" in response &&
+    "size" in response &&
+    "key" in response
   );
 };
 
 /**
- * This function will take a FileInputResponse object and return a ProcessedFile should
- * the file conform to expected mimetypes and size. Otherwise an error will be thrown
- * @param fileInputResponse
+ * This function takes a partial form submission and ensures every form template element has a corresponding value.
  */
-const processFileInputResponse = async (
-  fileInputResponse: FileInputResponse
-): Promise<ProcessedFile> => {
-  if (
-    fileInputResponse.name === null ||
-    fileInputResponse.size === null ||
-    fileInputResponse.based64EncodedFile === null
-  ) {
-    throw new FileObjectInvalid("FileInputResponse is missing required properties");
+
+export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values: Responses) => {
+  // Remove rich text elements from the form elements
+
+  const pureFormElements = formRecord.form.elements.reduce((acc: FormElement[], element) => {
+    if (FormElementTypes.richText === element.type) {
+      return acc;
+    }
+    // Dynamic rows can contain rich text elements, so we need to filter them out from the sub-elements
+    if (FormElementTypes.dynamicRow === element.type) {
+      const newSubElements = element.properties.subElements?.filter(
+        (subElement) => FormElementTypes.richText !== subElement.type
+      );
+      element.properties.subElements = newSubElements ?? [];
+      acc.push(element);
+      return acc;
+    }
+    // For all other element types, add them to the accumulator
+    acc.push(element);
+    return acc;
+  }, []);
+
+  // Build the complete form data object by adding values for each form element
+  const formData: { [key: string]: Response } = {};
+  const fileKeys: string[] = [];
+  pureFormElements.forEach((element) => {
+    emptyDataFiller(element, values, formData, fileKeys);
+  });
+
+  formData["formID"] = formRecord.id;
+  formData["securityAttribute"] = formRecord.securityAttribute;
+
+  return { formData, fileKeys };
+};
+
+const emptyDataFiller = (
+  element: FormElement,
+  values: Responses,
+  formAccumulator: { [key: string]: Response },
+  fileKeys: string[]
+) => {
+  if (element.type === FormElementTypes.dynamicRow) {
+    // If the dynamic row is not filled, we need to create an empty array for it
+    if (values[element.id] === undefined || values[element.id] === "") {
+      // Create a single empty data entry for the dynamic row
+      const emptyDataEntry: { [key: string]: string } = {};
+      element.properties.subElements?.forEach((subElement) => {
+        emptyDataFiller(subElement, values[element.id] as Responses, emptyDataEntry, fileKeys);
+      });
+      formAccumulator[element.id] = [emptyDataEntry];
+      return;
+    }
+
+    // Ensure all sub-elements have an empty string if they were not filled
+    if (!Array.isArray(values[element.id])) {
+      throw Error(
+        `Expected values for dynamic row element ${
+          element.id
+        } to be an array, but got ${typeof values[element.id]}`
+      );
+    }
+
+    formAccumulator[element.id] = (values[element.id] as Responses[]).map((response) => {
+      const dataEntry: { [key: string]: string } = {};
+      element.properties.subElements?.forEach((subElement, index) => {
+        // Sub-elements use the index of the dynamic row instead of the original ID
+        const correctedElement = {
+          ...subElement,
+          id: index,
+        };
+        emptyDataFiller(correctedElement, response, dataEntry, fileKeys);
+      });
+      return dataEntry;
+    });
+    return;
   }
 
-  const fileAsBuffer = Buffer.from(fileInputResponse.based64EncodedFile, "base64");
-
-  const fileValidationResult = await validateFileToUpload(
-    fileInputResponse.name,
-    fileInputResponse.size,
-    fileAsBuffer
-  );
-
-  switch (fileValidationResult.status) {
-    case "size-is-too-large":
-      throw new FileSizeError(
-        `FileValidationResult: file is too large to be processed. File size: ${fileValidationResult.fileSizeInBytes} bytes / Processed file data: ${fileValidationResult.sizeOfProcessedFileDataBuffer} bytes.`
+  // For File Input elements only keep the file path or set to an empty string if not filled
+  if (element.type === FormElementTypes.fileInput) {
+    if (values[element.id] === undefined || values[element.id] === "") {
+      formAccumulator[element.id] = "";
+      return;
+    }
+    const fileInputResponse = values[element.id] as FileInput;
+    if (isFileResponse(values[element.id])) {
+      formAccumulator[element.id] = fileInputResponse.key;
+      // Store the file key for later processing (e.g., deletion if needed)
+      fileKeys.push(fileInputResponse.key);
+      return;
+    } else {
+      throw new Error(
+        `Expected a FileInputResponse for element ${
+          element.id
+        }, but got ${typeof fileInputResponse}`
       );
-    case "invalid-given-extension":
-      throw new FileTypeError(
-        `FileValidationResult: given file extension is not allowed. File name: ${fileValidationResult.fileName}.`
-      );
-    case "invalid-mime-associated-extension":
-      throw new FileTypeError(
-        `FileValidationResult: MIME associated file extension is not allowed. MIME type: ${fileValidationResult.mimeType} / Extension: ${fileValidationResult.associatedExtension}.`
-      );
-    case "invalid-mime-type":
-      throw new FileTypeError(
-        `FileValidationResult: file MIME type is not allowed. MIME type: ${fileValidationResult.mimeType}.`
-      );
-    case "valid":
-      return {
-        name: fileInputResponse.name,
-        buffer: fileAsBuffer,
-      };
+    }
   }
+
+  // For non-dynamic row elements, just set an empty string
+
+  if (values[element.id] === undefined || values[element.id] === "") {
+    formAccumulator[element.id] = "";
+  }
+
+  formAccumulator[element.id] = values[element.id] as Response;
 };
