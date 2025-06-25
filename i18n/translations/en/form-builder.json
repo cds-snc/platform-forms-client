@@ -798,7 +798,7 @@
       },
       "usersList": {
         "title": "People with access to the form, who get notified",
-        "description": "You can manage team access on the Responses page"
+        "description": "You can manage team access on the Responses page",
         "enabled": "Notifications enabled",
         "disabled": "Notifications disabled"
       },

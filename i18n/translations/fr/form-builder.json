@@ -798,7 +798,7 @@
       },
       "usersList": {
         "title": "Personnes ayant accès au formulaire qui sont informés des  nouvelles réponses",
-        "description": "Vous pouvez gérer l'accès de l'équipe sur la page Réponses"
+        "description": "Vous pouvez gérer l'accès de l'équipe sur la page Réponses",
         "enabled": "Notifications activées",
         "disabled": "Notifications désactivées"
       },

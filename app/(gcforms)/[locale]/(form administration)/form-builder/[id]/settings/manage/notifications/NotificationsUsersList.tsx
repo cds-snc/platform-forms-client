@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 export const NotificationsUsersList = ({ formId }: { formId: string }) => {
   const { data } = useSession();
   const { t } = useTranslation("form-builder");
-  const generalError = t("settings.notifications.error.general");
+  const generalError = t("settings.notifications.error.getNotifcations");
   const [users, setUsers] = useState<NotificationsUser[] | null>(null);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const NotificationsUsersList = ({ formId }: { formId: string }) => {
   return (
     <>
       <p className="mb-2 font-bold">{t("settings.notifications.usersList.title")}</p>
-       <p className="mb-4">{t("settings.notifications.usersList.description")}</p>
+      <p className="mb-4">{t("settings.notifications.usersList.description")}</p>
       <ul className="m-0 mb-4 list-none p-0">
         {users.map((user) => {
           return (

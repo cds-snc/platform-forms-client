@@ -16,7 +16,7 @@ export type NotificationsUser = {
 
 export const Notifications = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
-  const generalError = t("settings.notifications.error.general");
+  const generalError = t("settings.notifications.error.getNotifcations");
   const updateNotificationsError = t("settings.notifications.error.updateNotifications");
   const updateNotificationsSuccess = t("settings.notifications.success.updateNotifications");
   const [sessionUser, setSessionUser] = useState<NotificationsUser | null>(null);
