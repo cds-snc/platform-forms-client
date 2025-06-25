@@ -34,7 +34,7 @@ export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values
     if (FormElementTypes.richText === element.type) {
       return acc;
     }
-
+    // Dynamic rows can contain rich text elements, so we need to filter them out from the sub-elements
     if (FormElementTypes.dynamicRow === element.type) {
       const newSubElements = element.properties.subElements?.filter(
         (subElement) => FormElementTypes.richText !== subElement.type
