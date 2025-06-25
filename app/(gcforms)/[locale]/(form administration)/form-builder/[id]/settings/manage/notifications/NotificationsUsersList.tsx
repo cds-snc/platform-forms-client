@@ -37,6 +37,7 @@ export const NotificationsUsersList = ({ formId }: { formId: string }) => {
   return (
     <>
       <p className="mb-2 font-bold">{t("settings.notifications.usersList.title")}</p>
+       <p className="mb-4">{t("settings.notifications.usersList.description")}</p>
       <ul className="m-0 mb-4 list-none p-0">
         {users.map((user) => {
           return (
