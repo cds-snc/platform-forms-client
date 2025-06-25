@@ -53,6 +53,19 @@ const isProcessedFile = (response: unknown): response is ProcessedFile => {
   );
 };
 
+const isHandledError = (
+  result: unknown
+): result is { id: string; error: { name: string; message: string } } => {
+  return (
+    result !== null &&
+    typeof result === "object" &&
+    "id" in result &&
+    "error" in result &&
+    typeof (result as { id: string; error: string }).id === "string" &&
+    typeof (result as { id: string; error: string }).error === "string"
+  );
+};
+
 const fileExtractor = (originalObj: unknown) => {
   const fileInputRefList: Array<FileInput | ProcessedFile> = [];
 
@@ -100,14 +113,20 @@ const fileExtractor = (originalObj: unknown) => {
   );
 };
 
-export const uploadFiles = async (responses: Responses) => {
+export const uploadFiles = async (formId: string, responses: Responses) => {
   // Extract file responses by memory reference
   const fileInputReferences = fileExtractor(responses);
 
   // Get signed URLs for file upload
   const presignedURLS = await getSignedS3Urls(
+    formId,
     fileInputReferences.unprocessedFiles.map((file) => file.name)
   );
+
+  if (isHandledError(presignedURLS)) {
+    // Contains an error from a downstream function
+    return presignedURLS;
+  }
 
   if (presignedURLS.length !== fileInputReferences.unprocessedFiles.length) {
     throw new Error("Mismatch between number of files and pre-signed URLs");

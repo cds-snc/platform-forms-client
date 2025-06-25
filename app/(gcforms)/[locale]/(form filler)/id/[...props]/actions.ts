@@ -95,5 +95,18 @@ export async function submitForm(
   }
 }
 
-export const getSignedS3Urls = async (files: string[]) =>
-  Promise.all(files.map(async (file) => generateSignedUrl(file)));
+export const getSignedS3Urls = async (formId: string, files: string[]) => {
+  const template = await getPublicTemplateByID(formId);
+
+  if (!template) {
+    throw new Error(`Could not find any form associated to identifier ${formId}`);
+  }
+
+  if (template.closingDate && dateHasPast(Date.parse(template.closingDate))) {
+    return {
+      id: formId,
+      error: { name: FormStatus.FORM_CLOSED_ERROR, message: "Form is closed" },
+    };
+  }
+  return Promise.all(files.map(async (file) => generateSignedUrl(file)));
+};
