@@ -34,7 +34,7 @@ export const FormCaptcha = ({
     hCaptcha &&
     !process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY
   ) {
-    logMessage.info(`hCaptcha: flag is enabled but hCaptchaSiteKey is missing. This will cause 
+    logMessage.warn(`hCaptcha: flag is enabled but hCaptchaSiteKey is missing. This will cause 
       hCaptcha to fail. Add the hCaptchaSiteKey to the App settings and make sure the
       HCAPTCHA_SITE_VERIFY_KEY is in your .env`);
   }
