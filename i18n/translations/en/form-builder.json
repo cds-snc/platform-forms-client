@@ -788,16 +788,17 @@
         }
       },
       "sessionUser": {
-        "title": "Get notified by email about new form responses",
-        "description": "Find out when there are new form responses available to download.",
+        "title": "Receive email notifications",
+        "description": "Find out when there are new form responses",
         "toggle": {
-          "title": "Notifications for {{email}}",
+          "title": "Get notified at {{email}}",
           "on": "On",
           "off": "Off"
         }
       },
       "usersList": {
-        "title": "Notification status for others on the form",
+        "title": "People with access to the form, who get notified",
+        "description": "You can manage team access on the Responses page"
         "enabled": "Notifications enabled",
         "disabled": "Notifications disabled"
       },
@@ -805,8 +806,8 @@
         "updateNotifications": "Your changes have been saved."
       },
       "error": {
-        "getNotifcations": "There was an error retrieving Notifications. Please try again later.",
-        "updateNotifications": "There was an error updating notifications. Please try again later."
+        "getNotifcations": "There was problem getting notification settings. Please try again later.",
+        "updateNotifications": "There was a problem updating notifications. Please try again later."
       }
     }
   },
