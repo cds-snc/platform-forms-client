@@ -788,25 +788,26 @@
         }
       },
       "sessionUser": {
-        "title": "Obtenez des notifications par courriel pour les nouvelles réponses",
-        "description": "[FR]Find out when there are new form responses available to download.",
+        "title": "Recevoir des notifications par courriel",
+        "description": "S'informer sur les nouvelles réponses aux formulaires",
         "toggle": {
-          "title": "[FR]Notifications for {{email}}",
-          "on": "On",
-          "off": "Off"
+          "title": "Obtenez des notification à : {{email}}",
+          "on": "Activé",
+          "off": "Desactivé"
         }
       },
       "usersList": {
-        "title": "[FR]Notification status for others on the form",
-        "enabled": "[FR]Notifications enabled",
-        "disabled": "[FR]Notifications disabled"
+        "title": "Personnes ayant accès au formulaire qui sont informés des  nouvelles réponses",
+        "description": "Vous pouvez gérer l'accès de l'équipe sur la page Réponses"
+        "enabled": "Notifications activées",
+        "disabled": "Notifications désactivées"
       },
       "success": {
-        "updateNotifications": "[FR - AI generated]Vos préférences de notification ont été mises à jour."
+        "updateNotifications": "Vos modifications ont été enregistrées."
       },
       "error": {
-        "getNotifcations": "[FR]There was an error retrieving Notifications. Please try again later.",
-        "updateNotifications": "Il y a eu une erreur dans la mise à jour des notifications. Veuillez réessayer plus tard."
+        "getNotifcations": "Il y a un problème avec les paramètres de notifications. Veuillez réessayer plus tard.",
+        "updateNotifications": "Il y a eu un problème avec la mise à jour des notifications. Veuillez réessayer plus tard."
       }
     }
   },
