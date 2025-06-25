@@ -83,7 +83,7 @@ export async function submitForm(
 
     const { formData, fileKeys } = buildCompleteFormDataObject(template, values);
 
-    const submissionId = await processFormData(formData, fileKeys, language);
+    const submissionId = await processFormData(formData, fileKeys, language, fileKeys.length > 0);
 
     sendNotifications(formId, template.form.titleEn, template.form.titleFr);
 
