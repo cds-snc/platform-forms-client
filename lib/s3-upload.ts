@@ -14,7 +14,7 @@ const bucketName: string =
  * @param fileKey
  * @returns
  */
-const deleteObject = async (fileKey: string): Promise<void> => {
+export const deleteObject = async (fileKey: string): Promise<void> => {
   try {
     await s3Client.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileKey }));
   } catch (error) {
@@ -46,5 +46,3 @@ export const generateSignedUrl = async (fileName: string) => {
   );
   return presigned;
 };
-
-export { deleteObject };
