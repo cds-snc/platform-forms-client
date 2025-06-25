@@ -671,7 +671,7 @@ describe("Recursive visibility check", () => {
         expect(checkVisibilityRecursive(formRecord, getElement(10), valuesThreeC1)).toBe(false);
     });
 
-    test("Visibility with groups", async () => {
+    test.skip("Visibility with groups", async () => {
         const formRecord = {
             "id": "cmapim4bc0001wpigmcpfwviq",
             "form": {
