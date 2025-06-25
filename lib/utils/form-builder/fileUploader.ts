@@ -160,12 +160,7 @@ export const uploadFiles = async (responses: Responses) => {
   }
 };
 
-const uploadFile = async (file: FileInput | ProcessedFile, preSigned: PresignedPost) => {
-  // If the file has already been uploaded and has a key, we can skip the upload
-  if (isProcessedFile(file)) {
-    return file.key; // If the file already has a key, return it
-  }
-
+const uploadFile = async (file: FileInput, preSigned: PresignedPost) => {
   const formData = new FormData();
   Object.entries(preSigned.fields).forEach(([key, value]) => {
     formData.append(key, value);
