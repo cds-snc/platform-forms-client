@@ -198,11 +198,11 @@ export const checkVisibilityRecursive = (
   checked: Record<string, boolean> = {}
 ): boolean => {
   // If the current page is not visible, the element is not visible
-  const pageVisible = checkPageVisibility(formRecord, element, values);
+  // const pageVisible = checkPageVisibility(formRecord, element, values);
 
-  if (!pageVisible) {
-    return false;
-  }
+  // if (!pageVisible) {
+  //   return false;
+  // }
 
   const rules = element.properties.conditionalRules;
   if (!rules || rules.length === 0) return true;
