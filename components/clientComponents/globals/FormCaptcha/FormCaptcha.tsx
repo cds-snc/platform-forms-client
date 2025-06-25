@@ -11,6 +11,7 @@ export const FormCaptcha = ({
   handleSubmit,
   lang,
   dataTestId = "",
+  isPublished = true,
   captchaToken,
   ...rest
 }: {
@@ -18,6 +19,7 @@ export const FormCaptcha = ({
   handleSubmit: (e?: FormEvent<HTMLFormElement>) => void;
   lang: string;
   dataTestId?: string;
+  isPublished?: boolean;
   captchaToken: React.RefObject<string> | undefined;
 } & React.FormHTMLAttributes<HTMLFormElement>) => {
   const hCaptchaRef = useRef<HCaptcha>(null);
@@ -44,6 +46,9 @@ export const FormCaptcha = ({
     handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
 
+  // Skip the hCaptcha flow for test and Draft forms where we don't need an hCaptcha verification
+  const doHCaptchaFlow = process.env.NEXT_PUBLIC_APP_ENV !== "test" || !isPublished;
+
   // see https://github.com/hCaptcha/react-hcaptcha
   return (
     <form
@@ -51,8 +56,7 @@ export const FormCaptcha = ({
       onSubmit={(e) => {
         e.preventDefault();
 
-        if (process.env.NEXT_PUBLIC_APP_ENV === "test") {
-          // Skip the hCaptcha flow or the tests will fail
+        if (!doHCaptchaFlow) {
           handleSubmit(e);
           return;
         }
@@ -67,7 +71,7 @@ export const FormCaptcha = ({
       {...rest}
     >
       {children}
-      {process.env.NEXT_PUBLIC_APP_ENV !== "test" && (
+      {doHCaptchaFlow && (
         <HCaptcha
           sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
           onVerify={onVerified}
