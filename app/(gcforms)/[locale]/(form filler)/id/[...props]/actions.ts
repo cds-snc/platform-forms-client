@@ -45,13 +45,6 @@ export async function submitForm(
       throw new Error(`Could not find any form associated to identifier ${formId}`);
     }
 
-    if (template.closingDate && dateHasPast(Date.parse(template.closingDate))) {
-      return {
-        id: formId,
-        error: { name: FormStatus.FORM_CLOSED_ERROR, message: "Form is closed" },
-      };
-    }
-
     const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
     if (captchaEnabled) {
       const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
