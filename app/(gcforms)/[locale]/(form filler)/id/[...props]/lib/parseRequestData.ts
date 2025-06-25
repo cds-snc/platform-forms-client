@@ -53,7 +53,7 @@ export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values
     emptyDataFiller(element, values, formData, fileKeys);
   });
 
-  formData["formID"] = `${formRecord.id}`;
+  formData["formID"] = formRecord.id;
   formData["securityAttribute"] = formRecord.securityAttribute;
 
   return { formData, fileKeys };
