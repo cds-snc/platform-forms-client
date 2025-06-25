@@ -44,29 +44,19 @@ export const FormCaptcha = ({
     handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
 
-  if (process.env.NEXT_PUBLIC_APP_ENV === "test") {
-    // Skip the hCaptcha flow so any tests can be run in isolation
-    return (
-      <form
-        method="POST"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit(e);
-        }}
-        {...(dataTestId ? { "data-testid": dataTestId } : {})}
-        {...rest}
-      >
-        {children}
-      </form>
-    );
-  }
-
   // see https://github.com/hCaptcha/react-hcaptcha
   return (
     <form
       method="POST"
       onSubmit={(e) => {
         e.preventDefault();
+
+        if (process.env.NEXT_PUBLIC_APP_ENV === "test") {
+          // Skip the hCaptcha flow so the form can be submitted in tests
+          handleSubmit(e);
+          return;
+        }
+
         // The submit event is captured here so it can be used later in the passed in handleSubmit(e)
         // that is called in onVerified() that is triggerd below via hCaptchaRef.current.execute()
         // and later called from HCaptcha component event onVerify.
@@ -77,29 +67,31 @@ export const FormCaptcha = ({
       {...rest}
     >
       {children}
-      <HCaptcha
-        sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
-        onVerify={onVerified}
-        // Component will reset immediately after a Client sends bad data.
-        // Note: An invalid sitekey will cause the HCaptcha component to fail without calling onError
-        onError={(code: string) => {
-          // @TODO investigate cases where the submission should be allowed through based on error code
-          // see https://docs.hcaptcha.com/#siteverify-error-codes-table
-          logMessage.warn(`hCatpcha: clientComponentError error ${code}`);
-        }}
-        onChalExpired={() => {
-          logMessage.info("hCaptcha: challenge expired");
-          hCaptchaRef.current?.resetCaptcha();
-        }}
-        onExpire={() => {
-          logMessage.info("hCaptcha: token expired");
-          hCaptchaRef.current?.resetCaptcha();
-        }}
-        ref={hCaptchaRef}
-        languageOverride={lang}
-        // Do not show a checkbox
-        size="invisible"
-      />
+      {process.env.NEXT_PUBLIC_APP_ENV !== "test" && (
+        <HCaptcha
+          sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
+          onVerify={onVerified}
+          // Component will reset immediately after a Client sends bad data.
+          // Note: An invalid sitekey will cause the HCaptcha component to fail without calling onError
+          onError={(code: string) => {
+            // @TODO investigate cases where the submission should be allowed through based on error code
+            // see https://docs.hcaptcha.com/#siteverify-error-codes-table
+            logMessage.warn(`hCatpcha: clientComponentError error ${code}`);
+          }}
+          onChalExpired={() => {
+            logMessage.info("hCaptcha: challenge expired");
+            hCaptchaRef.current?.resetCaptcha();
+          }}
+          onExpire={() => {
+            logMessage.info("hCaptcha: token expired");
+            hCaptchaRef.current?.resetCaptcha();
+          }}
+          ref={hCaptchaRef}
+          languageOverride={lang}
+          // Do not show a checkbox
+          size="invisible"
+        />
+      )}
     </form>
   );
 };
