@@ -23,6 +23,7 @@ jest.mock("@lib/client/clientHelpers", () => {
 jest.mock("app/(gcforms)/[locale]/(form filler)/id/[...props]/actions", () => ({
   __esModule: true,
   submitForm: jest.fn(),
+  isFormClosed: jest.fn(() => Promise.resolve(false)),
 }));
 
 let mockFormTimerState = {
