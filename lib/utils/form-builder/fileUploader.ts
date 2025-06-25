@@ -62,7 +62,9 @@ const isHandledError = (
     "id" in result &&
     "error" in result &&
     typeof (result as { id: string; error: string }).id === "string" &&
-    typeof (result as { id: string; error: string }).error === "string"
+    typeof (result as { id: string; error: string }).error === "object" &&
+    "name" in (result as { id: string; error: { name: string; message: string } }).error &&
+    "message" in (result as { id: string; error: { name: string; message: string } }).error
   );
 };
 
