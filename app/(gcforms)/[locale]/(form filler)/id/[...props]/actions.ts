@@ -1,19 +1,16 @@
 "use server";
 
 import { PublicFormRecord, Responses } from "@lib/types";
-
 import { buildCompleteFormDataObject } from "./lib/parseRequestData";
 import { processFormData } from "./lib/processFormData";
 import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
-import { dateHasPast } from "@lib/utils";
 import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@clientComponents/globals/FormCaptcha/actions";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
 import { sendNotification } from "@lib/notifications";
-import { generateSignedUrl } from "@lib/s3-upload";
 
 //  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
 const CAPTCHA_BLOCKABLE_MODE = false;
@@ -87,19 +84,3 @@ export async function submitForm(
     return { id: formId, error: { name: (e as Error).name, message: (e as Error).message } };
   }
 }
-
-export const getSignedS3Urls = async (formId: string, files: string[]) => {
-  const template = await getPublicTemplateByID(formId);
-
-  if (!template) {
-    throw new Error(`Could not find any form associated to identifier ${formId}`);
-  }
-
-  if (template.closingDate && dateHasPast(Date.parse(template.closingDate))) {
-    return {
-      id: formId,
-      error: { name: FormStatus.FORM_CLOSED_ERROR, message: "Form is closed" },
-    };
-  }
-  return Promise.all(files.map(async (file) => generateSignedUrl(file)));
-};

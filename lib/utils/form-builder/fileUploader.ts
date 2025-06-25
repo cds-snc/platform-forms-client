@@ -1,7 +1,7 @@
 import { PresignedPost } from "@aws-sdk/s3-presigned-post";
 import { Responses, FileInputResponse } from "@root/lib/types";
 import { logMessage } from "@lib/logger";
-import { getSignedS3Urls } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
+import { generateSignedUrl } from "@lib/s3-upload";
 
 interface FileInput extends FileInputResponse {
   name: string;
@@ -53,21 +53,6 @@ const isProcessedFile = (response: unknown): response is ProcessedFile => {
   );
 };
 
-const isHandledError = (
-  result: unknown
-): result is { id: string; error: { name: string; message: string } } => {
-  return (
-    result !== null &&
-    typeof result === "object" &&
-    "id" in result &&
-    "error" in result &&
-    typeof (result as { id: string; error: string }).id === "string" &&
-    typeof (result as { id: string; error: string }).error === "object" &&
-    "name" in (result as { id: string; error: { name: string; message: string } }).error &&
-    "message" in (result as { id: string; error: { name: string; message: string } }).error
-  );
-};
-
 const fileExtractor = (originalObj: unknown) => {
   const fileInputRefList: Array<FileInput | ProcessedFile> = [];
 
@@ -115,20 +100,14 @@ const fileExtractor = (originalObj: unknown) => {
   );
 };
 
-export const uploadFiles = async (formId: string, responses: Responses) => {
+export const uploadFiles = async (responses: Responses) => {
   // Extract file responses by memory reference
   const fileInputReferences = fileExtractor(responses);
 
   // Get signed URLs for file upload
   const presignedURLS = await getSignedS3Urls(
-    formId,
     fileInputReferences.unprocessedFiles.map((file) => file.name)
   );
-
-  if (isHandledError(presignedURLS)) {
-    // Contains an error from a downstream function
-    return presignedURLS;
-  }
 
   if (presignedURLS.length !== fileInputReferences.unprocessedFiles.length) {
     throw new Error("Mismatch between number of files and pre-signed URLs");
@@ -199,3 +178,6 @@ const uploadFile = async (file: FileInput, preSigned: PresignedPost) => {
   // Return the key for further error handling or confirmation
   return preSigned.fields.key;
 };
+
+const getSignedS3Urls = async (files: string[]) =>
+  Promise.all(files.map(async (file) => generateSignedUrl(file)));
