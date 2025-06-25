@@ -41,7 +41,9 @@ export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values
       );
       element.properties.subElements = newSubElements ?? [];
       acc.push(element);
+      return acc;
     }
+    // For all other element types, add them to the accumulator
     acc.push(element);
     return acc;
   }, []);
