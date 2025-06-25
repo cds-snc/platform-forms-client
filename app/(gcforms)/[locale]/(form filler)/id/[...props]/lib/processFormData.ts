@@ -9,8 +9,7 @@ import { validatePayloadSize } from "@lib/validation/validatePayloadSize";
 export const processFormData = async (
   responses: Record<string, Response>,
   fileKeys: string[],
-  contentLanguage: string,
-  containsFiles: boolean
+  contentLanguage: string
 ): Promise<string> => {
   try {
     // Do not process if in TEST mode
@@ -49,7 +48,7 @@ export const processFormData = async (
         responses,
         contentLanguage ? contentLanguage : "en",
         responses.securityAttribute ? (responses.securityAttribute as string) : "Protected A",
-        containsFiles
+        fileKeys.length > 0
       );
 
       logMessage.info(`Response submitted for Form ID: ${form.id}`);
