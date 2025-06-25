@@ -196,7 +196,7 @@ export const GCFormsProvider = ({
 
       // For file inputs reset the values to null
       if (value && typeof value === "object" && "size" in value) {
-        cleanedValue = { name: null, size: null, based64EncodedFile: null } as FileInputResponse;
+        cleanedValue = { name: null, size: null, content: null } as FileInputResponse;
       }
 
       // For all other inputs just return the value
