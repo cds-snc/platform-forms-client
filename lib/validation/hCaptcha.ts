@@ -1,4 +1,3 @@
-"use server";
 import axios from "axios";
 import { getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
