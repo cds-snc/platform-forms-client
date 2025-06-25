@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.45.1](https://github.com/cds-snc/platform-forms-client/compare/v3.45.0...v3.45.1) (2025-06-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency markdown-to-jsx to v7.7.7 ([#5745](https://github.com/cds-snc/platform-forms-client/issues/5745)) ([0f41dfd](https://github.com/cds-snc/platform-forms-client/commit/0f41dfdff7e0efca7e38a2ab5a7468bbd97dd40f))
+* Fix validation bug in older forms by removing page visibility check ([#5774](https://github.com/cds-snc/platform-forms-client/issues/5774)) ([7b072ec](https://github.com/cds-snc/platform-forms-client/commit/7b072ec93761f471cb29869de3c522efb8643c0d))
+
+
+### Miscellaneous Chores
+
+* **deps:** lock file maintenance ([#5746](https://github.com/cds-snc/platform-forms-client/issues/5746)) ([2ffe5c4](https://github.com/cds-snc/platform-forms-client/commit/2ffe5c4f92435772b1dbfdf19f1ab328a2780bc2))
+* **deps:** update all non-major github action dependencies ([#5742](https://github.com/cds-snc/platform-forms-client/issues/5742)) ([9abaebd](https://github.com/cds-snc/platform-forms-client/commit/9abaebdd25838a98455d711cd0bf1de2f773e46d))
+* synced file(s) with cds-snc/site-reliability-engineering ([#5744](https://github.com/cds-snc/platform-forms-client/issues/5744)) ([3a3ba5d](https://github.com/cds-snc/platform-forms-client/commit/3a3ba5d3b489acfea16b887c49f592bb0e4ca0b1))
+* update some of the project dependencies ([#5756](https://github.com/cds-snc/platform-forms-client/issues/5756)) ([ab9ba68](https://github.com/cds-snc/platform-forms-client/commit/ab9ba68e91c10e2f2f66d4b3bc4867909ab8b905))
+* update Yarn to version 4.9.2 where necessary ([#5754](https://github.com/cds-snc/platform-forms-client/issues/5754)) ([a67e94f](https://github.com/cds-snc/platform-forms-client/commit/a67e94f42742a0be913a6029ab53e9005f65da4a))
+
+## [3.45.0](https://github.com/cds-snc/platform-forms-client/compare/v3.44.0...v3.45.0) (2025-06-20)
+
+
+### Features
+
+* Add basic Admin Panel feature flag management ([#5723](https://github.com/cds-snc/platform-forms-client/issues/5723)) ([f116d34](https://github.com/cds-snc/platform-forms-client/commit/f116d3470c6c7f93794f71caefeb090850170a19))
+
+
+### Bug Fixes
+
+* Fix dynamic row empty rows error ([#5726](https://github.com/cds-snc/platform-forms-client/issues/5726)) ([475a0c9](https://github.com/cds-snc/platform-forms-client/commit/475a0c953353707ae98600bbec1cf1f17f11e75c))
+* Responses pagination ([#5732](https://github.com/cds-snc/platform-forms-client/issues/5732)) ([ed53b32](https://github.com/cds-snc/platform-forms-client/commit/ed53b32d005bc40c923fd143f6d5d53b60d6824a))
+
+
+### Miscellaneous Chores
+
+* Add exit page url to translate page ([#5721](https://github.com/cds-snc/platform-forms-client/issues/5721)) ([32fe50b](https://github.com/cds-snc/platform-forms-client/commit/32fe50b3daebe6a1c907aaeebf9f5c8820aaa0af))
+* Add link to account page from request publish ticket ([#5733](https://github.com/cds-snc/platform-forms-client/issues/5733)) ([ee9d092](https://github.com/cds-snc/platform-forms-client/commit/ee9d092f4a925c90c4132ab866efdbe14744f42b))
+* revert Axios/Got switch in connectors package ([#5738](https://github.com/cds-snc/platform-forms-client/issues/5738)) ([d213675](https://github.com/cds-snc/platform-forms-client/commit/d2136755ad010bb06edce246de96e2b8e6a8d42a))
+* Update next.js to 15.3.4 ([#5736](https://github.com/cds-snc/platform-forms-client/issues/5736)) ([15dced3](https://github.com/cds-snc/platform-forms-client/commit/15dced30e0dd56efa190f18528ad310afc850d88))
+
 ## [3.44.0](https://github.com/cds-snc/platform-forms-client/compare/v3.43.1...v3.44.0) (2025-06-17)
 
 

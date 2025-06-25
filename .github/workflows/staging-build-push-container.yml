@@ -16,6 +16,7 @@ env:
   GITHUB_SHA: ${{ github.sha }}
   COGNITO_APP_CLIENT_ID: ${{secrets.STAGING_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.STAGING_COGNITO_USER_POOL_ID}}
+  HCAPTCHA_SITE_KEY: ${{ vars.STAGING_HCAPTCHA_SITE_KEY }}
 
 permissions:
   id-token: write
@@ -34,6 +35,7 @@ jobs:
           docker build -t base \
             --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
             --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
+            --build-arg HCAPTCHA_SITE_KEY=$HCAPTCHA_SITE_KEY \
             --build-arg NEXT_DEPLOYMENT_ID=$GITHUB_SHA .
 
       - name: Configure AWS credentials using OIDC
@@ -45,7 +47,7 @@ jobs:
 
       - name: Login to Staging Amazon ECR
         id: login-ecr-staging
-        uses: aws-actions/amazon-ecr-login@a5bbe73ce77ea9c288698ad5757299f18b5a420c
+        uses: aws-actions/amazon-ecr-login@d63b14614fe5d7fc5e5e52c523dea4e876816cc4
 
       - name: Tag Images for Staging
         env:
