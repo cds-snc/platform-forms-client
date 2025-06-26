@@ -186,7 +186,7 @@ export const getValuesWithMatchedIds = (formElements: FormElement[], values: For
  * @param history
  * @returns
  */
-const getVisibleGroupsBasedOnValuesRecursive = (
+export const getVisibleGroupsBasedOnValuesRecursive = (
   formRecord: PublicFormRecord,
   valuesWithMatchedIds: FormValues,
   currentGroup: string,
