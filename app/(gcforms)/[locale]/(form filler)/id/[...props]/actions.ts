@@ -36,19 +36,6 @@ export async function submitForm(
 ): Promise<{ id: string; submissionId?: string; error?: Error }> {
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
-  // const validationError: ServerValidationError = {
-  //   name: "ServerValidationError", // @TODO
-  //   message: "There was a validation error with your submission.",
-  //   messages: {
-  //     1: "This is a validation error message. Please check your input and try again.",
-  //   },
-  // }
-
-  // return {
-  //   id: formId,
-  //   error: validationError,
-  // }
-
   try {
     const template = await getPublicTemplateByID(formId);
 
