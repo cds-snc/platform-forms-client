@@ -41,10 +41,11 @@ Vous avez pour responsabilité :
 
 - d’adhérer aux directives ministérielles concernant la bonne utilisation des appareils et des réseaux.
 - d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 45 jours suivant la réception d’une réponse. Formulaires GC ne sert qu’à stocker temporairement des données. Si les réponses ne sont pas sauvegardées et confirmées dans les 45 jours, nous prendrons les mesures nécessaires pour qu’elles soient récupérées par le programme ou le service responsable.
-- de signaler tout problème lié aux réponses enregistrées.
+- de signaler tout problème lié aux réponses enregistrées ou aux fichiers joints.
 - de traiter, d'ouvrir et d’enregistrer les réponses aux formulaires conformément à votre calendrier de conservation et d’élimination.
 
-### Réponses récupérées via l'API (jusqu'à Protégé B inclus)
+
+#### Réponses récupérées via l'API (jusqu'à Protégé B inclus)
 
 Vous avez pour responsabilité de veiller à ce que la clé API associée à votre formulaire soit sécurisée afin de protéger l'accès aux réponses du formulaire. Cela inclut :
 

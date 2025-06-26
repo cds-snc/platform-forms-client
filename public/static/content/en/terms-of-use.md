@@ -41,10 +41,10 @@ You are responsible for:
 
 - Adhering to your departmental guidance for acceptable device and network use.
 - Saving a copy and confirming receipt of your form responses within 45 days of receiving a submission.
-- Reporting any problems with saved form responses.
+- Reporting any problems with saved form responses or attached files.
 - Handling, opening, and saving form responses in accordance with your retention and disposition schedule.
 
-### Responses retrieved via the API (up to and including Protected B)
+#### Responses retrieved via the API (up to and including Protected B)
 
 You are responsible for:
 
