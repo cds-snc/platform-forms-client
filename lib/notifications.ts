@@ -107,7 +107,8 @@ export const updateNotificationsUser = async (formId: string, enabled: boolean) 
 };
 
 /**
- * Sends an email notification when a user has new form submissions
+ * Sends email notifications to all users that have notifications enabled for a form when a
+ * new form submission is sent.
  */
 export const sendNotification = async (formId: string, titleEn: string, titleFr: string) => {
   const notificationsSettings = await _getNotificationsSettings(formId);
@@ -174,7 +175,12 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
   }
 };
 
-// const getNotificationsUsers
+// getNotificationUser
+
+
+
+// getNotificationsUsers
+// getDeliveryOption
 
 /**
  * Creates or updates an existing marker in Redis. Note to remove a marker, use removeMarker
