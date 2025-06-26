@@ -1,8 +1,8 @@
 "use server";
 
 import { PublicFormRecord, Responses } from "@lib/types";
-import { buildCompleteFormDataObject } from "./lib/parseRequestData";
-import { processFormData } from "./lib/processFormData";
+import { buildCompleteFormDataObject } from "./lib/server/parseRequestData";
+import { processFormData } from "./lib/server/processFormData";
 import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
 import { FormStatus } from "@gcforms/types";
@@ -12,6 +12,7 @@ import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
 import { sendNotification } from "@lib/notifications";
 import { dateHasPast } from "@lib/utils";
+import { generateSignedUrl } from "@lib/s3-upload";
 
 //  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
 const CAPTCHA_BLOCKABLE_MODE = false;
@@ -91,3 +92,11 @@ export async function submitForm(
     return { id: formId, error: { name: (e as Error).name, message: (e as Error).message } };
   }
 }
+
+export const getSignedS3Urls = async (formId: string, files: string[]) => {
+  const isClosed = await isFormClosed(formId);
+  if (isClosed === null || isClosed === true) {
+    throw new Error(`Form ${formId} is closed or does not exist.`);
+  }
+  return Promise.all(files.map(async (file) => generateSignedUrl(file)));
+};

@@ -38,10 +38,10 @@ import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
 
 import { FocusHeader } from "app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
-import { uploadFiles } from "@lib/utils/form-builder/fileUploader";
 
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 
+import { uploadFiles } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
@@ -293,9 +293,12 @@ export const Form = withFormik<FormProps, Responses>({
 
       // Extract files from formValues and upload them to S3 in seperate function
       // formValues is modified in memory, so we can use it directly in the submitForm function
-      const fileUploadSuccess = await uploadFiles(formikBag.props.formRecord.id, formValues)
-        .then(() => true)
-        .catch((error) => {
+      const fileUploadSuccess: boolean = await uploadFiles(
+        formikBag.props.formRecord.id,
+        formValues
+      )
+        .then((): boolean => true)
+        .catch((error: Error): boolean => {
           formikBag.setStatus(FormStatus.FILE_ERROR);
           logMessage.error(`File Upload Error: ${error.message}`);
           return false;

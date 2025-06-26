@@ -6,11 +6,6 @@ import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/re
 import { Form } from "@clientComponents/forms/Form/Form";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 
-jest.mock("@lib/utils/form-builder/fileUploader", () => ({
-  __esModule: true,
-  uploadFiles: jest.fn(() => Promise.resolve()),
-}));
-
 jest.mock("@lib/client/clientHelpers", () => {
   const originalModule = jest.requireActual("@lib/client/clientHelpers");
   return {
@@ -24,6 +19,11 @@ jest.mock("app/(gcforms)/[locale]/(form filler)/id/[...props]/actions", () => ({
   __esModule: true,
   submitForm: jest.fn(),
   isFormClosed: jest.fn(() => Promise.resolve(false)),
+}));
+
+jest.mock("app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader", () => ({
+  __esModule: true,
+  uploadFiles: jest.fn(() => Promise.resolve()),
 }));
 
 let mockFormTimerState = {
