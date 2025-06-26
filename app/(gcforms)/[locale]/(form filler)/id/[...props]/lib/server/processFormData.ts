@@ -3,7 +3,7 @@ import { logMessage } from "@lib/logger";
 import { getPublicTemplateByID } from "@lib/templates";
 import { deleteObject } from "@lib/s3-upload";
 import { invokeSubmissionLambda } from "./invokeSubmissionLambda";
-import { FormIsClosedError, FormNotFoundError, MissingFormDataError } from "./exceptions";
+import { FormIsClosedError, FormNotFoundError, MissingFormDataError } from "../client/exceptions";
 import { validatePayloadSize } from "@lib/validation/validatePayloadSize";
 
 export const processFormData = async (

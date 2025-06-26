@@ -1,6 +1,6 @@
 import { Responses } from "@lib/types";
 import { InvokeCommand } from "@aws-sdk/client-lambda";
-import { SubmissionLambdaInvocationError } from "./exceptions";
+import { SubmissionLambdaInvocationError } from "../client/exceptions";
 import { lambdaClient } from "@lib/integration/awsServicesConnector";
 import { logMessage } from "@lib/logger";
 

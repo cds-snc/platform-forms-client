@@ -13,7 +13,10 @@ import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 
 import { ErrorStatus } from "../Alert/Alert";
-import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
+import {
+  submitForm,
+  isFormClosed,
+} from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Review } from "../Review/Review";
@@ -35,10 +38,10 @@ import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
 
 import { FocusHeader } from "app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
-import { uploadFiles } from "@lib/utils/form-builder/fileUploader";
 
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 
+import { uploadFiles } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
@@ -255,6 +258,12 @@ export const Form = withFormik<FormProps, Responses>({
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
+    // If the form is closed, do not allow submission
+    if (await isFormClosed(formikBag.props.formRecord.id)) {
+      formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
+      return;
+    }
+
     // For groups enabled forms only allow submitting on the Review page
     const isShowReviewPage = showReviewPage(formikBag.props.formRecord.form);
     if (isShowReviewPage && formikBag.props.currentGroup !== LockedSections.REVIEW) {
@@ -284,9 +293,12 @@ export const Form = withFormik<FormProps, Responses>({
 
       // Extract files from formValues and upload them to S3 in seperate function
       // formValues is modified in memory, so we can use it directly in the submitForm function
-      const fileUploadSuccess = await uploadFiles(formValues)
-        .then(() => true)
-        .catch((error) => {
+      const fileUploadSuccess: boolean = await uploadFiles(
+        formikBag.props.formRecord.id,
+        formValues
+      )
+        .then((): boolean => true)
+        .catch((error: Error): boolean => {
           formikBag.setStatus(FormStatus.FILE_ERROR);
           logMessage.error(`File Upload Error: ${error.message}`);
           return false;
@@ -312,9 +324,7 @@ export const Form = withFormik<FormProps, Responses>({
       }
 
       if (result.error) {
-        if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
-          formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
-        } else if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
+        if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
           formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
           formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
         } else {

@@ -1,18 +1,17 @@
 "use server";
 
 import { PublicFormRecord, Responses } from "@lib/types";
-
-import { buildCompleteFormDataObject } from "./lib/parseRequestData";
-import { processFormData } from "./lib/processFormData";
+import { buildCompleteFormDataObject } from "./lib/server/parseRequestData";
+import { processFormData } from "./lib/server/processFormData";
 import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
-import { dateHasPast } from "@lib/utils";
 import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@clientComponents/globals/FormCaptcha/actions";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
 import { sendNotification } from "@lib/notifications";
+import { dateHasPast } from "@lib/utils";
 import { generateSignedUrl } from "@lib/s3-upload";
 
 //  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
@@ -39,19 +38,7 @@ export async function submitForm(
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
-    const template = await getPublicTemplateByID(formId);
-
-    if (!template) {
-      throw new Error(`Could not find any form associated to identifier ${formId}`);
-    }
-
-    if (template.closingDate && dateHasPast(Date.parse(template.closingDate))) {
-      return {
-        id: formId,
-        error: { name: FormStatus.FORM_CLOSED_ERROR, message: "Form is closed" },
-      };
-    }
-
+    // Check for hCaptcha bot identification
     const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
     if (captchaEnabled) {
       const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
@@ -64,6 +51,17 @@ export async function submitForm(
           },
         };
       }
+    }
+
+    // Check if template exists and is not closed
+    const template = await getPublicTemplateByID(formId);
+
+    if (!template) {
+      throw new Error(`Could not find any form associated to identifier ${formId}`);
+    }
+
+    if (template.closingDate && dateHasPast(Date.parse(String(template.closingDate)))) {
+      throw new Error("This form is closed for submissions.");
     }
 
     const validateResponsesResult = await validateResponses(values, template);
@@ -95,5 +93,10 @@ export async function submitForm(
   }
 }
 
-export const getSignedS3Urls = async (files: string[]) =>
-  Promise.all(files.map(async (file) => generateSignedUrl(file)));
+export const getSignedS3Urls = async (formId: string, files: string[]) => {
+  const isClosed = await isFormClosed(formId);
+  if (isClosed === null || isClosed === true) {
+    throw new Error(`Form ${formId} is closed or does not exist.`);
+  }
+  return Promise.all(files.map(async (file) => generateSignedUrl(file)));
+};
