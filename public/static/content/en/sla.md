@@ -34,6 +34,8 @@ CDS can suspend a service at any time for anything deemed as inappropriate use. 
 
 CDS is not responsible for issues or outages with AWS infrastructure that may impact system uptime and availability. CDS is also not responsible for Amazon infrastructure failure, AWS, or Simple Email Service (SES). CDS is responsible for updating clients on any information pertaining to an AWS outage.
 
+CDS  will not be providing security analysis or support for malicious file, beyond telling the client if a file is safe or not.
+
 ## Uptime guarantee
 
 CDS guarantees that the GC Forms system shall have 99.0% uptime with no more than 1% downtime during regular business hours in a year.
