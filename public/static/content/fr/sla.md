@@ -28,6 +28,7 @@ Le SNC peut suspendre le service à tout moment en cas d’utilisation jugée in
 ### Les fournisseurs d’infrastructure de Formulaires GC sont responsables :
 
 - d’envoyer des courriels comprenant les données des utilisateurs finaux et utilisatrices finales aux adresses courriel gouvernementales fournies, si les formulaires ont été publiés avant le 11 juin 2025.
+- d'analyser des fichiers joints aux soumissions afin de détecter du contenu malveillant.
 - de fournir l’infrastructure infonuagique d’AWS.
 - de faire appliquer les [conditions de service d'AWS](https://d1.awsstatic.com/legal/awsserviceterms/AWS_Service_Terms_French_2022-10-14.pdf).
 
@@ -85,4 +86,4 @@ Dans certains cas, les fonctionnalités fournies par Formulaires GC peuvent devo
 
 Formulaires GC est un produit à code source ouvert permettant à des tiers de créer leur propre version à l’aide du code disponible sur [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Dernière mise à jour :** 17 décembre 2024
+**Dernière mise à jour :** 26 juin 2025
