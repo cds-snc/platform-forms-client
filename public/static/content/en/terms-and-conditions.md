@@ -16,7 +16,7 @@ Personal information is also collected in compliance with the [Privacy Act](http
 
 ### We use hCaptcha to protect form security
 
-The use of [hCaptcha](https://www.hcaptcha.com/) helps us detect spam and automated abuse or threats from bots. Learn more about this third-party provider's [privacy policy](https://www.hcaptcha.com/privacy) and [terms of service](https://www.hcaptcha.com/terms).
+The use of [hCaptcha](https://www.hcaptcha.com/) helps us detect and block spam and automated abuse or threats from bots. Learn more about this third-party provider's [privacy policy](https://www.hcaptcha.com/privacy) and [terms of service](https://www.hcaptcha.com/terms).
 
 ### We use web analytics to help improve your experience
 

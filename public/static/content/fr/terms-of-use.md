@@ -24,7 +24,7 @@ Vous avez pour responsabilité :
 - de récupérer les réponses directement à partir de la base de données lors du traitement d’informations plus sensibles de type Protégé B, soit en téléchargeant à partir de Formulaires GC ou par l'intermédiaire de l'API de récupération des données. La réception de réponses par courriel n’est que possible que pour les formulaires de type Protégé A publiés avant le 11 juin 2025.
 - de veiller à ce que les autres membres de votre équipe qui ont accès à vos formulaires et à vos réponses disposent des autorités appropriées et de l'autorisation de sécurité nécessaire pour accéder aux données recueillies. Pour cette raison, les comptes de courriel partagés ne sont pas autorisés dans Formulaires GC. Tout accès doit être accordé à des employés autorisés qui utilisent une adresse courriel valide du gouvernement du Canada.
 
-### Réponses envoyées par courriel (jusqu’à PROTÉGÉ A inclus)
+### Réponses envoyées par courriel (jusqu’à Protégé A inclus)
 
 Si vous avez publié un formulaire avec cette méthode de livraison avant le 11 juin 2025, vous avez pour responsabilité :
 

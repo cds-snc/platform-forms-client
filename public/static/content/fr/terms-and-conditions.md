@@ -16,7 +16,7 @@ Les renseignements personnels sont recueillis conformément à la [Loi sur la pr
 
 ### hCaptcha pour protéger la sécurité des formulaires
 
-L'utilisation de [hCaptcha](https://www.hcaptcha.com/) nous aide à détecter le spam, les abus automatisés et les menaces des robots. Apprenez-en plus sur la [politique de confidentialité](https://www.hcaptcha.com/privacy) et les [conditions d'utilisation](https://www.hcaptcha.com/terms) de ce fournisseur de services tiers.
+L'utilisation de [hCaptcha](https://www.hcaptcha.com/) nous aide à détecter et bloquer les spams, les abus automatisés et les menaces des robots. Apprenez-en plus sur la [politique de confidentialité](https://www.hcaptcha.com/privacy) et les [conditions d'utilisation](https://www.hcaptcha.com/terms) de ce fournisseur de services tiers.
 
 ### Analytique Web pour améliorer votre expérience  
 

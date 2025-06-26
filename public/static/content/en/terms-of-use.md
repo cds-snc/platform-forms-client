@@ -34,7 +34,7 @@ If you had a published form prior to June 11, 2025, with this delivery method, y
 - Accepting [GC Notify's terms of use](https://notification.canada.ca/terms).
 - Understanding that you will not be able to make updates to the form while maintaining your data delivery method as email.
 
-### Responses downloaded from GC Forms (up to and including PROTECTED B)
+### Responses downloaded from GC Forms (up to and including Protected B)
 
 You are responsible for:
 
