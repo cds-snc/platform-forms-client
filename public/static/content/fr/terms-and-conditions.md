@@ -14,9 +14,11 @@ Le ministère ou l’organisme avec lequel vous communiquez protège également 
 
 Les renseignements personnels sont recueillis conformément à la [Loi sur la protection des renseignements personnels](https://laws.justice.gc.ca/fra/lois/p-21/index.html).
 
-### hCaptcha pour protéger la sécurité des formulaires
+### Nous utilisons hCaptcha et une fonction d'analyse de fichiers malveillants pour protéger la sécurité des formulaires
 
 L'utilisation de [hCaptcha](https://www.hcaptcha.com/) nous aide à détecter et bloquer les spams, les abus automatisés et les menaces des robots. Apprenez-en plus sur la [politique de confidentialité](https://www.hcaptcha.com/privacy) et les [conditions d'utilisation](https://www.hcaptcha.com/terms) de ce fournisseur de services tiers.
+
+Nous analysons aussi les soumissions de formulaires grâce à un fournisseur de service tier pour détecter et signaler le contenu malveillant dans les fichiers joints.
 
 ### Analytique Web pour améliorer votre expérience  
 
@@ -121,4 +123,4 @@ Bon nombre de plateformes de médias sociaux offrent plusieurs choix de langues 
 
 
 
-**Dernière mise à jour :** 19 mars 2025
+**Dernière mise à jour :** 26 juin 2025
