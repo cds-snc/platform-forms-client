@@ -1455,10 +1455,21 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
 export const checkIfClosed = async (formId: string) => {
   try {
     let isPastClosingDate = false;
+    let template = null;
+
+    // The form cache stores the public template information
+    if (formCache.cacheAvailable) {
+      // This value will always be the latest if it exists because
+      // the cache is invalidated on change of a template
+      const cachedValue = await formCache.check(formId);
+      if (cachedValue) {
+        template = cachedValue;
+      }
+    }
 
     // Note these are the only fields we need from the template
     // They are public fields so no privilege check is needed
-    const template = await prisma.template
+    template = await prisma.template
       .findUnique({
         where: {
           id: formId,
