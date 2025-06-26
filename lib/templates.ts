@@ -1467,20 +1467,21 @@ export const checkIfClosed = async (formId: string) => {
       }
     }
 
-    // Note these are the only fields we need from the template
-    // They are public fields so no privilege check is needed
-    template = await prisma.template
-      .findUnique({
-        where: {
-          id: formId,
-        },
-        select: {
-          closingDate: true,
-          closedDetails: true,
-        },
-      })
-      .catch((e) => prismaErrors(e, null));
-
+    // If the template is not in the cache, we need to fetch it from the database
+    if (!template) {
+      template = await prisma.template
+        .findUnique({
+          where: {
+            id: formId,
+          },
+          select: {
+            closingDate: true,
+            closedDetails: true,
+          },
+        })
+        .catch((e) => prismaErrors(e, null));
+    }
+    // If it's not in the cache and in the DB then it doesn't exist
     if (!template) {
       throw new Error("Template not found");
     }
