@@ -269,14 +269,14 @@ export const checkPageVisibility = (
   const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, values);
 
   // Recursively build up the groupHistory array based on values
-  const groupHistory = getVisibleGroupsBasedOnValuesRecursive(
+  const visibleGroups = getVisibleGroupsBasedOnValuesRecursive(
     formRecord,
     valuesWithMatchedIds,
     "start"
   );
 
   // If the groupId is not found in the groupHistory, the page is not visible
-  return !!groupHistory.find((visitedGroupId: string | undefined) => visitedGroupId === groupId);
+  return !!visibleGroups.find((visitedGroupId: string | undefined) => visitedGroupId === groupId);
 };
 
 /**
