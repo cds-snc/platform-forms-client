@@ -293,7 +293,7 @@ export const Form = withFormik<FormProps, Responses>({
 
       // Extract files from formValues and upload them to S3 in seperate function
       // formValues is modified in memory, so we can use it directly in the submitForm function
-      const fileUploadSuccess = await uploadFiles(formValues)
+      const fileUploadSuccess = await uploadFiles(formikBag.props.formRecord.id, formValues)
         .then(() => true)
         .catch((error) => {
           formikBag.setStatus(FormStatus.FILE_ERROR);

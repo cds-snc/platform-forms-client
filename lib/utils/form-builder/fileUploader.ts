@@ -2,6 +2,7 @@ import { PresignedPost } from "@aws-sdk/s3-presigned-post";
 import { Responses, FileInputResponse } from "@root/lib/types";
 import { logMessage } from "@lib/logger";
 import { generateSignedUrl } from "@lib/s3-upload";
+import { checkIfClosed } from "@root/lib/templates";
 
 interface FileInput extends FileInputResponse {
   name: string;
@@ -100,7 +101,13 @@ const fileExtractor = (originalObj: unknown) => {
   );
 };
 
-export const uploadFiles = async (responses: Responses) => {
+export const uploadFiles = async (formId: string, responses: Responses) => {
+  // check if form is closed
+  const formStatus = await checkIfClosed(formId);
+  if (formStatus === null || formStatus.isPastClosingDate) {
+    throw new Error("This form is not accepting submissions.");
+  }
+
   // Extract file responses by memory reference
   const fileInputReferences = fileExtractor(responses);
 
