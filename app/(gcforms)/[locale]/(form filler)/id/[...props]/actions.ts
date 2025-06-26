@@ -12,8 +12,9 @@ import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
-import { validateResponses } from "@lib/validation/validation";
+import { validateOnSubmit, validateResponses } from "@lib/validation/validation";
 import { sendNotification } from "@lib/notifications";
+import { serverTranslation } from "@root/i18n";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -34,6 +35,19 @@ export async function submitForm(
   captchaToken?: string | undefined
 ): Promise<{ id: string; submissionId?: string; error?: Error }> {
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
+
+  // const validationError: ServerValidationError = {
+  //   name: "ServerValidationError", // @TODO
+  //   message: "There was a validation error with your submission.",
+  //   messages: {
+  //     1: "This is a validation error message. Please check your input and try again.",
+  //   },
+  // }
+
+  // return {
+  //   id: formId,
+  //   error: validationError,
+  // }
 
   try {
     const template = await getPublicTemplateByID(formId);
@@ -76,6 +90,24 @@ export async function submitForm(
       );
       // Turn this on after we've monitored the logs for a while
       // throw new MissingFormDataError("Form data validation failed");
+    }
+
+    const { t } = await serverTranslation();
+
+    // @TODO: (TBD) Does this replace the above type validation? Or is there use for both?
+    const validateOnSubmitResult = await validateOnSubmit(values, {
+      formRecord: template,
+      t: t,
+    });
+
+    if (Object.keys(validateOnSubmitResult).length !== 0) {
+      logMessage.info(
+        `[server-action][submitForm] Detected validation errors on form ${formId}. Errors: ${JSON.stringify(
+          validateOnSubmitResult
+        )}`
+      );
+      // @TODO: (TBD) Should we just log/monitor for now?
+      throw new MissingFormDataError("Form data validation failed");
     }
 
     const formDataObject = buildFormDataObject(template, values);
