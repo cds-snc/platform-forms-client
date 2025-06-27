@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.45.2](https://github.com/cds-snc/platform-forms-client/compare/v3.45.1...v3.45.2) (2025-06-27)
+
+
+### Miscellaneous Chores
+
+* enable hCaptcha in blocking mode ([#5755](https://github.com/cds-snc/platform-forms-client/issues/5755)) ([a0a1a1c](https://github.com/cds-snc/platform-forms-client/commit/a0a1a1cce543e9b026659bcbe11f39a7b9054d8f))
+* Tweaking content for file upload feature ([#5773](https://github.com/cds-snc/platform-forms-client/issues/5773)) ([f706801](https://github.com/cds-snc/platform-forms-client/commit/f706801b07ab705fbf599547a1635255d9ad980f))
+
 ## [3.45.1](https://github.com/cds-snc/platform-forms-client/compare/v3.45.0...v3.45.1) (2025-06-25)
 
 
