@@ -735,7 +735,7 @@
         "cautionText": "La suppression de cette clé API ne peut être annulée. Supprimer la clé interrompt définitivement la livraison de réponses à tous les systèmes intégrés. Vous devrez créer une nouvelle clé et l'ajouter à votre intégration pour relancer la livraison à partir de l'API.",
         "stopText": "<strong>Pour arrêter les soumissions</strong> à ce formulaire de façon temporaire, veuillez considérer",
         "stopText1": "la fermeture du formulaire",
-        "stopText2": "à la place.",
+        "stopText2": " à la place.",
         "cancelButton": "Annuler",
         "deleteKeyButton": "Supprimer la clé",
         "error": {

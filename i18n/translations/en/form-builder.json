@@ -735,7 +735,7 @@
         "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You'll need to create a new key and add it to your integration to restart API delivery.",
         "stopText": "<strong>To temporarily stop submissions</strong> to this form consider",
         "stopText1": "closing the form",
-        "stopText2": "instead.",
+        "stopText2": " instead.",
         "cancelButton": "Cancel",
         "deleteKeyButton": "Delete key",
         "error": {
