@@ -215,7 +215,8 @@
         "text1": "This trial feature is limited and requires:",
         "bullet1": "Retrieval of form responses via API",
         "bullet2": "{{BODY_SIZE_LIMIT_WITH_FILES}} MB maximum combined size of all files uploaded",
-        "bullet3": "Files to be scanned for malicious content once submitted"
+        "bullet3": "Files to be scanned for malicious content once submitted",
+        "bullet4": "Collecting contact information in case you need to follow up about files"
       },
       "recommendations": {
         "title": "Recommendations",
