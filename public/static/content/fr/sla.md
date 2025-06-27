@@ -34,8 +34,7 @@ Le SNC peut suspendre le service à tout moment en cas d’utilisation jugée in
 
 Le SNC n’est pas responsable des problèmes ou des interruptions de service de l’infrastructure AWS pouvant avoir des conséquences sur le temps de fonctionnement et la disponibilité du système. Le SNC n’est pas non plus responsable des défaillances de l’infrastructure d’Amazon, d’AWS ou d’Amazon Simple Email Service (SES). Le SNC est tenu de transmettre à la clientèle toute information relative à une interruption du service AWS.
 
-Le SNC ne fournira pas d'analyse de sécurité ni d'assistance pour les fichiers malveillants, sauf pour dire au client si un fichier est sûr ou non.
-
+Le SNC ne fournira pas d'assistance supplémentaire pour les fichiers malveillants, sauf pour dire au client si un fichier est sûr ou non.
 
 ## Garantie sur le temps de fonctionnement
 
