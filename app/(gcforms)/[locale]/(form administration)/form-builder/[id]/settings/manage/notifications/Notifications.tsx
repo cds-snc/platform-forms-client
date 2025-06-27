@@ -1,97 +1,96 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { NotificationsInterval } from "@gcforms/types";
-import { updateNotificationsInterval } from "../actions";
 import { NotificationsToggle } from "./NotificationsToggle";
 import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { isVaultDelivery } from "@lib/utils/form-builder";
+import { getNotificationsUser, updateNotificationsUser } from "./actions";
+import { NotificationsUsersList } from "./NotificationsUsersList";
+
+export type NotificationsUser = {
+  id: string;
+  email: string;
+  enabled: boolean;
+};
 
 export const Notifications = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
-  const { getDeliveryOption, setNotificationsInterval, notificationsInterval } = useTemplateStore(
-    (s) => ({
-      getDeliveryOption: s.getDeliveryOption,
-      setNotificationsInterval: s.setNotificationsInterval,
-      notificationsInterval: s.notificationsInterval,
-    })
-  );
+  const generalError = t("settings.notifications.error.getNotifcations");
+  const updateNotificationsError = t("settings.notifications.error.updateNotifications");
+  const updateNotificationsSuccess = t("settings.notifications.success.updateNotifications");
+  const [sessionUser, setSessionUser] = useState<NotificationsUser | null>(null);
 
-  const isVault = isVaultDelivery(getDeliveryOption());
-  const [notificationValue, setNotificationValue] = useState<string>(
-    notificationsInterval ? String(notificationsInterval) : String(NotificationsInterval.OFF)
-  );
+  useEffect(() => {
+    const getSettings = async () => {
+      try {
+        const sessionUserWithSetting = await getNotificationsUser(formId);
+        if (!sessionUserWithSetting || "error" in sessionUserWithSetting) {
+          throw new Error();
+        }
+        setSessionUser(sessionUserWithSetting);
+      } catch (error) {
+        toast.error(generalError);
+      }
+    };
+    getSettings();
+  }, [formId, generalError]);
+
+  const { getDeliveryOption } = useTemplateStore((s) => ({
+    getDeliveryOption: s.getDeliveryOption,
+  }));
 
   const toggleChecked = useCallback(
     () =>
-      setNotificationValue(
-        notificationValue === String(NotificationsInterval.OFF)
-          ? String(NotificationsInterval.DAY)
-          : String(NotificationsInterval.OFF)
-      ),
-    [notificationValue]
+      setSessionUser((prev) => {
+        if (!prev) {
+          return null;
+        }
+        return {
+          ...prev,
+          enabled: !sessionUser?.enabled,
+        };
+      }),
+    [sessionUser]
   );
 
-  const updateNotificationsIntervalError = t(
-    "settings.notifications.errors.updateNotificationsInterval"
-  );
-
-  const updateNotificationsIntervalSuccess = t("settings.notifications.savedSuccessMessage");
-
-  const saveNotificationsValue = useCallback(async () => {
-    const newNotificationsInterval: NotificationsInterval =
-      notificationValue === String(NotificationsInterval.DAY)
-        ? NotificationsInterval.DAY
-        : NotificationsInterval.OFF;
-    // To help track if many users are disabling notifications - yes, then default to off
-    if (newNotificationsInterval === NotificationsInterval.OFF) {
-      ga("form_notifications", {
-        formId,
-        action: "disabled",
-      });
+  const updateNotifications = useCallback(async () => {
+    const result = await updateNotificationsUser(formId, sessionUser);
+    if (result !== undefined && "error" in result) {
+      toast.error(updateNotificationsError);
+      return;
     }
 
-    const result = await updateNotificationsInterval(formId, newNotificationsInterval);
+    toast.success(updateNotificationsSuccess);
+    ga("form_notifications", {
+      formId,
+      action: sessionUser?.enabled ? "enabled" : "disabled",
+    });
+  }, [formId, sessionUser, updateNotificationsError, updateNotificationsSuccess]);
 
-    if (result && result.error) {
-      toast.error(updateNotificationsIntervalError);
-    } else {
-      setNotificationsInterval(newNotificationsInterval);
-      toast.success(updateNotificationsIntervalSuccess);
-    }
-  }, [
-    formId,
-    notificationValue,
-    updateNotificationsIntervalError,
-    updateNotificationsIntervalSuccess,
-    setNotificationsInterval,
-  ]);
+  // This is a published form with email delivery or a legacy form that has no users.
+  // Don't show the Notifications settings.
+  if (getDeliveryOption() || !sessionUser) {
+    return null;
+  }
 
   return (
     <div className="mb-10" data-testid="form-notifications">
       <h2>{t("settings.notifications.title")}</h2>
-      <p className="mb-2 font-bold">{t("settings.notifications.description1")}</p>
-      <p className="mb-8">{t("settings.notifications.description2")}</p>
-      <div className="mb-4">
-        <NotificationsToggle
-          isChecked={
-            isVault && notificationValue === String(NotificationsInterval.DAY) ? true : false
-          }
-          toggleChecked={toggleChecked}
-          onLabel={t("settings.notifications.options.off")}
-          offLabel={t("settings.notifications.options.on")}
-          description={t("settings.notifications.optionsDescription")}
-          disabled={!isVault}
-        />
-      </div>
-      <Button
-        dataTestId="form-notifications-save"
-        theme="secondary"
-        onClick={saveNotificationsValue}
-        disabled={!isVault}
-      >
+      <p className="mb-2 font-bold">{t("settings.notifications.sessionUser.title")}</p>
+      <p className="mb-4">{t("settings.notifications.sessionUser.description")}</p>
+      <NotificationsToggle
+        className="mb-4"
+        isChecked={sessionUser.enabled}
+        toggleChecked={toggleChecked}
+        onLabel={t("settings.notifications.sessionUser.toggle.off")}
+        offLabel={t("settings.notifications.sessionUser.toggle.on")}
+        description={t("settings.notifications.sessionUser.toggle.title", {
+          email: sessionUser.email,
+        })}
+      />
+      <NotificationsUsersList formId={formId} />
+      <Button dataTestId="form-notifications-save" theme="secondary" onClick={updateNotifications}>
         {t("settings.notifications.save")}
       </Button>
     </div>

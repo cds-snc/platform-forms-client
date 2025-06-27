@@ -15,17 +15,22 @@ export const inviteToFormsEmailTemplate = (
 ): string => `
 (la version française suit)
 
-${senderName} has invited you to collaborate in GC Forms. 
+${senderName} has invited you to collaborate on a form in GC Forms. 
 
 ${message}
 
-[Create an account](${registerUrlEn})
+Once you [create an account](${registerUrlEn}), you can join your colleague's form and help them manage form responses. 
+
+You may also choose to turn on notifications for new responses by navigating to Settings > Form management.
 
 ===
 
-${senderName} vous a invité à collaborer dans Formulaires GC.
+${senderName} vous a invité à collaborer à un formulaire dans Formulaires GC.
 
 ${message}
 
-[Créer un compte](${registerUrlFr})
+Une fois que vous [créez un compte](${registerUrlFr}) vous pouvez rejoindre le formulaire de votre collègue et l'aider à gérer les réponses au formulaire. 
+
+Vous pouvez également choisir d'activer les notifications pour les nouvelles réponses en naviguant vers Paramètres > Gestion du formulaire.
+
 `;
