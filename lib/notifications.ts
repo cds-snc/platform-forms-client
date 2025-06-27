@@ -8,13 +8,8 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logEvent } from "./auditLogs";
 import { authorization } from "./privileges";
 
-// TODO replace prisma calls in file with focussed reusable functions
-// getNotificationUser
-// getNotificationsUsers
-// getDeliveryOption
-
-// Most functions do not include an auth check since the request may be triggered from a
-// non-signed-in user, e.g. sending notifications on a form submission.
+// Hard coded since only one interval is supported currently
+const NOTIFICATIONS_INTERVAL = NotificationsInterval.DAY;
 
 const Status = {
   SINGLE_EMAIL_SENT: "SINGLE_EMAIL_SENT",
@@ -22,21 +17,71 @@ const Status = {
 } as const;
 type Status = (typeof Status)[keyof typeof Status];
 
-/**
- * Adds or removes the session user from the notificationsUsers list for a form. Users in
- * the notificationsUsers list will receive email notifications when a form has new submissions.
- */
 export const updateNotificationsUser = async (formId: string, enabled: boolean) => {
   const { user: sessionUser } = await authorization.canEditForm(formId).catch((e) => {
     logEvent(
       e.user.id,
       { type: "Form", id: formId },
       "AccessDenied",
-      "Attempted to update notifications interval for Form"
+      "Attempted to update notifications user for Form"
     );
     throw e;
   });
 
+  const userToUpdate = await getNotificationsUser(formId, sessionUser.id);
+  if (!userToUpdate) {
+    logMessage.warn(
+      `Cannot find notifications setting for user with id ${sessionUser.id}
+       on template ${formId}. User does not exist`
+    );
+    return null;
+  }
+
+  await _updateNotificationsUserSetting(formId, userToUpdate, enabled);
+};
+
+export const sendNotifications = async (formId: string, titleEn: string, titleFr: string) => {
+  // Avoid sending additional notifications to legacy forms that receive delivery by email.
+  const deliveryOption = await _getDeliveryOption(formId);
+  if (deliveryOption) {
+    return;
+  }
+
+  const users = await _getNotificationsUsers(formId);
+
+  // Some older forms may not have users, do nothing
+  if (!Array.isArray(users) || users.length === 0) {
+    return;
+  }
+
+  // No users have notifications enabled, do nothing
+  const atLeastOneUserEnabled = users.some((user) => user.enabled);
+  if (!atLeastOneUserEnabled) {
+    return;
+  }
+
+  const marker = await getMarker(formId);
+  switch (marker) {
+    case Status.SINGLE_EMAIL_SENT:
+      // Single submissions email sent but not multiple submissions email, send multiple email
+      Promise.all([
+        sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, true),
+        setMarker(formId, Status.MULTIPLE_EMAIL_SENT),
+      ]);
+      break;
+    case Status.MULTIPLE_EMAIL_SENT:
+      // Multiple submissions email has been sent, do nothing
+      break;
+    default:
+      // No email has been sent, send single submission email
+      Promise.all([
+        sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, false),
+        setMarker(formId),
+      ]);
+  }
+};
+
+const getNotificationsUser = async (formId: string, userId: string) => {
   const template = await prisma.template
     .findFirst({
       where: {
@@ -61,22 +106,74 @@ export const updateNotificationsUser = async (formId: string, enabled: boolean) 
 
   if (template === null) {
     logMessage.warn(
-      `Can not notifications setting for user with id ${sessionUser.id}
+      `Can not notifications setting for user with id ${userId}
        on template ${formId}. Template does not exist`
     );
     return null;
   }
 
   // A user can only update their own notifications settings
-  const userToUpdate = template.users.find((u) => u.id === sessionUser.id);
-  if (!userToUpdate) {
+  const notificationUser = template.users.find((u) => u.id === userId);
+  if (!notificationUser) {
     logMessage.warn(
-      `Can not find notifications setting for user with id ${sessionUser.id}
+      `Cannot find notifications setting for user with id ${userId}
        on template ${formId}. User does not exist`
     );
     return null;
   }
 
+  return notificationUser;
+};
+
+// Method should remain private since used in a public context from form filler
+const _getNotificationsUsers = async (formId: string) => {
+  const usersAndNotificationsUsers = await prisma.template
+    .findUnique({
+      where: {
+        id: formId,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+        notificationsUsers: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!usersAndNotificationsUsers) {
+    logMessage.warn(`_getNotificationsUsers template not found with id ${formId}`);
+    return null;
+  }
+
+  const { users, notificationsUsers } = usersAndNotificationsUsers;
+
+  return users.map((user) => {
+    const foundUser = notificationsUsers.find(
+      (notificationUser) => notificationUser.id === user.id
+    );
+    return {
+      id: user.id,
+      email: user.email,
+      enabled: foundUser ? true : false,
+    };
+  });
+};
+
+// Method should remain private since used in a public context from form filler
+const _updateNotificationsUserSetting = async (
+  formId: string,
+  user: { id: string; email: string },
+  enabled: boolean
+) => {
   await prisma.template
     .update({
       where: {
@@ -84,117 +181,45 @@ export const updateNotificationsUser = async (formId: string, enabled: boolean) 
       },
       data: {
         notificationsUsers: {
-          ...(enabled ? { connect: userToUpdate } : { disconnect: { id: userToUpdate.id } }),
+          ...(enabled ? { connect: user } : { disconnect: { id: user.id } }),
         },
       },
     })
     .catch((e) => prismaErrors(e, null));
 
-  logMessage.info(
-    `saveNotificationsSettings updated notifications settings for user with email ${
-      sessionUser.email
-    } on template ${formId} to ${enabled ? "enabled" : "disabled"}`
-  );
-
   logEvent(
-    sessionUser.id,
+    user.id,
     { type: "Form", id: formId },
-    "UpdateNotificationsSettings",
-    `User :${sessionUser.id} updated notifications setting on form ${formId} to ${
+    "UpdateNotificationsUserSetting",
+    `User :${user.id} updated notifications setting on form ${formId} to ${
       enabled ? "enabled" : "disabled"
     }`
   );
 };
 
-/**
- * Sends email notifications to all users that have notifications enabled for a form when a
- * new form submission is sent.
- */
-export const sendNotification = async (formId: string, titleEn: string, titleFr: string) => {
-  const notificationsSettings = await _getNotificationsSettings(formId);
-  if (!notificationsSettings) {
-    logMessage.error(`sendNotification template not found with id ${formId}`);
-    return;
+// Method should remain private since used in a public context from form filler
+const _getDeliveryOption = async (formId: string) => {
+  const template = await prisma.template
+    .findUnique({
+      where: {
+        id: formId,
+      },
+      select: {
+        deliveryOption: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!template) {
+    logMessage.warn(`_getDeliveryOption template not found with id ${formId}`);
+    return null;
   }
 
-  const { users, notificationsInterval, deliveryOption } = notificationsSettings;
-
-  // Avoid spamming users with emails by only sending one type of email, either an email
-  // delivery or a notification. For legacy published forms that snuck in a delivery option.
-  if (deliveryOption) {
-    return;
-  }
-
-  // const notificationsInterval = usersAndNotifications.notificationsInterval;
-  if (!validateNotificationsInterval(notificationsInterval)) {
-    logMessage.error(
-      `sendNotification template ${formId} has an invalid notificationsInterval ${notificationsInterval}`
-    );
-    return;
-  }
-
-  // set to 1440 instead of returning
-  // Notifications are turned off for this form, do nothing. This should never happen with the current
-  // logic that looks at each user's setting and uses this for how frequent to send emails.
-  if (!notificationsInterval) {
-    logMessage.debug(
-      `sendNotification template ${formId} has notificationsInterval set to OFF, not sending notifications`
-    );
-    return;
-  }
-
-  // Some older forms may not have users, do nothing
-  if (!Array.isArray(users) || users.length === 0) {
-    return;
-  }
-
-  // No users have notifications enabled, do nothing
-  const atLeastOneUserEnabled = users.some((user) => user.enabled);
-  if (!atLeastOneUserEnabled) {
-    return;
-  }
-
-  const marker = await getMarker(formId);
-  switch (marker) {
-    case Status.SINGLE_EMAIL_SENT:
-      // Single submissions email sent but not multiple submissions email, send multiple email
-      Promise.all([
-        sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, true),
-        setMarker(formId, notificationsInterval, Status.MULTIPLE_EMAIL_SENT),
-      ]);
-      break;
-    case Status.MULTIPLE_EMAIL_SENT:
-      // Multiple submissions email has been sent, do nothing
-      break;
-    default:
-      // No email has been sent, send single submission email
-      Promise.all([
-        sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, false),
-        setMarker(formId, notificationsInterval),
-      ]);
-  }
+  return template.deliveryOption;
 };
 
-// getNotificationUser
-
-
-
-// getNotificationsUsers
-// getDeliveryOption
-
-/**
- * Creates or updates an existing marker in Redis. Note to remove a marker, use removeMarker
- */
-const setMarker = async (
-  formId: string,
-  notificationsInterval: NotificationsInterval,
-  status: Status = Status.SINGLE_EMAIL_SENT
-) => {
-  if (!notificationsInterval || !validateNotificationsInterval(notificationsInterval)) {
-    logMessage.error(`setMarker has an invalid notificationsInterval for formId ${formId}`);
-    return;
-  }
-  const ttl = notificationsInterval * 60; // convert from minutes to seconds
+const setMarker = async (formId: string, status: Status = Status.SINGLE_EMAIL_SENT) => {
+  const ttl = NOTIFICATIONS_INTERVAL * 60; // convert from minutes to seconds
   const redis = await getRedisInstance();
   await redis
     .set(`notification:formId:${formId}`, status, "EX", ttl)
@@ -206,14 +231,6 @@ const setMarker = async (
     .catch((err) =>
       logMessage.error(`setMarker: notification:formId:${formId} failed to set ${err}`)
     );
-};
-
-const validateNotificationsInterval = (
-  notificationsInterval: number | null | undefined
-): notificationsInterval is NotificationsInterval => {
-  return Object.values(NotificationsInterval).includes(
-    notificationsInterval as NotificationsInterval
-  );
 };
 
 const getMarker = async (formId: string) => {
@@ -326,54 +343,4 @@ const multipleSubmissionsEmailTemplate = async (
   
   *${t_fr("settings.notifications.email.multipleSubmissions.paragraph3")}*
     `;
-};
-
-// TODO Update to be a unique feature and only needs to get notificationsUsers, not users
-const _getNotificationsSettings = async (formId: string) => {
-  const notificationsSettings = await prisma.template
-    .findUnique({
-      where: {
-        id: formId,
-      },
-      select: {
-        users: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-        notificationsUsers: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-        notificationsInterval: true, // todo hard code
-        deliveryOption: true,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (!notificationsSettings) {
-    logMessage.warn(`getNotificationsSettings template not found with id ${formId}`);
-    return null;
-  }
-
-  const { users, notificationsUsers, notificationsInterval, deliveryOption } =
-    notificationsSettings;
-
-  const allUsersWithSettings = users.map((user) => {
-    const found = notificationsUsers.find((notificationUser) => notificationUser.id === user.id);
-    return {
-      id: user.id,
-      email: user.email,
-      enabled: found ? true : false,
-    };
-  });
-
-  return {
-    users: allUsersWithSettings,
-    notificationsInterval,
-    deliveryOption,
-  };
 };
