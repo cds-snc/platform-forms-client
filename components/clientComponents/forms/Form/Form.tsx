@@ -48,7 +48,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     handleSubmit,
     status,
     language,
-    formRecord: { id: formID, form },
+    formRecord: { id: formID, form, isPublished },
     dirty,
   }: InnerFormProps = props;
 
@@ -176,8 +176,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             lang={language}
             handleSubmit={handleSubmit}
             noValidate={true}
-            hCaptchaSiteKey={props.hCaptchaSiteKey}
-            isPreview={props.isPreview}
+            isPublished={isPublished}
             captchaToken={props.captchaToken}
           >
             {isGroupsCheck &&

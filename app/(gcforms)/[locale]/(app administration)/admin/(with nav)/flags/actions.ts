@@ -16,3 +16,9 @@ export const modifyFlag = AuthenticatedAction(async (_, id: string, value: boole
   }
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/flags", "page");
 });
+
+export const removeUserFlag = AuthenticatedAction(async (_, userId: string, flag: string) => {
+  const { removeUserFeatureFlag } = await import("@lib/userFeatureFlags");
+  await removeUserFeatureFlag(userId, flag);
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/flags", "page");
+});

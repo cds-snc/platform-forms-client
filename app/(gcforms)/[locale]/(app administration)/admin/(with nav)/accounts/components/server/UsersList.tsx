@@ -33,12 +33,12 @@ export const UsersList = async ({ filter, query }: { filter?: string; query?: st
   if (query && query.trim() !== "") {
     const fuse = new Fuse(users, {
       keys: [
-        { name: "name", weight: 2 },
-        { name: "email", weight: 1.5 },
+        { name: "name", weight: 1 },
+        { name: "email", weight: 3 },
       ],
-      threshold: 0.3, // Lower threshold for more accurate matches
-      distance: 100, // Allow matching terms that are further apart
-      ignoreLocation: true, // Match anywhere in the string
+      threshold: 0.2, // Lower threshold for more accurate matches
+      distance: 20, // Allow matching terms that are further apart
+      ignoreLocation: false, // Match anywhere in the string
       minMatchCharLength: 2,
       shouldSort: true, // Sort results by score
       useExtendedSearch: true, // see: https://www.fusejs.io/examples.html#extended-search

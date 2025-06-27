@@ -38,6 +38,7 @@ export enum LocalizedElementProperties {
   TITLE = "title",
   DESCRIPTION = "description",
   PLACEHOLDER = "placeholder",
+  EXIT_URL = "exitUrl",
 }
 
 export interface LocalizedProperty {
