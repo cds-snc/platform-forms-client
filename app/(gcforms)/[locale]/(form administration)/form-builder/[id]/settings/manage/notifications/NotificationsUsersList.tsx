@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import { CheckNoBorderIcon, XIcon } from "@root/components/serverComponents/icons";
 import { useTranslation } from "@root/i18n/client";
 import { NotificationsUser } from "./Notifications";
-import { getNotificationsUsers } from "./actions";
+import { getNotificationsUsersList } from "./actions";
 import { toast } from "react-toastify";
 
 export const NotificationsUsersList = ({ formId }: { formId: string }) => {
@@ -15,7 +15,7 @@ export const NotificationsUsersList = ({ formId }: { formId: string }) => {
   useEffect(() => {
     const getSettings = async () => {
       try {
-        const usersWithSessionUser = await getNotificationsUsers(formId);
+        const usersWithSessionUser = await getNotificationsUsersList(formId);
         if (!usersWithSessionUser || "error" in usersWithSessionUser) {
           throw new Error();
         }

@@ -5,8 +5,6 @@ import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { logEvent } from "./auditLogs";
-import { authorization } from "./privileges";
 
 // Hard coded since only one interval is supported currently
 const NOTIFICATIONS_INTERVAL = NotificationsInterval.DAY;
@@ -17,29 +15,7 @@ const Status = {
 } as const;
 type Status = (typeof Status)[keyof typeof Status];
 
-export const updateNotificationsUser = async (formId: string, enabled: boolean) => {
-  const { user: sessionUser } = await authorization.canEditForm(formId).catch((e) => {
-    logEvent(
-      e.user.id,
-      { type: "Form", id: formId },
-      "AccessDenied",
-      "Attempted to update notifications user for Form"
-    );
-    throw e;
-  });
-
-  const userToUpdate = await getNotificationsUser(formId, sessionUser.id);
-  if (!userToUpdate) {
-    logMessage.warn(
-      `Cannot find notifications setting for user with id ${sessionUser.id}
-       on template ${formId}. User does not exist`
-    );
-    return null;
-  }
-
-  await _updateNotificationsUserSetting(formId, userToUpdate, enabled);
-};
-
+// Public facing function to send notifications to all related users on a form submission
 export const sendNotifications = async (formId: string, titleEn: string, titleFr: string) => {
   // Avoid sending additional notifications to legacy forms that receive delivery by email.
   const deliveryOption = await _getDeliveryOption(formId);
@@ -47,7 +23,7 @@ export const sendNotifications = async (formId: string, titleEn: string, titleFr
     return;
   }
 
-  const users = await _getNotificationsUsers(formId);
+  const users = await getNotificationsUsers(formId);
 
   // Some older forms may not have users, do nothing
   if (!Array.isArray(users) || users.length === 0) {
@@ -81,52 +57,7 @@ export const sendNotifications = async (formId: string, titleEn: string, titleFr
   }
 };
 
-const getNotificationsUser = async (formId: string, userId: string) => {
-  const template = await prisma.template
-    .findFirst({
-      where: {
-        id: formId,
-      },
-      select: {
-        users: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-        notificationsUsers: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (template === null) {
-    logMessage.warn(
-      `Can not notifications setting for user with id ${userId}
-       on template ${formId}. Template does not exist`
-    );
-    return null;
-  }
-
-  // A user can only update their own notifications settings
-  const notificationUser = template.users.find((u) => u.id === userId);
-  if (!notificationUser) {
-    logMessage.warn(
-      `Cannot find notifications setting for user with id ${userId}
-       on template ${formId}. User does not exist`
-    );
-    return null;
-  }
-
-  return notificationUser;
-};
-
-// Method should remain private since used in a public context from form filler
-const _getNotificationsUsers = async (formId: string) => {
+export const getNotificationsUsers = async (formId: string) => {
   const usersAndNotificationsUsers = await prisma.template
     .findUnique({
       where: {
@@ -168,36 +99,6 @@ const _getNotificationsUsers = async (formId: string) => {
   });
 };
 
-// Method should remain private since used in a public context from form filler
-const _updateNotificationsUserSetting = async (
-  formId: string,
-  user: { id: string; email: string },
-  enabled: boolean
-) => {
-  await prisma.template
-    .update({
-      where: {
-        id: formId,
-      },
-      data: {
-        notificationsUsers: {
-          ...(enabled ? { connect: user } : { disconnect: { id: user.id } }),
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  logEvent(
-    user.id,
-    { type: "Form", id: formId },
-    "UpdateNotificationsUserSetting",
-    `User :${user.id} updated notifications setting on form ${formId} to ${
-      enabled ? "enabled" : "disabled"
-    }`
-  );
-};
-
-// Method should remain private since used in a public context from form filler
 const _getDeliveryOption = async (formId: string) => {
   const template = await prisma.template
     .findUnique({

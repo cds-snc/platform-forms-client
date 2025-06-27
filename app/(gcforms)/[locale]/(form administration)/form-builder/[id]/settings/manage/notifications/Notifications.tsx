@@ -5,7 +5,7 @@ import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { getSessionUserWithSetting, updatSessionUserSetting } from "./actions";
+import { getNotificationsUser, updateNotificationsUser } from "./actions";
 import { NotificationsUsersList } from "./NotificationsUsersList";
 
 export type NotificationsUser = {
@@ -24,7 +24,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
   useEffect(() => {
     const getSettings = async () => {
       try {
-        const sessionUserWithSetting = await getSessionUserWithSetting(formId);
+        const sessionUserWithSetting = await getNotificationsUser(formId);
         if (!sessionUserWithSetting || "error" in sessionUserWithSetting) {
           throw new Error();
         }
@@ -55,7 +55,7 @@ export const Notifications = ({ formId }: { formId: string }) => {
   );
 
   const updateNotifications = useCallback(async () => {
-    const result = await updatSessionUserSetting(formId, sessionUser);
+    const result = await updateNotificationsUser(formId, sessionUser);
     if (result !== undefined && "error" in result) {
       toast.error(updateNotificationsError);
       return;
