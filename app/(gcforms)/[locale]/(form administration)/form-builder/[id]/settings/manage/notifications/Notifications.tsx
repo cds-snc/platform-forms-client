@@ -1,13 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { NotificationsToggle } from "./NotificationsToggle";
 import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { getNotificationsUser, updateNotificationsUser } from "./actions";
+import { updateNotificationsUser } from "./actions";
 import { NotificationsUsersList } from "./NotificationsUsersList";
-import Skeleton from "react-loading-skeleton";
+import { NotificationsUserSetting } from "./NotificationsUserSetting";
 
 export type NotificationsUser = {
   id: string;
@@ -17,43 +16,13 @@ export type NotificationsUser = {
 
 export const Notifications = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
-  const generalError = t("settings.notifications.error.getNotifcations");
   const updateNotificationsError = t("settings.notifications.error.updateNotifications");
   const updateNotificationsSuccess = t("settings.notifications.success.updateNotifications");
   const [sessionUser, setSessionUser] = useState<NotificationsUser | null>(null);
 
-  useEffect(() => {
-    const getSettings = async () => {
-      try {
-        const sessionUserWithSetting = await getNotificationsUser(formId);
-        if (!sessionUserWithSetting || "error" in sessionUserWithSetting) {
-          throw new Error();
-        }
-        setSessionUser(sessionUserWithSetting);
-      } catch (error) {
-        toast.error(generalError);
-      }
-    };
-    getSettings();
-  }, [formId, generalError]);
-
   const { getDeliveryOption } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
   }));
-
-  const toggleChecked = useCallback(
-    () =>
-      setSessionUser((prev) => {
-        if (!prev) {
-          return null;
-        }
-        return {
-          ...prev,
-          enabled: !sessionUser?.enabled,
-        };
-      }),
-    [sessionUser]
-  );
 
   const updateNotifications = useCallback(async () => {
     const result = await updateNotificationsUser(formId, sessionUser);
@@ -74,29 +43,13 @@ export const Notifications = ({ formId }: { formId: string }) => {
     return null;
   }
 
-  if (!sessionUser) {
-    return (
-      <div className="mb-10" data-testid="form-notifications">
-        <h2>{t("settings.notifications.title")}</h2>
-        <Skeleton count={1} className="mb-4" width={300} height={20} />
-      </div>
-    );
-  }
-
   return (
     <div className="mb-10" data-testid="form-notifications">
       <h2>{t("settings.notifications.title")}</h2>
-      <p className="mb-2 font-bold">{t("settings.notifications.sessionUser.title")}</p>
-      <p className="mb-4">{t("settings.notifications.sessionUser.description")}</p>
-      <NotificationsToggle
-        className="mb-4"
-        isChecked={sessionUser.enabled}
-        toggleChecked={toggleChecked}
-        onLabel={t("settings.notifications.sessionUser.toggle.off")}
-        offLabel={t("settings.notifications.sessionUser.toggle.on")}
-        description={t("settings.notifications.sessionUser.toggle.title", {
-          email: sessionUser.email,
-        })}
+      <NotificationsUserSetting
+        formId={formId}
+        sessionUser={sessionUser}
+        setSessionUser={setSessionUser}
       />
       <NotificationsUsersList formId={formId} />
       <Button dataTestId="form-notifications-save" theme="secondary" onClick={updateNotifications}>
