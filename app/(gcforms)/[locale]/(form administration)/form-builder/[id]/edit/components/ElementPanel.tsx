@@ -95,7 +95,11 @@ export const ElementPanel = ({
         hasRules && "border-dashed border-1 border-slate-500",
         hasSubPanel &&
           "border border-slate-500 hover:outline hover:outline-2 hover:outline-indigo-700 hover:outline-offset-[-1px] focus-within:outline focus-within:outline-2 focus-within:outline-indigo-700 focus-within:outline-offset-[-1px]",
-        isFileUpload && !hasApiKeyId && "bg-red-50 hover:bg-red-50 focus-within:bg-red-50"
+        isFileUpload && !hasApiKeyId && "bg-red-50 hover:bg-red-50 focus-within:bg-red-50",
+        hasSubPanel &&
+          isFileUpload &&
+          !hasApiKeyId &&
+          "border-red-500 hover:border-red-500 focus-within:border-red-500"
       )}
       onClick={(e) => {
         const el = e.target as HTMLElement;
