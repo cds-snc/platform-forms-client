@@ -16,6 +16,8 @@ import { CustomizeSetButton } from "../CustomizeSetButton";
 import { AddToSetButton } from "../AddToSetButton";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useRefsContext } from "../../RefsContext";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { cn } from "@lib/utils";
 
 export const SubElement = ({
   item,
@@ -41,6 +43,8 @@ export const SubElement = ({
   const { refs } = useRefsContext();
 
   const subElements = item.properties.subElements;
+
+  const { hasApiKeyId } = useFormBuilderConfig();
 
   const { handleAddSubElement } = useHandleAdd();
 
@@ -124,7 +128,14 @@ export const SubElement = ({
                 />
               }
             >
-              <div className="pt-4">
+              <div
+                className={cn(
+                  "pt-4",
+                  !hasApiKeyId &&
+                    item.type === FormElementTypes.fileInput &&
+                    "bg-red-50 hover:bg-red-50 focus-within:bg-red-50 px-4 py-2"
+                )}
+              >
                 <PanelBodySub
                   elIndex={elIndex}
                   item={item}
