@@ -137,17 +137,19 @@ const validate = async (
   const { t } = await serverTranslation(["login", "common"], { lang: language });
 
   const formValidationSchema = v.object({
-    username: v.string([
+    username: v.pipe(
+      v.string(),
       v.toLowerCase(),
-      v.toTrimmed(),
+      v.trim(),
       v.minLength(1, t("input-validation.required", { ns: "common" })),
-      v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
-    ]),
-    password: v.string([
-      v.toTrimmed(),
+      v.check((input) => isValidGovEmail(input), t("input-validation.validGovEmail"))
+    ),
+    password: v.pipe(
+      v.string(),
+      v.trim(),
       v.minLength(1, t("input-validation.required", { ns: "common" })),
-      v.maxLength(50, t("fields.password.errors.maxLength")),
-    ]),
+      v.maxLength(50, t("fields.password.errors.maxLength"))
+    ),
   });
   return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
 };
