@@ -8,28 +8,11 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { SaveResponse } from "@clientComponents/forms/SaveAndResume/SaveResponse";
 import { Language } from "@lib/types/form-builder-types";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+import { getSafeUrl } from "@lib/utils/getSafeUrl";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
 */
-
-// Function to sanitize URLs to prevent XSS attacks and other security issues
-const getSafeUrl = (url: string): string | null => {
-  try {
-    // Try to create a URL object to validate it
-    const urlObj = new URL(url);
-
-    // Only allow http and https protocols
-    if (urlObj.protocol !== "http:" && urlObj.protocol !== "https:") {
-      return null;
-    }
-
-    return url;
-  } catch (e) {
-    // If URL is invalid (will throw an error), return null
-    return null;
-  }
-};
 
 interface TextPageProps {
   formId: string;
