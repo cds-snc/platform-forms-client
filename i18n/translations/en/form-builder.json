@@ -10,7 +10,7 @@
       "label": "Allowable file types",
       "documents": {
         "label": "Documents",
-        "description": "pdf, txt, doc, docx"
+        "description": "pdf, txt, doc, docx, xml"
       },
       "images": {
         "label": "Images",
@@ -215,7 +215,8 @@
         "text1": "This trial feature is limited and requires:",
         "bullet1": "Retrieval of form responses via API",
         "bullet2": "{{BODY_SIZE_LIMIT_WITH_FILES}} MB maximum combined size of all files uploaded",
-        "bullet3": "Files to be scanned for malicious content once submitted"
+        "bullet3": "Files to be scanned for malicious content once submitted",
+        "bullet4": "Collecting contact information in case you need to follow up about files"
       },
       "recommendations": {
         "title": "Recommendations",
@@ -531,7 +532,7 @@
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
   "hasFileInputAndApiDelivery": "API delivery enabled",
-  "hasFileInputAndApiDeliveryNote": "Required when using file uploads.",
+  "hasFileInputAndApiDeliveryNote": "Required when using file upload",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -645,7 +646,7 @@
     "purpose": {
       "admin": "Administrative purposes",
       "nonAdmin": "Non-administrative purposes",
-      "unset": "Unset"
+      "unset": "Not set"
     },
     "formtypes": {
       "Collect": "Collect feedback or statistics",
@@ -735,7 +736,7 @@
         "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You'll need to create a new key and add it to your integration to restart API delivery.",
         "stopText": "<strong>To temporarily stop submissions</strong> to this form consider",
         "stopText1": "closing the form",
-        "stopText2": "instead.",
+        "stopText2": " instead.",
         "cancelButton": "Cancel",
         "deleteKeyButton": "Delete key",
         "error": {
@@ -840,7 +841,7 @@
     "purpose": {
       "admin": "Administrative purposes",
       "nonAdmin": "Non-administrative purposes",
-      "unset": "Unset"
+      "unset": "Not set"
     },
     "saveButton": "Save changes"
   },
@@ -979,7 +980,6 @@
   "startP2": "Edit a form that was created and downloaded from GC Forms.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
-  "submittedResponsesChange": "Change delivery option",
   "submittedResponsesTextVault": {
     "text1": "Clicking submit will make responses available for retrieval:",
     "text2": "Go to Responses"
