@@ -159,7 +159,7 @@ export const PanelBody = ({
               <BetaBadge className="inline-block" />
               {!hasApiKeyId && (
                 <div className="ml-2 inline-block text-sm font-bold text-red-700">
-                  {t("fileUploadApiWarning.text")}!!
+                  {t("fileUploadApiWarning.text")}
                 </div>
               )}
               <div className="mt-4 text-sm">
