@@ -34,6 +34,11 @@ export const ContactForm = () => {
   const submitForm = async (formData: FormData) => {
     const formEntries = Object.fromEntries(formData.entries());
 
+    if (!formEntries.request) {
+      // Set to empty string if the request field is not set
+      formEntries.request = "";
+    }
+
     const SupportSchema = object({
       // checkbox input can send a non-string value when empty
       request: pipe(

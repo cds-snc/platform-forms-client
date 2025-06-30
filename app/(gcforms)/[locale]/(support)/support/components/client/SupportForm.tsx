@@ -35,6 +35,11 @@ export const SupportForm = () => {
   const submitForm = async (formData: FormData) => {
     const formEntries = Object.fromEntries(formData.entries());
 
+    if (!formEntries.request) {
+      // Set to empty string if the request field is not set
+      formEntries.request = "";
+    }
+
     const SupportSchema = object({
       name: pipe(string(), minLength(1, t("input-validation.required"))),
       email: pipe(
