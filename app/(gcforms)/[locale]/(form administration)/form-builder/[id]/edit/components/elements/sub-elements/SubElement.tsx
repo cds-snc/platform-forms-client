@@ -133,7 +133,7 @@ export const SubElement = ({
                   "pt-4",
                   !hasApiKeyId &&
                     item.type === FormElementTypes.fileInput &&
-                    "bg-red-50 hover:bg-red-50 focus-within:bg-red-50 px-4"
+                    "bg-red-50 hover:bg-red-50 focus-within:bg-red-50 px-4 py-2"
                 )}
               >
                 <PanelBodySub
