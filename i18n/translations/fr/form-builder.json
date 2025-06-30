@@ -11,7 +11,7 @@
     },
     "documents": {
       "label": "Documents",
-      "description": "pdf, txt, doc, docx"
+      "description": "pdf, txt, doc, docx, xml"
     },
     "images": {
       "label": "Images",
@@ -204,9 +204,9 @@
       "title": "Téléverseur de fichier"
     },
     "fileInputDefault": {
-      "text1": "A way to add supporting documentation. You must",
-      "text2": "set  your response delivery to API",
-      "text3": "to use this form element."
+      "text1": "Un moyen d'ajouter de la documentation à l'appui. Vous devez",
+      "text2": "configurer la livraison de réponse via l'API",
+      "text3": "pour utiliser cet élément."
     },
     "fileInputWithApi": {
       "description": "Un moyen d'ajouter de la documentation à l'appui.",
@@ -215,7 +215,8 @@
         "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
         "bullet1": "La récupération des réponses au formulaire via l'API",
         "bullet2": "Une taille maximale combinée de tous les fichiers téléversés :  {{BODY_SIZE_LIMIT_WITH_FILES}} Mo",
-        "bullet3": "Les fichiers seront analysés pour du contenu malveillant une fois soumis"
+        "bullet3": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
+        "bullet4": "La collect de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
       },
       "recommendations": {
         "title": "Recommendations",
@@ -531,7 +532,7 @@
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
   "hasFileInputAndApiDelivery": "Livraison de réponse avec l'API",
-  "hasFileInputAndApiDeliveryNote": "Choix obligatoire lors de l'utilisation du téléverseur de fichiers.",
+  "hasFileInputAndApiDeliveryNote": "Choix obligatoire lors de l'utilisation du téléverseur de fichiers",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
@@ -735,7 +736,7 @@
         "cautionText": "La suppression de cette clé API ne peut être annulée. Supprimer la clé interrompt définitivement la livraison de réponses à tous les systèmes intégrés. Vous devrez créer une nouvelle clé et l'ajouter à votre intégration pour relancer la livraison à partir de l'API.",
         "stopText": "<strong>Pour arrêter les soumissions</strong> à ce formulaire de façon temporaire, veuillez considérer",
         "stopText1": "la fermeture du formulaire",
-        "stopText2": "à la place.",
+        "stopText2": " à la place.",
         "cancelButton": "Annuler",
         "deleteKeyButton": "Supprimer la clé",
         "error": {
@@ -990,7 +991,6 @@
   "startP2": "Modifiez un formulaire qui a été créé et téléchargé à partir de Formulaires GC.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
-  "submittedResponsesChange": "Modifier l'option de livraison",
   "submittedResponsesTextVault": {
     "text1": "En cliquant sur « Soumettre », la réponse sera disponible pour récupération :",
     "text2": "Allez aux Réponses"
