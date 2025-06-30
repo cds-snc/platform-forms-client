@@ -359,7 +359,8 @@ const resetCognitoPassword = async (
   });
 };
 
-const checkForSpecificFieldErrors = (issues: v.SchemaIssues, fields: string[]): boolean => {
+// Update function to use valibot's BaseIssue type
+const checkForSpecificFieldErrors = (issues: v.BaseIssue<unknown>[], fields: string[]): boolean => {
   const fieldErrors = issues.filter((issue) => fields.includes(issue.path?.[0].key as string));
 
   return Boolean(fieldErrors.length);
