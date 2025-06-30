@@ -7,6 +7,7 @@ import { ga } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { getNotificationsUser, updateNotificationsUser } from "./actions";
 import { NotificationsUsersList } from "./NotificationsUsersList";
+import Skeleton from "react-loading-skeleton";
 
 export type NotificationsUser = {
   id: string;
@@ -68,10 +69,18 @@ export const Notifications = ({ formId }: { formId: string }) => {
     });
   }, [formId, sessionUser, updateNotificationsError, updateNotificationsSuccess]);
 
-  // This is a published form with email delivery or a legacy form that has no users.
-  // Don't show the Notifications settings.
-  if (getDeliveryOption() || !sessionUser) {
+  // This is a legacy published form with email delivery, don't show Notifications
+  if (getDeliveryOption()) {
     return null;
+  }
+
+  if (!sessionUser) {
+    return (
+      <div className="mb-10" data-testid="form-notifications">
+        <h2>{t("settings.notifications.title")}</h2>
+        <Skeleton count={1} className="mb-4" width={300} height={20} />
+      </div>
+    );
   }
 
   return (

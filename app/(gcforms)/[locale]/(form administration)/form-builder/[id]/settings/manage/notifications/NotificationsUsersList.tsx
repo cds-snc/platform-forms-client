@@ -5,6 +5,7 @@ import { useTranslation } from "@root/i18n/client";
 import { NotificationsUser } from "./Notifications";
 import { getNotificationsUsersList } from "./actions";
 import { toast } from "react-toastify";
+import Skeleton from "react-loading-skeleton";
 
 export const NotificationsUsersList = ({ formId }: { formId: string }) => {
   const { data } = useSession();
@@ -30,7 +31,11 @@ export const NotificationsUsersList = ({ formId }: { formId: string }) => {
     getSettings();
   }, [formId, generalError, data?.user.id]);
 
-  if (!users || users.length === 0) {
+  if (!users) {
+    return <Skeleton count={3} className="mb-4" width={300} height={20} />;
+  }
+
+  if (users.length === 0) {
     return null;
   }
 
