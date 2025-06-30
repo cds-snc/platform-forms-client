@@ -13,6 +13,24 @@ import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
   This is the component for text pages within the form flow (start pages, end pages)
 */
 
+// Function to sanitize URLs to prevent XSS attacks and other security issues
+const getSafeUrl = (url: string): string | null => {
+  try {
+    // Try to create a URL object to validate it
+    const urlObj = new URL(url);
+
+    // Only allow http and https protocols
+    if (urlObj.protocol !== "http:" && urlObj.protocol !== "https:") {
+      return null;
+    }
+
+    return url;
+  } catch (e) {
+    // If URL is invalid (will throw an error), return null
+    return null;
+  }
+};
+
 interface TextPageProps {
   formId: string;
   formRecord: PublicFormRecord;
@@ -32,6 +50,9 @@ const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextPr
 
   const saveAndResume = formRecord?.saveAndResume;
 
+  // Sanitize urlQuery to prevent security issues
+  const safeUrlQuery = urlQuery ? getSafeUrl(urlQuery) : null;
+
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return (
@@ -45,7 +66,7 @@ const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextPr
   }
 
   // Otherwise, display the default confirmation text
-  const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
+  const backToLink = safeUrlQuery ? <a href={safeUrlQuery}>{t("backLink")}</a> : null;
   return (
     <>
       <div>
