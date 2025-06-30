@@ -204,7 +204,8 @@
       "title": "Téléverseur de fichier"
     },
     "fileInputDefault": {
-      "text1": "Un moyen d'ajouter de la documentation à l'appui. Vous devez",
+      "text1": "Un moyen d'ajouter de la documentation à l'appui.",
+      "text1x": "⚠️ Vous devez",
       "text2": "configurer la livraison de réponse via l'API",
       "text3": "pour utiliser cet élément."
     },
