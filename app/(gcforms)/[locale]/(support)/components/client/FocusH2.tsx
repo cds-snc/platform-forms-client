@@ -14,9 +14,6 @@ export const FocusH2 = ({
     const el = headingSuccessRef.current as unknown as HTMLElement;
 
     if (el) {
-      // Add a tabindex if one does not exist on the element. This needed to focus an element,
-      // unless it is a form control like an input or button
-
       // Give the DOM a little time to update
       setTimeout(() => {
         el?.focus();
