@@ -130,7 +130,7 @@ export const SubElement = ({
             >
               <div
                 className={cn(
-                  "pt-4 pb-2",
+                  "pt-4",
                   !hasApiKeyId &&
                     item.type === FormElementTypes.fileInput &&
                     "bg-red-50 hover:bg-red-50 focus-within:bg-red-50 px-4"
