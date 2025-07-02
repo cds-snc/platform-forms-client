@@ -53,7 +53,7 @@ export const NotificationsUserSetting = ({
 
   return (
     <>
-      <p className="mb-2 font-bold">{t("settings.notifications.sessionUser.title")}</p>
+      <h3 className="text-base font-bold">{t("settings.notifications.sessionUser.title")}</h3>
       <p className="mb-4">{t("settings.notifications.sessionUser.description")}</p>
       <NotificationsToggle
         className="mb-4"
