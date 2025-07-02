@@ -29,10 +29,13 @@ export const FormCaptcha = ({
   const { getFlag } = useFeatureFlags();
   const hCaptcha = getFlag("hCaptcha");
 
+  const HCAPTCHA_SITE_KEY = "72924bde-40f6-4f84-b86a-85ca705ce0c6";
+
   if (
     process.env.NODE_ENV === "development" &&
     hCaptcha &&
-    !process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY
+    // !process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY
+    !HCAPTCHA_SITE_KEY
   ) {
     logMessage.warn(`hCaptcha: flag is enabled but hCaptchaSiteKey is missing. This will cause 
       hCaptcha to fail. Add the hCaptchaSiteKey to the App settings and make sure the
@@ -73,7 +76,8 @@ export const FormCaptcha = ({
       {children}
       {doHCaptchaFlow && (
         <HCaptcha
-          sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
+          // sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
+          sitekey={HCAPTCHA_SITE_KEY || ""}
           onVerify={onVerified}
           // Component will reset immediately after a Client sends bad data.
           // Note: An invalid sitekey will cause the HCaptcha component to fail without calling onError

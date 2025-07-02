@@ -14,9 +14,7 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
     return false;
   }
 
-  // const siteVerifyKey = process.env.HCAPTCHA_SITE_VERIFY_KEY;
-  // TEMP - for testing a11y features of hCaptcha
-  const siteVerifyKey = "72924bde-40f6-4f84-b86a-85ca705ce0c6";
+  const siteVerifyKey = process.env.HCAPTCHA_SITE_VERIFY_KEY;
 
   if (!siteVerifyKey) {
     logMessage.info(`hCaptcha: missing siteVerifyKey`);
