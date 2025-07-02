@@ -5,6 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.45.2](https://github.com/cds-snc/platform-forms-client/compare/v3.45.1...v3.45.2) (2025-07-02)
+
+
+### Bug Fixes
+
+* **deps:** update all patch dependencies ([#5789](https://github.com/cds-snc/platform-forms-client/issues/5789)) ([a8e7066](https://github.com/cds-snc/platform-forms-client/commit/a8e7066e3eae377a1d6919ac3afaa7e3f4316831))
+* Tweak file upload to be a stronger message on needing the API. ([#5797](https://github.com/cds-snc/platform-forms-client/issues/5797)) ([a96cbbf](https://github.com/cds-snc/platform-forms-client/commit/a96cbbfb846addc0d72c777ef894343c8ab43f42))
+* update focus heading logic for front facing forms ([#5794](https://github.com/cds-snc/platform-forms-client/issues/5794)) ([b8d5e5c](https://github.com/cds-snc/platform-forms-client/commit/b8d5e5c2c5b698c6c1393a860b0e7bef25b9ee1c))
+
+
+### Miscellaneous Chores
+
+* add browser feature detect ([#5799](https://github.com/cds-snc/platform-forms-client/issues/5799)) ([d0fa620](https://github.com/cds-snc/platform-forms-client/commit/d0fa6202b0e37e1a65d0de92a1c0b7e964b90e19))
+* Add default file types to json for file inputs  ([#5798](https://github.com/cds-snc/platform-forms-client/issues/5798)) ([3d97cb2](https://github.com/cds-snc/platform-forms-client/commit/3d97cb2a2f933d6f522eb2671afef9f424341fa2))
+* add published check for file input within a repeating set ([#5795](https://github.com/cds-snc/platform-forms-client/issues/5795)) ([6a350dc](https://github.com/cds-snc/platform-forms-client/commit/6a350dc29f309999abd1c94648c5369822938f11))
+* Changes to T&Cs, Terms of Use and  SLA (hCaptcha, file scanning, anonymity) ([#5780](https://github.com/cds-snc/platform-forms-client/issues/5780)) ([689f232](https://github.com/cds-snc/platform-forms-client/commit/689f2328855b6f2e970925f50d48cf4586cddb01))
+* **deps:** update all non-major github action dependencies ([#5788](https://github.com/cds-snc/platform-forms-client/issues/5788)) ([bf5be84](https://github.com/cds-snc/platform-forms-client/commit/bf5be84df0b5be1cdd24f95908425f8ccf665be5))
+* enable hCaptcha in blocking mode ([#5755](https://github.com/cds-snc/platform-forms-client/issues/5755)) ([a0a1a1c](https://github.com/cds-snc/platform-forms-client/commit/a0a1a1cce543e9b026659bcbe11f39a7b9054d8f))
+* repeating set file input background color ([#5796](https://github.com/cds-snc/platform-forms-client/issues/5796)) ([4e7c75c](https://github.com/cds-snc/platform-forms-client/commit/4e7c75cc4b3ae079c39f43a458dc8b8d0977ce03))
+* Tweaking content for file upload feature ([#5773](https://github.com/cds-snc/platform-forms-client/issues/5773)) ([f706801](https://github.com/cds-snc/platform-forms-client/commit/f706801b07ab705fbf599547a1635255d9ad980f))
+* update GCDS package ([#5791](https://github.com/cds-snc/platform-forms-client/issues/5791)) ([ca63ea5](https://github.com/cds-snc/platform-forms-client/commit/ca63ea59898f04f81ed172432f1241b649122707))
+* validate url for confirm page ([#5792](https://github.com/cds-snc/platform-forms-client/issues/5792)) ([7761a0d](https://github.com/cds-snc/platform-forms-client/commit/7761a0ddd4ebf2179c0b29bb84908409875fc95a))
+
+## [3.45.1](https://github.com/cds-snc/platform-forms-client/compare/v3.45.0...v3.45.1) (2025-06-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency markdown-to-jsx to v7.7.7 ([#5745](https://github.com/cds-snc/platform-forms-client/issues/5745)) ([0f41dfd](https://github.com/cds-snc/platform-forms-client/commit/0f41dfdff7e0efca7e38a2ab5a7468bbd97dd40f))
+* Fix validation bug in older forms by removing page visibility check ([#5774](https://github.com/cds-snc/platform-forms-client/issues/5774)) ([7b072ec](https://github.com/cds-snc/platform-forms-client/commit/7b072ec93761f471cb29869de3c522efb8643c0d))
+
+
+### Miscellaneous Chores
+
+* **deps:** lock file maintenance ([#5746](https://github.com/cds-snc/platform-forms-client/issues/5746)) ([2ffe5c4](https://github.com/cds-snc/platform-forms-client/commit/2ffe5c4f92435772b1dbfdf19f1ab328a2780bc2))
+* **deps:** update all non-major github action dependencies ([#5742](https://github.com/cds-snc/platform-forms-client/issues/5742)) ([9abaebd](https://github.com/cds-snc/platform-forms-client/commit/9abaebdd25838a98455d711cd0bf1de2f773e46d))
+* synced file(s) with cds-snc/site-reliability-engineering ([#5744](https://github.com/cds-snc/platform-forms-client/issues/5744)) ([3a3ba5d](https://github.com/cds-snc/platform-forms-client/commit/3a3ba5d3b489acfea16b887c49f592bb0e4ca0b1))
+* update some of the project dependencies ([#5756](https://github.com/cds-snc/platform-forms-client/issues/5756)) ([ab9ba68](https://github.com/cds-snc/platform-forms-client/commit/ab9ba68e91c10e2f2f66d4b3bc4867909ab8b905))
+* update Yarn to version 4.9.2 where necessary ([#5754](https://github.com/cds-snc/platform-forms-client/issues/5754)) ([a67e94f](https://github.com/cds-snc/platform-forms-client/commit/a67e94f42742a0be913a6029ab53e9005f65da4a))
+
 ## [3.45.0](https://github.com/cds-snc/platform-forms-client/compare/v3.44.0...v3.45.0) (2025-06-20)
 
 

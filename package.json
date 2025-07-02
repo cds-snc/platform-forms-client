@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.45.0",
+  "version": "3.45.2",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -44,7 +44,6 @@
     "cypress:run": "CYPRESS_DEBUG=true cypress run --browser chrome",
     "cypress:e2e": "cypress run --browser chrome --e2e",
     "cypress:component": "cypress run --browser chrome --component",
-    "cypress:release-test": "CYPRESS_DEBUG=true cypress run --config-file ./cypress/release-test/cypress.config.ts --browser chrome",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
   },
   "dependencies": {
@@ -57,7 +56,7 @@
     "@aws-sdk/lib-dynamodb": "^3.826.0",
     "@bufbuild/protobuf": "^2.2.3",
     "@casl/ability": "6.7.3",
-    "@cdssnc/gcds-tokens": "2.10.0",
+    "@cdssnc/gcds-tokens": "2.12.0",
     "@gcforms/connectors": "workspace:*",
     "@gcforms/editor": "workspace:*",
     "@gcforms/tag-input": "workspace:*",
@@ -98,9 +97,9 @@
     "lodash.merge": "^4.6.2",
     "lodash.set": "4.3.2",
     "lodash.unset": "4.5.2",
-    "markdown-to-jsx": "7.7.7",
+    "markdown-to-jsx": "7.7.8",
     "next": "15.3.4",
-    "next-auth": "5.0.0-beta.28",
+    "next-auth": "5.0.0-beta.29",
     "node-fetch": "^3.3.2",
     "pino": "9.7.0",
     "prisma": "6",
