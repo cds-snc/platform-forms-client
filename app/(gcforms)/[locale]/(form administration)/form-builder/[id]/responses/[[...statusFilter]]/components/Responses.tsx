@@ -38,13 +38,13 @@ export const Responses = ({
   const searchParams = useSearchParams();
   const lastKey = searchParams.get("lastKey");
 
-  useFeatureDetect();
-
   const { initialForm, name, formId } = useTemplateStore((s) => ({
     initialForm: s.form,
     name: s.name,
     formId: s.id,
   }));
+
+  useFeatureDetect({ formId });
 
   const [forceRefresh, setForceRefresh] = useState(Date.now());
 
