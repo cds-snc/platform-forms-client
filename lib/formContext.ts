@@ -151,7 +151,7 @@ export const getElementById = (elements: FormElement[], id: string) => {
  *
  * @param formElements
  * @param values
- * @returns array
+ * @returns {FormValues} - Returns a new FormValues object with matched ids for checkboxes and radios.
  */
 export const getValuesWithMatchedIds = (formElements: FormElement[], values: FormValues) => {
   const newValues = { ...values };
@@ -260,10 +260,8 @@ export const checkPageVisibility = (
     return true;
   }
 
-  const groups = formRecord.form.groups as GroupsType;
-
   // Get the current element's group ID
-  const groupId = Object.keys(groups).find((groupKey) => inGroup(groupKey, element.id, groups));
+  const groupId = findGroupByElementId(formRecord, element.id);
 
   // Get an array of values with matched ids instead of raw values
   const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, values);
