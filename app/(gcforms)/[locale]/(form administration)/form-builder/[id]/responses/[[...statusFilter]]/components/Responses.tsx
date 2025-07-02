@@ -14,6 +14,7 @@ import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
 import { StatusFilter } from "../types";
 import { SystemStatus } from "../../[statusFilter]/components/SystemStatus/SystemStatus";
+import { useFeatureDetect } from "@lib/hooks/useFeatureDetect";
 
 export interface ResponsesProps {
   hasOverdue: boolean;
@@ -36,6 +37,8 @@ export const Responses = ({
 
   const searchParams = useSearchParams();
   const lastKey = searchParams.get("lastKey");
+
+  useFeatureDetect();
 
   const { initialForm, name, formId } = useTemplateStore((s) => ({
     initialForm: s.form,
