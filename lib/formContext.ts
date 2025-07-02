@@ -159,7 +159,7 @@ export const getValuesWithMatchedIds = (formElements: FormElement[], values: For
     if (key !== "currentGroup" && key !== "groupHistory" && key !== "matchedIds") {
       const el = getElementById(formElements, key);
 
-      if (value && el && (el.type === "checkbox" || el.type === "radio")) {
+      if (value && el && ["radio", "checkbox", "dropdown"].includes(el.type)) {
         if (el.properties.choices) {
           const choiceIndex = el.properties.choices.findIndex(
             (choice) => choice.en === value || choice.fr === value
