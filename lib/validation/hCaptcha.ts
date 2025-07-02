@@ -15,7 +15,6 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   }
 
   const siteVerifyKey = process.env.HCAPTCHA_SITE_VERIFY_KEY;
-
   if (!siteVerifyKey) {
     logMessage.info(`hCaptcha: missing siteVerifyKey`);
     return false;
