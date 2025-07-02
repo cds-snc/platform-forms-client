@@ -5,6 +5,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { blockLoader } from "../../utils/form-builder/blockLoader";
 import { elementLoader } from "@lib/utils/form-builder/elementLoader";
 import { logMessage } from "@lib/logger";
+import { getDefaultFileGroupTypes } from "@lib/fileInput/fileGroupsToFileTypes";
 
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import {
@@ -99,6 +100,11 @@ export const useHandleAdd = () => {
       if (item.type === "dynamicRow") {
         item.properties.dynamicRow = await getTranslatedDynamicRowProperties();
       }
+
+      if (item.type === FormElementTypes.fileInput) {
+        item.properties.fileType = getDefaultFileGroupTypes();
+      }
+
       id = await add(index, item.type, item, groupId);
       treeView?.current?.addItem(String(id));
 
@@ -123,8 +129,6 @@ export const useHandleAdd = () => {
       const closeAll = new CustomEvent("close-all-panel-menus");
       window && window.dispatchEvent(closeAll);
 
-      //
-
       if (type === "customJson") {
         try {
           await elementLoader(subIndex, async (data, position) => {
@@ -137,8 +141,6 @@ export const useHandleAdd = () => {
 
         return id;
       }
-
-      //
 
       if (allowedTemplates.includes(type as TemplateTypes)) {
         try {
@@ -153,6 +155,11 @@ export const useHandleAdd = () => {
       }
 
       const item = await create(type as FormElementTypes);
+
+      if (item.type === FormElementTypes.fileInput) {
+        item.properties.fileType = getDefaultFileGroupTypes();
+      }
+
       id = await addSubItem(elId, subIndex, item.type, item);
       setChangeKey(String(new Date().getTime())); //Force a re-render
 

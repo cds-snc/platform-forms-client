@@ -10,7 +10,7 @@
       "label": "Allowable file types",
       "documents": {
         "label": "Documents",
-        "description": "pdf, txt, doc, docx"
+        "description": "pdf, txt, doc, docx, xml"
       },
       "images": {
         "label": "Images",
@@ -202,6 +202,27 @@
       "description": "A way to add supporting documentation.",
       "label": "Add file",
       "title": "File upload"
+    },
+    "fileInputDefault": {
+      "text1": "A way to add supporting documentation.",
+      "text1x": "⚠️ You must",
+      "text2": "set  your response delivery to API",
+      "text3": "to use this form element."
+    },
+    "fileInputWithApi": {
+      "description": "A way to add supporting documentation.",
+      "trialFeature": {
+        "title": "Beta feature",
+        "text1": "This trial feature is limited and requires:",
+        "bullet1": "Retrieval of form responses via API",
+        "bullet2": "{{BODY_SIZE_LIMIT_WITH_FILES}} MB maximum combined size of all files uploaded",
+        "bullet3": "Files to be scanned for malicious content once submitted",
+        "bullet4": "Collecting contact information in case you need to follow up about files"
+      },
+      "recommendations": {
+        "title": "Recommendations",
+        "text1": "Add fields to gather contact information in case you need to support those with the files they have attached."
+      }
     },
     "firstMiddleLastName": {
       "whatIsYourName": "What is your name?",
@@ -511,6 +532,8 @@
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
+  "hasFileInputAndApiDelivery": "API delivery enabled",
+  "hasFileInputAndApiDeliveryNote": "Required when using file upload",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -624,7 +647,7 @@
     "purpose": {
       "admin": "Administrative purposes",
       "nonAdmin": "Non-administrative purposes",
-      "unset": "Unset"
+      "unset": "Not set"
     },
     "formtypes": {
       "Collect": "Collect feedback or statistics",
@@ -714,7 +737,7 @@
         "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You'll need to create a new key and add it to your integration to restart API delivery.",
         "stopText": "<strong>To temporarily stop submissions</strong> to this form consider",
         "stopText1": "closing the form",
-        "stopText2": "instead.",
+        "stopText2": " instead.",
         "cancelButton": "Cancel",
         "deleteKeyButton": "Delete key",
         "error": {
@@ -819,7 +842,7 @@
     "purpose": {
       "admin": "Administrative purposes",
       "nonAdmin": "Non-administrative purposes",
-      "unset": "Unset"
+      "unset": "Not set"
     },
     "saveButton": "Save changes"
   },
@@ -850,7 +873,7 @@
     "responseDeliveryHelpWithApi": {
       "cta": "Help choosing an option",
       "title": "Choosing a response delivery option",
-      "description": "There are three options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
+      "description": "Use the chart below to help pick which option best fits your needs for getting submitted form responses.",
       "inbox": {
         "title": "Email to an inbox",
         "text1": "For up to PROTECTED A forms",
@@ -875,6 +898,10 @@
         "text4": "One API key per form",
         "text5": "Software development resources needed for the API integration"
       }
+    },
+    "emailDeliveryDeprecated": {
+      "title": "Email data delivery is no longer available.",
+      "description": "You will not be able to select this delivery option for future forms."
     }
   },
   "loggedOutTab": {
@@ -954,7 +981,6 @@
   "startP2": "Edit a form that was created and downloaded from GC Forms.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
-  "submittedResponsesChange": "Change delivery option",
   "submittedResponsesTextVault": {
     "text1": "Clicking submit will make responses available for retrieval:",
     "text2": "Go to Responses"
@@ -1219,6 +1245,9 @@
       "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
       "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
     },
+    "exitUrl": {
+      "label": "Exit button URL link"
+    },
     "noPages": {
       "text1": "Add a <strong>New page</strong> from the",
       "text2": "Pages tab",
@@ -1389,5 +1418,12 @@
     "formDescription": "Form description"
   },
   "en": "English",
-  "fr": "Français"
+  "fr": "Français",
+  "beta": {
+    "tag": "Beta:",
+    "text": "Trial feature "
+  },
+  "fileUploadApiWarning": {
+    "text": "Delivery method is not set to API."
+  }
 }

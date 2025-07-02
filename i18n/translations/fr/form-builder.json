@@ -11,7 +11,7 @@
     },
     "documents": {
       "label": "Documents",
-      "description": "pdf, txt, doc, docx"
+      "description": "pdf, txt, doc, docx, xml"
     },
     "images": {
       "label": "Images",
@@ -202,6 +202,27 @@
       "description": "Un moyen d'ajouter des documents à l'appui.",
       "label": "Téléverser un fichier",
       "title": "Téléverseur de fichier"
+    },
+    "fileInputDefault": {
+      "text1": "Un moyen d'ajouter de la documentation à l'appui.",
+      "text1x": "⚠️ Vous devez",
+      "text2": "configurer la livraison de réponse via l'API",
+      "text3": "pour utiliser cet élément."
+    },
+    "fileInputWithApi": {
+      "description": "Un moyen d'ajouter de la documentation à l'appui.",
+      "trialFeature": {
+        "title": "Fonctionnalité Bêta",
+        "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
+        "bullet1": "La récupération des réponses au formulaire via l'API",
+        "bullet2": "Une taille maximale combinée de tous les fichiers téléversés :  {{BODY_SIZE_LIMIT_WITH_FILES}} Mo",
+        "bullet3": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
+        "bullet4": "La collect de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
+      },
+      "recommendations": {
+        "title": "Recommendations",
+        "text1": "Ajoutez des champs à votre formulaire pour recueillir des coordonnées au cas où vous auriez besoin d'aider ces personnes avec les fichiers ajoutés."
+      }
     },
     "firstMiddleLastName": {
       "whatIsYourName": "Quel est votre nom?",
@@ -511,6 +532,8 @@
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
+  "hasFileInputAndApiDelivery": "Livraison de réponse avec l'API",
+  "hasFileInputAndApiDeliveryNote": "Choix obligatoire lors de l'utilisation du téléverseur de fichiers",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
@@ -714,7 +737,7 @@
         "cautionText": "La suppression de cette clé API ne peut être annulée. Supprimer la clé interrompt définitivement la livraison de réponses à tous les systèmes intégrés. Vous devrez créer une nouvelle clé et l'ajouter à votre intégration pour relancer la livraison à partir de l'API.",
         "stopText": "<strong>Pour arrêter les soumissions</strong> à ce formulaire de façon temporaire, veuillez considérer",
         "stopText1": "la fermeture du formulaire",
-        "stopText2": "à la place.",
+        "stopText2": " à la place.",
         "cancelButton": "Annuler",
         "deleteKeyButton": "Supprimer la clé",
         "error": {
@@ -850,7 +873,7 @@
     "responseDeliveryHelpWithApi": {
       "cta": "Conseils pour le choix d'une option",
       "title": "Choisir une option de livraison des réponses",
-      "description": "Il y a trois options pour obtenir les réponses des formulaires soumis. Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins.",
+      "description": "Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins pour obtenir les réponses des formulaires soumis.",
       "inbox": {
         "title": "Courriel à une boîte de réception",
         "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A.",
@@ -875,6 +898,10 @@
         "text4": "Une clé API par formulaire",
         "text5": "Ressources de développement de logiciel requises pour l'intégration API."
       }
+    },
+    "emailDeliveryDeprecated": {
+      "title": "La livraison de données par courriel n’est plus disponible.",
+      "description": "Vous ne pourrez pas sélectionner cette option pour les formulaires à venir."
     }
   },
   "loggedOutTab": {
@@ -954,7 +981,6 @@
   "startP2": "Modifiez un formulaire qui a été créé et téléchargé à partir de Formulaires GC.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
-  "submittedResponsesChange": "Modifier l'option de livraison",
   "submittedResponsesTextVault": {
     "text1": "En cliquant sur « Soumettre », la réponse sera disponible pour récupération :",
     "text2": "Allez aux Réponses"
@@ -1219,6 +1245,9 @@
       "buttonDescription": "Un bouton de sortie renvoie les personnes vers le site Web de l'organisation correspondant à l'image de marque du formulaire.",
       "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :"
     },
+    "exitUrl": {
+      "label": "Lien URL pour le bouton de sortie"
+    },
     "noPages": {
       "text1": "Ajoutez une <strong>Nouvelle page</strong> dans",
       "text2": "l'onglet Pages",
@@ -1389,5 +1418,12 @@
     "formDescription": "Description du formulaire"
   },
   "en": "English",
-  "fr": "Français"
+  "fr": "Français",
+  "beta": {
+    "tag": "Bêta :",
+    "text": "Fonctionnalité à l'essai"
+  },
+  "fileUploadApiWarning": {
+    "text": "La méthode de livraison n'est pas configurée sur API."
+  }
 }

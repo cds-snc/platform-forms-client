@@ -90,7 +90,6 @@ export const Preview = ({
   };
 
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
-  const settingsLink = `/${i18n.language}/form-builder/${id}/settings`;
 
   const brand = formRecord?.form ? formRecord.form.brand : null;
 
@@ -127,11 +126,7 @@ export const Preview = ({
           </div>
         ) : email ? (
           <div className="mb-1 inline-block bg-purple-200 p-2">
-            {t("submittedResponsesText", { ns: "form-builder", email })}{" "}
-            <a className="visited:text-black-default" href={settingsLink}>
-              {t("submittedResponsesChange", { ns: "form-builder" })}
-            </a>
-            .
+            {t("submittedResponsesText", { ns: "form-builder", email })}.
           </div>
         ) : (
           <div className="mb-1 inline-block bg-purple-200 p-2">
@@ -139,11 +134,7 @@ export const Preview = ({
             <a className="visited:text-black-default" href={responsesLink}>
               {t("submittedResponsesTextVault.text2", { ns: "form-builder" })}
             </a>
-            .{" "}
-            <a className="visited:text-black-default" href={settingsLink}>
-              {t("submittedResponsesChange", { ns: "form-builder" })}
-            </a>
-            .
+            . .
           </div>
         )}
 

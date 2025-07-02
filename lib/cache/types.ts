@@ -1,13 +1,20 @@
 // TODO: in the future these could pulled in from default_flag_settings.json
-export const FeatureFlags = {
+
+export const UserFeatureFlags = {
+  fileUpload: "fileUpload",
   addressComplete: "addressComplete",
+} as const;
+
+export const FeatureFlags = {
   formTimer: "formTimer",
   hCaptcha: "hCaptcha",
   topBanner: "topBanner",
-  fileUpload: "fileUpload",
+  ...UserFeatureFlags,
 } as const;
 
 export type FeatureFlagKeys = keyof typeof FeatureFlags;
+
+export type UserFeatureFlagKeys = keyof typeof UserFeatureFlags;
 
 export type Flags = {
   [K in FeatureFlagKeys]: boolean;

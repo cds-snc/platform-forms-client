@@ -27,12 +27,21 @@ export const MoreMenu = ({
     <>
       <Dropdown>
         <DropdownMenuPrimitive.Item
-          className={`${themes.htmlLink} ${themes.base} !block !cursor-pointer`}
+          className={`${themes.htmlLink} ${themes.base} mb-2 !block !cursor-pointer`}
           onClick={() => {
             router.push(`/${language}/admin/accounts/${user.id}/manage-permissions`);
           }}
         >
           {canManageUser ? t("managePermissions") : t("viewPermissions")}
+        </DropdownMenuPrimitive.Item>
+
+        <DropdownMenuPrimitive.Item
+          className={`${themes.htmlLink} ${themes.base} !block !cursor-pointer`}
+          onClick={() => {
+            router.push(`/${language}/admin/accounts/${user.id}/manage-user-features`);
+          }}
+        >
+          {canManageUser ? t("manageUserFeatures") : t("viewUserFeatures")}
         </DropdownMenuPrimitive.Item>
 
         {/* Deactivate Account  */}

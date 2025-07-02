@@ -145,7 +145,6 @@ export const RulesDialog = () => {
           }
         >
           <div className="p-5">
-            This is the {mode} rules dialog for item {item?.id}
             <p className="mb-4" id={descriptionId}>
               {t("addConditionalRules.modalDescription")}
             </p>
