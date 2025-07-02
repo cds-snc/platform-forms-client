@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.45.1",
+  "version": "3.45.2",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -123,7 +123,7 @@
     "unorm": "^1.6.0",
     "usehooks-ts": "3.1.1",
     "uuid": "9.0.1",
-    "valibot": "^0.30.0",
+    "valibot": "^1.1.0",
     "zustand": "5.0.5"
   },
   "devDependencies": {

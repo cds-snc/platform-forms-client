@@ -31,9 +31,9 @@ export const updateSecurityQuestion = AuthenticatedAction(
 
 const validateData = (formData: { [k: string]: unknown }) => {
   const schema = v.object({
-    oldQuestionId: v.string("Field is required", [v.minLength(1)]),
-    newQuestionId: v.string("Field is required", [v.minLength(1)]),
-    newAnswer: v.string("Field is required", [v.toLowerCase(), v.toTrimmed(), v.minLength(4)]),
+    oldQuestionId: v.pipe(v.string("Field is required"), v.minLength(1)),
+    newQuestionId: v.pipe(v.string("Field is required"), v.minLength(1)),
+    newAnswer: v.pipe(v.string("Field is required"), v.toLowerCase(), v.trim(), v.minLength(4)),
   });
   return v.safeParse(schema, formData, { abortPipeEarly: true });
 };

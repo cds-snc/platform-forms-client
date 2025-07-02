@@ -172,13 +172,14 @@ const validate = async (
   const { t } = await serverTranslation(["auth-verify"], { lang: language });
 
   const formValidationSchema = v.object({
-    verificationCode: v.string([
+    verificationCode: v.pipe(
+      v.string(),
       v.minLength(1, t("verify.fields.confirmationCode.error.notEmpty")),
       v.length(5, t("verify.fields.confirmationCode.error.length")),
-      v.regex(/^[a-z0-9]*$/i, t("verify.fields.confirmationCode.error.noSymbols")),
-    ]),
-    authenticationFlowToken: v.string([v.minLength(1)]),
-    email: v.string([v.toTrimmed(), v.toLowerCase(), v.minLength(1)]),
+      v.regex(/^[a-z0-9]*$/i, t("verify.fields.confirmationCode.error.noSymbols"))
+    ),
+    authenticationFlowToken: v.pipe(v.string(), v.minLength(1)),
+    email: v.pipe(v.string(), v.trim(), v.toLowerCase(), v.minLength(1)),
   });
   return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
 };

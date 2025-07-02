@@ -14,9 +14,11 @@ The department or agency you’re communicating with also protects your personal
 
 Personal information is also collected in compliance with the [Privacy Act](https://laws.justice.gc.ca/eng/acts/P-21/index.html).
 
-### We use hCaptcha to protect form security
+### We use hCaptcha and malicious file scanning to protect form security
 
-The use of [hCaptcha](https://www.hcaptcha.com/) helps us detect spam and automated abuse or threats from bots. Learn more about this third-party provider's [privacy policy](https://www.hcaptcha.com/privacy) and [terms of service](https://www.hcaptcha.com/terms).
+The use of [hCaptcha](https://www.hcaptcha.com/) helps us detect and block spam and automated abuse or threats from bots. Learn more about this third-party provider's [privacy policy](https://www.hcaptcha.com/privacy) and [terms of service](https://www.hcaptcha.com/terms).
+
+We also analyze form submissions through a third-party service provider to detect and flag malicious content in file attachments.
 
 ### We use web analytics to help improve your experience
 
@@ -121,4 +123,4 @@ Many social media platforms have multiple language options and provide instructi
 
 
 
-**Last update:** March 19, 2025
+**Last update:** June 26, 2025
