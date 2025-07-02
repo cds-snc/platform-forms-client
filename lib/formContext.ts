@@ -207,13 +207,15 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
   // Push the current group to history
   history.push(currentGroup);
 
-  const nextAction = groups[currentGroup].nextAction;
+  // If there is no nextAction, treat as "end"
+  const nextAction = groups[currentGroup].nextAction ?? "end";
 
   if (typeof nextAction === "string") {
     // Nowhere to go from here
-    if (nextAction === "exit") {
+    if (nextAction === "end" || nextAction === "exit") {
       return history;
     }
+
     // Only one next action, so continue to the next group
     return getVisibleGroupsBasedOnValuesRecursive(
       formRecord,
@@ -223,11 +225,17 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
     );
   } else if (Array.isArray(nextAction)) {
     // If nextAction is an array, we need to check each rule
+    // Check for catch-all value
+    const catchAllRule = nextAction.find((action) => action.choiceId.includes("catch-all"));
+
+    let matchFound = false;
+
     for (const action of nextAction) {
       const elementId = action.choiceId.split(".")[0];
 
       // When we find a matching action, continue to the next group
       if (valuesWithMatchedIds[elementId] && valuesWithMatchedIds[elementId] === action.choiceId) {
+        matchFound = true;
         return getVisibleGroupsBasedOnValuesRecursive(
           formRecord,
           valuesWithMatchedIds,
@@ -235,6 +243,16 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
           history
         );
       }
+    }
+
+    if (!matchFound && catchAllRule) {
+      // If no match was found, but we have a catch-all rule, continue to the catch-all group
+      return getVisibleGroupsBasedOnValuesRecursive(
+        formRecord,
+        valuesWithMatchedIds,
+        catchAllRule.groupId,
+        history
+      );
     }
   }
 
