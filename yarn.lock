@@ -68,9 +68,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.39.1":
-  version: 0.39.1
-  resolution: "@auth/core@npm:0.39.1"
+"@auth/core@npm:0.40.0":
+  version: 0.40.0
+  resolution: "@auth/core@npm:0.40.0"
   dependencies:
     "@panva/hkdf": "npm:^1.2.1"
     jose: "npm:^6.0.6"
@@ -88,7 +88,7 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 10c0/ba2703656c266ce42f10a1e5ac90c2bcbc829bff651cc930ad95a4734aafaa249551d0af589a0c970fbd7f7aa6324c329439183bfb46ba1bee3f8cfa90128275
+  checksum: 10c0/25cd12f22611eedc21c17dc1908fa9428ae5f0e32eb32c1ab009642276c37099cce58f49ffbb7f8e8d6d6488d5101a24fb9808ec662eee5aca19d520750acaa3
   languageName: node
   linkType: hard
 
@@ -1610,10 +1610,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cdssnc/gcds-tokens@npm:2.10.0":
-  version: 2.10.0
-  resolution: "@cdssnc/gcds-tokens@npm:2.10.0"
-  checksum: 10c0/0d75c3ac6d9e2039eebb755a3f941e70c9cbba261a4b7bae1005abf8430ff7f93a90e72fbd10443c3431a1c139b09a8f15e424b5b119e4fbdf5ebacd2a3426a8
+"@cdssnc/gcds-tokens@npm:2.12.0":
+  version: 2.12.0
+  resolution: "@cdssnc/gcds-tokens@npm:2.12.0"
+  checksum: 10c0/d5e2396d636a16e7d1607611ee8de7cec4e20b544781d7e862a69a499bc67ac0d4db5af6cff030cd95f3b4451c1f33c7b9d59ca6ea1ec6d8d797f20f3254242a
   languageName: node
   linkType: hard
 
@@ -12381,7 +12381,7 @@ __metadata:
     "@babel/preset-typescript": "npm:^7.24.7"
     "@bufbuild/protobuf": "npm:^2.2.3"
     "@casl/ability": "npm:6.7.3"
-    "@cdssnc/gcds-tokens": "npm:2.10.0"
+    "@cdssnc/gcds-tokens": "npm:2.12.0"
     "@eslint/eslintrc": "npm:^3"
     "@gcforms/connectors": "workspace:*"
     "@gcforms/editor": "workspace:*"
@@ -12474,9 +12474,9 @@ __metadata:
     lodash.merge: "npm:^4.6.2"
     lodash.set: "npm:4.3.2"
     lodash.unset: "npm:4.5.2"
-    markdown-to-jsx: "npm:7.7.7"
+    markdown-to-jsx: "npm:7.7.8"
     next: "npm:15.3.4"
-    next-auth: "npm:5.0.0-beta.28"
+    next-auth: "npm:5.0.0-beta.29"
     node-fetch: "npm:^3.3.2"
     pino: "npm:9.7.0"
     pino-pretty: "npm:^11.0.0"
@@ -15034,12 +15034,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-to-jsx@npm:7.7.7":
-  version: 7.7.7
-  resolution: "markdown-to-jsx@npm:7.7.7"
+"markdown-to-jsx@npm:7.7.8":
+  version: 7.7.8
+  resolution: "markdown-to-jsx@npm:7.7.8"
   peerDependencies:
     react: ">= 0.14.0"
-  checksum: 10c0/d058d5e2657e034a1a4599906fbbcbb61858495c1c97a84711ba01ed3dfea932a8ae3f2ca027de4c62f13c77ad2ddc36c9b7ece66f39d3668699271000c7bab2
+  checksum: 10c0/6d279d906fc48e38ec178e61a5c78cdb0c89e1cfb9ba4e0f918699a61c5e6d5dbc255f073be12472df503a1f213c071b8d845e51ad211c59a9c890ff5b07dd5e
   languageName: node
   linkType: hard
 
@@ -15343,11 +15343,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:5.0.0-beta.28":
-  version: 5.0.0-beta.28
-  resolution: "next-auth@npm:5.0.0-beta.28"
+"next-auth@npm:5.0.0-beta.29":
+  version: 5.0.0-beta.29
+  resolution: "next-auth@npm:5.0.0-beta.29"
   dependencies:
-    "@auth/core": "npm:0.39.1"
+    "@auth/core": "npm:0.40.0"
   peerDependencies:
     "@simplewebauthn/browser": ^9.0.1
     "@simplewebauthn/server": ^9.0.2
@@ -15361,7 +15361,7 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 10c0/56ab8c5e9bdbffe65191a1afa1d18b95df9f61686f9d2faca3f53098eb59491df5929540d8bdb3258a0ab8d26ff2707e6256e34212c329c624f3014652cb8701
+  checksum: 10c0/2c6bada9a5f28a9a172d3ad295bfb05b648a4fced01f9988154df1ebca712cf460fb49173ada4c26de4c7ab180256f40ac19d16e2147c1c68f2a7475ab5d5ea8
   languageName: node
   linkType: hard
 
