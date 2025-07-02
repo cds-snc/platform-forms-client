@@ -14,6 +14,7 @@ import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
 import { StatusFilter } from "../types";
 import { SystemStatus } from "../../[statusFilter]/components/SystemStatus/SystemStatus";
+import { useFeatureDetect } from "@lib/hooks/useFeatureDetect";
 
 export interface ResponsesProps {
   hasOverdue: boolean;
@@ -42,6 +43,8 @@ export const Responses = ({
     name: s.name,
     formId: s.id,
   }));
+
+  useFeatureDetect({ formId });
 
   const [forceRefresh, setForceRefresh] = useState(Date.now());
 
