@@ -66,6 +66,9 @@ export async function submitForm(
       }
     }
 
+    /**
+     * This validation checks the response values against the template element types.
+     */
     const validateResponsesResult = await validateResponses(values, template);
 
     if (Object.keys(validateResponsesResult).length !== 0) {
@@ -81,7 +84,9 @@ export async function submitForm(
 
     const { t } = await serverTranslation();
 
-    // @TODO: (TBD) Does this replace the above type validation? Or is there use for both?
+    /**
+     * This validation runs the client-side validation on the server.
+     */
     const validateOnSubmitResult = await validateOnSubmit(values, {
       formRecord: template,
       t: t,
@@ -93,7 +98,7 @@ export async function submitForm(
           validateOnSubmitResult
         )}`
       );
-      // @TODO: (TBD) Should we just log/monitor for now?
+      // @TODO: comment out for passive mode
       throw new MissingFormDataError("Form data validation failed");
     }
 
