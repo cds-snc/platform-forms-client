@@ -4,7 +4,7 @@ import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
 import {
-  custom,
+  check,
   email,
   minLength,
   maxLength,
@@ -12,7 +12,8 @@ import {
   safeParse,
   string,
   toLowerCase,
-  toTrimmed,
+  trim,
+  pipe,
 } from "valibot";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { AuthenticatedAction } from "@lib/actions";
@@ -109,25 +110,27 @@ const validate = async (
   const { t } = await serverTranslation(["unlock-publishing", "common"], { lang: language });
 
   const SupportSchema = object({
-    managerEmail: string([
+    managerEmail: pipe(
+      string(),
       toLowerCase(),
-      toTrimmed(),
+      trim(),
       minLength(1, t("input-validation.required", { ns: "common" })),
       email(t("input-validation.email", { ns: "common" })),
-      custom(
+      check(
         (email) => isValidGovEmail(email),
         t("input-validation.validGovEmail", { ns: "common" })
       ),
-      custom(
+      check(
         (email) => email?.toLowerCase() != userEmail?.toLowerCase(),
         t("input-validation.notSameAsUserEmail", { ns: "common" })
-      ),
-    ]),
-    department: string([
+      )
+    ),
+    department: pipe(
+      string(),
       minLength(1, t("input-validation.required", { ns: "common" })),
-      maxLength(50, t("signUpRegistration.fields.name.error.maxLength")),
-    ]),
-    goals: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+      maxLength(50, t("signUpRegistration.fields.name.error.maxLength"))
+    ),
+    goals: pipe(string(), minLength(1, t("input-validation.required", { ns: "common" }))),
   });
 
   return safeParse(SupportSchema, formEntries, { abortPipeEarly: true });

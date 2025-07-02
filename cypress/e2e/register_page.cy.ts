@@ -105,6 +105,9 @@ describe("Register Page", () => {
     );
   });
   it("Error on submitting a form with a non matching password confirmation field", () => {
+    cy.typeInField("input[id='name']", "My Name");
+    cy.typeInField("input[id='username']", "myemail@cds-snc.ca");
+
     cy.typeInField("input[id='password']", "Password1!");
     cy.typeInField("input[id='passwordConfirmation']", "Password1!!!!!!!");
     cy.get("[type='submit']").click();

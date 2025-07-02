@@ -3,7 +3,7 @@
 import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
-import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
+import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
 
 export interface ErrorStates {
   validationErrors: {
@@ -115,18 +115,20 @@ const validate = async (
 
   const SupportSchema = object({
     // checkbox input can send a non-string value when empty
-    request: string(t("input-validation.required", { ns: "common" }), [
-      minLength(1, t("input-validation.required", { ns: "common" })),
-    ]),
-    description: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
-    name: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
-    email: string([
+    request: pipe(
+      string(t("input-validation.required", { ns: "common" })),
+      minLength(1, t("input-validation.required", { ns: "common" }))
+    ),
+    description: pipe(string(), minLength(1, t("input-validation.required", { ns: "common" }))),
+    name: pipe(string(), minLength(1, t("input-validation.required", { ns: "common" }))),
+    email: pipe(
+      string(),
       toLowerCase(),
-      toTrimmed(),
+      trim(),
       minLength(1, t("input-validation.required", { ns: "common" })),
-      email(t("input-validation.email", { ns: "common" })),
-    ]),
-    department: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+      email(t("input-validation.email", { ns: "common" }))
+    ),
+    department: pipe(string(), minLength(1, t("input-validation.required", { ns: "common" }))),
     // Note: branch and jobTitle are not required/validated
     branch: string(),
     jobTitle: string(),
