@@ -16,7 +16,7 @@ import { validateResponses } from "@lib/validation/validation";
 import { sendNotification } from "@lib/notifications";
 
 //  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
-const CAPTCHA_BLOCKABLE_MODE = true;
+const CAPTCHA_BLOCKABLE_MODE = false;
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
