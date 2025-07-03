@@ -56,6 +56,7 @@ export const ResponsesContainer = ({
             overdueAfter={overdueAfter}
             isApiRetrieval={true}
           />
+          <ManageFormAccessDialogContainer formId={id} />
         </div>
       </>
     );
