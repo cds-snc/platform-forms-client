@@ -579,4 +579,168 @@ describe("getVisibleGroupsBasedOnValuesRecursive", () => {
     // Should stop when it encounters 'start' again
     expect(result).toEqual(["start", "groupA", "groupB"]);
   });
+
+  it("handles catch-all rules when no specific choice matches", () => {
+    const groups: GroupsType = {
+      start: { 
+        name: "Start", 
+        titleEn: "Start", 
+        titleFr: "Start", 
+        elements: ["1"], 
+        nextAction: [
+          { choiceId: "1.0", groupId: "groupA" },
+          { choiceId: "1.1", groupId: "groupB" },
+          { choiceId: "catch-all", groupId: "defaultGroup" }
+        ]
+      },
+      groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
+      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] },
+      defaultGroup: { name: "Default", titleEn: "Default", titleFr: "Default", elements: [] }
+    };
+    
+    const formRecord = {
+      form: { groups }
+    } as PublicFormRecord;
+
+    // No matching choice ID - should use catch-all
+    const values: FormValues = { "1": "1.2" };
+    const result = getVisibleGroupsBasedOnValuesRecursive(
+      formRecord,
+      values,
+      "start"
+    );
+    expect(result).toEqual(["start", "defaultGroup"]);
+  });
+
+  it("handles catch-all rules when element has no value", () => {
+    const groups: GroupsType = {
+      start: { 
+        name: "Start", 
+        titleEn: "Start", 
+        titleFr: "Start", 
+        elements: ["1"], 
+        nextAction: [
+          { choiceId: "1.0", groupId: "groupA" },
+          { choiceId: "catch-all", groupId: "defaultGroup" }
+        ]
+      },
+      groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
+      defaultGroup: { name: "Default", titleEn: "Default", titleFr: "Default", elements: [] }
+    };
+    
+    const formRecord = {
+      form: { groups }
+    } as PublicFormRecord;
+
+    // Element 1 has no value - should use catch-all
+    const values: FormValues = {};
+    const result = getVisibleGroupsBasedOnValuesRecursive(
+      formRecord,
+      values,
+      "start"
+    );
+    expect(result).toEqual(["start", "defaultGroup"]);
+  });
+
+  it("prefers specific choice matches over catch-all rules", () => {
+    const groups: GroupsType = {
+      start: { 
+        name: "Start", 
+        titleEn: "Start", 
+        titleFr: "Start", 
+        elements: ["1"], 
+        nextAction: [
+          { choiceId: "catch-all", groupId: "defaultGroup" },
+          { choiceId: "1.0", groupId: "groupA" },
+          { choiceId: "1.1", groupId: "groupB" }
+        ]
+      },
+      groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
+      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] },
+      defaultGroup: { name: "Default", titleEn: "Default", titleFr: "Default", elements: [] }
+    };
+    
+    const formRecord = {
+      form: { groups }
+    } as PublicFormRecord;
+
+    // Should match specific choice, not catch-all
+    const valuesA: FormValues = { "1": "1.0" };
+    const resultA = getVisibleGroupsBasedOnValuesRecursive(
+      formRecord,
+      valuesA,
+      "start"
+    );
+    expect(resultA).toEqual(["start", "groupA"]);
+
+    const valuesB: FormValues = { "1": "1.1" };
+    const resultB = getVisibleGroupsBasedOnValuesRecursive(
+      formRecord,
+      valuesB,
+      "start"
+    );
+    expect(resultB).toEqual(["start", "groupB"]);
+  });
+
+  it("handles multiple catch-all rules (uses first found)", () => {
+    const groups: GroupsType = {
+      start: { 
+        name: "Start", 
+        titleEn: "Start", 
+        titleFr: "Start", 
+        elements: ["1"], 
+        nextAction: [
+          { choiceId: "1.0", groupId: "groupA" },
+          { choiceId: "catch-all-1", groupId: "defaultGroup1" },
+          { choiceId: "catch-all-2", groupId: "defaultGroup2" }
+        ]
+      },
+      groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
+      defaultGroup1: { name: "Default1", titleEn: "Default1", titleFr: "Default1", elements: [] },
+      defaultGroup2: { name: "Default2", titleEn: "Default2", titleFr: "Default2", elements: [] }
+    };
+    
+    const formRecord = {
+      form: { groups }
+    } as PublicFormRecord;
+
+    // Should use first catch-all rule found
+    const values: FormValues = { "1": "1.2" };
+    const result = getVisibleGroupsBasedOnValuesRecursive(
+      formRecord,
+      values,
+      "start"
+    );
+    expect(result).toEqual(["start", "defaultGroup1"]);
+  });
+
+  it("handles conditional nextAction with no matching choice and no catch-all", () => {
+    const groups: GroupsType = {
+      start: { 
+        name: "Start", 
+        titleEn: "Start", 
+        titleFr: "Start", 
+        elements: ["1"], 
+        nextAction: [
+          { choiceId: "1.0", groupId: "groupA" },
+          { choiceId: "1.1", groupId: "groupB" }
+        ]
+      },
+      groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
+      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] }
+    };
+    
+    const formRecord = {
+      form: { groups }
+    } as PublicFormRecord;
+
+    // No matching choice ID and no catch-all - should return current history
+    const values: FormValues = { "1": "1.2" };
+    const result = getVisibleGroupsBasedOnValuesRecursive(
+      formRecord,
+      values,
+      "start"
+    );
+    expect(result).toEqual(["start"]);
+  });
 });
