@@ -49,15 +49,13 @@ export const ResponsesContainer = ({
               </div>
             )}
           </div>
-          <div>
-            <Responses
-              hasOverdue={hasOverdue}
-              statusFilter={statusFilter}
-              responseDownloadLimit={responseDownloadLimit}
-              overdueAfter={overdueAfter}
-              isApiRetrieval={true}
-            />
-          </div>
+          <Responses
+            hasOverdue={hasOverdue}
+            statusFilter={statusFilter}
+            responseDownloadLimit={responseDownloadLimit}
+            overdueAfter={overdueAfter}
+            isApiRetrieval={true}
+          />
         </div>
       </>
     );
