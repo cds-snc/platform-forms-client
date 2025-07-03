@@ -193,7 +193,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               <span aria-hidden={true}>
                 {fileName} ({fileSize.size} {t(`input-validation.${fileSize.unit}`)}){" "}
               </span>
-              <ResetButton resetInput={resetInput} lang={lang} />
+              <ResetButton fileName={fileName} resetInput={resetInput} lang={lang} />
             </div>
           ) : (
             <span className="my-4 inline-block max-w-fit">{t("file-upload-no-file-selected")}</span>
