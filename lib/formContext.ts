@@ -178,34 +178,36 @@ export const getValuesWithMatchedIds = (formElements: FormElement[], values: For
 };
 
 /**
- * Recursively traverses the form groups to build a list of visible groups based on the current values.
+ * Recursively traverses the form groups to build a list of visible groups based on values.
+ * Essentially, we are reconstructing the group history (the path the
+ * user took through the form) based on the current set of values.
  *
  * @param formRecord
  * @param valuesWithMatchedIds
  * @param currentGroup
- * @param history
+ * @param visibleGroups
  * @returns
  */
 export const getVisibleGroupsBasedOnValuesRecursive = (
   formRecord: PublicFormRecord,
   valuesWithMatchedIds: FormValues,
   currentGroup: string,
-  history: string[] = []
+  visibleGroups: string[] = []
 ): string[] => {
-  // Prevent infinite loops by checking if the current group is already in history
-  if (history.includes(currentGroup)) {
-    return history;
+  // Prevent infinite loops by checking if the current group is already in visibleGroups
+  if (visibleGroups.includes(currentGroup)) {
+    return visibleGroups;
   }
 
   const groups = formRecord.form.groups as GroupsType;
 
   // If the current group is not defined in groups, bail out
   if (!groups || !groups[currentGroup]) {
-    return history;
+    return visibleGroups;
   }
 
-  // Push the current group to history
-  history.push(currentGroup);
+  // Push the current group to visibleGroups
+  visibleGroups.push(currentGroup);
 
   // If there is no nextAction, treat as "end"
   const nextAction = groups[currentGroup].nextAction ?? "end";
@@ -213,7 +215,7 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
   if (typeof nextAction === "string") {
     // Nowhere to go from here
     if (nextAction === "end" || nextAction === "exit") {
-      return history;
+      return visibleGroups;
     }
 
     // Only one next action, so continue to the next group
@@ -221,7 +223,7 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
       formRecord,
       valuesWithMatchedIds,
       nextAction,
-      history
+      visibleGroups
     );
   } else if (Array.isArray(nextAction)) {
     // If nextAction is an array, we need to check each rule
@@ -240,7 +242,7 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
           formRecord,
           valuesWithMatchedIds,
           action.groupId,
-          history
+          visibleGroups
         );
       }
     }
@@ -251,13 +253,13 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
         formRecord,
         valuesWithMatchedIds,
         catchAllRule.groupId,
-        history
+        visibleGroups
       );
     }
   }
 
-  // If no next action is found, return the current history
-  return history;
+  // If no next action is found, return the current visibleGroups
+  return visibleGroups;
 };
 
 /**
