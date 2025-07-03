@@ -9,6 +9,7 @@ import { Responses } from "./Responses";
 import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 import { StatusFilter } from "../types";
 import { useTranslation } from "@i18n/client";
+import { ManageFormAccessButton } from "./ManageFormAccessDialog/ManageFormAccessButton";
 
 export const ResponsesContainer = ({
   hasOverdue,
@@ -41,6 +42,11 @@ export const ResponsesContainer = ({
       <>
         <div className="mr-10">
           <h1>{t("apiDashboard.title")}</h1>
+          {isPublished && (
+            <div className="absolute right-0">
+              <ManageFormAccessButton />
+            </div>
+          )}
           <Responses
             hasOverdue={hasOverdue}
             statusFilter={statusFilter}
