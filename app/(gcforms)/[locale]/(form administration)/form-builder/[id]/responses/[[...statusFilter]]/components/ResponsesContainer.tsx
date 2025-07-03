@@ -41,19 +41,23 @@ export const ResponsesContainer = ({
     return (
       <>
         <div className="mr-10">
-          <h1>{t("apiDashboard.title")}</h1>
-          {isPublished && (
-            <div className="absolute right-0">
-              <ManageFormAccessButton />
-            </div>
-          )}
-          <Responses
-            hasOverdue={hasOverdue}
-            statusFilter={statusFilter}
-            responseDownloadLimit={responseDownloadLimit}
-            overdueAfter={overdueAfter}
-            isApiRetrieval={true}
-          />
+          <div className="mb-4 flex justify-between">
+            <h1>{t("apiDashboard.title")}</h1>
+            {isPublished && (
+              <div>
+                <ManageFormAccessButton />
+              </div>
+            )}
+          </div>
+          <div>
+            <Responses
+              hasOverdue={hasOverdue}
+              statusFilter={statusFilter}
+              responseDownloadLimit={responseDownloadLimit}
+              overdueAfter={overdueAfter}
+              isApiRetrieval={true}
+            />
+          </div>
         </div>
       </>
     );
