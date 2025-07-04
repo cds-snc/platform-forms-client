@@ -143,6 +143,46 @@ async function deliveryOptionMigration() {
   );
 }
 
+// Part 1: Notifications v2 data migration - run once and then remove after data migration is complete
+async function emailNotificationsUsersMigration() {
+  const templates = await prisma.template.findMany({
+    where: { notificationsInterval: { not: null } },
+    select: {
+      id: true,
+      users: { select: { id: true } },
+    },
+  });
+
+  await Promise.all(
+    templates.map((template) =>
+      prisma.template.update({
+        where: { id: template.id },
+        data: {
+          notificationsUsers: {
+            connect: template.users.map((u) => ({ id: u.id })),
+          },
+        },
+      })
+    )
+  );
+
+  console.log(
+    `${templates.length} were migrated for update email notifications users that have a non null notificationsInterval`
+  );
+}
+
+// Part 2: Notifications v2 data migration - run after Par 1 and then remove after data migration is complete
+// async function emailNotificationsIntervalMigration() {
+//   const templates = await prisma.template.updateMany({
+//     where: { notificationsInterval: null },
+//     data: { notificationsInterval: 1440 }, // Back to the 1440 default - use as a setting and no longer as a flag
+//   });
+//
+//   console.log(
+//     `${templates.count} were migrated for update notificationsInterval when null to the default value of 1440 minutes`
+//   );
+// }
+
 async function main(environment: string) {
   try {
     console.log(`Seeding Database for ${environment} enviroment`);
@@ -171,6 +211,14 @@ async function main(environment: string) {
 
     console.log("Running 'deliveryOptionMigration' migration");
     deliveryOptionMigration();
+
+    // Part 1:
+    console.log("Running 'emailNotificationsUsersMigration' migration");
+    emailNotificationsUsersMigration();
+
+    // Part 2:
+    // console.log("Running 'emailNotificationsIntervalMigration' migration");
+    // emailNotificationsIntervalMigration();
   } catch (e) {
     console.error(e);
   } finally {
