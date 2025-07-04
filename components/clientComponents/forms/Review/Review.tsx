@@ -1,7 +1,11 @@
 import { useRef } from "react";
 
 import { type Language } from "@lib/types/form-builder-types";
-import { type FormValues } from "@lib/formContext";
+import {
+  getValuesWithMatchedIds,
+  getVisibleGroupsBasedOnValuesRecursive,
+  type FormValues,
+} from "@lib/formContext";
 import { type Theme } from "@clientComponents/globals/Buttons/themes";
 import { useTranslation } from "@i18n/client";
 
@@ -14,7 +18,7 @@ import { EditButton } from "./EditButton";
 import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 
 export const Review = ({ language }: { language: Language }): React.ReactElement | null => {
-  const { groups, getValues, formRecord, getGroupHistory } = useGCFormsContext();
+  const { groups, getValues, formRecord } = useGCFormsContext();
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   const { t } = useTranslation(["review", "common"]);
 
@@ -22,8 +26,16 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   useFocusIt({ elRef: groupsHeadingRef });
 
   const formValues: void | FormValues = getValues();
-  const groupHistoryIds = getGroupHistory();
+
   if (!formValues || !groups) throw new Error("Form values or groups are missing");
+
+  const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, formValues);
+
+  const groupHistoryIds = getVisibleGroupsBasedOnValuesRecursive(
+    formRecord,
+    valuesWithMatchedIds,
+    "start"
+  );
 
   const reviewItems = getReviewItems({
     formRecord: formRecord,

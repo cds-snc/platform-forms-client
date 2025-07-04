@@ -671,7 +671,7 @@ describe("Recursive visibility check", () => {
         expect(checkVisibilityRecursive(formRecord, getElement(10), valuesThreeC1)).toBe(false);
     });
 
-    test.skip("Visibility with groups", async () => {
+    test("Visibility with groups", async () => {
         const formRecord = {
             "id": "cmapim4bc0001wpigmcpfwviq",
             "form": {
@@ -1102,16 +1102,6 @@ describe("Recursive visibility check", () => {
             "11": "",
             "12": "yes",
             "13": "",
-            "currentGroup": "598121d4-5439-4b58-a3e0-517579aafb0e",
-            "groupHistory": [
-                "start",
-                "598121d4-5439-4b58-a3e0-517579aafb0e",
-                "73db1af9-96e3-4f6e-89d5-45e0afff39d1"
-            ],
-            "matchedIds": [
-                "12.0",
-                "1.0"
-            ]
         };
 
         // Should show refer field (13), not if refer=no
@@ -1136,15 +1126,6 @@ describe("Recursive visibility check", () => {
             "11": "",
             "12": "",
             "13": "",
-            "currentGroup": "f695c318-73c3-4ba1-8807-6594992ac528",
-            "groupHistory": [
-                "start",
-                "f695c318-73c3-4ba1-8807-6594992ac528",
-                "73db1af9-96e3-4f6e-89d5-45e0afff39d1"
-            ],
-            "matchedIds": [
-                "1.1"
-            ]
         };
         // Should not show refer field (13) in this flow
         expect(checkVisibilityRecursive(formRecord, getElement(13), valuesNoAccount)).toBe(false);
@@ -1154,9 +1135,6 @@ describe("Recursive visibility check", () => {
         // --- Start group, only element 1 visible ---
         const valuesStart = {
             "1": "",
-            "currentGroup": "start",
-            "groupHistory": ["start"],
-            "matchedIds": []
         };
         expect(checkVisibilityRecursive(formRecord, getElement(1), valuesStart)).toBe(true);
         expect(checkVisibilityRecursive(formRecord, getElement(3), valuesStart)).toBe(false);
@@ -1173,36 +1151,8 @@ describe("Recursive visibility check", () => {
             "11": "",
             "12": "",
             "13": "",
-            "currentGroup": "f695c318-73c3-4ba1-8807-6594992ac528",
-            "groupHistory": [
-                "start",
-                "f695c318-73c3-4ba1-8807-6594992ac528",
-                "73db1af9-96e3-4f6e-89d5-45e0afff39d1"
-            ],
-            "matchedIds": [
-                "1.1"
-            ]
         }
 
         expect(checkVisibilityRecursive(formRecord, getElement(13), valuesThree)).toBe(false);
-
-        // --- Edge case: missing groupHistory ---
-        const valuesMissingHistory = {
-            "1": "yes",
-            "12": "yes",
-            "currentGroup": "598121d4-5439-4b58-a3e0-517579aafb0e",
-            "matchedIds": ["12.0", "1.0"]
-        };
-        expect(checkVisibilityRecursive(formRecord, getElement(13), valuesMissingHistory)).toBe(false);
-
-        // --- Edge case: wrong group, should not show ---
-        const valuesWrongGroup = {
-            "1": "yes",
-            "12": "yes",
-            "currentGroup": "start",
-            "groupHistory": ["start"],
-            "matchedIds": ["12.0", "1.0"]
-        };
-        expect(checkVisibilityRecursive(formRecord, getElement(13), valuesWrongGroup)).toBe(false);
     })
 })

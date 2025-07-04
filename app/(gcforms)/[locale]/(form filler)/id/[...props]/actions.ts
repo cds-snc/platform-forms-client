@@ -12,8 +12,10 @@ import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
-import { validateResponses } from "@lib/validation/validation";
+import { validateOnSubmit, validateResponses } from "@lib/validation/validation";
 import { sendNotification } from "@lib/notifications";
+import { serverTranslation } from "@root/i18n";
+import { SubmitFormError } from "@root/packages/types/src/form-types";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -32,7 +34,7 @@ export async function submitForm(
   language: string,
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined
-): Promise<{ id: string; submissionId?: string; error?: Error }> {
+): Promise<{ id: string; submissionId?: string; error?: SubmitFormError }> {
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
@@ -65,6 +67,9 @@ export async function submitForm(
       }
     }
 
+    /**
+     * This validation checks the response values against the template element types.
+     */
     const validateResponsesResult = await validateResponses(values, template);
 
     if (Object.keys(validateResponsesResult).length !== 0) {
@@ -76,6 +81,36 @@ export async function submitForm(
       );
       // Turn this on after we've monitored the logs for a while
       // throw new MissingFormDataError("Form data validation failed");
+    }
+
+    const { t } = await serverTranslation();
+
+    /**
+     * This validation runs the client-side validation on the server.
+     */
+    const validateOnSubmitResult = await validateOnSubmit(values, {
+      formRecord: template,
+      t: t,
+    });
+
+    if (Object.keys(validateOnSubmitResult).length !== 0) {
+      logMessage.info(
+        `[server-action][submitForm] Detected validation errors on form ${formId}. Errors: ${JSON.stringify(
+          validateOnSubmitResult
+        )}`
+      );
+      // Keeping in "passive mode" for now.
+      // Uncomment following line to throw validation error from server.
+      // throw new MissingFormDataError("Form data validation failed");
+      return {
+        id: formId,
+        error: {
+          name: FormStatus.SERVER_VALIDATION_ERROR,
+          messages: Object.fromEntries(
+            Object.entries(validateOnSubmitResult).map(([k, v]) => [k, String(v)])
+          ),
+        },
+      };
     }
 
     const formDataObject = buildFormDataObject(template, values);
