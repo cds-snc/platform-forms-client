@@ -774,13 +774,6 @@
     },
     "notifications": {
       "title": "Receive notifications",
-      "description1": "Get notified by email about new form responses",
-      "description2": "All team members with access to the form will be informed when there are new form responses available to download.",
-      "optionsDescription": "Enable notifications for new form responses",
-      "options": {
-        "on": "On",
-        "off": "Off"
-      },
       "save": "Save",
       "email": {
         "singleSubmission": {
@@ -796,9 +789,27 @@
           "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
         }
       },
-      "savedSuccessMessage": "Your changes have been saved.",
-      "errors": {
-        "updateNotificationsInterval": "There was an error updating notifications. Please try again later."
+      "sessionUser": {
+        "title": "Receive email notifications",
+        "description": "Find out when there are new form responses",
+        "toggle": {
+          "title": "Get notified at {{email}}",
+          "on": "On",
+          "off": "Off"
+        }
+      },
+      "usersList": {
+        "title": "People with access to the form, who get notified",
+        "description": "You can manage team access on the Responses page",
+        "enabled": "Notifications enabled",
+        "disabled": "Notifications disabled"
+      },
+      "success": {
+        "updateNotifications": "Your changes have been saved."
+      },
+      "error": {
+        "getNotifcations": "There was problem getting notification settings. Please try again later.",
+        "updateNotifications": "There was a problem updating notifications. Please try again later."
       }
     }
   },
