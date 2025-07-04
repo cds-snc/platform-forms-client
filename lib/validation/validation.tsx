@@ -346,11 +346,8 @@ export const validateOnSubmit = (
 ): Responses => {
   const errors: Responses = {};
 
-  for (const item in values) {
-    const formElement = props.formRecord.form.elements.find(
-      (element) => element.id == parseInt(item)
-    );
-    if (!formElement) continue;
+  for (const formElement of props.formRecord.form.elements) {
+    const item = values[formElement.id];
 
     const currentGroup = values.currentGroup as string;
     const groups = props.formRecord.form.groups as GroupsType;
@@ -365,13 +362,14 @@ export const validateOnSubmit = (
       continue;
     }
 
+    // If the form element is not visible, skip validation
     if (!checkVisibilityRecursive(props.formRecord, formElement, values as FormValues)) {
       continue;
     }
 
     if (formElement.properties.validation) {
       const result = isFieldResponseValid(
-        values[item],
+        item,
         values,
         formElement.type,
         formElement,
@@ -380,11 +378,11 @@ export const validateOnSubmit = (
       );
 
       if (result) {
-        errors[item] = result;
+        errors[formElement.id] = result;
       }
     }
   }
-  // console.log(errors);
+
   return errors;
 };
 /**
