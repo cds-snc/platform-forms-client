@@ -15,6 +15,7 @@ import { FeatureFlags } from "@lib/cache/types";
 import { validateOnSubmit, validateResponses } from "@lib/validation/validation";
 import { sendNotification } from "@lib/notifications";
 import { serverTranslation } from "@root/i18n";
+import { SubmitFormError } from "@root/packages/types/src/form-types";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -33,7 +34,7 @@ export async function submitForm(
   language: string,
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined
-): Promise<{ id: string; submissionId?: string; error?: Error }> {
+): Promise<{ id: string; submissionId?: string; error?: SubmitFormError }> {
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
@@ -101,6 +102,15 @@ export async function submitForm(
       // Keeping in "passive mode" for now.
       // Uncomment following line to throw validation error from server.
       // throw new MissingFormDataError("Form data validation failed");
+      return {
+        id: formId,
+        error: {
+          name: FormStatus.SERVER_VALIDATION_ERROR,
+          messages: Object.fromEntries(
+            Object.entries(validateOnSubmitResult).map(([k, v]) => [k, String(v)])
+          ),
+        },
+      };
     }
 
     const formDataObject = buildFormDataObject(template, values);
