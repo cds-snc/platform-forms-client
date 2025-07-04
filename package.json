@@ -61,6 +61,7 @@
     "@gcforms/editor": "workspace:*",
     "@gcforms/tag-input": "workspace:*",
     "@gcforms/types": "workspace:*",
+    "@gcforms/announce": "workspace:*",
     "@hcaptcha/react-hcaptcha": "^1.12.0",
     "@hcaptcha/types": "^1.0.4",
     "@headlessui/react": "^2.2.0",
