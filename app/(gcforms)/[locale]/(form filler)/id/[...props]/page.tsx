@@ -14,7 +14,6 @@ import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
-import { getAppSetting } from "@lib/appSettings";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
@@ -51,8 +50,6 @@ export default async function Page(props0: {
   const params = await props0.params;
 
   const { locale, props } = params;
-
-  const hCaptchaSiteKey = (await getAppSetting("hCaptchaSiteKey")) || "";
 
   const formId = props[0];
   const step = props[1] ?? "";
@@ -131,7 +128,6 @@ export default async function Page(props0: {
             formRecord={formRecord}
             currentForm={currentForm}
             allowGrouping={isAllowGrouping}
-            hCaptchaSiteKey={hCaptchaSiteKey}
           />
         </FormDelayProvider>
       </div>

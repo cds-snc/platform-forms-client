@@ -9,15 +9,12 @@ import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
 import { dateHasPast } from "@lib/utils";
 import { FormStatus } from "@gcforms/types";
-import { verifyHCaptchaToken } from "@clientComponents/globals/FormCaptcha/actions";
+import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
 import { sendNotification } from "@lib/notifications";
 import { SubmitFormError } from "@root/packages/types/src/form-types";
-
-//  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
-const CAPTCHA_BLOCKABLE_MODE = false;
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -53,10 +50,12 @@ export async function submitForm(
       };
     }
 
-    const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
-    if (captchaEnabled) {
+    const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
+    // Skip hCaptcha verification for form-builder Preview (drafts)
+    if (template?.isPublished) {
+      // hCaptcha runs regardless but only block submissions if the feature flag is enabled
       const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
-      if (CAPTCHA_BLOCKABLE_MODE && !captchaVerified) {
+      if (hCaptchaBlockingMode && !captchaVerified) {
         return {
           id: formId,
           error: {
