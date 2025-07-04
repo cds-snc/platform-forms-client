@@ -50,53 +50,54 @@ export const setupQuestions = AuthenticatedAction(
 
 const validateData = async (formData: { [k: string]: FormDataEntryValue }, language: string) => {
   const { t } = await serverTranslation(["setup-security-questions"], { lang: language });
-  const schema = v.object(
-    {
-      question1: v.string([v.minLength(1, t("errors.required"))]),
-      question2: v.string([v.minLength(1, t("errors.required"))]),
-      question3: v.string([v.minLength(1, t("errors.required"))]),
-      answer1: v.string([
+  const schema = v.pipe(
+    v.object({
+      question1: v.pipe(v.string(), v.minLength(1, t("errors.required"))),
+      question2: v.pipe(v.string(), v.minLength(1, t("errors.required"))),
+      question3: v.pipe(v.string(), v.minLength(1, t("errors.required"))),
+      answer1: v.pipe(
+        v.string(),
         v.toLowerCase(),
-        v.toTrimmed(),
+        v.trim(),
         v.minLength(1, t("errors.required")),
-        v.minLength(4, t("errors.answerLength")),
-      ]),
-      answer2: v.string([
+        v.minLength(4, t("errors.answerLength"))
+      ),
+      answer2: v.pipe(
+        v.string(),
         v.toLowerCase(),
-        v.toTrimmed(),
+        v.trim(),
         v.minLength(1, t("errors.required")),
-        v.minLength(4, t("errors.answerLength")),
-      ]),
-      answer3: v.string([
+        v.minLength(4, t("errors.answerLength"))
+      ),
+      answer3: v.pipe(
+        v.string(),
         v.toLowerCase(),
-        v.toTrimmed(),
+        v.trim(),
         v.minLength(1, t("errors.required")),
-        v.minLength(4, t("errors.answerLength")),
-      ]),
-    },
-    [
-      v.forward(
-        v.custom(
-          (input) => input.answer1 !== input.answer2 && input.answer1 !== input.answer3,
-          t("errors.duplicateAnswer")
-        ),
-        ["answer1"]
+        v.minLength(4, t("errors.answerLength"))
       ),
-      v.forward(
-        v.custom(
-          (input) => input.answer2 !== input.answer1 && input.answer2 !== input.answer3,
-          t("errors.duplicateAnswer")
-        ),
-        ["answer2"]
+    }),
+    v.forward(
+      v.check(
+        (input) => input.answer1 !== input.answer2 && input.answer1 !== input.answer3,
+        t("errors.duplicateAnswer")
       ),
-      v.forward(
-        v.custom(
-          (input) => input.answer3 !== input.answer1 && input.answer3 !== input.answer2,
-          t("errors.duplicateAnswer")
-        ),
-        ["answer3"]
+      ["answer1"]
+    ),
+    v.forward(
+      v.check(
+        (input) => input.answer2 !== input.answer1 && input.answer2 !== input.answer3,
+        t("errors.duplicateAnswer")
       ),
-    ]
+      ["answer2"]
+    ),
+    v.forward(
+      v.check(
+        (input) => input.answer3 !== input.answer1 && input.answer3 !== input.answer2,
+        t("errors.duplicateAnswer")
+      ),
+      ["answer3"]
+    )
   );
 
   return v.safeParse(schema, formData, { abortPipeEarly: true });

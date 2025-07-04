@@ -12512,7 +12512,7 @@ __metadata:
     unorm: "npm:^1.6.0"
     usehooks-ts: "npm:3.1.1"
     uuid: "npm:9.0.1"
-    valibot: "npm:^0.30.0"
+    valibot: "npm:^1.1.0"
     vite-tsconfig-paths: "npm:^4.3.2"
     vitest: "npm:^3.1.1"
     webpack: "npm:^5.89.0"
@@ -19725,10 +19725,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"valibot@npm:^0.30.0":
-  version: 0.30.0
-  resolution: "valibot@npm:0.30.0"
-  checksum: 10c0/9b343d3b9812d580a0e2452952e74570a3781fc76e6187cd90898b83249353b95a04d8d9193789ee1c86379b94ee76b45e045f26870384f036af6410ce2dfc0a
+"valibot@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "valibot@npm:1.1.0"
+  peerDependencies:
+    typescript: ">=5"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/39580b4e4683cc44398fb775e88c03639dbaa7e6f587df416125916cb6307292d45df18f656054e8846093ced13a2d2fdc98659da6dd104d1d20180edcbd99d4
   languageName: node
   linkType: hard
 

@@ -40,3 +40,8 @@ export const fileGroupToFileTypes = (fileGroup: string) => {
 
   return [];
 };
+
+export const getDefaultFileGroupTypes = () => {
+  const types = ["documents", "images", "spreadsheets"];
+  return fileGroupsToFileTypes(types);
+};
