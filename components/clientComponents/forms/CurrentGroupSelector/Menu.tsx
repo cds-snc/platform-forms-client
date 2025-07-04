@@ -34,33 +34,37 @@ export const Menu = () => {
     <div
       id="group-menu"
       popover="auto"
-      className="min-w-[230px] rounded-lg border-1 border-slate-500 bg-white px-1.5 py-1 shadow-md"
+      className="rounded-lg border-1 border-slate-500 bg-white shadow-md"
       style={{
         // @ts-expect-error - CSS anchor positioning is not in the types yet
-        positionArea: "center",
         positionAnchor: "--group-menu-trigger",
-        top: "calc(anchor(top) - 250px)",
+        top: "anchor(top)",
+        right: "anchor(right)",
+        positionArea: "inline-end center",
+        marginBlockEnd: "40px",
       }}
     >
-      {Object.entries(groups).map(([groupId, group]) => {
-        const isDisabled = groupId === currentGroup;
-        return (
-          <button
-            disabled={isDisabled}
-            key={groupId}
-            type="button"
-            className={`block w-full rounded-md p-2 text-left text-sm text-black !no-underline outline-none visited:text-black ${
-              !isDisabled
-                ? "hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
-                : "cursor-not-allowed text-slate-400"
-            }`}
-            onClick={setCurrentGroup}
-            data-id={groupId}
-          >
-            {group.name}
-          </button>
-        );
-      })}
+      <div className="px-1.5 py-1">
+        {Object.entries(groups).map(([groupId, group]) => {
+          const isDisabled = groupId === currentGroup;
+          return (
+            <button
+              disabled={isDisabled}
+              key={groupId}
+              type="button"
+              className={`block w-full min-w-52 rounded-md p-2 text-left text-sm text-black !no-underline outline-none visited:text-black ${
+                !isDisabled
+                  ? "hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
+                  : "cursor-not-allowed text-slate-400"
+              }`}
+              onClick={setCurrentGroup}
+              data-id={groupId}
+            >
+              {group.name}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 };
