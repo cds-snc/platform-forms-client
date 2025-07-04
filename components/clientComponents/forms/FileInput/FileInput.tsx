@@ -132,6 +132,14 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     allowedFileTypes = htmlInputAccept;
   }
 
+  const describedBy = [
+    `${name}_file_selected`,
+    ariaDescribedBy,
+    meta.error ? `${name}_error` : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <>
       {meta.error && <ErrorMessage id={`${name}_error`}>{meta.error}</ErrorMessage>}
@@ -156,9 +164,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
           className={cn(themes.base, themes.secondary, "mr-4")}
           aria-disabled={disabled}
           aria-labelledby="file-input-button-text"
-          aria-describedby={`${name}_file_selected ${ariaDescribedBy} ${
-            meta.error ? `${name}_error` : null
-          }`}
+          aria-describedby={describedBy}
         >
           <span id="file-input-button-text" aria-hidden={true}>
             {t("file-upload-button-text")}
@@ -187,7 +193,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               <span aria-hidden={true}>
                 {fileName} ({fileSize.size} {t(`input-validation.${fileSize.unit}`)}){" "}
               </span>
-              <ResetButton resetInput={resetInput} lang={lang} />
+              <ResetButton fileName={fileName} resetInput={resetInput} lang={lang} />
             </div>
           ) : (
             <span className="my-4 inline-block max-w-fit">{t("file-upload-no-file-selected")}</span>
