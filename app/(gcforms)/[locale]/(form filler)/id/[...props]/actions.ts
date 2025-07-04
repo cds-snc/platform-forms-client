@@ -14,6 +14,7 @@ import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
 import { sendNotification } from "@lib/notifications";
+import { SubmitFormError } from "@root/packages/types/src/form-types";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -32,7 +33,7 @@ export async function submitForm(
   language: string,
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined
-): Promise<{ id: string; submissionId?: string; error?: Error }> {
+): Promise<{ id: string; submissionId?: string; error?: SubmitFormError }> {
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
