@@ -17,6 +17,7 @@ import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { ForwardArrowIcon24x24 } from "@serverComponents/icons";
 import { isFormClosed } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useRouter } from "next/navigation";
+import { CurrentGroupSelector } from "../CurrentGroupSelector/CurrentGroupSelector";
 
 export const NextButton = ({
   validateForm,
@@ -99,6 +100,7 @@ export const NextButton = ({
     <>
       {/* For debugging */}
       <div className="hidden">{`currentGroup=${currentGroup}`}</div>
+      {/* End of debugging */}
       <Button
         onClick={async (e) => {
           e.preventDefault();
@@ -121,6 +123,8 @@ export const NextButton = ({
           </>
         )}
       </Button>
+
+      <CurrentGroupSelector />
     </>
   );
 };
