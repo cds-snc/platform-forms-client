@@ -1,9 +1,10 @@
-import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Menu } from "./Menu";
 import { MoreIcon } from "@serverComponents/icons";
 
 export const CurrentGroupSelector = () => {
-  const groups = useTemplateStore((s) => s.form.groups);
+  const { formRecord } = useGCFormsContext();
+  const groups = formRecord.form.groups;
 
   if (!groups || Object.keys(groups).length === 0) {
     return null;
