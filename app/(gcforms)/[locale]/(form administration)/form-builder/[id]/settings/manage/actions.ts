@@ -10,7 +10,7 @@ import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logEvent } from "@lib/auditLogs";
 
-// TODO: Create a ThrottlingRate directory and move the components and these actions there
+// Move to a separate ThrottlingRate directory. See https://github.com/cds-snc/platform-forms-client/issues/5814
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
