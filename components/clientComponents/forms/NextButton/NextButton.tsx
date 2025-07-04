@@ -99,7 +99,6 @@ export const NextButton = ({
     <>
       {/* For debugging */}
       <div className="hidden">{`currentGroup=${currentGroup}`}</div>
-      {/* End of debugging */}
       <Button
         onClick={async (e) => {
           e.preventDefault();
