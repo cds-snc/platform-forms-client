@@ -52,6 +52,10 @@ export const NextButton = ({
     return false;
   };
 
+  if (currentGroup && !hasNextAction(currentGroup)) {
+    return <div data-id="dead-end"></div>;
+  }
+
   if (
     !currentGroup ||
     currentGroup === LockedSections.REVIEW ||
