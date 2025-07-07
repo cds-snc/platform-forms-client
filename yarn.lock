@@ -185,7 +185,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-cognito-identity-provider@npm:^3.826.0":
+"@aws-sdk/client-cognito-identity-provider@npm:^3.840.0":
   version: 3.840.0
   resolution: "@aws-sdk/client-cognito-identity-provider@npm:3.840.0"
   dependencies:
@@ -232,7 +232,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-dynamodb@npm:^3.826.0":
+"@aws-sdk/client-dynamodb@npm:^3.840.0":
   version: 3.840.0
   resolution: "@aws-sdk/client-dynamodb@npm:3.840.0"
   dependencies:
@@ -283,7 +283,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-iam@npm:^3.826.0":
+"@aws-sdk/client-iam@npm:^3.840.0":
   version: 3.840.0
   resolution: "@aws-sdk/client-iam@npm:3.840.0"
   dependencies:
@@ -331,7 +331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-lambda@npm:^3.826.0":
+"@aws-sdk/client-lambda@npm:^3.840.0":
   version: 3.840.0
   resolution: "@aws-sdk/client-lambda@npm:3.840.0"
   dependencies:
@@ -383,7 +383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:^3.826.0":
+"@aws-sdk/client-s3@npm:^3.842.0":
   version: 3.842.0
   resolution: "@aws-sdk/client-s3@npm:3.842.0"
   dependencies:
@@ -449,7 +449,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-secrets-manager@npm:^3.826.0":
+"@aws-sdk/client-secrets-manager@npm:^3.840.0":
   version: 3.840.0
   resolution: "@aws-sdk/client-secrets-manager@npm:3.840.0"
   dependencies:
@@ -498,7 +498,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-sqs@npm:^3.826.0":
+"@aws-sdk/client-sqs@npm:^3.840.0":
   version: 3.840.0
   resolution: "@aws-sdk/client-sqs@npm:3.840.0"
   dependencies:
@@ -742,7 +742,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/lib-dynamodb@npm:^3.826.0":
+"@aws-sdk/lib-dynamodb@npm:^3.840.0":
   version: 3.840.0
   resolution: "@aws-sdk/lib-dynamodb@npm:3.840.0"
   dependencies:
@@ -1017,7 +1017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/types@npm:3.840.0, @aws-sdk/types@npm:^3.222.0, @aws-sdk/types@npm:^3.821.0":
+"@aws-sdk/types@npm:3.840.0, @aws-sdk/types@npm:^3.222.0, @aws-sdk/types@npm:^3.840.0":
   version: 3.840.0
   resolution: "@aws-sdk/types@npm:3.840.0"
   dependencies:
@@ -2412,7 +2412,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@gcforms/connectors@workspace:packages/connectors"
   dependencies:
-    "@aws-sdk/client-secrets-manager": "npm:^3.826.0"
+    "@aws-sdk/client-secrets-manager": "npm:^3.840.0"
     "@types/node": "npm:^20.11.6"
     got: "npm:^11.8.6"
     postgres: "npm:^3.4.5"
@@ -8696,8 +8696,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "archivable_audit_logs_migration@workspace:utils/archivableAuditLogsMigration"
   dependencies:
-    "@aws-sdk/client-dynamodb": "npm:^3.826.0"
-    "@aws-sdk/lib-dynamodb": "npm:^3.826.0"
+    "@aws-sdk/client-dynamodb": "npm:^3.840.0"
+    "@aws-sdk/lib-dynamodb": "npm:^3.840.0"
     dotenv: "npm:^16.3.1"
     tsx: "npm:^3.14.0"
   languageName: unknown
@@ -9783,8 +9783,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "cognito_backup@workspace:utils/cognitoBackup"
   dependencies:
-    "@aws-sdk/client-cognito-identity-provider": "npm:^3.826.0"
-    "@aws-sdk/client-iam": "npm:^3.826.0"
+    "@aws-sdk/client-cognito-identity-provider": "npm:^3.840.0"
+    "@aws-sdk/client-iam": "npm:^3.840.0"
     "@types/node": "npm:^18.19.3"
     axios: "npm:^1.8.4"
     csv-writer: "npm:^1.6.0"
@@ -9798,7 +9798,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "cognito_migration@workspace:utils/cognitoMigration"
   dependencies:
-    "@aws-sdk/client-cognito-identity-provider": "npm:^3.826.0"
+    "@aws-sdk/client-cognito-identity-provider": "npm:^3.840.0"
     "@types/node": "npm:^18.19.3"
     dotenv: "npm:^16.3.1"
     tsx: "npm:^4.7.0"
@@ -10088,8 +10088,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "created_at_vault_conf_items_migration@workspace:utils/createdAtVaultConfItemsMigration"
   dependencies:
-    "@aws-sdk/client-dynamodb": "npm:^3.826.0"
-    "@aws-sdk/lib-dynamodb": "npm:^3.826.0"
+    "@aws-sdk/client-dynamodb": "npm:^3.840.0"
+    "@aws-sdk/lib-dynamodb": "npm:^3.840.0"
     dotenv: "npm:^16.4.5"
     tsx: "npm:^4.19.2"
   languageName: unknown
@@ -12369,13 +12369,13 @@ __metadata:
   resolution: "gcforms@workspace:."
   dependencies:
     "@auth/prisma-adapter": "npm:^1.0.14"
-    "@aws-sdk/client-cognito-identity-provider": "npm:^3.826.0"
-    "@aws-sdk/client-dynamodb": "npm:^3.826.0"
-    "@aws-sdk/client-lambda": "npm:^3.826.0"
-    "@aws-sdk/client-s3": "npm:^3.826.0"
-    "@aws-sdk/client-sqs": "npm:^3.826.0"
-    "@aws-sdk/lib-dynamodb": "npm:^3.826.0"
-    "@aws-sdk/types": "npm:^3.821.0"
+    "@aws-sdk/client-cognito-identity-provider": "npm:^3.840.0"
+    "@aws-sdk/client-dynamodb": "npm:^3.840.0"
+    "@aws-sdk/client-lambda": "npm:^3.840.0"
+    "@aws-sdk/client-s3": "npm:^3.842.0"
+    "@aws-sdk/client-sqs": "npm:^3.840.0"
+    "@aws-sdk/lib-dynamodb": "npm:^3.840.0"
+    "@aws-sdk/types": "npm:^3.840.0"
     "@babel/core": "npm:^7.28.0"
     "@babel/preset-typescript": "npm:^7.27.1"
     "@bufbuild/protobuf": "npm:^2.2.3"
@@ -17381,8 +17381,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "reliability_queue_table_ttl_data_type_migration@workspace:utils/reliabilityQueueTableTTLDataTypeMigration"
   dependencies:
-    "@aws-sdk/client-dynamodb": "npm:^3.826.0"
-    "@aws-sdk/lib-dynamodb": "npm:^3.826.0"
+    "@aws-sdk/client-dynamodb": "npm:^3.840.0"
+    "@aws-sdk/lib-dynamodb": "npm:^3.840.0"
     dotenv: "npm:^16.3.1"
     tsx: "npm:^3.14.0"
   languageName: unknown
@@ -17504,9 +17504,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "response_generator@workspace:utils/responseGenerator"
   dependencies:
-    "@aws-sdk/client-lambda": "npm:^3.826.0"
-    "@aws-sdk/client-sqs": "npm:^3.826.0"
-    "@aws-sdk/types": "npm:^3.821.0"
+    "@aws-sdk/client-lambda": "npm:^3.840.0"
+    "@aws-sdk/client-sqs": "npm:^3.840.0"
+    "@aws-sdk/types": "npm:^3.840.0"
     "@types/node": "npm:^22.9.0"
     axios: "npm:^1.8.4"
     cheerio: "npm:^1.0.0-rc.12"
@@ -18337,8 +18337,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "status_created_at_vault_name_items_migration@workspace:utils/statusCreatedAtMigration"
   dependencies:
-    "@aws-sdk/client-dynamodb": "npm:^3.826.0"
-    "@aws-sdk/lib-dynamodb": "npm:^3.826.0"
+    "@aws-sdk/client-dynamodb": "npm:^3.840.0"
+    "@aws-sdk/lib-dynamodb": "npm:^3.840.0"
     dotenv: "npm:^16.4.5"
     tsx: "npm:^4.19.2"
   languageName: unknown
