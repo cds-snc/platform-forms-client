@@ -80,3 +80,5 @@ export { BackArrowIcon24x24 } from "./BackArrowIcon24x24";
 export { ForwardArrowIcon24x24 } from "./ForwardArrowIcon24x24";
 export { SaveProgressIcon } from "./SaveProgressIcon";
 export { ChatIcon } from "./ChatIcon";
+export { CheckNoBorderIcon } from "./CheckNoBorderIcon";
+export { XIcon } from "./XIcon";
