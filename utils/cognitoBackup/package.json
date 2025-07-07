@@ -10,8 +10,8 @@
   "keywords": [],
   "author": "Bryan Robitaille",
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.826.0",
-    "@aws-sdk/client-iam": "^3.826.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.840.0",
+    "@aws-sdk/client-iam": "^3.840.0",
     "@types/node": "^18.19.3",
     "axios": "^1.8.4",
     "csv-writer": "^1.6.0",
