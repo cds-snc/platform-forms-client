@@ -61,6 +61,7 @@ export const FileInputTrialDescription = () => {
           })}
         </li>
         <li>{t("addElementDialog.fileInputWithApi.trialFeature.bullet3")}</li>
+        <li>{t("addElementDialog.fileInputWithApi.trialFeature.bullet4")}</li>
       </ul>
     </div>
   );
@@ -100,10 +101,13 @@ const DefaultDescription = ({ title, link }: { title: string; link: string }) =>
   return (
     <div>
       <Title title={title} />
+      <p className="mb-4">{t("addElementDialog.fileInputDefault.text1")}</p>
       <p className="mb-8">
-        {t("addElementDialog.fileInputDefault.text1")}{" "}
-        <Link href={link}>{t("addElementDialog.fileInputDefault.text2")}</Link>{" "}
-        {t("addElementDialog.fileInputDefault.text3")}
+        <strong>
+          {t("addElementDialog.fileInputDefault.text1x")}{" "}
+          <Link href={link}>{t("addElementDialog.fileInputDefault.text2")}</Link>{" "}
+          {t("addElementDialog.fileInputDefault.text3")}
+        </strong>
       </p>
       <ExampleWrapper className="mt-4">
         <Label htmlFor="name" className="gc-label">

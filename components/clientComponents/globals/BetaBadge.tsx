@@ -5,7 +5,7 @@ export const BetaBadge = ({ className }: { className?: string }) => {
   const { t } = useTranslation("form-builder");
 
   const classes = cn(
-    "max-w-fit rounded border-1 border-indigo-700 bg-indigo-500 px-2 py-1 text-sm text-white",
+    "max-w-fit rounded border-1 border-indigo-700 bg-indigo-700 px-2 py-1 text-sm text-white",
     className
   );
   return (
