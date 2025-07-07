@@ -1,10 +1,9 @@
 import { useCallback } from "react";
-
-import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 export const Menu = () => {
-  const groups = useTemplateStore((s) => s.form.groups);
+  const { formRecord } = useGCFormsContext();
+  const groups = formRecord.form.groups;
   const { setGroup, currentGroup } = useGCFormsContext();
 
   const setCurrentGroup = useCallback(
