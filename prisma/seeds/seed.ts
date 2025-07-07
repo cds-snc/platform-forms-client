@@ -171,18 +171,6 @@ async function emailNotificationsUsersMigration() {
   );
 }
 
-// Part 2: Notifications v2 data migration - run after Par 1 and then remove after data migration is complete
-// async function emailNotificationsIntervalMigration() {
-//   const templates = await prisma.template.updateMany({
-//     where: { notificationsInterval: null },
-//     data: { notificationsInterval: 1440 }, // Back to the 1440 default - use as a setting and no longer as a flag
-//   });
-//
-//   console.log(
-//     `${templates.count} were migrated for update notificationsInterval when null to the default value of 1440 minutes`
-//   );
-// }
-
 async function main(environment: string) {
   try {
     console.log(`Seeding Database for ${environment} enviroment`);
@@ -210,15 +198,11 @@ async function main(environment: string) {
     }
 
     console.log("Running 'deliveryOptionMigration' migration");
-    deliveryOptionMigration();
+    await deliveryOptionMigration();
 
     // Part 1:
     console.log("Running 'emailNotificationsUsersMigration' migration");
-    emailNotificationsUsersMigration();
-
-    // Part 2:
-    // console.log("Running 'emailNotificationsIntervalMigration' migration");
-    // emailNotificationsIntervalMigration();
+    await emailNotificationsUsersMigration();
   } catch (e) {
     console.error(e);
   } finally {
