@@ -100,7 +100,7 @@ export async function submitForm(
       );
       // Keeping in "passive mode" for now.
       // Uncomment following line to throw validation error from server.
-      // throw new MissingFormDataError("Form data validation failed");
+      throw new MissingFormDataError("Form data validation failed");
     }
 
     const formDataObject = buildFormDataObject(template, values);
