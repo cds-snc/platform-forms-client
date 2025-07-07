@@ -22,7 +22,7 @@ export const Description = ({
 
   return (
     <div className="mb-2">
-      <Label>{t("inputDescription")}</Label>
+      <Label htmlFor={`description--modal--${item.id}`}>{t("inputDescription")}</Label>
       <Hint>{t("descriptionDescription")}</Hint>
       <TextArea
         id={`description--modal--${item.id}`}
