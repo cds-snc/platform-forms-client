@@ -20,7 +20,6 @@ export const RequiredOptions = ({
       <div className="gc-input-checkbox">
         <input
           className="gc-input-checkbox__input"
-          data-testid="required"
           id={`required-${item.id}-id-modal`}
           type="checkbox"
           value={`required-${item.id}-value-modal-` + checked}
@@ -38,7 +37,11 @@ export const RequiredOptions = ({
             });
           }}
         />
-        <label className="gc-checkbox-label" htmlFor={`required-${item.id}-id-modal`}>
+        <label
+          data-testid="required"
+          className="gc-checkbox-label"
+          htmlFor={`required-${item.id}-id-modal`}
+        >
           <span className="checkbox-label-text">
             {allRequired ? t("allRequired") : t("required")}
           </span>
