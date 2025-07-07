@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.46.0](https://github.com/cds-snc/platform-forms-client/compare/v3.45.3...v3.46.0) (2025-07-07)
+
+
+### Features
+
+* email notifications v2 ([#5702](https://github.com/cds-snc/platform-forms-client/issues/5702)) ([36c93ff](https://github.com/cds-snc/platform-forms-client/commit/36c93ff07e635e667b772e1d449bf7c7fc06e0e2))
+
+
+### Miscellaneous Chores
+
+* notification v2 data migration - part 2 ([#5825](https://github.com/cds-snc/platform-forms-client/issues/5825)) ([80add7a](https://github.com/cds-snc/platform-forms-client/commit/80add7aa319c6e7a52eaf1ff68c3d70646cb855d))
+
 ## [3.45.3](https://github.com/cds-snc/platform-forms-client/compare/v3.45.2...v3.45.3) (2025-07-07)
 
 
