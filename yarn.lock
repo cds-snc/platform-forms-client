@@ -1126,7 +1126,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.23.6, @babel/core@npm:^7.23.9, @babel/core@npm:^7.27.4":
+"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.23.9, @babel/core@npm:^7.27.4, @babel/core@npm:^7.28.0":
   version: 7.28.0
   resolution: "@babel/core@npm:7.28.0"
   dependencies:
@@ -1560,7 +1560,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-typescript@npm:^7.24.7":
+"@babel/preset-typescript@npm:^7.27.1":
   version: 7.27.1
   resolution: "@babel/preset-typescript@npm:7.27.1"
   dependencies:
@@ -7830,7 +7830,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:^24.0.10":
   version: 24.0.10
   resolution: "@types/node@npm:24.0.10"
   dependencies:
@@ -12479,8 +12479,8 @@ __metadata:
     "@aws-sdk/client-sqs": "npm:^3.826.0"
     "@aws-sdk/lib-dynamodb": "npm:^3.826.0"
     "@aws-sdk/types": "npm:^3.821.0"
-    "@babel/core": "npm:^7.23.6"
-    "@babel/preset-typescript": "npm:^7.24.7"
+    "@babel/core": "npm:^7.28.0"
+    "@babel/preset-typescript": "npm:^7.27.1"
     "@bufbuild/protobuf": "npm:^2.2.3"
     "@casl/ability": "npm:6.7.3"
     "@cdssnc/gcds-tokens": "npm:2.12.0"
@@ -12517,7 +12517,7 @@ __metadata:
     "@types/lodash.set": "npm:^4.3.9"
     "@types/lodash.unset": "npm:^4.5.9"
     "@types/mdx": "npm:^2.0.13"
-    "@types/node": "npm:^20.11.6"
+    "@types/node": "npm:^24.0.10"
     "@types/node-fetch": "npm:^2.6.9"
     "@types/pg": "npm:^8.10.9"
     "@types/react": "npm:19.1.8"
