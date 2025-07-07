@@ -143,35 +143,6 @@ async function deliveryOptionMigration() {
   );
 }
 
-// TODO: remove - here for reference only
-// Part 1: Notifications v2 data migration - run once and then remove after data migration is complete
-// async function emailNotificationsUsersMigration() {
-//   const templates = await prisma.template.findMany({
-//     where: { notificationsInterval: { not: null } },
-//     select: {
-//       id: true,
-//       users: { select: { id: true } },
-//     },
-//   });
-
-//   await Promise.all(
-//     templates.map((template) =>
-//       prisma.template.update({
-//         where: { id: template.id },
-//         data: {
-//           notificationsUsers: {
-//             connect: template.users.map((u) => ({ id: u.id })),
-//           },
-//         },
-//       })
-//     )
-//   );
-//
-//   console.log(
-//     `${templates.length} were migrated for update email notifications users that have a non null notificationsInterval`
-//   );
-// }
-
 // Part 2: Notifications v2 data migration - reset notificationsInterval to be used as a setting (and not a flag)
 async function emailNotificationsIntervalMigration2() {
   const templates = await prisma.template.updateMany({
@@ -212,11 +183,6 @@ async function main(environment: string) {
 
     console.log("Running 'deliveryOptionMigration' migration");
     await deliveryOptionMigration();
-
-    // TODO: remove - here for reference only
-    // Part 1:
-    // console.log("Running 'emailNotificationsUsersMigration' migration");
-    // await emailNotificationsUsersMigration();
 
     // Part 2: Notifications v2 data migration
     console.log("Running 'emailNotificationsIntervalMigration' migration Part 2");
