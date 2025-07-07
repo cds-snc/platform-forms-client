@@ -13,9 +13,9 @@ import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { validateOnSubmit, validateResponses } from "@lib/validation/validation";
-import { sendNotification } from "@lib/notifications";
 import { serverTranslation } from "@root/i18n";
 import { SubmitFormError } from "@root/packages/types/src/form-types";
+import { sendNotifications } from "@lib/notifications";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -123,7 +123,7 @@ export async function submitForm(
 
     const submissionId = await processFormData(data.fields, data.files, language);
 
-    sendNotification(formId, template.form.titleEn, template.form.titleFr);
+    sendNotifications(formId, template.form.titleEn, template.form.titleFr);
 
     return { id: formId, submissionId };
   } catch (e) {
