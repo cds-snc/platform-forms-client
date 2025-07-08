@@ -44,7 +44,6 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
 
     try {
       const response = await createOrUpdateTemplate({
-        id: formID,
         formConfig: parsedJson,
         name: parsedJson.titleEn,
       });
