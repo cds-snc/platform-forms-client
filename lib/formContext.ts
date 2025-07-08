@@ -147,6 +147,14 @@ export const getElementById = (elements: FormElement[], id: string) => {
 };
 
 /**
+ * Checks if the type of a form element is a choice input type.
+ *
+ * @param type - The type of the form element.
+ * @returns
+ */
+export const isChoiceInputType = (type: string) => ["radio", "checkbox", "dropdown"].includes(type);
+
+/**
  * Returns values array but with matched ids for checkboxes and radios.
  *
  * @param formElements
@@ -155,21 +163,23 @@ export const getElementById = (elements: FormElement[], id: string) => {
  */
 export const getValuesWithMatchedIds = (formElements: FormElement[], values: FormValues) => {
   const newValues = { ...values };
-  Object.entries(values).forEach(([key, value]) => {
-    if (key !== "currentGroup" && key !== "groupHistory" && key !== "matchedIds") {
-      const el = getElementById(formElements, key);
 
-      if (value && el && ["radio", "checkbox", "dropdown"].includes(el.type)) {
-        if (el.properties.choices) {
-          const choiceIndex = el.properties.choices.findIndex(
-            (choice) => choice.en === value || choice.fr === value
-          );
-          if (choiceIndex > -1) {
-            newValues[key] = `${el.id}.${choiceIndex}`;
-          } else {
-            newValues[key] = ""; // Reset if no choice found
-          }
-        }
+  Object.entries(values).forEach(([key, value]) => {
+    if (["currentGroup", "groupHistory", "matchedIds"].includes(key)) return;
+
+    const el = getElementById(formElements, key);
+    const choices = el?.properties?.choices;
+
+    if (!el) {
+      return;
+    }
+
+    if (isChoiceInputType(el.type) && choices && Array.isArray(choices)) {
+      const choiceIndex = choices.findIndex((choice) => choice.en === value || choice.fr === value);
+      if (choiceIndex > -1) {
+        newValues[key] = `${el.id}.${choiceIndex}`;
+      } else {
+        newValues[key] = value; // preserve original value if no match found
       }
     }
   });
