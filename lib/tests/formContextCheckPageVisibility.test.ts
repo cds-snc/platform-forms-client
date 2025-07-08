@@ -253,10 +253,10 @@ describe("getValuesWithMatchedIds", () => {
     });
   });
 
-  it("resets values when choice is not found", () => {
+  it("preserves original value when choice is not found", () => {
     const values: FormValues = { "2": "Non-existent option" };
     const result = getValuesWithMatchedIds(formElements, values);
-    expect(result).toEqual({ "2": "" });
+    expect(result).toEqual({ "2": "Non-existent option" });
   });
 
   it("ignores reserved keys (currentGroup, groupHistory, matchedIds)", () => {
