@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
 import { useTranslation } from "@i18n/client";
 import { FormRecord } from "@lib/types";
 import { useRouter } from "next/navigation";
@@ -10,6 +9,8 @@ import { useRefresh } from "@lib/hooks/useRefresh";
 import { safeJSONParse } from "@lib/utils";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
+import { FormProperties } from "@lib/types";
+import { createOrUpdateTemplate } from "@formBuilder/actions";
 
 interface JSONUploadProps {
   form?: FormRecord;
@@ -33,21 +34,29 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
     setErrorState({ message: "" });
     setSubmitStatus("");
     // Test if the json config is valid
-    const jsonTestParse = safeJSONParse(jsonConfig);
-    if (!jsonTestParse) {
+    const parsedJson = safeJSONParse<FormProperties>(jsonConfig);
+    if (!parsedJson) {
       setSubmitting(false);
       setErrorState({ message: "JSON Formatting error" });
+      toast.error(t("startErrorParse", { ns: "form-builder" }), "wide");
       return;
     }
 
     try {
-      const response = await uploadJson(jsonConfig, formID);
-      // If the server returned a record, this is a new record
-      // Redirect to the appropriate page
+      const response = await createOrUpdateTemplate({
+        id: formID,
+        formConfig: parsedJson,
+        name: parsedJson.titleEn,
+      });
 
-      if (response?.config.method === "post" && response?.data) {
-        const formID = response.data.id;
-        router.push(`/${i18n.language}/id/${formID}/settings?newForm=true`);
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      // If the server returned a record, and we did not have a formID this is a new record
+      // Redirect to the appropriate page
+      if (!formID && response.formRecord?.id) {
+        router.push(`/${i18n.language}/forms`);
       } else {
         // If not, but response was successful,
         // update the page text to show a success
@@ -58,46 +67,13 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
     } catch (err) {
       logMessage.error(err);
       setSubmitting(false);
-      if (
-        axios.isAxiosError(err) &&
-        (err.response?.data.error as string).includes("JSON Validation Error: ")
-      ) {
-        setErrorState({ message: err.response?.data.error });
+      const message = (err as Error).message;
+      if (message.includes("JSON Validation Error: ")) {
+        setErrorState({ message });
       } else {
         setErrorState({ message: "Uploading Error" });
       }
     }
-  };
-
-  /**
-   * Uploads the JSON config to the server,
-   * either as a new form or as an update to an existing form
-   * @param jsonConfig The JSON config to upload
-   * @param formID The formID to update, if any
-   * @returns The response from the server
-   * @throws Error if the server returns an error
-   * @throws Error if the JSON is invalid
-   */
-  const uploadJson = async (jsonConfig: string, formID?: string) => {
-    const url = formID ? `/api/templates/${formID}` : "/api/templates";
-
-    const formConfig = safeJSONParse(jsonConfig);
-    if (!formConfig) {
-      toast.error(t("startErrorParse", { ns: "form-builder" }), "wide");
-      return;
-    }
-
-    return axios({
-      url: url,
-      method: formID ? "PUT" : "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        formConfig,
-      },
-      timeout: 5000,
-    });
   };
 
   return (
