@@ -15,9 +15,6 @@ import { validateResponses } from "@lib/validation/validation";
 import { sendNotifications } from "@lib/notifications";
 import { generateSignedUrl } from "@lib/s3-upload";
 
-//  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
-const CAPTCHA_BLOCKABLE_MODE = false;
-
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function isFormClosed(formId: string): Promise<boolean> {
