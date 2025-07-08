@@ -175,7 +175,10 @@ export const getValuesWithMatchedIds = (formElements: FormElement[], values: For
     }
 
     if (isChoiceInputType(el.type) && choices && Array.isArray(choices)) {
-      const choiceIndex = choices.findIndex((choice) => choice.en === value || choice.fr === value);
+      const choiceIndex = choices.findIndex(
+        (choice) =>
+          (choice.en !== "" && choice.en === value) || (choice.fr !== "" && choice.fr === value)
+      );
       if (choiceIndex > -1) {
         newValues[key] = `${el.id}.${choiceIndex}`;
       } else {
