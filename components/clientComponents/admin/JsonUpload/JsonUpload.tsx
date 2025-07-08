@@ -46,8 +46,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
       // Redirect to the appropriate page
 
       if (response?.config.method === "post" && response?.data) {
-        const formID = response.data.id;
-        router.push(`/${i18n.language}/id/${formID}/settings?newForm=true`);
+        router.push(`/${i18n.language}/forms`);
       } else {
         // If not, but response was successful,
         // update the page text to show a success
@@ -79,7 +78,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
    * @throws Error if the JSON is invalid
    */
   const uploadJson = async (jsonConfig: string, formID?: string) => {
-    const url = formID ? `/api/templates/${formID}` : "/api/templates";
+    const url = formID ? ` ${formID}` : "/api/templates";
 
     const formConfig = safeJSONParse(jsonConfig);
     if (!formConfig) {
