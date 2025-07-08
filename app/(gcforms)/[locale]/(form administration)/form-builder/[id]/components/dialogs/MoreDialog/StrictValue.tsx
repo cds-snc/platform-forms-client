@@ -1,5 +1,4 @@
 import { useTranslation } from "@i18n/client";
-import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { FormElement, FormElementTypes } from "@lib/types";
 
 export const StrictValue = ({
@@ -24,23 +23,31 @@ export const StrictValue = ({
         <h3>{t("strictValue.title")}</h3>
       </div>
       <div>
-        <Checkbox
-          data-testid="strictValue"
-          id={`required-${item.id}-id-modal`}
-          value={`required-${item.id}-value-modal-` + checked}
-          key={`required-${item.id}-modal-` + checked}
-          defaultChecked={checked}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setItem({
-              ...item,
-              properties: {
-                ...item.properties,
-                strictValue: e.target.checked,
-              },
-            });
-          }}
-          label={t("strictValue.label")}
-        ></Checkbox>
+        <div className="gc-input-checkbox">
+          <input
+            data-testid="strictValue"
+            className="gc-input-checkbox__input"
+            id={`strict-${item.id}-id-modal`}
+            type="checkbox"
+            value={`strict-${item.id}-value-modal-` + checked}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  strictValue: e.target.checked,
+                },
+              });
+            }}
+          />
+          <label
+            data-testid="required"
+            className="gc-checkbox-label"
+            htmlFor={`strict-${item.id}-id-modal`}
+          >
+            <span className="checkbox-label-text">{t("strictValue.label")}</span>
+          </label>
+        </div>
       </div>
     </section>
   );
