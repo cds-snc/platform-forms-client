@@ -55,7 +55,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
       // If the server returned a record, and we did not have a formID this is a new record
       // Redirect to the appropriate page
       if (!formID && response.formRecord?.id) {
-        router.push(`/${i18n.language}/forms`);
+        router.push(`/${i18n.language}/form-builder/${response.formRecord.id}/settings`);
       } else {
         // If not, but response was successful,
         // update the page text to show a success
