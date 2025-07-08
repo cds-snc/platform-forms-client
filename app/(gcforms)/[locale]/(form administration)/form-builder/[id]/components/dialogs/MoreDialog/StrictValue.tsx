@@ -29,6 +29,7 @@ export const StrictValue = ({
             className="gc-input-checkbox__input"
             id={`strict-${item.id}-id-modal`}
             type="checkbox"
+            defaultChecked={checked}
             value={`strict-${item.id}-value-modal-` + checked}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setItem({
