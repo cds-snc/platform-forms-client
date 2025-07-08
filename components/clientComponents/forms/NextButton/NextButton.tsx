@@ -54,7 +54,7 @@ export const NextButton = ({
   };
 
   if (formHasGroups(formRecord.form) && currentGroup && !hasNextAction(currentGroup)) {
-    return <div data-id="dead-end"></div>;
+    return <div data-testid="dead-end"></div>;
   }
 
   if (
