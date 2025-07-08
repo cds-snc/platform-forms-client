@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.46.0](https://github.com/cds-snc/platform-forms-client/compare/v3.45.3...v3.46.0) (2025-07-07)
+
+
+### Features
+
+* email notifications v2 ([#5702](https://github.com/cds-snc/platform-forms-client/issues/5702)) ([36c93ff](https://github.com/cds-snc/platform-forms-client/commit/36c93ff07e635e667b772e1d449bf7c7fc06e0e2))
+
+
+### Miscellaneous Chores
+
+* notification v2 data migration - part 2 ([#5825](https://github.com/cds-snc/platform-forms-client/issues/5825)) ([80add7a](https://github.com/cds-snc/platform-forms-client/commit/80add7aa319c6e7a52eaf1ff68c3d70646cb855d))
+
+## [3.45.3](https://github.com/cds-snc/platform-forms-client/compare/v3.45.2...v3.45.3) (2025-07-07)
+
+
+### Bug Fixes
+
+* a11y updates for file input ([#5801](https://github.com/cds-snc/platform-forms-client/issues/5801)) ([407a907](https://github.com/cds-snc/platform-forms-client/commit/407a90718b5fca1716f72dbb6568720b11115a91))
+* **deps:** update all patch dependencies ([#5820](https://github.com/cds-snc/platform-forms-client/issues/5820)) ([5b23ab7](https://github.com/cds-snc/platform-forms-client/commit/5b23ab75d50c11fc40bd7d4d86c00aec249678e5))
+* Display Manage Access button when set to api delivery ([#5805](https://github.com/cds-snc/platform-forms-client/issues/5805)) ([e534787](https://github.com/cds-snc/platform-forms-client/commit/e53478746aa37224269f49c6d6c01328f6f77188))
+
+
+### Miscellaneous Chores
+
+* add manage access dialog for api mode ([#5807](https://github.com/cds-snc/platform-forms-client/issues/5807)) ([4587df5](https://github.com/cds-snc/platform-forms-client/commit/4587df59ea9974b660aee050ba623073af6f81a8))
+* Add set current group selector for debugging ([#5813](https://github.com/cds-snc/platform-forms-client/issues/5813)) ([01c5108](https://github.com/cds-snc/platform-forms-client/commit/01c510819a7777e0320ee25d74afbbb47472e093))
+* **deps:** lock file maintenance ([#5821](https://github.com/cds-snc/platform-forms-client/issues/5821)) ([6ca087f](https://github.com/cds-snc/platform-forms-client/commit/6ca087f7fe38c7e65132403df9838b60fb7ec62b))
+* **deps:** update all non-major docker images ([#5818](https://github.com/cds-snc/platform-forms-client/issues/5818)) ([aad14f1](https://github.com/cds-snc/platform-forms-client/commit/aad14f153cc1e92b5082a89b20bb4a00fe38a115))
+* **deps:** update all non-major github action dependencies ([#5819](https://github.com/cds-snc/platform-forms-client/issues/5819)) ([75acef6](https://github.com/cds-snc/platform-forms-client/commit/75acef6d951bc0a7097054b1550078decfb69ed4))
+* fix styling for required checkbox (more modal) ([#5822](https://github.com/cds-snc/platform-forms-client/issues/5822)) ([7dafc44](https://github.com/cds-snc/platform-forms-client/commit/7dafc4445bea0fc724f804440461623aa49d3659))
+* notification v2 data migration - part 1 ([#5783](https://github.com/cds-snc/platform-forms-client/issues/5783)) ([a1bf463](https://github.com/cds-snc/platform-forms-client/commit/a1bf463099b358493fce9c0e75ca7cd71ad40609))
+* update bg contrast for beta badge ([#5806](https://github.com/cds-snc/platform-forms-client/issues/5806)) ([b1d25f3](https://github.com/cds-snc/platform-forms-client/commit/b1d25f3b46d0f8ee0c336afd906853ce4e640568))
+* update debug util for CurrentGroupSelector to use FormsContext ([#5817](https://github.com/cds-snc/platform-forms-client/issues/5817)) ([9b5c3bd](https://github.com/cds-snc/platform-forms-client/commit/9b5c3bd501efda32efbed7f7a848b765adbad928))
+* Update next.js to 15.3.5 ([#5815](https://github.com/cds-snc/platform-forms-client/issues/5815)) ([884c491](https://github.com/cds-snc/platform-forms-client/commit/884c4910b213f6e664802296e72b0442da11e996))
+* update valibot to latest ([#5793](https://github.com/cds-snc/platform-forms-client/issues/5793)) ([b3b4a00](https://github.com/cds-snc/platform-forms-client/commit/b3b4a007cc54f3e6f0f43fa6c88cad334d4838fa))
+
 ## [3.45.2](https://github.com/cds-snc/platform-forms-client/compare/v3.45.1...v3.45.2) (2025-07-02)
 
 

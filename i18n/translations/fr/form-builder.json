@@ -774,13 +774,6 @@
     },
     "notifications": {
       "title": "Recevoir des notifications",
-      "description1": "Obtenez des notifications par courriel pour les nouvelles réponses",
-      "description2": "Tous les membres de votre équipe ayant accès au formulaire seront informés lorsque de nouvelles réponses au formulaire sont disponibles et peuvent être téléchargées.",
-      "optionsDescription": "Activer les notifications pour les nouvelles réponses au formulaire",
-      "options": {
-        "on": "Activé",
-        "off": "Désactivé"
-      },
       "save": "Enregistrer",
       "email": {
         "singleSubmission": {
@@ -796,9 +789,27 @@
           "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
         }
       },
-      "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-      "errors": {
-        "updateNotificationsInterval": "Il y a eu une erreur dans la mise à jour des notifications. Veuillez réessayer plus tard."
+      "sessionUser": {
+        "title": "Recevoir des notifications par courriel",
+        "description": "S'informer sur les nouvelles réponses aux formulaires",
+        "toggle": {
+          "title": "Obtenez des notification à : {{email}}",
+          "on": "Activé",
+          "off": "Desactivé"
+        }
+      },
+      "usersList": {
+        "title": "Personnes ayant accès au formulaire qui sont informés des  nouvelles réponses",
+        "description": "Vous pouvez gérer l'accès de l'équipe sur la page Réponses",
+        "enabled": "Notifications activées",
+        "disabled": "Notifications désactivées"
+      },
+      "success": {
+        "updateNotifications": "Vos modifications ont été enregistrées."
+      },
+      "error": {
+        "getNotifcations": "Il y a un problème avec les paramètres de notifications. Veuillez réessayer plus tard.",
+        "updateNotifications": "Il y a eu un problème avec la mise à jour des notifications. Veuillez réessayer plus tard."
       }
     }
   },
