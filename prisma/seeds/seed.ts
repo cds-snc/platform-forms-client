@@ -128,33 +128,6 @@ async function createSecurityQuestions() {
   });
 }
 
-// Can be removed once we know that the migration is completed
-async function deliveryOptionMigration() {
-  const deliveryOptions = await prisma.deliveryOption.deleteMany({
-    where: {
-      template: {
-        isPublished: false, // Only remove the delivery option for draft templates
-      },
-    },
-  });
-
-  console.log(
-    `${deliveryOptions.count} were migrated for move email Delivery Option to Vault migration`
-  );
-}
-
-// Part 2: Notifications v2 data migration - reset notificationsInterval to be used as a setting (and not a flag)
-async function emailNotificationsIntervalMigration2() {
-  const templates = await prisma.template.updateMany({
-    where: { notificationsInterval: null },
-    data: { notificationsInterval: 1440 },
-  });
-  console.log(
-    `${templates.count} were migrated for update notificationsInterval 
-    when null to the default value of 1440 minutes`
-  );
-}
-
 async function main(environment: string) {
   try {
     console.log(`Seeding Database for ${environment} enviroment`);
@@ -180,13 +153,6 @@ async function main(environment: string) {
         }
       }
     }
-
-    console.log("Running 'deliveryOptionMigration' migration");
-    await deliveryOptionMigration();
-
-    // Part 2: Notifications v2 data migration
-    console.log("Running 'emailNotificationsIntervalMigration' migration Part 2");
-    await emailNotificationsIntervalMigration2();
   } catch (e) {
     console.error(e);
   } finally {
