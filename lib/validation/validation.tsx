@@ -177,47 +177,39 @@ const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.dynamicRow: {
-      //set up object to store results
-      // loop over rows of values
-
       // deterministic switch to return an error object or not
       // required because returning any object (including nulls) blocks the submit action
       let dynamicRowHasErrors = false;
 
       const groupErrors = (value as Array<Responses>).map((row) => {
         const rowErrors: Record<string, unknown> = {};
-        for (const [responseKey, responseValue] of Object.entries(row)) {
-          if (
-            formElement.properties.subElements &&
-            formElement.properties.subElements[parseInt(responseKey)]
-          ) {
-            const subElement = formElement.properties.subElements[parseInt(responseKey)];
 
-            if (subElement?.properties?.validation) {
-              const validationError = isFieldResponseValid(
-                responseValue,
-                values,
-                subElement.type,
-                subElement,
-                subElement.properties.validation,
-                t
-              );
-              rowErrors[responseKey] = validationError;
-              if (validationError !== null) {
-                dynamicRowHasErrors = true;
-              }
-            } else {
-              rowErrors[responseKey] = null;
+        (formElement.properties.subElements || []).forEach((subElement, index) => {
+          if (subElement.properties.validation) {
+            const validationError = isFieldResponseValid(
+              row[index],
+              values,
+              subElement.type,
+              subElement,
+              subElement.properties.validation,
+              t
+            );
+
+            if (validationError !== null) {
+              rowErrors[index] = validationError;
+              dynamicRowHasErrors = true;
             }
           }
-        }
+        });
+
         return rowErrors;
       });
-      if (!dynamicRowHasErrors) {
-        break;
-      } else {
+
+      if (dynamicRowHasErrors) {
         return groupErrors;
       }
+
+      break;
     }
     case FormElementTypes.richText:
       break;
