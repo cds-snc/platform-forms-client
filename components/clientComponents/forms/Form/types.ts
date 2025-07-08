@@ -25,7 +25,6 @@ export interface FormProps {
   matchedIds?: string[];
   saveSessionProgress: (language?: Language) => void;
   saveAndResumeEnabled?: boolean;
-  hCaptchaSiteKey?: string | undefined;
   currentGroup: string | null;
   setCaptchaFail?: React.Dispatch<React.SetStateAction<boolean>>;
   captchaFail?: boolean;

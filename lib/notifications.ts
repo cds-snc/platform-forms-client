@@ -2,11 +2,12 @@ import { sendEmail } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
-import { DeliveryOption, NotificationsInterval } from "@gcforms/types";
+import { NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { logEvent } from "./auditLogs";
-import { authorization } from "./privileges";
+
+// Hard coded since only one interval is supported currently
+const NOTIFICATIONS_INTERVAL = NotificationsInterval.DAY;
 
 const Status = {
   SINGLE_EMAIL_SENT: "SINGLE_EMAIL_SENT",
@@ -14,32 +15,24 @@ const Status = {
 } as const;
 type Status = (typeof Status)[keyof typeof Status];
 
-// Sends an email notification when a user has new form submissions
-export const sendNotification = async (formId: string, titleEn: string, titleFr: string) => {
-  const usersAndNotifications = await _getUsersAndNotificationsInterval(formId);
-  if (!usersAndNotifications) {
-    logMessage.error(`sendNotification template not found with id ${formId}`);
-    return;
-  }
-
-  const { users, deliveryOption } = usersAndNotifications;
-
-  // Avoid spamming users with emails by only sending one type of email, either an email
-  // delivery or a notification
+// Public facing function to send notifications to all related users on a form submission
+export const sendNotifications = async (formId: string, titleEn: string, titleFr: string) => {
+  // Avoid sending additional notifications to legacy forms that receive delivery by email.
+  const deliveryOption = await _getDeliveryOption(formId);
   if (deliveryOption) {
     return;
   }
 
-  const notificationsInterval = usersAndNotifications.notificationsInterval;
-  if (!validateNotificationsInterval(notificationsInterval)) {
-    logMessage.error(
-      `sendNotification template ${formId} has an invalid notificationsInterval ${notificationsInterval}`
-    );
+  const users = await getNotificationsUsers(formId);
+
+  // Some older forms may not have users, do nothing
+  if (!Array.isArray(users) || users.length === 0) {
     return;
   }
 
-  // Notifcations are turned off, do nothing
-  if (!notificationsInterval) {
+  // No users have notifications enabled, do nothing
+  const atLeastOneUserEnabled = users.some((user) => user.enabled);
+  if (!atLeastOneUserEnabled) {
     return;
   }
 
@@ -49,7 +42,7 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
       // Single submissions email sent but not multiple submissions email, send multiple email
       Promise.all([
         sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, true),
-        setMarker(formId, notificationsInterval, Status.MULTIPLE_EMAIL_SENT),
+        setMarker(formId, Status.MULTIPLE_EMAIL_SENT),
       ]);
       break;
     case Status.MULTIPLE_EMAIL_SENT:
@@ -59,30 +52,75 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
       // No email has been sent, send single submission email
       Promise.all([
         sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, false),
-        setMarker(formId, notificationsInterval),
+        setMarker(formId),
       ]);
   }
 };
 
-export const removeMarker = async (formId: string) => {
-  const redis = await getRedisInstance();
-  await redis
-    .del(`notification:formId:${formId}`)
-    .then(() => logMessage.debug(`removeMarker: notification:formId:${formId} deleted`))
-    .catch((err) => logMessage.error(`removeMarker with ${formId} failed to delete ${err}`));
+export const getNotificationsUsers = async (formId: string) => {
+  const usersAndNotificationsUsers = await prisma.template
+    .findUnique({
+      where: {
+        id: formId,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+        notificationsUsers: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!usersAndNotificationsUsers) {
+    logMessage.warn(`_getNotificationsUsers template not found with id ${formId}`);
+    return null;
+  }
+
+  const { users, notificationsUsers } = usersAndNotificationsUsers;
+
+  return users.map((user) => {
+    const foundUser = notificationsUsers.find(
+      (notificationUser) => notificationUser.id === user.id
+    );
+    return {
+      id: user.id,
+      email: user.email,
+      enabled: foundUser ? true : false,
+    };
+  });
 };
 
-// Creates or updates an existing marker in Redis. Note to remove a marker, use removeMarker
-const setMarker = async (
-  formId: string,
-  notificationsInterval: NotificationsInterval,
-  status: Status = Status.SINGLE_EMAIL_SENT
-) => {
-  if (!notificationsInterval || !validateNotificationsInterval(notificationsInterval)) {
-    logMessage.error(`setMarker has an invalid notificationsInterval for formId ${formId}`);
-    return;
+const _getDeliveryOption = async (formId: string) => {
+  const template = await prisma.template
+    .findUnique({
+      where: {
+        id: formId,
+      },
+      select: {
+        deliveryOption: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!template) {
+    logMessage.warn(`_getDeliveryOption template not found with id ${formId}`);
+    return null;
   }
-  const ttl = notificationsInterval * 60; // convert from minutes to seconds
+
+  return template.deliveryOption;
+};
+
+const setMarker = async (formId: string, status: Status = Status.SINGLE_EMAIL_SENT) => {
+  const ttl = NOTIFICATIONS_INTERVAL * 60; // convert from minutes to seconds
   const redis = await getRedisInstance();
   await redis
     .set(`notification:formId:${formId}`, status, "EX", ttl)
@@ -106,6 +144,7 @@ const getMarker = async (formId: string) => {
 const sendEmailNotificationsToAllUsers = async (
   users: {
     email: string;
+    enabled: boolean;
   }[],
   formId: string,
   formTitleEn: string,
@@ -116,8 +155,9 @@ const sendEmailNotificationsToAllUsers = async (
     logMessage.error("sendEmailNotificationsToAllUsers missing users");
     return;
   }
-  users.forEach(({ email }) =>
-    sendEmailNotification(email, formId, formTitleEn, formTitleFr, multipleSubmissions)
+  users.forEach(
+    ({ email, enabled }) =>
+      enabled && sendEmailNotification(email, formId, formTitleEn, formTitleFr, multipleSubmissions)
   );
 };
 
@@ -204,82 +244,4 @@ const multipleSubmissionsEmailTemplate = async (
   
   *${t_fr("settings.notifications.email.multipleSubmissions.paragraph3")}*
     `;
-};
-
-export const validateNotificationsInterval = (
-  notificationsInterval: number | null | undefined
-): notificationsInterval is NotificationsInterval => {
-  return Object.values(NotificationsInterval).includes(
-    notificationsInterval as NotificationsInterval
-  );
-};
-
-const _getUsersAndNotificationsInterval = async (
-  formID: string
-): Promise<{
-  notificationsInterval: number | null | undefined;
-  users: { email: string }[];
-  deliveryOption: DeliveryOption | null;
-} | null> => {
-  const usersAndNotificationsInterval = await prisma.template
-    .findUnique({
-      where: {
-        id: formID,
-      },
-      select: {
-        notificationsInterval: true,
-        deliveryOption: true,
-        users: {
-          select: {
-            email: true,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (!usersAndNotificationsInterval) return null;
-
-  return {
-    users: usersAndNotificationsInterval.users,
-    notificationsInterval: usersAndNotificationsInterval.notificationsInterval,
-    deliveryOption: usersAndNotificationsInterval.deliveryOption as DeliveryOption,
-  };
-};
-
-export const updateNotificationsSetting = async (
-  formId: string,
-  notificationsInterval: NotificationsInterval
-) => {
-  const { user } = await authorization.canEditForm(formId).catch((e) => {
-    logEvent(
-      e.user.id,
-      { type: "Form", id: formId },
-      "AccessDenied",
-      "Attempted to update notifications interval for Form"
-    );
-    throw e;
-  });
-
-  if (!validateNotificationsInterval(notificationsInterval)) {
-    throw new Error(`Invalid notifications interval: ${notificationsInterval}`);
-  }
-
-  await prisma.template
-    .update({
-      where: {
-        id: formId,
-      },
-      data: {
-        notificationsInterval,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  logEvent(
-    user.id,
-    { type: "Form", id: formId },
-    "UpdateNotificationsInterval",
-    `User :${user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
-  );
 };

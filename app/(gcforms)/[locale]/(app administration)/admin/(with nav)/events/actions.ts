@@ -10,10 +10,11 @@ import {
   string,
   email,
   toLowerCase,
-  toTrimmed,
+  trim,
   minLength,
   maxLength,
   safeParse,
+  pipe,
 } from "valibot";
 
 const _retrieveEvents = async (query: QueryCommandInput) => {
@@ -156,11 +157,11 @@ export const getEventsForForm = async (formId: string) => {
 };
 
 const emailSchema = object({
-  subject: string([email()]),
+  subject: pipe(string(), email()),
 });
 
 const formSchema = object({
-  subject: string([minLength(1), maxLength(100), toLowerCase(), toTrimmed()]),
+  subject: pipe(string(), minLength(1), maxLength(100), toLowerCase(), trim()),
 });
 
 export const findSubject = async (_: unknown, formData: FormData) => {

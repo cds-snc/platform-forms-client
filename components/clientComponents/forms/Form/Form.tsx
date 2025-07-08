@@ -37,7 +37,7 @@ import { FormStatus } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
 
-import { FocusHeader } from "app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
+import { FocusH2 } from "app/(gcforms)/[locale]/(support)/components/client/FocusH2";
 
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 
@@ -52,7 +52,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     handleSubmit,
     status,
     language,
-    formRecord: { id: formID, form },
+    formRecord: { id: formID, form, isPublished },
     dirty,
   }: InnerFormProps = props;
 
@@ -180,17 +180,16 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             lang={language}
             handleSubmit={handleSubmit}
             noValidate={true}
-            hCaptchaSiteKey={props.hCaptchaSiteKey}
-            isPreview={props.isPreview}
+            isPublished={isPublished}
             captchaToken={props.captchaToken}
           >
             {isGroupsCheck &&
               isShowReviewPage &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <FocusHeader headingTag="h2">
+                <FocusH2 group={currentGroup || "default"}>
                   {getGroupTitle(currentGroup, language as Language)}
-                </FocusHeader>
+                </FocusH2>
               )}
 
             {children}

@@ -1,5 +1,4 @@
 import { useTranslation } from "@i18n/client";
-import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { FormElement } from "@lib/types";
 
 export const RequiredOptions = ({
@@ -18,13 +17,12 @@ export const RequiredOptions = ({
       <div className="mb-2">
         <h3>{t("addRules")}</h3>
       </div>
-      <div>
-        <Checkbox
-          data-testid="required"
+      <div className="gc-input-checkbox">
+        <input
+          className="gc-input-checkbox__input"
           id={`required-${item.id}-id-modal`}
+          type="checkbox"
           value={`required-${item.id}-value-modal-` + checked}
-          key={`required-${item.id}-modal-` + checked}
-          defaultChecked={checked}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             // clone the existing properties so that we don't overwrite other keys in "validation"
             const validation = Object.assign({}, item.properties.validation, {
@@ -38,9 +36,16 @@ export const RequiredOptions = ({
               },
             });
           }}
-          label={allRequired ? t("allRequired") : t("required")}
-          disabled={item.properties.validation?.all}
-        ></Checkbox>
+        />
+        <label
+          data-testid="required"
+          className="gc-checkbox-label"
+          htmlFor={`required-${item.id}-id-modal`}
+        >
+          <span className="checkbox-label-text">
+            {allRequired ? t("allRequired") : t("required")}
+          </span>
+        </label>
       </div>
     </section>
   );

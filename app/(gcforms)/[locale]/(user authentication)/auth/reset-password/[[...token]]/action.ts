@@ -197,12 +197,13 @@ const validateInitialResetForm = async (
 ) => {
   const { t } = await serverTranslation(["common"], { lang: language });
   const schema = v.object({
-    username: v.string([
+    username: v.pipe(
+      v.string(),
       v.toLowerCase(),
-      v.toTrimmed(),
+      v.trim(),
       v.minLength(1, t("input-validation.required")),
-      v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
-    ]),
+      v.check((input) => isValidGovEmail(input), t("input-validation.validGovEmail"))
+    ),
   });
 
   return v.safeParse(schema, formEntries, { abortPipeEarly: true });
@@ -216,33 +217,37 @@ const validateQuestionChallengeForm = async (
 ) => {
   const { t } = await serverTranslation(["common"], { lang: language });
   const schema = v.object({
-    question1: v.string([
+    question1: v.pipe(
+      v.string(),
       v.toLowerCase(),
-      v.toTrimmed(),
+      v.trim(),
       v.minLength(1, t("input-validation.required")),
-      v.minLength(4, t("input-validation.min-length-4-characters")),
-    ]),
-    question1Id: v.string([v.minLength(1, t("input-validation.required"))]),
-    question2: v.string([
+      v.minLength(4, t("input-validation.min-length-4-characters"))
+    ),
+    question1Id: v.pipe(v.string(), v.minLength(1, t("input-validation.required"))),
+    question2: v.pipe(
+      v.string(),
       v.toLowerCase(),
-      v.toTrimmed(),
+      v.trim(),
       v.minLength(1, t("input-validation.required")),
-      v.minLength(4, t("input-validation.min-length-4-characters")),
-    ]),
-    question2Id: v.string([v.minLength(1, t("input-validation.required"))]),
-    question3: v.string([
+      v.minLength(4, t("input-validation.min-length-4-characters"))
+    ),
+    question2Id: v.pipe(v.string(), v.minLength(1, t("input-validation.required"))),
+    question3: v.pipe(
+      v.string(),
       v.toLowerCase(),
-      v.toTrimmed(),
+      v.trim(),
       v.minLength(1, t("input-validation.required")),
-      v.minLength(4, t("input-validation.min-length-4-characters")),
-    ]),
-    question3Id: v.string([v.minLength(1, t("input-validation.required"))]),
-    email: v.string([
+      v.minLength(4, t("input-validation.min-length-4-characters"))
+    ),
+    question3Id: v.pipe(v.string(), v.minLength(1, t("input-validation.required"))),
+    email: v.pipe(
+      v.string(),
       v.toLowerCase(),
-      v.toTrimmed(),
+      v.trim(),
       v.minLength(1, t("input-validation.required")),
-      v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
-    ]),
+      v.check((input) => isValidGovEmail(input), t("input-validation.validGovEmail"))
+    ),
   });
 
   return v.safeParse(schema, formEntries, { abortPipeEarly: true });
@@ -253,53 +258,51 @@ const validatePasswordResetForm = async (
   formEntries: { [k: string]: FormDataEntryValue }
 ) => {
   const { t } = await serverTranslation(["reset-password", "common"], { lang: language });
-  const schema = v.object(
-    {
-      confirmationCode: v.coerce(
-        v.number(t("resetPassword.fields.confirmationCode.error.number")),
-        Number
-      ),
-      username: v.string([
+  const schema = v.pipe(
+    v.object({
+      confirmationCode: v.pipe(v.unknown(), v.transform(Number)),
+      username: v.pipe(
+        v.string(),
         v.toLowerCase(),
-        v.toTrimmed(),
+        v.trim(),
         v.minLength(1, t("input-validation.required")),
-        v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
-      ]),
-      password: v.string([
-        v.toTrimmed(),
+        v.check((input) => isValidGovEmail(input), t("input-validation.validGovEmail"))
+      ),
+      password: v.pipe(
+        v.string(),
+        v.trim(),
         v.minLength(8, t("account.fields.password.error.minLength", { ns: "common" })),
         v.maxLength(50, t("account.fields.password.error.maxLength", { ns: "common" })),
-        v.custom(
+        v.check(
           (password) => containsLowerCaseCharacter(password),
           t("account.fields.password.error.oneLowerCase", { ns: "common" })
         ),
-        v.custom(
+        v.check(
           (password) => containsUpperCaseCharacter(password),
           t("account.fields.password.error.oneUpperCase", { ns: "common" })
         ),
-        v.custom(
+        v.check(
           (password) => containsNumber(password),
           t("account.fields.password.error.oneNumber", { ns: "common" })
         ),
-        v.custom(
+        v.check(
           (password) => containsSymbol(password),
           t("account.fields.password.error.oneSymbol", { ns: "common" })
-        ),
-      ]),
-      passwordConfirmation: v.string([
-        v.toTrimmed(),
-        v.minLength(1, t("input-validation.required", { ns: "common" })),
-      ]),
-    },
-    [
-      v.forward(
-        v.custom(
-          (input) => input.password === input.passwordConfirmation,
-          t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
-        ),
-        ["passwordConfirmation"]
+        )
       ),
-    ]
+      passwordConfirmation: v.pipe(
+        v.string(),
+        v.trim(),
+        v.minLength(1, t("input-validation.required", { ns: "common" }))
+      ),
+    }),
+    v.forward(
+      v.check(
+        (input) => input.password === input.passwordConfirmation,
+        t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
+      ),
+      ["passwordConfirmation"]
+    )
   );
   return v.safeParse(schema, formEntries, { abortPipeEarly: true });
 };
@@ -356,7 +359,8 @@ const resetCognitoPassword = async (
   });
 };
 
-const checkForSpecificFieldErrors = (issues: v.SchemaIssues, fields: string[]): boolean => {
+// Update function to use valibot's BaseIssue type
+const checkForSpecificFieldErrors = (issues: v.BaseIssue<unknown>[], fields: string[]): boolean => {
   const fieldErrors = issues.filter((issue) => fields.includes(issue.path?.[0].key as string));
 
   return Boolean(fieldErrors.length);
