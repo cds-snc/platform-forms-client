@@ -4,8 +4,9 @@ import { useTranslation } from "@i18n/client";
 import Markdown from "markdown-to-jsx";
 
 import { PublishedLinks } from "./PublishedLinks";
+import { Language } from "@lib/types/form-builder-types";
 
-export const PublishedPreview = () => {
+export const PublishedPreview = ({ id, locale }: { id: string; locale: Language }) => {
   const { t } = useTranslation(["common", "form-builder"]);
 
   return (
@@ -18,10 +19,7 @@ export const PublishedPreview = () => {
           <Markdown options={{ forceBlock: true }}>
             {t("previewDisabledForPublishedForm", { ns: "form-builder" })}
           </Markdown>
-          <PublishedLinks
-            id="your-form-id"
-            locale="en" // Replace with the actual locale if needed
-          />
+          <PublishedLinks id={id} locale={locale} />
         </div>
       </div>
     </div>
