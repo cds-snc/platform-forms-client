@@ -1,7 +1,7 @@
 "use client";
 
-import { useTransition } from "react";
-import { createAlias, deleteAlias } from "./actions";
+import { useTransition, useState, useRef, useEffect } from "react";
+import { createAlias, deleteAlias, updateAlias } from "./actions";
 import { FormAlias } from "@prisma/client";
 
 type Template = {
@@ -35,18 +35,38 @@ export const AliasForm = ({
   templates: Template[];
 }) => {
   const [isPending, startTransition] = useTransition();
+  const [editingAlias, setEditingAlias] = useState<FormAlias | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  // en/id/cmcw2z2yj0001nb754br54eh1
+  useEffect(() => {
+    if (editingAlias && formRef.current) {
+      (formRef.current.elements.namedItem("alias") as HTMLInputElement).value = editingAlias.alias;
+      (formRef.current.elements.namedItem("formId") as HTMLSelectElement).value =
+        editingAlias.formId;
+    } else {
+      formRef.current?.reset();
+    }
+  }, [editingAlias]);
+
+  const formAction = async (formData: FormData) => {
+    if (editingAlias) {
+      await updateAlias(editingAlias.id, formData);
+      setEditingAlias(null);
+    } else {
+      await createAlias(formData);
+    }
+    formRef.current?.reset();
+  };
 
   return (
     <div>
+      <h2 className="mb-4 text-xl">{editingAlias ? "Edit Alias" : "Create Alias"}</h2>
       <form
+        ref={formRef}
         action={(formData) => {
-          startTransition(async () => {
-            await createAlias(formData);
-          });
+          startTransition(() => formAction(formData));
         }}
-        className="mb-8 flex gap-4"
+        className="mb-8 flex items-end gap-4"
       >
         <div>
           <label htmlFor="alias" className="mb-2 block">
@@ -58,7 +78,7 @@ export const AliasForm = ({
           <label htmlFor="formId" className="mb-2 block">
             Form
           </label>
-          <select name="formId" id="formId" className="border p-2" required>
+          <select name="formId" id="formId" className="border p-2" required defaultValue="">
             <option value="" disabled>
               Select a form
             </option>
@@ -69,10 +89,25 @@ export const AliasForm = ({
             ))}
           </select>
         </div>
-        <div className="self-end">
+        <div className="flex gap-2">
           <button type="submit" disabled={isPending} className="bg-blue-600 p-2 text-white">
-            {isPending ? "Creating..." : "Create Alias"}
+            {isPending
+              ? editingAlias
+                ? "Updating..."
+                : "Creating..."
+              : editingAlias
+              ? "Update Alias"
+              : "Create Alias"}
           </button>
+          {editingAlias && (
+            <button
+              type="button"
+              onClick={() => setEditingAlias(null)}
+              className="bg-gray-500 p-2 text-white"
+            >
+              Cancel
+            </button>
+          )}
         </div>
       </form>
 
@@ -90,14 +125,24 @@ export const AliasForm = ({
           {aliases.map((alias) => (
             <tr key={alias.id}>
               <td className="border p-2">
-                <a href={`${HOST}/id/${alias.alias}`} target="_blank" rel="noopener noreferrer">
+                <a href={`${HOST}/${alias.alias}`} target="_blank" rel="noopener noreferrer">
                   {alias.alias}
                 </a>
               </td>
-              <td className="border p-2">{alias.formId}</td>
+              <td className="border p-2">
+                {templates.find((t) => t.id === alias.formId)?.id ?? alias.formId}
+              </td>
               <td className="border p-2">{alias.createdAt.toLocaleDateString()}</td>
               <td className="border p-2">
-                <DeleteButton id={alias.id} />
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setEditingAlias(alias)}
+                    className="bg-gray-600 p-2 text-white"
+                  >
+                    Edit
+                  </button>
+                  <DeleteButton id={alias.id} />
+                </div>
               </td>
             </tr>
           ))}
