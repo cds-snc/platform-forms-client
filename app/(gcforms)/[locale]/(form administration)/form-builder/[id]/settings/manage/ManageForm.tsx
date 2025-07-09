@@ -6,7 +6,7 @@ import { FormOwnership } from "./FormOwnership";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { updateTemplateUsers } from "@formBuilder/actions";
 import { ManageApiKey } from "./ManageApiKey";
-import { ThrottlingRate } from "./ThrottlingRate";
+import { ThrottlingRate } from "./throttlingRate/ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 import { FormOwnerSettings } from "./FormOwnerSettings";
