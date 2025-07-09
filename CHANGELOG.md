@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.46.1](https://github.com/cds-snc/platform-forms-client/compare/v3.46.0...v3.46.1) (2025-07-09)
+
+
+### Bug Fixes
+
+* fix bold text in sla ([#5860](https://github.com/cds-snc/platform-forms-client/issues/5860)) ([635a2a8](https://github.com/cds-snc/platform-forms-client/commit/635a2a86e5fdfa0aa8581b0c591ee3ff7e009103))
+* fix default checked for more menu required ([#5864](https://github.com/cds-snc/platform-forms-client/issues/5864)) ([0ef2bfa](https://github.com/cds-snc/platform-forms-client/commit/0ef2bfa8b53eabc81ebd82d342606d0bb78a2653))
+* Update SQS queue ([#5865](https://github.com/cds-snc/platform-forms-client/issues/5865)) ([025d20d](https://github.com/cds-snc/platform-forms-client/commit/025d20d6577d0b75b089b0a9c4c3b58d2edf7201))
+
+
+### Miscellaneous Chores
+
+* add published links for preview ([#5856](https://github.com/cds-snc/platform-forms-client/issues/5856)) ([1a08ed6](https://github.com/cds-snc/platform-forms-client/commit/1a08ed640ac43573e32687eaf50d7b8c78bb06b5))
+* add strict value to form types ([#5855](https://github.com/cds-snc/platform-forms-client/issues/5855)) ([936bd3a](https://github.com/cds-snc/platform-forms-client/commit/936bd3afb86858f5d1827e73915969c2590a98e7))
+* Fix upload redirect ([#5857](https://github.com/cds-snc/platform-forms-client/issues/5857)) ([19461b7](https://github.com/cds-snc/platform-forms-client/commit/19461b7aa73beddafdb0511f580ce684d3bf8aca))
+* notification v2 data migration - part 3 ([#5827](https://github.com/cds-snc/platform-forms-client/issues/5827)) ([5dbc339](https://github.com/cds-snc/platform-forms-client/commit/5dbc339c95d0b4f17b0f0b6033fde8c53a49e93e))
+* throttle-ui file clean up ([#5862](https://github.com/cds-snc/platform-forms-client/issues/5862)) ([b853e34](https://github.com/cds-snc/platform-forms-client/commit/b853e341114b7fe7f0a76e5f3a613592aa7fb446))
+* update admin upload to use server action ([#5858](https://github.com/cds-snc/platform-forms-client/issues/5858)) ([c54647b](https://github.com/cds-snc/platform-forms-client/commit/c54647b5c338194ce503434c7c4a6b9e3be85aba))
+* update aws sdk  ([#5823](https://github.com/cds-snc/platform-forms-client/issues/5823)) ([bd7273c](https://github.com/cds-snc/platform-forms-client/commit/bd7273c76f0ca1f6aec6bde7201dbed635bcf98f))
+* update jest ([#5859](https://github.com/cds-snc/platform-forms-client/issues/5859)) ([f6bf58f](https://github.com/cds-snc/platform-forms-client/commit/f6bf58f9b179315e3ca2e7b9b91d0ae9be3ddc02))
+
 ## [3.46.0](https://github.com/cds-snc/platform-forms-client/compare/v3.45.3...v3.46.0) (2025-07-07)
 
 
