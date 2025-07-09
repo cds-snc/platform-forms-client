@@ -66,6 +66,17 @@ const responseDownloadLimit: Setting = {
   value: "20",
 };
 
+const aliasUrls: Setting = {
+  internalId: "aliasUrls",
+  nameEn: "Alias URLs",
+  nameFr: "Alias URLs",
+  descriptionEn: "A JSON object containing alias URLs for forms.",
+  descriptionFr: "Un objet JSON contenant des alias d'URL pour les formulaires.",
+  value: JSON.stringify({
+    "gc-cmcw3f3mc0001x601c79bl66p": "cmcvvmk9j0002nbbbg5muy0bv",
+  }),
+};
+
 const allSettings = [
   brandingRequestFormSetting,
   nagwarePhaseEncouraged,
@@ -73,6 +84,7 @@ const allSettings = [
   nagwarePhaseWarned,
   nagwarePhaseEscalated,
   responseDownloadLimit,
+  aliasUrls,
 ];
 
 export default {

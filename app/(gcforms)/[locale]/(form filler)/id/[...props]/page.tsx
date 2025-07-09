@@ -18,6 +18,8 @@ import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
 
+import { getAppSetting } from "@lib/appSettings";
+
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
 }): Promise<Metadata> {
@@ -42,11 +44,6 @@ export async function generateMetadata(props0: {
   };
 }
 
-// This would be in a database table in a real application
-// For the purposes of this example, we are using a hardcoded map
-const ALIAS_CONFIG = new Map();
-ALIAS_CONFIG.set("gc-cmcw3f3mc0001x601c79bl66p", "cmcvvmk9j0002nbbbg5muy0bv");
-
 export default async function Page(props0: {
   params: Promise<{ locale: string; props: string[] }>;
 }) {
@@ -58,8 +55,14 @@ export default async function Page(props0: {
 
   let formId = props[0];
 
-  if (ALIAS_CONFIG.has(formId)) {
-    formId = ALIAS_CONFIG.get(formId) as string;
+  const aliasUrls = await getAppSetting("aliasUrls");
+  // Turn json into a Map
+  if (aliasUrls) {
+    const aliasMap = new Map(Object.entries(JSON.parse(aliasUrls)));
+    // If the formId is in the alias map, use the alias instead
+    if (aliasMap.has(formId)) {
+      formId = aliasMap.get(formId) as string;
+    }
   }
 
   const step = props[1] ?? "";
