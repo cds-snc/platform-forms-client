@@ -12,6 +12,33 @@ import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSe
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
+import { showReviewPage } from "@root/lib/utils/form-builder/showReviewPage";
+import { LockedSections } from "../../../(form administration)/form-builder/components/shared/right-panel/treeview/types";
+import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
+import { getLocalizedProperty } from "@root/lib/utils";
+
+// For Multi-Page forms get the page head title for the:
+// - Initial page, set the title to {form title} *done at the page level*
+// - Group pages, set the title to {form title - group title}
+// - Review page, set the title to {form title - Review}
+const getPageTitle = (
+  formRecord: FormRecord,
+  language: Language,
+  currentGroup: string | null,
+  groupTitle: string,
+  reviewString: string
+) => {
+  const isShowReviewPage = showReviewPage(formRecord.form);
+  const pageTitleGroup = `${
+    formRecord.form[getLocalizedProperty("title", language)]
+  } - ${groupTitle}`;
+  const pageTitleReview = `${
+    formRecord.form[getLocalizedProperty("title", language)]
+  } - ${reviewString}`;
+  return isShowReviewPage && currentGroup !== LockedSections.REVIEW
+    ? pageTitleGroup
+    : pageTitleReview;
+};
 
 export const FormWrapper = ({
   formRecord,
@@ -28,7 +55,7 @@ export const FormWrapper = ({
   const {
     t,
     i18n: { language },
-  } = useTranslation(["common", "confirmation", "form-closed"]);
+  } = useTranslation(["common", "confirmation", "form-closed", "review"]);
   const {
     saveSessionProgress,
     setSubmissionId,
@@ -36,6 +63,7 @@ export const FormWrapper = ({
     submissionDate,
     setSubmissionDate,
     currentGroup,
+    getGroupTitle,
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
   const captchaToken = React.useRef("");
@@ -59,6 +87,18 @@ export const FormWrapper = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, formRecord.id]);
+
+  // Update the page head title for multi-page forms
+  const pageTitle = useMemo(() => {
+    return getPageTitle(
+      formRecord as FormRecord,
+      language as Language,
+      currentGroup,
+      getGroupTitle(currentGroup, language as Language),
+      t("reviewForm", { lng: language, ns: "review" })
+    );
+  }, [formRecord, language, currentGroup, getGroupTitle, t]);
+  useUpdateHeadTitle(pageTitle, showReviewPage(formRecord.form));
 
   useEffect(() => {
     // Clear session storage after values are restored
