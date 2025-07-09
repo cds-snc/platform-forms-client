@@ -176,3 +176,11 @@ model UserFeature {
 
   @@unique([userId, feature])
 }
+
+model FormAlias {
+  id        String   @id @default(cuid())
+  alias     String   @unique
+  formId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
