@@ -42,6 +42,11 @@ export async function generateMetadata(props0: {
   };
 }
 
+// This would be in a database table in a real application
+// For the purposes of this example, we are using a hardcoded map
+const ALIAS_CONFIG = new Map();
+ALIAS_CONFIG.set("gc-cmcw3f3mc0001x601c79bl66p", "cmcvvmk9j0002nbbbg5muy0bv");
+
 export default async function Page(props0: {
   params: Promise<{ locale: string; props: string[] }>;
 }) {
@@ -51,7 +56,12 @@ export default async function Page(props0: {
 
   const { locale, props } = params;
 
-  const formId = props[0];
+  let formId = props[0];
+
+  if (ALIAS_CONFIG.has(formId)) {
+    formId = ALIAS_CONFIG.get(formId) as string;
+  }
+
   const step = props[1] ?? "";
   const formRecord = await getPublicTemplateByID(formId);
 
