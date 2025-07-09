@@ -296,13 +296,16 @@ export const Form = withFormik<FormProps, Responses>({
       }
 
       if (result.error) {
-        if (result.error.message.includes("FileValidationResult")) {
+        if (result.error.message && result.error.message.includes("FileValidationResult")) {
           formikBag.setStatus(FormStatus.FILE_ERROR);
         } else if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
           formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
         } else if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
           formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
           formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
+        } else if (result.error.name === FormStatus.SERVER_VALIDATION_ERROR) {
+          formikBag.setStatus(FormStatus.SERVER_VALIDATION_ERROR);
+          result.error.messages && formikBag.setErrors(result.error.messages);
         } else {
           formikBag.setStatus(FormStatus.ERROR);
         }
