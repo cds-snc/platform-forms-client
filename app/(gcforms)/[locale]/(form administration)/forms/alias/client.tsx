@@ -4,6 +4,8 @@ import { useTransition, useState, useRef, useEffect } from "react";
 import { createAlias, deleteAlias, updateAlias } from "./actions";
 import { FormAlias } from "@prisma/client";
 
+import { Button } from "@clientComponents/globals";
+
 type Template = {
   id: string;
 };
@@ -11,17 +13,17 @@ type Template = {
 function DeleteButton({ id }: { id: string }) {
   const [isPending, startTransition] = useTransition();
   return (
-    <button
+    <Button
+      theme="destructive"
       onClick={() =>
         startTransition(async () => {
           await deleteAlias(id);
         })
       }
       disabled={isPending}
-      className="bg-red-600 p-2 text-white"
     >
       {isPending ? "Deleting..." : "Delete"}
-    </button>
+    </Button>
   );
 }
 
@@ -90,7 +92,7 @@ export const AliasForm = ({
           </select>
         </div>
         <div className="flex gap-2">
-          <button type="submit" disabled={isPending} className="bg-blue-600 p-2 text-white">
+          <Button theme="primary" type="submit" disabled={isPending}>
             {isPending
               ? editingAlias
                 ? "Updating..."
@@ -98,15 +100,11 @@ export const AliasForm = ({
               : editingAlias
               ? "Update Alias"
               : "Create Alias"}
-          </button>
+          </Button>
           {editingAlias && (
-            <button
-              type="button"
-              onClick={() => setEditingAlias(null)}
-              className="bg-gray-500 p-2 text-white"
-            >
+            <Button theme="secondary" type="button" onClick={() => setEditingAlias(null)}>
               Cancel
-            </button>
+            </Button>
           )}
         </div>
       </form>
@@ -135,12 +133,9 @@ export const AliasForm = ({
               <td className="border p-2">{alias.createdAt.toLocaleDateString()}</td>
               <td className="border p-2">
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => setEditingAlias(alias)}
-                    className="bg-gray-600 p-2 text-white"
-                  >
+                  <Button theme="secondary" onClick={() => setEditingAlias(alias)}>
                     Edit
-                  </button>
+                  </Button>
                   <DeleteButton id={alias.id} />
                 </div>
               </td>

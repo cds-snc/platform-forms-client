@@ -3,7 +3,9 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { revalidatePath } from "next/cache";
 
-export async function createAlias(formData: FormData) {
+import { AuthenticatedAction } from "@lib/actions";
+
+export const createAlias = AuthenticatedAction(async (_, formData: FormData) => {
   try {
     const alias = formData.get("alias") as string;
     const formId = formData.get("formId") as string;
@@ -19,9 +21,9 @@ export async function createAlias(formData: FormData) {
   } catch (e) {
     return { error: "Could not create alias" };
   }
-}
+});
 
-export async function updateAlias(id: string, formData: FormData) {
+export const updateAlias = AuthenticatedAction(async (_, id: string, formData: FormData) => {
   try {
     const alias = formData.get("alias") as string;
     const formId = formData.get("formId") as string;
@@ -38,9 +40,9 @@ export async function updateAlias(id: string, formData: FormData) {
   } catch (e) {
     return { error: "Could not update alias" };
   }
-}
+});
 
-export async function deleteAlias(id: string) {
+export const deleteAlias = AuthenticatedAction(async (_, id: string) => {
   try {
     await prisma.formAlias.delete({
       where: {
@@ -52,4 +54,4 @@ export async function deleteAlias(id: string) {
   } catch (e) {
     return { error: "Could not delete alias" };
   }
-}
+});
