@@ -58,7 +58,7 @@ CDS provides reactive support services to monitor, track, and remedy issues rais
 | :---------------------------------------------------------------------------------- | :------------------------------------- | :------------------------- |
 | Service is **unavailable**                                                          | 4 hours | Every 8 hours thereafter |
 | Service is **affected** (performance issues, intermittent errors)                   | 1 business day                         | 2 business days       |
-| Service is **\*functioning** (e.g., data is being collected and received by client) | 2 business days                        | None            |
+| Service is **functioning** (e.g., data is being collected and received by client) | 2 business days                        | None            |
 
 ### Service contacts and response time
 
