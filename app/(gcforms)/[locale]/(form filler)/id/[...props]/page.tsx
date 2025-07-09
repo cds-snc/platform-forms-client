@@ -18,6 +18,8 @@ import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
 
+import { getAppSetting } from "@lib/appSettings";
+
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
 }): Promise<Metadata> {
@@ -51,7 +53,21 @@ export default async function Page(props0: {
 
   const { locale, props } = params;
 
-  const formId = props[0];
+  let formId = props[0];
+
+  // Using a settin here just for demo purposes -- this would be a db table in production
+  // aliasUrls would be a simple json object with key value pairs - cache lookup
+  // { "some-key": "some-id" }
+  const aliasUrls = await getAppSetting("brandingRequestForm");
+  // Turn json into a Map
+  if (aliasUrls) {
+    const aliasMap = new Map(Object.entries(JSON.parse(aliasUrls)));
+    // If the formId is in the alias map, use the alias instead
+    if (aliasMap.has(formId)) {
+      formId = aliasMap.get(formId) as string;
+    }
+  }
+
   const step = props[1] ?? "";
   const formRecord = await getPublicTemplateByID(formId);
 
