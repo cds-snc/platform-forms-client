@@ -55,7 +55,8 @@ export default async function Page(props0: {
 
   let formId = props[0];
 
-  const aliasUrls = await getAppSetting("aliasUrls");
+  // Temp usong brandingRequestFormSetting so this works in preview
+  const aliasUrls = await getAppSetting("brandingRequestFormSetting");
   // Turn json into a Map
   if (aliasUrls) {
     const aliasMap = new Map(Object.entries(JSON.parse(aliasUrls)));
