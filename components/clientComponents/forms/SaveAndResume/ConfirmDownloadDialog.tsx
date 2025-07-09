@@ -110,7 +110,10 @@ export const ConfirmDownloadDialog = ({
             )}
             {/* Show save response text */}
             {type === "confirm" && (
-              <div className="mb-4 mt-6">{t(`${tParent}.prompt.description`)}</div>
+              <>
+                {open && <SaveFileWarning formValues={formValues} type={type} />}
+                <div className="mb-4 mt-6">{t(`${tParent}.prompt.description`)}</div>
+              </>
             )}
           </div>
 

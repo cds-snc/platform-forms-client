@@ -3,6 +3,8 @@ import { fileExtractor } from "@lib/fileExtractor";
 import { type FormValues } from "@lib/formContext";
 import { useTranslation } from "@i18n/client";
 
+import { Alert } from "@clientComponents/globals";
+
 export const SaveFileWarning = ({
   formValues,
   type,
@@ -21,8 +23,13 @@ export const SaveFileWarning = ({
   if (!hasFiles) return null;
 
   return (
-    <p className="mb-4">
-      {type === "confirm" ? t("confirmFileWarning.text") : t("saveFileWarning.text")}
-    </p>
+    <Alert.Warning className="mb-4">
+      <Alert.Body>
+        <span className="text-slate-950">
+          {" "}
+          {type === "confirm" ? t("confirmFileWarning.text") : t("saveFileWarning.text")}{" "}
+        </span>
+      </Alert.Body>
+    </Alert.Warning>
   );
 };
