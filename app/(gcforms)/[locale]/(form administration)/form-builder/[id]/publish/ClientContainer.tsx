@@ -4,11 +4,10 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 
-export const ClientContainer = ({ children }: { children: React.ReactNode }) => {
+export const ClientContainer = ({ children, id }: { children: React.ReactNode; id: string }) => {
   const router = useRouter();
-  const { isPublished, id } = useTemplateStore((s) => ({
+  const { isPublished } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
-    id: s.id,
   }));
   const [content, setContent] = useState<null | React.ReactNode>(null);
   const {

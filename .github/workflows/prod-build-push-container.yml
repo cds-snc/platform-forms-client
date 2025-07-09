@@ -11,7 +11,7 @@ env:
   TAG_VERSION: ${{  github.ref_name }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
-  NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${{ secrets.PRODUCTION_NEXT_SERVER_ACTIONS_ENCRYPTION_KEY }}
+  HCAPTCHA_SITE_KEY: ${{ vars.PRODUCTION_HCAPTCHA_SITE_KEY }}
 
 permissions:
   id-token: write
@@ -32,7 +32,7 @@ jobs:
           --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
           --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
           --build-arg INDEX_SITE=true \
-          --build-arg NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY \
+          --build-arg HCAPTCHA_SITE_KEY=$HCAPTCHA_SITE_KEY \
           --build-arg NEXT_DEPLOYMENT_ID=$TAG_VERSION .
 
       - name: Configure AWS credentials using OIDC
@@ -44,7 +44,7 @@ jobs:
 
       - name: Login to Production Amazon ECR
         id: login-ecr-production
-        uses: aws-actions/amazon-ecr-login@a5bbe73ce77ea9c288698ad5757299f18b5a420c
+        uses: aws-actions/amazon-ecr-login@d63b14614fe5d7fc5e5e52c523dea4e876816cc4
 
       - name: Tag Images for Production
         env:

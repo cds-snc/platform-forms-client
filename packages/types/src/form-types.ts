@@ -128,6 +128,7 @@ export interface ElementProperties {
   addressComponents?: AddressComponents | undefined;
   dynamicRow?: dynamicRowType;
   sortOrder?: SortValue;
+  strictValue?: boolean;
   [key: string]:
     | string
     | string[]
@@ -255,7 +256,7 @@ export const NotificationsInterval = {
   WEEK: 10080,
 } as const;
 
-export const NotificationsIntervalDefault = NotificationsInterval.OFF; // Default in prisma is 1440 (daily)
+export const NotificationsIntervalDefault = NotificationsInterval.DAY;
 
 export type NotificationsInterval =
   (typeof NotificationsInterval)[keyof typeof NotificationsInterval];

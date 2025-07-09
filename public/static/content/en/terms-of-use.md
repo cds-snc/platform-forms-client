@@ -22,6 +22,7 @@ You are responsible for:
 - Identifying the confidentiality of the information collected through your forms. GC Forms supports the collection of data classified as up to PROTECTED B. Learn more about identifying confidentiality through the [Standard on Security Categorization](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32614).
 - Complying with the [Privacy Act](https://laws-lois.justice.gc.ca/eng/acts/p-21/) and [Access to Information Act](https://laws-lois.justice.gc.ca/eng/acts/a-1/) related to the personal and sensitive information in responses submitted through your forms, if there is a request, incident, or data breach.
 - Retrieving responses directly from our database when handling more sensitive Protected B information, either by downloading from GC Forms or via the data retrieval API. Receiving responses via email  is only possible for forms for up to Protected A published prior to June 11, 2025.
+- Communicating with your users about malicious files they have submitted as attachments or about other issues with the form or the data in their submission.
 - Ensuring that other team members given access to your forms and responses have the appropriate authorities and the security clearance needed to access the data collected. For this reason, shared email accounts are not permitted in GC Forms. Any access must be given to authorized employees only using a valid Government of Canada email address.
 
 ### Responses delivered by email (up to and including Protected A)
@@ -34,16 +35,16 @@ If you had a published form prior to June 11, 2025, with this delivery method, y
 - Accepting [GC Notify's terms of use](https://notification.canada.ca/terms).
 - Understanding that you will not be able to make updates to the form while maintaining your data delivery method as email.
 
-### Responses downloaded from GC Forms (up to and including PROTECTED B)
+### Responses downloaded from GC Forms (up to and including Protected B)
 
 You are responsible for:
 
 - Adhering to your departmental guidance for acceptable device and network use.
 - Saving a copy and confirming receipt of your form responses within 45 days of receiving a submission.
-- Reporting any problems with saved form responses.
+- Reporting any problems with saved form responses or attached files.
 - Handling, opening, and saving form responses in accordance with your retention and disposition schedule.
 
-### Responses retrieved via the API (up to and including Protected B)
+#### Responses retrieved via the API (up to and including Protected B)
 
 You are responsible for:
 
@@ -88,4 +89,4 @@ We ask that clients not interfere with the format of JSON files, as any updates 
 
 For questions related to these terms of use, [contact us](/en/contact).
 
-**Last update:** March 19, 2025
+**Last update:** June 26, 2025

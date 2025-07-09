@@ -51,7 +51,7 @@ export default async function Page(props: { params: Promise<{ id: string; locale
     .catch(() => false);
 
   return (
-    <ClientContainer>
+    <ClientContainer id={id}>
       <div className="mr-6">
         <div
           className={cn(

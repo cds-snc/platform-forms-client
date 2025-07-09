@@ -34,5 +34,18 @@
       "title": "File upload",
       "description": "Enable file upload to be added as an element to a form"
     }
-  }
+  },
+  "addFlag": "Add user feature flag",
+  "flag": "Flag",
+  "actions": "Actions",
+  "no-flags-set": "No flags are set for this user.",
+  "manageUserFeatures": "Manage user feature flags",
+  "user": "User",
+  "select-features": "Select features",
+  "add": "Add",
+  "cancel": "Cancel",
+  "remove": "Remove",
+  "userFlagHeader": "User Specific Feature Flag Control",
+  "userFlagSubHeader": "This setting overrides Feature Flag status, and will provide a specific user access to a feature.",
+  "noUserFlags": "No user feature flags are set."
 }

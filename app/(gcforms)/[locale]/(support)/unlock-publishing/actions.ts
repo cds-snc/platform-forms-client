@@ -4,7 +4,7 @@ import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
 import {
-  custom,
+  check,
   email,
   minLength,
   maxLength,
@@ -12,11 +12,13 @@ import {
   safeParse,
   string,
   toLowerCase,
-  toTrimmed,
+  trim,
+  pipe,
 } from "valibot";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { AuthenticatedAction } from "@lib/actions";
 import { authorization } from "@lib/privileges";
+import { getOrigin } from "@lib/origin";
 
 export interface ErrorStates {
   validationErrors: {
@@ -44,8 +46,15 @@ export const unlockPublishing = AuthenticatedAction(
 
     const { managerEmail, department, goals } = validatedData.output;
 
+    const HOST = await getOrigin();
+    const manageUsersLink = `admin/accounts?query=${encodeURIComponent(session.user.email)}`;
+
     const emailBody = `
     ${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.<br/>
+    <br/>
+    <br/>
+    <a href="${HOST}/en/${manageUsersLink}" target="_blank">Update account</a><br/>
+    <br/>
     <br/>
     Goals:<br/>
     ${goals}<br/>
@@ -53,6 +62,10 @@ export const unlockPublishing = AuthenticatedAction(
     Manager email address: ${managerEmail} .<br/><br/>
     ****<br/><br/>
     ${session.user.name} (${session.user.email}) du ${department} a demandé l'autorisation de publier des formulaires.<br/>
+    <br/>
+    <br/>
+    <a href="${HOST}/fr/${manageUsersLink}" target="_blank">Mettre à jour le compte</a>.<br/>
+    <br/>
     <br/>
     Objectifs:<br/>
     ${goals}<br/>
@@ -97,25 +110,27 @@ const validate = async (
   const { t } = await serverTranslation(["unlock-publishing", "common"], { lang: language });
 
   const SupportSchema = object({
-    managerEmail: string([
+    managerEmail: pipe(
+      string(),
       toLowerCase(),
-      toTrimmed(),
+      trim(),
       minLength(1, t("input-validation.required", { ns: "common" })),
       email(t("input-validation.email", { ns: "common" })),
-      custom(
+      check(
         (email) => isValidGovEmail(email),
         t("input-validation.validGovEmail", { ns: "common" })
       ),
-      custom(
+      check(
         (email) => email?.toLowerCase() != userEmail?.toLowerCase(),
         t("input-validation.notSameAsUserEmail", { ns: "common" })
-      ),
-    ]),
-    department: string([
+      )
+    ),
+    department: pipe(
+      string(),
       minLength(1, t("input-validation.required", { ns: "common" })),
-      maxLength(50, t("signUpRegistration.fields.name.error.maxLength")),
-    ]),
-    goals: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+      maxLength(50, t("signUpRegistration.fields.name.error.maxLength"))
+    ),
+    goals: pipe(string(), minLength(1, t("input-validation.required", { ns: "common" }))),
   });
 
   return safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
