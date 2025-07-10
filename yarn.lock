@@ -12499,10 +12499,10 @@ __metadata:
     immer: "npm:10.1.1"
     ioredis: "npm:5.6.1"
     ioredis-mock: "npm:^8.9.0"
-    jest: "npm:^30.0.0"
+    jest: "npm:^30.0.4"
     jest-css-modules: "npm:^2.1.0"
-    jest-environment-jsdom: "npm:^30.0.0"
-    jest-environment-node: "npm:^30.0.0"
+    jest-environment-jsdom: "npm:^30.0.4"
+    jest-environment-node: "npm:^30.0.4"
     jest-mock-extended: "npm:^4.0.0"
     jose: "npm:^6.0.11"
     jsonschema: "npm:1.5.0"
@@ -13896,7 +13896,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-jsdom@npm:^30.0.0":
+"jest-environment-jsdom@npm:^30.0.4":
   version: 30.0.4
   resolution: "jest-environment-jsdom@npm:30.0.4"
   dependencies:
@@ -13914,7 +13914,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-node@npm:30.0.4, jest-environment-node@npm:^30.0.0":
+"jest-environment-node@npm:30.0.4, jest-environment-node@npm:^30.0.4":
   version: 30.0.4
   resolution: "jest-environment-node@npm:30.0.4"
   dependencies:
@@ -14347,7 +14347,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest@npm:^30.0.0":
+"jest@npm:^30.0.4":
   version: 30.0.4
   resolution: "jest@npm:30.0.4"
   dependencies:

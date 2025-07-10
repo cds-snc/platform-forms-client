@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.46.0",
+  "version": "3.46.1",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -178,10 +178,10 @@
     "eslint-plugin-tailwindcss": "^3.17.5",
     "husky": "^9.0.10",
     "ioredis-mock": "^8.9.0",
-    "jest": "^30.0.0",
+    "jest": "^30.0.4",
     "jest-css-modules": "^2.1.0",
-    "jest-environment-jsdom": "^30.0.0",
-    "jest-environment-node": "^30.0.0",
+    "jest-environment-jsdom": "^30.0.4",
+    "jest-environment-node": "^30.0.4",
     "jest-mock-extended": "^4.0.0",
     "lint-staged": "^15.2.2",
     "pino-pretty": "^11.0.0",
