@@ -47,6 +47,41 @@ function DeleteButton({
   );
 }
 
+const PopOverTip = ({ targetId, content }: { targetId: string; content: string }) => {
+  const { t } = useTranslation("my-forms");
+  return (
+    <>
+      <button
+        type="button"
+        popoverTarget={targetId}
+        style={{
+          // @ts-expect-error - CSS anchor positioning is not in the types yet
+          anchorName: `--${targetId}-trigger`,
+        }}
+        className="flex size-5 cursor-pointer items-center justify-center rounded-full border border-slate-500 text-sm"
+        aria-label={t("aliases.aliasDescription")}
+      >
+        ?
+      </button>
+      <div
+        id={targetId}
+        popover="auto"
+        style={{
+          // @ts-expect-error - CSS anchor positioning is not in the types yet
+          positionAnchor: `--${targetId}-trigger`,
+          top: "anchor(top)",
+          right: "anchor(right)",
+          positionArea: "inline-end center",
+          marginBlockEnd: "30px",
+        }}
+        className="rounded-lg bg-blue-default p-4 text-sm text-white"
+      >
+        <p className="min-w-96">{content}</p>
+      </div>
+    </>
+  );
+};
+
 export const AliasForm = ({
   locale,
   HOST,
@@ -125,9 +160,12 @@ export const AliasForm = ({
         className="flex items-end gap-4"
       >
         <div className="gcds-input-wrapper w-1/3">
-          <label htmlFor="alias" className="mb-2 block">
-            {t("aliases.alias")}
-          </label>
+          <div className="mb-2 flex items-center gap-2">
+            <label htmlFor="alias" className="block">
+              {t("aliases.alias")}
+            </label>
+            <PopOverTip targetId="alias-popover" content={t("aliases.aliasDescription")} />
+          </div>
           <input
             type="text"
             name="alias"
@@ -139,9 +177,12 @@ export const AliasForm = ({
           />
         </div>
         <div>
-          <label htmlFor="formId" className="mb-2 block">
-            {t("aliases.formName")}
-          </label>
+          <div className="mb-2 flex items-center gap-2">
+            <label htmlFor="formId" className="block">
+              {t("aliases.formName")}
+            </label>
+            <PopOverTip targetId="form-popover" content={t("aliases.formNameDescription")} />
+          </div>
           <div className="gcds-select-wrapper">
             <select
               name="formId"

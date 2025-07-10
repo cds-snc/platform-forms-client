@@ -114,6 +114,8 @@
     "editAlias": "Edit Alias",
     "createAlias": "Create Alias",
     "URL": "URL",
+    "aliasDescription": "An alias is a short, memorable name that can be used in the URL to access a form.",
+    "formNameDescription": "Select the form that this alias will point to. The alias will be used in the URL to access the form.",
     "error": {
       "title": "Error",
       "aliasExists": "An alias with this name already exists.",
