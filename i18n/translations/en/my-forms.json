@@ -113,6 +113,12 @@
     "edit": "Edit",
     "editAlias": "Edit Alias",
     "createAlias": "Create Alias",
-    "URL": "URL"
+    "URL": "URL",
+    "error": {
+      "title": "Error",
+      "aliasExists": "An alias with this name already exists.",
+      "aliasNotFound": "Alias not found.",
+      "failed": "Unable to perform the requested action."
+    }
   }
 }

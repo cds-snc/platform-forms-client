@@ -2,6 +2,7 @@
 
 import { prisma } from "@lib/integration/prismaConnector";
 import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 
 import { AuthenticatedAction } from "@lib/actions";
 
@@ -17,9 +18,14 @@ export const createAlias = AuthenticatedAction(async (_, formData: FormData) => 
       },
     });
     revalidatePath("/[locale]/forms/alias", "page");
-    return { message: "Alias created" };
+    return { message: "created" };
   } catch (e) {
-    return { error: "Could not create alias" };
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === "P2002") {
+        return { error: "aliasExists" };
+      }
+    }
+    return { error: "failed" };
   }
 });
 
@@ -38,7 +44,12 @@ export const updateAlias = AuthenticatedAction(async (_, id: string, formData: F
     revalidatePath("/[locale]/forms/alias", "page");
     return { message: "Alias updated" };
   } catch (e) {
-    return { error: "Could not update alias" };
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === "P2002") {
+        return { error: "aliasExists" };
+      }
+    }
+    return { error: "failed" };
   }
 });
 
@@ -50,8 +61,8 @@ export const deleteAlias = AuthenticatedAction(async (_, id: string) => {
       },
     });
     revalidatePath("/[locale]/forms/alias", "page");
-    return { message: "Alias deleted" };
+    return { message: "deleted" };
   } catch (e) {
-    return { error: "Could not delete alias" };
+    return { error: "failed" };
   }
 });

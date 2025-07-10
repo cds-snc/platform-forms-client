@@ -6,7 +6,7 @@ import { useTranslation } from "@i18n/client";
 
 import { FormAlias } from "@prisma/client";
 
-import { Button } from "@clientComponents/globals";
+import { Button, Alert } from "@clientComponents/globals";
 import { createAlias, deleteAlias, updateAlias } from "./actions";
 import { type Language } from "@lib/types/form-builder-types";
 import { slugify } from "@lib/client/clientHelpers";
@@ -16,7 +16,13 @@ type Template = {
   name: string;
 };
 
-function DeleteButton({ id }: { id: string }) {
+function DeleteButton({
+  id,
+  setServerError,
+}: {
+  id: string;
+  setServerError: (msg: string | null) => void;
+}) {
   const { t } = useTranslation("my-forms");
   const [isPending, startTransition] = useTransition();
   return (
@@ -24,7 +30,11 @@ function DeleteButton({ id }: { id: string }) {
       theme="destructive"
       onClick={() =>
         startTransition(async () => {
-          await deleteAlias(id);
+          setServerError(null);
+          const result = await deleteAlias(id);
+          if (result.error) {
+            setServerError(result.error);
+          }
         })
       }
       disabled={isPending}
@@ -49,7 +59,7 @@ export const AliasForm = ({
   const [editingAlias, setEditingAlias] = useState<FormAlias | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [aliasValue, setAliasValue] = useState("");
-
+  const [serverError, setServerError] = useState<string | null>(null);
   const { t } = useTranslation("my-forms");
 
   useEffect(() => {
@@ -62,14 +72,24 @@ export const AliasForm = ({
       formRef.current?.reset();
       setAliasValue("");
     }
+    setServerError(null);
   }, [editingAlias]);
 
   const formAction = async (formData: FormData) => {
+    setServerError(null);
     if (editingAlias) {
-      await updateAlias(editingAlias.id, formData);
+      const result = await updateAlias(editingAlias.id, formData);
+      if (result.error) {
+        setServerError(result.error);
+        return;
+      }
       setEditingAlias(null);
     } else {
-      await createAlias(formData);
+      const result = await createAlias(formData);
+      if (result.error) {
+        setServerError(t(result.error));
+        return;
+      }
     }
     formRef.current?.reset();
     setAliasValue("");
@@ -81,6 +101,16 @@ export const AliasForm = ({
 
   return (
     <div>
+      {serverError && (
+        <div className="mb-4">
+          <Alert.Danger>
+            <Alert.Title headingTag="h3">{t("aliases.error.title")}</Alert.Title>
+            <Alert.Body>
+              <p>{t(`aliases.error.${serverError}`)}</p>
+            </Alert.Body>
+          </Alert.Danger>
+        </div>
+      )}
       <h2 className="mb-4 text-xl">
         {editingAlias ? t("aliases.editAlias") : t("aliases.createAlias")}
       </h2>
@@ -187,7 +217,7 @@ export const AliasForm = ({
                   <Button theme="secondary" onClick={() => setEditingAlias(alias)}>
                     {t("aliases.edit")}
                   </Button>
-                  <DeleteButton id={alias.id} />
+                  <DeleteButton id={alias.id} setServerError={setServerError} />
                 </div>
               </td>
             </tr>

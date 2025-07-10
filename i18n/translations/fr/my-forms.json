@@ -113,6 +113,12 @@
     "edit": "Edit [FR]",
     "editAlias": "Edit Alias [FR]",
     "createAlias": "Create Alias [FR]",
-    "URL": "URL [FR]"
+    "URL": "URL [FR]",
+    "error": {
+      "title": "Error [FR]",
+      "aliasExists": "An alias with this name already exists. [FR]",
+      "aliasNotFound": "Alias not found. [FR]",
+      "failed": "Unable to perform the requested action. [FR]"
+    }
   }
 }
