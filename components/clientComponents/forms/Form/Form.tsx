@@ -324,6 +324,14 @@ export const Form = withFormik<FormProps, Responses>({
         return;
       }
 
+      if (
+        (!result.fileURLMap ? 0 : Object.keys(result.fileURLMap).length) !==
+        Object.keys(fileObjsRef).length
+      ) {
+        logMessage.error("File Upload count mismatch");
+        formikBag.setStatus(FormStatus.ERROR);
+      }
+
       // Handle if there are files to upload
       if (result.fileURLMap && Object.keys(result?.fileURLMap).length > 0) {
         const uploadPromises = Object.entries(result.fileURLMap).map(
