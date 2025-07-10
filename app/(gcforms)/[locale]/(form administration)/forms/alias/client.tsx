@@ -140,7 +140,7 @@ export const AliasForm = ({
         </div>
         <div>
           <label htmlFor="formId" className="mb-2 block">
-            {t("aliases.form")}
+            {t("aliases.formName")}
           </label>
           <div className="gcds-select-wrapper">
             <select
@@ -200,7 +200,7 @@ export const AliasForm = ({
         <thead>
           <tr>
             <th className="w-1/4 border p-2">{t("aliases.alias")}</th>
-            <th className="w-1/2 border p-2">{t("aliases.form")}</th>
+            <th className="w-1/2 border p-2">{t("aliases.formName")}</th>
             <th className="w-1/4 border p-2">{t("aliases.actions")}</th>
           </tr>
         </thead>

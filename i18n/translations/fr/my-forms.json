@@ -98,7 +98,7 @@
   "aliases": {
     "title": "Form Aliases [FR]",
     "alias": "Alias [FR]",
-    "form": "Form [FR]",
+    "formName": "Form name",
     "selectForm": "Select a form [FR]",
     "update": "Update Alias [FR]",
     "updating": "Updating... [FR]",
