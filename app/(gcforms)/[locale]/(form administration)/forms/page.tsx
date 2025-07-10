@@ -13,6 +13,8 @@ import { getOverdueTemplateIds } from "@lib/overdue";
 import { Invitations } from "./components/Invitations/Invitations";
 import { prisma } from "@lib/integration/prismaConnector";
 
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
+
 export type FormsTemplate = {
   id: string;
   titleEn: string;
@@ -50,10 +52,12 @@ export default async function Page(props: {
 
   const { locale } = params;
 
+  const { t } = await serverTranslation("my-forms", { lang: locale });
+
+  const manageButtonText = t("aliases.manageAliases");
+
   try {
     const { session } = await authCheckAndRedirect();
-
-    const { t } = await serverTranslation("my-forms", { lang: locale });
 
     // Moved from Cards to Page to avoid component being cached when navigating back to this page
     const options: TemplateOptions = {
@@ -115,7 +119,12 @@ export default async function Page(props: {
         <Invitations invitations={invitations} />
         <div className="flex w-full justify-between">
           <Navigation filter={status} />
-          <NewFormButton />
+          <div className="mr-6">
+            <NewFormButton />
+            <LinkButton.Primary href={`/${locale}/forms/alias`}>
+              {manageButtonText}
+            </LinkButton.Primary>
+          </div>
         </div>
         <ResumeEditingForm />
         <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} />

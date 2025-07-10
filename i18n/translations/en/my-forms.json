@@ -97,6 +97,7 @@
   },
   "aliases": {
     "title": "Form Aliases",
+    "manageAliases": "Manage aliases",
     "alias": "Alias",
     "formName": "Form name",
     "selectForm": "Select a form",
