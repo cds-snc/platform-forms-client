@@ -19,12 +19,6 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { StatusError } from "../StatusError/StatusError";
-import {
-  removeFormContextValues,
-  getInputHistoryValues,
-} from "@lib/utils/form-builder/groupsHistory";
-import { filterShownElements, filterValuesByShownElements, FormValues } from "@lib/formContext";
-import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { FormActions } from "./FormActions";
@@ -37,6 +31,7 @@ import { ga } from "@lib/client/clientHelpers";
 import { FocusH2 } from "app/(gcforms)/[locale]/(support)/components/client/FocusH2";
 
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
+import { cleanupInvisibleValues } from "@root/lib/formContext";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -259,27 +254,12 @@ export const Form = withFormik<FormProps, Responses>({
       return;
     }
 
-    const getValuesForConditionalLogic = () => {
-      const inputHistoryValues = getInputHistoryValues(
-        values,
-        values.groupHistory as string[],
-        formikBag.props.formRecord.form.groups
-      );
-      const shownElements = filterShownElements(formikBag.props.formRecord, values as FormValues);
-      return filterValuesByShownElements(inputHistoryValues, shownElements);
-    };
+    // Clean up form values by removing responses to non-visible questions
+    const formValues = cleanupInvisibleValues(formikBag.props.formRecord, values);
 
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const hasGroups =
-        formHasGroups(formikBag.props.formRecord.form) && formikBag.props.allowGrouping;
-      const hasShowHideRules = (values.matchedIds as string[])?.length > 0;
-      const formValues =
-        hasGroups && hasShowHideRules
-          ? removeFormContextValues(getValuesForConditionalLogic())
-          : removeFormContextValues(values);
-
       const result = await submitForm(
         formValues,
         formikBag.props.language,
