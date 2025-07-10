@@ -140,12 +140,12 @@ export const AliasForm = ({
       </form>
 
       <h2 className="mb-4 text-xl">{t("aliases.existingAliases")}</h2>
-      <table className="w-full text-left">
+      <table className="w-full table-fixed text-left">
         <thead>
           <tr>
-            <th className="border p-2">{t("aliases.alias")}</th>
-            <th className="border p-2">{t("aliases.form")}</th>
-            <th className="border p-2">{t("aliases.actions")}</th>
+            <th className="w-1/4 border p-2">{t("aliases.alias")}</th>
+            <th className="w-1/2 border p-2">{t("aliases.form")}</th>
+            <th className="w-1/4 border p-2">{t("aliases.actions")}</th>
           </tr>
         </thead>
         <tbody>
