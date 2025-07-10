@@ -110,6 +110,8 @@
     "deleting": "Deleting...",
     "existingAliases": "Existing Aliases",
     "actions": "Actions",
-    "edit": "Edit"
+    "edit": "Edit",
+    "editAlias": "Edit Alias",
+    "createAlias": "Create Alias"
   }
 }

@@ -94,5 +94,24 @@
   "errors": {
     "formDownloadNotExist": "Le forulaire que vous essayez de télécharger n'existe pas.",
     "formDownloadFailed": "Le téléchargement du formulaire a échoué."
+  },
+  "aliases": {
+    "title": "Form Aliases [FR]",
+    "alias": "Alias [FR]",
+    "form": "Form [FR]",
+    "selectForm": "Select a form [FR]",
+    "update": "Update Alias [FR]",
+    "updating": "Updating... [FR]",
+    "create": "Create Alias [FR]",
+    "creating": "Creating... [FR]",
+    "addAlias": "Add Alias [FR]",
+    "cancel": "Cancel [FR]",
+    "delete": "Delete Alias [FR]",
+    "deleting": "Deleting...[FR]",
+    "existingAliases": "Existing Aliases [FR]",
+    "actions": "Actions [FR]",
+    "edit": "Edit [FR]",
+    "editAlias": "Edit Alias [FR]",
+    "createAlias": "Create Alias [FR]"
   }
 }

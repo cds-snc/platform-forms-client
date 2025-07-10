@@ -72,7 +72,9 @@ export const AliasForm = ({
 
   return (
     <div>
-      <h2 className="mb-4 text-xl">{editingAlias ? "Edit Alias" : "Create Alias"}</h2>
+      <h2 className="mb-4 text-xl">
+        {editingAlias ? t("aliases.editAlias") : t("aliases.createAlias")}
+      </h2>
       <form
         ref={formRef}
         action={(formData) => {
@@ -80,35 +82,42 @@ export const AliasForm = ({
         }}
         className="mb-8 flex items-end gap-4"
       >
-        <div>
+        <div className="gcds-input-wrapper w-1/3">
           <label htmlFor="alias" className="mb-2 block">
             {t("aliases.alias")}
           </label>
-          <input type="text" name="alias" id="alias" className="border p-2" required />
+          <input
+            type="text"
+            name="alias"
+            id="alias"
+            className="required w-11/12 rounded border-1.5 border-solid border-slate-500 px-3 py-2 focus:border-blue-focus focus:outline focus:outline-2 focus:outline-blue-focus"
+          />
         </div>
         <div>
           <label htmlFor="formId" className="mb-2 block">
             {t("aliases.form")}
           </label>
-          <select
-            name="formId"
-            id="formId"
-            required
-            defaultValue=""
-            className={"my-0 inline-block min-w-[400px] border-1 border-black p-2"}
-          >
-            <option value="" disabled>
-              {t("aliases.selectForm")}
-            </option>
-            {templates.map((template) => (
-              <option key={template.id} value={template.id}>
-                {template.name}
+          <div className="gcds-select-wrapper">
+            <select
+              name="formId"
+              id="formId"
+              required
+              defaultValue=""
+              className="gc-dropdown !mb-0 inline-block"
+            >
+              <option value="" disabled>
+                {t("aliases.selectForm")}
               </option>
-            ))}
-          </select>
+              {templates.map((template) => (
+                <option key={template.id} value={template.id}>
+                  {template.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <div className="flex gap-2">
-          <Button theme="primary" type="submit" disabled={isPending}>
+          <Button className="mb-6" theme="primary" type="submit" disabled={isPending}>
             {isPending
               ? editingAlias
                 ? t("aliases.updating")
@@ -118,7 +127,12 @@ export const AliasForm = ({
               : t("aliases.create")}
           </Button>
           {editingAlias && (
-            <Button theme="secondary" type="button" onClick={() => setEditingAlias(null)}>
+            <Button
+              className="mb-6"
+              theme="secondary"
+              type="button"
+              onClick={() => setEditingAlias(null)}
+            >
               {t("aliases.cancel")}
             </Button>
           )}
