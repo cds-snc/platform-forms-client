@@ -41,7 +41,6 @@ interface GCFormsContextValueType {
   filteredMatchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
-  previousGroup: string | null;
   getPreviousGroup: (currentGroup: string) => string;
   setGroup: (group: string | null) => void;
   handleNextAction: () => void;
@@ -87,7 +86,6 @@ export const GCFormsProvider = ({
   const history = React.useRef<string[]>([LockedSections.START]);
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
-  const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
 
@@ -129,9 +127,6 @@ export const GCFormsProvider = ({
 
     if (hasNextAction(currentGroup)) {
       const nextAction = getNextAction(groups, currentGroup, filteredMatchedIds);
-
-      // Helpful for navigating to the last group
-      setPreviousGroup(currentGroup);
 
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
@@ -254,7 +249,6 @@ export const GCFormsProvider = ({
         filteredMatchedIds,
         groups,
         currentGroup,
-        previousGroup,
         getPreviousGroup,
         setGroup,
         handleNextAction,
@@ -295,7 +289,6 @@ export const useGCFormsContext = () => {
       filteredMatchedIds: [""],
       groups: {},
       currentGroup: "",
-      previousGroup: "",
       getPreviousGroup: () => "",
       setGroup: () => void 0,
       hasNextAction: () => void 0,
