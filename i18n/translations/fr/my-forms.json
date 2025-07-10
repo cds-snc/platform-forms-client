@@ -115,7 +115,7 @@
     "createAlias": "Create Alias [FR]",
     "URL": "URL [FR]",
     "aliasDescription": "An alias is a short, memorable name that will used as the form id. [FR]",
-    "formNameDescription": "The form alias will point to. The alias will be used in the URL to access the form. [FR]",
+    "formNameDescription": "The form the alias will point to. The alias will be used in the URL to access the form. [FR]",
     "error": {
       "title": "Error [FR]",
       "aliasExists": "An alias with this name already exists. [FR]",
