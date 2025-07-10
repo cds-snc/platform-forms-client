@@ -1,11 +1,15 @@
-import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { AccessControlError } from "@lib/auth/errors";
 import { redirect } from "next/navigation";
+
+import { serverTranslation } from "@i18n";
+import { AccessControlError } from "@lib/auth/errors";
 import { prisma } from "@lib/integration/prismaConnector";
 import { AliasForm } from "./client";
 import { getAllTemplatesForUser } from "@lib/templates";
 import { getOrigin } from "@lib/origin";
+
+import { type TemplateOptions } from "@lib/templates";
+import { type Language } from "@lib/types/form-builder-types";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -30,28 +34,46 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   try {
     const { t } = await serverTranslation("my-forms", { lang: locale });
 
+    const options: TemplateOptions = {
+      requestedWhere: {
+        isPublished: true,
+      },
+      sortByDateUpdated: "desc",
+    };
+
+    const templates = await getAllTemplatesForUser(options);
+
+    let templatesWithTitle = templates.map((template) => {
+      return {
+        id: template.id,
+        name: template.name,
+      };
+    });
+
+    if (!templatesWithTitle.length) {
+      templatesWithTitle = [{ id: "", name: "ya" }];
+    }
+
     const aliases = await prisma.formAlias.findMany({
+      where: {
+        formId: {
+          in: templatesWithTitle.map((template) => template.id),
+        },
+      },
       orderBy: {
         createdAt: "desc",
       },
     });
 
-    const templates = await getAllTemplatesForUser();
-
-    let templatesWithTitle = templates.map((template) => {
-      return {
-        id: template.id,
-      };
-    });
-
-    if (!templatesWithTitle.length) {
-      templatesWithTitle = [{ id: "" }];
-    }
-
     return (
       <div className="mx-auto w-[980px]">
         <h1 className="mb-8 border-b-0">{t("aliases.title")}</h1>
-        <AliasForm HOST={HOST} aliases={aliases} templates={templatesWithTitle} />
+        <AliasForm
+          locale={locale as Language}
+          HOST={HOST}
+          aliases={aliases}
+          templates={templatesWithTitle}
+        />
       </div>
     );
   } catch (e) {

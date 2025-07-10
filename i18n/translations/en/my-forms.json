@@ -94,5 +94,22 @@
   "errors": {
     "formDownloadNotExist": "The form you are trying to download does not exist.",
     "formDownloadFailed": "Failed to download the form."
+  },
+  "aliases": {
+    "title": "Form Aliases",
+    "alias": "Alias",
+    "form": "Form",
+    "selectForm": "Select a form",
+    "update": "Update Alias",
+    "updating": "Updating...",
+    "create": "Create Alias",
+    "creating": "Creating...",
+    "addAlias": "Add Alias",
+    "cancel": "Cancel",
+    "delete": "Delete Alias",
+    "deleting": "Deleting...",
+    "existingAliases": "Existing Aliases",
+    "actions": "Actions",
+    "edit": "Edit"
   }
 }
