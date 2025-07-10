@@ -7,19 +7,19 @@ import {
   Response,
 } from "@lib/types";
 
-interface FileInput extends FileInputResponse {
-  name: string;
-  size: number;
-  key: string;
+interface FileInputObj extends FileInputResponse {
+  name: string | null;
+  size: number | null;
+  id: string | null;
 }
 
-const isFileResponse = (response: unknown): response is FileInput => {
+const isFileInputObj = (response: unknown): response is FileInputObj => {
   return (
     response !== null &&
     typeof response === "object" &&
     "name" in response &&
     "size" in response &&
-    "key" in response
+    "id" in response
   );
 };
 
@@ -50,22 +50,21 @@ export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values
 
   // Build the complete form data object by adding values for each form element
   const formData: { [key: string]: Response } = {};
-  const fileKeys: string[] = [];
+
   pureFormElements.forEach((element) => {
-    emptyDataFiller(element, values, formData, fileKeys);
+    emptyDataFiller(element, values, formData);
   });
 
   formData["formID"] = formRecord.id;
   formData["securityAttribute"] = formRecord.securityAttribute;
 
-  return { formData, fileKeys };
+  return formData;
 };
 
 const emptyDataFiller = (
   element: FormElement,
   values: Responses,
-  formAccumulator: { [key: string]: Response },
-  fileKeys: string[]
+  formAccumulator: { [key: string]: Response }
 ) => {
   if (element.type === FormElementTypes.dynamicRow) {
     // If the dynamic row is not filled, we need to create an empty array for it
@@ -73,7 +72,7 @@ const emptyDataFiller = (
       // Create a single empty data entry for the dynamic row
       const emptyDataEntry: { [key: string]: string } = {};
       element.properties.subElements?.forEach((subElement) => {
-        emptyDataFiller(subElement, values[element.id] as Responses, emptyDataEntry, fileKeys);
+        emptyDataFiller(subElement, values[element.id] as Responses, emptyDataEntry);
       });
       formAccumulator[element.id] = [emptyDataEntry];
       return;
@@ -96,7 +95,7 @@ const emptyDataFiller = (
           ...subElement,
           id: index,
         };
-        emptyDataFiller(correctedElement, response, dataEntry, fileKeys);
+        emptyDataFiller(correctedElement, response, dataEntry);
       });
       return dataEntry;
     });
@@ -105,16 +104,17 @@ const emptyDataFiller = (
 
   // For File Input elements only keep the file path or set to an empty string if not filled
   if (element.type === FormElementTypes.fileInput) {
-    if (values[element.id] === undefined || values[element.id] === "") {
-      formAccumulator[element.id] = "";
+    if (values[element.id] === undefined || values[element.id] === null) {
+      formAccumulator[element.id] = {
+        id: null,
+        name: null,
+        size: null,
+      };
       return;
     }
-    const fileInputResponse = values[element.id] as FileInput;
-    if (isFileResponse(values[element.id])) {
-      formAccumulator[element.id] = fileInputResponse.key;
-      // Store the file key for later processing (e.g., deletion if needed)
-      fileKeys.push(fileInputResponse.key);
-      return;
+    const fileInputResponse = values[element.id];
+    if (isFileInputObj(fileInputResponse)) {
+      formAccumulator[element.id] = fileInputResponse;
     } else {
       throw new Error(
         `Expected a FileInputResponse for element ${

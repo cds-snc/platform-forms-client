@@ -41,7 +41,10 @@ import { FocusH2 } from "app/(gcforms)/[locale]/(support)/components/client/Focu
 
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 
-import { uploadFiles } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
+import {
+  copyObjectExcludingFileContent,
+  uploadFile,
+} from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
@@ -290,25 +293,13 @@ export const Form = withFormik<FormProps, Responses>({
           ? removeFormContextValues(getValuesForConditionalLogic())
           : removeFormContextValues(values);
 
-      // Extract files from formValues and upload them to S3 in seperate function
-      // formValues is modified in memory, so we can use it directly in the submitForm function
-      const fileUploadSuccess: boolean = await uploadFiles(
-        formikBag.props.formRecord.id,
-        formValues
-      )
-        .then((): boolean => true)
-        .catch((error: Error): boolean => {
-          formikBag.setStatus(FormStatus.FILE_ERROR);
-          logMessage.error(`File Upload Error: ${error.message}`);
-          return false;
-        });
+      // Extract file content from formValues so they are not part of the submission call to the submit action
 
-      if (!fileUploadSuccess) {
-        return;
-      }
+      const { formValuesWithoutFileContent, fileObjsRef } =
+        copyObjectExcludingFileContent(formValues);
 
       const result = await submitForm(
-        formValues,
+        formValuesWithoutFileContent,
         formikBag.props.language,
         formikBag.props.formRecord.id,
         formikBag.props.captchaToken?.current
@@ -321,6 +312,7 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.setStatus(FormStatus.SERVER_ID_ERROR);
         return;
       }
+      // Start here to upload files and handle errors below into something easier to read
 
       if (result.error) {
         if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
@@ -329,9 +321,21 @@ export const Form = withFormik<FormProps, Responses>({
         } else {
           formikBag.setStatus(FormStatus.ERROR);
         }
-      } else {
-        formikBag.props.onSuccess(result.id, result?.submissionId);
+        return;
       }
+
+      // Handle if there are files to upload
+      if (result.fileURLMap && Object.keys(result?.fileURLMap).length > 0) {
+        const uploadPromises = Object.entries(result.fileURLMap).map(
+          async ([fileId, signedPost]) => {
+            await uploadFile(fileObjsRef[fileId], signedPost, (ev) => logMessage.info(ev));
+          }
+        );
+
+        await Promise.all(uploadPromises);
+      }
+
+      formikBag.props.onSuccess(result.id, result?.submissionId);
     } catch (err) {
       logMessage.error(err as Error);
       formikBag.setStatus("Error");

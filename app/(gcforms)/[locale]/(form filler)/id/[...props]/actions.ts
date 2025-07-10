@@ -1,6 +1,6 @@
 "use server";
 
-import { PublicFormRecord, Responses } from "@lib/types";
+import { PublicFormRecord, Responses, SignedURLMap } from "@lib/types";
 import { buildCompleteFormDataObject } from "./lib/server/parseRequestData";
 import { processFormData } from "./lib/server/processFormData";
 import { logMessage } from "@lib/logger";
@@ -12,7 +12,6 @@ import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
 
 import { dateHasPast } from "@lib/utils";
-import { generateSignedUrl } from "@lib/s3-upload";
 
 import { sendNotifications } from "@lib/notifications";
 
@@ -33,7 +32,12 @@ export async function submitForm(
   language: string,
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined
-): Promise<{ id: string; submissionId?: string; error?: Error }> {
+): Promise<{
+  id: string;
+  submissionId?: string;
+  error?: Error;
+  fileURLMap?: SignedURLMap;
+}> {
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
@@ -87,13 +91,13 @@ export async function submitForm(
       // throw new MissingFormDataError("Form data validation failed");
     }
 
-    const { formData, fileKeys } = buildCompleteFormDataObject(template, values);
+    const formData = buildCompleteFormDataObject(template, values);
 
-    const submissionId = await processFormData(formData, fileKeys, language);
+    const { submissionId, fileURLMap } = await processFormData(formData, language);
 
     sendNotifications(formId, template.form.titleEn, template.form.titleFr);
 
-    return { id: formId, submissionId };
+    return { id: formId, submissionId, fileURLMap };
   } catch (e) {
     logMessage.error(
       `Could not submit response for form ${formId}. Received error: ${(e as Error).message}`
@@ -102,11 +106,3 @@ export async function submitForm(
     return { id: formId, error: { name: (e as Error).name, message: (e as Error).message } };
   }
 }
-
-export const getSignedS3Urls = async (formId: string, files: string[]) => {
-  const isClosed = await isFormClosed(formId);
-  if (isClosed === null || isClosed === true) {
-    throw new Error(`Form ${formId} is closed or does not exist.`);
-  }
-  return Promise.all(files.map(async (file) => generateSignedUrl(file)));
-};
