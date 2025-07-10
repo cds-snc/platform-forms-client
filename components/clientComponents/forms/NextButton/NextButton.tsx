@@ -17,6 +17,7 @@ import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { ForwardArrowIcon24x24 } from "@serverComponents/icons";
 import { isFormClosed } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useRouter } from "next/navigation";
+import { formHasGroups } from "@root/lib/utils/form-builder/formHasGroups";
 
 export const NextButton = ({
   validateForm,
@@ -50,6 +51,10 @@ export const NextButton = ({
     }
     return false;
   };
+
+  if (formHasGroups(formRecord.form) && currentGroup && !hasNextAction(currentGroup)) {
+    return <div data-testid="dead-end"></div>;
+  }
 
   if (
     !currentGroup ||
