@@ -16,12 +16,14 @@ export const BackButton = ({
   saveAndResumeEnabled?: boolean;
 }) => {
   const { t } = useTranslation("review");
-  const { setGroup, previousGroup, currentGroup } = useGCFormsContext();
+  const { setGroup, getPreviousGroup, currentGroup } = useGCFormsContext();
 
   // Do not show on the Review page
   if (!currentGroup || currentGroup !== LockedSections.REVIEW) {
     return <></>;
   }
+
+  const previousGroup = getPreviousGroup(currentGroup);
 
   return (
     <Button
@@ -38,7 +40,7 @@ export const BackButton = ({
         <>
           <BackArrowIcon24x24
             className="group-focus:fill-white group-active:fill-white"
-            title={t("goBack", { lng: language })}
+            title={t("goBack", { lng: language }) + " " + previousGroup}
           />
           <span className="hidden laptop:block">{t("goBack", { lng: language })}</span>
         </>
