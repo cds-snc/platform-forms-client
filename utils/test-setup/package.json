@@ -1,0 +1,16 @@
+{
+  "name": "test-setup",
+  "packageManager": "yarn@4.9.2",
+  "type": "module",
+  "scripts": {
+    "test-setup": "tsx src/test-setup.ts",
+    "test-cleanup": "tsx src/test-cleanup.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "axios": "^1.10.0"
+  }
+}

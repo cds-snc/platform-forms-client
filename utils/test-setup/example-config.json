@@ -1,0 +1,12 @@
+{
+  "formTemplates": [
+    "{\"titleEn\":\"test\",\"titleFr\":\"test\",\"introduction\":{\"descriptionEn\":\"\",\"descriptionFr\":\"\"},\"privacyPolicy\":{\"descriptionEn\":\"test\",\"descriptionFr\":\"test\"},\"confirmation\":{\"descriptionEn\":\"test\",\"descriptionFr\":\"test\",\"referrerUrlEn\":\"\",\"referrerUrlFr\":\"\"},\"layout\":[1],\"elements\":[{\"id\":1,\"type\":\"textField\",\"properties\":{\"questionId\":\"\",\"tags\":[],\"subElements\":[],\"choices\":[{\"en\":\"\",\"fr\":\"\"}],\"titleEn\":\"Q1\",\"titleFr\":\"test\",\"validation\":{\"required\":false},\"descriptionEn\":\"\",\"descriptionFr\":\"\",\"placeholderEn\":\"\",\"placeholderFr\":\"\"},\"uuid\":\"f3969a91-863a-499e-9dfd-cfd043ebab55\"}],\"groups\":{\"start\":{\"name\":\"Start\",\"titleEn\":\"Start page\",\"titleFr\":\"Page de départ\",\"elements\":[\"1\"],\"nextAction\":\"review\"},\"review\":{\"name\":\"Review\",\"titleEn\":\"End (Review page and Confirmation)\",\"titleFr\":\"Fin (Page récapitulative et confirmation)\",\"elements\":[],\"nextAction\":\"end\"},\"end\":{\"name\":\"End\",\"titleEn\":\"Confirmation page\",\"titleFr\":\"Page de confirmation\",\"elements\":[]}},\"groupsLayout\":[],\"lastGeneratedElementId\":1}"
+  ],
+  "targetEnvironment": "https://forms-staging.cdssandbox.xyz",
+  "authjsCookie": "__Host-authjs.csrf-token.......",
+  "serverActionIdentifiers": {
+    "createOrUpdateTemplate": "7f38469271b35a190df10fd42b59fd900f906a3871",
+    "updateTemplatePublishedStatus": "7fd2810ff12ae3b033125fd02095a11d38eb891bc8",
+    "deleteForm": "7f7a5498ac14f4f6ac6df010e5687eda6d29cd29c0"
+  }
+}

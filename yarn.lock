@@ -9017,7 +9017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.10.0, axios@npm:^1.8.4":
+"axios@npm:1.10.0, axios@npm:^1.10.0, axios@npm:^1.8.4":
   version: 1.10.0
   resolution: "axios@npm:1.10.0"
   dependencies:
@@ -18864,6 +18864,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"test-setup@workspace:utils/test-setup":
+  version: 0.0.0-use.local
+  resolution: "test-setup@workspace:utils/test-setup"
+  dependencies:
+    axios: "npm:^1.10.0"
+    tsx: "npm:^4.20.3"
+    typescript: "npm:^5.8.3"
+  languageName: unknown
+  linkType: soft
+
 "thenify-all@npm:^1.0.0":
   version: 1.6.0
   resolution: "thenify-all@npm:1.6.0"
@@ -19272,7 +19282,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsx@npm:^4.19.1, tsx@npm:^4.19.2, tsx@npm:^4.7.0":
+"tsx@npm:^4.19.1, tsx@npm:^4.19.2, tsx@npm:^4.20.3, tsx@npm:^4.7.0":
   version: 4.20.3
   resolution: "tsx@npm:4.20.3"
   dependencies:
@@ -19394,7 +19404,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.3.3, typescript@npm:^5.5.2, typescript@npm:^5.6.2":
+"typescript@npm:^5.3.3, typescript@npm:^5.5.2, typescript@npm:^5.6.2, typescript@npm:^5.8.3":
   version: 5.8.3
   resolution: "typescript@npm:5.8.3"
   bin:
@@ -19404,7 +19414,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.2#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.2#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.2#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.2#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.8.3#optional!builtin<compat/typescript>":
   version: 5.8.3
   resolution: "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=5786d5"
   bin:
