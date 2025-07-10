@@ -112,6 +112,7 @@
     "actions": "Actions",
     "edit": "Edit",
     "editAlias": "Edit Alias",
-    "createAlias": "Create Alias"
+    "createAlias": "Create Alias",
+    "URL": "URL"
   }
 }

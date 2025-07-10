@@ -9,6 +9,7 @@ import { FormAlias } from "@prisma/client";
 import { Button } from "@clientComponents/globals";
 import { createAlias, deleteAlias, updateAlias } from "./actions";
 import { type Language } from "@lib/types/form-builder-types";
+import { slugify } from "@lib/client/clientHelpers";
 
 type Template = {
   id: string;
@@ -47,16 +48,19 @@ export const AliasForm = ({
   const [isPending, startTransition] = useTransition();
   const [editingAlias, setEditingAlias] = useState<FormAlias | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [aliasValue, setAliasValue] = useState("");
 
   const { t } = useTranslation("my-forms");
 
   useEffect(() => {
     if (editingAlias && formRef.current) {
       (formRef.current.elements.namedItem("alias") as HTMLInputElement).value = editingAlias.alias;
+      setAliasValue(editingAlias.alias);
       (formRef.current.elements.namedItem("formId") as HTMLSelectElement).value =
         editingAlias.formId;
     } else {
       formRef.current?.reset();
+      setAliasValue("");
     }
   }, [editingAlias]);
 
@@ -68,6 +72,11 @@ export const AliasForm = ({
       await createAlias(formData);
     }
     formRef.current?.reset();
+    setAliasValue("");
+  };
+
+  const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAliasValue(slugify(e.target.value));
   };
 
   return (
@@ -80,7 +89,7 @@ export const AliasForm = ({
         action={(formData) => {
           startTransition(() => formAction(formData));
         }}
-        className="mb-8 flex items-end gap-4"
+        className="flex items-end gap-4"
       >
         <div className="gcds-input-wrapper w-1/3">
           <label htmlFor="alias" className="mb-2 block">
@@ -91,6 +100,9 @@ export const AliasForm = ({
             name="alias"
             id="alias"
             className="required w-11/12 rounded border-1.5 border-solid border-slate-500 px-3 py-2 focus:border-blue-focus focus:outline focus:outline-2 focus:outline-blue-focus"
+            value={aliasValue}
+            onChange={handleAliasChange}
+            required
           />
         </div>
         <div>
@@ -138,6 +150,17 @@ export const AliasForm = ({
           )}
         </div>
       </form>
+
+      <div>
+        {aliasValue ? (
+          <p className="-mt-10px mb-5 text-sm text-slate-500">
+            {t("aliases.URL")}: {`${HOST}/id/`}
+            <strong>{aliasValue}</strong>
+          </p>
+        ) : (
+          <p className="-mt-10px mb-5 text-sm text-slate-500">{"\u00A0"}</p>
+        )}
+      </div>
 
       <h2 className="mb-4 text-xl">{t("aliases.existingAliases")}</h2>
       <table className="w-full table-fixed text-left">
