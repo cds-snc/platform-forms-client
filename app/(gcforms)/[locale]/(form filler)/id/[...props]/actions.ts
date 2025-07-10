@@ -1,18 +1,18 @@
 "use server";
 
-import { PublicFormRecord, Responses, SubmissionRequestBody } from "@lib/types";
-import { buildFormDataObject } from "./lib/buildFormDataObject";
-import { parseRequestData } from "./lib/parseRequestData";
-import { processFormData } from "./lib/processFormData";
-import { MissingFormDataError } from "./lib/exceptions";
+import { PublicFormRecord, Responses, SignedURLMap } from "@lib/types";
+import { buildCompleteFormDataObject } from "./lib/server/parseRequestData";
+import { processFormData } from "./lib/server/processFormData";
 import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
-import { dateHasPast } from "@lib/utils";
 import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { validateResponses } from "@lib/validation/validation";
+
+import { dateHasPast } from "@lib/utils";
+
 import { sendNotifications } from "@lib/notifications";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -32,7 +32,12 @@ export async function submitForm(
   language: string,
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined
-): Promise<{ id: string; submissionId?: string; error?: Error }> {
+): Promise<{
+  id: string;
+  submissionId?: string;
+  error?: Error;
+  fileURLMap?: SignedURLMap;
+}> {
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
@@ -78,19 +83,13 @@ export async function submitForm(
       // throw new MissingFormDataError("Form data validation failed");
     }
 
-    const formDataObject = buildFormDataObject(template, values);
+    const formData = buildCompleteFormDataObject(template, values);
 
-    if (Object.entries(formDataObject).length <= 2) {
-      throw new MissingFormDataError("No form data submitted with request");
-    }
-
-    const data = await parseRequestData(formDataObject as SubmissionRequestBody);
-
-    const submissionId = await processFormData(data.fields, data.files, language);
+    const { submissionId, fileURLMap } = await processFormData(formData, language);
 
     sendNotifications(formId, template.form.titleEn, template.form.titleFr);
 
-    return { id: formId, submissionId };
+    return { id: formId, submissionId, fileURLMap };
   } catch (e) {
     logMessage.error(
       `Could not submit response for form ${formId}. Received error: ${(e as Error).message}`
