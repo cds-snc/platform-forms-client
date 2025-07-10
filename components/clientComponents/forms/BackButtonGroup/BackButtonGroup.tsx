@@ -15,7 +15,7 @@ export const BackButtonGroup = ({
   onClick?: () => void;
   saveAndResumeEnabled?: boolean;
 }) => {
-  const { currentGroup, getGroupHistory, handlePreviousAction } = useGCFormsContext();
+  const { currentGroup, getGroupHistory, getPreviousGroup, setGroup } = useGCFormsContext();
   const { t } = useTranslation("form-builder");
 
   // Only show on Group screens
@@ -37,7 +37,8 @@ export const BackButtonGroup = ({
       <Button
         onClick={async (e) => {
           e.preventDefault();
-          handlePreviousAction();
+          const previousGroup = getPreviousGroup(currentGroup);
+          setGroup(previousGroup);
           onClick && onClick();
           // Focus the H1 on the start page as the beginning of the page, and then for any other
           // sub page, focus the H2.

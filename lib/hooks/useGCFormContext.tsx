@@ -14,13 +14,14 @@ import {
   getNextAction,
   filterShownElements,
   filterValuesByShownElements,
+  getVisibleGroupsBasedOnValuesRecursive,
+  getValuesWithMatchedIds,
 } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import {
   getGroupHistory as _getGroupHistory,
   pushIdToHistory as _pushIdToHistory,
   clearHistoryAfterId as _clearHistoryAfterId,
-  getPreviousIdFromCurrentId,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
 
@@ -41,9 +42,9 @@ interface GCFormsContextValueType {
   groups?: GroupsType;
   currentGroup: string | null;
   previousGroup: string | null;
+  getPreviousGroup: (currentGroup: string) => string;
   setGroup: (group: string | null) => void;
   handleNextAction: () => void;
-  handlePreviousAction: () => void;
   hasNextAction: (group: string) => boolean;
   isOffBoardSection: (group: string) => boolean;
   formRecord: PublicFormRecord;
@@ -139,15 +140,6 @@ export const GCFormsProvider = ({
     }
   };
 
-  const handlePreviousAction = () => {
-    if (!currentGroup) return;
-    const previousGroupId = getPreviousIdFromCurrentId(currentGroup, history.current);
-    if (previousGroupId) {
-      setGroup(previousGroupId);
-      clearHistoryAfterId(previousGroupId);
-    }
-  };
-
   const updateValues = ({
     formValues,
   }: {
@@ -233,6 +225,21 @@ export const GCFormsProvider = ({
     return groupTitle({ groups, groupId, language });
   };
 
+  const getPreviousGroup = (currentGroup: string) => {
+    const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, values.current);
+    const visibleGroups = getVisibleGroupsBasedOnValuesRecursive(
+      formRecord,
+      valuesWithMatchedIds,
+      "start"
+    );
+
+    const idx = visibleGroups.indexOf(currentGroup);
+    if (idx === -1 || idx === 0) {
+      return currentGroup;
+    }
+    return visibleGroups[idx - 1];
+  };
+
   return (
     <GCFormsContext.Provider
       value={{
@@ -248,9 +255,9 @@ export const GCFormsProvider = ({
         groups,
         currentGroup,
         previousGroup,
+        getPreviousGroup,
         setGroup,
         handleNextAction,
-        handlePreviousAction,
         hasNextAction,
         isOffBoardSection,
         groupsCheck,
@@ -289,11 +296,11 @@ export const useGCFormsContext = () => {
       groups: {},
       currentGroup: "",
       previousGroup: "",
+      getPreviousGroup: () => "",
       setGroup: () => void 0,
       hasNextAction: () => void 0,
       isOffBoardSection: () => false,
       handleNextAction: () => void 0,
-      handlePreviousAction: () => void 0,
       formRecord: {} as PublicFormRecord,
       groupsCheck: () => false,
       getGroupHistory: () => [],
