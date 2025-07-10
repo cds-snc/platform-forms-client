@@ -70,14 +70,6 @@ export async function submitForm(
       }
     }
 
-    if (!template) {
-      throw new Error(`Could not find any form associated to identifier ${formId}`);
-    }
-
-    if (template.closingDate && dateHasPast(Date.parse(String(template.closingDate)))) {
-      throw new Error("This form is closed for submissions.");
-    }
-
     const validateResponsesResult = await validateResponses(values, template);
 
     if (Object.keys(validateResponsesResult).length !== 0) {
