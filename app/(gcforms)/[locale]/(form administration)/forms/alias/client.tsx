@@ -19,9 +19,11 @@ type Template = {
 function DeleteButton({
   id,
   setServerError,
+  setEditingAlias,
 }: {
   id: string;
   setServerError: (msg: string | null) => void;
+  setEditingAlias: (alias: FormAlias | null) => void;
 }) {
   const { t } = useTranslation("my-forms");
   const [isPending, startTransition] = useTransition();
@@ -30,6 +32,7 @@ function DeleteButton({
       theme="destructive"
       onClick={() =>
         startTransition(async () => {
+          setEditingAlias(null);
           setServerError(null);
           const result = await deleteAlias(id);
           if (result.error) {
@@ -217,7 +220,11 @@ export const AliasForm = ({
                   <Button theme="secondary" onClick={() => setEditingAlias(alias)}>
                     {t("aliases.edit")}
                   </Button>
-                  <DeleteButton id={alias.id} setServerError={setServerError} />
+                  <DeleteButton
+                    id={alias.id}
+                    setServerError={setServerError}
+                    setEditingAlias={setEditingAlias}
+                  />
                 </div>
               </td>
             </tr>
