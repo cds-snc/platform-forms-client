@@ -1,0 +1,277 @@
+"use client";
+
+import { useTransition, useState, useRef, useEffect } from "react";
+import Link from "next/link";
+import { useTranslation } from "@i18n/client";
+
+import { FormAlias } from "@prisma/client";
+
+import { Button, Alert } from "@clientComponents/globals";
+import { createAlias, deleteAlias, updateAlias } from "./actions";
+import { type Language } from "@lib/types/form-builder-types";
+import { slugify } from "@lib/client/clientHelpers";
+
+type Template = {
+  id: string;
+  name: string;
+};
+
+function DeleteButton({
+  id,
+  setServerError,
+  setEditingAlias,
+}: {
+  id: string;
+  setServerError: (msg: string | null) => void;
+  setEditingAlias: (alias: FormAlias | null) => void;
+}) {
+  const { t } = useTranslation("my-forms");
+  const [isPending, startTransition] = useTransition();
+  return (
+    <Button
+      theme="destructive"
+      onClick={() =>
+        startTransition(async () => {
+          setEditingAlias(null);
+          setServerError(null);
+          const result = await deleteAlias(id);
+          if (result.error) {
+            setServerError(result.error);
+          }
+        })
+      }
+      disabled={isPending}
+    >
+      {isPending ? t("aliases.deleting") : t("aliases.delete")}
+    </Button>
+  );
+}
+
+const PopOverTip = ({ targetId, content }: { targetId: string; content: string }) => {
+  const { t } = useTranslation("my-forms");
+  return (
+    <>
+      <button
+        type="button"
+        popoverTarget={targetId}
+        style={{
+          // @ts-expect-error - CSS anchor positioning is not in the types yet
+          anchorName: `--${targetId}-trigger`,
+        }}
+        className="flex size-5 cursor-pointer items-center justify-center rounded-full border border-slate-500 text-sm"
+        aria-label={t("aliases.aliasDescription")}
+      >
+        ?
+      </button>
+      <div
+        id={targetId}
+        popover="auto"
+        style={{
+          // @ts-expect-error - CSS anchor positioning is not in the types yet
+          positionAnchor: `--${targetId}-trigger`,
+          top: "anchor(top)",
+          right: "anchor(right)",
+          positionArea: "inline-end center",
+          marginBlockEnd: "30px",
+        }}
+        className="rounded-lg bg-blue-default p-4 text-sm text-white"
+      >
+        <p className="min-w-96">{content}</p>
+      </div>
+    </>
+  );
+};
+
+export const AliasForm = ({
+  locale,
+  HOST,
+  aliases,
+  templates,
+}: {
+  locale: Language;
+  HOST: string;
+  aliases: FormAlias[];
+  templates: Template[];
+}) => {
+  const [isPending, startTransition] = useTransition();
+  const [editingAlias, setEditingAlias] = useState<FormAlias | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [aliasValue, setAliasValue] = useState("");
+  const [serverError, setServerError] = useState<string | null>(null);
+  const { t } = useTranslation("my-forms");
+
+  useEffect(() => {
+    if (editingAlias && formRef.current) {
+      (formRef.current.elements.namedItem("alias") as HTMLInputElement).value = editingAlias.alias;
+      setAliasValue(editingAlias.alias);
+      (formRef.current.elements.namedItem("formId") as HTMLSelectElement).value =
+        editingAlias.formId;
+    } else {
+      formRef.current?.reset();
+      setAliasValue("");
+    }
+    setServerError(null);
+  }, [editingAlias]);
+
+  const formAction = async (formData: FormData) => {
+    setServerError(null);
+    if (editingAlias) {
+      const result = await updateAlias(editingAlias.id, formData);
+      if (result.error) {
+        setServerError(result.error);
+        return;
+      }
+      setEditingAlias(null);
+    } else {
+      const result = await createAlias(formData);
+      if (result.error) {
+        setServerError(t(result.error));
+        return;
+      }
+    }
+    formRef.current?.reset();
+    setAliasValue("");
+  };
+
+  const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAliasValue(slugify(e.target.value));
+  };
+
+  return (
+    <div>
+      {serverError && (
+        <div className="mb-4">
+          <Alert.Danger>
+            <Alert.Title headingTag="h3">{t("aliases.error.title")}</Alert.Title>
+            <Alert.Body>
+              <p>{t(`aliases.error.${serverError}`)}</p>
+            </Alert.Body>
+          </Alert.Danger>
+        </div>
+      )}
+      <h2 className="mb-4 text-xl">
+        {editingAlias ? t("aliases.editAlias") : t("aliases.createAlias")}
+      </h2>
+      <form
+        ref={formRef}
+        action={(formData) => {
+          startTransition(() => formAction(formData));
+        }}
+        className="flex items-end gap-4"
+      >
+        <div className="gcds-input-wrapper w-1/3">
+          <div className="mb-2 flex items-center gap-2">
+            <label htmlFor="alias" className="block">
+              {t("aliases.alias")}
+            </label>
+            <PopOverTip targetId="alias-popover" content={t("aliases.aliasDescription")} />
+          </div>
+          <input
+            type="text"
+            name="alias"
+            id="alias"
+            className="required w-11/12 rounded border-1.5 border-solid border-slate-500 px-3 py-2 focus:border-blue-focus focus:outline focus:outline-2 focus:outline-blue-focus"
+            value={aliasValue}
+            onChange={handleAliasChange}
+            required
+          />
+        </div>
+        <div>
+          <div className="mb-2 flex items-center gap-2">
+            <label htmlFor="formId" className="block">
+              {t("aliases.formName")}
+            </label>
+            <PopOverTip targetId="form-popover" content={t("aliases.formNameDescription")} />
+          </div>
+          <div className="gcds-select-wrapper">
+            <select
+              name="formId"
+              id="formId"
+              required
+              defaultValue=""
+              className="gc-dropdown !mb-0 inline-block"
+            >
+              <option value="" disabled>
+                {t("aliases.selectForm")}
+              </option>
+              {templates.map((template) => (
+                <option key={template.id} value={template.id}>
+                  {template.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Button className="mb-6" theme="primary" type="submit" disabled={isPending}>
+            {isPending
+              ? editingAlias
+                ? t("aliases.updating")
+                : t("aliases.creating")
+              : editingAlias
+              ? t("aliases.update")
+              : t("aliases.create")}
+          </Button>
+          {editingAlias && (
+            <Button
+              className="mb-6"
+              theme="secondary"
+              type="button"
+              onClick={() => setEditingAlias(null)}
+            >
+              {t("aliases.cancel")}
+            </Button>
+          )}
+        </div>
+      </form>
+
+      <div>
+        {aliasValue ? (
+          <p className="-mt-10px mb-5 text-sm text-slate-500">
+            {t("aliases.URL")}: {`${HOST}/id/`}
+            <strong>{aliasValue}</strong>
+          </p>
+        ) : (
+          <p className="-mt-10px mb-5 text-sm text-slate-500">{"\u00A0"}</p>
+        )}
+      </div>
+
+      <h2 className="mb-4 text-xl">{t("aliases.existingAliases")}</h2>
+      <table className="w-full table-fixed text-left">
+        <thead>
+          <tr>
+            <th className="w-1/4 border p-2">{t("aliases.alias")}</th>
+            <th className="w-1/2 border p-2">{t("aliases.formName")}</th>
+            <th className="w-1/4 border p-2">{t("aliases.actions")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {aliases.map((alias) => (
+            <tr key={alias.id}>
+              <td className="border p-2">
+                <Link href={`${HOST}/id/${alias.alias}`}>{alias.alias}</Link>
+              </td>
+              <td className="border p-2">
+                <Link href={`/${locale}/form-builder/${alias.formId}/settings`}>
+                  {templates.find((t) => t.id === alias.formId)?.name ?? alias.formId}
+                </Link>
+              </td>
+              <td className="border p-2">
+                <div className="flex gap-2">
+                  <Button theme="secondary" onClick={() => setEditingAlias(alias)}>
+                    {t("aliases.edit")}
+                  </Button>
+                  <DeleteButton
+                    id={alias.id}
+                    setServerError={setServerError}
+                    setEditingAlias={setEditingAlias}
+                  />
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
