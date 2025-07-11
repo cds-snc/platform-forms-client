@@ -71,12 +71,14 @@ export const Announce = () => {
         role="status"
         aria-live="polite"
         className="gc-announce-sr-only"
+        data-testid="gc-announce-polite"
         ref={messageLowRef}
       ></div>
       <div
         role="alert"
         aria-live="assertive"
         className="gc-announce-sr-only"
+        data-testid="gc-announce-assertive"
         ref={messageHighRef}
       ></div>
     </>

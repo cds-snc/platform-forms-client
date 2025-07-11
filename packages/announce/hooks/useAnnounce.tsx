@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { Announce } from "@gcforms/announce";
-import { logMessage } from "@root/lib/logger";
 
 export const useAnnounce = () => {
   useEffect(() => {
@@ -18,8 +17,6 @@ export const useAnnounce = () => {
     // Render the Announce component
     const root = createRoot(announceContainer);
     root.render(<Announce />);
-
-    logMessage.info("Announce component mounted");
 
     // Cleanup on unmount
     return () => {
