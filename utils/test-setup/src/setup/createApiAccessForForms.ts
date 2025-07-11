@@ -48,5 +48,9 @@ async function createApiAccessForForm(formId: string): Promise<string> {
       const apiKey = { ...partialApiKey, key: apiKeyMatch[0] };
 
       return JSON.stringify(apiKey);
+    })
+    .catch((error) => {
+      console.error(error);
+      throw new Error();
     });
 }

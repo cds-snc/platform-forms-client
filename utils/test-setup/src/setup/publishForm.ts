@@ -12,22 +12,28 @@ export async function publishForms(formIds: string[]): Promise<string[]> {
 }
 
 async function publishForm(formId: string): Promise<void> {
-  return axios.post(
-    config.targetEnvironment,
-    [
+  return axios
+    .post(
+      config.targetEnvironment,
+      [
+        {
+          id: formId,
+          isPublished: true,
+          publishFormType: "test-setup-tool",
+          publishDescription: "test-setup-tool",
+          publishReason: "test-setup-tool",
+        },
+      ],
       {
-        id: formId,
-        isPublished: true,
-        publishFormType: "test-setup-tool",
-        publishDescription: "test-setup-tool",
-        publishReason: "test-setup-tool",
-      },
-    ],
-    {
-      headers: {
-        cookie: config.authjsCookie,
-        "next-action": config.serverActionIdentifiers.updateTemplatePublishedStatus,
-      },
-    }
-  );
+        headers: {
+          cookie: config.authjsCookie,
+          "next-action": config.serverActionIdentifiers.updateTemplatePublishedStatus,
+        },
+      }
+    )
+    .then((_) => {})
+    .catch((error) => {
+      console.error(error);
+      throw new Error();
+    });
 }

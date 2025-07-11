@@ -12,10 +12,16 @@ export async function deleteForms(formIds: string[]): Promise<string[]> {
 }
 
 async function deleteForm(formId: string): Promise<void> {
-  return axios.post(config.targetEnvironment, [formId], {
-    headers: {
-      cookie: config.authjsCookie,
-      "next-action": config.serverActionIdentifiers.deleteForm,
-    },
-  });
+  return axios
+    .post(config.targetEnvironment, [formId], {
+      headers: {
+        cookie: config.authjsCookie,
+        "next-action": config.serverActionIdentifiers.deleteForm,
+      },
+    })
+    .then((_) => {})
+    .catch((error) => {
+      console.error(error);
+      throw new Error();
+    });
 }

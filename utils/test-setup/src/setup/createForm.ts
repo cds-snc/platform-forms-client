@@ -47,5 +47,9 @@ async function createForm(name: string, template: Record<string, any>): Promise<
         lines[1].slice(lines[1].indexOf(":") + 1)
       );
       return jsonResponse.formRecord.id;
+    })
+    .catch((error) => {
+      console.error(error);
+      throw new Error();
     });
 }
