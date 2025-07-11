@@ -5,7 +5,6 @@ import { SkipLink, Fip } from "@clientComponents/globals";
 import LanguageToggle from "../Header/LanguageToggle";
 import { DateModified } from "../DateModified";
 import { cn } from "@lib/utils";
-import { LiveRegion } from "../LiveRegion";
 import { type JSX } from "react";
 import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { type Language } from "@lib/types/form-builder-types";
@@ -75,7 +74,6 @@ const FormDisplayLayout = ({
           </main>
         </div>
         {footer}
-        <LiveRegion />
       </div>
     </>
   );
