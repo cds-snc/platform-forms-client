@@ -4,6 +4,10 @@ import { Announce } from "@gcforms/announce";
 
 export const useAnnounce = () => {
   useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
     if (document.getElementById("gc-announce")) {
       // Announce component already mounted, skipping initialization
       return;

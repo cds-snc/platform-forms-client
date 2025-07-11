@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useRef } from "react";
 import "./Announce.css";
 
@@ -12,19 +14,18 @@ interface Message {
 }
 
 /**
- * Example usage:
+ * Example:
  * In a top level component near the layout add:
- * import { Announce } from "@root/packages/announce/src/Announce";
+ * import { Announce } from "@gcforms/announce";
  * ...
  * useAnnounce();
  *
  * Then in any component you can use:
- * import { announce } from "@root/packages/announce/utils/announce";
+ * import { announce } from "@gcforms/announce";
  * ...
  * announce("Your message here");
  */
 export const Announce = () => {
-  // Use refs to avoid unnecessary rerenders of this component
   const messageLowRef = useRef<HTMLDivElement>(null);
   const messageHighRef = useRef<HTMLDivElement>(null);
 
@@ -43,6 +44,10 @@ export const Announce = () => {
   }, []);
 
   useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
     const handleAnnouncePolite = (event: Event) => {
       const customEvent = event as CustomEvent<Message>;
       announcePolite(customEvent.detail.message);
