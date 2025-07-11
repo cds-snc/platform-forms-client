@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import "./Announce.css";
 
-// TODO: What if the same message is announce repeatedly - should it be ignored?
-// If no, could cleanup message after adding to DOM then next message even if same should be announced
-
 export enum Priority {
   LOW = "polite",
   HIGH = "assertive",
