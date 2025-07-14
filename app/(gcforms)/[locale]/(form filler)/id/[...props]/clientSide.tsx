@@ -65,16 +65,18 @@ export const FormWrapper = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, formRecord.id]);
 
-  // Update the page head title for multi-page forms
-  const pageTitle = useMemo(() => {
+  const pageTitle = () => {
+    const pageTitle = formRecord.form[getLocalizedProperty("title", language)];
     const isReviewPage = showReviewPage(formRecord.form) && currentGroup === LockedSections.REVIEW;
-    return `${formRecord.form[getLocalizedProperty("title", language)]} - ${
-      isReviewPage
-        ? t("reviewForm", { lng: language, ns: "review" })
-        : getGroupTitle(currentGroup, language as Language)
-    }`;
-  }, [formRecord, language, currentGroup, getGroupTitle, t]);
-  useUpdateHeadTitle(pageTitle, showReviewPage(formRecord.form));
+    const subPageTitle = isReviewPage
+      ? t("reviewForm", { lng: language, ns: "review" })
+      : getGroupTitle(currentGroup, language as Language);
+    return `${pageTitle} - ${subPageTitle}`;
+  };
+  // For multi-page forms update the sub page head title or review page title
+  // Single-page forms will be skipped since since the title set in page.tsx is sufficient
+  // Updating the confirmation page title is handled in the TextPage component
+  useUpdateHeadTitle(pageTitle(), showReviewPage(formRecord.form));
 
   useEffect(() => {
     // Clear session storage after values are restored
