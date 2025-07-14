@@ -7,7 +7,7 @@ import { UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { dynamoDBDocumentClient, sqsClient } from "@lib/integration/awsServicesConnector";
 import { headers, type UnsafeUnwrappedHeaders } from "next/headers";
 
-const SQS_REPROCESS_SUBMISSION_QUEUE_NAME = "reprocess_submission_queue.fifo";
+const SQS_REPROCESS_SUBMISSION_QUEUE_NAME = "reliability_reprocessing_queue";
 
 let queueUrlRef: string | null = null;
 
