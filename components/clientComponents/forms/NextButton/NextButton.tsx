@@ -18,6 +18,7 @@ import { ForwardArrowIcon24x24 } from "@serverComponents/icons";
 import { isFormClosed } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useRouter } from "next/navigation";
 import { formHasGroups } from "@root/lib/utils/form-builder/formHasGroups";
+import { CurrentGroupSelector } from "../CurrentGroupSelector/CurrentGroupSelector";
 
 export const NextButton = ({
   validateForm,
@@ -126,6 +127,7 @@ export const NextButton = ({
           </>
         )}
       </Button>
+      <CurrentGroupSelector />
     </>
   );
 };
