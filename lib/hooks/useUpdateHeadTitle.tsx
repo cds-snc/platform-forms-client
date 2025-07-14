@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-// Note: the <title>title</title> method would be preferred but this seems to get overridden by
-// the Next.js generateMetadata() call
+// Update the document title in a React component client-side
+// Another way is to use <title> but that is meant for server-side rendering
 export const useUpdateHeadTitle = (title: string, condition = true) => {
   useEffect(() => {
     if (typeof document !== "undefined" && condition) {

@@ -17,29 +17,6 @@ import { LockedSections } from "../../../(form administration)/form-builder/comp
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty } from "@root/lib/utils";
 
-// For Multi-Page forms get the page head title for the:
-// - Initial page, set the title to {form title} *done at the page level*
-// - Group pages, set the title to {form title - group title}
-// - Review page, set the title to {form title - Review}
-const getPageTitle = (
-  formRecord: FormRecord,
-  language: Language,
-  currentGroup: string | null,
-  groupTitle: string,
-  reviewString: string
-) => {
-  const isShowReviewPage = showReviewPage(formRecord.form);
-  const pageTitleGroup = `${
-    formRecord.form[getLocalizedProperty("title", language)]
-  } - ${groupTitle}`;
-  const pageTitleReview = `${
-    formRecord.form[getLocalizedProperty("title", language)]
-  } - ${reviewString}`;
-  return isShowReviewPage && currentGroup !== LockedSections.REVIEW
-    ? pageTitleGroup
-    : pageTitleReview;
-};
-
 export const FormWrapper = ({
   formRecord,
   header,
@@ -90,13 +67,12 @@ export const FormWrapper = ({
 
   // Update the page head title for multi-page forms
   const pageTitle = useMemo(() => {
-    return getPageTitle(
-      formRecord as FormRecord,
-      language as Language,
-      currentGroup,
-      getGroupTitle(currentGroup, language as Language),
-      t("reviewForm", { lng: language, ns: "review" })
-    );
+    const isReviewPage = showReviewPage(formRecord.form) && currentGroup === LockedSections.REVIEW;
+    return `${formRecord.form[getLocalizedProperty("title", language)]} - ${
+      isReviewPage
+        ? t("reviewForm", { lng: language, ns: "review" })
+        : getGroupTitle(currentGroup, language as Language)
+    }`;
   }, [formRecord, language, currentGroup, getGroupTitle, t]);
   useUpdateHeadTitle(pageTitle, showReviewPage(formRecord.form));
 
