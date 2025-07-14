@@ -22,6 +22,7 @@ export const RequiredOptions = ({
           className="gc-input-checkbox__input"
           id={`required-${item.id}-id-modal`}
           type="checkbox"
+          defaultChecked={checked}
           value={`required-${item.id}-value-modal-` + checked}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             // clone the existing properties so that we don't overwrite other keys in "validation"

@@ -326,5 +326,11 @@
   },
   "submitProgress": {
     "text": "Submitting form..."
+  },
+  "saveFileWarning": {
+    "text": "You'll need to re-upload any files attached when you resume filling the form."
+  },
+  "confirmFileWarning": {
+    "text": "This copy of your answers will not include the files you attached to your submission."
   }
 }
