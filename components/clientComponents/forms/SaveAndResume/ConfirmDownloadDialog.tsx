@@ -16,6 +16,8 @@ import { generateDownloadHtml } from "@lib/saveAndResume/actions";
 import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
 import { logMessage } from "@lib/logger";
 
+import { SaveFileWarning } from "./FileWarning/SaveFileWarning";
+
 export type handleCloseType = (value: boolean) => void;
 
 export const ConfirmDownloadDialog = ({
@@ -35,6 +37,7 @@ export const ConfirmDownloadDialog = ({
   const [saving, setSaving] = useState(false);
 
   const formValues: void | FormValues = getValues();
+
   if (!formValues || !groups) throw new Error("Form values or groups are missing");
 
   const { fileName, getOptions } = useFormSubmissionData({ language, type });
@@ -91,6 +94,7 @@ export const ConfirmDownloadDialog = ({
           <div id="alert-dialog-description">
             {tParent === "saveAndResume" && (
               <>
+                {open && <SaveFileWarning formValues={formValues} type={type} />}
                 <ol className="list-outside list-decimal">
                   <li className="marker:text-2xl marker:font-bold">
                     {t(`${tParent}.prompt.text1`)}
@@ -106,7 +110,10 @@ export const ConfirmDownloadDialog = ({
             )}
             {/* Show save response text */}
             {type === "confirm" && (
-              <div className="mb-4 mt-6">{t(`${tParent}.prompt.description`)}</div>
+              <>
+                {open && <SaveFileWarning formValues={formValues} type={type} />}
+                <div className="mb-4 mt-6">{t(`${tParent}.prompt.description`)}</div>
+              </>
             )}
           </div>
 

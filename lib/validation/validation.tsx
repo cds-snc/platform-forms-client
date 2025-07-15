@@ -175,47 +175,39 @@ const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.dynamicRow: {
-      //set up object to store results
-      // loop over rows of values
-
       // deterministic switch to return an error object or not
       // required because returning any object (including nulls) blocks the submit action
       let dynamicRowHasErrors = false;
 
       const groupErrors = (value as Array<Responses>).map((row) => {
         const rowErrors: Record<string, unknown> = {};
-        for (const [responseKey, responseValue] of Object.entries(row)) {
-          if (
-            formElement.properties.subElements &&
-            formElement.properties.subElements[parseInt(responseKey)]
-          ) {
-            const subElement = formElement.properties.subElements[parseInt(responseKey)];
 
-            if (subElement?.properties?.validation) {
-              const validationError = isFieldResponseValid(
-                responseValue,
-                values,
-                subElement.type,
-                subElement,
-                subElement.properties.validation,
-                t
-              );
-              rowErrors[responseKey] = validationError;
-              if (validationError !== null) {
-                dynamicRowHasErrors = true;
-              }
-            } else {
-              rowErrors[responseKey] = null;
+        (formElement.properties.subElements || []).forEach((subElement, index) => {
+          if (subElement.properties.validation) {
+            const validationError = isFieldResponseValid(
+              row[index],
+              values,
+              subElement.type,
+              subElement,
+              subElement.properties.validation,
+              t
+            );
+
+            if (validationError !== null) {
+              rowErrors[index] = validationError;
+              dynamicRowHasErrors = true;
             }
           }
-        }
+        });
+
         return rowErrors;
       });
-      if (!dynamicRowHasErrors) {
-        break;
-      } else {
+
+      if (dynamicRowHasErrors) {
         return groupErrors;
       }
+
+      break;
     }
     case FormElementTypes.richText:
       break;
@@ -344,11 +336,8 @@ export const validateOnSubmit = (
 ): Responses => {
   const errors: Responses = {};
 
-  for (const item in values) {
-    const formElement = props.formRecord.form.elements.find(
-      (element) => element.id == parseInt(item)
-    );
-    if (!formElement) continue;
+  for (const formElement of props.formRecord.form.elements) {
+    const item = values[formElement.id];
 
     const currentGroup = values.currentGroup as string;
     const groups = props.formRecord.form.groups as GroupsType;
@@ -363,13 +352,14 @@ export const validateOnSubmit = (
       continue;
     }
 
+    // If the form element is not visible, skip validation
     if (!checkVisibilityRecursive(props.formRecord, formElement, values as FormValues)) {
       continue;
     }
 
     if (formElement.properties.validation) {
       const result = isFieldResponseValid(
-        values[item],
+        item,
         values,
         formElement.type,
         formElement,
@@ -378,11 +368,11 @@ export const validateOnSubmit = (
       );
 
       if (result) {
-        errors[item] = result;
+        errors[formElement.id] = result;
       }
     }
   }
-  // console.log(errors);
+
   return errors;
 };
 /**

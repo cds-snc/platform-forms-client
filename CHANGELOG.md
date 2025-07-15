@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.46.3](https://github.com/cds-snc/platform-forms-client/compare/v3.46.2...v3.46.3) (2025-07-14)
+
+
+### Bug Fixes
+
+* Page visibility and server validation ([#5779](https://github.com/cds-snc/platform-forms-client/issues/5779)) ([e4f4e0a](https://github.com/cds-snc/platform-forms-client/commit/e4f4e0adf329127cc4a0ec291b42e1eb1a17785d))
+
+## [3.46.2](https://github.com/cds-snc/platform-forms-client/compare/v3.46.1...v3.46.2) (2025-07-10)
+
+
+### Miscellaneous Chores
+
+* Add File warn to save progress and confirm download ([#5861](https://github.com/cds-snc/platform-forms-client/issues/5861)) ([af6e615](https://github.com/cds-snc/platform-forms-client/commit/af6e615f0ef1db637880e732b6a6b57a8b4ecdca))
+
 ## [3.46.1](https://github.com/cds-snc/platform-forms-client/compare/v3.46.0...v3.46.1) (2025-07-09)
 
 
