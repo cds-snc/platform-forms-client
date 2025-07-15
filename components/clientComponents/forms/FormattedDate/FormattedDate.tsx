@@ -113,11 +113,10 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
 
   return (
     <fieldset
-      role="group"
-      aria-describedby={description ? `desc-${id}` : undefined}
+      aria-roledescription="formatted date"
+      aria-labelledby={`label-${id}`}
       data-testid="formattedDate"
       id={id}
-      tabIndex={0}
     >
       <legend className={cn("gc-label", required && "required")} id={`label-${id}`}>
         {label}
