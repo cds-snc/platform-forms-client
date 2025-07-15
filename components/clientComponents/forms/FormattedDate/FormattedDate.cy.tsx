@@ -173,7 +173,8 @@ describe("<FormattedDate />", () => {
       </Formik>
     );
 
-    cy.get("[data-testid=formattedDate]").should("have.attr", "aria-describedby");
+    cy.get("[data-testid=formattedDate]").should("have.attr", "aria-roledescription");
+    cy.get("[data-testid=formattedDate]").should("have.attr", "aria-labelledby");
     cy.get("[data-testid=description]").should("exist");
     cy.get("[data-testid=description]").contains("This is a description");
   });
