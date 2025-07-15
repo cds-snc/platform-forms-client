@@ -1,7 +1,6 @@
 import { authCheckAndThrow } from "@lib/actions";
 import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
-import { SkipLink } from "@clientComponents/globals";
 import { Footer } from "@serverComponents/globals/Footer";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { AccessControlError } from "@lib/auth/errors";
@@ -83,7 +82,6 @@ export default async function Layout(props: {
           <RefStoreProvider>
             <div className="h-full">
               <div className="flex min-h-screen flex-col">
-                <SkipLink />
                 <Header context="formBuilder" className="mb-0" />
                 <div className="flex shrink-0 grow basis-auto flex-col bg-gray-soft">
                   <ToastContainer containerId="default" />
