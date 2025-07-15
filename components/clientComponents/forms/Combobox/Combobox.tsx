@@ -8,6 +8,7 @@ import { cn } from "@lib/utils";
 
 interface ComboboxProps extends InputFieldProps {
   choices?: string[];
+  strictValue?: boolean;
 }
 
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
@@ -18,6 +19,21 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const { setValue } = helpers;
 
   const [items, setItems] = React.useState(choices);
+
+  // Clear the field on blur if value does not match a choice (full match only)
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const hasFullMatch = choices.some(
+      (choice) => choice.toLowerCase() === inputValue.toLowerCase()
+    );
+    if (inputValue && !hasFullMatch) {
+      setValue("");
+    }
+    if (typeof field.onBlur === "function") {
+      field.onBlur(e);
+    }
+  };
+
   const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
     useCombobox({
       onInputValueChange({ inputValue }) {
@@ -44,6 +60,12 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
     delete inputProps["aria-labelledby"];
   }
 
+  if (props.strictValue) {
+    inputProps.onBlur = handleBlur;
+  }
+
+  inputProps.value = field.value || "";
+
   return (
     <>
       <div className={classes} data-testid="combobox">
@@ -63,6 +85,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
             className={`${!(isOpen && items.length >= 1 && items[0] !== "") ? "hidden" : ""}`}
             {...getMenuProps()}
             data-testid="combobox-listbox"
+            data-is-strict={props.strictValue}
             hidden={!isOpen}
           >
             {isOpen &&
