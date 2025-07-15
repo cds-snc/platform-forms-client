@@ -20,6 +20,8 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const [items, setItems] = React.useState(choices);
   const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
     useCombobox({
+      // Stops downshift from generating a garbled Id. See #5834
+      id: `downshift-${id}`,
       onInputValueChange({ inputValue }) {
         setItems(
           choices.filter((choice) => {
@@ -35,27 +37,23 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       initialInputValue: field.value || "",
     });
 
-  /**
-   * aria-lablledby is provided by getInputProps(). Since we're not creating a lablel
-   * for the input here, we need to remove it to avoid accessibility issues.
-   */
-  const inputProps = getInputProps();
-  if ("aria-labelledby" in inputProps) {
-    delete inputProps["aria-labelledby"];
-  }
-
   return (
     <>
       <div className={classes} data-testid="combobox">
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
         <input
-          {...inputProps}
+          {...getInputProps()}
           aria-describedby={ariaDescribedBy}
           id={id}
           required={required}
           {...(name && { name })}
           data-testid="combobox-input"
+          // Updates to match the label form id.
+          // Note: the label and id relationship is all that's needed but downshift includes
+          // this prop in getInputProps and even with `delete inputProps["aria-labelledby"]`
+          // this property persists. Overriding it below is a workaround.
+          aria-labelledby={`label-${id}`}
         />
 
         {items.length >= 1 && (
@@ -64,6 +62,8 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
             {...getMenuProps()}
             data-testid="combobox-listbox"
             hidden={!isOpen}
+            // Similar to above comment about downshift
+            aria-labelledby={`label-${id}`}
           >
             {isOpen &&
               items.length >= 1 &&
