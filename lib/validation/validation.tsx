@@ -5,7 +5,6 @@ import {
   FormElementTypes,
   Responses,
   PublicFormRecord,
-  FileInputResponse,
 } from "@lib/types";
 import { FormikProps } from "formik";
 import { TFunction } from "i18next";
@@ -16,12 +15,10 @@ import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import { FormValues, GroupsType, checkVisibilityRecursive } from "@lib/formContext";
 import { inGroup } from "@lib/formContext";
-import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClientSide";
+import { isFileExtensionValid } from "./fileValidationClientSide";
 import { DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
 import { isValidEmail } from "@lib/validation/isValidEmail";
-import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
-import { bytesToMb } from "@lib/utils/fileSize";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -137,19 +134,25 @@ const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.fileInput: {
-      const fileInputResponse = value as FileInputResponse;
+      const fileInputResponse = value as {
+        id: string | null;
+        name: string | null;
+        size: number | null;
+      };
 
       if (
         validator.required &&
-        (!fileInputResponse.name || !fileInputResponse.size || !fileInputResponse.content)
+        (!fileInputResponse.name || !fileInputResponse.size || !fileInputResponse.id)
       )
         return t("input-validation.required");
 
-      if (fileInputResponse.size && !isAllFilesSizeValid(values)) {
-        return t("input-validation.file-size-too-large-all-files", {
-          maxSizeInMb: bytesToMb(BODY_SIZE_LIMIT_WITH_FILES),
-        });
-      }
+      // No longer required if uploading straight to S3
+
+      // if (fileInputResponse.size && !isAllFilesSizeValid(values)) {
+      //   return t("input-validation.file-size-too-large-all-files", {
+      //     maxSizeInMb: bytesToMb(BODY_SIZE_LIMIT_WITH_FILES),
+      //   });
+      // }
 
       if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
         return t("input-validation.file-type-invalid");

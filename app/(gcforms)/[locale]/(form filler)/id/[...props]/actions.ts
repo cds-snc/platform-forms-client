@@ -92,7 +92,7 @@ export async function submitForm(
     /**
      * This validation runs the client-side validation on the server.
      */
-    const validateOnSubmitResult = await validateOnSubmit(values, {
+    const validateOnSubmitResult = validateOnSubmit(values, {
       formRecord: template,
       t: t,
     });
