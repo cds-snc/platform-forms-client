@@ -18,7 +18,7 @@ import { SelectNextAction } from "./logic/SelectNextAction";
 import { useGroupStore } from "./treeview/store/useGroupStore";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { Language } from "@lib/types/form-builder-types";
-import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { announce } from "@gcforms/announce";
 
 const TabButton = ({
   text,
@@ -29,14 +29,11 @@ const TabButton = ({
   onClick: () => void;
   className?: string;
 }) => {
-  const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
 
   const loadTab = () => {
     onClick();
-    Event.fire(EventKeys.liveMessage, {
-      message: t("rightPanel.loadTab", { tabPanelLabel: text }),
-    });
+    announce(t("rightPanel.loadTab", { tabPanelLabel: text }));
   };
   return (
     <Tab as={Fragment}>
