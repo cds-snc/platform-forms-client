@@ -12,6 +12,10 @@ import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSe
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
+import { showReviewPage } from "@root/lib/utils/form-builder/showReviewPage";
+import { LockedSections } from "../../../(form administration)/form-builder/components/shared/right-panel/treeview/types";
+import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
+import { getLocalizedProperty } from "@root/lib/utils";
 
 export const FormWrapper = ({
   formRecord,
@@ -28,7 +32,7 @@ export const FormWrapper = ({
   const {
     t,
     i18n: { language },
-  } = useTranslation(["common", "confirmation", "form-closed"]);
+  } = useTranslation(["common", "confirmation", "form-closed", "review"]);
   const {
     saveSessionProgress,
     setSubmissionId,
@@ -36,6 +40,7 @@ export const FormWrapper = ({
     submissionDate,
     setSubmissionDate,
     currentGroup,
+    getGroupTitle,
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
   const captchaToken = React.useRef("");
@@ -59,6 +64,19 @@ export const FormWrapper = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, formRecord.id]);
+
+  const pageTitle = () => {
+    const pageTitle = formRecord.form[getLocalizedProperty("title", language)];
+    const isReviewPage = showReviewPage(formRecord.form) && currentGroup === LockedSections.REVIEW;
+    const subPageTitle = isReviewPage
+      ? t("reviewForm", { lng: language, ns: "review" })
+      : getGroupTitle(currentGroup, language as Language);
+    return `${pageTitle} - ${subPageTitle}`;
+  };
+  // For multi-page forms update the sub page head title or review page title
+  // Single-page forms will be skipped since since the title set in page.tsx is sufficient
+  // Updating the confirmation page title is handled in the TextPage component
+  useUpdateHeadTitle(pageTitle(), showReviewPage(formRecord.form));
 
   useEffect(() => {
     // Clear session storage after values are restored
