@@ -28,10 +28,13 @@ CDS can suspend a service at any time for anything deemed as inappropriate use. 
 ### GC Forms infrastructure providers are responsible for:
 
 - Delivering emails with end-user data to the provided government email addresses, if forms were published forms prior to June 11, 2025.
+- Scanning files attached to submissions for malicious content.
 - Providing AWS service cloud infrastructure.
 - Enforcing the [AWS terms of service](https://aws.amazon.com/service-terms/).
 
 CDS is not responsible for issues or outages with AWS infrastructure that may impact system uptime and availability. CDS is also not responsible for Amazon infrastructure failure, AWS, or Simple Email Service (SES). CDS is responsible for updating clients on any information pertaining to an AWS outage.
+
+CDS  will not be providing additional support for malicious files, beyond telling the client if a file is safe or not. 
 
 ## Uptime guarantee
 
@@ -55,7 +58,7 @@ CDS provides reactive support services to monitor, track, and remedy issues rais
 | :---------------------------------------------------------------------------------- | :------------------------------------- | :------------------------- |
 | Service is **unavailable**                                                          | 4 hours | Every 8 hours thereafter |
 | Service is **affected** (performance issues, intermittent errors)                   | 1 business day                         | 2 business days       |
-| Service is **\*functioning** (e.g., data is being collected and received by client) | 2 business days                        | None            |
+| Service is **functioning** (e.g., data is being collected and received by client) | 2 business days                        | None            |
 
 ### Service contacts and response time
 
@@ -85,4 +88,4 @@ In some cases, features provided by GC Forms may need to be depreciated. If a fe
 
 GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Last update:** December 17, 2024
+**Last update:** June 26, 2025

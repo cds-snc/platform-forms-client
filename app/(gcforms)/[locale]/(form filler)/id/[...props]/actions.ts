@@ -12,8 +12,9 @@ import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
-import { validateResponses } from "@lib/validation/validation";
-import { sendNotification } from "@lib/notifications";
+import { validateOnSubmit, validateResponses } from "@lib/validation/validation";
+import { serverTranslation } from "@root/i18n";
+import { sendNotifications } from "@lib/notifications";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -65,6 +66,9 @@ export async function submitForm(
       }
     }
 
+    /**
+     * This validation checks the response values against the template element types.
+     */
     const validateResponsesResult = await validateResponses(values, template);
 
     if (Object.keys(validateResponsesResult).length !== 0) {
@@ -78,6 +82,27 @@ export async function submitForm(
       // throw new MissingFormDataError("Form data validation failed");
     }
 
+    const { t } = await serverTranslation();
+
+    /**
+     * This validation runs the client-side validation on the server.
+     */
+    const validateOnSubmitResult = await validateOnSubmit(values, {
+      formRecord: template,
+      t: t,
+    });
+
+    if (Object.keys(validateOnSubmitResult).length !== 0) {
+      logMessage.info(
+        `[server-action][submitForm] Detected validation errors on form ${formId}. Errors: ${JSON.stringify(
+          validateOnSubmitResult
+        )}`
+      );
+      // Keeping in "passive mode" for now.
+      // Uncomment following line to throw validation error from server.
+      // throw new MissingFormDataError("Form data validation failed");
+    }
+
     const formDataObject = buildFormDataObject(template, values);
 
     if (Object.entries(formDataObject).length <= 2) {
@@ -88,7 +113,7 @@ export async function submitForm(
 
     const submissionId = await processFormData(data.fields, data.files, language);
 
-    sendNotification(formId, template.form.titleEn, template.form.titleFr);
+    sendNotifications(formId, template.form.titleEn, template.form.titleFr);
 
     return { id: formId, submissionId };
   } catch (e) {

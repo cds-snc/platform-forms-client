@@ -71,7 +71,7 @@ jobs:
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@132e37767a5e362b4b7c67b96726fead8f7bbea9
+        uses: aws-actions/amazon-ecs-render-task-definition@433d88401d446052fbc91adf236c11e728e471aa
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
@@ -107,7 +107,7 @@ jobs:
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
         # v1.4.11
-        uses: aws-actions/amazon-ecs-deploy-task-definition@f7b2b96b7fe1b20b452641919c0559bcc19ab8f9
+        uses: aws-actions/amazon-ecs-deploy-task-definition@29647949a0ad5d6113d05ecc78a39a93f2e81e81
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer
