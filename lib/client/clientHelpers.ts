@@ -69,6 +69,30 @@ export const tryFocusOnPageLoad = (fallbackSelector = "H1") => {
   }, NEXT_TICK);
 };
 
+export const focusHeadingByName = (headingName: "H1"|"H2"|"H3") => {
+  //...
+}
+
+/**
+ * Focus a heading element on page load or page update.
+ * @param heading HTMLHeadingElement to focus
+ */
+export const focusHeading = (heading:HTMLHeadingElement) => {
+  if (!heading) {
+    return;
+  }
+
+  if (heading.getAttribute("tabIndex") === null) {
+    heading.setAttribute("tabIndex", "-1");
+  }
+
+  // Gives the DOM a little time to update before focusing
+  setTimeout(() => {
+    heading.focus();
+  }, 40);
+};
+
+
 /**
  * Like a UUID but smaller and not as unique. So best to append this to the element name.
  * e.g. id = `myElementName-${randomId()}`

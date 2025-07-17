@@ -1,5 +1,6 @@
 "use client";
-import { ReactElement, useRef, useEffect } from "react";
+import { useFocusHeading } from "@root/lib/hooks/useFocusHeading";
+import { ReactElement, useRef } from "react";
 
 export const FocusH2 = ({
   children,
@@ -10,16 +11,7 @@ export const FocusH2 = ({
 }) => {
   const headingSuccessRef = useRef(null);
 
-  useEffect(() => {
-    const el = headingSuccessRef.current as unknown as HTMLElement;
-
-    if (el) {
-      // Give the DOM a little time to update
-      setTimeout(() => {
-        el?.focus();
-      }, 40);
-    }
-  }, [group]);
+  useFocusHeading(headingSuccessRef);
 
   return (
     <h2 key={group} tabIndex={-1} data-group={group} data-testid="focus-h2" ref={headingSuccessRef}>
