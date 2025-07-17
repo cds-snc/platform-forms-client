@@ -182,7 +182,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
                 // Let the buttons and other logic control the focus to avoid conflicting with the
-                // error valication focus
+                // error validation focus
                 <h2 tabIndex={-1} data-group={currentGroup || "default"} data-testid="focus-h2">
                   {getGroupTitle(currentGroup, language as Language)}
                 </h2>
