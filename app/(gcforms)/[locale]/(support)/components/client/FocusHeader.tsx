@@ -1,5 +1,5 @@
 "use client";
-import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { useFocusHeading } from "@root/lib/hooks/useFocusHeading";
 import { ReactElement, useRef } from "react";
 
 export const FocusHeader = ({
@@ -10,7 +10,8 @@ export const FocusHeader = ({
   headingTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }) => {
   const headingSuccessRef = useRef(null);
-  useFocusIt({ elRef: headingSuccessRef });
+
+  useFocusHeading(headingSuccessRef);
 
   return <HeadingTag ref={headingSuccessRef}>{children}</HeadingTag>;
 };

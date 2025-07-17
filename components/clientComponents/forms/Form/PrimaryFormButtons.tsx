@@ -3,7 +3,6 @@ import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
 import { SubmitButton } from "./SubmitButton";
 import { InnerFormProps } from "./types";
-import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { FormStatus } from "@gcforms/types";
 
 const isFormClosed = (status: FormStatus) => {
@@ -37,7 +36,6 @@ export const PrimaryFormButtons = ({
         <BackButtonGroup
           saveAndResumeEnabled={saveAndResumeEnabled}
           language={language as Language}
-          onClick={() => tryFocusOnPageLoad("h2")}
         />
       )}
       {props.renderSubmit ? (
@@ -50,7 +48,6 @@ export const PrimaryFormButtons = ({
                   <BackButton
                     saveAndResumeEnabled={saveAndResumeEnabled}
                     language={language as Language}
-                    onClick={() => tryFocusOnPageLoad("h2")}
                   />
                 )}
                 <SubmitButton

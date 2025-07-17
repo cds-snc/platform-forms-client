@@ -21,52 +21,48 @@ export const scrollToBottom = (containerEl: HTMLElement) => {
 };
 
 /**
- * Tries to focus the first form control or if that fails a fallback selector. This is part of focus
- * management to set a page load entry point using a DOM focus for AT users. If a form control
- * exists it is preferred over a fallback selector like a heading, this is to avoid confusion
- * e.g. #4690
+ * Focuses a heading element that may or may not be visible at the time of the call.
+ * See #4690 and #5851
  *
- * Note: the setTimeout is a hack to help sequence the query selector after the DOM loads. Use a
- * react ref over this method if possible.
+ * @param headingSelector as a string will focus the first matching element. As an array
+ * will focus the first matching element in the array. Order matters.
  */
-export const tryFocusOnPageLoad = (fallbackSelector = "H1") => {
-  const NEXT_TICK = 4;
+export const focusHeadingBySelector = (headingSelector: string | string[]) => {
+  // Give the page a little time to update before looking for the heading element
   setTimeout(() => {
-    let focusEl = null;
-
-    // Note: checkVisibility() is still fairly new so we should check if available, if not, use the
-    // fallback instead. Because controls may or may not be nested in a parent element that is used
-    // for controlling visibility, determining an elements visibility using the computed style etc.
-    // is tricky and error prone. The WebAPI is probably the best reliable way.
-    // https://chromestatus.com/feature/5163102852087808
-    // https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility#browser_compatibility
-    if (window.document.documentElement.checkVisibility !== undefined) {
-      // Get the list of form controls in order, if any and take the first visible one
-      // Note: the CSS selector could be more efficient but e.g. not all form controls are nested
-      // in a form element.
-      const formControlEls = document.querySelectorAll(
-        "input, textarea, select"
-      ) as NodeListOf<HTMLElement>;
-      const visibleElements = Array.from(formControlEls).filter((element) =>
-        element.checkVisibility()
-      );
-      focusEl = visibleElements.length > 0 ? visibleElements[0] : null;
-    }
-
-    if (!focusEl) {
-      focusEl = document.querySelector(fallbackSelector) as HTMLElement;
-    }
-
-    focusEl?.focus();
-    // scrollItem into view if it is not visible
-    if (focusEl && focusEl.scrollIntoView) {
-      focusEl.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "nearest",
+    if (Array.isArray(headingSelector)) {
+      headingSelector.some((selector) => {
+        const headingEl = document.querySelector(selector) as HTMLHeadingElement;
+        if (headingEl) {
+          focusHeading(headingEl);
+          return true; // Stop searching if we found a heading
+        }
       });
+      return;
     }
-  }, NEXT_TICK);
+
+    const headingEl = document.querySelector(headingSelector) as HTMLHeadingElement;
+    focusHeading(headingEl);
+  }, 40);
+};
+
+/**
+ * Focus a heading element on page load or page update.
+ * @param heading HTMLHeadingElement to focus
+ */
+export const focusHeading = (heading: HTMLHeadingElement) => {
+  if (!heading) {
+    return;
+  }
+
+  if (heading.getAttribute("tabIndex") === null) {
+    heading.setAttribute("tabIndex", "-1");
+  }
+
+  // Gives the DOM a little time to update from the above change before focusing
+  setTimeout(() => {
+    heading.focus();
+  }, 40);
 };
 
 /**
