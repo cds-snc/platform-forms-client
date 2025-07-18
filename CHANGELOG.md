@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.46.5](https://github.com/cds-snc/platform-forms-client/compare/v3.46.4...v3.46.5) (2025-07-18)
+
+
+### Bug Fixes
+
+* Ensure form submit button doesn't get stuck in loading state ([#5901](https://github.com/cds-snc/platform-forms-client/issues/5901)) ([1fca07c](https://github.com/cds-snc/platform-forms-client/commit/1fca07c725a8679f6ebde72490253efca469eed6))
+* update downshift combobox to use valid Ids ([#5892](https://github.com/cds-snc/platform-forms-client/issues/5892)) ([f3f01c6](https://github.com/cds-snc/platform-forms-client/commit/f3f01c6fd599514f416c6a891bbcfe8bedd3a880))
+
 ## [3.46.4](https://github.com/cds-snc/platform-forms-client/compare/v3.46.3...v3.46.4) (2025-07-16)
 
 
