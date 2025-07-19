@@ -111,7 +111,7 @@
     "react-i18next": "^15.1.0",
     "react-loading-skeleton": "^3.4.0",
     "react-roving-tabindex": "^3.2.0",
-    "react-select": "5.10.1",
+    "react-select": "5.10.2",
     "react-swipeable": "^7.0.2",
     "react-toastify": "11.0.5",
     "react-transition-group": "^4.4.5",
