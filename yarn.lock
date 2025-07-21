@@ -2424,8 +2424,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@gcforms/editor@workspace:packages/editor"
   dependencies:
-    "@lexical/react": "npm:^0.33.0"
-    lexical: "npm:^0.33.0"
+    "@lexical/react": "npm:^0.33.1"
+    lexical: "npm:^0.33.1"
   peerDependencies:
     react: ^19.1.0
     react-dom: ^19.1.0
@@ -3428,7 +3428,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lexical/react@npm:^0.33.0":
+"@lexical/react@npm:^0.33.1":
   version: 0.33.1
   resolution: "@lexical/react@npm:0.33.1"
   dependencies:
@@ -14647,7 +14647,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lexical@npm:0.33.1, lexical@npm:^0.33.0":
+"lexical@npm:0.33.1, lexical@npm:^0.33.1":
   version: 0.33.1
   resolution: "lexical@npm:0.33.1"
   checksum: 10c0/cdc17dc459001dc72938d7374bbc6c415897e248f308fc2786e258b43c1fbfd18261aebfb0d788b470934058c6db5d7eba1a939e303d3abda3aa34125f9c39fe
