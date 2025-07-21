@@ -6,9 +6,10 @@ const isFileInput = (response: unknown): response is FileInputResponse => {
     typeof response === "object" &&
     "name" in response &&
     "size" in response &&
+    "content" in response &&
     response.name !== null &&
     response.size !== null &&
-    !("key" in response) // Ensure it does not have a key property
+    response.content !== null
   );
 };
 

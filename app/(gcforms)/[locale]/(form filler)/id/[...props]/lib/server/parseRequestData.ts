@@ -67,8 +67,9 @@ const emptyDataFiller = (
   formAccumulator: { [key: string]: Response }
 ) => {
   if (element.type === FormElementTypes.dynamicRow) {
-    // If the dynamic row is not filled, we need to create an empty array for it
     if (values[element.id] === undefined || values[element.id] === "") {
+      // If the dynamic row is not filled, we need to create an empty array for it
+      values[element.id] = [];
       // Create a single empty data entry for the dynamic row
       const emptyDataEntry: { [key: string]: string } = {};
       element.properties.subElements?.forEach((subElement) => {

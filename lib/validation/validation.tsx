@@ -5,6 +5,7 @@ import {
   FormElementTypes,
   Responses,
   PublicFormRecord,
+  FileInputResponse,
 } from "@lib/types";
 import { FormikProps } from "formik";
 import { TFunction } from "i18next";
@@ -134,15 +135,11 @@ const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.fileInput: {
-      const fileInputResponse = value as {
-        id: string | null;
-        name: string | null;
-        size: number | null;
-      };
+      const fileInputResponse = value as FileInputResponse;
 
       if (
         validator.required &&
-        (!fileInputResponse.name || !fileInputResponse.size || !fileInputResponse.id)
+        (!fileInputResponse.name || !fileInputResponse.size || !fileInputResponse.content)
       )
         return t("input-validation.required");
 
@@ -254,7 +251,7 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
         typeof value == "object" &&
         "name" in value &&
         "size" in value &&
-        "key" in value
+        "id" in value
       ) {
         return true;
       }
