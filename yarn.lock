@@ -383,7 +383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:^3.842.0":
+"@aws-sdk/client-s3@npm:3.848.0, @aws-sdk/client-s3@npm:^3.842.0":
   version: 3.848.0
   resolution: "@aws-sdk/client-s3@npm:3.848.0"
   dependencies:
@@ -985,6 +985,23 @@ __metadata:
     "@smithy/util-middleware": "npm:^4.0.4"
     tslib: "npm:^2.6.2"
   checksum: 10c0/27d72bb9657efd79637a4c4aa895004d29c66eefce083fa84050f092f68bcba8cb9bf0e4c16c11c132a5fa01f1841e878fa903bc837c4e1e6904d1b2d2c3dd37
+  languageName: node
+  linkType: hard
+
+"@aws-sdk/s3-presigned-post@npm:^3.840.0":
+  version: 3.848.0
+  resolution: "@aws-sdk/s3-presigned-post@npm:3.848.0"
+  dependencies:
+    "@aws-sdk/client-s3": "npm:3.848.0"
+    "@aws-sdk/types": "npm:3.840.0"
+    "@aws-sdk/util-format-url": "npm:3.840.0"
+    "@smithy/middleware-endpoint": "npm:^4.1.15"
+    "@smithy/signature-v4": "npm:^5.1.2"
+    "@smithy/types": "npm:^4.3.1"
+    "@smithy/util-hex-encoding": "npm:^4.0.0"
+    "@smithy/util-utf8": "npm:^4.0.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/b11f5f694cbbf41c272ee30fba50ffce4d760e9eeaaad8aafb0d5154903e9151afdd8f3235f9a90b96ae62abb540df59cca57c52754017dcda7186094529c6ff
   languageName: node
   linkType: hard
 
@@ -7566,12 +7583,13 @@ __metadata:
   linkType: hard
 
 "@types/hoist-non-react-statics@npm:^3.3.1":
-  version: 3.3.6
-  resolution: "@types/hoist-non-react-statics@npm:3.3.6"
+  version: 3.3.7
+  resolution: "@types/hoist-non-react-statics@npm:3.3.7"
   dependencies:
-    "@types/react": "npm:*"
     hoist-non-react-statics: "npm:^3.3.0"
-  checksum: 10c0/149a4c217d81f21f8a1e152160a59d5b99b6a9aa6d354385d5f5bc02760cbf1e170a8442ba92eb653befff44b0c5bc2234bb77ce33e0d11a65f779e8bab5c321
+  peerDependencies:
+    "@types/react": "*"
+  checksum: 10c0/ed8f4e88338f7d021d0f956adf6089d2a12b2e254a03c05292324f2e986d2376eb9efdb8a4f04596823e8fca88c9d06361d20dab4a2a00dc935fb36ac911de55
   languageName: node
   linkType: hard
 
