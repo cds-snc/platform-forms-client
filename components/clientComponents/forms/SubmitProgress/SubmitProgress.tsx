@@ -15,9 +15,13 @@ export const SubmitProgress = ({ spinner = true }: { spinner?: boolean }) => {
 
   const [progress, setProgress] = useState(0);
 
-  const handleProgressUpdate = (detail: { progress: number }) => {
+  const submitText = t("submitProgress.text");
+  const [message, setMessage] = useState(submitText);
+
+  const handleProgressUpdate = (detail: { progress: number; message?: string }) => {
     if (detail && detail.progress >= 0 && detail.progress <= 100) {
       setProgress(detail.progress);
+      setMessage(detail.message || submitText);
     }
   };
 
@@ -27,7 +31,9 @@ export const SubmitProgress = ({ spinner = true }: { spinner?: boolean }) => {
     return () => {
       Event.off(EventKeys.submitProgress, handleProgressUpdate);
     };
-  }, [Event]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div
@@ -38,7 +44,7 @@ export const SubmitProgress = ({ spinner = true }: { spinner?: boolean }) => {
     >
       <GcFormsIcon />
       <div>
-        <div className="mx-4 mb-3 font-bold">{t("submitProgress.text")}</div>
+        <div className="mx-4 mb-3 font-bold">{message}</div>
         {spinner ? <Spinner /> : <ProgressBar progress={progress} />}
       </div>
     </div>
