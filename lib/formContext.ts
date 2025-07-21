@@ -175,14 +175,28 @@ export const getValuesWithMatchedIds = (formElements: FormElement[], values: For
     }
 
     if (isChoiceInputType(el.type) && choices && Array.isArray(choices)) {
-      const choiceIndex = choices.findIndex(
-        (choice) =>
-          (choice.en !== "" && choice.en === value) || (choice.fr !== "" && choice.fr === value)
-      );
-      if (choiceIndex > -1) {
-        newValues[key] = `${el.id}.${choiceIndex}`;
+      if (Array.isArray(value)) {
+        // For checkboxes, map the values to their choiceIds
+        for (const selected of value) {
+          const choiceIndex = choices.findIndex((choice) => {
+            return (
+              (choice.en !== "" && choice.en === selected) ||
+              (choice.fr !== "" && choice.fr === selected)
+            );
+          });
+          newValues[key] = `${el.id}.${choiceIndex}`;
+          return;
+        }
       } else {
-        newValues[key] = value; // preserve original value if no match found
+        const choiceIndex = choices.findIndex(
+          (choice) =>
+            (choice.en !== "" && choice.en === value) || (choice.fr !== "" && choice.fr === value)
+        );
+        if (choiceIndex > -1) {
+          newValues[key] = `${el.id}.${choiceIndex}`;
+        } else {
+          newValues[key] = value; // preserve original value if no match found
+        }
       }
     }
   });
