@@ -7,6 +7,7 @@ import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
 import { useTranslation } from "@i18n/client";
 import { useFormSubmissionData } from "@lib/hooks/useFormSubmissionData";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
+import { useCallback } from "react";
 
 export const MobileDrawer = ({
   drawerOpen,
@@ -25,11 +26,13 @@ export const MobileDrawer = ({
 
   const { fileName, getOptions } = useFormSubmissionData({ language, type });
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
+    if (!drawerOpen) return;
+
     const html = await generateDownloadHtml(getOptions());
     await downloadDataAsBlob(html.data, fileName, { "text/html": [".html"] });
     setDrawerOpen(false);
-  };
+  }, [getOptions, fileName, setDrawerOpen, drawerOpen]);
 
   return (
     <Drawer isVisible={drawerOpen} onClose={() => setDrawerOpen(false)}>
