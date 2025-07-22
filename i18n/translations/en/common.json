@@ -326,8 +326,8 @@
   },
   "submitProgress": {
     "text": "Submitting form...",
-    "uploadingFiles": "Uploading {{totalFiles}} files..."
-    "spinner": "Submitting form",
+    "uploadingFiles": "Uploading {{totalFiles}} files...",
+    "spinner": "Submitting form"
   },
   "saveFileWarning": {
     "text": "You'll need to re-upload any files attached when you resume filling the form."
