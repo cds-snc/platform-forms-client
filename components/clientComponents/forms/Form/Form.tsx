@@ -134,7 +134,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   return status === "submitting" ? (
     <>
       <title>{t("loading")}</title>
-      <SubmitProgress spinner={false} />
+      <SubmitProgress />
     </>
   ) : (
     <>
@@ -337,18 +337,25 @@ export const Form = withFormik<FormProps, Responses>({
       // Handle if there are files to upload
       if (result.fileURLMap && Object.keys(result?.fileURLMap).length > 0) {
         const totalFiles = Object.keys(result.fileURLMap).length;
+        const fileProgress: { [key: string]: number } = {};
 
         const uploadPromises = Object.entries(result.fileURLMap).map(
           async ([fileId, signedPost]) => {
+            fileProgress[fileId] = 0;
             await uploadFile(fileObjsRef[fileId], signedPost, (ev) => {
               if (!ev.progress || !document) return;
+
+              fileProgress[fileId] = ev.progress;
+              const totalProgress =
+                Object.values(fileProgress).reduce((acc, progress) => acc + progress, 0) /
+                totalFiles;
+
               document.dispatchEvent(
                 new CustomEvent(EventKeys.submitProgress, {
                   detail: {
-                    progress: ev.progress,
-                    message: formikBag.props.t("submitProgress.uploadingFile", {
-                      current: 0,
-                      total: totalFiles,
+                    progress: totalProgress,
+                    message: formikBag.props.t("submitProgress.uploadingFiles", {
+                      totalFiles,
                     }),
                   },
                 })

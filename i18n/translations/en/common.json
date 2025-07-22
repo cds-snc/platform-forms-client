@@ -326,7 +326,7 @@
   },
   "submitProgress": {
     "text": "Submitting form...",
-    "uploadingFile": "Uploading file {{current}}/{{total}}..."
+    "uploadingFiles": "Uploading {{totalFiles}} files..."
   },
   "saveFileWarning": {
     "text": "You'll need to re-upload any files attached when you resume filling the form."

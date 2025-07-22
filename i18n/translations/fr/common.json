@@ -326,7 +326,7 @@
   },
   "submitProgress": {
     "text": "Envoi du formulaire en cours...",
-    "uploadingFile": "Uploading file {{current}}/{{total}}..."
+    "uploadingFiles": "Téléversement de {{totalFiles}} fichiers..."
   },
   "saveFileWarning": {
     "text": "Vous devrez télécharger à nouveau les fichiers joints lorsque vous poursuivrez le formulaire."
