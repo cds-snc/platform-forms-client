@@ -436,6 +436,13 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
     return Array(answer).join(", ");
   }
 
+  if (question && question.type === "fileInput") {
+    if (!answer || typeof answer !== "object" || !("name" in answer)) {
+      return ""; // If the answer is not an object or does not have a name, return empty string
+    }
+    return answer.name as string;
+  }
+
   if (question && question.type === "formattedDate") {
     // Could be empty if the date was not required
     if (!answer) {

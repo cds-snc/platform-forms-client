@@ -42,6 +42,8 @@ const QuestionRows = ({
   const answers = submission.answers.map((item, index) => {
     if (typeof item.answer === "string") {
       return renderColumn(index, lang, item);
+    } else if (typeof item.answer === "object" && !Array.isArray(item.answer)) {
+      return renderColumn(index, lang, item);
     } else {
       return (
         <div key={"row" + index + lang}>
