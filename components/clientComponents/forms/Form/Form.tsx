@@ -9,6 +9,8 @@ import { type FormProps, type InnerFormProps } from "./types";
 import { type Language } from "@lib/types/form-builder-types";
 import { type Responses } from "@lib/types";
 
+import { EventKeys } from "@lib/hooks/useCustomEvent";
+
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 
@@ -132,7 +134,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   return status === "submitting" ? (
     <>
       <title>{t("loading")}</title>
-      <SubmitProgress />
+      <SubmitProgress spinner={false} />
     </>
   ) : (
     <>
@@ -334,9 +336,24 @@ export const Form = withFormik<FormProps, Responses>({
 
       // Handle if there are files to upload
       if (result.fileURLMap && Object.keys(result?.fileURLMap).length > 0) {
+        const totalFiles = Object.keys(result.fileURLMap).length;
+
         const uploadPromises = Object.entries(result.fileURLMap).map(
           async ([fileId, signedPost]) => {
-            await uploadFile(fileObjsRef[fileId], signedPost, (ev) => logMessage.info(ev));
+            await uploadFile(fileObjsRef[fileId], signedPost, (ev) => {
+              if (!ev.progress || !document) return;
+              document.dispatchEvent(
+                new CustomEvent(EventKeys.submitProgress, {
+                  detail: {
+                    progress: ev.progress,
+                    message: formikBag.props.t("submitProgress.uploadingFile", {
+                      current: 0,
+                      total: totalFiles,
+                    }),
+                  },
+                })
+              );
+            });
           }
         );
 

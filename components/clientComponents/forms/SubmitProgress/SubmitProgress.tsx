@@ -8,16 +8,25 @@ import { GcFormsIcon } from "./GCFormsIcon";
 import { ProgressBar } from "./ProgressBar";
 import { Spinner } from "./Spinner";
 
+export function getPercentage(value: number): number {
+  const percentage = Math.round(value * 100);
+  return Math.max(0, Math.min(100, percentage));
+}
+
 export const SubmitProgress = ({ spinner = true }: { spinner?: boolean }) => {
   const { t } = useTranslation("common");
+
+  const submitText = t("submitProgress.text");
+  const [message, setMessage] = useState(submitText);
 
   const { Event } = useCustomEvent();
 
   const [progress, setProgress] = useState(0);
 
-  const handleProgressUpdate = (detail: { progress: number }) => {
+  const handleProgressUpdate = (detail: { progress: number; message?: string }) => {
     if (detail && detail.progress >= 0 && detail.progress <= 100) {
-      setProgress(detail.progress);
+      setProgress(getPercentage(detail.progress));
+      setMessage(detail.message || submitText);
     }
   };
 
@@ -27,7 +36,9 @@ export const SubmitProgress = ({ spinner = true }: { spinner?: boolean }) => {
     return () => {
       Event.off(EventKeys.submitProgress, handleProgressUpdate);
     };
-  }, [Event]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div
@@ -38,7 +49,7 @@ export const SubmitProgress = ({ spinner = true }: { spinner?: boolean }) => {
     >
       <GcFormsIcon />
       <div>
-        <div className="mx-4 mb-3 font-bold">{t("submitProgress.text")}</div>
+        <div className="mx-4 mb-3 font-bold">{message}</div>
         {spinner ? <Spinner /> : <ProgressBar progress={progress} />}
       </div>
     </div>
