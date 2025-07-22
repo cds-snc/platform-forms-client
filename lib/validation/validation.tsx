@@ -20,7 +20,6 @@ import { isFileExtensionValid } from "./fileValidationClientSide";
 import { DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
 import { isValidEmail } from "@lib/validation/isValidEmail";
-
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
  * Also, defines the regex for validation, with a matching bilingual error message
@@ -143,16 +142,9 @@ const isFieldResponseValid = (
           !fileInputResponse.name ||
           !fileInputResponse.size ||
           !fileInputResponse.content)
-      )
+      ) {
         return t("input-validation.required");
-
-      // No longer required if uploading straight to S3
-
-      // if (fileInputResponse.size && !isAllFilesSizeValid(values)) {
-      //   return t("input-validation.file-size-too-large-all-files", {
-      //     maxSizeInMb: bytesToMb(BODY_SIZE_LIMIT_WITH_FILES),
-      //   });
-      // }
+      }
 
       if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
         return t("input-validation.file-type-invalid");
