@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.46.6](https://github.com/cds-snc/platform-forms-client/compare/v3.46.5...v3.46.6) (2025-07-22)
+
+
+### Bug Fixes
+
+* fix issue for dead-end page when single page form ([#5912](https://github.com/cds-snc/platform-forms-client/issues/5912)) ([e2b13e6](https://github.com/cds-snc/platform-forms-client/commit/e2b13e63e6afa6fefcd60639fefb91991dd5639f))
+
 ## [3.46.5](https://github.com/cds-snc/platform-forms-client/compare/v3.46.4...v3.46.5) (2025-07-21)
 
 
