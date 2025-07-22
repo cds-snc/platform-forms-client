@@ -37,13 +37,13 @@ export const copyObjectExcludingFileContent = (
   fileObjsRef: Record<string, FileInput> = {}
 ) => {
   const formValuesWithoutFileContent: Responses = {};
-  const filter = <T>(originalState: T, filteredState: Record<string, T>): T => {
+  const filterFileContent = <T>(originalState: T, filteredState: Record<string, T>): T => {
     if (originalState === null || typeof originalState !== "object") {
       return originalState;
     }
 
     if (Array.isArray(originalState)) {
-      return originalState.map((item) => filter(item, {})) as unknown as T;
+      return originalState.map((item) => filterFileContent(item, {})) as unknown as T;
     }
 
     if (isFileInputResponse(originalState)) {
@@ -62,11 +62,11 @@ export const copyObjectExcludingFileContent = (
     }
 
     Object.keys(originalState).forEach((key) => {
-      filteredState[key] = filter((originalState as Record<string, T>)[key], {});
+      filteredState[key] = filterFileContent((originalState as Record<string, T>)[key], {});
     });
     return filteredState as unknown as T;
   };
-  filter(originalObject, formValuesWithoutFileContent);
+  filterFileContent(originalObject, formValuesWithoutFileContent);
   return { formValuesWithoutFileContent, fileObjsRef };
 };
 
