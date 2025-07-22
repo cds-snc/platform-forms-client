@@ -62,7 +62,8 @@ export const NextButton = ({
     ga("form_has_dead_end", {
       formId: formRecord.id,
     });
-    return <div data-testid="dead-end"></div>;
+    // @todo investigate why we're hitting this dead end
+    // return <div data-testid="dead-end"></div>;
   }
 
   if (
