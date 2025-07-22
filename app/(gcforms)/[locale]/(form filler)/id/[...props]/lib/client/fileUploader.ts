@@ -76,7 +76,7 @@ export const uploadFile = async (
   progressCallback: (event: AxiosProgressEvent) => void
 ) => {
   const formData = new FormData();
-  Object.entries(preSigned.fields).forEach(([key, value]) => {
+  Object.entries(preSigned.fields ?? {}).forEach(([key, value]) => {
     formData.append(key, value);
   });
   formData.append("file", new Blob([file.content]), file.name);
