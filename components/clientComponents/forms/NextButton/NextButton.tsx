@@ -12,13 +12,14 @@ import { Language } from "@lib/types/form-builder-types";
 
 import { getLocalizedProperty } from "@lib/utils";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
+import { ga, tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { ForwardArrowIcon24x24 } from "@serverComponents/icons";
 import { isFormClosed } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useRouter } from "next/navigation";
 import { formHasGroups } from "@root/lib/utils/form-builder/formHasGroups";
 import { CurrentGroupSelector } from "../CurrentGroupSelector/CurrentGroupSelector";
+import { showReviewPage as hasReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 export const NextButton = ({
   validateForm,
@@ -53,7 +54,15 @@ export const NextButton = ({
     return false;
   };
 
-  if (formHasGroups(formRecord.form) && currentGroup && !hasNextAction(currentGroup)) {
+  if (
+    formHasGroups(formRecord.form) &&
+    currentGroup &&
+    !hasNextAction(currentGroup) &&
+    hasReviewPage(formRecord.form)
+  ) {
+    ga("form_has_dead_end", {
+      formId: formRecord.id,
+    });
     return <div data-testid="dead-end"></div>;
   }
 
