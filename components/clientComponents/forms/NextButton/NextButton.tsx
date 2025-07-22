@@ -18,6 +18,7 @@ import { ForwardArrowIcon24x24 } from "@serverComponents/icons";
 import { isFormClosed } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useRouter } from "next/navigation";
 import { formHasGroups } from "@root/lib/utils/form-builder/formHasGroups";
+import { showReviewPage as hasReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 export const NextButton = ({
   validateForm,
@@ -52,7 +53,12 @@ export const NextButton = ({
     return false;
   };
 
-  if (formHasGroups(formRecord.form) && currentGroup && !hasNextAction(currentGroup)) {
+  if (
+    formHasGroups(formRecord.form) &&
+    currentGroup &&
+    !hasNextAction(currentGroup) &&
+    hasReviewPage(formRecord.form)
+  ) {
     return <div data-testid="dead-end"></div>;
   }
 
