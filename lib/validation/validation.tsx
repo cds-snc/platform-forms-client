@@ -139,7 +139,10 @@ const isFieldResponseValid = (
 
       if (
         validator.required &&
-        (!fileInputResponse.name || !fileInputResponse.size || !fileInputResponse.content)
+        (!fileInputResponse ||
+          !fileInputResponse.name ||
+          !fileInputResponse.size ||
+          !fileInputResponse.content)
       )
         return t("input-validation.required");
 
