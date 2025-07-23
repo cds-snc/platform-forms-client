@@ -41,6 +41,7 @@ import { ga } from "@lib/client/clientHelpers";
 
 import { FocusH2 } from "app/(gcforms)/[locale]/(support)/components/client/FocusH2";
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
+import { FileUploadError } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/exceptions";
 
 import {
   copyObjectExcludingFileContent,
@@ -385,9 +386,13 @@ export const Form = withFormik<FormProps, Responses>({
     } catch (err) {
       logMessage.error(err as Error);
 
-      // IF error contains a file error, set status to FILE_ERROR
-      if ((err as Error).message.includes("file")) {
+      // check if the error is a FileUploadError
+      if (err instanceof FileUploadError) {
+        // Set the status to FILE_ERROR if a FileUploadError is caught
         formikBag.setStatus(FormStatus.FILE_ERROR);
+        // logMessage.error(`File upload error: ${err.message}`, err.file, err.status);
+        // Optionally,
+        // Dispatch a custom event to update the submit progress
       } else {
         formikBag.setStatus("Error");
       }

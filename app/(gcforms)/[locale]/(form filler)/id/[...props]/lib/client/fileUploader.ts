@@ -3,6 +3,8 @@ import { Responses, FileInputResponse } from "@lib/types";
 import { v4 as uuid } from "uuid";
 import axios, { AxiosError, AxiosProgressEvent } from "axios";
 
+import { FileUploadError } from "../client/exceptions";
+
 const isFileInput = (response: unknown): response is FileInput => {
   return (
     response !== null &&
@@ -26,7 +28,7 @@ export const isFileInputResponse = (response: unknown): response is FileInputRes
   );
 };
 
-interface FileInput extends FileInputResponse {
+export interface FileInput extends FileInputResponse {
   name: string;
   size: number;
   content: ArrayBuffer;
@@ -90,8 +92,11 @@ export const uploadFile = async (
     })
     .catch((error) => {
       const axiosError = error as AxiosError;
-      throw new Error(
-        `Failed to upload file: ${file.name}, file status ${axiosError.response?.status}`
+
+      throw new FileUploadError(
+        `Failed to upload file: ${file.name}, error: ${axiosError.message}`,
+        file,
+        axiosError.response?.status
       );
     });
 };

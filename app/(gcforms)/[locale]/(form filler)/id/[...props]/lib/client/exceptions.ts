@@ -1,3 +1,11 @@
+import { FileInputResponse } from "@lib/types";
+
+export interface FileInput extends FileInputResponse {
+  name: string;
+  size: number;
+  content: ArrayBuffer;
+}
+
 export class MissingFormDataError extends Error {
   constructor(message?: string) {
     super(message ?? "MissingFormDataError");
@@ -22,6 +30,19 @@ export class FileSizeError extends Error {
     Object.setPrototypeOf(this, FileSizeError.prototype);
   }
 }
+
+export class FileUploadError extends Error {
+  public file: FileInput;
+  public status?: number;
+
+  constructor(message: string, file: FileInput, status?: number) {
+    super(message);
+    this.name = "FileUploadError";
+    this.file = file;
+    this.status = status;
+  }
+}
+
 export class FileTypeError extends Error {
   constructor(message?: string) {
     super(message ?? "FileTypeError");
