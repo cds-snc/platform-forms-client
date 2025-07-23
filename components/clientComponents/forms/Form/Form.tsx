@@ -49,7 +49,6 @@ import {
 
 import { SaveAndResumeButton } from "@clientComponents/forms/SaveAndResume/SaveAndResumeButton";
 
-
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
@@ -385,7 +384,13 @@ export const Form = withFormik<FormProps, Responses>({
       formikBag.props.onSuccess(result.id, result?.submissionId);
     } catch (err) {
       logMessage.error(err as Error);
-      formikBag.setStatus("Error");
+
+      // IF error contains a file error, set status to FILE_ERROR
+      if ((err as Error).message.includes("file")) {
+        formikBag.setStatus(FormStatus.FILE_ERROR);
+      } else {
+        formikBag.setStatus("Error");
+      }
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         ga("form_submission_trigger", {
