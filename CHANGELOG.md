@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.46.8](https://github.com/cds-snc/platform-forms-client/compare/v3.46.7...v3.46.8) (2025-07-23)
+
+
+### Bug Fixes
+
+* slow check get review items ([#5920](https://github.com/cds-snc/platform-forms-client/issues/5920)) ([8dc640a](https://github.com/cds-snc/platform-forms-client/commit/8dc640ab515996243eda06924c9c686923d33e19))
+
+
+### Miscellaneous Chores
+
+* Update next.js to 15.4.3 ([#5921](https://github.com/cds-snc/platform-forms-client/issues/5921)) ([fbb8468](https://github.com/cds-snc/platform-forms-client/commit/fbb8468b607cb3789dded75b1761bc0729db5543))
+
+## [3.46.7](https://github.com/cds-snc/platform-forms-client/compare/v3.46.6...v3.46.7) (2025-07-22)
+
+
+### Miscellaneous Chores
+
+* add GA event for when a form reaches a dead end ([#5915](https://github.com/cds-snc/platform-forms-client/issues/5915)) ([83e8a35](https://github.com/cds-snc/platform-forms-client/commit/83e8a3530efef0c7c794ab95c7b538691da4dc46))
+* remove dead end check ([#5919](https://github.com/cds-snc/platform-forms-client/issues/5919)) ([8db902b](https://github.com/cds-snc/platform-forms-client/commit/8db902b524942b750855c9c1fe14a18844c24919))
+* Update submit progress component ([#5911](https://github.com/cds-snc/platform-forms-client/issues/5911)) ([5f2b350](https://github.com/cds-snc/platform-forms-client/commit/5f2b350aa40d090778514fb63b336990e13e70ff))
+
+## [3.46.6](https://github.com/cds-snc/platform-forms-client/compare/v3.46.5...v3.46.6) (2025-07-22)
+
+
+### Bug Fixes
+
+* fix issue for dead-end page when single page form ([#5912](https://github.com/cds-snc/platform-forms-client/issues/5912)) ([e2b13e6](https://github.com/cds-snc/platform-forms-client/commit/e2b13e63e6afa6fefcd60639fefb91991dd5639f))
+
 ## [3.46.5](https://github.com/cds-snc/platform-forms-client/compare/v3.46.4...v3.46.5) (2025-07-21)
 
 
