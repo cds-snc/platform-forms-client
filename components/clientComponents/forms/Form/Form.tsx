@@ -84,7 +84,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
         : props.formRecord.closedDetails?.messageFr) || t("form-closed-error");
   }
 
-  formStatusError = "ya error";
+  /* Add save to device button as CTA  if the feature is enabled */
+  const cta = props.saveAndResumeEnabled ? (
+    <SaveAndResumeButton language={language as Language} />
+  ) : null;
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -140,7 +143,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           heading={formStatusError}
           tabIndex={0}
           id={serverErrorId}
-          cta={<SaveAndResumeButton language={language as Language} />}
+          cta={cta}
         />
       )}
 
