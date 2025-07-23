@@ -85,13 +85,14 @@ export const getGroupsWithElementIds = (
     return [] as GroupsWithElementIds[];
   }
 
+  // Remove any hidden elements from Show-Hide (only include elements interacted with by the user)
+  const shownFormElements = filterShownElements(formRecord, formValues);
+
   return groupHistoryIds
     .filter((key) => key !== "review")
     .map((groupId) => {
       const group: Group = groups[groupId as keyof typeof groups] || {};
 
-      // Remove any hidden elements from Show-Hide (only include elements interacted with by the user)
-      const shownFormElements = filterShownElements(formRecord, formValues);
       const elementIds = getElementIdsAsNumber(
         filterValuesForShownElements(group.elements, shownFormElements)
       );
