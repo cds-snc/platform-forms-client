@@ -325,7 +325,8 @@
     "removedMessage": "{{fileName}} a été supprimé"
   },
   "submitProgress": {
-    "text": "Envoi du formulaire en cours..."
+    "text": "Envoi du formulaire en cours...",
+    "uploadingFile": "Uploading file {{count}}/{{total}}..."
   },
   "saveFileWarning": {
     "text": "Vous devrez télécharger à nouveau les fichiers joints lorsque vous poursuivrez le formulaire."
