@@ -60,6 +60,7 @@ Vous avez pour responsabilité de veiller à ce que la clé API associée à vot
 - Ne communiquez pas votre mot de passe à personne et ne le conservez pas dans un endroit où d’autres personnes pourraient le trouver. Si quelqu’un d’autre a besoin d’accéder à un formulaire, [contactez-nous](/fr/support).
 - Protégez vos clés API. Si vous pensez qu'une clé API a été compromise, informez-nous, puis supprimez-la et créez-en une nouvelle pour sécuriser l'accès aux réponses de formulaire.
 - Assurer la confidentialité et la sécurité des renseignements protégés lors du téléchargement des réponses aux formulaires de Formulaires GC.
+- Signalez tout problème lié aux fonctionnalités de sécurité de Formulaires GC, par exemple si vous pensez que hCaptcha empêche les utilisateurs authentiques de remplir votre formulaire.
 - Signalez toute faille de sécurité et vulnérabilité en utilisant les étapes détaillées dans l’[avis de sécurité](https://numerique.canada.ca/avis-de-securite/).
 
 ## Publication du formulaire dans les deux langues officielles
@@ -88,4 +89,4 @@ Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car to
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
-**Dernière mise à jour :** 26 juin 2025
+**Dernière mise à jour :** 16 juillet 2025
