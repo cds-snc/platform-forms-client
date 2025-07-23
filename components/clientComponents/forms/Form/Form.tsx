@@ -40,13 +40,16 @@ import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
 
 import { FocusH2 } from "app/(gcforms)/[locale]/(support)/components/client/FocusH2";
-
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 
 import {
   copyObjectExcludingFileContent,
   uploadFile,
 } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
+
+import { SaveAndResumeButton } from "@clientComponents/forms/SaveAndResume/SaveAndResumeButton";
+
+
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
@@ -79,16 +82,22 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
 
-  const formStatusError =
-    props.status === FormStatus.FILE_ERROR
-      ? t("input-validation.file-submission")
-      : props.status === FormStatus.ERROR
-      ? t("server-error")
-      : props.status === FormStatus.FORM_CLOSED_ERROR
-      ? (language === "en"
-          ? props.formRecord.closedDetails?.messageEn
-          : props.formRecord.closedDetails?.messageFr) || t("form-closed-error")
-      : null;
+  let formStatusError = null;
+  if (props.status === FormStatus.FILE_ERROR) {
+    formStatusError = t("input-validation.file-submission");
+  } else if (props.status === FormStatus.ERROR) {
+    formStatusError = t("server-error");
+  } else if (props.status === FormStatus.FORM_CLOSED_ERROR) {
+    formStatusError =
+      (language === "en"
+        ? props.formRecord.closedDetails?.messageEn
+        : props.formRecord.closedDetails?.messageFr) || t("form-closed-error");
+  }
+
+  /* Add save to device button as CTA  if the feature is enabled */
+  const cta = props.saveAndResumeEnabled ? (
+    <SaveAndResumeButton language={language as Language} />
+  ) : null;
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -139,7 +148,13 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   ) : (
     <>
       {formStatusError && (
-        <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId} />
+        <Alert
+          type={ErrorStatus.ERROR}
+          heading={formStatusError}
+          tabIndex={0}
+          id={serverErrorId}
+          cta={cta}
+        />
       )}
 
       {/* ServerId error */}
