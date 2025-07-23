@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.46.8](https://github.com/cds-snc/platform-forms-client/compare/v3.46.7...v3.46.8) (2025-07-23)
+
+
+### Bug Fixes
+
+* slow check get review items ([#5920](https://github.com/cds-snc/platform-forms-client/issues/5920)) ([8dc640a](https://github.com/cds-snc/platform-forms-client/commit/8dc640ab515996243eda06924c9c686923d33e19))
+
+
+### Miscellaneous Chores
+
+* Update next.js to 15.4.3 ([#5921](https://github.com/cds-snc/platform-forms-client/issues/5921)) ([fbb8468](https://github.com/cds-snc/platform-forms-client/commit/fbb8468b607cb3789dded75b1761bc0729db5543))
+
 ## [3.46.7](https://github.com/cds-snc/platform-forms-client/compare/v3.46.6...v3.46.7) (2025-07-22)
 
 
