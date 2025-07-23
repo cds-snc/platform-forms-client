@@ -325,7 +325,9 @@
     "removedMessage": "{{fileName}} removed"
   },
   "submitProgress": {
-    "text": "Submitting form..."
+    "text": "Submitting form...",
+    "spinner": "Submitting form",
+    "uploadingFile": "Uploading file {{count}}/{{total}}..."
   },
   "saveFileWarning": {
     "text": "You'll need to re-upload any files attached when you resume filling the form."
