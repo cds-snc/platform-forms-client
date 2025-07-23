@@ -68,15 +68,22 @@ export const FormWrapper = ({
   // For multi-page forms update the sub page head title or review page title
   // Single-page forms will be skipped since since the title set in page.tsx is sufficient
   // Updating the confirmation page title is handled in the TextPage component
-  const pageTitle = () => {
-    const pageTitle = formRecord.form[getLocalizedProperty("title", language)];
+  const getPageTitle = () => {
+    const formTitle = String(formRecord.form[getLocalizedProperty("title", language)]);
+
+    if (currentGroup === LockedSections.START) {
+      return formTitle;
+    }
+
     const isReviewPage = showReviewPage(formRecord.form) && currentGroup === LockedSections.REVIEW;
-    const subPageTitle = isReviewPage
-      ? t("reviewForm", { lng: language, ns: "review" })
-      : getGroupTitle(currentGroup, language as Language);
-    return `${pageTitle}${subPageTitle ? ` - ${subPageTitle}` : ""}`;
+    if (isReviewPage) {
+      return `${formTitle} - ${t("reviewForm", { lng: language, ns: "review" })}`;
+    }
+
+    return `${formTitle} - ${getGroupTitle(currentGroup, language as Language)}`;
   };
-  useUpdateHeadTitle(pageTitle(), showReviewPage(formRecord.form));
+  const isMultiPageForm = showReviewPage(formRecord.form);
+  useUpdateHeadTitle(getPageTitle(), isMultiPageForm);
 
   useEffect(() => {
     // Clear session storage after values are restored
