@@ -6,5 +6,5 @@ export const BODY_SIZE_LIMIT_WITH_FILES = Number(
   process.env.NEXT_PUBLIC_BODY_SIZE_LIMIT_WITH_FILES || mbToBytes(6)
 );
 
-export const MAX_FILE_SIZE = mbToBytes(10); // 10 MB
+export const MAX_FILE_SIZE = 10485760; // 10 MB matches file upload lambda see: generateSignedUrl
 export const MAX_RESPONSE_SIZE = kbToBytes(380);
