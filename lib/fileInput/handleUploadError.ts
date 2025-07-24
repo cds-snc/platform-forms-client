@@ -1,5 +1,6 @@
 import { TFunction } from "i18next";
 import { FileUploadError } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/exceptions";
+import { isIndividualFileSizeValid } from "@lib/validation/isIndividualFileSizeValid";
 
 /**
  * Handles a `FileUploadError` by generating a user-friendly, localized error message.
@@ -31,9 +32,8 @@ export const handleUploadError = (
       fileName: error.file.name,
     });
 
-    // Check if the file size exceeds the limit (e.g., 10 MB)
-    if (error.file.size > 10485760) {
-      // 10 MB limit
+    // Noting this is checked client-side as well
+    if (!isIndividualFileSizeValid(error.file.size)) {
       message = t("input-validation.file-upload.file-size-too-large.message", {
         fileName: error.file.name,
       });
