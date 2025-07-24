@@ -9,6 +9,7 @@ import { SaveResponse } from "@clientComponents/forms/SaveAndResume/SaveResponse
 import { Language } from "@lib/types/form-builder-types";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { getSafeUrl } from "@lib/utils/getSafeUrl";
+import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -80,6 +81,10 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
   useEffect(() => {
     document.getElementsByTagName("h1").item(0)?.focus();
   });
+
+  useUpdateHeadTitle(
+    `${props.formRecord.form[getLocalizedProperty("title", language)]} - ${t("title")}`
+  );
 
   return (
     <>
