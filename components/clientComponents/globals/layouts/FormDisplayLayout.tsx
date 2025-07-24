@@ -1,7 +1,7 @@
 "use client";
 
 import { PublicFormRecord } from "@lib/types";
-import { SkipLink, Fip } from "@clientComponents/globals";
+import { Fip } from "@clientComponents/globals";
 import LanguageToggle from "../Header/LanguageToggle";
 import { DateModified } from "../DateModified";
 import { cn } from "@lib/utils";
@@ -59,7 +59,6 @@ const FormDisplayLayout = ({
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
       <meta charSet="utf-8" />
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-      <SkipLink />
       <div className="flex h-full flex-col">
         <FormDisplayHeader language={language} formRecord={formRecord} pathname={pathname} />
         <div
