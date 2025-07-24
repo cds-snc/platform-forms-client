@@ -37,14 +37,7 @@ export const StatusError = ({
   const { t } = useTranslation("error");
   const link = `/${language}/id/${formId}`;
   return (
-    <Alert
-      type={ErrorStatus.ERROR}
-      tabIndex={0}
-      id="gc-form-errors-server"
-      autoFocus
-      focussable={true}
-      cta={cta}
-    >
+    <Alert type={ErrorStatus.ERROR} id="gc-form-errors-server" autoFocus focussable={true} cta={cta}>
       <h2>{t("sever-error.title")}</h2>
       <div className="mt-4">
         <Text i18nKey="sever-error.body" values={{ formLink: link }} />
