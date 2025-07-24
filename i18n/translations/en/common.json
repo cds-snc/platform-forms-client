@@ -56,6 +56,10 @@
       },
       "file-size-too-large": {
         "message": "{{fileName}} Select a smaller file."
+      },
+      "network-error": {
+        "heading": "Network error",
+        "message": "Please check your internet connection and try again."
       }
     },
     "file-type-invalid": "Select a different file type.",

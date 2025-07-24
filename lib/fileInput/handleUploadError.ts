@@ -18,6 +18,15 @@ export const handleUploadError = (
   if (error instanceof FileUploadError && error.file) {
     const heading = t("input-validation.file-upload.default.heading");
 
+    if (typeof window !== "undefined") {
+      if (!window.navigator.onLine) {
+        return {
+          heading: t("input-validation.file-upload.network-error.heading"),
+          message: t("input-validation.file-upload.network-error.message"),
+        };
+      }
+    }
+
     let message = t("input-validation.file-upload.default.message", {
       fileName: error.file.name,
     });

@@ -55,6 +55,10 @@
       },
       "file-size-too-large": {
         "message": "{{fileName}} Select a smaller file. [FR]"
+      },
+      "network-error": {
+        "heading": "Network error [FR]",
+        "message": "Please check your internet connection and try again. [FR]"
       }
     },
     "file-submission": "Il y a eu un problème avec le fichier soumis. Essayez de téléverser un autre format de fichier, tel que PDF.",
