@@ -83,8 +83,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
 
   let formStatusError = null;
-  if (typeof props.status === "object" && props.status !== null && props.status.heading) {
-    formStatusError = props.status.heading;
+  if (typeof props.status === "object" && props.status !== null) {
+    // We have a "complex" `status`
+    // This used when we want to include a heading and message
+    // The error handling function set the error strings for us ref: handleUploadErrors.
+    formStatusError = true; // set to `true` to show the Alert and let the UI handle the strings
+  } else if (props.status === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
   } else if (props.status === FormStatus.ERROR) {
     formStatusError = t("server-error");
   } else if (props.status === FormStatus.FORM_CLOSED_ERROR) {
