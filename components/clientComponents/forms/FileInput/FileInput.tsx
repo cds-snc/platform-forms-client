@@ -8,8 +8,7 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
 import { themes } from "@clientComponents/globals/Buttons/themes";
-import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
-import { bytesToMb, bytesToKbOrMbString } from "@lib/utils/fileSize";
+import { bytesToKbOrMbString } from "@lib/utils/fileSize";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { Priority } from "@clientComponents/globals/LiveRegion";
 
@@ -139,11 +138,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     <>
       {meta.error && <ErrorMessage id={`${name}_error`}>{meta.error}</ErrorMessage>}
 
-      <div
-        className={classes}
-        data-testid="file"
-        data-limit={bytesToMb(BODY_SIZE_LIMIT_WITH_FILES)}
-      >
+      <div className={classes} data-testid="file">
         <div
           key={name}
           id={name}
