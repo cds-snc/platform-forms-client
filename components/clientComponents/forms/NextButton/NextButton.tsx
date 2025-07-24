@@ -126,6 +126,7 @@ export const NextButton = ({
             focusHeadingBySelector("form h2");
           }
         }}
+        dataTestId="nextButton"
       >
         {!saveAndResumeEnabled ? (
           t("next", { lng: language })

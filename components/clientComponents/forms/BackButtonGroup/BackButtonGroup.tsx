@@ -46,6 +46,7 @@ export const BackButtonGroup = ({
         type="button"
         className="group mr-4 "
         theme="secondary"
+        dataTestId="backButtonGroup"
       >
         {!saveAndResumeEnabled ? (
           t("goBack", { lng: language })

@@ -33,6 +33,7 @@ export const BackButton = ({
         onClick && onClick();
         focusHeadingBySelector(["form h2", "h1"]);
       }}
+      dataTestId="backButton"
     >
       {!saveAndResumeEnabled ? (
         t("goBack", { lng: language })
