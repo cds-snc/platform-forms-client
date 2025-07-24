@@ -83,7 +83,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
 
   let formStatusError = null;
-  if (props.status?.heading) {
+  if (typeof props.status === "object" && props.status !== null && props.status.heading) {
     formStatusError = props.status.heading;
   } else if (props.status === FormStatus.ERROR) {
     formStatusError = t("server-error");
