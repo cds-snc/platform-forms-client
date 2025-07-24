@@ -78,6 +78,10 @@ export const uploadFile = async (
   progressCallback: (event: AxiosProgressEvent) => void
 ) => {
   const formData = new FormData();
+
+  // for debugging purposes, you can uncomment the following line to log the file details
+  // throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400);
+
   Object.entries(preSigned.fields ?? {}).forEach(([key, value]) => {
     formData.append(key, value);
   });

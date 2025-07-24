@@ -28,14 +28,12 @@ export class FormIsClosedError extends Error {
 export class FileUploadError extends Error {
   public file: FileInput;
   public status?: number;
-  public error_code: string;
 
   constructor(message: string, file: FileInput, status?: number) {
     super(message ?? "FileUploadError");
     this.name = "FileUploadError";
     this.file = file;
     this.status = status;
-    this.error_code = "";
   }
 }
 

@@ -41,7 +41,7 @@ import { ga } from "@lib/client/clientHelpers";
 
 import { FocusH2 } from "app/(gcforms)/[locale]/(support)/components/client/FocusH2";
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
-import { FileUploadError } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/exceptions";
+import { handleUploadError } from "@lib/fileInput/handleUploadError";
 
 import {
   copyObjectExcludingFileContent,
@@ -83,8 +83,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
 
   let formStatusError = null;
-  if (props.status === FormStatus.FILE_ERROR) {
-    formStatusError = t("input-validation.file-submission");
+  if (props.status?.heading) {
+    formStatusError = props.status.heading;
   } else if (props.status === FormStatus.ERROR) {
     formStatusError = t("server-error");
   } else if (props.status === FormStatus.FORM_CLOSED_ERROR) {
@@ -154,7 +154,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           tabIndex={0}
           id={serverErrorId}
           cta={cta}
-        />
+        >
+          <>{props.status?.message && props.status?.message}</>
+        </Alert>
       )}
 
       {/* ServerId error */}
@@ -311,7 +313,6 @@ export const Form = withFormik<FormProps, Responses>({
           : removeFormContextValues(values);
 
       // Extract file content from formValues so they are not part of the submission call to the submit action
-
       const { formValuesWithoutFileContent, fileObjsRef } =
         copyObjectExcludingFileContent(formValues);
 
@@ -386,13 +387,13 @@ export const Form = withFormik<FormProps, Responses>({
     } catch (err) {
       logMessage.error(err as Error);
 
-      // check if the error is a FileUploadError
-      if (err instanceof FileUploadError) {
-        // Set the status to FILE_ERROR if a FileUploadError is caught
-        formikBag.setStatus(FormStatus.FILE_ERROR);
-        // logMessage.error(`File upload error: ${err.message}`, err.file, err.status);
-        // Optionally,
-        // Dispatch a custom event to update the submit progress
+      const fileUploadError = handleUploadError(err as Error, formikBag.props.t);
+
+      if (fileUploadError) {
+        formikBag.setStatus({
+          heading: fileUploadError.heading,
+          message: fileUploadError.message,
+        });
       } else {
         formikBag.setStatus("Error");
       }
