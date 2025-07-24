@@ -154,7 +154,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       {formStatusError && (
         <Alert
           type={ErrorStatus.ERROR}
-          heading={formStatusError}
+          heading={props.status?.heading ? props.status.heading : formStatusError}
           id={serverErrorId}
           focussable={true}
           cta={cta}
