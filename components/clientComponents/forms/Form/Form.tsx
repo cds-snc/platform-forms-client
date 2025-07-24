@@ -141,8 +141,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
         <Alert
           type={ErrorStatus.ERROR}
           heading={formStatusError}
-          tabIndex={0}
           id={serverErrorId}
+          focussable={true}
           cta={cta}
         />
       )}
@@ -160,7 +160,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           })}
           validation={true}
           id={errorId}
-          tabIndex={0}
           focussable={true}
         >
           {errorList}

@@ -91,7 +91,7 @@ export const SupportForm = () => {
             <ValidationMessage
               type={ErrorStatus.ERROR}
               validation={true}
-              tabIndex={0}
+              focussable={true}
               id="validationErrors"
               heading={t("input-validation.heading", { ns: "common" })}
             >
