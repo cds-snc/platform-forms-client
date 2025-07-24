@@ -195,7 +195,7 @@
     "YYYY-MM-DD": "AAAA-MM-JJ",
     "DD-MM-YYYY": "JJ-MM-AAAA",
     "MM-DD-YYYY": "MM-JJ-AAAA",
-    "roleDescription": "[FR]formatted date"
+    "roleDescription": "date mise en forme"
   },
   "start": "Départ",
   "loadingResult": "Chargement en cours...",
