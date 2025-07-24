@@ -12,6 +12,7 @@ import { YourAccountDropdown } from "./YourAccountDropdown";
 import Markdown from "markdown-to-jsx";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
+import { SkipLink } from "../SkipLink";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
@@ -52,6 +53,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
           className
         )}
       >
+        <SkipLink />
         {isBannerEnabled && (
           <div className="bg-slate-800 p-4 text-white">
             <div className="mr-4 inline-block border-2 border-white-default px-2 py-1">

@@ -35,7 +35,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
   const [dateObject, setDateObject] = useState<DateObject | null>(
     field.value ? JSON.parse(field.value) : null
   );
-  const { t } = useTranslation("common", { lng: lang });
+  const { t } = useTranslation(["common", "form-builder"], { lng: lang });
 
   let dateFormat = initialDateFormat;
 
@@ -113,11 +113,11 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
 
   return (
     <fieldset
-      role="group"
-      aria-describedby={description ? `desc-${id}` : undefined}
+      aria-roledescription={t("formattedDate.roleDescription")}
+      aria-labelledby={`label-${id}`}
       data-testid="formattedDate"
       id={id}
-      tabIndex={0}
+      tabIndex={-1}
     >
       <legend className={cn("gc-label", required && "required")} id={`label-${id}`}>
         {label}
