@@ -50,8 +50,13 @@
     "file-size-too-large-all-files": "Files exceed the {{maxSizeInMb}} MB maximum. Upload smaller files.",
     "file-submission": "There was a problem with the file submitted. Try uploading a different file format, such as PDF.",
     "file-upload": {
-      "heading": "File upload error",
-      "file-size-too-large": "{{fileName}} Select a smaller file."
+      "default": {
+        "heading": "File upload error",
+        "message": "{{fileName}} There was a problem with the file submitted."
+      },
+      "file-size-too-large": {
+        "message": "{{fileName}} Select a smaller file."
+      }
     },
     "file-type-invalid": "Select a different file type.",
     "too-many-characters": "Shorten the response.",

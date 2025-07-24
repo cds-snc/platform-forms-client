@@ -155,7 +155,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           id={serverErrorId}
           cta={cta}
         >
-          <>{props.status?.message && props.status?.message}</>
+          <>{props.status?.message && <p className="mb-4">{props.status?.message}</p>}</>
         </Alert>
       )}
 
