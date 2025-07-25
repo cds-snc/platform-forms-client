@@ -1625,6 +1625,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cdssnc/sanitize-pii@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@cdssnc/sanitize-pii@npm:1.0.2"
+  checksum: 10c0/98bfaa041425243811967a716346d8bb03a4a7d38630d7531f093a3f260cea8a21899fc8579c28709e6f565b17316975e9a99bb5dfbbe1acde2121b8237f336b
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.5.0":
   version: 1.5.0
   resolution: "@colors/colors@npm:1.5.0"
@@ -12398,6 +12405,7 @@ __metadata:
     "@bufbuild/protobuf": "npm:^2.2.3"
     "@casl/ability": "npm:6.7.3"
     "@cdssnc/gcds-tokens": "npm:2.12.0"
+    "@cdssnc/sanitize-pii": "npm:^1.0.2"
     "@eslint/eslintrc": "npm:^3"
     "@gcforms/announce": "workspace:*"
     "@gcforms/connectors": "workspace:*"
