@@ -12,7 +12,7 @@ import { Language } from "@lib/types/form-builder-types";
 
 import { getLocalizedProperty } from "@lib/utils";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { ga, tryFocusOnPageLoad } from "@lib/client/clientHelpers";
+import { ga, focusHeadingBySelector } from "@lib/client/clientHelpers";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { ForwardArrowIcon24x24 } from "@serverComponents/icons";
 import { isFormClosed } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
@@ -123,9 +123,10 @@ export const NextButton = ({
           if (await handleValidation()) {
             updateFormDelay(formRecord.form, currentGroup);
             handleNextAction();
-            tryFocusOnPageLoad("h2");
+            focusHeadingBySelector("form h2");
           }
         }}
+        dataTestId="nextButton"
       >
         {!saveAndResumeEnabled ? (
           t("next", { lng: language })

@@ -38,7 +38,6 @@ import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
 import { FormStatus } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
-
 import { FocusH2 } from "app/(gcforms)/[locale]/(support)/components/client/FocusH2";
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 import { handleUploadError } from "@lib/fileInput/handleUploadError";
@@ -212,9 +211,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               isShowReviewPage &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <FocusH2 group={currentGroup || "default"}>
+                // Let the buttons and other logic control the focus to avoid conflicting with the
+                // error validation focus
+                <h2 tabIndex={-1} data-group={currentGroup || "default"} data-testid="focus-h2">
                   {getGroupTitle(currentGroup, language as Language)}
-                </FocusH2>
+                </h2>
               )}
 
             {children}
