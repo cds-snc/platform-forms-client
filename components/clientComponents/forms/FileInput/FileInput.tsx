@@ -9,8 +9,7 @@ import { InputFieldProps } from "@lib/types";
 import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
 import { themes } from "@clientComponents/globals/Buttons/themes";
 import { bytesToKbOrMbString } from "@lib/utils/fileSize";
-import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
-import { Priority } from "@clientComponents/globals/LiveRegion";
+import { announce } from "@gcforms/announce";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -34,8 +33,6 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
   const { name, disabled, allowMulti, required, ariaDescribedBy, lang } = props;
 
-  const { Event } = useCustomEvent();
-
   const { t } = useTranslation("common", { lng: lang });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -48,10 +45,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   }>(bytesToKbOrMbString(value?.size));
 
   const resetInput = () => {
-    Event.fire(EventKeys.liveMessage, {
-      message: t("fileInput.removedMessage", { fileName }),
-      priority: Priority.LOW,
-    });
+    announce(t("fileInput.removedMessage", { fileName }));
     setFileName("");
     setFileSize({ size: 0, unit: "bytes" });
     setValue({});
@@ -85,10 +79,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
           if (newFile.name !== fileName) {
             setFileName(newFile.name);
 
-            Event.fire(EventKeys.liveMessage, {
-              message: t("fileInput.addedMessage", { fileName: newFile.name }),
-              priority: Priority.LOW,
-            });
+            announce(t("fileInput.addedMessage", { fileName: newFile.name }));
 
             setFileSize(bytesToKbOrMbString(newFile.size));
             setValue({

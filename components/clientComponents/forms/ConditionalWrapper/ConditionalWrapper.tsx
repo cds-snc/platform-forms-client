@@ -3,13 +3,11 @@ import React from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { ConditionalRule, FormElement } from "@lib/types";
 import { inGroup, checkVisibilityRecursive } from "@lib/formContext";
-import { Announce } from "./Announce";
 
 export const ConditionalWrapper = ({
   children,
   element,
   rules,
-  lang,
 }: {
   children: React.ReactElement;
   element: FormElement;
@@ -44,9 +42,5 @@ export const ConditionalWrapper = ({
     return null;
   }
 
-  return (
-    <Announce element={element} lang={lang}>
-      {children}
-    </Announce>
-  );
+  return children;
 };
