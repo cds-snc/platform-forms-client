@@ -94,5 +94,34 @@
   "errors": {
     "formDownloadNotExist": "The form you are trying to download does not exist.",
     "formDownloadFailed": "Failed to download the form."
+  },
+  "aliases": {
+    "title": "Form Aliases",
+    "manageAliases": "Manage aliases",
+    "alias": "Alias",
+    "formName": "Form name",
+    "selectForm": "Select a form",
+    "update": "Update Alias",
+    "updating": "Updating...",
+    "create": "Create Alias",
+    "creating": "Creating...",
+    "addAlias": "Add Alias",
+    "cancel": "Cancel",
+    "delete": "Delete Alias",
+    "deleting": "Deleting...",
+    "existingAliases": "Existing Aliases",
+    "actions": "Actions",
+    "edit": "Edit",
+    "editAlias": "Edit Alias",
+    "createAlias": "Create Alias",
+    "URL": "URL",
+    "aliasDescription": "An alias is a short, memorable name that will used as the form id.",
+    "formNameDescription": "The form the alias will point to. The alias will be used in the URL to access the form.",
+    "error": {
+      "title": "Error",
+      "aliasExists": "An alias with this name already exists.",
+      "aliasNotFound": "Alias not found.",
+      "failed": "Unable to perform the requested action."
+    }
   }
 }

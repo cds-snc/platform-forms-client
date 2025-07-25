@@ -18,6 +18,8 @@ import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
 
+import { getFormIDByAlias } from "@lib/aliases";
+
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
 }): Promise<Metadata> {
@@ -25,9 +27,14 @@ export async function generateMetadata(props0: {
 
   const { locale, props } = params;
 
-  const formID = props[0];
+  let formId = props[0];
+  const aliasedFormId = await getFormIDByAlias(formId);
+  if (aliasedFormId) {
+    formId = aliasedFormId;
+  }
+
   const step = props[1] ?? "";
-  const publicForm = await getPublicTemplateByID(formID);
+  const publicForm = await getPublicTemplateByID(formId);
   if (!publicForm) return {};
 
   const { t } = await serverTranslation(["form-builder"], { lang: locale });
@@ -51,7 +58,13 @@ export default async function Page(props0: {
 
   const { locale, props } = params;
 
-  const formId = props[0];
+  let formId = props[0];
+
+  const aliasedFormId = await getFormIDByAlias(formId);
+  if (aliasedFormId) {
+    formId = aliasedFormId;
+  }
+
   const step = props[1] ?? "";
   const formRecord = await getPublicTemplateByID(formId);
 

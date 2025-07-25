@@ -94,5 +94,34 @@
   "errors": {
     "formDownloadNotExist": "Le forulaire que vous essayez de télécharger n'existe pas.",
     "formDownloadFailed": "Le téléchargement du formulaire a échoué."
+  },
+  "aliases": {
+    "title": "Form Aliases [FR]",
+    "manageAliases": "Manage aliases [FR]",
+    "alias": "Alias [FR]",
+    "formName": "Form name",
+    "selectForm": "Select a form [FR]",
+    "update": "Update Alias [FR]",
+    "updating": "Updating... [FR]",
+    "create": "Create Alias [FR]",
+    "creating": "Creating... [FR]",
+    "addAlias": "Add Alias [FR]",
+    "cancel": "Cancel [FR]",
+    "delete": "Delete Alias [FR]",
+    "deleting": "Deleting...[FR]",
+    "existingAliases": "Existing Aliases [FR]",
+    "actions": "Actions [FR]",
+    "edit": "Edit [FR]",
+    "editAlias": "Edit Alias [FR]",
+    "createAlias": "Create Alias [FR]",
+    "URL": "URL [FR]",
+    "aliasDescription": "An alias is a short, memorable name that will used as the form id. [FR]",
+    "formNameDescription": "The form the alias will point to. The alias will be used in the URL to access the form. [FR]",
+    "error": {
+      "title": "Error [FR]",
+      "aliasExists": "An alias with this name already exists. [FR]",
+      "aliasNotFound": "Alias not found. [FR]",
+      "failed": "Unable to perform the requested action. [FR]"
+    }
   }
 }
