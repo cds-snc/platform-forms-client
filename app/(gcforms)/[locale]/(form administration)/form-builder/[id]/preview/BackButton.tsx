@@ -4,7 +4,7 @@ import { Button } from "@clientComponents/globals";
 import { Language } from "@lib/types/form-builder-types";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { BackArrowIcon24x24 } from "@serverComponents/icons";
-import { focusHeadingBySelector } from "@root/lib/client/clientHelpers";
+import { focusHeadingBySelector } from "@lib/client/clientHelpers";
 
 // Must be placed withing context of the GCFormsContext.Provider
 export const BackButton = ({

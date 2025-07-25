@@ -1,5 +1,5 @@
 "use client";
-import { useFocusHeading } from "@root/lib/hooks/useFocusHeading";
+import { useFocusHeading } from "@lib/hooks/useFocusHeading";
 import { ReactElement, useRef } from "react";
 
 export const FocusHeader = ({
