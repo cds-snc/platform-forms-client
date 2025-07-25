@@ -1625,10 +1625,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cdssnc/sanitize-pii@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@cdssnc/sanitize-pii@npm:1.0.0"
-  checksum: 10c0/8e79cadf22ad811478c803cc90c5eb16ab151ece21ff16c179149cbfec64e0b84b185cb7ff0c6bd9936811fb0ca1790db75e0c0a61feb2a9dae11d410a4b5595
+"@cdssnc/sanitize-pii@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@cdssnc/sanitize-pii@npm:1.0.1"
+  checksum: 10c0/a9cff6c54b28639dd5f3ffda57cda54c2c0701ac50d9f5d082305423b96b5812f3dca7a8a81c1e68955fbd0d50600c791b44ab28d4bec2f22b617eca545041cd
   languageName: node
   linkType: hard
 
@@ -12396,7 +12396,7 @@ __metadata:
     "@bufbuild/protobuf": "npm:^2.2.3"
     "@casl/ability": "npm:6.7.3"
     "@cdssnc/gcds-tokens": "npm:2.12.0"
-    "@cdssnc/sanitize-pii": "npm:^1.0.0"
+    "@cdssnc/sanitize-pii": "npm:^1.0.1"
     "@eslint/eslintrc": "npm:^3"
     "@gcforms/connectors": "workspace:*"
     "@gcforms/editor": "workspace:*"
