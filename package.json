@@ -57,7 +57,7 @@
     "@bufbuild/protobuf": "^2.2.3",
     "@casl/ability": "6.7.3",
     "@cdssnc/gcds-tokens": "2.12.0",
-    "@cdssnc/sanitize-pii": "^1.0.1",
+    "@cdssnc/sanitize-pii": "^1.0.2",
     "@gcforms/connectors": "workspace:*",
     "@gcforms/editor": "workspace:*",
     "@gcforms/tag-input": "workspace:*",
