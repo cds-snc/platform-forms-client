@@ -21,7 +21,6 @@ import {
   FormBuilderConfig,
   formBuilderConfigDefault,
 } from "@lib/hooks/useFormBuilderConfig";
-import { LiveRegion } from "@clientComponents/globals/LiveRegion";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -111,7 +110,6 @@ export default async function Layout(props: {
                 </div>
                 <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
               </div>
-              <LiveRegion />
             </div>
           </RefStoreProvider>
         </SaveTemplateProvider>
