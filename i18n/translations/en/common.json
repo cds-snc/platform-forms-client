@@ -49,6 +49,19 @@
     "file-size-too-large": "Select a smaller file.",
     "file-size-too-large-all-files": "Files exceed the {{maxSizeInMb}} MB maximum. Upload smaller files.",
     "file-submission": "There was a problem with the file submitted. Try uploading a different file format, such as PDF.",
+    "file-upload": {
+      "default": {
+        "heading": "File upload error",
+        "message": "{{fileName}} There was a problem with the file submitted."
+      },
+      "file-size-too-large": {
+        "message": "{{fileName}} Select a smaller file."
+      },
+      "network-error": {
+        "heading": "Network error",
+        "message": "Please check your internet connection and try again."
+      }
+    },
     "file-type-invalid": "Select a different file type.",
     "too-many-characters": "Shorten the response.",
     "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
@@ -327,8 +340,8 @@
   },
   "submitProgress": {
     "text": "Submitting form...",
-    "spinner": "Submitting form",
-    "uploadingFile": "Uploading file {{count}}/{{total}}..."
+    "uploadingFiles": "Uploading {{totalFiles}} files...",
+    "spinner": "Submitting form"
   },
   "saveFileWarning": {
     "text": "You'll need to re-upload any files attached when you resume filling the form."
