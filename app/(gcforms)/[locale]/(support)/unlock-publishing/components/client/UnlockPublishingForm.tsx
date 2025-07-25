@@ -104,7 +104,7 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
             <ValidationMessage
               type={ErrorStatus.ERROR}
               validation={true}
-              tabIndex={0}
+              focussable={true}
               id="unlockPublishingValidationErrors"
               heading={t("input-validation.heading", { ns: "common" })}
             >
