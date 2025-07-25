@@ -24,6 +24,7 @@ export const EditButton = ({
         // Focus groups heading on navigation
         onClick && onClick();
       }}
+      dataTestId={`editButton-${reviewItemId}`}
     >
       {children}
     </Button>
