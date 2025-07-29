@@ -51,15 +51,15 @@
     "file-submission": "There was a problem with the file submitted. Try uploading a different file format, such as PDF.",
     "file-upload": {
       "default": {
-        "heading": "File upload error",
-        "message": "{{fileName}} There was a problem with the file submitted."
+        "heading": "There was a problem submitting your form",
+        "message": "The file "{{fileName}}" could not be uploaded."
       },
       "file-size-too-large": {
-        "message": "{{fileName}} Select a smaller file."
+        "message": ""{{fileName}}" is too big. Select a smaller file or remove the file, if it is not required."
       },
       "network-error": {
-        "heading": "Network error",
-        "message": "Please check your internet connection and try again."
+        "heading": "There was a problem submitting your form",
+        "message": "Check your network connection and try to submit again later."
       }
     },
     "file-type-invalid": "Select a different file type.",

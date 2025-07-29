@@ -50,15 +50,15 @@
     "file-size-too-large-all-files": "Les fichiers dépassent le maximum de {{maxSizeInMb}} Mo. Téléversez des fichiers plus petits.",
     "file-upload": {
       "default": {
-        "heading": "File upload error [FR]",
-        "message": "{{fileName}} There was a problem with the file submitted. [FR]"
+        "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
+        "message": "Le fichier « {{fileName}} » n'a pas pu être envoyé."
       },
       "file-size-too-large": {
-        "message": "{{fileName}} Select a smaller file. [FR]"
+        "message": "Le fichier « {{fileName}} » est trop volumineux. Sélectionnez un fichier plus petit ou supprimez-le s'il n'est pas nécessaire."
       },
       "network-error": {
-        "heading": "Network error [FR]",
-        "message": "Please check your internet connection and try again. [FR]"
+        "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
+        "message": "Vérifiez votre connexion réseau et réessayez plus tard."
       }
     },
     "file-submission": "Il y a eu un problème avec le fichier soumis. Essayez de téléverser un autre format de fichier, tel que PDF.",
