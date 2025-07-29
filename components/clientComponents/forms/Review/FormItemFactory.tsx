@@ -21,7 +21,7 @@ export const FormItemFactory = ({
   }
 
   // Overides with fileInput type to print the custom element below (vs. as an Input)
-  if ((formItem.values as FileInputResponse)?.based64EncodedFile !== undefined) {
+  if ((formItem.values as FileInputResponse)?.content !== undefined) {
     formItem.type = FormElementTypes.fileInput;
   }
 
