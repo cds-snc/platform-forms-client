@@ -194,7 +194,8 @@
     },
     "YYYY-MM-DD": "YYYY-MM-DD",
     "DD-MM-YYYY": "DD-MM-YYYY",
-    "MM-DD-YYYY": "MM-DD-YYYY"
+    "MM-DD-YYYY": "MM-DD-YYYY",
+    "roleDescription": "formatted date"
   },
   "start": "Start",
   "loadingResult": "Loading...",
@@ -325,7 +326,9 @@
     "removedMessage": "{{fileName}} removed"
   },
   "submitProgress": {
-    "text": "Submitting form..."
+    "text": "Submitting form...",
+    "spinner": "Submitting form",
+    "uploadingFile": "Uploading file {{count}}/{{total}}..."
   },
   "saveFileWarning": {
     "text": "You'll need to re-upload any files attached when you resume filling the form."
