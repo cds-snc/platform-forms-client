@@ -101,6 +101,7 @@ export default async function Layout(props: {
                       <main
                         id="content"
                         className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
+                        tabIndex={-1}
                       >
                         {children}
                       </main>
