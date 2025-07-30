@@ -31,7 +31,7 @@ export const FormItemFactory = ({
       return <DynamicRow formItem={formItem} language={language} />;
 
     case FormElementTypes.fileInput:
-      return <FileInput formItem={formItem} />;
+      return <FileInput formItem={formItem} language={language} />;
 
     case FormElementTypes.formattedDate:
       return <FormattedDate formItem={formItem} />;
