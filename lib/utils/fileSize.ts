@@ -42,14 +42,14 @@ export const bytesToKbOrMbString = (
       unit: "bytes",
     };
   }
-  if (absBytes < 1000000) {
+  if (absBytes < 1040000) {
     return {
-      size: Math.round(bytes / 1000),
+      size: Math.round((bytes / 1024) * 2) / 2,
       unit: "KB",
     };
   }
   return {
-    size: Math.round(bytes / 1000000),
+    size: Math.round((bytes / 1048576) * 2) / 2,
     unit: "MB",
   };
 };
