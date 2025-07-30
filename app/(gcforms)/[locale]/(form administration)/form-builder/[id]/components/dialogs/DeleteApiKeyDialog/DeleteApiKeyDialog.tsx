@@ -110,6 +110,7 @@ export const DeleteApiKeyDialog = () => {
               {t("settings.api.deleteApiKeyDialog.cautionTitle")}
             </h3>
             <p className="mb-4">{t("settings.api.deleteApiKeyDialog.cautionText")}</p>
+            <p className="mb-4">{t("settings.api.deleteApiKeyDialog.fileUploadText")}</p>
             <Trans
               ns="form-builder"
               i18nKey="settings.api.deleteApiKeyDialog.stopText"
