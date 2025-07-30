@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.47.0](https://github.com/cds-snc/platform-forms-client/compare/v3.46.8...v3.47.0) (2025-07-30)
+
+
+### Features
+
+* announce live-region package ([#5872](https://github.com/cds-snc/platform-forms-client/issues/5872)) ([26545ca](https://github.com/cds-snc/platform-forms-client/commit/26545ca674fe6a631121311be01ee989404a5761))
+
+
+### Bug Fixes
+
+* combobox navigation ([#5897](https://github.com/cds-snc/platform-forms-client/issues/5897)) ([022c697](https://github.com/cds-snc/platform-forms-client/commit/022c69765db04644a22a291e5d4b69c9dcdf8ba4))
+* forms heading focus refactor ([#5903](https://github.com/cds-snc/platform-forms-client/issues/5903)) ([f952365](https://github.com/cds-snc/platform-forms-client/commit/f952365ba592745a9e0910f619f0d0636a02060d))
+* move skip-link into the header landmark ([#5883](https://github.com/cds-snc/platform-forms-client/issues/5883)) ([598659c](https://github.com/cds-snc/platform-forms-client/commit/598659c52b20e5e40f65868d509f5088ad6d37df))
+* update formatted date to define a custom widget ([#5889](https://github.com/cds-snc/platform-forms-client/issues/5889)) ([d7991d0](https://github.com/cds-snc/platform-forms-client/commit/d7991d023ba24ac6a5d7ccfa76a1611374d98106))
+* update multi-page forms to update their title for sub-pages ([#5877](https://github.com/cds-snc/platform-forms-client/issues/5877)) ([147384a](https://github.com/cds-snc/platform-forms-client/commit/147384a431963927642d2bd24fe83a02b2a9abbe))
+* update validation error list to be removed from the tab order ([#5899](https://github.com/cds-snc/platform-forms-client/issues/5899)) ([052f0b7](https://github.com/cds-snc/platform-forms-client/commit/052f0b7b488b93ba106fa9a71415d2559779f626))
+
+
+### Miscellaneous Chores
+
+* add gg to the valid email domain list ([#5948](https://github.com/cds-snc/platform-forms-client/issues/5948)) ([0aa606a](https://github.com/cds-snc/platform-forms-client/commit/0aa606ae7ba19f107a363087abf0bae02942fdcc))
+* add sanitize pii ([#5926](https://github.com/cds-snc/platform-forms-client/issues/5926)) ([e7042c2](https://github.com/cds-snc/platform-forms-client/commit/e7042c2209c80775fc4144e36e7fca6d7cc9faa1))
+* Add save and resume button to error summary ([#5925](https://github.com/cds-snc/platform-forms-client/issues/5925)) ([ca563c3](https://github.com/cds-snc/platform-forms-client/commit/ca563c3c95071fad0debf3cb7b74a48e777646f3))
+* fix styling when lots of items ([#5923](https://github.com/cds-snc/platform-forms-client/issues/5923)) ([b93680a](https://github.com/cds-snc/platform-forms-client/commit/b93680acc63805fe31e7e2b139e4064b0d7f3044))
+* Update next.js to 15.4.4 ([#5927](https://github.com/cds-snc/platform-forms-client/issues/5927)) ([7981989](https://github.com/cds-snc/platform-forms-client/commit/79819892d68d66e19293c6076d2ab494c55d2c85))
+* upgrade to latest @cdssnc/sanitize-pii ([#5946](https://github.com/cds-snc/platform-forms-client/issues/5946)) ([e395e1c](https://github.com/cds-snc/platform-forms-client/commit/e395e1c8c1eb0a68c0563220a50df3e1e3a51348))
+
 ## [3.46.8](https://github.com/cds-snc/platform-forms-client/compare/v3.46.7...v3.46.8) (2025-07-23)
 
 
