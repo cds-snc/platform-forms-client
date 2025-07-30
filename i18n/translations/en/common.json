@@ -52,10 +52,10 @@
     "file-upload": {
       "default": {
         "heading": "There was a problem submitting your form",
-        "message": "The file "{{fileName}}" could not be uploaded."
+        "message": "The file {{fileName}} could not be uploaded."
       },
       "file-size-too-large": {
-        "message": ""{{fileName}}" is too big. Select a smaller file or remove the file, if it is not required."
+        "message": "{{fileName}} is too big. Select a smaller file or remove the file, if it is not required."
       },
       "network-error": {
         "heading": "There was a problem submitting your form",
