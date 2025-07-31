@@ -4,7 +4,7 @@ import { Button } from "@clientComponents/globals";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { Language } from "@lib/types/form-builder-types";
 import { BackArrowIcon24x24 } from "@serverComponents/icons";
-import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
+import { focusHeadingBySelector } from "@lib/client/clientHelpers";
 
 export const BackButtonGroup = ({
   language,
@@ -40,14 +40,13 @@ export const BackButtonGroup = ({
           handlePreviousAction();
           onClick && onClick();
           // Focus the H1 on the start page as the beginning of the page, and then for any other
-          // sub page, focus the H2.
-          const groupHistory = getGroupHistory();
-          const focusHeadding = groupHistory && groupHistory.length === 1 ? "h1" : "h2";
-          tryFocusOnPageLoad(focusHeadding);
+          // sub page, focus the H2. This works since the start page will not have an H2.
+          focusHeadingBySelector(["form h2", "h1"]);
         }}
         type="button"
         className="group mr-4 "
         theme="secondary"
+        dataTestId="backButtonGroup"
       >
         {!saveAndResumeEnabled ? (
           t("goBack", { lng: language })
