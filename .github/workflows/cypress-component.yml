@@ -34,7 +34,7 @@ jobs:
         run: yarn workspaces focus gcforms
 
       - name: Cypress Component Tests
-        uses: cypress-io/github-action@6c143abc292aa835d827652c2ea025d098311070 # v6.10.1
+        uses: cypress-io/github-action@b8ba51a856ba5f4c15cf39007636d4ab04f23e3c # v6.10.2
         with:
           # we have already installed all dependencies above
           install: false
