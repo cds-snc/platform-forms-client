@@ -97,6 +97,10 @@ const emptyDataFiller = (
           id: index,
         };
         emptyDataFiller(correctedElement, response, dataEntry);
+        // Ensure no undefined values in the data entry
+        if (dataEntry[index] === undefined) {
+          dataEntry[index] = "";
+        }
       });
       return dataEntry;
     });
@@ -129,6 +133,7 @@ const emptyDataFiller = (
 
   if (values[element.id] === undefined || values[element.id] === "") {
     formAccumulator[element.id] = "";
+    return;
   }
 
   formAccumulator[element.id] = values[element.id] as Response;
