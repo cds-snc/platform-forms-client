@@ -72,7 +72,7 @@
     "useTheCopy": "Use the “Copy all receipt codes” button to copy and paste all the codes, signing off on the removal of these responses from GC Forms.",
     "copyCodes": {
       "title": "Sign off on removal of responses from GC Forms",
-      "description": "Once you've checked the downloaded responses, and are ready to remove these from GC Forms, copy and paste the receipt codes. This helps us know when responses have been transferred to you so we can remove the data from our system.",
+      "description": "Once you've checked the downloaded responses, and are ready to remove these from GC Forms, copy and paste the receipt codes. This action tells us you've taken custody of the data and lets us know that the data can be removed from our system.",
       "copyButton": "Copy all receipt codes"
     },
     "goToGcForms": "Go to GC Forms to sign off on removal",
