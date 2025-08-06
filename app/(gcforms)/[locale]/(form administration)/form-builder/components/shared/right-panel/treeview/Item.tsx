@@ -31,7 +31,9 @@ export const Item = ({
   arrow: ReactNode;
   context: TreeItemRenderContext;
   children: ReactNode | ReactElement;
-  handleDelete?: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  handleDelete?: (
+    e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLLIElement>
+  ) => Promise<void>;
 }) => {
   const { t } = useTranslation("form-builder");
   const { refs } = useRefsContext();
@@ -95,6 +97,14 @@ export const Item = ({
         (children as ReactElement) && context.isExpanded && "bg-slate-50",
         context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus"
       )}
+      onKeyDown={(e) => {
+        if (e.key === "Delete" || e.key === "Backspace") {
+          if (handleDelete) {
+            e.preventDefault();
+            handleDelete(e as React.KeyboardEvent<HTMLLIElement>);
+          }
+        }
+      }}
     >
       <>
         <div
