@@ -94,12 +94,12 @@ const emptyDataFiller = (
         // Sub-elements use the index of the dynamic row instead of the original ID
         const correctedElement = {
           ...subElement,
-          id: index + 1,
+          id: index,
         };
         emptyDataFiller(correctedElement, response, dataEntry);
         // Ensure no undefined values in the data entry
-        if (dataEntry[index + 1] === undefined) {
-          dataEntry[index + 1] = "";
+        if (dataEntry[index] === undefined) {
+          dataEntry[index] = "";
         }
       });
       return dataEntry;
