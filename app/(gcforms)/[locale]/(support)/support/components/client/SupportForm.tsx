@@ -6,18 +6,33 @@ import {
   Alert as ValidationMessage,
   ErrorListItem,
   Description,
+  // TextInput,
+  // MultipleChoiceGroup
 } from "@clientComponents/forms";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import Link from "next/link";
 import { Alert } from "@clientComponents/globals";
-import { TextInput } from "../../../components/client/TextInput";
-import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
-import { TextArea } from "../../../components/client/TextArea";
+// import { TextInput } from "../../../components/client/TextInput";
+// import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
+// import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
-import { useState } from "react";
-import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
+import { useActionState, useState } from "react";
+// import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+
+import { TextInputElement } from "@root/components/clientComponents/forms/TextInput/TextInputElement";
+import { MultipleChoiceGroupElement } from "@root/components/clientComponents/forms/MultipleChoiceGroup/MultipleChoiceGroupElement";
+// import { RegularTextInput } from "@root/components/clientComponents/forms/TextInput/RegularTextInput";
+
+type FormState = {
+  formData: {
+    name: string;
+    email: string;
+    request: string;
+    description: string;
+  };
+};
 
 export const SupportForm = () => {
   const {
@@ -29,57 +44,47 @@ export const SupportForm = () => {
   const [submitted, setSubmitted] = useState(false);
 
   const getError = (fieldKey: string) => {
-    return errors.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
+    // return errors.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
+    return state.validationErrors?.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
   };
 
-  const submitForm = async (formData: FormData) => {
-    const formEntries = Object.fromEntries(formData.entries());
+  const localFormAction = async (_: FormState, formData: FormData) => {
+    const formEntries = {
+      name: (formData.get("name") as string) || "",
+      email: (formData.get("email") as string) || "",
+      request: (formData.get("request") as string) || "",
+      description: (formData.get("description") as string) || "",
+    };
 
-    if (!formEntries.request) {
-      // Set to empty string if the request field is not set
-      formEntries.request = "";
-    }
-
-    const SupportSchema = object({
-      name: pipe(string(), minLength(1, t("input-validation.required"))),
-      email: pipe(
-        string(),
-        toLowerCase(),
-        trim(),
-        minLength(1, t("input-validation.required")),
-        email(t("input-validation.email"))
-      ),
-      // radio input can send a non-string value when empty
-      request: pipe(
-        string(t("input-validation.required")),
-        minLength(1, t("input-validation.required"))
-      ),
-      description: pipe(string(), minLength(1, t("input-validation.required"))),
-    });
-
-    const validateForm = safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
-
-    if (!validateForm.success) {
-      setErrors({
-        validationErrors: validateForm.issues.map((issue) => ({
-          fieldKey: issue.path?.[0].key as string,
-          fieldValue: issue.message,
-        })),
-      });
-      return;
-    }
-
-    // Submit the form
     const result = await support(language, errors, formData);
 
-    if (result.error) {
+    // Failed
+    if (result.error || result.validationErrors.length > 0) {
       setErrors({ ...result });
-      return;
+      return {
+        ...result,
+        formData: formEntries,
+      };
     }
 
+    // Success
     setSubmitted(true);
-    return;
+    return {
+      ...result,
+      formData: formEntries,
+    };
   };
+
+  const [state, formAction] = useActionState(localFormAction, {
+    error: "",
+    validationErrors: [],
+    formData: {
+      name: "",
+      email: "",
+      request: "",
+      description: "",
+    },
+  });
 
   return (
     <>
@@ -130,7 +135,19 @@ export const SupportForm = () => {
               <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
             </p>
           </Alert.Warning>
+<<<<<<< Updated upstream
           <form id="support" action={submitForm} noValidate>
+=======
+          <form
+            id="support"
+            // onSubmit={(e) => {
+            //   e.preventDefault();
+            //   submitForm(new FormData(e.currentTarget));
+            // }}
+            action={formAction}
+            noValidate
+          >
+>>>>>>> Stashed changes
             {errors.error && (
               <Alert.Danger focussable={true} title={t("error")} className="my-2">
                 <p>{t(errors.error)}</p>
@@ -141,24 +158,26 @@ export const SupportForm = () => {
               <Label id={"label-name"} htmlFor={"name"} className="required" required>
                 {t("support.name")}
               </Label>
-              <TextInput
+              <TextInputElement
                 type={"text"}
                 id={"name"}
                 name={"name"}
                 className="required w-[34rem]"
-                error={getError("name")}
+                validationError={getError("name")}
+                defaultValue={state.formData?.name || ""}
               />
             </div>
             <div className="gcds-input-wrapper">
               <Label id={"label-email"} htmlFor={"email"} className="required" required>
                 {t("support.email")}
               </Label>
-              <TextInput
+              <TextInputElement
                 type="text"
                 id="email"
                 name="email"
                 className="required w-[34rem]"
-                error={getError("email")}
+                validationError={getError("email")}
+                defaultValue={state.formData?.email || ""}
               />
             </div>
             <fieldset className="focus-group">
@@ -168,7 +187,7 @@ export const SupportForm = () => {
                   ({t("required", { ns: "common" })})
                 </span>
               </legend>
-              <MultipleChoiceGroup
+              <MultipleChoiceGroupElement
                 name="request"
                 type="radio"
                 choicesProps={[
@@ -198,7 +217,7 @@ export const SupportForm = () => {
                     label: t("support.request.option4"),
                   },
                 ]}
-                error={getError("request")}
+                validationError={getError("request")}
               />
             </fieldset>
             <div className="gcds-textarea-wrapper">
@@ -208,12 +227,15 @@ export const SupportForm = () => {
               <Description id={"description-description"}>
                 {t("support.description.description")}
               </Description>
-              <TextArea
+
+              {/* TODO */}
+
+              {/* <TextArea
                 id="description"
                 name="description"
                 className="required mt-4 w-[34rem]"
                 error={getError("description")}
-              />
+              /> */}
             </div>
             <SubmitButton>{t("submitButton", { ns: "common" })}</SubmitButton>
           </form>

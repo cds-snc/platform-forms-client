@@ -20,13 +20,15 @@ export async function support(
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> {
-  logMessage.info("Parsing support form data");
-  const rawData = Object.fromEntries(formData.entries());
-  logMessage.info("Validating support form data");
-  const validatedData = await validate(language, rawData).catch((e) => {
-    logMessage.warn(`Failed to validate support form: ${(e as Error).message}`);
-    logMessage.info(JSON.stringify(rawData));
+  const rawFormData = Object.fromEntries(formData.entries());
 
+  if (!rawFormData.request) {
+    // Avoids undefined value for request field
+    rawFormData.request = "";
+  }
+
+  const validatedData = await validate(language, rawFormData).catch((e) => {
+    logMessage.warn(`Failed to validate support form: ${(e as Error).message}`);
     return { success: false, issues: [] } as unknown as ReturnType<typeof validate>;
   });
 

@@ -1,6 +1,6 @@
 "use client";
 import React, { type JSX } from "react";
-import { Field } from "formik";
+// import { Field } from "formik";
 import { Description } from "@clientComponents/forms";
 import { ChoiceFieldProps } from "@lib/types";
 
@@ -17,7 +17,11 @@ export const Radio = (
       ) : (
         ""
       )}
-      <Field
+
+      {/* TODO this one will be difficult to remove */}
+
+      {/* <Field */}
+      <input
         className="gc-radio__input"
         id={id}
         type="radio"
