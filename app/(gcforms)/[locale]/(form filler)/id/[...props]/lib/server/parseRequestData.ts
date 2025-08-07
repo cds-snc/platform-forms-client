@@ -27,23 +27,25 @@ const isFileInputObj = (response: unknown): response is FileInputObj => {
  * This function takes a dynamic row element and an array of response values,
  * and fills in any missing sub-element values with empty strings.
  */
-const dynamicRowFiller = (values: Responses[], element: FormElement) => {
-  const subElements = element.properties.subElements || [];
+const dynamicRowFiller = (values: Responses[], element: FormElement): Responses[] => {
+  if (!Array.isArray(values)) {
+    return [];
+  }
 
-  // If the values are not an array, we need to create an empty array for it
+  const subElements = element.properties?.subElements || [];
   const newValues = [...values];
 
-  // Loop over each response object fill in missing sub-element keys with empty strings
   newValues.forEach((value) => {
+    if (!value || typeof value !== "object") {
+      return;
+    }
+
     subElements.forEach((subElement, index) => {
-      // if the sub element is rich text, we skip it
       if (subElement.type === FormElementTypes.richText) {
         return;
       }
 
-      // Check to see if the sub-element key exists in the response object
       if (!(index in value)) {
-        // Add the missing sub-element key to the response value as an empty string
         value[index] = "";
       }
 
@@ -66,12 +68,12 @@ export const fileInputFiller = (value: Response) => {
   };
 };
 
-export const checkboxFiller = (value: Response) => {
+export const checkboxFiller = (value: Response): string[] => {
   if (!Array.isArray(value)) {
     return [];
   }
 
-  return value;
+  return value.filter((item): item is string => typeof item === "string");
 };
 
 /*
@@ -79,30 +81,52 @@ export const checkboxFiller = (value: Response) => {
  * This function takes a response value and an element,
  * and fills in the response value based on the element type.
  */
-const fillData = (value: Response | Responses[], element: FormElement) => {
-  switch (element?.type) {
-    case "dynamicRow":
-      return dynamicRowFiller(value as Responses[], element);
-    case "checkbox":
-      return checkboxFiller(value as Response);
-    case "fileInput":
-      return fileInputFiller(value as Response);
-    default:
-      return value;
+const fillData = (value: Response | Responses[], element: FormElement): Response | Responses[] => {
+  if (!element?.type) {
+    return value;
+  }
+
+  try {
+    switch (element.type) {
+      case "dynamicRow":
+        return dynamicRowFiller(
+          Array.isArray(value) ? (value as Responses[]) : ([] as Responses[]),
+          element
+        );
+      case "checkbox":
+        return checkboxFiller(value as Response);
+      case "fileInput":
+        return fileInputFiller(value as Response);
+      default:
+        return value;
+    }
+  } catch (error) {
+    return value;
   }
 };
 
-export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values: Responses) => {
-  const originalValues = JSON.parse(JSON.stringify(values)) as Responses;
+export const buildCompleteFormDataObject = (
+  formRecord: PublicFormRecord,
+  values: Responses
+): Responses => {
+  if (!formRecord?.form?.elements || !Array.isArray(formRecord.form.elements)) {
+    throw new Error("Invalid form record: missing or invalid elements array");
+  }
+
+  if (!values || typeof values !== "object") {
+    throw new Error("Invalid values: must be a valid object");
+  }
+
+  const originalValues = structuredClone(values) as Responses;
   const formData = { ...originalValues };
 
-  // Ensure all submitted formDFata has the correct data shape
-  Object.keys(formData).forEach((key) => {
-    // Look for the matching element in the formRecord.form.elements
-    const element = formRecord.form.elements.find((el) => String(el.id) === key);
+  // Create a lookup map for better performance
+  const elementMap = new Map(formRecord.form.elements.map((el) => [String(el.id), el]));
 
-    // If the element is not found, preserve user submitted value just in case
-    // * Should only be possible in draft forms.
+  // Ensure all submitted formData has the correct data shape
+  Object.keys(formData).forEach((key) => {
+    const element = elementMap.get(key);
+
     if (!element) {
       formData[key] = originalValues[key];
       return;
