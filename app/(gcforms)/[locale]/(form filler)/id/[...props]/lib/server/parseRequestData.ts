@@ -87,7 +87,7 @@ const fillData = (value: Response | Responses[], element: FormElement) => {
     return value;
   }
 
-  return filler(value, element);
+  return filler(value as unknown as Responses[], element);
 };
 
 export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values: Responses) => {
