@@ -582,7 +582,7 @@
       "errorTagTooLong": "La balise ne peut pas dépasser 50 caractères"
     },
     "dynamicRow": {
-      "errorMaxRows": "Maximum row limit cannot exceed {{maxRows}}. [FR]"
+      "errorMaxRows": "Le nombre maximal de réponses ne peut pas dépasser {{maxRows}}."
     }
   },
   "moreOptions": "Plus d'options  ",

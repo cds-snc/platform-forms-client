@@ -582,7 +582,7 @@
       "errorTagTooLong": "Tag cannot exceed 50 characters"
     },
     "dynamicRow": {
-      "errorMaxRows": "Maximum row limit cannot exceed {{maxRows}}."
+      "errorMaxRows": "The maximum number of answers cannot exceed {{maxRows}}."
     }
   },
   "moreOptions": "More options",
