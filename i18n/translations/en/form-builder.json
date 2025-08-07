@@ -580,6 +580,9 @@
       "title": "Additional tags",
       "description": "Add flexible labels to include metadata for form elements so that related questions can be categorized or so that data can be transformed.",
       "errorTagTooLong": "Tag cannot exceed 50 characters"
+    },
+    "dynamicRow": {
+      "errorMaxRows": "Maximum row limit cannot exceed {{maxRows}}."
     }
   },
   "moreOptions": "More options",
