@@ -20,6 +20,7 @@ import {
   result as pagedFormSubmissionResult,
 } from "./fixtures/paged";
 import { submission as missingInputsSubmission, result as missingInputsResult } from "./fixtures/missingInputs";
+import { submission as richTextSubmission, result as richTextResult } from "./fixtures/includingRichText";
 
 import merge from "lodash.merge";
 
@@ -57,6 +58,10 @@ describe("transformFormResponses", () => {
       { 
         submission: missingInputsSubmission,
         result: missingInputsResult,
+      },
+      {
+        submission: richTextSubmission,
+        result: richTextResult,
       }
     ];
 
