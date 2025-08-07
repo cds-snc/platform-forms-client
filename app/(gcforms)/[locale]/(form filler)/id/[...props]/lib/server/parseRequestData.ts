@@ -27,8 +27,45 @@ const isFileInputObj = (response: unknown): response is FileInputObj => {
  * This function takes a partial form submission and ensures every form template element has a corresponding value.
  */
 
+const dynamicRowFiller = (element: FormElement, values: Responses[]) => {
+  // Get the sub-elements of the dynamic row
+  const subElements = element.properties.subElements || [];
+
+  // If the values are not an array, we need to create an empty array for it
+  const newValues = [...values];
+
+  // Loop over each response object fill in missing keys with empty strings
+  newValues.forEach((value) => {
+    subElements.forEach((subElement, index) => {
+      // if the sub element is rich text, we skip it
+      if (subElement.type === FormElementTypes.richText) {
+        return;
+      }
+
+      if (!(index in value)) {
+        value[index] = "";
+      }
+    });
+  });
+
+  return newValues;
+};
+
 export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values: Responses) => {
-  // Remove rich text elements from the form elements
+  // TEST CODE
+  const originalValues = { ...values };
+  const newValues = { ...originalValues };
+
+  Object.keys(newValues).forEach((key) => {
+    if (Array.isArray(newValues[key])) {
+      // find the elements key in the formRecord.form.elements
+      const element = formRecord.form.elements.find((el) => String(el.id) === key);
+      if (element?.type === FormElementTypes.dynamicRow) {
+        newValues[key] = dynamicRowFiller(element, originalValues[key] as Responses[]);
+      }
+    }
+  });
+  // END TEST CODE
 
   const pureFormElements = formRecord.form.elements.reduce((acc: FormElement[], element) => {
     if (FormElementTypes.richText === element.type) {
