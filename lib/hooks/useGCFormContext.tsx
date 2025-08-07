@@ -14,13 +14,14 @@ import {
   getNextAction,
   filterShownElements,
   filterValuesByShownElements,
+  getVisibleGroupsBasedOnValuesRecursive,
+  getValuesWithMatchedIds,
 } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import {
   getGroupHistory as _getGroupHistory,
   pushIdToHistory as _pushIdToHistory,
   clearHistoryAfterId as _clearHistoryAfterId,
-  getPreviousIdFromCurrentId,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
 
@@ -40,10 +41,9 @@ interface GCFormsContextValueType {
   filteredMatchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
-  previousGroup: string | null;
+  getPreviousGroup: (currentGroup: string) => string;
   setGroup: (group: string | null) => void;
   handleNextAction: () => void;
-  handlePreviousAction: () => void;
   hasNextAction: (group: string) => boolean;
   isOffBoardSection: (group: string) => boolean;
   formRecord: PublicFormRecord;
@@ -86,7 +86,6 @@ export const GCFormsProvider = ({
   const history = React.useRef<string[]>([LockedSections.START]);
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
-  const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
 
@@ -129,22 +128,10 @@ export const GCFormsProvider = ({
     if (hasNextAction(currentGroup)) {
       const nextAction = getNextAction(groups, currentGroup, filteredMatchedIds);
 
-      // Helpful for navigating to the last group
-      setPreviousGroup(currentGroup);
-
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
         pushIdToHistory(nextAction);
       }
-    }
-  };
-
-  const handlePreviousAction = () => {
-    if (!currentGroup) return;
-    const previousGroupId = getPreviousIdFromCurrentId(currentGroup, history.current);
-    if (previousGroupId) {
-      setGroup(previousGroupId);
-      clearHistoryAfterId(previousGroupId);
     }
   };
 
@@ -233,6 +220,21 @@ export const GCFormsProvider = ({
     return groupTitle({ groups, groupId, language });
   };
 
+  const getPreviousGroup = (currentGroup: string) => {
+    const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, values.current);
+    const visibleGroups = getVisibleGroupsBasedOnValuesRecursive(
+      formRecord,
+      valuesWithMatchedIds,
+      "start"
+    );
+
+    const idx = visibleGroups.indexOf(currentGroup);
+    if (idx === -1 || idx === 0) {
+      return currentGroup;
+    }
+    return visibleGroups[idx - 1];
+  };
+
   return (
     <GCFormsContext.Provider
       value={{
@@ -247,10 +249,9 @@ export const GCFormsProvider = ({
         filteredMatchedIds,
         groups,
         currentGroup,
-        previousGroup,
+        getPreviousGroup,
         setGroup,
         handleNextAction,
-        handlePreviousAction,
         hasNextAction,
         isOffBoardSection,
         groupsCheck,
@@ -288,12 +289,11 @@ export const useGCFormsContext = () => {
       filteredMatchedIds: [""],
       groups: {},
       currentGroup: "",
-      previousGroup: "",
+      getPreviousGroup: () => "",
       setGroup: () => void 0,
       hasNextAction: () => void 0,
       isOffBoardSection: () => false,
       handleNextAction: () => void 0,
-      handlePreviousAction: () => void 0,
       formRecord: {} as PublicFormRecord,
       groupsCheck: () => false,
       getGroupHistory: () => [],
