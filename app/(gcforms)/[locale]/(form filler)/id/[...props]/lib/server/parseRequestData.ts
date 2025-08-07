@@ -82,20 +82,16 @@ export const checkboxFiller = (value: Response) => {
  * If no specific filler is found, it returns the original value.
  */
 const fillData = (value: Response | Responses[], element: FormElement) => {
-  // Look up for specific types so they can clean up their own data
-  const fillers = {
-    dynamicRow: dynamicRowFiller,
-    checkbox: checkboxFiller,
-    fileInput: fileInputFiller,
-  };
-
-  const filler = fillers[element?.type as keyof typeof fillers];
-
-  if (!filler) {
-    return value;
+  switch (element?.type) {
+    case "dynamicRow":
+      return dynamicRowFiller(value as Responses[], element);
+    case "checkbox":
+      return checkboxFiller(value as Response);
+    case "fileInput":
+      return fileInputFiller(value as Response);
+    default:
+      return value;
   }
-
-  return filler(value as unknown as Responses[], element);
 };
 
 export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values: Responses) => {
