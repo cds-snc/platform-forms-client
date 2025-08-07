@@ -74,7 +74,15 @@ export const checkboxFiller = (value: Response) => {
   return value;
 };
 
+/*
+ * Centralized filling logic for form elements.
+ * This function takes a response value and an element,
+ * and fills in the response value based on the element type.
+ * It uses specific "fillers" for dynamic rows, checkboxes, and file inputs.
+ * If no specific filler is found, it returns the original value.
+ */
 const fillData = (value: Response | Responses[], element: FormElement) => {
+  // Look up for specific types so they can clean up their own data
   const fillers = {
     dynamicRow: dynamicRowFiller,
     checkbox: checkboxFiller,
