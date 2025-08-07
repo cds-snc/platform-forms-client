@@ -112,15 +112,13 @@ export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values
     formData[key] = fillData(originalValues[key], element);
   });
 
-  formRecord.form.elements.forEach((element) => {
-    if (element.type === FormElementTypes.richText) {
-      return;
-    }
+  // Process elements that don't already exist in formData and aren't richText
+  const missingElements = formRecord.form.elements.filter(
+    (element) => element.type !== FormElementTypes.richText && !formData[element.id]
+  );
 
-    if (!formData[element.id]) {
-      formData[element.id] = "";
-      formData[element.id] = fillData(formData[element.id], element);
-    }
+  missingElements.forEach((element) => {
+    formData[element.id] = fillData("", element);
   });
 
   formData["formID"] = formRecord.id;
