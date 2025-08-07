@@ -33,7 +33,7 @@ const dynamicRowFiller = (values: Responses[], element: FormElement) => {
   // If the values are not an array, we need to create an empty array for it
   const newValues = [...values];
 
-  // Loop over each response object fill in missing keys with empty strings
+  // Loop over each response object fill in missing sub-element keys with empty strings
   newValues.forEach((value) => {
     subElements.forEach((subElement, index) => {
       // if the sub element is rich text, we skip it
@@ -78,8 +78,6 @@ export const checkboxFiller = (value: Response) => {
  * Centralized filling logic for form elements.
  * This function takes a response value and an element,
  * and fills in the response value based on the element type.
- * It uses specific "fillers" for dynamic rows, checkboxes, and file inputs.
- * If no specific filler is found, it returns the original value.
  */
 const fillData = (value: Response | Responses[], element: FormElement) => {
   switch (element?.type) {
@@ -98,9 +96,9 @@ export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values
   const originalValues = JSON.parse(JSON.stringify(values)) as Responses;
   const formData = { ...originalValues };
 
-  // Ensure all form elements are present in the formData
+  // Ensure all submitted formDFata has the correct data shape
   Object.keys(formData).forEach((key) => {
-    // Look for the element in the formRecord.form.elements
+    // Look for the matching element in the formRecord.form.elements
     const element = formRecord.form.elements.find((el) => String(el.id) === key);
 
     // If the element is not found, preserve user submitted value just in case
