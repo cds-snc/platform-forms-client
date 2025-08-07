@@ -98,8 +98,9 @@ export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values
   const originalValues = JSON.parse(JSON.stringify(values)) as Responses;
   const formData = { ...originalValues };
 
+  // Ensure all form elements are present in the formData
   Object.keys(formData).forEach((key) => {
-    // find the elements key in the formRecord.form.elements
+    // Look for the element in the formRecord.form.elements
     const element = formRecord.form.elements.find((el) => String(el.id) === key);
 
     // If the element is not found, preserve user submitted value just in case
