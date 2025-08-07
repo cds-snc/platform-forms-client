@@ -24,11 +24,10 @@ const isFileInputObj = (response: unknown): response is FileInputObj => {
 };
 
 /**
- * This function takes a partial form submission and ensures every form template element has a corresponding value.
+ * This function takes a dynamic row element and an array of response values,
+ * and fills in any missing sub-element values with empty strings.
  */
-
 const dynamicRowFiller = (element: FormElement, values: Responses[]) => {
-  // Get the sub-elements of the dynamic row
   const subElements = element.properties.subElements || [];
 
   // If the values are not an array, we need to create an empty array for it
@@ -42,7 +41,9 @@ const dynamicRowFiller = (element: FormElement, values: Responses[]) => {
         return;
       }
 
+      // Check to see if the sub-element key exists in the response object
       if (!(index in value)) {
+        // Add the missing sub-element key to the response value as an empty string
         value[index] = "";
       }
     });
@@ -98,6 +99,9 @@ export const buildCompleteFormDataObject = (formRecord: PublicFormRecord, values
   return formData;
 };
 
+/**
+ * This function takes a partial form submission and ensures every form template element has a corresponding value.
+ */
 const emptyDataFiller = (
   element: FormElement,
   values: Responses,
