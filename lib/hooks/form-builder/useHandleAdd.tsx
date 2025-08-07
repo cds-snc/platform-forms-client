@@ -6,6 +6,7 @@ import { blockLoader } from "../../utils/form-builder/blockLoader";
 import { elementLoader } from "@lib/utils/form-builder/elementLoader";
 import { logMessage } from "@lib/logger";
 import { getDefaultFileGroupTypes } from "@lib/fileInput/fileGroupsToFileTypes";
+import { MAX_DYNAMIC_ROW_AMOUNT } from "@root/constants";
 
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import {
@@ -67,7 +68,7 @@ export const useHandleAdd = () => {
 
   const loadError = t("failedToReadFormFile");
 
-  /* Note this callback is also in ElementPanel */
+  // Note: For Sub elements see handleAddSubElement (below)
   const handleAddElement = useCallback(
     async (index: number, type?: FormElementTypes) => {
       let id;
@@ -97,12 +98,18 @@ export const useHandleAdd = () => {
       }
 
       const item = await create(type as FormElementTypes);
-      if (item.type === "dynamicRow") {
-        item.properties.dynamicRow = await getTranslatedDynamicRowProperties();
-      }
 
-      if (item.type === FormElementTypes.fileInput) {
-        item.properties.fileType = getDefaultFileGroupTypes();
+      // Set default properties based on element type
+      switch (item.type) {
+        case FormElementTypes.fileInput:
+          item.properties.fileType = getDefaultFileGroupTypes();
+          break;
+        case FormElementTypes.dynamicRow:
+          item.properties.dynamicRow = await getTranslatedDynamicRowProperties();
+          item.properties.maxNumberOfRows = MAX_DYNAMIC_ROW_AMOUNT;
+          break;
+        default:
+          break;
       }
 
       id = await add(index, item.type, item, groupId);
@@ -121,6 +128,7 @@ export const useHandleAdd = () => {
     [add, create, groupId, treeView, loadError]
   );
 
+  // Handle adding a sub-element
   const handleAddSubElement = useCallback(
     async (elId: number, subIndex: number, type?: FormElementTypes) => {
       let id;
@@ -156,8 +164,13 @@ export const useHandleAdd = () => {
 
       const item = await create(type as FormElementTypes);
 
-      if (item.type === FormElementTypes.fileInput) {
-        item.properties.fileType = getDefaultFileGroupTypes();
+      // Set default properties based on element type
+      switch (item.type) {
+        case FormElementTypes.fileInput:
+          item.properties.fileType = getDefaultFileGroupTypes();
+          break;
+        default:
+          break;
       }
 
       id = await addSubItem(elId, subIndex, item.type, item);
