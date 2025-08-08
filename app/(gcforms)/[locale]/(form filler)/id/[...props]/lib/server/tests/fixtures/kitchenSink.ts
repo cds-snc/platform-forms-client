@@ -150,8 +150,6 @@ export const submission = {
       { "0": "short answer", "1": "two", "2": ["one", "two"], "3": '{"YYYY":1900,"MM":1,"DD":1}' },
       { "0": "another", "1": "three", "2": ["two"], "3": '{"YYYY":1900,"MM":1,"DD":1}' },
     ],
-    formID: "cm40dwxmt0002pznalkm7dl9b",
-    securityAttribute: "Protected A",
   },
 };
 

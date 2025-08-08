@@ -13,8 +13,6 @@ interface FileInputObj extends FileInputResponse {
   id: string | null;
 }
 
-const IGNORED_KEYS = ["formID", "securityAttribute"];
-
 const isFileInputObj = (response: unknown): response is FileInputObj => {
   return (
     response !== null &&
@@ -121,11 +119,6 @@ export const buildCompleteFormDataObject = (
 
   const originalValues = structuredClone(values) as Responses;
   const formData = { ...originalValues };
-
-  // Remove ignored keys from formData these are not part of the Response
-  IGNORED_KEYS.forEach((key) => {
-    delete formData[key];
-  });
 
   // Create a lookup map for better performance
   const elementMap = new Map(formRecord.form.elements.map((el) => [String(el.id), el]));

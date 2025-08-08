@@ -7,6 +7,8 @@ import { validatePayloadSize } from "@lib/validation/validatePayloadSize";
 
 export const processFormData = async (
   responses: Record<string, Response>,
+  securityAttribute: string | undefined,
+  formId: string,
   contentLanguage: string
 ): Promise<{
   submissionId: string;
@@ -15,7 +17,7 @@ export const processFormData = async (
   // Do not process if in TEST mode
   if (process.env.APP_ENV === "test") {
     logMessage.info(
-      `TEST MODE - Not submitting Form ID: ${responses ? responses.formID : "No form attached"}`
+      `TEST MODE - Not submitting Form ID: ${responses ? formId : "No form attached"}`
     );
     return { submissionId: "test-mode" };
   }
@@ -24,7 +26,7 @@ export const processFormData = async (
     throw new MissingFormDataError("No form submitted with request");
   }
 
-  const form = await getPublicTemplateByID(responses.formID as string);
+  const form = await getPublicTemplateByID(formId);
 
   if (!form) {
     throw new FormNotFoundError("No form could be found with that ID");
@@ -47,7 +49,7 @@ export const processFormData = async (
       form.id,
       responses,
       contentLanguage ? contentLanguage : "en",
-      responses.securityAttribute ? (responses.securityAttribute as string) : "Protected A"
+      securityAttribute ? securityAttribute : "Protected A"
     );
 
     logMessage.info(`Response submitted for Form ID: ${form.id}`);

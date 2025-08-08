@@ -67,8 +67,6 @@ export const submission = {
       { "0": "Lorem ipsum", "1": ["two"] },
       { "0": "Hola mi amigo", "1": ["two", "three"] },
     ],
-    formID: "cm40ey4m40003pznady0wtty2",
-    securityAttribute: "Protected A",
   },
 };
 

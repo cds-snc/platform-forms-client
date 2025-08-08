@@ -20,8 +20,6 @@ export const submission = {
   responses: {
     "1": "test",
     3: "test",
-    formID: "cm41ifzhg0000kgike1emtkd2",
-    securityAttribute: "Protected A",
   },
 };
 
