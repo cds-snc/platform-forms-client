@@ -30,9 +30,29 @@ export const useFormSubmissionData = ({
   const groupHistoryIds = getGroupHistory();
   if (!formValues || !groups) throw new Error("Form values or groups are missing");
 
+  // Clean up the values for use with the Review component (removing the file contents)
+  const cleanedValues = {} as unknown as FormValues;
+
+  Object.entries(formValues).map(([key, value]) => {
+    let cleanedValue = value;
+
+    // For file inputs we just want to keep the name and size, and reset the base64 encoded file
+    if (value && typeof value === "object" && "size" in value && "name" in value) {
+      // Just keep the name
+      cleanedValue = {
+        name: value.name as string,
+        size: value.size as number,
+        based64EncodedFile: null,
+      } as unknown as string; // force compatibility with existing types
+    }
+
+    // For all other inputs just return the value
+    cleanedValues[key] = cleanedValue;
+  });
+
   const reviewItems = getReviewItems({
     formRecord: formRecord,
-    formValues,
+    formValues: cleanedValues as unknown as FormValues,
     groups,
     groupHistoryIds,
     language,

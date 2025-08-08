@@ -580,6 +580,9 @@
       "title": "Balises supplémentaires",
       "description": "Vous pouvez ajouter des étiquettes flexibles  pour inclure des métadonnées aux éléments du formulaire afin de catégoriser les questions connexes ou de transformer les données.",
       "errorTagTooLong": "La balise ne peut pas dépasser 50 caractères"
+    },
+    "dynamicRow": {
+      "errorMaxRows": "Le nombre maximal de réponses ne peut pas dépasser {{maxRows}}."
     }
   },
   "moreOptions": "Plus d'options  ",
@@ -1306,7 +1309,7 @@
       "emptyFormElement": "Élément de question sans contenu",
       "keyboardNav": {
         "label": "Raccourcis clavier",
-        "body": "<p className=\"mb-4\">Naviguer les questions et les pages à l'aide des touches fléchées.</p><p><strong>Glisser-déposer :</strong></p>\n<ul><li>Contrôle + D pour prendre un élément</li><li>Touches fléchées pour faire glisser l'élément</li><li>Appuyer Entrée pour déposer l'élément</li></ul>"
+        "body": "<p className=\"mb-4\">Naviguer les questions et les pages à l'aide des touches <kbd>fléchées</kbd>.</p><p><strong>Glisser-déposer :</strong></p>\n<ul><li><kbd>Contrôle</kbd> + <kbd>shift</kbd> + <kbd>D</kbd> pour prendre un élément</li><li>Touches <kbd>fléchées</kbd> pour faire glisser l'élément</li><li>Appuyer <kbd>Entrée</kbd> pour déposer l'élément</li><li>[FR]<kbd>Del</kbd> key on the page item to delete the page</li></ul>"
       }
     },
     "confirmDeleteGroup": {
