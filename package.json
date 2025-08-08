@@ -110,7 +110,7 @@
     "react": "19.1.1",
     "react-app-polyfill": "3.0.0",
     "react-aria": "3.41.1",
-    "react-complex-tree": "^2.4.5",
+    "react-complex-tree": "^2.6.0",
     "react-dom": "19.1.1",
     "react-i18next": "^15.1.0",
     "react-loading-skeleton": "^3.4.0",
