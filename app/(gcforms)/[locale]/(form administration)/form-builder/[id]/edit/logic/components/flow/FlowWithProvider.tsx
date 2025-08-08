@@ -9,7 +9,8 @@ import React, {
   useRef,
 } from "react";
 
-import ReactFlow, {
+import {
+  ReactFlow,
   Controls,
   useStoreApi,
   ReactFlowProvider,
@@ -17,10 +18,10 @@ import ReactFlow, {
   useEdgesState,
   Background,
   useOnViewportChange,
-  Viewport,
-} from "reactflow";
+  type Viewport,
+} from "@xyflow/react";
 
-import "reactflow/dist/style.css";
+import "@xyflow/react/dist/style.css";
 import useAutoLayout from "./useAutoLayout";
 import { useFlowData } from "./useFlowData";
 import { GroupNode } from "./GroupNode";
@@ -43,7 +44,7 @@ const nodeTypes = {
   endNode: EndNode,
   endNodeWithReview: EndNodeWithReview,
 };
-import { Edge } from "reactflow";
+import { type Edge } from "@xyflow/react";
 
 import { Loader } from "@clientComponents/globals/Loader";
 

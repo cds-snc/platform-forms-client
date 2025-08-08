@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { MarkerType } from "reactflow";
+import { MarkerType } from "@xyflow/react";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";

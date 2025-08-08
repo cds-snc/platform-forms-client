@@ -1,11 +1,5 @@
-/**
- * This code is based on an example from the React Flow Pro.
- * Source: https://pro.reactflow.dev/examples/react/auto-layout
- * Oss plan - https://www.xyflow.com/open-source
- */
-
-import { useEffect } from "react";
-import { type Node, type Edge, useReactFlow, useNodesInitialized, useStore } from "reactflow";
+import { useEffect, useCallback } from "react";
+import { type Node, type Edge, useReactFlow, useNodesInitialized, useStore } from "@xyflow/react";
 
 import { getSourceHandlePosition, getTargetHandlePosition } from "./utils";
 import layoutAlgorithms, { type LayoutAlgorithmOptions } from "./algorithms";
@@ -14,6 +8,7 @@ export type LayoutOptions = {
   algorithm: keyof typeof layoutAlgorithms;
 } & LayoutAlgorithmOptions;
 
+// todo --- needs to be fixed.
 function useAutoLayout(options: LayoutOptions) {
   const { setNodes, setEdges } = useReactFlow();
   const nodesInitialized = useNodesInitialized();
@@ -23,8 +18,8 @@ function useAutoLayout(options: LayoutOptions) {
   // actually trigger a layout change.
   const elements = useStore(
     (state) => ({
-      nodeMap: state.nodeInternals,
-      edgeMap: state.edges.reduce((acc, edge) => acc.set(edge.id, edge), new Map()),
+      nodes: state.nodes,
+      edges: state.edges,
     }),
     // The compare elements function will only update `elements` if something has
     // changed that should trigger a layout. This includes changes to a node's
@@ -32,50 +27,43 @@ function useAutoLayout(options: LayoutOptions) {
     compareElements
   );
 
-  // The callback passed to `useEffect` cannot be `async` itself, so instead we
-  // create an async function here and call it immediately afterwards.
-  const runLayout = async () => {
-    if (elements.nodeMap.size === 0) return;
+  const runLayout = useCallback(async () => {
+    if (!elements.nodes.length) return;
 
     const layoutAlgorithm = layoutAlgorithms[options.algorithm];
-    const nodes = [...elements.nodeMap.values()];
-    const edges = [...elements.edgeMap.values()];
+    // Pass in a clone of the nodes and edges so that we don't mutate the
+    // original elements.
+    const nodes = elements.nodes.map((node) => ({ ...node }));
+    const edges = elements.edges.map((edge) => ({ ...edge }));
 
-    try {
-      const nodeData = await layoutAlgorithm(nodes, edges, options);
-      const { nodes: nextNodes, edges: nextEdges } = nodeData;
+    const { nodes: nextNodes, edges: nextEdges } = await layoutAlgorithm(nodes, edges, options);
 
-      // Mutating the nodes and edges directly here is fine because we expect our
-      // layouting algorithms to return a new array of nodes/edges.
-      for (const node of nextNodes) {
-        node.style = { ...node.style, opacity: 1, marginLeft: "10px" };
-        node.sourcePosition = getSourceHandlePosition(options.direction);
-        node.targetPosition = getTargetHandlePosition(options.direction);
-      }
-
-      for (const edge of edges) {
-        edge.style = { ...edge.style, opacity: 1, zIndex: 200 };
-      }
-
-      setNodes(nextNodes);
-      setEdges(nextEdges);
-    } catch (e) {
-      return false;
+    for (const node of nextNodes) {
+      node.style = { ...node.style, opacity: 1 };
+      node.sourcePosition = getSourceHandlePosition(options.direction);
+      node.targetPosition = getTargetHandlePosition(options.direction);
     }
 
-    return true;
-  };
+    for (const edge of edges) {
+      edge.style = { ...edge.style, opacity: 1 };
+    }
+
+    setNodes(nextNodes);
+    setEdges(nextEdges);
+  }, [elements, options, setNodes, setEdges]);
 
   useEffect(() => {
     // Only run the layout if there are nodes and they have been initialized with
     // their dimensions
-    if (!nodesInitialized || elements.nodeMap.size === 0) {
+    if (!nodesInitialized || elements.nodes.length === 0) {
       return;
     }
 
-    runLayout();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nodesInitialized]);
+    // The callback passed to `useEffect` cannot be `async` itself, so instead we
+    // create an async function here and call it immediately afterwards.
+
+    // runLayout();
+  }, [nodesInitialized, elements, runLayout]);
 
   return { runLayout };
 }
@@ -83,20 +71,21 @@ function useAutoLayout(options: LayoutOptions) {
 export default useAutoLayout;
 
 type Elements = {
-  nodeMap: Map<string, Node>;
-  edgeMap: Map<string, Edge>;
+  nodes: Array<Node>;
+  edges: Array<Edge>;
 };
 
 function compareElements(xs: Elements, ys: Elements) {
-  return compareNodes(xs.nodeMap, ys.nodeMap) && compareEdges(xs.edgeMap, ys.edgeMap);
+  return compareNodes(xs.nodes, ys.nodes) && compareEdges(xs.edges, ys.edges);
 }
 
-function compareNodes(xs: Map<string, Node>, ys: Map<string, Node>) {
+function compareNodes(xs: Array<Node>, ys: Array<Node>) {
   // the number of nodes changed, so we already know that the nodes are not equal
-  if (xs.size !== ys.size) return false;
+  if (xs.length !== ys.length) return false;
 
-  for (const [id, x] of xs.entries()) {
-    const y = ys.get(id);
+  for (let i = 0; i < xs.length; i++) {
+    const x = xs[i];
+    const y = ys[i];
 
     // the node doesn't exist in the next state so it just got added
     if (!y) return false;
@@ -108,21 +97,22 @@ function compareNodes(xs: Map<string, Node>, ys: Map<string, Node>) {
     // scenario where we'd want nodes to start moving around *while* a user is
     // trying to resize a node or move it around.
     if (x.resizing || x.dragging) return true;
-    if (x.width !== y.width || x.height !== y.height) return false;
+    if (x.measured?.width !== y.measured?.width || x.measured?.height !== y.measured?.height) {
+      return false;
+    }
   }
 
   return true;
 }
 
-function compareEdges(xs: Map<string, Edge>, ys: Map<string, Edge>) {
+function compareEdges(xs: Array<Edge>, ys: Array<Edge>) {
   // the number of edges changed, so we already know that the edges are not equal
-  if (xs.size !== ys.size) return false;
+  if (xs.length !== ys.length) return false;
 
-  for (const [id, x] of xs.entries()) {
-    const y = ys.get(id);
+  for (let i = 0; i < xs.length; i++) {
+    const x = xs[i];
+    const y = ys[i];
 
-    // the edge doesn't exist in the next state so it just got added
-    if (!y) return false;
     if (x.source !== y.source || x.target !== y.target) return false;
     if (x?.sourceHandle !== y?.sourceHandle) return false;
     if (x?.targetHandle !== y?.targetHandle) return false;

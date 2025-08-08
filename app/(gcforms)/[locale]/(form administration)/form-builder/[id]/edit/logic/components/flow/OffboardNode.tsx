@@ -1,10 +1,14 @@
-import { Handle } from "reactflow";
-import { NodeProps } from "reactflow";
+import { Handle } from "@xyflow/react";
+import { NodeProps } from "@xyflow/react";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+
+interface OffboardNodeData {
+  label: string;
+}
 
 const ExitSvg = ({ title }: { title?: string }) => {
   return (
@@ -27,6 +31,7 @@ const ExitSvg = ({ title }: { title?: string }) => {
 };
 
 export const OffboardNode = (node: NodeProps) => {
+  const nodeData = node.data as unknown as OffboardNodeData;
   const direction = layoutOptions.direction;
   const { t } = useTranslation("form-builder");
 
@@ -54,7 +59,7 @@ export const OffboardNode = (node: NodeProps) => {
           htmlFor={node.id}
           className="inline-block w-5/6 max-w-[200px] truncate text-sm text-slate-600"
         >
-          {node.data.label}
+          {nodeData.label}
         </label>
       </div>
       <div

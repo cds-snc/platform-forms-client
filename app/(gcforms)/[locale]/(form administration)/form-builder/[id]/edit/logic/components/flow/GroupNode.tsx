@@ -1,5 +1,5 @@
-import { Handle } from "reactflow";
-import { NodeProps } from "reactflow";
+import { Handle } from "@xyflow/react";
+import { NodeProps } from "@xyflow/react";
 import { TreeItem } from "react-complex-tree";
 import { cn } from "@lib/utils";
 
@@ -11,6 +11,13 @@ import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+
+interface GroupNodeData {
+  label: {
+    name: string;
+  };
+  children: TreeItem[];
+}
 
 const OptionRuleSvg = ({ title }: { title?: string }) => {
   return (
@@ -38,6 +45,7 @@ const QuestionRuleSvg = ({ title }: { title?: string }) => {
 };
 
 export const GroupNode = (node: NodeProps) => {
+  const nodeData = node.data as unknown as GroupNodeData;
   const direction = layoutOptions.direction;
   const setId = useGroupStore((state) => state.setId);
   const setSelectedElementId = useGroupStore((state) => state.setSelectedElementId);
@@ -78,7 +86,7 @@ export const GroupNode = (node: NodeProps) => {
           className="inline-block w-5/6 max-w-[200px] truncate text-sm text-slate-600"
         >
           {/* Case of Review and End (no name) hide visually but include text required for a label */}
-          {node.data.label || <span className="sr-only">{node.id}</span>}
+          {nodeData.label?.name || <span className="sr-only">{node.id}</span>}
         </label>
       </div>
       <div
@@ -100,11 +108,11 @@ export const GroupNode = (node: NodeProps) => {
               "absolute right-[-20px] top-[-20px] cursor-pointer outline-offset-8 outline-slate-800 hover:scale-125 rounded-full"
             )}
           >
-            <QuestionRuleSvg title={t("groups.editPage", { name: node.data.label.name })} />
+            <QuestionRuleSvg title={t("groups.editPage", { name: nodeData.label.name })} />
           </button>
         )}
-        {!node.data.children.length && <div className="min-h-[50px] min-w-[200px]"></div>}
-        {node.data.children.map((child: TreeItem) => {
+        {!nodeData.children.length && <div className="min-h-[50px] min-w-[200px]"></div>}
+        {nodeData.children.map((child: TreeItem) => {
           const selected =
             selectedElementId === Number(child.index)
               ? "border-violet-800 border-2 border-dashed"
@@ -175,7 +183,7 @@ export const GroupNode = (node: NodeProps) => {
                 )}
               </div>
               <div className="absolute right-10px top-[6px] cursor-pointer hover:scale-125">
-                <OptionRuleSvg title={t("groups.editRules", { name: node.data.label.name })} />
+                <OptionRuleSvg title={t("groups.editRules", { name: nodeData.label.name })} />
               </div>
             </button>
           );

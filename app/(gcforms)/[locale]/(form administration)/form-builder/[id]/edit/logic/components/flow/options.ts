@@ -1,5 +1,5 @@
 import { type LayoutOptions } from "./useAutoLayout";
-import { MarkerType } from "reactflow";
+import { MarkerType } from "@xyflow/react";
 
 export const edgeOptions = {
   type: "simplebezier",

@@ -1,5 +1,5 @@
-import { Handle } from "reactflow";
-import { NodeProps } from "reactflow";
+import { Handle } from "@xyflow/react";
+import { NodeProps } from "@xyflow/react";
 import { useTranslation } from "@i18n/client";
 import { getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
