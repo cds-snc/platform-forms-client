@@ -125,10 +125,7 @@ describe("transformFormResponses", () => {
 
       const result = buildCompleteFormDataObject(emptyForm as unknown as FormRecord, {});
 
-      expect(result).toEqual({
-        formID: "test-form",
-        securityAttribute: "protected",
-      });
+      expect(result).toEqual({});
     });
 
     it("should handle empty responses object", () => {
@@ -147,7 +144,6 @@ describe("transformFormResponses", () => {
 
       expect(result).toHaveProperty("1", "");
       expect(result).toHaveProperty("2", []);
-      expect(result).toHaveProperty("formID", "test-form");
     });
 
     it("should handle responses with unknown field IDs", () => {

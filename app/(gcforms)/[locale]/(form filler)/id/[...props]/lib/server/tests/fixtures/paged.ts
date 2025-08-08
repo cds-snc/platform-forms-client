@@ -81,6 +81,4 @@ export const result = {
     { "0": "Lorem ipsum", "1": ["two"] },
     { "0": "Hola mi amigo", "1": ["two", "three"] },
   ],
-  formID: "cm41ifzhg0000kgike1emtkd2",
-  securityAttribute: "Protected A",
 };

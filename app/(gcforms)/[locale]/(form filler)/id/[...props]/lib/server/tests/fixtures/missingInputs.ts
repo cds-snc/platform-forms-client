@@ -79,6 +79,4 @@ export const result = {
     size: null,
     id: null,
   },
-  formID: "cm41ifzhg0000kgike1emtkd2",
-  securityAttribute: "Protected A",
 };
