@@ -5,11 +5,14 @@ import React, {
   forwardRef,
   ReactElement,
   ForwardRefRenderFunction,
+  useEffect,
   useState,
   useRef,
+  useMemo,
 } from "react";
 
-import ReactFlow, {
+import {
+  ReactFlow,
   Controls,
   useStoreApi,
   ReactFlowProvider,
@@ -17,17 +20,17 @@ import ReactFlow, {
   useEdgesState,
   Background,
   useOnViewportChange,
-  Viewport,
-} from "reactflow";
+  type Viewport,
+  type Edge,
+} from "@xyflow/react";
 
-import "reactflow/dist/style.css";
-import useAutoLayout from "./useAutoLayout";
+import "@xyflow/react/dist/style.css";
 import { useFlowData } from "./useFlowData";
 import { GroupNode } from "./GroupNode";
+import { ElementNode } from "./ElementNode";
 import { OffboardNode } from "./OffboardNode";
 import { EndNode } from "./EndNode";
 import { EndNodeWithReview } from "./EndNodeWithReview";
-import { layoutOptions } from "./options";
 import { edgeOptions } from "./options";
 
 import { useFlowRef } from "./provider/FlowRefProvider";
@@ -39,16 +42,16 @@ import { showReviewPage as hasReviewPage } from "@lib/utils/form-builder/showRev
 
 const nodeTypes = {
   groupNode: GroupNode,
+  elementNode: ElementNode,
   offboardNode: OffboardNode,
   endNode: EndNode,
   endNodeWithReview: EndNodeWithReview,
 };
-import { Edge } from "reactflow";
 
 import { Loader } from "@clientComponents/globals/Loader";
 
 const Loading = () => (
-  <div className="flex h-full items-center justify-center ">
+  <div className="flex h-full items-center justify-center">
     <Loader />
   </div>
 );
@@ -71,10 +74,31 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
     getData,
   } = useFlowData(lang, showReviewNode, hasReview);
   const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes);
-  const [, setEdges, onEdgesChange] = useEdgesState(flowEdges as Edge[]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(flowEdges as Edge[]);
   const reset = useRef(false);
   const [redrawing, setRedrawing] = useState(false);
   const [viewport, setViewport] = useState<Viewport | null>(null);
+  const flowSignature = useMemo(
+    () =>
+      JSON.stringify({
+        nodes: flowNodes.map((node) => ({
+          id: node.id,
+          parentId: node.parentId,
+          position: node.position,
+          type: node.type,
+          width: node.style?.width,
+          height: node.style?.height,
+          data: node.data,
+        })),
+        edges: flowEdges.map((edge) => ({
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          label: edge.label,
+        })),
+      }),
+    [flowNodes, flowEdges]
+  );
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
@@ -92,10 +116,10 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
     },
   });
 
-  const { runLayout } = useAutoLayout({
-    ...layoutOptions,
-    showReviewNode,
-  });
+  useEffect(() => {
+    setNodes(flowNodes);
+    setEdges(flowEdges as Edge[]);
+  }, [flowSignature, setNodes, setEdges]);
 
   useImperativeHandle(ref, () => ({
     updateEdges: () => {
@@ -108,14 +132,10 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
       setEdges(edges as Edge[]);
       setNodes(nodes);
       setRedrawing(true);
-      const reLayout = async () => {
-        await runLayout();
-        setRedrawing(false);
-      };
 
       // Add a small delay to visually indicate the redraw
       setTimeout(() => {
-        reLayout();
+        setRedrawing(false);
       }, 200);
 
       setTimeout(() => {
@@ -139,7 +159,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
         nodes={nodes}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
-        edges={flowEdges as Edge[]}
+        edges={edges}
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
         onInit={(instance) => {
@@ -148,7 +168,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
           if (viewport) {
             instance.setViewport(viewport);
           } else {
-            instance.fitView();
+            instance.fitView({ padding: 0.08 });
           }
         }}
       >

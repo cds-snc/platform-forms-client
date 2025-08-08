@@ -1,5 +1,5 @@
-import { Handle } from "reactflow";
-import { NodeProps } from "reactflow";
+import { Handle } from "@xyflow/react";
+import { NodeProps } from "@xyflow/react";
 import { useTranslation } from "@i18n/client";
 import { getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
@@ -34,7 +34,7 @@ export const EndNodeWithReview = (node: NodeProps) => {
         }}
       >
         {/* Review  */}
-        <div className="relative mb-1 space-y-2 rounded-md border-1 border-red-hover bg-[#FEF2F2] p-4 text-white shadow-offboardDefault">
+        <div className="border-red-hover shadow-offboardDefault relative mb-1 space-y-2 rounded-md border-1 bg-[#FEF2F2] p-4 text-white">
           <div className={nodeClassName}>
             <div className="truncate">{t("logic.endNodeWithReview.reviewContent")}</div>
           </div>
@@ -45,7 +45,7 @@ export const EndNodeWithReview = (node: NodeProps) => {
           />
         </div>
         {/* End  */}
-        <div className="relative mb-4 space-y-2 rounded-md border-1 border-red-hover bg-[#FEF2F2] p-4 text-white shadow-offboardDefault">
+        <div className="border-red-hover shadow-offboardDefault relative mb-4 space-y-2 rounded-md border-1 bg-[#FEF2F2] p-4 text-white">
           <div className={nodeClassName}>
             <div className="truncate">{t("logic.endNode.confirmContent")}</div>
           </div>

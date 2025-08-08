@@ -1,49 +1,54 @@
-import { useCallback } from "react";
-import { MarkerType } from "reactflow";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Group, GroupsType } from "@gcforms/types";
-import { type NextActionRule } from "@gcforms/types";
-import { Language } from "@lib/types/form-builder-types";
-import { getReviewNode, getStartElements, getEndNode } from "@lib/utils/form-builder/i18nHelpers";
-import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
+import { useCallback, useMemo } from "react";
+import { MarkerType, type Edge, type Node } from "@xyflow/react";
+import { stratify, tree } from "d3-hierarchy";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-import { groupsToTreeData } from "@root/lib/groups/utils/groupsToTreeData";
 import {
   TreeItem,
   TreeItemIndex,
 } from "@formBuilder/components/shared/right-panel/headless-treeview/types";
+import { type Group } from "@gcforms/types";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { FormElement } from "@lib/types";
+import { Language } from "@lib/types/form-builder-types";
+import {
+  getEndNode,
+  getReviewNode,
+  getStartElements,
+  getStartLabels,
+} from "@lib/utils/form-builder/i18nHelpers";
+import { groupsToTreeData } from "@root/lib/groups/utils/groupsToTreeData";
 
-interface CustomEdge {
-  id: string;
-  source: string;
-  target: string;
-  style: {
-    strokeWidth: number;
-    stroke: string;
-  };
-  markerEnd: {
-    type: string | MarkerType;
-    width?: number | undefined;
-    height?: number | undefined;
-    color?: string | undefined;
-  };
-  ariaLabel: string;
-}
+const LOCKED_SECTIONS = {
+  START: LOCKED_GROUPS.START,
+  REVIEW: LOCKED_GROUPS.REVIEW,
+  END: LOCKED_GROUPS.END,
+} as const;
 
-export type GroupNodeType = {
-  id: string;
-  position: { x: number; y: number };
-  data: {
-    label: string;
-    children: GroupNodeType[];
-    nextAction?: NextActionRule | NextActionRule[] | string;
-  };
-  type: string;
+const PAGE_WIDTH = 260;
+const PAGE_HEADER_HEIGHT = 48;
+const PAGE_CHILD_HEIGHT = 60;
+const PAGE_CHILD_GAP = 8;
+const PAGE_PADDING = 12;
+const PAGE_MIN_HEIGHT = 144;
+const OFFBOARD_HEIGHT = 164;
+const LAYOUT_SPACING_X = 110;
+const LAYOUT_SPACING_Y = 36;
+
+type StaticChild = {
+  data: string;
+  index: string;
 };
 
+type FlowElementNodeData = {
+  groupId: string;
+  elementId?: number;
+  label?: string;
+};
+
+type LayoutNode = Node<Record<string, unknown>>;
+
 const defaultEdges = {
-  start: "start",
-  end: "end",
+  end: LOCKED_SECTIONS.END,
 } as const;
 
 const lineStyle = {
@@ -52,102 +57,147 @@ const lineStyle = {
 };
 
 const arrowStyle = {
-  type: "1__type=gc-arrow-closed",
+  type: MarkerType.ArrowClosed,
 };
 
-const getEdges = (
-  nodeId: string,
-  prevNodeId: string,
-  group: Group | undefined,
-  groups: GroupsType | undefined,
-  showReviewNode: boolean
-): CustomEdge[] => {
-  // Connect to end node as we don't have a next action
-  if (prevNodeId && group && typeof group.nextAction === "undefined") {
-    const fromGroup = group?.[nodeId as keyof typeof group];
-    const fromName = fromGroup?.["name" as keyof typeof fromGroup];
-    return [
-      {
-        id: `e-${nodeId}-end`,
-        source: nodeId,
-        target: defaultEdges.end,
-        style: {
-          ...lineStyle,
-        },
-        markerEnd: {
-          ...arrowStyle,
-        },
-        ariaLabel: `From ${fromName} to Confirmation`,
-      },
-    ];
+const getElementNodeId = (groupId: string, elementId: string | number) =>
+  `${groupId}::element::${elementId}`;
+
+const isStaticChild = (child: TreeItem | StaticChild): child is StaticChild =>
+  !("isFolder" in child);
+
+const getLabelName = (
+  treeItem: TreeItem,
+  key: TreeItemIndex,
+  lang: Language,
+  titleKey: "name" | "titleEn" | "titleFr"
+) => {
+  if (key === LOCKED_SECTIONS.START) {
+    return getStartLabels()[lang];
   }
 
-  // Add edge from this node to next action
-  if (prevNodeId && group && typeof group.nextAction === "string") {
-    let nextAction = group.nextAction;
+  return (treeItem.data?.[titleKey as keyof typeof treeItem.data] as string) || String(key);
+};
 
-    if (!showReviewNode && nextAction === LOCKED_GROUPS.REVIEW) {
-      nextAction = LOCKED_GROUPS.END;
-    }
-
-    return [
-      {
-        id: `e-${nodeId}-${nextAction}`,
-        source: nodeId,
-        target: nextAction,
-        style: {
-          ...lineStyle,
-        },
-        markerEnd: {
-          ...arrowStyle,
-        },
-        ariaLabel: `From ${group.name} to ${groups?.[nextAction]?.name}`,
-      },
-    ];
+const getChoiceLabel = (
+  elements: FormElement[],
+  choiceId: string,
+  lang: Language
+): string | undefined => {
+  if (choiceId.includes("catch-all")) {
+    return lang === "fr" ? "Toutes les autres options" : "All other options";
   }
 
-  // Add edges for multiple next actions
-  if (prevNodeId && group && Array.isArray(group.nextAction)) {
-    const nextActions = group.nextAction;
-    const edges = nextActions.map((action: NextActionRule) => {
-      let nextAction = action.groupId;
+  const [elementId, choiceIndex] = choiceId.split(".");
+  const element = elements.find((item) => item.id === Number(elementId));
 
-      if (!showReviewNode && action.groupId === LOCKED_GROUPS.REVIEW) {
-        nextAction = LOCKED_GROUPS.END;
+  if (!element?.properties?.choices || typeof choiceIndex === "undefined") {
+    return undefined;
+  }
+
+  return element.properties.choices[Number(choiceIndex)]?.[lang];
+};
+
+const getPageHeight = (childCount: number) => {
+  if (!childCount) {
+    return PAGE_MIN_HEIGHT;
+  }
+
+  return Math.max(
+    PAGE_MIN_HEIGHT,
+    PAGE_HEADER_HEIGHT +
+      PAGE_PADDING * 2 +
+      childCount * PAGE_CHILD_HEIGHT +
+      (childCount - 1) * PAGE_CHILD_GAP
+  );
+};
+
+const rootLayoutNode: LayoutNode = {
+  id: "layout-root",
+  position: { x: 0, y: 0 },
+  data: { label: { name: "" } },
+};
+
+const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[]) => {
+  if (!nodes.length) {
+    return nodes;
+  }
+
+  const maxPageHeight = nodes.reduce((maxHeight, node) => {
+    const nodeHeight = typeof node.style?.height === "number" ? node.style.height : PAGE_MIN_HEIGHT;
+    return Math.max(maxHeight, nodeHeight);
+  }, PAGE_MIN_HEIGHT);
+
+  const layoutTree = tree<LayoutNode>()
+    .nodeSize([maxPageHeight + LAYOUT_SPACING_Y, PAGE_WIDTH + LAYOUT_SPACING_X])
+    .separation(() => 1);
+
+  const hierarchy = stratify<LayoutNode>()
+    .id((node) => node.id)
+    .parentId((node) => {
+      if (node.id === rootLayoutNode.id) {
+        return undefined;
       }
 
-      return {
-        id: `e-${nodeId}-${action.choiceId}-${nextAction}`,
-        source: nodeId,
-        target: nextAction,
-        style: {
-          ...lineStyle,
-        },
-        markerEnd: {
-          ...arrowStyle,
-        },
-        ariaLabel: `From ${group.name} to ${groups?.[action.groupId]?.name}`,
-      };
-    });
+      return edges.find((edge) => edge.target === node.id)?.source || rootLayoutNode.id;
+    })([rootLayoutNode, ...nodes]);
 
-    return edges;
+  const laidOutRoot = layoutTree(hierarchy);
+  const positions = new Map<string, { x: number; y: number }>();
+
+  for (const node of laidOutRoot.descendants()) {
+    if (!node.id || node.id === rootLayoutNode.id) {
+      continue;
+    }
+
+    const width = (node.data.style?.width as number) ?? PAGE_WIDTH;
+    const height = (node.data.style?.height as number) ?? PAGE_MIN_HEIGHT;
+
+    positions.set(node.id, {
+      x: node.y - width / 2,
+      y: node.x - height / 2,
+    });
   }
 
-  return [];
+  return nodes.map((node) => ({
+    ...node,
+    position: positions.get(node.id) ?? node.position,
+  }));
 };
+
+const getLinearEdge = (
+  source: string,
+  target: string,
+  sourceLabel: string,
+  targetLabel?: string
+): Edge => ({
+  id: `e-${source}-${target}`,
+  source,
+  target,
+  style: {
+    ...lineStyle,
+  },
+  markerEnd: {
+    ...arrowStyle,
+  },
+  ariaLabel: `From ${sourceLabel} to ${targetLabel || target}`,
+});
 
 export const useFlowData = (
   lang: Language = "en",
   showReviewNode: boolean,
   hasReviewPage: boolean
 ) => {
-  const formGroups = useTemplateStore((s) => s.form.groups);
-  const formElements = useTemplateStore((s) => s.form.elements);
-  const startElements = getStartElements(lang);
+  const formGroups = useTemplateStore((state) => state.form.groups);
+  const formElements = useTemplateStore((state) => state.form.elements || []);
+  const startElements = getStartElements(lang).map((element) => ({
+    index: element.id,
+    data: element.data.label,
+  }));
   const reviewNode = getReviewNode(lang);
   const endNode = getEndNode(lang);
 
-  const treeItems = groupsToTreeData(formGroups || {}, formElements || [], {
+  const treeItems = groupsToTreeData(formGroups || {}, formElements, {
     reviewGroup: showReviewNode,
   });
 
@@ -156,93 +206,197 @@ export const useFlowData = (
   }
 
   const getData = useCallback(() => {
-    const edges: CustomEdge[] = [];
-    const treeIds = treeItems.root.children;
+    const edges: Edge[] = [];
+    const layoutEdges: Edge[] = [];
+    const pageNodes: LayoutNode[] = [];
+    const childNodes: Node<FlowElementNodeData>[] = [];
+    const treeIndexes = treeItems.root.children;
 
-    const x_pos = 0;
-    const y_pos = 0;
-    let prevNodeId: string = LOCKED_GROUPS.START;
-
-    if (!treeIds) {
+    if (!treeIndexes) {
       return { edges, nodes: [] };
     }
 
-    const nodes = [];
+    treeIndexes.forEach((key: TreeItemIndex) => {
+      if (key === LOCKED_SECTIONS.REVIEW || key === LOCKED_SECTIONS.END) {
+        return;
+      }
 
-    treeIds.forEach((key: TreeItemIndex) => {
       const treeItem: TreeItem = treeItems[key];
       const group: Group | undefined = formGroups && formGroups[key] ? formGroups[key] : undefined;
-      let elements: GroupNodeType[] = [];
 
-      if (key === LOCKED_GROUPS.START) {
-        // Add "default" start elements
-        // introduction, privacy
-        elements = startElements;
+      const titleKey = "name" as const;
+      const label = getLabelName(treeItem, key, lang, titleKey);
+      const isOffBoardSection = treeItem.data.nextAction === "exit";
+
+      let children: Array<TreeItem | StaticChild> = [];
+
+      if (key === LOCKED_SECTIONS.START) {
+        children = [...startElements];
       }
 
       if (treeItem.children && treeItem.children.length > 0) {
-        const children = treeItem.children.map((itemIndex: TreeItemIndex) => {
-          const item = treeItems[itemIndex];
-          return {
-            type: "formElementNode",
-            id: String(item.index),
-            data: {
-              label: (lang === "en" ? item.data.titleEn : item.data.titleFr) || "",
-              children: [],
-            },
-            position: { x: 0, y: 0 },
-          };
-        });
-
-        elements = [...elements, ...children];
+        const groupChildren = treeItem.children
+          .map((childId: TreeItemIndex) => treeItems[childId])
+          .filter(Boolean) as TreeItem[];
+        children = [...children, ...groupChildren];
       }
 
-      const newEdges = getEdges(key as string, prevNodeId, group, formGroups, showReviewNode);
+      const pageHeight = isOffBoardSection ? OFFBOARD_HEIGHT : getPageHeight(children.length);
 
-      const titleKey = "name" as keyof typeof treeItem.data;
-
-      const isOffBoardSection = treeItem.data.nextAction === "exit";
-
-      let label = treeItem.data[titleKey];
-
-      if (key === LOCKED_GROUPS.START) {
-        // Ensure start label is displayed in the correct language
-        label = getStartLabels()[lang];
-      }
-
-      const flowNode = {
-        id: key as string,
-        type: isOffBoardSection ? "offboardNode" : "groupNode",
-        position: { x: x_pos, y: y_pos },
+      pageNodes.push({
+        id: String(key),
+        position: { x: 0, y: 0 },
         data: {
-          label,
-          children: elements,
-          nextAction: treeItem.data.nextAction,
+          label: {
+            name: label,
+          },
         },
-      };
+        type: isOffBoardSection ? "offboardNode" : "groupNode",
+        style: {
+          width: PAGE_WIDTH,
+          height: pageHeight,
+        },
+      });
 
-      edges.push(...(newEdges as CustomEdge[]));
-      prevNodeId = key as string;
+      if (!isOffBoardSection) {
+        children.forEach((child, index) => {
+          const childKey = String(child.index);
+          const treeChild = !isStaticChild(child) ? child : undefined;
+          const elementId = treeChild ? Number(treeChild.index) : undefined;
 
-      if (key === LOCKED_GROUPS.REVIEW || key === LOCKED_GROUPS.END) {
+          childNodes.push({
+            id: getElementNodeId(String(key), childKey),
+            type: "elementNode",
+            parentId: String(key),
+            extent: "parent",
+            draggable: false,
+            selectable: true,
+            position: {
+              x: PAGE_PADDING,
+              y: PAGE_HEADER_HEIGHT + PAGE_PADDING + index * (PAGE_CHILD_HEIGHT + PAGE_CHILD_GAP),
+            },
+            style: {
+              width: PAGE_WIDTH - PAGE_PADDING * 2,
+              height: PAGE_CHILD_HEIGHT,
+            },
+            data: {
+              groupId: String(key),
+              elementId,
+              label: isStaticChild(child) ? child.data : undefined,
+            },
+          });
+        });
+      }
+
+      if (!group) {
         return;
       }
-      nodes.push(flowNode);
+
+      const sourceLabel = group.name || label;
+
+      if (typeof group.nextAction === "undefined") {
+        edges.push(getLinearEdge(String(key), defaultEdges.end, sourceLabel, "Confirmation"));
+        layoutEdges.push(getLinearEdge(String(key), defaultEdges.end, sourceLabel, "Confirmation"));
+        return;
+      }
+
+      if (typeof group.nextAction === "string") {
+        if (group.nextAction === "exit") {
+          return;
+        }
+
+        let nextAction = group.nextAction;
+
+        if (!showReviewNode && nextAction === LOCKED_SECTIONS.REVIEW) {
+          nextAction = LOCKED_SECTIONS.END;
+        }
+
+        edges.push(
+          getLinearEdge(String(key), nextAction, sourceLabel, formGroups?.[nextAction]?.name)
+        );
+        layoutEdges.push(
+          getLinearEdge(String(key), nextAction, sourceLabel, formGroups?.[nextAction]?.name)
+        );
+        return;
+      }
+
+      group.nextAction.forEach((action) => {
+        let nextAction = action.groupId;
+
+        if (!showReviewNode && action.groupId === LOCKED_SECTIONS.REVIEW) {
+          nextAction = LOCKED_SECTIONS.END;
+        }
+
+        const [elementId] = action.choiceId.split(".");
+        const source = getElementNodeId(String(key), elementId);
+
+        edges.push({
+          id: `e-${source}-${action.choiceId}-${nextAction}`,
+          source,
+          target: nextAction,
+          style: {
+            ...lineStyle,
+          },
+          markerEnd: {
+            ...arrowStyle,
+          },
+          label: getChoiceLabel(formElements, action.choiceId, lang),
+          labelStyle: {
+            fill: "#334155",
+            fontSize: 12,
+            fontWeight: 600,
+          },
+          ariaLabel: `From ${group.name} to ${formGroups?.[action.groupId]?.name || nextAction}`,
+        });
+
+        layoutEdges.push(
+          getLinearEdge(String(key), nextAction, sourceLabel, formGroups?.[action.groupId]?.name)
+        );
+      });
     });
 
-    // Add review node
     if (showReviewNode) {
-      nodes.push({ ...reviewNode });
+      pageNodes.push({
+        ...reviewNode,
+        data: {
+          label: {
+            name: reviewNode.data.label as string,
+          },
+        },
+        style: {
+          width: PAGE_WIDTH,
+          height: PAGE_MIN_HEIGHT,
+        },
+      });
     }
 
-    // Push "end" node to the end
-    // And add confirmation element
-    nodes.push({ ...endNode });
+    pageNodes.push({
+      ...endNode,
+      style: {
+        width: PAGE_WIDTH,
+        height: hasReviewPage ? 230 : 164,
+      },
+    });
 
-    return { edges, nodes };
-  }, [treeItems, reviewNode, endNode, formGroups, startElements, lang, showReviewNode]);
+    const laidOutPageNodes = layoutPageNodes(pageNodes, layoutEdges);
 
-  const { edges, nodes } = getData();
+    return {
+      edges,
+      nodes: [...laidOutPageNodes, ...childNodes],
+    };
+  }, [
+    treeItems,
+    formGroups,
+    formElements,
+    startElements,
+    reviewNode,
+    endNode,
+    lang,
+    showReviewNode,
+    hasReviewPage,
+  ]);
 
-  return { edges, nodes, getData };
+  const data = useMemo(() => getData(), [getData]);
+
+  return { ...data, getData };
 };

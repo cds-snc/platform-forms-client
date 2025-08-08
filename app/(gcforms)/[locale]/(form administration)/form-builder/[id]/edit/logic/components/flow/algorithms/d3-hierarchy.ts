@@ -5,7 +5,7 @@
  */
 
 import { type LayoutAlgorithm, type Direction } from ".";
-import { type Node, getIncomers } from "reactflow";
+import { type Node, getIncomers } from "@xyflow/react";
 import { type HierarchyPointNode, stratify, tree } from "d3-hierarchy";
 
 // D3 Hierarchy doesn't support layouting in different directions, but we can
