@@ -1,4 +1,4 @@
-import { buildCompleteFormDataObject } from "../parseRequestData";
+
 import { submission as baseSubmission } from "./fixtures/base";
 import { submission as simpleSubmission, result as simpleResult } from "./fixtures/simple";
 import { submission as checkboxSubmission, result as checkboxResult } from "./fixtures/checkbox";
@@ -30,6 +30,7 @@ import {
 
 import merge from "lodash.merge";
 import { FormRecord, Responses } from "@root/lib/types";
+import { normalizeFormResponses } from "../normalizeFormResponses";
 
 describe("transformFormResponses", () => {
   it("should transform responses for storage", () => {
@@ -75,7 +76,7 @@ describe("transformFormResponses", () => {
     types.forEach((type) => {
       const payload = merge({}, baseSubmission, type.submission);
 
-      const result = buildCompleteFormDataObject(payload.form, payload.responses);
+      const result = normalizeFormResponses(payload.form, payload.responses);
 
       expect(result).toEqual(type.result);
     });
@@ -83,16 +84,16 @@ describe("transformFormResponses", () => {
 
   describe("Error handling", () => {
     it("should throw error for invalid form record", () => {
-      expect(() => buildCompleteFormDataObject(null as unknown as FormRecord, {})).toThrow(
+      expect(() => normalizeFormResponses(null as unknown as FormRecord, {})).toThrow(
         "Invalid form record: missing or invalid elements array"
       );
 
-      expect(() => buildCompleteFormDataObject({} as unknown as FormRecord, {})).toThrow(
+      expect(() => normalizeFormResponses({} as unknown as FormRecord, {})).toThrow(
         "Invalid form record: missing or invalid elements array"
       );
 
       expect(() =>
-        buildCompleteFormDataObject({ form: null } as unknown as FormRecord, {})
+        normalizeFormResponses({ form: null } as unknown as FormRecord, {})
       ).toThrow("Invalid form record: missing or invalid elements array");
     });
 
@@ -100,14 +101,14 @@ describe("transformFormResponses", () => {
       const validForm = { form: { elements: [] }, id: "test", securityAttribute: "protected" };
 
       expect(() =>
-        buildCompleteFormDataObject(
+        normalizeFormResponses(
           validForm as unknown as FormRecord,
           null as unknown as Responses
         )
       ).toThrow("Invalid values: must be a valid object");
 
       expect(() =>
-        buildCompleteFormDataObject(
+        normalizeFormResponses(
           validForm as unknown as FormRecord,
           "string" as unknown as Responses
         )
@@ -123,7 +124,7 @@ describe("transformFormResponses", () => {
         securityAttribute: "protected",
       };
 
-      const result = buildCompleteFormDataObject(emptyForm as unknown as FormRecord, {});
+      const result = normalizeFormResponses(emptyForm as unknown as FormRecord, {});
 
       expect(result).toEqual({});
     });
@@ -140,7 +141,7 @@ describe("transformFormResponses", () => {
         securityAttribute: "protected",
       };
 
-      const result = buildCompleteFormDataObject(formWithElements as unknown as FormRecord, {});
+      const result = normalizeFormResponses(formWithElements as unknown as FormRecord, {});
 
       expect(result).toHaveProperty("1", "");
       expect(result).toHaveProperty("2", []);
@@ -159,7 +160,7 @@ describe("transformFormResponses", () => {
         nonexistent: "another unknown",
       };
 
-      const result = buildCompleteFormDataObject(form as unknown as FormRecord, responses);
+      const result = normalizeFormResponses(form as unknown as FormRecord, responses);
 
       expect(result["1"]).toBe("valid field");
       expect(result["999"]).toBe("unknown field");
@@ -175,7 +176,7 @@ describe("transformFormResponses", () => {
 
       const responses = { "1": "invalid file data" };
 
-      const result = buildCompleteFormDataObject(form as unknown as FormRecord, responses);
+      const result = normalizeFormResponses(form as unknown as FormRecord, responses);
 
       expect(result["1"]).toEqual({
         name: null,
@@ -193,7 +194,7 @@ describe("transformFormResponses", () => {
 
       const responses = { "1": "not an array" };
 
-      const result = buildCompleteFormDataObject(form as unknown as FormRecord, responses);
+      const result = normalizeFormResponses(form as unknown as FormRecord, responses);
 
       expect(result["1"]).toEqual([]);
     });
@@ -207,7 +208,7 @@ describe("transformFormResponses", () => {
 
       const responses = { "1": ["valid", 123, null, "also valid", {}] };
 
-      const result = buildCompleteFormDataObject(
+      const result = normalizeFormResponses(
         form as unknown as FormRecord,
         responses as unknown as Responses
       );
@@ -224,7 +225,7 @@ describe("transformFormResponses", () => {
 
       const responses = { "1": "some value" };
 
-      const result = buildCompleteFormDataObject(form as unknown as FormRecord, responses);
+      const result = normalizeFormResponses(form as unknown as FormRecord, responses);
 
       expect(result["1"]).toBe("some value");
     });
@@ -242,7 +243,7 @@ describe("transformFormResponses", () => {
         securityAttribute: "protected",
       };
 
-      const result = buildCompleteFormDataObject(form as unknown as FormRecord, {});
+      const result = normalizeFormResponses(form as unknown as FormRecord, {});
 
       expect(result).toHaveProperty("1", "");
       expect(result).not.toHaveProperty("2"); // richText should be excluded
@@ -268,7 +269,7 @@ describe("transformFormResponses", () => {
 
       const responses = { "1": "not an array" };
 
-      const result = buildCompleteFormDataObject(form as unknown as FormRecord, responses);
+      const result = normalizeFormResponses(form as unknown as FormRecord, responses);
 
       expect(result["1"]).toEqual([]);
     });

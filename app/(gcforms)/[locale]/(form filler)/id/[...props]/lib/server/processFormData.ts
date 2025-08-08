@@ -5,12 +5,19 @@ import { invokeSubmissionLambda } from "./invokeSubmissionLambda";
 import { FormIsClosedError, FormNotFoundError, MissingFormDataError } from "../client/exceptions";
 import { validatePayloadSize } from "@lib/validation/validatePayloadSize";
 
-export const processFormData = async (
-  responses: Record<string, Response>,
-  securityAttribute: string | undefined,
-  formId: string,
-  contentLanguage: string
-): Promise<{
+type ProcessFormDataParams = {
+  responses: Record<string, Response>;
+  securityAttribute?: string;
+  formId: string;
+  language?: string;
+};
+
+export const processFormData = async ({
+  responses,
+  securityAttribute,
+  formId,
+  language,
+}: ProcessFormDataParams): Promise<{
   submissionId: string;
   fileURLMap?: SignedURLMap;
 }> => {
@@ -48,7 +55,7 @@ export const processFormData = async (
     const { submissionId, fileURLMap } = await invokeSubmissionLambda(
       form.id,
       responses,
-      contentLanguage ? contentLanguage : "en",
+      language ? language : "en",
       securityAttribute ? securityAttribute : "Protected A"
     );
 

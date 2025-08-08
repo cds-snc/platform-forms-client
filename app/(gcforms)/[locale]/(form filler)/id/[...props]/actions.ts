@@ -1,7 +1,7 @@
 "use server";
 
 import { PublicFormRecord, Responses, SignedURLMap } from "@lib/types";
-import { buildCompleteFormDataObject } from "./lib/server/parseRequestData";
+import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
 import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
@@ -108,14 +108,14 @@ export async function submitForm(
       // throw new MissingFormDataError("Form data validation failed");
     }
 
-    const formData = buildCompleteFormDataObject(template, values);
+    const formData = normalizeFormResponses(template, values);
 
-    const { submissionId, fileURLMap } = await processFormData(
-      formData,
-      template.securityAttribute,
+    const { submissionId, fileURLMap } = await processFormData({
+      responses: formData,
+      securityAttribute: template.securityAttribute,
       formId,
-      language
-    );
+      language,
+    });
 
     sendNotifications(formId, template.form.titleEn, template.form.titleFr);
 

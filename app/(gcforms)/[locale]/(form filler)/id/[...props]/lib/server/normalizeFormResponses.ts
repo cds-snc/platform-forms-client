@@ -105,7 +105,7 @@ const fillData = (value: Response | Responses[], element: FormElement): Response
   }
 };
 
-export const buildCompleteFormDataObject = (
+export const normalizeFormResponses = (
   formRecord: PublicFormRecord,
   values: Responses
 ): Responses => {
