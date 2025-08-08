@@ -14,12 +14,14 @@ import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorLis
 import { hasOwnProperty, isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
-import { matchRule, FormValues, GroupsType } from "@lib/formContext";
+import { FormValues, GroupsType, checkVisibilityRecursive } from "@lib/formContext";
 import { inGroup } from "@lib/formContext";
 import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClientSide";
 import { DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
 import { isValidEmail } from "@lib/validation/isValidEmail";
+import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
+import { bytesToMb } from "@lib/utils/fileSize";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -146,7 +148,9 @@ const isFieldResponseValid = (
         return t("input-validation.required");
 
       if (fileInputResponse.size && !isAllFilesSizeValid(values)) {
-        return t("input-validation.file-size-too-large-all-files");
+        return t("input-validation.file-size-too-large-all-files", {
+          maxSizeInMb: bytesToMb(BODY_SIZE_LIMIT_WITH_FILES),
+        });
       }
 
       if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
@@ -173,47 +177,39 @@ const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.dynamicRow: {
-      //set up object to store results
-      // loop over rows of values
-
       // deterministic switch to return an error object or not
       // required because returning any object (including nulls) blocks the submit action
       let dynamicRowHasErrors = false;
 
       const groupErrors = (value as Array<Responses>).map((row) => {
         const rowErrors: Record<string, unknown> = {};
-        for (const [responseKey, responseValue] of Object.entries(row)) {
-          if (
-            formElement.properties.subElements &&
-            formElement.properties.subElements[parseInt(responseKey)]
-          ) {
-            const subElement = formElement.properties.subElements[parseInt(responseKey)];
 
-            if (subElement?.properties?.validation) {
-              const validationError = isFieldResponseValid(
-                responseValue,
-                values,
-                subElement.type,
-                subElement,
-                subElement.properties.validation,
-                t
-              );
-              rowErrors[responseKey] = validationError;
-              if (validationError !== null) {
-                dynamicRowHasErrors = true;
-              }
-            } else {
-              rowErrors[responseKey] = null;
+        (formElement.properties.subElements || []).forEach((subElement, index) => {
+          if (subElement.properties.validation) {
+            const validationError = isFieldResponseValid(
+              row[index],
+              values,
+              subElement.type,
+              subElement,
+              subElement.properties.validation,
+              t
+            );
+
+            if (validationError !== null) {
+              rowErrors[index] = validationError;
+              dynamicRowHasErrors = true;
             }
           }
-        }
+        });
+
         return rowErrors;
       });
-      if (!dynamicRowHasErrors) {
-        break;
-      } else {
+
+      if (dynamicRowHasErrors) {
         return groupErrors;
       }
+
+      break;
     }
     case FormElementTypes.richText:
       break;
@@ -342,11 +338,8 @@ export const validateOnSubmit = (
 ): Responses => {
   const errors: Responses = {};
 
-  for (const item in values) {
-    const formElement = props.formRecord.form.elements.find(
-      (element) => element.id == parseInt(item)
-    );
-    if (!formElement) continue;
+  for (const formElement of props.formRecord.form.elements) {
+    const item = values[formElement.id];
 
     const currentGroup = values.currentGroup as string;
     const groups = props.formRecord.form.groups as GroupsType;
@@ -361,20 +354,14 @@ export const validateOnSubmit = (
       continue;
     }
 
-    if (
-      formElement.properties.conditionalRules &&
-      formElement.properties.conditionalRules.length > 0
-    ) {
-      // check if a conditional rule is met
-      const rules = formElement.properties.conditionalRules;
-      if (!rules.some((rule) => matchRule(rule, props.formRecord, values as FormValues))) {
-        continue;
-      }
+    // If the form element is not visible, skip validation
+    if (!checkVisibilityRecursive(props.formRecord, formElement, values as FormValues)) {
+      continue;
     }
 
     if (formElement.properties.validation) {
       const result = isFieldResponseValid(
-        values[item],
+        item,
         values,
         formElement.type,
         formElement,
@@ -383,11 +370,11 @@ export const validateOnSubmit = (
       );
 
       if (result) {
-        errors[item] = result;
+        errors[formElement.id] = result;
       }
     }
   }
-  // console.log(errors);
+
   return errors;
 };
 /**
@@ -470,7 +457,7 @@ export const setFocusOnErrorMessage = (props: FormikProps<Responses>, errorId: s
  */
 export const isValidGovEmail = (email: string): boolean => {
   const regex =
-    /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+(\+[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]*)?)@((?:[a-zA-Z0-9-.]+\.gc\.ca|cds-snc\.freshdesk\.com)|(canada|cds-snc|elections|rcafinnovation|canadacouncil|nfb|debates-debats)\.ca)$/;
+    /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+(\+[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]*)?)@((?:[a-zA-Z0-9-.]+\.gc\.ca|cds-snc\.freshdesk\.com)|(canada|cds-snc|elections|rcafinnovation|canadacouncil|nfb|debates-debats|invcanada|gg)\.ca)$/;
   return regex.test(email);
 };
 

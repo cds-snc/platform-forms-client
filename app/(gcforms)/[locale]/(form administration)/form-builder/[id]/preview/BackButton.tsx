@@ -4,6 +4,7 @@ import { Button } from "@clientComponents/globals";
 import { Language } from "@lib/types/form-builder-types";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { BackArrowIcon24x24 } from "@serverComponents/icons";
+import { focusHeadingBySelector } from "@lib/client/clientHelpers";
 
 // Must be placed withing context of the GCFormsContext.Provider
 export const BackButton = ({
@@ -16,12 +17,14 @@ export const BackButton = ({
   saveAndResumeEnabled?: boolean;
 }) => {
   const { t } = useTranslation("review");
-  const { setGroup, previousGroup, currentGroup } = useGCFormsContext();
+  const { setGroup, getPreviousGroup, currentGroup } = useGCFormsContext();
 
   // Do not show on the Review page
   if (!currentGroup || currentGroup !== LockedSections.REVIEW) {
     return <></>;
   }
+
+  const previousGroup = getPreviousGroup(currentGroup);
 
   return (
     <Button
@@ -30,7 +33,9 @@ export const BackButton = ({
       onClick={() => {
         setGroup(previousGroup);
         onClick && onClick();
+        focusHeadingBySelector(["form h2", "h1"]);
       }}
+      dataTestId="backButton"
     >
       {!saveAndResumeEnabled ? (
         t("goBack", { lng: language })
@@ -38,7 +43,7 @@ export const BackButton = ({
         <>
           <BackArrowIcon24x24
             className="group-focus:fill-white group-active:fill-white"
-            title={t("goBack", { lng: language })}
+            title={t("goBack", { lng: language }) + " " + previousGroup}
           />
           <span className="hidden laptop:block">{t("goBack", { lng: language })}</span>
         </>

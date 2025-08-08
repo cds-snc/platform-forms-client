@@ -228,11 +228,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
               className={isRequired ? "required" : ""}
               required={isRequired}
               lang={lang}
+              htmlFor={`${id}`}
             >
               {labelText}
             </Label>
           )}
-          {description && <Description id={`${id}`}>{description}</Description>}
+          {description && <Description id={`desc-${id}`}>{description}</Description>}
           <FileInput
             id={`${id}`}
             name={`${id}`}

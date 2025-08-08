@@ -41,15 +41,28 @@ export const RegistrationForm = () => {
   const router = useRouter();
 
   const localFormAction = async (_: ErrorStates, formData: FormData) => {
+    const formEntries = {
+      name: (formData.get("name") as string) || "",
+      username: (formData.get("username") as string) || "",
+      password: (formData.get("password") as string) || "",
+      passwordConfirmation: (formData.get("passwordConfirmation") as string) || "",
+    };
+
     const result = await register(language, _, formData);
     if (result.authFlowToken) {
       sessionStorage.setItem("authFlowToken", JSON.stringify(result.authFlowToken));
       router.push(`/${language}/auth/mfa`);
     }
-    return result;
+
+    return {
+      ...result,
+      formData: formEntries,
+    };
   };
 
-  const [state, formAction] = useActionState(localFormAction, {});
+  const [state, formAction] = useActionState(localFormAction, {
+    formData: { name: "", username: "", password: "", passwordConfirmation: "" },
+  });
 
   return (
     <>
@@ -111,6 +124,7 @@ export const RegistrationForm = () => {
             id={"name"}
             name={"name"}
             validationError={state.validationErrors?.find((e) => e.fieldKey === "name")?.fieldValue}
+            defaultValue={state.formData?.name || ""}
           />
         </div>
         <div className="gcds-input-wrapper">
@@ -129,6 +143,7 @@ export const RegistrationForm = () => {
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "username")?.fieldValue
             }
+            defaultValue={state.formData?.username || ""}
           />
         </div>
         <div className="gcds-input-wrapper">
@@ -153,6 +168,7 @@ export const RegistrationForm = () => {
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "password")?.fieldValue
             }
+            defaultValue={state.formData?.password || ""}
           />
         </div>
         <div className="gcds-input-wrapper">
@@ -172,6 +188,7 @@ export const RegistrationForm = () => {
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "passwordConfirmation")?.fieldValue
             }
+            defaultValue={state.formData?.passwordConfirmation || ""}
           />
         </div>
         <p className="-mt-2 mb-10">

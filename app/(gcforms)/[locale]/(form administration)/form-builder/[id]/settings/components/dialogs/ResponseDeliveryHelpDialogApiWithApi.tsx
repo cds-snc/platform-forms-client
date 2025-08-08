@@ -41,9 +41,6 @@ const ResponseDeliveryHelpWithApiDialogWithApi = ({ handleClose }: { handleClose
             <thead className="border-b-3">
               <tr>
                 <th className="p-2 text-left">
-                  {t("settingsResponseDelivery.responseDeliveryHelpWithApi.inbox.title")}
-                </th>
-                <th className="whitespace-nowrap p-2 text-left">
                   {t("settingsResponseDelivery.responseDeliveryHelpWithApi.vault.title")}
                 </th>
                 <th className="p-2 text-left">
@@ -55,9 +52,6 @@ const ResponseDeliveryHelpWithApiDialogWithApi = ({ handleClose }: { handleClose
               {/* Row 1 */}
               <tr>
                 <td className="border-b-2 border-r-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelpWithApi.inbox.text1")}
-                </td>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
                   {t("settingsResponseDelivery.responseDeliveryHelpWithApi.vault.text1")}
                 </td>
                 <td className="border-b-2 p-2 align-top text-sm">
@@ -66,9 +60,6 @@ const ResponseDeliveryHelpWithApiDialogWithApi = ({ handleClose }: { handleClose
               </tr>
               {/* Row 2 */}
               <tr>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelpWithApi.inbox.text2")}
-                </td>
                 <td className="border-b-2 border-r-2 p-2 align-top text-sm">
                   {t("settingsResponseDelivery.responseDeliveryHelpWithApi.vault.text2")}
                 </td>
@@ -79,9 +70,6 @@ const ResponseDeliveryHelpWithApiDialogWithApi = ({ handleClose }: { handleClose
               {/* Row 3 */}
               <tr>
                 <td className="border-b-2 border-r-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelpWithApi.inbox.text3")}
-                </td>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
                   {t("settingsResponseDelivery.responseDeliveryHelpWithApi.vault.text3")}
                 </td>
                 <td className="border-b-2 p-2 align-top text-sm">
@@ -91,9 +79,6 @@ const ResponseDeliveryHelpWithApiDialogWithApi = ({ handleClose }: { handleClose
               {/* Row 4 */}
               <tr>
                 <td className="border-b-2 border-r-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelpWithApi.inbox.text4")}
-                </td>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
                   {t("settingsResponseDelivery.responseDeliveryHelpWithApi.vault.text4")}
                 </td>
                 <td className="border-b-2 p-2 align-top text-sm">
@@ -102,9 +87,6 @@ const ResponseDeliveryHelpWithApiDialogWithApi = ({ handleClose }: { handleClose
               </tr>
               {/* Row 5 */}
               <tr>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelpWithApi.inbox.text5")}
-                </td>
                 <td className="border-b-2 border-r-2 p-2 align-top text-sm">
                   {t("settingsResponseDelivery.responseDeliveryHelpWithApi.vault.text5")}
                 </td>

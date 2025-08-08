@@ -9,13 +9,12 @@ import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
 import { dateHasPast } from "@lib/utils";
 import { FormStatus } from "@gcforms/types";
-import { verifyHCaptchaToken } from "@clientComponents/globals/FormCaptcha/actions";
+import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
-import { validateResponses } from "@lib/validation/validation";
-
-//  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
-const CAPTCHA_BLOCKABLE_MODE = false;
+import { validateOnSubmit, validateResponses } from "@lib/validation/validation";
+import { serverTranslation } from "@root/i18n";
+import { sendNotifications } from "@lib/notifications";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -51,10 +50,12 @@ export async function submitForm(
       };
     }
 
-    const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
-    if (captchaEnabled) {
+    const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
+    // Skip hCaptcha verification for form-builder Preview (drafts)
+    if (template?.isPublished) {
+      // hCaptcha runs regardless but only block submissions if the feature flag is enabled
       const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
-      if (CAPTCHA_BLOCKABLE_MODE && !captchaVerified) {
+      if (hCaptchaBlockingMode && !captchaVerified) {
         return {
           id: formId,
           error: {
@@ -65,6 +66,9 @@ export async function submitForm(
       }
     }
 
+    /**
+     * This validation checks the response values against the template element types.
+     */
     const validateResponsesResult = await validateResponses(values, template);
 
     if (Object.keys(validateResponsesResult).length !== 0) {
@@ -78,6 +82,27 @@ export async function submitForm(
       // throw new MissingFormDataError("Form data validation failed");
     }
 
+    const { t } = await serverTranslation();
+
+    /**
+     * This validation runs the client-side validation on the server.
+     */
+    const validateOnSubmitResult = await validateOnSubmit(values, {
+      formRecord: template,
+      t: t,
+    });
+
+    if (Object.keys(validateOnSubmitResult).length !== 0) {
+      logMessage.info(
+        `[server-action][submitForm] Detected validation errors on form ${formId}. Errors: ${JSON.stringify(
+          validateOnSubmitResult
+        )}`
+      );
+      // Keeping in "passive mode" for now.
+      // Uncomment following line to throw validation error from server.
+      // throw new MissingFormDataError("Form data validation failed");
+    }
+
     const formDataObject = buildFormDataObject(template, values);
 
     if (Object.entries(formDataObject).length <= 2) {
@@ -87,6 +112,8 @@ export async function submitForm(
     const data = await parseRequestData(formDataObject as SubmissionRequestBody);
 
     const submissionId = await processFormData(data.fields, data.files, language);
+
+    sendNotifications(formId, template.form.titleEn, template.form.titleFr);
 
     return { id: formId, submissionId };
   } catch (e) {

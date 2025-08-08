@@ -14,7 +14,7 @@ import { TextInput } from "../../../components/client/TextInput";
 import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
 import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
-import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
+import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
 import { useState } from "react";
 import { Success } from "../../../components/client/Success";
 
@@ -32,22 +32,33 @@ export const ContactForm = () => {
   };
 
   const submitForm = async (formData: FormData) => {
-    const formEntries = Object.fromEntries(formData.entries());
+    const formEntries = {
+      ...Object.fromEntries(formData.entries()),
+      // Handle checkbox values - without this only the last checked value is set
+      request: formData.getAll("request").join(","),
+    };
+
+    if (!formEntries.request) {
+      // Set to empty string if the request field is not set
+      formEntries.request = "";
+    }
 
     const SupportSchema = object({
       // checkbox input can send a non-string value when empty
-      request: string(t("input-validation.required", { ns: "common" }), [
-        minLength(1, t("input-validation.required", { ns: "common" })),
-      ]),
-      description: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
-      name: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
-      email: string([
+      request: pipe(
+        string(t("input-validation.required", { ns: "common" })),
+        minLength(1, t("input-validation.required", { ns: "common" }))
+      ),
+      description: pipe(string(), minLength(1, t("input-validation.required", { ns: "common" }))),
+      name: pipe(string(), minLength(1, t("input-validation.required", { ns: "common" }))),
+      email: pipe(
+        string(),
         toLowerCase(),
-        toTrimmed(),
+        trim(),
         minLength(1, t("input-validation.required", { ns: "common" })),
-        email(t("input-validation.email", { ns: "common" })),
-      ]),
-      department: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+        email(t("input-validation.email", { ns: "common" }))
+      ),
+      department: pipe(string(), minLength(1, t("input-validation.required", { ns: "common" }))),
       // Note: branch and jobTitle are not required/validated
       branch: string(),
       jobTitle: string(),
@@ -87,7 +98,7 @@ export const ContactForm = () => {
             <ValidationMessage
               type={ErrorStatus.ERROR}
               validation={true}
-              tabIndex={0}
+              focussable={true}
               id="validationErrors"
               heading={t("input-validation.heading", { ns: "common" })}
             >
@@ -105,7 +116,7 @@ export const ContactForm = () => {
             </ValidationMessage>
           )}
           <h1>{t("contactus.title")}</h1>
-          <p className="-mt-8 mb-6">{t("contactus.useThisForm")}</p>
+          <p className="mb-6">{t("contactus.useThisForm")}</p>
           <p className="mb-14">
             {t("contactus.gcFormsTeamPart1")}{" "}
             <Link href={`https://www.canada.ca/${language}/contact.html`}>
@@ -119,7 +130,14 @@ export const ContactForm = () => {
               <Link href={`/${language}/support`}>{t("contactus.supportFormLink")}</Link>.
             </p>
           </Alert.Warning>
-          <form id="contactus" action={submitForm} noValidate>
+          <form
+            id="contactus"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitForm(new FormData(e.currentTarget));
+            }}
+            noValidate
+          >
             {errors.error && (
               <Alert.Danger focussable={true} title={t("error")} className="my-2">
                 <p>{t(errors.error)}</p>

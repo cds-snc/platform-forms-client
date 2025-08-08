@@ -15,7 +15,7 @@ import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
 import { useState } from "react";
 import {
-  custom,
+  check,
   email,
   minLength,
   maxLength,
@@ -23,7 +23,8 @@ import {
   safeParse,
   string,
   toLowerCase,
-  toTrimmed,
+  trim,
+  pipe,
 } from "valibot";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { Success } from "./Success";
@@ -45,25 +46,27 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
     const formEntries = Object.fromEntries(formData.entries());
 
     const SupportSchema = object({
-      managerEmail: string([
+      managerEmail: pipe(
+        string(),
         toLowerCase(),
-        toTrimmed(),
+        trim(),
         minLength(1, t("input-validation.required", { ns: "common" })),
         email(t("input-validation.email", { ns: "common" })),
-        custom(
+        check(
           (email) => isValidGovEmail(email),
           t("input-validation.validGovEmail", { ns: "common" })
         ),
-        custom(
+        check(
           (email) => email?.toLowerCase() != userEmail?.toLowerCase(),
           t("input-validation.notSameAsUserEmail", { ns: "common" })
-        ),
-      ]),
-      department: string([
+        )
+      ),
+      department: pipe(
+        string(),
         minLength(1, t("input-validation.required", { ns: "common" })),
-        maxLength(50, t("signUpRegistration.fields.name.error.maxLength")),
-      ]),
-      goals: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+        maxLength(50, t("signUpRegistration.fields.name.error.maxLength"))
+      ),
+      goals: pipe(string(), minLength(1, t("input-validation.required", { ns: "common" }))),
     });
 
     const validateForm = safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
@@ -101,7 +104,7 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
             <ValidationMessage
               type={ErrorStatus.ERROR}
               validation={true}
-              tabIndex={0}
+              focussable={true}
               id="unlockPublishingValidationErrors"
               heading={t("input-validation.heading", { ns: "common" })}
             >

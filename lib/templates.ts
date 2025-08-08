@@ -22,6 +22,7 @@ import { isValidISODate } from "./utils/date/isValidISODate";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
+import { NotificationsInterval } from "@gcforms/types";
 
 // ******************************************
 // Internal Module Functions
@@ -46,6 +47,7 @@ const _parseTemplate = (template: {
   closingDate?: Date | null;
   closedDetails?: Prisma.JsonValue | null;
   saveAndResume: boolean;
+  notificationsInterval?: number | null;
 }): FormRecord => {
   return {
     id: template.id,
@@ -79,6 +81,7 @@ const _parseTemplate = (template: {
     }),
     closedDetails: template.closedDetails as ClosedDetails,
     saveAndResume: template.saveAndResume,
+    notificationsInterval: template.notificationsInterval as NotificationsInterval,
   };
 };
 
@@ -96,6 +99,7 @@ export type CreateTemplateCommand = {
   publishReason?: string;
   publishFormType?: string;
   publishDesc?: string;
+  notificationsInterval?: NotificationsInterval;
 };
 
 export type UpdateTemplateCommand = {
@@ -108,6 +112,7 @@ export type UpdateTemplateCommand = {
   publishReason?: string;
   publishFormType?: string;
   publishDesc?: string;
+  notificationsInterval?: NotificationsInterval;
 };
 
 export class InvalidFormConfigError extends Error {
@@ -187,6 +192,9 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
           connect: { id: command.userID },
         },
         ...(command.formPurpose && { formPurpose: command.formPurpose }),
+        ...(command.notificationsInterval !== undefined && {
+          notificationsInterval: command.notificationsInterval,
+        }),
       },
       select: {
         id: true,
@@ -202,6 +210,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -248,6 +257,7 @@ export async function getAllTemplates(options?: {
           publishFormType: true,
           publishDesc: true,
           saveAndResume: true,
+          notificationsInterval: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -308,6 +318,7 @@ export async function getAllTemplatesForUser(
           publishFormType: true,
           publishDesc: true,
           saveAndResume: true,
+          notificationsInterval: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -371,6 +382,7 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
           closedDetails: true,
           saveAndResume: true,
           ttl: true,
+          notificationsInterval: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -540,6 +552,9 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           securityAttribute: command.securityAttribute as string,
         }),
         ...(command.formPurpose && { formPurpose: command.formPurpose }),
+        ...(command.notificationsInterval !== undefined && {
+          notificationsInterval: command.notificationsInterval as NotificationsInterval,
+        }),
       },
       include: {
         deliveryOption: true,
@@ -589,27 +604,38 @@ export async function updateIsPublishedForTemplate(
   publishFormType: string,
   publishDescription: string
 ): Promise<FormRecord | null> {
+  // Alias the isPublished value to newPublishStatus for clarity within the function
+  const newPublishStatus = isPublished;
+
   const { user } = await authorization.canPublishForm(formID).catch((e) => {
     logEvent(e.user.id, { type: "Form", id: formID }, "AccessDenied", "Attempted to publish form");
     throw e;
   });
 
   // Delete all form responses created during draft mode
-  if (isPublished && process.env.APP_ENV !== "test") {
-    await deleteDraftFormResponses(formID);
+  if (newPublishStatus && process.env.APP_ENV !== "test") {
+    try {
+      await deleteDraftFormResponses(formID);
+    } catch (e) {
+      if (e instanceof TemplateAlreadyPublishedError) {
+        // Already published, so we can just return the full template
+        return getFullTemplateByID(formID);
+      }
+
+      throw e;
+    }
   }
 
-  // We use a where unique input to ensure we are only updating the form if it is not published
   const updatedTemplate = await prisma.template
     .update({
       where: {
         id: formID,
         isPublished: {
-          not: isPublished,
+          not: newPublishStatus, // Only update if the current publish status is different from the new one,
         },
       },
       data: {
-        isPublished: isPublished,
+        isPublished: newPublishStatus,
         publishReason: publishReason,
         publishFormType: publishFormType,
         publishDesc: publishDescription,
@@ -956,6 +982,7 @@ export async function updateAssignedUsersForTemplate(
         publishDesc: true,
         users: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1050,6 +1077,7 @@ export async function updateFormPurpose(
         publishFormType: true,
         publishReason: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => {
@@ -1109,6 +1137,7 @@ export async function updateFormSaveAndResume(
         publishFormType: true,
         publishReason: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => {
@@ -1122,79 +1151,6 @@ export async function updateFormSaveAndResume(
     { type: "Form", id: formID },
     "ChangeFormSaveAndResume",
     `Form save and resume set to ${saveAndResume}`
-  );
-
-  return _parseTemplate(updatedTemplate);
-}
-
-export async function updateResponseDeliveryOption(
-  formID: string,
-  deliveryOption: DeliveryOption
-): Promise<FormRecord | null> {
-  const { user } = await authorization.canEditForm(formID).catch((e) => {
-    logEvent(
-      e.user.id,
-      { type: "Form", id: formID },
-      "AccessDenied",
-      "Attempted to set Delivery Option to the Vault"
-    );
-    throw e;
-  });
-
-  const updatedTemplate = await prisma.template
-    .update({
-      where: {
-        id: formID,
-        isPublished: false,
-      },
-      data: {
-        deliveryOption: {
-          upsert: {
-            create: {
-              emailAddress: deliveryOption.emailAddress,
-              emailSubjectEn: deliveryOption.emailSubjectEn,
-              emailSubjectFr: deliveryOption.emailSubjectFr,
-            },
-            update: {
-              emailAddress: deliveryOption.emailAddress,
-              emailSubjectEn: deliveryOption.emailSubjectEn,
-              emailSubjectFr: deliveryOption.emailSubjectFr,
-            },
-          },
-        },
-      },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-        saveAndResume: true,
-      },
-    })
-    .catch((e) => {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === "P2025") {
-          throw new TemplateAlreadyPublishedError();
-        }
-      }
-      return prismaErrors(e, null);
-    });
-
-  if (updatedTemplate === null) return updatedTemplate;
-
-  logEvent(
-    user.id,
-    { type: "Form", id: formID },
-    "ChangeDeliveryOption",
-    `Delivery Option set to ${deliveryOption.emailAddress}`
   );
 
   return _parseTemplate(updatedTemplate);
@@ -1286,6 +1242,7 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1407,6 +1364,7 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));

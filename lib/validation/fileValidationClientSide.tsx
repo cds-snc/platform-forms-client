@@ -1,5 +1,9 @@
 import { FileInputResponse, Responses } from "@lib/types";
 
+import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
+import { ga } from "../client/clientHelpers";
+import { fileSizeWithBase64Overhead } from "../utils/fileSize";
+
 export const ALLOWED_FILE_TYPES = [
   { mime: "application/pdf", extensions: ["pdf"] },
   { mime: "text/plain", extensions: ["txt"] },
@@ -21,8 +25,6 @@ export const ALLOWED_FILE_TYPES = [
   { mime: "application/xml", extensions: ["xml"] },
 ];
 
-const MAXIMUM_FILE_SIZE_IN_BYTES = 5 * 1024 * 1024; // 5MB
-
 // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept
 export const htmlInputAccept = ALLOWED_FILE_TYPES.map((t) =>
   [t.mime].concat(t.extensions.map((e) => `.${e}`))
@@ -41,15 +43,16 @@ export function isFileExtensionValid(fileName: string): boolean {
 }
 
 export function isIndividualFileSizeValid(sizeInBytes: number): boolean {
-  return sizeInBytes <= MAXIMUM_FILE_SIZE_IN_BYTES;
+  return sizeInBytes <= BODY_SIZE_LIMIT_WITH_FILES;
 }
 
 /**
- * There is a 8.5MB bodySizeLimit that applies to the entire POST payload, including
+ * There is a bodySizeLimit that applies to the entire POST payload, including
  * all uploaded files, configured in next.config.mjs
  *
- * Since uploaded files are serialized to base64, there is a ~35% overhead in file size,
- * making the limit for all files approximately 6MB.
+ * We also have a const for BODY_SIZE_LIMIT_WITH_FILES for payloads with files
+ *
+ * Since uploaded files are serialized to base64, there is a ~35% overhead in file size.
  *
  * @param values
  * @param item
@@ -80,11 +83,17 @@ export function isAllFilesSizeValid(values: Responses): boolean {
       }
     }
     if (files) {
-      // file.size is the size reported by the browser which is the original file size.
-      // Since we are base64 encoding the file prior to transfer, there is a ~35% overhead
-      // in file size so we multiply by 1.35.
-      const totalSize = files.reduce((sum, file) => Number(sum) + Number(file.size) * 1.35, 0);
-      if (totalSize > MAXIMUM_FILE_SIZE_IN_BYTES) {
+      const totalSize = files.reduce(
+        (sum, file) => Number(sum) + fileSizeWithBase64Overhead(Number(file.size)),
+        0
+      );
+      if (totalSize > BODY_SIZE_LIMIT_WITH_FILES) {
+        // @TODO: Setup on GA
+        ga("file_upload_size_exceeded", {
+          size: totalSize,
+          limit: BODY_SIZE_LIMIT_WITH_FILES,
+          filesCount: files.length,
+        });
         return false;
       }
     }

@@ -40,6 +40,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       <div className={classes} data-testid="combobox">
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
+        {/* Note: downshift adds and updates the role="combobox" aria-activedescendant relationship with the list below */}
         <input
           {...getInputProps()}
           aria-describedby={ariaDescribedBy}
@@ -47,14 +48,19 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           required={required}
           {...(name && { name })}
           data-testid="combobox-input"
+          aria-autocomplete="list"
+          aria-haspopup="listbox"
+          aria-labelledby={`label-${id}`}
         />
 
+        {/* Note: downshift adds the role="listbox" and for the LI's below role="option" */}
         {items.length >= 1 && (
           <ul
             className={`${!(isOpen && items.length >= 1 && items[0] !== "") ? "hidden" : ""}`}
             {...getMenuProps()}
             data-testid="combobox-listbox"
             hidden={!isOpen}
+            aria-labelledby={`label-${id}`}
           >
             {isOpen &&
               items.length >= 1 &&

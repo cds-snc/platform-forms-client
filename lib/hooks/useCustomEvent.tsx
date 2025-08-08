@@ -23,8 +23,7 @@ export const EventKeys = {
   deleteApiKey: "delete-api-key",
   openAddUserNoteDialog: "open-add-user-note-dialog",
   openDeactivateUserDialog: "open-deactivate-user-dialog",
-  liveMessage: "live-message",
-  liveMessageObject: "live-message-object",
+  submitProgress: "submit-progress",
 } as const;
 
 export const useCustomEvent = () => {

@@ -2,7 +2,6 @@
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
-import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { BackButton } from "./BackButton";
 import { Button } from "@clientComponents/globals";
 import Markdown from "markdown-to-jsx";
@@ -61,10 +60,7 @@ export const PreviewFormWrapper = ({
                   return (
                     <>
                       {allowGrouping && isShowReviewPage && (
-                        <BackButton
-                          language={translationLanguagePriority}
-                          onClick={() => tryFocusOnPageLoad("h2")}
-                        />
+                        <BackButton language={translationLanguagePriority} />
                       )}
                       <Button
                         type="submit"

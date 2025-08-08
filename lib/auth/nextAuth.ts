@@ -6,6 +6,7 @@ import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
 import { prisma } from "@lib/integration/prismaConnector";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
+import { getUserFeatureFlags } from "@lib/userFeatureFlags";
 import { logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 import { JWT } from "next-auth/jwt";
@@ -181,6 +182,14 @@ const {
         );
       }
 
+      // Update lastLogin in the database
+      if (user.email) {
+        await prisma.user.update({
+          where: { email: user.email },
+          data: { lastLogin: new Date() },
+        });
+      }
+
       logEvent(
         internalUser.id,
         { type: "User", id: internalUser.id },
@@ -265,6 +274,7 @@ const {
         // Used client side to immidiately log out a user if they have been deactivated
         ...(token.deactivated && { deactivated: token.deactivated }),
         hasSecurityQuestions: token.hasSecurityQuestions ?? false,
+        featureFlags: await getUserFeatureFlags(token.userId as string),
       };
       return session;
     },

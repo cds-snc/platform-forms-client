@@ -2,7 +2,7 @@
   "tabs": {
     "newResponses": {
       "title": "Nouvelles réponses disponibles",
-      "message1": "Commencez par télécharger les réponses.",
+      "message1": "Commencez par télécharger les réponses. Vous pouvez sélectionner plusieurs réponses à la fois.",
       "message2": "Puis, approuvez leur suppression, car Formulaires GC ne conserve les réponses que temporairement les réponses."
     },
     "downloadedResponses": {
@@ -209,7 +209,7 @@
     "confirmReceiptDialog": {
       "title": "Approuver la suppression des réponses de Formulaires GC",
       "contentHeading": "Formulaires GC doit vérifier que les réponses ont bien été téléchargées.",
-      "contentBody": "Pourquoi? Parce que les choses peuvent mal tourner lorsque des fichiers numériques passent d’un ordinateur à un autre. Cette étape sert à vérifier que les fichiers ont été téléchargés en toute sécurité sur votre ordinateur.",
+      "contentBody": "Pourquoi? Parce que les choses peuvent mal tourner lorsque des fichiers numériques passent d’un ordinateur à un autre. Cette étape sert à vérifier que les fichiers ont été téléchargés en toute sécurité sur votre ordinateur et que les données s'affichent comme prévu, avant que celles-ci soit supprimées.",
       "copyCode": "Copiez-collez les codes de réception du fichier <italic>Reçu et registre officiel des réponses</italic>",
       "copyCodeNote": "Utilisez le bouton en haut du fichier de reçu que vous avez eu avec les réponses téléchargées.",
       "confirmReceipt": "Soumettre les codes de réception",

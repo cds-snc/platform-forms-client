@@ -18,7 +18,6 @@ import {
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
   updateSecurityAttribute,
-  updateResponseDeliveryOption,
   updateFormPurpose,
   updateFormSaveAndResume,
 } from "@lib/templates";
@@ -31,6 +30,7 @@ import { isValidEmail } from "@lib/validation/isValidEmail";
 import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
+import { NotificationsInterval } from "@gcforms/types";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -40,6 +40,7 @@ export type CreateOrUpdateTemplateType = {
   securityAttribute?: SecurityAttribute;
   formPurpose?: FormPurpose;
   saveAndResume?: boolean;
+  notificationsInterval?: NotificationsInterval;
 };
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -54,6 +55,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       deliveryOption,
       securityAttribute,
       formPurpose,
+      notificationsInterval,
     }: CreateOrUpdateTemplateType
   ): Promise<{
     formRecord: { id: string; updatedAt: string | undefined } | null;
@@ -80,6 +82,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
         deliveryOption: deliveryOption,
         securityAttribute: securityAttribute,
         formPurpose: formPurpose,
+        notificationsInterval,
       });
 
       if (!formRecord) {
@@ -335,39 +338,6 @@ export const updateTemplateUsers = AuthenticatedAction(
       return { success: true };
     } catch (error) {
       return { success: false, error: (error as Error).message };
-    }
-  }
-);
-
-export const updateTemplateDeliveryOption = AuthenticatedAction(
-  async (
-    _,
-    {
-      id: formID,
-      deliveryOption,
-    }: {
-      id: string;
-      deliveryOption: DeliveryOption | undefined;
-    }
-  ): Promise<{
-    formRecord: FormRecord | null;
-    error?: string;
-  }> => {
-    try {
-      if (!deliveryOption) {
-        throw new Error("Require Delivery Option Data");
-      }
-
-      const response = await updateResponseDeliveryOption(formID, deliveryOption);
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { ${formID}, ${deliveryOption} }`
-        );
-      }
-
-      return { formRecord: response };
-    } catch (error) {
-      return { formRecord: null, error: (error as Error).message };
     }
   }
 );

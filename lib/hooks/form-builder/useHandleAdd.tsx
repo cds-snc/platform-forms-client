@@ -3,6 +3,11 @@ import { useCallback } from "react";
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { blockLoader } from "../../utils/form-builder/blockLoader";
+import { elementLoader } from "@lib/utils/form-builder/elementLoader";
+import { logMessage } from "@lib/logger";
+import { getDefaultFileGroupTypes } from "@lib/fileInput/fileGroupsToFileTypes";
+import { MAX_DYNAMIC_ROW_AMOUNT } from "@root/constants";
+
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import {
   defaultField,
@@ -18,6 +23,7 @@ import {
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTranslation } from "@i18n/client";
+import { v4 as uuid } from "uuid";
 
 export const useHandleAdd = () => {
   const { add, addSubItem, setChangeKey } = useTemplateStore((s) => ({
@@ -33,7 +39,11 @@ export const useHandleAdd = () => {
   const groupId = useGroupStore((state) => state.id);
 
   const create = useCallback(async (type: FormElementTypes) => {
-    const defaults = JSON.parse(JSON.stringify(defaultField));
+    const defaults = {
+      ...defaultField,
+      uuid: uuid(),
+      properties: { ...defaultField.properties, validation: { required: false } },
+    };
 
     const labels = await getTranslatedElementProperties(type);
     const descriptionEn = labels.description.en;
@@ -58,10 +68,23 @@ export const useHandleAdd = () => {
 
   const loadError = t("failedToReadFormFile");
 
-  /* Note this callback is also in ElementPanel */
+  // Note: For Sub elements see handleAddSubElement (below)
   const handleAddElement = useCallback(
     async (index: number, type?: FormElementTypes) => {
       let id;
+
+      if (type === "customJson") {
+        try {
+          await elementLoader(index, async (data, position) => {
+            id = await add(position, data.type, data, groupId);
+          });
+        } catch (e) {
+          logMessage.info(`${(e as Error).message}`);
+          toast.error(loadError);
+        }
+
+        return id;
+      }
 
       if (allowedTemplates.includes(type as TemplateTypes)) {
         try {
@@ -75,9 +98,20 @@ export const useHandleAdd = () => {
       }
 
       const item = await create(type as FormElementTypes);
-      if (item.type === "dynamicRow") {
-        item.properties.dynamicRow = await getTranslatedDynamicRowProperties();
+
+      // Set default properties based on element type
+      switch (item.type) {
+        case FormElementTypes.fileInput:
+          item.properties.fileType = getDefaultFileGroupTypes();
+          break;
+        case FormElementTypes.dynamicRow:
+          item.properties.dynamicRow = await getTranslatedDynamicRowProperties();
+          item.properties.maxNumberOfRows = MAX_DYNAMIC_ROW_AMOUNT;
+          break;
+        default:
+          break;
       }
+
       id = await add(index, item.type, item, groupId);
       treeView?.current?.addItem(String(id));
 
@@ -94,6 +128,7 @@ export const useHandleAdd = () => {
     [add, create, groupId, treeView, loadError]
   );
 
+  // Handle adding a sub-element
   const handleAddSubElement = useCallback(
     async (elId: number, subIndex: number, type?: FormElementTypes) => {
       let id;
@@ -101,6 +136,19 @@ export const useHandleAdd = () => {
       // Close all panel menus before focussing on the new element
       const closeAll = new CustomEvent("close-all-panel-menus");
       window && window.dispatchEvent(closeAll);
+
+      if (type === "customJson") {
+        try {
+          await elementLoader(subIndex, async (data, position) => {
+            id = addSubItem(elId, position, data.type, data);
+          });
+        } catch (e) {
+          logMessage.info(`${(e as Error).message}`);
+          toast.error(loadError);
+        }
+
+        return id;
+      }
 
       if (allowedTemplates.includes(type as TemplateTypes)) {
         try {
@@ -115,6 +163,16 @@ export const useHandleAdd = () => {
       }
 
       const item = await create(type as FormElementTypes);
+
+      // Set default properties based on element type
+      switch (item.type) {
+        case FormElementTypes.fileInput:
+          item.properties.fileType = getDefaultFileGroupTypes();
+          break;
+        default:
+          break;
+      }
+
       id = await addSubItem(elId, subIndex, item.type, item);
       setChangeKey(String(new Date().getTime())); //Force a re-render
 

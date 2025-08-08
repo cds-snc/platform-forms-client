@@ -43,7 +43,6 @@ export const processFormData = async (
       responses: reqFields,
     });
 
-    // Staging or Production AWS environments
     for (const [_key, value] of Object.entries(files)) {
       const fileOrArray = value;
       if (!Array.isArray(fileOrArray)) {
@@ -54,7 +53,15 @@ export const processFormData = async (
             uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
             const splitKey = _key.split("-");
             if (splitKey.length > 1) {
+              if (!fields[splitKey[0]]) {
+                fields[splitKey[0]] = [];
+              }
+
+              // Note:
+              // currentValue is a reference to the fields object,
+              // updating currentValue will mutate the fields object.
               const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
+
               if (!currentValue[Number(splitKey[1])]) {
                 currentValue[Number(splitKey[1])] = {};
               }
@@ -101,7 +108,8 @@ export const processFormData = async (
         form.id,
         fields,
         contentLanguage ? contentLanguage : "en",
-        reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Protected A"
+        reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Protected A",
+        Object.keys(files).length > 0 ? true : false
       );
 
       logMessage.info(`Response submitted for Form ID: ${form.id}`);

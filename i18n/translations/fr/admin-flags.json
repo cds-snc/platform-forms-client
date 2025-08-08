@@ -26,13 +26,26 @@
       "title": "hCaptcha",
       "description": "Activer la prévention anti-spam hCaptcha"
     },
-    "caretakerPeriod": {
-      "title": "Banner",
-      "description": "Activer l'avertissement de période de garde pour qu'il soit visible"
+    "topBanner": {
+      "title": "Bannière",
+      "description": "Activer la bannière d'avertissement pour qu'elle soit visible"
     },
     "fileUpload": {
       "title": "Téléversement de fichier",
       "description": "Activer le téléverseur de fichier en tant qu'élément pouvant être ajouté à un formulaire"
     }
-  }
+  },
+  "addFlag": "Ajouter un indicateur de fonctionnalité",
+  "flag": "Flag",
+  "actions": "Actions",
+  "no-flags-set": "Aucun indicateur de fonctionnalité défini",
+  "manageUserFeatures": "Gérer les indicateurs de fonctionnalité utilisateur",
+  "user": "Comptes",
+  "select-features": "Sélectionner les fonctionnalités",
+  "add": "Ajouter",
+  "cancel": "Annuler",
+  "remove": "Supprimer",
+  "userFlagHeader": "Contrôle des indicateurs de fonctionnalité spécifique à l'utilisateur",
+  "userFlagSubHeader": "Ce paramètre remplace le statut de l'indicateur de fonctionnalité et donnera à un utilisateur spécifique l'accès à une fonctionnalité.",
+  "noUserFlags": "Aucun indicateur de fonctionnalité utilisateur défini."
 }

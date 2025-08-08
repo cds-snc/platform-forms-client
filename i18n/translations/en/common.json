@@ -38,6 +38,7 @@
     "heading": "Please correct the errors on the page.",
     "required": "Complete the required field to continue.",
     "alphanumeric": "Enter letters and numbers only.",
+    "duplicateEmail": "This email address was already added.",
     "text": "",
     "number": "Enter a number.",
     "email": "Enter a valid email address.",
@@ -46,7 +47,7 @@
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
     "file-size-too-large": "Select a smaller file.",
-    "file-size-too-large-all-files": "Files exceed the 3.5 MB maximum. Upload smaller files.",
+    "file-size-too-large-all-files": "Files exceed the {{maxSizeInMb}} MB maximum. Upload smaller files.",
     "file-submission": "There was a problem with the file submitted. Try uploading a different file format, such as PDF.",
     "file-type-invalid": "Select a different file type.",
     "too-many-characters": "Shorten the response.",
@@ -55,6 +56,8 @@
     "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. Enter the email of the person in charge of your team. If that's you, add a colleague.",
     "min-length-4-characters": "Must be at least 4 characters.",
     "MB": "MB",
+    "KB": "KB",
+    "bytes": "bytes",
     "error-list": {
       "default": "Enter an answer for: {{question}}",
       "select": "Select an option for: {{question}}",
@@ -67,7 +70,7 @@
   "required": "required",
   "all-required": "all checkboxes required",
   "required-field": "Required field",
-  "file-upload-button-text": "Select file",
+  "file-upload-button-text": "Choose file",
   "file-upload-sr-only-file-selected": "Currently selected file is",
   "file-upload-no-file-selected": "No file currently selected",
   "dropdown-initial-option-text": "No selection",
@@ -191,7 +194,8 @@
     },
     "YYYY-MM-DD": "YYYY-MM-DD",
     "DD-MM-YYYY": "DD-MM-YYYY",
-    "MM-DD-YYYY": "MM-DD-YYYY"
+    "MM-DD-YYYY": "MM-DD-YYYY",
+    "roleDescription": "formatted date"
   },
   "start": "Start",
   "loadingResult": "Loading...",
@@ -211,7 +215,9 @@
     "type2": "NEW",
     "message2": "Build complex multi-page forms with display logic and branching. <a href='https://articles.alpha.canada.ca/forms-formulaires/setting-up-form-logic/' className='text-white hover:text-white'>Learn more</a>",
     "type3": "Federal election",
-    "message3": "Check with your department’s communications team about announcements during the <a href='https://www.canada.ca/en/privy-council/services/publications/guidelines-conduct-ministers-state-exempt-staff-public-servants-election.html' className='text-white hover:text-white'>caretaker period</a>"
+    "message3": "Check with your department’s communications team about announcements during the <a href='https://www.canada.ca/en/privy-council/services/publications/guidelines-conduct-ministers-state-exempt-staff-public-servants-election.html' className='text-white hover:text-white'>caretaker period</a>",
+    "type4": "Retiring email delivery",
+    "message4": "Published forms are unaffected. New forms will not have email data delivery as an option. <a href='https://articles.alpha.canada.ca/forms-formulaires/getting-form-responses/' className='text-white hover:text-white'>Learn more</a>"
   },
   "closingNotice": {
     "title": "Form closing",
@@ -233,6 +239,11 @@
     "resumeUploadError": {
       "title": "Problem loading answers",
       "description": "Try uploading the file again or restart a new form and copy-paste your answers from the file.",
+      "errorCode": "Error code: {{code}}"
+    },
+    "problemLoadingAnswers": {
+      "title": "Problem loading answers from file",
+      "description": "Make sure you're selecting the right file. Try uploading again, or restart a new form and copy-paste your answers from your file.",
       "errorCode": "Error code: {{code}}"
     },
     "resumePage": {
@@ -308,5 +319,21 @@
   "conditional": {
     "activated": "The form element {{title}} was added to the form"
   },
-  "version": "Version"
+  "version": "Version",
+  "remove": "Remove",
+  "fileInput": {
+    "addedMessage": "{{fileName}} was added to the form",
+    "removedMessage": "{{fileName}} removed"
+  },
+  "submitProgress": {
+    "text": "Submitting form...",
+    "spinner": "Submitting form",
+    "uploadingFile": "Uploading file {{count}}/{{total}}..."
+  },
+  "saveFileWarning": {
+    "text": "You'll need to re-upload any files attached when you resume filling the form."
+  },
+  "confirmFileWarning": {
+    "text": "This copy of your answers will not include the files you attached to your submission."
+  }
 }

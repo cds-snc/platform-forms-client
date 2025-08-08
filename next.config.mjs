@@ -87,8 +87,8 @@ const nextConfig = {
     // PPR is only supported in Next.js Canary branches
     // ppr: true,
     serverActions: {
-      // Note: we match this value in constants.ts
-      bodySizeLimit: "5mb",
+      // Note: this matches values in constants.ts
+      bodySizeLimit: "10mb",
     },
   },
   turbopack: {

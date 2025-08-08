@@ -56,6 +56,7 @@ export enum FormElementTypes {
   contact = "contact",
   combobox = "combobox",
   formattedDate = "formattedDate",
+  customJson = "customJson",
 }
 
 export type ConditionalRule = {
@@ -104,6 +105,8 @@ export type SortValue = (typeof SortOption)[keyof typeof SortOption];
 
 // used to define attributes for the properties of an element in the form
 export interface ElementProperties {
+  questionId?: string;
+  tags?: string[];
   titleEn: string;
   titleFr: string;
   placeholderEn?: string;
@@ -114,7 +117,7 @@ export interface ElementProperties {
   choices?: PropertyChoices[];
   managedChoices?: string;
   subElements?: FormElement[];
-  fileType?: string | undefined;
+  fileType?: string | string[] | undefined;
   headingLevel?: string | undefined;
   isSectional?: boolean;
   maxNumberOfRows?: number;
@@ -125,8 +128,10 @@ export interface ElementProperties {
   addressComponents?: AddressComponents | undefined;
   dynamicRow?: dynamicRowType;
   sortOrder?: SortValue;
+  strictValue?: boolean;
   [key: string]:
     | string
+    | string[]
     | number
     | boolean
     | Array<PropertyChoices>
@@ -155,6 +160,7 @@ export interface BrandProperties {
 // used to define attributes for a form element or field
 export interface FormElement {
   id: number;
+  uuid?: string;
   subId?: string;
   type: FormElementTypes;
   properties: ElementProperties;
@@ -210,7 +216,16 @@ export type FormRecord = {
   closingDate?: string;
   closedDetails?: ClosedDetails;
   saveAndResume?: boolean;
-  [key: string]: string | boolean | FormProperties | DeliveryOption | ClosedDetails | undefined;
+  notificationsInterval?: NotificationsInterval;
+  [key: string]:
+    | string
+    | boolean
+    | number
+    | FormProperties
+    | DeliveryOption
+    | ClosedDetails
+    | undefined
+    | null;
 };
 
 export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
@@ -233,3 +248,15 @@ export const FormStatus = {
 } as const;
 
 export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];
+
+// Interval in minutes for sending email notifications. These are converted to seconds for the Redis ttl
+export const NotificationsInterval = {
+  OFF: null,
+  DAY: 1440,
+  WEEK: 10080,
+} as const;
+
+export const NotificationsIntervalDefault = NotificationsInterval.DAY;
+
+export type NotificationsInterval =
+  (typeof NotificationsInterval)[keyof typeof NotificationsInterval];

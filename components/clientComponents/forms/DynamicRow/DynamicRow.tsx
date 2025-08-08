@@ -7,7 +7,7 @@ import { FormElement } from "@lib/types";
 import { Description } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { announce } from "@gcforms/announce";
 
 interface DynamicGroupProps {
   name: string;
@@ -61,7 +61,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   );
   const focusedRow = useRef<number | null>(null);
   const [hasReachedMaxNumberOfRows, setHasReachedMaxNumberOfRows] = useState<boolean>(false);
-  const { Event } = useCustomEvent();
 
   const { t } = useTranslation();
 
@@ -89,8 +88,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     if (hasReachedMaxNumberOfRows) return;
     // Set the newly added row'initial value (plucked out of initialValues)
     const newValue = [...field.value];
-    // @todo check if the next line is needed.
-    // newValue.push(meta.initialValue ? {} : {});
+    newValue.push({}); // Push an empty object to the value array
     helpers.setValue(newValue);
     // Add the new row to the rows state
     setRows([...rows, rowElements]);
@@ -99,9 +97,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     // Do not subtract one because the rows state has not yet updated it's length when this is called
     focusedRow.current = rows.length;
     // Let an AT user know a new repeating set was added
-    Event.fire(EventKeys.liveMessage, {
-      message: t("dynamicRow.addedMessage", { rowTitle: title, count: rows.length + 1 }),
-    });
+    announce(t("dynamicRow.addedMessage", { rowTitle: title, count: rows.length + 1 }));
   };
 
   const deleteRow = (index: number) => {
@@ -119,12 +115,12 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     rowRefs.current.splice(index, 1);
     focusedRow.current = index > 0 ? index - 1 : 0;
     // Let an AT user know a new repeating set was removed
-    Event.fire(EventKeys.liveMessage, {
-      message: t("dynamicRow.removedMessage", {
+    announce(
+      t("dynamicRow.removedMessage", {
         rowTitle: title,
         count: index > 0 ? index + 1 : 0,
-      }),
-    });
+      })
+    );
   };
 
   const classes = cn("gc-form-group", { "gc-form-group--error": error }, className);

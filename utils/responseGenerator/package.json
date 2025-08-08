@@ -9,9 +9,9 @@
   "keywords": [],
   "author": "Bryan Robitaille",
   "dependencies": {
-    "@aws-sdk/client-lambda": "^3.481.0",
-    "@aws-sdk/client-sqs": "^3.481.0",
-    "@aws-sdk/types": "^3.468.0",
+    "@aws-sdk/client-lambda": "^3.859.0",
+    "@aws-sdk/client-sqs": "^3.859.0",
+    "@aws-sdk/types": "^3.840.0",
     "@types/node": "^22.9.0",
     "axios": "^1.8.4",
     "cheerio": "^1.0.0-rc.12",
@@ -20,5 +20,5 @@
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.9.2"
 }

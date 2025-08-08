@@ -1,15 +1,15 @@
 "use client";
 
 import { FormRecord, ClosedDetails } from "@lib/types";
-import { DownloadForm } from "./DownloadForm";
-import { SetClosingDate } from "./close/SetClosingDate";
+
 import { FormOwnership } from "./FormOwnership";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { updateTemplateUsers } from "@formBuilder/actions";
 import { ManageApiKey } from "./ManageApiKey";
-import { ThrottlingRate } from "./ThrottlingRate";
+import { ThrottlingRate } from "./throttlingRate/ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
-import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
+
+import { FormOwnerSettings } from "./FormOwnerSettings";
 
 interface User {
   id: string;
@@ -44,11 +44,12 @@ export const ManageForm = (props: ManageFormProps) => {
 
   if (!canManageAllForms) {
     return (
-      <div>
-        {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
-        <SetSaveAndResume formId={id} />
-        <DownloadForm />
-      </div>
+      <FormOwnerSettings
+        id={id}
+        formRecord={formRecord}
+        canSetClosingDate={canSetClosingDate}
+        closedDetails={closedDetails}
+      />
     );
   }
 
@@ -58,8 +59,14 @@ export const ManageForm = (props: ManageFormProps) => {
 
   return (
     <>
-      {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
-      <SetSaveAndResume formId={id} />
+      <FormOwnerSettings
+        id={id}
+        formRecord={formRecord}
+        canSetClosingDate={canSetClosingDate}
+        closedDetails={closedDetails}
+      />
+
+      {/* ADMIN USER SETTINGS BELOW */}
       <FormOwnership
         nonce={nonce}
         formRecord={formRecord}
@@ -69,7 +76,7 @@ export const ManageForm = (props: ManageFormProps) => {
       />
       {canManageAllForms && apiKeyId && <ThrottlingRate formId={id} />}
       {canManageAllForms && formRecord.isPublished && <ManageApiKey />}
-      <DownloadForm />
+      {/* End ADMIN USER SETTINGS */}
     </>
   );
 };

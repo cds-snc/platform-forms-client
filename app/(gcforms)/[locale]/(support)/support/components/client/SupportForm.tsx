@@ -15,7 +15,7 @@ import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGr
 import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
 import { useState } from "react";
-import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
+import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
@@ -35,19 +35,26 @@ export const SupportForm = () => {
   const submitForm = async (formData: FormData) => {
     const formEntries = Object.fromEntries(formData.entries());
 
+    if (!formEntries.request) {
+      // Set to empty string if the request field is not set
+      formEntries.request = "";
+    }
+
     const SupportSchema = object({
-      name: string([minLength(1, t("input-validation.required"))]),
-      email: string([
+      name: pipe(string(), minLength(1, t("input-validation.required"))),
+      email: pipe(
+        string(),
         toLowerCase(),
-        toTrimmed(),
+        trim(),
         minLength(1, t("input-validation.required")),
-        email(t("input-validation.email")),
-      ]),
+        email(t("input-validation.email"))
+      ),
       // radio input can send a non-string value when empty
-      request: string(t("input-validation.required"), [
-        minLength(1, t("input-validation.required")),
-      ]),
-      description: string([minLength(1, t("input-validation.required"))]),
+      request: pipe(
+        string(t("input-validation.required")),
+        minLength(1, t("input-validation.required"))
+      ),
+      description: pipe(string(), minLength(1, t("input-validation.required"))),
     });
 
     const validateForm = safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
@@ -84,7 +91,7 @@ export const SupportForm = () => {
             <ValidationMessage
               type={ErrorStatus.ERROR}
               validation={true}
-              tabIndex={0}
+              focussable={true}
               id="validationErrors"
               heading={t("input-validation.heading", { ns: "common" })}
             >
@@ -123,7 +130,14 @@ export const SupportForm = () => {
               <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
             </p>
           </Alert.Warning>
-          <form id="support" action={submitForm} noValidate>
+          <form
+            id="support"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitForm(new FormData(e.currentTarget));
+            }}
+            noValidate
+          >
             {errors.error && (
               <Alert.Danger focussable={true} title={t("error")} className="my-2">
                 <p>{t(errors.error)}</p>

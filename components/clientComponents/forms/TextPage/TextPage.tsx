@@ -8,6 +8,8 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { SaveResponse } from "@clientComponents/forms/SaveAndResume/SaveResponse";
 import { Language } from "@lib/types/form-builder-types";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+import { getSafeUrl } from "@lib/utils/getSafeUrl";
+import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -32,6 +34,9 @@ const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextPr
 
   const saveAndResume = formRecord?.saveAndResume;
 
+  // Sanitize urlQuery to prevent security issues
+  const safeUrlQuery = urlQuery ? getSafeUrl(urlQuery) : null;
+
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return (
@@ -45,7 +50,7 @@ const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextPr
   }
 
   // Otherwise, display the default confirmation text
-  const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
+  const backToLink = safeUrlQuery ? <a href={safeUrlQuery}>{t("backLink")}</a> : null;
   return (
     <>
       <div>
@@ -76,6 +81,10 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
   useEffect(() => {
     document.getElementsByTagName("h1").item(0)?.focus();
   });
+
+  useUpdateHeadTitle(
+    `${props.formRecord.form[getLocalizedProperty("title", language)]} - ${t("title")}`
+  );
 
   return (
     <>

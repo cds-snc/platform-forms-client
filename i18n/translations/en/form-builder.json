@@ -1,4 +1,27 @@
 {
+  "element": {
+    "copyButton": {
+      "text": "Copy element",
+      "copied": "Element copied"
+    }
+  },
+  "fileTypes": {
+    "more": {
+      "label": "Allowable file types",
+      "documents": {
+        "label": "Documents",
+        "description": "pdf, txt, doc, docx, xml"
+      },
+      "images": {
+        "label": "Images",
+        "description": "jpg, jpeg, png, svg"
+      },
+      "spreadsheets": {
+        "label": "Spreadsheets",
+        "description": "xls, xlsx, csv, numbers"
+      }
+    }
+  },
   "addElement": "Add form element",
   "addElementDialog": {
     "example": "example",
@@ -30,7 +53,8 @@
       "richText": "Add page text",
       "departments": "Add department",
       "combobox": "Add searchable list",
-      "formattedDate": "Add date"
+      "formattedDate": "Add date",
+      "customJson": "Add custom json"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
@@ -93,6 +117,16 @@
       "basic": "Basic",
       "preset": "Preset",
       "other": "Other"
+    },
+    "customJson": {
+      "description": "JSON schema to create a custom element.",
+      "title": "Custom element",
+      "label": "JSON",
+      "placeholder": "Custom element placeholder",
+      "field": {
+        "label": "JSON format",
+        "description": "Paste your JSON schema here"
+      }
     },
     "checkbox": {
       "description": "A list of options for a single or multiple selections.",
@@ -168,6 +202,27 @@
       "description": "A way to add supporting documentation.",
       "label": "Add file",
       "title": "File upload"
+    },
+    "fileInputDefault": {
+      "text1": "A way to add supporting documentation.",
+      "text1x": "⚠️ You must",
+      "text2": "set  your response delivery to API",
+      "text3": "to use this form element."
+    },
+    "fileInputWithApi": {
+      "description": "A way to add supporting documentation.",
+      "trialFeature": {
+        "title": "Beta feature",
+        "text1": "This trial feature is limited and requires:",
+        "bullet1": "Retrieval of form responses via API",
+        "bullet2": "{{BODY_SIZE_LIMIT_WITH_FILES}} MB maximum combined size of all files uploaded",
+        "bullet3": "Files to be scanned for malicious content once submitted",
+        "bullet4": "Collecting contact information in case you need to follow up about files"
+      },
+      "recommendations": {
+        "title": "Recommendations",
+        "text1": "Add fields to gather contact information in case you need to support those with the files they have attached."
+      }
     },
     "firstMiddleLastName": {
       "whatIsYourName": "What is your name?",
@@ -345,7 +400,7 @@
     "number": "Enter a number",
     "phone": "For example: 111-222-3333",
     "combobox": "Start typing to narrow down the list.",
-    "fileInput": "Files must not exceed 3.5 MB in total."
+    "fileInput": ""
   },
   "defaultElementLabel": {
     "addressComplete": "Address"
@@ -477,6 +532,8 @@
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
+  "hasFileInputAndApiDelivery": "API delivery enabled",
+  "hasFileInputAndApiDeliveryNote": "Required when using file upload",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -509,6 +566,23 @@
       "infoBox": "Which date format should you use?",
       "infoLine1": "Canada’s date standard format is YYYY-MM-DD and should be your first choice unless there is a reason to choose a different format.",
       "infoLine2": "For example, when asking for a date exactly as it’s shown on a passport, card or other document, make the fields match the format of the original. This makes it easier for users to copy the date across accurately."
+    },
+    "apiOptionsSection": {
+      "title": "Customize API data attributes",
+      "description": "Modify how your form fields get encoded for the API integration."
+    },
+    "questionId": {
+      "title": "Question ID",
+      "description": "Set a custom unique value to consistently refer to a form element so that they can match across republished form versions, data structures, and systems.",
+      "uniqueWarning": "Choose a unique value that differs from other questions."
+    },
+    "tags": {
+      "title": "Additional tags",
+      "description": "Add flexible labels to include metadata for form elements so that related questions can be categorized or so that data can be transformed.",
+      "errorTagTooLong": "Tag cannot exceed 50 characters"
+    },
+    "dynamicRow": {
+      "errorMaxRows": "The maximum number of answers cannot exceed {{maxRows}}."
     }
   },
   "moreOptions": "More options",
@@ -576,7 +650,7 @@
     "purpose": {
       "admin": "Administrative purposes",
       "nonAdmin": "Non-administrative purposes",
-      "unset": "Unset"
+      "unset": "Not set"
     },
     "formtypes": {
       "Collect": "Collect feedback or statistics",
@@ -666,7 +740,7 @@
         "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You'll need to create a new key and add it to your integration to restart API delivery.",
         "stopText": "<strong>To temporarily stop submissions</strong> to this form consider",
         "stopText1": "closing the form",
-        "stopText2": "instead.",
+        "stopText2": " instead.",
         "cancelButton": "Cancel",
         "deleteKeyButton": "Delete key",
         "error": {
@@ -699,6 +773,46 @@
             "message": "There was an error creating the API key. Save your form and try again later."
           }
         }
+      }
+    },
+    "notifications": {
+      "title": "Receive notifications",
+      "save": "Save",
+      "email": {
+        "singleSubmission": {
+          "subject": "New form response | Nouvelle réponse au formulaire",
+          "paragraph1": "Your form received a new submission:",
+          "paragraph2": "Retrieve response from GC Forms",
+          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
+        },
+        "multipleSubmissions": {
+          "subject": "New form responses | Nouvelles réponses au formulaire",
+          "paragraph1": "Your form received new submissions:",
+          "paragraph2": "Retrieve responses from GC Forms",
+          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
+        }
+      },
+      "sessionUser": {
+        "title": "Receive email notifications",
+        "description": "Find out when there are new form responses",
+        "toggle": {
+          "title": "Get notified at {{email}}",
+          "on": "On",
+          "off": "Off"
+        }
+      },
+      "usersList": {
+        "title": "People with access to the form, who get notified",
+        "description": "You can manage team access on the Responses page",
+        "enabled": "Notifications enabled",
+        "disabled": "Notifications disabled"
+      },
+      "success": {
+        "updateNotifications": "Your changes have been saved."
+      },
+      "error": {
+        "getNotifcations": "There was problem getting notification settings. Please try again later.",
+        "updateNotifications": "There was a problem updating notifications. Please try again later."
       }
     }
   },
@@ -742,7 +856,7 @@
     "purpose": {
       "admin": "Administrative purposes",
       "nonAdmin": "Non-administrative purposes",
-      "unset": "Unset"
+      "unset": "Not set"
     },
     "saveButton": "Save changes"
   },
@@ -770,26 +884,10 @@
       "title": "French response subject line",
       "hint": "When form responses are submitted in French."
     },
-    "responseDeliveryHelp": {
-      "cta": "Help choosing an option",
-      "title": "Choosing a response delivery option",
-      "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
-      "inbox": {
-        "title": "Email to an inbox",
-        "text1": "For up to PROTECTED A forms",
-        "text2": "Responses are delivered directly to an inbox in real time",
-        "text3": "One email address can receive response emails. This can be a shared inbox."
-      },
-      "vault": {
-        "title": "Download from GC Forms",
-        "text1": "For up to PROTECTED B forms",
-        "text2": "Download responses within 30 days"
-      }
-    },
     "responseDeliveryHelpWithApi": {
       "cta": "Help choosing an option",
       "title": "Choosing a response delivery option",
-      "description": "There are three options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
+      "description": "Use the chart below to help pick which option best fits your needs for getting submitted form responses.",
       "inbox": {
         "title": "Email to an inbox",
         "text1": "For up to PROTECTED A forms",
@@ -802,7 +900,7 @@
         "title": "Download from GC Forms",
         "text1": "For up to PROTECTED B forms",
         "text2": "Download responses within 30 days",
-        "text3": "Can be switched to API delivery after publishing",
+        "text3": "Cannot be switched after publishing",
         "text4": "Multiple account holders can access responses.",
         "text5": "No software development resources required."
       },
@@ -814,6 +912,10 @@
         "text4": "One API key per form",
         "text5": "Software development resources needed for the API integration"
       }
+    },
+    "emailDeliveryDeprecated": {
+      "title": "Email data delivery is no longer available.",
+      "description": "You will not be able to select this delivery option for future forms."
     }
   },
   "loggedOutTab": {
@@ -884,6 +986,7 @@
   "singleChoice": "Radio buttons",
   "start": "Start",
   "startErrorTemplateSize": "The form file is too large",
+  "startErrorDuplicateQuestionId": "Question IDs must be unique",
   "startErrorParse": "Failed to read form file",
   "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",
@@ -892,7 +995,6 @@
   "startP2": "Edit a form that was created and downloaded from GC Forms.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
-  "submittedResponsesChange": "Change delivery option",
   "submittedResponsesTextVault": {
     "text1": "Clicking submit will make responses available for retrieval:",
     "text2": "Go to Responses"
@@ -1157,6 +1259,9 @@
       "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
       "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
     },
+    "exitUrl": {
+      "label": "Exit button URL link"
+    },
     "noPages": {
       "text1": "Add a <strong>New page</strong> from the",
       "text2": "Pages tab",
@@ -1327,5 +1432,12 @@
     "formDescription": "Form description"
   },
   "en": "English",
-  "fr": "Français"
+  "fr": "Français",
+  "beta": {
+    "tag": "Beta:",
+    "text": "Trial feature "
+  },
+  "fileUploadApiWarning": {
+    "text": "Delivery method is not set to API."
+  }
 }

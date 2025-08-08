@@ -28,6 +28,8 @@ export const defaultField: FormElement = {
   id: 0,
   type: FormElementTypes.textField,
   properties: {
+    questionId: "",
+    tags: [],
     subElements: [],
     choices: [{ en: "", fr: "" }],
     titleEn: "",

@@ -1,4 +1,27 @@
 {
+  "element": {
+    "copy": {
+      "text": "Copier l'élément",
+      "toastSuccess": "Élément copié"
+    }
+  },
+  "fileTypes": {
+    "more": {
+      "label": "Types de fichiers autorisés"
+    },
+    "documents": {
+      "label": "Documents",
+      "description": "pdf, txt, doc, docx, xml"
+    },
+    "images": {
+      "label": "Images",
+      "description": "jpg, jpeg, png, svg"
+    },
+    "spreadsheets": {
+      "label": "Feuilles de calcul",
+      "description": "xls, xlsx, csv, numbers"
+    }
+  },
   "addElement": "Ajouter un élément",
   "addElementDialog": {
     "example": "exemple",
@@ -30,7 +53,8 @@
       "richText": "Ajouter du texte de page",
       "departments": "Ajouter un ministère",
       "combobox": "Ajouter une liste avec recherche",
-      "formattedDate": "Ajouter une date"
+      "formattedDate": "Ajouter une date",
+      "customJson": "Ajouter un élément personnalisé"
     },
     "address": {
       "whatIsYourAddress": "Quelle est votre adresse?",
@@ -93,6 +117,16 @@
       "basic": "De base",
       "preset": "Prédéfini",
       "other": "Autre"
+    },
+    "customJson": {
+      "description": "Schéma JSON pour créer un élément sur mesure.",
+      "title": "Élément sur mesure",
+      "label": "JSON",
+      "placeholder": "Espace réservé pour l'élément sur mesure",
+      "field": {
+        "label": "Format JSON",
+        "description": "Copiez-collez votre schéma JSON ici"
+      }
     },
     "checkbox": {
       "description": "Une liste d’options en vue de sélection unique ou multiple.",
@@ -168,6 +202,27 @@
       "description": "Un moyen d'ajouter des documents à l'appui.",
       "label": "Téléverser un fichier",
       "title": "Téléverseur de fichier"
+    },
+    "fileInputDefault": {
+      "text1": "Un moyen d'ajouter de la documentation à l'appui.",
+      "text1x": "⚠️ Vous devez",
+      "text2": "configurer la livraison de réponse via l'API",
+      "text3": "pour utiliser cet élément."
+    },
+    "fileInputWithApi": {
+      "description": "Un moyen d'ajouter de la documentation à l'appui.",
+      "trialFeature": {
+        "title": "Fonctionnalité Bêta",
+        "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
+        "bullet1": "La récupération des réponses au formulaire via l'API",
+        "bullet2": "Une taille maximale combinée de tous les fichiers téléversés :  {{BODY_SIZE_LIMIT_WITH_FILES}} Mo",
+        "bullet3": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
+        "bullet4": "La collect de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
+      },
+      "recommendations": {
+        "title": "Recommendations",
+        "text1": "Ajoutez des champs à votre formulaire pour recueillir des coordonnées au cas où vous auriez besoin d'aider ces personnes avec les fichiers ajoutés."
+      }
     },
     "firstMiddleLastName": {
       "whatIsYourName": "Quel est votre nom?",
@@ -345,7 +400,7 @@
     "number": "Saisissez un chiffre",
     "phone": "Par exemple : 111-222-3333",
     "combobox": "Commencez à taper pour réduire la liste.",
-    "fileInput": "Les fichiers ne doivent pas dépasser 3.5 Mo au total."
+    "fileInput": ""
   },
   "defaultElementLabel": {
     "addressComplete": "Adresse"
@@ -477,6 +532,8 @@
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
+  "hasFileInputAndApiDelivery": "Livraison de réponse avec l'API",
+  "hasFileInputAndApiDeliveryNote": "Choix obligatoire lors de l'utilisation du téléverseur de fichiers",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
@@ -509,6 +566,23 @@
       "infoBox": "Quel format de date utiliser?",
       "infoLine1": "Le format standard de la date au Canada est AAAA-MM-JJ et devrait être votre premier choix, à moins qu'il n'y ait une raison de choisir un format différent.",
       "infoLine2": "Par exemple, lorsque vous demandez la date exacte d'un passeport, d'une carte ou d'un autre document, faites en sorte que les champs correspondent au format de l'original. Il est ainsi plus facile pour les utilisateurs de recopier la date avec précision."
+    },
+    "apiOptionsSection": {
+      "title": "Personnaliser les attributs des données de l'API",
+      "description": "Modifiez la façon dont les champs de votre formulaire sont encodés pour l'intégration de l'API."
+    },
+    "questionId": {
+      "title": "Identifiant de la question",
+      "description": "Vous pouvez définir une valeur unique permettant de se référer de manière cohérente à un élément de formulaire afin qu'ils puissent correspondre entre les versions de formulaires republiées, les structures de données et les systèmes.",
+      "uniqueWarning": "Choisissez une valeur unique qui diffère des autres questions."
+    },
+    "tags": {
+      "title": "Balises supplémentaires",
+      "description": "Vous pouvez ajouter des étiquettes flexibles  pour inclure des métadonnées aux éléments du formulaire afin de catégoriser les questions connexes ou de transformer les données.",
+      "errorTagTooLong": "La balise ne peut pas dépasser 50 caractères"
+    },
+    "dynamicRow": {
+      "errorMaxRows": "Le nombre maximal de réponses ne peut pas dépasser {{maxRows}}."
     }
   },
   "moreOptions": "Plus d'options  ",
@@ -666,7 +740,7 @@
         "cautionText": "La suppression de cette clé API ne peut être annulée. Supprimer la clé interrompt définitivement la livraison de réponses à tous les systèmes intégrés. Vous devrez créer une nouvelle clé et l'ajouter à votre intégration pour relancer la livraison à partir de l'API.",
         "stopText": "<strong>Pour arrêter les soumissions</strong> à ce formulaire de façon temporaire, veuillez considérer",
         "stopText1": "la fermeture du formulaire",
-        "stopText2": "à la place.",
+        "stopText2": " à la place.",
         "cancelButton": "Annuler",
         "deleteKeyButton": "Supprimer la clé",
         "error": {
@@ -699,6 +773,46 @@
             "message": "Une erreur s'est produite lors de la création de la clé API. Veuillez enregistrer le formulaire et réessayer plus tard."
           }
         }
+      }
+    },
+    "notifications": {
+      "title": "Recevoir des notifications",
+      "save": "Enregistrer",
+      "email": {
+        "singleSubmission": {
+          "subject": "New form response | Nouvelle réponse au formulaire",
+          "paragraph1": "Votre formulaire a reçu une nouvelle soumission :",
+          "paragraph2": "Allez à Formulaires GC",
+          "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
+        },
+        "multipleSubmissions": {
+          "subject": "New form responses | Nouvelles réponses au formulaire",
+          "paragraph1": "Votre formulaire a reçu des nouvelles soumissions :",
+          "paragraph2": "Allez à Formulaires GC",
+          "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
+        }
+      },
+      "sessionUser": {
+        "title": "Recevoir des notifications par courriel",
+        "description": "S'informer sur les nouvelles réponses aux formulaires",
+        "toggle": {
+          "title": "Obtenez des notification à : {{email}}",
+          "on": "Activé",
+          "off": "Desactivé"
+        }
+      },
+      "usersList": {
+        "title": "Personnes ayant accès au formulaire qui sont informés des  nouvelles réponses",
+        "description": "Vous pouvez gérer l'accès de l'équipe sur la page Réponses",
+        "enabled": "Notifications activées",
+        "disabled": "Notifications désactivées"
+      },
+      "success": {
+        "updateNotifications": "Vos modifications ont été enregistrées."
+      },
+      "error": {
+        "getNotifcations": "Il y a un problème avec les paramètres de notifications. Veuillez réessayer plus tard.",
+        "updateNotifications": "Il y a eu un problème avec la mise à jour des notifications. Veuillez réessayer plus tard."
       }
     }
   },
@@ -770,26 +884,10 @@
       "title": "Ligne d'objet en français",
       "hint": "Lorsque les réponses au formulaire sont soumises en français."
     },
-    "responseDeliveryHelp": {
-      "cta": "Conseils pour le choix d’une option",
-      "title": "Choisir une option de livraison des réponses",
-      "description": "Il y a deux options pour obtenir les réponses des formulaires soumis. Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins.",
-      "inbox": {
-        "title": "Courriel à une boîte de réception",
-        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A",
-        "text2": "Les réponses sont envoyées directement dans une boîte de réception en temps réel",
-        "text3": "Une seule adresse courriel peut recevoir les courriel de réponses. Il peut s'agir d'une boîte de réception partagée."
-      },
-      "vault": {
-        "title": "Téléchargement des réponses",
-        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B",
-        "text2": "Téléchargement des réponses de Formulaires GC dans un délai de 30 jours"
-      }
-    },
     "responseDeliveryHelpWithApi": {
       "cta": "Conseils pour le choix d'une option",
       "title": "Choisir une option de livraison des réponses",
-      "description": "Il y a trois options pour obtenir les réponses des formulaires soumis. Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins.",
+      "description": "Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins pour obtenir les réponses des formulaires soumis.",
       "inbox": {
         "title": "Courriel à une boîte de réception",
         "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A.",
@@ -802,7 +900,7 @@
         "title": "Téléchargement des réponses dans Formulaires GC",
         "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B.",
         "text2": "Téléchargement des réponses de Formulaires GC dans un délai de 30 jours.",
-        "text3": "Possibilité de passer à la livraison par API après la publication.",
+        "text3": "Aucune possibilité de changer la méthode de livraison après la publication.",
         "text4": "Plusieurs titulaires de comptes peuvent accéder aux réponses.",
         "text5": "Aucune ressource de développement de logiciel n'est requise."
       },
@@ -814,6 +912,10 @@
         "text4": "Une clé API par formulaire",
         "text5": "Ressources de développement de logiciel requises pour l'intégration API."
       }
+    },
+    "emailDeliveryDeprecated": {
+      "title": "La livraison de données par courriel n’est plus disponible.",
+      "description": "Vous ne pourrez pas sélectionner cette option pour les formulaires à venir."
     }
   },
   "loggedOutTab": {
@@ -884,6 +986,7 @@
   "singleChoice": "Boutons radio",
   "start": "Commencer",
   "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
+  "startErrorDuplicateQuestionId": "Les identifiants de questions doivent être uniques",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
   "startFormIntro": "Ajoutez une description à votre formulaire pour aider à définir les attentes",
   "startH2": "Créer un formulaire",
@@ -892,7 +995,6 @@
   "startP2": "Modifiez un formulaire qui a été créé et téléchargé à partir de Formulaires GC.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
-  "submittedResponsesChange": "Modifier l'option de livraison",
   "submittedResponsesTextVault": {
     "text1": "En cliquant sur « Soumettre », la réponse sera disponible pour récupération :",
     "text2": "Allez aux Réponses"
@@ -1157,6 +1259,9 @@
       "buttonDescription": "Un bouton de sortie renvoie les personnes vers le site Web de l'organisation correspondant à l'image de marque du formulaire.",
       "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :"
     },
+    "exitUrl": {
+      "label": "Lien URL pour le bouton de sortie"
+    },
     "noPages": {
       "text1": "Ajoutez une <strong>Nouvelle page</strong> dans",
       "text2": "l'onglet Pages",
@@ -1327,5 +1432,12 @@
     "formDescription": "Description du formulaire"
   },
   "en": "English",
-  "fr": "Français"
+  "fr": "Français",
+  "beta": {
+    "tag": "Bêta :",
+    "text": "Fonctionnalité à l'essai"
+  },
+  "fileUploadApiWarning": {
+    "text": "La méthode de livraison n'est pas configurée sur API."
+  }
 }

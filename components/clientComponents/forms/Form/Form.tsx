@@ -12,8 +12,6 @@ import { type Responses } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 
-import Loader from "../../globals/Loader";
-
 import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
@@ -25,7 +23,7 @@ import {
   removeFormContextValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
+import { filterShownElements, filterValuesByShownElements, FormValues } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
@@ -36,7 +34,9 @@ import { FormStatus } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
 
-import { FocusHeader } from "app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
+import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
+
+import { SaveAndResumeButton } from "@clientComponents/forms/SaveAndResume/SaveAndResumeButton";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -48,7 +48,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     handleSubmit,
     status,
     language,
-    formRecord: { id: formID, form },
+    formRecord: { id: formID, form, isPublished },
     dirty,
   }: InnerFormProps = props;
 
@@ -70,16 +70,22 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
 
-  const formStatusError =
-    props.status === FormStatus.FILE_ERROR
-      ? t("input-validation.file-submission")
-      : props.status === FormStatus.ERROR
-      ? t("server-error")
-      : props.status === FormStatus.FORM_CLOSED_ERROR
-      ? (language === "en"
-          ? props.formRecord.closedDetails?.messageEn
-          : props.formRecord.closedDetails?.messageFr) || t("form-closed-error")
-      : null;
+  let formStatusError = null;
+  if (props.status === FormStatus.FILE_ERROR) {
+    formStatusError = t("input-validation.file-submission");
+  } else if (props.status === FormStatus.ERROR) {
+    formStatusError = t("server-error");
+  } else if (props.status === FormStatus.FORM_CLOSED_ERROR) {
+    formStatusError =
+      (language === "en"
+        ? props.formRecord.closedDetails?.messageEn
+        : props.formRecord.closedDetails?.messageFr) || t("form-closed-error");
+  }
+
+  /* Add save to device button as CTA  if the feature is enabled */
+  const cta = props.saveAndResumeEnabled ? (
+    <SaveAndResumeButton language={language as Language} />
+  ) : null;
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -125,12 +131,18 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   return status === "submitting" ? (
     <>
       <title>{t("loading")}</title>
-      <Loader message={t("loading")} />
+      <SubmitProgress />
     </>
   ) : (
     <>
       {formStatusError && (
-        <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId} />
+        <Alert
+          type={ErrorStatus.ERROR}
+          heading={formStatusError}
+          id={serverErrorId}
+          focussable={true}
+          cta={cta}
+        />
       )}
 
       {/* ServerId error */}
@@ -141,10 +153,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       {errorList && (
         <Alert
           type={ErrorStatus.ERROR}
-          heading={t("input-validation.heading")}
+          heading={t("input-validation.heading", {
+            lng: language,
+          })}
           validation={true}
           id={errorId}
-          tabIndex={0}
           focussable={true}
         >
           {errorList}
@@ -174,17 +187,18 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             lang={language}
             handleSubmit={handleSubmit}
             noValidate={true}
-            hCaptchaSiteKey={props.hCaptchaSiteKey}
-            isPreview={props.isPreview}
+            isPublished={isPublished}
             captchaToken={props.captchaToken}
           >
             {isGroupsCheck &&
               isShowReviewPage &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <FocusHeader headingTag="h2">
+                // Let the buttons and other logic control the focus to avoid conflicting with the
+                // error validation focus
+                <h2 tabIndex={-1} data-group={currentGroup || "default"} data-testid="focus-h2">
                   {getGroupTitle(currentGroup, language as Language)}
-                </FocusHeader>
+                </h2>
               )}
 
             {children}
@@ -264,10 +278,7 @@ export const Form = withFormik<FormProps, Responses>({
         values.groupHistory as string[],
         formikBag.props.formRecord.form.groups
       );
-      const shownElements = filterShownElements(
-        formikBag.props.formRecord.form.elements,
-        values.matchedIds as string[]
-      );
+      const shownElements = filterShownElements(formikBag.props.formRecord, values as FormValues);
       return filterValuesByShownElements(inputHistoryValues, shownElements);
     };
 
