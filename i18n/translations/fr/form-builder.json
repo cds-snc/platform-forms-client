@@ -580,6 +580,9 @@
       "title": "Balises supplémentaires",
       "description": "Vous pouvez ajouter des étiquettes flexibles  pour inclure des métadonnées aux éléments du formulaire afin de catégoriser les questions connexes ou de transformer les données.",
       "errorTagTooLong": "La balise ne peut pas dépasser 50 caractères"
+    },
+    "dynamicRow": {
+      "errorMaxRows": "Le nombre maximal de réponses ne peut pas dépasser {{maxRows}}."
     }
   },
   "moreOptions": "Plus d'options  ",
