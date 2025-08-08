@@ -98,7 +98,7 @@ export const Item = ({
         context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus"
       )}
       onKeyDown={(e) => {
-        if (e.key === "Delete" || e.key === "Backspace") {
+        if (e.key === "Delete") {
           if (handleDelete) {
             e.preventDefault();
             handleDelete(e as React.KeyboardEvent<HTMLLIElement>);

@@ -1306,7 +1306,7 @@
       "emptyFormElement": "Empty form question element",
       "keyboardNav": {
         "label": "Keyboard shortcuts",
-        "body": "<p className=\"mb-4\">Navigate the questions and pages using the <kbd>arrow</kbd> keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li><kbd>control</kbd> + <kbd>shift</kbd> + <kbd>D</kbd> to pick up an item</li><li><kbd>Arrow</kbd> keys to drag the item</li><li><kbd>Enter</kbd> key to drop the item</li><li><kbd>Del</kbd> or <kbd>Backspace</kbd> key on the page item to delete the page</li></ul>"
+        "body": "<p className=\"mb-4\">Navigate the questions and pages using the <kbd>arrow</kbd> keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li><kbd>control</kbd> + <kbd>shift</kbd> + <kbd>D</kbd> to pick up an item</li><li><kbd>Arrow</kbd> keys to drag the item</li><li><kbd>Enter</kbd> key to drop the item</li><li><kbd>Del</kbd> key on the page item to delete the page</li></ul>"
       }
     },
     "confirmDeleteGroup": {
