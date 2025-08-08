@@ -19,10 +19,17 @@ import {
   submission as pagedFormSubmission,
   result as pagedFormSubmissionResult,
 } from "./fixtures/paged";
-import { submission as missingInputsSubmission, result as missingInputsResult } from "./fixtures/missingInputs";
-import { submission as richTextSubmission, result as richTextResult } from "./fixtures/includingRichText";
+import {
+  submission as missingInputsSubmission,
+  result as missingInputsResult,
+} from "./fixtures/missingInputs";
+import {
+  submission as richTextSubmission,
+  result as richTextResult,
+} from "./fixtures/includingRichText";
 
 import merge from "lodash.merge";
+import { FormRecord, Responses } from "@root/lib/types";
 
 describe("transformFormResponses", () => {
   it("should transform responses for storage", () => {
@@ -55,14 +62,14 @@ describe("transformFormResponses", () => {
         submission: pagedFormSubmission,
         result: pagedFormSubmissionResult,
       },
-      { 
+      {
         submission: missingInputsSubmission,
         result: missingInputsResult,
       },
       {
         submission: richTextSubmission,
         result: richTextResult,
-      }
+      },
     ];
 
     types.forEach((type) => {
@@ -71,6 +78,203 @@ describe("transformFormResponses", () => {
       const result = buildCompleteFormDataObject(payload.form, payload.responses);
 
       expect(result).toEqual(type.result);
+    });
+  });
+
+  describe("Error handling", () => {
+    it("should throw error for invalid form record", () => {
+      expect(() => buildCompleteFormDataObject(null as unknown as FormRecord, {})).toThrow(
+        "Invalid form record: missing or invalid elements array"
+      );
+
+      expect(() => buildCompleteFormDataObject({} as unknown as FormRecord, {})).toThrow(
+        "Invalid form record: missing or invalid elements array"
+      );
+
+      expect(() =>
+        buildCompleteFormDataObject({ form: null } as unknown as FormRecord, {})
+      ).toThrow("Invalid form record: missing or invalid elements array");
+    });
+
+    it("should throw error for invalid values", () => {
+      const validForm = { form: { elements: [] }, id: "test", securityAttribute: "protected" };
+
+      expect(() =>
+        buildCompleteFormDataObject(
+          validForm as unknown as FormRecord,
+          null as unknown as Responses
+        )
+      ).toThrow("Invalid values: must be a valid object");
+
+      expect(() =>
+        buildCompleteFormDataObject(
+          validForm as unknown as FormRecord,
+          "string" as unknown as Responses
+        )
+      ).toThrow("Invalid values: must be a valid object");
+    });
+  });
+
+  describe("Edge cases", () => {
+    it("should handle empty form elements array", () => {
+      const emptyForm = {
+        form: { elements: [] },
+        id: "test-form",
+        securityAttribute: "protected",
+      };
+
+      const result = buildCompleteFormDataObject(emptyForm as unknown as FormRecord, {});
+
+      expect(result).toEqual({
+        formID: "test-form",
+        securityAttribute: "protected",
+      });
+    });
+
+    it("should handle empty responses object", () => {
+      const formWithElements = {
+        form: {
+          elements: [
+            { id: "1", type: "textField" },
+            { id: "2", type: "checkbox" },
+          ],
+        },
+        id: "test-form",
+        securityAttribute: "protected",
+      };
+
+      const result = buildCompleteFormDataObject(formWithElements as unknown as FormRecord, {});
+
+      expect(result).toHaveProperty("1", "");
+      expect(result).toHaveProperty("2", []);
+      expect(result).toHaveProperty("formID", "test-form");
+    });
+
+    it("should handle responses with unknown field IDs", () => {
+      const form = {
+        form: { elements: [{ id: "1", type: "textField" }] },
+        id: "test-form",
+        securityAttribute: "protected",
+      };
+
+      const responses = {
+        "1": "valid field",
+        "999": "unknown field",
+        nonexistent: "another unknown",
+      };
+
+      const result = buildCompleteFormDataObject(form as unknown as FormRecord, responses);
+
+      expect(result["1"]).toBe("valid field");
+      expect(result["999"]).toBe("unknown field");
+      expect(result["nonexistent"]).toBe("another unknown");
+    });
+
+    it("should handle malformed file input responses", () => {
+      const form = {
+        form: { elements: [{ id: "1", type: "fileInput" }] },
+        id: "test-form",
+        securityAttribute: "protected",
+      };
+
+      const responses = { "1": "invalid file data" };
+
+      const result = buildCompleteFormDataObject(form as unknown as FormRecord, responses);
+
+      expect(result["1"]).toEqual({
+        name: null,
+        size: null,
+        id: null,
+      });
+    });
+
+    it("should handle malformed checkbox responses", () => {
+      const form = {
+        form: { elements: [{ id: "1", type: "checkbox" }] },
+        id: "test-form",
+        securityAttribute: "protected",
+      };
+
+      const responses = { "1": "not an array" };
+
+      const result = buildCompleteFormDataObject(form as unknown as FormRecord, responses);
+
+      expect(result["1"]).toEqual([]);
+    });
+
+    it("should handle mixed valid and invalid checkbox array items", () => {
+      const form = {
+        form: { elements: [{ id: "1", type: "checkbox" }] },
+        id: "test-form",
+        securityAttribute: "protected",
+      };
+
+      const responses = { "1": ["valid", 123, null, "also valid", {}] };
+
+      const result = buildCompleteFormDataObject(
+        form as unknown as FormRecord,
+        responses as unknown as Responses
+      );
+
+      expect(result["1"]).toEqual(["valid", "also valid"]);
+    });
+
+    it("should handle elements with missing type property", () => {
+      const form = {
+        form: { elements: [{ id: "1" }] }, // missing type
+        id: "test-form",
+        securityAttribute: "protected",
+      };
+
+      const responses = { "1": "some value" };
+
+      const result = buildCompleteFormDataObject(form as unknown as FormRecord, responses);
+
+      expect(result["1"]).toBe("some value");
+    });
+
+    it("should exclude richText elements from missing elements processing", () => {
+      const form = {
+        form: {
+          elements: [
+            { id: "1", type: "textField" },
+            { id: "2", type: "richText" },
+            { id: "3", type: "checkbox" },
+          ],
+        },
+        id: "test-form",
+        securityAttribute: "protected",
+      };
+
+      const result = buildCompleteFormDataObject(form as unknown as FormRecord, {});
+
+      expect(result).toHaveProperty("1", "");
+      expect(result).not.toHaveProperty("2"); // richText should be excluded
+      expect(result).toHaveProperty("3", []);
+    });
+
+    it("should handle dynamic row with malformed data", () => {
+      const form = {
+        form: {
+          elements: [
+            {
+              id: "1",
+              type: "dynamicRow",
+              properties: {
+                subElements: [{ type: "textField" }, { type: "checkbox" }],
+              },
+            },
+          ],
+        },
+        id: "test-form",
+        securityAttribute: "protected",
+      };
+
+      const responses = { "1": "not an array" };
+
+      const result = buildCompleteFormDataObject(form as unknown as FormRecord, responses);
+
+      expect(result["1"]).toEqual([]);
     });
   });
 });
