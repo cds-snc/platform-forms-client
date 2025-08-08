@@ -130,7 +130,14 @@ export const SupportForm = () => {
               <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
             </p>
           </Alert.Warning>
-          <form id="support" action={submitForm} noValidate>
+          <form
+            id="support"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitForm(new FormData(e.currentTarget));
+            }}
+            noValidate
+          >
             {errors.error && (
               <Alert.Danger focussable={true} title={t("error")} className="my-2">
                 <p>{t(errors.error)}</p>
