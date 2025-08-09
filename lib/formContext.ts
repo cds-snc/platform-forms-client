@@ -401,6 +401,48 @@ export const checkVisibilityRecursive = (
 };
 
 /**
+ * Cleans up form values by removing responses to questions that should not be visible
+ * based on conditional logic and form element visibility.
+ */
+export const cleanupInvisibleValues = (
+  formRecord: PublicFormRecord,
+  values: Responses
+): Responses => {
+  const cleanedValues = { ...values };
+  const formElements = formRecord.form.elements;
+
+  // Remove values for elements that are not visible according to conditional rules
+  formElements.forEach((element) => {
+    const elementId = element.id.toString();
+
+    // Skip form context values like currentGroup, groupHistory, matchedIds
+    if (["currentGroup", "groupHistory", "matchedIds"].includes(elementId)) {
+      return;
+    }
+
+    // Check if this element should be visible
+    const isVisible = checkVisibilityRecursive(formRecord, element, values as FormValues);
+
+    // If the element is not visible, remove its value
+    if (!isVisible && cleanedValues[elementId] !== undefined) {
+      delete cleanedValues[elementId];
+    }
+  });
+
+  const formValues = removeFormContextValues(cleanedValues);
+
+  return formValues;
+};
+
+export const removeFormContextValues = (values: Responses) => {
+  const formValues = { ...values };
+  delete formValues["currentGroup"];
+  delete formValues["groupHistory"];
+  delete formValues["matchedIds"];
+  return formValues;
+};
+
+/**
  * Checks if an element exists within a group.
  * @param groupId - The id of the group to check
  * @param elementId - The id of the element to check
