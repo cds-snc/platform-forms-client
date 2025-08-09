@@ -1,4 +1,4 @@
-FROM node:22-alpine as base
+FROM node:22-alpine AS base
 
 ENV NODE_ENV=production
 ENV NEXT_OUTPUT_STANDALONE=true
@@ -27,7 +27,7 @@ RUN yarn workspaces focus gcforms
 RUN yarn build
 RUN yarn workspaces focus gcforms --production
 
-FROM node:22-alpine as final
+FROM node:22-alpine AS final
 LABEL maintainer="-"
 
 ENV PORT 3000

@@ -900,6 +900,7 @@ export const filterValuesByShownElements = (values: Responses, elementsShown: Fo
       filteredValues[key] = Array.isArray(values[key]) ? [] : "";
     }
   });
+
   return filteredValues;
 };
 

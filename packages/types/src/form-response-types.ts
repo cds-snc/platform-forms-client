@@ -14,5 +14,5 @@ export type Response =
 export type FileInputResponse = {
   name: string | null;
   size: number | null;
-  based64EncodedFile: string | null;
+  content: ArrayBuffer | null;
 };

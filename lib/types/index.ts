@@ -23,7 +23,7 @@ export type {
 import { FormikErrors } from "formik";
 export { FormElementTypes };
 
-export type { Submission, SubmissionRequestBody } from "./submission-types";
+export type { Submission, SubmissionRequestBody, SignedURLMap } from "./submission-types";
 
 export type FormBuilderPageProps = {
   tab: string;
