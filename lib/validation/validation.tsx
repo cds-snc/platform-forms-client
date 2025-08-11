@@ -11,18 +11,16 @@ import { FormikProps } from "formik";
 import { TFunction } from "i18next";
 import { ErrorListItem } from "@clientComponents/forms";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
-import { hasOwnProperty, isServer } from "../tsUtils";
+import { isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import { FormValues, GroupsType, checkVisibilityRecursive } from "@lib/formContext";
 import { inGroup } from "@lib/formContext";
-import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClientSide";
+import { isFileExtensionValid } from "./fileValidationClientSide";
 import { DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
 import { isValidEmail } from "@lib/validation/isValidEmail";
-import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
-import { bytesToMb } from "@lib/utils/fileSize";
-
+import { isIndividualFileSizeValid } from "@lib/validation/isIndividualFileSizeValid";
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
  * Also, defines the regex for validation, with a matching bilingual error message
@@ -141,20 +139,21 @@ const isFieldResponseValid = (
 
       if (
         validator.required &&
-        (!fileInputResponse.name ||
+        (!fileInputResponse ||
+          !fileInputResponse.name ||
           !fileInputResponse.size ||
-          !fileInputResponse.based64EncodedFile)
-      )
+          !fileInputResponse.content)
+      ) {
         return t("input-validation.required");
-
-      if (fileInputResponse.size && !isAllFilesSizeValid(values)) {
-        return t("input-validation.file-size-too-large-all-files", {
-          maxSizeInMb: bytesToMb(BODY_SIZE_LIMIT_WITH_FILES),
-        });
       }
 
       if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
         return t("input-validation.file-type-invalid");
+
+      // Check file size client-side
+      if (fileInputResponse.size && !isIndividualFileSizeValid(fileInputResponse.size)) {
+        return t("input-validation.file-size-too-large");
+      }
 
       break;
     }
@@ -248,12 +247,12 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
       return false;
     }
     case FormElementTypes.fileInput: {
-      const fileInputResponse = value as FileInputResponse;
       if (
-        fileInputResponse &&
-        hasOwnProperty(fileInputResponse, "name") &&
-        hasOwnProperty(fileInputResponse, "size") &&
-        hasOwnProperty(fileInputResponse, "based64EncodedFile")
+        value !== null &&
+        typeof value == "object" &&
+        "name" in value &&
+        "size" in value &&
+        "id" in value
       ) {
         return true;
       }

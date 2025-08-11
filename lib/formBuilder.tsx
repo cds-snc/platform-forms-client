@@ -377,7 +377,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     case FormElementTypes.checkbox:
       return [];
     case FormElementTypes.fileInput:
-      return { name: null, size: null, based64EncodedFile: null };
+      return { name: null, size: null, content: null };
     case FormElementTypes.dynamicRow: {
       const dynamicRowInitialValue: Responses =
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
