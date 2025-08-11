@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.47.1](https://github.com/cds-snc/platform-forms-client/compare/v3.47.0...v3.47.1) (2025-08-08)
+
+
+### Bug Fixes
+
+* add keyboard control for tree view delete button ([#5965](https://github.com/cds-snc/platform-forms-client/issues/5965)) ([94e7a54](https://github.com/cds-snc/platform-forms-client/commit/94e7a549737adc9090e7f5199dd171e12cf2b15a))
+* **deps:** update all patch dependencies ([#5931](https://github.com/cds-snc/platform-forms-client/issues/5931)) ([6e4d660](https://github.com/cds-snc/platform-forms-client/commit/6e4d6605472160d4edc536a311f13e13766e52c5))
+* form-builder skip to main content ([#5945](https://github.com/cds-snc/platform-forms-client/issues/5945)) ([e44cee5](https://github.com/cds-snc/platform-forms-client/commit/e44cee5a13ad063feb9153eceaf180626f3ba504))
+* tree view label page titles ([#5943](https://github.com/cds-snc/platform-forms-client/issues/5943)) ([e938a25](https://github.com/cds-snc/platform-forms-client/commit/e938a25164cebcea063b8cca262e07b516388fc1))
+* update Support, Contact, Register, Login, Question Challenge forms to retain state after validation ([#5954](https://github.com/cds-snc/platform-forms-client/issues/5954)) ([c360fc1](https://github.com/cds-snc/platform-forms-client/commit/c360fc13941bdb6c15ceb7fa9431f536ea91679f))
+
+
+### Miscellaneous Chores
+
+* add max row count for repeating sets ([#5966](https://github.com/cds-snc/platform-forms-client/issues/5966)) ([e3477fe](https://github.com/cds-snc/platform-forms-client/commit/e3477fe6248e0f673504b1e89839a0fadefe27fb))
+* bump aws sdk to latest ([#5959](https://github.com/cds-snc/platform-forms-client/issues/5959)) ([dbc77cc](https://github.com/cds-snc/platform-forms-client/commit/dbc77cc54045edf66985a45603847264f51de683))
+* clean file content from save / confirm ([#5961](https://github.com/cds-snc/platform-forms-client/issues/5961)) ([f133f1e](https://github.com/cds-snc/platform-forms-client/commit/f133f1e90950aceb7060dcbce0989ab955ea7a0a))
+* **deps:** update all non-major docker images ([#5929](https://github.com/cds-snc/platform-forms-client/issues/5929)) ([e593b7d](https://github.com/cds-snc/platform-forms-client/commit/e593b7de05eb63a8480e3d0acf60a132d7efc1b3))
+* **deps:** update all non-major github action dependencies ([#5930](https://github.com/cds-snc/platform-forms-client/issues/5930)) ([7ae0ed0](https://github.com/cds-snc/platform-forms-client/commit/7ae0ed0ba144c87ad924d1d31737679155bf3ce0))
+* minor tweak to content to clarify confirmation / sign-off step ([#5957](https://github.com/cds-snc/platform-forms-client/issues/5957)) ([8241b91](https://github.com/cds-snc/platform-forms-client/commit/8241b911fd0b1bff5cfa0c76e99276c173ff66b9))
+* Refactor BackButton to use new visible pages function ([#5962](https://github.com/cds-snc/platform-forms-client/issues/5962)) ([e03e537](https://github.com/cds-snc/platform-forms-client/commit/e03e537cbf42be5eb0e57b201688c66365286d2f))
+* translations for keyboard shortcuts to delete in tree view ([#5970](https://github.com/cds-snc/platform-forms-client/issues/5970)) ([de0918b](https://github.com/cds-snc/platform-forms-client/commit/de0918bcefd2982bb86aaa42ddf664dd692ee614))
+* Update next.js to 15.4.5 ([#5960](https://github.com/cds-snc/platform-forms-client/issues/5960)) ([39c3908](https://github.com/cds-snc/platform-forms-client/commit/39c390862be0e5947e0b2565681f5203b39f2902))
+* Update next.js to 15.4.6 ([#5967](https://github.com/cds-snc/platform-forms-client/issues/5967)) ([6f0f633](https://github.com/cds-snc/platform-forms-client/commit/6f0f63325bf8ffe527b16489873414ee6c22088c))
+
 ## [3.47.0](https://github.com/cds-snc/platform-forms-client/compare/v3.46.8...v3.47.0) (2025-07-30)
 
 
