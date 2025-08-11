@@ -9,11 +9,16 @@ import { type FormProps, type InnerFormProps } from "./types";
 import { type Language } from "@lib/types/form-builder-types";
 import { type Responses } from "@lib/types";
 
+import { EventKeys } from "@lib/hooks/useCustomEvent";
+
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 
 import { ErrorStatus } from "../Alert/Alert";
-import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
+import {
+  submitForm,
+  isFormClosed,
+} from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Review } from "../Review/Review";
@@ -33,8 +38,13 @@ import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
 import { FormStatus } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
-
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
+import { handleUploadError } from "@lib/fileInput/handleUploadError";
+
+import {
+  copyObjectExcludingFileContent,
+  uploadFile,
+} from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
 
 import { SaveAndResumeButton } from "@clientComponents/forms/SaveAndResume/SaveAndResumeButton";
 
@@ -71,8 +81,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
 
   let formStatusError = null;
-  if (props.status === FormStatus.FILE_ERROR) {
-    formStatusError = t("input-validation.file-submission");
+  if (typeof props.status === "object" && props.status !== null) {
+    // We have a "complex" `status`
+    // This used when we want to include a heading and message
+    // The error handling function set the error strings for us ref: handleUploadErrors.
+    formStatusError = true; // set to `true` to show the Alert and let the UI handle the strings
+  } else if (props.status === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
   } else if (props.status === FormStatus.ERROR) {
     formStatusError = t("server-error");
   } else if (props.status === FormStatus.FORM_CLOSED_ERROR) {
@@ -138,11 +152,13 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       {formStatusError && (
         <Alert
           type={ErrorStatus.ERROR}
-          heading={formStatusError}
+          heading={props.status?.heading ? props.status.heading : formStatusError}
           id={serverErrorId}
           focussable={true}
           cta={cta}
-        />
+        >
+          <>{props.status?.message && <p className="mb-4">{props.status?.message}</p>}</>
+        </Alert>
       )}
 
       {/* ServerId error */}
@@ -266,6 +282,12 @@ export const Form = withFormik<FormProps, Responses>({
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
+    // If the form is closed, do not allow submission
+    if (await isFormClosed(formikBag.props.formRecord.id)) {
+      formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
+      return;
+    }
+
     // For groups enabled forms only allow submitting on the Review page
     const isShowReviewPage = showReviewPage(formikBag.props.formRecord.form);
     if (isShowReviewPage && formikBag.props.currentGroup !== LockedSections.REVIEW) {
@@ -293,8 +315,12 @@ export const Form = withFormik<FormProps, Responses>({
           ? removeFormContextValues(getValuesForConditionalLogic())
           : removeFormContextValues(values);
 
+      // Extract file content from formValues so they are not part of the submission call to the submit action
+      const { formValuesWithoutFileContent, fileObjsRef } =
+        copyObjectExcludingFileContent(formValues);
+
       const result = await submitForm(
-        formValues,
+        formValuesWithoutFileContent,
         formikBag.props.language,
         formikBag.props.formRecord.id,
         formikBag.props.captchaToken?.current
@@ -307,24 +333,73 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.setStatus(FormStatus.SERVER_ID_ERROR);
         return;
       }
+      // Start here to upload files and handle errors below into something easier to read
 
       if (result.error) {
-        if (result.error.message.includes("FileValidationResult")) {
-          formikBag.setStatus(FormStatus.FILE_ERROR);
-        } else if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
-          formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
-        } else if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
+        if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
           formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
           formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
         } else {
           formikBag.setStatus(FormStatus.ERROR);
         }
-      } else {
-        formikBag.props.onSuccess(result.id, result?.submissionId);
+        return;
       }
+
+      if (
+        (!result.fileURLMap ? 0 : Object.keys(result.fileURLMap).length) !==
+        Object.keys(fileObjsRef).length
+      ) {
+        logMessage.error("File Upload count mismatch");
+        formikBag.setStatus(FormStatus.ERROR);
+      }
+
+      // Handle if there are files to upload
+      if (result.fileURLMap && Object.keys(result?.fileURLMap).length > 0) {
+        const totalFiles = Object.keys(result.fileURLMap).length;
+        const fileProgress: { [key: string]: number } = {};
+
+        const uploadPromises = Object.entries(result.fileURLMap).map(
+          async ([fileId, signedPost]) => {
+            fileProgress[fileId] = 0;
+            await uploadFile(fileObjsRef[fileId], signedPost, (ev) => {
+              if (!ev.progress || !document) return;
+
+              fileProgress[fileId] = ev.progress;
+              const totalProgress =
+                Object.values(fileProgress).reduce((acc, progress) => acc + progress, 0) /
+                totalFiles;
+
+              document.dispatchEvent(
+                new CustomEvent(EventKeys.submitProgress, {
+                  detail: {
+                    progress: totalProgress,
+                    message: formikBag.props.t("submitProgress.uploadingFiles", {
+                      totalFiles,
+                    }),
+                  },
+                })
+              );
+            });
+          }
+        );
+
+        await Promise.all(uploadPromises);
+      }
+
+      formikBag.props.onSuccess(result.id, result?.submissionId);
     } catch (err) {
       logMessage.error(err as Error);
-      formikBag.setStatus("Error");
+
+      const fileUploadError = handleUploadError(err as Error, formikBag.props.t);
+
+      if (fileUploadError) {
+        formikBag.setStatus({
+          heading: fileUploadError.heading,
+          message: fileUploadError.message,
+        });
+      } else {
+        formikBag.setStatus("Error");
+      }
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         ga("form_submission_trigger", {
