@@ -107,18 +107,17 @@ const fillData = (value: Response | Responses[], element: FormElement): Response
 
 export const normalizeFormResponses = (
   formRecord: PublicFormRecord,
-  values: Responses
+  originalValues: Responses
 ): Responses => {
   if (!formRecord?.form?.elements || !Array.isArray(formRecord.form.elements)) {
     throw new Error("Invalid form record: missing or invalid elements array");
   }
 
-  if (!values || typeof values !== "object") {
+  if (!originalValues || typeof originalValues !== "object") {
     throw new Error("Invalid values: must be a valid object");
   }
 
-  const originalValues = structuredClone(values) as Responses;
-  const formData = { ...originalValues };
+  const formData = structuredClone<Responses>(originalValues);
 
   // Create a lookup map for better performance
   const elementMap = new Map(formRecord.form.elements.map((el) => [String(el.id), el]));
