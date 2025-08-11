@@ -12,8 +12,7 @@ import {
   idArraysMatch,
   GroupsType,
   getNextAction,
-  filterShownElements,
-  filterValuesByShownElements,
+  filterValuesByVisibleElements,
   getVisibleGroupsBasedOnValuesRecursive,
   getValuesWithMatchedIds,
 } from "@lib/formContext";
@@ -22,7 +21,6 @@ import {
   getGroupHistory as _getGroupHistory,
   pushIdToHistory as _pushIdToHistory,
   clearHistoryAfterId as _clearHistoryAfterId,
-  getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
 
 import {
@@ -89,13 +87,7 @@ export const GCFormsProvider = ({
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
 
-  const inputHistoryValues = getInputHistoryValues(
-    (values.current || []) as FormValues,
-    (history.current || []) as string[],
-    groups
-  );
-  const shownElements = filterShownElements(formRecord, values.current);
-  const filteredResponses = filterValuesByShownElements(inputHistoryValues, shownElements);
+  const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
   const filteredMatchedIds = matchedIds.filter((id) => {
     const parentId = id.split(".")[0];
     if (filteredResponses[parentId]) {
