@@ -128,7 +128,7 @@
     "usehooks-ts": "3.1.1",
     "uuid": "9.0.1",
     "valibot": "^1.1.0",
-    "zustand": "5.0.6"
+    "zustand": "5.0.7"
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.840.0",
