@@ -230,26 +230,6 @@ describe("transformFormResponses", () => {
       expect(result["1"]).toBe("some value");
     });
 
-    // it("should exclude richText elements from missing elements processing", () => {
-    //   const form = {
-    //     form: {
-    //       elements: [
-    //         { id: "1", type: "textField" },
-    //         { id: "2", type: "richText" },
-    //         { id: "3", type: "checkbox" },
-    //       ],
-    //     },
-    //     id: "test-form",
-    //     securityAttribute: "protected",
-    //   };
-
-    //   const result = normalizeFormResponses(form as unknown as FormRecord, {});
-
-    //   expect(result).toHaveProperty("1", "");
-    //   expect(result).not.toHaveProperty("2"); // richText should be excluded
-    //   expect(result).toHaveProperty("3", []);
-    // });
-
     it("should handle dynamic row with malformed data", () => {
       const form = {
         form: {
