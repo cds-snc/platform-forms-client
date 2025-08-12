@@ -32,7 +32,11 @@ export const ContactForm = () => {
   };
 
   const submitForm = async (formData: FormData) => {
-    const formEntries = Object.fromEntries(formData.entries());
+    const formEntries = {
+      ...Object.fromEntries(formData.entries()),
+      // Handle checkbox values - without this only the last checked value is set
+      request: formData.getAll("request").join(","),
+    };
 
     if (!formEntries.request) {
       // Set to empty string if the request field is not set
@@ -126,7 +130,14 @@ export const ContactForm = () => {
               <Link href={`/${language}/support`}>{t("contactus.supportFormLink")}</Link>.
             </p>
           </Alert.Warning>
-          <form id="contactus" action={submitForm} noValidate>
+          <form
+            id="contactus"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitForm(new FormData(e.currentTarget));
+            }}
+            noValidate
+          >
             {errors.error && (
               <Alert.Danger focussable={true} title={t("error")} className="my-2">
                 <p>{t(errors.error)}</p>

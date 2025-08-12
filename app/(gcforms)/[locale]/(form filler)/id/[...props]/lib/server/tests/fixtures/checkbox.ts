@@ -17,10 +17,10 @@ export const submission = {
     },
   },
   responses: {
-    "1": '{"value":["one","two"]}',
-    formID: "cm41ifzhg0000kgike1emtkd2",
-    securityAttribute: "Protected A",
+    "1": ["one", "two"],
   },
 };
 
-export const result = { "1": ["one", "two"] };
+export const result = {
+  "1": ["one", "two"],
+};

@@ -18,7 +18,19 @@ jest.mock("@lib/client/clientHelpers", () => {
 jest.mock("app/(gcforms)/[locale]/(form filler)/id/[...props]/actions", () => ({
   __esModule: true,
   submitForm: jest.fn(),
+  isFormClosed: jest.fn(() => Promise.resolve(false)),
 }));
+
+jest.mock("app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader", () => {
+  const originalModule = jest.requireActual(
+    "app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader"
+  );
+  return {
+    __esModule: true,
+    ...originalModule,
+    uploadFile: jest.fn(() => Promise.resolve()),
+  };
+});
 
 let mockFormTimerState = {
   canSubmit: true,

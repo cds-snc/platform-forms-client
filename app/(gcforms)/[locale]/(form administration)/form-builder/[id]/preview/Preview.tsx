@@ -134,7 +134,7 @@ export const Preview = ({
             <a className="visited:text-black-default" href={responsesLink}>
               {t("submittedResponsesTextVault.text2", { ns: "form-builder" })}
             </a>
-            . .
+            .
           </div>
         )}
 

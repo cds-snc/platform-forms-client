@@ -1,16 +1,19 @@
 import { Responses } from "@lib/types";
 import { InvokeCommand } from "@aws-sdk/client-lambda";
-import { SubmissionLambdaInvocationError } from "./exceptions";
+import { SubmissionLambdaInvocationError } from "../client/exceptions";
 import { lambdaClient } from "@lib/integration/awsServicesConnector";
 import { logMessage } from "@lib/logger";
+import { SignedURLMap } from "@lib/types";
 
 export const invokeSubmissionLambda = async (
   formID: string,
   fields: Responses,
   language: string,
-  securityAttribute: string,
-  containsFiles: boolean
-): Promise<string> => {
+  securityAttribute: string
+): Promise<{
+  submissionId: string;
+  fileURLMap?: SignedURLMap;
+}> => {
   try {
     const lambdaInvokeResponse = await lambdaClient.send(
       new InvokeCommand({
@@ -20,7 +23,6 @@ export const invokeSubmissionLambda = async (
           language,
           responses: fields,
           securityAttribute,
-          containsFiles,
         }),
       })
     );
@@ -32,12 +34,12 @@ export const invokeSubmissionLambda = async (
       );
     }
 
-    const lambdaProcessingResult = JSON.parse(
+    const { status, submissionId, fileURLMap } = JSON.parse(
       lambdaInvokeResponse.Payload?.transformToString() ?? "{}"
-    ) as { status?: boolean; submissionId?: string };
+    ) as { status?: boolean; submissionId?: string; fileURLMap?: SignedURLMap };
 
-    if (lambdaProcessingResult.status === true && lambdaProcessingResult.submissionId) {
-      return lambdaProcessingResult.submissionId;
+    if (status === true && submissionId) {
+      return { submissionId, fileURLMap };
     } else {
       throw new Error(
         `Unexpected Submission lambda processing result: ${lambdaInvokeResponse.Payload?.transformToString()}`
