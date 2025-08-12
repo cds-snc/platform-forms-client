@@ -129,7 +129,7 @@ describe("transformFormResponses", () => {
       expect(result).toEqual({});
     });
 
-    it("should ignore empty responses", () => {
+    it("should handle empty responses", () => {
       const formWithElements = {
         form: {
           elements: [
