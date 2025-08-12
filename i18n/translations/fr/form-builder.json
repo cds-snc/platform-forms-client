@@ -549,7 +549,8 @@
   "maxCharacterLength": "Longueur maximale des caractères :",
   "maximumCharacterLength": "Longueur maximale des caractères",
   "maxNumberOfRows": {
-    "description": "Les utilisateur·rice·s peuvent fournir jusqu'à ce nombre d'entrées pour cette question.",
+    "description": "Définissez la limite supérieure du nombre d'entrées que vos utilisateur·rice·s peuvent fournir pour cette question.",
+    "description": "Set the upper limit for the number of entries your users can provide for this question.",
     "label": "Nombre maximum de réponses"
   },
   "more": "Plus",
