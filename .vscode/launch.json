@@ -36,6 +36,12 @@
         "webpack-internal:///(ssr)/./*": "${workspaceFolder}/*",
         "turbopack:///[project]/*": "${workspaceFolder}/*"
       }
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000"
     }
   ]
 }

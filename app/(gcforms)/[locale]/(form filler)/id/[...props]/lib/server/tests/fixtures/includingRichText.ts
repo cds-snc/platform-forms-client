@@ -6,12 +6,24 @@ export const submission = {
           id: 1,
           type: "textField",
         },
+        {
+          id: 2,
+          type: "richText",
+        },
+        {
+          id: 3,
+          type: "textField",
+        },
       ],
     },
   },
-  responses: { "1": "test", formID: "cm41ifzhg0000kgike1emtkd2", securityAttribute: "Protected A" },
+  responses: {
+    "1": "test",
+    3: "test",
+  },
 };
 
 export const result = {
   "1": "test",
+  "3": "test",
 };

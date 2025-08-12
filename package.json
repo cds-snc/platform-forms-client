@@ -28,6 +28,7 @@
     "prisma:reset": "prisma migrate reset",
     "prisma:studio": "prisma studio",
     "prisma:test": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=test",
+    "prisma:generate": "prisma generate",
     "start:test": "yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
     "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
     "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",
@@ -54,6 +55,7 @@
     "@aws-sdk/client-s3": "^3.859.0",
     "@aws-sdk/client-sqs": "^3.859.0",
     "@aws-sdk/lib-dynamodb": "^3.859.0",
+    "@aws-sdk/s3-presigned-post": "^3.840.0",
     "@bufbuild/protobuf": "^2.2.3",
     "@casl/ability": "6.7.3",
     "@cdssnc/gcds-tokens": "2.12.0",
@@ -126,7 +128,7 @@
     "usehooks-ts": "3.1.1",
     "uuid": "9.0.1",
     "valibot": "^1.1.0",
-    "zustand": "5.0.6"
+    "zustand": "5.0.7"
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.840.0",
@@ -188,7 +190,7 @@
     "postcss": "^8.4.32",
     "postcss-import": "^15.1.0",
     "postcss-loader": "^7.3.4",
-    "prettier": "^2.8.8",
+    "prettier": "^3.6.2",
     "raw-loader": "^4.0.2",
     "sass": "^1.69.5",
     "sass-loader": "^13.3.3",
