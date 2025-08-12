@@ -1,9 +1,20 @@
+import { fileTypeFromBuffer } from "file-type";
 import { PresignedPost } from "@aws-sdk/s3-presigned-post";
-import { Responses, FileInputResponse } from "@lib/types";
 import { v4 as uuid } from "uuid";
 import axios, { AxiosError, AxiosProgressEvent } from "axios";
 
+import { ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
+
+import { Responses, FileInputResponse } from "@lib/types";
 import { FileUploadError } from "../client/exceptions";
+
+export async function isMimeTypeValid(file: FileInput): Promise<boolean> {
+  const fileTypeResult = await fileTypeFromBuffer(file.content);
+  const mimeType = fileTypeResult?.mime;
+
+  if (!mimeType) return false;
+  return ALLOWED_FILE_TYPES.map((t) => t.mime).includes(mimeType);
+}
 
 const isFileInput = (response: unknown): response is FileInput => {
   return (
@@ -79,8 +90,12 @@ export const uploadFile = async (
 ) => {
   const formData = new FormData();
 
-  // for debugging purposes, you can uncomment the following line to log the file details
-  // throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400);
+  // Check mime type
+  const isValidMimeType = await isMimeTypeValid(file);
+
+  if (!isValidMimeType) {
+    throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400);
+  }
 
   Object.entries(preSigned.fields ?? {}).forEach(([key, value]) => {
     formData.append(key, value);
