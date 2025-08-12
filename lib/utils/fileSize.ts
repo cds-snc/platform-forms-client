@@ -53,13 +53,3 @@ export const bytesToKbOrMbString = (
     unit: "MB",
   };
 };
-
-/**
- * When we base64 encode a file, there is a ~35% overhead in file size.
- * This function calculates the size of the file after base64 encoding.
- * @param fileSize - Size of the file in bytes
- * @returns
- */
-export const fileSizeWithBase64Overhead = (fileSize: number): number => {
-  return Math.round(fileSize * 1.35);
-};
