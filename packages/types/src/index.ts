@@ -21,6 +21,11 @@ import {
   SortOption,
   NotificationsInterval,
   NotificationsIntervalDefault,
+  DateFormat,
+  DateObject,
+  DatePart,
+  GroupsType,
+  FormValues,
 } from "./form-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
@@ -45,6 +50,9 @@ export { FormElementTypes };
 export { FormStatus };
 export { NotificationsInterval };
 export { NotificationsIntervalDefault };
+export { DateFormat, DateObject, DatePart };
+export { GroupsType };
+export { FormValues };
 
 export { SortOption };
 export type { SortValue };

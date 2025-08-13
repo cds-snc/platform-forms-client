@@ -2879,6 +2879,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@gcforms/lib@workspace:*, @gcforms/lib@workspace:packages/lib":
+  version: 0.0.0-use.local
+  resolution: "@gcforms/lib@workspace:packages/lib"
+  peerDependencies:
+    "@gcforms/types": "*"
+  languageName: unknown
+  linkType: soft
+
 "@gcforms/tag-input@workspace:*, @gcforms/tag-input@workspace:packages/tag-input":
   version: 0.0.0-use.local
   resolution: "@gcforms/tag-input@workspace:packages/tag-input"
@@ -12906,6 +12914,7 @@ __metadata:
     "@gcforms/announce": "workspace:*"
     "@gcforms/connectors": "workspace:*"
     "@gcforms/editor": "workspace:*"
+    "@gcforms/lib": "workspace:*"
     "@gcforms/tag-input": "workspace:*"
     "@gcforms/types": "workspace:*"
     "@hcaptcha/react-hcaptcha": "npm:^1.12.0"
