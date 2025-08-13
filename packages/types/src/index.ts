@@ -21,6 +21,11 @@ import {
   SortOption,
   NotificationsInterval,
   NotificationsIntervalDefault,
+  DateFormat,
+  DateObject,
+  DatePart,
+  GroupsType,
+  FormValues,
 } from "./form-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
@@ -45,6 +50,27 @@ export { FormElementTypes };
 export { FormStatus };
 export { NotificationsInterval };
 export { NotificationsIntervalDefault };
+export type { DateFormat, DateObject, DatePart };
+export type { GroupsType };
+export type { FormValues };
 
 export { SortOption };
 export type { SortValue };
+
+import {
+  AddressCompleteChoice,
+  AddressCompleNext,
+  AddressCompleteResult,
+  AddressCompleteProps,
+  AddressElements,
+  AddressCompleteLabels,
+} from "./address-complete";
+
+export type {
+  AddressCompleteChoice,
+  AddressCompleNext,
+  AddressCompleteResult,
+  AddressCompleteProps,
+  AddressElements,
+  AddressCompleteLabels,
+};
