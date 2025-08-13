@@ -51,8 +51,8 @@ export { FormStatus };
 export { NotificationsInterval };
 export { NotificationsIntervalDefault };
 export type { DateFormat, DateObject, DatePart };
-export { GroupsType };
-export { FormValues };
+export type { GroupsType };
+export type { FormValues };
 
 export { SortOption };
 export type { SortValue };
