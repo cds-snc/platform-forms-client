@@ -322,10 +322,10 @@ export const Form = withFormik<FormProps, Responses>({
         copyObjectExcludingFileContent(formValues);
 
       const submitProgress = 0;
-      const progressInterval = undefined;
+      let progressInterval = undefined;
 
       if (hasFiles(values)) {
-        submitProgressDispatch(
+        progressInterval = submitProgressDispatch(
           submitProgress,
           progressInterval,
           formikBag.props.t("submitProgress.text")
