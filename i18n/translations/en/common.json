@@ -53,7 +53,7 @@
         "message": "The file {{fileName}} could not be uploaded."
       },
       "file-size-too-large": {
-        "message": "{{fileName}} is too big {{maxSizeInMb}} MB. Select a smaller file or remove the file, if it is not required."
+        "message": "'{{fileName}}' is too big. Choose a file size that is less than {{maxSizeInMb}} MB."
       },
       "network-error": {
         "heading": "There was a problem submitting your form",
