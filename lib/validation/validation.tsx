@@ -155,7 +155,7 @@ const isFieldResponseValid = (
 
       // Check file size client-side
       if (fileInputResponse.size && !isIndividualFileSizeValid(fileInputResponse.size)) {
-        return t("input-validation.file-upload.file-size-too-large", {
+        return t("input-validation.file-upload.file-size-too-large.message", {
           fileName: fileInputResponse.name,
           maxSizeInMb: bytesToMb(MAX_FILE_SIZE),
         });
