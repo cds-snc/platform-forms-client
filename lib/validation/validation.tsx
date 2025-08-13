@@ -21,6 +21,9 @@ import { DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
 import { isValidEmail } from "@lib/validation/isValidEmail";
 import { isIndividualFileSizeValid } from "@lib/validation/isIndividualFileSizeValid";
+
+import { MAX_FILE_SIZE } from "@root/constants";
+import { bytesToMb } from "@lib/utils/fileSize";
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
  * Also, defines the regex for validation, with a matching bilingual error message
@@ -152,7 +155,10 @@ const isFieldResponseValid = (
 
       // Check file size client-side
       if (fileInputResponse.size && !isIndividualFileSizeValid(fileInputResponse.size)) {
-        return t("input-validation.file-size-too-large");
+        return t("input-validation.file-upload.file-size-too-large", {
+          fileName: fileInputResponse.name,
+          maxSizeInMb: bytesToMb(MAX_FILE_SIZE),
+        });
       }
 
       break;
