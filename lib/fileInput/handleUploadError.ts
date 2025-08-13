@@ -43,6 +43,8 @@ export const handleUploadError = (
       });
     }
 
+    // Noting we can add a specfic mime type error message here if we want to
+
     return {
       heading: heading,
       message: message,
