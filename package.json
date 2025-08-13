@@ -62,6 +62,7 @@
     "@cdssnc/sanitize-pii": "^1.2.1",
     "@gcforms/announce": "workspace:*",
     "@gcforms/connectors": "workspace:*",
+    "@gcforms/core": "workspace:*",
     "@gcforms/editor": "workspace:*",
     "@gcforms/tag-input": "workspace:*",
     "@gcforms/types": "workspace:*",
