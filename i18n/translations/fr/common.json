@@ -52,7 +52,7 @@
         "message": "Le fichier « {{fileName}} » n'a pas pu être envoyé."
       },
       "file-size-too-large": {
-        "message": "Le fichier « {{fileName}} » est trop volumineux {{maxSizeInMb}} Mo. Sélectionnez un fichier plus petit ou supprimez-le s'il n'est pas nécessaire."
+        "message": "Le fichier « {{fileName}} » est trop volumineux. Choisissez un fichier dont la taille est inférieure à {{maxSizeInMb}} Mo."
       },
       "network-error": {
         "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
