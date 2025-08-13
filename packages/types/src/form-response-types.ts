@@ -1,3 +1,5 @@
+import { DateObject } from "./form-types";
+
 export type Responses = {
   [key: string]: Response;
 };
@@ -9,6 +11,7 @@ export type Response =
   | Record<string, unknown>[]
   | FileInputResponse
   | FileInputResponse[]
+  | DateObject
   | Record<string, unknown>;
 
 export type FileInputResponse = {
