@@ -56,3 +56,21 @@ export type { FormValues };
 
 export { SortOption };
 export type { SortValue };
+
+import {
+  AddressCompleteChoice,
+  AddressCompleNext,
+  AddressCompleteResult,
+  AddressCompleteProps,
+  AddressElements,
+  AddressCompleteLabels,
+} from "./address-complete";
+
+export type {
+  AddressCompleteChoice,
+  AddressCompleNext,
+  AddressCompleteResult,
+  AddressCompleteProps,
+  AddressElements,
+  AddressCompleteLabels,
+};
