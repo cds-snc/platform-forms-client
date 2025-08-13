@@ -6,6 +6,9 @@ import {
   FormElementTypes,
   Response,
 } from "@lib/types";
+import { isValidDateObject } from "@root/components/clientComponents/forms/FormattedDate/utils";
+import { logMessage } from "@root/lib/logger";
+import { DateObject } from "@root/packages/types/src";
 
 interface FileInputObj extends FileInputResponse {
   name: string | null;
@@ -56,6 +59,26 @@ const dynamicRowFiller = (values: Responses[], element: FormElement): Responses[
   return newValues;
 };
 
+/**
+ * Deserialize a date object from a JSON string
+ *
+ * @param value
+ * @returns DateObject | string
+ */
+export const deserializeDateObject = (value: string): DateObject | string => {
+  try {
+    const parsed = JSON.parse(value);
+
+    if (isValidDateObject(parsed)) {
+      return parsed;
+    }
+  } catch (e) {
+    logMessage.info("Failed to parse date object", { value, error: e });
+  }
+
+  return value;
+};
+
 export const fileInputFiller = (value: Response) => {
   if (isFileInputObj(value)) {
     return value;
@@ -81,22 +104,33 @@ export const checkboxFiller = (value: Response): string[] => {
  * This function takes a response value and an element,
  * and fills in the response value based on the element type.
  */
-const fillData = (value: Response | Responses[], element: FormElement): Response | Responses[] => {
+export const fillData = (
+  value: Response | Responses[],
+  element: FormElement
+): Response | Responses[] => {
   if (!element?.type) {
     return value;
   }
 
   try {
     switch (element.type) {
-      case "dynamicRow":
+      case FormElementTypes.dynamicRow:
         return dynamicRowFiller(
           Array.isArray(value) ? (value as Responses[]) : ([] as Responses[]),
           element
         );
-      case "checkbox":
+      case FormElementTypes.checkbox:
         return checkboxFiller(value as Response);
-      case "fileInput":
+      case FormElementTypes.fileInput:
         return fileInputFiller(value as Response);
+      case FormElementTypes.formattedDate:
+        if (typeof value === "string") {
+          return deserializeDateObject(value);
+        }
+        return value;
+      case FormElementTypes.address:
+        // @TODO: deserialize address object as above
+        return value;
       default:
         return value;
     }

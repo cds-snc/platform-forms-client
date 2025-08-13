@@ -61,13 +61,13 @@ export const result = {
     {
       "0": "test2",
       "1": ["one", "two"],
-      "2": '{"YYYY":2024,"MM":11,"DD":28}',
+      "2": { YYYY: 2024, MM: 11, DD: 28 },
       "3": { name: null, size: null, id: null },
     },
     {
       "0": "test3",
       "1": ["two", "three"],
-      "2": '{"YYYY":2025,"MM":11,"DD":28}',
+      "2": { YYYY: 2025, MM: 11, DD: 28 },
       "3": { name: null, size: null, id: null },
     },
   ],
