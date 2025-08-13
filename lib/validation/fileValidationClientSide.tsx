@@ -1,5 +1,3 @@
-import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
-
 export const ALLOWED_FILE_TYPES = [
   { mime: "application/pdf", extensions: ["pdf"] },
   { mime: "text/plain", extensions: ["txt"] },
@@ -36,8 +34,4 @@ export function isFileExtensionValid(fileName: string): boolean {
   return ALLOWED_FILE_TYPES.map((t) => t.extensions)
     .flat()
     .includes(extension);
-}
-
-export function isIndividualFileSizeValid(sizeInBytes: number): boolean {
-  return sizeInBytes <= BODY_SIZE_LIMIT_WITH_FILES;
 }

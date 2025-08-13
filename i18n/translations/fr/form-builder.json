@@ -215,9 +215,8 @@
         "title": "Fonctionnalité Bêta",
         "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
         "bullet1": "La récupération des réponses au formulaire via l'API",
-        "bullet2": "Une taille maximale combinée de tous les fichiers téléversés :  {{BODY_SIZE_LIMIT_WITH_FILES}} Mo",
-        "bullet3": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
-        "bullet4": "La collecte de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
+        "bullet2": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
+        "bullet3": "La collecte de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
       }
     },
     "firstMiddleLastName": {
