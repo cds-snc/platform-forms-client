@@ -63,7 +63,7 @@
     "@gcforms/announce": "workspace:*",
     "@gcforms/connectors": "workspace:*",
     "@gcforms/editor": "workspace:*",
-    "@gcforms/lib": "workspace:*",
+    "@gcforms/core": "workspace:*",
     "@gcforms/tag-input": "workspace:*",
     "@gcforms/types": "workspace:*",
     "@hcaptcha/react-hcaptcha": "^1.12.0",
