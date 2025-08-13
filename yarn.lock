@@ -2867,6 +2867,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@gcforms/core@workspace:*, @gcforms/core@workspace:packages/core":
+  version: 0.0.0-use.local
+  resolution: "@gcforms/core@workspace:packages/core"
+  peerDependencies:
+    "@gcforms/types": "*"
+  languageName: unknown
+  linkType: soft
+
 "@gcforms/editor@workspace:*, @gcforms/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@gcforms/editor@workspace:packages/editor"
@@ -2876,14 +2884,6 @@ __metadata:
   peerDependencies:
     react: ^19.1.0
     react-dom: ^19.1.0
-  languageName: unknown
-  linkType: soft
-
-"@gcforms/lib@workspace:*, @gcforms/lib@workspace:packages/lib":
-  version: 0.0.0-use.local
-  resolution: "@gcforms/lib@workspace:packages/lib"
-  peerDependencies:
-    "@gcforms/types": "*"
   languageName: unknown
   linkType: soft
 
@@ -12913,8 +12913,8 @@ __metadata:
     "@eslint/eslintrc": "npm:^3"
     "@gcforms/announce": "workspace:*"
     "@gcforms/connectors": "workspace:*"
+    "@gcforms/core": "workspace:*"
     "@gcforms/editor": "workspace:*"
-    "@gcforms/lib": "workspace:*"
     "@gcforms/tag-input": "workspace:*"
     "@gcforms/types": "workspace:*"
     "@hcaptcha/react-hcaptcha": "npm:^1.12.0"
