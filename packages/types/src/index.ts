@@ -50,7 +50,7 @@ export { FormElementTypes };
 export { FormStatus };
 export { NotificationsInterval };
 export { NotificationsIntervalDefault };
-export { DateFormat, DateObject, DatePart };
+export type { DateFormat, DateObject, DatePart };
 export { GroupsType };
 export { FormValues };
 
