@@ -41,7 +41,6 @@ import { ga } from "@lib/client/clientHelpers";
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 import { handleUploadError } from "@lib/fileInput/handleUploadError";
 import { hasFiles } from "@lib/fileExtractor";
-import { submitProgressDispatch } from "@lib/utils/submitProgressDispatch";
 
 import {
   copyObjectExcludingFileContent,
@@ -321,15 +320,25 @@ export const Form = withFormik<FormProps, Responses>({
       const { formValuesWithoutFileContent, fileObjsRef } =
         copyObjectExcludingFileContent(formValues);
 
-      const submitProgress = 0;
-      let progressInterval = undefined;
+      let submitProgress = 0;
+      let progressInterval: NodeJS.Timeout | undefined = undefined;
 
       if (hasFiles(values)) {
-        progressInterval = submitProgressDispatch(
-          submitProgress,
-          progressInterval,
-          formikBag.props.t("submitProgress.text")
-        );
+        progressInterval = setInterval(() => {
+          if (submitProgress <= 0.1) {
+            submitProgress += 0.02;
+            document.dispatchEvent(
+              new CustomEvent(EventKeys.submitProgress, {
+                detail: {
+                  progress: submitProgress,
+                  message: formikBag.props.t("submitProgress.text"),
+                },
+              })
+            );
+          } else {
+            clearInterval(progressInterval);
+          }
+        }, 500);
       }
 
       const result = await submitForm(
