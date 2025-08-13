@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { useField } from "formik";
+import { MAX_FILE_SIZE } from "@root/constants";
 
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
@@ -8,7 +9,7 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
 import { themes } from "@clientComponents/globals/Buttons/themes";
-import { bytesToKbOrMbString } from "@lib/utils/fileSize";
+import { bytesToKbOrMbString, bytesToMb } from "@lib/utils/fileSize";
 import { announce } from "@gcforms/announce";
 
 interface FileInputProps extends InputFieldProps {
@@ -79,9 +80,25 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
           if (newFile.name !== fileName) {
             setFileName(newFile.name);
 
+            if (newFile.size > MAX_FILE_SIZE) {
+              setError(
+                t("input-validation.file-upload.file-size-too-large.message", {
+                  fileName: newFile.name,
+                  maxSizeInMb: bytesToMb(MAX_FILE_SIZE),
+                })
+              );
+
+              setFileName("");
+
+              return;
+            }
+
+            setFileName(newFile.name);
+
             announce(t("fileInput.addedMessage", { fileName: newFile.name }));
 
             setFileSize(bytesToKbOrMbString(newFile.size));
+
             setValue({
               name: newFile.name,
               size: newFile.size,
