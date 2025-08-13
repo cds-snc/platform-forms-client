@@ -15,6 +15,11 @@ const scrollErrorInView = (id: string) => {
   if (labelElement && inputElement) {
     inputElement.focus();
     labelElement.scrollIntoView();
+    return;
+  }
+  if (inputElement) {
+    inputElement.focus();
+    inputElement.scrollIntoView();
   }
 };
 

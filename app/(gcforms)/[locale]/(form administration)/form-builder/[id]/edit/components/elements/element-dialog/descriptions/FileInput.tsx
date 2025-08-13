@@ -77,14 +77,6 @@ const WithApiDescription = ({ title }: { title: string }) => {
         {t("addElementDialog.fileInputWithApi.trialFeature.title")}
       </h4>
       <FileInputTrialDescription />
-      <div className="mb-4 mt-8">
-        <h4 className="mb-2 font-medium">
-          {t("addElementDialog.fileInputWithApi.recommendations.title")}
-        </h4>
-        <ul className="mb-4">
-          <li>{t("addElementDialog.fileInputWithApi.recommendations.text1")}</li>
-        </ul>
-      </div>
     </div>
   );
 };

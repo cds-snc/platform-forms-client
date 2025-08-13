@@ -343,7 +343,7 @@
     "uploadingFiles": "Téléversement de {{totalFiles}} fichiers..."
   },
   "saveFileWarning": {
-    "text": "Vous devrez télécharger à nouveau les fichiers joints lorsque vous poursuivrez le formulaire."
+    "text": "Vous devrez téléverser à nouveau les fichiers joints lorsque vous poursuivrez le formulaire."
   },
   "confirmFileWarning": {
     "text": "Cette copie de vos réponses n'aura pas les fichiers que vous avez joints à votre soumission."
