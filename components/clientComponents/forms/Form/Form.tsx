@@ -35,6 +35,7 @@ import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 import { handleUploadError } from "@lib/fileInput/handleUploadError";
+import { hasFiles } from "@lib/fileExtractor";
 
 import {
   copyObjectExcludingFileContent,
@@ -140,7 +141,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   return status === "submitting" ? (
     <>
       <title>{t("loading")}</title>
-      <SubmitProgress />
+      <SubmitProgress spinner={!hasFiles(props.values)} />
     </>
   ) : (
     <>
@@ -301,12 +302,35 @@ export const Form = withFormik<FormProps, Responses>({
       const { formValuesWithoutFileContent, fileObjsRef } =
         copyObjectExcludingFileContent(formValues);
 
+      let submitProgress = 0;
+      let progressInterval: NodeJS.Timeout | undefined = undefined;
+
+      if (hasFiles(values)) {
+        progressInterval = setInterval(() => {
+          if (submitProgress <= 0.1) {
+            submitProgress += 0.02;
+            document.dispatchEvent(
+              new CustomEvent(EventKeys.submitProgress, {
+                detail: {
+                  progress: submitProgress,
+                  message: formikBag.props.t("submitProgress.text"),
+                },
+              })
+            );
+          } else {
+            clearInterval(progressInterval);
+          }
+        }, 500);
+      }
+
       const result = await submitForm(
         formValuesWithoutFileContent,
         formikBag.props.language,
         formikBag.props.formRecord.id,
         formikBag.props.captchaToken?.current
       );
+
+      clearInterval(progressInterval);
 
       // Failed to find Server Action (likely due to newer deployment)
       if (result === undefined) {
@@ -350,6 +374,11 @@ export const Form = withFormik<FormProps, Responses>({
               const totalProgress =
                 Object.values(fileProgress).reduce((acc, progress) => acc + progress, 0) /
                 totalFiles;
+
+              if (totalProgress <= submitProgress) {
+                // Don't dispatch progress events if the total progress is less than what we've already dispatched
+                return;
+              }
 
               document.dispatchEvent(
                 new CustomEvent(EventKeys.submitProgress, {
