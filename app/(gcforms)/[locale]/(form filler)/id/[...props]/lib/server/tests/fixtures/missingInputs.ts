@@ -49,7 +49,7 @@ export const submission = {
   responses: {
     "1": [
       { "0": "Test", "3": { name: "example.pdf", size: 103, id: "123456" } },
-      { "0": "test2", "1": ["one", "two"], "2": '{"YYYY":2024,"MM":11,"DD":28}' },
+      { "0": "test2", "1": ["one", "two"] },
       { "0": "test3", "1": ["two", "three"], "2": '{"YYYY":2025,"MM":11,"DD":28}' },
     ],
   },
@@ -61,7 +61,7 @@ export const result = {
     {
       "0": "test2",
       "1": ["one", "two"],
-      "2": '{"YYYY":2024,"MM":11,"DD":28}',
+      "2": "",
       "3": { name: null, size: null, id: null },
     },
     {
@@ -71,10 +71,4 @@ export const result = {
       "3": { name: null, size: null, id: null },
     },
   ],
-  "2": "",
-  "3": {
-    name: null,
-    size: null,
-    id: null,
-  },
 };
