@@ -1,6 +1,10 @@
 import { EventKeys } from "@lib/hooks/useCustomEvent";
 
-export const submitProgressDispatch = (submitProgress = 0.01, progressInterval, message) => {
+export const submitProgressDispatch = (
+  submitProgress = 0.01,
+  progressInterval: NodeJS.Timeout | undefined,
+  message: string
+) => {
   // Dispatch initial progress events (fake)
   // We just want show some submission progress until file uploads step takes over
   // Note the progress bar updates using Math.round(value * 100) ...
