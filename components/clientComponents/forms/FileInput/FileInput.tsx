@@ -11,6 +11,7 @@ import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidat
 import { themes } from "@clientComponents/globals/Buttons/themes";
 import { bytesToKbOrMbString, bytesToMb } from "@lib/utils/fileSize";
 import { announce } from "@gcforms/announce";
+import { fileTypeFromBuffer } from "file-type";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -27,6 +28,14 @@ export type FileEventTarget = React.ChangeEvent<HTMLInputElement> & {
 import { ResetButton } from "./ResetButton";
 
 // Heavily inspired by https://scottaohara.github.io/a11y_styled_form_controls/src/file-upload/
+
+export async function isMimeTypeValid(file: { content: ArrayBuffer }): Promise<boolean> {
+  const fileTypeResult = await fileTypeFromBuffer(file.content);
+  const mimeType = fileTypeResult?.mime;
+
+  if (!mimeType) return false;
+  return ALLOWED_FILE_TYPES.map((t) => t.mime).includes(mimeType);
+}
 
 export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
@@ -62,24 +71,19 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     props.className ? props.className : ""
   );
 
-  const _onChange = (e: FileEventTarget) => {
+  const _onChange = async (e: FileEventTarget) => {
     if (e.target?.files) {
       const reader = new FileReader();
-      // Need to refactor in the future to add support for Multiple Files.
-      // ex.. check for length of e.target.files[] and handle accordingly.
-      // On multi file once files are selected remove `file-up--compact` and show
-      // number of files uploaded or file list in file_output
       const newFile = e.target.files[0];
       if (newFile) {
         reader.readAsArrayBuffer(newFile);
-        // react dispatch functions will not work within reader callbacks
-        // this we need to wait for reader readyState to be true
-        reader.onloadend = () => {
+        reader.onloadend = async () => {
           fileInputRef.current!.value = ""; // Reset the input value to allow re-uploading the same file
 
           if (newFile.name !== fileName) {
             setFileName(newFile.name);
 
+            // Check for file size
             if (newFile.size > MAX_FILE_SIZE) {
               setError(
                 t("input-validation.file-upload.file-size-too-large.message", {
@@ -87,12 +91,25 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
                   maxSizeInMb: bytesToMb(MAX_FILE_SIZE),
                 })
               );
-
               setFileName("");
-
               return;
             }
 
+            // Check for file content
+            const buffer = reader.result as ArrayBuffer;
+
+            const isValidMimeType = await isMimeTypeValid({ content: buffer });
+            if (!isValidMimeType) {
+              setError(
+                t("input-validation.file-upload.mime.message", {
+                  fileName: newFile.name,
+                })
+              );
+              setFileName("");
+              return;
+            }
+
+            // Successful file upload -- set the input
             setFileName(newFile.name);
 
             announce(t("fileInput.addedMessage", { fileName: newFile.name }));
@@ -102,7 +119,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             setValue({
               name: newFile.name,
               size: newFile.size,
-              content: reader.result as ArrayBuffer,
+              content: buffer,
             });
           }
         };
