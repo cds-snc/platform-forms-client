@@ -46,7 +46,6 @@
     "date-invalid": "Enter a valid date.",
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
-    "file-submission": "There was a problem with the file submitted. Try uploading a different file format, such as PDF.",
     "file-upload": {
       "default": {
         "heading": "There was a problem submitting your form",
@@ -57,7 +56,7 @@
       },
       "mime": {
         "heading": "There was a problem submitting your form",
-        "message": "{fileName} could not be uploaded. Try saving the file in a different format and uploading it again."
+        "message": "{{fileName}} could not be uploaded. Try saving the file in a different format and uploading it again."
       },
       "network-error": {
         "heading": "There was a problem submitting your form",
