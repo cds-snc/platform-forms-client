@@ -57,7 +57,7 @@
       },
       "mime": {
         "heading": "There was a problem submitting your form",
-        "message": "The file {{fileName}} has an invalid mime type."
+        "message": "{fileName} could not be uploaded. Try saving the file in a different format and uploading it again."
       },
       "network-error": {
         "heading": "There was a problem submitting your form",
