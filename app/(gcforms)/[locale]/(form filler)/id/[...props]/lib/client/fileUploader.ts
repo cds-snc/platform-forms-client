@@ -94,7 +94,7 @@ export const uploadFile = async (
   const isValidMimeType = await isMimeTypeValid(file);
 
   if (!isValidMimeType) {
-    throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400);
+    throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400, "mime");
   }
 
   Object.entries(preSigned.fields ?? {}).forEach(([key, value]) => {

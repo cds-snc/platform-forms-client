@@ -54,6 +54,10 @@
       "file-size-too-large": {
         "message": "Le fichier « {{fileName}} » est trop volumineux. Choisissez un fichier dont la taille est inférieure à {{maxSizeInMb}} Mo."
       },
+      "mime": {
+        "heading": "There was a problem submitting your form [FR]",
+        "message": "The file {{fileName}} has an invalid mime type. [FR]"
+      },
       "network-error": {
         "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
         "message": "Vérifiez votre connexion réseau et réessayez plus tard."

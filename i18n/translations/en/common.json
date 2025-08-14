@@ -55,6 +55,10 @@
       "file-size-too-large": {
         "message": "'{{fileName}}' is too big. Choose a file size that is less than {{maxSizeInMb}} MB."
       },
+      "mime": {
+        "heading": "There was a problem submitting your form",
+        "message": "The file {{fileName}} has an invalid mime type."
+      },
       "network-error": {
         "heading": "There was a problem submitting your form",
         "message": "Check your network connection and try to submit again later."
