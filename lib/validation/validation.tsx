@@ -408,39 +408,32 @@ export const getErrorList = (
       if (Array.isArray(formElementErrorValue)) {
         return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
           return Object.entries(dynamicRowErrors).map(
-            ([dyanamicRowElementKey, dyanamicRowElementErrorValue]) => {
-              const id = `${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`;
-
+            ([dynamicRowElementKey, dyanamicRowElementErrorValue]) => {
+              const id = `${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`;
               const parentElement = props.formRecord.form.elements.find(
                 (el) => el.id === formElementKey
               );
 
-              // console.log(parentElement)
-
-              let el;
+              let subElement;
 
               if (dyanamicRowElementErrorValue) {
                 const subElements = parentElement?.properties.subElements;
-
-                // console.log(subElements);
-                el = subElements?.find((el) => el.subId === id);
-                if (el) {
-                  // console.log(el.type);
-                }
+                subElement = subElements && subElements[Number(dynamicRowElementKey)];
               }
 
               return (
                 dyanamicRowElementErrorValue && (
                   <ErrorListItem
-                    key={`error-${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
-                    errorKey={`${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
+                    key={`error-${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
+                    errorKey={`${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
                     value={`${dyanamicRowElementErrorValue as string}`}
                   >
                     <ErrorListMessage
                       language={props.language || "en"}
                       id={id}
                       elements={[]}
-                      defaultValue={formElementErrorValue}
+                      defaultValue={""}
+                      subElement={subElement}
                     />
                   </ErrorListItem>
                 )

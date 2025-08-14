@@ -8,33 +8,42 @@ export const ErrorListMessage = ({
   defaultValue,
   elements,
   language,
+  subElement,
 }: {
   id: string | number | undefined;
   defaultValue: string | number | undefined;
   elements: FormElement[];
   language: string;
+  subElement?: FormElement;
 }) => {
   const { t } = useTranslation("form-builder");
 
   let question = "";
-  let element: FormElement | null = null;
-  try {
-    element = (elements && elements.find((element) => String(element.id) === String(id))) || null;
+  let elementType;
 
-    if (!element?.type || !defaultValue || !id) {
-      throw new Error("Invalid element");
+  if (subElement) {
+    question = subElement.properties?.[getProperty("title", language)] as string;
+    elementType = subElement.type;
+  } else {
+    let element: FormElement | null = null;
+    try {
+      element = (elements && elements.find((element) => String(element.id) === String(id))) || null;
+
+      if (!element?.type || !defaultValue || !id) {
+        throw new Error("Invalid element");
+      }
+
+      question = element.properties?.[getProperty("title", language)] as string;
+      question = truncateString(question);
+    } catch (error) {
+      return defaultValue;
     }
 
-    question = element.properties?.[getProperty("title", language)] as string;
-    question = truncateString(question);
-  } catch (error) {
-    return defaultValue;
-  }
+    elementType = element?.type;
 
-  let elementType = element?.type;
-
-  if (element.properties.validation?.all === true) {
-    elementType = FormElementTypes.attestation;
+    if (element.properties.validation?.all === true) {
+      elementType = FormElementTypes.attestation;
+    }
   }
 
   switch (elementType) {
