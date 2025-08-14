@@ -421,6 +421,8 @@ export const getErrorList = (
 
               if (dyanamicRowElementErrorValue) {
                 const subElements = parentElement?.properties.subElements;
+
+                // console.log(subElements);
                 el = subElements?.find((el) => el.subId === id);
                 if (el) {
                   // console.log(el.type);
