@@ -8307,15 +8307,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.7.4":
-  version: 22.17.0
-  resolution: "@types/node@npm:22.17.0"
-  dependencies:
-    undici-types: "npm:~6.21.0"
-  checksum: 10c0/e1c603b660d3de3243dfc02ded5d40623ff3f36315ffbdd8cdc81bc2c5a8da172035879d437b72e9fa61ca01827f28e9c2b0c32898f411a8e9ba0a5efac0b4ca
-  languageName: node
-  linkType: hard
-
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
@@ -14772,7 +14763,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^5.1.3, jose@npm:^5.9.3":
+"jose@npm:^5.1.3":
   version: 5.10.0
   resolution: "jose@npm:5.10.0"
   checksum: 10c0/e20d9fc58d7e402f2e5f04e824b8897d5579aae60e64cb88ebdea1395311c24537bf4892f7de413fab1acf11e922797fb1b42269bc8fc65089a3749265ccb7b0
@@ -16437,7 +16428,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino-pretty@npm:^11.0.0, pino-pretty@npm:^11.2.2":
+"pino-pretty@npm:^11.0.0":
   version: 11.3.0
   resolution: "pino-pretty@npm:11.3.0"
   dependencies:
@@ -16468,7 +16459,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:9.7.0, pino@npm:^9.4.0":
+"pino@npm:9.7.0":
   version: 9.7.0
   resolution: "pino@npm:9.7.0"
   dependencies:
@@ -17893,20 +17884,6 @@ __metadata:
   checksum: 10c0/78ad6edb8309a2bfb720c2c1898f7907a37f858866ce11a5974643af1203a6a6e05b2fa9c53d8064a673a447b83d42569260c306d43628bff5bb101969708355
   languageName: node
   linkType: hard
-
-"response_retriever@workspace:utils/responseRetriever":
-  version: 0.0.0-use.local
-  resolution: "response_retriever@workspace:utils/responseRetriever"
-  dependencies:
-    "@types/node": "npm:^22.7.4"
-    axios: "npm:^1.8.4"
-    jose: "npm:^5.9.3"
-    pino: "npm:^9.4.0"
-    pino-pretty: "npm:^11.2.2"
-    tsx: "npm:^4.19.1"
-    typescript: "npm:^5.6.2"
-  languageName: unknown
-  linkType: soft
 
 "responselike@npm:^2.0.0":
   version: 2.0.1
@@ -19750,7 +19727,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsx@npm:^4.19.1, tsx@npm:^4.7.0":
+"tsx@npm:^4.7.0":
   version: 4.20.3
   resolution: "tsx@npm:4.20.3"
   dependencies:
@@ -19872,7 +19849,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.3.3, typescript@npm:^5.5.2, typescript@npm:^5.6.2":
+"typescript@npm:^5.3.3, typescript@npm:^5.5.2":
   version: 5.8.3
   resolution: "typescript@npm:5.8.3"
   bin:
@@ -19882,7 +19859,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.2#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.2#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.2#optional!builtin<compat/typescript>":
   version: 5.8.3
   resolution: "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=5786d5"
   bin:
