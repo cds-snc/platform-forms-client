@@ -26,50 +26,58 @@ const main = async () => {
   });
 
   const users = await retrieveUsers(cognitoClient);
-  
-  const usersToUpdate = users.map((user) => {
-    const userAttributes: UserAttributes = {};
-  
-    if (user.Attributes) {
-      for (const attribute of user.Attributes) {
-        if (attribute.Name) {
-          userAttributes[attribute.Name] = attribute.Value;
+
+  const usersToUpdate = users
+    .map((user) => {
+      const userAttributes: UserAttributes = {};
+
+      if (user.Attributes) {
+        for (const attribute of user.Attributes) {
+          if (attribute.Name) {
+            userAttributes[attribute.Name] = attribute.Value;
+          }
         }
       }
-    }
-  
-    return {
-      username: user.Username,
-      email: userAttributes.email,
-    };
-  }).filter((user) => {
-    if (user.username && user.email) return /[A-Z]/.test(user.email);
-    else return false;
-  }) as { username: string, email: string }[];
 
-  console.log("Users requiring email address update:")
+      return {
+        username: user.Username,
+        email: userAttributes.email,
+      };
+    })
+    .filter((user) => {
+      if (user.username && user.email) return /[A-Z]/.test(user.email);
+      else return false;
+    }) as { username: string; email: string }[];
+
+  console.log("Users requiring email address update:");
   console.log(usersToUpdate);
 
   for (const user of usersToUpdate) {
     try {
-      await cognitoClient.send(new AdminUpdateUserAttributesCommand({
-        UserPoolId: USER_POOL_ID,
-        Username: user.username,
-        UserAttributes: [
-          {
-            Name: "email",
-            Value: user.email.toLowerCase(),
-          },
-          {
-            Name: "email_verified",
-            Value: "true",
-          }
-        ]
-      }));
+      await cognitoClient.send(
+        new AdminUpdateUserAttributesCommand({
+          UserPoolId: USER_POOL_ID,
+          Username: user.username,
+          UserAttributes: [
+            {
+              Name: "email",
+              Value: user.email.toLowerCase(),
+            },
+            {
+              Name: "email_verified",
+              Value: "true",
+            },
+          ],
+        })
+      );
 
-      console.log(`Converted email address ${user.email} to ${user.email.toLowerCase()} for user ${user.username}.`);
+      console.log(
+        `Converted email address ${user.email} to ${user.email.toLowerCase()} for user ${user.username}.`
+      );
     } catch (e) {
-      console.log(`Failed to migrate user email address ${user.email} because of following error: ${(e as Error).message}`);
+      console.log(
+        `Failed to migrate user email address ${user.email} because of following error: ${(e as Error).message}`
+      );
     }
   }
 };
