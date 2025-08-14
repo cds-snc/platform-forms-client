@@ -99,6 +99,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             const buffer = reader.result as ArrayBuffer;
 
             const isValidMimeType = await isMimeTypeValid({ content: buffer });
+
             if (!isValidMimeType) {
               setError(
                 t("input-validation.file-upload.mime.message", {

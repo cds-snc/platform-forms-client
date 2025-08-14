@@ -18,7 +18,6 @@ export const ErrorListMessage = ({
 
   let question = "";
   let element: FormElement | null = null;
-
   try {
     element = (elements && elements.find((element) => String(element.id) === String(id))) || null;
 

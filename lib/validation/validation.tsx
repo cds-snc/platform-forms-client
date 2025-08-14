@@ -409,13 +409,38 @@ export const getErrorList = (
         return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
           return Object.entries(dynamicRowErrors).map(
             ([dyanamicRowElementKey, dyanamicRowElementErrorValue]) => {
+              const id = `${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`;
+
+              const parentElement = props.formRecord.form.elements.find(
+                (el) => el.id === formElementKey
+              );
+
+              // console.log(parentElement)
+
+              let el;
+
+              if (dyanamicRowElementErrorValue) {
+                const subElements = parentElement?.properties.subElements;
+                el = subElements?.find((el) => el.subId === id);
+                if (el) {
+                  // console.log(el.type);
+                }
+              }
+
               return (
                 dyanamicRowElementErrorValue && (
                   <ErrorListItem
                     key={`error-${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
                     errorKey={`${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
                     value={`${dyanamicRowElementErrorValue as string}`}
-                  />
+                  >
+                    <ErrorListMessage
+                      language={props.language || "en"}
+                      id={id}
+                      elements={[]}
+                      defaultValue={formElementErrorValue}
+                    />
+                  </ErrorListItem>
                 )
               );
             }
