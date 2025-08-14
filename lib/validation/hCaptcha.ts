@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
+import { withRetryFallback } from "../utils/withRetry";
 
 /**
  * Verifies the client hCaptcha token is valid using the hCaptcha API
@@ -26,15 +27,31 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   data.append("response", String(token));
   data.append("remoteip", String(await getClientIP()));
 
-  const result = await axios({
-    url: "https://api.hcaptcha.com/siteverify",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
+  const result = await withRetryFallback(
+    async () => {
+      return axios({
+        url: "https://api.hcaptcha.com/siteverify",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data,
+        timeout: 5000,
+      });
     },
-    data,
-    timeout: 5000,
-  });
+    null, // fallback value if all retries fail
+    {
+      maxRetries: 3,
+      onRetry: (attempt, error) => {
+        logMessage.warn(`hCaptcha: attempt ${attempt} failed - ${error}`);
+      },
+    }
+  );
+
+  if (!result) {
+    logMessage.error(`hCaptcha: API call failed after retries, allowing submission`);
+    return true;
+  }
 
   // 4XX request error, want to fail. See https://docs.hcaptcha.com/#siteverify-error-codes-table
   const captchaData: { success: boolean; score: number; "error-codes"?: string[] } = result.data;
