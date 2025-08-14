@@ -18,6 +18,7 @@ export const QuestionInput = ({
   onQuestionChange,
   describedById,
   placeholder = "question",
+  isInvalid = false,
 }: {
   index: number;
   id: number;
@@ -25,6 +26,7 @@ export const QuestionInput = ({
   onQuestionChange: (itemId: number, val: string, lang: Language) => void;
   describedById?: string;
   placeholder?: string;
+  isInvalid?: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
@@ -96,6 +98,7 @@ export const QuestionInput = ({
       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateValue(id, e.target.value)}
       {...getLocalizationAttribute()}
       ariaLabel={t(placeholder)}
+      isInvalid={isInvalid}
     />
   );
 };
