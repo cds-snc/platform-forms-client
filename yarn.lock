@@ -232,7 +232,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-dynamodb@npm:^3.859.0":
+"@aws-sdk/client-dynamodb@npm:^3.844.0, @aws-sdk/client-dynamodb@npm:^3.859.0":
   version: 3.868.0
   resolution: "@aws-sdk/client-dynamodb@npm:3.868.0"
   dependencies:
@@ -331,7 +331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-lambda@npm:^3.859.0":
+"@aws-sdk/client-lambda@npm:^3.844.0, @aws-sdk/client-lambda@npm:^3.859.0":
   version: 3.865.0
   resolution: "@aws-sdk/client-lambda@npm:3.865.0"
   dependencies:
@@ -383,7 +383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:3.864.0, @aws-sdk/client-s3@npm:^3.859.0":
+"@aws-sdk/client-s3@npm:3.864.0, @aws-sdk/client-s3@npm:^3.848.0, @aws-sdk/client-s3@npm:^3.859.0":
   version: 3.864.0
   resolution: "@aws-sdk/client-s3@npm:3.864.0"
   dependencies:
@@ -742,7 +742,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/lib-dynamodb@npm:^3.859.0":
+"@aws-sdk/lib-dynamodb@npm:^3.844.0, @aws-sdk/lib-dynamodb@npm:^3.859.0":
   version: 3.868.0
   resolution: "@aws-sdk/lib-dynamodb@npm:3.868.0"
   dependencies:
@@ -7266,6 +7266,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cli-progress@npm:^3":
+  version: 3.11.6
+  resolution: "@types/cli-progress@npm:3.11.6"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/d9a2d60b8fc6ccef73368fa20a23d5b16506808a81ec65f7e8eedf58d236ebaf2ab46578936c000c8e39dde825cb48a3cf9195c8b410177efd5388bcf9d07370
+  languageName: node
+  linkType: hard
+
 "@types/cookie@npm:0.6.0":
   version: 0.6.0
   resolution: "@types/cookie@npm:0.6.0"
@@ -9100,7 +9109,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.8.4":
+"axios@npm:^1.10.0, axios@npm:^1.8.4":
   version: 1.11.0
   resolution: "axios@npm:1.11.0"
   dependencies:
@@ -9767,6 +9776,15 @@ __metadata:
   dependencies:
     restore-cursor: "npm:^5.0.0"
   checksum: 10c0/7ec62f69b79f6734ab209a3e4dbdc8af7422d44d360a7cb1efa8a0887bbe466a6e625650c466fe4359aee44dbe2dc0b6994b583d40a05d0808a5cb193641d220
+  languageName: node
+  linkType: hard
+
+"cli-progress@npm:^3.12.0":
+  version: 3.12.0
+  resolution: "cli-progress@npm:3.12.0"
+  dependencies:
+    string-width: "npm:^4.2.3"
+  checksum: 10c0/f464cb19ebde2f3880620a2adfaeeefaec6cb15c8e610c8a659ca1047ee90d69f3bf2fdabbb1fe33ac408678e882e3e0eecdb84ab5df0edf930b269b8a72682d
   languageName: node
   linkType: hard
 
@@ -15806,6 +15824,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"p-limit@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "p-limit@npm:6.2.0"
+  dependencies:
+    yocto-queue: "npm:^1.1.1"
+  checksum: 10c0/448bf55a1776ca1444594d53b3c731e68cdca00d44a6c8df06a2f6e506d5bbd540ebb57b05280f8c8bff992a630ed782a69612473f769a7473495d19e2270166
+  languageName: node
+  linkType: hard
+
 "p-locate@npm:^4.1.0":
   version: 4.1.0
   resolution: "p-locate@npm:4.1.0"
@@ -18946,6 +18973,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"test-setup@workspace:utils/test-setup":
+  version: 0.0.0-use.local
+  resolution: "test-setup@workspace:utils/test-setup"
+  dependencies:
+    "@aws-sdk/client-dynamodb": "npm:^3.844.0"
+    "@aws-sdk/client-lambda": "npm:^3.844.0"
+    "@aws-sdk/client-s3": "npm:^3.848.0"
+    "@aws-sdk/lib-dynamodb": "npm:^3.844.0"
+    "@types/cli-progress": "npm:^3"
+    axios: "npm:^1.10.0"
+    cli-progress: "npm:^3.12.0"
+    p-limit: "npm:^6.2.0"
+    tsx: "npm:^4.20.3"
+    typescript: "npm:^5.8.3"
+    uuid: "npm:^11.1.0"
+  languageName: unknown
+  linkType: soft
+
 "thenify-all@npm:^1.0.0":
   version: 1.6.0
   resolution: "thenify-all@npm:1.6.0"
@@ -19386,7 +19431,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsx@npm:^4.7.0":
+"tsx@npm:^4.20.3, tsx@npm:^4.7.0":
   version: 4.20.4
   resolution: "tsx@npm:4.20.4"
   dependencies:
@@ -19508,7 +19553,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.3.3, typescript@npm:^5.5.2":
+"typescript@npm:^5.3.3, typescript@npm:^5.5.2, typescript@npm:^5.8.3":
   version: 5.9.2
   resolution: "typescript@npm:5.9.2"
   bin:
@@ -19518,7 +19563,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.2#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.2#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.8.3#optional!builtin<compat/typescript>":
   version: 5.9.2
   resolution: "typescript@patch:typescript@npm%3A5.9.2#optional!builtin<compat/typescript>::version=5.9.2&hash=5786d5"
   bin:
@@ -19815,6 +19860,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 10c0/1607dd32ac7fc22f2d8f77051e6a64845c9bce5cd3dd8aa0070c074ec73e666a1f63c7b4e0f4bf2bc8b9d59dc85a15e17807446d9d2b17c8485fbc2147b27f9b
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "uuid@npm:11.1.0"
+  bin:
+    uuid: dist/esm/bin/uuid
+  checksum: 10c0/34aa51b9874ae398c2b799c88a127701408cd581ee89ec3baa53509dd8728cbb25826f2a038f9465f8b7be446f0fbf11558862965b18d21c993684297628d4d3
   languageName: node
   linkType: hard
 
@@ -20477,6 +20531,13 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: 10c0/dceb44c28578b31641e13695d200d34ec4ab3966a5729814d5445b194933c096b7ced71494ce53a0e8820685d1d010df8b2422e5bf2cdea7e469d97ffbea306f
+  languageName: node
+  linkType: hard
+
+"yocto-queue@npm:^1.1.1":
+  version: 1.2.1
+  resolution: "yocto-queue@npm:1.2.1"
+  checksum: 10c0/5762caa3d0b421f4bdb7a1926b2ae2189fc6e4a14469258f183600028eb16db3e9e0306f46e8ebf5a52ff4b81a881f22637afefbef5399d6ad440824e9b27f9f
   languageName: node
   linkType: hard
 
