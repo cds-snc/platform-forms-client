@@ -1432,7 +1432,8 @@
   "fr": "Français",
   "beta": {
     "tag": "Bêta :",
-    "text": "Fonctionnalité à l'essai"
+    "text": "Fonctionnalité à l'essai",
+    "loadingError": "Le formulaire que vous essayez de charger contient des composants bêta. Malheureusement, ceux-ci ne sont pas encore disponibles pour tous les utilisateurs.  Si vous souhaitez faire partie de ce groupe très sélect d'utilisateurs bêta, veuillez faire un don substantiel au fonds « Bryan Wants To Get Rich Quick ». Aucun reçu fiscal ne sera fourni."
   },
   "fileUploadApiWarning": {
     "text": "La méthode de livraison n'est pas configurée sur API."
