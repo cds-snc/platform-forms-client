@@ -26,6 +26,7 @@ import {
   DatePart,
   GroupsType,
   FormValues,
+  FileInput,
 } from "./form-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
@@ -74,3 +75,5 @@ export type {
   AddressElements,
   AddressCompleteLabels,
 };
+
+export type { FileInput };

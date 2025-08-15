@@ -11,7 +11,7 @@ import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidat
 import { themes } from "@clientComponents/globals/Buttons/themes";
 import { bytesToKbOrMbString, bytesToMb } from "@lib/utils/fileSize";
 import { announce } from "@gcforms/announce";
-import { fileTypeFromBuffer } from "file-type";
+import { isMimeTypeValid } from "@lib/client/isValidMimeType";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -28,14 +28,6 @@ export type FileEventTarget = React.ChangeEvent<HTMLInputElement> & {
 import { ResetButton } from "./ResetButton";
 
 // Heavily inspired by https://scottaohara.github.io/a11y_styled_form_controls/src/file-upload/
-
-export async function isMimeTypeValid(file: { content: ArrayBuffer }): Promise<boolean> {
-  const fileTypeResult = await fileTypeFromBuffer(file.content);
-  const mimeType = fileTypeResult?.mime;
-
-  if (!mimeType) return false;
-  return ALLOWED_FILE_TYPES.map((t) => t.mime).includes(mimeType);
-}
 
 export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
@@ -98,7 +90,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             // Check for file content
             const buffer = reader.result as ArrayBuffer;
 
-            const isValidMimeType = await isMimeTypeValid({ content: buffer });
+            const isValidMimeType = await isMimeTypeValid(buffer);
 
             if (!isValidMimeType) {
               setError(
