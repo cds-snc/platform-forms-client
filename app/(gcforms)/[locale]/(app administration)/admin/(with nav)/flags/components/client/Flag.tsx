@@ -2,9 +2,11 @@
 import { modifyFlag } from "../../actions";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const Flag = ({ flagKey, value }: { flagKey: string; value: boolean }) => {
   const { t } = useTranslation("admin-flags");
+  const { update } = useFeatureFlags();
 
   return (
     <tr key={flagKey} className="border-2">
@@ -22,6 +24,7 @@ export const Flag = ({ flagKey, value }: { flagKey: string; value: boolean }) =>
           className="whitespace-nowrap text-sm"
           onClick={async () => {
             await modifyFlag(flagKey, !value);
+            await update();
           }}
         >
           {value ? t("disable") : t("enable")}

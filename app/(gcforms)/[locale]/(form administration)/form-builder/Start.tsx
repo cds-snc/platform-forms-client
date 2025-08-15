@@ -13,6 +13,8 @@ import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { ga } from "@lib/client/clientHelpers";
 import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds";
 import { transformFormProperties } from "@lib/store/helpers/elements/transformFormProperties";
+import { BetaComponentsError, checkForBetaComponents } from "@lib/store/betaCheck";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const Start = () => {
   const {
@@ -26,6 +28,7 @@ export const Start = () => {
   }));
 
   const [errors, setErrors] = useState<errorMessage[]>();
+  const { getFlag } = useFeatureFlags();
 
   // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
   const cleaner = (key: string, value: string) =>
@@ -78,10 +81,18 @@ export const Start = () => {
           return;
         }
 
-        importTemplate(data);
+        try {
+          checkForBetaComponents(data.elements, getFlag);
 
-        ga("open_form_file");
-        router.push(`/${language}/form-builder/0000/preview`);
+          importTemplate(data);
+
+          ga("open_form_file");
+          router.push(`/${language}/form-builder/0000/preview`);
+        } catch (e) {
+          if (e instanceof BetaComponentsError) {
+            setErrors([{ message: t("beta.loadingError") }]);
+          }
+        }
       };
     } catch (e) {
       if (e instanceof Error) {
