@@ -1,3 +1,5 @@
+import { type FileInputResponse } from "./form-response-types";
+
 // Utility type creator
 export type TypeOmit<Type, Key extends PropertyKey> = {
   [Property in keyof Type as Exclude<Property, Key>]: Type[Property];
@@ -273,4 +275,10 @@ export enum DatePart {
   DD = "day",
   MM = "month",
   YYYY = "year",
+}
+
+export interface FileInput extends FileInputResponse {
+  name: string;
+  size: number;
+  content: ArrayBuffer;
 }
