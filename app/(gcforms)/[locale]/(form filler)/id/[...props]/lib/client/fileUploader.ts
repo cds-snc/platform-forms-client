@@ -1,20 +1,9 @@
-import { fileTypeFromBuffer } from "file-type";
 import { PresignedPost } from "@aws-sdk/s3-presigned-post";
 import { v4 as uuid } from "uuid";
 import axios, { AxiosError, AxiosProgressEvent } from "axios";
-
-import { ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
-
-import { Responses, FileInputResponse } from "@lib/types";
+import { Responses, FileInputResponse, FileInput } from "@gcforms/types";
 import { FileUploadError } from "../client/exceptions";
-
-export async function isMimeTypeValid(file: FileInput): Promise<boolean> {
-  const fileTypeResult = await fileTypeFromBuffer(file.content);
-  const mimeType = fileTypeResult?.mime;
-
-  if (!mimeType) return false;
-  return ALLOWED_FILE_TYPES.map((t) => t.mime).includes(mimeType);
-}
+import { isMimeTypeValid } from "@gcforms/core";
 
 const isFileInput = (response: unknown): response is FileInput => {
   return (
@@ -38,12 +27,6 @@ export const isFileInputResponse = (response: unknown): response is FileInputRes
     "content" in response
   );
 };
-
-export interface FileInput extends FileInputResponse {
-  name: string;
-  size: number;
-  content: ArrayBuffer;
-}
 
 export const copyObjectExcludingFileContent = (
   originalObject: Responses,
@@ -91,10 +74,10 @@ export const uploadFile = async (
   const formData = new FormData();
 
   // Check mime type
-  const isValidMimeType = await isMimeTypeValid(file);
+  const validMime = await isMimeTypeValid(file.name, file.content, false);
 
-  if (!isValidMimeType) {
-    throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400);
+  if (!validMime) {
+    throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400, "mime");
   }
 
   Object.entries(preSigned.fields ?? {}).forEach(([key, value]) => {

@@ -1,0 +1,28 @@
+{
+  "name": "@gcforms/core",
+  "version": "1.0.1",
+  "author": "Canadian Digital Service",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "yarn@4.9.2",
+  "dependencies": {
+    "file-type": "^21.0.0",
+    "tsdown": "^0.14.1"
+  },
+  "peerDependencies": {
+    "@gcforms/types": "*"
+  },
+  "scripts": {
+    "build": "tsdown"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "tsdown": {
+    "entry": "src/index.ts",
+    "outDir": "dist"
+  }
+}

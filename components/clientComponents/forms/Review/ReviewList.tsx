@@ -44,7 +44,7 @@ export const ReviewList = ({
                 className="mb-10 rounded-lg border-2 border-slate-400 px-6 py-4"
               >
                 <h3 className="text-slate-700">{editLink ? editLink : title}</h3>
-                <div className="mb-10 ml-1">
+                <div className="mb-10 ml-1 whitespace-pre-line break-words">
                   {reviewItem.formItems &&
                     reviewItem.formItems.map((formItem: FormItem) => (
                       <FormItemFactory
