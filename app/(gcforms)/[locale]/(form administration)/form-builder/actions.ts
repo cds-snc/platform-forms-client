@@ -62,8 +62,6 @@ export const createOrUpdateTemplate = AuthenticatedAction(
     error?: string;
   }> => {
     try {
-      revalidatePath("/[locale]/forms", "page");
-
       if (id) {
         return await updateTemplate({
           id,
@@ -88,6 +86,9 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       if (!formRecord) {
         throw new Error("Failed to create template");
       }
+      // revalidatePath must be at the end of a function.  It leverages the error object to trigger
+      // and internal refresh and can have awkward results if used before an error is thrown by a following fn.
+      revalidatePath("/[locale]/forms", "page");
 
       return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
     } catch (_) {
