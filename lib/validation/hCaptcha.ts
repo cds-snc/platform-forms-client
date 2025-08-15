@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
-import { withRetryFallback } from "../utils/withRetry";
+import { withRetryFallback } from "../utils/retry";
 
 /**
  * Verifies the client hCaptcha token is valid using the hCaptcha API
