@@ -1,6 +1,4 @@
-import {
-  isFileExtensionValid,
-} from "@gcforms/core";
+import { isFileExtensionValid} from "@gcforms/core";
 
 describe("File extension validator", () => {
   it.each([
