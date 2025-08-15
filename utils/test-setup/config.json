@@ -1,0 +1,25 @@
+{
+  "gcFormsClient": {
+    "url": "https://forms-staging.cdssandbox.xyz",
+    "authjsCookie": "__Host-authjs.csrf-token=70b168ba2c215e2444f084ecd587c7bd3f4500ba620f359144a9e07533d7f4d3%7C15bae106b90f3158a8bd0c911b7a096bcae60d8261479877610cec6ae3e6b113; __Secure-authjs.callback-url=https%3A%2F%2Fforms-staging.cdssandbox.xyz%2Fen%2Fauth%2Fmfa; i18next=en; __Secure-authjs.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoiR0g5M0lZMkdjQ0YtU0I5RzV3dFRQQnExZE9wUUFGRHVWbnQyVF80clY0YmoxTUN4cDMzc3h3TGpIUEV3TndnaUxiSHEzZ3k3a3RXcTZFSjJQZ1Q1OWcifQ..4mT3OdMAsBdmpVfKVEM1TQ.HkjCmzur-Yumgdl0WkL0xtPkVghPPtuJ2bIZtvNbm-LFrKZUL7t57uWzygmBMdk-jyQ-WQ5kv2TxIo4o4QjNvwMfdgu8VdCLNVfGNscWe8nuamI1FXNdz4WAQzd3gZLFfs1f_dSURxJXZqmlnfEE-Tx_9rq2_Uztq_e3IgY6Df6EaYjO7tQ2J23YF0wnHiPbqHKtjsubPgmg13bWVKdNUYw1vgnvJ1r-M2oxzkVGhnM01HQLzdk0K6RkGgtz9vyeH_0xteLI5PwcWeZ7YhRY6Vej_kAfO9cLXRpozbiEitpEcrzDMf-gcd384RZNTeNl9XDf-1HHUaAtoXX86N6tTWx6fep_kXmWJRzVYroTjnwr94bQiT69Sd2S3wuYyqY2Z7yNoWbLnpGmVqIIEQzTDg.DsAFie3D8F_hXpsyOuiwYJGa-33K8rGb_rWZyOv49ys",
+    "serverActionIdentifiers": {
+      "createOrUpdateTemplate": "7fb6e77a7a4b57b81541ac09e8508783d6685d6e66",
+      "updateTemplatePublishedStatus": "7fb168d4f814b87ffdbed9bb407343d9b9b74031e9",
+      "deleteForm": "7f9e7fd4faa6c2f12fdd78d16b80b2a83207ca9381",
+      "createServiceAccountKey": "7f8713692cd22c36a5c1785ebeb2fe5cf48a04a54f"
+    }
+  },
+  "testSetup": {
+    "templates": [
+      {
+        "name": "fileUploadForm",
+        "json": "{\"groups\":{\"end\":{\"name\":\"End\",\"titleEn\":\"Confirmation page\",\"titleFr\":\"Confirmation page\",\"elements\":[]},\"start\":{\"name\":\"Start\",\"titleEn\":\"Start page\",\"titleFr\":\"Start page\",\"elements\":[\"1\",\"2\",\"3\",\"4\"],\"nextAction\":\"review\"},\"review\":{\"name\":\"Review\",\"titleEn\":\"End (Review page and Confirmation)\",\"titleFr\":\"End (Review page and Confirmation)\",\"elements\":[],\"nextAction\":\"end\"}},\"layout\":[1,2,3,4],\"titleEn\":\"test-new-file-upload\",\"titleFr\":\"ezaeza\",\"elements\":[{\"id\":1,\"type\":\"textField\",\"uuid\":\"871b27c6-fcb7-4b1e-82fb-0f9401f84832\",\"properties\":{\"tags\":[],\"choices\":[{\"en\":\"\",\"fr\":\"\"}],\"titleEn\":\"Q1\",\"titleFr\":\"ezaea\",\"questionId\":\"\",\"validation\":{\"required\":false},\"subElements\":[],\"descriptionEn\":\"\",\"descriptionFr\":\"\",\"placeholderEn\":\"\",\"placeholderFr\":\"\"}},{\"id\":2,\"type\":\"fileInput\",\"uuid\":\"5f9c1802-8292-4383-9fa4-7caab35f1386\",\"properties\":{\"tags\":[],\"choices\":[{\"en\":\"\",\"fr\":\"\"}],\"titleEn\":\"F1\",\"titleFr\":\"ezae\",\"fileType\":[\"pdf\",\"txt\",\"doc\",\"docx\",\"jpg\",\"jpeg\",\"png\",\"svg\",\"xls\",\"xlsx\",\"csv\",\"numbers\"],\"questionId\":\"\",\"validation\":{\"required\":false},\"subElements\":[],\"descriptionEn\":\"\",\"descriptionFr\":\"\",\"placeholderEn\":\"\",\"placeholderFr\":\"\"}},{\"id\":3,\"type\":\"fileInput\",\"uuid\":\"ba87253b-b754-4fb6-b4dd-b4fdf3b47f2f\",\"properties\":{\"tags\":[],\"choices\":[{\"en\":\"\",\"fr\":\"\"}],\"titleEn\":\"F2\",\"titleFr\":\"ezae\",\"fileType\":[\"pdf\",\"txt\",\"doc\",\"docx\",\"jpg\",\"jpeg\",\"png\",\"svg\",\"xls\",\"xlsx\",\"csv\",\"numbers\"],\"questionId\":\"\",\"validation\":{\"required\":false},\"subElements\":[],\"descriptionEn\":\"\",\"descriptionFr\":\"\",\"placeholderEn\":\"\",\"placeholderFr\":\"\"}},{\"id\":4,\"type\":\"fileInput\",\"uuid\":\"db763d08-b580-443b-9749-af64b9b5b887\",\"properties\":{\"tags\":[],\"choices\":[{\"en\":\"\",\"fr\":\"\"}],\"titleEn\":\"F3\",\"titleFr\":\"eazeaz\",\"fileType\":[\"pdf\",\"txt\",\"doc\",\"docx\",\"jpg\",\"jpeg\",\"png\",\"svg\",\"xls\",\"xlsx\",\"csv\",\"numbers\"],\"questionId\":\"\",\"validation\":{\"required\":false},\"subElements\":[],\"descriptionEn\":\"\",\"descriptionFr\":\"\",\"placeholderEn\":\"\",\"placeholderFr\":\"\"}}],\"confirmation\":{\"descriptionEn\":\"eaze\",\"descriptionFr\":\"ezae\",\"referrerUrlEn\":\"\",\"referrerUrlFr\":\"\"},\"groupsLayout\":[],\"introduction\":{\"descriptionEn\":\"\",\"descriptionFr\":\"\"},\"privacyPolicy\":{\"descriptionEn\":\"zezae\",\"descriptionFr\":\"ezae\"},\"lastGeneratedElementId\":4}"
+      }
+    ],
+    "fileAttachments": ["text.txt"],
+    "numberOfForms": 2,
+    "publishForm": false,
+    "enableApiAccess": true,
+    "numberOfResponses": 10
+  }
+}
