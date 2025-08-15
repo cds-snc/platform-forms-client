@@ -7,7 +7,7 @@ import { inGroup } from "./helpers";
 import { checkVisibilityRecursive } from "./visibility";
 
 /**
- * validateOnSubmit is called during Formik's submission event to validate the fields
+ * validateOnSubmit is called for form submission validation
  * @param values
  * @param props
  */

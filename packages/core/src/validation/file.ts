@@ -1,4 +1,5 @@
-import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
+import { fileTypeFromBuffer } from "file-type";
+export const MAX_FILE_SIZE = 10485760; // 10 MB matches file upload lambda see: generateSignedUrl
 
 export const ALLOWED_FILE_TYPES = [
   { mime: "application/pdf", extensions: ["pdf"] },
@@ -28,6 +29,10 @@ export const htmlInputAccept = ALLOWED_FILE_TYPES.map((t) =>
   .flat()
   .join(",");
 
+export const isIndividualFileSizeValid = (size: number): boolean => {
+  return size <= MAX_FILE_SIZE;
+};
+
 export function isFileExtensionValid(fileName: string): boolean {
   const extension = fileName.split(".").pop()?.toLowerCase();
 
@@ -38,6 +43,28 @@ export function isFileExtensionValid(fileName: string): boolean {
     .includes(extension);
 }
 
-export function isIndividualFileSizeValid(sizeInBytes: number): boolean {
-  return sizeInBytes <= BODY_SIZE_LIMIT_WITH_FILES;
+/**
+ * Validates the MIME type of a file against a list of allowed types.
+ * If strict mode is disabled, the file's extension is checked against the allowed types.
+ * If the MIME type is still undetermined, the function falls back to the file extension validation.
+ * If the file extension is also not valid, the function returns false.
+ */
+export async function isMimeTypeValid(
+  fileName: string,
+  content: ArrayBuffer,
+  strict: boolean
+): Promise<boolean> {
+  const fileTypeResult = await fileTypeFromBuffer(content);
+  const mimeType = fileTypeResult?.mime;
+
+  // Fallback to extension-based validation if strict mode is disabled
+  if (!strict && typeof mimeType === "undefined") {
+    return isFileExtensionValid(fileName);
+  }
+
+  if (!mimeType) {
+    return false;
+  }
+
+  return ALLOWED_FILE_TYPES.map((t) => t.mime).includes(mimeType);
 }

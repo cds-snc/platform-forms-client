@@ -31,7 +31,7 @@ export const handleUploadError = (
       }
     }
 
-    let message = t("input-validation.file-upload.default.message", {
+    let message = t(`input-validation.file-upload.${error.type}.message`, {
       fileName: error.file.name,
     });
 
