@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import axios, { AxiosError, AxiosProgressEvent } from "axios";
 import { Responses, FileInputResponse, FileInput } from "@gcforms/types";
 import { FileUploadError } from "../client/exceptions";
-import { isMimeTypeValid } from "@lib/client/isValidMimeType";
+import { isMimeTypeValid } from "@gcforms/core/validation/file";
 
 const isFileInput = (response: unknown): response is FileInput => {
   return (
@@ -74,9 +74,9 @@ export const uploadFile = async (
   const formData = new FormData();
 
   // Check mime type
-  const isValidMimeType = await isMimeTypeValid(file.content);
+  const validMime = await isMimeTypeValid(file.name, file.content, false);
 
-  if (!isValidMimeType) {
+  if (!validMime) {
     throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400, "mime");
   }
 

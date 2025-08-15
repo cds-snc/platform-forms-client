@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1] - 2025-08-15
+
+Update file validation and added file-type as a dependancy
+
+### Changed
+
+- Setup package for common standalone functions
+
 ## [1.0.0] - 2025-08-12
 
 ### Changed

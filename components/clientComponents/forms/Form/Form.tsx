@@ -2,8 +2,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
-import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
+import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
 import { Alert, RichText } from "@clientComponents/forms";
+import { validateOnSubmit } from "@gcforms/core/process";
 
 import { type FormProps, type InnerFormProps } from "./types";
 import { type Language } from "@lib/types/form-builder-types";

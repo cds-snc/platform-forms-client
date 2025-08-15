@@ -2870,6 +2870,8 @@ __metadata:
 "@gcforms/core@workspace:*, @gcforms/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@gcforms/core@workspace:packages/core"
+  dependencies:
+    file-type: "npm:^21.0.0"
   peerDependencies:
     "@gcforms/types": "*"
   languageName: unknown
@@ -12978,7 +12980,6 @@ __metadata:
     eslint-config-next: "npm:15.4.6"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-tailwindcss: "npm:^3.17.5"
-    file-type: "npm:^21.0.0"
     formik: "npm:2.4.6"
     fuse.js: "npm:^7.1.0"
     got: "npm:11"

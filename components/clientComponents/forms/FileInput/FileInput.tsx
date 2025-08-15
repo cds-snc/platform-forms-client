@@ -7,11 +7,11 @@ import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
-import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
+import { htmlInputAccept, isMimeTypeValid } from "@gcforms/core/validation/file";
+import { ALLOWED_FILE_TYPES } from "@gcforms/core/validation/file";
 import { themes } from "@clientComponents/globals/Buttons/themes";
 import { bytesToKbOrMbString, bytesToMb } from "@lib/utils/fileSize";
 import { announce } from "@gcforms/announce";
-import { isMimeTypeValid } from "@lib/client/isValidMimeType";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -90,9 +90,9 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             // Check for file content
             const buffer = reader.result as ArrayBuffer;
 
-            const isValidMimeType = await isMimeTypeValid(buffer);
+            const validMime = await isMimeTypeValid(newFile.name, buffer, false);
 
-            if (!isValidMimeType) {
+            if (!validMime) {
               setError(
                 t("input-validation.file-upload.mime.message", {
                   fileName: newFile.name,

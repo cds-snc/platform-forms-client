@@ -1,7 +1,7 @@
 import {
   isFileExtensionValid,
   isIndividualFileSizeValid,
-} from "@lib/validation/fileValidationClientSide";
+} from "@gcforms/core/validation/file";
 import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
 
 describe("File extension validator", () => {
