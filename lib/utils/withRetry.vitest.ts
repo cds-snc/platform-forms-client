@@ -134,4 +134,29 @@ describe("withRetryFallback", () => {
     
     vi.useRealTimers();
   });
+
+  it("should call onFinalFailure callback when all retries fail", async () => {
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+    
+    const error = new Error("final failure");
+    const mockFn = vi.fn().mockRejectedValue(error);
+    const onFinalFailure = vi.fn();
+
+    const promise = withRetryFallback(mockFn, "fallback", { 
+      maxRetries: 2, 
+      onFinalFailure 
+    });
+
+    await vi.runAllTimersAsync();
+
+    const result = await promise;
+
+    expect(result).toBe("fallback");
+    expect(mockFn).toHaveBeenCalledTimes(2);
+    expect(onFinalFailure).toHaveBeenCalledTimes(1);
+    expect(onFinalFailure).toHaveBeenCalledWith(error, 2);
+    
+    vi.useRealTimers();
+  });
 });

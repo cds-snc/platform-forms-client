@@ -6,6 +6,7 @@ export interface RetryOptions {
   maxDelay?: number;
   onRetry?: (attempt: number, error: unknown) => void;
   shouldRetry?: (error: unknown) => boolean;
+  onFinalFailure?: (error: unknown, totalAttempts: number) => void;
 }
 
 /**
@@ -67,6 +68,13 @@ export async function withRetryFallback<T>(
   try {
     return await withRetry(fn, options);
   } catch (error) {
+    const { maxRetries = 3, onFinalFailure } = options;
+
+    // Call the final failure callback if provided
+    if (onFinalFailure) {
+      onFinalFailure(error, maxRetries);
+    }
+
     logMessage.error(`All retry attempts failed, returning fallback value. Last error: ${error}`);
     return fallbackValue;
   }

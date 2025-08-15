@@ -27,6 +27,8 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   data.append("response", String(token));
   data.append("remoteip", String(await getClientIP()));
 
+  const clientIP = await getClientIP(); // Get IP once before the retry logic
+
   const result = await withRetryFallback(
     async () => {
       return axios({
@@ -44,6 +46,30 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
       maxRetries: 3,
       onRetry: (attempt, error) => {
         logMessage.warn(`hCaptcha: attempt ${attempt} failed - ${error}`);
+      },
+      onFinalFailure: (error, totalAttempts) => {
+        // Log comprehensive failure information
+        logMessage.error(
+          `hCaptcha: All ${totalAttempts} retry attempts failed. Final error: ${error}`
+        );
+        logMessage.error(`hCaptcha: Token: ${token?.substring(0, 10)}...`);
+        logMessage.error(`hCaptcha: Client IP: ${clientIP}`);
+
+        // Perform specific actions on final failure
+        // Examples:
+        // - Send metrics/telemetry
+        // - Trigger alerts
+        // - Log to external monitoring systems
+        // - Record failure statistics
+
+        // You could add metrics here:
+        // metrics.increment('hcaptcha.final_failure');
+        // alerting.sendAlert('hCaptcha API completely failed');
+      },
+      shouldRetry: (error) => {
+        const err = error as { response?: { status?: number } };
+        // Retry on network errors or 5xx server errors, but not on 4xx client errors
+        return !err.response || (err.response.status !== undefined && err.response.status >= 500);
       },
     }
   );
