@@ -9,6 +9,11 @@ import { Responses, FileInputResponse } from "@lib/types";
 import { FileUploadError } from "../client/exceptions";
 
 export async function isMimeTypeValid(file: FileInput): Promise<boolean> {
+  // We can't use file-type to detect CSV or TXT files, so we'll check the extension.
+  const lowerCaseName = file.name.toLowerCase();
+  if (lowerCaseName.endsWith(".csv") || lowerCaseName.endsWith(".txt")) {
+    return true;
+  }
   const fileTypeResult = await fileTypeFromBuffer(file.content);
   const mimeType = fileTypeResult?.mime;
 
