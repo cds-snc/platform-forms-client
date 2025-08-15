@@ -22,7 +22,8 @@ import { isValidISODate } from "./utils/date/isValidISODate";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
-import { NotificationsInterval } from "@gcforms/types";
+import { FormElement, BetaFormElementTypes, NotificationsInterval } from "@gcforms/types";
+import { checkOne } from "@lib/cache/flags";
 
 // ******************************************
 // Internal Module Functions
@@ -146,6 +147,8 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
     logEvent(e.user.id, { type: "Form" }, "AccessDenied", "Attempted to create a Form");
     throw e;
   });
+
+  await checkForBetaComponents(command.formConfig.elements);
 
   const validationResult = validateTemplate(command.formConfig);
 
@@ -498,6 +501,11 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
       "AccessDenied",
       "Attempted to update Form"
     );
+    throw e;
+  });
+
+  await checkForBetaComponents(command.formConfig.elements).catch((e) => {
+    logMessage.warn(`User ${user.email} tried to use beta form components without flags being set`);
     throw e;
   });
 
@@ -1422,5 +1430,47 @@ export const checkIfClosed = async (formId: string) => {
     };
   } catch (e) {
     return null;
+  }
+};
+const checkForBetaComponents = async (elements: FormElement[]) => {
+  const foundBetaComponents = elements.filter((element) =>
+    Object.keys(BetaFormElementTypes).includes(element.type)
+  );
+
+  // Short circuit if no betaComponents are being used
+  if (foundBetaComponents.length === 0) return;
+  const uniqueComponentTypesToCheck = [
+    ...new Set(foundBetaComponents.map((component) => component.type)),
+  ];
+
+  // check global settings first to see if enabled
+
+  const flagResults = await Promise.all(
+    uniqueComponentTypesToCheck.map((type) =>
+      checkOne(BetaFormElementTypes[type as keyof typeof BetaFormElementTypes].flag)
+    )
+  );
+
+  const allowedGlobalBetaComponents = flagResults.reduce((prev, curr) => prev && curr, true);
+
+  // If it's enabled globally short circuit
+  if (allowedGlobalBetaComponents) {
+    return;
+  }
+
+  // check user level to see if enabled
+  const allowedUserBetaComponents = (
+    await Promise.all(
+      // Check that the user can use each flag
+      uniqueComponentTypesToCheck.map((type) =>
+        authorization.canAccessBetaComponents(
+          BetaFormElementTypes[type as keyof typeof BetaFormElementTypes].flag
+        )
+      )
+    )
+  ).reduce((prev, curr) => prev && curr, true);
+
+  if (!allowedUserBetaComponents) {
+    throw new Error("User cannot use beta components");
   }
 };
