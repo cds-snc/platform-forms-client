@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0](https://github.com/cds-snc/platform-forms-client/compare/v3.47.1...v4.0.0) (2025-08-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* Deserialize dates when normalizing data ([#6006](https://github.com/cds-snc/platform-forms-client/issues/6006))
+
+### Features
+
+* Deserialize dates when normalizing data ([#6006](https://github.com/cds-snc/platform-forms-client/issues/6006)) ([8a74812](https://github.com/cds-snc/platform-forms-client/commit/8a7481240704704c24638d5c66b099e996f9d264))
+* Upload files on form submission directly to S3 ([#5772](https://github.com/cds-snc/platform-forms-client/issues/5772)) ([bd6b73d](https://github.com/cds-snc/platform-forms-client/commit/bd6b73ded43a0fd5101393ab20513cb1eab364a8))
+
+
+### Bug Fixes
+
+* add more semantics for when a file input is invalid in the form-builder ([#6011](https://github.com/cds-snc/platform-forms-client/issues/6011)) ([c0f01ed](https://github.com/cds-snc/platform-forms-client/commit/c0f01ed9adbb9c54c469926bec7c263cf2c6d2cc))
+* **deps:** update all patch dependencies ([#5972](https://github.com/cds-snc/platform-forms-client/issues/5972)) ([b03c264](https://github.com/cds-snc/platform-forms-client/commit/b03c2643bd8e6f2168f9023032e5bf646a47b90e))
+* Error summary enable scrolling to input if label is missing ([#5991](https://github.com/cds-snc/platform-forms-client/issues/5991)) ([e0ee5ee](https://github.com/cds-snc/platform-forms-client/commit/e0ee5ee407928753d571bd5d576ac41a5e622466))
+* fix non wrapping text for review list ([#6012](https://github.com/cds-snc/platform-forms-client/issues/6012)) ([201f8da](https://github.com/cds-snc/platform-forms-client/commit/201f8da84e21299cb30e66be12cecabd6f34f395))
+* horizontal scroll on preview screen  ([#6017](https://github.com/cds-snc/platform-forms-client/issues/6017)) ([7d35134](https://github.com/cds-snc/platform-forms-client/commit/7d3513465279bf2f51d27488e10486bf95442226))
+
+
+### Miscellaneous Chores
+
+* Add core package ([#5998](https://github.com/cds-snc/platform-forms-client/issues/5998)) ([d004200](https://github.com/cds-snc/platform-forms-client/commit/d00420022926eca76b4a7d95553ef0ca63b8f018))
+* check mime type for file uploads ([#5977](https://github.com/cds-snc/platform-forms-client/issues/5977)) ([1f72ca7](https://github.com/cds-snc/platform-forms-client/commit/1f72ca77c0015509590594a2a20ae53740a44003))
+* Content QA-ing for file upload ([#5988](https://github.com/cds-snc/platform-forms-client/issues/5988)) ([58e3fd6](https://github.com/cds-snc/platform-forms-client/commit/58e3fd615f635ae8aafbb9ee08ad9e56a6918f2c))
+* **deps:** update github/codeql-action action to v3.29.7 ([#5971](https://github.com/cds-snc/platform-forms-client/issues/5971)) ([139fc60](https://github.com/cds-snc/platform-forms-client/commit/139fc607915a6d34d20045b07cb2251b5bf64bb4))
+* mime type validation ([#6009](https://github.com/cds-snc/platform-forms-client/issues/6009)) ([e962df0](https://github.com/cds-snc/platform-forms-client/commit/e962df0746e4c4d007e4eeb15411b1fb9f0bca08))
+* remove unused functions for global file size ([#5976](https://github.com/cds-snc/platform-forms-client/issues/5976)) ([678b2b5](https://github.com/cds-snc/platform-forms-client/commit/678b2b562e578e73351d2381d5bc5129ae32af3d))
+* show max file size ([#5997](https://github.com/cds-snc/platform-forms-client/issues/5997)) ([5a5ac79](https://github.com/cds-snc/platform-forms-client/commit/5a5ac792f229f82cf26e8b3a98c130d58ba19062))
+* small typo in testing banner about responses ([#5973](https://github.com/cds-snc/platform-forms-client/issues/5973)) ([f7d7812](https://github.com/cds-snc/platform-forms-client/commit/f7d7812d8309e2f87bd6cda6dc91c36bcd09af63))
+* Updates to content from QA testing ([#5982](https://github.com/cds-snc/platform-forms-client/issues/5982)) ([402466f](https://github.com/cds-snc/platform-forms-client/commit/402466f00ff85a20cc380e5cf15ed286e41cff54))
+
+
+### Code Refactoring
+
+* update progress bar to include submit % ([#6002](https://github.com/cds-snc/platform-forms-client/issues/6002)) ([0475c83](https://github.com/cds-snc/platform-forms-client/commit/0475c83c684dbb7b06a72e4523e34e97d877fef0))
+
 ## [3.47.1](https://github.com/cds-snc/platform-forms-client/compare/v3.47.0...v3.47.1) (2025-08-08)
 
 
