@@ -2,7 +2,9 @@
 
 ## [1.0.1] - 2025-08-15
 
-Update file validation and added file-type as a dependancy
+- Update file validation and added file-type as a dependancy
+- Add tsdown + build
+
 
 ### Changed
 
