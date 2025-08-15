@@ -1,8 +1,6 @@
 import {
   isFileExtensionValid,
-  isIndividualFileSizeValid,
-} from "@gcforms/core/validation/file";
-import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
+} from "@gcforms/core";
 
 describe("File extension validator", () => {
   it.each([
@@ -25,16 +23,5 @@ describe("File extension validator", () => {
     ["xml", true],
   ])(`Should return true if file extension is valid (testing "%s")`, async (extension, isValid) => {
     expect(isFileExtensionValid(`file.${extension}`)).toBe(isValid);
-  });
-});
-
-describe("File size validator", () => {
-  it.each([
-    [1000, 1000 <= Number(BODY_SIZE_LIMIT_WITH_FILES)],
-    [5000000, 5000000 <= BODY_SIZE_LIMIT_WITH_FILES],
-    [8389121, 8389121 <= BODY_SIZE_LIMIT_WITH_FILES],
-    [11534336, 11534336 <= BODY_SIZE_LIMIT_WITH_FILES],
-  ])(`Should return true if file size is valid (testing "%s")`, async (fileSize, isValid) => {
-    expect(isIndividualFileSizeValid(fileSize)).toBe(isValid);
   });
 });

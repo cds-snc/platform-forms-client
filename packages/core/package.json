@@ -8,9 +8,21 @@
   },
   "packageManager": "yarn@4.9.2",
   "dependencies": {
-    "file-type": "^21.0.0"
+    "file-type": "^21.0.0",
+    "tsdown": "^0.14.1"
   },
   "peerDependencies": {
     "@gcforms/types": "*"
+  },
+  "scripts": {
+    "build": "tsdown"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "tsdown": {
+    "entry": "src/index.ts",
+    "outDir": "dist"
   }
 }

@@ -10,7 +10,7 @@ import {
 import { isInputTooLong } from "./text";
 import { isValidDate } from "./date";
 import { getRegexByType } from "./regex";
-import { isFileExtensionValid, isIndividualFileSizeValid } from "@gcforms/core/validation/file";
+import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
 
 export const isFieldResponseValid = (
   value: unknown,

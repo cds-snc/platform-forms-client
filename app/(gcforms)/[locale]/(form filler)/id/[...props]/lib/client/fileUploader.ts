@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import axios, { AxiosError, AxiosProgressEvent } from "axios";
 import { Responses, FileInputResponse, FileInput } from "@gcforms/types";
 import { FileUploadError } from "../client/exceptions";
-import { isMimeTypeValid } from "@gcforms/core/validation/file";
+import { isMimeTypeValid } from "@gcforms/core";
 
 const isFileInput = (response: unknown): response is FileInput => {
   return (

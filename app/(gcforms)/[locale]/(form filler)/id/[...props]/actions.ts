@@ -13,7 +13,7 @@ import { FeatureFlags } from "@lib/cache/types";
 import { dateHasPast } from "@lib/utils";
 
 import { validateResponses } from "@lib/validation/validation";
-import { validateOnSubmit } from "@gcforms/core/process";
+import { validateOnSubmit } from "@gcforms/core";
 
 import { serverTranslation } from "@root/i18n";
 import { sendNotifications } from "@lib/notifications";
