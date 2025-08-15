@@ -21,6 +21,7 @@ import {
   SortOption,
   NotificationsInterval,
   NotificationsIntervalDefault,
+  BetaFormElementTypes,
 } from "./form-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
@@ -45,6 +46,7 @@ export { FormElementTypes };
 export { FormStatus };
 export { NotificationsInterval };
 export { NotificationsIntervalDefault };
+export { BetaFormElementTypes };
 
 export { SortOption };
 export type { SortValue };
