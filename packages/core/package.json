@@ -19,7 +19,8 @@
   },
   "scripts": {
     "build": "tsdown",
-    "test": "vitest --config vitest.config.ts"
+    "test": "vitest --config vitest.config.ts",
+    "test:watch": "vitest --config vitest.config.ts --watch"
   },
   "tsdown": {
     "entry": "src/index.ts",
