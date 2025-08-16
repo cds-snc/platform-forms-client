@@ -14,15 +14,19 @@
   "peerDependencies": {
     "@gcforms/types": "*"
   },
+  "devDependencies": {
+    "vitest": "^1.0.0"
+  },
   "scripts": {
-    "build": "tsdown"
+    "build": "tsdown",
+    "test": "vitest --config vitest.config.ts"
+  },
+  "tsdown": {
+    "entry": "src/index.ts",
+    "outDir": "dist"
   },
   "files": [
     "dist",
     "src"
-  ],
-  "tsdown": {
-    "entry": "src/index.ts",
-    "outDir": "dist"
-  }
+  ]
 }
