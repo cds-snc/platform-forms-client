@@ -2067,9 +2067,9 @@ __metadata:
   linkType: hard
 
 "@cdssnc/sanitize-pii@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@cdssnc/sanitize-pii@npm:1.2.1"
-  checksum: 10c0/0546a0f153d127d5ff903d43bf095aabfa0c0776bd85ac30cf4ad0424a39b53cf8b422aedf8838dd721bd70ff5d0184f1bbe14b5f643b9037d7b215fc45317f9
+  version: 1.2.2
+  resolution: "@cdssnc/sanitize-pii@npm:1.2.2"
+  checksum: 10c0/ae008adb17e0572d6a2628b46aa01c2f91f2c5622c37d364485ccaf377802156ae4824ae6305dd4039846c573bb275a5f10cac08cde3aa60a01254e72a8fb8a9
   languageName: node
   linkType: hard
 
@@ -2919,23 +2919,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@hcaptcha/loader@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@hcaptcha/loader@npm:2.0.0"
-  checksum: 10c0/c69c8e62ccf41cc5cce8f25721b9bd8284e201da608022476dc6d69afbd70512a6f272dd2bfe558c4b5fdbc0ee20fb5f062033c4d556e6d523ecb2448203298f
+"@hcaptcha/loader@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@hcaptcha/loader@npm:2.0.1"
+  checksum: 10c0/04b6cd32fe1a61666cd8ab0a0f400ce5e45ab1f51ec264048452c5c0d14e991b4c47770f1707b62a25e2686581a1357f66b43680321bcf05fb6c0bf94c825039
   languageName: node
   linkType: hard
 
 "@hcaptcha/react-hcaptcha@npm:^1.12.0":
-  version: 1.12.0
-  resolution: "@hcaptcha/react-hcaptcha@npm:1.12.0"
+  version: 1.12.1
+  resolution: "@hcaptcha/react-hcaptcha@npm:1.12.1"
   dependencies:
     "@babel/runtime": "npm:^7.17.9"
-    "@hcaptcha/loader": "npm:^2.0.0"
+    "@hcaptcha/loader": "npm:^2.0.1"
   peerDependencies:
     react: ">= 16.3.0"
     react-dom: ">= 16.3.0"
-  checksum: 10c0/58fddf7cbbeb1c9d784a90a4ee76604efd8d0c968d1d256f72d112d95c8d68bbb1255dd4184148e7e43e38491c5614b3747f4d17393a17d320e28935da47f8e8
+  checksum: 10c0/033eb10278e7389ac959dffc3f332bc894f8af55e0f236c5676f93d4eb755b1ac9d7c89594b53871a68e22c62e6556e906ca4ebf513fda7d08c3fa287611eacd
   languageName: node
   linkType: hard
 
@@ -8435,38 +8435,38 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*, @types/node@npm:^24.0.10":
-  version: 24.2.0
-  resolution: "@types/node@npm:24.2.0"
+  version: 24.3.0
+  resolution: "@types/node@npm:24.3.0"
   dependencies:
     undici-types: "npm:~7.10.0"
-  checksum: 10c0/0b55af4d7b37fea47bbeffffaff908462fa19ea9b1a18f92d9ed6d8415d97971b254f8cb3f629cd238916e94711fdb6ac939aa750cb353dfd6df6c0339435740
+  checksum: 10c0/96bdeca01f690338957c2dcc92cb9f76c262c10398f8d91860865464412b0f9d309c24d9b03d0bdd26dd47fa7ee3f8227893d5c89bc2009d919a525a22512030
   languageName: node
   linkType: hard
 
 "@types/node@npm:^18.19.3":
-  version: 18.19.121
-  resolution: "@types/node@npm:18.19.121"
+  version: 18.19.123
+  resolution: "@types/node@npm:18.19.123"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10c0/12ec33287214d617c7a5f8868f4ba11bd8c4dd895aa3e847bd15410eaf1ec58a0ce55dcb65a4eaffdccbb5e360476de88510248a681726bbc858fc90b8769e5d
+  checksum: 10c0/8077177ee2019c4c8875784b367732813b07e533f24197d1fb3bb09e81335267de9da3e70326daaba7a6499df2410257f6099d82d15c9a903d1587a752563178
   languageName: node
   linkType: hard
 
 "@types/node@npm:^20.11.6":
-  version: 20.19.9
-  resolution: "@types/node@npm:20.19.9"
+  version: 20.19.11
+  resolution: "@types/node@npm:20.19.11"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10c0/c6738131f1698258a5ac1e0185e4fc56977f7f566cd0ee11167f93f2339478470257bd82c5e1908a936a204e0ad7996d741356a1a07c04997a236161ea23a874
+  checksum: 10c0/9eecc4be04f1a8afbb8f8059b322fd0bbceeb02f96669bbaa52fb0b264c2e3269432a8833ada4be7b335e18d6b438b2d2c0274f5b3f54cc2081cb7c5374a6561
   languageName: node
   linkType: hard
 
 "@types/node@npm:^22.7.4, @types/node@npm:^22.9.0":
-  version: 22.17.0
-  resolution: "@types/node@npm:22.17.0"
+  version: 22.17.2
+  resolution: "@types/node@npm:22.17.2"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10c0/e1c603b660d3de3243dfc02ded5d40623ff3f36315ffbdd8cdc81bc2c5a8da172035879d437b72e9fa61ca01827f28e9c2b0c32898f411a8e9ba0a5efac0b4ca
+  checksum: 10c0/23cd13aa35da6322a6d66cf4b3a45dbd40764ba726ab8681960270156c3abba776dd8dc173250c467f708d40612ecd725755d7659b775b513904680d5205eaff
   languageName: node
   linkType: hard
 
@@ -13214,7 +13214,7 @@ __metadata:
     lodash.merge: "npm:^4.6.2"
     lodash.set: "npm:4.3.2"
     lodash.unset: "npm:4.5.2"
-    markdown-to-jsx: "npm:7.7.12"
+    markdown-to-jsx: "npm:7.7.13"
     next: "npm:15.4.6"
     next-auth: "npm:5.0.0-beta.29"
     node-fetch: "npm:^3.3.2"
@@ -15787,12 +15787,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-to-jsx@npm:7.7.12":
-  version: 7.7.12
-  resolution: "markdown-to-jsx@npm:7.7.12"
+"markdown-to-jsx@npm:7.7.13":
+  version: 7.7.13
+  resolution: "markdown-to-jsx@npm:7.7.13"
   peerDependencies:
     react: ">= 0.14.0"
-  checksum: 10c0/fa3fa2ea2fadb1a4eef96c3d4343c8570a16492b3e5f2f38316f9a0828cf03d0073cfea19f6b62c8eb5791bc4b0bb162c6a718bbd24285e8e9f70dbf91ff53a9
+  checksum: 10c0/6e423b36f62cc387b87cc17ab603108b8a3095d0fc6b4294d7149aba9ca52a356a937638cb883c44e63ea8d40212f6f81ffc683020afcbc9f84bdd2856061aa9
   languageName: node
   linkType: hard
 
