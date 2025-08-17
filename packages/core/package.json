@@ -18,10 +18,13 @@
     "vitest": "^1.0.0"
   },
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown src/index.ts --format cjs,esm --dts --clean",
     "test": "vitest --config vitest.config.ts",
     "test:watch": "vitest --config vitest.config.ts --watch"
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "tsdown": {
     "entry": "src/index.ts",
     "outDir": "dist"
