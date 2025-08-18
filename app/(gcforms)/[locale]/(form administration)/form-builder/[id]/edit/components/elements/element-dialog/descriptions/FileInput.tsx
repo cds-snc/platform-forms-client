@@ -7,8 +7,6 @@ import { ExampleWrapper } from "./ExampleWrapper";
 import { Label, FileInput as FileInputComponent } from "@clientComponents/forms";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
-import { bytesToMb } from "@lib/utils/fileSize";
 import { BetaBadge } from "@clientComponents/globals/BetaBadge";
 
 export const FileInput = ({ title }: { title: string }) => {
@@ -55,11 +53,6 @@ export const FileInputTrialDescription = () => {
         <li>
           <Link href={link}>{t("addElementDialog.fileInputWithApi.trialFeature.bullet1")}</Link>
         </li>
-        <li>
-          {t("addElementDialog.fileInputWithApi.trialFeature.bullet2", {
-            BODY_SIZE_LIMIT_WITH_FILES: bytesToMb(BODY_SIZE_LIMIT_WITH_FILES),
-          })}
-        </li>
         <li>{t("addElementDialog.fileInputWithApi.trialFeature.bullet3")}</li>
         <li>{t("addElementDialog.fileInputWithApi.trialFeature.bullet4")}</li>
       </ul>
@@ -84,14 +77,6 @@ const WithApiDescription = ({ title }: { title: string }) => {
         {t("addElementDialog.fileInputWithApi.trialFeature.title")}
       </h4>
       <FileInputTrialDescription />
-      <div className="mb-4 mt-8">
-        <h4 className="mb-2 font-medium">
-          {t("addElementDialog.fileInputWithApi.recommendations.title")}
-        </h4>
-        <ul className="mb-4">
-          <li>{t("addElementDialog.fileInputWithApi.recommendations.text1")}</li>
-        </ul>
-      </div>
     </div>
   );
 };

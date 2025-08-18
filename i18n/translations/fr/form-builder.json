@@ -215,13 +215,8 @@
         "title": "Fonctionnalité Bêta",
         "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
         "bullet1": "La récupération des réponses au formulaire via l'API",
-        "bullet2": "Une taille maximale combinée de tous les fichiers téléversés :  {{BODY_SIZE_LIMIT_WITH_FILES}} Mo",
         "bullet3": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
-        "bullet4": "La collect de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
-      },
-      "recommendations": {
-        "title": "Recommendations",
-        "text1": "Ajoutez des champs à votre formulaire pour recueillir des coordonnées au cas où vous auriez besoin d'aider ces personnes avec les fichiers ajoutés."
+        "bullet4": "La collecte de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
       }
     },
     "firstMiddleLastName": {
@@ -549,7 +544,8 @@
   "maxCharacterLength": "Longueur maximale des caractères :",
   "maximumCharacterLength": "Longueur maximale des caractères",
   "maxNumberOfRows": {
-    "description": "Les utilisateur·rice·s peuvent fournir jusqu'à ce nombre d'entrées pour cette question.",
+    "description": "Définissez la limite supérieure du nombre d'entrées que vos utilisateur·rice·s peuvent fournir pour cette question.",
+    "description": "Set the upper limit for the number of entries your users can provide for this question.",
     "label": "Nombre maximum de réponses"
   },
   "more": "Plus",
@@ -677,7 +673,7 @@
   "setName": "Nom de l'ensemble",
   "questionTitle": "Question",
   "remove": "Supprimer",
-  "removeFromSet": "Enlever de la série",
+  "removeFromSet": "Enlever de l'ensemble",
   "removeOption": "Supprimer l'option :  ",
   "requestSuccess": {
     "backToForms": "Retourner à Formulaires GC",
@@ -739,6 +735,7 @@
         "cautionTitle": "Attention :",
         "cautionText": "La suppression de cette clé API ne peut être annulée. Supprimer la clé interrompt définitivement la livraison de réponses à tous les systèmes intégrés. Vous devrez créer une nouvelle clé et l'ajouter à votre intégration pour relancer la livraison à partir de l'API.",
         "stopText": "<strong>Pour arrêter les soumissions</strong> à ce formulaire de façon temporaire, veuillez considérer",
+        "fileUploadText": "⚠️ En supprimant la clé API, vous changerez votre méthode de livraison et pourriez entraîner la perte des fichiers joints aux soumissions de formulaires.Pour récupérer tous les fichiers qui font partie des soumissions, créez une nouvelle clé API et configurez votre intégration.",
         "stopText1": "la fermeture du formulaire",
         "stopText2": " à la place.",
         "cancelButton": "Annuler",

@@ -60,15 +60,13 @@ export const submission = {
   },
   responses: {
     "1": "answer",
-    "2": '{"value":["one","two"]}',
+    "2": ["one", "two"],
     "3": "another",
-    "4": '{"value":["two","three"]}',
-    "5-0-0": "Lorem ipsum",
-    "5-0-1": '{"value":["two"]}',
-    "5-1-0": "Hola mi amigo",
-    "5-1-1": '{"value":["two","three"]}',
-    formID: "cm40ey4m40003pznady0wtty2",
-    securityAttribute: "Protected A",
+    "4": ["two", "three"],
+    "5": [
+      { "0": "Lorem ipsum", "1": ["two"] },
+      { "0": "Hola mi amigo", "1": ["two", "three"] },
+    ],
   },
 };
 

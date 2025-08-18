@@ -215,13 +215,8 @@
         "title": "Beta feature",
         "text1": "This trial feature is limited and requires:",
         "bullet1": "Retrieval of form responses via API",
-        "bullet2": "{{BODY_SIZE_LIMIT_WITH_FILES}} MB maximum combined size of all files uploaded",
         "bullet3": "Files to be scanned for malicious content once submitted",
         "bullet4": "Collecting contact information in case you need to follow up about files"
-      },
-      "recommendations": {
-        "title": "Recommendations",
-        "text1": "Add fields to gather contact information in case you need to support those with the files they have attached."
       }
     },
     "firstMiddleLastName": {
@@ -549,7 +544,7 @@
   "maxCharacterLength": "Max character length: ",
   "maximumCharacterLength": "Maximum character length",
   "maxNumberOfRows": {
-    "description": "Users can provide up to this many entries for this question.",
+    "description": "Set the upper limit for the number of entries your users can provide for this question.",
     "label": "Maximum number of answers"
   },
   "more": "More",
@@ -739,6 +734,7 @@
         "cautionTitle": "Caution:",
         "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You'll need to create a new key and add it to your integration to restart API delivery.",
         "stopText": "<strong>To temporarily stop submissions</strong> to this form consider",
+        "fileUploadText": "⚠️ Deleting the API key will switch your delivery method and may result in the loss of files attached to form submissions. To retrieve all files that are part of submissions, create a new API key and set up your integration.",
         "stopText1": "closing the form",
         "stopText2": " instead.",
         "cancelButton": "Cancel",

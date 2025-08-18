@@ -18,6 +18,10 @@ const scrollErrorInView = (id: string) => {
     inputElement.focus();
     labelElement.scrollIntoView();
   }
+  if (inputElement) {
+    inputElement.focus();
+    inputElement.scrollIntoView();
+  }
 };
 
 /**
