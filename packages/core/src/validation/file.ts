@@ -59,7 +59,8 @@ export async function isMimeTypeValid(
   const mimeType = fileTypeResult?.mime;
 
   // Fallback to extension-based validation if strict mode is disabled
-  if (!strict && typeof mimeType === "undefined") {
+  // application/x-cfb is the MS2003 Doc/PPT/Excel Format, as well as MSI installers.
+  if (!strict && (typeof mimeType === "undefined" || mimeType === "application/x-cfb")) {
     return isFileExtensionValid(fileName);
   }
 
