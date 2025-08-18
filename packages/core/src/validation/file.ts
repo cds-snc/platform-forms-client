@@ -20,14 +20,17 @@ export const ALLOWED_FILE_TYPES = [
   },
   { mime: "application/vnd.apple.numbers", extensions: ["numbers"] },
   { mime: "application/xml", extensions: ["xml"] },
+  { mime: "text/xml", extensions: ["xml"] },
 ];
 
 // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept
-export const htmlInputAccept = ALLOWED_FILE_TYPES.map((t) =>
-  [t.mime].concat(t.extensions.map((e) => `.${e}`))
-)
-  .flat()
-  .join(",");
+export const htmlInputAccept = Array.from(
+  ALLOWED_FILE_TYPES.reduce((acc, fileType) => {
+    acc.add(fileType.mime);
+    fileType.extensions.forEach((ext) => acc.add(`.${ext}`));
+    return acc;
+  }, new Set<string>())
+).join(",");
 
 export const isIndividualFileSizeValid = (size: number): boolean => {
   return size <= MAX_FILE_SIZE;
@@ -38,9 +41,7 @@ export function isFileExtensionValid(fileName: string): boolean {
 
   if (!extension) return false;
 
-  return ALLOWED_FILE_TYPES.map((t) => t.extensions)
-    .flat()
-    .includes(extension);
+  return ALLOWED_FILE_TYPES.some((fileType) => fileType.extensions.includes(extension));
 }
 
 /**
