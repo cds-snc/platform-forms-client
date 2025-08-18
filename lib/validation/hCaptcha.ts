@@ -2,6 +2,7 @@ import axios from "axios";
 import { getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
 import { withRetryFallback } from "../utils/retry";
+import { recordFailure } from "../utils/retry/failureTracker";
 
 /**
  * Verifies the client hCaptcha token is valid using the hCaptcha API
@@ -32,7 +33,7 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   const result = await withRetryFallback(
     async () => {
       return axios({
-        url: "https://api.hcaptcha.com/siteverify",
+        url: "http://localhost:4000/siteverify",
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -47,24 +48,20 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
       onRetry: (attempt, error) => {
         logMessage.warn(`hCaptcha: attempt ${attempt} failed - ${error}`);
       },
-      onFinalFailure: (error, totalAttempts) => {
+      onFinalFailure: async (error, totalAttempts) => {
         // Log comprehensive failure information
         logMessage.error(
           `hCaptcha: All ${totalAttempts} retry attempts failed. Final error: ${error}`
         );
-        logMessage.error(`hCaptcha: Token: ${token?.substring(0, 10)}...`);
-        logMessage.error(`hCaptcha: Client IP: ${clientIP}`);
 
-        // Perform specific actions on final failure
-        // Examples:
-        // - Send metrics/telemetry
-        // - Trigger alerts
-        // - Log to external monitoring systems
-        // - Record failure statistics
-
-        // You could add metrics here:
-        // metrics.increment('hcaptcha.final_failure');
-        // alerting.sendAlert('hCaptcha API completely failed');
+        // Record failure for monitoring and alerting
+        await recordFailure("hcaptcha", error, {
+          totalAttempts,
+          timestamp: Date.now(),
+          clientIP,
+          tokenPresent: !!token,
+          alertCooldownMs: 5 * 60 * 1000, // 5 minutes
+        });
       },
       shouldRetry: (error) => {
         const err = error as { response?: { status?: number } };
