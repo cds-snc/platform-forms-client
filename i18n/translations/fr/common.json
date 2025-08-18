@@ -46,15 +46,13 @@
     "date-invalid": "Entrer une date valide.",
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
-    "file-size-too-large": "Sélectionner un fichier plus petit.",
-    "file-size-too-large-all-files": "Les fichiers dépassent le maximum de {{maxSizeInMb}} Mo. Téléversez des fichiers plus petits.",
     "file-upload": {
       "default": {
         "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
         "message": "Le fichier « {{fileName}} » n'a pas pu être envoyé."
       },
       "file-size-too-large": {
-        "message": "Le fichier « {{fileName}} » est trop volumineux. Sélectionnez un fichier plus petit ou supprimez-le s'il n'est pas nécessaire."
+        "message": "Le fichier « {{fileName}} » est trop volumineux. Choisissez un fichier dont la taille est inférieure à {{maxSizeInMb}} Mo."
       },
       "network-error": {
         "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
