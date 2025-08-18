@@ -327,3 +327,70 @@ return await withRetryFallback(
   }
 );
 ```
+
+## Failure Tracking
+
+The retry system includes Redis-based failure tracking for monitoring service health and alerting on high failure rates.
+
+### FailureTracker Class
+
+Track failures across time windows and trigger alerts when thresholds are exceeded:
+
+```typescript
+import { FailureTracker, createRedisClient } from '@lib/utils/retry';
+
+const redisClient = createRedisClient();
+const tracker = new FailureTracker('hcaptcha-api', {
+  redisClient,
+  maxFailures: 5,                    // Alert after 5 failures
+  windowSizeMs: 5 * 60 * 1000,       // Within 5 minutes
+  alertCooldownMs: 15 * 60 * 1000,   // 15 minute cooldown between alerts
+});
+
+// Use with retry callbacks
+const result = await withRetryFallback(
+  () => apiCall(),
+  fallbackValue,
+  {
+    maxRetries: 3,
+    onFinalFailure: async (error, attempts) => {
+      await tracker.recordFailure(error, { 
+        attempts, 
+        timestamp: Date.now() 
+      });
+    }
+  }
+);
+```
+
+### Failure Metrics
+
+Get detailed failure metrics:
+
+```typescript
+const metrics = await tracker.getMetrics();
+console.log({
+  totalFailures: metrics.totalFailures,     // All-time failures
+  windowFailures: metrics.windowFailures,   // Failures in current window
+  alertCount: metrics.alertCount,           // Total alerts triggered
+  lastFailureTime: metrics.lastFailureTime  // Timestamp of last failure
+});
+```
+
+### Alert Customization
+
+The FailureTracker logs alerts using the application's logger. To customize alerting:
+
+1. Monitor the logs for failure tracker alerts
+2. Set up log aggregation to catch alert messages
+3. Configure external alerting based on log patterns
+4. Extend the `sendAlert` method for custom integrations
+
+### Graceful Degradation
+
+The failure tracker works gracefully without Redis:
+
+- If no Redis client is provided, tracking is disabled
+- Logs a warning and continues normal operation
+- No errors thrown, ensuring retry logic still works
+- Perfect for development or environments without Redis
