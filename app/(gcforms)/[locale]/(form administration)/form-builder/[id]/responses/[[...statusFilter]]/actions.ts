@@ -436,6 +436,20 @@ const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answ
   return sortByLayout({ layout, elements });
 };
 
+const getDateAsString = (answer: DateObject | string | object, dateFormat: DateFormat): string => {
+  try {
+    if (typeof answer === "object" && "YYYY" in answer && "MM" in answer && "DD" in answer) {
+      const dateObject = answer as unknown as DateObject;
+      return getFormattedDateFromObject(dateFormat, dateObject);
+    }
+
+    const dateObject = JSON.parse(answer as string) as DateObject;
+    return getFormattedDateFromObject(dateFormat, dateObject);
+  } catch (e) {
+    return answer as string;
+  }
+};
+
 const getAnswerAsString = (question: FormElement | undefined, answer: unknown): string => {
   if (question && question.type === "checkbox") {
     return Array(answer).join(", ");
@@ -453,15 +467,10 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
     if (!answer) {
       return "";
     }
+
     const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
 
-    try {
-      const dateObject = JSON.parse(answer as string) as DateObject;
-      return getFormattedDateFromObject(dateFormat, dateObject);
-    } catch (e) {
-      // If the answer is somehow not parseable as JSON, return it as is
-      return answer as string;
-    }
+    return getDateAsString(answer, dateFormat);
   }
 
   if (question && question.type === "addressComplete") {
