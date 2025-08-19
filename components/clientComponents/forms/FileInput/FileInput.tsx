@@ -126,17 +126,14 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   let allowedFileTypes = "";
 
   // Map itemFileTypes to match ALLOWED_FILE_TYPES format and create a string for the accept attribute
-  allowedFileTypes = itemFileTypes
-    .map((type) => {
-      const fileType = ALLOWED_FILE_TYPES.find((t) =>
-        Array.isArray(t.extensions) ? t.extensions.includes(type) : t.extensions === type
-      );
-      return fileType
-        ? [fileType.mime, ...fileType.extensions.map((ext: string) => `.${ext}`)].join(",")
-        : "";
-    })
-    .filter(Boolean)
-    .join(",");
+  const allowedFileTypesSet = new Set<string>();
+  itemFileTypes.forEach((type) => {
+    const fileTypeInfo = ALLOWED_FILE_TYPES.find((t) => t.extensions.includes(type));
+    if (fileTypeInfo) {
+      allowedFileTypesSet.add(fileTypeInfo.mime);
+      fileTypeInfo.extensions.forEach((ext) => allowedFileTypesSet.add(`.${ext}`));
+    }
+  });
 
   if (!allowedFileTypes) {
     // If no fileType is specified, use our default allowed file types
