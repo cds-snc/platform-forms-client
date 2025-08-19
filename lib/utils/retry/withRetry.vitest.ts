@@ -1,6 +1,5 @@
 import { vi } from "vitest";
 import { withRetry, withRetryFallback } from "./withRetry";
-import { logMessage } from "@lib/logger";
 
 // Mock the logger
 vi.mock("@lib/logger", () => ({
