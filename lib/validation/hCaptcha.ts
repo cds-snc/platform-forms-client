@@ -33,7 +33,7 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   const result = await withRetryFallback(
     async () => {
       return axios({
-        url: "http://localhost:4000/siteverify",
+        url: "https://api.hcaptcha.com/siteverify",
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
