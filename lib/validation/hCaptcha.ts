@@ -29,11 +29,12 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   data.append("remoteip", String(await getClientIP()));
 
   const clientIP = await getClientIP(); // Get IP once before the retry logic
+  const hCaptchaApiUrl = "https://api.hcaptcha.com/siteverify";
 
   const result = await withRetryFallback(
     async () => {
       return axios({
-        url: "https://api.hcaptcha.com/siteverify",
+        url: hCaptchaApiUrl,
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -51,11 +52,11 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
       onFinalFailure: async (error, totalAttempts) => {
         // Log comprehensive failure information
         logMessage.error(
-          `hCaptcha: All ${totalAttempts} retry attempts failed. Final error: ${error}`
+          `hCaptcha: ${totalAttempts} retry attempts failed, allowing submission. Final error: ${error}`
         );
 
         // Record failure for monitoring and alerting
-        await recordFailure("hcaptcha", error, {
+        await recordFailure("hCaptcha", error, {
           totalAttempts,
           timestamp: Date.now(),
           clientIP,
@@ -72,7 +73,7 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   );
 
   if (!result) {
-    logMessage.error(`hCaptcha: API call failed after retries, allowing submission`);
+    // All retries failed, but we allow the submission to proceed
     return true;
   }
 

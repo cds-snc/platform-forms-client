@@ -75,7 +75,7 @@ export async function withRetryFallback<T>(
       onFinalFailure(error, maxRetries);
     }
 
-    logMessage.error(`All retry attempts failed, returning fallback value. Last error: ${error}`);
+    // All retry attempts failed, return fallback value
     return fallbackValue;
   }
 }
