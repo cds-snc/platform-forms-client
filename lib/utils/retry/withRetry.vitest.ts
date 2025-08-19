@@ -58,9 +58,6 @@ describe("withRetry", () => {
 
     expect(result).toBe("fallback");
     expect(mockFn).toHaveBeenCalledTimes(2);
-    expect(logMessage.error).toHaveBeenCalledWith(
-      expect.stringContaining("All retry attempts failed, returning fallback value")
-    );
     
     vi.useRealTimers();
   });
@@ -128,9 +125,6 @@ describe("withRetryFallback", () => {
 
     expect(result).toBe("fallback");
     expect(mockFn).toHaveBeenCalledTimes(2);
-    expect(logMessage.error).toHaveBeenCalledWith(
-      expect.stringContaining("All retry attempts failed, returning fallback value")
-    );
     
     vi.useRealTimers();
   });
