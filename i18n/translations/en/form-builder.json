@@ -1432,7 +1432,7 @@
   "beta": {
     "tag": "Beta:",
     "text": "Trial feature ",
-    "loadingError": "The form you are trying to load contains beta components. Unfortunately they are not yet available to all users.  If you would like to be part of this very select beta user group please make a substantial donation to: « Bryan Wants To Get Rich Quick » fund. No tax receipt will be provided."
+    "loadingError": "This form contains a 'beta' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
   },
   "fileUploadApiWarning": {
     "text": "Delivery method is not set to API."
