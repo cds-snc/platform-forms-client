@@ -50,6 +50,10 @@ const getKeys = async (): Promise<FeatureFlagKeys[]> => {
  * @returns Boolean value of Flag key
  */
 export const checkOne = async (key: string): Promise<boolean> => {
+  // If in test mode return true for any flag
+  if (process.env.APP_ENV === "test") {
+    return true;
+  }
   // If REDIS is not configured return the default values for the flags
   if (!process.env.REDIS_URL) {
     return (flagInitialSettings as Record<string, boolean>)[key];
@@ -76,7 +80,11 @@ const checkMulti = async <T extends FeatureFlagKeys[]>(keys: T): Promise<PickFla
   const values = await redis.mget(keys.map((key) => `flag:${key}`));
 
   const mapped = keys.reduce((acc, key, index) => {
-    acc.set(key, values[index] === "1");
+    if (process.env.APP_ENV === "test") {
+      acc.set(key, true);
+    } else {
+      acc.set(key, values[index] === "1");
+    }
     return acc;
   }, new Map<string, boolean>());
 
