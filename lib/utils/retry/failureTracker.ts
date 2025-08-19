@@ -18,7 +18,7 @@ export interface FailureMetrics {
 }
 
 const DEFAULT_OPTIONS: Required<FailureTrackerOptions> = {
-  keyPrefix: "api_failures",
+  keyPrefix: "failure_tracker",
   windowSizeMs: 5 * 60 * 1000, // 5 minutes
   maxFailures: 5,
   alertCooldownMs: 15 * 60 * 1000, // 15 minutes
@@ -30,7 +30,6 @@ const DEFAULT_OPTIONS: Required<FailureTrackerOptions> = {
 export const recordFailure = async (
   serviceName: string,
   error: unknown,
-  metadata?: Record<string, unknown>,
   options: FailureTrackerOptions = {}
 ): Promise<void> => {
   const config = { ...DEFAULT_OPTIONS, ...options };
@@ -51,7 +50,6 @@ export const recordFailure = async (
     const failureData = {
       lastFailure: now.toString(),
       lastError: serializeError(error),
-      metadata: JSON.stringify(metadata || {}),
     };
 
     await redis.hmset(metaKey, failureData);
