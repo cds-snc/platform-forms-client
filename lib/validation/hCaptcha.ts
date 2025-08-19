@@ -28,7 +28,6 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   data.append("response", String(token));
   data.append("remoteip", String(await getClientIP()));
 
-  const clientIP = await getClientIP(); // Get IP once before the retry logic
   const hCaptchaApiUrl = "https://api.hcaptcha.com/siteverify";
 
   const result = await withRetryFallback(
@@ -47,21 +46,17 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
     {
       maxRetries: 3,
       onRetry: (attempt, error) => {
-        logMessage.warn(`hCaptcha: attempt ${attempt} failed - ${error}`);
+        logMessage.info(`hCaptcha: attempt ${attempt} failed - ${error}`);
       },
       onFinalFailure: async (error, totalAttempts) => {
         // Log comprehensive failure information
-        logMessage.error(
+        logMessage.warn(
           `hCaptcha: ${totalAttempts} retry attempts failed, allowing submission. Final error: ${error}`
         );
 
         // Record failure for monitoring and alerting
         await recordFailure("hCaptcha", error, {
-          totalAttempts,
-          timestamp: Date.now(),
-          clientIP,
-          tokenPresent: !!token,
-          alertCooldownMs: 5 * 60 * 1000, // 5 minutes
+          alertCooldownMs: 1 * 60 * 1000, // 5 minutes cooldown
         });
       },
       shouldRetry: (error) => {
