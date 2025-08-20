@@ -1,11 +1,11 @@
 /**
- * Converts bytes to megabytes rounded to the nearest half.
+ * Converts bytes to megabytes with precision to 2 decimal places.
  * @param bytes - Size in bytes
  * @returns
  */
 export const bytesToMb = (bytes: number): number => {
   const mb = bytes / (1024 * 1024);
-  return Math.round(mb * 2) / 2;
+  return Math.round(mb * 100) / 100;
 };
 
 /**
@@ -30,26 +30,49 @@ export const kbToBytes = (kb: number): number => {
  * Converts bytes to a string representation in bytes, KB, or MB.
  * Returns an object with size and unit (for i18n).
  * @param bytes - Size in bytes
+ * @param language - Language for proper decimal formatting (optional)
  * @returns
  */
 export const bytesToKbOrMbString = (
-  bytes: number
-): { size: number; unit: "bytes" | "KB" | "MB" } => {
+  bytes: number,
+  language?: string
+): { size: number | string; unit: "bytes" | "KB" | "MB" } => {
   const absBytes = Math.abs(bytes); // Handle negative values
+
   if (absBytes < 500) {
     return {
       size: bytes,
       unit: "bytes",
     };
   }
+
+  let size: number;
+  let unit: "KB" | "MB";
+
   if (absBytes < 1040000) {
+    // Round KB to whole numbers (no decimals)
+    size = Math.round(bytes / 1024);
+    unit = "KB";
+  } else {
+    // More precise MB calculation - round to 2 decimal places
+    size = Math.round((bytes / 1048576) * 100) / 100;
+    unit = "MB";
+  }
+
+  // Format with proper decimal separator if language is provided
+  if (language) {
+    const formatter = new Intl.NumberFormat(language === "fr" ? "fr-CA" : "en-CA", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: unit === "MB" ? 2 : 0, // No decimals for KB, up to 2 for MB
+    });
     return {
-      size: Math.round((bytes / 1024) * 2) / 2,
-      unit: "KB",
+      size: formatter.format(size),
+      unit,
     };
   }
+
   return {
-    size: Math.round((bytes / 1048576) * 2) / 2,
-    unit: "MB",
+    size,
+    unit,
   };
 };

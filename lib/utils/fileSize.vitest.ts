@@ -18,12 +18,12 @@ describe("bytesToMb", () => {
     expect(bytesToMb(1572864)).toBe(1.5);
   });
 
-  it("rounds 1.4 MB (1468006.4 bytes) to 1.5 MB", () => {
-    expect(bytesToMb(1468006.4)).toBe(1.5);
+  it("converts 1.4 MB (1468006.4 bytes) to 1.4 MB", () => {
+    expect(bytesToMb(1468006.4)).toBe(1.4);
   });
 
-  it("rounds 1.6 MB (1677721.6 bytes) to 1.5 MB", () => {
-    expect(bytesToMb(1677721.6)).toBe(1.5);
+  it("converts 1.6 MB (1677721.6 bytes) to 1.6 MB", () => {
+    expect(bytesToMb(1677721.6)).toBe(1.6);
   });
 
   it("converts 2 MB (2097152 bytes) to 2 MB", () => {
@@ -144,20 +144,20 @@ describe("bytesToKbOrMbString", () => {
 
   it("returns KB for values between 500 and 1040000", () => {
     expect(bytesToKbOrMbString(500)).toEqual({
-      size: Math.round((500 / 1024) * 2) / 2,
+      size: 0,
       unit: "KB",
     });
     expect(bytesToKbOrMbString(1024)).toEqual({ size: 1, unit: "KB" });
-    expect(bytesToKbOrMbString(1536)).toEqual({ size: 1.5, unit: "KB" });
+    expect(bytesToKbOrMbString(1536)).toEqual({ size: 2, unit: "KB" }); // 1.5 rounds to 2
     expect(bytesToKbOrMbString(1040000 - 1)).toEqual({
-      size: Math.round(((1040000 - 1) / 1024) * 2) / 2,
+      size: 1016,
       unit: "KB",
     });
   });
 
   it("returns MB for values >= 1040000", () => {
     expect(bytesToKbOrMbString(1040000)).toEqual({
-      size: Math.round((1040000 / 1048576) * 2) / 2,
+      size: 0.99,
       unit: "MB",
     });
     expect(bytesToKbOrMbString(1048576)).toEqual({ size: 1, unit: "MB" });
@@ -172,12 +172,109 @@ describe("bytesToKbOrMbString", () => {
 
   it("handles edge cases", () => {
     expect(bytesToKbOrMbString(500)).toEqual({
-      size: Math.round((500 / 1024) * 2) / 2,
+      size: 0,
       unit: "KB",
     });
     expect(bytesToKbOrMbString(1040000)).toEqual({
-      size: Math.round((1040000 / 1048576) * 2) / 2,
+      size: 0.99,
       unit: "MB",
+    });
+  });
+
+  describe("internationalization", () => {
+    it("formats decimals with periods for English", () => {
+      expect(bytesToKbOrMbString(1572864, "en")).toEqual({
+        size: "1.5",
+        unit: "MB",
+      });
+      expect(bytesToKbOrMbString(1536, "en")).toEqual({
+        size: "2",
+        unit: "KB",
+      });
+    });
+
+    it("formats decimals with commas for French", () => {
+      expect(bytesToKbOrMbString(1572864, "fr")).toEqual({
+        size: "1,5",
+        unit: "MB",
+      });
+      expect(bytesToKbOrMbString(1536, "fr")).toEqual({
+        size: "2",
+        unit: "KB",
+      });
+    });
+
+    it("handles whole numbers without decimals", () => {
+      expect(bytesToKbOrMbString(1048576, "en")).toEqual({
+        size: "1",
+        unit: "MB",
+      });
+      expect(bytesToKbOrMbString(1048576, "fr")).toEqual({
+        size: "1",
+        unit: "MB",
+      });
+    });
+
+    it("shows up to 2 decimal places when needed", () => {
+      // 1.7 MB -> shows as 1.7 MB with our new precision
+      expect(bytesToKbOrMbString(1782579, "en")).toEqual({
+        size: "1.7",
+        unit: "MB",
+      });
+      expect(bytesToKbOrMbString(1782579, "fr")).toEqual({
+        size: "1,7",
+        unit: "MB",
+      });
+    });
+
+    it("does not format bytes (too small for decimals)", () => {
+      expect(bytesToKbOrMbString(250, "en")).toEqual({
+        size: 250,
+        unit: "bytes",
+      });
+      expect(bytesToKbOrMbString(250, "fr")).toEqual({
+        size: 250,
+        unit: "bytes",
+      });
+    });
+
+    it("maintains backward compatibility when no language is provided", () => {
+      expect(bytesToKbOrMbString(1572864)).toEqual({
+        size: 1.5,
+        unit: "MB",
+      });
+    });
+
+    it("demonstrates increased precision with various sizes", () => {
+      // Test KB precision to 1 decimal place
+      expect(bytesToKbOrMbString(1228, "en")).toEqual({
+        size: "1",
+        unit: "KB",
+      });
+      expect(bytesToKbOrMbString(1228, "fr")).toEqual({
+        size: "1",
+        unit: "KB",
+      });
+
+      // Test MB precision to 2 decimal places
+      expect(bytesToKbOrMbString(1258291, "en")).toEqual({
+        size: "1.2",
+        unit: "MB",
+      });
+      expect(bytesToKbOrMbString(1258291, "fr")).toEqual({
+        size: "1,2",
+        unit: "MB",
+      });
+
+      // Test more precise MB values
+      expect(bytesToKbOrMbString(1363149, "en")).toEqual({
+        size: "1.3",
+        unit: "MB",
+      });
+      expect(bytesToKbOrMbString(1363149, "fr")).toEqual({
+        size: "1,3",
+        unit: "MB",
+      });
     });
   });
 });
