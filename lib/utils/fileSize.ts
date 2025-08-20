@@ -82,6 +82,13 @@ export const bytesToKbOrMbString = (
   // Return early for bytes (no formatting needed)
   if (unit === "bytes" || unit === "KB") {
     return { size, unit };
+  if (unit === "bytes") {
+    // Bytes are always whole numbers; no locale formatting needed
+    return { size, unit };
+  }
+  if (unit === "KB") {
+    // KB values are always whole numbers due to rounding; no locale formatting needed
+    return { size, unit };
   }
 
   return {
