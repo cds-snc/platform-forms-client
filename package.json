@@ -44,7 +44,7 @@
     "cypress": "cypress open",
     "cypress:run": "CYPRESS_DEBUG=true cypress run --browser chrome",
     "cypress:e2e": "cypress run --browser chrome --e2e",
-    "cypress:component": "cypress run --browser chrome --component",
+    "cypress:component": "NEXT_PUBLIC_APP_ENV=test cypress run --browser chrome --component",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
   },
   "dependencies": {

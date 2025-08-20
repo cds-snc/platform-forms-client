@@ -4,9 +4,6 @@ import { Flags } from "@lib/cache/types";
 import { createContext, useContext, useState } from "react";
 import { useSession } from "next-auth/react";
 
-// Uses the checkAll as a server action
-import { checkAll } from "../cache/flags";
-
 const FeatureFlagsContext = createContext({
   flags: {} as Flags,
   update: async () => {},
@@ -31,7 +28,12 @@ export const FeatureFlagsProvider = ({
   });
 
   const update = async () => {
-    await checkAll().then((flags) => setFlags(flags));
+    // Required beause Cypress Component tests cannot handle server side actions
+    if (process.env.NEXT_PUBLIC_APP_ENV !== "test") {
+      await import("./useFeatureFlagsActions").then(({ getFlags }) =>
+        getFlags().then((flags) => setFlags(flags))
+      );
+    }
   };
 
   return (

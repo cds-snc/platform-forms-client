@@ -1,4 +1,3 @@
-"use server";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import flagInitialSettings from "../flags/default_flag_settings.json";
 import { authorization } from "@lib/privileges";
