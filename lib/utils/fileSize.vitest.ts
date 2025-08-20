@@ -188,7 +188,7 @@ describe("bytesToKbOrMbString", () => {
         unit: "MB",
       });
       expect(bytesToKbOrMbString(1536, "en")).toEqual({
-        size: "2",
+        size: 2,
         unit: "KB",
       });
     });
@@ -199,7 +199,7 @@ describe("bytesToKbOrMbString", () => {
         unit: "MB",
       });
       expect(bytesToKbOrMbString(1536, "fr")).toEqual({
-        size: "2",
+        size: 2,
         unit: "KB",
       });
     });
@@ -248,11 +248,11 @@ describe("bytesToKbOrMbString", () => {
     it("demonstrates increased precision with various sizes", () => {
       // Test KB precision to 1 decimal place
       expect(bytesToKbOrMbString(1228, "en")).toEqual({
-        size: "1",
+        size: 1,
         unit: "KB",
       });
       expect(bytesToKbOrMbString(1228, "fr")).toEqual({
-        size: "1",
+        size: 1,
         unit: "KB",
       });
 
