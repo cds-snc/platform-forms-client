@@ -168,7 +168,7 @@
     "babel-plugin-transform-require-context": "^0.1.1",
     "css-loader": "^6.8.1",
     "cssnano": "^5.1.15",
-    "cypress": "^13.17.0",
+    "cypress": "14.5.4",
     "cypress-axe": "^1.6.0",
     "cypress-each": "^1.14.0",
     "cypress-plugin-tab": "^1.0.5",
