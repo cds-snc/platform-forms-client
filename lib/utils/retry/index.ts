@@ -8,8 +8,7 @@ export { withRetry, withRetryFallback, type RetryOptions } from "./withRetry";
 // Export failure tracking utilities (functional interface)
 export {
   recordFailure,
-  getMetrics,
+  getFailureMetrics,
   clearFailures,
   type FailureTrackerOptions,
-  type FailureMetrics,
 } from "./failureTracker";

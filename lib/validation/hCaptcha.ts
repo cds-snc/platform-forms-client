@@ -56,7 +56,7 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
 
         // Record failure for monitoring and alerting
         await recordFailure("hCaptcha", error, {
-          alertCooldownMs: 1 * 60 * 1000, // 5 minutes cooldown
+          severity2Cooldown: 5, // 5 minute cooldown for Sev2 alerts
         });
       },
       shouldRetry: (error) => {
