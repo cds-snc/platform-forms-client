@@ -37,7 +37,7 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
         throw error;
       }
 
-      const delay = Math.min(Math.pow(2, attempt - 1) * baseDelay, maxDelay);
+      const delay = Math.min(2 ** (attempt - 1) * baseDelay, maxDelay);
 
       if (onRetry) {
         onRetry(attempt, error);
