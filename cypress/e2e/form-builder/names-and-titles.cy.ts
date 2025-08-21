@@ -6,7 +6,7 @@ describe("Form builder names and titles", () => {
 
   it("Autocompletes name with title on focus", () => {
     cy.typeInField("#formTitle", "Cypress Share Test Form");
-    cy.get("#fileName").focus().blur();
+    cy.get("#fileName").focus();
     cy.get("#formTitle").click();
     cy.get("#fileName").should("have.value", "Cypress Share Test Form");
   });
