@@ -206,7 +206,7 @@ Cypress.Commands.add("logout", () => {
  * Type in a field and wait for the field to be updated
  */
 Cypress.Commands.add("typeInField", (field, typedText, outputText) => {
-  cy.get(field).click().type(typedText, { delay: 50 }).blur();
+  cy.get(field).click().type(typedText, { delay: 150 }).blur();
 
   // Use passed in outputText or Remove actions in brackets from typedText
   const text = outputText ?? typedText.replace(/\{.*\}/, "");

@@ -12,8 +12,7 @@ describe("Form builder names and titles", () => {
 
   it("Accepts a blank name", () => {
     cy.typeInField("#formTitle", "Cypress Share Test Form");
-    cy.get("#fileName").click();
-    cy.get("#fileName").clear();
+    cy.get("#fileName").click().clear();
     cy.get("#fileName").should("have.value", "");
   });
 });
