@@ -101,6 +101,9 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               return;
             }
 
+            setError(undefined); // Clear the error
+            setTouched(false); // Reset the touched state
+
             // Successful file upload -- set the input
             setFileName(newFile.name);
 
