@@ -296,4 +296,24 @@ export const options = [
     logoTitleEn: "Office of the Commissioner of Lobbying of Canada",
     logoTitleFr: "Commissariat au lobbying du Canada",
   },
+  {
+    name: "cfia",
+    urlEn: "https://inspection.canada.ca/en",
+    urlFr: "https://inspection.canada.ca/fr",
+    logoEn: "/img/branding/cfia-en.svg",
+    logoFr: "/img/branding/cfia-fr.svg",
+    logoTitleEn: "Canadian Food Inspection Agency",
+    logoTitleFr: "Agence canadienne d'inspection des aliments",
+  },
+  {
+    name: "dcc",
+    urlEn:
+      "https://www.dcc-cdc.gc.ca/?_gl=1*1hqz9so*_ga*MTA0MzMwNzk5Ny4xNzU1MDg3NTU1*_ga_ZW1ZJ21C1W*czE3NTU3OTk1NzIkbzMkZzEkdDE3NTU3OTk2NTUkajUyJGwwJGgw",
+    urlFr:
+      "https://www.cdc-dcc.gc.ca/?_gl=1*11og30m*_ga*MTA0MzMwNzk5Ny4xNzU1MDg3NTU1*_ga_ZW1ZJ21C1W*czE3NTU3OTk1NzIkbzMkZzEkdDE3NTU3OTk2NTkkajQ4JGwwJGgw",
+    logoEn: "/img/branding/dcc.svg",
+    logoFr: "/img/branding/dcc.svg",
+    logoTitleEn: "Defence Construction Canada",
+    logoTitleFr: "Construction de Défense Canada",
+  },
 ];
