@@ -311,8 +311,8 @@ export const options = [
       "https://www.dcc-cdc.gc.ca/?_gl=1*1hqz9so*_ga*MTA0MzMwNzk5Ny4xNzU1MDg3NTU1*_ga_ZW1ZJ21C1W*czE3NTU3OTk1NzIkbzMkZzEkdDE3NTU3OTk2NTUkajUyJGwwJGgw",
     urlFr:
       "https://www.cdc-dcc.gc.ca/?_gl=1*11og30m*_ga*MTA0MzMwNzk5Ny4xNzU1MDg3NTU1*_ga_ZW1ZJ21C1W*czE3NTU3OTk1NzIkbzMkZzEkdDE3NTU3OTk2NTkkajQ4JGwwJGgw",
-    logoEn: "/img/branding/dcc.svg",
-    logoFr: "/img/branding/dcc.svg",
+    logoEn: "/img/branding/dcc-en.svg",
+    logoFr: "/img/branding/dcc-fr.svg",
     logoTitleEn: "Defence Construction Canada",
     logoTitleFr: "Construction de Défense Canada",
   },
