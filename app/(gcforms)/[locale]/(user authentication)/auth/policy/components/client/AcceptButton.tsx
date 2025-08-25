@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
 // Needed for Cypress E2E testing for some reason
-// The broadcase should be called as part of the useSession update() fn but doesn't seem to be registering
+// The broadcast should be called as part of the useSession update() fn but doesn't seem to be registering
 
 let broadcastChannel: BroadcastChannel | null = null;
 
