@@ -31,7 +31,7 @@
     "prisma:generate": "prisma generate",
     "start:test": "yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
     "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
-    "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",
+    "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build --turbopack",
     "lint": "next lint && tsc --noEmit",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix .",
