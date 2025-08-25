@@ -66,7 +66,7 @@ export const Dialog = ({
     <dialog
       className="size-full bg-transparent bg-clip-padding p-0"
       {...(title && { "aria-labelledby": `modal-title-${modalRandomId.current}` })}
-      ref={dialogRef}
+      ref={dialogRef as React.RefObject<HTMLDialogElement>}
       data-testid="dialog"
     >
       <div

@@ -181,3 +181,8 @@ export const ga = (eventName: string, data?: object) => {
     ...data,
   });
 };
+
+// Type guard because ArrayBufferLike contains both ArrayBuffer and SharedArrayBuffer
+export const isArrayBuffer = (value: unknown): value is ArrayBuffer => {
+  return value instanceof ArrayBuffer;
+};

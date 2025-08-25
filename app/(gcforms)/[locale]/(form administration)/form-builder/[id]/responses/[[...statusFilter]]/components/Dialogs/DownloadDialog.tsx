@@ -16,6 +16,7 @@ import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { getSubmissionsByFormat } from "../../actions";
 import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/form-builder-types";
 import { FormBuilderError } from "../../exceptions";
+import { isArrayBuffer } from "@lib/client/clientHelpers";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -129,7 +130,9 @@ export const DownloadDialog = ({
 
         zip.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
           const fileName = `${filePrefix}responses-reponses.zip`;
-          downloadFileFromBlob(new Blob([buffer]), fileName);
+          if (isArrayBuffer(buffer)) {
+            downloadFileFromBlob(new Blob([buffer]), fileName);
+          }
 
           handleDownloadComplete();
         });
@@ -157,7 +160,9 @@ export const DownloadDialog = ({
           file.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
             const fileName = `${filePrefix}responses-reponses.zip`;
-            downloadFileFromBlob(new Blob([buffer]), fileName);
+            if (isArrayBuffer(buffer)) {
+              downloadFileFromBlob(new Blob([buffer]), fileName);
+            }
 
             handleDownloadComplete();
           });
@@ -192,7 +197,9 @@ export const DownloadDialog = ({
           file.file("responses-reponses.json", JSON.stringify(response.responses));
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
             const fileName = `${filePrefix}responses-reponses.zip`;
-            downloadFileFromBlob(new Blob([buffer]), fileName);
+            if (isArrayBuffer(buffer)) {
+              downloadFileFromBlob(new Blob([buffer]), fileName);
+            }
 
             handleDownloadComplete();
           });

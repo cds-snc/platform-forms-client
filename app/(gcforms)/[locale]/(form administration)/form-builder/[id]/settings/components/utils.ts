@@ -2,6 +2,7 @@ import { createServiceAccountKey } from "../actions";
 import JSZip from "jszip";
 
 import { getReadmeContent } from "../actions";
+import { isArrayBuffer } from "@root/lib/client/clientHelpers";
 
 const downloadFileFromBlob = (data: Blob, fileName: string) => {
   const href = window.URL.createObjectURL(data);
@@ -38,6 +39,8 @@ export const downloadKey = async (key: string, templateId: string) => {
   // Generate zip
   zip.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
     const fileName = `api-key-${templateId}.zip`;
-    downloadFileFromBlob(new Blob([buffer]), fileName);
+    if (isArrayBuffer(buffer)) {
+      downloadFileFromBlob(new Blob([buffer]), fileName);
+    }
   });
 };

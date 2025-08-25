@@ -126,7 +126,7 @@ export const getErrorList = (
   if (!props.formRecord?.form || !props.errors) {
     return null;
   }
-  let errorList;
+  let errorList: React.JSX.Element[] = [];
 
   const sortedFormElementErrors = props.formRecord.form.layout
     .filter((element) => {
@@ -137,62 +137,66 @@ export const getErrorList = (
     });
 
   if (props.touched && sortedFormElementErrors.length) {
-    errorList = sortedFormElementErrors.map(([formElementKey, formElementErrorValue]) => {
-      if (Array.isArray(formElementErrorValue)) {
-        return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
-          return Object.entries(dynamicRowErrors).map(
-            ([dynamicRowElementKey, dyanamicRowElementErrorValue]) => {
-              const id = `${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`;
-              const parentElement = props.formRecord.form.elements.find(
-                (el) => el.id === formElementKey
-              );
+    errorList = sortedFormElementErrors.flatMap(
+      ([formElementKey, formElementErrorValue]): React.JSX.Element[] => {
+        if (Array.isArray(formElementErrorValue)) {
+          return (formElementErrorValue as Record<string, string | undefined>[]).flatMap(
+            (dynamicRowErrors, dynamicRowIndex) => {
+              return Object.entries(dynamicRowErrors)
+                .map(([dynamicRowElementKey, dyanamicRowElementErrorValue]) => {
+                  const id = `${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`;
+                  const parentElement = props.formRecord.form.elements.find(
+                    (el) => el.id === formElementKey
+                  );
 
-              let subElement;
+                  let subElement;
 
-              if (dyanamicRowElementErrorValue) {
-                const subElements = parentElement?.properties.subElements;
-                subElement = subElements && subElements[Number(dynamicRowElementKey)];
-              }
+                  if (dyanamicRowElementErrorValue) {
+                    const subElements = parentElement?.properties.subElements;
+                    subElement = subElements && subElements[Number(dynamicRowElementKey)];
+                  }
 
-              return (
-                dyanamicRowElementErrorValue && (
-                  <ErrorListItem
-                    key={`error-${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
-                    errorKey={`${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
-                    value={`${dyanamicRowElementErrorValue as string}`}
-                  >
-                    <ErrorListMessage
-                      language={props.language || "en"}
-                      id={id}
-                      elements={[]}
-                      defaultValue={""}
-                      subElement={subElement}
-                    />
-                  </ErrorListItem>
-                )
-              );
+                  return (
+                    dyanamicRowElementErrorValue && (
+                      <ErrorListItem
+                        key={`error-${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
+                        errorKey={`${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
+                        value={`${dyanamicRowElementErrorValue as string}`}
+                      >
+                        <ErrorListMessage
+                          language={props.language || "en"}
+                          id={id}
+                          elements={[]}
+                          defaultValue={""}
+                          subElement={subElement}
+                        />
+                      </ErrorListItem>
+                    )
+                  );
+                })
+                .filter((item) => item !== undefined && item !== null && item !== "");
             }
           );
-        });
-      } else {
-        return (
-          <ErrorListItem
-            key={`error-${formElementKey}`}
-            errorKey={`${formElementKey}`}
-            value={`${formElementErrorValue}`}
-          >
-            <ErrorListMessage
-              language={props.language || "en"}
-              id={formElementKey}
-              elements={props.formRecord.form.elements}
-              defaultValue={formElementErrorValue}
-            />
-          </ErrorListItem>
-        );
+        } else {
+          return [
+            <ErrorListItem
+              key={`error-${formElementKey}`}
+              errorKey={`${formElementKey}`}
+              value={`${formElementErrorValue}`}
+            >
+              <ErrorListMessage
+                language={props.language || "en"}
+                id={formElementKey}
+                elements={props.formRecord.form.elements}
+                defaultValue={formElementErrorValue}
+              />
+            </ErrorListItem>,
+          ];
+        }
       }
-    });
+    );
   }
-  return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
+  return errorList.length > 0 ? <ol className="gc-ordered-list">{errorList}</ol> : null;
 };
 
 /**

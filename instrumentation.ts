@@ -1,4 +1,11 @@
 export async function register() {
+  // Do not collect traces when doing active development
+  // if (process.env.NODE_ENV === "production") {
+  //    opentelemetry();
+  // }
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    await import("./instrumentation.node");
+  }
   if (process.env.NEXT_RUNTIME === "nodejs" && !process.env.LAMBDA_ENV) {
     if (!process.env.REDIS_URL) {
       // eslint-disable-next-line no-console
