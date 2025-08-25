@@ -1,5 +1,10 @@
 # Changelog
 
+
+## [1.0.3] - 2025-08-25
+
+- Update to add more helpers
+
 ## [1.0.1] - 2025-08-15
 
 - Update file validation and added file-type as a dependancy

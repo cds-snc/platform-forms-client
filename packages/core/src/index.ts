@@ -16,3 +16,26 @@ export {
   checkVisibilityRecursive,
   isElementVisible,
 } from "./visibility";
+
+export {
+  getElementsWithRuleForChoice,
+  choiceRulesToConditonalRules,
+  cleanChoiceIdsFromRules,
+  removeChoiceIdFromRules,
+  removeChoiceFromRules,
+  validConditionalRules,
+  cleanRules,
+} from "./rules/rules";
+
+export {
+  getElementById,
+  findChoiceIndexByValue,
+  isChoiceInputType,
+  mapIdsToValues,
+  matchRule,
+  getValuesWithMatchedIds,
+  inGroup,
+  findGroupByElementId,
+  ensureChoiceId,
+  getElementsUsingChoiceId,
+} from "./helpers";
