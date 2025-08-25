@@ -101,9 +101,9 @@ export const ResponseDelivery = () => {
   const [purposeOption, setPurposeOption] = useState(formPurpose as PurposeOption);
 
   /*--------------------------------------------*
-   * Save Delivery Option
+   * Save security attribute
    *--------------------------------------------*/
-  const saveDeliveryOptions = useCallback(async () => {
+  const saveSecurityAttribute = useCallback(async () => {
     updateSecurityAttribute(classification);
 
     const resultAttribute = (await updateTemplateSecurityAttribute({
@@ -196,14 +196,18 @@ export const ResponseDelivery = () => {
             <h2 className="mb-6">{t("settingsResponseDelivery.selectClassification")}</h2>
             <div className="mb-10">
               <ClassificationSelect
-                className="max-w-[400px] truncate bg-gray-soft p-1 pr-10"
+                className="!mb-8 max-w-[400px] truncate bg-gray-soft p-1 pr-10"
                 lang={lang}
                 isPublished={isPublished}
                 classification={classification}
                 handleUpdateClassification={handleUpdateClassification}
               />
+              <div>
+                <Button disabled={isPublished} theme="secondary" onClick={saveSecurityAttribute}>
+                  {t("settingsResponseDelivery.saveButton")}
+                </Button>
+              </div>
             </div>
-
             <div className="mb-10">
               <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
 
@@ -296,12 +300,7 @@ export const ResponseDelivery = () => {
                 </div>
               )}
 
-              <>
-                <Button disabled={isPublished} theme="secondary" onClick={saveDeliveryOptions}>
-                  {t("settingsResponseDelivery.saveButton")}
-                </Button>
-                <ResponseDeliveryHelpButtonWithApi />
-              </>
+              <ResponseDeliveryHelpButtonWithApi />
             </div>
 
             {/*--------------------------------------------*
