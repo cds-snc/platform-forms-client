@@ -46,16 +46,17 @@
     "date-invalid": "Enter a valid date.",
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
-    "file-size-too-large": "Select a smaller file.",
-    "file-size-too-large-all-files": "Files exceed the {{maxSizeInMb}} MB maximum. Upload smaller files.",
-    "file-submission": "There was a problem with the file submitted. Try uploading a different file format, such as PDF.",
     "file-upload": {
       "default": {
         "heading": "There was a problem submitting your form",
         "message": "The file {{fileName}} could not be uploaded."
       },
       "file-size-too-large": {
-        "message": "{{fileName}} is too big. Select a smaller file or remove the file, if it is not required."
+        "message": "'{{fileName}}' is too big. Choose a file size that is less than {{maxSizeInMb}} MB."
+      },
+      "mime": {
+        "heading": "There was a problem submitting your form",
+        "message": "{{fileName}} could not be uploaded. Try saving the file in a different format and uploading it again."
       },
       "network-error": {
         "heading": "There was a problem submitting your form",

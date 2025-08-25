@@ -1,14 +1,15 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { useField } from "formik";
+import { MAX_FILE_SIZE } from "@root/constants";
 
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
-import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
+import { ALLOWED_FILE_TYPES, htmlInputAccept, isMimeTypeValid } from "@gcforms/core";
 import { themes } from "@clientComponents/globals/Buttons/themes";
-import { bytesToKbOrMbString } from "@lib/utils/fileSize";
+import { bytesToKbOrMbString, bytesToMb } from "@lib/utils/fileSize";
 import { announce } from "@gcforms/announce";
 
 interface FileInputProps extends InputFieldProps {
@@ -61,31 +62,59 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     props.className ? props.className : ""
   );
 
-  const _onChange = (e: FileEventTarget) => {
+  const _onChange = async (e: FileEventTarget) => {
     if (e.target?.files) {
       const reader = new FileReader();
-      // Need to refactor in the future to add support for Multiple Files.
-      // ex.. check for length of e.target.files[] and handle accordingly.
-      // On multi file once files are selected remove `file-up--compact` and show
-      // number of files uploaded or file list in file_output
       const newFile = e.target.files[0];
       if (newFile) {
         reader.readAsArrayBuffer(newFile);
-        // react dispatch functions will not work within reader callbacks
-        // this we need to wait for reader readyState to be true
-        reader.onloadend = () => {
+        reader.onloadend = async () => {
           fileInputRef.current!.value = ""; // Reset the input value to allow re-uploading the same file
 
           if (newFile.name !== fileName) {
             setFileName(newFile.name);
 
+            // Check for file size
+            if (newFile.size > MAX_FILE_SIZE) {
+              setError(
+                t("input-validation.file-upload.file-size-too-large.message", {
+                  fileName: newFile.name,
+                  maxSizeInMb: bytesToMb(MAX_FILE_SIZE),
+                })
+              );
+              setFileName("");
+              return;
+            }
+
+            // Check for file content
+            const buffer = reader.result as ArrayBuffer;
+
+            const validMime = await isMimeTypeValid(newFile.name, buffer, false);
+
+            if (!validMime) {
+              setError(
+                t("input-validation.file-upload.mime.message", {
+                  fileName: newFile.name,
+                })
+              );
+              setFileName("");
+              return;
+            }
+
+            setError(undefined); // Clear the error
+            setTouched(false); // Reset the touched state
+
+            // Successful file upload -- set the input
+            setFileName(newFile.name);
+
             announce(t("fileInput.addedMessage", { fileName: newFile.name }));
 
             setFileSize(bytesToKbOrMbString(newFile.size));
+
             setValue({
               name: newFile.name,
               size: newFile.size,
-              content: reader.result as ArrayBuffer,
+              content: buffer,
             });
           }
         };
@@ -100,17 +129,14 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   let allowedFileTypes = "";
 
   // Map itemFileTypes to match ALLOWED_FILE_TYPES format and create a string for the accept attribute
-  allowedFileTypes = itemFileTypes
-    .map((type) => {
-      const fileType = ALLOWED_FILE_TYPES.find((t) =>
-        Array.isArray(t.extensions) ? t.extensions.includes(type) : t.extensions === type
-      );
-      return fileType
-        ? [fileType.mime, ...fileType.extensions.map((ext: string) => `.${ext}`)].join(",")
-        : "";
-    })
-    .filter(Boolean)
-    .join(",");
+  const allowedFileTypesSet = new Set<string>();
+  itemFileTypes.forEach((type) => {
+    const fileTypeInfo = ALLOWED_FILE_TYPES.find((t) => t.extensions.includes(type));
+    if (fileTypeInfo) {
+      allowedFileTypesSet.add(fileTypeInfo.mime);
+      fileTypeInfo.extensions.forEach((ext) => allowedFileTypesSet.add(`.${ext}`));
+    }
+  });
 
   if (!allowedFileTypes) {
     // If no fileType is specified, use our default allowed file types

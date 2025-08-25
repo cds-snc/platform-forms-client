@@ -1,9 +1,9 @@
 import { PresignedPost } from "@aws-sdk/s3-presigned-post";
-import { Responses, FileInputResponse } from "@lib/types";
 import { v4 as uuid } from "uuid";
 import axios, { AxiosError, AxiosProgressEvent } from "axios";
-
+import { Responses, FileInputResponse, FileInput } from "@gcforms/types";
 import { FileUploadError } from "../client/exceptions";
+import { isMimeTypeValid } from "@gcforms/core";
 
 const isFileInput = (response: unknown): response is FileInput => {
   return (
@@ -27,12 +27,6 @@ export const isFileInputResponse = (response: unknown): response is FileInputRes
     "content" in response
   );
 };
-
-export interface FileInput extends FileInputResponse {
-  name: string;
-  size: number;
-  content: ArrayBuffer;
-}
 
 export const copyObjectExcludingFileContent = (
   originalObject: Responses,
@@ -79,8 +73,12 @@ export const uploadFile = async (
 ) => {
   const formData = new FormData();
 
-  // for debugging purposes, you can uncomment the following line to log the file details
-  // throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400);
+  // Check mime type
+  const validMime = await isMimeTypeValid(file.name, file.content, false);
+
+  if (!validMime) {
+    throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400, "mime");
+  }
 
   Object.entries(preSigned.fields ?? {}).forEach(([key, value]) => {
     formData.append(key, value);
