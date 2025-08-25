@@ -54,7 +54,7 @@ import {
   getFormElementIndexes,
 } from "./helpers/elements";
 import { transform } from "./helpers/elements/transformFormProperties";
-import { BetaComponentsError, checkForBetaComponents } from "./betaCheck";
+import { BetaComponentsError, checkForBetaComponents } from "../validation/betaCheck";
 import { useFeatureFlags } from "../hooks/useFeatureFlags";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { useTranslation } from "@root/i18n/client";

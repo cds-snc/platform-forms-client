@@ -13,7 +13,7 @@ import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { ga } from "@lib/client/clientHelpers";
 import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds";
 import { transformFormProperties } from "@lib/store/helpers/elements/transformFormProperties";
-import { BetaComponentsError, checkForBetaComponents } from "@lib/store/betaCheck";
+import { BetaComponentsError, checkForBetaComponents } from "@lib/validation/betaCheck";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const Start = () => {
