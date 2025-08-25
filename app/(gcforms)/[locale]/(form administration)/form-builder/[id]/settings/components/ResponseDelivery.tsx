@@ -200,7 +200,6 @@ export const ResponseDelivery = () => {
                 lang={lang}
                 isPublished={isPublished}
                 classification={classification}
-                disabled={hasApiKey}
                 handleUpdateClassification={handleUpdateClassification}
               />
             </div>
@@ -296,19 +295,13 @@ export const ResponseDelivery = () => {
                   <ApiDocNotes />
                 </div>
               )}
-              {deliveryOptionValue !== DeliveryOption.api && !hasApiKey && (
-                <>
-                  <Button
-                    // disabled={!isValid || isPublished}
-                    disabled={isPublished}
-                    theme="secondary"
-                    onClick={saveDeliveryOptions}
-                  >
-                    {t("settingsResponseDelivery.saveButton")}
-                  </Button>
-                  <ResponseDeliveryHelpButtonWithApi />
-                </>
-              )}
+
+              <>
+                <Button disabled={isPublished} theme="secondary" onClick={saveDeliveryOptions}>
+                  {t("settingsResponseDelivery.saveButton")}
+                </Button>
+                <ResponseDeliveryHelpButtonWithApi />
+              </>
             </div>
 
             {/*--------------------------------------------*
