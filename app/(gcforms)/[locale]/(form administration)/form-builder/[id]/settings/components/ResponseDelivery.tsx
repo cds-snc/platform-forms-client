@@ -103,23 +103,26 @@ export const ResponseDelivery = () => {
   /*--------------------------------------------*
    * Save security attribute
    *--------------------------------------------*/
-  const saveSecurityAttribute = useCallback(async () => {
-    updateSecurityAttribute(classification);
+  const saveSecurityAttribute = useCallback(
+    async (classification: ClassificationType) => {
+      updateSecurityAttribute(classification);
 
-    const resultAttribute = (await updateTemplateSecurityAttribute({
-      id,
-      securityAttribute: classification,
-    })) as FormServerError;
+      const resultAttribute = (await updateTemplateSecurityAttribute({
+        id,
+        securityAttribute: classification,
+      })) as FormServerError;
 
-    if (resultAttribute?.error) {
-      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
-      return;
-    }
+      if (resultAttribute?.error) {
+        toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
+        return;
+      }
 
-    toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
+      toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
-    refreshData && refreshData();
-  }, [t, refreshData, id, classification, updateSecurityAttribute]);
+      refreshData && refreshData();
+    },
+    [t, refreshData, id, updateSecurityAttribute]
+  );
 
   /*--------------------------------------------*
    * Save form purpose option
@@ -165,8 +168,9 @@ export const ResponseDelivery = () => {
         setDeliveryOptionValue(DeliveryOption.vault);
       }
       setClassification(value);
+      saveSecurityAttribute(value);
     },
-    [deliveryOptionValue]
+    [deliveryOptionValue, saveSecurityAttribute]
   );
 
   const handleDeleteApiKey = useCallback(() => {
@@ -196,17 +200,12 @@ export const ResponseDelivery = () => {
             <h2 className="mb-6">{t("settingsResponseDelivery.selectClassification")}</h2>
             <div className="mb-10">
               <ClassificationSelect
-                className="!mb-8 max-w-[400px] truncate bg-gray-soft p-1 pr-10"
+                className="max-w-[400px] truncate bg-gray-soft p-1 pr-10"
                 lang={lang}
                 isPublished={isPublished}
                 classification={classification}
                 handleUpdateClassification={handleUpdateClassification}
               />
-              <div>
-                <Button disabled={isPublished} theme="secondary" onClick={saveSecurityAttribute}>
-                  {t("settingsResponseDelivery.saveButton")}
-                </Button>
-              </div>
             </div>
             <div className="mb-10">
               <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
