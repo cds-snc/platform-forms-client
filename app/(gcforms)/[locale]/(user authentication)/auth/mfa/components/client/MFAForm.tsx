@@ -13,7 +13,7 @@ import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { Loader } from "@clientComponents/globals/Loader";
 import { useRouter } from "next/navigation";
-import { updateSessionProvider } from "@lib/hooks/auth/updateSessionProvider";
+import { useSession } from "next-auth/react";
 
 export const MFAForm = () => {
   const {
@@ -30,6 +30,7 @@ export const MFAForm = () => {
   const [isReady, setIsReady] = useState(false);
   const [isSubmittingStep1, setIsSubmittingStep1] = useState(false);
   const [isSubmittingStep2, setIsSubmittingStep2] = useState(false);
+  const { update: sessionUpdate } = useSession();
 
   const authToken = useRef<{ email?: string; authenticationFlowToken?: string }>({});
 
@@ -52,7 +53,7 @@ export const MFAForm = () => {
     if (mfaState.success) {
       setIsSubmittingStep2(true);
       // Let the Session Provider know that the user has been authenticated
-      updateSessionProvider();
+      sessionUpdate();
       sessionStorage.removeItem("authFlowToken");
       const result = await getRedirectPath(language);
       if (result.callback) router.push(result.callback);

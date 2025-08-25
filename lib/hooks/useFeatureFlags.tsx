@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 
 const FeatureFlagsContext = createContext({
   flags: {} as Flags,
-  getFlag: () => {},
+  update: async () => {},
 });
 
 export const FeatureFlagsProvider = ({
@@ -17,7 +17,7 @@ export const FeatureFlagsProvider = ({
   featureFlags: Flags;
 }) => {
   const { data: session } = useSession();
-  const [flags] = useState(featureFlags);
+  const [flags, setFlags] = useState(featureFlags);
 
   const userFlags: string[] = session?.user?.featureFlags ?? [];
   // Loop through flags and set them to true if they are in the user's feature flags
@@ -27,18 +27,28 @@ export const FeatureFlagsProvider = ({
     }
   });
 
+  const update = async () => {
+    // Required beause Cypress Component tests cannot handle server side actions
+    if (process.env.NEXT_PUBLIC_APP_ENV !== "test") {
+      await import("./useFeatureFlagsActions").then(({ getFlags }) =>
+        getFlags().then((flags) => setFlags(flags))
+      );
+    }
+  };
+
   return (
-    <FeatureFlagsContext.Provider value={{ flags, getFlag: () => {} }}>
+    <FeatureFlagsContext.Provider value={{ flags, update }}>
       {children}
     </FeatureFlagsContext.Provider>
   );
 };
 
 export const useFeatureFlags = () => {
-  const { flags } = useContext(FeatureFlagsContext);
+  const { flags, update } = useContext(FeatureFlagsContext);
   return {
     getFlag: (key: string) => {
       return flags[key as keyof typeof flags];
     },
+    update,
   };
 };

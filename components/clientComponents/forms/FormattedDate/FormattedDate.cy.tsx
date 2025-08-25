@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import { FormattedDate } from "./FormattedDate";
+import { DateFormat } from "./types";
 
 describe("<FormattedDate />", () => {
   it("mounts", () => {
@@ -106,7 +107,7 @@ describe("<FormattedDate />", () => {
           throw new Error("Function not implemented.");
         }}
       >
-        <FormattedDate name="formattedDate" dateFormat="XXXX-XX-XX" />
+        <FormattedDate name="formattedDate" dateFormat={"XXXX-XX-XX" as unknown as DateFormat} />
       </Formik>
     );
 

@@ -54,8 +54,20 @@ import {
   getFormElementIndexes,
 } from "./helpers/elements";
 import { transform } from "./helpers/elements/transformFormProperties";
+import { BetaComponentsError, checkForBetaComponents } from "./betaCheck";
+import { useFeatureFlags } from "../hooks/useFeatureFlags";
+import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
+import { useTranslation } from "@root/i18n/client";
 
-const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
+const createTemplateStore = (
+  checkFeatureFlag: (flag: string) => boolean,
+  initProps?: Partial<InitialTemplateStoreProps>
+) => {
+  // If form elements are passed in check to see if they contain beta elements
+  if (initProps?.form?.elements) {
+    checkForBetaComponents(initProps.form.elements, checkFeatureFlag);
+  }
+
   const props = initStore(initProps);
   return createStore<TemplateStoreState>()(
     immer(
@@ -167,21 +179,32 @@ export const TemplateStoreProvider = ({
   ...props
 }: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
   const storeRef = useRef<TemplateStore>(null);
-  if (!storeRef.current) {
-    // When there is an incoming form with a different id clear it first
-    if (props.id) {
-      clearTemplateStorage(props.id);
-    }
-    storeRef.current = createTemplateStore(props);
-  }
+  const { getFlag } = useFeatureFlags();
 
-  return (
-    <TemplateStoreContext.Provider value={storeRef.current}>
-      <FlowRefProvider>
-        <TreeRefProvider>{children}</TreeRefProvider>
-      </FlowRefProvider>
-    </TemplateStoreContext.Provider>
-  );
+  const { t } = useTranslation("form-builder");
+  try {
+    if (!storeRef.current) {
+      // When there is an incoming form with a different id clear it first
+      if (props.id) {
+        clearTemplateStorage(props.id);
+      }
+      storeRef.current = createTemplateStore(getFlag, props);
+    }
+
+    return (
+      <TemplateStoreContext.Provider value={storeRef.current}>
+        <FlowRefProvider>
+          <TreeRefProvider>{children}</TreeRefProvider>
+        </FlowRefProvider>
+      </TemplateStoreContext.Provider>
+    );
+  } catch (e) {
+    if (e instanceof BetaComponentsError) {
+      return <ErrorPanel>{t("beta.loadingError")}</ErrorPanel>;
+    } else {
+      throw e;
+    }
+  }
 };
 
 export const useTemplateStore = <T,>(
