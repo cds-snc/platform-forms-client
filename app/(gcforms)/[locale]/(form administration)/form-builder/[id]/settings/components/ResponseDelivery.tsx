@@ -298,8 +298,9 @@ export const ResponseDelivery = () => {
                   <ApiDocNotes />
                 </div>
               )}
-
-              <ResponseDeliveryHelpButtonWithApi />
+              <div>
+                <ResponseDeliveryHelpButtonWithApi />
+              </div>
             </div>
 
             {/*--------------------------------------------*
