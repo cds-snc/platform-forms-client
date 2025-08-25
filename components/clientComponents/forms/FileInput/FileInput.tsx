@@ -41,9 +41,9 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
   const [fileName, setFileName] = useState(value?.name);
   const [fileSize, setFileSize] = useState<{
-    size: number;
+    size: number | string;
     unit: "bytes" | "KB" | "MB";
-  }>(bytesToKbOrMbString(value?.size));
+  }>(bytesToKbOrMbString(value?.size, lang));
 
   const resetInput = () => {
     announce(t("fileInput.removedMessage", { fileName }));
@@ -109,7 +109,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
             announce(t("fileInput.addedMessage", { fileName: newFile.name }));
 
-            setFileSize(bytesToKbOrMbString(newFile.size));
+            setFileSize(bytesToKbOrMbString(newFile.size, lang));
 
             setValue({
               name: newFile.name,
