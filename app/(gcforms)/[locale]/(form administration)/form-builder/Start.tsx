@@ -110,9 +110,11 @@ export const Start = () => {
       <div role="alert">
         {errors && (
           <div className="m-auto mb-8 flex w-5/12 bg-red-100 p-6">
-            <WarningIcon />
             <div>
-              <h3 className="mb-2 ml-6 mt-1">{t("failedToReadFormFile")}</h3>
+              <WarningIcon className="mt-1" />
+            </div>
+            <div>
+              <h3 className="mb-2 ml-6">{t("failedToReadFormFile")}</h3>
               <ul className="mb-4 list-none pl-6">
                 {errors.map((error, index) => {
                   return (
