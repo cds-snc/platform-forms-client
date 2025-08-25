@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [1.0.2] - 2025-08-25
+## [1.0.3] - 2025-08-25
 
 - Update to add more helpers
 
