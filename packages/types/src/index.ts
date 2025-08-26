@@ -22,6 +22,7 @@ import {
   SortOption,
   NotificationsInterval,
   NotificationsIntervalDefault,
+  BetaFormElementTypes,
   DateFormat,
   DateObject,
   DatePart,
@@ -55,6 +56,7 @@ export { FormElementTypes };
 export { FormStatus };
 export { NotificationsInterval };
 export { NotificationsIntervalDefault };
+export { BetaFormElementTypes };
 export type { DateFormat, DateObject, DatePart };
 export type { GroupsType };
 export type { FormValues };
