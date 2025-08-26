@@ -293,7 +293,7 @@ export const ResponseDelivery = () => {
 
               {deliveryOptionValue === DeliveryOption.api && (
                 <div>
-                  <DeleteKeyToChangeOptionsNote hasApiKey={hasApiKey} />
+                  <DeleteKeyToChangeOptionsNote hasApiKey={hasApiKey} isPublished={isPublished} />
                   <ApiKeyButton showDelete classification={classification} />
                   <ApiDocNotes />
                 </div>
