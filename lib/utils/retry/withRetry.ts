@@ -15,7 +15,7 @@ export interface RetryOptions {
   baseDelay?: number;
   maxDelay?: number;
   onRetry?: (attempt: number, error: unknown) => void;
-  shouldRetry?: (error: unknown) => boolean;
+  isRetryable?: (error: unknown) => boolean;
   onFinalFailure?: (error: unknown, totalAttempts: number) => void;
 }
 
@@ -31,7 +31,7 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
     baseDelay = 1000,
     maxDelay = 10000,
     onRetry,
-    shouldRetry = () => true,
+    isRetryable: isRetryable = () => true,
     onFinalFailure,
   } = options;
 
@@ -44,7 +44,7 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
     } catch (error) {
       lastError = error;
 
-      if (attempt === maxRetries || !shouldRetry(error)) {
+      if (attempt === maxRetries || !isRetryable(error)) {
         // Call the final failure callback if provided
         if (onFinalFailure) {
           onFinalFailure(error, attempt);

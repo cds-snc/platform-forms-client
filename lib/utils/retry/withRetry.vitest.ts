@@ -92,7 +92,7 @@ describe("withRetry", () => {
 
     const shouldRetry = vi.fn().mockReturnValue(false);
 
-    await expect(withRetry(mockFn, { shouldRetry })).rejects.toThrow("non-retryable");
+    await expect(withRetry(mockFn, { isRetryable: shouldRetry })).rejects.toThrow("non-retryable");
     expect(mockFn).toHaveBeenCalledTimes(1);
     expect(shouldRetry).toHaveBeenCalledWith(error);
   });

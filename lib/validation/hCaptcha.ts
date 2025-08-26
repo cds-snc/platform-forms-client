@@ -54,7 +54,7 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
           `hCaptcha: ${totalAttempts} retry attempts failed, preventing submission. Final error: ${error}`
         );
       },
-      shouldRetry: (error) => {
+      isRetryable: (error) => {
         const err = error as { response?: { status?: number } };
         // Retry on network errors or 5xx server errors, but not on 4xx client errors
         return !err.response || (err.response.status !== undefined && err.response.status >= 500);
