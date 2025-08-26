@@ -1,12 +1,11 @@
 "use client";
 
 import { Flags } from "@lib/cache/types";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 const FeatureFlagsContext = createContext({
   flags: {} as Flags,
-  update: async () => {},
 });
 
 export const FeatureFlagsProvider = ({
@@ -17,38 +16,40 @@ export const FeatureFlagsProvider = ({
   featureFlags: Flags;
 }) => {
   const { data: session } = useSession();
-  const [flags, setFlags] = useState(featureFlags);
+  // Do initial merge of user and global flags
+  const [flags, setFlags] = useState(() => {
+    const userFlags: string[] = session?.user?.featureFlags ?? [];
+    // Loop through flags and set them to true if they are in the user's feature flags
+    const userOverriddenFlags: Partial<Flags> = {};
+    userFlags.forEach((flag) => {
+      userOverriddenFlags[flag as keyof typeof flags] = true;
+    });
 
-  const userFlags: string[] = session?.user?.featureFlags ?? [];
-  // Loop through flags and set them to true if they are in the user's feature flags
-  Object.keys(flags).forEach((key) => {
-    if (userFlags.includes(key)) {
-      flags[key as keyof typeof flags] = true;
-    }
+    return { ...featureFlags, ...userOverriddenFlags };
   });
 
-  const update = async () => {
-    // Required beause Cypress Component tests cannot handle server side actions
-    if (process.env.NEXT_PUBLIC_APP_ENV !== "test") {
-      await import("./useFeatureFlagsActions").then(({ getFlags }) =>
-        getFlags().then((flags) => setFlags(flags))
-      );
-    }
-  };
+  // If flags are changed on the session then ensure they are synced with state
+  useEffect(() => {
+    setFlags((prevFlags) => {
+      const userFlags: string[] = session?.user?.featureFlags ?? [];
+      // Loop through flags and set them to true if they are in the user's feature flags
+      const userOverriddenFlags: Partial<Flags> = {};
+      userFlags.forEach((flag) => {
+        userOverriddenFlags[flag as keyof typeof flags] = true;
+      });
 
-  return (
-    <FeatureFlagsContext.Provider value={{ flags, update }}>
-      {children}
-    </FeatureFlagsContext.Provider>
-  );
+      return { ...prevFlags, ...userOverriddenFlags };
+    });
+  }, [session]);
+
+  return <FeatureFlagsContext.Provider value={{ flags }}>{children}</FeatureFlagsContext.Provider>;
 };
 
 export const useFeatureFlags = () => {
-  const { flags, update } = useContext(FeatureFlagsContext);
+  const { flags } = useContext(FeatureFlagsContext);
   return {
     getFlag: (key: string) => {
       return flags[key as keyof typeof flags];
     },
-    update,
   };
 };

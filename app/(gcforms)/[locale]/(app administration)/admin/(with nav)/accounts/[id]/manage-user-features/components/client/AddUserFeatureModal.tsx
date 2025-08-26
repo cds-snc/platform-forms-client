@@ -6,7 +6,6 @@ import { AppUser } from "@lib/types/user-types";
 import { setUserFlags } from "../../actions";
 import { useSession } from "next-auth/react";
 import { UserFeatureFlags, UserFeatureFlagKeys } from "@lib/cache/types";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const AddUserFeatureModal = ({
   formUser,
@@ -21,7 +20,6 @@ export const AddUserFeatureModal = ({
   const [showModal, setShowModal] = useState(false);
   const [selectedFlags, setSelectedFlags] = useState<string[]>([]);
   const { update: updateSession } = useSession();
-  const { update: updateFlags } = useFeatureFlags();
 
   // Filter the list of flags to only include user level feature flags
   const availableFeatureFlags = flags.filter((flag) =>
@@ -39,7 +37,6 @@ export const AddUserFeatureModal = ({
     setShowModal(false);
     setSelectedFlags([]);
     await updateSession();
-    await updateFlags();
   };
 
   const handleCancel = () => {
