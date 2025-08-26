@@ -1,22 +1,24 @@
 "use client";
 import React, { createContext, useContext, ReactNode } from "react";
 
+import { type FormValues, type GroupsType, type PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
-import { type PublicFormRecord } from "@lib/types";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
 
 import {
-  mapIdsToValues,
-  FormValues,
-  idArraysMatch,
-  GroupsType,
   getNextAction,
   filterShownElements,
   filterValuesByShownElements,
-  getVisibleGroupsBasedOnValuesRecursive,
-  getValuesWithMatchedIds,
+  idArraysMatch,
 } from "@lib/formContext";
+
+import {
+  mapIdsToValues,
+  getValuesWithMatchedIds,
+  getVisibleGroupsBasedOnValuesRecursive,
+} from "@gcforms/core";
+
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import {
   getGroupHistory as _getGroupHistory,
