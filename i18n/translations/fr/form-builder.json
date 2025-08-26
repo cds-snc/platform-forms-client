@@ -686,7 +686,7 @@
   },
   "required": "obligatoire",
   "responseDelivery": "Tester la réception des réponses",
-  "richText": "Texte",
+  "richText": "Texte de page",
   "richTextConfirmationTitle": "Message de confirmation",
   "richTextEditor": "Éditeur de texte enrichi",
   "richTextIntroTitle": "Introduction au formulaire",
