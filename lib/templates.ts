@@ -155,7 +155,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
     throw e;
   });
 
-  checkForBetaComponentsAsync(command.formConfig.elements, checkFlag);
+  await checkForBetaComponentsAsync(command.formConfig.elements, checkFlag);
 
   const validationResult = validateTemplate(command.formConfig);
 
