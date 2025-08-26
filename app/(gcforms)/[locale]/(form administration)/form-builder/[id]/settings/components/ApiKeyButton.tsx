@@ -51,6 +51,7 @@ export const ApiKeyButton = ({
         <>
           <GenerateApiKeyButton
             loading={false}
+            className="mr-2"
             theme={theme}
             disabled={Boolean(apiKeyId)}
             onClick={() => {
