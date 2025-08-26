@@ -2768,6 +2768,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@headless-tree/core@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@headless-tree/core@npm:1.4.0"
+  checksum: 10c0/c1cf19246729d3959473fca9d056fbf1c0bda9b17bc38cace5aefe1dc1697ffa7f27e069d51d434c2c2a1e26b44ec6f144a3e2063186b78271844888f2183ab3
+  languageName: node
+  linkType: hard
+
+"@headless-tree/react@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@headless-tree/react@npm:1.4.0"
+  peerDependencies:
+    "@headless-tree/core": "*"
+    react: "*"
+    react-dom: "*"
+  checksum: 10c0/769e4f378fb9301d950c0fd383036416e2600edb855dd4c68eb36c5e1a8bb83bd21e28cf4d822b68b446da13821a08e10d70290050c0796ccdc8c21fa6aa9bbe
+  languageName: node
+  linkType: hard
+
 "@headlessui/react@npm:^2.2.0":
   version: 2.2.7
   resolution: "@headlessui/react@npm:2.2.7"
@@ -13185,6 +13203,8 @@ __metadata:
     "@gcforms/types": "workspace:*"
     "@hcaptcha/react-hcaptcha": "npm:^1.12.0"
     "@hcaptcha/types": "npm:^1.0.4"
+    "@headless-tree/core": "npm:^1.4.0"
+    "@headless-tree/react": "npm:^1.4.0"
     "@headlessui/react": "npm:^2.2.0"
     "@jest/globals": "npm:^29.7.0"
     "@neshca/cache-handler": "npm:^1.2.1"
