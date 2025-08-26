@@ -28,6 +28,7 @@ import {
   GroupsType,
   FormValues,
   FileInput,
+  NextActionRule,
 } from "./form-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
@@ -41,6 +42,7 @@ export type { BrandProperties };
 export type { DeliveryOption };
 export type { ConditionalRule };
 export type { ChoiceRule };
+export type { NextActionRule };
 export type { FormRecord };
 export type { SecurityAttribute };
 export type { FormPurpose };

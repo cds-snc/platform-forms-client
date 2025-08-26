@@ -1,11 +1,10 @@
 import { useRef } from "react";
 
 import { type Language } from "@lib/types/form-builder-types";
-import {
-  getValuesWithMatchedIds,
-  getVisibleGroupsBasedOnValuesRecursive,
-  type FormValues,
-} from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
+
+import { getValuesWithMatchedIds, getVisibleGroupsBasedOnValuesRecursive } from "@gcforms/core";
+
 import { type Theme } from "@clientComponents/globals/Buttons/themes";
 import { useTranslation } from "@i18n/client";
 
