@@ -233,7 +233,9 @@ const {
       // Only permit the updating of certain properties
 
       if (trigger === "update" && session) {
-        logMessage.debug(`Client Side Session update recieved for user ${token.email}`);
+        logMessage.debug(
+          `Client Side Session update recieved for user ${token.email} with ${JSON.stringify(session)}`
+        );
         token = {
           ...token,
           acceptableUse: session.user.acceptableUse,

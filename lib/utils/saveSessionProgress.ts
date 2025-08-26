@@ -1,6 +1,6 @@
 import { type Language } from "@lib/types/form-builder-types";
 import { FormProperties } from "@gcforms/types";
-import { type FormValues } from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
 import { toggleSavedValues } from "@i18n/toggleSavedValues";
 
 export const SESSION_STORAGE_KEY = "form-data";
