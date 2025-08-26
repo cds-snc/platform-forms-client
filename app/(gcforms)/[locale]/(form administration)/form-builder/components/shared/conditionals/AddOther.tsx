@@ -8,7 +8,7 @@ import { FormElementTypes } from "@lib/types";
 import { getTranslatedProperties } from "../../../actions";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { BoltIcon } from "@serverComponents/icons";
-import { ChoiceRule } from "@lib/formContext";
+import { type ChoiceRule } from "@gcforms/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const AddOther = ({
