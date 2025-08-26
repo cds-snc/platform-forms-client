@@ -44,7 +44,7 @@
     "cypress": "cypress open",
     "cypress:run": "CYPRESS_DEBUG=true cypress run --browser chrome",
     "cypress:e2e": "cypress run --browser chrome --e2e",
-    "cypress:component": "cypress run --browser chrome --component",
+    "cypress:component": "NEXT_PUBLIC_APP_ENV=test cypress run --browser chrome --component",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
   },
   "dependencies": {
@@ -170,7 +170,7 @@
     "babel-plugin-transform-require-context": "^0.1.1",
     "css-loader": "^6.8.1",
     "cssnano": "^5.1.15",
-    "cypress": "^13.17.0",
+    "cypress": "14.5.4",
     "cypress-axe": "^1.6.0",
     "cypress-each": "^1.14.0",
     "cypress-plugin-tab": "^1.0.5",
