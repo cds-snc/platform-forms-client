@@ -22,6 +22,7 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
     maxDelay = 10000,
     onRetry,
     shouldRetry = () => true,
+    onFinalFailure,
   } = options;
 
   let lastError: unknown;
@@ -34,6 +35,10 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
       lastError = error;
 
       if (attempt === maxRetries || !shouldRetry(error)) {
+        // Call the final failure callback if provided
+        if (onFinalFailure) {
+          onFinalFailure(error, attempt);
+        }
         throw error;
       }
 
@@ -68,13 +73,6 @@ export async function withRetryFallback<T>(
   try {
     return await withRetry(fn, options);
   } catch (error) {
-    const { maxRetries = 3, onFinalFailure } = options;
-
-    // Call the final failure callback if provided
-    if (onFinalFailure) {
-      onFinalFailure(error, maxRetries);
-    }
-
     // All retry attempts failed, return fallback value
     return fallbackValue;
   }
