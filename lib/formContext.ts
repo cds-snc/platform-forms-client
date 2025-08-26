@@ -1,4 +1,4 @@
-import { FormElement, FormRecord, PublicFormRecord, Response, Responses } from "@lib/types";
+import { FormElement, FormRecord, PublicFormRecord, Response } from "@lib/types";
 import { ConditionalRule } from "@lib/types";
 
 import {
@@ -316,6 +316,26 @@ export const filterShownElements = (
   });
 };
 
+export const filterValuesByVisibleElements = (
+  formRecord: FormRecord | PublicFormRecord,
+  values: FormValues
+) => {
+  const shownElements = filterShownElements(formRecord, values);
+  if (!shownElements || shownElements.length === 0) {
+    return values;
+  }
+
+  const filteredValues: { [key: string]: Response } = {};
+  Object.keys(values).forEach((key) => {
+    if (shownElements.find((el) => el.id === Number(key))) {
+      // Note: want to keep original value type (e.g. Checkbox=Array) or Formik may get confused
+      filteredValues[key] = values[key];
+    }
+  });
+
+  return filteredValues;
+};
+
 export const filterValuesForShownElements = (elements: string[], elementsShown: FormElement[]) => {
   if (!Array.isArray(elements) || !Array.isArray(elementsShown)) {
     return elements;
@@ -328,24 +348,6 @@ export const getElementIdsAsNumber = (elements: string[]) => {
     return [];
   }
   return elements.map((element) => Number(element));
-};
-
-// TODO: rename to filterResponsesByShownElements
-export const filterValuesByShownElements = (values: Responses, elementsShown: FormElement[]) => {
-  if (!values || !Array.isArray(elementsShown)) {
-    return values;
-  }
-  const filteredValues: { [key: string]: Response } = {};
-  Object.keys(values).forEach((key) => {
-    if (elementsShown.find((el) => el.id === Number(key))) {
-      // Note: want to keep original value type (e.g. Checkbox=Array) or Formik may get confused
-      filteredValues[key] = values[key];
-    } else {
-      filteredValues[key] = Array.isArray(values[key]) ? [] : "";
-    }
-  });
-
-  return filteredValues;
 };
 
 // const nextBasedOnValues = (nextActions: Group["nextAction"], values: FormValues) => {
