@@ -99,8 +99,8 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
       ? "top-30"
       : "top-10"
     : isIntersecting
-    ? "top-20"
-    : "top-0";
+      ? "top-20"
+      : "top-0";
 
   // Observe if the header is offscreen
   // Used to determine the position of the right panel button "toggle" button
