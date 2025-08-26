@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { ConditionalRule, FormElement } from "@lib/types";
-import { inGroup, checkVisibilityRecursive } from "@lib/formContext";
+import { type ConditionalRule, type FormElement } from "@gcforms/types";
+import { inGroup, checkVisibilityRecursive } from "@gcforms/core";
 
 export const ConditionalWrapper = ({
   children,

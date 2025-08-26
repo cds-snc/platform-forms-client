@@ -101,25 +101,28 @@ export const ResponseDelivery = () => {
   const [purposeOption, setPurposeOption] = useState(formPurpose as PurposeOption);
 
   /*--------------------------------------------*
-   * Save Delivery Option
+   * Save security attribute
    *--------------------------------------------*/
-  const saveDeliveryOptions = useCallback(async () => {
-    updateSecurityAttribute(classification);
+  const saveSecurityAttribute = useCallback(
+    async (classification: ClassificationType) => {
+      updateSecurityAttribute(classification);
 
-    const resultAttribute = (await updateTemplateSecurityAttribute({
-      id,
-      securityAttribute: classification,
-    })) as FormServerError;
+      const resultAttribute = (await updateTemplateSecurityAttribute({
+        id,
+        securityAttribute: classification,
+      })) as FormServerError;
 
-    if (resultAttribute?.error) {
-      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
-      return;
-    }
+      if (resultAttribute?.error) {
+        toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
+        return;
+      }
 
-    toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
+      toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
-    refreshData && refreshData();
-  }, [t, refreshData, id, classification, updateSecurityAttribute]);
+      refreshData && refreshData();
+    },
+    [t, refreshData, id, updateSecurityAttribute]
+  );
 
   /*--------------------------------------------*
    * Save form purpose option
@@ -165,8 +168,9 @@ export const ResponseDelivery = () => {
         setDeliveryOptionValue(DeliveryOption.vault);
       }
       setClassification(value);
+      saveSecurityAttribute(value);
     },
-    [deliveryOptionValue]
+    [deliveryOptionValue, saveSecurityAttribute]
   );
 
   const handleDeleteApiKey = useCallback(() => {
@@ -200,11 +204,9 @@ export const ResponseDelivery = () => {
                 lang={lang}
                 isPublished={isPublished}
                 classification={classification}
-                disabled={hasApiKey}
                 handleUpdateClassification={handleUpdateClassification}
               />
             </div>
-
             <div className="mb-10">
               <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
 
@@ -291,24 +293,14 @@ export const ResponseDelivery = () => {
 
               {deliveryOptionValue === DeliveryOption.api && (
                 <div>
-                  <DeleteKeyToChangeOptionsNote hasApiKey={hasApiKey} />
+                  <DeleteKeyToChangeOptionsNote hasApiKey={hasApiKey} isPublished={isPublished} />
                   <ApiKeyButton showDelete classification={classification} />
                   <ApiDocNotes />
                 </div>
               )}
-              {deliveryOptionValue !== DeliveryOption.api && !hasApiKey && (
-                <>
-                  <Button
-                    // disabled={!isValid || isPublished}
-                    disabled={isPublished}
-                    theme="secondary"
-                    onClick={saveDeliveryOptions}
-                  >
-                    {t("settingsResponseDelivery.saveButton")}
-                  </Button>
-                  <ResponseDeliveryHelpButtonWithApi />
-                </>
-              )}
+              <div>
+                <ResponseDeliveryHelpButtonWithApi />
+              </div>
             </div>
 
             {/*--------------------------------------------*
