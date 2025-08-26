@@ -1,3 +1,6 @@
+import { type GroupsType, type FormElement } from "@gcforms/types";
+import { groupsToTreeData, type TreeDataOptions } from "../treeview/util/groupsToTreeData";
+
 export type DemoItem = {
   name: string;
   children?: string[];
@@ -75,6 +78,14 @@ export const data: Record<string, DemoItem> = {
   juice: { name: "Juice" },
   beer: { name: "Beer" },
   wine: { name: "Wine" },
+};
+
+export const getData = (
+  formGroups: GroupsType,
+  elements: FormElement[],
+  options: TreeDataOptions = {}
+) => {
+  return groupsToTreeData(formGroups, elements, options);
 };
 
 const wait = (ms: number) =>

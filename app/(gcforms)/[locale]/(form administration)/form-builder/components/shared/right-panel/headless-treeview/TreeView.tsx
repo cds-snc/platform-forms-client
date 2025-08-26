@@ -2,36 +2,58 @@
  * Note this is a work in progress to move the tree view to a more accessible implementation.
  */
 
+import { TreeItem } from "react-complex-tree";
+
 import "./style.css";
 import {
-  asyncDataLoaderFeature,
+  syncDataLoaderFeature,
   createOnDropHandler,
   dragAndDropFeature,
   hotkeysCoreFeature,
   keyboardDragAndDropFeature,
   selectionFeature,
 } from "@headless-tree/core";
-import { DemoItem, asyncDataLoader, data } from "./data";
+import { data } from "./data";
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
 import { cn } from "@lib/utils";
 
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+
 export const TreeView = ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
-  const tree = useTree<DemoItem>({
+  const getTreeData = useGroupStore((s) => s.getTreeData);
+  const items = getTreeData({
+    addIntroElement: true,
+    addPolicyElement: true,
+    addConfirmationElement: true,
+    addSectionTitleElements: false,
+    reviewGroup: false,
+  });
+
+  const tree = useTree<TreeItem>({
     initialState: {
       expandedItems: ["fruit"],
       selectedItems: ["banana", "orange"],
     },
     rootItemId: "root",
-    getItemName: (item) => item.getItemData()?.name,
+    getItemName: (item) => {
+      // Todo: update to use lang
+      return item.getItemData()?.data.titleEn;
+    },
     isItemFolder: (item) => !!item.getItemData()?.children,
     canReorder: true,
     onDrop: createOnDropHandler((item, newChildren) => {
       data[item.getId()].children = newChildren;
     }),
     indent: 20,
-    dataLoader: asyncDataLoader,
+    dataLoader: {
+      getItem: (itemId: string) => items[itemId],
+      getChildren: (itemId: string): string[] => {
+        const children = items[itemId]?.children;
+        return children && children.length > 0 ? (children as string[]) : [];
+      },
+    },
     features: [
-      asyncDataLoaderFeature,
+      syncDataLoaderFeature,
       selectionFeature,
       hotkeysCoreFeature,
       dragAndDropFeature,
