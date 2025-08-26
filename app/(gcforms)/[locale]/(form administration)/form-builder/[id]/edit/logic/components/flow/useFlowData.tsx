@@ -4,7 +4,8 @@ import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Group, GroupsType, NextActionRule } from "@lib/formContext";
+import { Group, GroupsType } from "@gcforms/types";
+import { type NextActionRule } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getReviewNode, getStartElements, getEndNode } from "@lib/utils/form-builder/i18nHelpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";

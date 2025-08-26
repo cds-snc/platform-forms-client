@@ -16,7 +16,7 @@ import { useGroupStore } from "./store/useGroupStore";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
 import { findParentGroup } from "./util/findParentGroup";
-import { GroupsType } from "@lib/formContext";
+import { type GroupsType } from "@gcforms/types";
 import { Item } from "./Item";
 import { SubItem } from "./SubItem";
 import { autoFlowGroupNextActions } from "./util/setNextAction";

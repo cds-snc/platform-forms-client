@@ -1,6 +1,6 @@
 import { type TemplateStore } from "../../types";
-import { FormElement, FormProperties } from "@gcforms/types";
-import { cleanRules } from "@lib/formContext";
+import { type FormElement, type FormProperties } from "@gcforms/types";
+import { cleanRules } from "@gcforms/core";
 import { logMessage } from "@lib/logger";
 import { v4 as uuid } from "uuid";
 

@@ -1,6 +1,5 @@
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
-import { GroupsType } from "@lib/formContext";
-import { Responses } from "@lib/types";
+import { type GroupsType, type Responses } from "@gcforms/types";
 
 export const getGroupHistory = (history: string[]) => {
   if (!Array.isArray(history)) return [LockedSections.START];

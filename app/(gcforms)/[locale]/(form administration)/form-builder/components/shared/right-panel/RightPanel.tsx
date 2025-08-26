@@ -2,7 +2,15 @@
 
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Transition, Tab } from "@headlessui/react";
+import {
+  Transition,
+  Tab,
+  TabGroup,
+  TabPanels,
+  TabPanel,
+  TabList,
+  TransitionChild,
+} from "@headlessui/react";
 import { useTranslation } from "@i18n/client";
 import { CircleButton } from "@clientComponents/globals/Buttons/CircleButton";
 
@@ -99,8 +107,8 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
       ? "top-30"
       : "top-10"
     : isIntersecting
-    ? "top-20"
-    : "top-0";
+      ? "top-20"
+      : "top-0";
 
   // Observe if the header is offscreen
   // Used to determine the position of the right panel button "toggle" button
@@ -146,10 +154,10 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
           </CircleButton>
         </div>
       </div>
-      <Transition.Root show={open} as={Fragment}>
+      <Transition show={open} as={Fragment}>
         <div className="sticky top-0">
           <div className="flex">
-            <Transition.Child
+            <TransitionChild
               as={Fragment}
               enter="transform transition ease-in-out duration-500"
               enterFrom="translate-x-full"
@@ -182,8 +190,8 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                   </div>
                   {/* Panel Header --> */}
                   {/* <-- Tabs */}
-                  <Tab.Group selectedIndex={selectedIndex}>
-                    <Tab.List className={"flex justify-between border-b border-gray-200"}>
+                  <TabGroup selectedIndex={selectedIndex}>
+                    <TabList className={"flex justify-between border-b border-gray-200"}>
                       <TabButton
                         text={t("rightPanel.pages")}
                         onClick={() => {
@@ -204,9 +212,9 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                           router.push(`/${i18n.language}/form-builder/${id}/edit/logic`);
                         }}
                       />
-                    </Tab.List>
-                    <Tab.Panels>
-                      <Tab.Panel>
+                    </TabList>
+                    <TabPanels>
+                      <TabPanel>
                         {/* Tree */}
                         <SkipLinkReusable anchor="#pagesTitle">
                           {t("skipLink.pages")}
@@ -224,8 +232,8 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                           />
                         </div>
                         {/* end tree */}
-                      </Tab.Panel>
-                      <Tab.Panel>
+                      </TabPanel>
+                      <TabPanel>
                         {/* Translate */}
                         <SkipLinkReusable anchor="#editTranslationsHeading">
                           {t("skipLink.translate")}
@@ -234,8 +242,8 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                           <DownloadCSVWithGroups />
                         </div>
                         {/* End translate */}
-                      </Tab.Panel>
-                      <Tab.Panel>
+                      </TabPanel>
+                      <TabPanel>
                         {/* Logic */}
                         <SkipLinkReusable anchor="#logicTitle">
                           {t("skipLink.logic")}
@@ -246,16 +254,16 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                           )}
                         </div>
                         {/* end logic */}
-                      </Tab.Panel>
-                    </Tab.Panels>
-                  </Tab.Group>
+                      </TabPanel>
+                    </TabPanels>
+                  </TabGroup>
                   {/* --> */}
                 </div>
               </div>
-            </Transition.Child>
+            </TransitionChild>
           </div>
         </div>
-      </Transition.Root>
+      </Transition>
     </section>
   );
 };

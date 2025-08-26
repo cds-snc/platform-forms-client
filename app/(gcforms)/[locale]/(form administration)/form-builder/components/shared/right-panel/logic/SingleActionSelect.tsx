@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { GroupsType } from "@lib/formContext";
+import { type GroupsType } from "@gcforms/types";
 import { GroupSelect } from "./GroupSelect";
 import { Button } from "@clientComponents/globals";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";

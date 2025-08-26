@@ -735,6 +735,14 @@ export const authorization = {
       },
     ]);
   },
+  canAccessBetaComponents: async (flag: string) => {
+    const session = await auth();
+    const userFeatureFlags = session?.user.featureFlags;
+    if (!userFeatureFlags || userFeatureFlags.length < 1) {
+      return false;
+    }
+    return userFeatureFlags.includes(flag);
+  },
   unauthorizedRedirect: async () => {
     const language = await getCurrentLanguage();
     redirect(`/${language}/unauthorized`);
