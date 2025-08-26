@@ -1,8 +1,7 @@
 import axios from "axios";
 import { getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
-import { withRetryFallback } from "../utils/retry";
-import { recordFailure } from "../utils/retry/failureTracker";
+import { withRetry } from "../utils/retry";
 
 /**
  * Verifies the client hCaptcha token is valid using the hCaptcha API
@@ -30,7 +29,7 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
 
   const hCaptchaApiUrl = "https://api.hcaptcha.com/siteverify";
 
-  const result = await withRetryFallback(
+  const result = await withRetry(
     async () => {
       return axios({
         url: hCaptchaApiUrl,
@@ -40,9 +39,10 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
         },
         data,
         timeout: 5000,
+      }).catch((error) => {
+        throw new Error(`hCaptcha: ${error.message}`);
       });
     },
-    null, // fallback value if all retries fail
     {
       maxRetries: 3,
       onRetry: (attempt, error) => {
@@ -50,14 +50,9 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
       },
       onFinalFailure: async (error, totalAttempts) => {
         // Log comprehensive failure information
-        logMessage.warn(
-          `hCaptcha: ${totalAttempts} retry attempts failed, allowing submission. Final error: ${error}`
+        logMessage.info(
+          `hCaptcha: ${totalAttempts} retry attempts failed, preventing submission. Final error: ${error}`
         );
-
-        // Record failure for monitoring and alerting
-        await recordFailure("hCaptcha", error, {
-          severity2Cooldown: 5, // 5 minute cooldown for Sev2 alerts
-        });
       },
       shouldRetry: (error) => {
         const err = error as { response?: { status?: number } };
@@ -66,11 +61,6 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
       },
     }
   );
-
-  if (!result) {
-    // All retries failed, but we allow the submission to proceed
-    return true;
-  }
 
   // 4XX request error, want to fail. See https://docs.hcaptcha.com/#siteverify-error-codes-table
   const captchaData: { success: boolean; score: number; "error-codes"?: string[] } = result.data;
