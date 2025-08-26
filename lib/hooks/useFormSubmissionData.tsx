@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormValues } from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { getReviewItems } from "@clientComponents/forms/Review/helpers";

@@ -9,11 +9,8 @@ import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/
 import { useRouter } from "next/navigation";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { Button } from "@clientComponents/globals/Buttons/Button";
-import {
-  ChoiceRule,
-  choiceRulesToConditonalRules,
-  cleanChoiceIdsFromRules,
-} from "@lib/formContext";
+import { type ChoiceRule } from "@gcforms/types";
+import { choiceRulesToConditonalRules, cleanChoiceIdsFromRules } from "@gcforms/core";
 import { getPathString } from "@lib/utils/form-builder/getPath";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 

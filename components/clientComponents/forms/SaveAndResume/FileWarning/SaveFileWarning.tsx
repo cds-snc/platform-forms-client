@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { fileExtractor } from "@lib/fileExtractor";
-import { type FormValues } from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
 import { useTranslation } from "@i18n/client";
 
 import { Alert } from "@clientComponents/globals";

@@ -1,4 +1,5 @@
-import { GroupsType, NextActionRule, Group } from "@lib/formContext";
+import { type GroupsType, type Group } from "@gcforms/types";
+import { type NextActionRule } from "@gcforms/types";
 
 /**
  * Autoflow: Set nextAction for all groups **if the nextAction has not already been set**.
