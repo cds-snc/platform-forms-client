@@ -2779,7 +2779,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@headlessui/react@npm:^2.2.0":
+"@headlessui/react@npm:^2.2.7":
   version: 2.2.7
   resolution: "@headlessui/react@npm:2.2.7"
   dependencies:
@@ -13206,7 +13206,7 @@ __metadata:
     "@hcaptcha/types": "npm:^1.0.4"
     "@headless-tree/core": "npm:^1.4.0"
     "@headless-tree/react": "npm:^1.4.0"
-    "@headlessui/react": "npm:^2.2.0"
+    "@headlessui/react": "npm:^2.2.7"
     "@jest/globals": "npm:^29.7.0"
     "@neshca/cache-handler": "npm:^1.2.1"
     "@next/mdx": "npm:15.5.0"
