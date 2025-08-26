@@ -1,8 +1,8 @@
-import { expect } from 'vitest';
+import { expect } from "vitest";
 import { FormProperties } from "@lib/types";
 import { resetLockedSections } from "@lib/formContext";
 import validFormTemplate from "../../__fixtures__/sections-out-of-order.json";
-import { GroupsType } from "@lib/formContext";
+import { type GroupsType } from "@gcforms/types";
 describe("resetLockedSections function", () => {
   it("Resets locked sections", () => {
     const form = validFormTemplate as FormProperties;

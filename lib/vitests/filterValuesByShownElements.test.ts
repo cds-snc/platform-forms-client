@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { filterValuesByShownElements } from "@lib/formContext";
-import { FormElement } from "@lib/types";
+import { FormElement } from "@gcforms/types";
 
 // Fixtures captured by adding a break point in Forms.tsx and copying the values from the debugger
 import {inputHistoryValues, shownElements} from "../../__fixtures__/filterValuesByShownElements.json";

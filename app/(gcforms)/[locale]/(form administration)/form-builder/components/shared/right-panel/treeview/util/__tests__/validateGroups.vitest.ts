@@ -1,28 +1,28 @@
 import { canModifyNextAction, canDeleteGroup } from "../validateGroups";
-import { GroupsType } from "@lib/formContext";
+import { type GroupsType } from "@gcforms/types";
 
 describe("validateGroups utility functions", () => {
   const formGroups: GroupsType = {
     group1: {
-        nextAction: "review",
-        name: "",
-        titleEn: "",
-        titleFr: "",
-        elements: []
+      nextAction: "review",
+      name: "",
+      titleEn: "",
+      titleFr: "",
+      elements: [],
     },
     group2: {
-        nextAction: "submit",
-        name: "",
-        titleEn: "",
-        titleFr: "",
-        elements: []
+      nextAction: "submit",
+      name: "",
+      titleEn: "",
+      titleFr: "",
+      elements: [],
     },
     group3: {
-        nextAction: "review",
-        name: "",
-        titleEn: "",
-        titleFr: "",
-        elements: []
+      nextAction: "review",
+      name: "",
+      titleEn: "",
+      titleFr: "",
+      elements: [],
     },
   };
 
@@ -38,14 +38,14 @@ describe("validateGroups utility functions", () => {
           name: "",
           titleEn: "",
           titleFr: "",
-          elements: []
+          elements: [],
         },
         group2: {
           nextAction: "submit",
           name: "",
           titleEn: "",
           titleFr: "",
-          elements: []
+          elements: [],
         },
       };
       expect(canModifyNextAction(singleReviewGroup, "review", "exit")).toBe(false);
@@ -68,14 +68,14 @@ describe("validateGroups utility functions", () => {
           name: "",
           titleEn: "",
           titleFr: "",
-          elements: []
+          elements: [],
         },
         group2: {
           nextAction: "submit",
           name: "",
           titleEn: "",
           titleFr: "",
-          elements: []
+          elements: [],
         },
       };
       expect(canDeleteGroup(singleReviewGroup, "review")).toBe(false);

@@ -2,7 +2,7 @@
 import React from "react";
 
 import { FormElement } from "@lib/types";
-import { GroupsType } from "@lib/formContext";
+import { type GroupsType } from "@gcforms/types";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 

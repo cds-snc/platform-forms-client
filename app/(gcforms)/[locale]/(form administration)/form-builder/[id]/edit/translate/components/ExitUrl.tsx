@@ -8,7 +8,7 @@ import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { FieldsetLegend } from "./FieldsetLegend";
 import { useTranslation } from "@i18n/client";
 
-import { type Group } from "@lib/formContext";
+import { type Group } from "@gcforms/types";
 
 const FieldInput = ({ groupId, val, lang }: { groupId: string; val: string; lang: Language }) => {
   const setExitButtonUrl = useGroupStore((state) => state.setExitButtonUrl);
