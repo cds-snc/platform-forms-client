@@ -4,11 +4,3 @@
 
 // Export retry utilities for easy importing
 export { withRetry, withRetryFallback, type RetryOptions } from "./withRetry";
-
-// Export failure tracking utilities (functional interface)
-export {
-  recordFailure,
-  getFailureMetrics,
-  clearFailures,
-  type FailureTrackerOptions,
-} from "./failureTracker";
