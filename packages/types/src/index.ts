@@ -8,6 +8,7 @@ import {
   BrandProperties,
   DeliveryOption,
   ConditionalRule,
+  ChoiceRule,
   FormRecord,
   SecurityAttribute,
   FormPurpose,
@@ -40,6 +41,7 @@ export type { PropertyChoices };
 export type { BrandProperties };
 export type { DeliveryOption };
 export type { ConditionalRule };
+export type { ChoiceRule };
 export type { FormRecord };
 export type { SecurityAttribute };
 export type { FormPurpose };
