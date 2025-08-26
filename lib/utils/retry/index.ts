@@ -1,6 +1,1 @@
-/**
- * Retry utilities with exponential backoff, comprehensive testing, and failure monitoring
- */
-
-// Export retry utilities for easy importing
 export { withRetry, withRetryFallback, type RetryOptions } from "./withRetry";
