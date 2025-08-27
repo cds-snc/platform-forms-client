@@ -169,5 +169,14 @@ export const normalizeFormResponses = (
     formData[key] = fillData(originalValues[key], element);
   });
 
+  // Process elements that don't already exist in formData and aren't richText
+  const missingElements = formRecord.form.elements.filter(
+    (element) => element.type !== FormElementTypes.richText && !formData[element.id]
+  );
+
+  missingElements.forEach((element) => {
+    formData[element.id] = fillData("", element);
+  });
+
   return formData;
 };
