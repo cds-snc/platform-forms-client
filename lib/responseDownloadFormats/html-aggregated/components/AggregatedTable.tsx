@@ -27,7 +27,7 @@ export const AggregatedTable = ({
           {headers.map(({ title, type }) => (
             <th
               key=""
-              className={`${type === "dynamicRow" ? "w-96 bg-slate-500" : "w-64"} p-4 font-bold`}
+              className={`${type === "dynamicRow" ? "w-96 bg-slate-500" : "w-64"} overflow-scroll p-4 font-bold`}
             >
               {title}
             </th>
@@ -53,7 +53,7 @@ export const AggregatedTable = ({
                 submission.answers.map((item) => {
                   if (Array.isArray(item.answer)) {
                     return (
-                      <td key="" className="w-96 bg-slate-500 pl-4">
+                      <td key="" className="w-96 overflow-scroll bg-slate-500 pl-4">
                         <table className="ml-4 table-fixed text-left">
                           {item.answer.map((subItem) => {
                             return (
