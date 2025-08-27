@@ -43,17 +43,17 @@ export const AggregatedTable = ({
                 index % 2 !== 0 ? "bg-slate-50" : ""
               }`}
             >
-              <td className="w-64 p-4">
+              <td className="p-4">
                 <a href={`#${submission.id}`} className="tableLink">
                   {submission.id}
                 </a>
               </td>
-              <td className="w-64 p-4">{formatDate(new Date(submission.createdAt))}</td>
+              <td className="p-4">{formatDate(new Date(submission.createdAt))}</td>
               {submission.answers &&
                 submission.answers.map((item) => {
                   if (Array.isArray(item.answer)) {
                     return (
-                      <td key="" className="w-96 overflow-scroll pl-4">
+                      <td key="" className="pl-4">
                         <table className="ml-4 table-fixed text-left">
                           {item.answer.map((subItem) => {
                             return (
@@ -81,7 +81,7 @@ export const AggregatedTable = ({
                     );
                   }
                   return (
-                    <td key="" className="w-64 p-4">
+                    <td key="" className="p-4">
                       <span
                         dangerouslySetInnerHTML={{
                           __html: newLineToHtml(item.answer),
