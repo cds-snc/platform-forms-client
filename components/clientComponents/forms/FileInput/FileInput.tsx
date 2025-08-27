@@ -138,8 +138,13 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     }
   });
 
+  // if there are items in the allowedFileTypesSet create a string for the input accept attribute
+  if (allowedFileTypesSet.size > 0) {
+    allowedFileTypes = Array.from(allowedFileTypesSet).join(", ");
+  }
+
+  // Fallback to default allowed file types
   if (!allowedFileTypes) {
-    // If no fileType is specified, use our default allowed file types
     allowedFileTypes = htmlInputAccept;
   }
 
