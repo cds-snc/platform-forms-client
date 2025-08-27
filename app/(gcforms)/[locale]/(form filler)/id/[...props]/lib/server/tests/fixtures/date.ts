@@ -15,5 +15,5 @@ export const submission = {
 };
 
 export const result = {
-  "1": { YYYY: 2024, MM: 11, DD: 28 },
+  "1": '{"YYYY":2024,"MM":11,"DD":28}',
 };
