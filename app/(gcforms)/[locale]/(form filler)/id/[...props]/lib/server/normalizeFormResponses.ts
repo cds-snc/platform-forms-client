@@ -125,6 +125,7 @@ export const fillData = (
         return fileInputFiller(value as Response);
       case FormElementTypes.formattedDate:
         if (typeof value === "string") {
+          // This is a breaking change to be revisted in future
           // return deserializeDateObject(value);
         }
         return value;
