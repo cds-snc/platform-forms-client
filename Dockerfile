@@ -1,11 +1,8 @@
-FROM node:22-alpine as base
+FROM node:22-alpine AS base
 
 ENV NODE_ENV=production
 ENV NEXT_OUTPUT_STANDALONE=true
 ENV NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY=UR78-BU29-RU35-EP49 
-
-# 10 MB --- alllow more for the main deployment
-ENV NEXT_PUBLIC_BODY_SIZE_LIMIT_WITH_FILES=10485760
 
 COPY . /src
 WORKDIR /src
@@ -27,7 +24,7 @@ RUN yarn workspaces focus gcforms
 RUN yarn build
 RUN yarn workspaces focus gcforms --production
 
-FROM node:22-alpine as final
+FROM node:22-alpine AS final
 LABEL maintainer="-"
 
 ENV PORT 3000

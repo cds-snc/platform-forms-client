@@ -1,18 +1,17 @@
 "use server";
 
-import { PublicFormRecord, Responses, SubmissionRequestBody } from "@lib/types";
-import { buildFormDataObject } from "./lib/buildFormDataObject";
-import { parseRequestData } from "./lib/parseRequestData";
-import { processFormData } from "./lib/processFormData";
-import { MissingFormDataError } from "./lib/exceptions";
+import { PublicFormRecord, Responses, SignedURLMap } from "@lib/types";
+import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
+import { processFormData } from "./lib/server/processFormData";
 import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
-import { dateHasPast } from "@lib/utils";
 import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
-import { validateOnSubmit, validateResponses } from "@lib/validation/validation";
+import { dateHasPast } from "@lib/utils";
+import { validateResponses } from "@lib/validation/validation";
+import { validateOnSubmit } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
 import { sendNotifications } from "@lib/notifications";
 
@@ -33,7 +32,12 @@ export async function submitForm(
   language: string,
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined
-): Promise<{ id: string; submissionId?: string; error?: Error }> {
+): Promise<{
+  id: string;
+  submissionId?: string;
+  error?: Error;
+  fileURLMap?: SignedURLMap;
+}> {
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
@@ -52,7 +56,7 @@ export async function submitForm(
 
     const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
     // Skip hCaptcha verification for form-builder Preview (drafts)
-    if (template?.isPublished) {
+    if (template?.isPublished && process.env.APP_ENV !== "test") {
       // hCaptcha runs regardless but only block submissions if the feature flag is enabled
       const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
       if (hCaptchaBlockingMode && !captchaVerified) {
@@ -87,7 +91,7 @@ export async function submitForm(
     /**
      * This validation runs the client-side validation on the server.
      */
-    const validateOnSubmitResult = await validateOnSubmit(values, {
+    const validateOnSubmitResult = validateOnSubmit(values, {
       formRecord: template,
       t: t,
     });
@@ -103,19 +107,18 @@ export async function submitForm(
       // throw new MissingFormDataError("Form data validation failed");
     }
 
-    const formDataObject = buildFormDataObject(template, values);
+    const formData = normalizeFormResponses(template, values);
 
-    if (Object.entries(formDataObject).length <= 2) {
-      throw new MissingFormDataError("No form data submitted with request");
-    }
-
-    const data = await parseRequestData(formDataObject as SubmissionRequestBody);
-
-    const submissionId = await processFormData(data.fields, data.files, language);
+    const { submissionId, fileURLMap } = await processFormData({
+      responses: formData,
+      securityAttribute: template.securityAttribute,
+      formId,
+      language,
+    });
 
     sendNotifications(formId, template.form.titleEn, template.form.titleFr);
 
-    return { id: formId, submissionId };
+    return { id: formId, submissionId, fileURLMap };
   } catch (e) {
     logMessage.error(
       `Could not submit response for form ${formId}. Received error: ${(e as Error).message}`

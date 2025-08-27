@@ -44,7 +44,7 @@
   "select-features": "Sélectionner les fonctionnalités",
   "add": "Ajouter",
   "cancel": "Annuler",
-  "remove": "Supprimer",
+  "remove": "Enlever",
   "userFlagHeader": "Contrôle des indicateurs de fonctionnalité spécifique à l'utilisateur",
   "userFlagSubHeader": "Ce paramètre remplace le statut de l'indicateur de fonctionnalité et donnera à un utilisateur spécifique l'accès à une fonctionnalité.",
   "noUserFlags": "Aucun indicateur de fonctionnalité utilisateur défini."

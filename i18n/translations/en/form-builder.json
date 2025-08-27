@@ -215,13 +215,8 @@
         "title": "Beta feature",
         "text1": "This trial feature is limited and requires:",
         "bullet1": "Retrieval of form responses via API",
-        "bullet2": "{{BODY_SIZE_LIMIT_WITH_FILES}} MB maximum combined size of all files uploaded",
-        "bullet3": "Files to be scanned for malicious content once submitted",
-        "bullet4": "Collecting contact information in case you need to follow up about files"
-      },
-      "recommendations": {
-        "title": "Recommendations",
-        "text1": "Add fields to gather contact information in case you need to support those with the files they have attached."
+        "bullet2": "Files to be scanned for malicious content once submitted",
+        "bullet3": "Collecting contact information in case you need to follow up about files"
       }
     },
     "firstMiddleLastName": {
@@ -549,7 +544,7 @@
   "maxCharacterLength": "Max character length: ",
   "maximumCharacterLength": "Maximum character length",
   "maxNumberOfRows": {
-    "description": "Users can provide up to this many entries for this question.",
+    "description": "Set the upper limit for the number of entries your users can provide for this question.",
     "label": "Maximum number of answers"
   },
   "more": "More",
@@ -739,6 +734,7 @@
         "cautionTitle": "Caution:",
         "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You'll need to create a new key and add it to your integration to restart API delivery.",
         "stopText": "<strong>To temporarily stop submissions</strong> to this form consider",
+        "fileUploadText": "⚠️ Deleting the API key will switch your delivery method and may result in the loss of files attached to form submissions. To retrieve all files that are part of submissions, create a new API key and set up your integration.",
         "stopText1": "closing the form",
         "stopText2": " instead.",
         "cancelButton": "Cancel",
@@ -1309,7 +1305,7 @@
       "emptyFormElement": "Empty form question element",
       "keyboardNav": {
         "label": "Keyboard shortcuts",
-        "body": "<p className=\"mb-4\">Navigate the questions and pages using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>Arrow keys to drag the item</li><li>Enter key to drop the item</li></ul>"
+        "body": "<p className=\"mb-4\">Navigate the questions and pages using the <kbd>arrow</kbd> keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li><kbd>Control</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> to pick up an item</li><li><kbd>Arrow</kbd> keys to drag the item</li><li><kbd>Enter</kbd> key to drop the item</li><li><kbd>Del</kbd> key on the page item to delete the page</li></ul>"
       }
     },
     "confirmDeleteGroup": {
@@ -1435,7 +1431,8 @@
   "fr": "Français",
   "beta": {
     "tag": "Beta:",
-    "text": "Trial feature "
+    "text": "Trial feature ",
+    "loadingError": "This form contains a 'beta' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
   },
   "fileUploadApiWarning": {
     "text": "Delivery method is not set to API."

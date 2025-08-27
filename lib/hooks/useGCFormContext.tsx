@@ -1,28 +1,24 @@
 "use client";
 import React, { createContext, useContext, ReactNode } from "react";
 
+import { type FormValues, type GroupsType, type PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
-import { type PublicFormRecord } from "@lib/types";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
 
+import { getNextAction, filterValuesByVisibleElements, idArraysMatch } from "@lib/formContext";
+
 import {
   mapIdsToValues,
-  FormValues,
-  idArraysMatch,
-  GroupsType,
-  getNextAction,
-  filterShownElements,
-  filterValuesByShownElements,
-  getVisibleGroupsBasedOnValuesRecursive,
   getValuesWithMatchedIds,
-} from "@lib/formContext";
+  getVisibleGroupsBasedOnValuesRecursive,
+} from "@gcforms/core";
+
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import {
   getGroupHistory as _getGroupHistory,
   pushIdToHistory as _pushIdToHistory,
   clearHistoryAfterId as _clearHistoryAfterId,
-  getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
 
 import {
@@ -89,13 +85,7 @@ export const GCFormsProvider = ({
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
 
-  const inputHistoryValues = getInputHistoryValues(
-    (values.current || []) as FormValues,
-    (history.current || []) as string[],
-    groups
-  );
-  const shownElements = filterShownElements(formRecord, values.current);
-  const filteredResponses = filterValuesByShownElements(inputHistoryValues, shownElements);
+  const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
   const filteredMatchedIds = matchedIds.filter((id) => {
     const parentId = id.split(".")[0];
     if (filteredResponses[parentId]) {
@@ -183,7 +173,7 @@ export const GCFormsProvider = ({
 
       // For file inputs reset the values to null
       if (value && typeof value === "object" && "size" in value) {
-        cleanedValue = { name: null, size: null, based64EncodedFile: null } as FileInputResponse;
+        cleanedValue = { name: null, size: null, content: null } as FileInputResponse;
       }
 
       // For all other inputs just return the value

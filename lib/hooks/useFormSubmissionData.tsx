@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormValues } from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { getReviewItems } from "@clientComponents/forms/Review/helpers";
@@ -8,6 +8,7 @@ import { useCallback } from "react";
 import { slugify } from "@lib/client/clientHelpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 import { type HTMLProps } from "@lib/saveAndResume/types";
+import { copyObjectExcludingFileContent } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
 
 export const useFormSubmissionData = ({
   language,
@@ -31,28 +32,11 @@ export const useFormSubmissionData = ({
   if (!formValues || !groups) throw new Error("Form values or groups are missing");
 
   // Clean up the values for use with the Review component (removing the file contents)
-  const cleanedValues = {} as unknown as FormValues;
-
-  Object.entries(formValues).map(([key, value]) => {
-    let cleanedValue = value;
-
-    // For file inputs we just want to keep the name and size, and reset the base64 encoded file
-    if (value && typeof value === "object" && "size" in value && "name" in value) {
-      // Just keep the name
-      cleanedValue = {
-        name: value.name as string,
-        size: value.size as number,
-        based64EncodedFile: null,
-      } as unknown as string; // force compatibility with existing types
-    }
-
-    // For all other inputs just return the value
-    cleanedValues[key] = cleanedValue;
-  });
+  const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(formValues);
 
   const reviewItems = getReviewItems({
     formRecord: formRecord,
-    formValues: cleanedValues as unknown as FormValues,
+    formValues: formValuesWithoutFileContent as FormValues,
     groups,
     groupHistoryIds,
     language,

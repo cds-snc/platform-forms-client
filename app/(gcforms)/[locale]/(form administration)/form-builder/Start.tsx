@@ -13,6 +13,8 @@ import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { ga } from "@lib/client/clientHelpers";
 import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds";
 import { transformFormProperties } from "@lib/store/helpers/elements/transformFormProperties";
+import { BetaComponentsError, checkForBetaComponents } from "@lib/validation/betaCheck";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const Start = () => {
   const {
@@ -26,6 +28,7 @@ export const Start = () => {
   }));
 
   const [errors, setErrors] = useState<errorMessage[]>();
+  const { getFlag } = useFeatureFlags();
 
   // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
   const cleaner = (key: string, value: string) =>
@@ -78,10 +81,18 @@ export const Start = () => {
           return;
         }
 
-        importTemplate(data);
+        try {
+          checkForBetaComponents(data.elements, getFlag);
 
-        ga("open_form_file");
-        router.push(`/${language}/form-builder/0000/preview`);
+          importTemplate(data);
+
+          ga("open_form_file");
+          router.push(`/${language}/form-builder/0000/preview`);
+        } catch (e) {
+          if (e instanceof BetaComponentsError) {
+            setErrors([{ message: t("beta.loadingError") }]);
+          }
+        }
       };
     } catch (e) {
       if (e instanceof Error) {
@@ -99,9 +110,11 @@ export const Start = () => {
       <div role="alert">
         {errors && (
           <div className="m-auto mb-8 flex w-5/12 bg-red-100 p-6">
-            <WarningIcon />
             <div>
-              <h3 className="mb-2 ml-6 mt-1">{t("failedToReadFormFile")}</h3>
+              <WarningIcon className="mt-1" />
+            </div>
+            <div>
+              <h3 className="mb-2 ml-6">{t("failedToReadFormFile")}</h3>
               <ul className="mb-4 list-none pl-6">
                 {errors.map((error, index) => {
                   return (

@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { useTranslation } from "@i18n/client";
 
-import { type FormValues } from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
 
 import { Button } from "@clientComponents/globals";

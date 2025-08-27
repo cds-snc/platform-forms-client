@@ -5,7 +5,7 @@
 import nextJest from "next/jest.js";
 import { pathsToModuleNameMapper } from "ts-jest";
 import type { Config } from "jest";
-import { compilerOptions } from "./tsconfig.json";
+import tsconfig from "./tsconfig.json" with { type: "json" };
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
@@ -23,10 +23,11 @@ const customJestConfig: Config = {
     "<rootDir>/__fixtures__/",
     "<rootDir>/__tests__/",
     "<rootDir>/lib/vitests/",
+    "<rootDir>/packages/core",
   ],
   testMatch: ["/**/*.test.+(ts|tsx|js|jsx)"],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: "<rootDir>/",
     }),
     "^next-auth(/?.*)$": "<rootDir>/__utils__/mocks/next-auth",

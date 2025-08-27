@@ -1,8 +1,14 @@
 import { useTranslation } from "@i18n/client";
 
-export const DeleteKeyToChangeOptionsNote = ({ hasApiKey }: { hasApiKey: boolean }) => {
+export const DeleteKeyToChangeOptionsNote = ({
+  hasApiKey,
+  isPublished,
+}: {
+  hasApiKey: boolean;
+  isPublished: boolean;
+}) => {
   const { t } = useTranslation("form-builder");
-  if (!hasApiKey) return null;
+  if (!hasApiKey || isPublished) return null;
   return (
     <div className="mb-4 w-3/5 rounded-md bg-indigo-50 p-3">
       <h5 className="font-bold">{t("settings.api.deleteApiKeyToChangeOptions.title")}</h5>

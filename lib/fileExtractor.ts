@@ -6,10 +6,16 @@ const isFileInput = (response: unknown): response is FileInputResponse => {
     typeof response === "object" &&
     "name" in response &&
     "size" in response &&
+    "content" in response &&
     response.name !== null &&
     response.size !== null &&
-    !("key" in response) // Ensure it does not have a key property
+    response.content !== null
   );
+};
+
+export const hasFiles = (values: unknown): values is Array<FileInputResponse> => {
+  if (values === null || typeof values !== "object") return false;
+  return fileExtractor(values).files.length > 0;
 };
 
 // Modified from:  https://github.com/cds-snc/platform-forms-client/pull/5772/files#diff-09b42a1cf4cc755e2ddcdc9d06795ea6191e25fcf8c109f6f312a56850444ba6R56

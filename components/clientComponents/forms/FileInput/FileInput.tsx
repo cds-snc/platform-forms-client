@@ -1,15 +1,15 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { useField } from "formik";
+import { MAX_FILE_SIZE } from "@root/constants";
 
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
-import { htmlInputAccept, ALLOWED_FILE_TYPES } from "@lib/validation/fileValidationClientSide";
+import { ALLOWED_FILE_TYPES, htmlInputAccept, isMimeTypeValid } from "@gcforms/core";
 import { themes } from "@clientComponents/globals/Buttons/themes";
-import { BODY_SIZE_LIMIT_WITH_FILES } from "@root/constants";
-import { bytesToMb, bytesToKbOrMbString } from "@lib/utils/fileSize";
+import { bytesToKbOrMbString, bytesToMb } from "@lib/utils/fileSize";
 import { announce } from "@gcforms/announce";
 
 interface FileInputProps extends InputFieldProps {
@@ -41,9 +41,9 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
   const [fileName, setFileName] = useState(value?.name);
   const [fileSize, setFileSize] = useState<{
-    size: number;
+    size: number | string;
     unit: "bytes" | "KB" | "MB";
-  }>(bytesToKbOrMbString(value?.size));
+  }>(bytesToKbOrMbString(value?.size, lang));
 
   const resetInput = () => {
     announce(t("fileInput.removedMessage", { fileName }));
@@ -62,36 +62,59 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     props.className ? props.className : ""
   );
 
-  const _onChange = (e: FileEventTarget) => {
+  const _onChange = async (e: FileEventTarget) => {
     if (e.target?.files) {
       const reader = new FileReader();
-      // Need to refactor in the future to add support for Multiple Files.
-      // ex.. check for length of e.target.files[] and handle accordingly.
-      // On multi file once files are selected remove `file-up--compact` and show
-      // number of files uploaded or file list in file_output
       const newFile = e.target.files[0];
       if (newFile) {
-        // AWS WAF blocks files with random characters in their metadata
-        // as such file uploads with images are blocked from being submitted
-        // to the API. One of the recommended solutions is to base64 encode the image
-        // on the client side before submitting to the API.
-        // see https://aws.amazon.com/premiumsupport/knowledge-center/waf-upload-blocked-files/
-        reader.readAsDataURL(newFile);
-        // react dispatch functions will not work within reader callbacks
-        // this we need to wait for reader readyState to be true
-        reader.onloadend = () => {
+        reader.readAsArrayBuffer(newFile);
+        reader.onloadend = async () => {
           fileInputRef.current!.value = ""; // Reset the input value to allow re-uploading the same file
 
           if (newFile.name !== fileName) {
             setFileName(newFile.name);
 
+            // Check for file size
+            if (newFile.size > MAX_FILE_SIZE) {
+              setError(
+                t("input-validation.file-upload.file-size-too-large.message", {
+                  fileName: newFile.name,
+                  maxSizeInMb: bytesToMb(MAX_FILE_SIZE),
+                })
+              );
+              setFileName("");
+              return;
+            }
+
+            // Check for file content
+            const buffer = reader.result as ArrayBuffer;
+
+            const validMime = await isMimeTypeValid(newFile.name, buffer, false);
+
+            if (!validMime) {
+              setError(
+                t("input-validation.file-upload.mime.message", {
+                  fileName: newFile.name,
+                })
+              );
+              setFileName("");
+              return;
+            }
+
+            setError(undefined); // Clear the error
+            setTouched(false); // Reset the touched state
+
+            // Successful file upload -- set the input
+            setFileName(newFile.name);
+
             announce(t("fileInput.addedMessage", { fileName: newFile.name }));
 
-            setFileSize(bytesToKbOrMbString(newFile.size));
+            setFileSize(bytesToKbOrMbString(newFile.size, lang));
+
             setValue({
               name: newFile.name,
               size: newFile.size,
-              based64EncodedFile: reader.result?.toString().split(";base64,").pop(),
+              content: buffer,
             });
           }
         };
@@ -106,20 +129,22 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   let allowedFileTypes = "";
 
   // Map itemFileTypes to match ALLOWED_FILE_TYPES format and create a string for the accept attribute
-  allowedFileTypes = itemFileTypes
-    .map((type) => {
-      const fileType = ALLOWED_FILE_TYPES.find((t) =>
-        Array.isArray(t.extensions) ? t.extensions.includes(type) : t.extensions === type
-      );
-      return fileType
-        ? [fileType.mime, ...fileType.extensions.map((ext: string) => `.${ext}`)].join(",")
-        : "";
-    })
-    .filter(Boolean)
-    .join(",");
+  const allowedFileTypesSet = new Set<string>();
+  itemFileTypes.forEach((type) => {
+    const fileTypeInfo = ALLOWED_FILE_TYPES.find((t) => t.extensions.includes(type));
+    if (fileTypeInfo) {
+      allowedFileTypesSet.add(fileTypeInfo.mime);
+      fileTypeInfo.extensions.forEach((ext) => allowedFileTypesSet.add(`.${ext}`));
+    }
+  });
 
+  // if there are items in the allowedFileTypesSet create a string for the input accept attribute
+  if (allowedFileTypesSet.size > 0) {
+    allowedFileTypes = Array.from(allowedFileTypesSet).join(", ");
+  }
+
+  // Fallback to default allowed file types
   if (!allowedFileTypes) {
-    // If no fileType is specified, use our default allowed file types
     allowedFileTypes = htmlInputAccept;
   }
 
@@ -135,11 +160,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     <>
       {meta.error && <ErrorMessage id={`${name}_error`}>{meta.error}</ErrorMessage>}
 
-      <div
-        className={classes}
-        data-testid="file"
-        data-limit={bytesToMb(BODY_SIZE_LIMIT_WITH_FILES)}
-      >
+      <div className={classes} data-testid="file">
         <div
           key={name}
           id={name}
