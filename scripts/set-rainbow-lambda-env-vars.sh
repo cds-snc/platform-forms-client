@@ -9,10 +9,10 @@ TASK_DEF_ARN="$(aws ecs describe-tasks --cluster Forms --task "$TASK_ARN" --outp
 TASK_DEF="$(aws ecs describe-task-definition --task-definition "$TASK_DEF_ARN")"
 
 # Get environment variables from current task definition
-ENV_VARS=$(echo "$TASK_DEF" | jq -r '.taskDefinition.containerDefinitions[1].environment | map("\(.name)=\(.value)") | join(",")')
+ENV_VARS=$(echo "$TASK_DEF" | jq -r '.taskDefinition.containerDefinitions[0].environment | map("\(.name)=\(.value)") | join(",")')
 
 # Get secrets from current task definition
-SECRET_VARS="$(echo "$TASK_DEF" | jq -r '.taskDefinition.containerDefinitions[1].secrets | flatten[] | [.name,.valueFrom] | join("=")')"
+SECRET_VARS="$(echo "$TASK_DEF" | jq -r '.taskDefinition.containerDefinitions[0].secrets | flatten[] | [.name,.valueFrom] | join("=")')"
 while IFS= read -r SECRET; do
     SECRET_NAME="${SECRET%%=*}"
     SECRET_ARN="${SECRET#*=}"
