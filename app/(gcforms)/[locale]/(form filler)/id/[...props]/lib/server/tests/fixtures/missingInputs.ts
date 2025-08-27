@@ -71,4 +71,6 @@ export const result = {
       "3": { name: null, size: null, id: null },
     },
   ],
+  "2": "",
+  "3": { name: null, size: null, id: null },
 };

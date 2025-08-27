@@ -143,8 +143,8 @@ describe("transformFormResponses", () => {
 
       const result = normalizeFormResponses(formWithElements as unknown as FormRecord, {});
 
-      expect(result).not.toHaveProperty("1", "");
-      expect(result).not.toHaveProperty("2", []);
+      expect(result).toHaveProperty("1", "");
+      expect(result).toHaveProperty("2", []);
     });
 
     it("should handle responses with unknown field IDs", () => {
