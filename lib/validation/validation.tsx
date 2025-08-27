@@ -140,39 +140,41 @@ export const getErrorList = (
     errorList = sortedFormElementErrors.map(([formElementKey, formElementErrorValue]) => {
       if (Array.isArray(formElementErrorValue)) {
         return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
-          return Object.entries(dynamicRowErrors).map(
-            ([dynamicRowElementKey, dyanamicRowElementErrorValue]) => {
-              const id = `${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`;
-              const parentElement = props.formRecord.form.elements.find(
-                (el) => el.id === formElementKey
-              );
+          return dynamicRowErrors && typeof dynamicRowErrors === "object"
+            ? Object.entries(dynamicRowErrors).map(
+                ([dynamicRowElementKey, dyanamicRowElementErrorValue]) => {
+                  const id = `${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`;
+                  const parentElement = props.formRecord.form.elements.find(
+                    (el) => el.id === formElementKey
+                  );
 
-              let subElement;
+                  let subElement;
 
-              if (dyanamicRowElementErrorValue) {
-                const subElements = parentElement?.properties.subElements;
-                subElement = subElements && subElements[Number(dynamicRowElementKey)];
-              }
+                  if (dyanamicRowElementErrorValue) {
+                    const subElements = parentElement?.properties.subElements;
+                    subElement = subElements && subElements[Number(dynamicRowElementKey)];
+                  }
 
-              return (
-                dyanamicRowElementErrorValue && (
-                  <ErrorListItem
-                    key={`error-${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
-                    errorKey={`${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
-                    value={`${dyanamicRowElementErrorValue as string}`}
-                  >
-                    <ErrorListMessage
-                      language={props.language || "en"}
-                      id={id}
-                      elements={[]}
-                      defaultValue={""}
-                      subElement={subElement}
-                    />
-                  </ErrorListItem>
-                )
-              );
-            }
-          );
+                  return (
+                    dyanamicRowElementErrorValue && (
+                      <ErrorListItem
+                        key={`error-${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
+                        errorKey={`${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
+                        value={`${dyanamicRowElementErrorValue as string}`}
+                      >
+                        <ErrorListMessage
+                          language={props.language || "en"}
+                          id={id}
+                          elements={[]}
+                          defaultValue={""}
+                          subElement={subElement}
+                        />
+                      </ErrorListItem>
+                    )
+                  );
+                }
+              )
+            : false;
         });
       } else {
         return (
@@ -192,7 +194,18 @@ export const getErrorList = (
       }
     });
   }
-  return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
+
+  // Flatten the nested arrays and filter out empty/falsy values
+  // Prevent rendering empty error lists
+  // The error list can be nested so we want to avoid rendering empty arrays
+  // i.e. [[ [] ]]
+  const flattenedErrorList = errorList
+    ? (errorList.flat(Infinity) as JSX.Element[]).filter(Boolean)
+    : [];
+
+  return flattenedErrorList && flattenedErrorList.length ? (
+    <ol className="gc-ordered-list">{flattenedErrorList}</ol>
+  ) : null;
 };
 
 /**
