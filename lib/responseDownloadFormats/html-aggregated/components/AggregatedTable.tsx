@@ -21,15 +21,16 @@ export const AggregatedTable = ({
   const capitalizedLang = lang === "en" ? "En" : "Fr";
 
   return (
-    <table id={`responseTableRow${capitalizedLang}`} className="table-fixed text-left">
+    <table id={`responseTableRow${capitalizedLang}`} className="w-full table-fixed text-left">
       <thead>
-        <tr key="" className="flex">
+        <tr key="">
           {headers.map(({ title, type }) => (
             <th
               key=""
-              className={`${type === "dynamicRow" ? "w-96 max-w-96 bg-slate-500" : "w-64"} overflow-scroll p-4 font-bold`}
+              className={`${type === "dynamicRow" ? "w-96" : "w-64"} break-words p-4 font-bold`}
+              style={{ maxWidth: type === "dynamicRow" ? "24rem" : "16rem" }}
             >
-              {title}
+              <div className="overflow-hidden">{title}</div>
             </th>
           ))}
         </tr>
@@ -39,54 +40,74 @@ export const AggregatedTable = ({
           return (
             <tr
               key=""
-              className={`flex border-t-2 border-t-gray-300 ${
-                index % 2 !== 0 ? "bg-slate-50" : ""
-              }`}
+              className={`border-t-2 border-t-gray-300 ${index % 2 !== 0 ? "bg-slate-50" : ""}`}
             >
-              <td className="w-64 p-4">
-                <a href={`#${submission.id}`} className="tableLink">
-                  {submission.id}
-                </a>
+              <td className="w-64 break-words p-4" style={{ maxWidth: "16rem" }}>
+                <div className="overflow-hidden">
+                  <a href={`#${submission.id}`} className="tableLink">
+                    {submission.id}
+                  </a>
+                </div>
               </td>
-              <td className="w-64 p-4">{formatDate(new Date(submission.createdAt))}</td>
+              <td className="w-64 break-words p-4" style={{ maxWidth: "16rem" }}>
+                <div className="overflow-hidden">{formatDate(new Date(submission.createdAt))}</div>
+              </td>
               {submission.answers &&
                 submission.answers.map((item) => {
                   if (Array.isArray(item.answer)) {
                     return (
-                      <td key="" className="w-96 max-w-96 overflow-scroll bg-slate-500 pl-4">
-                        <table className="ml-4 table-fixed text-left">
-                          {item.answer.map((subItem) => {
-                            return (
-                              Array.isArray(subItem) &&
-                              subItem.map((subSubItem) => {
-                                const question = String(subSubItem[getProperty("question", lang)]);
-                                const response = subSubItem.answer;
+                      <td key="" className="w-96 break-words p-4" style={{ maxWidth: "24rem" }}>
+                        <div className="overflow-hidden">
+                          <table className="w-full table-fixed text-left">
+                            <tbody>
+                              {item.answer.map((subItem) => {
                                 return (
-                                  <tr key="" className="flex">
-                                    <th className="w-64 p-4">{question}</th>
-                                    <td className="p-4">
-                                      <span
-                                        dangerouslySetInnerHTML={{
-                                          __html: newLineToHtml(response),
-                                        }}
-                                      ></span>
-                                    </td>
-                                  </tr>
+                                  Array.isArray(subItem) &&
+                                  subItem.map((subSubItem) => {
+                                    const question = String(
+                                      subSubItem[getProperty("question", lang)]
+                                    );
+                                    const response = subSubItem.answer;
+                                    return (
+                                      <tr key="">
+                                        <th
+                                          className="w-1/2 break-words p-2"
+                                          style={{ maxWidth: "12rem" }}
+                                        >
+                                          <div className="overflow-hidden">{question}</div>
+                                        </th>
+                                        <td
+                                          className="w-1/2 break-words p-2"
+                                          style={{ maxWidth: "12rem" }}
+                                        >
+                                          <div className="overflow-hidden">
+                                            <span
+                                              dangerouslySetInnerHTML={{
+                                                __html: newLineToHtml(response),
+                                              }}
+                                            ></span>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    );
+                                  })
                                 );
-                              })
-                            );
-                          })}
-                        </table>
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
                       </td>
                     );
                   }
                   return (
-                    <td key="" className="w-64 p-4">
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: newLineToHtml(item.answer),
-                        }}
-                      ></span>
+                    <td key="" className="w-64 break-words p-4" style={{ maxWidth: "16rem" }}>
+                      <div className="overflow-hidden">
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: newLineToHtml(item.answer),
+                          }}
+                        ></span>
+                      </div>
                     </td>
                   );
                 })}
