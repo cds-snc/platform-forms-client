@@ -125,6 +125,7 @@ export interface ElementProperties {
   maxNumberOfRows?: number;
   autoComplete?: string;
   dateFormat?: string;
+  allowNegativeNumbers?: boolean;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;
