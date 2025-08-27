@@ -27,7 +27,7 @@ export const AggregatedTable = ({
           {headers.map(({ title, type }) => (
             <th
               key=""
-              className={`${type === "dynamicRow" ? "w-96" : "w-64"} break-words p-4 font-bold`}
+              className={`${type === "dynamicRow" ? "w-96 bg-slate-500" : "w-64"} p-4 font-bold`}
             >
               {title}
             </th>
@@ -43,17 +43,17 @@ export const AggregatedTable = ({
                 index % 2 !== 0 ? "bg-slate-50" : ""
               }`}
             >
-              <td className="w-64 break-words p-4">
+              <td className="w-64 p-4">
                 <a href={`#${submission.id}`} className="tableLink">
                   {submission.id}
                 </a>
               </td>
-              <td className="w-64 break-words p-4">{formatDate(new Date(submission.createdAt))}</td>
+              <td className="w-64 p-4">{formatDate(new Date(submission.createdAt))}</td>
               {submission.answers &&
                 submission.answers.map((item) => {
                   if (Array.isArray(item.answer)) {
                     return (
-                      <td key="" className="w-96 break-words pl-4">
+                      <td key="" className="w-96 bg-slate-500 pl-4">
                         <table className="ml-4 table-fixed text-left">
                           {item.answer.map((subItem) => {
                             return (
@@ -63,8 +63,8 @@ export const AggregatedTable = ({
                                 const response = subSubItem.answer;
                                 return (
                                   <tr key="" className="flex">
-                                    <th className="w-64 break-words p-4">{question}</th>
-                                    <td className="break-words p-4">
+                                    <th className="w-64 p-4">{question}</th>
+                                    <td className="p-4">
                                       <span
                                         dangerouslySetInnerHTML={{
                                           __html: newLineToHtml(response),
@@ -81,7 +81,7 @@ export const AggregatedTable = ({
                     );
                   }
                   return (
-                    <td key="" className="w-64 break-words p-4">
+                    <td key="" className="w-64 p-4">
                       <span
                         dangerouslySetInnerHTML={{
                           __html: newLineToHtml(item.answer),
