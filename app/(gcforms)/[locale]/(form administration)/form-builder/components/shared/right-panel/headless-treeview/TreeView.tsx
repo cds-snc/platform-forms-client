@@ -21,6 +21,7 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 
 export const TreeView = ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
   const getTreeData = useGroupStore((s) => s.getTreeData);
+
   const items = getTreeData({
     addIntroElement: true,
     addPolicyElement: true,
@@ -28,6 +29,10 @@ export const TreeView = ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
     addSectionTitleElements: false,
     reviewGroup: false,
   });
+
+  // const items = data;
+
+  //console.log(items);
 
   const tree = useTree<TreeItem>({
     initialState: {
@@ -37,6 +42,7 @@ export const TreeView = ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
     rootItemId: "root",
     getItemName: (item) => {
       // Todo: update to use lang
+      // return item.getItemData()?.name;
       return item.getItemData()?.data.titleEn;
     },
     isItemFolder: (item) => !!item.getItemData()?.children,

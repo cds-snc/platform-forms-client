@@ -156,7 +156,7 @@ export const groupsToTreeData = (
     isFolder: false,
     canRename: false,
     canMove: false,
-    children: [],
+    //children: [],
     data: {
       titleEn: "Form introduction",
       titleFr: "Introduction au formulaire",
@@ -175,7 +175,7 @@ export const groupsToTreeData = (
     isFolder: false,
     canRename: false,
     canMove: false,
-    children: [],
+    // children: [],
     data: {
       titleEn: "Privacy statement",
       titleFr: "Avis de confidentialité",
@@ -194,8 +194,6 @@ export const groupsToTreeData = (
     const currentStartChildren = items["start"]?.children ? items["start"].children : [];
     items["start"].children = [...startChildren, ...currentStartChildren];
   }
-
-  // ----
 
   const confirmationItem = {
     index: "confirmation",
@@ -224,6 +222,14 @@ export const groupsToTreeData = (
     items.root.children = items.root.children?.filter((child) => child !== "review");
     delete items["review"];
   }
+
+  // Remove children if empty array
+  // Headless version does not require this
+  Object.values(items).forEach((item) => {
+    if (Array.isArray(item.children) && item.children.length === 0) {
+      delete item.children;
+    }
+  });
 
   return items;
 };
