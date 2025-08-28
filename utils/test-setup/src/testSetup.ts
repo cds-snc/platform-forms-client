@@ -158,8 +158,8 @@ async function main(): Promise<void> {
         if (current.status === "rejected") {
           return {
             ...acc,
-            failedToBeCreatedForms: [
-              ...acc.failedToBeCreatedForms,
+            formsThatFailedToBeFullySetUp: [
+              ...acc.formsThatFailedToBeFullySetUp,
               {
                 id:
                   (current.reason as Error).constructor === PostFormCreationException
@@ -173,28 +173,21 @@ async function main(): Promise<void> {
 
         return {
           ...acc,
-          createdForms: [
-            ...acc.createdForms,
-            {
-              id: current.value.formId,
-              usedTemplate: current.value.usedTemplate,
-              apiKey: current.value.apiKey,
-            },
-          ],
+          numberOfFormsSuccessfullySetUp: acc.numberOfFormsSuccessfullySetUp + 1,
         };
       },
-      { createdForms: [], failedToBeCreatedForms: [] } as {
-        createdForms: { id: string; usedTemplate: string; apiKey: string | undefined }[];
-        failedToBeCreatedForms: { id: string | undefined; errorMessage: string }[];
+      { numberOfFormsSuccessfullySetUp: 0, formsThatFailedToBeFullySetUp: [] } as {
+        numberOfFormsSuccessfullySetUp: number;
+        formsThatFailedToBeFullySetUp: { id: string | undefined; errorMessage: string }[];
       }
     );
 
-    if (setupReport.createdForms.length > 0) {
+    if (setupReport.numberOfFormsSuccessfullySetUp > 0) {
       console.info(
         styleText(
-          setupReport.failedToBeCreatedForms.length > 0 ? "yellowBright" : "greenBright",
+          setupReport.formsThatFailedToBeFullySetUp.length > 0 ? "yellowBright" : "greenBright",
           `\n${
-            setupReport.failedToBeCreatedForms.length > 0
+            setupReport.formsThatFailedToBeFullySetUp.length > 0
               ? "Oops.. Some of the forms failed to be created!"
               : "You are all set!"
           } The 'output.json' file has been generated.`
@@ -202,17 +195,17 @@ async function main(): Promise<void> {
       );
     }
 
-    if (setupReport.failedToBeCreatedForms.length > 0) {
+    if (setupReport.formsThatFailedToBeFullySetUp.length > 0) {
       console.info(
         styleText(
           "redBright",
-          `\n${setupReport.failedToBeCreatedForms.length} forms failed to be fully created.`
+          `\n${setupReport.formsThatFailedToBeFullySetUp.length} forms failed to be fully created.`
         )
       );
 
       console.error("List of errors that happened during setup process:");
 
-      for (const { errorMessage } of setupReport.failedToBeCreatedForms) {
+      for (const { errorMessage } of setupReport.formsThatFailedToBeFullySetUp) {
         console.error(errorMessage);
       }
     }

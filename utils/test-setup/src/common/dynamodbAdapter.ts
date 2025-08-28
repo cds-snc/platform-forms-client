@@ -3,7 +3,7 @@ import { BatchWriteCommand, BatchWriteCommandOutput } from "@aws-sdk/lib-dynamod
 import pLimit from "p-limit";
 import { delay } from "./utils";
 
-const DELAY_BETWEEN_DYNAMODB_QUERIES_IN_MS = 1000; // The delay is needed to avoid being rate limited by DynamoDB's API
+const DELAY_BETWEEN_DYNAMODB_QUERIES_IN_MS = 100; // The delay is needed to avoid being rate limited by DynamoDB's API
 const MAXIMUM_NUMBER_OF_UNPROCESSED_ITEMS_RETRIES = 5;
 
 const operationQueue = pLimit(1);
