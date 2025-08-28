@@ -2,7 +2,7 @@
  * Note this is a work in progress to move the tree view to a more accessible implementation.
  */
 
-import { ForwardRefRenderFunction, forwardRef, useImperativeHandle, ReactElement } from "react";
+import { ForwardRefRenderFunction, forwardRef, useImperativeHandle } from "react";
 
 import { TreeItem } from "react-complex-tree";
 
@@ -18,24 +18,10 @@ import {
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
 import { cn } from "@lib/utils";
 import { useTreeSync } from "./useTreeSync";
-import { getInitialTreeState } from "./treeUtils";
 
-export interface TreeDataProviderProps {
-  children?: ReactElement;
-  addItem: (id: string) => void;
-  updateItem: (id: string, value: string) => void;
-  removeItem: (id: string) => void;
-  addPage: () => void;
-}
+import { TreeDataProviderProps } from "../treeview/types";
 
-const treeOptions = {
-  addIntroElement: true,
-  addPolicyElement: true,
-  addConfirmationElement: true,
-  addSectionTitleElements: false,
-  reviewGroup: false,
-  headless: true,
-};
+import { getInitialTreeState, createTreeItem, treeOptions } from "./utils";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
@@ -80,41 +66,20 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
           // Always ensure we return something, never undefined
           if (!items) {
             // Return a placeholder item for missing data
-            return {
-              index: itemId,
-              canMove: false,
-              canRename: false,
-              data: { titleEn: "", titleFr: "" },
-              children: [],
-              isFolder: false,
-            };
+            return createTreeItem(itemId);
           }
 
           const item = items[itemId];
 
           // If item doesn't exist, return a placeholder
           if (item === undefined || item === null) {
-            return {
-              index: itemId,
-              canMove: false,
-              canRename: false,
-              data: { titleEn: "", titleFr: "" },
-              children: [],
-              isFolder: false,
-            };
+            return createTreeItem(itemId);
           }
 
           return item;
         } catch (error) {
           // Return placeholder for errors
-          return {
-            index: itemId,
-            canMove: false,
-            canRename: false,
-            data: { titleEn: "", titleFr: "" },
-            children: [],
-            isFolder: false,
-          };
+          return createTreeItem(itemId);
         }
       },
       getChildren: (itemId: string): string[] => {

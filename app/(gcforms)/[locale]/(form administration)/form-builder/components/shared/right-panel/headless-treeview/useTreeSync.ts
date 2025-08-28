@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
-import { elementIdToTreeId } from "./treeUtils";
+import { elementIdToTreeId } from "./utils";
 
 /**
  * Custom hook to sync tree state with external store
