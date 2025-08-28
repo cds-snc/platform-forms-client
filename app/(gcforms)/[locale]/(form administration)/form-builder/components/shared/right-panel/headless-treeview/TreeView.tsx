@@ -3,8 +3,11 @@
  */
 
 import { ForwardRefRenderFunction, forwardRef, useImperativeHandle } from "react";
+import { v4 as uuid } from "uuid";
 
 import { TreeItem } from "react-complex-tree";
+import { type GroupsType } from "@gcforms/types";
+import { useTranslation } from "@i18n/client";
 
 import "./style.css";
 import {
@@ -25,16 +28,26 @@ import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } f
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
+import { autoFlowGroupNextActions } from "../treeview/util/setNextAction";
+
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
 ) => {
-  const { getTreeData, updateGroup, selectedElementId } = useGroupStore((s) => ({
-    getTreeData: s.getTreeData,
-    updateGroup: s.updateGroup,
-    setSelectedElementId: s.setSelectedElementId,
-    selectedElementId: s.selectedElementId,
-  }));
+  const { t } = useTranslation("form-builder");
+  const { addGroup, replaceGroups, setId, getGroups, getTreeData, updateGroup, selectedElementId } =
+    useGroupStore((s) => ({
+      addGroup: s.addGroup,
+      replaceGroups: s.replaceGroups,
+      setId: s.setId,
+      getGroups: s.getGroups,
+      getTreeData: s.getTreeData,
+      updateGroup: s.updateGroup,
+      setSelectedElementId: s.setSelectedElementId,
+      selectedElementId: s.selectedElementId,
+    }));
+
+  const newSectionText = t("groups.newPage");
 
   const tree = useTree<TreeItem>({
     initialState: getInitialTreeState(selectedElementId),
@@ -74,6 +87,17 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   // Sync tree with external store changes
   useTreeSync(tree);
 
+  const addPage = () => {
+    const id = uuid();
+    addGroup(id, newSectionText);
+    const newGroups = autoFlowGroupNextActions(getGroups() as GroupsType, id);
+    replaceGroups(newGroups);
+    // setSelectedItems([id]);
+    //setExpandedItems([id]);
+    setId(id);
+    // tree.startRenamingItem(id);
+  };
+
   useImperativeHandle(ref, () => ({
     addItem: async () => {
       tree.rebuildTree();
@@ -85,7 +109,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       tree.rebuildTree();
     },
     addPage: () => {
-      tree.rebuildTree();
+      // eslint-disable-next-line no-console
+      console.log("Adding page");
+      addPage();
     },
   }));
 
