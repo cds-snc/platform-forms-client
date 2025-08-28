@@ -1,5 +1,8 @@
 /**
  * Note this is a work in progress to move the tree view to a more accessible implementation.
+ *
+ * Docs - https://headless-tree.lukasbach.com/
+ *
  */
 
 import { ForwardRefRenderFunction, forwardRef, useImperativeHandle } from "react";
