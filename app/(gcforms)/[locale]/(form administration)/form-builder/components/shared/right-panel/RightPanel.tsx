@@ -12,8 +12,9 @@ import { useActivePathname } from "@lib/hooks/form-builder/useActivePathname";
 import { DownloadCSVWithGroups } from "@formBuilder/[id]/edit/translate/components/DownloadCSVWithGroups";
 import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 
-import { TreeView } from "./headless-treeview/TreeView";
-// import { TreeView } from "./treeview/TreeView";
+import { TreeView as HeadlessTreeView } from "./headless-treeview/TreeView";
+
+import { TreeView } from "./treeview/TreeView";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SelectNextAction } from "./logic/SelectNextAction";
@@ -224,6 +225,11 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                             removeItem={() => {}}
                             addPage={() => {}}
                           />
+
+                          <div className="m-4 mx-2 border-2 border-dotted border-indigo-500">
+                            Headless
+                          </div>
+                          <HeadlessTreeView />
                         </div>
                         {/* end tree */}
                       </Tab.Panel>

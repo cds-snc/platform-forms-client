@@ -19,7 +19,7 @@ import { cn } from "@lib/utils";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
-export const TreeView = ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
+export const TreeView = () => {
   const getTreeData = useGroupStore((s) => s.getTreeData);
 
   const items = getTreeData({
@@ -68,27 +68,29 @@ export const TreeView = ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
   });
 
   return (
-    <div {...tree.getContainerProps()} className="tree" ref={ref}>
+    <div {...tree.getContainerProps()} className="tree">
       <AssistiveTreeDescription tree={tree} />
-      {tree.getItems().map((item) => (
-        <button
-          key={item.getId()}
-          {...item.getProps()}
-          style={{ paddingLeft: `${item.getItemMeta().level * 20}px` }}
-        >
-          <div
-            className={cn("treeitem", {
-              focused: item.isFocused(),
-              expanded: item.isExpanded(),
-              selected: item.isSelected(),
-              folder: item.isFolder(),
-              drop: item.isDragTarget(),
-            })}
+      {tree.getItems().map((item) => {
+        return (
+          <button
+            key={item.getId()}
+            {...item.getProps()}
+            style={{ paddingLeft: `${item.getItemMeta().level * 20}px` }}
           >
-            {item.getItemName()}
-          </div>
-        </button>
-      ))}
+            <div
+              className={cn("treeitem", {
+                focused: item.isFocused(),
+                expanded: item.isExpanded(),
+                selected: item.isSelected(),
+                folder: item.isFolder(),
+                drop: item.isDragTarget(),
+              })}
+            >
+              {item.getItemName()}
+            </div>
+          </button>
+        );
+      })}
       <div style={tree.getDragLineStyle()} className="dragline" />
     </div>
   );
