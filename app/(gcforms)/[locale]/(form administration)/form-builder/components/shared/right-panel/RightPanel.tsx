@@ -229,7 +229,14 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                           <div className="m-4 mx-2 border-2 border-dotted border-indigo-500">
                             Headless
                           </div>
-                          <HeadlessTreeView />
+                          <HeadlessTreeView
+                            ref={treeView}
+                            addItem={() => {}}
+                            updateItem={() => {}}
+                            removeItem={() => {}}
+                            addPage={() => {}}
+                            refresh={() => {}}
+                          />
                         </div>
                         {/* end tree */}
                       </Tab.Panel>

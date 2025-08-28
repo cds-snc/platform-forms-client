@@ -2,6 +2,8 @@
  * Note this is a work in progress to move the tree view to a more accessible implementation.
  */
 
+import { ForwardRefRenderFunction, forwardRef, useImperativeHandle, ReactElement } from "react";
+
 import { TreeItem } from "react-complex-tree";
 
 import "./style.css";
@@ -17,9 +19,20 @@ import { data } from "./data";
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
 import { cn } from "@lib/utils";
 
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+export interface TreeDataProviderProps {
+  children?: ReactElement;
+  addItem: (id: string) => void;
+  updateItem: (id: string, value: string) => void;
+  removeItem: (id: string) => void;
+  addPage: () => void;
+  refresh: () => void;
+}
 
-export const TreeView = () => {
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
+  { children },
+  ref
+) => {
   const getTreeData = useGroupStore((s) => s.getTreeData);
 
   const items = getTreeData({
@@ -67,9 +80,25 @@ export const TreeView = () => {
     ],
   });
 
+  useImperativeHandle(ref, () => ({
+    addItem: async () => {
+      tree.rebuildTree();
+    },
+    updateItem: () => {
+      tree.rebuildTree();
+    },
+    removeItem: () => {
+      tree.rebuildTree();
+    },
+    addPage: () => {
+      tree.rebuildTree();
+    },
+  }));
+
   return (
     <div {...tree.getContainerProps()} className="tree">
       <AssistiveTreeDescription tree={tree} />
+      {children}
       {tree.getItems().map((item) => {
         return (
           <button
@@ -95,3 +124,5 @@ export const TreeView = () => {
     </div>
   );
 };
+
+export const TreeView = forwardRef(HeadlessTreeView);
