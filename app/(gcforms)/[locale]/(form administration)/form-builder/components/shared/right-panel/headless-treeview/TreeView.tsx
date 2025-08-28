@@ -3,6 +3,12 @@
  *
  * Docs - https://headless-tree.lukasbach.com/
  *
+ * LLMs
+ * https://headless-tree.lukasbach.com/llms.txt
+ *
+ * Full
+ * https://headless-tree.lukasbach.com/llms-full.txt
+ *
  */
 
 import { ForwardRefRenderFunction, forwardRef, useImperativeHandle } from "react";
