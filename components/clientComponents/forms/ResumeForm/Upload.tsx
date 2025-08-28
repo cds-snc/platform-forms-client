@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 import { saveSessionProgress } from "@lib/utils/saveSessionProgress";
 
-import { type FormValues } from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";

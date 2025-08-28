@@ -1,4 +1,4 @@
-import { GroupsType } from "@lib/formContext";
+import { type GroupsType } from "@gcforms/types";
 
 export const orderGroups = (groups?: GroupsType, groupsLayout?: string[]) => {
   if (!groupsLayout || groupsLayout.length <= 0 || !groups) {

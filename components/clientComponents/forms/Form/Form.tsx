@@ -25,18 +25,13 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { StatusError } from "../StatusError/StatusError";
-import {
-  removeFormContextValues,
-  getInputHistoryValues,
-} from "@lib/utils/form-builder/groupsHistory";
-import { filterShownElements, filterValuesByShownElements, FormValues } from "@lib/formContext";
-import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { filterValuesByVisibleElements } from "@lib/formContext";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
 import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
-import { FormStatus } from "@gcforms/types";
+import { FormStatus, type FormValues } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
@@ -296,26 +291,13 @@ export const Form = withFormik<FormProps, Responses>({
       return;
     }
 
-    const getValuesForConditionalLogic = () => {
-      const inputHistoryValues = getInputHistoryValues(
-        values,
-        values.groupHistory as string[],
-        formikBag.props.formRecord.form.groups
-      );
-      const shownElements = filterShownElements(formikBag.props.formRecord, values as FormValues);
-      return filterValuesByShownElements(inputHistoryValues, shownElements);
-    };
-
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const hasGroups =
-        formHasGroups(formikBag.props.formRecord.form) && formikBag.props.allowGrouping;
-      const hasShowHideRules = (values.matchedIds as string[])?.length > 0;
-      const formValues =
-        hasGroups && hasShowHideRules
-          ? removeFormContextValues(getValuesForConditionalLogic())
-          : removeFormContextValues(values);
+      const formValues = filterValuesByVisibleElements(
+        formikBag.props.formRecord,
+        values as FormValues
+      );
 
       // Extract file content from formValues so they are not part of the submission call to the submit action
       const { formValuesWithoutFileContent, fileObjsRef } =
