@@ -6,11 +6,8 @@
  */
 
 import { ForwardRefRenderFunction, forwardRef, useImperativeHandle } from "react";
-import { v4 as uuid } from "uuid";
 
 import { TreeItem } from "react-complex-tree";
-import { type GroupsType } from "@gcforms/types";
-import { useTranslation } from "@i18n/client";
 
 import "./style.css";
 import {
@@ -31,26 +28,20 @@ import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } f
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
-import { autoFlowGroupNextActions } from "../treeview/util/setNextAction";
-
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
 ) => {
-  const { t } = useTranslation("form-builder");
-  const { addGroup, replaceGroups, setId, getGroups, getTreeData, updateGroup, selectedElementId } =
-    useGroupStore((s) => ({
-      addGroup: s.addGroup,
-      replaceGroups: s.replaceGroups,
-      setId: s.setId,
-      getGroups: s.getGroups,
-      getTreeData: s.getTreeData,
-      updateGroup: s.updateGroup,
-      setSelectedElementId: s.setSelectedElementId,
-      selectedElementId: s.selectedElementId,
-    }));
-
-  const newSectionText = t("groups.newPage");
+  const { getTreeData, updateGroup, selectedElementId } = useGroupStore((s) => ({
+    addGroup: s.addGroup,
+    replaceGroups: s.replaceGroups,
+    setId: s.setId,
+    getGroups: s.getGroups,
+    getTreeData: s.getTreeData,
+    updateGroup: s.updateGroup,
+    setSelectedElementId: s.setSelectedElementId,
+    selectedElementId: s.selectedElementId,
+  }));
 
   const tree = useTree<TreeItem>({
     initialState: getInitialTreeState(selectedElementId),
@@ -90,37 +81,8 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   // Sync tree with external store changes
   useTreeSync(tree);
 
-  const addPage = () => {
-    const id = uuid();
-    addGroup(id, newSectionText);
-    const newGroups = autoFlowGroupNextActions(getGroups() as GroupsType, id);
-    replaceGroups(newGroups);
-    // setSelectedItems([id]);
-    //setExpandedItems([id]);
-    setId(id);
-
-    tree.setSelectedItems([id]);
-
-    // @todo -- this isn't working
-    // tree.getItemInstance("intro").startRenaming();
-    // tree.getItemInstance(id).startRenaming();
-  };
-
   useImperativeHandle(ref, () => ({
-    addItem: async () => {
-      tree.rebuildTree();
-    },
-    updateItem: () => {
-      tree.rebuildTree();
-    },
-    removeItem: () => {
-      tree.rebuildTree();
-    },
-    addPage: () => {
-      // eslint-disable-next-line no-console
-      console.log("Adding page");
-      addPage();
-    },
+    // Note: if we can drive state from useTreeSync  we should be able to skip these functions
   }));
 
   return (
