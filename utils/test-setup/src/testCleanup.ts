@@ -23,10 +23,7 @@ async function main(): Promise<void> {
   let multiBarProgress: MultiBar | undefined = undefined;
 
   try {
-    const formIdsToCleanUp = [
-      ...output.failedToBeSetUpTestForms,
-      ...output.testForms.map((t) => t.id),
-    ];
+    const formIdsToCleanUp = output.testForms.map((t) => t.id);
 
     multiBarProgress = new MultiBar({
       format: "[{bar}] | {step} ({formId})",

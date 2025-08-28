@@ -4,9 +4,20 @@ import { publishForm } from "./setup/publishForm.js";
 import { createFormApiKey } from "./setup/createFormApiKey";
 import { MultiBar } from "cli-progress";
 import { createResponses } from "./setup/createResponse";
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { styleText } from "node:util";
-import { FileAttachment, setUpFileAttachments } from "./setup/setUpFileAttachments";
+import { setUpFileAttachments } from "./setup/setUpFileAttachments";
+import pLimit from "p-limit";
+
+type OutputFile = {
+  templates: Record<string, string>;
+  testForms: {
+    id: string;
+    usedTemplate: string;
+    apiKey?: string;
+  }[];
+  fileAttachmentStoredInS3: string[];
+};
 
 class PostFormCreationException extends Error {
   public formId: string;
@@ -18,6 +29,8 @@ class PostFormCreationException extends Error {
     this.formId = formId;
   }
 }
+
+const updateOutputFileOperationQueue = pLimit(1);
 
 async function main(): Promise<void> {
   const multiBarProgress = new MultiBar({
@@ -32,6 +45,10 @@ async function main(): Promise<void> {
     console.info("Setting up file attachment pool...");
 
     const fileAttachmentPool = await setUpFileAttachments();
+
+    await updateOutputfile({
+      saveFileAttachmentPool: { filePaths: fileAttachmentPool.map((f) => f.path) },
+    });
 
     const setupOperations = Array.from({ length: config.testSetup.numberOfForms }).map(
       async (_, i) => {
@@ -48,6 +65,13 @@ async function main(): Promise<void> {
         try {
           const formId = await createForm(`Test form - ${i}`, parsedTemplate);
 
+          await updateOutputfile({
+            saveForm: {
+              id: formId,
+              usedTemplate: { name: randomTemplate.name, json: randomTemplate.json },
+            },
+          });
+
           progress.update(0, { formId: formId });
 
           try {
@@ -63,7 +87,11 @@ async function main(): Promise<void> {
                 })()
               : undefined;
 
-            let test = false;
+            if (apiKey) {
+              await updateOutputfile({ saveApiKey: { formId: formId, key: apiKey } });
+            }
+
+            let didFailToCreateAllResponses = false;
 
             if (config.testSetup.numberOfResponses > 0) {
               progress.update(3, {
@@ -85,7 +113,7 @@ async function main(): Promise<void> {
                   totalNumberOfFailedInsertOperations +
                   createResponsesProgress.numberOfFailedInsertOperations;
 
-                test = totalNumberOfFailedInsertOperations > 0;
+                didFailToCreateAllResponses = totalNumberOfFailedInsertOperations > 0;
 
                 progress.update(3, {
                   step: styleText(
@@ -102,7 +130,7 @@ async function main(): Promise<void> {
               }
             }
 
-            if (test === false) {
+            if (didFailToCreateAllResponses === false) {
               progress.update(4, { step: styleText("greenBright", "✔ Form ready") });
             }
 
@@ -161,8 +189,6 @@ async function main(): Promise<void> {
       }
     );
 
-    await generateOutputFile(setupReport, fileAttachmentPool);
-
     if (setupReport.createdForms.length > 0) {
       console.info(
         styleText(
@@ -202,42 +228,44 @@ async function main(): Promise<void> {
   }
 }
 
-function generateOutputFile(
-  setupReport: {
-    createdForms: { id: string; usedTemplate: string; apiKey: string | undefined }[];
-    failedToBeCreatedForms: { id: string | undefined; errorMessage: string }[];
-  },
-  fileAttachmentPool: FileAttachment[]
-): Promise<void> {
-  const templates = config.testSetup.templates.reduce(
-    (acc, current) => {
-      acc[current.name] = current.json;
-      return acc;
-    },
-    {} as Record<string, string>
-  );
+async function updateOutputfile(input: {
+  saveForm?: { id: string; usedTemplate: { name: string; json: string } };
+  saveApiKey?: { formId: string; key: string };
+  saveFileAttachmentPool?: { filePaths: string[] };
+}): Promise<void> {
+  return updateOutputFileOperationQueue(async () => {
+    return readFile("output.json", "utf-8")
+      .then(JSON.parse)
+      .catch(() => ({
+        templates: {},
+        testForms: [],
+        fileAttachmentStoredInS3: [],
+      }))
+      .then((outputFile: OutputFile) => {
+        if (input.saveForm) {
+          outputFile.templates[input.saveForm.usedTemplate.name] = input.saveForm.usedTemplate.json;
+          outputFile.testForms = outputFile.testForms.concat([
+            { id: input.saveForm.id, usedTemplate: input.saveForm.usedTemplate.name },
+          ]);
+        }
 
-  const testForms = setupReport.createdForms.map((f) => ({
-    id: f.id,
-    usedTemplate: f.usedTemplate,
-    apiKey: f.apiKey,
-  }));
+        if (input.saveApiKey) {
+          const index = outputFile.testForms.findIndex(
+            (test) => test.id === input.saveApiKey?.formId
+          );
+          outputFile.testForms[index].apiKey = input.saveApiKey.key;
+        }
 
-  const failedToBeSetUpTestForms = setupReport.failedToBeCreatedForms
-    .filter((f) => f.id !== undefined)
-    .map((f) => f.id as string);
+        if (input.saveFileAttachmentPool) {
+          outputFile.fileAttachmentStoredInS3 = outputFile.fileAttachmentStoredInS3.concat(
+            input.saveFileAttachmentPool.filePaths
+          );
+        }
 
-  const fileAttachmentPoolAsListOfFilePath = fileAttachmentPool.map((file) => file.path);
-
-  return writeFile(
-    "output.json",
-    JSON.stringify({
-      templates,
-      testForms,
-      failedToBeSetUpTestForms,
-      fileAttachmentStoredInS3: fileAttachmentPoolAsListOfFilePath,
-    })
-  );
+        return outputFile;
+      })
+      .then((outputFile) => writeFile("output.json", JSON.stringify(outputFile)));
+  });
 }
 
 main();

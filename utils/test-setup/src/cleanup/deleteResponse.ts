@@ -1,7 +1,8 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { QueryCommand, BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
-import { chunkArray, delay } from "../common/utils";
+import { chunkArray } from "../common/utils";
 import pLimit, { LimitFunction } from "p-limit";
+import { sendBatchWriteCommandAndRetryOnUnprocessedItemsDetection } from "../common/dynamodbAdapter";
 
 interface Response {
   formId: string;
@@ -26,9 +27,6 @@ export async function deleteResponses(formId: string): Promise<void> {
       formId,
       lastEvaluatedKey ?? undefined
     );
-
-    // This is needed to avoid being rate limited by DynamoDB's API
-    await delay(1000);
 
     await deleteResponsesFromDynamodb(operationQueue, responsesToDelete.responses);
 
@@ -109,16 +107,12 @@ async function deleteResponsesFromDynamodb(
     })
     .map((deleteCommand) => {
       return operationQueue(() => {
-        return dynamodbClient
-          .send(deleteCommand)
-          .then((commandOutput) => {
-            if (commandOutput.UnprocessedItems && "Vault" in commandOutput.UnprocessedItems) {
-              throw new Error("Failed to delete some responses (detected UnprocessedItems)");
-            }
-          })
-          .catch((error) => {
-            throw new Error(`Failed to delete responses. Reason: ${(error as Error).message}`);
-          });
+        return sendBatchWriteCommandAndRetryOnUnprocessedItemsDetection(deleteCommand).catch(
+          (error) => {
+            console.log(error);
+            throw new Error(`Failed to delete responses. Reason: ${(error as Error).message}.`);
+          }
+        );
       });
     });
 

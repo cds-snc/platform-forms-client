@@ -1,10 +1,11 @@
-import { chunkArray, delay } from "../common/utils";
+import { chunkArray } from "../common/utils";
 import { v4 as uuid } from "uuid";
 import { FileAttachment } from "./setUpFileAttachments";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
-import { createHash, randomBytes } from "node:crypto";
+import { createHash } from "node:crypto";
 import pLimit from "p-limit";
+import { sendBatchWriteCommandAndRetryOnUnprocessedItemsDetection } from "../common/dynamodbAdapter";
 
 type GeneratedResponse = {
   responses: Record<string, any>;
@@ -23,6 +24,8 @@ export async function* createResponses(
 ) {
   const operationQueue = pLimit(1);
 
+  const existingResponseNames: Set<string> = new Set();
+
   const generatedResponseChunks = chunkArray(
     Array.from({ length: numberOfResponses }, () => {
       return generateResponse(form.template, fileAttachmentPool);
@@ -39,13 +42,12 @@ export async function* createResponses(
           command: new BatchWriteCommand({
             RequestItems: {
               Vault: chunk.flatMap((generatedResponse) => {
-                const submissionID = uuid();
+                const submissionId = uuid();
                 const createdAt = Date.now();
-                const submissionDate = new Date(createdAt);
-                const name = `${("0" + submissionDate.getDate()).slice(-2)}-${(
-                  "0" +
-                  (submissionDate.getMonth() + 1)
-                ).slice(-2)}-${randomBytes(8).toString("hex").substring(0, 5)}`;
+
+                const name = generateResponseName(existingResponseNames, submissionId, createdAt);
+                existingResponseNames.add(name);
+
                 const formSubmission = JSON.stringify(generatedResponse.responses);
                 const confirmationCode = uuid();
                 const formSubmissionHash = createHash("md5").update(formSubmission).digest("hex");
@@ -61,7 +63,7 @@ export async function* createResponses(
                   {
                     PutRequest: {
                       Item: {
-                        SubmissionID: submissionID,
+                        SubmissionID: submissionId,
                         FormID: form.id,
                         NAME_OR_CONF: `NAME#${name}`,
                         FormSubmission: formSubmission,
@@ -95,25 +97,15 @@ export async function* createResponses(
       })
       .map((insertCommand) => {
         return operationQueue(() => {
-          return dynamodbClient
-            .send(insertCommand.command)
-            .then((commandOutput) => {
-              if (commandOutput.UnprocessedItems && "Vault" in commandOutput.UnprocessedItems) {
-                throw new Error("Failed to insert some items");
-              }
-
-              return insertCommand.numberOfItems;
-            })
-            .catch(() => {
-              throw new Error("Failed to insert all items");
+          return sendBatchWriteCommandAndRetryOnUnprocessedItemsDetection(insertCommand.command)
+            .then(() => insertCommand.numberOfItems)
+            .catch((error) => {
+              throw new Error(`Failed to insert all items. Reason: ${(error as Error).message}.`);
             });
         });
       });
 
     const insertResponseOperationsResults = await Promise.allSettled(insertResponseOperations);
-
-    // This is needed to avoid being rate limited by DynamoDB's API
-    await delay(1000);
 
     const successVsFailureInsertOperations = insertResponseOperationsResults.reduce(
       (acc, current) => {
@@ -190,4 +182,51 @@ function generateResponse(
 
 function getRandomInt(max: number): number {
   return Math.floor(Math.random() * max);
+}
+
+function generateResponseName(
+  existingResponseNames: Set<string>,
+  submissionId: string,
+  createdAt: number
+): string {
+  const submissionDate = new Date(createdAt);
+
+  let name = "";
+  let shouldStop = false;
+  let duplicateFound = false;
+
+  while (shouldStop === false) {
+    name = `${("0" + submissionDate.getDate()).slice(-2)}-${(
+      "0" +
+      (submissionDate.getMonth() + 1)
+    ).slice(-2)}-${duplicateFound ? generateRandomString() : submissionId.substring(0, 5)}`;
+
+    if (existingResponseNames.has(name)) {
+      duplicateFound = true;
+    } else {
+      shouldStop = true;
+    }
+  }
+
+  return name;
+}
+
+function generateRandomString(): string {
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  const characters = letters + "0123456789";
+
+  let result = "";
+
+  // Ensure at least one letter
+  result += letters.charAt(Math.floor(Math.random() * letters.length));
+
+  for (let i = 0; i < 4; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  // Shuffle result to avoid always starting with a letter
+  return result
+    .split("")
+    .sort(() => 0.5 - Math.random())
+    .join("");
 }
