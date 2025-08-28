@@ -21,7 +21,7 @@ import { useTreeSync } from "./useTreeSync";
 
 import { TreeDataProviderProps } from "../treeview/types";
 
-import { getInitialTreeState, createTreeItem, treeOptions } from "./utils";
+import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } from "./treeUtils";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
@@ -59,52 +59,8 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     }),
     indent: 20,
     dataLoader: {
-      getItem: (itemId: string) => {
-        try {
-          const items = getTreeData(treeOptions);
-
-          // Always ensure we return something, never undefined
-          if (!items) {
-            // Return a placeholder item for missing data
-            return createTreeItem(itemId);
-          }
-
-          const item = items[itemId];
-
-          // If item doesn't exist, return a placeholder
-          if (item === undefined || item === null) {
-            return createTreeItem(itemId);
-          }
-
-          return item;
-        } catch (error) {
-          // Return placeholder for errors
-          return createTreeItem(itemId);
-        }
-      },
-      getChildren: (itemId: string): string[] => {
-        try {
-          const items = getTreeData(treeOptions);
-
-          // If items is null/undefined, return empty array
-          if (!items) {
-            return [];
-          }
-
-          const item = items[itemId];
-
-          // If parent item doesn't exist, return empty array
-          if (!item || item === null) {
-            return [];
-          }
-
-          const children = item.children;
-          return Array.isArray(children) ? children.map(String) : [];
-        } catch (error) {
-          // Always return empty array, never undefined
-          return [];
-        }
-      },
+      getItem: createSafeItemLoader(getTreeData),
+      getChildren: createSafeChildrenLoader(getTreeData),
     },
     features: [
       syncDataLoaderFeature,
