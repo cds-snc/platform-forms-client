@@ -95,7 +95,8 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     // setSelectedItems([id]);
     //setExpandedItems([id]);
     setId(id);
-    tree.getItemInstance(id).startRenaming();
+    // @todo -- this isn't working
+    // tree.getItemInstance(id).startRenaming();
   };
 
   useImperativeHandle(ref, () => ({
