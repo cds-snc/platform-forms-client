@@ -4,18 +4,18 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
 import { FormElement } from "@lib/types";
-import { GroupsType } from "@lib/formContext";
+import { type GroupsType } from "@gcforms/types";
 
 import { GroupSelect } from "./GroupSelect";
 import { ChoiceSelect } from "./ChoiceSelect";
 import { Button } from "@clientComponents/globals";
 import { AddIcon } from "@serverComponents/icons";
 
-import { NextActionRule } from "@lib/formContext";
+import { type NextActionRule } from "@gcforms/types";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
-import { ensureChoiceId } from "@lib/formContext";
+import { ensureChoiceId } from "@gcforms/core";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
