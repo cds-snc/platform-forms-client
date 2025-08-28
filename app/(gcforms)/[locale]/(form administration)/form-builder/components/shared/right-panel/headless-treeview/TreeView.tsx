@@ -34,6 +34,7 @@ const treeOptions = {
   addConfirmationElement: true,
   addSectionTitleElements: false,
   reviewGroup: false,
+  headless: true,
 };
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";

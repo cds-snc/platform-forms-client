@@ -9,6 +9,7 @@ export type TreeDataOptions = {
   addConfirmationElement?: boolean;
   addSectionTitleElements?: boolean;
   reviewGroup?: boolean;
+  headless?: boolean;
 };
 
 export const subElementsToTreeData = (parentId: number, subElements: FormElement[]) => {
@@ -175,7 +176,7 @@ export const groupsToTreeData = (
     isFolder: false,
     canRename: false,
     canMove: false,
-    // children: [],
+    children: [],
     data: {
       titleEn: "Privacy statement",
       titleFr: "Avis de confidentialité",
@@ -224,12 +225,13 @@ export const groupsToTreeData = (
   }
 
   // Remove children if empty array
-  // Headless version does not require this
-  Object.values(items).forEach((item) => {
-    if (Array.isArray(item.children) && item.children.length === 0) {
-      delete item.children;
-    }
-  });
+  if (options.headless) {
+    Object.values(items).forEach((item) => {
+      if (Array.isArray(item.children) && item.children.length === 0) {
+        delete item.children;
+      }
+    });
+  }
 
   return items;
 };

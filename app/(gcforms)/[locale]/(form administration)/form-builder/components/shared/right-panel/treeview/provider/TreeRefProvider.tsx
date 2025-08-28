@@ -8,7 +8,6 @@ export type treeContextType = {
   tree: RefObject<TreeRef | null> | null;
   open: boolean;
   togglePanel?: (state: boolean) => void;
-  refresh?: () => void;
 };
 
 // Create a context for the tree
