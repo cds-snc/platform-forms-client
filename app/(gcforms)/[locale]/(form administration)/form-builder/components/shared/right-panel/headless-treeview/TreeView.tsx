@@ -15,9 +15,10 @@ import {
   keyboardDragAndDropFeature,
   selectionFeature,
 } from "@headless-tree/core";
-import { data } from "./data";
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
 import { cn } from "@lib/utils";
+import { useTreeSync } from "./useTreeSync";
+import { getInitialTreeState, getSelectedElementId } from "./treeUtils";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -28,30 +29,31 @@ export interface TreeDataProviderProps {
   refresh: () => void;
 }
 
+const treeOptions = {
+  addIntroElement: true,
+  addPolicyElement: true,
+  addConfirmationElement: true,
+  addSectionTitleElements: false,
+  reviewGroup: false,
+};
+
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
 ) => {
-  const getTreeData = useGroupStore((s) => s.getTreeData);
-
-  const items = getTreeData({
-    addIntroElement: true,
-    addPolicyElement: true,
-    addConfirmationElement: true,
-    addSectionTitleElements: false,
-    reviewGroup: false,
-  });
-
-  // const items = data;
-
-  //console.log(items);
+  const { getTreeData, updateGroup, setSelectedElementId, selectedElementId } = useGroupStore(
+    (s) => ({
+      getTreeData: s.getTreeData,
+      updateGroup: s.updateGroup,
+      setSelectedElementId: s.setSelectedElementId,
+      selectedElementId: s.selectedElementId,
+    })
+  );
 
   const tree = useTree<TreeItem>({
-    initialState: {
-      expandedItems: ["fruit"],
-      selectedItems: ["banana", "orange"],
-    },
+    initialState: getInitialTreeState(selectedElementId),
     rootItemId: "root",
     getItemName: (item) => {
       // Todo: update to use lang
@@ -61,12 +63,26 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     isItemFolder: (item) => !!item.getItemData()?.children,
     canReorder: true,
     onDrop: createOnDropHandler((item, newChildren) => {
-      data[item.getId()].children = newChildren;
+      // Update your external store when items are dropped
+      updateGroup(item.getId(), newChildren);
     }),
+    onSelectItems: (items) => {
+      // Sync selection with external store
+      const elementId = getSelectedElementId(items);
+      if (elementId !== undefined) {
+        setSelectedElementId(elementId);
+      }
+    },
     indent: 20,
     dataLoader: {
-      getItem: (itemId: string) => items[itemId],
+      getItem: (itemId: string) => {
+        const items = getTreeData(treeOptions);
+        const item = items[itemId];
+        return item;
+      },
       getChildren: (itemId: string): string[] => {
+        const items = getTreeData(treeOptions);
+
         const children = items[itemId]?.children;
         return children && children.length > 0 ? (children as string[]) : [];
       },
@@ -79,6 +95,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       keyboardDragAndDropFeature,
     ],
   });
+
+  // Sync tree with external store changes
+  useTreeSync(tree);
 
   useImperativeHandle(ref, () => ({
     addItem: async () => {
