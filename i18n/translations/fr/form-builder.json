@@ -257,7 +257,7 @@
       "title": "Chiffre",
       "amount": "Montant",
       "enterOnlyNumbers": "Saisissez un chiffre.",
-      "allowNegative": "Autoriser les nombres négatifs"
+      "allowNegative": "permettre les valeurs numériques négatives"
     },
     "questionElement": "Éléments",
     "radio": {
