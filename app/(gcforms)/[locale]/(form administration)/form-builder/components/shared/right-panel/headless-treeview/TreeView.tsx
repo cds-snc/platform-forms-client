@@ -95,7 +95,11 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     // setSelectedItems([id]);
     //setExpandedItems([id]);
     setId(id);
+
+    tree.setSelectedItems([id]);
+
     // @todo -- this isn't working
+    // tree.getItemInstance("intro").startRenaming();
     // tree.getItemInstance(id).startRenaming();
   };
 
@@ -135,6 +139,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
         return (
           <button
             key={item.getId()}
+            id={item.getId()}
             {...item.getProps()}
             style={{ paddingLeft: `${item.getItemMeta().level * 20}px` }}
           >
