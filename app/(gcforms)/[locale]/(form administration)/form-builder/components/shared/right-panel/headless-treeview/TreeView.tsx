@@ -26,7 +26,6 @@ export interface TreeDataProviderProps {
   updateItem: (id: string, value: string) => void;
   removeItem: (id: string) => void;
   addPage: () => void;
-  refresh: () => void;
 }
 
 const treeOptions = {
