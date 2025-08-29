@@ -256,7 +256,8 @@
       "description": "A field that only accepts a numeric value.",
       "title": "Number",
       "amount": "Amount",
-      "enterOnlyNumbers": "Enter a number."
+      "enterOnlyNumbers": "Enter a number.",
+      "allowNegative": "allow negative number values"
     },
     "questionElement": "Elements",
     "radio": {
