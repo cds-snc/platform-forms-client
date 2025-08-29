@@ -23,6 +23,7 @@ import {
   hotkeysCoreFeature,
   keyboardDragAndDropFeature,
   selectionFeature,
+  renamingFeature,
 } from "@headless-tree/core";
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
 import { cn } from "@lib/utils";
@@ -38,7 +39,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   { children },
   ref
 ) => {
-  const { getTreeData, updateGroup, selectedElementId } = useGroupStore((s) => ({
+  const { getTreeData, updateGroup, selectedElementId, updateGroupName } = useGroupStore((s) => ({
     addGroup: s.addGroup,
     replaceGroups: s.replaceGroups,
     setId: s.setId,
@@ -47,6 +48,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     updateGroup: s.updateGroup,
     setSelectedElementId: s.setSelectedElementId,
     selectedElementId: s.selectedElementId,
+    updateGroupName: s.updateGroupName,
   }));
 
   const tree = useTree<TreeItem>({
@@ -70,6 +72,10 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       // Update your external store when items are dropped
       updateGroup(item.getId(), newChildren);
     }),
+    onRename: (item, newName) => {
+      // Update the group name in the store when renamed
+      updateGroupName({ id: item.getId(), name: newName });
+    },
     indent: 20,
     dataLoader: {
       getItem: createSafeItemLoader(getTreeData),
@@ -81,55 +87,82 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       hotkeysCoreFeature,
       dragAndDropFeature,
       keyboardDragAndDropFeature,
+      renamingFeature,
     ],
   });
 
   // Sync tree with external store changes
-  useTreeSync(tree);
+  const { addPage, onFocusItem } = useTreeSync(tree);
 
   useImperativeHandle(ref, () => ({
-    // Note: if we can drive state from useTreeSync  we should be able to skip these functions
+    addItem: async () => {
+      tree.rebuildTree();
+    },
+    updateItem: () => {
+      tree.rebuildTree();
+    },
+    removeItem: () => {
+      tree.rebuildTree();
+    },
+    addPage: () => {
+      addPage();
+    },
   }));
 
   return (
-    <div {...tree.getContainerProps()} className="tree">
-      <AssistiveTreeDescription tree={tree} />
-      {children}
-      {tree.getItems().map((item) => {
-        // Skip rendering items that don't have valid data
-        try {
-          const itemData = item.getItemData();
-          if (!itemData || !itemData.data) {
+    <>
+      <button onClick={addPage}>Add Page</button>
+
+      <div {...tree.getContainerProps()} className="tree">
+        <AssistiveTreeDescription tree={tree} />
+        {children}
+        {tree.getItems().map((item) => {
+          // Skip rendering items that don't have valid data
+          try {
+            const itemData = item.getItemData();
+            if (!itemData || !itemData.data) {
+              return null;
+            }
+          } catch (error) {
+            // If getItemData throws an error, skip this item
             return null;
           }
-        } catch (error) {
-          // If getItemData throws an error, skip this item
-          return null;
-        }
 
-        return (
-          <button
-            key={item.getId()}
-            id={item.getId()}
-            {...item.getProps()}
-            style={{ paddingLeft: `${item.getItemMeta().level * 20}px` }}
-          >
+          return item.isRenaming() ? (
             <div
-              className={cn("treeitem", {
-                focused: item.isFocused(),
-                expanded: item.isExpanded(),
-                selected: item.isSelected(),
-                folder: item.isFolder(),
-                drop: item.isDragTarget(),
-              })}
+              className="renaming-item"
+              style={{ marginLeft: `${item.getItemMeta().level * 20}px` }}
             >
-              {item.getItemName()}
+              <input {...item.getRenameInputProps()} />
             </div>
-          </button>
-        );
-      })}
-      <div style={tree.getDragLineStyle()} className="dragline" />
-    </div>
+          ) : (
+            <button
+              key={item.getId()}
+              id={item.getId()}
+              {...item.getProps()}
+              onFocus={() => {
+                onFocusItem(item);
+              }}
+              style={{ paddingLeft: `${item.getItemMeta().level * 20}px` }}
+            >
+              <div
+                className={cn("treeitem", {
+                  focused: item.isFocused(),
+                  expanded: item.isExpanded(),
+                  selected: item.isSelected(),
+                  folder: item.isFolder(),
+                  drop: item.isDragTarget(),
+                })}
+              >
+                {item.getItemName()}
+              </div>
+            </button>
+          );
+        })}
+
+        <div style={tree.getDragLineStyle()} className="dragline" />
+      </div>
+    </>
   );
 };
 
