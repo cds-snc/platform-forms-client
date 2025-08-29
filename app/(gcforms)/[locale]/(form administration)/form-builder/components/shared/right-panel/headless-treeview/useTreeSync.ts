@@ -80,7 +80,11 @@ export const useTreeSync = <T>(tree: TreeInstance<T>) => {
         return;
       }
 
-      setId(item.isFolder() ? id : String(parent?.index));
+      // const toId = item.isFolder() ? id : String(parent?.index);
+
+      // console.log(toId, id, item.isFolder())
+
+      setId(id);
     },
     [getTreeData, setId]
   );
