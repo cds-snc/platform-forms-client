@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
 import { TreeInstance, ItemInstance } from "@headless-tree/core";
@@ -6,7 +6,6 @@ import { TreeInstance, ItemInstance } from "@headless-tree/core";
 import { GroupsType } from "@gcforms/types";
 import { useTranslation } from "@i18n/client";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
-import { elementIdToTreeId } from "./treeUtils";
 
 import { findParentGroup } from "../treeview/util/findParentGroup";
 
@@ -22,21 +21,15 @@ export const useTreeSync = <T>(tree: TreeInstance<T>) => {
   const { t } = useTranslation("form-builder");
   const newSectionText = t("groups.newPage");
 
-  const { setId, selectedElementId, groups, getGroups, addGroup, replaceGroups, getTreeData } =
-    useGroupStore((s) => ({
-      setId: s.setId,
-      selectedElementId: s.selectedElementId,
-      groups: s.getGroups(),
-      getGroups: s.getGroups,
-      addGroup: s.addGroup,
-      replaceGroups: s.replaceGroups,
-      getTreeData: s.getTreeData,
-    }));
+  const { setId, getGroups, addGroup, replaceGroups, getTreeData } = useGroupStore((s) => ({
+    setId: s.setId,
+    getGroups: s.getGroups,
+    addGroup: s.addGroup,
+    replaceGroups: s.replaceGroups,
+    getTreeData: s.getTreeData,
+  }));
 
   // Keep track of groups changes to trigger sync
-  const groupsRef = useRef(groups);
-  const groupKeysRef = useRef<string[]>([]);
-
   const addPage = useCallback(() => {
     const id = uuid();
     addGroup(id, newSectionText);
@@ -91,48 +84,6 @@ export const useTreeSync = <T>(tree: TreeInstance<T>) => {
     },
     [getTreeData, setId]
   );
-
-  useEffect(() => {
-    // Check if groups structure changed (new/removed groups)
-    if (groups !== groupsRef.current) {
-      const currentGroupKeys = groups ? Object.keys(groups) : [];
-      const previousGroupKeys = groupsRef.current ? Object.keys(groupsRef.current) : [];
-
-      const groupsChanged =
-        currentGroupKeys.length !== previousGroupKeys.length ||
-        currentGroupKeys.some((key) => !previousGroupKeys.includes(key)) ||
-        previousGroupKeys.some((key) => !currentGroupKeys.includes(key));
-
-      if (groupsChanged && tree && typeof tree.rebuildTree === "function") {
-        // Groups structure changed (added/removed), rebuild the tree
-        try {
-          tree.rebuildTree();
-        } catch (error) {
-          // Ignore rebuild errors - tree will sync on next render
-        }
-      }
-
-      groupsRef.current = groups;
-      groupKeysRef.current = currentGroupKeys;
-    }
-  }, [groups, tree]);
-
-  // Sync selection from store to tree
-  useEffect(() => {
-    if (selectedElementId !== undefined && tree && typeof tree.setSelectedItems === "function") {
-      try {
-        const currentSelection = tree.getState().selectedItems;
-        const expectedSelection = [String(elementIdToTreeId(selectedElementId))];
-
-        // Only update if selection actually changed
-        if (JSON.stringify(currentSelection) !== JSON.stringify(expectedSelection)) {
-          tree.setSelectedItems(expectedSelection);
-        }
-      } catch (error) {
-        // Ignore selection sync errors
-      }
-    }
-  }, [selectedElementId, tree]);
 
   return { addPage, onFocusItem };
 };
