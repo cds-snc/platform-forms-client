@@ -9,6 +9,7 @@ export type TreeDataOptions = {
   addConfirmationElement?: boolean;
   addSectionTitleElements?: boolean;
   reviewGroup?: boolean;
+  headless?: boolean;
 };
 
 export const subElementsToTreeData = (parentId: number, subElements: FormElement[]) => {
@@ -156,7 +157,7 @@ export const groupsToTreeData = (
     isFolder: false,
     canRename: false,
     canMove: false,
-    children: [],
+    //children: [],
     data: {
       titleEn: "Form introduction",
       titleFr: "Introduction au formulaire",
@@ -195,8 +196,6 @@ export const groupsToTreeData = (
     items["start"].children = [...startChildren, ...currentStartChildren];
   }
 
-  // ----
-
   const confirmationItem = {
     index: "confirmation",
     isFolder: false,
@@ -223,6 +222,15 @@ export const groupsToTreeData = (
   if (options.reviewGroup === false) {
     items.root.children = items.root.children?.filter((child) => child !== "review");
     delete items["review"];
+  }
+
+  // Remove children if empty array
+  if (options.headless) {
+    Object.values(items).forEach((item) => {
+      if (Array.isArray(item.children) && item.children.length === 0) {
+        delete item.children;
+      }
+    });
   }
 
   return items;

@@ -5,7 +5,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { Language } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+// import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
 export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; groupId: string }) => {
   const { getLocalizationAttribute, translationLanguagePriority } = useTemplateStore((s) => ({
@@ -17,7 +17,7 @@ export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; grou
   const language = (getLocalizationAttribute()?.lang as Language) || translationLanguagePriority;
 
   const { t } = useTranslation("form-builder");
-  const { tree } = useTreeRef();
+  // const { tree, headlessTree } = useTreeRef();
 
   const groupNameRef = useRef(null);
   const updateGroupTitle = useGroupStore((state) => state.updateGroupTitle);
@@ -33,8 +33,9 @@ export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; grou
   const saveGroupTitle = (groupTitle: string) => {
     updateGroupTitle({ id: groupId, locale: language, title: groupTitle });
 
-    const sectionTitleKey = `section-title-${groupId}`;
-    tree?.current?.renameItem(sectionTitleKey, groupTitle);
+    // const sectionTitleKey = `section-title-${groupId}`;
+    // console.log("Renaming section title:", groupId, groupTitle);
+    // tree?.current?.renameItem(sectionTitleKey, groupTitle);
   };
 
   const lockedInput = Object.values(LockedSections).includes(groupId as LockedSections);
