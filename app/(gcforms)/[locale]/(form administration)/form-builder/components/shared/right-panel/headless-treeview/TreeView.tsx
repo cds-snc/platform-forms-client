@@ -9,6 +9,11 @@
  * Full
  * https://headless-tree.lukasbach.com/llms-full.txt
  *
+ * Notes:
+ * old refs
+ * tree?.current?. <- This to the instance of the Tree
+ * treeView?.current?. <- This is the useImperativeHandle ref
+ *
  */
 
 import { ForwardRefRenderFunction, forwardRef, useEffect, useImperativeHandle } from "react";
