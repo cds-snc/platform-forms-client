@@ -31,7 +31,7 @@ import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { Language } from "@lib/types/form-builder-types";
 import { announce } from "@gcforms/announce";
 
-const renderControlledTree = true;
+const renderControlledTree = false;
 
 const TabButton = ({
   text,
@@ -238,17 +238,16 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                             />
                           )}
 
-                          <div className="m-4 mx-2 border-2 border-dotted border-indigo-500">
-                            Headless
-                          </div>
-                          <HeadlessTreeView
-                            ref={treeView}
-                            addItem={() => {}}
-                            updateItem={() => {}}
-                            removeItem={() => {}}
-                            addPage={() => {}}
-                            addGroup={() => {}}
-                          />
+                          {!renderControlledTree && (
+                            <HeadlessTreeView
+                              ref={treeView}
+                              addItem={() => {}}
+                              updateItem={() => {}}
+                              removeItem={() => {}}
+                              addPage={() => {}}
+                              addGroup={() => {}}
+                            />
+                          )}
                         </div>
                         {/* end tree */}
                       </TabPanel>
