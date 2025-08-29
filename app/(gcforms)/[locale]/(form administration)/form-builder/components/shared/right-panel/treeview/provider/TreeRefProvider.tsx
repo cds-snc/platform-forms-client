@@ -1,11 +1,16 @@
 import React, { createContext, useContext, useRef, RefObject, useState } from "react";
 import { TreeEnvironmentRef, TreeRef } from "react-complex-tree";
+
 import { TreeDataProviderProps } from "../types";
+
+import { TreeInstance } from "@headless-tree/core";
+import { TreeItem } from "react-complex-tree";
 
 export type treeContextType = {
   treeView: RefObject<TreeDataProviderProps | null> | null;
   environment: RefObject<TreeEnvironmentRef | null> | null;
   tree: RefObject<TreeRef | null> | null;
+  headlessTree: RefObject<TreeInstance<TreeItem> | null> | null;
   open: boolean;
   togglePanel?: (state: boolean) => void;
 };
@@ -18,6 +23,7 @@ export const TreeRefProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const treeView = useRef<TreeDataProviderProps | null>(null);
   const environment = useRef<TreeEnvironmentRef | null>(null);
   const tree = useRef<TreeRef | null>(null);
+  const headlessTree = useRef<TreeInstance<TreeItem> | null>(null);
   const [open, setOpen] = useState(false);
 
   const togglePanel = (state: boolean) => {
@@ -30,6 +36,7 @@ export const TreeRefProvider: React.FC<{ children: React.ReactNode }> = ({ child
         treeView: treeView,
         environment: environment,
         tree: tree,
+        headlessTree: headlessTree,
         open: open,
         togglePanel: togglePanel,
       }}

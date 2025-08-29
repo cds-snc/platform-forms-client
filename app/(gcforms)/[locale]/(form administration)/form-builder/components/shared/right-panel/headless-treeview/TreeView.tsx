@@ -11,7 +11,7 @@
  *
  */
 
-import { ForwardRefRenderFunction, forwardRef, useImperativeHandle } from "react";
+import { ForwardRefRenderFunction, forwardRef, useEffect, useImperativeHandle } from "react";
 
 import { TreeItem } from "react-complex-tree";
 
@@ -36,6 +36,8 @@ import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } f
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 
+import { useTreeRef } from "../treeview/provider/TreeRefProvider";
+
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
@@ -52,6 +54,8 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   }));
 
   const { getTitle } = useElementTitle();
+
+  const { headlessTree } = useTreeRef();
 
   const tree = useTree<TreeItem>({
     initialState: getInitialTreeState(selectedElementId),
@@ -84,6 +88,10 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       renamingFeature,
     ],
   });
+
+  useEffect(() => {
+    headlessTree && (headlessTree.current = tree);
+  }, [headlessTree, tree]);
 
   // Sync tree with external store changes
   const { addPage, onFocusItem } = useTreeSync(tree);
