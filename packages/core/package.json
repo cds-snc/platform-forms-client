@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/core",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -20,7 +20,9 @@
   "scripts": {
     "build": "tsdown src/index.ts --format cjs,esm --dts --clean",
     "test": "vitest --config vitest.config.ts",
-    "test:watch": "vitest --config vitest.config.ts --watch"
+    "test:watch": "vitest --config vitest.config.ts --watch",
+    "prepack": "yarn build",
+    "core:prepack": "yarn prepack"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
