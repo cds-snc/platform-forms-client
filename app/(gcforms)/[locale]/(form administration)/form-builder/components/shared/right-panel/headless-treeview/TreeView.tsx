@@ -34,12 +34,13 @@ import { TreeDataProviderProps } from "../treeview/types";
 import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } from "./treeUtils";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
 ) => {
-  const { getTreeData, updateGroup, selectedElementId, updateGroupName } = useGroupStore((s) => ({
+  const { getTreeData, updateGroup, selectedElementId } = useGroupStore((s) => ({
     addGroup: s.addGroup,
     replaceGroups: s.replaceGroups,
     setId: s.setId,
@@ -48,21 +49,14 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     updateGroup: s.updateGroup,
     setSelectedElementId: s.setSelectedElementId,
     selectedElementId: s.selectedElementId,
-    updateGroupName: s.updateGroupName,
   }));
+
+  const { getTitle } = useElementTitle();
 
   const tree = useTree<TreeItem>({
     initialState: getInitialTreeState(selectedElementId),
     rootItemId: "root",
-    getItemName: (item) => {
-      // Todo: update to use lang
-      // return item.getItemData()?.name;
-      const itemData = item.getItemData();
-      if (!itemData || !itemData.data) {
-        return ""; // Return empty string for deleted/invalid items
-      }
-      return itemData.data.titleEn || "";
-    },
+    getItemName: (item) => getTitle(item.getItemData().data as ElementProperties),
     isItemFolder: (item) => {
       const itemData = item.getItemData();
       return !!(itemData && itemData.children);
@@ -72,9 +66,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       // Update your external store when items are dropped
       updateGroup(item.getId(), newChildren);
     }),
-    onRename: (item, newName) => {
-      // Update the group name in the store when renamed
-      updateGroupName({ id: item.getId(), name: newName });
+    onRename: (item, value) => {
+      alert(`Renamed ${item.getItemName()} to ${value}`);
+      // @todo add rename logic
     },
     indent: 20,
     dataLoader: {
@@ -130,6 +124,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
 
           return item.isRenaming() ? (
             <div
+              key={item.getId()}
               className="renaming-item"
               style={{ marginLeft: `${item.getItemMeta().level * 20}px` }}
             >

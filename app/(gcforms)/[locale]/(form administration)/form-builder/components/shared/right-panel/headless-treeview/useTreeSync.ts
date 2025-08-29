@@ -8,7 +8,10 @@ import { useTranslation } from "@i18n/client";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { elementIdToTreeId } from "./treeUtils";
 
+import { findParentGroup } from "../treeview/util/findParentGroup";
+
 import { autoFlowGroupNextActions } from "../treeview/util/setNextAction";
+import { TreeItem } from "react-complex-tree";
 
 /**
  * Custom hook to sync tree state with external store
@@ -19,16 +22,16 @@ export const useTreeSync = <T>(tree: TreeInstance<T>) => {
   const { t } = useTranslation("form-builder");
   const newSectionText = t("groups.newPage");
 
-  const { setId, selectedElementId, groups, getGroups, addGroup, replaceGroups } = useGroupStore(
-    (s) => ({
+  const { setId, selectedElementId, groups, getGroups, addGroup, replaceGroups, getTreeData } =
+    useGroupStore((s) => ({
       setId: s.setId,
       selectedElementId: s.selectedElementId,
       groups: s.getGroups(),
       getGroups: s.getGroups,
       addGroup: s.addGroup,
       replaceGroups: s.replaceGroups,
-    })
-  );
+      getTreeData: s.getTreeData,
+    }));
 
   // Keep track of groups changes to trigger sync
   const groupsRef = useRef(groups);
@@ -57,13 +60,38 @@ export const useTreeSync = <T>(tree: TreeInstance<T>) => {
     }, 0);
   }, [addGroup, getGroups, newSectionText, replaceGroups, setId, tree]);
 
-  // Focus Item
-  const onFocusItem = useCallback((item: ItemInstance<T>) => {
-    const id = item.getId();
-    // @todo navigate to page
-    // eslint-disable-next-line no-console
-    console.log(id);
-  }, []);
+  const onFocusItem = useCallback(
+    (item: ItemInstance<TreeItem>) => {
+      const id = item.getId();
+      const data = item.getItemData().data;
+
+      const parent = findParentGroup(getTreeData(), id);
+
+      if (data.type === "dynamicRow") {
+        setId(String(parent?.index));
+        return;
+      }
+
+      if (data.isSubElement) {
+        const subParent = findParentGroup(getTreeData(), String(data.parentId));
+        setId(String(subParent?.index));
+        return;
+      }
+
+      if (id === "intro" || id === "policy") {
+        setId("start");
+        return;
+      }
+
+      if (id === "confirmation") {
+        setId("end");
+        return;
+      }
+
+      setId(item.isFolder() ? id : String(parent?.index));
+    },
+    [getTreeData, setId]
+  );
 
   useEffect(() => {
     // Check if groups structure changed (new/removed groups)
