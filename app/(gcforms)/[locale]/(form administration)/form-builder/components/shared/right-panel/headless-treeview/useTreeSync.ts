@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { v4 as uuid } from "uuid";
 
-import { TreeInstance } from "@headless-tree/core";
+import { TreeInstance, ItemInstance } from "@headless-tree/core";
 
 import { GroupsType } from "@gcforms/types";
 import { useTranslation } from "@i18n/client";
@@ -58,7 +58,7 @@ export const useTreeSync = <T>(tree: TreeInstance<T>) => {
   }, [addGroup, getGroups, newSectionText, replaceGroups, setId, tree]);
 
   // Focus Item
-  const onFocusItem = useCallback((item) => {
+  const onFocusItem = useCallback((item: ItemInstance<T>) => {
     const id = item.getId();
     // @todo navigate to page
     // eslint-disable-next-line no-console
