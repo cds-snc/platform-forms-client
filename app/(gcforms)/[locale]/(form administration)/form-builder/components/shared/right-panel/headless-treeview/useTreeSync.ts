@@ -64,7 +64,6 @@ export const useTreeSync = <T>(tree: TreeInstance<T>) => {
     (item: ItemInstance<TreeItem>) => {
       const id = item.getId();
       const data = item.getItemData().data;
-
       const parent = findParentGroup(getTreeData(), id);
 
       if (data.type === "dynamicRow") {
