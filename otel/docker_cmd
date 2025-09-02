@@ -1,0 +1,6 @@
+docker run --rm -it -p 4317:4317 -p 4318:4318 -p 2000:2000 \
+-e AWS_REGION=ca-central-1 \
+-e AWS_PROFILE=development \
+-v ./next-agent-config.yaml:/etc/next-agent-config.yaml \
+-v ~/.aws:/home/aoc/.aws \
+amazon/aws-otel-collector:latest --config /etc/next-agent-config.yaml

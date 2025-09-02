@@ -1,0 +1,40 @@
+extensions:
+  health_check:
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 2s
+    send_batch_size: 50
+  batch/metrics:
+    timeout: 60s
+
+exporters:
+  debug:
+    verbosity: detailed
+  awsxray:
+    region: "ca-central-1"
+  awsemf:
+    region: "ca-central-1"
+    log_group_name: '/aws/otel/traces'
+    log_stream_name: 'app-metrics
+    dimension_rollup_option: 'NoDimensionRollup'
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [awsxray]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [awsemf]
+  extensions: [health_check]

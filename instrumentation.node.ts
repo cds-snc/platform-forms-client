@@ -21,9 +21,11 @@ const sdk = new NodeSDK({
       ignoreIncomingRequestHook: (request: IncomingMessage) => {
         const ignorePatterns = [
           /^\/_next\//, // starts with /_next/
+          /^\/__nextjs_\//, // starts with /__nextjs_/
           /^\/img\//, // starts with /img/
           /^\/static\//, // starts with /static/
           /\?_rsc=/, // contains ?_rsc=
+          /^\/favicon.ico/, // starts with favicon.ico
         ];
 
         const url = request.url;
