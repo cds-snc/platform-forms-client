@@ -1,0 +1,24 @@
+{
+  "gcFormsClient": {
+    "url": "https://forms-staging.cdssandbox.xyz",
+    "authjsCookie": "__Host-authjs.csrf-token=...",
+    "serverActionIdentifiers": {
+      "createOrUpdateTemplate": "7f91af0b5f770b8e654b421d79546df9f3d0b80ead",
+      "updateTemplatePublishedStatus": "7f244459a58a8dd268968cbe0464a27e9e11798212",
+      "deleteForm": "7fdb6663d8bb1d8f5355664f7c8aa6464b945b08ac",
+      "createServiceAccountKey": "7f0d3cefb47e0bd604ea02102a9b0ad3a62edd57a9"
+    }
+  },
+  "testSetup": {
+    "templates": [
+      {
+        "name": "basicForm",
+        "json": "{\"titleEn\":\"test\",\"titleFr\":\"test\",\"introduction\":{\"descriptionEn\":\"\",\"descriptionFr\":\"\"},\"privacyPolicy\":{\"descriptionEn\":\"test\",\"descriptionFr\":\"test\"},\"confirmation\":{\"descriptionEn\":\"test\",\"descriptionFr\":\"test\",\"referrerUrlEn\":\"\",\"referrerUrlFr\":\"\"},\"layout\":[1],\"elements\":[{\"id\":1,\"type\":\"textField\",\"properties\":{\"questionId\":\"\",\"tags\":[],\"subElements\":[],\"choices\":[{\"en\":\"\",\"fr\":\"\"}],\"titleEn\":\"Q1\",\"titleFr\":\"test\",\"validation\":{\"required\":false},\"descriptionEn\":\"\",\"descriptionFr\":\"\",\"placeholderEn\":\"\",\"placeholderFr\":\"\"},\"uuid\":\"f3969a91-863a-499e-9dfd-cfd043ebab55\"}],\"groups\":{\"start\":{\"name\":\"Start\",\"titleEn\":\"Start page\",\"titleFr\":\"Page de départ\",\"elements\":[\"1\"],\"nextAction\":\"review\"},\"review\":{\"name\":\"Review\",\"titleEn\":\"End (Review page and Confirmation)\",\"titleFr\":\"Fin (Page récapitulative et confirmation)\",\"elements\":[],\"nextAction\":\"end\"},\"end\":{\"name\":\"End\",\"titleEn\":\"Confirmation page\",\"titleFr\":\"Page de confirmation\",\"elements\":[]}},\"groupsLayout\":[],\"lastGeneratedElementId\":1}"
+      }
+    ],
+    "numberOfForms": 10,
+    "publishForm": true,
+    "enableApiAccess": true,
+    "numberOfResponses": 100
+  }
+}
