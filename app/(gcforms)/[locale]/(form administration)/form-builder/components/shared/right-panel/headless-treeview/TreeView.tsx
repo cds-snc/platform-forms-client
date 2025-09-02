@@ -32,7 +32,7 @@ import {
 } from "@headless-tree/core";
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
 import { cn } from "@lib/utils";
-import { useTreeSync } from "./useTreeSync";
+import { useTreeHandlers } from "./useTreeHandlers";
 
 import { TreeDataProviderProps } from "../treeview/types";
 
@@ -66,10 +66,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     initialState: getInitialTreeState(selectedElementId),
     rootItemId: "root",
     getItemName: (item) => getTitle(item.getItemData().data as ElementProperties),
-    isItemFolder: (item) => {
-      const itemData = item.getItemData();
-      return !!(itemData && itemData.children);
-    },
+    isItemFolder: (item) => item.getItemMeta().level < 1,
     canReorder: true,
     onDrop: createOnDropHandler((item, newChildren) => {
       // Update your external store when items are dropped
@@ -99,7 +96,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   }, [headlessTree, tree]);
 
   // Sync tree with external store changes
-  const { addPage, onFocusItem } = useTreeSync(tree);
+  const { addPage, setActiveGroup } = useTreeHandlers(tree);
 
   useImperativeHandle(ref, () => ({
     addItem: async () => {
@@ -111,9 +108,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     removeItem: () => {
       tree.rebuildTree();
     },
-    addPage: () => {
-      addPage();
-    },
+    addPage,
   }));
 
   return (
@@ -141,6 +136,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
               className="renaming-item"
               style={{ marginLeft: `${item.getItemMeta().level * 20}px` }}
             >
+              {/* Render EditableInput.tsx */}
               <input {...item.getRenameInputProps()} />
             </div>
           ) : (
@@ -149,7 +145,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
               id={item.getId()}
               {...item.getProps()}
               onFocus={() => {
-                onFocusItem(item);
+                setActiveGroup(item);
               }}
               style={{ paddingLeft: `${item.getItemMeta().level * 20}px` }}
             >

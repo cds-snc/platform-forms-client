@@ -12,12 +12,7 @@ import { findParentGroup } from "../treeview/util/findParentGroup";
 import { autoFlowGroupNextActions } from "../treeview/util/setNextAction";
 import { TreeItem } from "react-complex-tree";
 
-/**
- * Custom hook to sync tree state with external store
- * This ensures the tree rebuilds whenever the underlying data changes
- * while preserving the expanded/selected state and syncing selection with store
- */
-export const useTreeSync = <T>(tree: TreeInstance<T>) => {
+export const useTreeHandlers = <T>(tree: TreeInstance<T>) => {
   const { t } = useTranslation("form-builder");
   const newSectionText = t("groups.newPage");
 
@@ -53,7 +48,7 @@ export const useTreeSync = <T>(tree: TreeInstance<T>) => {
     }, 0);
   }, [addGroup, getGroups, newSectionText, replaceGroups, setId, tree]);
 
-  const onFocusItem = useCallback(
+  const setActiveGroup = useCallback(
     (item: ItemInstance<TreeItem>) => {
       const id = item.getId();
       const data = item.getItemData().data;
@@ -80,14 +75,12 @@ export const useTreeSync = <T>(tree: TreeInstance<T>) => {
         return;
       }
 
-      // const toId = item.isFolder() ? id : String(parent?.index);
+      const toId = item.isFolder() ? id : String(parent?.index);
 
-      // console.log(toId, id, item.isFolder())
-
-      setId(id);
+      setId(toId);
     },
     [getTreeData, setId]
   );
 
-  return { addPage, onFocusItem };
+  return { addPage, setActiveGroup };
 };
