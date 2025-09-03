@@ -1,13 +1,16 @@
-import { checkPageVisibility, FormValues, GroupsType, getValuesWithMatchedIds, 
-  getVisibleGroupsBasedOnValuesRecursive } from "../formContext";
-import type { PublicFormRecord, FormElement } from "../types";
+import { FormValues, GroupsType, PublicFormRecord, FormElement } from "@gcforms/types";
 
+import {
+  checkPageVisibility,
+  getValuesWithMatchedIds,
+  getVisibleGroupsBasedOnValuesRecursive,
+} from "./index";
 
 describe("checkPageVisibility", () => {
   const baseElement: FormElement = {
     id: 1,
     type: "textField",
-    properties: { conditionalRules: [] }
+    properties: { conditionalRules: [] },
   } as unknown as FormElement;
 
   const radioElement: FormElement = {
@@ -17,16 +20,16 @@ describe("checkPageVisibility", () => {
       conditionalRules: [],
       choices: [
         { en: "Option A", fr: "Option A" },
-        { en: "Option B", fr: "Option B" }
-      ]
-    }
+        { en: "Option B", fr: "Option B" },
+      ],
+    },
   } as unknown as FormElement;
 
   it("returns true if form has no groups", () => {
     const formRecord = {
       form: {
-        elements: [baseElement]
-      }
+        elements: [baseElement],
+      },
     } as PublicFormRecord;
     expect(checkPageVisibility(formRecord, baseElement, {})).toBe(true);
   });
@@ -35,82 +38,100 @@ describe("checkPageVisibility", () => {
     const formRecord = {
       form: {
         elements: [baseElement],
-        groups: {}
-      }
+        groups: {},
+      },
     } as PublicFormRecord;
     expect(checkPageVisibility(formRecord, baseElement, {})).toBe(true);
   });
 
   it("returns true if element is in a group reachable from start", () => {
     const groups: GroupsType = {
-      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: [], nextAction: "groupA" },
-      groupA: { name: "A", titleEn: "Group A", titleFr: "Group A", elements: ["1"] }
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: [],
+        nextAction: "groupA",
+      },
+      groupA: { name: "A", titleEn: "Group A", titleFr: "Group A", elements: ["1"] },
     };
     const formRecord = {
       form: {
         elements: [baseElement],
-        groups
-      }
+        groups,
+      },
     } as PublicFormRecord;
     expect(checkPageVisibility(formRecord, baseElement, {})).toBe(true);
   });
 
   it("returns false if element is in a group not reachable from start", () => {
     const groups: GroupsType = {
-      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: [], nextAction: "groupA" },
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: [],
+        nextAction: "groupA",
+      },
       groupA: { name: "A", titleEn: "Group A", titleFr: "Group A", elements: ["2"] },
-      groupB: { name: "B", titleEn: "Group B", titleFr: "Group B", elements: ["1"] }
+      groupB: { name: "B", titleEn: "Group B", titleFr: "Group B", elements: ["1"] },
     };
     const formRecord = {
       form: {
         elements: [baseElement],
-        groups
-      }
+        groups,
+      },
     } as PublicFormRecord;
     expect(checkPageVisibility(formRecord, baseElement, {})).toBe(false);
   });
 
   it("returns false if element is not in any group", () => {
     const groups: GroupsType = {
-      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: [], nextAction: "groupA" },
-      groupA: { name: "A", titleEn: "Group A", titleFr: "Group A", elements: ["2"] }
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: [],
+        nextAction: "groupA",
+      },
+      groupA: { name: "A", titleEn: "Group A", titleFr: "Group A", elements: ["2"] },
     };
     const formRecord = {
       form: {
         elements: [baseElement],
-        groups
-      }
+        groups,
+      },
     } as PublicFormRecord;
     expect(checkPageVisibility(formRecord, baseElement, {})).toBe(false);
   });
 
   it("follows conditional navigation with nextAction array based on form values", () => {
     const groups: GroupsType = {
-      start: { 
-        name: "Start", 
-        titleEn: "Start", 
-        titleFr: "Start", 
-        elements: ["2"], 
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: ["2"],
         nextAction: [
           { choiceId: "2.0", groupId: "groupA" },
-          { choiceId: "2.1", groupId: "groupB" }
-        ]
+          { choiceId: "2.1", groupId: "groupB" },
+        ],
       },
       groupA: { name: "A", titleEn: "Group A", titleFr: "Group A", elements: ["1"] },
-      groupB: { name: "B", titleEn: "Group B", titleFr: "Group B", elements: ["3"] }
+      groupB: { name: "B", titleEn: "Group B", titleFr: "Group B", elements: ["3"] },
     };
-    
+
     const element3: FormElement = {
       id: 3,
       type: "textField",
-      properties: { conditionalRules: [] }
+      properties: { conditionalRules: [] },
     } as unknown as FormElement;
 
     const formRecord = {
       form: {
         elements: [baseElement, radioElement, element3],
-        groups
-      }
+        groups,
+      },
     } as PublicFormRecord;
 
     // When radio element has value "Option A" (index 0), should go to groupA
@@ -118,7 +139,7 @@ describe("checkPageVisibility", () => {
     expect(checkPageVisibility(formRecord, baseElement, valuesForGroupA)).toBe(true);
     expect(checkPageVisibility(formRecord, element3, valuesForGroupA)).toBe(false);
 
-    // When radio element has value "Option B" (index 1), should go to groupB  
+    // When radio element has value "Option B" (index 1), should go to groupB
     const valuesForGroupB: FormValues = { "2": "Option B" };
     expect(checkPageVisibility(formRecord, baseElement, valuesForGroupB)).toBe(false);
     expect(checkPageVisibility(formRecord, element3, valuesForGroupB)).toBe(true);
@@ -126,56 +147,98 @@ describe("checkPageVisibility", () => {
 
   it("handles exit nextAction", () => {
     const groups: GroupsType = {
-      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: ["1"], nextAction: "exit" }
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: ["1"],
+        nextAction: "exit",
+      },
     };
     const formRecord = {
       form: {
         elements: [baseElement],
-        groups
-      }
+        groups,
+      },
     } as PublicFormRecord;
     expect(checkPageVisibility(formRecord, baseElement, {})).toBe(true);
   });
 
   it("prevents infinite loops by tracking visited groups", () => {
     const groups: GroupsType = {
-      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: [], nextAction: "groupA" },
-      groupA: { name: "A", titleEn: "Group A", titleFr: "Group A", elements: ["1"], nextAction: "groupB" },
-      groupB: { name: "B", titleEn: "Group B", titleFr: "Group B", elements: [], nextAction: "groupA" }
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: [],
+        nextAction: "groupA",
+      },
+      groupA: {
+        name: "A",
+        titleEn: "Group A",
+        titleFr: "Group A",
+        elements: ["1"],
+        nextAction: "groupB",
+      },
+      groupB: {
+        name: "B",
+        titleEn: "Group B",
+        titleFr: "Group B",
+        elements: [],
+        nextAction: "groupA",
+      },
     };
     const formRecord = {
       form: {
         elements: [baseElement],
-        groups
-      }
+        groups,
+      },
     } as PublicFormRecord;
     expect(checkPageVisibility(formRecord, baseElement, {})).toBe(true);
   });
 
   it("handles missing groups gracefully", () => {
     const groups: GroupsType = {
-      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: [], nextAction: "nonExistentGroup" }
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: [],
+        nextAction: "nonExistentGroup",
+      },
     };
     const formRecord = {
       form: {
         elements: [baseElement],
-        groups
-      }
+        groups,
+      },
     } as PublicFormRecord;
     expect(checkPageVisibility(formRecord, baseElement, {})).toBe(false);
   });
 
   it("handles chain of groups with simple nextAction strings", () => {
     const groups: GroupsType = {
-      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: [], nextAction: "groupA" },
-      groupA: { name: "A", titleEn: "Group A", titleFr: "Group A", elements: [], nextAction: "groupB" },
-      groupB: { name: "B", titleEn: "Group B", titleFr: "Group B", elements: ["1"] }
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: [],
+        nextAction: "groupA",
+      },
+      groupA: {
+        name: "A",
+        titleEn: "Group A",
+        titleFr: "Group A",
+        elements: [],
+        nextAction: "groupB",
+      },
+      groupB: { name: "B", titleEn: "Group B", titleFr: "Group B", elements: ["1"] },
     };
     const formRecord = {
       form: {
         elements: [baseElement],
-        groups
-      }
+        groups,
+      },
     } as PublicFormRecord;
     expect(checkPageVisibility(formRecord, baseElement, {})).toBe(true);
   });
@@ -185,7 +248,7 @@ describe("getValuesWithMatchedIds", () => {
   const textElement: FormElement = {
     id: 1,
     type: "textField",
-    properties: { conditionalRules: [] }
+    properties: { conditionalRules: [] },
   } as unknown as FormElement;
 
   const radioElement: FormElement = {
@@ -196,9 +259,9 @@ describe("getValuesWithMatchedIds", () => {
       choices: [
         { en: "Option A", fr: "Option A FR" },
         { en: "Option B", fr: "Option B FR" },
-        { en: "Option C", fr: "Option C FR" }
-      ]
-    }
+        { en: "Option C", fr: "Option C FR" },
+      ],
+    },
   } as unknown as FormElement;
 
   const checkboxElement: FormElement = {
@@ -208,9 +271,9 @@ describe("getValuesWithMatchedIds", () => {
       conditionalRules: [],
       choices: [
         { en: "Choice 1", fr: "Choice 1 FR" },
-        { en: "Choice 2", fr: "Choice 2 FR" }
-      ]
-    }
+        { en: "Choice 2", fr: "Choice 2 FR" },
+      ],
+    },
   } as unknown as FormElement;
 
   const formElements = [textElement, radioElement, checkboxElement];
@@ -243,13 +306,13 @@ describe("getValuesWithMatchedIds", () => {
     const values: FormValues = {
       "1": "Text value",
       "2": "Option C",
-      "3": "Choice 1"
+      "3": "Choice 1",
     };
     const result = getValuesWithMatchedIds(formElements, values);
     expect(result).toEqual({
       "1": "Text value",
       "2": "2.2",
-      "3": "3.0"
+      "3": "3.0",
     });
   });
 
@@ -262,16 +325,16 @@ describe("getValuesWithMatchedIds", () => {
   it("ignores reserved keys (currentGroup, groupHistory, matchedIds)", () => {
     const values: FormValues = {
       "2": "Option A",
-      "currentGroup": "start",
-      "groupHistory": ["start"],
-      "matchedIds": ["2.0"]
+      currentGroup: "start",
+      groupHistory: ["start"],
+      matchedIds: ["2.0"],
     };
     const result = getValuesWithMatchedIds(formElements, values);
     expect(result).toEqual({
       "2": "2.0",
-      "currentGroup": "start",
-      "groupHistory": ["start"],
-      "matchedIds": ["2.0"]
+      currentGroup: "start",
+      groupHistory: ["start"],
+      matchedIds: ["2.0"],
     });
   });
 
@@ -285,7 +348,7 @@ describe("getValuesWithMatchedIds", () => {
     const elementWithoutChoices: FormElement = {
       id: 4,
       type: "radio",
-      properties: { conditionalRules: [] }
+      properties: { conditionalRules: [] },
     } as unknown as FormElement;
 
     const values: FormValues = { "4": "Some value" };
@@ -304,11 +367,11 @@ describe("getVisibleGroupsBasedOnValuesRecursive", () => {
   it("returns history when current group is already visited (prevents infinite loops)", () => {
     const groups: GroupsType = {
       groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [], nextAction: "groupB" },
-      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [], nextAction: "groupA" }
+      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [], nextAction: "groupA" },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
     const result = getVisibleGroupsBasedOnValuesRecursive(
@@ -317,430 +380,375 @@ describe("getVisibleGroupsBasedOnValuesRecursive", () => {
       "groupA",
       ["groupA"] // groupA already in history
     );
-    
+
     expect(result).toEqual(["groupA"]);
   });
 
   it("returns history when current group doesn't exist", () => {
     const groups: GroupsType = {
-      groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] }
+      groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
-    const result = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      {},
-      "nonExistentGroup",
-      ["start"]
-    );
-    
+    const result = getVisibleGroupsBasedOnValuesRecursive(formRecord, {}, "nonExistentGroup", [
+      "start",
+    ]);
+
     expect(result).toEqual(["start"]);
   });
 
   it("handles simple string nextAction", () => {
     const groups: GroupsType = {
-      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: [], nextAction: "groupA" },
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: [],
+        nextAction: "groupA",
+      },
       groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [], nextAction: "groupB" },
-      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] }
+      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
-    const result = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      {},
-      "start"
-    );
-    
+    const result = getVisibleGroupsBasedOnValuesRecursive(formRecord, {}, "start");
+
     expect(result).toEqual(["start", "groupA", "groupB"]);
   });
 
   it("handles exit nextAction", () => {
     const groups: GroupsType = {
-      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: [], nextAction: "exit" }
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: [],
+        nextAction: "exit",
+      },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
-    const result = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      {},
-      "start"
-    );
-    
+    const result = getVisibleGroupsBasedOnValuesRecursive(formRecord, {}, "start");
+
     expect(result).toEqual(["start"]);
   });
 
   it("handles conditional nextAction with matching choice", () => {
     const groups: GroupsType = {
-      start: { 
-        name: "Start", 
-        titleEn: "Start", 
-        titleFr: "Start", 
-        elements: ["1"], 
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: ["1"],
         nextAction: [
           { choiceId: "1.0", groupId: "groupA" },
-          { choiceId: "1.1", groupId: "groupB" }
-        ]
+          { choiceId: "1.1", groupId: "groupB" },
+        ],
       },
       groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
-      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] }
+      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
     // Test first choice
     const valuesA: FormValues = { "1": "1.0" };
-    const resultA = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      valuesA,
-      "start"
-    );
+    const resultA = getVisibleGroupsBasedOnValuesRecursive(formRecord, valuesA, "start");
     expect(resultA).toEqual(["start", "groupA"]);
 
     // Test second choice
     const valuesB: FormValues = { "1": "1.1" };
-    const resultB = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      valuesB,
-      "start"
-    );
+    const resultB = getVisibleGroupsBasedOnValuesRecursive(formRecord, valuesB, "start");
     expect(resultB).toEqual(["start", "groupB"]);
   });
 
   it("handles conditional nextAction with no matching choice", () => {
     const groups: GroupsType = {
-      start: { 
-        name: "Start", 
-        titleEn: "Start", 
-        titleFr: "Start", 
-        elements: ["1"], 
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: ["1"],
         nextAction: [
           { choiceId: "1.0", groupId: "groupA" },
-          { choiceId: "1.1", groupId: "groupB" }
-        ]
+          { choiceId: "1.1", groupId: "groupB" },
+        ],
       },
       groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
-      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] }
+      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
     // No matching choice ID
     const values: FormValues = { "1": "1.2" };
-    const result = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      values,
-      "start"
-    );
+    const result = getVisibleGroupsBasedOnValuesRecursive(formRecord, values, "start");
     expect(result).toEqual(["start"]);
   });
 
   it("handles conditional nextAction with missing element value", () => {
     const groups: GroupsType = {
-      start: { 
-        name: "Start", 
-        titleEn: "Start", 
-        titleFr: "Start", 
-        elements: ["1"], 
-        nextAction: [
-          { choiceId: "1.0", groupId: "groupA" }
-        ]
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: ["1"],
+        nextAction: [{ choiceId: "1.0", groupId: "groupA" }],
       },
-      groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] }
+      groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
     // Element 1 has no value
     const values: FormValues = {};
-    const result = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      values,
-      "start"
-    );
+    const result = getVisibleGroupsBasedOnValuesRecursive(formRecord, values, "start");
     expect(result).toEqual(["start"]);
   });
 
   it("handles complex multi-level navigation", () => {
     const groups: GroupsType = {
-      start: { 
-        name: "Start", 
-        titleEn: "Start", 
-        titleFr: "Start", 
-        elements: ["1"], 
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: ["1"],
         nextAction: [
           { choiceId: "1.0", groupId: "pathA" },
-          { choiceId: "1.1", groupId: "pathB" }
-        ]
+          { choiceId: "1.1", groupId: "pathB" },
+        ],
       },
-      pathA: { 
-        name: "Path A", 
-        titleEn: "Path A", 
-        titleFr: "Path A", 
-        elements: ["2"], 
-        nextAction: "finalA"
+      pathA: {
+        name: "Path A",
+        titleEn: "Path A",
+        titleFr: "Path A",
+        elements: ["2"],
+        nextAction: "finalA",
       },
-      pathB: { 
-        name: "Path B", 
-        titleEn: "Path B", 
-        titleFr: "Path B", 
-        elements: ["3"], 
+      pathB: {
+        name: "Path B",
+        titleEn: "Path B",
+        titleFr: "Path B",
+        elements: ["3"],
         nextAction: [
           { choiceId: "3.0", groupId: "finalB1" },
-          { choiceId: "3.1", groupId: "finalB2" }
-        ]
+          { choiceId: "3.1", groupId: "finalB2" },
+        ],
       },
       finalA: { name: "Final A", titleEn: "Final A", titleFr: "Final A", elements: [] },
       finalB1: { name: "Final B1", titleEn: "Final B1", titleFr: "Final B1", elements: [] },
-      finalB2: { name: "Final B2", titleEn: "Final B2", titleFr: "Final B2", elements: [] }
+      finalB2: { name: "Final B2", titleEn: "Final B2", titleFr: "Final B2", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
     // Test path A
     const valuesA: FormValues = { "1": "1.0" };
-    const resultA = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      valuesA,
-      "start"
-    );
+    const resultA = getVisibleGroupsBasedOnValuesRecursive(formRecord, valuesA, "start");
     expect(resultA).toEqual(["start", "pathA", "finalA"]);
 
     // Test path B with first sub-choice
     const valuesB1: FormValues = { "1": "1.1", "3": "3.0" };
-    const resultB1 = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      valuesB1,
-      "start"
-    );
+    const resultB1 = getVisibleGroupsBasedOnValuesRecursive(formRecord, valuesB1, "start");
     expect(resultB1).toEqual(["start", "pathB", "finalB1"]);
 
     // Test path B with second sub-choice
     const valuesB2: FormValues = { "1": "1.1", "3": "3.1" };
-    const resultB2 = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      valuesB2,
-      "start"
-    );
+    const resultB2 = getVisibleGroupsBasedOnValuesRecursive(formRecord, valuesB2, "start");
     expect(resultB2).toEqual(["start", "pathB", "finalB2"]);
   });
 
   it("handles groups with no nextAction", () => {
     const groups: GroupsType = {
-      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: [] }
+      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
-    const result = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      {},
-      "start"
-    );
-    
+    const result = getVisibleGroupsBasedOnValuesRecursive(formRecord, {}, "start");
+
     expect(result).toEqual(["start"]);
   });
 
   it("prevents infinite loops in circular navigation", () => {
     const groups: GroupsType = {
-      start: { name: "Start", titleEn: "Start", titleFr: "Start", elements: [], nextAction: "groupA" },
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: [],
+        nextAction: "groupA",
+      },
       groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [], nextAction: "groupB" },
-      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [], nextAction: "start" }
+      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [], nextAction: "start" },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
-    const result = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      {},
-      "start"
-    );
-    
+    const result = getVisibleGroupsBasedOnValuesRecursive(formRecord, {}, "start");
+
     // Should stop when it encounters 'start' again
     expect(result).toEqual(["start", "groupA", "groupB"]);
   });
 
   it("handles catch-all rules when no specific choice matches", () => {
     const groups: GroupsType = {
-      start: { 
-        name: "Start", 
-        titleEn: "Start", 
-        titleFr: "Start", 
-        elements: ["1"], 
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: ["1"],
         nextAction: [
           { choiceId: "1.0", groupId: "groupA" },
           { choiceId: "1.1", groupId: "groupB" },
-          { choiceId: "catch-all", groupId: "defaultGroup" }
-        ]
+          { choiceId: "catch-all", groupId: "defaultGroup" },
+        ],
       },
       groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
       groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] },
-      defaultGroup: { name: "Default", titleEn: "Default", titleFr: "Default", elements: [] }
+      defaultGroup: { name: "Default", titleEn: "Default", titleFr: "Default", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
     // No matching choice ID - should use catch-all
     const values: FormValues = { "1": "1.2" };
-    const result = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      values,
-      "start"
-    );
+    const result = getVisibleGroupsBasedOnValuesRecursive(formRecord, values, "start");
     expect(result).toEqual(["start", "defaultGroup"]);
   });
 
   it("handles catch-all rules when element has no value", () => {
     const groups: GroupsType = {
-      start: { 
-        name: "Start", 
-        titleEn: "Start", 
-        titleFr: "Start", 
-        elements: ["1"], 
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: ["1"],
         nextAction: [
           { choiceId: "1.0", groupId: "groupA" },
-          { choiceId: "catch-all", groupId: "defaultGroup" }
-        ]
+          { choiceId: "catch-all", groupId: "defaultGroup" },
+        ],
       },
       groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
-      defaultGroup: { name: "Default", titleEn: "Default", titleFr: "Default", elements: [] }
+      defaultGroup: { name: "Default", titleEn: "Default", titleFr: "Default", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
     // Element 1 has no value - should use catch-all
     const values: FormValues = {};
-    const result = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      values,
-      "start"
-    );
+    const result = getVisibleGroupsBasedOnValuesRecursive(formRecord, values, "start");
     expect(result).toEqual(["start", "defaultGroup"]);
   });
 
   it("prefers specific choice matches over catch-all rules", () => {
     const groups: GroupsType = {
-      start: { 
-        name: "Start", 
-        titleEn: "Start", 
-        titleFr: "Start", 
-        elements: ["1"], 
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: ["1"],
         nextAction: [
           { choiceId: "catch-all", groupId: "defaultGroup" },
           { choiceId: "1.0", groupId: "groupA" },
-          { choiceId: "1.1", groupId: "groupB" }
-        ]
+          { choiceId: "1.1", groupId: "groupB" },
+        ],
       },
       groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
       groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] },
-      defaultGroup: { name: "Default", titleEn: "Default", titleFr: "Default", elements: [] }
+      defaultGroup: { name: "Default", titleEn: "Default", titleFr: "Default", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
     // Should match specific choice, not catch-all
     const valuesA: FormValues = { "1": "1.0" };
-    const resultA = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      valuesA,
-      "start"
-    );
+    const resultA = getVisibleGroupsBasedOnValuesRecursive(formRecord, valuesA, "start");
     expect(resultA).toEqual(["start", "groupA"]);
 
     const valuesB: FormValues = { "1": "1.1" };
-    const resultB = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      valuesB,
-      "start"
-    );
+    const resultB = getVisibleGroupsBasedOnValuesRecursive(formRecord, valuesB, "start");
     expect(resultB).toEqual(["start", "groupB"]);
   });
 
   it("handles multiple catch-all rules (uses first found)", () => {
     const groups: GroupsType = {
-      start: { 
-        name: "Start", 
-        titleEn: "Start", 
-        titleFr: "Start", 
-        elements: ["1"], 
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: ["1"],
         nextAction: [
           { choiceId: "1.0", groupId: "groupA" },
           { choiceId: "catch-all-1", groupId: "defaultGroup1" },
-          { choiceId: "catch-all-2", groupId: "defaultGroup2" }
-        ]
+          { choiceId: "catch-all-2", groupId: "defaultGroup2" },
+        ],
       },
       groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
       defaultGroup1: { name: "Default1", titleEn: "Default1", titleFr: "Default1", elements: [] },
-      defaultGroup2: { name: "Default2", titleEn: "Default2", titleFr: "Default2", elements: [] }
+      defaultGroup2: { name: "Default2", titleEn: "Default2", titleFr: "Default2", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
     // Should use first catch-all rule found
     const values: FormValues = { "1": "1.2" };
-    const result = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      values,
-      "start"
-    );
+    const result = getVisibleGroupsBasedOnValuesRecursive(formRecord, values, "start");
     expect(result).toEqual(["start", "defaultGroup1"]);
   });
 
   it("handles conditional nextAction with no matching choice and no catch-all", () => {
     const groups: GroupsType = {
-      start: { 
-        name: "Start", 
-        titleEn: "Start", 
-        titleFr: "Start", 
-        elements: ["1"], 
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: ["1"],
         nextAction: [
           { choiceId: "1.0", groupId: "groupA" },
-          { choiceId: "1.1", groupId: "groupB" }
-        ]
+          { choiceId: "1.1", groupId: "groupB" },
+        ],
       },
       groupA: { name: "A", titleEn: "A", titleFr: "A", elements: [] },
-      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] }
+      groupB: { name: "B", titleEn: "B", titleFr: "B", elements: [] },
     };
-    
+
     const formRecord = {
-      form: { groups }
+      form: { groups },
     } as PublicFormRecord;
 
     // No matching choice ID and no catch-all - should return current history
     const values: FormValues = { "1": "1.2" };
-    const result = getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      values,
-      "start"
-    );
+    const result = getVisibleGroupsBasedOnValuesRecursive(formRecord, values, "start");
     expect(result).toEqual(["start"]);
   });
 });

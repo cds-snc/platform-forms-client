@@ -5,7 +5,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { autoFlowAllNextActions } from "@formBuilder/components/shared/right-panel/treeview/util/setNextAction";
-import { GroupsType } from "@lib/formContext";
+import { type GroupsType } from "@gcforms/types";
 import { SortIcon } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";

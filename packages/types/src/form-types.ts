@@ -61,6 +61,11 @@ export enum FormElementTypes {
   customJson = "customJson",
 }
 
+export const BetaFormElementTypes = {
+  [FormElementTypes.addressComplete]: { flag: "addressComplete" },
+  [FormElementTypes.fileInput]: { flag: "fileUpload" },
+};
+
 export type ConditionalRule = {
   choiceId: string;
 };

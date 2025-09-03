@@ -1,6 +1,6 @@
 import { FormElement } from "@lib/types";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
-import { Group, GroupsType } from "@lib/formContext";
+import { type Group, type GroupsType } from "@gcforms/types";
 import { TreeItems } from "../types";
 import { TemplateStore } from "@lib/store/useTemplateStore";
 import { TreeDataOptions } from "../util/groupsToTreeData";

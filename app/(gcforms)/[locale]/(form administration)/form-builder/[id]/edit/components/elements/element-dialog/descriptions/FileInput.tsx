@@ -53,8 +53,8 @@ export const FileInputTrialDescription = () => {
         <li>
           <Link href={link}>{t("addElementDialog.fileInputWithApi.trialFeature.bullet1")}</Link>
         </li>
+        <li>{t("addElementDialog.fileInputWithApi.trialFeature.bullet2")}</li>
         <li>{t("addElementDialog.fileInputWithApi.trialFeature.bullet3")}</li>
-        <li>{t("addElementDialog.fileInputWithApi.trialFeature.bullet4")}</li>
       </ul>
     </div>
   );

@@ -65,7 +65,7 @@ jobs:
         id: download-taskdef-form-viewer
         run: |
           aws ecs describe-task-definition --task-definition form-viewer --query taskDefinition > form_viewer.json
-          echo "container_name=$(jq -r '.containerDefinitions[0].name' form_viewer.json)" >> "$GITHUB_OUTPUT"
+          echo "container_name=$(jq -r '.containerDefinitions[1].name' form_viewer.json)" >> "$GITHUB_OUTPUT"
 
       - name: Render image for form viewer service
         id: taskdef-form-viewer
@@ -78,7 +78,7 @@ jobs:
 
       - name: Render appspec for form viewer service
         run: |
-          CONTAINER_PORT=`jq '.containerDefinitions[0].portMappings[0].containerPort' form_viewer.json`
+          CONTAINER_PORT=`jq '.containerDefinitions[1].portMappings[0].containerPort' form_viewer.json`
           CONTAINER_NAME=${{ steps.download-taskdef-form-viewer.outputs.container_name }}
           TASKDEF_ARN=`jq -r '.taskDefinitionArn' form_viewer.json | cut -f 1-6 -d "/"`
           jq --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json

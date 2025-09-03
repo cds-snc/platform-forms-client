@@ -8,6 +8,7 @@ import {
   BrandProperties,
   DeliveryOption,
   ConditionalRule,
+  ChoiceRule,
   FormRecord,
   SecurityAttribute,
   FormPurpose,
@@ -21,12 +22,14 @@ import {
   SortOption,
   NotificationsInterval,
   NotificationsIntervalDefault,
+  BetaFormElementTypes,
   DateFormat,
   DateObject,
   DatePart,
   GroupsType,
   FormValues,
   FileInput,
+  NextActionRule,
 } from "./form-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
@@ -39,6 +42,8 @@ export type { PropertyChoices };
 export type { BrandProperties };
 export type { DeliveryOption };
 export type { ConditionalRule };
+export type { ChoiceRule };
+export type { NextActionRule };
 export type { FormRecord };
 export type { SecurityAttribute };
 export type { FormPurpose };
@@ -51,6 +56,7 @@ export { FormElementTypes };
 export { FormStatus };
 export { NotificationsInterval };
 export { NotificationsIntervalDefault };
+export { BetaFormElementTypes };
 export type { DateFormat, DateObject, DatePart };
 export type { GroupsType };
 export type { FormValues };

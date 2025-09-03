@@ -4,6 +4,7 @@ import {
   GroupsType,
   FormValues,
   ConditionalRule,
+  ChoiceRule,
 } from "@gcforms/types";
 
 /**
@@ -200,4 +201,92 @@ export const findGroupByElementId = (
 
   // Find the group that contains the element with the specified id
   return Object.keys(groups).find((groupKey) => inGroup(groupKey, elementId, groups));
+};
+
+/**
+ * Ensure the choiceId is in the format "1.0"
+ * @param choiceId - The choiceId to ensure is in the correct format
+ * @returns The choiceId in the correct format
+ * i.e. "1" becomes "1.0"
+ * i.e. "1.0" stays "1.0"
+ */
+export const ensureChoiceId = (choiceId: string) => {
+  const choiceIdParts = choiceId.split(".");
+  if (choiceIdParts.length === 1) {
+    return `${choiceId}.0`;
+  }
+
+  return choiceId;
+};
+
+/**
+ * Searches for form elements that have a rule for a specified choice.
+ *
+ * @param {Array} formElements - The form elements to search.
+ * @param {string | number} choiceId - The id of the choice to search for.
+ * @returns {Array} - Returns an array of elements that have a rule for the specified choice.
+ */
+export const getElementsUsingChoiceId = ({
+  formElements,
+  choiceId,
+}: {
+  formElements: FormElement[];
+  choiceId: string;
+}) => {
+  const elements: ChoiceRule[] = [];
+
+  formElements.forEach((element) => {
+    // Look for conditional rules
+    if (element.properties.conditionalRules) {
+      element.properties.conditionalRules.forEach((rule) => {
+        if (rule.choiceId && rule.choiceId === choiceId) {
+          // add the element to the group
+          elements.push({
+            elementId: element.id.toString(),
+            choiceId: ensureChoiceId(rule.choiceId),
+          });
+        }
+      });
+    }
+  });
+
+  return elements;
+};
+
+/**
+ * Searches for form elements that have a rule for a specified choice parent.
+ * i.e. for a choiceId of "1.0", return all elements that have a rule for "1.x"
+ *
+ * @param {Array} formElements - The form elements to search.
+ * @param {string | number} choiceId - The id of the choice to search for.
+ * @returns {Array} - Returns an array of elements that have a rule for the specified choice.
+ */
+export const getElementsUsingChoiceIdParent = ({
+  formElements,
+  choiceId,
+}: {
+  formElements: FormElement[];
+  choiceId: string;
+}) => {
+  const elements: ChoiceRule[] = [];
+
+  formElements.forEach((element) => {
+    // Look for conditional rules
+    if (element.properties.conditionalRules) {
+      element.properties.conditionalRules.forEach((rule) => {
+        const parentId = choiceId.split(".")[0];
+        const ruleParentId = rule.choiceId.split(".")[0];
+
+        if (ruleParentId === parentId) {
+          // add the element to the group
+          elements.push({
+            elementId: element.id.toString(),
+            choiceId: ensureChoiceId(rule.choiceId),
+          });
+        }
+      });
+    }
+  });
+
+  return elements;
 };
