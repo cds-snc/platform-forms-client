@@ -18,5 +18,9 @@
   "saveLink": "Enregistrer le lien",
   "editLink": "Modifier le lien",
   "removeLink": "Supprimer le lien",
-  "pressEnterToEditLink": "Appuyez sur Entrée pour modifier le lien"
+  "pressEnterToEditLink": "Appuyez sur Entrée pour modifier le lien",
+  "tooltipIndent": "[FR]Indent",
+  "tooltipOutdent": "[FR]Outdent",
+  "indent": "[FR]Indent",
+  "outdent": "[FR]Outdent"
 }

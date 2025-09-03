@@ -29,11 +29,19 @@ import { BulletListIcon } from "../../icons/BulletListIcon";
 import { NumberedListIcon } from "../../icons/NumberedListIcon";
 import { LinkIcon } from "../../icons/LinkIcon";
 import { useTranslation } from "../../hooks/useTranslation";
-import { formatBulletList, formatHeading, formatNumberedList } from "./utils";
+import {
+  formatBulletList,
+  formatHeading,
+  formatIndent,
+  formatNumberedList,
+  formatOutdent,
+} from "./utils";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import "./styles.css";
 import { SHORTCUTS } from "../ShortcutsPlugin/shortcuts";
 import { blockTypeToBlockName, useToolbarState } from "../../context/ToolbarContext";
+import { IndentIcon } from "../../icons/IndentIcon";
+import { OutdentIcon } from "../../icons/OutdentIcon";
 
 export default function ToolbarPlugin({
   editorId,
@@ -69,6 +77,8 @@ export default function ToolbarPlugin({
     { id: 5, txt: "bulletedList" },
     { id: 6, txt: "numberedList" },
     { id: 7, txt: "link" },
+    { id: 8, txt: "indent" },
+    { id: 9, txt: "outdent" },
   ]);
 
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
@@ -359,6 +369,42 @@ export default function ToolbarPlugin({
             data-testid={`link-button`}
           >
             <LinkIcon />
+          </button>
+        </ToolTip>
+
+        <ToolTip text={t("tooltipIndent") + ` (${SHORTCUTS.INDENT})`}>
+          <button
+            tabIndex={currentFocusIndex == 7 ? 0 : -1}
+            ref={(el) => {
+              const index = "button-7" as unknown as number;
+              if (el && itemsRef.current) {
+                itemsRef.current[index] = el;
+              }
+            }}
+            onClick={() => formatIndent(editor)}
+            className="toolbar-item"
+            aria-label={t("indent")}
+            data-testid="indent-button"
+          >
+            <IndentIcon />
+          </button>
+        </ToolTip>
+
+        <ToolTip text={t("tooltipOutdent") + ` (${SHORTCUTS.OUTDENT})`}>
+          <button
+            tabIndex={currentFocusIndex == 8 ? 0 : -1}
+            ref={(el) => {
+              const index = "button-8" as unknown as number;
+              if (el && itemsRef.current) {
+                itemsRef.current[index] = el;
+              }
+            }}
+            onClick={() => formatOutdent(editor)}
+            className="toolbar-item"
+            aria-label={t("outdent")}
+            data-testid="outdent-button"
+          >
+            <OutdentIcon />
           </button>
         </ToolTip>
       </div>

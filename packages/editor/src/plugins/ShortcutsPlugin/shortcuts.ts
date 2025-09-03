@@ -24,6 +24,10 @@ export const SHORTCUTS = Object.freeze({
   BOLD: IS_APPLE ? "⌘+B" : "Ctrl+B",
   ITALIC: IS_APPLE ? "⌘+I" : "Ctrl+I",
   INSERT_LINK: IS_APPLE ? "⌘+K" : "Ctrl+K",
+
+  // Alt + Shift + <key> shortcuts
+  INDENT: "Alt+Shift+→",
+  OUTDENT: "Alt+Shift+←",
 });
 
 export function controlOrMeta(metaKey: boolean, ctrlKey: boolean): boolean {
@@ -73,4 +77,20 @@ export function isFormatNumberedList(event: KeyboardEvent): boolean {
 export function isInsertLink(event: KeyboardEvent): boolean {
   const { code, shiftKey, altKey, metaKey, ctrlKey } = event;
   return code === "KeyK" && !shiftKey && !altKey && controlOrMeta(metaKey, ctrlKey);
+}
+
+const isMac = typeof window !== "undefined" && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+
+// Note: Ctrl+Shift+ArrowRight reserved by MacOS so ALT+Shift+ArrowRight is used instead
+// Otherwise for all other platforms Ctrl+Shift+ArrowRight is used
+export const isIndent = (event: KeyboardEvent) => {
+  if (event.key !== "ArrowRight" || !event.shiftKey) return false;
+  return isMac ? event.altKey : event.ctrlKey;
+};
+
+// Note: Ctrl+Shift+ArrowLeft reserved by MacOS so ALT+Shift+ArrowLeft is used instead
+// Otherwise for all other platforms Ctrl+Shift+ArrowLeft is used
+export function isOutdent(event: KeyboardEvent): boolean {
+  if (event.key !== "ArrowLeft" || !event.shiftKey) return false;
+  return isMac ? event.altKey : event.ctrlKey;
 }
