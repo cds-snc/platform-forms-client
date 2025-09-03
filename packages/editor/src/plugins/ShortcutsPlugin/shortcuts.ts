@@ -79,18 +79,12 @@ export function isInsertLink(event: KeyboardEvent): boolean {
   return code === "KeyK" && !shiftKey && !altKey && controlOrMeta(metaKey, ctrlKey);
 }
 
-const isMac = typeof window !== "undefined" && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
-
-// Note: Ctrl+Shift+ArrowRight reserved by MacOS so ALT+Shift+ArrowRight is used instead
-// Otherwise for all other platforms Ctrl+Shift+ArrowRight is used
 export const isIndent = (event: KeyboardEvent) => {
-  if (event.key !== "ArrowRight" || !event.shiftKey) return false;
-  return isMac ? event.altKey : event.ctrlKey;
+  const { code, shiftKey, altKey } = event;
+  return code === "ArrowRight" && shiftKey && altKey;
 };
 
-// Note: Ctrl+Shift+ArrowLeft reserved by MacOS so ALT+Shift+ArrowLeft is used instead
-// Otherwise for all other platforms Ctrl+Shift+ArrowLeft is used
 export function isOutdent(event: KeyboardEvent): boolean {
-  if (event.key !== "ArrowLeft" || !event.shiftKey) return false;
-  return isMac ? event.altKey : event.ctrlKey;
+  const { code, shiftKey, altKey } = event;
+  return code === "ArrowLeft" && shiftKey && altKey;
 }
