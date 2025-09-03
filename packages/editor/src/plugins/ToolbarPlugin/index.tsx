@@ -382,9 +382,9 @@ export default function ToolbarPlugin({
               }
             }}
             onClick={() => formatIndent(editor)}
-            className="toolbar-item"
+            className={"toolbar-item " + (toolbarState.isIndent && editorHasFocus ? "active" : "")}
             aria-label={t("indent")}
-            aria-pressed={toolbarState.blockType === "number"}
+            aria-pressed={toolbarState.isIndent}
             data-testid="indent-button"
           >
             <IndentIcon />
@@ -401,9 +401,9 @@ export default function ToolbarPlugin({
               }
             }}
             onClick={() => formatOutdent(editor)}
-            className="toolbar-item"
+            className={"toolbar-item " + (toolbarState.isOutdent && editorHasFocus ? "active" : "")}
             aria-label={t("outdent")}
-            aria-pressed={toolbarState.blockType === "number"}
+            aria-pressed={toolbarState.isOutdent}
             data-testid="outdent-button"
           >
             <OutdentIcon />
