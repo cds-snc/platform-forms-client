@@ -42,6 +42,8 @@ import { createHeadlessCanDropHandler } from "./handleHeadlessCanDrop";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { Language } from "@lib/types/form-builder-types";
 
 import { useTreeRef } from "../treeview/provider/TreeRefProvider";
 
@@ -58,6 +60,8 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     getSubElements,
     updateSubElements,
     getElement,
+    updateElementTitle,
+    groupId,
   } = useGroupStore((s) => ({
     getTreeData: s.getTreeData,
     selectedElementId: s.selectedElementId,
@@ -67,7 +71,16 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     getSubElements: s.getSubElements,
     updateSubElements: s.updateSubElements,
     getElement: s.getElement,
+    updateElementTitle: s.updateElementTitle,
+    groupId: s.id,
   }));
+
+  const updateGroupTitle = useGroupStore((state) => state.updateGroupTitle);
+  const { getLocalizationAttribute } = useTemplateStore((s) => ({
+    getLocalizationAttribute: s.getLocalizationAttribute,
+  }));
+
+  const language = getLocalizationAttribute()?.lang as Language;
 
   const { getTitle } = useElementTitle();
 
@@ -126,21 +139,68 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       )
     ),
     onRename: (item, value) => {
-      // Update the external store with the new name
-      updateGroupName({ id: item.getId(), name: value });
+      const data = item.getItemData();
+      const id = item.getId();
+      const parent = item.getParent()?.getId();
+
+      // Handle title elements (section titles)
+      if (data && typeof data === "object" && id.includes("section-title-")) {
+        updateGroupTitle({ id: groupId, locale: language || "en", title: value });
+        tree.rebuildTree();
+        return;
+      }
+
+      // Handle root-level groups/folders
+      if (
+        parent === "root" &&
+        data &&
+        typeof data === "object" &&
+        (!data.type || data.type === "group")
+      ) {
+        updateGroupName({ id, name: value });
+        tree.rebuildTree();
+        return;
+      }
+
+      // Handle form elements (including dynamicRow and sub-elements)
+      if (data && typeof data === "object" && (data.type === "dynamicRow" || parent !== "root")) {
+        updateElementTitle({
+          id: Number(id),
+          text: value,
+        });
+        tree.rebuildTree();
+        return;
+      }
+
+      // Fallback for other cases
+      updateGroupName({ id, name: value });
       tree.rebuildTree();
     },
     canRename: (item) => {
       const id = item.getId();
-      const parent = item.getParent()?.getId();
+      // const data = item.getItemData();
 
-      if (parent !== "root") {
+      // Don't allow renaming of special sections
+      if (["start", "end", "intro", "policy", "confirmation", "review"].includes(id)) {
         return false;
       }
 
-      if (["start", "end"].includes(id)) {
-        return false;
-      }
+      // @TODO: copilot suggested the following, not sure it's needed?
+      // Don't allow renaming items with specific names that shouldn't be renamed
+      // if (data && typeof data === "object" && data.name) {
+      //   const itemName = String(data.name);
+      //   if (
+      //     ["Start", "Introduction", "Policy", "Review", "End", "Confirmation"].includes(itemName)
+      //   ) {
+      //     return false;
+      //   }
+      // }
+
+      // Allow renaming for:
+      // - Title elements (section titles)
+      // - Root-level groups/sections (excluding special ones)
+      // - Form elements and sub-elements
+      // - Dynamic rows
       return true;
     },
     indent: 20,
