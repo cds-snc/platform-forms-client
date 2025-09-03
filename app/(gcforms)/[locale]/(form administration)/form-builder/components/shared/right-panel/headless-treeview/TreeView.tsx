@@ -20,19 +20,7 @@ import { ForwardRefRenderFunction, forwardRef, useEffect, useImperativeHandle } 
 
 import "./style.css";
 
-// Define the data structure that headless-tree expects
-type TreeItemData = {
-  type?: string;
-  titleEn?: string;
-  titleFr?: string;
-  descriptionEn?: string;
-  descriptionFr?: string;
-  name?: string;
-  isSubElement?: boolean;
-  parentId?: number;
-  subIndex?: number;
-  nextAction?: string;
-};
+import { TreeItemData } from "./types";
 import {
   syncDataLoaderFeature,
   createOnDropHandler,
@@ -43,8 +31,8 @@ import {
   renamingFeature,
 } from "@headless-tree/core";
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
-import { cn } from "@lib/utils";
 import { useTreeHandlers } from "./useTreeHandlers";
+import { TreeItem } from "./TreeItem";
 
 import { TreeDataProviderProps } from "../treeview/types";
 
@@ -148,70 +136,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       <div {...tree.getContainerProps()} className="tree">
         <AssistiveTreeDescription tree={tree} />
         {children}
-        {tree.getItems().map((item) => {
-          // Skip rendering items that don't have valid data
-          try {
-            const itemData = item.getItemData();
-            if (!itemData) {
-              return null;
-            }
-          } catch (error) {
-            // If getItemData throws an error, skip this item
-            return null;
-          }
-
-          return item.isRenaming() ? (
-            <div
-              key={item.getId()}
-              className="renaming-item"
-              style={{ marginLeft: `${item.getItemMeta().level * 20}px` }}
-            >
-              <input
-                {...item.getRenameInputProps()}
-                autoFocus
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    tree.completeRenaming();
-                  } else if (e.key === "Escape") {
-                    e.preventDefault();
-                    tree.abortRenaming();
-                  }
-                }}
-                onBlur={() => {
-                  tree.completeRenaming();
-                }}
-              />
-            </div>
-          ) : (
-            <button
-              key={item.getId()}
-              id={item.getId()}
-              {...item.getProps()}
-              onFocus={() => {
-                setActiveGroup(item);
-              }}
-              onDoubleClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                tree.getItemInstance(item.getId()).startRenaming();
-              }}
-              style={{ paddingLeft: `${item.getItemMeta().level * 20}px` }}
-            >
-              <div
-                className={cn("treeitem", {
-                  focused: item.isFocused(),
-                  expanded: item.isExpanded(),
-                  selected: item.isSelected(),
-                  folder: item.isFolder(),
-                  drop: item.isDragTarget(),
-                })}
-              >
-                {item.getItemName()}
-              </div>
-            </button>
-          );
-        })}
+        {tree.getItems().map((item) => (
+          <TreeItem key={item.getId()} item={item} tree={tree} onFocus={setActiveGroup} />
+        ))}
 
         <div style={tree.getDragLineStyle()} className="dragline" />
       </div>
