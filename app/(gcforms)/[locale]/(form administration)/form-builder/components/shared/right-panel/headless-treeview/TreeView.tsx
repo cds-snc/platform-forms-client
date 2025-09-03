@@ -37,6 +37,8 @@ import { TreeItem } from "./TreeItem";
 import { TreeDataProviderProps } from "../treeview/types";
 
 import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } from "./treeUtils";
+import { createHeadlessDropHandler } from "./handleHeadlessDrop";
+import { createHeadlessCanDropHandler } from "./handleHeadlessCanDrop";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
@@ -47,10 +49,24 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   { children },
   ref
 ) => {
-  const { getTreeData, selectedElementId, updateGroupName } = useGroupStore((s) => ({
+  const {
+    getTreeData,
+    selectedElementId,
+    updateGroupName,
+    getGroups,
+    replaceGroups,
+    getSubElements,
+    updateSubElements,
+    getElement,
+  } = useGroupStore((s) => ({
     getTreeData: s.getTreeData,
     selectedElementId: s.selectedElementId,
     updateGroupName: s.updateGroupName,
+    getGroups: s.getGroups,
+    replaceGroups: s.replaceGroups,
+    getSubElements: s.getSubElements,
+    updateSubElements: s.updateSubElements,
+    getElement: s.getElement,
   }));
 
   const { getTitle } = useElementTitle();
@@ -68,12 +84,47 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       }
       return item.getId();
     },
-    isItemFolder: (item) => item.getItemMeta().level < 1,
+    isItemFolder: (item) => {
+      const data = item.getItemData();
+      const level = item.getItemMeta().level;
+
+      // Root level sections/groups should be folders (can contain children)
+      // But they should NOT accept other root-level items as children
+      if (level === 0 && data && typeof data === "object") {
+        // Check if this is a group/section vs a form element
+        return !data.type || data.type === "group" || ["start", "end"].includes(String(data.name));
+      }
+
+      return level < 1;
+    },
     canReorder: true,
-    onDrop: createOnDropHandler((_item, _newChildren) => {
-      // Update your external store when items are dropped
-      // updateGroup(item.getId(), newChildren);
-    }),
+    canDrop: (items, target) => {
+      const canDropHandler = createHeadlessCanDropHandler(getGroups, getElement);
+      const itemIds = items.map((item) => item.getId());
+
+      // Extract target information from headless-tree target structure
+      // If target.item exists, we're dropping ON an item (making it a child)
+      // If target.item is null/undefined, we're dropping between items at root level
+      let targetParentId: string;
+      let targetIndex: number;
+
+      if (target.item) {
+        // Dropping ON an item - the item becomes the parent
+        targetParentId = target.item.getId();
+        targetIndex = "insertionIndex" in target ? target.insertionIndex : 0;
+      } else {
+        // Dropping between items - assume root level
+        targetParentId = "root";
+        targetIndex = "insertionIndex" in target ? target.insertionIndex : 0;
+      }
+
+      return canDropHandler(itemIds, targetParentId, targetIndex);
+    },
+    onDrop: createOnDropHandler(
+      createHeadlessDropHandler(getGroups, replaceGroups, getSubElements, updateSubElements, () =>
+        tree.rebuildTree()
+      )
+    ),
     onRename: (item, value) => {
       // Update the external store with the new name
       updateGroupName({ id: item.getId(), name: value });

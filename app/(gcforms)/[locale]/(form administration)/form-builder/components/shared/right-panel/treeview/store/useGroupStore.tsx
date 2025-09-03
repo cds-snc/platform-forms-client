@@ -140,14 +140,23 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           }
           const newObject: GroupsType = {};
           const keys = Object.keys(s.form.groups);
+          let newGroupAdded = false;
 
           for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
-            if (key === "review") {
+
+            // Add new group before "end" section (or "review" if no "end" exists)
+            if ((key === "end" || key === "review") && !newGroupAdded) {
               newObject[id] = { name, elements: [], titleEn: "", titleFr: "" };
-              newObject[key] = s.form.groups[key];
+              newGroupAdded = true;
             }
+
             newObject[key] = s.form.groups[key];
+          }
+
+          // If no end or review section exists, add the new group at the end
+          if (!newGroupAdded) {
+            newObject[id] = { name, elements: [], titleEn: "", titleFr: "" };
           }
 
           s.form.groups = newObject;
