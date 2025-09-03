@@ -1,11 +1,6 @@
 /**
- * Utility functions for TreeView integration with external store
+ * Utility functions for TreeView integration with external store - Headless Tree version
  */
-
-import { TreeItemIndex, TreeItem } from "react-complex-tree";
-
-// Import types from the main treeview store
-type TreeItems = Record<TreeItemIndex, TreeItem>;
 
 // Define the tree data options type
 type TreeDataOptions = {
@@ -17,20 +12,20 @@ type TreeDataOptions = {
   headless?: boolean;
 };
 
-// Define the getTreeData function type
-type GetTreeDataFunction = (options: TreeDataOptions) => TreeItems;
+// Define the getTreeData function type that returns react-complex-tree format
+type GetTreeDataFunction = (options: TreeDataOptions) => Record<string, unknown>;
 
 /**
  * Converts element IDs to tree item IDs
  */
-export const elementIdToTreeId = (elementId: number): TreeItemIndex => {
+export const elementIdToTreeId = (elementId: number): string => {
   return String(elementId);
 };
 
 /**
  * Converts tree item IDs back to element IDs
  */
-export const treeIdToElementId = (treeId: TreeItemIndex): number | null => {
+export const treeIdToElementId = (treeId: string): number | null => {
   const id = parseInt(String(treeId));
   return isNaN(id) ? null : id;
 };
@@ -52,21 +47,12 @@ export const getInitialTreeState = (selectedElementId?: number) => ({
   selectedItems: selectedElementId ? [String(selectedElementId)] : ([] as string[]),
 });
 
-export const createTreeItem = (itemId: string): TreeItem => {
-  return {
-    index: itemId,
-    canMove: false,
-    canRename: false,
-    data: { titleEn: "", titleFr: "" },
-    children: [],
-    isFolder: false,
-  };
-};
-
 /**
  * Safely gets tree items from the store with error handling
  */
-export const getTreeItems = (getTreeDataFn: GetTreeDataFunction): TreeItems | null => {
+export const getTreeItems = (
+  getTreeDataFn: GetTreeDataFunction
+): Record<string, unknown> | null => {
   try {
     return getTreeDataFn(treeOptions);
   } catch (error) {
@@ -75,25 +61,27 @@ export const getTreeItems = (getTreeDataFn: GetTreeDataFunction): TreeItems | nu
 };
 
 /**
- * Safe data loader function for tree items
+ * Safe data loader function for tree items - converts react-complex-tree to headless-tree format
  */
 export const createSafeItemLoader = (getTreeDataFn: GetTreeDataFunction) => {
-  return (itemId: string): TreeItem => {
+  return (itemId: string): Record<string, unknown> => {
     const items = getTreeItems(getTreeDataFn);
 
     // Always ensure we return something, never undefined
     if (!items) {
-      return createTreeItem(itemId);
+      return { name: itemId, type: "unknown" };
     }
 
     const item = items[itemId];
 
     // If item doesn't exist, return a placeholder
     if (item === undefined || item === null) {
-      return createTreeItem(itemId);
+      return { name: itemId, type: "unknown" };
     }
 
-    return item;
+    // For headless-tree, we just return the data object, not the full TreeItem
+    const itemData = (item as Record<string, unknown>).data;
+    return (itemData as Record<string, unknown>) || { name: itemId, type: "unknown" };
   };
 };
 
@@ -116,7 +104,7 @@ export const createSafeChildrenLoader = (getTreeDataFn: GetTreeDataFunction) => 
       return [];
     }
 
-    const children = item.children;
+    const children = (item as Record<string, unknown>).children;
     return Array.isArray(children) ? children.map(String) : [];
   };
 };

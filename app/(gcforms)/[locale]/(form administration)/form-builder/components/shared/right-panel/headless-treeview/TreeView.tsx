@@ -18,9 +18,21 @@
 
 import { ForwardRefRenderFunction, forwardRef, useEffect, useImperativeHandle } from "react";
 
-import { TreeItem } from "react-complex-tree";
-
 import "./style.css";
+
+// Define the data structure that headless-tree expects
+type TreeItemData = {
+  type?: string;
+  titleEn?: string;
+  titleFr?: string;
+  descriptionEn?: string;
+  descriptionFr?: string;
+  name?: string;
+  isSubElement?: boolean;
+  parentId?: number;
+  subIndex?: number;
+  nextAction?: string;
+};
 import {
   syncDataLoaderFeature,
   createOnDropHandler,
@@ -47,34 +59,50 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   { children },
   ref
 ) => {
-  const { getTreeData, updateGroup, selectedElementId } = useGroupStore((s) => ({
-    addGroup: s.addGroup,
-    replaceGroups: s.replaceGroups,
-    setId: s.setId,
-    getGroups: s.getGroups,
+  const { getTreeData, selectedElementId, updateGroupName } = useGroupStore((s) => ({
     getTreeData: s.getTreeData,
-    updateGroup: s.updateGroup,
-    setSelectedElementId: s.setSelectedElementId,
     selectedElementId: s.selectedElementId,
+    updateGroupName: s.updateGroupName,
   }));
 
   const { getTitle } = useElementTitle();
 
   const { headlessTree } = useTreeRef();
 
-  const tree = useTree<TreeItem>({
+  const tree = useTree<TreeItemData>({
     initialState: getInitialTreeState(selectedElementId),
     rootItemId: "root",
-    getItemName: (item) => getTitle(item.getItemData().data as ElementProperties),
+    getItemName: (item) => {
+      const data = item.getItemData();
+      // For headless-tree, the data is the actual data object
+      if (data && typeof data === "object") {
+        return getTitle(data as ElementProperties) || data.name || item.getId();
+      }
+      return item.getId();
+    },
     isItemFolder: (item) => item.getItemMeta().level < 1,
     canReorder: true,
-    onDrop: createOnDropHandler((item, newChildren) => {
+    onDrop: createOnDropHandler((_item, _newChildren) => {
       // Update your external store when items are dropped
-      updateGroup(item.getId(), newChildren);
+      // updateGroup(item.getId(), newChildren);
     }),
     onRename: (item, value) => {
-      alert(`Renamed ${item.getItemName()} to ${value}`);
-      // @todo add rename logic
+      // Update the external store with the new name
+      updateGroupName({ id: item.getId(), name: value });
+      tree.rebuildTree();
+    },
+    canRename: (item) => {
+      const id = item.getId();
+      const parent = item.getParent()?.getId();
+
+      if (parent !== "root") {
+        return false;
+      }
+
+      if (["start", "end"].includes(id)) {
+        return false;
+      }
+      return true;
     },
     indent: 20,
     dataLoader: {
@@ -92,7 +120,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   });
 
   useEffect(() => {
-    headlessTree && (headlessTree.current = tree);
+    // Note: Type assertion needed during migration from react-complex-tree to headless-tree
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    headlessTree && (headlessTree.current = tree as any);
   }, [headlessTree, tree]);
 
   // Sync tree with external store changes
@@ -122,7 +152,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
           // Skip rendering items that don't have valid data
           try {
             const itemData = item.getItemData();
-            if (!itemData || !itemData.data) {
+            if (!itemData) {
               return null;
             }
           } catch (error) {
@@ -136,8 +166,22 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
               className="renaming-item"
               style={{ marginLeft: `${item.getItemMeta().level * 20}px` }}
             >
-              {/* Render EditableInput.tsx */}
-              <input {...item.getRenameInputProps()} />
+              <input
+                {...item.getRenameInputProps()}
+                autoFocus
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    tree.completeRenaming();
+                  } else if (e.key === "Escape") {
+                    e.preventDefault();
+                    tree.abortRenaming();
+                  }
+                }}
+                onBlur={() => {
+                  tree.completeRenaming();
+                }}
+              />
             </div>
           ) : (
             <button
@@ -146,6 +190,11 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
               {...item.getProps()}
               onFocus={() => {
                 setActiveGroup(item);
+              }}
+              onDoubleClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                tree.getItemInstance(item.getId()).startRenaming();
               }}
               style={{ paddingLeft: `${item.getItemMeta().level * 20}px` }}
             >

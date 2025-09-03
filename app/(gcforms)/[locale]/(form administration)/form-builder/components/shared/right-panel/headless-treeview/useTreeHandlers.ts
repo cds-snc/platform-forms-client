@@ -1,16 +1,19 @@
 import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
-import { TreeInstance, ItemInstance } from "@headless-tree/core";
-
+import { TreeInstance } from "@headless-tree/core";
 import { GroupsType } from "@gcforms/types";
 import { useTranslation } from "@i18n/client";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
-
 import { findParentGroup } from "../treeview/util/findParentGroup";
-
 import { autoFlowGroupNextActions } from "../treeview/util/setNextAction";
-import { TreeItem } from "react-complex-tree";
+
+// Type for tree item with minimal required methods
+type TreeItem = {
+  getId: () => string;
+  getItemData: () => unknown;
+  isFolder: () => boolean;
+};
 
 export const useTreeHandlers = <T>(tree: TreeInstance<T>) => {
   const { t } = useTranslation("form-builder");
@@ -35,8 +38,8 @@ export const useTreeHandlers = <T>(tree: TreeInstance<T>) => {
     tree.setSelectedItems([id]);
 
     // Start renaming the newly created item
-    // We need to wait a bit for the tree to rebuild and the item to be available
-    setTimeout(() => {
+    // We need to wait for the tree to rebuild and the item to be available
+    queueMicrotask(() => {
       try {
         const newItem = tree.getItemInstance(id);
         if (newItem && typeof newItem.startRenaming === "function") {
@@ -45,21 +48,21 @@ export const useTreeHandlers = <T>(tree: TreeInstance<T>) => {
       } catch (error) {
         // Ignore if item not found or renaming fails
       }
-    }, 0);
+    });
   }, [addGroup, getGroups, newSectionText, replaceGroups, setId, tree]);
 
   const setActiveGroup = useCallback(
-    (item: ItemInstance<TreeItem>) => {
+    (item: TreeItem) => {
       const id = item.getId();
-      const data = item.getItemData().data;
+      const data = item.getItemData() as Record<string, unknown>;
       const parent = findParentGroup(getTreeData(), id);
 
-      if (data.type === "dynamicRow") {
+      if (data && data.type === "dynamicRow") {
         setId(String(parent?.index));
         return;
       }
 
-      if (data.isSubElement) {
+      if (data && data.isSubElement) {
         const subParent = findParentGroup(getTreeData(), String(data.parentId));
         setId(String(subParent?.index));
         return;
