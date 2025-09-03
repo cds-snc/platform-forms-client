@@ -14,6 +14,7 @@ export const CaptchaFail = () => {
         <li>{t("helpOptions.item1")}</li>
         <li>{t("helpOptions.item2")}</li>
         <li>{t("helpOptions.item3")}</li>
+        <li>{t("helpOptions.item4")}</li>
       </ul>
     </>
   );
