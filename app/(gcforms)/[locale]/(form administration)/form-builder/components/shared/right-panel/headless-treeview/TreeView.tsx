@@ -48,7 +48,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { useTreeRef } from "../treeview/provider/TreeRefProvider";
 import { Button } from "@root/components/clientComponents/globals";
 import { AddIcon } from "@root/components/serverComponents/icons";
-import { KeyboardNavTip } from "../treeview/KeyboardNavTip";
+import { KeyboardNavTip } from "./KeyboardNavTip";
 import { useTranslation } from "@root/i18n/client";
 
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
