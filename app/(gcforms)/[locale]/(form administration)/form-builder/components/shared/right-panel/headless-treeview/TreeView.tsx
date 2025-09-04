@@ -37,8 +37,8 @@ import { TreeItem } from "./TreeItem";
 import { TreeDataProviderProps } from "../treeview/types";
 
 import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } from "./treeUtils";
-import { createHeadlessDropHandler } from "./handleHeadlessDrop";
-import { createHeadlessCanDropHandler } from "./handleHeadlessCanDrop";
+import { createHeadlessDropHandler } from "./handlers/handleOnDrop";
+import { createHeadlessCanDropHandler } from "./handlers/handleCanDropAt";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
