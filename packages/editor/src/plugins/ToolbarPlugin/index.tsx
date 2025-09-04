@@ -378,7 +378,10 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipIndent")} element={keyboardShortcut(SHORTCUTS.INDENT)}>
+        <ToolTip
+          text={t("tooltipIndent")}
+          element={keyboardShortcut(SHORTCUTS.INDENT, SHORTCUTS.INDENT_ALT)}
+        >
           <button
             tabIndex={currentFocusIndex == 7 ? 0 : -1}
             ref={(el) => {
@@ -396,7 +399,10 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipOutdent")} element={keyboardShortcut(SHORTCUTS.OUTDENT)}>
+        <ToolTip
+          text={t("tooltipOutdent")}
+          element={keyboardShortcut(SHORTCUTS.OUTDENT, SHORTCUTS.OUTDENT_ALT)}
+        >
           <button
             tabIndex={currentFocusIndex == 8 ? 0 : -1}
             ref={(el) => {
@@ -418,10 +424,10 @@ export default function ToolbarPlugin({
   );
 }
 
-const keyboardShortcut = (text: string) => {
+const keyboardShortcut = (text: string, ariaLabel?: string) => {
   return (
     <div>
-      <kbd>{text}</kbd>
+      <kbd {...(ariaLabel && { "aria-label": ariaLabel })}>{text}</kbd>
     </div>
   );
 };
