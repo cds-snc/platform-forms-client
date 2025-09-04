@@ -10,6 +10,38 @@ import { SignJWT } from "jose";
 import { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import md5 from "md5";
 import { logMessage } from "@lib/logger";
+// Removed incorrect import of 'blob'
+
+export enum SubmissionStatus {
+  New = "New",
+  Downloaded = "Downloaded",
+  Confirmed = "Confirmed",
+  Problem = "Problem",
+}
+
+export enum AttachmentScanStatus {
+  NoThreatsFound = "NoThreatsFound",
+  ThreatsFound = "ThreatsFound",
+  Unsupported = "Unsupported",
+  Failed = "Failed",
+}
+
+type CompleteAttachment = {
+  id: string;
+  name: string;
+  path: string;
+  scanStatus: AttachmentScanStatus;
+  downloadLink: string;
+};
+
+export type FormSubmission = {
+  createdAt: number;
+  status: SubmissionStatus;
+  confirmationCode: string;
+  answers: string;
+  checksum: string;
+  attachments?: CompleteAttachment[];
+};
 
 export class TokenRateLimitError extends Error {
   constructor(message: string) {
@@ -239,13 +271,25 @@ const downloadFormSubmissions = async (
 
       const decryptedData = await decryptFormSubmission(encryptedSubmission, decryptionKey);
 
+      const decryptedResponse: FormSubmission = JSON.parse(decryptedData);
+
       // Write the decrypted data to a file in the chosen directory
 
       const fileHandle = await dir.getFileHandle(`${submission.name}.json`, { create: true });
-      const fileStream = await fileHandle.createWritable();
+      const fileStream = await fileHandle.createWritable({ keepExistingData: false });
       await fileStream.write(decryptedData);
       await fileStream.close();
 
+      // check if there are files to download
+      if (decryptedResponse.attachments && decryptedResponse.attachments.length > 0) {
+        // download the files into their own folder
+
+        // assuming we have a directory handle: 'currentDirHandle'
+        const fileDir = await dir.getDirectoryHandle(submission.name, { create: true });
+        await Promise.all(
+          decryptedResponse.attachments.map((attachment) => downloadAttachment(fileDir, attachment))
+        );
+      }
       // await apiClient.confirmFormSubmission(submission.name, encryptedSubmission.confirmationCode);
     } catch (error) {
       logMessage.error(`Failed to download submission ${submission.name}:`, error);
@@ -254,6 +298,24 @@ const downloadFormSubmissions = async (
     }
   });
   await Promise.all(downloadPromises);
+};
+
+const downloadAttachment = async (
+  dir: FileSystemDirectoryHandle,
+  attachment: CompleteAttachment
+) => {
+  const response = await fetch(attachment.downloadLink);
+  // Ensure the fetch was successful
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const fileDir = await dir.getDirectoryHandle(attachment.id, { create: true });
+  const fileStream = await fileDir
+    .getFileHandle(`${attachment.name}`, { create: true })
+    .then((handle) => handle.createWritable({ keepExistingData: false }));
+
+  await response.body?.pipeTo(fileStream);
 };
 
 const integrityCheckAndConfirm = async (
