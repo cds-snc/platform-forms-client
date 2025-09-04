@@ -265,12 +265,14 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
         <KeyboardNavTip />
       </div>
 
-      <div {...tree.getContainerProps()} className="tree">
+      <div {...tree.getContainerProps()} className="w-full">
         <AssistiveTreeDescription tree={tree} />
         {children}
-        {tree.getItems().map((item) => (
-          <TreeItem key={item.getId()} item={item} tree={tree} onFocus={setActiveGroup} />
-        ))}
+        <div>
+          {tree.getItems().map((item) => (
+            <TreeItem key={item.getId()} item={item} tree={tree} onFocus={setActiveGroup} />
+          ))}
+        </div>
 
         <div style={tree.getDragLineStyle()} className="dragline" />
       </div>
