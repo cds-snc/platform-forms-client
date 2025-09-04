@@ -25,9 +25,12 @@ export const SHORTCUTS = Object.freeze({
   ITALIC: IS_APPLE ? "⌘+I" : "Ctrl+I",
   INSERT_LINK: IS_APPLE ? "⌘+K" : "Ctrl+K",
 
-  // Alt + Shift + <key> shortcuts
-  INDENT: "Alt+Shift+→",
-  OUTDENT: "Alt+Shift+←",
+  // "⌘+Opt+]" prevents overriding the key "Opt+[" “curly quotes” on macOS
+  // "⌘+Opt+]" prevents overriding the key "⌘+[" to go back in browser history on macOS
+  // But "⌘+Opt+]" is cumbersome and not very discoverable. Making an expection
+  // to override the default browser history keys for better usability in the editor.
+  INDENT: IS_APPLE ? "⌘+]" : "Ctrl+]",
+  OUTDENT: IS_APPLE ? "⌘+[" : "Ctrl+[",
 });
 
 export function controlOrMeta(metaKey: boolean, ctrlKey: boolean): boolean {
@@ -80,11 +83,13 @@ export function isInsertLink(event: KeyboardEvent): boolean {
 }
 
 export const isIndent = (event: KeyboardEvent) => {
-  const { code, shiftKey, altKey } = event;
-  return code === "ArrowRight" && shiftKey && altKey;
+  const { code, shiftKey, altKey, metaKey, ctrlKey } = event;
+  // ⌘ + ] (macOS) or Ctrl + ] (Win/Linux)
+  return code === "BracketRight" && !shiftKey && !altKey && controlOrMeta(metaKey, ctrlKey);
 };
 
 export function isOutdent(event: KeyboardEvent): boolean {
-  const { code, shiftKey, altKey } = event;
-  return code === "ArrowLeft" && shiftKey && altKey;
+  const { code, shiftKey, altKey, metaKey, ctrlKey } = event;
+  // ⌘ + [ (macOS) or Ctrl + [ (Win/Linux)
+  return code === "BracketLeft" && !shiftKey && !altKey && controlOrMeta(metaKey, ctrlKey);
 }
