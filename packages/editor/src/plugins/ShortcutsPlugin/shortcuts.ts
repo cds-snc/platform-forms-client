@@ -11,26 +11,26 @@ import { IS_APPLE } from "@lexical/utils";
 //disable eslint sorting rule for quick reference to shortcuts
 export const SHORTCUTS = Object.freeze({
   // (Ctrl|⌘) + (Alt|Option) + <key> shortcuts
-  NORMAL: IS_APPLE ? "⌘+Opt+0" : "Ctrl+Alt+0",
-  HEADING2: IS_APPLE ? "⌘+Opt+2" : "Ctrl+Alt+2",
-  HEADING3: IS_APPLE ? "⌘+Opt+3" : "Ctrl+Alt+3",
-  BULLET_LIST: IS_APPLE ? "⌘+Opt+4" : "Ctrl+Alt+4",
-  NUMBERED_LIST: IS_APPLE ? "⌘+Opt+5" : "Ctrl+Alt+5",
+  NORMAL: IS_APPLE ? "⌘ + Opt + 0" : "Ctrl + Alt + 0",
+  HEADING2: IS_APPLE ? "⌘ + Opt + 2" : "Ctrl + Alt + 2",
+  HEADING3: IS_APPLE ? "⌘ + Opt + 3" : "Ctrl + Alt + 3",
+  BULLET_LIST: IS_APPLE ? "⌘ + Opt + 4" : "Ctrl + Alt + 4",
+  NUMBERED_LIST: IS_APPLE ? "⌘ + Opt + 5" : "Ctrl + Alt + 5",
 
   // (Ctrl|⌘) + Shift + <key> shortcuts
   //
 
   // (Ctrl|⌘) + <key> shortcuts
-  BOLD: IS_APPLE ? "⌘+B" : "Ctrl+B",
-  ITALIC: IS_APPLE ? "⌘+I" : "Ctrl+I",
-  INSERT_LINK: IS_APPLE ? "⌘+K" : "Ctrl+K",
+  BOLD: IS_APPLE ? "⌘ + B" : "Ctrl + B",
+  ITALIC: IS_APPLE ? "⌘ + I" : "Ctrl + I",
+  INSERT_LINK: IS_APPLE ? "⌘ + K" : "Ctrl + K",
 
   // "⌘+Opt+]" prevents overriding the key "Opt+[" “curly quotes” on macOS
   // "⌘+Opt+]" prevents overriding the key "⌘+[" to go back in browser history on macOS
   // But "⌘+Opt+]" is cumbersome and not very discoverable. Making an expection
   // to override the default browser history keys for better usability in the editor.
-  INDENT: IS_APPLE ? "⌘+]" : "Ctrl+]",
-  OUTDENT: IS_APPLE ? "⌘+[" : "Ctrl+[",
+  INDENT: IS_APPLE ? "⌘ + ]" : "Ctrl + ]",
+  OUTDENT: IS_APPLE ? "⌘ + [" : "Ctrl + [",
 });
 
 export function controlOrMeta(metaKey: boolean, ctrlKey: boolean): boolean {

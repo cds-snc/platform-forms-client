@@ -220,7 +220,7 @@ export default function ToolbarPlugin({
         onKeyDown={handleNav}
         data-testid="toolbar"
       >
-        <ToolTip text={t("tooltipFormatH2") + ` (${SHORTCUTS.HEADING2})`}>
+        <ToolTip text={t("tooltipFormatH2")} element={keyboardShortcut(SHORTCUTS.HEADING2)}>
           <button
             tabIndex={currentFocusIndex == 0 ? 0 : -1}
             ref={(el) => {
@@ -243,7 +243,7 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipFormatH3") + ` (${SHORTCUTS.HEADING3})`}>
+        <ToolTip text={t("tooltipFormatH3")} element={keyboardShortcut(SHORTCUTS.HEADING3)}>
           <button
             tabIndex={currentFocusIndex == 1 ? 0 : -1}
             ref={(el) => {
@@ -266,7 +266,7 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipFormatBold") + ` (${SHORTCUTS.BOLD})`}>
+        <ToolTip text={t("tooltipFormatBold")} element={keyboardShortcut(SHORTCUTS.BOLD)}>
           <button
             tabIndex={currentFocusIndex == 2 ? 0 : -1}
             ref={(el) => {
@@ -287,7 +287,7 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipFormatItalic") + ` (${SHORTCUTS.ITALIC})`}>
+        <ToolTip text={t("tooltipFormatItalic")} element={keyboardShortcut(SHORTCUTS.ITALIC)}>
           <button
             tabIndex={currentFocusIndex == 3 ? 0 : -1}
             ref={(el) => {
@@ -308,7 +308,10 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipFormatBulletList") + ` (${SHORTCUTS.BULLET_LIST})`}>
+        <ToolTip
+          text={t("tooltipFormatBulletList")}
+          element={keyboardShortcut(SHORTCUTS.BULLET_LIST)}
+        >
           <button
             tabIndex={currentFocusIndex == 4 ? 0 : -1}
             ref={(el) => {
@@ -330,7 +333,10 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipFormatNumberedList") + ` (${SHORTCUTS.NUMBERED_LIST})`}>
+        <ToolTip
+          text={t("tooltipFormatNumberedList")}
+          element={keyboardShortcut(SHORTCUTS.NUMBERED_LIST)}
+        >
           <button
             tabIndex={currentFocusIndex == 5 ? 0 : -1}
             ref={(el) => {
@@ -352,7 +358,7 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipInsertLink") + ` (${SHORTCUTS.INSERT_LINK})`}>
+        <ToolTip text={t("tooltipInsertLink")} element={keyboardShortcut(SHORTCUTS.INSERT_LINK)}>
           <button
             tabIndex={currentFocusIndex == 6 ? 0 : -1}
             ref={(el) => {
@@ -372,7 +378,7 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipIndent") + ` (${SHORTCUTS.INDENT})`}>
+        <ToolTip text={t("tooltipIndent")} element={keyboardShortcut(SHORTCUTS.INDENT)}>
           <button
             tabIndex={currentFocusIndex == 7 ? 0 : -1}
             ref={(el) => {
@@ -390,7 +396,7 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipOutdent") + ` (${SHORTCUTS.OUTDENT})`}>
+        <ToolTip text={t("tooltipOutdent")} element={keyboardShortcut(SHORTCUTS.OUTDENT)}>
           <button
             tabIndex={currentFocusIndex == 8 ? 0 : -1}
             ref={(el) => {
@@ -411,3 +417,11 @@ export default function ToolbarPlugin({
     </>
   );
 }
+
+const keyboardShortcut = (text: string) => {
+  return (
+    <div>
+      <kbd>{text}</kbd>
+    </div>
+  );
+};
