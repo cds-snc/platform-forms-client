@@ -36,8 +36,6 @@ const INITIAL_TOOLBAR_STATE = {
   isBold: false,
   isItalic: false,
   isLink: false,
-  isIndent: false,
-  isOutdent: false,
   rootType: "root" as keyof typeof rootTypeToRootName,
 };
 
