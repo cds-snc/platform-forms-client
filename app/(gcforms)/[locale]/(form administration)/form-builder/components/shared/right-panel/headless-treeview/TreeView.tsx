@@ -46,6 +46,10 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 
 import { useTreeRef } from "../treeview/provider/TreeRefProvider";
+import { Button } from "@root/components/clientComponents/globals";
+import { AddIcon } from "@root/components/serverComponents/icons";
+import { KeyboardNavTip } from "../treeview/KeyboardNavTip";
+import { useTranslation } from "@root/i18n/client";
 
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
@@ -81,6 +85,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   }));
 
   const language = getLocalizationAttribute()?.lang as Language;
+
+  const { t } = useTranslation("form-builder");
+  const newSectionText = t("groups.newPage");
 
   const { getTitle } = useElementTitle();
 
@@ -142,6 +149,8 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       const data = item.getItemData();
       const id = item.getId();
       const parent = item.getParent()?.getId();
+
+      // @TODO: check these different cases:
 
       // Handle title elements (section titles)
       if (data && typeof data === "object" && id.includes("section-title-")) {
@@ -242,7 +251,19 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
 
   return (
     <>
-      <button onClick={addPage}>Add Page</button>
+      <div className="sticky top-0 z-10 flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+        <label className="flex items-center hover:fill-white hover:underline">
+          <span className="mr-2 pl-3 text-sm">{newSectionText}</span>
+          <Button
+            theme="secondary"
+            className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
+            onClick={addPage}
+          >
+            <AddIcon className="hover:fill-white focus:fill-white" title={t("groups.addPage")} />
+          </Button>
+        </label>
+        <KeyboardNavTip />
+      </div>
 
       <div {...tree.getContainerProps()} className="tree">
         <AssistiveTreeDescription tree={tree} />
