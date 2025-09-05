@@ -82,5 +82,23 @@ describe("<RichTextEditor />", () => {
     );
     cy.get('[id^="editor-"] a').first().contains("will be a link");
     cy.get('[id^="editor-"] a').first().should("have.attr", "href", "https://example.com");
+
+    // Add a new numbered list to test the indent and outdent buttons
+    cy.get('[id^="editor-"]').type(
+      "{moveToEnd}{enter}{enter}{enter}This is a numbered list item 2"
+    );
+    cy.get('[data-testid="numbered-list-button"]').first().click();
+    cy.get('[id^="editor-"]')
+      .setCursorAfter("This is a numbered list item 2")
+      .type("{enter}This is another numbered list item 2");
+    cy.get('[id^="editor-"] ol li').last().contains("This is another numbered list item 2");
+    // Indent the last list item
+    cy.get('[data-testid="indent-button"]').click();
+    cy.get('[id^="editor-"] ol li').eq(2).contains("This is a numbered list item 2");
+    cy.get('[id^="editor-"] ol li ol li').last().contains("This is another numbered list item 2");
+    // Outdent the last list item (revert)
+    cy.get('[data-testid="outdent-button"]').click();
+    cy.get('[id^="editor-"] ol li').eq(2).contains("This is a numbered list item 2");
+    cy.get('[id^="editor-"] ol li').last().contains("This is another numbered list item 2");
   });
 });

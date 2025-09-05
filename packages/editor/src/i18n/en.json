@@ -18,5 +18,9 @@
   "saveLink": "Save link",
   "editLink": "Edit link",
   "removeLink": "Remove link",
-  "pressEnterToEditLink": "Press Enter to edit link"
+  "pressEnterToEditLink": "Press Enter to edit link",
+  "tooltipIndent": "Indent",
+  "tooltipOutdent": "Outdent",
+  "indent": "Indent",
+  "outdent": "Outdent"
 }
