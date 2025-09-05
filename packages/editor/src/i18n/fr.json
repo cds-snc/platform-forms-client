@@ -19,8 +19,8 @@
   "editLink": "Modifier le lien",
   "removeLink": "Supprimer le lien",
   "pressEnterToEditLink": "Appuyez sur Entrée pour modifier le lien",
-  "tooltipIndent": "[FR]Indent",
-  "tooltipOutdent": "[FR]Outdent",
-  "indent": "[FR]Indent",
-  "outdent": "[FR]Outdent"
+  "tooltipIndent": "Indentation",
+  "tooltipOutdent": "Suppression d'indentation",
+  "indent": "Indentation",
+  "outdent": "Suppression d'indentation"
 }
