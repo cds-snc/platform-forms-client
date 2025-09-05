@@ -1,0 +1,137 @@
+import { TreeInstance } from "@headless-tree/core";
+import { cn } from "@lib/utils";
+import { TreeItemData, TreeItemInstance } from "./types";
+import { ArrowDown } from "./icons/ArrowDown";
+import { ArrowRight } from "./icons/ArrowRight";
+import { ItemActions } from "./ItemActions";
+
+interface TreeItemProps {
+  item: TreeItemInstance<TreeItemData>;
+  tree: TreeInstance<TreeItemData>;
+  onFocus: (item: TreeItemInstance<TreeItemData>) => void;
+}
+
+const isTitleElementType = (item: TreeItemInstance<TreeItemData>) => {
+  const key = item?.getId() as string;
+  if (!key) return false;
+  return key.includes("section-title-");
+};
+
+const isFormElementType = (item: TreeItemInstance<TreeItemData>) => {
+  const data = item.getItemData();
+  if (data.type === "dynamicRow") return true;
+  return item?.isFolder() && !isTitleElementType(item) ? false : true;
+};
+
+export const isSectionElementType = (item: TreeItemInstance<TreeItemData>) => {
+  return item?.isFolder() && item.getItemData().type !== "dynamicRow" ? true : false;
+};
+
+export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
+  // Skip rendering items that don't have valid data
+  try {
+    const itemData = item.getItemData();
+    if (!itemData) {
+      return null;
+    }
+  } catch (error) {
+    // If getItemData throws an error, skip this item
+    return null;
+  }
+
+  const isFormElement = item ? isFormElementType(item) : false;
+  const isSectionElement = item ? isSectionElementType(item) : false;
+
+  //   console.log({ isFormElement });
+
+  const formElementClasses = cn(
+    "rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px]",
+    item.isFocused() && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
+    item.isSelected() && "border-2 border-slate-950 bg-white",
+    !item.isSelected() &&
+      "border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50"
+  );
+
+  const interactiveSectionElementClasses = cn(
+    "w-full relative",
+    !item.isExpanded() && "border-b-1 border-slate-200"
+  );
+
+  if (item.isRenaming()) {
+    return (
+      <div
+        key={item.getId()}
+        className="renaming-item"
+        style={{ marginLeft: `${item.getItemMeta().level * 20}px` }}
+      >
+        <input
+          {...item.getRenameInputProps()}
+          autoFocus
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              tree.completeRenaming();
+            } else if (e.key === "Escape") {
+              e.preventDefault();
+              tree.abortRenaming();
+            }
+          }}
+          onBlur={() => {
+            tree.completeRenaming();
+          }}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      key={item.getId()}
+      id={item.getId()}
+      {...item.getProps()}
+      onFocus={() => {
+        onFocus(item);
+      }}
+      onDoubleClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        tree.getItemInstance(item.getId()).startRenaming();
+      }}
+      className="block h-[60px] w-full"
+    >
+      <div
+        className={cn(
+          "px-4 py-2 w-full text-left cursor-pointer",
+          isFormElement && formElementClasses,
+          isSectionElement && interactiveSectionElementClasses,
+          !item.isFolder() && "ml-10"
+          // item.isFolder() && "border-t-1 border-slate-200"
+          // {
+          //   focused: item.isFocused(),
+          //   expanded: item.isExpanded(),
+          //   selected: item.isSelected(),
+          //   folder: item.isFolder(),
+          //   drop: item.isDragTarget(),
+          // }
+        )}
+      >
+        {item.isFolder() && (
+          <span className="mr-2 mt-3 inline-block">
+            {item.isExpanded() ? <ArrowDown /> : <ArrowRight />}
+          </span>
+        )}
+        <span className="inline-block">{item.getItemName()}</span>
+        <ItemActions
+          item={item}
+          tree={tree}
+          arrow={undefined}
+          lockClassName={""}
+          handleDelete={async (e) => {
+            e.stopPropagation();
+            alert("delete");
+          }}
+        />
+      </div>
+    </div>
+  );
+};
