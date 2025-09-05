@@ -1,8 +1,9 @@
 import { TreeInstance } from "@headless-tree/core";
 import { cn } from "@lib/utils";
 import { TreeItemData, TreeItemInstance } from "./types";
-import { ArrowDown } from "../treeview/icons/ArrowDown";
-import { ArrowRight } from "../treeview/icons/ArrowRight";
+import { ArrowDown } from "./icons/ArrowDown";
+import { ArrowRight } from "./icons/ArrowRight";
+import { ItemActions } from "./ItemActions";
 
 interface TreeItemProps {
   item: TreeItemInstance<TreeItemData>;
@@ -84,7 +85,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
   }
 
   return (
-    <button
+    <div
       key={item.getId()}
       id={item.getId()}
       {...item.getProps()}
@@ -100,7 +101,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
     >
       <div
         className={cn(
-          "px-4 py-2 w-full text-left",
+          "px-4 py-2 w-full text-left cursor-pointer",
           isFormElement && formElementClasses,
           isSectionElement && interactiveSectionElementClasses,
           !item.isFolder() && "ml-10"
@@ -120,7 +121,17 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
           </span>
         )}
         <span className="inline-block">{item.getItemName()}</span>
+        <ItemActions
+          item={item}
+          tree={tree}
+          arrow={undefined}
+          lockClassName={""}
+          handleDelete={async (e) => {
+            e.stopPropagation();
+            alert("delete");
+          }}
+        />
       </div>
-    </button>
+    </div>
   );
 };
