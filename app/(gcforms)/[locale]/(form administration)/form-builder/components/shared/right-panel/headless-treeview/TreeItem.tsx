@@ -47,7 +47,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
   const isFormElement = item ? isFormElementType(item) : false;
   const isSectionElement = item ? isSectionElementType(item) : false;
   const fieldType = item ? item?.getItemData().type : "";
-  const isSubElement = item?.getItemData().isSubElement;
+  // const isSubElement = item?.getItemData().isSubElement;
 
   const titleText = item?.getItemData()[localizedTitle] || "";
   const descriptionText =
@@ -112,7 +112,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
     >
       <div
         className={cn(
-          "px-4 py-2 w-full text-left cursor-pointer",
+          "px-4 py-2 w-full text-left cursor-pointer flex items-center",
           isFormElement && formElementClasses,
           isSectionElement && interactiveSectionElementClasses,
           !item.isFolder() && "ml-10"
@@ -132,11 +132,9 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
           </span>
         )}
         <ItemTitle
+          isFolder={item.isFolder()}
           title={fieldType === "richText" ? descriptionText : titleText}
           id={item.getId()}
-          isSubElement={isSubElement}
-          isFocused={item.isFocused()}
-          isSelected={item.isSelected()}
         />
         <ItemActions
           item={item}
