@@ -154,8 +154,7 @@ export const groupsToTreeData = (
           descriptionEn: element.properties.descriptionEn,
           descriptionFr: element.properties.descriptionFr,
           isSubElement: false,
-          isRepeatingSet:
-            (element.properties.subElements && element.properties.subElements.length > 0) || false,
+          isRepeatingSet: element.type === "dynamicRow",
           type: element.type,
           nextAction: undefined,
         },
