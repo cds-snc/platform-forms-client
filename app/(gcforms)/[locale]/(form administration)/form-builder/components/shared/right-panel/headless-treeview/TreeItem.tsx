@@ -65,15 +65,15 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
   */
 
   const itemIndent = cn(
-    !item.isFolder() && "ml-10",
-    item.getItemData().isRepeatingSet && "ml-10 ",
+    !item.isFolder() && "ml-4",
+    item.getItemData().isRepeatingSet && "ml-4 ",
     isSubElement && "pl-5 border-l-2 border-indigo-700"
   );
 
-  const itemSpacing = "pb-3";
+  const itemSpacing = "pb-2";
 
   const formElementClasses = cn(
-    "flex items-center rounded-md border-1 bg-white px-4 py-2 w-full text-left cursor-pointer",
+    "flex items-center rounded-md border-1 bg-white px-4 py-2 w-full text-left cursor-pointer relative",
     item.isFocused() && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
     item.isSelected() && "border-2 border-slate-950 bg-white",
     !item.isSelected() &&
@@ -136,7 +136,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
             )}
           >
             {item.isFolder() && !isRepeatingSet && (
-              <span className="mr-2 inline-block">
+              <span className="mr-2 inline-block pb-2">
                 {item.isExpanded() ? <ArrowDown /> : <ArrowRight />}
               </span>
             )}

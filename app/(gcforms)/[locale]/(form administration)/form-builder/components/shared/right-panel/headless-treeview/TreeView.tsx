@@ -272,7 +272,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       <div {...tree.getContainerProps()} className="w-full">
         <AssistiveTreeDescription tree={tree} />
         {children}
-        <div>
+        <div className="p-4">
           {tree.getItems().map((item) => (
             <TreeItem key={item.getId()} item={item} tree={tree} onFocus={setActiveGroup} />
           ))}
