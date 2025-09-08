@@ -19,11 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update AWS SDK package from version `3.859.0`
 
-## [2.2.2] - 2025-06-10
+## [2.2.2] - 2025-08-08
 
 ### Changed
 
 - Update AWS SDK package from version `3.840.0`
+
+### Changed
+
+- Update Yarn to version 4.9.4
 
 ## [2.2.1] - 2025-06-23
 
