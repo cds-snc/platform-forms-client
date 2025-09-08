@@ -5,10 +5,14 @@ export const ItemTitle = ({
   title,
   id,
   isFolder,
+  isFormElement,
+  fieldType,
 }: {
   title: string;
   id: string;
   isFolder: boolean;
+  isFormElement: boolean;
+  fieldType: string;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -18,6 +22,14 @@ export const ItemTitle = ({
 
   if (title === "End") {
     title = t("logic.end");
+  }
+
+  if (isFormElement && fieldType === "richText" && title === "") {
+    return <span className="text-gray-500">{t("groups.treeView.emptyPageTextElement")}</span>;
+  }
+
+  if (isFormElement && fieldType !== "richText" && title === "") {
+    return <span className="text-gray-500">{t("groups.treeView.emptyFormElement")}</span>;
   }
 
   return (

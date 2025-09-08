@@ -46,7 +46,8 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
 
   const isFormElement = item ? isFormElementType(item) : false;
   const isSectionElement = item ? isSectionElementType(item) : false;
-  const fieldType = item ? item?.getItemData().type : "";
+  const fieldType = (item ? item?.getItemData().type : "") || "";
+
   // const isSubElement = item?.getItemData().isSubElement;
 
   const titleText = item?.getItemData()[localizedTitle] || "";
@@ -134,6 +135,8 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
         <ItemTitle
           isFolder={item.isFolder()}
           title={fieldType === "richText" ? descriptionText : titleText}
+          isFormElement={isFormElement}
+          fieldType={fieldType}
           id={item.getId()}
         />
         <ItemActions
