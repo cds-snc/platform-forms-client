@@ -125,7 +125,7 @@ export const ConfirmFormDeleteDialog = ({
 
   const responsesLink = `/${i18n.language}/form-builder/${formId}/responses`;
 
-  if (unprocessed) {
+  if (unprocessed && isPublished) {
     return (
       <Dialog handleClose={handleClose} dialogRef={dialog}>
         <div className="p-5">

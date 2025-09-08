@@ -1226,10 +1226,23 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
     throw e;
   });
 
-  // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
+  // Check if the form is draft or not.
+  const template = await prisma.template.findFirstOrThrow({
+    where: {
+      id: formID,
+    },
+    select: {
+      isPublished: true,
+    },
+  });
 
+  if (!template) throw new TemplateNotFoundError();
+
+  // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
+  // Only check submissions if the form is published.
   const numOfUnprocessedSubmissions = await unprocessedSubmissions(formID, true);
-  if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
+  if (numOfUnprocessedSubmissions && template.isPublished)
+    throw new TemplateHasUnprocessedSubmissions();
 
   // Check and delete any API keys from IDP
   await deleteKey(formID);
