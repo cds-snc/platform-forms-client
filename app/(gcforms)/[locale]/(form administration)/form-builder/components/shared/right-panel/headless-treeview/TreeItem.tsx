@@ -50,7 +50,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
   const isSectionElement = item ? isSectionElementType(item) : false;
   const fieldType = (item ? item?.getItemData().type : "") || "";
 
-  // const isSubElement = item?.getItemData().isSubElement;
+  const isSubElement = item?.getItemData().isSubElement;
 
   /*
   const handleScroll = useCallback(() => {
@@ -69,6 +69,13 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
     item.isSelected() && "border-2 border-slate-950 bg-white",
     !item.isSelected() &&
       "border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50"
+  );
+
+  const formSubElementClasses = cn(
+    "pl-3 w-5/6 border-l-2 border-indigo-700 bg-none min-h-[60px] cursor-default py-0",
+    item.isFocused() && "",
+    item.isSelected() && "",
+    !item.isSelected() && ""
   );
 
   const interactiveSectionElementClasses = cn(
@@ -121,10 +128,11 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
       <div
         className={cn(
           "px-4 py-2 w-full text-left cursor-pointer flex items-center ",
-          isFormElement && formElementClasses,
+          isFormElement && !isSubElement && formElementClasses,
           isSectionElement && interactiveSectionElementClasses,
           !item.isFolder() && "ml-10",
-          item.getItemData().isRepeatingSet && "ml-10"
+          item.getItemData().isRepeatingSet && "ml-10",
+          isSubElement && formSubElementClasses
           // item.isFolder() && "border-t-1 border-slate-200"
           // {
           //   focused: item.isFocused(),
