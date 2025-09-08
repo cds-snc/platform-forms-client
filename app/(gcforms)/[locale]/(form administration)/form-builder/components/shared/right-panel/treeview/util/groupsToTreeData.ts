@@ -225,13 +225,13 @@ export const groupsToTreeData = (
   }
 
   // Remove children if empty array
-  // if (options.headless) {
-  //   Object.values(items).forEach((item) => {
-  //     if (Array.isArray(item.children) && item.children.length === 0) {
-  //       delete item.children;
-  //     }
-  //   });
-  // }
+  if (options.headless) {
+    Object.values(items).forEach((item) => {
+      if (Array.isArray(item.children) && item.children.length === 0) {
+        delete item.children;
+      }
+    });
+  }
 
   return items;
 };

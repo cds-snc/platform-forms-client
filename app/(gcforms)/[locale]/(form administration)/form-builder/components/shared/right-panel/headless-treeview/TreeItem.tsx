@@ -1,9 +1,13 @@
-import { TreeInstance } from "@headless-tree/core";
 import { cn } from "@lib/utils";
+
+import { TreeInstance } from "@headless-tree/core";
 import { TreeItemData, TreeItemInstance } from "./types";
+
 import { ArrowDown } from "./icons/ArrowDown";
 import { ArrowRight } from "./icons/ArrowRight";
 import { ItemActions } from "./ItemActions";
+import { ItemTitle } from "./ItemTitle";
+import { useLocalize } from "./useLocalize";
 
 interface TreeItemProps {
   item: TreeItemInstance<TreeItemData>;
@@ -28,6 +32,7 @@ export const isSectionElementType = (item: TreeItemInstance<TreeItemData>) => {
 };
 
 export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
+  const { localizedTitle, localizedDescription } = useLocalize();
   // Skip rendering items that don't have valid data
   try {
     const itemData = item.getItemData();
@@ -41,6 +46,12 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
 
   const isFormElement = item ? isFormElementType(item) : false;
   const isSectionElement = item ? isSectionElementType(item) : false;
+  const fieldType = item ? item?.getItemData().type : "";
+  const isSubElement = item?.getItemData().isSubElement;
+
+  const titleText = item?.getItemData()[localizedTitle] || "";
+  const descriptionText =
+    (isFormElement && (item ? item?.getItemData()[localizedDescription] : "")) || "";
 
   //   console.log({ isFormElement });
 
@@ -120,7 +131,13 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
             {item.isExpanded() ? <ArrowDown /> : <ArrowRight />}
           </span>
         )}
-        <span className="inline-block">{item.getItemName()}</span>
+        <ItemTitle
+          title={fieldType === "richText" ? descriptionText : titleText}
+          id={item.getId()}
+          isSubElement={isSubElement}
+          isFocused={item.isFocused()}
+          isSelected={item.isSelected()}
+        />
         <ItemActions
           item={item}
           tree={tree}
