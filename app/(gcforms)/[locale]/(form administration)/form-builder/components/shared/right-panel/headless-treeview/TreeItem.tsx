@@ -57,7 +57,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
   //   console.log({ isFormElement });
 
   const formElementClasses = cn(
-    "rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px]",
+    "flex items-center rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px]",
     item.isFocused() && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
     item.isSelected() && "border-2 border-slate-950 bg-white",
     !item.isSelected() &&
