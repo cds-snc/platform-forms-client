@@ -113,7 +113,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
     >
       <div
         className={cn(
-          "px-4 py-2 w-full text-left cursor-pointer flex items-center",
+          "px-4 py-2 w-full text-left cursor-pointer flex items-center justify-center",
           isFormElement && formElementClasses,
           isSectionElement && interactiveSectionElementClasses,
           !item.isFolder() && "ml-10"
@@ -128,7 +128,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
         )}
       >
         {item.isFolder() && (
-          <span className="mr-2 mt-3 inline-block">
+          <span className="mr-2 inline-block">
             {item.isExpanded() ? <ArrowDown /> : <ArrowRight />}
           </span>
         )}
