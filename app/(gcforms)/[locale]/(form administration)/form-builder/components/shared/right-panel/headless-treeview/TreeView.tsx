@@ -44,12 +44,17 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
-
+import { toast } from "@formBuilder/components/shared/Toast";
 import { useTreeRef } from "../treeview/provider/TreeRefProvider";
 import { Button } from "@root/components/clientComponents/globals";
 import { AddIcon } from "@root/components/serverComponents/icons";
 import { KeyboardNavTip } from "./KeyboardNavTip";
 import { useTranslation } from "@root/i18n/client";
+import { canDeleteGroup } from "../treeview/util/validateGroups";
+import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
+import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
+import { useUpdateGroupLayout } from "../treeview/util/useUpdateGroupLayout";
+import { useAutoFlowIfNoCustomRules } from "@root/lib/hooks/useAutoFlowAll";
 
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
@@ -66,6 +71,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     getElement,
     updateElementTitle,
     groupId,
+    deleteGroup,
   } = useGroupStore((s) => ({
     getTreeData: s.getTreeData,
     selectedElementId: s.selectedElementId,
@@ -77,7 +83,11 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     getElement: s.getElement,
     updateElementTitle: s.updateElementTitle,
     groupId: s.id,
+    deleteGroup: s.deleteGroup,
   }));
+
+  const { updateGroupsLayout } = useUpdateGroupLayout();
+  const { autoFlowAll } = useAutoFlowIfNoCustomRules();
 
   const updateGroupTitle = useGroupStore((state) => state.updateGroupTitle);
   const { getLocalizationAttribute } = useTemplateStore((s) => ({
@@ -231,6 +241,19 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     ],
   });
 
+  const { remove: removeItem } = useTemplateStore((s) => {
+    return {
+      remove: s.remove,
+    };
+  });
+
+  const {
+    resolve: resolveConfirmDelete,
+    getPromise: getConfirmDeletePromise,
+    openDialog: openConfirmDeleteDialog,
+    setOpenDialog: setOpenConfirmDeleteDialog,
+  } = useConfirmDeleteDialogState();
+
   useEffect(() => {
     // Note: Type assertion needed during migration from react-complex-tree to headless-tree
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -274,12 +297,75 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
         {children}
         <div className="px-1 pt-1">
           {tree.getItems().map((item) => (
-            <TreeItem key={item.getId()} item={item} tree={tree} onFocus={setActiveGroup} />
+            <TreeItem
+              key={item.getId()}
+              item={item}
+              tree={tree}
+              onFocus={setActiveGroup}
+              handleDelete={async (e) => {
+                e.stopPropagation();
+                if (!canDeleteGroup(getGroups() || {}, item.getItemData().nextAction ?? "")) {
+                  toast.error(t("groups.cannotDeleteGroup"));
+                  return;
+                }
+
+                setOpenConfirmDeleteDialog(true);
+                const confirm = await getConfirmDeletePromise();
+
+                if (confirm) {
+                  const children = item.getChildren();
+                  children.map((child) => {
+                    removeItem(Number(child));
+                  });
+
+                  const removedItemName = item.getItemName();
+
+                  deleteGroup(item.getId());
+
+                  // When deleting a group, we need to select the previous group
+                  // const itemsArray = Object.keys(items);
+                  // const deletedItemIndex = itemsArray.indexOf(String(item.index));
+                  // const previousItemId =
+                  //   deletedItemIndex > 0 ? itemsArray[deletedItemIndex - 1] : "start";
+                  // setSelectedItems([previousItemId]);
+                  // setExpandedItems([previousItemId]);
+                  // setId(previousItemId);
+
+                  // And update the groups layout
+                  await updateGroupsLayout();
+
+                  autoFlowAll();
+                  setOpenConfirmDeleteDialog(false);
+
+                  tree.rebuildTree();
+
+                  toast.success(
+                    <>
+                      <h3>{t("groups.groupDeleted")}</h3>
+                      <p>{t("groups.groupSuccessfullyDeleted", { group: removedItemName })}</p>
+                    </>
+                  );
+
+                  return;
+                }
+              }}
+            />
           ))}
         </div>
 
         <div style={tree.getDragLineStyle()} className="dragline" />
       </div>
+
+      <ConfirmDeleteSectionDialog
+        open={openConfirmDeleteDialog}
+        handleClose={(value) => {
+          if (value) {
+            resolveConfirmDelete && resolveConfirmDelete(true);
+          } else {
+            resolveConfirmDelete && resolveConfirmDelete(false);
+          }
+        }}
+      />
     </>
   );
 };

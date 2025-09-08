@@ -14,6 +14,9 @@ interface TreeItemProps {
   item: TreeItemInstance<TreeItemData>;
   tree: TreeInstance<TreeItemData>;
   onFocus: (item: TreeItemInstance<TreeItemData>) => void;
+  handleDelete?: (
+    e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>
+  ) => Promise<void>;
 }
 
 const isTitleElementType = (item: TreeItemInstance<TreeItemData>) => {
@@ -32,7 +35,7 @@ export const isSectionElementType = (item: TreeItemInstance<TreeItemData>) => {
   return item?.isFolder() && item.getItemData().type !== "dynamicRow" ? true : false;
 };
 
-export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
+export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) => {
   // const { refs } = useRefsContext();
 
   // Skip rendering items that don't have valid data
@@ -125,6 +128,18 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
         e.stopPropagation();
         tree.getItemInstance(item.getId()).startRenaming();
       }}
+      onKeyDown={(e) => {
+        // if (isRenaming) {
+        //   return;
+        // }
+
+        if (e.key === "Delete" || e.key === "Backspace") {
+          if (handleDelete) {
+            e.preventDefault();
+            handleDelete(e as React.KeyboardEvent<HTMLDivElement>);
+          }
+        }
+      }}
       className="block w-full"
     >
       <div className={cn(itemIndent, "pt-2 px-2 pb-0")}>
@@ -159,10 +174,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
               tree={tree}
               arrow={undefined}
               lockClassName={""}
-              handleDelete={async (e) => {
-                e.stopPropagation();
-                alert("delete");
-              }}
+              handleDelete={handleDelete}
             />
           </div>
         </div>

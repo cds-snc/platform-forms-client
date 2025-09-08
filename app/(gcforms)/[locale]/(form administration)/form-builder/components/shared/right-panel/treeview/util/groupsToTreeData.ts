@@ -36,6 +36,7 @@ export const subElementsToTreeData = (parentId: number, subElements: FormElement
         isRepeatingSet: false,
         parentId: parentId,
         subIndex: subIndex,
+        nextAction: undefined,
       },
     };
 
