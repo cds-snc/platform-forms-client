@@ -9,6 +9,8 @@ import { ItemActions } from "./ItemActions";
 import { ItemTitle } from "./ItemTitle";
 import { useLocalize } from "./useLocalize";
 
+// import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
+
 interface TreeItemProps {
   item: TreeItemInstance<TreeItemData>;
   tree: TreeInstance<TreeItemData>;
@@ -33,6 +35,9 @@ export const isSectionElementType = (item: TreeItemInstance<TreeItemData>) => {
 
 export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
   const { localizedTitle, localizedDescription } = useLocalize();
+
+  // const { refs } = useRefsContext();
+
   // Skip rendering items that don't have valid data
   try {
     const itemData = item.getItemData();
@@ -54,7 +59,16 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
   const descriptionText =
     (isFormElement && (item ? item?.getItemData()[localizedDescription] : "")) || "";
 
-  //   console.log({ isFormElement });
+  /*
+  const handleScroll = useCallback(() => {
+    if (refs && refs.current) {
+      const el = refs?.current?.[Number(item.getId)];
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+  }, [refs, item]);
+  */
 
   const formElementClasses = cn(
     "flex items-center rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px]",
