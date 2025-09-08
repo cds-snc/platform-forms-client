@@ -545,6 +545,11 @@ describe("Template CRUD functions", () => {
         ...buildPrismaResponse("formtestID", formConfiguration),
         users: [{ id: "1" }],
       });
+      // Added: handle implementation using findFirst
+      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration),
+        users: [{ id: "1" }],
+      });
 
       (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
@@ -604,6 +609,11 @@ describe("Template CRUD functions", () => {
         ...buildPrismaResponse("formtestID", formConfiguration, true),
         users: [{ id: "1" }],
       });
+      // Added: handle implementation using findFirst
+      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        users: [{ id: "1" }],
+      });
 
       // Should never reach update when blocked
       (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
@@ -626,6 +636,11 @@ describe("Template CRUD functions", () => {
 
     it("Draft (unpublished) template with unprocessed submissions can be deleted", async () => {
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, false),
+        users: [{ id: "1" }],
+      });
+      
+      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration, false),
         users: [{ id: "1" }],
       });
