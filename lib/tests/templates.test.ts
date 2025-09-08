@@ -598,21 +598,60 @@ describe("Template CRUD functions", () => {
       expect(mockedDeleteKey).toHaveBeenCalledTimes(1);
     });
 
-    it("Template deletion should not be allowed if there are still unprocessed submissions associated to targeted form", async () => {
+    // Test for published template with unprocessed submissions
+    it("Published template with unprocessed submissions cannot be deleted", async () => {
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-        ...buildPrismaResponse("formtestID", formConfiguration),
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
         users: [{ id: "1" }],
       });
 
+      // Should never reach update when blocked
       (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("formtestID", formConfiguration)
+        buildPrismaResponse("formtestID", formConfiguration, true)
       );
 
       mockUnprocessedSubmissions.mockResolvedValueOnce(true);
 
-      await expect(async () => {
-        await deleteTemplate("formtestID");
-      }).rejects.toThrow(TemplateHasUnprocessedSubmissions);
+      await expect(deleteTemplate("formtestID")).rejects.toThrow(
+        TemplateHasUnprocessedSubmissions
+      );
+
+      // Ensure no archival update was attempted
+      expect(prismaMock.template.update).not.toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ ttl: expect.any(Date) }),
+        })
+      );
+    });
+
+    it("Draft (unpublished) template with unprocessed submissions can be deleted", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, false),
+        users: [{ id: "1" }],
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration, false)
+      );
+
+      mockUnprocessedSubmissions.mockResolvedValueOnce(true);
+
+      const deletedTemplate = await deleteTemplate("formtestID");
+
+      expect(deletedTemplate).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+        })
+      );
+
+      expect(prismaMock.template.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: "formtestID" },
+          data: { ttl: expect.any(Date) },
+        })
+      );
     });
 
     it("Only include public properties", async () => {
