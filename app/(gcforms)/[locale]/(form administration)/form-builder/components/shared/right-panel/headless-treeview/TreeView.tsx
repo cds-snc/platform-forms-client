@@ -60,7 +60,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
 ) => {
   const {
     getTreeData,
-    selectedElementId,
+    id,
     updateGroupName,
     getGroups,
     replaceGroups,
@@ -70,9 +70,10 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     updateElementTitle,
     groupId,
     deleteGroup,
+    setId,
   } = useGroupStore((s) => ({
     getTreeData: s.getTreeData,
-    selectedElementId: s.selectedElementId,
+    id: s.id,
     updateGroupName: s.updateGroupName,
     getGroups: s.getGroups,
     replaceGroups: s.replaceGroups,
@@ -82,6 +83,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     updateElementTitle: s.updateElementTitle,
     groupId: s.id,
     deleteGroup: s.deleteGroup,
+    setId: s.setId,
   }));
 
   const { updateGroupsLayout } = useUpdateGroupLayout();
@@ -102,7 +104,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   const { headlessTree } = useTreeRef();
 
   const tree = useTree<TreeItemData>({
-    initialState: getInitialTreeState(selectedElementId),
+    initialState: getInitialTreeState(id ?? "start"),
     rootItemId: "root",
     getItemName: (item) => {
       const data = item.getItemData();
@@ -321,13 +323,11 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
                   deleteGroup(item.getId());
 
                   // When deleting a group, we need to select the previous group
-                  // const itemsArray = Object.keys(items);
-                  // const deletedItemIndex = itemsArray.indexOf(String(item.index));
-                  // const previousItemId =
-                  //   deletedItemIndex > 0 ? itemsArray[deletedItemIndex - 1] : "start";
-                  // setSelectedItems([previousItemId]);
-                  // setExpandedItems([previousItemId]);
-                  // setId(previousItemId);
+                  // const itemsArray = tree.getI
+
+                  const previousItem = item.getItemAbove()?.getId();
+                  setId(previousItem ?? "start");
+                  headlessTree?.current?.setSelectedItems([previousItem ?? "start"]);
 
                   // And update the groups layout
                   await updateGroupsLayout();

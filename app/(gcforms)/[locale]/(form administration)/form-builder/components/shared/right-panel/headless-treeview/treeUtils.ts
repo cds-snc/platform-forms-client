@@ -42,7 +42,7 @@ export const treeOptions = {
 /**
  * Helper to prepare initial tree state from store
  */
-export const getInitialTreeState = (selectedElementId?: number) => ({
+export const getInitialTreeState = (selectedElementId?: string) => ({
   expandedItems: [] as string[],
   selectedItems: selectedElementId ? [String(selectedElementId)] : ([] as string[]),
 });
