@@ -50,6 +50,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
   const isSectionElement = item ? isSectionElementType(item) : false;
   const fieldType = (item ? item?.getItemData().type : "") || "";
 
+  const isRepeatingSet = item.getItemData().isRepeatingSet;
   const isSubElement = item?.getItemData().isSubElement;
 
   /*
@@ -63,8 +64,16 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
   }, [refs, item]);
   */
 
+  const itemIndent = cn(
+    !item.isFolder() && "ml-10",
+    item.getItemData().isRepeatingSet && "ml-10 ",
+    isSubElement && "pl-5 border-l-2 border-indigo-700"
+  );
+
+  const itemSpacing = "pb-3";
+
   const formElementClasses = cn(
-    "flex items-center rounded-md px-3 w-5/6 border-1 bg-white",
+    "flex items-center rounded-md border-1 bg-white px-4 py-2 w-full text-left cursor-pointer",
     item.isFocused() && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
     item.isSelected() && "border-2 border-slate-950 bg-white",
     !item.isSelected() &&
@@ -118,28 +127,21 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
       }}
       className="block w-full"
     >
-      <div
-        className={cn(
-          !item.isFolder() && "ml-10",
-          item.getItemData().isRepeatingSet && "ml-10 ",
-          isSubElement && "pl-5 border-l-2 border-indigo-700"
-        )}
-      >
-        <div className="pb-3">
+      <div className={itemIndent}>
+        <div className={itemSpacing}>
           <div
             className={cn(
-              "px-4 py-2 w-full text-left cursor-pointer flex items-center",
               isFormElement && formElementClasses,
               isSectionElement && interactiveSectionElementClasses
             )}
           >
-            {item.isFolder() && !item.getItemData().isRepeatingSet && (
+            {item.isFolder() && !isRepeatingSet && (
               <span className="mr-2 inline-block">
                 {item.isExpanded() ? <ArrowDown /> : <ArrowRight />}
               </span>
             )}
 
-            {item.getItemData().isRepeatingSet && (
+            {isRepeatingSet && (
               <span className="mr-2 inline-block">
                 <Hamburger />
               </span>
