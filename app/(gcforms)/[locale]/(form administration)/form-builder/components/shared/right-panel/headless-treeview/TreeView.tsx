@@ -325,9 +325,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
                   // When deleting a group, we need to select the previous group
                   // const itemsArray = tree.getI
 
-                  const previousItem = item.getItemAbove()?.getId();
-                  setId(previousItem ?? "start");
-                  headlessTree?.current?.setSelectedItems([previousItem ?? "start"]);
+                  const previousItem = item.getItemAbove();
+                  setId(previousItem?.getId() ?? "start");
+                  previousItem?.setFocused();
 
                   // And update the groups layout
                   await updateGroupsLayout();
