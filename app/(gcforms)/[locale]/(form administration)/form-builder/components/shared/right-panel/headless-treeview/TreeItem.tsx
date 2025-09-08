@@ -83,7 +83,10 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
     item.isFocused() && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700"
   );
 
-  const interactiveSectionElementClasses = cn("w-full relative");
+  const interactiveSectionElementClasses = cn(
+    "w-full relative p-2",
+    item.isFocused() && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700"
+  );
 
   if (item.isRenaming()) {
     return (
@@ -133,7 +136,7 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
           }
         }
       }}
-      className="block w-full"
+      className="block w-full  outline-none"
     >
       <div className={cn(itemIndent, "px-2 pb-0")}>
         <div className={itemSpacing}>
