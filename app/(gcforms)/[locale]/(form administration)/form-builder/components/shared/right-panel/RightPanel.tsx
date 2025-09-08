@@ -181,7 +181,11 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                         <button
                           type="button"
                           className="relative rounded-md bg-white text-slate-500 hover:text-slate-600 focus:ring-2 focus:ring-indigo-500"
-                          onClick={() => togglePanel && togglePanel(false)}
+                          onClick={() => {
+                            togglePanel && togglePanel(false);
+                            // Focus management: move focus to the Pages heading when closing the panel
+                            document.getElementById("editPagesHeading")?.focus();
+                          }}
                         >
                           <span className="sr-only">{t("rightPanel.closePanel")}</span>
                           <RoundCloseIcon />
