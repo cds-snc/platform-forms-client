@@ -120,7 +120,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
     >
       <div
         className={cn(
-          "px-4 py-2 w-full text-left cursor-pointer flex items-center justify-center ",
+          "px-4 py-2 w-full text-left cursor-pointer flex items-center ",
           isFormElement && formElementClasses,
           isSectionElement && interactiveSectionElementClasses,
           !item.isFolder() && "ml-10"
