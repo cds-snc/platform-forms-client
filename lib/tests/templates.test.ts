@@ -550,6 +550,10 @@ describe("Template CRUD functions", () => {
         ...buildPrismaResponse("formtestID", formConfiguration),
         users: [{ id: "1" }],
       });
+      // New implementation uses findFirstOrThrow to fetch publication status
+      (prismaMock.template.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        isPublished: false,
+      });
 
       (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
@@ -614,6 +618,10 @@ describe("Template CRUD functions", () => {
         ...buildPrismaResponse("formtestID", formConfiguration, true),
         users: [{ id: "1" }],
       });
+      // New implementation uses findFirstOrThrow to fetch publication status
+      (prismaMock.template.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        isPublished: true,
+      });
 
       // Should never reach update when blocked
       (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
@@ -643,6 +651,10 @@ describe("Template CRUD functions", () => {
       (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration, false),
         users: [{ id: "1" }],
+      });
+      // New implementation uses findFirstOrThrow to fetch publication status
+      (prismaMock.template.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        isPublished: false,
       });
 
       (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
