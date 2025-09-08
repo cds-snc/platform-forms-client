@@ -70,7 +70,7 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
   const itemIndent = cn(
     !item.isFolder() && "ml-4",
     item.getItemData().isRepeatingSet && "ml-4 ",
-    isSubElement && "pl-5 border-l-2 border-indigo-700"
+    isSubElement && "ml-6 border-l-2 border-indigo-700"
   );
 
   const itemSpacing = "pb-2";
