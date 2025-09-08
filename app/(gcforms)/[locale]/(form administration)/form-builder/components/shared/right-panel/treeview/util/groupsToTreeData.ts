@@ -33,6 +33,7 @@ export const subElementsToTreeData = (parentId: number, subElements: FormElement
         descriptionEn: element.properties.descriptionEn,
         descriptionFr: element.properties.descriptionFr,
         isSubElement: true,
+        isRepeatingSet: false,
         parentId: parentId,
         subIndex: subIndex,
       },
@@ -88,6 +89,9 @@ export const groupsToTreeData = (
         titleFr: formGroups[key].titleFr,
         descriptionEn: "",
         descriptionFr: "",
+        type: "group",
+        isRepeatingSet: false,
+        isSubElement: false,
         nextAction: formGroups[key].nextAction,
       },
       children: children,
@@ -108,6 +112,10 @@ export const groupsToTreeData = (
         titleFr: formGroups[key].titleFr || "Titre de section",
         descriptionEn: "",
         descriptionFr: "",
+        type: "section",
+        isRepeatingSet: false,
+        isSubElement: false,
+        nextAction: undefined,
       },
       children: [],
     };
@@ -141,11 +149,15 @@ export const groupsToTreeData = (
         canMove: true,
         children: itemChildren,
         data: {
-          type: element.type,
           titleEn: element.properties.titleEn,
           titleFr: element.properties.titleFr,
           descriptionEn: element.properties.descriptionEn,
           descriptionFr: element.properties.descriptionFr,
+          isSubElement: false,
+          isRepeatingSet:
+            (element.properties.subElements && element.properties.subElements.length > 0) || false,
+          type: element.type,
+          nextAction: undefined,
         },
       };
       items[childId] = childItem;
@@ -163,6 +175,10 @@ export const groupsToTreeData = (
       titleFr: "Introduction au formulaire",
       descriptionEn: "",
       descriptionFr: "",
+      isSubElement: false,
+      isRepeatingSet: false,
+      type: "ghost",
+      nextAction: undefined,
     },
   };
 
@@ -182,6 +198,10 @@ export const groupsToTreeData = (
       titleFr: "Avis de confidentialité",
       descriptionEn: "",
       descriptionFr: "",
+      isSubElement: false,
+      isRepeatingSet: false,
+      type: "ghost",
+      nextAction: undefined,
     },
   };
 
@@ -207,6 +227,10 @@ export const groupsToTreeData = (
       titleFr: "Message de confirmation",
       descriptionEn: "",
       descriptionFr: "",
+      isSubElement: false,
+      isRepeatingSet: false,
+      type: "ghost",
+      nextAction: undefined,
     },
   };
 

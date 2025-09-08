@@ -9,6 +9,7 @@ export type TreeItemData = {
   descriptionFr?: string;
   name?: string;
   isSubElement?: boolean;
+  isRepeatingSet?: boolean;
   parentId?: number;
   subIndex?: number;
   nextAction?: string;

@@ -115,7 +115,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
         return !data.type || data.type === "group" || ["start", "end"].includes(String(data.name));
       }
 
-      return level < 1;
+      return level < 1 || data.isRepeatingSet || false;
     },
     canReorder: true,
     canDrop: (items, target) => {
