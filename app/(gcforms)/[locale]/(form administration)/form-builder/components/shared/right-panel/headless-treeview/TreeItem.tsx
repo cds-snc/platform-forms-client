@@ -127,7 +127,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
       }}
       className="block w-full"
     >
-      <div className={itemIndent}>
+      <div className={cn(itemIndent, "pt-2 px-2 pb-0")}>
         <div className={itemSpacing}>
           <div
             className={cn(
