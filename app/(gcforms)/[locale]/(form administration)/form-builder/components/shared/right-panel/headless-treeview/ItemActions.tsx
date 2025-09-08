@@ -34,7 +34,7 @@ export const ItemActions = ({
       <DragHandle
         className={cn(
           "absolute right-0 mr-4 hidden cursor-pointer group-hover:block",
-          !arrow && "mt-2"
+          !arrow && ""
         )}
       />
     </>
