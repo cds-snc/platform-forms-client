@@ -7,7 +7,6 @@ import { ArrowDown } from "./icons/ArrowDown";
 import { ArrowRight } from "./icons/ArrowRight";
 import { ItemActions } from "./ItemActions";
 import { ItemTitle } from "./ItemTitle";
-import { useLocalize } from "./useLocalize";
 
 // import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 
@@ -34,8 +33,6 @@ export const isSectionElementType = (item: TreeItemInstance<TreeItemData>) => {
 };
 
 export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
-  const { localizedTitle, localizedDescription } = useLocalize();
-
   // const { refs } = useRefsContext();
 
   // Skip rendering items that don't have valid data
@@ -54,10 +51,6 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
   const fieldType = (item ? item?.getItemData().type : "") || "";
 
   // const isSubElement = item?.getItemData().isSubElement;
-
-  const titleText = item?.getItemData()[localizedTitle] || "";
-  const descriptionText =
-    (isFormElement && (item ? item?.getItemData()[localizedDescription] : "")) || "";
 
   /*
   const handleScroll = useCallback(() => {
@@ -127,7 +120,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
     >
       <div
         className={cn(
-          "px-4 py-2 w-full text-left cursor-pointer flex items-center justify-center group relative ",
+          "px-4 py-2 w-full text-left cursor-pointer flex items-center justify-center ",
           isFormElement && formElementClasses,
           isSectionElement && interactiveSectionElementClasses,
           !item.isFolder() && "ml-10"
@@ -148,7 +141,7 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
         )}
         <ItemTitle
           isFolder={item.isFolder()}
-          title={fieldType === "richText" ? descriptionText : titleText}
+          title={item.getItemName()}
           isFormElement={isFormElement}
           fieldType={fieldType}
           id={item.getId()}
