@@ -18,8 +18,6 @@
 
 import { ForwardRefRenderFunction, forwardRef, useEffect, useImperativeHandle } from "react";
 
-import "./style.css";
-
 import { TreeItemData } from "./types";
 import {
   syncDataLoaderFeature,
@@ -295,7 +293,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       <div {...tree.getContainerProps()} className="w-full">
         <AssistiveTreeDescription tree={tree} />
         {children}
-        <div className="px-1 pt-1">
+        <div className="p-2">
           {tree.getItems().map((item) => (
             <TreeItem
               key={item.getId()}
