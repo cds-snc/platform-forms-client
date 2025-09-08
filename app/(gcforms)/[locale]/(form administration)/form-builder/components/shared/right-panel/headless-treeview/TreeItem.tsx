@@ -7,7 +7,7 @@ import { ArrowDown } from "./icons/ArrowDown";
 import { ArrowRight } from "./icons/ArrowRight";
 import { ItemActions } from "./ItemActions";
 import { ItemTitle } from "./ItemTitle";
-
+import { Hamburger } from "./icons/Hamburger";
 // import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 
 interface TreeItemProps {
@@ -123,7 +123,8 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
           "px-4 py-2 w-full text-left cursor-pointer flex items-center ",
           isFormElement && formElementClasses,
           isSectionElement && interactiveSectionElementClasses,
-          !item.isFolder() && "ml-10"
+          !item.isFolder() && "ml-10",
+          item.getItemData().isRepeatingSet && "ml-10"
           // item.isFolder() && "border-t-1 border-slate-200"
           // {
           //   focused: item.isFocused(),
@@ -134,13 +135,20 @@ export const TreeItem = ({ item, tree, onFocus }: TreeItemProps) => {
           // }
         )}
       >
-        {item.isFolder() && (
+        {item.isFolder() && !item.getItemData().isRepeatingSet && (
           <span className="mr-2 inline-block">
             {item.isExpanded() ? <ArrowDown /> : <ArrowRight />}
           </span>
         )}
+
+        {item.getItemData().isRepeatingSet && (
+          <span className="mr-2 inline-block">
+            <Hamburger />
+          </span>
+        )}
+
         <ItemTitle
-          isFolder={item.isFolder()}
+          isFolder={item.isFolder() || item.getItemData().isRepeatingSet || false}
           title={item.getItemName()}
           isFormElement={isFormElement}
           fieldType={fieldType}
