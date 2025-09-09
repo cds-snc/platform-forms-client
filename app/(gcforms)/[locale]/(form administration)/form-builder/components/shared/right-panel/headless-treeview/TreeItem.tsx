@@ -150,6 +150,9 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
                   className="m-2 block w-full select-all rounded-md border-2 border-indigo-700 p-2 font-normal outline-none"
                   {...item.getRenameInputProps()}
                   autoFocus
+                  onFocus={(e) => {
+                    e.target.select();
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
