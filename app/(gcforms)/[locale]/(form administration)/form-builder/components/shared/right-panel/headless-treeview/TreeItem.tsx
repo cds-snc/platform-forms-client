@@ -70,7 +70,7 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
   const itemIndent = cn(
     !item.isFolder() && "ml-4",
     item.getItemData().isRepeatingSet && "ml-4 ",
-    isSubElement && "ml-6 border-l-2 border-indigo-700"
+    isSubElement && "border-l-2 border-indigo-700"
   );
 
   const itemSpacing = cn("py-1");
@@ -80,14 +80,14 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
     item.isSelected() && "border-2 border-slate-950 bg-white",
     !item.isSelected() &&
       "border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50",
-    item.isFocused() && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700"
+    item.isFocused() && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
+    isSubElement && "ml-2"
   );
 
   const sectionElementClasses = cn(
     "flex items-center w-full relative cursor-pointer",
     item.isFocused() && "font-bold",
-    !item.isExpanded() && "py-2",
-    item.isExpanded() && "py-1"
+    "py-1"
   );
 
   if (item.isRenaming()) {
@@ -138,10 +138,19 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
           }
         }
       }}
-      className={cn("block w-full", isFormElement && "outline-none")}
+      className={cn(
+        "block w-full",
+        isFormElement && "outline-none",
+        isSectionElement && "outline-indigo-700 outline-offset-[-px]"
+      )}
     >
       <div className={cn(itemIndent)}>
-        <div className={cn(itemSpacing, !item.isExpanded() && "border-b-1 border-slate-300")}>
+        <div
+          className={cn(
+            itemSpacing,
+            !item.isExpanded() && isSectionElement && "border-b-1 border-slate-300"
+          )}
+        >
           <div
             data-selected={item.isSelected()}
             data-focused={item.isFocused()}
