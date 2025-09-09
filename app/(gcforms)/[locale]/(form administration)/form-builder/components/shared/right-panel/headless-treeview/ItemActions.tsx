@@ -39,6 +39,6 @@ export const ItemActions = ({
       />
     </>
   ) : (
-    <LockIcon className={cn("inline-block scale-75", lockClassName)} />
+    <LockIcon className={cn("absolute right-0 mr-4 inline-block scale-75", lockClassName)} />
   );
 };

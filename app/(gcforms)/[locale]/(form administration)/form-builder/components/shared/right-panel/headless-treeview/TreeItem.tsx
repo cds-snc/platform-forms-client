@@ -84,8 +84,8 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
   );
 
   const interactiveSectionElementClasses = cn(
-    "w-full relative p-2",
-    item.isFocused() && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700"
+    "flex items-center w-full relative p-2 cursor-pointer",
+    item.isFocused() && "font-bold"
   );
 
   if (item.isRenaming()) {
@@ -136,18 +136,20 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
           }
         }
       }}
-      className="block w-full  outline-none"
+      className={cn("block w-full", isFormElement && "outline-none")}
     >
       <div className={cn(itemIndent, "px-2 pb-0")}>
         <div className={itemSpacing}>
           <div
+            data-selected={item.isSelected()}
+            data-focused={item.isFocused()}
             className={cn(
               isFormElement && formElementClasses,
               isSectionElement && interactiveSectionElementClasses
             )}
           >
-            {item.isFolder() && !isRepeatingSet && (
-              <span className="mr-2 inline-block pb-2">
+            {isSectionElement && (
+              <span className="mr-2 inline-block">
                 {item.isExpanded() ? <ArrowDown /> : <ArrowRight />}
               </span>
             )}
