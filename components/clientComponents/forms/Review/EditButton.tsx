@@ -7,11 +7,13 @@ export const EditButton = ({
   theme,
   children,
   onClick,
+  label,
 }: {
   reviewItemId: string;
   theme: Theme;
   children: React.ReactElement | string;
   onClick?: () => void;
+  label?: string;
 }): React.ReactElement => {
   const { setGroup, clearHistoryAfterId } = useGCFormsContext();
   return (
@@ -24,6 +26,7 @@ export const EditButton = ({
         // Focus groups heading on navigation
         onClick && onClick();
       }}
+      {...(label && { "aria-describedby": label })}
       dataTestId={`editButton-${reviewItemId}`}
     >
       {children}

@@ -40,7 +40,17 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     language,
   });
 
-  const renderEditButton = ({ id, title, theme }: { id: string; title?: string; theme: Theme }) => {
+  const renderEditButton = ({
+    id,
+    title,
+    theme,
+    label,
+  }: {
+    id: string;
+    title?: string;
+    theme: Theme;
+    label?: string;
+  }) => {
     const editText = t("edit", { lng: language });
 
     return (
@@ -50,6 +60,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
         onClick={() => {
           focusHeadingBySelector(["form h2", "h1"]);
         }}
+        label={label}
       >
         {title ? title : editText}
       </EditButton>
