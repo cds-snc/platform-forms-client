@@ -33,7 +33,7 @@ export const ItemTitle = ({
   }
 
   return (
-    <div className={cn("inline-block truncate", !isFolder ? "w-full" : "w-5/6")}>
+    <div className={cn("inline-block truncate py-2", !isFolder ? "w-full" : "w-5/6")}>
       {title} <span className="hidden">{id}</span>
     </div>
   );
