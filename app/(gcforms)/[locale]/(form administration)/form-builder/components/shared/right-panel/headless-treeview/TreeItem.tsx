@@ -141,7 +141,7 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
       className={cn(
         "block w-full",
         isFormElement && "outline-none",
-        isSectionElement && "outline-indigo-700 outline-offset-[-px]"
+        isSectionElement && "outline-indigo-700 outline-offset-[-4px]"
       )}
     >
       <div className={cn(itemIndent)}>
