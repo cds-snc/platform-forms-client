@@ -94,27 +94,25 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
     <div
       key={item.getId()}
       id={item.getId()}
-      {...item.getProps()}
-      onFocus={() => {
-        onFocus(item);
-      }}
-      onDoubleClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        tree.getItemInstance(item.getId()).startRenaming();
-      }}
-      onKeyDown={(e) => {
-        // if (isRenaming) {
-        //   return;
-        // }
-
-        if (e.key === "Delete" || e.key === "Backspace") {
-          if (handleDelete) {
-            e.preventDefault();
-            handleDelete(e as React.KeyboardEvent<HTMLDivElement>);
+      {...(!item.isRenaming() && {
+        ...item.getProps(),
+        onFocus: () => {
+          onFocus(item);
+        },
+        onDoubleClick: (e: React.MouseEvent) => {
+          e.preventDefault();
+          e.stopPropagation();
+          tree.getItemInstance(item.getId()).startRenaming();
+        },
+        onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => {
+          if (e.key === "Delete" || e.key === "Backspace") {
+            if (handleDelete) {
+              e.preventDefault();
+              handleDelete(e as React.KeyboardEvent<HTMLDivElement>);
+            }
           }
-        }
-      }}
+        },
+      })}
       className={cn(
         "block max-w-full",
         isFormElement && "outline-none",
