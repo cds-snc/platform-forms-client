@@ -256,7 +256,8 @@
       "description": "Un champ qui n’accepte qu’une valeur numérique.",
       "title": "Chiffre",
       "amount": "Montant",
-      "enterOnlyNumbers": "Saisissez un chiffre."
+      "enterOnlyNumbers": "Saisissez un chiffre.",
+      "allowNegative": "permettre les valeurs numériques négatives"
     },
     "questionElement": "Éléments",
     "radio": {
