@@ -295,62 +295,60 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       <div {...tree.getContainerProps()} className="w-full">
         <AssistiveTreeDescription tree={tree} />
         {children}
-        <div className="p-2">
-          {tree.getItems().map((item) => (
-            <TreeItem
-              key={item.getId()}
-              item={item}
-              tree={tree}
-              onFocus={setActiveGroup}
-              handleDelete={async (e) => {
-                e.stopPropagation();
-                if (!canDeleteGroup(getGroups() || {}, item.getItemData().nextAction ?? "")) {
-                  toast.error(t("groups.cannotDeleteGroup"));
-                  return;
-                }
+        {tree.getItems().map((item) => (
+          <TreeItem
+            key={item.getId()}
+            item={item}
+            tree={tree}
+            onFocus={setActiveGroup}
+            handleDelete={async (e) => {
+              e.stopPropagation();
+              if (!canDeleteGroup(getGroups() || {}, item.getItemData().nextAction ?? "")) {
+                toast.error(t("groups.cannotDeleteGroup"));
+                return;
+              }
 
-                setOpenConfirmDeleteDialog(true);
-                const confirm = await getConfirmDeletePromise();
+              setOpenConfirmDeleteDialog(true);
+              const confirm = await getConfirmDeletePromise();
 
-                if (confirm) {
-                  const children = item.getChildren();
-                  children.map((child) => {
-                    removeItem(Number(child));
-                  });
+              if (confirm) {
+                const children = item.getChildren();
+                children.map((child) => {
+                  removeItem(Number(child));
+                });
 
-                  const removedItemName = item.getItemName();
+                const removedItemName = item.getItemName();
 
-                  deleteGroup(item.getId());
+                deleteGroup(item.getId());
 
-                  // When deleting a group, we need to select the previous group
-                  const previousItem = item.getItemAbove();
-                  setId(previousItem?.getId() ?? "start");
-                  previousItem?.setFocused();
+                // When deleting a group, we need to select the previous group
+                const previousItem = item.getItemAbove();
+                setId(previousItem?.getId() ?? "start");
+                previousItem?.setFocused();
 
-                  // And update the groups layout
-                  await updateGroupsLayout();
+                // And update the groups layout
+                await updateGroupsLayout();
 
-                  autoFlowAll();
-                  setOpenConfirmDeleteDialog(false);
+                autoFlowAll();
+                setOpenConfirmDeleteDialog(false);
 
-                  tree.rebuildTree();
+                tree.rebuildTree();
 
-                  toast.success(
-                    <>
-                      <h3>{t("groups.groupDeleted")}</h3>
-                      <p>{t("groups.groupSuccessfullyDeleted", { group: removedItemName })}</p>
-                    </>
-                  );
+                toast.success(
+                  <>
+                    <h3>{t("groups.groupDeleted")}</h3>
+                    <p>{t("groups.groupSuccessfullyDeleted", { group: removedItemName })}</p>
+                  </>
+                );
 
-                  return;
-                }
-              }}
-            />
-          ))}
-        </div>
-
-        <div style={tree.getDragLineStyle()} className="dragline" />
+                return;
+              }
+            }}
+          />
+        ))}
       </div>
+
+      <div style={tree.getDragLineStyle()} className="dragline" />
 
       <ConfirmDeleteSectionDialog
         open={openConfirmDeleteDialog}
