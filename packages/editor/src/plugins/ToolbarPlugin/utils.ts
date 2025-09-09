@@ -29,6 +29,7 @@ import {
   $isTextNode,
   LexicalEditor,
 } from "lexical";
+import { INDENT_CONTENT_COMMAND, OUTDENT_CONTENT_COMMAND } from "lexical";
 
 export const formatParagraph = (editor: LexicalEditor) => {
   editor.update(() => {
@@ -169,4 +170,12 @@ export const clearFormatting = (editor: LexicalEditor) => {
       });
     }
   });
+};
+
+export const formatIndent = (editor: LexicalEditor) => {
+  editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined);
+};
+
+export const formatOutdent = (editor: LexicalEditor) => {
+  editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined);
 };
