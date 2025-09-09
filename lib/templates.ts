@@ -1238,11 +1238,12 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
 
   if (!template) throw new TemplateNotFoundError();
 
-  // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
   // Only check submissions if the form is published.
-  const numOfUnprocessedSubmissions = await unprocessedSubmissions(formID, true);
-  if (numOfUnprocessedSubmissions && template.isPublished)
-    throw new TemplateHasUnprocessedSubmissions();
+  if (template.isPublished) {
+    // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
+    const numOfUnprocessedSubmissions = await unprocessedSubmissions(formID, true);
+    if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
+  }
 
   // Check and delete any API keys from IDP
   await deleteKey(formID);
