@@ -90,29 +90,6 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
     ""
   );
 
-  if (item.isRenaming()) {
-    return (
-      <div key={item.getId()} style={{ marginLeft: `${item.getItemMeta().level * 20}px` }}>
-        <input
-          {...item.getRenameInputProps()}
-          autoFocus
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              tree.completeRenaming();
-            } else if (e.key === "Escape") {
-              e.preventDefault();
-              tree.abortRenaming();
-            }
-          }}
-          onBlur={() => {
-            tree.completeRenaming();
-          }}
-        />
-      </div>
-    );
-  }
-
   return (
     <div
       key={item.getId()}
@@ -164,27 +141,51 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
                 {item.isExpanded() ? <ArrowDown /> : <ArrowRight />}
               </span>
             )}
-
             {isRepeatingSet && (
               <span className="mr-2 inline-block">
                 <Hamburger />
               </span>
             )}
+            {item.isRenaming() && (
+              <div key={item.getId()}>
+                <input
+                  {...item.getRenameInputProps()}
+                  autoFocus
+                  className="select-all border-none p-2 outline-none"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      tree.completeRenaming();
+                    } else if (e.key === "Escape") {
+                      e.preventDefault();
+                      tree.abortRenaming();
+                    }
+                  }}
+                  onBlur={() => {
+                    tree.completeRenaming();
+                  }}
+                />
+              </div>
+            )}
 
-            <ItemTitle
-              isFolder={item.isFolder() || item.getItemData().isRepeatingSet || false}
-              title={item.getItemName()}
-              isFormElement={isFormElement}
-              fieldType={fieldType}
-              id={item.getId()}
-            />
-            <ItemActions
-              item={item}
-              tree={tree}
-              arrow={undefined}
-              lockClassName={""}
-              handleDelete={isRepeatingSet ? undefined : handleDelete}
-            />
+            {!item.isRenaming() && (
+              <>
+                <ItemTitle
+                  isFolder={item.isFolder() || item.getItemData().isRepeatingSet || false}
+                  title={item.getItemName()}
+                  isFormElement={isFormElement}
+                  fieldType={fieldType}
+                  id={item.getId()}
+                />
+                <ItemActions
+                  item={item}
+                  tree={tree}
+                  arrow={undefined}
+                  lockClassName={""}
+                  handleDelete={isRepeatingSet ? undefined : handleDelete}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>
