@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.5] - 2025-09-09
+## [1.0.6] - 2025-09-09
 
 - export validateVisibleElements
 
