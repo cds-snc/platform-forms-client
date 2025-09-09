@@ -1,5 +1,10 @@
 # Changelog
 
+
+## [1.0.7] - 2025-09-09
+
+- Bump yarn
+
 ## [1.0.6] - 2025-09-09
 
 - export validateVisibleElements
