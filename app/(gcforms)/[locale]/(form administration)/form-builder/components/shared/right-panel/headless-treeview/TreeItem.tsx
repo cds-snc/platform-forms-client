@@ -145,11 +145,11 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
               </span>
             )}
             {item.isRenaming() && (
-              <div key={item.getId()}>
+              <div key={item.getId()} className="w-5/6">
                 <input
+                  className="m-2 block w-full select-all rounded-md border-2 border-indigo-700 p-2 font-normal outline-none"
                   {...item.getRenameInputProps()}
                   autoFocus
-                  className="select-all border-none p-2 outline-none"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
