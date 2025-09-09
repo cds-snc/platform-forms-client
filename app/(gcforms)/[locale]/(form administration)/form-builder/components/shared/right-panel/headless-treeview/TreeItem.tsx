@@ -73,7 +73,7 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
     isSubElement && "border-l-2 border-indigo-700"
   );
 
-  const itemSpacing = cn("py-2 pl-4 pr-6");
+  const itemSpacing = cn("py-1 pl-4 pr-6");
 
   const formElementClasses = cn(
     "flex items-center rounded-md border-1 bg-white px-4 py-2 w-full text-left cursor-pointer relative outline-none",
