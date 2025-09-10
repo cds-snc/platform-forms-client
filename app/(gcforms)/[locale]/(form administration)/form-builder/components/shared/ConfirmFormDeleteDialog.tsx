@@ -62,15 +62,19 @@ export const ConfirmFormDeleteDialog = ({
   }, [formId]);
 
   useEffect(() => {
-    checkForUnprocessed()
-      .then(() => {
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-        setError(true);
-      });
-  }, [checkForUnprocessed]);
+    if (isPublished) {
+      checkForUnprocessed()
+        .then(() => {
+          setIsLoading(false);
+        })
+        .catch(() => {
+          setIsLoading(false);
+          setError(true);
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, [checkForUnprocessed, isPublished]);
 
   if (isLoading) {
     return (
