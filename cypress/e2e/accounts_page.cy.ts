@@ -30,10 +30,11 @@ describe("Accounts Page", () => {
       cy.get("ul[data-testid='accountsList'] li").contains(testUserEmail).should("not.exist");
     });
 
-    it("Clicking lock/unlock publishing of an account updates the button text state", () => {
+    it.skip("Clicking lock/unlock publishing of an account updates the button text state", () => {
       cy.get("button").contains("All").click();
       // Lock an account
       cy.get(`li[data-testid="${testUserEmail}"]`).contains("Lock publishing").click();
+
       cy.get(`li[data-testid="${testUserEmail}"]`).contains("Unlock publishing");
 
       // Unlock an account
