@@ -97,6 +97,13 @@ describe("Template CRUD functions", () => {
       mockGetAbility(userID);
     });
 
+    // Ensure vault submission count mock state does not leak between tests
+    beforeEach(() => {
+      mockUnprocessedSubmissions.mockReset();
+      // Default to no unprocessed submissions unless a test overrides
+      mockUnprocessedSubmissions.mockResolvedValue(false);
+    });
+
     it("Create a Template", async () => {
       (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
