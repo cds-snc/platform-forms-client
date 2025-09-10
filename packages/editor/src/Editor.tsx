@@ -14,7 +14,6 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 
 import ContentEditable from "./ui/ContentEditable";
-import TabControlPlugin from "./plugins/TabControlPlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
 import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentPlugin";
@@ -116,7 +115,6 @@ export const Editor = ({
             />
             <ListPlugin />
             <LinkPlugin />
-            <TabControlPlugin />
             <ListMaxIndentLevelPlugin maxDepth={5} />
 
             {floatingAnchorElem && (

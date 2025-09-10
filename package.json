@@ -210,7 +210,7 @@
     "not ie < 11",
     "not op_mini all"
   ],
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "yarn@4.9.4",
   "resolutions": {
     "@types/react": "19.1.12",
     "@types/react-dom": "19.1.8"
