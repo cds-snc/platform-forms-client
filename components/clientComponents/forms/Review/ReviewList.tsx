@@ -17,12 +17,12 @@ export const ReviewList = ({
     id,
     title,
     theme,
-    label,
+    description,
   }: {
     id: string;
     title?: string;
     theme: Theme;
-    label?: string;
+    description?: string;
   }) => React.ReactElement;
   startSectionTitle: string;
 }): React.ReactElement => {
@@ -37,7 +37,7 @@ export const ReviewList = ({
               : null;
 
             const editButton = renderEditButton
-              ? renderEditButton({ id: reviewItem.id, theme: "secondary", label: title })
+              ? renderEditButton({ id: reviewItem.id, theme: "secondary", description: title })
               : null;
 
             return (
