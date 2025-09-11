@@ -132,6 +132,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
             maxLength={element.properties.validation?.maxLength}
+            allowNegativeNumbers={element.properties.allowNegativeNumbers}
           />
         </div>
       );

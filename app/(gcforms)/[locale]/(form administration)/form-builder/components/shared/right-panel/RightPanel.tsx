@@ -149,6 +149,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
       <div className={cn("fixed right-0", fixedRange, open && "hidden")}>
         <div className="mr-4 mt-4">
           <CircleButton
+            id={!open ? "rightPanelTitle" : ""}
             title={t("rightPanel.openPanel")}
             onClick={() => {
               togglePanel && togglePanel(true);
@@ -177,7 +178,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                   <div className="p-6">
                     <div className="flex justify-between">
                       <div>
-                        <h2 id="rightPanelTitle" className="text-base" tabIndex={-1}>
+                        <h2 id={open ? "rightPanelTitle" : ""} className="text-base" tabIndex={-1}>
                           {t("rightPanel.openPanel")}
                         </h2>
                       </div>
