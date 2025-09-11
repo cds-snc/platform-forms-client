@@ -59,11 +59,15 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
 
         {item.isRenaming() ? <EditableInput item={item} tree={tree} /> : <ItemTitle item={item} />}
 
-        {item.isExpanded() && handleDelete && !isFormElement && !isRepeatingSet && (
-          <button className="cursor-pointer" onClick={handleDelete}>
-            <DeleteIcon title="Delete group" className="mr-2 scale-50" />
-          </button>
-        )}
+        {item.isExpanded() &&
+          handleDelete &&
+          !isFormElement &&
+          !isRepeatingSet &&
+          !["start", "end"].includes(item.getId()) && (
+            <button className="cursor-pointer" onClick={handleDelete}>
+              <DeleteIcon title="Delete group" className="mr-2 scale-50" />
+            </button>
+          )}
 
         {isFormElement && <DragHandle canDragItem={canDragItem} />}
       </ItemContent>
