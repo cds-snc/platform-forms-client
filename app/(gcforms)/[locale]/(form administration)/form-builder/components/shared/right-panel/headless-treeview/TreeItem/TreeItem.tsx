@@ -29,7 +29,10 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
         ...item.getProps(),
         onFocus: () => {
           onFocus(item);
+        },
+        onClick: (e: React.MouseEvent) => {
           handleScroll(item);
+          item.getProps().onClick(e);
         },
         onDoubleClick: (e: React.MouseEvent) => {
           e.preventDefault();
