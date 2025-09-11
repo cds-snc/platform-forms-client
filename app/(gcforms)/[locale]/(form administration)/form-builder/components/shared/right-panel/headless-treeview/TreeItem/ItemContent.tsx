@@ -27,7 +27,8 @@ export const ItemContent = ({
       <div
         className={cn(
           isFormElement && formElementClasses,
-          isSectionElement && sectionElementClasses
+          isSectionElement && sectionElementClasses,
+          "group"
         )}
       >
         {children}
