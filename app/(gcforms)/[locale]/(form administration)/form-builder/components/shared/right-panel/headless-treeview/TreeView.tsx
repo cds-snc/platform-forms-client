@@ -196,7 +196,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       tree.rebuildTree();
     },
     canDrag: (items) => {
-      const lockedItems = ["start", "introduction", "policy", "review", "end", "confirmation"];
+      const lockedItems = ["start", "intro", "policy", "review", "end", "confirmation"];
       return !items.some((item) => lockedItems.includes(item.getId()));
     },
     canRename: (item) => {
