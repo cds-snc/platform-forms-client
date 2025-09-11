@@ -1,12 +1,12 @@
 {
   "name": "@gcforms/tag-input",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "yarn@4.9.4",
   "peerDependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
