@@ -9,7 +9,7 @@ import { useElementType } from "../hooks/useElementType";
 import { ItemContent } from "./ItemContent";
 import { ItemTitle } from "./ItemTitle";
 import { ItemIcon } from "./ItemIcon";
-import { ItemActions } from "./ItemActions";
+import { DragHandle } from "./DragHandle";
 import { EditableInput } from "./EditableInput";
 
 import { DeleteIcon } from "@serverComponents/icons";
@@ -17,6 +17,9 @@ import { DeleteIcon } from "@serverComponents/icons";
 export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) => {
   const { isFormElement, isSectionElement, isRepeatingSet } = useElementType(item);
   const handleScroll = useScrollIntoView();
+
+  const { canDrag } = tree.getConfig();
+  const canDragItem = canDrag ? canDrag([item]) : true;
 
   return (
     <div
@@ -59,7 +62,7 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
           </button>
         )}
 
-        {isFormElement && <ItemActions item={item} tree={tree} arrow={undefined} />}
+        {isFormElement && <DragHandle canDragItem={canDragItem} />}
       </ItemContent>
     </div>
   );

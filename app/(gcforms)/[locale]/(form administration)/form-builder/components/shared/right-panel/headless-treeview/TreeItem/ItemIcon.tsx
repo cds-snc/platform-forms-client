@@ -1,6 +1,6 @@
-import { ArrowDown } from "../icons/ArrowDown";
-import { ArrowRight } from "../icons/ArrowRight";
-import { Hamburger } from "../icons/Hamburger";
+import { ArrowDownIcon } from "../icons/ArrowDown";
+import { ArrowRightIcon } from "../icons/ArrowRightIcon";
+import { HamburgerIcon } from "../icons/HamburgerIcon";
 
 import { ItemProps } from "../types";
 import { useElementType } from "../hooks/useElementType";
@@ -11,12 +11,12 @@ export const ItemIcon = ({ item }: ItemProps) => {
     <>
       {isSectionElement && (
         <span className="mx-2 inline-block">
-          {item.isExpanded() ? <ArrowDown /> : <ArrowRight />}
+          {item.isExpanded() ? <ArrowDownIcon /> : <ArrowRightIcon />}
         </span>
       )}
       {isRepeatingSet && (
         <span className="mr-2 inline-block">
-          <Hamburger />
+          <HamburgerIcon />
         </span>
       )}
     </>

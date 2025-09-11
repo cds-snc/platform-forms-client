@@ -1,4 +1,4 @@
-export const Hamburger = ({ className, title }: { className?: string; title?: string }) => (
+export const HamburgerIcon = ({ className, title }: { className?: string; title?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="15"
