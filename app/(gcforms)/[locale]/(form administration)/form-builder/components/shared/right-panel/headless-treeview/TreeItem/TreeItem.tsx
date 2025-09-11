@@ -11,15 +11,21 @@ import { ItemTitle } from "./ItemTitle";
 import { ExpandableIcon } from "./ExpandableIcon";
 import { DragHandle } from "./DragHandle";
 import { EditableInput } from "./EditableInput";
-
 import { DeleteIcon } from "@serverComponents/icons";
 
 export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) => {
-  const { isFormElement, isSectionElement, isRepeatingSet } = useElementType(item);
   const handleScroll = useScrollIntoView();
+  const { isFormElement, isSectionElement, isRepeatingSet } = useElementType(item);
 
   const { canDrag } = tree.getConfig();
-  const canDragItem = canDrag ? canDrag([item]) : true;
+  const canDragItem = isFormElement ? (canDrag ? canDrag([item]) : true) : false;
+
+  const canDeleteItem =
+    item.isExpanded() &&
+    handleDelete &&
+    !isFormElement &&
+    !isRepeatingSet &&
+    !["start", "end"].includes(item.getId());
 
   return (
     <div
@@ -59,17 +65,13 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
 
         {item.isRenaming() ? <EditableInput item={item} tree={tree} /> : <ItemTitle item={item} />}
 
-        {item.isExpanded() &&
-          handleDelete &&
-          !isFormElement &&
-          !isRepeatingSet &&
-          !["start", "end"].includes(item.getId()) && (
-            <button className="cursor-pointer" onClick={handleDelete}>
-              <DeleteIcon title="Delete group" className="mr-2 scale-50" />
-            </button>
-          )}
+        {canDeleteItem && (
+          <button className="cursor-pointer" onClick={handleDelete}>
+            <DeleteIcon title="Delete group" className="mr-2 scale-50" />
+          </button>
+        )}
 
-        {isFormElement && <DragHandle canDragItem={canDragItem} />}
+        {canDragItem && <DragHandle canDragItem={canDragItem} />}
       </ItemContent>
     </div>
   );
