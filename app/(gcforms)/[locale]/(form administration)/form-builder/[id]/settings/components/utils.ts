@@ -38,6 +38,6 @@ export const downloadKey = async (key: string, templateId: string) => {
   // Generate zip
   zip.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
     const fileName = `api-key-${templateId}.zip`;
-    downloadFileFromBlob(new Blob([buffer]), fileName);
+    downloadFileFromBlob(new Blob([buffer as unknown as ArrayBuffer]), fileName);
   });
 };

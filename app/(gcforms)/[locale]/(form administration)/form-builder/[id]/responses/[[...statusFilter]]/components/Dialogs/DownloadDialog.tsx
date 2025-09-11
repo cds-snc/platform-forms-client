@@ -129,7 +129,7 @@ export const DownloadDialog = ({
 
         zip.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
           const fileName = `${filePrefix}responses-reponses.zip`;
-          downloadFileFromBlob(new Blob([buffer]), fileName);
+          downloadFileFromBlob(new Blob([buffer as unknown as ArrayBuffer]), fileName);
 
           handleDownloadComplete();
         });
@@ -157,7 +157,7 @@ export const DownloadDialog = ({
           file.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
             const fileName = `${filePrefix}responses-reponses.zip`;
-            downloadFileFromBlob(new Blob([buffer]), fileName);
+            downloadFileFromBlob(new Blob([buffer as unknown as ArrayBuffer]), fileName);
 
             handleDownloadComplete();
           });
@@ -192,7 +192,7 @@ export const DownloadDialog = ({
           file.file("responses-reponses.json", JSON.stringify(response.responses));
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
             const fileName = `${filePrefix}responses-reponses.zip`;
-            downloadFileFromBlob(new Blob([buffer]), fileName);
+            downloadFileFromBlob(new Blob([buffer as unknown as ArrayBuffer]), fileName);
 
             handleDownloadComplete();
           });
