@@ -4,7 +4,6 @@ import React from "react";
 import { TreeItemProps } from "../types";
 
 import { useScrollIntoView } from "../hooks/useScrolntoView";
-import { useStyles } from "../hooks/useStyles";
 import { useElementType } from "../hooks/useElementType";
 
 import { ItemIcon } from "./ItemIcon";
@@ -12,9 +11,10 @@ import { EditableInput } from "./EditableInput";
 import { ItemActions } from "./ItemActions";
 import { ItemTitle } from "./ItemTitle";
 
+import { ItemContainer } from "./ItemContainer";
+
 export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) => {
   const { isFormElement, isSectionElement, isRepeatingSet, fieldType } = useElementType(item);
-  const { itemIndent, itemSpacing, formElementClasses, sectionElementClasses } = useStyles(item);
   const handleScroll = useScrollIntoView();
 
   return (
@@ -47,19 +47,8 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
         isSectionElement && "outline-indigo-700 outline-offset-[-4px]"
       )}
     >
-      <div
-        className={cn(
-          itemIndent,
-          itemSpacing,
-          !item.isExpanded() && isSectionElement && "border-b-1 border-slate-300"
-        )}
-      >
-        <div
-          className={cn(
-            isFormElement && formElementClasses,
-            isSectionElement && sectionElementClasses
-          )}
-        >
+      <ItemContainer item={item}>
+        <>
           <ItemIcon item={item} />
 
           {item.isRenaming() ? (
@@ -81,8 +70,8 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
             lockClassName={""}
             handleDelete={isRepeatingSet ? undefined : handleDelete}
           />
-        </div>
-      </div>
+        </>
+      </ItemContainer>
     </div>
   );
 };
