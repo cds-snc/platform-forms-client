@@ -47,43 +47,40 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
         isSectionElement && "outline-indigo-700 outline-offset-[-4px]"
       )}
     >
-      <div className={cn(itemIndent)}>
+      <div
+        className={cn(
+          itemIndent,
+          itemSpacing,
+          !item.isExpanded() && isSectionElement && "border-b-1 border-slate-300"
+        )}
+      >
         <div
           className={cn(
-            itemSpacing,
-            !item.isExpanded() && isSectionElement && "border-b-1 border-slate-300"
+            isFormElement && formElementClasses,
+            isSectionElement && sectionElementClasses
           )}
         >
-          <div
-            data-selected={item.isSelected()}
-            data-focused={item.isFocused()}
-            className={cn(
-              isFormElement && formElementClasses,
-              isSectionElement && sectionElementClasses
-            )}
-          >
-            <ItemIcon item={item} />
+          <ItemIcon item={item} />
 
-            {item.isRenaming() ? (
-              <EditableInput item={item} tree={tree} />
-            ) : (
-              <ItemTitle
-                isFolder={item.isFolder() || item.getItemData().isRepeatingSet || false}
-                title={item.getItemName()}
-                isFormElement={isFormElement}
-                fieldType={fieldType}
-                id={item.getId()}
-              />
-            )}
-
-            <ItemActions
-              item={item}
-              tree={tree}
-              arrow={undefined}
-              lockClassName={""}
-              handleDelete={isRepeatingSet ? undefined : handleDelete}
+          {item.isRenaming() ? (
+            <EditableInput item={item} tree={tree} />
+          ) : (
+            <ItemTitle
+              isFolder={item.isFolder() || item.getItemData().isRepeatingSet || false}
+              title={item.getItemName()}
+              isFormElement={isFormElement}
+              fieldType={fieldType}
+              id={item.getId()}
             />
-          </div>
+          )}
+
+          <ItemActions
+            item={item}
+            tree={tree}
+            arrow={undefined}
+            lockClassName={""}
+            handleDelete={isRepeatingSet ? undefined : handleDelete}
+          />
         </div>
       </div>
     </div>
