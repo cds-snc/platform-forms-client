@@ -81,7 +81,7 @@ export const getNotificationsUsers = async (formId: string) => {
     .catch((e) => prismaErrors(e, null));
 
   if (!usersAndNotificationsUsers) {
-    logMessage.warn(`_getNotificationsUsers template not found with id ${formId}`);
+    logMessage.warn(`_getNotificationsUsers no users found for formId ${formId}`);
     return null;
   }
 
