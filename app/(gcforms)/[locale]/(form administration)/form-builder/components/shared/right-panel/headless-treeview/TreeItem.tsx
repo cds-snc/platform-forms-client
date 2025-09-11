@@ -3,15 +3,14 @@ import React from "react";
 
 import { TreeItemProps } from "./types";
 
-import { ArrowDown } from "./icons/ArrowDown";
-import { ArrowRight } from "./icons/ArrowRight";
+import { useScrollIntoView } from "./hooks/useScrolntoView";
+import { useStyles } from "./hooks/useStyles";
+import { useElementType } from "./hooks/useElementType";
+
+import { ItemIcon } from "./ItemIcon";
+import { EditableInput } from "./EditableInput";
 import { ItemActions } from "./ItemActions";
 import { ItemTitle } from "./ItemTitle";
-import { Hamburger } from "./icons/Hamburger";
-
-import { useScrollIntoView } from "./hooks/useScrolntoView";
-import { useElementType } from "./hooks/useElementType";
-import { useStyles } from "./hooks/useStyles";
 
 export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) => {
   const { isFormElement, isSectionElement, isRepeatingSet, fieldType } = useElementType(item);
@@ -63,59 +62,27 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
               isSectionElement && sectionElementClasses
             )}
           >
-            {isSectionElement && (
-              <span className="mx-2 inline-block">
-                {item.isExpanded() ? <ArrowDown /> : <ArrowRight />}
-              </span>
-            )}
-            {isRepeatingSet && (
-              <span className="mr-2 inline-block">
-                <Hamburger />
-              </span>
-            )}
-            {item.isRenaming() && (
-              <div key={item.getId()} className="w-5/6">
-                <input
-                  className="m-2 block w-full select-all rounded-md border-2 border-indigo-700 p-2 font-normal outline-none"
-                  {...item.getRenameInputProps()}
-                  autoFocus
-                  onFocus={(e) => {
-                    e.target.select();
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      tree.completeRenaming();
-                    } else if (e.key === "Escape") {
-                      e.preventDefault();
-                      tree.abortRenaming();
-                    }
-                  }}
-                  onBlur={() => {
-                    tree.completeRenaming();
-                  }}
-                />
-              </div>
+            <ItemIcon item={item} />
+
+            {item.isRenaming() ? (
+              <EditableInput item={item} tree={tree} />
+            ) : (
+              <ItemTitle
+                isFolder={item.isFolder() || item.getItemData().isRepeatingSet || false}
+                title={item.getItemName()}
+                isFormElement={isFormElement}
+                fieldType={fieldType}
+                id={item.getId()}
+              />
             )}
 
-            {!item.isRenaming() && (
-              <>
-                <ItemTitle
-                  isFolder={item.isFolder() || item.getItemData().isRepeatingSet || false}
-                  title={item.getItemName()}
-                  isFormElement={isFormElement}
-                  fieldType={fieldType}
-                  id={item.getId()}
-                />
-                <ItemActions
-                  item={item}
-                  tree={tree}
-                  arrow={undefined}
-                  lockClassName={""}
-                  handleDelete={isRepeatingSet ? undefined : handleDelete}
-                />
-              </>
-            )}
+            <ItemActions
+              item={item}
+              tree={tree}
+              arrow={undefined}
+              lockClassName={""}
+              handleDelete={isRepeatingSet ? undefined : handleDelete}
+            />
           </div>
         </div>
       </div>

@@ -1,6 +1,15 @@
 import { TreeInstance } from "@headless-tree/core";
 import { ItemInstance } from "@headless-tree/core";
 
+export interface ItemIconProps {
+  item: TreeItemInstance<TreeItemData>;
+}
+
+export interface EditableInputProps {
+  item: TreeItemInstance<TreeItemData>;
+  tree: TreeInstance<TreeItemData>;
+}
+
 export interface TreeItemProps {
   item: TreeItemInstance<TreeItemData>;
   tree: TreeInstance<TreeItemData>;
