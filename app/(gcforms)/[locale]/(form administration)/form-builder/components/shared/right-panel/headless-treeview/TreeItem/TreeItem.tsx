@@ -8,7 +8,7 @@ import { useElementType } from "../hooks/useElementType";
 
 import { ItemContent } from "./ItemContent";
 import { ItemTitle } from "./ItemTitle";
-import { ItemIcon } from "./ItemIcon";
+import { ExpandableIcon } from "./ExpandableIcon";
 import { DragHandle } from "./DragHandle";
 import { EditableInput } from "./EditableInput";
 
@@ -55,7 +55,7 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
       )}
     >
       <ItemContent item={item}>
-        <ItemIcon item={item} />
+        <ExpandableIcon item={item} />
 
         {item.isRenaming() ? <EditableInput item={item} tree={tree} /> : <ItemTitle item={item} />}
 

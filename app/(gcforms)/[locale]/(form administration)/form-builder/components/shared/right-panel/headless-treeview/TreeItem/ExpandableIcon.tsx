@@ -5,7 +5,7 @@ import { HamburgerIcon } from "../icons/HamburgerIcon";
 import { ItemProps } from "../types";
 import { useElementType } from "../hooks/useElementType";
 
-export const ItemIcon = ({ item }: ItemProps) => {
+export const ExpandableIcon = ({ item }: ItemProps) => {
   const { isSectionElement, isRepeatingSet } = useElementType(item);
   return (
     <>
