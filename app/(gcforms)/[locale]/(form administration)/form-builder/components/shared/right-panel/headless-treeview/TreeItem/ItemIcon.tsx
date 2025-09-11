@@ -1,4 +1,4 @@
-import { ArrowDownIcon } from "../icons/ArrowDown";
+import { ArrowDownIcon } from "../icons/ArrowDownIcon";
 import { ArrowRightIcon } from "../icons/ArrowRightIcon";
 import { HamburgerIcon } from "../icons/HamburgerIcon";
 
