@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0](https://github.com/cds-snc/platform-forms-client/compare/v4.0.1...v4.1.0) (2025-09-09)
+
+
+### Features
+
+* Negative Numbers Functionality ([#6076](https://github.com/cds-snc/platform-forms-client/issues/6076)) ([32f33b4](https://github.com/cds-snc/platform-forms-client/commit/32f33b4800f189cce91f5de3e8a5748de87dc67b))
+* Remove response padding + deserialize date objects ([#6104](https://github.com/cds-snc/platform-forms-client/issues/6104)) ([8d3df67](https://github.com/cds-snc/platform-forms-client/commit/8d3df67e9201443bb31fefbf44a69fd3ed2f1e38))
+
+
+### Bug Fixes
+
+* Set rainbow to use correct container index ([#6079](https://github.com/cds-snc/platform-forms-client/issues/6079)) ([391fa51](https://github.com/cds-snc/platform-forms-client/commit/391fa517317d003585b609fac8bcf6ce697a1d48))
+* skip to right panel ([#6089](https://github.com/cds-snc/platform-forms-client/issues/6089)) ([d11931d](https://github.com/cds-snc/platform-forms-client/commit/d11931dd66ecb3cef0077f9eb142b6ef44200e30))
+* update editor to allow tab keys to use browser default behaviour ([#6049](https://github.com/cds-snc/platform-forms-client/issues/6049)) ([c59f09f](https://github.com/cds-snc/platform-forms-client/commit/c59f09fe1373fe7b6c185e565aafda84c36079c9))
+
+
+### Miscellaneous Chores
+
+* bump yarn ([#6107](https://github.com/cds-snc/platform-forms-client/issues/6107)) ([107bbc0](https://github.com/cds-snc/platform-forms-client/commit/107bbc0a406ba1f13a90d672a883caf34e1f5fc1))
+* **deps:** update all non-major docker images ([#6100](https://github.com/cds-snc/platform-forms-client/issues/6100)) ([f36d648](https://github.com/cds-snc/platform-forms-client/commit/f36d6489167d2183e62f7dbdf6944503f8830fc9))
+* **deps:** update all non-major github action dependencies ([#6092](https://github.com/cds-snc/platform-forms-client/issues/6092)) ([2d8fef6](https://github.com/cds-snc/platform-forms-client/commit/2d8fef650f31009a266c674e76687d0f676a6c1a))
+* fix build step for core package ([#6090](https://github.com/cds-snc/platform-forms-client/issues/6090)) ([424dcdf](https://github.com/cds-snc/platform-forms-client/commit/424dcdfa28394dd39f5c5384d8092f0fe976f9ab))
+* update core exports ([#6106](https://github.com/cds-snc/platform-forms-client/issues/6106)) ([ec9ade2](https://github.com/cds-snc/platform-forms-client/commit/ec9ade2f580ffc0cdfe65aad7dfff68cd829e63e))
+* Update error message for blocked potential spam submissions  ([#6085](https://github.com/cds-snc/platform-forms-client/issues/6085)) ([e6b76e6](https://github.com/cds-snc/platform-forms-client/commit/e6b76e6421a17a7be81bdd114460c13e7fa1e384))
+* Update next.js to 15.5.2 ([#6075](https://github.com/cds-snc/platform-forms-client/issues/6075)) ([c7d4296](https://github.com/cds-snc/platform-forms-client/commit/c7d4296ed583b5f7b540e237c71614f77abaccfc))
+
 ## [4.0.1](https://github.com/cds-snc/platform-forms-client/compare/v4.0.0...v4.0.1) (2025-08-27)
 
 
