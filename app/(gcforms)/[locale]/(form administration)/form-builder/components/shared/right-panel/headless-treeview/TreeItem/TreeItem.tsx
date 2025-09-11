@@ -6,12 +6,11 @@ import { TreeItemProps } from "../types";
 import { useScrollIntoView } from "../hooks/useScrolntoView";
 import { useElementType } from "../hooks/useElementType";
 
-import { ItemIcon } from "./ItemIcon";
-import { EditableInput } from "./EditableInput";
-import { ItemActions } from "./ItemActions";
+import { ItemContent } from "./ItemContent";
 import { ItemTitle } from "./ItemTitle";
-
-import { ItemContainer } from "./ItemContainer";
+import { ItemIcon } from "./ItemIcon";
+import { ItemActions } from "./ItemActions";
+import { EditableInput } from "./EditableInput";
 
 export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) => {
   const { isFormElement, isSectionElement, isRepeatingSet, fieldType } = useElementType(item);
@@ -47,31 +46,27 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
         isSectionElement && "outline-indigo-700 outline-offset-[-4px]"
       )}
     >
-      <ItemContainer item={item}>
-        <>
-          <ItemIcon item={item} />
-
-          {item.isRenaming() ? (
-            <EditableInput item={item} tree={tree} />
-          ) : (
-            <ItemTitle
-              isFolder={item.isFolder() || item.getItemData().isRepeatingSet || false}
-              title={item.getItemName()}
-              isFormElement={isFormElement}
-              fieldType={fieldType}
-              id={item.getId()}
-            />
-          )}
-
-          <ItemActions
-            item={item}
-            tree={tree}
-            arrow={undefined}
-            lockClassName={""}
-            handleDelete={isRepeatingSet ? undefined : handleDelete}
+      <ItemContent item={item}>
+        <ItemIcon item={item} />
+        {item.isRenaming() ? (
+          <EditableInput item={item} tree={tree} />
+        ) : (
+          <ItemTitle
+            isFolder={item.isFolder() || item.getItemData().isRepeatingSet || false}
+            title={item.getItemName()}
+            isFormElement={isFormElement}
+            fieldType={fieldType}
+            id={item.getId()}
           />
-        </>
-      </ItemContainer>
+        )}
+        <ItemActions
+          item={item}
+          tree={tree}
+          arrow={undefined}
+          lockClassName={""}
+          handleDelete={isRepeatingSet ? undefined : handleDelete}
+        />
+      </ItemContent>
     </div>
   );
 };

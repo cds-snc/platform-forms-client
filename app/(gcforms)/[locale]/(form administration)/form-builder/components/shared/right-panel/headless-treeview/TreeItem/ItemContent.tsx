@@ -6,7 +6,7 @@ import { TreeItemData, TreeItemInstance } from "../types";
 import { useStyles } from "../hooks/useStyles";
 import { useElementType } from "../hooks/useElementType";
 
-export const ItemContainer = ({
+export const ItemContent = ({
   item,
   children,
 }: {
