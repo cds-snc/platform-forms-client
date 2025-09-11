@@ -20,8 +20,9 @@ export const useElementType = (item: TreeItemInstance<TreeItemData>) => {
   const isFormElement = item ? isFormElementType(item) : false;
   const isSectionElement = item ? isSectionElementType(item) : false;
   const isRepeatingSet = item.getItemData().isRepeatingSet;
+  const isSubElement = item.getItemData().isSubElement;
 
   const fieldType = (item ? item?.getItemData().type : "") || "";
 
-  return { isFormElement, isSectionElement, isRepeatingSet, fieldType };
+  return { isFormElement, isSectionElement, isRepeatingSet, isSubElement, fieldType };
 };

@@ -2,10 +2,10 @@ import { ArrowDown } from "../icons/ArrowDown";
 import { ArrowRight } from "../icons/ArrowRight";
 import { Hamburger } from "../icons/Hamburger";
 
-import { ItemIconProps } from "../types";
+import { ItemProps } from "../types";
 import { useElementType } from "../hooks/useElementType";
 
-export const ItemIcon = ({ item }: ItemIconProps) => {
+export const ItemIcon = ({ item }: ItemProps) => {
   const { isSectionElement, isRepeatingSet } = useElementType(item);
   return (
     <>

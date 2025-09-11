@@ -1,7 +1,7 @@
 import { TreeInstance } from "@headless-tree/core";
 import { ItemInstance } from "@headless-tree/core";
 
-export interface ItemIconProps {
+export interface ItemProps {
   item: TreeItemInstance<TreeItemData>;
 }
 

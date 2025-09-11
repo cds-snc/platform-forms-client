@@ -1,20 +1,15 @@
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 
-export const ItemTitle = ({
-  title,
-  id,
-  isFolder,
-  isFormElement,
-  fieldType,
-}: {
-  title: string;
-  id: string;
-  isFolder: boolean;
-  isFormElement: boolean;
-  fieldType: string;
-}) => {
+import { ItemProps } from "../types";
+
+import { useElementType } from "../hooks/useElementType";
+
+export const ItemTitle = ({ item }: ItemProps) => {
   const { t } = useTranslation("form-builder");
+  const { isFormElement, fieldType } = useElementType(item);
+
+  let title = item.getItemName() || "";
 
   if (title === "Start") {
     title = t("logic.start");
@@ -33,8 +28,8 @@ export const ItemTitle = ({
   }
 
   return (
-    <div className={cn("inline-block truncate py-2", !isFolder ? "w-full" : "w-5/6")}>
-      {title} <span className="hidden">{id}</span>
+    <div className={cn("inline-block truncate py-2", "w-full")}>
+      {title} <span className="hidden">{item.getId()}</span>
     </div>
   );
 };

@@ -15,7 +15,7 @@ import { EditableInput } from "./EditableInput";
 import { DeleteIcon } from "@serverComponents/icons";
 
 export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) => {
-  const { isFormElement, isSectionElement, fieldType, isRepeatingSet } = useElementType(item);
+  const { isFormElement, isSectionElement, isRepeatingSet } = useElementType(item);
   const handleScroll = useScrollIntoView();
 
   return (
@@ -51,21 +51,11 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
       <ItemContent item={item}>
         <ItemIcon item={item} />
 
-        {item.isRenaming() ? (
-          <EditableInput item={item} tree={tree} />
-        ) : (
-          <ItemTitle
-            isFolder={item.isFolder() || item.getItemData().isRepeatingSet || false}
-            title={item.getItemName()}
-            isFormElement={isFormElement}
-            fieldType={fieldType}
-            id={item.getId()}
-          />
-        )}
+        {item.isRenaming() ? <EditableInput item={item} tree={tree} /> : <ItemTitle item={item} />}
 
         {item.isExpanded() && handleDelete && !isFormElement && !isRepeatingSet && (
           <button className="cursor-pointer" onClick={handleDelete}>
-            <DeleteIcon title="Delete group" className="scale-50" />
+            <DeleteIcon title="Delete group" className="mr-2 scale-50" />
           </button>
         )}
 
