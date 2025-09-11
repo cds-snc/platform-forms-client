@@ -1,4 +1,14 @@
+import { TreeInstance } from "@headless-tree/core";
 import { ItemInstance } from "@headless-tree/core";
+
+export interface TreeItemProps {
+  item: TreeItemInstance<TreeItemData>;
+  tree: TreeInstance<TreeItemData>;
+  onFocus: (item: TreeItemInstance<TreeItemData>) => void;
+  handleDelete?: (
+    e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>
+  ) => Promise<void>;
+}
 
 // Define the data structure that headless-tree expects
 export type TreeItemData = {

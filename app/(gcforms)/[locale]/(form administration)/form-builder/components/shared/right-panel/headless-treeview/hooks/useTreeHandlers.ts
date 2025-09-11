@@ -5,8 +5,8 @@ import { TreeInstance } from "@headless-tree/core";
 import { GroupsType } from "@gcforms/types";
 import { useTranslation } from "@i18n/client";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
-import { findParentGroup } from "../treeview/util/findParentGroup";
-import { autoFlowGroupNextActions } from "../treeview/util/setNextAction";
+import { findParentGroup } from "../../treeview/util/findParentGroup";
+import { autoFlowGroupNextActions } from "../../treeview/util/setNextAction";
 
 // Type for tree item with minimal required methods
 type TreeItem = {

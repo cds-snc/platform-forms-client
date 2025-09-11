@@ -29,7 +29,7 @@ import {
   renamingFeature,
 } from "@headless-tree/core";
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
-import { useTreeHandlers } from "./useTreeHandlers";
+import { useTreeHandlers } from "./hooks/useTreeHandlers";
 import { TreeItem } from "./TreeItem";
 
 import { TreeDataProviderProps } from "../treeview/types";
