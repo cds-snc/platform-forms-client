@@ -30,7 +30,7 @@ import {
 } from "@headless-tree/core";
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
 import { useTreeHandlers } from "./hooks/useTreeHandlers";
-import { TreeItem } from "./TreeItem";
+import { TreeItem } from "./TreeItem/TreeItem";
 
 import { TreeDataProviderProps } from "../treeview/types";
 

@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
-import { DragHandle } from "./icons/DragHandle";
+import { DragHandle } from "../icons/DragHandle";
 import { DeleteIcon, LockIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
-import { TreeItemData, TreeItemInstance } from "./types";
+import { TreeItemData, TreeItemInstance } from "../types";
 import { TreeInstance } from "@headless-tree/core";
 
 type ItemActionProps = {

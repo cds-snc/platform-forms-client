@@ -1,4 +1,4 @@
-import { EditableInputProps } from "./types";
+import { EditableInputProps } from "../types";
 
 export const EditableInput = ({ item, tree }: EditableInputProps) => {
   return (

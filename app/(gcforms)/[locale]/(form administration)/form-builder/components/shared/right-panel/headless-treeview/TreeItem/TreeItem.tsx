@@ -1,11 +1,11 @@
 import { cn } from "@lib/utils";
 import React from "react";
 
-import { TreeItemProps } from "./types";
+import { TreeItemProps } from "../types";
 
-import { useScrollIntoView } from "./hooks/useScrolntoView";
-import { useStyles } from "./hooks/useStyles";
-import { useElementType } from "./hooks/useElementType";
+import { useScrollIntoView } from "../hooks/useScrolntoView";
+import { useStyles } from "../hooks/useStyles";
+import { useElementType } from "../hooks/useElementType";
 
 import { ItemIcon } from "./ItemIcon";
 import { EditableInput } from "./EditableInput";
