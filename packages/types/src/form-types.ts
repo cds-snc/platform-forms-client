@@ -61,6 +61,11 @@ export enum FormElementTypes {
   customJson = "customJson",
 }
 
+export const BetaFormElementTypes = {
+  [FormElementTypes.addressComplete]: { flag: "addressComplete" },
+  [FormElementTypes.fileInput]: { flag: "fileUpload" },
+};
+
 export type ConditionalRule = {
   choiceId: string;
 };
@@ -125,6 +130,7 @@ export interface ElementProperties {
   maxNumberOfRows?: number;
   autoComplete?: string;
   dateFormat?: string;
+  allowNegativeNumbers?: boolean;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;

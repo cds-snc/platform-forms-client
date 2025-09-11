@@ -15,7 +15,7 @@ import { initializeGroups } from "../util/initializeGroups";
 import { findNextGroup } from "../util/findNextGroup";
 import { findPreviousGroup } from "../util/findPreviousGroup";
 import { getGroupFromId } from "../util/getGroupFromId";
-import { Group, GroupsType } from "@lib/formContext";
+import { type Group, type GroupsType } from "@gcforms/types";
 import { TreeItemIndex } from "react-complex-tree";
 import { autoFlowAllNextActions } from "../util/setNextAction";
 import { setGroupNextAction } from "../util/setNextAction";

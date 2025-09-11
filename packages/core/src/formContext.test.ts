@@ -1,6 +1,5 @@
-import { FormElementTypes } from "../types";
-import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
-import { PublicFormRecord } from "@lib/types";
+import { FormElementTypes, PublicFormRecord } from "@gcforms/types";
+import validFormTemplate from "../__fixtures__/validFormTemplate.json";
 
 import {
   findChoiceIndexByValue,
@@ -14,10 +13,11 @@ import {
   removeChoiceFromRules,
   validConditionalRules,
   cleanRules,
-} from "../formContext";
+} from "./index";
+import { describe, it, expect } from "vitest";
 
 describe("Form Context", () => {
-  test("Gets choice index", async () => {
+  it("Gets choice index", () => {
     const elements = [
       {
         id: 1,
@@ -52,7 +52,7 @@ describe("Form Context", () => {
     expect(findChoiceIndexByValue(elements, 1, "possibly fr")).toEqual(2);
   });
 
-  test("Gets elements with rule for choice", async () => {
+  it("Gets elements with rule for choice", () => {
     const elements = [
       {
         id: 1,
@@ -99,7 +99,7 @@ describe("Form Context", () => {
     ]);
   });
 
-  test("Updates conditional rules from 'modal properties' choice rules", async () => {
+  it("Updates conditional rules from 'modal properties' choice rules", () => {
     // Properties from rules modal
     const properties = [
       {
@@ -177,7 +177,7 @@ describe("Form Context", () => {
   });
 
   describe("Ensure choice id", () => {
-    test("Ensures choice id is in the format 1.0", async () => {
+    it("Ensures choice id is in the format 1.0", () => {
       expect(ensureChoiceId("1")).toEqual("1.0");
       expect(ensureChoiceId("1.0")).toEqual("1.0");
       expect(ensureChoiceId("1.1")).toEqual("1.1");
@@ -201,14 +201,16 @@ describe("Form Context", () => {
       securityAttribute: "Unclassified",
     } as PublicFormRecord;
 
-    expect(
-      mapIdsToValues(formRecord.form.elements, {
-        2: ["Individual Nomination"],
-        3: ["60 Years of Service Special Award (Individual only)"],
-        15: ["Saskatchewan"],
-        25: "Some name",
-      })
-    ).toEqual(["2.1", "3.5", "15.12"]);
+    it("Maps ids to values", () => {
+      expect(
+        mapIdsToValues(formRecord.form.elements, {
+          2: ["Individual Nomination"],
+          3: ["60 Years of Service Special Award (Individual only)"],
+          15: ["Saskatchewan"],
+          25: "Some name",
+        })
+      ).toEqual(["2.1", "3.5", "15.12"]);
+    });
   });
 
   describe("Match rule", () => {
@@ -224,169 +226,178 @@ describe("Form Context", () => {
       securityAttribute: "Unclassified",
     } as PublicFormRecord;
 
-    // False -> Pass Value that isn't in the list of values
-    expect(
-      matchRule({ choiceId: "2.0" }, formRecord.form.elements, {
-        2: ["Individual Nomination"],
-        3: ["60 Years of Service Special Award (Individual only)"],
-        15: ["Saskatchewan"],
-        25: "Some name",
-      })
-    ).toEqual(false);
-
-    // True -> Pass Value that is in the list of values
-    expect(
-      matchRule({ choiceId: "2.1" }, formRecord.form.elements, {
-        2: ["Individual Nomination"],
-        3: ["60 Years of Service Special Award (Individual only)"],
-        15: ["Saskatchewan"],
-        25: "Some name",
-      })
-    ).toEqual(true);
+    it("Returns false for unmatched value", () => {
+      // False -> Pass Value that isn't in the list of values
+      expect(
+        matchRule({ choiceId: "2.0" }, formRecord.form.elements, {
+          2: ["Individual Nomination"],
+          3: ["60 Years of Service Special Award (Individual only)"],
+          15: ["Saskatchewan"],
+          25: "Some name",
+        })
+      ).toEqual(false);
+    });
+    it("Returns true for matched value", () => {
+      // True -> Pass Value that is in the list of values
+      expect(
+        matchRule({ choiceId: "2.1" }, formRecord.form.elements, {
+          2: ["Individual Nomination"],
+          3: ["60 Years of Service Special Award (Individual only)"],
+          15: ["Saskatchewan"],
+          25: "Some name",
+        })
+      ).toEqual(true);
+    });
   });
 
   describe("Get elements using ChoiceId", () => {
-    // The form elements we're working with
-    const elements = [
-      {
-        id: 1,
-        type: FormElementTypes.radio,
-        properties: {
-          titleEn: "Question 1 en",
-          titleFr: "Question 1 fr",
-          choices: [
-            { en: "ya", fr: "ya fr" }, // 1.0
-            { en: "nope", fr: "nope fr" }, // 1.1
-            { en: "possibly", fr: "possibly fr" }, // 1.2
-          ],
+    it("Gets elements using ChoiceId", () => {
+      // The form elements we're working with
+      const elements = [
+        {
+          id: 1,
+          type: FormElementTypes.radio,
+          properties: {
+            titleEn: "Question 1 en",
+            titleFr: "Question 1 fr",
+            choices: [
+              { en: "ya", fr: "ya fr" }, // 1.0
+              { en: "nope", fr: "nope fr" }, // 1.1
+              { en: "possibly", fr: "possibly fr" }, // 1.2
+            ],
+          },
         },
-      },
-      {
-        id: 2,
-        type: FormElementTypes.radio,
-        properties: {
-          titleEn: "Question 2 en",
-          titleFr: "Question 2 fr",
-          choices: [
-            { en: "yes", fr: "yes" }, // 2.0
-            { en: "no", fr: "no" }, // 2.1
-            { en: "other", fr: "other fr" }, // 2.2
-          ],
+        {
+          id: 2,
+          type: FormElementTypes.radio,
+          properties: {
+            titleEn: "Question 2 en",
+            titleFr: "Question 2 fr",
+            choices: [
+              { en: "yes", fr: "yes" }, // 2.0
+              { en: "no", fr: "no" }, // 2.1
+              { en: "other", fr: "other fr" }, // 2.2
+            ],
+          },
         },
-      },
-      {
-        id: 3,
-        type: FormElementTypes.textField,
-        properties: {
-          titleEn: "Question 3 en",
-          titleFr: "Question 3 fr",
-          conditionalRules: [{ choiceId: "1.0" }, { choiceId: "1.1" }],
+        {
+          id: 3,
+          type: FormElementTypes.textField,
+          properties: {
+            titleEn: "Question 3 en",
+            titleFr: "Question 3 fr",
+            conditionalRules: [{ choiceId: "1.0" }, { choiceId: "1.1" }],
+          },
         },
-      },
-      {
-        id: 4,
-        type: FormElementTypes.textField,
-        properties: {
-          titleEn: "Question 4 en",
-          titleFr: "Question 4 fr",
-          conditionalRules: [{ choiceId: "1.3" }],
+        {
+          id: 4,
+          type: FormElementTypes.textField,
+          properties: {
+            titleEn: "Question 4 en",
+            titleFr: "Question 4 fr",
+            conditionalRules: [{ choiceId: "1.3" }],
+          },
         },
-      },
-      {
-        id: 5,
-        type: FormElementTypes.textField,
-        properties: {
-          titleEn: "Question 5 en",
-          titleFr: "Question 5 fr",
-          conditionalRules: [{ choiceId: "2.0" }, { choiceId: "1.1" }],
+        {
+          id: 5,
+          type: FormElementTypes.textField,
+          properties: {
+            titleEn: "Question 5 en",
+            titleFr: "Question 5 fr",
+            conditionalRules: [{ choiceId: "2.0" }, { choiceId: "1.1" }],
+          },
         },
-      },
-    ];
+      ];
 
-    expect(getElementsUsingChoiceId({ formElements: elements, choiceId: "1.1" })).toEqual([
-      { choiceId: "1.1", elementId: "3" },
-      { choiceId: "1.1", elementId: "5" },
-    ]);
+      expect(getElementsUsingChoiceId({ formElements: elements, choiceId: "1.1" })).toEqual([
+        { choiceId: "1.1", elementId: "3" },
+        { choiceId: "1.1", elementId: "5" },
+      ]);
+    });
   });
 
   describe("Clean choice ids from rules", () => {
-    const rules = [
-      { choiceId: "1.0" },
-      { choiceId: "1.1" },
-      { choiceId: "1.2" },
-      { choiceId: "2.0" },
-      { choiceId: "2.1" },
-    ];
+    it("Cleans choice ids from rules", () => {
+      const rules = [
+        { choiceId: "1.0" },
+        { choiceId: "1.1" },
+        { choiceId: "1.2" },
+        { choiceId: "2.0" },
+        { choiceId: "2.1" },
+      ];
 
-    expect(cleanChoiceIdsFromRules("1", rules)).toEqual([{ choiceId: "2.0" }, { choiceId: "2.1" }]);
+      expect(cleanChoiceIdsFromRules("1", rules)).toEqual([{ choiceId: "2.0" }, { choiceId: "2.1" }]);
 
-    expect(cleanChoiceIdsFromRules("2", rules)).toEqual([
-      { choiceId: "1.0" },
-      { choiceId: "1.1" },
-      { choiceId: "1.2" },
-    ]);
+      expect(cleanChoiceIdsFromRules("2", rules)).toEqual([
+        { choiceId: "1.0" },
+        { choiceId: "1.1" },
+        { choiceId: "1.2" },
+      ]);
+    });
   });
 
   describe("Remove choice rules", () => {
-    const elements = [
-      {
-        id: 1,
-        type: FormElementTypes.radio,
-        properties: {
-          titleEn: "Question 1 en",
-          titleFr: "Question 1 fr",
-          choices: [
-            { en: "ya", fr: "ya fr" }, // 1.0
-            { en: "nope", fr: "nope fr" }, // 1.1
-            { en: "possibly", fr: "possibly fr" }, // 1.2
-          ],
+    it("Removes choice rules", () => {
+      const elements = [
+        {
+          id: 1,
+          type: FormElementTypes.radio,
+          properties: {
+            titleEn: "Question 1 en",
+            titleFr: "Question 1 fr",
+            choices: [
+              { en: "ya", fr: "ya fr" }, // 1.0
+              { en: "nope", fr: "nope fr" }, // 1.1
+              { en: "possibly", fr: "possibly fr" }, // 1.2
+            ],
+          },
         },
-      },
-      {
-        id: 2,
-        type: FormElementTypes.radio,
-        properties: {
-          titleEn: "Question 2 en",
-          titleFr: "Question 2 fr",
-          choices: [
-            { en: "yes", fr: "yes" }, // 2.0
-            { en: "no", fr: "no" }, // 2.1
-            { en: "other", fr: "other fr" }, // 2.2
-          ],
+        {
+          id: 2,
+          type: FormElementTypes.radio,
+          properties: {
+            titleEn: "Question 2 en",
+            titleFr: "Question 2 fr",
+            choices: [
+              { en: "yes", fr: "yes" }, // 2.0
+              { en: "no", fr: "no" }, // 2.1
+              { en: "other", fr: "other fr" }, // 2.2
+            ],
+          },
         },
-      },
-      {
-        id: 3,
-        type: FormElementTypes.textField,
-        properties: {
-          titleEn: "Question 3 en",
-          titleFr: "Question 3 fr",
-          conditionalRules: [{ choiceId: "1.0" }, { choiceId: "1.1" }],
+        {
+          id: 3,
+          type: FormElementTypes.textField,
+          properties: {
+            titleEn: "Question 3 en",
+            titleFr: "Question 3 fr",
+            conditionalRules: [{ choiceId: "1.0" }, { choiceId: "1.1" }],
+          },
         },
-      },
-      {
-        id: 4,
-        type: FormElementTypes.textField,
-        properties: {
-          titleEn: "Question 4 en",
-          titleFr: "Question 4 fr",
-          conditionalRules: [{ choiceId: "1.3" }],
+        {
+          id: 4,
+          type: FormElementTypes.textField,
+          properties: {
+            titleEn: "Question 4 en",
+            titleFr: "Question 4 fr",
+            conditionalRules: [{ choiceId: "1.3" }],
+          },
         },
-      },
-      {
-        id: 5,
-        type: FormElementTypes.textField,
-        properties: {
-          titleEn: "Question 5 en",
-          titleFr: "Question 5 fr",
-          conditionalRules: [{ choiceId: "2.0" }, { choiceId: "1.1" }],
+        {
+          id: 5,
+          type: FormElementTypes.textField,
+          properties: {
+            titleEn: "Question 5 en",
+            titleFr: "Question 5 fr",
+            conditionalRules: [{ choiceId: "2.0" }, { choiceId: "1.1" }],
+          },
         },
-      },
-    ];
+      ];
 
-    expect(removeChoiceFromRules(elements, "1.1")).toEqual({
-      "3": [{ choiceId: "1.0" }],
-      "5": [{ choiceId: "2.0" }],
+      expect(removeChoiceFromRules(elements, "1.1")).toEqual({
+        "3": [{ choiceId: "1.0" }],
+        "5": [{ choiceId: "2.0" }],
+      });
     });
   });
 
@@ -438,21 +449,21 @@ describe("Form Context", () => {
       },
     ];
 
-    test("Element with no rules", async () => {
+    it("Element with no rules", () => {
       expect(validConditionalRules(elements[0], [])).toEqual(true);
     });
 
-    test("Element with rules when no matched values", async () => {
+    it("Element with rules when no matched values", () => {
       // Not valid depends 1.0 being selected
       expect(validConditionalRules(elements[1], [])).toEqual(false);
     });
 
-    test("Element with rules when matched values", async () => {
+    it("Element with rules when matched values", () => {
       // Valid as 1.0 is selected
       expect(validConditionalRules(elements[1], ["1.0"])).toEqual(true);
     });
 
-    test("Nested element with rules when matched values", async () => {
+    it("Nested element with rules when matched values", () => {
       // Valid as 2.2 is selected -- not testing parent rule
       expect(validConditionalRules(elements[3], ["2.2"])).toEqual(true);
     });
@@ -485,12 +496,12 @@ describe("Form Context", () => {
       },
     ];
 
-    test("Clean rules - no changes", async () => {
+    it("Clean rules - no changes", () => {
       const rules = elements[0].properties?.conditionalRules;
       expect(cleanRules(elements, rules || [])).toEqual([{ choiceId: "3.0" }]);
     });
 
-    test("Clean rules - remove invalid rule", async () => {
+    it("Clean rules - remove invalid rule", () => {
       const rules = elements[1].properties?.conditionalRules;
       const cleanedRules = cleanRules(elements, rules || []);
       expect(cleanedRules).toEqual([{ choiceId: "1.0" }]);

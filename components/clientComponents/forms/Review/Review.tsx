@@ -1,11 +1,10 @@
 import { useRef } from "react";
 
 import { type Language } from "@lib/types/form-builder-types";
-import {
-  getValuesWithMatchedIds,
-  getVisibleGroupsBasedOnValuesRecursive,
-  type FormValues,
-} from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
+
+import { getValuesWithMatchedIds, getVisibleGroupsBasedOnValuesRecursive } from "@gcforms/core";
+
 import { type Theme } from "@clientComponents/globals/Buttons/themes";
 import { useTranslation } from "@i18n/client";
 
@@ -41,7 +40,17 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     language,
   });
 
-  const renderEditButton = ({ id, title, theme }: { id: string; title?: string; theme: Theme }) => {
+  const renderEditButton = ({
+    id,
+    title,
+    theme,
+    description,
+  }: {
+    id: string;
+    title?: string;
+    theme: Theme;
+    description?: string;
+  }) => {
     const editText = t("edit", { lng: language });
 
     return (
@@ -51,6 +60,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
         onClick={() => {
           focusHeadingBySelector(["form h2", "h1"]);
         }}
+        description={description}
       >
         {title ? title : editText}
       </EditButton>

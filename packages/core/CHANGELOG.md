@@ -1,5 +1,22 @@
 # Changelog
 
+
+## [1.0.7] - 2025-09-09
+
+- Bump yarn
+
+## [1.0.6] - 2025-09-09
+
+- export validateVisibleElements
+
+## [1.0.4] - 2025-08-29
+
+- Fix build step
+
+## [1.0.3] - 2025-08-25
+
+- Update to add more helpers
+
 ## [1.0.1] - 2025-08-15
 
 - Update file validation and added file-type as a dependancy

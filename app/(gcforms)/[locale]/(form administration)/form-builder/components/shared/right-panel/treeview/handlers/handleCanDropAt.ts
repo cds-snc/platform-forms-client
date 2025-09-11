@@ -1,4 +1,4 @@
-import { GroupsType } from "@lib/formContext";
+import { type GroupsType } from "@gcforms/types";
 import {
   DraggingPosition,
   DraggingPositionBetweenItems,

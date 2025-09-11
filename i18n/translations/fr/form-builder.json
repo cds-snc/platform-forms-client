@@ -215,8 +215,8 @@
         "title": "Fonctionnalité Bêta",
         "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
         "bullet1": "La récupération des réponses au formulaire via l'API",
-        "bullet3": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
-        "bullet4": "La collecte de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
+        "bullet2": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
+        "bullet3": "La collecte de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
       }
     },
     "firstMiddleLastName": {
@@ -256,7 +256,8 @@
       "description": "Un champ qui n’accepte qu’une valeur numérique.",
       "title": "Chiffre",
       "amount": "Montant",
-      "enterOnlyNumbers": "Saisissez un chiffre."
+      "enterOnlyNumbers": "Saisissez un chiffre.",
+      "allowNegative": "permettre les valeurs numériques négatives"
     },
     "questionElement": "Éléments",
     "radio": {
@@ -686,7 +687,7 @@
   },
   "required": "obligatoire",
   "responseDelivery": "Tester la réception des réponses",
-  "richText": "Texte",
+  "richText": "Texte de page",
   "richTextConfirmationTitle": "Message de confirmation",
   "richTextEditor": "Éditeur de texte enrichi",
   "richTextIntroTitle": "Introduction au formulaire",
@@ -1432,7 +1433,8 @@
   "fr": "Français",
   "beta": {
     "tag": "Bêta :",
-    "text": "Fonctionnalité à l'essai"
+    "text": "Fonctionnalité à l'essai",
+    "loadingError": "Ce formulaire contient un composant « bêta » qui n'est pas encore disponible pour tous les utilisateurs. Pour en savoir plus sur cette fonctionnalité limitée, veuillez contacter l'équipe de soutien."
   },
   "fileUploadApiWarning": {
     "text": "La méthode de livraison n'est pas configurée sur API."

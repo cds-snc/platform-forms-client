@@ -3,6 +3,7 @@ import { FormItem } from "../helpers";
 import { BaseElement } from "./BaseElement";
 import { type Language } from "@lib/types/form-builder-types";
 import { customTranslate } from "@lib/i18nHelpers";
+import { bytesToKbOrMbString } from "@lib/utils/fileSize";
 
 export const FileInput = ({
   formItem,
@@ -23,8 +24,8 @@ export const FileInput = ({
     return <BaseElement formItem={{ ...formItem, values: "-" } as FormItem} />;
   }
 
-  const fileSizeInMB = (file.size / 1024 / 1024).toFixed(2);
-  const fileAsString = `${file.name} (${fileSizeInMB} ${t("input-validation.MB", {
+  const { size, unit } = bytesToKbOrMbString(file.size, language);
+  const fileAsString = `${file.name} (${size} ${t(`input-validation.${unit}`, {
     lng: language,
   })})`;
   return <BaseElement formItem={{ ...formItem, values: fileAsString } as FormItem} />;

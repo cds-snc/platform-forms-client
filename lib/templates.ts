@@ -23,6 +23,14 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { NotificationsInterval } from "@gcforms/types";
+import { checkOne } from "@lib/cache/flags";
+import { checkForBetaComponentsAsync } from "./validation/betaCheck";
+
+const checkFlag = async (flag: string) => {
+  return (await Promise.all([checkOne(flag), authorization.canAccessBetaComponents(flag)])).reduce(
+    (prev, curr) => prev || curr
+  );
+};
 
 // ******************************************
 // Internal Module Functions
@@ -146,6 +154,8 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
     logEvent(e.user.id, { type: "Form" }, "AccessDenied", "Attempted to create a Form");
     throw e;
   });
+
+  await checkForBetaComponentsAsync(command.formConfig.elements, checkFlag);
 
   const validationResult = validateTemplate(command.formConfig);
 
@@ -498,6 +508,11 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
       "AccessDenied",
       "Attempted to update Form"
     );
+    throw e;
+  });
+
+  await checkForBetaComponentsAsync(command.formConfig.elements, checkFlag).catch((e) => {
+    logMessage.warn(`User ${user.email} tried to use beta form components without flags being set`);
     throw e;
   });
 
@@ -1211,10 +1226,24 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
     throw e;
   });
 
-  // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
+  // Check if the form is draft or not.
+  const template = await prisma.template.findFirstOrThrow({
+    where: {
+      id: formID,
+    },
+    select: {
+      isPublished: true,
+    },
+  });
 
-  const numOfUnprocessedSubmissions = await unprocessedSubmissions(formID, true);
-  if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
+  if (!template) throw new TemplateNotFoundError();
+
+  // Only check submissions if the form is published.
+  if (template.isPublished) {
+    // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
+    const numOfUnprocessedSubmissions = await unprocessedSubmissions(formID, true);
+    if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
+  }
 
   // Check and delete any API keys from IDP
   await deleteKey(formID);
