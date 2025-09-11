@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { ExpandingInput } from "@formBuilder/components/shared/ExpandingInput";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";

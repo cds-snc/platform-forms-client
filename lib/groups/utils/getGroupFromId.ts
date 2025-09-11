@@ -1,5 +1,5 @@
 import { TreeItem } from "react-complex-tree";
-import { TreeItems } from "../types";
+import { TreeItems } from "../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/treeview/types";
 
 export function getGroupFromId(groups: TreeItems, elementId: string): TreeItem | undefined {
   if (groups[elementId]) {

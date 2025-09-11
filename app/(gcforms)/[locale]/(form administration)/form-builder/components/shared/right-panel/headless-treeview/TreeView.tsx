@@ -38,7 +38,7 @@ import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } f
 import { createHeadlessDropHandler } from "./handlers/handleOnDrop";
 import { createHeadlessCanDropHandler } from "./handlers/handleCanDropAt";
 
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
@@ -48,10 +48,10 @@ import { Button } from "@root/components/clientComponents/globals";
 import { AddIcon } from "@root/components/serverComponents/icons";
 import { KeyboardNavTip } from "./KeyboardNavTip";
 import { useTranslation } from "@root/i18n/client";
-import { canDeleteGroup } from "../treeview/util/validateGroups";
+import { canDeleteGroup } from "../../../../../../../../../lib/groups/utils/validateGroups";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
-import { useUpdateGroupLayout } from "../treeview/util/useUpdateGroupLayout";
+import { useUpdateGroupLayout } from "../../../../../../../../../lib/groups/utils/useUpdateGroupLayout";
 import { useAutoFlowIfNoCustomRules } from "@root/lib/hooks/useAutoFlowAll";
 
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (

@@ -6,19 +6,19 @@ import { shallow } from "zustand/shallow";
 import React, { createContext, useRef, useContext } from "react";
 import { TemplateStoreContext } from "@lib/store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { groupsToTreeData, TreeDataOptions } from "../util/groupsToTreeData";
-import { findParentGroup } from "../util/findParentGroup";
+import { groupsToTreeData, TreeDataOptions } from "./utils/groupsToTreeData";
+import { findParentGroup } from "./utils/findParentGroup";
 import { GroupStoreProps, GroupStoreState } from "./types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
-import { initializeGroups } from "../util/initializeGroups";
+import { initializeGroups } from "./utils/initializeGroups";
 
-import { findNextGroup } from "../util/findNextGroup";
-import { findPreviousGroup } from "../util/findPreviousGroup";
-import { getGroupFromId } from "../util/getGroupFromId";
+import { findNextGroup } from "./utils/findNextGroup";
+import { findPreviousGroup } from "./utils/findPreviousGroup";
+import { getGroupFromId } from "./utils/getGroupFromId";
 import { type Group, type GroupsType } from "@gcforms/types";
 import { TreeItemIndex } from "react-complex-tree";
-import { autoFlowAllNextActions } from "../util/setNextAction";
-import { setGroupNextAction } from "../util/setNextAction";
+import { autoFlowAllNextActions } from "./utils/setNextAction";
+import { setGroupNextAction } from "./utils/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
 import { FormElement } from "@lib/types";
 

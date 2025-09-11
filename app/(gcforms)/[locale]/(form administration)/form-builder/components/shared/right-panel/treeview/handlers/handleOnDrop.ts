@@ -6,11 +6,11 @@ import {
   TreeItem,
   TreeItemIndex,
 } from "react-complex-tree";
-import { findParentGroup } from "../util/findParentGroup";
+import { findParentGroup } from "../../../../../../../../../../lib/groups/utils/findParentGroup";
 import { TreeItems } from "../types";
-import { autoFlowGroupNextActions } from "../util/setNextAction";
+import { autoFlowGroupNextActions } from "../../../../../../../../../../lib/groups/utils/setNextAction";
 import { FormElement } from "@lib/types";
-import { reorderElements as reorderSubElements } from "../util/updateArrayOrder";
+import { reorderElements as reorderSubElements } from "../../../../../../../../../../lib/groups/utils/updateArrayOrder";
 
 const findItemIndex = (items: string[], itemIndex: string | number) =>
   items.indexOf(String(itemIndex));

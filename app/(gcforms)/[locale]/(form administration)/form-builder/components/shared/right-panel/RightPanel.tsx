@@ -26,7 +26,7 @@ import { TreeView } from "./treeview/TreeView";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SelectNextAction } from "./logic/SelectNextAction";
-import { useGroupStore } from "./treeview/store/useGroupStore";
+import { useGroupStore } from "../../../../../../../../lib/groups/useGroupStore";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { Language } from "@lib/types/form-builder-types";
 import { announce } from "@gcforms/announce";

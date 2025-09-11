@@ -3,7 +3,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { type GroupsType } from "@gcforms/types";
 import { GroupSelect } from "./GroupSelect";
 import { Button } from "@clientComponents/globals";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
@@ -11,7 +11,7 @@ import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { LockedSections } from "../treeview/types";
-import { canModifyNextAction } from "../treeview/util/validateGroups";
+import { canModifyNextAction } from "../../../../../../../../../lib/groups/utils/validateGroups";
 
 const ExitIcon = () => {
   return (
