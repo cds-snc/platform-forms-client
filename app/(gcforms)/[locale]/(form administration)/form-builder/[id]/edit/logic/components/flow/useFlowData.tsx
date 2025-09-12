@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { MarkerType } from "reactflow";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Group, GroupsType } from "@gcforms/types";
 import { type NextActionRule } from "@gcforms/types";

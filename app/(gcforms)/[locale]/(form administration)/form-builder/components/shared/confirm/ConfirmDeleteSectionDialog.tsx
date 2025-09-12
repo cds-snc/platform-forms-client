@@ -23,7 +23,7 @@ export const ConfirmDeleteSectionDialog = ({
             {t("groups.confirmDeleteGroup.title")}
           </AlertDialog.Title>
           <AlertDialog.Description className="pb-6">
-            <Markdown options={{ forceBlock: true }}>
+            <Markdown options={{ forceBlock: false }}>
               {t("groups.confirmDeleteGroup.description")}
             </Markdown>
           </AlertDialog.Description>

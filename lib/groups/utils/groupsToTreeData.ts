@@ -1,5 +1,5 @@
 import { type GroupsType } from "@gcforms/types";
-import { TreeItems } from "../types";
+import { TreeItems } from "../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/treeview/types";
 import { FormElement } from "@lib/types";
 import { resetLockedSections } from "@lib/formContext";
 
@@ -9,6 +9,7 @@ export type TreeDataOptions = {
   addConfirmationElement?: boolean;
   addSectionTitleElements?: boolean;
   reviewGroup?: boolean;
+  headless?: boolean;
 };
 
 export const subElementsToTreeData = (parentId: number, subElements: FormElement[]) => {
@@ -32,8 +33,10 @@ export const subElementsToTreeData = (parentId: number, subElements: FormElement
         descriptionEn: element.properties.descriptionEn,
         descriptionFr: element.properties.descriptionFr,
         isSubElement: true,
+        isRepeatingSet: false,
         parentId: parentId,
         subIndex: subIndex,
+        nextAction: undefined,
       },
     };
 
@@ -87,6 +90,9 @@ export const groupsToTreeData = (
         titleFr: formGroups[key].titleFr,
         descriptionEn: "",
         descriptionFr: "",
+        type: "group",
+        isRepeatingSet: false,
+        isSubElement: false,
         nextAction: formGroups[key].nextAction,
       },
       children: children,
@@ -107,6 +113,10 @@ export const groupsToTreeData = (
         titleFr: formGroups[key].titleFr || "Titre de section",
         descriptionEn: "",
         descriptionFr: "",
+        type: "section",
+        isRepeatingSet: false,
+        isSubElement: false,
+        nextAction: undefined,
       },
       children: [],
     };
@@ -140,11 +150,14 @@ export const groupsToTreeData = (
         canMove: true,
         children: itemChildren,
         data: {
-          type: element.type,
           titleEn: element.properties.titleEn,
           titleFr: element.properties.titleFr,
           descriptionEn: element.properties.descriptionEn,
           descriptionFr: element.properties.descriptionFr,
+          isSubElement: false,
+          isRepeatingSet: element.type === "dynamicRow",
+          type: element.type,
+          nextAction: undefined,
         },
       };
       items[childId] = childItem;
@@ -156,12 +169,16 @@ export const groupsToTreeData = (
     isFolder: false,
     canRename: false,
     canMove: false,
-    children: [],
+    //children: [],
     data: {
       titleEn: "Form introduction",
       titleFr: "Introduction au formulaire",
       descriptionEn: "",
       descriptionFr: "",
+      isSubElement: false,
+      isRepeatingSet: false,
+      type: "ghost",
+      nextAction: undefined,
     },
   };
 
@@ -181,6 +198,10 @@ export const groupsToTreeData = (
       titleFr: "Avis de confidentialité",
       descriptionEn: "",
       descriptionFr: "",
+      isSubElement: false,
+      isRepeatingSet: false,
+      type: "ghost",
+      nextAction: undefined,
     },
   };
 
@@ -195,8 +216,6 @@ export const groupsToTreeData = (
     items["start"].children = [...startChildren, ...currentStartChildren];
   }
 
-  // ----
-
   const confirmationItem = {
     index: "confirmation",
     isFolder: false,
@@ -208,6 +227,10 @@ export const groupsToTreeData = (
       titleFr: "Message de confirmation",
       descriptionEn: "",
       descriptionFr: "",
+      isSubElement: false,
+      isRepeatingSet: false,
+      type: "ghost",
+      nextAction: undefined,
     },
   };
 
@@ -223,6 +246,15 @@ export const groupsToTreeData = (
   if (options.reviewGroup === false) {
     items.root.children = items.root.children?.filter((child) => child !== "review");
     delete items["review"];
+  }
+
+  // Remove children if empty array
+  if (options.headless) {
+    Object.values(items).forEach((item) => {
+      if (Array.isArray(item.children) && item.children.length === 0) {
+        delete item.children;
+      }
+    });
   }
 
   return items;
