@@ -1,4 +1,3 @@
-import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 
 import { ItemProps } from "../types";
@@ -20,15 +19,23 @@ export const ItemTitle = ({ item }: ItemProps) => {
   }
 
   if (isFormElement && fieldType === "richText" && title === "") {
-    return <span className="text-gray-500">{t("groups.treeView.emptyPageTextElement")}</span>;
+    return (
+      <div className="inline-block w-full truncate py-2">
+        <span className="text-gray-500">{t("groups.treeView.emptyPageTextElement")}</span>
+      </div>
+    );
   }
 
-  if (isFormElement && fieldType !== "richText" && title === "") {
-    return <span className="text-gray-500">{t("groups.treeView.emptyFormElement")}</span>;
+  if (isFormElement && title === "") {
+    return (
+      <div className="inline-block w-full truncate py-2">
+        <span className="text-gray-500">{t("groups.treeView.emptyFormElement")}</span>
+      </div>
+    );
   }
 
   return (
-    <div className={cn("inline-block truncate py-2", "w-full")}>
+    <div className="inline-block w-full truncate py-2">
       {title} <span className="hidden">{item.getId()}</span>
     </div>
   );
