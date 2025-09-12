@@ -13,12 +13,7 @@ export async function deleteForm(formId: string): Promise<void> {
       })
       .then((response) => {
         try {
-          const lines = response.data.split("\n");
-          const jsonResponse: { error: string | undefined } = JSON.parse(
-            lines[1].slice(lines[1].indexOf(":") + 1)
-          );
-
-          if (jsonResponse.error !== undefined) {
+          if (/Failed to Delete Form/i.test(response.data)) {
             throw new Error("Failed to delete form");
           }
         } catch (error) {

@@ -26,11 +26,11 @@ export async function createForm(name: string, template: Record<string, any>): P
       )
       .then((response) => {
         try {
-          const lines = response.data.split("\n");
+          const responseMatch = response.data.match(/\{"formRecord":\{.*?\}\}/);
 
-          const jsonResponse: { formRecord: { id: string } | null } = JSON.parse(
-            lines[1].slice(lines[1].indexOf(":") + 1)
-          );
+          if (responseMatch === null) throw new Error("Could not parse response");
+
+          const jsonResponse = JSON.parse(responseMatch[0]);
 
           if (jsonResponse.formRecord === null) {
             throw new Error("formRecord is null");

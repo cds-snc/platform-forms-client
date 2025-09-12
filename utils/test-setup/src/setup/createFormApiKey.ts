@@ -13,21 +13,19 @@ export async function createFormApiKey(formId: string): Promise<string> {
       })
       .then((response) => {
         try {
-          const lines = response.data.split("\n");
-
-          const partialApiKeyResponse = lines.find((l) => l.startsWith("1:"));
-
-          if (partialApiKeyResponse === undefined)
-            throw new Error("Could not find partial API key in response");
-
-          const partialApiKey: { type: string; keyId: string; userId: string; formId: string } =
-            JSON.parse(partialApiKeyResponse.slice(partialApiKeyResponse.indexOf(":") + 1));
+          const apiKeyMetadataMatch = response.data.match(
+            /\{"type":"serviceAccount","keyId":"\d+","key":"[^"]+","userId":"\d+","formId":"[a-z0-9]+"\}/
+          );
 
           const apiKeyMatch = response.data.match(
             /-----BEGIN PRIVATE KEY-----[\s\S]*?-----END PRIVATE KEY-----/
           );
 
-          if (apiKeyMatch === null) throw new Error("Could not find API key in response");
+          if (apiKeyMetadataMatch === null || apiKeyMatch === null)
+            throw new Error("Could not parse response");
+
+          const partialApiKey: { type: string; keyId: string; userId: string; formId: string } =
+            JSON.parse(apiKeyMetadataMatch[0]);
 
           const apiKey = { ...partialApiKey, key: apiKeyMatch[0] };
 
