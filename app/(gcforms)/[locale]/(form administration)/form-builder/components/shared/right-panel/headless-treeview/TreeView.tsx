@@ -21,7 +21,6 @@ import { ForwardRefRenderFunction, forwardRef, useEffect, useImperativeHandle } 
 import { TreeItemData } from "./types";
 import {
   syncDataLoaderFeature,
-  createOnDropHandler,
   dragAndDropFeature,
   hotkeysCoreFeature,
   keyboardDragAndDropFeature,
@@ -31,13 +30,8 @@ import {
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
 import { useTreeHandlers } from "./hooks/useTreeHandlers";
 import { TreeItem } from "./TreeItem/TreeItem";
-
 import { TreeDataProviderProps } from "../treeview/types";
-
 import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } from "./treeUtils";
-import { createHeadlessDropHandler } from "./handlers/handleOnDrop";
-import { createHeadlessCanDropHandler } from "./handlers/handleCanDropAt";
-
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -53,21 +47,27 @@ import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/us
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
 import { useUpdateGroupLayout } from "../../../../../../../../../lib/groups/utils/useUpdateGroupLayout";
 import { useAutoFlowIfNoCustomRules } from "@root/lib/hooks/useAutoFlowAll";
+import { useConfirmState as useConfirmMoveDialogState } from "../../confirm/useConfirmState";
+import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog";
+import { handleCanDrop } from "./handlers/handleCanDrop";
+import { handleOnDrop } from "./handlers/handleOnDrop";
 
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
 ) => {
+  const { t } = useTranslation("form-builder");
+
   const {
     getTreeData,
     id,
     updateGroupName,
+    updateGroupTitle,
     getGroups,
-    replaceGroups,
     getSubElements,
     updateSubElements,
-    getElement,
     updateElementTitle,
+    updateGroupElements,
     groupId,
     deleteGroup,
     setId,
@@ -75,33 +75,36 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     getTreeData: s.getTreeData,
     id: s.id,
     updateGroupName: s.updateGroupName,
+    updateGroupTitle: s.updateGroupTitle,
     getGroups: s.getGroups,
-    replaceGroups: s.replaceGroups,
     getSubElements: s.getSubElements,
     updateSubElements: s.updateSubElements,
-    getElement: s.getElement,
     updateElementTitle: s.updateElementTitle,
+    updateGroupElements: s.updateGroupElements,
     groupId: s.id,
     deleteGroup: s.deleteGroup,
     setId: s.setId,
   }));
 
-  const { updateGroupsLayout } = useUpdateGroupLayout();
-  const { autoFlowAll } = useAutoFlowIfNoCustomRules();
-
-  const updateGroupTitle = useGroupStore((state) => state.updateGroupTitle);
-  const { getLocalizationAttribute } = useTemplateStore((s) => ({
+  const { getLocalizationAttribute, setGroupsLayout } = useTemplateStore((s) => ({
     getLocalizationAttribute: s.getLocalizationAttribute,
+    setGroupsLayout: s.setGroupsLayout,
   }));
 
-  const language = getLocalizationAttribute()?.lang as Language;
+  const {
+    resolve: resolveConfirmMove,
+    getPromise: getConfirmMovePromise,
+    openDialog: openConfirmMoveDialog,
+    setOpenDialog: setOpenConfirmMoveDialog,
+  } = useConfirmMoveDialogState();
 
-  const { t } = useTranslation("form-builder");
-  const newSectionText = t("groups.newPage");
-
+  const { updateGroupsLayout } = useUpdateGroupLayout();
+  const { autoFlowAll } = useAutoFlowIfNoCustomRules();
   const { getTitle } = useElementTitle();
-
   const { headlessTree } = useTreeRef();
+
+  const language = getLocalizationAttribute()?.lang as Language;
+  const newSectionText = t("groups.newPage");
 
   const tree = useTree<TreeItemData>({
     initialState: getInitialTreeState(id ?? "start"),
@@ -128,33 +131,17 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       return level < 1 || data.isRepeatingSet || false;
     },
     canReorder: true,
-    canDrop: (items, target) => {
-      const canDropHandler = createHeadlessCanDropHandler(getGroups, getElement);
-      const itemIds = items.map((item) => item.getId());
-
-      // Extract target information from headless-tree target structure
-      // If target.item exists, we're dropping ON an item (making it a child)
-      // If target.item is null/undefined, we're dropping between items at root level
-      let targetParentId: string;
-      let targetIndex: number;
-
-      if (target.item) {
-        // Dropping ON an item - the item becomes the parent
-        targetParentId = target.item.getId();
-        targetIndex = "insertionIndex" in target ? target.insertionIndex : 0;
-      } else {
-        // Dropping between items - assume root level
-        targetParentId = "root";
-        targetIndex = "insertionIndex" in target ? target.insertionIndex : 0;
-      }
-
-      return canDropHandler(itemIds, targetParentId, targetIndex);
-    },
-    onDrop: createOnDropHandler(
-      createHeadlessDropHandler(getGroups, replaceGroups, getSubElements, updateSubElements, () =>
-        tree.rebuildTree()
-      )
-    ),
+    canDrop: (items, target) => handleCanDrop(items, target),
+    onDrop: (items, target) =>
+      handleOnDrop(
+        items,
+        target,
+        getSubElements,
+        setGroupsLayout,
+        updateGroupElements,
+        updateSubElements,
+        () => tree.rebuildTree()
+      ),
     onRename: (item, value) => {
       const data = item.getItemData();
       const id = item.getId();
@@ -201,29 +188,12 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     },
     canRename: (item) => {
       const id = item.getId();
-      // const data = item.getItemData();
 
-      // Don't allow renaming of special sections
+      // Don't allow renaming of special sections/elements
       if (["start", "end", "intro", "policy", "confirmation", "review"].includes(id)) {
         return false;
       }
 
-      // @TODO: copilot suggested the following, not sure it's needed?
-      // Don't allow renaming items with specific names that shouldn't be renamed
-      // if (data && typeof data === "object" && data.name) {
-      //   const itemName = String(data.name);
-      //   if (
-      //     ["Start", "Introduction", "Policy", "Review", "End", "Confirmation"].includes(itemName)
-      //   ) {
-      //     return false;
-      //   }
-      // }
-
-      // Allow renaming for:
-      // - Title elements (section titles)
-      // - Root-level groups/sections (excluding special ones)
-      // - Form elements and sub-elements
-      // - Dynamic rows
       return true;
     },
     indent: 20,
@@ -347,11 +317,19 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
               }}
             />
           ))}
+          <div style={tree.getDragLineStyle()} className="border-b-2 border-blue-400" />
         </div>
       </div>
-
-      <div style={tree.getDragLineStyle()} className="dragline" />
-
+      <ConfirmMoveSectionDialog
+        open={openConfirmMoveDialog}
+        handleClose={(value) => {
+          if (value) {
+            resolveConfirmMove && resolveConfirmMove(true);
+          } else {
+            resolveConfirmMove && resolveConfirmMove(false);
+          }
+        }}
+      />
       <ConfirmDeleteSectionDialog
         open={openConfirmDeleteDialog}
         handleClose={(value) => {

@@ -45,5 +45,6 @@ export interface GroupStoreState extends GroupStoreProps {
     locale: Language;
     title: string;
   }) => void;
+  updateGroupElements: ({id, elements}:{id: string; elements: string[]}) => void;
   setExitButtonUrl: ({ id, locale, url }: { id: string; locale: Language; url: string }) => void;
 }

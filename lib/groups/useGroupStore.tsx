@@ -111,6 +111,21 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           setChangeKey(String(new Date().getTime()));
         }
       },
+      updateGroupElements: ({ id, elements }: { id: string; elements: string[] }) => {
+        const formGroups = get().templateStore.getState().form.groups;
+        const setChangeKey = get().templateStore.getState().setChangeKey;
+        if (formGroups && formGroups[id]) {
+          get().templateStore.setState((s) => {
+            if (s.form.groups) {
+              s.form.groups[id] = {
+                ...formGroups[id],
+                ["elements"]: elements,
+              };
+            }
+          });
+          setChangeKey(String(new Date().getTime()));
+        }
+      },
       getGroups: () => get().templateStore.getState().form.groups,
       getTreeData: (options: TreeDataOptions = {}) => {
         const form = get().templateStore.getState().form;
@@ -124,9 +139,19 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
 
         if (!formGroups) return {};
 
+        const groupsLayout = get().templateStore.getState().form.groupsLayout;
+
+        const orderedFormGroups = { start: formGroups["start"] } as GroupsType;
+
+        groupsLayout?.map((groupId) => {
+          orderedFormGroups[groupId] = { ...formGroups[groupId] };
+        });
+
+        orderedFormGroups["end"] = formGroups["end"];
+
         const elements = get().templateStore.getState().form.elements;
 
-        return groupsToTreeData(formGroups, elements, options);
+        return groupsToTreeData(orderedFormGroups, elements, options);
       },
       getElementsGroupById: (id: string) => {
         const formGroups = get().templateStore.getState().form.groups;

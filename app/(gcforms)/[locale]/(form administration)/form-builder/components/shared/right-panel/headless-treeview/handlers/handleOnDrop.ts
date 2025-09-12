@@ -1,95 +1,68 @@
-import { type GroupsType } from "@gcforms/types";
-import { FormElement } from "@lib/types";
+import { DragTarget, insertItemsAtTarget, ItemInstance, removeItemsFromParents } from "@headless-tree/core";
+import { TreeItemData } from "../types";
+import { FormElement } from "@root/lib/types";
 
-// Type definitions for headless-tree drag target
-export type HeadlessDragTarget = {
-  parentId: string;
-  index: number;
-  targetType: "parent" | "between-items";
-};
-
-export const createHeadlessDropHandler = (
-  getGroups: () => GroupsType | undefined,
-  replaceGroups: (groups: GroupsType) => void,
-  getSubElements: (parentId: number) => FormElement[] | undefined,
+export const handleOnDrop = async (
+  items: ItemInstance<TreeItemData>[], 
+  target: DragTarget<TreeItemData>, 
+  getSubElements: (parentId: number) => FormElement[] | undefined, 
+  setGroupsLayout: (layout: string[]) => void, 
+  updateGroupElements: ({ id, elements }: {
+      id: string;
+      elements: string[];
+  }) => void, 
   updateSubElements: (elements: FormElement[], parentId: number) => void,
   rebuildTree: () => void
 ) => {
-  return (parent: { getId: () => string }, newChildren: string[]) => {
-    const parentId = parent.getId();
+    const droppedLevel = target.item.getItemMeta().level;
 
-    try {
-      const currentGroups = getGroups();
-      if (!currentGroups) return;
+      // Handle moving subElements
 
-      // Handle root-level group reordering
-      if (parentId === "root") {
-        // Get all current group keys
-        const allGroupKeys = Object.keys(currentGroups);
+      const movedItemIds = items.map((item) => item.getId());
+      const originalSubElements = getSubElements(Number(target.item.getId())) || [];
+      let updatedSubElements: FormElement[] = [];
 
-        // Find which groups are being reordered vs which should be preserved
-        const reorderedGroups = new Set(newChildren);
-        const preservedGroups: Record<string, GroupsType[string]> = {};
+      await removeItemsFromParents(items, (item, newChildren) => {
+        if (droppedLevel === -1) {
+          setGroupsLayout(newChildren);
+        }
 
-        // First, preserve any groups that aren't being reordered
-        allGroupKeys.forEach((key) => {
-          if (!reorderedGroups.has(key)) {
-            preservedGroups[key] = currentGroups[key];
-          }
-        });
+        if (droppedLevel === 0) {
+          updateGroupElements({ id: item.getId(), elements: newChildren });
+        }
 
-        // Create new groups object with reordered keys
-        const newGroups: GroupsType = {};
+        if (droppedLevel === 1) {
+          updatedSubElements = originalSubElements.filter(
+            (el) => !movedItemIds.includes(String(el.id))
+          );
+          updateSubElements(updatedSubElements, Number(item.getId()));
+        }
+      });
 
-        // Add groups in the new order
-        newChildren.forEach((childId: string) => {
-          if (currentGroups[childId]) {
-            newGroups[childId] = currentGroups[childId];
-          }
-        });
+      await insertItemsAtTarget(movedItemIds, target, (item, newChildren) => {
+        if (droppedLevel === -1) {
+          setGroupsLayout(newChildren);
+        }
 
-        // Add back any preserved groups that weren't part of the reordering
-        Object.keys(preservedGroups).forEach((key) => {
-          newGroups[key] = preservedGroups[key];
-        });
+        if (droppedLevel === 0) {
+          updateGroupElements({ id: item.getId(), elements: newChildren });
+        }
 
-        replaceGroups(newGroups);
-        rebuildTree();
-        return;
-      }
+        if (droppedLevel === 1) {
+          const movedSubElements = originalSubElements.filter((el) =>
+            movedItemIds.includes(String(el.id))
+          );
 
-      // Handle sub-element reordering within a group
-      const parentIdNum = Number(parentId);
-      if (!isNaN(parentIdNum)) {
-        const subElements = getSubElements(parentIdNum);
-        if (!subElements) return;
+          // Insert movedSubElements into updatedSubElements at target.insertionIndex
+          const newSubElements = [
+            ...updatedSubElements.slice(0, target.insertionIndex),
+            ...movedSubElements,
+            ...updatedSubElements.slice(target.insertionIndex),
+          ];
 
-        // Reorder sub-elements based on newChildren order
-        const reorderedElements = newChildren
-          .map((childId) => subElements.find((el) => String(el.id) === childId))
-          .filter((el): el is FormElement => el !== undefined);
+          updateSubElements(newSubElements, Number(target.item.getId()));
+        }
+      });
 
-        updateSubElements(reorderedElements, parentIdNum);
-        rebuildTree();
-        return;
-      }
-
-      // Handle group-level element reordering
-      if (!currentGroups[parentId]) return;
-
-      const updatedGroups = {
-        ...currentGroups,
-        [parentId]: {
-          ...currentGroups[parentId],
-          elements: newChildren,
-        },
-      };
-
-      replaceGroups(updatedGroups);
       rebuildTree();
-    } catch (error) {
-      // Silent error handling - just rebuild tree to maintain consistency
-      rebuildTree();
-    }
-  };
-};
+}
