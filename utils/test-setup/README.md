@@ -16,9 +16,10 @@ By combining reusable form templates with synthetic submissions — sent in para
 ## Prerequisites
 
 - Node.js and Yarn installed.
-- AWS credentials with appropriate access configured in your environment:
+- AWS credentials with appropriate access configured in your environment (you can get them from the CDS AWS access portal):
   - `AWS_ACCESS_KEY_ID`
   - `AWS_SECRET_ACCESS_KEY`
+  - `AWS_SESSION_TOKEN`
 
 ## Setup
 
@@ -43,6 +44,8 @@ Update the configuration according to your environment:
 authjsCookie: Retrieve from Chrome inspector (Network tab) on a valid authenticated request sent to our Next.js server.
 
 serverActionIdentifiers: Find server action identifiers in Chrome inspector (Sources tab) using the search bar.
+
+vaultFileStorageS3BucketName: Find the bucket name using the AWS console (against the environment that you are looking to use).
 
 templates: Provide a list of JSON-formatted form templates. The tool picks a random template for each new form.
 

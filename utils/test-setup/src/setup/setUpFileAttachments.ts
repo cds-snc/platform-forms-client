@@ -1,3 +1,4 @@
+import config from "../../config.json";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { randomBytes } from "node:crypto";
 import os from "os";
@@ -26,7 +27,7 @@ export async function setUpFileAttachments(): Promise<FileAttachment[]> {
     return s3Client
       .send(
         new PutObjectCommand({
-          Bucket: "forms-staging-vault-file-storage",
+          Bucket: config.gcFormsInfra.vaultFileStorageS3BucketName,
           Key: key,
           Body: randomFile.data,
           Tagging: "GuardDutyMalwareScanStatus=NO_THREATS_FOUND",

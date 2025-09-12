@@ -1,3 +1,4 @@
+import config from "../../config.json";
 import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 const s3Client = new S3Client({
@@ -9,7 +10,7 @@ export async function cleanUpFileAttachments(filePaths: string[]): Promise<void>
   const deleteFileAttachmentOperations = filePaths.map((filePath) => {
     return s3Client.send(
       new DeleteObjectCommand({
-        Bucket: "forms-staging-vault-file-storage",
+        Bucket: config.gcFormsInfra.vaultFileStorageS3BucketName,
         Key: filePath,
       })
     );

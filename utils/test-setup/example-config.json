@@ -9,6 +9,9 @@
       "createServiceAccountKey": "7f0d3cefb47e0bd604ea02102a9b0ad3a62edd57a9"
     }
   },
+  "gcFormsInfra": {
+    "vaultFileStorageS3BucketName": "forms-staging-vault-file-storage"
+  },
   "testSetup": {
     "templates": [
       {
