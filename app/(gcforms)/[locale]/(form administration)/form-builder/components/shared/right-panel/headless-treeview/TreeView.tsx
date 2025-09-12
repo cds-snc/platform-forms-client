@@ -110,9 +110,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       const data = item.getItemData();
       // For headless-tree, the data is the actual data object
       if (data && typeof data === "object") {
-        return getTitle(data as ElementProperties) || data.name || item.getId();
+        return getTitle(data as ElementProperties) || data.name || "";
       }
-      return item.getId();
+      return "";
     },
     isItemFolder: (item) => {
       const data = item.getItemData();
