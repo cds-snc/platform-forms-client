@@ -116,7 +116,10 @@ export async function submitForm(
       language,
     });
 
-    sendNotifications(formId, template.form.titleEn, template.form.titleFr);
+    // Avoid sending additional notifications to legacy forms that receive delivery by email.
+    if (!template.deliveryOption) {
+      sendNotifications(formId, template.form.titleEn, template.form.titleFr);
+    }
 
     return { id: formId, submissionId, fileURLMap };
   } catch (e) {

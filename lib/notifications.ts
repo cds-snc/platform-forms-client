@@ -18,10 +18,10 @@ type Status = (typeof Status)[keyof typeof Status];
 // Public facing function to send notifications to all related users on a form submission
 export const sendNotifications = async (formId: string, titleEn: string, titleFr: string) => {
   // Avoid sending additional notifications to legacy forms that receive delivery by email.
-  const deliveryOption = await _getDeliveryOption(formId);
-  if (deliveryOption) {
-    return;
-  }
+  // const deliveryOption = await _getDeliveryOption(formId);
+  // if (deliveryOption) {
+  //   return;
+  // }
 
   const users = await getNotificationsUsers(formId);
 
@@ -99,25 +99,25 @@ export const getNotificationsUsers = async (formId: string) => {
   });
 };
 
-const _getDeliveryOption = async (formId: string) => {
-  const template = await prisma.template
-    .findUnique({
-      where: {
-        id: formId,
-      },
-      select: {
-        deliveryOption: true,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
+// const _getDeliveryOption = async (formId: string) => {
+//   const template = await prisma.template
+//     .findUnique({
+//       where: {
+//         id: formId,
+//       },
+//       select: {
+//         deliveryOption: true,
+//       },
+//     })
+//     .catch((e) => prismaErrors(e, null));
 
-  if (!template) {
-    logMessage.warn(`_getDeliveryOption template not found with id ${formId}`);
-    return null;
-  }
+//   if (!template) {
+//     logMessage.warn(`_getDeliveryOption template not found with id ${formId}`);
+//     return null;
+//   }
 
-  return template.deliveryOption;
-};
+//   return template.deliveryOption;
+// };
 
 const setMarker = async (formId: string, status: Status = Status.SINGLE_EMAIL_SENT) => {
   const ttl = NOTIFICATIONS_INTERVAL * 60; // convert from minutes to seconds
