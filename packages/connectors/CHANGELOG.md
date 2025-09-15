@@ -5,12 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.6] - 2025-09-15
+
+- Update AWS SDK package from version `3.888.0`
+
+
+## [2.2.5] - 2025-09-15
+
+### Changed
+
+- Update Yarn to version 4.9.4
 
 ## [2.2.4] - 2025-08-25
 
 ### Changed
 
-- Update AWS SDK package from version `3.873.0"`
+- Update AWS SDK package from version `3.873.0`
 
 
 ## [2.2.3] - 2025-08-05
@@ -19,11 +29,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update AWS SDK package from version `3.859.0`
 
-## [2.2.2] - 2025-06-10
+## [2.2.2] - 2025-08-08
 
 ### Changed
 
 - Update AWS SDK package from version `3.840.0`
+
+### Changed
+
+- Update Yarn to version 4.9.4
 
 ## [2.2.1] - 2025-06-23
 
