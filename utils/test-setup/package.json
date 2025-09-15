@@ -1,0 +1,23 @@
+{
+  "name": "test-setup",
+  "packageManager": "yarn@4.9.4",
+  "type": "module",
+  "scripts": {
+    "test-setup": "tsx src/testSetup.ts",
+    "test-cleanup": "tsx src/testCleanup.ts"
+  },
+  "devDependencies": {
+    "@types/cli-progress": "^3",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.844.0",
+    "@aws-sdk/client-s3": "^3.848.0",
+    "@aws-sdk/lib-dynamodb": "^3.844.0",
+    "axios": "^1.10.0",
+    "cli-progress": "^3.12.0",
+    "p-limit": "^6.2.0",
+    "uuid": "^11.1.0"
+  }
+}
