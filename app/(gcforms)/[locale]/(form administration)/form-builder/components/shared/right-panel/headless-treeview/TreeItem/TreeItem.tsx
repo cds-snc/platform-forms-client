@@ -3,7 +3,6 @@ import React from "react";
 
 import { TreeItemProps } from "../types";
 
-import { useScrollIntoView } from "../hooks/useScrolntoView";
 import { useElementType } from "../hooks/useElementType";
 
 import { ItemContent } from "./ItemContent";
@@ -14,7 +13,6 @@ import { EditableInput } from "./EditableInput";
 import { DeleteIcon } from "@serverComponents/icons";
 
 export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) => {
-  const handleScroll = useScrollIntoView();
   const { isFormElement, isSectionElement, isRepeatingSet } = useElementType(item);
 
   const { canDrag } = tree.getConfig();
@@ -35,10 +33,6 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
         ...item.getProps(),
         onFocus: () => {
           onFocus(item);
-        },
-        onClick: (e: React.MouseEvent) => {
-          handleScroll(item);
-          item.getProps().onClick(e);
         },
         onDoubleClick: (e: React.MouseEvent) => {
           e.preventDefault();
