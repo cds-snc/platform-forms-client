@@ -1,8 +1,8 @@
-import { DragTarget, ItemInstance } from "@headless-tree/core"
-import { TreeItemData } from "../types"
+import { DragTarget, isOrderedDragTarget, ItemInstance } from "@headless-tree/core";
+import { TreeItemData } from "../types";
 
-export const handleCanDrop = ( 
-  items: ItemInstance<TreeItemData>[], 
+export const handleCanDrop = (
+  items: ItemInstance<TreeItemData>[],
   target: DragTarget<TreeItemData>
 ) => {
   const targetItem = target.item;
@@ -28,27 +28,40 @@ export const handleCanDrop = (
     return false;
   }
 
-  // Root level items can only be dropped on root (-1)
+  // Root level items can only be dropped between Start and End
   if (draggedItemLevel === 0) {
-    // console.log(target?.getItemMeta()?.level);
-
-    // Can't drop above start
-    if (target.insertionIndex === 0) {
+    // Must be dropping on the root item
+    if (target.item.getId() !== "root") {
       return false;
     }
 
     const targetChildren = targetItem.getChildren();
 
-    // Can't drop below end
-    if (target.insertionIndex === targetChildren.length - 1) {
-      return false;
-    }
+    // For ordered drops (between items), validate insertion position
+    if (isOrderedDragTarget(target)) {
+      const endIndex = targetChildren.findIndex((child) => child.getId() === "end");
 
+      // Can't drop before Start (position 0)
+      if (target.insertionIndex === 0) {
+        return false;
+      }
 
-    if (target.item.getId() === "root") {
+      // Can't drop at the very end (position equals length)
+      if (target.insertionIndex === targetChildren.length) {
+        return false;
+      }
+
+      // Can't drop at or after End position
+      if (endIndex !== -1 && target.insertionIndex >= endIndex) {
+        return false;
+      }
+
       return true;
     }
-    return false;
+
+    // Allow non-ordered drops for now - they'll be handled in onDrop
+    // This prevents interference with the library's drag target creation
+    return true;
   }
 
   // Elements can be dragged into any root level item (0)
@@ -68,4 +81,4 @@ export const handleCanDrop = (
   }
 
   return false;
-}
+};
