@@ -91,6 +91,18 @@ const nextConfig = {
       bodySizeLimit: "10mb",
     },
   },
+  // Enable build caching for faster rebuilds
+  cacheHandler: process.env.NODE_ENV === 'production' 
+    ? require.resolve('./nextCacheHandler.mjs')
+    : undefined,
+  cacheMaxMemorySize: 0, // disable default in-memory caching when using custom handler
+  // Additional build optimizations
+  onDemandEntries: {
+    // period (in ms) where the server will keep pages in the buffer
+    maxInactiveAge: 25 * 1000,
+    // number of pages that should be kept simultaneously without being disposed
+    pagesBufferLength: 2,
+  },
   turbopack: {
     rules: {
       "*.md": {
