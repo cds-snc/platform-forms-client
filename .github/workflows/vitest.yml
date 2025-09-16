@@ -26,12 +26,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             ${{ github.workspace }}/.next/cache
-            ${{ github.workspace }}/node_modules/.cache
-          key: linux-yarn-vitest-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/next.config.mjs') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
-            linux-yarn-vitest-${{ hashFiles('**/yarn.lock') }}-
-            linux-yarn-vitest-
-            linux-yarn-
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
       - name: "Install dependencies"
         run: yarn workspaces focus gcforms
 
