@@ -9,9 +9,9 @@ export const scrollIntoViewFeature: FeatureImplementation = {
       "aria-selected": item.isSelected() ? "true" : "false",
 
       onClick: (e: React.MouseEvent) => {
-        // Call the previous onClick implementation first (maintains selection, expansion, etc.)
+        // Call the previous onClick implementation (maintains selection, expansion, etc.)
         prev?.()?.onClick?.(e);
-        
+
         let id = item.getId();
 
         if (id === "confirmation") {
@@ -32,12 +32,14 @@ export const scrollIntoViewFeature: FeatureImplementation = {
           return;
         }
 
-        const el = document.getElementById(`item-${id}`);
+        setTimeout(() => {
+          const el = document.getElementById(`item-${id}`);
 
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }, 200);
       },
     }),
-  }
+  },
 };
