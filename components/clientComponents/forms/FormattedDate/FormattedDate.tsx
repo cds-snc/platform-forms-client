@@ -40,7 +40,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
   let dateFormat = initialDateFormat;
 
   if (!isValidDateFormat(dateFormat)) {
-    logMessage.info("Invalid date format", { dateFormat });
+    logMessage.info(`Invalid date format: ${dateFormat}`);
     dateFormat = "YYYY-MM-DD";
   }
 
