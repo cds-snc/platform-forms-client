@@ -53,34 +53,36 @@ export const useTreeHandlers = <T>(tree: TreeInstance<T>) => {
 
   const setActiveGroup = useCallback(
     (item: TreeItem) => {
-      const id = item.getId();
-      const data = item.getItemData() as Record<string, unknown>;
-      const parent = findParentGroup(getTreeData(), id);
+      setTimeout(() => {
+        const id = item.getId();
+        const data = item.getItemData() as Record<string, unknown>;
+        const parent = findParentGroup(getTreeData(), id);
 
-      if (data && data.type === "dynamicRow") {
-        setId(String(parent?.index));
-        return;
-      }
+        if (data && data.type === "dynamicRow") {
+          setId(String(parent?.index));
+          return;
+        }
 
-      if (data && data.isSubElement) {
-        const subParent = findParentGroup(getTreeData(), String(data.parentId));
-        setId(String(subParent?.index));
-        return;
-      }
+        if (data && data.isSubElement) {
+          const subParent = findParentGroup(getTreeData(), String(data.parentId));
+          setId(String(subParent?.index));
+          return;
+        }
 
-      if (id === "intro" || id === "policy") {
-        setId("start");
-        return;
-      }
+        if (id === "intro" || id === "policy") {
+          setId("start");
+          return;
+        }
 
-      if (id === "confirmation") {
-        setId("end");
-        return;
-      }
+        if (id === "confirmation") {
+          setId("end");
+          return;
+        }
 
-      const toId = item.isFolder() ? id : String(parent?.index);
+        const toId = item.isFolder() ? id : String(parent?.index);
 
-      setId(toId);
+        setId(toId);
+      }, 200);
     },
     [getTreeData, setId]
   );
