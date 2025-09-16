@@ -65,7 +65,7 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
           </button>
         )}
 
-        {canDragItem && <DragHandle canDragItem={canDragItem} />}
+        {canDragItem && !item.isRenaming() && <DragHandle canDragItem={canDragItem} />}
       </ItemContent>
     </div>
   );
