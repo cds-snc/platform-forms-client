@@ -11,6 +11,9 @@ import { googleTagManager } from "@lib/cspScripts";
 import { headers } from "next/headers";
 import { auth } from "@lib/auth";
 
+// Force dynamic rendering due to auth and headers usage
+export const dynamic = "force-dynamic";
+
 const notoSans = Noto_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-noto-sans",

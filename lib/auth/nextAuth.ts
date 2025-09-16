@@ -174,9 +174,16 @@ const {
         return;
       }
 
-      const requestHeaders = await headers();
+      // Skip header access during build time
+      let requestHeaders: Headers | null = null;
+      try {
+        requestHeaders = await headers();
+      } catch (error) {
+        // Headers not available during build time, skip header check
+        logMessage.info("Headers not available during auth event, skipping region check");
+      }
 
-      if (requestHeaders.get("x-amzn-waf-cognito-login-outside-of-canada")) {
+      if (requestHeaders?.get("x-amzn-waf-cognito-login-outside-of-canada")) {
         logMessage.info(
           `[next-auth][sign-in] User ${user.email} (${internalUser.id}) signed in from outside of Canada`
         );

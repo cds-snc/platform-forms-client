@@ -1,14 +1,15 @@
 import React from "react";
 import { serverTranslation } from "@i18n";
-
 import { Metadata } from "next";
-
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { Footer } from "@serverComponents/globals/Footer";
 import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { languages } from "@i18n/settings";
 import { cookies } from "next/headers";
 import { Language } from "@lib/types/form-builder-types";
+
+// Force dynamic rendering due to cookies usage
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await serverTranslation("error");
