@@ -25,9 +25,14 @@ jobs:
       - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: linux-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            ${{ github.workspace }}/.next/cache
+            ${{ github.workspace }}/node_modules/.cache
+          key: linux-yarn-eslint-merge-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/next.config.mjs') }}
           restore-keys: |
+            linux-yarn-eslint-merge-${{ hashFiles('**/yarn.lock') }}-
+            linux-yarn-eslint-merge-
             linux-yarn-
 
       - name: "Install dependencies"
@@ -60,9 +65,14 @@ jobs:
       - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: linux-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            ${{ github.workspace }}/.next/cache
+            ${{ github.workspace }}/node_modules/.cache
+          key: linux-yarn-eslint-pr-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/next.config.mjs') }}
           restore-keys: |
+            linux-yarn-eslint-pr-${{ hashFiles('**/yarn.lock') }}-
+            linux-yarn-eslint-pr-
             linux-yarn-
 
       - name: "Install dependencies"

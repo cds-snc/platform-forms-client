@@ -60,9 +60,11 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             ${{ github.workspace }}/.next/cache
-
-          key: linux-yarn-${{ hashFiles('**/yarn.lock') }}
+            ${{ github.workspace }}/node_modules/.cache
+          key: linux-yarn-nextjs-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/next.config.mjs') }}
           restore-keys: |
+            linux-yarn-nextjs-${{ hashFiles('**/yarn.lock') }}-
+            linux-yarn-nextjs-
             linux-yarn-
 
       - name: "Install dependencies"
