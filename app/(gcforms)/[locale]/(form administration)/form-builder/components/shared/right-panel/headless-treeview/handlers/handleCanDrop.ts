@@ -66,6 +66,10 @@ export const handleCanDrop = (
 
   // Elements can be dragged into any root level item (0)
   if (draggedItemLevel === 1) {
+    if (["start", "end"].includes(targetItem.getId())) {
+      return false;
+    }
+
     if (targetItem?.getItemMeta().level === 0) {
       return true;
     }
