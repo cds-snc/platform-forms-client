@@ -52,7 +52,7 @@ import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog
 import { handleCanDrop } from "./handlers/handleCanDrop";
 import { handleOnDrop } from "./handlers/handleOnDrop";
 import { scrollIntoViewFeature } from "./features/scrollIntoViewFeature";
-import { dragStateFixFeature } from "./features/dragStateFixFeature";
+import { dragAndDropFixFeature } from "./features/dragAndDropFixFeature";
 
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
@@ -211,7 +211,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       keyboardDragAndDropFeature,
       renamingFeature,
       scrollIntoViewFeature,
-      dragStateFixFeature, // Fixes drag state issues
+      dragAndDropFixFeature,
     ],
   });
 
