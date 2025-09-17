@@ -211,14 +211,51 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       renamingFeature,
       scrollIntoViewFeature,
     ],
-    // There appears to be a bug in the underlying package where after dropping an item,
-    // up/down keyboard navigation will stop working. The following override fixes that.
+    // Custom hotkey overrides to fix post-drop navigation AND enable proper selection for keyboard drag
     hotkeys: {
       focusNextItem: {
         hotkey: "ArrowDown",
+        isEnabled: (tree) => {
+          const dndState = tree.getState().dnd;
+          // Check if actually dragging (draggedItems exists), not just if dnd object exists
+          return !dndState?.draggedItems;
+        },
+        handler: (_, tree) => {
+          tree.focusNextItem();
+          tree.updateDomFocus();
+          // Select the focused item to enable keyboard drag (CTRL-SHIFT-D)
+          const focusedItem = tree.getFocusedItem();
+          tree.setSelectedItems([focusedItem.getId()]);
+        },
       },
       focusPreviousItem: {
         hotkey: "ArrowUp",
+        isEnabled: (tree) => {
+          const dndState = tree.getState().dnd;
+          // Check if actually dragging (draggedItems exists), not just if dnd object exists
+          return !dndState?.draggedItems;
+        },
+        handler: (_, tree) => {
+          tree.focusPreviousItem();
+          tree.updateDomFocus();
+          // Select the focused item to enable keyboard drag (CTRL-SHIFT-D)
+          const focusedItem = tree.getFocusedItem();
+          tree.setSelectedItems([focusedItem.getId()]);
+        },
+      },
+      // Override CTRL-SHIFT-D to fix isEnabled condition after mouse drag operations
+      startDrag: {
+        hotkey: "Control+Shift+KeyD",
+        preventDefault: true,
+        isEnabled: (tree) => !tree.getState().dnd?.draggedItems,
+        handler: (_, tree) => {
+          const selectedItems = tree.getSelectedItems?.() || [tree.getFocusedItem()];
+          const focusedItem = tree.getFocusedItem();
+          const itemsToMove = selectedItems.includes(focusedItem)
+            ? selectedItems
+            : selectedItems.concat(focusedItem);
+          tree.startKeyboardDrag(itemsToMove);
+        },
       },
     },
   });
@@ -275,7 +312,6 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       </div>
 
       <div {...tree.getContainerProps()} className="w-full">
-        <AssistiveTreeDescription tree={tree} />
         {children}
         <div className="py-2">
           {tree.getItems().map((item) => (
@@ -350,6 +386,20 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
           } else {
             resolveConfirmDelete && resolveConfirmDelete(false);
           }
+        }}
+      />
+      <AssistiveTreeDescription
+        tree={tree}
+        style={{
+          position: "unset",
+          width: "unset",
+          height: "unset",
+          margin: "unset",
+          overflow: "auto",
+          clip: "unset",
+          display: "block",
+          marginBottom: "1rem",
+          backgroundColor: "#e1f1f8",
         }}
       />
     </>
