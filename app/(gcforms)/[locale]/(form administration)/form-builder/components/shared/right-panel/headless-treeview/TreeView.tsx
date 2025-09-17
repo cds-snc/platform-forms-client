@@ -211,6 +211,16 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       renamingFeature,
       scrollIntoViewFeature,
     ],
+    // There appears to be a bug in the underlying package where after dropping an item,
+    // up/down keyboard navigation will stop working. The following override fixes that.
+    hotkeys: {
+      focusNextItem: {
+        hotkey: "ArrowDown",
+      },
+      focusPreviousItem: {
+        hotkey: "ArrowUp",
+      },
+    },
   });
 
   const { remove: removeItem } = useTemplateStore((s) => {
