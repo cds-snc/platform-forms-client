@@ -52,6 +52,7 @@ import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog
 import { handleCanDrop } from "./handlers/handleCanDrop";
 import { handleOnDrop } from "./handlers/handleOnDrop";
 import { scrollIntoViewFeature } from "./features/scrollIntoViewFeature";
+import { dragStateFixFeature } from "./features/dragStateFixFeature";
 
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
@@ -210,54 +211,8 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       keyboardDragAndDropFeature,
       renamingFeature,
       scrollIntoViewFeature,
+      dragStateFixFeature, // Fixes drag state issues
     ],
-    // Custom hotkey overrides to fix post-drop navigation AND enable proper selection for keyboard drag
-    hotkeys: {
-      focusNextItem: {
-        hotkey: "ArrowDown",
-        isEnabled: (tree) => {
-          const dndState = tree.getState().dnd;
-          // Check if actually dragging (draggedItems exists), not just if dnd object exists
-          return !dndState?.draggedItems;
-        },
-        handler: (_, tree) => {
-          tree.focusNextItem();
-          tree.updateDomFocus();
-          // Select the focused item to enable keyboard drag (CTRL-SHIFT-D)
-          const focusedItem = tree.getFocusedItem();
-          tree.setSelectedItems([focusedItem.getId()]);
-        },
-      },
-      focusPreviousItem: {
-        hotkey: "ArrowUp",
-        isEnabled: (tree) => {
-          const dndState = tree.getState().dnd;
-          // Check if actually dragging (draggedItems exists), not just if dnd object exists
-          return !dndState?.draggedItems;
-        },
-        handler: (_, tree) => {
-          tree.focusPreviousItem();
-          tree.updateDomFocus();
-          // Select the focused item to enable keyboard drag (CTRL-SHIFT-D)
-          const focusedItem = tree.getFocusedItem();
-          tree.setSelectedItems([focusedItem.getId()]);
-        },
-      },
-      // Override CTRL-SHIFT-D to fix isEnabled condition after mouse drag operations
-      startDrag: {
-        hotkey: "Control+Shift+KeyD",
-        preventDefault: true,
-        isEnabled: (tree) => !tree.getState().dnd?.draggedItems,
-        handler: (_, tree) => {
-          const selectedItems = tree.getSelectedItems?.() || [tree.getFocusedItem()];
-          const focusedItem = tree.getFocusedItem();
-          const itemsToMove = selectedItems.includes(focusedItem)
-            ? selectedItems
-            : selectedItems.concat(focusedItem);
-          tree.startKeyboardDrag(itemsToMove);
-        },
-      },
-    },
   });
 
   const { remove: removeItem } = useTemplateStore((s) => {
@@ -314,6 +269,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       <div {...tree.getContainerProps()} className="w-full">
         {children}
         <div className="py-2">
+          <AssistiveTreeDescription tree={tree} />
           {tree.getItems().map((item) => (
             <TreeItem
               key={item.getId()}
@@ -386,20 +342,6 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
           } else {
             resolveConfirmDelete && resolveConfirmDelete(false);
           }
-        }}
-      />
-      <AssistiveTreeDescription
-        tree={tree}
-        style={{
-          position: "unset",
-          width: "unset",
-          height: "unset",
-          margin: "unset",
-          overflow: "auto",
-          clip: "unset",
-          display: "block",
-          marginBottom: "1rem",
-          backgroundColor: "#e1f1f8",
         }}
       />
     </>
