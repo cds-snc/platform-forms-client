@@ -50,6 +50,7 @@ export const handleOnDrop = async (
   await insertItemsAtTarget(movedItemIds, target, (item, newChildren) => {
     if (droppedLevel === -1) {
       setGroupsLayout(newChildren);
+      items[items.length - 1].setFocused();
     }
 
     if (droppedLevel === 0) {
