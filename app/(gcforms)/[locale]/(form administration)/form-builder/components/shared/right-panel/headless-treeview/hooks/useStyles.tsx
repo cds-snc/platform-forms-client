@@ -22,7 +22,7 @@ export const useStyles = (item: TreeItemInstance<TreeItemData>) => {
   );
 
   const sectionElementClasses = cn(
-    "flex items-center w-full relative cursor-pointer",
+    "flex items-center w-full relative cursor-pointer p-2",
     item.isFocused() && "font-bold",
     ""
   );
