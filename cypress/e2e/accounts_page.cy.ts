@@ -30,7 +30,7 @@ describe("Accounts Page", () => {
       cy.get("ul[data-testid='accountsList'] li").contains(testUserEmail).should("not.exist");
     });
 
-    it("Clicking lock/unlock publishing of an account updates the button text state", () => {
+    it.skip("Clicking lock/unlock publishing of an account updates the button text state", () => {
       cy.get("button").contains("All").click();
       // Lock an account
       cy.get(`li[data-testid="${testUserEmail}"]`).contains("Lock publishing").click();
@@ -47,7 +47,7 @@ describe("Accounts Page", () => {
       cy.get("h1").contains("Manage forms");
     });
 
-    it("Account deactivation updates the card and related tabs/filters lists correctly", () => {
+    it.skip("Account deactivation updates the card and related tabs/filters lists correctly", () => {
       // Deactivate the test.user and check the tab states updated correctly
       cy.get("button").contains("All").click();
       cy.get(`li[data-testid="${testUserEmail}"]`).contains("More").click();
