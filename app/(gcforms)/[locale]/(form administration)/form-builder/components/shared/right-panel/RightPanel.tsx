@@ -241,14 +241,19 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                           )}
 
                           {!renderControlledTree && (
-                            <HeadlessTreeView
-                              ref={treeView}
-                              addItem={() => {}}
-                              updateItem={() => {}}
-                              removeItem={() => {}}
-                              addPage={() => {}}
-                              addGroup={() => {}}
-                            />
+                            <>
+                              <HeadlessTreeView
+                                ref={treeView}
+                                addItem={() => {}}
+                                updateItem={() => {}}
+                                removeItem={() => {}}
+                                addPage={() => {}}
+                                addGroup={() => {}}
+                              />
+                              <SkipLinkReusable anchor="#editPagesHeading">
+                                {t("skipLink.pages")}
+                              </SkipLinkReusable>
+                            </>
                           )}
                         </div>
                         {/* end tree */}
