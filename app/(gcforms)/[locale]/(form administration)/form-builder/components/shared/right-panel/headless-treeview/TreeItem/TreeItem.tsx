@@ -16,7 +16,7 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
   const { isFormElement, isSectionElement, isRepeatingSet } = useElementType(item);
 
   const { canDrag } = tree.getConfig();
-  const canDragItem = isFormElement ? (canDrag ? canDrag([item]) : true) : false;
+  const canDragItem = isSectionElement ? (canDrag ? canDrag([item]) : true) : false;
 
   const canDeleteItem =
     item.isExpanded() &&
@@ -39,14 +39,6 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
           e.stopPropagation();
           tree.getItemInstance(item.getId()).startRenaming();
         },
-        onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => {
-          if (e.key === "Delete" || e.key === "Backspace") {
-            if (handleDelete) {
-              e.preventDefault();
-              handleDelete(e as React.KeyboardEvent<HTMLDivElement>);
-            }
-          }
-        },
       })}
       className={cn(
         "block max-w-full",
@@ -64,8 +56,7 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
             <DeleteIcon title="Delete group" className="mr-2 scale-50" />
           </button>
         )}
-
-        {canDragItem && !item.isRenaming() && <DragHandle canDragItem={canDragItem} />}
+        {!item.isRenaming() && <DragHandle canDragItem={canDragItem} />}
       </ItemContent>
     </div>
   );
