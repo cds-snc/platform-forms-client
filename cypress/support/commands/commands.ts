@@ -90,27 +90,72 @@ Cypress.Commands.add("useForm", (file, published = true) => {
       if (!sessionExists) {
         cy.userSession({ acceptableUse: true });
       }
+
+      // Load fixture with error handling
       cy.fixture(file).then((mockedForm) => {
+        // Validate fixture has required structure
+        if (!mockedForm || typeof mockedForm !== "object") {
+          throw new Error(`Invalid fixture data in file "${file}"`);
+        }
+
+        // Create the form template with error handling
         cy.request({
           method: "POST",
           url: "/api/templates",
           body: {
             formConfig: mockedForm,
           },
+          failOnStatusCode: false, // Don't fail immediately on non-2xx status codes
         }).then((response) => {
-          expect(response.body).to.have.property("id");
-          cy.wrap(response.body.id).as("formID", { type: "static" });
-          if (published) {
-            cy.request({
-              method: "PUT",
-              url: `/api/templates/${response.body.id}`,
-              body: {
-                isPublished: true,
-              },
-            });
+          // Handle different response scenarios
+          if (response.status >= 200 && response.status < 300) {
+            // Success case
+            if (!response.body || !response.body.id) {
+              throw new Error("API response missing form ID");
+            }
+
+            expect(response.body).to.have.property("id");
+            cy.wrap(response.body.id).as("formID", { type: "static" });
+            cy.log(`Form template created successfully with ID: ${response.body.id}`);
+
+            if (published) {
+              // Publish the form with error handling
+              cy.request({
+                method: "PUT",
+                url: `/api/templates/${response.body.id}`,
+                body: {
+                  isPublished: true,
+                },
+                failOnStatusCode: false,
+              }).then((publishResponse) => {
+                if (publishResponse.status >= 200 && publishResponse.status < 300) {
+                  cy.log(`Form ${response.body.id} successfully published`);
+                } else {
+                  const errorMessage =
+                    publishResponse.body?.message || publishResponse.body?.error || "Unknown error";
+                  cy.log(
+                    `Failed to publish form ${response.body.id}: ${publishResponse.status} - ${errorMessage}`
+                  );
+                  throw publishResponse;
+                }
+              });
+            }
+          } else {
+            // Handle API errors
+            const errorMessage = response.body?.message || response.body?.error || "Unknown error";
+            cy.log(`Failed to create form template: ${response.status} - ${errorMessage}`);
+
+            // Log additional error details if available
+            if (response.body?.details) {
+              cy.log(`Error details: ${JSON.stringify(response.body.details)}`);
+            }
+
+            // Re-throw the response object to let Cypress handle the failure
+            throw response;
           }
         });
       });
+
       if (!sessionExists) {
         cy.logout();
       }
