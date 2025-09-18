@@ -38,9 +38,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTreeRef } from "../treeview/provider/TreeRefProvider";
-import { Button } from "@root/components/clientComponents/globals";
-import { AddIcon } from "@root/components/serverComponents/icons";
-import { KeyboardNavTip } from "./KeyboardNavTip";
+
 import { useTranslation } from "@root/i18n/client";
 import { canDeleteGroup } from "../../../../../../../../../lib/groups/utils/validateGroups";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
@@ -53,6 +51,7 @@ import { handleCanDrop } from "./handlers/handleCanDrop";
 import { handleOnDrop } from "./handlers/handleOnDrop";
 import { scrollIntoViewFeature } from "./features/scrollIntoViewFeature";
 import { dragAndDropFixFeature } from "./features/dragAndDropFixFeature";
+import { TreeActions } from "./TreeActions";
 
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
@@ -106,7 +105,6 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   const { headlessTree } = useTreeRef();
 
   const language = getLocalizationAttribute()?.lang as Language;
-  const newSectionText = t("groups.newPage");
 
   const tree = useTree<TreeItemData>({
     initialState: getInitialTreeState(id ?? "start"),
@@ -252,20 +250,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
 
   return (
     <>
-      <div className="sticky top-0 z-10 flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
-        <label className="flex items-center hover:fill-white hover:underline">
-          <span className="mr-2 pl-3 text-sm">{newSectionText}</span>
-          <Button
-            theme="secondary"
-            className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
-            onClick={addPage}
-          >
-            <AddIcon className="hover:fill-white focus:fill-white" title={t("groups.addPage")} />
-          </Button>
-        </label>
-        <KeyboardNavTip />
-      </div>
-
+      <TreeActions addPage={addPage} />
       <div {...tree.getContainerProps()} className="w-full">
         {children}
         <div className="py-2">
