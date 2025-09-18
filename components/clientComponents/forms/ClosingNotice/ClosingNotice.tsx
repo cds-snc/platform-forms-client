@@ -36,7 +36,7 @@ export const ClosingNotice = ({
   try {
     ({ month, day, year, hour, minute } = formClosingDateEst(closingDate, language));
   } catch (error) {
-    logMessage.info("Unable to parse closing date", closingDate);
+    logMessage.info(`Unable to parse closing date: ${closingDate}`);
     return null;
   }
 

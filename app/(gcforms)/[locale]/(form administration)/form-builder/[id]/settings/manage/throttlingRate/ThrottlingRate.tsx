@@ -67,7 +67,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
 
       throw new Error("Failed to parse out day, month or year.");
     } catch (error) {
-      logMessage.info("Unable to parse throttling in weeks", weeks);
+      logMessage.info(`Unable to parse throttling in weeks: ${weeks}`);
       return null;
     }
   };
