@@ -188,7 +188,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
 
           // Add id to groupsLayout
           const groupsLayout = [...(s.form.groupsLayout || [])];
-          groupsLayout.splice(groupsLayout.length - 1, 0, id);
+          groupsLayout.splice(groupsLayout.length, 0, id);
           s.form.groupsLayout = groupsLayout;
         });
       },
