@@ -7,7 +7,7 @@ import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
-import { allowGrouping } from "./components/shared/right-panel/treeview/util/allowGrouping";
+import { allowGrouping } from "../../../../../lib/groups/utils/allowGrouping";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;

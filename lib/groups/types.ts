@@ -1,9 +1,9 @@
 import { FormElement } from "@lib/types";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
 import { type Group, type GroupsType } from "@gcforms/types";
-import { TreeItems } from "../types";
+import { TreeItems } from "../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/treeview/types";
 import { TemplateStore } from "@lib/store/useTemplateStore";
-import { TreeDataOptions } from "../util/groupsToTreeData";
+import { TreeDataOptions } from "./utils/groupsToTreeData";
 import { Language } from "@lib/types/form-builder-types";
 
 export interface GroupStoreProps {
@@ -45,5 +45,6 @@ export interface GroupStoreState extends GroupStoreProps {
     locale: Language;
     title: string;
   }) => void;
+  updateGroupElements: ({id, elements}:{id: string; elements: string[]}) => void;
   setExitButtonUrl: ({ id, locale, url }: { id: string; locale: Language; url: string }) => void;
 }

@@ -10,7 +10,11 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
-import { getItemFromElement, isTitleElementType, isFormElementType } from "./util/itemType";
+import {
+  getItemFromElement,
+  isTitleElementType,
+  isFormElementType,
+} from "../../../../../../../../../lib/groups/utils/itemType";
 
 export const SubItem = ({
   title,

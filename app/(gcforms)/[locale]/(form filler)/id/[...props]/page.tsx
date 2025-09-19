@@ -9,7 +9,7 @@ import { Metadata } from "next";
 import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayout";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { FormWrapper } from "./clientSide";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
 import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";

@@ -1,67 +1,341 @@
 /**
  * Note this is a work in progress to move the tree view to a more accessible implementation.
+ *
+ * Docs - https://headless-tree.lukasbach.com/
+ *
+ * LLMs
+ * https://headless-tree.lukasbach.com/llms.txt
+ *
+ * Full
+ * https://headless-tree.lukasbach.com/llms-full.txt
+ *
+ * Notes:
+ * old refs
+ * tree?.current?. <- This to the instance of the Tree
+ * treeView?.current?. <- This is the useImperativeHandle ref
+ *
  */
 
-import "./style.css";
+import { ForwardRefRenderFunction, forwardRef, useEffect, useImperativeHandle } from "react";
+
+import { TreeItemData } from "./types";
 import {
-  asyncDataLoaderFeature,
-  createOnDropHandler,
+  syncDataLoaderFeature,
   dragAndDropFeature,
   hotkeysCoreFeature,
   keyboardDragAndDropFeature,
   selectionFeature,
+  renamingFeature,
 } from "@headless-tree/core";
-import { DemoItem, asyncDataLoader, data } from "./data";
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
-import { cn } from "@lib/utils";
+import { useTreeHandlers } from "./hooks/useTreeHandlers";
+import { TreeItem } from "./TreeItem/TreeItem";
+import { TreeDataProviderProps } from "../treeview/types";
+import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } from "./treeUtils";
+import { useGroupStore } from "@lib/groups/useGroupStore";
+import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { Language } from "@lib/types/form-builder-types";
+import { toast } from "@formBuilder/components/shared/Toast";
+import { useTreeRef } from "../treeview/provider/TreeRefProvider";
 
-export const TreeView = ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
-  const tree = useTree<DemoItem>({
-    initialState: {
-      expandedItems: ["fruit"],
-      selectedItems: ["banana", "orange"],
-    },
+import { useTranslation } from "@root/i18n/client";
+import { canDeleteGroup } from "../../../../../../../../../lib/groups/utils/validateGroups";
+import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
+import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
+import { useUpdateGroupLayout } from "../../../../../../../../../lib/groups/utils/useUpdateGroupLayout";
+import { useAutoFlowIfNoCustomRules } from "@root/lib/hooks/useAutoFlowAll";
+import { useConfirmState as useConfirmMoveDialogState } from "../../confirm/useConfirmState";
+import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog";
+import { handleCanDrop } from "./handlers/handleCanDrop";
+import { handleOnDrop } from "./handlers/handleOnDrop";
+import { scrollIntoViewFeature } from "./features/scrollIntoViewFeature";
+import { dragAndDropFixFeature } from "./features/dragAndDropFixFeature";
+import { TreeActions } from "./TreeActions";
+
+const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
+  { children },
+  ref
+) => {
+  const { t } = useTranslation("form-builder");
+
+  const {
+    getTreeData,
+    id,
+    updateGroupName,
+    updateGroupTitle,
+    getGroups,
+    replaceGroups,
+    getSubElements,
+    updateSubElements,
+    updateElementTitle,
+    updateGroupElements,
+    groupId,
+    deleteGroup,
+    setId,
+  } = useGroupStore((s) => ({
+    getTreeData: s.getTreeData,
+    id: s.id,
+    updateGroupName: s.updateGroupName,
+    updateGroupTitle: s.updateGroupTitle,
+    getGroups: s.getGroups,
+    replaceGroups: s.replaceGroups,
+    getSubElements: s.getSubElements,
+    updateSubElements: s.updateSubElements,
+    updateElementTitle: s.updateElementTitle,
+    updateGroupElements: s.updateGroupElements,
+    groupId: s.id,
+    deleteGroup: s.deleteGroup,
+    setId: s.setId,
+  }));
+
+  const { getLocalizationAttribute, setGroupsLayout } = useTemplateStore((s) => ({
+    getLocalizationAttribute: s.getLocalizationAttribute,
+    setGroupsLayout: s.setGroupsLayout,
+  }));
+
+  const {
+    resolve: resolveConfirmMove,
+    getPromise: getConfirmMovePromise,
+    openDialog: openConfirmMoveDialog,
+    setOpenDialog: setOpenConfirmMoveDialog,
+  } = useConfirmMoveDialogState();
+
+  const { updateGroupsLayout } = useUpdateGroupLayout();
+  const { autoFlowAll } = useAutoFlowIfNoCustomRules();
+  const { getTitle } = useElementTitle();
+  const { headlessTree } = useTreeRef();
+
+  const language = getLocalizationAttribute()?.lang as Language;
+
+  const tree = useTree<TreeItemData>({
+    initialState: getInitialTreeState(id ?? "start"),
     rootItemId: "root",
-    getItemName: (item) => item.getItemData()?.name,
-    isItemFolder: (item) => !!item.getItemData()?.children,
+    getItemName: (item) => {
+      const data = item.getItemData();
+      // For headless-tree, the data is the actual data object
+      if (data && typeof data === "object") {
+        return getTitle(data as ElementProperties) || data.name || "";
+      }
+      return "";
+    },
+    isItemFolder: (item) => {
+      const data = item.getItemData();
+      const level = item.getItemMeta().level;
+
+      // Root level sections/groups should be folders (can contain children)
+      // But they should NOT accept other root-level items as children
+      if (level === 0 && data && typeof data === "object") {
+        // Check if this is a group/section vs a form element
+        return !data.type || data.type === "group" || ["start", "end"].includes(String(data.name));
+      }
+
+      return level < 1 || data.isRepeatingSet || false;
+    },
     canReorder: true,
-    onDrop: createOnDropHandler((item, newChildren) => {
-      data[item.getId()].children = newChildren;
-    }),
+    canDrop: (items, target) => handleCanDrop(items, target),
+    onDrop: (items, target) =>
+      handleOnDrop(
+        items,
+        target,
+        getGroups,
+        replaceGroups,
+        getSubElements,
+        setGroupsLayout,
+        updateGroupElements,
+        updateSubElements,
+        getConfirmMovePromise,
+        setOpenConfirmMoveDialog
+      ),
+    onRename: (item, value) => {
+      const data = item.getItemData();
+      const id = item.getId();
+      const parent = item.getParent()?.getId();
+
+      // @TODO: check these different cases:
+
+      // Handle title elements (section titles)
+      if (data && typeof data === "object" && id.includes("section-title-")) {
+        updateGroupTitle({ id: groupId, locale: language || "en", title: value });
+        tree.rebuildTree();
+        return;
+      }
+
+      // Handle root-level groups/folders
+      if (
+        parent === "root" &&
+        data &&
+        typeof data === "object" &&
+        (!data.type || data.type === "group")
+      ) {
+        updateGroupName({ id, name: value });
+        tree.rebuildTree();
+        return;
+      }
+
+      // Handle form elements (including dynamicRow and sub-elements)
+      if (data && typeof data === "object" && (data.type === "dynamicRow" || parent !== "root")) {
+        updateElementTitle({
+          id: Number(id),
+          text: value,
+        });
+        tree.rebuildTree();
+        return;
+      }
+
+      // Fallback for other cases
+      updateGroupName({ id, name: value });
+      tree.rebuildTree();
+    },
+    canDrag: (items) => {
+      const lockedItems = ["start", "intro", "policy", "review", "end", "confirmation"];
+      return !items.some((item) => lockedItems.includes(item.getId()));
+    },
+    canRename: (item) => {
+      const id = item.getId();
+
+      // Don't allow renaming of special sections/elements
+      if (["start", "end", "intro", "policy", "confirmation", "review"].includes(id)) {
+        return false;
+      }
+
+      return true;
+    },
     indent: 20,
-    dataLoader: asyncDataLoader,
+    dataLoader: {
+      getItem: createSafeItemLoader(getTreeData),
+      getChildren: createSafeChildrenLoader(getTreeData),
+    },
     features: [
-      asyncDataLoaderFeature,
+      syncDataLoaderFeature,
       selectionFeature,
       hotkeysCoreFeature,
       dragAndDropFeature,
       keyboardDragAndDropFeature,
+      renamingFeature,
+      scrollIntoViewFeature,
+      dragAndDropFixFeature,
     ],
   });
 
+  const { remove: removeItem } = useTemplateStore((s) => {
+    return {
+      remove: s.remove,
+    };
+  });
+
+  const {
+    resolve: resolveConfirmDelete,
+    getPromise: getConfirmDeletePromise,
+    openDialog: openConfirmDeleteDialog,
+    setOpenDialog: setOpenConfirmDeleteDialog,
+  } = useConfirmDeleteDialogState();
+
+  useEffect(() => {
+    // Note: Type assertion needed during migration from react-complex-tree to headless-tree
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    headlessTree && (headlessTree.current = tree as any);
+  }, [headlessTree, tree]);
+
+  // Sync tree with external store changes
+  const { addPage, setActiveGroup } = useTreeHandlers(tree);
+
+  useImperativeHandle(ref, () => ({
+    addItem: async () => {
+      tree.rebuildTree();
+    },
+    updateItem: () => {
+      tree.rebuildTree();
+    },
+    removeItem: () => {
+      tree.rebuildTree();
+    },
+    addPage,
+  }));
+
   return (
-    <div {...tree.getContainerProps()} className="tree" ref={ref}>
-      <AssistiveTreeDescription tree={tree} />
-      {tree.getItems().map((item) => (
-        <button
-          key={item.getId()}
-          {...item.getProps()}
-          style={{ paddingLeft: `${item.getItemMeta().level * 20}px` }}
-        >
-          <div
-            className={cn("treeitem", {
-              focused: item.isFocused(),
-              expanded: item.isExpanded(),
-              selected: item.isSelected(),
-              folder: item.isFolder(),
-              drop: item.isDragTarget(),
-            })}
-          >
-            {item.getItemName()}
-          </div>
-        </button>
-      ))}
-      <div style={tree.getDragLineStyle()} className="dragline" />
-    </div>
+    <>
+      <TreeActions addPage={addPage} />
+      <div {...tree.getContainerProps()} className="w-full">
+        {children}
+        <div className="py-2">
+          <AssistiveTreeDescription tree={tree} />
+          {tree.getItems().map((item) => (
+            <TreeItem
+              key={item.getId()}
+              item={item}
+              tree={tree}
+              onFocus={setActiveGroup}
+              handleDelete={async (e) => {
+                e.stopPropagation();
+                if (!canDeleteGroup(getGroups() || {}, item.getItemData().nextAction ?? "")) {
+                  toast.error(t("groups.cannotDeleteGroup"));
+                  return;
+                }
+
+                setOpenConfirmDeleteDialog(true);
+                const confirm = await getConfirmDeletePromise();
+
+                if (confirm) {
+                  const children = item.getChildren();
+                  children.map((child) => {
+                    removeItem(Number(child));
+                  });
+
+                  const removedItemName = item.getItemName();
+
+                  deleteGroup(item.getId());
+
+                  // When deleting a group, we need to select the previous group
+                  const previousItem = item.getItemAbove();
+                  setId(previousItem?.getId() ?? "start");
+                  previousItem?.setFocused();
+
+                  // And update the groups layout
+                  await updateGroupsLayout();
+
+                  autoFlowAll();
+                  setOpenConfirmDeleteDialog(false);
+
+                  tree.rebuildTree();
+
+                  toast.success(
+                    <>
+                      <h3>{t("groups.groupDeleted")}</h3>
+                      <p>{t("groups.groupSuccessfullyDeleted", { group: removedItemName })}</p>
+                    </>
+                  );
+
+                  return;
+                }
+              }}
+            />
+          ))}
+          <div style={tree.getDragLineStyle()} className="border-b-2 border-blue-400" />
+        </div>
+      </div>
+      <ConfirmMoveSectionDialog
+        open={openConfirmMoveDialog}
+        handleClose={(value) => {
+          if (value) {
+            resolveConfirmMove && resolveConfirmMove(true);
+          } else {
+            resolveConfirmMove && resolveConfirmMove(false);
+          }
+        }}
+      />
+      <ConfirmDeleteSectionDialog
+        open={openConfirmDeleteDialog}
+        handleClose={(value) => {
+          if (value) {
+            resolveConfirmDelete && resolveConfirmDelete(true);
+          } else {
+            resolveConfirmDelete && resolveConfirmDelete(false);
+          }
+        }}
+      />
+    </>
   );
 };
+
+export const TreeView = forwardRef(HeadlessTreeView);

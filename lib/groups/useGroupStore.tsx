@@ -6,19 +6,19 @@ import { shallow } from "zustand/shallow";
 import React, { createContext, useRef, useContext } from "react";
 import { TemplateStoreContext } from "@lib/store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { groupsToTreeData, TreeDataOptions } from "../util/groupsToTreeData";
-import { findParentGroup } from "../util/findParentGroup";
+import { groupsToTreeData, TreeDataOptions } from "./utils/groupsToTreeData";
+import { findParentGroup } from "./utils/findParentGroup";
 import { GroupStoreProps, GroupStoreState } from "./types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
-import { initializeGroups } from "../util/initializeGroups";
+import { initializeGroups } from "./utils/initializeGroups";
 
-import { findNextGroup } from "../util/findNextGroup";
-import { findPreviousGroup } from "../util/findPreviousGroup";
-import { getGroupFromId } from "../util/getGroupFromId";
+import { findNextGroup } from "./utils/findNextGroup";
+import { findPreviousGroup } from "./utils/findPreviousGroup";
+import { getGroupFromId } from "./utils/getGroupFromId";
 import { type Group, type GroupsType } from "@gcforms/types";
 import { TreeItemIndex } from "react-complex-tree";
-import { autoFlowAllNextActions } from "../util/setNextAction";
-import { setGroupNextAction } from "../util/setNextAction";
+import { autoFlowAllNextActions } from "./utils/setNextAction";
+import { setGroupNextAction } from "./utils/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
 import { FormElement } from "@lib/types";
 
@@ -111,6 +111,21 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           setChangeKey(String(new Date().getTime()));
         }
       },
+      updateGroupElements: ({ id, elements }: { id: string; elements: string[] }) => {
+        const formGroups = get().templateStore.getState().form.groups;
+        const setChangeKey = get().templateStore.getState().setChangeKey;
+        if (formGroups && formGroups[id]) {
+          get().templateStore.setState((s) => {
+            if (s.form.groups) {
+              s.form.groups[id] = {
+                ...formGroups[id],
+                ["elements"]: elements,
+              };
+            }
+          });
+          setChangeKey(String(new Date().getTime()));
+        }
+      },
       getGroups: () => get().templateStore.getState().form.groups,
       getTreeData: (options: TreeDataOptions = {}) => {
         const form = get().templateStore.getState().form;
@@ -124,9 +139,19 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
 
         if (!formGroups) return {};
 
+        const groupsLayout = get().templateStore.getState().form.groupsLayout;
+
+        const orderedFormGroups = { start: formGroups["start"] } as GroupsType;
+
+        groupsLayout?.map((groupId) => {
+          orderedFormGroups[groupId] = { ...formGroups[groupId] };
+        });
+
+        orderedFormGroups["end"] = formGroups["end"];
+
         const elements = get().templateStore.getState().form.elements;
 
-        return groupsToTreeData(formGroups, elements, options);
+        return groupsToTreeData(orderedFormGroups, elements, options);
       },
       getElementsGroupById: (id: string) => {
         const formGroups = get().templateStore.getState().form.groups;
@@ -140,17 +165,31 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           }
           const newObject: GroupsType = {};
           const keys = Object.keys(s.form.groups);
+          let newGroupAdded = false;
 
           for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
-            if (key === "review") {
+
+            // Add new group before "end" section (or "review" if no "end" exists)
+            if ((key === "end" || key === "review") && !newGroupAdded) {
               newObject[id] = { name, elements: [], titleEn: "", titleFr: "" };
-              newObject[key] = s.form.groups[key];
+              newGroupAdded = true;
             }
+
             newObject[key] = s.form.groups[key];
           }
 
+          // If no end or review section exists, add the new group at the end
+          if (!newGroupAdded) {
+            newObject[id] = { name, elements: [], titleEn: "", titleFr: "" };
+          }
+
           s.form.groups = newObject;
+
+          // Add id to groupsLayout
+          const groupsLayout = [...(s.form.groupsLayout || [])];
+          groupsLayout.splice(groupsLayout.length, 0, id);
+          s.form.groupsLayout = groupsLayout;
         });
       },
       deleteGroup: (id: string) => {

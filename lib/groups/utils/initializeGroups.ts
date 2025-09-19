@@ -1,5 +1,5 @@
 import { FormProperties } from "@lib/types";
-import { LockedSections } from "../types";
+import { LockedSections } from "../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/treeview/types";
 import { getStartLabels, getReviewLabels, getEndLabels } from "@lib/utils/form-builder/i18nHelpers";
 
 export const initializeGroups = (form: FormProperties, allowGroups: boolean): FormProperties => {

@@ -15,7 +15,7 @@ import {
   setDescription,
   setTitle,
 } from "@lib/utils/form-builder/itemHelper";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import {
   getTranslatedElementProperties,
   getTranslatedDynamicRowProperties,
