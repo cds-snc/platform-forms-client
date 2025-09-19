@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0](https://github.com/cds-snc/platform-forms-client/compare/v4.1.0...v4.2.0) (2025-09-19)
+
+
+### Features
+
+* introduce test-setup tool ([#5893](https://github.com/cds-snc/platform-forms-client/issues/5893)) ([8dc0e2f](https://github.com/cds-snc/platform-forms-client/commit/8dc0e2f192fbaad1ec7a90513066df78d726ebf4))
+
+
+### Bug Fixes
+
+* add review edit button description ([#6108](https://github.com/cds-snc/platform-forms-client/issues/6108)) ([2dc3803](https://github.com/cds-snc/platform-forms-client/commit/2dc380359645d07cbf163b554460a65d8df68158))
+* Allow deletion of draft forms with submissions. ([#6101](https://github.com/cds-snc/platform-forms-client/issues/6101)) ([724230a](https://github.com/cds-snc/platform-forms-client/commit/724230a02fe88a65d30de22d92ff0453bd789568))
+* **deps:** update all patch dependencies ([#6114](https://github.com/cds-snc/platform-forms-client/issues/6114)) ([02dbdbd](https://github.com/cds-snc/platform-forms-client/commit/02dbdbdb0ec2df46e0e5787674a6a4dc287472c7))
+* dynamic row - controlled or uncontrolled input element  ([#6130](https://github.com/cds-snc/platform-forms-client/issues/6130)) ([973abed](https://github.com/cds-snc/platform-forms-client/commit/973abede1d540d32e3d925211975004751e87d36))
+* update right panel close focus ([#6102](https://github.com/cds-snc/platform-forms-client/issues/6102)) ([8c2ed6a](https://github.com/cds-snc/platform-forms-client/commit/8c2ed6a04e848963f1fdc73228ea2dd1dbf5ae80))
+
+
+### Miscellaneous Chores
+
+* bump aws packages ([#6116](https://github.com/cds-snc/platform-forms-client/issues/6116)) ([23f8798](https://github.com/cds-snc/platform-forms-client/commit/23f87984f6b7c247f8f72c8a28aed21b960f1d14))
+* bump lexical ([#6119](https://github.com/cds-snc/platform-forms-client/issues/6119)) ([bc66132](https://github.com/cds-snc/platform-forms-client/commit/bc6613215a526449b5418238edef8c02946f5066))
+* bump testing packages ([#6118](https://github.com/cds-snc/platform-forms-client/issues/6118)) ([df06ccf](https://github.com/cds-snc/platform-forms-client/commit/df06ccf18ee7beb05d95aeb72732754c0cdfeda4))
+* cypress update typing speed ([#6128](https://github.com/cds-snc/platform-forms-client/issues/6128)) ([19108fb](https://github.com/cds-snc/platform-forms-client/commit/19108fb8f326ea646811e7459212e814a27a9bd9))
+* **deps:** update all non-major docker images ([#6112](https://github.com/cds-snc/platform-forms-client/issues/6112)) ([6d38dee](https://github.com/cds-snc/platform-forms-client/commit/6d38dee297af4540ee6eda5c3fe5bc7ae7900b5f))
+* **deps:** update all non-major github action dependencies ([#6113](https://github.com/cds-snc/platform-forms-client/issues/6113)) ([11e902c](https://github.com/cds-snc/platform-forms-client/commit/11e902c070c0458202a1055eb699980d70011283))
+* hCAPTCHA more log detail ([#6111](https://github.com/cds-snc/platform-forms-client/issues/6111)) ([75c4d1f](https://github.com/cds-snc/platform-forms-client/commit/75c4d1fc74cf323ec7e33c0ca448490dd848a261))
+* Log use form errors ([#6126](https://github.com/cds-snc/platform-forms-client/issues/6126)) ([c8b87ec](https://github.com/cds-snc/platform-forms-client/commit/c8b87ec720ad0300c6638b3ee7ed6df3a8b89e7a))
+* move skip to editor ([#6129](https://github.com/cds-snc/platform-forms-client/issues/6129)) ([43af5e7](https://github.com/cds-snc/platform-forms-client/commit/43af5e74cbd2e0f5081555946dfebc12e0f191cb))
+* package updates ([#6121](https://github.com/cds-snc/platform-forms-client/issues/6121)) ([19123ef](https://github.com/cds-snc/platform-forms-client/commit/19123eff12f3ac54b5eafe9e8504d41a0cca0c29))
+* Update can I use ([#6127](https://github.com/cds-snc/platform-forms-client/issues/6127)) ([94984d3](https://github.com/cds-snc/platform-forms-client/commit/94984d375be7d17d1d81fb863e23b780e76d3137))
+* Update next.js to 15.5.3 ([#6117](https://github.com/cds-snc/platform-forms-client/issues/6117)) ([531f764](https://github.com/cds-snc/platform-forms-client/commit/531f76479e31aef79a6f5d487eec4203b43d371e))
+* update TypeScript version ([#6120](https://github.com/cds-snc/platform-forms-client/issues/6120)) ([c514dd0](https://github.com/cds-snc/platform-forms-client/commit/c514dd0f1d632594f1172cbb440540e310cb00ac))
+
 ## [4.1.0](https://github.com/cds-snc/platform-forms-client/compare/v4.0.1...v4.1.0) (2025-09-09)
 
 
