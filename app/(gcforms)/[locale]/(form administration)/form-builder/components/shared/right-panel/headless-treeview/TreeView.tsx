@@ -65,6 +65,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     updateGroupName,
     updateGroupTitle,
     getGroups,
+    replaceGroups,
     getSubElements,
     updateSubElements,
     updateElementTitle,
@@ -78,6 +79,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     updateGroupName: s.updateGroupName,
     updateGroupTitle: s.updateGroupTitle,
     getGroups: s.getGroups,
+    replaceGroups: s.replaceGroups,
     getSubElements: s.getSubElements,
     updateSubElements: s.updateSubElements,
     updateElementTitle: s.updateElementTitle,
@@ -136,11 +138,14 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       handleOnDrop(
         items,
         target,
+        getGroups,
+        replaceGroups,
         getSubElements,
         setGroupsLayout,
         updateGroupElements,
         updateSubElements,
-        () => tree.rebuildTree()
+        getConfirmMovePromise,
+        setOpenConfirmMoveDialog
       ),
     onRename: (item, value) => {
       const data = item.getItemData();
