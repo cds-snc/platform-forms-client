@@ -5,7 +5,16 @@ test.describe("Test FormBuilder Add Elements", () => {
 
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 }); // macbook-15 equivalent
-    await page.goto("/en/form-builder/0000/edit");
+
+    // Initialize a new form by going to the start page first
+    await page.goto("/en/form-builder");
+
+    // Click "Start from scratch" to initialize a new form
+    await page.getByRole("button", { name: /start/i }).click();
+
+    // Wait for navigation to the edit page
+    await page.waitForURL(/\/form-builder\/0000\/edit/);
+    await page.waitForLoadState("networkidle");
   });
 
   test("Adds a Page Text element", async ({ page }) => {
