@@ -40,6 +40,9 @@ export const handleOnDrop = async (
   }
 
   await removeItemsFromParents(items, async (item, newChildren) => {
+    // Locked items in Start should be ignored
+    newChildren = newChildren.filter((id) => id !== "policy" && id !== "intro");
+
     if (droppedLevel === -1) {
       setGroupsLayout(newChildren);
       items.forEach((item) => {
@@ -82,6 +85,9 @@ export const handleOnDrop = async (
   });
 
   await insertItemsAtTarget(movedItemIds, target, (item, newChildren) => {
+    // Locked items in Start should not be included in the new layout
+    newChildren = newChildren.filter((id) => id !== "policy" && id !== "intro");
+
     if (droppedLevel === -1) {
       setGroupsLayout(newChildren);
       items[items.length - 1].setFocused();

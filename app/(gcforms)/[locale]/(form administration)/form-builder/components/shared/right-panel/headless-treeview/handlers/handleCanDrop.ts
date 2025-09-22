@@ -64,15 +64,26 @@ export const handleCanDrop = (
     return true;
   }
 
-  // Elements can be dragged into any root level item (0)
   if (draggedItemLevel === 1) {
-    if (["start", "end"].includes(targetItem.getId())) {
+    // Can't drop on End
+    if (targetItem.getId() === "end") {
       return false;
     }
 
+    // Can drop on start but only below privacy (index 1)
+    if (targetItem.getId() === "start") {
+      if (isOrderedDragTarget(target)) {
+        if (target.insertionIndex < 2) {
+          return false;
+        }
+      }
+    }
+
+    // Otherwise ok to drop Elements into any root level item (0)
     if (targetItem?.getItemMeta().level === 0) {
       return true;
     }
+
     return false;
   }
 
