@@ -53,6 +53,8 @@ import { scrollIntoViewFeature } from "./features/scrollIntoViewFeature";
 import { dragAndDropFixFeature } from "./features/dragAndDropFixFeature";
 import { TreeActions } from "./TreeActions";
 
+import { groupsHaveCustomRules } from "@lib/groups/utils/setNextAction";
+
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
@@ -96,9 +98,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
 
   const {
     resolve: resolveConfirmMove,
-    getPromise: getConfirmMovePromise,
+    // getPromise: getConfirmMovePromise,
     openDialog: openConfirmMoveDialog,
-    setOpenDialog: setOpenConfirmMoveDialog,
+    // setOpenDialog: setOpenConfirmMoveDialog,
   } = useConfirmMoveDialogState();
 
   const { updateGroupsLayout } = useUpdateGroupLayout();
@@ -268,7 +270,15 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
               onFocus={setActiveGroup}
               handleDelete={async (e) => {
                 e.stopPropagation();
-                if (!canDeleteGroup(getGroups() || {}, item.getItemData().nextAction ?? "")) {
+
+                const groups = getGroups() || {};
+
+                const hasCustomRules = groupsHaveCustomRules(Object.values(groups));
+
+                if (
+                  hasCustomRules &&
+                  !canDeleteGroup(groups, item.getItemData().nextAction ?? "")
+                ) {
                   toast.error(t("groups.cannotDeleteGroup"));
                   return;
                 }
