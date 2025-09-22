@@ -174,12 +174,17 @@ const {
         return;
       }
 
-      const requestHeaders = await headers();
+      try {
+        const requestHeaders = await headers();
 
-      if (requestHeaders.get("x-amzn-waf-cognito-login-outside-of-canada")) {
-        logMessage.info(
-          `[next-auth][sign-in] User ${user.email} (${internalUser.id}) signed in from outside of Canada`
-        );
+        if (requestHeaders.get("x-amzn-waf-cognito-login-outside-of-canada")) {
+          logMessage.info(
+            `[next-auth][sign-in] User ${user.email} (${internalUser.id}) signed in from outside of Canada`
+          );
+        }
+      } catch (error) {
+        // headers() can fail during build time, log but don't prevent sign-in
+        logMessage.debug(`Could not access request headers during sign-in event: ${error}`);
       }
 
       // Update lastLogin in the database
