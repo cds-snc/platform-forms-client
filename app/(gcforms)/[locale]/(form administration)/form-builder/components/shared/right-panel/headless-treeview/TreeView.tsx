@@ -98,9 +98,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
 
   const {
     resolve: resolveConfirmMove,
-    // getPromise: getConfirmMovePromise,
+    getPromise: getConfirmMovePromise,
     openDialog: openConfirmMoveDialog,
-    // setOpenDialog: setOpenConfirmMoveDialog,
+    setOpenDialog: setOpenConfirmMoveDialog,
   } = useConfirmMoveDialogState();
 
   const { updateGroupsLayout } = useUpdateGroupLayout();
