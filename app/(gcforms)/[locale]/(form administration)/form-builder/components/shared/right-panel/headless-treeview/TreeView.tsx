@@ -52,8 +52,9 @@ import { handleOnDrop } from "./handlers/handleOnDrop";
 import { scrollIntoViewFeature } from "./features/scrollIntoViewFeature";
 import { dragAndDropFixFeature } from "./features/dragAndDropFixFeature";
 import { TreeActions } from "./TreeActions";
-
 import { groupsHaveCustomRules } from "@lib/groups/utils/setNextAction";
+
+export const lockedItems = ["start", "intro", "policy", "review", "end", "confirmation"];
 
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
@@ -190,14 +191,13 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       tree.rebuildTree();
     },
     canDrag: (items) => {
-      const lockedItems = ["start", "intro", "policy", "review", "end", "confirmation"];
       return !items.some((item) => lockedItems.includes(item.getId()));
     },
     canRename: (item) => {
       const id = item.getId();
 
       // Don't allow renaming of special sections/elements
-      if (["start", "end", "intro", "policy", "confirmation", "review"].includes(id)) {
+      if (lockedItems.includes(id)) {
         return false;
       }
 
@@ -270,7 +270,6 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
               onFocus={setActiveGroup}
               handleDelete={async (e) => {
                 e.stopPropagation();
-
                 const groups = getGroups() || {};
 
                 const hasCustomRules = groupsHaveCustomRules(Object.values(groups));

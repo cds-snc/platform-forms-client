@@ -11,12 +11,12 @@ import { ExpandableIcon } from "./ExpandableIcon";
 import { DragHandle } from "./DragHandle";
 import { EditableInput } from "./EditableInput";
 import { DeleteIcon } from "@serverComponents/icons";
+import { lockedItems } from "../TreeView";
 
 export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) => {
   const { isFormElement, isSectionElement, isRepeatingSet } = useElementType(item);
 
-  const { canDrag } = tree.getConfig();
-  const canDragItem = isSectionElement ? (canDrag ? canDrag([item]) : true) : false;
+  const canDragItem = !lockedItems.includes(item.getId());
 
   const canDeleteItem =
     item.isExpanded() &&
@@ -56,6 +56,7 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
             <DeleteIcon title="Delete group" className="mr-2 scale-50" />
           </button>
         )}
+
         {!item.isRenaming() && <DragHandle canDragItem={canDragItem} />}
       </ItemContent>
     </div>
