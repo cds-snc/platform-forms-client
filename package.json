@@ -47,8 +47,6 @@
     "cypress:component": "NEXT_PUBLIC_APP_ENV=test cypress run --browser chrome --component",
     "playwright": "playwright test --ui",
     "playwright:run": "playwright test",
-    "playwright:e2e": "playwright test tests/e2e",
-    "playwright:headed": "playwright test --headed",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
   },
   "dependencies": {
