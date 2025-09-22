@@ -10,7 +10,7 @@ export const ExpandableIcon = ({ item }: ItemProps) => {
   return (
     <>
       {isSectionElement && (
-        <span className="mx-4 inline-block">
+        <span className="mr-3 inline-block">
           {item.isExpanded() ? <ArrowDownIcon /> : <ArrowRightIcon />}
         </span>
       )}
