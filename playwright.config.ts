@@ -57,10 +57,6 @@ export default defineConfig({
   webServer: {
     command: "yarn build:test && yarn start:test",
     url: "http://localhost:3000",
-    reuseExistingServer: true, // Always reuse existing server
-    timeout: 120 * 1000,
-    ignoreHTTPSErrors: true,
-    stderr: "pipe",
-    stdout: "pipe",
+    reuseExistingServer: !process.env.CI,
   },
 });
