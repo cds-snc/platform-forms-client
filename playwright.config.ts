@@ -4,7 +4,7 @@ import { defineConfig, devices } from "@playwright/test";
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: "./tests",
+  testDir: "./tests/e2e",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -27,6 +27,12 @@ export default defineConfig({
     trace: "on-first-retry",
     /* Take screenshot only on failures */
     screenshot: "only-on-failure",
+    /* Additional settings for better UI mode support */
+    video: "retain-on-failure",
+    /* Wait for page to be fully loaded */
+    actionTimeout: 10000,
+    /* Ensure browser is visible in UI mode (headless only in CI) */
+    headless: !!process.env.CI,
   },
 
   /* Global setup and teardown */
@@ -36,7 +42,14 @@ export default defineConfig({
   projects: [
     {
       name: "Microsoft Edge",
-      use: { ...devices["Desktop Edge"], channel: "msedge" },
+      use: {
+        ...devices["Desktop Edge"],
+        channel: "msedge",
+        headless: !!process.env.CI, // Run headless only in CI
+        launchOptions: {
+          slowMo: 250, // Slow down actions for better visibility
+        },
+      },
     },
   ],
 
@@ -44,7 +57,10 @@ export default defineConfig({
   webServer: {
     command: "yarn build:test && yarn start:test",
     url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true, // Always reuse existing server
     timeout: 120 * 1000,
+    ignoreHTTPSErrors: true,
+    stderr: "pipe",
+    stdout: "pipe",
   },
 });
