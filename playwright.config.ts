@@ -27,10 +27,6 @@ export default defineConfig({
     trace: "on-first-retry",
     /* Take screenshot only on failures */
     screenshot: "only-on-failure",
-    /* Additional settings for better UI mode support */
-    video: "retain-on-failure",
-    /* Wait for page to be fully loaded */
-    actionTimeout: 10000,
     /* Ensure browser is visible in UI mode (headless only in CI) */
     headless: !!process.env.CI,
   },
@@ -58,5 +54,6 @@ export default defineConfig({
     command: "yarn build:test && yarn start:test",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
   },
 });
