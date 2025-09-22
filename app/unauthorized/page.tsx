@@ -4,6 +4,8 @@ import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { Metadata } from "next";
 import { AuthenticatedPage } from "@lib/pages/auth";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
