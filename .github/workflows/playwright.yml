@@ -40,6 +40,7 @@ jobs:
       NEXT_PUBLIC_APP_ENV: test
       REDIS_URL: localhost
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/formsDB
+      CI: true
 
     steps:
       - name: Checkout
