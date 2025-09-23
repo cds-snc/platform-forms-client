@@ -51,13 +51,13 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
 
         {item.isRenaming() ? <EditableInput item={item} tree={tree} /> : <ItemTitle item={item} />}
 
+        {!item.isRenaming() && <DragHandle canDragItem={canDragItem} />}
+
         {canDeleteItem && (
-          <button className="cursor-pointer" onClick={handleDelete}>
-            <DeleteIcon title="Delete group" className="mr-2 scale-50" />
+          <button className="mr-2 inline-block w-[24px] cursor-pointer" onClick={handleDelete}>
+            <DeleteIcon title="Delete group" className="scale-50" />
           </button>
         )}
-
-        {!item.isRenaming() && <DragHandle canDragItem={canDragItem} />}
       </ItemContent>
     </div>
   );
