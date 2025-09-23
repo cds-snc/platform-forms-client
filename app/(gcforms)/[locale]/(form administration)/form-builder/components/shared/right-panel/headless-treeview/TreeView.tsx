@@ -309,10 +309,10 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
                   tree.rebuildTree();
 
                   toast.success(
-                    <>
+                    <div>
                       <h3>{t("groups.groupDeleted")}</h3>
                       <p>{t("groups.groupSuccessfullyDeleted", { group: removedItemName })}</p>
-                    </>
+                    </div>
                   );
 
                   return;
