@@ -54,7 +54,10 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
         {!item.isRenaming() && <DragHandle canDragItem={canDragItem} />}
 
         {canDeleteItem && (
-          <button className="mr-2 inline-block w-[24px] cursor-pointer" onClick={handleDelete}>
+          <button
+            className="mr-2 flex cursor-pointer items-center justify-center"
+            onClick={handleDelete}
+          >
             <DeleteIcon title="Delete group" className="scale-50" />
           </button>
         )}
