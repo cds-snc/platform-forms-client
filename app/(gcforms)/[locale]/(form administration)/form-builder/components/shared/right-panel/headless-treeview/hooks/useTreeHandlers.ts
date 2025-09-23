@@ -34,16 +34,27 @@ export const useTreeHandlers = <T>(tree: TreeInstance<T>) => {
     const newGroups = autoFlowGroupNextActions(getGroups() as GroupsType, id);
     replaceGroups(newGroups);
     setId(id);
+
     tree.rebuildTree();
     tree.setSelectedItems([id]);
 
-    // Start renaming the newly created item
+    // Start renaming the newly created item and set focus
     // We need to wait for the tree to rebuild and the item to be available
     queueMicrotask(() => {
       try {
         const newItem = tree.getItemInstance(id);
-        if (newItem && typeof newItem.startRenaming === "function") {
-          newItem.startRenaming();
+
+        if (newItem) {
+          // Ensure the item is focused
+          // If not onFocus (setActiveGroup) will `reset` the active group
+          if (typeof newItem.setFocused === "function") {
+            newItem.setFocused();
+          }
+
+          // Start renaming the newly created item
+          if (typeof newItem.startRenaming === "function") {
+            newItem.startRenaming();
+          }
         }
       } catch (error) {
         // Ignore if item not found or renaming fails
