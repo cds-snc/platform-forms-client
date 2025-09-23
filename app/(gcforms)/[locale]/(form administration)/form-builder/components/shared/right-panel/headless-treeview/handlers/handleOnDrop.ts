@@ -80,6 +80,7 @@ export const handleOnDrop = async (
       updatedSubElements = originalSubElements.filter(
         (el) => !movedItemIds.includes(String(el.id))
       );
+
       updateSubElements(updatedSubElements, Number(item.getId()));
     }
   });
@@ -102,7 +103,7 @@ export const handleOnDrop = async (
         movedItemIds.includes(String(el.id))
       );
 
-      // Only handle ordered drops for sub-elements
+      // Handle ordered drops for sub-elements (insert between items)
       if (isOrderedDragTarget(target)) {
         // Insert movedSubElements into updatedSubElements at target.insertionIndex
         const newSubElements = [
@@ -112,6 +113,12 @@ export const handleOnDrop = async (
         ];
 
         updateSubElements(newSubElements, Number(target.item.getId()));
+      } else {
+        // For non-ordered drops, just append to the end
+        updateSubElements(
+          [...updatedSubElements, ...movedSubElements],
+          Number(target.item.getId())
+        );
       }
     }
   });
