@@ -7,12 +7,7 @@ import {
 } from "@headless-tree/core";
 import { TreeItemData } from "../types";
 import { FormElement } from "@root/lib/types";
-import { Group, GroupsType } from "@root/packages/types/src";
-import { autoFlowGroupNextActions } from "@root/lib/groups/utils/setNextAction";
-
-const groupsHaveCustomRules = (items: Group[]) => {
-  return items.some((item) => Object.hasOwn(item, "autoFlow") && !item.autoFlow);
-};
+import { GroupsType } from "@root/packages/types/src";
 
 export const handleOnDrop = async (
   items: ItemInstance<TreeItemData>[],
@@ -23,16 +18,12 @@ export const handleOnDrop = async (
   setGroupsLayout: (layout: string[]) => void,
   updateGroupElements: ({ id, elements }: { id: string; elements: string[] }) => void,
   updateSubElements: (elements: FormElement[], parentId: number) => void,
-  getPromise: () => Promise<boolean>,
-  setOpenDialog: (value: boolean) => void
+  autoFlowAll: () => void
 ) => {
   const droppedLevel = target.item.getItemMeta().level;
   const movedItemIds = items.map((item) => item.getId());
   const originalSubElements = getSubElements(Number(target.item.getId())) || [];
-  let currentGroups = getGroups() as GroupsType;
   let updatedSubElements: FormElement[] = [];
-  let promptForReflow = false;
-  const keysToReflow: string[] = [];
 
   // Block non-ordered drops on root level (prevents "drag above start" issues)
   if (droppedLevel === -1 && !isOrderedDragTarget(target)) {
@@ -45,31 +36,6 @@ export const handleOnDrop = async (
 
     if (droppedLevel === -1) {
       setGroupsLayout(newChildren);
-      items.forEach((item) => {
-        const movedGroup = currentGroups[item.getId()];
-        if (groupsHaveCustomRules([movedGroup])) {
-          promptForReflow = true;
-        }
-        keysToReflow.push(item.getId());
-      });
-
-      if (promptForReflow) {
-        setOpenDialog(true);
-        const confirm = getPromise();
-
-        const confirmed = await confirm;
-
-        if (confirmed) {
-          keysToReflow.forEach((key) => {
-            currentGroups = autoFlowGroupNextActions(currentGroups, key);
-          });
-          setOpenDialog(false);
-        } else {
-          setOpenDialog(false);
-        }
-
-        replaceGroups(currentGroups);
-      }
     }
 
     if (droppedLevel === 0) {
@@ -91,6 +57,7 @@ export const handleOnDrop = async (
 
     if (droppedLevel === -1) {
       setGroupsLayout(newChildren);
+      autoFlowAll();
       items[items.length - 1].setFocused();
     }
 

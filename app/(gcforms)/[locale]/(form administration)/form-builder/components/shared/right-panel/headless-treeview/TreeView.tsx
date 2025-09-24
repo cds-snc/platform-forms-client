@@ -45,8 +45,6 @@ import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/us
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
 import { useUpdateGroupLayout } from "../../../../../../../../../lib/groups/utils/useUpdateGroupLayout";
 import { useAutoFlowIfNoCustomRules } from "@root/lib/hooks/useAutoFlowAll";
-import { useConfirmState as useConfirmMoveDialogState } from "../../confirm/useConfirmState";
-import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog";
 import { handleCanDrop } from "./handlers/handleCanDrop";
 import { handleOnDrop } from "./handlers/handleOnDrop";
 import { scrollIntoViewFeature } from "./features/scrollIntoViewFeature";
@@ -97,13 +95,6 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     setGroupsLayout: s.setGroupsLayout,
   }));
 
-  const {
-    resolve: resolveConfirmMove,
-    getPromise: getConfirmMovePromise,
-    openDialog: openConfirmMoveDialog,
-    setOpenDialog: setOpenConfirmMoveDialog,
-  } = useConfirmMoveDialogState();
-
   const { updateGroupsLayout } = useUpdateGroupLayout();
   const { autoFlowAll } = useAutoFlowIfNoCustomRules();
   const { getTitle } = useElementTitle();
@@ -147,8 +138,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
         setGroupsLayout,
         updateGroupElements,
         updateSubElements,
-        getConfirmMovePromise,
-        setOpenConfirmMoveDialog
+        autoFlowAll
       ),
     onRename: (item, value) => {
       const data = item.getItemData();
@@ -323,16 +313,6 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
           <div style={tree.getDragLineStyle()} className="border-b-2 border-blue-400" />
         </div>
       </div>
-      <ConfirmMoveSectionDialog
-        open={openConfirmMoveDialog}
-        handleClose={(value) => {
-          if (value) {
-            resolveConfirmMove && resolveConfirmMove(true);
-          } else {
-            resolveConfirmMove && resolveConfirmMove(false);
-          }
-        }}
-      />
       <ConfirmDeleteSectionDialog
         open={openConfirmDeleteDialog}
         handleClose={(value) => {
