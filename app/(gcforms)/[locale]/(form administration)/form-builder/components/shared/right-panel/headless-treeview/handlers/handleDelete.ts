@@ -15,7 +15,6 @@ export const handleDelete = async (
   updateGroupsLayout: () => Promise<void>,
   autoFlowAll: () => void,
   tree: { rebuildTree: () => void },
-  t: (key: string, options?: Record<string, string>) => string,
   onSuccess?: () => void,
   onError?: () => void
 ) => {

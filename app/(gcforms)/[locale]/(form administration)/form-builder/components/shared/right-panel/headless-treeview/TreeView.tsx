@@ -241,7 +241,6 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
                   updateGroupsLayout,
                   autoFlowAll,
                   tree,
-                  t,
                   () => {
                     toast.success(
                       <div>
