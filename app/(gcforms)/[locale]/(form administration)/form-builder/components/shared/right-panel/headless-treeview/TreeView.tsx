@@ -40,11 +40,11 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { useTreeRef } from "../treeview/provider/TreeRefProvider";
 
 import { useTranslation } from "@root/i18n/client";
-import { canDeleteGroup } from "../../../../../../../../../lib/groups/utils/validateGroups";
+import { canDeleteGroup } from "@lib/groups/utils/validateGroups";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
-import { useUpdateGroupLayout } from "../../../../../../../../../lib/groups/utils/useUpdateGroupLayout";
-import { useAutoFlowIfNoCustomRules } from "@root/lib/hooks/useAutoFlowAll";
+import { useUpdateGroupLayout } from "@lib/groups/utils/useUpdateGroupLayout";
+import { useAutoFlowIfNoCustomRules } from "@lib/hooks/useAutoFlowAll";
 import { handleCanDrop } from "./handlers/handleCanDrop";
 import { handleOnDrop } from "./handlers/handleOnDrop";
 import { scrollIntoViewFeature } from "./features/scrollIntoViewFeature";
