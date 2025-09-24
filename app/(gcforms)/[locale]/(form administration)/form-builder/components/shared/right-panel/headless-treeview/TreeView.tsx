@@ -51,6 +51,7 @@ import { scrollIntoViewFeature } from "./features/scrollIntoViewFeature";
 import { dragAndDropFixFeature } from "./features/dragAndDropFixFeature";
 import { TreeActions } from "./TreeActions";
 import { groupsHaveCustomRules } from "@lib/groups/utils/setNextAction";
+import { handleDelete } from "./handlers/handleDelete";
 
 export const lockedItems = ["start", "intro", "policy", "review", "end", "confirmation"];
 
@@ -248,54 +249,35 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
               tree={tree}
               onFocus={setActiveGroup}
               handleDelete={async (e) => {
+                const deletedItemName = item.getItemName();
+
                 e.stopPropagation();
-                const groups = getGroups() || {};
-
-                const hasCustomRules = groupsHaveCustomRules(Object.values(groups));
-
-                if (
-                  hasCustomRules &&
-                  !canDeleteGroup(groups, item.getItemData().nextAction ?? "")
-                ) {
-                  toast.error(t("groups.cannotDeleteGroup"));
-                  return;
-                }
-
-                setOpenConfirmDeleteDialog(true);
-                const confirm = await getConfirmDeletePromise();
-
-                if (confirm) {
-                  const children = item.getChildren();
-                  children.map((child) => {
-                    removeItem(Number(child));
-                  });
-
-                  const removedItemName = item.getItemName();
-
-                  deleteGroup(item.getId());
-
-                  // When deleting a group, we need to select the previous group
-                  const previousItem = item.getItemAbove();
-                  setId(previousItem?.getId() ?? "start");
-                  previousItem?.setFocused();
-
-                  // And update the groups layout
-                  await updateGroupsLayout();
-
-                  autoFlowAll();
-                  setOpenConfirmDeleteDialog(false);
-
-                  tree.rebuildTree();
-
-                  toast.success(
-                    <div>
-                      <h3>{t("groups.groupDeleted")}</h3>
-                      <p>{t("groups.groupSuccessfullyDeleted", { group: removedItemName })}</p>
-                    </div>
-                  );
-
-                  return;
-                }
+                await handleDelete(
+                  item,
+                  getGroups,
+                  groupsHaveCustomRules,
+                  canDeleteGroup,
+                  setOpenConfirmDeleteDialog,
+                  getConfirmDeletePromise,
+                  removeItem,
+                  deleteGroup,
+                  setId,
+                  updateGroupsLayout,
+                  autoFlowAll,
+                  tree,
+                  t,
+                  () => {
+                    toast.success(
+                      <div>
+                        <h3>{t("groups.groupDeleted")}</h3>
+                        <p>{t("groups.groupSuccessfullyDeleted", { group: deletedItemName })}</p>
+                      </div>
+                    );
+                  },
+                  () => {
+                    toast.error(t("groups.cannotDeleteGroup"));
+                  }
+                );
               }}
             />
           ))}
