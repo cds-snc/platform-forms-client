@@ -9,9 +9,6 @@ import { Language, LocalizedElementProperties } from "@lib/types/form-builder-ty
 import { groupsToTreeData, TreeDataOptions } from "./utils/groupsToTreeData";
 import { findParentGroup } from "./utils/findParentGroup";
 import { GroupStoreProps, GroupStoreState } from "./types";
-import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
-import { initializeGroups } from "./utils/initializeGroups";
-
 import { findNextGroup } from "./utils/findNextGroup";
 import { findPreviousGroup } from "./utils/findPreviousGroup";
 import { getGroupFromId } from "./utils/getGroupFromId";
@@ -131,7 +128,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
 
         const groupsLayout = get()
           .templateStore.getState()
-          .form.groupsLayout?.filter((id) => id !== "start" && id !== "end");
+          .form.groupsLayout?.filter((id) => !["start", "end", "review"].includes(id));
 
         if (!groups || !groupsLayout) return {};
 
@@ -141,27 +138,16 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
             orderedGroups[groupId] = groups[groupId];
           }
         });
-        return orderedGroups;
+
+        return {
+          start: groups["start"],
+          ...orderedGroups,
+          review: groups["review"],
+          end: groups["end"],
+        };
       },
       getTreeData: (options: TreeDataOptions = {}) => {
-        const form = get().templateStore.getState().form;
-        let formGroups = form.groups;
-
-        const hasGroups = formHasGroups(form);
-
-        if (!hasGroups) {
-          formGroups = initializeGroups({ ...form }, true).groups;
-        }
-
-        if (!formGroups) return {};
-
-        const orderedGroups = get().getGroups();
-
-        const orderedFormGroups = {
-          start: formGroups["start"],
-          ...orderedGroups,
-          end: formGroups["end"],
-        };
+        const orderedFormGroups = get().getGroups() as GroupsType;
 
         const elements = get().templateStore.getState().form.elements;
 
