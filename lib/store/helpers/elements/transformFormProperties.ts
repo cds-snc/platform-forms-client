@@ -54,6 +54,7 @@ export const hasCleanedRules = (elements: FormElement[], element: FormElement) =
 
 export const transform: TemplateStore<"transform"> = (set) => () => {
   set((state) => {
+    // Clean rules and ensure UUIDs
     state.form.elements.forEach((element, index) => {
       if (element.uuid === undefined) {
         state.form.elements[index] = { ...element, uuid: uuid() };
@@ -65,5 +66,25 @@ export const transform: TemplateStore<"transform"> = (set) => () => {
         state.form.elements[index].properties.conditionalRules = rules;
       }
     });
+
+    // Clean groupsLayout
+    if (state.form.groupsLayout) {
+      // Remove start and end if they exist
+      state.form.groupsLayout = state.form.groupsLayout.filter(
+        (id) => !["start", "end", "review"].includes(id)
+      );
+
+      // Ensure all group ids exist in form.groups
+      state.form.groupsLayout = state.form.groupsLayout.filter((id) =>
+        Object.entries(state.form.groups || {}).some(([key, _group]) => key === id)
+      );
+    }
+
+    // Clean form layout
+    if (state.form.layout) {
+      state.form.layout = state.form.layout.filter((id) =>
+        state.form.elements.some((element) => element.id === id)
+      );
+    }
   });
 };
