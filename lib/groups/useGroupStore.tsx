@@ -22,6 +22,8 @@ import { setGroupNextAction } from "./utils/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
 import { FormElement } from "@lib/types";
 
+import { cleanGroupsLayout } from "@lib/utils/cleanGroupsLayout";
+
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
     id: "start",
@@ -139,7 +141,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
 
         if (!formGroups) return {};
 
-        const groupsLayout = get().templateStore.getState().form.groupsLayout;
+        const groupsLayout = cleanGroupsLayout(get().templateStore.getState().form).groupsLayout;
 
         const orderedFormGroups = { start: formGroups["start"] } as GroupsType;
 

@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn, safeJSONParse } from "@lib/utils";
+import { cleanGroupsLayout } from "@lib/utils/cleanGroupsLayout";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
@@ -122,7 +123,7 @@ export const SaveButton = () => {
     if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
       return;
     }
-    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    let formConfig = safeJSONParse<FormProperties>(getSchema());
     if (!formConfig) {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;
@@ -132,6 +133,8 @@ export const SaveButton = () => {
       if (!createOrUpdateTemplate) {
         return;
       }
+
+      formConfig = cleanGroupsLayout(formConfig);
 
       const operationResult = await createOrUpdateTemplate({
         id: getId(),
