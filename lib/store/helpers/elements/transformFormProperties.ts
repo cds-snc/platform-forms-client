@@ -3,6 +3,7 @@ import { type FormElement, type FormProperties } from "@gcforms/types";
 import { cleanRules } from "@gcforms/core";
 import { logMessage } from "@lib/logger";
 import { v4 as uuid } from "uuid";
+import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
 
 const cleanElementRules = (elements: FormElement[], element: FormElement) => {
   if (element.properties?.conditionalRules) {
@@ -54,6 +55,9 @@ export const hasCleanedRules = (elements: FormElement[], element: FormElement) =
 
 export const transform: TemplateStore<"transform"> = (set) => () => {
   set((state) => {
+    // Make sure groups are initialized
+    state.form = initializeGroups({ ...state.form }, true);
+
     // Clean rules and ensure UUIDs
     state.form.elements.forEach((element, index) => {
       if (element.uuid === undefined) {
