@@ -1,23 +1,4 @@
-/**
- * Note this is a work in progress to move the tree view to a more accessible implementation.
- *
- * Docs - https://headless-tree.lukasbach.com/
- *
- * LLMs
- * https://headless-tree.lukasbach.com/llms.txt
- *
- * Full
- * https://headless-tree.lukasbach.com/llms-full.txt
- *
- * Notes:
- * old refs
- * tree?.current?. <- This to the instance of the Tree
- * treeView?.current?. <- This is the useImperativeHandle ref
- *
- */
-
 import { ForwardRefRenderFunction, forwardRef, useEffect, useImperativeHandle } from "react";
-
 import { TreeItemData } from "./types";
 import {
   syncDataLoaderFeature,
@@ -38,7 +19,6 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTreeRef } from "../treeview/provider/TreeRefProvider";
-
 import { useTranslation } from "@root/i18n/client";
 import { canDeleteGroup } from "@lib/groups/utils/validateGroups";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
