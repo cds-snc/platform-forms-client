@@ -145,40 +145,29 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
       const id = item.getId();
       const parent = item.getParent()?.getId();
 
-      // @TODO: check these different cases:
-
+      // @TODO: is this case needed?
       // Handle title elements (section titles)
       if (data && typeof data === "object" && id.includes("section-title-")) {
         updateGroupTitle({ id: groupId, locale: language || "en", title: value });
-        tree.rebuildTree();
         return;
       }
 
       // Handle root-level groups/folders
-      if (
-        parent === "root" &&
-        data &&
-        typeof data === "object" &&
-        (!data.type || data.type === "group")
-      ) {
+      if (parent === "root" && data && (!data.type || data.type === "group")) {
         updateGroupName({ id, name: value });
-        tree.rebuildTree();
         return;
       }
 
       // Handle form elements (including dynamicRow and sub-elements)
-      if (data && typeof data === "object" && (data.type === "dynamicRow" || parent !== "root")) {
+      if (data && (data.type === "dynamicRow" || parent !== "root")) {
         updateElementTitle({
           id: Number(id),
           text: value,
         });
-        tree.rebuildTree();
         return;
       }
 
-      // Fallback for other cases
-      updateGroupName({ id, name: value });
-      tree.rebuildTree();
+      return;
     },
     canDrag: (items) => {
       return !items.some((item) => lockedItems.includes(item.getId()));
