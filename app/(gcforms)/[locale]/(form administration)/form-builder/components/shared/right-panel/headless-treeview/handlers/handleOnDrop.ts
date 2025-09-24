@@ -7,13 +7,10 @@ import {
 } from "@headless-tree/core";
 import { TreeItemData } from "../types";
 import { FormElement } from "@root/lib/types";
-import { GroupsType } from "@root/packages/types/src";
 
 export const handleOnDrop = async (
   items: ItemInstance<TreeItemData>[],
   target: DragTarget<TreeItemData>,
-  getGroups: () => GroupsType | undefined,
-  replaceGroups: (groups: GroupsType) => void,
   getSubElements: (parentId: number) => FormElement[] | undefined,
   setGroupsLayout: (layout: string[]) => void,
   updateGroupElements: ({ id, elements }: { id: string; elements: string[] }) => void,
