@@ -22,8 +22,6 @@ import { setGroupNextAction } from "./utils/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
 import { FormElement } from "@lib/types";
 
-import { cleanGroupsLayout } from "@lib/utils/cleanGroupsLayout";
-
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
     id: "start",
@@ -128,7 +126,23 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           setChangeKey(String(new Date().getTime()));
         }
       },
-      getGroups: () => get().templateStore.getState().form.groups,
+      getGroups: () => {
+        const groups = get().templateStore.getState().form.groups;
+
+        const groupsLayout = get()
+          .templateStore.getState()
+          .form.groupsLayout?.filter((id) => id !== "start" && id !== "end");
+
+        if (!groups || !groupsLayout) return {};
+
+        const orderedGroups: GroupsType = {};
+        groupsLayout.forEach((groupId) => {
+          if (groups[groupId]) {
+            orderedGroups[groupId] = groups[groupId];
+          }
+        });
+        return orderedGroups;
+      },
       getTreeData: (options: TreeDataOptions = {}) => {
         const form = get().templateStore.getState().form;
         let formGroups = form.groups;
@@ -141,15 +155,13 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
 
         if (!formGroups) return {};
 
-        const groupsLayout = cleanGroupsLayout(get().templateStore.getState().form).groupsLayout;
+        const orderedGroups = get().getGroups();
 
-        const orderedFormGroups = { start: formGroups["start"] } as GroupsType;
-
-        groupsLayout?.map((groupId) => {
-          orderedFormGroups[groupId] = { ...formGroups[groupId] };
-        });
-
-        orderedFormGroups["end"] = formGroups["end"];
+        const orderedFormGroups = {
+          start: formGroups["start"],
+          ...orderedGroups,
+          end: formGroups["end"],
+        };
 
         const elements = get().templateStore.getState().form.elements;
 
