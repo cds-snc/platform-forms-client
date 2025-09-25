@@ -323,12 +323,13 @@ describe('handleCanDrop', () => {
   });
 
   describe('Edge cases', () => {
-    it('should handle empty items array', () => {
+    it('should handle empty items array gracefully', () => {
       const target = createMockTarget(createMockItem('root', -1));
 
-      // This would likely cause an error in the current implementation
-      // as it accesses items[0] without checking length
-      expect(() => handleCanDrop([], target)).toThrow();
+      // After refactoring, we handle empty arrays gracefully by returning false
+      // instead of throwing an error (which is better UX)
+      const result = handleCanDrop([], target);
+      expect(result).toBe(false);
     });
 
     it('should handle target without children for root level drops', () => {
