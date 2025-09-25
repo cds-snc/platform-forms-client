@@ -292,7 +292,9 @@ const downloadFormSubmissions = async (
       }
       // await apiClient.confirmFormSubmission(submission.name, encryptedSubmission.confirmationCode);
     } catch (error) {
-      logMessage.error(`Failed to download submission ${submission.name}:`, error);
+      logMessage.error(
+        `Failed to download submission ${submission.name}:${(error as Error).message}`
+      );
 
       throw error;
     }
