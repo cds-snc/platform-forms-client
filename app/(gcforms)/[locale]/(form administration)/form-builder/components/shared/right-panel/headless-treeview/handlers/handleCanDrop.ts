@@ -21,6 +21,12 @@ const isNonGroupItem = (item: ItemInstance<TreeItemData>): boolean => {
   return !item.isFolder() || isDynamicRow(item);
 };
 
+/**
+ * Can't drag Groups + Items together
+ *
+ * @param items
+ * @returns boolean
+ */
 const validateItemTypesCompatible = (items: ItemInstance<TreeItemData>[]): boolean => {
   const draggedGroupItemsCount = items.filter(isGroup).length;
   const draggedNonGroupItemsCount = items.filter(isNonGroupItem).length;
@@ -29,6 +35,15 @@ const validateItemTypesCompatible = (items: ItemInstance<TreeItemData>[]): boole
   return !(draggedGroupItemsCount > 0 && draggedNonGroupItemsCount > 0);
 };
 
+/**
+ * Rules for odered drops on Root
+ *  - Can't drop before Start
+ *  - Can't drop after End
+ *
+ * @param target
+ * @param targetItem
+ * @returns
+ */
 const validateRootOrderedDrop = (
   target: DragTarget<TreeItemData>,
   targetItem: ItemInstance<TreeItemData>
@@ -58,6 +73,15 @@ const validateRootOrderedDrop = (
   return true;
 };
 
+/**
+ * Validate drop target for Groups
+ *  - Can only be dropped on Root
+ *  - Additional rules apply to OrderedDrops
+ *
+ * @param target
+ * @param targetItem
+ * @returns boolean
+ */
 const validateGroupLevelDrop = (
   target: DragTarget<TreeItemData>,
   targetItem: ItemInstance<TreeItemData>
@@ -70,6 +94,16 @@ const validateGroupLevelDrop = (
   return validateRootOrderedDrop(target, targetItem);
 };
 
+/**
+ * Validate drop target for Elements
+ *  - Can be dropped on Groups
+ *  - Cannot be dropped on End
+ *  - Can be dropped on Start but only below Privacy.
+ *
+ * @param target
+ * @param targetItem
+ * @returns boolean
+ */
 const validateElementLevelDrop = (
   target: DragTarget<TreeItemData>,
   targetItem: ItemInstance<TreeItemData>
@@ -97,11 +131,18 @@ const validateElementLevelDrop = (
   return false;
 };
 
+/**
+ * Validate drop target for sub-elements.
+ *  - Must be dropped within the same parent
+ *
+ * @param targetItem
+ * @param firstDraggedItem
+ * @returns boolean
+ */
 const validateSubElementLevelDrop = (
   targetItem: ItemInstance<TreeItemData>,
   firstDraggedItem: ItemInstance<TreeItemData>
 ): boolean => {
-  // Sub-elements can only be dragged within the same parentID
   return targetItem.getId() === firstDraggedItem.getParent()?.getId();
 };
 
@@ -109,7 +150,7 @@ export const handleCanDrop = (
   items: ItemInstance<TreeItemData>[],
   target: DragTarget<TreeItemData>
 ) => {
-  // Guard clause: Handle empty items array
+  // Handle empty items array
   if (items.length === 0) {
     return false;
   }
