@@ -30,9 +30,6 @@ export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; grou
 
   const saveGroupTitle = (groupTitle: string) => {
     updateGroupTitle({ id: groupId, locale: language, title: groupTitle });
-    // const sectionTitleKey = `section-title-${groupId}`;
-    // console.log("Renaming section title:", groupId, groupTitle);
-    // tree?.current?.renameItem(sectionTitleKey, groupTitle);
   };
 
   const lockedInput = Object.values(LockedSections).includes(groupId as LockedSections);

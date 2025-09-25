@@ -14,7 +14,7 @@ import {
   getItemFromElement,
   isTitleElementType,
   isFormElementType,
-} from "../../../../../../../../../lib/groups/utils/itemType";
+} from "@lib/groups/utils/itemType";
 
 export const SubItem = ({
   title,

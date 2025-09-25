@@ -12,14 +12,14 @@ import {
   TreeItem,
   TreeItemIndex,
 } from "react-complex-tree";
-import { useGroupStore } from "../../../../../../../../../lib/groups/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
-import { findParentGroup } from "../../../../../../../../../lib/groups/utils/findParentGroup";
+import { findParentGroup } from "@lib/groups/utils/findParentGroup";
 import { type GroupsType } from "@gcforms/types";
 import { Item } from "./Item";
 import { SubItem } from "./SubItem";
-import { autoFlowGroupNextActions } from "../../../../../../../../../lib/groups/utils/setNextAction";
+import { autoFlowGroupNextActions } from "@lib/groups/utils/setNextAction";
 import { AddIcon } from "@serverComponents/icons";
 import { handleCanDropAt } from "./handlers/handleCanDropAt";
 import { handleOnDrop } from "./handlers/handleOnDrop";
@@ -34,11 +34,11 @@ import { cn } from "@lib/utils";
 import { KeyboardNavTip } from "./KeyboardNavTip";
 import { Button } from "@clientComponents/globals";
 import { Language } from "@lib/types/form-builder-types";
-import { isTitleElementType } from "../../../../../../../../../lib/groups/utils/itemType";
+import { isTitleElementType } from "@lib/groups/utils/itemType";
 import { useAutoFlowIfNoCustomRules } from "@lib/hooks/useAutoFlowAll";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { useUpdateGroupLayout } from "../../../../../../../../../lib/groups/utils/useUpdateGroupLayout";
-import { canDeleteGroup } from "../../../../../../../../../lib/groups/utils/validateGroups";
+import { useUpdateGroupLayout } from "@lib/groups/utils/useUpdateGroupLayout";
+import { canDeleteGroup } from "@lib/groups/utils/validateGroups";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;

@@ -1,5 +1,5 @@
 import Markdown from "markdown-to-jsx";
-import { removeMarkdown } from "@root/lib/groups/utils/itemType";
+import { removeMarkdown } from "@lib/groups/utils/itemType";
 import { Language } from "@lib/types/form-builder-types";
 import { FormItem } from "../helpers";
 import { getLocalizedProperty } from "@lib/utils";

@@ -18,7 +18,7 @@ import {
   isFormElementType,
   isGhostElementType,
   removeMarkdown,
-} from "../../../../../../../../../lib/groups/utils/itemType";
+} from "@lib/groups/utils/itemType";
 
 export const Item = ({
   title,

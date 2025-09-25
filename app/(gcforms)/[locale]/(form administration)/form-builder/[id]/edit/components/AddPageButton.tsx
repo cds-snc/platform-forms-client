@@ -21,9 +21,6 @@ export const AddPageButton = ({ className }: { className?: string }) => {
         // add 1 sec delay to allow the panel to open
         setTimeout(() => {
           treeView?.current?.addPage();
-
-          // eslint-disable-next-line no-console
-          // console.log(headlessTree?.current?.getSelectedItems()[0].getItemData().data);
         }, 500);
       }}
     >

@@ -11,7 +11,7 @@ import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { LockedSections } from "../treeview/types";
-import { canModifyNextAction } from "../../../../../../../../../lib/groups/utils/validateGroups";
+import { canModifyNextAction } from "@lib/groups/utils/validateGroups";
 
 const ExitIcon = () => {
   return (
