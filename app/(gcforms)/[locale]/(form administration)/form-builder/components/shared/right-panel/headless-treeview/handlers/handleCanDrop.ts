@@ -1,6 +1,14 @@
 import { DragTarget, isOrderedDragTarget, ItemInstance } from "@headless-tree/core";
 import { TreeItemData } from "../types";
 
+// Tree level constants for better readability
+const TREE_LEVELS = {
+  ROOT: -1,
+  GROUP: 0,
+  ELEMENT: 1,
+  SUB_ELEMENT: 2,
+} as const;
+
 export const handleCanDrop = (
   items: ItemInstance<TreeItemData>[],
   target: DragTarget<TreeItemData>
@@ -29,7 +37,7 @@ export const handleCanDrop = (
   }
 
   // Root level items can only be dropped between Start and End
-  if (draggedItemLevel === 0) {
+  if (draggedItemLevel === TREE_LEVELS.GROUP) {
     // Must be dropping on the root item
     if (target.item.getId() !== "root") {
       return false;
@@ -64,23 +72,24 @@ export const handleCanDrop = (
     return true;
   }
 
-  if (draggedItemLevel === 1) {
+  if (draggedItemLevel === TREE_LEVELS.ELEMENT) {
     // Can't drop on End
     if (targetItem.getId() === "end") {
       return false;
     }
 
-    // Can drop on start but only below privacy (index 1)
+    // Can drop on start but only below privacy policy (must be after intro=0 and policy=1)
     if (targetItem.getId() === "start") {
       if (isOrderedDragTarget(target)) {
-        if (target.insertionIndex < 2) {
+        const PRIVACY_POLICY_INDEX = 2; // Elements must come after intro and policy
+        if (target.insertionIndex < PRIVACY_POLICY_INDEX) {
           return false;
         }
       }
     }
 
-    // Otherwise ok to drop Elements into any root level item (0)
-    if (targetItem?.getItemMeta().level === 0) {
+    // Otherwise ok to drop Elements into any root level item (GROUP level)
+    if (targetItem?.getItemMeta().level === TREE_LEVELS.GROUP) {
       return true;
     }
 
@@ -88,7 +97,7 @@ export const handleCanDrop = (
   }
 
   // Sub-elements can only be dragged within the same parentID
-  if (draggedItemLevel === 2) {
+  if (draggedItemLevel === TREE_LEVELS.SUB_ELEMENT) {
     if (targetItem.getId() === firstDraggedItem.getParent()?.getId()) {
       return true;
     }
