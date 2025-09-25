@@ -221,9 +221,6 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                     <TabPanels>
                       <TabPanel>
                         {/* Tree */}
-                        <SkipLinkReusable anchor="#pagesTitle">
-                          {t("skipLink.pages")}
-                        </SkipLinkReusable>
                         <div
                           className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll bg-slate-50"
                           aria-live="polite"
@@ -237,6 +234,9 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                           />
                         </div>
                         {/* end tree */}
+                        <SkipLinkReusable anchor="#editPagesHeading">
+                          {t("skipLink.pages")}
+                        </SkipLinkReusable>
                       </TabPanel>
                       <TabPanel>
                         {/* Translate */}
