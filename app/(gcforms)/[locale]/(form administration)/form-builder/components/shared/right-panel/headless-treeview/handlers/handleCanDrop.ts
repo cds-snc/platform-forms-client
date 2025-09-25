@@ -1,13 +1,6 @@
 import { DragTarget, isOrderedDragTarget, ItemInstance } from "@headless-tree/core";
 import { TreeItemData } from "../types";
-
-// Tree level constants for better readability
-const TREE_LEVELS = {
-  ROOT: -1,
-  GROUP: 0,
-  ELEMENT: 1,
-  SUB_ELEMENT: 2,
-} as const;
+import { TREE_LEVELS } from "../constants";
 
 const isDynamicRow = (item: ItemInstance<TreeItemData>): boolean => {
   return item.getItemData().type === "dynamicRow";
