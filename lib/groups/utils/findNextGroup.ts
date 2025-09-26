@@ -1,5 +1,5 @@
 import { TreeItem } from "react-complex-tree";
-import { TreeItems } from "../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/treeview/types";
+import { TreeItems } from "../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/headless-treeview/types";
 import { getGroupFromId } from "./getGroupFromId";
 
 export function findNextGroup(groups: TreeItems, elementId: string): TreeItem | undefined {
