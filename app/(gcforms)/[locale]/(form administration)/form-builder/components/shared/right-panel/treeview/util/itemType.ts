@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { TreeItem } from "react-complex-tree";
+import { TreeItem } from "@formBuilder/components/shared/right-panel/treeview/types";
 
 export const getItemFromElement = (el: ReactNode) => {
   if (el && typeof el === "object" && "props" in el) {

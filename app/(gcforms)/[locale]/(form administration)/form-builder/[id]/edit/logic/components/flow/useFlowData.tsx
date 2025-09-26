@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { MarkerType } from "reactflow";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Group, GroupsType } from "@gcforms/types";
 import { type NextActionRule } from "@gcforms/types";
@@ -10,6 +9,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { getReviewNode, getStartElements, getEndNode } from "@lib/utils/form-builder/i18nHelpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { groupsToTreeData } from "@formBuilder/components/shared/right-panel/treeview/util/groupsToTreeData";
 
 interface CustomEdge {
   id: string;
@@ -128,12 +128,15 @@ export const useFlowData = (
   showReviewNode: boolean,
   hasReviewPage: boolean
 ) => {
-  const getTreeData = useGroupStore((s) => s.getTreeData);
-  const treeItems = getTreeData();
   const formGroups = useTemplateStore((s) => s.form.groups);
+  const formElements = useTemplateStore((s) => s.form.elements);
   const startElements = getStartElements(lang);
   const reviewNode = getReviewNode(lang);
   const endNode = getEndNode(lang);
+
+  const treeItems = groupsToTreeData(formGroups || {}, formElements || [], {
+    reviewGroup: showReviewNode,
+  });
 
   if (hasReviewPage) {
     endNode.type = "endNodeWithReview";

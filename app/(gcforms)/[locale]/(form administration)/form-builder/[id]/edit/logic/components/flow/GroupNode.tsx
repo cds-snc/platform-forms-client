@@ -1,6 +1,5 @@
 import { Handle } from "reactflow";
 import { NodeProps } from "reactflow";
-import { TreeItem } from "react-complex-tree";
 import { cn } from "@lib/utils";
 
 import { getSourceHandlePosition, getTargetHandlePosition } from "./utils";
@@ -9,6 +8,7 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 import { useElementTitle, ElementProperties } from "@lib/hooks/useElementTitle";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
+import { TreeItem } from "@formBuilder/components/shared/right-panel/treeview/types";
 
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
@@ -125,7 +125,7 @@ export const GroupNode = (node: NodeProps) => {
             ) {
               return (
                 <div key={child.index} className={cn(nodeClassName)}>
-                  {child.data}
+                  here
                 </div>
               );
             }
