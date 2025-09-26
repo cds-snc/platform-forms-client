@@ -14,6 +14,12 @@ export const isValidTreeLevel = (level: number): level is TreeLevel => {
   return Object.values(TREE_LEVELS).includes(level as TreeLevel);
 };
 
+export const LOCKED_GROUPS = {
+  START: "start",
+  END: "end",
+  REVIEW: "review",
+} as const;
+
 export const lockedGroups = ["start", "end", "review"];
 export const lockedElements = ["intro", "policy", "confirmation"];
 

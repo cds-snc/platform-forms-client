@@ -1,18 +1,15 @@
 import React, { createContext, useContext, useRef, RefObject, useState } from "react";
-import { TreeEnvironmentRef, TreeRef } from "react-complex-tree";
-
-import { TreeDataProviderProps } from "../types";
+import { HeadlessTreeHandleProps } from "../types";
 
 import { TreeInstance } from "@headless-tree/core";
 import { TreeItem } from "react-complex-tree";
 
 export type treeContextType = {
-  treeView: RefObject<TreeDataProviderProps | null> | null;
-  environment: RefObject<TreeEnvironmentRef | null> | null;
-  tree: RefObject<TreeRef | null> | null;
+  headlessTreeHandle: RefObject<HeadlessTreeHandleProps | null> | null;
   headlessTree: RefObject<TreeInstance<TreeItem> | null> | null;
   open: boolean;
   togglePanel?: (state: boolean) => void;
+  startRenamingNewGroup?: (id: string) => void;
 };
 
 // Create a context for the tree
@@ -20,9 +17,7 @@ const TreeRefContext = createContext<treeContextType | null>(null);
 
 // Create a provider component for the tree ref context
 export const TreeRefProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const treeView = useRef<TreeDataProviderProps | null>(null);
-  const environment = useRef<TreeEnvironmentRef | null>(null);
-  const tree = useRef<TreeRef | null>(null);
+  const treeView = useRef<HeadlessTreeHandleProps | null>(null);
   const headlessTree = useRef<TreeInstance<TreeItem> | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -30,15 +25,34 @@ export const TreeRefProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setOpen(state);
   };
 
+  const startRenamingNewGroup = (id: string) => {
+    headlessTree.current?.rebuildTree();
+    headlessTree.current?.setSelectedItems([id]);
+
+    const newItem = headlessTree.current?.getItemInstance(id);
+
+    if (newItem) {
+      // Ensure the item is focused
+      // If not onFocus (setActiveGroup) will `reset` the active group
+      if (typeof newItem.setFocused === "function") {
+        newItem.setFocused();
+      }
+
+      // Start renaming the newly created item
+      if (typeof newItem.startRenaming === "function") {
+        newItem.startRenaming();
+      }
+    }
+  };
+
   return (
     <TreeRefContext.Provider
       value={{
-        treeView: treeView,
-        environment: environment,
-        tree: tree,
+        headlessTreeHandle: treeView,
         headlessTree: headlessTree,
         open: open,
         togglePanel: togglePanel,
+        startRenamingNewGroup: startRenamingNewGroup,
       }}
     >
       {children}

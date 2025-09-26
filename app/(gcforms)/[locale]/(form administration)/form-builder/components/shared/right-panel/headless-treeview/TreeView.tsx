@@ -11,19 +11,18 @@ import {
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
 import { useTreeHandlers } from "./hooks/useTreeHandlers";
 import { TreeItem } from "./TreeItem/TreeItem";
-import { TreeDataProviderProps } from "../treeview/types";
+import { HeadlessTreeHandleProps } from "./types";
 import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } from "./treeUtils";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { toast } from "@formBuilder/components/shared/Toast";
-import { useTreeRef } from "../treeview/provider/TreeRefProvider";
+import { useTreeRef } from "./provider/TreeRefProvider";
 import { useTranslation } from "@root/i18n/client";
 import { canDeleteGroup } from "@lib/groups/utils/validateGroups";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
-import { useUpdateGroupLayout } from "@lib/groups/utils/useUpdateGroupLayout";
 import { useAutoFlowIfNoCustomRules } from "@lib/hooks/useAutoFlowAll";
 import { handleCanDrop } from "./handlers/handleCanDrop";
 import { handleOnDrop } from "./handlers/handleOnDrop";
@@ -34,7 +33,7 @@ import { groupsHaveCustomRules } from "@lib/groups/utils/setNextAction";
 import { handleDelete } from "./handlers/handleDelete";
 import { lockedItems } from "./constants";
 
-const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
+const HeadlessTreeView: ForwardRefRenderFunction<unknown, HeadlessTreeHandleProps> = (
   { children },
   ref
 ) => {
@@ -73,11 +72,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     setGroupsLayout: s.setGroupsLayout,
   }));
 
-  const { updateGroupsLayout } = useUpdateGroupLayout();
   const { autoFlowAll } = useAutoFlowIfNoCustomRules();
   const { getTitle } = useElementTitle();
-  const { headlessTree } = useTreeRef();
-
+  const { headlessTree, startRenamingNewGroup } = useTreeRef();
   const language = getLocalizationAttribute()?.lang as Language;
 
   const tree = useTree<TreeItemData>({
@@ -175,7 +172,7 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
     ],
   });
 
-  const { remove: removeItem } = useTemplateStore((s) => {
+  const { remove: removeElement } = useTemplateStore((s) => {
     return {
       remove: s.remove,
     };
@@ -195,18 +192,14 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
   }, [headlessTree, tree]);
 
   // Sync tree with external store changes
-  const { addPage, setActiveGroup } = useTreeHandlers(tree);
+  const { addPage: addPageHandler, setActiveGroup } = useTreeHandlers();
+
+  const addPage = () => {
+    const id = addPageHandler();
+    startRenamingNewGroup && startRenamingNewGroup(id);
+  };
 
   useImperativeHandle(ref, () => ({
-    addItem: async () => {
-      tree.rebuildTree();
-    },
-    updateItem: () => {
-      tree.rebuildTree();
-    },
-    removeItem: () => {
-      tree.rebuildTree();
-    },
     addPage,
   }));
 
@@ -234,10 +227,9 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps>
                   canDeleteGroup,
                   setOpenConfirmDeleteDialog,
                   getConfirmDeletePromise,
-                  removeItem,
+                  removeElement,
                   deleteGroup,
                   setId,
-                  updateGroupsLayout,
                   autoFlowAll,
                   tree,
                   () => {

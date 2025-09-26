@@ -197,6 +197,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         get().templateStore.setState((s) => {
           if (!s.form.groups) return;
           delete s.form.groups[id];
+          s.form.groupsLayout = s.form.groupsLayout?.filter((groupId) => groupId !== id);
         });
       },
       replaceGroups: (groups: GroupsType) => {

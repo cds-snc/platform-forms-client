@@ -10,8 +10,8 @@ import { useTranslation } from "@i18n/client";
 import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
-import { LockedSections } from "../treeview/types";
 import { canModifyNextAction } from "@lib/groups/utils/validateGroups";
+import { lockedGroups } from "../headless-treeview/constants";
 
 const ExitIcon = () => {
   return (
@@ -47,7 +47,7 @@ export const SingleActionSelect = ({
 
     const label = t(`logic.${key}`);
 
-    if (Object.values(LockedSections).includes(key as LockedSections)) {
+    if (lockedGroups.includes(key)) {
       return {
         label,
         value: key,

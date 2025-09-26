@@ -5,7 +5,7 @@ import { Language } from "@lib/types/form-builder-types";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
 import { Editor } from "@gcforms/editor";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 const _debounced = debounce((updater) => {
   updater();

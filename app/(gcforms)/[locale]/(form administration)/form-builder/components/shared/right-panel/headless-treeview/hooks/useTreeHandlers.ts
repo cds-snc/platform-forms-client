@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
-import { TreeInstance } from "@headless-tree/core";
 import { GroupsType } from "@gcforms/types";
 import { useTranslation } from "@i18n/client";
 import { useGroupStore } from "@lib/groups/useGroupStore";
@@ -15,7 +14,7 @@ type TreeItem = {
   isFolder: () => boolean;
 };
 
-export const useTreeHandlers = <T>(tree: TreeInstance<T>) => {
+export const useTreeHandlers = () => {
   const { t } = useTranslation("form-builder");
   const newSectionText = t("groups.newPage");
 
@@ -35,32 +34,8 @@ export const useTreeHandlers = <T>(tree: TreeInstance<T>) => {
     replaceGroups(newGroups);
     setId(id);
 
-    tree.rebuildTree();
-    tree.setSelectedItems([id]);
-
-    // Start renaming the newly created item and set focus
-    // We need to wait for the tree to rebuild and the item to be available
-    queueMicrotask(() => {
-      try {
-        const newItem = tree.getItemInstance(id);
-
-        if (newItem) {
-          // Ensure the item is focused
-          // If not onFocus (setActiveGroup) will `reset` the active group
-          if (typeof newItem.setFocused === "function") {
-            newItem.setFocused();
-          }
-
-          // Start renaming the newly created item
-          if (typeof newItem.startRenaming === "function") {
-            newItem.startRenaming();
-          }
-        }
-      } catch (error) {
-        // Ignore if item not found or renaming fails
-      }
-    });
-  }, [addGroup, getGroups, newSectionText, replaceGroups, setId, tree]);
+    return id;
+  }, [addGroup, getGroups, newSectionText, replaceGroups, setId]);
 
   const setActiveGroup = useCallback(
     (item: TreeItem) => {

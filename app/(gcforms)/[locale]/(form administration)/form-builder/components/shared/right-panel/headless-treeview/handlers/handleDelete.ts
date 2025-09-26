@@ -9,10 +9,9 @@ export const handleDelete = async (
   canDeleteGroup: (groups: GroupsType, nextAction: string) => boolean,
   setOpenConfirmDeleteDialog: (value: boolean) => void,
   getConfirmDeletePromise: () => Promise<boolean>,
-  removeItem: (id: number) => void,
+  removeElement: (id: number) => void,
   deleteGroup: (id: string) => void,
   setId: (id: string) => void,
-  updateGroupsLayout: () => Promise<void>,
   autoFlowAll: () => void,
   tree: { rebuildTree: () => void },
   onSuccess?: () => void,
@@ -33,7 +32,7 @@ export const handleDelete = async (
   if (confirm) {
     const children = item.getChildren();
     children.map((child) => {
-      removeItem(Number(child));
+      removeElement(Number(child));
     });
 
     deleteGroup(item.getId());
@@ -42,9 +41,6 @@ export const handleDelete = async (
     const previousItem = item.getItemAbove();
     setId(previousItem?.getId() ?? "start");
     previousItem?.setFocused();
-
-    // And update the groups layout
-    await updateGroupsLayout();
 
     autoFlowAll();
     setOpenConfirmDeleteDialog(false);

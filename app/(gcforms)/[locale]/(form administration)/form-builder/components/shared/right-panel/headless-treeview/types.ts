@@ -1,5 +1,7 @@
 import { TreeInstance } from "@headless-tree/core";
 import { ItemInstance } from "@headless-tree/core";
+import { ReactElement } from "react";
+import { TreeItemIndex, TreeItem } from "react-complex-tree";
 
 export interface ItemProps {
   item: TreeItemInstance<TreeItemData>;
@@ -36,3 +38,11 @@ export type TreeItemData = {
 
 // Use the official headless-tree ItemInstance type
 export type TreeItemInstance<T> = ItemInstance<T>;
+
+export interface HeadlessTreeHandleProps {
+  children?: ReactElement;
+  addPage: () => void;
+  startRenamingNewGroup: (id: string) => void;
+}
+
+export type TreeItems = Record<TreeItemIndex, TreeItem>;

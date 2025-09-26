@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { cn } from "@lib/utils";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 import { GroupStoreState } from "@lib/groups/types";
 import { useTranslation } from "@i18n/client";
 

@@ -1,11 +1,11 @@
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { NewPageIcon } from "@serverComponents/icons/NewPageIcon";
 import { cn } from "@lib/utils";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 export const AddPageButton = ({ className }: { className?: string }) => {
-  const { togglePanel, treeView } = useTreeRef();
+  const { togglePanel, headlessTreeHandle } = useTreeRef();
   const { t } = useTranslation("form-builder");
 
   return (
@@ -20,7 +20,7 @@ export const AddPageButton = ({ className }: { className?: string }) => {
 
         // add 1 sec delay to allow the panel to open
         setTimeout(() => {
-          treeView?.current?.addPage();
+          headlessTreeHandle?.current?.addPage();
         }, 500);
       }}
     >

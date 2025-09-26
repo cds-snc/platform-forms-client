@@ -1,6 +1,6 @@
 import { FormProperties } from "@lib/types";
-import { LockedSections } from "../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/treeview/types";
 import { getStartLabels, getReviewLabels, getEndLabels } from "@lib/utils/form-builder/i18nHelpers";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 export const initializeGroups = (form: FormProperties, allowGroups: boolean): FormProperties => {
   // Clean and remove any existing groups
@@ -25,7 +25,7 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
         titleEn: getStartLabels().en,
         titleFr: getStartLabels().fr,
         elements: [...elementIds],
-        nextAction: LockedSections.REVIEW,
+        nextAction: LOCKED_GROUPS.REVIEW,
       },
     };
 

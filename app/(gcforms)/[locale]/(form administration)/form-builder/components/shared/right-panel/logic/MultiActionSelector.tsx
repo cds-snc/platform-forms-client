@@ -21,7 +21,7 @@ import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { SectionName } from "./SectionName";
 import { Language } from "@lib/types/form-builder-types";
-import { LockedSections } from "../treeview/types";
+import { lockedGroups } from "../headless-treeview/constants";
 
 const GroupAndChoiceSelect = ({
   groupId,
@@ -59,7 +59,7 @@ const GroupAndChoiceSelect = ({
   const choiceElement = getElement(Number(choiceParentQuestion));
   let groupItems = Object.keys(formGroups).map((key) => {
     const item = formGroups[key];
-    if (Object.values(LockedSections).includes(key as LockedSections)) {
+    if (lockedGroups.includes(key)) {
       return {
         label: t(`logic.${key}`),
         value: key,

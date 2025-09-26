@@ -18,11 +18,10 @@ import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { useActivePathname } from "@lib/hooks/form-builder/useActivePathname";
 import { DownloadCSVWithGroups } from "@formBuilder/[id]/edit/translate/components/DownloadCSVWithGroups";
-import { useTreeRef } from "./treeview/provider/TreeRefProvider";
+import { useTreeRef } from "./headless-treeview/provider/TreeRefProvider";
 
 import { TreeView as HeadlessTreeView } from "./headless-treeview/TreeView";
 
-import { TreeView } from "./treeview/TreeView";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SelectNextAction } from "./logic/SelectNextAction";
@@ -30,8 +29,6 @@ import { useGroupStore } from "@lib/groups/useGroupStore";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { Language } from "@lib/types/form-builder-types";
 import { announce } from "@gcforms/announce";
-
-const renderControlledTree = false;
 
 const TabButton = ({
   text,
@@ -85,7 +82,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   const { activePathname } = useActivePathname();
-  const { treeView, togglePanel, open } = useTreeRef();
+  const { headlessTreeHandle, togglePanel, open } = useTreeRef();
   const getElement = useGroupStore((s) => s.getElement);
 
   const selectedElementId = useGroupStore((s) => s.selectedElementId);
@@ -230,31 +227,14 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                           className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll bg-slate-50"
                           aria-live="polite"
                         >
-                          {renderControlledTree && (
-                            <TreeView
-                              ref={treeView}
-                              addItem={() => {}}
-                              updateItem={() => {}}
-                              removeItem={() => {}}
-                              addPage={() => {}}
-                            />
-                          )}
-
-                          {!renderControlledTree && (
-                            <>
-                              <HeadlessTreeView
-                                ref={treeView}
-                                addItem={() => {}}
-                                updateItem={() => {}}
-                                removeItem={() => {}}
-                                addPage={() => {}}
-                                addGroup={() => {}}
-                              />
-                              <SkipLinkReusable anchor="#editPagesHeading">
-                                {t("skipLink.pages")}
-                              </SkipLinkReusable>
-                            </>
-                          )}
+                          <HeadlessTreeView
+                            ref={headlessTreeHandle}
+                            addPage={() => {}}
+                            startRenamingNewGroup={() => {}}
+                          />
+                          <SkipLinkReusable anchor="#editPagesHeading">
+                            {t("skipLink.pages")}
+                          </SkipLinkReusable>
                         </div>
                         {/* end tree */}
                         <SkipLinkReusable anchor="#editPagesHeading">

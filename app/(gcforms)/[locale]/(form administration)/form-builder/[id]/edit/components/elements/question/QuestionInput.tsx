@@ -9,7 +9,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { cleanInput } from "@lib/utils/form-builder";
 import { useRefsContext } from "../../RefsContext";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 export const QuestionInput = ({
   index,

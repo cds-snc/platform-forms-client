@@ -10,7 +10,7 @@ import { useElementTitle, ElementProperties } from "@lib/hooks/useElementTitle";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 const OptionRuleSvg = ({ title }: { title?: string }) => {
   return (

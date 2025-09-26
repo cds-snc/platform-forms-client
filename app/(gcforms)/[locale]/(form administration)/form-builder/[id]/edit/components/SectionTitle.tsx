@@ -2,9 +2,9 @@ import React, { useRef } from "react";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { ExpandingInput } from "@formBuilder/components/shared/ExpandingInput";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { Language } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
+import { lockedGroups } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; groupId: string }) => {
   const { getLocalizationAttribute, translationLanguagePriority } = useTemplateStore((s) => ({
@@ -32,7 +32,7 @@ export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; grou
     updateGroupTitle({ id: groupId, locale: language, title: groupTitle });
   };
 
-  const lockedInput = Object.values(LockedSections).includes(groupId as LockedSections);
+  const lockedInput = lockedGroups.includes(groupId);
 
   return lockedInput ? (
     <h4 className="font-bold laptop:text-3xl">{groupTitle}</h4>
