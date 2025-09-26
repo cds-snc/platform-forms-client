@@ -1,11 +1,8 @@
 import React, { createContext, useContext, useRef, RefObject, useState } from "react";
-import { HeadlessTreeHandleProps } from "../types";
-
 import { TreeInstance } from "@headless-tree/core";
 import { TreeItem } from "react-complex-tree";
 
 export type treeContextType = {
-  headlessTreeHandle: RefObject<HeadlessTreeHandleProps | null> | null;
   headlessTree: RefObject<TreeInstance<TreeItem> | null> | null;
   open: boolean;
   togglePanel?: (state: boolean) => void;
@@ -17,7 +14,6 @@ const TreeRefContext = createContext<treeContextType | null>(null);
 
 // Create a provider component for the tree ref context
 export const TreeRefProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const treeView = useRef<HeadlessTreeHandleProps | null>(null);
   const headlessTree = useRef<TreeInstance<TreeItem> | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -48,7 +44,6 @@ export const TreeRefProvider: React.FC<{ children: React.ReactNode }> = ({ child
   return (
     <TreeRefContext.Provider
       value={{
-        headlessTreeHandle: treeView,
         headlessTree: headlessTree,
         open: open,
         togglePanel: togglePanel,

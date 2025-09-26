@@ -20,7 +20,7 @@ import { useActivePathname } from "@lib/hooks/form-builder/useActivePathname";
 import { DownloadCSVWithGroups } from "@formBuilder/[id]/edit/translate/components/DownloadCSVWithGroups";
 import { useTreeRef } from "./headless-treeview/provider/TreeRefProvider";
 
-import { TreeView as HeadlessTreeView } from "./headless-treeview/TreeView";
+import { HeadlessTreeView } from "./headless-treeview/TreeView";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
@@ -82,7 +82,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   const { activePathname } = useActivePathname();
-  const { headlessTreeHandle, togglePanel, open } = useTreeRef();
+  const { togglePanel, open } = useTreeRef();
   const getElement = useGroupStore((s) => s.getElement);
 
   const selectedElementId = useGroupStore((s) => s.selectedElementId);
@@ -227,11 +227,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                           className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll bg-slate-50"
                           aria-live="polite"
                         >
-                          <HeadlessTreeView
-                            ref={headlessTreeHandle}
-                            addPage={() => {}}
-                            startRenamingNewGroup={() => {}}
-                          />
+                          <HeadlessTreeView />
                           <SkipLinkReusable anchor="#editPagesHeading">
                             {t("skipLink.pages")}
                           </SkipLinkReusable>

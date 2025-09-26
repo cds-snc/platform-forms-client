@@ -14,11 +14,12 @@ import { findPreviousGroup } from "./utils/findPreviousGroup";
 import { getGroupFromId } from "./utils/getGroupFromId";
 import { type Group, type GroupsType } from "@gcforms/types";
 import { TreeItemIndex } from "react-complex-tree";
-import { autoFlowAllNextActions } from "./utils/setNextAction";
+import { autoFlowAllNextActions, autoFlowGroupNextActions } from "./utils/setNextAction";
 import { setGroupNextAction } from "./utils/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
 import { FormElement } from "@lib/types";
 import { lockedGroups } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/headless-treeview/constants";
+import { v4 as uuid } from "uuid";
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
@@ -159,7 +160,9 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         if (!formGroups) return { id, elements: [], name: "", titleEn: "", titleFr: "" };
         return formGroups[id];
       },
-      addGroup: (id: string, name: string) => {
+      addGroup: (name: string) => {
+        const id = uuid();
+
         get().templateStore.setState((s) => {
           if (!s.form.groups) {
             s.form.groups = {} as GroupsType;
@@ -185,13 +188,15 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
             newObject[id] = { name, elements: [], titleEn: "", titleFr: "" };
           }
 
-          s.form.groups = newObject;
+          s.form.groups = autoFlowGroupNextActions(newObject, id);
 
           // Add id to groupsLayout
           const groupsLayout = [...(s.form.groupsLayout || [])];
           groupsLayout.splice(groupsLayout.length, 0, id);
           s.form.groupsLayout = groupsLayout;
         });
+
+        return id;
       },
       deleteGroup: (id: string) => {
         get().templateStore.setState((s) => {

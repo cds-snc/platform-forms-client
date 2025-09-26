@@ -1,11 +1,7 @@
 import { useCallback } from "react";
-import { v4 as uuid } from "uuid";
-
-import { GroupsType } from "@gcforms/types";
 import { useTranslation } from "@i18n/client";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { findParentGroup } from "@lib/groups/utils/findParentGroup";
-import { autoFlowGroupNextActions } from "@lib/groups/utils/setNextAction";
 
 // Type for tree item with minimal required methods
 type TreeItem = {
@@ -18,24 +14,20 @@ export const useTreeHandlers = () => {
   const { t } = useTranslation("form-builder");
   const newSectionText = t("groups.newPage");
 
-  const { setId, getGroups, addGroup, replaceGroups, getTreeData } = useGroupStore((s) => ({
+  const { setId, addGroup, getTreeData } = useGroupStore((s) => ({
     setId: s.setId,
-    getGroups: s.getGroups,
     addGroup: s.addGroup,
-    replaceGroups: s.replaceGroups,
     getTreeData: s.getTreeData,
   }));
 
   // Keep track of groups changes to trigger sync
   const addPage = useCallback(() => {
-    const id = uuid();
-    addGroup(id, newSectionText);
-    const newGroups = autoFlowGroupNextActions(getGroups() as GroupsType, id);
-    replaceGroups(newGroups);
+    const id = addGroup(newSectionText);
+
     setId(id);
 
     return id;
-  }, [addGroup, getGroups, newSectionText, replaceGroups, setId]);
+  }, [addGroup, newSectionText, setId]);
 
   const setActiveGroup = useCallback(
     (item: TreeItem) => {

@@ -1,4 +1,4 @@
-import { ForwardRefRenderFunction, forwardRef, useEffect, useImperativeHandle } from "react";
+import { useEffect } from "react";
 import { TreeItemData } from "./types";
 import {
   syncDataLoaderFeature,
@@ -11,12 +11,10 @@ import {
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
 import { useTreeHandlers } from "./hooks/useTreeHandlers";
 import { TreeItem } from "./TreeItem/TreeItem";
-import { HeadlessTreeHandleProps } from "./types";
 import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } from "./treeUtils";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Language } from "@lib/types/form-builder-types";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { useTranslation } from "@root/i18n/client";
@@ -33,41 +31,34 @@ import { groupsHaveCustomRules } from "@lib/groups/utils/setNextAction";
 import { handleDelete } from "./handlers/handleDelete";
 import { lockedItems } from "./constants";
 
-const HeadlessTreeView: ForwardRefRenderFunction<unknown, HeadlessTreeHandleProps> = (
-  { children },
-  ref
-) => {
+export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) => {
   const { t } = useTranslation("form-builder");
 
   const {
     getTreeData,
     id,
     updateGroupName,
-    updateGroupTitle,
     getGroups,
     getSubElements,
     updateSubElements,
     updateElementTitle,
     updateGroupElements,
-    groupId,
     deleteGroup,
     setId,
   } = useGroupStore((s) => ({
     getTreeData: s.getTreeData,
     id: s.id,
     updateGroupName: s.updateGroupName,
-    updateGroupTitle: s.updateGroupTitle,
     getGroups: s.getGroups,
     getSubElements: s.getSubElements,
     updateSubElements: s.updateSubElements,
     updateElementTitle: s.updateElementTitle,
     updateGroupElements: s.updateGroupElements,
-    groupId: s.id,
     deleteGroup: s.deleteGroup,
     setId: s.setId,
   }));
 
-  const { getLocalizationAttribute, setGroupsLayout } = useTemplateStore((s) => ({
+  const { setGroupsLayout } = useTemplateStore((s) => ({
     getLocalizationAttribute: s.getLocalizationAttribute,
     setGroupsLayout: s.setGroupsLayout,
   }));
@@ -75,7 +66,6 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, HeadlessTreeHandleProp
   const { autoFlowAll } = useAutoFlowIfNoCustomRules();
   const { getTitle } = useElementTitle();
   const { headlessTree, startRenamingNewGroup } = useTreeRef();
-  const language = getLocalizationAttribute()?.lang as Language;
 
   const tree = useTree<TreeItemData>({
     initialState: getInitialTreeState(id ?? "start"),
@@ -117,13 +107,6 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, HeadlessTreeHandleProp
       const data = item.getItemData();
       const id = item.getId();
       const parent = item.getParent()?.getId();
-
-      // @TODO: is this case needed?
-      // Handle title elements (section titles)
-      if (data && typeof data === "object" && id.includes("section-title-")) {
-        updateGroupTitle({ id: groupId, locale: language || "en", title: value });
-        return;
-      }
 
       // Handle root-level groups/folders
       if (parent === "root" && data && (!data.type || data.type === "group")) {
@@ -192,20 +175,18 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, HeadlessTreeHandleProp
   }, [headlessTree, tree]);
 
   // Sync tree with external store changes
-  const { addPage: addPageHandler, setActiveGroup } = useTreeHandlers();
+  const { setActiveGroup, addPage } = useTreeHandlers();
 
-  const addPage = () => {
-    const id = addPageHandler();
+  const addGroup = () => {
+    const id = addPage();
+    setId(id);
+
     startRenamingNewGroup && startRenamingNewGroup(id);
   };
 
-  useImperativeHandle(ref, () => ({
-    addPage,
-  }));
-
   return (
     <>
-      <TreeActions addPage={addPage} />
+      <TreeActions addPage={addGroup} />
       <div {...tree.getContainerProps()} className="w-full">
         {children}
         <div className="py-2">
@@ -263,5 +244,3 @@ const HeadlessTreeView: ForwardRefRenderFunction<unknown, HeadlessTreeHandleProp
     </>
   );
 };
-
-export const TreeView = forwardRef(HeadlessTreeView);
