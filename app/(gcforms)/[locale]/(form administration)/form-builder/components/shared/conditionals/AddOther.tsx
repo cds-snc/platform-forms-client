@@ -6,7 +6,7 @@ import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElementTypes } from "@lib/types";
 import { getTranslatedProperties } from "../../../actions";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { BoltIcon } from "@serverComponents/icons";
 import { type ChoiceRule } from "@gcforms/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";

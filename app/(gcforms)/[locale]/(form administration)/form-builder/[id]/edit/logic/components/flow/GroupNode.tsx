@@ -5,12 +5,12 @@ import { cn } from "@lib/utils";
 
 import { getSourceHandlePosition, getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useElementTitle, ElementProperties } from "@lib/hooks/useElementTitle";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 const OptionRuleSvg = ({ title }: { title?: string }) => {
   return (

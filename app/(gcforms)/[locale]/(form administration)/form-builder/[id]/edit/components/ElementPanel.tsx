@@ -6,14 +6,14 @@ import { PanelActions, PanelBodyRoot } from "./index";
 import { useIsWithin } from "@lib/hooks/form-builder/useIsWithin";
 import { useRefsContext } from "./RefsContext";
 import { FormElementTypes, FormElement } from "@lib/types";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 
 import { cn } from "@lib/utils";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 import { getTranslatedProperties } from "@formBuilder/actions";
 
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 export const ElementPanel = ({
   item,
@@ -37,7 +37,7 @@ export const ElementPanel = ({
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
-  const { treeView } = useTreeRef();
+  const { headlessTree } = useTreeRef();
   const { handleAddElement } = useHandleAdd();
   const groupId = useGroupStore((state) => state.id);
 
@@ -137,10 +137,9 @@ export const ElementPanel = ({
         }}
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
-          treeView?.current && treeView?.current.removeItem(String(item.id));
-          remove(item.id, groupId);
 
-          setChangeKey(String(new Date().getTime()));
+          remove(item.id, groupId);
+          headlessTree?.current?.rebuildTree();
 
           // if index is 0, then highlight the form title
           if (item.index === 0) {

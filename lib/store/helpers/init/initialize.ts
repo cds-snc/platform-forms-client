@@ -1,5 +1,5 @@
 import { type TemplateStore } from "../../types";
-import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
+import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
 import { defaultForm } from "../../defaults";
 import { Language } from "../../../types/form-builder-types";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
