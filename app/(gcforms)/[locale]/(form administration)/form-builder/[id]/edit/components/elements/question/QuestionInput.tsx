@@ -31,7 +31,7 @@ export const QuestionInput = ({
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
 
-  const { treeView } = useTreeRef();
+  const { headlessTree } = useTreeRef();
 
   const { refs } = useRefsContext();
   const getRef = (element: HTMLTextAreaElement) => {
@@ -93,7 +93,7 @@ export const QuestionInput = ({
       describedBy={describedById ?? undefined}
       onBlur={() => {
         updateValue(id, cleanInput(value));
-        treeView?.current?.updateItem(String(id), cleanInput(value));
+        headlessTree?.current?.rebuildTree();
       }}
       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateValue(id, e.target.value)}
       {...getLocalizationAttribute()}
