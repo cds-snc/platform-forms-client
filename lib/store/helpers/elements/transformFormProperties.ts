@@ -72,7 +72,7 @@ export const transform: TemplateStore<"transform"> = (set) => () => {
     });
 
     // Clean groupsLayout
-    if (state.form.groupsLayout) {
+    if (state.form.groupsLayout && state.form.groupsLayout.length > 0) {
       // Remove start and end if they exist
       state.form.groupsLayout = state.form.groupsLayout.filter(
         (id) => !["start", "end", "review"].includes(id)
@@ -82,6 +82,13 @@ export const transform: TemplateStore<"transform"> = (set) => () => {
       state.form.groupsLayout = state.form.groupsLayout.filter((id) =>
         Object.entries(state.form.groups || {}).some(([key, _group]) => key === id)
       );
+    } else {
+      // Create a groupsLayout if it's missing or empty
+      state.form.groupsLayout = Object.entries(state.form.groups || {})
+        .filter(([id, _group]) => {
+          return !["start", "end", "review"].includes(id);
+        })
+        .map(([id, _group]) => id);
     }
 
     // Clean form layout
