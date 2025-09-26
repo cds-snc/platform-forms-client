@@ -4,6 +4,7 @@ import { cleanRules } from "@gcforms/core";
 import { logMessage } from "@lib/logger";
 import { v4 as uuid } from "uuid";
 import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
+import { lockedGroups } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/headless-treeview/constants";
 
 const cleanElementRules = (elements: FormElement[], element: FormElement) => {
   if (element.properties?.conditionalRules) {
@@ -74,9 +75,7 @@ export const transform: TemplateStore<"transform"> = (set) => () => {
     // Clean groupsLayout
     if (state.form.groupsLayout && state.form.groupsLayout.length > 0) {
       // Remove start and end if they exist
-      state.form.groupsLayout = state.form.groupsLayout.filter(
-        (id) => !["start", "end", "review"].includes(id)
-      );
+      state.form.groupsLayout = state.form.groupsLayout.filter((id) => !lockedGroups.includes(id));
 
       // Ensure all group ids exist in form.groups
       state.form.groupsLayout = state.form.groupsLayout.filter((id) =>
@@ -86,7 +85,7 @@ export const transform: TemplateStore<"transform"> = (set) => () => {
       // Create a groupsLayout if it's missing or empty
       state.form.groupsLayout = Object.entries(state.form.groups || {})
         .filter(([id, _group]) => {
-          return !["start", "end", "review"].includes(id);
+          return !lockedGroups.includes(id);
         })
         .map(([id, _group]) => id);
     }

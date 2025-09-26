@@ -18,6 +18,7 @@ import { autoFlowAllNextActions } from "./utils/setNextAction";
 import { setGroupNextAction } from "./utils/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
 import { FormElement } from "@lib/types";
+import { lockedGroups } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/headless-treeview/constants";
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
@@ -128,7 +129,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
 
         const groupsLayout = get()
           .templateStore.getState()
-          .form.groupsLayout?.filter((id) => !["start", "end", "review"].includes(id));
+          .form.groupsLayout?.filter((id) => !lockedGroups.includes(id));
 
         if (!groups || !groupsLayout) return {};
 

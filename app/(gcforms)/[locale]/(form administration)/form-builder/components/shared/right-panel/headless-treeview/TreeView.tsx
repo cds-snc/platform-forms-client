@@ -32,8 +32,7 @@ import { dragAndDropFixFeature } from "./features/dragAndDropFixFeature";
 import { TreeActions } from "./TreeActions";
 import { groupsHaveCustomRules } from "@lib/groups/utils/setNextAction";
 import { handleDelete } from "./handlers/handleDelete";
-
-export const lockedItems = ["start", "intro", "policy", "review", "end", "confirmation"];
+import { lockedItems } from "./constants";
 
 const HeadlessTreeView: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },

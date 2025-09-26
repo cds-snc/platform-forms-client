@@ -11,7 +11,7 @@ import { ExpandableIcon } from "./ExpandableIcon";
 import { DragHandle } from "./DragHandle";
 import { EditableInput } from "./EditableInput";
 import { DeleteIcon } from "@serverComponents/icons";
-import { lockedItems } from "../TreeView";
+import { lockedItems } from "../constants";
 
 export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) => {
   const { isFormElement, isSectionElement, isRepeatingSet } = useElementType(item);

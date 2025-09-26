@@ -13,3 +13,8 @@ export type TreeLevel = (typeof TREE_LEVELS)[keyof typeof TREE_LEVELS];
 export const isValidTreeLevel = (level: number): level is TreeLevel => {
   return Object.values(TREE_LEVELS).includes(level as TreeLevel);
 };
+
+export const lockedGroups = ["start", "end", "review"];
+export const lockedElements = ["intro", "policy", "confirmation"];
+
+export const lockedItems = [...lockedGroups, ...lockedElements];
