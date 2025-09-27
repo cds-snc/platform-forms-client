@@ -6,7 +6,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@4.9.4",
+  "packageManager": "yarn@4.10.2",
   "dependencies": {
     "file-type": "^21.0.0",
     "tsdown": "^0.15.0"
