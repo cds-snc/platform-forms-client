@@ -6,7 +6,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@4.9.4",
+  "packageManager": "yarn@4.10.2",
   "dependencies": {
     "@lexical/react": "^0.35.0",
     "lexical": "^0.35.0"
