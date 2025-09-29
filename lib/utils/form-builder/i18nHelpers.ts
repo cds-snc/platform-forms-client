@@ -57,18 +57,20 @@ export const getEndNode = (lang: Language = "en") => {
   return {
     type: "endNode",
     id: "end",
-    label: lang === "en" ? "End" : "Fin",
-    children: [
-      {
-        type: "lockedElement",
-        id: "confirmation",
-        data: {
-          label: t("logic.confirmation", { lng: lang }),
-          children: [],
+    data: {
+      label: lang === "en" ? "End" : "Fin",
+      children: [
+        {
+          type: "lockedElement",
+          id: "confirmation",
+          data: {
+            label: t("logic.confirmation", { lng: lang }),
+            children: [],
+          },
+          position: { x: 0, y: 0 },
         },
-        position: { x: 0, y: 0 },
-      },
-    ],
+      ],
+    },
     position: { x: 0, y: 0 },
   };
 };
@@ -79,18 +81,20 @@ export const getReviewNode = (lang: Language = "en") => {
   return {
     type: "groupNode",
     id: "review",
-    label: t("logic.review", { lng: lang }),
-    children: [
-      {
-        type: "lockedElement",
-        id: "review",
-        data: {
-          label: t("logic.review", { lng: lang }),
-          children: [],
+    data: {
+      label: t("logic.review", { lng: lang }),
+      children: [
+        {
+          type: "lockedElement",
+          id: "review",
+          data: {
+            label: t("logic.review", { lng: lang }),
+            children: [],
+          },
+          position: { x: 0, y: 0 },
         },
-        position: { x: 0, y: 0 },
-      },
-    ],
+      ],
+    },
     position: { x: 0, y: 0 },
   };
 };
