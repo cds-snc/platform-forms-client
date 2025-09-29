@@ -29,7 +29,7 @@ import { dragAndDropFixFeature } from "./features/dragAndDropFixFeature";
 import { TreeActions } from "./TreeActions";
 import { groupsHaveCustomRules } from "@lib/groups/utils/setNextAction";
 import { handleDelete } from "./handlers/handleDelete";
-import { lockedItems } from "./constants";
+import { lockedGroups, lockedItems } from "./constants";
 
 export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) => {
   const { t } = useTranslation("form-builder");
@@ -86,7 +86,7 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
       // But they should NOT accept other root-level items as children
       if (level === 0 && data && typeof data === "object") {
         // Check if this is a group/section vs a form element
-        return !data.type || data.type === "group" || ["start", "end"].includes(String(data.name));
+        return !data.type || data.type === "group" || lockedGroups.includes(String(data.name));
       }
 
       return level < 1 || data.isRepeatingSet || false;
