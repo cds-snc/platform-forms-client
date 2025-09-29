@@ -25,7 +25,7 @@
     "name_eng": "Atlantic Canada Opportunities Agency",
     "name_fra": "Agence de promotion économique du Canada atlantique",
     "type": "GC Department",
-    "notify_organisation_id": null
+    "notify_organisation_id": "01315b61-4236-41e4-96f2-44559c2eafe1"
   },
   {
     "id": "001I900000505PuIAI",
@@ -151,7 +151,7 @@
     "name_eng": "Canadian Human Rights Commission",
     "name_fra": "Commission canadienne des droits de la personne",
     "type": "GC Department",
-    "notify_organisation_id": null
+    "notify_organisation_id": "80d45c47-9943-431c-b15b-f9e3a3c776fd"
   },
   {
     "id": "001I900000503mHIAQ",
@@ -242,7 +242,7 @@
     "name_eng": "Canadian Space Agency",
     "name_fra": "Agence spatiale canadienne",
     "type": "GC Department",
-    "notify_organisation_id": null
+    "notify_organisation_id": "c9e21254-8d93-4168-b55a-9d1b130eb00d"
   },
   {
     "id": "001I900000503r9IAA",
@@ -490,6 +490,13 @@
     "notify_organisation_id": "311528bc-ff51-44f4-a268-2eaae8b99efd"
   },
   {
+    "id": "001I9000004Vt5yIAC",
+    "name_eng": "Housing, Infrastructure and Communities Canada",
+    "name_fra": "Logement, Infrastructures et Collectivités Canada",
+    "type": "GC Department",
+    "notify_organisation_id": "5f48482e-c4d0-41a1-9337-0f64d157573a"
+  },
+  {
     "id": "001I9000004Vt5vIAC",
     "name_eng": "Immigration and Refugee Board of Canada",
     "name_fra": "Commission de l'immigration et du statut de réfugié du Canada",
@@ -525,18 +532,18 @@
     "notify_organisation_id": null
   },
   {
-    "id": "001I9000004Vt5yIAC",
-    "name_eng": "Infrastructure Canada",
-    "name_fra": "Infrastructure Canada",
-    "type": "GC Department",
-    "notify_organisation_id": "5f48482e-c4d0-41a1-9337-0f64d157573a"
-  },
-  {
     "id": "001I9000004Vt5zIAC",
     "name_eng": "Innovation, Science and Economic Development Canada",
     "name_fra": "Innovation, Sciences et Développement économique Canada",
     "type": "GC Department",
     "notify_organisation_id": "33503c98-2fa9-4ee8-91b0-12b68a26dcc1"
+  },
+  {
+    "id": "001OO00000Sl2T1YAJ",
+    "name_eng": "Invest in Canada",
+    "name_fra": "Investir au Canada",
+    "type": "GC Department",
+    "notify_organisation_id": "340e3e43-55ad-4cae-949d-5edb5eeadda2"
   },
   {
     "id": "001I9000004Vt60IAC",
@@ -585,7 +592,7 @@
     "name_eng": "National Research Council Canada",
     "name_fra": "Conseil national de recherches Canada",
     "type": "GC Department",
-    "notify_organisation_id": null
+    "notify_organisation_id": "1fd678e1-2664-415f-a67b-d7986c578d39"
   },
   {
     "id": "001OO00000GgHJNYA3",
@@ -610,10 +617,10 @@
   },
   {
     "id": "001I900000503zhIAA",
-    "name_eng": "Office of the Auditor General",
+    "name_eng": "Office of the Auditor General of Canada",
     "name_fra": "Le Bureau du vérificateur général du Canada",
     "type": "GC Department",
-    "notify_organisation_id": null
+    "notify_organisation_id": "354a8ef4-4ea2-4365-a992-b001cb5b4945"
   },
   {
     "id": "001I900000503tVIAQ",
@@ -623,11 +630,18 @@
     "notify_organisation_id": null
   },
   {
+    "id": "001OO00000Y7VDLYA3",
+    "name_eng": "Office of the Commissioner for Federal Judicial Affairs Canada",
+    "name_fra": "Commissariat à la magistrature fédérale Canada",
+    "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
     "id": "001I9000004Vt65IAC",
     "name_eng": "Office of the Commissioner of Lobbying of Canada",
     "name_fra": "Commissariat au lobbying du Canada",
     "type": "GC Department",
-    "notify_organisation_id": null
+    "notify_organisation_id": "5f2e6748-3ef4-49b1-a9b3-3db9372ac831"
   },
   {
     "id": "001I9000004Vt66IAC",
@@ -683,7 +697,7 @@
     "name_eng": "Pacific Economic Development Canada",
     "name_fra": "Développement économique Canada pour le Pacifique",
     "type": "GC Department",
-    "notify_organisation_id": null
+    "notify_organisation_id": "c5214275-99a4-468d-a5bd-a88f548c2a60"
   },
   {
     "id": "001I90000050XWsIAM",
@@ -697,7 +711,7 @@
     "name_eng": "Parks Canada",
     "name_fra": "Parcs Canada",
     "type": "GC Department",
-    "notify_organisation_id": null
+    "notify_organisation_id": "be21200e-4eaf-4e90-9aca-00b1b84e7143"
   },
   {
     "id": "001I9000005DbCwIAK",
@@ -732,14 +746,14 @@
     "name_eng": "Prairies Economic Development Canada",
     "name_fra": "Développement économique Canada pour les Prairies",
     "type": "GC Department",
-    "notify_organisation_id": null
+    "notify_organisation_id": "92f47188-8588-46ea-be47-a75c793c3f21"
   },
   {
     "id": "001I9000004Vt69IAC",
     "name_eng": "Privy Council Office",
     "name_fra": "Bureau du Conseil privé",
     "type": "GC Department",
-    "notify_organisation_id": null
+    "notify_organisation_id": "8427108d-bb8f-443d-817b-6bba8bb2fa04"
   },
   {
     "id": "001I9000004Vt6AIAS",
@@ -852,13 +866,6 @@
     "name_fra": "Commission des champs de bataille nationaux",
     "type": "GC Department",
     "notify_organisation_id": null
-  },
-  {
-    "id": "001I90000050aLkIAI",
-    "name_eng": "The Office of the Procurement Ombudsman",
-    "name_fra": "Le Bureau de l'ombudsman de l'approvisionnement",
-    "type": "GC Department",
-    "notify_organisation_id": "4029fa62-0a9f-4d7e-8c29-a8698d14ed92"
   },
   {
     "id": "001I9000004Vt6JIAS",
