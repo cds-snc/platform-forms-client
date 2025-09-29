@@ -28,6 +28,17 @@ interface CustomEdge {
   ariaLabel: string;
 }
 
+export type GroupNodeType = {
+  id: string;
+  position: { x: number; y: number };
+  data: {
+    label: string;
+    children: GroupNodeType[];
+    nextAction?: NextActionRule | NextActionRule[] | string;
+  };
+  type: string;
+};
+
 const defaultEdges = {
   start: "start",
   end: "end",
@@ -144,22 +155,22 @@ export const useFlowData = (
 
   const getData = useCallback(() => {
     const edges: CustomEdge[] = [];
-    const treeIndexes = treeItems.root.children;
+    const treeIds = treeItems.root.children;
 
     const x_pos = 0;
     const y_pos = 0;
     let prevNodeId: string = LockedSections.START;
 
-    if (!treeIndexes) {
+    if (!treeIds) {
       return { edges, nodes: [] };
     }
 
     const nodes = [];
 
-    treeIndexes.forEach((key: TreeItemIndex) => {
+    treeIds.forEach((key: TreeItemIndex) => {
       const treeItem: TreeItem = treeItems[key];
       const group: Group | undefined = formGroups && formGroups[key] ? formGroups[key] : undefined;
-      let elements: TreeItem[] = [];
+      let elements: GroupNodeType[] = [];
 
       if (key === LockedSections.START) {
         // Add "default" start elements
@@ -168,9 +179,19 @@ export const useFlowData = (
       }
 
       if (treeItem.children && treeItem.children.length > 0) {
-        const children = treeItem.children.map((childId) => {
-          return treeItems[childId];
+        const children = treeItem.children.map((itemIndex: TreeItemIndex) => {
+          const item = treeItems[itemIndex];
+          return {
+            type: "formElementNode",
+            id: String(item.index),
+            data: {
+              label: (lang === "en" ? item.data.titleEn : item.data.titleFr) || "",
+              children: [],
+            },
+            position: { x: 0, y: 0 },
+          };
         });
+
         elements = [...elements, ...children];
       }
 
@@ -189,13 +210,13 @@ export const useFlowData = (
 
       const flowNode = {
         id: key as string,
+        type: isOffBoardSection ? "offboardNode" : "groupNode",
         position: { x: x_pos, y: y_pos },
         data: {
           label,
           children: elements,
           nextAction: treeItem.data.nextAction,
         },
-        type: isOffBoardSection ? "offboardNode" : "groupNode",
       };
 
       edges.push(...(newEdges as CustomEdge[]));
