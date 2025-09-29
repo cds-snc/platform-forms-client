@@ -21,7 +21,7 @@ import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { SectionName } from "./SectionName";
 import { Language } from "@lib/types/form-builder-types";
-import { lockedGroups } from "../headless-treeview/constants";
+import { lockedGroups } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 const GroupAndChoiceSelect = ({
   groupId,

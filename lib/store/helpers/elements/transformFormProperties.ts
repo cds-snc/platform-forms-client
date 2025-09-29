@@ -4,7 +4,7 @@ import { cleanRules } from "@gcforms/core";
 import { logMessage } from "@lib/logger";
 import { v4 as uuid } from "uuid";
 import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
-import { lockedGroups } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/headless-treeview/constants";
+import { lockedGroups } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 const cleanElementRules = (elements: FormElement[], element: FormElement) => {
   if (element.properties?.conditionalRules) {
