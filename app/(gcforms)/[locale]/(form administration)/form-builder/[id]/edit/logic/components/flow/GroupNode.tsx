@@ -124,11 +124,9 @@ export const GroupNode = (node: NodeProps) => {
                   {child.data.label}
                 </div>
               );
+            } else {
+              return null;
             }
-          }
-
-          if (!item) {
-            return null;
           }
 
           // Render "non-option" elements
