@@ -169,9 +169,7 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
   } = useConfirmDeleteDialogState();
 
   useEffect(() => {
-    // Note: Type assertion needed during migration from react-complex-tree to headless-tree
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    headlessTree && (headlessTree.current = tree as any);
+    headlessTree && (headlessTree.current = tree);
   }, [headlessTree, tree]);
 
   // Sync tree with external store changes

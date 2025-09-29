@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useRef, RefObject, useState } from "react";
 import { TreeInstance } from "@headless-tree/core";
-import { TreeItem } from "../types";
+import { TreeItemData } from "../types";
 
 export type treeContextType = {
-  headlessTree: RefObject<TreeInstance<TreeItem> | null> | null;
+  headlessTree: RefObject<TreeInstance<TreeItemData> | null> | null;
   open: boolean;
   togglePanel?: (state: boolean) => void;
   startRenamingNewGroup?: (id: string) => void;
@@ -14,7 +14,7 @@ const TreeRefContext = createContext<treeContextType | null>(null);
 
 // Create a provider component for the tree ref context
 export const TreeRefProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const headlessTree = useRef<TreeInstance<TreeItem> | null>(null);
+  const headlessTree = useRef<TreeInstance<TreeItemData> | null>(null);
   const [open, setOpen] = useState(false);
 
   const togglePanel = (state: boolean) => {
