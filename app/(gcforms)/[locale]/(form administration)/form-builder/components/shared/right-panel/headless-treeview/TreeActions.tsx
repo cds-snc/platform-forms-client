@@ -1,7 +1,7 @@
 import { useTranslation } from "@root/i18n/client";
 
-import { Button } from "@root/components/clientComponents/globals";
-import { AddIcon } from "@root/components/serverComponents/icons";
+import { Button } from "@clientComponents/globals";
+import { AddIcon } from "@serverComponents/icons";
 import { KeyboardNavTip } from "./KeyboardNavTip";
 
 export const TreeActions = ({ addPage }: { addPage: () => void }) => {
