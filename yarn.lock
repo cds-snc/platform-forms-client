@@ -12302,6 +12302,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-react-you-might-not-need-an-effect@npm:^0.5.4":
+  version: 0.5.4
+  resolution: "eslint-plugin-react-you-might-not-need-an-effect@npm:0.5.4"
+  dependencies:
+    eslint-utils: "npm:^3.0.0"
+    globals: "npm:^16.2.0"
+  peerDependencies:
+    eslint: ">=8.40.0"
+  checksum: 10c0/58984267e7cd89d87452f0e5d415c17e83697af5b3d5273d274ba1544b950feb43403a01b27cee1dc2b6567fe37a8e96a39504c4aa452cfd070e6c58c9e0c524
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-react@npm:^7.37.0":
   version: 7.37.5
   resolution: "eslint-plugin-react@npm:7.37.5"
@@ -12359,6 +12371,24 @@ __metadata:
     esrecurse: "npm:^4.3.0"
     estraverse: "npm:^5.2.0"
   checksum: 10c0/407f6c600204d0f3705bd557f81bd0189e69cd7996f408f8971ab5779c0af733d1af2f1412066b40ee1588b085874fc37a2333986c6521669cdbdd36ca5058e0
+  languageName: node
+  linkType: hard
+
+"eslint-utils@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "eslint-utils@npm:3.0.0"
+  dependencies:
+    eslint-visitor-keys: "npm:^2.0.0"
+  peerDependencies:
+    eslint: ">=5"
+  checksum: 10c0/45aa2b63667a8d9b474c98c28af908d0a592bed1a4568f3145cd49fb5d9510f545327ec95561625290313fe126e6d7bdfe3fdbdb6f432689fab6b9497d3bfb52
+  languageName: node
+  linkType: hard
+
+"eslint-visitor-keys@npm:^2.0.0":
+  version: 2.1.0
+  resolution: "eslint-visitor-keys@npm:2.1.0"
+  checksum: 10c0/9f0e3a2db751d84067d15977ac4b4472efd6b303e369e6ff241a99feac04da758f46d5add022c33d06b53596038dbae4b4aceb27c7e68b8dfc1055b35e495787
   languageName: node
   linkType: hard
 
@@ -13251,6 +13281,7 @@ __metadata:
     eslint: "npm:^9.17.0"
     eslint-config-next: "npm:15.5.4"
     eslint-config-prettier: "npm:^9.1.0"
+    eslint-plugin-react-you-might-not-need-an-effect: "npm:^0.5.4"
     eslint-plugin-tailwindcss: "npm:^3.17.5"
     formik: "npm:2.4.6"
     fuse.js: "npm:^7.1.0"
@@ -13513,6 +13544,13 @@ __metadata:
   version: 14.0.0
   resolution: "globals@npm:14.0.0"
   checksum: 10c0/b96ff42620c9231ad468d4c58ff42afee7777ee1c963013ff8aabe095a451d0ceeb8dcd8ef4cbd64d2538cef45f787a78ba3a9574f4a634438963e334471302d
+  languageName: node
+  linkType: hard
+
+"globals@npm:^16.2.0":
+  version: 16.4.0
+  resolution: "globals@npm:16.4.0"
+  checksum: 10c0/a14b447a78b664b42f6d324e8675fcae6fe5e57924fecc1f6328dce08af9b2ca3a3138501e1b1f244a49814a732dc60cfc1aa24e714e0b64ac8bd18910bfac90
   languageName: node
   linkType: hard
 
