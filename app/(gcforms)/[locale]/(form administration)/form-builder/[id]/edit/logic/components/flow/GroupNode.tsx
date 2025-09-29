@@ -10,6 +10,11 @@ import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 import { TreeItem } from "@formBuilder/components/shared/right-panel/treeview/types";
 
+type NodeItem = {
+  data: string;
+  index: string;
+};
+
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
 const OptionRuleSvg = ({ title }: { title?: string }) => {
@@ -106,7 +111,7 @@ export const GroupNode = (node: NodeProps) => {
           </button>
         )}
         {!node.data.children.length && <div className="min-h-[50px] min-w-[200px]"></div>}
-        {node.data.children.map((child: TreeItem) => {
+        {node.data.children.map((child: TreeItem | NodeItem) => {
           const selected =
             selectedElementId === Number(child.index)
               ? "border-violet-800 border-2 border-dashed"
@@ -115,8 +120,6 @@ export const GroupNode = (node: NodeProps) => {
           const item = getElement(Number(child.index));
 
           if (!item) {
-            // Check for "start" and "end" nodes "no elements"
-            // see: useFlowData.tsx
             if (
               child.index === "introduction" ||
               child.index === "privacy" ||
@@ -125,13 +128,18 @@ export const GroupNode = (node: NodeProps) => {
             ) {
               return (
                 <div key={child.index} className={cn(nodeClassName)}>
-                  here
+                  {typeof child.data === "string" && child.data}
                 </div>
               );
             }
           }
 
           if (!item) {
+            return null;
+          }
+
+          // ensure data is an object
+          if (typeof child.data !== "object") {
             return null;
           }
 
