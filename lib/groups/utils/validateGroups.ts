@@ -1,4 +1,4 @@
-import { type Group, type GroupsType } from "@gcforms/types";
+import { NextActionRule, type Group, type GroupsType } from "@gcforms/types";
 
 /**
  * Get a count of the number of groups with a nextAction of "review".
@@ -36,8 +36,17 @@ export const canModifyNextAction = (
  * @param currentGroupNextAction string
  * @returns boolean
  */
-export const canDeleteGroup = (formGroups: GroupsType, currentGroupNextAction: string) => {
+export const canDeleteGroup = (
+  formGroups: GroupsType,
+  currentGroupNextAction: string | NextActionRule[]
+) => {
   const reviewCount = _getNextActionReviewCount(formGroups);
+
+  if (Array.isArray(currentGroupNextAction)) {
+    // Check if any rule is "review"
+    const hasReview = currentGroupNextAction.some((rule) => rule?.groupId === "review");
+    return !(reviewCount <= 1 && hasReview);
+  }
 
   return !(reviewCount <= 1 && currentGroupNextAction === "review");
 };

@@ -1,5 +1,6 @@
 import { TreeInstance } from "@headless-tree/core";
 import { ItemInstance } from "@headless-tree/core";
+import { NextActionRule } from "@gcforms/types";
 import { ReactElement } from "react";
 
 export interface ItemProps {
@@ -34,7 +35,7 @@ export type TreeItemData = {
   isRepeatingSet?: boolean;
   parentId?: number;
   subIndex?: number;
-  nextAction?: string;
+  nextAction?: string | NextActionRule[];
 };
 
 export interface TreeItem {

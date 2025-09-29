@@ -1,4 +1,4 @@
-import { type Group, GroupsType } from "@gcforms/types";
+import { type Group, GroupsType, NextActionRule } from "@gcforms/types";
 import { ItemInstance } from "@headless-tree/core";
 import { TreeItemData } from "../types";
 
@@ -6,7 +6,7 @@ export const handleDelete = async (
   item: ItemInstance<TreeItemData>,
   getGroups: () => GroupsType | undefined,
   groupsHaveCustomRules: (groups: Group[]) => boolean,
-  canDeleteGroup: (groups: GroupsType, nextAction: string) => boolean,
+  canDeleteGroup: (groups: GroupsType, nextAction: string | NextActionRule[]) => boolean,
   setOpenConfirmDeleteDialog: (value: boolean) => void,
   getConfirmDeletePromise: () => Promise<boolean>,
   removeElement: (id: number) => void,

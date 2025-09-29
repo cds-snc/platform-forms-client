@@ -1,5 +1,5 @@
 import { type GroupsType } from "@gcforms/types";
-import { TreeItems } from "../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/headless-treeview/types";
+import { TreeItems } from "@formBuilder/components/shared/right-panel/headless-treeview/types";
 import { FormElement } from "@lib/types";
 import { resetLockedSections } from "@lib/formContext";
 
@@ -91,7 +91,6 @@ export const groupsToTreeData = (
         titleFr: formGroups[key].titleFr,
         descriptionEn: "",
         descriptionFr: "",
-        type: "group",
         isRepeatingSet: false,
         isSubElement: false,
         nextAction: formGroups[key].nextAction,
@@ -115,7 +114,6 @@ export const groupsToTreeData = (
         titleFr: formGroups[key].titleFr || "Titre de section",
         descriptionEn: "",
         descriptionFr: "",
-        type: "section",
         isRepeatingSet: false,
         isSubElement: false,
         nextAction: undefined,
@@ -180,7 +178,6 @@ export const groupsToTreeData = (
       descriptionFr: "",
       isSubElement: false,
       isRepeatingSet: false,
-      type: "ghost",
       nextAction: undefined,
     },
   };
@@ -204,7 +201,6 @@ export const groupsToTreeData = (
       descriptionFr: "",
       isSubElement: false,
       isRepeatingSet: false,
-      type: "ghost",
       nextAction: undefined,
     },
   };
@@ -234,7 +230,6 @@ export const groupsToTreeData = (
       descriptionFr: "",
       isSubElement: false,
       isRepeatingSet: false,
-      type: "ghost",
       nextAction: undefined,
     },
   };
