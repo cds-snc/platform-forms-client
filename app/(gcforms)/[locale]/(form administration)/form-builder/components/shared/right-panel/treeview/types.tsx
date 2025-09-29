@@ -1,12 +1,26 @@
 import { ReactElement } from "react";
-import { TreeItemIndex, TreeItem } from "react-complex-tree";
 
-// export type TreeItem = {
-//   id: string;
-//   readOnly: boolean;
-//   name: string;
-//   children?: TreeItem[];
-// };
+type TreeItemIndex = string | number;
+
+type TreeItemData = {
+  type: string;
+  titleEn?: string;
+  titleFr?: string;
+  descriptionEn?: string;
+  descriptionFr?: string;
+  isSubElement?: boolean;
+  parentId?: string | number;
+  subIndex?: number;
+};
+
+export interface TreeItem {
+  index: TreeItemIndex;
+  children?: Array<TreeItemIndex>;
+  isFolder?: boolean;
+  canMove?: boolean;
+  canRename?: boolean;
+  data: TreeItemData;
+}
 
 export type TreeData = TreeItem[];
 
