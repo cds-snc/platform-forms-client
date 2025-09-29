@@ -55,7 +55,7 @@ export const groupsToTreeData = (
   const items: TreeItems = {
     root: {
       index: "root",
-      data: "Root",
+      data: { type: "root" },
       children: [],
     },
   };
@@ -85,6 +85,7 @@ export const groupsToTreeData = (
       canRename: true,
       canMove: true,
       data: {
+        type: "group",
         name: formGroups[key].name,
         titleEn: formGroups[key].titleEn,
         titleFr: formGroups[key].titleFr,
@@ -109,6 +110,7 @@ export const groupsToTreeData = (
       canRename: true,
       canMove: false,
       data: {
+        type: "sectionTitle",
         titleEn: formGroups[key].titleEn || "Section title",
         titleFr: formGroups[key].titleFr || "Titre de section",
         descriptionEn: "",
@@ -171,6 +173,7 @@ export const groupsToTreeData = (
     canMove: false,
     //children: [],
     data: {
+      type: "sectionElement",
       titleEn: "Form introduction",
       titleFr: "Introduction au formulaire",
       descriptionEn: "",
@@ -194,6 +197,7 @@ export const groupsToTreeData = (
     canMove: false,
     children: [],
     data: {
+      type: "sectionElement",
       titleEn: "Privacy statement",
       titleFr: "Avis de confidentialité",
       descriptionEn: "",
@@ -223,6 +227,7 @@ export const groupsToTreeData = (
     canMove: false,
     children: [],
     data: {
+      type: "sectionElement",
       titleEn: "Confirmation message",
       titleFr: "Message de confirmation",
       descriptionEn: "",

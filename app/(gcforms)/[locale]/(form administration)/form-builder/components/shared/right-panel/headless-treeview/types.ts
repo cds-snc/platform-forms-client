@@ -1,11 +1,12 @@
 import { TreeInstance } from "@headless-tree/core";
 import { ItemInstance } from "@headless-tree/core";
 import { ReactElement } from "react";
-import { TreeItemIndex, TreeItem } from "react-complex-tree";
 
 export interface ItemProps {
   item: TreeItemInstance<TreeItemData>;
 }
+
+type TreeItemIndex = string | number;
 
 export interface EditableInputProps {
   item: TreeItemInstance<TreeItemData>;
@@ -35,6 +36,15 @@ export type TreeItemData = {
   subIndex?: number;
   nextAction?: string;
 };
+
+export interface TreeItem {
+  index: TreeItemIndex;
+  children?: Array<TreeItemIndex>;
+  isFolder?: boolean;
+  canMove?: boolean;
+  canRename?: boolean;
+  data: TreeItemData;
+}
 
 // Use the official headless-tree ItemInstance type
 export type TreeItemInstance<T> = ItemInstance<T>;

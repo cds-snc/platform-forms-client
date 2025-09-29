@@ -1,14 +1,14 @@
 import { Handle } from "reactflow";
 import { NodeProps } from "reactflow";
-import { TreeItem } from "react-complex-tree";
 import { cn } from "@lib/utils";
 
 import { getSourceHandlePosition, getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
 import { useGroupStore } from "@lib/groups/useGroupStore";
-import { useElementTitle, ElementProperties } from "@lib/hooks/useElementTitle";
+import { useElementTitle } from "@lib/hooks/useElementTitle";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
+import { GroupNodeType } from "../flow/useFlowData";
 
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
@@ -100,50 +100,44 @@ export const GroupNode = (node: NodeProps) => {
               "absolute right-[-20px] top-[-20px] cursor-pointer outline-offset-8 outline-slate-800 hover:scale-125 rounded-full"
             )}
           >
-            <QuestionRuleSvg
-              title={t("groups.editPage", { name: node.data.label || node.data.label?.name })}
-            />
+            <QuestionRuleSvg title={t("groups.editPage", { name: node.data.label })} />
           </button>
         )}
         {!node.data.children.length && <div className="min-h-[50px] min-w-[200px]"></div>}
-        {node.data.children.map((child: TreeItem) => {
+        {node.data.children.map((child: GroupNodeType) => {
           const selected =
-            selectedElementId === Number(child.index)
+            selectedElementId === Number(child.id)
               ? "border-violet-800 border-2 border-dashed"
               : "border-violet-200 border-2 border-solid";
 
-          const item = getElement(Number(child.index));
+          const item = getElement(Number(child.id));
 
           if (!item) {
-            // Check for "start" and "end" nodes "no elements"
-            // see: useFlowData.tsx
             if (
-              child.index === "introduction" ||
-              child.index === "privacy" ||
-              child.index === "confirmation" ||
-              child.index === "review"
+              child.id === "introduction" ||
+              child.id === "privacy" ||
+              child.id === "confirmation" ||
+              child.id === "review"
             ) {
               return (
-                <div key={child.index} className={cn(nodeClassName)}>
-                  {child.data}
+                <div key={child.id} className={cn(nodeClassName)}>
+                  {child.data.label}
                 </div>
               );
+            } else {
+              return null;
             }
-          }
-
-          if (!item) {
-            return null;
           }
 
           // Render "non-option" elements
           // No click event as we can't select these
           if (!typesWithOptions.includes(item.type)) {
             return (
-              <div key={child.index} className={cn(nodeClassName)}>
+              <div key={child.id} className={cn(nodeClassName)}>
                 <div className="truncate">
-                  {getTitle(child.data as ElementProperties).substring(0, 300) || (
+                  {getTitle(item).substring(0, 300) || (
                     <span className="italic">
-                      {getDefaultLabelForElement(child.data.type as FormElementTypes)}
+                      {getDefaultLabelForElement(child.type as FormElementTypes)}
                     </span>
                   )}
                 </div>
@@ -156,11 +150,11 @@ export const GroupNode = (node: NodeProps) => {
           // based on the option value
           return (
             <button
-              key={child.index}
+              key={child.id}
               onClick={(evt) => {
                 evt.stopPropagation();
                 setId(node.id);
-                setSelectedElementId(Number(child.index));
+                setSelectedElementId(Number(child.id));
                 togglePanel && togglePanel(true);
               }}
               className={cn(
@@ -170,16 +164,14 @@ export const GroupNode = (node: NodeProps) => {
               )}
             >
               <div className="w-full truncate pr-8">
-                {getTitle(child.data as ElementProperties).substring(0, 200) || (
+                {getTitle(item).substring(0, 200) || (
                   <span className="italic">
-                    {getDefaultLabelForElement(child.data.type as FormElementTypes)}
+                    {getDefaultLabelForElement(child.type as FormElementTypes)}
                   </span>
                 )}
               </div>
               <div className="absolute right-10px top-[6px] cursor-pointer hover:scale-125">
-                <OptionRuleSvg
-                  title={t("groups.editRules", { name: node.data.label || node.data.label?.name })}
-                />
+                <OptionRuleSvg title={t("groups.editRules", { name: node.data.label })} />
               </div>
             </button>
           );
