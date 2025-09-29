@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 import { MarkerType } from "reactflow";
-import { TreeItem, TreeItemIndex } from "react-complex-tree";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Group, GroupsType } from "@gcforms/types";
 import { type NextActionRule } from "@gcforms/types";
@@ -9,6 +8,10 @@ import { getReviewNode, getStartElements, getEndNode } from "@lib/utils/form-bui
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { groupsToTreeData } from "@root/lib/groups/utils/groupsToTreeData";
+import {
+  TreeItem,
+  TreeItemIndex,
+} from "@formBuilder/components/shared/right-panel/headless-treeview/types";
 
 interface CustomEdge {
   id: string;

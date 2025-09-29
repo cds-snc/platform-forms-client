@@ -1,7 +1,10 @@
 import { FormElement } from "@lib/types";
-import { TreeItem, TreeItemIndex } from "react-complex-tree";
 import { type Group, type GroupsType } from "@gcforms/types";
-import { TreeItems } from "@formBuilder/components/shared/right-panel/headless-treeview/types";
+import {
+  TreeItem,
+  TreeItemIndex,
+  TreeItems,
+} from "@formBuilder/components/shared/right-panel/headless-treeview/types";
 import { TemplateStore } from "@lib/store/useTemplateStore";
 import { TreeDataOptions } from "./utils/groupsToTreeData";
 import { Language } from "@lib/types/form-builder-types";

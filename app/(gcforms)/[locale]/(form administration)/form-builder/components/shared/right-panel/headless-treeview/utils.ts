@@ -2,7 +2,7 @@
  * Utility functions for TreeView integration with external store
  */
 
-import { TreeItemIndex } from "react-complex-tree";
+import { TreeItemIndex } from "./types";
 
 /**
  * Converts element IDs to tree item IDs

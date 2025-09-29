@@ -13,13 +13,13 @@ import { findNextGroup } from "./utils/findNextGroup";
 import { findPreviousGroup } from "./utils/findPreviousGroup";
 import { getGroupFromId } from "./utils/getGroupFromId";
 import { type Group, type GroupsType } from "@gcforms/types";
-import { TreeItemIndex } from "react-complex-tree";
 import { autoFlowAllNextActions, autoFlowGroupNextActions } from "./utils/setNextAction";
 import { setGroupNextAction } from "./utils/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
 import { FormElement } from "@lib/types";
 import { lockedGroups } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/headless-treeview/constants";
 import { v4 as uuid } from "uuid";
+import { TreeItemIndex } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/headless-treeview/types";
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {

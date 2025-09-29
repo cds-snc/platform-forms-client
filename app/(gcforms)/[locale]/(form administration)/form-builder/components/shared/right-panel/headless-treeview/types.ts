@@ -6,7 +6,7 @@ export interface ItemProps {
   item: TreeItemInstance<TreeItemData>;
 }
 
-type TreeItemIndex = string | number;
+export type TreeItemIndex = string | number;
 
 export interface EditableInputProps {
   item: TreeItemInstance<TreeItemData>;

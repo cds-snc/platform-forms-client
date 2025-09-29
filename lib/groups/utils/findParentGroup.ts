@@ -1,5 +1,7 @@
-import { TreeItem } from "react-complex-tree";
-import { TreeItems } from "../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/right-panel/headless-treeview/types";
+import {
+  TreeItem,
+  TreeItems,
+} from "@formBuilder/components/shared/right-panel/headless-treeview/types";
 
 export function findParentGroup(groups: TreeItems, elementId: string): TreeItem | undefined {
   for (const [, group] of Object.entries(groups)) {

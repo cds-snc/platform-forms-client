@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useRef, RefObject, useState } from "react";
 import { TreeInstance } from "@headless-tree/core";
-import { TreeItem } from "react-complex-tree";
+import { TreeItem } from "../types";
 
 export type treeContextType = {
   headlessTree: RefObject<TreeInstance<TreeItem> | null> | null;
