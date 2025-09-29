@@ -868,6 +868,13 @@
     "notify_organisation_id": null
   },
   {
+    "id": "001I90000050aLkIAI",
+    "name_eng": "The Office of the Procurement Ombudsman",
+    "name_fra": "Le Bureau de l'ombudsman de l'approvisionnement",
+    "type": "GC Department",
+    "notify_organisation_id": "4029fa62-0a9f-4d7e-8c29-a8698d14ed92"
+  },
+  {
     "id": "001I9000004Vt6JIAS",
     "name_eng": "Transport Canada",
     "name_fra": "Transports Canada",
