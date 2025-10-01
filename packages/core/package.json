@@ -1,12 +1,12 @@
 {
   "name": "@gcforms/core",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@4.9.4",
+  "packageManager": "yarn@4.10.3",
   "dependencies": {
     "file-type": "^21.0.0",
     "tsdown": "^0.15.0"
