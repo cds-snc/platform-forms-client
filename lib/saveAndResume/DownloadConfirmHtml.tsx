@@ -1,12 +1,12 @@
 import React from "react";
 
-import Fip from "@lib/responseDownloadFormats/html/components/Fip";
 import { css } from "@lib/responseDownloadFormats/html/css/compiled";
 import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
 import { SubmittedBadge } from "./SubmittedBadge";
 import { KeepSafe } from "./KeepSafe";
 import { HTMLProps } from "./types";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 
 export const DownloadConfirmHtml = ({
   language,
@@ -55,10 +55,11 @@ export const DownloadConfirmHtml = ({
         <div id="page-container">
           <main id="content">
             <div className="mt-6" />
-            <Fip
+            <GcdsHeader
               language={language}
-              showLangLink={false}
-              className="mb-10 mt-0 border-b-4 border-blue-dark py-9"
+              skipLink={false}
+              showLanguageToggle={false}
+              pathname=""
             />
             <div>
               <div className="mb-14">
