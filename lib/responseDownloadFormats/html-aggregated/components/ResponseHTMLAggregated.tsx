@@ -1,6 +1,6 @@
 import React from "react";
 import { ClipboardJSScript } from "../../html/scripts";
-import Fip from "../../html/components/Fip";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { css } from "../../html/css/compiled";
 import { ColumnTable } from "../../html/components/ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
@@ -82,7 +82,7 @@ export const ResponseHtmlAggregated = ({
         </div>
         <div id="page-container">
           <main id="content">
-            <Fip language="en" showLangLink={false} />
+            <GcdsHeader language={"en"} skipLink={false} showLanguageToggle={false} pathname="" />
 
             <h1 id="main-header" className="mb-6 mt-14">{`${
               formRecord.form[getProperty("title", lang)]

@@ -2,7 +2,7 @@ import { FormRecord, SecurityAttribute } from "@lib/types";
 import React from "react";
 import { ClipboardJSScript, UpdateDLStylesScript } from "../scripts";
 import { ProtectedWarning } from "./ProtectedWarning";
-import Fip from "./Fip";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { ResponseSection } from "./ResponseSection";
 import { css } from "../css/compiled";
 import { Submission } from "../../types";
@@ -43,7 +43,7 @@ export const ResponseHtml = ({
             <h1 className="sr-only">{`${formRecord.form.titleEn} - ${formRecord.form.titleFr}`}</h1>
             <div className="mt-14" />
             <ProtectedWarning securityAttribute={securityAttribute} lang="en" />
-            <Fip language="en" />
+            <GcdsHeader language={"en"} skipLink={false} showLanguageToggle={false} pathname="" />
             <div className="mt-14" />
             <ResponseSection
               formRecord={formRecord}
@@ -56,7 +56,7 @@ export const ResponseHtml = ({
             <div className="mt-20" />
             <div lang="fr">
               <ProtectedWarning securityAttribute={securityAttribute} lang="fr" />
-              <Fip language="fr" />
+              <GcdsHeader language={"fr"} skipLink={false} showLanguageToggle={false} pathname="" />
               <div className="mt-14" />
               <ResponseSection
                 formRecord={formRecord}
