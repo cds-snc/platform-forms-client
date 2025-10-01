@@ -169,7 +169,9 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
   } = useConfirmDeleteDialogState();
 
   useEffect(() => {
-    headlessTree && (headlessTree.current = tree);
+    if (headlessTree) {
+      headlessTree.current = tree;
+    }
   }, [headlessTree, tree]);
 
   // Sync tree with external store changes
