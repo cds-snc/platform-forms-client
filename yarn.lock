@@ -2659,21 +2659,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@headless-tree/core@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@headless-tree/core@npm:1.4.0"
-  checksum: 10c0/c1cf19246729d3959473fca9d056fbf1c0bda9b17bc38cace5aefe1dc1697ffa7f27e069d51d434c2c2a1e26b44ec6f144a3e2063186b78271844888f2183ab3
+"@headless-tree/core@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@headless-tree/core@npm:1.5.0"
+  checksum: 10c0/d5e3559fc59a4cfb3c31879477ffe61d66bc9ff5f048d73eeda2e4bc6feb113d4bee3b29f644136a32f5e946e7683af785564f068622775867b9a1894ff9cb05
   languageName: node
   linkType: hard
 
-"@headless-tree/react@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@headless-tree/react@npm:1.4.0"
+"@headless-tree/react@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@headless-tree/react@npm:1.5.0"
   peerDependencies:
     "@headless-tree/core": "*"
     react: "*"
     react-dom: "*"
-  checksum: 10c0/769e4f378fb9301d950c0fd383036416e2600edb855dd4c68eb36c5e1a8bb83bd21e28cf4d822b68b446da13821a08e10d70290050c0796ccdc8c21fa6aa9bbe
+  checksum: 10c0/76f299cd2c203f21619118e7631a0d8b08354e5fb5d97e87138524145f0d9c9e4e3a8f72dea3d61197731ce80532e4985a4ee31c2501be53ce22fe107e7dca09
   languageName: node
   linkType: hard
 
@@ -13220,8 +13220,8 @@ __metadata:
     "@gcforms/types": "workspace:*"
     "@hcaptcha/react-hcaptcha": "npm:^1.12.0"
     "@hcaptcha/types": "npm:^1.0.4"
-    "@headless-tree/core": "npm:^1.4.0"
-    "@headless-tree/react": "npm:^1.4.0"
+    "@headless-tree/core": "npm:^1.5.0"
+    "@headless-tree/react": "npm:^1.5.0"
     "@headlessui/react": "npm:^2.2.7"
     "@jest/globals": "npm:^30.1.2"
     "@neshca/cache-handler": "npm:^1.2.1"
