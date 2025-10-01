@@ -1,3 +1,8 @@
+@use "sass:meta";
+
+@include meta.load-css("../../../../_gc-header");
+
+
 @tailwind base;
 @tailwind components;
 
@@ -57,6 +62,8 @@
   --gcds-heading-spacing-1200: 6rem;
   --gcds-heading-spacing-1250: 6.25rem;
 }
+
+
 
 @layer base {
   body {
