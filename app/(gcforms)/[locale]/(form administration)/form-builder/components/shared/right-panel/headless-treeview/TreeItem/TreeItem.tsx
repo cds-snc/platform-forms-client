@@ -60,7 +60,8 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
       className={cn(
         "block max-w-full",
         isFormElement && "outline-none",
-        isSectionElement && "outline-indigo-700 outline-offset-[-4px]"
+        isSectionElement && "outline-indigo-700 outline-offset-[-4px]",
+        item.isDraggingOver() && item.isDragTarget() && "border-1 border-dashed border-blue-focus"
       )}
     >
       <ItemContent item={item}>
