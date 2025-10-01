@@ -1,7 +1,5 @@
-@use "sass:meta";
-
-@include meta.load-css("../../../../_gc-header");
-
+/* GC Header styles with SCSS preprocessing */
+@import "../../../../styles/_gc-header.scss";
 
 @tailwind base;
 @tailwind components;
@@ -63,8 +61,6 @@
   --gcds-heading-spacing-1250: 6.25rem;
 }
 
-
-
 @layer base {
   body {
     @apply text-xl leading-7 text-gray-front;
@@ -77,7 +73,6 @@
     -webkit-font-smoothing: antialiased;
     @apply font-lato font-bold;
     @apply leading-10;
-    
   }
 
   h1 {
@@ -138,7 +133,9 @@
 
   a:focus {
     outline: none;
-    box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
+    box-shadow:
+      4px 0 0 0 #303fc3,
+      -4px 0 0 0 #303fc3;
     @apply bg-blue-focus text-white;
   }
 
