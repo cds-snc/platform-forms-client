@@ -74,7 +74,7 @@ export const transform: TemplateStore<"transform"> = (set) => () => {
 
     // Clean groupsLayout
     if (state.form.groupsLayout && state.form.groupsLayout.length > 0) {
-      // Remove start and end if they exist
+      // Remove locked groups (start, end, review) if they exist
       state.form.groupsLayout = state.form.groupsLayout.filter((id) => !lockedGroups.includes(id));
 
       // Ensure all group ids exist in form.groups
