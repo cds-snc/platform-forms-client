@@ -39,6 +39,14 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
           e.stopPropagation();
           tree.getItemInstance(item.getId()).startRenaming();
         },
+        onKeyDown: async (e: React.KeyboardEvent<HTMLDivElement>) => {
+          if (e.key === "Delete" || e.key === "Backspace") {
+            if (handleDelete) {
+              e.preventDefault();
+              handleDelete(e);
+            }
+          }
+        },
       })}
       className={cn(
         "block max-w-full",
