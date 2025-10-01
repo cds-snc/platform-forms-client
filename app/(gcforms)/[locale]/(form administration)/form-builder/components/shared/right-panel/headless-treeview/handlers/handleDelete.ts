@@ -51,4 +51,7 @@ export const handleDelete = async (
 
     return;
   }
+
+  setOpenConfirmDeleteDialog(false);
+  return;
 };
