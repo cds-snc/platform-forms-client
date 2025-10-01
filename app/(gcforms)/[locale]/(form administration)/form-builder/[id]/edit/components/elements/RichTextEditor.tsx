@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import debounce from "lodash.debounce";
@@ -31,10 +31,6 @@ export const RichTextEditor = ({
   }));
   const [value, setValue] = useState(content);
   const { t, i18n } = useTranslation("form-builder");
-
-  useEffect(() => {
-    setValue(content);
-  }, [content]);
 
   const updateValue = useCallback(
     (value: string) => {
