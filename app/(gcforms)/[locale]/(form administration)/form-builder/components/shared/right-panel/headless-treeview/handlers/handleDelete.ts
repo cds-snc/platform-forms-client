@@ -31,7 +31,7 @@ export const handleDelete = async (
 
   if (confirm) {
     const children = item.getChildren();
-    children.map((child) => {
+    children.forEach((child) => {
       removeElement(Number(child));
     });
 
