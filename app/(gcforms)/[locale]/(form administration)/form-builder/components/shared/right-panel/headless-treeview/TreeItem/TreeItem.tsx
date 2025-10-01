@@ -25,29 +25,38 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
     !isRepeatingSet &&
     !["start", "end"].includes(item.getId());
 
+  // Get interactive props only when not renaming
+  const getInteractiveProps = () => {
+    if (item.isRenaming()) {
+      return {};
+    }
+
+    return {
+      ...item.getProps(),
+      onFocus: () => {
+        onFocus(item);
+      },
+      onDoubleClick: (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        tree.getItemInstance(item.getId()).startRenaming();
+      },
+      onKeyDown: async (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === "Delete" || e.key === "Backspace") {
+          if (handleDelete) {
+            e.preventDefault();
+            handleDelete(e);
+          }
+        }
+      },
+    };
+  };
+
   return (
     <div
       key={item.getId()}
       id={item.getId()}
-      {...(!item.isRenaming() && {
-        ...item.getProps(),
-        onFocus: () => {
-          onFocus(item);
-        },
-        onDoubleClick: (e: React.MouseEvent) => {
-          e.preventDefault();
-          e.stopPropagation();
-          tree.getItemInstance(item.getId()).startRenaming();
-        },
-        onKeyDown: async (e: React.KeyboardEvent<HTMLDivElement>) => {
-          if (e.key === "Delete" || e.key === "Backspace") {
-            if (handleDelete) {
-              e.preventDefault();
-              handleDelete(e);
-            }
-          }
-        },
-      })}
+      {...getInteractiveProps()}
       className={cn(
         "block max-w-full",
         isFormElement && "outline-none",
