@@ -1,9 +1,9 @@
 import { expect } from 'vitest';
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { getGroupHistory, pushIdToHistory, clearHistoryAfterId, getPreviousIdFromCurrentId } from "@lib/utils/form-builder/groupsHistory";
+import { LOCKED_GROUPS } from '@formBuilder/components/shared/right-panel/headless-treeview/constants';
 
 const defaultHistory:string[] = [
-  LockedSections.START,
+  LOCKED_GROUPS.START,
   "group1",
   "group2",
   "group3",
@@ -18,7 +18,7 @@ describe("getGroupHistory tests", () => {
     // @ts-expect-error - testing invalid input
     const result = getGroupHistory("INVALID");
     expect(result.length).toEqual(1);
-    expect(result[0]).toEqual(LockedSections.START);
+    expect(result[0]).toEqual(LOCKED_GROUPS.START);
   });
 
   it("gets history", () => {
@@ -74,7 +74,7 @@ describe("getPreviousIdFromCurrentId tests", () => {
   });
 
   it("returns nothing at start of history", () => {
-    expect(getPreviousIdFromCurrentId(LockedSections.START, history)).toEqual(null);
+    expect(getPreviousIdFromCurrentId(LOCKED_GROUPS.START, history)).toEqual(null);
   });
 
   it("returns previous Id around middle of history", () => {

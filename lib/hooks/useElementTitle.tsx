@@ -1,8 +1,7 @@
 "use client";
 
-import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useLocalize } from "./useLocalize";
 import { FormElement } from "@lib/types";
-import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 
 export type ElementProperties = {
   name?: string;
@@ -14,20 +13,7 @@ export type ElementProperties = {
 };
 
 export const useElementTitle = () => {
-  const { translationLanguagePriority, localizeField } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
-
-  const localizedDescription = localizeField(
-    LocalizedElementProperties.DESCRIPTION,
-    translationLanguagePriority
-  );
-
-  const localizedTitle = localizeField(
-    LocalizedElementProperties.TITLE,
-    translationLanguagePriority
-  );
+  const { localizedTitle, localizedDescription } = useLocalize();
 
   const getTitle = (element: ElementProperties | FormElement) => {
     let data = element as ElementProperties;

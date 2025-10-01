@@ -10,13 +10,13 @@
   "keywords": [],
   "author": "Bryan Robitaille",
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.893.0",
-    "@aws-sdk/client-iam": "^3.893.0",
-    "@types/node": "^18.19.3",
-    "axios": "^1.8.4",
+    "@aws-sdk/client-cognito-identity-provider": "^3.899.0",
+    "@aws-sdk/client-iam": "^3.899.0",
+    "@types/node": "^24.6.1",
+    "axios": "^1.12.2",
     "csv-writer": "^1.6.0",
     "dotenv": "^16.3.1",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.9.3"
   }
 }

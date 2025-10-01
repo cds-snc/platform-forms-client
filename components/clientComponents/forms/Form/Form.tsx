@@ -23,7 +23,6 @@ import {
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Review } from "../Review/Review";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { StatusError } from "../StatusError/StatusError";
 import { filterValuesByVisibleElements } from "@lib/formContext";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
@@ -44,6 +43,7 @@ import {
 } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
 
 import { SaveAndResumeButton } from "@clientComponents/forms/SaveAndResume/SaveAndResumeButton";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -67,7 +67,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   // TODO: This can be removed in the next refactor.
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
-  const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
+  const showIntro = isGroupsCheck ? currentGroup === LOCKED_GROUPS.START : true;
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
@@ -205,8 +205,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           >
             {isGroupsCheck &&
               isShowReviewPage &&
-              currentGroup !== LockedSections.REVIEW &&
-              currentGroup !== LockedSections.START && (
+              currentGroup !== LOCKED_GROUPS.REVIEW &&
+              currentGroup !== LOCKED_GROUPS.START && (
                 // Let the buttons and other logic control the focus to avoid conflicting with the
                 // error validation focus
                 <h2 tabIndex={-1} data-group={currentGroup || "default"} data-testid="focus-h2">
@@ -224,7 +224,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               </RichText>
             )}
 
-            {isGroupsCheck && isShowReviewPage && currentGroup === LockedSections.REVIEW && (
+            {isGroupsCheck && isShowReviewPage && currentGroup === LOCKED_GROUPS.REVIEW && (
               <Review language={language as Language} />
             )}
 
@@ -287,7 +287,7 @@ export const Form = withFormik<FormProps, Responses>({
 
     // For groups enabled forms only allow submitting on the Review page
     const isShowReviewPage = showReviewPage(formikBag.props.formRecord.form);
-    if (isShowReviewPage && formikBag.props.currentGroup !== LockedSections.REVIEW) {
+    if (isShowReviewPage && formikBag.props.currentGroup !== LOCKED_GROUPS.REVIEW) {
       return;
     }
 
