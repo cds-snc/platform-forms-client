@@ -13,9 +13,9 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
 import { showReviewPage } from "@root/lib/utils/form-builder/showReviewPage";
-import { LockedSections } from "../../../(form administration)/form-builder/components/shared/right-panel/treeview/types";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty } from "@root/lib/utils";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 export const FormWrapper = ({
   formRecord,
@@ -71,11 +71,11 @@ export const FormWrapper = ({
   const getPageTitle = () => {
     const formTitle = String(formRecord.form[getLocalizedProperty("title", language)]);
 
-    if (currentGroup === LockedSections.START) {
+    if (currentGroup === LOCKED_GROUPS.START) {
       return formTitle;
     }
 
-    const isReviewPage = showReviewPage(formRecord.form) && currentGroup === LockedSections.REVIEW;
+    const isReviewPage = showReviewPage(formRecord.form) && currentGroup === LOCKED_GROUPS.REVIEW;
     if (isReviewPage) {
       return `${formTitle} - ${t("reviewForm", { lng: language, ns: "review" })}`;
     }

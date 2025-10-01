@@ -2530,21 +2530,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@headless-tree/core@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@headless-tree/core@npm:1.4.0"
-  checksum: 10c0/c1cf19246729d3959473fca9d056fbf1c0bda9b17bc38cace5aefe1dc1697ffa7f27e069d51d434c2c2a1e26b44ec6f144a3e2063186b78271844888f2183ab3
+"@headless-tree/core@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@headless-tree/core@npm:1.5.0"
+  checksum: 10c0/d5e3559fc59a4cfb3c31879477ffe61d66bc9ff5f048d73eeda2e4bc6feb113d4bee3b29f644136a32f5e946e7683af785564f068622775867b9a1894ff9cb05
   languageName: node
   linkType: hard
 
-"@headless-tree/react@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@headless-tree/react@npm:1.4.0"
+"@headless-tree/react@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@headless-tree/react@npm:1.5.0"
   peerDependencies:
     "@headless-tree/core": "*"
     react: "*"
     react-dom: "*"
-  checksum: 10c0/769e4f378fb9301d950c0fd383036416e2600edb855dd4c68eb36c5e1a8bb83bd21e28cf4d822b68b446da13821a08e10d70290050c0796ccdc8c21fa6aa9bbe
+  checksum: 10c0/76f299cd2c203f21619118e7631a0d8b08354e5fb5d97e87138524145f0d9c9e4e3a8f72dea3d61197731ce80532e4985a4ee31c2501be53ce22fe107e7dca09
   languageName: node
   linkType: hard
 
@@ -12750,8 +12750,8 @@ __metadata:
     "@gcforms/types": "workspace:*"
     "@hcaptcha/react-hcaptcha": "npm:^1.12.0"
     "@hcaptcha/types": "npm:^1.0.4"
-    "@headless-tree/core": "npm:^1.4.0"
-    "@headless-tree/react": "npm:^1.4.0"
+    "@headless-tree/core": "npm:^1.5.0"
+    "@headless-tree/react": "npm:^1.5.0"
     "@headlessui/react": "npm:^2.2.7"
     "@jest/globals": "npm:^30.1.2"
     "@neshca/cache-handler": "npm:^1.2.1"
@@ -12853,7 +12853,6 @@ __metadata:
     react: "npm:19.1.1"
     react-app-polyfill: "npm:3.0.0"
     react-aria: "npm:3.43.2"
-    react-complex-tree: "npm:^2.6.0"
     react-dom: "npm:19.1.1"
     react-i18next: "npm:^15.1.0"
     react-loading-skeleton: "npm:^3.5.0"
@@ -17445,15 +17444,6 @@ __metadata:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
     react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
   checksum: 10c0/4ae525bf805c5192758ee9ba93c0949a257d406d5d4ab04f01ba9a9ae8ce40ec1726b77603e00e4ad2a5503435037dfb67b1dfa1033cba545a122d0b4fc18599
-  languageName: node
-  linkType: hard
-
-"react-complex-tree@npm:^2.6.0":
-  version: 2.6.0
-  resolution: "react-complex-tree@npm:2.6.0"
-  peerDependencies:
-    react: ">=16.0.0"
-  checksum: 10c0/320d7d2d4c6364b62102f2c8a29dc484a9c1cf098f35580d5c9f0eaf18228929a31e235840cbfe8e79ddae990496915d19c5d5ac535e9e7d33c939065a92b48a
   languageName: node
   linkType: hard
 

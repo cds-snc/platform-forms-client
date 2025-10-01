@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { cn } from "@lib/utils";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
-import { GroupStoreState } from "@formBuilder/components/shared/right-panel/treeview/store/types";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
+import { GroupStoreState } from "@lib/groups/types";
 import { useTranslation } from "@i18n/client";
 
 interface Props {
@@ -21,7 +21,7 @@ export const SectionNameInput = React.forwardRef<Ref, Props>((props, ref) => {
     "rounded-md px-2 py-1 min-w-[250px] max-w-[400px] text-base font-bold text-ellipsis placeholder-slate-500 h-10";
   const disabled = groupId === "start" || groupId === "end" || groupId === "review";
   const { t } = useTranslation("form-builder");
-  const { tree } = useTreeRef();
+  const { headlessTree } = useTreeRef();
 
   // Override the value if it's a reserved name
   if (value === "Start") {
@@ -44,8 +44,9 @@ export const SectionNameInput = React.forwardRef<Ref, Props>((props, ref) => {
       placeholder={t("groups.newPage", { ns: "form-builder" })}
       onChange={(e) => {
         const val = e.target.value;
-        tree?.current?.renameItem(groupId, e.target.value);
+        // tree?.current?.renameItem(groupId, e.target.value);
         updateGroupName({ id: groupId, name: val });
+        headlessTree?.current?.rebuildTree();
       }}
       disabled={disabled}
       ref={ref}

@@ -1,5 +1,5 @@
 import { Button } from "@clientComponents/globals";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useTranslation } from "@i18n/client";
 
 export const ClearMultiRules = () => {

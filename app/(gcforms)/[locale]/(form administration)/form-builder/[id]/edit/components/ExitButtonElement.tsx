@@ -1,7 +1,7 @@
 import { useTranslation } from "@i18n/client";
 import Brand from "@clientComponents/globals/Brand";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { Language } from "@lib/types/form-builder-types";
 import { useState } from "react";
 
