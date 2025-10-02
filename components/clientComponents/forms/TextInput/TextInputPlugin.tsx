@@ -10,7 +10,7 @@ export const TextInputPlugin: ComponentPlugin = {
     type: FormElementTypes.textField,
   },
   render({ element, lang }) {
-    const id = element.id;
+    const id = element.subId ?? element.id;
     const isRequired: boolean = element.properties.validation
       ? element.properties.validation.required
       : false;
