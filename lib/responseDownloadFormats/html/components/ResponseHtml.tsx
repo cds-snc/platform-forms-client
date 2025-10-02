@@ -59,7 +59,7 @@ export const ResponseHtml = ({
             <div lang="fr">
               <ProtectedWarning securityAttribute={securityAttribute} lang="fr" />
               <GcdsHeader language={"fr"} skipLink={false} showLanguageToggle={false} pathname="" />
-              <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
+              <div className="gc-formview container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
                 <ResponseSection
                   formRecord={formRecord}
                   confirmReceiptCode={confirmationCode}
