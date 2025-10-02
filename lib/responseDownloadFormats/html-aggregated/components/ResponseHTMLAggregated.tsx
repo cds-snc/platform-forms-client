@@ -84,7 +84,7 @@ export const ResponseHtmlAggregated = ({
           <main id="content">
             <GcdsHeader language={"en"} skipLink={false} showLanguageToggle={false} pathname="" />
 
-            <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
+            <div className="gc-formview container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
               <h1
                 id="main-header"
                 className="mb-6 mt-14"

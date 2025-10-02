@@ -61,7 +61,7 @@ export const DownloadConfirmHtml = ({
               showLanguageToggle={false}
               pathname=""
             />
-            <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
+            <div className="gc-formview container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
               <div className="mb-14">
                 <SubmittedBadge
                   submissionId={submissionId}
