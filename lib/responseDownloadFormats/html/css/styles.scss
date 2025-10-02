@@ -1,6 +1,11 @@
-/* GC Header styles with SCSS preprocessing */
+
+@import "@cdssnc/gcds-tokens/build/web/css/tokens.css";
 @import "../../../../styles/_typography.scss";
+/* GC Header styles with SCSS preprocessing */
+
 @import "../../../../styles/_gc-header.scss";
+
+
 
 @tailwind base;
 @tailwind components;
