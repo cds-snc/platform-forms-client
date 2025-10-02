@@ -546,7 +546,6 @@
   "maximumCharacterLength": "Longueur maximale des caractères",
   "maxNumberOfRows": {
     "description": "Définissez la limite supérieure du nombre d'entrées que vos utilisateur·rice·s peuvent fournir pour cette question.",
-    "description": "Set the upper limit for the number of entries your users can provide for this question.",
     "label": "Nombre maximum de réponses"
   },
   "more": "Plus",
@@ -1383,6 +1382,7 @@
   },
   "scheduleClosingPage": {
     "linkText": "Programmer la fermeture du formulaire",
+    "changeOrRemove": "Change or remove closing date",
     "dialog": {
       "title": "Programmer la fermeture du formulaire",
       "text1": "Fixez la date de fermeture",
@@ -1401,7 +1401,9 @@
         "notFutureDate": "La date et l'heure doivent être à venir, dans le futur."
       },
       "save": "Enregistrer",
-      "cancel": "Annuler"
+      "cancel": "Annuler",
+      "removeClosingDate": "Remove closing date",
+      "removeConfirm": "Click again to confirm"
     }
   },
   "systemHealthCheck": {
