@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import { usePathname } from "next/navigation";
 
@@ -9,16 +9,9 @@ const LanguageToggle = () => {
     i18n: { language: currentLang },
   } = useTranslation("common");
   const pathname = usePathname();
-  const [href, setHref] = useState(
+  const href =
     pathname?.replace(`/${currentLang}`, `/${currentLang === "en" ? "fr" : "en"}`) ??
-      `/${currentLang}`
-  );
-
-  useEffect(() => {
-    if (pathname !== null) {
-      setHref(pathname.replace(`/${currentLang}`, `/${currentLang === "en" ? "fr" : "en"}`));
-    }
-  }, [pathname, currentLang]);
+    `/${currentLang}`;
 
   const handleClick = useCallback(() => {
     // Dispatch beforeunload event using a custom event
