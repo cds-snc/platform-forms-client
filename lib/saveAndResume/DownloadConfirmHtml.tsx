@@ -46,13 +46,13 @@ export const DownloadConfirmHtml = ({
         />
         <style dangerouslySetInnerHTML={{ __html: css }}></style>
       </head>
-      <body>
+      <body className="gcds-page flex h-full flex-col bg-white">
         <div id="skip-link-container">
           <a href="#content" id="skip-link">
             Skip to main content
           </a>
         </div>
-        <div id="page-container">
+        <div>
           <main id="content">
             <div className="mt-6" />
             <GcdsHeader
@@ -61,7 +61,7 @@ export const DownloadConfirmHtml = ({
               showLanguageToggle={false}
               pathname=""
             />
-            <div>
+            <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
               <div className="mb-14">
                 <SubmittedBadge
                   submissionId={submissionId}
