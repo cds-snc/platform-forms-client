@@ -1,11 +1,10 @@
 
+@import "@cdssnc/gcds-tokens/build/web/css/global.css";
 @import "@cdssnc/gcds-tokens/build/web/css/tokens.css";
+
+// Pull in partial styles from the main styles directory
 @import "../../../../styles/_typography.scss";
-/* GC Header styles with SCSS preprocessing */
-
 @import "../../../../styles/_gc-header.scss";
-
-
 
 @tailwind base;
 @tailwind components;
@@ -63,8 +62,6 @@
 }
 
 @tailwind utilities;
-
-@import "@cdssnc/gcds-tokens/build/web/css/global.css";
 
 .container-xl {
   max-width: var(--gcds-container-xl);
