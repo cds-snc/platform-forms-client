@@ -4064,7 +4064,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-alert-dialog@npm:^1.1.4":
+"@radix-ui/react-alert-dialog@npm:^1.1.15":
   version: 1.1.15
   resolution: "@radix-ui/react-alert-dialog@npm:1.1.15"
   dependencies:
@@ -12758,7 +12758,7 @@ __metadata:
     "@next/mdx": "npm:15.5.4"
     "@playwright/test": "npm:^1.49.1"
     "@prisma/client": "npm:6"
-    "@radix-ui/react-alert-dialog": "npm:^1.1.4"
+    "@radix-ui/react-alert-dialog": "npm:^1.1.15"
     "@radix-ui/react-dropdown-menu": "npm:^2.1.4"
     "@radix-ui/react-tooltip": "npm:^1.1.6"
     "@testing-library/dom": "npm:^10.4.0"
