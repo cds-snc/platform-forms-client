@@ -11,7 +11,9 @@ export const TextInputPlugin: ComponentPlugin = {
   },
   render({ element, lang }) {
     const id = element.id;
-    const isRequired = !!element.properties.required;
+    const isRequired: boolean = element.properties.validation
+      ? element.properties.validation.required
+      : false;
 
     const descriptionPerLocale = element.properties[getLocalizedProperty("description", lang)];
     const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
