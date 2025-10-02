@@ -10,7 +10,6 @@ import {
   MultipleChoiceGroup,
   RichText,
   TextArea,
-  TextInput,
   ConditionalWrapper,
   Combobox,
   FormattedDate,
@@ -27,6 +26,8 @@ import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
 import { AddressComplete } from "@clientComponents/forms/AddressComplete/AddressComplete";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
+
+import { GeneratePluginElement } from "@lib/components/Component";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -83,31 +84,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
-  const textType =
-    element.properties?.validation?.type &&
-    ["email", "name", "number", "password", "search", "tel", "url"].includes(
-      element.properties.validation.type
-    )
-      ? element.properties.validation.type
-      : "text";
-
-  const spellCheck =
-    element.properties?.autoComplete &&
-    [
-      "email",
-      "name",
-      "tel",
-      "given-name",
-      "additional-name",
-      "family-name",
-      "address-line1",
-      "address-level2",
-      "address-level1",
-      "postal-code",
-    ].includes(element.properties?.autoComplete)
-      ? false
-      : undefined;
-
   const placeHolderPerLocale = element.properties[getLocalizedProperty("placeholder", lang)];
   const placeHolder = placeHolderPerLocale ? placeHolderPerLocale.toString() : "";
 
@@ -118,24 +94,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   switch (element.type) {
     case FormElementTypes.textField:
-      return (
-        <div className="focus-group gcds-input-wrapper">
-          {labelComponent}
-          {description && <Description id={`${id}`}>{description}</Description>}
-          <TextInput
-            type={textType}
-            spellCheck={spellCheck}
-            id={`${id}`}
-            name={`${id}`}
-            required={isRequired}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
-            placeholder={placeHolder.toString()}
-            autoComplete={element.properties.autoComplete?.toString()}
-            maxLength={element.properties.validation?.maxLength}
-            allowNegativeNumbers={element.properties.allowNegativeNumbers}
-          />
-        </div>
-      );
+      return GeneratePluginElement(element, lang) ?? <></>;
     case FormElementTypes.textArea:
       return (
         <div className="focus-group gcds-textarea-wrapper">
