@@ -29,13 +29,12 @@ const LanguageToggle = () => {
 
   return (
     <div className="gc-lang-toggle-link text-right text-base">
-      <span className="sr-only" lang={currentLang}>
+      <h2 className="sr-only" lang={currentLang}>
         {t("lang-toggle")}:{" "}
-      </span>
+      </h2>
       <a
         href={href}
         className="text-right text-base"
-        aria-label={currentLang == "en" ? "Français" : "English"}
         lang={currentLang === "en" ? "fr" : "en"}
         onClick={handleClick}
       >
