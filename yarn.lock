@@ -6521,6 +6521,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ryanntannn/zustand-sync@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@ryanntannn/zustand-sync@npm:0.1.2"
+  dependencies:
+    "@types/ramda": "npm:^0.31.1"
+    fast-json-patch: "npm:^3.1.1"
+    ramda: "npm:^0.31.3"
+    zustand: "npm:^5.0.8"
+  checksum: 10c0/6a6bb1819132bf1fc69ac522d767c2f8a49d3b137fea72639cca79b524fc0078b51628be84f0996999f2cba19d8caef6b61febd953bf697f1d53a1406dd61c0e
+  languageName: node
+  linkType: hard
+
 "@sinclair/typebox@npm:^0.27.8":
   version: 0.27.8
   resolution: "@sinclair/typebox@npm:0.27.8"
@@ -8004,6 +8016,15 @@ __metadata:
     pg-protocol: "npm:*"
     pg-types: "npm:^2.2.0"
   checksum: 10c0/19a3cc1811918753f8c827733648c3a85c7b0355bf207c44eb1a3b79b2e6a0d85cb5457ec550d860fc9be7e88c7587a3600958ec8c61fa1ad573061c63af93f0
+  languageName: node
+  linkType: hard
+
+"@types/ramda@npm:^0.31.1":
+  version: 0.31.1
+  resolution: "@types/ramda@npm:0.31.1"
+  dependencies:
+    types-ramda: "npm:^0.31.0"
+  checksum: 10c0/60c11e66730e2d1c96d480a9e4474be0ae82a84700a34937032c1e46147b8625e1a977361c37ca65e8b29d4368dc942354c7942aebda91b0fd416beac87646d6
   languageName: node
   linkType: hard
 
@@ -12415,6 +12436,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-json-patch@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "fast-json-patch@npm:3.1.1"
+  checksum: 10c0/8a0438b4818bb53153275fe5b38033610e8c9d9eb11869e6a7dc05eb92fa70f3caa57015e344eb3ae1e71c7a75ad4cc6bc2dc9e0ff281d6ed8ecd44505210ca8
+  languageName: node
+  linkType: hard
+
 "fast-json-stable-stringify@npm:2.x, fast-json-stable-stringify@npm:^2.0.0, fast-json-stable-stringify@npm:^2.1.0":
   version: 2.1.0
   resolution: "fast-json-stable-stringify@npm:2.1.0"
@@ -12874,6 +12902,7 @@ __metadata:
     "@radix-ui/react-alert-dialog": "npm:^1.1.15"
     "@radix-ui/react-dropdown-menu": "npm:^2.1.4"
     "@radix-ui/react-tooltip": "npm:^1.1.6"
+    "@ryanntannn/zustand-sync": "npm:^0.1.2"
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/jest-dom": "npm:^6.9.1"
     "@testing-library/react": "npm:^16.3.0"
@@ -17492,6 +17521,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ramda@npm:^0.31.3":
+  version: 0.31.3
+  resolution: "ramda@npm:0.31.3"
+  checksum: 10c0/a4328521e990df2a8fed7b73b2ca1d6bd611e3af0e512dd23142b5f4e5124778d75573cad7742479007dacb8b0204c386b21a0542e0a35aee5097bb27f48bff1
+  languageName: node
+  linkType: hard
+
 "randombytes@npm:^2.1.0":
   version: 2.1.0
   resolution: "randombytes@npm:2.1.0"
@@ -19882,6 +19918,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-toolbelt@npm:^9.6.0":
+  version: 9.6.0
+  resolution: "ts-toolbelt@npm:9.6.0"
+  checksum: 10c0/838f9a2f0fe881d5065257a23b402c41315b33ff987b73db3e2b39fcb70640c4c7220e1ef118ed5676763543724fdbf4eda7b0e2c17acb667ed1401336af9f8c
+  languageName: node
+  linkType: hard
+
 "tsconfck@npm:^3.0.3":
   version: 3.1.6
   resolution: "tsconfck@npm:3.1.6"
@@ -20124,6 +20167,15 @@ __metadata:
     possible-typed-array-names: "npm:^1.0.0"
     reflect.getprototypeof: "npm:^1.0.6"
   checksum: 10c0/e38f2ae3779584c138a2d8adfa8ecf749f494af3cd3cdafe4e688ce51418c7d2c5c88df1bd6be2bbea099c3f7cea58c02ca02ed438119e91f162a9de23f61295
+  languageName: node
+  linkType: hard
+
+"types-ramda@npm:^0.31.0":
+  version: 0.31.0
+  resolution: "types-ramda@npm:0.31.0"
+  dependencies:
+    ts-toolbelt: "npm:^9.6.0"
+  checksum: 10c0/fcdd4673fb9a08f82e5f72071200c662cdeb5b785556186645af0c43f9ab999de64c110c4f2a83b508aae985f014839799d2e3c552473543e8458733e6d0174a
   languageName: node
   linkType: hard
 
@@ -21206,7 +21258,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand@npm:5.0.8":
+"zustand@npm:5.0.8, zustand@npm:^5.0.8":
   version: 5.0.8
   resolution: "zustand@npm:5.0.8"
   peerDependencies:
