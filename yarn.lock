@@ -2548,7 +2548,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@headlessui/react@npm:^2.2.7":
+"@headlessui/react@npm:^2.2.9":
   version: 2.2.9
   resolution: "@headlessui/react@npm:2.2.9"
   dependencies:
@@ -3974,7 +3974,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.49.1":
+"@playwright/test@npm:^1.55.1":
   version: 1.55.1
   resolution: "@playwright/test@npm:1.55.1"
   dependencies:
@@ -7830,7 +7830,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ioredis-mock@npm:^8.2.5":
+"@types/ioredis-mock@npm:^8.2.6":
   version: 8.2.6
   resolution: "@types/ioredis-mock@npm:8.2.6"
   peerDependencies:
@@ -12759,11 +12759,11 @@ __metadata:
     "@hcaptcha/types": "npm:^1.0.4"
     "@headless-tree/core": "npm:^1.5.0"
     "@headless-tree/react": "npm:^1.5.0"
-    "@headlessui/react": "npm:^2.2.7"
+    "@headlessui/react": "npm:^2.2.9"
     "@jest/globals": "npm:^30.1.2"
     "@neshca/cache-handler": "npm:^1.2.1"
     "@next/mdx": "npm:15.5.4"
-    "@playwright/test": "npm:^1.49.1"
+    "@playwright/test": "npm:^1.55.1"
     "@prisma/client": "npm:6"
     "@radix-ui/react-alert-dialog": "npm:^1.1.15"
     "@radix-ui/react-dropdown-menu": "npm:^2.1.4"
@@ -12777,7 +12777,7 @@ __metadata:
     "@types/eslint-plugin-tailwindcss": "npm:^3"
     "@types/formidable": "npm:^2.0.6"
     "@types/i18n": "npm:^0.13.12"
-    "@types/ioredis-mock": "npm:^8.2.5"
+    "@types/ioredis-mock": "npm:^8.2.6"
     "@types/jest": "npm:^30.0.0"
     "@types/json2md": "npm:^1.5.4"
     "@types/lodash.debounce": "npm:^4.0.9"
@@ -12875,9 +12875,9 @@ __metadata:
     tailwind-merge: "npm:^2.2.0"
     tailwindcss: "npm:^3.4.0"
     ts-command-line-args: "npm:2.5.1"
-    ts-jest: "npm:^29.4.1"
+    ts-jest: "npm:^29.4.4"
     ts-node: "npm:^10.9.2"
-    tsx: "npm:^4.20.5"
+    tsx: "npm:^4.20.6"
     typescript: "npm:^5.9.3"
     unorm: "npm:^1.6.0"
     usehooks-ts: "npm:3.1.1"
@@ -19652,7 +19652,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:^29.4.1":
+"ts-jest@npm:^29.4.4":
   version: 29.4.4
   resolution: "ts-jest@npm:29.4.4"
   dependencies:
@@ -19846,7 +19846,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsx@npm:^4.20.3, tsx@npm:^4.20.5, tsx@npm:^4.7.0":
+"tsx@npm:^4.20.3, tsx@npm:^4.20.6, tsx@npm:^4.7.0":
   version: 4.20.6
   resolution: "tsx@npm:4.20.6"
   dependencies:
