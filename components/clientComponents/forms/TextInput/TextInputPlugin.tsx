@@ -2,8 +2,8 @@
 import { ComponentPlugin } from "@lib/components/ComponentPlugin";
 import { TextInput } from "./TextInput";
 import { FormElementTypes } from "@lib/types";
-import { getLocalizedProperty } from "@lib/utils";
-import { Label, Description } from "@clientComponents/forms";
+import { Description } from "@clientComponents/forms";
+import { GenericComponentLabel } from "../../globals/GenericComponentLabel";
 
 export const TextInputPlugin: ComponentPlugin = {
   meta: {
@@ -15,12 +15,6 @@ export const TextInputPlugin: ComponentPlugin = {
       ? element.properties.validation.required
       : false;
 
-    const descriptionPerLocale = element.properties[getLocalizedProperty("description", lang)];
-    const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
-
-    const placeHolderPerLocale = element.properties[getLocalizedProperty("placeholder", lang)];
-    const placeHolder = placeHolderPerLocale ? placeHolderPerLocale.toString() : "";
-
     const textType =
       element.properties?.validation?.type &&
       ["email", "name", "number", "password", "search", "tel", "url"].includes(
@@ -28,22 +22,6 @@ export const TextInputPlugin: ComponentPlugin = {
       )
         ? element.properties.validation.type
         : "text";
-
-    const labelText = element.properties[getLocalizedProperty("title", lang)]?.toString();
-    const labelComponent = labelText ? (
-      <Label
-        key={`label-${id}`}
-        id={`label-${id}`}
-        htmlFor={`${id}`}
-        className={isRequired ? "required" : ""}
-        required={isRequired}
-        validation={element.properties.validation}
-        group={["radio", "checkbox"].indexOf(element.type) !== -1}
-        lang={lang}
-      >
-        {labelText}
-      </Label>
-    ) : null;
 
     const spellCheck =
       element.properties?.autoComplete &&
@@ -62,18 +40,22 @@ export const TextInputPlugin: ComponentPlugin = {
         ? false
         : undefined;
 
+    const genericLabel = GenericComponentLabel(id, element, lang, isRequired);
+
     return (
       <div className="focus-group gcds-input-wrapper">
-        {labelComponent}
-        {description && <Description id={`${id}`}>{description}</Description>}
+        {genericLabel.labelComponent}
+        {genericLabel.description && (
+          <Description id={`${id}`}>{genericLabel.description}</Description>
+        )}
         <TextInput
           type={textType}
           spellCheck={spellCheck}
           id={`${id}`}
           name={`${id}`}
           required={isRequired}
-          ariaDescribedBy={description ? `desc-${id}` : undefined}
-          placeholder={placeHolder.toString()}
+          ariaDescribedBy={genericLabel.description ? `desc-${id}` : undefined}
+          placeholder={genericLabel.placeHolder.toString()}
           autoComplete={element.properties.autoComplete?.toString()}
           maxLength={element.properties.validation?.maxLength}
           allowNegativeNumbers={element.properties.allowNegativeNumbers}
