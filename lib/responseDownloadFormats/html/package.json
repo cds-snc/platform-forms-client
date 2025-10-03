@@ -4,6 +4,7 @@
   },
   "type": "module",
   "dependencies": {
-    "shelljs": "^0.10.0"
+    "shelljs": "^0.10.0",
+    "@cdssnc/gcds-tokens": "2.12.0"
   }
 }

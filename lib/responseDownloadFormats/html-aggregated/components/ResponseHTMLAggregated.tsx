@@ -1,6 +1,6 @@
 import React from "react";
 import { ClipboardJSScript } from "../../html/scripts";
-import Fip from "../../html/components/Fip";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { css } from "../../html/css/compiled";
 import { ColumnTable } from "../../html/components/ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
@@ -74,72 +74,79 @@ export const ResponseHtmlAggregated = ({
         <title>{`${formRecord.form[getProperty("title", lang)]}`}</title>
         <style dangerouslySetInnerHTML={{ __html: css }}></style>
       </head>
-      <body>
+      <body className="gcds-page flex h-full flex-col bg-white">
         <div id="skip-link-container">
           <a href="#main-header" id="skip-link">
             Skip to main content
           </a>
         </div>
-        <div id="page-container">
+        <div>
           <main id="content">
-            <Fip language="en" showLangLink={false} />
+            <GcdsHeader language={"en"} skipLink={false} showLanguageToggle={false} pathname="" />
 
-            <h1 id="main-header" className="mb-6 mt-14">{`${
-              formRecord.form[getProperty("title", lang)]
-            }`}</h1>
+            <div className="gc-formview container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
+              <h1
+                id="main-header"
+                className="mb-6 mt-14"
+              >{`${formRecord.form[getProperty("title", lang)]}`}</h1>
 
-            <div className="mb-14 border-2 border-dashed border-black bg-slate-50 p-8">
-              <div className="mb-4 flex justify-between">
-                <h2>{t("responseAggregatedTemplate.officialReceipt", { lng: lang })}</h2>
-                <ProtectedLevel
-                  securityAttribute={formResponseSubmissions.formRecord.securityAttribute}
+              <div className="mb-14 border-2 border-dashed border-black bg-slate-50 p-8">
+                <div className="mb-4 flex justify-between">
+                  <h2>{t("responseAggregatedTemplate.officialReceipt", { lng: lang })}</h2>
+                  <ProtectedLevel
+                    securityAttribute={formResponseSubmissions.formRecord.securityAttribute}
+                    lang={lang}
+                  />
+                </div>
+                <p className="mb-4">
+                  <strong>{submissions.length}</strong>{" "}
+                  {`${t("responseAggregatedTemplate.responsesDownloaded", {
+                    lng: lang,
+                    count: submissions.length,
+                  })} ${dateTime}`}
+                </p>
+                <p className="mb-4">
+                  {t("responseAggregatedTemplate.needToVerify", { lng: lang })}
+                </p>
+                <p className="mb-8">{t("responseAggregatedTemplate.useTheCopy", { lng: lang })}</p>
+                <CopyCodes
+                  host={host}
+                  confirmationCodes={confirmationCodes}
+                  formId={formResponseSubmissions.formRecord.id}
                   lang={lang}
                 />
               </div>
-              <p className="mb-4">
-                <strong>{submissions.length}</strong>{" "}
-                {`${t("responseAggregatedTemplate.responsesDownloaded", {
-                  lng: lang,
-                  count: submissions.length,
-                })} ${dateTime}`}
-              </p>
-              <p className="mb-4">{t("responseAggregatedTemplate.needToVerify", { lng: lang })}</p>
-              <p className="mb-8">{t("responseAggregatedTemplate.useTheCopy", { lng: lang })}</p>
-              <CopyCodes
-                host={host}
-                confirmationCodes={confirmationCodes}
-                formId={formResponseSubmissions.formRecord.id}
-                lang={lang}
-              />
+
+              <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
+
+              <div className="mt-14 overflow-x-auto">
+                <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
+              </div>
+
+              <h2 className="sr-only">
+                {t("responseAggregatedTemplate.dataList.title", { lng: lang })}
+              </h2>
+              {submissions &&
+                submissions.map((submission) => {
+                  return (
+                    <div key="" className="mt-32 break-before-page">
+                      <h3 id={submission.id} tabIndex={-1}>
+                        {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
+                        {submission.id}
+                      </h3>
+                      <ColumnTable
+                        responseID={submission.id}
+                        submissionDate={submission.createdAt}
+                        submission={submission}
+                        lang={lang}
+                      />
+                    </div>
+                  );
+                })}
             </div>
-
-            <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
-
-            <div className="mt-14 overflow-x-auto">
-              <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
-            </div>
-
-            <h2 className="sr-only">
-              {t("responseAggregatedTemplate.dataList.title", { lng: lang })}
-            </h2>
-            {submissions &&
-              submissions.map((submission) => {
-                return (
-                  <div key="" className="mt-32 break-before-page">
-                    <h3 id={submission.id} tabIndex={-1}>
-                      {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
-                      {submission.id}
-                    </h3>
-                    <ColumnTable
-                      responseID={submission.id}
-                      submissionDate={submission.createdAt}
-                      submission={submission}
-                      lang={lang}
-                    />
-                  </div>
-                );
-              })}
           </main>
+
+          <div className="mt-32"></div>
         </div>
 
         {ClipboardJSScript}
