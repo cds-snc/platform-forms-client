@@ -11951,15 +11951,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-you-might-not-need-an-effect@npm:^0.5.4":
-  version: 0.5.4
-  resolution: "eslint-plugin-react-you-might-not-need-an-effect@npm:0.5.4"
+"eslint-plugin-react-you-might-not-need-an-effect@npm:^0.5.5":
+  version: 0.5.5
+  resolution: "eslint-plugin-react-you-might-not-need-an-effect@npm:0.5.5"
   dependencies:
     eslint-utils: "npm:^3.0.0"
     globals: "npm:^16.2.0"
   peerDependencies:
     eslint: ">=8.40.0"
-  checksum: 10c0/58984267e7cd89d87452f0e5d415c17e83697af5b3d5273d274ba1544b950feb43403a01b27cee1dc2b6567fe37a8e96a39504c4aa452cfd070e6c58c9e0c524
+  checksum: 10c0/9285e214ae85aafc91555f53b720359d6a05e59c8ee09484e635c49254d6c8e7214f3faff787b4f53d9d3a21d252dbf0988c2b3bb228f8e36b8e356c2569d189
   languageName: node
   linkType: hard
 
@@ -12914,7 +12914,7 @@ __metadata:
     eslint: "npm:^9.36.0"
     eslint-config-next: "npm:15.5.4"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-react-you-might-not-need-an-effect: "npm:^0.5.4"
+    eslint-plugin-react-you-might-not-need-an-effect: "npm:^0.5.5"
     eslint-plugin-tailwindcss: "npm:^3.17.5"
     formik: "npm:2.4.6"
     fuse.js: "npm:^7.1.0"
