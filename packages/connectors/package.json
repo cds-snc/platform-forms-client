@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/connectors",
-  "version": "2.2.8",
+  "version": "2.2.9",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -34,5 +34,5 @@
     "tsup": "^8.3.6",
     "typescript": "^5.9.3"
   },
-  "packageManager": "yarn@4.9.4"
+  "packageManager": "yarn@4.10.3"
 }
