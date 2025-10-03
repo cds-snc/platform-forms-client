@@ -9,9 +9,9 @@
   "keywords": [],
   "author": "Bryan Robitaille",
   "dependencies": {
-    "@aws-sdk/client-lambda": "^3.899.0",
-    "@aws-sdk/client-sqs": "^3.899.0",
-    "@aws-sdk/types": "^3.893.0",
+    "@aws-sdk/client-lambda": "^3.901.0",
+    "@aws-sdk/client-sqs": "^3.901.0",
+    "@aws-sdk/types": "^3.901.0",
     "@types/node": "^24.6.1",
     "axios": "^1.12.2",
     "cheerio": "^1.0.0-rc.12",
