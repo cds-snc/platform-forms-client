@@ -58,6 +58,6 @@ export const prismaErrors = <Error, T>(e: Error, returnValue: T): T => {
   }
 
   // Continue to raise the error if it is a different type of Error or not a handled Prisma Error.
-  logMessage.error(e as string);
+  logMessage.error(e.message);
   throw e;
 };
