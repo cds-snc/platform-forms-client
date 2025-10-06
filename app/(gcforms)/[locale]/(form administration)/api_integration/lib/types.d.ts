@@ -24,16 +24,39 @@ export enum FormSubmissionStatus {
   Problem = "Problem",
 }
 
-export type FormSubmission = {
-  createdAt: number;
-  status: FormSubmissionStatus;
-  confirmationCode: string;
-  answers: string;
-  checksum: string;
-};
-
 export type FormSubmissionProblem = {
   contactEmail: string;
   description: string;
   preferredLanguage: string;
+};
+
+export enum SubmissionStatus {
+  New = "New",
+  Downloaded = "Downloaded",
+  Confirmed = "Confirmed",
+  Problem = "Problem",
+}
+
+export enum AttachmentScanStatus {
+  NoThreatsFound = "NoThreatsFound",
+  ThreatsFound = "ThreatsFound",
+  Unsupported = "Unsupported",
+  Failed = "Failed",
+}
+
+type CompleteAttachment = {
+  id: string;
+  name: string;
+  path: string;
+  scanStatus: AttachmentScanStatus;
+  downloadLink: string;
+};
+
+export type FormSubmission = {
+  createdAt: number;
+  status: SubmissionStatus;
+  confirmationCode: string;
+  answers: string;
+  checksum: string;
+  attachments?: CompleteAttachment[];
 };

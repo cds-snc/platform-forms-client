@@ -8,20 +8,12 @@ import {
   FileSystemDirectoryHandle,
 } from "native-file-system-adapter";
 import type { NewFormSubmission, PrivateApiKey } from "../lib/types";
-import {
-  downloadAndConfirmFormSubmissions,
-  getAccessTokenFromApiKey,
-  GCFormsApiClient,
-  TokenRateLimitError,
-} from "../lib/apiUtils";
 
-function createSubArrays<T>(arr: T[], size: number) {
-  const subArrays = [];
-  for (let i = 0; i < arr.length; i += size) {
-    subArrays.push(arr.slice(i, i + size));
-  }
-  return subArrays;
-}
+import { downloadAndConfirmFormSubmissions, getAccessTokenFromApiKey } from "../lib/utils";
+
+import { GCFormsApiClient } from "../lib/apiClient";
+import { TokenRateLimitError } from "../lib/error";
+import { createSubArrays } from "../lib/utils";
 
 export const APIIntegration = () => {
   const [isCompatible, setIsCompatible] = useState(false);

@@ -1,54 +1,19 @@
 /* eslint-disable no-await-in-loop */
-import axios, { type AxiosInstance } from "axios";
+import axios from "axios";
+import { SignJWT } from "jose";
+import md5 from "md5";
+import { FileSystemDirectoryHandle } from "native-file-system-adapter";
+
 import type {
   EncryptedFormSubmission,
-  FormSubmissionProblem,
   NewFormSubmission,
   PrivateApiKey,
+  FormSubmission,
+  CompleteAttachment,
 } from "./types";
-import { SignJWT } from "jose";
-import { FileSystemDirectoryHandle } from "native-file-system-adapter";
-import md5 from "md5";
+
 import { logMessage } from "@lib/logger";
-// Removed incorrect import of 'blob'
-
-export enum SubmissionStatus {
-  New = "New",
-  Downloaded = "Downloaded",
-  Confirmed = "Confirmed",
-  Problem = "Problem",
-}
-
-export enum AttachmentScanStatus {
-  NoThreatsFound = "NoThreatsFound",
-  ThreatsFound = "ThreatsFound",
-  Unsupported = "Unsupported",
-  Failed = "Failed",
-}
-
-type CompleteAttachment = {
-  id: string;
-  name: string;
-  path: string;
-  scanStatus: AttachmentScanStatus;
-  downloadLink: string;
-};
-
-export type FormSubmission = {
-  createdAt: number;
-  status: SubmissionStatus;
-  confirmationCode: string;
-  answers: string;
-  checksum: string;
-  attachments?: CompleteAttachment[];
-};
-
-export class TokenRateLimitError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "TokenRateLimitError";
-  }
-}
+import { GCFormsApiClient } from "./apiClient";
 
 /*
 Import a PEM encoded RSA private key, to use for RSA-PSS signing.
@@ -136,80 +101,6 @@ export async function getAccessTokenFromApiKey(apiKey: PrivateApiKey): Promise<s
         });
     });
   });
-}
-
-export class GCFormsApiClient {
-  private formId: string;
-  private httpClient: AxiosInstance;
-
-  public constructor(formId: string, apiUrl: string, accessToken: string) {
-    this.formId = formId;
-    this.httpClient = axios.create({
-      baseURL: apiUrl,
-      timeout: 3000,
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-  }
-
-  public getFormTemplate(): Promise<Record<string, unknown>> {
-    return this.httpClient
-      .get<Record<string, unknown>>(`/forms/${this.formId}/template`)
-      .then((response) => response.data)
-      .catch((error) => {
-        throw new Error("Failed to retrieve form template", { cause: error });
-      });
-  }
-
-  public getNewFormSubmissions(): Promise<NewFormSubmission[]> {
-    return this.httpClient
-      .get<NewFormSubmission[]>(`/forms/${this.formId}/submission/new`)
-      .then((response) => response.data)
-      .catch((error) => {
-        throw new Error("Failed to retrieve new form submissions", {
-          cause: error,
-        });
-      });
-  }
-
-  public getFormSubmission(submissionName: string): Promise<EncryptedFormSubmission> {
-    return this.httpClient
-      .get<EncryptedFormSubmission>(`/forms/${this.formId}/submission/${submissionName}`)
-      .then((response) => response.data)
-      .catch((error) => {
-        if (error.response && error.response.status === 429) {
-          throw new TokenRateLimitError("Rate limit exceeded. Please try again later.");
-        } else {
-          throw new Error("Failed to retrieve form submission", { cause: error });
-        }
-      });
-  }
-
-  public confirmFormSubmission(submissionName: string, confirmationCode: string): Promise<void> {
-    return this.httpClient
-      .put<void>(`/forms/${this.formId}/submission/${submissionName}/confirm/${confirmationCode}`)
-      .then(() => Promise.resolve())
-      .catch((error) => {
-        throw new Error("Failed to confirm form submission", { cause: error });
-      });
-  }
-
-  public reportProblemWithFormSubmission(
-    submissionName: string,
-    problem: FormSubmissionProblem
-  ): Promise<void> {
-    return this.httpClient
-      .post<void>(`/forms/${this.formId}/submission/${submissionName}/problem`, problem, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then(() => Promise.resolve())
-      .catch((error) => {
-        throw new Error("Failed to report problem with form submission", {
-          cause: error,
-        });
-      });
-  }
 }
 
 const decryptFormSubmission = async (
@@ -366,3 +257,11 @@ export const downloadAndConfirmFormSubmissions = async (
     apiClient
   );
 };
+
+export function createSubArrays<T>(arr: T[], size: number) {
+  const subArrays = [];
+  for (let i = 0; i < arr.length; i += size) {
+    subArrays.push(arr.slice(i, i + size));
+  }
+  return subArrays;
+}

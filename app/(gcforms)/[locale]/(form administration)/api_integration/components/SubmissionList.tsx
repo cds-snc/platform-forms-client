@@ -2,7 +2,8 @@ import { useState } from "react";
 import { NewFormSubmission, PrivateApiKey } from "../lib/types";
 import { Button } from "@clientComponents/globals";
 import { showDirectoryPicker, FileSystemDirectoryHandle } from "native-file-system-adapter";
-import { downloadAndConfirmFormSubmissions, GCFormsApiClient } from "../lib/apiUtils";
+import { downloadAndConfirmFormSubmissions } from "../lib/utils";
+import { GCFormsApiClient } from "../lib/apiClient";
 
 export const SubmissionList = ({
   list,
