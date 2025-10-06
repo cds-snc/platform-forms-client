@@ -1,6 +1,6 @@
 // Update the path below to the correct location of ComponentPlugin
 import { ComponentPlugin } from "@lib/components/ComponentPlugin";
-import { TextInput } from "./TextInput";
+import { TextInput } from "./FormikTextInput";
 import { FormElementTypes } from "@lib/types";
 import { Description } from "@clientComponents/forms";
 import { GenericComponentLabel } from "../../globals/GenericComponentLabel";

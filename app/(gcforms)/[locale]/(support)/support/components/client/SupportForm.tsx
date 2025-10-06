@@ -10,7 +10,6 @@ import {
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import Link from "next/link";
 import { Alert } from "@clientComponents/globals";
-import { TextInput } from "../../../components/client/TextInput";
 import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
 import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
@@ -18,6 +17,7 @@ import { useState } from "react";
 import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+import { BaseTextInput } from "@root/components/clientComponents/forms/TextInput/BaseTextInput";
 
 export const SupportForm = () => {
   const {
@@ -148,7 +148,7 @@ export const SupportForm = () => {
               <Label id={"label-name"} htmlFor={"name"} className="required" required>
                 {t("support.name")}
               </Label>
-              <TextInput
+              <BaseTextInput
                 type={"text"}
                 id={"name"}
                 name={"name"}
@@ -160,7 +160,7 @@ export const SupportForm = () => {
               <Label id={"label-email"} htmlFor={"email"} className="required" required>
                 {t("support.email")}
               </Label>
-              <TextInput
+              <BaseTextInput
                 type="text"
                 id="email"
                 name="email"
