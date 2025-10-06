@@ -17,7 +17,7 @@ export const Number = () => {
           {t("addElementDialog.number.amount")}
         </Label>
         <Description>{t("addElementDialog.number.enterOnlyNumbers")}</Description>
-        <TextInput label="title" type="number" name="name" placeholder="123456789" />
+        <TextInput label="title" type="number" id="name" name="name" placeholder="123456789" />
       </ExampleWrapper>
     </div>
   );
