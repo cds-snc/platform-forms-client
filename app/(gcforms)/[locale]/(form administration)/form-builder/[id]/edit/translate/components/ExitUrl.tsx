@@ -3,7 +3,7 @@ import React from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { FieldsetLegend } from "./FieldsetLegend";
 import { useTranslation } from "@i18n/client";
