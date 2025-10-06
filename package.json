@@ -159,7 +159,7 @@
     "@types/node": "^24.6.1",
     "@types/node-fetch": "^2.6.9",
     "@types/pg": "^8.10.9",
-    "@types/react": "19.1.13",
+    "@types/react": "19.1.15",
     "@types/react-dom": "19.1.9",
     "@types/react-transition-group": "^4",
     "@types/unorm": "^1",
@@ -215,7 +215,7 @@
   ],
   "packageManager": "yarn@4.10.3",
   "resolutions": {
-    "@types/react": "19.1.13",
+    "@types/react": "19.1.15",
     "@types/react-dom": "19.1.9"
   }
 }
