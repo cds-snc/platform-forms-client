@@ -1,6 +1,14 @@
 import { Loader } from "@clientComponents/globals/Loader";
 
-export const ProcessingMessage = ({ completed, responsesProcessed, tokenRateLimiter }) => {
+export const ProcessingMessage = ({
+  completed,
+  responsesProcessed,
+  tokenRateLimiter,
+}: {
+  completed: boolean;
+  responsesProcessed: number;
+  tokenRateLimiter: boolean;
+}) => {
   return (
     <>
       {completed ? (

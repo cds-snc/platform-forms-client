@@ -1,4 +1,4 @@
-export const NoSubmissions = ({ isLoading }) => {
+export const NoSubmissions = ({ isLoading }: { isLoading: boolean }) => {
   return isLoading ? (
     <div>
       <p>Loading...</p>
