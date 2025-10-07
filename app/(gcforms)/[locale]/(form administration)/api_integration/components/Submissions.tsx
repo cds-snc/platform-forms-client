@@ -13,8 +13,8 @@ import { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import type { NewFormSubmission, PrivateApiKey } from "../lib/types";
 
 import { ContentWrapper } from "./ContentWrapper";
-
-import { Loader } from "@clientComponents/globals/Loader";
+import { ProcessingMessage } from "./ProcessingMessage";
+import { NoSubmissions } from "./NoSubmissions";
 
 export const Submissions = ({
   apiClient,
@@ -91,44 +91,25 @@ export const Submissions = ({
                   </div>
                 )}
 
-                {completed ? (
-                  <p className="mt-5">Responses processed successfully!</p>
-                ) : (
-                  <div className="mt-5">
-                    {responsesProcessed > 0 ? (
-                      <div>
-                        <Loader message={`Processing ${responsesProcessed} responses...`} />{" "}
-                      </div>
-                    ) : null}
-                  </div>
-                )}
-                {tokenRateLimiter ? (
-                  <p className="mt-5 text-red-600">
-                    You have hit the token rate limit. Please try again later.
-                  </p>
-                ) : null}
+                <ProcessingMessage
+                  completed={completed}
+                  responsesProcessed={responsesProcessed}
+                  tokenRateLimiter={tokenRateLimiter}
+                />
               </>
             ) : (
-              <>
-                <Button
-                  onClick={async () => {
-                    const directory = await showDirectoryPicker();
-                    setDirectoryHandle(directory);
-                  }}
-                >
-                  Choose Save Location
-                </Button>
-              </>
+              <Button
+                onClick={async () => {
+                  const directory = await showDirectoryPicker();
+                  setDirectoryHandle(directory);
+                }}
+              >
+                Choose Save Location
+              </Button>
             )}
           </>
-        ) : isLoading ? (
-          <div>
-            <p>Loading...</p>
-          </div>
         ) : (
-          <div>
-            <p>No new form submissions found.</p>
-          </div>
+          <NoSubmissions isLoading={isLoading} />
         )}
       </div>
     </ContentWrapper>
