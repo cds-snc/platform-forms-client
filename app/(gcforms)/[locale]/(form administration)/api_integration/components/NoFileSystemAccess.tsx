@@ -1,10 +1,13 @@
+import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
+import { useTranslation } from "@i18n/client";
+
 export const NoFileSystemAccess = () => {
+  const { t } = useTranslation("response-api");
   return (
-    <div className="flex size-full flex-col items-center justify-center">
-      <h1 className="text-2xl font-bold">API Integration</h1>
-      <div className="m-10">
-        This browser does not support the File System Access API. Please use a compatible browser.
-      </div>
+    <div className="mt-20">
+      <ErrorPanel headingTag="h1" title={t("not-supported.title")}>
+        <p>{t("not-supported.body")}</p>
+      </ErrorPanel>
     </div>
   );
 };

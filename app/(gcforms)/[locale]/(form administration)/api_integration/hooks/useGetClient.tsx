@@ -15,6 +15,7 @@ export const useGetClient = () => {
   const [isCompatible] = useState(
     () => typeof window !== "undefined" && "showOpenFilePicker" in window
   );
+
   const [userKey, setUserKey] = useState<PrivateApiKey | null>(null);
   const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
 

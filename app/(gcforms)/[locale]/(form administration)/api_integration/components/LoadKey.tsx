@@ -10,8 +10,8 @@ import { useGetClient } from "../hooks/useGetClient";
 export const LoadKey = () => {
   const { t, i18n } = useTranslation("common");
   const locale = i18n.language;
-
   const { handleLoadApiKey } = useGetClient();
+
   return (
     <div className="account-wrapper mt-10">
       <div className="w-[622px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10">

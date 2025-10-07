@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { Main } from "./components/Main";
+import { Client } from "./client";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -17,6 +17,6 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function ApiIntegration() {
-  return <Main />;
+export default async function Page() {
+  return <Client />;
 }

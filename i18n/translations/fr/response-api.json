@@ -1,0 +1,6 @@
+{
+  "not-supported": {
+    "title": "Not Supported [FR]",
+    "body": "This browser does not support the File System Access API. [FR]"
+  }
+}

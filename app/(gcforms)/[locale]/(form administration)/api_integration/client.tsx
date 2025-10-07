@@ -4,18 +4,17 @@
 import { useState, useEffect } from "react";
 import { showDirectoryPicker, FileSystemDirectoryHandle } from "native-file-system-adapter";
 
-import type { NewFormSubmission } from "../lib/types";
-
-import { TokenRateLimitError } from "../lib/error";
-import { createSubArrays, downloadAndConfirmFormSubmissions } from "../lib/utils";
+import type { NewFormSubmission } from "./lib/types";
+import { TokenRateLimitError } from "./lib/error";
+import { createSubArrays, downloadAndConfirmFormSubmissions } from "./lib/utils";
 
 import { Button } from "@clientComponents/globals";
-import { NoFileSystemAccess } from "./NoFileSystemAccess";
-import { LoadKey } from "./LoadKey";
+import { NoFileSystemAccess } from "./components/NoFileSystemAccess";
+import { LoadKey } from "./components/LoadKey";
 
-import { useGetClient } from "../hooks/useGetClient";
+import { useGetClient } from "./hooks/useGetClient";
 
-export const Main = () => {
+export const Client = () => {
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[]>([]);
 
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
