@@ -44,19 +44,19 @@ export class MockGCFormsApiClient implements IGCFormsApiClient {
     const mockSubmissions: NewFormSubmission[] = [
       {
         name: "submission-2025-001",
-        createdAt: new Date(Date.now() - 86400000), // 1 day ago
+        createdAt: Date.now() - 86400000, // 1 day ago
       },
       {
         name: "submission-2025-002",
-        createdAt: new Date(Date.now() - 43200000), // 12 hours ago
+        createdAt: Date.now() - 43200000, // 12 hours ago
       },
       {
         name: "submission-2025-003",
-        createdAt: new Date(Date.now() - 3600000), // 1 hour ago
+        createdAt: Date.now() - 3600000, // 1 hour ago
       },
       {
         name: "submission-2025-004",
-        createdAt: new Date(), // Just now
+        createdAt: Date.now(), // Just now
       },
     ];
 
