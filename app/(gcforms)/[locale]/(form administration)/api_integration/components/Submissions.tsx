@@ -14,6 +14,8 @@ import type { NewFormSubmission, PrivateApiKey } from "../lib/types";
 
 import { ContentWrapper } from "./ContentWrapper";
 
+import { Loader } from "@clientComponents/globals/Loader";
+
 export const Submissions = ({
   apiClient,
   userKey,
@@ -99,9 +101,13 @@ export const Submissions = ({
                     {`${responsesProcessed} responses processed successfully!`}
                   </p>
                 ) : (
-                  <p className="mt-5">
-                    {responsesProcessed > 0 ? `Processing ${responsesProcessed} responses` : null}
-                  </p>
+                  <div className="mt-5">
+                    {responsesProcessed > 0 ? (
+                      <div>
+                        <Loader message={`Processing ${responsesProcessed} responses...`} />{" "}
+                      </div>
+                    ) : null}
+                  </div>
                 )}
                 {tokenRateLimiter ? (
                   <p className="mt-5 text-red-600">
