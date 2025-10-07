@@ -66,13 +66,14 @@ export class MockGCFormsApiClient {
     // Simulate API delay
     await this.delay(600);
 
-    // Simulate rate limiting occasionally
+    // Simulate rate limiting
+    /*
     if (Math.random() < 0.1) {
-      // 10% chance
       const error = new Error("Rate limit exceeded") as Error & { response: { status: number } };
       error.response = { status: 429 };
       throw error;
     }
+    */
 
     return {
       name: submissionName,

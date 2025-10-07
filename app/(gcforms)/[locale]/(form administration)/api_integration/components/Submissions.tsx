@@ -44,7 +44,10 @@ export const Submissions = ({
       <div>
         {newFormSubmissions.length > 0 ? (
           <>
-            <p className="my-5">{`At least ${newFormSubmissions.length} New Responses ready for download`}</p>
+            {!directoryHandle && (
+              <p className="my-5">{`At least ${newFormSubmissions.length} New Responses ready for download`}</p>
+            )}
+
             {directoryHandle ? (
               <>
                 <Button
@@ -79,6 +82,7 @@ export const Submissions = ({
                 >
                   Download and Confirm
                 </Button>
+
                 {completed ? (
                   <p className="mt-5 text-green-600">
                     {`${responsesProcessed} responses processed successfully!`}

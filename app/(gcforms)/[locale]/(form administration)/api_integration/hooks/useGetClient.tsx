@@ -12,6 +12,11 @@ import { getAccessTokenFromApiKey } from "../lib/utils";
 import { GCFormsApiClient } from "../lib/apiClient";
 import { MockGCFormsApiClient } from "../lib/mockApiClient";
 
+// ──────────────────────────────
+// ⚠️  - set to false to use the real API
+const MOCK_API_CLIENT = process.env.NODE_ENV === "development";
+// ──────────────────────────────
+
 export const useGetClient = () => {
   const [isCompatible] = useState(
     () => typeof window !== "undefined" && "showOpenFilePicker" in window
@@ -40,7 +45,7 @@ export const useGetClient = () => {
       }
 
       setApiClient(
-        process.env.NODE_ENV === "development"
+        MOCK_API_CLIENT
           ? new MockGCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
           : new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
       );
