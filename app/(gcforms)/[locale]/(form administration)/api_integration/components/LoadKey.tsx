@@ -5,12 +5,13 @@ import { SiteLogo } from "@serverComponents/icons";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 
-import { useGetClient } from "../hooks/useGetClient";
+interface LoadKeyProps {
+  onLoadKey: () => Promise<boolean>;
+}
 
-export const LoadKey = () => {
+export const LoadKey = ({ onLoadKey }: LoadKeyProps) => {
   const { t, i18n } = useTranslation(["response-api", "common"]);
   const locale = i18n.language;
-  const { handleLoadApiKey } = useGetClient();
 
   return (
     <div className="account-wrapper mt-10">
@@ -31,7 +32,7 @@ export const LoadKey = () => {
           <div className=" flex items-center justify-center">
             <Button
               onClick={async () => {
-                const result = await handleLoadApiKey();
+                const result = await onLoadKey();
 
                 if (!result) {
                   toast.error(t("failed-to-load-api-key"), "response-api");

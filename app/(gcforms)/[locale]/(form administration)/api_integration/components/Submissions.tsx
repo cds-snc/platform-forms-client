@@ -11,16 +11,19 @@ import { Button } from "@clientComponents/globals";
 import { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
 import type { NewFormSubmission } from "../lib/types";
-import { useGetClient } from "../hooks/useGetClient";
 
-export const Submissions = () => {
+export const Submissions = ({
+  apiClient,
+  userKey,
+}: {
+  apiClient: GCFormsApiClient | null;
+  userKey: PrivateApiKey | null;
+}) => {
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[]>([]);
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [responsesProcessed, setResponsesProcessed] = useState(0);
   const [completed, setCompleted] = useState(false);
   const [tokenRateLimiter, setTokenRateLimiter] = useState<boolean>(false);
-
-  const { userKey, apiClient } = useGetClient();
 
   useEffect(() => {
     if (apiClient) {

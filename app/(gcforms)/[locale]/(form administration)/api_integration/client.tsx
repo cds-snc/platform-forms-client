@@ -9,7 +9,7 @@ import { useGetClient } from "./hooks/useGetClient";
 import { Submissions } from "./components/Submissions";
 
 export const Client = () => {
-  const { isCompatible, userKey } = useGetClient();
+  const { isCompatible, userKey, handleLoadApiKey, apiClient } = useGetClient();
 
   const [isClient, setIsClient] = useState(false);
 
@@ -27,8 +27,8 @@ export const Client = () => {
   }
 
   if (!userKey) {
-    return <LoadKey />;
+    return <LoadKey onLoadKey={handleLoadApiKey} />;
   }
 
-  return <Submissions />;
+  return <Submissions apiClient={apiClient} userKey={userKey} />;
 };

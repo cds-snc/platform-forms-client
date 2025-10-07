@@ -31,6 +31,7 @@ export const useGetClient = () => {
         const text = await file.text();
         return JSON.parse(text);
       });
+
       const token = await getAccessTokenFromApiKey(keyFile);
 
       if (!token) {
@@ -40,7 +41,10 @@ export const useGetClient = () => {
       setApiClient(
         new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
       );
+
       setUserKey(keyFile);
+
+      return true;
     } catch (error) {
       // no-op
       return false;
