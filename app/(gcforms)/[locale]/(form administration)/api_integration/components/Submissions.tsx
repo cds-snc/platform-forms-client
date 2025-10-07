@@ -41,13 +41,12 @@ export const Submissions = ({
 
   return (
     <ContentWrapper>
-      <div className="m-5">
+      <div>
         {newFormSubmissions.length > 0 ? (
           <>
-            <p>{`At least ${newFormSubmissions.length} New Responses ready for download`}</p>
+            <p className="my-5">{`At least ${newFormSubmissions.length} New Responses ready for download`}</p>
             {directoryHandle ? (
               <>
-                <p className="text-green-600">Save location set: {directoryHandle.name}</p>
                 <Button
                   hidden={completed}
                   onClick={async () => {

@@ -1,15 +1,16 @@
 // ──────────────────────────────
 // 📦 External Packages & APIs
 // ──────────────────────────────
-import { useState, useCallback } from "react"; // React core hooks
-import { showOpenFilePicker } from "native-file-system-adapter"; // Browser FS polyfill
+import { useState, useCallback } from "react";
+import { showOpenFilePicker } from "native-file-system-adapter";
 
 // ──────────────────────────────
 // 🏠 Internal Types & Modules
 // ──────────────────────────────
-import type { PrivateApiKey } from "../lib/types"; // Project-specific types
-import { getAccessTokenFromApiKey } from "../lib/utils"; // Utility functions
-import { GCFormsApiClient } from "../lib/apiClient"; // API client class
+import type { PrivateApiKey } from "../lib/types";
+import { getAccessTokenFromApiKey } from "../lib/utils";
+import { GCFormsApiClient } from "../lib/apiClient";
+import { MockGCFormsApiClient } from "../lib/mockApiClient";
 
 export const useGetClient = () => {
   const [isCompatible] = useState(
@@ -17,7 +18,7 @@ export const useGetClient = () => {
   );
 
   const [userKey, setUserKey] = useState<PrivateApiKey | null>(null);
-  const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
+  const [apiClient, setApiClient] = useState<GCFormsApiClient | MockGCFormsApiClient | null>(null);
 
   const handleLoadApiKey = useCallback(async () => {
     try {
@@ -39,7 +40,9 @@ export const useGetClient = () => {
       }
 
       setApiClient(
-        new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
+        process.env.NODE_ENV === "development"
+          ? new MockGCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
+          : new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
       );
 
       setUserKey(keyFile);
