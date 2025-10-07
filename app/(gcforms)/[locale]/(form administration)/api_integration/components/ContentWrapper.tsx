@@ -21,7 +21,7 @@ export const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
               {t("title", { ns: "common" })}
             </span>
           </Link>
-          <div className="flex items-center justify-center">{children}</div>
+          <div className="flex w-full items-center justify-center">{children}</div>
           <ToastContainer autoClose={false} containerId="response-api" />
         </main>
       </div>

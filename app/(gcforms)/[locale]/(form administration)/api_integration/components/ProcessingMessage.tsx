@@ -1,5 +1,7 @@
 import { Loader } from "@clientComponents/globals/Loader";
 
+import { Success } from "@clientComponents/globals/Alert/Alert";
+
 export const ProcessingMessage = ({
   completed,
   responsesProcessed,
@@ -12,7 +14,7 @@ export const ProcessingMessage = ({
   return (
     <>
       {completed ? (
-        <p className="mt-5">Responses processed successfully!</p>
+        <Success className="w-full" title={"Success"} body={"Responses processed successfully!"} />
       ) : (
         <div className="mt-5">
           {responsesProcessed > 0 ? (

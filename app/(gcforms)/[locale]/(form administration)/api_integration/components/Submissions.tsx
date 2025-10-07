@@ -15,6 +15,7 @@ import type { NewFormSubmission, PrivateApiKey } from "../lib/types";
 import { ContentWrapper } from "./ContentWrapper";
 import { ProcessingMessage } from "./ProcessingMessage";
 import { NoSubmissions } from "./NoSubmissions";
+import { Success } from "@clientComponents/globals/Alert/Alert";
 
 export const Submissions = ({
   apiClient,
@@ -74,6 +75,11 @@ export const Submissions = ({
     setCompleted(true);
   }, [apiClient, directoryHandle, newFormSubmissions, userKey]);
 
+  const hasResponses =
+    !completed && responsesProcessed < 1 && newFormSubmissions
+      ? `At least ${newFormSubmissions.length} New Responses ready for download`
+      : null;
+
   if (!userKey || !apiClient) {
     return null;
   }
@@ -83,8 +89,10 @@ export const Submissions = ({
       <div>
         {newFormSubmissions && newFormSubmissions.length > 0 ? (
           <>
-            {!completed && responsesProcessed < 1 && (
-              <p className="my-5">{`At least ${newFormSubmissions.length} New Responses ready for download`}</p>
+            {hasResponses && (
+              <div className="mb-5">
+                <Success title={"New Responses Available"} body={hasResponses}></Success>
+              </div>
             )}
 
             {directoryHandle && !completed && responsesProcessed < 1 && (
