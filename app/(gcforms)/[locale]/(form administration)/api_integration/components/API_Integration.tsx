@@ -15,6 +15,8 @@ import { GCFormsApiClient } from "../lib/apiClient";
 import { TokenRateLimitError } from "../lib/error";
 import { createSubArrays } from "../lib/utils";
 
+import { NoFileSystemAccess } from "./NoFileSystemAccess";
+
 export const APIIntegration = () => {
   const [isCompatible, setIsCompatible] = useState(false);
   const [userKey, setUserKey] = useState<PrivateApiKey | null>(null);
@@ -53,14 +55,7 @@ export const APIIntegration = () => {
   }, [apiClient]);
 
   if (!isCompatible) {
-    return (
-      <div className="flex size-full flex-col items-center justify-center">
-        <h1 className="text-2xl font-bold">API Integration</h1>
-        <div className="m-10">
-          This browser does not support the File System Access API. Please use a compatible browser.
-        </div>
-      </div>
-    );
+    return <NoFileSystemAccess />;
   }
 
   return (
