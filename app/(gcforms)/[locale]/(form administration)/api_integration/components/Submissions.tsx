@@ -29,7 +29,6 @@ export const Submissions = ({
   const [completed, setCompleted] = useState(false);
   const [tokenRateLimiter, setTokenRateLimiter] = useState<boolean>(false);
 
-  // Derive loading state from apiClient presence and submissions state
   const isLoading = apiClient && newFormSubmissions === null;
 
   useEffect(() => {
@@ -93,9 +92,7 @@ export const Submissions = ({
                 )}
 
                 {completed ? (
-                  <p className="mt-5">
-                    {`${responsesProcessed} responses processed successfully!`}
-                  </p>
+                  <p className="mt-5">Responses processed successfully!</p>
                 ) : (
                   <div className="mt-5">
                     {responsesProcessed > 0 ? (
