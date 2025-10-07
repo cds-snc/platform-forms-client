@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-
+import { useCallback } from "react";
 import { showDirectoryPicker } from "native-file-system-adapter";
 import { useState, useEffect } from "react";
 import { type IGCFormsApiClient } from "../lib/IGCFormsApiClient";
@@ -48,6 +48,29 @@ export const Submissions = ({
     }
   }, [apiClient]);
 
+  const handleProcessSubmissions = useCallback(async () => {
+    setTokenRateLimiter(false);
+    let formResponses = [...newFormSubmissions];
+
+    while (formResponses.length > 0) {
+      try {
+        const subArrays = createSubArrays(formResponses, 5);
+        for (const subArray of subArrays) {
+          await downloadAndConfirmFormSubmissions(directoryHandle, apiClient, userKey, subArray);
+          setResponsesProcessed((prev) => prev + subArray.length);
+
+          formResponses = await apiClient.getNewFormSubmissions();
+        }
+      } catch (error) {
+        if (error instanceof TokenRateLimitError) {
+          setTokenRateLimiter(true);
+        }
+        break;
+      }
+    }
+    setCompleted(true);
+  }, [apiClient, directoryHandle, newFormSubmissions, userKey]);
+
   if (!userKey || !apiClient) {
     return null;
   }
@@ -63,38 +86,9 @@ export const Submissions = ({
 
             {directoryHandle ? (
               <>
-                <Button
-                  hidden={completed}
-                  onClick={async () => {
-                    setTokenRateLimiter(false);
-                    let formResponses = [...newFormSubmissions];
-
-                    while (formResponses.length > 0) {
-                      try {
-                        const subArrays = createSubArrays(formResponses, 5);
-                        for (const subArray of subArrays) {
-                          await downloadAndConfirmFormSubmissions(
-                            directoryHandle,
-                            apiClient,
-                            userKey,
-                            subArray
-                          );
-                          setResponsesProcessed((prev) => prev + subArray.length);
-
-                          formResponses = await apiClient.getNewFormSubmissions();
-                        }
-                      } catch (error) {
-                        if (error instanceof TokenRateLimitError) {
-                          setTokenRateLimiter(true);
-                        }
-                        break;
-                      }
-                    }
-                    setCompleted(true);
-                  }}
-                >
-                  Download and Confirm
-                </Button>
+                <div>
+                  <Button onClick={handleProcessSubmissions}>Download and Confirm</Button>
+                </div>
 
                 {completed ? (
                   <p className="mt-5 text-green-600">
