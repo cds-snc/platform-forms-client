@@ -12,6 +12,8 @@ import { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
 import type { NewFormSubmission } from "../lib/types";
 
+import { ContentWrapper } from "./ContentWrapper";
+
 export const Submissions = ({
   apiClient,
   userKey,
@@ -38,7 +40,7 @@ export const Submissions = ({
   }
 
   return (
-    <div className="flex size-full flex-col items-center justify-center">
+    <ContentWrapper>
       <div className="m-5">
         {newFormSubmissions.length > 0 && apiClient ? (
           <>
@@ -107,9 +109,11 @@ export const Submissions = ({
             )}
           </>
         ) : (
-          <p>No new form submissions found.</p>
+          <div>
+            <p>No new form submissions found.</p>
+          </div>
         )}
       </div>
-    </div>
+    </ContentWrapper>
   );
 };
