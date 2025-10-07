@@ -83,21 +83,21 @@ export const Submissions = ({
               <p className="my-5">{`At least ${newFormSubmissions.length} New Responses ready for download`}</p>
             )}
 
-            {directoryHandle ? (
-              <>
-                {!completed && responsesProcessed < 1 && (
-                  <div>
-                    <Button onClick={handleProcessSubmissions}>Download and Confirm</Button>
-                  </div>
-                )}
+            {directoryHandle && !completed && responsesProcessed < 1 && (
+              <div>
+                <Button onClick={handleProcessSubmissions}>Download and Confirm</Button>
+              </div>
+            )}
 
-                <ProcessingMessage
-                  completed={completed}
-                  responsesProcessed={responsesProcessed}
-                  tokenRateLimiter={tokenRateLimiter}
-                />
-              </>
-            ) : (
+            {directoryHandle && (
+              <ProcessingMessage
+                completed={completed}
+                responsesProcessed={responsesProcessed}
+                tokenRateLimiter={tokenRateLimiter}
+              />
+            )}
+
+            {!directoryHandle && (
               <Button
                 onClick={async () => {
                   const directory = await showDirectoryPicker();
