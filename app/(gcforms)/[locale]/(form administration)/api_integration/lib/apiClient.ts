@@ -29,7 +29,9 @@ export class GCFormsApiClient {
   public getNewFormSubmissions(): Promise<NewFormSubmission[]> {
     return this.httpClient
       .get<NewFormSubmission[]>(`/forms/${this.formId}/submission/new`)
-      .then((response) => response.data)
+      .then((response) => {
+        return response.data;
+      })
       .catch((error) => {
         throw new Error("Failed to retrieve new form submissions", {
           cause: error,
