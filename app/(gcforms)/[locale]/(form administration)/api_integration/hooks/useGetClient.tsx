@@ -12,10 +12,12 @@ import { getAccessTokenFromApiKey } from "../lib/utils"; // Utility functions
 import { GCFormsApiClient } from "../lib/apiClient"; // API client class
 
 export const useGetClient = () => {
-  const isCompatible = typeof window !== "undefined" && "showOpenFilePicker" in window;
-  // No effect needed; initial value is set in useState
+  const [isCompatible] = useState(
+    () => typeof window !== "undefined" && "showOpenFilePicker" in window
+  );
   const [userKey, setUserKey] = useState<PrivateApiKey | null>(null);
   const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
+
   const handleLoadApiKey = useCallback(async () => {
     // Simulate user key retrieval
     const [fileHandle] = await showOpenFilePicker({
