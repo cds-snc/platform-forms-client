@@ -14,7 +14,7 @@ export const LoadKey = ({ onLoadKey }: LoadKeyProps) => {
 
   return (
     <ContentWrapper>
-      <div>
+      <div className="flex max-w-full items-center justify-center">
         <Button
           onClick={async () => {
             const result = await onLoadKey();

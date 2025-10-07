@@ -14,7 +14,11 @@ export const ProcessingMessage = ({
   return (
     <>
       {completed ? (
-        <Success className="w-full" title={"Success"} body={"Responses processed successfully!"} />
+        <Success
+          className="w-full min-w-full"
+          title={"Success"}
+          body={"Responses processed successfully!"}
+        />
       ) : (
         <div className="mt-5">
           {responsesProcessed > 0 ? (

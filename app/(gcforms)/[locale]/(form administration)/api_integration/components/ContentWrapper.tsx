@@ -9,7 +9,7 @@ export const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="account-wrapper mt-10">
       <div className="w-[622px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10">
-        <main id="content ">
+        <main id="content w-full">
           <Link
             className="mb-6 mr-10 inline-flex no-underline focus:bg-white"
             href={`/${locale}/form-builder`}
@@ -21,7 +21,7 @@ export const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
               {t("title", { ns: "common" })}
             </span>
           </Link>
-          <div className="flex w-full items-center justify-center">{children}</div>
+          <div>{children}</div>
           <ToastContainer autoClose={false} containerId="response-api" />
         </main>
       </div>
