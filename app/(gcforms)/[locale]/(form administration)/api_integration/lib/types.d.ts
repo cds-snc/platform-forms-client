@@ -15,6 +15,8 @@ export type EncryptedFormSubmission = {
   encryptedKey: string;
   encryptedNonce: string;
   encryptedAuthTag: string;
+  name: string;
+  confirmationCode: string;
 };
 
 export enum FormSubmissionStatus {

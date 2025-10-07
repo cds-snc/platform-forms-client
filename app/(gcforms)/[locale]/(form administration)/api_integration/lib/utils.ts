@@ -4,6 +4,8 @@ import { SignJWT } from "jose";
 import md5 from "md5";
 import { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
+import type { IGCFormsApiClient } from "./IGCFormsApiClient";
+
 import type {
   EncryptedFormSubmission,
   NewFormSubmission,
@@ -13,7 +15,7 @@ import type {
 } from "./types";
 
 import { logMessage } from "@lib/logger";
-import { GCFormsApiClient } from "./apiClient";
+// ...existing code...
 
 /*
 Import a PEM encoded RSA private key, to use for RSA-PSS signing.
@@ -145,7 +147,7 @@ const decryptFormSubmission = async (
 
 const downloadFormSubmissions = async (
   dir: FileSystemDirectoryHandle,
-  apiClient: GCFormsApiClient,
+  apiClient: IGCFormsApiClient,
   privateApiKey: PrivateApiKey,
   submissions: NewFormSubmission[]
 ) => {
@@ -221,7 +223,7 @@ const downloadAttachment = async (
 const integrityCheckAndConfirm = async (
   submissionNames: string[],
   dir: FileSystemDirectoryHandle,
-  apiClient: GCFormsApiClient
+  apiClient: IGCFormsApiClient
 ) => {
   for (const submissionName of submissionNames) {
     // Load file into memory
@@ -253,7 +255,7 @@ const integrityCheckAndConfirm = async (
 
 export const downloadAndConfirmFormSubmissions = async (
   dir: FileSystemDirectoryHandle,
-  apiClient: GCFormsApiClient,
+  apiClient: IGCFormsApiClient,
   privateApiKey: PrivateApiKey,
   submissions: NewFormSubmission[]
 ) => {

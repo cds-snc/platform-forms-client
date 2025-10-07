@@ -29,7 +29,7 @@ export const Submissions = ({
   const [completed, setCompleted] = useState(false);
   const [tokenRateLimiter, setTokenRateLimiter] = useState<boolean>(false);
 
-  const isLoading = apiClient && newFormSubmissions === null;
+  const isLoading = Boolean(apiClient) && newFormSubmissions === null;
 
   useEffect(() => {
     if (apiClient) {
@@ -49,12 +49,16 @@ export const Submissions = ({
 
   const handleProcessSubmissions = useCallback(async () => {
     setTokenRateLimiter(false);
-    let formResponses = [...newFormSubmissions];
+    let formResponses = [...(newFormSubmissions ?? [])];
 
     while (formResponses.length > 0) {
       try {
         const subArrays = createSubArrays(formResponses, 5);
         for (const subArray of subArrays) {
+          if (!directoryHandle || !userKey || !apiClient) {
+            // Optionally handle the error or prompt the user
+            break;
+          }
           await downloadAndConfirmFormSubmissions(directoryHandle, apiClient, userKey, subArray);
           setResponsesProcessed((prev) => prev + subArray.length);
 
