@@ -2,13 +2,13 @@ import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 
 import { SiteLogo } from "@serverComponents/icons";
-import { ToastContainer } from "@formBuilder/components/shared/Toast";
+import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 
 import { useGetClient } from "../hooks/useGetClient";
 
 export const LoadKey = () => {
-  const { t, i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation(["response-api", "common"]);
   const locale = i18n.language;
   const { handleLoadApiKey } = useGetClient();
 
@@ -29,10 +29,20 @@ export const LoadKey = () => {
           </Link>
 
           <div className=" flex items-center justify-center">
-            <Button onClick={handleLoadApiKey}>Load API Key</Button>
+            <Button
+              onClick={async () => {
+                const result = await handleLoadApiKey();
+
+                if (!result) {
+                  toast.error(t("failed-to-load-api-key"), "response-api");
+                }
+              }}
+            >
+              Load API Key
+            </Button>
           </div>
 
-          <ToastContainer autoClose={false} containerId="default" />
+          <ToastContainer autoClose={false} containerId="response-api" />
         </main>
       </div>
     </div>

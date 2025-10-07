@@ -2,5 +2,6 @@
   "not-supported": {
     "title": "Not Supported",
     "body": "This browser does not support the File System Access API."
-  }
+  },
+  "failed-to-load-api-key": "API key failed to load"
 }
