@@ -1,50 +1,28 @@
 /* eslint-disable no-await-in-loop */
 "use client";
+
 import { useState, useEffect } from "react";
-import { Button } from "@clientComponents/globals";
-import {
-  showOpenFilePicker,
-  showDirectoryPicker,
-  FileSystemDirectoryHandle,
-} from "native-file-system-adapter";
-import type { NewFormSubmission, PrivateApiKey } from "../lib/types";
+import { showDirectoryPicker, FileSystemDirectoryHandle } from "native-file-system-adapter";
 
-import { downloadAndConfirmFormSubmissions, getAccessTokenFromApiKey } from "../lib/utils";
+import type { NewFormSubmission } from "../lib/types";
 
-import { GCFormsApiClient } from "../lib/apiClient";
 import { TokenRateLimitError } from "../lib/error";
-import { createSubArrays } from "../lib/utils";
+import { createSubArrays, downloadAndConfirmFormSubmissions } from "../lib/utils";
 
+import { Button } from "@clientComponents/globals";
 import { NoFileSystemAccess } from "./NoFileSystemAccess";
 
+import { useGetClient } from "../hooks/useGetClient";
+
 export const APIIntegration = () => {
-  const [isCompatible, setIsCompatible] = useState(false);
-  const [userKey, setUserKey] = useState<PrivateApiKey | null>(null);
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[]>([]);
-  const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
+
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [responsesProcessed, setResponsesProcessed] = useState(0);
   const [completed, setCompleted] = useState(false);
   const [tokenRateLimiter, setTokenRateLimiter] = useState<boolean>(false);
 
-  useEffect(() => {
-    // Check if the File System Access API is supported
-    setIsCompatible("showOpenFilePicker" in window);
-  }, []);
-
-  useEffect(() => {
-    if (userKey) {
-      getAccessTokenFromApiKey(userKey).then((token) => {
-        if (token) {
-          setApiClient(
-            new GCFormsApiClient(userKey.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
-          );
-        } else {
-          alert("Failed to import private key.");
-        }
-      });
-    }
-  }, [userKey]);
+  const { isCompatible, handleLoadApiKey, userKey, apiClient } = useGetClient();
 
   useEffect(() => {
     if (apiClient) {
@@ -61,29 +39,16 @@ export const APIIntegration = () => {
   return (
     <div className="flex size-full flex-col items-center justify-center">
       <h1 className="text-2xl font-bold">API Integration</h1>
-      <div className="m-4">
-        <p>{`Form Id from Key: ${userKey?.formId} `}</p>
-        <p>{`Access Token: ${apiClient ? "Created" : "null"}`}</p>
-      </div>
-      {!userKey ? (
-        <Button
-          onClick={async () => {
-            // Simulate user key retrieval
 
-            const [fileHandle] = await showOpenFilePicker({
-              multiple: false, // default
-              excludeAcceptAllOption: false, // default
-              _preferPolyfill: false, // default
-            });
-            const keyFile = await fileHandle.getFile().then(async (file) => {
-              const text = await file.text();
-              return JSON.parse(text);
-            });
-            setUserKey(keyFile);
-          }}
-        >
-          Load API Key
-        </Button>
+      {userKey && (
+        <div className="m-4">
+          <p>{`Form Id from Key: ${userKey?.formId} `}</p>
+          <p>{`Access Token: ${apiClient ? "Created" : "null"}`}</p>
+        </div>
+      )}
+
+      {!userKey ? (
+        <Button onClick={handleLoadApiKey}>Load API Key</Button>
       ) : (
         <div className="m-5">
           {newFormSubmissions.length > 0 && apiClient ? (
