@@ -1,8 +1,8 @@
 /* eslint-disable no-await-in-loop */
 
 import { showDirectoryPicker } from "native-file-system-adapter";
-
 import { useState, useEffect } from "react";
+import { type GCFormsApiClient } from "../lib/apiClient";
 
 import { TokenRateLimitError } from "../lib/error";
 import { createSubArrays, downloadAndConfirmFormSubmissions } from "../lib/utils";
@@ -10,7 +10,7 @@ import { Button } from "@clientComponents/globals";
 
 import { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
-import type { NewFormSubmission } from "../lib/types";
+import type { NewFormSubmission, PrivateApiKey } from "../lib/types";
 
 import { ContentWrapper } from "./ContentWrapper";
 
@@ -42,7 +42,7 @@ export const Submissions = ({
   return (
     <ContentWrapper>
       <div className="m-5">
-        {newFormSubmissions.length > 0 && apiClient ? (
+        {newFormSubmissions.length > 0 ? (
           <>
             <p>{`At least ${newFormSubmissions.length} New Responses ready for download`}</p>
             {directoryHandle ? (
