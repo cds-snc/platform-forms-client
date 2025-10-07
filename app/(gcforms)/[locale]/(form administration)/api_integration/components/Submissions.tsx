@@ -2,7 +2,7 @@
 
 import { showDirectoryPicker } from "native-file-system-adapter";
 import { useState, useEffect } from "react";
-import { type GCFormsApiClient } from "../lib/apiClient";
+import { type IGCFormsApiClient } from "../lib/IGCFormsApiClient";
 
 import { TokenRateLimitError } from "../lib/error";
 import { createSubArrays, downloadAndConfirmFormSubmissions } from "../lib/utils";
@@ -18,20 +18,31 @@ export const Submissions = ({
   apiClient,
   userKey,
 }: {
-  apiClient: GCFormsApiClient | null;
+  apiClient: IGCFormsApiClient | null;
   userKey: PrivateApiKey | null;
 }) => {
-  const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[]>([]);
+  const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [responsesProcessed, setResponsesProcessed] = useState(0);
   const [completed, setCompleted] = useState(false);
   const [tokenRateLimiter, setTokenRateLimiter] = useState<boolean>(false);
 
+  // Derive loading state from apiClient presence and submissions state
+  const isLoading = apiClient && newFormSubmissions === null;
+
   useEffect(() => {
     if (apiClient) {
-      apiClient.getNewFormSubmissions().then((submissions) => {
-        setNewFormSubmissions(submissions);
-      });
+      apiClient
+        .getNewFormSubmissions()
+        .then((submissions) => {
+          setNewFormSubmissions(submissions);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error("Error loading submissions:", error);
+          // Set empty array on error to stop loading state
+          setNewFormSubmissions([]);
+        });
     }
   }, [apiClient]);
 
@@ -42,7 +53,7 @@ export const Submissions = ({
   return (
     <ContentWrapper>
       <div>
-        {newFormSubmissions.length > 0 ? (
+        {newFormSubmissions && newFormSubmissions.length > 0 ? (
           <>
             {!directoryHandle && (
               <p className="my-5">{`At least ${newFormSubmissions.length} New Responses ready for download`}</p>
@@ -111,6 +122,10 @@ export const Submissions = ({
               </>
             )}
           </>
+        ) : isLoading ? (
+          <div>
+            <p>Loading...</p>
+          </div>
         ) : (
           <div>
             <p>No new form submissions found.</p>

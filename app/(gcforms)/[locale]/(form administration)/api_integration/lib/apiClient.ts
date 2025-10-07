@@ -1,10 +1,11 @@
 import axios, { type AxiosInstance } from "axios";
 
 import type { EncryptedFormSubmission, NewFormSubmission, FormSubmissionProblem } from "./types";
+import type { IGCFormsApiClient } from "./IGCFormsApiClient";
 
 import { TokenRateLimitError } from "./error";
 
-export class GCFormsApiClient {
+export class GCFormsApiClient implements IGCFormsApiClient {
   private formId: string;
   private httpClient: AxiosInstance;
 

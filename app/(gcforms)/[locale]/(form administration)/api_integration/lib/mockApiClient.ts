@@ -1,10 +1,11 @@
 import type { EncryptedFormSubmission, NewFormSubmission, FormSubmissionProblem } from "./types";
+import type { IGCFormsApiClient } from "./IGCFormsApiClient";
 
 /**
  * Mock API client for development and testing
  * Simulates the GCFormsApiClient behavior without making real API calls
  */
-export class MockGCFormsApiClient {
+export class MockGCFormsApiClient implements IGCFormsApiClient {
   private formId: string;
 
   public constructor(formId: string, _apiUrl: string, _accessToken: string) {
