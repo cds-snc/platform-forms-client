@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/connectors",
-  "version": "2.2.10",
+  "version": "2.2.11",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -20,13 +20,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --splitting",
     "prepack": "yarn build",
     "connectors:prepack": "yarn prepack"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.901.0",
-    "got": "^11.8.6",
+    "axios": "^1.12.2",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
