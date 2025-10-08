@@ -62,7 +62,7 @@ export const SubOptions = ({
     const initialValue = choices?.[choiceIndex][translationLanguagePriority] ?? "";
 
     return (
-      <div key={`child-${item.id}-${choiceIndex}`}>
+      <div key={`child-${item.id}-${choiceIndex}-${translationLanguagePriority}`}>
         <SubOption
           renderIcon={renderIcon}
           subIndex={item.index}
