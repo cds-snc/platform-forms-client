@@ -57,8 +57,6 @@ export const Option = ({
 
   const icon = renderIcon && renderIcon(index);
   const { t } = useTranslation("form-builder");
-
-  // Use initialValue directly - let parent control when to reset
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
