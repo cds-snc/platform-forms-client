@@ -258,7 +258,7 @@ export const downloadAndConfirmFormSubmissions = async (
   apiClient: IGCFormsApiClient,
   privateApiKey: PrivateApiKey,
   submissions: NewFormSubmission[]
-) => {
+): Promise<string[]> => {
   if (!dir || !submissions.length) {
     throw new Error("Invalid directory handle or no submissions to process.");
   }
@@ -269,6 +269,9 @@ export const downloadAndConfirmFormSubmissions = async (
     dir,
     apiClient
   );
+
+  // Return the JSON file names that were created
+  return submissions.map((submission) => `${submission.name}.json`);
 };
 
 export function createSubArrays<T>(arr: T[], size: number) {
