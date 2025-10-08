@@ -20,7 +20,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean --splitting",
+    "build": "tsdown src/index.ts --format cjs,esm --dts --clean --splitting",
     "prepack": "yarn build",
     "connectors:prepack": "yarn prepack"
   },
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.6.1",
-    "tsup": "^8.3.6",
+    "tsdown": "^0.15.6",
     "typescript": "^5.9.3"
   },
   "packageManager": "yarn@4.10.3"
