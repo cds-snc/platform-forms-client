@@ -708,8 +708,7 @@ describe("Template CRUD functions", () => {
       expect(publicFormRecord).toHaveProperty("form");
       expect(publicFormRecord).toHaveProperty("isPublished");
       expect(publicFormRecord).toHaveProperty("securityAttribute");
-
-      expect(publicFormRecord).not.toHaveProperty("deliveryOption");
+      expect(publicFormRecord).toHaveProperty("deliveryOption");
     });
   });
 
