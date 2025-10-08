@@ -1,0 +1,71 @@
+
+@import "@cdssnc/gcds-tokens/build/web/css/global.css";
+@import "@cdssnc/gcds-tokens/build/web/css/tokens.css";
+
+
+
+@tailwind base;
+@tailwind components;
+
+@layer base {
+  #skip-link-container {
+    width: 100%;
+    position: absolute;
+    z-index: 5;
+    text-align: center;
+    top: 10px;
+
+    #skip-link {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      white-space: nowrap;
+
+      &:focus {
+        position: static;
+        padding: 5px;
+        width: auto;
+        height: auto;
+        overflow: auto;
+        text-align: center;
+      }
+    }
+  }
+
+  a:focus {
+    outline: none;
+    box-shadow:
+      4px 0 0 0 #303fc3,
+      -4px 0 0 0 #303fc3;
+    @apply bg-blue-focus text-white;
+  }
+
+  a.tableLink {
+    color: #303f9f;
+    text-decoration: underline;
+  }
+
+  a.tableLink:hover,
+  a.tableLink:focus {
+    color: #fff !important;
+    text-decoration: underline;
+    background: #0d47a1;
+  }
+
+  a.tableLink:visited {
+    color: #9c27b0;
+    text-decoration: underline;
+  }
+}
+
+@tailwind utilities;
+
+// Pull in partial styles from the main styles directory
+@import "../../../../styles/_typography.scss";
+@import "../../../../styles/_gc-header.scss";
+
+.container-xl {
+  max-width: var(--gcds-container-xl);
+  width: 100%;
+}

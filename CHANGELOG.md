@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.1](https://github.com/cds-snc/platform-forms-client/compare/v4.2.0...v4.2.1) (2025-10-08)
+
+
+### Bug Fixes
+
+* **deps:** update all minor dependencies ([#6152](https://github.com/cds-snc/platform-forms-client/issues/6152)) ([26b24d3](https://github.com/cds-snc/platform-forms-client/commit/26b24d3260f509ff1ca2e0298bf610d88776bbad))
+* Filter out richText elements when initializing new repeatingSet rows ([#6184](https://github.com/cds-snc/platform-forms-client/issues/6184)) ([9785f28](https://github.com/cds-snc/platform-forms-client/commit/9785f28f86c55908367d2a463c0285c61821a506))
+
+
+### Miscellaneous Chores
+
+* add prisma config file ([#6176](https://github.com/cds-snc/platform-forms-client/issues/6176)) ([7afccff](https://github.com/cds-snc/platform-forms-client/commit/7afccff553c08649d9696f95eb71f3ea2e399708))
+* bump packages ([#6158](https://github.com/cds-snc/platform-forms-client/issues/6158)) ([f88205e](https://github.com/cds-snc/platform-forms-client/commit/f88205ec7513e0e1ba6bc87028c12bebc7e0b28d))
+* bump prisma adapter ([#6178](https://github.com/cds-snc/platform-forms-client/issues/6178)) ([39bb064](https://github.com/cds-snc/platform-forms-client/commit/39bb06438ae037996918b96cc9a07910deec6193))
+* bump use effect linter + aws packages ([#6169](https://github.com/cds-snc/platform-forms-client/issues/6169)) ([317b799](https://github.com/cds-snc/platform-forms-client/commit/317b799f56d6038ae64ed5bf51d1dbdfec082fc1))
+* bump yarn ([#6167](https://github.com/cds-snc/platform-forms-client/issues/6167)) ([be19676](https://github.com/cds-snc/platform-forms-client/commit/be19676f6e325abf56a891efae8007b10f8b1e68))
+* Cleanup unnecessary useEffect ([#6162](https://github.com/cds-snc/platform-forms-client/issues/6162)) ([9c878a4](https://github.com/cds-snc/platform-forms-client/commit/9c878a4dace243e8cb97fa5c73685fc8cda6dc66))
+* **deps:** lock file maintenance ([#6175](https://github.com/cds-snc/platform-forms-client/issues/6175)) ([12130d3](https://github.com/cds-snc/platform-forms-client/commit/12130d3b1711579dd1e347e1d6827695f24acc32))
+* **deps:** update all non-major docker images ([#6171](https://github.com/cds-snc/platform-forms-client/issues/6171)) ([a6bec76](https://github.com/cds-snc/platform-forms-client/commit/a6bec769e50572dfccf2dd2b0597a4106100f3fe))
+* **deps:** update all non-major github action dependencies ([#6174](https://github.com/cds-snc/platform-forms-client/issues/6174)) ([42911e5](https://github.com/cds-snc/platform-forms-client/commit/42911e5d33db6ba21055dc048b359e7609fff10d))
+* **deps:** update all patch dependencies ([#6151](https://github.com/cds-snc/platform-forms-client/issues/6151)) ([0275fbd](https://github.com/cds-snc/platform-forms-client/commit/0275fbdff82ea61064e125221384aaadec304567))
+* **deps:** update all patch dependencies ([#6173](https://github.com/cds-snc/platform-forms-client/issues/6173)) ([e1432cc](https://github.com/cds-snc/platform-forms-client/commit/e1432ccfabcc7eba6f2d9c09f2db5b410e8526db))
+* Fix confirm delete group dialog ([#6161](https://github.com/cds-snc/platform-forms-client/issues/6161)) ([397c341](https://github.com/cds-snc/platform-forms-client/commit/397c3419548c55829d4e96d642abad3513150443))
+* import env for prisma config ([#6177](https://github.com/cds-snc/platform-forms-client/issues/6177)) ([048ac4c](https://github.com/cds-snc/platform-forms-client/commit/048ac4ca07f4e37bd1d322ff339162a3259f8af0))
+* Migrate TreeView to headless package ([#6059](https://github.com/cds-snc/platform-forms-client/issues/6059)) ([84030b0](https://github.com/cds-snc/platform-forms-client/commit/84030b0845e25c21ca4d433024858a95a7a9355f))
+* synced file(s) with cds-snc/site-reliability-engineering ([#6172](https://github.com/cds-snc/platform-forms-client/issues/6172)) ([cab6827](https://github.com/cds-snc/platform-forms-client/commit/cab6827c096290b4e2059eb49bdc67114bffaefd))
+* synced file(s) with cds-snc/site-reliability-engineering ([#6179](https://github.com/cds-snc/platform-forms-client/issues/6179)) ([9f2914e](https://github.com/cds-snc/platform-forms-client/commit/9f2914ec37b90c53b97a9bad992e58aac5f87c26))
+* synced local '.github/workflows/export_github_data.yml' with remote 'tools/sre_file_sync/export_github_data.yml' ([cab6827](https://github.com/cds-snc/platform-forms-client/commit/cab6827c096290b4e2059eb49bdc67114bffaefd))
+* update styles for standalone HTML downloads ([#6165](https://github.com/cds-snc/platform-forms-client/issues/6165)) ([e4f3a83](https://github.com/cds-snc/platform-forms-client/commit/e4f3a838e75d8f4c6981ca310c8e5e8879fcf8dd))
+
 ## [4.2.0](https://github.com/cds-snc/platform-forms-client/compare/v4.1.0...v4.2.0) (2025-09-29)
 
 
