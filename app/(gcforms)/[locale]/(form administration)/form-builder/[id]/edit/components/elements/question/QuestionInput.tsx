@@ -56,10 +56,6 @@ export const QuestionInput = ({
     }
   }, [getFocusInput, setFocusInput, id, refs]);
 
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
-
   const _debounced = debounce(
     useCallback(
       (id: number, value: string, lang: Language) => {

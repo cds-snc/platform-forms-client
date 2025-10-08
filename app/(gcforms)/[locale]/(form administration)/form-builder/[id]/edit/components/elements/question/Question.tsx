@@ -34,6 +34,7 @@ export const Question = ({
   return isRichText ? null : (
     <>
       <QuestionInput
+        key={translationLanguagePriority}
         initialValue={title}
         index={itemIndex}
         id={item.id}
