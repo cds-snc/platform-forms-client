@@ -1,38 +1,41 @@
+import { TokenRateLimitError } from "../lib/error";
 import { Loader } from "@clientComponents/globals/Loader";
-
-import { Success } from "@clientComponents/globals/Alert/Alert";
+import { Danger, Success } from "@clientComponents/globals/Alert/Alert";
 
 export const ProcessingMessage = ({
   completed,
   responsesProcessed,
-  tokenRateLimiter,
+  error,
 }: {
   completed: boolean;
   responsesProcessed: number;
-  tokenRateLimiter: boolean;
+  error: Error | null;
 }) => {
-  return (
-    <>
-      {completed ? (
-        <Success
-          className="w-full min-w-full"
-          title={"Success"}
-          body={"Responses processed successfully!"}
-        />
-      ) : (
-        <div className="mt-5">
-          {responsesProcessed > 0 ? (
-            <div>
-              <Loader message={`Processing ${responsesProcessed} responses...`} />{" "}
-            </div>
-          ) : null}
-        </div>
-      )}
-      {tokenRateLimiter ? (
-        <p className="mt-5 text-red-600">
-          You have hit the token rate limit. Please try again later.
-        </p>
-      ) : null}
-    </>
-  );
+  if (error instanceof TokenRateLimitError) {
+    return (
+      <Danger title="Error" body="You have hit the token rate limit. Please try again later." />
+    );
+  }
+
+  if (error) {
+    return <Danger title="Error" body="An error occurred while processing submissions" />;
+  }
+
+  if (responsesProcessed === 0 && !completed) {
+    return null;
+  }
+
+  if (responsesProcessed > 0 && !completed) {
+    return <Loader message={`Processing ${responsesProcessed} responses...`} />;
+  }
+
+  if (completed) {
+    return (
+      <Success
+        className="w-full min-w-full"
+        title={"Success"}
+        body={"Responses processed successfully!"}
+      />
+    );
+  }
 };

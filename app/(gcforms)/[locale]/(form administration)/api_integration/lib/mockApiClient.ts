@@ -60,7 +60,7 @@ export class MockGCFormsApiClient implements IGCFormsApiClient {
       },
     ];
 
-    return mockSubmissions;
+    return mockSubmissions.slice(0, 20);
   }
 
   public async getFormSubmission(submissionName: string): Promise<EncryptedFormSubmission> {
@@ -68,13 +68,11 @@ export class MockGCFormsApiClient implements IGCFormsApiClient {
     await this.delay(600);
 
     // Simulate rate limiting
-    /*
     if (Math.random() < 0.1) {
       const error = new Error("Rate limit exceeded") as Error & { response: { status: number } };
       error.response = { status: 429 };
       throw error;
     }
-    */
 
     return {
       name: submissionName,

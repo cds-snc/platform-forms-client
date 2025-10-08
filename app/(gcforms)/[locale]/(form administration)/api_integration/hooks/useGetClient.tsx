@@ -33,6 +33,7 @@ export const useGetClient = () => {
         excludeAcceptAllOption: false, // default
         _preferPolyfill: false, // default
       });
+
       const keyFile = await fileHandle.getFile().then(async (file) => {
         const text = await file.text();
         return JSON.parse(text);

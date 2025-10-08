@@ -1,21 +1,22 @@
 /* eslint-disable no-await-in-loop */
 import { useCallback } from "react";
-import { showDirectoryPicker } from "native-file-system-adapter";
+
 import { useState, useEffect } from "react";
 import { type IGCFormsApiClient } from "../lib/IGCFormsApiClient";
 
-import { TokenRateLimitError } from "../lib/error";
 import { createSubArrays, downloadAndConfirmFormSubmissions } from "../lib/utils";
 import { Button } from "@clientComponents/globals";
 
+// Use the type returned by showDirectoryPicker
 import { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
 import type { NewFormSubmission, PrivateApiKey } from "../lib/types";
 
+import { ResponsesAvailable } from "./ResponsesAvailable";
 import { ContentWrapper } from "./ContentWrapper";
 import { ProcessingMessage } from "./ProcessingMessage";
 import { NoSubmissions } from "./NoSubmissions";
-import { Success } from "@clientComponents/globals/Alert/Alert";
+import { DirectoryPicker } from "./DirectoryPicker";
 
 export const Submissions = ({
   apiClient,
@@ -25,10 +26,10 @@ export const Submissions = ({
   userKey: PrivateApiKey | null;
 }) => {
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
-  const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
+  const [directoryHandle, setDirectoryHandle] = useState<unknown>(null);
   const [responsesProcessed, setResponsesProcessed] = useState(0);
   const [completed, setCompleted] = useState(false);
-  const [tokenRateLimiter, setTokenRateLimiter] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const isLoading = Boolean(apiClient) && newFormSubmissions === null;
 
@@ -49,7 +50,7 @@ export const Submissions = ({
   }, [apiClient]);
 
   const handleProcessSubmissions = useCallback(async () => {
-    setTokenRateLimiter(false);
+    setError(null);
     let formResponses = [...(newFormSubmissions ?? [])];
 
     while (formResponses.length > 0) {
@@ -60,15 +61,18 @@ export const Submissions = ({
             // Optionally handle the error or prompt the user
             break;
           }
-          await downloadAndConfirmFormSubmissions(directoryHandle, apiClient, userKey, subArray);
+          await downloadAndConfirmFormSubmissions(
+            directoryHandle as FileSystemDirectoryHandle,
+            apiClient,
+            userKey,
+            subArray
+          );
           setResponsesProcessed((prev) => prev + subArray.length);
 
           formResponses = await apiClient.getNewFormSubmissions();
         }
       } catch (error) {
-        if (error instanceof TokenRateLimitError) {
-          setTokenRateLimiter(true);
-        }
+        setError(error as Error);
         break;
       }
     }
@@ -80,6 +84,8 @@ export const Submissions = ({
       ? `At least ${newFormSubmissions.length} New Responses ready for download`
       : null;
 
+  const showDownloadButton = directoryHandle && !completed && responsesProcessed < 1;
+
   if (!userKey || !apiClient) {
     return null;
   }
@@ -89,36 +95,24 @@ export const Submissions = ({
       <div>
         {newFormSubmissions && newFormSubmissions.length > 0 ? (
           <>
-            {hasResponses && (
-              <div className="mb-5">
-                <Success title={"New Responses Available"} body={hasResponses}></Success>
-              </div>
+            <ResponsesAvailable message={hasResponses} />
+
+            {showDownloadButton && (
+              <Button onClick={handleProcessSubmissions}>Download and Confirm</Button>
             )}
 
-            {directoryHandle && !completed && responsesProcessed < 1 && (
-              <div>
-                <Button onClick={handleProcessSubmissions}>Download and Confirm</Button>
-              </div>
-            )}
+            <DirectoryPicker
+              directoryHandle={directoryHandle}
+              onPick={(handle) => {
+                setDirectoryHandle(handle);
+              }}
+            />
 
-            {directoryHandle && (
-              <ProcessingMessage
-                completed={completed}
-                responsesProcessed={responsesProcessed}
-                tokenRateLimiter={tokenRateLimiter}
-              />
-            )}
-
-            {!directoryHandle && (
-              <Button
-                onClick={async () => {
-                  const directory = await showDirectoryPicker();
-                  setDirectoryHandle(directory);
-                }}
-              >
-                Choose Save Location
-              </Button>
-            )}
+            <ProcessingMessage
+              error={error}
+              completed={completed}
+              responsesProcessed={responsesProcessed}
+            />
           </>
         ) : (
           <NoSubmissions isLoading={isLoading} />
