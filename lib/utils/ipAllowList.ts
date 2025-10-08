@@ -22,3 +22,23 @@ export const isIpInRange = (ip: string, range: string): boolean => {
   // Compare masked values
   return (ipInt & mask) === (rangeInt & mask);
 };
+
+export const allowIp = (clientIp: string, ipAllowList: string) => {
+  // const ipAllowList = process.env.IP_ALLOW_LIST;
+
+  if (!clientIp || !ipAllowList) {
+    return false;
+  }
+
+  const ipRanges = ipAllowList.split(",").map((range) => range.trim());
+
+  // Check if client IP is in any of the allowed ranges
+  for (const range of ipRanges) {
+    if (isIpInRange(clientIp, range)) {
+      return true;
+    }
+  }
+
+  // Client IP not in any allowed range, deny access
+  return false;
+};
