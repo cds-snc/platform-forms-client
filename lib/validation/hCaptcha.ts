@@ -1,8 +1,7 @@
 import axios from "axios";
-import { getClientIP } from "@lib/ip";
+import { allowIp, getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
 import { withRetry } from "../utils/retry";
-import { allowIp } from "../utils/ipAllowList";
 
 /**
  * Verifies the client hCaptcha token is valid using the hCaptcha API
