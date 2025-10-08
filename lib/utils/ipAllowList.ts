@@ -1,12 +1,12 @@
-// Checks if an IPv4 address is in a given IPv4 range (CIDR)
+// Checks if an IPv4 address is in a given IPv4 CIDR (Classless Inter-Domain Routing) range
 export const isIpInRange = (ip: string, range: string): boolean => {
   // Split IP range
   const [rangeIp, prefixLengthStr] = range.split("/");
   const prefixLength = parseInt(prefixLengthStr, 10);
 
   // Convert IPs to 32-bit numbers
-  function ipToInt(ipStr: string): number {
-    return ipStr
+  function ipToInt(ipList: string): number {
+    return ipList
       .split(".")
       .map(Number)
       .reduce((acc, octet) => (acc << 8) + octet, 0);
@@ -30,11 +30,14 @@ export const allowIp = (clientIp: string, ipAllowList: string) => {
     return false;
   }
 
+  // Handle IPv4-mapped IPv6 addresses
+  const ipV4 = clientIp.replace(/^::ffff:/, "");
+
   const ipRanges = ipAllowList.split(",").map((range) => range.trim());
 
   // Check if client IP is in any of the allowed ranges
   for (const range of ipRanges) {
-    if (isIpInRange(clientIp, range)) {
+    if (isIpInRange(ipV4, range)) {
       return true;
     }
   }

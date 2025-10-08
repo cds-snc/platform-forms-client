@@ -11,7 +11,8 @@ import { allowIp } from "../utils/ipAllowList";
  * @returns boolean true if the token is valid
  */
 export const verifyHCaptchaToken = async (token: string, formId: string): Promise<boolean> => {
-  if (allowIp(String(await getClientIP()), String(process.env.HCAPTCHA_IP_ALLOW_LIST))) {
+  const clientIp = await getClientIP();
+  if (allowIp(clientIp, String(process.env.HCAPTCHA_IP_ALLOW_LIST))) {
     logMessage.info(`hCaptcha: bypassed for allow-listed IP for formId ${formId}`);
     return true;
   }
