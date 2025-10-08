@@ -1,15 +1,15 @@
 {
   "name": "@gcforms/editor",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@4.9.4",
+  "packageManager": "yarn@4.10.3",
   "dependencies": {
-    "@lexical/react": "^0.35.0",
-    "lexical": "^0.35.0"
+    "@lexical/react": "^0.36.2",
+    "lexical": "^0.36.2"
   },
   "peerDependencies": {
     "react": "^19.1.0",

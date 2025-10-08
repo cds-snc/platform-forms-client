@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/connectors",
-  "version": "2.2.6",
+  "version": "2.2.10",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -25,14 +25,14 @@
     "connectors:prepack": "yarn prepack"
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.888.0",
+    "@aws-sdk/client-secrets-manager": "^3.901.0",
     "got": "^11.8.6",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
-    "@types/node": "^20.11.6",
+    "@types/node": "^24.6.1",
     "tsup": "^8.3.6",
-    "typescript": "^5.5.2"
+    "typescript": "^5.9.3"
   },
-  "packageManager": "yarn@4.9.4"
+  "packageManager": "yarn@4.10.3"
 }
