@@ -76,7 +76,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     Array(fieldValue.length).fill(createRef<HTMLFieldSetElement>())
   );
   const focusedRow = useRef<number | null>(null);
-  const [hasReachedMaxNumberOfRows, setHasReachedMaxNumberOfRows] = useState<boolean>(false);
+
+  // Compute this value directly instead of using state
+  const hasReachedMaxNumberOfRows = maxNumberOfRows ? rows.length >= maxNumberOfRows : false;
 
   const { t } = useTranslation();
 
@@ -93,12 +95,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
     // When rows are added or deleted run the useEffect again to focus on the new row
   }, [rows.length]);
-
-  useEffect(() => {
-    if (maxNumberOfRows) {
-      setHasReachedMaxNumberOfRows(rows.length >= maxNumberOfRows);
-    }
-  }, [rows.length, maxNumberOfRows]);
 
   const addRow = () => {
     if (hasReachedMaxNumberOfRows) return;
