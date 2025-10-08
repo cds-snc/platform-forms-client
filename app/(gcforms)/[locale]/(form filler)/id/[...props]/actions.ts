@@ -116,7 +116,12 @@ export async function submitForm(
       language,
     });
 
-    sendNotifications(formId, template.form.titleEn, template.form.titleFr);
+    sendNotifications(
+      formId,
+      template.form.titleEn,
+      template.form.titleFr,
+      !!template.deliveryOption
+    );
 
     return { id: formId, submissionId, fileURLMap };
   } catch (e) {

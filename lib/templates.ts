@@ -1309,6 +1309,7 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
     isPublished: template.isPublished,
     securityAttribute: template.securityAttribute,
     saveAndResume: template.saveAndResume,
+    deliveryOption: template.deliveryOption,
   };
 };
 

@@ -16,10 +16,14 @@ const Status = {
 type Status = (typeof Status)[keyof typeof Status];
 
 // Public facing function to send notifications to all related users on a form submission
-export const sendNotifications = async (formId: string, titleEn: string, titleFr: string) => {
-  // Avoid sending additional notifications to legacy forms that receive delivery by email.
-  const deliveryOption = await _getDeliveryOption(formId);
-  if (deliveryOption) {
+export const sendNotifications = async (
+  formId: string,
+  titleEn: string,
+  titleFr: string,
+  hasDeliveryOption: boolean
+) => {
+  // Avoid sending additional notifications to legacy forms that already receive delivery updates by email
+  if (hasDeliveryOption) {
     return;
   }
 
@@ -97,26 +101,6 @@ export const getNotificationsUsers = async (formId: string) => {
       enabled: foundUser ? true : false,
     };
   });
-};
-
-const _getDeliveryOption = async (formId: string) => {
-  const template = await prisma.template
-    .findUnique({
-      where: {
-        id: formId,
-      },
-      select: {
-        deliveryOption: true,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (!template) {
-    logMessage.warn(`_getDeliveryOption template not found with id ${formId}`);
-    return null;
-  }
-
-  return template.deliveryOption;
 };
 
 const setMarker = async (formId: string, status: Status = Status.SINGLE_EMAIL_SENT) => {
