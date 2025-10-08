@@ -57,7 +57,12 @@ export const Option = ({
 
   const icon = renderIcon && renderIcon(index);
   const { t } = useTranslation("form-builder");
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(() => initialValue);
+
+  // Sync state with prop during render
+  if (value !== initialValue) {
+    setValue(initialValue);
+  }
 
   useEffect(() => {
     // see: https://github.com/cds-snc/platform-forms-client/pull/1194/commits/cf2d08676cb9dfa7bb500f713cc16cdf653c3e93
@@ -66,10 +71,6 @@ export const Option = ({
       setFocusInput(false);
     }
   }, [getFocusInput, setFocusInput]);
-
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
