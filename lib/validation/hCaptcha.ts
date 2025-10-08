@@ -2,6 +2,7 @@ import axios from "axios";
 import { getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
 import { withRetry } from "../utils/retry";
+import { allowIp } from "../utils/ipAllowList";
 
 /**
  * Verifies the client hCaptcha token is valid using the hCaptcha API
@@ -10,6 +11,11 @@ import { withRetry } from "../utils/retry";
  * @returns boolean true if the token is valid
  */
 export const verifyHCaptchaToken = async (token: string, formId: string): Promise<boolean> => {
+  if (allowIp(String(await getClientIP()), String(process.env.HCAPTCHA_IP_ALLOW_LIST))) {
+    logMessage.info(`hCaptcha: bypassed for allow-listed IP for formId ${formId}`);
+    return true;
+  }
+
   if (!token) {
     logMessage.info(`hCaptcha: client error missing token for formId ${formId}`);
     return false;
