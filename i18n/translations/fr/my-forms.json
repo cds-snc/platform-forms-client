@@ -39,7 +39,7 @@
       "coppiedToClipboard": "Copié dans le presse-papier",
       "somethingWentWrong": "Quelque chose a mal tourné",
       "clone": "Dupliquer",
-      "cloneSuccess": "Formulaire dupliqué",
+      "cloneSuccess": "Le formulaire a été dupliqué.",
       "cloneFailed": "Échec de la duplication du formulaire"
     },
     "actionRequired": {
