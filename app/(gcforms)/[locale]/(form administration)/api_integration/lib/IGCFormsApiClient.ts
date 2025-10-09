@@ -4,6 +4,7 @@ import type { EncryptedFormSubmission, NewFormSubmission, FormSubmissionProblem 
  * Common interface for both real and mock API clients
  */
 export interface IGCFormsApiClient {
+  getFormId(): string;
   getFormTemplate(): Promise<Record<string, unknown>>;
   getNewFormSubmissions(): Promise<NewFormSubmission[]>;
   getFormSubmission(submissionName: string): Promise<EncryptedFormSubmission>;

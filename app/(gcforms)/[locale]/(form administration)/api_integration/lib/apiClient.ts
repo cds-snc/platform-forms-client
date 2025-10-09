@@ -18,6 +18,10 @@ export class GCFormsApiClient implements IGCFormsApiClient {
     });
   }
 
+  public getFormId(): string {
+    return this.formId;
+  }
+
   public getFormTemplate(): Promise<Record<string, unknown>> {
     return this.httpClient
       .get<Record<string, unknown>>(`/forms/${this.formId}/template`)

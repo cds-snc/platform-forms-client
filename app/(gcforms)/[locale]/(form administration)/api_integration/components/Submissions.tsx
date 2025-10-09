@@ -17,7 +17,7 @@ import { ContentWrapper } from "./ContentWrapper";
 import { ProcessingMessage } from "./ProcessingMessage";
 import { NoSubmissions } from "./NoSubmissions";
 import { DirectoryPicker } from "./DirectoryPicker";
-import { convertJsonToCSV } from "../lib/jsonToCsv";
+import { processJsonToCsv } from "../lib/jsonToCsv";
 
 export const Submissions = ({
   apiClient,
@@ -50,64 +50,6 @@ export const Submissions = ({
     }
   }, [apiClient]);
 
-  const processToCsv = useCallback(
-    async (jsonFileNames: string[]) => {
-      if (!directoryHandle || jsonFileNames.length === 0) return;
-
-      try {
-        // Read all JSON files and parse them
-        const allData: Record<string, unknown>[] = [];
-
-        for (const fileName of jsonFileNames) {
-          try {
-            const fileHandle = await (directoryHandle as FileSystemDirectoryHandle).getFileHandle(
-              fileName
-            );
-            const file = await fileHandle.getFile();
-            const content = await file.text();
-
-            const jsonData = JSON.parse(content);
-            // Handle both single objects and arrays
-            if (Array.isArray(jsonData)) {
-              allData.push(...jsonData);
-            } else {
-              allData.push(jsonData);
-            }
-          } catch (parseError) {
-            // eslint-disable-next-line no-console
-            console.error(`Failed to parse ${fileName}:`, parseError);
-          }
-        }
-
-        if (allData.length === 0) {
-          // eslint-disable-next-line no-console
-          console.warn("No valid JSON data found to convert to CSV");
-          return;
-        }
-
-        // Convert to CSV
-        const csvContent = convertJsonToCSV(allData);
-
-        // Write CSV file back to directory
-        const csvFileName = `combined-output-${Date.now()}.csv`;
-        const csvFileHandle = await (directoryHandle as FileSystemDirectoryHandle).getFileHandle(
-          csvFileName,
-          { create: true }
-        );
-        const writable = await csvFileHandle.createWritable();
-        await writable.write(csvContent);
-        await writable.close();
-
-        // eslint-disable-next-line no-console
-        console.log(`CSV file created: ${csvFileName}`);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error("Error processing JSON to CSV:", error);
-      }
-    },
-    [directoryHandle]
-  );
-
   const handleProcessSubmissions = useCallback(async () => {
     setError(null);
     let formResponses = [...(newFormSubmissions ?? [])];
@@ -139,13 +81,16 @@ export const Submissions = ({
         break;
       }
     }
-    setCompleted(true);
 
-    // Process all JSON files to CSV after completion
-    if (allJsonFiles.length > 0) {
-      await processToCsv(allJsonFiles);
-    }
-  }, [apiClient, directoryHandle, newFormSubmissions, userKey, processToCsv]);
+    // Write the collected JSON files to a CSV
+    await processJsonToCsv({
+      formId: apiClient?.getFormId() || "<formId>",
+      jsonFileNames: allJsonFiles,
+      directoryHandle: directoryHandle,
+    });
+
+    setCompleted(true);
+  }, [apiClient, directoryHandle, newFormSubmissions, userKey]);
 
   const hasResponses =
     !completed && responsesProcessed < 1 && newFormSubmissions

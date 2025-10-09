@@ -42,3 +42,68 @@ function escapeCSVValue(value: unknown): string {
 
   return stringValue;
 }
+
+/* eslint-disable no-await-in-loop */
+export const processJsonToCsv = async ({
+  formId,
+  jsonFileNames,
+  directoryHandle,
+}: {
+  formId: string;
+  jsonFileNames: string[];
+  directoryHandle: unknown;
+}) => {
+  if (!directoryHandle || jsonFileNames.length === 0) return;
+
+  try {
+    // Read all JSON files and parse them
+    const allData: Record<string, unknown>[] = [];
+
+    for (const fileName of jsonFileNames) {
+      try {
+        const fileHandle = await (directoryHandle as FileSystemDirectoryHandle).getFileHandle(
+          fileName
+        );
+        const file = await fileHandle.getFile();
+        const content = await file.text();
+
+        const jsonData = JSON.parse(content);
+        // Handle both single objects and arrays
+        if (Array.isArray(jsonData)) {
+          allData.push(...jsonData);
+        } else {
+          allData.push(jsonData);
+        }
+      } catch (parseError) {
+        // eslint-disable-next-line no-console
+        console.error(`Failed to parse ${fileName}:`, parseError);
+      }
+    }
+
+    if (allData.length === 0) {
+      // eslint-disable-next-line no-console
+      console.warn("No valid JSON data found to convert to CSV");
+      return;
+    }
+
+    // Convert to CSV
+    const csvContent = convertJsonToCSV(allData);
+
+    // Write CSV file back to directory
+    const csvFileName = `${formId}-responses-${Date.now()}.csv`;
+    const csvFileHandle = await (directoryHandle as FileSystemDirectoryHandle).getFileHandle(
+      csvFileName,
+      { create: true }
+    );
+
+    const writable = await csvFileHandle.createWritable();
+    await writable.write(csvContent);
+    await writable.close();
+
+    // eslint-disable-next-line no-console
+    console.log(`CSV file created: ${csvFileName}`);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error processing JSON to CSV:", error);
+  }
+};
