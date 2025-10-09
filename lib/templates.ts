@@ -1259,11 +1259,10 @@ export async function cloneTemplate(formID: string): Promise<FormRecord | null> 
     ...(template.notificationsInterval !== undefined && {
       notificationsInterval: template.notificationsInterval,
     }),
-    // connect the same users (owners)
+    // connect only the current user (owners are not copied when cloning as the form will be a draft form)
     users: {
-      connect: template.users?.map((u) => ({ id: u.id })) ?? [{ id: user.id }],
+      connect: [{ id: user.id }],
     },
-    // connect notification users if present
     ...(template.notificationsUsers &&
       template.notificationsUsers.length > 0 && {
         notificationsUsers: {

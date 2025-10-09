@@ -16,7 +16,7 @@ describe("cloneTemplate", () => {
     mockGetAbility(userID);
   });
 
-  it("should create a copy of a template with delivery option and users connected", async () => {
+  it("should create a copy of a template with user connected", async () => {
     const sourceTemplate = {
       id: "src1",
       name: "Original",
@@ -31,11 +31,6 @@ describe("cloneTemplate", () => {
       notificationsInterval: 1440,
       users: [{ id: "user1" }],
       notificationsUsers: [{ id: "user2" }],
-      deliveryOption: {
-        emailAddress: "a@b.com",
-        emailSubjectEn: "sub en",
-        emailSubjectFr: "sub fr",
-      },
     };
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(sourceTemplate);
@@ -45,7 +40,6 @@ describe("cloneTemplate", () => {
       name: "Copy of Original",
       jsonConfig: sourceTemplate.jsonConfig,
       isPublished: false,
-      deliveryOption: sourceTemplate.deliveryOption,
       securityAttribute: sourceTemplate.securityAttribute,
       formPurpose: sourceTemplate.formPurpose,
       publishReason: sourceTemplate.publishReason,
@@ -64,9 +58,8 @@ describe("cloneTemplate", () => {
         data: expect.objectContaining({
           jsonConfig: sourceTemplate.jsonConfig,
           name: `Copy of ${sourceTemplate.name}`,
-          users: { connect: [{ id: "user1" }] },
-          deliveryOption: expect.any(Object),
-          notificationsUsers: expect.any(Object),
+          users: { connect: [{ id: userID }] },
+          notificationsUsers: { connect: [{ id: "user2" }] },
         }),
         select: expect.any(Object),
       })
