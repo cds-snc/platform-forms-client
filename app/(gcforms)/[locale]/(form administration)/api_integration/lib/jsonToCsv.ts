@@ -1,47 +1,8 @@
-export function convertJsonToCSV(data: Record<string, unknown>[]): string {
-  if (data.length === 0) {
-    return "";
-  }
-
-  // Get all unique keys from all objects
-  const allKeys = new Set<string>();
-  data.forEach((item) => {
-    Object.keys(item).forEach((key) => allKeys.add(key));
-  });
-
-  const headers = Array.from(allKeys);
-
-  // Create CSV header row
-  const csvRows: string[] = [];
-  csvRows.push(headers.map(escapeCSVValue).join(","));
-
-  // Create data rows
-  data.forEach((item) => {
-    const values = headers.map((header) => {
-      const value = item[header];
-      return escapeCSVValue(value);
-    });
-    csvRows.push(values.join(","));
-  });
-
-  return csvRows.join("\n");
-}
-
-function escapeCSVValue(value: unknown): string {
-  if (value === null || value === undefined) {
-    return "";
-  }
-
-  // Convert to string
-  let stringValue = String(value);
-
-  // If value contains comma, newline, or quotes, wrap in quotes and escape quotes
-  if (stringValue.includes(",") || stringValue.includes("\n") || stringValue.includes('"')) {
-    stringValue = '"' + stringValue.replace(/"/g, '""') + '"';
-  }
-
-  return stringValue;
-}
+import { createObjectCsvWriter } from "./csv-writer";
+import type {
+  FileSystemFileHandle,
+  FileSystemDirectoryHandle,
+} from "./csv-writer/lib/browser-types";
 
 /* eslint-disable no-await-in-loop */
 export const processJsonToCsv = async ({
@@ -51,7 +12,7 @@ export const processJsonToCsv = async ({
 }: {
   formId: string;
   jsonFileNames: string[];
-  directoryHandle: unknown;
+  directoryHandle: FileSystemDirectoryHandle;
 }) => {
   if (!directoryHandle || jsonFileNames.length === 0) return;
 
@@ -61,9 +22,7 @@ export const processJsonToCsv = async ({
 
     for (const fileName of jsonFileNames) {
       try {
-        const fileHandle = await (directoryHandle as FileSystemDirectoryHandle).getFileHandle(
-          fileName
-        );
+        const fileHandle = await directoryHandle.getFileHandle(fileName);
         const file = await fileHandle.getFile();
         const content = await file.text();
 
@@ -86,19 +45,45 @@ export const processJsonToCsv = async ({
       return;
     }
 
-    // Convert to CSV
-    const csvContent = convertJsonToCSV(allData);
+    // Get all unique keys to create header
+    const allKeys = new Set<string>();
+    allData.forEach((item) => {
+      Object.keys(item).forEach((key) => allKeys.add(key));
+    });
 
-    // Write CSV file back to directory
+    const headers = Array.from(allKeys).map((key) => ({ id: key, title: key }));
+
+    // Create CSV file using csv-writer
     const csvFileName = `${formId}-responses-${Date.now()}.csv`;
-    const csvFileHandle = await (directoryHandle as FileSystemDirectoryHandle).getFileHandle(
-      csvFileName,
-      { create: true }
-    );
+    const csvFileHandle = await directoryHandle.getFileHandle(csvFileName, { create: true });
 
-    const writable = await csvFileHandle.createWritable();
-    await writable.write(csvContent);
-    await writable.close();
+    const csvWriter = createObjectCsvWriter({
+      fileHandle: csvFileHandle as FileSystemFileHandle,
+      header: headers,
+    });
+
+    // Convert data to proper CSV field types (JSON values are serializable and compatible with Field type)
+    const csvData = allData.map((item) => {
+      const csvRecord: Record<string, string | number | boolean | null | undefined> = {};
+      Object.entries(item).forEach(([key, value]) => {
+        // Convert unknown values to Field types - JSON values are already serializable
+        if (
+          value === null ||
+          value === undefined ||
+          typeof value === "string" ||
+          typeof value === "number" ||
+          typeof value === "boolean"
+        ) {
+          csvRecord[key] = value;
+        } else {
+          // For complex objects/arrays, convert to string representation
+          csvRecord[key] = String(value);
+        }
+      });
+      return csvRecord;
+    });
+
+    await csvWriter.writeRecords(csvData);
 
     // eslint-disable-next-line no-console
     console.log(`CSV file created: ${csvFileName}`);

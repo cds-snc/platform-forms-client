@@ -14,6 +14,10 @@ export class MockGCFormsApiClient implements IGCFormsApiClient {
     console.log(`Mock API Client initialized for form: ${formId}`);
   }
 
+  public getFormId(): string {
+    return this.formId;
+  }
+
   public async getFormTemplate(): Promise<Record<string, unknown>> {
     // Simulate API delay
     await this.delay(500);
