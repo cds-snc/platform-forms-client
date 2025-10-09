@@ -1383,7 +1383,7 @@
   },
   "scheduleClosingPage": {
     "linkText": "Programmer la fermeture du formulaire",
-    "changeOrRemove": "Change or remove closing date",
+    "changeOrRemove": "Modifier ou supprimer la date de fermeture",
     "dialog": {
       "title": "Programmer la fermeture du formulaire",
       "text1": "Fixez la date de fermeture",
