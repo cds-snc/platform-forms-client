@@ -7,7 +7,6 @@ import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { Validate, PublicFormRecord } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Button } from "@clientComponents/globals/Buttons/Button";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { Language } from "@lib/types/form-builder-types";
 
 import { getLocalizedProperty } from "@lib/utils";
@@ -19,6 +18,7 @@ import { isFormClosed } from "app/(gcforms)/[locale]/(form filler)/id/[...props]
 import { useRouter } from "next/navigation";
 import { formHasGroups } from "@root/lib/utils/form-builder/formHasGroups";
 import { showReviewPage as hasReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 export const NextButton = ({
   validateForm,
@@ -68,8 +68,8 @@ export const NextButton = ({
 
   if (
     !currentGroup ||
-    currentGroup === LockedSections.REVIEW ||
-    currentGroup === LockedSections.END ||
+    currentGroup === LOCKED_GROUPS.REVIEW ||
+    currentGroup === LOCKED_GROUPS.END ||
     !hasNextAction(currentGroup) ||
     !showReviewPage(formRecord.form)
   ) {

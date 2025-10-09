@@ -41,7 +41,7 @@ import { AuthenticatedAction } from "@lib/actions";
 import { FormBuilderError } from "./exceptions";
 import { FormProperties } from "@lib/types";
 import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";

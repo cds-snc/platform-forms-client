@@ -58,7 +58,7 @@ export async function submitForm(
     // Skip hCaptcha verification for form-builder Preview (drafts)
     if (template?.isPublished && process.env.APP_ENV !== "test") {
       // hCaptcha runs regardless but only block submissions if the feature flag is enabled
-      const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
+      const captchaVerified = await verifyHCaptchaToken(captchaToken || "", formId);
       if (hCaptchaBlockingMode && !captchaVerified) {
         return {
           id: formId,

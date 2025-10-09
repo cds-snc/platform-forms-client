@@ -73,7 +73,7 @@ export const deserializeDateObject = (value: string): DateObject | string => {
       return parsed;
     }
   } catch (e) {
-    logMessage.info("Failed to parse date object", { value, error: e });
+    logMessage.info(`Failed to parse date object value: ${value}, error: ${JSON.stringify(e)}`);
   }
 
   return value;
@@ -125,8 +125,7 @@ export const fillData = (
         return fileInputFiller(value as Response);
       case FormElementTypes.formattedDate:
         if (typeof value === "string") {
-          // This is a breaking change to be revisted in future
-          // return deserializeDateObject(value);
+          return deserializeDateObject(value);
         }
         return value;
       case FormElementTypes.address:
@@ -167,15 +166,6 @@ export const normalizeFormResponses = (
     }
 
     formData[key] = fillData(originalValues[key], element);
-  });
-
-  // Process elements that don't already exist in formData and aren't richText
-  const missingElements = formRecord.form.elements.filter(
-    (element) => element.type !== FormElementTypes.richText && !formData[element.id]
-  );
-
-  missingElements.forEach((element) => {
-    formData[element.id] = fillData("", element);
   });
 
   return formData;
