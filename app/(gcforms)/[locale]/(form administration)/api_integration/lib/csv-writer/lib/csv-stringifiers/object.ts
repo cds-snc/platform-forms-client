@@ -24,9 +24,17 @@ export class ObjectCsvStringifier extends CsvStringifier<ObjectMap<Field>> {
 
   private getNestedValue(obj: ObjectMap<Field>, key: string) {
     if (!this.headerIdDelimiter) return obj[key];
-    return key
-      .split(this.headerIdDelimiter)
-      .reduce((subObj, keyPart) => (subObj || {})[keyPart], obj);
+
+    const parts = key.split(this.headerIdDelimiter);
+    let current: unknown = obj;
+    for (const part of parts) {
+      if (!current || typeof current !== "object") return undefined;
+      const asObj = current as Record<string, unknown>;
+      if (!(part in asObj)) return undefined;
+      current = asObj[part];
+    }
+
+    return current as Field | undefined;
   }
 
   private get fieldIds(): string[] {
