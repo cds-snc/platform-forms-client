@@ -17,6 +17,8 @@ import type {
 import { logMessage } from "@lib/logger";
 // ...existing code...
 
+import { getSubmissionByFormat } from "./responseRender";
+
 /*
 Import a PEM encoded RSA private key, to use for RSA-PSS signing.
 Takes a string containing the PEM encoded key, and returns a Promise
@@ -157,6 +159,8 @@ const downloadFormSubmissions = async (
 
   const decryptionKey = await importPrivateKeyDecrypt(privateApiKey.key);
 
+  const formTemplate = await apiClient.getFormTemplate();
+
   const downloadPromises = submissions.map(async (submission) => {
     try {
       const encryptedSubmission = await apiClient.getFormSubmission(submission.name);
@@ -178,11 +182,28 @@ const downloadFormSubmissions = async (
 
       const decryptedResponse: FormSubmission = JSON.parse(decryptedData);
 
+      const htmlFormat = await getSubmissionByFormat({
+        form: formTemplate,
+        response: decryptedResponse,
+        submissionId: submission.name,
+      });
+
       // Write the decrypted data to a file in the chosen directory
-      const fileHandle = await dir.getFileHandle(`${submission.name}.json`, { create: true });
-      const fileStream = await fileHandle.createWritable({ keepExistingData: false });
-      await fileStream.write(decryptedData);
-      await fileStream.close();
+
+      const officialRecord = async () => {
+        const fileHandle = await dir.getFileHandle(`${submission.name}.json`, { create: true });
+        const fileStream = await fileHandle.createWritable({ keepExistingData: false });
+        await fileStream.write(decryptedData);
+        await fileStream.close();
+      };
+      const htmlRecord = async () => {
+        const fileHandle = await dir.getFileHandle(`${submission.name}.html`, { create: true });
+        const fileStream = await fileHandle.createWritable({ keepExistingData: false });
+        await fileStream.write(htmlFormat.html);
+        await fileStream.close();
+      };
+
+      await Promise.all([officialRecord(), htmlRecord()]);
 
       // check if there are files to download
       if (decryptedResponse.attachments && decryptedResponse.attachments.length > 0) {

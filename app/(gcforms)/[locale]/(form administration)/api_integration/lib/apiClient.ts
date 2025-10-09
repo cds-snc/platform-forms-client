@@ -4,6 +4,7 @@ import type { EncryptedFormSubmission, NewFormSubmission, FormSubmissionProblem 
 import type { IGCFormsApiClient } from "./IGCFormsApiClient";
 
 import { TokenRateLimitError } from "./error";
+import { FormProperties } from "@root/lib/types";
 
 export class GCFormsApiClient implements IGCFormsApiClient {
   private formId: string;
@@ -22,10 +23,10 @@ export class GCFormsApiClient implements IGCFormsApiClient {
     return this.formId;
   }
 
-  public getFormTemplate(): Promise<Record<string, unknown>> {
+  public getFormTemplate(): Promise<FormProperties> {
     return this.httpClient
       .get<Record<string, unknown>>(`/forms/${this.formId}/template`)
-      .then((response) => response.data)
+      .then((response) => response.data as FormProperties)
       .catch((error) => {
         throw new Error("Failed to retrieve form template", { cause: error });
       });
