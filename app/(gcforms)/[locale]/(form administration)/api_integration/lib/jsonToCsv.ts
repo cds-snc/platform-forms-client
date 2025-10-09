@@ -17,8 +17,8 @@ export const processJsonToCsv = async ({
   if (!directoryHandle || jsonFileNames.length === 0) return;
 
   try {
-    // Read all JSON files and parse them
-    const allData: Record<string, unknown>[] = [];
+    // Read all JSON files and extract answers
+    const allAnswers: Record<string, unknown>[] = [];
 
     for (const fileName of jsonFileNames) {
       try {
@@ -27,11 +27,22 @@ export const processJsonToCsv = async ({
         const content = await file.text();
 
         const jsonData = JSON.parse(content);
-        // Handle both single objects and arrays
-        if (Array.isArray(jsonData)) {
-          allData.push(...jsonData);
+
+        // Extract answers field - it's a JSON string that needs to be parsed
+        if (jsonData.answers && typeof jsonData.answers === "string") {
+          try {
+            const answersData = JSON.parse(jsonData.answers);
+            allAnswers.push(answersData);
+          } catch (answersParseError) {
+            // eslint-disable-next-line no-console
+            console.error(`Failed to parse answers from ${fileName}:`, answersParseError);
+          }
+        } else if (jsonData.answers && typeof jsonData.answers === "object") {
+          // If answers is already an object, use it directly
+          allAnswers.push(jsonData.answers);
         } else {
-          allData.push(jsonData);
+          // eslint-disable-next-line no-console
+          console.warn(`No answers field found in ${fileName}`);
         }
       } catch (parseError) {
         // eslint-disable-next-line no-console
@@ -39,19 +50,22 @@ export const processJsonToCsv = async ({
       }
     }
 
-    if (allData.length === 0) {
+    if (allAnswers.length === 0) {
       // eslint-disable-next-line no-console
-      console.warn("No valid JSON data found to convert to CSV");
+      console.warn("No valid answers data found to convert to CSV");
       return;
     }
 
-    // Get all unique keys to create header
-    const allKeys = new Set<string>();
-    allData.forEach((item) => {
-      Object.keys(item).forEach((key) => allKeys.add(key));
+    // Get all unique question IDs to create header
+    const allQuestionIds = new Set<string>();
+    allAnswers.forEach((answers) => {
+      Object.keys(answers).forEach((questionId) => allQuestionIds.add(questionId));
     });
 
-    const headers = Array.from(allKeys).map((key) => ({ id: key, title: key }));
+    const headers = Array.from(allQuestionIds).map((questionId) => ({
+      id: questionId,
+      title: `Question ${questionId}`,
+    }));
 
     // Create CSV file using csv-writer
     const csvFileName = `${formId}-responses-${Date.now()}.csv`;
@@ -62,22 +76,22 @@ export const processJsonToCsv = async ({
       header: headers,
     });
 
-    // Convert data to proper CSV field types (JSON values are serializable and compatible with Field type)
-    const csvData = allData.map((item) => {
+    // Convert answers data to proper CSV field types
+    const csvData = allAnswers.map((answers) => {
       const csvRecord: Record<string, string | number | boolean | null | undefined> = {};
-      Object.entries(item).forEach(([key, value]) => {
+      Object.entries(answers).forEach(([questionId, answer]) => {
         // Convert unknown values to Field types - JSON values are already serializable
         if (
-          value === null ||
-          value === undefined ||
-          typeof value === "string" ||
-          typeof value === "number" ||
-          typeof value === "boolean"
+          answer === null ||
+          answer === undefined ||
+          typeof answer === "string" ||
+          typeof answer === "number" ||
+          typeof answer === "boolean"
         ) {
-          csvRecord[key] = value;
+          csvRecord[questionId] = answer;
         } else {
           // For complex objects/arrays, convert to string representation
-          csvRecord[key] = String(value);
+          csvRecord[questionId] = String(answer);
         }
       });
       return csvRecord;
@@ -86,7 +100,7 @@ export const processJsonToCsv = async ({
     await csvWriter.writeRecords(csvData);
 
     // eslint-disable-next-line no-console
-    console.log(`CSV file created: ${csvFileName}`);
+    console.log(`CSV file created: ${csvFileName} with ${allAnswers.length} responses`);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error("Error processing JSON to CSV:", error);
