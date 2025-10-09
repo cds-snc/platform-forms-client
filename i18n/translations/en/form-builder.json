@@ -1124,7 +1124,7 @@
     "closed": "Closed",
     "saveButton": "Save",
     "savedSuccessMessage": "Your changes have been saved.",
-    "clearSuccessMessage": "Closing date has been cleared",
+    "clearSuccessMessage": "Closing date has been removed",
     "formClosedSuccessMessage": {
       "title": "This form is now closed",
       "body": "It is no longer receiving responses."
