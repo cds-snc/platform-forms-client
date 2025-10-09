@@ -11,34 +11,37 @@ export async function getClientIP() {
   return head.get("x-real-ip") ?? FALLBACK_IP_ADDRESS;
 }
 
+// Creates a bitmask for use with a CIDR range
+// Example: bits = 16 -> 11111111.11111111.00000000.00000000
+const cidrMask = (bits: number): number => {
+  if (bits === 0) return 0;
+  return ((Math.pow(2, bits) - 1) << (32 - bits)) >>> 0;
+};
+
+// Convert IPs to 32-bit numbers
+const ipToInt = (ipList: string): number => {
+  return ipList
+    .split(".")
+    .map(Number)
+    .reduce((accumulator, octet) => (accumulator << 8) + octet, 0);
+};
+
 // Checks if an IPv4 address is in a given IPv4 CIDR (Classless Inter-Domain Routing) range
 export const isIpInRange = (ip: string, range: string): boolean => {
   // Split IP range
   const [rangeIp, prefixLengthStr] = range.split("/");
   const prefixLength = parseInt(prefixLengthStr, 10);
 
-  // Convert IPs to 32-bit numbers
-  function ipToInt(ipList: string): number {
-    return ipList
-      .split(".")
-      .map(Number)
-      .reduce((acc, octet) => (acc << 8) + octet, 0);
-  }
-
   const ipInt = ipToInt(ip);
   const rangeInt = ipToInt(rangeIp);
+  const mask = cidrMask(prefixLength);
 
-  // Calculate mask
-  // Something like this also work but can run into weird JS errors: 0 ? 0 : (~0 << (32 - prefixLength)) >>> 0;
-  const mask = prefixLength === 0 ? 0 : (0xffffffff << (32 - prefixLength)) >>> 0;
-
-  // Compare masked values
+  // Compare masked values by taking a bitwise AND to compare IP bits to
+  // the network portion of the range
   return (ipInt & mask) === (rangeInt & mask);
 };
 
 export const allowIp = (clientIp: string, ipAllowList: string) => {
-  // const ipAllowList = process.env.IP_ALLOW_LIST;
-
   if (!clientIp || !ipAllowList) {
     return false;
   }
@@ -48,13 +51,13 @@ export const allowIp = (clientIp: string, ipAllowList: string) => {
 
   const ipRanges = ipAllowList.split(",").map((range) => range.trim());
 
-  // Check if client IP is in any of the allowed ranges
+  // Check if client IP is in any of the allowed ranges, if so allow it
   for (const range of ipRanges) {
     if (isIpInRange(ipV4, range)) {
       return true;
     }
   }
 
-  // Client IP not in any allowed range, deny access
+  // Client IP not in any allowed range, deny it
   return false;
 };

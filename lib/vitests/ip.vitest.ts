@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { allowIp, isIpInRange } from "../ip";
 
-describe("IP in a Range", () => {
-  const testIpAndRanges = [
+describe("isIpInRange function", () => {
+  const ipAndRangesList = [
     {
       ip: "130.150.1.1",
       range: "130.150.0.0/16",
@@ -45,20 +45,20 @@ describe("IP in a Range", () => {
     }
   ];
 
-  testIpAndRanges.forEach(({ ip, range, expected }) => {
+  ipAndRangesList.forEach(({ ip, range, expected }) => {
     it(`should return ${expected} for IP ${ip} in range ${range}`, () => {
       expect(isIpInRange(ip, range)).toBe(expected);
     });
   });
 });
 
-describe("IP in allow list", () => {
+describe("allowIp function", () => {
   const ipRangeAllowList = "130.150.0.0/16,130.100.60.0/18,160.100.60.0/19,160.100.100.0/20,192.168.1.0/24";
-  it("finds an IP in range", () => {
+  it("finds an IP in range of the allow list", () => {
     expect(allowIp("130.150.1.1", ipRangeAllowList)).toBe(true);
   });
 
-  it("does not find an IP out of range", () => {
-    expect(allowIp("192.168.1.1", ipRangeAllowList)).toBe(false);
+  it("does not find an IP out of range of the allow list", () => {
+    expect(allowIp("130.160.1.1", ipRangeAllowList)).toBe(false);
   });
 });
