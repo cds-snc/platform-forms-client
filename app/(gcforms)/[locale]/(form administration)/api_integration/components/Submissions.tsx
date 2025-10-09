@@ -87,6 +87,7 @@ export const Submissions = ({
       formId: apiClient?.getFormId() || "<formId>",
       jsonFileNames: allJsonFiles,
       directoryHandle: directoryHandle,
+      apiClient: apiClient,
     });
 
     setCompleted(true);
