@@ -1124,7 +1124,7 @@
     "closed": "Fermé",
     "saveButton": "Enregistrer",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "clearSuccessMessage": "Closing date has been cleared",
+    "clearSuccessMessage": "La date de fermeture a été supprimée",
     "formClosedSuccessMessage": {
       "title": "Ce formulaire est maintenant fermé",
       "body": "Il n'accepte plus de soumissions."
