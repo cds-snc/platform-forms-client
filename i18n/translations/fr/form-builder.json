@@ -1403,8 +1403,8 @@
       },
       "save": "Enregistrer",
       "cancel": "Annuler",
-      "removeClosingDate": "Remove closing date",
-      "removeConfirm": "Click again to confirm"
+      "removeClosingDate": "Supprimer la date de fermeture",
+      "removeConfirm": "Cliquer à nouveau pour confirmer"
     }
   },
   "systemHealthCheck": {
