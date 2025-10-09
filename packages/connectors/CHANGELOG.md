@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [2.2.11] - 2025-10-08
+
+- Replace Got with Axios in dependency list
+- Enable code splitting in TSdown because of an incompatibility with recent Yarn upgrade
 
 ## [2.2.10] - 2025-10-03
 

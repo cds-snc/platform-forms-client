@@ -62,10 +62,6 @@ export const SubOption = ({
     }
   }, [getFocusInput, setFocusInput]);
 
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
       setFocusInput(true);
