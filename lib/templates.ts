@@ -1263,22 +1263,14 @@ export async function cloneTemplate(formID: string): Promise<FormRecord | null> 
     users: {
       connect: [{ id: user.id }],
     },
+    // connect current user as a notificationsUser only if they were in the original notificationsUsers list
     ...(template.notificationsUsers &&
-      template.notificationsUsers.length > 0 && {
+      template.notificationsUsers.some((u) => u.id === user.id) && {
         notificationsUsers: {
-          connect: template.notificationsUsers.map((u) => ({ id: u.id })),
+          connect: [{ id: user.id }],
         },
       }),
-    // copy delivery option if present
-    ...(template.deliveryOption && {
-      deliveryOption: {
-        create: {
-          emailAddress: template.deliveryOption.emailAddress,
-          emailSubjectEn: template.deliveryOption.emailSubjectEn,
-          emailSubjectFr: template.deliveryOption.emailSubjectFr,
-        },
-      },
-    }),
+    // NOTE: Do NOT copy deliveryOption when cloning - just default to the vault.
   };
 
   const createdTemplate = await prisma.template

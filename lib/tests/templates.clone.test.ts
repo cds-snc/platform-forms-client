@@ -59,7 +59,7 @@ describe("cloneTemplate", () => {
           jsonConfig: sourceTemplate.jsonConfig,
           name: `Copy of ${sourceTemplate.name}`,
           users: { connect: [{ id: userID }] },
-          notificationsUsers: { connect: [{ id: "user2" }] },
+          // notificationsUsers should not be copied because current user is not in the original list
         }),
         select: expect.any(Object),
       })
