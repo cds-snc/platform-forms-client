@@ -11,7 +11,8 @@ import { withRetry } from "../utils/retry";
  */
 export const verifyHCaptchaToken = async (token: string, formId: string): Promise<boolean> => {
   const clientIp = await getClientIP();
-  if (allowIp(clientIp, String(process.env.HCAPTCHA_IP_ALLOW_LIST))) {
+  const allowList = String(process.env.HCAPTCHA_IP_ALLOW_LIST);
+  if (allowIp(clientIp, allowList)) {
     logMessage.info(`hCaptcha: bypassed for allow-listed IP for formId ${formId}`);
     return true;
   }
