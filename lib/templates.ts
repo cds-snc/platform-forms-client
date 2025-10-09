@@ -1216,6 +1216,102 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
 }
 
 /**
+ * Clone a template including associated users and delivery option
+ */
+export async function cloneTemplate(formID: string): Promise<FormRecord | null> {
+  const { user } = await authorization.canCreateForm().catch((e) => {
+    logEvent(
+      e?.user?.id ?? "unknown",
+      { type: "Form", id: formID },
+      "AccessDenied",
+      "Attempted to clone Form"
+    );
+    throw e;
+  });
+
+  const template = await prisma.template
+    .findUnique({
+      where: { id: formID },
+      include: {
+        deliveryOption: true,
+        users: { select: { id: true } },
+        notificationsUsers: { select: { id: true } },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!template) {
+    logMessage.warn(`[templates][cloneTemplate] Template ${formID} not found`);
+    return null;
+  }
+
+  // Build the create payload copying allowed fields. Do NOT copy apiServiceAccount or bearerToken.
+  const createData: Prisma.TemplateCreateInput = {
+    jsonConfig: template.jsonConfig as Prisma.JsonObject,
+    name: `Copy of ${template.name}`,
+    isPublished: false,
+    formPurpose: template.formPurpose,
+    publishReason: template.publishReason,
+    publishFormType: template.publishFormType,
+    publishDesc: template.publishDesc,
+    securityAttribute: template.securityAttribute,
+    saveAndResume: template.saveAndResume,
+    ...(template.notificationsInterval !== undefined && {
+      notificationsInterval: template.notificationsInterval,
+    }),
+    // connect the same users (owners)
+    users: {
+      connect: template.users?.map((u) => ({ id: u.id })) ?? [{ id: user.id }],
+    },
+    // connect notification users if present
+    ...(template.notificationsUsers &&
+      template.notificationsUsers.length > 0 && {
+        notificationsUsers: {
+          connect: template.notificationsUsers.map((u) => ({ id: u.id })),
+        },
+      }),
+    // copy delivery option if present
+    ...(template.deliveryOption && {
+      deliveryOption: {
+        create: {
+          emailAddress: template.deliveryOption.emailAddress,
+          emailSubjectEn: template.deliveryOption.emailSubjectEn,
+          emailSubjectFr: template.deliveryOption.emailSubjectFr,
+        },
+      },
+    }),
+  };
+
+  const createdTemplate = await prisma.template
+    .create({
+      data: createData,
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
+        saveAndResume: true,
+        notificationsInterval: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (createdTemplate === null) return null;
+
+  logEvent(user.id, { type: "Form", id: createdTemplate.id }, "CreateForm", "Cloned Form");
+
+  return _parseTemplate(createdTemplate);
+}
+
+/**
  * Deletes a form template. The template will stay in the database for 30 days in an archived state until a lambda function deletes it from the database.
  * @param formID ID of the form template
  * @returns A boolean status if operation is sucessful

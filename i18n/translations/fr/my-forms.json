@@ -37,7 +37,10 @@
       "settings": "Paramètres",
       "delete": "Supprimer",
       "coppiedToClipboard": "Copié dans le presse-papier",
-      "somethingWentWrong": "Il y a eu un problème"
+      "somethingWentWrong": "Il y a eu un problème",
+      "clone": "Dupliquer",
+      "cloneSuccess": "Formulaire dupliqué",
+      "cloneFailed": "Échec de la duplication du formulaire"
     },
     "actionRequired": {
       "description": "Action requise : ",
