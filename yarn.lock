@@ -2436,9 +2436,9 @@ __metadata:
   dependencies:
     "@aws-sdk/client-secrets-manager": "npm:^3.901.0"
     "@types/node": "npm:^24.6.1"
-    got: "npm:^11.8.6"
+    axios: "npm:^1.12.2"
     postgres: "npm:^3.4.5"
-    tsup: "npm:^8.3.6"
+    tsdown: "npm:^0.15.6"
     typescript: "npm:^5.9.3"
   languageName: unknown
   linkType: soft
@@ -9711,7 +9711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"birpc@npm:^2.5.0":
+"birpc@npm:^2.6.1":
   version: 2.6.1
   resolution: "birpc@npm:2.6.1"
   checksum: 10c0/eda4a9fbf95ac7ac2112d7fc10db588dc9145d9d50ad91bb714f3f36d64dd1a5c5206ac17b5bc5c0d6fbdb48c63e110946b240ad1bb51eeca37ce161efdf2d06
@@ -13398,7 +13398,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"got@npm:11, got@npm:^11.8.6":
+"got@npm:11":
   version: 11.8.6
   resolution: "got@npm:11.8.6"
   dependencies:
@@ -18163,15 +18163,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rolldown-plugin-dts@npm:^0.16.7":
-  version: 0.16.8
-  resolution: "rolldown-plugin-dts@npm:0.16.8"
+"rolldown-plugin-dts@npm:^0.16.8":
+  version: 0.16.11
+  resolution: "rolldown-plugin-dts@npm:0.16.11"
   dependencies:
     "@babel/generator": "npm:^7.28.3"
     "@babel/parser": "npm:^7.28.4"
     "@babel/types": "npm:^7.28.4"
     ast-kit: "npm:^2.1.2"
-    birpc: "npm:^2.5.0"
+    birpc: "npm:^2.6.1"
     debug: "npm:^4.4.3"
     dts-resolver: "npm:^2.1.2"
     get-tsconfig: "npm:^4.10.1"
@@ -18181,7 +18181,7 @@ __metadata:
     "@typescript/native-preview": ">=7.0.0-dev.20250601.1"
     rolldown: ^1.0.0-beta.9
     typescript: ^5.0.0
-    vue-tsc: ~3.0.3
+    vue-tsc: ~3.1.0
   peerDependenciesMeta:
     "@ts-macro/tsc":
       optional: true
@@ -18191,7 +18191,7 @@ __metadata:
       optional: true
     vue-tsc:
       optional: true
-  checksum: 10c0/a6aa276d89ee4f1036e07052700dfb46302ce75abc0381e352885e9a2186adca7343682594f11afe3c6c30650c39985483eb7ba88125a016f3bc30b09fbf9aba
+  checksum: 10c0/3dcb61e43f117864cf3145cec41c68c913fd16dffb93efee399a0b70c9fb0b672951b7045e6efc5905d3ba10770d1fe65dfa8c8b97677f092a2d4e0a64b43d1e
   languageName: node
   linkType: hard
 
@@ -19924,9 +19924,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsdown@npm:^0.15.0":
-  version: 0.15.4
-  resolution: "tsdown@npm:0.15.4"
+"tsdown@npm:^0.15.0, tsdown@npm:^0.15.6":
+  version: 0.15.6
+  resolution: "tsdown@npm:0.15.6"
   dependencies:
     ansis: "npm:^4.1.0"
     cac: "npm:^6.7.14"
@@ -19936,7 +19936,7 @@ __metadata:
     empathic: "npm:^2.0.0"
     hookable: "npm:^5.5.3"
     rolldown: "npm:latest"
-    rolldown-plugin-dts: "npm:^0.16.7"
+    rolldown-plugin-dts: "npm:^0.16.8"
     semver: "npm:^7.7.2"
     tinyexec: "npm:^1.0.1"
     tinyglobby: "npm:^0.2.15"
@@ -19961,7 +19961,7 @@ __metadata:
       optional: true
   bin:
     tsdown: dist/run.mjs
-  checksum: 10c0/eeca83c9d8205f6d55a010999ce6f946e137e2ed9bb41853f87beccce16f118e50b730baee82dd66876380a244089c0d1944937020d4ed76fa163f0c10dec77b
+  checksum: 10c0/fb8f11a34bbce6d11b318eed6920e87f1a82bf738354a36d59de85bd9ff016f1553530e4e22927e9eca4bf1ecf0b822988d7f289b1405adc6bdd4346f550d312
   languageName: node
   linkType: hard
 
