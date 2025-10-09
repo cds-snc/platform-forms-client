@@ -40,7 +40,7 @@
       "somethingWentWrong": "Quelque chose a mal tourné",
       "clone": "Dupliquer",
       "cloneSuccess": "Le formulaire a été dupliqué.",
-      "cloneFailed": "Échec de la duplication du formulaire"
+      "cloneFailed": "Le formulaire n'a pas pu être dupliqué."
     },
     "actionRequired": {
       "description": "Action requise : ",
