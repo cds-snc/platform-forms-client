@@ -38,9 +38,9 @@
       "delete": "Delete",
       "coppiedToClipboard": "Copied to clipboard",
       "somethingWentWrong": "Something went wrong",
-      "clone": "Clone",
-      "cloneSuccess": "Form cloned",
-      "cloneFailed": "Failed to clone form"
+      "clone": "Duplicate",
+      "cloneSuccess": "Form was duplicated.",
+      "cloneFailed": "Form could not be duplicated."
     },
     "actionRequired": {
       "description": "Action required: ",
