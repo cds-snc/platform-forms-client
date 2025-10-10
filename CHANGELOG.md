@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.0](https://github.com/cds-snc/platform-forms-client/compare/v4.2.1...v4.3.0) (2025-10-10)
+
+
+### Features
+
+* Add ability to clear form closing date ([#6166](https://github.com/cds-snc/platform-forms-client/issues/6166)) ([9f8bd91](https://github.com/cds-snc/platform-forms-client/commit/9f8bd913fbb603bb755b9d9190b99ad5c3d2e766))
+* add ability to duplicate a form ([27fd92e](https://github.com/cds-snc/platform-forms-client/commit/27fd92e53f7c31599bfe89597c6a00b66bbc9a95))
+
+
+### Bug Fixes
+
+* attempt at fixing some of the GC Notify API calls timing out ([#6194](https://github.com/cds-snc/platform-forms-client/issues/6194)) ([387f0ec](https://github.com/cds-snc/platform-forms-client/commit/387f0ecb25325d88e1c63c6df0284bb129ca0773))
+* trying to fix connectors package ([#6192](https://github.com/cds-snc/platform-forms-client/issues/6192)) ([5799a61](https://github.com/cds-snc/platform-forms-client/commit/5799a61d2a3c7b62313a033e1d475c3bb09d2578))
+
+
+### Miscellaneous Chores
+
+* fix lint for sub options ([#6187](https://github.com/cds-snc/platform-forms-client/issues/6187)) ([6e26281](https://github.com/cds-snc/platform-forms-client/commit/6e26281bd0b4377947404d149ca1b824d8530769))
+* fix lint issue for options ([#6182](https://github.com/cds-snc/platform-forms-client/issues/6182)) ([1cf7ec2](https://github.com/cds-snc/platform-forms-client/commit/1cf7ec2a793f4762de771d6fac10538dc2dccb1e))
+* lint for change group ([#6188](https://github.com/cds-snc/platform-forms-client/issues/6188)) ([c74bf68](https://github.com/cds-snc/platform-forms-client/commit/c74bf68426325ec7edd562136068085b65cfb442))
+* remove use effect for max row - fix lint ([#6185](https://github.com/cds-snc/platform-forms-client/issues/6185)) ([6b62ac1](https://github.com/cds-snc/platform-forms-client/commit/6b62ac1f31e8a4de4a3cf7ebfd44f6aa832a3edc))
+* synced file(s) with cds-snc/site-reliability-engineering ([#6180](https://github.com/cds-snc/platform-forms-client/issues/6180)) ([f79869f](https://github.com/cds-snc/platform-forms-client/commit/f79869f97b4a68ffabffbd5d05d996d22a5ce5db))
+* synced local '.github/workflows/export_github_data.yml' with remote 'tools/sre_file_sync/export_github_data.yml' ([f79869f](https://github.com/cds-snc/platform-forms-client/commit/f79869f97b4a68ffabffbd5d05d996d22a5ce5db))
+* use operation queue to send DynamoDB requests within test-setup tool during cleanup action ([#6186](https://github.com/cds-snc/platform-forms-client/issues/6186)) ([22f1a3d](https://github.com/cds-snc/platform-forms-client/commit/22f1a3d87a7cc437f88e3ed122f74376ad60055f))
+
 ## [4.2.1](https://github.com/cds-snc/platform-forms-client/compare/v4.2.0...v4.2.1) (2025-10-08)
 
 
