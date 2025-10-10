@@ -2436,9 +2436,9 @@ __metadata:
   dependencies:
     "@aws-sdk/client-secrets-manager": "npm:^3.901.0"
     "@types/node": "npm:^24.6.1"
-    got: "npm:^11.8.6"
+    axios: "npm:^1.12.2"
     postgres: "npm:^3.4.5"
-    tsup: "npm:^8.3.6"
+    tsdown: "npm:^0.15.6"
     typescript: "npm:^5.9.3"
   languageName: unknown
   linkType: soft
@@ -13101,7 +13101,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"got@npm:11, got@npm:^11.8.6":
+"got@npm:11":
   version: 11.8.6
   resolution: "got@npm:11.8.6"
   dependencies:
@@ -19580,7 +19580,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsdown@npm:^0.15.0":
+"tsdown@npm:^0.15.0, tsdown@npm:^0.15.6":
   version: 0.15.6
   resolution: "tsdown@npm:0.15.6"
   dependencies:
