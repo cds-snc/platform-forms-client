@@ -66,7 +66,7 @@ typings/
 # dotenv environment variables file
 .env*.local
 .env
-
+.env.yarn
 # Ignore cypress screenshots and videos
 cypress/screenshots
 cypress/videos

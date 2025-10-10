@@ -1,0 +1,38 @@
+{
+  "name": "@gcforms/database",
+  "version": "1.0.0",
+  "author": "Canadian Digital Service",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "yarn@4.10.3",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "db:test": "prisma migrate deploy && tsx src/seed_cli.ts --environment=test",
+    "dev": "tsup src/* --format esm --watch",
+    "format": "prisma format",
+    "generate": "prisma generate",
+    "prebuild": "npm run generate",
+    "predev": "npm run generate",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^6.17.0",
+    "@prisma/client": "^6.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.1",
+    "dotenv": "^17.2.3",
+    "prisma": "^6.17.0",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

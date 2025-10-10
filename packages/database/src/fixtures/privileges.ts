@@ -1,4 +1,4 @@
-import { Privilege } from "@prisma/client";
+import { Privilege } from "../generated/prisma/client";
 
 type PrivilegeSeed = Omit<Privilege, "id">;
 type PrivilegeCollection = {
