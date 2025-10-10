@@ -1219,12 +1219,24 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
  * Clone a template including associated users and delivery option
  */
 export async function cloneTemplate(formID: string): Promise<FormRecord | null> {
+  // Ensure the user can create a new form (needed to persist a clone)
   const { user } = await authorization.canCreateForm().catch((e) => {
     logEvent(
       e?.user?.id ?? "unknown",
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to clone Form"
+      "Attempted to clone Form - missing create permission"
+    );
+    throw e;
+  });
+
+  // Ensure the user can edit the source form (they must have edit rights to clone it)
+  await authorization.canEditForm(formID).catch((e) => {
+    logEvent(
+      e?.user?.id ?? "unknown",
+      { type: "Form", id: formID },
+      "AccessDenied",
+      "Attempted to clone Form - missing edit permission"
     );
     throw e;
   });
