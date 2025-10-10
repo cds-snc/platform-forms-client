@@ -10,7 +10,7 @@ import {
 import { Alert } from "@clientComponents/globals";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
-import { BaseTextInput } from "@clientComponents/forms/TextInput/BaseTextInput";
+import { TextInput } from "@root/components/clientComponents/forms/TextInput/TextInput";
 import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
 import { useState } from "react";
@@ -137,7 +137,7 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
               <Description id={"unlock-publishing-description"}>
                 {t("unlockPublishing.form.field1.description")}
               </Description>
-              <BaseTextInput
+              <TextInput
                 type="text"
                 id="managerEmail"
                 name="managerEmail"
@@ -150,7 +150,7 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
               <Label id="label-department" htmlFor="department" className="required" required>
                 {t("unlockPublishing.form.field2.title")}
               </Label>
-              <BaseTextInput
+              <TextInput
                 type="text"
                 id="department"
                 name="department"

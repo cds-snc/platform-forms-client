@@ -17,7 +17,7 @@ import { useState } from "react";
 import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
-import { BaseTextInput } from "@root/components/clientComponents/forms/TextInput/BaseTextInput";
+import { TextInput } from "@root/components/clientComponents/forms/TextInput/TextInput";
 
 export const SupportForm = () => {
   const {
@@ -148,7 +148,7 @@ export const SupportForm = () => {
               <Label id={"label-name"} htmlFor={"name"} className="required" required>
                 {t("support.name")}
               </Label>
-              <BaseTextInput
+              <TextInput
                 type={"text"}
                 id={"name"}
                 name={"name"}
@@ -160,7 +160,7 @@ export const SupportForm = () => {
               <Label id={"label-email"} htmlFor={"email"} className="required" required>
                 {t("support.email")}
               </Label>
-              <BaseTextInput
+              <TextInput
                 type="text"
                 id="email"
                 name="email"

@@ -1,9 +1,28 @@
+"use client";
 // Update the path below to the correct location of ComponentPlugin
 import { ComponentPlugin } from "@lib/components/ComponentPlugin";
-import { TextInput } from "./FormikTextInput";
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, InputFieldProps } from "@lib/types";
 import { Description } from "@clientComponents/forms";
 import { GenericComponentLabel } from "../../globals/GenericComponentLabel";
+import { useField } from "formik";
+import { TextInput, type BaseTextInputProps } from "./TextInput";
+
+type FormikTextInputProps = BaseTextInputProps & InputFieldProps;
+
+const FormikTextInput = (props: FormikTextInputProps) => {
+  const { id, name, type, ...rest } = props;
+  const [field, meta] = useField({ name, type });
+
+  return (
+    <TextInput
+      id={id}
+      type={type}
+      {...rest}
+      {...field}
+      error={meta.touched && meta.error ? meta.error : undefined}
+    />
+  );
+};
 
 export const TextInputPlugin: ComponentPlugin = {
   meta: {
@@ -48,7 +67,7 @@ export const TextInputPlugin: ComponentPlugin = {
         {genericLabel.description && (
           <Description id={`${id}`}>{genericLabel.description}</Description>
         )}
-        <TextInput
+        <FormikTextInput
           type={textType}
           spellCheck={spellCheck}
           id={`${id}`}

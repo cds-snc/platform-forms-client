@@ -16,7 +16,7 @@ import { SubmitButton } from "../../../components/client/SubmitButton";
 import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
 import { useState } from "react";
 import { Success } from "../../../components/client/Success";
-import { BaseTextInput } from "@root/components/clientComponents/forms/TextInput/BaseTextInput";
+import { TextInput } from "@root/components/clientComponents/forms/TextInput/TextInput";
 
 export const ContactForm = () => {
   const {
@@ -202,7 +202,7 @@ export const ContactForm = () => {
               <Label id={"label-name"} htmlFor={"name"} className="required" required>
                 {t("contactus.name")}
               </Label>
-              <BaseTextInput
+              <TextInput
                 type={"text"}
                 id={"name"}
                 name={"name"}
@@ -214,7 +214,7 @@ export const ContactForm = () => {
               <Label id={"label-email"} htmlFor={"email"} className="required" required>
                 {t("contactus.email")}
               </Label>
-              <BaseTextInput
+              <TextInput
                 type={"text"}
                 id={"email"}
                 name={"email"}
@@ -227,7 +227,7 @@ export const ContactForm = () => {
               <Label id="label-department" htmlFor="department" className="required" required>
                 {t("contactus.department")}
               </Label>
-              <BaseTextInput
+              <TextInput
                 type="text"
                 id="department"
                 name="department"
@@ -239,7 +239,7 @@ export const ContactForm = () => {
               <Label id={"label-branch"} htmlFor={"branch"}>
                 {t("contactus.branch")}
               </Label>
-              <BaseTextInput
+              <TextInput
                 type="text"
                 id="branch"
                 name="branch"
@@ -251,7 +251,7 @@ export const ContactForm = () => {
               <Label id={"label-jobTitle"} htmlFor={"jobTitle"}>
                 {t("contactus.jobTitle")}
               </Label>
-              <BaseTextInput
+              <TextInput
                 type={"text"}
                 id={"jobTitle"}
                 name={"jobTitle"}

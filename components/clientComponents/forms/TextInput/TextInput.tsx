@@ -14,7 +14,7 @@ export interface BaseTextInputProps extends React.InputHTMLAttributes<HTMLInputE
   allowNegativeNumbers?: boolean;
 }
 
-export const BaseTextInput = React.forwardRef<HTMLInputElement, BaseTextInputProps>(
+export const TextInput = React.forwardRef<HTMLInputElement, BaseTextInputProps>(
   (
     {
       id,
@@ -114,4 +114,4 @@ export const BaseTextInput = React.forwardRef<HTMLInputElement, BaseTextInputPro
   }
 );
 
-BaseTextInput.displayName = "BaseTextInput";
+TextInput.displayName = "BaseTextInput";
