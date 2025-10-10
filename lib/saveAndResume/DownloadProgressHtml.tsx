@@ -1,12 +1,13 @@
 import React from "react";
 
 import { type HTMLProps } from "./types";
-import Fip from "@lib/responseDownloadFormats/html/components/Fip";
 import { css } from "@lib/responseDownloadFormats/html/css/compiled";
 import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
 import { InProgressBadge } from "./InProgressBadge";
 import { NextSteps } from "./NextSteps";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 
 export const DownloadProgressHtml = ({
   language,
@@ -44,21 +45,22 @@ export const DownloadProgressHtml = ({
         />
         <style dangerouslySetInnerHTML={{ __html: css }}></style>
       </head>
-      <body>
+      <body className="gcds-page flex h-full flex-col bg-white">
         <div id="skip-link-container">
           <a href="#content" id="skip-link">
             Skip to main content
           </a>
         </div>
-        <div id="page-container">
+        <div>
           <main id="content">
             <div className="mt-6" />
-            <Fip
+            <GcdsHeader
               language={language}
-              showLangLink={false}
-              className="mb-10 mt-0 border-b-4 border-blue-dark py-9"
+              skipLink={false}
+              showLanguageToggle={false}
+              pathname=""
             />
-            <div>
+            <div className="gc-formview container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
               <div className="mb-14">
                 <InProgressBadge language={language} />
               </div>

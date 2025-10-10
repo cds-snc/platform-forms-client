@@ -32,32 +32,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.29.0":
-  version: 0.29.0
-  resolution: "@auth/core@npm:0.29.0"
-  dependencies:
-    "@panva/hkdf": "npm:^1.1.1"
-    "@types/cookie": "npm:0.6.0"
-    cookie: "npm:0.6.0"
-    jose: "npm:^5.1.3"
-    oauth4webapi: "npm:^2.4.0"
-    preact: "npm:10.11.3"
-    preact-render-to-string: "npm:5.2.3"
-  peerDependencies:
-    "@simplewebauthn/browser": ^9.0.1
-    "@simplewebauthn/server": ^9.0.2
-    nodemailer: ^6.8.0
-  peerDependenciesMeta:
-    "@simplewebauthn/browser":
-      optional: true
-    "@simplewebauthn/server":
-      optional: true
-    nodemailer:
-      optional: true
-  checksum: 10c0/9f249584702868f7eb6fcbe34da1a0310936ff51b98741e58e5dbefceda6be48ffdab854f262f630d3daae164cfa6177353147b952896acb30f5f5c75950e1a6
-  languageName: node
-  linkType: hard
-
 "@auth/core@npm:0.40.0":
   version: 0.40.0
   resolution: "@auth/core@npm:0.40.0"
@@ -82,14 +56,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/prisma-adapter@npm:^1.0.14":
-  version: 1.6.0
-  resolution: "@auth/prisma-adapter@npm:1.6.0"
+"@auth/prisma-adapter@npm:^2.10.0":
+  version: 2.10.0
+  resolution: "@auth/prisma-adapter@npm:2.10.0"
   dependencies:
-    "@auth/core": "npm:0.29.0"
+    "@auth/core": "npm:0.40.0"
   peerDependencies:
-    "@prisma/client": ">=2.26.0 || >=3 || >=4 || >=5"
-  checksum: 10c0/d6b922886f76be95aaed09b83d8f1024bb8d974142cb2d741d30d0a2b51413ef5f9c0d5f73fa30ee0435405a1166d18085ca959c4170043cfe375f95d1637b57
+    "@prisma/client": ">=2.26.0 || >=3 || >=4 || >=5 || >=6"
+  checksum: 10c0/f6c95f144958c678e8cbc691b205c937cbc456beab3da035ab3e00d55e91b8b39be6ff8529dbe3c72d0f95365988db09bc5862445f70c2438061dbe69bca34f5
   languageName: node
   linkType: hard
 
@@ -2462,9 +2436,9 @@ __metadata:
   dependencies:
     "@aws-sdk/client-secrets-manager": "npm:^3.901.0"
     "@types/node": "npm:^24.6.1"
-    got: "npm:^11.8.6"
+    axios: "npm:^1.12.2"
     postgres: "npm:^3.4.5"
-    tsup: "npm:^8.3.6"
+    tsdown: "npm:^0.15.6"
     typescript: "npm:^5.9.3"
   languageName: unknown
   linkType: soft
@@ -3725,7 +3699,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@panva/hkdf@npm:^1.1.1, @panva/hkdf@npm:^1.2.1":
+"@panva/hkdf@npm:^1.2.1":
   version: 1.2.1
   resolution: "@panva/hkdf@npm:1.2.1"
   checksum: 10c0/1fabdec9bd2c19b8e88a3fa6fd0c25e25823c5000d9efdf4b6dfe32e9f370f8b9603cf776d120d160bec15fba17e079974cc34f0f52cebb24602cd832dfde19c
@@ -7413,13 +7387,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cookie@npm:0.6.0":
-  version: 0.6.0
-  resolution: "@types/cookie@npm:0.6.0"
-  checksum: 10c0/5b326bd0188120fb32c0be086b141b1481fec9941b76ad537f9110e10d61ee2636beac145463319c71e4be67a17e85b81ca9e13ceb6e3bb63b93d16824d6c149
-  languageName: node
-  linkType: hard
-
 "@types/d3-array@npm:*":
   version: 3.2.2
   resolution: "@types/d3-array@npm:3.2.2"
@@ -10281,13 +10248,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie@npm:0.6.0":
-  version: 0.6.0
-  resolution: "cookie@npm:0.6.0"
-  checksum: 10c0/f2318b31af7a31b4ddb4a678d024514df5e705f9be5909a192d7f116cfb6d45cbacf96a473fa733faa95050e7cff26e7832bb3ef94751592f1387b71c8956686
-  languageName: node
-  linkType: hard
-
 "copy-to-clipboard@npm:3.3.3":
   version: 3.3.3
   resolution: "copy-to-clipboard@npm:3.3.3"
@@ -12734,7 +12694,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "gcforms@workspace:."
   dependencies:
-    "@auth/prisma-adapter": "npm:^1.0.14"
+    "@auth/prisma-adapter": "npm:^2.10.0"
     "@aws-sdk/client-cognito-identity-provider": "npm:^3.901.0"
     "@aws-sdk/client-dynamodb": "npm:^3.902.0"
     "@aws-sdk/client-lambda": "npm:^3.901.0"
@@ -13141,7 +13101,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"got@npm:11, got@npm:^11.8.6":
+"got@npm:11":
   version: 11.8.6
   resolution: "got@npm:11.8.6"
   dependencies:
@@ -14608,13 +14568,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^5.1.3":
-  version: 5.10.0
-  resolution: "jose@npm:5.10.0"
-  checksum: 10c0/e20d9fc58d7e402f2e5f04e824b8897d5579aae60e64cb88ebdea1395311c24537bf4892f7de413fab1acf11e922797fb1b42269bc8fc65089a3749265ccb7b0
-  languageName: node
-  linkType: hard
-
 "jose@npm:^6.0.6, jose@npm:^6.1.0":
   version: 6.1.0
   resolution: "jose@npm:6.1.0"
@@ -15822,13 +15775,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oauth4webapi@npm:^2.4.0":
-  version: 2.17.0
-  resolution: "oauth4webapi@npm:2.17.0"
-  checksum: 10c0/a3be4f07f3050c982c9f47a899cb34eb4ce1b2072818eab37f241c7db932cf0dac31ed90b0913eaaaebfd7b23e8bf397ecef249a11aea699efb62c7657884ba5
-  languageName: node
-  linkType: hard
-
 "oauth4webapi@npm:^3.3.0":
   version: 3.8.2
   resolution: "oauth4webapi@npm:3.8.2"
@@ -16984,30 +16930,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"preact-render-to-string@npm:5.2.3":
-  version: 5.2.3
-  resolution: "preact-render-to-string@npm:5.2.3"
-  dependencies:
-    pretty-format: "npm:^3.8.0"
-  peerDependencies:
-    preact: ">=10"
-  checksum: 10c0/c7695dd034a2dc50e3fd44621fd55e2d41854ab0abbcbc833a81feb3593a22a011596049de5a2486f71483323467a827adc7d6077cbbb1d154c0089fd8ab4cd7
-  languageName: node
-  linkType: hard
-
 "preact-render-to-string@npm:6.5.11":
   version: 6.5.11
   resolution: "preact-render-to-string@npm:6.5.11"
   peerDependencies:
     preact: ">=10"
   checksum: 10c0/a68b704c1343756022fb41322154b45e39f6021b940cbc97e86c292627d017d019700339a17d67b42c308b14fc5323fc120c798f785d6a3e993c8f273610bfe2
-  languageName: node
-  linkType: hard
-
-"preact@npm:10.11.3":
-  version: 10.11.3
-  resolution: "preact@npm:10.11.3"
-  checksum: 10c0/44f342de226a89b53a7156fad0d4192bfc8233a5cc3eb46162f53d3c0c1c2956222d997927c7dff20f52c3592f112cefec5adac64f0477cbd8370fb39126ef7b
   languageName: node
   linkType: hard
 
@@ -17071,13 +16999,6 @@ __metadata:
     ansi-styles: "npm:^5.0.0"
     react-is: "npm:^18.0.0"
   checksum: 10c0/edc5ff89f51916f036c62ed433506b55446ff739358de77207e63e88a28ca2894caac6e73dcb68166a606e51c8087d32d400473e6a9fdd2dbe743f46c9c0276f
-  languageName: node
-  linkType: hard
-
-"pretty-format@npm:^3.8.0":
-  version: 3.8.0
-  resolution: "pretty-format@npm:3.8.0"
-  checksum: 10c0/69f12937bfb7b2a537a7463b9f875a16322401f1e44d7702d643faa0d21991126c24c093217ef6da403b54c15942a834174fa1c016b72e2cb9edaae6bb3729b6
   languageName: node
   linkType: hard
 
@@ -19659,7 +19580,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsdown@npm:^0.15.0":
+"tsdown@npm:^0.15.0, tsdown@npm:^0.15.6":
   version: 0.15.6
   resolution: "tsdown@npm:0.15.6"
   dependencies:

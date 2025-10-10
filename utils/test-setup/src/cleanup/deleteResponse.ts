@@ -1,8 +1,9 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { QueryCommand, BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
-import { chunkArray, delay } from "../common/utils";
-import pLimit, { LimitFunction } from "p-limit";
+import { chunkArray } from "../common/utils";
+import { LimitFunction } from "p-limit";
 import { sendBatchWriteCommandAndRetryOnUnprocessedItemsDetection } from "../common/dynamodbAdapter";
+import { dynamodbOperationQueue } from "../common/operationQueues";
 
 interface Response {
   formId: string;
@@ -17,21 +18,16 @@ const dynamodbClient = new DynamoDBClient({
 });
 
 export async function deleteResponses(formId: string): Promise<void> {
-  const operationQueue = pLimit(1);
-
   let lastEvaluatedKey = null;
 
   while (lastEvaluatedKey !== undefined) {
     const responsesToDelete = await retrieveResponsesToDeleteFromDynamodb(
-      operationQueue,
+      dynamodbOperationQueue,
       formId,
       lastEvaluatedKey ?? undefined
     );
 
-    // The delay is needed to avoid being rate limited by DynamoDB's API
-    await delay(2500);
-
-    await deleteResponsesFromDynamodb(operationQueue, responsesToDelete.responses);
+    await deleteResponsesFromDynamodb(dynamodbOperationQueue, responsesToDelete.responses);
 
     lastEvaluatedKey = responsesToDelete.lastEvaluatedKey;
   }

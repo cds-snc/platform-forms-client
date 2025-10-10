@@ -3,7 +3,7 @@ import React, { useState, useEffect, createRef, useRef } from "react";
 import { cn } from "@lib/utils";
 import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
-import { FormElement } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { Description } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
@@ -61,7 +61,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     const initialValue: Record<string, string> = {};
     rowElements.forEach((element, index) => {
       // Initialize each field with an empty string to prevent controlled/uncontrolled warnings
-      initialValue[index.toString()] = "";
+      if (element.type !== FormElementTypes.richText) {
+        initialValue[index.toString()] = "";
+      }
     });
     return initialValue;
   };
@@ -76,7 +78,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     Array(fieldValue.length).fill(createRef<HTMLFieldSetElement>())
   );
   const focusedRow = useRef<number | null>(null);
-  const [hasReachedMaxNumberOfRows, setHasReachedMaxNumberOfRows] = useState<boolean>(false);
+
+  // Compute this value directly instead of using state
+  const hasReachedMaxNumberOfRows = maxNumberOfRows ? rows.length >= maxNumberOfRows : false;
 
   const { t } = useTranslation();
 
@@ -93,12 +97,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
     // When rows are added or deleted run the useEffect again to focus on the new row
   }, [rows.length]);
-
-  useEffect(() => {
-    if (maxNumberOfRows) {
-      setHasReachedMaxNumberOfRows(rows.length >= maxNumberOfRows);
-    }
-  }, [rows.length, maxNumberOfRows]);
 
   const addRow = () => {
     if (hasReachedMaxNumberOfRows) return;
