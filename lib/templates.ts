@@ -1220,26 +1220,36 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
  */
 export async function cloneTemplate(formID: string): Promise<FormRecord | null> {
   // Ensure the user can create a new form (needed to persist a clone)
-  const { user } = await authorization.canCreateForm().catch((e) => {
+  // and that they can edit the source form.
+  const [createResult, editResult] = (await Promise.allSettled([
+    authorization.canCreateForm(),
+    authorization.canEditForm(formID),
+  ])) as Array<PromiseSettledResult<{ user: { id: string } }>>;
+
+  if (createResult.status === "rejected") {
+    const e = createResult.reason as { user?: { id?: string } };
     logEvent(
       e?.user?.id ?? "unknown",
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to clone Form - missing create permission"
     );
-    throw e;
-  });
+    throw createResult.reason;
+  }
 
-  // Ensure the user can edit the source form (they must have edit rights to clone it)
-  await authorization.canEditForm(formID).catch((e) => {
+  if (editResult.status === "rejected") {
+    const e = editResult.reason as { user?: { id?: string } };
     logEvent(
       e?.user?.id ?? "unknown",
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to clone Form - missing edit permission"
     );
-    throw e;
-  });
+    throw editResult.reason;
+  }
+
+  // Extract the user from the fulfilled createResult
+  const { user } = (createResult as PromiseFulfilledResult<{ user: { id: string } }>).value;
 
   const template = await prisma.template
     .findUnique({
