@@ -13,28 +13,6 @@ export type MappedAnswer =
     }
   | string;
 
-export const getAnswerObject = ({
-  question,
-  rawAnswer,
-}: {
-  question?: FormElement;
-  rawAnswer: Response;
-}): MappedAnswer | null => {
-  if (!question) return null;
-
-  if (question.type === FormElementTypes.dynamicRow && Array.isArray(rawAnswer)) {
-    return handleAnswerArray({ question, rawAnswers: rawAnswer });
-  }
-
-  return {
-    type: String(question.type),
-    questionId: question.id,
-    questionEn: question.properties?.titleEn,
-    questionFr: question.properties?.titleFr,
-    answer: getAnswerAsString(question as FormElement, rawAnswer as unknown),
-  };
-};
-
 export const mapAnswers = ({
   formTemplate,
   rawAnswers,
@@ -101,4 +79,26 @@ export const handleAnswerArray = ({
     questionFr: question.properties?.titleFr,
     answer: rows as MappedAnswer[][],
   } as MappedAnswer;
+};
+
+export const getAnswerObject = ({
+  question,
+  rawAnswer,
+}: {
+  question?: FormElement;
+  rawAnswer: Response;
+}): MappedAnswer | null => {
+  if (!question) return null;
+
+  if (question.type === FormElementTypes.dynamicRow && Array.isArray(rawAnswer)) {
+    return handleAnswerArray({ question, rawAnswers: rawAnswer });
+  }
+
+  return {
+    type: String(question.type),
+    questionId: question.id,
+    questionEn: question.properties?.titleEn,
+    questionFr: question.properties?.titleFr,
+    answer: getAnswerAsString(question as FormElement, rawAnswer as unknown),
+  };
 };

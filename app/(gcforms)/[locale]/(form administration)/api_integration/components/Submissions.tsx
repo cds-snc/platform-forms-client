@@ -8,7 +8,7 @@ import { createSubArrays, downloadAndConfirmFormSubmissions } from "../lib/utils
 import { Button } from "@clientComponents/globals";
 
 // Use the type returned by showDirectoryPicker
-import { FileSystemDirectoryHandle } from "native-file-system-adapter";
+// import { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
 import type { NewFormSubmission, PrivateApiKey } from "../lib/types";
 
