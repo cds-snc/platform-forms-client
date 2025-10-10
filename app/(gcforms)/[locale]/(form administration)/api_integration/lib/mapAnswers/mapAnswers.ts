@@ -1,5 +1,6 @@
-import { PublicFormRecord, FormElement, FormElementTypes } from "@gcforms/types";
+import { FormElement, FormElementTypes } from "@gcforms/types";
 import { getAnswerAsString } from "./formatAnswers/toString";
+import { FormProperties, Response } from "@gcforms/types";
 
 export type MappedAnswer =
   | {
@@ -17,7 +18,7 @@ export const getAnswerObject = ({
   rawAnswer,
 }: {
   question?: FormElement;
-  rawAnswer: unknown;
+  rawAnswer: Response;
 }): MappedAnswer | null => {
   if (!question) return null;
 
@@ -35,15 +36,15 @@ export const getAnswerObject = ({
 };
 
 export const mapAnswers = ({
-  template,
+  formTemplate,
   rawAnswers,
 }: {
-  template: PublicFormRecord;
-  rawAnswers: Record<string, unknown> | null | undefined;
+  formTemplate: FormProperties;
+  rawAnswers: Response;
 }): MappedAnswer[] => {
-  if (!template || !template.form?.elements || !rawAnswers) return [];
+  if (!formTemplate || !formTemplate.elements || !rawAnswers) return [];
 
-  const elements = template.form.elements;
+  const elements = formTemplate.elements;
   const elementMap = new Map<number, FormElement>();
   elements.forEach((element) => elementMap.set(element.id, element));
 

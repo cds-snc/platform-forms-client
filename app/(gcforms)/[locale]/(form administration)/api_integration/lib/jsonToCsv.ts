@@ -5,14 +5,13 @@ import type {
 } from "./csv-writer/lib/browser-types";
 import { sortByLayout } from "@lib/utils/form-builder";
 import { FormElementTypes, type FormElement } from "@lib/types";
+
+import { FormProperties, Response } from "@gcforms/types";
+
 import { customTranslate } from "@lib/i18nHelpers";
 import type { IGCFormsApiClient } from "./IGCFormsApiClient";
 import type { Field } from "./csv-writer/lib/record";
-import {
-  parseAnswersField,
-  formatAnswer as helperFormatAnswer,
-  renderDynamicRow,
-} from "./jsonToCsvHelpers";
+import { mapAnswers, type MappedAnswer } from "./mapAnswers/mapAnswers";
 
 /* eslint-disable no-await-in-loop */
 export const processJsonToCsv = async ({
@@ -95,9 +94,8 @@ export const processJsonToCsv = async ({
         const content = await file.text();
 
         const jsonData = JSON.parse(content);
-
-        const answersObj = parseAnswersField(jsonData as Record<string, unknown>);
-        if (!answersObj) {
+        const answersObj = (jsonData as Record<string, unknown>)?.answers;
+        if (!answersObj || typeof answersObj !== "object") {
           // skip files without answers
           // eslint-disable-next-line no-console
           console.warn(`No answers field found in ${fileName}`);
@@ -127,61 +125,71 @@ export const processJsonToCsv = async ({
         }
         record["__createdAt"] = (createdAtIso as Field) || ("" as Field);
 
-        const specialChars = ["=", "+", "-", "@"];
+        // Map answers from the template + raw responses
+        const mappedAnswers = mapAnswers({
+          formTemplate: template.form as unknown as FormProperties,
+          rawAnswers: answersObj as Response,
+        });
 
+        // Build a lookup by question id for quick access
+        const mappedByQuestionId = new Map<string, MappedAnswer>();
+        if (Array.isArray(mappedAnswers)) {
+          mappedAnswers.forEach((m) => {
+            if (typeof m !== "string" && (m as { questionId?: number }).questionId !== undefined) {
+              mappedByQuestionId.set(
+                String((m as { questionId?: number }).questionId),
+                m as MappedAnswer
+              );
+            }
+          });
+        }
+
+        // Build a record following sortedElements order
         for (const element of sortedElements) {
           const qid = String(element.id);
-          const rawAnswer = answersObj[qid];
+          const rawAnswer = (answersObj as Record<string, unknown>)[qid];
 
-          const formatAnswer = (v: unknown) => helperFormatAnswer(v, specialChars);
-
-          if (element.type === FormElementTypes.dynamicRow) {
-            record[qid] = renderDynamicRow(element, rawAnswer, formatAnswer) as Field;
-            continue;
-          }
-
-          if (element.type === FormElementTypes.checkbox) {
-            if (Array.isArray(rawAnswer)) {
-              record[qid] = (rawAnswer as unknown[]).map((v) => String(v)).join(", ") as Field;
+          // If mapAnswers produced a value for this question, prefer that
+          const mapped = mappedByQuestionId.get(qid);
+          if (mapped) {
+            // Prefer mapped answers; if mapped value is missing/empty, treat as no-answer
+            const mappedVal =
+              typeof mapped === "string" ? mapped : (mapped as { answer?: unknown }).answer;
+            if (mappedVal === null || mappedVal === undefined || mappedVal === "") {
+              record[qid] = "-" as Field;
+            } else if (
+              typeof mappedVal === "string" ||
+              typeof mappedVal === "number" ||
+              typeof mappedVal === "boolean"
+            ) {
+              record[qid] = mappedVal as Field;
             } else {
-              record[qid] = formatAnswer(rawAnswer);
-            }
-            continue;
-          }
-
-          if (element.type === FormElementTypes.fileInput) {
-            if (rawAnswer && typeof rawAnswer === "object") {
-              const obj = rawAnswer as Record<string, unknown>;
-              if ("name" in obj && typeof obj.name === "string") {
-                record[qid] = obj.name as Field;
-              } else {
-                record[qid] = formatAnswer(rawAnswer);
+              try {
+                record[qid] = JSON.stringify(mappedVal) as Field;
+              } catch (e) {
+                record[qid] = String(mappedVal) as Field;
               }
-            } else {
-              record[qid] = formatAnswer(rawAnswer);
             }
             continue;
           }
-
-          if (element.type === FormElementTypes.formattedDate) {
+          // No mapped value — just pass the raw answer through with minimal
+          // coercion. Tests/consumers expect primitive types or strings; for
+          // complex objects, stringify them.
+          if (rawAnswer === null || rawAnswer === undefined) {
+            record[qid] = "-" as Field;
+          } else if (
+            typeof rawAnswer === "string" ||
+            typeof rawAnswer === "number" ||
+            typeof rawAnswer === "boolean"
+          ) {
+            record[qid] = rawAnswer as Field;
+          } else {
             try {
-              if (typeof rawAnswer === "string") {
-                const maybeObj = JSON.parse(rawAnswer);
-                if (maybeObj && typeof maybeObj === "object" && "YYYY" in maybeObj) {
-                  record[qid] = String(rawAnswer) as Field;
-                } else {
-                  record[qid] = formatAnswer(rawAnswer);
-                }
-              } else {
-                record[qid] = formatAnswer(rawAnswer);
-              }
+              record[qid] = JSON.stringify(rawAnswer) as Field;
             } catch (e) {
-              record[qid] = formatAnswer(rawAnswer);
+              record[qid] = String(rawAnswer) as Field;
             }
-            continue;
           }
-
-          record[qid] = formatAnswer(rawAnswer);
         }
 
         // receipt placeholder
