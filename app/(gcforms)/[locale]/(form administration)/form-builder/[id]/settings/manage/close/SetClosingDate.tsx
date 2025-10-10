@@ -63,6 +63,15 @@ export const SetClosingDate = ({
     setStatus(value == true ? "closed" : "open");
   };
 
+  const clearClosingDate = () => {
+    closeForm({
+      id: formId,
+      closingDate: null,
+    });
+    setClosingDate(null);
+    toast.success(t("closingDate.clearSuccessMessage"));
+  };
+
   // Called from the date scheduling modal
   const saveFutureDate = useCallback(
     async (futureDate?: number) => {
@@ -147,14 +156,24 @@ export const SetClosingDate = ({
         />
       </div>
       <div className="mb-4" id="closing-date">
-        {closingDate && <ScheduledClosingDate closingDate={closingDate} language="en" />}
-        <Button
-          data-closing-date={closingDate}
-          theme="link"
-          onClick={() => setShowDateTimeDialog(true)}
-        >
-          {t("scheduleClosingPage.linkText")}
-        </Button>
+        {closingDate && (
+          <>
+            <ScheduledClosingDate closingDate={closingDate} language="en" />
+            <Button theme="primary" onClick={() => setShowDateTimeDialog(true)}>
+              {t("scheduleClosingPage.changeOrRemove")}
+            </Button>
+          </>
+        )}
+
+        {!closingDate && (
+          <Button
+            data-closing-date={closingDate}
+            theme="primary"
+            onClick={() => setShowDateTimeDialog(true)}
+          >
+            {t("scheduleClosingPage.linkText")}
+          </Button>
+        )}
       </div>
       <div className="mb-4 w-3/5">
         <ClosedMessage
@@ -171,6 +190,7 @@ export const SetClosingDate = ({
           showDateTimeDialog={showDateTimeDialog}
           setShowDateTimeDialog={setShowDateTimeDialog}
           save={saveFutureDate}
+          clearClosingDate={clearClosingDate}
           closingDate={closingDate}
         />
       )}
