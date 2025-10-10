@@ -30,7 +30,8 @@ describe("cloneTemplate", () => {
       saveAndResume: true,
       notificationsInterval: 1440,
       users: [{ id: "user1" }],
-      notificationsUsers: [{ id: "user2" }],
+      // include the current user in notificationsUsers so cloning will connect them
+      notificationsUsers: [{ id: "user2" }, { id: userID }],
     };
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(sourceTemplate);
@@ -59,7 +60,8 @@ describe("cloneTemplate", () => {
           jsonConfig: sourceTemplate.jsonConfig,
           name: `Copy of ${sourceTemplate.name}`,
           users: { connect: [{ id: userID }] },
-          // notificationsUsers should not be copied because current user is not in the original list
+          // current user is in notificationsUsers in the source so they should be connected
+          notificationsUsers: { connect: [{ id: userID }] },
         }),
         select: expect.any(Object),
       })
