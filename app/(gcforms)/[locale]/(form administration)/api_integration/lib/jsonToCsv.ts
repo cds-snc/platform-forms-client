@@ -1,8 +1,8 @@
-import { createObjectCsvWriter } from "./csv-writer";
+import { createObjectCsvWriter } from "./csv/csv-writer";
 import type {
   FileSystemFileHandle,
   FileSystemDirectoryHandle,
-} from "./csv-writer/lib/browser-types";
+} from "./csv/csv-writer/lib/browser-types";
 import { sortByLayout } from "@lib/utils/form-builder";
 import { FormElementTypes, type FormElement } from "@lib/types";
 
@@ -10,7 +10,7 @@ import { FormProperties, Response } from "@gcforms/types";
 
 import { customTranslate } from "@lib/i18nHelpers";
 import type { IGCFormsApiClient } from "./IGCFormsApiClient";
-import type { Field } from "./csv-writer/lib/record";
+import type { Field } from "./csv/csv-writer/lib/record";
 import { mapAnswers, type MappedAnswer } from "./mapAnswers/mapAnswers";
 
 /* eslint-disable no-await-in-loop */

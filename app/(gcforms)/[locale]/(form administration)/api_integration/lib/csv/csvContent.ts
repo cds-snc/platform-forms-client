@@ -1,6 +1,6 @@
 import { FormProperties, FormElement, FormElementTypes, Response } from "@gcforms/types";
 import { sortByLayout } from "@lib/utils/form-builder";
-import type { Field } from "../csv-writer/lib/record";
+import type { Field } from "./csv-writer/lib/record";
 
 import { customTranslate } from "@lib/i18nHelpers";
 import { mapAnswers, type MappedAnswer } from "../mapAnswers/mapAnswers";
