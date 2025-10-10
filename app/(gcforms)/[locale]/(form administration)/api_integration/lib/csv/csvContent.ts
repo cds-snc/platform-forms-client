@@ -2,6 +2,7 @@ import { FormProperties, FormElement, FormElementTypes, Response } from "@gcform
 import { sortByLayout } from "@lib/utils/form-builder";
 import type { Field } from "./csv-writer/lib/record";
 
+const specialChars = ["=", "+", "-", "@"];
 import { customTranslate } from "@lib/i18nHelpers";
 import { mapAnswers, type MappedAnswer } from "./mapAnswers/mapAnswers";
 
@@ -50,10 +51,6 @@ export const buildRecords = ({
   rawAnswers: Response;
   sortedElements: FormElement[];
 }): Array<Record<string, Field>> => {
-  // Build a record following sortedElements order
-  const record: Record<string, Field> = {};
-  const recordsData: Array<Record<string, Field>> = [];
-
   // Map answers from the template + raw responses
   const mappedAnswers = mapAnswers({
     // mapAnswers expects a formTemplate and rawAnswers fields.
@@ -75,54 +72,53 @@ export const buildRecords = ({
   }
 
   // Build a record following sortedElements order
-  for (const element of sortedElements) {
-    const qid = String(element.id);
-  const rawAnswer = rawAnswers[qid as unknown as keyof Response];
-
-    // If mapAnswers produced a value for this question, prefer that
-    const mapped = mappedByQuestionId.get(qid);
-    if (mapped) {
-      // Prefer mapped answers; if mapped value is missing/empty, treat as no-answer
-      const mappedVal =
-        typeof mapped === "string" ? mapped : (mapped as { answer?: unknown }).answer;
-      if (mappedVal === null || mappedVal === undefined || mappedVal === "") {
-        record[qid] = "-" as Field;
-      } else if (
-        typeof mappedVal === "string" ||
-        typeof mappedVal === "number" ||
-        typeof mappedVal === "boolean"
-      ) {
-        record[qid] = mappedVal as Field;
-      } else {
-        try {
-          record[qid] = JSON.stringify(mappedVal) as Field;
-        } catch (e) {
-          record[qid] = String(mappedVal) as Field;
-        }
-      }
-      continue;
+  const answers = sortedElements.map((element) => {
+    const answer = mappedByQuestionId.get(String(element.id));
+    if (!answer) {
+      return "-";
     }
-    // No mapped value — just pass the raw answer through with minimal
-    // coercion. Tests/consumers expect primitive types or strings; for
-    // complex objects, stringify them.
-    if (rawAnswer === null || rawAnswer === undefined) {
-      record[qid] = "-" as Field;
-    } else if (
-      typeof rawAnswer === "string" ||
-      typeof rawAnswer === "number" ||
-      typeof rawAnswer === "boolean"
-    ) {
-      record[qid] = rawAnswer as Field;
-    } else {
-      try {
-        record[qid] = JSON.stringify(rawAnswer) as Field;
-      } catch (e) {
-        record[qid] = String(rawAnswer) as Field;
-      }
+    if (answer instanceof Array) {
+      return answer
+        .map((answer) =>
+          answer
+            .map((subAnswer: { questionEn: string; questionFr: string; answer: string }) => {
+              let answerText = `${subAnswer.questionEn}\n${subAnswer.questionFr}: ${subAnswer.answer}\n`;
+              if (specialChars.some((char) => answerText.startsWith(char))) {
+                answerText = `'${answerText}`;
+              }
+              if (answerText == "") {
+                answerText = "-";
+              }
+              return answerText;
+            })
+            .join("")
+        )
+        .join("\n");
     }
-  }
+    let answerText = answer as string;
+    if (specialChars.some((char) => answerText.startsWith(char))) {
+      answerText = `'${answerText}`;
+    }
+    if (answerText == "") {
+      answerText = "-";
+    }
+    return answerText;
+  });
 
-  // receipt placeholder
+  const recordsData: Array<Record<string, Field>> = [];
+
+  if (answers.length === 0) return recordsData;
+
+  const record: Record<string, Field> = {};
+  // Map answers array back to element ids in sortedElements order
+  sortedElements.forEach((el, idx) => {
+    const qid = String(el.id);
+    const val = answers[idx];
+    record[qid] = (val === null || val === undefined ? "-" : (val as unknown)) as Field;
+  });
+
+  // created at and receipt
+  record["__createdAt"] = String(new Date().toISOString()) as Field;
   record["__receipt"] =
     "Receipt codes are in the Official receipt and record of responses\nLes codes de réception sont dans le Reçu et registre officiel des réponses" as Field;
 
