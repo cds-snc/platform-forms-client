@@ -11,7 +11,7 @@ import { FormProperties, Response } from "@gcforms/types";
 import { customTranslate } from "@lib/i18nHelpers";
 import type { IGCFormsApiClient } from "./IGCFormsApiClient";
 import type { Field } from "./csv/csv-writer/lib/record";
-import { mapAnswers, type MappedAnswer } from "./mapAnswers/mapAnswers";
+import { mapAnswers, type MappedAnswer } from "./csv/mapAnswers/mapAnswers";
 
 /* eslint-disable no-await-in-loop */
 export const processJsonToCsv = async ({

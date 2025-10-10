@@ -3,7 +3,7 @@ import { sortByLayout } from "@lib/utils/form-builder";
 import type { Field } from "./csv-writer/lib/record";
 
 import { customTranslate } from "@lib/i18nHelpers";
-import { mapAnswers, type MappedAnswer } from "../mapAnswers/mapAnswers";
+import { mapAnswers, type MappedAnswer } from "./mapAnswers/mapAnswers";
 
 export const sortElements = ({ formTemplate }: { formTemplate: FormProperties }) => {
   const elements = Array.isArray(formTemplate.elements)
@@ -47,7 +47,7 @@ export const buildRecords = ({
   sortedElements,
 }: {
   formTemplate: FormProperties;
-  rawAnswers: Record<string, unknown>;
+  rawAnswers: Response;
   sortedElements: FormElement[];
 }): Array<Record<string, Field>> => {
   // Build a record following sortedElements order
@@ -58,7 +58,7 @@ export const buildRecords = ({
   const mappedAnswers = mapAnswers({
     // mapAnswers expects a formTemplate and rawAnswers fields.
     formTemplate,
-    rawAnswers: rawAnswers as unknown as Response,
+    rawAnswers,
   });
 
   // Build a lookup by question id for quick access
@@ -77,7 +77,7 @@ export const buildRecords = ({
   // Build a record following sortedElements order
   for (const element of sortedElements) {
     const qid = String(element.id);
-    const rawAnswer = (rawAnswers as Record<string, unknown>)[qid];
+  const rawAnswer = rawAnswers[qid as unknown as keyof Response];
 
     // If mapAnswers produced a value for this question, prefer that
     const mapped = mappedByQuestionId.get(qid);
@@ -135,7 +135,7 @@ export const buildCsvContent = ({
   rawAnswers,
 }: {
   formTemplate: FormProperties;
-  rawAnswers: Record<string, unknown>;
+  rawAnswers: Response;
 }) => {
   const headers = getHeaders({ sortedElements: sortElements({ formTemplate }) });
 

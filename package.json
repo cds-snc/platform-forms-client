@@ -38,6 +38,7 @@
     "test:vitest": "vitest run",
     "test:watch:vitest": "vitest --watch",
     "test:watch": "DEBUG_PRINT_LIMIT=10000  jest --watch",
+  "dump:csv": "tsx scripts/dump-csv-from-buildCsvContent.ts",
     "cypress": "cypress open",
     "cypress:run": "CYPRESS_DEBUG=true cypress run --browser chrome",
     "cypress:e2e": "cypress run --browser chrome --e2e",
