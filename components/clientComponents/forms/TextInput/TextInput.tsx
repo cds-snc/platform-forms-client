@@ -9,6 +9,7 @@ export interface BaseTextInputProps extends React.InputHTMLAttributes<HTMLInputE
   id: string;
   name: string;
   type: HTMLTextInputTypeAttribute;
+  label?: string;
   error?: string;
   ariaDescribedBy?: string;
   allowNegativeNumbers?: boolean;
