@@ -99,7 +99,6 @@ export const BaseTextInput = React.forwardRef<HTMLInputElement, BaseTextInputPro
           autoComplete={autoComplete ?? "off"}
           placeholder={placeholder}
           aria-describedby={ariaDescribedByIds()}
-          maxLength={maxLength}
           onKeyDown={handleKeyDown}
           {...rest}
         />

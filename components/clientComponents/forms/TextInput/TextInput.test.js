@@ -5,6 +5,7 @@ import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GenerateElement } from "@lib/formBuilder";
+import { useField } from "formik";
 
 jest.mock("formik", () => ({
   ...jest.requireActual("formik"),
@@ -14,6 +15,8 @@ jest.mock("formik", () => ({
     { setValue: jest.fn() },
   ]),
 }));
+
+const mockedUseField = useField;
 
 const textInputData = {
   id: "1",
@@ -74,6 +77,17 @@ describe("Verfify character count restrictions", () => {
 
   beforeEach(() => {
     screen = render(<GenerateElement element={textInputData} language={"en"} />);
+    mockedUseField.mockImplementation((props) => {
+      const [value, setValue] = React.useState(props.value || "");
+      const field = {
+        name: props.name,
+        value,
+        onChange: (e) => setValue(e.target.value),
+        onBlur: jest.fn(),
+      };
+      const meta = { touched: false, error: "" };
+      return [field, meta];
+    });
   });
 
   it("does not display any message when not enough characters have been typed in", async () => {

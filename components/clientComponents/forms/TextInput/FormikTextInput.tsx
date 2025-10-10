@@ -14,8 +14,8 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
     <BaseTextInput
       id={id}
       type={type}
-      {...field}
       {...rest}
+      {...field}
       error={meta.touched && meta.error ? meta.error : undefined}
     />
   );
