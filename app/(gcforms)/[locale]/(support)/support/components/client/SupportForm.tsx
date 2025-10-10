@@ -10,7 +10,6 @@ import {
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import Link from "next/link";
 import { Alert } from "@clientComponents/globals";
-import { TextInput } from "../../../components/client/TextInput";
 import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
 import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
@@ -18,6 +17,7 @@ import { useState } from "react";
 import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+import { TextInput } from "@root/components/clientComponents/forms/TextInput/TextInput";
 
 export const SupportForm = () => {
   const {
