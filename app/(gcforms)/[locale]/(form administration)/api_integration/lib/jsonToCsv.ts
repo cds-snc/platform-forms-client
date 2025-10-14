@@ -104,8 +104,15 @@ export const processJsonToCsv = async ({
           continue;
         }
 
+        // mapAnswers expects template.form.elements, but API might return elements directly
+        // Wrap in a form object if needed
+        const templateForMapping =
+          "form" in (template as object)
+            ? (template as PublicFormRecord)
+            : ({ form: template } as PublicFormRecord);
+
         const mappedAnswers = mapAnswers({
-          template: template as PublicFormRecord,
+          template: templateForMapping,
           rawAnswers: answersObj as Record<string, Response>,
         });
 
