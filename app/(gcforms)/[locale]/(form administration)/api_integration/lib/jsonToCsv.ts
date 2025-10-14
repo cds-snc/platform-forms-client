@@ -1,18 +1,14 @@
-import { createObjectCsvWriter } from "./csv-writer";
+import { createObjectCsvWriter } from "@lib/responses/csv-writer";
 import type {
   FileSystemFileHandle,
   FileSystemDirectoryHandle,
-} from "./csv-writer/lib/browser-types";
+} from "@lib/responses/csv-writer/lib/browser-types";
 import { sortByLayout } from "@lib/utils/form-builder";
 import { FormElementTypes, type FormElement } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
 import type { IGCFormsApiClient } from "./IGCFormsApiClient";
-import type { Field } from "./csv-writer/lib/record";
-import {
-  parseAnswersField,
-  formatAnswer as helperFormatAnswer,
-  renderDynamicRow,
-} from "./jsonToCsvHelpers";
+import type { Field } from "@lib/responses/csv-writer/lib/record";
+import { parseAnswersField } from "./jsonToCsvHelpers";
 
 /* eslint-disable no-await-in-loop */
 export const processJsonToCsv = async ({
@@ -96,99 +92,13 @@ export const processJsonToCsv = async ({
 
         const jsonData = JSON.parse(content);
 
-        const answersObj = parseAnswersField(jsonData as Record<string, unknown>);
+        const answersObj = parseAnswersField(jsonData.answers);
         if (!answersObj) {
           // skip files without answers
           // eslint-disable-next-line no-console
           console.warn(`No answers field found in ${fileName}`);
           continue;
         }
-
-        // Build a record following sortedElements order
-        const record: Record<string, Field> = {};
-        // submission id and createdAt (if present in JSON)
-        record["__submissionId"] = (jsonData.name ?? jsonData.id ?? "") as unknown as Field;
-        // createdAt may be a number (ms) or an ISO string — coerce safely
-        let createdAtIso = "";
-        if (jsonData && typeof (jsonData as Record<string, unknown>).createdAt !== "undefined") {
-          const rawCreated = (jsonData as Record<string, unknown>).createdAt;
-          if (typeof rawCreated === "number") {
-            createdAtIso = new Date(rawCreated).toISOString();
-          } else if (typeof rawCreated === "string") {
-            // If it's numeric string, try Number first, otherwise parse as date string
-            const asNumber = Number(rawCreated);
-            if (!Number.isNaN(asNumber)) {
-              createdAtIso = new Date(asNumber).toISOString();
-            } else {
-              const parsed = new Date(rawCreated);
-              if (!Number.isNaN(parsed.getTime())) createdAtIso = parsed.toISOString();
-            }
-          }
-        }
-        record["__createdAt"] = (createdAtIso as Field) || ("" as Field);
-
-        const specialChars = ["=", "+", "-", "@"];
-
-        for (const element of sortedElements) {
-          const qid = String(element.id);
-          const rawAnswer = answersObj[qid];
-
-          const formatAnswer = (v: unknown) => helperFormatAnswer(v, specialChars);
-
-          if (element.type === FormElementTypes.dynamicRow) {
-            record[qid] = renderDynamicRow(element, rawAnswer, formatAnswer) as Field;
-            continue;
-          }
-
-          if (element.type === FormElementTypes.checkbox) {
-            if (Array.isArray(rawAnswer)) {
-              record[qid] = (rawAnswer as unknown[]).map((v) => String(v)).join(", ") as Field;
-            } else {
-              record[qid] = formatAnswer(rawAnswer);
-            }
-            continue;
-          }
-
-          if (element.type === FormElementTypes.fileInput) {
-            if (rawAnswer && typeof rawAnswer === "object") {
-              const obj = rawAnswer as Record<string, unknown>;
-              if ("name" in obj && typeof obj.name === "string") {
-                record[qid] = obj.name as Field;
-              } else {
-                record[qid] = formatAnswer(rawAnswer);
-              }
-            } else {
-              record[qid] = formatAnswer(rawAnswer);
-            }
-            continue;
-          }
-
-          if (element.type === FormElementTypes.formattedDate) {
-            try {
-              if (typeof rawAnswer === "string") {
-                const maybeObj = JSON.parse(rawAnswer);
-                if (maybeObj && typeof maybeObj === "object" && "YYYY" in maybeObj) {
-                  record[qid] = String(rawAnswer) as Field;
-                } else {
-                  record[qid] = formatAnswer(rawAnswer);
-                }
-              } else {
-                record[qid] = formatAnswer(rawAnswer);
-              }
-            } catch (e) {
-              record[qid] = formatAnswer(rawAnswer);
-            }
-            continue;
-          }
-
-          record[qid] = formatAnswer(rawAnswer);
-        }
-
-        // receipt placeholder
-        record["__receipt"] =
-          "Receipt codes are in the Official receipt and record of responses\nLes codes de réception sont dans le Reçu et registre officiel des réponses" as Field;
-
-        recordsData.push(record as Record<string, unknown>);
       } catch (parseError) {
         // eslint-disable-next-line no-console
         console.error(`Failed to parse ${fileName}:`, parseError);
