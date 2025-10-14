@@ -52,7 +52,6 @@ const nextConfig = {
       },
     ];
   },
-
   async redirects() {
     return [
       {
@@ -74,6 +73,7 @@ const nextConfig = {
   },
   serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
   experimental: {
+    turbopackFileSystemCacheForDev: true,
     // PPR is only supported in Next.js Canary branches
     // ppr: true,
     serverActions: {
