@@ -1,36 +1,10 @@
-import { PrismaClient, Prisma } from "@prisma/client";
 import { logMessage } from "@lib/logger";
+import { initializeDbConnection, Prisma } from "@root/packages/database/src";
 
 // See https://www.prisma.io/docs/support/help-articles/nextjs-prisma-client-dev-practices
 // Needed to ensure we only instantiate Prisma Client once
 
-const prismaClientSingleton = () => {
-  return new PrismaClient({
-    log: ["info", "warn", "error"],
-  }).$extends({
-    model: {
-      $allModels: {
-        async exists<T>(this: T, where: Prisma.Args<T, "findFirst">["where"]): Promise<boolean> {
-          const context = Prisma.getExtensionContext(this);
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const result = await (context as any).findFirst({ where });
-          return result !== null;
-        },
-      },
-    },
-    query: {
-      template: {
-        $allOperations({ args, query }) {
-          if ("where" in args) {
-            args.where = { ...args.where, ttl: null };
-          }
-          return query(args);
-        },
-      },
-    },
-  });
-};
-
+const prismaClientSingleton = () => initializeDbConnection();
 declare global {
   var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
 }

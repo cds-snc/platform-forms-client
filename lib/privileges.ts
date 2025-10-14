@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@gcforms/database";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { privilegeCheck, privilegePut, privilegeDelete } from "@lib/cache/privilegeCache";
 import {

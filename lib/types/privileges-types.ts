@@ -1,6 +1,6 @@
 import { InferSubjects, MongoQuery, MongoAbility } from "@casl/ability";
 import { FormRecord } from "@lib/types";
-import { User, Privilege as PrismaPrivilege, Setting } from "@prisma/client";
+import { User, Privilege as PrismaPrivilege, Setting } from "@gcforms/database";
 
 interface CASL_FormRecord extends Omit<FormRecord, "form"> {
   kind: "FormRecord";

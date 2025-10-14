@@ -12,7 +12,7 @@ if (!connectionString) {
   throw new Error("Database Connection URL missing");
 }
 
-const prisma = initializeDbConnection({ connectionString });
+const prisma = initializeDbConnection();
 
 async function createTemplates(env: string) {
   // see https://github.com/prisma/prisma/issues/9247#issuecomment-1249322729 for why this check is needed

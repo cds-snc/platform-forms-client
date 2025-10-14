@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient, Prisma } from "@gcforms/database";
 import { mockDeep, mockReset, DeepMockProxy } from "jest-mock-extended";
 import { prisma } from "@lib/integration/prismaConnector";
 

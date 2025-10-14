@@ -8,7 +8,7 @@ import {
   SecurityAttribute,
   ClosedDetails,
 } from "@lib/types";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@gcforms/database";
 import { authorization, getAbility } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";

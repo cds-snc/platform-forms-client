@@ -14,7 +14,7 @@ import { inviteToCollaborateEmailTemplate } from "@lib/invitations/emailTemplate
 import { inviteToFormsEmailTemplate } from "@lib/invitations/emailTemplates/inviteToFormsEmailTemplate";
 import { getOrigin } from "@lib/origin";
 import { logMessage } from "@lib/logger";
-import { Invitation } from "@prisma/client";
+import { Invitation } from "@gcforms/database";
 import { logEvent } from "@lib/auditLogs";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { authorization } from "@lib/privileges";
