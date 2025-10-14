@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@i18n/client";
 import copy from "copy-to-clipboard";
-import { getForm } from "../../actions";
+import { getForm, cloneForm } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useCallback, useState } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
@@ -35,6 +35,27 @@ export const Menu = ({
   }, []);
 
   const menuItemsList: Array<MenuDropdownItemI> = [
+    {
+      title: t("card.menu.clone"),
+      callback: () => {
+        // Start async clone but return immediate callback value to satisfy MenuDropdown
+        (async () => {
+          try {
+            const res = await cloneForm(id);
+            if (res && res.formRecord && !res.error) {
+              toast.success(t("card.menu.cloneSuccess"));
+              window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;
+              return;
+            }
+            throw new Error(res?.error || "Clone failed");
+          } catch (e) {
+            toast.error(t("card.menu.cloneFailed"));
+          }
+        })();
+
+        return { message: "" };
+      },
+    },
     {
       title: t("card.menu.save"),
       callback: () => {
@@ -90,8 +111,8 @@ export const Menu = ({
       const fileName = name
         ? name
         : language === "fr"
-        ? formRecord.form.titleFr
-        : formRecord.form.titleEn;
+          ? formRecord.form.titleFr
+          : formRecord.form.titleEn;
       const data = JSON.stringify(formRecord.form, null, 2);
       const tempUrl = window.URL.createObjectURL(new Blob([data]));
       const link = document.createElement("a");
