@@ -18,7 +18,7 @@
     "dev": "yarn prisma:dev && next dev --turbopack",
     "dev:debug": "next dev --turbopack",
     "dev:secure": "yarn prisma:dev && next dev --experimental-https --turbopack",
-    "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
+    "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug --turbopack",
     "start": "yarn prisma:deploy && NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
     "prisma:deploy": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=production",
     "prisma:dev": "prisma migrate dev --skip-seed && tsx prisma/seeds/seed_cli.ts --environment=development",
