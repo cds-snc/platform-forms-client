@@ -54,8 +54,8 @@ const getMappedAnswer = ({
   }
 
   return createAnswerObject({
-    question: question as FormElement,
-    answer: getAnswerAsString(question as FormElement, rawAnswer as unknown),
+    question,
+    answer: getAnswerAsString(question, rawAnswer as unknown),
   });
 };
 
@@ -92,12 +92,7 @@ const handleAnswerArray = ({
         return createFallbackMappedAnswer({ questionId: index, rawAnswer: value });
       }
 
-      const resolved = getMappedAnswer({ question: subQuestion as FormElement, rawAnswer: value });
-      if (resolved === null) {
-        return createFallbackMappedAnswer({ questionId: index, rawAnswer: value });
-      }
-
-      return resolved;
+      return getMappedAnswer({ question: subQuestion, rawAnswer: value });
     });
 
     return subAnswers;
