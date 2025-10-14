@@ -17,7 +17,7 @@ import { ContentWrapper } from "./ContentWrapper";
 import { ProcessingMessage } from "./ProcessingMessage";
 import { NoSubmissions } from "./NoSubmissions";
 import { DirectoryPicker } from "./DirectoryPicker";
-// import { processJsonToCsv } from "../lib/jsonToCsv";
+import { processJsonToCsv } from "../lib/jsonToCsv";
 
 export const Submissions = ({
   apiClient,
@@ -85,14 +85,13 @@ export const Submissions = ({
     }
 
     // Write the collected JSON files to a CSV
-    /*
+
     await processJsonToCsv({
       formId: apiClient?.getFormId() || "<formId>",
       jsonFileNames: allJsonFiles,
       directoryHandle: directoryHandle,
       apiClient: apiClient,
     });
-    */
 
     setCompleted(true);
   }, [apiClient, directoryHandle, newFormSubmissions, userKey]);

@@ -3,6 +3,7 @@ export const parseAnswersField = (
 ): Record<string, unknown> | null => {
   if (!jsonData || typeof jsonData !== "object") return null;
   const v = (jsonData as Record<string, unknown>)["answers"];
+
   if (!v) return null;
   if (typeof v === "string") {
     try {
@@ -11,7 +12,8 @@ export const parseAnswersField = (
         ? (parsed as Record<string, unknown>)
         : null;
     } catch (e) {
-      // parsing failed
+      // eslint-disable-next-line no-console
+      console.log(e);
       return null;
     }
   }

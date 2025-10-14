@@ -1,0 +1,279 @@
+{
+  "titleEn": "Get support",
+  "titleFr": "Get support",
+  "introduction": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "Privacy statement",
+    "descriptionFr": "Privacy statement"
+  },
+  "confirmation": {
+    "descriptionEn": "Thanks - we'll get back to you.",
+    "descriptionFr": "Thanks - we'll get back to you.",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [2, 8, 9, 10, 11, 12, 13, 14],
+  "elements": [
+    {
+      "id": 14,
+      "type": "textArea",
+      "uuid": "4a9a23b5-3a89-4e87-b8f7-1910138e1c79",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Tell us more ",
+        "titleFr": "Tell us more ",
+        "questionId": "",
+        "validation": {
+          "required": true
+        },
+        "subElements": [],
+        "descriptionEn": "Please do not include any protected or personal information.",
+        "descriptionFr": "Please do not include any protected or personal information.",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 12,
+      "type": "radio",
+      "uuid": "4c3cbe6e-90f0-4328-b160-5dafb74c795c",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "Ask a question",
+            "fr": "Ask a question"
+          },
+          {
+            "en": "Get help using GC Forms",
+            "fr": "Get help using GC Forms"
+          },
+          {
+            "en": "Request technical support with the API",
+            "fr": "Request technical support with the API"
+          },
+          {
+            "en": "Report a problem with a published form",
+            "fr": "Report a problem with a published form"
+          },
+          {
+            "en": "Other ",
+            "fr": "Autre "
+          }
+        ],
+        "titleEn": "Reason for reaching out",
+        "titleFr": "Reason for reaching out",
+        "questionId": "",
+        "validation": {
+          "required": true
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 13,
+      "type": "textField",
+      "uuid": "33635e8e-46d4-4720-905e-2c7de7c41044",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Other ",
+        "titleFr": "Autre ",
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [
+          {
+            "choiceId": "12.4"
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "type": "textField",
+      "uuid": "611de7ef-d94d-48f3-bbad-e4219e2e6aef",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Your name",
+        "titleFr": "Your name",
+        "questionId": "",
+        "validation": {
+          "required": true
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 8,
+      "type": "richText",
+      "uuid": "44736abd-6463-441b-810c-eec63697e4cf",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "## How can we contact you?",
+        "descriptionFr": "## Comment pouvons-nous vous contacter?",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 9,
+      "type": "textField",
+      "uuid": "8efda9f9-c64a-4673-bfb4-a3a5bfc0ef36",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Phone number",
+        "titleFr": "Numéro de téléphone",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "autoComplete": "tel",
+        "descriptionEn": "For example: 111-222-3333",
+        "descriptionFr": "Par exemple : 111-222-3333",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 10,
+      "type": "textField",
+      "uuid": "09cd2b30-3a3f-4fb5-8b56-d6396253fb70",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Email address",
+        "titleFr": "Adresse courriel",
+        "validation": {
+          "type": "email",
+          "required": false
+        },
+        "subElements": [],
+        "autoComplete": "email",
+        "descriptionEn": "For example: name@example.com",
+        "descriptionFr": "Par exemple : nom@exemple.com",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 11,
+      "type": "radio",
+      "uuid": "8531a7b5-47ec-47d9-a374-8d2a695a480e",
+      "properties": {
+        "choices": [
+          {
+            "en": "English",
+            "fr": "anglais"
+          },
+          {
+            "en": "French",
+            "fr": "français"
+          }
+        ],
+        "titleEn": "Preferred language for communication",
+        "titleFr": "Langue de communication préférée",
+        "validation": {
+          "required": true
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    }
+  ],
+  "groups": {
+    "start": {
+      "name": "Start",
+      "titleEn": "Start page",
+      "titleFr": "Page de départ",
+      "elements": ["2", "8", "9", "10", "11"],
+      "nextAction": "b0e74a96-fa9e-43f4-8573-4b4ba23d65e5"
+    },
+    "b0e74a96-fa9e-43f4-8573-4b4ba23d65e5": {
+      "name": "Details",
+      "titleEn": "Details",
+      "titleFr": "Details",
+      "elements": ["12", "13"],
+      "nextAction": "f926a616-80e2-4b93-a950-5e508f444c19"
+    },
+    "f926a616-80e2-4b93-a950-5e508f444c19": {
+      "name": "More information",
+      "titleEn": "More information",
+      "titleFr": "More information",
+      "elements": ["14"],
+      "nextAction": "review"
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "End (Review page and Confirmation)",
+      "titleFr": "Fin (Page récapitulative et confirmation)",
+      "elements": [],
+      "nextAction": "end"
+    },
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Page de confirmation",
+      "elements": []
+    }
+  },
+  "groupsLayout": ["b0e74a96-fa9e-43f4-8573-4b4ba23d65e5", "f926a616-80e2-4b93-a950-5e508f444c19"],
+  "lastGeneratedElementId": 14
+}
