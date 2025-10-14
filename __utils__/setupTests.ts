@@ -78,12 +78,6 @@ jest.mock("next/headers", () => {
   };
 });
 
-jest.mock("next/config", () => () => ({
-  publicRuntimeConfig: {
-    isProduction: false,
-  },
-}));
-
 jest.mock("@i18n/client", () => ({
   __esModule: true,
   useTranslation: jest.fn(() => {

@@ -43,16 +43,6 @@ const nextConfig = {
     cacheHandler: require.resolve("./nextCacheHandler.mjs"),
     cacheMaxMemorySize: 0, // disable default in-memory caching
   }),
-  webpack: (config) => {
-    // Support reading markdown
-    config.module.rules.push({
-      test: /\.md$/,
-      type: "asset/source",
-    });
-
-    return config;
-  },
-
   async headers() {
     return [
       {
@@ -98,7 +88,7 @@ const nextConfig = {
         as: "*.js",
       },
     },
-  }
+  },
 };
 
 export default nextConfig;
