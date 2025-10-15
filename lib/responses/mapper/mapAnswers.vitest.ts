@@ -4,6 +4,7 @@ import { type MappedAnswer } from "./types";
 import kitchen from "../__fixtures__/kitchen-sink-form-application-2025-10-10.json";
 import answersFixture from "../__fixtures__/answers.json";
 import type { PublicFormRecord } from "@gcforms/types";
+import { FormProperties } from "@root/packages/types/dist";
 
 describe("mapAnswers", () => {
   it("maps kitchen-sink fixture answers into mapped answer objects", () => {
@@ -17,7 +18,7 @@ describe("mapAnswers", () => {
     // answers.json stores the answers as a JSON string under the `answers` key
     const rawAnswers = JSON.parse((answersFixture as unknown as { answers: string }).answers);
 
-    const mapped = mapAnswers({ template, rawAnswers });
+    const mapped = mapAnswers({ formTemplate: template.form as FormProperties, rawAnswers });
 
     const radio = mapped[2];
     expect(radio.type).toBe("radio");
@@ -38,7 +39,7 @@ describe("mapAnswers", () => {
       Response
     >;
 
-    const mapped = mapAnswers({ template, rawAnswers });
+    const mapped = mapAnswers({ formTemplate: template.form as FormProperties, rawAnswers });
 
     expect(mapped.length).toBe(1);
     const first = mapped[0];
@@ -76,7 +77,7 @@ describe("mapAnswers", () => {
       ],
     } as unknown as Record<string, Response>;
 
-    const mapped = mapAnswers({ template, rawAnswers });
+    const mapped = mapAnswers({ formTemplate: template.form as FormProperties, rawAnswers });
 
     expect(mapped.length).toBe(1);
     const dyn = mapped[0];

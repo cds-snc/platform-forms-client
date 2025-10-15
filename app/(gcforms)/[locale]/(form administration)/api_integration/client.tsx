@@ -8,6 +8,8 @@ import { LoadKey } from "./components/LoadKey";
 import { useGetClient } from "./hooks/useGetClient";
 import { Submissions } from "./components/Submissions";
 
+// import { Csv } from "./components/Csv";
+
 export const Client = () => {
   const { isCompatible, userKey, handleLoadApiKey, apiClient } = useGetClient();
 
@@ -29,6 +31,8 @@ export const Client = () => {
   if (!userKey) {
     return <LoadKey onLoadKey={handleLoadApiKey} />;
   }
+
+  // return <Csv apiClient={apiClient} />
 
   return <Submissions apiClient={apiClient} userKey={userKey} />;
 };

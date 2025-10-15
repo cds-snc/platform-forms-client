@@ -86,12 +86,16 @@ export const Submissions = ({
 
     // Write the collected JSON files to a CSV
 
-    await processJsonToCsv({
-      formId: apiClient?.getFormId() || "<formId>",
-      jsonFileNames: allJsonFiles,
-      directoryHandle: directoryHandle,
-      apiClient: apiClient,
-    });
+    const formTemplate = await apiClient?.getFormTemplate();
+
+    if (formTemplate) {
+      await processJsonToCsv({
+        formId: apiClient?.getFormId() || "<formId>",
+        jsonFileNames: allJsonFiles,
+        directoryHandle: directoryHandle,
+        formTemplate,
+      });
+    }
 
     setCompleted(true);
   }, [apiClient, directoryHandle, newFormSubmissions, userKey]);

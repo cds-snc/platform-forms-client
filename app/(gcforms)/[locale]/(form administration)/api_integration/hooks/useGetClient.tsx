@@ -10,12 +10,6 @@ import { showOpenFilePicker } from "native-file-system-adapter";
 import type { PrivateApiKey } from "../lib/types";
 import { getAccessTokenFromApiKey } from "../lib/utils";
 import { GCFormsApiClient } from "../lib/apiClient";
-import { MockGCFormsApiClient } from "../lib/mockApiClient";
-
-// ──────────────────────────────
-// ⚠️  - set to false to use the real API
-const MOCK_API_CLIENT = false; //process.env.NODE_ENV === "development";
-// ──────────────────────────────
 
 export const useGetClient = () => {
   const [isCompatible] = useState(
@@ -23,7 +17,7 @@ export const useGetClient = () => {
   );
 
   const [userKey, setUserKey] = useState<PrivateApiKey | null>(null);
-  const [apiClient, setApiClient] = useState<GCFormsApiClient | MockGCFormsApiClient | null>(null);
+  const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
 
   const handleLoadApiKey = useCallback(async () => {
     try {
@@ -46,9 +40,7 @@ export const useGetClient = () => {
       }
 
       setApiClient(
-        MOCK_API_CLIENT
-          ? new MockGCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
-          : new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
+        new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
       );
 
       setUserKey(keyFile);

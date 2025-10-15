@@ -1,3 +1,4 @@
+import { type FormProperties } from "@gcforms/types";
 import type { EncryptedFormSubmission, NewFormSubmission, FormSubmissionProblem } from "./types";
 
 /**
@@ -5,7 +6,7 @@ import type { EncryptedFormSubmission, NewFormSubmission, FormSubmissionProblem 
  */
 export interface IGCFormsApiClient {
   getFormId(): string;
-  getFormTemplate(): Promise<Record<string, unknown>>;
+  getFormTemplate(): Promise<FormProperties>;
   getNewFormSubmissions(): Promise<NewFormSubmission[]>;
   getFormSubmission(submissionName: string): Promise<EncryptedFormSubmission>;
   confirmFormSubmission(submissionName: string, confirmationCode: string): Promise<void>;

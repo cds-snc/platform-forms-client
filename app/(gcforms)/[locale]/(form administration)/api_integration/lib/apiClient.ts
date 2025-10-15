@@ -25,8 +25,8 @@ export class GCFormsApiClient implements IGCFormsApiClient {
 
   public getFormTemplate(): Promise<FormProperties> {
     return this.httpClient
-      .get<Record<string, unknown>>(`/forms/${this.formId}/template`)
-      .then((response) => response.data as FormProperties)
+      .get<FormProperties>(`/forms/${this.formId}/template`)
+      .then((response) => response.data)
       .catch((error) => {
         throw new Error("Failed to retrieve form template", { cause: error });
       });

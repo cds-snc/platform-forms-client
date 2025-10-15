@@ -3,35 +3,27 @@ import type { FileSystemDirectoryHandle } from "@lib/responses/csv-writer/lib/br
 import { sortByLayout } from "@lib/utils/form-builder";
 import { FormElementTypes, type FormElement } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
-import type { IGCFormsApiClient } from "./IGCFormsApiClient";
 import { parseAnswersField } from "./jsonToCsvHelpers";
 
-import { PublicFormRecord } from "@gcforms/types";
-
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
+import { type FormProperties } from "@gcforms/types";
+
+const specialChars = ["=", "+", "-", "@"];
 
 /* eslint-disable no-await-in-loop */
 export const processJsonToCsv = async ({
   formId,
   jsonFileNames,
   directoryHandle,
-  apiClient,
+  formTemplate,
 }: {
   formId: string;
   jsonFileNames: string[];
   // directoryHandle comes from caller state and may be untyped at callsite
   directoryHandle: FileSystemDirectoryHandle | unknown;
-  // apiClient may be null at callsite; function will guard
-  apiClient: IGCFormsApiClient | null;
+  formTemplate: FormProperties;
 }) => {
   if (!directoryHandle || jsonFileNames.length === 0) return;
-
-  // Narrow runtime types
-  if (!apiClient) {
-    // eslint-disable-next-line no-console
-    console.warn("No apiClient provided to processJsonToCsv");
-    return;
-  }
 
   if (
     typeof (directoryHandle as unknown as { getFileHandle?: unknown })?.getFileHandle !== "function"
@@ -44,20 +36,13 @@ export const processJsonToCsv = async ({
   const dirHandle = directoryHandle as FileSystemDirectoryHandle;
 
   try {
-    // Fetch form template so we can map questions to answers and format appropriately
-    const template = await apiClient.getFormTemplate();
-
-    // Assume API returns the form object directly
-    const form =
-      template && typeof template === "object"
-        ? (template as Record<string, unknown>)
-        : { elements: [], layout: [] };
-
-    const elements = Array.isArray(form.elements) ? (form.elements as FormElement[]) : [];
+    const elements = Array.isArray(formTemplate.elements)
+      ? (formTemplate.elements as FormElement[])
+      : [];
 
     // sort elements according to layout and filter out richText
     const sortedElements = sortByLayout({
-      layout: Array.isArray(form.layout) ? (form.layout as number[]) : [],
+      layout: Array.isArray(formTemplate.layout) ? (formTemplate.layout as number[]) : [],
       elements,
     }).filter((el: FormElement) => ![FormElementTypes.richText].includes(el.type));
 
@@ -104,38 +89,44 @@ export const processJsonToCsv = async ({
           continue;
         }
 
-        // mapAnswers expects template.form.elements, but API might return elements directly
-        // Wrap in a form object if needed
-        const templateForMapping =
-          "form" in (template as object)
-            ? (template as PublicFormRecord)
-            : ({ form: template } as PublicFormRecord);
-
         const mappedAnswers = mapAnswers({
-          template: templateForMapping,
+          formTemplate,
           rawAnswers: answersObj as Record<string, Response>,
         });
 
         // Build row similar to server-side transform
         const answers = sortedElements.map((element) => {
-          const answer = mappedAnswers.find((a) => a.questionId === element.id);
-          if (!answer) {
+          const mappedAnswer = mappedAnswers.find((a) => a.questionId === element.id);
+
+          if (!mappedAnswer) {
             return "-";
           }
-          if (Array.isArray(answer.answer)) {
-            // Handle dynamic rows
-            return answer.answer
-              .map((row) =>
-                row
+          if (mappedAnswer.answer instanceof Array) {
+            return mappedAnswer.answer
+              .map((answer) =>
+                answer
                   .map((subAnswer) => {
-                    const text = `${subAnswer.questionEn}\n${subAnswer.questionFr}: ${subAnswer.answer}`;
-                    return text || "-";
+                    let answerText = `${subAnswer.questionEn}\n${subAnswer.questionFr}: ${subAnswer.answer}\n`;
+                    if (specialChars.some((char) => answerText.startsWith(char))) {
+                      answerText = `'${answerText}`;
+                    }
+                    if (answerText == "") {
+                      answerText = "-";
+                    }
+                    return answerText;
                   })
                   .join("")
               )
               .join("\n");
           }
-          return String(answer.answer || "-");
+          let answerText = mappedAnswer.answer;
+          if (specialChars.some((char) => answerText.startsWith(char))) {
+            answerText = `'${answerText}`;
+          }
+          if (answerText == "") {
+            answerText = "-";
+          }
+          return answerText;
         });
 
         const row = [
