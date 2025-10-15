@@ -18,7 +18,8 @@
   "card": {
     "states": {
       "draft": "Ébauche",
-      "published": "Publié"
+      "published": "Publié",
+      "archived": "Archivé"
     },
     "title": {
       "notTranslatedEn": "Untitled form",
