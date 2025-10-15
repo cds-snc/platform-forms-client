@@ -154,7 +154,13 @@ export const Card = async ({ card }: { card: CardI }) => {
       <div className="mb-4 flex items-center justify-between px-3">
         <CardDate id={card.id} date={card.date} />
         <div className="flex items-center text-sm">
-          <Menu id={card.id} name={card.name} isPublished={card.isPublished} direction={"up"} />
+          <Menu
+            id={card.id}
+            name={card.name}
+            isPublished={card.isPublished}
+            ttl={card.ttl ? card.ttl : undefined}
+            direction={"up"}
+          />
         </div>
       </div>
     </div>
