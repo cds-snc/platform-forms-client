@@ -477,16 +477,17 @@
     "somethingWentWrong": "Il y a eu un problème",
     "downloadButtonText": "Télécharger une copie",
     "draft": {
-      "message1": "La suppression d'un formulaire ne peut être annulée. Votre formulaire sera définitivement supprimé.",
-      "message2": "Téléchargez une copie du fichier de formulaire pour vos archives. Vous pourrez ainsi le téléverser à nouveau dans Formulaires GC pour recréer le formulaire."
+      "message1": "La suppression d'un formulaire ne peut être annulée. Votre formulaire brouillon sera définitivement supprimé de Formulaires GC.",
+      "message2": "Téléchargez une copie du fichier de formulaire pour vos archives. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer un nouveau formulaire avec de nouveaux liens URL.",
+      "message3": "Avant d'archiver votre formulaire, assurez-vous de supprimer tous les liens publics menant à ce formulaire. Cela permet d'éviter d'envoyer les gens dans une impasse. Pour arrêter les soumissions, vous pouvez plutôt considérer la fermeture du formulaire dans les paramètres."
     },
-    "okay": "Supprimer le formulaire",
+    "okay": "Archiver le formulaire",
     "published": {
       "message1": "La suppression d'un formulaire ne peut être annulée. Votre formulaire publié sera définitivement supprimé de l'Internet, ce qui risque de créer des liens brisés.",
       "message2": "Téléchargez une copie du fichier de formulaire pour vos archives. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer un nouveau formulaire avec de nouveaux liens URL.",
-      "message3": "Avant de supprimer votre formulaire, assurez-vous de supprimer tous les liens publics menant à ce formulaire. Cela permet d'éviter d'envoyer les gens dans une impasse. Pour arrêter les soumissions, vous pouvez plutôt considérer la fermeture du formulaire dans les paramètres."
+      "message3": "Avant d'archiver votre formulaire, assurez-vous de supprimer tous les liens publics menant à ce formulaire. Cela permet d'éviter d'envoyer les gens dans une impasse. Pour arrêter les soumissions, vous pouvez plutôt considérer la fermeture du formulaire dans les paramètres."
     },
-    "title": "Supprimer ce formulaire?"
+    "title": "Archiver ce formulaire?"
   },
   "formDeletedDialogMessage": "Formulaire supprimé",
   "formDeletedDialogMessageFailed": "Échec de la suppression du formulaire",

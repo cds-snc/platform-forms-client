@@ -6,7 +6,7 @@ import Link from "next/link";
 import { DeliveryOption } from "@lib/types";
 import Skeleton from "react-loading-skeleton";
 
-const CardBanner = async ({ isPublished }: { isPublished: boolean }) => {
+const CardBanner = async ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
   const { t } = await serverTranslation("my-forms");
   return (
     <div
@@ -18,7 +18,11 @@ const CardBanner = async ({ isPublished }: { isPublished: boolean }) => {
       }
       aria-hidden="true"
     >
-      {isPublished ? t("card.states.published") : t("card.states.draft")}
+      {ttl
+        ? t("card.states.archived")
+        : isPublished
+          ? t("card.states.published")
+          : t("card.states.draft")}
     </div>
   );
 };
@@ -116,6 +120,7 @@ export interface CardI {
   deliveryOption: DeliveryOption;
   name: string;
   isPublished: boolean;
+  ttl: Date | null;
   date: string;
   url: string;
   overdue: boolean;
@@ -131,7 +136,7 @@ export const Card = async ({ card }: { card: CardI }) => {
         <div className="flex flex-col px-3">
           <div className="flex h-full justify-between">
             <CardTitle name={card.name} />
-            <CardBanner isPublished={card.isPublished} />
+            <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
           </div>
         </div>
 
@@ -149,7 +154,13 @@ export const Card = async ({ card }: { card: CardI }) => {
       <div className="mb-4 flex items-center justify-between px-3">
         <CardDate id={card.id} date={card.date} />
         <div className="flex items-center text-sm">
-          <Menu id={card.id} name={card.name} isPublished={card.isPublished} direction={"up"} />
+          <Menu
+            id={card.id}
+            name={card.name}
+            isPublished={card.isPublished}
+            ttl={card.ttl ? card.ttl : undefined}
+            direction={"up"}
+          />
         </div>
       </div>
     </div>

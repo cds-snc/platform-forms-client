@@ -3,7 +3,8 @@
   "nav": {
     "drafts": "Drafts",
     "published": "Published",
-    "all": "All"
+    "all": "All",
+    "archived": "Archived"
   },
   "actions": {
     "resumeForm": "Resume editing form",
@@ -17,7 +18,8 @@
   "card": {
     "states": {
       "draft": "Draft",
-      "published": "Published"
+      "published": "Published",
+      "archived": "Archived"
     },
     "title": {
       "notTranslatedEn": "No English translation",
@@ -36,6 +38,7 @@
       "edit": "Edit",
       "settings": "Settings",
       "delete": "Delete",
+      "archive": "Archive",
       "coppiedToClipboard": "Copied to clipboard",
       "somethingWentWrong": "Something went wrong",
       "clone": "Duplicate",

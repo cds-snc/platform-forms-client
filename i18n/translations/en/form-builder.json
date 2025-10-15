@@ -477,16 +477,17 @@
     "somethingWentWrong": "Something went wrong",
     "downloadButtonText": "Download a copy",
     "draft": {
-      "message1": "Deleting a form cannot be undone. Your form will be removed permanently.",
-      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create the form later."
+      "message1": "Archiving your form will remove your live form to the “Archived” section of your forms.",
+      "message2": "You can retrieve your draft or published form from the archive folder within 30 days of archiving your form. After 30 days your form will be deleted permanently and cannot be undone.",
+      "message3": "Download a copy of your form file for your records. You can then upload it in GC Forms to re-create the form after the 30 days."
     },
-    "okay": "Delete form",
+    "okay": "Archive form",
     "published": {
-      "message1": "Deleting a form cannot be undone. Your published form will be removed from the Internet, potentially creating broken links.",
-      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create a new form with new URL links.",
-      "message3": "Before deleting your form, make sure you remove any public links leading to this form. This avoids sending people to a dead end. To stop submissions, you might instead consider closing the form in Settings."
+      "message1": "Archiving your form will remove your live form to the “Archived” section of your forms.",
+      "message2": "Archive and edit your form, to update an existing form. The older version will be available in the archive folder.",
+      "message3": "You can retrieve your draft or published form from the archive folder within 30 days of archiving your form. After 30 days your form will be deleted permanently and cannot be undone."
     },
-    "title": "Delete this form?"
+    "title": "Archive this form?"
   },
   "formDeletedDialogMessage": "Form deleted",
   "formDeletedDialogMessageFailed": "Failed to delete form",
