@@ -68,7 +68,7 @@ export const Menu = ({
       url: `/${language}/form-builder/${id}/settings`,
     },
     {
-      title: t("card.menu.delete"),
+      title: t("card.menu.archive"),
       callback: () => {
         handleDelete();
         return {

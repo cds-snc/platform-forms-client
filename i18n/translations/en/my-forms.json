@@ -3,7 +3,8 @@
   "nav": {
     "drafts": "Drafts",
     "published": "Published",
-    "all": "All"
+    "all": "All",
+    "archived": "Archived"
   },
   "actions": {
     "resumeForm": "Resume editing form",
@@ -36,6 +37,7 @@
       "edit": "Edit",
       "settings": "Settings",
       "delete": "Delete",
+      "archive": "Archive",
       "coppiedToClipboard": "Copied to clipboard",
       "somethingWentWrong": "Something went wrong",
       "clone": "Duplicate",

@@ -3,7 +3,8 @@
   "nav": {
     "drafts": "Ébauches",
     "published": "Publiés",
-    "all": "Tous"
+    "all": "Tous",
+    "archived": "Archivé"
   },
   "actions": {
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
@@ -36,6 +37,7 @@
       "edit": "Modifier",
       "settings": "Paramètres",
       "delete": "Supprimer",
+      "archive": "Archiver",
       "coppiedToClipboard": "Copié dans le presse-papier",
       "somethingWentWrong": "Quelque chose a mal tourné",
       "clone": "Dupliquer",
