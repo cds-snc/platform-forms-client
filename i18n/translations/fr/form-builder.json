@@ -210,14 +210,7 @@
       "text3": "pour utiliser cet élément."
     },
     "fileInputWithApi": {
-      "description": "Un moyen d'ajouter de la documentation à l'appui.",
-      "trialFeature": {
-        "title": "Fonctionnalité Bêta",
-        "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
-        "bullet1": "La récupération des réponses au formulaire via l'API",
-        "bullet2": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
-        "bullet3": "La collecte de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
-      }
+      "description": "Un moyen d'ajouter de la documentation à l'appui."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "Quel est votre nom?",
