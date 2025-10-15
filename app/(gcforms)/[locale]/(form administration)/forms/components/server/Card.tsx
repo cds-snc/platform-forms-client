@@ -6,13 +6,7 @@ import Link from "next/link";
 import { DeliveryOption } from "@lib/types";
 import Skeleton from "react-loading-skeleton";
 
-const CardBanner = async ({
-  isPublished,
-  deletedAt,
-}: {
-  isPublished: boolean;
-  deletedAt: Date | null;
-}) => {
+const CardBanner = async ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
   const { t } = await serverTranslation("my-forms");
   return (
     <div
@@ -24,7 +18,7 @@ const CardBanner = async ({
       }
       aria-hidden="true"
     >
-      {deletedAt
+      {ttl
         ? t("card.states.archived")
         : isPublished
           ? t("card.states.published")
@@ -126,7 +120,7 @@ export interface CardI {
   deliveryOption: DeliveryOption;
   name: string;
   isPublished: boolean;
-  deletedAt: Date | null;
+  ttl: Date | null;
   date: string;
   url: string;
   overdue: boolean;
@@ -142,7 +136,7 @@ export const Card = async ({ card }: { card: CardI }) => {
         <div className="flex flex-col px-3">
           <div className="flex h-full justify-between">
             <CardTitle name={card.name} />
-            <CardBanner isPublished={card.isPublished} deletedAt={card.deletedAt} />
+            <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
           </div>
         </div>
 

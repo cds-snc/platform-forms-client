@@ -39,7 +39,6 @@ const _parseTemplate = (template: {
   id: string;
   created_at?: Date;
   updated_at?: Date;
-  deleted_at?: Date | null;
   name: string;
   jsonConfig: Prisma.JsonValue;
   isPublished: boolean;
@@ -319,7 +318,7 @@ export async function getAllTemplatesForUser(
           id: true,
           created_at: true,
           updated_at: true,
-          deleted_at: true,
+          ttl: true,
           name: true,
           jsonConfig: true,
           isPublished: true,
