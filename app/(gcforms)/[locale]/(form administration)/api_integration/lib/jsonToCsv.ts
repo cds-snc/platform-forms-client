@@ -156,7 +156,10 @@ export const processJsonToCsv = async ({
     const csvFileName = `${formId}-responses-${Date.now()}.csv`;
     const csvFileHandle = await dirHandle.getFileHandle(csvFileName, { create: true });
 
-    const str = csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(recordsData);
+    // Add UTF-8 BOM to ensure proper encoding of French characters (é, è, ç, etc.)
+    const BOM = "\uFEFF";
+    const str =
+      BOM + csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(recordsData);
 
     await csvFileHandle.createWritable().then((writer) => {
       writer.write(str);
