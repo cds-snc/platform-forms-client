@@ -4,7 +4,7 @@ import { type MappedAnswer } from "./types";
 import kitchen from "../__fixtures__/kitchen-sink-form-application-2025-10-10.json";
 import answersFixture from "../__fixtures__/answers.json";
 import type { PublicFormRecord } from "@gcforms/types";
-import { FormProperties } from "@root/packages/types/dist";
+import { FormProperties } from "@gcforms/types";
 
 describe("mapAnswers", () => {
   it("maps kitchen-sink fixture answers into mapped answer objects", () => {
