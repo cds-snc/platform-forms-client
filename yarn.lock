@@ -13661,7 +13661,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fetch-blob@npm:^3.1.2, fetch-blob@npm:^3.1.4":
+"fetch-blob@npm:^3.1.2, fetch-blob@npm:^3.1.4, fetch-blob@npm:^3.2.0":
   version: 3.2.0
   resolution: "fetch-blob@npm:3.2.0"
   dependencies:
@@ -14100,6 +14100,7 @@ __metadata:
     lodash.set: "npm:4.3.2"
     lodash.unset: "npm:4.5.2"
     markdown-to-jsx: "npm:7.7.13"
+    native-file-system-adapter: "npm:^3.0.1"
     next: "npm:15.5.4"
     next-auth: "npm:5.0.0-beta.29"
     node-fetch: "npm:^3.3.2"
@@ -16801,6 +16802,18 @@ __metadata:
   bin:
     napi-postinstall: lib/cli.js
   checksum: 10c0/b33d64150828bdade3a5d07368a8b30da22ee393f8dd8432f1b9e5486867be21c84ec443dd875dd3ef3c7401a079a7ab7e2aa9d3538a889abbcd96495d5104fe
+  languageName: node
+  linkType: hard
+
+"native-file-system-adapter@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "native-file-system-adapter@npm:3.0.1"
+  dependencies:
+    fetch-blob: "npm:^3.2.0"
+  dependenciesMeta:
+    fetch-blob:
+      optional: true
+  checksum: 10c0/2a60cd7fa6b92a85b1fc9dbbda91135f66af424e240e36c7c3708b987330844fb689e29a92a8a472d7216f685423e863af8acfb4b9a7bd73c0f6093fff4bf2fd
   languageName: node
   linkType: hard
 
