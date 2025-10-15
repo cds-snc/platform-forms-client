@@ -20,6 +20,7 @@ export type FormsTemplate = {
   deliveryOption: DeliveryOption;
   name: string;
   isPublished: boolean;
+  deletedAt: Date | null;
   date: string;
   url: string;
   overdue: boolean;
@@ -59,6 +60,7 @@ export default async function Page(props: {
     const options: TemplateOptions = {
       requestedWhere: {
         isPublished: status === "published" ? true : status === "draft" ? false : undefined,
+        deleted_at: status === "archived" ? { not: null } : null,
       },
       sortByDateUpdated: "desc",
     };
@@ -70,6 +72,7 @@ export default async function Page(props: {
         deliveryOption = { emailAddress: "" },
         isPublished,
         updatedAt,
+        deletedAt,
       } = template;
       return {
         id,
@@ -81,6 +84,7 @@ export default async function Page(props: {
         date: updatedAt ?? Date.now().toString(),
         url: `/${locale}/id/${id}`,
         overdue: false,
+        deletedAt: deletedAt instanceof Date ? deletedAt : null,
       };
     });
 
