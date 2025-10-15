@@ -63,8 +63,8 @@ export const jsonFilesToCsv = async ({
         });
 
         const row = getRow({
-          rowId: String(jsonData.id ?? ""),
-          createdAt: String(jsonData.createdAt ?? ""),
+          rowId: String(fileName.replace(".json", "")),
+          createdAt: new Date(jsonData.createdAt).toISOString(),
           mappedAnswers,
           sortedElements,
         });
