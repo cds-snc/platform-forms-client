@@ -8,7 +8,7 @@ import { Button } from "@clientComponents/globals";
 
 import { ContentWrapper } from "./ContentWrapper";
 import { DirectoryPicker } from "./DirectoryPicker";
-import { processJsonToCsv } from "../lib/jsonToCsv";
+import { jsonFilesToCsv } from "../lib/jsonFilesToCsv";
 
 export const Csv = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
   const [directoryHandle, setDirectoryHandle] = useState<unknown>(null);
@@ -17,10 +17,11 @@ export const Csv = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
     const allJsonFiles = ["15-10-1be8e.json", "15-10-8c05c.json", "15-10-e604f.json"];
 
     const formTemplate = await apiClient?.getFormTemplate();
+    const formId = apiClient?.getFormId() || "<formId>";
 
     if (formTemplate) {
-      await processJsonToCsv({
-        formId: apiClient?.getFormId() || "<formId>",
+      await jsonFilesToCsv({
+        formId,
         jsonFileNames: allJsonFiles,
         directoryHandle: directoryHandle,
         formTemplate,

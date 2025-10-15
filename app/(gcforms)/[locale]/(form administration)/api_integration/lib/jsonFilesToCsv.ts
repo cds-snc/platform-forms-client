@@ -12,7 +12,7 @@ import { type FormProperties } from "@gcforms/types";
 const specialChars = ["=", "+", "-", "@"];
 
 /* eslint-disable no-await-in-loop */
-export const processJsonToCsv = async ({
+export const jsonFilesToCsv = async ({
   formId,
   jsonFileNames,
   directoryHandle,
