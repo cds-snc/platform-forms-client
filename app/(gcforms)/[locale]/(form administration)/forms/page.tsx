@@ -84,7 +84,7 @@ export default async function Page(props: {
         date: updatedAt ?? Date.now().toString(),
         url: `/${locale}/id/${id}`,
         overdue: false,
-        ttl: ttl instanceof Date ? ttl : null,
+        ttl: ttl ? new Date(ttl) : null,
       };
     });
 

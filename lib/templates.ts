@@ -56,6 +56,7 @@ const _parseTemplate = (template: {
   closedDetails?: Prisma.JsonValue | null;
   saveAndResume: boolean;
   notificationsInterval?: number | null;
+  ttl?: Date | null;
 }): FormRecord => {
   return {
     id: template.id,
@@ -90,6 +91,7 @@ const _parseTemplate = (template: {
     closedDetails: template.closedDetails as ClosedDetails,
     saveAndResume: template.saveAndResume,
     notificationsInterval: template.notificationsInterval as NotificationsInterval,
+    ...(template.ttl && { ttl: template.ttl }),
   };
 };
 
