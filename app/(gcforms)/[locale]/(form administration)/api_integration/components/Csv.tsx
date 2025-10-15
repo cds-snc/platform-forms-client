@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import { useCallback } from "react";
 
 import { useState } from "react";
@@ -14,15 +13,12 @@ export const Csv = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
   const [directoryHandle, setDirectoryHandle] = useState<unknown>(null);
 
   const toCsv = useCallback(async () => {
-    const allJsonFiles = ["15-10-1be8e.json", "15-10-8c05c.json", "15-10-e604f.json"];
-
     const formTemplate = await apiClient?.getFormTemplate();
     const formId = apiClient?.getFormId() || "<formId>";
 
     if (formTemplate) {
       await jsonFilesToCsv({
         formId,
-        jsonFileNames: allJsonFiles,
         directoryHandle: directoryHandle,
         formTemplate,
       });

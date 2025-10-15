@@ -11,20 +11,57 @@ import { type FormProperties } from "@gcforms/types";
 
 const specialChars = ["=", "+", "-", "@"];
 
+async function getFilenamesInDirectory(directoryHandle: FileSystemDirectoryHandle) {
+  const filenames = [];
+  for await (const entry of directoryHandle.values()) {
+    if (entry.kind === "file") {
+      filenames.push(entry.name);
+    }
+  }
+  return filenames;
+}
+
+/**
+ * Collects response file names from the 'records' directory, or from the main directory if 'records' doesn't exist
+ * @param directoryHandle - The directory handle to search within
+ * @returns Promise<{fileNames: string[], isRecordsDir: boolean}> - Array of JSON file names and whether they're from records dir
+ */
+export const collectResponseFiles = async (
+  directoryHandle: FileSystemDirectoryHandle
+): Promise<{ fileNames: string[]; isRecordsDir: boolean }> => {
+  try {
+    // Try to get the 'records' directory handle first
+    const recordsHandle = await directoryHandle.getDirectoryHandle("records");
+    const jsonFileNames = await getFilenamesInDirectory(recordsHandle);
+
+    return { fileNames: jsonFileNames, isRecordsDir: true };
+  } catch (error) {
+    // If records directory doesn't exist, look in the main directory
+    try {
+      // Iterate through all files in the main directory
+      const jsonFileNames = await getFilenamesInDirectory(directoryHandle);
+
+      return { fileNames: jsonFileNames, isRecordsDir: false };
+    } catch (mainError) {
+      // eslint-disable-next-line no-console
+      console.error("Error reading directory:", mainError);
+      return { fileNames: [], isRecordsDir: false };
+    }
+  }
+};
+
 /* eslint-disable no-await-in-loop */
 export const jsonFilesToCsv = async ({
   formId,
-  jsonFileNames,
   directoryHandle,
   formTemplate,
 }: {
   formId: string;
-  jsonFileNames: string[];
   // directoryHandle comes from caller state and may be untyped at callsite
   directoryHandle: FileSystemDirectoryHandle | unknown;
   formTemplate: FormProperties;
 }) => {
-  if (!directoryHandle || jsonFileNames.length === 0) return;
+  if (!directoryHandle) return;
 
   if (
     typeof (directoryHandle as unknown as { getFileHandle?: unknown })?.getFileHandle !== "function"
@@ -37,6 +74,16 @@ export const jsonFilesToCsv = async ({
   const dirHandle = directoryHandle as FileSystemDirectoryHandle;
 
   try {
+    const { fileNames: jsonFileNames, isRecordsDir } = await collectResponseFiles(dirHandle);
+
+    if (jsonFileNames.length === 0) {
+      // eslint-disable-next-line no-console
+      console.warn(`No JSON files found in ${isRecordsDir ? "records directory" : "directory"}`);
+      return;
+    }
+
+    // Use either the records directory or the main directory based on where files were found
+    const sourceHandle = isRecordsDir ? await dirHandle.getDirectoryHandle("records") : dirHandle;
     const sortedElements = orderElements({ formTemplate });
     const csvStringifier = createCsvStringifier({
       header: getHeaders({ sortedElements }),
@@ -46,7 +93,7 @@ export const jsonFilesToCsv = async ({
 
     for (const fileName of jsonFileNames) {
       try {
-        const fileHandle = await dirHandle.getFileHandle(fileName);
+        const fileHandle = await sourceHandle.getFileHandle(fileName);
         const file = await fileHandle.getFile();
         const content = await file.text();
         const jsonData = JSON.parse(content);
