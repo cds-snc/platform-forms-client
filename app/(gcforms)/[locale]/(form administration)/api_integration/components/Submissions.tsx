@@ -27,7 +27,7 @@ export const Submissions = ({
   userKey: PrivateApiKey | null;
 }) => {
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
-  const [directoryHandle, setDirectoryHandle] = useState<unknown>(null);
+  const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   // Track processed submission ids to keep an accurate count across retries/partial runs
   const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [completed, setCompleted] = useState(false);
@@ -52,7 +52,7 @@ export const Submissions = ({
   }, [apiClient]);
 
   const setDirectory = useCallback(
-    async (handle: unknown) => {
+    async (handle: FileSystemDirectoryHandle | null) => {
       if (!handle) {
         return;
       }
