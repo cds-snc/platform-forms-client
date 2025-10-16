@@ -17,7 +17,7 @@ import { ContentWrapper } from "./ContentWrapper";
 import { ProcessingMessage } from "./ProcessingMessage";
 import { NoSubmissions } from "./NoSubmissions";
 import { DirectoryPicker } from "./DirectoryPicker";
-import { jsonFilesToCsv } from "../lib/jsonFilesToCsv";
+import { initCsvHandler } from "../lib/csvWriter";
 
 export const Submissions = ({
   apiClient,
@@ -50,10 +50,31 @@ export const Submissions = ({
     }
   }, [apiClient]);
 
+  const setDirectory = useCallback(
+    async (handle: unknown) => {
+      // Ensure the handle is a FileSystemDirectoryHandle
+      if (!(handle instanceof FileSystemDirectoryHandle)) {
+        return;
+      }
+      setDirectoryHandle(handle);
+
+      const formId = apiClient?.getFormId();
+      const template = await apiClient?.getFormTemplate();
+
+      if (!formId || !template || !handle) {
+        return;
+      }
+
+      // Initialize CSV file in the selected directory
+      await initCsvHandler({ apiClient, dirHandle: handle });
+    },
+    [apiClient]
+  );
+
   const handleProcessSubmissions = useCallback(async () => {
     setError(null);
+
     let formResponses = [...(newFormSubmissions ?? [])];
-    const allJsonFiles: string[] = [];
 
     while (formResponses.length > 0) {
       try {
@@ -63,15 +84,14 @@ export const Submissions = ({
             // Optionally handle the error or prompt the user
             break;
           }
-          const jsonFileNames = await downloadAndConfirmFormSubmissions(
+
+          await downloadAndConfirmFormSubmissions(
             directoryHandle as FileSystemDirectoryHandle,
             apiClient,
             userKey,
             subArray
           );
 
-          // Collect all JSON file names
-          allJsonFiles.push(...jsonFileNames);
           setResponsesProcessed((prev) => prev + subArray.length);
 
           formResponses = await apiClient.getNewFormSubmissions();
@@ -82,19 +102,6 @@ export const Submissions = ({
         setError(error as Error);
         break;
       }
-    }
-
-    // Write the collected JSON files to a CSV
-    const formTemplate = await apiClient?.getFormTemplate();
-    const formID = apiClient?.getFormId() || "<formId>";
-
-    if (formTemplate) {
-      await jsonFilesToCsv({
-        formId: formID,
-        jsonFileNames: allJsonFiles,
-        directoryHandle: directoryHandle,
-        formTemplate,
-      });
     }
 
     setCompleted(true);
@@ -122,12 +129,7 @@ export const Submissions = ({
               <Button onClick={handleProcessSubmissions}>Download and Confirm</Button>
             )}
 
-            <DirectoryPicker
-              directoryHandle={directoryHandle}
-              onPick={(handle) => {
-                setDirectoryHandle(handle);
-              }}
-            />
+            <DirectoryPicker directoryHandle={directoryHandle} onPick={setDirectory} />
 
             <ProcessingMessage
               error={error}

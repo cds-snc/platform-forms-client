@@ -281,7 +281,12 @@ const integrityCheckAndConfirm = async (
     }
 
     // If checksums match (or it's mock data), confirm the submission
-    await apiClient.confirmFormSubmission(submissionName, confirmationCode);
+    const result = await apiClient.confirmFormSubmission(submissionName, confirmationCode);
+
+    return {
+      result,
+      answers,
+    };
   }
 };
 
@@ -290,20 +295,19 @@ export const downloadAndConfirmFormSubmissions = async (
   apiClient: IGCFormsApiClient,
   privateApiKey: PrivateApiKey,
   submissions: NewFormSubmission[]
-): Promise<string[]> => {
+) => {
   if (!dir || !submissions.length) {
     throw new Error("Invalid directory handle or no submissions to process.");
   }
 
   await downloadFormSubmissions(dir, apiClient, privateApiKey, submissions);
-  await integrityCheckAndConfirm(
+  const results = await integrityCheckAndConfirm(
     submissions.map((s) => s.name),
     dir,
     apiClient
   );
 
-  // Return the JSON file names that were created
-  return submissions.map((submission) => `${submission.name}.json`);
+  return results;
 };
 
 export function createSubArrays<T>(arr: T[], size: number) {
