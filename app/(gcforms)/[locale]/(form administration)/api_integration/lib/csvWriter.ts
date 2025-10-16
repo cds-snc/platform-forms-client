@@ -132,8 +132,7 @@ export const writeRow = async ({
 
     // Check if submissionId already exists in the file
     if (fileContent.includes(submissionId)) {
-      // eslint-disable-next-line no-console
-      console.log(`Submission ${submissionId} already exists in CSV, skipping...`);
+      // console.log(`Submission ${submissionId} already exists in CSV, skipping...`);
       return;
     }
   }
