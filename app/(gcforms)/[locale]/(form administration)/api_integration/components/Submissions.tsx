@@ -144,6 +144,11 @@ export const Submissions = ({
               error={error}
               completed={completed}
               responsesProcessed={responsesProcessed}
+              retryButton={
+                <Button className="mt-2" theme="secondary" onClick={handleProcessSubmissions}>
+                  Retry
+                </Button>
+              }
             />
           </>
         ) : (
