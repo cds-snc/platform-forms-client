@@ -2463,6 +2463,7 @@ __metadata:
     "@prisma/client": "npm:^6.17.0"
     "@types/node": "npm:^24.7.1"
     prisma: "npm:^6.17.0"
+    ts-command-line-args: "npm:^2.5.1"
     tsup: "npm:^8.5.0"
     tsx: "npm:^4.20.6"
     typescript: "npm:^5.9.3"
@@ -19546,7 +19547,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-command-line-args@npm:2.5.1":
+"ts-command-line-args@npm:2.5.1, ts-command-line-args@npm:^2.5.1":
   version: 2.5.1
   resolution: "ts-command-line-args@npm:2.5.1"
   dependencies:
