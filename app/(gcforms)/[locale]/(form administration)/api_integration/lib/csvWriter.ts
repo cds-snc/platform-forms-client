@@ -4,7 +4,7 @@ import { FormElementTypes, type FormElement } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
 import { type FormProperties } from "@gcforms/types";
 import { MappedAnswer } from "@lib/responses/mapper/types";
-import { FileSystemDirectoryHandle } from "native-file-system-adapter";
+import { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import { mapAnswers } from "@root/lib/responses/mapper/mapAnswers";
 
 const specialChars = ["=", "+", "-", "@"];
@@ -22,7 +22,12 @@ export const initCsv = async ({
     return;
   }
 
-  const handle = getFileHandle({ formId, dirHandle });
+  const { handle, created } = await getFileHandle({ formId, dirHandle });
+
+  if (!created) {
+    // File already exists, no need to initialize
+    return;
+  }
 
   const sortedElements = orderElements({ formTemplate });
   const headers = getHeaders({ sortedElements });
@@ -81,12 +86,13 @@ export const getFileHandle = async ({
 }: {
   formId: string;
   dirHandle: FileSystemDirectoryHandle | null;
-}) => {
+}): Promise<{ handle: FileSystemFileHandle | null; created: boolean }> => {
   if (!dirHandle || !formId) {
-    return null;
+    return { handle: null, created: false };
   }
 
-  let csvFileHandle;
+  let csvFileHandle = null;
+  let created: boolean = false;
 
   try {
     const csvFileName = `${formId}.csv`;
@@ -96,6 +102,7 @@ export const getFileHandle = async ({
     } catch {
       // File doesn't exist
       csvFileHandle = await dirHandle.getFileHandle(csvFileName, { create: true });
+      created = true;
       // eslint-disable-next-line no-console
       console.log(`CSV file ${csvFileName} created`);
     }
@@ -104,7 +111,7 @@ export const getFileHandle = async ({
     console.error("Error creating CSV file:", error);
   }
 
-  return csvFileHandle;
+  return { handle: csvFileHandle, created };
 };
 
 export const writeRow = async ({
@@ -122,10 +129,10 @@ export const writeRow = async ({
   dirHandle: FileSystemDirectoryHandle | null;
   rawAnswers: Record<string, Response>;
 }) => {
-  const handle = getFileHandle({ formId, dirHandle });
+  const { handle } = await getFileHandle({ formId, dirHandle });
 
   // Check if submission already exists in CSV
-  const fileHandle = await handle;
+  const fileHandle = handle;
   if (fileHandle) {
     const file = await fileHandle.getFile();
     const fileContent = await file.text();
