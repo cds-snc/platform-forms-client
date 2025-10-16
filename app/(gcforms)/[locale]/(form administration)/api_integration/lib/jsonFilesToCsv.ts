@@ -1,5 +1,6 @@
+import { type FileSystemDirectoryHandle } from "native-file-system-adapter";
+
 import { createArrayCsvStringifier as createCsvStringifier } from "@lib/responses/csv-writer";
-import type { FileSystemDirectoryHandle } from "@lib/responses/csv-writer/lib/browser-types";
 import { sortByLayout } from "@lib/utils/form-builder";
 import { FormElementTypes, type FormElement } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
