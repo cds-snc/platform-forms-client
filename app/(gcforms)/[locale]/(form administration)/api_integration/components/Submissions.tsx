@@ -28,7 +28,8 @@ export const Submissions = ({
 }) => {
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
   const [directoryHandle, setDirectoryHandle] = useState<unknown>(null);
-  const [responsesProcessed, setResponsesProcessed] = useState(0);
+  // Track processed submission ids to keep an accurate count across retries/partial runs
+  const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [completed, setCompleted] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -100,9 +101,16 @@ export const Submissions = ({
               formTemplate,
               submissionData,
             });
-          }
 
-          setResponsesProcessed((prev) => prev + subArray.length);
+            // Record individual submission ids so we have an accurate count
+            setProcessedSubmissionIds((prev) => {
+              const next = new Set(prev);
+              for (const s of submissionData) {
+                next.add(s.submissionId);
+              }
+              return next;
+            });
+          }
 
           formResponses = await apiClient.getNewFormSubmissions();
         }
@@ -117,12 +125,14 @@ export const Submissions = ({
     setCompleted(true);
   }, [apiClient, directoryHandle, newFormSubmissions, userKey]);
 
+  const processedCount = processedSubmissionIds.size;
+
   const hasResponses =
-    !completed && responsesProcessed < 1 && newFormSubmissions
+    !completed && processedCount < 1 && newFormSubmissions
       ? `At least ${newFormSubmissions.length} New Responses ready for download`
       : null;
 
-  const showDownloadButton = directoryHandle && !completed && responsesProcessed < 1;
+  const showDownloadButton = directoryHandle && !completed && processedCount < 1;
 
   if (!userKey || !apiClient) {
     return null;
@@ -144,7 +154,7 @@ export const Submissions = ({
             <ProcessingMessage
               error={error}
               completed={completed}
-              responsesProcessed={responsesProcessed}
+              responsesProcessed={processedCount}
               retryButton={
                 <Button className="mt-2" theme="secondary" onClick={handleProcessSubmissions}>
                   Retry
