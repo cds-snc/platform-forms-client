@@ -1,11 +1,13 @@
+import { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
+
+import { type FormProperties } from "@gcforms/types";
+import { FormElementTypes, type FormElement } from "@lib/types";
+
 import { createArrayCsvStringifier as createCsvStringifier } from "@lib/responses/csv-writer";
 import { sortByLayout } from "@lib/utils/form-builder";
-import { FormElementTypes, type FormElement } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
-import { type FormProperties } from "@gcforms/types";
 import { MappedAnswer } from "@lib/responses/mapper/types";
-import { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
-import { mapAnswers } from "@root/lib/responses/mapper/mapAnswers";
+import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 
 const specialChars = ["=", "+", "-", "@"];
 
