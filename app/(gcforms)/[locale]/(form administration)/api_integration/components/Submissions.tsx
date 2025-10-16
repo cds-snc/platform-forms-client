@@ -17,7 +17,7 @@ import { ContentWrapper } from "./ContentWrapper";
 import { ProcessingMessage } from "./ProcessingMessage";
 import { NoSubmissions } from "./NoSubmissions";
 import { DirectoryPicker } from "./DirectoryPicker";
-import { initCsvHandler } from "../lib/csvWriter";
+import { initCsv } from "../lib/csvWriter";
 
 export const Submissions = ({
   apiClient,
@@ -59,14 +59,10 @@ export const Submissions = ({
       setDirectoryHandle(handle);
 
       const formId = apiClient?.getFormId();
-      const template = await apiClient?.getFormTemplate();
+      const formTemplate = await apiClient?.getFormTemplate();
 
-      if (!formId || !template || !handle) {
-        return;
-      }
-
-      // Initialize CSV file in the selected directory
-      await initCsvHandler({ apiClient, dirHandle: handle });
+      // Initialize CSV file as needed in the selected directory
+      await initCsv({ formId, dirHandle: handle, formTemplate });
     },
     [apiClient]
   );

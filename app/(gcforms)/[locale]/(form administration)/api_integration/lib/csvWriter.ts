@@ -1,4 +1,3 @@
-import { IGCFormsApiClient } from "./IGCFormsApiClient";
 import { createArrayCsvStringifier as createCsvStringifier } from "@lib/responses/csv-writer";
 import { sortByLayout } from "@lib/utils/form-builder";
 import { FormElementTypes, type FormElement } from "@lib/types";
@@ -6,21 +5,55 @@ import { customTranslate } from "@lib/i18nHelpers";
 import { type FormProperties } from "@gcforms/types";
 import { MappedAnswer } from "@lib/responses/mapper/types";
 import { FileSystemDirectoryHandle } from "native-file-system-adapter";
+import { mapAnswers } from "@root/lib/responses/mapper/mapAnswers";
 
 const specialChars = ["=", "+", "-", "@"];
 
-export const initCsvHandler = async ({
-  apiClient,
+export const initCsv = async ({
+  formId,
+  dirHandle,
+  formTemplate,
+}: {
+  formId: string | undefined;
+  dirHandle: FileSystemDirectoryHandle | null;
+  formTemplate: FormProperties | undefined;
+}) => {
+  if (!formId || !formTemplate || !dirHandle) {
+    return;
+  }
+
+  const handle = getFileHandle({ formId, dirHandle });
+
+  const sortedElements = orderElements({ formTemplate });
+  const headers = getHeaders({ sortedElements });
+
+  // Init the file with headers from the template
+  const csvStringifier = createCsvStringifier({
+    header: headers,
+    alwaysQuote: true,
+  });
+
+  // Write UTF-8 BOM and headers
+  const headerString = "\uFEFF" + csvStringifier.getHeaderString();
+
+  // Write to file
+  const writable = await (await handle)?.createWritable();
+  await writable?.write(headerString);
+  await writable?.close();
+
+  // eslint-disable-next-line no-console
+  console.log(`Created CSV file ${formId}.csv with headers`);
+};
+
+export const getFileHandle = async ({
+  formId,
   dirHandle,
 }: {
-  apiClient: IGCFormsApiClient | null;
+  formId: string;
   dirHandle: FileSystemDirectoryHandle | null;
 }) => {
-  const formId = apiClient?.getFormId();
-  const template = await apiClient?.getFormTemplate();
-
-  if (!formId || !template || !dirHandle) {
-    return;
+  if (!dirHandle || !formId) {
+    return null;
   }
 
   let csvFileHandle;
@@ -35,26 +68,6 @@ export const initCsvHandler = async ({
     } catch {
       // File doesn't exist
       csvFileHandle = await dirHandle.getFileHandle(csvFileName, { create: true });
-
-      const sortedElements = orderElements({ formTemplate: template });
-      const headers = getHeaders({ sortedElements });
-
-      // Init the file with headers from the template
-      const csvStringifier = createCsvStringifier({
-        header: headers,
-        alwaysQuote: true,
-      });
-
-      // Write UTF-8 BOM and headers
-      const headerString = "\uFEFF" + csvStringifier.getHeaderString();
-
-      // Write to file
-      const writable = await csvFileHandle.createWritable();
-      await writable.write(headerString);
-      await writable.close();
-
-      // eslint-disable-next-line no-console
-      console.log(`Created CSV file ${csvFileName} with headers`);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -64,20 +77,56 @@ export const initCsvHandler = async ({
   return csvFileHandle;
 };
 
-export const getCsvHandle = async ({
-  apiClient,
+export const writeRow = async ({
+  formId,
+  submissionId,
+  createdAt,
+  formTemplate,
   dirHandle,
+  rawAnswers,
 }: {
-  apiClient: IGCFormsApiClient | null;
+  formId: string;
+  submissionId: string;
+  createdAt: string;
+  formTemplate: FormProperties;
   dirHandle: FileSystemDirectoryHandle | null;
+  rawAnswers: Record<string, Response>;
 }) => {
-  if (!dirHandle || !apiClient) {
-    return null;
+  const handle = getFileHandle({ formId, dirHandle });
+
+  const sortedElements = orderElements({ formTemplate });
+
+  const mappedAnswers = mapAnswers({
+    formTemplate,
+    rawAnswers,
+  });
+
+  const row = getRow({
+    rowId: submissionId,
+    createdAt: new Date(createdAt).toISOString(),
+    mappedAnswers,
+    sortedElements,
+  });
+
+  const recordsData = [row];
+
+  const csvStringifier = createCsvStringifier({
+    header: getHeaders({ sortedElements }),
+    alwaysQuote: true,
+  });
+
+  const rowString = csvStringifier.stringifyRecords(recordsData);
+
+  // Write to file
+  const fileHandle = await handle;
+  if (fileHandle) {
+    const writable = await fileHandle.createWritable({ keepExistingData: true });
+    // Seek to end of file
+    const file = await fileHandle.getFile();
+    await writable.seek(file.size);
+    await writable.write(rowString);
+    await writable.close();
   }
-
-  const csvFileHandle = await initCsvHandler({ apiClient, dirHandle });
-
-  return csvFileHandle;
 };
 
 export const orderElements = ({ formTemplate }: { formTemplate: FormProperties }) => {
