@@ -126,6 +126,20 @@ export const writeRow = async ({
 }) => {
   const handle = getFileHandle({ formId, dirHandle });
 
+  // Check if submission already exists in CSV
+  const fileHandle = await handle;
+  if (fileHandle) {
+    const file = await fileHandle.getFile();
+    const fileContent = await file.text();
+
+    // Check if submissionId already exists in the file
+    if (fileContent.includes(submissionId)) {
+      // eslint-disable-next-line no-console
+      console.log(`Submission ${submissionId} already exists in CSV, skipping...`);
+      return;
+    }
+  }
+
   const sortedElements = orderElements({ formTemplate });
 
   const mappedAnswers = mapAnswers({
@@ -150,7 +164,6 @@ export const writeRow = async ({
   const rowString = csvStringifier.stringifyRecords(recordsData);
 
   // Write to file
-  const fileHandle = await handle;
   if (fileHandle) {
     const writable = await fileHandle.createWritable({ keepExistingData: true });
     // Seek to end of file
