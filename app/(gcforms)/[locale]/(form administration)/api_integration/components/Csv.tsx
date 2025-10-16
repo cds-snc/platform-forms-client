@@ -1,16 +1,18 @@
 import { useCallback } from "react";
 
 import { useState } from "react";
+import { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { type IGCFormsApiClient } from "../lib/IGCFormsApiClient";
 
 import { Button } from "@clientComponents/globals";
 
 import { ContentWrapper } from "./ContentWrapper";
-import { DirectoryPicker } from "./DirectoryPicker";
+import { showDirectoryPicker } from "native-file-system-adapter";
 import { jsonFilesToCsv } from "../lib/jsonFilesToCsv";
 
 export const Csv = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
-  const [directoryHandle, setDirectoryHandle] = useState<unknown>(null);
+  const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
+  const [hasDirectory, setHasDirectory] = useState(false);
 
   const toCsv = useCallback(async () => {
     const formTemplate = await apiClient?.getFormTemplate();
@@ -32,16 +34,23 @@ export const Csv = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
   return (
     <ContentWrapper>
       <div>
-        <DirectoryPicker
-          directoryHandle={directoryHandle}
-          onPick={(handle) => {
-            setDirectoryHandle(handle);
-          }}
-        />
+        {!hasDirectory && (
+          <Button
+            onClick={async () => {
+              try {
+                const dirHandle = await showDirectoryPicker();
+                setDirectoryHandle(dirHandle as FileSystemDirectoryHandle | null);
+                setHasDirectory(true);
+              } catch (error) {
+                if ((error as Error).name === "AbortError") return;
+              }
+            }}
+          >
+            Choose Save Location
+          </Button>
+        )}
 
-        <Button onClick={toCsv} disabled={!directoryHandle} className="mt-4">
-          Download CSV
-        </Button>
+        {hasDirectory && <Button onClick={toCsv}>Generate CSV</Button>}
       </div>
     </ContentWrapper>
   );

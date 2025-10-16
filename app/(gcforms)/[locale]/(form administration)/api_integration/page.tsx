@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { Client } from "./client";
+import { Client, type ClientProps } from "./client";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -17,6 +17,14 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page() {
-  return <Client />;
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: Record<string, string | string[] | undefined>;
+}) {
+  // Pass the raw `csv` param (if present) to the client. Client will only check existence.
+  const csvParam = searchParams?.csv;
+
+  const props: ClientProps = { csv: csvParam };
+  return <Client {...props} />;
 }

@@ -8,10 +8,13 @@ import { LoadKey } from "./components/LoadKey";
 import { useGetClient } from "./hooks/useGetClient";
 import { Submissions } from "./components/Submissions";
 
-// import { Csv } from "./components/Csv";
+import { Csv } from "./components/Csv";
 
-export const Client = () => {
+export type ClientProps = { csv?: string | string[] | undefined };
+
+export const Client = ({ csv }: ClientProps = {}) => {
   const { isCompatible, userKey, handleLoadApiKey, apiClient } = useGetClient();
+  const shouldGenerateCsv = typeof csv !== "undefined";
 
   const [isClient, setIsClient] = useState(false);
 
@@ -32,7 +35,9 @@ export const Client = () => {
     return <LoadKey onLoadKey={handleLoadApiKey} />;
   }
 
-  // return <Csv apiClient={apiClient} />
+  if (shouldGenerateCsv && apiClient) {
+    return <Csv apiClient={apiClient} />;
+  }
 
   return <Submissions apiClient={apiClient} userKey={userKey} />;
 };
