@@ -29,10 +29,6 @@
     "topBanner": {
       "title": "Bannière",
       "description": "Activer la bannière d'avertissement pour qu'elle soit visible"
-    },
-    "fileUpload": {
-      "title": "Téléversement de fichier",
-      "description": "Activer le téléverseur de fichier en tant qu'élément pouvant être ajouté à un formulaire"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",
