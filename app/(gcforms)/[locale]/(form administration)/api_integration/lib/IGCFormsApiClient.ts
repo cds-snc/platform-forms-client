@@ -9,7 +9,7 @@ export interface IGCFormsApiClient {
   getFormTemplate(): Promise<FormProperties>;
   getNewFormSubmissions(): Promise<NewFormSubmission[]>;
   getFormSubmission(submissionName: string): Promise<EncryptedFormSubmission>;
-  confirmFormSubmission(submissionName: string, confirmationCode: string): Promise<void>;
+  confirmFormSubmission(submissionName: string, confirmationCode: string): Promise<unknown>;
   reportProblemWithFormSubmission(
     submissionName: string,
     problem: FormSubmissionProblem

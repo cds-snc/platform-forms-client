@@ -69,6 +69,7 @@ export const Submissions = ({
 
   const handleProcessSubmissions = useCallback(async () => {
     setError(null);
+    setCompleted(false);
 
     let formResponses = [...(newFormSubmissions ?? [])];
 
@@ -107,7 +108,7 @@ export const Submissions = ({
         }
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.error("Error processing submissions:", error);
+        console.log("Error processing submissions:", error);
         setError(error as Error);
         break;
       }

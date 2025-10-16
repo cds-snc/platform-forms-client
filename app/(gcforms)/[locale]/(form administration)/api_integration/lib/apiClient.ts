@@ -68,10 +68,12 @@ export class GCFormsApiClient implements IGCFormsApiClient {
       });
   }
 
-  public confirmFormSubmission(submissionName: string, confirmationCode: string): Promise<void> {
+  public confirmFormSubmission(submissionName: string, confirmationCode: string): Promise<unknown> {
     return this.httpClient
-      .put<void>(`/forms/${this.formId}/submission/${submissionName}/confirm/${confirmationCode}`)
-      .then(() => Promise.resolve())
+      .put<unknown>(
+        `/forms/${this.formId}/submission/${submissionName}/confirm/${confirmationCode}`
+      )
+      .then((response) => response)
       .catch((error) => {
         throw new Error("Failed to confirm form submission", { cause: error });
       });

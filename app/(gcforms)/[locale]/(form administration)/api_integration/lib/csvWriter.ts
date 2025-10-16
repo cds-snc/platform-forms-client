@@ -93,8 +93,6 @@ export const getFileHandle = async ({
     // Use try-catch to handle file existence
     try {
       csvFileHandle = await dirHandle.getFileHandle(csvFileName);
-      // eslint-disable-next-line no-console
-      console.log(`CSV file ${csvFileName} already exists`);
     } catch {
       // File doesn't exist
       csvFileHandle = await dirHandle.getFileHandle(csvFileName, { create: true });

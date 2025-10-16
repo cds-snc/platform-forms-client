@@ -14,9 +14,6 @@ import type {
   CompleteAttachment,
 } from "./types";
 
-import { logMessage } from "@lib/logger";
-// ...existing code...
-
 // import { getSubmissionByFormat } from "./responseRender";
 
 /*
@@ -232,9 +229,8 @@ const downloadFormSubmissions = async (
         rawAnswers: JSON.parse(decryptedResponse.answers),
       };
     } catch (error) {
-      logMessage.error(
-        `Failed to download submission ${submission.name}: ${(error as Error).message}`
-      );
+      // eslint-disable-next-line no-console
+      console.log(`Failed to download submission ${submission.name}: ${(error as Error).message}`);
       throw error;
     }
   });
