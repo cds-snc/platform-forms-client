@@ -9,6 +9,7 @@ import { FormProperties } from "@root/lib/types";
 export class GCFormsApiClient implements IGCFormsApiClient {
   private formId: string;
   private httpClient: AxiosInstance;
+  private cachedFormTemplate: FormProperties | null = null;
 
   public constructor(formId: string, apiUrl: string, accessToken: string) {
     this.formId = formId;
@@ -24,9 +25,18 @@ export class GCFormsApiClient implements IGCFormsApiClient {
   }
 
   public getFormTemplate(): Promise<FormProperties> {
+    // Return cached template if available
+    if (this.cachedFormTemplate) {
+      return Promise.resolve(this.cachedFormTemplate);
+    }
+
     return this.httpClient
       .get<FormProperties>(`/forms/${this.formId}/template`)
-      .then((response) => response.data)
+      .then((response) => {
+        // Cache the template for future calls
+        this.cachedFormTemplate = response.data;
+        return response.data;
+      })
       .catch((error) => {
         throw new Error("Failed to retrieve form template", { cause: error });
       });

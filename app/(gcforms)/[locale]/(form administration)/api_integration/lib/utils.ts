@@ -224,6 +224,13 @@ const downloadFormSubmissions = async (
           decryptedResponse.attachments.map((attachment) => downloadAttachment(fileDir, attachment))
         );
       }
+
+      // Return the submission data for CSV writing
+      return {
+        submissionId: submission.name,
+        createdAt: new Date(decryptedResponse.createdAt).toISOString(),
+        rawAnswers: JSON.parse(decryptedResponse.answers),
+      };
     } catch (error) {
       logMessage.error(
         `Failed to download submission ${submission.name}: ${(error as Error).message}`
@@ -231,7 +238,8 @@ const downloadFormSubmissions = async (
       throw error;
     }
   });
-  await Promise.all(downloadPromises);
+  const results = await Promise.all(downloadPromises);
+  return results;
 };
 
 const downloadAttachment = async (
@@ -300,14 +308,14 @@ export const downloadAndConfirmFormSubmissions = async (
     throw new Error("Invalid directory handle or no submissions to process.");
   }
 
-  await downloadFormSubmissions(dir, apiClient, privateApiKey, submissions);
+  const submissionData = await downloadFormSubmissions(dir, apiClient, privateApiKey, submissions);
   const results = await integrityCheckAndConfirm(
     submissions.map((s) => s.name),
     dir,
     apiClient
   );
 
-  return results;
+  return { results, submissionData };
 };
 
 export function createSubArrays<T>(arr: T[], size: number) {

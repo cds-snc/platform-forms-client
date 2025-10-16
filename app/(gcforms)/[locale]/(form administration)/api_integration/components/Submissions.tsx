@@ -17,7 +17,7 @@ import { ContentWrapper } from "./ContentWrapper";
 import { ProcessingMessage } from "./ProcessingMessage";
 import { NoSubmissions } from "./NoSubmissions";
 import { DirectoryPicker } from "./DirectoryPicker";
-import { initCsv } from "../lib/csvWriter";
+import { initCsv, writeSubmissionsToCsv } from "../lib/csvWriter";
 
 export const Submissions = ({
   apiClient,
@@ -52,17 +52,17 @@ export const Submissions = ({
 
   const setDirectory = useCallback(
     async (handle: unknown) => {
-      // Ensure the handle is a FileSystemDirectoryHandle
-      if (!(handle instanceof FileSystemDirectoryHandle)) {
+      if (!handle) {
         return;
       }
+
       setDirectoryHandle(handle);
 
       const formId = apiClient?.getFormId();
       const formTemplate = await apiClient?.getFormTemplate();
 
       // Initialize CSV file as needed in the selected directory
-      await initCsv({ formId, dirHandle: handle, formTemplate });
+      await initCsv({ formId, dirHandle: handle as FileSystemDirectoryHandle, formTemplate });
     },
     [apiClient]
   );
@@ -81,12 +81,25 @@ export const Submissions = ({
             break;
           }
 
-          await downloadAndConfirmFormSubmissions(
+          const { submissionData } = await downloadAndConfirmFormSubmissions(
             directoryHandle as FileSystemDirectoryHandle,
             apiClient,
             userKey,
             subArray
           );
+
+          // Write each submission to CSV
+          const formId = apiClient.getFormId();
+          const formTemplate = await apiClient.getFormTemplate();
+
+          if (formId && formTemplate && submissionData) {
+            await writeSubmissionsToCsv({
+              formId,
+              dirHandle: directoryHandle as FileSystemDirectoryHandle,
+              formTemplate,
+              submissionData,
+            });
+          }
 
           setResponsesProcessed((prev) => prev + subArray.length);
 

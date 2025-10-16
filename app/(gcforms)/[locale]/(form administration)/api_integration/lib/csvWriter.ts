@@ -40,9 +40,39 @@ export const initCsv = async ({
   const writable = await (await handle)?.createWritable();
   await writable?.write(headerString);
   await writable?.close();
+};
 
-  // eslint-disable-next-line no-console
-  console.log(`Created CSV file ${formId}.csv with headers`);
+export const writeSubmissionsToCsv = async ({
+  formId,
+  dirHandle,
+  formTemplate,
+  submissionData,
+}: {
+  formId: string;
+  dirHandle: FileSystemDirectoryHandle;
+  formTemplate: FormProperties;
+  submissionData: Array<{
+    submissionId: string;
+    createdAt: string;
+    rawAnswers: Record<string, Response>;
+  }>;
+}) => {
+  if (!submissionData || submissionData.length === 0) {
+    return;
+  }
+
+  // Write rows sequentially to maintain order
+  for (const submission of submissionData) {
+    // eslint-disable-next-line no-await-in-loop
+    await writeRow({
+      formId,
+      submissionId: submission.submissionId,
+      createdAt: submission.createdAt,
+      formTemplate,
+      dirHandle,
+      rawAnswers: submission.rawAnswers,
+    });
+  }
 };
 
 export const getFileHandle = async ({
@@ -68,6 +98,8 @@ export const getFileHandle = async ({
     } catch {
       // File doesn't exist
       csvFileHandle = await dirHandle.getFileHandle(csvFileName, { create: true });
+      // eslint-disable-next-line no-console
+      console.log(`CSV file ${csvFileName} created`);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
