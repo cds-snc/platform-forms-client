@@ -10,6 +10,7 @@ export class GCFormsApiClient implements IGCFormsApiClient {
   private formId: string;
   private httpClient: AxiosInstance;
   private cachedFormTemplate: FormProperties | null = null;
+  private rateLimitRemaining: number | null = null;
 
   public constructor(formId: string, apiUrl: string, accessToken: string) {
     this.formId = formId;
@@ -18,6 +19,27 @@ export class GCFormsApiClient implements IGCFormsApiClient {
       timeout: 3000,
       headers: { Authorization: `Bearer ${accessToken}` },
     });
+
+    // Response interceptor to track rate limits
+    this.httpClient.interceptors.response.use((response) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const headers = response.headers as any;
+      const remaining = headers.get?.("x-ratelimit-remaining");
+      if (remaining !== undefined) {
+        this.rateLimitRemaining = parseInt(remaining, 10);
+      }
+      return response;
+    });
+  }
+
+  private async checkRateLimit(): Promise<void> {
+    // If we're getting low on requests (< 10% remaining), add a small delay
+    if (this.rateLimitRemaining !== null && this.rateLimitRemaining < 50) {
+      const delayMs = 20000; // 20 second delay when low
+      // eslint-disable-next-line no-console
+      console.log(`Rate limit low (${this.rateLimitRemaining} remaining), delaying ${delayMs}ms`);
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
   }
 
   public getFormId(): string {
@@ -42,7 +64,8 @@ export class GCFormsApiClient implements IGCFormsApiClient {
       });
   }
 
-  public getNewFormSubmissions(): Promise<NewFormSubmission[]> {
+  public async getNewFormSubmissions(): Promise<NewFormSubmission[]> {
+    await this.checkRateLimit();
     return this.httpClient
       .get<NewFormSubmission[]>(`/forms/${this.formId}/submission/new`)
       .then((response) => {
@@ -55,7 +78,8 @@ export class GCFormsApiClient implements IGCFormsApiClient {
       });
   }
 
-  public getFormSubmission(submissionName: string): Promise<EncryptedFormSubmission> {
+  public async getFormSubmission(submissionName: string): Promise<EncryptedFormSubmission> {
+    await this.checkRateLimit();
     return this.httpClient
       .get<EncryptedFormSubmission>(`/forms/${this.formId}/submission/${submissionName}`)
       .then((response) => response.data)
