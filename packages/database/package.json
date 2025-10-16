@@ -16,6 +16,7 @@
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
     "db:reset": "prisma migrate reset -f --skip-seed",
+    "db:seed:prod": "tsx src/seed_cli.ts --environment=production",
     "db:seed:test": "prisma migrate deploy && tsx src/seed_cli.ts --environment=test",
     "dev": "tsup src/* --format esm --watch",
     "format": "prisma format",
