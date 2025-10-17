@@ -50,13 +50,29 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
           {t("settings.apiIntegration.page.text2")}
         </Markdown>
         <ApiKey />
-        <ul className="ml-5 p-0">
+        <ul className="mb-6 ml-5 p-0">
           <li>{t("settings.apiIntegration.page.notes.text1")}</li>
           <li>{t("settings.apiIntegration.page.notes.text2")}</li>
           <li>{t("settings.apiIntegration.page.notes.text3")}</li>
           <li>{t("settings.apiIntegration.page.notes.text4")}</li>
         </ul>
       </div>
+      <p className="mb-2">
+        <strong>{t("settings.apiIntegration.page.apiKey.title")}</strong>
+      </p>
+      <p className="mb-6">{t("settings.apiIntegration.page.apiKey.description")}</p>
+      <p className="mb-4">
+        <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.title")}</strong>
+      </p>
+      <p className="text-sm">
+        <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.currentLimit")}</strong>
+      </p>
+      <p className="mb-2">
+        {t("settings.apiIntegration.page.apiKey.rateLimit.currentLimitDescription")}
+      </p>
+      <Markdown options={{ forceBlock: true }} className="mb-4">
+        {t("settings.apiIntegration.page.apiKey.rateLimit.increaseRequest")}
+      </Markdown>
       <ApiKeyDialog />
       <DeleteApiKeyDialog />
     </>
