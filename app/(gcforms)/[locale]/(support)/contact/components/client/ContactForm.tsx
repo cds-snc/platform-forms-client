@@ -16,7 +16,7 @@ import { SubmitButton } from "../../../components/client/SubmitButton";
 import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
 import { useState } from "react";
 import { Success } from "../../../components/client/Success";
-import { TextInput } from "@root/components/clientComponents/forms/TextInput/TextInput";
+import { TextInput } from "@clientComponents/forms/TextInput/TextInput";
 
 export const ContactForm = () => {
   const {

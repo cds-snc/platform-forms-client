@@ -17,7 +17,7 @@ import { useState } from "react";
 import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
-import { TextInput } from "@root/components/clientComponents/forms/TextInput/TextInput";
+import { TextInput } from "@clientComponents/forms/TextInput/TextInput";
 
 export const SupportForm = () => {
   const {
