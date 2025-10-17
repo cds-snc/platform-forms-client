@@ -62,6 +62,7 @@ export default AuthenticatedPage(
         <p className="mb-4">{t("settings.apiIntegration.page.text1")}</p>
 
         <LinkButton.Secondary
+          target="_blank"
           className="mb-6"
           href={t("settings.apiIntegration.page.docsButton.link")}
         >
