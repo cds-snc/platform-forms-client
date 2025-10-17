@@ -10,6 +10,7 @@ import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/
 import { AuthenticatedPage } from "@lib/pages/auth";
 
 import { getCurrentThrottlingRate } from "../manage/throttlingRate/actions";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -59,21 +60,20 @@ export default AuthenticatedPage(
       <div className="w-7/12">
         <h2 className="mb-6">{t("settings.apiIntegration.page.title")}</h2>
         <p className="mb-4">{t("settings.apiIntegration.page.text1")}</p>
-        <Markdown options={{ forceBlock: true }} className="mb-4">
-          {t("settings.apiIntegration.page.text2")}
-        </Markdown>
-        <ApiKey />
-        <ul className="mb-6 ml-5 p-0">
-          <li>{t("settings.apiIntegration.page.notes.text1")}</li>
-          <li>{t("settings.apiIntegration.page.notes.text2")}</li>
-          <li>{t("settings.apiIntegration.page.notes.text3")}</li>
-          <li>{t("settings.apiIntegration.page.notes.text4")}</li>
-        </ul>
+
+        <LinkButton.Secondary
+          className="mb-6"
+          href={t("settings.apiIntegration.page.docsButton.link")}
+        >
+          {t("settings.apiIntegration.page.docsButton.text")}
+        </LinkButton.Secondary>
 
         <p className="mb-2">
           <strong>{t("settings.apiIntegration.page.apiKey.title")}</strong>
         </p>
         <p className="mb-6">{t("settings.apiIntegration.page.apiKey.description")}</p>
+
+        <ApiKey />
 
         {rate === null ? (
           <div>

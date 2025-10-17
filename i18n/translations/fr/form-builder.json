@@ -707,13 +707,10 @@
       },
       "page": {
         "title": "Set up API integration [FR]",
-        "text1": "This will allow you to build an integration that pulls form responses into a target system. Once set-up, responses will be retrieved programmatically from an API endpoint. [FR]",
-        "text2": "Consult our <a href='https://cds-snc.github.io/forms-api'>technical documentation</a> for more information on how to get started. [FR]",
-        "notes": {
-          "text1": "Save this key in an authorized secure location on a Government of Canada machine. [FR]",
-          "text2": "Do not share this key with others, as it provides access to all form response data. [FR]",
-          "text3": "If it’s absolutely necessary, for the purpose of integration, use encrypted email. [FR]",
-          "text4": "Refresh the API key and update the integration, it you suspect it’s been compromised. [FR]"
+        "text1": "This allows you to build an integration that pulls form responses into a target system. Once set-up by a developer, responses can be retrieved programmatically from an API endpoint. Consult our technical documentation for more information.",
+        "docsButton": {
+          "text": "Go to API documentation",
+          "link": "https://cds-snc.github.io/forms-api/accueil"
         },
         "apiKey": {
           "title": "Retrieve submissions via API [FR]",
