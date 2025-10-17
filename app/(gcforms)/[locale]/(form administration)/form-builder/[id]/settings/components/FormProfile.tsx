@@ -83,7 +83,12 @@ export const FormProfile = () => {
   const saveFormPurpose = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
+
+      // Update local state
       setPurposeOption(value as PurposeOption);
+
+      // Update the template store
+      updateField("formPurpose", value);
 
       const result = await updateTemplateFormPurpose({
         id,
@@ -94,9 +99,6 @@ export const FormProfile = () => {
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.FORM_PURPOSE} />, "wide");
         return;
       }
-
-      // Update the template store
-      updateField("formPurpose", purposeOption);
 
       toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
