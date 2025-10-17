@@ -92,7 +92,7 @@ export default AuthenticatedPage(
             </Markdown>
           </div>
         ) : (
-          <p className="mb-4">Rate limit set</p>
+          <p className="mb-4" data-id="already-set"></p>
         )}
 
         <ApiKeyDialog />
