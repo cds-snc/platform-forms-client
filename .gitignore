@@ -114,3 +114,6 @@ dist
 
 test-results/
 playwright-report/
+
+# Ignore generated Prisma Code
+packages/database/src/generated
