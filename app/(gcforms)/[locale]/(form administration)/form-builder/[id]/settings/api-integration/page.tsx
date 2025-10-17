@@ -36,7 +36,7 @@ export default AuthenticatedPage(
     let rate = null;
 
     if ("error" in limit) {
-      // no-op
+      // no-op no need to handle as this is just to show or hide the suoport text
     } else {
       rate = limit.rate;
     }
