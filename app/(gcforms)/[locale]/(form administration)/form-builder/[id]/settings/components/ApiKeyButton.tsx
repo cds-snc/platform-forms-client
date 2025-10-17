@@ -9,14 +9,11 @@ import { Theme } from "@clientComponents/globals/Buttons/themes";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { ResponseDeliveryHelpButtonWithApi } from "./dialogs/ResponseDeliveryHelpDialogApiWithApi";
 
-import { type SecurityAttribute } from "@lib/types";
-
 type ApiKeyButtonProps = {
   showDelete?: boolean;
   i18nKey?: string;
   theme?: Theme;
   showHelp?: boolean;
-  classification?: SecurityAttribute;
 };
 
 export const ApiKeyButton = ({
@@ -24,7 +21,6 @@ export const ApiKeyButton = ({
   i18nKey = "settings.api.generateKey",
   theme = "primary",
   showHelp = true,
-  classification,
 }: ApiKeyButtonProps) => {
   const { t } = useTranslation("form-builder");
   const { id } = useParams();
@@ -33,7 +29,7 @@ export const ApiKeyButton = ({
   const { Event } = useCustomEvent();
 
   const openDialog = () => {
-    Event.fire(EventKeys.openApiKeyDialog, { id, classification });
+    Event.fire(EventKeys.openApiKeyDialog, { id });
   };
 
   if (Array.isArray(id)) return null;
