@@ -7,7 +7,6 @@ import { DeleteKeyButton } from "./DeleteKeyButton";
 import { SubmitButton as GenerateApiKeyButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
-import { ResponseDeliveryHelpButtonWithApi } from "../../components/dialogs/ResponseDeliveryHelpDialogApiWithApi";
 
 type ApiKeyButtonProps = {
   showDelete?: boolean;
@@ -20,7 +19,6 @@ export const ApiKeyButton = ({
   showDelete = false,
   i18nKey = "settings.api.generateKey",
   theme = "primary",
-  showHelp = true,
 }: ApiKeyButtonProps) => {
   const { t } = useTranslation("form-builder");
   const { id } = useParams();
@@ -39,10 +37,7 @@ export const ApiKeyButton = ({
   return (
     <div className="mb-4">
       {showDelete && apiKeyId ? (
-        <>
-          <DeleteKeyButton id={id} keyId={apiKeyId} />
-          {showHelp && <ResponseDeliveryHelpButtonWithApi />}
-        </>
+        <DeleteKeyButton id={id} keyId={apiKeyId} />
       ) : (
         <>
           <GenerateApiKeyButton
@@ -56,7 +51,6 @@ export const ApiKeyButton = ({
           >
             {t(i18nKey)}
           </GenerateApiKeyButton>
-          {showHelp && <ResponseDeliveryHelpButtonWithApi />}
         </>
       )}
     </div>

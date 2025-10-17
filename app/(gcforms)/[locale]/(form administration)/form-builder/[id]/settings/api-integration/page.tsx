@@ -4,7 +4,7 @@ import Markdown from "markdown-to-jsx";
 
 import { serverTranslation } from "@i18n";
 import { authCheckAndThrow } from "@lib/actions";
-import { ApiKey } from "./components/ApiKey";
+import { ApiKeyButton } from "./components/ApiKeyButton";
 import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 import { AuthenticatedPage } from "@lib/pages/auth";
@@ -74,7 +74,7 @@ export default AuthenticatedPage(
         </p>
         <p className="mb-6">{t("settings.apiIntegration.page.apiKey.description")}</p>
 
-        <ApiKey />
+        <ApiKeyButton />
 
         {rate === null ? (
           <div>
