@@ -1,0 +1,31 @@
+name: Staging DB Migration
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Deploy to Staging"]
+    types:
+      - in_progress
+jobs:
+  run-check:
+    runs-on: ubuntu-latest
+    outputs:
+      has-migrations: ${{ steps.filter.outputs.migrations }}
+    steps:
+      - name: path-filter
+        uses: cds-snc/paths-filter@b316143212d841aed668b7b29240c719d603a9b9 # tag=v2.10.4
+        id: filter
+        with:
+          filters: |
+            migrations:
+              - 'packages/database/prisma/migrations/**'
+              - 'packages/database/src/fixtures/**'
+  migrate-db:
+    needs: [run-check]
+    if: ${{ needs.run-check.outputs.has-migrations == 'true' }}
+    runs-on:
+      - codebuild-Staging-Github-Runner-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - run: yarn workspaces focus @gcforms/database
+      - run: yarn db:generate
+      - run: yarn db:migrate:deploy
+      - run: yarn db:seed:prod

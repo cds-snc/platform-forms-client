@@ -83,14 +83,6 @@ jobs:
           TASKDEF_ARN=`jq -r '.taskDefinitionArn' form_viewer.json | cut -f 1-6 -d "/"`
           jq --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json
 
-      - name: Run Prisma Migrations
-        id: prisma-migration
-        uses: ./.github/workflows/prisma-migration
-        with:
-          aws-account-id: ${{ env.AWS_ACCOUNT_ID }}
-          aws-region: ${{ env.AWS_REGION }}
-          app-env: production
-
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
         # v1.4.11
