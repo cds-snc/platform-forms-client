@@ -1,3 +1,12 @@
+"use client";
+
+import { useTemplateStore } from "@root/lib/store/useTemplateStore";
+import { ApiKeyButton } from "../../components/ApiKeyButton";
+
 export const ApiKey = () => {
-  return <div>API Key Component</div>;
+  const { securityAttribute } = useTemplateStore((s) => ({
+    securityAttribute: s.securityAttribute,
+  }));
+
+  return <ApiKeyButton showHelp={false} showDelete classification={securityAttribute} />;
 };

@@ -1,9 +1,12 @@
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
+import Markdown from "markdown-to-jsx";
 
 import { serverTranslation } from "@i18n";
 import { authCheckAndThrow } from "@lib/actions";
 import { ApiKey } from "./components/ApiKey";
+import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
+import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -38,10 +41,24 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   }
 
   return (
-    <div className="w-4/6">
-      <h2 className="mb-6">{t("settings.apiIntegration.page.title")}</h2>
-      <p className="block text-sm">{t("settings.apiIntegration.page.description")}</p>
-      <ApiKey />
-    </div>
+    <>
+      {" "}
+      <div className="w-7/12">
+        <h2 className="mb-6">{t("settings.apiIntegration.page.title")}</h2>
+        <p className="mb-4">{t("settings.apiIntegration.page.text1")}</p>
+        <Markdown options={{ forceBlock: true }} className="mb-4">
+          {t("settings.apiIntegration.page.text2")}
+        </Markdown>
+        <ApiKey />
+        <ul className="ml-5 p-0">
+          <li>{t("settings.apiIntegration.page.notes.text1")}</li>
+          <li>{t("settings.apiIntegration.page.notes.text2")}</li>
+          <li>{t("settings.apiIntegration.page.notes.text3")}</li>
+          <li>{t("settings.apiIntegration.page.notes.text4")}</li>
+        </ul>
+      </div>
+      <ApiKeyDialog />
+      <DeleteApiKeyDialog />
+    </>
   );
 }
