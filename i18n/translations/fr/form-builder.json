@@ -701,6 +701,15 @@
   "copy": "copie",
   "settings": {
     "formManagement": "Gestion du formulaire",
+    "apiIntegration": {
+      "navigation": {
+        "title": "API integration [FR]"
+      },
+      "page": {
+        "title": "Set up API integration",
+        "description": "This will allow you to build an integration that pulls form responses into a target system. Once set-up, responses will be retrieved programmatically from an API endpoint. Consult our technical documentation for more information on how to get started."
+      }
+    },
     "api": {
       "keyId": "Identifiant de la clé API",
       "title": "Accès pour l'API",

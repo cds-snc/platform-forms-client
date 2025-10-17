@@ -32,6 +32,13 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
               {t("settings.formManagement")}
             </span>
           </SubNavLink>
+
+          <SubNavLink href={`/${language}/form-builder/${id}/settings/api-integration`}>
+            <span className="text-sm laptop:text-base">
+              <GearIcon className="mr-2 inline-block laptop:mt-[-2px]" />
+              {t("settings.apiIntegration.navigation.title")}
+            </span>
+          </SubNavLink>
         </nav>
       </div>
     </div>
