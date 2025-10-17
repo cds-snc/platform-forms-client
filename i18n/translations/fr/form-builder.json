@@ -811,41 +811,40 @@
           "paragraph2": "Allez à Formulaires GC",
           "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
         }
+    "apiIntegration": {
+      "navigation": {
+        "title": "Intégration API"
       },
-      "sessionUser": {
-        "title": "Recevoir des notifications par courriel",
-        "description": "S'informer sur les nouvelles réponses aux formulaires",
-        "toggle": {
-          "title": "Obtenez des notification à : {{email}}",
-          "on": "Activé",
-          "off": "Desactivé"
+      "page": {
+        "title": "Configurer l’intégration API",
+        "text1": "Cela vous permet de créer une intégration qui extrait les réponses aux formulaires dans un système cible. Une fois configurée par un·e développeur·se, les réponses peuvent être récupérées  par programmation à partir d’un point de terminaison API. Consultez la documentation technique pour plus d’informations..",
+        "docsButton": {
+          "text": "Accéder à la documentation API",
+          "link": "https://cds-snc.github.io/forms-api/accueil"
+        },
+        "apiKey": {
+          "title": "Récupérer les soumissions via l'API",
+          "description": "Le fait de disposer d'une clé API signifie que GC Forms s'attend à ce que les données de réponse au formulaire soient récupérées via l'API.",
+          "rateLimit": {
+            "title": "Limite de débit API",
+            "currentLimit": "Limite actuelle :",
+            "currentLimitDescription": "500 requêtes par minute",
+            "increaseRequest": "Si vous avez besoin d’un débit plus élevé, <a href='/en/support' target='_blank'>contactez l'équipe de soutien</a>."
+          }
         }
-      },
-      "usersList": {
-        "title": "Personnes ayant accès au formulaire qui sont informés des  nouvelles réponses",
-        "description": "Vous pouvez gérer l'accès de l'équipe sur la page Réponses",
-        "enabled": "Notifications activées",
-        "disabled": "Notifications désactivées"
-      },
-      "success": {
-        "updateNotifications": "Vos modifications ont été enregistrées."
-      },
-      "error": {
-        "getNotifcations": "Il y a un problème avec les paramètres de notifications. Veuillez réessayer plus tard.",
-        "updateNotifications": "Il y a eu un problème avec la mise à jour des notifications. Veuillez réessayer plus tard."
       }
-    }
-  },
-  "settingsDeleteButton": "Supprimer le formulaire",
-  "settingsDeleteHint": "Une fois le formulaire supprimé, vous ne pourrez pas le récupérer. Veuillez enregistrer une copie du formulaire avant de le supprimer.",
-  "settingsDeleteTitle": "Supprimer le formulaire",
-  "settingsInvalidEmailAlertDesc1": "Doit être une adresse courriel du gouvernement du Canada.",
-  "settingsInvalidEmailAlertDesc2": "pour enregistrer l'adresse courriel.",
-  "settingsInvalidEmailAlertTitle": "Adresse courriel du gouvernement",
-  "settingsNavHome": "Form profile [FR]",
-  "settingsResponseEmailTitle": "Adresse courriel",
-  "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
-  "settingsPurposeAndUse": {
+    },
+"api": {
+"keyId": "Identifiant de la clé API",
+"title": "Accès pour l'API",
+@@ -819,7 +842,7 @@
+"settingsInvalidEmailAlertDesc1": "Doit être une adresse courriel du gouvernement du Canada.",
+"settingsInvalidEmailAlertDesc2": "pour enregistrer l'adresse courriel.",
+"settingsInvalidEmailAlertTitle": "Adresse courriel du gouvernement",
+  "settingsNavHome": "Profil du formulaire",
+"settingsResponseEmailTitle": "Adresse courriel",
+"settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
+"settingsPurposeAndUse": {
     "title": "Usage prévu",
     "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui sont dans Formulaires GC depuis plus de 45 jours.",
     "personalInfo": "Renseignements personnels servant à prendre une décision qui touche un individu",
