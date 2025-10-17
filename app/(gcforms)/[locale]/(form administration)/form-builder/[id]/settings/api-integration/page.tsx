@@ -7,6 +7,9 @@ import { authCheckAndThrow } from "@lib/actions";
 import { ApiKey } from "./components/ApiKey";
 import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
+import { AuthenticatedPage } from "@lib/pages/auth";
+
+import { getCurrentThrottlingRate } from "../manage/throttlingRate/actions";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -21,28 +24,38 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page(props: { params: Promise<{ locale: string }> }) {
-  const params = await props.params;
+export default AuthenticatedPage(
+  async (props: { params: Promise<{ id: string; locale: string }> }) => {
+    const params = await props.params;
 
-  const { locale } = params;
+    const { locale } = params;
 
-  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
+    const { id } = params;
 
-  const { t } = await serverTranslation("form-builder", { lang: locale });
+    const limit = await getCurrentThrottlingRate(id);
+    let rate = null;
 
-  if (session && !session.user.acceptableUse) {
-    // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
-    redirect(`/${locale}/auth/policy`);
-  }
+    if ("error" in limit) {
+      // no-op
+    } else {
+      rate = limit.rate;
+    }
 
-  if (session && !session.user.hasSecurityQuestions) {
-    // If they haven't setup security questions Use redirect to policy page for acceptance
-    redirect(`/${locale}/auth/setup-security-questions`);
-  }
+    const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
 
-  return (
-    <>
-      {" "}
+    const { t } = await serverTranslation("form-builder", { lang: locale });
+
+    if (session && !session.user.acceptableUse) {
+      // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
+      redirect(`/${locale}/auth/policy`);
+    }
+
+    if (session && !session.user.hasSecurityQuestions) {
+      // If they haven't setup security questions Use redirect to policy page for acceptance
+      redirect(`/${locale}/auth/setup-security-questions`);
+    }
+
+    return (
       <div className="w-7/12">
         <h2 className="mb-6">{t("settings.apiIntegration.page.title")}</h2>
         <p className="mb-4">{t("settings.apiIntegration.page.text1")}</p>
@@ -56,25 +69,34 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
           <li>{t("settings.apiIntegration.page.notes.text3")}</li>
           <li>{t("settings.apiIntegration.page.notes.text4")}</li>
         </ul>
+
+        <p className="mb-2">
+          <strong>{t("settings.apiIntegration.page.apiKey.title")}</strong>
+        </p>
+        <p className="mb-6">{t("settings.apiIntegration.page.apiKey.description")}</p>
+
+        {rate === null ? (
+          <div>
+            <p className="mb-4">
+              <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.title")}</strong>
+            </p>
+            <p className="text-sm">
+              <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.currentLimit")}</strong>
+            </p>
+            <p className="mb-2">
+              {t("settings.apiIntegration.page.apiKey.rateLimit.currentLimitDescription")}
+            </p>
+            <Markdown options={{ forceBlock: true }} className="mb-4">
+              {t("settings.apiIntegration.page.apiKey.rateLimit.increaseRequest")}
+            </Markdown>
+          </div>
+        ) : (
+          <p className="mb-4">Rate limit set</p>
+        )}
+
+        <ApiKeyDialog />
+        <DeleteApiKeyDialog />
       </div>
-      <p className="mb-2">
-        <strong>{t("settings.apiIntegration.page.apiKey.title")}</strong>
-      </p>
-      <p className="mb-6">{t("settings.apiIntegration.page.apiKey.description")}</p>
-      <p className="mb-4">
-        <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.title")}</strong>
-      </p>
-      <p className="text-sm">
-        <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.currentLimit")}</strong>
-      </p>
-      <p className="mb-2">
-        {t("settings.apiIntegration.page.apiKey.rateLimit.currentLimitDescription")}
-      </p>
-      <Markdown options={{ forceBlock: true }} className="mb-4">
-        {t("settings.apiIntegration.page.apiKey.rateLimit.increaseRequest")}
-      </Markdown>
-      <ApiKeyDialog />
-      <DeleteApiKeyDialog />
-    </>
-  );
-}
+    );
+  }
+);

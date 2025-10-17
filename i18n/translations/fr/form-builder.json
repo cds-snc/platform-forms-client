@@ -714,6 +714,16 @@
           "text2": "Do not share this key with others, as it provides access to all form response data. [FR]",
           "text3": "If it’s absolutely necessary, for the purpose of integration, use encrypted email. [FR]",
           "text4": "Refresh the API key and update the integration, it you suspect it’s been compromised. [FR]"
+        },
+        "apiKey": {
+          "title": "Retrieve submissions via API [FR]",
+          "description": "Having an API key means GC Forms expects form response data to be retrieved via API. [FR]",
+          "rateLimit": {
+            "title": "API rate limit [FR]",
+            "currentLimit": "Current limit: [FR]",
+            "currentLimitDescription": "500 requests per minute [FR]",
+            "increaseRequest": "If you require a higher API rate, <a href='/en/support' target='_blank'>contact Support</a>. [FR]"
+          }
         }
       }
     },
