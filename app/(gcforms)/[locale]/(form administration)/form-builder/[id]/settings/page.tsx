@@ -1,8 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { ApiKeyDialog } from "../components/dialogs/ApiKeyDialog/ApiKeyDialog";
-import { DeleteApiKeyDialog } from "../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
-import { ResponseDelivery } from "./components/ResponseDelivery";
+import { FormProfile } from "./components/FormProfile";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -20,9 +18,7 @@ export async function generateMetadata(props: {
 export default async function Page() {
   return (
     <>
-      <ResponseDelivery />
-      <ApiKeyDialog />
-      <DeleteApiKeyDialog />
+      <FormProfile />
     </>
   );
 }
