@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactElement } from "react";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { TextInputPlugin } from "@clientComponents/forms/TextInput/TextInputPlugin";
