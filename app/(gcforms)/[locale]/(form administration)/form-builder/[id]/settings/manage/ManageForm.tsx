@@ -5,7 +5,6 @@ import { FormRecord, ClosedDetails } from "@lib/types";
 import { FormOwnership } from "./FormOwnership";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { updateTemplateUsers } from "@formBuilder/actions";
-import { ManageApiKey } from "./ManageApiKey";
 import { ThrottlingRate } from "./throttlingRate/ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
@@ -75,7 +74,6 @@ export const ManageForm = (props: ManageFormProps) => {
         updateTemplateUsers={updateTemplateUsers}
       />
       {canManageAllForms && apiKeyId && <ThrottlingRate formId={id} />}
-      {canManageAllForms && formRecord.isPublished && <ManageApiKey />}
       {/* End ADMIN USER SETTINGS */}
     </>
   );

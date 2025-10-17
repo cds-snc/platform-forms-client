@@ -51,7 +51,7 @@ export const Primary = ({ href, children, className, scroll, target }: LinkButto
   );
 };
 
-export const Secondary = ({ href, className, children, scroll }: LinkButtonProps) => {
+export const Secondary = ({ href, className, children, scroll, target }: LinkButtonProps) => {
   return (
     <Link
       scroll={scroll}
@@ -62,6 +62,7 @@ export const Secondary = ({ href, className, children, scroll }: LinkButtonProps
         themes.base,
         className
       )}
+      target={target}
     >
       {children}
     </Link>

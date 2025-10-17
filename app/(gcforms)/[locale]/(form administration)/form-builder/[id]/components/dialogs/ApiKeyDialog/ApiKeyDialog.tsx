@@ -13,15 +13,10 @@ import { downloadKey, _createKey } from "@formBuilder/[id]/settings/components/u
 import { SubmitButton as DownloadButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import * as Alert from "@clientComponents/globals/Alert/Alert";
 import { logMessage } from "@lib/logger";
-import { sendResponsesToVault } from "@formBuilder/actions";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { GenerateKeySuccess } from "./GenerateKeySuccess";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { type SecurityAttribute } from "@lib/types";
-import { type FormServerError } from "@lib/types/form-builder-types";
-
-import { updateTemplateSecurityAttribute } from "@formBuilder/actions";
 
 type APIKeyCustomEventDetails = {
   id: string;
@@ -33,23 +28,14 @@ type APIKeyCustomEventDetails = {
  * @param isVaultDelivery - boolean - Allows skipping the save request when a form is already saving to the vault -- example a live form swapping to API mode
  * @returns JSX.Element
  */
-export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: boolean }) => {
+export const ApiKeyDialog = () => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
 
-  const { resetDeliveryOption, getSecurityAttribute, updateSecurityAttribute } = useTemplateStore(
-    (s) => ({
-      resetDeliveryOption: s.resetDeliveryOption,
-      getSecurityAttribute: s.getSecurityAttribute,
-      updateSecurityAttribute: s.updateSecurityAttribute,
-    })
-  );
-
   // Setup + Open dialog
   const [id, setId] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
-  const [classification, setClassification] = useState<string>("");
 
   const { updateApiKeyId } = useFormBuilderConfig();
 
@@ -61,7 +47,6 @@ export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: bo
   const handleOpen = useCallback((detail: APIKeyCustomEventDetails) => {
     if (detail) {
       detail.id && setId(detail.id);
-      detail.classification && setClassification(detail.classification);
       setIsOpen(true);
     }
   }, []);
@@ -95,49 +80,8 @@ export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: bo
     setHasError(false);
     setGenerating(true);
     try {
-      /*
-        Allows skipping the save request
-        if it's determined that the form responses 
-        are already being delivered to the vault
-      */
-      if (!isVaultDelivery) {
-        const result = await sendResponsesToVault({
-          id: id,
-        });
-
-        // Check local state vs template store state
-        if (classification && getSecurityAttribute() !== classification) {
-          const securityAttribute = classification as SecurityAttribute;
-
-          // Update the security attribute database
-          const result = (await updateTemplateSecurityAttribute({
-            id,
-            securityAttribute,
-          })) as FormServerError;
-
-          // Sync the template store
-          updateSecurityAttribute(securityAttribute);
-
-          if (result.error) {
-            // Throw the generic key creation error
-            // Handling as generic as we're in the process of creating a key
-            throw new Error(result.error);
-          }
-        }
-
-        if (result.error) {
-          // Throw the generic key creation error
-          // Handling as generic as we're in the process of creating a key
-          throw new Error(result.error);
-        }
-
-        // Sync the template store with the new delivery option
-        resetDeliveryOption();
-      }
-
       const key = await _createKey(id);
       await downloadKey(JSON.stringify(key), id);
-
       setGenerating(false);
       updateApiKeyId(key.keyId);
       toast.success(<GenerateKeySuccess />, "wide");

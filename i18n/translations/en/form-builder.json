@@ -701,6 +701,29 @@
   "copy": "copy",
   "settings": {
     "formManagement": "Form management",
+    "apiIntegration": {
+      "navigation": {
+        "title": "API integration"
+      },
+      "page": {
+        "title": "Set up API integration",
+        "text1": "This allows you to build an integration that pulls form responses into a target system. Once set-up by a developer, responses can be retrieved programmatically from an API endpoint. Consult our technical documentation for more information.",
+        "docsButton": {
+          "text": "Go to API documentation",
+          "link": "https://cds-snc.github.io/forms-api/home"
+        },
+        "apiKey": {
+          "title": "Retrieve submissions via API",
+          "description": "Having an API key means GC Forms expects form response data to be retrieved via API.",
+          "rateLimit": {
+            "title": "API rate limit",
+            "currentLimit": "Current limit:",
+            "currentLimitDescription": "500 requests per minute",
+            "increaseRequest": "If you require a higher API rate, <a href='/en/support' target='_blank'>contact Support</a>."
+          }
+        }
+      }
+    },
     "api": {
       "keyId": "API key ID",
       "title": "API access",
@@ -709,10 +732,6 @@
       "deleteKeyFailed": {
         "title": "Something went wrong",
         "message": "API key could not be deleted"
-      },
-      "deleteApiKeyToChangeOptions": {
-        "title": "Delete API key to change options",
-        "message": "You must delete the API key before you can change the delivery option."
       },
       "deleteKeySuccess": {
         "title": "API key deleted",
@@ -819,7 +838,7 @@
   "settingsInvalidEmailAlertDesc1": "Must be a Government of Canada email address.",
   "settingsInvalidEmailAlertDesc2": "to register email address.",
   "settingsInvalidEmailAlertTitle": "Government email address",
-  "settingsNavHome": "Response delivery",
+  "settingsNavHome": "Form profile",
   "settingsResponseEmailTitle": "Email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox. This can be a shared inbox.",
   "settingsPurposeAndUse": {
@@ -880,35 +899,6 @@
     "emailSubjectFr": {
       "title": "French response subject line",
       "hint": "When form responses are submitted in French."
-    },
-    "responseDeliveryHelpWithApi": {
-      "cta": "Help choosing an option",
-      "title": "Choosing a response delivery option",
-      "description": "Use the chart below to help pick which option best fits your needs for getting submitted form responses.",
-      "inbox": {
-        "title": "Email to an inbox",
-        "text1": "For up to PROTECTED A forms",
-        "text2": "Responses are delivered directly to an inbox in real time",
-        "text3": "One email address can receive response emails.",
-        "text4": "This can be a shared inbox.",
-        "text5": "No software development resources required."
-      },
-      "vault": {
-        "title": "Download from GC Forms",
-        "text1": "For up to PROTECTED B forms",
-        "text2": "Download responses within 30 days",
-        "text3": "Cannot be switched after publishing",
-        "text4": "Multiple account holders can access responses.",
-        "text5": "No software development resources required."
-      },
-      "api": {
-        "title": "API response retrieval",
-        "text1": "For up to PROTECTED B forms",
-        "text2": "API calls to extract (pull) form responses",
-        "text3": "Can be switched to the download delivery method after publishing",
-        "text4": "One API key per form",
-        "text5": "Software development resources needed for the API integration"
-      }
     },
     "emailDeliveryDeprecated": {
       "title": "Email data delivery is no longer available.",

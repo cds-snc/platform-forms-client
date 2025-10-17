@@ -5,8 +5,6 @@ import { getUsers } from "@lib/users";
 import { ManageForm } from "./ManageForm";
 import { Metadata } from "next";
 import { headers } from "next/headers";
-import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
-import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 import { AuthenticatedPage } from "@lib/pages/auth";
 
 export async function generateMetadata(props: {
@@ -76,9 +74,6 @@ export default AuthenticatedPage(async (props: { params: Promise<{ id: string }>
     }))
   );
 
-  const isPublished = templateWithAssociatedUsers.formRecord.isPublished;
-  const isVaultDelivery = !templateWithAssociatedUsers.formRecord.deliveryMethod;
-
   return (
     <>
       <ManageForm
@@ -91,19 +86,6 @@ export default AuthenticatedPage(async (props: { params: Promise<{ id: string }>
         allUsers={allUsers}
         closedDetails={closedDetails}
       />
-      {/* 
-        - Only show for users with manage all forms privileges
-            - we do an additional check here in case the code above to reach this point changes later
-        - Only show for forms with vault delivery already set
-        - Only show for live forms 
-            - draft forms should use Response Delivery page
-      */}
-      {isPublished && manageAllForms && isVaultDelivery && (
-        <>
-          <ApiKeyDialog isVaultDelivery={true} />
-          <DeleteApiKeyDialog />
-        </>
-      )}
     </>
   );
 });
