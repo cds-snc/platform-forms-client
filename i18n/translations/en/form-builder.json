@@ -733,10 +733,6 @@
         "title": "Something went wrong",
         "message": "API key could not be deleted"
       },
-      "deleteApiKeyToChangeOptions": {
-        "title": "Delete API key to change options",
-        "message": "You must delete the API key before you can change the delivery option."
-      },
       "deleteKeySuccess": {
         "title": "API key deleted",
         "message": "New responses can now be downloaded on the ",

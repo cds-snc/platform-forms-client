@@ -7,7 +7,7 @@ import { DeleteKeyButton } from "./DeleteKeyButton";
 import { SubmitButton as GenerateApiKeyButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
-import { ResponseDeliveryHelpButtonWithApi } from "./dialogs/ResponseDeliveryHelpDialogApiWithApi";
+import { ResponseDeliveryHelpButtonWithApi } from "../../components/dialogs/ResponseDeliveryHelpDialogApiWithApi";
 
 type ApiKeyButtonProps = {
   showDelete?: boolean;
