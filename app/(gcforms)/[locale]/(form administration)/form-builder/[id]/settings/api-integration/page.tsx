@@ -74,7 +74,7 @@ export default AuthenticatedPage(
         </p>
         <p className="mb-6">{t("settings.apiIntegration.page.apiKey.description")}</p>
 
-        <ApiKeyButton />
+        <ApiKeyButton showDelete />
 
         {rate === null ? (
           <div>
