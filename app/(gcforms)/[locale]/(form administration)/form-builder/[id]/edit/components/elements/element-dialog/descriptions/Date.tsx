@@ -17,6 +17,7 @@ export const Date = () => {
         </Label>
         <Description>{t("addElementDialog.date.forExample")}</Description>
         <TextInput
+          id="name"
           label="title"
           type={"text"}
           name={"name"}
