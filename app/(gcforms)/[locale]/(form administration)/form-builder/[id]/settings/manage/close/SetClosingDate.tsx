@@ -75,21 +75,12 @@ export const SetClosingDate = ({
     const newStatus = pendingToggleValue ? "open" : "closed";
     setStatus(newStatus);
 
-    // Check to see if the existing date is in the past when updating the toggle. If the date is in
-    // the future we want to keep the existing value.
-    let closeDate = isFutureDate(String(closingDate))
-      ? new Date(String(closingDate)).toISOString()
-      : null;
-
-    if (newStatus === "closed") {
-      // Set date to now to close the form right away
-      const now = new Date();
-      closeDate = now.toISOString();
-    }
+    // If closed, set date to now. If open, clear the closing date.
+    const closeDate = newStatus === "closed" ? new Date().toISOString() : null;
 
     const result = await closeForm({
       id: formId,
-      closingDate: closeDate || null,
+      closingDate: closeDate,
       closedDetails: closedMessage,
     });
 
@@ -103,7 +94,7 @@ export const SetClosingDate = ({
     }
 
     // Setting local store
-    setClosingDate(closeDate || null);
+    setClosingDate(closeDate);
 
     if (newStatus === "closed") {
       toast.success(<ClosedSuccess />, "wide");
@@ -113,7 +104,7 @@ export const SetClosingDate = ({
 
     setShowConfirmDialog(false);
     setPendingToggleValue(null);
-  }, [pendingToggleValue, closingDate, formId, closedMessage, setClosingDate, t]);
+  }, [pendingToggleValue, formId, closedMessage, setClosingDate, t]);
 
   const cancelToggle = useCallback(() => {
     setShowConfirmDialog(false);
