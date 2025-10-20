@@ -1,8 +1,9 @@
 "use client";
 
 import { useTranslation } from "@i18n/client";
-import { SubNavLink } from "@clientComponents/globals/SubNavLink";
-import { GearIcon, ChatIcon } from "@serverComponents/icons";
+
+import { TabNavLink } from "@clientComponents/globals/TabNavLink";
+import { usePathname } from "next/navigation";
 
 export const SettingsNavigation = ({ id }: { id: string }) => {
   const {
@@ -10,31 +11,34 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
     i18n: { language },
   } = useTranslation("form-builder");
 
-  return (
-    <div className="relative flex">
-      <div className="flex">
-        <nav className="mb-6 flex flex-wrap" aria-label={t("navLabelEditor")}>
-          <SubNavLink href={`/${language}/form-builder/${id}/settings`}>
-            <span className="text-sm laptop:text-base">
-              <ChatIcon className="mr-2 inline-block laptop:mt-[-2px]" />
-              {t("settingsNavHome")}
-            </span>
-          </SubNavLink>
-          <SubNavLink href={`/${language}/form-builder/${id}/settings/manage`}>
-            <span className="text-sm laptop:text-base">
-              <GearIcon className="mr-2 inline-block laptop:mt-[-2px]" />
-              {t("settings.formManagement")}
-            </span>
-          </SubNavLink>
+  const pathname = usePathname();
 
-          <SubNavLink href={`/${language}/form-builder/${id}/settings/api-integration`}>
-            <span className="text-sm laptop:text-base">
-              <GearIcon className="mr-2 inline-block laptop:mt-[-2px]" />
-              {t("settings.apiIntegration.navigation.title")}
-            </span>
-          </SubNavLink>
-        </nav>
-      </div>
-    </div>
+  return (
+    <nav className="relative mb-10 flex border-b border-black" aria-label={t("responses.navLabel")}>
+      <TabNavLink
+        active={
+          pathname.includes("manage") === false && pathname.includes("api-integration") === false
+        }
+        href={`/${language}/form-builder/${id}/settings`}
+      >
+        <span className="text-sm laptop:text-base">{t("settingsNavHome")}</span>
+      </TabNavLink>
+
+      <TabNavLink
+        active={pathname.includes("manage")}
+        href={`/${language}/form-builder/${id}/settings/manage`}
+      >
+        <span className="text-sm laptop:text-base">{t("settings.formManagement")}</span>
+      </TabNavLink>
+
+      <TabNavLink
+        active={pathname.includes("api-integration")}
+        href={`/${language}/form-builder/${id}/settings/api-integration`}
+      >
+        <span className="text-sm laptop:text-base">
+          {t("settings.apiIntegration.navigation.title")}
+        </span>
+      </TabNavLink>
+    </nav>
   );
 };
