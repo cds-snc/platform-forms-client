@@ -113,16 +113,25 @@ const CardTitle = async ({ name }: { name: string }) => {
   return <h2 className={classes}>{name ? name : t("card.unnamedForm")}</h2>;
 };
 
-const CardDate = async ({ id, date }: { id: string; date: string }) => {
+const CardDate = async ({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
   const { t } = await serverTranslation(["my-forms", "common"]);
   function formatDate(date: string) {
     const jsDate = new Date(date);
     return jsDate.toISOString().split("T")[0];
   }
+  function formatDateToString(date: Date) {
+    // Format date as YYYY-MM-DD
+    return date.toISOString().split("T")[0];
+  }
 
   return (
     <div id={`card-date-${id}`} className="text-sm">
       {t("card.lastEdited")}: {formatDate(date)}
+      {ttl != null && (
+        <>
+          <br /> <span>{t("card.deleteDate") + formatDateToString(ttl)}</span>
+        </>
+      )}
     </div>
   );
 };
@@ -167,7 +176,7 @@ export const Card = async ({ card }: { card: CardI }) => {
       </div>
 
       <div className="mb-4 flex items-center justify-between px-3">
-        <CardDate id={card.id} date={card.date} />
+        <CardDate id={card.id} date={card.date} ttl={card.ttl} />
         <div className="flex items-center text-sm">
           <Menu
             id={card.id}

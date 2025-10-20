@@ -28,6 +28,7 @@
       "notTranslatedFr": "No French translation"
     },
     "lastEdited": "Last edited",
+    "deleteDate": " Delete date: ",
     "deliveryOption": {
       "email": "Responses get sent to:",
       "vault": "Responses page"
