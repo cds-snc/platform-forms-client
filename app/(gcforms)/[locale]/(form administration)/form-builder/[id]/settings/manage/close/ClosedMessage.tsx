@@ -3,7 +3,7 @@ import { ClosedDetails } from "@lib/types";
 import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import Skeleton from "react-loading-skeleton";
-import React from "react";
+import React, { useCallback, useRef } from "react";
 
 import { cn } from "@lib/utils";
 
@@ -17,11 +17,48 @@ type ClosedMessageProps = {
   valid: boolean;
   closedDetails?: ClosedDetails;
   setClosedDetails: (details: ClosedDetails) => void;
+  onSave?: () => void;
 };
 
-export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: ClosedMessageProps) => {
+export const ClosedMessage = ({
+  valid,
+  closedDetails,
+  setClosedDetails,
+  onSave,
+}: ClosedMessageProps) => {
   const { t, i18n } = useTranslation("form-builder");
   const hasHydrated = useRehydrate();
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Track the initial state to detect changes (only set once on mount)
+  const initialDetailsRef = useRef<ClosedDetails | undefined>(closedDetails);
+  const lastSavedDetailsRef = useRef<ClosedDetails | undefined>(closedDetails);
+
+  const hasChanged = useCallback(() => {
+    const baseline = lastSavedDetailsRef.current || initialDetailsRef.current;
+
+    if (!baseline && !closedDetails) return false;
+    if (!baseline) return true;
+    if (!closedDetails) return true;
+
+    return (
+      baseline.messageEn !== closedDetails.messageEn ||
+      baseline.messageFr !== closedDetails.messageFr
+    );
+  }, [closedDetails]);
+
+  const debouncedSave = useCallback(() => {
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+    saveTimeoutRef.current = setTimeout(() => {
+      if (valid && hasChanged() && onSave) {
+        onSave();
+        // Update last saved state after save
+        lastSavedDetailsRef.current = closedDetails;
+      }
+    }, 1000); // Save 1 second after user stops typing
+  }, [valid, onSave, hasChanged, closedDetails]);
 
   if (!hasHydrated) {
     // Don't show the rich text editor until the form has been hydrated
@@ -69,6 +106,7 @@ export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: Closed
             content={closedDetails && closedDetails.messageEn ? closedDetails.messageEn : ""}
             onChange={(value: string) => {
               setClosedDetails({ ...closedDetails, messageEn: value });
+              debouncedSave();
             }}
           />
         </div>
@@ -87,7 +125,10 @@ export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: Closed
             locale={i18n.language}
             contentLocale="fr"
             content={closedDetails && closedDetails.messageFr ? closedDetails.messageFr : ""}
-            onChange={(value: string) => setClosedDetails({ ...closedDetails, messageFr: value })}
+            onChange={(value: string) => {
+              setClosedDetails({ ...closedDetails, messageFr: value });
+              debouncedSave();
+            }}
           />
         </div>
       </div>
