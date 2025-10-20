@@ -103,5 +103,7 @@
     "formDownloadNotExist": "Le forulaire que vous essayez de télécharger n'existe pas.",
     "formDownloadFailed": "Le téléchargement du formulaire a échoué.",
     "formUnarchiveFailed": "La restauration du formulaire a échoué."
-  }
+  },
+  "archivedNotice": "Vous pouvez récupérer votre formulaire brouillon ou publié depuis le dossier d'archive dans les 30 jours suivant l'archivage de votre formulaire.",
+  "archivedNotice2": "Après 30 jours, votre formulaire sera supprimé définitivement et cette action ne pourra pas être annulée."
 }

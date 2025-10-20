@@ -103,5 +103,7 @@
     "formDownloadNotExist": "The form you are trying to download does not exist.",
     "formDownloadFailed": "Failed to download the form.",
     "formUnarchiveFailed": "Failed to restore the form."
-  }
+  },
+  "archivedNotice": "You can retrieve your draft or published form from the archive folder within 30 days of archiving your form.",
+  "archivedNotice2": "After 30 days your form will be deleted permanently and cannot be undone."
 }

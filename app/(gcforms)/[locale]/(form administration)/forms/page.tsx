@@ -122,6 +122,12 @@ export default async function Page(props: {
           <NewFormButton />
         </div>
         <ResumeEditingForm />
+        {status == "archived" && <div>{t("archivedNotice")}</div>}
+        {status == "archived" && (
+          <div>
+            <strong>{t("archivedNotice2")}</strong>
+          </div>
+        )}
         <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} />
       </div>
     );
