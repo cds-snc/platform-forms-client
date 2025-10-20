@@ -22,6 +22,7 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormPurposeHelpButton } from "./dialogs/FormPurposeHelpButton";
 import { Branding } from "./branding/Branding";
 import { DownloadForm } from "./DownloadForm";
+import { SetSaveAndResume } from "../manage/saveAndResume/SetSaveAndResume";
 
 /*
  * PurposeOption is used to determine the purpose of the form
@@ -206,6 +207,11 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
             </div>
             <FormPurposeHelpButton />
           </div>
+
+          {/*--------------------------------------------*
+           * Save progress section
+           *--------------------------------------------*/}
+          <SetSaveAndResume formId={id} />
 
           {/*--------------------------------------------*
            * Download section
