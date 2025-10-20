@@ -3,7 +3,7 @@
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logMessage } from "@root/lib/logger";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@gcforms/database";
 import { logEvent } from "@root/lib/auditLogs";
 import { getNotificationsUsers } from "@root/lib/notifications";
 

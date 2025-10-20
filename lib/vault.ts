@@ -6,7 +6,7 @@ import {
   BatchWriteCommand,
   GetCommand,
 } from "@aws-sdk/lib-dynamodb";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@gcforms/database";
 import {
   VaultSubmissionOverview,
   VaultStatus,

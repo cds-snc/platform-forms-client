@@ -1,4 +1,4 @@
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@gcforms/database";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import { DeactivationReason, DeactivationReasons, NagwareResult } from "./types";

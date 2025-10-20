@@ -41,7 +41,7 @@
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.10.0",
+    "@auth/prisma-adapter": "^2.11.0",
     "@aws-sdk/client-cognito-identity-provider": "^3.901.0",
     "@aws-sdk/client-dynamodb": "^3.902.0",
     "@aws-sdk/client-lambda": "^3.901.0",
@@ -148,7 +148,6 @@
     "@types/lodash.unset": "^4.5.9",
     "@types/node": "^24.6.1",
     "@types/node-fetch": "^2.6.9",
-    "@types/pg": "^8.10.9",
     "@types/react": "19.1.15",
     "@types/react-dom": "19.1.9",
     "@types/react-transition-group": "^4",

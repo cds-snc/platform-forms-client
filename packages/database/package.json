@@ -7,8 +7,16 @@
     "access": "public"
   },
   "packageManager": "yarn@4.10.3",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
+        "default": "./dist/index.js"
+      }
+    }
   },
   "scripts": {
     "db:migrate:deploy": "prisma migrate deploy",
@@ -18,22 +26,24 @@
     "db:reset": "prisma migrate reset -f --skip-seed",
     "db:seed:prod": "tsx src/seed_cli.ts --environment=production",
     "db:seed:test": "prisma migrate deploy && tsx src/seed_cli.ts --environment=test",
-    "dev": "tsup src/* --format esm --watch",
-    "format": "prisma format",
     "db:generate": "prisma generate",
-    "prebuild": "npm run generate",
-    "predev": "npm run generate",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "prebuild": "yarn clean && prisma generate",
+    "build": "tsdown src/index.ts --format cjs,esm --dts --clean --splitting",
+    "prepack": "yarn build",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^6.17.0",
-    "@prisma/client": "^6.17.0"
+    "@prisma/client": "^6.17.0",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@types/node": "^24.7.1",
+    "@types/pg": "^8",
     "prisma": "^6.17.0",
     "ts-command-line-args": "^2.5.1",
-    "tsup": "^8.5.0",
+    "tsdown": "^0.15.7",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }

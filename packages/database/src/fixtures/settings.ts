@@ -1,4 +1,4 @@
-import { Setting } from "../generated/prisma/client";
+import { Setting } from "../generated/client";
 
 type SettingCollection = {
   development: Setting[];

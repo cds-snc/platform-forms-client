@@ -7,7 +7,7 @@ import { requestNew2FAVerificationCode } from "@lib/auth";
 import { signIn } from "@lib/auth";
 import { handleErrorById, Missing2FASession } from "@lib/auth/cognito";
 import { cookies } from "next/headers";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { CredentialsSignin } from "next-auth";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { logMessage } from "@lib/logger";

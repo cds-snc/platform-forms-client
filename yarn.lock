@@ -56,14 +56,38 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/prisma-adapter@npm:^2.10.0":
-  version: 2.10.0
-  resolution: "@auth/prisma-adapter@npm:2.10.0"
+"@auth/core@npm:0.41.0":
+  version: 0.41.0
+  resolution: "@auth/core@npm:0.41.0"
   dependencies:
-    "@auth/core": "npm:0.40.0"
+    "@panva/hkdf": "npm:^1.2.1"
+    jose: "npm:^6.0.6"
+    oauth4webapi: "npm:^3.3.0"
+    preact: "npm:10.24.3"
+    preact-render-to-string: "npm:6.5.11"
+  peerDependencies:
+    "@simplewebauthn/browser": ^9.0.1
+    "@simplewebauthn/server": ^9.0.2
+    nodemailer: ^6.8.0
+  peerDependenciesMeta:
+    "@simplewebauthn/browser":
+      optional: true
+    "@simplewebauthn/server":
+      optional: true
+    nodemailer:
+      optional: true
+  checksum: 10c0/2971dc78b12cb00774fa4a82105d0302b7e2d96e416336f119e7e90604878bde26fca16c5c53dc027ecb47cecffb0d1471397cd5d8aedb85a8cd4b41c742379c
+  languageName: node
+  linkType: hard
+
+"@auth/prisma-adapter@npm:^2.11.0":
+  version: 2.11.0
+  resolution: "@auth/prisma-adapter@npm:2.11.0"
+  dependencies:
+    "@auth/core": "npm:0.41.0"
   peerDependencies:
     "@prisma/client": ">=2.26.0 || >=3 || >=4 || >=5 || >=6"
-  checksum: 10c0/f6c95f144958c678e8cbc691b205c937cbc456beab3da035ab3e00d55e91b8b39be6ff8529dbe3c72d0f95365988db09bc5862445f70c2438061dbe69bca34f5
+  checksum: 10c0/0109a8800636c65b755a38987d22dcf350b316bf9cf5722eeb6ef76e21e6a2487d88edabd1a010f70e5bd1ef1b62463555d0d49fbb21e9a67e5de6c6d143f27c
   languageName: node
   linkType: hard
 
@@ -2462,9 +2486,11 @@ __metadata:
     "@prisma/adapter-pg": "npm:^6.17.0"
     "@prisma/client": "npm:^6.17.0"
     "@types/node": "npm:^24.7.1"
+    "@types/pg": "npm:^8"
+    pg: "npm:^8.16.3"
     prisma: "npm:^6.17.0"
     ts-command-line-args: "npm:^2.5.1"
-    tsup: "npm:^8.5.0"
+    tsdown: "npm:^0.15.7"
     tsx: "npm:^4.20.6"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -7957,7 +7983,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/pg@npm:^8.10.9":
+"@types/pg@npm:^8":
   version: 8.15.5
   resolution: "@types/pg@npm:8.15.5"
   dependencies:
@@ -8919,7 +8945,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansis@npm:=4.2.0, ansis@npm:^4.1.0":
+"ansis@npm:=4.2.0, ansis@npm:^4.1.0, ansis@npm:^4.2.0":
   version: 4.2.0
   resolution: "ansis@npm:4.2.0"
   checksum: 10c0/cd6a7a681ecd36e72e0d79c1e34f1f3bcb1b15bcbb6f0f8969b4228062d3bfebbef468e09771b00d93b2294370b34f707599d4a113542a876de26823b795b5d2
@@ -9170,6 +9196,16 @@ __metadata:
     "@babel/parser": "npm:^7.28.0"
     pathe: "npm:^2.0.3"
   checksum: 10c0/7034c2d98de971cd689f5e098837c08f4f1b96a4fab14ab8d54ddc3b877e5e677f6851bef7e1625f0c714196f85ba2a0417446afe571ae34db1a4e34d788b25c
+  languageName: node
+  linkType: hard
+
+"ast-kit@npm:^2.1.3":
+  version: 2.1.3
+  resolution: "ast-kit@npm:2.1.3"
+  dependencies:
+    "@babel/parser": "npm:^7.28.4"
+    pathe: "npm:^2.0.3"
+  checksum: 10c0/33cc530bfbff610fff720df031e5fcd8342ee14a0a9380635cf2f57a4dbbe3d69408a8b990c424323144a51c0cfb8da5a65dc0cc0826b1c66a7a8eb426e21945
   languageName: node
   linkType: hard
 
@@ -12738,7 +12774,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "gcforms@workspace:."
   dependencies:
-    "@auth/prisma-adapter": "npm:^2.10.0"
+    "@auth/prisma-adapter": "npm:^2.11.0"
     "@aws-sdk/client-cognito-identity-provider": "npm:^3.901.0"
     "@aws-sdk/client-dynamodb": "npm:^3.902.0"
     "@aws-sdk/client-lambda": "npm:^3.901.0"
@@ -12793,7 +12829,6 @@ __metadata:
     "@types/mdx": "npm:^2.0.13"
     "@types/node": "npm:^24.6.1"
     "@types/node-fetch": "npm:^2.6.9"
-    "@types/pg": "npm:^8.10.9"
     "@types/react": "npm:19.1.15"
     "@types/react-dom": "npm:19.1.9"
     "@types/react-transition-group": "npm:^4"
@@ -13014,6 +13049,15 @@ __metadata:
   dependencies:
     resolve-pkg-maps: "npm:^1.0.0"
   checksum: 10c0/7f8e3dabc6a49b747920a800fb88e1952fef871cdf51b79e98db48275a5de6cdaf499c55ee67df5fa6fe7ce65f0063e26de0f2e53049b408c585aa74d39ffa21
+  languageName: node
+  linkType: hard
+
+"get-tsconfig@npm:^4.12.0":
+  version: 4.12.0
+  resolution: "get-tsconfig@npm:4.12.0"
+  dependencies:
+    resolve-pkg-maps: "npm:^1.0.0"
+  checksum: 10c0/3438106bd46bfc6595fce6117190f1ac0998de2e6916b40ec23b20c784b0b47e79ea2b920895b9ed26029b1f80b8867626fb24795d5f45abbdab716a4ba1ef92
   languageName: node
   linkType: hard
 
@@ -16315,7 +16359,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:^8.11.3":
+"pg@npm:^8.11.3, pg@npm:^8.16.3":
   version: 8.16.3
   resolution: "pg@npm:8.16.3"
   dependencies:
@@ -17923,6 +17967,38 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rolldown-plugin-dts@npm:^0.16.11":
+  version: 0.16.12
+  resolution: "rolldown-plugin-dts@npm:0.16.12"
+  dependencies:
+    "@babel/generator": "npm:^7.28.3"
+    "@babel/parser": "npm:^7.28.4"
+    "@babel/types": "npm:^7.28.4"
+    ast-kit: "npm:^2.1.3"
+    birpc: "npm:^2.6.1"
+    debug: "npm:^4.4.3"
+    dts-resolver: "npm:^2.1.2"
+    get-tsconfig: "npm:^4.12.0"
+    magic-string: "npm:^0.30.19"
+  peerDependencies:
+    "@ts-macro/tsc": ^0.3.6
+    "@typescript/native-preview": ">=7.0.0-dev.20250601.1"
+    rolldown: ^1.0.0-beta.9
+    typescript: ^5.0.0
+    vue-tsc: ~3.1.0
+  peerDependenciesMeta:
+    "@ts-macro/tsc":
+      optional: true
+    "@typescript/native-preview":
+      optional: true
+    typescript:
+      optional: true
+    vue-tsc:
+      optional: true
+  checksum: 10c0/5b138ea608e0e1165ef987c36df332af5d074bc58000ceb500460abf298e9316a0bf38c3209a046348cc81f7f64f8c047e6135d131c3ce32dc02b1114a1d910a
+  languageName: node
+  linkType: hard
+
 "rolldown-plugin-dts@npm:^0.16.8":
   version: 0.16.11
   resolution: "rolldown-plugin-dts@npm:0.16.11"
@@ -18294,6 +18370,15 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10c0/aca305edfbf2383c22571cb7714f48cadc7ac95371b4b52362fb8eeffdfbc0de0669368b82b2b15978f8848f01d7114da65697e56cd8c37b0dab8c58e543f9ea
+  languageName: node
+  linkType: hard
+
+"semver@npm:^7.7.3":
+  version: 7.7.3
+  resolution: "semver@npm:7.7.3"
+  bin:
+    semver: bin/semver.js
+  checksum: 10c0/4afe5c986567db82f44c8c6faef8fe9df2a9b1d98098fc1721f57c696c4c21cebd572f297fc21002f81889492345b8470473bc6f4aff5fb032a6ea59ea2bc45e
   languageName: node
   linkType: hard
 
@@ -19725,6 +19810,47 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tsdown@npm:^0.15.7":
+  version: 0.15.7
+  resolution: "tsdown@npm:0.15.7"
+  dependencies:
+    ansis: "npm:^4.2.0"
+    cac: "npm:^6.7.14"
+    chokidar: "npm:^4.0.3"
+    debug: "npm:^4.4.3"
+    diff: "npm:^8.0.2"
+    empathic: "npm:^2.0.0"
+    hookable: "npm:^5.5.3"
+    rolldown: "npm:latest"
+    rolldown-plugin-dts: "npm:^0.16.11"
+    semver: "npm:^7.7.3"
+    tinyexec: "npm:^1.0.1"
+    tinyglobby: "npm:^0.2.15"
+    tree-kill: "npm:^1.2.2"
+    unconfig: "npm:^7.3.3"
+  peerDependencies:
+    "@arethetypeswrong/core": ^0.18.1
+    publint: ^0.3.0
+    typescript: ^5.0.0
+    unplugin-lightningcss: ^0.4.0
+    unplugin-unused: ^0.5.0
+  peerDependenciesMeta:
+    "@arethetypeswrong/core":
+      optional: true
+    publint:
+      optional: true
+    typescript:
+      optional: true
+    unplugin-lightningcss:
+      optional: true
+    unplugin-unused:
+      optional: true
+  bin:
+    tsdown: dist/run.mjs
+  checksum: 10c0/83f509ac17504dad933ae4787dc9a535a6e1005882fb9f322d836ba2665e900ea2d50408b5d5c65f9c37805c31ec93ff4cbcefb8a1ee099643c30f12315fc5f8
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^2.0.0, tslib@npm:^2.1.0, tslib@npm:^2.4.0, tslib@npm:^2.6.2, tslib@npm:^2.8.0":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
@@ -19732,7 +19858,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsup@npm:^8.3.6, tsup@npm:^8.5.0":
+"tsup@npm:^8.3.6":
   version: 8.5.0
   resolution: "tsup@npm:8.5.0"
   dependencies:

@@ -1,5 +1,5 @@
 import { authorization } from "@lib/privileges";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { featureFlagsCheck, featureFlagsPut } from "@lib/cache/userFeatureFlagsCache";
 
 /**

@@ -1,4 +1,4 @@
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { FormProperties } from "@lib/types";
 import {
   InvitationIsExpiredError,

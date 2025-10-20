@@ -1,5 +1,5 @@
 import { formCache } from "./cache/formCache";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@gcforms/database";
 import {
   PublicFormRecord,
   FormRecord,

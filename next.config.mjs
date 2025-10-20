@@ -98,7 +98,7 @@ const nextConfig = {
         as: "*.js",
       },
     },
-  }
+  },
 };
 
 export default nextConfig;

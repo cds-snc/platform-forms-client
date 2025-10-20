@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@gcforms/database";
 import { logEvent } from "@lib/auditLogs";
 import { authorization } from "@lib/privileges";
 import * as ZitadelConnector from "@lib/integration/zitadelConnector";

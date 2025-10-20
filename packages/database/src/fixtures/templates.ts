@@ -1,4 +1,4 @@
-import { Prisma } from "../generated/prisma/client";
+import { Prisma } from "../generated/client";
 
 type JsonFormCollection = {
   development: Prisma.JsonObject[];

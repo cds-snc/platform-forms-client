@@ -1,4 +1,4 @@
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { prismaMock } from "@jestUtils";
 import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { getUser } from "@lib/users";
@@ -27,7 +27,7 @@ import { declineInvitation } from "../declineInvitation";
 import { logEvent } from "@lib/auditLogs";
 import { mockTemplate } from "./fixtures/Template";
 jest.mock("@lib/privileges");
-jest.mock("@lib/integration/prismaConnector");
+jest.mock("@gcforms/database");
 jest.mock("@lib/integration/notifyConnector");
 jest.mock("@lib/logger");
 jest.mock("@lib/auditLogs");
@@ -313,9 +313,7 @@ describe("Invitations", () => {
         })
       ); // user exists
 
-      prismaMock.template.findUnique.mockResolvedValueOnce(
-        mockTemplate()
-      ); // template exists
+      prismaMock.template.findUnique.mockResolvedValueOnce(mockTemplate()); // template exists
 
       prismaMock.template.update.mockResolvedValueOnce(
         mockTemplate({

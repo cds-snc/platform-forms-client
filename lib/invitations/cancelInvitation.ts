@@ -1,4 +1,4 @@
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { InvitationNotFoundError } from "./exceptions";
 import { authorization } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";

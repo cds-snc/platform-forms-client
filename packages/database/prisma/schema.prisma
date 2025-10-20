@@ -1,7 +1,10 @@
 generator client {
   provider = "prisma-client"
-  output = "../src/generated/prisma"
+  output = "../src/generated"
   engineType = "client" 
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts" // generated extensions
+  importFileExtension    = "ts"
 }
 
 datasource db {

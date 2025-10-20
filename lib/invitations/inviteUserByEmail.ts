@@ -8,7 +8,7 @@ import {
   UserNotFoundError,
 } from "./exceptions";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { inviteToCollaborateEmailTemplate } from "@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate";
 import { inviteToFormsEmailTemplate } from "@lib/invitations/emailTemplates/inviteToFormsEmailTemplate";
