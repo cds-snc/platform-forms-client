@@ -106,5 +106,5 @@
     "formUnarchiveFailed": "La restauration du formulaire a échoué."
   },
   "archivedNotice": "Vous pouvez accéder à vos formulaires archivés pendant 30 jours.",
-  "archivedNotice2": "Passé ce délai, ce formulaire sera définitivement supprimé."
+  "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés."
 }

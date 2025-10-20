@@ -106,5 +106,5 @@
     "formUnarchiveFailed": "Failed to restore the form."
   },
   "archivedNotice": "You can access your archived forms for 30 days.",
-  "archivedNotice2": "After that, this form will be permanently deleted."
+  "archivedNotice2": "After that, the form will be permanently deleted."
 }
