@@ -9,7 +9,8 @@
   "actions": {
     "resumeForm": "Resume editing form",
     "createNewForm": "Create new form",
-    "unarchiveForm": "Restore form"
+    "unarchiveForm": "Restore form",
+    "duplicatePublishedForm": "Duplicate published form"
   },
   "cards": {
     "noForms": "You have no forms.",

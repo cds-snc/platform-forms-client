@@ -73,7 +73,7 @@ const CardLinks = async ({
   return (
     <div className="mb-4 px-3">
       {ttl == null && editLink}
-      {ttl != null && <Unarchive id={id} />}
+      {ttl != null && <Unarchive id={id} isPublished={isPublished} language={language} />}
 
       {/* Email delivery */}
       {deliveryOption && deliveryOption.emailAddress && (

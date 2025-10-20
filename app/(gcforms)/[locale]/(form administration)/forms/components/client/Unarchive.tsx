@@ -1,10 +1,18 @@
 "use client";
 import { useTranslation } from "@i18n/client";
 import { clearTemplateStorage } from "@lib/store/utils";
-import { restoreForm } from "../../actions";
+import { cloneForm, restoreForm } from "../../actions";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 
-export const Unarchive = ({ id }: { id: string }) => {
+export const Unarchive = ({
+  id,
+  isPublished,
+  language,
+}: {
+  id: string;
+  isPublished: boolean;
+  language: string;
+}) => {
   const { t } = useTranslation("my-forms");
 
   return (
@@ -12,16 +20,29 @@ export const Unarchive = ({ id }: { id: string }) => {
       <button
         className="action my-4 block whitespace-nowrap text-sm underline"
         onClick={async () => {
-          const { error } = (await restoreForm(id)) ?? {};
+          if (!isPublished) {
+            const { error } = (await restoreForm(id)) ?? {};
 
-          if (error) {
-            toast.error(t("errors.formUnarchiveFailed"));
+            if (error) {
+              toast.error(t("errors.formUnarchiveFailed"));
+            }
+            clearTemplateStorage(id);
+          } else {
+            try {
+              const res = await cloneForm(id);
+              if (res && res.formRecord && !res.error) {
+                toast.success(t("card.menu.cloneSuccess"));
+                window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;
+                return;
+              }
+              throw new Error(res?.error || "Clone failed");
+            } catch (e) {
+              toast.error(t("card.menu.cloneFailed"));
+            }
           }
-
-          clearTemplateStorage(id);
         }}
       >
-        {t("actions.unarchiveForm")}
+        {isPublished ? t("actions.duplicatePublishedForm") : t("actions.unarchiveForm")}
       </button>
       <div className="sticky top-0">
         <ToastContainer autoClose={false} containerId="default" />
