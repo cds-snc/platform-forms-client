@@ -13,7 +13,7 @@ export const DownloadForm = () => {
           {t("formDownload.description")}
         </p>
         <div className="mb-4">
-          <DownloadFileButton />
+          <DownloadFileButton theme="primary" />
         </div>
       </div>
     </>

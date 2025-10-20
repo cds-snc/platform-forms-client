@@ -1,8 +1,6 @@
 import { type FormRecord, ClosedDetails } from "@lib/types";
 
 import { SetClosingDate } from "./close/SetClosingDate";
-
-import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
 import { Notifications } from "./notifications/Notifications";
 
 interface FormOwnerSettingsProps {
@@ -20,7 +18,6 @@ export const FormOwnerSettings = ({
   return (
     <>
       {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
-      <SetSaveAndResume formId={id} />
       <Notifications formId={id} />
     </>
   );
