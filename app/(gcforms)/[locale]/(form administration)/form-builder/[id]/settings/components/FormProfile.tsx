@@ -21,6 +21,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormPurposeHelpButton } from "./dialogs/FormPurposeHelpButton";
 import { Branding } from "./branding/Branding";
+import { DownloadForm } from "./DownloadForm";
 
 /*
  * PurposeOption is used to determine the purpose of the form
@@ -203,8 +204,13 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
                 </ul>
               </div>
             </div>
+            <FormPurposeHelpButton />
           </div>
-          <FormPurposeHelpButton />
+
+          {/*--------------------------------------------*
+           * Download section
+           *--------------------------------------------*/}
+          <DownloadForm />
         </div>
       )}
     </>

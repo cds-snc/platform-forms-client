@@ -1,6 +1,6 @@
 import { type FormRecord, ClosedDetails } from "@lib/types";
 
-import { DownloadForm } from "./DownloadForm";
+import { DownloadForm } from "../components/DownloadForm";
 import { SetClosingDate } from "./close/SetClosingDate";
 
 import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
