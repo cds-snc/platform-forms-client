@@ -146,6 +146,51 @@ export const createKey = async (templateId: string) => {
   return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
 };
 
+export const refreshKey = async (templateId: string) => {
+  const { user } = await authorization.canEditForm(templateId);
+
+  // Get existing service account and key
+  const { id: serviceAccountId, publicKeyId } =
+    (await prisma.apiServiceAccount.findUnique({
+      where: {
+        templateId: templateId,
+      },
+      select: { id: true, publicKeyId: true },
+    })) ?? {};
+
+  if (!serviceAccountId || !publicKeyId) {
+    throw new Error("No API key exists for this form");
+  }
+
+  // Generate new keys
+  const { privateKey, publicKey } = generateKeys();
+
+  // Create new machine key in Zitadel
+  const keyId = await ZitadelConnector.createMachineKey(serviceAccountId, publicKey).then(
+    (r) => r.keyId
+  );
+
+  // Update DB with new public key id and public key
+  await prisma.apiServiceAccount.update({
+    where: {
+      templateId,
+    },
+    data: {
+      publicKey: publicKey,
+      publicKeyId: keyId,
+    },
+  });
+
+  logEvent(
+    user.id,
+    { type: "ServiceAccount" },
+    "RefreshAPIKey",
+    `User :${user.id} refreshed API key for service account ${serviceAccountId} `
+  );
+
+  return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
+};
+
 // Look at possibly moving this to the browser so the GCForms System is never in possession
 // of the private key.
 
