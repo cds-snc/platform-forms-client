@@ -123,9 +123,6 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
 
   return (
     <>
-      <p className="mb-4 w-3/5 rounded-md bg-indigo-50 p-3 font-bold">
-        {t("settingsResponseDelivery.beforePublishMessage")}
-      </p>
       {status === "authenticated" && (
         <div className="mb-10">
           <div className="mb-10">
