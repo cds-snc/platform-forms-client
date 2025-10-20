@@ -728,6 +728,7 @@
       "keyId": "Identifiant de la clé API",
       "title": "Accès pour l'API",
       "generateKey": "Créer une clé API",
+      "refreshKey": "Refresh API key [FR]",
       "deleteKey": "Supprimer la clé API",
       "deleteKeyFailed": {
         "title": "Quelque chose a mal tourné",
@@ -772,7 +773,9 @@
       },
       "dialog": {
         "title": "Créer la clé API",
-        "heading": "Les clés API de Formulaires GC sont PROTÉGÉES B",
+        "refreshTitle": "Refresh API key [FR]",
+        "heading": "⚠️ Les clés API de Formulaires GC sont PROTÉGÉES B",
+        "refreshHeading": "⚠️ You'll need to add this new key to your integration to be able to successfully retrieve responses. [FR]",
         "responsibility": "Vous êtes responsable de :",
         "responsibility1": "L'enregistrement de cette clé dans un endroit sûr d'une machine du gouvernement du Canada.",
         "responsibility2": "Le partage de cette clé uniquement avec les personnes qui ont les autorisations, s'il y a un besoin.",

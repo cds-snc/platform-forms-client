@@ -9,20 +9,14 @@ import { Theme } from "@clientComponents/globals/Buttons/themes";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 type ApiKeyButtonProps = {
-  showDelete?: boolean;
-  i18nKey?: string;
   theme?: Theme;
   showHelp?: boolean;
 };
 
-export const ApiKeyButton = ({
-  showDelete = false,
-  i18nKey = "settings.api.generateKey",
-  theme = "primary",
-}: ApiKeyButtonProps) => {
+export const ApiKeyButton = ({ theme = "primary" }: ApiKeyButtonProps) => {
   const { t } = useTranslation("form-builder");
   const { id } = useParams();
-  const { apiKeyId } = useFormBuilderConfig();
+  const { apiKeyId, hasApiKeyId } = useFormBuilderConfig();
 
   const { Event } = useCustomEvent();
 
@@ -34,25 +28,22 @@ export const ApiKeyButton = ({
 
   if (!id) return null;
 
+  const buttonText = hasApiKeyId ? t("settings.api.refreshKey") : t("settings.api.generateKey");
+
   return (
-    <div className="mb-4">
-      {showDelete && apiKeyId ? (
-        <DeleteKeyButton id={id} keyId={apiKeyId} />
-      ) : (
-        <>
-          <GenerateApiKeyButton
-            loading={false}
-            className="mr-2"
-            theme={theme}
-            disabled={Boolean(apiKeyId)}
-            onClick={() => {
-              openDialog();
-            }}
-          >
-            {t(i18nKey)}
-          </GenerateApiKeyButton>
-        </>
-      )}
+    <div className="mb-4 flex">
+      <GenerateApiKeyButton
+        loading={false}
+        className="mr-4"
+        theme={theme}
+        onClick={() => {
+          openDialog();
+        }}
+      >
+        {buttonText}
+      </GenerateApiKeyButton>
+
+      {hasApiKeyId && apiKeyId && <DeleteKeyButton id={id} keyId={apiKeyId} />}
     </div>
   );
 };

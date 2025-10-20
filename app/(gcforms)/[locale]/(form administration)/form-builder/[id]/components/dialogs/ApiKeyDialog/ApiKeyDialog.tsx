@@ -30,7 +30,7 @@ type APIKeyCustomEventDetails = {
  * API Key Dialog
  * @returns JSX.Element
  */
-export const ApiKeyDialog = ({ refreshKey }: { refreshKey: boolean }) => {
+export const ApiKeyDialog = () => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
@@ -39,7 +39,7 @@ export const ApiKeyDialog = ({ refreshKey }: { refreshKey: boolean }) => {
   const [id, setId] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const { updateApiKeyId } = useFormBuilderConfig();
+  const { updateApiKeyId, hasApiKeyId } = useFormBuilderConfig();
 
   // Handle loading state for download button
   const [generating, setGenerating] = useState(false);
@@ -84,7 +84,7 @@ export const ApiKeyDialog = ({ refreshKey }: { refreshKey: boolean }) => {
     try {
       let key;
 
-      if (refreshKey) {
+      if (hasApiKeyId) {
         key = await _regenKey(id);
       } else {
         key = await _createKey(id);
@@ -121,15 +121,18 @@ export const ApiKeyDialog = ({ refreshKey }: { refreshKey: boolean }) => {
     </>
   );
 
+  const dialogTitle = hasApiKeyId
+    ? t("settings.api.dialog.refreshTitle")
+    : t("settings.api.dialog.title");
+
+  const dialogHeading = hasApiKeyId
+    ? t("settings.api.dialog.refreshHeading")
+    : t("settings.api.dialog.heading");
+
   return (
     <>
       {isOpen && (
-        <Dialog
-          handleClose={handleClose}
-          dialogRef={dialog}
-          actions={actions}
-          title={t("settings.api.dialog.title")}
-        >
+        <Dialog handleClose={handleClose} dialogRef={dialog} actions={actions} title={dialogTitle}>
           <div className="p-5">
             {hasError && (
               <Alert.Danger className="mb-4">
@@ -139,7 +142,7 @@ export const ApiKeyDialog = ({ refreshKey }: { refreshKey: boolean }) => {
                 <p className="mb-2">{t("settings.api.dialog.error.createFailed.message")} </p>
               </Alert.Danger>
             )}
-            <h3 className="mb-4">{t("settings.api.dialog.heading")}</h3>
+            <h3 className="mb-4">{dialogHeading}</h3>
             <ResponsibilityList />
             <ConfirmationAgreement handleAgreement={hasAgreed} />
             <Note />
