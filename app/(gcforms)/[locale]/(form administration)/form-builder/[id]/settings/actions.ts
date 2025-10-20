@@ -1,6 +1,6 @@
 "use server";
 
-import { createKey, deleteKey } from "@lib/serviceAccount";
+import { createKey, deleteKey, refreshKey } from "@lib/serviceAccount";
 import { revalidatePath } from "next/cache";
 import { promises as fs } from "fs";
 import path from "path";
@@ -20,17 +20,25 @@ export const getReadmeContent = AuthenticatedAction(async () => {
 
 export const createServiceAccountKey = AuthenticatedAction(async (_, templateId: string) => {
   revalidatePath(
-    "/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/api",
+    "/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/api-integration",
     "page"
   );
   return createKey(templateId);
+});
+
+export const refreshServiceAccountKey = AuthenticatedAction(async (_, templateId: string) => {
+  revalidatePath(
+    "/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/api-integration",
+    "page"
+  );
+  return refreshKey(templateId);
 });
 
 export const deleteServiceAccountKey = AuthenticatedAction(async (_, templateId: string) => {
   try {
     await deleteKey(templateId);
     revalidatePath(
-      "/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/api",
+      "/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/api-integration",
       "page"
     );
     return { templateId: templateId };

@@ -1,6 +1,10 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
+
+// Save actions
+import { downloadKey, _createKey, _regenKey } from "@formBuilder/[id]/settings/components/utils";
+
 import { cn } from "@lib/utils";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
@@ -9,7 +13,6 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ResponsibilityList } from "./ResponsibilityList";
 import { ConfirmationAgreement } from "./ConfirmationAgreement";
 import { Note } from "./Note";
-import { downloadKey, _createKey } from "@formBuilder/[id]/settings/components/utils";
 import { SubmitButton as DownloadButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import * as Alert from "@clientComponents/globals/Alert/Alert";
 import { logMessage } from "@lib/logger";
@@ -25,10 +28,9 @@ type APIKeyCustomEventDetails = {
 
 /**
  * API Key Dialog
- * @param isVaultDelivery - boolean - Allows skipping the save request when a form is already saving to the vault -- example a live form swapping to API mode
  * @returns JSX.Element
  */
-export const ApiKeyDialog = () => {
+export const ApiKeyDialog = ({ refreshKey }: { refreshKey: boolean }) => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
@@ -80,7 +82,14 @@ export const ApiKeyDialog = () => {
     setHasError(false);
     setGenerating(true);
     try {
-      const key = await _createKey(id);
+      let key;
+
+      if (refreshKey) {
+        key = await _regenKey(id);
+      } else {
+        key = await _createKey(id);
+      }
+
       await downloadKey(JSON.stringify(key), id);
       setGenerating(false);
       updateApiKeyId(key.keyId);
