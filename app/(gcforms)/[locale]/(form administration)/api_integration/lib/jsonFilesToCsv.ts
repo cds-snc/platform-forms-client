@@ -1,21 +1,15 @@
 import { type FileSystemDirectoryHandle } from "native-file-system-adapter";
 
-import { createArrayCsvStringifier as createCsvStringifier } from "@lib/responses/csv-writer";
-import { sortByLayout } from "@lib/utils/form-builder";
-import { FormElementTypes, type FormElement } from "@lib/types";
-import { customTranslate } from "@lib/i18nHelpers";
 import { parseAnswersField } from "./jsonToCsvHelpers";
 
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
-import { MappedAnswer } from "@lib/responses/mapper/types";
 import { type FormProperties } from "@gcforms/types";
-
-const specialChars = ["=", "+", "-", "@"];
+import { getFileHandle, getRow, initCsv, orderElements } from "./csvWriter";
 
 async function getFilenamesInDirectory(directoryHandle: FileSystemDirectoryHandle) {
   const filenames = [];
   for await (const entry of directoryHandle.values()) {
-    if (entry.kind === "file") {
+    if (entry.kind === "file" && entry.name.endsWith(".json")) {
       filenames.push(entry.name);
     }
   }
@@ -59,23 +53,13 @@ export const jsonFilesToCsv = async ({
 }: {
   formId: string;
   // directoryHandle comes from caller state and may be untyped at callsite
-  directoryHandle: FileSystemDirectoryHandle | unknown;
+  directoryHandle: FileSystemDirectoryHandle | null;
   formTemplate: FormProperties;
 }) => {
   if (!directoryHandle) return;
 
-  if (
-    typeof (directoryHandle as unknown as { getFileHandle?: unknown })?.getFileHandle !== "function"
-  ) {
-    // eslint-disable-next-line no-console
-    console.warn("Invalid directoryHandle provided to processJsonToCsv");
-    return;
-  }
-
-  const dirHandle = directoryHandle as FileSystemDirectoryHandle;
-
   try {
-    const { fileNames: jsonFileNames, isRecordsDir } = await collectResponseFiles(dirHandle);
+    const { fileNames: jsonFileNames, isRecordsDir } = await collectResponseFiles(directoryHandle);
 
     if (jsonFileNames.length === 0) {
       // eslint-disable-next-line no-console
@@ -84,13 +68,21 @@ export const jsonFilesToCsv = async ({
     }
 
     // Use either the records directory or the main directory based on where files were found
-    const sourceHandle = isRecordsDir ? await dirHandle.getDirectoryHandle("records") : dirHandle;
+    const sourceHandle = isRecordsDir
+      ? await directoryHandle.getDirectoryHandle("records")
+      : directoryHandle;
     const sortedElements = orderElements({ formTemplate });
-    const csvStringifier = createCsvStringifier({
-      header: getHeaders({ sortedElements }),
-      alwaysQuote: true,
-    });
+
     const recordsData: string[][] = [];
+
+    // Initialize CSV file as needed in the selected directory
+    const csvStringifier = await initCsv({ formId, dirHandle: directoryHandle, formTemplate });
+
+    if (!csvStringifier) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to initialize CSV stringifier");
+      return;
+    }
 
     for (const fileName of jsonFileNames) {
       try {
@@ -124,119 +116,24 @@ export const jsonFilesToCsv = async ({
       }
     }
 
-    // Create CSV file using csv-writer
-    const csvFileName = `${formId}-responses-${Date.now()}.csv`;
-    const csvFileHandle = await dirHandle.getFileHandle(csvFileName, { create: true });
+    const { handle } = await getFileHandle({ formId, dirHandle: directoryHandle });
 
-    // Add UTF-8 BOM to ensure proper encoding of French characters (é, è, ç, etc.)
-    const BOM = "\uFEFF";
-    const str =
-      BOM + csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(recordsData);
+    if (!handle) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to get CSV file handle");
+      return;
+    }
 
-    await csvFileHandle.createWritable().then((writer) => {
-      writer.write(str);
-      writer.close();
-    });
+    const rowsString = csvStringifier.stringifyRecords(recordsData);
 
-    // eslint-disable-next-line no-console
-    console.log(`CSV file created: ${csvFileName} with ${recordsData.length} responses`);
+    const writable = await handle.createWritable({ keepExistingData: true });
+    // Seek to end of file
+    const file = await handle.getFile();
+    await writable.seek(file.size);
+    await writable.write(rowsString);
+    await writable.close();
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error("Error processing JSON to CSV:", error);
   }
-};
-
-export const orderElements = ({ formTemplate }: { formTemplate: FormProperties }) => {
-  const elements = Array.isArray(formTemplate.elements)
-    ? (formTemplate.elements as FormElement[])
-    : [];
-
-  // sort elements according to layout and filter out richText
-  const sortedElements = sortByLayout({
-    layout: Array.isArray(formTemplate.layout) ? (formTemplate.layout as number[]) : [],
-    elements,
-  }).filter((el: FormElement) => ![FormElementTypes.richText].includes(el.type));
-
-  return sortedElements;
-};
-
-export const getHeaders = ({ sortedElements }: { sortedElements: FormElement[] }) => {
-  const { t } = customTranslate("common");
-
-  // Build headers in the same style as server-side transform (titles with EN/FR and date format)
-  const headerTitles = sortedElements.map((element: FormElement) => {
-    return `${element.properties.titleEn}\n${element.properties.titleFr}${
-      element.type === FormElementTypes.formattedDate && element.properties.dateFormat
-        ? "\n" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "en" }) +
-          "/" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "fr" })
-        : ""
-    }`;
-  });
-
-  // prepend submission id and date headers and append receipt text similar to transform
-  headerTitles.unshift("Submission ID \nIdentifiant de soumission");
-  headerTitles.splice(1, 0, "Date of submission \nDate de soumission");
-  headerTitles.push("Receipt codes \nCodes de réception");
-
-  return headerTitles;
-};
-
-export const getRow = ({
-  rowId,
-  createdAt,
-  mappedAnswers,
-  sortedElements,
-}: {
-  rowId: string;
-  createdAt: string;
-  mappedAnswers: MappedAnswer[];
-  sortedElements: FormElement[];
-}) => {
-  // Build row similar to server-side transform
-  const answers = sortedElements.map((element) => {
-    const mappedAnswer = mappedAnswers.find((a) => a.questionId === element.id);
-
-    if (!mappedAnswer) {
-      return "-";
-    }
-
-    if (mappedAnswer.answer instanceof Array) {
-      return mappedAnswer.answer
-        .map((answer) =>
-          answer
-            .map((subAnswer) => {
-              let answerText = `${subAnswer.questionEn}\n${subAnswer.questionFr}: ${subAnswer.answer}\n`;
-              if (specialChars.some((char) => answerText.startsWith(char))) {
-                answerText = `'${answerText}`;
-              }
-              if (answerText == "") {
-                answerText = "-";
-              }
-              return answerText;
-            })
-            .join("")
-        )
-        .join("\n");
-    }
-    let answerText = mappedAnswer.answer;
-    if (specialChars.some((char) => answerText.startsWith(char))) {
-      answerText = `'${answerText}`;
-    }
-    if (answerText == "") {
-      answerText = "-";
-    }
-    return answerText;
-  });
-
-  const row = [
-    rowId,
-    createdAt,
-    ...answers,
-    "Receipt codes are in the Official receipt and record of responses\n" +
-      "Les codes de réception sont dans le Reçu et registre officiel des réponses",
-  ];
-
-  return row;
 };

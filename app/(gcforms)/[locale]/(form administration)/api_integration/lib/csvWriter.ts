@@ -47,6 +47,8 @@ export const initCsv = async ({
   const writable = await (await handle)?.createWritable();
   await writable?.write(headerString);
   await writable?.close();
+
+  return csvStringifier;
 };
 
 export const writeSubmissionsToCsv = async ({
