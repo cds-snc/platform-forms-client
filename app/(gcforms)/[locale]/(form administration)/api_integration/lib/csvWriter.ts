@@ -28,7 +28,7 @@ export const initCsv = async ({
 
   if (!created) {
     // File already exists, no need to initialize
-    return;
+    return handle;
   }
 
   const sortedElements = orderElements({ formTemplate });
@@ -48,7 +48,7 @@ export const initCsv = async ({
   await writable?.write(headerString);
   await writable?.close();
 
-  return csvStringifier;
+  return handle;
 };
 
 export const writeSubmissionsToCsv = async ({
@@ -214,7 +214,6 @@ export const getHeaders = ({ sortedElements }: { sortedElements: FormElement[] }
   // prepend submission id and date headers and append receipt text similar to transform
   headerTitles.unshift("Submission ID \nIdentifiant de soumission");
   headerTitles.splice(1, 0, "Date of submission \nDate de soumission");
-  headerTitles.push("Receipt codes \nCodes de réception");
 
   return headerTitles;
 };
@@ -266,13 +265,7 @@ export const getRow = ({
     return answerText;
   });
 
-  const row = [
-    rowId,
-    createdAt,
-    ...answers,
-    "Receipt codes are in the Official receipt and record of responses\n" +
-      "Les codes de réception sont dans le Reçu et registre officiel des réponses",
-  ];
+  const row = [rowId, createdAt, ...answers];
 
   return row;
 };
