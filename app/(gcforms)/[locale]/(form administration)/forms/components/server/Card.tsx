@@ -124,12 +124,24 @@ const CardDate = async ({ id, date, ttl }: { id: string; date: string; ttl?: Dat
     return date.toISOString().split("T")[0];
   }
 
+  const ttlInNextFiveDays = ttl
+    ? new Date(ttl).getTime() - new Date().getTime() <= 5 * 24 * 60 * 60 * 1000
+    : false;
+  const ttlInDays = ttl
+    ? Math.ceil((ttl.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+    : 0;
+
   return (
     <div id={`card-date-${id}`} className="text-sm">
       {t("card.lastEdited")}: {formatDate(date)}
       {ttl != null && (
         <>
           <br /> <span>{t("card.deleteDate") + formatDateToString(ttl)}</span>
+          {ttlInNextFiveDays && (
+            <span className="ml-4 text-red-500">
+              {t("card.deletedIn")} {ttlInDays} {t("card.days")}
+            </span>
+          )}
         </>
       )}
     </div>

@@ -29,6 +29,8 @@
     },
     "lastEdited": "Dernière modification ",
     "deleteDate": " Date de suppression : ",
+    "deletedIn": "Supprimé dans ",
+    "days": " jours",
     "deliveryOption": {
       "email": "Réponses envoyées à :",
       "vault": "Page Réponses"

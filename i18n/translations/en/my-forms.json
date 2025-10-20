@@ -29,6 +29,8 @@
     },
     "lastEdited": "Last edited",
     "deleteDate": " Delete date: ",
+    "deletedIn": "Deleted in ",
+    "days": " days",
     "deliveryOption": {
       "email": "Responses get sent to:",
       "vault": "Responses page"
