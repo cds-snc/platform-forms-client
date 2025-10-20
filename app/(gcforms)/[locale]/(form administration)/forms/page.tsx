@@ -122,9 +122,9 @@ export default async function Page(props: {
           <NewFormButton />
         </div>
         <ResumeEditingForm />
-        {status == "archived" && <div>{t("archivedNotice")}</div>}
         {status == "archived" && (
           <div>
+            {t("archivedNotice")}&nbsp;
             <strong>{t("archivedNotice2")}</strong>
           </div>
         )}
