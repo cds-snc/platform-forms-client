@@ -13,27 +13,36 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
 
   const pathname = usePathname();
 
+  const isSettingsActive =
+    pathname.includes("manage") === false && pathname.includes("api-integration") === false;
+  const isManageActive = pathname.includes("manage");
+  const isApiIntegrationActive = pathname.includes("api-integration");
+
   return (
     <nav className="relative mb-10 flex border-b border-black" aria-label={t("responses.navLabel")}>
       <TabNavLink
-        active={
-          pathname.includes("manage") === false && pathname.includes("api-integration") === false
-        }
+        active={isSettingsActive}
         href={`/${language}/form-builder/${id}/settings`}
+        setAriaCurrent={isSettingsActive}
+        id="settings"
       >
         <span className="text-sm laptop:text-base">{t("settingsNavHome")}</span>
       </TabNavLink>
 
       <TabNavLink
-        active={pathname.includes("manage")}
+        active={isManageActive}
         href={`/${language}/form-builder/${id}/settings/manage`}
+        setAriaCurrent={isManageActive}
+        id="manage-form"
       >
         <span className="text-sm laptop:text-base">{t("settings.formManagement")}</span>
       </TabNavLink>
 
       <TabNavLink
-        active={pathname.includes("api-integration")}
+        active={isApiIntegrationActive}
         href={`/${language}/form-builder/${id}/settings/api-integration`}
+        setAriaCurrent={isApiIntegrationActive}
+        id="api-integration"
       >
         <span className="text-sm laptop:text-base">
           {t("settings.apiIntegration.navigation.title")}
