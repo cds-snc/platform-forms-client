@@ -52,11 +52,17 @@ export const FormProfile = () => {
 
   const [purposeOption, setPurposeOption] = useState(formPurpose as PurposeOption);
 
+  const savedSuccessMessage = t("settingsResponseDelivery.savedSuccessMessage");
+
   /*--------------------------------------------*
    * Save security attribute
    *--------------------------------------------*/
+
   const saveSecurityAttribute = useCallback(
     async (classification: ClassificationType) => {
+      // Update local state
+      setClassification(classification);
+
       updateSecurityAttribute(classification);
 
       const resultAttribute = (await updateTemplateSecurityAttribute({
@@ -69,11 +75,11 @@ export const FormProfile = () => {
         return;
       }
 
-      toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
+      toast.success(savedSuccessMessage);
 
       refreshData && refreshData();
     },
-    [t, refreshData, id, updateSecurityAttribute]
+    [savedSuccessMessage, refreshData, id, updateSecurityAttribute]
   );
 
   /*--------------------------------------------*
@@ -83,13 +89,15 @@ export const FormProfile = () => {
   const saveFormPurpose = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
+      const purposeOption = value as PurposeOption;
 
       // Update local state
-      setPurposeOption(value as PurposeOption);
+      setPurposeOption(purposeOption);
 
       // Update the template store
-      updateField("formPurpose", value);
+      updateField("formPurpose", purposeOption);
 
+      // Update the database
       const result = await updateTemplateFormPurpose({
         id,
         formPurpose: purposeOption,
@@ -100,20 +108,11 @@ export const FormProfile = () => {
         return;
       }
 
-      toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
+      toast.success(savedSuccessMessage);
 
       refreshData && refreshData();
     },
-    [t, refreshData, id, purposeOption, updateField]
-  );
-
-  // Update local state
-  const handleUpdateClassification = useCallback(
-    (value: ClassificationType) => {
-      setClassification(value);
-      saveSecurityAttribute(value);
-    },
-    [saveSecurityAttribute]
+    [savedSuccessMessage, refreshData, id, updateField]
   );
 
   return (
@@ -131,7 +130,7 @@ export const FormProfile = () => {
                 lang={lang}
                 isPublished={isPublished}
                 classification={classification}
-                handleUpdateClassification={handleUpdateClassification}
+                handleUpdateClassification={saveSecurityAttribute}
               />
             </div>
 
