@@ -8,7 +8,8 @@
   },
   "actions": {
     "resumeForm": "Resume editing form",
-    "createNewForm": "Create new form"
+    "createNewForm": "Create new form",
+    "unarchiveForm": "Restore form"
   },
   "cards": {
     "noForms": "You have no forms.",
@@ -99,6 +100,7 @@
   "navLabel": "Forms navigation",
   "errors": {
     "formDownloadNotExist": "The form you are trying to download does not exist.",
-    "formDownloadFailed": "Failed to download the form."
+    "formDownloadFailed": "Failed to download the form.",
+    "formUnarchiveFailed": "Failed to restore the form."
   }
 }

@@ -1398,6 +1398,71 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
   return _parseTemplate(templateMarkedAsDeleted);
 }
 
+/**
+ * Restores a form template from the archived state.
+ * @param formID ID of the form template
+ * @returns A boolean status if operation is sucessful
+ */
+export async function restoreTemplate(formID: string): Promise<FormRecord | null> {
+  const { user } = await authorization.canDeleteForm(formID).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      "Attempted to unarchive Form"
+    );
+    throw e;
+  });
+
+  // Check if the form is draft or not.
+  const template = await prisma.template.findFirstOrThrow({
+    where: {
+      id: formID,
+    },
+    select: {
+      isPublished: true,
+    },
+  });
+
+  if (!template) throw new TemplateNotFoundError();
+
+  const templateMarkedToUnarchive = await prisma.template
+    .update({
+      where: {
+        id: formID,
+      },
+      data: {
+        ttl: null,
+      },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
+        saveAndResume: true,
+        notificationsInterval: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  // There was an error with Prisma, do not delete from Cache.
+  if (templateMarkedToUnarchive === null) return templateMarkedToUnarchive;
+
+  logEvent(user.id, { type: "Form", id: formID }, "UnarchiveForm");
+
+  if (formCache.cacheAvailable) formCache.invalidate(formID);
+
+  return _parseTemplate(templateMarkedToUnarchive);
+}
+
 // Remove and replace this utility with new authorization object in code
 export const checkUserHasTemplateOwnership = async (formID: string) => {
   await authorization.canEditForm(formID);

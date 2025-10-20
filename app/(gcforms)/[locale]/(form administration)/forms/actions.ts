@@ -5,6 +5,7 @@ import {
   deleteTemplate,
   getFullTemplateByID,
   cloneTemplate,
+  restoreTemplate,
 } from "@lib/templates";
 import { revalidatePath } from "next/cache";
 import { FormRecord } from "@lib/types";
@@ -33,6 +34,24 @@ export const deleteForm = AuthenticatedAction(
   async (_, id: string): Promise<void | { error?: string }> => {
     try {
       await deleteTemplate(id).catch((error) => {
+        if (error instanceof TemplateHasUnprocessedSubmissions) {
+          throw new Error("Responses Exist");
+        } else {
+          throw new Error("Failed to Delete Form");
+        }
+      });
+
+      revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
+    } catch (e) {
+      return { error: (e as Error).message };
+    }
+  }
+);
+
+export const restoreForm = AuthenticatedAction(
+  async (_, id: string): Promise<void | { error?: string }> => {
+    try {
+      await restoreTemplate(id).catch((error) => {
         if (error instanceof TemplateHasUnprocessedSubmissions) {
           throw new Error("Responses Exist");
         } else {

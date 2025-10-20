@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
+import { Unarchive } from "../client/Unarchive";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { DeliveryOption } from "@lib/types";
@@ -33,9 +34,17 @@ interface CardLinksProps {
   isPublished: boolean;
   deliveryOption?: { emailAddress?: string } | null;
   overdue: boolean;
+  ttl?: Date | null;
 }
 
-const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: CardLinksProps) => {
+const CardLinks = async ({
+  isPublished,
+  url,
+  id,
+  deliveryOption,
+  overdue,
+  ttl,
+}: CardLinksProps) => {
   const {
     t,
     i18n: { language },
@@ -43,23 +52,28 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: Card
 
   const responsesLink = `/${language}/form-builder/${id}/responses`;
 
+  const editLink = (
+    <Link
+      href={isPublished ? url : `/${language}/form-builder/${id}/edit/`}
+      className="my-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
+      target={isPublished ? "_blank" : "_self"}
+      aria-describedby={`card-title-${id} card-date-${id}`}
+      rel="noreferrer"
+      prefetch={false}
+    >
+      {isPublished ? (
+        <PreviewIcon className="mr-2 inline-block" />
+      ) : (
+        <DesignIcon className="mr-2 inline-block" />
+      )}
+      {isPublished ? t("viewForm") : t("editForm")}
+    </Link>
+  );
+
   return (
     <div className="mb-4 px-3">
-      <Link
-        href={isPublished ? url : `/${language}/form-builder/${id}/edit/`}
-        className="my-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
-        target={isPublished ? "_blank" : "_self"}
-        aria-describedby={`card-title-${id} card-date-${id}`}
-        rel="noreferrer"
-        prefetch={false}
-      >
-        {isPublished ? (
-          <PreviewIcon className="mr-2 inline-block" />
-        ) : (
-          <DesignIcon className="mr-2 inline-block" />
-        )}
-        {isPublished ? t("viewForm") : t("editForm")}
-      </Link>
+      {ttl == null && editLink}
+      {ttl != null && <Unarchive id={id} />}
 
       {/* Email delivery */}
       {deliveryOption && deliveryOption.emailAddress && (
@@ -147,6 +161,7 @@ export const Card = async ({ card }: { card: CardI }) => {
             id={card.id}
             deliveryOption={card.deliveryOption}
             overdue={card.overdue}
+            ttl={card.ttl}
           />
         </Suspense>
       </div>
