@@ -842,10 +842,9 @@
   "settingsResponseEmailTitle": "Email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox. This can be a shared inbox.",
   "settingsPurposeAndUse": {
-    "title": "Purpose and use",
-    "description": "We'll use this to inform the retention of responses in GC Forms beyond 45 days.",
+    "title": "Intended use",
+    "description": "We’ll use this to inform the retention of responses in GC Forms, that extend beyond 45 days.",
     "personalInfo": "Personal information used to make a decision about an individual",
-    "helpUs": "Help us understand how form responses will be used",
     "learnMore": "Learn more about administrative purposes",
     "learnMoreBox": {
       "title": "More about administrative purpose",

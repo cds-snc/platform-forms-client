@@ -154,14 +154,12 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
 
             <div className="mb-10">
               <h2>{t("settingsPurposeAndUse.title")}</h2>
-              <p className="mb-2">
-                <strong>{t("settingsPurposeAndUse.helpUs")}</strong>
-              </p>
               <p className="mb-6 text-sm">{t("settingsPurposeAndUse.description")}</p>
               <Radio
                 id="purposeAndUseAdmin"
                 name="purpose-use"
                 label={t("settingsPurposeAndUse.personalInfo")}
+                labelClassName="font-bold"
                 disabled={isPublished}
                 checked={purposeOption === PurposeOption.admin}
                 value={PurposeOption.admin}
@@ -184,6 +182,7 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
                 id="purposeAndUseNonAdmin"
                 name="purpose-use"
                 label={t("settingsPurposeAndUse.nonAdminInfo")}
+                labelClassName="font-bold"
                 disabled={isPublished}
                 checked={purposeOption === PurposeOption.nonAdmin}
                 value={PurposeOption.nonAdmin}
