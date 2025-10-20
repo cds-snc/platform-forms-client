@@ -13,15 +13,15 @@ export const DeleteKeyButton = ({ id, keyId }: { id: string; keyId: string }) =>
   };
 
   return (
-    <>
-      <div className="mb-4"></div>
-      <Button theme="secondary" className="mr-4" onClick={openDeleteApiDialog}>
+    <div className="flex items-center gap-4">
+      <Button theme="secondary" onClick={openDeleteApiDialog}>
         {t("settings.api.deleteKey")}
       </Button>
-      <div className="font-bold">
-        {t("settings.api.keyId")} <ApiTooltip />
+      <div className="flex items-center gap-2">
+        <span className="font-bold">{t("settings.api.keyId")}</span>
+        <ApiTooltip />
+        <span>{keyId}</span>
       </div>
-      {keyId}
-    </>
+    </div>
   );
 };
