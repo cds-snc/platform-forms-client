@@ -1,22 +1,26 @@
 "use client";
 import React, { useCallback, useState } from "react";
-import { FormServerError, FormServerErrorCodes } from "@lib/types/form-builder-types";
-import { useTranslation } from "@i18n/client";
+import Markdown from "markdown-to-jsx";
 import { useSession } from "next-auth/react";
-import { Radio } from "@formBuilder/components/shared/MultipleChoice";
+import { useTranslation } from "@i18n/client";
+
+import { FormServerError, FormServerErrorCodes } from "@lib/types/form-builder-types";
+
+import { updateTemplateSecurityAttribute, updateTemplateFormPurpose } from "@formBuilder/actions";
+
+import { useRefresh } from "@lib/hooks/useRefresh";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { FormPurposeHelpButton } from "./dialogs/FormPurposeHelpButton";
+
+import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import {
   ClassificationType,
   ClassificationSelect,
 } from "@formBuilder/components/ClassificationSelect";
-import { updateTemplateSecurityAttribute, updateTemplateFormPurpose } from "@formBuilder/actions";
-import { useRefresh } from "@lib/hooks/useRefresh";
-
-import Markdown from "markdown-to-jsx";
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
+import { FormPurposeHelpButton } from "./dialogs/FormPurposeHelpButton";
+import { Branding } from "./branding/Branding";
 
 /*
  * PurposeOption is used to determine the purpose of the form
@@ -29,7 +33,7 @@ export enum PurposeOption {
   nonAdmin = "nonAdmin",
 }
 
-export const FormProfile = () => {
+export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const { refreshData } = useRefresh();
@@ -124,6 +128,10 @@ export const FormProfile = () => {
         <div className="mb-10">
           <div className="mb-10">
             <h2 className="mb-6">{t("settingsResponseDelivery.selectClassification")}</h2>
+
+            {/*--------------------------------------------*
+             * Classification section
+             *--------------------------------------------*/}
             <div className="mb-10">
               <ClassificationSelect
                 className="max-w-[400px] truncate bg-gray-soft p-1 pr-10"
@@ -132,6 +140,13 @@ export const FormProfile = () => {
                 classification={classification}
                 handleUpdateClassification={saveSecurityAttribute}
               />
+            </div>
+
+            {/*--------------------------------------------*
+             * Branding section
+             *--------------------------------------------*/}
+            <div className="mb-10">
+              <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
             </div>
 
             {/*--------------------------------------------*

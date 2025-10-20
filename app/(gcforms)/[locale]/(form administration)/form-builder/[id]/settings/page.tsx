@@ -1,6 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { FormProfile } from "./components/FormProfile";
+import { getAppSetting } from "@root/lib/appSettings";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -16,5 +17,7 @@ export async function generateMetadata(props: {
 }
 
 export default async function Page() {
-  return <FormProfile />;
+  const hasBrandingRequestForm = Boolean(await getAppSetting("brandingRequestForm"));
+
+  return <FormProfile hasBrandingRequestForm={hasBrandingRequestForm} />;
 }

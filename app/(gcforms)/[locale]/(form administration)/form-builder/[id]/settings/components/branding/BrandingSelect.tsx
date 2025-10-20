@@ -9,7 +9,7 @@ type Option = {
   label: string;
 };
 
-export const Logos = ({
+export const BrandingSelect = ({
   className,
   selected,
   options,
