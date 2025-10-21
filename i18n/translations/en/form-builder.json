@@ -792,8 +792,8 @@
         },
         "error": {
           "createFailed": {
-            "title": "The API key could not be created",
-            "message": "There was an error creating the API key. Save your form and try again later."
+            "title": "The API key could not be generated",
+            "message": "There was an error generating the API key. Save your form and try again later."
           }
         }
       }
@@ -885,7 +885,6 @@
   "settingsResponseDelivery": {
     "selectClassification": "Data classification",
     "beforePublishMessage": "These settings can only be changed before publishing.",
-    "deleteApiKeyMessage": "You must delete the API key before you can change the delivery option.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
     "title": "Delivery option",
     "vaultOption": "Download responses from GC Forms",
