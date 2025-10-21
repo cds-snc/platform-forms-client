@@ -1,7 +1,7 @@
 import { defineConfig } from "cypress";
 import { logMessage } from "@lib/logger";
 import dbTearDown from "./__utils__/dbTearDown";
-import dbSeed from "@gcforms/database/src/seed";
+import dbSeed from "./packages/database/src/seed";
 
 export default defineConfig({
   video: false,
