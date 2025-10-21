@@ -1420,8 +1420,8 @@
     "toggleOn": "On",
     "toggleOff": "Off",
     "toggleDescription": {
-      "text1": "Resuming filling out a form in progress",
-      "text2": "Gives users the option to pause and finish filling out the form later. People filling out the form can get a copy of their answers filled in so far, as well as a copy of their answers once the form has been submitted."
+      "text1": "To continue filling out a form in progress",
+      "text2": "This gives users the option to pause and finish filling out a form later. It also provides people filling out a form with a copy of their answers once the form has been submitted."
     },
     "a11yDescription": "Save progress and resume the form later",
     "saveButton": "Save"
