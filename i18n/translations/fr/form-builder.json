@@ -1425,9 +1425,9 @@
     "toggleOff": "Désactivé",
     "toggleDescription": {
       "text1": "Reprendre le remplissage d'un formulaire en cours",
-      "text2": "Donne la possiblité aux utilisateur·rice·s de prendre une pause et de compléter le formulaire plus tard. Les personnes qui remplissent le formulaire peuvent obtenir une copie des réponses remplies jusqu’à présent, ainsi qu'une copie de leur réponses une fois le formulaire soumis."
+      "text2": "Cela permet aux utilisateur·rice·s de prendre une pause et de compléter le formulaire plus tard. Les personnes qui remplissent le formulaire peuvent également obtenir une copie de leurs réponses une fois le formulaire soumis."
     },
-    "a11yDescription": "Enregistrer la progression et reprendre le formulaire plus tard",
+    "a11yDescription": "Sauvegarder les réponses en cours et reprendre le formulaire plus tard",
     "saveButton": "Enregistrer"
   },
   "sortOptions": {
