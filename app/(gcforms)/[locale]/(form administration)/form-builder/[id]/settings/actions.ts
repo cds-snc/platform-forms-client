@@ -6,6 +6,10 @@ import { promises as fs } from "fs";
 import path from "path";
 import { AuthenticatedAction } from "@lib/actions";
 
+import { submissionTypeExists } from "@lib/vault";
+import { VaultStatus } from "@lib/types";
+import { ServerActionError } from "@root/lib/types/form-builder-types";
+
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const getReadmeContent = AuthenticatedAction(async () => {
@@ -44,5 +48,14 @@ export const deleteServiceAccountKey = AuthenticatedAction(async (_, templateId:
     return { templateId: templateId };
   } catch (e) {
     return { error: true, templateId: templateId };
+  }
+});
+
+export const unConfirmedResponsesExist = AuthenticatedAction(async (_, formId: string) => {
+  try {
+    return submissionTypeExists(formId, VaultStatus.DOWNLOADED);
+  } catch (error) {
+    // Throw sanitized error back to client
+    return { error: "There was an error. Please try again later." } as ServerActionError;
   }
 });
