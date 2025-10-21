@@ -723,8 +723,8 @@
           }
         },
         "isEmailDelivery": {
-          "title": "Not supported with email delivery [FR]",
-          "description": "API delivery cannot be used when responses are sent by email. [FR]"
+          "title": "Cette fonctionnalité n'est pas disponible avec l'envoi par courriel",
+          "description": "La récupération des données via API n'est pas possible lorsque les réponses sont envoyées par courriel. Considérez la fermeture de ce formulaire et sa republication afin d'utiliser cette fonctionnalité."
         }
       }
     },
