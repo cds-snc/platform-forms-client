@@ -707,7 +707,7 @@
       },
       "page": {
         "title": "Configurer l’intégration API",
-        "text1": "Cela vous permet de créer une intégration qui extrait les réponses aux formulaires dans un système cible. Une fois configurée par un·e développeur·se, les réponses peuvent être récupérées  par programmation à partir d’un point de terminaison API. Consultez la documentation technique pour plus d’informations..",
+        "text1": "Avec l'aide de développeur·se·s, créez une intégration qui extrait les soumissions aux formulaires dans un système cible. Une fois la programmation configurée, les réponses pourront être récupérées à partir d’un point de terminaison API. Consultez la documentation technique pour plus d’informations.",
         "docsButton": {
           "text": "Accéder à la documentation API",
           "link": "https://cds-snc.github.io/forms-api/accueil"
