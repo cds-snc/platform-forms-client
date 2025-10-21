@@ -707,7 +707,7 @@
       },
       "page": {
         "title": "Configurer l’intégration API",
-        "text1": "Cette section s'adresse aux développeurs qui souhaitent utiliser l'API pour la récupération de données de Formulaires GC, ce qui permet d'extraire les soumissions de formulaires vers un système cible. Une fois la configuration programmatique effectuée, les réponses pourront être récupérées à partir d'un point de terminaison API. Consultez notre site de documentation pour en savoir plus.      
+        "text1": "Cette section s'adresse aux développeurs qui souhaitent utiliser l'API pour la récupération de données de Formulaires GC, ce qui permet d'extraire les soumissions de formulaires vers un système cible. Une fois la configuration programmatique effectuée, les réponses pourront être récupérées à partir d'un point de terminaison API. Consultez notre site de documentation pour en savoir plus.",
         "docsButton": {
           "text": "Accéder à la documentation API",
           "link": "https://cds-snc.github.io/forms-api/accueil"
