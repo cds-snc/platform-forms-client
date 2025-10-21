@@ -782,7 +782,7 @@
         "responsibility3": "Send the key using encrypted email if needed for the purpose of setting up the integration",
         "responsibility4": "Securing the key and managing it by generating a new key, if it is suspected that it has been compromised.",
         "text1": "Do not lose your key",
-        "text2": "This key is provided once as it can give access to form response data. If you lose this key, or if it becomes compromised, you will have to create a new one.",
+        "text2": "This key is provided once as it can give access to form response data. If you lose this key, or if it becomes compromised, you will have to generate a new API key.",
         "cancelButton": "Cancel",
         "downloadButton": "Download API key",
         "confirm": {
