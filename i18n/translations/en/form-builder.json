@@ -1122,6 +1122,13 @@
       "body": "It is no longer receiving responses."
     },
     "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
+    "confirmDialog": {
+      "title": "Confirm form status change",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "messageOpen": "Are you sure you want to open this form? It will start accepting responses.",
+      "messageClosed": "Are you sure you want to close this form? It will stop accepting responses."
+    },
     "message": {
       "title": "Customize the closed form message",
       "text1": "Tell people trying to access the form when and why it closed and where to go next.",

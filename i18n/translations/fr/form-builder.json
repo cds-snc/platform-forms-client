@@ -1135,6 +1135,13 @@
     },
     "banner": {
       "text": "Le formulaire a été fermé le {{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
+    },
+    "confirmDialog": {
+      "title": "Confirmer le changement d'état du formulaire",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "messageOpen": "Êtes-vous sûr de vouloir ouvrir ce formulaire? Il commencera à accepter des réponses.",
+      "messageClosed": "Êtes-vous sûr de vouloir fermer ce formulaire? Il cessera d'accepter des réponses."
     }
   },
   "errorSavingForm": {
