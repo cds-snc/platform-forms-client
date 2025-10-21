@@ -1,7 +1,5 @@
 import { defineConfig } from "cypress";
 import { logMessage } from "@lib/logger";
-import dbTearDown from "./__utils__/dbTearDown";
-import dbSeed from "./packages/database/src/seed";
 
 export default defineConfig({
   video: false,
@@ -10,10 +8,12 @@ export default defineConfig({
     baseUrl: "http://localhost:3000",
     setupNodeEvents(on) {
       on("before:run", async () => {
+        const dbTearDown = await import("./__utils__/dbTearDown");
         logMessage.info("Tearing down database");
-        await dbTearDown();
+        await dbTearDown.default();
         logMessage.info("Seeding database");
-        await dbSeed("test");
+        const dbSeed = await import("@gcforms/database/src/seed");
+        await dbSeed.default("test");
       });
     },
   },
