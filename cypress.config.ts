@@ -12,7 +12,7 @@ export default defineConfig({
         logMessage.info("Tearing down database");
         await dbTearDown.default();
         logMessage.info("Seeding database");
-        const dbSeed = await import("@gcforms/database/src/seed");
+        const dbSeed = await import("./packages/database/src/seed");
         await dbSeed.default("test");
       });
     },

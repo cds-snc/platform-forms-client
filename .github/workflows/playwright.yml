@@ -69,7 +69,7 @@ jobs:
             linux-yarn-
 
       - name: "Install dependencies"
-        run: yarn workspaces focus gcforms
+        run: yarn workspaces focus gcforms @gcforms/database
 
       - name: Install Playwright Browsers
         run: npx playwright install msedge --with-deps

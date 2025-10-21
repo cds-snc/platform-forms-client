@@ -66,7 +66,7 @@ jobs:
             linux-yarn-
 
       - name: "Install dependencies"
-        run: yarn workspaces focus gcforms
+        run: yarn workspaces focus gcforms @gcforms/database
 
       - name: Cypress Tests
         uses: cypress-io/github-action@b8ba51a856ba5f4c15cf39007636d4ab04f23e3c # v6.10.2
