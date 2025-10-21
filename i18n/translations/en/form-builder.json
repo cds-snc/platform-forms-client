@@ -331,9 +331,9 @@
     "heading": "Branding",
     "notFound": "Didn’t find your department or agency in the list?",
     "preview": "Preview",
-    "select": "Select different branding for the top of your form",
+    "select": "Select different headerbranding to show up at the top of your form.",
     "submitNew": "Request alternate branding",
-    "text1": "Published forms include the Government of Canada signature by default."
+    "text1": "By default, published forms display the Government of Canada signature."
   },
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",

@@ -331,9 +331,9 @@
     "heading": "Image de marque",
     "notFound": "Vous ne trouvez pas votre ministère ou votre organisme dans la liste?",
     "preview": "Aperçu",
-    "select": "Sélectionnez une image de marque différente pour le haut du formulaire",
+    "select": "Sélectionnez une image de marque différente qui apparaîtra dans l'entête en haut du formulaire.",
     "submitNew": "Demander une autre image de marque",
-    "text1": "Les formulaires publiés affichent par défaut la signature du gouvernement du Canada."
+    "text1": "Par défaut, les formulaires publiés affichent la signature du gouvernement du Canada."
   },
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
@@ -611,7 +611,7 @@
   "publishingDisablesEditing": "La publication désactive toute modification.",
   "publishingDisablesEditingDescription": "Une fois publié, vous ne pouvez plus apporter des modifications à ce formulaire. Si des modifications sont nécessaires après la publication, utilisez le fichier du formulaire pour créer et publier un nouveau formulaire.",
   "publishingLocksSettings": "La publication verrouille les paramètres.",
-  "publishingLocksSettingsDescription": "L’option de livraison des réponses que vous avez choisie ne sera plus modifiable.",
+  "publishingLocksSettingsDescription": "Plusieurs paramètres du formulaire ne seront plus modifiables, tels que la classification, l'image de marque et l'usage prévu du formulaire.",
   "publishingRemovesTestResponses": "La publication supprime les réponses test.",
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
@@ -780,9 +780,9 @@
         "responsibility1": "L'enregistrement de cette clé dans un endroit sûr d'une machine du gouvernement du Canada.",
         "responsibility2": "Le partage de cette clé uniquement avec les personnes qui ont les autorisations, s'il y a un besoin.",
         "responsibility3": "L'envoi de cette clé en utilisant un courriel crypté, s'il est nécessaire pour la configuration de l'intégration.",
-        "responsibility4": "La gestion de la clé, supprimant et recréant celle-ci si l'on soupçonne qu'elle a été compromise.",
+        "responsibility4": "La gestion de la clé, son actualisation avec la création d’une nouvelle clée, si l'on soupçonne qu'elle a été compromise.",
         "text1": "Ne perdez pas votre clé ",
-        "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en créer une nouvelle.",
+        "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en obtenir une nouvelle.",
         "cancelButton": "Annuler",
         "downloadButton": "Télécharger la clé API",
         "confirm": {
