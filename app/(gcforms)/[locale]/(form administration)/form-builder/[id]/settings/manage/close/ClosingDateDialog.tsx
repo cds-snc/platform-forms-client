@@ -2,7 +2,7 @@ import { getMaxMonthDay } from "@clientComponents/forms/FormattedDate/utils";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useTranslation } from "@i18n/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { WarningIcon } from "@serverComponents/icons";
 import { formClosingDateEst } from "@lib/utils/date/utcToEst";
@@ -12,11 +12,13 @@ export const ClosingDateDialog = ({
   showDateTimeDialog,
   setShowDateTimeDialog,
   save,
+  clearClosingDate,
   closingDate,
 }: {
   showDateTimeDialog: boolean;
   setShowDateTimeDialog: React.Dispatch<React.SetStateAction<boolean>>;
   save: (futureDate?: number) => Promise<void>;
+  clearClosingDate: () => void;
   closingDate: string | null | undefined;
 }) => {
   const {
@@ -25,6 +27,8 @@ export const ClosingDateDialog = ({
   } = useTranslation("form-builder");
   const dialogRef = useDialogRef();
   const [hasErrors, setHasErrors] = useState(false);
+  const [showClearConfirmation, setShowClearConfirmation] = useState(false);
+  const clearConfirmationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [month, setMonth] = useState<string>("");
   const [day, setDay] = useState<string>("");
@@ -58,7 +62,30 @@ export const ClosingDateDialog = ({
 
   const handleClose = () => {
     setShowDateTimeDialog(false);
+    setShowClearConfirmation(false);
+    // Clear any pending confirmation timeout
+    if (clearConfirmationTimeoutRef.current) {
+      clearTimeout(clearConfirmationTimeoutRef.current);
+    }
     dialogRef.current?.close();
+  };
+
+  const handleClearClick = () => {
+    if (showClearConfirmation) {
+      // Second click - confirm and execute
+      if (clearConfirmationTimeoutRef.current) {
+        clearTimeout(clearConfirmationTimeoutRef.current);
+      }
+      clearClosingDate();
+      handleClose();
+    } else {
+      // First click - show confirmation state
+      setShowClearConfirmation(true);
+      // Reset confirmation state after 5 seconds
+      clearConfirmationTimeoutRef.current = setTimeout(() => {
+        setShowClearConfirmation(false);
+      }, 5000);
+    }
   };
 
   const handleSave = () => {
@@ -214,6 +241,13 @@ export const ClosingDateDialog = ({
             <Button theme="primary" type="submit">
               {t("scheduleClosingPage.dialog.save")}
             </Button>
+            {closingDate && (
+              <Button theme="destructive" onClick={handleClearClick}>
+                {showClearConfirmation
+                  ? t("scheduleClosingPage.dialog.removeConfirm")
+                  : t("scheduleClosingPage.dialog.removeClosingDate")}
+              </Button>
+            )}
           </div>
         </div>
       </form>

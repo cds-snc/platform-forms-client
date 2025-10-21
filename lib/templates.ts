@@ -1216,6 +1216,115 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
 }
 
 /**
+ * Clone a template including associated users and delivery option
+ */
+export async function cloneTemplate(formID: string): Promise<FormRecord | null> {
+  // Ensure the user can create a new form (needed to persist a clone)
+  // and that they can edit the source form.
+  const [createResult, editResult] = (await Promise.allSettled([
+    authorization.canCreateForm(),
+    authorization.canEditForm(formID),
+  ])) as Array<PromiseSettledResult<{ user: { id: string } }>>;
+
+  if (createResult.status === "rejected") {
+    const e = createResult.reason as { user?: { id?: string } };
+    logEvent(
+      e?.user?.id ?? "unknown",
+      { type: "Form", id: formID },
+      "AccessDenied",
+      "Attempted to clone Form - missing create permission"
+    );
+    throw createResult.reason;
+  }
+
+  if (editResult.status === "rejected") {
+    const e = editResult.reason as { user?: { id?: string } };
+    logEvent(
+      e?.user?.id ?? "unknown",
+      { type: "Form", id: formID },
+      "AccessDenied",
+      "Attempted to clone Form - missing edit permission"
+    );
+    throw editResult.reason;
+  }
+
+  // Extract the user from the fulfilled createResult
+  const { user } = (createResult as PromiseFulfilledResult<{ user: { id: string } }>).value;
+
+  const template = await prisma.template
+    .findUnique({
+      where: { id: formID },
+      include: {
+        deliveryOption: true,
+        users: { select: { id: true } },
+        notificationsUsers: { select: { id: true } },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!template) {
+    logMessage.warn(`[templates][cloneTemplate] Template ${formID} not found`);
+    return null;
+  }
+
+  // Build the create payload copying allowed fields. Do NOT copy apiServiceAccount or bearerToken.
+  const createData: Prisma.TemplateCreateInput = {
+    jsonConfig: template.jsonConfig as Prisma.JsonObject,
+    name: `Copy of ${template.name}`,
+    isPublished: false,
+    formPurpose: template.formPurpose,
+    publishReason: template.publishReason,
+    publishFormType: template.publishFormType,
+    publishDesc: template.publishDesc,
+    securityAttribute: template.securityAttribute,
+    saveAndResume: template.saveAndResume,
+    ...(template.notificationsInterval !== undefined && {
+      notificationsInterval: template.notificationsInterval,
+    }),
+    // connect only the current user (owners are not copied when cloning as the form will be a draft form)
+    users: {
+      connect: [{ id: user.id }],
+    },
+    // connect current user as a notificationsUser only if they were in the original notificationsUsers list
+    ...(template.notificationsUsers &&
+      template.notificationsUsers.some((u) => u.id === user.id) && {
+        notificationsUsers: {
+          connect: [{ id: user.id }],
+        },
+      }),
+    // NOTE: Do NOT copy deliveryOption when cloning - just default to the vault.
+  };
+
+  const createdTemplate = await prisma.template
+    .create({
+      data: createData,
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
+        saveAndResume: true,
+        notificationsInterval: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (createdTemplate === null) return null;
+
+  logEvent(user.id, { type: "Form", id: createdTemplate.id }, "CreateForm", "Cloned Form");
+
+  return _parseTemplate(createdTemplate);
+}
+
+/**
  * Deletes a form template. The template will stay in the database for 30 days in an archived state until a lambda function deletes it from the database.
  * @param formID ID of the form template
  * @returns A boolean status if operation is sucessful

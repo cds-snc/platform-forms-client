@@ -173,7 +173,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-cognito-identity-provider@npm:^3.901.0":
+"@aws-sdk/client-cognito-identity-provider@npm:^3.901.0, @aws-sdk/client-cognito-identity-provider@npm:^3.910.0":
   version: 3.913.0
   resolution: "@aws-sdk/client-cognito-identity-provider@npm:3.913.0"
   dependencies:
@@ -220,7 +220,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-dynamodb@npm:^3.902.0":
+"@aws-sdk/client-dynamodb@npm:^3.902.0, @aws-sdk/client-dynamodb@npm:^3.910.0":
   version: 3.913.0
   resolution: "@aws-sdk/client-dynamodb@npm:3.913.0"
   dependencies:
@@ -318,7 +318,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-lambda@npm:^3.901.0":
+"@aws-sdk/client-lambda@npm:^3.901.0, @aws-sdk/client-lambda@npm:^3.910.0":
   version: 3.913.0
   resolution: "@aws-sdk/client-lambda@npm:3.913.0"
   dependencies:
@@ -370,7 +370,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:3.913.0, @aws-sdk/client-s3@npm:^3.901.0":
+"@aws-sdk/client-s3@npm:3.913.0, @aws-sdk/client-s3@npm:^3.901.0, @aws-sdk/client-s3@npm:^3.910.0":
   version: 3.913.0
   resolution: "@aws-sdk/client-s3@npm:3.913.0"
   dependencies:
@@ -483,7 +483,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-sqs@npm:^3.901.0":
+"@aws-sdk/client-sqs@npm:^3.901.0, @aws-sdk/client-sqs@npm:^3.910.0":
   version: 3.913.0
   resolution: "@aws-sdk/client-sqs@npm:3.913.0"
   dependencies:
@@ -726,7 +726,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/lib-dynamodb@npm:^3.902.0":
+"@aws-sdk/lib-dynamodb@npm:^3.902.0, @aws-sdk/lib-dynamodb@npm:^3.910.0":
   version: 3.913.0
   resolution: "@aws-sdk/lib-dynamodb@npm:3.913.0"
   dependencies:
@@ -973,7 +973,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/s3-presigned-post@npm:^3.901.0":
+"@aws-sdk/s3-presigned-post@npm:^3.910.0":
   version: 3.913.0
   resolution: "@aws-sdk/s3-presigned-post@npm:3.913.0"
   dependencies:
@@ -1019,7 +1019,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/types@npm:3.910.0, @aws-sdk/types@npm:^3.222.0, @aws-sdk/types@npm:^3.901.0":
+"@aws-sdk/types@npm:3.910.0, @aws-sdk/types@npm:^3.222.0, @aws-sdk/types@npm:^3.901.0, @aws-sdk/types@npm:^3.910.0":
   version: 3.910.0
   resolution: "@aws-sdk/types@npm:3.910.0"
   dependencies:
@@ -7941,6 +7941,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/md5@npm:^2.3.5":
+  version: 2.3.6
+  resolution: "@types/md5@npm:2.3.6"
+  checksum: 10c0/34cc6b6d01f08263cbb585f7403e78f4cf535dcac1aeb141ccbe179ab8ea2223544c0e4c543bf5a3ab465008f6ce2e1a1ce6138629276e1a0afc6460ec7713d0
+  languageName: node
+  linkType: hard
+
 "@types/mdx@npm:^2.0.13":
   version: 2.0.13
   resolution: "@types/mdx@npm:2.0.13"
@@ -7958,7 +7965,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^24.6.1, @types/node@npm:^24.7.1":
+"@types/node@npm:*, @types/node@npm:^24.6.1, @types/node@npm:^24.7.1, @types/node@npm:^24.7.2":
   version: 24.9.1
   resolution: "@types/node@npm:24.9.1"
   dependencies:
@@ -9860,6 +9867,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"charenc@npm:0.0.2":
+  version: 0.0.2
+  resolution: "charenc@npm:0.0.2"
+  checksum: 10c0/a45ec39363a16799d0f9365c8dd0c78e711415113c6f14787a22462ef451f5013efae8a28f1c058f81fc01f2a6a16955f7a5fd0cd56247ce94a45349c89877d8
+  languageName: node
+  linkType: hard
+
 "check-error@npm:^1.0.3":
   version: 1.0.3
   resolution: "check-error@npm:1.0.3"
@@ -10384,6 +10398,13 @@ __metadata:
     shebang-command: "npm:^2.0.0"
     which: "npm:^2.0.1"
   checksum: 10c0/053ea8b2135caff68a9e81470e845613e374e7309a47731e81639de3eaeb90c3d01af0e0b44d2ab9d50b43467223b88567dfeb3262db942dc063b9976718ffc1
+  languageName: node
+  linkType: hard
+
+"crypt@npm:0.0.2":
+  version: 0.0.2
+  resolution: "crypt@npm:0.0.2"
+  checksum: 10c0/adbf263441dd801665d5425f044647533f39f4612544071b1471962209d235042fb703c27eea2795c7c53e1dfc242405173003f83cf4f4761a633d11f9653f18
   languageName: node
   linkType: hard
 
@@ -12428,7 +12449,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fetch-blob@npm:^3.1.2, fetch-blob@npm:^3.1.4":
+"fetch-blob@npm:^3.1.2, fetch-blob@npm:^3.1.4, fetch-blob@npm:^3.2.0":
   version: 3.2.0
   resolution: "fetch-blob@npm:3.2.0"
   dependencies:
@@ -12755,14 +12776,14 @@ __metadata:
   resolution: "gcforms@workspace:."
   dependencies:
     "@auth/prisma-adapter": "npm:^2.11.0"
-    "@aws-sdk/client-cognito-identity-provider": "npm:^3.901.0"
-    "@aws-sdk/client-dynamodb": "npm:^3.902.0"
-    "@aws-sdk/client-lambda": "npm:^3.901.0"
-    "@aws-sdk/client-s3": "npm:^3.901.0"
-    "@aws-sdk/client-sqs": "npm:^3.901.0"
-    "@aws-sdk/lib-dynamodb": "npm:^3.902.0"
-    "@aws-sdk/s3-presigned-post": "npm:^3.901.0"
-    "@aws-sdk/types": "npm:^3.901.0"
+    "@aws-sdk/client-cognito-identity-provider": "npm:^3.910.0"
+    "@aws-sdk/client-dynamodb": "npm:^3.910.0"
+    "@aws-sdk/client-lambda": "npm:^3.910.0"
+    "@aws-sdk/client-s3": "npm:^3.910.0"
+    "@aws-sdk/client-sqs": "npm:^3.910.0"
+    "@aws-sdk/lib-dynamodb": "npm:^3.910.0"
+    "@aws-sdk/s3-presigned-post": "npm:^3.910.0"
+    "@aws-sdk/types": "npm:^3.910.0"
     "@babel/core": "npm:^7.28.0"
     "@babel/preset-typescript": "npm:^7.27.1"
     "@bufbuild/protobuf": "npm:^2.9.0"
@@ -12807,8 +12828,9 @@ __metadata:
     "@types/lodash.merge": "npm:^4"
     "@types/lodash.set": "npm:^4.3.9"
     "@types/lodash.unset": "npm:^4.5.9"
+    "@types/md5": "npm:^2.3.5"
     "@types/mdx": "npm:^2.0.13"
-    "@types/node": "npm:^24.6.1"
+    "@types/node": "npm:^24.7.2"
     "@types/node-fetch": "npm:^2.6.9"
     "@types/pg": "npm:^8"
     "@types/react": "npm:19.1.15"
@@ -12868,6 +12890,8 @@ __metadata:
     lodash.set: "npm:4.3.2"
     lodash.unset: "npm:4.5.2"
     markdown-to-jsx: "npm:7.7.13"
+    md5: "npm:^2.3.0"
+    native-file-system-adapter: "npm:^3.0.1"
     next: "npm:15.5.4"
     next-auth: "npm:5.0.0-beta.29"
     node-fetch: "npm:^3.3.2"
@@ -13724,6 +13748,13 @@ __metadata:
     call-bound: "npm:^1.0.3"
     has-tostringtag: "npm:^1.0.2"
   checksum: 10c0/36ff6baf6bd18b3130186990026f5a95c709345c39cd368468e6c1b6ab52201e9fd26d8e1f4c066357b4938b0f0401e1a5000e08257787c1a02f3a719457001e
+  languageName: node
+  linkType: hard
+
+"is-buffer@npm:~1.1.6":
+  version: 1.1.6
+  resolution: "is-buffer@npm:1.1.6"
+  checksum: 10c0/ae18aa0b6e113d6c490ad1db5e8df9bdb57758382b313f5a22c9c61084875c6396d50bbf49315f5b1926d142d74dfb8d31b40d993a383e0a158b15fea7a82234
   languageName: node
   linkType: hard
 
@@ -15318,6 +15349,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"md5@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "md5@npm:2.3.0"
+  dependencies:
+    charenc: "npm:0.0.2"
+    crypt: "npm:0.0.2"
+    is-buffer: "npm:~1.1.6"
+  checksum: 10c0/14a21d597d92e5b738255fbe7fe379905b8cb97e0a49d44a20b58526a646ec5518c337b817ce0094ca94d3e81a3313879c4c7b510d250c282d53afbbdede9110
+  languageName: node
+  linkType: hard
+
 "mdn-data@npm:2.0.14":
   version: 2.0.14
   resolution: "mdn-data@npm:2.0.14"
@@ -15569,6 +15611,18 @@ __metadata:
   bin:
     napi-postinstall: lib/cli.js
   checksum: 10c0/b33d64150828bdade3a5d07368a8b30da22ee393f8dd8432f1b9e5486867be21c84ec443dd875dd3ef3c7401a079a7ab7e2aa9d3538a889abbcd96495d5104fe
+  languageName: node
+  linkType: hard
+
+"native-file-system-adapter@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "native-file-system-adapter@npm:3.0.1"
+  dependencies:
+    fetch-blob: "npm:^3.2.0"
+  dependenciesMeta:
+    fetch-blob:
+      optional: true
+  checksum: 10c0/2a60cd7fa6b92a85b1fc9dbbda91135f66af424e240e36c7c3708b987330844fb689e29a92a8a472d7216f685423e863af8acfb4b9a7bd73c0f6093fff4bf2fd
   languageName: node
   linkType: hard
 
