@@ -786,7 +786,7 @@
         "responsibility3": "L'envoi de cette clé en utilisant un courriel crypté, s'il est nécessaire pour la configuration de l'intégration.",
         "responsibility4": "La sécurisation de la clé et sa gestion avec la génération d’une nouvelle clée, si l'on soupçonne qu'elle a été compromise.",
         "text1": "Ne perdez pas votre clé ",
-        "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en obtenir une nouvelle.",
+        "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en générer une nouvelle.",
         "cancelButton": "Annuler",
         "downloadButton": "Télécharger la clé API",
         "confirm": {
