@@ -15,13 +15,13 @@
     "singleQuote": false
   },
   "scripts": {
-    "dev": "yarn db:migrate:dev && next dev --turbopack",
+    "dev": "yarn db:dev && next dev --turbopack",
     "dev:debug": "next dev --turbopack",
-    "dev:secure": "yarn db:migrate:dev && next dev --experimental-https --turbopack",
+    "dev:secure": "yarn db:dev && next dev --experimental-https --turbopack",
     "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
-    "start": "yarn db:migrate:deploy && NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
-    "start:test": "yarn db:seed:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
-    "dev:test": "yarn db:reset && yarn db:seed:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
+    "start": "yarn db:prod && NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
+    "start:test": "yarn db:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
+    "dev:test": "yarn db:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
     "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",
     "lint": "eslint . && tsc --noEmit",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",

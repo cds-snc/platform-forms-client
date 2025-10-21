@@ -19,7 +19,7 @@
     }
   },
   "scripts": {
-    "db:reset": "prisma migrate reset -f --skip-seed",
+    "reset": "prisma migrate reset -f --skip-seed",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
     "db:prod": "prisma migrate deploy && tsx src/seed_cli.ts --environment=production",
