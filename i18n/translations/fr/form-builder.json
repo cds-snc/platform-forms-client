@@ -796,7 +796,7 @@
         },
         "error": {
           "createFailed": {
-            "title": "La clé API n'a pas pu être créée",
+            "title": "La clé API n'a pas pu être générée",
             "message": "Une erreur s'est produite lors de la création de la clé API. Veuillez enregistrer le formulaire et réessayer plus tard."
           }
         }
