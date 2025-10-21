@@ -748,7 +748,7 @@
         "message": "Afin de sélectionner une autre option, vous devez d'abord supprimer la clé API."
       },
       "generateKeySuccess": {
-        "title": "La clé API a été créée",
+        "title": "La clé API a été générée",
         "message": "Les nouvelles réponses seront disponibles par l'API. Trouvez des instructions pour la configuration de l'intégration dans ",
         "docsLinkText": "la documentation API",
         "docsLink": "https://cds-snc.github.io/forms-api/accueil/"
