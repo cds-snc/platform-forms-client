@@ -11,9 +11,10 @@ import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 type ApiKeyButtonProps = {
   theme?: Theme;
   showHelp?: boolean;
+  hasUnconfirmedResponses?: boolean;
 };
 
-export const ApiKeyButton = ({ theme = "primary" }: ApiKeyButtonProps) => {
+export const ApiKeyButton = ({ theme = "primary", hasUnconfirmedResponses }: ApiKeyButtonProps) => {
   const { t } = useTranslation("form-builder");
   const { id } = useParams();
   const { apiKeyId, hasApiKeyId } = useFormBuilderConfig();
@@ -43,7 +44,13 @@ export const ApiKeyButton = ({ theme = "primary" }: ApiKeyButtonProps) => {
         {buttonText}
       </GenerateApiKeyButton>
 
-      {hasApiKeyId && apiKeyId && <DeleteKeyButton id={id} keyId={apiKeyId} />}
+      {hasApiKeyId && apiKeyId && (
+        <DeleteKeyButton
+          id={id}
+          keyId={apiKeyId}
+          disabled={hasUnconfirmedResponses ? true : false}
+        />
+      )}
     </div>
   );
 };

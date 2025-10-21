@@ -4,7 +4,15 @@ import { ApiTooltip } from "./ApiTooltip";
 import { Button } from "@clientComponents/globals";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
-export const DeleteKeyButton = ({ id, keyId }: { id: string; keyId: string }) => {
+export const DeleteKeyButton = ({
+  id,
+  keyId,
+  disabled,
+}: {
+  id: string;
+  keyId: string;
+  disabled: boolean;
+}) => {
   const { t } = useTranslation("form-builder");
   const { Event } = useCustomEvent();
 
@@ -14,7 +22,7 @@ export const DeleteKeyButton = ({ id, keyId }: { id: string; keyId: string }) =>
 
   return (
     <div className="flex items-center gap-4">
-      <Button theme="secondary" onClick={openDeleteApiDialog}>
+      <Button theme="secondary" onClick={openDeleteApiDialog} disabled={disabled}>
         {t("settings.api.deleteKey")}
       </Button>
       <div className="flex items-center gap-2">

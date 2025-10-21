@@ -12,6 +12,7 @@ import { AuthenticatedPage } from "@lib/pages/auth";
 import { getCurrentThrottlingRate } from "../manage/throttlingRate/actions";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { getFullTemplateByID } from "@lib/templates";
+import { unConfirmedResponsesExist } from "../actions";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -60,6 +61,14 @@ export default AuthenticatedPage(
     // Get template and check if delivery option is email
     const template = await getFullTemplateByID(id);
     const isEmailDelivery = template?.deliveryOption?.emailAddress !== undefined;
+    const hasUnconfirmedResponsesResult = await unConfirmedResponsesExist(id);
+
+    if (typeof hasUnconfirmedResponsesResult === "object" && hasUnconfirmedResponsesResult.error) {
+      throw new Error(hasUnconfirmedResponsesResult.error);
+    }
+
+    const hasUnconfirmedResponses =
+      typeof hasUnconfirmedResponsesResult === "boolean" ? hasUnconfirmedResponsesResult : false;
 
     if (isEmailDelivery) {
       return (
@@ -88,7 +97,7 @@ export default AuthenticatedPage(
         </p>
         <p className="mb-6">{t("settings.apiIntegration.page.apiKey.description")}</p>
 
-        <ApiKeyButton />
+        <ApiKeyButton hasUnconfirmedResponses={hasUnconfirmedResponses} />
 
         {rate === null ? (
           <div>
