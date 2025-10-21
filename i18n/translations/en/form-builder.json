@@ -772,7 +772,7 @@
         }
       },
       "dialog": {
-        "title": "Create API key",
+        "title": "Generate API key",
         "refreshTitle": "Generate new API key",
         "heading": "⚠️ GC Forms API keys are PROTECTED B",
         "refreshHeading": "⚠️You'll need to add this new key to your integration to be able to successfully retrieve responses.",
