@@ -731,7 +731,7 @@
     "api": {
       "keyId": "API key ID",
       "title": "API access",
-      "generateKey": "Create API key",
+      "generateKey": "Generate API key",
       "refreshKey": "Generate new API key",
       "deleteKey": "Delete API key",
       "deleteKeyFailed": {
