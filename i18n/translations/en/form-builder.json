@@ -465,9 +465,9 @@
   "formattedDate": "Date",
   "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
-    "title": "Sign off on the removal of responses before deleting form",
+    "title": "Sign off on the removal of responses before archiving form",
     "message1": "This form has been published and is receiving responses. You have responses to download and sign off for removal from GC Forms.",
-    "message2": "Before deleting this form:",
+    "message2": "Before archiving this form:",
     "message3": "1. Download all responses.",
     "message4": "2. Confirm the receipt of downloaded responses by signing off on their removal from GC Forms.",
     "cta": "Go to responses"

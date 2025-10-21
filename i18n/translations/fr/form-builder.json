@@ -465,9 +465,9 @@
   "formattedDate": "Date",
   "formConfirmationMessage": "Message de confirmation",
   "formDeleteResponses": {
-    "title": "Approuvez la suppression des réponses avant de supprimer le formulaire",
+    "title": "Approuvez la suppression des réponses avant d'archiver le formulaire",
     "message1": "Ce formulaire est publié et reçoit des réponses. Vous avez des réponses à télécharger et à approuver pour suppression de Formulaires GC.",
-    "message2": "Avant de supprimer ce formulaire :",
+    "message2": "Avant d'archiver ce formulaire :",
     "message3": "1. Télécharger toutes les réponses.",
     "message4": "2. Confirmer la réception des réponses téléchargées en approuvant leur suppression de Formulaires GC.",
     "cta": "Accéder aux réponses"
