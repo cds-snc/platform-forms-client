@@ -27,5 +27,4 @@ jobs:
     steps:
       - run: yarn workspaces focus @gcforms/database
       - run: yarn db:generate
-      - run: yarn db:migrate:deploy
-      - run: yarn db:seed:prod
+      - run: yarn db:prod
