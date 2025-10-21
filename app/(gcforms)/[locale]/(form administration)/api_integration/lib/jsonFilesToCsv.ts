@@ -56,30 +56,30 @@ async function getFilenamesInDirectory(directoryHandle: FileSystemDirectoryHandl
 }
 
 /**
- * Collects response file names from the 'records' directory, or from the main directory if 'records' doesn't exist
+ * Collects response file names from the 'responses' directory, or from the main directory if 'responses' doesn't exist
  * @param directoryHandle - The directory handle to search within
- * @returns Promise<{fileNames: string[], isRecordsDir: boolean}> - Array of JSON file names and whether they're from records dir
+ * @returns Promise<{fileNames: string[], isResponsesDir: boolean}> - Array of JSON file names and whether they're from responses dir
  */
 export const collectResponseFiles = async (
   directoryHandle: FileSystemDirectoryHandle
-): Promise<{ fileNames: string[]; isRecordsDir: boolean }> => {
+): Promise<{ fileNames: string[]; isResponsesDir: boolean }> => {
   try {
-    // Try to get the 'records' directory handle first
-    const recordsHandle = await directoryHandle.getDirectoryHandle("records");
-    const jsonFileNames = await getFilenamesInDirectory(recordsHandle);
+    // Try to get the 'responses' directory handle first
+    const responsesHandle = await directoryHandle.getDirectoryHandle("responses");
+    const jsonFileNames = await getFilenamesInDirectory(responsesHandle);
 
-    return { fileNames: jsonFileNames, isRecordsDir: true };
+    return { fileNames: jsonFileNames, isResponsesDir: true };
   } catch (error) {
-    // If records directory doesn't exist, look in the main directory
+    // If responses directory doesn't exist, look in the main directory
     try {
       // Iterate through all files in the main directory
       const jsonFileNames = await getFilenamesInDirectory(directoryHandle);
 
-      return { fileNames: jsonFileNames, isRecordsDir: false };
+      return { fileNames: jsonFileNames, isResponsesDir: false };
     } catch (mainError) {
       // eslint-disable-next-line no-console
       console.error("Error reading directory:", mainError);
-      return { fileNames: [], isRecordsDir: false };
+      return { fileNames: [], isResponsesDir: false };
     }
   }
 };
@@ -98,16 +98,19 @@ export const jsonFilesToCsv = async ({
   if (!directoryHandle) return;
 
   try {
-    const { fileNames: jsonFileNames, isRecordsDir } = await collectResponseFiles(directoryHandle);
+    const { fileNames: jsonFileNames, isResponsesDir } =
+      await collectResponseFiles(directoryHandle);
 
     if (jsonFileNames.length === 0) {
       // eslint-disable-next-line no-console
-      console.warn(`No JSON files found in ${isRecordsDir ? "records directory" : "directory"}`);
+      console.warn(
+        `No JSON files found in ${isResponsesDir ? "responses directory" : "directory"}`
+      );
       return;
     }
 
     // Use either the records directory or the main directory based on where files were found
-    const sourceHandle = isRecordsDir
+    const sourceHandle = isResponsesDir
       ? await directoryHandle.getDirectoryHandle("records")
       : directoryHandle;
     const sortedElements = orderElements({ formTemplate });
