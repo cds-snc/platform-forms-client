@@ -797,7 +797,7 @@
         "error": {
           "createFailed": {
             "title": "La clé API n'a pas pu être générée",
-            "message": "Une erreur s'est produite lors de la création de la clé API. Veuillez enregistrer le formulaire et réessayer plus tard."
+            "message": "Une erreur s'est produite lors de la génération de la clé API. Veuillez enregistrer le formulaire et réessayer plus tard."
           }
         }
       }
@@ -889,7 +889,6 @@
   "settingsResponseDelivery": {
     "selectClassification": "Classification des données",
     "beforePublishMessage": "Ces paramètres ne peuvent être modifiés qu’avant la publication.",
-    "deleteApiKeyMessage": "Vous devez supprimer la clé API avant de pouvoir modifier l'option de livraison.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
     "title": "Option de livraison",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
