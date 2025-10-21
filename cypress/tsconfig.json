@@ -23,7 +23,8 @@
       "@i18n": ["../i18n"],
       "@i18n/*": ["../i18n/*"],
       "@content/*": ["../public/static/content/*"],
-      "@public/*": ["../public/*"]
+      "@public/*": ["../public/*"],
+      "@gcforms/*": ["../packages/*"]
     }
   },
   "include": [

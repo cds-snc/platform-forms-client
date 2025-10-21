@@ -1,8 +1,7 @@
 import { defineConfig } from "cypress";
 import { logMessage } from "@lib/logger";
-import terminalReport from "cypress-terminal-report/src/installLogsPrinter";
 import dbTearDown from "./__utils__/dbTearDown";
-import dbSeed from "./prisma/seeds/seed";
+import dbSeed from "@gcforms/database/seed";
 
 export default defineConfig({
   video: false,
@@ -16,10 +15,6 @@ export default defineConfig({
         logMessage.info("Seeding database");
         await dbSeed("test");
       });
-      if (process.env.CYPRESS_DEBUG) {
-        logMessage.info("Enabling terminal report for Debugging");
-        terminalReport(on);
-      }
     },
   },
   component: {
