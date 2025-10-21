@@ -205,7 +205,7 @@ export const SetClosingDate = ({
           </Button>
         )}
       </div>
-      <div className="mb-4 w-3/5">
+      <div className="mb-4 max-w-4xl">
         <ClosedMessage
           closedDetails={closedMessage}
           setClosedDetails={setClosedMessage}

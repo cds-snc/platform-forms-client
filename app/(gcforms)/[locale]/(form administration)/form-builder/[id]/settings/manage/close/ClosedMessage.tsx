@@ -90,14 +90,11 @@ export const ClosedMessage = ({
           {t("closingDate.message.errors.translation")}
         </ValidationMessage>
       </div>
-      <div className="flex">
-        <div className="relative w-1/2 border-1 border-r-4 border-gray-100 border-r-black">
+      <div className="mb-10 flex gap-px border border-gray-100">
+        <div className="relative w-1/2 flex-1 border-r-4 border-black">
           <label className="sr-only" htmlFor={`closed-en`}>
             {t("english")}
           </label>
-          <LanguageLabel id="form-introduction-english-language" lang={"en"}>
-            <>{t("english")}</>
-          </LanguageLabel>
           <Editor
             id="closed-en"
             className="gc-formview gc-richText"
@@ -109,16 +106,15 @@ export const ClosedMessage = ({
               debouncedSave();
             }}
           />
+          <LanguageLabel id="closed-en-language" lang={"en"}>
+            <>{t("english")}</>
+          </LanguageLabel>
         </div>
 
-        <div className="relative w-1/2 border-1 border-gray-100">
+        <div className="relative w-1/2 flex-1">
           <label className="sr-only" htmlFor={`closed-fr`}>
             {t("french")}
           </label>
-
-          <LanguageLabel id="form-introduction-english-language" lang={"fr"}>
-            <>{t("french")}</>
-          </LanguageLabel>
           <Editor
             id="closed-fr"
             className="gc-formview gc-richText"
@@ -130,6 +126,9 @@ export const ClosedMessage = ({
               debouncedSave();
             }}
           />
+          <LanguageLabel id="closed-fr-language" lang={"fr"}>
+            <>{t("french")}</>
+          </LanguageLabel>
         </div>
       </div>
     </>
