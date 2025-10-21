@@ -3949,6 +3949,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/client@npm:^6.17.1":
+  version: 6.17.1
+  resolution: "@prisma/client@npm:6.17.1"
+  peerDependencies:
+    prisma: "*"
+    typescript: ">=5.1.0"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+    typescript:
+      optional: true
+  checksum: 10c0/dac39e6cca192720915e02c5d1c8b6e447dafb40522b7133a7bc0047462720de57e2a1370d76a69670f18d9699994b79d9afaba3407c1a97973b58ac066a9c90
+  languageName: node
+  linkType: hard
+
 "@prisma/config@npm:6.17.0":
   version: 6.17.0
   resolution: "@prisma/config@npm:6.17.0"
@@ -12806,6 +12821,7 @@ __metadata:
     "@neshca/cache-handler": "npm:^1.2.1"
     "@next/mdx": "npm:15.5.4"
     "@playwright/test": "npm:^1.55.1"
+    "@prisma/client": "npm:^6.17.1"
     "@radix-ui/react-alert-dialog": "npm:^1.1.15"
     "@radix-ui/react-dropdown-menu": "npm:^2.1.4"
     "@radix-ui/react-tooltip": "npm:^1.1.6"
@@ -12829,6 +12845,7 @@ __metadata:
     "@types/mdx": "npm:^2.0.13"
     "@types/node": "npm:^24.6.1"
     "@types/node-fetch": "npm:^2.6.9"
+    "@types/pg": "npm:^8"
     "@types/react": "npm:19.1.15"
     "@types/react-dom": "npm:19.1.9"
     "@types/react-transition-group": "npm:^4"
@@ -12889,6 +12906,7 @@ __metadata:
     next: "npm:15.5.4"
     next-auth: "npm:5.0.0-beta.29"
     node-fetch: "npm:^3.3.2"
+    pg: "npm:^8.16.3"
     pino: "npm:10.0.0"
     pino-pretty: "npm:^11.0.0"
     postcss: "npm:^8.4.32"

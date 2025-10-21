@@ -1,8 +1,7 @@
-import { initializeDbConnection } from "@gcforms/database";
+import { prisma } from "@gcforms/database";
 import { logMessage } from "@lib/logger";
 
 export default async function teardown() {
-  const prisma = initializeDbConnection();
   try {
     const tablenames = await prisma.$queryRaw<
       Array<{ tablename: string }>

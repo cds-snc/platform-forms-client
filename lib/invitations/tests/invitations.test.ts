@@ -1,4 +1,3 @@
-import { prisma } from "@gcforms/database";
 import { prismaMock } from "@jestUtils";
 import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { getUser } from "@lib/users";
@@ -27,7 +26,6 @@ import { declineInvitation } from "../declineInvitation";
 import { logEvent } from "@lib/auditLogs";
 import { mockTemplate } from "./fixtures/Template";
 jest.mock("@lib/privileges");
-jest.mock("@gcforms/database");
 jest.mock("@lib/integration/notifyConnector");
 jest.mock("@lib/logger");
 jest.mock("@lib/auditLogs");
@@ -41,6 +39,8 @@ const userId = "test-user-id";
 jest.mock("@lib/origin", () => ({
   getOrigin: jest.fn().mockReturnValue("http://localhost:3000"),
 }));
+
+
 
 describe("Invitations", () => {
   beforeEach(() => {
@@ -112,14 +112,14 @@ describe("Invitations", () => {
         getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValueOnce(mockTemplateWithUsers());
 
-      (prismaMock.invitation.create as jest.Mock).mockResolvedValueOnce(
+      prismaMock.invitation.create.mockResolvedValueOnce(
         mockInvitation({
           email: "invited@cds-snc.ca",
         })
       );
 
       // invitee does not have an account
-      (prisma.user.findFirst as jest.Mock).mockResolvedValueOnce(null);
+      (prismaMock.user.findFirst as jest.Mock).mockResolvedValueOnce(null);
 
       // Previous invitation does not exist
       (prismaMock.invitation.findFirst as jest.Mock).mockResolvedValue(null);
@@ -128,7 +128,7 @@ describe("Invitations", () => {
 
       await inviteUserByEmail("invited@cds-snc.ca", "form-id", "message");
 
-      expect(prisma.invitation.create).toHaveBeenCalledTimes(1);
+      expect(prismaMock.invitation.create).toHaveBeenCalledTimes(1);
 
       expect(inviteToFormsEmailTemplate).toHaveBeenCalledTimes(1);
       expect(inviteToFormsEmailTemplate).toHaveBeenCalledWith(
@@ -182,7 +182,7 @@ describe("Invitations", () => {
 
       await inviteUserByEmail("invited@cds-snc.ca", "form-id", "message");
 
-      expect(prisma.invitation.create).toHaveBeenCalledTimes(1);
+      expect(prismaMock.invitation.create).toHaveBeenCalledTimes(1);
       expect(inviteToCollaborateEmailTemplate).toHaveBeenCalledTimes(1);
       expect(inviteToCollaborateEmailTemplate).toHaveBeenCalledWith(
         "sender",
@@ -256,10 +256,10 @@ describe("Invitations", () => {
 
       await inviteUserByEmail("invited2@cds-snc.ca", "form-id", "message");
 
-      expect(prisma.invitation.delete).toHaveBeenCalledTimes(1); // delete expired
-      expect(prisma.invitation.delete).toHaveBeenCalledWith({ where: { id: "invitation-id" } });
+      expect(prismaMock.invitation.delete).toHaveBeenCalledTimes(1); // delete expired
+      expect(prismaMock.invitation.delete).toHaveBeenCalledWith({ where: { id: "invitation-id" } });
 
-      expect(prisma.invitation.create).toHaveBeenCalledTimes(1); // create new
+      expect(prismaMock.invitation.create).toHaveBeenCalledTimes(1); // create new
       expect(inviteToFormsEmailTemplate).toHaveBeenCalledTimes(1);
       expect(inviteToFormsEmailTemplate).toHaveBeenCalledWith(
         "sender",
@@ -333,7 +333,7 @@ describe("Invitations", () => {
       await acceptInvitation("invitation-id");
 
       // Delete the invitation
-      expect(prisma.invitation.delete).toHaveBeenCalledWith({
+      expect(prismaMock.invitation.delete).toHaveBeenCalledWith({
         where: { id: "invitation-id" },
       });
 
