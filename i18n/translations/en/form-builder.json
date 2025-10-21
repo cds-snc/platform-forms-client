@@ -707,7 +707,7 @@
       },
       "page": {
         "title": "Set up API integration",
-        "text1": "With development resources, you can build an integration that pulls form submissions into a target system. Once programmatically set-up, responses are retrieved from an API endpoint. Consult our documentation site to learn more.",
+        "text1": "This section is for developers who want to use the GC Forms data retrieval to pull form submissions into a target system. Once programmatically set-up, responses can be retrieved from an API endpoint. Consult our documentation site to learn more.",
         "docsButton": {
           "text": "Go to API documentation",
           "link": "https://cds-snc.github.io/forms-api/home"
