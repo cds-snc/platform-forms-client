@@ -721,6 +721,10 @@
             "currentLimitDescription": "500 requests per minute",
             "increaseRequest": "If you require a higher API rate, <a href='/en/support' target='_blank'>contact Support</a>."
           }
+        },
+        "isEmailDelivery": {
+          "title": "Not supported with email delivery",
+          "description": "API delivery cannot be used when responses are sent by email."
         }
       }
     },

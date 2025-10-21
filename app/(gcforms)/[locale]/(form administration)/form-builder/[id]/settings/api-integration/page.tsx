@@ -11,6 +11,7 @@ import { AuthenticatedPage } from "@lib/pages/auth";
 
 import { getCurrentThrottlingRate } from "../manage/throttlingRate/actions";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
+import { getFullTemplateByID } from "@lib/templates";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -54,6 +55,19 @@ export default AuthenticatedPage(
     if (session && !session.user.hasSecurityQuestions) {
       // If they haven't setup security questions Use redirect to policy page for acceptance
       redirect(`/${locale}/auth/setup-security-questions`);
+    }
+
+    // Get template and check if delivery option is email
+    const template = await getFullTemplateByID(id);
+    const isEmailDelivery = template?.deliveryOption?.emailAddress !== undefined;
+
+    if (isEmailDelivery) {
+      return (
+        <div>
+          <h2>{t("settings.apiIntegration.page.isEmailDelivery.title")}</h2>
+          <p>{t("settings.apiIntegration.page.isEmailDelivery.description")}</p>
+        </div>
+      );
     }
 
     return (

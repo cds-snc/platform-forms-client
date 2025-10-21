@@ -721,6 +721,10 @@
             "currentLimitDescription": "500 requêtes par minute",
             "increaseRequest": "Si vous avez besoin d’un débit plus élevé, <a href='/en/support' target='_blank'>contactez l'équipe de soutien</a>."
           }
+        },
+        "isEmailDelivery": {
+          "title": "Not supported with email delivery [FR]",
+          "description": "API delivery cannot be used when responses are sent by email. [FR]"
         }
       }
     },
