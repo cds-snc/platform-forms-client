@@ -700,7 +700,7 @@
   "send": "Envoyer",
   "copy": "copie",
   "settings": {
-    "formManagement": "Gestion du formulaire",
+    "formManagement": "Options liées aux réponses",
     "apiIntegration": {
       "navigation": {
         "title": "Intégration API"
