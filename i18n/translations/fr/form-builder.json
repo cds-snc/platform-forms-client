@@ -777,7 +777,7 @@
       },
       "dialog": {
         "title": "Créer la clé API",
-        "refreshTitle": "Refresh API key [FR]",
+        "refreshTitle": "Générer une nouvelle clé API",
         "heading": "⚠️ Les clés API de Formulaires GC sont PROTÉGÉES B",
         "refreshHeading": "⚠️ Vous devrez ajouter cette nouvelle clé à votre intégration pour pouvoir récupérer correctement les réponses.",
         "responsibility": "Vous êtes responsable de :",
