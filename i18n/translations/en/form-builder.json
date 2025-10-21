@@ -724,7 +724,7 @@
         },
         "isEmailDelivery": {
           "title": "Not supported with email delivery",
-          "description": "API delivery cannot be used when responses are sent by email."
+          "description": "Data retrieval via API is not possible when responses are sent by email. Consider closing this form and republishing a new one to use this feature."
         }
       }
     },
