@@ -185,7 +185,7 @@ export const refreshKey = async (templateId: string) => {
     user.id,
     { type: "ServiceAccount" },
     "RefreshAPIKey",
-    `User :${user.id} refreshed API key for service account ${serviceAccountId} `
+    `User :${user.id} generated a new API key for service account ${serviceAccountId} `
   );
 
   return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
