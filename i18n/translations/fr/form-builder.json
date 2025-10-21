@@ -775,7 +775,7 @@
         "title": "Créer la clé API",
         "refreshTitle": "Refresh API key [FR]",
         "heading": "⚠️ Les clés API de Formulaires GC sont PROTÉGÉES B",
-        "refreshHeading": "⚠️ You'll need to add this new key to your integration to be able to successfully retrieve responses. [FR]",
+        "refreshHeading": "⚠️ Vous devrez ajouter cette nouvelle clé à votre intégration pour pouvoir récupérer correctement les réponses.",
         "responsibility": "Vous êtes responsable de :",
         "responsibility1": "L'enregistrement de cette clé dans un endroit sûr d'une machine du gouvernement du Canada.",
         "responsibility2": "Le partage de cette clé uniquement avec les personnes qui ont les autorisations, s'il y a un besoin.",
