@@ -19,24 +19,21 @@
     }
   },
   "scripts": {
-    "db:migrate:deploy": "prisma migrate deploy",
-    "db:migrate:dev": "prisma migrate dev",
-    "db:push": "prisma db push",
-    "db:seed": "prisma db seed",
     "db:reset": "prisma migrate reset -f --skip-seed",
-    "db:seed:prod": "tsx src/seed_cli.ts --environment=production",
-    "db:seed:test": "prisma migrate deploy && tsx src/seed_cli.ts --environment=test",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
+    "db:prod": "prisma migrate deploy && tsx src/seed_cli.ts --environment=production",
+    "db:dev": "prisma migrate dev && prisma db seed",
+    "db:test": "prisma migrate deploy && tsx src/seed_cli.ts --environment=test",
     "prebuild": "yarn clean && prisma generate",
     "build": "tsdown src/index.ts --format cjs,esm --dts --clean --splitting",
     "prepack": "yarn build",
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^6.17.0",
-    "@prisma/client": "^6.17.0",
-    "pg": "^8.16.3"
+    "@prisma/adapter-pg": "6.17.1",
+    "@prisma/client": "6.17.1",
+    "pg": "8.16.3"
   },
   "devDependencies": {
     "@types/node": "^24.7.1",
