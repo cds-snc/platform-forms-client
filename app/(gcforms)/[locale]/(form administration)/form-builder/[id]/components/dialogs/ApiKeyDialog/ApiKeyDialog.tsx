@@ -50,6 +50,7 @@ export const ApiKeyDialog = () => {
     if (detail) {
       detail.id && setId(detail.id);
       setIsOpen(true);
+      setAgreed(false);
     }
   }, []);
 
@@ -76,6 +77,7 @@ export const ApiKeyDialog = () => {
     dialog.current?.close();
     setHasError(false);
     setIsOpen(false);
+    setAgreed(false);
   };
 
   const handleSave = async () => {
