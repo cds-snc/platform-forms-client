@@ -53,13 +53,13 @@ Ensuring the API key associated with your form is secure to protect access to fo
 - Storing the API key in a safe place on a Government of Canada machine.
 - Not sharing the API key by email, support requests, or in a plain text file in a source repository as this would compromise the privacy and security of responses.
 - Using encrypted email on the Government of Canada network, if there is an absolute need to transfer the private API key to authorized staff, for the purpose of setting up the API integration.
-- Deleting and re-creating your form's API key, if it's suspected to have been compromised.
+- Generating a new API key for your form, if the previous one is suspected to have been compromised.
 
 ## Practice continuous security
 
 - Use a valid individual government email belonging to an employee (not a shared inbox) to create your account and for two-factor authentication (2FA).
 - Do not share your password with anyone or store it where others could find it. If someone else needs access to a form, [contact us](/en/support).
-- Safeguard your API keys. If you suspect an API key has been compromised, notify us, and delete and re-create a new API key to secure access to form responses.
+- Safeguard your API keys. If you suspect an API key has been compromised, notify us, and update your integration with a newly generated API key to secure access to form responses.
 - Ensure the privacy and security of protected information upon downloading form responses from GC Forms. If Responses are not saved and confirmed within 45 days, we will take necessary steps to ensure they are retrieved by the responsible program or service.
 - Report any problems with GC Forms' security features, for example if you think hCaptcha may be blocking genuine users from completing your form.
 - Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/security-notice/).
