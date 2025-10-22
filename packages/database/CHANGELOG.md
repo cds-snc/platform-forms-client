@@ -10,7 +10,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Refactored and moved wysiwyg editor to internal package
-- Updated to latest Lexical version
-- Replaced Link Editor with latest from Lexical examples
-- Moved Markdown transforms to Transformer
+- Refactored and moved prisma to internal package
