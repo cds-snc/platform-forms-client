@@ -90,4 +90,4 @@ We ask that clients not interfere with the format of JSON files, as any updates 
 
 For questions related to these terms of use, [contact us](/en/contact).
 
-**Last update:** July 16, 2025
+**Last update:** October 22, 2025
