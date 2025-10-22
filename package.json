@@ -68,7 +68,7 @@
     "@headlessui/react": "^2.2.9",
     "@neshca/cache-handler": "^1.2.1",
     "@next/mdx": "15.5.4",
-    "@prisma/client": "6.17.1",
+    "@prisma/client": "6.18.0",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.4",
     "@radix-ui/react-tooltip": "^1.1.6",
