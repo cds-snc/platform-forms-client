@@ -7,6 +7,7 @@ import { DeleteKeyButton } from "./DeleteKeyButton";
 import { SubmitButton as GenerateApiKeyButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { KeyId } from "./KeyId";
 
 type ApiKeyButtonProps = {
   theme?: Theme;
@@ -41,28 +42,31 @@ export const ApiKeyButton = ({
   const buttonText = hasApiKeyId ? t("settings.api.refreshKey") : t("settings.api.generateKey");
 
   return (
-    <div className="mb-4 flex">
-      <GenerateApiKeyButton
-        loading={false}
-        className="mr-4"
-        theme={theme}
-        onClick={() => {
-          hasUnconfirmedResponses && !hasApiKeyId && isPublished
-            ? openUnconfirmedApiKeyDialog()
-            : openDialog();
-        }}
-      >
-        {buttonText}
-      </GenerateApiKeyButton>
+    <div className="mb-4 ">
+      {hasApiKeyId && apiKeyId && <KeyId keyId={apiKeyId} />}
 
-      {hasApiKeyId && apiKeyId && (
-        <DeleteKeyButton
-          id={id}
-          keyId={apiKeyId}
-          hasUnconfirmedResponses={hasUnconfirmedResponses}
-          isPublished={isPublished}
-        />
-      )}
+      <div className="flex">
+        <GenerateApiKeyButton
+          loading={false}
+          className="mr-4"
+          theme={theme}
+          onClick={() => {
+            hasUnconfirmedResponses && !hasApiKeyId && isPublished
+              ? openUnconfirmedApiKeyDialog()
+              : openDialog();
+          }}
+        >
+          {buttonText}
+        </GenerateApiKeyButton>
+
+        {hasApiKeyId && apiKeyId && (
+          <DeleteKeyButton
+            id={id}
+            hasUnconfirmedResponses={hasUnconfirmedResponses}
+            isPublished={isPublished}
+          />
+        )}
+      </div>
     </div>
   );
 };

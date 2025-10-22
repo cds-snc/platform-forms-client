@@ -110,7 +110,7 @@ export default AuthenticatedPage(
             <p className="mb-4">
               <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.title")}</strong>
             </p>
-            <p className="text-sm">
+            <p>
               <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.currentLimit")}</strong>
             </p>
             <p className="mb-2">
