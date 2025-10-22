@@ -284,8 +284,8 @@ export const options = [
     urlFr: "https://www.canada.ca/fr/patrimoine-canadien/campagnes/fete-canada.html",
     logoEn: "/img/branding/canada-heritage-en.svg",
     logoFr: "/img/branding/canada-heritage-fr.svg",
-    logoTitleEn: "Canadian Heritage",
-    logoTitleFr: "Patrimoine canadien",
+    logoTitleEn: "Canadian Heritage (Canada Day)",
+    logoTitleFr: "Patrimoine canadien (Fête du Canada)",
   },
   {
     name: "ocl",
@@ -313,5 +313,14 @@ export const options = [
     logoFr: "/img/branding/dcc-fr.svg",
     logoTitleEn: "Defence Construction Canada",
     logoTitleFr: "Construction de Défense Canada",
+  },
+  {
+    name: "pch",
+    urlEn: "https://www.canada.ca/en/canadian-heritage.html",
+    urlFr: "https://www.canada.ca/fr/patrimoine-canadien.html",
+    logoEn: "/img/branding/pch-en.svg",
+    logoFr: "/img/branding/pch-fr.svg",
+    logoTitleEn: "Canadian Heritage",
+    logoTitleFr: "Patrimoine canadien",
   },
 ];

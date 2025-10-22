@@ -17,7 +17,7 @@ import { ClosingDateDialog } from "./ClosingDateDialog";
 
 import { ScheduledClosingDate } from "./ScheduledClosingDate";
 import { dateHasPast } from "@lib/utils";
-import { isFutureDate } from "@lib/utils/date/isFutureDate";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 
 export const SetClosingDate = ({
   formId,
@@ -58,10 +58,74 @@ export const SetClosingDate = ({
   }, [closingDate]);
 
   const [showDateTimeDialog, setShowDateTimeDialog] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [pendingToggleValue, setPendingToggleValue] = useState<boolean | null>(null);
+  const dialog = useDialogRef();
 
   const handleToggle = (value: boolean) => {
-    setStatus(value == true ? "closed" : "open");
+    // Store the pending value and show confirmation dialog
+    setPendingToggleValue(value);
+    setShowConfirmDialog(true);
   };
+
+  const confirmToggle = useCallback(async () => {
+    if (pendingToggleValue === null) return;
+
+    const newStatus = pendingToggleValue ? "open" : "closed";
+    setStatus(newStatus);
+
+    // If closed, set date to now. If open, clear the closing date.
+    const closeDate = newStatus === "closed" ? new Date().toISOString() : null;
+
+    const result = await closeForm({
+      id: formId,
+      closingDate: closeDate,
+      closedDetails: closedMessage,
+    });
+
+    if (!result || result.error) {
+      // Revert the status on error
+      setStatus(newStatus === "closed" ? "open" : "closed");
+      toast.error(t("closingDate.savedErrorMessage"));
+      setShowConfirmDialog(false);
+      setPendingToggleValue(null);
+      return;
+    }
+
+    // Setting local store
+    setClosingDate(closeDate);
+
+    if (newStatus === "closed") {
+      toast.success(<ClosedSuccess />, "wide");
+    } else {
+      toast.success(t("closingDate.savedSuccessMessage"));
+    }
+
+    setShowConfirmDialog(false);
+    setPendingToggleValue(null);
+  }, [pendingToggleValue, formId, closedMessage, setClosingDate, t]);
+
+  const cancelToggle = useCallback(() => {
+    setShowConfirmDialog(false);
+    setPendingToggleValue(null);
+  }, []);
+
+  const saveClosedMessage = useCallback(async () => {
+    if (!validateClosedMessage()) return;
+
+    const result = await closeForm({
+      id: formId,
+      closingDate: closingDate || null,
+      closedDetails: closedMessage,
+    });
+
+    if (!result || result.error) {
+      toast.error(t("closingDate.savedErrorMessage"));
+      return;
+    }
+
+    toast.success(t("closingDate.savedSuccessMessage"));
+  }, [formId, closingDate, closedMessage, validateClosedMessage, t]);
 
   const clearClosingDate = () => {
     closeForm({
@@ -104,40 +168,6 @@ export const SetClosingDate = ({
     [formId, setClosingDate, t, closedMessage]
   );
 
-  const saveFormStatus = useCallback(async () => {
-    // Check to see if the existing date is in the past when updating the toggle. If the date is in
-    // the future we want to keep the existing value.
-    let closeDate = isFutureDate(String(closingDate))
-      ? new Date(String(closingDate)).toISOString()
-      : null;
-
-    if (status === "closed") {
-      // Set date to now to close the form right away
-      const now = new Date();
-      closeDate = now.toISOString();
-    }
-
-    const result = await closeForm({
-      id: formId,
-      closingDate: closeDate || null,
-      closedDetails: closedMessage,
-    });
-
-    if (!result || result.error) {
-      toast.error(t("closingDate.savedErrorMessage"));
-      return;
-    }
-
-    // Setting local store
-    setClosingDate(closeDate || null);
-
-    if (status === "closed") {
-      toast.success(<ClosedSuccess />, "wide");
-    } else {
-      toast.success(t("closingDate.savedSuccessMessage"));
-    }
-  }, [status, formId, setClosingDate, t, closedMessage, closingDate]);
-
   return (
     <div className="mb-10">
       <h2>{t("closingDate.title")}</h2>
@@ -175,16 +205,14 @@ export const SetClosingDate = ({
           </Button>
         )}
       </div>
-      <div className="mb-4 w-3/5">
+      <div className="mb-4 max-w-4xl">
         <ClosedMessage
           closedDetails={closedMessage}
           setClosedDetails={setClosedMessage}
           valid={validateClosedMessage()}
+          onSave={saveClosedMessage}
         />
       </div>
-      <Button disabled={!validateClosedMessage()} theme="secondary" onClick={saveFormStatus}>
-        {t("closingDate.saveButton")}
-      </Button>
       {showDateTimeDialog && (
         <ClosingDateDialog
           showDateTimeDialog={showDateTimeDialog}
@@ -193,6 +221,31 @@ export const SetClosingDate = ({
           clearClosingDate={clearClosingDate}
           closingDate={closingDate}
         />
+      )}
+      {showConfirmDialog && (
+        <Dialog
+          handleClose={cancelToggle}
+          dialogRef={dialog}
+          title={t("closingDate.confirmDialog.title")}
+          actions={
+            <>
+              <Button theme="secondary" onClick={cancelToggle}>
+                {t("closingDate.confirmDialog.cancel")}
+              </Button>
+              <Button theme="primary" onClick={confirmToggle} className="ml-4">
+                {t("closingDate.confirmDialog.confirm")}
+              </Button>
+            </>
+          }
+        >
+          <div className="p-5">
+            <p>
+              {pendingToggleValue
+                ? t("closingDate.confirmDialog.messageOpen")
+                : t("closingDate.confirmDialog.messageClosed")}
+            </p>
+          </div>
+        </Dialog>
       )}
     </div>
   );
