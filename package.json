@@ -19,8 +19,8 @@
     "dev:debug": "next dev --turbopack",
     "dev:secure": "yarn db:dev && next dev --experimental-https --turbopack",
     "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
-    "start": "yarn db:prod && NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
-    "start:test": "yarn db:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
+    "start": "NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
+    "start:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
     "dev:test": "yarn db:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
     "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",
     "lint": "eslint . && tsc --noEmit",
@@ -36,8 +36,8 @@
     "cypress:run": "CYPRESS_DEBUG=true cypress run --browser chrome",
     "cypress:e2e": "cypress run --browser chrome --e2e",
     "cypress:component": "NEXT_PUBLIC_APP_ENV=test cypress run --browser chrome --component",
-    "playwright": "playwright test --ui",
-    "playwright:run": "playwright test",
+    "playwright": "yarn db:test && playwright test --ui",
+    "playwright:run": "yarn db:test && playwright test",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
   },
   "dependencies": {

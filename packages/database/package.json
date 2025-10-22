@@ -24,7 +24,7 @@
     "db:studio": "prisma studio",
     "db:prod": "prisma migrate deploy && tsx src/seed_cli.ts --environment=production",
     "db:dev": "prisma migrate dev && prisma db seed",
-    "db:test": "prisma migrate deploy && tsx src/seed_cli.ts --environment=test",
+    "db:test": "prisma migrate reset -f --skip-seed && prisma migrate deploy && tsx src/seed_cli.ts --environment=test",
     "prebuild": "yarn clean && prisma generate",
     "build": "tsdown src/index.ts --format cjs,esm --dts --clean --splitting",
     "prepack": "yarn build",
