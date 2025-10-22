@@ -798,10 +798,15 @@
         }
       },
       "hasUnconfirmedDownloads": {
-        "title": "Before generating an API key",
         "message": "⚠️ You must sign off on all responses that have been downloaded, but not yet confirmed with the receipt codes.",
         "ctaButton": "Go to Responses",
-        "cancelButton": "Cancel"
+        "cancelButton": "Cancel",
+        "generateAction": {
+          "title": "Before generating an API key"
+        },
+        "deleteAction": {
+          "title": "Before deleting an API key"
+        }
       }
     },
     "notifications": {

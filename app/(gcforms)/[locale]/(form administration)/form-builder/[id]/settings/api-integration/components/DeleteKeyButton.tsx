@@ -7,22 +7,24 @@ import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 export const DeleteKeyButton = ({
   id,
   keyId,
-  disabled,
+  hasUnconfirmedResponses,
 }: {
   id: string;
   keyId: string;
-  disabled: boolean;
+  hasUnconfirmedResponses: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const { Event } = useCustomEvent();
 
   const openDeleteApiDialog = () => {
-    Event.fire(EventKeys.openDeleteApiKeyDialog, { id });
+    hasUnconfirmedResponses
+      ? Event.fire(EventKeys.openUnconfirmedApiKeyDialog, { id, actionType: "delete" })
+      : Event.fire(EventKeys.openDeleteApiKeyDialog, { id });
   };
 
   return (
     <div className="flex items-center gap-4">
-      <Button theme="secondary" onClick={openDeleteApiDialog} disabled={disabled}>
+      <Button theme="secondary" onClick={openDeleteApiDialog}>
         {t("settings.api.deleteKey")}
       </Button>
       <div className="flex items-center gap-2">

@@ -11,7 +11,7 @@ import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 type ApiKeyButtonProps = {
   theme?: Theme;
   showHelp?: boolean;
-  hasUnconfirmedResponses?: boolean;
+  hasUnconfirmedResponses: boolean;
 };
 
 export const ApiKeyButton = ({ theme = "primary", hasUnconfirmedResponses }: ApiKeyButtonProps) => {
@@ -26,7 +26,7 @@ export const ApiKeyButton = ({ theme = "primary", hasUnconfirmedResponses }: Api
   };
 
   const openUnconfirmedApiKeyDialog = () => {
-    Event.fire(EventKeys.openUnconfirmedApiKeyDialog, { id });
+    Event.fire(EventKeys.openUnconfirmedApiKeyDialog, { id, actionType: "generate" });
   };
 
   if (Array.isArray(id)) return null;
@@ -52,7 +52,7 @@ export const ApiKeyButton = ({ theme = "primary", hasUnconfirmedResponses }: Api
         <DeleteKeyButton
           id={id}
           keyId={apiKeyId}
-          disabled={hasUnconfirmedResponses ? true : false}
+          hasUnconfirmedResponses={hasUnconfirmedResponses}
         />
       )}
     </div>
