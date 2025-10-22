@@ -60,6 +60,7 @@ export const ApiKeyButton = ({
           id={id}
           keyId={apiKeyId}
           hasUnconfirmedResponses={hasUnconfirmedResponses}
+          isPublished={isPublished}
         />
       )}
     </div>

@@ -8,16 +8,18 @@ export const DeleteKeyButton = ({
   id,
   keyId,
   hasUnconfirmedResponses,
+  isPublished,
 }: {
   id: string;
   keyId: string;
   hasUnconfirmedResponses: boolean;
+  isPublished: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const { Event } = useCustomEvent();
 
   const openDeleteApiDialog = () => {
-    hasUnconfirmedResponses
+    isPublished && hasUnconfirmedResponses
       ? Event.fire(EventKeys.openUnconfirmedApiKeyDialog, { id, actionType: "delete" })
       : Event.fire(EventKeys.openDeleteApiKeyDialog, { id });
   };
