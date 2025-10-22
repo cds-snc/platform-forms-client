@@ -1124,11 +1124,19 @@
     "closed": "Closed",
     "saveButton": "Save",
     "savedSuccessMessage": "Your changes have been saved.",
+    "clearSuccessMessage": "Closing date has been removed",
     "formClosedSuccessMessage": {
       "title": "This form is now closed",
       "body": "It is no longer receiving responses."
     },
     "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
+    "confirmDialog": {
+      "title": "Confirm form status change",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "messageOpen": "Are you sure you want to open this form? It will start accepting responses.",
+      "messageClosed": "Are you sure you want to close this form? It will stop accepting responses."
+    },
     "message": {
       "title": "Customize the closed form message",
       "text1": "Tell people trying to access the form when and why it closed and where to go next.",
@@ -1382,6 +1390,7 @@
   },
   "scheduleClosingPage": {
     "linkText": "Schedule form closing",
+    "changeOrRemove": "Change or remove closing date",
     "dialog": {
       "title": "Schedule closing the form",
       "text1": "Schedule a closing date",
@@ -1400,7 +1409,9 @@
         "notFutureDate": "Date and time must be upcoming, in the future."
       },
       "save": "Save",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "removeClosingDate": "Remove closing date",
+      "removeConfirm": "Click again to confirm"
     }
   },
   "systemHealthCheck": {
