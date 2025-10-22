@@ -178,10 +178,10 @@ export const jsonFilesToHtml = async ({
       }
     }
 
-    // eslint-disable-next-line no-console
-    console.log(`HTML generation completed. ${recordsAdded} new records added.`);
+    return `HTML generation completed. ${recordsAdded} new records added.`;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error("Error processing JSON to CSV:", error);
+    console.error("Error processing JSON to HTML:", error);
+    return `Error processing JSON to HTML: ${error}`;
   }
 };

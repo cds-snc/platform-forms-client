@@ -171,10 +171,10 @@ export const jsonFilesToCsv = async ({
       }
     }
 
-    // eslint-disable-next-line no-console
-    console.log(`CSV generation completed. ${recordsAdded} new records added.`);
+    return `CSV generation completed. ${recordsAdded} new records added.`;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error("Error processing JSON to CSV:", error);
+    return `Error processing JSON to CSV: ${error}`;
   }
 };

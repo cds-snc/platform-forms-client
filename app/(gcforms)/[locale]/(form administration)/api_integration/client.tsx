@@ -11,9 +11,7 @@ import { Submissions } from "./components/Submissions";
 import { Csv } from "./components/Csv";
 import { Html } from "./components/Html";
 
-export type ClientProps = { format?: string | string[] | undefined };
-
-export const Client = ({ format }: ClientProps = {}) => {
+export const Client = () => {
   const { isCompatible, userKey, handleLoadApiKey, apiClient } = useGetClient();
 
   const [isClient, setIsClient] = useState(false);
@@ -34,21 +32,25 @@ export const Client = ({ format }: ClientProps = {}) => {
   if (!userKey) {
     return (
       <>
-        {format === "csv" && <h2>Generate CSV from files</h2>}
-        {format === "html" && <h2>Generate HTML from files</h2>}
-        {!format && <h2>Download and process to CSV</h2>}
         <LoadKey onLoadKey={handleLoadApiKey} />
       </>
     );
   }
 
-  if (format && format === "csv" && apiClient) {
-    return <Csv apiClient={apiClient} />;
-  }
-
-  if (format && format === "html" && apiClient) {
-    return <Html apiClient={apiClient} />;
-  }
-
-  return <Submissions apiClient={apiClient} userKey={userKey} />;
+  return (
+    <div className="flex flex-col gap-8">
+      <div>
+        <h2>Download and process to CSV</h2>
+        <Submissions apiClient={apiClient} userKey={userKey} />
+      </div>
+      <div>
+        <h2>Process files to CSV</h2>
+        <Csv apiClient={apiClient} />
+      </div>
+      <div>
+        <h2>Process files to HTML</h2>
+        <Html apiClient={apiClient} />
+      </div>
+    </div>
+  );
 };

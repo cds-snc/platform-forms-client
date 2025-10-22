@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { Client, type ClientProps } from "./client";
+import { Client } from "./client";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -17,13 +17,6 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams?: Record<string, string | string[] | undefined>;
-}) {
-  const format = searchParams?.format || undefined;
-
-  const props: ClientProps = { format: format };
-  return <Client {...props} />;
+export default async function Page() {
+  return <Client />;
 }

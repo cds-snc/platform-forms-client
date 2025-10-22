@@ -13,17 +13,23 @@ import { jsonFilesToCsv } from "../lib/jsonFilesToCsv";
 export const Csv = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [hasDirectory, setHasDirectory] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [message, setMessage] = useState<string | undefined>(undefined);
 
   const toCsv = useCallback(async () => {
+    setIsProcessing(true);
     const formTemplate = await apiClient?.getFormTemplate();
     const formId = apiClient?.getFormId() || "<formId>";
 
     if (formTemplate) {
-      await jsonFilesToCsv({
+      const result = await jsonFilesToCsv({
         formId,
         directoryHandle: directoryHandle,
         formTemplate,
       });
+
+      setMessage(result);
+      setIsProcessing(false);
     }
   }, [apiClient, directoryHandle]);
 
@@ -35,6 +41,8 @@ export const Csv = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
     <ContentWrapper>
       <div>
         <h2>Generate CSV from files</h2>
+        {isProcessing && <p className="my-4">Processing...</p>}
+        {message && <p className="my-4">{message}</p>}
         {!hasDirectory && (
           <Button
             onClick={async () => {

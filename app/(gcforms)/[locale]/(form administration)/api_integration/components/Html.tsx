@@ -14,20 +14,26 @@ import { useTranslation } from "@root/i18n/client";
 export const Html = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [hasDirectory, setHasDirectory] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [message, setMessage] = useState<string | undefined>(undefined);
 
   const { t } = useTranslation("my-forms");
 
   const toHtml = useCallback(async () => {
+    setIsProcessing(true);
     const formTemplate = await apiClient?.getFormTemplate();
     const formId = apiClient?.getFormId() || "<formId>";
 
     if (formTemplate) {
-      await jsonFilesToHtml({
+      const result = await jsonFilesToHtml({
         formId,
         directoryHandle: directoryHandle,
         formTemplate,
         t,
       });
+
+      setMessage(result);
+      setIsProcessing(false);
     }
   }, [apiClient, directoryHandle, t]);
 
@@ -39,6 +45,8 @@ export const Html = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => 
     <ContentWrapper>
       <div>
         <h2>Generate HTML from files</h2>
+        {isProcessing && <p className="my-4">Processing...</p>}
+        {message && <p className="my-4">{message}</p>}
         {!hasDirectory && (
           <Button
             onClick={async () => {
