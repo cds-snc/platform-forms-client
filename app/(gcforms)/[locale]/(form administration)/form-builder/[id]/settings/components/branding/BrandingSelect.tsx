@@ -30,7 +30,11 @@ export const BrandingSelect = ({
         disabled={disabled}
         id="branding-select"
         value={selected}
-        className={cn("form-builder-dropdown mb-0 mt-0 inline-block text-black-default", className)}
+        className={cn(
+          "form-builder-dropdown mb-0 mt-0 inline-block text-black-default",
+          className,
+          disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+        )}
         onChange={(evt: React.ChangeEvent<HTMLSelectElement>) => {
           const val = evt.target.value;
           handleUpdate(val);

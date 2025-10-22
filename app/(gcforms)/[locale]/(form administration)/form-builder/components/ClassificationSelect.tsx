@@ -48,7 +48,7 @@ export const ClassificationSelect = ({
         className={cn(
           "form-builder-dropdown my-0 inline-block min-w-[200px] text-black-default",
           className,
-          disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+          isPublished || disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
         )}
         onChange={(evt: React.ChangeEvent<HTMLSelectElement>) => {
           const val = evt.target.value;
