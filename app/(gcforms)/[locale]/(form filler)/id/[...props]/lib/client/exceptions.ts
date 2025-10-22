@@ -34,7 +34,7 @@ export class FileUploadError extends Error {
     message: string,
     file: FileInput,
     status?: number,
-    type: "default" | "mime" | "size" = "default"
+    type: "default" | "mime" | "size" | "svg" = "default"
   ) {
     super(message ?? "FileUploadError");
     this.name = "FileUploadError";

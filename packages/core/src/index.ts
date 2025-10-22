@@ -5,6 +5,8 @@ export {
   isMimeTypeValid,
   isIndividualFileSizeValid,
   isFileExtensionValid,
+  isSvg,
+  isSvgContentSafe,
 } from "./validation/file";
 
 export { isValidDateObject, isValidDate, isValidDateFormat } from "./validation/date";

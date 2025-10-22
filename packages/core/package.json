@@ -8,6 +8,7 @@
   },
   "packageManager": "yarn@4.10.3",
   "dependencies": {
+    "dompurify": "^3.3.0",
     "file-type": "^21.0.0",
     "tsdown": "^0.15.0"
   },
@@ -15,6 +16,7 @@
     "@gcforms/types": "*"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.2.0",
     "vitest": "^1.0.0"
   },
   "scripts": {

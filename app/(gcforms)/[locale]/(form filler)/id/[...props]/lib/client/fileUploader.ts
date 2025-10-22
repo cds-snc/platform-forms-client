@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import axios, { AxiosError, AxiosProgressEvent } from "axios";
 import { Responses, FileInputResponse, FileInput } from "@gcforms/types";
 import { FileUploadError } from "../client/exceptions";
-import { isMimeTypeValid } from "@gcforms/core";
+import { isMimeTypeValid, isSvg, isSvgContentSafe } from "@gcforms/core";
 
 const isFileInput = (response: unknown): response is FileInput => {
   return (
@@ -78,6 +78,13 @@ export const uploadFile = async (
 
   if (!validMime) {
     throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400, "mime");
+  }
+
+  if (isSvg(file.name)) {
+    const isSafe = isSvgContentSafe(file.content);
+    if (!isSafe) {
+      throw new FileUploadError(`Failed to upload file: ${file.name}`, file, 400, "svg");
+    }
   }
 
   Object.entries(preSigned.fields ?? {}).forEach(([key, value]) => {
