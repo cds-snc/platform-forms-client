@@ -13,6 +13,7 @@ import { getCurrentThrottlingRate } from "../manage/throttlingRate/actions";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { getFullTemplateByID } from "@lib/templates";
 import { unConfirmedResponsesExist } from "../actions";
+import { UnconfirmedApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/hasUnconfirmedApiKeyDialog";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -118,6 +119,7 @@ export default AuthenticatedPage(
           <p className="mb-4" data-id="already-set"></p>
         )}
 
+        <UnconfirmedApiKeyDialog />
         <ApiKeyDialog />
         <DeleteApiKeyDialog />
       </div>

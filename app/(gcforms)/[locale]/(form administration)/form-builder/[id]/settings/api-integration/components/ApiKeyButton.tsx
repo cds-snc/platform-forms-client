@@ -25,6 +25,10 @@ export const ApiKeyButton = ({ theme = "primary", hasUnconfirmedResponses }: Api
     Event.fire(EventKeys.openApiKeyDialog, { id });
   };
 
+  const openUnconfirmedApiKeyDialog = () => {
+    Event.fire(EventKeys.openUnconfirmedApiKeyDialog, { id });
+  };
+
   if (Array.isArray(id)) return null;
 
   if (!id) return null;
@@ -38,7 +42,7 @@ export const ApiKeyButton = ({ theme = "primary", hasUnconfirmedResponses }: Api
         className="mr-4"
         theme={theme}
         onClick={() => {
-          openDialog();
+          hasUnconfirmedResponses ? openUnconfirmedApiKeyDialog() : openDialog();
         }}
       >
         {buttonText}

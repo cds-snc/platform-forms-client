@@ -804,7 +804,7 @@
     },
     "hasUnconfirmedDownloads": {
       "title": "Avant de pouvoir générer une clé API",
-      "message": "Vous devez approuver pour suppression toutes les réponses qui ont été téléchargées, mais qui n'ont pas encore été confirmées avec les codes de réception.",
+      "message": "⚠️ Vous devez approuver pour suppression toutes les réponses qui ont été téléchargées, mais qui n'ont pas encore été confirmées avec les codes de réception.",
       "ctaButton": "Accéder aux réponses",
       "cancelButton": "Annuler "
     },
