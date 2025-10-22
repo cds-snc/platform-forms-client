@@ -26,6 +26,10 @@ export default async function Page(props: { params: Promise<{ id: string; locale
   return (
     <>
       <FormProfile hasBrandingRequestForm={hasBrandingRequestForm} />
+
+      {/*--------------------------------------------*
+       * Admin components - manage all forms
+       *--------------------------------------------*/}
       <ManageOwners id={id} />
     </>
   );

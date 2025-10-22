@@ -1,9 +1,10 @@
 import { serverTranslation } from "@i18n";
 import { checkIfClosed } from "@lib/templates";
 import { authorization } from "@lib/privileges";
-import { ManageForm } from "./components/ManageForm";
 import { Metadata } from "next";
 import { AuthenticatedPage } from "@lib/pages/auth";
+import { SetClosingDate } from "./components/close/SetClosingDate";
+import { Notifications } from "./components/notifications/Notifications";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -38,5 +39,10 @@ export default AuthenticatedPage(async (props: { params: Promise<{ id: string }>
     closedDetails = closedData?.closedDetails;
   }
 
-  return <ManageForm id={id} canSetClosingDate={canSetClosingDate} closedDetails={closedDetails} />;
+  return (
+    <>
+      {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
+      <Notifications formId={id} />
+    </>
+  );
 });

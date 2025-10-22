@@ -22,7 +22,7 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormPurposeHelpButton } from "./dialogs/FormPurposeHelpButton";
 import { Branding } from "./branding/Branding";
 import { DownloadForm } from "./DownloadForm";
-import { SetSaveAndResume } from "../manage/saveAndResume/SetSaveAndResume";
+import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
 
 /*
  * PurposeOption is used to determine the purpose of the form

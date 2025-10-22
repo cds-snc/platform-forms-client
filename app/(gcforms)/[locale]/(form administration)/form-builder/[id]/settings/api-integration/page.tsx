@@ -9,11 +9,13 @@ import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog
 import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 import { AuthenticatedPage } from "@lib/pages/auth";
 
-import { getCurrentThrottlingRate } from "../manage/throttlingRate/actions";
+import { getCurrentThrottlingRate } from "./components/throttlingRate/actions";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { getFullTemplateByID } from "@lib/templates";
 import { unConfirmedResponsesExist } from "../actions";
 import { UnconfirmedApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/hasUnconfirmedApiKeyDialog";
+
+import { ManageApiThrottle } from "./components/throttlingRate/ManageApiThrottle";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -125,6 +127,10 @@ export default AuthenticatedPage(
         <UnconfirmedApiKeyDialog />
         <ApiKeyDialog />
         <DeleteApiKeyDialog />
+        {/*--------------------------------------------*
+         * Admin components - manage all forms
+         *--------------------------------------------*/}
+        <ManageApiThrottle formId={id} />
       </div>
     );
   }
