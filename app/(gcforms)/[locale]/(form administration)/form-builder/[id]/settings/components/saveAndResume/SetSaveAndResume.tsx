@@ -49,15 +49,13 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
       <p className="mb-2 font-bold">{t("saveAndResume.toggleDescription.text1")}</p>
       <p>{t("saveAndResume.toggleDescription.text2")}</p>
 
-      <div className="mb-4">
-        <SaveAndResumeToggle
-          isChecked={status === "off" ? false : true}
-          setIsChecked={handleToggle}
-          onLabel={t("saveAndResume.toggleOn")}
-          offLabel={t("saveAndResume.toggleOff")}
-          description={t("saveAndResume.a11yDescription")}
-        />
-      </div>
+      <SaveAndResumeToggle
+        isChecked={status === "off" ? false : true}
+        setIsChecked={handleToggle}
+        onLabel={t("saveAndResume.toggleOn")}
+        offLabel={t("saveAndResume.toggleOff")}
+        description={t("saveAndResume.a11yDescription")}
+      />
     </div>
   );
 };

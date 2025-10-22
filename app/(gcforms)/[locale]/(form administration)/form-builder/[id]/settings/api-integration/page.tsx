@@ -84,7 +84,7 @@ export default AuthenticatedPage(
 
     return (
       <div className="w-7/12">
-        <h2 className="mb-6">{t("settings.apiIntegration.page.title")}</h2>
+        <h2>{t("settings.apiIntegration.page.title")}</h2>
         <p className="mb-4">{t("settings.apiIntegration.page.text1")}</p>
 
         <LinkButton.Secondary
@@ -106,7 +106,7 @@ export default AuthenticatedPage(
         />
 
         {rate === null ? (
-          <div>
+          <div className="mb-10">
             <p className="mb-4">
               <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.title")}</strong>
             </p>

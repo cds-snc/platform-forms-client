@@ -99,8 +99,8 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   );
 
   return (
-    <div>
-      <h2 className="mb-6">{t("branding.heading")}</h2>
+    <>
+      <h2>{t("branding.heading")}</h2>
       <p className="block text-sm">{t("branding.text1")}</p>
       {/* Logo select */}
       <div>
@@ -114,12 +114,12 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         />
       </div>
       {/* Logo preview */}
-      <div className="my-5">
+      <div>
         <div className="mb-3 text-sm font-bold">{t("branding.preview")}</div>
         <Brand brand={brand} />
       </div>
       {hasBrandingRequestForm && (
-        <div className="mt-10">
+        <div>
           <p className="mb-2 text-sm font-bold">{t("branding.notFound")}</p>
           <p className="text-sm">
             <Link
@@ -139,6 +139,6 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
           </p>
         </div>
       )}
-    </div>
+    </>
   );
 };

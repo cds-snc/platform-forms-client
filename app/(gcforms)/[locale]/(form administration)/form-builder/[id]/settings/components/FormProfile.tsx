@@ -124,83 +124,81 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
   return (
     <>
       {status === "authenticated" && (
-        <div className="mb-10">
+        <div className="mb-10 w-7/12">
+          {/*--------------------------------------------*
+           * Classification section
+           *--------------------------------------------*/}
           <div className="mb-10">
-            <h2 className="mb-6">{t("settingsResponseDelivery.selectClassification")}</h2>
+            <h2>{t("settingsResponseDelivery.selectClassification")}</h2>
+            <ClassificationSelect
+              className="max-w-[400px] truncate bg-gray-soft p-1 pr-10"
+              lang={lang}
+              isPublished={isPublished}
+              classification={classification}
+              handleUpdateClassification={saveSecurityAttribute}
+            />
+          </div>
 
-            {/*--------------------------------------------*
-             * Classification section
-             *--------------------------------------------*/}
-            <div className="mb-10">
-              <ClassificationSelect
-                className="max-w-[400px] truncate bg-gray-soft p-1 pr-10"
-                lang={lang}
-                isPublished={isPublished}
-                classification={classification}
-                handleUpdateClassification={saveSecurityAttribute}
-              />
-            </div>
+          {/*--------------------------------------------*
+           * Branding section
+           *--------------------------------------------*/}
+          <div className="mb-10">
+            <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
+          </div>
 
-            {/*--------------------------------------------*
-             * Branding section
-             *--------------------------------------------*/}
-            <div className="mb-10">
-              <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
-            </div>
+          {/*--------------------------------------------*
+           * Purpose option section
+           *--------------------------------------------*/}
 
-            {/*--------------------------------------------*
-             * Purpose option section
-             *--------------------------------------------*/}
-
-            <div className="mb-10">
-              <h2>{t("settingsPurposeAndUse.title")}</h2>
-              <p className="mb-6 text-sm">{t("settingsPurposeAndUse.description")}</p>
-              <Radio
-                id="purposeAndUseAdmin"
-                name="purpose-use"
-                label={t("settingsPurposeAndUse.personalInfo")}
-                labelClassName="font-bold"
-                disabled={isPublished}
-                checked={purposeOption === PurposeOption.admin}
-                value={PurposeOption.admin}
-                onChange={saveFormPurpose}
-                className="mb-20"
-              />
-              <div className="mb-4 ml-12 text-sm">
-                <div>
-                  <Markdown options={{ forceBlock: false }}>
-                    {t("settingsPurposeAndUse.personalInfoDetails")}
-                  </Markdown>
-                </div>
-                <ul>
-                  <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.1")}</li>
-                  <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.2")}</li>
-                  <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.3")}</li>
-                </ul>
+          <div className="mb-10">
+            <h2>{t("settingsPurposeAndUse.title")}</h2>
+            <p className="mb-6 text-sm">{t("settingsPurposeAndUse.description")}</p>
+            <Radio
+              id="purposeAndUseAdmin"
+              name="purpose-use"
+              label={t("settingsPurposeAndUse.personalInfo")}
+              labelClassName="font-bold"
+              disabled={isPublished}
+              checked={purposeOption === PurposeOption.admin}
+              value={PurposeOption.admin}
+              onChange={saveFormPurpose}
+              className="mb-20"
+            />
+            <div className="mb-4 ml-12 text-sm">
+              <div>
+                <Markdown options={{ forceBlock: false }}>
+                  {t("settingsPurposeAndUse.personalInfoDetails")}
+                </Markdown>
               </div>
-              <Radio
-                id="purposeAndUseNonAdmin"
-                name="purpose-use"
-                label={t("settingsPurposeAndUse.nonAdminInfo")}
-                labelClassName="font-bold"
-                disabled={isPublished}
-                checked={purposeOption === PurposeOption.nonAdmin}
-                value={PurposeOption.nonAdmin}
-                onChange={saveFormPurpose}
-              />
-              <div className="mb-4 ml-12 text-sm">
-                <div>
-                  <Markdown options={{ forceBlock: false }}>
-                    {t("settingsPurposeAndUse.nonAdminInfoDetails")}
-                  </Markdown>
-                </div>
-                <ul>
-                  <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.1")}</li>
-                  <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.2")}</li>
-                  <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.3")}</li>
-                </ul>
-              </div>
+              <ul>
+                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.1")}</li>
+                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.2")}</li>
+                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.3")}</li>
+              </ul>
             </div>
+            <Radio
+              id="purposeAndUseNonAdmin"
+              name="purpose-use"
+              label={t("settingsPurposeAndUse.nonAdminInfo")}
+              labelClassName="font-bold"
+              disabled={isPublished}
+              checked={purposeOption === PurposeOption.nonAdmin}
+              value={PurposeOption.nonAdmin}
+              onChange={saveFormPurpose}
+            />
+            <div className="mb-4 ml-12 text-sm">
+              <div>
+                <Markdown options={{ forceBlock: false }}>
+                  {t("settingsPurposeAndUse.nonAdminInfoDetails")}
+                </Markdown>
+              </div>
+              <ul>
+                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.1")}</li>
+                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.2")}</li>
+                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.3")}</li>
+              </ul>
+            </div>
+
             <FormPurposeHelpButton />
           </div>
 
