@@ -33,9 +33,10 @@
     "test:watch:vitest": "vitest --watch",
     "test:watch": "DEBUG_PRINT_LIMIT=10000 yarn test --watch",
     "cypress": "cypress open",
-    "cypress:run": "CYPRESS_DEBUG=true cypress run --browser chrome",
+    "cypress:debug": "CYPRESS_DEBUG=true cypress run --browser chrome",
     "cypress:e2e": "cypress run --browser chrome --e2e",
     "cypress:component": "NEXT_PUBLIC_APP_ENV=test cypress run --browser chrome --component",
+    "cypress:run": "yarn db:test && yarn start:test",
     "playwright": "yarn db:test && playwright test --ui",
     "playwright:run": "yarn db:test && playwright test",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"

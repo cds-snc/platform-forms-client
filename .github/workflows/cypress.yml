@@ -75,8 +75,8 @@ jobs:
           install: false
           browser: chrome
           headed: false
-          build: yarn db:test, yarn build:test
-          start: yarn start:test
+          build: yarn build:test
+          start: yarn cypress:run
           wait-on: "http://localhost:3000"
           config: baseUrl=http://localhost:3000
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
