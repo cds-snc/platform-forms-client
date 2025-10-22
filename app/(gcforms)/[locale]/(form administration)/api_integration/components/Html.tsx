@@ -8,24 +8,28 @@ import { Button } from "@clientComponents/globals";
 
 import { ContentWrapper } from "./ContentWrapper";
 import { showDirectoryPicker } from "native-file-system-adapter";
-import { jsonFilesToCsv } from "../lib/jsonFilesToCsv";
+import { jsonFilesToHtml } from "../lib/jsonFilesToHtml";
+import { useTranslation } from "@root/i18n/client";
 
-export const Csv = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
+export const Html = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [hasDirectory, setHasDirectory] = useState(false);
 
-  const toCsv = useCallback(async () => {
+  const { t } = useTranslation("my-forms");
+
+  const toHtml = useCallback(async () => {
     const formTemplate = await apiClient?.getFormTemplate();
     const formId = apiClient?.getFormId() || "<formId>";
 
     if (formTemplate) {
-      await jsonFilesToCsv({
+      await jsonFilesToHtml({
         formId,
         directoryHandle: directoryHandle,
         formTemplate,
+        t,
       });
     }
-  }, [apiClient, directoryHandle]);
+  }, [apiClient, directoryHandle, t]);
 
   if (!apiClient) {
     return null;
@@ -34,7 +38,7 @@ export const Csv = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
   return (
     <ContentWrapper>
       <div>
-        <h2>Generate CSV from files</h2>
+        <h2>Generate HTML from files</h2>
         {!hasDirectory && (
           <Button
             onClick={async () => {
@@ -51,7 +55,7 @@ export const Csv = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
           </Button>
         )}
 
-        {hasDirectory && <Button onClick={toCsv}>Generate CSV</Button>}
+        {hasDirectory && <Button onClick={toHtml}>Generate HTML</Button>}
       </div>
     </ContentWrapper>
   );

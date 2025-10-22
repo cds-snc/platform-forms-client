@@ -22,9 +22,8 @@ export default async function Page({
 }: {
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
-  // Pass the raw `csv` param (if present) to the client. Client will only check existence.
-  const csvParam = searchParams?.csv;
+  const format = searchParams?.format || undefined;
 
-  const props: ClientProps = { csv: csvParam };
+  const props: ClientProps = { format: format };
   return <Client {...props} />;
 }
