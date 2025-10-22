@@ -12,9 +12,14 @@ type ApiKeyButtonProps = {
   theme?: Theme;
   showHelp?: boolean;
   hasUnconfirmedResponses: boolean;
+  isPublished: boolean;
 };
 
-export const ApiKeyButton = ({ theme = "primary", hasUnconfirmedResponses }: ApiKeyButtonProps) => {
+export const ApiKeyButton = ({
+  theme = "primary",
+  hasUnconfirmedResponses,
+  isPublished,
+}: ApiKeyButtonProps) => {
   const { t } = useTranslation("form-builder");
   const { id } = useParams();
   const { apiKeyId, hasApiKeyId } = useFormBuilderConfig();
@@ -42,7 +47,9 @@ export const ApiKeyButton = ({ theme = "primary", hasUnconfirmedResponses }: Api
         className="mr-4"
         theme={theme}
         onClick={() => {
-          hasUnconfirmedResponses ? openUnconfirmedApiKeyDialog() : openDialog();
+          hasUnconfirmedResponses && !hasApiKeyId && isPublished
+            ? openUnconfirmedApiKeyDialog()
+            : openDialog();
         }}
       >
         {buttonText}

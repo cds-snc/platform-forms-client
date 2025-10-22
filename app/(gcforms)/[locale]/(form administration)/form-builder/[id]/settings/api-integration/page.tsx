@@ -98,7 +98,10 @@ export default AuthenticatedPage(
         </p>
         <p className="mb-6">{t("settings.apiIntegration.page.apiKey.description")}</p>
 
-        <ApiKeyButton hasUnconfirmedResponses={hasUnconfirmedResponses} />
+        <ApiKeyButton
+          hasUnconfirmedResponses={hasUnconfirmedResponses}
+          isPublished={template?.isPublished ?? false}
+        />
 
         {rate === null ? (
           <div>
