@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
-import { prisma } from ".";
-import { Prisma } from "./generated/client";
+import { prisma, Prisma } from ".";
 import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
 import seedSettings from "./fixtures/settings";

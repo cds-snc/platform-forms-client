@@ -8,13 +8,12 @@ import {
   UserNotFoundError,
 } from "./exceptions";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
-import { prisma } from "@gcforms/database";
+import { prisma, Invitation } from "@gcforms/database";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { inviteToCollaborateEmailTemplate } from "@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate";
 import { inviteToFormsEmailTemplate } from "@lib/invitations/emailTemplates/inviteToFormsEmailTemplate";
 import { getOrigin } from "@lib/origin";
 import { logMessage } from "@lib/logger";
-import { Invitation } from "@gcforms/database";
 import { logEvent } from "@lib/auditLogs";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { authorization } from "@lib/privileges";
