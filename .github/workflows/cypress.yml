@@ -75,7 +75,7 @@ jobs:
           install: false
           browser: chrome
           headed: false
-          build: yarn db:test && yarn build:test
+          build: yarn db:test, yarn build:test
           start: yarn start:test
           wait-on: "http://localhost:3000"
           config: baseUrl=http://localhost:3000
