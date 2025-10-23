@@ -477,9 +477,9 @@
     "somethingWentWrong": "Something went wrong",
     "downloadButtonText": "Download a copy",
     "draft": {
-      "message1": "Archiving your form will remove your live form to the “Archived” section of your forms.",
-      "message2": "You can retrieve your draft or published form from the archive folder within 30 days of archiving your form. After 30 days your form will be deleted permanently and cannot be undone.",
-      "message3": "Download a copy of your form file for your records. You can then upload it in GC Forms to re-create the form after the 30 days."
+      "message1": "Archiving will move this form to the “Archived” section of your forms.",
+      "message2": "This form will be available to restore from the archive folder for 30 days before being deleted permanently.",
+      "message3": "Download a copy of the form file for your records. You can upload it again in GC Forms to re-create the form later"
     },
     "okay": "Archive form",
     "published": {

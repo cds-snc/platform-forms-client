@@ -29,7 +29,7 @@
     },
     "lastEdited": "Last edited",
     "deleteDate": " Delete date: ",
-    "deletedIn": "Deleted in ",
+    "deletedIn": "Will be deleted in ",
     "days": " days",
     "deliveryOption": {
       "email": "Responses get sent to:",
@@ -107,6 +107,6 @@
     "formDownloadFailed": "Failed to download the form.",
     "formUnarchiveFailed": "Failed to restore the form."
   },
-  "archivedNotice": "You can access your archived forms for 30 days.",
-  "archivedNotice2": "After that, the form will be permanently deleted."
+  "archivedNotice": "You can access archived forms for 30 days.",
+  "archivedNotice2": "After that, forms will be permanently deleted."
 }
