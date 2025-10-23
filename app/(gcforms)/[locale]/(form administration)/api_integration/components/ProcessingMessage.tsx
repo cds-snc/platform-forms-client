@@ -1,7 +1,7 @@
 import { type JSX } from "react";
 import { TokenRateLimitError } from "../lib/error";
-import { Loader } from "@clientComponents/globals/Loader";
 import { Danger, Success } from "@clientComponents/globals/Alert/Alert";
+import { MapleLeafLoader } from "@clientComponents/icons/MapleLeafLoader";
 
 export const ProcessingMessage = ({
   completed,
@@ -37,7 +37,12 @@ export const ProcessingMessage = ({
   }
 
   if (responsesProcessed > 0 && !completed) {
-    return <Loader message={`Processing ${responsesProcessed} responses...`} />;
+    return (
+      <div>
+        <p>Processing ${responsesProcessed} responses...</p>
+        <MapleLeafLoader message="Large maple leaf" width={300} height={350} />
+      </div>
+    );
   }
 
   if (completed) {
