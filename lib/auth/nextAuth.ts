@@ -135,7 +135,6 @@ const {
   },
   // Elastic Load Balancer safely sets the host header and ignores the incoming request headers
   trustHost: true,
-  debug: process.env.NODE_ENV !== "production",
   logger: {
     error(error) {
       if (!(error instanceof CredentialsSignin)) {
@@ -147,8 +146,9 @@ const {
       logMessage.warn(`NextAuth warning - Code: ${code}`);
     },
     debug(code, ...message) {
-      logMessage.debug(code);
-      logMessage.debug(message);
+      // TODO.. switch back to debug
+      logMessage.info(code);
+      logMessage.info(message);
     },
   },
 
