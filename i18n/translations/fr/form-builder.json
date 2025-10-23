@@ -466,7 +466,7 @@
   "formConfirmationMessage": "Message de confirmation",
   "formDeleteResponses": {
     "title": "Approuvez la suppression des réponses avant d'archiver le formulaire",
-    "message1": "Ce formulaire est publié et reçoit des réponses. Vous avez des réponses à télécharger et à approuver pour suppression de Formulaires GC.",
+    "message1": "Vous avez des réponses à récupérer de Formulaires GC avant de pouvoir archiver ce formulaire.",
     "message2": "Avant d'archiver ce formulaire :",
     "message3": "1. Télécharger toutes les réponses.",
     "message4": "2. Confirmer la réception des réponses téléchargées en approuvant leur suppression de Formulaires GC.",
@@ -477,14 +477,14 @@
     "somethingWentWrong": "Il y a eu un problème",
     "downloadButtonText": "Télécharger une copie",
     "draft": {
-      "message1": "La suppression d'un formulaire ne peut être annulée. Votre formulaire brouillon sera définitivement supprimé de Formulaires GC.",
-      "message2": "Téléchargez une copie du fichier de formulaire pour vos archives. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer un nouveau formulaire avec de nouveaux liens URL.",
-      "message3": "Avant d'archiver votre formulaire, assurez-vous de supprimer tous les liens publics menant à ce formulaire. Cela permet d'éviter d'envoyer les gens dans une impasse. Pour arrêter les soumissions, vous pouvez plutôt considérer la fermeture du formulaire dans les paramètres."
+      "message1": "L'archivage déplacera ce formulaire vers la section « Archivés » de vos formulaires.",
+      "message2": "Ce formulaire pourra être désarchivé à partir des formulaires « Archivés » pendant 30 jours avant d'être définitivement supprimé.",
+      "message3": " Téléchargez une copie du fichier du formulaire pour vos registres. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer le formulaire plus tard."
     },
     "okay": "Archiver le formulaire",
     "published": {
-      "message1": "La suppression d'un formulaire ne peut être annulée. Votre formulaire publié sera définitivement supprimé de l'Internet, ce qui risque de créer des liens brisés.",
-      "message2": "Téléchargez une copie du fichier de formulaire pour vos archives. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer un nouveau formulaire avec de nouveaux liens URL.",
+      "message1": "L'archivage de ce formulaire publié ne peut être annulée. Votre formulaire publié sera définitivement enlevé de l'Internet, ce qui risque de créer des liens brisés.",
+      "message2": "Téléchargez une copie du fichier de formulaire pour vos registres. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer un nouveau formulaire avec de nouveaux liens URL.",
       "message3": "Avant d'archiver votre formulaire, assurez-vous de supprimer tous les liens publics menant à ce formulaire. Cela permet d'éviter d'envoyer les gens dans une impasse. Pour arrêter les soumissions, vous pouvez plutôt considérer la fermeture du formulaire dans les paramètres."
     },
     "title": "Archiver ce formulaire?"

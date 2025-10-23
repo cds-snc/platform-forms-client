@@ -4,12 +4,12 @@
     "drafts": "Ébauches",
     "published": "Publiés",
     "all": "Tous",
-    "archived": "Archivé"
+    "archived": "Archivés"
   },
   "actions": {
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
     "createNewForm": "Créer un nouveau formulaire",
-    "unarchiveForm": "Restaurer le formulaire",
+    "unarchiveForm": "Désarchiver le formulaire",
     "duplicatePublishedForm": "Dupliquer le formulaire publié"
   },
   "cards": {
@@ -105,7 +105,7 @@
   "errors": {
     "formDownloadNotExist": "Le forulaire que vous essayez de télécharger n'existe pas.",
     "formDownloadFailed": "Le téléchargement du formulaire a échoué.",
-    "formUnarchiveFailed": "La restauration du formulaire a échoué."
+    "formUnarchiveFailed": "La désarchivage du formulaire a échoué."
   },
   "archivedNotice": "Vous pouvez accéder à vos formulaires archivés pendant 30 jours.",
   "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés."
