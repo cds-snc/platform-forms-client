@@ -484,7 +484,7 @@
     "okay": "Archive form",
     "published": {
       "message1": "Archiving will move this published form to the “Archived” section of your forms.",
-      "message2": "Archive and edit your form, to update an existing form instead. The older version will temporarily remain available in the archive folder.",
+      "message2": "Archive and duplicate your form, to create a new draft from the archived form that can be edited as a new version. The older version will temporarily remain available in the archive folder.",
       "message3": "You can restore an old form from the archive folder within 30 days of archiving your form. After 30 days your form will be deleted permanently, this cannot be undone."
     },
     "title": "Archive this form?"
