@@ -8,7 +8,7 @@ import {
   BatchGetCommandOutput,
 } from "@aws-sdk/lib-dynamodb";
 import { logEvent } from "@lib/auditLogs";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import {

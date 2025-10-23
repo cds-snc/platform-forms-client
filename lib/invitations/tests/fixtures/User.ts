@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User } from "@gcforms/database";
 
 export const mockUser = (overrides: Partial<User> = {}): User => {
   const defaultInvitation: User = {

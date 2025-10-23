@@ -23,7 +23,7 @@ import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 // structuredClone is available starting in Node 17.
 // Until we catch up... polyfill
 import v8 from "v8";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@gcforms/database";
 
 import { logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
@@ -134,7 +134,7 @@ describe("Template CRUD functions", () => {
           id: "formtestID",
           form: formConfiguration,
           isPublished: false,
-          securityAttribute: "Unclassified"
+          securityAttribute: "Unclassified",
         })
       );
 
@@ -159,7 +159,6 @@ describe("Template CRUD functions", () => {
           form: formConfiguration,
           isPublished: false,
           securityAttribute: "Unclassified",
-
         }),
         expect.objectContaining({
           id: "formtestID2",
@@ -382,7 +381,7 @@ describe("Template CRUD functions", () => {
           id: "formtestID",
           form: formConfiguration,
           isPublished: true,
-          securityAttribute: "Unclassified"
+          securityAttribute: "Unclassified",
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
@@ -637,9 +636,7 @@ describe("Template CRUD functions", () => {
 
       mockUnprocessedSubmissions.mockResolvedValueOnce(true);
 
-      await expect(deleteTemplate("formtestID")).rejects.toThrow(
-        TemplateHasUnprocessedSubmissions
-      );
+      await expect(deleteTemplate("formtestID")).rejects.toThrow(TemplateHasUnprocessedSubmissions);
 
       // Ensure no archival update was attempted
       expect(prismaMock.template.update).not.toHaveBeenCalledWith(
@@ -654,7 +651,7 @@ describe("Template CRUD functions", () => {
         ...buildPrismaResponse("formtestID", formConfiguration, false),
         users: [{ id: "1" }],
       });
-      
+
       (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration, false),
         users: [{ id: "1" }],
