@@ -1,39 +1,28 @@
 "use client";
 import React, { useCallback, useState } from "react";
-import Markdown from "markdown-to-jsx";
+
 import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 
-import { FormServerError, FormServerErrorCodes } from "@lib/types/form-builder-types";
-
+import { toast } from "@formBuilder/components/shared/Toast";
 import { updateTemplateSecurityAttribute, updateTemplateFormPurpose } from "@formBuilder/actions";
+import { FormServerError, FormServerErrorCodes } from "@lib/types/form-builder-types";
 
 import { useRefresh } from "@lib/hooks/useRefresh";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
-import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import {
   ClassificationType,
   ClassificationSelect,
 } from "@formBuilder/components/ClassificationSelect";
 
-import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
-import { FormPurposeHelpButton } from "./dialogs/FormPurposeHelpButton";
+
 import { Branding } from "./branding/Branding";
 import { DownloadForm } from "./DownloadForm";
 import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
 
-/*
- * PurposeOption is used to determine the purpose of the form
- * admin: The form is used to collect personal information
- * nonAdmin: The form is used to collect non-personal information
- */
-export enum PurposeOption {
-  none = "",
-  admin = "admin",
-  nonAdmin = "nonAdmin",
-}
+import { IntendedUse, PurposeOption } from "./intendedUse/IntendedUse";
 
 export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -149,57 +138,12 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
           {/*--------------------------------------------*
            * Purpose option section
            *--------------------------------------------*/}
-
           <div className="mb-10">
-            <h2>{t("settingsPurposeAndUse.title")}</h2>
-            <p className="mb-6 text-sm">{t("settingsPurposeAndUse.description")}</p>
-            <Radio
-              id="purposeAndUseAdmin"
-              name="purpose-use"
-              label={t("settingsPurposeAndUse.personalInfo")}
-              labelClassName="font-bold"
-              disabled={isPublished}
-              checked={purposeOption === PurposeOption.admin}
-              value={PurposeOption.admin}
-              onChange={saveFormPurpose}
-              className="mb-20"
-            />
-            <div className="mb-4 ml-12 text-sm">
-              <div>
-                <Markdown options={{ forceBlock: false }}>
-                  {t("settingsPurposeAndUse.personalInfoDetails")}
-                </Markdown>
-              </div>
-              <ul>
-                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.1")}</li>
-                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.2")}</li>
-                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.3")}</li>
-              </ul>
-            </div>
-            <Radio
-              id="purposeAndUseNonAdmin"
-              name="purpose-use"
-              label={t("settingsPurposeAndUse.nonAdminInfo")}
-              labelClassName="font-bold"
-              disabled={isPublished}
-              checked={purposeOption === PurposeOption.nonAdmin}
-              value={PurposeOption.nonAdmin}
+            <IntendedUse
+              purposeOption={purposeOption}
+              isPublished={isPublished}
               onChange={saveFormPurpose}
             />
-            <div className="mb-4 ml-12 text-sm">
-              <div>
-                <Markdown options={{ forceBlock: false }}>
-                  {t("settingsPurposeAndUse.nonAdminInfoDetails")}
-                </Markdown>
-              </div>
-              <ul>
-                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.1")}</li>
-                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.2")}</li>
-                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.3")}</li>
-              </ul>
-            </div>
-
-            <FormPurposeHelpButton />
           </div>
 
           {/*--------------------------------------------*

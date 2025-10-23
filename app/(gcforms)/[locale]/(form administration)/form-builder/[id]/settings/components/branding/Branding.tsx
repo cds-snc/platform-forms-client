@@ -3,6 +3,7 @@ import React, { useCallback, type JSX } from "react";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
 
+import { cn } from "@lib/utils";
 import { BrandingSelect } from "./BrandingSelect";
 import { options } from "./options";
 
@@ -114,7 +115,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         />
       </div>
       {/* Logo preview */}
-      <div>
+      <div className={cn(hasBrandingRequestForm ? "mb-10" : "")}>
         <div className="mb-3 text-sm font-bold">{t("branding.preview")}</div>
         <Brand brand={brand} />
       </div>

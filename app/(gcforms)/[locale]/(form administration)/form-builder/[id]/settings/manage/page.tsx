@@ -1,7 +1,8 @@
+import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
+
 import { checkIfClosed } from "@lib/templates";
 import { authorization } from "@lib/privileges";
-import { Metadata } from "next";
 import { AuthenticatedPage } from "@lib/pages/auth";
 import { SetClosingDate } from "./components/close/SetClosingDate";
 import { Notifications } from "./components/notifications/Notifications";

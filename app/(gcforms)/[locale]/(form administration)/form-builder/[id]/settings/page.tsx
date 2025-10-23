@@ -1,8 +1,9 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { FormProfile } from "./components/FormProfile";
-import { getAppSetting } from "@root/lib/appSettings";
+
+import { getAppSetting } from "@lib/appSettings";
 import { ManageOwners } from "./components/manageFormOwners/ManageOwners";
+import { FormProfile } from "./components/FormProfile";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
