@@ -54,7 +54,7 @@ const {
       id: "gcAccount", // signIn("my-provider") and will be part of the callback URL
       name: "GC Account", // optional, used on the default login page as the button text.
       type: "oidc",
-      issuer: process.env.ZITADEL_URL,
+      issuer: process.env.ZITADEL_PROVIDER,
       clientId: process.env.ZITADEL_CLIENT_ID,
       checks: ["pkce", "state"],
       client: { token_endpoint_auth_method: "none" },
