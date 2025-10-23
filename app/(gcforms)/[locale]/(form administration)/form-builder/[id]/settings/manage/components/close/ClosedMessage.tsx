@@ -91,6 +91,10 @@ export const ClosedMessage = ({
           {t("closingDate.message.errors.translation")}
         </ValidationMessage>
       </div>
+
+      {/*--------------------------------------------*
+       * En editor
+       *--------------------------------------------*/}
       <div className="mb-10 flex gap-px border border-gray-100">
         <div className="relative w-1/2 flex-1 border-r-4 border-black">
           <label className="sr-only" htmlFor={`closed-en`}>
@@ -112,6 +116,9 @@ export const ClosedMessage = ({
           </LanguageLabel>
         </div>
 
+        {/*--------------------------------------------*
+         * Fr editor
+         *--------------------------------------------*/}
         <div className="relative w-1/2 flex-1">
           <label className="sr-only" htmlFor={`closed-fr`}>
             {t("french")}
