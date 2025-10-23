@@ -100,7 +100,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   );
 
   return (
-    <>
+    <div className="mb-10">
       <h2>{t("branding.heading")}</h2>
       <p className="block text-sm">{t("branding.text1")}</p>
       {/* Logo select */}
@@ -140,6 +140,6 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
           </p>
         </div>
       )}
-    </>
+    </div>
   );
 };

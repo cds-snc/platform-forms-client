@@ -28,7 +28,7 @@ export const IntendedUse = ({
   const { t } = useTranslation("form-builder");
 
   return (
-    <>
+    <div className="mb-10">
       <h2>{t("settingsPurposeAndUse.title")}</h2>
       <p className="mb-6 text-sm">{t("settingsPurposeAndUse.description")}</p>
       <Radio
@@ -40,7 +40,6 @@ export const IntendedUse = ({
         checked={purposeOption === PurposeOption.admin}
         value={PurposeOption.admin}
         onChange={onChange}
-        className="mb-20"
       />
       <div className="mb-4 ml-12 text-sm">
         <div>
@@ -78,6 +77,6 @@ export const IntendedUse = ({
       </div>
 
       <FormPurposeHelpButton />
-    </>
+    </div>
   );
 };

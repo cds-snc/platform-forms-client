@@ -117,34 +117,27 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
           {/*--------------------------------------------*
            * Classification section
            *--------------------------------------------*/}
-          <div className="mb-10">
-            <h2>{t("settingsResponseDelivery.selectClassification")}</h2>
-            <ClassificationSelect
-              className="max-w-[400px] truncate bg-gray-soft p-1 pr-10"
-              lang={lang}
-              isPublished={isPublished}
-              classification={classification}
-              handleUpdateClassification={saveSecurityAttribute}
-            />
-          </div>
+          <ClassificationSelect
+            className="max-w-[400px] truncate bg-gray-soft p-1 pr-10"
+            lang={lang}
+            isPublished={isPublished}
+            classification={classification}
+            handleUpdateClassification={saveSecurityAttribute}
+          />
 
           {/*--------------------------------------------*
            * Branding section
            *--------------------------------------------*/}
-          <div className="mb-10">
-            <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
-          </div>
+          <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
 
           {/*--------------------------------------------*
            * Purpose option section
            *--------------------------------------------*/}
-          <div className="mb-10">
-            <IntendedUse
-              purposeOption={purposeOption}
-              isPublished={isPublished}
-              onChange={saveFormPurpose}
-            />
-          </div>
+          <IntendedUse
+            purposeOption={purposeOption}
+            isPublished={isPublished}
+            onChange={saveFormPurpose}
+          />
 
           {/*--------------------------------------------*
            * Save progress section
