@@ -39,8 +39,11 @@ export const ProcessingMessage = ({
   if (responsesProcessed > 0 && !completed) {
     return (
       <div>
-        <p>Processing ${responsesProcessed} responses...</p>
-        <MapleLeafLoader message="Large maple leaf" width={300} height={350} />
+        <MapleLeafLoader
+          message={`Processing ${responsesProcessed} responses...`}
+          width={300}
+          height={350}
+        />
       </div>
     );
   }
