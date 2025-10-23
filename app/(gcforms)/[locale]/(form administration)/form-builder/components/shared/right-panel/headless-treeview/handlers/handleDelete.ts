@@ -32,7 +32,7 @@ export const handleDelete = async (
   if (confirm) {
     const children = item.getChildren();
     children.forEach((child) => {
-      removeElement(Number(child));
+      removeElement(Number(child.getId()));
     });
 
     deleteGroup(item.getId());

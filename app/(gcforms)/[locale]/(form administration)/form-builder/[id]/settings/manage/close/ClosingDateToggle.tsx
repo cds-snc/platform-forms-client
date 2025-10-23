@@ -28,12 +28,12 @@ export const ClosingDateToggle = ({
       aria-checked={isChecked}
       tabIndex={0}
       onClick={() => {
-        setIsChecked(isChecked ? true : false);
+        setIsChecked(!isChecked);
       }}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           // toggle the switch to the opposite state
-          setIsChecked(isChecked ? true : false);
+          setIsChecked(!isChecked);
           // Stop the browser "space" key default behavior of scrolling down
           e.preventDefault();
         }

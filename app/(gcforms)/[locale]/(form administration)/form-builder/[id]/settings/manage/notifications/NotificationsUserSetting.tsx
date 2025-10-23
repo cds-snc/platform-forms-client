@@ -1,51 +1,23 @@
-import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
-import { toast } from "@formBuilder/components/shared/Toast";
 import { NotificationsUser } from "./Notifications";
 import { NotificationsToggle } from "./NotificationsToggle";
-import { getNotificationsUser } from "./actions";
 import Skeleton from "react-loading-skeleton";
 
 export const NotificationsUserSetting = ({
-  formId,
   sessionUser,
-  setSessionUser,
+  onToggle,
 }: {
-  formId: string;
   sessionUser: NotificationsUser | null;
-  setSessionUser: Dispatch<SetStateAction<NotificationsUser | null>>;
+  onToggle: (enabled: boolean) => Promise<void>;
 }) => {
   const { t } = useTranslation("form-builder");
-  const generalError = t("settings.notifications.error.getNotifcations");
 
-  useEffect(() => {
-    const getSettings = async () => {
-      try {
-        const sessionUserWithSetting = await getNotificationsUser(formId);
-        if (!sessionUserWithSetting || "error" in sessionUserWithSetting) {
-          throw new Error();
-        }
-        setSessionUser(sessionUserWithSetting);
-      } catch (error) {
-        toast.error(generalError);
-      }
-    };
-    getSettings();
-  }, [formId, generalError, setSessionUser]);
-
-  const toggleChecked = useCallback(
-    () =>
-      setSessionUser((prev) => {
-        if (!prev) {
-          return null;
-        }
-        return {
-          ...prev,
-          enabled: !sessionUser?.enabled,
-        };
-      }),
-    [sessionUser?.enabled, setSessionUser]
-  );
+  const toggleChecked = useCallback(() => {
+    if (!sessionUser) return;
+    const newEnabled = !sessionUser.enabled;
+    onToggle(newEnabled);
+  }, [sessionUser, onToggle]);
 
   if (!sessionUser) {
     return <Skeleton count={1} className="mb-4" width={300} height={20} />;

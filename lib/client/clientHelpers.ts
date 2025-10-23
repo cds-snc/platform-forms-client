@@ -172,12 +172,11 @@ export const truncateString = (str: string, maxLength: number = 50): string => {
 
 // Google Analytics util to simplify firing an event
 export const ga = (eventName: string, data?: object) => {
-  if (!window || !eventName) {
-    return;
+  if (typeof window !== "undefined") {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: eventName,
+      ...data,
+    });
   }
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    event: eventName,
-    ...data,
-  });
 };
