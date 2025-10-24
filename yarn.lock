@@ -11863,16 +11863,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress-terminal-report@npm:^7.1.0":
-  version: 7.2.1
-  resolution: "cypress-terminal-report@npm:7.2.1"
+"cypress-terminal-report@npm:^7.3.3":
+  version: 7.3.3
+  resolution: "cypress-terminal-report@npm:7.3.3"
   dependencies:
     chalk: "npm:^4.0.0"
     compare-versions: "npm:^6.1.1"
     superstruct: "npm:0.14.2"
   peerDependencies:
     cypress: ">=10.0.0"
-  checksum: 10c0/8396407f0fc5d8300c71e9026973fa38f370c22a28b08d1b53fa35a4595f7d626d975c304ac9f88c6bb4a239cdc42da163684fb8560ba7bc3bd43bcfce416515
+  checksum: 10c0/afd2976c26e5a92499c3b00b0f223764a9029c4ec57da99a4efa737cf1b9468541281c59252c18fc93e4ad2672d86aa607e046e8ccaddd12c94166444f49aded
   languageName: node
   linkType: hard
 
@@ -11883,9 +11883,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^15.3.0":
-  version: 15.3.0
-  resolution: "cypress@npm:15.3.0"
+"cypress@npm:^15.5.0":
+  version: 15.5.0
+  resolution: "cypress@npm:15.5.0"
   dependencies:
     "@cypress/request": "npm:^3.0.9"
     "@cypress/xvfb": "npm:^1.2.4"
@@ -11932,7 +11932,7 @@ __metadata:
     yauzl: "npm:^2.10.0"
   bin:
     cypress: bin/cypress
-  checksum: 10c0/41a422526ba851a68dbe0121d0897a1ce73ad85462d28432756e43b92d5e7df7335ba5c5d776e81a9a0b4730de316b69b9ab88f32d8c149a5ccb011eec8a4d2a
+  checksum: 10c0/0a7aabc9920a808f5257f111b9b4bb6602e9b7146dd945a49e16a0811c201d5f5837f9ae439756556b686e020155483542505bf8499b72307236047b85a1130b
   languageName: node
   linkType: hard
 
@@ -14092,11 +14092,11 @@ __metadata:
     css-loader: "npm:^6.8.1"
     cssnano: "npm:^5.1.15"
     csv-writer: "npm:^1.6.0"
-    cypress: "npm:^15.3.0"
+    cypress: "npm:^15.5.0"
     cypress-axe: "npm:^1.7.0"
     cypress-each: "npm:^1.14.1"
     cypress-plugin-tab: "npm:^1.0.5"
-    cypress-terminal-report: "npm:^7.1.0"
+    cypress-terminal-report: "npm:^7.3.3"
     cypress-wait-until: "npm:^3.0.2"
     d3-hierarchy: "npm:^3.1.2"
     downshift: "npm:^9.0.10"
