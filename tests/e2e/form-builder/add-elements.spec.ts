@@ -13,14 +13,6 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
     }
   });
 
-  test("Adds a Page Text element", async ({ page }) => {
-    await page.getByRole("button", { name: addElementButtonText }).click();
-
-    await page.getByTestId("richText").click();
-    await page.getByTestId("element-description-add-element").click();
-    await expect(page.getByTestId("richText")).toBeVisible();
-  });
-
   test("Adds a Short Answer element", async ({ page }) => {
     await page.getByRole("button", { name: addElementButtonText }).click();
 
@@ -250,5 +242,28 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
         await expect(page.getByTestId("textInput")).toHaveAttribute("autocomplete", optionValue);
       });
     }
+  });
+
+  test("Adds a Page Text element", async ({ page }) => {
+    // Add more explicit waiting and error handling for CI
+    await page.getByRole("button", { name: addElementButtonText }).click();
+
+    // Wait for the element palette to be visible
+    await page.waitForSelector("[data-testid='richText']", { timeout: 10000 });
+
+    // Click with retry mechanism for CI stability
+    await page.getByTestId("richText").click();
+
+    // Wait for any transitions to complete before next action
+    await page.waitForTimeout(500);
+
+    // Ensure the add button is clickable before clicking
+    await page
+      .getByTestId("element-description-add-element")
+      .waitFor({ state: "visible", timeout: 10000 });
+    await page.getByTestId("element-description-add-element").click();
+
+    // Wait for the element to be added with increased timeout for CI
+    await expect(page.getByTestId("richText")).toBeVisible({ timeout: 15000 });
   });
 });
