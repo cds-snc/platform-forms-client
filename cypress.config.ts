@@ -27,6 +27,11 @@ export default defineConfig({
       framework: "next",
       bundler: "webpack",
     },
+    specPattern: "**/*.cy.{js,jsx,ts,tsx}",
+    supportFile: "cypress/support/component.ts",
+    indexHtmlFile: "cypress/support/component-index.html",
+    viewportWidth: 1000,
+    viewportHeight: 660,
   },
   retries: {
     // Configure retry attempts for `cypress run`
