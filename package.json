@@ -15,7 +15,7 @@
     "singleQuote": false
   },
   "scripts": {
-    "dev": "yarn prisma:dev && next dev",
+    "dev": "yarn prisma:dev && next dev --webpack",
     "dev:debug": "next dev",
     "dev:secure": "yarn prisma:dev && next dev --experimental-https",
     "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
