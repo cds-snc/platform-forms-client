@@ -3,11 +3,14 @@
   "nav": {
     "drafts": "Ébauches",
     "published": "Publiés",
-    "all": "Tous"
+    "all": "Tous",
+    "archived": "Archivés"
   },
   "actions": {
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
-    "createNewForm": "Créer un nouveau formulaire"
+    "createNewForm": "Créer un nouveau formulaire",
+    "unarchiveForm": "Désarchiver le formulaire",
+    "duplicatePublishedForm": "Dupliquer pour modifier et republier"
   },
   "cards": {
     "noForms": "Vous n’avez aucun formulaire.",
@@ -17,13 +20,17 @@
   "card": {
     "states": {
       "draft": "Ébauche",
-      "published": "Publié"
+      "published": "Publié",
+      "archived": "Archivé"
     },
     "title": {
       "notTranslatedEn": "Untitled form",
       "notTranslatedFr": "Formulaire sans titre"
     },
     "lastEdited": "Dernière modification ",
+    "deleteDate": " Date de suppression : ",
+    "deletedIn": "Sera supprimé dans ",
+    "days": " jours",
     "deliveryOption": {
       "email": "Réponses envoyées à :",
       "vault": "Page Réponses"
@@ -36,6 +43,7 @@
       "edit": "Modifier",
       "settings": "Paramètres",
       "delete": "Supprimer",
+      "archive": "Archiver",
       "coppiedToClipboard": "Copié dans le presse-papier",
       "somethingWentWrong": "Quelque chose a mal tourné",
       "clone": "Dupliquer",
@@ -96,6 +104,9 @@
   "navLabel": "Navigation des formulaires",
   "errors": {
     "formDownloadNotExist": "Le forulaire que vous essayez de télécharger n'existe pas.",
-    "formDownloadFailed": "Le téléchargement du formulaire a échoué."
-  }
+    "formDownloadFailed": "Le téléchargement du formulaire a échoué.",
+    "formUnarchiveFailed": "La désarchivage du formulaire a échoué."
+  },
+  "archivedNotice": "Vous pouvez accéder à vos formulaires archivés pendant 30 jours.",
+  "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés."
 }
