@@ -4,6 +4,9 @@ import { playwright } from "@vitest/browser-playwright";
 
 export default defineConfig({
   plugins: [tsconfigPaths()],
+  css: {
+    postcss: "./postcss.config.js", // Use PostCSS config for Tailwind
+  },
   esbuild: {
     jsx: 'automatic',
   },
