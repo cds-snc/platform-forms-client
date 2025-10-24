@@ -492,8 +492,6 @@
   "formDeletedDialogMessage": "Form deleted",
   "formDeletedDialogMessageFailed": "Failed to delete form",
   "formDeletedResponsesExist": "The form could not be deleted. Ensure there are no new responses and try again.",
-  "formDeletedDialogTitle": "Success",
-  "formDeleteDialogTitleFailed": "Error",
   "formDownload": {
     "btnText": "What can I do with a form file?",
     "description": "Keep a version of your form on your computer.",
@@ -814,9 +812,6 @@
       }
     }
   },
-  "settingsDeleteButton": "Delete",
-  "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
-  "settingsDeleteTitle": "Delete form",
   "settingsInvalidEmailAlertDesc1": "Must be a Government of Canada email address.",
   "settingsInvalidEmailAlertDesc2": "to register email address.",
   "settingsInvalidEmailAlertTitle": "Government email address",
