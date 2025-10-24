@@ -131,9 +131,11 @@ export const SetClosingDate = ({
 
       if (!isValid) return;
 
+      const isoClosingDate = closingDate ? new Date(closingDate).toISOString() : null;
+
       const result = await closeForm({
         id: formId,
-        closingDate: closingDate || null,
+        closingDate: isoClosingDate,
         closedDetails: messageToSave,
       });
 
