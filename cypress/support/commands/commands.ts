@@ -107,6 +107,9 @@ Cypress.Commands.add("useForm", (file, published = true) => {
           },
           failOnStatusCode: false, // Don't fail immediately on non-2xx status codes
         }).then((response) => {
+          cy.log(`Template creation response status: ${response.status}`);
+          cy.log(`Template creation response body:`, response.body);
+
           // Handle different response scenarios
           if (response.status >= 200 && response.status < 300) {
             // Success case
@@ -120,47 +123,27 @@ Cypress.Commands.add("useForm", (file, published = true) => {
             cy.log(`Form template created successfully with ID: ${formId}`);
 
             if (published) {
-              // Wait a moment to ensure the template is fully committed
-              cy.wait(1000);
+              // Wait longer to ensure the template is fully committed in CI
+              cy.wait(2000);
 
-              // Verify the template exists before publishing
+              // Publish the form directly - skip verification GET to avoid timing issues
               cy.request({
-                method: "GET",
+                method: "PUT",
                 url: `/api/templates/${formId}`,
+                body: {
+                  isPublished: true,
+                },
                 failOnStatusCode: false,
-              }).then((getResponse) => {
-                if (getResponse.status >= 200 && getResponse.status < 300) {
-                  cy.log(`Template ${formId} verified to exist, proceeding with publication`);
-
-                  // Publish the form with error handling
-                  cy.request({
-                    method: "PUT",
-                    url: `/api/templates/${formId}`,
-                    body: {
-                      isPublished: true,
-                    },
-                    failOnStatusCode: false,
-                  }).then((publishResponse) => {
-                    if (publishResponse.status >= 200 && publishResponse.status < 300) {
-                      cy.log(`Form ${formId} successfully published`);
-                    } else {
-                      const errorMessage =
-                        publishResponse.body?.message ||
-                        publishResponse.body?.error ||
-                        "Unknown error";
-                      cy.log(
-                        `Failed to publish form ${formId}: ${publishResponse.status} - ${errorMessage}`
-                      );
-                      throw publishResponse;
-                    }
-                  });
+              }).then((publishResponse) => {
+                if (publishResponse.status >= 200 && publishResponse.status < 300) {
+                  cy.log(`Form ${formId} successfully published`);
                 } else {
                   const errorMessage =
-                    getResponse.body?.message || getResponse.body?.error || "Template not found";
+                    publishResponse.body?.message || publishResponse.body?.error || "Unknown error";
                   cy.log(
-                    `Template ${formId} verification failed: ${getResponse.status} - ${errorMessage}`
+                    `Failed to publish form ${formId}: ${publishResponse.status} - ${errorMessage}`
                   );
-                  throw getResponse;
+                  throw publishResponse;
                 }
               });
             }
