@@ -10,7 +10,7 @@
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
     "createNewForm": "Créer un nouveau formulaire",
     "unarchiveForm": "Désarchiver le formulaire",
-    "duplicatePublishedForm": "Dupliquer le formulaire publié"
+    "duplicatePublishedForm": "Dupliquer pour modifier et republier"
   },
   "cards": {
     "noForms": "Vous n’avez aucun formulaire.",

@@ -10,7 +10,7 @@
     "resumeForm": "Resume editing form",
     "createNewForm": "Create new form",
     "unarchiveForm": "Restore form",
-    "duplicatePublishedForm": "Duplicate published form"
+    "duplicatePublishedForm": "Duplicate to edit and republish"
   },
   "cards": {
     "noForms": "You have no forms.",
