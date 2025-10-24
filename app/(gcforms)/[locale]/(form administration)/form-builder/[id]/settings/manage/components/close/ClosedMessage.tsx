@@ -18,7 +18,7 @@ type ClosedMessageProps = {
   valid: boolean;
   closedDetails?: ClosedDetails;
   setClosedDetails: (details: ClosedDetails) => void;
-  onSave?: () => void;
+  onSave?: (detailsToSave?: ClosedDetails) => Promise<void> | void; // Make onSave return a promise so we can wait for it
 };
 
 export const ClosedMessage = ({
@@ -29,37 +29,22 @@ export const ClosedMessage = ({
 }: ClosedMessageProps) => {
   const { t, i18n } = useTranslation("form-builder");
   const hasHydrated = useRehydrate();
-  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Track the initial state to detect changes (only set once on mount)
-  const initialDetailsRef = useRef<ClosedDetails | undefined>(closedDetails);
-  const lastSavedDetailsRef = useRef<ClosedDetails | undefined>(closedDetails);
+  // Track the current state for saving
+  const currentDetailsRef = useRef<ClosedDetails | undefined>(closedDetails);
 
-  const hasChanged = useCallback(() => {
-    const baseline = lastSavedDetailsRef.current || initialDetailsRef.current;
+  // Update current details ref whenever closedDetails changes
+  currentDetailsRef.current = closedDetails;
 
-    if (!baseline && !closedDetails) return false;
-    if (!baseline) return true;
-    if (!closedDetails) return true;
-
-    return (
-      baseline.messageEn !== closedDetails.messageEn ||
-      baseline.messageFr !== closedDetails.messageFr
-    );
-  }, [closedDetails]);
-
-  const debouncedSave = useCallback(() => {
-    if (saveTimeoutRef.current) {
-      clearTimeout(saveTimeoutRef.current);
-    }
-    saveTimeoutRef.current = setTimeout(() => {
-      if (valid && hasChanged() && onSave) {
-        onSave();
-        // Update last saved state after save
-        lastSavedDetailsRef.current = closedDetails;
+  const handleSave = useCallback(async () => {
+    if (valid && onSave) {
+      try {
+        await onSave(currentDetailsRef.current);
+      } catch (error) {
+        // Silent fail - error handling should be done by parent component
       }
-    }, 1000); // Save 1 second after user stops typing
-  }, [valid, onSave, hasChanged, closedDetails]);
+    }
+  }, [valid, onSave]);
 
   if (!hasHydrated) {
     // Don't show the rich text editor until the form has been hydrated
@@ -91,11 +76,7 @@ export const ClosedMessage = ({
           {t("closingDate.message.errors.translation")}
         </ValidationMessage>
       </div>
-
-      {/*--------------------------------------------*
-       * En editor
-       *--------------------------------------------*/}
-      <div className="mb-10 flex gap-px border border-gray-100">
+      <div className="mb-10 flex gap-px border border-gray-100" onBlur={handleSave}>
         <div className="relative w-1/2 flex-1 border-r-4 border-black">
           <label className="sr-only" htmlFor={`closed-en`}>
             {t("english")}
@@ -107,8 +88,9 @@ export const ClosedMessage = ({
             contentLocale="en"
             content={closedDetails && closedDetails.messageEn ? closedDetails.messageEn : ""}
             onChange={(value: string) => {
-              setClosedDetails({ ...closedDetails, messageEn: value });
-              debouncedSave();
+              const updatedDetails = { ...closedDetails, messageEn: value };
+              setClosedDetails(updatedDetails);
+              currentDetailsRef.current = updatedDetails;
             }}
           />
           <LanguageLabel id="closed-en-language" lang={"en"}>
@@ -130,8 +112,9 @@ export const ClosedMessage = ({
             contentLocale="fr"
             content={closedDetails && closedDetails.messageFr ? closedDetails.messageFr : ""}
             onChange={(value: string) => {
-              setClosedDetails({ ...closedDetails, messageFr: value });
-              debouncedSave();
+              const updatedDetails = { ...closedDetails, messageFr: value };
+              setClosedDetails(updatedDetails);
+              currentDetailsRef.current = updatedDetails;
             }}
           />
           <LanguageLabel id="closed-fr-language" lang={"fr"}>
