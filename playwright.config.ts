@@ -11,12 +11,14 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 3 : 0,
-  /* Use more workers in CI for faster execution */
+  /* Use fewer workers in CI for more stability */
   workers: process.env.PLAYWRIGHT_WORKERS
     ? parseInt(process.env.PLAYWRIGHT_WORKERS)
     : process.env.CI
-      ? 4
+      ? 2
       : undefined,
+  /* Increase timeout for CI environment */
+  timeout: process.env.CI ? 60 * 1000 : 30 * 1000,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI ? [["github"], ["list"]] : "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -41,10 +43,8 @@ export default defineConfig({
       use: {
         ...devices["Desktop Edge"],
         channel: "msedge",
-        headless: !!process.env.CI, // Run headless only in CI
-        launchOptions: {
-          slowMo: 250, // Slow down actions for better visibility
-        },
+        headless: !!process.env.CI,
+        launchOptions: process.env.CI ? {} : { slowMo: 250 }, // Slow down actions only locally for visibility
       },
     },
   ],
