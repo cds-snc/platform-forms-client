@@ -1,33 +1,21 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-import tailwind from "eslint-plugin-tailwindcss";
-import reactHooks from "eslint-plugin-react-hooks";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const eslintConfig = [
   {
-    plugins: {
-      "react-hooks": reactHooks,
-    },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-    },
+    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
-  ...tailwind.configs["flat/recommended"],
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-    "node_modules/**",
-    "utils/**",
-    "**/dist/**",
-  ]),
-  {
+  ...compat.config({
+    extends: ["next/core-web-vitals", "next/typescript", "prettier"],
+    plugins: ["tailwindcss"],
     rules: {
       "no-console": "error",
       "no-await-in-loop": "error",
@@ -44,6 +32,9 @@ const eslintConfig = defineConfig([
           caughtErrors: "none",
         },
       ],
+      "tailwindcss/classnames-order": "warn",
+      "tailwindcss/no-custom-classname": "warn",
+      "tailwindcss/no-contradicting-classname": "error",
     },
     settings: {
       tailwindcss: {
@@ -91,7 +82,7 @@ const eslintConfig = defineConfig([
         ],
       },
     },
-  },
-]);
+  }),
+];
 
 export default eslintConfig;

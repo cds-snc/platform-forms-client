@@ -15,9 +15,9 @@
     "singleQuote": false
   },
   "scripts": {
-    "dev": "yarn prisma:dev && next dev --turbopack",
-    "dev:debug": "next dev --turbopack",
-    "dev:secure": "yarn prisma:dev && next dev --experimental-https --turbopack",
+    "dev": "yarn prisma:dev && next dev",
+    "dev:debug": "next dev",
+    "dev:secure": "yarn prisma:dev && next dev --experimental-https",
     "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
     "start": "yarn prisma:deploy && NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
     "prisma:deploy": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=production",
@@ -27,7 +27,7 @@
     "prisma:test": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=test",
     "prisma:generate": "prisma generate",
     "start:test": "yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
-    "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
+    "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev",
     "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",
     "lint": "eslint . && tsc --noEmit",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
@@ -71,7 +71,7 @@
     "@headless-tree/react": "^1.5.0",
     "@headlessui/react": "^2.2.9",
     "@neshca/cache-handler": "^1.2.1",
-    "@next/mdx": "15.5.4",
+    "@next/mdx": "16.0.0",
     "@prisma/client": "6",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.4",
@@ -105,7 +105,7 @@
     "markdown-to-jsx": "7.7.13",
     "md5": "^2.3.0",
     "native-file-system-adapter": "^3.0.1",
-    "next": "15.5.4",
+    "next": "16.0.0",
     "next-auth": "5.0.0-beta.29",
     "node-fetch": "^3.3.2",
     "pino": "10.0.0",
@@ -159,8 +159,8 @@
     "@types/node": "^24.7.2",
     "@types/node-fetch": "^2.6.9",
     "@types/pg": "^8.10.9",
-    "@types/react": "19.1.15",
-    "@types/react-dom": "19.1.9",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
     "@types/react-transition-group": "^4",
     "@types/unorm": "^1",
     "@types/uuid": "^8.3.4",
@@ -179,7 +179,7 @@
     "cypress-terminal-report": "^7.3.3",
     "cypress-wait-until": "^3.0.2",
     "eslint": "^9.36.0",
-    "eslint-config-next": "15.5.4",
+    "eslint-config-next": "16.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react-you-might-not-need-an-effect": "^0.5.5",
     "eslint-plugin-tailwindcss": "^3.17.5",
@@ -215,7 +215,7 @@
   ],
   "packageManager": "yarn@4.10.3",
   "resolutions": {
-    "@types/react": "19.1.15",
-    "@types/react-dom": "19.1.9"
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2"
   }
 }
