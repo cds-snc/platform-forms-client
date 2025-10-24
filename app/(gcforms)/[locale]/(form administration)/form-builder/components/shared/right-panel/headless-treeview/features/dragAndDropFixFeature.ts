@@ -17,8 +17,7 @@ export const dragAndDropFixFeature: FeatureImplementation = {
       hotkey: "ArrowDown",
       canRepeat: true,
       preventDefault: true,
-      isEnabled: (tree) =>
-        !(tree.isSearchOpen?.() ?? false) && !tree.getState().dnd?.draggedItems, // TODO what happens when the feature doesnt exist? proxy method still claims to exist
+      isEnabled: (tree) => !(tree.isSearchOpen?.() ?? false) && !tree.getState().dnd?.draggedItems, // TODO what happens when the feature doesnt exist? proxy method still claims to exist
       handler: (e, tree) => {
         tree.focusNextItem();
         tree.updateDomFocus();
@@ -32,8 +31,7 @@ export const dragAndDropFixFeature: FeatureImplementation = {
       hotkey: "ArrowUp",
       canRepeat: true,
       preventDefault: true,
-      isEnabled: (tree) =>
-        !(tree.isSearchOpen?.() ?? false) && !tree.getState().dnd?.draggedItems,
+      isEnabled: (tree) => !(tree.isSearchOpen?.() ?? false) && !tree.getState().dnd?.draggedItems,
       handler: (e, tree) => {
         tree.focusPreviousItem();
         tree.updateDomFocus();
@@ -48,17 +46,13 @@ export const dragAndDropFixFeature: FeatureImplementation = {
       preventDefault: true,
       isEnabled: (tree) => !tree.getState().dnd?.draggedItems,
       handler: (_, tree) => {
-        const selectedItems = tree.getSelectedItems?.() ?? [
-          tree.getFocusedItem(),
-        ];
+        const selectedItems = tree.getSelectedItems?.() ?? [tree.getFocusedItem()];
         const focusedItem = tree.getFocusedItem();
 
         tree.startKeyboardDrag(
-          selectedItems.includes(focusedItem)
-            ? selectedItems
-            : selectedItems.concat(focusedItem),
+          selectedItems.includes(focusedItem) ? selectedItems : selectedItems.concat(focusedItem)
         );
       },
     },
-  }
- }
+  },
+};
