@@ -29,8 +29,7 @@ export const ClosedMessage = ({
   const { t, i18n } = useTranslation("form-builder");
   const hasHydrated = useRehydrate();
 
-  // Track the last saved state for reference
-  const lastSavedDetailsRef = useRef<ClosedDetails | undefined>(closedDetails);
+  // Track the current state for saving
   const currentDetailsRef = useRef<ClosedDetails | undefined>(closedDetails);
 
   // Update current details ref whenever closedDetails changes
@@ -40,10 +39,7 @@ export const ClosedMessage = ({
     if (valid && onSave) {
       try {
         await onSave(currentDetailsRef.current);
-        // Update last saved state only after successful save
-        lastSavedDetailsRef.current = currentDetailsRef.current;
       } catch (error) {
-        // Don't update lastSavedDetailsRef if save failed
         // Silent fail - error handling should be done by parent component
       }
     }
