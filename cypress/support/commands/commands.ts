@@ -107,6 +107,9 @@ Cypress.Commands.add("useForm", (file, published = true) => {
           },
           failOnStatusCode: false, // Don't fail immediately on non-2xx status codes
         }).then((response) => {
+          cy.log(`Template creation response status: ${response.status}`);
+          cy.log(`Template creation response body:`, response.body);
+
           // Handle different response scenarios
           if (response.status >= 200 && response.status < 300) {
             // Success case
@@ -115,26 +118,30 @@ Cypress.Commands.add("useForm", (file, published = true) => {
             }
 
             expect(response.body).to.have.property("id");
-            cy.wrap(response.body.id).as("formID", { type: "static" });
-            cy.log(`Form template created successfully with ID: ${response.body.id}`);
+            const formId = response.body.id;
+            cy.wrap(formId).as("formID", { type: "static" });
+            cy.log(`Form template created successfully with ID: ${formId}`);
 
             if (published) {
-              // Publish the form with error handling
+              // Wait longer to ensure the template is fully committed in CI
+              cy.wait(2000);
+
+              // Publish the form directly - skip verification GET to avoid timing issues
               cy.request({
                 method: "PUT",
-                url: `/api/templates/${response.body.id}`,
+                url: `/api/templates/${formId}`,
                 body: {
                   isPublished: true,
                 },
                 failOnStatusCode: false,
               }).then((publishResponse) => {
                 if (publishResponse.status >= 200 && publishResponse.status < 300) {
-                  cy.log(`Form ${response.body.id} successfully published`);
+                  cy.log(`Form ${formId} successfully published`);
                 } else {
                   const errorMessage =
                     publishResponse.body?.message || publishResponse.body?.error || "Unknown error";
                   cy.log(
-                    `Failed to publish form ${response.body.id}: ${publishResponse.status} - ${errorMessage}`
+                    `Failed to publish form ${formId}: ${publishResponse.status} - ${errorMessage}`
                   );
                   throw publishResponse;
                 }
