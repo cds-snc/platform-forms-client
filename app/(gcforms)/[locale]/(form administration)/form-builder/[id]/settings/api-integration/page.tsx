@@ -107,9 +107,9 @@ export default AuthenticatedPage(
 
         {rate === null ? (
           <div className="mb-10">
-            <p className="mb-4">
-              <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.title")}</strong>
-            </p>
+            <h2>
+              {t("settings.apiIntegration.page.apiKey.rateLimit.title")}
+            </h2>
             <p>
               <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.currentLimit")}</strong>
             </p>
