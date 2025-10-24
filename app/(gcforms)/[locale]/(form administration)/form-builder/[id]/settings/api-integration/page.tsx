@@ -95,9 +95,9 @@ export default AuthenticatedPage(
           {t("settings.apiIntegration.page.docsButton.text")}
         </LinkButton.Secondary>
 
-        <p className="mb-2">
-          <strong>{t("settings.apiIntegration.page.apiKey.title")}</strong>
-        </p>
+        <h2>
+        {t("settings.apiIntegration.page.apiKey.title")}
+        </h2>
         <p className="mb-6">{t("settings.apiIntegration.page.apiKey.description")}</p>
 
         <ApiKeyButton
