@@ -1,15 +1,17 @@
 import { useCallback } from "react";
 import { MarkerType } from "reactflow";
-import { TreeItem, TreeItemIndex } from "react-complex-tree";
-
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Group, GroupsType } from "@gcforms/types";
 import { type NextActionRule } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getReviewNode, getStartElements, getEndNode } from "@lib/utils/form-builder/i18nHelpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+import { groupsToTreeData } from "@root/lib/groups/utils/groupsToTreeData";
+import {
+  TreeItem,
+  TreeItemIndex,
+} from "@formBuilder/components/shared/right-panel/headless-treeview/types";
 
 interface CustomEdge {
   id: string;
@@ -27,6 +29,17 @@ interface CustomEdge {
   };
   ariaLabel: string;
 }
+
+export type GroupNodeType = {
+  id: string;
+  position: { x: number; y: number };
+  data: {
+    label: string;
+    children: GroupNodeType[];
+    nextAction?: NextActionRule | NextActionRule[] | string;
+  };
+  type: string;
+};
 
 const defaultEdges = {
   start: "start",
@@ -73,8 +86,8 @@ const getEdges = (
   if (prevNodeId && group && typeof group.nextAction === "string") {
     let nextAction = group.nextAction;
 
-    if (!showReviewNode && nextAction === LockedSections.REVIEW) {
-      nextAction = LockedSections.END;
+    if (!showReviewNode && nextAction === LOCKED_GROUPS.REVIEW) {
+      nextAction = LOCKED_GROUPS.END;
     }
 
     return [
@@ -99,8 +112,8 @@ const getEdges = (
     const edges = nextActions.map((action: NextActionRule) => {
       let nextAction = action.groupId;
 
-      if (!showReviewNode && action.groupId === LockedSections.REVIEW) {
-        nextAction = LockedSections.END;
+      if (!showReviewNode && action.groupId === LOCKED_GROUPS.REVIEW) {
+        nextAction = LOCKED_GROUPS.END;
       }
 
       return {
@@ -128,12 +141,15 @@ export const useFlowData = (
   showReviewNode: boolean,
   hasReviewPage: boolean
 ) => {
-  const getTreeData = useGroupStore((s) => s.getTreeData);
-  const treeItems = getTreeData();
   const formGroups = useTemplateStore((s) => s.form.groups);
+  const formElements = useTemplateStore((s) => s.form.elements);
   const startElements = getStartElements(lang);
   const reviewNode = getReviewNode(lang);
   const endNode = getEndNode(lang);
+
+  const treeItems = groupsToTreeData(formGroups || {}, formElements || [], {
+    reviewGroup: showReviewNode,
+  });
 
   if (hasReviewPage) {
     endNode.type = "endNodeWithReview";
@@ -141,33 +157,43 @@ export const useFlowData = (
 
   const getData = useCallback(() => {
     const edges: CustomEdge[] = [];
-    const treeIndexes = treeItems.root.children;
+    const treeIds = treeItems.root.children;
 
     const x_pos = 0;
     const y_pos = 0;
-    let prevNodeId: string = LockedSections.START;
+    let prevNodeId: string = LOCKED_GROUPS.START;
 
-    if (!treeIndexes) {
+    if (!treeIds) {
       return { edges, nodes: [] };
     }
 
     const nodes = [];
 
-    treeIndexes.forEach((key: TreeItemIndex) => {
+    treeIds.forEach((key: TreeItemIndex) => {
       const treeItem: TreeItem = treeItems[key];
       const group: Group | undefined = formGroups && formGroups[key] ? formGroups[key] : undefined;
-      let elements: TreeItem[] = [];
+      let elements: GroupNodeType[] = [];
 
-      if (key === LockedSections.START) {
+      if (key === LOCKED_GROUPS.START) {
         // Add "default" start elements
         // introduction, privacy
         elements = startElements;
       }
 
       if (treeItem.children && treeItem.children.length > 0) {
-        const children = treeItem.children.map((childId) => {
-          return treeItems[childId];
+        const children = treeItem.children.map((itemIndex: TreeItemIndex) => {
+          const item = treeItems[itemIndex];
+          return {
+            type: "formElementNode",
+            id: String(item.index),
+            data: {
+              label: (lang === "en" ? item.data.titleEn : item.data.titleFr) || "",
+              children: [],
+            },
+            position: { x: 0, y: 0 },
+          };
         });
+
         elements = [...elements, ...children];
       }
 
@@ -179,26 +205,26 @@ export const useFlowData = (
 
       let label = treeItem.data[titleKey];
 
-      if (key === LockedSections.START) {
+      if (key === LOCKED_GROUPS.START) {
         // Ensure start label is displayed in the correct language
         label = getStartLabels()[lang];
       }
 
       const flowNode = {
         id: key as string,
+        type: isOffBoardSection ? "offboardNode" : "groupNode",
         position: { x: x_pos, y: y_pos },
         data: {
           label,
           children: elements,
           nextAction: treeItem.data.nextAction,
         },
-        type: isOffBoardSection ? "offboardNode" : "groupNode",
       };
 
       edges.push(...(newEdges as CustomEdge[]));
       prevNodeId = key as string;
 
-      if (key === LockedSections.REVIEW || key === LockedSections.END) {
+      if (key === LOCKED_GROUPS.REVIEW || key === LOCKED_GROUPS.END) {
         return;
       }
       nodes.push(flowNode);

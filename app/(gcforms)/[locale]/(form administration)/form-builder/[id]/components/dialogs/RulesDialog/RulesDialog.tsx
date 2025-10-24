@@ -5,7 +5,7 @@ import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import React, { useCallback, useEffect } from "react";
 import { RulesForm } from "./RulesForm";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 import { useRouter } from "next/navigation";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { Button } from "@clientComponents/globals/Buttons/Button";

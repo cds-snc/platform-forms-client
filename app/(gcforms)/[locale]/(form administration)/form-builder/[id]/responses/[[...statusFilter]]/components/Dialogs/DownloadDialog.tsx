@@ -16,7 +16,6 @@ import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { getSubmissionsByFormat } from "../../actions";
 import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/form-builder-types";
 import { FormBuilderError } from "../../exceptions";
-import { isArrayBuffer } from "@lib/client/clientHelpers";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -128,11 +127,9 @@ export const DownloadDialog = ({
           zip.file(`${response.id}.html`, response.html);
         });
 
-        zip.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
+        zip.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
           const fileName = `${filePrefix}responses-reponses.zip`;
-          if (isArrayBuffer(buffer)) {
-            downloadFileFromBlob(new Blob([buffer]), fileName);
-          }
+          downloadFileFromBlob(blob, fileName);
 
           handleDownloadComplete();
         });
@@ -158,11 +155,9 @@ export const DownloadDialog = ({
 
           file.file("receipt-recu.html", response.receipt);
           file.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
-          file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
+          file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
             const fileName = `${filePrefix}responses-reponses.zip`;
-            if (isArrayBuffer(buffer)) {
-              downloadFileFromBlob(new Blob([buffer]), fileName);
-            }
+            downloadFileFromBlob(blob, fileName);
 
             handleDownloadComplete();
           });
@@ -195,11 +190,9 @@ export const DownloadDialog = ({
           const file = new JSZip();
           file.file("receipt-recu.html", response.receipt);
           file.file("responses-reponses.json", JSON.stringify(response.responses));
-          file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
+          file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
             const fileName = `${filePrefix}responses-reponses.zip`;
-            if (isArrayBuffer(buffer)) {
-              downloadFileFromBlob(new Blob([buffer]), fileName);
-            }
+            downloadFileFromBlob(blob, fileName);
 
             handleDownloadComplete();
           });

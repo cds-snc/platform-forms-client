@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Button } from "@clientComponents/globals";
 import { Language } from "@lib/types/form-builder-types";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { BackArrowIcon24x24 } from "@serverComponents/icons";
 import { focusHeadingBySelector } from "@lib/client/clientHelpers";
 
@@ -20,7 +20,7 @@ export const BackButton = ({
   const { setGroup, getPreviousGroup, currentGroup } = useGCFormsContext();
 
   // Do not show on the Review page
-  if (!currentGroup || currentGroup !== LockedSections.REVIEW) {
+  if (!currentGroup || currentGroup !== LOCKED_GROUPS.REVIEW) {
     return <></>;
   }
 

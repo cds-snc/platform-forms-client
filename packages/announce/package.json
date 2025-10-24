@@ -1,12 +1,12 @@
 {
   "name": "@gcforms/announce",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "yarn@4.10.3",
   "peerDependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0"

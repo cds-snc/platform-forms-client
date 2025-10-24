@@ -84,18 +84,7 @@ export interface DropdownLabelProps {
 }
 
 /* https://github.com/microsoft/TypeScript/blob/main/lib/lib.dom.d.ts#L6282 */
-export interface CDSHTMLDialogElement extends HTMLElement {
-  open: boolean;
-  returnValue: string;
-  /**
-   * Closes the dialog element.
-   *
-   * The argument, if provided, provides a return value.
-   */
-  close(returnValue?: string): void;
-  /** Displays the dialog element. */
-  show(): void;
-  showModal(): void;
+export interface CDSHTMLDialogElement extends HTMLDialogElement {
   addEventListener<K extends keyof HTMLElementEventMap>(
     type: K,
     listener: (this: HTMLDialogElement, ev: HTMLElementEventMap[K]) => any, // eslint-disable-line  @typescript-eslint/no-explicit-any

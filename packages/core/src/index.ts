@@ -9,7 +9,8 @@ export {
 
 export { isValidDateObject, isValidDate, isValidDateFormat } from "./validation/date";
 
-export { validateOnSubmit, validate } from "./process";
+export { validateOnSubmit, validate, validateVisibleElements } from "./process";
+
 export {
   getVisibleGroupsBasedOnValuesRecursive,
   checkPageVisibility,

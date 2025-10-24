@@ -73,7 +73,7 @@ export const deserializeDateObject = (value: string): DateObject | string => {
       return parsed;
     }
   } catch (e) {
-    logMessage.info("Failed to parse date object", { value, error: e });
+    logMessage.info(`Failed to parse date object value: ${value}, error: ${JSON.stringify(e)}`);
   }
 
   return value;

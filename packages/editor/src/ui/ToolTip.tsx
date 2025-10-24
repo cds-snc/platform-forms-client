@@ -2,7 +2,15 @@
 import React, { useId, Children } from "react";
 import "./ToolTip.css";
 
-export const ToolTip = ({ children, text }: { children: React.ReactElement; text: string }) => {
+export const ToolTip = ({
+  children,
+  text,
+  element = null,
+}: {
+  children: React.ReactElement;
+  text: string;
+  element?: React.JSX.Element | null;
+}) => {
   const id = `tooltip-${useId()}`;
 
   return (
@@ -18,6 +26,7 @@ export const ToolTip = ({ children, text }: { children: React.ReactElement; text
       })}
       <span id={id} className="gc-tooltip">
         {text}
+        {element}
       </span>
     </span>
   );

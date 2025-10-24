@@ -10,8 +10,8 @@ describe("User profile", () => {
       cy.get("[data-testid='yourAccountDropdownContent']").contains("Profile").click();
       cy.url().should("include", "/profile");
       cy.get("h1").contains("Profile");
-      cy.get("h2").first().contains("Account information");
-      cy.get("h2").eq(1).contains("Security questions");
+      cy.get("h2").eq(1).contains("Account information");
+      cy.get("h2").eq(2).contains("Security questions");
     });
     it("Redirects to user profile page if security questions are already completed", () => {
       cy.visitPage("/en/auth/setup-security-questions");
@@ -41,8 +41,8 @@ describe("User profile", () => {
       cy.url().should("include", "/profile");
 
       cy.get("h1").contains("Profile");
-      cy.get("h2").first().contains("Account information");
-      cy.get("h2").eq(1).contains("Security questions");
+      cy.get("h2").eq(1).contains("Account information");
+      cy.get("h2").eq(2).contains("Security questions");
     });
     it("Renders the My Account dropdown as admin", () => {
       cy.visitPage("/en/forms");

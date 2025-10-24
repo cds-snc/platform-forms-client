@@ -252,11 +252,11 @@
                 "type": "string"
               }
             },
-            "titleEN": {
+            "titleEn": {
               "description": "Input label in English",
               "type": "string"
             },
-            "titleFR": {
+            "titleFr": {
               "description": "Input label in French",
               "type": "string"
             },
@@ -366,10 +366,10 @@
                   "type": "integer",
                   "minimum": 1
                 },
-                "descriptionEN": {
+                "descriptionEn": {
                   "type": "string"
                 },
-                "descriptionFR": {
+                "descriptionFr": {
                   "type": "string"
                 },
                 "all": {
@@ -382,16 +382,16 @@
                   "validation": {
                     "required": true,
                     "type": "email",
-                    "descriptionEN": "Enter a valid email address.",
-                    "descriptionFR": "Veuillez entrer une adresse courriel valide."
+                    "descriptionEn": "Enter a valid email address.",
+                    "descriptionFr": "Veuillez entrer une adresse courriel valide."
                   }
                 },
                 {
                   "validation": {
                     "required": false,
                     "type": "alphanumeric",
-                    "descriptionEN": "Please enter your home street address.",
-                    "descriptionFR": "Veuillez entrer votre adresse postale."
+                    "descriptionEn": "Please enter your home street address.",
+                    "descriptionFr": "Veuillez entrer votre adresse postale."
                   }
                 }
               ]

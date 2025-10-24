@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [1.0.11] - 2025-10-03
+
+- Update Lexical to version 0.36.2
+
+## [1.0.10] - 2025-10-01
+
+- Bump yarn
+
+## [1.0.9] - 2025-09-15
+
+- Update Lexical to version 0.35.0
+
+## [1.0.8] - 2025-09-09
+
+- Bump yarn
+
+## [1.0.7] - 2025-08-25
+
+### Changed
+
+- Update indent and outdent to have buttons and new shortcuts
+
 ## [1.0.6] - 2025-07-21
 
 ### Changed

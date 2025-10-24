@@ -3,6 +3,8 @@ import { type FormElement, type FormProperties } from "@gcforms/types";
 import { cleanRules } from "@gcforms/core";
 import { logMessage } from "@lib/logger";
 import { v4 as uuid } from "uuid";
+import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
+import { lockedGroups } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 const cleanElementRules = (elements: FormElement[], element: FormElement) => {
   if (element.properties?.conditionalRules) {
@@ -54,6 +56,10 @@ export const hasCleanedRules = (elements: FormElement[], element: FormElement) =
 
 export const transform: TemplateStore<"transform"> = (set) => () => {
   set((state) => {
+    // Make sure groups are initialized
+    state.form = initializeGroups({ ...state.form }, true);
+
+    // Clean rules and ensure UUIDs
     state.form.elements.forEach((element, index) => {
       if (element.uuid === undefined) {
         state.form.elements[index] = { ...element, uuid: uuid() };
@@ -65,5 +71,30 @@ export const transform: TemplateStore<"transform"> = (set) => () => {
         state.form.elements[index].properties.conditionalRules = rules;
       }
     });
+
+    // Clean groupsLayout
+    if (state.form.groupsLayout && state.form.groupsLayout.length > 0) {
+      // Remove locked groups (start, end, review) if they exist
+      state.form.groupsLayout = state.form.groupsLayout.filter((id) => !lockedGroups.includes(id));
+
+      // Ensure all group ids exist in form.groups
+      state.form.groupsLayout = state.form.groupsLayout.filter((id) =>
+        Object.entries(state.form.groups || {}).some(([key, _group]) => key === id)
+      );
+    } else {
+      // Create a groupsLayout if it's missing or empty
+      state.form.groupsLayout = Object.entries(state.form.groups || {})
+        .filter(([id, _group]) => {
+          return !lockedGroups.includes(id);
+        })
+        .map(([id, _group]) => id);
+    }
+
+    // Clean form layout
+    if (state.form.layout) {
+      state.form.layout = state.form.layout.filter((id) =>
+        state.form.elements.some((element) => element.id === id)
+      );
+    }
   });
 };

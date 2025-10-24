@@ -4,6 +4,7 @@ import {
   TemplateHasUnprocessedSubmissions,
   deleteTemplate,
   getFullTemplateByID,
+  cloneTemplate,
 } from "@lib/templates";
 import { revalidatePath } from "next/cache";
 import { FormRecord } from "@lib/types";
@@ -42,6 +43,23 @@ export const deleteForm = AuthenticatedAction(
       revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
     } catch (e) {
       return { error: (e as Error).message };
+    }
+  }
+);
+
+export const cloneForm = AuthenticatedAction(
+  async (_, id: string): Promise<{ formRecord: FormRecord | null; error?: string }> => {
+    try {
+      const cloned = await cloneTemplate(id);
+
+      if (!cloned) throw new Error("Failed to clone template");
+
+      // Revalidate forms listing so the new cloned template appears
+      revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
+
+      return { formRecord: cloned };
+    } catch (e) {
+      return { formRecord: null, error: (e as Error).message };
     }
   }
 );

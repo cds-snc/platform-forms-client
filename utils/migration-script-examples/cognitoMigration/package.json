@@ -1,0 +1,19 @@
+{
+  "name": "cognito_migration",
+  "version": "0.1.0",
+  "description": "Migrate user attributes in Cognito User Pool",
+  "main": "convertEmailAddressToLowercase.ts",
+  "scripts": {
+    "convert-email-address-to-lowercase": "tsx convertEmailAddressToLowercase.ts"
+  },
+  "keywords": [],
+  "author": "Clément Janin",
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.873.0",
+    "@types/node": "^18.19.3",
+    "dotenv": "^16.3.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "yarn@4.10.3"
+}

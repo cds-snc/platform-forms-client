@@ -1,6 +1,12 @@
 "use server";
 import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
-import { BatchGetCommand, QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import {
+  BatchGetCommand,
+  QueryCommand,
+  QueryCommandInput,
+  QueryCommandOutput,
+  BatchGetCommandOutput,
+} from "@aws-sdk/lib-dynamodb";
 import { logEvent } from "@lib/auditLogs";
 import { prisma } from "@lib/integration/prismaConnector";
 import { authorization } from "@lib/privileges";
@@ -20,9 +26,9 @@ import {
 const _retrieveEvents = async (query: QueryCommandInput) => {
   const request = new QueryCommand(query);
 
-  const { Items: eventsIndex, Count: eventsIndexCount } = await dynamoDBDocumentClient.send(
-    request
-  );
+  const response = (await dynamoDBDocumentClient.send(request)) as QueryCommandOutput;
+  const { Items: eventsIndex, Count: eventsIndexCount } = response;
+
   if (eventsIndexCount === 0 || eventsIndex === undefined) {
     return [];
   }
@@ -66,20 +72,20 @@ const _retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
     },
   });
 
-  await dynamoDBDocumentClient.send(batchRequest).then(async (data) => {
+  await dynamoDBDocumentClient.send(batchRequest).then(async (data: BatchGetCommandOutput) => {
     auditLogs.push(
-      ...(data?.Responses?.AuditLogs?.map((item) => ({
-        UserID: item.UserID,
-        Event: item.Event,
-        TimeStamp: item.TimeStamp,
-        Description: item.Description,
-        Subject: item.Subject,
+      ...(data?.Responses?.AuditLogs?.map((item: Record<string, string | number>) => ({
+        UserID: item.UserID as string,
+        Event: item.Event as string,
+        TimeStamp: item.TimeStamp as number,
+        Description: item.Description as string,
+        Subject: item.Subject as string,
       })) ?? [])
     );
 
     if (data.UnprocessedKeys?.AuditLogs) {
       while (retries < maxRetries) {
-        // eslint-disable-next-line no-await-in-loop
+        // eslint-disable-next-line no-await-in-loop -- Intentional retry logic with delay
         await delay(200); // Wait for 200ms second before retrying
         const retryRequest = new BatchGetCommand({
           RequestItems: {
@@ -88,15 +94,16 @@ const _retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
             },
           },
         });
-        // eslint-disable-next-line no-await-in-loop
-        const retryResponse = await dynamoDBDocumentClient.send(retryRequest);
+        const retryResponse: BatchGetCommandOutput =
+          // eslint-disable-next-line no-await-in-loop -- Intentional retry logic
+          await dynamoDBDocumentClient.send(retryRequest);
         auditLogs.push(
-          ...(retryResponse.Responses?.AuditLogs.map((item) => ({
-            UserID: item.UserID,
-            Event: item.Event,
-            TimeStamp: item.TimeStamp,
-            Description: item.Description,
-            Subject: item.Subject,
+          ...(retryResponse.Responses?.AuditLogs.map((item: Record<string, string | number>) => ({
+            UserID: item.UserID as string,
+            Event: item.Event as string,
+            TimeStamp: item.TimeStamp as number,
+            Description: item.Description as string,
+            Subject: item.Subject as string,
           })) ?? [])
         );
         if (!retryResponse.UnprocessedKeys?.AuditLogs) {

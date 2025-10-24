@@ -62,15 +62,19 @@ export const ConfirmFormDeleteDialog = ({
   }, [formId]);
 
   useEffect(() => {
-    checkForUnprocessed()
-      .then(() => {
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-        setError(true);
-      });
-  }, [checkForUnprocessed]);
+    if (isPublished) {
+      checkForUnprocessed()
+        .then(() => {
+          setIsLoading(false);
+        })
+        .catch(() => {
+          setIsLoading(false);
+          setError(true);
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, [checkForUnprocessed, isPublished]);
 
   if (isLoading) {
     return (
@@ -125,7 +129,7 @@ export const ConfirmFormDeleteDialog = ({
 
   const responsesLink = `/${i18n.language}/form-builder/${formId}/responses`;
 
-  if (unprocessed) {
+  if (unprocessed && isPublished) {
     return (
       <Dialog handleClose={handleClose} dialogRef={dialog}>
         <div className="p-5">

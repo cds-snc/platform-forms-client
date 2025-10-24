@@ -10,6 +10,7 @@ export interface TextInputProps extends InputFieldProps {
   type: HTMLTextInputTypeAttribute;
   placeholder?: string;
   spellCheck?: boolean;
+  allowNegativeNumbers?: boolean;
 }
 
 export const TextInput = (
@@ -25,6 +26,7 @@ export const TextInput = (
     autoComplete,
     maxLength,
     spellCheck,
+    allowNegativeNumbers,
   } = props;
   const [field, meta, helpers] = useField(props);
   const { t } = useTranslation("common");
@@ -66,6 +68,37 @@ export const TextInput = (
 
   const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
 
+  const checkNumericValues = (key: string, currentTarget: EventTarget & HTMLInputElement) => {
+    if (!allowNegativeNumbers) {
+      // Restrict a user from entering anything but a number
+      if (!/[0-9]+/.test(key)) {
+        return false;
+      }
+    } else {
+      // Prevent typing before an existing minus
+      const { value, selectionStart, selectionEnd } = currentTarget;
+      const minusIndex = value.indexOf("-");
+      const isBeforeMinus =
+        minusIndex !== -1 &&
+        selectionStart !== null &&
+        selectionEnd !== null &&
+        selectionStart <= minusIndex &&
+        selectionEnd <= minusIndex;
+
+      if (isBeforeMinus) {
+        return false;
+      }
+      // Allow digits, or a single leading minus for negatives
+      const isDigit = /^\d$/.test(key);
+      const isLeadingMinus =
+        key === "-" && currentTarget.selectionStart === 0 && !currentTarget.value.includes("-");
+
+      if (!(isDigit || isLeadingMinus)) {
+        return false;
+      }
+    }
+  };
+
   return (
     <>
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
@@ -106,8 +139,8 @@ export const TextInput = (
             ) {
               return;
             }
-            // Restrict a user from entering anything but a number
-            if (!/[0-9]+/.test(e.key)) {
+
+            if (checkNumericValues(e.key, e.currentTarget) === false) {
               e.preventDefault();
             }
           },

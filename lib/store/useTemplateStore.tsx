@@ -16,7 +16,7 @@ import unset from "lodash.unset";
  * Internal dependencies
  */
 import { TemplateStoreProps, TemplateStoreState, InitialTemplateStoreProps } from "./types";
-import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { getSchemaFromState, cleanInput } from "../utils/form-builder";
 import { Language } from "../types/form-builder-types";

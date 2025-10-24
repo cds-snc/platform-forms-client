@@ -111,3 +111,6 @@ certificates
 
 
 dist
+
+test-results/
+playwright-report/

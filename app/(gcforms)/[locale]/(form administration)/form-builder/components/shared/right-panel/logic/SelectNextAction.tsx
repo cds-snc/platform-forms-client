@@ -3,7 +3,7 @@ import React from "react";
 
 import { FormElement } from "@lib/types";
 import { type GroupsType } from "@gcforms/types";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SingleActionSelect } from "./SingleActionSelect";
