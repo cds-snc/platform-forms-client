@@ -24,6 +24,7 @@ export const EventKeys = {
   openAddUserNoteDialog: "open-add-user-note-dialog",
   openDeactivateUserDialog: "open-deactivate-user-dialog",
   submitProgress: "submit-progress",
+  openUnconfirmedApiKeyDialog: "open-unconfirmed-api-key-dialog",
 } as const;
 
 export const useCustomEvent = () => {

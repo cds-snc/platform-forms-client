@@ -12,7 +12,7 @@ If you need additional support, contact us: [https://forms-formulaires.alpha.can
 
 # Configurez votre intégration API
 
-Utilisez la clé APIA pour effectuer des demandes à l'API de Formulaires GC afin de récupérer vos soumissions de formulaires.
+Utilisez la clé API pour effectuer des demandes à l'API de Formulaires GC afin de récupérer vos soumissions de formulaires.
 
 **Veillez à conserver cette clé API en toute sécurité. Ne la partagez pas à grande échelle. Envoyez-la par courriel crypté s'il est absolument nécessaire de la partager avec un membre de votre équipe.**
 

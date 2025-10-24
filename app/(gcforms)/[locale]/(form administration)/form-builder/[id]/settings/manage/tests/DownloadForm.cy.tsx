@@ -1,5 +1,5 @@
 import React from "react";
-import { DownloadForm } from "../DownloadForm";
+import { DownloadForm } from "../../components/DownloadForm";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 
 describe("<DownloadForm />", () => {

@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { toast } from "@formBuilder/components/shared/Toast";

@@ -21,7 +21,7 @@ ${message}
 
 Once you [create an account](${registerUrlEn}), you can join your colleague's form and help them manage form responses. 
 
-You may also choose to turn on notifications for new responses by navigating to Settings > Form management.
+You may also choose to turn on notifications for new responses by navigating to Settings > Response options.
 
 ===
 
@@ -31,6 +31,6 @@ ${message}
 
 Une fois que vous [créez un compte](${registerUrlFr}) vous pouvez rejoindre le formulaire de votre collègue et l'aider à gérer les réponses au formulaire. 
 
-Vous pouvez également choisir d'activer les notifications pour les nouvelles réponses en naviguant vers Paramètres > Gestion du formulaire.
+Vous pouvez également choisir d'activer les notifications pour les nouvelles réponses en naviguant vers Paramètres > Options liées aux réponses.
 
 `;

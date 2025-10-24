@@ -1,4 +1,4 @@
-import { createServiceAccountKey } from "../actions";
+import { createServiceAccountKey, refreshServiceAccountKey } from "../actions";
 import JSZip from "jszip";
 
 import { getReadmeContent } from "../actions";
@@ -16,6 +16,11 @@ const downloadFileFromBlob = (data: Blob, fileName: string) => {
 
 export const _createKey = async (templateId: string) => {
   const key = await createServiceAccountKey(templateId);
+  return key;
+};
+
+export const _regenKey = async (templateId: string) => {
+  const key = await refreshServiceAccountKey(templateId);
   return key;
 };
 

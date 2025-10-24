@@ -7,14 +7,12 @@ export const DownloadForm = () => {
   const { t } = useTranslation("form-builder");
   return (
     <>
-      <div id="download-form" className="mb-6">
+      <div id="download-form" className="mb-10">
         <h2>{t("formDownload.title")}</h2>
         <p className="mb-4" id="download-hint">
           {t("formDownload.description")}
         </p>
-        <div className="mb-4">
-          <DownloadFileButton />
-        </div>
+        <DownloadFileButton theme="primary" />
       </div>
     </>
   );

@@ -36,7 +36,7 @@ const FormPurposeHelpDialog = ({ handleClose }: { handleClose: () => void }) => 
       <div className="p-5">
         <div className="mt-0">
           <p className="mb-6 text-sm">
-            <Markdown options={{ forceBlock: true }}>
+            <Markdown options={{ forceBlock: false }}>
               {t("settingsPurposeAndUse.learnMoreBox.description")}
             </Markdown>
           </p>
@@ -45,7 +45,7 @@ const FormPurposeHelpDialog = ({ handleClose }: { handleClose: () => void }) => 
               <strong>{t("settingsPurposeAndUse.learnMoreBox.personalInfo")}</strong>
             </div>
             <ul>
-              <Markdown options={{ forceBlock: true }}>
+              <Markdown options={{ forceBlock: false }}>
                 {t("settingsPurposeAndUse.learnMoreBox.personalInfoList")}
               </Markdown>
             </ul>
@@ -55,13 +55,13 @@ const FormPurposeHelpDialog = ({ handleClose }: { handleClose: () => void }) => 
               <strong>{t("settingsPurposeAndUse.learnMoreBox.nonAdminInfo")}</strong>
             </div>
             <ul>
-              <Markdown options={{ forceBlock: true }}>
+              <Markdown options={{ forceBlock: false }}>
                 {t("settingsPurposeAndUse.learnMoreBox.nonAdminInfoList")}
               </Markdown>
             </ul>
           </div>
           <div>
-            <Markdown options={{ forceBlock: true }}>
+            <Markdown options={{ forceBlock: false }}>
               {t("settingsPurposeAndUse.learnMoreBox.contactCoordinator")}
             </Markdown>
           </div>
@@ -86,7 +86,7 @@ export const FormPurposeHelpButton = () => {
 
   return (
     <>
-      <InfoIcon className="ml-4 inline-block" />
+      <InfoIcon className="inline-block" />
       <div className="ml-2 inline-block">
         <Button onClick={handleOpenDialog} theme="link">
           {t("settingsPurposeAndUse.learnMore")}
