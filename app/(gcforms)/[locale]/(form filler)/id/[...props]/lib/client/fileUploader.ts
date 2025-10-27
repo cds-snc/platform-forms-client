@@ -4,6 +4,7 @@ import axios, { AxiosError, AxiosProgressEvent } from "axios";
 import { Responses, FileInputResponse, FileInput } from "@gcforms/types";
 import { FileUploadError } from "../client/exceptions";
 import { isMimeTypeValid } from "@gcforms/core";
+import { generateFileChecksums } from "@lib/utils/fileChecksum";
 
 const isFileInput = (response: unknown): response is FileInput => {
   return (
@@ -63,7 +64,11 @@ export const copyObjectExcludingFileContent = (
     return filteredState as unknown as T;
   };
   filterFileContent(originalObject, formValuesWithoutFileContent);
-  return { formValuesWithoutFileContent, fileObjsRef };
+
+  // Calculate checksums for all files key / value pairs
+  const fileChecksums = generateFileChecksums(fileObjsRef);
+
+  return { formValuesWithoutFileContent, fileObjsRef, fileChecksums };
 };
 
 export const uploadFile = async (
