@@ -1,5 +1,5 @@
 import { defineConfig } from "cypress";
-import { logMessage } from "@lib/logger";
+import { logMessage } from "./lib/logger";
 import terminalReport from "cypress-terminal-report/src/installLogsPrinter";
 import dbTearDown from "./__utils__/dbTearDown";
 import dbSeed from "./prisma/seeds/seed";

@@ -11211,7 +11211,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress-terminal-report@npm:^7.1.0":
+"cypress-terminal-report@npm:^7.3.3":
   version: 7.3.3
   resolution: "cypress-terminal-report@npm:7.3.3"
   dependencies:
@@ -11231,7 +11231,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^15.3.0":
+"cypress@npm:^15.5.0":
   version: 15.5.0
   resolution: "cypress@npm:15.5.0"
   dependencies:
@@ -13473,11 +13473,11 @@ __metadata:
     css-loader: "npm:^6.8.1"
     cssnano: "npm:^5.1.15"
     csv-writer: "npm:^1.6.0"
-    cypress: "npm:^15.3.0"
+    cypress: "npm:^15.5.0"
     cypress-axe: "npm:^1.7.0"
     cypress-each: "npm:^1.14.1"
     cypress-plugin-tab: "npm:^1.0.5"
-    cypress-terminal-report: "npm:^7.1.0"
+    cypress-terminal-report: "npm:^7.3.3"
     cypress-wait-until: "npm:^3.0.2"
     d3-hierarchy: "npm:^3.1.2"
     downshift: "npm:^9.0.10"

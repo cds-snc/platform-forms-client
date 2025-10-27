@@ -29,7 +29,7 @@ export const formatTicketData = ({
       tags: [hostTag, "Forms_Request_Logo"],
     },
     publishing: {
-      subject: "Publishing permission request / Demande d’autorisation de publication",
+      subject: "Publishing permission / Autorisation de publication",
       type: "Go Live Request",
       tags: [hostTag, "Forms_Request_GoLive"],
     },
