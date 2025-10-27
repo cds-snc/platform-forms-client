@@ -31,7 +31,8 @@ export async function submitForm(
   values: Responses,
   language: string,
   formRecordOrId: PublicFormRecord | string,
-  captchaToken?: string | undefined
+  captchaToken?: string | undefined,
+  fileChecksums?: Record<string, string>
 ): Promise<{
   id: string;
   submissionId?: string;
@@ -114,6 +115,7 @@ export async function submitForm(
       securityAttribute: template.securityAttribute,
       formId,
       language,
+      fileChecksums,
     });
 
     sendNotifications(formId, template.form.titleEn, template.form.titleFr);
