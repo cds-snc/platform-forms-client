@@ -56,6 +56,7 @@ export enum AuditLogEvent {
   // API Management
   CreateAPIKey = "CreateAPIKey",
   DeleteAPIKey = "DeleteAPIKey",
+  RefreshAPIKey = "RefreshAPIKey",
   IncreaseThrottlingRate = "IncreaseThrottlingRate",
   ResetThrottlingRate = "ResetThrottlingRate",
   // Audi Log events
