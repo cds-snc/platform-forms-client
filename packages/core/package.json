@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/core",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -27,6 +27,13 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
   "tsdown": {
     "entry": "src/index.ts",
     "outDir": "dist"
