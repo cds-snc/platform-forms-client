@@ -1,9 +1,10 @@
+import React, { useCallback, useRef } from "react";
+import Skeleton from "react-loading-skeleton";
 import { useTranslation } from "@i18n/client";
+
 import { ClosedDetails } from "@lib/types";
 import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { useRehydrate } from "@lib/store/hooks/useRehydrate";
-import Skeleton from "react-loading-skeleton";
-import React, { useCallback, useRef } from "react";
 
 import { cn } from "@lib/utils";
 
@@ -97,6 +98,9 @@ export const ClosedMessage = ({
           </LanguageLabel>
         </div>
 
+        {/*--------------------------------------------*
+         * Fr editor
+         *--------------------------------------------*/}
         <div className="relative w-1/2 flex-1">
           <label className="sr-only" htmlFor={`closed-fr`}>
             {t("french")}
