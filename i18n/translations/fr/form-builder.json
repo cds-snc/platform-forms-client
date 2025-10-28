@@ -507,6 +507,17 @@
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Télécharger le fichier du formulaire"
   },
+  "auditDownload": {
+    "description": "Tableur de l'activité du formulaire.",
+    "descriptionEx": {
+      "line1": "Ce journal comprend :",
+      "line2": "Qui a créé le formulaire",
+      "line3": "Qui et quand le formulaire a été archivé",
+      "line4": "Qui et quand les paramètres du formulaire ont été mis à jour"
+    },
+    "downloadBtnText": "Télécharger le fichier du formulaire",
+    "title": "Télécharger l'activité du formulaire"
+  },
   "switchToApiMode": {
     "title": "Passer à la livraison par API",
     "description": "Les nouvelles soumissions seront disponibles via le point de terminaison de l'API.",

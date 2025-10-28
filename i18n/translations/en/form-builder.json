@@ -508,7 +508,6 @@
     "title": "Download form file"
   },
   "auditDownload": {
-    "btnText": "What can I do with a form file?",
     "description": "Spreadsheet of the form activity.",
     "descriptionEx": {
       "line1": "This log includes:",
