@@ -1563,3 +1563,86 @@ export const checkIfClosed = async (formId: string) => {
     return null;
   }
 };
+
+export const getFormJSONConfig = async (formId: string) => {
+  await authorization.canEditForm(formId).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formId },
+      "AccessDenied",
+      "Attempted to update security attribute"
+    );
+    throw e;
+  });
+
+  const result = await prisma.template
+    .findUnique({
+      where: { id: formId },
+      select: { jsonConfig: true },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!result) {
+    throw new Error("Template not found");
+  }
+
+  let jsonConfig: FormProperties;
+  const raw = result.jsonConfig;
+
+  if (typeof raw === "string") {
+    // Only parse if (unexpectedly) stored as a string
+    jsonConfig = JSON.parse(raw) as FormProperties;
+  } else {
+    jsonConfig = raw as FormProperties;
+  }
+
+  return jsonConfig;
+};
+
+export const updateFormJSONConfig = async (formID: string, jsonConfig: FormProperties) => {
+  const { user } = await authorization.canEditForm(formID).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      "Attempted to update security attribute"
+    );
+    throw e;
+  });
+
+  // Ensure it is a pure JSON value (strip functions/undefined)
+  const sanitized = JSON.parse(JSON.stringify(jsonConfig)) as Prisma.JsonObject;
+
+  const updatedTemplate = await prisma.template
+    .update({
+      where: {
+        id: formID,
+      },
+      data: { jsonConfig: sanitized },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
+        saveAndResume: true,
+        notificationsInterval: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (updatedTemplate === null) return updatedTemplate;
+
+  if (formCache.cacheAvailable) formCache.invalidate(formID);
+
+  logEvent(user.id, { type: "Form", id: formID }, "UpdateFormJSONConfig");
+
+  return _parseTemplate(updatedTemplate);
+};

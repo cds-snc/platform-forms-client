@@ -11,7 +11,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 import Brand from "@clientComponents/globals/Brand";
 import { ExternalLinkIcon } from "@serverComponents/icons";
-import { updateTemplate } from "@formBuilder/actions";
+import { updateBranding } from "@formBuilder/actions";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
@@ -63,10 +63,9 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
       return;
     }
 
-    const operationResult = await updateTemplate({
+    const operationResult = await updateBranding({
       id,
-      formConfig,
-      allowPublishedUpdate: true,
+      branding: formConfig.brand || undefined, // pass undefined to reset to default GoC branding
     });
 
     if (operationResult.formRecord !== null) {

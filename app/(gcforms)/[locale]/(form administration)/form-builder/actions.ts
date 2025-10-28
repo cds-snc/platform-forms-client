@@ -20,6 +20,8 @@ import {
   updateSecurityAttribute,
   updateFormPurpose,
   updateFormSaveAndResume,
+  getFormJSONConfig,
+  updateFormJSONConfig,
 } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
@@ -30,7 +32,7 @@ import { isValidEmail } from "@lib/validation/isValidEmail";
 import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
-import { NotificationsInterval } from "@gcforms/types";
+import { BrandProperties, NotificationsInterval } from "@gcforms/types";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -516,6 +518,44 @@ Pour prévisualiser ce formulaire :
       return { success: true };
     } catch (error) {
       return { success: false, error: (error as Error).message };
+    }
+  }
+);
+
+export const updateBranding = AuthenticatedAction(
+  async (
+    _,
+    {
+      id: formId,
+      branding,
+    }: {
+      id: string;
+      branding: BrandProperties | undefined;
+    }
+  ): Promise<{
+    formRecord: { id: string; updatedAt: string | undefined } | null;
+    error?: string;
+  }> => {
+    try {
+      const formConfig = await getFormJSONConfig(formId);
+
+      if (!formConfig) {
+        throw new Error("Failed to get template for branding update");
+      }
+
+      const updatedFormConfig: FormProperties = {
+        ...formConfig,
+        brand: branding,
+      };
+      const formRecord = await updateFormJSONConfig(formId, updatedFormConfig);
+
+      if (!formRecord) {
+        throw new Error("Failed to update template");
+      }
+
+      return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
+    } catch (_) {
+      return { formRecord: null, error: "error" };
     }
   }
 );
