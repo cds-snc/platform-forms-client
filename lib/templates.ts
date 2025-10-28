@@ -1610,7 +1610,7 @@ export const updateFormJSONConfig = async (formID: string, jsonConfig: FormPrope
     throw e;
   });
 
-  // Ensure it is a pure JSON value (strip functions/undefined)
+  // Ensure it is a pure JSON value
   const sanitized = JSON.parse(JSON.stringify(jsonConfig)) as Prisma.JsonObject;
 
   const updatedTemplate = await prisma.template
