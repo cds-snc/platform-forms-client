@@ -10,7 +10,6 @@ import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { dateHasPast } from "@lib/utils";
-import { validateResponses } from "@lib/validation/validation";
 import { validateOnSubmit } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
 import { sendNotifications } from "@lib/notifications";
@@ -69,22 +68,6 @@ export async function submitForm(
           },
         };
       }
-    }
-
-    /**
-     * This validation checks the response values against the template element types.
-     */
-    const validateResponsesResult = await validateResponses(values, template);
-
-    if (Object.keys(validateResponsesResult).length !== 0) {
-      // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
-      logMessage.info(
-        `[server-action][submitForm] Detected invalid response(s) in submission on form ${formId}. Errors: ${JSON.stringify(
-          validateResponsesResult
-        )}`
-      );
-      // Turn this on after we've monitored the logs for a while
-      // throw new MissingFormDataError("Form data validation failed");
     }
 
     const { t } = await serverTranslation();

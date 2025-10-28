@@ -9,6 +9,7 @@ import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.s
 import { DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
 import { isValidEmail } from "@lib/validation/isValidEmail";
+import { isFileExtensionValid } from "@root/packages/core/src/validation/file";
 
 export const getFieldType = (formElement: FormElement) => {
   if (formElement.properties.autoComplete === "email") {
@@ -18,7 +19,7 @@ export const getFieldType = (formElement: FormElement) => {
   return formElement.type;
 };
 
-const valueMatchesType = (value: unknown, type: string, formElement: FormElement) => {
+export const valueMatchesType = (value: unknown, type: string, formElement: FormElement) => {
   switch (type) {
     case FormElementTypes.formattedDate:
       if (value && isValidDate(JSON.parse(value as string) as DateObject)) {
@@ -31,6 +32,11 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
           return false;
         }
       }
+
+      if (typeof value === "string") {
+        return true;
+      }
+
       return true;
     case FormElementTypes.checkbox: {
       if (Array.isArray(value)) {
@@ -41,11 +47,21 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
     case FormElementTypes.fileInput: {
       if (
         value !== null &&
-        typeof value == "object" &&
+        typeof value === "object" &&
         "name" in value &&
         "size" in value &&
         "id" in value
       ) {
+        const fileValue = value as { name: string; size: unknown; id: unknown };
+
+        if (
+          typeof fileValue.name === "string" &&
+          fileValue.name &&
+          !isFileExtensionValid(fileValue.name)
+        ) {
+          return false;
+        }
+
         return true;
       }
       return false;
@@ -83,36 +99,6 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
   }
 
   return false;
-};
-
-/**
- * Server-side validation the form responses
- */
-export const validateResponses = async (values: Responses, formRecord: PublicFormRecord) => {
-  const errors: Responses = {};
-  for (const item in values) {
-    const formElement = formRecord.form.elements.find((element) => element.id == parseInt(item));
-
-    if (!formElement) {
-      errors[item] = "response-to-non-existing-question";
-      continue;
-    }
-
-    // Check if the incoming value matches the type of the form element
-    const result = valueMatchesType(values[item], formElement.type, formElement);
-
-    // Only invalidate the response if the type has a value
-    // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
-    if (values[item] && !result) {
-      errors[item] = {
-        type: getFieldType(formElement),
-        value: values[item],
-        message: "response-type-mismatch",
-      };
-    }
-  }
-
-  return errors;
 };
 
 /**
