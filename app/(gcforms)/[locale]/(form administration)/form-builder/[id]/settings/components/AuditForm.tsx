@@ -71,12 +71,6 @@ export const AuditForm = ({ formId }: { formId: string }) => {
         <p className="mb-4" id="download-hint">
           {t("auditDownload.description")}
         </p>
-        <p>{t("auditDownload.descriptionEx.line1")}</p>
-        <ul className="mb-4 list-disc pl-5">
-          <li>{t("auditDownload.descriptionEx.line2")}</li>
-          <li>{t("auditDownload.descriptionEx.line3")}</li>
-          <li>{t("auditDownload.descriptionEx.line4")}</li>
-        </ul>
 
         <Button onClick={() => handleFormAudit(formId)} theme="primary">
           {t("auditDownload.downloadBtnText")}
