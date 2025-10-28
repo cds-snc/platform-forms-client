@@ -13,28 +13,21 @@ export const BrandingSelect = ({
   className,
   selected,
   options,
-  disabled,
   handleUpdate,
   ...rest
 }: {
   className?: string;
   selected: string;
   options: Option[];
-  disabled: boolean;
   handleUpdate: (type: string) => void;
 }) => {
   return (
     <div>
       <BrandingIcon className="mr-2 inline-block" />
       <select
-        disabled={disabled}
         id="branding-select"
         value={selected}
-        className={cn(
-          "form-builder-dropdown mb-0 mt-0 inline-block text-black-default",
-          className,
-          disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-        )}
+        className={cn("form-builder-dropdown mb-0 mt-0 inline-block text-black-default", className)}
         onChange={(evt: React.ChangeEvent<HTMLSelectElement>) => {
           const val = evt.target.value;
           handleUpdate(val);

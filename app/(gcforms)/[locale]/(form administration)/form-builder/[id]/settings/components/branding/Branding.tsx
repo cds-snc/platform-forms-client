@@ -106,7 +106,6 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         <Label htmlFor="branding-select">{t("branding.select")}</Label>
         <BrandingSelect
           className="mb-5 mt-2 max-w-[450px] truncate bg-gray-soft p-1 pr-10"
-          disabled={false}
           options={brandingOptions.map(({ value, label }) => ({ value, label }))}
           selected={brandName}
           handleUpdate={updateBrand}
