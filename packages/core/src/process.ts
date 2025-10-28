@@ -96,7 +96,7 @@ export const validateVisibleElements = (
     }
 
     // Note this checks against all visible elements, not just required ones
-
+    // Only check if we actually have a value to validate
     if (
       !errors[formElement.id] &&
       responseValue !== undefined &&
