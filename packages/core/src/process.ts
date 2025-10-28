@@ -80,14 +80,6 @@ export const validateVisibleElements = (
 
     visibilityMap.set(String(formElement.id), isVisible);
 
-    // Note this checks against all visible elements, not just required ones
-    const result = valueMatchesType(responseValue, formElement.type, formElement);
-
-    if (!result) {
-      errors[formElement.id] = `Mismatched type for ${formElement.type} => ${responseValue}`;
-      continue;
-    }
-
     if (formElement.properties.validation) {
       const result = isFieldResponseValid(
         responseValue,
@@ -99,8 +91,27 @@ export const validateVisibleElements = (
       );
 
       if (result) {
-        errors[formElement.id] =
-          `Failed validation: ${result} => ${formElement.type}  => ${responseValue}`;
+        errors[formElement.id] = result;
+      }
+    }
+
+    // Note this checks against all visible elements, not just required ones
+
+    if (
+      !errors[formElement.id] &&
+      responseValue !== undefined &&
+      responseValue !== null &&
+      responseValue !== ""
+    ) {
+      const result =
+        responseValue &&
+        responseValue !== "" &&
+        valueMatchesType(responseValue, formElement.type, formElement);
+
+      if (!result) {
+        const err = `Mismatched type for ${formElement.type} => ${JSON.stringify(responseValue)}`;
+        errors[formElement.id] = err;
+        // continue;
       }
     }
   }

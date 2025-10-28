@@ -28,13 +28,7 @@ export const valueMatchesType = (value: unknown, type: string, formElement: Form
       return false;
     }
     case FormElementTypes.fileInput: {
-      if (
-        value !== null &&
-        typeof value === "object" &&
-        "name" in value &&
-        "size" in value &&
-        "id" in value
-      ) {
+      if (value !== null && typeof value === "object" && "name" in value && "size" in value) {
         const fileValue = value as { name: string; size: unknown; id: unknown };
 
         if (
@@ -48,6 +42,10 @@ export const valueMatchesType = (value: unknown, type: string, formElement: Form
         return true;
       }
       return false;
+    }
+    case FormElementTypes.dropdown:
+    case FormElementTypes.radio: {
+      return true;
     }
     case FormElementTypes.dynamicRow: {
       if (!Array.isArray(value)) {
