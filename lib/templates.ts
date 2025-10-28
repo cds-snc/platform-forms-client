@@ -121,6 +121,7 @@ export type UpdateTemplateCommand = {
   publishFormType?: string;
   publishDesc?: string;
   notificationsInterval?: NotificationsInterval;
+  allowPublishedUpdate?: boolean;
 };
 
 export class InvalidFormConfigError extends Error {
@@ -542,7 +543,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     .update({
       where: {
         id: command.formID,
-        isPublished: false,
+        ...(!command.allowPublishedUpdate && { isPublished: false }),
       },
       data: {
         jsonConfig: command.formConfig as Prisma.JsonObject,

@@ -27,17 +27,15 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
 
 export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation(["form-builder", "common"]);
-  const { id, isPublished, brandName, updateField, unsetField, getSchema, brand } =
-    useTemplateStore((s) => ({
-      id: s.id,
-      brandName: s.form?.brand?.name || "",
-      unsetField: s.unsetField,
-      updateField: s.updateField,
-      getSchema: s.getSchema,
-      getName: s.getName,
-      isPublished: s.isPublished,
-      brand: s.form.brand,
-    }));
+  const { id, brandName, updateField, unsetField, getSchema, brand } = useTemplateStore((s) => ({
+    id: s.id,
+    brandName: s.form?.brand?.name || "",
+    unsetField: s.unsetField,
+    updateField: s.updateField,
+    getSchema: s.getSchema,
+    getName: s.getName,
+    brand: s.form.brand,
+  }));
 
   const savedSuccessMessage = t("settingsResponseDelivery.savedSuccessMessage");
   const savedErrorMessage = t("settingsResponseDelivery.savedErrorMessage");
@@ -68,6 +66,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
     const operationResult = await updateTemplate({
       id,
       formConfig,
+      allowPublishedUpdate: true,
     });
 
     if (operationResult.formRecord !== null) {
@@ -108,7 +107,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         <Label htmlFor="branding-select">{t("branding.select")}</Label>
         <BrandingSelect
           className="mb-5 mt-2 max-w-[450px] truncate bg-gray-soft p-1 pr-10"
-          disabled={isPublished as boolean}
+          disabled={false}
           options={brandingOptions.map(({ value, label }) => ({ value, label }))}
           selected={brandName}
           handleUpdate={updateBrand}
