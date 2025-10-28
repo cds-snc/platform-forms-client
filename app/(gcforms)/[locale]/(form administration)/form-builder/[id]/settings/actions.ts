@@ -172,19 +172,19 @@ const _retrieveEvents = async (query: QueryCommandInput) => {
     event.UserID = userEmailMap[event.UserID] || "Unknown User";
   });
 
-  return filteredEvents
-    .map((record) => {
-      return {
-        userId: record.UserID,
-        event: record.Event,
-        timestamp: record.TimeStamp,
-        description: record.Description,
-        subject: record.Subject,
-      };
-    })
-    .sort((a, b) => {
-      return b.timestamp - a.timestamp;
-    });
+  // Sort by timestamp
+  filteredEvents.sort((a, b) => {
+    return b.TimeStamp - a.TimeStamp;
+  });
+
+  return filteredEvents.map((record) => {
+    return {
+      userId: record.UserID,
+      event: record.Event,
+      timestamp: new Date(record.TimeStamp).toISOString().split("T")[0],
+      description: record.Description,
+    };
+  });
 };
 
 export const getEventsForForm = AuthenticatedAction(async (_, formId: string) => {

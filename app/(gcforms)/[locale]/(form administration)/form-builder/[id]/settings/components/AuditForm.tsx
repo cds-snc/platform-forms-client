@@ -12,14 +12,13 @@ export const AuditForm = ({ formId }: { formId: string }) => {
     events: {
       userId: string;
       event: string;
-      timestamp: number;
+      timestamp: string;
       description: string;
-      subject: string;
     }[],
     name?: string
   ) {
     try {
-      const headers = ["userId", "event", "timestamp", "description", "subject"];
+      const headers = ["userId", "event", "timestamp", "description"];
       const csvHeader = headers.join(",") + "\r\n";
 
       const csvRows = events
