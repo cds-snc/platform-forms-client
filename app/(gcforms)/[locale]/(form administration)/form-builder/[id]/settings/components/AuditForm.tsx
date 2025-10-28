@@ -19,13 +19,33 @@ export const AuditForm = ({ formId }: { formId: string }) => {
     name?: string
   ) {
     try {
-      const blob = new Blob([JSON.stringify(events)], { type: "application/json" });
+      const headers = ["userId", "event", "timestamp", "description", "subject"];
+      const csvHeader = headers.join(",") + "\r\n";
+
+      const csvRows = events
+        .map((row) => {
+          return headers
+            .map((header) => {
+              const key = header as keyof typeof row;
+              let value = row[key];
+              if (typeof value === "string") {
+                // Escape double quotes by doubling them and wrap the whole string in double quotes.
+                value = `"${value.replace(/"/g, '""')}"`;
+              }
+              return value;
+            })
+            .join(",");
+        })
+        .join("\r\n");
+
+      const csvContent = csvHeader + csvRows;
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       const fileName = name ? name : i18n.language === "fr" ? "French" : "English";
 
       a.href = url;
-      a.download = slugify(`${fileName}-${getDate()}`) + ".json";
+      a.download = slugify(`${fileName}-${getDate()}`) + ".csv";
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {

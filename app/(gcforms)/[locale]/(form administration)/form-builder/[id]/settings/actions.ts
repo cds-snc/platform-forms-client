@@ -18,6 +18,7 @@ import {
   BatchGetCommandOutput,
 } from "@aws-sdk/lib-dynamodb";
 import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
+import { getUsers } from "@lib/users";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -136,6 +137,15 @@ const _retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
   return auditLogs;
 };
 
+const _retrieveUserEmails = async (userIds: string[]) => {
+  // Pull from rds
+  const users = await getUsers({ id: { in: userIds } });
+  return users.map((user) => ({
+    UserID: user.id,
+    Email: user.email,
+  }));
+};
+
 const _retrieveEvents = async (query: QueryCommandInput) => {
   const request = new QueryCommand(query);
 
@@ -146,8 +156,23 @@ const _retrieveEvents = async (query: QueryCommandInput) => {
     return [];
   }
   const eventItems = await _retrieveAuditLogs(eventsIndex);
+  // filter out "ReadForm" event type.
+  const filteredEvents = eventItems.filter((event) => event.Event !== "ReadForm");
 
-  return eventItems
+  // batch get emails for user IDs
+  const userIds = Array.from(new Set(filteredEvents.map((event) => event.UserID)));
+  const userEmails = await _retrieveUserEmails(userIds);
+  const userEmailMap: Record<string, string> = {};
+  userEmails.forEach((user) => {
+    userEmailMap[user.UserID] = user.Email;
+  });
+
+  // map user emails to events
+  filteredEvents.forEach((event) => {
+    event.UserID = userEmailMap[event.UserID] || "Unknown User";
+  });
+
+  return filteredEvents
     .map((record) => {
       return {
         userId: record.UserID,
