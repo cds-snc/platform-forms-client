@@ -508,14 +508,8 @@
     "title": "Download form file"
   },
   "auditDownload": {
-    "description": "Spreadsheet of the form activity.",
-    "descriptionEx": {
-      "line1": "This log includes:",
-      "line2": "Who created the form",
-      "line3": "Who and when the form was archived",
-      "line4": "Who and when the form settings have been updated"
-    },
-    "downloadBtnText": "Download form activity",
+    "description": "Obtain a spreadsheet with the history of all key actions taken in a form, including when a form was created, updated, and archived.",
+    "downloadBtnText": "Afficher l'activité du formulaire",
     "title": "Download form activity",
     "headers": {
       "formId": "Form ID",

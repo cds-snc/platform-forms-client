@@ -508,15 +508,9 @@
     "title": "Télécharger le fichier du formulaire"
   },
   "auditDownload": {
-    "description": "Tableur de l'activité du formulaire.",
-    "descriptionEx": {
-      "line1": "Ce journal comprend :",
-      "line2": "Qui a créé le formulaire",
-      "line3": "Qui et quand le formulaire a été archivé",
-      "line4": "Qui et quand les paramètres du formulaire ont été mis à jour"
-    },
-    "downloadBtnText": "Télécharger le fichier du formulaire",
-    "title": "Télécharger l'activité du formulaire",
+    "description": "Obtenez une feuille de calcul avec l'historique de toutes les actions clés effectuées dans un formulaire, y compris la date de création, de mise à jour et d'archivage du formulaire.",
+    "downloadBtnText": "Télécharger la feuille de calcul",
+    "title": "Afficher l'activité du formulaire",
     "headers": {
       "formId": "ID du formulaire",
       "userId": "Membre de l'équipe",
