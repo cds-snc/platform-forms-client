@@ -189,16 +189,28 @@ const _retrieveEvents = async (query: QueryCommandInput) => {
 };
 
 export const getEventsForForm = AuthenticatedAction(async (_, formId: string) => {
-  const events = await _retrieveEvents({
-    TableName: "AuditLogs",
-    IndexName: "SubjectByTimestamp",
-    Limit: 100,
-    KeyConditionExpression: "Subject = :formId",
-    ExpressionAttributeValues: {
-      ":formId": `Form#${formId}`,
-    },
-    ScanIndexForward: false,
-  });
+  try {
+    const events = await _retrieveEvents({
+      TableName: "AuditLogs",
+      IndexName: "SubjectByTimestamp",
+      Limit: 100,
+      KeyConditionExpression: "Subject = :formId",
+      ExpressionAttributeValues: {
+        ":formId": `Form#${formId}`,
+      },
+      ScanIndexForward: false,
+    });
 
-  return events;
+    return events;
+  } catch (error) {
+    return [
+      {
+        formId: formId,
+        userId: "Error retrieving events",
+        event: "",
+        timestamp: new Date().toISOString().split("T")[0],
+        description: error instanceof Error ? error.message : "Unknown error",
+      },
+    ];
+  }
 });
