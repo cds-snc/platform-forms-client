@@ -5,7 +5,7 @@ import { isFieldResponseValid } from "./validation/validation";
 import { inGroup } from "./helpers";
 
 import { checkVisibilityRecursive } from "./visibility";
-import { valueMatchesType } from "@lib/validation/validation";
+import { valueMatchesType } from "@gcforms/core";
 
 /*
  Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit

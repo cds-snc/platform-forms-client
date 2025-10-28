@@ -1,15 +1,11 @@
 import React, { type JSX } from "react";
-import { FormElement, FormElementTypes, Responses, PublicFormRecord } from "@gcforms/types";
+import { FormElement, Responses, PublicFormRecord } from "@gcforms/types";
 import { FormikProps } from "formik";
 import { ErrorListItem } from "@clientComponents/forms";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
 import { isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
-import { DateObject } from "@clientComponents/forms/FormattedDate/types";
-import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
-import { isValidEmail } from "@lib/validation/isValidEmail";
-import { isFileExtensionValid } from "@root/packages/core/src/validation/file";
 
 export const getFieldType = (formElement: FormElement) => {
   if (formElement.properties.autoComplete === "email") {
@@ -17,88 +13,6 @@ export const getFieldType = (formElement: FormElement) => {
   }
 
   return formElement.type;
-};
-
-export const valueMatchesType = (value: unknown, type: string, formElement: FormElement) => {
-  switch (type) {
-    case FormElementTypes.formattedDate:
-      if (value && isValidDate(JSON.parse(value as string) as DateObject)) {
-        return true;
-      }
-      return false;
-    case FormElementTypes.textField:
-      if (formElement.properties.autoComplete === "email") {
-        if (value && !isValidEmail(value as string)) {
-          return false;
-        }
-      }
-
-      if (typeof value === "string") {
-        return true;
-      }
-
-      return true;
-    case FormElementTypes.checkbox: {
-      if (Array.isArray(value)) {
-        return true;
-      }
-      return false;
-    }
-    case FormElementTypes.fileInput: {
-      if (
-        value !== null &&
-        typeof value === "object" &&
-        "name" in value &&
-        "size" in value &&
-        "id" in value
-      ) {
-        const fileValue = value as { name: string; size: unknown; id: unknown };
-
-        if (
-          typeof fileValue.name === "string" &&
-          fileValue.name &&
-          !isFileExtensionValid(fileValue.name)
-        ) {
-          return false;
-        }
-
-        return true;
-      }
-      return false;
-    }
-    case FormElementTypes.dynamicRow: {
-      if (!Array.isArray(value)) {
-        return false;
-      }
-
-      let valid = true;
-
-      for (const row of value as Array<Responses>) {
-        for (const [responseKey, responseValue] of Object.entries(row)) {
-          if (
-            formElement.properties.subElements &&
-            formElement.properties.subElements[parseInt(responseKey)]
-          ) {
-            const subElement = formElement.properties.subElements[parseInt(responseKey)];
-            const result = valueMatchesType(responseValue, subElement.type, subElement);
-
-            if (!result) {
-              valid = false;
-              break;
-            }
-          }
-        }
-      }
-
-      return valid;
-    }
-    default:
-      if (typeof value === "string") {
-        return true;
-      }
-  }
-
-  return false;
 };
 
 /**
