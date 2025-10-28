@@ -108,7 +108,7 @@ export const validateVisibleElements = (
       if (!result) {
         const err = `Mismatched type for ${formElement.type} => ${JSON.stringify(responseValue)}`;
         errors[formElement.id] = err;
-        // continue;
+        continue;
       }
     }
   }
