@@ -10,6 +10,15 @@ import { submissionTypeExists } from "@lib/vault";
 import { VaultStatus } from "@lib/types";
 import { ServerActionError } from "@root/lib/types/form-builder-types";
 
+import {
+  BatchGetCommand,
+  QueryCommand,
+  QueryCommandInput,
+  QueryCommandOutput,
+  BatchGetCommandOutput,
+} from "@aws-sdk/lib-dynamodb";
+import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
+
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const getReadmeContent = AuthenticatedAction(async () => {
@@ -58,4 +67,112 @@ export const unConfirmedResponsesExist = AuthenticatedAction(async (_, formId: s
     // Throw sanitized error back to client
     return { error: "There was an error. Please try again later." } as ServerActionError;
   }
+});
+
+const _retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
+  let retries = 0;
+  const maxRetries = 3;
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  const auditLogs: Array<{
+    UserID: string;
+    Event: string;
+    TimeStamp: number;
+    Description: string;
+    Subject: string;
+  }> = [];
+
+  const batchRequest = new BatchGetCommand({
+    RequestItems: {
+      AuditLogs: {
+        Keys: keys.map((event) => ({
+          UserID: event.UserID,
+          "Event#SubjectID#TimeStamp": event["Event#SubjectID#TimeStamp"],
+        })),
+      },
+    },
+  });
+
+  await dynamoDBDocumentClient.send(batchRequest).then(async (data: BatchGetCommandOutput) => {
+    auditLogs.push(
+      ...(data?.Responses?.AuditLogs?.map((item: Record<string, string | number>) => ({
+        UserID: item.UserID as string,
+        Event: item.Event as string,
+        TimeStamp: item.TimeStamp as number,
+        Description: item.Description as string,
+        Subject: item.Subject as string,
+      })) ?? [])
+    );
+
+    if (data.UnprocessedKeys?.AuditLogs) {
+      while (retries < maxRetries) {
+        // eslint-disable-next-line no-await-in-loop -- Intentional retry logic with delay
+        await delay(200); // Wait for 200ms second before retrying
+        const retryRequest = new BatchGetCommand({
+          RequestItems: {
+            AuditLogs: {
+              Keys: data.UnprocessedKeys.AuditLogs.Keys,
+            },
+          },
+        });
+        const retryResponse: BatchGetCommandOutput =
+          // eslint-disable-next-line no-await-in-loop -- Intentional retry logic
+          await dynamoDBDocumentClient.send(retryRequest);
+        auditLogs.push(
+          ...(retryResponse.Responses?.AuditLogs.map((item: Record<string, string | number>) => ({
+            UserID: item.UserID as string,
+            Event: item.Event as string,
+            TimeStamp: item.TimeStamp as number,
+            Description: item.Description as string,
+            Subject: item.Subject as string,
+          })) ?? [])
+        );
+        if (!retryResponse.UnprocessedKeys?.AuditLogs) {
+          break; // Exit the loop if there are no more unprocessed keys
+        }
+        retries++;
+      }
+    }
+  });
+  return auditLogs;
+};
+
+const _retrieveEvents = async (query: QueryCommandInput) => {
+  const request = new QueryCommand(query);
+
+  const response = (await dynamoDBDocumentClient.send(request)) as QueryCommandOutput;
+  const { Items: eventsIndex, Count: eventsIndexCount } = response;
+
+  if (eventsIndexCount === 0 || eventsIndex === undefined) {
+    return [];
+  }
+  const eventItems = await _retrieveAuditLogs(eventsIndex);
+
+  return eventItems
+    .map((record) => {
+      return {
+        userId: record.UserID,
+        event: record.Event,
+        timestamp: record.TimeStamp,
+        description: record.Description,
+        subject: record.Subject,
+      };
+    })
+    .sort((a, b) => {
+      return b.timestamp - a.timestamp;
+    });
+};
+
+export const getEventsForForm = AuthenticatedAction(async (_, formId: string) => {
+  const events = await _retrieveEvents({
+    TableName: "AuditLogs",
+    IndexName: "SubjectByTimestamp",
+    Limit: 100,
+    KeyConditionExpression: "Subject = :formId",
+    ExpressionAttributeValues: {
+      ":formId": `Form#${formId}`,
+    },
+    ScanIndexForward: false,
+  });
+
+  return events;
 });

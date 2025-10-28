@@ -507,6 +507,18 @@
     "downloadBtnText": "Download form file",
     "title": "Download form file"
   },
+  "auditDownload": {
+    "btnText": "What can I do with a form file?",
+    "description": "Spreadsheet of the form activity.",
+    "descriptionEx": {
+      "line1": "This log includes:",
+      "line2": "Who created the form",
+      "line3": "Who and when the form was archived",
+      "line4": "Who and when the form settings have been updated"
+    },
+    "downloadBtnText": "Download form activity",
+    "title": "Download form activity"
+  },
   "switchToApiMode": {
     "title": "Switch to API delivery",
     "description": "New responses will be available through the API endpoint",
