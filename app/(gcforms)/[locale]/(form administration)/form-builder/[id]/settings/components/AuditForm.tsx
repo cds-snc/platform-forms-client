@@ -18,14 +18,21 @@ export const AuditForm = ({ formId }: { formId: string }) => {
     name?: string
   ) {
     try {
-      const headers = ["userId", "event", "timestamp", "description"];
+      const columns = ["formId", "userId", "event", "timestamp", "description"];
+      const headers = [
+        t("headers.formId"),
+        t("headers.userId"),
+        t("headers.event"),
+        t("headers.timestamp"),
+        t("headers.description"),
+      ];
       const csvHeader = headers.join(",") + "\r\n";
 
       const csvRows = events
         .map((row) => {
-          return headers
-            .map((header) => {
-              const key = header as keyof typeof row;
+          return columns
+            .map((columns) => {
+              const key = columns as keyof typeof row;
               let value = row[key];
               if (typeof value === "string") {
                 // Escape double quotes by doubling them and wrap the whole string in double quotes.

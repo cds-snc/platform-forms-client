@@ -516,7 +516,14 @@
       "line4": "Qui et quand les paramètres du formulaire ont été mis à jour"
     },
     "downloadBtnText": "Télécharger le fichier du formulaire",
-    "title": "Télécharger l'activité du formulaire"
+    "title": "Télécharger l'activité du formulaire",
+    "headers": {
+      "formId": "ID du formulaire",
+      "userId": "Membre de l'équipe",
+      "event": "Action du formulaire",
+      "timestamp": "Date",
+      "description": "Détails"
+    }
   },
   "switchToApiMode": {
     "title": "Passer à la livraison par API",

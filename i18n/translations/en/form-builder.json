@@ -516,7 +516,14 @@
       "line4": "Who and when the form settings have been updated"
     },
     "downloadBtnText": "Download form activity",
-    "title": "Download form activity"
+    "title": "Download form activity",
+    "headers": {
+      "formId": "Form ID",
+      "userId": "Team Member",
+      "event": "Form Action",
+      "timestamp": "Date",
+      "description": "Details"
+    }
   },
   "switchToApiMode": {
     "title": "Switch to API delivery",

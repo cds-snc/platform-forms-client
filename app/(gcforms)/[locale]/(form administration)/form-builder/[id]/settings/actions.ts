@@ -157,7 +157,7 @@ const _retrieveEvents = async (query: QueryCommandInput) => {
   }
   const eventItems = await _retrieveAuditLogs(eventsIndex);
   // filter out "ReadForm" event type.
-  const filteredEvents = eventItems.filter((event) => event.Event !== "ReadForm");
+  let filteredEvents = eventItems.filter((event) => event.Event !== "ReadForm");
 
   // batch get emails for user IDs
   const userIds = Array.from(new Set(filteredEvents.map((event) => event.UserID)));
@@ -173,12 +173,13 @@ const _retrieveEvents = async (query: QueryCommandInput) => {
   });
 
   // Sort by timestamp
-  filteredEvents.sort((a, b) => {
+  filteredEvents = filteredEvents.sort((a, b) => {
     return b.TimeStamp - a.TimeStamp;
   });
 
   return filteredEvents.map((record) => {
     return {
+      formId: record.Subject.split("#")[1],
       userId: record.UserID,
       event: record.Event,
       timestamp: new Date(record.TimeStamp).toISOString().split("T")[0],
