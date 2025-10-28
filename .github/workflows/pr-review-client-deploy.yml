@@ -123,10 +123,15 @@ jobs:
             aws lambda wait function-active --function-name $FUNCTION_NAME-$PR_NUMBER
             aws lambda add-permission \
               --function-name $FUNCTION_NAME-$PR_NUMBER \
-              --statement-id FunctionURLAllowPublicAccess \
+              --statement-id AllowPublicInvokeFunctionUrl \
               --action lambda:InvokeFunctionUrl \
               --principal "*" \
               --function-url-auth-type NONE > /dev/null 2>&1
+            aws lambda add-permission \
+              --function-name $FUNCTION_NAME-$PR_NUMBER \
+              --statement-id AllowPublicInvokeFunction \
+              --action lambda:InvokeFunction \
+              --principal "*" > /dev/null 2>&1
 
             URL="$(aws lambda create-function-url-config --function-name $FUNCTION_NAME-$PR_NUMBER --auth-type NONE | jq .FunctionUrl)"
             echo "URL=$URL" >> $GITHUB_ENV
