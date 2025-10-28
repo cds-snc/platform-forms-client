@@ -45,7 +45,10 @@ export const valueMatchesType = (value: unknown, type: string, formElement: Form
     }
     case FormElementTypes.dropdown:
     case FormElementTypes.radio: {
-      return true;
+      if (typeof value === "string") {
+        return true;
+      }
+      return false;
     }
     case FormElementTypes.dynamicRow: {
       if (!Array.isArray(value)) {
