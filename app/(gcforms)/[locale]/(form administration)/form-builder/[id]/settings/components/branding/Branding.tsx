@@ -81,8 +81,12 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
 
   const updateBrand = useCallback(
     (type: string) => {
+      // Reset to default GoC branding
       if (type === "") {
         unsetField("form.brand");
+
+        handleSave();
+
         return;
       }
 
