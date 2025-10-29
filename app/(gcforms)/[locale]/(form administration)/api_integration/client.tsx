@@ -1,56 +1,48 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
 import { NoFileSystemAccess } from "./components/NoFileSystemAccess";
-import { LoadKey } from "./components/LoadKey";
-
 import { useGetClient } from "./hooks/useGetClient";
-import { Submissions } from "./components/Submissions";
 
-import { Csv } from "./components/Csv";
-import { Html } from "./components/Html";
+// Step Components
+import { Start } from "./components/pages/Start";
+import { SelectApiKey } from "./components/pages/SelectApiKey";
+import { SelectLocation } from "./components/pages/SelectLocation";
+import { SelectFormat } from "./components/pages/SelectFormat";
+import { ContentWrapper } from "./components/ContentWrapper";
+import { GenerateFormatFromJson } from "./components/pages/GenerateFormatFromJson";
+import { JSX } from "react";
+import {
+  PageKey,
+  useStepFlow,
+  ApiResponseDownloadProvider,
+} from "./contexts/ApiResponseDownloaderContext";
+import { ProcessingDownloads } from "./components/pages/ProcessingDownloads";
+
+const ClientContent = () => {
+  const { currentPage } = useStepFlow();
+
+  const pages: Record<PageKey, JSX.Element> = {
+    start: <Start />,
+    selectApiKey: <SelectApiKey />,
+    selectLocation: <SelectLocation />,
+    selectFormat: <SelectFormat />,
+    processingDownloads: <ProcessingDownloads />,
+    generateFormatFromJson: <GenerateFormatFromJson />,
+  };
+
+  return <ContentWrapper>{pages[currentPage]}</ContentWrapper>;
+};
 
 export const Client = () => {
-  const { isCompatible, userKey, handleLoadApiKey, apiClient } = useGetClient();
-
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-you-might-not-need-an-effect/no-initialize-state
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return null;
-  }
+  const { isCompatible } = useGetClient();
 
   if (!isCompatible) {
     return <NoFileSystemAccess />;
   }
 
-  if (!userKey) {
-    return (
-      <>
-        <LoadKey onLoadKey={handleLoadApiKey} />
-      </>
-    );
-  }
-
   return (
-    <div className="flex flex-col gap-8">
-      <div>
-        <h2>Download and process to CSV</h2>
-        <Submissions apiClient={apiClient} userKey={userKey} />
-      </div>
-      <div>
-        <h2>Process files to CSV</h2>
-        <Csv apiClient={apiClient} />
-      </div>
-      <div>
-        <h2>Process files to HTML</h2>
-        <Html apiClient={apiClient} />
-      </div>
-    </div>
+    <ApiResponseDownloadProvider>
+      <ClientContent />
+    </ApiResponseDownloadProvider>
   );
 };
