@@ -1,8 +1,9 @@
 "use client";
 
 import { useTranslation } from "@i18n/client";
-import { SubNavLink } from "@clientComponents/globals/SubNavLink";
-import { BrandIcon, GearIcon, ChatIcon } from "@serverComponents/icons";
+
+import { TabNavLink } from "@clientComponents/globals/TabNavLink";
+import { usePathname } from "next/navigation";
 
 export const SettingsNavigation = ({ id }: { id: string }) => {
   const {
@@ -10,30 +11,43 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
     i18n: { language },
   } = useTranslation("form-builder");
 
+  const pathname = usePathname();
+
+  const isSettingsActive =
+    pathname.includes("manage") === false && pathname.includes("api-integration") === false;
+  const isManageActive = pathname.includes("manage");
+  const isApiIntegrationActive = pathname.includes("api-integration");
+
   return (
-    <div className="relative flex">
-      <div className="flex">
-        <nav className="mb-6 flex flex-wrap" aria-label={t("navLabelEditor")}>
-          <SubNavLink href={`/${language}/form-builder/${id}/settings`}>
-            <span className="text-sm laptop:text-base">
-              <ChatIcon className="mr-2 inline-block laptop:mt-[-2px]" />
-              {t("settingsNavHome")}
-            </span>
-          </SubNavLink>
-          <SubNavLink href={`/${language}/form-builder/${id}/settings/branding`}>
-            <span className="text-sm laptop:text-base">
-              <BrandIcon className="mr-2 inline-block fill-black laptop:mt-[-2px]" />
-              {t("branding.heading")}
-            </span>
-          </SubNavLink>
-          <SubNavLink href={`/${language}/form-builder/${id}/settings/manage`}>
-            <span className="text-sm laptop:text-base">
-              <GearIcon className="mr-2 inline-block laptop:mt-[-2px]" />
-              {t("settings.formManagement")}
-            </span>
-          </SubNavLink>
-        </nav>
-      </div>
-    </div>
+    <nav className="relative mb-10 flex border-b border-black" aria-label={t("responses.navLabel")}>
+      <TabNavLink
+        active={isSettingsActive}
+        href={`/${language}/form-builder/${id}/settings`}
+        setAriaCurrent={isSettingsActive}
+        id="settings"
+      >
+        <span className="text-sm laptop:text-base">{t("settingsNavHome")}</span>
+      </TabNavLink>
+
+      <TabNavLink
+        active={isManageActive}
+        href={`/${language}/form-builder/${id}/settings/manage`}
+        setAriaCurrent={isManageActive}
+        id="manage-form"
+      >
+        <span className="text-sm laptop:text-base">{t("settings.formManagement")}</span>
+      </TabNavLink>
+
+      <TabNavLink
+        active={isApiIntegrationActive}
+        href={`/${language}/form-builder/${id}/settings/api-integration`}
+        setAriaCurrent={isApiIntegrationActive}
+        id="api-integration"
+      >
+        <span className="text-sm laptop:text-base">
+          {t("settings.apiIntegration.navigation.title")}
+        </span>
+      </TabNavLink>
+    </nav>
   );
 };

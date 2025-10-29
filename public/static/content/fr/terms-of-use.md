@@ -52,13 +52,13 @@ Vous avez pour responsabilité de veiller à ce que la clé API associée à vot
 - enregistrer la clé API dans un endroit sûr d'une machine du gouvernement du Canada.
 - ne pas partager la clé API par courriel, dans les demandes de soutien ou dans un fichier de texte dans un référentiel source, car cela pourrait compromettre la confidentialité et la sécurité des réponses.
 - utiliser un courriel crypté sur le réseau du gouvernement du Canada, s'il est absolument nécessaire de transférer la clé privée de l'API au personnel autorisé, dans le but de configurer l'intégration de l'API.
-- supprimer et recréer la clé API de votre formulaire, si l’on soupçonne qu’elle a été compromise.
+- générer une nouvelle clé API pour votre formulaire, si l’on soupçonne que la clé précédente a été compromise.
 
 ## Pratique de sécurité en continu
 
 - Utilisez une adresse courriel gouvernementale individuelle appartenant à un·e employé·e (et non une boîte de réception partagée) pour créer votre compte et pour l’authentification à deux facteurs.
 - Ne communiquez pas votre mot de passe à personne et ne le conservez pas dans un endroit où d’autres personnes pourraient le trouver. Si quelqu’un d’autre a besoin d’accéder à un formulaire, [contactez-nous](/fr/support).
-- Protégez vos clés API. Si vous pensez qu'une clé API a été compromise, informez-nous, puis supprimez-la et créez-en une nouvelle pour sécuriser l'accès aux réponses de formulaire.
+- Protégez vos clés API. Si vous pensez qu'une clé API a été compromise, informez-nous, puis générez une nouvelle clé API et mettez à jour votre intégration pour sécuriser l'accès aux réponses de formulaire.
 - Assurer la confidentialité et la sécurité des renseignements protégés lors du téléchargement des réponses aux formulaires de Formulaires GC.
 - Signalez tout problème lié aux fonctionnalités de sécurité de Formulaires GC, par exemple si vous pensez que hCaptcha empêche les utilisateurs authentiques de remplir votre formulaire.
 - Signalez toute faille de sécurité et vulnérabilité en utilisant les étapes détaillées dans l’[avis de sécurité](https://numerique.canada.ca/avis-de-securite/).
@@ -89,4 +89,4 @@ Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car to
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
-**Dernière mise à jour :** 16 juillet 2025
+**Dernière mise à jour :** 22 octobre 2025

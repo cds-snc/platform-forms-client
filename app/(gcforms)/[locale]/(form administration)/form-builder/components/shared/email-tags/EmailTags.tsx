@@ -1,6 +1,6 @@
 import { TagInput } from "@gcforms/tag-input";
 import { useTranslation } from "@i18n/client";
-import { isValidEmail } from "@lib/validation/isValidEmail";
+import { isValidEmail } from "@gcforms/core";
 
 export const EmailTags = ({
   tags,
