@@ -8,7 +8,7 @@ import { MiddlewareProps, MiddlewareRequest } from "@lib/types";
  * @param handler Api handler function
  * @returns
  */
-export const middleware = (
+export const proxy = (
   middlewareArray: Array<MiddlewareRequest>,
   handler: (req: NextRequest, props: MiddlewareProps) => Promise<NextResponse>
 ) => {
