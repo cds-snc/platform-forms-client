@@ -5,6 +5,7 @@ export const Confirmation = () => {
   const {
     onNext,
     retrieveResponses,
+    processResponses,
     processedSubmissionIds,
     setProcessedSubmissionIds,
     setProcessingCompleted,
@@ -17,9 +18,10 @@ export const Confirmation = () => {
     setInterrupt(false);
 
     setTimeout(async () => {
-      await retrieveResponses();
+      const initialResponses = await retrieveResponses();
+      processResponses(initialResponses);
       onNext();
-    }, 2000);
+    }, 500);
   };
 
   return (

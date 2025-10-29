@@ -6,6 +6,7 @@ import {
   useState,
   ReactNode,
   useCallback,
+  useRef,
   type Dispatch,
   type SetStateAction,
 } from "react";
@@ -47,10 +48,11 @@ interface ApiResponseDownloaderContextType {
   setSelectedFormat: Dispatch<SetStateAction<string | null>>;
   csvFileHandle: FileSystemFileHandle | null;
   setCsvFileHandle: Dispatch<SetStateAction<FileSystemFileHandle | null>>;
-  retrieveResponses: () => Promise<void>;
+  retrieveResponses: () => Promise<NewFormSubmission[]>;
   newFormSubmissions: NewFormSubmission[] | null;
   processedSubmissionIds: Set<string>;
   setProcessedSubmissionIds: Dispatch<SetStateAction<Set<string>>>;
+  processResponses: (initialSubmissions?: NewFormSubmission[]) => Promise<void>;
   processingCompleted: boolean;
   setProcessingCompleted: Dispatch<SetStateAction<boolean>>;
   interrupt: boolean;
@@ -75,7 +77,19 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
   const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
-  const [interrupt, setInterrupt] = useState(false);
+  const [interruptState, setInterruptState] = useState(false);
+  const interruptRef = useRef(interruptState);
+
+  const setInterrupt: Dispatch<SetStateAction<boolean>> = useCallback((value) => {
+    setInterruptState((prev) => {
+      const nextValue =
+        typeof value === "function" ? (value as (v: boolean) => boolean)(prev) : value;
+      interruptRef.current = nextValue;
+      return nextValue;
+    });
+  }, []);
+
+  const interrupt = interruptState;
 
   const handleLoadApiKey = useCallback(async () => {
     try {
@@ -110,13 +124,34 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
   }, []);
 
   const retrieveResponses = useCallback(async () => {
-    const downloadFormats = async (initialSubmissions?: NewFormSubmission[]) => {
+    if (!apiClient) {
+      setNewFormSubmissions([]);
+      return [];
+    }
+
+    try {
+      const submissions = await apiClient.getNewFormSubmissions();
+      setNewFormSubmissions(submissions);
+      return submissions;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error loading submissions:", error);
+      setNewFormSubmissions([]);
+      return [];
+    }
+  }, [apiClient]);
+
+  const processResponses = useCallback(
+    async (initialSubmissions?: NewFormSubmission[]) => {
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
 
-      while (formResponses.length > 0 && !interrupt) {
+      while (formResponses.length > 0 && !interruptRef.current) {
         try {
           const subArrays = createSubArrays(formResponses, 5);
           for (const subArray of subArrays) {
+            if (interruptRef.current) {
+              break;
+            }
             if (!directoryHandle || !userKey || !apiClient) {
               // Optionally handle the error or prompt the user
               break;
@@ -153,8 +188,16 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
             }
 
             // Get subsequent submissions
-            // formResponses = await apiClient.getNewFormSubmissions();
-            formResponses = [];
+            if (interruptRef.current) {
+              break;
+            }
+
+            formResponses = await apiClient.getNewFormSubmissions();
+            // formResponses = [];
+          }
+
+          if (interruptRef.current) {
+            break;
           }
         } catch (error) {
           // eslint-disable-next-line no-console
@@ -165,30 +208,9 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
       }
 
       setProcessingCompleted(true);
-    };
-
-    setProcessingCompleted(false);
-
-    if (apiClient) {
-      apiClient
-        .getNewFormSubmissions()
-        .then((submissions) => {
-          // Set the submissions in state first
-          setNewFormSubmissions(submissions);
-
-          if (submissions.length > 0) {
-            // We need to pass submissions directly since state hasn't updated yet
-            downloadFormats(submissions);
-          }
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.error("Error loading submissions:", error);
-          // Set empty array on error to stop loading state
-          setNewFormSubmissions([]);
-        });
-    }
-  }, [apiClient, directoryHandle, interrupt, newFormSubmissions, userKey]);
+    },
+    [apiClient, directoryHandle, newFormSubmissions, userKey]
+  );
 
   const onCancel = () => {
     setCurrentPage(PageKeys.START);
@@ -237,6 +259,7 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
         newFormSubmissions,
         processedSubmissionIds,
         setProcessedSubmissionIds,
+        processResponses,
         processingCompleted,
         setProcessingCompleted,
         interrupt,

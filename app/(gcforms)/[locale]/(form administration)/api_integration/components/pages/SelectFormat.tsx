@@ -3,10 +3,14 @@ import { useStepFlow } from "../../contexts/ApiResponseDownloaderContext";
 import { Checkbox } from "../../../form-builder/components/shared/MultipleChoice";
 
 export const SelectFormat = () => {
-  const { onNext, onCancel, setSelectedFormat, retrieveResponses } = useStepFlow();
+  const { onNext, onCancel, setSelectedFormat, retrieveResponses, processResponses } =
+    useStepFlow();
 
   const handleNext = async () => {
-    await retrieveResponses();
+    const initialResponses = await retrieveResponses();
+
+    processResponses(initialResponses);
+
     onNext();
   };
 
