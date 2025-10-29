@@ -4,9 +4,14 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { getEventsForForm } from "../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const AuditForm = ({ formId }: { formId: string }) => {
   const { t, i18n } = useTranslation("form-builder");
+
+  const { form } = useTemplateStore((s) => ({
+    form: s.form,
+  }));
 
   async function retrieveFileBlob(
     events: {
@@ -48,7 +53,11 @@ export const AuditForm = ({ formId }: { formId: string }) => {
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      const fileName = name ? name : i18n.language === "fr" ? "French" : "English";
+      const fileName = name
+        ? name
+        : i18n.language === "fr"
+          ? form.titleFr + "-JournalAudit-fr"
+          : form.titleEn + "-AuditLog-en";
 
       a.href = url;
       a.download = slugify(`${fileName}-${getDate()}`) + ".csv";
