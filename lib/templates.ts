@@ -1602,6 +1602,7 @@ export const getFormJSONConfig = async (formId: string) => {
  * WARNING:
  * Avoid using this function for any update that would modify the structure of the form
  * e.g. groups, layouts, elements, etc.
+ * Doing so would cause an error in the infra pipeline when processing submissions.
  */
 export const updateFormJSONConfig = async (formID: string, jsonConfig: FormProperties) => {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
