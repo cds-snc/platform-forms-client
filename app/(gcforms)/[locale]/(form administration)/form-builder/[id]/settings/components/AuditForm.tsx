@@ -40,6 +40,9 @@ export const AuditForm = ({ formId }: { formId: string }) => {
               const key = columns as keyof typeof row;
               let value = row[key];
               if (typeof value === "string") {
+                if (key === "event") {
+                  value = `"${t(`auditDownload.events.${row.event}`)}"`; // Translate event names
+                }
                 // Escape double quotes by doubling them and wrap the whole string in double quotes.
                 value = `"${value.replace(/"/g, '""')}"`;
               }

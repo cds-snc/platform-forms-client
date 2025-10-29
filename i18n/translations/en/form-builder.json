@@ -517,6 +517,11 @@
       "event": "Form Action",
       "timestamp": "Date",
       "description": "Details"
+    },
+    "events": {
+      "CreateForm": "Form created",
+      "ChangeDeliveryOption": "Changed delivery option",
+      "ChangeFormName": "Changed form title"
     }
   },
   "switchToApiMode": {
