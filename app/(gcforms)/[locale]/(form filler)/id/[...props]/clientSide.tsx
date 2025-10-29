@@ -85,24 +85,28 @@ export const FormWrapper = ({
   const isMultiPageForm = showReviewPage(formRecord.form);
   useUpdateHeadTitle(getPageTitle(), isMultiPageForm);
 
-  useEffect(() => {
-    const nonEmptyForm =
+  const nonEmptyForm = useMemo(() => {
+    return (
       savedValues &&
       savedValues.values &&
       Object.entries(savedValues.values).some(([key, value]) => {
         const isAFormElement = !Number.isNaN(Number(key)); // only care about elements in the layout array
         const isNotEmpty = value !== "";
         return isAFormElement && isNotEmpty;
-      });
+      })
+    );
+  }, [savedValues]);
 
+  useEffect(() => {
     // Clear session storage after values are restored
     if (savedValues) {
       removeProgressStorage();
+
       if (savedValues.language === language && nonEmptyForm) {
         toast.success(formRestoredMessage, "public-facing-form");
       }
     }
-  }, [savedValues, formRestoredMessage, language]);
+  }, [savedValues, formRestoredMessage, language, nonEmptyForm]);
 
   const initialValues = savedValues ? savedValues.values : undefined;
 
