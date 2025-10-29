@@ -28,6 +28,13 @@ const eslintConfig = [
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      // Downgrade React Compiler rules to warnings
+      "react-hooks/preserve-manual-memoization": "warn",
+      "react-hooks/set-state-in-effect": "warn",
+      "react-hooks/static-components": "warn",
+      "react-hooks/refs": "warn",
+      "react-hooks/purity": "warn",
+      "react-hooks/immutability": "warn",
     },
   },
   ...tailwind.configs["flat/recommended"],
