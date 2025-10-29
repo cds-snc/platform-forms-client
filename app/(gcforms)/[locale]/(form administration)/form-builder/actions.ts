@@ -109,7 +109,6 @@ export const updateTemplate = AuthenticatedAction(
       deliveryOption,
       securityAttribute,
       formPurpose,
-      allowPublishedUpdate,
     }: {
       id: string;
       formConfig: FormProperties;
@@ -117,7 +116,6 @@ export const updateTemplate = AuthenticatedAction(
       deliveryOption?: DeliveryOption;
       securityAttribute?: SecurityAttribute;
       formPurpose?: FormPurpose;
-      allowPublishedUpdate?: boolean;
     }
   ): Promise<{
     formRecord: { id: string; updatedAt: string | undefined } | null;
@@ -131,7 +129,6 @@ export const updateTemplate = AuthenticatedAction(
         deliveryOption: deliveryOption,
         securityAttribute: securityAttribute,
         formPurpose: formPurpose,
-        allowPublishedUpdate,
       });
 
       if (!formRecord) {
