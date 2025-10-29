@@ -6,7 +6,6 @@ import { type IGCFormsApiClient } from "../lib/IGCFormsApiClient";
 
 import { Button } from "@clientComponents/globals";
 
-import { ContentWrapper } from "./ContentWrapper";
 import { showDirectoryPicker } from "native-file-system-adapter";
 import { jsonFilesToCsv } from "../lib/jsonFilesToCsv";
 
@@ -38,29 +37,27 @@ export const Csv = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => {
   }
 
   return (
-    <ContentWrapper>
-      <div>
-        <h2>Generate CSV from files</h2>
-        {isProcessing && <p className="my-4">Processing...</p>}
-        {message && <p className="my-4">{message}</p>}
-        {!hasDirectory && (
-          <Button
-            onClick={async () => {
-              try {
-                const dirHandle = await showDirectoryPicker();
-                setDirectoryHandle(dirHandle as FileSystemDirectoryHandle | null);
-                setHasDirectory(true);
-              } catch (error) {
-                if ((error as Error).name === "AbortError") return;
-              }
-            }}
-          >
-            Choose Save Location
-          </Button>
-        )}
+    <div>
+      <h2>Generate CSV from files</h2>
+      {isProcessing && <p className="my-4">Processing...</p>}
+      {message && <p className="my-4">{message}</p>}
+      {!hasDirectory && (
+        <Button
+          onClick={async () => {
+            try {
+              const dirHandle = await showDirectoryPicker();
+              setDirectoryHandle(dirHandle as FileSystemDirectoryHandle | null);
+              setHasDirectory(true);
+            } catch (error) {
+              if ((error as Error).name === "AbortError") return;
+            }
+          }}
+        >
+          Choose Save Location
+        </Button>
+      )}
 
-        {hasDirectory && <Button onClick={toCsv}>Generate CSV</Button>}
-      </div>
-    </ContentWrapper>
+      {hasDirectory && <Button onClick={toCsv}>Generate CSV</Button>}
+    </div>
   );
 };

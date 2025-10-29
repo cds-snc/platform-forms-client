@@ -1,8 +1,11 @@
 import { Button } from "@clientComponents/globals";
 import { useStepFlow } from "../../contexts/ApiResponseDownloaderContext";
+import { useGetClient } from "../../hooks/useGetClient";
 
 export const Start = () => {
   const { onNext } = useStepFlow();
+  const { isCompatible } = useGetClient();
+
   return (
     <div>
       <h1 className="">Get new responses</h1>
@@ -23,7 +26,16 @@ export const Start = () => {
       </ol>
       <p className="py-4">After the inital download, you can select more formats to download.</p>
 
-      <Button theme="primary" onClick={onNext}>
+      <Button
+        theme="primary"
+        onClick={() => {
+          if (!isCompatible) {
+            alert("Your browser does not support the File System Access API.");
+            return;
+          }
+          onNext();
+        }}
+      >
         Start
       </Button>
     </div>
