@@ -64,7 +64,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
     }
 
     const operationResult = await updateBranding({
-      id,
+      formId: id,
       branding: formConfig.brand || undefined, // pass undefined to reset to default GoC branding
     });
 

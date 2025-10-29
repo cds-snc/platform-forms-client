@@ -1604,11 +1604,11 @@ export const getFormJSONConfig = async (formId: string) => {
  * e.g. groups, layouts, elements, etc.
  * Doing so would cause an error in the infra pipeline when processing submissions.
  */
-export const updateFormJSONConfig = async (formID: string, jsonConfig: FormProperties) => {
-  const { user } = await authorization.canEditForm(formID).catch((e) => {
+export const updateFormJsonConfig = async (formId: string, jsonConfig: FormProperties) => {
+  const { user } = await authorization.canEditForm(formId).catch((e) => {
     logEvent(
       e.user.id,
-      { type: "Form", id: formID },
+      { type: "Form", id: formId },
       "AccessDenied",
       "Attempted to update form jsonConfig"
     );
@@ -1640,7 +1640,7 @@ export const updateFormJSONConfig = async (formID: string, jsonConfig: FormPrope
   const updatedTemplate = await prisma.template
     .update({
       where: {
-        id: formID,
+        id: formId,
       },
       data: { jsonConfig: jsonConfig as Prisma.JsonObject },
       select: {
@@ -1664,9 +1664,9 @@ export const updateFormJSONConfig = async (formID: string, jsonConfig: FormPrope
 
   if (updatedTemplate === null) return updatedTemplate;
 
-  if (formCache.cacheAvailable) formCache.invalidate(formID);
+  if (formCache.cacheAvailable) formCache.invalidate(formId);
 
-  logEvent(user.id, { type: "Form", id: formID }, "UpdateFormJSONConfig");
+  logEvent(user.id, { type: "Form", id: formId }, "UpdateFormJSONConfig");
 
   return _parseTemplate(updatedTemplate);
 };
