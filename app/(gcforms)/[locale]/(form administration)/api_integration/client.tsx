@@ -1,8 +1,5 @@
 "use client";
 
-import { NoFileSystemAccess } from "./components/NoFileSystemAccess";
-import { useGetClient } from "./hooks/useGetClient";
-
 // Step Components
 import { Start } from "./components/pages/Start";
 import { SelectApiKey } from "./components/pages/SelectApiKey";
@@ -36,12 +33,6 @@ const ClientContent = () => {
 };
 
 export const Client = () => {
-  const { isCompatible } = useGetClient();
-
-  if (!isCompatible) {
-    return <NoFileSystemAccess />;
-  }
-
   return (
     <ApiResponseDownloadProvider>
       <ClientContent />

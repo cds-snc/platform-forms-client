@@ -6,7 +6,6 @@ import { type IGCFormsApiClient } from "../lib/IGCFormsApiClient";
 
 import { Button } from "@clientComponents/globals";
 
-import { ContentWrapper } from "./ContentWrapper";
 import { showDirectoryPicker } from "native-file-system-adapter";
 import { jsonFilesToHtml } from "../lib/jsonFilesToHtml";
 import { useTranslation } from "@root/i18n/client";
@@ -42,29 +41,27 @@ export const Html = ({ apiClient }: { apiClient: IGCFormsApiClient | null }) => 
   }
 
   return (
-    <ContentWrapper>
-      <div>
-        <h2>Generate HTML from files</h2>
-        {isProcessing && <p className="my-4">Processing...</p>}
-        {message && <p className="my-4">{message}</p>}
-        {!hasDirectory && (
-          <Button
-            onClick={async () => {
-              try {
-                const dirHandle = await showDirectoryPicker();
-                setDirectoryHandle(dirHandle as FileSystemDirectoryHandle | null);
-                setHasDirectory(true);
-              } catch (error) {
-                if ((error as Error).name === "AbortError") return;
-              }
-            }}
-          >
-            Choose Save Location
-          </Button>
-        )}
+    <div>
+      <h2>Generate HTML from files</h2>
+      {isProcessing && <p className="my-4">Processing...</p>}
+      {message && <p className="my-4">{message}</p>}
+      {!hasDirectory && (
+        <Button
+          onClick={async () => {
+            try {
+              const dirHandle = await showDirectoryPicker();
+              setDirectoryHandle(dirHandle as FileSystemDirectoryHandle | null);
+              setHasDirectory(true);
+            } catch (error) {
+              if ((error as Error).name === "AbortError") return;
+            }
+          }}
+        >
+          Choose Save Location
+        </Button>
+      )}
 
-        {hasDirectory && <Button onClick={toHtml}>Generate HTML</Button>}
-      </div>
-    </ContentWrapper>
+      {hasDirectory && <Button onClick={toHtml}>Generate HTML</Button>}
+    </div>
   );
 };

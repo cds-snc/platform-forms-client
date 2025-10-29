@@ -13,7 +13,6 @@ import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import type { NewFormSubmission, PrivateApiKey } from "../lib/types";
 
 import { ResponsesAvailable } from "./ResponsesAvailable";
-import { ContentWrapper } from "./ContentWrapper";
 import { ProcessingMessage } from "./ProcessingMessage";
 import { NoSubmissions } from "./NoSubmissions";
 import { DirectoryPicker } from "./DirectoryPicker";
@@ -139,33 +138,31 @@ export const Submissions = ({
   }
 
   return (
-    <ContentWrapper>
-      <div>
-        {newFormSubmissions && newFormSubmissions.length > 0 ? (
-          <>
-            <ResponsesAvailable message={hasResponses} />
+    <div>
+      {newFormSubmissions && newFormSubmissions.length > 0 ? (
+        <>
+          <ResponsesAvailable message={hasResponses} />
 
-            {showDownloadButton && (
-              <Button onClick={handleProcessSubmissions}>Download and Confirm</Button>
-            )}
+          {showDownloadButton && (
+            <Button onClick={handleProcessSubmissions}>Download and Confirm</Button>
+          )}
 
-            <DirectoryPicker onPick={setDirectory} />
+          <DirectoryPicker onPick={setDirectory} />
 
-            <ProcessingMessage
-              error={error}
-              completed={completed}
-              responsesProcessed={processedCount}
-              retryButton={
-                <Button className="mt-2" theme="secondary" onClick={handleProcessSubmissions}>
-                  Retry
-                </Button>
-              }
-            />
-          </>
-        ) : (
-          <NoSubmissions isLoading={isLoading} />
-        )}
-      </div>
-    </ContentWrapper>
+          <ProcessingMessage
+            error={error}
+            completed={completed}
+            responsesProcessed={processedCount}
+            retryButton={
+              <Button className="mt-2" theme="secondary" onClick={handleProcessSubmissions}>
+                Retry
+              </Button>
+            }
+          />
+        </>
+      ) : (
+        <NoSubmissions isLoading={isLoading} />
+      )}
+    </div>
   );
 };
