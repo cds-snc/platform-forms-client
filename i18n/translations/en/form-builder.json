@@ -509,7 +509,7 @@
   },
   "auditDownload": {
     "description": "Obtain a spreadsheet with the history of all key actions taken in a form, including when a form was created, updated, and archived.",
-    "downloadBtnText": "Afficher l'activité du formulaire",
+    "downloadBtnText": "Download activity log",
     "title": "Download form activity",
     "headers": {
       "formId": "Form ID",

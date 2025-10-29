@@ -20,11 +20,11 @@ export const AuditForm = ({ formId }: { formId: string }) => {
     try {
       const columns = ["formId", "userId", "event", "timestamp", "description"];
       const headers = [
-        t("headers.formId"),
-        t("headers.userId"),
-        t("headers.event"),
-        t("headers.timestamp"),
-        t("headers.description"),
+        t("auditDownload.headers.formId"),
+        t("auditDownload.headers.userId"),
+        t("auditDownload.headers.event"),
+        t("auditDownload.headers.timestamp"),
+        t("auditDownload.headers.description"),
       ];
       const csvHeader = headers.join(",") + "\r\n";
 
