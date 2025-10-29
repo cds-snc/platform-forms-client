@@ -540,7 +540,7 @@ export const updateBranding = AuthenticatedAction(
       const formConfig = await getFormJSONConfig(formId);
 
       if (!formConfig) {
-        throw new Error("Failed to get template for branding update");
+        throw new Error(`Failed to get template for branding update with formId ${formId}`);
       }
 
       const updatedFormConfig: FormProperties = {
@@ -550,7 +550,7 @@ export const updateBranding = AuthenticatedAction(
       const formRecord = await updateFormJSONConfig(formId, updatedFormConfig);
 
       if (!formRecord) {
-        throw new Error("Failed to update template");
+        throw new Error(`Failed to update template for branding update with formId ${formId}`);
       }
 
       return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };

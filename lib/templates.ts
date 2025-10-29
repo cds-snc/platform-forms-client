@@ -1570,7 +1570,7 @@ export const getFormJSONConfig = async (formId: string) => {
       e.user.id,
       { type: "Form", id: formId },
       "AccessDenied",
-      "Attempted to update security attribute"
+      "Attempted to get form jsonConfig"
     );
     throw e;
   });
@@ -1583,7 +1583,7 @@ export const getFormJSONConfig = async (formId: string) => {
     .catch((e) => prismaErrors(e, null));
 
   if (!result) {
-    throw new Error("Template not found");
+    throw new Error(`Template not found when getting jsonConfig with formId ${formId}`);
   }
 
   let jsonConfig: FormProperties;
@@ -1605,20 +1605,39 @@ export const updateFormJSONConfig = async (formID: string, jsonConfig: FormPrope
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to update security attribute"
+      "Attempted to update form jsonConfig"
     );
     throw e;
   });
 
-  // Ensure it is a pure JSON value
-  const sanitized = JSON.parse(JSON.stringify(jsonConfig)) as Prisma.JsonObject;
+  const validationResult = validateTemplate(jsonConfig);
+
+  if (!validationResult.valid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Form config is invalid.\nReasons: ${JSON.stringify(
+        validationResult.errors
+      )}.\nConfig: ${JSON.stringify(jsonConfig)}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
+  const isValid = validateTemplateSize(JSON.stringify(jsonConfig));
+
+  if (!isValid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Template size exceeds the limit.\nConfig: ${JSON.stringify(
+        jsonConfig
+      )}`
+    );
+    throw new InvalidFormConfigError();
+  }
 
   const updatedTemplate = await prisma.template
     .update({
       where: {
         id: formID,
       },
-      data: { jsonConfig: sanitized },
+      data: { jsonConfig: jsonConfig as Prisma.JsonObject },
       select: {
         id: true,
         created_at: true,
