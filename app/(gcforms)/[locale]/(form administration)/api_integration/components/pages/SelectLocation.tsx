@@ -33,14 +33,18 @@ export const SelectLocation = () => {
       <div>Step 2 of 3</div>
       <h1>Select Location</h1>
 
-      {!directoryHandle && <DirectoryPicker onPick={setDirectory} />}
+      {!directoryHandle && (
+        <div className="mb-4">
+          <DirectoryPicker onPick={setDirectory} />
+        </div>
+      )}
       {directoryHandle && <p className="mb-4">Save location selected successfully.</p>}
 
       <div className="flex flex-row gap-4">
         <Button theme="secondary" onClick={onCancel}>
           Cancel
         </Button>
-        <Button theme="primary" onClick={onNext}>
+        <Button disabled={!directoryHandle} theme="primary" onClick={onNext}>
           Next
         </Button>
       </div>

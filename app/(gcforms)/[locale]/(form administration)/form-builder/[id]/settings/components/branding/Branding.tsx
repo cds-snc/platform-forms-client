@@ -11,7 +11,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 import Brand from "@clientComponents/globals/Brand";
 import { ExternalLinkIcon } from "@serverComponents/icons";
-import { updateTemplate } from "@formBuilder/actions";
+import { updateBranding } from "@formBuilder/actions";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
@@ -27,17 +27,15 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
 
 export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation(["form-builder", "common"]);
-  const { id, isPublished, brandName, updateField, unsetField, getSchema, brand } =
-    useTemplateStore((s) => ({
-      id: s.id,
-      brandName: s.form?.brand?.name || "",
-      unsetField: s.unsetField,
-      updateField: s.updateField,
-      getSchema: s.getSchema,
-      getName: s.getName,
-      isPublished: s.isPublished,
-      brand: s.form.brand,
-    }));
+  const { id, brandName, updateField, unsetField, getSchema, brand } = useTemplateStore((s) => ({
+    id: s.id,
+    brandName: s.form?.brand?.name || "",
+    unsetField: s.unsetField,
+    updateField: s.updateField,
+    getSchema: s.getSchema,
+    getName: s.getName,
+    brand: s.form.brand,
+  }));
 
   const savedSuccessMessage = t("settingsResponseDelivery.savedSuccessMessage");
   const savedErrorMessage = t("settingsResponseDelivery.savedErrorMessage");
@@ -65,9 +63,9 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
       return;
     }
 
-    const operationResult = await updateTemplate({
-      id,
-      formConfig,
+    const operationResult = await updateBranding({
+      formId: id,
+      branding: formConfig.brand || undefined, // pass undefined to reset to default GoC branding
     });
 
     if (operationResult.formRecord !== null) {
@@ -83,8 +81,12 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
 
   const updateBrand = useCallback(
     (type: string) => {
+      // Reset to default GoC branding
       if (type === "") {
         unsetField("form.brand");
+
+        handleSave();
+
         return;
       }
 
@@ -108,7 +110,6 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         <Label htmlFor="branding-select">{t("branding.select")}</Label>
         <BrandingSelect
           className="mb-5 mt-2 max-w-[450px] truncate bg-gray-soft p-1 pr-10"
-          disabled={isPublished as boolean}
           options={brandingOptions.map(({ value, label }) => ({ value, label }))}
           selected={brandName}
           handleUpdate={updateBrand}

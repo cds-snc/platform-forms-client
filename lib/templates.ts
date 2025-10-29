@@ -1562,3 +1562,111 @@ export const checkIfClosed = async (formId: string) => {
     return null;
   }
 };
+
+export const getFormJSONConfig = async (formId: string) => {
+  await authorization.canEditForm(formId).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formId },
+      "AccessDenied",
+      "Attempted to get form jsonConfig"
+    );
+    throw e;
+  });
+
+  const result = await prisma.template
+    .findUnique({
+      where: { id: formId },
+      select: { jsonConfig: true },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!result) {
+    throw new Error(`Template not found when getting jsonConfig with formId ${formId}`);
+  }
+
+  let jsonConfig: FormProperties;
+  const raw = result.jsonConfig;
+
+  if (typeof raw === "string") {
+    // Only parse if (unexpectedly) stored as a string
+    jsonConfig = JSON.parse(raw) as FormProperties;
+  } else {
+    jsonConfig = raw as FormProperties;
+  }
+
+  return jsonConfig;
+};
+
+/**
+ * WARNING:
+ * Avoid using this function for any update that would modify the structure of the form
+ * e.g. groups, layouts, elements, etc.
+ * Doing so would cause an error in the infra pipeline when processing submissions.
+ */
+export const updateFormJsonConfig = async (formId: string, jsonConfig: FormProperties) => {
+  const { user } = await authorization.canEditForm(formId).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formId },
+      "AccessDenied",
+      "Attempted to update form jsonConfig"
+    );
+    throw e;
+  });
+
+  const validationResult = validateTemplate(jsonConfig);
+
+  if (!validationResult.valid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Form config is invalid.\nReasons: ${JSON.stringify(
+        validationResult.errors
+      )}.\nConfig: ${JSON.stringify(jsonConfig)}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
+  const isValid = validateTemplateSize(JSON.stringify(jsonConfig));
+
+  if (!isValid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Template size exceeds the limit.\nConfig: ${JSON.stringify(
+        jsonConfig
+      )}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
+  const updatedTemplate = await prisma.template
+    .update({
+      where: {
+        id: formId,
+      },
+      data: { jsonConfig: jsonConfig as Prisma.JsonObject },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
+        saveAndResume: true,
+        notificationsInterval: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (updatedTemplate === null) return updatedTemplate;
+
+  if (formCache.cacheAvailable) formCache.invalidate(formId);
+
+  logEvent(user.id, { type: "Form", id: formId }, "UpdateFormJsonConfig");
+
+  return _parseTemplate(updatedTemplate);
+};

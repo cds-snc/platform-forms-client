@@ -611,7 +611,7 @@
   "publishingDisablesEditing": "Publishing disables editing.",
   "publishingDisablesEditingDescription": "Once you publish, you cannot make changes to this form. If changes are needed after publishing, use the form file to create and publish a new form.",
   "publishingLocksSettings": "Publishing locks some settings.",
-  "publishingLocksSettingsDescription": "Many form settings will no longer be changeable such as the form's classification, branding, and intended use.",
+  "publishingLocksSettingsDescription": "Many form settings will no longer be changeable such as the form's classification and intended use.",
   "publishingRemovesTestResponses": "Publishing removes test responses.",
   "publishingRemovesTestResponsesDescription": "Any prior responses will be removed from the system.",
   "publishYourForm": "Publish your form",
