@@ -26,6 +26,7 @@ export const PageKeys = {
   SELECT_LOCATION: "selectLocation",
   SELECT_FORMAT: "selectFormat",
   PROCESSING_DOWNLOADS: "processingDownloads",
+  CHECK_FOR_NEW_RESPONSES: "checkForNewResponses",
   GENERATE_FORMAT_FROM_JSON: "generateFormatFromJson",
 } as const;
 
@@ -49,7 +50,11 @@ interface ApiResponseDownloaderContextType {
   retrieveResponses: () => Promise<void>;
   newFormSubmissions: NewFormSubmission[] | null;
   processedSubmissionIds: Set<string>;
+  setProcessedSubmissionIds: Dispatch<SetStateAction<Set<string>>>;
   processingCompleted: boolean;
+  setProcessingCompleted: Dispatch<SetStateAction<boolean>>;
+  interrupt: boolean;
+  setInterrupt: Dispatch<SetStateAction<boolean>>;
 }
 
 const ApiResponseDownloaderContext = createContext<ApiResponseDownloaderContextType | undefined>(
@@ -70,6 +75,7 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
   const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
+  const [interrupt, setInterrupt] = useState(false);
 
   const handleLoadApiKey = useCallback(async () => {
     try {
@@ -107,7 +113,7 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
     const downloadFormats = async (initialSubmissions?: NewFormSubmission[]) => {
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
 
-      while (formResponses.length > 0) {
+      while (formResponses.length > 0 && !interrupt) {
         try {
           const subArrays = createSubArrays(formResponses, 5);
           for (const subArray of subArrays) {
@@ -182,7 +188,7 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
           setNewFormSubmissions([]);
         });
     }
-  }, [apiClient, directoryHandle, newFormSubmissions, userKey]);
+  }, [apiClient, directoryHandle, interrupt, newFormSubmissions, userKey]);
 
   const onCancel = () => {
     setCurrentPage(PageKeys.START);
@@ -201,7 +207,9 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
         case PageKeys.SELECT_FORMAT:
           return PageKeys.PROCESSING_DOWNLOADS;
         case PageKeys.PROCESSING_DOWNLOADS:
-          return PageKeys.START;
+          return PageKeys.CHECK_FOR_NEW_RESPONSES;
+        case PageKeys.CHECK_FOR_NEW_RESPONSES:
+          return PageKeys.PROCESSING_DOWNLOADS;
         default:
           return PageKeys.START;
       }
@@ -228,7 +236,11 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
         retrieveResponses,
         newFormSubmissions,
         processedSubmissionIds,
+        setProcessedSubmissionIds,
         processingCompleted,
+        setProcessingCompleted,
+        interrupt,
+        setInterrupt,
       }}
     >
       {children}

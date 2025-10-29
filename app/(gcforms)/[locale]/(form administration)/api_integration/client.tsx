@@ -17,6 +17,7 @@ import {
   ApiResponseDownloadProvider,
 } from "./contexts/ApiResponseDownloaderContext";
 import { ProcessingDownloads } from "./components/pages/ProcessingDownloads";
+import { CheckForNewResponses } from "./components/pages/CheckForNewResponses";
 
 const ClientContent = () => {
   const { currentPage } = useStepFlow();
@@ -28,6 +29,7 @@ const ClientContent = () => {
     selectFormat: <SelectFormat />,
     processingDownloads: <ProcessingDownloads />,
     generateFormatFromJson: <GenerateFormatFromJson />,
+    checkForNewResponses: <CheckForNewResponses />,
   };
 
   return <ContentWrapper>{pages[currentPage]}</ContentWrapper>;
