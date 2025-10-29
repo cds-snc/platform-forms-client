@@ -18,7 +18,7 @@ export enum AuditLogEvent {
   RevokeFormAccess = "RevokeFormAccess",
   UpdateNotificationsInterval = "UpdateNotificationsInterval",
   UpdateNotificationsUserSetting = "UpdateNotificationsUserSetting",
-  UpdateFormJSONConfig = "updateFormJSONConfig",
+  UpdateFormJsonConfig = "updateFormJsonConfig",
   // Invitations
   InvitationCreated = "InvitationCreated",
   InvitationAccepted = "InvitationAccepted",

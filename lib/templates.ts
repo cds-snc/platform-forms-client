@@ -1666,7 +1666,7 @@ export const updateFormJsonConfig = async (formId: string, jsonConfig: FormPrope
 
   if (formCache.cacheAvailable) formCache.invalidate(formId);
 
-  logEvent(user.id, { type: "Form", id: formId }, "UpdateFormJSONConfig");
+  logEvent(user.id, { type: "Form", id: formId }, "UpdateFormJsonConfig");
 
   return _parseTemplate(updatedTemplate);
 };
