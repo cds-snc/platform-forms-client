@@ -8,7 +8,7 @@ import { createSubArrays, downloadAndConfirmFormSubmissions } from "../lib/utils
 import { Button } from "@clientComponents/globals";
 
 // Use the type returned by showDirectoryPicker
-import { FileSystemDirectoryHandle } from "native-file-system-adapter";
+import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
 import type { NewFormSubmission, PrivateApiKey } from "../lib/types";
 
@@ -63,7 +63,7 @@ export const Submissions = ({
       const formTemplate = await apiClient?.getFormTemplate();
 
       // Initialize CSV file as needed in the selected directory
-      await initCsv({ formId, dirHandle: handle as FileSystemDirectoryHandle, formTemplate });
+      await initCsv({ formId, dirHandle: handle, formTemplate });
     },
     [apiClient]
   );
@@ -84,7 +84,7 @@ export const Submissions = ({
           }
 
           const { submissionData } = await downloadAndConfirmFormSubmissions(
-            directoryHandle as FileSystemDirectoryHandle,
+            directoryHandle,
             apiClient,
             userKey,
             subArray
@@ -97,7 +97,7 @@ export const Submissions = ({
           if (formId && formTemplate && submissionData) {
             await writeSubmissionsToCsv({
               formId,
-              dirHandle: directoryHandle as FileSystemDirectoryHandle,
+              dirHandle: directoryHandle,
               formTemplate,
               submissionData,
             });
@@ -149,7 +149,7 @@ export const Submissions = ({
               <Button onClick={handleProcessSubmissions}>Download and Confirm</Button>
             )}
 
-            <DirectoryPicker directoryHandle={directoryHandle} onPick={setDirectory} />
+            <DirectoryPicker onPick={setDirectory} />
 
             <ProcessingMessage
               error={error}

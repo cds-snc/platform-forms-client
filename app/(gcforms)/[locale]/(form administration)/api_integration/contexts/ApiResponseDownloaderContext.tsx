@@ -1,6 +1,15 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useCallback,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
+import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import { NewFormSubmission, PrivateApiKey } from "../lib/types";
 import { GCFormsApiClient } from "../lib/apiClient";
 import { showOpenFilePicker } from "native-file-system-adapter";
@@ -24,7 +33,7 @@ export type PageKey = (typeof PageKeys)[keyof typeof PageKeys];
 
 interface ApiResponseDownloaderContextType {
   currentPage: PageKey;
-  setCurrentPage: (page: PageKey) => void;
+  setCurrentPage: Dispatch<SetStateAction<PageKey>>;
   onNext: () => void;
   onCancel: () => void;
   isCompatible: boolean;
@@ -32,11 +41,11 @@ interface ApiResponseDownloaderContextType {
   userKey: PrivateApiKey | null;
   apiClient: GCFormsApiClient | null;
   directoryHandle: FileSystemDirectoryHandle | null;
-  setDirectoryHandle: (handle: FileSystemDirectoryHandle | null) => void;
+  setDirectoryHandle: Dispatch<SetStateAction<FileSystemDirectoryHandle | null>>;
   selectedFormat: string | null;
-  setSelectedFormat: (format: string | null) => void;
+  setSelectedFormat: Dispatch<SetStateAction<string | null>>;
   csvFileHandle: FileSystemFileHandle | null;
-  setCsvFileHandle: (handle: FileSystemFileHandle | null) => void;
+  setCsvFileHandle: Dispatch<SetStateAction<FileSystemFileHandle | null>>;
   retrieveResponses: () => Promise<void>;
   newFormSubmissions: NewFormSubmission[] | null;
   processedSubmissionIds: Set<string>;
@@ -68,7 +77,6 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
       const [fileHandle] = await showOpenFilePicker({
         multiple: false, // default
         excludeAcceptAllOption: false, // default
-        _preferPolyfill: false, // default
       });
 
       const keyFile = await fileHandle.getFile().then(async (file) => {

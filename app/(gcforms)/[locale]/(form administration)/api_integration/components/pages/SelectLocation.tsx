@@ -2,6 +2,7 @@ import { Button } from "@clientComponents/globals";
 import { useStepFlow } from "../../contexts/ApiResponseDownloaderContext";
 import { DirectoryPicker } from "../DirectoryPicker";
 import { useCallback } from "react";
+import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { initCsv } from "../../lib/csvWriter";
 
 export const SelectLocation = () => {
@@ -22,7 +23,7 @@ export const SelectLocation = () => {
       // Initialize CSV file as needed in the selected directory
       const csvFileHandle = await initCsv({ formId, dirHandle: handle, formTemplate });
 
-      setCsvFileHandle(csvFileHandle);
+      setCsvFileHandle(csvFileHandle ?? null);
     },
     [apiClient, setDirectoryHandle, setCsvFileHandle]
   );
@@ -32,9 +33,7 @@ export const SelectLocation = () => {
       <div>Step 2 of 3</div>
       <h1>Select Location</h1>
 
-      {!directoryHandle && (
-        <DirectoryPicker directoryHandle={directoryHandle} onPick={setDirectory} />
-      )}
+      {!directoryHandle && <DirectoryPicker onPick={setDirectory} />}
       {directoryHandle && <p className="mb-4">Save location selected successfully.</p>}
 
       <div className="flex flex-row gap-4">
