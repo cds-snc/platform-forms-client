@@ -1598,6 +1598,11 @@ export const getFormJSONConfig = async (formId: string) => {
   return jsonConfig;
 };
 
+/**
+ * WARNING:
+ * Avoid using this function for any update that would modify the structure of the form
+ * e.g. groups, layouts, elements, etc.
+ */
 export const updateFormJSONConfig = async (formID: string, jsonConfig: FormProperties) => {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
