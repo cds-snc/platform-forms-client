@@ -26,7 +26,7 @@ export const PageKeys = {
   SELECT_LOCATION: "selectLocation",
   SELECT_FORMAT: "selectFormat",
   PROCESSING_DOWNLOADS: "processingDownloads",
-  CHECK_FOR_NEW_RESPONSES: "checkForNewResponses",
+  CONFIRMATION: "confirmation",
   GENERATE_FORMAT_FROM_JSON: "generateFormatFromJson",
 } as const;
 
@@ -207,8 +207,8 @@ export const ApiResponseDownloadProvider = ({ children }: { children: ReactNode 
         case PageKeys.SELECT_FORMAT:
           return PageKeys.PROCESSING_DOWNLOADS;
         case PageKeys.PROCESSING_DOWNLOADS:
-          return PageKeys.CHECK_FOR_NEW_RESPONSES;
-        case PageKeys.CHECK_FOR_NEW_RESPONSES:
+          return PageKeys.CONFIRMATION;
+        case PageKeys.CONFIRMATION:
           return PageKeys.PROCESSING_DOWNLOADS;
         default:
           return PageKeys.START;
