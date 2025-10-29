@@ -19,7 +19,7 @@ export const FileInput = ({ title }: { title: string }) => {
 
   const formId = id || "0000";
 
-  const link = `/${translationLanguagePriority}/form-builder/${formId}/settings`;
+  const link = `/${translationLanguagePriority}/form-builder/${formId}/settings/api-integration`;
 
   return hasApiKeyId ? (
     <WithApiDescription title={title} />
@@ -43,7 +43,7 @@ export const FileInputTrialDescription = () => {
     translationLanguagePriority: s.translationLanguagePriority,
   }));
 
-  const link = `/${translationLanguagePriority}/form-builder/${id}/settings`;
+  const link = `/${translationLanguagePriority}/form-builder/${id}/settings/api-integration`;
 
   const { t } = useTranslation("form-builder");
   return (

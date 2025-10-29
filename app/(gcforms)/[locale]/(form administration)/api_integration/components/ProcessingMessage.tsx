@@ -1,5 +1,5 @@
 import { type JSX } from "react";
-import { TokenRateLimitError } from "../lib/error";
+import { TokenRateLimitError } from "../lib/errorsTypes";
 import { Danger, Success } from "@clientComponents/globals/Alert/Alert";
 import { MapleLeafLoader } from "@clientComponents/icons/MapleLeafLoader";
 

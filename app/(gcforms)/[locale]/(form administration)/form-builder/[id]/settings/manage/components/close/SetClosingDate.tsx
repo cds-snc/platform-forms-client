@@ -110,22 +110,44 @@ export const SetClosingDate = ({
     setPendingToggleValue(null);
   }, []);
 
-  const saveClosedMessage = useCallback(async () => {
-    if (!validateClosedMessage()) return;
+  const saveClosedMessage = useCallback(
+    async (detailsToSave?: ClosedDetails) => {
+      const messageToSave = detailsToSave || closedMessage;
 
-    const result = await closeForm({
-      id: formId,
-      closingDate: closingDate || null,
-      closedDetails: closedMessage,
-    });
+      // Update the parent state with the fresh data
+      if (detailsToSave) {
+        setClosedMessage(detailsToSave);
+      }
 
-    if (!result || result.error) {
-      toast.error(t("closingDate.savedErrorMessage"));
-      return;
-    }
+      // Validate the fresh data directly instead of relying on state
+      const hasClosedMessageEn = messageToSave?.messageEn && messageToSave?.messageEn !== "";
+      const hasClosedMessageFr = messageToSave?.messageFr && messageToSave?.messageFr !== "";
 
-    toast.success(t("closingDate.savedSuccessMessage"));
-  }, [formId, closingDate, closedMessage, validateClosedMessage, t]);
+      let isValid = true;
+      if (hasClosedMessageEn || hasClosedMessageFr) {
+        if (!hasClosedMessageEn) isValid = false;
+        if (!hasClosedMessageFr) isValid = false;
+      }
+
+      if (!isValid) return;
+
+      const isoClosingDate = closingDate ? new Date(closingDate).toISOString() : null;
+
+      const result = await closeForm({
+        id: formId,
+        closingDate: isoClosingDate,
+        closedDetails: messageToSave,
+      });
+
+      if (!result || result.error) {
+        toast.error(t("closingDate.savedErrorMessage"));
+        return;
+      }
+
+      toast.success(t("closingDate.savedSuccessMessage"));
+    },
+    [formId, closingDate, closedMessage, t]
+  );
 
   const clearClosingDate = () => {
     closeForm({
