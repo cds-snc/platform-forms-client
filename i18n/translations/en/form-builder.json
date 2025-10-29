@@ -18,7 +18,7 @@
       },
       "spreadsheets": {
         "label": "Spreadsheets",
-        "description": "xls, xlsx, csv, numbers"
+        "description": "xls, xlsx, csv"
       }
     }
   },
