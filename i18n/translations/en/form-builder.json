@@ -496,7 +496,7 @@
   "formDownload": {
     "description": "Keep a version stored locally on your computer or use this file to share a draft in progress.",
     "downloadBtnText": "Download form file",
-    "title": "Download form file"
+    "title": "Get a copy of your form"
   },
   "switchToApiMode": {
     "title": "Switch to API delivery",

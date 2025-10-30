@@ -496,7 +496,7 @@
   "formDownload": {
     "description": "Conservez une version du formulaire enregistrée localement sur votre ordinateur ou utilisez ce fichier pour partager une ébauche en cours de développement.",
     "downloadBtnText": "Télécharger le fichier du formulaire",
-    "title": "Télécharger le fichier du formulaire"
+    "title": "Obtenir une copie du formulaire"
   },
   "switchToApiMode": {
     "title": "Passer à la livraison par API",
