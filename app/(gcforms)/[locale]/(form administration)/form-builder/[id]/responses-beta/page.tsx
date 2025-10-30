@@ -5,7 +5,6 @@ import { serverTranslation } from "@i18n";
 import { authCheckAndThrow } from "@lib/actions";
 import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
-import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -33,18 +32,8 @@ export default async function Page(props: { params: Promise<{ locale: string; id
     session !== null &&
     (await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesBeta));
 
-  if (!hasAccess) {
+  if (!hasAccess || session === null) {
     redirect(`/${locale}/form-builder/${id}/responses`);
-  }
-
-  const isAuthenticated = session !== null;
-
-  if (!isAuthenticated) {
-    return (
-      <div className="max-w-4xl">
-        <LoggedOutTab tabName={LoggedOutTabName.RESPONSES_BETA} />
-      </div>
-    );
   }
 
   return (
