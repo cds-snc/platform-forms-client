@@ -1,6 +1,8 @@
 import { authorization } from "@lib/privileges";
 import { prisma } from "@lib/integration/prismaConnector";
 import { featureFlagsCheck, featureFlagsPut } from "@lib/cache/userFeatureFlagsCache";
+import { FeatureFlagKeys } from "./cache/types";
+import { checkOne } from "./cache/flags";
 
 /**
  * Get all feature flags enabled for a user.
@@ -95,4 +97,16 @@ export const addUserFeatureFlags = async (userId: string, flags: string[]): Prom
   } catch (error) {
     throw new Error(`Failed to add feature flags: ${error}`);
   }
+};
+
+export const featureFlagAllowedForUser = async (
+  userId: string,
+  flag: FeatureFlagKeys
+): Promise<boolean> => {
+  // Check if flag is enabled globally
+  const flagEnabled = await checkOne(flag);
+  // Check if user has the flag
+  const userFlags = await getUserFeatureFlags(userId);
+  const userFlag = userFlags.find((matchFlag) => matchFlag === flag);
+  return userFlag || flagEnabled ? true : false;
 };

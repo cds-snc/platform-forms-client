@@ -3,5 +3,6 @@
   "formTimer": false,
   "hCaptcha": false,
   "topBanner": false,
-  "fileUpload": false
+  "fileUpload": false,
+  "responsesBeta": false
 }
