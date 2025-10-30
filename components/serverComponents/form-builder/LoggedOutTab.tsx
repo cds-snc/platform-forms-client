@@ -7,6 +7,7 @@ import { serverTranslation } from "@i18n";
 export enum LoggedOutTabName {
   PUBLISH = "publish",
   RESPONSES = "responses",
+  RESPONSES_BETA = "responses-beta",
   SETTINGS = "settings",
 }
 
