@@ -18,7 +18,6 @@ export const ALLOWED_FILE_TYPES = [
     mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     extensions: ["xlsx"],
   },
-  { mime: "application/vnd.apple.numbers", extensions: ["numbers"] },
   { mime: "application/xml", extensions: ["xml"] },
   { mime: "text/xml", extensions: ["xml"] },
 ];
