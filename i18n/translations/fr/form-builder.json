@@ -19,7 +19,7 @@
     },
     "spreadsheets": {
       "label": "Feuilles de calcul",
-      "description": "xls, xlsx, csv, numbers"
+      "description": "xls, xlsx, csv"
     }
   },
   "addElement": "Ajouter un élément",
