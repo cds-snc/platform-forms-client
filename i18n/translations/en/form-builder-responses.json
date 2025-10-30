@@ -79,6 +79,10 @@
     },
     "viewAllProblemResponses": "View reported responses"
   },
+  "responsesBeta": {
+    "pageTitle": "Responses Beta",
+    "responsesBetaLink": "Try Responses Beta"
+  },
   "supportWillContact": "Support will contact you",
   "reportedAsProblem": "Response reported as a problem",
   "downloadSuccess": {
