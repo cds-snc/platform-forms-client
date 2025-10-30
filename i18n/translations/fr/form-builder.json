@@ -821,13 +821,13 @@
           "subject": "New form response | Nouvelle réponse au formulaire",
           "paragraph1": "Votre formulaire a reçu une nouvelle soumission :",
           "paragraph2": "Allez à Formulaires GC",
-          "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
+          "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Options liées aux réponses."
         },
         "multipleSubmissions": {
           "subject": "New form responses | Nouvelles réponses au formulaire",
           "paragraph1": "Votre formulaire a reçu des nouvelles soumissions :",
           "paragraph2": "Allez à Formulaires GC",
-          "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
+          "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Options liées aux réponses."
         }
       },
       "sessionUser": {

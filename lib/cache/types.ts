@@ -3,7 +3,6 @@
 export const UserFeatureFlags = {
   fileUpload: "fileUpload",
   addressComplete: "addressComplete",
-  responsesBeta: "responsesBeta",
 } as const;
 
 export const FeatureFlags = {
