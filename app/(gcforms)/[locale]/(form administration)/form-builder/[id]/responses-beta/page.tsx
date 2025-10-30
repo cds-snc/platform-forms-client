@@ -13,9 +13,9 @@ export async function generateMetadata(props: {
 
   const { locale } = params;
 
-  const { t } = await serverTranslation("form-builder", { lang: locale });
+  const { t } = await serverTranslation("form-builder-responses", { lang: locale });
   return {
-    title: `${t("gcFormsPublished")} — ${t("gcForms")}`,
+    title: `${t("responsesBeta.pageTitle")} — ${t("gcForms")}`,
   };
 }
 
