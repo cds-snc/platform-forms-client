@@ -33,7 +33,9 @@ export default async function Page(props: { params: Promise<{ locale: string; id
     return null;
   }
 
-  if (!featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesBeta)) {
+  const hasAccess = await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesBeta);
+
+  if (!hasAccess) {
     logMessage.info(
       `User ${session.user.id} attempted to access Responses Beta page without the feature flag enabled.`
     );

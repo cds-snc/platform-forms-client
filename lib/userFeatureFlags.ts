@@ -100,15 +100,13 @@ export const addUserFeatureFlags = async (userId: string, flags: string[]): Prom
 };
 
 export const featureFlagAllowedForUser = async (
-  userID: string,
+  userId: string,
   flag: FeatureFlagKeys
 ): Promise<boolean> => {
   // Check if flag is enabled globally
   const flagEnabled = await checkOne(flag);
-
   // Check if user has the flag
-  const userFlags = await getUserFeatureFlags(userID);
+  const userFlags = await getUserFeatureFlags(userId);
   const userFlag = userFlags.find((matchFlag) => matchFlag === flag);
-
   return userFlag || flagEnabled ? true : false;
 };
