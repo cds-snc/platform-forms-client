@@ -5,8 +5,12 @@ import { isFieldResponseValid } from "./validation/validation";
 import { inGroup } from "./helpers";
 
 import { checkVisibilityRecursive } from "./visibility";
+import { valueMatchesType } from "@gcforms/core";
 
-/* Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit  */
+/*
+ Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit
+ this allows passing in currentGroup vs adding the currentGroup to values beforehand
+*/
 export const validate = ({
   values,
   currentGroup,
@@ -25,6 +29,11 @@ export const validate = ({
   return errors;
 };
 
+/**
+ * validateOnSubmit is called for form submission validation
+ * @param values
+ * @param props
+ */
 export const validateOnSubmit = (
   values: Responses,
   props: {
@@ -36,11 +45,6 @@ export const validateOnSubmit = (
   return errors;
 };
 
-/**
- * validateOnSubmit is called for form submission validation
- * @param values
- * @param props
- */
 export const validateVisibleElements = (
   values: Responses,
   props: {
@@ -52,7 +56,7 @@ export const validateVisibleElements = (
   const visibilityMap = new Map<string, boolean>();
 
   for (const formElement of props.formRecord.form.elements) {
-    const item = values[formElement.id];
+    const responseValue = values[formElement.id];
 
     const currentGroup = values.currentGroup as string;
     const groups = props.formRecord.form.groups as GroupsType;
@@ -78,7 +82,7 @@ export const validateVisibleElements = (
 
     if (formElement.properties.validation) {
       const result = isFieldResponseValid(
-        item,
+        responseValue,
         values,
         formElement.type,
         formElement,
@@ -88,6 +92,22 @@ export const validateVisibleElements = (
 
       if (result) {
         errors[formElement.id] = result;
+      }
+    }
+
+    // Note this checks against all visible elements, not just required ones
+    // Only check if we actually have a value to validate
+    if (
+      !errors[formElement.id] &&
+      responseValue !== undefined &&
+      responseValue !== null &&
+      responseValue !== ""
+    ) {
+      const result = valueMatchesType(responseValue, formElement.type, formElement);
+
+      if (!result) {
+        const err = `Mismatched type for ${formElement.type} => ${JSON.stringify(responseValue)}`;
+        errors[formElement.id] = err;
       }
     }
   }

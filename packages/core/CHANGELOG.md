@@ -1,5 +1,18 @@
 # Changelog
 
+
+## [1.0.11] - 2025-10-29
+
+- Remove `.numbers` file type support
+
+## [1.0.10] - 2025-10-28
+
+- Add values-to-types and isValidEmail
+
+## [1.0.9] - 2025-10-27
+
+- Add exports field to package.json
+
 ## [1.0.8] - 2025-10-01
 
 - Bump yarn

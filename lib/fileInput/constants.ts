@@ -6,6 +6,6 @@ export const FILE_GROUPS = {
     types: ["jpg", "jpeg", "png", "svg"],
   },
   spreadsheets: {
-    types: ["xls", "xlsx", "csv", "numbers"],
+    types: ["xls", "xlsx", "csv"],
   },
 };

@@ -300,7 +300,7 @@ export const Form = withFormik<FormProps, Responses>({
       );
 
       // Extract file content from formValues so they are not part of the submission call to the submit action
-      const { formValuesWithoutFileContent, fileObjsRef } =
+      const { formValuesWithoutFileContent, fileObjsRef, fileChecksums } =
         copyObjectExcludingFileContent(formValues);
 
       let submitProgress = 0;
@@ -328,7 +328,8 @@ export const Form = withFormik<FormProps, Responses>({
         formValuesWithoutFileContent,
         formikBag.props.language,
         formikBag.props.formRecord.id,
-        formikBag.props.captchaToken?.current
+        formikBag.props.captchaToken?.current,
+        fileChecksums
       );
 
       clearInterval(progressInterval);

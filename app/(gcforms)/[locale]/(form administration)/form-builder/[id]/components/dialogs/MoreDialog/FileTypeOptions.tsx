@@ -17,13 +17,13 @@ export const FileTypeOptions = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
-  // item.properties.fileType = types of files ["xls","xlsx","csv","numbers"]
+  // item.properties.fileType = types of files ["xls","xlsx","csv"]
   // First ensure fileType is an array
   const fileTypes: string[] = Array.isArray(item.properties.fileType)
     ? item.properties.fileType
     : item.properties.fileType
-    ? [item.properties.fileType]
-    : [];
+      ? [item.properties.fileType]
+      : [];
 
   // Convert file types to file groups ["documents", "images", "spreadsheets"]
   const [selectedGroups, setSelectedGroups] = useState<string[]>(fileTypesToFileGroups(fileTypes));
