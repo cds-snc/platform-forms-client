@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
-import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
+import { SelectApiKey } from "./SelectApiKey";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -24,10 +24,7 @@ export default async function Page(props: {
   const { locale, id } = params;
   return (
     <div>
-      <p>Load key</p>
-      <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/location`}>
-        Next
-      </LinkButton.Primary>
+      <SelectApiKey locale={locale} id={id} />
     </div>
   );
 }

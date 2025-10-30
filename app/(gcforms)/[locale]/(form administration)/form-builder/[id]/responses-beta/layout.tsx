@@ -2,6 +2,8 @@ import { authCheckAndThrow } from "@root/lib/actions";
 import { FeatureFlags } from "@root/lib/cache/types";
 import { featureFlagAllowedForUser } from "@root/lib/userFeatureFlags";
 import { redirect } from "next/navigation";
+import { ResponsesProvider } from "./context/ResponsesContext";
+import { ContentWrapper } from "./ContentWrapper";
 
 export default async function ResponsesLayout(props: {
   children: React.ReactNode;
@@ -23,5 +25,9 @@ export default async function ResponsesLayout(props: {
     redirect(`/${locale}/form-builder/${id}/responses`);
   }
 
-  return <section>{props.children}</section>;
+  return (
+    <ResponsesProvider>
+      <ContentWrapper>{props.children}</ContentWrapper>
+    </ResponsesProvider>
+  );
 }
