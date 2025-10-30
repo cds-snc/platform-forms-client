@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
-import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -15,19 +14,10 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page(props: {
-  children: React.ReactNode;
-  params: Promise<{ locale: string; id: string }>;
-}) {
-  const params = await props.params;
-
-  const { locale, id } = params;
+export default async function Page() {
   return (
     <div>
-      <p>Start</p>
-      <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/load-key`}>
-        Next
-      </LinkButton.Primary>
+      <p>Result</p>
     </div>
   );
 }

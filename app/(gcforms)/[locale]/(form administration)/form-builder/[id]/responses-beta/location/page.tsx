@@ -24,8 +24,8 @@ export default async function Page(props: {
   const { locale, id } = params;
   return (
     <div>
-      <p>Start</p>
-      <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/load-key`}>
+      <p>Location</p>
+      <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/format`}>
         Next
       </LinkButton.Primary>
     </div>
