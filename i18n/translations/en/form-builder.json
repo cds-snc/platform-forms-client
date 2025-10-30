@@ -521,7 +521,19 @@
     "events": {
       "CreateForm": "Form created",
       "ChangeDeliveryOption": "Changed delivery option",
-      "ChangeFormName": "Changed form title"
+      "ChangeFormPurpose": "Changed form purpose",
+      "ChangeFormSaveAndResume": "Changed save and resume option",
+      "ChangeFormName": "Changed form title",
+      "UpdateForm": "Updated form",
+      "UpdateNotificationsInterval": "Updated notifications interval",
+      "UpdateNotificationsUserSetting": "Updated notifications user setting",
+      "GrantFormAccess": "Granted form access",
+      "RevokeFormAccess": "Revoked form access",
+      "DownloadResponse": "Downloaded responses",
+      "ConfirmResponse": "Confirmed response",
+      "IdentifyProblemResponse": "Identified problem response",
+      "DeleteResponses": "Deleted responses",
+      "RetrieveResponses": "Retrieved responses via API"
     }
   },
   "switchToApiMode": {

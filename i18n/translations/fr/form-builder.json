@@ -521,7 +521,19 @@
     "events": {
       "CreateForm": "Formulaire créé",
       "ChangeDeliveryOption": "Option de livraison modifiée",
-      "ChangeFormName": "Changed form title"
+      "ChangeFormPurpose": "Titre du formulaire modifié",
+      "ChangeFormSaveAndResume": "Option de sauvegarde et de reprise modifiée",
+      "ChangeFormName": "Titre du formulaire modifié",
+      "UpdateForm": "Formulaire mis à jour",
+      "UpdateNotificationsInterval": "Intervalle de notification mis à jour",
+      "UpdateNotificationsUserSetting": "Paramètre utilisateur de notification mis à jour",
+      "GrantFormAccess": "Accès au formulaire accordé",
+      "RevokeFormAccess": "Accès au formulaire révoqué",
+      "DownloadResponse": "Réponses téléchargées",
+      "ConfirmResponse": "Réponse confirmée",
+      "IdentifyProblemResponse": "Réponse de problème identifiée",
+      "DeleteResponses": "Réponses supprimées",
+      "RetrieveResponses": "Réponses récupérées via l'API"
     }
   },
   "switchToApiMode": {
