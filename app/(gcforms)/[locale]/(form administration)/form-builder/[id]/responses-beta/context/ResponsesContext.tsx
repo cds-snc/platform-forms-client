@@ -13,19 +13,15 @@ import {
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import { NewFormSubmission, PrivateApiKey } from "../lib/types";
 import { GCFormsApiClient } from "../lib/apiClient";
-import { showOpenFilePicker } from "native-file-system-adapter";
-import {
-  createSubArrays,
-  downloadAndConfirmFormSubmissions,
-  getAccessTokenFromApiKey,
-} from "../lib/utils";
+import { createSubArrays, downloadAndConfirmFormSubmissions } from "../lib/utils";
 import { writeSubmissionsToCsv } from "../lib/csvWriter";
 
 interface ResponsesContextType {
   isCompatible: boolean;
-  handleLoadApiKey: () => Promise<boolean>;
   userKey: PrivateApiKey | null;
+  setUserKey: Dispatch<SetStateAction<PrivateApiKey | null>>;
   apiClient: GCFormsApiClient | null;
+  setApiClient: Dispatch<SetStateAction<GCFormsApiClient | null>>;
   directoryHandle: FileSystemDirectoryHandle | null;
   setDirectoryHandle: Dispatch<SetStateAction<FileSystemDirectoryHandle | null>>;
   selectedFormat: string | null;
@@ -71,38 +67,6 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const interrupt = interruptState;
-
-  const handleLoadApiKey = useCallback(async () => {
-    try {
-      // Simulate user key retrieval
-      const [fileHandle] = await showOpenFilePicker({
-        multiple: false, // default
-        excludeAcceptAllOption: false, // default
-      });
-
-      const keyFile = await fileHandle.getFile().then(async (file) => {
-        const text = await file.text();
-        return JSON.parse(text);
-      });
-
-      const token = await getAccessTokenFromApiKey(keyFile);
-
-      if (!token) {
-        return false;
-      }
-
-      setApiClient(
-        new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
-      );
-
-      setUserKey(keyFile);
-
-      return true;
-    } catch (error) {
-      // no-op
-      return false;
-    }
-  }, []);
 
   const retrieveResponses = useCallback(async () => {
     if (!apiClient) {
@@ -197,9 +161,10 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
     <ResponsesContext.Provider
       value={{
         isCompatible,
-        handleLoadApiKey,
         userKey,
+        setUserKey,
         apiClient,
+        setApiClient,
         directoryHandle,
         setDirectoryHandle,
         selectedFormat,
