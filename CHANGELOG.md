@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.0](https://github.com/cds-snc/platform-forms-client/compare/v4.3.2...v4.4.0) (2025-10-30)
+
+
+### Features
+
+* Update setting pages ([#6232](https://github.com/cds-snc/platform-forms-client/issues/6232)) ([3b22815](https://github.com/cds-snc/platform-forms-client/commit/3b2281548f12fa32387de3c5eedc1e9e5b561aa6))
+
+
+### Bug Fixes
+
+* PR review Lambda function permissions ([#6274](https://github.com/cds-snc/platform-forms-client/issues/6274)) ([75f30cc](https://github.com/cds-snc/platform-forms-client/commit/75f30cc164c6b80e3c6b48b98314078f280dec9b))
+
+
+### Miscellaneous Chores
+
+* Add checksum for file uploads ([#6266](https://github.com/cds-snc/platform-forms-client/issues/6266)) ([98be619](https://github.com/cds-snc/platform-forms-client/commit/98be619e77c910895aa443ece2d02a1dbe7df470))
+* add exports to package.json in Core package ([#6269](https://github.com/cds-snc/platform-forms-client/issues/6269)) ([01c2711](https://github.com/cds-snc/platform-forms-client/commit/01c27114e1a242497776e78a66d9018006b4f0dd))
+* bump aws packages  ([#6265](https://github.com/cds-snc/platform-forms-client/issues/6265)) ([04c0129](https://github.com/cds-snc/platform-forms-client/commit/04c01293b73f97c401674a1952eabac4f3b00eef))
+* Move values-to-types to core ([#6270](https://github.com/cds-snc/platform-forms-client/issues/6270)) ([a9de7c5](https://github.com/cds-snc/platform-forms-client/commit/a9de7c5e68a51d826d6d36c66499ef2d223c3cdb))
+* remove .numbers file type support ([#6279](https://github.com/cds-snc/platform-forms-client/issues/6279)) ([f714c4d](https://github.com/cds-snc/platform-forms-client/commit/f714c4d61fb3c6f403ece263895b0543e299ad2c))
+* remove references to .numbers file type in UI elements ([#6280](https://github.com/cds-snc/platform-forms-client/issues/6280)) ([7e908ee](https://github.com/cds-snc/platform-forms-client/commit/7e908ee1f073cb242b2cad94df769d20a6228c85))
+* update the settings page to allow branding changes on a published form ([#6272](https://github.com/cds-snc/platform-forms-client/issues/6272)) ([f10d8dc](https://github.com/cds-snc/platform-forms-client/commit/f10d8dc74739d694bd8f4b858cb4a61239dbf6fc))
+
 ## [4.3.2](https://github.com/cds-snc/platform-forms-client/compare/v4.3.1...v4.3.2) (2025-10-24)
 
 
