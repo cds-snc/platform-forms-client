@@ -17,6 +17,49 @@ import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
+type JsonPrimitive = string | number | boolean | null;
+
+function flattenStructureToValues(root: unknown): JsonPrimitive[] {
+  const out: JsonPrimitive[] = [];
+  const visit = (node: unknown): void => {
+    if (
+      node === null ||
+      typeof node === "string" ||
+      typeof node === "number" ||
+      typeof node === "boolean"
+    ) {
+      out.push(node);
+      return;
+    }
+    if (Array.isArray(node)) {
+      for (const item of node) visit(item);
+      return;
+    }
+    if (typeof node === "object") {
+      for (const value of Object.values(node as Record<string, unknown>)) {
+        visit(value);
+      }
+    }
+  };
+  visit(root);
+  return out;
+}
+
+const NON_VALUE_FORM_ELEMENTS = new Set([
+  ...Object.values(LOCKED_GROUPS),
+  "currentGroup",
+  "groupHistory",
+]);
+function stripExcludedKeys<T extends Record<string, unknown>>(obj: T): Partial<T> {
+  const out: Partial<T> = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (!NON_VALUE_FORM_ELEMENTS.has(k)) {
+      out[k as keyof T] = v as T[keyof T];
+    }
+  }
+  return out;
+}
+
 export const FormWrapper = ({
   formRecord,
   header,
@@ -85,16 +128,13 @@ export const FormWrapper = ({
   const isMultiPageForm = showReviewPage(formRecord.form);
   useUpdateHeadTitle(getPageTitle(), isMultiPageForm);
 
-  const nonEmptyForm = useMemo(() => {
-    return (
-      savedValues &&
-      savedValues.values &&
-      Object.entries(savedValues.values).some(([key, value]) => {
-        const isAFormElement = !Number.isNaN(Number(key)); // only care about elements in the layout array
-        const isNotEmpty = value !== "";
-        return isAFormElement && isNotEmpty;
-      })
-    );
+  const isEmptyForm = useMemo(() => {
+    if (!savedValues) {
+      return false;
+    }
+    const elements = stripExcludedKeys(savedValues.values || {});
+    const elementValues = flattenStructureToValues(elements);
+    return elementValues.join("") === "";
   }, [savedValues]);
 
   useEffect(() => {
@@ -102,11 +142,11 @@ export const FormWrapper = ({
     if (savedValues) {
       removeProgressStorage();
 
-      if (savedValues.language === language && nonEmptyForm) {
+      if (savedValues.language === language && !isEmptyForm) {
         toast.success(formRestoredMessage, "public-facing-form");
       }
     }
-  }, [savedValues, formRestoredMessage, language, nonEmptyForm]);
+  }, [savedValues, formRestoredMessage, language, isEmptyForm]);
 
   const initialValues = savedValues ? savedValues.values : undefined;
 
