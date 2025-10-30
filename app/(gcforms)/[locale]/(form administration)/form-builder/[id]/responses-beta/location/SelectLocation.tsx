@@ -9,7 +9,7 @@ import { initCsv } from "../lib/csvWriter";
 import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
-  const { onCancel, apiClient, directoryHandle, setDirectoryHandle, setCsvFileHandle } =
+  const { apiClient, directoryHandle, setDirectoryHandle, setCsvFileHandle } =
     useResponsesContext();
 
   const setDirectory = useCallback(
@@ -31,6 +31,10 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
     [apiClient, setDirectoryHandle, setCsvFileHandle]
   );
 
+  const handleCancel = () => {
+    //
+  };
+
   return (
     <div>
       <div>Step 2 of 3</div>
@@ -44,7 +48,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       {directoryHandle && <p className="mb-4">Save location selected successfully.</p>}
 
       <div className="flex flex-row gap-4">
-        <Button theme="secondary" onClick={onCancel}>
+        <Button theme="secondary" onClick={handleCancel}>
           Cancel
         </Button>
         <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/format`}>

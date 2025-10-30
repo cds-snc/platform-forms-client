@@ -21,23 +21,7 @@ import {
 } from "../lib/utils";
 import { writeSubmissionsToCsv } from "../lib/csvWriter";
 
-export const PageKeys = {
-  START: "start",
-  SELECT_API_KEY: "selectApiKey",
-  SELECT_LOCATION: "selectLocation",
-  SELECT_FORMAT: "selectFormat",
-  PROCESSING_DOWNLOADS: "processingDownloads",
-  CONFIRMATION: "confirmation",
-  GENERATE_FORMAT_FROM_JSON: "generateFormatFromJson",
-} as const;
-
-export type PageKey = (typeof PageKeys)[keyof typeof PageKeys];
-
 interface ResponsesContextType {
-  currentPage: PageKey;
-  setCurrentPage: Dispatch<SetStateAction<PageKey>>;
-  onNext: () => void;
-  onCancel: () => void;
   isCompatible: boolean;
   handleLoadApiKey: () => Promise<boolean>;
   userKey: PrivateApiKey | null;
@@ -62,7 +46,6 @@ interface ResponsesContextType {
 const ResponsesContext = createContext<ResponsesContextType | undefined>(undefined);
 
 export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
-  const [currentPage, setCurrentPage] = useState<PageKey>(PageKeys.START);
   const [isCompatible] = useState(
     () => typeof window !== "undefined" && "showOpenFilePicker" in window
   );
@@ -210,39 +193,9 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
     [apiClient, directoryHandle, newFormSubmissions, userKey]
   );
 
-  const onCancel = () => {
-    setCurrentPage(PageKeys.START);
-    // @TODO: handle restetting state
-  };
-
-  const onNext = () => {
-    setCurrentPage((prevPage) => {
-      switch (prevPage) {
-        case PageKeys.START:
-          return PageKeys.SELECT_API_KEY;
-        case PageKeys.SELECT_API_KEY:
-          return PageKeys.SELECT_LOCATION;
-        case PageKeys.SELECT_LOCATION:
-          return PageKeys.SELECT_FORMAT;
-        case PageKeys.SELECT_FORMAT:
-          return PageKeys.PROCESSING_DOWNLOADS;
-        case PageKeys.PROCESSING_DOWNLOADS:
-          return PageKeys.CONFIRMATION;
-        case PageKeys.CONFIRMATION:
-          return PageKeys.PROCESSING_DOWNLOADS;
-        default:
-          return PageKeys.START;
-      }
-    });
-  };
-
   return (
     <ResponsesContext.Provider
       value={{
-        currentPage,
-        setCurrentPage,
-        onNext,
-        onCancel,
         isCompatible,
         handleLoadApiKey,
         userKey,

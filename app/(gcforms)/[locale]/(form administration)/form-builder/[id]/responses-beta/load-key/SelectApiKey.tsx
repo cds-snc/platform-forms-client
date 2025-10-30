@@ -7,7 +7,7 @@ import { LoadKey } from "./LoadKey";
 import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 
 export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => {
-  const { onCancel, userKey, handleLoadApiKey, apiClient, retrieveResponses, newFormSubmissions } =
+  const { userKey, handleLoadApiKey, apiClient, retrieveResponses, newFormSubmissions } =
     useResponsesContext();
 
   useEffect(() => {
@@ -17,6 +17,10 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
     void retrieveResponses();
   }, [retrieveResponses, userKey]);
+
+  const handleCancel = () => {
+    //
+  };
 
   return (
     <div>
@@ -37,7 +41,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       )}
 
       <div className="mt-8 flex flex-row gap-4">
-        <Button theme="secondary" onClick={onCancel}>
+        <Button theme="secondary" onClick={handleCancel}>
           Cancel
         </Button>
         {userKey && (

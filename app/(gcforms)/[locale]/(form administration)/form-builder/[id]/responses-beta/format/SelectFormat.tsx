@@ -6,10 +6,13 @@ import { Checkbox } from "../../../components/shared/MultipleChoice";
 import { useRouter } from "next/navigation";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
-  const { onCancel, setSelectedFormat, retrieveResponses, processResponses } =
-    useResponsesContext();
+  const { setSelectedFormat, retrieveResponses, processResponses } = useResponsesContext();
 
   const router = useRouter();
+
+  const handleCancel = () => {
+    //
+  };
 
   const handleNext = async () => {
     const initialResponses = await retrieveResponses();
@@ -44,7 +47,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
         </div>
       </div>
       <div className="flex flex-row gap-4">
-        <Button theme="secondary" onClick={onCancel}>
+        <Button theme="secondary" onClick={handleCancel}>
           Cancel
         </Button>
         <Button theme="primary" onClick={handleNext}>

@@ -1,9 +1,11 @@
 import { Button } from "@root/components/clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
+import { useRouter } from "next/navigation";
 
-export const Confirmation = () => {
+export const Confirmation = ({ locale, id }: { locale: string; id: string }) => {
+  const router = useRouter();
+
   const {
-    onNext,
     retrieveResponses,
     processResponses,
     processedSubmissionIds,
@@ -20,7 +22,8 @@ export const Confirmation = () => {
     setTimeout(async () => {
       const initialResponses = await retrieveResponses();
       processResponses(initialResponses);
-      onNext();
+
+      router.push(`/${locale}/form-builder/${id}/responses-beta/processing`);
     }, 500);
   };
 

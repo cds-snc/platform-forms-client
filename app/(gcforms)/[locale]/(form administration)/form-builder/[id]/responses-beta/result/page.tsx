@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
+import { Confirmation } from "./Confirmation";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -14,10 +15,16 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page() {
+export default async function Page(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string; id: string }>;
+}) {
+  const params = await props.params;
+
+  const { locale, id } = params;
   return (
     <div>
-      <p>Result</p>
+      <Confirmation locale={locale} id={id} />
     </div>
   );
 }
