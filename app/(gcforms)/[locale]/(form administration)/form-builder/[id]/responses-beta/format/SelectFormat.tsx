@@ -3,19 +3,20 @@
 import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { Checkbox } from "../../../components/shared/MultipleChoice";
+import { useRouter } from "next/navigation";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { onCancel, setSelectedFormat, retrieveResponses, processResponses } =
     useResponsesContext();
+
+  const router = useRouter();
 
   const handleNext = async () => {
     const initialResponses = await retrieveResponses();
 
     processResponses(initialResponses);
 
-    id;
-    locale;
-    // Navigate to the next step
+    router.push(`/${locale}/form-builder/${id}/responses-beta/processing`);
   };
 
   return (
