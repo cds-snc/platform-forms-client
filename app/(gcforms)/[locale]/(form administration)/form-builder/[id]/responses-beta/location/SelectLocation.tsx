@@ -51,7 +51,14 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
           <DirectoryPicker onPick={setDirectory} />
         </div>
       )}
-      {directoryHandle && <p className="mb-4">Save location selected successfully.</p>}
+      {directoryHandle && (
+        <p className="mb-4">
+          Save location selected successfully:{" "}
+          <span className="rounded border border-violet-500 bg-violet-100 px-1">
+            {directoryHandle.name}
+          </span>
+        </p>
+      )}
 
       <div className="flex flex-row gap-4">
         <Button theme="secondary" onClick={handleCancel}>
