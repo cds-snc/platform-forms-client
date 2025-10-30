@@ -533,7 +533,10 @@
       "ConfirmResponse": "Réponse confirmée",
       "IdentifyProblemResponse": "Réponse de problème identifiée",
       "DeleteResponses": "Réponses supprimées",
-      "RetrieveResponses": "Réponses récupérées via l'API"
+      "RetrieveResponses": "Réponses récupérées via l'API",
+      "CreateAPIKey": "Clé API créée",
+      "DeleteAPIKey": "Clé API supprimée",
+      "RefreshAPIKey": "Clé API actualisée"
     }
   },
   "switchToApiMode": {
