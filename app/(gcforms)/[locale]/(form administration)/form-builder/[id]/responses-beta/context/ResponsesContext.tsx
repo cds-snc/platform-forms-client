@@ -24,8 +24,6 @@ interface ResponsesContextType {
   setApiClient: Dispatch<SetStateAction<GCFormsApiClient | null>>;
   directoryHandle: FileSystemDirectoryHandle | null;
   setDirectoryHandle: Dispatch<SetStateAction<FileSystemDirectoryHandle | null>>;
-  selectedFormat: string | null;
-  setSelectedFormat: Dispatch<SetStateAction<string | null>>;
   csvFileHandle: FileSystemFileHandle | null;
   setCsvFileHandle: Dispatch<SetStateAction<FileSystemFileHandle | null>>;
   retrieveResponses: () => Promise<NewFormSubmission[]>;
@@ -35,6 +33,8 @@ interface ResponsesContextType {
   processResponses: (initialSubmissions?: NewFormSubmission[]) => Promise<void>;
   processingCompleted: boolean;
   setProcessingCompleted: Dispatch<SetStateAction<boolean>>;
+  selectedFormats: string[];
+  setSelectedFormats: Dispatch<SetStateAction<string[]>>;
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
 }
@@ -50,10 +50,10 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
   const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [csvFileHandle, setCsvFileHandle] = useState<FileSystemFileHandle | null>(null);
-  const [selectedFormat, setSelectedFormat] = useState<string | null>(null);
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
   const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
+  const [selectedFormats, setSelectedFormats] = useState<string[]>([]);
   const [interruptState, setInterruptState] = useState(false);
   const interruptRef = useRef(interruptState);
 
@@ -167,8 +167,6 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
         setApiClient,
         directoryHandle,
         setDirectoryHandle,
-        selectedFormat,
-        setSelectedFormat,
         csvFileHandle,
         setCsvFileHandle,
         retrieveResponses,
@@ -178,6 +176,8 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
         processResponses,
         processingCompleted,
         setProcessingCompleted,
+        selectedFormats,
+        setSelectedFormats,
         interrupt,
         setInterrupt,
       }}

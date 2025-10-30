@@ -4,9 +4,11 @@ import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { Checkbox } from "../../../components/shared/MultipleChoice";
 import { useRouter } from "next/navigation";
+import { ChangeEvent } from "react";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
-  const { setSelectedFormat, retrieveResponses, processResponses } = useResponsesContext();
+  const { setSelectedFormats, selectedFormats, retrieveResponses, processResponses } =
+    useResponsesContext();
 
   const router = useRouter();
 
@@ -20,6 +22,21 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
     processResponses(initialResponses);
 
     router.push(`/${locale}/form-builder/${id}/responses-beta/processing`);
+  };
+
+  const toggleFormat = (format: "csv" | "html") => (event: ChangeEvent<HTMLInputElement>) => {
+    const { checked } = event.target;
+
+    setSelectedFormats((prev) => {
+      if (checked) {
+        if (prev.includes(format)) {
+          return prev;
+        }
+        return [...prev, format];
+      }
+
+      return prev.filter((item) => item !== format);
+    });
   };
 
   return (
@@ -36,13 +53,15 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
             name="format"
             id="format-csv"
             label="Combined in a spreadsheet (Aggregated CSV file)"
-            onChange={() => setSelectedFormat("csv")}
+            checked={selectedFormats.includes("csv")}
+            onChange={toggleFormat("csv")}
           />
           <Checkbox
             name="format"
             id="format-html"
             label="Individual copies (Separate HTML files)"
-            onChange={() => setSelectedFormat("html")}
+            checked={selectedFormats.includes("html")}
+            onChange={toggleFormat("html")}
           />
         </div>
       </div>
@@ -50,7 +69,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
         <Button theme="secondary" onClick={handleCancel}>
           Cancel
         </Button>
-        <Button theme="primary" onClick={handleNext}>
+        <Button theme="primary" disabled={selectedFormats.length === 0} onClick={handleNext}>
           Next
         </Button>
       </div>
