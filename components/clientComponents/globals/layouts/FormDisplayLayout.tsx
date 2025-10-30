@@ -1,7 +1,7 @@
 "use client";
 
 import { PublicFormRecord } from "@lib/types";
-import { Fip } from "@clientComponents/globals";
+import { Fip, SkipLink } from "@clientComponents/globals";
 import LanguageToggle from "../Header/LanguageToggle";
 import { DateModified } from "../DateModified";
 import { cn } from "@lib/utils";
@@ -34,14 +34,17 @@ const FormDisplayHeader = ({
   }
 
   return (
-    <header>
-      <Fip
-        formRecord={formRecord}
-        className="mb-20 mt-0 border-b-1 border-[var(--gcds-header-brand-border-color)] py-9"
-      >
-        <LanguageToggle />
-      </Fip>
-    </header>
+    <div className="gcds-header__container">
+      <header className="gcds-header">
+        {<SkipLink />}
+        <div className="gcds-header__brand">
+          <div className="brand__container">
+            <Fip formRecord={formRecord}></Fip>
+            <LanguageToggle />
+          </div>
+        </div>
+      </header>
+    </div>
   );
 };
 
