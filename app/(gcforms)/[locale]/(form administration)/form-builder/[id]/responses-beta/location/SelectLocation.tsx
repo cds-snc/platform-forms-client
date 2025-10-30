@@ -6,9 +6,11 @@ import { DirectoryPicker } from "./DirectoryPicker";
 import { useCallback } from "react";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { initCsv } from "../lib/csvWriter";
-import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
+import { useRouter } from "next/navigation";
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
+  const router = useRouter();
+
   const { apiClient, directoryHandle, setDirectoryHandle, setCsvFileHandle } =
     useResponsesContext();
 
@@ -35,6 +37,10 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
     //
   };
 
+  const handleNext = () => {
+    router.push(`/${locale}/form-builder/${id}/responses-beta/format`);
+  };
+
   return (
     <div>
       <div>Step 2 of 3</div>
@@ -51,9 +57,9 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
         <Button theme="secondary" onClick={handleCancel}>
           Cancel
         </Button>
-        <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/format`}>
+        <Button theme="primary" disabled={!directoryHandle} onClick={handleNext}>
           Next
-        </LinkButton.Primary>
+        </Button>
       </div>
     </div>
   );

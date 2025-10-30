@@ -4,9 +4,10 @@ import { useEffect } from "react";
 import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { LoadKey } from "./LoadKey";
-import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
+import { useRouter } from "next/navigation";
 
 export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => {
+  const router = useRouter();
   const { userKey, handleLoadApiKey, apiClient, retrieveResponses, newFormSubmissions } =
     useResponsesContext();
 
@@ -20,6 +21,10 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
   const handleCancel = () => {
     //
+  };
+
+  const handleNext = () => {
+    router.push(`/${locale}/form-builder/${id}/responses-beta/location`);
   };
 
   return (
@@ -44,11 +49,10 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         <Button theme="secondary" onClick={handleCancel}>
           Cancel
         </Button>
-        {userKey && (
-          <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/location`}>
-            Next
-          </LinkButton.Primary>
-        )}
+
+        <Button theme="primary" disabled={!apiClient} onClick={handleNext}>
+          Next
+        </Button>
       </div>
     </div>
   );

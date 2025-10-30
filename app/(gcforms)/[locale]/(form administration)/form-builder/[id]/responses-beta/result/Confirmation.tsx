@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@root/components/clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { useRouter } from "next/navigation";
