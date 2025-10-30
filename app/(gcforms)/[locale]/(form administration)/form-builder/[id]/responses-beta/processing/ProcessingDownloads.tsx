@@ -22,6 +22,8 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
     }
   }, [id, locale, processingCompleted, router]);
 
+  // @TODO: handle direct visit if processing is not running, redirect somewhere?
+
   return (
     <div>
       <MapleLeafLoader

@@ -3,7 +3,7 @@
 import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { DirectoryPicker } from "./DirectoryPicker";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { initCsv } from "../lib/csvWriter";
 import { useRouter } from "next/navigation";
@@ -40,6 +40,12 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
   const handleNext = () => {
     router.push(`/${locale}/form-builder/${id}/responses-beta/format`);
   };
+
+  useEffect(() => {
+    if (!apiClient) {
+      router.push(`/${locale}/form-builder/${id}/responses-beta`);
+    }
+  }, [apiClient, locale, id, router]);
 
   return (
     <div>

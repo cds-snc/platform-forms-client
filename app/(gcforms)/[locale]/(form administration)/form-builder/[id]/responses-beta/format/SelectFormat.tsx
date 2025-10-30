@@ -4,11 +4,17 @@ import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { Checkbox } from "../../../components/shared/MultipleChoice";
 import { useRouter } from "next/navigation";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
-  const { setSelectedFormats, selectedFormats, retrieveResponses, processResponses } =
-    useResponsesContext();
+  const {
+    setSelectedFormats,
+    selectedFormats,
+    retrieveResponses,
+    processResponses,
+    apiClient,
+    directoryHandle,
+  } = useResponsesContext();
 
   const router = useRouter();
 
@@ -38,6 +44,12 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
       return prev.filter((item) => item !== format);
     });
   };
+
+  useEffect(() => {
+    if (!apiClient || !directoryHandle) {
+      router.push(`/${locale}/form-builder/${id}/responses-beta`);
+    }
+  }, [apiClient, directoryHandle, locale, id, router]);
 
   return (
     <div>
