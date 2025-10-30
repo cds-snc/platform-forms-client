@@ -1,6 +1,9 @@
 # Changelog
 
 
+## [1.0.11] - 2025-10-29
+
+- Remove `.numbers` file type support
 
 ## [1.0.10] - 2025-10-28
 
