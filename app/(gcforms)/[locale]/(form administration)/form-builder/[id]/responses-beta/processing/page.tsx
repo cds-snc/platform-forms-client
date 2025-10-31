@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
-import { Start } from "./Start";
+import { ProcessingDownloads } from "./ProcessingDownloads";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -22,5 +22,9 @@ export default async function Page(props: {
   const params = await props.params;
 
   const { locale, id } = params;
-  return <Start locale={locale} id={id} />;
+  return (
+    <div>
+      <ProcessingDownloads locale={locale} id={id} />
+    </div>
+  );
 }
