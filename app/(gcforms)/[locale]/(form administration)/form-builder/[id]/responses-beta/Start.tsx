@@ -1,8 +1,20 @@
 "use client";
 
-import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
+import { useRouter } from "next/navigation";
+
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
+import { useResponsesContext } from "./context/ResponsesContext";
 
 export const Start = ({ locale, id }: { locale: string; id: string }) => {
+  const router = useRouter();
+
+  const { isCompatible } = useResponsesContext();
+
+  if (!isCompatible) {
+    router.push(`/${locale}/form-builder/${id}/responses-beta/not-supported`);
+    return null;
+  }
+
   return (
     <div>
       <h1 className="">Get new responses</h1>
