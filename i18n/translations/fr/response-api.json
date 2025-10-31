@@ -59,6 +59,12 @@
     "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
     "downloadMoreResponsesButton": "Télécharger plus de réponses"
   },
+  "processingPage": {
+    "processingTitle": "Download in progress",
+    "processingMessage": "Processing {{count}} responses...",
+    "cancelButton": "Cancel download",
+    "note": "For large downloads, this can take some time."
+  },
   "backButton": "Retour",
   "continueButton": "Continuer",
   "failed-to-load-api-key": "API key failed to load"
