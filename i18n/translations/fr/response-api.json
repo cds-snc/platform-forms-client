@@ -4,5 +4,6 @@
     "title": "Not Supported [FR]",
     "body": "This browser does not support the File System Access API. [FR]"
   },
+  "startButton": "Start",
   "failed-to-load-api-key": "API key failed to load"
 }

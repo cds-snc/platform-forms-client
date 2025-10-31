@@ -2,11 +2,15 @@
 
 import { useRouter } from "next/navigation";
 
+import { useTranslation } from "@i18n/client";
+
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { useResponsesContext } from "./context/ResponsesContext";
 
 export const Start = ({ locale, id }: { locale: string; id: string }) => {
   const router = useRouter();
+
+  const { t } = useTranslation("response-api");
 
   const { isCompatible } = useResponsesContext();
 
@@ -18,7 +22,6 @@ export const Start = ({ locale, id }: { locale: string; id: string }) => {
   return (
     <div>
       <h2 className="">Get new responses</h2>
-
       <p className="py-4">Download responses in three steps.</p>
       <ol>
         <li>
@@ -36,7 +39,7 @@ export const Start = ({ locale, id }: { locale: string; id: string }) => {
       <p className="py-4">After the inital download, you can select more formats to download.</p>
 
       <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/load-key`}>
-        Next
+        {t("startButton")}
       </LinkButton.Primary>
     </div>
   );
