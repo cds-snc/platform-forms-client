@@ -9,8 +9,8 @@ import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import Skeleton from "react-loading-skeleton";
-import { GcdsHeader } from "@root/components/serverComponents/globals/GcdsHeader/GcdsHeader";
-import { BrandHeader } from "@root/components/serverComponents/globals/GcdsHeader/BrandHeader";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
+import { BrandHeader } from "@serverComponents/globals/GcdsHeader/BrandHeader";
 
 export const PreviewClosed = ({ closedDetails }: { closedDetails: ClosedDetails }) => {
   const { i18n } = useTranslation(["common", "confirmation"]);

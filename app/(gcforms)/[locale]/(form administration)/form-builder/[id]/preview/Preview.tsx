@@ -27,7 +27,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { defaultForm } from "@lib/store/defaults";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { PreviewFormWrapper } from "./PreviewFormWrapper";
-import { BrandHeader } from "@root/components/serverComponents/globals/GcdsHeader/BrandHeader";
+import { BrandHeader } from "@serverComponents/globals/GcdsHeader/BrandHeader";
 
 export const Preview = ({
   disableSubmit = true,
