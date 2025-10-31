@@ -40,13 +40,10 @@ export const Start = ({ locale, id }: { locale: string; id: string }) => {
           </li>
         </ul>
 
-        <hr className="my-6" />
+        <hr className="my-6 border-t border-black" />
 
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">{t("startPage.steps.heading")}</h3>
-          <div className="text-sm text-slate-600">
-            {t("startPage.steps.stepOf", { current: 1, total: 3 })}
-          </div>
         </div>
         <ol className="mt-3 list-decimal pl-6">
           <li className="pb-3">
