@@ -38,7 +38,15 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     <div>
       <p className="mb-0 text-base">{t("confirmationPage.successTitle")}</p>
       <h2 className="mb-8">
-        {t("confirmationPage.downloadedResponses", { count: processedSubmissionIds.size || 0 })}
+        {(() => {
+          const count = processedSubmissionIds.size || 0;
+          const formatted = new Intl.NumberFormat(locale).format(count);
+          const key =
+            count === 1
+              ? "confirmationPage.downloadedResponsesOne"
+              : "confirmationPage.downloadedResponsesOther";
+          return t(key, { count, formattedCount: formatted });
+        })()}
       </h2>
 
       {dirName && (

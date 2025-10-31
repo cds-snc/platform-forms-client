@@ -54,7 +54,8 @@
   },
   "confirmationPage": {
     "successTitle": "Succès !",
-    "downloadedResponses": "{{count}} réponses ont été téléchargées",
+    "downloadedResponsesOne": "{{formattedCount}} réponse a été téléchargée",
+    "downloadedResponsesOther": "{{formattedCount}} réponses ont été téléchargées",
     "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
     "downloadMoreResponsesButton": "Télécharger plus de réponses"
   },
