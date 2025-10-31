@@ -22,7 +22,7 @@ export const BrandHeader = ({
       <header className="gcds-header">
         {skipLink && <SkipLink />}
         <BrandContainer>
-          <div className="gcds-signature brand__signature">
+          <div className="gcds-signature brand__signature" data-testid="fip">
             <Brand brand={brand} />
           </div>
           {showLanguageToggle && <LanguageToggle pathname={pathname} language={language} />}
