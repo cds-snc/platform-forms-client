@@ -5,15 +5,7 @@ import { getLocalizedProperty } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { Language } from "@lib/types/form-builder-types";
 
-const Brand = ({
-  brand,
-  className,
-  lang,
-}: {
-  brand: BrandProperties | undefined | null;
-  className?: string;
-  lang?: Language;
-}) => {
+const Brand = ({ brand, lang }: { brand: BrandProperties | undefined | null; lang?: Language }) => {
   const { t, i18n } = useTranslation("common");
 
   const language = lang ? lang : (i18n.language as Language);
@@ -31,11 +23,11 @@ const Brand = ({
     (brand?.[getLocalizedProperty("url", language)] as string | undefined) ?? t("fip.link");
 
   // This default height seems to work for most custom brand logos so far.
-  let logoStyles = `min-h-[40px] max-h-[80px] max-w-[600px] ${className || ""}`;
+  let logoStyles = `min-h-[25px] max-h-[40px] laptop:min-h-[40px] laptop:max-h-[80px] max-w-[600px]`;
 
   // This customization applies to the default logo only. We may need to add more custom sizes in future.
   if (!themeLogo) {
-    logoStyles = `max-h-[40px] ${className || ""}`;
+    logoStyles = `max-h-[40px]}`;
   }
 
   return (

@@ -1,12 +1,11 @@
 "use client";
 
 import { PublicFormRecord } from "@lib/types";
-import { Fip, SkipLink } from "@clientComponents/globals";
-import LanguageToggle from "../Header/LanguageToggle";
 import { DateModified } from "../DateModified";
 import { cn } from "@lib/utils";
 import { type JSX } from "react";
 import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
+import { BrandHeader } from "@serverComponents/globals/GcdsHeader/BrandHeader";
 import { type Language } from "@lib/types/form-builder-types";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
@@ -33,19 +32,7 @@ const FormDisplayHeader = ({
     return <GcdsHeader pathname={pathname} language={language} />;
   }
 
-  return (
-    <div className="gcds-header__container">
-      <header className="gcds-header">
-        {<SkipLink />}
-        <div className="gcds-header__brand">
-          <div className="brand__container">
-            <Fip formRecord={formRecord}></Fip>
-            <LanguageToggle />
-          </div>
-        </div>
-      </header>
-    </div>
-  );
+  return <BrandHeader brand={brand} pathname={pathname} language={language} />;
 };
 
 const FormDisplayLayout = ({

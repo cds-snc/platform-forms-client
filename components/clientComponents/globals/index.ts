@@ -1,6 +1,5 @@
 export { themes, Button, RoundedButton } from "./Buttons";
 export { default as Brand } from "./Brand";
-export { Fip } from "./Fip";
 export { default as LanguageToggle } from "./Header/LanguageToggle";
 export { SkipLink } from "./SkipLink";
 export * as Alert from "./Alert/Alert";
