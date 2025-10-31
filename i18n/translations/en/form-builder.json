@@ -507,6 +507,38 @@
     "downloadBtnText": "Download form file",
     "title": "Download form file"
   },
+  "auditDownload": {
+    "description": "Obtain a spreadsheet with the history of all key actions taken in a form, including when a form was created, updated, and archived.",
+    "downloadBtnText": "Download activity log",
+    "title": "Download form activity",
+    "headers": {
+      "formId": "Form ID",
+      "userId": "Team Member",
+      "event": "Form Action",
+      "timestamp": "Date",
+      "description": "Details"
+    },
+    "events": {
+      "CreateForm": "Form created",
+      "ChangeDeliveryOption": "Changed delivery option",
+      "ChangeFormPurpose": "Changed form purpose",
+      "ChangeFormSaveAndResume": "Changed save and resume option",
+      "ChangeFormName": "Changed form title",
+      "UpdateForm": "Updated form",
+      "UpdateNotificationsInterval": "Updated notifications interval",
+      "UpdateNotificationsUserSetting": "Updated notifications user setting",
+      "GrantFormAccess": "Granted form access",
+      "RevokeFormAccess": "Revoked form access",
+      "DownloadResponse": "Downloaded responses",
+      "ConfirmResponse": "Confirmed response",
+      "IdentifyProblemResponse": "Identified problem response",
+      "DeleteResponses": "Deleted responses",
+      "RetrieveResponses": "Retrieved responses via API",
+      "CreateAPIKey": "Created an API Key",
+      "DeleteAPIKey": "Deleted an API Key",
+      "RefreshAPIKey": "Refreshed an API Key"
+    }
+  },
   "switchToApiMode": {
     "title": "Switch to API delivery",
     "description": "New responses will be available through the API endpoint",
