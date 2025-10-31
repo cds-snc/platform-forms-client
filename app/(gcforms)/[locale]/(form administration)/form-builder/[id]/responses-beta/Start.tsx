@@ -21,22 +21,40 @@ export const Start = ({ locale, id }: { locale: string; id: string }) => {
 
   return (
     <div>
-      <h2 className="">Get new responses</h2>
-      <p className="py-4">Download responses in three steps.</p>
-      <ol>
-        <li>
-          <strong>Start with your Forms API Key.</strong> This is how you will access new responses.
+      <p className="mb-4 text-xl">{t("startPage.intro")}</p>
+      <h3 className="mt-6 text-lg font-semibold">{t("startPage.beforeStart.heading")}</h3>
+      <ul className="mt-3 list-disc pl-6">
+        <li className="pb-2">
+          <strong>{t("startPage.beforeStart.generateKey")}</strong>
+          <div className="text-sm text-slate-700">
+            {t("startPage.beforeStart.generateKeyDetail")}
+          </div>
         </li>
         <li>
-          <strong>Choose download location.</strong> Downloading to the same location will append to
-          an existing CSV.
+          <strong>{t("startPage.beforeStart.browserSupport")}</strong>
+          <div className="text-sm text-slate-700">
+            {t("startPage.beforeStart.browserSupportDetail")}
+          </div>
         </li>
-        <li>
-          <strong>Select response format.</strong> Select HTML individual files or CSV download. All
-          responses will come with the raw JSON file.
+      </ul>
+
+      <hr className="my-6" />
+
+      <h3 className="text-lg font-semibold">{t("startPage.steps.heading")}</h3>
+      <ol className="mt-3 list-decimal pl-6">
+        <li className="pb-3">
+          <strong>{t("startPage.steps.uploadKey.title")}</strong>
+          <div className="text-sm text-slate-700">{t("startPage.steps.uploadKey.detail")}</div>
+        </li>
+        <li className="pb-3">
+          <strong>{t("startPage.steps.chooseLocation.title")}</strong>
+          <div className="text-sm text-slate-700">{t("startPage.steps.chooseLocation.detail")}</div>
+        </li>
+        <li className="pb-3">
+          <strong>{t("startPage.steps.selectFormat.title")}</strong>
+          <div className="text-sm text-slate-700">{t("startPage.steps.selectFormat.detail")}</div>
         </li>
       </ol>
-      <p className="py-4">After the inital download, you can select more formats to download.</p>
 
       <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/load-key`}>
         {t("startPage.nextButton")}

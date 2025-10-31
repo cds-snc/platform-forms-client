@@ -5,7 +5,30 @@
     "body": "This browser does not support the File System Access API. [FR]"
   },
   "startPage": {
-    "nextButton": "Start"
+    "intro": "Get responses in fewer steps with a form API key. [FR]",
+    "nextButton": "Démarrer",
+    "beforeStart": {
+      "heading": "Avant de commencer",
+      "generateKey": "Générez une clé API pour votre formulaire dans Paramètres.",
+      "generateKeyDetail": "C'est ainsi que vous pourrez accéder aux nouvelles réponses.",
+      "browserSupport": "Assurez-vous d'utiliser Google Chrome ou Microsoft Edge.",
+      "browserSupportDetail": "Votre navigateur demandera l'autorisation d'enregistrer des fichiers sur votre appareil."
+    },
+    "steps": {
+      "heading": "Ensuite, suivez ces étapes :",
+      "uploadKey": {
+        "title": "Téléversez votre fichier de clé API.",
+        "detail": "C'est ainsi que vous vous authentifierez en toute sécurité."
+      },
+      "chooseLocation": {
+        "title": "Choisissez un emplacement de téléchargement pour les réponses.",
+        "detail": "C'est là que les nouvelles réponses peuvent être ajoutées aux fichiers déjà présents dans le même dossier."
+      },
+      "selectFormat": {
+        "title": "Sélectionnez le format des fichiers de réponse.",
+        "detail": "C'est ici que vous pouvez choisir d'obtenir des copies individuelles en HTML ou un fichier CSV."
+      }
+    }
   },
   "failed-to-load-api-key": "API key failed to load"
 }
