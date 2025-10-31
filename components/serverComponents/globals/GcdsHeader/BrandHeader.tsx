@@ -8,20 +8,24 @@ export const BrandHeader = ({
   brand,
   pathname,
   language,
+  showLanguageToggle = true,
+  skipLink = true,
 }: {
   brand: BrandProperties | undefined | null;
   pathname: string;
   language: Language;
+  showLanguageToggle?: boolean;
+  skipLink?: boolean;
 }) => {
   return (
     <div className="gcds-header__container">
       <header className="gcds-header">
-        {<SkipLink />}
+        {skipLink && <SkipLink />}
         <BrandContainer>
           <div className="gcds-signature brand__signature">
             <Brand brand={brand} />
           </div>
-          <LanguageToggle pathname={pathname} language={language} />
+          {showLanguageToggle && <LanguageToggle pathname={pathname} language={language} />}
         </BrandContainer>
       </header>
     </div>

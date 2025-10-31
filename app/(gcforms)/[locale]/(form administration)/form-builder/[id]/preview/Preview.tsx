@@ -148,7 +148,12 @@ export const Preview = ({
 
         <div className="gc-formview gc-form-preview-header">
           {hasCustom ? (
-            <BrandHeader brand={brand} pathname={""} language={language} />
+            <BrandHeader
+              brand={brand}
+              pathname={""}
+              language={language}
+              showLanguageToggle={true}
+            />
           ) : (
             <GcdsHeader pathname={""} language={language} showLanguageToggle={false} />
           )}
