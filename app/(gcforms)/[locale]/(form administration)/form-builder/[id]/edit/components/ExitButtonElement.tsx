@@ -43,7 +43,7 @@ export const ExitButtonElement = ({
       </ul>
       <div>
         <p className="mb-4">{t("logic.exitButtonElement.buttonDescription")}</p>
-        <div className="mb-4">
+        <div className="mb-4 max-w-[400px]">
           <Brand brand={brand} />
         </div>
         <label className="mb-4 inline-block">{t("logic.exitButtonElement.buttonLabel")}</label>

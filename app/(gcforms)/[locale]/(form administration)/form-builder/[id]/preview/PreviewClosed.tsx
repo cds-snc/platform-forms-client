@@ -1,6 +1,5 @@
 "use client";
 
-import Brand from "@clientComponents/globals/Brand";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { defaultForm } from "@lib/store/defaults";
@@ -10,14 +9,17 @@ import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import Skeleton from "react-loading-skeleton";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
+import { BrandHeader } from "@serverComponents/globals/GcdsHeader/BrandHeader";
 
 export const PreviewClosed = ({ closedDetails }: { closedDetails: ClosedDetails }) => {
   const { i18n } = useTranslation(["common", "confirmation"]);
   const { status } = useSession();
-  const { id, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
+  const { id, getIsPublished, getSecurityAttribute, brand } = useTemplateStore((s) => ({
     id: s.id,
     getIsPublished: s.getIsPublished,
     getSecurityAttribute: s.getSecurityAttribute,
+    brand: s.form.brand,
   }));
 
   const { translationLanguagePriority, getLocalizationAttribute } = useTemplateStore((s) => ({
@@ -36,7 +38,7 @@ export const PreviewClosed = ({ closedDetails }: { closedDetails: ClosedDetails 
     closedDetails: closedDetails,
   };
 
-  const brand = formRecord?.form ? formRecord.form.brand : null;
+  const hasCustom = brand?.logoEn && brand?.logoFr;
 
   const isPastClosingDate = useIsFormClosed();
 
@@ -61,10 +63,19 @@ export const PreviewClosed = ({ closedDetails }: { closedDetails: ClosedDetails 
         }`}
         {...getLocalizationAttribute()}
       >
+        <div className="gc-formview gc-form-preview-header">
+          {hasCustom ? (
+            <BrandHeader
+              brand={brand}
+              pathname={""}
+              language={language}
+              showLanguageToggle={false}
+            />
+          ) : (
+            <GcdsHeader pathname={""} language={language} showLanguageToggle={false} />
+          )}
+        </div>
         <div className="gc-formview">
-          <div className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
-            <Brand brand={brand} lang={language} className="max-w-[360px]" />
-          </div>
           <ClosedPage language={language} formRecord={formRecord} isPreview={true} />
         </div>
       </div>

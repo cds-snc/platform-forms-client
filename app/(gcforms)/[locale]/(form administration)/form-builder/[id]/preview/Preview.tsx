@@ -19,7 +19,6 @@ import {
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { BackArrowIcon } from "@serverComponents/icons";
-import Brand from "@clientComponents/globals/Brand";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import Skeleton from "react-loading-skeleton";
 import { safeJSONParse } from "@lib/utils";
@@ -28,6 +27,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { defaultForm } from "@lib/store/defaults";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { PreviewFormWrapper } from "./PreviewFormWrapper";
+import { BrandHeader } from "@serverComponents/globals/GcdsHeader/BrandHeader";
 
 export const Preview = ({
   disableSubmit = true,
@@ -148,9 +148,12 @@ export const Preview = ({
 
         <div className="gc-formview gc-form-preview-header">
           {hasCustom ? (
-            <div className="mb-20 mt-0 border-b-1 border-[var(--gcds-header-brand-border-color)] py-9 ">
-              <Brand brand={brand} lang={language} className="max-w-[360px] " />
-            </div>
+            <BrandHeader
+              brand={brand}
+              pathname={""}
+              language={language}
+              showLanguageToggle={true}
+            />
           ) : (
             <GcdsHeader pathname={""} language={language} showLanguageToggle={false} />
           )}
