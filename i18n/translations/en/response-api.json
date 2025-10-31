@@ -37,6 +37,11 @@
     "detail": "Upload the API key you generated in Settings to get access to your form’s responses.",
     "chooseFileButton": "Upload API Key "
   },
+  "locationPage": {
+    "title": "Select a save location",
+    "subheading": "Decide where new responses will be downloaded.",
+    "detail": "To add response data to an existing CSV, select the folder where it is currently saved. Make sure the CSV file name still includes the form ID, as it did when originally downloaded."
+  },
   "backButton": "Back",
   "continueButton": "Continue",
   "failed-to-load-api-key": "API key failed to load"

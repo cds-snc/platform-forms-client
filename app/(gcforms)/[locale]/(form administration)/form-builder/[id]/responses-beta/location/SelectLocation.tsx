@@ -1,15 +1,19 @@
 "use client";
+import { useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useTranslation } from "@i18n/client";
+import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
 import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { DirectoryPicker } from "./DirectoryPicker";
-import { useCallback, useEffect } from "react";
-import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
+
 import { initCsv } from "../lib/csvWriter";
-import { useRouter } from "next/navigation";
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
   const router = useRouter();
+  const { t } = useTranslation("response-api");
 
   const { apiClient, directoryHandle, setDirectoryHandle, setCsvFileHandle } =
     useResponsesContext();
@@ -33,10 +37,6 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
     [apiClient, setDirectoryHandle, setCsvFileHandle]
   );
 
-  const handleCancel = () => {
-    //
-  };
-
   const handleNext = () => {
     router.push(`/${locale}/form-builder/${id}/responses-beta/format`);
   };
@@ -49,17 +49,18 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
 
   return (
     <div>
-      <div>Step 2 of 3</div>
-      <h1>Select Location</h1>
+      <div className="mb-4">{t("stepOf", { current: 2, total: 3 })}</div>
+      <h2>{t("locationPage.title")}</h2>
+      <p className="mb-4 mt-2 font-bold">{t("locationPage.subheading")}</p>
+      <p className="mb-6 text-sm text-slate-700">{t("locationPage.detail")}</p>
 
       {!directoryHandle && (
-        <div className="mb-4">
+        <div className="mb-8">
           <DirectoryPicker onPick={setDirectory} />
         </div>
       )}
       {directoryHandle && (
         <p className="mb-4">
-          Save location selected successfully:{" "}
           <span className="rounded border border-violet-500 bg-violet-100 px-1">
             {directoryHandle.name}
           </span>
@@ -67,11 +68,11 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       )}
 
       <div className="flex flex-row gap-4">
-        <Button theme="secondary" onClick={handleCancel}>
-          Cancel
-        </Button>
+        <LinkButton.Secondary href={`/${locale}/form-builder/${id}/responses-beta`}>
+          {t("backButton")}
+        </LinkButton.Secondary>
         <Button theme="primary" disabled={!directoryHandle} onClick={handleNext}>
-          Next
+          {t("continueButton")}
         </Button>
       </div>
     </div>

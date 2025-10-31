@@ -9,6 +9,7 @@ export const DirectoryPicker = ({
 }) => {
   return (
     <Button
+      theme="secondary"
       onClick={async () => {
         try {
           const dirHandle = await showDirectoryPicker();

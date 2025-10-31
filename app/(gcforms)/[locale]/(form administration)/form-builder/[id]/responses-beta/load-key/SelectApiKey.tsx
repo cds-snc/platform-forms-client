@@ -16,8 +16,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
   const { t } = useTranslation("response-api");
 
   const router = useRouter();
-  const { userKey, apiClient, retrieveResponses, newFormSubmissions, setApiClient, setUserKey } =
-    useResponsesContext();
+  const { userKey, apiClient, retrieveResponses, setApiClient, setUserKey } = useResponsesContext();
 
   useEffect(() => {
     if (!userKey) {
@@ -70,18 +69,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
       <p className="mb-4 font-medium">{t("loadKeyPage.detail")}</p>
 
-      {(newFormSubmissions?.length ?? 0) > 0 && (
-        <p className="mb-4">
-          There are at least {newFormSubmissions?.length ?? 0} new responses to download.
-        </p>
-      )}
-
       {!apiClient && <LoadKey onLoadKey={handleLoadApiKey} />}
-      {apiClient && (
-        <>
-          <p>API Key Loaded Successfully</p>
-        </>
-      )}
 
       <div className="mt-8 flex flex-row gap-4">
         <LinkButton.Secondary href={`/${locale}/form-builder/${id}/responses-beta`}>
