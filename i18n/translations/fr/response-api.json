@@ -35,7 +35,10 @@
   "loadKeyPage": {
     "title": "Upload your API key file",
     "detail": "Upload the API key you generated in Settings to get access to your form’s responses.",
-    "chooseFileButton": "Upload API Key "
+    "chooseFileButton": "Upload API Key",
+    "noNewResponsesAvailable": "Aucune nouvelle réponse disponible",
+    "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
+    "newResponsesAvailable": "De nouvelles réponses sont disponibles"
   },
   "locationPage": {
     "title": "Select a save locatiom",

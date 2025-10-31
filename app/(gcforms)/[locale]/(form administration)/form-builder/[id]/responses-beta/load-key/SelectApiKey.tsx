@@ -11,6 +11,7 @@ import { getAccessTokenFromApiKey } from "../lib/utils";
 import { showOpenFilePicker } from "native-file-system-adapter";
 import { GCFormsApiClient } from "../lib/apiClient";
 import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
+import { Responses } from "./Responses";
 
 export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => {
   const { t } = useTranslation("response-api");
@@ -64,12 +65,15 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
   return (
     <div>
-      <div className="mb-4">{t("stepOf", { current: 1, total: 3 })}</div>
-      <h2>{t("loadKeyPage.title")}</h2>
-
-      <p className="mb-4 font-medium">{t("loadKeyPage.detail")}</p>
-
-      {!apiClient && <LoadKey onLoadKey={handleLoadApiKey} />}
+      {!apiClient && (
+        <div>
+          <div className="mb-4">{t("stepOf", { current: 1, total: 3 })}</div>
+          <h2>{t("loadKeyPage.title")}</h2>
+          <p className="mb-4 font-medium">{t("loadKeyPage.detail")}</p>
+          <LoadKey onLoadKey={handleLoadApiKey} />
+        </div>
+      )}
+      {apiClient && <Responses />}
 
       <div className="mt-8 flex flex-row gap-4">
         <LinkButton.Secondary href={`/${locale}/form-builder/${id}/responses-beta`}>
