@@ -65,7 +65,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
   return (
     <div>
-      <div>Step 1 of 3</div>
+      <div className="mb-4">{t("stepOf", { current: 1, total: 3 })}</div>
       <h2>{t("loadKeyPage.title")}</h2>
 
       <p className="mb-4 font-medium">{t("loadKeyPage.detail")}</p>

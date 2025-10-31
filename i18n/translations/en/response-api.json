@@ -1,5 +1,6 @@
 {
   "section-title": "Responses Pilot",
+  "stepOf": "Step {{current}} of {{total}}",
   "not-supported": {
     "title": "Not Supported",
     "body": "This browser does not support the File System Access API."
@@ -16,6 +17,7 @@
     },
     "steps": {
       "heading": "Then, follow these steps:",
+      "stepOf": "Step {{current}} of {{total}}",
       "uploadKey": {
         "title": "Upload your API key file.",
         "detail": "This is how you will securely authenticate."
