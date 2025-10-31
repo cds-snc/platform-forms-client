@@ -48,6 +48,12 @@
     "detail": "To add response data to an existing CSV, select the folder where it is currently saved. Make sure the CSV file name still includes the form ID, as it did when originally downloaded.",
     "chooseLocationButton": "Choose location"
   },
+  "confirmationPage": {
+    "successTitle": "Succès !",
+    "downloadedResponses": "{{count}} réponses ont été téléchargées",
+    "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
+    "downloadMoreResponsesButton": "Télécharger plus de réponses"
+  },
   "backButton": "Retour",
   "continueButton": "Continuer",
   "failed-to-load-api-key": "API key failed to load"
