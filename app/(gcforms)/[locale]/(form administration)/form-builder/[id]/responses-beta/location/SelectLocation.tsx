@@ -59,13 +59,6 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
           <DirectoryPicker onPick={setDirectory} />
         </div>
       )}
-      {directoryHandle && (
-        <p className="mb-4">
-          <span className="rounded border border-violet-500 bg-violet-100 px-1">
-            {directoryHandle.name}
-          </span>
-        </p>
-      )}
 
       <div className="flex flex-row gap-4">
         <LinkButton.Secondary href={`/${locale}/form-builder/${id}/responses-beta`}>
