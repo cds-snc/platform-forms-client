@@ -1,15 +1,20 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useTranslation } from "@i18n/client";
+
 import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { LoadKey } from "./LoadKey";
-import { useRouter } from "next/navigation";
 import { getAccessTokenFromApiKey } from "../lib/utils";
 import { showOpenFilePicker } from "native-file-system-adapter";
 import { GCFormsApiClient } from "../lib/apiClient";
+import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 
 export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => {
+  const { t } = useTranslation("response-api");
+
   const router = useRouter();
   const { userKey, apiClient, retrieveResponses, newFormSubmissions, setApiClient, setUserKey } =
     useResponsesContext();
@@ -21,10 +26,6 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
     void retrieveResponses();
   }, [retrieveResponses, userKey]);
-
-  const handleCancel = () => {
-    //
-  };
 
   const handleNext = () => {
     router.push(`/${locale}/form-builder/${id}/responses-beta/location`);
@@ -65,7 +66,9 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
   return (
     <div>
       <div>Step 1 of 3</div>
-      <h1>Select ApiKey</h1>
+      <h2>{t("loadKeyPage.title")}</h2>
+
+      <p className="mb-4 font-medium">{t("loadKeyPage.detail")}</p>
 
       {(newFormSubmissions?.length ?? 0) > 0 && (
         <p className="mb-4">
@@ -81,12 +84,12 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       )}
 
       <div className="mt-8 flex flex-row gap-4">
-        <Button theme="secondary" onClick={handleCancel}>
-          Cancel
-        </Button>
+        <LinkButton.Secondary href={`/${locale}/form-builder/${id}/responses-beta`}>
+          {t("backButton")}
+        </LinkButton.Secondary>
 
         <Button theme="primary" disabled={!apiClient} onClick={handleNext}>
-          Next
+          {t("continueButton")}
         </Button>
       </div>
     </div>

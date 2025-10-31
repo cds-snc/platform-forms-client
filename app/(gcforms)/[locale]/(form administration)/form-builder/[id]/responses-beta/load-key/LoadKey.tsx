@@ -11,21 +11,17 @@ export const LoadKey = ({ onLoadKey }: LoadKeyProps) => {
   const { t } = useTranslation(["response-api", "common"]);
 
   return (
-    <div>
-      <p className="mb-4">
-        <strong>Upload your form&apos;s API key to get started</strong>
-      </p>
-      <Button
-        onClick={async () => {
-          const result = await onLoadKey();
+    <Button
+      theme="secondary"
+      onClick={async () => {
+        const result = await onLoadKey();
 
-          if (!result) {
-            toast.error(t("failed-to-load-api-key"), "response-api");
-          }
-        }}
-      >
-        Load API Key
-      </Button>
-    </div>
+        if (!result) {
+          toast.error(t("failed-to-load-api-key"), "response-api");
+        }
+      }}
+    >
+      {t("loadKeyPage.chooseFileButton")}
+    </Button>
   );
 };

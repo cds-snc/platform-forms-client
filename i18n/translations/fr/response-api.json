@@ -30,5 +30,12 @@
       }
     }
   },
+  "loadKeyPage": {
+    "title": "Upload your API key file",
+    "detail": "Upload the API key you generated in Settings to get access to your form’s responses.",
+    "chooseFileButton": "Upload API Key "
+  },
+  "backButton": "Retour",
+  "continueButton": "Continuer",
   "failed-to-load-api-key": "API key failed to load"
 }
