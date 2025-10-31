@@ -38,7 +38,9 @@
     "chooseFileButton": "Upload API Key",
     "noNewResponsesAvailable": "Aucune nouvelle réponse disponible",
     "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
-    "newResponsesAvailable": "De nouvelles réponses sont disponibles"
+    "newResponsesAvailable": "De nouvelles réponses sont disponibles",
+    "backToStart": "Back to start",
+    "downloadResponses": "Télécharger les réponses"
   },
   "locationPage": {
     "title": "Select a save locatiom",

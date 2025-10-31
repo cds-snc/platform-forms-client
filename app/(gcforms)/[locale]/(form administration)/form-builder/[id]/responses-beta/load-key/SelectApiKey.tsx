@@ -17,7 +17,8 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
   const { t } = useTranslation("response-api");
 
   const router = useRouter();
-  const { userKey, apiClient, retrieveResponses, setApiClient, setUserKey } = useResponsesContext();
+  const { userKey, apiClient, retrieveResponses, setApiClient, setUserKey, newFormSubmissions } =
+    useResponsesContext();
 
   useEffect(() => {
     if (!userKey) {
@@ -28,6 +29,8 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
   }, [retrieveResponses, userKey]);
 
   const handleNext = () => {
+    // clean api client state before proceeding
+
     router.push(`/${locale}/form-builder/${id}/responses-beta/location`);
   };
 
@@ -77,11 +80,15 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
       <div className="mt-8 flex flex-row gap-4">
         <LinkButton.Secondary href={`/${locale}/form-builder/${id}/responses-beta`}>
-          {t("backButton")}
+          {t("loadKeyPage.backToStart")}
         </LinkButton.Secondary>
 
-        <Button theme="primary" disabled={!apiClient} onClick={handleNext}>
-          {t("continueButton")}
+        <Button
+          theme="primary"
+          disabled={Boolean(!apiClient || (newFormSubmissions && newFormSubmissions.length === 0))}
+          onClick={handleNext}
+        >
+          {t("loadKeyPage.downloadResponses")}
         </Button>
       </div>
     </div>
