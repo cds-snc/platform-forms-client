@@ -19,7 +19,7 @@
     },
     "spreadsheets": {
       "label": "Feuilles de calcul",
-      "description": "xls, xlsx, csv, numbers"
+      "description": "xls, xlsx, csv"
     }
   },
   "addElement": "Ajouter un élément",
@@ -610,7 +610,7 @@
   "publishingDisablesEditing": "La publication désactive toute modification.",
   "publishingDisablesEditingDescription": "Une fois publié, vous ne pouvez plus apporter des modifications à ce formulaire. Si des modifications sont nécessaires après la publication, utilisez le fichier du formulaire pour créer et publier un nouveau formulaire.",
   "publishingLocksSettings": "La publication verrouille certains paramètres.",
-  "publishingLocksSettingsDescription": "Plusieurs paramètres du formulaire ne seront plus modifiables, tels que la classification, l'image de marque et l'usage prévu du formulaire.",
+  "publishingLocksSettingsDescription": "Plusieurs paramètres du formulaire ne seront plus modifiables, tels que la classification et l'usage prévu du formulaire.",
   "publishingRemovesTestResponses": "La publication supprime les réponses test.",
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
