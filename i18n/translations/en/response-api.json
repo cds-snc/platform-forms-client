@@ -1,4 +1,5 @@
 {
+  "section-title": "Responses Pilot",
   "not-supported": {
     "title": "Not Supported",
     "body": "This browser does not support the File System Access API."

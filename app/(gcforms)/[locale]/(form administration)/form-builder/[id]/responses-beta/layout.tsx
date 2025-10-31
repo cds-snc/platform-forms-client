@@ -1,15 +1,19 @@
-import { authCheckAndThrow } from "@root/lib/actions";
-import { FeatureFlags } from "@root/lib/cache/types";
-import { featureFlagAllowedForUser } from "@root/lib/userFeatureFlags";
+import { serverTranslation } from "@i18n";
+
+import { authCheckAndThrow } from "@lib/actions";
+import { FeatureFlags } from "@lib/cache/types";
+import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
 import { redirect } from "next/navigation";
 import { ResponsesProvider } from "./context/ResponsesContext";
 import { ContentWrapper } from "./ContentWrapper";
+import { BetaBadge } from "@root/components/clientComponents/globals/BetaBadge";
 
 export default async function ResponsesLayout(props: {
   children: React.ReactNode;
   params: Promise<{ locale: string; id: string }>;
 }) {
   const params = await props.params;
+  const { t } = await serverTranslation("response-api", { lang: params.locale });
 
   const { locale, id } = params;
 
@@ -27,6 +31,8 @@ export default async function ResponsesLayout(props: {
 
   return (
     <ResponsesProvider>
+      <h1>{t("section-title")}</h1>
+      <BetaBadge className="mb-4" />
       <ContentWrapper>{props.children}</ContentWrapper>
     </ResponsesProvider>
   );

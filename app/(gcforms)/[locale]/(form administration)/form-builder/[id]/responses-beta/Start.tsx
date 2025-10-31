@@ -17,7 +17,7 @@ export const Start = ({ locale, id }: { locale: string; id: string }) => {
 
   return (
     <div>
-      <h1 className="">Get new responses</h1>
+      <h2 className="">Get new responses</h2>
 
       <p className="py-4">Download responses in three steps.</p>
       <ol>
