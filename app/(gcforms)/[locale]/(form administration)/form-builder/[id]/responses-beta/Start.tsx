@@ -39,7 +39,7 @@ export const Start = ({ locale, id }: { locale: string; id: string }) => {
       <p className="py-4">After the inital download, you can select more formats to download.</p>
 
       <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/load-key`}>
-        {t("startButton")}
+        {t("startPage.nextButton")}
       </LinkButton.Primary>
     </div>
   );

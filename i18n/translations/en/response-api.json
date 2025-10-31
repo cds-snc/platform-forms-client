@@ -4,6 +4,8 @@
     "title": "Not Supported",
     "body": "This browser does not support the File System Access API."
   },
-  "startButton": "Start",
+  "startPage": {
+    "nextButton": "Start"
+  },
   "failed-to-load-api-key": "API key failed to load"
 }
