@@ -40,7 +40,11 @@
     "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
     "newResponsesAvailable": "De nouvelles réponses sont disponibles",
     "backToStart": "Back to start",
-    "downloadResponses": "Télécharger les réponses"
+    "downloadResponses": "Télécharger les réponses",
+    "uploadSuccessTitle": "La clé API a été téléchargée avec succès",
+    "uploadSuccessMessage": "Vous pouvez maintenant récupérer toutes les nouvelles réponses pour ce formulaire.",
+    "uploadFailedTitle": "Échec du téléchargement de la clé API",
+    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la télécharger à nouveau."
   },
   "locationPage": {
     "title": "Select a save locatiom",

@@ -39,7 +39,11 @@
     "noNewResponsesDetail": "There are currently no new responses for this form.",
     "newResponsesAvailable": "New responses available",
     "backToStart": "Back to start",
-    "downloadResponses": "Download responses"
+    "downloadResponses": "Download responses",
+    "uploadSuccessTitle": "API key was successfully uploaded",
+    "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
+    "uploadFailedTitle": "API key upload failed",
+    "uploadFailedMessage": "Make sure you selected the correct file. If it's not working, try regenerating a new API key and try uploading again."
   },
   "locationPage": {
     "title": "Select a save location ",
