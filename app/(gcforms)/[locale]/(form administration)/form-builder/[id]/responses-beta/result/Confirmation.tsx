@@ -40,8 +40,13 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
       <h2 className="mb-8">
         {t("confirmationPage.downloadedResponses", { count: processedSubmissionIds.size || 0 })}
       </h2>
-      <p className="mb-0">{t("confirmationPage.savedTo")}</p>
-      <p className="mb-8 font-bold">/{dirName}</p>
+
+      {dirName && (
+        <>
+          <p className="mb-0">{t("confirmationPage.savedTo")}</p>
+          <p className="mb-8 font-bold">/{dirName}</p>
+        </>
+      )}
       <div className="flex flex-row gap-4">
         <Button theme="secondary" onClick={() => router.back()}>
           {t("backButton")}
