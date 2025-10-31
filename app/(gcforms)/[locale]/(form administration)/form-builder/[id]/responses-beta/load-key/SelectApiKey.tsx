@@ -30,7 +30,6 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
   const handleNext = () => {
     // clean api client state before proceeding
-
     router.push(`/${locale}/form-builder/${id}/responses-beta/location`);
   };
 

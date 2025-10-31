@@ -11,7 +11,7 @@ export const Responses = () => {
       <h2>{t("loadKeyPage.newResponsesAvailable")}</h2>
       <div>
         <Image
-          src="/img/new-responses.svg"
+          src="/img/api-new-responses.svg"
           alt={t("loadKeyPage.newResponsesAvailable")}
           width={218}
           height={196}
@@ -23,7 +23,7 @@ export const Responses = () => {
       <h2>{t("loadKeyPage.noNewResponsesAvailable")}</h2>
       <div>
         <Image
-          src="/img/no-responses.svg"
+          src="/img/api-no-responses.svg"
           alt={t("loadKeyPage.noNewResponsesAvailable")}
           width={218}
           height={196}

@@ -1,9 +1,0 @@
-<svg width="218" height="196" viewBox="0 0 218 196" fill="none" xmlns="http://www.w3.org/2000/svg">
-<ellipse cx="109" cy="189" rx="109" ry="7" fill="#D9F0D9"/>
-<rect x="43" y="54" width="132" height="130" rx="4" stroke="#0B6A0B" stroke-width="3" fill="#F2FFF2"/>
-<path d="M70 90H148" stroke="#8CCB8C" stroke-width="3"/>
-<path d="M70 104H148" stroke="#8CCB8C" stroke-width="3"/>
-<path d="M70 118H148" stroke="#8CCB8C" stroke-width="3"/>
-<circle cx="150" cy="70" r="14" fill="#0B6A0B"/>
-<text x="150" y="76" font-size="12" fill="white" text-anchor="middle" font-family="Arial">A</text>
-</svg>
