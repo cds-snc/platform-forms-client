@@ -118,7 +118,9 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
       {/* Logo preview */}
       <div className={cn(hasBrandingRequestForm ? "mb-10" : "")}>
         <div className="mb-3 text-sm font-bold">{t("branding.preview")}</div>
-        <Brand brand={brand} />
+        <div className="max-w-[400px]">
+          <Brand brand={brand} />
+        </div>
       </div>
       {hasBrandingRequestForm && (
         <div>
