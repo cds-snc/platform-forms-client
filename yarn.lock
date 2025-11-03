@@ -2521,14 +2521,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@headless-tree/core@npm:^1.5.1":
+"@headless-tree/core@npm:^1.5.0":
   version: 1.5.1
   resolution: "@headless-tree/core@npm:1.5.1"
   checksum: 10c0/588f444f50a24964b7e694347cd629f3212f38d42ceefd71d7d10572cdf744133d165199f4b21bbc68958034fd237d3d681929162db0b3964858f4a7760af000
   languageName: node
   linkType: hard
 
-"@headless-tree/react@npm:^1.5.1":
+"@headless-tree/react@npm:^1.5.0":
   version: 1.5.1
   resolution: "@headless-tree/react@npm:1.5.1"
   peerDependencies:
@@ -12745,8 +12745,8 @@ __metadata:
     "@gcforms/types": "workspace:*"
     "@hcaptcha/react-hcaptcha": "npm:^1.14.0"
     "@hcaptcha/types": "npm:^1.1.0"
-    "@headless-tree/core": "npm:^1.5.1"
-    "@headless-tree/react": "npm:^1.5.1"
+    "@headless-tree/core": "npm:^1.5.0"
+    "@headless-tree/react": "npm:^1.5.0"
     "@headlessui/react": "npm:^2.2.9"
     "@jest/globals": "npm:^30.2.0"
     "@neshca/cache-handler": "npm:^1.2.1"
