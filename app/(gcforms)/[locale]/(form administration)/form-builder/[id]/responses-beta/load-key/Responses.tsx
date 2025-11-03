@@ -2,9 +2,20 @@ import Image from "next/image";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { useTranslation } from "@i18n/client";
 
-export const Responses = () => {
+import Skeleton from "react-loading-skeleton";
+
+export const Responses = ({ hasCheckedForResponses }: { hasCheckedForResponses: boolean }) => {
   const { newFormSubmissions } = useResponsesContext();
   const { t } = useTranslation("response-api");
+
+  if (!hasCheckedForResponses) {
+    return (
+      <>
+        <Skeleton count={1} className="h-[40px]" />{" "}
+        <Skeleton count={1} className="h-[200px] w-[250px]" />
+      </>
+    );
+  }
 
   return newFormSubmissions && newFormSubmissions.length > 0 ? (
     <div>

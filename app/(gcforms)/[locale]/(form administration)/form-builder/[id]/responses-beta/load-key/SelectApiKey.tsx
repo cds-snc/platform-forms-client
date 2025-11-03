@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 
@@ -18,16 +18,10 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
   const { t } = useTranslation("response-api");
 
   const router = useRouter();
-  const { userKey, apiClient, retrieveResponses, setApiClient, setUserKey, newFormSubmissions } =
+  const { apiClient, retrieveResponses, setApiClient, setUserKey, newFormSubmissions } =
     useResponsesContext();
 
-  useEffect(() => {
-    if (!userKey) {
-      return;
-    }
-
-    void retrieveResponses();
-  }, [retrieveResponses, userKey]);
+  const [hasCheckedForResponses, setHasCheckedForResponses] = useState(false);
 
   const handleNext = () => {
     // clean api client state before proceeding
@@ -59,12 +53,15 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
       setUserKey(keyFile);
 
+      await retrieveResponses();
+      setHasCheckedForResponses(true);
+
       return true;
     } catch (error) {
       // no-op
       return false;
     }
-  }, [setApiClient, setUserKey]);
+  }, [setApiClient, setUserKey, retrieveResponses]);
 
   return (
     <div>
@@ -78,7 +75,8 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
           <LostKeyPopover locale={locale} id={id} />
         </div>
       )}
-      {apiClient && <Responses />}
+
+      {apiClient && <Responses hasCheckedForResponses={hasCheckedForResponses} />}
 
       <div className="mt-8 flex flex-row gap-4">
         <LinkButton.Secondary href={`/${locale}/form-builder/${id}/responses-beta`}>
