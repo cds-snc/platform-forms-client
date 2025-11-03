@@ -12,6 +12,7 @@ import { showOpenFilePicker } from "native-file-system-adapter";
 import { GCFormsApiClient } from "../lib/apiClient";
 import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 import { Responses } from "./Responses";
+import { LostKeyLink, LostKeyPopover } from "./LostKeyPopover";
 
 export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => {
   const { t } = useTranslation("response-api");
@@ -73,9 +74,8 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
           <h2>{t("loadKeyPage.title")}</h2>
           <p className="mb-4 font-medium">{t("loadKeyPage.detail")}</p>
           <LoadKey onLoadKey={handleLoadApiKey} />
-          <p className="mt-2 text-sm text-gray-600">
-            <a>{t("loadKeyPage.lostKey.link")}</a>
-          </p>
+          <LostKeyLink />
+          <LostKeyPopover locale={locale} id={id} />
         </div>
       )}
       {apiClient && <Responses />}
