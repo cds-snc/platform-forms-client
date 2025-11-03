@@ -11,8 +11,13 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   const router = useRouter();
   const { t } = useTranslation("response-api");
 
-  const { processedSubmissionIds, processingCompleted, setInterrupt, interrupt } =
-    useResponsesContext();
+  const {
+    processedSubmissionIds,
+    processingCompleted,
+    setInterrupt,
+    interrupt,
+    resetNewSubmissions,
+  } = useResponsesContext();
 
   useEffect(() => {
     if (processingCompleted) {
@@ -23,6 +28,11 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
       return () => clearTimeout(timer); // Cleanup on unmount or if processingCompleted changes
     }
   }, [id, locale, processingCompleted, router]);
+
+  const handleInterrupt = () => {
+    setInterrupt(true);
+    resetNewSubmissions();
+  };
 
   // @TODO: handle direct visit if processing is not running, redirect somewhere?
 
@@ -40,7 +50,7 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
         <p>{t("processingPage.note")}</p>
       </div>
       {!interrupt && (
-        <Button theme="secondary" onClick={() => setInterrupt(true)}>
+        <Button theme="secondary" onClick={handleInterrupt}>
           {t("processingPage.cancelButton")}
         </Button>
       )}

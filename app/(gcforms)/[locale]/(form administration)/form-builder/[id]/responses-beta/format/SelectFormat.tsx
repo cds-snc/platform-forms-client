@@ -1,24 +1,22 @@
 "use client";
 
-import { Button } from "@clientComponents/globals";
+import { Alert, Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { Checkbox } from "../../../components/shared/MultipleChoice";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
+import { useTranslation } from "@root/i18n/client";
+import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
-  const {
-    setSelectedFormats,
-    selectedFormats,
-    retrieveResponses,
-    processResponses,
-    apiClient,
-    directoryHandle,
-  } = useResponsesContext();
+  const { t } = useTranslation("response-api");
+
+  const { setSelectedFormats, selectedFormats, retrieveResponses, processResponses, apiClient } =
+    useResponsesContext();
 
   const router = useRouter();
 
-  const handleCancel = () => {
+  const handleBack = () => {
     //
   };
 
@@ -45,15 +43,25 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
     });
   };
 
-  useEffect(() => {
-    if (!apiClient || !directoryHandle) {
-      router.push(`/${locale}/form-builder/${id}/responses-beta`);
-    }
-  }, [apiClient, directoryHandle, locale, id, router]);
+  if (!apiClient) {
+    return (
+      <div>
+        <Alert.Danger>
+          <Alert.Title headingTag="h3">No key</Alert.Title>
+          <p className="mb-2">You don&apos;t have a key selected </p>
+        </Alert.Danger>
+        <div className="mt-8 flex flex-row gap-4">
+          <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/load-key`}>
+            Go back
+          </LinkButton.Primary>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <div>Step 3 of 3</div>
+      <div className="mb-4">{t("stepOf", { current: 3, total: 3 })}</div>
       <h1>Optional response format</h1>
       <div>
         <p>
@@ -78,8 +86,8 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
         </div>
       </div>
       <div className="flex flex-row gap-4">
-        <Button theme="secondary" onClick={handleCancel}>
-          Cancel
+        <Button theme="secondary" onClick={handleBack}>
+          Back
         </Button>
         <Button theme="primary" disabled={selectedFormats.length === 0} onClick={handleNext}>
           Next

@@ -1,16 +1,16 @@
 "use client";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
-import { Button } from "@clientComponents/globals";
+import { Alert, Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { DirectoryPicker } from "./DirectoryPicker";
-import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
 import { initCsv } from "../lib/csvWriter";
 import { toast } from "../../../components/shared/Toast";
+import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 
 const CsvDetected = () => {
   const { t } = useTranslation("response-api");
@@ -56,15 +56,30 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
     [apiClient, setDirectoryHandle, setCsvFileHandle]
   );
 
+  const handleBack = () => {
+    resetState();
+    router.push(`/${locale}/form-builder/${id}/responses-beta/load-key`);
+  };
+
   const handleNext = () => {
     router.push(`/${locale}/form-builder/${id}/responses-beta/format`);
   };
 
-  useEffect(() => {
-    if (!apiClient) {
-      router.push(`/${locale}/form-builder/${id}/responses-beta`);
-    }
-  }, [apiClient, locale, id, router]);
+  if (!apiClient) {
+    return (
+      <div>
+        <Alert.Danger>
+          <Alert.Title headingTag="h3">No key</Alert.Title>
+          <p className="mb-2">You don&apos;t have a key selected </p>
+        </Alert.Danger>
+        <div className="mt-8 flex flex-row gap-4">
+          <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/load-key`}>
+            Go back
+          </LinkButton.Primary>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -80,14 +95,9 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       )}
 
       <div className="flex flex-row gap-4">
-        <LinkButton.Secondary
-          onClick={() => {
-            resetState();
-          }}
-          href={`/${locale}/form-builder/${id}/responses-beta`}
-        >
-          {t("backButton")}
-        </LinkButton.Secondary>
+        <Button theme="secondary" onClick={handleBack}>
+          Back
+        </Button>
         <Button theme="primary" disabled={!directoryHandle} onClick={handleNext}>
           {t("continueButton")}
         </Button>

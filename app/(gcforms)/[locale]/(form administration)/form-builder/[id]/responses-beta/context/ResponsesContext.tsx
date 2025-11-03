@@ -38,6 +38,7 @@ interface ResponsesContextType {
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
   resetState: () => void;
+  resetNewSubmissions: () => void;
 }
 
 const ResponsesContext = createContext<ResponsesContextType | undefined>(undefined);
@@ -65,6 +66,7 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
       interruptRef.current = nextValue;
       return nextValue;
     });
+    setNewFormSubmissions([]);
   }, []);
 
   const interrupt = interruptState;
@@ -86,6 +88,10 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
       return [];
     }
   }, [apiClient]);
+
+  const resetNewSubmissions = () => {
+    setNewFormSubmissions([]);
+  };
 
   const processResponses = useCallback(
     async (initialSubmissions?: NewFormSubmission[]) => {
@@ -153,6 +159,7 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
         }
       }
 
+      setNewFormSubmissions([]);
       setProcessingCompleted(true);
     },
     [apiClient, directoryHandle, newFormSubmissions, userKey]
@@ -194,6 +201,7 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
         interrupt,
         setInterrupt,
         resetState,
+        resetNewSubmissions,
       }}
     >
       {children}

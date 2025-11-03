@@ -10,7 +10,6 @@ import { LoadKey } from "./LoadKey";
 import { getAccessTokenFromApiKey } from "../lib/utils";
 import { showOpenFilePicker } from "native-file-system-adapter";
 import { GCFormsApiClient } from "../lib/apiClient";
-import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 import { Responses } from "./Responses";
 import { LostKeyLink, LostKeyPopover } from "./LostKeyPopover";
 
@@ -18,7 +17,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
   const { t } = useTranslation("response-api");
 
   const router = useRouter();
-  const { apiClient, retrieveResponses, setApiClient, setUserKey, newFormSubmissions } =
+  const { apiClient, retrieveResponses, setApiClient, setUserKey, newFormSubmissions, resetState } =
     useResponsesContext();
 
   const [hasCheckedForResponses, setHasCheckedForResponses] = useState(false);
@@ -42,6 +41,11 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       mounted = false;
     };
   }, [didSetUserKey, retrieveResponses]);
+
+  const handleBack = () => {
+    resetState();
+    router.push(`/${locale}/form-builder/${id}/responses-beta`);
+  };
 
   const handleNext = () => {
     // clean api client state before proceeding
@@ -97,9 +101,9 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       {apiClient && <Responses hasCheckedForResponses={hasCheckedForResponses} />}
 
       <div className="mt-8 flex flex-row gap-4">
-        <LinkButton.Secondary href={`/${locale}/form-builder/${id}/responses-beta`}>
+        <Button theme="secondary" onClick={handleBack}>
           {t("loadKeyPage.backToStart")}
-        </LinkButton.Secondary>
+        </Button>
 
         <Button
           theme="primary"
