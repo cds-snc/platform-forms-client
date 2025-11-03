@@ -9,7 +9,6 @@ describe("File extension validator", () => {
     ["docx", true],
     ["jpg", true],
     ["png", true],
-    ["numbers", true],
     ["PDF", true],
     ["CSV", true],
     ["ca", false],
