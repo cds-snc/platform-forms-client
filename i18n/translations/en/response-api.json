@@ -43,7 +43,16 @@
     "uploadSuccessTitle": "API key was successfully uploaded",
     "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
     "uploadFailedTitle": "API key upload failed",
-    "uploadFailedMessage": "Make sure you selected the correct file. If it's not working, try regenerating a new API key and try uploading again."
+    "uploadFailedMessage": "Make sure you selected the correct file. If it's not working, try regenerating a new API key and try uploading again.",
+    "lostKey": {
+      "link": "Lost API key?",
+      "lostKeyTip": {
+        "title": "Lost API key?",
+        "text1": "Only one API key can be associated to a form at a time.",
+        "text2": "Generate a new API key by going to Settings > API integration while signed in to",
+        "link": " GC Forms"
+      }
+    }
   },
   "locationPage": {
     "title": "Select a save location ",

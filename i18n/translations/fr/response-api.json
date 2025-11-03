@@ -44,7 +44,16 @@
     "uploadSuccessTitle": "La clé API a été téléchargée avec succès",
     "uploadSuccessMessage": "Vous pouvez maintenant récupérer toutes les nouvelles réponses pour ce formulaire.",
     "uploadFailedTitle": "Échec du téléchargement de la clé API",
-    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la télécharger à nouveau."
+    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la télécharger à nouveau.",
+    "lostKey": {
+      "link": "Lost API key? [FR]",
+      "lostKeyTip": {
+        "title": "Lost API key?",
+        "text1": "Only one API key can be associated to a form at a time.",
+        "text2": "Generate a new API key by going to Settings > API integration while signed in to",
+        "link": " GC Forms"
+      }
+    }
   },
   "locationPage": {
     "title": "Select a save locatiom",

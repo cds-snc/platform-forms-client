@@ -28,6 +28,7 @@ export const LoadKey = ({ onLoadKey }: LoadKeyProps) => {
   return (
     <Button
       theme="secondary"
+      className="mb-4"
       onClick={async () => {
         const result = await onLoadKey();
 

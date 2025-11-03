@@ -73,6 +73,9 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
           <h2>{t("loadKeyPage.title")}</h2>
           <p className="mb-4 font-medium">{t("loadKeyPage.detail")}</p>
           <LoadKey onLoadKey={handleLoadApiKey} />
+          <p className="mt-2 text-sm text-gray-600">
+            <a>{t("loadKeyPage.lostKey.link")}</a>
+          </p>
         </div>
       )}
       {apiClient && <Responses />}
