@@ -36,6 +36,7 @@ import { ga } from "@lib/client/clientHelpers";
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 import { handleUploadError } from "@lib/fileInput/handleUploadError";
 import { hasFiles } from "@lib/fileExtractor";
+import { generateFileChecksums } from "@lib/utils/fileChecksum";
 
 import {
   copyObjectExcludingFileContent,
@@ -300,9 +301,10 @@ export const Form = withFormik<FormProps, Responses>({
       );
 
       // Extract file content from formValues so they are not part of the submission call to the submit action
-      const { formValuesWithoutFileContent, fileObjsRef, fileChecksums } =
-        await copyObjectExcludingFileContent(formValues);
+      const { formValuesWithoutFileContent, fileObjsRef } =
+        copyObjectExcludingFileContent(formValues);
 
+      const fileChecksums = await generateFileChecksums(fileObjsRef);
       let submitProgress = 0;
       let progressInterval: NodeJS.Timeout | undefined = undefined;
 
