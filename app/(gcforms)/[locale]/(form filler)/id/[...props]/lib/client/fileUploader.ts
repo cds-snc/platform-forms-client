@@ -29,7 +29,7 @@ export const isFileInputResponse = (response: unknown): response is FileInputRes
   );
 };
 
-export const copyObjectExcludingFileContent = (
+export const copyObjectExcludingFileContent = async (
   originalObject: Responses,
   fileObjsRef: Record<string, FileInput> = {}
 ) => {
@@ -66,7 +66,7 @@ export const copyObjectExcludingFileContent = (
   filterFileContent(originalObject, formValuesWithoutFileContent);
 
   // Calculate checksums for all files key / value pairs
-  const fileChecksums = generateFileChecksums(fileObjsRef);
+  const fileChecksums = await generateFileChecksums(fileObjsRef);
 
   return { formValuesWithoutFileContent, fileObjsRef, fileChecksums };
 };

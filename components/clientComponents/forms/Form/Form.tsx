@@ -301,7 +301,7 @@ export const Form = withFormik<FormProps, Responses>({
 
       // Extract file content from formValues so they are not part of the submission call to the submit action
       const { formValuesWithoutFileContent, fileObjsRef, fileChecksums } =
-        copyObjectExcludingFileContent(formValues);
+        await copyObjectExcludingFileContent(formValues);
 
       let submitProgress = 0;
       let progressInterval: NodeJS.Timeout | undefined = undefined;
