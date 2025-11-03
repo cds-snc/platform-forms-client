@@ -3,7 +3,7 @@ import { formNonElementValues, emptyForm, emptyFormRepeatingSet, nonEmptyFormSub
 import { flattenStructureToValues, stripExcludedKeys } from "../helpers";
 
 
-describe("Remove non-value keys from form values", () => {
+describe("stripExcludedKeys() test - Remove non-value keys from form values", () => {
   it("should remove non-value keys from form values object", () => {
     const expectedResult = {
       "3": "",
@@ -20,7 +20,7 @@ describe("Remove non-value keys from form values", () => {
   });
 })
 
-describe("Emty form", () => {
+describe("flattenStructureToValues() test - Emty form", () => {
   it("should return a list of empty values for an empty form", () => {
     const expectedResult = ["",  "", null, null, null, "", "",  "", "",  "", ""];
     const elementValues = flattenStructureToValues(emptyForm);
@@ -34,7 +34,7 @@ describe("Emty form", () => {
   });
 });
 
-describe("Non-Empty form", () => {
+describe("flattenStructureToValues() test - Non-Empty form", () => {
   it("should return a non-empty list for a form with a group page with a value", () => {
     const expectedResult = ["1", "", null, null, null, "", "", "", "Page A", "", ""];
     const elementValues = flattenStructureToValues(nonEmptyFormSubPageValue);
