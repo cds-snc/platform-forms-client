@@ -37,6 +37,7 @@ interface ResponsesContextType {
   setSelectedFormats: Dispatch<SetStateAction<string[]>>;
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
+  resetState: () => void;
 }
 
 const ResponsesContext = createContext<ResponsesContextType | undefined>(undefined);
@@ -157,6 +158,18 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
     [apiClient, directoryHandle, newFormSubmissions, userKey]
   );
 
+  const resetState = useCallback(() => {
+    setUserKey(null);
+    setApiClient(null);
+    setDirectoryHandle(null);
+    setCsvFileHandle(null);
+    setNewFormSubmissions(null);
+    setProcessedSubmissionIds(new Set());
+    setProcessingCompleted(false);
+    setSelectedFormats([]);
+    setInterrupt(false);
+  }, [setInterrupt]);
+
   return (
     <ResponsesContext.Provider
       value={{
@@ -180,6 +193,7 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
         setSelectedFormats,
         interrupt,
         setInterrupt,
+        resetState,
       }}
     >
       {children}

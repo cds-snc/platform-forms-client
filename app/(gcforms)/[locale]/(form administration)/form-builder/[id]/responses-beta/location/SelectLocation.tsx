@@ -26,7 +26,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
   const router = useRouter();
   const { t } = useTranslation("response-api");
 
-  const { apiClient, directoryHandle, setDirectoryHandle, setCsvFileHandle } =
+  const { apiClient, directoryHandle, setDirectoryHandle, setCsvFileHandle, resetState } =
     useResponsesContext();
 
   const setDirectory = useCallback(
@@ -80,7 +80,12 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       )}
 
       <div className="flex flex-row gap-4">
-        <LinkButton.Secondary href={`/${locale}/form-builder/${id}/responses-beta`}>
+        <LinkButton.Secondary
+          onClick={() => {
+            resetState();
+          }}
+          href={`/${locale}/form-builder/${id}/responses-beta`}
+        >
           {t("backButton")}
         </LinkButton.Secondary>
         <Button theme="primary" disabled={!directoryHandle} onClick={handleNext}>
