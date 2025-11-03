@@ -62,7 +62,7 @@
     "chooseLocationButton": "Choose location",
     "csvDetected": {
       "title": "Fichier CSV détecté",
-      "message": "Un fichier CSV existant a été trouvé dans le dossier"
+      "message": "Un fichier CSV existant a été trouvé dans le dossier sélectionné."
     }
   },
   "confirmationPage": {
