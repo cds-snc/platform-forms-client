@@ -10,6 +10,17 @@ import { DirectoryPicker } from "./DirectoryPicker";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
 import { initCsv } from "../lib/csvWriter";
+import { toast } from "../../../components/shared/Toast";
+
+const CsvDetected = () => {
+  const { t } = useTranslation("response-api");
+  return (
+    <div className="w-full">
+      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("locationPage.csvDetected.title")}</h3>
+      <p className="mb-2 text-black">{t("locationPage.csvDetected.message")}</p>
+    </div>
+  );
+};
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
   const router = useRouter();
@@ -30,9 +41,17 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       const formTemplate = await apiClient?.getFormTemplate();
 
       // Initialize CSV file as needed in the selected directory
-      const csvFileHandle = await initCsv({ formId, dirHandle: handle, formTemplate });
+      const result = await initCsv({ formId, dirHandle: handle, formTemplate });
+
+      const csvFileHandle = result && result.handle;
 
       setCsvFileHandle(csvFileHandle ?? null);
+
+      const csvExists = result && !result.created;
+
+      if (csvExists) {
+        toast.success(<CsvDetected />, "wide");
+      }
     },
     [apiClient, setDirectoryHandle, setCsvFileHandle]
   );

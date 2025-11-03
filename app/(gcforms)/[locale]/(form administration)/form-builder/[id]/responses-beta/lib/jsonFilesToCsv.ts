@@ -118,7 +118,13 @@ export const jsonFilesToCsv = async ({
     let recordsAdded = 0;
 
     // Initialize CSV file as needed in the selected directory
-    const csvFileHandle = await initCsv({ formId, dirHandle: directoryHandle, formTemplate });
+    const result = await initCsv({
+      formId,
+      dirHandle: directoryHandle,
+      formTemplate,
+    });
+
+    const csvFileHandle = result && result.handle;
 
     if (!csvFileHandle) {
       // eslint-disable-next-line no-console

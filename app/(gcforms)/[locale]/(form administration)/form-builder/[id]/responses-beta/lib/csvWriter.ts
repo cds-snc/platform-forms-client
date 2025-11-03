@@ -28,7 +28,7 @@ export const initCsv = async ({
 
   if (!created) {
     // File already exists, no need to initialize
-    return handle;
+    return { handle, created };
   }
 
   const sortedElements = orderElements({ formTemplate });
@@ -48,7 +48,7 @@ export const initCsv = async ({
   await writable?.write(headerString);
   await writable?.close();
 
-  return handle;
+  return { handle, created };
 };
 
 export const writeSubmissionsToCsv = async ({
