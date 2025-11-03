@@ -31,6 +31,7 @@ const NON_VALUE_FORM_ELEMENTS = new Set([
   ...Object.values(LOCKED_GROUPS),
   "currentGroup",
   "groupHistory",
+  "matchedIds",
 ]);
 
 // Removes non-value keys from a form values object
