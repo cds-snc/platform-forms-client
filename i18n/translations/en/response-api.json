@@ -39,7 +39,7 @@
     "noNewResponsesDetail": "There are currently no new responses for this form.",
     "newResponsesAvailable": "New responses available",
     "backToStart": "Back to start",
-    "downloadResponses": "Download responses",
+    "downloadResponses": "Choose location",
     "uploadSuccessTitle": "API key was successfully uploaded",
     "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
     "uploadFailedTitle": "API key upload failed",
