@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
@@ -17,6 +17,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
   const { t } = useTranslation("response-api");
 
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { apiClient, retrieveResponses, setApiClient, setUserKey, newFormSubmissions, resetState } =
     useResponsesContext();
 
@@ -41,6 +42,19 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       mounted = false;
     };
   }, [didSetUserKey, retrieveResponses]);
+
+  // If navigation included ?reset=true, call resetState now (after navigation) and remove the param
+  useEffect(() => {
+    const shouldReset = searchParams?.get("reset") === "true";
+    if (!shouldReset) return;
+
+    // clear state now to avoid flashing when arriving from SelectLocation
+    resetState();
+
+    // remove reset param without adding history
+    const cleanUrl = `/${locale}/form-builder/${id}/responses-beta/load-key`;
+    router.replace(cleanUrl);
+  }, [searchParams, resetState, router, locale, id]);
 
   const handleBack = () => {
     resetState();

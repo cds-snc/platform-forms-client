@@ -26,7 +26,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
   const router = useRouter();
   const { t } = useTranslation("response-api");
 
-  const { apiClient, directoryHandle, setDirectoryHandle, setCsvFileHandle, resetState } =
+  const { apiClient, directoryHandle, setDirectoryHandle, setCsvFileHandle } =
     useResponsesContext();
 
   const setDirectory = useCallback(
@@ -57,8 +57,8 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
   );
 
   const handleBack = () => {
-    resetState();
-    router.push(`/${locale}/form-builder/${id}/responses-beta/load-key`);
+    // navigate back and indicate caller should reset state after navigation to avoid flashing
+    router.push(`/${locale}/form-builder/${id}/responses-beta/load-key?reset=true`);
   };
 
   const handleNext = () => {
