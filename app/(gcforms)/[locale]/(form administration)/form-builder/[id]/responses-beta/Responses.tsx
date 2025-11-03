@@ -1,14 +1,14 @@
 import Image from "next/image";
-import { useResponsesContext } from "../context/ResponsesContext";
+import { useResponsesContext } from "./context/ResponsesContext";
 import { useTranslation } from "@i18n/client";
 
 import Skeleton from "react-loading-skeleton";
 
-export const Responses = ({ hasCheckedForResponses }: { hasCheckedForResponses: boolean }) => {
+export const Responses = () => {
   const { newFormSubmissions } = useResponsesContext();
   const { t } = useTranslation("response-api");
 
-  if (!hasCheckedForResponses) {
+  if (newFormSubmissions === null) {
     return (
       <>
         <Skeleton count={1} className="h-[40px]" />{" "}

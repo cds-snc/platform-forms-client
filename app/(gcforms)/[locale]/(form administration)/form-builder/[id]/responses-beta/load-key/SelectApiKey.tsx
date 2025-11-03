@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 
@@ -10,7 +10,7 @@ import { LoadKey } from "./LoadKey";
 import { getAccessTokenFromApiKey } from "../lib/utils";
 import { showOpenFilePicker } from "native-file-system-adapter";
 import { GCFormsApiClient } from "../lib/apiClient";
-import { Responses } from "./Responses";
+import { Responses } from "../Responses";
 import { LostKeyLink, LostKeyPopover } from "./LostKeyPopover";
 
 export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => {
@@ -20,28 +20,6 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
   const searchParams = useSearchParams();
   const { apiClient, retrieveResponses, setApiClient, setUserKey, newFormSubmissions, resetState } =
     useResponsesContext();
-
-  const [hasCheckedForResponses, setHasCheckedForResponses] = useState(false);
-  const [didSetUserKey, setDidSetUserKey] = useState(false);
-
-  // When we set the user key, run retrieveResponses afterwards (acts as a "callback" to the setter)
-  useEffect(() => {
-    if (!didSetUserKey) return;
-
-    let mounted = true;
-    (async () => {
-      try {
-        await retrieveResponses();
-        if (mounted) setHasCheckedForResponses(true);
-      } finally {
-        if (mounted) setDidSetUserKey(false);
-      }
-    })();
-
-    return () => {
-      mounted = false;
-    };
-  }, [didSetUserKey, retrieveResponses]);
 
   // If navigation included ?reset=true, call resetState now (after navigation) and remove the param
   useEffect(() => {
@@ -55,6 +33,10 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     const cleanUrl = `/${locale}/form-builder/${id}/responses-beta/load-key`;
     router.replace(cleanUrl);
   }, [searchParams, resetState, router, locale, id]);
+
+  useEffect(() => {
+    void retrieveResponses();
+  }, [apiClient, retrieveResponses]);
 
   const handleBack = () => {
     resetState();
@@ -90,7 +72,6 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       );
 
       setUserKey(keyFile);
-      setDidSetUserKey(true);
 
       return true;
     } catch (error) {
@@ -112,7 +93,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         </div>
       )}
 
-      {apiClient && <Responses hasCheckedForResponses={hasCheckedForResponses} />}
+      {apiClient && <Responses />}
 
       <div className="mt-8 flex flex-row gap-4">
         <Button theme="secondary" onClick={handleBack}>

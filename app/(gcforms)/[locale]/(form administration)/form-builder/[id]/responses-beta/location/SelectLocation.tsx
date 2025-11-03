@@ -1,6 +1,6 @@
 "use client";
-import { useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
@@ -24,6 +24,8 @@ const CsvDetected = () => {
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const { t } = useTranslation("response-api");
 
   const { apiClient, directoryHandle, setDirectoryHandle, setCsvFileHandle } =
@@ -64,6 +66,18 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
   const handleNext = () => {
     router.push(`/${locale}/form-builder/${id}/responses-beta/format`);
   };
+
+  useEffect(() => {
+    const shouldReset = searchParams?.get("reset") === "true";
+    if (!shouldReset) return;
+
+    setDirectoryHandle(null);
+    setCsvFileHandle(null);
+
+    // remove reset param without adding history
+    const cleanUrl = `/${locale}/form-builder/${id}/responses-beta/location`;
+    router.replace(cleanUrl);
+  }, [id, locale, router, searchParams, setCsvFileHandle, setDirectoryHandle]);
 
   if (!apiClient) {
     return (

@@ -66,14 +66,13 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
       interruptRef.current = nextValue;
       return nextValue;
     });
-    setNewFormSubmissions([]);
+    setNewFormSubmissions(null);
   }, []);
 
   const interrupt = interruptState;
 
   const retrieveResponses = useCallback(async () => {
     if (!apiClient) {
-      setNewFormSubmissions([]);
       return [];
     }
 
@@ -159,7 +158,7 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
         }
       }
 
-      setNewFormSubmissions([]);
+      setNewFormSubmissions(null);
       setProcessingCompleted(true);
     },
     [apiClient, directoryHandle, newFormSubmissions, userKey]
