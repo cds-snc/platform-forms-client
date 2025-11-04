@@ -99,21 +99,29 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         </div>
       )}
 
-      {apiClient && <Responses />}
+      {apiClient && (
+        <div>
+          <Responses
+            actions={
+              <div className="mt-8 flex flex-row gap-4">
+                <Button theme="secondary" onClick={handleBack}>
+                  {t("loadKeyPage.backToStart")}
+                </Button>
 
-      <div className="mt-8 flex flex-row gap-4">
-        <Button theme="secondary" onClick={handleBack}>
-          {t("loadKeyPage.backToStart")}
-        </Button>
-
-        <Button
-          theme="primary"
-          disabled={Boolean(!apiClient || (newFormSubmissions && newFormSubmissions.length === 0))}
-          onClick={handleNext}
-        >
-          {t("loadKeyPage.downloadResponses")}
-        </Button>
-      </div>
+                <Button
+                  theme="primary"
+                  disabled={Boolean(
+                    !apiClient || (newFormSubmissions && newFormSubmissions.length === 0)
+                  )}
+                  onClick={handleNext}
+                >
+                  {t("continueButton")}
+                </Button>
+              </div>
+            }
+          />
+        </div>
+      )}
     </div>
   );
 };
