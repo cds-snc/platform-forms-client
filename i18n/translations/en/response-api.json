@@ -1,9 +1,9 @@
 {
-  "section-title": "Responses Pilot",
+  "section-title": "Responses (Pilot)",
   "stepOf": "Step {{current}} of {{total}}",
   "not-supported": {
-    "title": "Not Supported",
-    "body": "This browser does not support the File System Access API."
+    "title": "Not supported",
+    "body": "This browser does not support the File System Access API. Try a different web browser or give your browser permission to save files to your device."
   },
   "startPage": {
     "intro": "Get responses in fewer steps with a form API key.",
@@ -43,7 +43,7 @@
     "uploadSuccessTitle": "API key was successfully uploaded",
     "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
     "uploadFailedTitle": "API key upload failed",
-    "uploadFailedMessage": "Make sure you selected the correct file. If it's not working, try regenerating a new API key and try uploading again.",
+    "uploadFailedMessage": "Make sure you selected the correct file. If it's not working, try regenerating a new API key and uploading it again.",
     "lostKey": {
       "link": "Lost API key?",
       "lostKeyTip": {
