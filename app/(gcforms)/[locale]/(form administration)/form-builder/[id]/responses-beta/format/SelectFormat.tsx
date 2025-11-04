@@ -69,9 +69,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
         </div>
       </div>
       <div className="flex flex-row gap-4">
-        <Button theme="secondary" onClick={handleBack}>
-          Back
-        </Button>
+        <Button theme="secondary" onClick={handleBack}></Button>
         <Button theme="primary" disabled={selectedFormats.length === 0} onClick={handleNext}>
           Next
         </Button>
