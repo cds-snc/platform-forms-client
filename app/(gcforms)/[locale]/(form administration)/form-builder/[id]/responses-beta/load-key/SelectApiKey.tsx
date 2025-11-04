@@ -89,7 +89,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
   const actions = (
     <div className="mt-8 flex flex-row gap-4">
       <Button theme="secondary" onClick={handleBack}>
-        {t("loadKeyPage.backToStart")}
+        {t("backToStart")}
       </Button>
 
       <Button
