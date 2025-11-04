@@ -87,12 +87,16 @@ export const FormWrapper = ({
   useUpdateHeadTitle(getPageTitle(), isMultiPageForm);
 
   const isEmptyForm = useMemo(() => {
-    if (!savedValues) {
-      return false;
+    try {
+      if (!savedValues) {
+        return false;
+      }
+      const elements = stripExcludedKeys(savedValues.values || {});
+      const elementValues = flattenStructureToValues(elements);
+      return elementValues.join("") === "";
+    } catch (e) {
+      return true;
     }
-    const elements = stripExcludedKeys(savedValues.values || {});
-    const elementValues = flattenStructureToValues(elements);
-    return elementValues.join("") === "";
   }, [savedValues]);
 
   useEffect(() => {

@@ -7,7 +7,7 @@ export const flattenStructureToValues = (root: unknown): JsonPrimitive[] => {
   const out: JsonPrimitive[] = [];
   const visit = (node: unknown): void => {
     if (
-      node === null || // Include file objects
+      node === null || // Guards against reaching below if object e.g. File placeholder uses null for some values
       typeof node === "string"
     ) {
       out.push(node);
