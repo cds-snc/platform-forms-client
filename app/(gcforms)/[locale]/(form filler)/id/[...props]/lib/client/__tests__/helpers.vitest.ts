@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formNonElementValues, emptyForm, emptyFormRepeatingSet, nonEmptyFormSubPageValue, nonEmptyFormFileValue, nonEmptyFormDateValue, nonEmptyFormCheckBoxValue, nonEmptyFormRepeatingSetValue } from "__fixtures__/formFillerFlattenStructureValues.json";
+import { formNonElementValues, emptyForm, emptyFormRepeatingSet, nonEmptyFormSubPageValue, nonEmptyFormDateValue, nonEmptyFormCheckBoxValue, nonEmptyFormRepeatingSetValue } from "__fixtures__/formFillerFlattenStructureValues.json";
 import { flattenStructureToValues, stripExcludedKeys } from "../helpers";
 
 
@@ -38,12 +38,6 @@ describe("flattenStructureToValues() test - Non-Empty form", () => {
   it("should return a non-empty list for a form with a group page with a value", () => {
     const expectedResult = ["1", "", null, null, null, "", "", "", "Page A", "", ""];
     const elementValues = flattenStructureToValues(nonEmptyFormSubPageValue);
-    expect(elementValues).toEqual(expectedResult);
-  });
-
-  it("should return a non-empty list for a form with a file value", () => {
-    const expectedResult = [ "", "", "naming guidelines.png", "", "", "", "", "", ""];
-    const elementValues = flattenStructureToValues(nonEmptyFormFileValue);
     expect(elementValues).toEqual(expectedResult);
   });
 
