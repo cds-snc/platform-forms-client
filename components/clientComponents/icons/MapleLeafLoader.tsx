@@ -26,7 +26,7 @@ export const MapleLeafLoader = ({
           >
             <path
               className="maple-leaf-loader"
-              strokeWidth={0.5}
+              strokeWidth={1}
               fill="none"
               stroke="#000"
               strokeLinecap="round"

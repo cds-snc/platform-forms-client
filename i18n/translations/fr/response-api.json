@@ -74,10 +74,11 @@
     "checkForNewResponsesButton": "[FR] Check for new responses"
   },
   "processingPage": {
-    "processingTitle": "Download in progress",
-    "processingMessage": "Processing {{count}} responses...",
-    "cancelButton": "Cancel download",
-    "note": "For large downloads, this can take some time."
+    "processingTitle": "Téléchargement en cours",
+    "pleaseWait": "Veuillez patienter...",
+    "processingMessage": "Traitement de {{count}} réponses...",
+    "cancelButton": "Mettre en pause le téléchargement",
+    "note": "Pour les téléchargements volumineux, cela peut prendre un certain temps."
   },
   "backButton": "Retour",
   "continueButton": "Continuer",

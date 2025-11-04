@@ -74,8 +74,9 @@
   },
   "processingPage": {
     "processingTitle": "Download in progress",
+    "pleaseWait": "Please wait...",
     "processingMessage": "Processing {{count}} responses...",
-    "cancelButton": "Cancel download",
+    "cancelButton": "Pause download",
     "note": "For large downloads, this can take some time."
   },
   "backButton": "Back",

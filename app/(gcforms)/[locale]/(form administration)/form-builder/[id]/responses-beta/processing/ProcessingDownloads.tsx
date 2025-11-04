@@ -11,13 +11,8 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   const router = useRouter();
   const { t } = useTranslation("response-api");
 
-  const {
-    processedSubmissionIds,
-    processingCompleted,
-    setInterrupt,
-    interrupt,
-    resetNewSubmissions,
-  } = useResponsesContext();
+  const { processingCompleted, setInterrupt, interrupt, resetNewSubmissions } =
+    useResponsesContext();
 
   useEffect(() => {
     if (processingCompleted) {
@@ -34,30 +29,21 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
     resetNewSubmissions();
   };
 
-  // @TODO: handle direct visit if processing is not running, redirect somewhere?
-
   return (
     <div>
-      <h2>{t("processingPage.processingTitle")}</h2>
-      <div className="my-8">
-        <div className="flex justify-start">
-          <MapleLeafLoader
-            message={`Processing ${processedSubmissionIds.size} responses...`}
-            width={300}
-            height={350}
-          />
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="mb-4 text-2xl font-semibold">{t("processingPage.processingTitle")}</h2>
+          <p className="mb-4 text-xl">{t("processingPage.pleaseWait")}</p>
+          <p className="mb-8">{t("processingPage.note")}</p>
+          {!interrupt && (
+            <Button theme="secondary" onClick={handleInterrupt}>
+              {t("processingPage.cancelButton")}
+            </Button>
+          )}
         </div>
-        <p>{t("processingPage.note")}</p>
+        <MapleLeafLoader />
       </div>
-      {!interrupt && (
-        <Button theme="secondary" onClick={handleInterrupt}>
-          {t("processingPage.cancelButton")}
-        </Button>
-      )}
-      <p className="hidden">
-        Status:
-        {interrupt ? "interrupting..." : processingCompleted ? "complete" : "processing..."}
-      </p>
     </div>
   );
 };
