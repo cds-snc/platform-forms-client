@@ -1,3 +1,5 @@
+"use client";
+
 import { Spinner } from "@clientComponents/forms/SubmitProgress/Spinner";
 
 export const ContentPlaceholder = () => {
