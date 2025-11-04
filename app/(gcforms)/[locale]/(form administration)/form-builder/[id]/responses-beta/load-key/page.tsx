@@ -22,9 +22,5 @@ export default async function Page(props: {
   const params = await props.params;
 
   const { locale, id } = params;
-  return (
-    <div>
-      <SelectApiKey locale={locale} id={id} />
-    </div>
-  );
+  return <SelectApiKey locale={locale} id={id} />;
 }

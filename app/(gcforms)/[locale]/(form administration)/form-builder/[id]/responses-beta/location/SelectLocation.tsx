@@ -58,11 +58,6 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
     [apiClient, setDirectoryHandle, setCsvFileHandle]
   );
 
-  const handleBack = () => {
-    // navigate back and indicate caller should reset state after navigation to avoid flashing
-    router.push(`/${locale}/form-builder/${id}/responses-beta/load-key?reset=true`);
-  };
-
   const handleNext = () => {
     router.push(`/${locale}/form-builder/${id}/responses-beta/format`);
   };
@@ -109,9 +104,11 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       )}
 
       <div className="flex flex-row gap-4">
-        <Button theme="secondary" onClick={handleBack}>
-          Back
-        </Button>
+        <LinkButton.Secondary
+          href={`/${locale}/form-builder/${id}/responses-beta/load-key?reset=true`}
+        >
+          {t("backButton")}
+        </LinkButton.Secondary>
         <Button theme="primary" disabled={!directoryHandle} onClick={handleNext}>
           {t("continueButton")}
         </Button>
