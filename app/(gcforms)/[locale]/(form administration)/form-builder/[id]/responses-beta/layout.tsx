@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { ResponsesProvider } from "./context/ResponsesContext";
 import { ContentWrapper } from "./ContentWrapper";
 import { BetaBadge } from "@root/components/clientComponents/globals/BetaBadge";
+import { CompatibilityGuard } from "./components/CompatibilityGuard";
 
 export default async function ResponsesLayout(props: {
   children: React.ReactNode;
@@ -31,9 +32,11 @@ export default async function ResponsesLayout(props: {
 
   return (
     <ResponsesProvider>
-      <h1 className="mb-4">{t("section-title")}</h1>
-      <BetaBadge className="mb-8" />
-      <ContentWrapper>{props.children}</ContentWrapper>
+      <CompatibilityGuard locale={locale} id={id}>
+        <h1 className="mb-4">{t("section-title")}</h1>
+        <BetaBadge className="mb-8" />
+        <ContentWrapper>{props.children}</ContentWrapper>
+      </CompatibilityGuard>
     </ResponsesProvider>
   );
 }

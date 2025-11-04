@@ -2,8 +2,6 @@ import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
-import { SystemCheck } from "./SystemCheck";
-
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
@@ -27,7 +25,6 @@ export default async function Page(props: {
 
   return (
     <div>
-      <SystemCheck locale={locale} id={id} />
       <p className="mb-4 text-xl">{t("startPage.intro")}</p>
       <h3 className="mt-6 text-lg font-semibold">{t("startPage.beforeStart.heading")}</h3>
       <div className="mb-8">
