@@ -18,8 +18,8 @@ import { writeSubmissionsToCsv } from "../lib/csvWriter";
 
 interface ResponsesContextType {
   isCompatible: boolean;
-  userKey: PrivateApiKey | null;
-  setUserKey: Dispatch<SetStateAction<PrivateApiKey | null>>;
+  privateApiKey: PrivateApiKey | null;
+  setPrivateApiKey: Dispatch<SetStateAction<PrivateApiKey | null>>;
   apiClient: GCFormsApiClient | null;
   setApiClient: Dispatch<SetStateAction<GCFormsApiClient | null>>;
   directoryHandle: FileSystemDirectoryHandle | null;
@@ -48,7 +48,7 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
     () => typeof window !== "undefined" && "showOpenFilePicker" in window
   );
 
-  const [userKey, setUserKey] = useState<PrivateApiKey | null>(null);
+  const [privateApiKey, setPrivateApiKey] = useState<PrivateApiKey | null>(null);
   const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [csvFileHandle, setCsvFileHandle] = useState<FileSystemFileHandle | null>(null);
@@ -103,7 +103,7 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
             if (interruptRef.current) {
               break;
             }
-            if (!directoryHandle || !userKey || !apiClient) {
+            if (!directoryHandle || !privateApiKey || !apiClient) {
               // Optionally handle the error or prompt the user
               break;
             }
@@ -112,7 +112,7 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
             const { submissionData } = await downloadAndConfirmFormSubmissions(
               directoryHandle as FileSystemDirectoryHandle,
               apiClient,
-              userKey,
+              privateApiKey,
               subArray
             );
 
@@ -161,11 +161,11 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
       setNewFormSubmissions(null);
       setProcessingCompleted(true);
     },
-    [apiClient, directoryHandle, newFormSubmissions, userKey]
+    [apiClient, directoryHandle, newFormSubmissions, privateApiKey]
   );
 
   const resetState = useCallback(() => {
-    setUserKey(null);
+    setPrivateApiKey(null);
     setApiClient(null);
     setDirectoryHandle(null);
     setCsvFileHandle(null);
@@ -180,8 +180,8 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
     <ResponsesContext.Provider
       value={{
         isCompatible,
-        userKey,
-        setUserKey,
+        privateApiKey,
+        setPrivateApiKey,
         apiClient,
         setApiClient,
         directoryHandle,

@@ -18,8 +18,14 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { apiClient, retrieveResponses, setApiClient, setUserKey, newFormSubmissions, resetState } =
-    useResponsesContext();
+  const {
+    apiClient,
+    retrieveResponses,
+    setApiClient,
+    setPrivateApiKey,
+    newFormSubmissions,
+    resetState,
+  } = useResponsesContext();
 
   // If navigation included ?reset=true, call resetState now (after navigation) and remove the param
   useEffect(() => {
@@ -71,14 +77,14 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
       );
 
-      setUserKey(keyFile);
+      setPrivateApiKey(keyFile);
 
       return true;
     } catch (error) {
       // no-op
       return false;
     }
-  }, [setApiClient, setUserKey]);
+  }, [setApiClient, setPrivateApiKey]);
 
   return (
     <div>
