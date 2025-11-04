@@ -10,45 +10,47 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
 
   if (newFormSubmissions === null) {
     return (
-      <>
-        <Skeleton count={1} className="h-[40px]" />{" "}
-        <Skeleton count={1} className="h-[200px] w-[250px]" />
-      </>
+      <div className="mb-8 rounded-2xl border-2 border-gray-300 bg-white p-8">
+        <div className="flex items-center justify-between">
+          <div className="w-2/3">
+            <Skeleton className="mb-6 h-10 w-3/4" />
+          </div>
+          <div className="h-[196px] w-[218px]">
+            <Skeleton style={{ height: "100%", width: "100%" }} />
+          </div>
+        </div>
+      </div>
     );
   }
 
   return newFormSubmissions && newFormSubmissions.length > 0 ? (
-    <div>
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="mb-8">{t("loadKeyPage.newResponsesAvailable")}</h2>
-          {actions}
-        </div>
-        <div>
-          <Image
-            src="/img/api-new-responses.svg"
-            alt={t("loadKeyPage.newResponsesAvailable")}
-            width={218}
-            height={196}
-          />
-        </div>
+    <div className="flex items-center justify-between">
+      <div>
+        <h2 className="mb-8">{t("loadKeyPage.newResponsesAvailable")}</h2>
+        {actions}
+      </div>
+      <div>
+        <Image
+          src="/img/api-new-responses.svg"
+          alt={t("loadKeyPage.newResponsesAvailable")}
+          width={218}
+          height={196}
+        />
       </div>
     </div>
   ) : (
-    <div>
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="mb-8">{t("loadKeyPage.noNewResponsesAvailable")}</h2>
-          {actions}
-        </div>
-        <div>
-          <Image
-            src="/img/api-no-responses.svg"
-            alt={t("loadKeyPage.noNewResponsesAvailable")}
-            width={218}
-            height={196}
-          />
-        </div>
+    <div className="flex items-center justify-between">
+      <div>
+        <h2 className="mb-8">{t("loadKeyPage.noNewResponsesAvailable")}</h2>
+        {actions}
+      </div>
+      <div>
+        <Image
+          src="/img/api-no-responses.svg"
+          alt={t("loadKeyPage.noNewResponsesAvailable")}
+          width={218}
+          height={196}
+        />
       </div>
     </div>
   );

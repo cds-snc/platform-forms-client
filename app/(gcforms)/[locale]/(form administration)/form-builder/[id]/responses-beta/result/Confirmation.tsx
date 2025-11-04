@@ -96,7 +96,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
       )}
       <div className="flex flex-row gap-4">
         <Button theme="secondary" onClick={handleGoBack}>
-          Go back
+          {t("backToStart")}
         </Button>
         <Button theme="primary" onClick={handleCheck}>
           {t("confirmationPage.checkForNewResponsesButton")}

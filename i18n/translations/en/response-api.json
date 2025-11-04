@@ -39,7 +39,6 @@
     "noNewResponsesDetail": "There are currently no new responses for this form.",
     "newResponsesAvailable": "New responses available",
     "checkForNewResponses": "Check for new responses",
-    "backToStart": "Back to start",
     "downloadResponses": "Choose location",
     "uploadSuccessTitle": "API key was successfully uploaded",
     "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
@@ -74,11 +73,13 @@
   },
   "processingPage": {
     "processingTitle": "Download in progress",
+    "pleaseWait": "Please wait...",
     "processingMessage": "Processing {{count}} responses...",
-    "cancelButton": "Cancel download",
+    "cancelButton": "Pause download",
     "note": "For large downloads, this can take some time."
   },
   "backButton": "Back",
+  "backToStart": "Back to start",
   "continueButton": "Continue",
   "failed-to-load-api-key": "API key failed to load"
 }

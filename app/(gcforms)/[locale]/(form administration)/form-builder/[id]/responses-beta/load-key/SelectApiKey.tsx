@@ -86,6 +86,22 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     }
   }, [setApiClient, setPrivateApiKey]);
 
+  const actions = (
+    <div className="mt-8 flex flex-row gap-4">
+      <Button theme="secondary" onClick={handleBack}>
+        {t("backToStart")}
+      </Button>
+
+      <Button
+        theme="primary"
+        disabled={Boolean(!apiClient || (newFormSubmissions && newFormSubmissions.length === 0))}
+        onClick={handleNext}
+      >
+        {t("continueButton")}
+      </Button>
+    </div>
+  );
+
   return (
     <div>
       {!apiClient && (
@@ -96,32 +112,11 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
           <LoadKey onLoadKey={handleLoadApiKey} />
           <LostKeyLink />
           <LostKeyPopover locale={locale} id={id} />
+          {actions}
         </div>
       )}
 
-      {apiClient && (
-        <div>
-          <Responses
-            actions={
-              <div className="mt-8 flex flex-row gap-4">
-                <Button theme="secondary" onClick={handleBack}>
-                  {t("loadKeyPage.backToStart")}
-                </Button>
-
-                <Button
-                  theme="primary"
-                  disabled={Boolean(
-                    !apiClient || (newFormSubmissions && newFormSubmissions.length === 0)
-                  )}
-                  onClick={handleNext}
-                >
-                  {t("continueButton")}
-                </Button>
-              </div>
-            }
-          />
-        </div>
-      )}
+      {apiClient && <Responses actions={actions} />}
     </div>
   );
 };

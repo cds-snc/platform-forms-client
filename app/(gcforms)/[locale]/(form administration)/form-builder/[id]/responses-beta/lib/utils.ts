@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import axios from "axios";
 import { SignJWT } from "jose";
-import md5 from "md5";
+import { md5 } from "hash-wasm";
 import { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
 import type { IGCFormsApiClient } from "./IGCFormsApiClient";
@@ -260,9 +260,7 @@ const integrityCheckAndConfirm = async (
     }: { answers: string; checksum: string; confirmationCode: string } = JSON.parse(fileContent);
     // Calculate checksum
 
-    const calculatedChecksum = md5(answers, { asBytes: true })
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
+    const calculatedChecksum = await md5(answers);
 
     if (calculatedChecksum !== checksum) {
       throw new Error(`Checksum mismatch for submission ${submissionName}.`);
