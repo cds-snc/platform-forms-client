@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
 import { SelectFormat } from "./SelectFormat";
+import { ApiClientGuard } from "../guards/ApiClientGuard";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -24,7 +25,9 @@ export default async function Page(props: {
   const { locale, id } = params;
   return (
     <div>
-      <SelectFormat locale={locale} id={id} />
+      <ApiClientGuard locale={locale} id={id}>
+        <SelectFormat locale={locale} id={id} />
+      </ApiClientGuard>
     </div>
   );
 }

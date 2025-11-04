@@ -1,17 +1,16 @@
 "use client";
 
-import { Alert, Button } from "@clientComponents/globals";
+import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { Checkbox } from "../../../components/shared/MultipleChoice";
 import { useRouter } from "next/navigation";
 import { ChangeEvent } from "react";
 import { useTranslation } from "@root/i18n/client";
-import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { t } = useTranslation("response-api");
 
-  const { setSelectedFormats, selectedFormats, retrieveResponses, processResponses, apiClient } =
+  const { setSelectedFormats, selectedFormats, retrieveResponses, processResponses } =
     useResponsesContext();
 
   const router = useRouter();
@@ -42,22 +41,6 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
       return prev.filter((item) => item !== format);
     });
   };
-
-  if (!apiClient) {
-    return (
-      <div>
-        <Alert.Danger>
-          <Alert.Title headingTag="h3">No key</Alert.Title>
-          <p className="mb-2">You don&apos;t have a key selected </p>
-        </Alert.Danger>
-        <div className="mt-8 flex flex-row gap-4">
-          <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/load-key`}>
-            Go back
-          </LinkButton.Primary>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div>
