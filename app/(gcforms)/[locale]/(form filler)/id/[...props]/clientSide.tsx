@@ -16,6 +16,7 @@ import { showReviewPage } from "@root/lib/utils/form-builder/showReviewPage";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+import { flattenStructureToValues, stripExcludedKeys } from "./lib/client/helpers";
 
 export const FormWrapper = ({
   formRecord,
@@ -85,16 +86,29 @@ export const FormWrapper = ({
   const isMultiPageForm = showReviewPage(formRecord.form);
   useUpdateHeadTitle(getPageTitle(), isMultiPageForm);
 
+  const isEmptyForm = useMemo(() => {
+    try {
+      if (!savedValues) {
+        return false;
+      }
+      const elements = stripExcludedKeys(savedValues.values || {});
+      const elementValues = flattenStructureToValues(elements);
+      return elementValues.join("") === "";
+    } catch (e) {
+      return true;
+    }
+  }, [savedValues]);
+
   useEffect(() => {
     // Clear session storage after values are restored
     if (savedValues) {
       removeProgressStorage();
 
-      if (savedValues.language === language) {
+      if (savedValues.language === language && !isEmptyForm) {
         toast.success(formRestoredMessage, "public-facing-form");
       }
     }
-  }, [savedValues, formRestoredMessage, language]);
+  }, [savedValues, formRestoredMessage, language, isEmptyForm]);
 
   const initialValues = savedValues ? savedValues.values : undefined;
 
