@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
-import { Alert, Button } from "@clientComponents/globals";
+import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { DirectoryPicker } from "./DirectoryPicker";
 
@@ -73,22 +73,6 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
     const cleanUrl = `/${locale}/form-builder/${id}/responses-beta/location`;
     router.replace(cleanUrl);
   }, [id, locale, router, searchParams, setCsvFileHandle, setDirectoryHandle]);
-
-  if (!apiClient) {
-    return (
-      <div>
-        <Alert.Danger>
-          <Alert.Title headingTag="h3">No key</Alert.Title>
-          <p className="mb-2">You don&apos;t have a key selected </p>
-        </Alert.Danger>
-        <div className="mt-8 flex flex-row gap-4">
-          <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/load-key`}>
-            Go back
-          </LinkButton.Primary>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div>

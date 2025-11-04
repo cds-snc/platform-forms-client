@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { ResponsesProvider } from "./context/ResponsesContext";
 import { ContentWrapper } from "./ContentWrapper";
 import { BetaBadge } from "@root/components/clientComponents/globals/BetaBadge";
-import { CompatibilityGuard } from "./components/CompatibilityGuard";
+import { CompatibilityGuard } from "./guards/CompatibilityGuard";
 
 export default async function ResponsesLayout(props: {
   children: React.ReactNode;
