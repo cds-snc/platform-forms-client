@@ -10,10 +10,16 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
 
   if (newFormSubmissions === null) {
     return (
-      <>
-        <Skeleton count={1} className="h-[40px]" />{" "}
-        <Skeleton count={1} className="h-[200px] w-[250px]" />
-      </>
+      <div className="mb-8 rounded-2xl border-2 border-gray-300 bg-white p-8">
+        <div className="flex items-center justify-between">
+          <div className="w-2/3">
+            <Skeleton className="mb-6 h-10 w-3/4" />
+          </div>
+          <div className="h-[196px] w-[218px]">
+            <Skeleton style={{ height: "100%", width: "100%" }} />
+          </div>
+        </div>
+      </div>
     );
   }
 
