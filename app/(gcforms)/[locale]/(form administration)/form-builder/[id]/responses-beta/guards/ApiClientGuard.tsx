@@ -24,7 +24,11 @@ export function ApiClientGuard({
   }, [apiClient, locale, id, router]);
 
   if (!apiClient) {
-    return <Spinner />;
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <Spinner />
+      </div>
+    );
   }
 
   return <>{children}</>;
