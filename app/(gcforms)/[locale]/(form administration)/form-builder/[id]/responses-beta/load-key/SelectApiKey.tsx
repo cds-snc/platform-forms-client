@@ -116,11 +116,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         </div>
       )}
 
-      {apiClient && (
-        <div>
-          <Responses actions={actions} />
-        </div>
-      )}
+      {apiClient && <Responses actions={actions} />}
     </div>
   );
 };

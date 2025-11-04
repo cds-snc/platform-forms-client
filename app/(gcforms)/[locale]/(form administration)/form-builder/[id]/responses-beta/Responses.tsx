@@ -18,37 +18,33 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
   }
 
   return newFormSubmissions && newFormSubmissions.length > 0 ? (
-    <div>
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="mb-8">{t("loadKeyPage.newResponsesAvailable")}</h2>
-          {actions}
-        </div>
-        <div>
-          <Image
-            src="/img/api-new-responses.svg"
-            alt={t("loadKeyPage.newResponsesAvailable")}
-            width={218}
-            height={196}
-          />
-        </div>
+    <div className="flex items-center justify-between">
+      <div>
+        <h2 className="mb-8">{t("loadKeyPage.newResponsesAvailable")}</h2>
+        {actions}
+      </div>
+      <div>
+        <Image
+          src="/img/api-new-responses.svg"
+          alt={t("loadKeyPage.newResponsesAvailable")}
+          width={218}
+          height={196}
+        />
       </div>
     </div>
   ) : (
-    <div>
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="mb-8">{t("loadKeyPage.noNewResponsesAvailable")}</h2>
-          {actions}
-        </div>
-        <div>
-          <Image
-            src="/img/api-no-responses.svg"
-            alt={t("loadKeyPage.noNewResponsesAvailable")}
-            width={218}
-            height={196}
-          />
-        </div>
+    <div className="flex items-center justify-between">
+      <div>
+        <h2 className="mb-8">{t("loadKeyPage.noNewResponsesAvailable")}</h2>
+        {actions}
+      </div>
+      <div>
+        <Image
+          src="/img/api-no-responses.svg"
+          alt={t("loadKeyPage.noNewResponsesAvailable")}
+          width={218}
+          height={196}
+        />
       </div>
     </div>
   );
