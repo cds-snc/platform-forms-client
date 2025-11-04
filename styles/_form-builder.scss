@@ -268,3 +268,18 @@
   opacity: 0;
   animation: maple-leaf-dash 4s ease-out infinite;
 }
+
+.gc-lost-key-button {
+  anchor-name: --gc-lost-key-button;
+}
+
+.gc-lost-key-popover-content {
+  position: absolute;
+  position-anchor: --gc-lost-key-button;
+  inset: unset;
+  left: anchor(right);
+  top: anchor(center);
+  translate: 0 -50%;
+  margin-left: 0.5rem;
+  max-width: 650px;
+}
