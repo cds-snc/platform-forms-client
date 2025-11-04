@@ -31,8 +31,8 @@ export default async function ResponsesLayout(props: {
   }
 
   return (
-    <ResponsesProvider>
-      <CompatibilityGuard locale={locale} id={id}>
+    <ResponsesProvider locale={locale} formId={id}>
+      <CompatibilityGuard>
         <h1 className="mb-4">{t("section-title")}</h1>
         <BetaBadge className="mb-8" />
         <ContentWrapper>{props.children}</ContentWrapper>

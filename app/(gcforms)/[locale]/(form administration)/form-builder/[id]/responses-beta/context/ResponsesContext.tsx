@@ -17,6 +17,8 @@ import { createSubArrays, downloadAndConfirmFormSubmissions } from "../lib/utils
 import { writeSubmissionsToCsv } from "../lib/csvWriter";
 
 interface ResponsesContextType {
+  locale: string;
+  formId: string;
   isCompatible: boolean;
   privateApiKey: PrivateApiKey | null;
   setPrivateApiKey: Dispatch<SetStateAction<PrivateApiKey | null>>;
@@ -43,11 +45,18 @@ interface ResponsesContextType {
 
 const ResponsesContext = createContext<ResponsesContextType | undefined>(undefined);
 
-export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
+export const ResponsesProvider = ({
+  locale,
+  formId,
+  children,
+}: {
+  locale: string;
+  formId: string;
+  children: ReactNode;
+}) => {
   const [isCompatible] = useState(
     () => typeof window !== "undefined" && "showOpenFilePicker" in window
   );
-
   const [privateApiKey, setPrivateApiKey] = useState<PrivateApiKey | null>(null);
   const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
@@ -179,6 +188,8 @@ export const ResponsesProvider = ({ children }: { children: ReactNode }) => {
   return (
     <ResponsesContext.Provider
       value={{
+        locale,
+        formId,
         isCompatible,
         privateApiKey,
         setPrivateApiKey,

@@ -21,10 +21,9 @@ export default async function Page(props: {
   params: Promise<{ locale: string; id: string }>;
 }) {
   const params = await props.params;
-
   const { locale, id } = params;
   return (
-    <ApiClientGuard locale={locale} id={id}>
+    <ApiClientGuard>
       <SelectLocation locale={locale} id={id} />
     </ApiClientGuard>
   );

@@ -3,32 +3,20 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useResponsesContext } from "../context/ResponsesContext";
-import { Spinner } from "@root/components/clientComponents/forms/SubmitProgress/Spinner";
+import { ContentPlaceholder } from "./ContentPlaceholder";
 
-export function LocationGuard({
-  locale,
-  id,
-  children,
-}: {
-  locale: string;
-  id: string;
-  children: React.ReactNode;
-}) {
-  const { directoryHandle } = useResponsesContext();
+export function LocationGuard({ children }: { children: React.ReactNode }) {
+  const { directoryHandle, locale, formId } = useResponsesContext();
   const router = useRouter();
 
   useEffect(() => {
     if (!directoryHandle) {
-      router.replace(`/${locale}/form-builder/${id}/responses-beta/location`);
+      router.replace(`/${locale}/form-builder/${formId}/responses-beta/location`);
     }
-  }, [directoryHandle, locale, id, router]);
+  }, [directoryHandle, locale, formId, router]);
 
   if (!directoryHandle) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <Spinner />
-      </div>
-    );
+    return <ContentPlaceholder />;
   }
 
   return <>{children}</>;

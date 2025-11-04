@@ -26,8 +26,8 @@ export default async function Page(props: {
   const { locale, id } = params;
   return (
     <div>
-      <ApiClientGuard locale={locale} id={id}>
-        <LocationGuard locale={locale} id={id}>
+      <ApiClientGuard>
+        <LocationGuard>
           <SelectFormat locale={locale} id={id} />
         </LocationGuard>
       </ApiClientGuard>

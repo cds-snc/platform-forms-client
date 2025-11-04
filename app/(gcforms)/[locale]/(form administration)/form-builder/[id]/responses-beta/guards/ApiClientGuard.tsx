@@ -3,32 +3,20 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useResponsesContext } from "../context/ResponsesContext";
-import { Spinner } from "@root/components/clientComponents/forms/SubmitProgress/Spinner";
+import { ContentPlaceholder } from "./ContentPlaceholder";
 
-export function ApiClientGuard({
-  locale,
-  id,
-  children,
-}: {
-  locale: string;
-  id: string;
-  children: React.ReactNode;
-}) {
-  const { apiClient } = useResponsesContext();
+export function ApiClientGuard({ children }: { children: React.ReactNode }) {
+  const { apiClient, locale, formId } = useResponsesContext();
   const router = useRouter();
 
   useEffect(() => {
     if (!apiClient) {
-      router.replace(`/${locale}/form-builder/${id}/responses-beta/load-key`);
+      router.replace(`/${locale}/form-builder/${formId}/responses-beta/load-key`);
     }
-  }, [apiClient, locale, id, router]);
+  }, [apiClient, locale, formId, router]);
 
   if (!apiClient) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <Spinner />
-      </div>
-    );
+    return <ContentPlaceholder />;
   }
 
   return <>{children}</>;
