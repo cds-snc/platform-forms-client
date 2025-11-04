@@ -1,15 +1,14 @@
-import { createHash } from "crypto";
+import { md5 } from "hash-wasm";
 import { FileInput } from "@gcforms/types";
 import { logMessage } from "@lib/logger";
 
-export function calculateMD5Checksum(content: ArrayBuffer): string {
+// Creates Hexadecimal base MD5 hash
+export async function calculateMD5Checksum(content: ArrayBuffer): Promise<string> {
   const buffer = Buffer.from(content);
-  const hash = createHash("md5");
-  hash.update(buffer);
-  return hash.digest("base64");
+  return md5(buffer);
 }
 
-export function calculateFileChecksum(file: FileInput): string {
+export async function calculateFileChecksum(file: FileInput): Promise<string> {
   // Ensure file content is available
   if (!file.content) {
     throw new Error(`Unable to calculate checksum for file ${file.name}: no content available`);
@@ -22,19 +21,21 @@ export function calculateFileChecksum(file: FileInput): string {
  * @param fileObjsRef - Map of file IDs to FileInput objects
  * @returns Map of file IDs to their MD5 checksums
  */
-export function generateFileChecksums(
+export async function generateFileChecksums(
   fileObjsRef: Record<string, FileInput>
-): Record<string, string> {
+): Promise<Record<string, string>> {
   const checksums: Record<string, string> = {};
 
-  for (const [fileId, file] of Object.entries(fileObjsRef)) {
-    try {
-      checksums[fileId] = calculateFileChecksum(file);
-    } catch (error) {
-      logMessage.warn(`Failed to calculate checksum for file ${file.name}: ${error}`);
-      // Continue with other files, don't fail the entire process
-    }
-  }
+  await Promise.all(
+    Object.entries(fileObjsRef).map(async ([fileId, file]) => {
+      try {
+        checksums[fileId] = await calculateFileChecksum(file);
+      } catch (error) {
+        logMessage.warn(`Failed to calculate checksum for file ${file.name}: ${error}`);
+        // Continue with other files, don't fail the entire process
+      }
+    })
+  );
 
   return checksums;
 }
