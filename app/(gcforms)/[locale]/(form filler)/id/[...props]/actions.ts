@@ -96,7 +96,7 @@ export async function submitForm(
       });
 
       if (fileInputErrors && fileInputErrors.length > 0) {
-        new MissingFormDataError("Form data validation failed");
+        throw new MissingFormDataError("Form data validation failed");
       }
 
       // 👉 Keeping in "passive mode" for now.
