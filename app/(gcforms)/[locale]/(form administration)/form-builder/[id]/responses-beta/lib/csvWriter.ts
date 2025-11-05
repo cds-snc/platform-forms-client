@@ -16,14 +16,10 @@ export const initCsv = async ({
   dirHandle,
   formTemplate,
 }: {
-  formId: string | undefined;
-  dirHandle: FileSystemDirectoryHandle | null;
-  formTemplate: FormProperties | undefined;
+  formId: string;
+  dirHandle: FileSystemDirectoryHandle;
+  formTemplate: FormProperties;
 }) => {
-  if (!formId || !formTemplate || !dirHandle) {
-    return;
-  }
-
   const { handle, created } = await getFileHandle({ formId, dirHandle });
 
   if (!created) {
@@ -49,39 +45,6 @@ export const initCsv = async ({
   await writable?.close();
 
   return { handle, created };
-};
-
-export const writeSubmissionsToCsv = async ({
-  formId,
-  dirHandle,
-  formTemplate,
-  submissionData,
-}: {
-  formId: string;
-  dirHandle: FileSystemDirectoryHandle;
-  formTemplate: FormProperties;
-  submissionData: Array<{
-    submissionId: string;
-    createdAt: string;
-    rawAnswers: Record<string, Response>;
-  }>;
-}) => {
-  if (!submissionData || submissionData.length === 0) {
-    return;
-  }
-
-  // Write rows sequentially to maintain order
-  for (const submission of submissionData) {
-    // eslint-disable-next-line no-await-in-loop
-    await writeRow({
-      formId,
-      submissionId: submission.submissionId,
-      createdAt: submission.createdAt,
-      formTemplate,
-      dirHandle,
-      rawAnswers: submission.rawAnswers,
-    });
-  }
 };
 
 export const getFileHandle = async ({
@@ -119,33 +82,25 @@ export const getFileHandle = async ({
 };
 
 export const writeRow = async ({
-  formId,
   submissionId,
   createdAt,
   formTemplate,
-  dirHandle,
+  csvFileHandle,
   rawAnswers,
 }: {
-  formId: string;
   submissionId: string;
   createdAt: string;
   formTemplate: FormProperties;
-  dirHandle: FileSystemDirectoryHandle | null;
+  csvFileHandle: FileSystemFileHandle;
   rawAnswers: Record<string, Response>;
 }) => {
-  const { handle } = await getFileHandle({ formId, dirHandle });
+  const file = await csvFileHandle.getFile();
+  const fileContent = await file.text();
 
-  // Check if submission already exists in CSV
-  const fileHandle = handle;
-  if (fileHandle) {
-    const file = await fileHandle.getFile();
-    const fileContent = await file.text();
-
-    // Check if submissionId already exists in the file
-    if (fileContent.includes(submissionId)) {
-      // console.log(`Submission ${submissionId} already exists in CSV, skipping...`);
-      return;
-    }
+  // Check if submissionId already exists in the file
+  if (fileContent.includes(submissionId)) {
+    // console.log(`Submission ${submissionId} already exists in CSV, skipping...`);
+    return;
   }
 
   const sortedElements = orderElements({ formTemplate });
@@ -172,10 +127,10 @@ export const writeRow = async ({
   const rowString = csvStringifier.stringifyRecords(recordsData);
 
   // Write to file
-  if (fileHandle) {
-    const writable = await fileHandle.createWritable({ keepExistingData: true });
+  if (csvFileHandle) {
+    const writable = await csvFileHandle.createWritable({ keepExistingData: true });
     // Seek to end of file
-    const file = await fileHandle.getFile();
+    const file = await csvFileHandle.getFile();
     await writable.seek(file.size);
     await writable.write(rowString);
     await writable.close();

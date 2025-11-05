@@ -30,8 +30,6 @@ interface ResponsesContextType {
   setApiClient: Dispatch<SetStateAction<GCFormsApiClient | null>>;
   directoryHandle: FileSystemDirectoryHandle | null;
   setDirectoryHandle: Dispatch<SetStateAction<FileSystemDirectoryHandle | null>>;
-  csvFileHandle: FileSystemFileHandle | null;
-  setCsvFileHandle: Dispatch<SetStateAction<FileSystemFileHandle | null>>;
   retrieveResponses: () => Promise<NewFormSubmission[]>;
   newFormSubmissions: NewFormSubmission[] | null;
   processedSubmissionIds: Set<string>;
@@ -77,7 +75,6 @@ export const ResponsesProvider = ({
   const [privateApiKey, setPrivateApiKey] = useState<PrivateApiKey | null>(null);
   const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
-  const [csvFileHandle, setCsvFileHandle] = useState<FileSystemFileHandle | null>(null);
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
   const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
@@ -124,6 +121,7 @@ export const ResponsesProvider = ({
     async (initialSubmissions?: NewFormSubmission[]) => {
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
       let formTemplate;
+      let csvFileHandle: FileSystemFileHandle | null = null;
 
       if (!directoryHandle || !privateApiKey || !apiClient) {
         // Optionally handle the error or prompt the user
@@ -142,8 +140,7 @@ export const ResponsesProvider = ({
       if (selectedFormat === "csv") {
         const result = await initCsv({ formId, dirHandle: directoryHandle, formTemplate });
 
-        const csvFileHandle = result && result.handle;
-        setCsvFileHandle(csvFileHandle || null);
+        csvFileHandle = result && result.handle;
 
         const csvExists = result && !result.created;
 
@@ -186,12 +183,15 @@ export const ResponsesProvider = ({
                   });
                   break;
                 default:
+                  if (!csvFileHandle) {
+                    throw new Error("CSV file handle is null"); // @TODO: catch?
+                  }
+
                   await writeRow({
-                    formId,
                     submissionId: submission.submissionId,
                     createdAt: submission.createdAt,
                     formTemplate,
-                    dirHandle: directoryHandle as FileSystemDirectoryHandle,
+                    csvFileHandle,
                     rawAnswers: submission.rawAnswers,
                   });
                   break;
@@ -236,7 +236,6 @@ export const ResponsesProvider = ({
     setPrivateApiKey(null);
     setApiClient(null);
     setDirectoryHandle(null);
-    setCsvFileHandle(null);
     setNewFormSubmissions(null);
     setProcessedSubmissionIds(new Set());
     setProcessingCompleted(false);
@@ -256,8 +255,6 @@ export const ResponsesProvider = ({
         setApiClient,
         directoryHandle,
         setDirectoryHandle,
-        csvFileHandle,
-        setCsvFileHandle,
         retrieveResponses,
         newFormSubmissions,
         processedSubmissionIds,
