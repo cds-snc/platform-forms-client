@@ -13,7 +13,7 @@ import { dateHasPast } from "@lib/utils";
 import { validateOnSubmit } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
 import { sendNotifications } from "@lib/notifications";
-import { MissingFormDataError } from "./lib/client/exceptions";
+import { FileUploadError } from "./lib/client/exceptions";
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function isFormClosed(formId: string): Promise<boolean> {
@@ -93,9 +93,13 @@ export async function submitForm(
       );
 
       if (fileInputErrors.length > 0) {
-        // pass an empty ArrayBuffer as the file content so the FileUploadError's
-        // `file` argument matches the expected FileInput type
-        throw new MissingFormDataError("Form data validation failed");
+        // Note throwing upload error ...
+        // The UI will show error string from valueMatchesType + generic validation message
+        throw new FileUploadError("validation-error", {
+          name: "",
+          size: 0,
+          content: new ArrayBuffer(0),
+        });
       }
 
       // 👉 Keeping in "passive mode" for now.
