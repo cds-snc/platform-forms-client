@@ -103,11 +103,10 @@ export const validateVisibleElements = (
       responseValue !== null &&
       responseValue !== ""
     ) {
-      const result = valueMatchesType(responseValue, formElement.type, formElement);
+      const result = valueMatchesType(responseValue, formElement.type, formElement, props.t);
 
-      if (!result) {
-        const err = `Mismatched type for ${formElement.type} => ${JSON.stringify(responseValue)}`;
-        errors[formElement.id] = err;
+      if (result) {
+        errors[formElement.id] = result;
       }
     }
   }

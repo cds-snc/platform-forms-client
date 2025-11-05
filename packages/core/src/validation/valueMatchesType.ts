@@ -3,7 +3,30 @@ import { isValidDate } from "../validation/date";
 import { isValidEmail } from "../validation/isValidEmail";
 import { isFileExtensionValid } from "../validation/file";
 
-export const valueMatchesType = (value: unknown, type: string, formElement: FormElement) => {
+// Returns error message string if value does not match type, otherwise undefined
+// This pattern matches isFieldResponseValid
+export const valueMatchesType = (
+  value: unknown,
+  type: string,
+  formElement: FormElement,
+  t: (str: string) => string
+): string | undefined => {
+  // Use required message for type mismatch -- can be customized per type later if needed
+  let msg = t("vinput-validation.required");
+
+  if (type === FormElementTypes.fileInput) {
+    msg = t("input-validation.file-type-invalid");
+  }
+
+  const result = valueMatches(value, type, formElement);
+
+  if (!result) {
+    return msg;
+  }
+};
+
+// Helper function to check if value matches type, returns boolean
+export const valueMatches = (value: unknown, type: string, formElement: FormElement) => {
   switch (type) {
     case FormElementTypes.formattedDate:
       if (value && isValidDate(JSON.parse(value as string) as DateObject)) {
@@ -64,7 +87,7 @@ export const valueMatchesType = (value: unknown, type: string, formElement: Form
             formElement.properties.subElements[parseInt(responseKey)]
           ) {
             const subElement = formElement.properties.subElements[parseInt(responseKey)];
-            const result = valueMatchesType(responseValue, subElement.type, subElement);
+            const result = valueMatches(responseValue, subElement.type, subElement);
 
             if (!result) {
               valid = false;
