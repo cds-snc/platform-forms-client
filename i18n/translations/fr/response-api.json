@@ -1,41 +1,41 @@
 {
-  "section-title": "Responses Pilot",
-  "stepOf": "Étape {{current}} sur {{total}}",
+  "section-title": "Réponses (Pilote)",
+  "stepOf": "Étape {{current}} de {{total}}",
   "not-supported": {
-    "title": "Not Supported [FR]",
-    "body": "This browser does not support the File System Access API. [FR]"
+    "title": "Problème de compatibilité",
+    "body": "Ce navigateur ne supporte pas l'API d'accès au système de fichiers. Essayez un autre navigateur Web ou autorisez votre navigateur à enregistrer des fichiers sur votre appareil."
   },
   "startPage": {
-    "intro": "Get responses in fewer steps with a form API key. [FR]",
-    "nextButton": "Démarrer",
+    "intro": "Obtenez les réponses de votre formulaire en quelques étapes grâce à une clé API.",
+    "nextButton": "Commencer",
     "beforeStart": {
       "heading": "Avant de commencer",
-      "generateKey": "Générez une clé API pour votre formulaire dans Paramètres.",
+      "generateKey": "Générez une clé API pour votre formulaire dans les Paramètres.",
       "generateKeyDetail": "C'est ainsi que vous pourrez accéder aux nouvelles réponses.",
       "browserSupport": "Assurez-vous d'utiliser Google Chrome ou Microsoft Edge.",
       "browserSupportDetail": "Votre navigateur demandera l'autorisation d'enregistrer des fichiers sur votre appareil."
     },
     "steps": {
       "heading": "Ensuite, suivez ces étapes :",
-      "stepOf": "Étape {{current}} sur {{total}}",
+      "stepOf": "Étape {{current}} de {{total}}",
       "uploadKey": {
         "title": "Téléversez votre fichier de clé API.",
         "detail": "C'est ainsi que vous vous authentifierez en toute sécurité."
       },
       "chooseLocation": {
         "title": "Choisissez un emplacement de téléchargement pour les réponses.",
-        "detail": "C'est là que les nouvelles réponses peuvent être ajoutées aux fichiers déjà présents dans le même dossier."
+        "detail": "C'est ici que vous pourrez ajouter les nouvelles données aux fichiers qui se trouvent déjà dans le même dossier."
       },
       "selectFormat": {
         "title": "Sélectionnez le format des fichiers de réponse.",
-        "detail": "C'est ici que vous pouvez choisir d'obtenir des copies individuelles en HTML ou un fichier CSV."
+        "detail": "C'est ici que vous pourrez choisir si vous souhaitez obtenir des copies individuelles HTML ou une feuille de calcul CSV."
       }
     }
   },
   "loadKeyPage": {
-    "title": "Upload your API key file",
-    "detail": "Upload the API key you generated in Settings to get access to your form's responses.",
-    "chooseFileButton": "Upload API Key",
+    "title": "Téléversez le fichier de clé API",
+    "detail": "Téléversez la clé API générée dans les Paramètres pour accéder aux réponses de votre formulaire.",
+    "chooseFileButton": "Téléverser la clé API",
     "noNewResponsesAvailable": "Aucune nouvelle réponse",
     "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
     "newResponsesAvailable": "De nouvelles réponses sont disponibles",
@@ -46,23 +46,23 @@
     "uploadFailedTitle": "Échec du téléchargement de la clé API",
     "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la télécharger à nouveau.",
     "lostKey": {
-      "link": "Lost API key? [FR]",
+      "link": "Vous avez perdu votre clé API?",
       "lostKeyTip": {
-        "title": "Lost API key?",
-        "text1": "Only one API key can be associated to a form at a time.",
-        "text2": "Generate a new API key by going to Settings > API integration while signed in to",
-        "link": " GC Forms"
+        "title": "Clé API perdue?",
+        "text1": "Une seule clé API peut être associée à un formulaire. ",
+        "text2": "Générez une nouvelle clé API en allant dans Paramètres > Intégration API lorsque vous êtes connecté à",
+        "link": " Formulaires GC"
       }
     }
   },
   "locationPage": {
-    "title": "Select a save locatiom",
-    "subheading": "Decide where new responses will be downloaded.",
-    "detail": "To add response data to an existing CSV, select the folder where it is currently saved. Make sure the CSV file name still includes the form ID, as it did when originally downloaded.",
-    "chooseLocationButton": "Choose location",
+    "title": "Sélectionnez un emplacement d’enregistrement",
+    "subheading": "Decidez où les nouvelles réponses seront téléchargées.",
+    "detail": "Pour ajouter des données de réponse à un fichier CSV existant, sélectionnez le dossier dans lequel il est actuellement enregistré. Assurez-vous que le nom du fichier inclut toujours l'identifiant du formulaire, comme lors du téléchargement initial.",
+    "chooseLocationButton": "Choisir l’emplacement",
     "csvDetected": {
-      "title": "Fichier CSV détecté",
-      "message": "Un fichier CSV existant a été trouvé dans le dossier sélectionné."
+      "title": "Fichier de réponse CSV détecté dans le dossier cible",
+      "message": "Les nouvelles données de réponse seront ajoutées au fichier CSV existant."
     }
   },
   "confirmationPage": {
@@ -79,8 +79,8 @@
     "cancelButton": "Mettre en pause le téléchargement",
     "note": "Pour les téléchargements volumineux, cela peut prendre un certain temps."
   },
-  "backButton": "Retour",
-  "backToStart": "Retour au début",
+  "backButton": "Retourner",
+  "backToStart": "Retourner au début",
   "continueButton": "Continuer",
-  "failed-to-load-api-key": "API key failed to load"
+  "failed-to-load-api-key": "La clé API n'a pas pu être téléversée"
 }
