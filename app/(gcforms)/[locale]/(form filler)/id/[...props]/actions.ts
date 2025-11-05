@@ -87,7 +87,7 @@ export async function submitForm(
         )}`
       );
 
-      // ⚠️ Specifically  catch file input errors
+      // ⚠️ Specifically catch file input errors
       const fileInputErrors = Object.keys(validateOnSubmitResult).filter((key) =>
         key.startsWith("fileInput")
       );
