@@ -88,9 +88,12 @@ export async function submitForm(
       );
 
       // ⚠️ Specifically catch file input errors
-      const fileInputErrors = Object.keys(validateOnSubmitResult).filter((key) =>
-        key.startsWith("fileInput")
-      );
+      const fileInputErrors = Object.keys(validateOnSubmitResult).filter((key) => {
+        // check keys against the template form elements to see if any are file inputs
+        return template.form.elements.find(
+          (el) => el.id === Number(key) && el.type === "fileInput"
+        );
+      });
 
       if (fileInputErrors.length > 0) {
         // Note throwing upload error ...
