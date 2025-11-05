@@ -22,6 +22,18 @@ const CsvDetected = () => {
   );
 };
 
+const TemplateFailed = () => {
+  const { t } = useTranslation("response-api");
+  return (
+    <div className="w-full">
+      <h3 className="!mb-0 pb-0 text-xl font-semibold">
+        {t("locationPage.getTemplateFailed.title")}
+      </h3>
+      <p className="mb-2 text-black">{t("locationPage.getTemplateFailed.message")}</p>
+    </div>
+  );
+};
+
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -40,19 +52,25 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       setDirectoryHandle(handle);
 
       const formId = apiClient?.getFormId();
-      const formTemplate = await apiClient?.getFormTemplate();
 
-      // Initialize CSV file as needed in the selected directory
-      const result = await initCsv({ formId, dirHandle: handle, formTemplate });
+      try {
+        const formTemplate = await apiClient?.getFormTemplate();
 
-      const csvFileHandle = result && result.handle;
+        // Initialize CSV file as needed in the selected directory
+        const result = await initCsv({ formId, dirHandle: handle, formTemplate });
 
-      setCsvFileHandle(csvFileHandle ?? null);
+        const csvFileHandle = result && result.handle;
 
-      const csvExists = result && !result.created;
+        setCsvFileHandle(csvFileHandle ?? null);
 
-      if (csvExists) {
-        toast.success(<CsvDetected />, "wide");
+        const csvExists = result && !result.created;
+
+        if (csvExists) {
+          toast.success(<CsvDetected />, "wide");
+        }
+      } catch (e) {
+        toast.error(<TemplateFailed />, "wide");
+        return;
       }
     },
     [apiClient, setDirectoryHandle, setCsvFileHandle]

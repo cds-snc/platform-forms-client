@@ -62,6 +62,10 @@
     "csvDetected": {
       "title": "CSV response file detected in folder",
       "message": "New response data will be appended to the existing CSV file."
+    },
+    "getTemplateFailed": {
+      "title": "Failed to fetch form template",
+      "message": "There was an error retrieving the form template. Please try again later."
     }
   },
   "confirmationPage": {

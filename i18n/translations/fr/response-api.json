@@ -63,6 +63,10 @@
     "csvDetected": {
       "title": "Fichier de réponse CSV détecté dans le dossier cible",
       "message": "Les nouvelles données de réponse seront ajoutées au fichier CSV existant."
+    },
+    "getTemplateFailed": {
+      "title": "Failed to fetch form template",
+      "message": "There was an error retrieving the form template. Please try again later."
     }
   },
   "confirmationPage": {
