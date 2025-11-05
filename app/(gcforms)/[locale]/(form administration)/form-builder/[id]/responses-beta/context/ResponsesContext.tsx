@@ -128,6 +128,11 @@ export const ResponsesProvider = ({
         return;
       }
 
+      let htmlDirectoryHandle: FileSystemDirectoryHandle | null = null;
+
+      const dataDirectoryHandle: FileSystemDirectoryHandle =
+        await directoryHandle.getDirectoryHandle("data", { create: true });
+
       try {
         formTemplate = await apiClient?.getFormTemplate();
       } catch (error) {
@@ -137,6 +142,9 @@ export const ResponsesProvider = ({
 
       const formId = apiClient.getFormId();
 
+      /**
+       * Initialize CSV if needed
+       */
       if (selectedFormat === "csv") {
         const result = await initCsv({ formId, dirHandle: directoryHandle, formTemplate });
 
@@ -149,6 +157,10 @@ export const ResponsesProvider = ({
         }
       }
 
+      if (selectedFormat === "html") {
+        htmlDirectoryHandle = await directoryHandle.getDirectoryHandle("html", { create: true });
+      }
+
       while (formResponses.length > 0 && !interruptRef.current) {
         try {
           const subArrays = createSubArrays(formResponses, 5);
@@ -159,7 +171,7 @@ export const ResponsesProvider = ({
 
             /* eslint-disable no-await-in-loop */
             const { submissionData } = await downloadAndConfirmFormSubmissions(
-              directoryHandle as FileSystemDirectoryHandle,
+              dataDirectoryHandle,
               apiClient,
               privateApiKey,
               subArray
@@ -174,8 +186,12 @@ export const ResponsesProvider = ({
               // switch based on selected format
               switch (selectedFormat) {
                 case "html":
+                  if (!htmlDirectoryHandle) {
+                    throw new Error("HTML directory handle is null"); // @TODO: catch?
+                  }
+
                   await writeHtml({
-                    directoryHandle: directoryHandle,
+                    htmlDirectoryHandle,
                     formTemplate,
                     submission,
                     formId,

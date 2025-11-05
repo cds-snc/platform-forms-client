@@ -6,13 +6,13 @@ import { TFunction } from "i18next";
 import { Submission } from "@root/lib/responseDownloadFormats/types";
 
 export const writeHtml = async ({
-  directoryHandle,
+  htmlDirectoryHandle,
   formTemplate,
   submission,
   formId,
   t,
 }: {
-  directoryHandle: FileSystemDirectoryHandle;
+  htmlDirectoryHandle: FileSystemDirectoryHandle;
   formTemplate: FormProperties;
   submission: {
     submissionId: string;
@@ -22,10 +22,6 @@ export const writeHtml = async ({
   formId: string;
   t: TFunction<string | string[], undefined>;
 }) => {
-  const htmlDirectoryHandle = await directoryHandle.getDirectoryHandle("html-responses", {
-    create: true,
-  });
-
   const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
 
   const mappedAnswers = mapAnswers({
@@ -35,7 +31,7 @@ export const writeHtml = async ({
 
   const submissionObj = {
     id: submission.submissionId,
-    createdAt: Number(submission.createdAt),
+    createdAt: Date.parse(submission.createdAt),
     confirmationCode: "",
     answers: mappedAnswers,
   } as Submission;
