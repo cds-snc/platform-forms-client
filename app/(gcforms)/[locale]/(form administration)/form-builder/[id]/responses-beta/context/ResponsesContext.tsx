@@ -14,7 +14,11 @@ import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-fil
 import { NewFormSubmission, PrivateApiKey } from "../lib/types";
 import { GCFormsApiClient } from "../lib/apiClient";
 import { createSubArrays, downloadAndConfirmFormSubmissions } from "../lib/utils";
-import { writeSubmissionsToCsv } from "../lib/csvWriter";
+import { initCsv, writeRow } from "../lib/csvWriter";
+import { toast } from "../../../components/shared/Toast";
+import { useTranslation } from "@root/i18n/client";
+import { writeHtml } from "../lib/htmlWriter";
+import { TemplateFailed } from "../components/Toasts";
 
 interface ResponsesContextType {
   locale: string;
@@ -32,11 +36,14 @@ interface ResponsesContextType {
   newFormSubmissions: NewFormSubmission[] | null;
   processedSubmissionIds: Set<string>;
   setProcessedSubmissionIds: Dispatch<SetStateAction<Set<string>>>;
-  processResponses: (initialSubmissions?: NewFormSubmission[]) => Promise<void>;
+  processResponses: (
+    initialSubmissions?: NewFormSubmission[],
+    format?: "csv" | "html"
+  ) => Promise<void>;
   processingCompleted: boolean;
   setProcessingCompleted: Dispatch<SetStateAction<boolean>>;
-  selectedFormats: string[];
-  setSelectedFormats: Dispatch<SetStateAction<string[]>>;
+  selectedFormat: string;
+  setSelectedFormat: Dispatch<SetStateAction<string>>;
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
   resetState: () => void;
@@ -44,6 +51,16 @@ interface ResponsesContextType {
 }
 
 const ResponsesContext = createContext<ResponsesContextType | undefined>(undefined);
+
+const CsvDetected = () => {
+  const { t } = useTranslation("response-api");
+  return (
+    <div className="w-full">
+      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("locationPage.csvDetected.title")}</h3>
+      <p className="mb-2 text-black">{t("locationPage.csvDetected.message")}</p>
+    </div>
+  );
+};
 
 export const ResponsesProvider = ({
   locale,
@@ -64,9 +81,11 @@ export const ResponsesProvider = ({
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
   const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
-  const [selectedFormats, setSelectedFormats] = useState<string[]>([]);
+  const [selectedFormat, setSelectedFormat] = useState<string>("csv");
   const [interruptState, setInterruptState] = useState(false);
   const interruptRef = useRef(interruptState);
+
+  const { t } = useTranslation("my-forms");
 
   const setInterrupt: Dispatch<SetStateAction<boolean>> = useCallback((value) => {
     setInterruptState((prev) => {
@@ -104,16 +123,40 @@ export const ResponsesProvider = ({
   const processResponses = useCallback(
     async (initialSubmissions?: NewFormSubmission[]) => {
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
+      let formTemplate;
+
+      if (!directoryHandle || !privateApiKey || !apiClient) {
+        // Optionally handle the error or prompt the user
+        return;
+      }
+
+      try {
+        formTemplate = await apiClient?.getFormTemplate();
+      } catch (error) {
+        toast.error(<TemplateFailed />, "wide");
+        return;
+      }
+
+      const formId = apiClient.getFormId();
+
+      if (selectedFormat === "csv") {
+        const result = await initCsv({ formId, dirHandle: directoryHandle, formTemplate });
+
+        const csvFileHandle = result && result.handle;
+        setCsvFileHandle(csvFileHandle || null);
+
+        const csvExists = result && !result.created;
+
+        if (csvExists) {
+          toast.success(<CsvDetected />, "wide");
+        }
+      }
 
       while (formResponses.length > 0 && !interruptRef.current) {
         try {
           const subArrays = createSubArrays(formResponses, 5);
           for (const subArray of subArrays) {
             if (interruptRef.current) {
-              break;
-            }
-            if (!directoryHandle || !privateApiKey || !apiClient) {
-              // Optionally handle the error or prompt the user
               break;
             }
 
@@ -125,27 +168,44 @@ export const ResponsesProvider = ({
               subArray
             );
 
-            // Write each submission to CSV
-            const formId = apiClient.getFormId();
-            const formTemplate = await apiClient.getFormTemplate();
-
-            if (formId && formTemplate && submissionData) {
-              await writeSubmissionsToCsv({
-                formId,
-                dirHandle: directoryHandle as FileSystemDirectoryHandle,
-                formTemplate,
-                submissionData,
-              });
-
-              // Record individual submission ids so we have an accurate count
-              setProcessedSubmissionIds((prev) => {
-                const next = new Set(prev);
-                for (const s of submissionData) {
-                  next.add(s.submissionId);
-                }
-                return next;
-              });
+            if (!submissionData) {
+              // @TODO: Some kind of error handling?
+              continue;
             }
+
+            for (const submission of submissionData) {
+              // switch based on selected format
+              switch (selectedFormat) {
+                case "html":
+                  await writeHtml({
+                    directoryHandle: directoryHandle,
+                    formTemplate,
+                    submission,
+                    formId,
+                    t,
+                  });
+                  break;
+                default:
+                  await writeRow({
+                    formId,
+                    submissionId: submission.submissionId,
+                    createdAt: submission.createdAt,
+                    formTemplate,
+                    dirHandle: directoryHandle as FileSystemDirectoryHandle,
+                    rawAnswers: submission.rawAnswers,
+                  });
+                  break;
+              }
+            }
+
+            // Record individual submission ids so we have an accurate count
+            setProcessedSubmissionIds((prev) => {
+              const next = new Set(prev);
+              for (const s of submissionData) {
+                next.add(s.submissionId);
+              }
+              return next;
+            });
 
             // Get subsequent submissions
             if (interruptRef.current) {
@@ -153,7 +213,6 @@ export const ResponsesProvider = ({
             }
 
             formResponses = await apiClient.getNewFormSubmissions();
-            // formResponses = [];
           }
 
           if (interruptRef.current) {
@@ -170,7 +229,7 @@ export const ResponsesProvider = ({
       setNewFormSubmissions(null);
       setProcessingCompleted(true);
     },
-    [apiClient, directoryHandle, newFormSubmissions, privateApiKey]
+    [apiClient, directoryHandle, newFormSubmissions, privateApiKey, selectedFormat, t]
   );
 
   const resetState = useCallback(() => {
@@ -181,7 +240,7 @@ export const ResponsesProvider = ({
     setNewFormSubmissions(null);
     setProcessedSubmissionIds(new Set());
     setProcessingCompleted(false);
-    setSelectedFormats([]);
+    setSelectedFormat("csv");
     setInterrupt(false);
   }, [setInterrupt]);
 
@@ -206,8 +265,8 @@ export const ResponsesProvider = ({
         processResponses,
         processingCompleted,
         setProcessingCompleted,
-        selectedFormats,
-        setSelectedFormats,
+        selectedFormat,
+        setSelectedFormat,
         interrupt,
         setInterrupt,
         resetState,

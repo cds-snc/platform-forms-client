@@ -59,16 +59,18 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   if (hasCheckedForResponses) {
     return (
       <div>
-        <Responses />
-
-        <div className="mt-8 flex flex-row gap-4">
-          <Button theme="secondary" onClick={handleSelectNewLocation}>
-            Choose new location
-          </Button>
-          <Button theme="primary" onClick={handleDownload}>
-            Download responses
-          </Button>
-        </div>
+        <Responses
+          actions={
+            <div className="mt-8 flex flex-row gap-4">
+              <Button theme="secondary" onClick={handleSelectNewLocation}>
+                Choose new location
+              </Button>
+              <Button theme="primary" onClick={handleDownload}>
+                Download responses
+              </Button>
+            </div>
+          }
+        />
       </div>
     );
   }

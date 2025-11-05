@@ -16,7 +16,7 @@ const QuestionColumns = ({
 }): JSX.Element => {
   const { t } = customTranslate("common");
 
-  const renderRow = (index: number, lang: string, item: Answer) => {
+  const renderRow = (index: number | string, lang: string, item: Answer) => {
     return (
       <div key={`row-${index}`} className="flex w-full flex-row border-b border-gray py-4">
         <dt className="w-96 py-4 font-bold">

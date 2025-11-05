@@ -2,15 +2,15 @@
 
 import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
-import { Checkbox } from "../../../components/shared/MultipleChoice";
+import { Radio } from "../../../components/shared/MultipleChoice";
 import { useRouter } from "next/navigation";
-import { ChangeEvent } from "react";
 import { useTranslation } from "@root/i18n/client";
+import { useCallback } from "react";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { t } = useTranslation("response-api");
 
-  const { setSelectedFormats, selectedFormats, retrieveResponses, processResponses } =
+  const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses } =
     useResponsesContext();
 
   const router = useRouter();
@@ -19,28 +19,21 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
     //
   };
 
-  const handleNext = async () => {
+  const handleNext = useCallback(async () => {
     const initialResponses = await retrieveResponses();
 
     processResponses(initialResponses);
 
     router.push(`/${locale}/form-builder/${id}/responses-beta/processing`);
-  };
+  }, [retrieveResponses, processResponses, router, locale, id]);
 
-  const toggleFormat = (format: "csv" | "html") => (event: ChangeEvent<HTMLInputElement>) => {
-    const { checked } = event.target;
-
-    setSelectedFormats((prev) => {
-      if (checked) {
-        if (prev.includes(format)) {
-          return prev;
-        }
-        return [...prev, format];
-      }
-
-      return prev.filter((item) => item !== format);
-    });
-  };
+  const handleFormatChange = useCallback(
+    (evt: React.ChangeEvent<HTMLInputElement>) => {
+      const value = evt.target.value;
+      setSelectedFormat(value);
+    },
+    [setSelectedFormat]
+  );
 
   return (
     <div>
@@ -52,25 +45,27 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
         </p>
         <p>All downloads will come with a CSV and raw JSON response files.</p>
         <div className="form-builder my-6">
-          <Checkbox
+          <Radio
             name="format"
             id="format-csv"
+            value="csv"
             label="Combined in a spreadsheet (Aggregated CSV file)"
-            checked={selectedFormats.includes("csv")}
-            onChange={toggleFormat("csv")}
+            onChange={handleFormatChange}
           />
-          <Checkbox
+          <Radio
             name="format"
             id="format-html"
+            value="html"
             label="Individual copies (Separate HTML files)"
-            checked={selectedFormats.includes("html")}
-            onChange={toggleFormat("html")}
+            onChange={handleFormatChange}
           />
         </div>
       </div>
       <div className="flex flex-row gap-4">
-        <Button theme="secondary" onClick={handleBack}></Button>
-        <Button theme="primary" disabled={selectedFormats.length === 0} onClick={handleNext}>
+        <Button theme="secondary" onClick={handleBack}>
+          Back
+        </Button>
+        <Button theme="primary" disabled={!selectedFormat} onClick={handleNext}>
           Next
         </Button>
       </div>

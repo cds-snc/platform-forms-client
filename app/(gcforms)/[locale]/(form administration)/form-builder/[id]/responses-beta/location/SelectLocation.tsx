@@ -3,36 +3,10 @@ import { useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
-
 import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { DirectoryPicker } from "./DirectoryPicker";
-
-import { initCsv } from "../lib/csvWriter";
-import { toast } from "../../../components/shared/Toast";
 import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
-
-const CsvDetected = () => {
-  const { t } = useTranslation("response-api");
-  return (
-    <div className="w-full">
-      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("locationPage.csvDetected.title")}</h3>
-      <p className="mb-2 text-black">{t("locationPage.csvDetected.message")}</p>
-    </div>
-  );
-};
-
-const TemplateFailed = () => {
-  const { t } = useTranslation("response-api");
-  return (
-    <div className="w-full">
-      <h3 className="!mb-0 pb-0 text-xl font-semibold">
-        {t("locationPage.getTemplateFailed.title")}
-      </h3>
-      <p className="mb-2 text-black">{t("locationPage.getTemplateFailed.message")}</p>
-    </div>
-  );
-};
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
   const router = useRouter();
@@ -40,8 +14,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
 
   const { t } = useTranslation("response-api");
 
-  const { apiClient, directoryHandle, setDirectoryHandle, setCsvFileHandle } =
-    useResponsesContext();
+  const { directoryHandle, setDirectoryHandle } = useResponsesContext();
 
   const setDirectory = useCallback(
     async (handle: FileSystemDirectoryHandle | null) => {
@@ -50,30 +23,8 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       }
 
       setDirectoryHandle(handle);
-
-      const formId = apiClient?.getFormId();
-
-      try {
-        const formTemplate = await apiClient?.getFormTemplate();
-
-        // Initialize CSV file as needed in the selected directory
-        const result = await initCsv({ formId, dirHandle: handle, formTemplate });
-
-        const csvFileHandle = result && result.handle;
-
-        setCsvFileHandle(csvFileHandle ?? null);
-
-        const csvExists = result && !result.created;
-
-        if (csvExists) {
-          toast.success(<CsvDetected />, "wide");
-        }
-      } catch (e) {
-        toast.error(<TemplateFailed />, "wide");
-        return;
-      }
     },
-    [apiClient, setDirectoryHandle, setCsvFileHandle]
+    [setDirectoryHandle]
   );
 
   const handleNext = () => {
@@ -85,12 +36,11 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
     if (!shouldReset) return;
 
     setDirectoryHandle(null);
-    setCsvFileHandle(null);
 
     // remove reset param without adding history
     const cleanUrl = `/${locale}/form-builder/${id}/responses-beta/location`;
     router.replace(cleanUrl);
-  }, [id, locale, router, searchParams, setCsvFileHandle, setDirectoryHandle]);
+  }, [id, locale, router, searchParams, setDirectoryHandle]);
 
   return (
     <div>
