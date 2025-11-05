@@ -130,9 +130,6 @@ export const ResponsesProvider = ({
 
       let htmlDirectoryHandle: FileSystemDirectoryHandle | null = null;
 
-      const dataDirectoryHandle: FileSystemDirectoryHandle =
-        await directoryHandle.getDirectoryHandle("data", { create: true });
-
       try {
         formTemplate = await apiClient?.getFormTemplate();
       } catch (error) {
@@ -170,12 +167,12 @@ export const ResponsesProvider = ({
             }
 
             /* eslint-disable no-await-in-loop */
-            const { submissionData } = await downloadAndConfirmFormSubmissions(
-              dataDirectoryHandle,
+            const { submissionData } = await downloadAndConfirmFormSubmissions({
+              directoryHandle,
               apiClient,
               privateApiKey,
-              subArray
-            );
+              submissions: subArray,
+            });
 
             if (!submissionData) {
               // @TODO: Some kind of error handling?

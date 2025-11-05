@@ -144,13 +144,20 @@ const decryptFormSubmission = async (
   return new TextDecoder().decode(decryptedData);
 };
 
-const downloadFormSubmissions = async (
-  dir: FileSystemDirectoryHandle,
-  apiClient: IGCFormsApiClient,
-  privateApiKey: PrivateApiKey,
-  submissions: NewFormSubmission[]
-) => {
-  if (!dir || !submissions.length) {
+const downloadFormSubmissions = async ({
+  directoryHandle,
+  dataDirectoryHandle,
+  apiClient,
+  privateApiKey,
+  submissions,
+}: {
+  directoryHandle: FileSystemDirectoryHandle;
+  dataDirectoryHandle: FileSystemDirectoryHandle;
+  apiClient: IGCFormsApiClient;
+  privateApiKey: PrivateApiKey;
+  submissions: NewFormSubmission[];
+}) => {
+  if (!dataDirectoryHandle || !submissions.length) {
     throw new Error("Invalid directory handle or no submissions to process.");
   }
 
@@ -164,15 +171,23 @@ const downloadFormSubmissions = async (
 
       const decryptedResponse: FormSubmission = JSON.parse(decryptedData);
 
-      const fileHandle = await dir.getFileHandle(`${submission.name}.json`, { create: true });
+      const fileHandle = await dataDirectoryHandle.getFileHandle(`${submission.name}.json`, {
+        create: true,
+      });
       const fileStream = await fileHandle.createWritable({ keepExistingData: false });
       await fileStream.write(decryptedData);
       await fileStream.close();
 
       // check if there are files to download
       if (decryptedResponse.attachments && decryptedResponse.attachments.length > 0) {
+        const attachmentsDirectoryHandle = await directoryHandle.getDirectoryHandle("attachments", {
+          create: true,
+        });
+
         // download the files into their own folder
-        const fileDir = await dir.getDirectoryHandle(submission.name, { create: true });
+        const fileDir = await attachmentsDirectoryHandle.getDirectoryHandle(submission.name, {
+          create: true,
+        });
         await Promise.all(
           decryptedResponse.attachments.map((attachment) => downloadAttachment(fileDir, attachment))
         );
@@ -241,20 +256,36 @@ const integrityCheckAndConfirm = async (
   }
 };
 
-export const downloadAndConfirmFormSubmissions = async (
-  dir: FileSystemDirectoryHandle,
-  apiClient: IGCFormsApiClient,
-  privateApiKey: PrivateApiKey,
-  submissions: NewFormSubmission[]
-) => {
-  if (!dir || !submissions.length) {
+export const downloadAndConfirmFormSubmissions = async ({
+  directoryHandle,
+  apiClient,
+  privateApiKey,
+  submissions,
+}: {
+  directoryHandle: FileSystemDirectoryHandle;
+  apiClient: IGCFormsApiClient;
+  privateApiKey: PrivateApiKey;
+  submissions: NewFormSubmission[];
+}) => {
+  if (!directoryHandle || !submissions.length) {
     throw new Error("Invalid directory handle or no submissions to process.");
   }
 
-  const submissionData = await downloadFormSubmissions(dir, apiClient, privateApiKey, submissions);
+  const dataDirectoryHandle: FileSystemDirectoryHandle = await directoryHandle.getDirectoryHandle(
+    "data",
+    { create: true }
+  );
+
+  const submissionData = await downloadFormSubmissions({
+    directoryHandle,
+    dataDirectoryHandle,
+    apiClient,
+    privateApiKey,
+    submissions,
+  });
   const results = await integrityCheckAndConfirm(
     submissions.map((s) => s.name),
-    dir,
+    dataDirectoryHandle,
     apiClient
   );
 
