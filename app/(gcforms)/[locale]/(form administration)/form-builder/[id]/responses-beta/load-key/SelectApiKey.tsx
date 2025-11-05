@@ -54,6 +54,10 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     router.push(`/${locale}/form-builder/${id}/responses-beta/location`);
   };
 
+  const handleCheck = async () => {
+    void retrieveResponses();
+  };
+
   const handleLoadApiKey = useCallback(async () => {
     try {
       // Simulate user key retrieval
@@ -92,13 +96,19 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         {t("backToStart")}
       </Button>
 
-      <Button
-        theme="primary"
-        disabled={Boolean(!apiClient || (newFormSubmissions && newFormSubmissions.length === 0))}
-        onClick={handleNext}
-      >
-        {t("continueButton")}
-      </Button>
+      {apiClient && newFormSubmissions && newFormSubmissions.length === 0 ? (
+        <Button theme="primary" onClick={handleCheck}>
+          Check for new responses
+        </Button>
+      ) : (
+        <Button
+          theme="primary"
+          disabled={Boolean(!apiClient || (newFormSubmissions && newFormSubmissions.length === 0))}
+          onClick={handleNext}
+        >
+          {t("continueButton")}
+        </Button>
+      )}
     </div>
   );
 
