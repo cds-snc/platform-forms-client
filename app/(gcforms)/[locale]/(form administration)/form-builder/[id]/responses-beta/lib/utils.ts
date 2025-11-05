@@ -263,7 +263,9 @@ const integrityCheckAndConfirm = async (
     const calculatedChecksum = await md5(answers);
 
     if (calculatedChecksum !== checksum) {
-      throw new Error(`Checksum mismatch for submission ${submissionName}.`);
+      // Delete failed file from the directory
+      await dir.removeEntry(`${submissionName}.json`);
+      throw new Error(`Checksum mismatch for submission ${submissionName}. File removed.`);
     }
     // If checksums match, confirm the submission
     await apiClient.confirmFormSubmission(submissionName, confirmationCode);
