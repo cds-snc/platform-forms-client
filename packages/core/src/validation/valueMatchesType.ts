@@ -96,7 +96,8 @@ export const valueMatches = (
         return true;
       }
 
-      if (value === null || value === undefined || value === "") {
+      // Allow empty value (no file uploaded)
+      if (value === "") {
         return true;
       }
 
