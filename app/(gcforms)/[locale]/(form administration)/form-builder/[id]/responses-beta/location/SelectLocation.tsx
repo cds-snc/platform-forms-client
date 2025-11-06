@@ -14,7 +14,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
 
   const { t } = useTranslation("response-api");
 
-  const { directoryHandle, setDirectoryHandle } = useResponsesContext();
+  const { directoryHandle, setDirectoryHandle, logger } = useResponsesContext();
 
   const setDirectory = useCallback(
     async (handle: FileSystemDirectoryHandle | null) => {
@@ -23,8 +23,12 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       }
 
       setDirectoryHandle(handle);
+
+      const logsDirectoryHandle = await handle.getDirectoryHandle("logs", { create: true });
+      logger.setDirectoryHandle(logsDirectoryHandle);
+      logger.info(`Directory selected for response downloads: ${handle.name}`);
     },
-    [setDirectoryHandle]
+    [logger, setDirectoryHandle]
   );
 
   const handleNext = () => {
@@ -34,13 +38,13 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
   useEffect(() => {
     const shouldReset = searchParams?.get("reset") === "true";
     if (!shouldReset) return;
-
+    logger.info("Directory selection reset");
     setDirectoryHandle(null);
 
     // remove reset param without adding history
     const cleanUrl = `/${locale}/form-builder/${id}/responses-beta/location`;
     router.replace(cleanUrl);
-  }, [id, locale, router, searchParams, setDirectoryHandle]);
+  }, [id, locale, logger, router, searchParams, setDirectoryHandle]);
 
   return (
     <div>

@@ -11,18 +11,22 @@ import { LinkButton } from "@root/components/serverComponents/globals/Buttons/Li
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { t } = useTranslation("response-api");
 
-  const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses } =
+  const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses, logger } =
     useResponsesContext();
 
   const router = useRouter();
 
   const handleNext = useCallback(async () => {
+    logger.info("Starting retrieval of form submissions");
+
     const initialResponses = await retrieveResponses();
+
+    logger.info(`Retrieved ${initialResponses.length} form submissions`);
 
     processResponses(initialResponses);
 
     router.push(`/${locale}/form-builder/${id}/responses-beta/processing`);
-  }, [retrieveResponses, processResponses, router, locale, id]);
+  }, [logger, retrieveResponses, processResponses, router, locale, id]);
 
   const handleFormatChange = useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {

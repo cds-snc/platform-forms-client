@@ -21,6 +21,7 @@ import { useTranslation } from "@root/i18n/client";
 import { writeHtml } from "../lib/htmlWriter";
 import { TemplateFailed } from "../components/Toasts";
 import { BATCH_SIZE, HTML_DOWNLOAD_FOLDER } from "../lib/constants";
+import { ResponseDownloadLogger } from "../lib/logger";
 
 interface ResponsesContextType {
   locale: string;
@@ -48,6 +49,7 @@ interface ResponsesContextType {
   setInterrupt: Dispatch<SetStateAction<boolean>>;
   resetState: () => void;
   resetNewSubmissions: () => void;
+  logger: ResponseDownloadLogger;
 }
 
 const ResponsesContext = createContext<ResponsesContextType | undefined>(undefined);
@@ -83,6 +85,8 @@ export const ResponsesProvider = ({
   const [selectedFormat, setSelectedFormat] = useState<string>("csv");
   const [isProcessingInterrupted, setIsProcessingInterrupted] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const loggerRef = useRef(new ResponseDownloadLogger());
+  const logger = loggerRef.current;
 
   const { t } = useTranslation("my-forms");
 
@@ -121,24 +125,31 @@ export const ResponsesProvider = ({
       return [];
     }
 
+    logger.info("Retrieving new form submissions");
+
     try {
       const submissions = await apiClient.getNewFormSubmissions();
       setNewFormSubmissions(submissions);
+
+      logger.info(`Retrieved ${submissions.length} new form submissions`);
+
       return submissions;
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error("Error loading submissions:", error);
+      logger.error("Error loading submissions:", error);
       setNewFormSubmissions([]);
       return [];
     }
-  }, [apiClient]);
+  }, [apiClient, logger]);
 
   const resetNewSubmissions = () => {
+    logger.info("Resetting new form submissions");
     setNewFormSubmissions([]);
   };
 
   const processResponses = useCallback(
     async (initialSubmissions?: NewFormSubmission[]) => {
+      logger.info("Beginning processing of form submissions");
+
       // Create new abort controller for this processing run
       const abortController = new AbortController();
       abortControllerRef.current = abortController;
@@ -161,6 +172,7 @@ export const ResponsesProvider = ({
       try {
         formTemplate = await apiClient?.getFormTemplate();
       } catch (error) {
+        logger.error("Error loading form template:", error);
         toast.error(<TemplateFailed />, "wide");
         return;
       }
@@ -172,6 +184,7 @@ export const ResponsesProvider = ({
        */
       if (selectedFormat === "csv") {
         const result = await initCsv({ formId, dirHandle: directoryHandle, formTemplate });
+        logger.info("Initialized CSV:", result);
 
         csvFileHandle = result && result.handle;
 
@@ -182,20 +195,25 @@ export const ResponsesProvider = ({
         }
       }
 
+      /**
+       * Prepare HTML directory if needed
+       */
       if (selectedFormat === "html") {
         htmlDirectoryHandle = await directoryHandle.getDirectoryHandle(HTML_DOWNLOAD_FOLDER, {
           create: true,
         });
+        logger.info("Initialized HTML directory:", htmlDirectoryHandle);
       }
 
       while (formResponses.length > 0 && !abortController.signal.aborted) {
         try {
           const subArrays = createSubArrays(formResponses, BATCH_SIZE);
+          logger.info(`Processing ${subArrays.length} batches of ${BATCH_SIZE} submissions`);
+
           for (const subArray of subArrays) {
             // Check abort signal
             if (abortController.signal.aborted) {
-              // eslint-disable-next-line no-console
-              console.log("Processing interrupted by user");
+              logger.info("Processing interrupted by user");
               break;
             }
 
@@ -209,7 +227,7 @@ export const ResponsesProvider = ({
             });
 
             if (!submissionData) {
-              // @TODO: Some kind of error handling?
+              logger.warn("No submission data returned for current batch, skipping...");
               continue;
             }
 
@@ -254,10 +272,13 @@ export const ResponsesProvider = ({
               return next;
             });
 
+            // Log after state update
+            const processedIds = submissionData.map((s) => s.submissionId);
+            logger.info("Processed submission IDs:", processedIds);
+
             // Get subsequent submissions
             if (abortController.signal.aborted) {
-              // eslint-disable-next-line no-console
-              console.log("Processing interrupted after batch completion");
+              logger.info("Processing interrupted after batch completion");
               break;
             }
 
@@ -265,15 +286,14 @@ export const ResponsesProvider = ({
           }
 
           if (abortController.signal.aborted) {
+            logger.info("Processing interrupted, exiting batch loop");
             break;
           }
         } catch (error) {
           if (error instanceof Error && error.name === "AbortError") {
-            // eslint-disable-next-line no-console
-            console.log("Processing aborted");
+            logger.warn("Processing aborted");
           } else {
-            // eslint-disable-next-line no-console
-            console.log("Error processing submissions:", error);
+            logger.error("Error processing submissions:", error);
           }
           break;
         }
@@ -285,7 +305,16 @@ export const ResponsesProvider = ({
       setNewFormSubmissions(null);
       setProcessingCompleted(true);
     },
-    [apiClient, directoryHandle, newFormSubmissions, privateApiKey, selectedFormat, setInterrupt, t]
+    [
+      apiClient,
+      directoryHandle,
+      logger,
+      newFormSubmissions,
+      privateApiKey,
+      selectedFormat,
+      setInterrupt,
+      t,
+    ]
   );
 
   const resetState = useCallback(() => {
@@ -324,6 +353,7 @@ export const ResponsesProvider = ({
         setInterrupt,
         resetState,
         resetNewSubmissions,
+        logger: loggerRef.current,
       }}
     >
       {children}
