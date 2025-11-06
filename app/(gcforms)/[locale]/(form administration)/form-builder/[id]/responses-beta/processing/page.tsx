@@ -1,6 +1,9 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
 import { ProcessingDownloads } from "./ProcessingDownloads";
+import { ApiClientGuard } from "../guards/ApiClientGuard";
+import { FormatGuard } from "../guards/FormatGuard";
+import { LocationGuard } from "../guards/LocationGuard";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -24,7 +27,13 @@ export default async function Page(props: {
   const { locale, id } = params;
   return (
     <div>
-      <ProcessingDownloads locale={locale} id={id} />
+      <ApiClientGuard>
+        <LocationGuard>
+          <FormatGuard>
+            <ProcessingDownloads locale={locale} id={id} />
+          </FormatGuard>
+        </LocationGuard>
+      </ApiClientGuard>
     </div>
   );
 }
