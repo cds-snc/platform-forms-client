@@ -74,3 +74,67 @@ describe("valueMatchesType - fileInput", () => {
     expect(valueMatches("not a file", FormElementTypes.fileInput, baseFileInput)).toBe(false);
   });
 });
+
+describe("valueMatchesType - dynamicRow", () => {
+  const payload = [
+    {
+      "0": "Row 1 text",
+      "1": {
+        id: "13278d83-70fc-40dd-8953-eec1a403be5b",
+        name: "fine.csv",
+        size: 1765,
+      },
+    },
+    {
+      "0": "Row 2 text",
+      "1": {
+        id: "b8074de2-c815-4c72-b1d5-c1f8be433aaf",
+        name: "bad-extension.mcsv",
+        size: 1765,
+      },
+    }
+  ];
+
+  const dynamicRowElement: FormElement = {
+    id: 3,
+    type: FormElementTypes.dynamicRow,
+    properties: {
+      titleEn: "Dynamic Row",
+      titleFr: "Ligne dynamique",
+      subElements: [
+        {
+          id: 1,
+          type: FormElementTypes.textField,
+          properties: {
+            titleEn: "Text field sub-element",
+            titleFr: "Sous-élément de champ de texte",
+          },
+        },
+        {
+          id: 2,
+          type: FormElementTypes.fileInput,
+          properties: {
+            titleEn: "File input sub-element",
+            titleFr: "Sous-élément de champ de fichier",
+          },
+        },
+      ],
+    },
+  };
+
+  it("returns array for valid dynamicRow value", () => {
+    expect(valueMatches(payload, FormElementTypes.dynamicRow, dynamicRowElement)).toStrictEqual([
+      {
+        responseKey: 1,
+        rowIndex: 1,
+        subElementId: 2,
+        type: "fileInput",
+        value: {
+          id: "b8074de2-c815-4c72-b1d5-c1f8be433aaf",
+          name: "bad-extension.mcsv",
+          size: 1765,
+        },
+      },
+    ]);
+  });
+});

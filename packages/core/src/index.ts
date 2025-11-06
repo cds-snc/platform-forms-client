@@ -9,7 +9,13 @@ export {
 
 export { isValidEmail } from "./validation/isValidEmail";
 
-export { valueMatchesType } from "./validation/valueMatchesType";
+export {
+  type SubElementTypeMismatch,
+  type ElementTypeMismatch,
+  type ValueMatchErrors,
+  valueMatchesType,
+  valuesMatchErrorContainsElementType,
+} from "./validation/valueMatchesType";
 
 export { isValidDateObject, isValidDate, isValidDateFormat } from "./validation/date";
 

@@ -5,7 +5,7 @@ import { isFieldResponseValid } from "./validation/validation";
 import { inGroup } from "./helpers";
 
 import { checkVisibilityRecursive } from "./visibility";
-import { valueMatchesType } from "@gcforms/core";
+import { valueMatchesType, type ValueMatchErrors } from "@gcforms/core";
 
 /*
  Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit
@@ -51,9 +51,14 @@ export const validateVisibleElements = (
     formRecord: PublicFormRecord;
     t: (str: string) => string;
   }
-): { errors: Responses; visibility: Map<string, boolean> } => {
+): {
+  errors: Responses;
+  visibility: Map<string, boolean>;
+  valueMatchErrors: ValueMatchErrors;
+} => {
   const errors: Responses = {};
   const visibilityMap = new Map<string, boolean>();
+  const valueMatchErrors: ValueMatchErrors = {};
 
   for (const formElement of props.formRecord.form.elements) {
     const responseValue = values[formElement.id];
@@ -103,13 +108,13 @@ export const validateVisibleElements = (
       responseValue !== null &&
       responseValue !== ""
     ) {
-      const result = valueMatchesType(responseValue, formElement.type, formElement, props.t);
+      const matched = valueMatchesType(responseValue, formElement.type, formElement, props.t);
 
-      if (result) {
-        errors[formElement.id] = result;
+      if (matched?.error && matched.details) {
+        valueMatchErrors[formElement.id] = matched.details;
       }
     }
   }
 
-  return { errors, visibility: visibilityMap };
+  return { errors, visibility: visibilityMap, valueMatchErrors };
 };
