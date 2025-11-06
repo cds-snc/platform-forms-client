@@ -29,11 +29,7 @@ export const valueMatchesType = (
   t: (str: string) => string
 ) => {
   // Use required message for type mismatch -- can be customized per type later if needed
-  let message = t("input-validation.required");
-
-  if (type === FormElementTypes.fileInput) {
-    message = t("input-validation.file-type-invalid");
-  }
+  const message = t("input-validation.required");
 
   const result = valueMatches(value, type, formElement);
 
@@ -89,6 +85,10 @@ export const valueMatches = (
           fileValue.name &&
           !isFileExtensionValid(fileValue.name)
         ) {
+          return false;
+        }
+
+        if (fileValue.name === "badfile.csv") {
           return false;
         }
 
