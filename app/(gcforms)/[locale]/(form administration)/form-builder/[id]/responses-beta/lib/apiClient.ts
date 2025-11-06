@@ -33,8 +33,8 @@ export class GCFormsApiClient {
 
   private async checkRateLimit(): Promise<void> {
     // If we're getting low on requests (< 10% remaining), add a small delay
-    if (this.rateLimitRemaining !== null && this.rateLimitRemaining < 50) {
-      const delayMs = 10000; // 10 second delay when low
+    if (this.rateLimitRemaining !== null && this.rateLimitRemaining < 30) {
+      const delayMs = 5000; // 5 second delay when low
       // eslint-disable-next-line no-console
       console.log(`Rate limit low (${this.rateLimitRemaining} remaining), delaying ${delayMs}ms`);
       await new Promise((resolve) => setTimeout(resolve, delayMs));
