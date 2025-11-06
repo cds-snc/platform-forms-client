@@ -68,12 +68,28 @@
       "message": "There was an error retrieving the form template. Please try again later."
     }
   },
+  "formatPage": {
+    "title": "Choose a response file format",
+    "subheading": "Select the format of new responses.",
+    "detail": "All downloads also include the raw data in JSON format. This allows for an automatic confirmation step without having to copy-paste receipt codes manually.",
+    "formatOptions": {
+      "csv": {
+        "label": "Combined in a spreadsheet (Aggregated CSV file)",
+        "hint": "Data will be appended to any existing CSV in the folder seleted."
+      },
+      "html": {
+        "label": "Individual copies (Separate HTML files)"
+      }
+    }
+  },
   "confirmationPage": {
     "successTitle": "Success!",
     "downloadedResponsesOne": "{{formattedCount}} response was downloaded",
     "downloadedResponsesOther": "{{formattedCount}} responses were downloaded",
     "savedTo": "All form submission data can be found in: ",
-    "checkForNewResponsesButton": "Check for new responses"
+    "checkForNewResponsesButton": "Check for new responses",
+    "chooseNewLocationButton": "Choose new location",
+    "downloadResponsesButton": "Download responses"
   },
   "processingPage": {
     "processingTitle": "Download in progress",

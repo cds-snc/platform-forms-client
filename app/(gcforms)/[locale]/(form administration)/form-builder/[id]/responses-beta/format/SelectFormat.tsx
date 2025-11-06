@@ -16,7 +16,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
   const router = useRouter();
 
   const handleBack = () => {
-    //
+    // @TODO
   };
 
   const handleNext = useCallback(async () => {
@@ -38,35 +38,36 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
   return (
     <div>
       <div className="mb-4">{t("stepOf", { current: 3, total: 3 })}</div>
-      <h1>Optional response format</h1>
+      <h1>{t("formatPage.title")}</h1>
       <div>
         <p>
-          <strong>Select to download HTML individual responses.</strong>
+          <strong>{t("formatPage.subheading")}</strong>
         </p>
-        <p>All downloads will come with a CSV and raw JSON response files.</p>
+        <p>{t("formatPage.detail")}</p>
         <div className="form-builder my-6">
           <Radio
             name="format"
             id="format-csv"
             value="csv"
-            label="Combined in a spreadsheet (Aggregated CSV file)"
+            label={t("formatPage.formatOptions.csv.label")}
+            hint={t("formatPage.formatOptions.csv.hint")}
             onChange={handleFormatChange}
           />
           <Radio
             name="format"
             id="format-html"
             value="html"
-            label="Individual copies (Separate HTML files)"
+            label={t("formatPage.formatOptions.html.label")}
             onChange={handleFormatChange}
           />
         </div>
       </div>
       <div className="flex flex-row gap-4">
         <Button theme="secondary" onClick={handleBack}>
-          Back
+          {t("backButton")}
         </Button>
         <Button theme="primary" disabled={!selectedFormat} onClick={handleNext}>
-          Next
+          {t("continueButton")}
         </Button>
       </div>
     </div>

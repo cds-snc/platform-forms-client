@@ -49,7 +49,7 @@
       "link": "Vous avez perdu votre clé API?",
       "lostKeyTip": {
         "title": "Clé API perdue?",
-        "text1": "Une seule clé API peut être associée à un formulaire. ",
+        "text1": "Une seule clé API peut être associée à un formulaire.",
         "text2": "Générez une nouvelle clé API en allant dans Paramètres > Intégration API lorsque vous êtes connecté à",
         "link": " Formulaires GC"
       }
@@ -69,12 +69,28 @@
       "message": "There was an error retrieving the form template. Please try again later."
     }
   },
+  "formatPage": {
+    "title": "Choisissez un format de fichier de réponse",
+    "subheading": "Sélectionnez le format des nouvelles réponses.",
+    "detail": "Tous les téléchargements incluent également les données brutes au format JSON. Cela permet une étape de confirmation automatique sans avoir à copier-coller manuellement les codes de réception.",
+    "formatOptions": {
+      "csv": {
+        "label": "Combiné dans un tableur (Fichier CSV agrégé)",
+        "hint": "Les données seront ajoutées à tout fichier CSV existant dans le dossier sélectionné."
+      },
+      "html": {
+        "label": "Copies individuelles (Fichiers HTML séparés)"
+      }
+    }
+  },
   "confirmationPage": {
     "successTitle": "Succès !",
     "downloadedResponsesOne": "{{formattedCount}} réponse a été téléchargée",
     "downloadedResponsesOther": "{{formattedCount}} réponses ont été téléchargées",
     "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
-    "checkForNewResponsesButton": "[FR] Check for new responses"
+    "checkForNewResponsesButton": "Vérifier les nouvelles réponses",
+    "chooseNewLocationButton": "Choisir un nouvel emplacement",
+    "downloadResponsesButton": "Télécharger les réponses"
   },
   "processingPage": {
     "processingTitle": "Téléchargement en cours",
