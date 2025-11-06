@@ -6,8 +6,6 @@ import { inGroup } from "./helpers";
 
 import { checkVisibilityRecursive } from "./visibility";
 import { valueMatchesType, type ValueMatchErrors } from "@gcforms/core";
-import { type SubElementTypeMismatch } from "@gcforms/core";
-
 /*
  Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit
  this allows passing in currentGroup vs adding the currentGroup to values beforehand
@@ -113,28 +111,19 @@ export const validateVisibleElements = (
 
       if (matched?.error && matched.details) {
         if (Array.isArray(matched.details)) {
-          const groupErrors = []; //
+          const groupErrors = {}; //
           // const rowErrors: [];
 
-
           matched.details.forEach((detail, index) => {
+            if (!groupErrors[detail.rowIndex]) {
+              groupErrors[detail.rowIndex] = {};
+            }
 
-            //const errors = {};
-           // const err = detail[i]
-
-            // loop over properties of detail object
-            //errors[err.responseKey] = "mismatched type";
-
-
-            // loop over properties of detail object
-
-
-
-
+            groupErrors[detail.rowIndex] = {
+              ...groupErrors[detail.rowIndex],
+              [detail.responseKey]: "mismatched type",
+            };
           });
-
-          // groupErrors[detail.rowIndex] = errors;
-
 
           //console.log(matched.details);
 
