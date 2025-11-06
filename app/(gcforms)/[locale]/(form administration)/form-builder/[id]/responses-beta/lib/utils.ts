@@ -12,6 +12,7 @@ import type {
   FormSubmission,
   CompleteAttachment,
 } from "./types";
+import { ATTACHMENTS_FOLDER, RAW_RESPONSE_FOLDER } from "./constants";
 
 // import { getSubmissionByFormat } from "./responseRender";
 
@@ -186,9 +187,12 @@ const downloadFormSubmissions = async ({
 
       // check if there are files to download
       if (decryptedResponse.attachments && decryptedResponse.attachments.length > 0) {
-        const attachmentsDirectoryHandle = await directoryHandle.getDirectoryHandle("attachments", {
-          create: true,
-        });
+        const attachmentsDirectoryHandle = await directoryHandle.getDirectoryHandle(
+          ATTACHMENTS_FOLDER,
+          {
+            create: true,
+          }
+        );
 
         // download the files into their own folder
         const fileDir = await attachmentsDirectoryHandle.getDirectoryHandle(submission.name, {
@@ -286,7 +290,7 @@ export const downloadAndConfirmFormSubmissions = async ({
   }
 
   const dataDirectoryHandle: FileSystemDirectoryHandle = await directoryHandle.getDirectoryHandle(
-    "data",
+    RAW_RESPONSE_FOLDER,
     { create: true }
   );
 

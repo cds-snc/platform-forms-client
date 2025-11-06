@@ -20,7 +20,7 @@ import { toast } from "../../../components/shared/Toast";
 import { useTranslation } from "@root/i18n/client";
 import { writeHtml } from "../lib/htmlWriter";
 import { TemplateFailed } from "../components/Toasts";
-import { BATCH_SIZE } from "../lib/constants";
+import { BATCH_SIZE, HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 
 interface ResponsesContextType {
   locale: string;
@@ -183,7 +183,9 @@ export const ResponsesProvider = ({
       }
 
       if (selectedFormat === "html") {
-        htmlDirectoryHandle = await directoryHandle.getDirectoryHandle("html", { create: true });
+        htmlDirectoryHandle = await directoryHandle.getDirectoryHandle(HTML_DOWNLOAD_FOLDER, {
+          create: true,
+        });
       }
 
       while (formResponses.length > 0 && !abortController.signal.aborted) {
