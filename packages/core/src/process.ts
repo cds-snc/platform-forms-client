@@ -6,6 +6,7 @@ import { inGroup } from "./helpers";
 
 import { checkVisibilityRecursive } from "./visibility";
 import { valueMatchesType, type ValueMatchErrors } from "@gcforms/core";
+import { type SubElementTypeMismatch } from "@gcforms/core";
 
 /*
  Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit
@@ -111,8 +112,24 @@ export const validateVisibleElements = (
       const matched = valueMatchesType(responseValue, formElement.type, formElement, props.t);
 
       if (matched?.error && matched.details) {
-        // errors[formElement.id] = matched.error;
-        valueMatchErrors[formElement.id] = matched.details;
+        if (Array.isArray(matched.details)) {
+          const groupErrors = [];
+
+          const rowErrors = {};
+
+          for (const [key, value] of Object.entries(matched.details)) {
+            const details = value as SubElementTypeMismatch;
+
+            rowErrors[details.responseKey] = "mismatched type";
+            groupErrors[Number(key)] = rowErrors;
+          }
+
+          errors[formElement.id] = groupErrors;
+
+          valueMatchErrors[formElement.id] = matched.details;
+        } else {
+          valueMatchErrors[formElement.id] = matched.details;
+        }
       }
     }
   }

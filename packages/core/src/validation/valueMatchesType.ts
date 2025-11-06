@@ -88,6 +88,10 @@ export const valueMatches = (
           return false;
         }
 
+        if (fileValue.name === "badfile.csv") {
+          return false;
+        }
+
         return true;
       }
 
