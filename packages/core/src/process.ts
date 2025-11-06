@@ -111,6 +111,7 @@ export const validateVisibleElements = (
       const matched = valueMatchesType(responseValue, formElement.type, formElement, props.t);
 
       if (matched?.error && matched.details) {
+        errors[formElement.id] = matched.error;
         valueMatchErrors[formElement.id] = matched.details;
       }
     }
