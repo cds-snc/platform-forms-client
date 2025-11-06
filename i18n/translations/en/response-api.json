@@ -39,6 +39,7 @@
     "noNewResponsesDetail": "There are currently no new responses for this form.",
     "newResponsesAvailable": "New responses available",
     "checkForNewResponses": "Check for new responses",
+    "checkForNewResponsesButton": "Check for new responses",
     "downloadResponses": "Choose location",
     "uploadSuccessTitle": "API key was successfully uploaded",
     "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
@@ -96,6 +97,7 @@
     "pleaseWait": "Please wait...",
     "processingMessage": "Processing {{count}} responses...",
     "cancelButton": "Pause download",
+    "cancellingButton": "Pausing...",
     "note": "For large downloads, this can take some time."
   },
   "backButton": "Back",

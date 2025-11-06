@@ -40,6 +40,7 @@
     "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
     "newResponsesAvailable": "De nouvelles réponses sont disponibles",
     "checkForNewResponses": "Vérifier les nouvelles réponses",
+    "checkForNewResponsesButton": "Vérifier les nouvelles réponses",
     "downloadResponses": "Choisir l'emplacement",
     "uploadSuccessTitle": "La clé API a été téléchargée avec succès",
     "uploadSuccessMessage": "Vous pouvez maintenant récupérer toutes les nouvelles réponses pour ce formulaire.",
@@ -97,6 +98,7 @@
     "pleaseWait": "Veuillez patienter...",
     "processingMessage": "Traitement de {{count}} réponses...",
     "cancelButton": "Mettre en pause le téléchargement",
+    "cancellingButton": "Mise en pause...",
     "note": "Pour les téléchargements volumineux, cela peut prendre un certain temps."
   },
   "backButton": "Retourner",

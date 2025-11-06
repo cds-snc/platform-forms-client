@@ -98,7 +98,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
       {apiClient && newFormSubmissions && newFormSubmissions.length === 0 ? (
         <Button theme="primary" onClick={handleCheck}>
-          Check for new responses
+          {t("loadKeyPage.checkForNewResponsesButton")}
         </Button>
       ) : (
         <Button
