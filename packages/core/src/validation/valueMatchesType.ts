@@ -88,6 +88,7 @@ export const valueMatches = (
           return false;
         }
 
+        // @todo remove this testing code
         if (fileValue.name === "badfile.csv") {
           return false;
         }
@@ -95,7 +96,7 @@ export const valueMatches = (
         return true;
       }
 
-      if(value === null || value === undefined || value === "") {
+      if (value === null || value === undefined || value === "") {
         return true;
       }
 
