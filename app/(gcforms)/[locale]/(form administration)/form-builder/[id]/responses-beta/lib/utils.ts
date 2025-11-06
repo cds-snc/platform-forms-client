@@ -3,8 +3,7 @@ import axios from "axios";
 import { SignJWT } from "jose";
 import { md5 } from "hash-wasm";
 import { FileSystemDirectoryHandle } from "native-file-system-adapter";
-
-import type { IGCFormsApiClient } from "./IGCFormsApiClient";
+import { GCFormsApiClient } from "./apiClient";
 
 import type {
   EncryptedFormSubmission,
@@ -154,7 +153,7 @@ const downloadFormSubmissions = async ({
 }: {
   directoryHandle: FileSystemDirectoryHandle;
   dataDirectoryHandle: FileSystemDirectoryHandle;
-  apiClient: IGCFormsApiClient;
+  apiClient: GCFormsApiClient;
   privateApiKey: PrivateApiKey;
   submissions: NewFormSubmission[];
   signal?: AbortSignal;
@@ -237,7 +236,7 @@ const downloadAttachment = async (
 const integrityCheckAndConfirm = async (
   submissionNames: string[],
   dir: FileSystemDirectoryHandle,
-  apiClient: IGCFormsApiClient,
+  apiClient: GCFormsApiClient,
   signal?: AbortSignal
 ) => {
   for (const submissionName of submissionNames) {
@@ -277,7 +276,7 @@ export const downloadAndConfirmFormSubmissions = async ({
   signal,
 }: {
   directoryHandle: FileSystemDirectoryHandle;
-  apiClient: IGCFormsApiClient;
+  apiClient: GCFormsApiClient;
   privateApiKey: PrivateApiKey;
   submissions: NewFormSubmission[];
   signal?: AbortSignal;
