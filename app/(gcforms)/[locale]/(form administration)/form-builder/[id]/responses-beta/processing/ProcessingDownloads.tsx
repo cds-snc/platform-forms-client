@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import { useResponsesContext } from "../context/ResponsesContext";
 import MapleLeafLoader from "@root/components/clientComponents/icons";
 import { Button } from "@root/components/clientComponents/globals";
 import { useRouter } from "next/navigation";
+import { INTERRUPT_CLEANUP_DELAY_MS } from "../lib/constants";
 
 export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string }) => {
   const router = useRouter();
   const { t } = useTranslation("response-api");
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const { processingCompleted, setInterrupt, interrupt, resetNewSubmissions } =
     useResponsesContext();
@@ -24,10 +26,19 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
     }
   }, [id, locale, processingCompleted, router]);
 
-  const handleInterrupt = () => {
+  const handleInterrupt = useCallback(async () => {
+    if (isNavigating) return; // Prevent double-click
+
+    setIsNavigating(true);
     setInterrupt(true);
     resetNewSubmissions();
-  };
+
+    // Wait for async operations to see the interrupt and cleanup
+    await new Promise((resolve) => setTimeout(resolve, INTERRUPT_CLEANUP_DELAY_MS));
+
+    // Now navigate
+    router.push(`/${locale}/form-builder/${id}/responses-beta/result`);
+  }, [setInterrupt, resetNewSubmissions, router, locale, id, isNavigating]);
 
   return (
     <div>
@@ -37,8 +48,10 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
           <p className="mb-4 text-xl">{t("processingPage.pleaseWait")}</p>
           <p className="mb-8">{t("processingPage.note")}</p>
           {!interrupt && (
-            <Button theme="secondary" onClick={handleInterrupt}>
-              {t("processingPage.cancelButton")}
+            <Button theme="secondary" onClick={handleInterrupt} disabled={isNavigating}>
+              {isNavigating
+                ? t("processingPage.cancellingButton")
+                : t("processingPage.cancelButton")}
             </Button>
           )}
         </div>

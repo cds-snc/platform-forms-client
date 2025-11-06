@@ -6,10 +6,14 @@ import type { EncryptedFormSubmission, NewFormSubmission, FormSubmissionProblem 
  */
 export interface IGCFormsApiClient {
   getFormId(): string;
-  getFormTemplate(): Promise<FormProperties>;
-  getNewFormSubmissions(): Promise<NewFormSubmission[]>;
-  getFormSubmission(submissionName: string): Promise<EncryptedFormSubmission>;
-  confirmFormSubmission(submissionName: string, confirmationCode: string): Promise<unknown>;
+  getFormTemplate(signal?: AbortSignal): Promise<FormProperties>;
+  getNewFormSubmissions(signal?: AbortSignal): Promise<NewFormSubmission[]>;
+  getFormSubmission(submissionName: string, signal?: AbortSignal): Promise<EncryptedFormSubmission>;
+  confirmFormSubmission(
+    submissionName: string,
+    confirmationCode: string,
+    signal?: AbortSignal
+  ): Promise<unknown>;
   reportProblemWithFormSubmission(
     submissionName: string,
     problem: FormSubmissionProblem

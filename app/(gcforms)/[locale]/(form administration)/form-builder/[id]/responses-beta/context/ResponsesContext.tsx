@@ -7,6 +7,7 @@ import {
   ReactNode,
   useCallback,
   useRef,
+  useEffect,
   type Dispatch,
   type SetStateAction,
 } from "react";
@@ -19,6 +20,7 @@ import { toast } from "../../../components/shared/Toast";
 import { useTranslation } from "@root/i18n/client";
 import { writeHtml } from "../lib/htmlWriter";
 import { TemplateFailed } from "../components/Toasts";
+import { BATCH_SIZE } from "../lib/constants";
 
 interface ResponsesContextType {
   locale: string;
@@ -79,22 +81,40 @@ export const ResponsesProvider = ({
   const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<string>("csv");
-  const [interruptState, setInterruptState] = useState(false);
-  const interruptRef = useRef(interruptState);
+  const [isProcessingInterrupted, setIsProcessingInterrupted] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const { t } = useTranslation("my-forms");
 
-  const setInterrupt: Dispatch<SetStateAction<boolean>> = useCallback((value) => {
-    setInterruptState((prev) => {
+  const setInterrupt: Dispatch<SetStateAction<boolean>> = useCallback(
+    (value) => {
       const nextValue =
-        typeof value === "function" ? (value as (v: boolean) => boolean)(prev) : value;
-      interruptRef.current = nextValue;
-      return nextValue;
-    });
-    setNewFormSubmissions(null);
-  }, []);
+        typeof value === "function"
+          ? (value as (v: boolean) => boolean)(isProcessingInterrupted)
+          : value;
 
-  const interrupt = interruptState;
+      setIsProcessingInterrupted(nextValue);
+
+      // Trigger abort when interrupt is set to true
+      if (nextValue && abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    },
+    [isProcessingInterrupted]
+  );
+
+  const interrupt = isProcessingInterrupted;
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      // Abort any in-flight requests on unmount
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
+      }
+    };
+  }, []);
 
   const retrieveResponses = useCallback(async () => {
     if (!apiClient) {
@@ -119,12 +139,20 @@ export const ResponsesProvider = ({
 
   const processResponses = useCallback(
     async (initialSubmissions?: NewFormSubmission[]) => {
+      // Create new abort controller for this processing run
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
+
+      // Reset interrupt state
+      setInterrupt(false);
+
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
       let formTemplate;
       let csvFileHandle: FileSystemFileHandle | null = null;
 
       if (!directoryHandle || !privateApiKey || !apiClient) {
         // Optionally handle the error or prompt the user
+        abortControllerRef.current = null;
         return;
       }
 
@@ -158,11 +186,14 @@ export const ResponsesProvider = ({
         htmlDirectoryHandle = await directoryHandle.getDirectoryHandle("html", { create: true });
       }
 
-      while (formResponses.length > 0 && !interruptRef.current) {
+      while (formResponses.length > 0 && !abortController.signal.aborted) {
         try {
-          const subArrays = createSubArrays(formResponses, 5);
+          const subArrays = createSubArrays(formResponses, BATCH_SIZE);
           for (const subArray of subArrays) {
-            if (interruptRef.current) {
+            // Check abort signal
+            if (abortController.signal.aborted) {
+              // eslint-disable-next-line no-console
+              console.log("Processing interrupted by user");
               break;
             }
 
@@ -172,6 +203,7 @@ export const ResponsesProvider = ({
               apiClient,
               privateApiKey,
               submissions: subArray,
+              signal: abortController.signal,
             });
 
             if (!submissionData) {
@@ -221,28 +253,37 @@ export const ResponsesProvider = ({
             });
 
             // Get subsequent submissions
-            if (interruptRef.current) {
+            if (abortController.signal.aborted) {
+              // eslint-disable-next-line no-console
+              console.log("Processing interrupted after batch completion");
               break;
             }
 
-            formResponses = await apiClient.getNewFormSubmissions();
+            formResponses = await apiClient.getNewFormSubmissions(abortController.signal);
           }
 
-          if (interruptRef.current) {
+          if (abortController.signal.aborted) {
             break;
           }
         } catch (error) {
-          // eslint-disable-next-line no-console
-          console.log("Error processing submissions:", error);
-          // setError(error as Error);
+          if (error instanceof Error && error.name === "AbortError") {
+            // eslint-disable-next-line no-console
+            console.log("Processing aborted");
+          } else {
+            // eslint-disable-next-line no-console
+            console.log("Error processing submissions:", error);
+          }
           break;
         }
       }
 
+      // Cleanup
+      abortControllerRef.current = null;
+
       setNewFormSubmissions(null);
       setProcessingCompleted(true);
     },
-    [apiClient, directoryHandle, newFormSubmissions, privateApiKey, selectedFormat, t]
+    [apiClient, directoryHandle, newFormSubmissions, privateApiKey, selectedFormat, setInterrupt, t]
   );
 
   const resetState = useCallback(() => {
