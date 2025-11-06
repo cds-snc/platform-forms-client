@@ -95,6 +95,10 @@ export const valueMatches = (
         return true;
       }
 
+      if(value === null || value === undefined || value === "") {
+        return true;
+      }
+
       return false;
     }
     case FormElementTypes.dropdown:

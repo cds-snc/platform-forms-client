@@ -113,21 +113,38 @@ export const validateVisibleElements = (
 
       if (matched?.error && matched.details) {
         if (Array.isArray(matched.details)) {
-          const groupErrors = [];
+          const groupErrors = []; //
+          // const rowErrors: [];
 
-          const rowErrors = {};
 
-          for (const [key, value] of Object.entries(matched.details)) {
-            const details = value as SubElementTypeMismatch;
+          matched.details.forEach((detail, index) => {
 
-            rowErrors[details.responseKey] = "mismatched type";
-            groupErrors[Number(key)] = rowErrors;
-          }
+            //const errors = {};
+           // const err = detail[i]
+
+            // loop over properties of detail object
+            //errors[err.responseKey] = "mismatched type";
+
+
+            // loop over properties of detail object
+
+
+
+
+          });
+
+          // groupErrors[detail.rowIndex] = errors;
+
+
+          //console.log(matched.details);
+
+          //groupErrors[1] = {1: "mismatched type", 2: "mismatched type 2"};
 
           errors[formElement.id] = groupErrors;
 
           valueMatchErrors[formElement.id] = matched.details;
         } else {
+          errors[formElement.id] = "mismatched type";
           valueMatchErrors[formElement.id] = matched.details;
         }
       }
