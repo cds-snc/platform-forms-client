@@ -6,6 +6,7 @@ import { Radio } from "../../../components/shared/MultipleChoice";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@root/i18n/client";
 import { useCallback } from "react";
+import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { t } = useTranslation("response-api");
@@ -14,10 +15,6 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
     useResponsesContext();
 
   const router = useRouter();
-
-  const handleBack = () => {
-    // @TODO
-  };
 
   const handleNext = useCallback(async () => {
     const initialResponses = await retrieveResponses();
@@ -63,9 +60,11 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
         </div>
       </div>
       <div className="flex flex-row gap-4">
-        <Button theme="secondary" onClick={handleBack}>
+        <LinkButton.Secondary
+          href={`/${locale}/form-builder/${id}/responses-beta/location?reset=true`}
+        >
           {t("backButton")}
-        </Button>
+        </LinkButton.Secondary>
         <Button theme="primary" disabled={!selectedFormat} onClick={handleNext}>
           {t("continueButton")}
         </Button>
