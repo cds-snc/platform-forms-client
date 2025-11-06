@@ -124,14 +124,14 @@ export const validateVisibleElements = (
 
             groupErrors[detail.rowIndex] = {
               ...groupErrors[detail.rowIndex],
-              [detail.responseKey]: "mismatched type",
+              [detail.responseKey]: props.t("input-validation.mismatched-type"),
             };
           });
 
           errors[formElement.id] = groupErrors as unknown as Responses[string];
           valueMatchErrors[formElement.id] = matched.details;
         } else {
-          errors[formElement.id] = "mismatched type" as Responses[string];
+          errors[formElement.id] = props.t("input-validation.mismatched-type");
           valueMatchErrors[formElement.id] = matched.details;
         }
       }
