@@ -2,8 +2,8 @@
   "section-title": "Responses (Pilot)",
   "stepOf": "Step {{current}} of {{total}}",
   "not-supported": {
-    "title": "Not supported",
-    "body": "This browser does not support the File System Access API. Try a different web browser or give your browser permission to save files to your device."
+    "title": "Web browser not supported",
+    "body": "This browser cannot use the File System Access API. Try a different browser or give your browser permission to save files to your device."
   },
   "startPage": {
     "intro": "Get responses in fewer steps with a form API key.",

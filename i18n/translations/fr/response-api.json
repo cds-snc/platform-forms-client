@@ -2,8 +2,8 @@
   "section-title": "Réponses (Pilote)",
   "stepOf": "Étape {{current}} de {{total}}",
   "not-supported": {
-    "title": "Problème de compatibilité",
-    "body": "Ce navigateur ne supporte pas l'API d'accès au système de fichiers. Essayez un autre navigateur Web ou autorisez votre navigateur à enregistrer des fichiers sur votre appareil."
+    "title": "Navigateur web non compatible",
+    "body": "Ce navigateur ne peut pas utiliser l'API d'accès au système de fichiers. Essayez un autre navigateur ou autorisez votre navigateur à enregistrer des fichiers sur votre appareil."
   },
   "startPage": {
     "intro": "Obtenez les réponses de votre formulaire en quelques étapes grâce à une clé API.",
