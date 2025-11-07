@@ -104,16 +104,31 @@ export const NoResponses = ({
         !checkingApiSubmissions &&
         !hasNewApiSubmissions &&
         !hasUnconfirmedApiSubmissions && (
-          <Card
-            icon={<Image src="/img/butterfly_noresponses.svg" alt="" width="200" height="200" />}
-          >
-            <div className="max-w-[600px]">
-              <h3 className="mb-4 text-slate-500">
-                <Text i18nKey="downloadResponsesTable.card.noNewResponsesApiTitle" />
-              </h3>
-              <Text i18nKey="downloadResponsesTable.card.noNewResponsesApiMessage" />
-            </div>
-          </Card>
+          <>
+            <Card
+              icon={<Image src="/img/butterfly_noresponses.svg" alt="" width="200" height="200" />}
+            >
+              <div className="max-w-[600px]">
+                <h3 className="mb-4 text-slate-500">
+                  <Text i18nKey="downloadResponsesTable.card.noNewResponsesApiTitle" />
+                </h3>
+                <Text i18nKey="downloadResponsesTable.card.noNewResponsesApiMessage" />
+              </div>
+            </Card>
+
+            {responsesBetaEnabled && (
+              <div className="mt-4">
+                <Link
+                  onClick={handleResponsesBetaClick}
+                  data-testid="responses-beta-switch-link"
+                  href={`/${i18n.language}/form-builder/${formId}/responses-beta`}
+                  className="text-black visited:text-black"
+                >
+                  {t("responsesBeta.responsesBetaLink")}
+                </Link>
+              </div>
+            )}
+          </>
         )}
 
       {/* 
