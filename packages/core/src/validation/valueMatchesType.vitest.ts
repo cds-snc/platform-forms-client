@@ -15,8 +15,12 @@ describe("valueMatchesType - textField", () => {
     expect(valueMatches("hello", FormElementTypes.textField, baseTextField)).toBe(true);
   });
 
-  it("returns true for an empty string", () => {
-    expect(valueMatches("", FormElementTypes.textField, baseTextField)).toBe(true);
+  it("throws for an empty string", () => {
+    expect(() => valueMatches("", FormElementTypes.textField, baseTextField)).toThrow();
+  });
+
+  it("throws for a null value", () => {
+    expect(() => valueMatches(null, FormElementTypes.fileInput, baseTextField)).toThrow();
   });
 
   it("returns false for a non-string value", () => {
@@ -70,9 +74,10 @@ describe("valueMatchesType - fileInput", () => {
 
   it("returns false for missing file properties", () => {
     expect(valueMatches({}, FormElementTypes.fileInput, baseFileInput)).toBe(false);
-    expect(valueMatches(null, FormElementTypes.fileInput, baseFileInput)).toBe(false);
     expect(valueMatches("not a file", FormElementTypes.fileInput, baseFileInput)).toBe(false);
   });
+
+
 });
 
 describe("valueMatchesType - dynamicRow", () => {

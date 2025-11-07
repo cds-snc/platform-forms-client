@@ -6,9 +6,10 @@ import { inGroup } from "./helpers";
 
 import { checkVisibilityRecursive } from "./visibility";
 import {
-  valueMatchesType,
   type ValueMatchErrors,
   type SubElementTypeMismatch,
+  valueMatchesType,
+  hasValue,
 } from "@gcforms/core";
 /*
  Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit
@@ -104,13 +105,12 @@ export const validateVisibleElements = (
     }
 
     // Note this checks against all visible elements, not just required ones
-    // Only check if we actually have a value to validate
-    if (
-      !errors[formElement.id] &&
-      responseValue !== undefined &&
-      responseValue !== null &&
-      responseValue !== ""
-    ) {
+    // If we already have an error for this element, skip type checking
+    if (!errors[formElement.id]) {
+      if (!hasValue(responseValue)) {
+        continue;
+      }
+
       const matched = valueMatchesType(responseValue, formElement.type, formElement, props.t);
 
       if (matched?.error && matched.details) {

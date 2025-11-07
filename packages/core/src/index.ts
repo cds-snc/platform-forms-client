@@ -13,6 +13,7 @@ export {
   type SubElementTypeMismatch,
   type ElementTypeMismatch,
   type ValueMatchErrors,
+  hasValue,
   valueMatchesType,
   valuesMatchErrorContainsElementType,
 } from "./validation/valueMatchesType";

@@ -43,12 +43,21 @@ export const valueMatchesType = (
   }
 };
 
+export const hasValue = (responseValue: unknown) => {
+  return responseValue !== undefined && responseValue !== null && responseValue !== "";
+};
+
 // Helper function to check if value matches type, returns boolean
 export const valueMatches = (
   value: unknown,
   type: string,
   formElement: FormElement
 ): boolean | SubElementTypeMismatch[] => {
+  if (!hasValue(value)) {
+    // We don't have a value to validate
+    throw new Error("Invalid value");
+  }
+
   switch (type) {
     case FormElementTypes.formattedDate:
       if (value && isValidDate(JSON.parse(value as string) as DateObject)) {
@@ -56,15 +65,19 @@ export const valueMatches = (
       }
       return false;
     case FormElementTypes.textField:
+      // Email validation
       if (formElement.properties.autoComplete === "email") {
         if (typeof value !== "string" || (value && !isValidEmail(value))) {
           return false;
         }
         return true;
       }
+
+      // General text field validation
       if (typeof value === "string") {
         return true;
       }
+
       return false;
     case FormElementTypes.checkbox: {
       if (Array.isArray(value)) {
@@ -84,11 +97,6 @@ export const valueMatches = (
           return false;
         }
 
-        return true;
-      }
-
-      // Allow empty value (no file uploaded)
-      if (value === "") {
         return true;
       }
 
