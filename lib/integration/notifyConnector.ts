@@ -1,10 +1,10 @@
 import { GCNotifyConnector, type Personalisation } from "@gcforms/connectors";
 import { logMessage } from "@lib/logger";
-import { otel } from "../otel";
+import { traceFunction } from "../otel";
 const gcNotifyConnector = GCNotifyConnector.default(process.env.NOTIFY_API_KEY ?? "");
 
 export const sendEmail = async (email: string, personalisation: Personalisation, type: string) => {
-  return otel("sendEmail", async () => {
+  return traceFunction("sendEmail", async () => {
     try {
       if (process.env.APP_ENV === "test") {
         logMessage.info("Mock Notify email sent.");

@@ -52,7 +52,7 @@ import {
   getAddressAsString,
 } from "@clientComponents/forms/AddressComplete/utils";
 import { serverTranslation } from "@i18n";
-import { otel } from "@lib/otel";
+import { traceFunction } from "@lib/otel";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -71,7 +71,7 @@ export const fetchSubmissions = AuthenticatedAction(
       lastKey: string | null;
     }
   ) => {
-    return otel("fetchResponseSubmissions", async () => {
+    return tracefunction("fetchResponseSubmissions", async () => {
       try {
         if (!formId) {
           return {
@@ -138,7 +138,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
     | JSONResponse
     | ServerActionError
   > => {
-    return otel("generateSubmissionResponseFormats", async () => {
+    return traceFunction("generateSubmissionResponseFormats", async () => {
       try {
         const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
         const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
@@ -396,7 +396,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
 
 export const confirmSubmissionCodes = AuthenticatedAction(
   async (_, confirmationCodes: string[], formId: string) => {
-    return otel("confirmResponseWithCodes", async () => {
+    return traceFunction("confirmResponseWithCodes", async () => {
       try {
         return confirmResponses(confirmationCodes, formId);
       } catch (e) {

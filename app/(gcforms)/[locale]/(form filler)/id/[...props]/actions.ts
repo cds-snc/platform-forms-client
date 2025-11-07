@@ -13,7 +13,7 @@ import { dateHasPast } from "@lib/utils";
 import { validateOnSubmit } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
 import { sendNotifications } from "@lib/notifications";
-import { otel } from "@lib/otel";
+import { traceFunction } from "@lib/otel";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -39,7 +39,7 @@ export async function submitForm(
   error?: Error;
   fileURLMap?: SignedURLMap;
 }> {
-  return otel("submitForm", async () => {
+  return traceFunction("submitForm", async () => {
     const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
     try {
