@@ -123,6 +123,12 @@ export const valueMatches = (
             formElement.properties.subElements[parseInt(responseKey)]
           ) {
             const subElement = formElement.properties.subElements[parseInt(responseKey)];
+
+            if (!hasValue(responseValue)) {
+              // We don't have a value to validate
+              continue;
+            }
+
             const result = valueMatches(responseValue, subElement.type, subElement);
 
             if (!result) {
