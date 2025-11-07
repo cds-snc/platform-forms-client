@@ -125,7 +125,7 @@ export const validateVisibleElements = (
 
             groupErrors[detail.rowIndex] = {
               ...groupErrors[detail.rowIndex],
-              [detail.responseKey]: props.t("input-validation.mismatched-type"),
+              [detail.responseKey]: matched.error,
             };
           });
 
@@ -133,7 +133,7 @@ export const validateVisibleElements = (
 
           valueMatchErrors[formElement.id] = matched.details;
         } else {
-          errors[formElement.id] = props.t("input-validation.mismatched-type");
+          errors[formElement.id] = matched.error;
           valueMatchErrors[formElement.id] = matched.details;
         }
       }

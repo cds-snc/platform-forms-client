@@ -20,28 +20,24 @@ export type ElementTypeMismatch = {
 
 export type ValueMatchErrors = Record<string, SubElementTypeMismatch[] | ElementTypeMismatch>;
 
-// Returns error message string if value does not match type, otherwise undefined
-// This pattern matches isFieldResponseValid
 export const valueMatchesType = (
   value: Response,
   type: string,
   formElement: FormElement,
   t: (str: string) => string
 ) => {
-  // Use required message for type mismatch -- can be customized per type later if needed
-  const message = t("input-validation.required");
-
   const result = valueMatches(value, type, formElement);
+  const errorMessage = t("input-validation.mismatched-type");
 
+  // Return sub-element mismatches (passes back results from dynamic rows)
   if (Array.isArray(result) && result.length > 0) {
-    // Handle sub-element mismatches
-    return { error: message, details: result };
+    return { error: errorMessage, details: result };
   }
 
+  // Return element mismatches
   if (result === false) {
-    // Handle element mismatches
     return {
-      error: message,
+      error: errorMessage,
       details: { type: formElement.type, elementId: formElement.id, value },
     };
   }
