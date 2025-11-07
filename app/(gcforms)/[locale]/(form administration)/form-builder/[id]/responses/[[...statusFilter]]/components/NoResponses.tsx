@@ -7,8 +7,11 @@ import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { newResponsesExist, unConfirmedResponsesExist } from "../actions";
 import { StatusFilter } from "../types";
 
+import { useRouter } from "next/navigation";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags } from "@root/lib/cache/types";
+import { FeatureFlags } from "@lib/cache/types";
+
+import { enableResponsesBetaMode } from "../../actions";
 
 export const NoResponses = ({
   statusFilter,
@@ -17,6 +20,7 @@ export const NoResponses = ({
   statusFilter: StatusFilter;
   formId: string;
 }) => {
+  const router = useRouter();
   const { getFlag } = useFeatureFlags();
   const { t, i18n } = useTranslation(["form-builder-responses"]);
   const { hasApiKeyId } = useFormBuilderConfig();
@@ -26,6 +30,12 @@ export const NoResponses = ({
   const [hasUnconfirmedApiSubmissions, setHasUnconfirmedApiSubmissions] = useState(false);
 
   const responsesBetaEnabled = getFlag(FeatureFlags.responsesBeta);
+
+  const handleResponsesBetaClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    await enableResponsesBetaMode();
+    router.push(`/${i18n.language}/form-builder/${formId}/responses-beta`);
+  };
 
   useEffect(() => {
     const getApiSubmissions = async () => {
@@ -124,6 +134,8 @@ export const NoResponses = ({
           {responsesBetaEnabled && (
             <div className="mt-4">
               <Link
+                onClick={handleResponsesBetaClick}
+                data-testid="responses-beta-switch-link"
                 href={`/${i18n.language}/form-builder/${formId}/responses-beta`}
                 className="text-black visited:text-black"
               >
