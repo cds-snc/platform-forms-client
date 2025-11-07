@@ -81,7 +81,8 @@
   },
   "responsesBeta": {
     "pageTitle": "Responses (Beta - Trial Feature)",
-    "responsesBetaLink": "Try out the new Responses (in beta)"
+    "responsesBetaLink": "Try out the new Responses (in beta)",
+    "responsesSwitchLink": "Switch back to the classic Responses view"
   },
   "supportWillContact": "Support will contact you",
   "reportedAsProblem": "Response reported as a problem",
