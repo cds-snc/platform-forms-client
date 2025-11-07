@@ -115,6 +115,7 @@ export const validateVisibleElements = (
 
       if (matched?.error && matched.details) {
         if (Array.isArray(matched.details)) {
+          // Build errors UI display for dynamic rows
           const groupErrors: Record<string, string>[] = [];
           const detailsArray = matched.details as SubElementTypeMismatch[];
           detailsArray.forEach((detail) => {
@@ -129,6 +130,7 @@ export const validateVisibleElements = (
           });
 
           errors[formElement.id] = groupErrors as unknown as Responses[string];
+
           valueMatchErrors[formElement.id] = matched.details;
         } else {
           errors[formElement.id] = props.t("input-validation.mismatched-type");
