@@ -30,14 +30,17 @@
     },
     "menu": {
       "more": "Plus",
-      "save": "Enregistrer",
+      "save": "Télécharger une copie",
       "copyLink": "Copier le lien",
       "preview": "Prévisualiser",
       "edit": "Modifier",
       "settings": "Paramètres",
       "delete": "Supprimer",
       "coppiedToClipboard": "Copié dans le presse-papier",
-      "somethingWentWrong": "Il y a eu un problème"
+      "somethingWentWrong": "Quelque chose a mal tourné",
+      "clone": "Dupliquer",
+      "cloneSuccess": "Le formulaire a été dupliqué.",
+      "cloneFailed": "Le formulaire n'a pas pu être dupliqué."
     },
     "actionRequired": {
       "description": "Action requise : ",

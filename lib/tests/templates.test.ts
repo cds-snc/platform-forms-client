@@ -97,6 +97,13 @@ describe("Template CRUD functions", () => {
       mockGetAbility(userID);
     });
 
+    // Ensure vault submission count mock state does not leak between tests
+    beforeEach(() => {
+      mockUnprocessedSubmissions.mockReset();
+      // Default to no unprocessed submissions unless a test overrides
+      mockUnprocessedSubmissions.mockResolvedValue(false);
+    });
+
     it("Create a Template", async () => {
       (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
@@ -545,6 +552,15 @@ describe("Template CRUD functions", () => {
         ...buildPrismaResponse("formtestID", formConfiguration),
         users: [{ id: "1" }],
       });
+      // Added: handle implementation using findFirst
+      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration),
+        users: [{ id: "1" }],
+      });
+      // New implementation uses findFirstOrThrow to fetch publication status
+      (prismaMock.template.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        isPublished: false,
+      });
 
       (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
@@ -598,21 +614,78 @@ describe("Template CRUD functions", () => {
       expect(mockedDeleteKey).toHaveBeenCalledTimes(1);
     });
 
-    it("Template deletion should not be allowed if there are still unprocessed submissions associated to targeted form", async () => {
+    // Test for published template with unprocessed submissions
+    it("Published template with unprocessed submissions cannot be deleted", async () => {
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-        ...buildPrismaResponse("formtestID", formConfiguration),
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
         users: [{ id: "1" }],
       });
+      // Added: handle implementation using findFirst
+      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        users: [{ id: "1" }],
+      });
+      // New implementation uses findFirstOrThrow to fetch publication status
+      (prismaMock.template.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        isPublished: true,
+      });
 
+      // Should never reach update when blocked
       (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("formtestID", formConfiguration)
+        buildPrismaResponse("formtestID", formConfiguration, true)
       );
 
       mockUnprocessedSubmissions.mockResolvedValueOnce(true);
 
-      await expect(async () => {
-        await deleteTemplate("formtestID");
-      }).rejects.toThrow(TemplateHasUnprocessedSubmissions);
+      await expect(deleteTemplate("formtestID")).rejects.toThrow(
+        TemplateHasUnprocessedSubmissions
+      );
+
+      // Ensure no archival update was attempted
+      expect(prismaMock.template.update).not.toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ ttl: expect.any(Date) }),
+        })
+      );
+    });
+
+    it("Draft (unpublished) template with unprocessed submissions can be deleted", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, false),
+        users: [{ id: "1" }],
+      });
+      
+      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, false),
+        users: [{ id: "1" }],
+      });
+      // New implementation uses findFirstOrThrow to fetch publication status
+      (prismaMock.template.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        isPublished: false,
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration, false)
+      );
+
+      mockUnprocessedSubmissions.mockResolvedValueOnce(true);
+
+      const deletedTemplate = await deleteTemplate("formtestID");
+
+      expect(deletedTemplate).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+        })
+      );
+
+      expect(prismaMock.template.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: "formtestID" },
+          data: { ttl: expect.any(Date) },
+        })
+      );
     });
 
     it("Only include public properties", async () => {

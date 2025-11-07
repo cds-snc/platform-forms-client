@@ -52,10 +52,7 @@ export async function submitForm(
       if (template.closingDate && dateHasPast(Date.parse(template.closingDate))) {
         return {
           id: formId,
-          error: {
-            name: FormStatus.FORM_CLOSED_ERROR,
-            message: "Form is closed",
-          },
+          error: { name: FormStatus.FORM_CLOSED_ERROR, message: "Form is closed" },
         };
       }
 
@@ -68,8 +65,8 @@ export async function submitForm(
           return {
             id: formId,
             error: {
-              name: FormStatus.CAPTCHA_VERIFICATION_ERROR,
-              message: "Captcha verification failure",
+              name: FormStatus.FORM_CLOSED_ERROR,
+              message: "Form is closed",
             },
           };
         }
@@ -114,10 +111,7 @@ export async function submitForm(
         `Could not submit response for form ${formId}. Received error: ${(e as Error).message}`
       );
 
-      return {
-        id: formId,
-        error: { name: (e as Error).name, message: (e as Error).message },
-      };
+      return { id: formId, error: { name: (e as Error).name, message: (e as Error).message } };
     }
   });
 }

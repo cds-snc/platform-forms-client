@@ -7,9 +7,14 @@ export {
   isFileExtensionValid,
 } from "./validation/file";
 
+export { isValidEmail } from "./validation/isValidEmail";
+
+export { valueMatchesType } from "./validation/valueMatchesType";
+
 export { isValidDateObject, isValidDate, isValidDateFormat } from "./validation/date";
 
-export { validateOnSubmit, validate } from "./process";
+export { validateOnSubmit, validate, validateVisibleElements } from "./process";
+
 export {
   getVisibleGroupsBasedOnValuesRecursive,
   checkPageVisibility,

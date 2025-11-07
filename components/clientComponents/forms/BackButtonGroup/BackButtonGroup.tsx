@@ -1,10 +1,10 @@
 import { useTranslation } from "@i18n/client";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Button } from "@clientComponents/globals";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { Language } from "@lib/types/form-builder-types";
 import { BackArrowIcon24x24 } from "@serverComponents/icons";
 import { focusHeadingBySelector } from "@lib/client/clientHelpers";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 export const BackButtonGroup = ({
   language,
@@ -21,9 +21,9 @@ export const BackButtonGroup = ({
   // Only show on Group screens
   if (
     !currentGroup ||
-    currentGroup === LockedSections.START ||
-    currentGroup === LockedSections.REVIEW ||
-    currentGroup === LockedSections.END
+    currentGroup === LOCKED_GROUPS.START ||
+    currentGroup === LOCKED_GROUPS.REVIEW ||
+    currentGroup === LOCKED_GROUPS.END
   ) {
     return <></>;
   }

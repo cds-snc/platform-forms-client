@@ -30,14 +30,17 @@
     },
     "menu": {
       "more": "More",
-      "save": "Save to computer",
+      "save": "Download copy",
       "copyLink": "Copy link",
       "preview": "Preview",
       "edit": "Edit",
       "settings": "Settings",
       "delete": "Delete",
       "coppiedToClipboard": "Copied to clipboard",
-      "somethingWentWrong": "Something went wrong"
+      "somethingWentWrong": "Something went wrong",
+      "clone": "Duplicate",
+      "cloneSuccess": "Form was duplicated.",
+      "cloneFailed": "Form could not be duplicated."
     },
     "actionRequired": {
       "description": "Action required: ",

@@ -1,14 +1,11 @@
 import React, { type JSX } from "react";
-import { FormElement, FormElementTypes, Responses, PublicFormRecord } from "@gcforms/types";
+import { FormElement, Responses, PublicFormRecord } from "@gcforms/types";
 import { FormikProps } from "formik";
 import { ErrorListItem } from "@clientComponents/forms";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
 import { isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
-import { DateObject } from "@clientComponents/forms/FormattedDate/types";
-import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
-import { isValidEmail } from "@lib/validation/isValidEmail";
 
 export const getFieldType = (formElement: FormElement) => {
   if (formElement.properties.autoComplete === "email") {
@@ -16,103 +13,6 @@ export const getFieldType = (formElement: FormElement) => {
   }
 
   return formElement.type;
-};
-
-const valueMatchesType = (value: unknown, type: string, formElement: FormElement) => {
-  switch (type) {
-    case FormElementTypes.formattedDate:
-      if (value && isValidDate(JSON.parse(value as string) as DateObject)) {
-        return true;
-      }
-      return false;
-    case FormElementTypes.textField:
-      if (formElement.properties.autoComplete === "email") {
-        if (value && !isValidEmail(value as string)) {
-          return false;
-        }
-      }
-      return true;
-    case FormElementTypes.checkbox: {
-      if (Array.isArray(value)) {
-        return true;
-      }
-      return false;
-    }
-    case FormElementTypes.fileInput: {
-      if (
-        value !== null &&
-        typeof value == "object" &&
-        "name" in value &&
-        "size" in value &&
-        "id" in value
-      ) {
-        return true;
-      }
-      return false;
-    }
-    case FormElementTypes.dynamicRow: {
-      if (!Array.isArray(value)) {
-        return false;
-      }
-
-      let valid = true;
-
-      for (const row of value as Array<Responses>) {
-        for (const [responseKey, responseValue] of Object.entries(row)) {
-          if (
-            formElement.properties.subElements &&
-            formElement.properties.subElements[parseInt(responseKey)]
-          ) {
-            const subElement = formElement.properties.subElements[parseInt(responseKey)];
-            const result = valueMatchesType(responseValue, subElement.type, subElement);
-
-            if (!result) {
-              valid = false;
-              break;
-            }
-          }
-        }
-      }
-
-      return valid;
-    }
-    default:
-      if (typeof value === "string") {
-        return true;
-      }
-  }
-
-  return false;
-};
-
-/**
- * Server-side validation the form responses
- */
-export const validateResponses = async (values: Responses, formRecord: PublicFormRecord) => {
-  const errors: Responses = {};
-  for (const item in values) {
-    const formElement = formRecord.form.elements.find((element) => element.id == parseInt(item));
-
-    if (!formElement) {
-      errors[item] = "response-to-non-existing-question";
-      continue;
-    }
-
-    // Check if the incoming value matches the type of the form element
-    const result = valueMatchesType(values[item], formElement.type, formElement);
-
-    // Only invalidate the response if the type has a value
-    // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
-    if (values[item] && !result) {
-      errors[item] = {
-        type: getFieldType(formElement),
-        value: values[item],
-        message: "response-type-mismatch",
-      };
-    }
-  }
-
-  return errors;
 };
 
 /**
@@ -140,39 +40,41 @@ export const getErrorList = (
     errorList = sortedFormElementErrors.map(([formElementKey, formElementErrorValue]) => {
       if (Array.isArray(formElementErrorValue)) {
         return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
-          return Object.entries(dynamicRowErrors).map(
-            ([dynamicRowElementKey, dyanamicRowElementErrorValue]) => {
-              const id = `${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`;
-              const parentElement = props.formRecord.form.elements.find(
-                (el) => el.id === formElementKey
-              );
+          return dynamicRowErrors && typeof dynamicRowErrors === "object"
+            ? Object.entries(dynamicRowErrors).map(
+                ([dynamicRowElementKey, dyanamicRowElementErrorValue]) => {
+                  const id = `${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`;
+                  const parentElement = props.formRecord.form.elements.find(
+                    (el) => el.id === formElementKey
+                  );
 
-              let subElement;
+                  let subElement;
 
-              if (dyanamicRowElementErrorValue) {
-                const subElements = parentElement?.properties.subElements;
-                subElement = subElements && subElements[Number(dynamicRowElementKey)];
-              }
+                  if (dyanamicRowElementErrorValue) {
+                    const subElements = parentElement?.properties.subElements;
+                    subElement = subElements && subElements[Number(dynamicRowElementKey)];
+                  }
 
-              return (
-                dyanamicRowElementErrorValue && (
-                  <ErrorListItem
-                    key={`error-${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
-                    errorKey={`${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
-                    value={`${dyanamicRowElementErrorValue as string}`}
-                  >
-                    <ErrorListMessage
-                      language={props.language || "en"}
-                      id={id}
-                      elements={[]}
-                      defaultValue={""}
-                      subElement={subElement}
-                    />
-                  </ErrorListItem>
-                )
-              );
-            }
-          );
+                  return (
+                    dyanamicRowElementErrorValue && (
+                      <ErrorListItem
+                        key={`error-${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
+                        errorKey={`${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
+                        value={`${dyanamicRowElementErrorValue as string}`}
+                      >
+                        <ErrorListMessage
+                          language={props.language || "en"}
+                          id={id}
+                          elements={[]}
+                          defaultValue={""}
+                          subElement={subElement}
+                        />
+                      </ErrorListItem>
+                    )
+                  );
+                }
+              )
+            : false;
         });
       } else {
         return (
@@ -192,7 +94,18 @@ export const getErrorList = (
       }
     });
   }
-  return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
+
+  // Flatten the nested arrays and filter out empty/falsy values
+  // Prevent rendering empty error lists
+  // The error list can be nested so we want to avoid rendering empty arrays
+  // i.e. [[ [] ]]
+  const flattenedErrorList = errorList
+    ? (errorList.flat(Infinity) as JSX.Element[]).filter(Boolean)
+    : [];
+
+  return flattenedErrorList && flattenedErrorList.length ? (
+    <ol className="gc-ordered-list">{flattenedErrorList}</ol>
+  ) : null;
 };
 
 /**

@@ -43,7 +43,7 @@ export const ResetFlowDialog = ({
         <div className="mx-5 my-4 flex flex-col gap-4">
           <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("logic.resetRulesDialog.areYouSure")}</h3>
           <p className="text-sm">
-            <Markdown options={{ forceBlock: true }}>{t("logic.resetRulesDialog.text")}</Markdown>
+            <Markdown options={{ forceBlock: false }}>{t("logic.resetRulesDialog.text")}</Markdown>
           </p>
 
           <span></span>

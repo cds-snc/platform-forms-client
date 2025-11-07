@@ -14,7 +14,7 @@ services:
       - 3000
 
   db:
-    image: postgres:13.22@sha256:aedabd10a05c7304233d006a186a42d7d350b11e702d227dc09a99882dafa142
+    image: postgres:13.22@sha256:f8e950624f314c103c9f40d1ba24ee67f1b16b529b342420d851d9b9d52449c3
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: chummy
@@ -30,7 +30,7 @@ services:
 
   redis:
     restart: unless-stopped
-    image: redis:latest@sha256:cc2dfb8f5151da2684b4a09bd04b567f92d07591d91980eb3eca21df07e12760
+    image: redis:latest@sha256:f0957bcaa75fd58a9a1847c1f07caf370579196259d69ac07f2e27b5b389b021
     ports:
       - "6379:6379"
     expose:
