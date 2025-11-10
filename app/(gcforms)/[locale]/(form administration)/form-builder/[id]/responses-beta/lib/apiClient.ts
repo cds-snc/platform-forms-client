@@ -21,10 +21,9 @@ export class GCFormsApiClient {
 
     // Response interceptor to track rate limits
     this.httpClient.interceptors.response.use((response) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const headers = response.headers as any;
-      const remaining = headers.get?.("x-ratelimit-remaining");
-      if (remaining !== undefined) {
+      const headers = response.headers as Record<string, string | string[]>;
+      const remaining = headers["x-ratelimit-remaining"];
+      if (remaining !== undefined && typeof remaining === "string") {
         this.rateLimitRemaining = parseInt(remaining, 10);
       }
       return response;
