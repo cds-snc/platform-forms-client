@@ -13,7 +13,9 @@
       "generateKey": "Générez une clé API pour votre formulaire dans les Paramètres.",
       "generateKeyDetail": "C'est ainsi que vous pourrez accéder aux nouvelles réponses.",
       "browserSupport": "Assurez-vous d'utiliser Google Chrome ou Microsoft Edge.",
-      "browserSupportDetail": "Votre navigateur demandera l'autorisation d'enregistrer des fichiers sur votre appareil."
+      "browserSupportDetail": "Votre navigateur demandera l'autorisation d'enregistrer des fichiers sur votre appareil.",
+      "attachSafety": "Take caution when opening files attachments.",
+      "attachSafetyDetail": "Check files before opening, follow warning prompts, use host-based sensors."
     },
     "steps": {
       "heading": "Ensuite, suivez ces étapes :",

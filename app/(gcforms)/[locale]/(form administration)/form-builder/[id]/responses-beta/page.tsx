@@ -41,6 +41,12 @@ export default async function Page(props: {
               {t("startPage.beforeStart.browserSupportDetail")}
             </div>
           </li>
+          <li>
+            <strong>{t("startPage.beforeStart.attachSafety")}</strong>
+            <div className="text-sm text-slate-700">
+              {t("startPage.beforeStart.attachSafetyDetail")}
+            </div>
+          </li>
         </ul>
 
         <hr className="my-6 border-t border-black" />
