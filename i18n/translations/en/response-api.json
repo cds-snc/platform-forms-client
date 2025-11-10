@@ -103,5 +103,15 @@
   "backButton": "Back",
   "backToStart": "Back to start",
   "continueButton": "Continue",
-  "failed-to-load-api-key": "API key failed to load"
+  "failed-to-load-api-key": "API key failed to load",
+  "toasts": {
+    "rateLimitExceeded": {
+      "title": "Rate limit exceeded",
+      "message": "You have exceeded the number of allowed requests. Please wait before trying again."
+    },
+    "unknownError": {
+      "title": "An unknown error occurred",
+      "message": "An unexpected error occurred. Please try again later."
+    }
+  }
 }

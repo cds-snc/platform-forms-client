@@ -19,7 +19,7 @@ import { initCsv, writeRow } from "../lib/csvWriter";
 import { toast } from "../../../components/shared/Toast";
 import { useTranslation } from "@root/i18n/client";
 import { writeHtml } from "../lib/htmlWriter";
-import { TemplateFailed } from "../components/Toasts";
+import { TemplateFailed, UnknownError } from "../components/Toasts";
 import { BATCH_SIZE, HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
 
@@ -295,6 +295,7 @@ export const ResponsesProvider = ({
           } else {
             logger.error("Error processing submissions:", error);
           }
+          toast.error(<UnknownError />, "wide");
           break;
         }
       }

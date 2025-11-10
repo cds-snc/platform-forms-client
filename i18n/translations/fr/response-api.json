@@ -104,5 +104,15 @@
   "backButton": "Retourner",
   "backToStart": "Retourner au début",
   "continueButton": "Continuer",
-  "failed-to-load-api-key": "La clé API n'a pas pu être téléversée"
+  "failed-to-load-api-key": "La clé API n'a pas pu être téléversée",
+  "toasts": {
+    "rateLimitExceeded": {
+      "title": "Rate limit exceeded",
+      "message": "You have exceeded the number of allowed requests. Please wait before trying again."
+    },
+    "unknownError": {
+      "title": "An unknown error occurred",
+      "message": "An unexpected error occurred. Please try again later."
+    }
+  }
 }
