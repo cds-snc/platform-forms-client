@@ -9,7 +9,6 @@ _(le français suit)_
 ## You’ll also see: 
 
 - A folder with **raw data** in JSON format.  _These files eliminate the need for a manual confirmation step._ 
-
 - A folder with **logs** of all actions taken. _These files help with debugging. Please do not alter these files._
 
 ---
@@ -23,4 +22,4 @@ _(le français suit)_
 ## Vous verrez également :
 
 - Un dossier avec les **données brutes** au format JSON.  _Ces fichiers éliminent la nécessité de l’étape de confirmation manuelle._
-Un dossier contenant les **journaux** avec toutes les actions effectuées.  _Ces fichiers facilitent le débogage. Veuillez ne pas modifier ces fichiers._
+- Un dossier contenant les **journaux** avec toutes les actions effectuées.  _Ces fichiers facilitent le débogage. Veuillez ne pas modifier ces fichiers._
