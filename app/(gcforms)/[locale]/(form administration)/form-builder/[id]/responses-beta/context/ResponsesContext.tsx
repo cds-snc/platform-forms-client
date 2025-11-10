@@ -22,6 +22,7 @@ import { writeHtml } from "../lib/htmlWriter";
 import { TemplateFailed, UnknownError } from "../components/Toasts";
 import { BATCH_SIZE, HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
+import { useApiDebug } from "../lib/useApiDebug";
 
 interface ResponsesContextType {
   locale: string;
@@ -120,6 +121,9 @@ export const ResponsesProvider = ({
     };
   }, []);
 
+  // Enable dev console helpers for simulating API errors
+  useApiDebug();
+
   const retrieveResponses = useCallback(async () => {
     if (!apiClient) {
       return [];
@@ -135,8 +139,9 @@ export const ResponsesProvider = ({
 
       return submissions;
     } catch (error) {
-      logger.error("Error loading submissions:", error);
+      logger.info("Error loading submissions:", error);
       setNewFormSubmissions([]);
+      toast.error(<UnknownError />, "wide");
       return [];
     }
   }, [apiClient, logger]);

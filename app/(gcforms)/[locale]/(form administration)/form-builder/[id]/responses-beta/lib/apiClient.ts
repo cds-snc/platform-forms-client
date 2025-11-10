@@ -4,6 +4,10 @@ import type { EncryptedFormSubmission, NewFormSubmission, FormSubmissionProblem 
 
 import { TokenRateLimitError } from "./errorsTypes";
 import { FormProperties } from "@root/lib/types";
+import {
+  addErrorSimulationInterceptor,
+  addRateLimitTrackingInterceptor,
+} from "./apiClientInterceptors";
 
 export class GCFormsApiClient {
   private formId: string;
@@ -19,15 +23,11 @@ export class GCFormsApiClient {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    // Response interceptor to track rate limits
-    this.httpClient.interceptors.response.use((response) => {
-      const headers = response.headers as Record<string, string | string[]>;
-      const remaining = headers["x-ratelimit-remaining"];
-      if (remaining !== undefined && typeof remaining === "string") {
-        this.rateLimitRemaining = parseInt(remaining, 10);
-      }
-      return response;
+    // Add interceptors
+    addRateLimitTrackingInterceptor(this.httpClient, (remaining) => {
+      this.rateLimitRemaining = remaining;
     });
+    addErrorSimulationInterceptor(this.httpClient);
   }
 
   private async checkRateLimit(): Promise<void> {
