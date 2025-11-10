@@ -4,6 +4,8 @@ import { ReportDialog } from "./Dialogs/ReportDialog";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 
+import { enableResponsesBetaMode } from "../../actions";
+
 // TODO: move to an app setting variable
 const MAX_REPORT_COUNT = 20;
 
@@ -13,6 +15,12 @@ export const ResponsesFooter = ({ formId }: { formId: string }) => {
 
   const onSuccessfulReport = () => {
     router.refresh();
+  };
+
+  const handleResponsesBetaClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    await enableResponsesBetaMode();
+    router.push(`/${i18n.language}/form-builder/${formId}/responses-beta`);
   };
 
   return (
@@ -28,6 +36,17 @@ export const ResponsesFooter = ({ formId }: { formId: string }) => {
       >
         {t("responses.viewAllProblemResponses")}
       </Link>
+
+      {responsesBetaEnabled && (
+        <Link
+          data-testid="responses-beta-link"
+          href={`/${i18n.language}/form-builder/${formId}/responses-beta`}
+          onClick={handleResponsesBetaClick}
+          className="ml-12 text-black visited:text-black"
+        >
+          {t("responsesBeta.responsesBetaLink")}
+        </Link>
+      )}
     </div>
   );
 };

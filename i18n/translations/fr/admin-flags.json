@@ -33,6 +33,10 @@
     "fileUpload": {
       "title": "Téléversement de fichier",
       "description": "Activer le téléverseur de fichier en tant qu'élément pouvant être ajouté à un formulaire"
+    },
+    "responsesBeta": {
+      "title": "Réponses Bêta",
+      "description": "Activer le flux bêta pour la récupération des réponses au formulaire de l'interface, avec un clé API."
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",

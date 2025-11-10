@@ -79,6 +79,11 @@
     },
     "viewAllProblemResponses": "Afficher les réponses signalées"
   },
+  "responsesBeta": {
+    "pageTitle": "Réponses (Bêta - Fonctionnalité à l'essai)",
+    "responsesBetaLink": "Essayer les nouvelles Réponses (en bêta)",
+    "responsesSwitchLink": "Switch back to the classic Responses view [FR]"
+  },
   "supportWillContact": "L’équipe de soutien vous contactera",
   "reportedAsProblem": "Réponse signalée avec problème",
   "downloadSuccess": {
