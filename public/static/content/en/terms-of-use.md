@@ -22,6 +22,7 @@ You are responsible for:
 - Identifying the confidentiality of the information collected through your forms. GC Forms supports the collection of data classified as up to PROTECTED B. Learn more about identifying confidentiality through the [Standard on Security Categorization](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32614).
 - Complying with the [Privacy Act](https://laws-lois.justice.gc.ca/eng/acts/p-21/) and [Access to Information Act](https://laws-lois.justice.gc.ca/eng/acts/a-1/) related to the personal and sensitive information in responses submitted through your forms, if there is a request, incident, or data breach.
 - Retrieving responses directly from our database when handling more sensitive Protected B information, either by downloading from GC Forms or via the data retrieval API. Receiving responses via email  is only possible for forms for up to Protected A published prior to June 11, 2025.
+- Taking additional measures when opening file attachments, such as checking the file before opening it, opening files in a safe place, following safety prompts, and running host-based sensors on your device.  
 - Communicating with your users about malicious files they have submitted as attachments or about other issues with the form or the data in their submission.
 - Ensuring that other team members given access to your forms and responses have the appropriate authorities and the security clearance needed to access the data collected. For this reason, shared email accounts are not permitted in GC Forms. Any access must be given to authorized employees only using a valid Government of Canada email address.
 
@@ -61,7 +62,7 @@ Ensuring the API key associated with your form is secure to protect access to fo
 - Do not share your password with anyone or store it where others could find it. If someone else needs access to a form, [contact us](/en/support).
 - Safeguard your API keys. If you suspect an API key has been compromised, notify us, and update your integration with a newly generated API key to secure access to form responses.
 - Ensure the privacy and security of protected information upon downloading form responses from GC Forms. If Responses are not saved and confirmed within 45 days, we will take necessary steps to ensure they are retrieved by the responsible program or service.
-- Report any problems with GC Forms' security features, for example if you think hCaptcha may be blocking genuine users from completing your form.
+- Report any problems with GC Forms' security features, for example if you think hCaptcha may be blocking genuine users from completing your form, or for inaccurate file scanning results.
 - Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/security-notice/).
 
 ## Publish in both Official Languages
