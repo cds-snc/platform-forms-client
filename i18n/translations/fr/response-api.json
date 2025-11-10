@@ -15,7 +15,7 @@
       "browserSupport": "Assurez-vous d'utiliser Google Chrome ou Microsoft Edge.",
       "browserSupportDetail": "Votre navigateur demandera l'autorisation d'enregistrer des fichiers sur votre appareil.",
       "attachSafety": "Soyez prudent lorsque vous ouvrez des pièces jointes.",
-      "attachSafetyDetail": "Vérifiez les fichiers avant de les ouvrir, suivez les avertissements et utilisez des ccapteurs au niveau de l'hôte."
+      "attachSafetyDetail": "Vérifiez les fichiers avant de les ouvrir, suivez les avertissements et utilisez des capteurs au niveau de l'hôte."
     },
     "steps": {
       "heading": "Ensuite, suivez ces étapes :",
