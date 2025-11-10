@@ -4,7 +4,6 @@ import { useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 
-import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { LoadKey } from "./LoadKey";
 import { getAccessTokenFromApiKey } from "../lib/utils";
@@ -12,20 +11,15 @@ import { showOpenFilePicker } from "native-file-system-adapter";
 import { GCFormsApiClient } from "../lib/apiClient";
 import { Responses } from "../Responses";
 import { LostKeyLink, LostKeyPopover } from "./LostKeyPopover";
+import { ResponseActionButtons } from "./ResponseActionButtons";
 
 export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => {
   const { t } = useTranslation("response-api");
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const {
-    apiClient,
-    retrieveResponses,
-    setApiClient,
-    setPrivateApiKey,
-    newFormSubmissions,
-    resetState,
-  } = useResponsesContext();
+  const { apiClient, retrieveResponses, setApiClient, setPrivateApiKey, resetState } =
+    useResponsesContext();
 
   // If navigation included ?reset=true, call resetState now (after navigation) and remove the param
   useEffect(() => {
@@ -44,23 +38,8 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     void retrieveResponses();
   }, [apiClient, retrieveResponses]);
 
-  const handleBack = () => {
-    resetState();
-    router.push(`/${locale}/form-builder/${id}/responses-beta`);
-  };
-
-  const handleNext = () => {
-    // clean api client state before proceeding
-    router.push(`/${locale}/form-builder/${id}/responses-beta/location`);
-  };
-
-  const handleCheck = async () => {
-    void retrieveResponses();
-  };
-
   const handleLoadApiKey = useCallback(async () => {
     try {
-      // Simulate user key retrieval
       const [fileHandle] = await showOpenFilePicker({
         multiple: false, // default
         excludeAcceptAllOption: false, // default
@@ -90,28 +69,6 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     }
   }, [setApiClient, setPrivateApiKey]);
 
-  const actions = (
-    <div className="mt-8 flex flex-row gap-4">
-      <Button theme="secondary" onClick={handleBack}>
-        {t("backToStart")}
-      </Button>
-
-      {apiClient && newFormSubmissions && newFormSubmissions.length === 0 ? (
-        <Button theme="primary" onClick={handleCheck}>
-          {t("loadKeyPage.checkForNewResponsesButton")}
-        </Button>
-      ) : (
-        <Button
-          theme="primary"
-          disabled={Boolean(!apiClient || (newFormSubmissions && newFormSubmissions.length === 0))}
-          onClick={handleNext}
-        >
-          {t("continueButton")}
-        </Button>
-      )}
-    </div>
-  );
-
   return (
     <div>
       {!apiClient && (
@@ -122,11 +79,10 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
           <LoadKey onLoadKey={handleLoadApiKey} />
           <LostKeyLink />
           <LostKeyPopover locale={locale} id={id} />
-          {actions}
+          <ResponseActionButtons />
         </div>
       )}
-
-      {apiClient && <Responses actions={actions} />}
+      {apiClient && <Responses actions={<ResponseActionButtons />} />}
     </div>
   );
 };
