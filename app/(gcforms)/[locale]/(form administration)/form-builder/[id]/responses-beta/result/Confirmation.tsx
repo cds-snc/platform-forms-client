@@ -22,6 +22,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     setProcessingCompleted,
     setInterrupt,
     processResponses,
+    newFormSubmissions,
   } = useResponsesContext();
 
   const handleCheck = async () => {
@@ -100,7 +101,11 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
         <Button theme="secondary" onClick={handleGoBack}>
           {t("backToStart")}
         </Button>
-        <Button theme="primary" onClick={handleCheck}>
+        <Button
+          theme="primary"
+          onClick={handleCheck}
+          disabled={Boolean(newFormSubmissions && newFormSubmissions.length === 0)}
+        >
           {t("confirmationPage.checkForNewResponsesButton")}
         </Button>
       </div>
