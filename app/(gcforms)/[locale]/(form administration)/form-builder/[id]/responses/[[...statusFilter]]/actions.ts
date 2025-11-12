@@ -71,7 +71,7 @@ export const fetchSubmissions = AuthenticatedAction(
       lastKey: string | null;
     }
   ) => {
-    return tracefunction("fetchResponseSubmissions", async () => {
+    return traceFunction("fetchResponseSubmissions", async () => {
       try {
         if (!formId) {
           return {
