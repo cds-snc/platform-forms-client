@@ -13,7 +13,9 @@
       "generateKey": "Generate an API key for your form in Settings.",
       "generateKeyDetail": "This is how you’ll be able to access new responses.",
       "browserSupport": "Ensure you’re using Google Chrome or Microsoft Edge.",
-      "browserSupportDetail": "Your browser will ask for permission to save files to your device."
+      "browserSupportDetail": "Your browser will ask for permission to save files to your device.",
+      "attachSafety": "Take caution when opening files attachments.",
+      "attachSafetyDetail": "Check files before opening, follow warning prompts, use host-based sensors."
     },
     "steps": {
       "heading": "Then, follow these steps:",

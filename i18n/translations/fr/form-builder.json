@@ -206,16 +206,16 @@
     "fileInputDefault": {
       "text1": "Un moyen d'ajouter de la documentation à l'appui.",
       "text1x": "⚠️ Vous devez",
-      "text2": "configurer la livraison de réponse via l'API",
-      "text3": "pour utiliser cet élément."
+      "text2": "avoir une clé API configurée pour la récupération des données",
+      "text3": "afin d'utiliser cet élément."
     },
     "fileInputWithApi": {
       "description": "Un moyen d'ajouter de la documentation à l'appui.",
       "trialFeature": {
         "title": "Fonctionnalité Bêta",
         "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
-        "bullet1": "La récupération des réponses au formulaire via l'API",
-        "bullet2": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
+        "bullet1": "La récupération des réponses au formulaire via une clé API",
+        "bullet2": "La vérification des fichiers pour détecter des indicateurs malveillants ou d'autres problèmes de sécurité",
         "bullet3": "La collecte de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
       }
     },
