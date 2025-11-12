@@ -41,7 +41,8 @@ export const LoadKey = ({ onLoadKey }: LoadKeyProps) => {
         if (!result) {
           toast.error(<UploadFailed />, "wide");
         } else {
-          toast.success(<UploadSuccess />, "wide");
+          // Use defeault toast --- which will auto dismiss
+          toast.success(<UploadSuccess />);
         }
       }}
     >

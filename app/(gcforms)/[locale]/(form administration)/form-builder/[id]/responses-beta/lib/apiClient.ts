@@ -4,6 +4,10 @@ import type { EncryptedFormSubmission, NewFormSubmission, FormSubmissionProblem 
 
 import { TokenRateLimitError } from "./errorsTypes";
 import { FormProperties } from "@root/lib/types";
+import {
+  addErrorSimulationInterceptor,
+  addRateLimitTrackingInterceptor,
+} from "./apiClientInterceptors";
 
 export class GCFormsApiClient {
   private formId: string;
@@ -19,15 +23,11 @@ export class GCFormsApiClient {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    // Response interceptor to track rate limits
-    this.httpClient.interceptors.response.use((response) => {
-      const headers = response.headers as Record<string, string | string[]>;
-      const remaining = headers["x-ratelimit-remaining"];
-      if (remaining !== undefined && typeof remaining === "string") {
-        this.rateLimitRemaining = parseInt(remaining, 10);
-      }
-      return response;
+    // Add interceptors
+    addRateLimitTrackingInterceptor(this.httpClient, (remaining) => {
+      this.rateLimitRemaining = remaining;
     });
+    addErrorSimulationInterceptor(this.httpClient);
   }
 
   private async checkRateLimit(): Promise<void> {
@@ -62,37 +62,26 @@ export class GCFormsApiClient {
       });
   }
 
-  public async getNewFormSubmissions(signal?: AbortSignal): Promise<NewFormSubmission[]> {
+  public async getNewFormSubmissions(): Promise<NewFormSubmission[]> {
     await this.checkRateLimit();
     return this.httpClient
-      .get<NewFormSubmission[]>(`/forms/${this.formId}/submission/new`, { signal })
+      .get<NewFormSubmission[]>(`/forms/${this.formId}/submission/new`)
       .then((response) => {
         return response.data;
       })
       .catch((error) => {
-        if (axios.isCancel(error)) {
-          throw new DOMException("Request aborted", "AbortError");
-        }
         throw new Error("Failed to retrieve new form submissions", {
           cause: error,
         });
       });
   }
 
-  public async getFormSubmission(
-    submissionName: string,
-    signal?: AbortSignal
-  ): Promise<EncryptedFormSubmission> {
+  public async getFormSubmission(submissionName: string): Promise<EncryptedFormSubmission> {
     await this.checkRateLimit();
     return this.httpClient
-      .get<EncryptedFormSubmission>(`/forms/${this.formId}/submission/${submissionName}`, {
-        signal,
-      })
+      .get<EncryptedFormSubmission>(`/forms/${this.formId}/submission/${submissionName}`)
       .then((response) => response.data)
       .catch((error) => {
-        if (axios.isCancel(error)) {
-          throw new DOMException("Request aborted", "AbortError");
-        }
         if (error.response && error.response.status === 429) {
           throw new TokenRateLimitError("Rate limit exceeded. Please try again later.");
         } else {
@@ -101,22 +90,14 @@ export class GCFormsApiClient {
       });
   }
 
-  public confirmFormSubmission(
-    submissionName: string,
-    confirmationCode: string,
-    signal?: AbortSignal
-  ): Promise<unknown> {
+  public confirmFormSubmission(submissionName: string, confirmationCode: string): Promise<unknown> {
     return this.httpClient
       .put<unknown>(
         `/forms/${this.formId}/submission/${submissionName}/confirm/${confirmationCode}`,
-        {},
-        { signal }
+        {}
       )
       .then((response) => response)
       .catch((error) => {
-        if (axios.isCancel(error)) {
-          throw new DOMException("Request aborted", "AbortError");
-        }
         throw new Error("Failed to confirm form submission", { cause: error });
       });
   }

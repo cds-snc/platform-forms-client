@@ -19,9 +19,10 @@ import { initCsv, writeRow } from "../lib/csvWriter";
 import { toast } from "../../../components/shared/Toast";
 import { useTranslation } from "@root/i18n/client";
 import { writeHtml } from "../lib/htmlWriter";
-import { TemplateFailed } from "../components/Toasts";
+import { ErrorRetreivingSubmissions, TemplateFailed } from "../components/Toasts";
 import { BATCH_SIZE, HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
+import { useApiDebug } from "../lib/useApiDebug";
 
 interface ResponsesContextType {
   locale: string;
@@ -120,6 +121,9 @@ export const ResponsesProvider = ({
     };
   }, []);
 
+  // Enable dev console helpers for simulating API errors
+  useApiDebug();
+
   const retrieveResponses = useCallback(async () => {
     if (!apiClient) {
       return [];
@@ -135,8 +139,9 @@ export const ResponsesProvider = ({
 
       return submissions;
     } catch (error) {
-      logger.error("Error loading submissions:", error);
+      logger.info("Error loading submissions:", error);
       setNewFormSubmissions([]);
+      toast.error(<ErrorRetreivingSubmissions />, "wide");
       return [];
     }
   }, [apiClient, logger]);
@@ -191,7 +196,8 @@ export const ResponsesProvider = ({
         const csvExists = result && !result.created;
 
         if (csvExists) {
-          toast.success(<CsvDetected />, "wide");
+          // Use defeault toast --- which will auto dismiss
+          toast.success(<CsvDetected />);
         }
       }
 
@@ -223,7 +229,6 @@ export const ResponsesProvider = ({
               apiClient,
               privateApiKey,
               submissions: subArray,
-              signal: abortController.signal,
             });
 
             if (!submissionData) {
@@ -282,7 +287,7 @@ export const ResponsesProvider = ({
               break;
             }
 
-            formResponses = await apiClient.getNewFormSubmissions(abortController.signal);
+            formResponses = await apiClient.getNewFormSubmissions();
           }
 
           if (abortController.signal.aborted) {
@@ -293,7 +298,8 @@ export const ResponsesProvider = ({
           if (error instanceof Error && error.name === "AbortError") {
             logger.warn("Processing aborted");
           } else {
-            logger.error("Error processing submissions:", error);
+            toast.error(<ErrorRetreivingSubmissions />, "wide");
+            logger.warn("Error processing submissions:", error);
           }
           break;
         }
