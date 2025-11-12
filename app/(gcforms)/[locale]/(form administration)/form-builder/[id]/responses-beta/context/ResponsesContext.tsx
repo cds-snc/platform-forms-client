@@ -19,7 +19,7 @@ import { initCsv, writeRow } from "../lib/csvWriter";
 import { toast } from "../../../components/shared/Toast";
 import { useTranslation } from "@root/i18n/client";
 import { writeHtml } from "../lib/htmlWriter";
-import { TemplateFailed, UnknownError } from "../components/Toasts";
+import { ErrorRetreivingSubmissions, TemplateFailed } from "../components/Toasts";
 import { BATCH_SIZE, HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
 import { useApiDebug } from "../lib/useApiDebug";
@@ -141,7 +141,7 @@ export const ResponsesProvider = ({
     } catch (error) {
       logger.info("Error loading submissions:", error);
       setNewFormSubmissions([]);
-      toast.error(<UnknownError />, "wide");
+      toast.error(<ErrorRetreivingSubmissions />, "wide");
       return [];
     }
   }, [apiClient, logger]);
@@ -298,9 +298,9 @@ export const ResponsesProvider = ({
           if (error instanceof Error && error.name === "AbortError") {
             logger.warn("Processing aborted");
           } else {
-            logger.error("Error processing submissions:", error);
+            logger.warn("Error processing submissions:", error);
           }
-          toast.error(<UnknownError />, "wide");
+          toast.error(<ErrorRetreivingSubmissions />, "wide");
           break;
         }
       }

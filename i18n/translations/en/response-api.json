@@ -111,7 +111,12 @@
     },
     "unknownError": {
       "title": "An unknown error occurred",
-      "message": "An unexpected error occurred. Please try again later."
+      "message": "An unexpected error occurred. Please try again later.",
+      "code": "Error code"
+    },
+    "errorRetreivingSubmissions": {
+      "title": "Error retrieving submissions",
+      "message": "There was an error retrieving form submissions. Please try again later."
     }
   }
 }

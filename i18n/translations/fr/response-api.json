@@ -112,7 +112,12 @@
     },
     "unknownError": {
       "title": "An unknown error occurred",
-      "message": "An unexpected error occurred. Please try again later."
+      "message": "An unexpected error occurred. Please try again later.",
+      "code": "Code d'erreur"
+    },
+    "errorRetreivingSubmissions": {
+      "title": "Erreur lors de la récupération des soumissions",
+      "message": "Une erreur est survenue lors de la récupération des soumissions du formulaire. Veuillez réessayer plus tard."
     }
   }
 }
