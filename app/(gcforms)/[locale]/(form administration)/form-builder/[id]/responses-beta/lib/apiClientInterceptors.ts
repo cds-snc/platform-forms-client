@@ -16,7 +16,12 @@ export const addErrorSimulationInterceptor = (httpClient: AxiosInstance) => {
   httpClient.interceptors.request.use(
     (config) => {
       try {
-        if (typeof window === "undefined") return config;
+        if (
+          typeof window === "undefined" ||
+          (window.location.origin.includes("forms-formulaires") &&
+            window.location.origin.includes("canada.ca"))
+        )
+          return config;
 
         const simulate = sessionStorage.getItem("gcforms_simulate_error");
         if (!simulate) return config;
