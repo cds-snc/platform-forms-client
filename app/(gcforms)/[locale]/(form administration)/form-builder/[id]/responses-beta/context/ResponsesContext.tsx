@@ -229,7 +229,6 @@ export const ResponsesProvider = ({
               apiClient,
               privateApiKey,
               submissions: subArray,
-              signal: abortController.signal,
             });
 
             if (!submissionData) {
@@ -288,7 +287,7 @@ export const ResponsesProvider = ({
               break;
             }
 
-            formResponses = await apiClient.getNewFormSubmissions(abortController.signal);
+            formResponses = await apiClient.getNewFormSubmissions();
           }
 
           if (abortController.signal.aborted) {
@@ -299,9 +298,9 @@ export const ResponsesProvider = ({
           if (error instanceof Error && error.name === "AbortError") {
             logger.warn("Processing aborted");
           } else {
+            toast.error(<ErrorRetreivingSubmissions />, "wide");
             logger.warn("Error processing submissions:", error);
           }
-          toast.error(<ErrorRetreivingSubmissions />, "wide");
           break;
         }
       }

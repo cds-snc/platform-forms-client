@@ -150,14 +150,12 @@ const downloadFormSubmissions = async ({
   apiClient,
   privateApiKey,
   submissions,
-  signal,
 }: {
   directoryHandle: FileSystemDirectoryHandle;
   dataDirectoryHandle: FileSystemDirectoryHandle;
   apiClient: GCFormsApiClient;
   privateApiKey: PrivateApiKey;
   submissions: NewFormSubmission[];
-  signal?: AbortSignal;
 }) => {
   if (!dataDirectoryHandle || !submissions.length) {
     throw new Error("Invalid directory handle or no submissions to process.");
@@ -166,13 +164,8 @@ const downloadFormSubmissions = async ({
   const decryptionKey = await importPrivateKeyDecrypt(privateApiKey.key);
 
   const downloadPromises = submissions.map(async (submission) => {
-    // Check abort signal before each download
-    if (signal?.aborted) {
-      throw new DOMException("Download aborted", "AbortError");
-    }
-
     try {
-      const encryptedSubmission = await apiClient.getFormSubmission(submission.name, signal);
+      const encryptedSubmission = await apiClient.getFormSubmission(submission.name);
 
       const decryptedData = await decryptFormSubmission(encryptedSubmission, decryptionKey);
 
@@ -240,15 +233,9 @@ const downloadAttachment = async (
 const integrityCheckAndConfirm = async (
   submissionNames: string[],
   dir: FileSystemDirectoryHandle,
-  apiClient: GCFormsApiClient,
-  signal?: AbortSignal
+  apiClient: GCFormsApiClient
 ) => {
   for (const submissionName of submissionNames) {
-    // Check abort signal before each confirmation
-    if (signal?.aborted) {
-      throw new DOMException("Confirmation aborted", "AbortError");
-    }
-
     // Load file into memory
     const fileHandle = await dir.getFileHandle(`${submissionName}.json`);
     const file = await fileHandle.getFile();
@@ -268,7 +255,7 @@ const integrityCheckAndConfirm = async (
       throw new Error(`Checksum mismatch for submission ${submissionName}. File removed.`);
     }
     // If checksums match, confirm the submission
-    await apiClient.confirmFormSubmission(submissionName, confirmationCode, signal);
+    await apiClient.confirmFormSubmission(submissionName, confirmationCode);
   }
 };
 
@@ -277,13 +264,11 @@ export const downloadAndConfirmFormSubmissions = async ({
   apiClient,
   privateApiKey,
   submissions,
-  signal,
 }: {
   directoryHandle: FileSystemDirectoryHandle;
   apiClient: GCFormsApiClient;
   privateApiKey: PrivateApiKey;
   submissions: NewFormSubmission[];
-  signal?: AbortSignal;
 }) => {
   if (!directoryHandle || !submissions.length) {
     throw new Error("Invalid directory handle or no submissions to process.");
@@ -300,13 +285,11 @@ export const downloadAndConfirmFormSubmissions = async ({
     apiClient,
     privateApiKey,
     submissions,
-    signal,
   });
   const results = await integrityCheckAndConfirm(
     submissions.map((s) => s.name),
     dataDirectoryHandle,
-    apiClient,
-    signal
+    apiClient
   );
 
   return { results, submissionData };
