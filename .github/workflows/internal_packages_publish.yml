@@ -6,6 +6,9 @@ on:
       - main
     paths:
       - "packages/**/package.json"
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
 
 jobs:
   publish-internal-packages:
@@ -15,7 +18,7 @@ jobs:
       - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
         with:
           fetch-depth: 2
-          
+
       - name: Node.JS Setup
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
