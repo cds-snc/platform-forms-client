@@ -494,18 +494,9 @@
   "formDeletedDialogTitle": "Succès",
   "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {
-    "btnText": "Que puis-je faire avec un fichier de formulaire?",
-    "description": "Conservez une version du formulaire sur votre ordinateur.",
-    "dialog": {
-      "downloadButtonText": "Télécharger une copie",
-      "message1": "Téléchargez un fichier de formulaire pour partager l’ébauche avec d'autres personnes. Les collaborateur·rice·s peuvent ainsi ouvrir le fichier dans Formulaires GC et visualiser les progrès réalisés.",
-      "message2": "Téléchargez une copie de votre formulaire pour le conserver localement sur votre ordinateur.",
-      "subtitle1": "Partager",
-      "subtitle2": "Conserver une copie",
-      "title": "Usages du fichier de formulaire"
-    },
+    "description": "Conservez une version du formulaire enregistrée localement sur votre ordinateur ou utilisez ce fichier pour partager une ébauche en cours de développement.",
     "downloadBtnText": "Télécharger le fichier du formulaire",
-    "title": "Télécharger le fichier du formulaire"
+    "title": "Obtenir une copie du formulaire"
   },
   "auditDownload": {
     "description": "Obtenez une feuille de calcul avec l'historique de toutes les actions clés effectuées dans un formulaire, y compris la date de création, de mise à jour et d'archivage du formulaire.",
