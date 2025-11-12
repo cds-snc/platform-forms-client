@@ -1,5 +1,10 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs" && !process.env.LAMBDA_ENV) {
+    // Do not collect traces when doing active development or running tests
+    if (process.env.NODE_ENV !== "development" && process.env.APP_ENV !== "test") {
+      await import("./instrumentation.node");
+    }
+
     if (!process.env.REDIS_URL) {
       // eslint-disable-next-line no-console
       console.log(
