@@ -78,7 +78,7 @@ export const Menu = ({
       filterd: ttl ? true : false,
       title: t("card.menu.save"),
       callback: () => {
-        downloadForm(name, id);
+        downloadForm(name, id, ttl);
         return { message: "" };
       },
     },
@@ -103,8 +103,8 @@ export const Menu = ({
     (item) => !item.filtered
   ) as MenuDropdownItemI[];
 
-  async function downloadForm(name: string, id: string) {
-    const { formRecord, error } = await getForm(id);
+  async function downloadForm(name: string, id: string, ttl: Date | undefined) {
+    const { formRecord, error } = await getForm(id, ttl == null ? false : true);
     if (error) {
       if (error === "Form Not Found") {
         toast.error(t("errors.formDownloadNotExist"));

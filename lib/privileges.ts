@@ -549,11 +549,12 @@ export const authorization = {
    * Can the user view this specific form
    * @param formId The ID of the form
    */
-  canViewForm: async (formId: string) => {
+  canViewForm: async (formId: string, allowDeleted?: boolean) => {
     return _authorizationCheck([
       {
         action: "view",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
+        allowDeleted: allowDeleted,
       },
     ]);
   },
@@ -566,7 +567,7 @@ export const authorization = {
       {
         action: "update",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
-        allowDeleted,
+        allowDeleted: allowDeleted,
       },
     ]);
   },

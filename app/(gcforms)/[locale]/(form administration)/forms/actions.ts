@@ -14,9 +14,13 @@ import { AuthenticatedAction } from "@lib/actions";
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const getForm = AuthenticatedAction(
-  async (_, formId: string): Promise<{ formRecord: FormRecord | null; error?: string }> => {
+  async (
+    _,
+    formId: string,
+    allowDeleted: boolean
+  ): Promise<{ formRecord: FormRecord | null; error?: string }> => {
     try {
-      const response = await getFullTemplateByID(formId).catch(() => {
+      const response = await getFullTemplateByID(formId, allowDeleted).catch(() => {
         throw new Error("Failed to Get Form");
       });
       if (response === null) {

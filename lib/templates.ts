@@ -420,9 +420,12 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
  * @param formID ID of form template
  * @returns FormRecord
  */
-export async function getFullTemplateByID(formID: string): Promise<FormRecord | null> {
+export async function getFullTemplateByID(
+  formID: string,
+  allowDeleted: boolean
+): Promise<FormRecord | null> {
   try {
-    const { user } = await authorization.canViewForm(formID).catch((e) => {
+    const { user } = await authorization.canViewForm(formID, allowDeleted).catch((e) => {
       logEvent(
         e.user.id,
         { type: "Form", id: formID },
@@ -436,6 +439,7 @@ export async function getFullTemplateByID(formID: string): Promise<FormRecord | 
       .findUnique({
         where: {
           id: formID,
+          ttl: allowDeleted ? { not: null } : null,
         },
         include: {
           deliveryOption: true,
@@ -637,7 +641,7 @@ export async function updateIsPublishedForTemplate(
     } catch (e) {
       if (e instanceof TemplateAlreadyPublishedError) {
         // Already published, so we can just return the full template
-        return getFullTemplateByID(formID);
+        return getFullTemplateByID(formID, false);
       }
 
       throw e;

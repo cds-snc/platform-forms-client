@@ -83,7 +83,7 @@ const CardLinks = async ({
         </span>
       )}
       {/* Vault delivery */}
-      {deliveryOption && !deliveryOption.emailAddress && (
+      {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
         <>
           {overdue ? (
             <span className="mt-4 block text-sm text-red">
