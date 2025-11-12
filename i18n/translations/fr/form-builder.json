@@ -503,7 +503,7 @@
     "downloadBtnText": "Télécharger la feuille de calcul",
     "title": "Afficher l'activité du formulaire",
     "headers": {
-      "formId": "ID du formulaire",
+      "formId": "Identifiant du formulaire",
       "userId": "Membre de l'équipe",
       "event": "Action du formulaire",
       "timestamp": "Date",
@@ -516,18 +516,18 @@
       "ChangeFormSaveAndResume": "Option de sauvegarde et de reprise modifiée",
       "ChangeFormName": "Titre du formulaire modifié",
       "UpdateForm": "Formulaire mis à jour",
-      "UpdateNotificationsInterval": "Intervalle de notification mis à jour",
-      "UpdateNotificationsUserSetting": "Paramètre utilisateur de notification mis à jour",
+      "UpdateNotificationsInterval": "Interval de notifications mis à jour",
+      "UpdateNotificationsUserSetting": "Paramètre utilisateur des notification mis à jour",
       "GrantFormAccess": "Accès au formulaire accordé",
       "RevokeFormAccess": "Accès au formulaire révoqué",
       "DownloadResponse": "Réponses téléchargées",
-      "ConfirmResponse": "Réponse confirmée",
-      "IdentifyProblemResponse": "Réponse de problème identifiée",
+      "ConfirmResponse": "Réponses confirmées",
+      "IdentifyProblemResponse": "Réponses signalées avec probléme",
       "DeleteResponses": "Réponses supprimées",
       "RetrieveResponses": "Réponses récupérées via l'API",
-      "CreateAPIKey": "Clé API créée",
+      "CreateAPIKey": "Clé API générée",
       "DeleteAPIKey": "Clé API supprimée",
-      "RefreshAPIKey": "Clé API actualisée"
+      "RefreshAPIKey": "Clé API re-générée"
     }
   },
   "switchToApiMode": {
