@@ -29,6 +29,10 @@
     "topBanner": {
       "title": "Banner",
       "description": "Enable warning banner to be visible"
+    },
+    "responsesBeta": {
+      "title": "Responses Beta",
+      "description": "Enable beta features for form responses management"
     }
   },
   "addFlag": "Add user feature flag",

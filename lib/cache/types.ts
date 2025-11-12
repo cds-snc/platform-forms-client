@@ -2,6 +2,7 @@
 
 export const UserFeatureFlags = {
   addressComplete: "addressComplete",
+  responsesBeta: "responsesBeta",
 } as const;
 
 export const FeatureFlags = {

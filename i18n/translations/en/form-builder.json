@@ -487,18 +487,9 @@
   "formDeletedDialogTitle": "Success",
   "formDeleteDialogTitleFailed": "Error",
   "formDownload": {
-    "btnText": "What can I do with a form file?",
-    "description": "Keep a version of your form on your computer.",
-    "dialog": {
-      "downloadButtonText": "Download a copy",
-      "message1": "Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
-      "message2": "Download a copy of the your form to store locally on your computer.",
-      "subtitle1": "Share",
-      "subtitle2": "Save a copy",
-      "title": "Form file uses"
-    },
+    "description": "Keep a version stored locally on your computer or use this file to share a draft in progress.",
     "downloadBtnText": "Download form file",
-    "title": "Download form file"
+    "title": "Get a copy of your form"
   },
   "switchToApiMode": {
     "title": "Switch to API delivery",

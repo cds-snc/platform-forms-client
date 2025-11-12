@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.1](https://github.com/cds-snc/platform-forms-client/compare/v4.4.0...v4.4.1) (2025-11-05)
+
+
+### Bug Fixes
+
+* add non empty form check to save progress toast ([#6277](https://github.com/cds-snc/platform-forms-client/issues/6277)) ([1bc0d29](https://github.com/cds-snc/platform-forms-client/commit/1bc0d29a730bac3263ce2b68e40cfdae3ef1fa90))
+* brand header ([#6287](https://github.com/cds-snc/platform-forms-client/issues/6287)) ([8bbb3d3](https://github.com/cds-snc/platform-forms-client/commit/8bbb3d338d5c4e09fbeb635245300a999f4db599))
+
+
+### Miscellaneous Chores
+
+* fix Canadian Heritage scaling ([#6286](https://github.com/cds-snc/platform-forms-client/issues/6286)) ([c065cfb](https://github.com/cds-snc/platform-forms-client/commit/c065cfb56be34c8c973e72f7c757567196df496f))
+* init setup for responses beta flag + route ([#6281](https://github.com/cds-snc/platform-forms-client/issues/6281)) ([708d728](https://github.com/cds-snc/platform-forms-client/commit/708d728508e9143480101b0834f02ac7e281b1bb))
+* Misc package bumps ([#6293](https://github.com/cds-snc/platform-forms-client/issues/6293)) ([c78ec16](https://github.com/cds-snc/platform-forms-client/commit/c78ec1676efe30c49dab8e3ff3a9fd7494ca4635))
+* Send md5 hex to server action on submit instead of base64 ([#6294](https://github.com/cds-snc/platform-forms-client/issues/6294)) ([a3d25b5](https://github.com/cds-snc/platform-forms-client/commit/a3d25b525f82d0f1e1cd7dd70a2f4edb6bd7dc16))
+* Update "download form file" content ([#6284](https://github.com/cds-snc/platform-forms-client/issues/6284)) ([a24b1f5](https://github.com/cds-snc/platform-forms-client/commit/a24b1f5dc27dab1b59b7d1dee4937f74a6308df9))
+* update `mapAnswers` ([#6297](https://github.com/cds-snc/platform-forms-client/issues/6297)) ([5e9b899](https://github.com/cds-snc/platform-forms-client/commit/5e9b899c323cd8397d93288ad3560a4068303ddc))
+
 ## [4.4.0](https://github.com/cds-snc/platform-forms-client/compare/v4.3.2...v4.4.0) (2025-10-30)
 
 
