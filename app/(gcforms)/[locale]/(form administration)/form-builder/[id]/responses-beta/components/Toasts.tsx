@@ -34,7 +34,7 @@ export const RateLimitExceeded = () => {
   );
 };
 
-export const UnknownError = ({ code }: { code: string | undefined }) => {
+export const UnknownError = ({ code }: { code?: string }) => {
   const { t } = useTranslation("response-api");
   return (
     <div className="w-full">
@@ -49,7 +49,7 @@ export const UnknownError = ({ code }: { code: string | undefined }) => {
   );
 };
 
-export const ErrorRetreivingSubmissions = () => {
+export const ErrorRetreivingSubmissions = ({ code }: { code?: string }) => {
   const { t } = useTranslation("response-api");
   return (
     <div className="w-full">
@@ -57,6 +57,11 @@ export const ErrorRetreivingSubmissions = () => {
         {t("toasts.errorRetreivingSubmissions.title")}
       </h3>
       <p className="mb-2 text-black">{t("toasts.errorRetreivingSubmissions.message")}</p>
+      {code && (
+        <p className="mb-2 text-black">
+          {t("toasts.unknownError.code")}: {code}
+        </p>
+      )}
     </div>
   );
 };

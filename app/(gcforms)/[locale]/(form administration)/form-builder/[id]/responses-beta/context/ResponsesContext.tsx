@@ -196,7 +196,8 @@ export const ResponsesProvider = ({
         const csvExists = result && !result.created;
 
         if (csvExists) {
-          toast.success(<CsvDetected />, "wide");
+          // Use defeault toast --- which will auto dismiss
+          toast.success(<CsvDetected />);
         }
       }
 
