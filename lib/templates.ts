@@ -1226,7 +1226,7 @@ export async function cloneTemplate(formID: string): Promise<FormRecord | null> 
   // and that they can edit the source form.
   const [createResult, editResult] = (await Promise.allSettled([
     authorization.canCreateForm(),
-    authorization.canEditForm(formID),
+    authorization.canEditForm(formID, true),
   ])) as Array<PromiseSettledResult<{ user: { id: string } }>>;
 
   if (createResult.status === "rejected") {
@@ -1256,7 +1256,7 @@ export async function cloneTemplate(formID: string): Promise<FormRecord | null> 
 
   const template = await prisma.template
     .findUnique({
-      where: { id: formID },
+      where: { id: formID, ttl: { not: null } },
       include: {
         deliveryOption: true,
         users: { select: { id: true } },

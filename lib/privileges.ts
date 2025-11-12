@@ -561,11 +561,12 @@ export const authorization = {
    * Can the user edit this specific form
    * @param formId The ID of the form
    */
-  canEditForm: async (formId: string) => {
+  canEditForm: async (formId: string, allowDeleted?: boolean) => {
     return _authorizationCheck([
       {
         action: "update",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
+        allowDeleted,
       },
     ]);
   },
