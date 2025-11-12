@@ -104,16 +104,20 @@ export const validateVisibleElements = (
       }
     }
 
-    // Note this checks against all visible elements, not just required ones
-    // If we already have an error for this element, skip type checking
-    if (!errors[formElement.id]) {
-      if (!hasValue(responseValue)) {
-        continue;
-      }
+    // Both parts of the code (above and below) should probably be merged together once we revisit form response validation
 
-      const matched = valueMatchesType(responseValue, formElement.type, formElement, props.t);
+    // Note the code below checks against all visible elements, not just required ones
+    if (!hasValue(responseValue)) {
+      continue;
+    }
 
-      if (matched?.error && matched.details) {
+    const matched = valueMatchesType(responseValue, formElement.type, formElement, props.t);
+
+    if (matched?.error && matched.details) {
+      valueMatchErrors[formElement.id] = matched.details;
+
+      // If we already have an error for this element, skip type checking
+      if (!errors[formElement.id]) {
         if (Array.isArray(matched.details)) {
           // Build errors UI display for dynamic rows
           const groupErrors: Record<string, string>[] = [];
@@ -130,11 +134,8 @@ export const validateVisibleElements = (
           });
 
           errors[formElement.id] = groupErrors as unknown as Responses[string];
-
-          valueMatchErrors[formElement.id] = matched.details;
         } else {
           errors[formElement.id] = matched.error;
-          valueMatchErrors[formElement.id] = matched.details;
         }
       }
     }
