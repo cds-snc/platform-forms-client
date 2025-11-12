@@ -298,7 +298,11 @@ export const getPrivilege = async (where: Prisma.PrivilegeWhereInput) => {
   }
 };
 
-const _getSubject = async (subject: { type: Extract<Subject, string>; id: string }) => {
+const _getSubject = async (subject: {
+  type: Extract<Subject, string>;
+  id: string;
+  allowDeleted: boolean;
+}) => {
   if (subject.id === "all") {
     return {};
   }
@@ -320,6 +324,7 @@ const _getSubject = async (subject: { type: Extract<Subject, string>; id: string
       return prisma.template.findUniqueOrThrow({
         where: {
           id: subject.id,
+          ttl: subject.allowDeleted ? { not: null } : null,
         },
         select: {
           id: true,
@@ -361,7 +366,8 @@ const _retrieveSubjects = async (
   subject: {
     type: Extract<Subject, string>;
     scope: "all" | { subjectId: string } | { subjectIds: string[] };
-  }
+  },
+  allowDeleted: boolean
 ) => {
   if (subject.scope === "all") {
     return [{}];
@@ -370,7 +376,11 @@ const _retrieveSubjects = async (
     const cachedItem = cache.get(`${subject.type}:${subject.scope.subjectId}`);
     if (cachedItem) return [cachedItem];
 
-    const item = await _getSubject({ type: subject.type, id: subject.scope.subjectId });
+    const item = await _getSubject({
+      type: subject.type,
+      id: subject.scope.subjectId,
+      allowDeleted: allowDeleted,
+    });
     cache.set(`${subject.type}:${subject.scope.subjectId}`, item);
     return [item];
   }
@@ -379,7 +389,7 @@ const _retrieveSubjects = async (
       const cachedItem = cache.get(`${subject.type}:${id}`);
       if (cachedItem) return cachedItem;
 
-      const item = await _getSubject({ type: subject.type, id });
+      const item = await _getSubject({ type: subject.type, id, allowDeleted: allowDeleted });
       cache.set(`${subject.type}:${id}`, item);
       return item;
     })
@@ -400,6 +410,7 @@ const _authorizationCheck = async (
       scope: "all" | { subjectId: string } | { subjectIds: string[] };
     };
     fields?: string[];
+    allowDeleted?: boolean;
   }[],
   logic: "all" | "one" = "all"
 ) => {
@@ -408,8 +419,8 @@ const _authorizationCheck = async (
   const ability = await getAbility();
 
   const result = await Promise.all(
-    rules.flatMap(async ({ action, subject, fields }) => {
-      const subjectsToValidate = await _retrieveSubjects(cache, subject);
+    rules.flatMap(async ({ action, subject, fields, allowDeleted }) => {
+      const subjectsToValidate = await _retrieveSubjects(cache, subject, allowDeleted ?? false);
 
       return subjectsToValidate.flatMap((subjectToValidate) => {
         if (fields) {
@@ -567,6 +578,19 @@ export const authorization = {
       {
         action: "delete",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
+      },
+    ]);
+  },
+  /**
+   * Can the user restore this specific form
+   * @param formId The ID of the form
+   */
+  canRestoreForm: async (formId: string) => {
+    return _authorizationCheck([
+      {
+        action: "delete",
+        subject: { type: "FormRecord", scope: { subjectId: formId } },
+        allowDeleted: true,
       },
     ]);
   },

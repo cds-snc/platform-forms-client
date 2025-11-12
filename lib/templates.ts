@@ -1404,7 +1404,7 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
  * @returns A boolean status if operation is sucessful
  */
 export async function restoreTemplate(formID: string): Promise<FormRecord | null> {
-  const { user } = await authorization.canDeleteForm(formID).catch((e) => {
+  const { user } = await authorization.canRestoreForm(formID).catch((e) => {
     logEvent(
       e.user.id,
       { type: "Form", id: formID },
@@ -1414,13 +1414,28 @@ export async function restoreTemplate(formID: string): Promise<FormRecord | null
     throw e;
   });
 
-  // Check if the form is draft or not.
+  // Check if the form is archived.
   const template = await prisma.template.findFirstOrThrow({
     where: {
       id: formID,
+      ttl: { not: null },
     },
     select: {
+      id: true,
+      created_at: true,
+      updated_at: true,
+      name: true,
+      jsonConfig: true,
       isPublished: true,
+      deliveryOption: true,
+      securityAttribute: true,
+      formPurpose: true,
+      publishReason: true,
+      publishFormType: true,
+      publishDesc: true,
+      saveAndResume: true,
+      notificationsInterval: true,
+      ttl: true,
     },
   });
 
@@ -1430,6 +1445,7 @@ export async function restoreTemplate(formID: string): Promise<FormRecord | null
     .update({
       where: {
         id: formID,
+        ttl: { not: null },
       },
       data: {
         ttl: null,
