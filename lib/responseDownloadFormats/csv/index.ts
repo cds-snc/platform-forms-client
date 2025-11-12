@@ -80,7 +80,5 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
     ];
   });
 
-  // Add UTF-8 BOM to ensure proper encoding of French characters (é, è, ç, etc.)
-  const BOM = "\uFEFF";
-  return BOM + csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records);
+  return csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records);
 };
