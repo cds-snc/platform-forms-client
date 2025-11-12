@@ -92,7 +92,7 @@ const main = async () => {
 
     console.log(`Getting form template from ${appEnv}`);
     if (appEnv === "staging") {
-      // process.env.AWS_PROFILE = "staging";
+      process.env.AWS_PROFILE = "staging";
     }
 
     // Get the form template
