@@ -52,10 +52,8 @@ export const restoreForm = AuthenticatedAction(
   async (_, id: string): Promise<void | { error?: string }> => {
     try {
       await restoreTemplate(id).catch((error) => {
-        if (error instanceof TemplateHasUnprocessedSubmissions) {
-          throw new Error("Responses Exist");
-        } else {
-          throw new Error("Failed to Delete Form");
+        if (error) {
+          throw new Error("Failed to Restore Form");
         }
       });
 
