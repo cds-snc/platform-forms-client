@@ -8,6 +8,9 @@ import { ResponsesContainer } from "./components/ResponsesContainer";
 import { redirect } from "next/navigation";
 import { StatusFilter } from "./types";
 import { getOverdueTemplateIds } from "@lib/overdue";
+import { isResponsesBetaModeEnabled } from "../actions";
+import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -113,6 +116,15 @@ export default async function Page(props: {
         <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
       </div>
     );
+  }
+
+  // Check if user has responses-beta mode enabled via cookie and has access
+  const betaModeEnabled = await isResponsesBetaModeEnabled();
+  if (betaModeEnabled && session) {
+    const hasAccess = await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesBeta);
+    if (hasAccess) {
+      redirect(`/${locale}/form-builder/${id}/responses-beta`);
+    }
   }
 
   const isApiRetrieval = id !== "0000" && !!(await checkKeyExists(id));
