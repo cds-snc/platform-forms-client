@@ -11,11 +11,11 @@
     },
     "documents": {
       "label": "Documents",
-      "description": "pdf, txt, doc, docx, xml"
+      "description": "pdf, txt, doc, docx"
     },
     "images": {
       "label": "Images",
-      "description": "jpg, jpeg, png, svg"
+      "description": "jpg, jpeg, png"
     },
     "spreadsheets": {
       "label": "Feuilles de calcul",
@@ -206,11 +206,11 @@
     "fileInputDefault": {
       "text1": "Un moyen d'ajouter de la documentation à l'appui.",
       "text1x": "⚠️ Vous devez",
-      "text2": "configurer la livraison de réponse via l'API",
-      "text3": "pour utiliser cet élément."
+      "text2": "avoir une clé API configurée pour la récupération des données",
+      "text3": "afin d'utiliser cet élément."
     },
     "fileInputWithApi": {
-      "description": "Un moyen d'ajouter de la documentation à l'appui."
+        "description": "Un moyen d'ajouter de la documentation à l'appui.
     },
     "firstMiddleLastName": {
       "whatIsYourName": "Quel est votre nom?",

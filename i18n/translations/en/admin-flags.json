@@ -32,7 +32,7 @@
     },
     "responsesBeta": {
       "title": "Responses Beta",
-      "description": "Enable beta features for form responses management"
+      "description": "Enable beta flow for retrieving form responses with API key from the interface"
     }
   },
   "addFlag": "Add user feature flag",
@@ -45,7 +45,7 @@
   "add": "Add",
   "cancel": "Cancel",
   "remove": "Remove",
-  "userFlagHeader": "User Specific Feature Flag Control",
-  "userFlagSubHeader": "This setting overrides Feature Flag status, and will provide a specific user access to a feature.",
+  "userFlagHeader": "User-specific feature flag control",
+  "userFlagSubHeader": "This setting overrides feature flag status, and will provide a specific user access to a feature.",
   "noUserFlags": "No user feature flags are set."
 }
