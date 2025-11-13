@@ -15,7 +15,7 @@
       "browserSupport": "Ensure you’re using Google Chrome or Microsoft Edge.",
       "browserSupportDetail": "Your browser will ask for permission to save files to your device.",
       "attachSafety": "Take caution when opening files attachments.",
-      "attachSafetyDetail": "Check files before opening, follow warning prompts, use host-based sensors."
+      "attachSafetyDetail": "Check files before opening, verify malicious file attributes, follow warning prompts."
     },
     "steps": {
       "heading": "Then, follow these steps:",
