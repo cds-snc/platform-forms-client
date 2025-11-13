@@ -30,7 +30,7 @@ export const ResponsesFooter = ({ formId }: { formId: string }) => {
       >
         {t("responses.viewAllProblemResponses")}
       </Link>
-      <ResponseBetaLink formId={formId} />
+      <ResponseBetaLink formId={formId} className="ml-12" />
     </div>
   );
 };

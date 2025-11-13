@@ -3,13 +3,15 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { cn } from "@lib/utils/";
+
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
 import { useTranslation } from "@i18n/client";
 
 import { enableResponsesBetaMode } from "../../actions";
 
-export const ResponseBetaLink = ({ formId }: { formId: string }) => {
+export const ResponseBetaLink = ({ formId, className }: { formId: string; className?: string }) => {
   const { t, i18n } = useTranslation("form-builder-responses");
   const { getFlag } = useFeatureFlags();
   const responsesBetaEnabled = getFlag(FeatureFlags.responsesBeta);
@@ -27,7 +29,7 @@ export const ResponseBetaLink = ({ formId }: { formId: string }) => {
         data-testid="responses-beta-link"
         href={`/${i18n.language}/form-builder/${formId}/responses-beta`}
         onClick={handleResponsesBetaClick}
-        className="ml-12 text-black visited:text-black"
+        className={cn("text-black visited:text-black", className)}
       >
         {t("responsesBeta.responsesBetaLink")}
       </Link>
