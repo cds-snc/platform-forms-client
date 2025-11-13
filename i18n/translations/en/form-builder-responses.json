@@ -2,7 +2,7 @@
   "tabs": {
     "newResponses": {
       "title": "New responses available",
-      "message1": "Start by downloading responses. You can select multiples responses to download at once.",
+      "message1": "Start by downloading responses. You can select multiple responses to download at once.",
       "message2": "Then, sign off on their removal, as GC Forms only stores responses temporarily."
     },
     "downloadedResponses": {
