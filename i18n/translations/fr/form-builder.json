@@ -11,11 +11,11 @@
     },
     "documents": {
       "label": "Documents",
-      "description": "pdf, txt, doc, docx, xml"
+      "description": "pdf, txt, doc, docx"
     },
     "images": {
       "label": "Images",
-      "description": "jpg, jpeg, png, svg"
+      "description": "jpg, jpeg, png"
     },
     "spreadsheets": {
       "label": "Feuilles de calcul",
