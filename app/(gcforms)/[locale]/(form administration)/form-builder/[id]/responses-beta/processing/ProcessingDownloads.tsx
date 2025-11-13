@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useResponsesContext } from "../context/ResponsesContext";
 import MapleLeafLoader from "@root/components/clientComponents/icons";
@@ -12,7 +12,7 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   const router = useRouter();
   const { t } = useTranslation("response-api");
   const [isNavigating, setIsNavigating] = useState(false);
-  const isMountedRef = useState(true);
+  const isMountedRef = useRef(false);
 
   const { processingCompleted, setInterrupt, interrupt, resetNewSubmissions, logger } =
     useResponsesContext();
