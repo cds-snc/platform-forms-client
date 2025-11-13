@@ -262,7 +262,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
  * This is the main Form component that wraps "InnerForm" withFormik hook, giving all of its components context
  * @param props
  */
-
 export const Form = withFormik<FormProps, Responses>({
   validateOnChange: false,
 
