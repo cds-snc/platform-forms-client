@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useResponsesContext } from "../context/ResponsesContext";
 import MapleLeafLoader from "@root/components/clientComponents/icons";
@@ -12,8 +12,9 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   const router = useRouter();
   const { t } = useTranslation("response-api");
   const [isNavigating, setIsNavigating] = useState(false);
+  const isMountedRef = useRef(false);
 
-  const { processingCompleted, setInterrupt, interrupt, resetNewSubmissions } =
+  const { processingCompleted, setInterrupt, interrupt, resetNewSubmissions, logger } =
     useResponsesContext();
 
   useEffect(() => {
@@ -25,6 +26,20 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
       return () => clearTimeout(timer); // Cleanup on unmount or if processingCompleted changes
     }
   }, [id, locale, processingCompleted, router]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      isMountedRef.current = true;
+    }, 100);
+
+    return () => {
+      if (isMountedRef.current) {
+        logger.info("ProcessingDownloads unmounted, interrupting processing.");
+        setInterrupt(true);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleInterrupt = useCallback(async () => {
     if (isNavigating) return; // Prevent double-click
