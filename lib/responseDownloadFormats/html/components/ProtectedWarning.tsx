@@ -1,15 +1,15 @@
 import React from "react";
 import { SecurityAttribute } from "@lib/types";
-import { customTranslate } from "../../../i18nHelpers";
+import { TFunction } from "i18next";
 
 interface ProtectedWarningProps {
   securityAttribute: SecurityAttribute;
   lang: string;
+  t: TFunction<string | string[], undefined>;
 }
 
 export const ProtectedWarning = (props: ProtectedWarningProps) => {
-  const { lang } = props;
-  const { t } = customTranslate("my-forms");
+  const { lang, t } = props;
 
   const renderSecurityAttribute = () => {
     switch (props.securityAttribute) {

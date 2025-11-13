@@ -11,11 +11,11 @@
     },
     "documents": {
       "label": "Documents",
-      "description": "pdf, txt, doc, docx, xml"
+      "description": "pdf, txt, doc, docx"
     },
     "images": {
       "label": "Images",
-      "description": "jpg, jpeg, png, svg"
+      "description": "jpg, jpeg, png"
     },
     "spreadsheets": {
       "label": "Feuilles de calcul",
@@ -206,16 +206,16 @@
     "fileInputDefault": {
       "text1": "Un moyen d'ajouter de la documentation à l'appui.",
       "text1x": "⚠️ Vous devez",
-      "text2": "configurer la livraison de réponse via l'API",
-      "text3": "pour utiliser cet élément."
+      "text2": "avoir une clé API configurée pour la récupération des données",
+      "text3": "afin d'utiliser cet élément."
     },
     "fileInputWithApi": {
       "description": "Un moyen d'ajouter de la documentation à l'appui.",
       "trialFeature": {
         "title": "Fonctionnalité Bêta",
         "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
-        "bullet1": "La récupération des réponses au formulaire via l'API",
-        "bullet2": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
+        "bullet1": "La récupération des réponses au formulaire via une clé API",
+        "bullet2": "La vérification des fichiers pour détecter des indicateurs malveillants ou d'autres problèmes de sécurité",
         "bullet3": "La collecte de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
       }
     },
@@ -465,9 +465,9 @@
   "formattedDate": "Date",
   "formConfirmationMessage": "Message de confirmation",
   "formDeleteResponses": {
-    "title": "Approuvez la suppression des réponses avant de supprimer le formulaire",
-    "message1": "Ce formulaire est publié et reçoit des réponses. Vous avez des réponses à télécharger et à approuver pour suppression de Formulaires GC.",
-    "message2": "Avant de supprimer ce formulaire :",
+    "title": "Approuvez la suppression des réponses avant d'archiver le formulaire",
+    "message1": "Vous avez des réponses à récupérer de Formulaires GC avant de pouvoir archiver ce formulaire.",
+    "message2": "Avant d'archiver ce formulaire :",
     "message3": "1. Télécharger toutes les réponses.",
     "message4": "2. Confirmer la réception des réponses téléchargées en approuvant leur suppression de Formulaires GC.",
     "cta": "Accéder aux réponses"
@@ -477,22 +477,21 @@
     "somethingWentWrong": "Il y a eu un problème",
     "downloadButtonText": "Télécharger une copie",
     "draft": {
-      "message1": "La suppression d'un formulaire ne peut être annulée. Votre formulaire sera définitivement supprimé.",
-      "message2": "Téléchargez une copie du fichier de formulaire pour vos archives. Vous pourrez ainsi le téléverser à nouveau dans Formulaires GC pour recréer le formulaire."
+      "message1": "L'archivage déplacera ce formulaire vers la section « Archivés » de vos formulaires.",
+      "message2": "Ce formulaire pourra être désarchivé à partir des formulaires « Archivés » pendant 30 jours avant d'être définitivement supprimé.",
+      "message3": " Téléchargez une copie du fichier du formulaire pour vos registres. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer le formulaire plus tard."
     },
-    "okay": "Supprimer le formulaire",
+    "okay": "Archiver le formulaire",
     "published": {
-      "message1": "La suppression d'un formulaire ne peut être annulée. Votre formulaire publié sera définitivement supprimé de l'Internet, ce qui risque de créer des liens brisés.",
-      "message2": "Téléchargez une copie du fichier de formulaire pour vos archives. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer un nouveau formulaire avec de nouveaux liens URL.",
-      "message3": "Avant de supprimer votre formulaire, assurez-vous de supprimer tous les liens publics menant à ce formulaire. Cela permet d'éviter d'envoyer les gens dans une impasse. Pour arrêter les soumissions, vous pouvez plutôt considérer la fermeture du formulaire dans les paramètres."
+      "message1": "L'archivage de ce formulaire publié ne peut être annulée. Votre formulaire publié sera définitivement enlevé de l'Internet, ce qui risque de créer des liens brisés.",
+      "message2": "Téléchargez une copie du fichier de formulaire pour vos registres. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer un nouveau formulaire avec de nouveaux liens URL.",
+      "message3": "Avant d'archiver votre formulaire, assurez-vous de supprimer tous les liens publics menant à ce formulaire. Cela permet d'éviter d'envoyer les gens dans une impasse. Pour arrêter les soumissions, vous pouvez plutôt considérer la fermeture du formulaire dans les paramètres."
     },
-    "title": "Supprimer ce formulaire?"
+    "title": "Archiver ce formulaire?"
   },
   "formDeletedDialogMessage": "Formulaire supprimé",
   "formDeletedDialogMessageFailed": "Échec de la suppression du formulaire",
   "formDeletedResponsesExist": "Le formulaire n'a pas pu être supprimé. Veuillez vous assurer qu'il n'y a pas de nouvelles réponses et réessayez.",
-  "formDeletedDialogTitle": "Succès",
-  "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {
     "description": "Conservez une version du formulaire enregistrée localement sur votre ordinateur ou utilisez ce fichier pour partager une ébauche en cours de développement.",
     "downloadBtnText": "Télécharger le fichier du formulaire",

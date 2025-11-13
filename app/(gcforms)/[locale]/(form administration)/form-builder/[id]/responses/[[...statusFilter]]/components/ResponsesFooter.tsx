@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@root/lib/cache/types";
+import { enableResponsesBetaMode } from "../../actions";
 
 // TODO: move to an app setting variable
 const MAX_REPORT_COUNT = 20;
@@ -19,6 +20,12 @@ export const ResponsesFooter = ({ formId }: { formId: string }) => {
 
   const onSuccessfulReport = () => {
     router.refresh();
+  };
+
+  const handleResponsesBetaClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    await enableResponsesBetaMode();
+    router.push(`/${i18n.language}/form-builder/${formId}/responses-beta`);
   };
 
   return (
@@ -37,7 +44,9 @@ export const ResponsesFooter = ({ formId }: { formId: string }) => {
 
       {responsesBetaEnabled && (
         <Link
+          data-testid="responses-beta-link"
           href={`/${i18n.language}/form-builder/${formId}/responses-beta`}
+          onClick={handleResponsesBetaClick}
           className="ml-12 text-black visited:text-black"
         >
           {t("responsesBeta.responsesBetaLink")}

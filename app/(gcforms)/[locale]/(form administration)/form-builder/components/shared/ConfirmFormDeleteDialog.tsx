@@ -167,16 +167,7 @@ export const ConfirmFormDeleteDialog = ({
       title={t("formDelete.title")}
     >
       <div className="p-5">
-        <div className="flex justify-center px-10">
-          <Image
-            width={"288"}
-            height={"206"}
-            alt=""
-            className="block"
-            src="/img/form-builder-delete-dialog.svg"
-          />
-        </div>
-        <div className="mt-10">
+        <div>
           {isPublished ? (
             <>
               <p className="mb-6">{t("formDelete.published.message1")}</p>
@@ -188,7 +179,8 @@ export const ConfirmFormDeleteDialog = ({
           ) : (
             <>
               <p className="mb-6">{t("formDelete.draft.message1")}</p>
-              <p>{t("formDelete.draft.message2")}</p>
+              <p className="mb-6">{t("formDelete.draft.message2")}</p>
+              <p>{t("formDelete.draft.message3")}</p>
             </>
           )}
         </div>

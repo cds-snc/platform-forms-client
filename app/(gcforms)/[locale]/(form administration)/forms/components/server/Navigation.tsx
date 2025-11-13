@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { FolderIcon, GlobeIcon, PageIcon } from "@serverComponents/icons";
+import { ArchiveIcon, FolderIcon, GlobeIcon, PageIcon } from "@serverComponents/icons";
 import { NavLink } from "./NavLink";
 
 export const Navigation = async ({ filter }: { filter?: string }) => {
@@ -33,6 +33,16 @@ export const Navigation = async ({ filter }: { filter?: string }) => {
         <>
           <GlobeIcon className={iconClassname} />
           {t("nav.published")}
+        </>
+      </NavLink>
+      <NavLink
+        href={`/${language}/forms?status=archived`}
+        id="tab-archived"
+        active={filter === "archived"}
+      >
+        <>
+          <ArchiveIcon className={iconClassname} />
+          {t("nav.archived")}
         </>
       </NavLink>
     </nav>
