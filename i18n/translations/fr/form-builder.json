@@ -527,7 +527,8 @@
       "CreateAPIKey": "Clé API générée",
       "DeleteAPIKey": "Clé API supprimée",
       "RefreshAPIKey": "Clé API re-générée"
-    }
+    },
+    "errorCreatingDownload": "Erreur lors de la création du téléchargement"
   },
   "switchToApiMode": {
     "title": "Passer à la livraison par API",

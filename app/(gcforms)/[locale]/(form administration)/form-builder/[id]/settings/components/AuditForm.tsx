@@ -67,7 +67,7 @@ export const AuditForm = ({ formId }: { formId: string }) => {
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
-      alert("error creating file download");
+      alert(t("auditDownload.errorCreatingDownload"));
     }
   }
 

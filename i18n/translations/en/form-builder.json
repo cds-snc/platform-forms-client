@@ -527,7 +527,8 @@
       "CreateAPIKey": "Generated API Key",
       "DeleteAPIKey": "Deleted API Key",
       "RefreshAPIKey": "Re-generated API Key"
-    }
+    },
+    "errorCreatingDownload": "Error creating download"
   },
   "switchToApiMode": {
     "title": "Switch to API delivery",
