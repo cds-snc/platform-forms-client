@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { logMessage } from "@root/lib/logger";
 
 declare global {
   // Dev helper functions to toggle simulated API errors from the browser console
@@ -20,7 +21,11 @@ declare global {
  */
 export const useApiDebug = () => {
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || process.env.NODE_ENV !== "development") return;
+
+    logMessage.info(
+      "useApiDebug has exposed helpers on the window for simulating API errors during development"
+    );
 
     const setSim = (value?: string | null) => {
       try {
