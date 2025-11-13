@@ -28,9 +28,10 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
 
   useEffect(() => {
     return () => {
-      logger.info("interrupt on unmount: " + processingCompleted);
+      logger.info("ProcessingDownloads unmounted, interrupting processing.");
       setInterrupt(true);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInterrupt = useCallback(async () => {
