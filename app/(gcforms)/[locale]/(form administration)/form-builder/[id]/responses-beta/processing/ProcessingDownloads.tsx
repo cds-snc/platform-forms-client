@@ -13,7 +13,7 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   const { t } = useTranslation("response-api");
   const [isNavigating, setIsNavigating] = useState(false);
 
-  const { processingCompleted, setInterrupt, interrupt, resetNewSubmissions } =
+  const { processingCompleted, setInterrupt, interrupt, resetNewSubmissions, logger } =
     useResponsesContext();
 
   useEffect(() => {
@@ -25,6 +25,13 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
       return () => clearTimeout(timer); // Cleanup on unmount or if processingCompleted changes
     }
   }, [id, locale, processingCompleted, router]);
+
+  useEffect(() => {
+    return () => {
+      logger.info("interrupt on unmount: " + processingCompleted);
+      setInterrupt(true);
+    };
+  }, []);
 
   const handleInterrupt = useCallback(async () => {
     if (isNavigating) return; // Prevent double-click
