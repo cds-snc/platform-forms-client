@@ -205,12 +205,12 @@ export const ResponsesProvider = ({
 
       while (formResponses.length > 0 && !interruptRef.current) {
         for (const response of formResponses) {
-          logger.info(`Processing submission ID: ${response.name}`);
-
           if (interruptRef.current) {
             logger.info("Processing interrupted by user");
             break;
           }
+
+          logger.info(`Processing submission ID: ${response.name}`);
 
           try {
             // eslint-disable-next-line no-await-in-loop
