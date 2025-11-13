@@ -14,15 +14,14 @@ import {
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import { NewFormSubmission, PrivateApiKey } from "../lib/types";
 import { GCFormsApiClient } from "../lib/apiClient";
-import { createSubArrays, downloadAndConfirmFormSubmissions } from "../lib/utils";
-import { initCsv, writeRow } from "../lib/csvWriter";
+import { initCsv } from "../lib/csvWriter";
 import { toast } from "../../../components/shared/Toast";
 import { useTranslation } from "@root/i18n/client";
-import { writeHtml } from "../lib/htmlWriter";
 import { ErrorRetreivingSubmissions, TemplateFailed } from "../components/Toasts";
-import { BATCH_SIZE, HTML_DOWNLOAD_FOLDER } from "../lib/constants";
+import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
 import { useApiDebug } from "../lib/useApiDebug";
+import { processResponse } from "../lib/processResponse";
 
 interface ResponsesContextType {
   locale: string;
@@ -84,10 +83,11 @@ export const ResponsesProvider = ({
   const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<string>("csv");
-  const [isProcessingInterrupted, setIsProcessingInterrupted] = useState(false);
-  const abortControllerRef = useRef<AbortController | null>(null);
   const loggerRef = useRef(new ResponseDownloadLogger());
   const logger = loggerRef.current;
+
+  const [isProcessingInterrupted, setIsProcessingInterrupted] = useState(false);
+  const interruptRef = useRef<boolean>(false);
 
   const { t } = useTranslation("my-forms");
 
@@ -100,23 +100,18 @@ export const ResponsesProvider = ({
 
       setIsProcessingInterrupted(nextValue);
 
-      // Trigger abort when interrupt is set to true
-      if (nextValue && abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
+      // Sync ref with state value
+      interruptRef.current = nextValue;
     },
     [isProcessingInterrupted]
   );
-
-  const interrupt = isProcessingInterrupted;
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       // Abort any in-flight requests on unmount
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-        abortControllerRef.current = null;
+      if (interruptRef.current) {
+        interruptRef.current = false;
       }
     };
   }, []);
@@ -147,52 +142,49 @@ export const ResponsesProvider = ({
   }, [apiClient, logger]);
 
   const resetNewSubmissions = () => {
-    logger.info("Resetting new form submissions");
     setNewFormSubmissions([]);
   };
 
+  // const onInterrupt = () => {
+  //   logger.info("Processing interrupted by user");
+  //   setNewFormSubmissions([]);
+  // }
+
   const processResponses = useCallback(
     async (initialSubmissions?: NewFormSubmission[]) => {
-      logger.info("Beginning processing of form submissions");
-
-      // Create new abort controller for this processing run
-      const abortController = new AbortController();
-      abortControllerRef.current = abortController;
+      logger.info("Beginning processing of form responses");
 
       // Reset interrupt state
       setInterrupt(false);
 
-      let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
+      let formId;
       let formTemplate;
       let csvFileHandle: FileSystemFileHandle | null = null;
+      let htmlDirectoryHandle: FileSystemDirectoryHandle | null = null;
+      let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
 
       if (!directoryHandle || !privateApiKey || !apiClient) {
-        // Optionally handle the error or prompt the user
-        abortControllerRef.current = null;
+        logger.error("Missing required context values, aborting processing");
         return;
       }
 
-      let htmlDirectoryHandle: FileSystemDirectoryHandle | null = null;
-
       try {
-        formTemplate = await apiClient?.getFormTemplate();
+        formTemplate = await apiClient.getFormTemplate();
+        formId = apiClient.getFormId();
       } catch (error) {
-        logger.error("Error loading form template:", error);
+        logger.error("Error loading form template: ", error);
         toast.error(<TemplateFailed />, "wide");
         return;
       }
-
-      const formId = apiClient.getFormId();
 
       /**
        * Initialize CSV if needed
        */
       if (selectedFormat === "csv") {
         const result = await initCsv({ formId, dirHandle: directoryHandle, formTemplate });
-        logger.info("Initialized CSV:", result);
+        logger.info("Initialized CSV file: ", result.handle?.name);
 
         csvFileHandle = result && result.handle;
-
         const csvExists = result && !result.created;
 
         if (csvExists) {
@@ -208,105 +200,51 @@ export const ResponsesProvider = ({
         htmlDirectoryHandle = await directoryHandle.getDirectoryHandle(HTML_DOWNLOAD_FOLDER, {
           create: true,
         });
-        logger.info("Initialized HTML directory:", htmlDirectoryHandle);
+        logger.info("Initialized HTML directory: ", htmlDirectoryHandle.name);
       }
 
-      while (formResponses.length > 0 && !abortController.signal.aborted) {
-        try {
-          const subArrays = createSubArrays(formResponses, BATCH_SIZE);
-          logger.info(`Processing ${subArrays.length} batches of ${BATCH_SIZE} submissions`);
+      while (formResponses.length > 0 && !interruptRef.current) {
+        for (const response of formResponses) {
+          logger.info(`Processing submission ID: ${response.name}`);
 
-          for (const subArray of subArrays) {
-            // Check abort signal
-            if (abortController.signal.aborted) {
-              logger.info("Processing interrupted by user");
-              break;
-            }
-
-            /* eslint-disable no-await-in-loop */
-            const { submissionData } = await downloadAndConfirmFormSubmissions({
-              directoryHandle,
-              apiClient,
-              privateApiKey,
-              submissions: subArray,
-            });
-
-            if (!submissionData) {
-              logger.warn("No submission data returned for current batch, skipping...");
-              continue;
-            }
-
-            for (const submission of submissionData) {
-              // switch based on selected format
-              switch (selectedFormat) {
-                case "html":
-                  if (!htmlDirectoryHandle) {
-                    throw new Error("HTML directory handle is null"); // @TODO: catch?
-                  }
-
-                  await writeHtml({
-                    htmlDirectoryHandle,
-                    formTemplate,
-                    submission,
-                    formId,
-                    t,
-                  });
-                  break;
-                default:
-                  if (!csvFileHandle) {
-                    throw new Error("CSV file handle is null"); // @TODO: catch?
-                  }
-
-                  await writeRow({
-                    submissionId: submission.submissionId,
-                    createdAt: submission.createdAt,
-                    formTemplate,
-                    csvFileHandle,
-                    rawAnswers: submission.rawAnswers,
-                  });
-                  break;
-              }
-            }
-
-            // Record individual submission ids so we have an accurate count
-            setProcessedSubmissionIds((prev) => {
-              const next = new Set(prev);
-              for (const s of submissionData) {
-                next.add(s.submissionId);
-              }
-              return next;
-            });
-
-            // Log after state update
-            const processedIds = submissionData.map((s) => s.submissionId);
-            logger.info("Processed submission IDs:", processedIds);
-
-            // Get subsequent submissions
-            if (abortController.signal.aborted) {
-              logger.info("Processing interrupted after batch completion");
-              break;
-            }
-
-            formResponses = await apiClient.getNewFormSubmissions();
-          }
-
-          if (abortController.signal.aborted) {
-            logger.info("Processing interrupted, exiting batch loop");
+          if (interruptRef.current) {
+            logger.info("Processing interrupted by user");
             break;
           }
-        } catch (error) {
-          if (error instanceof Error && error.name === "AbortError") {
-            logger.warn("Processing aborted");
-          } else {
+
+          try {
+            // eslint-disable-next-line no-await-in-loop
+            await processResponse({
+              setProcessedSubmissionIds,
+              workingDirectoryHandle: directoryHandle,
+              htmlDirectoryHandle,
+              csvFileHandle,
+              apiClient,
+              privateApiKey,
+              responseName: response.name,
+              selectedFormat,
+              formId: String(formId),
+              formTemplate: formTemplate!,
+              t,
+            });
+          } catch (error) {
+            setInterrupt(true);
+            logger.info(`Error processing submission ID ${response.name}:`, error);
             toast.error(<ErrorRetreivingSubmissions />, "wide");
-            logger.warn("Error processing submissions:", error);
           }
+        }
+
+        if (interruptRef.current) {
           break;
         }
+
+        // Get subsequent submissions
+        // eslint-disable-next-line no-await-in-loop
+        formResponses = await retrieveResponses();
       }
 
       // Cleanup
-      abortControllerRef.current = null;
+      interruptRef.current = false;
 
       setNewFormSubmissions(null);
       setProcessingCompleted(true);
@@ -317,6 +255,7 @@ export const ResponsesProvider = ({
       logger,
       newFormSubmissions,
       privateApiKey,
+      retrieveResponses,
       selectedFormat,
       setInterrupt,
       t,
@@ -332,6 +271,7 @@ export const ResponsesProvider = ({
     setProcessingCompleted(false);
     setSelectedFormat("csv");
     setInterrupt(false);
+    interruptRef.current = false;
   }, [setInterrupt]);
 
   return (
@@ -355,7 +295,7 @@ export const ResponsesProvider = ({
         setProcessingCompleted,
         selectedFormat,
         setSelectedFormat,
-        interrupt,
+        interrupt: isProcessingInterrupted,
         setInterrupt,
         resetState,
         resetNewSubmissions,
