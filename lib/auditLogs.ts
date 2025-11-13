@@ -1,6 +1,15 @@
+import {
+  BatchGetCommand,
+  BatchGetCommandOutput,
+  QueryCommand,
+  QueryCommandInput,
+  QueryCommandOutput,
+} from "@aws-sdk/lib-dynamodb";
+import { delay } from "@lib/utils/retryability";
 import { GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { logMessage } from "./logger";
-import { sqsClient } from "./integration/awsServicesConnector";
+import { sqsClient, dynamoDBDocumentClient } from "./integration/awsServicesConnector";
+import { getUsers } from "@lib/users";
 
 export enum AuditLogEvent {
   // Form Events
@@ -126,4 +135,119 @@ export const logEvent = async (
     // Ensure the audit event is not lost by sending to console
     logMessage.warn(`AuditLog:${auditLog}`);
   }
+};
+
+export const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
+  let retries = 0;
+  const maxRetries = 3;
+  const auditLogs: Array<{
+    UserID: string;
+    Event: string;
+    TimeStamp: number;
+    Description: string;
+    Subject: string;
+  }> = [];
+
+  const batchRequest = new BatchGetCommand({
+    RequestItems: {
+      AuditLogs: {
+        Keys: keys.map((event) => ({
+          UserID: event.UserID,
+          "Event#SubjectID#TimeStamp": event["Event#SubjectID#TimeStamp"],
+        })),
+      },
+    },
+  });
+
+  await dynamoDBDocumentClient.send(batchRequest).then(async (data: BatchGetCommandOutput) => {
+    auditLogs.push(
+      ...(data?.Responses?.AuditLogs?.map((item: Record<string, string | number>) => ({
+        UserID: item.UserID as string,
+        Event: item.Event as string,
+        TimeStamp: item.TimeStamp as number,
+        Description: item.Description as string,
+        Subject: item.Subject as string,
+      })) ?? [])
+    );
+
+    if (data.UnprocessedKeys?.AuditLogs) {
+      while (retries < maxRetries) {
+        // eslint-disable-next-line no-await-in-loop -- Intentional retry logic with delay
+        await delay(200); // Wait for 200ms second before retrying
+        const retryRequest = new BatchGetCommand({
+          RequestItems: {
+            AuditLogs: {
+              Keys: data.UnprocessedKeys.AuditLogs.Keys,
+            },
+          },
+        });
+        const retryResponse: BatchGetCommandOutput =
+          // eslint-disable-next-line no-await-in-loop -- Intentional retry logic
+          await dynamoDBDocumentClient.send(retryRequest);
+        auditLogs.push(
+          ...(retryResponse.Responses?.AuditLogs.map((item: Record<string, string | number>) => ({
+            UserID: item.UserID as string,
+            Event: item.Event as string,
+            TimeStamp: item.TimeStamp as number,
+            Description: item.Description as string,
+            Subject: item.Subject as string,
+          })) ?? [])
+        );
+        if (!retryResponse.UnprocessedKeys?.AuditLogs) {
+          break; // Exit the loop if there are no more unprocessed keys
+        }
+        retries++;
+      }
+    }
+  });
+  return auditLogs;
+};
+
+export const retrieveEvents = async (
+  query: QueryCommandInput,
+  options?: {
+    filter?: string[];
+    mapUserEmail?: boolean;
+  }
+) => {
+  const request = new QueryCommand(query);
+
+  const response = (await dynamoDBDocumentClient.send(request)) as QueryCommandOutput;
+  const { Items: eventsIndex, Count: eventsIndexCount } = response;
+
+  if (eventsIndexCount === 0 || eventsIndex === undefined) {
+    return [];
+  }
+  let eventItems = await retrieveAuditLogs(eventsIndex);
+
+  if (options?.filter) {
+    eventItems = eventItems.filter((event) => !options.filter?.includes(event.Event));
+  }
+
+  if (options?.mapUserEmail) {
+    const userIds = Array.from(new Set(eventItems.map((event) => event.UserID)));
+    const users = await getUsers({ id: { in: userIds } });
+    const userEmailMap: Record<string, string> = {};
+    users.forEach((user) => {
+      userEmailMap[user.id] = user.email;
+    });
+
+    eventItems.forEach((event) => {
+      event.UserID = userEmailMap[event.UserID] || "Unknown User";
+    });
+  }
+
+  return eventItems
+    .map((record) => {
+      return {
+        userId: record.UserID,
+        event: record.Event,
+        timestamp: record.TimeStamp,
+        description: record.Description,
+        subject: record.Subject,
+      };
+    })
+    .sort((a, b) => {
+      return b.timestamp - a.timestamp;
+    });
 };
