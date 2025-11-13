@@ -10,6 +10,8 @@ import { submissionTypeExists } from "@lib/vault";
 import { VaultStatus } from "@lib/types";
 import { ServerActionError } from "@root/lib/types/form-builder-types";
 
+import { delay } from "@lib/utils/retryability";
+
 import {
   BatchGetCommand,
   QueryCommand,
@@ -73,7 +75,7 @@ export const unConfirmedResponsesExist = AuthenticatedAction(async (_, formId: s
 const _retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
   let retries = 0;
   const maxRetries = 3;
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
   const auditLogs: Array<{
     UserID: string;
     Event: string;

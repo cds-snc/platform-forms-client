@@ -23,6 +23,8 @@ import {
   pipe,
 } from "valibot";
 
+import { delay } from "@lib/utils/retryability";
+
 const _retrieveEvents = async (query: QueryCommandInput) => {
   const request = new QueryCommand(query);
 
@@ -52,7 +54,6 @@ const _retrieveEvents = async (query: QueryCommandInput) => {
 const _retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
   let retries = 0;
   const maxRetries = 3;
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
   const auditLogs: Array<{
     UserID: string;
     Event: string;
