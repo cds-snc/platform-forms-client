@@ -12,6 +12,7 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   const router = useRouter();
   const { t } = useTranslation("response-api");
   const [isNavigating, setIsNavigating] = useState(false);
+  const isMountedRef = useState(true);
 
   const { processingCompleted, setInterrupt, interrupt, resetNewSubmissions, logger } =
     useResponsesContext();
@@ -27,9 +28,15 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   }, [id, locale, processingCompleted, router]);
 
   useEffect(() => {
+    setTimeout(() => {
+      isMountedRef.current = true;
+    }, 100);
+
     return () => {
-      logger.info("ProcessingDownloads unmounted, interrupting processing.");
-      setInterrupt(true);
+      if (isMountedRef.current) {
+        logger.info("ProcessingDownloads unmounted, interrupting processing.");
+        setInterrupt(true);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
