@@ -52,6 +52,11 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
       const token = await getAccessTokenFromApiKey(keyFile);
 
+      // Ensure the key's formId matches the current form id - unless in local development mode
+      if (keyFile.formId !== id && process.env.NODE_ENV !== "development") {
+        throw new Error("API key form ID does not match the current form ID.");
+      }
+
       if (!token) {
         return false;
       }
@@ -67,7 +72,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       // no-op
       return false;
     }
-  }, [setApiClient, setPrivateApiKey]);
+  }, [setApiClient, setPrivateApiKey, id]);
 
   return (
     <div>
