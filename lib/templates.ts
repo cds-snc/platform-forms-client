@@ -422,7 +422,7 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
  */
 export async function getFullTemplateByID(
   formID: string,
-  allowDeleted: boolean
+  allowDeleted?: boolean
 ): Promise<FormRecord | null> {
   try {
     const { user } = await authorization.canViewForm(formID, allowDeleted).catch((e) => {
