@@ -69,6 +69,8 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
       return true;
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error loading API key:", error);
       // no-op
       return false;
     }
