@@ -5,8 +5,12 @@ import { isFieldResponseValid } from "./validation/validation";
 import { inGroup } from "./helpers";
 
 import { checkVisibilityRecursive } from "./visibility";
-import { valueMatchesType } from "@gcforms/core";
-
+import {
+  type ValueMatchErrors,
+  type SubElementTypeMismatch,
+  valueMatchesType,
+  hasValue,
+} from "@gcforms/core";
 /*
  Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit
  this allows passing in currentGroup vs adding the currentGroup to values beforehand
@@ -51,9 +55,14 @@ export const validateVisibleElements = (
     formRecord: PublicFormRecord;
     t: (str: string) => string;
   }
-): { errors: Responses; visibility: Map<string, boolean> } => {
+): {
+  errors: Responses;
+  visibility: Map<string, boolean>;
+  valueMatchErrors: ValueMatchErrors;
+} => {
   const errors: Responses = {};
   const visibilityMap = new Map<string, boolean>();
+  const valueMatchErrors: ValueMatchErrors = {};
 
   for (const formElement of props.formRecord.form.elements) {
     const responseValue = values[formElement.id];
@@ -95,22 +104,42 @@ export const validateVisibleElements = (
       }
     }
 
-    // Note this checks against all visible elements, not just required ones
-    // Only check if we actually have a value to validate
-    if (
-      !errors[formElement.id] &&
-      responseValue !== undefined &&
-      responseValue !== null &&
-      responseValue !== ""
-    ) {
-      const result = valueMatchesType(responseValue, formElement.type, formElement);
+    // Both parts of the code (above and below) should probably be merged together once we revisit form response validation
 
-      if (!result) {
-        const err = `Mismatched type for ${formElement.type} => ${JSON.stringify(responseValue)}`;
-        errors[formElement.id] = err;
+    // Note the code below checks against all visible elements, not just required ones
+    if (!hasValue(responseValue)) {
+      continue;
+    }
+
+    const matched = valueMatchesType(responseValue, formElement.type, formElement, props.t);
+
+    if (matched?.error && matched.details) {
+      valueMatchErrors[formElement.id] = matched.details;
+
+      // If we already have an error for this element, skip type checking
+      if (!errors[formElement.id]) {
+        if (Array.isArray(matched.details)) {
+          // Build errors UI display for dynamic rows
+          const groupErrors: Record<string, string>[] = [];
+          const detailsArray = matched.details as SubElementTypeMismatch[];
+          detailsArray.forEach((detail) => {
+            if (!groupErrors[detail.rowIndex]) {
+              groupErrors[detail.rowIndex] = {};
+            }
+
+            groupErrors[detail.rowIndex] = {
+              ...groupErrors[detail.rowIndex],
+              [detail.responseKey]: matched.error,
+            };
+          });
+
+          errors[formElement.id] = groupErrors as unknown as Responses[string];
+        } else {
+          errors[formElement.id] = matched.error;
+        }
       }
     }
   }
 
-  return { errors, visibility: visibilityMap };
+  return { errors, visibility: visibilityMap, valueMatchErrors };
 };

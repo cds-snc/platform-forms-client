@@ -26,6 +26,9 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
 };
 
 export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
+  // Public facing form id
+  const brandingFormId = "cmhwhsfzc003ayg01km2haq6m";
+
   const { t, i18n } = useTranslation(["form-builder", "common"]);
   const { id, brandName, updateField, unsetField, getSchema, brand } = useTemplateStore((s) => ({
     id: s.id,
@@ -128,9 +131,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
           <p className="text-sm">
             <Link
               href={`https://forms-formulaires.alpha.canada.ca/${
-                i18n.language === "fr"
-                  ? "fr/id/cm6f4sci50083vt68djorvzjg/"
-                  : "en/id/cm6f4sci50083vt68djorvzjg/"
+                i18n.language === "fr" ? `fr/id/${brandingFormId}` : `en/id/${brandingFormId}`
               }`}
               passHref
               rel="noopener noreferrer"
