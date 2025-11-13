@@ -206,7 +206,7 @@
     "fileInputDefault": {
       "text1": "A way to add supporting documentation.",
       "text1x": "⚠️ You must",
-      "text2": "set  your response delivery to API",
+      "text2": "have an API key configured for data retrieval",
       "text3": "to use this form element."
     },
     "fileInputWithApi": {

@@ -18,7 +18,7 @@ Personal information is also collected in compliance with the [Privacy Act](http
 
 The use of [hCaptcha](https://www.hcaptcha.com/) helps us detect and block spam and automated abuse or threats from bots. Learn more about this third-party provider's [privacy policy](https://www.hcaptcha.com/privacy) and [terms of service](https://www.hcaptcha.com/terms).
 
-We also analyze form submissions through a third-party service provider to detect and flag malicious content in file attachments.
+We also analyze form submissions through a third-party service provider to detect and flag malicious content in file attachments, with commercial-grade anti-virus file scanning technology. While we attempt to mark potentially harmful content, no software is perfect.
 
 ### We use web analytics to help improve your experience
 
@@ -123,4 +123,4 @@ Many social media platforms have multiple language options and provide instructi
 
 
 
-**Last update:** June 26, 2025
+**Last update:** November 12, 2025

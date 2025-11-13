@@ -31,8 +31,8 @@
       "description": "Activer la bannière d'avertissement pour qu'elle soit visible"
     },
     "responsesBeta": {
-      "title": "Réponses Beta",
-      "description": "Activer les fonctionnalités bêta pour la gestion des réponses aux formulaires"
+      "title": "Réponses Bêta",
+      "description": "Activer le flux bêta pour la récupération des réponses au formulaire de l'interface, avec un clé API."
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",
