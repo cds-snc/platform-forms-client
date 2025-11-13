@@ -76,7 +76,7 @@ export const getEventsForForm = AuthenticatedAction(async (_, formId: string) =>
         ScanIndexForward: false,
       },
       {
-        filter: ["ReadForm"],
+        filter: ["ReadForm", "AuditLogsRead"],
         mapUserEmail: true,
       }
     );

@@ -511,6 +511,7 @@
     "events": {
       "CreateForm": "Formulaire créé",
       "ChangeDeliveryOption": "Option de livraison modifiée",
+      "ChangeSecurityAttribute": "Attribut de sécurité modifié",
       "ChangeFormPurpose": "Titre du formulaire modifié",
       "ChangeFormSaveAndResume": "Option de sauvegarde et de reprise modifiée",
       "ChangeFormName": "Titre du formulaire modifié",

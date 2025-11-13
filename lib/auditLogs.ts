@@ -9,7 +9,7 @@ import { delay } from "@lib/utils/retryability";
 import { GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { logMessage } from "./logger";
 import { sqsClient, dynamoDBDocumentClient } from "./integration/awsServicesConnector";
-import { getUsers } from "@lib/users";
+import { getUsersEmails } from "@lib/users";
 
 export enum AuditLogEvent {
   // Form Events
@@ -226,14 +226,11 @@ export const retrieveEvents = async (
 
   if (options?.mapUserEmail) {
     const userIds = Array.from(new Set(eventItems.map((event) => event.UserID)));
-    const users = await getUsers({ id: { in: userIds } });
-    const userEmailMap: Record<string, string> = {};
-    users.forEach((user) => {
-      userEmailMap[user.id] = user.email;
-    });
+    const formId = eventItems[0]?.Subject.split("#")[1];
+    const users = await getUsersEmails(formId, userIds);
 
     eventItems.forEach((event) => {
-      event.UserID = userEmailMap[event.UserID] || "Unknown User";
+      event.UserID = users.find((user) => user.id === event.UserID)?.email || "Unknown User";
     });
   }
 

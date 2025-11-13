@@ -511,6 +511,7 @@
     "events": {
       "CreateForm": "Form created",
       "ChangeDeliveryOption": "Delivery option changed",
+      "ChangeSecurityAttribute": "Data classification changed",
       "ChangeFormPurpose": "Form purpose changed",
       "ChangeFormSaveAndResume": "Save and resume option changed",
       "ChangeFormName": "Form title changed",
