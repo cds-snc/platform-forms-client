@@ -14,15 +14,14 @@ import {
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import { NewFormSubmission, PrivateApiKey } from "../lib/types";
 import { GCFormsApiClient } from "../lib/apiClient";
-import { initCsv, writeRow } from "../lib/csvWriter";
+import { initCsv } from "../lib/csvWriter";
 import { toast } from "../../../components/shared/Toast";
 import { useTranslation } from "@root/i18n/client";
-import { writeHtml } from "../lib/htmlWriter";
 import { ErrorRetreivingSubmissions, TemplateFailed } from "../components/Toasts";
 import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
 import { useApiDebug } from "../lib/useApiDebug";
-import { downloadAndConfirmResponse } from "../lib/downloadAndConfirmResponse";
+import { processResponse } from "../lib/processResponse";
 
 interface ResponsesContextType {
   locale: string;
@@ -215,49 +214,18 @@ export const ResponsesProvider = ({
 
           try {
             // eslint-disable-next-line no-await-in-loop
-            const confirmedResponse = await downloadAndConfirmResponse({
+            await processResponse({
+              setProcessedSubmissionIds,
               workingDirectoryHandle: directoryHandle,
+              htmlDirectoryHandle,
+              csvFileHandle,
               apiClient,
               privateApiKey,
               responseName: response.name,
-            });
-
-            switch (selectedFormat) {
-              case "html":
-                if (!htmlDirectoryHandle) {
-                  throw new Error("HTML directory handle is null");
-                }
-
-                // eslint-disable-next-line no-await-in-loop
-                await writeHtml({
-                  htmlDirectoryHandle,
-                  formTemplate,
-                  submission: confirmedResponse,
-                  formId,
-                  t,
-                });
-                break;
-              default:
-                if (!csvFileHandle) {
-                  throw new Error("CSV file handle is null");
-                }
-
-                // eslint-disable-next-line no-await-in-loop
-                await writeRow({
-                  submissionId: confirmedResponse.submissionId,
-                  createdAt: confirmedResponse.createdAt,
-                  formTemplate,
-                  csvFileHandle,
-                  rawAnswers: confirmedResponse.rawAnswers,
-                });
-                break;
-            }
-
-            // Record individual submission ids so we have an accurate count
-            setProcessedSubmissionIds((prev) => {
-              const next = new Set(prev);
-              next.add(response.name);
-              return next;
+              selectedFormat,
+              formId: String(formId),
+              formTemplate: formTemplate!,
+              t,
             });
           } catch (error) {
             setInterrupt(true);

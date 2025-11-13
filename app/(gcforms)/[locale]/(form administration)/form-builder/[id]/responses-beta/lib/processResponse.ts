@@ -1,9 +1,82 @@
-import { md5 } from "hash-wasm";
-import { GCFormsApiClient } from "./apiClient";
-import { ATTACHMENTS_FOLDER, RAW_RESPONSE_FOLDER } from "./constants";
-import { CompleteAttachment, FormSubmission, PrivateApiKey } from "./types";
+import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
+import { PrivateApiKey, CompleteAttachment, FormSubmission } from "./types";
 import { decryptFormSubmission, importPrivateKeyDecrypt } from "./utils";
-import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
+import { ATTACHMENTS_FOLDER, RAW_RESPONSE_FOLDER } from "./constants";
+import { FormProperties } from "@root/lib/types";
+import { GCFormsApiClient } from "./apiClient";
+import { writeHtml } from "./htmlWriter";
+import { writeRow } from "./csvWriter";
+import { TFunction } from "i18next";
+import { md5 } from "hash-wasm";
+
+export const processResponse = async ({
+  setProcessedSubmissionIds,
+  workingDirectoryHandle,
+  htmlDirectoryHandle,
+  csvFileHandle,
+  apiClient,
+  privateApiKey,
+  responseName,
+  selectedFormat,
+  formId,
+  formTemplate,
+  t,
+}: {
+  setProcessedSubmissionIds: React.Dispatch<React.SetStateAction<Set<string>>>;
+  workingDirectoryHandle: FileSystemDirectoryHandle;
+  htmlDirectoryHandle: FileSystemDirectoryHandle | null;
+  csvFileHandle: FileSystemFileHandle | null;
+  apiClient: GCFormsApiClient;
+  privateApiKey: PrivateApiKey;
+  responseName: string;
+  selectedFormat: string;
+  formId: string;
+  formTemplate: FormProperties;
+  t: TFunction<string | string[], undefined>;
+}) => {
+  const confirmedResponse = await downloadAndConfirmResponse({
+    workingDirectoryHandle,
+    apiClient,
+    privateApiKey,
+    responseName: responseName,
+  });
+
+  switch (selectedFormat) {
+    case "html":
+      if (!htmlDirectoryHandle) {
+        throw new Error("HTML directory handle is null");
+      }
+
+      await writeHtml({
+        htmlDirectoryHandle,
+        formTemplate,
+        submission: confirmedResponse,
+        formId,
+        t,
+      });
+      break;
+    default:
+      if (!csvFileHandle) {
+        throw new Error("CSV file handle is null");
+      }
+
+      await writeRow({
+        submissionId: confirmedResponse.submissionId,
+        createdAt: confirmedResponse.createdAt,
+        formTemplate,
+        csvFileHandle,
+        rawAnswers: confirmedResponse.rawAnswers,
+      });
+      break;
+  }
+
+  // Record individual submission ids so we have an accurate count
+  setProcessedSubmissionIds((prev) => {
+    const next = new Set(prev);
+    next.add(responseName);
+    return next;
+  });
+};
 
 export const downloadAndConfirmResponse = async ({
   workingDirectoryHandle,
@@ -16,16 +89,20 @@ export const downloadAndConfirmResponse = async ({
   privateApiKey: PrivateApiKey;
   responseName: string;
 }) => {
+  // Get or create raw data directory
   const dataDirectoryHandle: FileSystemDirectoryHandle =
     await workingDirectoryHandle.getDirectoryHandle(RAW_RESPONSE_FOLDER, { create: true });
 
   const decryptionKey = await importPrivateKeyDecrypt(privateApiKey.key);
 
+  // Retrieve encrypted response from API
   const encryptedSubmission = await apiClient.getFormSubmission(responseName);
 
+  // Decrypt response data
   const decryptedData = await decryptFormSubmission(encryptedSubmission, decryptionKey);
   const decryptedResponse: FormSubmission = JSON.parse(decryptedData);
 
+  // Save decrypted response to file
   const fileHandle = await dataDirectoryHandle.getFileHandle(`${responseName}.json`, {
     create: true,
   });
