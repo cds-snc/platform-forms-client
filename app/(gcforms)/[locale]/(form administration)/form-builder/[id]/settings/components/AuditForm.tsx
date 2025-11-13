@@ -13,7 +13,7 @@ export const AuditForm = ({ formId }: { formId: string }) => {
     form: s.form,
   }));
 
-  async function retrieveFileBlob(
+  function retrieveFileBlob(
     events: {
       userId: string;
       event: string;
