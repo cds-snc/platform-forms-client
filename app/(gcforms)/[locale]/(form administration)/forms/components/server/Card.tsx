@@ -1,12 +1,13 @@
 import React, { Suspense } from "react";
 import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
+import { Unarchive } from "../client/Unarchive";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { DeliveryOption } from "@lib/types";
 import Skeleton from "react-loading-skeleton";
 
-const CardBanner = async ({ isPublished }: { isPublished: boolean }) => {
+const CardBanner = async ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
   const { t } = await serverTranslation("my-forms");
   return (
     <div
@@ -18,7 +19,11 @@ const CardBanner = async ({ isPublished }: { isPublished: boolean }) => {
       }
       aria-hidden="true"
     >
-      {isPublished ? t("card.states.published") : t("card.states.draft")}
+      {ttl
+        ? t("card.states.archived")
+        : isPublished
+          ? t("card.states.published")
+          : t("card.states.draft")}
     </div>
   );
 };
@@ -29,9 +34,17 @@ interface CardLinksProps {
   isPublished: boolean;
   deliveryOption?: { emailAddress?: string } | null;
   overdue: boolean;
+  ttl?: Date | null;
 }
 
-const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: CardLinksProps) => {
+const CardLinks = async ({
+  isPublished,
+  url,
+  id,
+  deliveryOption,
+  overdue,
+  ttl,
+}: CardLinksProps) => {
   const {
     t,
     i18n: { language },
@@ -39,23 +52,28 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: Card
 
   const responsesLink = `/${language}/form-builder/${id}/responses`;
 
+  const editLink = (
+    <Link
+      href={isPublished ? url : `/${language}/form-builder/${id}/edit/`}
+      className="my-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
+      target={isPublished ? "_blank" : "_self"}
+      aria-describedby={`card-title-${id} card-date-${id}`}
+      rel="noreferrer"
+      prefetch={false}
+    >
+      {isPublished ? (
+        <PreviewIcon className="mr-2 inline-block" />
+      ) : (
+        <DesignIcon className="mr-2 inline-block" />
+      )}
+      {isPublished ? t("viewForm") : t("editForm")}
+    </Link>
+  );
+
   return (
     <div className="mb-4 px-3">
-      <Link
-        href={isPublished ? url : `/${language}/form-builder/${id}/edit/`}
-        className="my-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
-        target={isPublished ? "_blank" : "_self"}
-        aria-describedby={`card-title-${id} card-date-${id}`}
-        rel="noreferrer"
-        prefetch={false}
-      >
-        {isPublished ? (
-          <PreviewIcon className="mr-2 inline-block" />
-        ) : (
-          <DesignIcon className="mr-2 inline-block" />
-        )}
-        {isPublished ? t("viewForm") : t("editForm")}
-      </Link>
+      {ttl == null && editLink}
+      {ttl != null && <Unarchive id={id} isPublished={isPublished} language={language} />}
 
       {/* Email delivery */}
       {deliveryOption && deliveryOption.emailAddress && (
@@ -65,7 +83,7 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: Card
         </span>
       )}
       {/* Vault delivery */}
-      {deliveryOption && !deliveryOption.emailAddress && (
+      {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
         <>
           {overdue ? (
             <span className="mt-4 block text-sm text-red">
@@ -95,16 +113,37 @@ const CardTitle = async ({ name }: { name: string }) => {
   return <h2 className={classes}>{name ? name : t("card.unnamedForm")}</h2>;
 };
 
-const CardDate = async ({ id, date }: { id: string; date: string }) => {
+const CardDate = async ({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
   const { t } = await serverTranslation(["my-forms", "common"]);
   function formatDate(date: string) {
     const jsDate = new Date(date);
     return jsDate.toISOString().split("T")[0];
   }
+  function formatDateToString(date: Date) {
+    // Format date as YYYY-MM-DD
+    return date.toISOString().split("T")[0];
+  }
+
+  const ttlInNextFiveDays = ttl
+    ? new Date(ttl).getTime() - new Date().getTime() <= 5 * 24 * 60 * 60 * 1000
+    : false;
+  const ttlInDays = ttl
+    ? Math.ceil((ttl.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+    : 0;
 
   return (
     <div id={`card-date-${id}`} className="text-sm">
       {t("card.lastEdited")}: {formatDate(date)}
+      {ttl != null && (
+        <>
+          <br /> <span>{t("card.deleteDate") + formatDateToString(ttl)}</span>
+          {ttlInNextFiveDays && (
+            <span className="ml-4 text-red-500">
+              {t("card.deletedIn")} {ttlInDays} {t("card.days")}
+            </span>
+          )}
+        </>
+      )}
     </div>
   );
 };
@@ -116,6 +155,7 @@ export interface CardI {
   deliveryOption: DeliveryOption;
   name: string;
   isPublished: boolean;
+  ttl: Date | null;
   date: string;
   url: string;
   overdue: boolean;
@@ -131,7 +171,7 @@ export const Card = async ({ card }: { card: CardI }) => {
         <div className="flex flex-col px-3">
           <div className="flex h-full justify-between">
             <CardTitle name={card.name} />
-            <CardBanner isPublished={card.isPublished} />
+            <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
           </div>
         </div>
 
@@ -142,14 +182,21 @@ export const Card = async ({ card }: { card: CardI }) => {
             id={card.id}
             deliveryOption={card.deliveryOption}
             overdue={card.overdue}
+            ttl={card.ttl}
           />
         </Suspense>
       </div>
 
       <div className="mb-4 flex items-center justify-between px-3">
-        <CardDate id={card.id} date={card.date} />
+        <CardDate id={card.id} date={card.date} ttl={card.ttl} />
         <div className="flex items-center text-sm">
-          <Menu id={card.id} name={card.name} isPublished={card.isPublished} direction={"up"} />
+          <Menu
+            id={card.id}
+            name={card.name}
+            isPublished={card.isPublished}
+            ttl={card.ttl ? card.ttl : undefined}
+            direction={"up"}
+          />
         </div>
       </div>
     </div>

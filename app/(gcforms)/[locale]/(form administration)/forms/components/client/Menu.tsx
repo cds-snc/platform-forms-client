@@ -17,11 +17,13 @@ export const Menu = ({
   id,
   name,
   isPublished,
+  ttl,
   direction = "up",
 }: {
   id: string;
   name: string;
   isPublished: boolean;
+  ttl?: Date;
   direction?: "up" | "down";
 }) => {
   const {
@@ -34,8 +36,24 @@ export const Menu = ({
     setShowConfirm(true);
   }, []);
 
-  const menuItemsList: Array<MenuDropdownItemI> = [
+  const unfilteredMenuItemList = [
     {
+      filtered: isPublished ? false : true,
+      title: t("card.menu.copyLink"),
+      callback: copyLinkCallback,
+    },
+    {
+      filtered: (isPublished ? true : false) || (ttl ? true : false),
+      title: t("card.menu.edit"),
+      url: `/${language}/form-builder/${id}/edit`,
+    },
+    {
+      filtered: (isPublished ? true : false) || (ttl ? true : false),
+      title: t("card.menu.preview"),
+      url: `/${language}/form-builder/${id}/preview`,
+    },
+    {
+      filtered: false,
       title: t("card.menu.clone"),
       callback: () => {
         // Start async clone but return immediate callback value to satisfy MenuDropdown
@@ -57,18 +75,21 @@ export const Menu = ({
       },
     },
     {
+      filterd: ttl ? true : false,
       title: t("card.menu.save"),
       callback: () => {
-        downloadForm(name, id);
+        downloadForm(name, id, ttl);
         return { message: "" };
       },
     },
     {
+      filtered: ttl ? true : false,
       title: t("card.menu.settings"),
       url: `/${language}/form-builder/${id}/settings`,
     },
     {
-      title: t("card.menu.delete"),
+      filtered: ttl ? true : false,
+      title: t("card.menu.archive"),
       callback: () => {
         handleDelete();
         return {
@@ -78,27 +99,12 @@ export const Menu = ({
     },
   ];
 
-  // Show slightly different list items depending on whether a Published or Draft card
-  if (isPublished) {
-    menuItemsList.unshift({
-      title: t("card.menu.copyLink"),
-      callback: copyLinkCallback,
-    });
-  } else {
-    menuItemsList.unshift(
-      {
-        title: t("card.menu.edit"),
-        url: `/${language}/form-builder/${id}/edit`,
-      },
-      {
-        title: t("card.menu.preview"),
-        url: `/${language}/form-builder/${id}/preview`,
-      }
-    );
-  }
+  const menuItemsList: Array<MenuDropdownItemI> = unfilteredMenuItemList.filter(
+    (item) => !item.filtered
+  ) as MenuDropdownItemI[];
 
-  async function downloadForm(name: string, id: string) {
-    const { formRecord, error } = await getForm(id);
+  async function downloadForm(name: string, id: string, ttl: Date | undefined) {
+    const { formRecord, error } = await getForm(id, ttl == null ? false : true);
     if (error) {
       if (error === "Form Not Found") {
         toast.error(t("errors.formDownloadNotExist"));
