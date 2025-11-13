@@ -78,7 +78,7 @@ export const processResponse = async ({
   });
 };
 
-export const downloadAndConfirmResponse = async ({
+const downloadAndConfirmResponse = async ({
   workingDirectoryHandle,
   apiClient,
   privateApiKey,
