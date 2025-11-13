@@ -27,7 +27,7 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
 
 export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   // Public facing form id
-  const brandingFormId = "cmhwhsfzc003ayg01km2haq6m";
+  const brandingFormId = "cmhxi3fam003rx20111btkj03";
 
   const { t, i18n } = useTranslation(["form-builder", "common"]);
   const { id, brandName, updateField, unsetField, getSchema, brand } = useTemplateStore((s) => ({
