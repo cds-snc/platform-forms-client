@@ -2,9 +2,8 @@ import React from "react";
 import { Submission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
-import { getProperty } from "@lib/i18nHelpers";
+import { customTranslate, getProperty } from "@lib/i18nHelpers";
 import { FormRecord } from "@gcforms/types";
-import { TFunction } from "i18next";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -13,7 +12,6 @@ export interface ResponseSectionProps {
   submissionDate: number;
   formResponse: Submission;
   formRecord: FormRecord;
-  t: TFunction<string | string[], undefined>;
 }
 
 export function capitalize(string: string) {
@@ -31,8 +29,9 @@ export const ResponseSection = ({
   submissionDate,
   formResponse,
   formRecord,
-  t,
 }: ResponseSectionProps) => {
+  const { t } = customTranslate("my-forms");
+
   const capitalizedLang = capitalize(lang);
 
   const CopyToClipboardScripts = React.createElement("script", {

@@ -18,7 +18,7 @@ Les renseignements personnels sont recueillis conformément à la [Loi sur la pr
 
 L'utilisation de [hCaptcha](https://www.hcaptcha.com/) nous aide à détecter et bloquer les spams, les abus automatisés et les menaces des robots. Apprenez-en plus sur la [politique de confidentialité](https://www.hcaptcha.com/privacy) et les [conditions d'utilisation](https://www.hcaptcha.com/terms) de ce fournisseur de services tiers.
 
-Nous analysons aussi les soumissions de formulaires grâce à un fournisseur de service tier pour détecter et signaler le contenu malveillant dans les fichiers joints, à l'aide de technologies antivirus de niveau commercial. Bien que nous nous efforcions de signaler les contenu potentiellement dangereux, aucun logiciel n'est parfait.
+Nous analysons aussi les soumissions de formulaires grâce à un fournisseur de service tier pour détecter et signaler le contenu malveillant dans les fichiers joints.
 
 ### Analytique Web pour améliorer votre expérience  
 
@@ -123,4 +123,4 @@ Bon nombre de plateformes de médias sociaux offrent plusieurs choix de langues 
 
 
 
-**Dernière mise à jour :** 12 novembre 2025
+**Dernière mise à jour :** 26 juin 2025

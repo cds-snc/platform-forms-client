@@ -1,9 +1,7 @@
 import { ResponseHtml } from "./components/ResponseHtml";
 import { FormResponseSubmissions } from "../types";
-import { serverTranslation } from "@root/i18n";
 
 export const transform = async (formResponseSubmissions: FormResponseSubmissions) => {
-  const { t } = await serverTranslation("my-forms");
   const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
   const records = formResponseSubmissions.submissions.map((response) => {
     return {
@@ -17,7 +15,6 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
           responseID: response.id,
           createdAt: response.createdAt,
           securityAttribute: formResponseSubmissions.formRecord.securityAttribute,
-          t,
         })
       ),
     };

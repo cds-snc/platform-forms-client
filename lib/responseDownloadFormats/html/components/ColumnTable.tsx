@@ -16,10 +16,10 @@ const QuestionColumns = ({
 }): JSX.Element => {
   const { t } = customTranslate("common");
 
-  const renderRow = (index: number | string, lang: string, item: Answer) => {
+  const renderRow = (index: number, lang: string, item: Answer) => {
     return (
-      <div key={`row-${index}`} className="flex w-full flex-row border-b border-gray py-4">
-        <dt className="w-96 py-4 font-bold">
+      <div className="flex w-full flex-row border-b border-gray py-4">
+        <dt key="" className="w-96 py-4 font-bold">
           {orderLanguageStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
           {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
             <>
@@ -55,11 +55,11 @@ const QuestionColumns = ({
           </dt>
           <dd className="w-full py-4 pl-16">
             <dl className="ml-8">
-              {item.answer.map((subItem, subItemIndex) => {
+              {item.answer.map((subItem) => {
                 return (
                   Array.isArray(subItem) &&
                   subItem.map((subSubItem, subIndex) => {
-                    return renderRow(`${index}-${subItemIndex}-${subIndex}`, lang, subSubItem);
+                    return renderRow(subIndex, lang, subSubItem);
                   })
                 );
               })}

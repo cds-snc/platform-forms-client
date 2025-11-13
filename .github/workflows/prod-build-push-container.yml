@@ -12,8 +12,6 @@ env:
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
   HCAPTCHA_SITE_KEY: ${{ vars.PRODUCTION_HCAPTCHA_SITE_KEY }}
-  ZITADEL_URL: https://auth.forms-formulaires.alpha.canada.ca
-  API_URL: https://api.forms-formulaires.alpha.canada.ca
 
 permissions:
   id-token: write
@@ -35,8 +33,6 @@ jobs:
           --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
           --build-arg INDEX_SITE=true \
           --build-arg HCAPTCHA_SITE_KEY=$HCAPTCHA_SITE_KEY \
-          --build-arg ZITADEL_URL=$ZITADEL_URL \
-          --build-arg API_URL=$API_URL \
           --build-arg NEXT_DEPLOYMENT_ID=$TAG_VERSION .
 
       - name: Configure AWS credentials using OIDC

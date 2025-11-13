@@ -87,11 +87,10 @@ const main = async () => {
     const formID = await getValue("Form ID to generate responses for: ");
     const numberOfResponses = parseInt(await getValue("Number of responses to generate: "), 10);
     const appEnv = await getValue("App Environment:  [0] Local || [1] Staging: ").then((ans) =>
-      ans === "1" ? "staging" : "development"
+      ans === "1" ? "staging" : "local"
     );
 
     console.log(`Getting form template from ${appEnv}`);
-    process.env.AWS_PROFILE = appEnv;
 
     // Get the form template
     const formTemplate = await axios
@@ -155,7 +154,7 @@ const main = async () => {
           throw new Error("Submission API could not process form response");
         }
       });
-      if (appEnv === "development") await delay(500);
+      if (appEnv === "local") await delay(500);
       numOfProcessed += submission.length;
       writeWaitingPercent(numOfProcessed, numberOfResponses);
     }

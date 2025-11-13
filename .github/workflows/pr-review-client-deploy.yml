@@ -22,8 +22,6 @@ env:
   COGNITO_USER_POOL_ID: ${{ secrets.STAGING_COGNITO_USER_POOL_ID}}
   GITHUB_SHA: ${{ github.sha }}
   HCAPTCHA_SITE_KEY: ${{ vars.STAGING_HCAPTCHA_SITE_KEY }}
-  ZITADEL_URL: https://auth.forms-staging.cdssandbox.xyz
-  API_URL: https://api.forms-staging.cdssandbox.xyz
 
 permissions:
   id-token: write
@@ -73,8 +71,6 @@ jobs:
             --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
             --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
             --build-arg HCAPTCHA_SITE_KEY=$HCAPTCHA_SITE_KEY \
-            --build-arg ZITADEL_URL=$ZITADEL_URL \
-            --build-arg API_URL=$API_URL \
             --build-arg NEXT_DEPLOYMENT_ID=$GITHUB_SHA .
 
       - name: Push Docker image to ECR

@@ -6,7 +6,6 @@ import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { ResponseSection } from "./ResponseSection";
 import { css } from "../css/compiled";
 import { Submission } from "../../types";
-import { TFunction } from "i18next";
 
 interface HTMLDownloadProps {
   response: Submission;
@@ -15,7 +14,6 @@ interface HTMLDownloadProps {
   responseID: string;
   createdAt: number;
   securityAttribute: SecurityAttribute;
-  t: TFunction<string | string[], undefined>;
 }
 
 export const ResponseHtml = ({
@@ -25,7 +23,6 @@ export const ResponseHtml = ({
   responseID,
   createdAt,
   securityAttribute,
-  t,
 }: HTMLDownloadProps) => {
   return (
     <html lang="en">
@@ -46,7 +43,7 @@ export const ResponseHtml = ({
             <h1 className="sr-only">{`${formRecord.form.titleEn} - ${formRecord.form.titleFr}`}</h1>
             <div className="mt-14" />
             <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
-              <ProtectedWarning securityAttribute={securityAttribute} lang="en" t={t} />
+              <ProtectedWarning securityAttribute={securityAttribute} lang="en" />
             </div>
             <div className="mt-14" />
             <GcdsHeader language={"en"} skipLink={false} showLanguageToggle={false} pathname="" />
@@ -59,7 +56,6 @@ export const ResponseHtml = ({
                 responseID={responseID}
                 submissionDate={createdAt}
                 formResponse={response}
-                t={t}
               />
             </div>
 
@@ -67,7 +63,7 @@ export const ResponseHtml = ({
             <div lang="fr">
               <div className="mt-14" />
               <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
-                <ProtectedWarning securityAttribute={securityAttribute} lang="fr" t={t} />
+                <ProtectedWarning securityAttribute={securityAttribute} lang="fr" />
               </div>
               <div className="mt-14" />
               <GcdsHeader language={"fr"} skipLink={false} showLanguageToggle={false} pathname="" />
@@ -79,7 +75,6 @@ export const ResponseHtml = ({
                   responseID={responseID}
                   submissionDate={createdAt}
                   formResponse={response}
-                  t={t}
                 />
               </div>
             </div>

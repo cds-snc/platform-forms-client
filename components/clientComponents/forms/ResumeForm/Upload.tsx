@@ -159,7 +159,7 @@ export const Upload = ({ formId }: { formId: string }) => {
           <div className="m-10">
             <div className="flex items-center tablet:block">
               <ResumeUploadIcon className="group-focus:fill-white" />
-              <h2 className="!mb-1 !mt-0 p-0 !text-2xl tablet:!text-3xl">
+              <h2 className="!mb-1 p-0 !text-2xl tablet:!text-3xl">
                 {t("saveAndResume.resumePage.upload.title")}
               </h2>
             </div>

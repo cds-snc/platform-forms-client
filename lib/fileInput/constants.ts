@@ -3,7 +3,7 @@ export const FILE_GROUPS = {
     types: ["pdf", "txt", "doc", "docx"],
   },
   images: {
-    types: ["jpg", "jpeg", "png"],
+    types: ["jpg", "jpeg", "png", "svg"],
   },
   spreadsheets: {
     types: ["xls", "xlsx", "csv"],
