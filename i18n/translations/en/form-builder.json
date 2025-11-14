@@ -497,11 +497,6 @@
     "downloadBtnText": "Download form file",
     "title": "Get a copy of your form"
   },
-  "switchToApiMode": {
-    "title": "Switch to API delivery",
-    "description": "New responses will be available through the API endpoint",
-    "btnText": "Switch to API delivery"
-  },
   "formIntroduction": "Form introduction",
   "formInvalidProperty": "Invalid: {{property}}",
   "formMissingProperty": "Missing: {{property}}",
@@ -518,8 +513,8 @@
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
-  "hasFileInputAndApiDelivery": "API delivery enabled",
-  "hasFileInputAndApiDeliveryNote": "Required when using file upload",
+  "hasFileInputAndApiDelivery": "Retrieving responses from API endpoint",
+  "hasFileInputAndApiDeliveryNote": "API key required when using file upload",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -1440,6 +1435,6 @@
     "loadingError": "This form contains a 'beta' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
   },
   "fileUploadApiWarning": {
-    "text": "Delivery method is not set to API."
+    "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
   }
 }
