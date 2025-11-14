@@ -48,10 +48,10 @@
     "uploadFailedTitle": "API key upload failed",
     "uploadFailedMessage": "Make sure you selected the correct file. If it's not working, try regenerating a new API key and uploading it again.",
     "lostKey": {
-      "link": "Lost API key?",
+      "link": "Don't have API key?",
       "lostKeyTip": {
-        "title": "Lost API key?",
-        "text1": "Only one API key can be associated to a form at a time.",
+        "title": "Don't have your API key?",
+        "text1": "Only one API key file can be associated to a form at a time.",
         "text2": "Generate a new API key by going to Settings > API integration while signed in to",
         "link": " GC Forms"
       }
