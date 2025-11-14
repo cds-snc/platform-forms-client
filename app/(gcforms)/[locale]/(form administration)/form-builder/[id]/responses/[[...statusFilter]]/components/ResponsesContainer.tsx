@@ -10,6 +10,7 @@ import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 import { StatusFilter } from "../types";
 import { useTranslation } from "@i18n/client";
 import { ManageFormAccessButton } from "./ManageFormAccessDialog/ManageFormAccessButton";
+import { ResponseBetaLink } from "./ResponseBetaLink";
 
 export const ResponsesContainer = ({
   hasOverdue,
@@ -56,6 +57,9 @@ export const ResponsesContainer = ({
             overdueAfter={overdueAfter}
             isApiRetrieval={true}
           />
+          <div className="mt-8">
+            <ResponseBetaLink formId={id} />
+          </div>
           <ManageFormAccessDialogContainer formId={id} />
         </div>
       </>

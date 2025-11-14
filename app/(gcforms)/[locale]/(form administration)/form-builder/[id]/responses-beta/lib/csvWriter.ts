@@ -94,15 +94,6 @@ export const writeRow = async ({
   csvFileHandle: FileSystemFileHandle;
   rawAnswers: Record<string, Response>;
 }) => {
-  const file = await csvFileHandle.getFile();
-  const fileContent = await file.text();
-
-  // Check if submissionId already exists in the file
-  if (fileContent.includes(submissionId)) {
-    // console.log(`Submission ${submissionId} already exists in CSV, skipping...`);
-    return;
-  }
-
   const sortedElements = orderElements({ formTemplate });
 
   const mappedAnswers = mapAnswers({

@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { Card, HeadingLevel, Text } from "@clientComponents/globals/card/Card";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { newResponsesExist, unConfirmedResponsesExist } from "../actions";
 import { StatusFilter } from "../types";
-
-import { useRouter } from "next/navigation";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
-
-import { enableResponsesBetaMode } from "../../actions";
 
 export const NoResponses = ({
   statusFilter,
@@ -20,22 +13,12 @@ export const NoResponses = ({
   statusFilter: StatusFilter;
   formId: string;
 }) => {
-  const router = useRouter();
-  const { getFlag } = useFeatureFlags();
-  const { t, i18n } = useTranslation(["form-builder-responses"]);
+  const { t } = useTranslation(["form-builder-responses"]);
   const { hasApiKeyId } = useFormBuilderConfig();
 
   const [checkingApiSubmissions, setCheckingApiSubmissions] = useState(true);
   const [hasNewApiSubmissions, setHasNewApiSubmissions] = useState(false);
   const [hasUnconfirmedApiSubmissions, setHasUnconfirmedApiSubmissions] = useState(false);
-
-  const responsesBetaEnabled = getFlag(FeatureFlags.responsesBeta);
-
-  const handleResponsesBetaClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    await enableResponsesBetaMode();
-    router.push(`/${i18n.language}/form-builder/${formId}/responses-beta`);
-  };
 
   useEffect(() => {
     const getApiSubmissions = async () => {
@@ -115,19 +98,6 @@ export const NoResponses = ({
                 <Text i18nKey="downloadResponsesTable.card.noNewResponsesApiMessage" />
               </div>
             </Card>
-
-            {responsesBetaEnabled && (
-              <div className="mt-4">
-                <Link
-                  onClick={handleResponsesBetaClick}
-                  data-testid="responses-beta-switch-link"
-                  href={`/${i18n.language}/form-builder/${formId}/responses-beta`}
-                  className="text-black visited:text-black"
-                >
-                  {t("responsesBeta.responsesBetaLink")}
-                </Link>
-              </div>
-            )}
           </>
         )}
 
@@ -145,19 +115,6 @@ export const NoResponses = ({
               <Text i18nKey="downloadResponsesTable.card.apiResponsesAvailableMessage" />
             </div>
           </Card>
-
-          {responsesBetaEnabled && (
-            <div className="mt-4">
-              <Link
-                onClick={handleResponsesBetaClick}
-                data-testid="responses-beta-switch-link"
-                href={`/${i18n.language}/form-builder/${formId}/responses-beta`}
-                className="text-black visited:text-black"
-              >
-                {t("responsesBeta.responsesBetaLink")}
-              </Link>
-            </div>
-          )}
         </>
       )}
 
