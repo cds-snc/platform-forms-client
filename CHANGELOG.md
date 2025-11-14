@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.5.0](https://github.com/cds-snc/platform-forms-client/compare/v4.4.2...v4.5.0) (2025-11-14)
+
+
+### Features
+
+* Ability to Archive Templates ([#6229](https://github.com/cds-snc/platform-forms-client/issues/6229)) ([4dc026b](https://github.com/cds-snc/platform-forms-client/commit/4dc026b18caf68f946954e15b7bcb8f8726ace3d))
+* Add browser side API integration ([#5719](https://github.com/cds-snc/platform-forms-client/issues/5719)) ([00acbdf](https://github.com/cds-snc/platform-forms-client/commit/00acbdf4452283644d629cde1381f6ce351b6688))
+
+
+### Bug Fixes
+
+* Allow for staging and production subdomains in CSP ([#6343](https://github.com/cds-snc/platform-forms-client/issues/6343)) ([08a192d](https://github.com/cds-snc/platform-forms-client/commit/08a192d7ac3adfc501a9052a3c4da2ae95bcdadf))
+* Next Public Env vars undefined in docker image ([#6340](https://github.com/cds-snc/platform-forms-client/issues/6340)) ([c77dac7](https://github.com/cds-snc/platform-forms-client/commit/c77dac72cf8d3e0528b85a0116e43b49424c18ef))
+
+
+### Miscellaneous Chores
+
+* add api template check ([#6333](https://github.com/cds-snc/platform-forms-client/issues/6333)) ([c1bb001](https://github.com/cds-snc/platform-forms-client/commit/c1bb001b2f9080880019da7a5b089200df9a4f5d))
+* add link component for responses beta ([#6342](https://github.com/cds-snc/platform-forms-client/issues/6342)) ([f336ae0](https://github.com/cds-snc/platform-forms-client/commit/f336ae0eb41e4bb8d59338e173e7c419dc9711e9))
+* add location toast ([#6352](https://github.com/cds-snc/platform-forms-client/issues/6352)) ([d189284](https://github.com/cds-snc/platform-forms-client/commit/d189284a474e9cae83a7d46d33fd297297cb2218))
+* Excessive logging and check new responses ([#6339](https://github.com/cds-snc/platform-forms-client/issues/6339)) ([1b2ab34](https://github.com/cds-snc/platform-forms-client/commit/1b2ab34204dd9cae27fa127d43de2e438f8d10ed))
+* handle type mismatch for file input ([#6296](https://github.com/cds-snc/platform-forms-client/issues/6296)) ([4de67ea](https://github.com/cds-snc/platform-forms-client/commit/4de67eae51b70c403cf9c5b4c5537f27a3e2d5a5))
+* Log error when API key upload fails ([#6338](https://github.com/cds-snc/platform-forms-client/issues/6338)) ([52ae23a](https://github.com/cds-snc/platform-forms-client/commit/52ae23a2606bd915404b1f29955ac7cf88c1da18))
+* move decrypt key ([#6351](https://github.com/cds-snc/platform-forms-client/issues/6351)) ([23e7481](https://github.com/cds-snc/platform-forms-client/commit/23e7481ed8af06ca6c13c36be859376e22fc1fdc))
+* remove .xml and .svg file type support ([#6326](https://github.com/cds-snc/platform-forms-client/issues/6326)) ([fd10d68](https://github.com/cds-snc/platform-forms-client/commit/fd10d68c85529d921713cb2ec015cd4066b2ae17))
+* Remove check for duplicates ([#6345](https://github.com/cds-snc/platform-forms-client/issues/6345)) ([102e7c5](https://github.com/cds-snc/platform-forms-client/commit/102e7c5c5d3d6067c5b5da3aa95c8f5f0da7ca7c))
+* remove link from card view ([#6347](https://github.com/cds-snc/platform-forms-client/issues/6347)) ([91e479c](https://github.com/cds-snc/platform-forms-client/commit/91e479c2ed26604fbbd4ee9b05461877ffb3e46d))
+* Response downloads - Process responses one at a time ([#6336](https://github.com/cds-snc/platform-forms-client/issues/6336)) ([a5f3412](https://github.com/cds-snc/platform-forms-client/commit/a5f341233f625a426f8339a8d5fb234927912239))
+* Switch NPM publishing from token to OIDC ([#6324](https://github.com/cds-snc/platform-forms-client/issues/6324)) ([08b2268](https://github.com/cds-snc/platform-forms-client/commit/08b22684aad332a76dde50ab048306e1d8e884ad))
+* synced file(s) with cds-snc/site-reliability-engineering ([#6337](https://github.com/cds-snc/platform-forms-client/issues/6337)) ([161e9c1](https://github.com/cds-snc/platform-forms-client/commit/161e9c1d0d9e438ef87075be67afcb81afcdf362))
+* synced local '.github/workflows/s3-backup.yml' with remote 'tools/sre_file_sync/s3-backup.yml' ([161e9c1](https://github.com/cds-snc/platform-forms-client/commit/161e9c1d0d9e438ef87075be67afcb81afcdf362))
+* update branding form id ([#6328](https://github.com/cds-snc/platform-forms-client/issues/6328)) ([cba26e0](https://github.com/cds-snc/platform-forms-client/commit/cba26e04438be87205f7d58a324f005014abf58c))
+* Update branding form ID in Branding component ([#6332](https://github.com/cds-snc/platform-forms-client/issues/6332)) ([02f8da6](https://github.com/cds-snc/platform-forms-client/commit/02f8da62a4eb90ae38ba34b901941c11b358c3c8))
+* Update in-line content-warnings for clients and a few tweaks ([#6350](https://github.com/cds-snc/platform-forms-client/issues/6350)) ([c998e2a](https://github.com/cds-snc/platform-forms-client/commit/c998e2ab69aef6685660a30fbba3ca31a8bee725))
+
 ## [4.4.2](https://github.com/cds-snc/platform-forms-client/compare/v4.4.1...v4.4.2) (2025-11-12)
 
 
