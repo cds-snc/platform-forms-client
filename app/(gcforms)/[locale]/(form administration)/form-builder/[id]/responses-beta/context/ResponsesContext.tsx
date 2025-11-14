@@ -22,6 +22,7 @@ import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
 import { useApiDebug } from "../lib/useApiDebug";
 import { processResponse } from "../lib/processResponse";
+import { importPrivateKeyDecrypt } from "../lib/utils";
 
 interface ResponsesContextType {
   locale: string;
@@ -203,6 +204,9 @@ export const ResponsesProvider = ({
         logger.info("Initialized HTML directory: ", htmlDirectoryHandle.name);
       }
 
+      // Import decryption key once
+      const decryptionKey = await importPrivateKeyDecrypt(privateApiKey.key);
+
       while (formResponses.length > 0 && !interruptRef.current) {
         for (const response of formResponses) {
           if (interruptRef.current) {
@@ -220,7 +224,7 @@ export const ResponsesProvider = ({
               htmlDirectoryHandle,
               csvFileHandle,
               apiClient,
-              privateApiKey,
+              decryptionKey,
               responseName: response.name,
               selectedFormat,
               formId: String(formId),

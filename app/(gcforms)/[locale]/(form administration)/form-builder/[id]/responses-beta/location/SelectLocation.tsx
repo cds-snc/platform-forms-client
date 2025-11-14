@@ -7,6 +7,8 @@ import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { DirectoryPicker } from "./DirectoryPicker";
 import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
+import { toast } from "../../../components/shared/Toast";
+import { LocationSelected } from "../components/Toasts";
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
   const router = useRouter();
@@ -23,6 +25,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       }
 
       setDirectoryHandle(handle);
+      toast.success(<LocationSelected directoryName={handle.name} />, "wide");
 
       const logsDirectoryHandle = await handle.getDirectoryHandle("logs", { create: true });
       logger.setDirectoryHandle(logsDirectoryHandle);
