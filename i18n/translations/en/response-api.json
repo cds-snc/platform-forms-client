@@ -62,6 +62,10 @@
     "subheading": "Decide where new responses will be downloaded.",
     "detail": "To add response data to an existing CSV, select the folder where it is currently saved. Make sure the CSV file name still includes the form ID, as it did when originally downloaded.",
     "chooseLocationButton": "Choose location",
+    "locationSelected": {
+      "title": "Save location selected",
+      "text1": "Responses will be placed in:"
+    },
     "csvDetected": {
       "title": "CSV response file detected in folder",
       "message": "New response data will be appended to the existing CSV file."

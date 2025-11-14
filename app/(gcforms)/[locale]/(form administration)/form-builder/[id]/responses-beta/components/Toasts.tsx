@@ -1,5 +1,18 @@
 import { useTranslation } from "@root/i18n/client";
 
+export const LocationSelected = ({ directoryName }: { directoryName: string }) => {
+  const { t } = useTranslation("response-api");
+  return (
+    <div className="w-full">
+      <h3 className="!mb-0 pb-0 text-xl font-semibold">
+        {t("locationPage.locationSelected.title")}
+      </h3>
+      <p className="mb-0 text-black">{t("locationPage.locationSelected.text1")}</p>
+      <p className="mb-2 font-bold text-black">/{directoryName}</p>
+    </div>
+  );
+};
+
 export const CsvDetected = () => {
   const { t } = useTranslation("response-api");
   return (
