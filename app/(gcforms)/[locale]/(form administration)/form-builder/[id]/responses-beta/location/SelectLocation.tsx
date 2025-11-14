@@ -25,14 +25,11 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       }
 
       setDirectoryHandle(handle);
+      toast.success(<LocationSelected directoryName={handle.name} />, "wide");
 
       const logsDirectoryHandle = await handle.getDirectoryHandle("logs", { create: true });
       logger.setDirectoryHandle(logsDirectoryHandle);
-
-      //
       logger.info(`Directory selected for response downloads: ${handle.name}`);
-
-      toast.success(<LocationSelected directoryName={handle.name} />, "wide");
     },
     [logger, setDirectoryHandle]
   );
