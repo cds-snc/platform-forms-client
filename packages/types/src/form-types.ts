@@ -63,7 +63,6 @@ export enum FormElementTypes {
 
 export const BetaFormElementTypes = {
   [FormElementTypes.addressComplete]: { flag: "addressComplete" },
-  [FormElementTypes.fileInput]: { flag: "fileUpload" },
 };
 
 export type ConditionalRule = {

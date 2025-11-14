@@ -18,7 +18,6 @@ import {
 } from "@serverComponents/icons";
 
 import { useIsAdminUser } from "./useIsAdminUser";
-import { useAllowFileUpload } from "./useAllowFileUpload";
 
 import {
   RichText,
@@ -69,18 +68,6 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   const { getFlag } = useFeatureFlags();
 
   const isAdminUser = useIsAdminUser();
-
-  // Allow via feature flag or if the user is an admin and forms has an API key
-  const allowFileInput = useAllowFileUpload();
-
-  const fileInputOption: ElementOption = {
-    id: "fileInput",
-    value: t("addElementDialog.fileInput.title"),
-    icon: UploadIcon,
-    description: FileInput,
-    className: "",
-    group: groups.other,
-  };
 
   // Custom json is only available to admin users
   const allowCustomJson = isAdminUser;
@@ -172,7 +159,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "",
       group: groups.basic,
     },
-    ...(allowFileInput ? [{ ...(fileInputOption as ElementOption) }] : []),
+    {
+      id: "fileInput",
+      value: t("addElementDialog.fileInput.title"),
+      icon: UploadIcon,
+      description: FileInput,
+      className: "",
+      group: groups.other,
+    },
     {
       id: "attestation",
       value: t("attestation"),

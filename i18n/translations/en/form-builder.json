@@ -210,14 +210,7 @@
       "text3": "to use this form element."
     },
     "fileInputWithApi": {
-      "description": "A way to add supporting documentation.",
-      "trialFeature": {
-        "title": "Beta feature",
-        "text1": "This trial feature is limited and requires:",
-        "bullet1": "Retrieval of form responses via API key",
-        "bullet2": "Files to be checked for malicious flags or other security issues",
-        "bullet3": "Collecting contact information in case you need to follow up about files"
-      }
+      "description": "A way to add supporting documentation."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "What is your name?",
