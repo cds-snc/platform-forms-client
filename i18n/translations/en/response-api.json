@@ -101,6 +101,7 @@
   "processingPage": {
     "processingTitle": "Download in progress",
     "pleaseWait": "Please wait...",
+    "processingSubmission": "Processing submission {{submissionId}}",
     "processingMessage": "Processing {{count}} responses...",
     "cancelButton": "Pause download",
     "cancellingButton": "Pausing...",

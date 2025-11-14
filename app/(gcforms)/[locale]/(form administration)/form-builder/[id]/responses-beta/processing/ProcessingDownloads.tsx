@@ -14,8 +14,14 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   const [isNavigating, setIsNavigating] = useState(false);
   const isMountedRef = useRef(false);
 
-  const { processingCompleted, setInterrupt, interrupt, resetNewSubmissions, logger } =
-    useResponsesContext();
+  const {
+    processingCompleted,
+    setInterrupt,
+    interrupt,
+    resetNewSubmissions,
+    logger,
+    currentSubmissionId,
+  } = useResponsesContext();
 
   useEffect(() => {
     if (processingCompleted) {
@@ -60,7 +66,13 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
       <div className="flex items-center justify-between">
         <div>
           <h2 className="mb-4 text-2xl font-semibold">{t("processingPage.processingTitle")}</h2>
-          <p className="mb-4 text-xl">{t("processingPage.pleaseWait")}</p>
+          {currentSubmissionId ? (
+            <p className="mb-4 text-xl">
+              {t("processingPage.processingSubmission", { submissionId: currentSubmissionId })}
+            </p>
+          ) : (
+            <p className="mb-4 text-xl">{t("processingPage.pleaseWait")}</p>
+          )}
           <p className="mb-8">{t("processingPage.note")}</p>
           {!interrupt && (
             <Button theme="secondary" onClick={handleInterrupt} disabled={isNavigating}>
