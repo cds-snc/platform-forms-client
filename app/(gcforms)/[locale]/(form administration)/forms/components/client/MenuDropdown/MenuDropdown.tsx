@@ -10,6 +10,7 @@ export interface MenuDropdownItemCallback {
 }
 
 export interface MenuDropdownItemI {
+  filtered: boolean;
   title: string;
   url?: string;
   callback?: () => MenuDropdownItemCallback;

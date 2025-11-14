@@ -5,6 +5,81 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.2](https://github.com/cds-snc/platform-forms-client/compare/v4.4.1...v4.4.2) (2025-11-12)
+
+
+### Bug Fixes
+
+* Add 'wasm unsafe eval' to allow for hash library to run in browser ([#6320](https://github.com/cds-snc/platform-forms-client/issues/6320)) ([c06436e](https://github.com/cds-snc/platform-forms-client/commit/c06436e83a79ef4fe904e60c94b44e6af3c8acd5))
+
+## [4.4.1](https://github.com/cds-snc/platform-forms-client/compare/v4.4.0...v4.4.1) (2025-11-05)
+
+
+### Bug Fixes
+
+* add non empty form check to save progress toast ([#6277](https://github.com/cds-snc/platform-forms-client/issues/6277)) ([1bc0d29](https://github.com/cds-snc/platform-forms-client/commit/1bc0d29a730bac3263ce2b68e40cfdae3ef1fa90))
+* brand header ([#6287](https://github.com/cds-snc/platform-forms-client/issues/6287)) ([8bbb3d3](https://github.com/cds-snc/platform-forms-client/commit/8bbb3d338d5c4e09fbeb635245300a999f4db599))
+
+
+### Miscellaneous Chores
+
+* fix Canadian Heritage scaling ([#6286](https://github.com/cds-snc/platform-forms-client/issues/6286)) ([c065cfb](https://github.com/cds-snc/platform-forms-client/commit/c065cfb56be34c8c973e72f7c757567196df496f))
+* init setup for responses beta flag + route ([#6281](https://github.com/cds-snc/platform-forms-client/issues/6281)) ([708d728](https://github.com/cds-snc/platform-forms-client/commit/708d728508e9143480101b0834f02ac7e281b1bb))
+* Misc package bumps ([#6293](https://github.com/cds-snc/platform-forms-client/issues/6293)) ([c78ec16](https://github.com/cds-snc/platform-forms-client/commit/c78ec1676efe30c49dab8e3ff3a9fd7494ca4635))
+* Send md5 hex to server action on submit instead of base64 ([#6294](https://github.com/cds-snc/platform-forms-client/issues/6294)) ([a3d25b5](https://github.com/cds-snc/platform-forms-client/commit/a3d25b525f82d0f1e1cd7dd70a2f4edb6bd7dc16))
+* Update "download form file" content ([#6284](https://github.com/cds-snc/platform-forms-client/issues/6284)) ([a24b1f5](https://github.com/cds-snc/platform-forms-client/commit/a24b1f5dc27dab1b59b7d1dee4937f74a6308df9))
+* update `mapAnswers` ([#6297](https://github.com/cds-snc/platform-forms-client/issues/6297)) ([5e9b899](https://github.com/cds-snc/platform-forms-client/commit/5e9b899c323cd8397d93288ad3560a4068303ddc))
+
+## [4.4.0](https://github.com/cds-snc/platform-forms-client/compare/v4.3.2...v4.4.0) (2025-10-30)
+
+
+### Features
+
+* Update setting pages ([#6232](https://github.com/cds-snc/platform-forms-client/issues/6232)) ([3b22815](https://github.com/cds-snc/platform-forms-client/commit/3b2281548f12fa32387de3c5eedc1e9e5b561aa6))
+
+
+### Bug Fixes
+
+* PR review Lambda function permissions ([#6274](https://github.com/cds-snc/platform-forms-client/issues/6274)) ([75f30cc](https://github.com/cds-snc/platform-forms-client/commit/75f30cc164c6b80e3c6b48b98314078f280dec9b))
+
+
+### Miscellaneous Chores
+
+* Add checksum for file uploads ([#6266](https://github.com/cds-snc/platform-forms-client/issues/6266)) ([98be619](https://github.com/cds-snc/platform-forms-client/commit/98be619e77c910895aa443ece2d02a1dbe7df470))
+* add exports to package.json in Core package ([#6269](https://github.com/cds-snc/platform-forms-client/issues/6269)) ([01c2711](https://github.com/cds-snc/platform-forms-client/commit/01c27114e1a242497776e78a66d9018006b4f0dd))
+* bump aws packages  ([#6265](https://github.com/cds-snc/platform-forms-client/issues/6265)) ([04c0129](https://github.com/cds-snc/platform-forms-client/commit/04c01293b73f97c401674a1952eabac4f3b00eef))
+* Move values-to-types to core ([#6270](https://github.com/cds-snc/platform-forms-client/issues/6270)) ([a9de7c5](https://github.com/cds-snc/platform-forms-client/commit/a9de7c5e68a51d826d6d36c66499ef2d223c3cdb))
+* remove .numbers file type support ([#6279](https://github.com/cds-snc/platform-forms-client/issues/6279)) ([f714c4d](https://github.com/cds-snc/platform-forms-client/commit/f714c4d61fb3c6f403ece263895b0543e299ad2c))
+* remove references to .numbers file type in UI elements ([#6280](https://github.com/cds-snc/platform-forms-client/issues/6280)) ([7e908ee](https://github.com/cds-snc/platform-forms-client/commit/7e908ee1f073cb242b2cad94df769d20a6228c85))
+* update the settings page to allow branding changes on a published form ([#6272](https://github.com/cds-snc/platform-forms-client/issues/6272)) ([f10d8dc](https://github.com/cds-snc/platform-forms-client/commit/f10d8dc74739d694bd8f4b858cb4a61239dbf6fc))
+
+## [4.3.2](https://github.com/cds-snc/platform-forms-client/compare/v4.3.1...v4.3.2) (2025-10-24)
+
+
+### Bug Fixes
+
+* use onBlur vs timeout for save close message ([#6264](https://github.com/cds-snc/platform-forms-client/issues/6264)) ([03b268b](https://github.com/cds-snc/platform-forms-client/commit/03b268b5831d6e8dec740edd7b0bb613c86c8458))
+
+
+### Miscellaneous Chores
+
+* bump cypress ([#6260](https://github.com/cds-snc/platform-forms-client/issues/6260)) ([c920aa9](https://github.com/cds-snc/platform-forms-client/commit/c920aa9ec642d74f73ee818737cd8f5d549379f5))
+* notify token use async ([#6261](https://github.com/cds-snc/platform-forms-client/issues/6261)) ([00f07f1](https://github.com/cds-snc/platform-forms-client/commit/00f07f1a9d753b3ba981f9d8a6dfa1b96cc970a8))
+* Update publishing request subject for clarity ([#6259](https://github.com/cds-snc/platform-forms-client/issues/6259)) ([a6a0a5f](https://github.com/cds-snc/platform-forms-client/commit/a6a0a5f7ea88929e0229d621e020f1556d4f0ba0))
+
+## [4.3.1](https://github.com/cds-snc/platform-forms-client/compare/v4.3.0...v4.3.1) (2025-10-23)
+
+
+### Bug Fixes
+
+* pass Id to removeElement ([1ed32ff](https://github.com/cds-snc/platform-forms-client/commit/1ed32ff4d7c1dc47c3e5997a3ebf0ce2911d36a5))
+
+
+### Miscellaneous Chores
+
+* add auto-save for close toggle ([#6237](https://github.com/cds-snc/platform-forms-client/issues/6237)) ([f181759](https://github.com/cds-snc/platform-forms-client/commit/f181759e427c227558de4b589c085aa4f823eac8))
+* handle auto-save for notifications ([#6235](https://github.com/cds-snc/platform-forms-client/issues/6235)) ([2cd3d45](https://github.com/cds-snc/platform-forms-client/commit/2cd3d45951012174eab68c7e07aad3515d501029))
+
 ## [4.3.0](https://github.com/cds-snc/platform-forms-client/compare/v4.2.1...v4.3.0) (2025-10-21)
 
 

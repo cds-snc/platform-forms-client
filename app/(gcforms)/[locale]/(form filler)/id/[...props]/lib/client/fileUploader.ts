@@ -63,6 +63,7 @@ export const copyObjectExcludingFileContent = (
     return filteredState as unknown as T;
   };
   filterFileContent(originalObject, formValuesWithoutFileContent);
+
   return { formValuesWithoutFileContent, fileObjsRef };
 };
 

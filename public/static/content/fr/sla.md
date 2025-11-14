@@ -19,6 +19,7 @@ Formulaires GC est un service infonuagique créé et exploité par le Service nu
 - de veiller à ce que le système fonctionne et à ce que le temps de chargement des pages soit inférieur à 10 secondes au Canada dans le cas d’une connexion Internet haute vitesse, à moins que le produit ne soit victime d’une attaque de déni de service ou qu’il y ait d’autres problèmes avec AWS.
 - de limiter le rythme auquel les utilisateurs finaux et utilisatrices finales peuvent soumettre leurs réponses afin de préserver la sécurité des systèmes du SNC et de ceux de la clientèle.
 - de configurer hCaptcha de manière à ce que les menaces présumées et le spam soient bloqués, mais que les utilisateurs authentiques puissent soumettre des formulaires.
+- de mettre en place une fonctionnalité d'analyse de base pour aider à détecter les fichiers potentiellement malveillants joints aux formulaires.
 - de répondre rapidement aux incidents : Formulaires GC respecte la [directive sur la gestion de la sécurité du SCT](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32611) et dispose d’un processus d’intervention en cas d’incident afin de résoudre rapidement les problèmes.
 - de mettre en place du personnel de garde 24 heures sur 24, 7 jours sur 7, 365 jours par année, pour répondre aux incidents de sévérité 1 dans les deux heures qui suivent leur détection.
 - de partager les journaux de l’application avec le Centre canadien pour la cybersécurité (CCC) : Formulaires GC respecte l’[Orientation sur l’utilisation sécurisée des services commerciaux d’informatique en nuage : Avis de mise en œuvre de la Politique sur la sécurité (AMOPS)](https://www.canada.ca/fr/gouvernement/systeme/gouvernement-numerique/innovations-gouvernementales-numeriques/services-informatique-nuage/orientation-utilisation-securisee-services-commerciaux-informatique-nuage-amops.html).
@@ -37,7 +38,7 @@ Le SNC peut suspendre le service à tout moment en cas d’utilisation jugée in
 
 Le SNC n’est pas responsable des problèmes ou des interruptions de service de l’infrastructure AWS pouvant avoir des conséquences sur le temps de fonctionnement et la disponibilité du système. Le SNC n’est pas non plus responsable des défaillances de l’infrastructure d’Amazon, d’AWS ou d’Amazon Simple Email Service (SES). Le SNC est tenu de transmettre à la clientèle toute information relative à une interruption du service AWS.
 
-Le SNC ne fournira pas d'assistance supplémentaire pour les fichiers malveillants, sauf pour dire au client si un fichier est sûr ou non.
+Le SNC ne fournira pas d'assistance supplémentaire pour les fichiers malveillants. Nous pouvons uniquement indiquer si un fichier est marqué sûr ou non, sur la base des résultats du service d'analyse des fichiers. Nous ne pouvons garantir la sécurité, car aucune technologie n'est parfaite pour détecter les menaces.
 
 Le SNC n'est pas responsable des problèmes ou des pannes de hCaptcha qui peuvent avoir une incidence sur la disponibilité du système.
 
@@ -93,4 +94,4 @@ Dans certains cas, les fonctionnalités fournies par Formulaires GC peuvent devo
 
 Formulaires GC est un produit à code source ouvert permettant à des tiers de créer leur propre version à l’aide du code disponible sur [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Dernière mise à jour :** 16 juillet 2025
+**Dernière mise à jour :** 12 novembre 2025

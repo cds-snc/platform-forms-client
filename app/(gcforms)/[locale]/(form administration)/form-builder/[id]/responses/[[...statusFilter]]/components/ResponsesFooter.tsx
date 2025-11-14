@@ -4,6 +4,8 @@ import { ReportDialog } from "./Dialogs/ReportDialog";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 
+import { ResponseBetaLink } from "./ResponseBetaLink";
+
 // TODO: move to an app setting variable
 const MAX_REPORT_COUNT = 20;
 
@@ -28,6 +30,7 @@ export const ResponsesFooter = ({ formId }: { formId: string }) => {
       >
         {t("responses.viewAllProblemResponses")}
       </Link>
+      <ResponseBetaLink formId={formId} className="ml-12" />
     </div>
   );
 };

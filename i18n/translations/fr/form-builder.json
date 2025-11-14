@@ -11,15 +11,15 @@
     },
     "documents": {
       "label": "Documents",
-      "description": "pdf, txt, doc, docx, xml"
+      "description": "pdf, txt, doc, docx"
     },
     "images": {
       "label": "Images",
-      "description": "jpg, jpeg, png, svg"
+      "description": "jpg, jpeg, png"
     },
     "spreadsheets": {
       "label": "Feuilles de calcul",
-      "description": "xls, xlsx, csv, numbers"
+      "description": "xls, xlsx, csv"
     }
   },
   "addElement": "Ajouter un élément",
@@ -206,16 +206,16 @@
     "fileInputDefault": {
       "text1": "Un moyen d'ajouter de la documentation à l'appui.",
       "text1x": "⚠️ Vous devez",
-      "text2": "configurer la livraison de réponse via l'API",
-      "text3": "pour utiliser cet élément."
+      "text2": "avoir une clé API configurée pour la récupération des données",
+      "text3": "afin d'utiliser cet élément."
     },
     "fileInputWithApi": {
       "description": "Un moyen d'ajouter de la documentation à l'appui.",
       "trialFeature": {
         "title": "Fonctionnalité Bêta",
         "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
-        "bullet1": "La récupération des réponses au formulaire via l'API",
-        "bullet2": "Les fichiers seront analysés pour du contenu malveillant une fois soumis",
+        "bullet1": "La récupération des réponses au formulaire via une clé API",
+        "bullet2": "La vérification des fichiers pour détecter des indicateurs malveillants ou d'autres problèmes de sécurité",
         "bullet3": "La collecte de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
       }
     },
@@ -331,9 +331,9 @@
     "heading": "Image de marque",
     "notFound": "Vous ne trouvez pas votre ministère ou votre organisme dans la liste?",
     "preview": "Aperçu",
-    "select": "Sélectionnez une image de marque différente pour le haut du formulaire",
+    "select": "Sélectionnez un autre en-tête à affiché en haut du formulaire.",
     "submitNew": "Demander une autre image de marque",
-    "text1": "Les formulaires publiés affichent par défaut la signature du gouvernement du Canada."
+    "text1": "Par défaut, la signature du gouvernement du Canada apparaît sur les formulaires publiés."
   },
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
@@ -465,9 +465,9 @@
   "formattedDate": "Date",
   "formConfirmationMessage": "Message de confirmation",
   "formDeleteResponses": {
-    "title": "Approuvez la suppression des réponses avant de supprimer le formulaire",
-    "message1": "Ce formulaire est publié et reçoit des réponses. Vous avez des réponses à télécharger et à approuver pour suppression de Formulaires GC.",
-    "message2": "Avant de supprimer ce formulaire :",
+    "title": "Approuvez la suppression des réponses avant d'archiver le formulaire",
+    "message1": "Vous avez des réponses à récupérer de Formulaires GC avant de pouvoir archiver ce formulaire.",
+    "message2": "Avant d'archiver ce formulaire :",
     "message3": "1. Télécharger toutes les réponses.",
     "message4": "2. Confirmer la réception des réponses téléchargées en approuvant leur suppression de Formulaires GC.",
     "cta": "Accéder aux réponses"
@@ -477,35 +477,25 @@
     "somethingWentWrong": "Il y a eu un problème",
     "downloadButtonText": "Télécharger une copie",
     "draft": {
-      "message1": "La suppression d'un formulaire ne peut être annulée. Votre formulaire sera définitivement supprimé.",
-      "message2": "Téléchargez une copie du fichier de formulaire pour vos archives. Vous pourrez ainsi le téléverser à nouveau dans Formulaires GC pour recréer le formulaire."
+      "message1": "L'archivage déplacera ce formulaire vers la section « Archivés » de vos formulaires.",
+      "message2": "Ce formulaire pourra être désarchivé à partir des formulaires « Archivés » pendant 30 jours avant d'être définitivement supprimé.",
+      "message3": " Téléchargez une copie du fichier du formulaire pour vos registres. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer le formulaire plus tard."
     },
-    "okay": "Supprimer le formulaire",
+    "okay": "Archiver le formulaire",
     "published": {
-      "message1": "La suppression d'un formulaire ne peut être annulée. Votre formulaire publié sera définitivement supprimé de l'Internet, ce qui risque de créer des liens brisés.",
-      "message2": "Téléchargez une copie du fichier de formulaire pour vos archives. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer un nouveau formulaire avec de nouveaux liens URL.",
-      "message3": "Avant de supprimer votre formulaire, assurez-vous de supprimer tous les liens publics menant à ce formulaire. Cela permet d'éviter d'envoyer les gens dans une impasse. Pour arrêter les soumissions, vous pouvez plutôt considérer la fermeture du formulaire dans les paramètres."
+      "message1": "L'archivage de ce formulaire publié ne peut être annulée. Votre formulaire publié sera définitivement enlevé de l'Internet, ce qui risque de créer des liens brisés.",
+      "message2": "Téléchargez une copie du fichier de formulaire pour vos registres. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer un nouveau formulaire avec de nouveaux liens URL.",
+      "message3": "Avant d'archiver votre formulaire, assurez-vous de supprimer tous les liens publics menant à ce formulaire. Cela permet d'éviter d'envoyer les gens dans une impasse. Pour arrêter les soumissions, vous pouvez plutôt considérer la fermeture du formulaire dans les paramètres."
     },
-    "title": "Supprimer ce formulaire?"
+    "title": "Archiver ce formulaire?"
   },
   "formDeletedDialogMessage": "Formulaire supprimé",
   "formDeletedDialogMessageFailed": "Échec de la suppression du formulaire",
   "formDeletedResponsesExist": "Le formulaire n'a pas pu être supprimé. Veuillez vous assurer qu'il n'y a pas de nouvelles réponses et réessayez.",
-  "formDeletedDialogTitle": "Succès",
-  "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {
-    "btnText": "Que puis-je faire avec un fichier de formulaire?",
-    "description": "Conservez une version du formulaire sur votre ordinateur.",
-    "dialog": {
-      "downloadButtonText": "Télécharger une copie",
-      "message1": "Téléchargez un fichier de formulaire pour partager l’ébauche avec d'autres personnes. Les collaborateur·rice·s peuvent ainsi ouvrir le fichier dans Formulaires GC et visualiser les progrès réalisés.",
-      "message2": "Téléchargez une copie de votre formulaire pour le conserver localement sur votre ordinateur.",
-      "subtitle1": "Partager",
-      "subtitle2": "Conserver une copie",
-      "title": "Usages du fichier de formulaire"
-    },
+    "description": "Conservez une version du formulaire enregistrée localement sur votre ordinateur ou utilisez ce fichier pour partager une ébauche en cours de développement.",
     "downloadBtnText": "Télécharger le fichier du formulaire",
-    "title": "Télécharger le fichier du formulaire"
+    "title": "Obtenir une copie du formulaire"
   },
   "switchToApiMode": {
     "title": "Passer à la livraison par API",
@@ -610,15 +600,15 @@
   "whatYouNeedToKnow": "Ce qu’il faut savoir",
   "publishingDisablesEditing": "La publication désactive toute modification.",
   "publishingDisablesEditingDescription": "Une fois publié, vous ne pouvez plus apporter des modifications à ce formulaire. Si des modifications sont nécessaires après la publication, utilisez le fichier du formulaire pour créer et publier un nouveau formulaire.",
-  "publishingLocksSettings": "La publication verrouille les paramètres.",
-  "publishingLocksSettingsDescription": "L’option de livraison des réponses que vous avez choisie ne sera plus modifiable.",
+  "publishingLocksSettings": "La publication verrouille certains paramètres.",
+  "publishingLocksSettingsDescription": "Plusieurs paramètres du formulaire ne seront plus modifiables, tels que la classification et l'usage prévu du formulaire.",
   "publishingRemovesTestResponses": "La publication supprime les réponses test.",
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
   "publishYourFormInstructions": {
     "settings": "Paramètres",
     "classification": "Classification des données ",
-    "deliveryOption": "Option de livraison ",
+    "deliveryOption": "Récupération des données ",
     "purpose": "Usage prévu ",
     "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire.",
     "text2": "",
@@ -700,11 +690,39 @@
   "send": "Envoyer",
   "copy": "copie",
   "settings": {
-    "formManagement": "Gestion du formulaire",
+    "formManagement": "Options liées aux réponses",
+    "apiIntegration": {
+      "navigation": {
+        "title": "Intégration API"
+      },
+      "page": {
+        "title": "Configurer l’intégration API",
+        "text1": "Cette section s'adresse aux développeur·se·s qui souhaitent utiliser l'API pour extraire les données des soumissions au formulaire vers un système cible. Une fois l’API configurée, les réponses pourront être récupérées à partir d'un point de terminaison. Consultez notre site de documentation pour en savoir plus.",
+        "docsButton": {
+          "text": "Accéder à la documentation API",
+          "link": "https://cds-snc.github.io/forms-api/accueil"
+        },
+        "apiKey": {
+          "title": "Récupérer les soumissions via l'API",
+          "description": "Le fait de disposer d'une clé API signifie que GC Forms s'attend à ce que les données de réponse au formulaire soient récupérées via l'API.",
+          "rateLimit": {
+            "title": "Limite de débit API",
+            "currentLimit": "Limite actuelle :",
+            "currentLimitDescription": "500 requêtes par minute",
+            "increaseRequest": "Si vous avez besoin d’un débit plus élevé, <a href='/en/support' target='_blank'>contactez l'équipe de soutien</a>."
+          }
+        },
+        "isEmailDelivery": {
+          "title": "Cette fonctionnalité n'est pas disponible avec l'envoi par courriel",
+          "description": "La récupération des données via API n'est pas possible lorsque les réponses sont envoyées par courriel. Considérez la fermeture de ce formulaire et sa republication afin d'utiliser cette fonctionnalité."
+        }
+      }
+    },
     "api": {
       "keyId": "Identifiant de la clé API",
       "title": "Accès pour l'API",
-      "generateKey": "Créer une clé API",
+      "generateKey": "Générer une clé API",
+      "refreshKey": "Générer une nouvelle clé API",
       "deleteKey": "Supprimer la clé API",
       "deleteKeyFailed": {
         "title": "Quelque chose a mal tourné",
@@ -720,7 +738,7 @@
         "message": "Afin de sélectionner une autre option, vous devez d'abord supprimer la clé API."
       },
       "generateKeySuccess": {
-        "title": "La clé API a été créée",
+        "title": "La clé API a été générée",
         "message": "Les nouvelles réponses seront disponibles par l'API. Trouvez des instructions pour la configuration de l'intégration dans ",
         "docsLinkText": "la documentation API",
         "docsLink": "https://cds-snc.github.io/forms-api/accueil/"
@@ -749,14 +767,16 @@
       },
       "dialog": {
         "title": "Créer la clé API",
-        "heading": "Les clés API de Formulaires GC sont PROTÉGÉES B",
+        "refreshTitle": "Générer une nouvelle clé API",
+        "heading": "⚠️ Les clés API de Formulaires GC sont PROTÉGÉES B",
+        "refreshHeading": "⚠️ Vous devrez ajouter cette nouvelle clé à votre intégration pour pouvoir récupérer correctement les réponses.",
         "responsibility": "Vous êtes responsable de :",
         "responsibility1": "L'enregistrement de cette clé dans un endroit sûr d'une machine du gouvernement du Canada.",
         "responsibility2": "Le partage de cette clé uniquement avec les personnes qui ont les autorisations, s'il y a un besoin.",
         "responsibility3": "L'envoi de cette clé en utilisant un courriel crypté, s'il est nécessaire pour la configuration de l'intégration.",
-        "responsibility4": "La gestion de la clé, supprimant et recréant celle-ci si l'on soupçonne qu'elle a été compromise.",
+        "responsibility4": "La sécurisation de la clé et sa gestion avec la génération d’une nouvelle clée, si l'on soupçonne qu'elle a été compromise.",
         "text1": "Ne perdez pas votre clé ",
-        "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en créer une nouvelle.",
+        "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en générer une nouvelle.",
         "cancelButton": "Annuler",
         "downloadButton": "Télécharger la clé API",
         "confirm": {
@@ -766,10 +786,21 @@
         },
         "error": {
           "createFailed": {
-            "title": "La clé API n'a pas pu être créée",
-            "message": "Une erreur s'est produite lors de la création de la clé API. Veuillez enregistrer le formulaire et réessayer plus tard."
+            "title": "La clé API n'a pas pu être générée",
+            "message": "Une erreur s'est produite lors de la génération de la clé API. Veuillez enregistrer le formulaire et réessayer plus tard."
           }
         }
+      }
+    },
+    "hasUnconfirmedDownloads": {
+      "message": "⚠️ Vous devez approuver pour suppression toutes les réponses qui ont été téléchargées, mais qui n'ont pas encore été confirmées avec les codes de réception.",
+      "ctaButton": "Accéder aux réponses",
+      "cancelButton": "Annuler",
+      "generateAction": {
+        "title": "Avant de générer une clé API"
+      },
+      "deleteAction": {
+        "title": "Avant de supprimer une clé API"
       }
     },
     "notifications": {
@@ -791,15 +822,15 @@
       },
       "sessionUser": {
         "title": "Recevoir des notifications par courriel",
-        "description": "S'informer sur les nouvelles réponses aux formulaires",
+        "description": "Soyez informé lorsqu'il y a de nouvelles réponses au formulaire",
         "toggle": {
-          "title": "Obtenez des notification à : {{email}}",
+          "title": "Recevoir des notifications à {{email}}",
           "on": "Activé",
-          "off": "Desactivé"
+          "off": "Désactivé"
         }
       },
       "usersList": {
-        "title": "Personnes ayant accès au formulaire qui sont informés des  nouvelles réponses",
+        "title": "Personnes ayant accès au formulaire et recevant des notifications",
         "description": "Vous pouvez gérer l'accès de l'équipe sur la page Réponses",
         "enabled": "Notifications activées",
         "disabled": "Notifications désactivées"
@@ -808,25 +839,24 @@
         "updateNotifications": "Vos modifications ont été enregistrées."
       },
       "error": {
-        "getNotifcations": "Il y a un problème avec les paramètres de notifications. Veuillez réessayer plus tard.",
-        "updateNotifications": "Il y a eu un problème avec la mise à jour des notifications. Veuillez réessayer plus tard."
+        "getNotifcations": "Un problème est survenu lors de l'obtention des paramètres de notification. Veuillez réessayer plus tard.",
+        "updateNotifications": "Un problème est survenu lors de la mise à jour des notifications. Veuillez réessayer plus tard."
       }
     }
   },
-  "settingsDeleteButton": "Supprimer le formulaire",
-  "settingsDeleteHint": "Une fois le formulaire supprimé, vous ne pourrez pas le récupérer. Veuillez enregistrer une copie du formulaire avant de le supprimer.",
+  "settingsDeleteButton": "Supprimer",
+  "settingsDeleteHint": "Une fois que vous supprimez un formulaire, il n'y a aucun moyen de le récupérer. Veuillez enregistrer une copie avant de supprimer votre formulaire.",
   "settingsDeleteTitle": "Supprimer le formulaire",
   "settingsInvalidEmailAlertDesc1": "Doit être une adresse courriel du gouvernement du Canada.",
   "settingsInvalidEmailAlertDesc2": "pour enregistrer l'adresse courriel.",
   "settingsInvalidEmailAlertTitle": "Adresse courriel du gouvernement",
-  "settingsNavHome": "Livraison des réponses",
+  "settingsNavHome": "Profil du formulaire",
   "settingsResponseEmailTitle": "Adresse courriel",
   "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
   "settingsPurposeAndUse": {
     "title": "Usage prévu",
     "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui sont dans Formulaires GC depuis plus de 45 jours.",
     "personalInfo": "Renseignements personnels servant à prendre une décision qui touche un individu",
-    "helpUs": "Dites-nous comment vous prévoyez utiliser les réponses recueillies",
     "learnMore": "En savoir plus sur les fins administratives",
     "learnMoreBox": {
       "title": "En savoir plus sur les fins administratives",
@@ -860,7 +890,6 @@
   "settingsResponseDelivery": {
     "selectClassification": "Classification des données",
     "beforePublishMessage": "Ces paramètres ne peuvent être modifiés qu’avant la publication.",
-    "deleteApiKeyMessage": "Vous devez supprimer la clé API avant de pouvoir modifier l'option de livraison.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
     "title": "Option de livraison",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
@@ -880,35 +909,6 @@
     "emailSubjectFr": {
       "title": "Ligne d'objet en français",
       "hint": "Lorsque les réponses au formulaire sont soumises en français."
-    },
-    "responseDeliveryHelpWithApi": {
-      "cta": "Conseils pour le choix d'une option",
-      "title": "Choisir une option de livraison des réponses",
-      "description": "Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins pour obtenir les réponses des formulaires soumis.",
-      "inbox": {
-        "title": "Courriel à une boîte de réception",
-        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A.",
-        "text2": "Les réponses sont envoyées directement dans une boîte de réception en temps réel.",
-        "text3": "Une seule adresse courriel peut recevoir les courriel de réponses.",
-        "text4": "Il peut s'agir d'une boîte de réception partagée.",
-        "text5": "Aucune ressource de développement de logiciel n'est requise."
-      },
-      "vault": {
-        "title": "Téléchargement des réponses dans Formulaires GC",
-        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B.",
-        "text2": "Téléchargement des réponses de Formulaires GC dans un délai de 30 jours.",
-        "text3": "Aucune possibilité de changer la méthode de livraison après la publication.",
-        "text4": "Plusieurs titulaires de comptes peuvent accéder aux réponses.",
-        "text5": "Aucune ressource de développement de logiciel n'est requise."
-      },
-      "api": {
-        "title": "Récupération des réponses par API",
-        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B",
-        "text2": "Appels à l'API pour extraire les réponses de formulaire.",
-        "text3": "Possibilité de passer à la méthode de téléchargement après la publication.",
-        "text4": "Une clé API par formulaire",
-        "text5": "Ressources de développement de logiciel requises pour l'intégration API."
-      }
     },
     "emailDeliveryDeprecated": {
       "title": "La livraison de données par courriel n’est plus disponible.",
@@ -1425,9 +1425,9 @@
     "toggleOff": "Désactivé",
     "toggleDescription": {
       "text1": "Reprendre le remplissage d'un formulaire en cours",
-      "text2": "Donne la possiblité aux utilisateur·rice·s de prendre une pause et de compléter le formulaire plus tard. Les personnes qui remplissent le formulaire peuvent obtenir une copie des réponses remplies jusqu’à présent, ainsi qu'une copie de leur réponses une fois le formulaire soumis."
+      "text2": "Cela permet aux utilisateur·rice·s de prendre une pause et de compléter le formulaire plus tard. Les personnes qui remplissent le formulaire peuvent également obtenir une copie de leurs réponses une fois le formulaire soumis."
     },
-    "a11yDescription": "Enregistrer la progression et reprendre le formulaire plus tard",
+    "a11yDescription": "Sauvegarder les réponses en cours et reprendre le formulaire plus tard",
     "saveButton": "Enregistrer"
   },
   "sortOptions": {

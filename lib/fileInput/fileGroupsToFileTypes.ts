@@ -4,7 +4,7 @@
  * Converts an array of file groups to an array of file types.
  * Each file group is mapped to its corresponding file types based on predefined file groups.
  * If a file group does not belong to any predefined group, it is ignored.
- * @returns  An array of unique file types (e.g., ["pdf", "txt", "doc", "docx", "jpg", "jpeg", "png", "svg", "xls", "xlsx", "csv", "numbers"]).
+ * @returns  An array of unique file types (e.g., ["pdf", "txt", "doc", "docx", "jpg", "jpeg", "png", "xls", "xlsx", "csv"]).
  */
 export const fileGroupsToFileTypes = (fileGroups: string[]) => {
   const fileTypes = new Set<string>();
@@ -32,10 +32,10 @@ export const fileGroupToFileTypes = (fileGroup: string) => {
     return ["pdf", "txt", "doc", "docx"];
   }
   if (fileGroup === "images") {
-    return ["jpg", "jpeg", "png", "svg"];
+    return ["jpg", "jpeg", "png"];
   }
   if (fileGroup === "spreadsheets") {
-    return ["xls", "xlsx", "csv", "numbers"];
+    return ["xls", "xlsx", "csv"];
   }
 
   return [];

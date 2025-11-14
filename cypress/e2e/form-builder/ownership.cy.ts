@@ -9,7 +9,7 @@ describe("Form Ownership", () => {
   describe("Regular User", () => {
     it("Non-Admin cannot manage Form Ownership", () => {
       cy.userSession({ admin: false });
-      cy.visitPage(`/en/form-builder/${formID}/settings/manage`);
+      cy.visitPage(`/en/form-builder/${formID}/settings`);
       cy.get("[data-testid='form-ownership']").should("not.exist");
     });
   });
@@ -17,7 +17,7 @@ describe("Form Ownership", () => {
   describe("Admin User", () => {
     beforeEach(() => {
       cy.userSession({ admin: true });
-      cy.visitPage(`/en/form-builder/${formID}/settings/manage`);
+      cy.visitPage(`/en/form-builder/${formID}/settings`);
     });
     it("Admin can manage Form Ownership", () => {
       cy.get("h2").contains("Manage ownership").should("be.visible");

@@ -13,7 +13,7 @@ export const NoResponses = ({
   statusFilter: StatusFilter;
   formId: string;
 }) => {
-  const { t } = useTranslation("form-builder-responses");
+  const { t } = useTranslation(["form-builder-responses"]);
   const { hasApiKeyId } = useFormBuilderConfig();
 
   const [checkingApiSubmissions, setCheckingApiSubmissions] = useState(true);
@@ -87,16 +87,18 @@ export const NoResponses = ({
         !checkingApiSubmissions &&
         !hasNewApiSubmissions &&
         !hasUnconfirmedApiSubmissions && (
-          <Card
-            icon={<Image src="/img/butterfly_noresponses.svg" alt="" width="200" height="200" />}
-          >
-            <div className="max-w-[600px]">
-              <h3 className="mb-4 text-slate-500">
-                <Text i18nKey="downloadResponsesTable.card.noNewResponsesApiTitle" />
-              </h3>
-              <Text i18nKey="downloadResponsesTable.card.noNewResponsesApiMessage" />
-            </div>
-          </Card>
+          <>
+            <Card
+              icon={<Image src="/img/butterfly_noresponses.svg" alt="" width="200" height="200" />}
+            >
+              <div className="max-w-[600px]">
+                <h3 className="mb-4 text-slate-500">
+                  <Text i18nKey="downloadResponsesTable.card.noNewResponsesApiTitle" />
+                </h3>
+                <Text i18nKey="downloadResponsesTable.card.noNewResponsesApiMessage" />
+              </div>
+            </Card>
+          </>
         )}
 
       {/* 
@@ -104,14 +106,16 @@ export const NoResponses = ({
           but there are submissions available for API retreival 
         */}
       {!checkingApiSubmissions && hasApiKeyId && hasNewApiSubmissions && (
-        <Card icon={<Image src="/img/flower_responses.svg" alt="" width="200" height="200" />}>
-          <div className="max-w-[600px]">
-            <h3 className="mb-4 text-slate-500">
-              <Text i18nKey="downloadResponsesTable.card.apiResponsesAvailableTitle" />
-            </h3>
-            <Text i18nKey="downloadResponsesTable.card.apiResponsesAvailableMessage" />
-          </div>
-        </Card>
+        <>
+          <Card icon={<Image src="/img/flower_responses.svg" alt="" width="200" height="200" />}>
+            <div className="max-w-[600px]">
+              <h3 className="mb-4 text-slate-500">
+                <Text i18nKey="downloadResponsesTable.card.apiResponsesAvailableTitle" />
+              </h3>
+              <Text i18nKey="downloadResponsesTable.card.apiResponsesAvailableMessage" />
+            </div>
+          </Card>
+        </>
       )}
 
       {!checkingApiSubmissions &&

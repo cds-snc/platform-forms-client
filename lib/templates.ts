@@ -56,6 +56,7 @@ const _parseTemplate = (template: {
   closedDetails?: Prisma.JsonValue | null;
   saveAndResume: boolean;
   notificationsInterval?: number | null;
+  ttl?: Date | null;
 }): FormRecord => {
   return {
     id: template.id,
@@ -90,6 +91,7 @@ const _parseTemplate = (template: {
     closedDetails: template.closedDetails as ClosedDetails,
     saveAndResume: template.saveAndResume,
     notificationsInterval: template.notificationsInterval as NotificationsInterval,
+    ...(template.ttl && { ttl: template.ttl }),
   };
 };
 
@@ -318,6 +320,7 @@ export async function getAllTemplatesForUser(
           id: true,
           created_at: true,
           updated_at: true,
+          ttl: true,
           name: true,
           jsonConfig: true,
           isPublished: true,
@@ -417,9 +420,12 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
  * @param formID ID of form template
  * @returns FormRecord
  */
-export async function getFullTemplateByID(formID: string): Promise<FormRecord | null> {
+export async function getFullTemplateByID(
+  formID: string,
+  allowDeleted?: boolean
+): Promise<FormRecord | null> {
   try {
-    const { user } = await authorization.canViewForm(formID).catch((e) => {
+    const { user } = await authorization.canViewForm(formID, allowDeleted).catch((e) => {
       logEvent(
         e.user.id,
         { type: "Form", id: formID },
@@ -433,6 +439,7 @@ export async function getFullTemplateByID(formID: string): Promise<FormRecord | 
       .findUnique({
         where: {
           id: formID,
+          ttl: allowDeleted ? { not: null } : null,
         },
         include: {
           deliveryOption: true,
@@ -634,7 +641,7 @@ export async function updateIsPublishedForTemplate(
     } catch (e) {
       if (e instanceof TemplateAlreadyPublishedError) {
         // Already published, so we can just return the full template
-        return getFullTemplateByID(formID);
+        return getFullTemplateByID(formID, false);
       }
 
       throw e;
@@ -1223,7 +1230,7 @@ export async function cloneTemplate(formID: string): Promise<FormRecord | null> 
   // and that they can edit the source form.
   const [createResult, editResult] = (await Promise.allSettled([
     authorization.canCreateForm(),
-    authorization.canEditForm(formID),
+    authorization.canEditForm(formID, true),
   ])) as Array<PromiseSettledResult<{ user: { id: string } }>>;
 
   if (createResult.status === "rejected") {
@@ -1253,7 +1260,7 @@ export async function cloneTemplate(formID: string): Promise<FormRecord | null> 
 
   const template = await prisma.template
     .findUnique({
-      where: { id: formID },
+      where: { id: formID, ttl: { not: null } },
       include: {
         deliveryOption: true,
         users: { select: { id: true } },
@@ -1393,6 +1400,87 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
   return _parseTemplate(templateMarkedAsDeleted);
+}
+
+/**
+ * Restores a form template from the archived state.
+ * @param formID ID of the form template
+ * @returns A boolean status if operation is sucessful
+ */
+export async function restoreTemplate(formID: string): Promise<FormRecord | null> {
+  const { user } = await authorization.canRestoreForm(formID).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      "Attempted to unarchive Form"
+    );
+    throw e;
+  });
+
+  // Check if the form is archived.
+  const template = await prisma.template.findFirstOrThrow({
+    where: {
+      id: formID,
+      ttl: { not: null },
+    },
+    select: {
+      id: true,
+      created_at: true,
+      updated_at: true,
+      name: true,
+      jsonConfig: true,
+      isPublished: true,
+      deliveryOption: true,
+      securityAttribute: true,
+      formPurpose: true,
+      publishReason: true,
+      publishFormType: true,
+      publishDesc: true,
+      saveAndResume: true,
+      notificationsInterval: true,
+      ttl: true,
+    },
+  });
+
+  if (!template) throw new TemplateNotFoundError();
+
+  const templateMarkedToUnarchive = await prisma.template
+    .update({
+      where: {
+        id: formID,
+        ttl: { not: null },
+      },
+      data: {
+        ttl: null,
+      },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
+        saveAndResume: true,
+        notificationsInterval: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  // There was an error with Prisma, do not delete from Cache.
+  if (templateMarkedToUnarchive === null) return templateMarkedToUnarchive;
+
+  logEvent(user.id, { type: "Form", id: formID }, "UnarchiveForm");
+
+  if (formCache.cacheAvailable) formCache.invalidate(formID);
+
+  return _parseTemplate(templateMarkedToUnarchive);
 }
 
 // Remove and replace this utility with new authorization object in code
@@ -1561,4 +1649,112 @@ export const checkIfClosed = async (formId: string) => {
   } catch (e) {
     return null;
   }
+};
+
+export const getFormJSONConfig = async (formId: string) => {
+  await authorization.canEditForm(formId).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formId },
+      "AccessDenied",
+      "Attempted to get form jsonConfig"
+    );
+    throw e;
+  });
+
+  const result = await prisma.template
+    .findUnique({
+      where: { id: formId },
+      select: { jsonConfig: true },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!result) {
+    throw new Error(`Template not found when getting jsonConfig with formId ${formId}`);
+  }
+
+  let jsonConfig: FormProperties;
+  const raw = result.jsonConfig;
+
+  if (typeof raw === "string") {
+    // Only parse if (unexpectedly) stored as a string
+    jsonConfig = JSON.parse(raw) as FormProperties;
+  } else {
+    jsonConfig = raw as FormProperties;
+  }
+
+  return jsonConfig;
+};
+
+/**
+ * WARNING:
+ * Avoid using this function for any update that would modify the structure of the form
+ * e.g. groups, layouts, elements, etc.
+ * Doing so would cause an error in the infra pipeline when processing submissions.
+ */
+export const updateFormJsonConfig = async (formId: string, jsonConfig: FormProperties) => {
+  const { user } = await authorization.canEditForm(formId).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formId },
+      "AccessDenied",
+      "Attempted to update form jsonConfig"
+    );
+    throw e;
+  });
+
+  const validationResult = validateTemplate(jsonConfig);
+
+  if (!validationResult.valid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Form config is invalid.\nReasons: ${JSON.stringify(
+        validationResult.errors
+      )}.\nConfig: ${JSON.stringify(jsonConfig)}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
+  const isValid = validateTemplateSize(JSON.stringify(jsonConfig));
+
+  if (!isValid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Template size exceeds the limit.\nConfig: ${JSON.stringify(
+        jsonConfig
+      )}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
+  const updatedTemplate = await prisma.template
+    .update({
+      where: {
+        id: formId,
+      },
+      data: { jsonConfig: jsonConfig as Prisma.JsonObject },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
+        saveAndResume: true,
+        notificationsInterval: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (updatedTemplate === null) return updatedTemplate;
+
+  if (formCache.cacheAvailable) formCache.invalidate(formId);
+
+  logEvent(user.id, { type: "Form", id: formId }, "UpdateFormJsonConfig");
+
+  return _parseTemplate(updatedTemplate);
 };
