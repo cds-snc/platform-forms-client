@@ -6,10 +6,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@4.10.3",
+  "packageManager": "yarn@4.11.0",
   "dependencies": {
     "file-type": "^21.0.0",
-    "tsdown": "^0.15.0"
+    "tsdown": "^0.16.0"
   },
   "peerDependencies": {
     "@gcforms/types": "*"
