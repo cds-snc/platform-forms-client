@@ -25,7 +25,7 @@ export const CheckForResponsesButton = ({
   }, [retrieveResponses, callBack]);
   return (
     <SubmitButton theme="primary" loading={loading} onClick={handleCheck} disabled={disabled}>
-      {loading ? t("checking") : t("loadKeyPage.checkForNewResponsesButton")}
+      {loading ? t("checking") : t("checkForNewResponsesButton")}
     </SubmitButton>
   );
 };
