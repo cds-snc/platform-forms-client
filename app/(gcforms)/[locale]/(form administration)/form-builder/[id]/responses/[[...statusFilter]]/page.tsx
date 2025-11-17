@@ -11,6 +11,7 @@ import { getOverdueTemplateIds } from "@lib/overdue";
 import { isResponsesBetaModeEnabled } from "../actions";
 import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
+import { getFullTemplateByID } from "@root/lib/templates";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -118,11 +119,14 @@ export default async function Page(props: {
     );
   }
 
+  const template = await getFullTemplateByID(id);
+  const isEmailDelivery = template?.deliveryOption?.emailAddress !== undefined;
+
   // Check if user has responses-beta mode enabled via cookie and has access
   const betaModeEnabled = await isResponsesBetaModeEnabled();
   if (betaModeEnabled && session) {
     const hasAccess = await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesBeta);
-    if (hasAccess) {
+    if (hasAccess && !isEmailDelivery) {
       redirect(`/${locale}/form-builder/${id}/responses-beta`);
     }
   }
