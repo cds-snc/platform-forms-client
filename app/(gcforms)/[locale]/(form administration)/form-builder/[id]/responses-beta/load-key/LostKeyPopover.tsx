@@ -1,4 +1,5 @@
 import { useTranslation } from "@i18n/client";
+import { Close } from "@serverComponents/icons/Close";
 
 export const LostKeyLink = () => {
   const { t } = useTranslation("response-api");
@@ -14,6 +15,15 @@ export const LostKeyLink = () => {
 export const LostKeyPopover = ({ locale, id }: { locale: string; id: string }) => {
   const { t } = useTranslation("response-api");
 
+  const handleClose = () => {
+    const popover = document.getElementById("api-key-popover") as HTMLElement & {
+      hidePopover: () => void;
+    };
+    if (popover?.hidePopover) {
+      popover.hidePopover();
+    }
+  };
+
   return (
     <div
       id="api-key-popover"
@@ -28,6 +38,14 @@ export const LostKeyPopover = ({ locale, id }: { locale: string; id: string }) =
           {t("loadKeyPage.lostKey.lostKeyTip.link")}.
         </a>
       </p>
+      <button
+        type="button"
+        className="group absolute right-0 top-0 mr-4 mt-4 rounded p-2 hover:bg-gray-100 focus:bg-gray-100"
+        aria-label={t("close")}
+        onClick={handleClose}
+      >
+        <Close className="inline-block group-focus:fill-white-default" />
+      </button>
     </div>
   );
 };
