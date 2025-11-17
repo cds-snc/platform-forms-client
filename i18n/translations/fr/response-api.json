@@ -111,6 +111,7 @@
   "backToStart": "Retourner au début",
   "continueButton": "Continuer",
   "failed-to-load-api-key": "La clé API n'a pas pu être téléversée",
+  "checking": "Vérification en cours...",
   "toasts": {
     "rateLimitExceeded": {
       "title": "Rate limit exceeded",

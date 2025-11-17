@@ -1,7 +1,7 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
+import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
 export const CheckForResponsesButton = ({
   disabled,
@@ -11,16 +11,21 @@ export const CheckForResponsesButton = ({
   callBack?: () => void;
 }) => {
   const { t } = useTranslation("response-api");
+  const [loading, setLoading] = useState(false);
 
   const { retrieveResponses } = useResponsesContext();
 
   const handleCheck = useCallback(async () => {
-    void retrieveResponses();
+    setLoading(true);
+    // Add a minimum delay to show loading state
+    await Promise.all([retrieveResponses(), new Promise((resolve) => setTimeout(resolve, 1500))]);
+
+    setLoading(false);
     callBack && callBack();
   }, [retrieveResponses, callBack]);
   return (
-    <Button theme="primary" onClick={handleCheck} disabled={disabled}>
-      {t("loadKeyPage.checkForNewResponsesButton")}
-    </Button>
+    <SubmitButton theme="primary" loading={loading} onClick={handleCheck} disabled={disabled}>
+      {loading ? t("checking") : t("loadKeyPage.checkForNewResponsesButton")}
+    </SubmitButton>
   );
 };

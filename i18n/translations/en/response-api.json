@@ -110,6 +110,7 @@
   "backToStart": "Back to start",
   "continueButton": "Continue",
   "failed-to-load-api-key": "API key failed to load",
+  "checking": "Checking...",
   "toasts": {
     "rateLimitExceeded": {
       "title": "Rate limit exceeded",
