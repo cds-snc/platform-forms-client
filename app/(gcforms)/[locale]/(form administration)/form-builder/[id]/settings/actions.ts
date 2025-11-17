@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { promises as fs } from "fs";
 import path from "path";
 import { AuthenticatedAction } from "@lib/actions";
+import { authorization } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth/errors";
 
 import { submissionTypeExists } from "@lib/vault";
 import { VaultStatus } from "@lib/types";
@@ -64,6 +66,13 @@ export const unConfirmedResponsesExist = AuthenticatedAction(async (_, formId: s
 
 export const getEventsForForm = AuthenticatedAction(async (session, formId: string) => {
   try {
+    await authorization.canViewForm(formId).catch((e) => {
+      if (e instanceof AccessControlError) {
+        logEvent(e.user.id, { type: "User" }, "AccessDenied", "Attempted to get users emails");
+      }
+      throw e;
+    });
+
     const events = await retrieveEvents(
       {
         TableName: "AuditLogs",
