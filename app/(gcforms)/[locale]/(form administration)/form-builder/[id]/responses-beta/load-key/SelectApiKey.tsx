@@ -62,7 +62,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       }
 
       setApiClient(
-        new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
+        new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", keyFile, token)
       );
 
       setPrivateApiKey(keyFile);

@@ -210,14 +210,7 @@
       "text3": "to use this form element."
     },
     "fileInputWithApi": {
-      "description": "A way to add supporting documentation.",
-      "trialFeature": {
-        "title": "Beta feature",
-        "text1": "This trial feature is limited and requires:",
-        "bullet1": "Retrieval of form responses via API key",
-        "bullet2": "Files to be checked for malicious flags or other security issues",
-        "bullet3": "Collecting contact information in case you need to follow up about files"
-      }
+      "description": "A way to add supporting documentation."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "What is your name?",
@@ -552,8 +545,8 @@
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
-  "hasFileInputAndApiDelivery": "API delivery enabled",
-  "hasFileInputAndApiDeliveryNote": "Required when using file upload",
+  "hasFileInputAndApiDelivery": "Retrieving responses from API endpoint",
+  "hasFileInputAndApiDeliveryNote": "API key required when using file upload",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -1474,6 +1467,6 @@
     "loadingError": "This form contains a 'beta' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
   },
   "fileUploadApiWarning": {
-    "text": "Delivery method is not set to API."
+    "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
   }
 }

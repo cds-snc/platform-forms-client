@@ -22,6 +22,7 @@ import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
 import { useApiDebug } from "../lib/useApiDebug";
 import { processResponse } from "../lib/processResponse";
+import { importPrivateKeyDecrypt } from "../lib/utils";
 
 interface ResponsesContextType {
   locale: string;
@@ -47,6 +48,7 @@ interface ResponsesContextType {
   setSelectedFormat: Dispatch<SetStateAction<string>>;
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
+  currentSubmissionId: string | null;
   resetState: () => void;
   resetNewSubmissions: () => void;
   logger: ResponseDownloadLogger;
@@ -83,6 +85,7 @@ export const ResponsesProvider = ({
   const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<string>("csv");
+  const [currentSubmissionId, setCurrentSubmissionId] = useState<string | null>(null);
   const loggerRef = useRef(new ResponseDownloadLogger());
   const logger = loggerRef.current;
 
@@ -203,6 +206,9 @@ export const ResponsesProvider = ({
         logger.info("Initialized HTML directory: ", htmlDirectoryHandle.name);
       }
 
+      // Import decryption key once
+      const decryptionKey = await importPrivateKeyDecrypt(privateApiKey.key);
+
       while (formResponses.length > 0 && !interruptRef.current) {
         for (const response of formResponses) {
           if (interruptRef.current) {
@@ -211,6 +217,7 @@ export const ResponsesProvider = ({
           }
 
           logger.info(`Processing submission ID: ${response.name}`);
+          setCurrentSubmissionId(response.name);
 
           try {
             // eslint-disable-next-line no-await-in-loop
@@ -220,7 +227,7 @@ export const ResponsesProvider = ({
               htmlDirectoryHandle,
               csvFileHandle,
               apiClient,
-              privateApiKey,
+              decryptionKey,
               responseName: response.name,
               selectedFormat,
               formId: String(formId),
@@ -247,6 +254,7 @@ export const ResponsesProvider = ({
       interruptRef.current = false;
 
       setNewFormSubmissions(null);
+      setCurrentSubmissionId(null);
       setProcessingCompleted(true);
     },
     [
@@ -297,6 +305,7 @@ export const ResponsesProvider = ({
         setSelectedFormat,
         interrupt: isProcessingInterrupted,
         setInterrupt,
+        currentSubmissionId,
         resetState,
         resetNewSubmissions,
         logger: loggerRef.current,

@@ -210,14 +210,7 @@
       "text3": "afin d'utiliser cet élément."
     },
     "fileInputWithApi": {
-      "description": "Un moyen d'ajouter de la documentation à l'appui.",
-      "trialFeature": {
-        "title": "Fonctionnalité Bêta",
-        "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
-        "bullet1": "La récupération des réponses au formulaire via une clé API",
-        "bullet2": "La vérification des fichiers pour détecter des indicateurs malveillants ou d'autres problèmes de sécurité",
-        "bullet3": "La collecte de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
-      }
+      "description": "Un moyen d'ajouter de la documentation à l'appui."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "Quel est votre nom?",
@@ -552,8 +545,8 @@
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
-  "hasFileInputAndApiDelivery": "Livraison de réponse avec l'API",
-  "hasFileInputAndApiDeliveryNote": "Choix obligatoire lors de l'utilisation du téléverseur de fichiers",
+  "hasFileInputAndApiDelivery": "Récupération des réponses à partir du point de terminaison API",
+  "hasFileInputAndApiDeliveryNote": "Clé API obligatoire lors de l'utilisation du téléverseur de fichiers",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
@@ -1481,6 +1474,6 @@
     "loadingError": "Ce formulaire contient un composant « bêta » qui n'est pas encore disponible pour tous les utilisateurs. Pour en savoir plus sur cette fonctionnalité limitée, veuillez contacter l'équipe de soutien."
   },
   "fileUploadApiWarning": {
-    "text": "La méthode de livraison n'est pas configurée sur API."
+    "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
   }
 }
