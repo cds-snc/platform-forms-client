@@ -53,8 +53,8 @@
       "lostKeyTip": {
         "title": "Vous n'avez pas votre clé API?",
         "text1": "Un seul fichier de clé API peut être associée à un formulaire à la fois.",
-        "text2": "Générez une nouvelle clé API en allant dans Paramètres > Intégration API lorsque vous êtes connecté à",
-        "link": " Formulaires GC"
+        "text2": "Générez une nouvelle clé API en allant dans",
+        "link": " Paramètres > Intégration API"
       }
     }
   },
