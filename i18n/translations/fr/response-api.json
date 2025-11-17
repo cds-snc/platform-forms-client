@@ -47,7 +47,7 @@
     "uploadSuccessTitle": "La clé API a été téléchargée avec succès",
     "uploadSuccessMessage": "Vous pouvez maintenant récupérer toutes les nouvelles réponses pour ce formulaire.",
     "uploadFailedTitle": "Échec du téléchargement de la clé API",
-    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la télécharger à nouveau.",
+    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la téléverser à nouveau.",
     "lostKey": {
       "link": "Vous n'avez pas votre clé API?",
       "lostKeyTip": {
