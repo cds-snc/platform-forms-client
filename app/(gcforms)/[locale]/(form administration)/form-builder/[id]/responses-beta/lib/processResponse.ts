@@ -104,11 +104,16 @@ const downloadAndConfirmResponse = async ({
   const encryptedSubmission = await withRetry(() => apiClient.getFormSubmission(responseName), {
     maxRetries: 6,
     onRetry: (attempt, error) => {
-      logger.info(`Attempt ${attempt} to download submission ${responseName} failed: ${error}`);
+      const cause = error instanceof Error && error.cause ? error.cause : null;
+      logger.info(`Attempt ${attempt} to download submission ${responseName} failed: ${error}`, {
+        cause,
+      });
     },
     onFinalFailure: async (error, totalAttempts) => {
+      const cause = error instanceof Error && error.cause ? error.cause : null;
       logger.error(
-        `Failed to download submission ${responseName} after ${totalAttempts} attempts: ${error}`
+        `Failed to download submission ${responseName} after ${totalAttempts} attempts: ${error}`,
+        { cause }
       );
     },
     isRetryable: (error) => {
@@ -215,11 +220,16 @@ const integrityCheckAndConfirm = async (
     await withRetry(() => apiClient.confirmFormSubmission(submissionName, confirmationCode), {
       maxRetries: 6,
       onRetry: (attempt, error) => {
-        logger.info(`Attempt ${attempt} to confirm submission ${submissionName} failed: ${error}`);
+        const cause = error instanceof Error && error.cause ? error.cause : null;
+        logger.info(`Attempt ${attempt} to confirm submission ${submissionName} failed: ${error}`, {
+          cause,
+        });
       },
       onFinalFailure: async (error, totalAttempts) => {
+        const cause = error instanceof Error && error.cause ? error.cause : null;
         logger.error(
-          `Failed to confirm submission ${submissionName} after ${totalAttempts} attempts: ${error}`
+          `Failed to confirm submission ${submissionName} after ${totalAttempts} attempts: ${error}`,
+          { cause }
         );
       },
       isRetryable: (error) => {
