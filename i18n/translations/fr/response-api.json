@@ -100,6 +100,7 @@
   "processingPage": {
     "processingTitle": "Téléchargement en cours",
     "pleaseWait": "Veuillez patienter...",
+    "processingSubmission": "Traitement en cours : soumission {{submissionId}}",
     "processingMessage": "Traitement de {{count}} réponses...",
     "cancelButton": "Mettre en pause le téléchargement",
     "cancellingButton": "Mise en pause...",
