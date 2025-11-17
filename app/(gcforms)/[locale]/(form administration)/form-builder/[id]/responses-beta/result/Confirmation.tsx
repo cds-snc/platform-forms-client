@@ -1,10 +1,11 @@
 "use client";
+import { useCallback, useState } from "react";
 import { Button } from "@root/components/clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
-import { useState } from "react";
 import { Responses } from "../Responses";
+import { CheckForResponsesButton } from "../components/CheckForResponsesButton";
 
 export const Confirmation = ({ locale, id }: { locale: string; id: string }) => {
   const router = useRouter();
@@ -25,10 +26,9 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     newFormSubmissions,
   } = useResponsesContext();
 
-  const handleCheck = async () => {
-    void retrieveResponses();
+  const handleCheckResponses = useCallback(() => {
     setHasCheckedForResponses(true);
-  };
+  }, []);
 
   const handleGoBack = () => {
     router.push(`/${locale}/form-builder/${id}/responses-beta?reset=true`);
@@ -71,9 +71,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
                   {t("confirmationPage.downloadResponsesButton")}
                 </Button>
               ) : (
-                <Button theme="primary" onClick={handleCheck}>
-                  {t("confirmationPage.checkForNewResponsesButton")}
-                </Button>
+                <CheckForResponsesButton callBack={handleCheckResponses} />
               )}
             </div>
           }
@@ -107,13 +105,10 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
         <Button theme="secondary" onClick={handleGoBack}>
           {t("backToStart")}
         </Button>
-        <Button
-          theme="primary"
-          onClick={handleCheck}
+        <CheckForResponsesButton
           disabled={Boolean(newFormSubmissions && newFormSubmissions.length === 0)}
-        >
-          {t("confirmationPage.checkForNewResponsesButton")}
-        </Button>
+          callBack={handleCheckResponses}
+        />
       </div>
     </div>
   );
