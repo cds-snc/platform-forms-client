@@ -82,8 +82,8 @@
     "detail": "Tous les téléchargements incluent également les données brutes au format JSON. Cela permet une étape de confirmation automatique sans avoir à copier-coller manuellement les codes de réception.",
     "formatOptions": {
       "csv": {
-        "label": "Combiné dans un tableur (Fichier CSV agrégé)",
-        "hint": "Les données seront ajoutées à tout fichier CSV existant dans le dossier sélectionné."
+        "label": "Combinées dans feuille de calcul (Un fichier CSV)",
+        "hint": "Données ajoutées au fichier CSV, s'il existe déjà dans le dossier sélectionné."
       },
       "html": {
         "label": "Copies individuelles (Fichiers HTML séparés)"

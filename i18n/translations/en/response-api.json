@@ -81,8 +81,8 @@
     "detail": "All downloads also include the raw data in JSON format. This allows for an automatic confirmation step without having to copy-paste receipt codes manually.",
     "formatOptions": {
       "csv": {
-        "label": "Combined in a spreadsheet (Aggregated CSV file)",
-        "hint": "Data will be appended to any existing CSV in the folder seleted."
+        "label": "Combined in spreadsheet (One CSV file)",
+        "hint": "Data appended, if there's an existing CSV in the folder seleted."
       },
       "html": {
         "label": "Individual copies (Separate HTML files)"
