@@ -41,7 +41,6 @@
     "noNewResponsesDetail": "There are currently no new responses for this form.",
     "newResponsesAvailable": "New responses available",
     "checkForNewResponses": "Check for new responses",
-    "checkForNewResponsesButton": "Check for new responses",
     "downloadResponses": "Choose location",
     "uploadSuccessTitle": "API key was successfully uploaded",
     "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
@@ -94,13 +93,13 @@
     "downloadedResponsesOne": "{{formattedCount}} response was downloaded",
     "downloadedResponsesOther": "{{formattedCount}} responses were downloaded",
     "savedTo": "All form submission data can be found in: ",
-    "checkForNewResponsesButton": "Check for new responses",
     "chooseNewLocationButton": "Choose new location",
     "downloadResponsesButton": "Download responses"
   },
   "processingPage": {
     "processingTitle": "Download in progress",
     "pleaseWait": "Please wait...",
+    "processingSubmission": "Processing submission {{submissionId}}",
     "processingMessage": "Processing {{count}} responses...",
     "cancelButton": "Pause download",
     "cancellingButton": "Pausing...",
@@ -110,6 +109,8 @@
   "backToStart": "Back to start",
   "continueButton": "Continue",
   "failed-to-load-api-key": "API key failed to load",
+  "checkForNewResponsesButton": "Check for new responses",
+  "checking": "Checking...",
   "toasts": {
     "rateLimitExceeded": {
       "title": "Rate limit exceeded",

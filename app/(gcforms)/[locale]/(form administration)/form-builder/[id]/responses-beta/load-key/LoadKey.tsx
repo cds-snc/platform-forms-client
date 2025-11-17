@@ -5,7 +5,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 
 interface LoadKeyProps {
-  onLoadKey: () => Promise<boolean>;
+  onLoadKey: () => Promise<boolean | undefined>;
 }
 
 const UploadSuccess = () => {
@@ -36,11 +36,12 @@ export const LoadKey = ({ onLoadKey }: LoadKeyProps) => {
       theme="secondary"
       className="mb-4"
       onClick={async () => {
+        // null or undefined return means user aborted - do nothing
         const result = await onLoadKey();
 
-        if (!result) {
+        if (result === false) {
           toast.error(<UploadFailed />, "wide");
-        } else {
+        } else if (result === true) {
           // Use defeault toast --- which will auto dismiss
           toast.success(<UploadSuccess />);
         }

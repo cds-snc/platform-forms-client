@@ -42,7 +42,6 @@
     "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
     "newResponsesAvailable": "De nouvelles réponses sont disponibles",
     "checkForNewResponses": "Vérifier les nouvelles réponses",
-    "checkForNewResponsesButton": "Vérifier les nouvelles réponses",
     "downloadResponses": "Choisir l'emplacement",
     "uploadSuccessTitle": "La clé API a été téléchargée avec succès",
     "uploadSuccessMessage": "Vous pouvez maintenant récupérer toutes les nouvelles réponses pour ce formulaire.",
@@ -95,13 +94,13 @@
     "downloadedResponsesOne": "{{formattedCount}} réponse a été téléchargée",
     "downloadedResponsesOther": "{{formattedCount}} réponses ont été téléchargées",
     "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
-    "checkForNewResponsesButton": "Vérifier les nouvelles réponses",
     "chooseNewLocationButton": "Choisir un nouvel emplacement",
     "downloadResponsesButton": "Télécharger les réponses"
   },
   "processingPage": {
     "processingTitle": "Téléchargement en cours",
     "pleaseWait": "Veuillez patienter...",
+    "processingSubmission": "Traitement en cours : soumission {{submissionId}}",
     "processingMessage": "Traitement de {{count}} réponses...",
     "cancelButton": "Mettre en pause le téléchargement",
     "cancellingButton": "Mise en pause...",
@@ -111,6 +110,8 @@
   "backToStart": "Retourner au début",
   "continueButton": "Continuer",
   "failed-to-load-api-key": "La clé API n'a pas pu être téléversée",
+  "checkForNewResponsesButton": "Vérifier les nouvelles réponses",
+  "checking": "Vérification en cours...",
   "toasts": {
     "rateLimitExceeded": {
       "title": "Rate limit exceeded",

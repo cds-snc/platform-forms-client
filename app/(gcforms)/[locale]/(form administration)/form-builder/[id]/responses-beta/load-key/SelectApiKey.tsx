@@ -40,10 +40,13 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
   const handleLoadApiKey = useCallback(async () => {
     try {
-      const [fileHandle] = await showOpenFilePicker({
-        multiple: false, // default
-        excludeAcceptAllOption: false, // default
-      });
+      const [fileHandle] = (await showOpenFilePicker({
+        multiple: false,
+        excludeAcceptAllOption: true,
+        types: [{ accept: { "application/json": [".json"] } }],
+      } as Parameters<typeof showOpenFilePicker>[0])) as Awaited<
+        ReturnType<typeof showOpenFilePicker>
+      >;
 
       const keyFile = await fileHandle.getFile().then(async (file) => {
         const text = await file.text();
@@ -62,13 +65,17 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       }
 
       setApiClient(
-        new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", token)
+        new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", keyFile, token)
       );
 
       setPrivateApiKey(keyFile);
 
       return true;
     } catch (error) {
+      // check for user abort - if so, don't show error toast
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
       // eslint-disable-next-line no-console
       console.error("Error loading API key:", error);
       // no-op
