@@ -10,7 +10,7 @@ import { submissionTypeExists } from "@lib/vault";
 import { VaultStatus } from "@lib/types";
 import { ServerActionError } from "@root/lib/types/form-builder-types";
 
-import { retrieveEvents } from "@lib/auditLogs";
+import { retrieveEvents, logEvent } from "@lib/auditLogs";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -62,7 +62,7 @@ export const unConfirmedResponsesExist = AuthenticatedAction(async (_, formId: s
   }
 });
 
-export const getEventsForForm = AuthenticatedAction(async (_, formId: string) => {
+export const getEventsForForm = AuthenticatedAction(async (session, formId: string) => {
   try {
     const events = await retrieveEvents(
       {
@@ -79,6 +79,15 @@ export const getEventsForForm = AuthenticatedAction(async (_, formId: string) =>
         filter: ["ReadForm", "AuditLogsRead"],
         mapUserEmail: true,
       }
+    );
+
+    const userId = session.user.id;
+
+    logEvent(
+      userId,
+      { type: "Form", id: formId },
+      "AuditLogsRead",
+      `User ${userId} read audit logs for form ${formId}`
     );
 
     return events.map((event) => {
