@@ -9,6 +9,7 @@ import { ContentWrapper } from "./ContentWrapper";
 import { BetaBadge } from "@root/components/clientComponents/globals/BetaBadge";
 import { CompatibilityGuard } from "./guards/CompatibilityGuard";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
+import { getFullTemplateByID } from "@root/lib/templates";
 
 export default async function ResponsesLayout(props: {
   children: React.ReactNode;
@@ -33,7 +34,10 @@ export default async function ResponsesLayout(props: {
 
   const hasAccess = await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesBeta);
 
-  if (!hasAccess) {
+  const template = await getFullTemplateByID(id);
+  const isEmailDelivery = template?.deliveryOption?.emailAddress !== undefined;
+
+  if (!hasAccess || isEmailDelivery) {
     // Clear the cookie to prevent redirect loop
     redirect(`/${locale}/form-builder/${id}/responses`);
   }
