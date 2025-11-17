@@ -66,9 +66,15 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
               <Button theme="secondary" onClick={handleSelectNewLocation}>
                 {t("confirmationPage.chooseNewLocationButton")}
               </Button>
-              <Button theme="primary" onClick={handleDownload}>
-                {t("confirmationPage.downloadResponsesButton")}
-              </Button>
+              {newFormSubmissions && newFormSubmissions.length > 0 ? (
+                <Button theme="primary" onClick={handleDownload}>
+                  {t("confirmationPage.downloadResponsesButton")}
+                </Button>
+              ) : (
+                <Button theme="primary" onClick={handleCheck}>
+                  {t("confirmationPage.checkForNewResponsesButton")}
+                </Button>
+              )}
             </div>
           }
         />

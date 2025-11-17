@@ -490,11 +490,6 @@
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Obtenir une copie du formulaire"
   },
-  "switchToApiMode": {
-    "title": "Passer à la livraison par API",
-    "description": "Les nouvelles soumissions seront disponibles via le point de terminaison de l'API.",
-    "btnText": "Passer à la livraison par API"
-  },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
   "formMissingProperty": "Il manque : {{property}}",
@@ -511,8 +506,8 @@
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
-  "hasFileInputAndApiDelivery": "Livraison de réponse avec l'API",
-  "hasFileInputAndApiDeliveryNote": "Choix obligatoire lors de l'utilisation du téléverseur de fichiers",
+  "hasFileInputAndApiDelivery": "Récupération des réponses à partir du point de terminaison API",
+  "hasFileInputAndApiDeliveryNote": "Clé API obligatoire lors de l'utilisation du téléverseur de fichiers",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
@@ -1440,6 +1435,6 @@
     "loadingError": "Ce formulaire contient un composant « bêta » qui n'est pas encore disponible pour tous les utilisateurs. Pour en savoir plus sur cette fonctionnalité limitée, veuillez contacter l'équipe de soutien."
   },
   "fileUploadApiWarning": {
-    "text": "La méthode de livraison n'est pas configurée sur API."
+    "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
   }
 }

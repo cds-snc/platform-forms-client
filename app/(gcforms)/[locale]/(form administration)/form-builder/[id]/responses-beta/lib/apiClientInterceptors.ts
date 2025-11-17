@@ -14,13 +14,13 @@ import type { AxiosInstance } from "axios";
  *   window.gcformsSimulateClear()
  */
 export const addErrorSimulationInterceptor = (httpClient: AxiosInstance) => {
+  logMessage.info(
+    "addErrorSimulationInterceptor has been added to simulate API errors for development"
+  );
   httpClient.interceptors.request.use(
     (config) => {
       try {
         if (process.env.NODE_ENV !== "development" || typeof window === "undefined") return config;
-        logMessage.info(
-          "addErrorSimulationInterceptor has been added to simulate API errors for development"
-        );
 
         const simulate = sessionStorage.getItem("gcforms_simulate_error");
         if (!simulate) return config;

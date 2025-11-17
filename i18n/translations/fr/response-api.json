@@ -15,7 +15,7 @@
       "browserSupport": "Assurez-vous d'utiliser Google Chrome ou Microsoft Edge.",
       "browserSupportDetail": "Votre navigateur demandera l'autorisation d'enregistrer des fichiers sur votre appareil.",
       "attachSafety": "Soyez prudent lorsque vous ouvrez des pièces jointes.",
-      "attachSafetyDetail": "Vérifiez les fichiers avant de les ouvrir, suivez les avertissements et utilisez des capteurs au niveau de l'hôte."
+      "attachSafetyDetail": "Vérifiez les fichiers avant de les ouvrir, analysez les attributs des fichiers malveillants, suivez les avertissements."
     },
     "steps": {
       "heading": "Ensuite, suivez ces étapes :",
@@ -49,10 +49,10 @@
     "uploadFailedTitle": "Échec du téléchargement de la clé API",
     "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la télécharger à nouveau.",
     "lostKey": {
-      "link": "Vous avez perdu votre clé API?",
+      "link": "Vous n'avez pas votre clé API?",
       "lostKeyTip": {
-        "title": "Clé API perdue?",
-        "text1": "Une seule clé API peut être associée à un formulaire.",
+        "title": "Vous n'avez pas votre clé API?",
+        "text1": "Un seul fichier de clé API peut être associée à un formulaire à la fois.",
         "text2": "Générez une nouvelle clé API en allant dans Paramètres > Intégration API lorsque vous êtes connecté à",
         "link": " Formulaires GC"
       }
@@ -62,7 +62,11 @@
     "title": "Sélectionnez un emplacement d’enregistrement",
     "subheading": "Decidez où les nouvelles réponses seront téléchargées.",
     "detail": "Pour ajouter des données de réponse à un fichier CSV existant, sélectionnez le dossier dans lequel il est actuellement enregistré. Assurez-vous que le nom du fichier inclut toujours l'identifiant du formulaire, comme lors du téléchargement initial.",
-    "chooseLocationButton": "Choisir l’emplacement",
+    "chooseLocationButton": "Choisir l'emplacement",
+    "locationSelected": {
+      "title": "Emplacement de sauvegarde sélectionné",
+      "text1": "Les réponses seront placées dans :"
+    },
     "csvDetected": {
       "title": "Fichier de réponse CSV détecté dans le dossier cible",
       "message": "Les nouvelles données de réponse seront ajoutées au fichier CSV existant."
@@ -98,6 +102,7 @@
   "processingPage": {
     "processingTitle": "Téléchargement en cours",
     "pleaseWait": "Veuillez patienter...",
+    "processingSubmission": "Traitement en cours : soumission {{submissionId}}",
     "processingMessage": "Traitement de {{count}} réponses...",
     "cancelButton": "Mettre en pause le téléchargement",
     "cancellingButton": "Mise en pause...",

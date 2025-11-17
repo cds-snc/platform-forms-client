@@ -1,6 +1,6 @@
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
-import { PrivateApiKey, CompleteAttachment, FormSubmission } from "./types";
-import { decryptFormSubmission, importPrivateKeyDecrypt } from "./utils";
+import { CompleteAttachment, FormSubmission } from "./types";
+import { decryptFormSubmission } from "./utils";
 import { ATTACHMENTS_FOLDER, RAW_RESPONSE_FOLDER } from "./constants";
 import { FormProperties } from "@root/lib/types";
 import { GCFormsApiClient } from "./apiClient";
@@ -15,7 +15,7 @@ export const processResponse = async ({
   htmlDirectoryHandle,
   csvFileHandle,
   apiClient,
-  privateApiKey,
+  decryptionKey,
   responseName,
   selectedFormat,
   formId,
@@ -27,7 +27,7 @@ export const processResponse = async ({
   htmlDirectoryHandle: FileSystemDirectoryHandle | null;
   csvFileHandle: FileSystemFileHandle | null;
   apiClient: GCFormsApiClient;
-  privateApiKey: PrivateApiKey;
+  decryptionKey: CryptoKey;
   responseName: string;
   selectedFormat: string;
   formId: string;
@@ -37,7 +37,7 @@ export const processResponse = async ({
   const confirmedResponse = await downloadAndConfirmResponse({
     workingDirectoryHandle,
     apiClient,
-    privateApiKey,
+    decryptionKey,
     responseName: responseName,
   });
 
@@ -78,22 +78,20 @@ export const processResponse = async ({
   });
 };
 
-export const downloadAndConfirmResponse = async ({
+const downloadAndConfirmResponse = async ({
   workingDirectoryHandle,
   apiClient,
-  privateApiKey,
+  decryptionKey,
   responseName,
 }: {
   workingDirectoryHandle: FileSystemDirectoryHandle;
   apiClient: GCFormsApiClient;
-  privateApiKey: PrivateApiKey;
+  decryptionKey: CryptoKey;
   responseName: string;
 }) => {
   // Get or create raw data directory
   const dataDirectoryHandle: FileSystemDirectoryHandle =
     await workingDirectoryHandle.getDirectoryHandle(RAW_RESPONSE_FOLDER, { create: true });
-
-  const decryptionKey = await importPrivateKeyDecrypt(privateApiKey.key);
 
   // Retrieve encrypted response from API
   const encryptedSubmission = await apiClient.getFormSubmission(responseName);
