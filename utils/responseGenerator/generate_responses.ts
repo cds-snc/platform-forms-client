@@ -4,15 +4,26 @@ import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { config } from "dotenv";
 import { chunkArray } from "../../lib/utils";
 import axios from "axios";
-import { load } from "cheerio";
-
-const decoder = new TextDecoder();
+import {
+  getRandomInt,
+  generateResponseForQuestion,
+  loadFiles,
+  TestFile,
+} from "./lib/responseGenerator";
+import { uploadFile } from "./lib/fileUpload";
 
 interface SubmissionRequestBody {
   [key: string]: Response;
 }
 
 type Response = string | string[] | number | Record<string, unknown>[] | Record<string, unknown>;
+
+type SignedURLMap = Record<string, PostSignedURL>;
+
+type PostSignedURL = {
+  url: string;
+  fields: Record<string, string>;
+};
 
 function getValue(query: string) {
   const rl = readline.createInterface({
@@ -27,28 +38,24 @@ function getValue(query: string) {
     })
   );
 }
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-const twirlTimer = () => {
-  var P = ["\\", "|", "/", "-"];
-  var x = 0;
-  return setInterval(function () {
-    process.stdout.write("\r" + P[x++]);
-    x &= 3;
-  }, 250);
-};
-
-function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max);
-}
+// const twirlTimer = () => {
+//   var P = ["\\", "|", "/", "-"];
+//   var x = 0;
+//   return setInterval(function () {
+//     process.stdout.write("\r" + P[x++]);
+//     x &= 3;
+//   }, 250);
+// };
 
 function writeWaitingPercent(current: number, total: number) {
   readline.cursorTo(process.stdout, 0);
   process.stdout.write(`waiting ... ${Math.round((current / total) * 100)}%`);
 }
 
-const createResponse = (formTemplate: any): SubmissionRequestBody => {
-  const response: SubmissionRequestBody = {};
+const createResponse = (formTemplate: any) => {
+  const responses: SubmissionRequestBody = {};
+  const fileRefs: Record<string, TestFile> = {};
   const language = getRandomInt(1) === 0 ? "en" : "fr";
 
   // For each element in the form template, generate a response
@@ -57,29 +64,11 @@ const createResponse = (formTemplate: any): SubmissionRequestBody => {
     if (!question) {
       throw new Error("Could not find question in form template");
     }
-    switch (question.type) {
-      case "textField":
-        return (response[questionId] = language === "en" ? "Test response" : "Réponse de test");
 
-      case "textArea":
-      case "richText":
-        return (response[questionId] =
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ac metus sed odio rutrum eleifend. Donec eu viverra nisl. Duis sit amet accumsan lacus. Nunc eleifend justo nunc. Vestibulum vitae lectus nisl. Aenean ullamcorper dictum arcu, quis sagittis arcu bibendum non. Sed ligula libero, ornare quis augue et, elementum cursus nunc. Fusce at mollis eros. Sed sollicitudin enim ut ligula tristique, vel ultricies nulla interdum. Aenean neque lectus, mattis nec pharetra et, porttitor quis tellus. Aenean a facilisis nunc. Pellentesque et nisl nec eros vehicula bibendum at nec risus. Nam mollis, nunc sed convallis pellentesque, massa est tincidunt ex, vel efficitur dolor elit tempus sapien. Vivamus consequat nisi ipsum, non mollis massa tempus quis. Sed justo turpis, blandit quis arcu in, varius porta dolor.");
-
-      case "dropdown":
-      case "radio":
-      case "checkbox":
-      case "attestation":
-      case "combobox":
-        const numOfChoices = question.properties.choices.length;
-        const randomChoice = getRandomInt(numOfChoices);
-        return (response[questionId] = question.properties.choices[randomChoice][language]);
-
-      default:
-        throw new Error("Unsupported question type");
-    }
+    // modifies the `response` object directly
+    generateResponseForQuestion(language, question, responses, fileRefs);
   });
-  return response;
+  return { responses, fileRefs };
 };
 
 const main = async () => {
@@ -90,7 +79,7 @@ const main = async () => {
       ans === "1" ? "staging" : "development"
     );
 
-    console.log(`Getting form template from ${appEnv}`);
+    console.info(`Getting form template from ${appEnv}`);
     process.env.AWS_PROFILE = appEnv;
 
     // Get the form template
@@ -103,7 +92,7 @@ const main = async () => {
       .then(({ data }) => {
         return data.form;
       });
-    console.log(formTemplate);
+
     if (!formTemplate) {
       throw new Error("Could not retrieve form template");
     }
@@ -116,53 +105,97 @@ const main = async () => {
       ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
     });
 
+    // Load files in case they are required to generate responses
+    await loadFiles();
+
     // Generate and submit responses
-    console.log("Generating responses for form.");
+    console.info("Generating responses for form.");
 
     const submissions = chunkArray(
-      Array.from(
-        { length: numberOfResponses },
-        () =>
-          new InvokeCommand({
+      Array.from({ length: numberOfResponses }, () => {
+        const { responses, fileRefs } = createResponse(formTemplate);
+        return {
+          invokeCommand: new InvokeCommand({
             FunctionName: "Submission",
             Payload: encoder.encode(
               JSON.stringify({
                 formID,
-                responses: createResponse(formTemplate),
+                responses,
                 language: "en",
                 securityAttribute: "Protected A",
+                fileChecksums: Object.entries(fileRefs).reduce(
+                  (fileChecksums, [key, value]) => {
+                    fileChecksums[key] = value.checksum;
+                    return fileChecksums;
+                  },
+                  {} as Record<string, string>
+                ),
               })
             ),
-          })
-      ),
-      appEnv === "staging" ? 50 : 2
+          }),
+          fileRefs,
+        };
+      }),
+      50
     );
 
     let numOfProcessed = 0;
 
-    console.log("Sending responses to Lambda Submission function.");
+    console.info("Sending responses to Lambda Submission function.");
 
-    for (const submission of submissions) {
-      const results = await Promise.all(
-        submission.map((invokeCommand) => lambdaClient.send(invokeCommand))
+    for (const chunk of submissions) {
+      await Promise.all(
+        chunk.map(async ({ invokeCommand, fileRefs }) => {
+          const lambdaInvokeResponse = await lambdaClient.send(invokeCommand);
+          if (lambdaInvokeResponse.StatusCode !== 200 || lambdaInvokeResponse.FunctionError) {
+            // If `FunctionError` is defined then the `Payload` is an Error object
+            throw new Error(
+              `Submission lambda execution failure. Reason: ${lambdaInvokeResponse.Payload?.transformToString()}`
+            );
+          }
+
+          const { status, submissionId, fileURLMap } = JSON.parse(
+            lambdaInvokeResponse.Payload?.transformToString() ?? "{}"
+          ) as { status?: boolean; submissionId?: string; fileURLMap?: SignedURLMap };
+
+          // Check for successfull submission creation
+
+          if (status !== true && !submissionId) {
+            throw new Error(
+              `Unexpected Submission lambda processing result: ${lambdaInvokeResponse.Payload?.transformToString()}`
+            );
+          }
+
+          // Check if we need to process files
+          if (Object.keys(fileRefs).length > 0) {
+            // Check if there is a url / file count mismatch
+            if (
+              fileURLMap === undefined ||
+              Object.keys(fileURLMap).length !== Object.keys(fileRefs).length
+            )
+              throw new Error("File Upload count mismatch");
+
+            // Upload the files
+
+            await Promise.all(
+              Object.entries(fileURLMap).map(async ([fileId, signedUrl]) => {
+                return uploadFile(fileRefs[fileId], signedUrl);
+              })
+            );
+          }
+        })
       ).catch((err) => {
         console.error(err);
         throw new Error("Could not process request with Lambda Submission function");
       });
-      results.forEach((result) => {
-        const payload = decoder.decode(result.Payload);
-        if (result.FunctionError || !JSON.parse(payload).status) {
-          throw new Error("Submission API could not process form response");
-        }
-      });
-      if (appEnv === "development") await delay(500);
-      numOfProcessed += submission.length;
+
+      numOfProcessed += chunk.length;
       writeWaitingPercent(numOfProcessed, numberOfResponses);
     }
 
-    console.log(`\nData generation completed for ${numberOfResponses} responses.`);
+    console.info(`\nData generation completed for ${numberOfResponses} responses.`);
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 // config() adds the .env variables to process.env
