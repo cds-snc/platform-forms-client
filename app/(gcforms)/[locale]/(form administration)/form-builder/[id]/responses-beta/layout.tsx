@@ -8,7 +8,6 @@ import { ResponsesProvider } from "./context/ResponsesContext";
 import { ContentWrapper } from "./ContentWrapper";
 import { BetaBadge } from "@root/components/clientComponents/globals/BetaBadge";
 import { CompatibilityGuard } from "./guards/CompatibilityGuard";
-import { disableResponsesBetaMode } from "../responses/actions";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 
 export default async function ResponsesLayout(props: {
@@ -36,7 +35,6 @@ export default async function ResponsesLayout(props: {
 
   if (!hasAccess) {
     // Clear the cookie to prevent redirect loop
-    await disableResponsesBetaMode();
     redirect(`/${locale}/form-builder/${id}/responses`);
   }
 
