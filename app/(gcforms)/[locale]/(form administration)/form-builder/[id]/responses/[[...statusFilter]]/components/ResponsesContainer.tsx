@@ -85,7 +85,7 @@ export const ResponsesContainer = ({
   return (
     <>
       <div className="mr-10">
-        <ResponseBetaLink formId={id} />
+        <ResponseBetaLink formId={id} className="mb-8" />
         <NavigationTabs formId={id} />
         <Responses
           hasOverdue={hasOverdue}
