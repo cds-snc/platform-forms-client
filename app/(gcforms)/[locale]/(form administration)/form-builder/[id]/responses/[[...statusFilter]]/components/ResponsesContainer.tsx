@@ -51,7 +51,7 @@ export const ResponsesContainer = ({
             )}
           </div>
           <div>
-            <ResponseBetaLink formId={id} />
+            <ResponseBetaLink formId={id} className="mb-8" />
           </div>
           <Responses
             hasOverdue={hasOverdue}
