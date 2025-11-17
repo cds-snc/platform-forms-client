@@ -37,7 +37,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   const handleSelectNewLocation = () => {
     // reset relevant state
     setProcessedSubmissionIds(new Set());
-    setProcessingCompleted(false);
+    setProcessingCompleted(true);
     setInterrupt(false);
 
     // navigate to location selection with reset param
@@ -47,7 +47,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   const handleDownload = async () => {
     // reset relevant state
     setProcessedSubmissionIds(new Set());
-    setProcessingCompleted(false);
+    setProcessingCompleted(true);
     setInterrupt(false);
 
     const initialResponses = await retrieveResponses();
@@ -63,7 +63,11 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
         <Responses
           actions={
             <div className="mt-8 flex flex-row gap-4">
-              <Button theme="secondary" onClick={handleSelectNewLocation}>
+              <Button
+                theme="secondary"
+                onClick={handleSelectNewLocation}
+                disabled={Boolean(!newFormSubmissions || newFormSubmissions.length < 1)}
+              >
                 {t("confirmationPage.chooseNewLocationButton")}
               </Button>
               {newFormSubmissions && newFormSubmissions.length > 0 ? (
