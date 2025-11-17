@@ -120,19 +120,11 @@ export const generateResponseForQuestion = (
     case "dropdown":
     case "radio":
     case "combobox":
-      if (!Array.isArray(question.properties.choices)) {
-        val = `${getRandomInt(9999, 1)} ${lorem.generateWords(1)}`;
-        break;
-      }
       // single values only
       const randomChoice = getRandomInt(question.properties.choices.length - 1);
       val = question.properties.choices[randomChoice][language];
       break;
     case "checkbox":
-      if (!Array.isArray(question.properties.choices)) {
-        val = `${getRandomInt(9999, 1)} ${lorem.generateWords(1)}`;
-        break;
-      }
       // multiple values possible
       const numberOfCheckedBoxes = question.properties.validation?.all
         ? question.properties.choices.length
