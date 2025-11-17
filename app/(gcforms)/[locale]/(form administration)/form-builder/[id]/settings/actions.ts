@@ -86,7 +86,7 @@ export const getEventsForForm = AuthenticatedAction(async (_, formId: string) =>
         formId: event.subject.split("#")[1],
         userId: event.userId,
         event: event.event,
-        timestamp: new Date(event.timestamp).toISOString().split("T")[0],
+        timestamp: new Date(event.timestamp).toISOString(),
         description: event.description,
       };
     });
