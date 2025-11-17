@@ -50,6 +50,9 @@ export const ResponsesContainer = ({
               </div>
             )}
           </div>
+          <div className="mt-8">
+            <ResponseBetaLink formId={id} />
+          </div>
           <Responses
             hasOverdue={hasOverdue}
             statusFilter={statusFilter}
@@ -57,9 +60,6 @@ export const ResponsesContainer = ({
             overdueAfter={overdueAfter}
             isApiRetrieval={true}
           />
-          <div className="mt-8">
-            <ResponseBetaLink formId={id} />
-          </div>
           <ManageFormAccessDialogContainer formId={id} />
         </div>
       </>
