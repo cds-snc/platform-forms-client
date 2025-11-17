@@ -1,6 +1,11 @@
 import axios, { type AxiosInstance } from "axios";
 
-import type { EncryptedFormSubmission, NewFormSubmission, FormSubmissionProblem } from "./types";
+import type {
+  EncryptedFormSubmission,
+  NewFormSubmission,
+  FormSubmissionProblem,
+  PrivateApiKey,
+} from "./types";
 
 import { TokenRateLimitError } from "./errorsTypes";
 import { FormProperties } from "@root/lib/types";
@@ -8,19 +13,39 @@ import {
   addErrorSimulationInterceptor,
   addRateLimitTrackingInterceptor,
 } from "./apiClientInterceptors";
+import { getAccessTokenFromApiKey } from "./utils";
 
 export class GCFormsApiClient {
   private formId: string;
   private httpClient: AxiosInstance;
   private cachedFormTemplate: FormProperties | null = null;
   private rateLimitRemaining: number | null = null;
+  private privateApiKey: PrivateApiKey;
+  private accessToken: string;
+  private tokenTimestamp: number;
+  private readonly TOKEN_VALIDITY_MS = 1200000; // 20 minutes
 
-  public constructor(formId: string, apiUrl: string, accessToken: string) {
+  public constructor(
+    formId: string,
+    apiUrl: string,
+    privateApiKey: PrivateApiKey,
+    accessToken: string
+  ) {
     this.formId = formId;
+    this.privateApiKey = privateApiKey;
+    this.accessToken = accessToken;
+    this.tokenTimestamp = Date.now();
+
     this.httpClient = axios.create({
       baseURL: apiUrl,
       timeout: 3000,
-      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    // Add request interceptor to refresh token and set auth header
+    this.httpClient.interceptors.request.use(async (config) => {
+      await this.ensureValidToken();
+      config.headers.Authorization = `Bearer ${this.accessToken}`;
+      return config;
     });
 
     // Add interceptors
@@ -28,6 +53,15 @@ export class GCFormsApiClient {
       this.rateLimitRemaining = remaining;
     });
     addErrorSimulationInterceptor(this.httpClient);
+  }
+
+  private async ensureValidToken(): Promise<void> {
+    const tokenAge = Date.now() - this.tokenTimestamp;
+
+    if (tokenAge >= this.TOKEN_VALIDITY_MS) {
+      this.accessToken = await getAccessTokenFromApiKey(this.privateApiKey);
+      this.tokenTimestamp = Date.now();
+    }
   }
 
   private async checkRateLimit(): Promise<void> {
