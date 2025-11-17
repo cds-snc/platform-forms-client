@@ -50,7 +50,7 @@ export const ResponsesContainer = ({
               </div>
             )}
           </div>
-          <div className="mt-8">
+          <div>
             <ResponseBetaLink formId={id} />
           </div>
           <Responses
