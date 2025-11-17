@@ -498,7 +498,7 @@
     "title": "Get a copy of your form"
   },
   "auditDownload": {
-    "description": "Obtain a spreadsheet with the history of all key actions taken in a form, including when a form was created, updated, and archived.",
+    "description": "Obtain a spreadsheet with the history of all key actions taken in a form, including when a form was created, updated, and archived. Actions can take several minutes to appear in the activity log.",
     "downloadBtnText": "Download activity log",
     "title": "Download form activity",
     "headers": {
