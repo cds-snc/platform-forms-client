@@ -132,7 +132,7 @@ export const generateResponseForQuestion = (
       // Copy the array so we don't mutate the original
       const choicesArray = [...question.properties.choices];
 
-      val = new Array(numberOfCheckedBoxes).fill(0).map(() => {
+      val = Array.from({ length: numberOfCheckedBoxes }, () => {
         // get a choice from available choices and remove it from the array so it can't be selected twice
         const selection = choicesArray.splice(getRandomInt(choicesArray.length - 1), 1)[0];
 
@@ -142,7 +142,7 @@ export const generateResponseForQuestion = (
 
     case "dynamicRow":
       const numberOfRows = getRandomInt(question.properties.maxNumberOfRows ?? 10);
-      val = new Array(numberOfRows).fill(0).map(() => {
+      val = Array.from({ length: numberOfRows }, () => {
         const subElementResponses: Record<string, unknown> = {};
         question.properties.subElements.forEach((subQuestion) => {
           generateResponseForQuestion(language, subQuestion, subElementResponses, fileRefs);

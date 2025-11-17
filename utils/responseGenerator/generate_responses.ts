@@ -105,11 +105,8 @@ const main = async () => {
       ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
     });
 
-    // Load files if required to generate responses
-    if (formTemplate.elements.some((element: { type: string }) => element.type === "fileInput")) {
-      console.info(`File input field detected... loading test files`);
-      await loadFiles();
-    }
+    // Load files in case they are required to generate responses
+    await loadFiles();
 
     // Generate and submit responses
     console.info("Generating responses for form.");
