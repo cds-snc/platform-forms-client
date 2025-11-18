@@ -233,6 +233,7 @@ export const ResponsesProvider = ({
               formId: String(formId),
               formTemplate: formTemplate!,
               t,
+              logger,
             });
           } catch (error) {
             setInterrupt(true);
