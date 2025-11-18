@@ -1423,9 +1423,9 @@
   "en": "English",
   "fr": "Français",
   "beta": {
-    "tag": "Beta:",
+    "tag": "Pilot:",
     "text": "Trial feature ",
-    "loadingError": "This form contains a 'beta' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
+    "loadingError": "This form contains a 'Pilot' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
   },
   "fileUploadApiWarning": {
     "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
