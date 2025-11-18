@@ -21,7 +21,7 @@
       "heading": "Then, follow these steps:",
       "uploadKey": {
         "title": "Upload your API key file.",
-        "detail": "This is how you will securely authenticate."
+        "detail": "This is how you will securely authenticate to get all new responses."
       },
       "chooseLocation": {
         "title": "Choose a download location for responses.",
@@ -35,7 +35,7 @@
   },
   "loadKeyPage": {
     "title": "Upload your API key file",
-    "detail": "Upload the API key you generated in Settings to get access to your form's responses.",
+    "detail": "Upload the API key you generated in Settings (JSON file) to get access to your form's responses.",
     "chooseFileButton": "Upload API Key",
     "noNewResponsesAvailable": "No new responses",
     "noNewResponsesDetail": "There are currently no new responses for this form.",
@@ -45,14 +45,14 @@
     "uploadSuccessTitle": "API key was successfully uploaded",
     "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
     "uploadFailedTitle": "API key upload failed",
-    "uploadFailedMessage": "Make sure you selected the correct file. If it's not working, try regenerating a new API key and uploading it again.",
+    "uploadFailedMessage": "Make sure you select the correct file. If it's not working, try regenerating a new API key and uploading it again.",
     "lostKey": {
       "link": "Don't have API key?",
       "lostKeyTip": {
         "title": "Don't have your API key?",
         "text1": "Only one API key file can be associated to a form at a time.",
-        "text2": "Generate a new API key by going to Settings > API integration while signed in to",
-        "link": " GC Forms"
+        "text2": "Generate a new API key by going to",
+        "link": " Settings > API integration"
       }
     }
   },
@@ -80,8 +80,8 @@
     "detail": "All downloads also include the raw data in JSON format. This allows for an automatic confirmation step without having to copy-paste receipt codes manually.",
     "formatOptions": {
       "csv": {
-        "label": "Combined in a spreadsheet (Aggregated CSV file)",
-        "hint": "Data will be appended to any existing CSV in the folder seleted."
+        "label": "Combined in spreadsheet (One CSV file)",
+        "hint": "Data appended, if there's an existing CSV in the folder seleted."
       },
       "html": {
         "label": "Individual copies (Separate HTML files)"
@@ -117,7 +117,7 @@
       "message": "You have exceeded the number of allowed requests. Please wait before trying again."
     },
     "unknownError": {
-      "title": "An unknown error occurred",
+      "title": "Something went wrong",
       "message": "An unexpected error occurred. Please try again later.",
       "code": "Error code"
     },
