@@ -30,9 +30,9 @@
       "title": "Bannière",
       "description": "Activer la bannière d'avertissement pour qu'elle soit visible"
     },
-    "responsesBeta": {
+    "responsesPilot": {
       "title": "Réponses (Pilote)",
-      "description": "Activer le nouveau flux pour la récupération des réponses au formulaire de l'interface, avec une clé API."
+      "description": "Activer le nouveau flux pour le téléchargement des réponses dans le navigateur avec une clé API."
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",

@@ -210,13 +210,13 @@ export const ResponsesProvider = ({
       const decryptionKey = await importPrivateKeyDecrypt(privateApiKey.key);
 
       while (formResponses.length > 0 && !interruptRef.current) {
+        logger.info(`Processing next ${formResponses.length} submissions`);
         for (const response of formResponses) {
           if (interruptRef.current) {
             logger.info("Processing interrupted by user");
             break;
           }
 
-          logger.info(`Processing submission ID: ${response.name}`);
           setCurrentSubmissionId(response.name);
 
           try {

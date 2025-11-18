@@ -30,9 +30,9 @@
       "title": "Banner",
       "description": "Enable warning banner to be visible"
     },
-    "responsesBeta": {
+    "responsesPilot": {
       "title": "Responses Pilot",
-      "description": "Enable new flow for retrieving form responses from the interface with an API key "
+      "description": "Enable new flow for downloading form responses with API key in browser"
     }
   },
   "addFlag": "Add user feature flag",

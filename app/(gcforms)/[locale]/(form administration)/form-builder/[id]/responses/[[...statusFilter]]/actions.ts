@@ -52,6 +52,7 @@ import {
   getAddressAsString,
 } from "@clientComponents/forms/AddressComplete/utils";
 import { serverTranslation } from "@i18n";
+import { traceFunction } from "@lib/otel";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -70,46 +71,48 @@ export const fetchSubmissions = AuthenticatedAction(
       lastKey: string | null;
     }
   ) => {
-    try {
-      if (!formId) {
-        return {
-          submissions: [],
-        };
-      }
-
-      // get status from url params (default = new) and capitalize/cast to VaultStatus
-      // Protect against invalid status query
-      const selectedStatus = Object.values(VaultStatus).includes(ucfirst(status) as VaultStatus)
-        ? (ucfirst(status) as VaultStatus)
-        : VaultStatus.NEW;
-
-      let startFromExclusiveResponse: StartFromExclusiveResponse | undefined = undefined;
-
-      // build up startFromExclusiveResponse from lastKey url param
-      if (lastKey) {
-        const splitLastKey = lastKey.split("_");
-
-        // Make sure both components of lastKey are valid
-        if (
-          isResponseId(String(splitLastKey[0])) &&
-          isNaN(new Date(Number(splitLastKey[1])).getTime()) === false
-        ) {
-          startFromExclusiveResponse = {
-            name: splitLastKey[0],
-            status: selectedStatus,
-            createdAt: Number(splitLastKey[1]),
+    return traceFunction("fetchResponseSubmissions", async () => {
+      try {
+        if (!formId) {
+          return {
+            submissions: [],
           };
         }
+
+        // get status from url params (default = new) and capitalize/cast to VaultStatus
+        // Protect against invalid status query
+        const selectedStatus = Object.values(VaultStatus).includes(ucfirst(status) as VaultStatus)
+          ? (ucfirst(status) as VaultStatus)
+          : VaultStatus.NEW;
+
+        let startFromExclusiveResponse: StartFromExclusiveResponse | undefined = undefined;
+
+        // build up startFromExclusiveResponse from lastKey url param
+        if (lastKey) {
+          const splitLastKey = lastKey.split("_");
+
+          // Make sure both components of lastKey are valid
+          if (
+            isResponseId(String(splitLastKey[0])) &&
+            isNaN(new Date(Number(splitLastKey[1])).getTime()) === false
+          ) {
+            startFromExclusiveResponse = {
+              name: splitLastKey[0],
+              status: selectedStatus,
+              createdAt: Number(splitLastKey[1]),
+            };
+          }
+        }
+
+        const { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse } =
+          await listAllSubmissions(formId, selectedStatus, undefined, startFromExclusiveResponse);
+
+        return { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse };
+      } catch (e) {
+        logMessage.error(`Error fetching submissions for form ${formId}: ${(e as Error).message}`);
+        return { error: true, submissions: [] };
       }
-
-      const { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse } =
-        await listAllSubmissions(formId, selectedStatus, undefined, startFromExclusiveResponse);
-
-      return { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse };
-    } catch (e) {
-      logMessage.error(`Error fetching submissions for form ${formId}: ${(e as Error).message}`);
-      return { error: true, submissions: [] };
-    }
+    });
   }
 );
 
@@ -135,263 +138,275 @@ export const getSubmissionsByFormat = AuthenticatedAction(
     | JSONResponse
     | ServerActionError
   > => {
-    try {
-      const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
-      const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
+    return traceFunction("generateSubmissionResponseFormats", async () => {
+      try {
+        const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
+        const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
 
-      const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
+        const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
-      const fullFormTemplate = await getFullTemplateByID(formID);
+        const fullFormTemplate = await getFullTemplateByID(formID);
 
-      if (fullFormTemplate === null) {
-        logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);
-        throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
-      }
-
-      if (ids.length > responseConfirmLimit) {
-        throw new FormBuilderError(
-          `You can only download a maximum of ${responseConfirmLimit} responses at a time.`,
-          FormServerErrorCodes.DOWNLOAD_LIMIT_EXCEEDED
-        );
-      }
-
-      const queryResult = await retrieveSubmissions(formID, ids);
-
-      if (!queryResult) {
-        throw new FormBuilderError(
-          "Error retrieving submissions",
-          FormServerErrorCodes.DOWNLOAD_RETRIEVE_SUBMISSIONS
-        );
-      }
-
-      const allowGroupsFlag = allowGrouping();
-      // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
-      const responses = queryResult
-        .sort((a, b) => a.createdAt - b.createdAt)
-        .map((item) => {
-          const filteredSubmissionData = JSON.parse(String(item.formSubmission));
-          // Remove ignored keys from the submission data
-          Object.keys(filteredSubmissionData).forEach((key) => {
-            if (IGNORED_KEYS.includes(key)) {
-              delete filteredSubmissionData[key];
-            }
-          });
-          const submission = Object.entries(filteredSubmissionData).map(([questionId, answer]) => {
-            const question = fullFormTemplate.form.elements.find(
-              (element) => element.id === Number(questionId)
-            );
-
-            // Handle Dynamic Rows
-            if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
-              return {
-                questionId: question.id,
-                type: question?.type,
-                questionEn: question?.properties.titleEn,
-                questionFr: question?.properties.titleFr,
-                answer: answer.map((item) => {
-                  return Object.values(item).map((value, index) => {
-                    if (question?.properties.subElements) {
-                      // Filter out richText elements from subElements since we access them by index
-                      const subQuestions = question?.properties.subElements.filter((subElement) => {
-                        return subElement.type !== FormElementTypes.richText;
-                      });
-
-                      // The question does not exist for the given index.
-                      // This can happen on Draft forms when a dynamic row is modified
-                      // after a submission and the submission is subsequently downloaded.
-                      if (!subQuestions.length || !subQuestions[index]) {
-                        // If this happens on a published form, we should log it
-                        if (fullFormTemplate.isPublished) {
-                          logMessage.error(
-                            `Dynamic row submission for form ${formID} has an invalid index ${index} for subQuestions.`
-                          );
-                        }
-
-                        return {
-                          questionId: index,
-                          type: "-",
-                          questionEn: "-",
-                          questionFr: "-",
-                          answer: value as string,
-                        };
-                      }
-
-                      const subQuestion = subQuestions[index];
-
-                      return {
-                        questionId: subQuestion.id,
-                        type: subQuestion.type,
-                        questionEn: subQuestion.properties.titleEn,
-                        questionFr: subQuestion.properties.titleFr,
-                        answer: getAnswerAsString(subQuestion, value),
-                        ...(subQuestion.type === "formattedDate" && {
-                          dateFormat: subQuestion.properties.dateFormat,
-                        }),
-                      };
-                    }
-                  });
-                }),
-              } as Answer;
-            }
-
-            // Handle "Split" AddressComplete in a similiar manner to dynamic fields.
-            if (
-              question?.type === FormElementTypes.addressComplete &&
-              question.properties.addressComponents?.splitAddress === true
-            ) {
-              const addressObject = JSON.parse(answer as string) as AddressElements;
-
-              const questionComponents = question.properties.addressComponents as AddressComponents;
-              if (questionComponents.canadianOnly) {
-                addressObject.country = "CAN";
-              }
-
-              const extraTranslations = {
-                streetAddress: {
-                  en: tEn("addressComponents.streetAddress"),
-                  fr: tFr("addressComponents.streetAddress"),
-                },
-                city: {
-                  en: tEn("addressComponents.city"),
-                  fr: tFr("addressComponents.city"),
-                },
-                province: {
-                  en: tEn("addressComponents.province"),
-                  fr: tFr("addressComponents.province"),
-                },
-                postalCode: {
-                  en: tEn("addressComponents.postalCode"),
-                  fr: tFr("addressComponents.postalCode"),
-                },
-                country: {
-                  en: tEn("addressComponents.country"),
-                  fr: tFr("addressComponents.country"),
-                },
-              };
-
-              const reviewElements = getAddressAsAnswerElements(
-                question,
-                addressObject,
-                extraTranslations
-              );
-
-              const addressElements = [reviewElements];
-
-              return {
-                questionId: question.id,
-                type: FormElementTypes.address,
-                questionEn: question?.properties.titleEn,
-                questionFr: question?.properties.titleFr,
-                answer: addressElements,
-              } as Answer;
-            }
-
-            // return the final answer object
-            return {
-              questionId: question?.id,
-              type: question?.type,
-              questionEn: question?.properties.titleEn,
-              questionFr: question?.properties.titleFr,
-              answer: getAnswerAsString(question, answer),
-              ...(question?.type === "formattedDate" && {
-                dateFormat: question.properties.dateFormat,
-              }),
-            } as Answer;
-          });
-
-          let sorted: Answer[];
-          if (allowGroupsFlag && formHasGroups(fullFormTemplate.form)) {
-            sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
-          } else {
-            sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
-          }
-
-          return {
-            id: item.name,
-            createdAt: parseInt(item.createdAt.toString()),
-            confirmationCode: item.confirmationCode,
-            answers: sorted,
-          };
-        }) as FormResponseSubmissions["submissions"];
-
-      if (!responses.length) {
-        throw new FormBuilderError("No responses found.", FormServerErrorCodes.NO_RESPONSES_FOUND);
-      }
-
-      const formResponse = {
-        formRecord: fullFormTemplate,
-        submissions: responses,
-      } as FormResponseSubmissions;
-
-      const responseIdStatusArray = queryResult.map((item) => {
-        return {
-          id: item.name,
-          status: item.status,
-          createdAt: item.createdAt,
-        };
-      });
-
-      await updateLastDownloadedBy(responseIdStatusArray, formID);
-      await logDownload(responseIdStatusArray, format, session.user.id);
-
-      switch (format) {
-        case DownloadFormat.CSV:
-          return {
-            receipt: await htmlAggregatedTransform(formResponse, lang),
-            responses: csvTransform(formResponse),
-          };
-        case DownloadFormat.HTML_AGGREGATED:
-          return await htmlAggregatedTransform(formResponse, lang);
-
-        case DownloadFormat.HTML:
-          return await htmlTransform(formResponse);
-
-        case DownloadFormat.HTML_ZIPPED: {
-          return await zipTransform(formResponse, lang);
+        if (fullFormTemplate === null) {
+          logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);
+          throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
         }
 
-        case DownloadFormat.JSON:
-          return {
-            receipt: await htmlAggregatedTransform(formResponse, lang),
-            responses: jsonTransform(formResponse),
-          };
-
-        default:
+        if (ids.length > responseConfirmLimit) {
           throw new FormBuilderError(
-            `Invalid format: ${format}`,
-            FormServerErrorCodes.DOWNLOAD_INVALID_FORMAT
+            `You can only download a maximum of ${responseConfirmLimit} responses at a time.`,
+            FormServerErrorCodes.DOWNLOAD_LIMIT_EXCEEDED
           );
-      }
-    } catch (err) {
-      logMessage.warn(
-        `Could not create submissions in format ${format} formId: ${formID}: ${
-          (err as Error).message
-        }`
-      );
+        }
 
-      if (err instanceof FormBuilderError) {
-        return {
-          error: "There was an error. Please try again later.",
-          code: err.code,
-        } as ServerActionError;
-      } else {
-        return { error: "There was an error. Please try again later." } as ServerActionError;
+        const queryResult = await retrieveSubmissions(formID, ids);
+
+        if (!queryResult) {
+          throw new FormBuilderError(
+            "Error retrieving submissions",
+            FormServerErrorCodes.DOWNLOAD_RETRIEVE_SUBMISSIONS
+          );
+        }
+
+        const allowGroupsFlag = allowGrouping();
+        // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
+        const responses = queryResult
+          .sort((a, b) => a.createdAt - b.createdAt)
+          .map((item) => {
+            const filteredSubmissionData = JSON.parse(String(item.formSubmission));
+            // Remove ignored keys from the submission data
+            Object.keys(filteredSubmissionData).forEach((key) => {
+              if (IGNORED_KEYS.includes(key)) {
+                delete filteredSubmissionData[key];
+              }
+            });
+            const submission = Object.entries(filteredSubmissionData).map(
+              ([questionId, answer]) => {
+                const question = fullFormTemplate.form.elements.find(
+                  (element) => element.id === Number(questionId)
+                );
+
+                // Handle Dynamic Rows
+                if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
+                  return {
+                    questionId: question.id,
+                    type: question?.type,
+                    questionEn: question?.properties.titleEn,
+                    questionFr: question?.properties.titleFr,
+                    answer: answer.map((item) => {
+                      return Object.values(item).map((value, index) => {
+                        if (question?.properties.subElements) {
+                          // Filter out richText elements from subElements since we access them by index
+                          const subQuestions = question?.properties.subElements.filter(
+                            (subElement) => {
+                              return subElement.type !== FormElementTypes.richText;
+                            }
+                          );
+
+                          // The question does not exist for the given index.
+                          // This can happen on Draft forms when a dynamic row is modified
+                          // after a submission and the submission is subsequently downloaded.
+                          if (!subQuestions.length || !subQuestions[index]) {
+                            // If this happens on a published form, we should log it
+                            if (fullFormTemplate.isPublished) {
+                              logMessage.error(
+                                `Dynamic row submission for form ${formID} has an invalid index ${index} for subQuestions.`
+                              );
+                            }
+
+                            return {
+                              questionId: index,
+                              type: "-",
+                              questionEn: "-",
+                              questionFr: "-",
+                              answer: value as string,
+                            };
+                          }
+
+                          const subQuestion = subQuestions[index];
+
+                          return {
+                            questionId: subQuestion.id,
+                            type: subQuestion.type,
+                            questionEn: subQuestion.properties.titleEn,
+                            questionFr: subQuestion.properties.titleFr,
+                            answer: getAnswerAsString(subQuestion, value),
+                            ...(subQuestion.type === "formattedDate" && {
+                              dateFormat: subQuestion.properties.dateFormat,
+                            }),
+                          };
+                        }
+                      });
+                    }),
+                  } as Answer;
+                }
+
+                // Handle "Split" AddressComplete in a similiar manner to dynamic fields.
+                if (
+                  question?.type === FormElementTypes.addressComplete &&
+                  question.properties.addressComponents?.splitAddress === true
+                ) {
+                  const addressObject = JSON.parse(answer as string) as AddressElements;
+
+                  const questionComponents = question.properties
+                    .addressComponents as AddressComponents;
+                  if (questionComponents.canadianOnly) {
+                    addressObject.country = "CAN";
+                  }
+
+                  const extraTranslations = {
+                    streetAddress: {
+                      en: tEn("addressComponents.streetAddress"),
+                      fr: tFr("addressComponents.streetAddress"),
+                    },
+                    city: {
+                      en: tEn("addressComponents.city"),
+                      fr: tFr("addressComponents.city"),
+                    },
+                    province: {
+                      en: tEn("addressComponents.province"),
+                      fr: tFr("addressComponents.province"),
+                    },
+                    postalCode: {
+                      en: tEn("addressComponents.postalCode"),
+                      fr: tFr("addressComponents.postalCode"),
+                    },
+                    country: {
+                      en: tEn("addressComponents.country"),
+                      fr: tFr("addressComponents.country"),
+                    },
+                  };
+
+                  const reviewElements = getAddressAsAnswerElements(
+                    question,
+                    addressObject,
+                    extraTranslations
+                  );
+
+                  const addressElements = [reviewElements];
+
+                  return {
+                    questionId: question.id,
+                    type: FormElementTypes.address,
+                    questionEn: question?.properties.titleEn,
+                    questionFr: question?.properties.titleFr,
+                    answer: addressElements,
+                  } as Answer;
+                }
+
+                // return the final answer object
+                return {
+                  questionId: question?.id,
+                  type: question?.type,
+                  questionEn: question?.properties.titleEn,
+                  questionFr: question?.properties.titleFr,
+                  answer: getAnswerAsString(question, answer),
+                  ...(question?.type === "formattedDate" && {
+                    dateFormat: question.properties.dateFormat,
+                  }),
+                } as Answer;
+              }
+            );
+
+            let sorted: Answer[];
+            if (allowGroupsFlag && formHasGroups(fullFormTemplate.form)) {
+              sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
+            } else {
+              sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
+            }
+
+            return {
+              id: item.name,
+              createdAt: parseInt(item.createdAt.toString()),
+              confirmationCode: item.confirmationCode,
+              answers: sorted,
+            };
+          }) as FormResponseSubmissions["submissions"];
+
+        if (!responses.length) {
+          throw new FormBuilderError(
+            "No responses found.",
+            FormServerErrorCodes.NO_RESPONSES_FOUND
+          );
+        }
+
+        const formResponse = {
+          formRecord: fullFormTemplate,
+          submissions: responses,
+        } as FormResponseSubmissions;
+
+        const responseIdStatusArray = queryResult.map((item) => {
+          return {
+            id: item.name,
+            status: item.status,
+            createdAt: item.createdAt,
+          };
+        });
+
+        await updateLastDownloadedBy(responseIdStatusArray, formID);
+        await logDownload(responseIdStatusArray, format, session.user.id);
+
+        switch (format) {
+          case DownloadFormat.CSV:
+            return {
+              receipt: await htmlAggregatedTransform(formResponse, lang),
+              responses: csvTransform(formResponse),
+            };
+          case DownloadFormat.HTML_AGGREGATED:
+            return await htmlAggregatedTransform(formResponse, lang);
+
+          case DownloadFormat.HTML:
+            return await htmlTransform(formResponse);
+
+          case DownloadFormat.HTML_ZIPPED: {
+            return await zipTransform(formResponse, lang);
+          }
+
+          case DownloadFormat.JSON:
+            return {
+              receipt: await htmlAggregatedTransform(formResponse, lang),
+              responses: jsonTransform(formResponse),
+            };
+
+          default:
+            throw new FormBuilderError(
+              `Invalid format: ${format}`,
+              FormServerErrorCodes.DOWNLOAD_INVALID_FORMAT
+            );
+        }
+      } catch (err) {
+        logMessage.warn(
+          `Could not create submissions in format ${format} formId: ${formID}: ${
+            (err as Error).message
+          }`
+        );
+
+        if (err instanceof FormBuilderError) {
+          return {
+            error: "There was an error. Please try again later.",
+            code: err.code,
+          } as ServerActionError;
+        } else {
+          return { error: "There was an error. Please try again later." } as ServerActionError;
+        }
       }
-    }
+    });
   }
 );
 
 export const confirmSubmissionCodes = AuthenticatedAction(
   async (_, confirmationCodes: string[], formId: string) => {
-    try {
-      return confirmResponses(confirmationCodes, formId);
-    } catch (e) {
-      logMessage.warn(
-        `Error confirming submission codes for formId ${formId}: ${(e as Error).message}`
-      );
-      // Throw sanitized error back to client
-      throw new Error("There was an error. Please try again later.");
-    }
+    return traceFunction("confirmResponseWithCodes", async () => {
+      try {
+        return confirmResponses(confirmationCodes, formId);
+      } catch (e) {
+        logMessage.warn(
+          `Error confirming submission codes for formId ${formId}: ${(e as Error).message}`
+        );
+        // Throw sanitized error back to client
+        throw new Error("There was an error. Please try again later.");
+      }
+    });
   }
 );
 

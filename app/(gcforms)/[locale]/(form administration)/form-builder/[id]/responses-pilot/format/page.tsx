@@ -13,7 +13,7 @@ export async function generateMetadata(props: {
 
   const { t } = await serverTranslation("form-builder-responses", { lang: locale });
   return {
-    title: `${t("responsesBeta.pageTitle")} — ${t("gcForms")}`,
+    title: `${t("responsesPilot.pageTitle")} — ${t("gcForms")}`,
   };
 }
 

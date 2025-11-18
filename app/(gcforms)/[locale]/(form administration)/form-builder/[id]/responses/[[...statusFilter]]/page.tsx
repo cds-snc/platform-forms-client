@@ -8,7 +8,7 @@ import { ResponsesContainer } from "./components/ResponsesContainer";
 import { redirect } from "next/navigation";
 import { StatusFilter } from "./types";
 import { getOverdueTemplateIds } from "@lib/overdue";
-import { isResponsesBetaModeEnabled } from "../actions";
+import { isResponsesPilotModeEnabled } from "../actions";
 import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
 import { getFullTemplateByID } from "@root/lib/templates";
@@ -122,12 +122,12 @@ export default async function Page(props: {
   const template = await getFullTemplateByID(id);
   const isEmailDelivery = template?.deliveryOption?.emailAddress !== undefined;
 
-  // Check if user has responses-beta mode enabled via cookie and has access
-  const betaModeEnabled = await isResponsesBetaModeEnabled();
+  // Check if user has responses-pilot mode enabled via cookie and has access
+  const betaModeEnabled = await isResponsesPilotModeEnabled();
   if (betaModeEnabled && session) {
-    const hasAccess = await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesBeta);
+    const hasAccess = await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesPilot);
     if (hasAccess && !isEmailDelivery) {
-      redirect(`/${locale}/form-builder/${id}/responses-beta`);
+      redirect(`/${locale}/form-builder/${id}/responses-pilot`);
     }
   }
 
