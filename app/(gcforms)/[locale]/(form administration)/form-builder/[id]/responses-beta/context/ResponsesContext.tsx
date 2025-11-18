@@ -20,7 +20,7 @@ import { useTranslation } from "@root/i18n/client";
 import { ErrorRetreivingSubmissions, TemplateFailed } from "../components/Toasts";
 import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
-import { useApiDebug } from "../lib/useApiDebug";
+// import { useApiDebug } from "../lib/useApiDebug";
 import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
 
@@ -120,7 +120,7 @@ export const ResponsesProvider = ({
   }, []);
 
   // Enable dev console helpers for simulating API errors
-  useApiDebug();
+  // useApiDebug();
 
   const retrieveResponses = useCallback(async () => {
     if (!apiClient) {
