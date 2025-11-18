@@ -86,6 +86,7 @@ export const ResponsesContainer = ({
   return (
     <>
       <div className="mr-10">
+        <h1>{t("responses.title")}</h1>
         <ResponseBetaLink formId={id} className="mb-8 block" />
         <NavigationTabs formId={id} />
         <Responses
