@@ -11,7 +11,7 @@ export async function generateMetadata(props: {
 
   const { t } = await serverTranslation("form-builder-responses", { lang: locale });
   return {
-    title: `${t("responsesBeta.pageTitle")} — ${t("gcForms")}`,
+    title: `${t("responsesPilot.pageTitle")} — ${t("gcForms")}`,
   };
 }
 
@@ -72,7 +72,7 @@ export default async function Page(props: {
         </ol>
       </div>
 
-      <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-beta/load-key`}>
+      <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-pilot/load-key`}>
         {t("startPage.nextButton")}
       </LinkButton.Primary>
     </div>

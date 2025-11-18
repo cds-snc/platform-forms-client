@@ -11,7 +11,7 @@ export function LocationGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!directoryHandle) {
-      router.replace(`/${locale}/form-builder/${formId}/responses-beta/location`);
+      router.replace(`/${locale}/form-builder/${formId}/responses-pilot/location`);
     }
   }, [directoryHandle, locale, formId, router]);
 

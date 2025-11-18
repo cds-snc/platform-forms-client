@@ -31,7 +31,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   }, []);
 
   const handleGoBack = () => {
-    router.push(`/${locale}/form-builder/${id}/responses-beta?reset=true`);
+    router.push(`/${locale}/form-builder/${id}/responses-pilot?reset=true`);
   };
 
   const handleSelectNewLocation = () => {
@@ -41,7 +41,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     setInterrupt(false);
 
     // navigate to location selection with reset param
-    router.push(`/${locale}/form-builder/${id}/responses-beta/location?reset=true`);
+    router.push(`/${locale}/form-builder/${id}/responses-pilot/location?reset=true`);
   };
 
   const handleDownload = async () => {
@@ -54,7 +54,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
     processResponses(initialResponses);
 
-    router.push(`/${locale}/form-builder/${id}/responses-beta/processing`);
+    router.push(`/${locale}/form-builder/${id}/responses-pilot/processing`);
   };
 
   if (hasCheckedForResponses) {
