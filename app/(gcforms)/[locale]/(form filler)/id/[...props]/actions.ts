@@ -10,11 +10,13 @@ import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { dateHasPast } from "@lib/utils";
-import { validateOnSubmit } from "@gcforms/core";
+import { validateVisibleElements } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
 import { sendNotifications } from "@lib/notifications";
 import { traceFunction } from "@lib/otel";
 
+import { MissingFormDataError } from "./lib/client/exceptions";
+import { valuesMatchErrorContainsElementType } from "@gcforms/core";
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function isFormClosed(formId: string): Promise<boolean> {
@@ -65,8 +67,8 @@ export async function submitForm(
           return {
             id: formId,
             error: {
-              name: FormStatus.FORM_CLOSED_ERROR,
-              message: "Form is closed",
+              name: FormStatus.CAPTCHA_VERIFICATION_ERROR,
+              message: "Captcha verification failure",
             },
           };
         }
@@ -77,20 +79,32 @@ export async function submitForm(
       /**
        * This validation runs the client-side validation on the server.
        */
-      const validateOnSubmitResult = validateOnSubmit(values, {
+      const validateOnSubmitResult = validateVisibleElements(values, {
         formRecord: template,
         t: t,
       });
 
-      if (Object.keys(validateOnSubmitResult).length !== 0) {
+      if (Object.keys(validateOnSubmitResult.errors).length !== 0) {
         logMessage.info(
           `[server-action][submitForm] Detected validation errors on form ${formId}. Errors: ${JSON.stringify(
             validateOnSubmitResult
           )}`
         );
-        // Keeping in "passive mode" for now.
+
+        // 👉 Keeping in "passive mode" for now.
         // Uncomment following line to throw validation error from server.
         // throw new MissingFormDataError("Form data validation failed");
+      }
+
+      // ⚠️ Specifically catch file input errors
+      if (validateOnSubmitResult.valueMatchErrors) {
+        const hasFileInputErrors = valuesMatchErrorContainsElementType(
+          validateOnSubmitResult.valueMatchErrors,
+          "fileInput"
+        );
+        if (hasFileInputErrors) {
+          throw new MissingFormDataError("Form data validation failed due to file input errors");
+        }
       }
 
       const formData = normalizeFormResponses(template, values);

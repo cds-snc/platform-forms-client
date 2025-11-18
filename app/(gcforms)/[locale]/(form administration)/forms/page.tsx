@@ -20,6 +20,7 @@ export type FormsTemplate = {
   deliveryOption: DeliveryOption;
   name: string;
   isPublished: boolean;
+  ttl: Date | null;
   date: string;
   url: string;
   overdue: boolean;
@@ -59,6 +60,7 @@ export default async function Page(props: {
     const options: TemplateOptions = {
       requestedWhere: {
         isPublished: status === "published" ? true : status === "draft" ? false : undefined,
+        ttl: status === "archived" ? { not: null } : null,
       },
       sortByDateUpdated: "desc",
     };
@@ -70,6 +72,7 @@ export default async function Page(props: {
         deliveryOption = { emailAddress: "" },
         isPublished,
         updatedAt,
+        ttl,
       } = template;
       return {
         id,
@@ -81,6 +84,7 @@ export default async function Page(props: {
         date: updatedAt ?? Date.now().toString(),
         url: `/${locale}/id/${id}`,
         overdue: false,
+        ttl: ttl ? new Date(ttl) : null,
       };
     });
 
@@ -118,6 +122,12 @@ export default async function Page(props: {
           <NewFormButton />
         </div>
         <ResumeEditingForm />
+        {status == "archived" && (
+          <div>
+            {t("archivedNotice")}&nbsp;
+            <strong>{t("archivedNotice2")}</strong>
+          </div>
+        )}
         <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} />
       </div>
     );

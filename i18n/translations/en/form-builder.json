@@ -10,11 +10,11 @@
       "label": "Allowable file types",
       "documents": {
         "label": "Documents",
-        "description": "pdf, txt, doc, docx, xml"
+        "description": "pdf, txt, doc, docx"
       },
       "images": {
         "label": "Images",
-        "description": "jpg, jpeg, png, svg"
+        "description": "jpg, jpeg, png"
       },
       "spreadsheets": {
         "label": "Spreadsheets",
@@ -206,18 +206,11 @@
     "fileInputDefault": {
       "text1": "A way to add supporting documentation.",
       "text1x": "⚠️ You must",
-      "text2": "set  your response delivery to API",
+      "text2": "have an API key configured for data retrieval",
       "text3": "to use this form element."
     },
     "fileInputWithApi": {
-      "description": "A way to add supporting documentation.",
-      "trialFeature": {
-        "title": "Beta feature",
-        "text1": "This trial feature is limited and requires:",
-        "bullet1": "Retrieval of form responses via API",
-        "bullet2": "Files to be scanned for malicious content once submitted",
-        "bullet3": "Collecting contact information in case you need to follow up about files"
-      }
+      "description": "A way to add supporting documentation."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "What is your name?",
@@ -465,9 +458,9 @@
   "formattedDate": "Date",
   "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
-    "title": "Sign off on the removal of responses before deleting form",
+    "title": "You must retrieve all responses before archiving this form.",
     "message1": "This form has been published and is receiving responses. You have responses to download and sign off for removal from GC Forms.",
-    "message2": "Before deleting this form:",
+    "message2": "Before archiving this form:",
     "message3": "1. Download all responses.",
     "message4": "2. Confirm the receipt of downloaded responses by signing off on their removal from GC Forms.",
     "cta": "Go to responses"
@@ -477,31 +470,25 @@
     "somethingWentWrong": "Something went wrong",
     "downloadButtonText": "Download a copy",
     "draft": {
-      "message1": "Deleting a form cannot be undone. Your form will be removed permanently.",
-      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create the form later."
+      "message1": "Archiving will move this form to the “Archived” section of your forms.",
+      "message2": "This form will be available to restore from the archive folder for 30 days before being deleted permanently.",
+      "message3": "Download a copy of the form file for your records. You can upload it again in GC Forms to re-create the form later."
     },
-    "okay": "Delete form",
+    "okay": "Archive form",
     "published": {
-      "message1": "Deleting a form cannot be undone. Your published form will be removed from the Internet, potentially creating broken links.",
-      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create a new form with new URL links.",
-      "message3": "Before deleting your form, make sure you remove any public links leading to this form. This avoids sending people to a dead end. To stop submissions, you might instead consider closing the form in Settings."
+      "message1": "Archiving will move this published form to the “Archived” section of your forms.",
+      "message2": "Archive and duplicate your form, to create a new draft from the archived form that can be edited as a new version. The older version will temporarily remain available in the archive folder.",
+      "message3": "You can restore an old form from the archive folder within 30 days of archiving your form. After 30 days your form will be deleted permanently, this cannot be undone."
     },
-    "title": "Delete this form?"
+    "title": "Archive this form?"
   },
   "formDeletedDialogMessage": "Form deleted",
   "formDeletedDialogMessageFailed": "Failed to delete form",
   "formDeletedResponsesExist": "The form could not be deleted. Ensure there are no new responses and try again.",
-  "formDeletedDialogTitle": "Success",
-  "formDeleteDialogTitleFailed": "Error",
   "formDownload": {
     "description": "Keep a version stored locally on your computer or use this file to share a draft in progress.",
     "downloadBtnText": "Download form file",
     "title": "Get a copy of your form"
-  },
-  "switchToApiMode": {
-    "title": "Switch to API delivery",
-    "description": "New responses will be available through the API endpoint",
-    "btnText": "Switch to API delivery"
   },
   "formIntroduction": "Form introduction",
   "formInvalidProperty": "Invalid: {{property}}",
@@ -519,8 +506,8 @@
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
-  "hasFileInputAndApiDelivery": "API delivery enabled",
-  "hasFileInputAndApiDeliveryNote": "Required when using file upload",
+  "hasFileInputAndApiDelivery": "Retrieving responses from API endpoint",
+  "hasFileInputAndApiDeliveryNote": "API key required when using file upload",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -841,9 +828,6 @@
       }
     }
   },
-  "settingsDeleteButton": "Delete",
-  "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
-  "settingsDeleteTitle": "Delete form",
   "settingsInvalidEmailAlertDesc1": "Must be a Government of Canada email address.",
   "settingsInvalidEmailAlertDesc2": "to register email address.",
   "settingsInvalidEmailAlertTitle": "Government email address",
@@ -1444,6 +1428,6 @@
     "loadingError": "This form contains a 'beta' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
   },
   "fileUploadApiWarning": {
-    "text": "Delivery method is not set to API."
+    "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
   }
 }

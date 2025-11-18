@@ -3,11 +3,14 @@
   "nav": {
     "drafts": "Drafts",
     "published": "Published",
-    "all": "All"
+    "all": "All",
+    "archived": "Archived"
   },
   "actions": {
     "resumeForm": "Resume editing form",
-    "createNewForm": "Create new form"
+    "createNewForm": "Create new form",
+    "unarchiveForm": "Restore form",
+    "duplicatePublishedForm": "Duplicate to edit and republish"
   },
   "cards": {
     "noForms": "You have no forms.",
@@ -17,13 +20,17 @@
   "card": {
     "states": {
       "draft": "Draft",
-      "published": "Published"
+      "published": "Published",
+      "archived": "Archived"
     },
     "title": {
       "notTranslatedEn": "No English translation",
       "notTranslatedFr": "No French translation"
     },
     "lastEdited": "Last edited",
+    "deleteDate": " Delete date: ",
+    "deletedIn": "Will be deleted in ",
+    "days": " days",
     "deliveryOption": {
       "email": "Responses get sent to:",
       "vault": "Responses page"
@@ -36,6 +43,7 @@
       "edit": "Edit",
       "settings": "Settings",
       "delete": "Delete",
+      "archive": "Archive",
       "coppiedToClipboard": "Copied to clipboard",
       "somethingWentWrong": "Something went wrong",
       "clone": "Duplicate",
@@ -96,6 +104,9 @@
   "navLabel": "Forms navigation",
   "errors": {
     "formDownloadNotExist": "The form you are trying to download does not exist.",
-    "formDownloadFailed": "Failed to download the form."
-  }
+    "formDownloadFailed": "Failed to download the form.",
+    "formUnarchiveFailed": "Failed to restore the form."
+  },
+  "archivedNotice": "You can access archived forms for 30 days.",
+  "archivedNotice2": "After that, forms will be permanently deleted."
 }

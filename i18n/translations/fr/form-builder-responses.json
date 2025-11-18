@@ -80,8 +80,9 @@
     "viewAllProblemResponses": "Afficher les réponses signalées"
   },
   "responsesBeta": {
-    "pageTitle": "Réponses bêta",
-    "responsesBetaLink": "Essayer les réponses bêta"
+    "pageTitle": "Réponses (Bêta - Fonctionnalité à l'essai)",
+    "responsesBetaLink": "Essayer les nouvelles Réponses (Pilote)",
+    "responsesSwitchLink": "Revenir à l'affichage classique des Réponses"
   },
   "supportWillContact": "L’équipe de soutien vous contactera",
   "reportedAsProblem": "Réponse signalée avec problème",

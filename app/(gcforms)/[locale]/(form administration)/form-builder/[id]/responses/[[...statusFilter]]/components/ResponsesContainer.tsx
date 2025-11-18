@@ -10,6 +10,7 @@ import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 import { StatusFilter } from "../types";
 import { useTranslation } from "@i18n/client";
 import { ManageFormAccessButton } from "./ManageFormAccessDialog/ManageFormAccessButton";
+import { ResponseBetaLink } from "./ResponseBetaLink";
 
 export const ResponsesContainer = ({
   hasOverdue,
@@ -42,13 +43,17 @@ export const ResponsesContainer = ({
       <>
         <div className="mr-10">
           <div className="mb-4 flex justify-between">
-            <h1>{t("apiDashboard.title")}</h1>
+            <div>
+              <h1>{t("apiDashboard.title")}</h1>
+              <ResponseBetaLink formId={id} className="mb-8 block" />
+            </div>
             {isPublished && (
               <div>
                 <ManageFormAccessButton />
               </div>
             )}
           </div>
+
           <Responses
             hasOverdue={hasOverdue}
             statusFilter={statusFilter}
@@ -81,6 +86,8 @@ export const ResponsesContainer = ({
   return (
     <>
       <div className="mr-10">
+        <h1>{t("responses.title")}</h1>
+        <ResponseBetaLink formId={id} className="mb-8 block" />
         <NavigationTabs formId={id} />
         <Responses
           hasOverdue={hasOverdue}
