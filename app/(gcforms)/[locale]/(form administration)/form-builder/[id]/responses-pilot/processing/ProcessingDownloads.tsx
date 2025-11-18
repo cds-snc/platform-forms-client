@@ -26,7 +26,7 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   useEffect(() => {
     if (processingCompleted) {
       const timer = setTimeout(() => {
-        router.push(`/${locale}/form-builder/${id}/responses-beta/result`);
+        router.push(`/${locale}/form-builder/${id}/responses-pilot/result`);
       }, 2000); // 2 seconds delay
 
       return () => clearTimeout(timer); // Cleanup on unmount or if processingCompleted changes
@@ -58,7 +58,7 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
     await new Promise((resolve) => setTimeout(resolve, INTERRUPT_CLEANUP_DELAY_MS));
 
     // Now navigate
-    router.push(`/${locale}/form-builder/${id}/responses-beta/result`);
+    router.push(`/${locale}/form-builder/${id}/responses-pilot/result`);
   }, [setInterrupt, resetNewSubmissions, router, locale, id, isNavigating]);
 
   return (

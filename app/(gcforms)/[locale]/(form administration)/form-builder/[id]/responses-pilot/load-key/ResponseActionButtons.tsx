@@ -12,12 +12,12 @@ export const ResponseActionButtons = () => {
 
   const handleBack = () => {
     resetState();
-    router.push(`/${locale}/form-builder/${formId}/responses-beta`);
+    router.push(`/${locale}/form-builder/${formId}/responses-pilot`);
   };
 
   const handleNext = () => {
     // clean api client state before proceeding
-    router.push(`/${locale}/form-builder/${formId}/responses-beta/location`);
+    router.push(`/${locale}/form-builder/${formId}/responses-pilot/location`);
   };
 
   return (

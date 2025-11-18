@@ -32,7 +32,7 @@ export default async function ResponsesLayout(props: {
     );
   }
 
-  const hasAccess = await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesBeta);
+  const hasAccess = await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesPilot);
 
   const template = await getFullTemplateByID(id);
   const isEmailDelivery = template?.deliveryOption?.emailAddress !== undefined;
