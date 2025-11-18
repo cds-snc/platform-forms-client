@@ -14,7 +14,6 @@ export const ResponseBetaLink = ({ formId, className }: { formId: string; classN
   const { t, i18n } = useTranslation("form-builder-responses");
   const { getFlag } = useFeatureFlags();
   const responsesBetaEnabled = getFlag(FeatureFlags.responsesBeta);
-  // const router = useRouter();
 
   const handleResponsesBetaClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
