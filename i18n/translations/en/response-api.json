@@ -35,7 +35,7 @@
   },
   "loadKeyPage": {
     "title": "Upload your API key file",
-    "detail": "Upload the API key you generated in Settings (JSON file) to get access to your form's responses.",
+    "detail": "Upload the API key you generated in Settings to get access to all your form's available responses in one download. Make sure to unzip the folder that contains the JSON file.",
     "chooseFileButton": "Upload API Key",
     "noNewResponsesAvailable": "No new responses",
     "noNewResponsesDetail": "There are currently no new responses for this form.",
