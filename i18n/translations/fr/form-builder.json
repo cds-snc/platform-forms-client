@@ -1433,7 +1433,7 @@
   "en": "English",
   "fr": "Français",
   "beta": {
-    "tag": "Pilote :",
+    "tag": "Nouveauté :",
     "text": "Fonctionnalité à l'essai",
     "loadingError": "Ce formulaire contient un composant « pilote » qui n'est pas encore disponible pour tous les utilisateurs. Pour en savoir plus sur cette fonctionnalité limitée, veuillez contacter l'équipe de soutien."
   },
