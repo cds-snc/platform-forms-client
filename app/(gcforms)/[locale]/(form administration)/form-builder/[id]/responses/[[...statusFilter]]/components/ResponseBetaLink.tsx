@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import { cn } from "@lib/utils/";
 
@@ -15,17 +14,16 @@ export const ResponseBetaLink = ({ formId, className }: { formId: string; classN
   const { t, i18n } = useTranslation("form-builder-responses");
   const { getFlag } = useFeatureFlags();
   const responsesBetaEnabled = getFlag(FeatureFlags.responsesBeta);
-  const router = useRouter();
 
   const handleResponsesBetaClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     await enableResponsesBetaMode();
-    router.push(`/${i18n.language}/form-builder/${formId}/responses-beta`);
   };
 
   return (
     responsesBetaEnabled && (
       <Link
+        scroll={false}
         data-testid="responses-beta-link"
         href={`/${i18n.language}/form-builder/${formId}/responses-beta`}
         onClick={handleResponsesBetaClick}
