@@ -84,6 +84,13 @@ export default AuthenticatedPage(
 
     return (
       <div className="w-7/12">
+        <h2>{t("settings.apiIntegration.page.apiKey.title")}</h2>
+        <p className="mb-6">{t("settings.apiIntegration.page.apiKey.description")}</p>
+
+        <ApiKeyButton
+          hasUnconfirmedResponses={hasUnconfirmedResponses}
+          isPublished={template?.isPublished ?? false}
+        />
         <h2>{t("settings.apiIntegration.page.title")}</h2>
         <p className="mb-4">{t("settings.apiIntegration.page.text1")}</p>
 
@@ -95,21 +102,9 @@ export default AuthenticatedPage(
           {t("settings.apiIntegration.page.docsButton.text")}
         </LinkButton.Secondary>
 
-        <h2>
-        {t("settings.apiIntegration.page.apiKey.title")}
-        </h2>
-        <p className="mb-6">{t("settings.apiIntegration.page.apiKey.description")}</p>
-
-        <ApiKeyButton
-          hasUnconfirmedResponses={hasUnconfirmedResponses}
-          isPublished={template?.isPublished ?? false}
-        />
-
         {rate === null ? (
           <div className="mb-10">
-            <h2>
-              {t("settings.apiIntegration.page.apiKey.rateLimit.title")}
-            </h2>
+            <h2>{t("settings.apiIntegration.page.apiKey.rateLimit.title")}</h2>
             <p>
               <strong>{t("settings.apiIntegration.page.apiKey.rateLimit.currentLimit")}</strong>
             </p>
