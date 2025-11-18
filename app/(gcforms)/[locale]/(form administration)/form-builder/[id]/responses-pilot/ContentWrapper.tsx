@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useResponsesContext } from "./context/ResponsesContext";
 import { useRouter } from "next/navigation";
-import { disableResponsesBetaMode } from "../responses/actions";
+import { disableResponsesPilotMode } from "../responses/actions";
 
 export const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
   const { formId } = useResponsesContext();
@@ -13,7 +13,7 @@ export const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
 
   const handleSwitchBack = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    await disableResponsesBetaMode();
+    await disableResponsesPilotMode();
     router.push(`/${i18n.language}/form-builder/${formId}/responses`);
   };
 
@@ -30,12 +30,12 @@ export const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
       <div>
         <div className="mt-4">
           <Link
-            data-testid="responses-beta-switch-back-link"
+            data-testid="responses-pilot-switch-back-link"
             href={`/${i18n.language}/form-builder/${formId}/responses`}
             onClick={handleSwitchBack}
             className="text-black visited:text-black"
           >
-            {t("responsesBeta.responsesSwitchLink")}
+            {t("responsesPilot.responsesSwitchLink")}
           </Link>
         </div>
       </div>

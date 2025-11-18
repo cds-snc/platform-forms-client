@@ -35,7 +35,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
   );
 
   const handleNext = () => {
-    router.push(`/${locale}/form-builder/${id}/responses-beta/format`);
+    router.push(`/${locale}/form-builder/${id}/responses-pilot/format`);
   };
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
     setDirectoryHandle(null);
 
     // remove reset param without adding history
-    const cleanUrl = `/${locale}/form-builder/${id}/responses-beta/location`;
+    const cleanUrl = `/${locale}/form-builder/${id}/responses-pilot/location`;
     router.replace(cleanUrl);
   }, [id, locale, logger, router, searchParams, setDirectoryHandle]);
 
@@ -64,7 +64,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
 
       <div className="flex flex-row gap-4">
         <LinkButton.Secondary
-          href={`/${locale}/form-builder/${id}/responses-beta/load-key?reset=true`}
+          href={`/${locale}/form-builder/${id}/responses-pilot/load-key?reset=true`}
         >
           {t("backButton")}
         </LinkButton.Secondary>

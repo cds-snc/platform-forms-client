@@ -25,7 +25,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
 
     processResponses(initialResponses);
 
-    router.push(`/${locale}/form-builder/${id}/responses-beta/processing`);
+    router.push(`/${locale}/form-builder/${id}/responses-pilot/processing`);
   }, [logger, retrieveResponses, processResponses, router, locale, id]);
 
   const handleFormatChange = useCallback(
@@ -65,7 +65,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
       </div>
       <div className="flex flex-row gap-4">
         <LinkButton.Secondary
-          href={`/${locale}/form-builder/${id}/responses-beta/location?reset=true`}
+          href={`/${locale}/form-builder/${id}/responses-pilot/location?reset=true`}
         >
           {t("backButton")}
         </LinkButton.Secondary>

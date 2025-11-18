@@ -1,6 +1,9 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
-import { SelectApiKey } from "./SelectApiKey";
+import { Confirmation } from "./Confirmation";
+import { ApiClientGuard } from "../guards/ApiClientGuard";
+import { LocationGuard } from "../guards/LocationGuard";
+import { FormatGuard } from "../guards/FormatGuard";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -11,7 +14,7 @@ export async function generateMetadata(props: {
 
   const { t } = await serverTranslation("form-builder-responses", { lang: locale });
   return {
-    title: `${t("responsesBeta.pageTitle")} — ${t("gcForms")}`,
+    title: `${t("responsesPilot.pageTitle")} — ${t("gcForms")}`,
   };
 }
 
@@ -22,5 +25,15 @@ export default async function Page(props: {
   const params = await props.params;
 
   const { locale, id } = params;
-  return <SelectApiKey locale={locale} id={id} />;
+  return (
+    <div>
+      <ApiClientGuard>
+        <LocationGuard>
+          <FormatGuard>
+            <Confirmation locale={locale} id={id} />
+          </FormatGuard>
+        </LocationGuard>
+      </ApiClientGuard>
+    </div>
+  );
 }

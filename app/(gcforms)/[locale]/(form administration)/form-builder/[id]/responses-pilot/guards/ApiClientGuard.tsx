@@ -11,7 +11,7 @@ export function ApiClientGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!apiClient) {
-      router.replace(`/${locale}/form-builder/${formId}/responses-beta/load-key`);
+      router.replace(`/${locale}/form-builder/${formId}/responses-pilot/load-key`);
     }
   }, [apiClient, locale, formId, router]);
 
