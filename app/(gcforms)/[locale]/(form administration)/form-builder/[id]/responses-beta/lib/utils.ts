@@ -3,8 +3,6 @@ import { SignJWT } from "jose";
 
 import type { EncryptedFormSubmission, PrivateApiKey } from "./types";
 
-// import { getSubmissionByFormat } from "./responseRender";
-
 /*
 Import a PEM encoded RSA private key, to use for RSA-PSS signing.
 Takes a string containing the PEM encoded key, and returns a Promise
@@ -58,19 +56,19 @@ export async function getAccessTokenFromApiKey(apiKey: PrivateApiKey): Promise<s
     return Promise.reject(new Error("Zitadel URL is not set."));
   }
 
-  return importPrivateKeySign(apiKey.key).then((privateKey) => {
+  return importPrivateKeySign(apiKey.key).then(async (privateKey) => {
     const jwtSigner = new SignJWT()
       .setProtectedHeader({
         alg: "RS256",
         kid: apiKey.keyId,
       })
-      .setIssuedAt()
+      .setIssuedAt(await serverTime())
       .setIssuer(apiKey.userId)
       .setSubject(apiKey.userId)
       .setAudience(zitadelURL) // Expected audience for the JWT token is the IdP external domain
       .setExpirationTime("1 minute"); // long enough for the introspection to happen
 
-    return jwtSigner.sign(privateKey).then((jwtSignedToken) => {
+    return jwtSigner.sign(privateKey).then(async (jwtSignedToken) => {
       return axios
         .post(
           `${zitadelURL}/oauth/v2/token`,
@@ -131,4 +129,13 @@ export const decryptFormSubmission = async (
   );
 
   return new TextDecoder().decode(decryptedData);
+};
+
+const serverTime = async () => {
+  const response = await axios.get("/api/timecheck");
+  const { serverTime }: { serverTime?: number } = response.data;
+  if (!serverTime) {
+    throw new Error("Could not retrieve server time for Access Token creation");
+  }
+  return serverTime;
 };
