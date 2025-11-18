@@ -8,6 +8,8 @@ import { writeHtml } from "./htmlWriter";
 import { writeRow } from "./csvWriter";
 import { TFunction } from "i18next";
 import { md5 } from "hash-wasm";
+import { withRetry } from "@root/lib/utils/retry";
+import { ResponseDownloadLogger } from "./logger";
 
 export const processResponse = async ({
   setProcessedSubmissionIds,
@@ -21,6 +23,7 @@ export const processResponse = async ({
   formId,
   formTemplate,
   t,
+  logger,
 }: {
   setProcessedSubmissionIds: React.Dispatch<React.SetStateAction<Set<string>>>;
   workingDirectoryHandle: FileSystemDirectoryHandle;
@@ -33,12 +36,14 @@ export const processResponse = async ({
   formId: string;
   formTemplate: FormProperties;
   t: TFunction<string | string[], undefined>;
+  logger: ResponseDownloadLogger;
 }) => {
   const confirmedResponse = await downloadAndConfirmResponse({
     workingDirectoryHandle,
     apiClient,
     decryptionKey,
     responseName: responseName,
+    logger,
   });
 
   switch (selectedFormat) {
@@ -83,18 +88,40 @@ const downloadAndConfirmResponse = async ({
   apiClient,
   decryptionKey,
   responseName,
+  logger,
 }: {
   workingDirectoryHandle: FileSystemDirectoryHandle;
   apiClient: GCFormsApiClient;
   decryptionKey: CryptoKey;
   responseName: string;
+  logger: ResponseDownloadLogger;
 }) => {
   // Get or create raw data directory
   const dataDirectoryHandle: FileSystemDirectoryHandle =
     await workingDirectoryHandle.getDirectoryHandle(RAW_RESPONSE_FOLDER, { create: true });
 
   // Retrieve encrypted response from API
-  const encryptedSubmission = await apiClient.getFormSubmission(responseName);
+  const encryptedSubmission = await withRetry(() => apiClient.getFormSubmission(responseName), {
+    maxRetries: 6,
+    onRetry: (attempt, error) => {
+      const cause = error instanceof Error && error.cause ? error.cause : null;
+      logger.info(`Attempt ${attempt} to download submission ${responseName} failed: ${error}`, {
+        cause,
+      });
+    },
+    onFinalFailure: async (error, totalAttempts) => {
+      const cause = error instanceof Error && error.cause ? error.cause : null;
+      logger.error(
+        `Failed to download submission ${responseName} after ${totalAttempts} attempts: ${error}`,
+        { cause }
+      );
+    },
+    isRetryable: (error) => {
+      const err = error as { response?: { status?: number } };
+      // Retry on network errors or 5xx server errors, but not on 4xx client errors
+      return !err.response || (err.response.status !== undefined && err.response.status >= 500);
+    },
+  });
 
   // Decrypt response data
   const decryptedData = await decryptFormSubmission(encryptedSubmission, decryptionKey);
@@ -110,7 +137,7 @@ const downloadAndConfirmResponse = async ({
   await fileStream.close();
 
   // Perform integrity check and confirm submission
-  await integrityCheckAndConfirm(responseName, dataDirectoryHandle, apiClient);
+  await integrityCheckAndConfirm(responseName, dataDirectoryHandle, apiClient, logger);
 
   // check if there are files to download
   if (decryptedResponse.attachments && decryptedResponse.attachments.length > 0) {
@@ -168,7 +195,8 @@ const downloadAttachment = async (
 const integrityCheckAndConfirm = async (
   submissionName: string,
   dataDirectoryHandle: FileSystemDirectoryHandle,
-  apiClient: GCFormsApiClient
+  apiClient: GCFormsApiClient,
+  logger: ResponseDownloadLogger
 ) => {
   try {
     // Load file into memory
@@ -189,7 +217,27 @@ const integrityCheckAndConfirm = async (
     }
 
     // If checksums match, confirm the submission
-    await apiClient.confirmFormSubmission(submissionName, confirmationCode);
+    await withRetry(() => apiClient.confirmFormSubmission(submissionName, confirmationCode), {
+      maxRetries: 6,
+      onRetry: (attempt, error) => {
+        const cause = error instanceof Error && error.cause ? error.cause : null;
+        logger.info(`Attempt ${attempt} to confirm submission ${submissionName} failed: ${error}`, {
+          cause,
+        });
+      },
+      onFinalFailure: async (error, totalAttempts) => {
+        const cause = error instanceof Error && error.cause ? error.cause : null;
+        logger.error(
+          `Failed to confirm submission ${submissionName} after ${totalAttempts} attempts: ${error}`,
+          { cause }
+        );
+      },
+      isRetryable: (error) => {
+        const err = error as { response?: { status?: number } };
+        // Retry on network errors or 5xx server errors, but not on 4xx client errors
+        return !err.response || (err.response.status !== undefined && err.response.status >= 500);
+      },
+    });
   } catch (error) {
     // Delete failed file from the directory
     await dataDirectoryHandle.removeEntry(`${submissionName}.json`);
