@@ -3,13 +3,15 @@ import { v4 as uuid } from "uuid";
 import { md5 } from "hash-wasm";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { managedData } from "../../../lib/managedData";
 
 interface Question {
   id: string;
   type: string;
   properties: {
     subElements: Array<Question>;
-    choices: { en: string; fr: string }[];
+    choices?: { en: string; fr: string }[];
+    managedChoices?: string;
     validation?: {
       required: boolean;
       all?: boolean;
@@ -121,16 +123,33 @@ export const generateResponseForQuestion = (
     case "radio":
     case "combobox":
       // single values only
-      const randomChoice = getRandomInt(question.properties.choices.length - 1);
-      val = question.properties.choices[randomChoice][language];
+      // Check to see if it has managed choices
+      const choiceOptions1 =
+        question.properties.choices ??
+        (question.properties.managedChoices
+          ? managedData[question.properties.managedChoices]
+          : undefined);
+      if (!choiceOptions1) {
+        throw new Error("No Choice Options were provided for generator to select from");
+      }
+      const randomChoice = getRandomInt(choiceOptions1.length - 1);
+      val = choiceOptions1[randomChoice][language];
       break;
     case "checkbox":
       // multiple values possible
+      const choiceOptions2 =
+        question.properties.choices ??
+        (question.properties.managedChoices
+          ? managedData[question.properties.managedChoices]
+          : undefined);
+      if (!choiceOptions2) {
+        throw new Error("No Choice Options were provided for generator to select from");
+      }
       const numberOfCheckedBoxes = question.properties.validation?.all
-        ? question.properties.choices.length
-        : getRandomInt(question.properties.choices.length, 1);
+        ? choiceOptions2.length
+        : getRandomInt(choiceOptions2.length, 1);
       // Copy the array so we don't mutate the original
-      const choicesArray = [...question.properties.choices];
+      const choicesArray = [...choiceOptions2];
 
       val = Array.from({ length: numberOfCheckedBoxes }, () => {
         // get a choice from available choices and remove it from the array so it can't be selected twice
@@ -141,7 +160,12 @@ export const generateResponseForQuestion = (
       break;
 
     case "dynamicRow":
-      const numberOfRows = getRandomInt(question.properties.maxNumberOfRows ?? 10);
+      // Limit the number of rows to always less than 10 but respect the maxNumberOfRows if less than 10
+      const numberOfRows = getRandomInt(
+        (question.properties.maxNumberOfRows && question.properties.maxNumberOfRows < 10
+          ? question.properties.maxNumberOfRows
+          : 10) ?? 10
+      );
       val = Array.from({ length: numberOfRows }, () => {
         const subElementResponses: Record<string, unknown> = {};
         question.properties.subElements.forEach((subQuestion) => {

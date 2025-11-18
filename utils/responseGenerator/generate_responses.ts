@@ -50,7 +50,8 @@ function getValue(query: string) {
 
 function writeWaitingPercent(current: number, total: number) {
   readline.cursorTo(process.stdout, 0);
-  process.stdout.write(`waiting ... ${Math.round((current / total) * 100)}%`);
+  process.stdout.write(`processed ... ${current} / ${total}`);
+  console.info("");
 }
 
 const createResponse = (formTemplate: any) => {
@@ -141,10 +142,10 @@ const main = async () => {
 
     let numOfProcessed = 0;
 
-    console.info("Sending responses to Lambda Submission function.");
-
     for (const chunk of submissions) {
-      await Promise.all(
+      console.info("Sending responses to Lambda Submission function.");
+
+      const chunkLinks = await Promise.all(
         chunk.map(async ({ invokeCommand, fileRefs }) => {
           const lambdaInvokeResponse = await lambdaClient.send(invokeCommand);
           if (lambdaInvokeResponse.StatusCode !== 200 || lambdaInvokeResponse.FunctionError) {
@@ -177,17 +178,29 @@ const main = async () => {
 
             // Upload the files
 
-            await Promise.all(
-              Object.entries(fileURLMap).map(async ([fileId, signedUrl]) => {
-                return uploadFile(fileRefs[fileId], signedUrl);
-              })
-            );
+            return { fileRefs, fileURLMap };
           }
         })
       ).catch((err) => {
         console.error(err);
         throw new Error("Could not process request with Lambda Submission function");
       });
+
+      console.info("Uploading files for responses if required");
+
+      // Process synchronously to not overwhelm the number of connections generated simultaneously
+      for (const submissionLinks of chunkLinks) {
+        if (submissionLinks?.fileRefs && submissionLinks.fileURLMap) {
+          const fileUploads = chunkArray(Object.entries(submissionLinks.fileURLMap), 10);
+          for (const chunk of fileUploads) {
+            await Promise.all(
+              chunk.map(([fileId, signedUrl]) =>
+                uploadFile(submissionLinks.fileRefs[fileId], signedUrl)
+              )
+            );
+          }
+        }
+      }
 
       numOfProcessed += chunk.length;
       writeWaitingPercent(numOfProcessed, numberOfResponses);
