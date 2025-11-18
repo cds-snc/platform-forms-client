@@ -22,7 +22,7 @@
       "stepOf": "Étape {{current}} de {{total}}",
       "uploadKey": {
         "title": "Téléversez votre fichier de clé API.",
-        "detail": "C'est ainsi que vous vous authentifierez en toute sécurité."
+        "detail": "C'est ainsi que vous vous authentifierez en toute sécurité pour obtenir toutes les nouvelles réponses."
       },
       "chooseLocation": {
         "title": "Choisissez un emplacement de téléchargement pour les réponses.",
@@ -36,7 +36,7 @@
   },
   "loadKeyPage": {
     "title": "Téléversez le fichier de clé API",
-    "detail": "Téléversez la clé API générée dans les Paramètres pour accéder aux réponses de votre formulaire.",
+    "detail": "Téléversez la clé API générée dans les Paramètres (fichier JSON) pour accéder aux réponses de votre formulaire.",
     "chooseFileButton": "Téléverser la clé API",
     "noNewResponsesAvailable": "Aucune nouvelle réponse",
     "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
@@ -110,16 +110,16 @@
   "backToStart": "Retourner au début",
   "continueButton": "Continuer",
   "failed-to-load-api-key": "La clé API n'a pas pu être téléversée",
-  "checkForNewResponsesButton": "Vérifier les nouvelles réponses",
+  "checkForNewResponsesButton": "Vérifier s'il y a des nouvelles réponses",
   "checking": "Vérification en cours...",
   "toasts": {
     "rateLimitExceeded": {
-      "title": "Rate limit exceeded",
-      "message": "You have exceeded the number of allowed requests. Please wait before trying again."
+      "title": "Limite de débit dépassée",
+      "message": "Vous avez dépassé le nombre de requêtes autorisées. Veuillez attendre avant de réessayer."
     },
     "unknownError": {
-      "title": "An unknown error occurred",
-      "message": "An unexpected error occurred. Please try again later.",
+      "title": "Quelque chose a mal tourné",
+      "message": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard.",
       "code": "Code d'erreur"
     },
     "errorRetreivingSubmissions": {
