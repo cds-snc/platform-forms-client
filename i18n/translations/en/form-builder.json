@@ -1428,7 +1428,7 @@
     "loadingError": "This form contains a 'Pilot' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
   },
   "pilot": {
-    "tag": "Pilot:",
+    "tag": "New:",
     "text": "Trial feature "
   },
   "fileUploadApiWarning": {
