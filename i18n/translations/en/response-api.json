@@ -35,7 +35,7 @@
   },
   "loadKeyPage": {
     "title": "Upload your API key file",
-    "detail": "Upload the API key you generated in Settings to get access to all your form's available responses in one download. Make sure to unzip the folder that contains the JSON file.",
+    "detail": "Upload the API key you generated in Settings to get access to all your form's available responses in one download. Make sure to unzip the folder that contains the JSON file before uploading",
     "chooseFileButton": "Upload API Key",
     "noNewResponsesAvailable": "No new responses",
     "noNewResponsesDetail": "There are currently no new responses for this form.",
@@ -50,8 +50,8 @@
       "link": "Don't have API key?",
       "lostKeyTip": {
         "title": "Don't have your API key?",
-        "text1": "Only one API key file can be associated to a form at a time.",
-        "text2": "Generate a new API key by going to",
+        "text1": "The API key is needed to access responses for this new feature. This will give you access to a pre-built integration without having to code.",
+        "text2": "Only one API key file can be associated to a form at a time. Generate a new API key by going to",
         "link": " Settings > API integration"
       }
     }
