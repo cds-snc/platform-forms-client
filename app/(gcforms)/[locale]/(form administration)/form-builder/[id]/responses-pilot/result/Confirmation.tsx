@@ -28,6 +28,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
   const handleCheckResponses = useCallback(() => {
     setHasCheckedForResponses(true);
+    setProcessingCompleted(false);
   }, []);
 
   const handleGoBack = () => {
@@ -37,7 +38,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   const handleSelectNewLocation = () => {
     // reset relevant state
     setProcessedSubmissionIds(new Set());
-    setProcessingCompleted(true);
+    setProcessingCompleted(false);
     setInterrupt(false);
 
     // navigate to location selection with reset param
@@ -47,7 +48,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   const handleDownload = async () => {
     // reset relevant state
     setProcessedSubmissionIds(new Set());
-    setProcessingCompleted(true);
+    setProcessingCompleted(false);
     setInterrupt(false);
 
     const initialResponses = await retrieveResponses();
