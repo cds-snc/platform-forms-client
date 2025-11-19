@@ -1473,6 +1473,10 @@
     "text": "Fonctionnalité à l'essai",
     "loadingError": "Ce formulaire contient un composant « bêta » qui n'est pas encore disponible pour tous les utilisateurs. Pour en savoir plus sur cette fonctionnalité limitée, veuillez contacter l'équipe de soutien."
   },
+  "pilot": {
+    "tag": "Pilote :",
+    "text": "Fonctionnalité à l'essai"
+  },
   "fileUploadApiWarning": {
     "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
   }

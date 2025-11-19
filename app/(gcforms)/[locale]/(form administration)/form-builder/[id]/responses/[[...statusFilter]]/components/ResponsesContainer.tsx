@@ -43,13 +43,17 @@ export const ResponsesContainer = ({
       <>
         <div className="mr-10">
           <div className="mb-4 flex justify-between">
-            <h1>{t("apiDashboard.title")}</h1>
+            <div>
+              <h1>{t("apiDashboard.title")}</h1>
+              <ResponseBetaLink formId={id} className="mb-8 block" />
+            </div>
             {isPublished && (
               <div>
                 <ManageFormAccessButton />
               </div>
             )}
           </div>
+
           <Responses
             hasOverdue={hasOverdue}
             statusFilter={statusFilter}
@@ -57,9 +61,6 @@ export const ResponsesContainer = ({
             overdueAfter={overdueAfter}
             isApiRetrieval={true}
           />
-          <div className="mt-8">
-            <ResponseBetaLink formId={id} />
-          </div>
           <ManageFormAccessDialogContainer formId={id} />
         </div>
       </>
@@ -85,6 +86,8 @@ export const ResponsesContainer = ({
   return (
     <>
       <div className="mr-10">
+        <h1>{t("responses.title")}</h1>
+        <ResponseBetaLink formId={id} className="mb-8 block" />
         <NavigationTabs formId={id} />
         <Responses
           hasOverdue={hasOverdue}
