@@ -72,11 +72,9 @@ const RemovalDateLabel = ({ submission }: { submission: VaultSubmissionOverview 
     };
   }, [submission.formID, submission.name, getRemovalByMessage]);
 
-  if (label === null) {
-    return <Skeleton count={1} className="my-4 ml-4 w-[300px]" />;
-  }
-
-  return <p ref={elementRef}>{label}</p>;
+  return (
+    <p ref={elementRef}>{label === null ? <Skeleton count={1} className="w-[300px]" /> : label}</p>
+  );
 };
 
 export const NextStep = ({
