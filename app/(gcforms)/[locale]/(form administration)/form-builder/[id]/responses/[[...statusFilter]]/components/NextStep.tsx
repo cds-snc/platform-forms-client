@@ -5,7 +5,7 @@ import { ExclamationIcon } from "@serverComponents/icons";
 import React, { useEffect, useState } from "react";
 import { StatusFilter } from "../types";
 import Skeleton from "react-loading-skeleton";
-import { getSubmissionRemovalDate } from "../actions";
+// import { getSubmissionRemovalDate } from "../actions";
 
 const ExclamationText = ({
   text,
@@ -25,9 +25,10 @@ const ExclamationText = ({
 };
 
 const RemovalDateLabel = ({ submission }: { submission: VaultSubmissionOverview }) => {
-  const { t } = useTranslation("form-builder-responses");
-  const [label, setLabel] = useState<string | null>(null);
+  // const { t } = useTranslation("form-builder-responses");
+  const [label] = useState<string | null>(null);
 
+  /*
   const getRemovalByMessage = (removalAt?: Date | number) => {
     const daysLeft = removalAt && getDaysPassed(removalAt);
     if (daysLeft && daysLeft > 0) {
@@ -35,8 +36,10 @@ const RemovalDateLabel = ({ submission }: { submission: VaultSubmissionOverview 
     }
     return "";
   };
+  */
 
   useEffect(() => {
+    /*
     getSubmissionRemovalDate(submission.formID, submission.name).then((value) => {
       if (typeof value === "number") {
         setLabel(getRemovalByMessage(value));
@@ -44,14 +47,18 @@ const RemovalDateLabel = ({ submission }: { submission: VaultSubmissionOverview 
         setLabel("-");
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    */
   }, []);
 
   if (label === null) {
     return <Skeleton count={1} className="my-4 ml-4 w-[300px]" />;
   }
 
-  return <p>{label}</p>;
+  return (
+    <p>
+      {label} name{submission.name}
+    </p>
+  );
 };
 
 export const NextStep = ({
