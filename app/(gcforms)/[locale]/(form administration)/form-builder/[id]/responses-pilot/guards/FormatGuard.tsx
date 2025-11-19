@@ -11,7 +11,7 @@ export function FormatGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!selectedFormat) {
-      router.replace(`/${locale}/form-builder/${formId}/responses-beta/format`);
+      router.replace(`/${locale}/form-builder/${formId}/responses-pilot/format`);
     }
   }, [selectedFormat, locale, formId, router]);
 

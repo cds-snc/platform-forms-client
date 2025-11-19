@@ -6,7 +6,7 @@ import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
 import { redirect } from "next/navigation";
 import { ResponsesProvider } from "./context/ResponsesContext";
 import { ContentWrapper } from "./ContentWrapper";
-import { BetaBadge } from "@root/components/clientComponents/globals/BetaBadge";
+import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { CompatibilityGuard } from "./guards/CompatibilityGuard";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { getFullTemplateByID } from "@root/lib/templates";
@@ -32,7 +32,7 @@ export default async function ResponsesLayout(props: {
     );
   }
 
-  const hasAccess = await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesBeta);
+  const hasAccess = await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesPilot);
 
   const template = await getFullTemplateByID(id);
   const isEmailDelivery = template?.deliveryOption?.emailAddress !== undefined;
@@ -46,7 +46,7 @@ export default async function ResponsesLayout(props: {
     <ResponsesProvider locale={locale} formId={id}>
       <CompatibilityGuard>
         <h1 className="mb-4">{t("section-title")}</h1>
-        <BetaBadge className="mb-8" />
+        <PilotBadge className="mb-8" />
         <ContentWrapper>{props.children}</ContentWrapper>
       </CompatibilityGuard>
     </ResponsesProvider>

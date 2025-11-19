@@ -79,9 +79,9 @@
     },
     "viewAllProblemResponses": "View reported responses"
   },
-  "responsesBeta": {
+  "responsesPilot": {
     "pageTitle": "Responses (Beta - Trial Feature)",
-    "responsesBetaLink": "Try out the new Responses (Pilot)",
+    "responsesPilotLink": "Try out the new Responses (Pilot)",
     "responsesSwitchLink": "Switch back to the classic Responses view"
   },
   "supportWillContact": "Support will contact you",
