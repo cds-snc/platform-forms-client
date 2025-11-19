@@ -43,7 +43,7 @@ interface ResponsesContextType {
     format?: "csv" | "html"
   ) => Promise<void>;
   processingCompleted: boolean;
-  setProcessingCompleted: Dispatch<SetStateAction<boolean>>;
+  resetProcessingCompleted: () => void;
   selectedFormat: string;
   setSelectedFormat: Dispatch<SetStateAction<string>>;
   interrupt: boolean;
@@ -148,10 +148,9 @@ export const ResponsesProvider = ({
     setNewFormSubmissions([]);
   };
 
-  // const onInterrupt = () => {
-  //   logger.info("Processing interrupted by user");
-  //   setNewFormSubmissions([]);
-  // }
+  const resetProcessingCompleted = () => {
+    setProcessingCompleted(false);
+  };
 
   const processResponses = useCallback(
     async (initialSubmissions?: NewFormSubmission[]) => {
@@ -277,7 +276,7 @@ export const ResponsesProvider = ({
     setDirectoryHandle(null);
     setNewFormSubmissions(null);
     setProcessedSubmissionIds(new Set());
-    setProcessingCompleted(false);
+    resetProcessingCompleted();
     setSelectedFormat("csv");
     setInterrupt(false);
     interruptRef.current = false;
@@ -301,7 +300,7 @@ export const ResponsesProvider = ({
         setProcessedSubmissionIds,
         processResponses,
         processingCompleted,
-        setProcessingCompleted,
+        resetProcessingCompleted,
         selectedFormat,
         setSelectedFormat,
         interrupt: isProcessingInterrupted,
