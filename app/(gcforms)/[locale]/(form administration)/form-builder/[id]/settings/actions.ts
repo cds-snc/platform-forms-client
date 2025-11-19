@@ -109,14 +109,6 @@ export const getEventsForForm = AuthenticatedAction(async (session, formId: stri
       };
     });
   } catch (error) {
-    return [
-      {
-        formId: formId,
-        userId: "Error retrieving events",
-        event: "",
-        timestamp: new Date().toISOString().split("T")[0],
-        description: error instanceof Error ? error.message : "Unknown error",
-      },
-    ];
+    return { error: "There was an error. Please try again later." } as ServerActionError;
   }
 });
