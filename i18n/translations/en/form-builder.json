@@ -685,14 +685,14 @@
       },
       "page": {
         "title": "Set up API integration",
-        "text1": "This section is for developers who want to use the API to pull form submission data to a target system. Once set-up, responses can be retrieved from an API endpoint. Visit our documentation site for more information.",
+        "text1": "This section is for developers who want to use the API to pull form submission data to a target system with a custom integration. Once set-up, responses can be retrieved from the API endpoint programmatically. Visit our documentation site for more information.",
         "docsButton": {
           "text": "Go to API documentation",
           "link": "https://cds-snc.github.io/forms-api/home"
         },
         "apiKey": {
           "title": "Retrieve submissions via API",
-          "description": "Having an API key means GC Forms expects form response data to be retrieved via API.",
+          "description": "Having an API key means GC Forms expects form response data to be retrieved from the API endpoint.",
           "rateLimit": {
             "title": "API rate limit",
             "currentLimit": "Current limit:",
@@ -1423,9 +1423,9 @@
   "en": "English",
   "fr": "Français",
   "beta": {
-    "tag": "Beta:",
+    "tag": "New:",
     "text": "Trial feature ",
-    "loadingError": "This form contains a 'beta' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
+    "loadingError": "This form contains a 'Pilot' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
   },
   "pilot": {
     "tag": "Pilot:",
