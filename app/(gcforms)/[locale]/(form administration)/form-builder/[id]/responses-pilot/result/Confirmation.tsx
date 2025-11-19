@@ -20,7 +20,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     retrieveResponses,
     processedSubmissionIds,
     setProcessedSubmissionIds,
-    setProcessingCompleted,
+    resetProcessingCompleted,
     setInterrupt,
     processResponses,
     newFormSubmissions,
@@ -28,7 +28,8 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
   const handleCheckResponses = useCallback(() => {
     setHasCheckedForResponses(true);
-    setProcessingCompleted(false);
+    resetProcessingCompleted();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleGoBack = () => {
@@ -38,7 +39,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   const handleSelectNewLocation = () => {
     // reset relevant state
     setProcessedSubmissionIds(new Set());
-    setProcessingCompleted(false);
+    resetProcessingCompleted();
     setInterrupt(false);
 
     // navigate to location selection with reset param
@@ -48,7 +49,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   const handleDownload = async () => {
     // reset relevant state
     setProcessedSubmissionIds(new Set());
-    setProcessingCompleted(false);
+    resetProcessingCompleted();
     setInterrupt(false);
 
     const initialResponses = await retrieveResponses();
