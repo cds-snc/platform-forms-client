@@ -46,6 +46,29 @@ export const processResponse = async ({
     logger,
   });
 
+  // console.log(confirmedResponse.attachments);
+
+  if (confirmedResponse.attachments) {
+    const attachmentsDirectory = await workingDirectoryHandle.getDirectoryHandle(
+      ATTACHMENTS_FOLDER,
+      { create: true }
+    );
+    const responseAttachmentsDirectory = await attachmentsDirectory.getDirectoryHandle(
+      responseName,
+      { create: true }
+    );
+
+    // Write a mapping file for attachments
+    const mappingFileHandle = await responseAttachmentsDirectory.getFileHandle("mapping.json", {
+      create: true,
+    });
+    const mappingFileStream = await mappingFileHandle.createWritable({ keepExistingData: false });
+    await mappingFileStream.write(
+      JSON.stringify(Object.fromEntries(confirmedResponse.attachments), null, 2)
+    );
+    await mappingFileStream.close();
+  }
+
   switch (selectedFormat) {
     case "html":
       if (!htmlDirectoryHandle) {
@@ -71,6 +94,7 @@ export const processResponse = async ({
         formTemplate,
         csvFileHandle,
         rawAnswers: confirmedResponse.rawAnswers,
+        attachments: confirmedResponse.attachments,
       });
       break;
   }
@@ -82,6 +106,8 @@ export const processResponse = async ({
     return next;
   });
 };
+
+export type ResponseFilenameMapping = Map<string, { originalName: string; actualName: string }>;
 
 const downloadAndConfirmResponse = async ({
   workingDirectoryHandle,
@@ -139,6 +165,8 @@ const downloadAndConfirmResponse = async ({
   // Perform integrity check and confirm submission
   await integrityCheckAndConfirm(responseName, dataDirectoryHandle, apiClient, logger);
 
+  const fileNameMapping: ResponseFilenameMapping = new Map();
+
   // check if there are files to download
   if (decryptedResponse.attachments && decryptedResponse.attachments.length > 0) {
     const attachmentsDirectoryHandle = await workingDirectoryHandle.getDirectoryHandle(
@@ -156,40 +184,81 @@ const downloadAndConfirmResponse = async ({
       }
     );
 
-    await Promise.all(
+    const downloadResults = await Promise.all(
       decryptedResponse.attachments.map((attachment) =>
         downloadAttachment(responseAttachmentsDirectoryHandle, attachment)
       )
     );
+
+    // Build mapping of attachment ID to filenames
+    downloadResults.forEach(({ id, originalName, actualName }) => {
+      fileNameMapping.set(id, { originalName, actualName });
+    });
   }
 
   return {
     submissionId: responseName,
     createdAt: new Date(decryptedResponse.createdAt).toISOString(),
     rawAnswers: JSON.parse(decryptedResponse.answers),
+    attachments: fileNameMapping,
   };
 };
 
 const downloadAttachment = async (
   responseAttachmentsDirectoryHandle: FileSystemDirectoryHandle,
   attachment: CompleteAttachment
-) => {
+): Promise<{ id: string; originalName: string; actualName: string }> => {
   const response = await fetch(attachment.downloadLink);
   // Ensure the fetch was successful
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  // Create UUID folder for each attachment
-  const fileDir = await responseAttachmentsDirectoryHandle.getDirectoryHandle(attachment.id, {
-    create: true,
-  });
+  const uniqueFilename = await getUniqueFileName(
+    responseAttachmentsDirectoryHandle,
+    attachment.name
+  );
 
-  const fileStream = await fileDir
-    .getFileHandle(`${attachment.name}`, { create: true })
+  const fileStream = await responseAttachmentsDirectoryHandle
+    .getFileHandle(`${uniqueFilename}`, { create: true })
     .then((handle) => handle.createWritable({ keepExistingData: false }));
 
   await response.body?.pipeTo(fileStream);
+
+  return {
+    id: attachment.id,
+    originalName: attachment.name,
+    actualName: uniqueFilename,
+  };
+};
+
+const getUniqueFileName = async (
+  directoryHandle: FileSystemDirectoryHandle,
+  fileName: string
+): Promise<string> => {
+  // Split filename into name and extension
+  const lastDotIndex = fileName.lastIndexOf(".");
+  const name = lastDotIndex !== -1 ? fileName.substring(0, lastDotIndex) : fileName;
+  const extension = lastDotIndex !== -1 ? fileName.substring(lastDotIndex) : "";
+
+  let uniqueFileName = fileName;
+  let counter = 1;
+
+  // Check if file exists and increment counter until we find a unique name
+  while (true) {
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      await directoryHandle.getFileHandle(uniqueFileName);
+      // File exists, try next number
+      uniqueFileName = `${name} (${counter})${extension}`;
+      counter++;
+    } catch {
+      // File doesn't exist, we can use this name
+      break;
+    }
+  }
+
+  return uniqueFileName;
 };
 
 const integrityCheckAndConfirm = async (
