@@ -1,6 +1,6 @@
 # About the API key
 
-This key (JSON file) gives you unlimited access to all form submission data.
+This key (JSON file) gives you unlimited access to all of your form's submission data.
 
 **Make sure you keep this API key secure. Do not share it broadly. Send by encrypted email, if it is absolutely necessary to share with a team member.**
 
@@ -18,7 +18,7 @@ If you need additional support, contact us: [https://forms-formulaires.alpha.can
 
 # À propos de la clé API
 
-Cette clé (fichier JSON) vous donne accès illimité à toutes les données soumises au formulaire.
+Cette clé (fichier JSON) vous donne accès illimité à toutes les données soumises à votre formulaire.
 
 **Veillez à conserver cette clé API en toute sécurité. Ne la partagez pas à grande échelle. Envoyez-la par courriel crypté s'il est absolument nécessaire de la partager avec un membre de votre équipe.**
 
