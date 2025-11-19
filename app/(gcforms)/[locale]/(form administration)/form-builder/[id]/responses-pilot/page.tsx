@@ -35,13 +35,13 @@ export default async function Page(props: {
               {t("startPage.beforeStart.generateKeyDetail")}
             </div>
           </li>
-          <li>
+          <li className="pb-2">
             <strong>{t("startPage.beforeStart.browserSupport")}</strong>
             <div className="text-sm text-slate-700">
               {t("startPage.beforeStart.browserSupportDetail")}
             </div>
           </li>
-          <li>
+          <li className="pb-2">
             <strong>{t("startPage.beforeStart.attachSafety")}</strong>
             <div className="text-sm text-slate-700">
               {t("startPage.beforeStart.attachSafetyDetail")}
