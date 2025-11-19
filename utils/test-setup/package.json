@@ -1,6 +1,6 @@
 {
   "name": "test-setup",
-  "packageManager": "yarn@4.10.3",
+  "packageManager": "yarn@4.11.0",
   "type": "module",
   "scripts": {
     "test-setup": "tsx src/testSetup.ts",
