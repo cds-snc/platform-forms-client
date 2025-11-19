@@ -58,6 +58,7 @@ export const writeHtml = async ({
       responseID: submissionObj.id,
       createdAt: submissionObj.createdAt,
       securityAttribute: "Unclassified",
+      showCodes: false,
       t,
     })
   );

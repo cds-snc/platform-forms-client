@@ -31,8 +31,8 @@
       "description": "Enable warning banner to be visible"
     },
     "responsesPilot": {
-      "title": "Responses Beta",
-      "description": "Enable beta flow for retrieving form responses with API key from the interface"
+      "title": "Responses Pilot",
+      "description": "Enable new flow for downloading form responses with API key in browser"
     }
   },
   "addFlag": "Add user feature flag",

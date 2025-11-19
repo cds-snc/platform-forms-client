@@ -724,14 +724,17 @@
       },
       "page": {
         "title": "Configurer l’intégration API",
-        "text1": "Cette section s'adresse aux développeur·se·s qui souhaitent utiliser l'API pour extraire les données des soumissions au formulaire vers un système cible. Une fois l’API configurée, les réponses pourront être récupérées à partir d'un point de terminaison. Consultez notre site de documentation pour en savoir plus.",
+        "text1": "Cette section s'adresse aux développeur·se·s qui souhaitent utiliser l'API pour extraire les données des soumissions au formulaire vers un système cible avec une intégration sur mesure. Une fois l’API configurée, les réponses pourront être récupérées à partir d'un point de terminaison programmatiquement. Consultez notre site de documentation pour en savoir plus.",
+
+        "text1": "This section is for developers who want to use the API to pull form submission data to a target system with a custom integration. Once set-up, responses can be retrieved from the API endpoint programmatically. Visit our documentation site for more information.",
+
         "docsButton": {
           "text": "Accéder à la documentation API",
           "link": "https://cds-snc.github.io/forms-api/accueil"
         },
         "apiKey": {
           "title": "Récupérer les soumissions via l'API",
-          "description": "Le fait de disposer d'une clé API signifie que GC Forms s'attend à ce que les données de réponse au formulaire soient récupérées via l'API.",
+          "description": "Le fait de disposer d'une clé API signifie que GC Forms s'attend à ce que les données de réponse au formulaire soient récupérées du point de terminaison API.",
           "rateLimit": {
             "title": "Limite de débit API",
             "currentLimit": "Limite actuelle :",
@@ -1469,9 +1472,9 @@
   "en": "English",
   "fr": "Français",
   "beta": {
-    "tag": "Bêta :",
+    "tag": "Nouveauté :",
     "text": "Fonctionnalité à l'essai",
-    "loadingError": "Ce formulaire contient un composant « bêta » qui n'est pas encore disponible pour tous les utilisateurs. Pour en savoir plus sur cette fonctionnalité limitée, veuillez contacter l'équipe de soutien."
+    "loadingError": "Ce formulaire contient un composant « pilote » qui n'est pas encore disponible pour tous les utilisateurs. Pour en savoir plus sur cette fonctionnalité limitée, veuillez contacter l'équipe de soutien."
   },
   "pilot": {
     "tag": "Pilote :",

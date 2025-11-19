@@ -79,9 +79,10 @@
     },
     "viewAllProblemResponses": "Afficher les réponses signalées"
   },
+
   "responsesPilot": {
-    "pageTitle": "Réponses (Bêta - Fonctionnalité à l'essai)",
-    "responsesPilotLink": "Essayer les nouvelles Réponses (Pilote)",
+    "pageTitle": "Réponses (Pilote)",
+    "responsesPilotLink": "Essayer la nouvelle fonctionnalité Réponses (Pilote)",
     "responsesSwitchLink": "Revenir à l'affichage classique des Réponses"
   },
   "supportWillContact": "L’équipe de soutien vous contactera",

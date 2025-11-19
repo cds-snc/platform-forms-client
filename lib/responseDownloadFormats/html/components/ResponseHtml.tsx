@@ -15,6 +15,7 @@ interface HTMLDownloadProps {
   responseID: string;
   createdAt: number;
   securityAttribute: SecurityAttribute;
+  showCodes?: boolean;
   t: TFunction<string | string[], undefined>;
 }
 
@@ -25,6 +26,7 @@ export const ResponseHtml = ({
   responseID,
   createdAt,
   securityAttribute,
+  showCodes = true,
   t,
 }: HTMLDownloadProps) => {
   return (
@@ -59,6 +61,7 @@ export const ResponseHtml = ({
                 responseID={responseID}
                 submissionDate={createdAt}
                 formResponse={response}
+                showCodes={showCodes}
                 t={t}
               />
             </div>
@@ -79,6 +82,7 @@ export const ResponseHtml = ({
                   responseID={responseID}
                   submissionDate={createdAt}
                   formResponse={response}
+                  showCodes={showCodes}
                   t={t}
                 />
               </div>
@@ -86,7 +90,7 @@ export const ResponseHtml = ({
           </main>
         </div>
 
-        {ClipboardJSScript}
+        {showCodes && ClipboardJSScript}
 
         {UpdateDLStylesScript}
       </body>
