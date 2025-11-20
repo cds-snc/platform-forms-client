@@ -38,7 +38,7 @@ export const Menu = ({
 
   const unfilteredMenuItemList = [
     {
-      filtered: isPublished ? false : true,
+      filtered: isPublished ? false : true || (ttl ? true : false),
       title: t("card.menu.copyLink"),
       callback: copyLinkCallback,
     },
