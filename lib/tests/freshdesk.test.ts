@@ -71,7 +71,7 @@ describe("Formats ticket data", () => {
       name: "Test Name - publishing",
       email: "test-publishing@example.com",
       type: "Go Live Request",
-      subject: "Publishing permission request / Demande d’autorisation de publication",
+      subject: "Publishing permission / Autorisation de publication",
       tags: ["Forms_Dev", "Forms_Request_GoLive"],
       description: "Test publishing description",
       custom_fields: {

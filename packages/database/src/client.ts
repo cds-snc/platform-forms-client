@@ -18,7 +18,7 @@ const extendedPrisma = new PrismaClient({ adapter }).$extends({
     template: {
       $allOperations({ args, query }) {
         if ("where" in args) {
-          args.where = { ...args.where, ttl: null };
+          args.where = { ttl: null, ...args.where };
         }
         return query(args);
       },

@@ -22,6 +22,7 @@ Vous avez pour responsabilité :
 - de déterminer le niveau de confidentialité des renseignements collectés dans vos formulaires. Formulaires GC prend en charge la collecte de données classées jusqu’à Protégé B. Apprenez-en davantage sur la détermination du niveau de confidentialité en consultant la [norme sur la catégorisation de sécurité](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32614).
 - de respecter la [_Loi sur la protection des renseignements personnels_](https://laws-lois.justice.gc.ca/fra/lois/p-21/) et la [_Loi sur l’accès à l’information_](https://laws-lois.justice.gc.ca/fra/lois/a-1/) concernant les renseignements personnels et sensibles contenus dans les réponses soumises dans vos formulaires en cas de demande, d’incident ou d’atteinte à la sécurité des données.
 - de récupérer les réponses directement à partir de la base de données lors du traitement d’informations plus sensibles de type Protégé B, soit en téléchargeant à partir de Formulaires GC ou par l'intermédiaire de l'API de récupération des données. La réception de réponses par courriel n’est que possible que pour les formulaires de type Protégé A publiés avant le 11 juin 2025.
+- de prendre des mesures supplémentaires lors de l'ouverture des pièces jointes, telles que vérifier le fichier, l'ouvrir dans un emplacement sécurisé, suivre les consignes de sécurité et exécuter des logiciels suppémentaires tels que des capteurs au niveau de l'hôte sur votre appareil.
 - de communiquer avec vos  utilisateur·rice·s au sujet de fichiers malveillants qu'ils ont envoyés en pièces jointes ou au sujet d'autres problèmes liés au formulaire ou aux données qui font partie de leur soumission.
 - de veiller à ce que les autres membres de votre équipe qui ont accès à vos formulaires et à vos réponses disposent des autorités appropriées et de l'autorisation de sécurité nécessaire pour accéder aux données recueillies. Pour cette raison, les comptes de courriel partagés ne sont pas autorisés dans Formulaires GC. Tout accès doit être accordé à des employés autorisés qui utilisent une adresse courriel valide du gouvernement du Canada.
 
@@ -52,15 +53,15 @@ Vous avez pour responsabilité de veiller à ce que la clé API associée à vot
 - enregistrer la clé API dans un endroit sûr d'une machine du gouvernement du Canada.
 - ne pas partager la clé API par courriel, dans les demandes de soutien ou dans un fichier de texte dans un référentiel source, car cela pourrait compromettre la confidentialité et la sécurité des réponses.
 - utiliser un courriel crypté sur le réseau du gouvernement du Canada, s'il est absolument nécessaire de transférer la clé privée de l'API au personnel autorisé, dans le but de configurer l'intégration de l'API.
-- supprimer et recréer la clé API de votre formulaire, si l’on soupçonne qu’elle a été compromise.
+- générer une nouvelle clé API pour votre formulaire, si l’on soupçonne que la clé précédente a été compromise.
 
 ## Pratique de sécurité en continu
 
 - Utilisez une adresse courriel gouvernementale individuelle appartenant à un·e employé·e (et non une boîte de réception partagée) pour créer votre compte et pour l’authentification à deux facteurs.
 - Ne communiquez pas votre mot de passe à personne et ne le conservez pas dans un endroit où d’autres personnes pourraient le trouver. Si quelqu’un d’autre a besoin d’accéder à un formulaire, [contactez-nous](/fr/support).
-- Protégez vos clés API. Si vous pensez qu'une clé API a été compromise, informez-nous, puis supprimez-la et créez-en une nouvelle pour sécuriser l'accès aux réponses de formulaire.
-- Assurer la confidentialité et la sécurité des renseignements protégés lors du téléchargement des réponses aux formulaires de Formulaires GC.
-- Signalez tout problème lié aux fonctionnalités de sécurité de Formulaires GC, par exemple si vous pensez que hCaptcha empêche les utilisateurs authentiques de remplir votre formulaire.
+- Protégez vos clés API. Si vous pensez qu'une clé API a été compromise, informez-nous, puis générez une nouvelle clé API et mettez à jour votre intégration pour sécuriser l'accès aux réponses de formulaire.
+- Assurez la confidentialité et la sécurité des renseignements protégés lors du téléchargement des réponses aux formulaires de Formulaires GC.
+- Signalez tout problème lié aux fonctionnalités de sécurité de Formulaires GC, par exemple si vous pensez que hCaptcha empêche les utilisateurs authentiques de remplir votre formulaire, ou en cas de résultats d'analyse de fichiers inexacts.
 - Signalez toute faille de sécurité et vulnérabilité en utilisant les étapes détaillées dans l’[avis de sécurité](https://numerique.canada.ca/avis-de-securite/).
 
 ## Publication du formulaire dans les deux langues officielles
@@ -89,4 +90,4 @@ Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car to
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
-**Dernière mise à jour :** 16 juillet 2025
+**Dernière mise à jour :** 12 novembre 2025

@@ -3,5 +3,5 @@
   "formTimer": false,
   "hCaptcha": false,
   "topBanner": false,
-  "fileUpload": false
+  "responsesPilot": false
 }

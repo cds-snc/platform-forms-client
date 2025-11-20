@@ -1,0 +1,45 @@
+"use client";
+import React from "react";
+import { cn } from "@lib/utils";
+
+import { BrandingIcon } from "@serverComponents/icons";
+
+type Option = {
+  value: string;
+  label: string;
+};
+
+export const BrandingSelect = ({
+  className,
+  selected,
+  options,
+  handleUpdate,
+  ...rest
+}: {
+  className?: string;
+  selected: string;
+  options: Option[];
+  handleUpdate: (type: string) => void;
+}) => {
+  return (
+    <div>
+      <BrandingIcon className="mr-2 inline-block" />
+      <select
+        id="branding-select"
+        value={selected}
+        className={cn("form-builder-dropdown mb-0 mt-0 inline-block text-black-default", className)}
+        onChange={(evt: React.ChangeEvent<HTMLSelectElement>) => {
+          const val = evt.target.value;
+          handleUpdate(val);
+        }}
+        {...rest}
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};

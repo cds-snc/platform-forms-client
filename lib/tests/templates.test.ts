@@ -247,6 +247,7 @@ describe("Template CRUD functions", () => {
         expect.objectContaining({
           where: {
             id: "formTestID",
+            ttl: null,
           },
         })
       );
@@ -323,7 +324,7 @@ describe("Template CRUD functions", () => {
         expect.objectContaining({
           where: {
             id: "test1",
-            isPublished: false,
+            isPublished: false
           },
           data: {
             jsonConfig: updatedFormConfig as unknown as Prisma.JsonObject,

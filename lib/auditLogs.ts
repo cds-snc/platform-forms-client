@@ -8,6 +8,7 @@ export enum AuditLogEvent {
   ReadForm = "ReadForm",
   UpdateForm = "UpdateForm",
   DeleteForm = "DeleteForm",
+  UnarchiveForm = "UnarchiveForm",
   PublishForm = "PublishForm",
   ChangeFormName = "ChangeFormName",
   ChangeDeliveryOption = "ChangeDeliveryOption",
@@ -18,6 +19,7 @@ export enum AuditLogEvent {
   RevokeFormAccess = "RevokeFormAccess",
   UpdateNotificationsInterval = "UpdateNotificationsInterval",
   UpdateNotificationsUserSetting = "UpdateNotificationsUserSetting",
+  UpdateFormJsonConfig = "updateFormJsonConfig",
   // Invitations
   InvitationCreated = "InvitationCreated",
   InvitationAccepted = "InvitationAccepted",
@@ -55,6 +57,7 @@ export enum AuditLogEvent {
   // API Management
   CreateAPIKey = "CreateAPIKey",
   DeleteAPIKey = "DeleteAPIKey",
+  RefreshAPIKey = "RefreshAPIKey",
   IncreaseThrottlingRate = "IncreaseThrottlingRate",
   ResetThrottlingRate = "ResetThrottlingRate",
   // Audi Log events
