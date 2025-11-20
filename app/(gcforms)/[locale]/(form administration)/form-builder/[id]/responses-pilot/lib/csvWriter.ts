@@ -1,6 +1,6 @@
 import { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 
-import { Response, type FormProperties } from "@gcforms/types";
+import { type Response, type FormProperties } from "@gcforms/types";
 import { FormElementTypes, type FormElement } from "@lib/types";
 
 import { createArrayCsvStringifier as createCsvStringifier } from "@lib/responses/csv-writer";
@@ -103,8 +103,12 @@ export const writeRow = async ({
   Object.entries(rawAnswers).forEach(([questionId, answer]) => {
     const question = sortedElements.find((el) => el.id === Number(questionId));
     if (question && question.type === FormElementTypes.fileInput) {
-      // answer is a file input
-      const fileName = attachments.get(answer.id);
+      // Ensure we have an id to use for lookup
+      if (typeof answer !== "object" || answer === null || !("id" in answer)) {
+        return;
+      }
+
+      const fileName = attachments.get(answer.id as string);
       if (fileName) {
         rawAnswers[questionId] = { name: fileName.actualName };
       }
