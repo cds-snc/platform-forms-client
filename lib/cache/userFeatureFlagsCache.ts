@@ -48,6 +48,9 @@ export const featureFlagsGetAll = async (): Promise<{ userID: string; flag: stri
   try {
     const redis = await getRedisInstance();
     const keys = await redis.keys("auth:featureFlags:*");
+    logMessage.debug(
+      `~~~~~~~~~~~~~Fetching Cached Feature Flags for ${keys.length} users: ${keys.join(", ")}`
+    );
     if (keys.length === 0) return [];
 
     const values = await redis.mget(keys);
