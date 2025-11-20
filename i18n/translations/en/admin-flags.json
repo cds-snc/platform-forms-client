@@ -30,9 +30,9 @@
       "title": "Banner",
       "description": "Enable warning banner to be visible"
     },
-    "fileUpload": {
-      "title": "File upload",
-      "description": "Enable file upload to be added as an element to a form"
+    "responsesPilot": {
+      "title": "Responses Pilot",
+      "description": "Enable new flow for downloading form responses with API key in browser"
     }
   },
   "addFlag": "Add user feature flag",
@@ -45,7 +45,7 @@
   "add": "Add",
   "cancel": "Cancel",
   "remove": "Remove",
-  "userFlagHeader": "User Specific Feature Flag Control",
-  "userFlagSubHeader": "This setting overrides Feature Flag status, and will provide a specific user access to a feature.",
+  "userFlagHeader": "User-specific feature flag control",
+  "userFlagSubHeader": "This setting overrides feature flag status, and will provide a specific user access to a feature.",
   "noUserFlags": "No user feature flags are set."
 }

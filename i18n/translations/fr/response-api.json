@@ -1,0 +1,130 @@
+{
+  "section-title": "Réponses (Pilote)",
+  "stepOf": "Étape {{current}} de {{total}}",
+  "not-supported": {
+    "title": "Navigateur web non compatible",
+    "body": "Ce navigateur ne peut pas utiliser l'API d'accès au système de fichiers. Essayez un autre navigateur ou autorisez votre navigateur à enregistrer des fichiers sur votre appareil."
+  },
+  "startPage": {
+    "intro": "Obtenez les réponses de votre formulaire en quelques étapes grâce à une clé API.",
+    "nextButton": "Commencer",
+    "beforeStart": {
+      "heading": "Avant de commencer",
+      "generateKey": "Générez une clé API pour votre formulaire dans les Paramètres.",
+      "generateKeyDetail": "C'est ainsi que vous pourrez accéder aux nouvelles réponses.",
+      "browserSupport": "Assurez-vous d'utiliser Google Chrome ou Microsoft Edge.",
+      "browserSupportDetail": "Votre navigateur demandera l'autorisation d'enregistrer des fichiers sur votre appareil.",
+      "attachSafety": "Soyez prudent lorsque vous ouvrez des pièces jointes.",
+      "attachSafetyDetail": "Vérifiez les fichiers avant de les ouvrir, analysez les attributs des fichiers malveillants, suivez les avertissements."
+    },
+    "steps": {
+      "heading": "Ensuite, suivez ces étapes :",
+      "stepOf": "Étape {{current}} de {{total}}",
+      "uploadKey": {
+        "title": "Téléversez votre fichier de clé API.",
+        "detail": "C'est ainsi que vous vous authentifierez en toute sécurité pour obtenir toutes les nouvelles réponses."
+      },
+      "chooseLocation": {
+        "title": "Choisissez un emplacement de téléchargement pour les réponses.",
+        "detail": "C'est ici que vous pourrez ajouter les nouvelles données aux fichiers qui se trouvent déjà dans le même dossier."
+      },
+      "selectFormat": {
+        "title": "Sélectionnez le format des fichiers de réponse.",
+        "detail": "C'est ici que vous pourrez choisir si vous souhaitez obtenir des copies individuelles HTML ou une feuille de calcul CSV."
+      }
+    }
+  },
+  "loadKeyPage": {
+    "title": "Téléversez le fichier de clé API",
+    "detail": "Téléversez la clé API générée dans les Paramètres pour accéder à toutes les réponses disponibles de votre formulaire en un seul téléchargement. Veillez à décompresser le dossier contenant le fichier JSON.",
+    "chooseFileButton": "Téléverser la clé API",
+    "noNewResponsesAvailable": "Aucune nouvelle réponse",
+    "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
+    "newResponsesAvailable": "De nouvelles réponses sont disponibles",
+    "checkForNewResponses": "Vérifier les nouvelles réponses",
+    "downloadResponses": "Choisir l'emplacement",
+    "uploadSuccessTitle": "La clé API a été téléchargée avec succès",
+    "uploadSuccessMessage": "Vous pouvez maintenant récupérer toutes les nouvelles réponses pour ce formulaire.",
+    "uploadFailedTitle": "Échec du téléchargement de la clé API",
+    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la téléverser à nouveau.",
+    "lostKey": {
+      "link": "Vous n'avez pas votre clé API?",
+      "lostKeyTip": {
+        "title": "Vous n'avez pas votre clé API?",
+        "text1": "Un seul fichier de clé API peut être associée à un formulaire à la fois.",
+        "text2": "Générez une nouvelle clé API en allant dans",
+        "link": " Paramètres > Intégration API"
+      }
+    }
+  },
+  "locationPage": {
+    "title": "Sélectionnez un emplacement d’enregistrement",
+    "subheading": "Decidez où les nouvelles réponses seront téléchargées.",
+    "detail": "Pour ajouter des données de réponse à un fichier CSV existant, sélectionnez le dossier dans lequel il est actuellement enregistré. Assurez-vous que le nom du fichier inclut toujours l'identifiant du formulaire, comme lors du téléchargement initial.",
+    "chooseLocationButton": "Choisir l'emplacement",
+    "locationSelected": {
+      "title": "Emplacement de sauvegarde sélectionné",
+      "text1": "Les réponses seront placées dans :"
+    },
+    "csvDetected": {
+      "title": "Fichier de réponse CSV détecté dans le dossier cible",
+      "message": "Les nouvelles données de réponse seront ajoutées au fichier CSV existant."
+    },
+    "getTemplateFailed": {
+      "title": "Failed to fetch form template",
+      "message": "There was an error retrieving the form template. Please try again later."
+    }
+  },
+  "formatPage": {
+    "title": "Choisissez un format de fichier de réponse",
+    "subheading": "Sélectionnez le format des nouvelles réponses.",
+    "detail": "Tous les téléchargements incluent également les données brutes au format JSON. Cela permet une étape de confirmation automatique sans avoir à copier-coller manuellement les codes de réception.",
+    "formatOptions": {
+      "csv": {
+        "label": "Combinées dans feuille de calcul (Un fichier CSV)",
+        "hint": "Données ajoutées au fichier CSV, s'il existe déjà dans le dossier sélectionné."
+      },
+      "html": {
+        "label": "Copies individuelles (Fichiers HTML séparés)"
+      }
+    }
+  },
+  "confirmationPage": {
+    "successTitle": "Succès !",
+    "downloadedResponsesOne": "{{formattedCount}} réponse a été téléchargée",
+    "downloadedResponsesOther": "{{formattedCount}} réponses ont été téléchargées",
+    "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
+    "chooseNewLocationButton": "Choisir un nouvel emplacement",
+    "downloadResponsesButton": "Télécharger les réponses"
+  },
+  "processingPage": {
+    "processingTitle": "Téléchargement en cours",
+    "pleaseWait": "Veuillez patienter...",
+    "processingSubmission": "Traitement de la soumission : {{submissionId}}",
+    "processingMessage": "Traitement de {{count}} réponses...",
+    "cancelButton": "Mettre en pause le téléchargement",
+    "cancellingButton": "Mise en pause...",
+    "note": "Pour les téléchargements volumineux, cela peut prendre un certain temps."
+  },
+  "backButton": "Retourner",
+  "backToStart": "Retourner au début",
+  "continueButton": "Continuer",
+  "failed-to-load-api-key": "La clé API n'a pas pu être téléversée",
+  "checkForNewResponsesButton": "Vérifier s'il y a des nouvelles réponses",
+  "checking": "Vérification en cours...",
+  "toasts": {
+    "rateLimitExceeded": {
+      "title": "Limite de débit dépassée",
+      "message": "Vous avez dépassé le nombre de requêtes autorisées. Veuillez attendre avant de réessayer."
+    },
+    "unknownError": {
+      "title": "Quelque chose a mal tourné",
+      "message": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard.",
+      "code": "Code d'erreur"
+    },
+    "errorRetreivingSubmissions": {
+      "title": "Erreur lors de la récupération des soumissions",
+      "message": "Une erreur est survenue lors de la récupération des soumissions du formulaire. Veuillez réessayer plus tard."
+    }
+  }
+}

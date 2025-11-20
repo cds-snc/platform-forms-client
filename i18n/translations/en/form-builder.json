@@ -10,15 +10,15 @@
       "label": "Allowable file types",
       "documents": {
         "label": "Documents",
-        "description": "pdf, txt, doc, docx, xml"
+        "description": "pdf, txt, doc, docx"
       },
       "images": {
         "label": "Images",
-        "description": "jpg, jpeg, png, svg"
+        "description": "jpg, jpeg, png"
       },
       "spreadsheets": {
         "label": "Spreadsheets",
-        "description": "xls, xlsx, csv, numbers"
+        "description": "xls, xlsx, csv"
       }
     }
   },
@@ -206,18 +206,11 @@
     "fileInputDefault": {
       "text1": "A way to add supporting documentation.",
       "text1x": "⚠️ You must",
-      "text2": "set  your response delivery to API",
+      "text2": "have an API key configured for data retrieval",
       "text3": "to use this form element."
     },
     "fileInputWithApi": {
-      "description": "A way to add supporting documentation.",
-      "trialFeature": {
-        "title": "Beta feature",
-        "text1": "This trial feature is limited and requires:",
-        "bullet1": "Retrieval of form responses via API",
-        "bullet2": "Files to be scanned for malicious content once submitted",
-        "bullet3": "Collecting contact information in case you need to follow up about files"
-      }
+      "description": "A way to add supporting documentation."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "What is your name?",
@@ -331,9 +324,9 @@
     "heading": "Branding",
     "notFound": "Didn’t find your department or agency in the list?",
     "preview": "Preview",
-    "select": "Select different branding for the top of your form",
+    "select": "Select a different header to show up at the top of your form.",
     "submitNew": "Request alternate branding",
-    "text1": "Published forms include the Government of Canada signature by default."
+    "text1": "By default, published forms display the Government of Canada signature."
   },
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
@@ -465,9 +458,9 @@
   "formattedDate": "Date",
   "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
-    "title": "Sign off on the removal of responses before deleting form",
+    "title": "You must retrieve all responses before archiving this form.",
     "message1": "This form has been published and is receiving responses. You have responses to download and sign off for removal from GC Forms.",
-    "message2": "Before deleting this form:",
+    "message2": "Before archiving this form:",
     "message3": "1. Download all responses.",
     "message4": "2. Confirm the receipt of downloaded responses by signing off on their removal from GC Forms.",
     "cta": "Go to responses"
@@ -477,35 +470,60 @@
     "somethingWentWrong": "Something went wrong",
     "downloadButtonText": "Download a copy",
     "draft": {
-      "message1": "Deleting a form cannot be undone. Your form will be removed permanently.",
-      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create the form later."
+      "message1": "Archiving will move this form to the “Archived” section of your forms.",
+      "message2": "This form will be available to restore from the archive folder for 30 days before being deleted permanently.",
+      "message3": "Download a copy of the form file for your records. You can upload it again in GC Forms to re-create the form later."
     },
-    "okay": "Delete form",
+    "okay": "Archive form",
     "published": {
-      "message1": "Deleting a form cannot be undone. Your published form will be removed from the Internet, potentially creating broken links.",
-      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create a new form with new URL links.",
-      "message3": "Before deleting your form, make sure you remove any public links leading to this form. This avoids sending people to a dead end. To stop submissions, you might instead consider closing the form in Settings."
+      "message1": "Archiving will move this published form to the “Archived” section of your forms.",
+      "message2": "Archive and duplicate your form, to create a new draft from the archived form that can be edited as a new version. The older version will temporarily remain available in the archive folder.",
+      "message3": "You can restore an old form from the archive folder within 30 days of archiving your form. After 30 days your form will be deleted permanently, this cannot be undone."
     },
-    "title": "Delete this form?"
+    "title": "Archive this form?"
   },
   "formDeletedDialogMessage": "Form deleted",
   "formDeletedDialogMessageFailed": "Failed to delete form",
   "formDeletedResponsesExist": "The form could not be deleted. Ensure there are no new responses and try again.",
-  "formDeletedDialogTitle": "Success",
-  "formDeleteDialogTitleFailed": "Error",
   "formDownload": {
-    "btnText": "What can I do with a form file?",
-    "description": "Keep a version of your form on your computer.",
-    "dialog": {
-      "downloadButtonText": "Download a copy",
-      "message1": "Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
-      "message2": "Download a copy of the your form to store locally on your computer.",
-      "subtitle1": "Share",
-      "subtitle2": "Save a copy",
-      "title": "Form file uses"
-    },
+    "description": "Keep a version stored locally on your computer or use this file to share a draft in progress.",
     "downloadBtnText": "Download form file",
-    "title": "Download form file"
+    "title": "Get a copy of your form"
+  },
+  "auditDownload": {
+    "description": "Obtain a spreadsheet with the history of all key actions taken in a form, including when a form was created, updated, and archived. Actions can take several minutes to appear in the activity log.",
+    "downloadBtnText": "Download activity log",
+    "title": "Download form activity",
+    "headers": {
+      "formId": "Form ID",
+      "userId": "Team member",
+      "event": "Form action",
+      "timestamp": "Date",
+      "description": "Details"
+    },
+    "events": {
+      "CreateForm": "Form created",
+      "ChangeDeliveryOption": "Delivery option changed",
+      "ChangeSecurityAttribute": "Data classification changed",
+      "ChangeFormPurpose": "Form purpose changed",
+      "ChangeFormSaveAndResume": "Save and resume option changed",
+      "ChangeFormName": "Form title changed",
+      "UpdateForm": "Form updated",
+      "UpdateNotificationsInterval": "Notifications interval updated",
+      "UpdateNotificationsUserSetting": "Notifications user setting updated",
+      "GrantFormAccess": "Granted form access",
+      "RevokeFormAccess": "Revoked form access",
+      "DownloadResponse": "Downloaded responses",
+      "ConfirmResponse": "Confirmed responses",
+      "IdentifyProblemResponse": "Reported problem with responses",
+      "DeleteResponses": "Deleted responses",
+      "RetrieveResponses": "Retrieved responses via API",
+      "CreateAPIKey": "Generated API Key",
+      "DeleteAPIKey": "Deleted API Key",
+      "RefreshAPIKey": "Re-generated API Key",
+      "PublishForm": "Form published"
+    },
+    "errorCreatingDownload": "Error creating download"
   },
   "switchToApiMode": {
     "title": "Switch to API delivery",
@@ -528,8 +546,8 @@
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
-  "hasFileInputAndApiDelivery": "API delivery enabled",
-  "hasFileInputAndApiDeliveryNote": "Required when using file upload",
+  "hasFileInputAndApiDelivery": "Retrieving responses from API endpoint",
+  "hasFileInputAndApiDeliveryNote": "API key required when using file upload",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -610,15 +628,15 @@
   "whatYouNeedToKnow": "What you need to know",
   "publishingDisablesEditing": "Publishing disables editing.",
   "publishingDisablesEditingDescription": "Once you publish, you cannot make changes to this form. If changes are needed after publishing, use the form file to create and publish a new form.",
-  "publishingLocksSettings": "Publishing locks your settings.",
-  "publishingLocksSettingsDescription": "The response delivery option you choose will no longer be changeable.",
+  "publishingLocksSettings": "Publishing locks some settings.",
+  "publishingLocksSettingsDescription": "Many form settings will no longer be changeable such as the form's classification and intended use.",
   "publishingRemovesTestResponses": "Publishing removes test responses.",
   "publishingRemovesTestResponsesDescription": "Any prior responses will be removed from the system.",
   "publishYourForm": "Publish your form",
   "publishYourFormInstructions": {
     "settings": "Settings",
     "classification": "Data classification",
-    "deliveryOption": "Delivery option",
+    "deliveryOption": "Data retrieval",
     "purpose": "Purpose and use",
     "text1": "Complete the following items before you publish your form.",
     "text2": "",
@@ -700,19 +718,43 @@
   "send": "Send",
   "copy": "copy",
   "settings": {
-    "formManagement": "Form management",
+    "formManagement": "Response options",
+    "apiIntegration": {
+      "navigation": {
+        "title": "API integration"
+      },
+      "page": {
+        "title": "Set up API integration",
+        "text1": "This section is for developers who want to use the API to pull form submission data to a target system with a custom integration. Once set-up, responses can be retrieved from the API endpoint programmatically. Visit our documentation site for more information.",
+        "docsButton": {
+          "text": "Go to API documentation",
+          "link": "https://cds-snc.github.io/forms-api/home"
+        },
+        "apiKey": {
+          "title": "Retrieve submissions via API",
+          "description": "Having an API key means GC Forms expects form response data to be retrieved from the API endpoint.",
+          "rateLimit": {
+            "title": "API rate limit",
+            "currentLimit": "Current limit:",
+            "currentLimitDescription": "500 requests per minute",
+            "increaseRequest": "If you require a higher API rate, <a href='/en/support' target='_blank'>contact Support</a>."
+          }
+        },
+        "isEmailDelivery": {
+          "title": "Not supported with email delivery",
+          "description": "Data retrieval via API is not possible when responses are sent by email. Consider closing this form and republishing a new one to use this feature."
+        }
+      }
+    },
     "api": {
       "keyId": "API key ID",
       "title": "API access",
-      "generateKey": "Create API key",
+      "generateKey": "Generate API key",
+      "refreshKey": "Generate new API key",
       "deleteKey": "Delete API key",
       "deleteKeyFailed": {
         "title": "Something went wrong",
         "message": "API key could not be deleted"
-      },
-      "deleteApiKeyToChangeOptions": {
-        "title": "Delete API key to change options",
-        "message": "You must delete the API key before you can change the delivery option."
       },
       "deleteKeySuccess": {
         "title": "API key deleted",
@@ -720,7 +762,7 @@
         "responseLinkText": "Responses page"
       },
       "generateKeySuccess": {
-        "title": "API key created",
+        "title": "API key generated",
         "message": "New responses are available through the API. Find out more about integration set-up in ",
         "docsLinkText": "API documentation",
         "docsLink": "https://cds-snc.github.io/forms-api/home/"
@@ -748,15 +790,17 @@
         }
       },
       "dialog": {
-        "title": "Create API key",
-        "heading": "GC Forms API keys are PROTECTED B",
+        "title": "Generate API key",
+        "refreshTitle": "Generate new API key",
+        "heading": "⚠️ GC Forms API keys are PROTECTED B",
+        "refreshHeading": "⚠️You'll need to add this new key to your integration to be able to successfully retrieve responses.",
         "responsibility": "It is your responsibility to:",
         "responsibility1": "Save this key in a secure location on a Government of Canada machine.",
         "responsibility2": "Share the key only with people who are authorized, if there is a need.",
         "responsibility3": "Send the key using encrypted email if needed for the purpose of setting up the integration",
-        "responsibility4": "Manage the key, deleting and re-creating it if it's suspected to have been compromised.",
+        "responsibility4": "Securing the key and managing it by generating a new key, if it is suspected that it has been compromised.",
         "text1": "Do not lose your key",
-        "text2": "This key is provided once as it can give access to form response data. If you lose this key, or if it becomes compromised, you will have to create a new one.",
+        "text2": "This key is provided once as it can give access to form response data. If you lose this key, or if it becomes compromised, you will have to generate a new API key.",
         "cancelButton": "Cancel",
         "downloadButton": "Download API key",
         "confirm": {
@@ -766,9 +810,20 @@
         },
         "error": {
           "createFailed": {
-            "title": "The API key could not be created",
-            "message": "There was an error creating the API key. Save your form and try again later."
+            "title": "The API key could not be generated",
+            "message": "There was an error generating the API key. Save your form and try again later."
           }
+        }
+      },
+      "hasUnconfirmedDownloads": {
+        "message": "⚠️ You must sign off on all responses that have been downloaded, but not yet confirmed with the receipt codes.",
+        "ctaButton": "Go to Responses",
+        "cancelButton": "Cancel",
+        "generateAction": {
+          "title": "Before generating an API key"
+        },
+        "deleteAction": {
+          "title": "Before deleting an API key"
         }
       }
     },
@@ -780,13 +835,13 @@
           "subject": "New form response | Nouvelle réponse au formulaire",
           "paragraph1": "Your form received a new submission:",
           "paragraph2": "Retrieve response from GC Forms",
-          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
+          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Response options."
         },
         "multipleSubmissions": {
           "subject": "New form responses | Nouvelles réponses au formulaire",
           "paragraph1": "Your form received new submissions:",
           "paragraph2": "Retrieve responses from GC Forms",
-          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
+          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Response options."
         }
       },
       "sessionUser": {
@@ -813,20 +868,16 @@
       }
     }
   },
-  "settingsDeleteButton": "Delete",
-  "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
-  "settingsDeleteTitle": "Delete form",
   "settingsInvalidEmailAlertDesc1": "Must be a Government of Canada email address.",
   "settingsInvalidEmailAlertDesc2": "to register email address.",
   "settingsInvalidEmailAlertTitle": "Government email address",
-  "settingsNavHome": "Response delivery",
+  "settingsNavHome": "Form profile",
   "settingsResponseEmailTitle": "Email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox. This can be a shared inbox.",
   "settingsPurposeAndUse": {
-    "title": "Purpose and use",
-    "description": "We'll use this to inform the retention of responses in GC Forms beyond 45 days.",
+    "title": "Intended use",
+    "description": "We’ll use this to inform the retention of responses in GC Forms, that extend beyond 45 days.",
     "personalInfo": "Personal information used to make a decision about an individual",
-    "helpUs": "Help us understand how form responses will be used",
     "learnMore": "Learn more about administrative purposes",
     "learnMoreBox": {
       "title": "More about administrative purpose",
@@ -860,7 +911,6 @@
   "settingsResponseDelivery": {
     "selectClassification": "Data classification",
     "beforePublishMessage": "These settings can only be changed before publishing.",
-    "deleteApiKeyMessage": "You must delete the API key before you can change the delivery option.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
     "title": "Delivery option",
     "vaultOption": "Download responses from GC Forms",
@@ -880,35 +930,6 @@
     "emailSubjectFr": {
       "title": "French response subject line",
       "hint": "When form responses are submitted in French."
-    },
-    "responseDeliveryHelpWithApi": {
-      "cta": "Help choosing an option",
-      "title": "Choosing a response delivery option",
-      "description": "Use the chart below to help pick which option best fits your needs for getting submitted form responses.",
-      "inbox": {
-        "title": "Email to an inbox",
-        "text1": "For up to PROTECTED A forms",
-        "text2": "Responses are delivered directly to an inbox in real time",
-        "text3": "One email address can receive response emails.",
-        "text4": "This can be a shared inbox.",
-        "text5": "No software development resources required."
-      },
-      "vault": {
-        "title": "Download from GC Forms",
-        "text1": "For up to PROTECTED B forms",
-        "text2": "Download responses within 30 days",
-        "text3": "Cannot be switched after publishing",
-        "text4": "Multiple account holders can access responses.",
-        "text5": "No software development resources required."
-      },
-      "api": {
-        "title": "API response retrieval",
-        "text1": "For up to PROTECTED B forms",
-        "text2": "API calls to extract (pull) form responses",
-        "text3": "Can be switched to the download delivery method after publishing",
-        "text4": "One API key per form",
-        "text5": "Software development resources needed for the API integration"
-      }
     },
     "emailDeliveryDeprecated": {
       "title": "Email data delivery is no longer available.",
@@ -1424,8 +1445,8 @@
     "toggleOn": "On",
     "toggleOff": "Off",
     "toggleDescription": {
-      "text1": "Resuming filling out a form in progress",
-      "text2": "Gives users the option to pause and finish filling out the form later. People filling out the form can get a copy of their answers filled in so far, as well as a copy of their answers once the form has been submitted."
+      "text1": "To continue filling out a form in progress",
+      "text2": "This gives users the option to pause and finish filling out a form later. It also provides people filling out a form with a copy of their answers once the form has been submitted."
     },
     "a11yDescription": "Save progress and resume the form later",
     "saveButton": "Save"
@@ -1442,11 +1463,15 @@
   "en": "English",
   "fr": "Français",
   "beta": {
-    "tag": "Beta:",
+    "tag": "New:",
     "text": "Trial feature ",
-    "loadingError": "This form contains a 'beta' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
+    "loadingError": "This form contains a 'Pilot' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
+  },
+  "pilot": {
+    "tag": "Pilot:",
+    "text": "Trial feature "
   },
   "fileUploadApiWarning": {
-    "text": "Delivery method is not set to API."
+    "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
   }
 }

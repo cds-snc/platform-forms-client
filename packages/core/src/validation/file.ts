@@ -3,24 +3,20 @@ export const MAX_FILE_SIZE = 10485760; // 10 MB matches file upload lambda see: 
 
 export const ALLOWED_FILE_TYPES = [
   { mime: "application/pdf", extensions: ["pdf"] },
-  { mime: "text/plain", extensions: ["txt"] },
-  { mime: "text/csv", extensions: ["csv"] },
   { mime: "application/msword", extensions: ["doc"] },
+  { mime: "application/vnd.ms-excel", extensions: ["xls"] },
   {
     mime: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     extensions: ["docx"],
   },
-  { mime: "image/jpeg", extensions: ["jpg", "jpeg"] },
-  { mime: "image/png", extensions: ["png"] },
-  { mime: "image/svg+xml", extensions: ["svg"] },
-  { mime: "application/vnd.ms-excel", extensions: ["xls"] },
   {
     mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     extensions: ["xlsx"],
   },
-  { mime: "application/vnd.apple.numbers", extensions: ["numbers"] },
-  { mime: "application/xml", extensions: ["xml"] },
-  { mime: "text/xml", extensions: ["xml"] },
+  { mime: "image/jpeg", extensions: ["jpg", "jpeg"] },
+  { mime: "image/png", extensions: ["png"] },
+  { mime: "text/plain", extensions: ["txt"] },
+  { mime: "text/csv", extensions: ["csv"] },
 ];
 
 // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept

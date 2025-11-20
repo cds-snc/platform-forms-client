@@ -1,7 +1,9 @@
-import { type PublicFormRecord, type FormElement, FormElementTypes } from "@gcforms/types";
+import { type FormElement, FormElementTypes } from "@gcforms/types";
 import type { MappedAnswer } from "./types";
 import { createFallbackMappedAnswer, createAnswerObject } from "./utils/toAnswerObject";
 import { getAnswerAsString } from "./utils/toString";
+import { FormProperties } from "@gcforms/types";
+import { Response } from "@gcforms/types";
 
 /**
  * Map raw response answers to the standardized MappedAnswer shape using a template.
@@ -15,13 +17,13 @@ import { getAnswerAsString } from "./utils/toString";
  * mapped answer is produced so the output array remains consistent.
  */
 export const mapAnswers = ({
-  template,
+  formTemplate,
   rawAnswers,
 }: {
-  template: PublicFormRecord;
+  formTemplate: FormProperties;
   rawAnswers: Record<string, Response>;
 }): MappedAnswer[] => {
-  const elementMap = getElementMap(template);
+  const elementMap = getElementMap(formTemplate);
 
   const mappedAnswers: Array<MappedAnswer | null> = Object.entries(rawAnswers).map(
     ([questionId, rawAnswer]) => {
@@ -110,8 +112,8 @@ const handleAnswerArray = ({
  * @param {PublicFormRecord} template
  * @returns {Map<number, FormElement>} map of element id -> element
  */
-export const getElementMap = (template: PublicFormRecord) => {
-  const elements = template.form?.elements || [];
+export const getElementMap = (formTemplate: FormProperties) => {
+  const elements = formTemplate.elements || [];
   const elementMap = new Map<number, FormElement>();
   elements.forEach((element) => elementMap.set(element.id, element));
   return elementMap;

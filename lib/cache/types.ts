@@ -1,8 +1,8 @@
 // TODO: in the future these could pulled in from default_flag_settings.json
 
 export const UserFeatureFlags = {
-  fileUpload: "fileUpload",
   addressComplete: "addressComplete",
+  responsesPilot: "responsesPilot",
 } as const;
 
 export const FeatureFlags = {

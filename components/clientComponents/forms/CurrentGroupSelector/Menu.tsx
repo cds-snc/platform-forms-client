@@ -35,7 +35,6 @@ export const Menu = () => {
       popover="auto"
       className="max-h-60 overflow-y-scroll rounded-lg border-1 border-slate-500 bg-white shadow-md"
       style={{
-        // @ts-expect-error - CSS anchor positioning is not in the types yet
         positionAnchor: "--group-menu-trigger",
         top: "anchor(top)",
         right: "anchor(right)",
