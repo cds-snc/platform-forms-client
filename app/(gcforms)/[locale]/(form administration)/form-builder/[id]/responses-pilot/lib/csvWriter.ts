@@ -138,18 +138,22 @@ export const writeRow = async ({
         }
       }
 
-      // Handle specific DOMException errors
+      // Handle specific DOMException errors - throw with cause to preserve original error
       if (error instanceof DOMException) {
         if (error.name === "NoModificationAllowedError") {
           throw new Error(
-            `Cannot write to the CSV file. The file "${csvFileHandle.name}" is currently open in another application (e.g., Excel). Please close the file and try again.`
+            `Cannot write to the CSV file. The file "${csvFileHandle.name}" is currently open in another application (e.g., Excel). Please close the file and try again.`,
+            { cause: error }
           );
         } else if (error.name === "InvalidStateError") {
           throw new Error(
-            `The file "${csvFileHandle.name}" is in an invalid state. It may be locked or corrupted.`
+            `The file "${csvFileHandle.name}" is in an invalid state. It may be locked or corrupted.`,
+            { cause: error }
           );
         } else if (error.name === "QuotaExceededError") {
-          throw new Error("Not enough storage space available to write to the file.");
+          throw new Error("Not enough storage space available to write to the file.", {
+            cause: error,
+          });
         }
       }
 

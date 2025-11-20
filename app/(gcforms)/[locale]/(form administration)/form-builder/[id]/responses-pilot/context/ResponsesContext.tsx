@@ -17,7 +17,7 @@ import { GCFormsApiClient } from "../lib/apiClient";
 import { initCsv } from "../lib/csvWriter";
 import { toast } from "../../../components/shared/Toast";
 import { useTranslation } from "@root/i18n/client";
-import { ErrorRetreivingSubmissions, TemplateFailed } from "../components/Toasts";
+import { ErrorRetreivingSubmissions, TemplateFailed, FileLockedError } from "../components/Toasts";
 import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
 import { useApiDebug } from "../lib/useApiDebug";
@@ -236,8 +236,20 @@ export const ResponsesProvider = ({
             });
           } catch (error) {
             setInterrupt(true);
+
+            // Check if this is a file locked error from CSV writer by examining the cause
+            const isFileLocked =
+              error instanceof Error &&
+              error.cause instanceof DOMException &&
+              error.cause.name === "NoModificationAllowedError";
+
             logger.info(`Error processing submission ID ${response.name}:`, error);
-            toast.error(<ErrorRetreivingSubmissions />, "wide");
+
+            if (isFileLocked) {
+              toast.error(<FileLockedError />, "wide");
+            } else {
+              toast.error(<ErrorRetreivingSubmissions />, "wide");
+            }
           }
         }
 

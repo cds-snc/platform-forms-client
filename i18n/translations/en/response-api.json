@@ -124,6 +124,10 @@
     "errorRetreivingSubmissions": {
       "title": "Error retrieving submissions",
       "message": "There was an error retrieving form submissions. Please try again later."
+    },
+    "fileLockedError": {
+      "title": "File is currently in use",
+      "message": "Cannot write to the CSV file because it is open in another application (such as Excel). Please close the file and try again."
     }
   }
 }

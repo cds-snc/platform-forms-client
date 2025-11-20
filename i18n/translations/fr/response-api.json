@@ -125,6 +125,10 @@
     "errorRetreivingSubmissions": {
       "title": "Erreur lors de la récupération des soumissions",
       "message": "Une erreur est survenue lors de la récupération des soumissions du formulaire. Veuillez réessayer plus tard."
+    },
+    "fileLockedError": {
+      "title": "Le fichier est actuellement en cours d'utilisation",
+      "message": "Impossible d'écrire dans le fichier CSV car il est ouvert dans une autre application (comme Excel). Veuillez fermer le fichier et réessayer."
     }
   }
 }

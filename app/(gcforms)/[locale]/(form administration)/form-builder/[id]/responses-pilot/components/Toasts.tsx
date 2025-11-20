@@ -78,3 +78,13 @@ export const ErrorRetreivingSubmissions = ({ code }: { code?: string }) => {
     </div>
   );
 };
+
+export const FileLockedError = () => {
+  const { t } = useTranslation("response-api");
+  return (
+    <div className="w-full">
+      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("toasts.fileLockedError.title")}</h3>
+      <p className="mb-2 text-black">{t("toasts.fileLockedError.message")}</p>
+    </div>
+  );
+};
