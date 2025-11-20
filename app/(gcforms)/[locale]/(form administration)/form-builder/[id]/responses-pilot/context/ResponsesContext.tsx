@@ -17,7 +17,13 @@ import { GCFormsApiClient } from "../lib/apiClient";
 import { initCsv } from "../lib/csvWriter";
 import { toast } from "../../../components/shared/Toast";
 import { useTranslation } from "@root/i18n/client";
-import { ErrorRetreivingSubmissions, TemplateFailed, FileLockedError } from "../components/Toasts";
+import {
+  ErrorRetreivingSubmissions,
+  TemplateFailed,
+  FileWriteError,
+  InvalidStateError as InvalidStateErrorToast,
+  QuotaExceededError as QuotaExceededErrorToast,
+} from "../components/Toasts";
 import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
 import { useApiDebug } from "../lib/useApiDebug";
@@ -237,16 +243,21 @@ export const ResponsesProvider = ({
           } catch (error) {
             setInterrupt(true);
 
-            // Check if this is a file locked error from CSV writer by examining the cause
-            const isFileLocked =
-              error instanceof Error &&
-              error.cause instanceof DOMException &&
-              error.cause.name === "NoModificationAllowedError";
+            // Check if this is a file write error from CSV writer by examining the cause
+            const errorCause = error instanceof Error ? error.cause : null;
 
             logger.info(`Error processing submission ID ${response.name}:`, error);
 
-            if (isFileLocked) {
-              toast.error(<FileLockedError />, "wide");
+            if (errorCause instanceof DOMException) {
+              if (errorCause.name === "NoModificationAllowedError") {
+                toast.error(<FileWriteError />, "wide");
+              } else if (errorCause.name === "InvalidStateError") {
+                toast.error(<InvalidStateErrorToast />, "wide");
+              } else if (errorCause.name === "QuotaExceededError") {
+                toast.error(<QuotaExceededErrorToast />, "wide");
+              } else {
+                toast.error(<ErrorRetreivingSubmissions />, "wide");
+              }
             } else {
               toast.error(<ErrorRetreivingSubmissions />, "wide");
             }
