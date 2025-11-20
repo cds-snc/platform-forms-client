@@ -102,15 +102,21 @@ export const writeRow = async ({
   // map attachments to rawAnswers
   Object.entries(rawAnswers).forEach(([questionId, answer]) => {
     const question = sortedElements.find((el) => el.id === Number(questionId));
-    if (question && question.type === FormElementTypes.fileInput) {
-      // Ensure we have an id to use for lookup
-      if (typeof answer !== "object" || answer === null || !("id" in answer)) {
-        return;
+
+    if (question) {
+      if (question.type === FormElementTypes.fileInput) {
+        // Ensure we have an id to use for lookup
+        if (typeof answer !== "object" || answer === null || !("id" in answer)) {
+          return;
+        }
+
+        const fileName = attachments.get(answer.id as string);
+        if (fileName) {
+          rawAnswers[questionId] = { name: fileName.actualName };
+        }
       }
 
-      const fileName = attachments.get(answer.id as string);
-      if (fileName) {
-        rawAnswers[questionId] = { name: fileName.actualName };
+      if (question.type === FormElementTypes.dynamicRow && Array.isArray(answer)) {
       }
     }
   });
