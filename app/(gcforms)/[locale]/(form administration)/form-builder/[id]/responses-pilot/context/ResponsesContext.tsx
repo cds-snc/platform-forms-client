@@ -50,6 +50,8 @@ interface ResponsesContextType {
   ) => Promise<void>;
   processingCompleted: boolean;
   resetProcessingCompleted: () => void;
+  hasError: boolean;
+  setHasError: Dispatch<SetStateAction<boolean>>;
   selectedFormat: string;
   setSelectedFormat: Dispatch<SetStateAction<string>>;
   interrupt: boolean;
@@ -90,6 +92,7 @@ export const ResponsesProvider = ({
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
   const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<string>("csv");
   const [currentSubmissionId, setCurrentSubmissionId] = useState<string | null>(null);
   const loggerRef = useRef(new ResponseDownloadLogger());
@@ -164,6 +167,7 @@ export const ResponsesProvider = ({
 
       // Reset interrupt state
       setInterrupt(false);
+      setHasError(false);
 
       let formId;
       let formTemplate;
@@ -242,6 +246,7 @@ export const ResponsesProvider = ({
             });
           } catch (error) {
             setInterrupt(true);
+            setHasError(true);
 
             // Check if this is a file write error from CSV writer by examining the cause
             const errorCause = error instanceof Error ? error.cause : null;
@@ -250,16 +255,16 @@ export const ResponsesProvider = ({
 
             if (errorCause instanceof DOMException) {
               if (errorCause.name === "NoModificationAllowedError") {
-                toast.error(<FileWriteError />, "default");
+                toast.error(<FileWriteError />, "error-persistent");
               } else if (errorCause.name === "InvalidStateError") {
-                toast.error(<InvalidStateErrorToast />, "default");
+                toast.error(<InvalidStateErrorToast />, "error-persistent");
               } else if (errorCause.name === "QuotaExceededError") {
-                toast.error(<QuotaExceededErrorToast />, "default");
+                toast.error(<QuotaExceededErrorToast />, "error-persistent");
               } else {
-                toast.error(<ErrorRetreivingSubmissions />, "default");
+                toast.error(<ErrorRetreivingSubmissions />, "error-persistent");
               }
             } else {
-              toast.error(<ErrorRetreivingSubmissions />, "default");
+              toast.error(<ErrorRetreivingSubmissions />, "error-persistent");
             }
           }
         }
@@ -301,6 +306,7 @@ export const ResponsesProvider = ({
     setProcessedSubmissionIds(new Set());
     resetProcessingCompleted();
     setSelectedFormat("csv");
+    setHasError(false);
     setInterrupt(false);
     interruptRef.current = false;
   }, [setInterrupt]);
@@ -324,6 +330,8 @@ export const ResponsesProvider = ({
         processResponses,
         processingCompleted,
         resetProcessingCompleted,
+        hasError,
+        setHasError,
         selectedFormat,
         setSelectedFormat,
         interrupt: isProcessingInterrupted,

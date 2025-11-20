@@ -91,6 +91,9 @@
   },
   "confirmationPage": {
     "successTitle": "Succès !",
+    "errorTitle": "Téléchargement interrompu",
+    "partialSuccessTitle": "Téléchargement partiel terminé",
+    "errorOccurred": "Une erreur s'est produite pendant le processus de téléchargement",
     "downloadedResponsesOne": "{{formattedCount}} réponse a été téléchargée",
     "downloadedResponsesOther": "{{formattedCount}} réponses ont été téléchargées",
     "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",

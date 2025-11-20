@@ -90,6 +90,9 @@
   },
   "confirmationPage": {
     "successTitle": "Success!",
+    "errorTitle": "Download interrupted",
+    "partialSuccessTitle": "Partial download completed",
+    "errorOccurred": "An error occurred during the download process",
     "downloadedResponsesOne": "{{formattedCount}} response was downloaded",
     "downloadedResponsesOther": "{{formattedCount}} responses were downloaded",
     "savedTo": "All form submission data can be found in: ",

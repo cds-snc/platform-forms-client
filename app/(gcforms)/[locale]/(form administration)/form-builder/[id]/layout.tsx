@@ -91,6 +91,12 @@ export default async function Layout(props: {
                     ariaLabel="Notifications: Alt+T"
                     width="600px"
                   />
+                  <ToastContainer
+                    containerId="error-persistent"
+                    autoClose={false}
+                    ariaLabel="Error notifications"
+                    width="600px"
+                  />
                   <div className="flex grow flex-row gap-7">
                     <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
                       <div className="sticky top-0">
