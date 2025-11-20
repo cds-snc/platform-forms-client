@@ -251,7 +251,7 @@ export const ResponsesProvider = ({
             // Check if this is a file write error from CSV writer by examining the cause
             const errorCause = error instanceof Error ? error.cause : null;
 
-            logger.info(`Error processing submission ID ${response.name}:`, error);
+            logger.error(`Error processing submission ID ${response.name}:`, error);
 
             if (errorCause instanceof DOMException) {
               if (errorCause.name === "NoModificationAllowedError") {
