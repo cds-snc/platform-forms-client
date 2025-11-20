@@ -15,13 +15,13 @@
       "browserSupport": "Ensure you’re using Google Chrome or Microsoft Edge.",
       "browserSupportDetail": "Your browser will ask for permission to save files to your device.",
       "attachSafety": "Take caution when opening files attachments.",
-      "attachSafetyDetail": "Check files before opening, follow warning prompts, use host-based sensors."
+      "attachSafetyDetail": "Check files before opening, verify malicious file attributes, follow warning prompts."
     },
     "steps": {
       "heading": "Then, follow these steps:",
       "uploadKey": {
         "title": "Upload your API key file.",
-        "detail": "This is how you will securely authenticate."
+        "detail": "This is how you will securely authenticate to get all new responses."
       },
       "chooseLocation": {
         "title": "Choose a download location for responses.",
@@ -35,25 +35,24 @@
   },
   "loadKeyPage": {
     "title": "Upload your API key file",
-    "detail": "Upload the API key you generated in Settings to get access to your form's responses.",
+    "detail": "Upload the API key you generated in Settings to get access to all your form's available responses in one download. Make sure to unzip the folder that contains the JSON file.",
     "chooseFileButton": "Upload API Key",
     "noNewResponsesAvailable": "No new responses",
     "noNewResponsesDetail": "There are currently no new responses for this form.",
     "newResponsesAvailable": "New responses available",
     "checkForNewResponses": "Check for new responses",
-    "checkForNewResponsesButton": "Check for new responses",
     "downloadResponses": "Choose location",
     "uploadSuccessTitle": "API key was successfully uploaded",
     "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
     "uploadFailedTitle": "API key upload failed",
-    "uploadFailedMessage": "Make sure you selected the correct file. If it's not working, try regenerating a new API key and uploading it again.",
+    "uploadFailedMessage": "Make sure you select the correct file. If it's not working, try regenerating a new API key and uploading it again.",
     "lostKey": {
-      "link": "Lost API key?",
+      "link": "Don't have API key?",
       "lostKeyTip": {
-        "title": "Lost API key?",
-        "text1": "Only one API key can be associated to a form at a time.",
-        "text2": "Generate a new API key by going to Settings > API integration while signed in to",
-        "link": " GC Forms"
+        "title": "Don't have your API key?",
+        "text1": "Only one API key file can be associated to a form at a time.",
+        "text2": "Generate a new API key by going to",
+        "link": " Settings > API integration"
       }
     }
   },
@@ -62,6 +61,10 @@
     "subheading": "Decide where new responses will be downloaded.",
     "detail": "To add response data to an existing CSV, select the folder where it is currently saved. Make sure the CSV file name still includes the form ID, as it did when originally downloaded.",
     "chooseLocationButton": "Choose location",
+    "locationSelected": {
+      "title": "Save location selected",
+      "text1": "Responses will be placed in:"
+    },
     "csvDetected": {
       "title": "CSV response file detected in folder",
       "message": "New response data will be appended to the existing CSV file."
@@ -77,8 +80,8 @@
     "detail": "All downloads also include the raw data in JSON format. This allows for an automatic confirmation step without having to copy-paste receipt codes manually.",
     "formatOptions": {
       "csv": {
-        "label": "Combined in a spreadsheet (Aggregated CSV file)",
-        "hint": "Data will be appended to any existing CSV in the folder seleted."
+        "label": "Combined in spreadsheet (One CSV file)",
+        "hint": "Data appended, if there's an existing CSV in the folder seleted."
       },
       "html": {
         "label": "Individual copies (Separate HTML files)"
@@ -90,13 +93,13 @@
     "downloadedResponsesOne": "{{formattedCount}} response was downloaded",
     "downloadedResponsesOther": "{{formattedCount}} responses were downloaded",
     "savedTo": "All form submission data can be found in: ",
-    "checkForNewResponsesButton": "Check for new responses",
     "chooseNewLocationButton": "Choose new location",
     "downloadResponsesButton": "Download responses"
   },
   "processingPage": {
     "processingTitle": "Download in progress",
     "pleaseWait": "Please wait...",
+    "processingSubmission": "Processing submission {{submissionId}}",
     "processingMessage": "Processing {{count}} responses...",
     "cancelButton": "Pause download",
     "cancellingButton": "Pausing...",
@@ -106,13 +109,15 @@
   "backToStart": "Back to start",
   "continueButton": "Continue",
   "failed-to-load-api-key": "API key failed to load",
+  "checkForNewResponsesButton": "Check for new responses",
+  "checking": "Checking...",
   "toasts": {
     "rateLimitExceeded": {
       "title": "Rate limit exceeded",
       "message": "You have exceeded the number of allowed requests. Please wait before trying again."
     },
     "unknownError": {
-      "title": "An unknown error occurred",
+      "title": "Something went wrong",
       "message": "An unexpected error occurred. Please try again later.",
       "code": "Error code"
     },

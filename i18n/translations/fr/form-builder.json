@@ -210,14 +210,7 @@
       "text3": "afin d'utiliser cet élément."
     },
     "fileInputWithApi": {
-      "description": "Un moyen d'ajouter de la documentation à l'appui.",
-      "trialFeature": {
-        "title": "Fonctionnalité Bêta",
-        "text1": "Cette fonctionnalité à l’essai est limitée et nécessite :",
-        "bullet1": "La récupération des réponses au formulaire via une clé API",
-        "bullet2": "La vérification des fichiers pour détecter des indicateurs malveillants ou d'autres problèmes de sécurité",
-        "bullet3": "La collecte de coordonnées au cas où vous auriez besoin d'un suivi par rapport aux fichiers"
-      }
+      "description": "Un moyen d'ajouter de la documentation à l'appui."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "Quel est votre nom?",
@@ -497,6 +490,41 @@
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Obtenir une copie du formulaire"
   },
+  "auditDownload": {
+    "description": "Obtenez une feuille de calcul avec l'historique de toutes les actions clés effectuées dans un formulaire, y compris la date de création, de mise à jour et d'archivage du formulaire. Les actions peuvent prendre plusieurs minutes pour apparaître dans le journal d'activité.",
+    "downloadBtnText": "Télécharger la feuille de calcul",
+    "title": "Afficher l'activité du formulaire",
+    "headers": {
+      "formId": "Identifiant du formulaire",
+      "userId": "Membre de l'équipe",
+      "event": "Action du formulaire",
+      "timestamp": "Date",
+      "description": "Détails"
+    },
+    "events": {
+      "CreateForm": "Formulaire créé",
+      "ChangeDeliveryOption": "Option de livraison modifiée",
+      "ChangeSecurityAttribute": "Attribut de sécurité modifié",
+      "ChangeFormPurpose": "Titre du formulaire modifié",
+      "ChangeFormSaveAndResume": "Option de sauvegarde et de reprise modifiée",
+      "ChangeFormName": "Titre du formulaire modifié",
+      "UpdateForm": "Formulaire mis à jour",
+      "UpdateNotificationsInterval": "Interval de notifications mis à jour",
+      "UpdateNotificationsUserSetting": "Paramètre utilisateur des notification mis à jour",
+      "GrantFormAccess": "Accès au formulaire accordé",
+      "RevokeFormAccess": "Accès au formulaire révoqué",
+      "DownloadResponse": "Réponses téléchargées",
+      "ConfirmResponse": "Réponses confirmées",
+      "IdentifyProblemResponse": "Réponses signalées avec probléme",
+      "DeleteResponses": "Réponses supprimées",
+      "RetrieveResponses": "Réponses récupérées via l'API",
+      "CreateAPIKey": "Clé API générée",
+      "DeleteAPIKey": "Clé API supprimée",
+      "RefreshAPIKey": "Clé API re-générée",
+      "PublishForm": "Formulaire publié"
+    },
+    "errorCreatingDownload": "Erreur lors de la création du téléchargement"
+  },
   "switchToApiMode": {
     "title": "Passer à la livraison par API",
     "description": "Les nouvelles soumissions seront disponibles via le point de terminaison de l'API.",
@@ -518,8 +546,8 @@
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
-  "hasFileInputAndApiDelivery": "Livraison de réponse avec l'API",
-  "hasFileInputAndApiDeliveryNote": "Choix obligatoire lors de l'utilisation du téléverseur de fichiers",
+  "hasFileInputAndApiDelivery": "Récupération des réponses à partir du point de terminaison API",
+  "hasFileInputAndApiDeliveryNote": "Clé API obligatoire lors de l'utilisation du téléverseur de fichiers",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
@@ -697,14 +725,17 @@
       },
       "page": {
         "title": "Configurer l’intégration API",
-        "text1": "Cette section s'adresse aux développeur·se·s qui souhaitent utiliser l'API pour extraire les données des soumissions au formulaire vers un système cible. Une fois l’API configurée, les réponses pourront être récupérées à partir d'un point de terminaison. Consultez notre site de documentation pour en savoir plus.",
+        "text1": "Cette section s'adresse aux développeur·se·s qui souhaitent utiliser l'API pour extraire les données des soumissions au formulaire vers un système cible avec une intégration sur mesure. Une fois l’API configurée, les réponses pourront être récupérées à partir d'un point de terminaison programmatiquement. Consultez notre site de documentation pour en savoir plus.",
+
+        "text1": "This section is for developers who want to use the API to pull form submission data to a target system with a custom integration. Once set-up, responses can be retrieved from the API endpoint programmatically. Visit our documentation site for more information.",
+
         "docsButton": {
           "text": "Accéder à la documentation API",
           "link": "https://cds-snc.github.io/forms-api/accueil"
         },
         "apiKey": {
           "title": "Récupérer les soumissions via l'API",
-          "description": "Le fait de disposer d'une clé API signifie que GC Forms s'attend à ce que les données de réponse au formulaire soient récupérées via l'API.",
+          "description": "Le fait de disposer d'une clé API signifie que GC Forms s'attend à ce que les données de réponse au formulaire soient récupérées du point de terminaison API.",
           "rateLimit": {
             "title": "Limite de débit API",
             "currentLimit": "Limite actuelle :",
@@ -1442,11 +1473,15 @@
   "en": "English",
   "fr": "Français",
   "beta": {
-    "tag": "Bêta :",
+    "tag": "Nouveauté :",
     "text": "Fonctionnalité à l'essai",
-    "loadingError": "Ce formulaire contient un composant « bêta » qui n'est pas encore disponible pour tous les utilisateurs. Pour en savoir plus sur cette fonctionnalité limitée, veuillez contacter l'équipe de soutien."
+    "loadingError": "Ce formulaire contient un composant « pilote » qui n'est pas encore disponible pour tous les utilisateurs. Pour en savoir plus sur cette fonctionnalité limitée, veuillez contacter l'équipe de soutien."
+  },
+  "pilot": {
+    "tag": "Pilote :",
+    "text": "Fonctionnalité à l'essai"
   },
   "fileUploadApiWarning": {
-    "text": "La méthode de livraison n'est pas configurée sur API."
+    "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
   }
 }

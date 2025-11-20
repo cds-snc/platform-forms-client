@@ -30,13 +30,9 @@
       "title": "Banner",
       "description": "Enable warning banner to be visible"
     },
-    "fileUpload": {
-      "title": "File upload",
-      "description": "Enable file upload to be added as an element to a form"
-    },
-    "responsesBeta": {
-      "title": "Responses Beta",
-      "description": "Enable beta flow for retrieving form responses with API key from the interface"
+    "responsesPilot": {
+      "title": "Responses Pilot",
+      "description": "Enable new flow for downloading form responses with API key in browser"
     }
   },
   "addFlag": "Add user feature flag",

@@ -90,6 +90,20 @@ export const transform: TemplateStore<"transform"> = (set) => () => {
         .map(([id, _group]) => id);
     }
 
+    // Clean elements array based on groups (only those in groups are kept)
+    const elementIdsInGroups = new Set<string>();
+
+    Object.values(state.form.groups || {}).forEach((group) => {
+      group.elements.forEach((elementId) => {
+        elementIdsInGroups.add(elementId);
+      });
+    });
+
+    state.form.elements = state.form.elements.filter((element) => {
+      // ensure element.id exists in any elements array in the groups object
+      return elementIdsInGroups.has(element.id.toString());
+    });
+
     // Clean form layout
     if (state.form.layout) {
       state.form.layout = state.form.layout.filter((id) =>

@@ -30,13 +30,9 @@
       "title": "Bannière",
       "description": "Activer la bannière d'avertissement pour qu'elle soit visible"
     },
-    "fileUpload": {
-      "title": "Téléversement de fichier",
-      "description": "Activer le téléverseur de fichier en tant qu'élément pouvant être ajouté à un formulaire"
-    },
-    "responsesBeta": {
-      "title": "Réponses Bêta",
-      "description": "Activer le flux bêta pour la récupération des réponses au formulaire de l'interface, avec un clé API."
+    "responsesPilot": {
+      "title": "Réponses (Pilote)",
+      "description": "Activer le nouveau flux pour le téléchargement des réponses dans le navigateur avec une clé API."
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",
