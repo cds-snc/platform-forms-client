@@ -146,7 +146,7 @@ export const ResponsesProvider = ({
 
       return submissions;
     } catch (error) {
-      logger.info("Error loading submissions:", error);
+      logger.error("Error loading submissions:", error);
       setNewFormSubmissions([]);
       toast.error(<ErrorRetreivingSubmissions />, "wide");
       return [];
@@ -222,7 +222,7 @@ export const ResponsesProvider = ({
         logger.info(`Processing next ${formResponses.length} submissions`);
         for (const response of formResponses) {
           if (interruptRef.current) {
-            logger.info("Processing interrupted by user");
+            logger.warn("Processing interrupted by user");
             break;
           }
 
