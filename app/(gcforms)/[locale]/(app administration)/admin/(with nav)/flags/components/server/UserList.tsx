@@ -9,7 +9,9 @@ export const UserList = async () => {
   const { t } = await serverTranslation("admin-flags");
 
   const usersWithFlags = await featureFlagsGetAll();
-  logMessage.info(`~~~~~~~~~~~Fetching users with feature flags ${JSON.stringify(usersWithFlags)}`);
+  logMessage.info(
+    `~~~~~~UserList received users (${usersWithFlags.length}) with feature flags: ${JSON.stringify(usersWithFlags)}`
+  );
 
   // Loop through the users and fetch their details
   const userIDs = usersWithFlags.map((uf) => uf.userID);
