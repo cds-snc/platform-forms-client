@@ -520,7 +520,8 @@
       "RetrieveResponses": "Retrieved responses via API",
       "CreateAPIKey": "Generated API Key",
       "DeleteAPIKey": "Deleted API Key",
-      "RefreshAPIKey": "Re-generated API Key"
+      "RefreshAPIKey": "Re-generated API Key",
+      "PublishForm": "Form published"
     },
     "errorCreatingDownload": "Error creating download"
   },
