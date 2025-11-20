@@ -24,11 +24,14 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     setInterrupt,
     processResponses,
     newFormSubmissions,
+    hasError,
+    setHasError,
   } = useResponsesContext();
 
   const handleCheckResponses = useCallback(() => {
     setHasCheckedForResponses(true);
     resetProcessingCompleted();
+    setHasError(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -40,6 +43,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     // reset relevant state
     setProcessedSubmissionIds(new Set());
     resetProcessingCompleted();
+    setHasError(false);
     setInterrupt(false);
 
     // navigate to location selection with reset param
@@ -50,6 +54,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     // reset relevant state
     setProcessedSubmissionIds(new Set());
     resetProcessingCompleted();
+    setHasError(false);
     setInterrupt(false);
 
     const initialResponses = await retrieveResponses();
@@ -88,9 +93,20 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
   return (
     <div>
-      <p className="mb-0 text-base">{t("confirmationPage.successTitle")}</p>
+      <p className="mb-0 text-base">
+        {hasError
+          ? processedSubmissionIds.size > 0
+            ? t("confirmationPage.partialSuccessTitle")
+            : t("confirmationPage.errorTitle")
+          : t("confirmationPage.successTitle")}
+      </p>
       <h2 className="mb-8">
         {(() => {
+          // If error occurred with no successful downloads, show error message
+          if (hasError && processedSubmissionIds.size === 0) {
+            return t("confirmationPage.errorOccurred");
+          }
+
           const count = processedSubmissionIds.size || 0;
           const formatted = new Intl.NumberFormat(locale).format(count);
           const key =
