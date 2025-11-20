@@ -40,7 +40,7 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
 
     return () => {
       if (isMountedRef.current) {
-        logger.info("ProcessingDownloads unmounted, interrupting processing.");
+        logger.warn("ProcessingDownloads unmounted, interrupting processing.");
         setInterrupt(true);
       }
     };
