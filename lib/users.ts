@@ -155,6 +155,30 @@ export const getUser = async (id: string): Promise<AppUser> => {
   });
 };
 
+export const getUsersEmails = async (
+  formId: string,
+  userIds: string[]
+): Promise<{ id: string; email: string }[]> => {
+  await authorization.canViewForm(formId).catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(e.user.id, { type: "User" }, "AccessDenied", "Attempted to get users emails");
+    }
+    throw e;
+  });
+
+  return prisma.user.findMany({
+    where: {
+      id: {
+        in: userIds,
+      },
+    },
+    select: {
+      id: true,
+      email: true,
+    },
+  });
+};
+
 /**
  * Get all Users
  * @returns An array of all Users
