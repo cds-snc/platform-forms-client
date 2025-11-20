@@ -142,7 +142,7 @@ export const writeRow = async ({
       if (error instanceof DOMException) {
         if (error.name === "NoModificationAllowedError") {
           throw new Error(
-            `Cannot write to the CSV file. The file "${csvFileHandle.name}" is currently open in another application (e.g., Excel). Please close the file and try again.`,
+            `Cannot modify file "${csvFileHandle.name}" posssibly opened in another program.`,
             { cause: error }
           );
         } else if (error.name === "InvalidStateError") {
@@ -151,9 +151,12 @@ export const writeRow = async ({
             { cause: error }
           );
         } else if (error.name === "QuotaExceededError") {
-          throw new Error("Not enough storage space available to write to the file.", {
-            cause: error,
-          });
+          throw new Error(
+            `Not enough storage space available to write to the file "${csvFileHandle.name}".`,
+            {
+              cause: error,
+            }
+          );
         }
       }
 
