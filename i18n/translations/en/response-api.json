@@ -90,6 +90,9 @@
   },
   "confirmationPage": {
     "successTitle": "Success!",
+    "errorTitle": "Download interrupted",
+    "partialSuccessTitle": "Partial download completed",
+    "errorOccurred": "An error occurred during the download process",
     "downloadedResponsesOne": "{{formattedCount}} response was downloaded",
     "downloadedResponsesOther": "{{formattedCount}} responses were downloaded",
     "savedTo": "All form submission data can be found in: ",
@@ -124,6 +127,18 @@
     "errorRetreivingSubmissions": {
       "title": "Error retrieving submissions",
       "message": "There was an error retrieving form submissions. Please try again later."
+    },
+    "fileLockedError": {
+      "title": "Unable to modify file",
+      "message": "Cannot write to the CSV file. The file may be locked by another application. Please close the file and try again."
+    },
+    "invalidStateError": {
+      "title": "File in invalid state",
+      "message": "The CSV file is in an invalid state and cannot be modified. The file may be locked or corrupted."
+    },
+    "quotaExceededError": {
+      "title": "Storage space exceeded",
+      "message": "Not enough storage space is available to write to the file. Please free up space and try again."
     }
   }
 }
