@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Lock Test - File System API</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .log {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+        }
+        .log-success {
+            color: #28a745;
+        }
+        .log-error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .log-info {
+            color: #666;
+        }
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        h1 {
+            color: #333;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            background: #e7f3ff;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔒 File Lock Test - File System API</h1>
+    
+    <div class="instructions">
+        <h3>Test Instructions:</h3>
+        <ol>
+            <li>Click "Select Directory" to choose a folder</li>
+            <li>Click "Create & Write Test File" to create a file</li>
+            <li><strong>Open the file in Excel/TextEdit/another app</strong></li>
+            <li>Click "Try Writing (Should Fail)" to test the lock behavior</li>
+            <li>Close the file in the other app</li>
+            <li>Click "Try Writing (Should Succeed)" to verify it works when unlocked</li>
+        </ol>
+    </div>
+
+    <div class="status">
+        <strong>Selected Directory:</strong> <span id="dirStatus">None</span><br>
+        <strong>Test File:</strong> <span id="fileStatus">Not created</span>
+    </div>
+
+    <div>
+        <button id="selectDirBtn">📁 Select Directory</button>
+        <button id="createFileBtn" disabled>📝 Create & Write Test File</button>
+        <button id="tryWriteBtn" disabled>✍️ Try Writing (Should Fail When Locked)</button>
+        <button id="clearLogBtn">🗑️ Clear Log</button>
+    </div>
+
+    <div class="log" id="log"></div>
+
+    <script>
+        let dirHandle = null;
+        let fileHandle = null;
+        const TEST_FILENAME = 'test-file-lock.txt';
+
+        // DOM elements
+        const selectDirBtn = document.getElementById('selectDirBtn');
+        const createFileBtn = document.getElementById('createFileBtn');
+        const tryWriteBtn = document.getElementById('tryWriteBtn');
+        const clearLogBtn = document.getElementById('clearLogBtn');
+        const logDiv = document.getElementById('log');
+        const dirStatus = document.getElementById('dirStatus');
+        const fileStatus = document.getElementById('fileStatus');
+
+        // Logging functions
+        function log(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            const timestamp = new Date().toLocaleTimeString();
+            entry.textContent = `[${timestamp}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function logSuccess(message) {
+            log('✅ ' + message, 'success');
+        }
+
+        function logError(message) {
+            log('❌ ' + message, 'error');
+        }
+
+        function logInfo(message) {
+            log('ℹ️ ' + message, 'info');
+        }
+
+        // Select directory
+        selectDirBtn.addEventListener('click', async () => {
+            try {
+                logInfo('Opening directory picker...');
+                dirHandle = await window.showDirectoryPicker({
+                    mode: 'readwrite'
+                });
+                
+                dirStatus.textContent = dirHandle.name;
+                createFileBtn.disabled = false;
+                logSuccess(`Directory selected: ${dirHandle.name}`);
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    logInfo('Directory selection cancelled');
+                } else {
+                    logError(`Failed to select directory: ${error.name} - ${error.message}`);
+                }
+            }
+        });
+
+        // Create test file
+        createFileBtn.addEventListener('click', async () => {
+            try {
+                logInfo(`Creating test file: ${TEST_FILENAME}...`);
+                
+                fileHandle = await dirHandle.getFileHandle(TEST_FILENAME, { create: true });
+                
+                const writable = await fileHandle.createWritable();
+                await writable.write('Initial content - File created at: ' + new Date().toISOString() + '\n');
+                await writable.write('This is a test file for checking file lock behavior.\n');
+                await writable.write('Try opening this file in Excel, TextEdit, or another application.\n');
+                await writable.close();
+                
+                fileStatus.textContent = TEST_FILENAME;
+                tryWriteBtn.disabled = false;
+                logSuccess('File created and written successfully!');
+                logInfo('👉 Now open this file in another application (Excel, TextEdit, etc.) and try writing again.');
+            } catch (error) {
+                logError(`Failed to create/write file: ${error.name} - ${error.message}`);
+                console.error('Full error:', error);
+            }
+        });
+
+        // Try writing to file (will fail if locked)
+        tryWriteBtn.addEventListener('click', async () => {
+            if (!fileHandle) {
+                logError('No file handle available');
+                return;
+            }
+
+            try {
+                logInfo('Attempting to write to file...');
+                
+                const writable = await fileHandle.createWritable({ keepExistingData: true });
+                
+                // Seek to end of file
+                const file = await fileHandle.getFile();
+                await writable.seek(file.size);
+                
+                await writable.write('\nNew entry added at: ' + new Date().toISOString() + '\n');
+                await writable.close();
+                
+                logSuccess('Write successful! The file was NOT locked.');
+                logInfo('If the file was open in another app, it was likely open in read-only mode or the OS allows concurrent writes.');
+            } catch (error) {
+                if (error.name === 'NoModificationAllowedError') {
+                    logError(`File is LOCKED! Error: ${error.name}`);
+                    logInfo('This means the file is open in another application that has exclusive access.');
+                    logInfo('Close the file in the other application and try again.');
+                } else if (error.name === 'NotAllowedError') {
+                    logError(`Permission denied! Error: ${error.name}`);
+                    logInfo('You may need to grant write permission to this directory.');
+                } else {
+                    logError(`Write failed: ${error.name} - ${error.message}`);
+                }
+                console.error('Full error:', error);
+            }
+        });
+
+        // Clear log
+        clearLogBtn.addEventListener('click', () => {
+            logDiv.innerHTML = '';
+            logInfo('Log cleared');
+        });
+
+        // Check browser support
+        if (!('showDirectoryPicker' in window)) {
+            logError('❌ File System Access API is not supported in this browser!');
+            logInfo('Please use Chrome, Edge, or another Chromium-based browser.');
+            selectDirBtn.disabled = true;
+        } else {
+            logSuccess('✅ File System Access API is supported!');
+            logInfo('Click "Select Directory" to begin the test.');
+        }
+    </script>
+</body>
+</html>
