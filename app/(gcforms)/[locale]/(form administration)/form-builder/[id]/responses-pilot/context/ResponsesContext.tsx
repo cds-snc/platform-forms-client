@@ -250,16 +250,16 @@ export const ResponsesProvider = ({
 
             if (errorCause instanceof DOMException) {
               if (errorCause.name === "NoModificationAllowedError") {
-                toast.error(<FileWriteError />, "wide");
+                toast.error(<FileWriteError />, "default");
               } else if (errorCause.name === "InvalidStateError") {
-                toast.error(<InvalidStateErrorToast />, "wide");
+                toast.error(<InvalidStateErrorToast />, "default");
               } else if (errorCause.name === "QuotaExceededError") {
-                toast.error(<QuotaExceededErrorToast />, "wide");
+                toast.error(<QuotaExceededErrorToast />, "default");
               } else {
-                toast.error(<ErrorRetreivingSubmissions />, "wide");
+                toast.error(<ErrorRetreivingSubmissions />, "default");
               }
             } else {
-              toast.error(<ErrorRetreivingSubmissions />, "wide");
+              toast.error(<ErrorRetreivingSubmissions />, "default");
             }
           }
         }
