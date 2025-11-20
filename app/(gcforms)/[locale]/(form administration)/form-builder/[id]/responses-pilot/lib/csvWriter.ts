@@ -1,6 +1,6 @@
 import { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 
-import { type FormProperties } from "@gcforms/types";
+import { type FormProperties, Response } from "@gcforms/types";
 import { FormElementTypes, type FormElement } from "@lib/types";
 
 import { createArrayCsvStringifier as createCsvStringifier } from "@lib/responses/csv-writer";

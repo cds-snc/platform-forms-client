@@ -1,7 +1,7 @@
 import { ResponseHtml } from "@root/lib/responseDownloadFormats/html/components/ResponseHtml";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { mapAnswers } from "@root/lib/responses/mapper/mapAnswers";
-import { FormProperties, SecurityAttribute } from "@root/lib/types";
+import { FormProperties, SecurityAttribute, Response } from "@root/lib/types";
 import { TFunction } from "i18next";
 import { Submission } from "@root/lib/responseDownloadFormats/types";
 

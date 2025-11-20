@@ -3,6 +3,7 @@ import type { MappedAnswer } from "./types";
 import { createFallbackMappedAnswer, createAnswerObject } from "./utils/toAnswerObject";
 import { getAnswerAsString } from "./utils/toString";
 import { FormProperties } from "@gcforms/types";
+import { Response } from "@gcforms/types";
 
 /**
  * Map raw response answers to the standardized MappedAnswer shape using a template.
