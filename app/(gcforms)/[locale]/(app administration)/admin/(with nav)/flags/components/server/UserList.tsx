@@ -3,11 +3,14 @@ import { featureFlagsGetAll } from "@lib/cache/userFeatureFlagsCache";
 import { getUsers } from "@lib/users";
 import { UserFlag } from "../client/UserFlag";
 import { AddUserFlag } from "../client/AddUserFlag";
+import { logMessage } from "@root/lib/logger";
 
 export const UserList = async () => {
   const { t } = await serverTranslation("admin-flags");
 
   const usersWithFlags = await featureFlagsGetAll();
+  logMessage.info(`~~~~~~~~~~~Fetching users with feature flags ${JSON.stringify(usersWithFlags)}`);
+
   // Loop through the users and fetch their details
   const userIDs = usersWithFlags.map((uf) => uf.userID);
   const users = await getUsers({ id: { in: userIDs } });
