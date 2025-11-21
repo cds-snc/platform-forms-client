@@ -1,15 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
 import { useResponsesContext } from "./context/ResponsesContext";
-import { useRouter } from "next/navigation";
+import { useResponsesApp } from "./context";
 import { disableResponsesPilotMode } from "../responses/actions";
 
 export const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
   const { formId } = useResponsesContext();
-  const { t, i18n } = useTranslation(["form-builder-responses"]);
-  const router = useRouter();
+  const { t, i18n, router } = useResponsesApp();
 
   const handleSwitchBack = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
