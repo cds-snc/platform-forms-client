@@ -79,12 +79,12 @@ export const syncUserFeatureFlagsToRedis = async (
 
     // Group features by userId from usersWithFeatures
     const userFlagsMap: Record<string, Set<string>> = {};
-    for (const { userId, feature } of usersWithFeatures) {
+    usersWithFeatures.map(({ userId, feature }) => {
       if (!userFlagsMap[userId]) {
         userFlagsMap[userId] = new Set();
       }
       userFlagsMap[userId].add(feature);
-    }
+    });
 
     // Delete any keys to delete not in usersWithFeatures
     const existingKeys = await redis.keys("auth:featureFlags:*");
