@@ -69,7 +69,7 @@ export const featureFlagsGetAll = async (): Promise<{ userID: string; flag: stri
   }
 };
 
-export const syncFeatureFlagsToRedis = async (
+export const syncUserFeatureFlagsToRedis = async (
   usersWithFeatures: { userId: string; feature: string }[]
 ): Promise<void> => {
   if (!cacheAvailable) return;

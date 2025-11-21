@@ -7,7 +7,7 @@ import { getUsers } from "./users";
 
 /**
  * Get all feature flags enabled.
- * @returns Array of feature flag keys (strings)
+ * @returns Array of user and feature data
  */
 export const getAllUsersWithFeatures = async (): Promise<
   {

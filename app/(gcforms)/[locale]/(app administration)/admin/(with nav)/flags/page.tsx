@@ -7,7 +7,7 @@ import { FlagList } from "./components/server/FlagList";
 import { UserList } from "./components/server/UserList";
 import { Loader } from "@clientComponents/globals/Loader";
 import { getAllUsersWithFeatures } from "@root/lib/userFeatureFlags";
-import { syncFeatureFlagsToRedis } from "@root/lib/cache/userFeatureFlagsCache";
+import { syncUserFeatureFlagsToRedis } from "@root/lib/cache/userFeatureFlagsCache";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -25,9 +25,9 @@ export async function generateMetadata(props: {
 export default AuthenticatedPage([authorization.canAccessFlags], async () => {
   const { t } = await serverTranslation("admin-flags");
 
-  // Get and sync feature flags for all users
+  // Get and sync user feature flags for all users
   const usersWithFeatures = await getAllUsersWithFeatures();
-  await syncFeatureFlagsToRedis(usersWithFeatures);
+  await syncUserFeatureFlagsToRedis(usersWithFeatures);
 
   return (
     <>
