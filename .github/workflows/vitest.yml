@@ -30,5 +30,11 @@ jobs:
       - name: "Install dependencies"
         run: yarn workspaces focus gcforms
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
       - name: Vitest Tests
         run: yarn test:vitest
+
+      - name: Vitest Browser Tests
+        run: yarn test:vitest:browser

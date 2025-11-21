@@ -1,6 +1,9 @@
 {
   "section-title": "Responses (Pilot)",
   "stepOf": "Step {{current}} of {{total}}",
+  "responsesPilot": {
+    "responsesSwitchLink": "Switch back to the classic Responses view"
+  },
   "not-supported": {
     "title": "Web browser not supported",
     "body": "This browser cannot use the File System Access API. Try a different browser or give your browser permission to save files to your device."
