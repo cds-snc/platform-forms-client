@@ -1,10 +1,14 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output = "../src/generated"
+  engineType = "client" 
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts" // generated extensions
+  importFileExtension    = "ts"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model Account {

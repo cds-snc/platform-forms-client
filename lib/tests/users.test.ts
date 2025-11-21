@@ -2,7 +2,7 @@
 
 import { prismaMock } from "@jestUtils";
 import { getUsers, getOrCreateUser } from "@lib/users";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@gcforms/database";
 
 import { AccessControlError } from "@lib/auth/errors";
 import { ManageUsers, Base } from "__utils__/permissions";
