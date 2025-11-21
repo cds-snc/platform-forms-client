@@ -1,3 +1,4 @@
+"use client";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 
@@ -14,14 +15,14 @@ export const Login = ({ language = "en" }) => {
   return (
     <form
       action={async () => {
-        signIn("gcAccount", { redirectTo: `/${language}/auth/policy` });
+        signIn("gcForms", { redirectTo: `/${language}/auth/policy` });
       }}
     >
       <button
-        className="border-gcds-blue-800 bg-gcds-blue-900 text-white-default hover:border-gcds-blue-800 hover:bg-gcds-blue-800 hover:text-white-default active:border-black"
+        className="rounded-xl border-3 border-gcds-gray-500 p-3 text-blue-900 hover:border-gcds-blue-800 hover:bg-gcds-blue-800 hover:text-white-default active:border-black"
         type="submit"
       >
-        Sign in
+        Sign in with Zitadel
       </button>
     </form>
   );

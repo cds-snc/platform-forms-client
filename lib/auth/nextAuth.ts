@@ -51,8 +51,8 @@ const {
   providers: [
     // Keep this commented out for now, as we are not using Zitadel for authentication within the app
     {
-      id: "gcAccount", // signIn("my-provider") and will be part of the callback URL
-      name: "GC Account", // optional, used on the default login page as the button text.
+      id: "gcForms", // signIn("my-provider") and will be part of the callback URL
+      name: "GC Forms", // optional, used on the default login page as the button text.
       type: "oidc",
       issuer: process.env.ZITADEL_PROVIDER,
       clientId: process.env.ZITADEL_CLIENT_ID,

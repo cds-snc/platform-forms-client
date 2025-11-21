@@ -13,8 +13,6 @@ import Markdown from "markdown-to-jsx";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
 import { SkipLink } from "../SkipLink";
-import { Login } from "./Login";
-
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
   className?: string;
@@ -98,9 +96,13 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
           </div>
           <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
             <ul className="mt-2 flex list-none px-0 text-base">
-              <li className="mr-2 py-2 text-base tablet:mr-4">
-                <Login />
-              </li>
+              {status !== "authenticated" && (
+                <li className="mr-2 py-2 text-base tablet:mr-4">
+                  <Link href={`/${language}/auth/login`} prefetch={false}>
+                    {t("loginMenu.login")}
+                  </Link>
+                </li>
+              )}
               {
                 <li className="mr-2 py-2 tablet:mr-4">
                   <LanguageToggle />
