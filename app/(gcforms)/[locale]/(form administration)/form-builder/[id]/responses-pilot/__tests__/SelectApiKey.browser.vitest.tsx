@@ -5,7 +5,7 @@ import { ResponsesProvider } from "../context/ResponsesContext";
 import { SelectApiKey } from "../load-key/SelectApiKey";
 import { ContentWrapper } from "../ContentWrapper";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
-import { setupFonts } from "./testHelpers";
+import { setupFonts, visualWait, isVisualDebugMode } from "./testHelpers";
 
 // Import actual app styles
 import "@root/styles/app.scss";
@@ -45,33 +45,30 @@ describe("SelectApiKey - Browser Mode", () => {
     // Verify component renders
     expect(container).toBeTruthy();
     
-    // Keep visible for 15 seconds to visually inspect
-    await new Promise(resolve => setTimeout(resolve, 15000));
-  }, 20000); // 20 second timeout
+    await visualWait(5000);
+  }, 10000);
 
   it("should have Continue button disabled initially", async () => {
     setupFonts();
 
-    const { findByText } = renderSelectApiKey();
+    const { findByTestId } = renderSelectApiKey();
 
-    const continueButton = (await findByText("Continue")) as HTMLButtonElement;
+    const continueButton = (await findByTestId("continue-button")) as HTMLButtonElement;
     expect(continueButton.disabled).toBe(true);
 
-    // Keep visible for 10 seconds
-    await new Promise(resolve => setTimeout(resolve, 10000));
-  }, 15000);
+    await visualWait(3000);
+  }, 10000);
 
   it("should show 'Lost your key?' link", async () => {
     setupFonts();
 
-    const { findByText } = renderSelectApiKey();
+    const { findByTestId } = renderSelectApiKey();
 
-    const lostKeyLink = await findByText("Lost your key?");
+    const lostKeyLink = await findByTestId("lost-key-link");
     expect(lostKeyLink).toBeTruthy();
 
-    // Keep visible for 10 seconds
-    await new Promise(resolve => setTimeout(resolve, 10000));
-  }, 15000);
+    await visualWait(3000);
+  }, 10000);
 
   it("should open file picker when clicking Upload API Key", async () => {
     setupFonts();
@@ -79,21 +76,19 @@ describe("SelectApiKey - Browser Mode", () => {
     let filePickerOpened = false;
     const mockShowOpenFilePicker = async () => {
       filePickerOpened = true;
-      // Simulate user canceling
       throw new DOMException("User cancelled", "AbortError");
     };
 
-    const { findByText } = renderSelectApiKey({ showOpenFilePicker: mockShowOpenFilePicker });
+    const { findByTestId } = renderSelectApiKey({ showOpenFilePicker: mockShowOpenFilePicker });
 
-    const uploadButton = await findByText("Load key");
+    const uploadButton = await findByTestId("load-api-key-button");
     uploadButton.click();
 
-    // Wait a bit for the click to process
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Wait for the click to process
+    await new Promise(resolve => setTimeout(resolve, isVisualDebugMode() ? 4000 : 500));
 
     expect(filePickerOpened).toBe(true);
 
-    // Keep visible for 10 seconds
-    await new Promise(resolve => setTimeout(resolve, 10000));
+    await visualWait(3000);
   }, 15000);
 });

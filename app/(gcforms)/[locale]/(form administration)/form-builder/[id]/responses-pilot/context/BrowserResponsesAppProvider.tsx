@@ -3,6 +3,8 @@
 import { createContext, useContext, ReactNode } from "react";
 import { showOpenFilePicker } from "native-file-system-adapter";
 import { getAccessTokenFromApiKey } from "../lib/utils";
+import responseApiEn from "@root/i18n/translations/en/response-api.json";
+import commonEn from "@root/i18n/translations/en/common.json";
 
 interface ResponsesAppContextType {
   // Navigation
@@ -36,6 +38,55 @@ interface ResponsesAppContextType {
 
 const BrowserResponsesAppContext = createContext<ResponsesAppContextType | null>(null);
 
+/**
+ * Helper to get nested translation value from JSON
+ */
+const getNestedValue = (obj: unknown, path: string): string | undefined => {
+  const keys = path.split(".");
+  let result: unknown = obj;
+
+  for (const key of keys) {
+    if (result && typeof result === "object" && key in result) {
+      result = (result as Record<string, unknown>)[key];
+    } else {
+      return undefined;
+    }
+  }
+
+  return typeof result === "string" ? result : undefined;
+};
+
+/**
+ * Create a translation function that loads from actual translation files
+ */
+const createTranslationFunction = (
+  translationFiles: { namespace: string; data: Record<string, unknown> }[]
+) => {
+  return (key: string, options?: Record<string, unknown>): string => {
+    // Try to find the translation in each namespace
+    for (const { namespace, data } of translationFiles) {
+      // Check if key starts with namespace prefix
+      const prefixedKey = key.startsWith(`${namespace}.`)
+        ? key.substring(namespace.length + 1)
+        : key;
+
+      const value = getNestedValue(data, prefixedKey);
+      if (value) {
+        // Simple interpolation for {{variable}} patterns
+        if (options) {
+          return value.replace(/\{\{(\w+)\}\}/g, (_, varName) => {
+            return options[varName]?.toString() || "";
+          });
+        }
+        return value;
+      }
+    }
+
+    // Fallback to key if not found
+    return key;
+  };
+};
+
 interface BrowserResponsesAppProviderProps {
   children: ReactNode;
   overrides?: Partial<ResponsesAppContextType>;
@@ -61,41 +112,11 @@ export const BrowserResponsesAppProvider = ({
 
   const defaultSearchParams = new URLSearchParams();
 
-  // Basic translation function with common strings
-  const defaultT = (key: string, options?: Record<string, unknown>) => {
-    const translations: Record<string, string> = {
-      // Step indicator
-      stepOf: `Step ${options?.current || 1} of ${options?.total || 3}`,
-
-      // Load Key Page
-      "loadKeyPage.title": "Load your API key",
-      "loadKeyPage.detail": "Select the API key file you downloaded when you created your API key.",
-
-      // Buttons
-      back: "Back",
-      next: "Next",
-      loadKey: "Load key",
-      checkForResponses: "Check for responses",
-      backToStart: "Back to start",
-      continueButton: "Continue",
-
-      // Lost Key
-      "lostKey.link": "Lost your key?",
-      "lostKey.title": "Lost your API key?",
-      "lostKey.description": "If you've lost your API key, you'll need to generate a new one.",
-
-      // ContentWrapper
-      "responsesPilot.responsesSwitchLink": "Switch back to standard responses view",
-
-      // Common
-      "common.back": "Back",
-      "common.next": "Next",
-      "common.cancel": "Cancel",
-      "common.continue": "Continue",
-    };
-
-    return translations[key] || key;
-  };
+  // Translation function that uses actual translation files
+  const defaultT = createTranslationFunction([
+    { namespace: "response-api", data: responseApiEn as Record<string, unknown> },
+    { namespace: "common", data: commonEn as Record<string, unknown> },
+  ]);
 
   const defaultI18n = {
     language: "en",

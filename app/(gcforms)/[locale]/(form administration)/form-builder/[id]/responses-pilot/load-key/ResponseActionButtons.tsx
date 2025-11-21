@@ -19,7 +19,7 @@ export const ResponseActionButtons = () => {
 
   return (
     <div className="mt-8 flex flex-row gap-4">
-      <Button theme="secondary" onClick={handleBack}>
+      <Button theme="secondary" onClick={handleBack} data-testid="back-to-start-button">
         {t("backToStart")}
       </Button>
 
@@ -30,6 +30,7 @@ export const ResponseActionButtons = () => {
           theme="primary"
           disabled={Boolean(!apiClient || (newFormSubmissions && newFormSubmissions.length === 0))}
           onClick={handleNext}
+          data-testid="continue-button"
         >
           {t("continueButton")}
         </Button>

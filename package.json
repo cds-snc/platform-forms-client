@@ -37,6 +37,7 @@
     "test": "jest",
     "test:vitest": "vitest run",
     "test:vitest:browser": "VITEST_BROWSER=true vitest --run",
+    "test:vitest:browser:debug": "VITEST_BROWSER=true VISUAL_DEBUG=true vitest --run",
     "test:vitest:browser:ui": "VITEST_BROWSER=true vitest --ui",
     "test:watch:vitest": "vitest --watch",
     "test:watch": "DEBUG_PRINT_LIMIT=10000  jest --watch",
