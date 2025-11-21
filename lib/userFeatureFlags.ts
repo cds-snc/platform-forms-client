@@ -3,7 +3,6 @@ import { prisma } from "@lib/integration/prismaConnector";
 import { featureFlagsCheck, featureFlagsPut } from "@lib/cache/userFeatureFlagsCache";
 import { FeatureFlagKeys } from "./cache/types";
 import { checkOne } from "./cache/flags";
-import { getUsers } from "./users";
 
 /**
  * Get all feature flags enabled for a user.
@@ -113,7 +112,7 @@ export const featureFlagAllowedForUser = async (
 };
 
 /**
- * Get all feature flags enabled.
+ * Get all user feature flags enabled.
  * @returns Array of user and feature data
  */
 export const getAllUsersWithFeatures = async (): Promise<
@@ -128,21 +127,20 @@ export const getAllUsersWithFeatures = async (): Promise<
       select: {
         feature: true,
         userId: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
       },
     });
 
-    // Loop through the users and fetch their details
-    const userIds = usersWithFlags.map((uf) => uf.userId);
-    const users = await getUsers({ id: { in: userIds } });
-
-    // Map user details back to the features
-    return usersWithFlags.map((uf) => {
-      const user = users.find((u) => u.id === uf.userId);
-      return {
-        ...uf,
-        userText: user ? `${user.name} (${user.email})` : uf.userId,
-      };
-    });
+    return usersWithFlags.map((uf) => ({
+      feature: uf.feature,
+      userId: uf.userId,
+      userText: uf.user ? `${uf.user.name} (${uf.user.email})` : uf.userId,
+    }));
   } catch (error) {
     return [];
   }
