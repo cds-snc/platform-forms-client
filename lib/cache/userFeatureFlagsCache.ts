@@ -86,7 +86,7 @@ export const syncUserFeatureFlagsToRedis = async (
       userFlagsMap[userId].add(feature);
     });
 
-    // Delete any keys to delete not in usersWithFeatures
+    // Delete any keys not usersWithFeatures
     const existingKeys = await redis.keys("auth:featureFlags:*");
     const existingUserIds = existingKeys.map((key) => key.replace("auth:featureFlags:", ""));
     const currentUserIds = Object.keys(userFlagsMap);
@@ -98,7 +98,7 @@ export const syncUserFeatureFlagsToRedis = async (
       })
     );
 
-    // Sync current user feature flags to Redis
+    // Sync user feature flags (usersWithFeatures) to Redis
     await Promise.all(
       Object.entries(userFlagsMap).map(([userId, features]) => {
         const redisKey = `auth:featureFlags:${userId}`;
