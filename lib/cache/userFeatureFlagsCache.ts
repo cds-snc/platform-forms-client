@@ -48,9 +48,7 @@ export const featureFlagsGetAll = async (): Promise<{ userID: string; flag: stri
   try {
     const redis = await getRedisInstance();
     const keys = await redis.keys("auth:featureFlags:*");
-    logMessage.debug(
-      `~~~~~~~~~~~~~featureFlagsGetAll: Fetching Cached Feature Flags for ${keys.length} users: ${keys.join(", ")}`
-    );
+
     if (keys.length === 0) return [];
 
     const values = await redis.mget(keys);
@@ -67,6 +65,49 @@ export const featureFlagsGetAll = async (): Promise<{ userID: string; flag: stri
     return result;
   } catch (e) {
     logMessage.error(e as Error);
+    throw new Error("Could not connect to cache");
+  }
+};
+
+export const syncFeatureFlagsToRedis = async (
+  usersWithFeatures: { userId: string; feature: string }[]
+): Promise<void> => {
+  if (!cacheAvailable) return;
+
+  try {
+    const redis = await getRedisInstance();
+
+    // Group features by userId from usersWithFeatures
+    const userFlagsMap: Record<string, Set<string>> = {};
+    for (const { userId, feature } of usersWithFeatures) {
+      if (!userFlagsMap[userId]) {
+        userFlagsMap[userId] = new Set();
+      }
+      userFlagsMap[userId].add(feature);
+    }
+
+    // Delete any keys to delete not in usersWithFeatures
+    const existingKeys = await redis.keys("auth:featureFlags:*");
+    const existingUserIds = existingKeys.map((key) => key.replace("auth:featureFlags:", ""));
+    const currentUserIds = Object.keys(userFlagsMap);
+    const keysToDelete = existingUserIds.filter((userId) => !currentUserIds.includes(userId));
+    await Promise.all(
+      keysToDelete.map((userId) => {
+        const redisKey = `auth:featureFlags:${userId}`;
+        redis.del(redisKey).then();
+      })
+    );
+
+    // Sync current user feature flags to Redis
+    await Promise.all(
+      Object.entries(userFlagsMap).map(([userId, features]) => {
+        const redisKey = `auth:featureFlags:${userId}`;
+        const flagsArray = Array.from(features); // Convert Set to Array
+        redis.setex(redisKey, randomCacheExpiry(), JSON.stringify(flagsArray));
+      })
+    );
+  } catch (error) {
+    logMessage.error(error as Error);
     throw new Error("Could not connect to cache");
   }
 };

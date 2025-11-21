@@ -1,29 +1,17 @@
 import { serverTranslation } from "@i18n";
-import { featureFlagsGetAll } from "@lib/cache/userFeatureFlagsCache";
-import { getUsers } from "@lib/users";
 import { UserFlag } from "../client/UserFlag";
 import { AddUserFlag } from "../client/AddUserFlag";
-import { logMessage } from "@root/lib/logger";
 
-export const UserList = async () => {
+export const UserList = async ({
+  usersWithFeatures,
+}: {
+  usersWithFeatures: {
+    userText: string;
+    userId: string;
+    feature: string;
+  }[];
+}) => {
   const { t } = await serverTranslation("admin-flags");
-
-  const usersWithFlags = await featureFlagsGetAll();
-  logMessage.info(
-    `~~~~~~UserList received users (${usersWithFlags.length}) with feature flags: ${JSON.stringify(usersWithFlags)}`
-  );
-
-  // Loop through the users and fetch their details
-  const userIDs = usersWithFlags.map((uf) => uf.userID);
-  const users = await getUsers({ id: { in: userIDs } });
-  // Map user details back to the flags
-  const usersWithDetails = usersWithFlags.map((uf) => {
-    const user = users.find((u) => u.id === uf.userID);
-    return {
-      ...uf,
-      userText: user ? `${user.name} (${user.email})` : uf.userID, // Display name and email if available
-    };
-  });
 
   return (
     <table className="mb-20 table-auto border-4">
@@ -35,15 +23,15 @@ export const UserList = async () => {
         </tr>
       </thead>
       <tbody>
-        {Object.entries(usersWithDetails).map(([i, userflagData]) => (
+        {Object.entries(usersWithFeatures).map(([i, userWithFeature]) => (
           <UserFlag
             key={i}
-            user={userflagData.userText}
-            flag={userflagData.flag}
-            userId={userflagData.userID}
+            user={userWithFeature.userText}
+            flag={userWithFeature.feature}
+            userId={userWithFeature.userId}
           />
         ))}
-        {usersWithDetails.length === 0 && (
+        {usersWithFeatures.length === 0 && (
           <tr>
             <td className="border-2 p-2" colSpan={3}>
               {t("noUserFlags")}
