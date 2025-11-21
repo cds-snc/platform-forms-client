@@ -38,6 +38,7 @@
     "test:vitest": "vitest run",
     "test:vitest:browser": "VITEST_BROWSER=true vitest --run",
     "test:vitest:browser:watch": "VITEST_BROWSER=true vitest --watch",
+    "test:vitest:browser:watch:debug": "VITEST_BROWSER=true VISUAL_DEBUG=true vitest --watch",
     "test:vitest:browser:debug": "VITEST_BROWSER=true VISUAL_DEBUG=true vitest --run",
     "test:vitest:browser:ui": "VITEST_BROWSER=true vitest --ui",
     "test:watch:vitest": "vitest --watch",

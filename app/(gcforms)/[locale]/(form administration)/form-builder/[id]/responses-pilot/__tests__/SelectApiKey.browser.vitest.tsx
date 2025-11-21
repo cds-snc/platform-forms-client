@@ -157,25 +157,29 @@ describe("SelectApiKey - Browser Mode", () => {
 
       // Mock API client that returns submissions
       const mockApiClient = {
-        getNewFormSubmissions: async () => [
-          {
-            confirmationCode: "TEST-123",
-            createdAt: new Date().toISOString(),
-            name: "Test Submission",
-          },
-          {
-            confirmationCode: "TEST-456",
-            createdAt: new Date().toISOString(),
-            name: "Test Submission 2",
-          },
-        ],
+        getNewFormSubmissions: async () => {
+          // Small delay to simulate API call
+          await new Promise(resolve => setTimeout(resolve, 100));
+          return [
+            {
+              confirmationCode: "TEST-123",
+              createdAt: new Date().toISOString(),
+              name: "Test Submission",
+            },
+            {
+              confirmationCode: "TEST-456",
+              createdAt: new Date().toISOString(),
+              name: "Test Submission 2",
+            },
+          ];
+        },
         formId: "test-form",
       } as unknown as GCFormsApiClient;
 
       const { findByTestId } = renderSelectApiKey(undefined, mockApiClient);
 
-      // Should show responses available section with heading
-      const responsesSection = await findByTestId("responses-available");
+      // Wait for the data to load and responses to be available
+      const responsesSection = await findByTestId("responses-available", {}, { timeout: 5000 });
       expect(responsesSection).toBeTruthy();
 
       const newResponsesHeading = await findByTestId("new-responses-heading");
