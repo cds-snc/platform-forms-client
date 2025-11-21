@@ -86,7 +86,7 @@ export const syncUserFeatureFlagsToRedis = async (
       userFlagsMap[userId].add(feature);
     });
 
-    // Delete any keys not usersWithFeatures
+    // Delete any keys not in usersWithFeatures
     const existingKeys = await redis.keys("auth:featureFlags:*");
     const existingUserIds = existingKeys.map((key) => key.replace("auth:featureFlags:", ""));
     const currentUserIds = Object.keys(userFlagsMap);
