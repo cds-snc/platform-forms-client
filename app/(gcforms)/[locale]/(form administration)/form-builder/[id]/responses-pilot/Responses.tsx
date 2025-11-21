@@ -10,7 +10,10 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
 
   if (newFormSubmissions === null) {
     return (
-      <div className="mb-8 rounded-2xl border-2 border-gray-300 bg-white p-8">
+      <div
+        className="mb-8 rounded-2xl border-2 border-gray-300 bg-white p-8"
+        data-testid="responses-loading"
+      >
         <div className="flex items-center justify-between">
           <div className="w-2/3">
             <Skeleton className="mb-6 h-10 w-3/4" />
@@ -24,9 +27,11 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
   }
 
   return newFormSubmissions && newFormSubmissions.length > 0 ? (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between" data-testid="responses-available">
       <div>
-        <h2 className="mb-8">{t("loadKeyPage.newResponsesAvailable")}</h2>
+        <h2 className="mb-8" data-testid="new-responses-heading">
+          {t("loadKeyPage.newResponsesAvailable")}
+        </h2>
         {actions}
       </div>
       <div>
@@ -39,9 +44,11 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
       </div>
     </div>
   ) : (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between" data-testid="no-responses">
       <div>
-        <h2 className="mb-8">{t("loadKeyPage.noNewResponsesAvailable")}</h2>
+        <h2 className="mb-8" data-testid="no-responses-heading">
+          {t("loadKeyPage.noNewResponsesAvailable")}
+        </h2>
         {actions}
       </div>
       <div>

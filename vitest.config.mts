@@ -44,5 +44,7 @@ export default defineConfig({
       instances: [{ browser: "chromium" }],
       headless: false, // Always show browser window
     },
+    isolate: false,
+    fileParallelism: false,
   },
 });
