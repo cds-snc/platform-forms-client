@@ -37,8 +37,8 @@
     "cypress:e2e": "cypress run --browser chrome --e2e",
     "cypress:component": "NEXT_PUBLIC_APP_ENV=test cypress run --browser chrome --component",
     "cypress:run": "yarn db:test && yarn start:test",
-    "playwright": "yarn db:test && playwright test --ui",
-    "playwright:run": "yarn db:test && playwright test",
+    "playwright": "yarn db:test && APP_ENV=test  playwright test --ui",
+    "playwright:run": "yarn db:test && APP_ENV=test playwright test",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
   },
   "dependencies": {
