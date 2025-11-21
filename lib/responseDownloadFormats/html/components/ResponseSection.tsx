@@ -37,6 +37,75 @@ export const ResponseSection = ({
 }: ResponseSectionProps) => {
   const capitalizedLang = capitalize(lang);
 
+  const CopyResponseToClipboardScript = React.createElement("script", {
+    dangerouslySetInnerHTML: {
+      __html: `
+        document.addEventListener("DOMContentLoaded", function() {
+          // Copy Row Response
+          var btnCopyResponse = document.getElementById("copyResponseButton${capitalizedLang}");
+          var outputCopyResponse = document.getElementById("copyResponseOutput${capitalizedLang}");
+          
+          // Select only deepest dd elements without any nested dl elements
+          var responseItems = Array.from(document.querySelectorAll("#responseTableRow${capitalizedLang} dd:not(:has(dl))"));
+          
+          // Format with tab separators for Excel copy+paste
+          var responseText = responseItems.map(item => {
+            var text = item.textContent.trim();
+            // Remove unnecessary newlines, tabs, and extra spaces
+            return text.replace(/[\\t|\\n]+/g, "").replace(/[ ]{2,}/g, " ");
+          }).join(String.fromCharCode(9));
+          
+          btnCopyResponse.dataset.clipboardText = responseText;
+          
+          var clipboardResponse = new ClipboardJS("#copyResponseButton${capitalizedLang}");
+          clipboardResponse.on('success', function (e) {
+            outputCopyResponse.classList.remove("hidden");
+            outputCopyResponse.textContent = "${t("responseTemplate.copiedToCipboard", {
+              lng: lang || "en",
+            })}";
+            e.clearSelection();
+          });
+          clipboardResponse.on('error', function () {
+            outputCopyResponse.classList.remove("hidden");
+            outputCopyResponse.classList.add("text-red-default");
+            outputCopyResponse.textContent = "${t("responseTemplate.errorrCopyingToClipboard", {
+              lng: lang || "en",
+            })}";
+          });
+        });
+      `,
+    },
+  });
+
+  const CopyCodeToClipboardScript = showCodes
+    ? React.createElement("script", {
+        dangerouslySetInnerHTML: {
+          __html: `
+        document.addEventListener("DOMContentLoaded", function() {
+          // Copy Code
+          var btnCopyCode = document.getElementById("copyCodeButton${capitalizedLang}");
+          var outputCopyCode = document.getElementById("copyCodeOutput${capitalizedLang}");
+          var clipboardCode = new ClipboardJS("#copyCodeButton${capitalizedLang}");
+          clipboardCode.on('success', function (e) {
+            outputCopyCode.classList.remove("hidden");
+            outputCopyCode.textContent = "${t("responseTemplate.copiedToCipboard", {
+              lng: lang || "en",
+            })}";
+            e.clearSelection();
+          });
+          clipboardCode.on('error', function () {
+            outputCopyCode.classList.remove("hidden");
+            outputCopyCode.classList.add("text-red-default");
+            outputCopyCode.textContent = "${t("responseTemplate.errorrCopyingToClipboard", {
+              lng: lang || "en",
+            })}";
+          });
+        });
+      `,
+        },
+      })
+    : null;
+
   return (
     <>
       <nav
@@ -85,6 +154,24 @@ export const ResponseSection = ({
       <h3 id={`rowTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.rowTable", { lng: lang })}
       </h3>
+      <p className="mt-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
+      <div className="mb-8 mt-4">
+        <div>
+          <button
+            className="inline-flex items-center rounded-md border-2 border-solid border-blue bg-blue-default p-3 font-medium leading-[24px] text-white-default transition-all duration-150 ease-in-out hover:border-blue-light hover:bg-blue-light hover:text-white-default focus:border-blue-active focus:bg-blue-focus focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus active:top-0.5 active:border-black active:bg-black active:text-white-default active:outline-[3px] active:outline-offset-2 active:outline-blue-focus disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark"
+            id={`copyResponseButton${capitalizedLang}`}
+            aria-labelledby={`copyResponseLabel${capitalizedLang}`}
+            data-clipboard-text=""
+          >
+            {t("responseTemplate.copyResponse", { lng: lang })}
+          </button>
+        </div>
+        <div
+          id={`copyResponseOutput${capitalizedLang}`}
+          aria-live="polite"
+          className="mt-4 hidden text-green"
+        ></div>
+      </div>
 
       <RowTable
         responseID={responseID}
@@ -123,6 +210,9 @@ export const ResponseSection = ({
           </div>
         </>
       )}
+
+      {CopyResponseToClipboardScript}
+      {CopyCodeToClipboardScript}
     </>
   );
 };
