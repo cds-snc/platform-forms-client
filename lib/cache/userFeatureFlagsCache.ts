@@ -102,7 +102,7 @@ export const syncUserFeatureFlagsToRedis = async (
     await Promise.all(
       Object.entries(userFlagsMap).map(([userId, features]) => {
         const redisKey = `auth:featureFlags:${userId}`;
-        const flagsArray = Array.from(features); // Convert Set to Array
+        const flagsArray = Array.from(features);
         redis.setex(redisKey, randomCacheExpiry(), JSON.stringify(flagsArray));
       })
     );
