@@ -71,7 +71,8 @@
     "copyCodeClipboard": "Copy code to clipboard",
     "copiedToCipboard": "Copied to clipboard",
     "errorrCopyingToClipboard": "Error copying to clipboard",
-    "submissionID": "Submission ID"
+    "submissionID": "Submission ID",
+    "copyResponse": "Copy answer row to clipboard"
   },
   "responseAggregatedTemplate": {
     "title": "Form responses",
