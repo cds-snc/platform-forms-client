@@ -1,13 +1,10 @@
 import { Button } from "@clientComponents/globals";
-import { useRouter } from "next/navigation";
-
-import { useTranslation } from "@i18n/client";
+import { useResponsesApp } from "../context";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { CheckForResponsesButton } from "../components/CheckForResponsesButton";
 
 export const ResponseActionButtons = () => {
-  const { t } = useTranslation(["response-api", "common"]);
-  const router = useRouter();
+  const { t, router } = useResponsesApp();
   const { apiClient, newFormSubmissions, resetState, locale, formId } = useResponsesContext();
 
   const handleBack = () => {
