@@ -3,7 +3,7 @@ import { type FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { parseAnswersField } from "./jsonToCsvHelpers";
 
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
-import { SecurityAttribute, type FormProperties } from "@gcforms/types";
+import { SecurityAttribute, type FormProperties, type Response } from "@gcforms/types";
 import { ResponseHtml } from "@root/lib/responseDownloadFormats/html/components/ResponseHtml";
 import { Answer } from "@root/lib/responseDownloadFormats/types";
 import { TFunction } from "i18next";

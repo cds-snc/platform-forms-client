@@ -71,7 +71,8 @@
     "copyCodeClipboard": "Copier le code dans le presse-papiers",
     "copiedToCipboard": "Copié dans le presse-papiers",
     "errorrCopyingToClipboard": "Erreur lors de la copie dans le presse-papiers",
-    "submissionID": "Identifiant de soumission"
+    "submissionID": "Identifiant de soumission",
+    "copyResponse": "Copier la ligne de réponse dans le presse-papiers"
   },
   "responseAggregatedTemplate": {
     "title": "Réponses au formulaire",

@@ -490,6 +490,46 @@
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Obtenir une copie du formulaire"
   },
+  "auditDownload": {
+    "description": "Obtenez une feuille de calcul avec l'historique de toutes les actions clés effectuées dans un formulaire, y compris la date de création, de mise à jour et d'archivage du formulaire. Les actions peuvent prendre plusieurs minutes pour apparaître dans le journal d'activité.",
+    "downloadBtnText": "Télécharger la feuille de calcul",
+    "title": "Afficher l'activité du formulaire",
+    "headers": {
+      "formId": "Identifiant du formulaire",
+      "userId": "Membre de l'équipe",
+      "event": "Action du formulaire",
+      "timestamp": "Date",
+      "description": "Détails"
+    },
+    "events": {
+      "CreateForm": "Formulaire créé",
+      "ChangeDeliveryOption": "Option de livraison modifiée",
+      "ChangeSecurityAttribute": "Attribut de sécurité modifié",
+      "ChangeFormPurpose": "Titre du formulaire modifié",
+      "ChangeFormSaveAndResume": "Option de sauvegarde et de reprise modifiée",
+      "ChangeFormName": "Titre du formulaire modifié",
+      "UpdateForm": "Formulaire mis à jour",
+      "UpdateNotificationsInterval": "Interval de notifications mis à jour",
+      "UpdateNotificationsUserSetting": "Paramètre utilisateur des notification mis à jour",
+      "GrantFormAccess": "Accès au formulaire accordé",
+      "RevokeFormAccess": "Accès au formulaire révoqué",
+      "DownloadResponse": "Réponses téléchargées",
+      "ConfirmResponse": "Réponses confirmées",
+      "IdentifyProblemResponse": "Réponses signalées avec probléme",
+      "DeleteResponses": "Réponses supprimées",
+      "RetrieveResponses": "Réponses récupérées via l'API",
+      "CreateAPIKey": "Clé API générée",
+      "DeleteAPIKey": "Clé API supprimée",
+      "RefreshAPIKey": "Clé API re-générée",
+      "PublishForm": "Formulaire publié"
+    },
+    "errorCreatingDownload": "Erreur lors de la création du téléchargement"
+  },
+  "switchToApiMode": {
+    "title": "Passer à la livraison par API",
+    "description": "Les nouvelles soumissions seront disponibles via le point de terminaison de l'API.",
+    "btnText": "Passer à la livraison par API"
+  },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
   "formMissingProperty": "Il manque : {{property}}",
@@ -763,9 +803,9 @@
         "refreshHeading": "⚠️ Vous devrez ajouter cette nouvelle clé à votre intégration pour pouvoir récupérer correctement les réponses.",
         "responsibility": "Vous êtes responsable de :",
         "responsibility1": "L'enregistrement de cette clé dans un endroit sûr d'une machine du gouvernement du Canada.",
-        "responsibility2": "Le partage de cette clé uniquement avec les personnes qui ont les autorisations, s'il y a un besoin.",
+        "responsibility2": "Le partage de cette clé uniquement avec les personnes qui ont les autorisations, s'il y a un besoin pour l'intégration programmatique.",
         "responsibility3": "L'envoi de cette clé en utilisant un courriel crypté, s'il est nécessaire pour la configuration de l'intégration.",
-        "responsibility4": "La sécurisation de la clé et sa gestion avec la génération d’une nouvelle clée, si l'on soupçonne qu'elle a été compromise.",
+        "responsibility4": "La sécurisation de la clé et sa gestion avec la génération d’une nouvelle clé, si l'on soupçonne qu'elle a été compromise.",
         "text1": "Ne perdez pas votre clé ",
         "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en générer une nouvelle.",
         "cancelButton": "Annuler",

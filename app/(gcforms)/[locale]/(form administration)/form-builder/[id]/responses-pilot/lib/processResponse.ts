@@ -105,7 +105,7 @@ const downloadAndConfirmResponse = async ({
     maxRetries: 6,
     onRetry: (attempt, error) => {
       const cause = error instanceof Error && error.cause ? error.cause : null;
-      logger.info(`Attempt ${attempt} to download submission ${responseName} failed: ${error}`, {
+      logger.warn(`Attempt ${attempt} to download submission ${responseName} failed: ${error}`, {
         cause,
       });
     },
