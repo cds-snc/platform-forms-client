@@ -1,6 +1,9 @@
 {
   "section-title": "Réponses (Pilote)",
   "stepOf": "Étape {{current}} de {{total}}",
+  "responsesPilot": {
+    "responsesSwitchLink": "Revenir à l'affichage classique des Réponses"
+  },
   "not-supported": {
     "title": "Navigateur web non compatible",
     "body": "Ce navigateur ne peut pas utiliser l'API d'accès au système de fichiers. Essayez un autre navigateur ou autorisez votre navigateur à enregistrer des fichiers sur votre appareil."
