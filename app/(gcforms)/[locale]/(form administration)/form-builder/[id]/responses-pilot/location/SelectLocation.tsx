@@ -73,6 +73,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
         </LinkButton.Secondary>
         <Button
           id="continue-button"
+          data-testid="continue-button"
           theme="primary"
           disabled={!directoryHandle}
           onClick={handleNext}
