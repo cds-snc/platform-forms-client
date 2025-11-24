@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "author": "Canadian Digital Service",
   "license": "MIT",
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },
