@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.0](https://github.com/cds-snc/platform-forms-client/compare/v4.5.0...v4.6.0) (2025-11-24)
+
+
+### Features
+
+* Ability to view Audit Log Events for Owned Forms ([b38ff69](https://github.com/cds-snc/platform-forms-client/commit/b38ff695516157a9d4e2acda2f76eef05faeeae2))
+
+
+### Miscellaneous Chores
+
+* Add Veterans Review and Appeal Board branding ([#6418](https://github.com/cds-snc/platform-forms-client/issues/6418)) ([62c7018](https://github.com/cds-snc/platform-forms-client/commit/62c701876e713347a92ef4b06b346e6004e043b0))
+* Change logging level for submission processing error ([#6415](https://github.com/cds-snc/platform-forms-client/issues/6415)) ([bd86106](https://github.com/cds-snc/platform-forms-client/commit/bd86106f88f54e72df55f781e7853d24d7b2aafe))
+* content updates ([#6416](https://github.com/cds-snc/platform-forms-client/issues/6416)) ([e01a20f](https://github.com/cds-snc/platform-forms-client/commit/e01a20f6f5f27bfb64e004b1ca835d8f73b017e3))
+* fix blocking getSubmissionRemovalDate calls ([#6396](https://github.com/cds-snc/platform-forms-client/issues/6396)) ([10016ee](https://github.com/cds-snc/platform-forms-client/commit/10016ee64aabdeafdb8edede68ae25ba59cf1275))
+* fix Response type for map answers ([#6407](https://github.com/cds-snc/platform-forms-client/issues/6407)) ([f6a6896](https://github.com/cds-snc/platform-forms-client/commit/f6a68966f710b0b25f2890b5bacf72d2122d7f8d))
+* handle file write errors ([#6411](https://github.com/cds-snc/platform-forms-client/issues/6411)) ([29a06c1](https://github.com/cds-snc/platform-forms-client/commit/29a06c1356241823f8e49a28f5d761a9baca4cd6))
+* Improve error serialization in logs, set appropriate levels ([#6413](https://github.com/cds-snc/platform-forms-client/issues/6413)) ([cd49132](https://github.com/cds-snc/platform-forms-client/commit/cd4913242a267e6695a60cf63512058b331711ba))
+* pilot update heading level for Select format ([#6423](https://github.com/cds-snc/platform-forms-client/issues/6423)) ([4a9d840](https://github.com/cds-snc/platform-forms-client/commit/4a9d8402ab2605f69ee15996e5bc9eb7494b9979))
+* re-add copy row ([#6417](https://github.com/cds-snc/platform-forms-client/issues/6417)) ([8ab7f94](https://github.com/cds-snc/platform-forms-client/commit/8ab7f9470d2f56a506f83e155a77f0fa5783731b))
+* Remove http instrumentation ([#6422](https://github.com/cds-snc/platform-forms-client/issues/6422)) ([e704527](https://github.com/cds-snc/platform-forms-client/commit/e7045277933da69d489dcd8a520a216566ba8b57))
+* Reset state when re-checking for responses ([#6397](https://github.com/cds-snc/platform-forms-client/issues/6397)) ([a98be59](https://github.com/cds-snc/platform-forms-client/commit/a98be59149bbd00028bbee7707909f52173ff8f0))
+* revert action log work until new strategy is complete ([#6424](https://github.com/cds-snc/platform-forms-client/issues/6424)) ([1f2c2e3](https://github.com/cds-snc/platform-forms-client/commit/1f2c2e32299e88006bca247fd6b45ac0d3e660aa))
+
 ## [4.5.0](https://github.com/cds-snc/platform-forms-client/compare/v4.4.2...v4.5.0) (2025-11-19)
 
 

@@ -4,6 +4,7 @@ import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
 import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
 
 import { FormElement } from "@root/packages/types/src/form-types";
+import { ResponseFilenameMapping } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot/lib/processResponse";
 
 const getDateAsString = (answer: DateObject | string | object, dateFormat: DateFormat): string => {
   try {
@@ -19,7 +20,11 @@ const getDateAsString = (answer: DateObject | string | object, dateFormat: DateF
   }
 };
 
-export const getAnswerAsString = (question: FormElement | undefined, answer: unknown): string => {
+export const getAnswerAsString = (
+  question: FormElement | undefined,
+  answer: unknown,
+  attachments?: ResponseFilenameMapping
+): string => {
   if (question && question.type === "checkbox") {
     return Array(answer).join(", ");
   }
@@ -28,7 +33,15 @@ export const getAnswerAsString = (question: FormElement | undefined, answer: unk
     if (!answer || typeof answer !== "object" || !("name" in answer)) {
       return ""; // If the answer is not an object or does not have a name, return empty string
     }
-    return answer.name as string;
+
+    let id = null;
+    if ("id" in answer) {
+      id = (answer as { id: string }).id;
+    }
+
+    const attachment = attachments?.get(id as string);
+
+    return attachment ? attachment.actualName : (answer as { name: string }).name || "";
   }
 
   if (question && question.type === "formattedDate") {

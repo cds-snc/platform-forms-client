@@ -1,23 +1,25 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslation } from "@i18n/client";
-
+import { useResponsesApp } from "../context";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { LoadKey } from "./LoadKey";
-import { getAccessTokenFromApiKey } from "../lib/utils";
-import { showOpenFilePicker } from "native-file-system-adapter";
 import { GCFormsApiClient } from "../lib/apiClient";
 import { Responses } from "../Responses";
 import { LostKeyLink, LostKeyPopover } from "./LostKeyPopover";
 import { ResponseActionButtons } from "./ResponseActionButtons";
 
 export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => {
-  const { t } = useTranslation("response-api");
+  const {
+    t,
+    router,
+    searchParams,
+    showOpenFilePicker,
+    getAccessTokenFromApiKey,
+    apiUrl,
+    isDevelopment,
+  } = useResponsesApp();
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const { apiClient, retrieveResponses, setApiClient, setPrivateApiKey, resetState } =
     useResponsesContext();
 
@@ -56,7 +58,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       const token = await getAccessTokenFromApiKey(keyFile);
 
       // Ensure the key's formId matches the current form id - unless in local development mode
-      if (keyFile.formId !== id && process.env.NODE_ENV !== "development") {
+      if (keyFile.formId !== id && !isDevelopment) {
         throw new Error("API key form ID does not match the current form ID.");
       }
 
@@ -64,9 +66,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         return false;
       }
 
-      setApiClient(
-        new GCFormsApiClient(keyFile.formId, process.env.NEXT_PUBLIC_API_URL ?? "", keyFile, token)
-      );
+      setApiClient(new GCFormsApiClient(keyFile.formId, apiUrl, keyFile, token));
 
       setPrivateApiKey(keyFile);
 
@@ -81,14 +81,22 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       // no-op
       return false;
     }
-  }, [setApiClient, setPrivateApiKey, id]);
+  }, [
+    setApiClient,
+    setPrivateApiKey,
+    id,
+    showOpenFilePicker,
+    getAccessTokenFromApiKey,
+    apiUrl,
+    isDevelopment,
+  ]);
 
   return (
     <div>
       {!apiClient && (
         <div>
           <div className="mb-4">{t("stepOf", { current: 1, total: 3 })}</div>
-          <h2>{t("loadKeyPage.title")}</h2>
+          <h2 data-testid="load-key-heading">{t("loadKeyPage.title")}</h2>
           <p className="mb-4 font-medium">{t("loadKeyPage.detail")}</p>
           <LoadKey onLoadKey={handleLoadApiKey} />
           <LostKeyLink />
