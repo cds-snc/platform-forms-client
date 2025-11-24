@@ -6,34 +6,26 @@ import { useTranslation } from "@i18n/client";
 
 export const DirectoryPicker = ({
   onPick,
-  onClose,
 }: {
   onPick: (handle: FileSystemDirectoryHandle | null) => void;
-  onClose?: (picked: boolean) => void;
 }) => {
   const { t } = useTranslation("response-api");
   return (
     <Button
       theme="secondary"
+      data-testid="choose-location-button"
       onClick={async () => {
-        let picked = false;
         try {
           const dirHandle = await showDirectoryPicker();
-          if (dirHandle) {
-            picked = true;
-            onPick(dirHandle as FileSystemDirectoryHandle);
-          }
+          dirHandle && onPick(dirHandle as FileSystemDirectoryHandle);
         } catch (error) {
           if ((error as Error).name === "AbortError") {
-            // user cancelled the picker
-          } else {
-            // no-op for other errors
+            return;
           }
-        } finally {
-          onClose?.(picked);
+
+          // no-op
         }
       }}
-      buttonRef={pickerButtonRef}
     >
       {t("locationPage.chooseLocationButton")}
     </Button>
