@@ -136,11 +136,13 @@ export const getAllUsersWithFeatures = async (): Promise<
       },
     });
 
-    return usersWithFlags.map((uf) => ({
-      feature: uf.feature,
-      userId: uf.userId,
-      userText: uf.user ? `${uf.user.name} (${uf.user.email})` : uf.userId,
-    }));
+    return usersWithFlags
+      .map((uf) => ({
+        feature: uf.feature,
+        userId: uf.userId,
+        userText: uf.user ? `${uf.user.name} (${uf.user.email})` : uf.userId,
+      }))
+      .sort((a, b) => a.userText.localeCompare(b.userText));
   } catch (error) {
     return [];
   }
