@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
@@ -17,6 +17,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
   const { t } = useTranslation("response-api");
 
   const { directoryHandle, setDirectoryHandle, logger } = useResponsesContext();
+  const continueButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const setDirectory = useCallback(
     async (handle: FileSystemDirectoryHandle | null) => {
@@ -26,6 +27,10 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
 
       setDirectoryHandle(handle);
       toast.success(<LocationSelected directoryName={handle.name} />, "wide");
+
+      // Wait a tick to ensure the button is rendered
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      document.getElementById("continue-button")?.focus();
 
       const logsDirectoryHandle = await handle.getDirectoryHandle("logs", { create: true });
       logger.setDirectoryHandle(logsDirectoryHandle);
@@ -68,7 +73,13 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
         >
           {t("backButton")}
         </LinkButton.Secondary>
-        <Button theme="primary" disabled={!directoryHandle} onClick={handleNext}>
+        <Button
+          id="continue-button"
+          theme="primary"
+          disabled={!directoryHandle}
+          onClick={handleNext}
+          buttonRef={(el) => (continueButtonRef.current = el)}
+        >
           {t("continueButton")}
         </Button>
       </div>
