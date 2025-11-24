@@ -62,10 +62,7 @@ export class ResponseDownloadLogger {
 
     // Also log to console for debugging
     // eslint-disable-next-line no-console
-    console[level === "error" ? "error" : level === "warn" ? "warn" : "log"](
-      `[${level.toUpperCase()}] ${message}`,
-      data || ""
-    );
+    console["log"](`[${level.toUpperCase()}] ${message}`, data || "");
 
     // Queue write to avoid race conditions
     this.writeQueue = this.writeQueue.then(() => this.writeToFile(entry));
@@ -87,8 +84,16 @@ export class ResponseDownloadLogger {
               message: error.message,
               stack: error.stack,
               name: error.name,
+              cause: error.cause,
             }
-          : error,
+          : error instanceof DOMException
+            ? {
+                message: error.message,
+                name: error.name,
+                code: error.code,
+                cause: error.cause,
+              }
+            : error,
     });
   }
 

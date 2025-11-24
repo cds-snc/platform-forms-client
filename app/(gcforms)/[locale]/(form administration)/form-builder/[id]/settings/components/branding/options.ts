@@ -323,4 +323,13 @@ export const options = [
     logoTitleEn: "Canadian Heritage",
     logoTitleFr: "Patrimoine canadien",
   },
+  {
+    name: "vrab",
+    urlEn: "https://vrab-tacra.gc.ca/en",
+    urlFr: "https://vrab-tacra.gc.ca/fr",
+    logoEn: "/img/branding/vrab-en.svg",
+    logoFr: "/img/branding/vrab-fr.svg",
+    logoTitleEn: "Veterans Review and Appeal Board",
+    logoTitleFr: "Tribunal des anciens combattants (révision et appel)",
+  },
 ];

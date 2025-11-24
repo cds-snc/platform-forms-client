@@ -91,6 +91,9 @@
   },
   "confirmationPage": {
     "successTitle": "Succès !",
+    "errorTitle": "Téléchargement interrompu",
+    "partialSuccessTitle": "Téléchargement partiel terminé",
+    "errorOccurred": "Une erreur s'est produite pendant le processus de téléchargement",
     "downloadedResponsesOne": "{{formattedCount}} réponse a été téléchargée",
     "downloadedResponsesOther": "{{formattedCount}} réponses ont été téléchargées",
     "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
@@ -125,6 +128,18 @@
     "errorRetreivingSubmissions": {
       "title": "Erreur lors de la récupération des soumissions",
       "message": "Une erreur est survenue lors de la récupération des soumissions du formulaire. Veuillez réessayer plus tard."
+    },
+    "fileLockedError": {
+      "title": "Impossible de modifier le fichier",
+      "message": "Impossible d'écrire dans le fichier CSV. Le fichier peut être verrouillé par une autre application. Veuillez fermer le fichier et réessayer."
+    },
+    "invalidStateError": {
+      "title": "Fichier dans un état invalide",
+      "message": "Le fichier CSV est dans un état invalide et ne peut pas être modifié. Le fichier peut être verrouillé ou corrompu."
+    },
+    "quotaExceededError": {
+      "title": "Espace de stockage dépassé",
+      "message": "Espace de stockage insuffisant pour écrire dans le fichier. Veuillez libérer de l'espace et réessayer."
     }
   }
 }

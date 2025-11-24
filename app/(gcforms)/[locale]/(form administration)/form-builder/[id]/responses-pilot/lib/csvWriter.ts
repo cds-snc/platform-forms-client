@@ -142,14 +142,52 @@ export const writeRow = async ({
 
   const rowString = csvStringifier.stringifyRecords(recordsData);
 
-  // Write to file
+  // Write to file with error handling
   if (csvFileHandle) {
-    const writable = await csvFileHandle.createWritable({ keepExistingData: true });
-    // Seek to end of file
-    const file = await csvFileHandle.getFile();
-    await writable.seek(file.size);
-    await writable.write(rowString);
-    await writable.close();
+    let writable;
+    try {
+      writable = await csvFileHandle.createWritable({ keepExistingData: true });
+
+      // Seek to end of file
+      const file = await csvFileHandle.getFile();
+      await writable.seek(file.size);
+      await writable.write(rowString);
+      await writable.close();
+    } catch (error) {
+      // Clean up writable if it was created
+      if (writable) {
+        try {
+          await writable.abort();
+        } catch {
+          // Ignore abort errors
+        }
+      }
+
+      // Handle specific DOMException errors - throw with cause to preserve original error
+      if (error instanceof DOMException) {
+        if (error.name === "NoModificationAllowedError") {
+          throw new Error(
+            `Cannot modify file "${csvFileHandle.name}" posssibly opened in another program.`,
+            { cause: error }
+          );
+        } else if (error.name === "InvalidStateError") {
+          throw new Error(
+            `The file "${csvFileHandle.name}" is in an invalid state. It may be locked or corrupted.`,
+            { cause: error }
+          );
+        } else if (error.name === "QuotaExceededError") {
+          throw new Error(
+            `Not enough storage space available to write to the file "${csvFileHandle.name}".`,
+            {
+              cause: error,
+            }
+          );
+        }
+      }
+
+      // Re-throw if not a known error
+      throw error;
+    }
   }
 };
 
