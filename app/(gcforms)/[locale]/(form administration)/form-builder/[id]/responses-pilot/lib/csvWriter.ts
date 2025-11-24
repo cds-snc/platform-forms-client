@@ -117,6 +117,25 @@ export const writeRow = async ({
       }
 
       if (question.type === FormElementTypes.dynamicRow && Array.isArray(answer)) {
+        answer.forEach((subAnswers) => {
+          const subElements = question.properties?.subElements ?? [];
+          const subQuestions = subElements.filter((sub) => sub.type !== FormElementTypes.richText);
+
+          Object.entries(subAnswers).forEach(([subQuestionIndex, subAnswer]) => {
+            const subQuestion = subQuestions[Number(subQuestionIndex)];
+            if (subQuestion?.type === FormElementTypes.fileInput) {
+              // Ensure we have an id to use for lookup
+              if (typeof subAnswer !== "object" || subAnswer === null || !("id" in subAnswer)) {
+                return;
+              }
+
+              const fileName = attachments.get(subAnswer.id as string);
+              if (fileName) {
+                subAnswers[subQuestionIndex] = { name: fileName.actualName };
+              }
+            }
+          });
+        });
       }
     }
   });
