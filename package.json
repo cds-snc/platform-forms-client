@@ -19,7 +19,7 @@
     "dev": "yarn db:dev && next dev --turbopack",
     "dev:debug": "next dev --turbopack",
     "dev:secure": "yarn db:dev && next dev --experimental-https --turbopack",
-    "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
+    "build": "next build",
     "start": "NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
     "start:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
     "dev:test": "yarn db:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
