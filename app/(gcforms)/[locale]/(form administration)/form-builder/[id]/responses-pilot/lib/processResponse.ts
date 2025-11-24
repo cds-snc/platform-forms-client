@@ -184,11 +184,13 @@ const downloadAndConfirmResponse = async ({
       }
     );
 
-    const downloadResults = await Promise.all(
-      decryptedResponse.attachments.map((attachment) =>
-        downloadAttachment(responseAttachmentsDirectoryHandle, attachment)
-      )
-    );
+    const downloadResults: Array<{ id: string; originalName: string; actualName: string }> = [];
+    for (const attachment of decryptedResponse.attachments) {
+      // eslint-disable-next-line no-await-in-loop
+      downloadResults.push(
+        await downloadAttachment(responseAttachmentsDirectoryHandle, attachment)
+      );
+    }
 
     // Build mapping of attachment ID to filenames
     downloadResults.forEach(({ id, originalName, actualName }) => {
