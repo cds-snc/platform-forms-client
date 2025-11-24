@@ -99,61 +99,10 @@ export const writeRow = async ({
 }) => {
   const sortedElements = orderElements({ formTemplate });
 
-  // map attachments to rawAnswers
-  Object.entries(rawAnswers).forEach(([questionId, answer]) => {
-    const question = sortedElements.find((el) => el.id === Number(questionId));
-
-    if (question) {
-      if (question.type === FormElementTypes.fileInput) {
-        // Ensure we have an id to use for lookup
-        if (typeof answer !== "object" || answer === null || !("id" in answer)) {
-          return;
-        }
-
-        const fileName = attachments.get(answer.id as string);
-        if (fileName) {
-          rawAnswers[questionId] = { name: fileName.actualName };
-        }
-      }
-
-      if (question.type === FormElementTypes.dynamicRow && Array.isArray(answer)) {
-        answer.forEach((subAnswers) => {
-          // Ensure subAnswers is a Record before indexing
-          if (
-            typeof subAnswers !== "object" ||
-            subAnswers === null ||
-            typeof subAnswers === "string"
-          ) {
-            return;
-          }
-
-          const subElements = question.properties?.subElements ?? [];
-          const subQuestions = subElements.filter((sub) => sub.type !== FormElementTypes.richText);
-
-          Object.entries(subAnswers).forEach(([subQuestionIndex, subAnswer]) => {
-            const subQuestion = subQuestions[Number(subQuestionIndex)];
-            if (subQuestion?.type === FormElementTypes.fileInput) {
-              // Ensure we have an id to use for lookup
-              if (typeof subAnswer !== "object" || subAnswer === null || !("id" in subAnswer)) {
-                return;
-              }
-
-              const fileName = attachments.get(subAnswer.id as string);
-              if (fileName) {
-                (subAnswers as Record<string, unknown>)[subQuestionIndex] = {
-                  name: fileName.actualName,
-                };
-              }
-            }
-          });
-        });
-      }
-    }
-  });
-
   const mappedAnswers = mapAnswers({
     formTemplate,
     rawAnswers,
+    attachments,
   });
 
   const row = getRow({

@@ -4,11 +4,13 @@ import { mapAnswers } from "@root/lib/responses/mapper/mapAnswers";
 import { FormProperties, SecurityAttribute, Response } from "@root/lib/types";
 import { TFunction } from "i18next";
 import { Submission } from "@root/lib/responseDownloadFormats/types";
+import { ResponseFilenameMapping } from "./processResponse";
 
 export const writeHtml = async ({
   htmlDirectoryHandle,
   formTemplate,
   submission,
+  attachments,
   formId,
   t,
 }: {
@@ -19,6 +21,7 @@ export const writeHtml = async ({
     createdAt: string;
     rawAnswers: Record<string, Response>;
   };
+  attachments?: ResponseFilenameMapping;
   formId: string;
   t: TFunction<string | string[], undefined>;
 }) => {
@@ -27,6 +30,7 @@ export const writeHtml = async ({
   const mappedAnswers = mapAnswers({
     formTemplate,
     rawAnswers: submission.rawAnswers,
+    attachments,
   });
 
   const submissionObj = {

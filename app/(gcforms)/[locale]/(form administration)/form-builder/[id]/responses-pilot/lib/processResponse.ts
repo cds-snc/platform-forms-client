@@ -79,6 +79,7 @@ export const processResponse = async ({
         htmlDirectoryHandle,
         formTemplate,
         submission: confirmedResponse,
+        attachments: confirmedResponse.attachments,
         formId,
         t,
       });
