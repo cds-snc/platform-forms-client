@@ -7,6 +7,7 @@ import { logMessage } from "@root/lib/logger";
 const GET = async (req: NextRequest) => {
   if (
     [
+      "/api/auth/error",
       "/api/auth/session",
       "/api/auth/csrf",
       "/api/auth/providers",
