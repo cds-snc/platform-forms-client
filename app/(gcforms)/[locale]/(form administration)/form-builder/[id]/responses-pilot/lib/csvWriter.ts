@@ -118,6 +118,15 @@ export const writeRow = async ({
 
       if (question.type === FormElementTypes.dynamicRow && Array.isArray(answer)) {
         answer.forEach((subAnswers) => {
+          // Ensure subAnswers is a Record before indexing
+          if (
+            typeof subAnswers !== "object" ||
+            subAnswers === null ||
+            typeof subAnswers === "string"
+          ) {
+            return;
+          }
+
           const subElements = question.properties?.subElements ?? [];
           const subQuestions = subElements.filter((sub) => sub.type !== FormElementTypes.richText);
 
@@ -131,7 +140,9 @@ export const writeRow = async ({
 
               const fileName = attachments.get(subAnswer.id as string);
               if (fileName) {
-                subAnswers[subQuestionIndex] = { name: fileName.actualName };
+                (subAnswers as Record<string, unknown>)[subQuestionIndex] = {
+                  name: fileName.actualName,
+                };
               }
             }
           });
