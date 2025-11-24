@@ -39,7 +39,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
   return (
     <div>
       <div className="mb-4">{t("stepOf", { current: 3, total: 3 })}</div>
-      <h1>{t("formatPage.title")}</h1>
+      <h2>{t("formatPage.title")}</h2>
       <div>
         <p>
           <strong>{t("formatPage.subheading")}</strong>
