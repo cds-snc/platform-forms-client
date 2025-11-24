@@ -7,11 +7,9 @@ import { useTranslation } from "@i18n/client";
 export const DirectoryPicker = ({
   onPick,
   onClose,
-  pickerButtonRef,
 }: {
   onPick: (handle: FileSystemDirectoryHandle | null) => void;
   onClose?: (picked: boolean) => void;
-  pickerButtonRef?: (el: HTMLButtonElement | null) => void;
 }) => {
   const { t } = useTranslation("response-api");
   return (
