@@ -53,6 +53,8 @@ ENV AWS_LWA_ENABLE_COMPRESSION=true
 ENV HOSTNAME=localhost
 ENV PORT=3000
 
+ENV ZITADEL_CLIENT_ID=343363438019420754
+
 # Use the LAMBDA_ENV environment variable to determine if the app is running in a Lambda environment
 # Enables memory caching for the prerendering of pages
 ENV LAMBDA_ENV=1
