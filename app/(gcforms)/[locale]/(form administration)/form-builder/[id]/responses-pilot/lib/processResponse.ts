@@ -48,7 +48,7 @@ export const processResponse = async ({
 
   // console.log(confirmedResponse.attachments);
 
-  if (confirmedResponse.attachments) {
+  if (confirmedResponse.attachments && confirmedResponse.attachments.size > 0) {
     const attachmentsDirectory = await workingDirectoryHandle.getDirectoryHandle(
       ATTACHMENTS_FOLDER,
       { create: true }
