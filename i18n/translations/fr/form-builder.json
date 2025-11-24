@@ -490,46 +490,6 @@
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Obtenir une copie du formulaire"
   },
-  "auditDownload": {
-    "description": "Obtenez une feuille de calcul avec l'historique de toutes les actions clés effectuées dans un formulaire, y compris la date de création, de mise à jour et d'archivage du formulaire. Les actions peuvent prendre plusieurs minutes pour apparaître dans le journal d'activité.",
-    "downloadBtnText": "Télécharger la feuille de calcul",
-    "title": "Afficher l'activité du formulaire",
-    "headers": {
-      "formId": "Identifiant du formulaire",
-      "userId": "Membre de l'équipe",
-      "event": "Action du formulaire",
-      "timestamp": "Date",
-      "description": "Détails"
-    },
-    "events": {
-      "CreateForm": "Formulaire créé",
-      "ChangeDeliveryOption": "Option de livraison modifiée",
-      "ChangeSecurityAttribute": "Attribut de sécurité modifié",
-      "ChangeFormPurpose": "Titre du formulaire modifié",
-      "ChangeFormSaveAndResume": "Option de sauvegarde et de reprise modifiée",
-      "ChangeFormName": "Titre du formulaire modifié",
-      "UpdateForm": "Formulaire mis à jour",
-      "UpdateNotificationsInterval": "Interval de notifications mis à jour",
-      "UpdateNotificationsUserSetting": "Paramètre utilisateur des notification mis à jour",
-      "GrantFormAccess": "Accès au formulaire accordé",
-      "RevokeFormAccess": "Accès au formulaire révoqué",
-      "DownloadResponse": "Réponses téléchargées",
-      "ConfirmResponse": "Réponses confirmées",
-      "IdentifyProblemResponse": "Réponses signalées avec probléme",
-      "DeleteResponses": "Réponses supprimées",
-      "RetrieveResponses": "Réponses récupérées via l'API",
-      "CreateAPIKey": "Clé API générée",
-      "DeleteAPIKey": "Clé API supprimée",
-      "RefreshAPIKey": "Clé API re-générée",
-      "PublishForm": "Formulaire publié"
-    },
-    "errorCreatingDownload": "Erreur lors de la création du téléchargement"
-  },
-  "switchToApiMode": {
-    "title": "Passer à la livraison par API",
-    "description": "Les nouvelles soumissions seront disponibles via le point de terminaison de l'API.",
-    "btnText": "Passer à la livraison par API"
-  },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
   "formMissingProperty": "Il manque : {{property}}",

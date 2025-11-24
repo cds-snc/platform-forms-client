@@ -21,7 +21,6 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { Branding } from "./branding/Branding";
 import { DownloadForm } from "./DownloadForm";
 import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
-import { AuditForm } from "./AuditForm";
 
 import { IntendedUse, PurposeOption } from "./intendedUse/IntendedUse";
 
@@ -149,11 +148,6 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
            * Download section
            *--------------------------------------------*/}
           <DownloadForm />
-
-          {/*--------------------------------------------*
-           * Audit Form section
-           *--------------------------------------------*/}
-          <AuditForm formId={id} />
         </div>
       )}
     </>
