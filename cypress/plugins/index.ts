@@ -15,7 +15,7 @@
 /**
  * @type {Cypress.PluginConfig}
  */
-module.exports = () => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
+
+module.exports = (on: Cypress.PluginEvents) => {
+  if (Cypress.env("DEBUG")) require("cypress-terminal-report/src/installLogsPrinter")(on);
 };

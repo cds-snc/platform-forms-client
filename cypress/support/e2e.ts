@@ -21,8 +21,7 @@ import "./commands";
 
 // Import Axe-Core library
 import "cypress-axe";
-import terminalReport from "cypress-terminal-report/src/installLogsCollector";
 
 // import flagsDefault from "../../flag_initialization/default_flag_settings.json";
 
-if (Cypress.env("DEBUG")) terminalReport();
+if (Cypress.env("DEBUG")) require("cypress-terminal-report/src/installLogsCollector")();

@@ -1,6 +1,7 @@
 "use server";
+
+import { prisma } from "@gcforms/database";
 import { logEvent, retrieveEvents } from "@lib/auditLogs";
-import { prisma } from "@lib/integration/prismaConnector";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import {

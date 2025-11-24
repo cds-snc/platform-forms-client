@@ -1,4 +1,4 @@
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { generateVerificationCode } from "./2fa";
 import { logMessage } from "@lib/logger";
 import { sendEmail } from "@lib/integration/notifyConnector";
