@@ -11,10 +11,7 @@ import { toast } from "../../../components/shared/Toast";
 import { LocationSelected } from "../components/Toasts";
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const { t } = useTranslation("response-api");
+  const { t, router, searchParams } = useResponsesApp();
 
   const { directoryHandle, setDirectoryHandle, logger } = useResponsesContext();
   const continueButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -56,8 +53,10 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
 
   return (
     <div>
-      <div className="mb-4">{t("stepOf", { current: 2, total: 3 })}</div>
-      <h2>{t("locationPage.title")}</h2>
+      <div className="mb-4" data-testid="step-indicator">
+        {t("stepOf", { current: 2, total: 3 })}
+      </div>
+      <h2 data-testid="location-page-title">{t("locationPage.title")}</h2>
       <p className="mb-4 mt-2 font-bold">{t("locationPage.subheading")}</p>
       <p className="mb-6 text-sm text-slate-700">{t("locationPage.detail")}</p>
 
@@ -70,6 +69,7 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       <div className="flex flex-row gap-4">
         <LinkButton.Secondary
           href={`/${locale}/form-builder/${id}/responses-pilot/load-key?reset=true`}
+          data-testid="back-button"
         >
           {t("backButton")}
         </LinkButton.Secondary>

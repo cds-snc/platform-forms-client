@@ -5,7 +5,11 @@ export const LostKeyLink = () => {
   const { t } = useTranslation("response-api");
   return (
     <p className="relative mt-2 block">
-      <button popoverTarget="api-key-popover" className="gc-lost-key-button">
+      <button
+        popoverTarget="api-key-popover"
+        className="gc-lost-key-button"
+        data-testid="lost-key-link"
+      >
         <span className="underline">{t("loadKeyPage.lostKey.link")}</span>
       </button>
     </p>
@@ -29,8 +33,11 @@ export const LostKeyPopover = ({ locale, id }: { locale: string; id: string }) =
       id="api-key-popover"
       popover="auto"
       className="gc-lost-key-popover-content rounded-xl border-1 border-gray-500 p-10"
+      data-testid="lost-key-popover"
     >
-      <h2 className="mb-8">{t("loadKeyPage.lostKey.lostKeyTip.title")}</h2>
+      <h2 className="mb-8" data-testid="lost-key-popover-title">
+        {t("loadKeyPage.lostKey.lostKeyTip.title")}
+      </h2>
       <p className="mb-2 font-bold">{t("loadKeyPage.lostKey.lostKeyTip.text1")}</p>
       <p>
         {t("loadKeyPage.lostKey.lostKeyTip.text2")}{" "}
