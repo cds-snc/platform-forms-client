@@ -5,6 +5,7 @@ import seedPrivileges from "./fixtures/privileges";
 import seedSettings from "./fixtures/settings";
 import seedUsers, { UserWithoutSecurityAnswers } from "./fixtures/users";
 import seedSecurityQuestions from "./fixtures/security-questions";
+import { parseArgs } from "node:util";
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
@@ -131,7 +132,12 @@ async function createSecurityQuestions() {
   });
 }
 
-async function main(environment: string) {
+async function main() {
+  const {
+    values: { environment = "development" },
+  } = parseArgs({
+    options: { environment: { type: "string" } },
+  });
   try {
     console.log(`Seeding Database for ${environment} enviroment`);
     await Promise.all([
@@ -158,9 +164,10 @@ async function main(environment: string) {
     }
   } catch (e) {
     console.error(e);
+    process.exit(1);
   } finally {
     prisma.$disconnect;
   }
 }
 
-export default main;
+main();
