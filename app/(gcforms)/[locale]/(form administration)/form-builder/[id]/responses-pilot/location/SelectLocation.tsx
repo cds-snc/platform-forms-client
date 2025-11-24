@@ -1,7 +1,6 @@
 "use client";
-import { useCallback, useEffect, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslation } from "@i18n/client";
+import { useCallback, useEffect } from "react";
+import { useResponsesApp } from "../context";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { Button } from "@clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
@@ -14,7 +13,6 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
   const { t, router, searchParams } = useResponsesApp();
 
   const { directoryHandle, setDirectoryHandle, logger } = useResponsesContext();
-  const continueButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const setDirectory = useCallback(
     async (handle: FileSystemDirectoryHandle | null) => {
@@ -78,7 +76,6 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
           theme="primary"
           disabled={!directoryHandle}
           onClick={handleNext}
-          buttonRef={(el) => (continueButtonRef.current = el)}
         >
           {t("continueButton")}
         </Button>
