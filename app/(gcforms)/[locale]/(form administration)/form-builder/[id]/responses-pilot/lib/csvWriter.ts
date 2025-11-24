@@ -1,6 +1,6 @@
 import { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 
-import { type FormProperties, Response } from "@gcforms/types";
+import { type Response, type FormProperties } from "@gcforms/types";
 import { FormElementTypes, type FormElement } from "@lib/types";
 
 import { createArrayCsvStringifier as createCsvStringifier } from "@lib/responses/csv-writer";
@@ -8,6 +8,7 @@ import { sortByLayout } from "@lib/utils/form-builder";
 import { customTranslate } from "@lib/i18nHelpers";
 import { MappedAnswer } from "@lib/responses/mapper/types";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
+import { ResponseFilenameMapping } from "./processResponse";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -87,18 +88,21 @@ export const writeRow = async ({
   formTemplate,
   csvFileHandle,
   rawAnswers,
+  attachments,
 }: {
   submissionId: string;
   createdAt: string;
   formTemplate: FormProperties;
   csvFileHandle: FileSystemFileHandle;
   rawAnswers: Record<string, Response>;
+  attachments: ResponseFilenameMapping;
 }) => {
   const sortedElements = orderElements({ formTemplate });
 
   const mappedAnswers = mapAnswers({
     formTemplate,
     rawAnswers,
+    attachments,
   });
 
   const row = getRow({
