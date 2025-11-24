@@ -23,6 +23,10 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       setDirectoryHandle(handle);
       toast.success(<LocationSelected directoryName={handle.name} />, "wide");
 
+      // Wait a tick to ensure the button is rendered
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      document.getElementById("continue-button")?.focus();
+
       const logsDirectoryHandle = await handle.getDirectoryHandle("logs", { create: true });
       logger.setDirectoryHandle(logsDirectoryHandle);
       logger.info(`Directory selected for response downloads: ${handle.name}`);
@@ -68,10 +72,11 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
           {t("backButton")}
         </LinkButton.Secondary>
         <Button
+          id="continue-button"
+          data-testid="continue-button"
           theme="primary"
           disabled={!directoryHandle}
           onClick={handleNext}
-          data-testid="continue-button"
         >
           {t("continueButton")}
         </Button>

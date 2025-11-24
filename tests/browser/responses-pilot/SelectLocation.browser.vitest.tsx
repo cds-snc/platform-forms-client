@@ -59,7 +59,7 @@ describe("SelectLocation - Browser Mode", () => {
       .toHaveAttribute("href", "/en/form-builder/test-form/responses-pilot/load-key?reset=true");
   });
 
-  it("should show toast when directory is selected", async () => {
+  it("should show toast when directory is selected and focused on Continue button", async () => {
     const { showDirectoryPicker } = await import("native-file-system-adapter");
     
     // Mock the directory picker to return a mock handle
@@ -80,5 +80,9 @@ describe("SelectLocation - Browser Mode", () => {
     // Check for toast message
     const toast = page.getByText(/test-directory/i);
     await expect.element(toast).toBeInTheDocument();
+
+    // Ensure Continue is focused after selection
+    const continueButton = page.getByTestId("continue-button");
+    await expect.element(continueButton).toHaveFocus();
   });
 });
