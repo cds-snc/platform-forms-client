@@ -54,6 +54,7 @@ ENV HOSTNAME=localhost
 ENV PORT=3000
 
 ENV ZITADEL_CLIENT_ID=343363438019420754
+ENV ZITADEL_URL=https://auth.forms-staging.cdssandbox.xyz
 
 # Use the LAMBDA_ENV environment variable to determine if the app is running in a Lambda environment
 # Enables memory caching for the prerendering of pages
