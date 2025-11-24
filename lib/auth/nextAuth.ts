@@ -49,7 +49,6 @@ const {
   signOut,
 } = NextAuth({
   providers: [
-    // Keep this commented out for now, as we are not using Zitadel for authentication within the app
     {
       id: "gcForms", // signIn("my-provider") and will be part of the callback URL
       name: "GC Forms", // optional, used on the default login page as the button text.

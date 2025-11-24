@@ -54,6 +54,7 @@ ENV HOSTNAME=localhost
 ENV PORT=3000
 
 ENV ZITADEL_CLIENT_ID=343363438019420754
+ENV NEXTAUTH_URL="https://4h4lvpes7jfqs2ccrumpqamsvy0qjqmb.lambda-url.ca-central-1.on.aws"
 
 # Use the LAMBDA_ENV environment variable to determine if the app is running in a Lambda environment
 # Enables memory caching for the prerendering of pages
