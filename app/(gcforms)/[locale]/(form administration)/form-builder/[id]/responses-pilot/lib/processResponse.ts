@@ -186,8 +186,8 @@ const downloadAndConfirmResponse = async ({
 
     const downloadResults: Array<{ id: string; originalName: string; actualName: string }> = [];
     for (const attachment of decryptedResponse.attachments) {
-      // eslint-disable-next-line no-await-in-loop
       downloadResults.push(
+        // eslint-disable-next-line no-await-in-loop
         await downloadAttachment(responseAttachmentsDirectoryHandle, attachment)
       );
     }
