@@ -93,6 +93,7 @@
     }
   },
   "confirmationPage": {
+    "section-title": "Résultats",
     "successTitle": "Succès !",
     "errorTitle": "Téléchargement interrompu",
     "partialSuccessTitle": "Téléchargement partiel terminé",
@@ -104,6 +105,7 @@
     "downloadResponsesButton": "Télécharger les réponses"
   },
   "processingPage": {
+    "section-title": "Traitement des réponses",
     "processingTitle": "Téléchargement en cours",
     "pleaseWait": "Veuillez patienter...",
     "processingSubmission": "Traitement de la soumission : {{submissionId}}",
