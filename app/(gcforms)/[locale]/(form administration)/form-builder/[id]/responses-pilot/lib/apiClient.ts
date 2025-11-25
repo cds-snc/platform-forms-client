@@ -39,6 +39,11 @@ export class GCFormsApiClient {
     this.projectId = projectId;
     this.tokenTimestamp = Date.now();
 
+    // eslint-disable-next-line no-console
+    console.log("GCFormsApiClient initialized for formId:", formId);
+    // eslint-disable-next-line no-console
+    console.log("Using projectId:", projectId);
+
     this.httpClient = axios.create({
       baseURL: apiUrl,
       timeout: 3000,
