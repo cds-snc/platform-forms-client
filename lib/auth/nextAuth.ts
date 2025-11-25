@@ -12,7 +12,6 @@ import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStat
 import { JWT } from "next-auth/jwt";
 import { cache } from "react";
 import { headers } from "next/headers";
-// import ZitadelProvider from "next-auth/providers/zitadel";
 
 /**
  * Checks the active status of a user using a cache strategy
@@ -50,23 +49,21 @@ const {
   signOut,
 } = NextAuth({
   providers: [
-    // Keep this commented out for now, as we are not using Zitadel for authentication within the app
-    // ZitadelProvider({
-    //   issuer: process.env.ZITADEL_ISSUER,
-    //   clientId: process.env.ZITADEL_CLIENT_ID,
-    //   checks: ["pkce"],
-    //   client: {
-    //     token_endpoint_auth_method: "none",
-    //   },
-    //   allowDangerousEmailAccountLinking: true,
-    //   async profile(profile) {
-    //     return {
-    //       id: profile.sub,
-    //       name: profile.name,
-    //       email: profile.email,
-    //     };
-    //   },
-    // }),
+    {
+      id: "gcForms", // signIn("my-provider") and will be part of the callback URL
+      name: "GC Forms", // optional, used on the default login page as the button text.
+      type: "oidc",
+      issuer: process.env.ZITADEL_URL,
+      clientId: process.env.ZITADEL_CLIENT_ID,
+      checks: ["pkce", "state"],
+      client: { token_endpoint_auth_method: "none" },
+      allowDangerousEmailAccountLinking: true,
+      authorization: {
+        params: {
+          scope: "openid email profile",
+        },
+      },
+    },
     CredentialsProvider({
       id: "mfa",
       name: "MultiFactorAuth",
@@ -137,7 +134,6 @@ const {
   },
   // Elastic Load Balancer safely sets the host header and ignores the incoming request headers
   trustHost: true,
-  debug: process.env.NODE_ENV !== "production",
   logger: {
     error(error) {
       if (!(error instanceof CredentialsSignin)) {
@@ -147,6 +143,11 @@ const {
     },
     warn(code) {
       logMessage.warn(`NextAuth warning - Code: ${code}`);
+    },
+    debug(code, ...message) {
+      // TODO.. switch back to debug
+      logMessage.info(code);
+      logMessage.info(message);
     },
   },
 
