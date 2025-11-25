@@ -13,6 +13,7 @@ env:
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
   HCAPTCHA_SITE_KEY: ${{ vars.PRODUCTION_HCAPTCHA_SITE_KEY }}
   ZITADEL_URL: https://auth.forms-formulaires.alpha.canada.ca
+  ZITADEL_PROJECT_ID: "284778202772022819"
   API_URL: https://api.forms-formulaires.alpha.canada.ca
 
 permissions:

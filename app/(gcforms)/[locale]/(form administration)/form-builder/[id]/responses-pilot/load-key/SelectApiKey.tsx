@@ -18,10 +18,11 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     showOpenFilePicker,
     getAccessTokenFromApiKey,
     apiUrl,
+    projectId,
     isDevelopment,
   } = useResponsesApp();
 
-  const { apiClient, retrieveResponses, setApiClient, setPrivateApiKey, resetState, getProjectId } =
+  const { apiClient, retrieveResponses, setApiClient, setPrivateApiKey, resetState } =
     useResponsesContext();
 
   // If navigation included ?reset=true, call resetState now (after navigation) and remove the param
@@ -56,7 +57,6 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         return JSON.parse(text);
       });
 
-      const projectId = getProjectId();
       const token = await getAccessTokenFromApiKey(keyFile, projectId);
 
       // Ensure the key's formId matches the current form id - unless in local development mode
@@ -90,8 +90,8 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     showOpenFilePicker,
     getAccessTokenFromApiKey,
     apiUrl,
+    projectId,
     isDevelopment,
-    getProjectId,
   ]);
 
   return (

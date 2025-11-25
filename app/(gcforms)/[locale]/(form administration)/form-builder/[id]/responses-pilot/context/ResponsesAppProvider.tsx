@@ -23,8 +23,8 @@ interface ResponsesAppContextType {
 
   // Environment
   apiUrl: string;
+  projectId: string;
   isDevelopment: boolean;
-  isProductionEnvironment?: boolean;
 }
 
 const ResponsesAppContext = createContext<ResponsesAppContextType | null>(null);
@@ -43,7 +43,6 @@ export const ResponsesAppProvider = ({
   _locale,
   namespace = "response-api",
   overrides = {},
-  isProductionEnvironment,
 }: ResponsesAppProviderProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -57,8 +56,8 @@ export const ResponsesAppProvider = ({
     showOpenFilePicker,
     getAccessTokenFromApiKey,
     apiUrl: process.env.NEXT_PUBLIC_API_URL ?? "",
+    projectId: process.env.NEXT_PUBLIC_ZITADEL_PROJECT_ID ?? "",
     isDevelopment: process.env.NODE_ENV === "development",
-    isProductionEnvironment: isProductionEnvironment ?? false,
     ...overrides, // Allow test overrides
   };
 
