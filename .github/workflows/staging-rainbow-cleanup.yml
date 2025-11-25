@@ -88,7 +88,7 @@ jobs:
               deployment_ids+=($batch_ids)
             done
 
-            json_array=$(printf '%s\n' "${deployment_ids[@]}" | jq -R . | jq -s .)
+            json_array=$(printf "%s\n" "${deployment_ids[@]}" | sort -u | jq -R . | jq -s .)
 
             echo "ids=$(echo $json_array | sed 's/ //g')" >> "$GITHUB_OUTPUT"
           fi
