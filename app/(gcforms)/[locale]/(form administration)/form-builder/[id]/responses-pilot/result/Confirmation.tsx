@@ -101,7 +101,6 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
             : t("confirmationPage.errorTitle")
           : t("confirmationPage.successTitle")}
       </p>
-
       <FocusHeader headingTag="h2" dataTestId="confirmation-page-title">
         {(() => {
           // If error occurred with no successful downloads, show error message
