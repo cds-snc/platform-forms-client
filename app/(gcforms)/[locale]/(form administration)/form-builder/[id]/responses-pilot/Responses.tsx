@@ -3,6 +3,7 @@ import { useResponsesContext } from "./context/ResponsesContext";
 import { useTranslation } from "@i18n/client";
 
 import Skeleton from "react-loading-skeleton";
+import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 
 export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
   const { newFormSubmissions } = useResponsesContext();
@@ -29,9 +30,9 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
   return newFormSubmissions && newFormSubmissions.length > 0 ? (
     <div className="flex items-center justify-between" data-testid="responses-available">
       <div>
-        <h2 className="mb-8" data-testid="new-responses-heading">
+        <FocusHeader headingTag="h2" dataTestId="new-responses-heading">
           {t("loadKeyPage.newResponsesAvailable")}
-        </h2>
+        </FocusHeader>
         {actions}
       </div>
       <div>
@@ -46,9 +47,9 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
   ) : (
     <div className="flex items-center justify-between" data-testid="no-responses">
       <div>
-        <h2 className="mb-8" data-testid="no-responses-heading">
+        <FocusHeader headingTag="h2" dataTestId="no-responses-heading">
           {t("loadKeyPage.noNewResponsesAvailable")}
-        </h2>
+        </FocusHeader>
         {actions}
       </div>
       <div>

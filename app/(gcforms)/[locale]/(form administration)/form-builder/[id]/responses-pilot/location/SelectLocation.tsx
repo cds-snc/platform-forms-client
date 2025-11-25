@@ -8,6 +8,7 @@ import { DirectoryPicker } from "./DirectoryPicker";
 import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 import { toast } from "../../../components/shared/Toast";
 import { LocationSelected } from "../components/Toasts";
+import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
   const { t, router, searchParams } = useResponsesApp();
@@ -54,7 +55,9 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       <div className="mb-4" data-testid="step-indicator">
         {t("stepOf", { current: 2, total: 3 })}
       </div>
-      <h2 data-testid="location-page-title">{t("locationPage.title")}</h2>
+      <FocusHeader headingTag="h2" dataTestId="location-page-title">
+        {t("locationPage.title")}
+      </FocusHeader>
       <p className="mb-4 mt-2 font-bold">{t("locationPage.subheading")}</p>
       <p className="mb-6 text-sm text-slate-700">{t("locationPage.detail")}</p>
 

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Responses } from "../Responses";
 import { CheckForResponsesButton } from "../components/CheckForResponsesButton";
+import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 
 export const Confirmation = ({ locale, id }: { locale: string; id: string }) => {
   const router = useRouter();
@@ -100,7 +101,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
             : t("confirmationPage.errorTitle")
           : t("confirmationPage.successTitle")}
       </p>
-      <h2 className="mb-8">
+      <FocusHeader headingTag="h2" dataTestId="confirmation-page-title">
         {(() => {
           // If error occurred with no successful downloads, show error message
           if (hasError && processedSubmissionIds.size === 0) {
@@ -115,7 +116,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
               : "confirmationPage.downloadedResponsesOther";
           return t(key, { count, formattedCount: formatted });
         })()}
-      </h2>
+      </FocusHeader>
 
       {dirName && (
         <>

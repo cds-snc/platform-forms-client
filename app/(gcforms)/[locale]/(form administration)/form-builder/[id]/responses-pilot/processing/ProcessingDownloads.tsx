@@ -7,6 +7,7 @@ import MapleLeafLoader from "@root/components/clientComponents/icons";
 import { Button } from "@root/components/clientComponents/globals";
 import { useRouter } from "next/navigation";
 import { INTERRUPT_CLEANUP_DELAY_MS } from "../lib/constants";
+import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 
 export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string }) => {
   const router = useRouter();
@@ -65,7 +66,9 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="mb-4 text-2xl font-semibold">{t("processingPage.processingTitle")}</h2>
+          <FocusHeader headingTag="h2" dataTestId="processing-page-title">
+            {t("processingPage.processingTitle")}
+          </FocusHeader>
           {currentSubmissionId ? (
             <p className="mb-4 text-xl">
               {t("processingPage.processingSubmission", { submissionId: currentSubmissionId })}

@@ -1,19 +1,13 @@
 import { Metadata } from "next";
-import { serverTranslation } from "@i18n";
 import { SelectLocation } from "./SelectLocation";
 import { ApiClientGuard } from "../guards/ApiClientGuard";
+import { getPageTitle } from "../lib/getStepOf";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const params = await props.params;
-
-  const { locale } = params;
-
-  const { t } = await serverTranslation("form-builder-responses", { lang: locale });
-  return {
-    title: `${t("responsesPilot.pageTitle")} — ${t("gcForms")}`,
-  };
+  const metadata = await getPageTitle({ step: "location", props: props.params });
+  return metadata;
 }
 
 export default async function Page(props: {
