@@ -34,6 +34,7 @@ interface ResponsesAppContextType {
 
   // Environment
   apiUrl: string;
+  projectId: string;
   isDevelopment: boolean;
 }
 
@@ -85,6 +86,7 @@ export const BrowserResponsesAppProvider = ({
     showOpenFilePicker,
     getAccessTokenFromApiKey,
     apiUrl: "http://localhost:3000/api",
+    projectId: "test-project",
     isDevelopment: true,
     ...overrides, // Allow custom overrides for specific test needs
   };

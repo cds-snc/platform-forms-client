@@ -18,6 +18,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     showOpenFilePicker,
     getAccessTokenFromApiKey,
     apiUrl,
+    projectId,
     isDevelopment,
   } = useResponsesApp();
 
@@ -56,7 +57,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         return JSON.parse(text);
       });
 
-      const token = await getAccessTokenFromApiKey(keyFile);
+      const token = await getAccessTokenFromApiKey(keyFile, projectId);
 
       // Ensure the key's formId matches the current form id - unless in local development mode
       if (keyFile.formId !== id && !isDevelopment) {
@@ -67,7 +68,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         return false;
       }
 
-      setApiClient(new GCFormsApiClient(keyFile.formId, apiUrl, keyFile, token));
+      setApiClient(new GCFormsApiClient(keyFile.formId, apiUrl, keyFile, token, projectId));
 
       setPrivateApiKey(keyFile);
 
@@ -89,6 +90,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     showOpenFilePicker,
     getAccessTokenFromApiKey,
     apiUrl,
+    projectId,
     isDevelopment,
   ]);
 
