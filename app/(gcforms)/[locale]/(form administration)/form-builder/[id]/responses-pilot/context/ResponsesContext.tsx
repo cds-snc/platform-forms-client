@@ -11,7 +11,7 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
-import { useResponsesApp } from "./ResponsesAppProvider";
+import { useResponsesApp } from "../context";
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import { NewFormSubmission, PrivateApiKey } from "../lib/types";
 import { GCFormsApiClient } from "../lib/apiClient";
