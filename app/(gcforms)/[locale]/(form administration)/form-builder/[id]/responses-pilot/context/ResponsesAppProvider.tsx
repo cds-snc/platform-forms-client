@@ -54,7 +54,7 @@ export const ResponsesAppProvider = ({
     i18n,
     showOpenFilePicker,
     getAccessTokenFromApiKey,
-    apiUrl: process.env.NEXT_PUBLIC_API_URL ?? "",
+    apiUrl: process.env.NEXT_PUBLIC_API_URL ?? "275372254274006635", // default to staging
     projectId: process.env.NEXT_PUBLIC_ZITADEL_PROJECT_ID ?? "",
     isDevelopment: process.env.NODE_ENV === "development",
     ...overrides, // Allow test overrides
