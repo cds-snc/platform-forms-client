@@ -8,6 +8,7 @@ import { GCFormsApiClient } from "../lib/apiClient";
 import { Responses } from "../Responses";
 import { LostKeyLink, LostKeyPopover } from "./LostKeyPopover";
 import { ResponseActionButtons } from "./ResponseActionButtons";
+import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 
 export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => {
   const {
@@ -96,7 +97,9 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
       {!apiClient && (
         <div>
           <div className="mb-4">{t("stepOf", { current: 1, total: 3 })}</div>
-          <h2 data-testid="load-key-heading">{t("loadKeyPage.title")}</h2>
+          <FocusHeader headingTag="h2" dataTestId="load-key-heading">
+            {t("loadKeyPage.title")}
+          </FocusHeader>
           <p className="mb-4 font-medium">{t("loadKeyPage.detail")}</p>
           <LoadKey onLoadKey={handleLoadApiKey} />
           <LostKeyLink />

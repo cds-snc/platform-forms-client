@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "@root/i18n/client";
 import { useCallback } from "react";
 import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
+import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { t } = useTranslation("response-api");
@@ -39,7 +40,9 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
   return (
     <div>
       <div className="mb-4">{t("stepOf", { current: 3, total: 3 })}</div>
-      <h2>{t("formatPage.title")}</h2>
+      <FocusHeader headingTag="h2" dataTestId="format-page-title">
+        {t("formatPage.title")}
+      </FocusHeader>
       <div>
         <p>
           <strong>{t("formatPage.subheading")}</strong>
