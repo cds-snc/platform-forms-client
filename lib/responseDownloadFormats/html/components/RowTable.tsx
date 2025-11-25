@@ -40,6 +40,7 @@ const QuestionRows = ({
         <dd className="p-4">
           {item.type === FormElementTypes.fileInput && linkAttachments ? (
             <a
+              className="underline"
               href={`../attachments/${submission.id}/${item.answer}`}
               target="_blank"
               rel="noreferrer"

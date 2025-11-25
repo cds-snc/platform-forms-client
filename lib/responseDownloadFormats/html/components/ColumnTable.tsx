@@ -42,6 +42,7 @@ const QuestionColumns = ({
               href={`../attachments/${submission.id}/${item.answer}`}
               target="_blank"
               rel="noreferrer"
+              className="underline"
             >
               <>{item.answer}</>
             </a>
