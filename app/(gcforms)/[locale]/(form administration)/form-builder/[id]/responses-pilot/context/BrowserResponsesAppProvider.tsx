@@ -35,6 +35,7 @@ interface ResponsesAppContextType {
   // Environment
   apiUrl: string;
   isDevelopment: boolean;
+  isProductionEnvironment?: boolean;
 }
 
 const BrowserResponsesAppContext = createContext<ResponsesAppContextType | null>(null);
@@ -86,6 +87,7 @@ export const BrowserResponsesAppProvider = ({
     getAccessTokenFromApiKey,
     apiUrl: "http://localhost:3000/api",
     isDevelopment: true,
+    isProductionEnvironment: false,
     ...overrides, // Allow custom overrides for specific test needs
   };
 

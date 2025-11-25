@@ -11,6 +11,7 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
+import { useResponsesApp } from "./ResponsesAppProvider";
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import { NewFormSubmission, PrivateApiKey } from "../lib/types";
 import { GCFormsApiClient } from "../lib/apiClient";
@@ -60,6 +61,7 @@ interface ResponsesContextType {
   resetState: () => void;
   resetNewSubmissions: () => void;
   logger: ResponseDownloadLogger;
+  getProjectId: () => string;
 }
 
 const ResponsesContext = createContext<ResponsesContextType | undefined>(undefined);
@@ -83,6 +85,12 @@ export const ResponsesProvider = ({
   formId: string;
   children: ReactNode;
 }) => {
+  const app = useResponsesApp();
+  const getProjectId = () => {
+    const defaultId = "275372254274006635";
+    const prodId = "284778202772022819";
+    return app?.isProductionEnvironment ? prodId : defaultId;
+  };
   const [isCompatible] = useState(
     () => typeof window !== "undefined" && "showOpenFilePicker" in window
   );
@@ -340,6 +348,7 @@ export const ResponsesProvider = ({
         resetState,
         resetNewSubmissions,
         logger: loggerRef.current,
+        getProjectId,
       }}
     >
       {children}

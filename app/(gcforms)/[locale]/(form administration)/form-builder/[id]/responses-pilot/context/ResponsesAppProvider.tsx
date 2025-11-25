@@ -24,6 +24,7 @@ interface ResponsesAppContextType {
   // Environment
   apiUrl: string;
   isDevelopment: boolean;
+  isProductionEnvironment?: boolean;
 }
 
 const ResponsesAppContext = createContext<ResponsesAppContextType | null>(null);
@@ -34,6 +35,7 @@ interface ResponsesAppProviderProps {
   namespace?: string;
   // Optional overrides for testing
   overrides?: Partial<ResponsesAppContextType>;
+  isProductionEnvironment?: boolean;
 }
 
 export const ResponsesAppProvider = ({
@@ -41,6 +43,7 @@ export const ResponsesAppProvider = ({
   _locale,
   namespace = "response-api",
   overrides = {},
+  isProductionEnvironment,
 }: ResponsesAppProviderProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -55,6 +58,7 @@ export const ResponsesAppProvider = ({
     getAccessTokenFromApiKey,
     apiUrl: process.env.NEXT_PUBLIC_API_URL ?? "",
     isDevelopment: process.env.NODE_ENV === "development",
+    isProductionEnvironment: isProductionEnvironment ?? false,
     ...overrides, // Allow test overrides
   };
 

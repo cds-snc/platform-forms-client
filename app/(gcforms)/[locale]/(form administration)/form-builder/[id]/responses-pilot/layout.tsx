@@ -6,6 +6,7 @@ import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
 import { redirect } from "next/navigation";
 import { ResponsesProvider } from "./context/ResponsesContext";
 import { ResponsesAppProvider } from "./context/ResponsesAppProvider";
+import { isProductionEnvironment } from "@root/lib/origin";
 import { ContentWrapper } from "./ContentWrapper";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { CompatibilityGuard } from "./guards/CompatibilityGuard";
@@ -44,7 +45,10 @@ export default async function ResponsesLayout(props: {
   }
 
   return (
-    <ResponsesAppProvider _locale={locale}>
+    <ResponsesAppProvider
+      _locale={locale}
+      isProductionEnvironment={await isProductionEnvironment()}
+    >
       <ResponsesProvider locale={locale} formId={id}>
         <CompatibilityGuard>
           <h1 className="mb-4">{t("section-title")}</h1>

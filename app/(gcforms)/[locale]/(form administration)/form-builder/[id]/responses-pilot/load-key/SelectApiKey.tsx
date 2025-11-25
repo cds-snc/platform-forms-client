@@ -23,6 +23,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
 
   const { apiClient, retrieveResponses, setApiClient, setPrivateApiKey, resetState } =
     useResponsesContext();
+  const { getProjectId } = useResponsesContext();
 
   // If navigation included ?reset=true, call resetState now (after navigation) and remove the param
   useEffect(() => {
@@ -56,7 +57,8 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         return JSON.parse(text);
       });
 
-      const token = await getAccessTokenFromApiKey(keyFile);
+      const projectId = getProjectId();
+      const token = await getAccessTokenFromApiKey(keyFile, projectId);
 
       // Ensure the key's formId matches the current form id - unless in local development mode
       if (keyFile.formId !== id && !isDevelopment) {
@@ -67,7 +69,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
         return false;
       }
 
-      setApiClient(new GCFormsApiClient(keyFile.formId, apiUrl, keyFile, token));
+      setApiClient(new GCFormsApiClient(keyFile.formId, apiUrl, keyFile, token, projectId));
 
       setPrivateApiKey(keyFile);
 
@@ -90,6 +92,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     getAccessTokenFromApiKey,
     apiUrl,
     isDevelopment,
+    getProjectId,
   ]);
 
   return (
