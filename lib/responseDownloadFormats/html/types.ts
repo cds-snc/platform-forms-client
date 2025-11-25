@@ -6,4 +6,5 @@ export interface TableProps {
   responseID: string;
   submissionDate: number;
   submission: Submission;
+  linkAttachments?: boolean;
 }

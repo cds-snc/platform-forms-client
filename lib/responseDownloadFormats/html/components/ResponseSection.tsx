@@ -14,6 +14,7 @@ export interface ResponseSectionProps {
   formResponse: Submission;
   formRecord: FormRecord;
   showCodes?: boolean;
+  linkAttachments?: boolean;
   t: TFunction<string | string[], undefined>;
 }
 
@@ -33,6 +34,7 @@ export const ResponseSection = ({
   formResponse,
   formRecord,
   showCodes = true,
+  linkAttachments = false,
   t,
 }: ResponseSectionProps) => {
   const capitalizedLang = capitalize(lang);
@@ -149,6 +151,7 @@ export const ResponseSection = ({
         submission={formResponse}
         lang={lang}
         data-clipboard-text=""
+        linkAttachments={linkAttachments}
       />
 
       <h3 id={`rowTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
@@ -178,6 +181,7 @@ export const ResponseSection = ({
         submissionDate={submissionDate}
         submission={formResponse}
         lang={lang}
+        linkAttachments={linkAttachments}
       />
       {showCodes && (
         <>

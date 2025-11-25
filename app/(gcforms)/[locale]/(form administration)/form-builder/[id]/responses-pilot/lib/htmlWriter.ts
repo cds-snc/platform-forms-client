@@ -63,6 +63,7 @@ export const writeHtml = async ({
       createdAt: submissionObj.createdAt,
       securityAttribute: "Unclassified",
       showCodes: false,
+      linkAttachments: true,
       t,
     })
   );

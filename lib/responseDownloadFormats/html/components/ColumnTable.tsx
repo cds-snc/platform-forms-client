@@ -10,9 +10,11 @@ import { newLineToHtml } from "@lib/utils/newLineToHtml";
 const QuestionColumns = ({
   submission,
   lang,
+  linkAttachments,
 }: {
   submission: Submission;
   lang: string;
+  linkAttachments?: boolean;
 }): JSX.Element => {
   const { t } = customTranslate("common");
 
@@ -34,10 +36,22 @@ const QuestionColumns = ({
             ""
           )}
         </dt>
-        <dd
-          className={`py-4 pl-8`}
-          dangerouslySetInnerHTML={{ __html: newLineToHtml(item.answer) }}
-        />
+        {item.type === FormElementTypes.fileInput && linkAttachments ? (
+          <dd className={`py-4 pl-8`}>
+            <a
+              href={`../attachments/${submission.id}/${item.answer}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <>{item.answer}</>
+            </a>
+          </dd>
+        ) : (
+          <dd
+            className={`py-4 pl-8`}
+            dangerouslySetInnerHTML={{ __html: newLineToHtml(item.answer) }}
+          />
+        )}
       </div>
     );
   };
@@ -99,7 +113,11 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
         </dt>
         <dd className="py-4 pl-8">{formatDateTimeUTC(submissionDate)}</dd>
       </div>
-      <QuestionColumns submission={submission} lang={lang} />
+      <QuestionColumns
+        linkAttachments={props.linkAttachments}
+        submission={submission}
+        lang={lang}
+      />
     </dl>
   );
 };

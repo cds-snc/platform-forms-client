@@ -9,9 +9,11 @@ import { newLineToHtml } from "@lib/utils/newLineToHtml";
 const QuestionRows = ({
   submission,
   lang,
+  linkAttachments,
 }: {
   submission: Submission;
   lang: string;
+  linkAttachments?: boolean;
 }): JSX.Element => {
   const { t } = customTranslate("common");
   const renderColumn = (index: number, lang: string, item: Answer, subItem = false) => {
@@ -36,7 +38,17 @@ const QuestionRows = ({
           )}
         </dt>
         <dd className="p-4">
-          <p dangerouslySetInnerHTML={{ __html: newLineToHtml(item.answer) }}></p>
+          {item.type === FormElementTypes.fileInput && linkAttachments ? (
+            <a
+              href={`../attachments/${submission.id}/${item.answer}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <>{item.answer}</>
+            </a>
+          ) : (
+            <p dangerouslySetInnerHTML={{ __html: newLineToHtml(item.answer) }}></p>
+          )}
         </dd>
       </div>
     );
@@ -94,7 +106,7 @@ export const RowTable = (props: TableProps): React.ReactElement => {
           </dt>
           <dd className="whitespace-nowrap p-4">{formattedSubmissionDate}</dd>
         </div>
-        <QuestionRows submission={submission} lang={lang} />
+        <QuestionRows linkAttachments={props.linkAttachments} submission={submission} lang={lang} />
       </dl>
     </div>
   );
