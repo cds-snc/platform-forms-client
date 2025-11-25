@@ -18,7 +18,7 @@ env:
   COGNITO_USER_POOL_ID: ${{ secrets.STAGING_COGNITO_USER_POOL_ID}}
   HCAPTCHA_SITE_KEY: ${{ vars.STAGING_HCAPTCHA_SITE_KEY }}
   ZITADEL_URL: https://auth.forms-staging.cdssandbox.xyz
-  ZITADEL_PROJECT_ID: 275372254274006635
+  ZITADEL_PROJECT_ID: "275372254274006635"
   API_URL: https://api.forms-staging.cdssandbox.xyz
 
 permissions:

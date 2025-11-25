@@ -23,7 +23,7 @@ env:
   GITHUB_SHA: ${{ github.sha }}
   HCAPTCHA_SITE_KEY: ${{ vars.STAGING_HCAPTCHA_SITE_KEY }}
   ZITADEL_URL: https://auth.forms-staging.cdssandbox.xyz
-  ZITADEL_PROJECT_ID: 275372254274006635
+  ZITADEL_PROJECT_ID: "275372254274006635"
   API_URL: https://api.forms-staging.cdssandbox.xyz
 
 permissions:
