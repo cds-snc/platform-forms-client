@@ -35,7 +35,6 @@ interface ResponsesAppProviderProps {
   namespace?: string;
   // Optional overrides for testing
   overrides?: Partial<ResponsesAppContextType>;
-  isProductionEnvironment?: boolean;
 }
 
 export const ResponsesAppProvider = ({
