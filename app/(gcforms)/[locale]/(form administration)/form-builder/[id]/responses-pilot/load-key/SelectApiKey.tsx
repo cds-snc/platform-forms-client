@@ -21,9 +21,8 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     isDevelopment,
   } = useResponsesApp();
 
-  const { apiClient, retrieveResponses, setApiClient, setPrivateApiKey, resetState } =
+  const { apiClient, retrieveResponses, setApiClient, setPrivateApiKey, resetState, getProjectId } =
     useResponsesContext();
-  const { getProjectId } = useResponsesContext();
 
   // If navigation included ?reset=true, call resetState now (after navigation) and remove the param
   useEffect(() => {
