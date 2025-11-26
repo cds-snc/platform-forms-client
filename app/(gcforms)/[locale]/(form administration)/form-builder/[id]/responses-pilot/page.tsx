@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
-import { getPageTitle } from "./lib/getStepOf";
+import { getPageTitle } from "./lib/getPageTitle";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;

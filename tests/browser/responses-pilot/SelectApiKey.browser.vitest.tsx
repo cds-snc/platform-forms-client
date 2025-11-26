@@ -18,11 +18,11 @@ describe("SelectApiKey - Browser Mode", () => {
     // Check that the switch back link shows translated text, not the key
     const switchLink = page.getByTestId("responses-pilot-switch-back-link");
     await expect.element(switchLink).toBeInTheDocument();
-    
+
     // Get the actual text content
     const linkElement = await switchLink.element();
     const textContent = linkElement.textContent;
-    
+
     // Should show translated text
     expect(textContent).toBe("Switch back to the classic Responses view");
     // Should NOT show the translation key
@@ -32,6 +32,11 @@ describe("SelectApiKey - Browser Mode", () => {
   it("should render the load key page", async () => {
     await render(<SelectApiKey locale="en" id="test-form" />);
 
+    // Check for step indicator
+    await expect.element(page.getByTestId("step-indicator")).toBeInTheDocument();
+    await expect.element(page.getByTestId("step-indicator")).toHaveTextContent("Step 1 of 3");
+
+    // Check for heading
     await expect.element(page.getByTestId("load-key-heading")).toBeInTheDocument();
     await expect
       .element(page.getByTestId("load-key-heading"))
