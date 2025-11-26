@@ -50,10 +50,6 @@ export default defineConfig({
       }),
       instances: [{ browser: "chromium" }],
       headless: process.env.CI === "true", // Headless in CI, headed locally
-      viewport: {
-        width: 1920,
-        height: 1080,
-      },
     },
     isolate: true,
     fileParallelism: false,

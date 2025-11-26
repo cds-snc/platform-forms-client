@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useResponsesContext } from "./context/ResponsesContext";
 import { useResponsesApp } from "./context";
+import { useResponsesContext } from "./context/ResponsesContext";
 import { disableResponsesPilotMode } from "../responses/actions";
 
 export const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
+  const { t, router, i18n } = useResponsesApp();
   const { formId } = useResponsesContext();
-  const { t, i18n, router } = useResponsesApp();
 
   const handleSwitchBack = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
