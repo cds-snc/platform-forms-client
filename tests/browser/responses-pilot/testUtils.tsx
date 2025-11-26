@@ -6,7 +6,6 @@ import { ContentWrapper } from "@responses-pilot/ContentWrapper";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { ApiClientSetter } from "./AplClientSetter";
 import { GCFormsApiClient } from "@responses-pilot/lib/apiClient";
-import { showOpenFilePicker } from "native-file-system-adapter";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 
 // Import to trigger i18next initialization
@@ -18,9 +17,8 @@ interface RenderWithProvidersOptions {
   locale?: string;
   formId?: string;
   mockApiClient?: GCFormsApiClient;
-  overrides?: {
-    showOpenFilePicker?: typeof showOpenFilePicker;
-  };
+  // Allow passing arbitrary provider overrides for tests (e.g. router)
+  overrides?: Record<string, unknown>;
   children: ReactNode;
 }
 
