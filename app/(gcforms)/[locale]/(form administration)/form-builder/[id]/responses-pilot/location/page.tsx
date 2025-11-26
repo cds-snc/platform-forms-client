@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { SelectLocation } from "./SelectLocation";
 import { ApiClientGuard } from "../guards/ApiClientGuard";
-import { getPageTitle } from "../lib/getStepOf";
+import { getPageTitle } from "../lib/getPageTitle";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
