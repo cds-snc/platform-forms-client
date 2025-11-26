@@ -40,7 +40,7 @@ describe("SelectApiKey - Browser Mode", () => {
     await expect.element(page.getByTestId("load-key-heading")).toBeInTheDocument();
     await expect
       .element(page.getByTestId("load-key-heading"))
-      .toHaveTextContent("Upload your API key file");
+      .toHaveTextContent("USelect your API key file");
   });
 
   it("should have Continue button disabled initially", async () => {
