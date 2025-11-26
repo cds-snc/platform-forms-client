@@ -12,17 +12,19 @@ import type { ResponseDownloadLogger } from "./logger";
 import type { TFunction } from "i18next";
 
 // Fixtures
-import submissionFixture from "./__tests__/fixtures/submission-25-11-d70b9.json";
-import templateFixture from "./__tests__/fixtures/get-support-2025-11-26.json";
+import submissionFixture from "./__tests__/fixtures/response-get-support.json";
+import templateFixture from "./__tests__/fixtures/template-get-support-cmeaj61dl0001xf01aja6mnpf.json";
+import crypto from "crypto";
 
 // Mock decryptFormSubmission in local utils module path
 vi.mock("./utils", () => ({
   decryptFormSubmission: async () => JSON.stringify(submissionFixture),
 }));
 
-// Mock md5 to match checksum in fake payload
+// Compute checksum from fixture and mock md5 to return it
+const expectedChecksum = crypto.createHash("md5").update(submissionFixture.answers).digest("hex");
 vi.mock("hash-wasm", () => ({
-  md5: async () => "5d5877990b57e4c2cc096683f90f141f",
+  md5: async () => expectedChecksum,
 }));
 
 describe("processResponse", () => {
@@ -33,6 +35,8 @@ describe("processResponse", () => {
 
   it("writes a CSV row from a submission", async () => {
     const formTemplate = templateFixture as unknown as FormProperties;
+    const formId = "cmeaj61dl0001xf01aja6mnpf";
+    const responseName = "26-11-2b09f";
 
     const mockApiClient: Partial<GCFormsApiClient> = {
       getFormSubmission: async (submissionName: string) => {
@@ -47,7 +51,7 @@ describe("processResponse", () => {
       },
       confirmFormSubmission: async () => {},
       getFormTemplate: async () => formTemplate,
-      getFormId: () => "test-form",
+      getFormId: () => formId,
       getNewFormSubmissions: async () => [],
     };
 
@@ -78,9 +82,9 @@ describe("processResponse", () => {
       csvFileHandle: csvHandle,
       apiClient: mockApiClient as GCFormsApiClient,
       decryptionKey: {} as unknown as CryptoKey,
-      responseName: "submission-1",
+      responseName,
       selectedFormat: "csv",
-      formId: "test-form",
+      formId: formId,
       formTemplate,
       t,
       logger,
@@ -97,8 +101,8 @@ describe("processResponse", () => {
     expect(text).toContain("Submission ID");
 
     // Ensure known fields from submission are present in CSV (name, phone, email)
-    expect(text).toContain("test");
+    expect(text).toContain("Sarah Elyse");
     expect(text).toContain("111-222-3333");
-    expect(text).toContain("name@example.com");
+    expect(text).toContain("name@cds-snc.ca");
   });
 });
