@@ -39,7 +39,7 @@
   },
   "loadKeyPage": {
     "title": "Téléversez le fichier de clé API",
-    "detail": "Téléversez la clé API générée dans les Paramètres pour accéder à toutes les réponses disponibles de votre formulaire en un seul téléchargement. Veillez à décompresser le dossier contenant le fichier JSON.",
+    "detail": "Téléversez la clé API générée dans les Paramètres pour accéder à toutes les réponses disponibles de votre formulaire en un seul téléchargement.",
     "chooseFileButton": "Téléverser la clé API",
     "noNewResponsesAvailable": "Aucune nouvelle réponse",
     "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
