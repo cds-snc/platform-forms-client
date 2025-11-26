@@ -24,7 +24,7 @@
       "heading": "Ensuite, suivez ces étapes :",
       "stepOf": "Étape {{current}} de {{total}}",
       "uploadKey": {
-        "title": "Téléversez votre fichier de clé API.",
+        "title": "Sélectionnez votre fichier de clé API.",
         "detail": "C'est ainsi que vous vous authentifierez en toute sécurité pour obtenir toutes les nouvelles réponses."
       },
       "chooseLocation": {
@@ -38,18 +38,18 @@
     }
   },
   "loadKeyPage": {
-    "title": "Téléversez le fichier de clé API",
-    "detail": "Téléversez la clé API générée dans les Paramètres pour accéder à toutes les réponses disponibles de votre formulaire en un seul téléchargement.",
+    "title": "Utilisez votre clé API pour vous authentifier",
+    "detail": "Sélectionnez le fichier de clé API qui a été générée dans les Paramètres pour accéder à toutes les réponses disponibles de votre formulaire en un seul téléchargement.",
     "chooseFileButton": "Téléverser la clé API",
     "noNewResponsesAvailable": "Aucune nouvelle réponse",
     "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
     "newResponsesAvailable": "De nouvelles réponses sont disponibles",
     "checkForNewResponses": "Vérifier les nouvelles réponses",
     "downloadResponses": "Choisir l'emplacement",
-    "uploadSuccessTitle": "La clé API a été téléchargée avec succès",
+    "uploadSuccessTitle": "Vous avez été authentifié avec succès.",
     "uploadSuccessMessage": "Vous pouvez maintenant récupérer toutes les nouvelles réponses pour ce formulaire.",
-    "uploadFailedTitle": "Échec du téléchargement de la clé API",
-    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la téléverser à nouveau.",
+    "uploadFailedTitle": "Échec d'authentification avec la clé API",
+    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la mettre à nouveau.",
     "lostKey": {
       "link": "Vous n'avez pas votre clé API?",
       "lostKeyTip": {
