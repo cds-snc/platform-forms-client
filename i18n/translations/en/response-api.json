@@ -23,7 +23,7 @@
     "steps": {
       "heading": "Then, follow these steps:",
       "uploadKey": {
-        "title": "Upload your API key file.",
+        "title": "Select your API key file.",
         "detail": "This is how you will securely authenticate to get all new responses."
       },
       "chooseLocation": {
@@ -37,18 +37,18 @@
     }
   },
   "loadKeyPage": {
-    "title": "Upload your API key file",
-    "detail": "Upload the API key you generated in Settings to get access to all your form's available responses in one download.",
-    "chooseFileButton": "Upload API Key",
+    "title": "Use your API key to authenticate yourself",
+    "detail": "Select the API key file that you generated in Settings to get access to all your form's available responses in one download.",
+    "chooseFileButton": "Select API Key",
     "noNewResponsesAvailable": "No new responses",
     "noNewResponsesDetail": "There are currently no new responses for this form.",
     "newResponsesAvailable": "New responses available",
     "checkForNewResponses": "Check for new responses",
     "downloadResponses": "Choose location",
-    "uploadSuccessTitle": "API key was successfully uploaded",
+    "uploadSuccessTitle": "You were successfully authenticated.",
     "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
-    "uploadFailedTitle": "API key upload failed",
-    "uploadFailedMessage": "Make sure you select the correct file. If it's not working, try regenerating a new API key and uploading it again.",
+    "uploadFailedTitle": "Authentication failed with API key",
+    "uploadFailedMessage": "Make sure you select the correct file. If it's not working, try regenerating a new API key and adding it again.",
     "lostKey": {
       "link": "Don't have API key?",
       "lostKeyTip": {

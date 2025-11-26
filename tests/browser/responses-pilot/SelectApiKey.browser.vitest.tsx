@@ -4,6 +4,7 @@ import { SelectApiKey } from "@responses-pilot/load-key/SelectApiKey";
 import { render } from "./testUtils";
 import { GCFormsApiClient } from "@responses-pilot/lib/apiClient";
 import { setupFonts } from "./testHelpers";
+import enTranslations from "@root/i18n/translations/en/response-api.json";
 
 import "@root/styles/app.scss";
 
@@ -40,7 +41,7 @@ describe("SelectApiKey - Browser Mode", () => {
     await expect.element(page.getByTestId("load-key-heading")).toBeInTheDocument();
     await expect
       .element(page.getByTestId("load-key-heading"))
-      .toHaveTextContent("Upload your API key file");
+      .toHaveTextContent(enTranslations.loadKeyPage.title);
   });
 
   it("should have Continue button disabled initially", async () => {
