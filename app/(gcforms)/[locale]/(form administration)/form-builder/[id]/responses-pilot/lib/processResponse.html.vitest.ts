@@ -1,10 +1,13 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { prepareTestEnv, defaultSetProcessedSubmissionIds, defaultT } from "./__tests__/testHelpers";
+import {
+  prepareTestEnv,
+  defaultSetProcessedSubmissionIds,
+  defaultT,
+} from "./__tests__/testHelpers";
 import InMemoryDirectoryHandle from "./__tests__/fsMock";
 import type { GCFormsApiClient } from "./apiClient";
 import type { FormProperties } from "@root/lib/types";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
-
 
 // Prepare test environment (mocks + in-memory env)
 const prepared = prepareTestEnv();
@@ -28,7 +31,7 @@ describe("processResponse (html)", () => {
 
     const { processResponse } = await import("./processResponse");
 
-    const htmlDir = (await dir.getDirectoryHandle("html", { create: true }));
+    const htmlDir = await dir.getDirectoryHandle("html", { create: true });
 
     const setProcessedSubmissionIds = defaultSetProcessedSubmissionIds;
     const t = defaultT;
