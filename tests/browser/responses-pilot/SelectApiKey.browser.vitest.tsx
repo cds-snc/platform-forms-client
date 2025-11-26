@@ -40,7 +40,7 @@ describe("SelectApiKey - Browser Mode", () => {
     await expect.element(page.getByTestId("load-key-heading")).toBeInTheDocument();
     await expect
       .element(page.getByTestId("load-key-heading"))
-      .toHaveTextContent("Select your API key file");
+      .toHaveTextContent("Use your API key to authenticate yourself");
   });
 
   it("should have Continue button disabled initially", async () => {
