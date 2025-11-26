@@ -11,10 +11,9 @@ import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/c
 import { getStepOf } from "../lib/getStepOf";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
+  const { t, router } = useResponsesApp();
   const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses, logger } =
     useResponsesContext();
-
-  const { t, router } = useResponsesApp();
 
   const handleNext = useCallback(async () => {
     logger.info("Starting retrieval of form submissions");

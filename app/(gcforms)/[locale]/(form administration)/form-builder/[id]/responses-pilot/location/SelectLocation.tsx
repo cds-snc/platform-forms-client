@@ -13,7 +13,6 @@ import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/c
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
   const { t, router, searchParams } = useResponsesApp();
-
   const { directoryHandle, setDirectoryHandle, logger } = useResponsesContext();
 
   const setDirectory = useCallback(
