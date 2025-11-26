@@ -144,7 +144,7 @@
     },
     "quotaExceededError": {
       "title": "Espace de stockage dépassé",
-      "message": "Vous n'avez pas assez d'espace  pour écrire dans le fichier. Veuillez libérer de l'espace et réessayer."
+      "message": "Vous n'avez pas assez d'espace de stockage pour écrire dans le fichier. Veuillez libérer de l'espace et réessayer."
     }
   }
 }
