@@ -69,9 +69,15 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
             {t("processingPage.processingTitle")}
           </FocusHeader>
           {currentSubmissionId ? (
-            <p className="mb-4 text-xl">
-              {t("processingPage.processingSubmission", { submissionId: currentSubmissionId })}
-            </p>
+            <>
+              {/* Visual message — hidden from assistive tech */}
+              <p className="mb-4 text-xl" aria-hidden="true">
+                {t("processingPage.processingSubmission", { submissionId: currentSubmissionId })}
+              </p>
+
+              {/* Screen-reader only: announce a generic 'please wait' message */}
+              <p className="sr-only">{t("processingPage.pleaseWait")}</p>
+            </>
           ) : (
             <p className="mb-4 text-xl">{t("processingPage.pleaseWait")}</p>
           )}
