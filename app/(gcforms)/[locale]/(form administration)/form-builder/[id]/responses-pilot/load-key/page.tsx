@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { SelectApiKey } from "./SelectApiKey";
-import { getPageTitle } from "../lib/getStepOf";
+import { getPageTitle } from "../lib/getPageTitle";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
