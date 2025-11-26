@@ -10,23 +10,57 @@ class InMemoryFile {
   }
 }
 
-class InMemoryWritable {
+class InMemoryWritable extends WritableStream {
   private file: InMemoryFile;
   private keepExisting: boolean;
+  private firstWrite: boolean = true;
+
   constructor(file: InMemoryFile, keepExisting = false) {
+    const decoder = new TextDecoder();
+    let firstWrite = true;
+
+    super({
+      write(chunk) {
+        const text = typeof chunk === "string" ? chunk : decoder.decode(chunk, { stream: true });
+        if (keepExisting || !firstWrite) {
+          file.content += text;
+        } else {
+          file.content = text;
+        }
+        firstWrite = false;
+      },
+      close() {
+        // No-op for in-memory
+      },
+      abort() {
+        // No-op for in-memory
+      },
+    });
+
     this.file = file;
     this.keepExisting = keepExisting;
   }
-  async write(data: string) {
-    if (this.keepExisting) {
-      this.file.content = this.file.content + data;
-    } else {
-      this.file.content = data;
-    }
+
+  // Legacy API for compatibility with code that calls write() directly
+  async write(data: string | Uint8Array) {
+    const writer = this.getWriter();
+    await writer.write(data);
+    writer.releaseLock();
   }
-  async seek(_pos: number) {}
-  async close() {}
-  async abort() {}
+
+  async seek(_pos: number) {
+    // No-op for in-memory
+  }
+
+  async close() {
+    const writer = this.getWriter();
+    await writer.close();
+  }
+
+  async abort() {
+    const writer = this.getWriter();
+    await writer.abort();
+  }
 }
 
 class InMemoryFileHandle {
