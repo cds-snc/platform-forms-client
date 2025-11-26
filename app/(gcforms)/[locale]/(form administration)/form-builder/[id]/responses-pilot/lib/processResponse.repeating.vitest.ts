@@ -62,8 +62,6 @@ describe("processResponse - repeating set", () => {
     const file = await csvHandle.getFile();
     const text = await file.text();
 
-    // CSV content generated (previously logged for debugging)
-
     expect(text.length).toBeGreaterThan(0);
     expect(text).toContain("Submission ID");
 
