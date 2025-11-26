@@ -1,15 +1,11 @@
-import React from "react";
+
 import { describe, it, expect, beforeEach } from "vitest";
 import InMemoryDirectoryHandle from "./__tests__/fsMock";
-import { prepareTestEnv } from "./__tests__/testHelpers";
+import { prepareTestEnv, defaultSetProcessedSubmissionIds, defaultT } from "./__tests__/testHelpers";
 
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import type { FormProperties } from "@gcforms/types";
 import type { GCFormsApiClient } from "./apiClient";
-import type { TFunction } from "i18next";
-
-// Fixtures
-// Fixtures are provided via setupMocks in testHelpers
 
 // Prepare test environment (mocks + in-memory env)
 const prepared = prepareTestEnv();
@@ -42,8 +38,8 @@ describe("processResponse", () => {
       create: true,
     })) as unknown as FileSystemFileHandle;
 
-    const setProcessedSubmissionIds: React.Dispatch<React.SetStateAction<Set<string>>> = () => {};
-    const t: TFunction = ((k: string) => k) as unknown as TFunction;
+    const setProcessedSubmissionIds = defaultSetProcessedSubmissionIds;
+    const t = defaultT;
 
     await processResponse({
       setProcessedSubmissionIds,

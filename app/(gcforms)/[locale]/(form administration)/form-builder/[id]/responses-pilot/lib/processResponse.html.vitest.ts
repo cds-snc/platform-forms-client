@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { prepareTestEnv } from "./__tests__/testHelpers";
+import { prepareTestEnv, defaultSetProcessedSubmissionIds, defaultT } from "./__tests__/testHelpers";
 import InMemoryDirectoryHandle from "./__tests__/fsMock";
 import type { GCFormsApiClient } from "./apiClient";
 import type { FormProperties } from "@root/lib/types";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
-import type { TFunction } from "i18next";
+
 // Prepare test environment (mocks + in-memory env)
 const prepared = prepareTestEnv();
 
@@ -30,9 +30,8 @@ describe("processResponse (html)", () => {
 
     const htmlDir = (await dir.getDirectoryHandle("html", { create: true }));
 
-    const setProcessedSubmissionIds: React.Dispatch<React.SetStateAction<Set<string>>> =
-      (() => {}) as unknown as React.Dispatch<React.SetStateAction<Set<string>>>;
-    const t = ((k: string) => k) as unknown as TFunction;
+    const setProcessedSubmissionIds = defaultSetProcessedSubmissionIds;
+    const t = defaultT;
 
     await processResponse({
       setProcessedSubmissionIds,

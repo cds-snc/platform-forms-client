@@ -62,3 +62,10 @@ export const prepareTestEnv = () => {
 };
 
 export type PreparedTestEnv = ReturnType<typeof prepareTestEnv>;
+
+// Default typed stubs for tests
+export const defaultSetProcessedSubmissionIds: React.Dispatch<React.SetStateAction<Set<string>>> =
+  (() => {}) as unknown as React.Dispatch<React.SetStateAction<Set<string>>>;
+
+export const defaultT: import("i18next").TFunction = ((k: string) =>
+  k) as unknown as import("i18next").TFunction;
