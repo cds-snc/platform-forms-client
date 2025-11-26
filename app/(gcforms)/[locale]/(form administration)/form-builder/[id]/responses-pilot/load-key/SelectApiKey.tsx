@@ -5,6 +5,7 @@ import { useResponsesApp } from "../context";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { LoadKey } from "./LoadKey";
 import { GCFormsApiClient } from "../lib/apiClient";
+import { getStepOf } from "../lib/getStepOf";
 import { Responses } from "../Responses";
 import { LostKeyLink, LostKeyPopover } from "./LostKeyPopover";
 import { ResponseActionButtons } from "./ResponseActionButtons";
@@ -98,7 +99,9 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     <div>
       {!apiClient && (
         <div>
-          <div className="mb-4">{t("stepOf", { current: 1, total: 3 })}</div>
+          <div className="mb-4" data-testid="step-indicator">
+            {t("stepOf", getStepOf("load-key"))}
+          </div>
           <FocusHeader headingTag="h2" dataTestId="load-key-heading">
             {t("loadKeyPage.title")}
           </FocusHeader>

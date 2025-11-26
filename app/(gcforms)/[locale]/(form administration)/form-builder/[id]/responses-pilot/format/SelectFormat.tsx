@@ -8,6 +8,7 @@ import { Radio } from "../../../components/shared/MultipleChoice";
 import { useCallback } from "react";
 import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
+import { getStepOf } from "../lib/getStepOf";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses, logger } =
@@ -37,7 +38,9 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
 
   return (
     <div>
-      <div className="mb-4">{t("stepOf", { current: 3, total: 3 })}</div>
+      <div className="mb-4" data-testid="step-indicator">
+        {t("stepOf", getStepOf("format"))}
+      </div>
       <FocusHeader headingTag="h2" dataTestId="format-page-title">
         {t("formatPage.title")}
       </FocusHeader>

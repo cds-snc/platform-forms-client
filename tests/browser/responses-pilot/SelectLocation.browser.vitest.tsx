@@ -24,9 +24,8 @@ describe("SelectLocation - Browser Mode", () => {
     await render(<SelectLocation locale="en" id="test-form" />);
 
     // Check for step indicator
-    const stepIndicator = page.getByTestId("step-indicator");
-    await expect.element(stepIndicator).toBeInTheDocument();
-    await expect.element(stepIndicator).toHaveTextContent("Step 2 of 3");
+    await expect.element(page.getByTestId("step-indicator")).toBeInTheDocument();
+    await expect.element(page.getByTestId("step-indicator")).toHaveTextContent("Step 2 of 3");
 
     // Check for title
     const title = page.getByTestId("location-page-title");
