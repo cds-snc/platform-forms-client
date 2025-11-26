@@ -1,35 +1,38 @@
-
 import { describe, it, expect, beforeEach } from "vitest";
 import InMemoryDirectoryHandle from "./__tests__/fsMock";
-import { prepareTestEnv, defaultSetProcessedSubmissionIds, defaultT } from "./__tests__/testHelpers";
+import { prepareTestEnvFromFixtures, defaultSetProcessedSubmissionIds, defaultT, testLogger } from "./__tests__/testHelpers";
 
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import type { FormProperties } from "@gcforms/types";
 import type { GCFormsApiClient } from "./apiClient";
 
-// Prepare test environment (mocks + in-memory env)
-const prepared = prepareTestEnv();
+import responseFixture from "./__tests__/fixtures/response-repeating-26-11-28610.json";
+import templateFixture from "./__tests__/fixtures/template-equipment-list-2025-11-26.json";
 
-describe("processResponse", () => {
+// Prepare test environment (mocks + in-memory env) using provided fixtures
+const prepared = prepareTestEnvFromFixtures(responseFixture, templateFixture);
+
+describe("processResponse - repeating set", () => {
   let dir: InMemoryDirectoryHandle;
   beforeEach(() => {
     dir = prepared.dir;
   });
 
-  it("writes a CSV row from a submission", async () => {
+  it("writes repeating set rows into CSV correctly", async () => {
     const env = prepared;
     const formTemplate = env.formTemplate as unknown as FormProperties;
-    const formId = "cmeaj61dl0001xf01aja6mnpf";
-    const responseName = "26-11-2b09f";
+    const formId = "test-form";
+    const responseName = "26-11-28610";
     const mockApiClient = env.mockApiClient;
-    const logger = env.logger;
+    const logger = env.logger ?? testLogger;
 
     // Initialize CSV headers first (matches app behavior)
     const { initCsv } = await import("./csvWriter");
     const { processResponse } = await import("./processResponse");
 
     await initCsv({
-      formId: "test-form",
+      formId:
+        "test-form",
       dirHandle: dir as unknown as FileSystemDirectoryHandle,
       formTemplate,
     });
@@ -62,9 +65,10 @@ describe("processResponse", () => {
     expect(text.length).toBeGreaterThan(0);
     expect(text).toContain("Submission ID");
 
-    // Ensure known fields from submission are present in CSV (name, phone, email)
-    expect(text).toContain("Sarah Elyse");
-    expect(text).toContain("111-222-3333");
-    expect(text).toContain("name@cds-snc.ca");
+    // Ensure known repeating values are present
+    expect(text).toContain("List the names of the equipment you need");
+    expect(text).toContain("Name\n: Item 1");
+    expect(text).toContain("Name\n: Item 2");
+    expect(text).toContain("Name\n: Item 3");
   });
 });
