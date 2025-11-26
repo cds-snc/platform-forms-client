@@ -55,5 +55,10 @@ describe("processResponse (html)", () => {
     // Ensure file written and contains a label from template
     expect(text.length).toBeGreaterThan(0);
     expect(text).toContain("Your name");
+    // Ensure submission values are present in the rendered HTML
+    expect(text).toContain("Sarah Elyse");
+    expect(text).toContain("111-222-3333");
+    expect(text).toContain("name@cds-snc.ca");
+    expect(text).toContain("When will you release the GC Form Response pilot?");
   });
 });
