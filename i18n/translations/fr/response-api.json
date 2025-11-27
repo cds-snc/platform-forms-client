@@ -144,7 +144,11 @@
     },
     "quotaExceededError": {
       "title": "Espace de stockage dépassé",
-      "message": "Vous n'avez pas assez d'espace de stockage pour écrire dans le fichier. Veuillez libérer de l'espace et réessayer."
+      "message": "L'espace de stockage est insuffisant pour écrire dans le fichier. Veuillez libérer de l'espace et réessayer."
+    },
+    "permissionError": {
+      "title": "Impossible de modifier le contenu du dossier",
+      "message": "Veuillez accorder à votre navigateur l'accès de « modification » (ou accès en écriture) au dossier sélectionné. Vous trouverez cette option dans le menu du navigateur. Il est possible que votre ministère ait bloqué cette fonctionnalité."
     }
   }
 }

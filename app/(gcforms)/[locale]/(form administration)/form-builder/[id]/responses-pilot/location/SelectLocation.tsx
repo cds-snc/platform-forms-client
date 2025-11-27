@@ -10,6 +10,8 @@ import { toast } from "../../../components/shared/Toast";
 import { LocationSelected } from "../components/Toasts";
 import { getStepOf } from "../lib/getStepOf";
 import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
+import { verifyPermission } from "../lib/fileSystemHelpers";
+import { NotAllowedError } from "../components/Toasts";
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
   const { t, router, searchParams } = useResponsesApp();
@@ -18,6 +20,16 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
   const setDirectory = useCallback(
     async (handle: FileSystemDirectoryHandle | null) => {
       if (!handle) {
+        return;
+      }
+
+      // Verify permission for the selected directory before persisting
+      const ok = await verifyPermission(handle, "readwrite");
+
+      if (!ok) {
+        // for debugging -- check read permission separately this will log to the console
+        await verifyPermission(handle, "read");
+        toast.error(<NotAllowedError />, "error-persistent");
         return;
       }
 
