@@ -68,7 +68,7 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
           <FocusHeader headingTag="h2" dataTestId="processing-page-title">
             {t("processingPage.processingTitle")}
           </FocusHeader>
-          <div aria-live="polite">
+          <div aria-live="polite" role="status">
             {currentSubmissionId ? (
               <>
                 {/* Visual message — hidden from assistive tech */}
