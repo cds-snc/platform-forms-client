@@ -12,6 +12,18 @@ import { AccessControlError } from "@lib/auth/errors";
 import * as settingCache from "@lib/cache/settingCache";
 
 import { logEvent } from "@lib/auditLogs";
+
+jest.mock("@lib/auditLogs", () => ({
+  __esModule: true,
+  logEvent: jest.fn(),
+  get AuditLogDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
+  },
+  get AuditLogAccessDeniedDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
+  }
+}));
+
 import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authorization";
 
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
@@ -116,7 +128,8 @@ describe("Application Settings", () => {
         userId,
         { id: "testSetting", type: "Setting" },
         "CreateSetting",
-        'Created setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}'
+        'Created setting with ${settingData}',
+        { settingData: '{"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}' }
       );
       expect(newSetting).toMatchObject({
         internalId: "testSetting",
@@ -175,7 +188,8 @@ describe("Application Settings", () => {
         userId,
         { id: "testSetting", type: "Setting" },
         "ChangeSetting",
-        'Updated setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}'
+        'Updated setting with ${settingData}',
+        { settingData: '{"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}' }
       );
       expect(newSetting).toMatchObject({
         internalId: "testSetting",
@@ -233,7 +247,8 @@ describe("Application Settings", () => {
         userId,
         { id: "testSetting", type: "Setting" },
         "DeleteSetting",
-        'Deleted setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","descriptionEn":null,"descriptionFr":null,"value":"123"}'
+        'Deleted setting with internalId: ${internalId}',
+        { internalId: "testSetting" }
       );
     });
     test("Only users with correct privileges can delete app settings", async () => {
