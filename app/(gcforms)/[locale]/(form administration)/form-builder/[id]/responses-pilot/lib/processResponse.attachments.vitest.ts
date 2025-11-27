@@ -60,6 +60,7 @@ describe("processResponse - attachment handling", () => {
 
       await processResponse({
         setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
         csvFileHandle: null,
@@ -103,6 +104,7 @@ describe("processResponse - attachment handling", () => {
 
       await processResponse({
         setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
         csvFileHandle: null,
@@ -193,6 +195,7 @@ describe("processResponse - attachment handling", () => {
 
       await processResponse({
         setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
         csvFileHandle: null,
@@ -241,6 +244,7 @@ describe("processResponse - attachment handling", () => {
 
       await processResponse({
         setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
         csvFileHandle: null,
@@ -308,6 +312,7 @@ describe("processResponse - attachment handling", () => {
 
       await processResponse({
         setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
         csvFileHandle: null,
@@ -388,6 +393,7 @@ describe("processResponse - attachment handling", () => {
 
       await processResponse({
         setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
         csvFileHandle: null,
@@ -432,6 +438,7 @@ describe("processResponse - attachment handling", () => {
 
       await processResponse({
         setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
         csvFileHandle: null,
@@ -497,6 +504,7 @@ describe("processResponse - attachment handling", () => {
 
       await processResponse({
         setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
         csvFileHandle: null,
@@ -541,6 +549,7 @@ describe("processResponse - attachment handling", () => {
 
       await processResponse({
         setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
         csvFileHandle: null,

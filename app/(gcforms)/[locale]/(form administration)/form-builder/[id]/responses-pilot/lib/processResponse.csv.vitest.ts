@@ -55,6 +55,7 @@ describe("processResponse", () => {
 
     await processResponse({
       setProcessedSubmissionIds,
+      setHasMaliciousAttachments: () => {},
       workingDirectoryHandle: dir as unknown as FileSystemDirectoryHandle,
       htmlDirectoryHandle: null,
       csvFileHandle: csvHandle,
@@ -119,6 +120,7 @@ describe("processResponse with null values", () => {
 
     await processResponse({
       setProcessedSubmissionIds,
+      setHasMaliciousAttachments: () => {},
       workingDirectoryHandle: dir as unknown as FileSystemDirectoryHandle,
       htmlDirectoryHandle: null,
       csvFileHandle: csvHandle,
