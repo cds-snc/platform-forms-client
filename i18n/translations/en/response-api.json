@@ -144,6 +144,10 @@
     "quotaExceededError": {
       "title": "Storage space exceeded",
       "message": "Not enough storage space is available to write to the file. Please free up space and try again."
+    },
+    "permissionError": {
+      "title": "Unable to modify folder contents",
+      "message": "Please grant edit access to the selected folder."
     }
   }
 }

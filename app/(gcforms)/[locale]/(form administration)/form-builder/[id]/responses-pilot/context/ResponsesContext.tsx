@@ -23,6 +23,7 @@ import {
   FileWriteError,
   InvalidStateError as InvalidStateErrorToast,
   QuotaExceededError as QuotaExceededErrorToast,
+  NotAllowedError as NotAllowedErrorToast,
 } from "../components/Toasts";
 import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
@@ -260,6 +261,9 @@ export const ResponsesProvider = ({
                 toast.error(<InvalidStateErrorToast />, "error-persistent");
               } else if (errorCause.name === "QuotaExceededError") {
                 toast.error(<QuotaExceededErrorToast />, "error-persistent");
+              } else if (errorCause.name === "NotAllowedError") {
+                // User has revoked permission - show generic error
+                toast.error(<NotAllowedErrorToast />, "error-persistent");
               } else {
                 toast.error(<ErrorRetreivingSubmissions />, "error-persistent");
               }

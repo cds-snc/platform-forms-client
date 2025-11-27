@@ -145,6 +145,10 @@
     "quotaExceededError": {
       "title": "Espace de stockage dépassé",
       "message": "Espace de stockage insuffisant pour écrire dans le fichier. Veuillez libérer de l'espace et réessayer."
+    },
+    "permissionError": {
+      "title": "Impossible de modifier le contenu du dossier",
+      "message": "Veuillez accorder l'accès en modification au dossier sélectionné."
     }
   }
 }
