@@ -8,7 +8,6 @@ import { AccessControlError } from "@lib/auth/errors";
 import { ManageUsers, Base } from "__utils__/permissions";
 
 import { logEvent } from "@lib/auditLogs";
-jest.mock("@lib/auditLogs");
 jest.mock("@lib/privileges");
 
 import { JWT } from "next-auth/jwt";
@@ -16,7 +15,17 @@ import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authoriz
 
 const userId = "1";
 
-jest.mock("@lib/auditLogs");
+jest.mock("@lib/auditLogs", () => ({
+  __esModule: true,
+  logEvent: jest.fn(),
+  get AuditLogDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
+  },
+  get AuditLogAccessDeniedDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
+  }
+}));
+
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 describe("User query tests should fail gracefully", () => {

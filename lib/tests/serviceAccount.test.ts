@@ -7,7 +7,19 @@ import { prismaMock } from "@jestUtils";
 import { logEvent } from "@lib/auditLogs";
 import * as ZitadelConnector from "@lib/integration/zitadelConnector";
 
-jest.mock("@lib/auditLogs");
+const { AuditLogDetails, AuditLogEvent, AuditSubjectType } = jest.requireActual("@lib/auditLogs");
+
+jest.mock("@lib/auditLogs", () => ({
+  __esModule: true,
+  logEvent: jest.fn(),
+  get AuditLogDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
+  },
+  get AuditLogAccessDeniedDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
+  }
+}));
+
 jest.mock("@lib/templates");
 jest.mock("@lib/privileges");
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
@@ -128,7 +140,8 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "CreateAPIKey",
-        "User :1 created API key for service account serviceAccountUser"
+        "User :${userId} created API key for service account ${serviceAccountId}",
+        { "serviceAccountId": "serviceAccountUser", "userId": "1" }
       );
     });
     it("should create a key if an existing user exists", async () => {
@@ -148,7 +161,8 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "CreateAPIKey",
-        "User :1 created API key for service account templateId"
+        "User :${userId} created API key for service account ${serviceAccountId}",
+        { "serviceAccountId": "templateId", "userId": "1" }
       );
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
@@ -179,7 +193,8 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "DeleteAPIKey",
-        "User :1 deleted service account 123412341234"
+        "User :${userId} deleted service account ${serviceAccountID} for template ${templateId}",
+        {"serviceAccountID": serviceAccountID, "templateId": "templateId", "userId": "1"}
       );
     });
     it("should delete a key if there is not an existing user in the IDP", async () => {
@@ -195,7 +210,8 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "DeleteAPIKey",
-        "User :1 deleted service account for template templateId"
+        "User :${userId} deleted service account ${serviceAccountID} for template ${templateId}",
+        {"templateId": "templateId", "userId": "1", "serviceAccountID": ""}
       );
     });
     it("should not throw an Error if the key does not exist in the database", async () => {
@@ -215,7 +231,8 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "DeleteAPIKey",
-        "User :1 deleted service account 123412341234"
+        "User :${userId} deleted service account ${serviceAccountID} for template ${templateId}",
+        {"serviceAccountID": serviceAccountID, "templateId": "templateId", "userId": "1"}
       );
     });
 

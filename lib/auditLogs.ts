@@ -118,12 +118,12 @@ export enum AuditLogDetails {
   AccessedForms = "Accessed Forms: ${formList}",
   ChangeDeliveryOption = "Changed delivery option to ${deliveryOption}",
   ChangeSecurityAttribute = "Changed security attribute to ${securityAttribute}",
-  AccessGrantedTo = "Access granted to {userList}",
-  AccessRevokedFor = "Access revoked for {userList}",
+  AccessGrantedTo = "Access granted to ${userList}",
+  AccessRevokedFor = "Access revoked for ${userList}",
   //API Keys
   GeneratedNewApiKey = "User :${userId} generated a new API key for service account ${serviceAccountId}",
   CreatedNewApiKey = "User :${userId} created API key for service account ${serviceAccountId}",
-  DeletedServiceAccount = "User :${userId} deleted service account ${serviceAccountID} : `for template ${templateId}",
+  DeletedServiceAccount = "User :${userId} deleted service account ${serviceAccountID} for template ${templateId}",
   // App Settings
   UpdatedAppSetting = "Updated setting with ${settingData}",
   CreatedAppSetting = "Created setting with ${settingData}",
@@ -134,12 +134,12 @@ export enum AuditLogDetails {
 }
 
 export enum AuditLogAccessDeniedDetails {
-  AccessDenied_AttemptedToReadFormObject = "Attempted to read form object",
-  AccessDenied_AttemptToCreateForm = "Attempted to create form",
-  AccessDenied_AttemptToDeleteForm = "Attempted to delete form",
+  AccessDenied_AttemptedToReadFormObject = "Attemped to read form object",
+  AccessDenied_AttemptToCreateForm = "Attempted to create a Form",
+  AccessDenied_AttemptToDeleteForm = "Attempted to delete Form",
   AccessDenied_AttemptToUnarchiveForm = "Attempted to unarchive form",
   AccessDenied_AttemptToPublishForm = "Attempted to publish form",
-  AccessDenied_AttemptToUpdateForm = "Attempted to update form",
+  AccessDenied_AttemptToUpdateForm = "Attempted to update Form",
   AccessDenied_AttemptToUpdateFormJson = "Attempted to update form jsonConfig",
   AccessDenied_AttemptToGetFormJson = "Attempted to get form jsonConfig",
   AccessDenied_AttemptToUpdateSecurityAttribute = "Attempted to update security attribute",
@@ -152,7 +152,7 @@ export enum AuditLogAccessDeniedDetails {
   AccessDenied_AttemptToListAssignedUsers = "Attempted to retrieve users associated with Form",
   AccessDenied_AttemptToSetSaveAndResume = "Attempted to set save and resume",
   AccessDenied_AttemptToSetFormPurpose = "Attempted to set form purpose",
-  AccessDenied_AttempttoAccessAllSystemForms = "Attempted to access all system forms",
+  AccessDenied_AttempttoAccessAllSystemForms = "Attempted to access all System Forms",
   AccessDenied_IdentifyProblemResponse = "Attempted to identify problem response without form ownership",
   AccessDenied_IdentifiedProblemResponse = "Identified problem response for form ${formId}",
   AccessDenied_AttemptToModifyPrivilege = "Attempted to modify privilege on user ${userId}",
@@ -203,6 +203,22 @@ const getQueueURL = async () => {
   return queueUrlRef;
 };
 
+const resolveDescription = (
+  description?: AuditLogDetails | AuditLogAccessDeniedDetails,
+  descriptionParams?: Record<string, string>
+) => {
+  if (!description) return undefined;
+  let descriptionFinal = description.toString();
+
+  if (descriptionParams) {
+    for (const [key, value] of Object.entries(descriptionParams)) {
+      const placeholder = new RegExp(`\\$\\{${key}\\}`, "g");
+      descriptionFinal = descriptionFinal.replace(placeholder, value);
+    }
+  }
+  return descriptionFinal;
+};
+
 export const logEvent = async (
   userId: string,
   subject: { type: keyof typeof AuditSubjectType; id?: string },
@@ -210,15 +226,7 @@ export const logEvent = async (
   description?: AuditLogDetails | AuditLogAccessDeniedDetails,
   descriptionParams?: Record<string, string>
 ): Promise<void> => {
-  const descTemplate = description ? description.toString() : "";
-  let descriptionFinal = descTemplate;
-
-  if (descriptionParams) {
-    for (const [key, value] of Object.entries(descriptionParams)) {
-      const placeholder = `\${${key}}`;
-      descriptionFinal = descriptionFinal.replace(placeholder, value);
-    }
-  }
+  const descriptionFinal = resolveDescription(description, descriptionParams);
 
   const auditLog = JSON.stringify({
     userId,

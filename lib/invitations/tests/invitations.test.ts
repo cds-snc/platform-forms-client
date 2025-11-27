@@ -30,12 +30,22 @@ jest.mock("@lib/privileges");
 jest.mock("@lib/integration/prismaConnector");
 jest.mock("@lib/integration/notifyConnector");
 jest.mock("@lib/logger");
-jest.mock("@lib/auditLogs");
 jest.mock("@lib/users");
 jest.mock("@lib/templates");
 jest.mock("@lib/invitations/emailTemplates/inviteToFormsEmailTemplate");
 jest.mock("@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate");
 jest.mock("@lib/invitations/emailTemplates/ownerAddedEmailTemplate");
+
+jest.mock("@lib/auditLogs", () => ({
+  __esModule: true,
+  logEvent: jest.fn(),
+  get AuditLogDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
+  },
+  get AuditLogAccessDeniedDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
+  }
+}));
 
 const userId = "test-user-id";
 jest.mock("@lib/origin", () => ({
@@ -344,7 +354,8 @@ describe("Invitations", () => {
         "invited-user-id",
         { id: "template-id", type: "Form" },
         "InvitationAccepted",
-        "invited-user-id has accepted an invitation"
+        "${userId} has accepted an invitation",
+        { "userId" : "invited-user-id" }
       );
 
       // @TODO: these tests need to move to templates.test.ts
