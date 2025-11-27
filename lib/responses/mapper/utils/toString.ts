@@ -40,8 +40,9 @@ export const getAnswerAsString = (
     }
 
     const attachment = attachments?.get(id as string);
+    const prefix = attachment?.isPotentiallyMalicious ? "⚠️ " : "";
 
-    return attachment ? attachment.actualName : (answer as { name: string }).name || "";
+    return attachment ? prefix + attachment.actualName : (answer as { name: string }).name || "";
   }
 
   if (question && question.type === "formattedDate") {

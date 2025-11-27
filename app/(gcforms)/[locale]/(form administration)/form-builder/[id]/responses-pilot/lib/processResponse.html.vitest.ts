@@ -43,6 +43,7 @@ describe("processResponse (html)", () => {
 
     await processResponse({
       setProcessedSubmissionIds,
+      setHasMaliciousAttachments: () => {},
       workingDirectoryHandle: dir as unknown as FileSystemDirectoryHandle,
       htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
       csvFileHandle: null,

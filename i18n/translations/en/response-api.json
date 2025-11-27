@@ -101,7 +101,9 @@
     "downloadedResponsesOther": "{{formattedCount}} responses were downloaded",
     "savedTo": "All form submission data can be found in: ",
     "chooseNewLocationButton": "Choose new location",
-    "downloadResponsesButton": "Download responses"
+    "downloadResponsesButton": "Download responses",
+    "maliciousAttachmentsWarningTitle": "Your responses contain files attached to submissions",
+    "maliciousAttachmentsWarningBody": "These are located in a nested folder and will be marked in the CSV or HTML file with the symbol: “⚠️” if we suspect that they could potentially be malicious."
   },
   "processingPage": {
     "section-title": "Processing responses",

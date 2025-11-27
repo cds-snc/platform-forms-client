@@ -49,8 +49,8 @@ export enum AttachmentScanStatus {
 type CompleteAttachment = {
   id: string;
   name: string;
-  path: string;
-  scanStatus: AttachmentScanStatus;
+  isPotentiallyMalicious: boolean;
+  md5: string;
   downloadLink: string;
 };
 

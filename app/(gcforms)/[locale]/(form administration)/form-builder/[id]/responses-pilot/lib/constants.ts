@@ -22,3 +22,8 @@ export const RAW_RESPONSE_FOLDER = "data";
  * Folder within the selected directory to store attachments
  */
 export const ATTACHMENTS_FOLDER = "attachments";
+
+/**
+ * Folder within the attachments directory to store potentially malicious attachments
+ */
+export const MALICIOUS_ATTACHMENTS_FOLDER = "suspicious";

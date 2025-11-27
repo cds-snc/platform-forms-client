@@ -46,6 +46,7 @@ describe("processResponse - repeating set", () => {
 
     await processResponse({
       setProcessedSubmissionIds,
+      setHasMaliciousAttachments: () => {},
       workingDirectoryHandle: dir as unknown as FileSystemDirectoryHandle,
       htmlDirectoryHandle: null,
       csvFileHandle: csvHandle,
