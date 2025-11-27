@@ -60,6 +60,7 @@ interface ResponsesContextType {
   currentSubmissionId: string | null;
   hasMaliciousAttachments: boolean;
   setHasMaliciousAttachments: Dispatch<SetStateAction<boolean>>;
+  setCurrentSubmissionId: Dispatch<SetStateAction<string | null>>;
   resetState: () => void;
   resetNewSubmissions: () => void;
   logger: ResponseDownloadLogger;
@@ -348,6 +349,7 @@ export const ResponsesProvider = ({
         currentSubmissionId,
         hasMaliciousAttachments,
         setHasMaliciousAttachments,
+        setCurrentSubmissionId,
         resetState,
         resetNewSubmissions,
         logger: loggerRef.current,

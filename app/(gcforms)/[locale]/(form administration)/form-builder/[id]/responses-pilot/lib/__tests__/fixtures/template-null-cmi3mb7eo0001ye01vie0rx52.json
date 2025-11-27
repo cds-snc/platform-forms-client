@@ -1,0 +1,597 @@
+{
+  "titleEn": "Test for High Volume Submissions",
+  "titleFr": "Test for High Volume Submissions",
+  "introduction": {
+    "descriptionEn": "This form will be used for QA Testing high volume form submissions.",
+    "descriptionFr": "test"
+  },
+  "privacyPolicy": {
+    "descriptionEn": "privacy statement",
+    "descriptionFr": "privacy statement"
+  },
+  "confirmation": {
+    "descriptionEn": "you did it!",
+    "descriptionFr": "you did it!",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [2, 1, 4, 5, 6, 7, 8, 9, 15, 11, 16, 12, 13, 17, 14],
+  "elements": [
+    {
+      "id": 12,
+      "type": "formattedDate",
+      "uuid": "26448033-388b-490b-9c5b-53ba4d1aa49f",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Date",
+        "titleFr": "Date",
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 13,
+      "type": "dynamicRow",
+      "uuid": "b6986d45-c927-4e9f-99a6-a6e7c0a45b4f",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Last 5 vacations",
+        "titleFr": "Last 5 vacations",
+        "dynamicRow": {
+          "rowTitleEn": "Entry",
+          "rowTitleFr": "Entrée",
+          "addButtonTextEn": "Add",
+          "addButtonTextFr": "Ajouter",
+          "removeButtonTextEn": "Remove",
+          "removeButtonTextFr": "Supprimer"
+        },
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [
+          {
+            "id": 1301,
+            "type": "textField",
+            "uuid": "2fa2b679-e6e5-4a7c-8856-b821f575c573",
+            "properties": {
+              "tags": [],
+              "choices": [
+                {
+                  "en": "",
+                  "fr": ""
+                }
+              ],
+              "titleEn": "Country",
+              "titleFr": "Country",
+              "questionId": "",
+              "validation": {
+                "required": false
+              },
+              "subElements": [],
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 1302,
+            "type": "textArea",
+            "uuid": "3dbb7c03-827b-4063-9c9a-d34d87b4bf75",
+            "properties": {
+              "tags": [],
+              "choices": [
+                {
+                  "en": "",
+                  "fr": ""
+                }
+              ],
+              "titleEn": "Why did you like it?",
+              "titleFr": "Why did you like it?",
+              "questionId": "",
+              "validation": {
+                "required": false
+              },
+              "subElements": [],
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 1303,
+            "type": "radio",
+            "uuid": "cb73e73d-d025-4527-b98e-542da7cae539",
+            "properties": {
+              "tags": [],
+              "choices": [
+                {
+                  "en": "Less than a week",
+                  "fr": "Less than a week"
+                },
+                {
+                  "en": "7-10 days",
+                  "fr": "7-10 days"
+                },
+                {
+                  "en": "+14 days",
+                  "fr": "+14 days"
+                }
+              ],
+              "titleEn": "Duration",
+              "titleFr": "Duration",
+              "questionId": "",
+              "validation": {
+                "required": false
+              },
+              "subElements": [],
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          }
+        ],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "maxNumberOfRows": 50,
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 17,
+      "type": "fileInput",
+      "uuid": "66f71f29-44f0-4a20-ae94-a38935a863c0",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "File upload",
+        "titleFr": "file upload",
+        "fileType": ["pdf", "txt", "doc", "docx", "jpg", "jpeg", "png", "xls", "xlsx", "csv"],
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 14,
+      "type": "checkbox",
+      "uuid": "27c100ef-8412-4592-941d-2dbe7700624a",
+      "properties": {
+        "choices": [
+          {
+            "en": "Condition 1",
+            "fr": "Condition 1"
+          },
+          {
+            "en": "Condition 2",
+            "fr": "Condition 2"
+          },
+          {
+            "en": "Condition 3",
+            "fr": "Condition 3"
+          }
+        ],
+        "titleEn": "I agree to:",
+        "titleFr": "J'accepte :",
+        "validation": {
+          "all": true,
+          "required": true
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 15,
+      "type": "textField",
+      "uuid": "ea21d13c-d650-4305-a153-1638899029a3",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Why?!",
+        "titleFr": "pourquoi?!",
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [
+          {
+            "choiceId": "9.3"
+          }
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "type": "radio",
+      "uuid": "d1e30e82-f995-4552-89fa-98e559604782",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "1",
+            "fr": "1"
+          },
+          {
+            "en": "2",
+            "fr": "2"
+          },
+          {
+            "en": "3",
+            "fr": "3"
+          }
+        ],
+        "titleEn": "Radio buttons",
+        "titleFr": "radio button",
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 16,
+      "type": "radio",
+      "uuid": "441bfb93-a38b-4af9-81a5-201fdcf55799",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "Yes",
+            "fr": "oui"
+          },
+          {
+            "en": "No",
+            "fr": "no"
+          }
+        ],
+        "titleEn": "Do you have more information?",
+        "titleFr": "Do you have more information?",
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 8,
+      "type": "checkbox",
+      "uuid": "673df3b7-833b-4fab-83e2-dba472cbc547",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "a",
+            "fr": "a"
+          },
+          {
+            "en": "b",
+            "fr": "b"
+          },
+          {
+            "en": "c",
+            "fr": "c"
+          }
+        ],
+        "titleEn": "Checkboxes",
+        "titleFr": "checkboxes",
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 9,
+      "type": "dropdown",
+      "uuid": "dc5124fa-5d81-4741-a1ce-9647a2205ee0",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "spring",
+            "fr": "spring"
+          },
+          {
+            "en": "summer",
+            "fr": "summer"
+          },
+          {
+            "en": "fall",
+            "fr": "fall"
+          },
+          {
+            "en": "winter",
+            "fr": "winter"
+          }
+        ],
+        "titleEn": "Favourite season",
+        "titleFr": "Favourite season",
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 11,
+      "type": "combobox",
+      "uuid": "2bc64073-52e1-4ec9-ab20-6d957a6d8849",
+      "properties": {
+        "titleEn": "Department or agency",
+        "titleFr": "Ministère ou organisme",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "Start typing to narrow down the list",
+        "descriptionFr": "Commencez à taper pour réduire la liste",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "managedChoices": "departments",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 1,
+      "type": "textField",
+      "uuid": "15fae7f9-eeb8-4235-811b-3441eb04daf5",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Full name",
+        "titleFr": "Nom complet",
+        "validation": {
+          "required": true
+        },
+        "subElements": [],
+        "autoComplete": "name",
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 2,
+      "type": "richText",
+      "uuid": "3c0d3684-87a9-4661-af91-3ba3971631ba",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "",
+        "titleFr": "",
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "## Personal Information",
+        "descriptionFr": "## Personal Information",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 4,
+      "type": "textField",
+      "uuid": "548610c4-3493-48c4-b277-b1bbb195fa43",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Phone number",
+        "titleFr": "Numéro de téléphone",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "autoComplete": "tel",
+        "descriptionEn": "For example: 111-222-3333",
+        "descriptionFr": "Par exemple : 111-222-3333",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 5,
+      "type": "textField",
+      "uuid": "cd2c40bb-a70f-4d21-bf90-90faa0faca62",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Email address",
+        "titleFr": "Adresse courriel",
+        "validation": {
+          "type": "email",
+          "required": false
+        },
+        "subElements": [],
+        "autoComplete": "email",
+        "descriptionEn": "For example: name@example.com",
+        "descriptionFr": "Par exemple : nom@exemple.com",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 6,
+      "type": "radio",
+      "uuid": "37ef8f1b-4489-4006-9663-b3d2a9286ba7",
+      "properties": {
+        "choices": [
+          {
+            "en": "English",
+            "fr": "anglais"
+          },
+          {
+            "en": "French",
+            "fr": "français"
+          }
+        ],
+        "titleEn": "Preferred language for communication",
+        "titleFr": "Langue de communication préférée",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    }
+  ],
+  "brand": {
+    "name": "cds",
+    "urlEn": "https://digital.canada.ca",
+    "urlFr": "https://numerique.canada.ca",
+    "logoEn": "/img/branding/cds-en.svg",
+    "logoFr": "/img/branding/cds-fr.svg",
+    "logoTitleEn": "Canadian Digital Service",
+    "logoTitleFr": "Service numérique canadien"
+  },
+  "groups": {
+    "start": {
+      "name": "Start",
+      "titleEn": "Start page",
+      "titleFr": "Start page",
+      "autoFlow": false,
+      "elements": ["2", "1", "4", "5", "6"],
+      "nextAction": "cdf49515-ea8b-40f8-9e50-1daa70ce4365"
+    },
+    "cdf49515-ea8b-40f8-9e50-1daa70ce4365": {
+      "name": "Page 2",
+      "titleEn": "Page 2",
+      "titleFr": "2",
+      "autoFlow": false,
+      "elements": ["7", "8", "9", "15", "11", "16"],
+      "nextAction": [
+        {
+          "groupId": "64e26bfa-323f-44e4-978a-b0fc58157600",
+          "choiceId": "16.0"
+        },
+        {
+          "groupId": "review",
+          "choiceId": "16.1"
+        }
+      ]
+    },
+    "64e26bfa-323f-44e4-978a-b0fc58157600": {
+      "name": "Page 3",
+      "titleEn": "",
+      "titleFr": "",
+      "autoFlow": false,
+      "elements": ["12", "13", "17", "14"],
+      "nextAction": "review"
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "End (Review page and Confirmation)",
+      "titleFr": "End (Review page and Confirmation)",
+      "elements": [],
+      "nextAction": "end"
+    },
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Confirmation page",
+      "elements": []
+    }
+  },
+  "groupsLayout": ["cdf49515-ea8b-40f8-9e50-1daa70ce4365", "64e26bfa-323f-44e4-978a-b0fc58157600"],
+  "lastGeneratedElementId": 17
+}
