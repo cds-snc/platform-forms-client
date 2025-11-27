@@ -1,23 +1,33 @@
 
 import { describe, it, expect, beforeEach } from "vitest";
 import InMemoryDirectoryHandle from "./__tests__/fsMock";
-import { prepareTestEnv, defaultSetProcessedSubmissionIds, defaultT } from "./__tests__/testHelpers";
+import {
+  prepareTestEnvFromFixtures,
+  defaultSetProcessedSubmissionIds,
+  defaultT,
+  type SubmissionFixture,
+  type PreparedTestEnv,
+} from "./__tests__/testHelpers";
+import submissionFixture from "./__tests__/fixtures/response-get-support.json";
+import templateFixture from "./__tests__/fixtures/template-get-support-cmeaj61dl0001xf01aja6mnpf.json";
 
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import type { FormProperties } from "@gcforms/types";
 import type { GCFormsApiClient } from "./apiClient";
 
-// Prepare test environment (mocks + in-memory env)
-const prepared = prepareTestEnv();
+// Prepare test environment (mocks + in-memory env) using explicit fixtures
+let preparedEnv: PreparedTestEnv;
 
 describe("processResponse", () => {
   let dir: InMemoryDirectoryHandle;
   beforeEach(() => {
-    dir = prepared.dir;
+    // Re-create prepared environment using explicit fixtures
+    preparedEnv = prepareTestEnvFromFixtures(submissionFixture as unknown as SubmissionFixture, templateFixture as unknown);
+    dir = preparedEnv.dir;
   });
 
   it("writes a CSV row from a submission", async () => {
-    const env = prepared;
+    const env = preparedEnv;
     const formTemplate = env.formTemplate as unknown as FormProperties;
     const formId = "cmeaj61dl0001xf01aja6mnpf";
     const responseName = "26-11-2b09f";

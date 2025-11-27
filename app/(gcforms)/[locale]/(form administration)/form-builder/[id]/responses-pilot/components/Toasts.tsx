@@ -108,3 +108,13 @@ export const QuotaExceededError = () => {
     </div>
   );
 };
+
+export const NotAllowedError = () => {
+  const { t } = useTranslation("response-api");
+  return (
+    <div className="w-full">
+      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("toasts.permissionError.title")}</h3>
+      <p className="mb-2 text-black">{t("toasts.permissionError.message")}</p>
+    </div>
+  );
+};
