@@ -196,10 +196,10 @@ const downloadAndConfirmResponse = async ({
     const downloadResults: AttachmentDownloadResult[] = [];
 
     for (const attachment of decryptedResponse.attachments) {
-      downloadResults.push(
-        // eslint-disable-next-line no-await-in-loop
-        await downloadAttachment(responseAttachmentsDirectoryHandle, attachment)
-      );
+      // eslint-disable-next-line no-await-in-loop
+      const res = await downloadAttachment(responseAttachmentsDirectoryHandle, attachment);
+
+      downloadResults.push(res);
     }
 
     // Build mapping of attachment ID to filenames

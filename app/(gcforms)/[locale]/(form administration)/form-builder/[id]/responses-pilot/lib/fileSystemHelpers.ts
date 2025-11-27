@@ -23,9 +23,6 @@ export const verifyPermission = async (
     if (typeof h.queryPermission === "function") {
       const current = await h.queryPermission(desc);
 
-      // eslint-disable-next-line no-console
-      console.info(`verifyPermission: current permission for mode ${mode}:`, current);
-
       if (current === "granted") return true;
 
       if (typeof h.requestPermission === "function") {
@@ -33,9 +30,6 @@ export const verifyPermission = async (
           const requested = await h.requestPermission(desc);
           return requested === "granted";
         } catch (err) {
-          // requestPermission may throw (e.g., NotAllowedError) — treat as denied
-          // eslint-disable-next-line no-console
-          console.warn("verifyPermission: requestPermission threw", err);
           return false;
         }
       }
@@ -44,8 +38,6 @@ export const verifyPermission = async (
     }
   } catch (err) {
     // Some platforms/browsers may throw; treat as permission denied
-    // eslint-disable-next-line no-console
-    console.warn("verifyPermission: permission API threw", err);
     return false;
   }
 
