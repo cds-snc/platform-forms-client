@@ -121,10 +121,6 @@ describe("processResponse - attachment handling", () => {
       const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
-      type AttachmentMapping = Record<
-        string,
-        { originalName: string; actualName: string }
-      >;
       const mapping = JSON.parse(mappingContent) as AttachmentMapping;
 
       // Verify mapping contains all 4 attachments
@@ -259,10 +255,6 @@ describe("processResponse - attachment handling", () => {
       const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
-      type AttachmentMapping = Record<
-        string,
-        { originalName: string; actualName: string }
-      >;
       const mapping = JSON.parse(mappingContent) as AttachmentMapping;
 
       // Verify mapping contains all 5 attachments and actualName values are unique
@@ -310,10 +302,6 @@ describe("processResponse - attachment handling", () => {
       const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
-      type AttachmentMapping = Record<
-        string,
-        { originalName: string; actualName: string }
-      >;
       const mapping = JSON.parse(mappingContent) as AttachmentMapping;
 
 
