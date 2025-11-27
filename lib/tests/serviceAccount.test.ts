@@ -7,8 +7,6 @@ import { prismaMock } from "@jestUtils";
 import { logEvent } from "@lib/auditLogs";
 import * as ZitadelConnector from "@lib/integration/zitadelConnector";
 
-const { AuditLogDetails, AuditLogEvent, AuditSubjectType } = jest.requireActual("@lib/auditLogs");
-
 jest.mock("@lib/auditLogs", () => ({
   __esModule: true,
   logEvent: jest.fn(),
