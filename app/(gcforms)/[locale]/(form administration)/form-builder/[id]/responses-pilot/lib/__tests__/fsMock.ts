@@ -89,7 +89,7 @@ export class InMemoryDirectoryHandle {
       this.files.set(name, fh);
       return fh;
     }
-    throw new Error("File not found");
+    throw new Error(`File not found: ${name}`);
   }
   async getDirectoryHandle(name: string, options?: { create?: boolean }) {
     // return a nested directory handle backed by same map
@@ -100,7 +100,7 @@ export class InMemoryDirectoryHandle {
       this.files.set(name, dir as unknown as InMemoryFileHandle);
       return dir;
     }
-    throw new Error("Directory not found");
+    throw new Error(`Directory not found: ${name}`);
   }
   async removeEntry(name: string) {
     this.files.delete(name);
