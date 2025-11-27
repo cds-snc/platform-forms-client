@@ -13,6 +13,7 @@ import { ResponseDownloadLogger } from "./logger";
 
 export const processResponse = async ({
   setProcessedSubmissionIds,
+  setHasMaliciousAttachments,
   workingDirectoryHandle,
   htmlDirectoryHandle,
   csvFileHandle,
@@ -26,6 +27,7 @@ export const processResponse = async ({
   logger,
 }: {
   setProcessedSubmissionIds: React.Dispatch<React.SetStateAction<Set<string>>>;
+  setHasMaliciousAttachments: React.Dispatch<React.SetStateAction<boolean>>;
   workingDirectoryHandle: FileSystemDirectoryHandle;
   htmlDirectoryHandle: FileSystemDirectoryHandle | null;
   csvFileHandle: FileSystemFileHandle | null;
@@ -47,6 +49,12 @@ export const processResponse = async ({
   });
 
   if (confirmedResponse.attachments && confirmedResponse.attachments.size > 0) {
+    if (
+      Array.from(confirmedResponse.attachments.values()).some((att) => att.isPotentiallyMalicious)
+    ) {
+      setHasMaliciousAttachments(true);
+    }
+
     const attachmentsDirectory = await workingDirectoryHandle.getDirectoryHandle(
       ATTACHMENTS_FOLDER,
       { create: true }

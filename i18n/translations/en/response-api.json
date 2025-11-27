@@ -101,7 +101,8 @@
     "downloadedResponsesOther": "{{formattedCount}} responses were downloaded",
     "savedTo": "All form submission data can be found in: ",
     "chooseNewLocationButton": "Choose new location",
-    "downloadResponsesButton": "Download responses"
+    "downloadResponsesButton": "Download responses",
+    "maliciousAttachmentsWarning": "⚠️ Warning: Some attachments may be malicious. Please verify before opening."
   },
   "processingPage": {
     "section-title": "Processing responses",

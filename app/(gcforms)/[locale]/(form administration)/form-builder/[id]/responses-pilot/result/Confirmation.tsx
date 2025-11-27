@@ -27,10 +27,13 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     newFormSubmissions,
     hasError,
     setHasError,
+    hasMaliciousAttachments,
+    setHasMaliciousAttachments,
   } = useResponsesContext();
 
   const handleCheckResponses = useCallback(() => {
     setHasCheckedForResponses(true);
+    setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,6 +46,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   const handleSelectNewLocation = () => {
     // reset relevant state
     setProcessedSubmissionIds(new Set());
+    setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
     setInterrupt(false);
@@ -123,6 +127,9 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
           <p className="mb-0">{t("confirmationPage.savedTo")}</p>
           <p className="mb-8 font-bold">/{dirName}</p>
         </>
+      )}
+      {hasMaliciousAttachments && (
+        <p className="mb-4 text-red-600">{t("confirmationPage.maliciousAttachmentsWarning")}</p>
       )}
       <div className="flex flex-row gap-4">
         <Button theme="secondary" onClick={handleGoBack}>
