@@ -58,6 +58,21 @@ export const prepareTestEnvFromFixtures = (submission: SubmissionFixture, templa
     md5: async () => currentComputedChecksum,
   }));
 
+  // Mock global fetch for attachment downloads (AWS S3 URLs expire quickly in fixtures)
+  global.fetch = vi.fn(async (_url: string | URL | Request) => {
+    // Return mock attachment content for any fetch call
+    return {
+      ok: true,
+      status: 200,
+      body: new ReadableStream({
+        start(controller) {
+          controller.enqueue(new TextEncoder().encode("mock attachment content"));
+          controller.close();
+        },
+      }),
+    } as Response;
+  });
+
   const env = setupInMemoryEnvFromFixtures(submission, template);
   return { ...env, logger: testLogger };
 };
