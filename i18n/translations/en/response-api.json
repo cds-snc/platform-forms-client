@@ -134,12 +134,12 @@
       "message": "There was an error retrieving form submissions. Please try again later."
     },
     "fileLockedError": {
-      "title": "Unable to modify file",
-      "message": "Cannot write to the CSV file. The file may be locked by another application. Please close the file and try again."
+      "title": "Unable to modify the file",
+      "message": "Cannot write to the CSV file. The file may be open, or locked by another application. Please close the file and try again."
     },
     "invalidStateError": {
       "title": "File in invalid state",
-      "message": "The CSV file is in an invalid state and cannot be modified. The file may be locked or corrupted."
+      "message": "The CSV file is in an invalid state and cannot be modified. The file may be open, locked, or corrupted."
     },
     "quotaExceededError": {
       "title": "Storage space exceeded",

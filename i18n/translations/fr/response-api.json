@@ -136,11 +136,11 @@
     },
     "fileLockedError": {
       "title": "Impossible de modifier le fichier",
-      "message": "Impossible d'écrire dans le fichier CSV. Le fichier peut être verrouillé par une autre application. Veuillez fermer le fichier et réessayer."
+      "message": "Impossible d'écrire dans le fichier CSV. Le fichier pourrait être ouvert ou verrouillé. Veuillez fermer le fichier et réessayer."
     },
     "invalidStateError": {
       "title": "Fichier dans un état invalide",
-      "message": "Le fichier CSV est dans un état invalide et ne peut pas être modifié. Le fichier peut être verrouillé ou corrompu."
+      "message": "Le fichier CSV est dans un état invalide et ne peut pas être modifié. Le fichier pourrait être ouvert, verrouillé, ou corrompu."
     },
     "quotaExceededError": {
       "title": "Espace de stockage dépassé",
