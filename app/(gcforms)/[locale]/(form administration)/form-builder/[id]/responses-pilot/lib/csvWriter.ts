@@ -230,8 +230,13 @@ export const getRow = ({
         .map((answer) =>
           answer
             .map((subAnswer) => {
-              let answerText = `${subAnswer.questionEn}\n${subAnswer.questionFr}: ${subAnswer.answer}\n`;
-              if (specialChars.some((char) => answerText.startsWith(char))) {
+              let answerText =
+                `${subAnswer.questionEn}\n${subAnswer.questionFr}: ${subAnswer.answer}\n` || "";
+
+              if (
+                typeof answerText === "string" &&
+                specialChars.some((char) => answerText.startsWith(char))
+              ) {
                 answerText = `'${answerText}`;
               }
               if (answerText == "") {
@@ -243,8 +248,11 @@ export const getRow = ({
         )
         .join("\n");
     }
-    let answerText = mappedAnswer.answer;
-    if (specialChars.some((char) => answerText.startsWith(char))) {
+    let answerText = mappedAnswer.answer || "";
+    if (
+      typeof answerText === "string" &&
+      specialChars.some((char) => answerText.startsWith(char))
+    ) {
       answerText = `'${answerText}`;
     }
     if (answerText == "") {
