@@ -1,7 +1,7 @@
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import { CompleteAttachment, FormSubmission } from "./types";
 import { decryptFormSubmission } from "./utils";
-import { ATTACHMENTS_FOLDER, RAW_RESPONSE_FOLDER } from "./constants";
+import { ATTACHMENTS_FOLDER, MALICIOUS_ATTACHMENTS_FOLDER, RAW_RESPONSE_FOLDER } from "./constants";
 import { FormProperties } from "@root/lib/types";
 import { GCFormsApiClient } from "./apiClient";
 import { writeHtml } from "./htmlWriter";
@@ -106,7 +106,17 @@ export const processResponse = async ({
   });
 };
 
-export type ResponseFilenameMapping = Map<string, { originalName: string; actualName: string }>;
+export type ResponseFilenameMapping = Map<
+  string,
+  { originalName: string; actualName: string; isPotentiallyMalicious: boolean }
+>;
+
+export type AttachmentDownloadResult = {
+  id: string;
+  originalName: string;
+  actualName: string;
+  isPotentiallyMalicious: boolean;
+};
 
 const downloadAndConfirmResponse = async ({
   workingDirectoryHandle,
@@ -183,7 +193,8 @@ const downloadAndConfirmResponse = async ({
       }
     );
 
-    const downloadResults: Array<{ id: string; originalName: string; actualName: string }> = [];
+    const downloadResults: AttachmentDownloadResult[] = [];
+
     for (const attachment of decryptedResponse.attachments) {
       downloadResults.push(
         // eslint-disable-next-line no-await-in-loop
@@ -192,8 +203,8 @@ const downloadAndConfirmResponse = async ({
     }
 
     // Build mapping of attachment ID to filenames
-    downloadResults.forEach(({ id, originalName, actualName }) => {
-      fileNameMapping.set(id, { originalName, actualName });
+    downloadResults.forEach(({ id, originalName, actualName, isPotentiallyMalicious }) => {
+      fileNameMapping.set(id, { originalName, actualName, isPotentiallyMalicious });
     });
   }
 
@@ -208,19 +219,27 @@ const downloadAndConfirmResponse = async ({
 const downloadAttachment = async (
   responseAttachmentsDirectoryHandle: FileSystemDirectoryHandle,
   attachment: CompleteAttachment
-): Promise<{ id: string; originalName: string; actualName: string }> => {
+): Promise<AttachmentDownloadResult> => {
   const response = await fetch(attachment.downloadLink);
   // Ensure the fetch was successful
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  const uniqueFilename = await getUniqueFileName(
-    responseAttachmentsDirectoryHandle,
-    attachment.name
-  );
+  let attachmentDirectoryHandle = responseAttachmentsDirectoryHandle;
 
-  const fileStream = await responseAttachmentsDirectoryHandle
+  if (attachment.isPotentiallyMalicious) {
+    attachmentDirectoryHandle = await responseAttachmentsDirectoryHandle.getDirectoryHandle(
+      MALICIOUS_ATTACHMENTS_FOLDER,
+      {
+        create: true,
+      }
+    );
+  }
+
+  const uniqueFilename = await getUniqueFileName(attachmentDirectoryHandle, attachment.name);
+
+  const fileStream = await attachmentDirectoryHandle
     .getFileHandle(`${uniqueFilename}`, { create: true })
     .then((handle) => handle.createWritable({ keepExistingData: false }));
 
@@ -230,6 +249,7 @@ const downloadAttachment = async (
     id: attachment.id,
     originalName: attachment.name,
     actualName: uniqueFilename,
+    isPotentiallyMalicious: attachment.isPotentiallyMalicious,
   };
 };
 
