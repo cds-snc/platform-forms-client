@@ -103,7 +103,8 @@
     "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
     "chooseNewLocationButton": "Choisir un nouvel emplacement",
     "downloadResponsesButton": "Télécharger les réponses",
-    "maliciousAttachmentsWarning": "⚠️ Avertissement : Certaines pièces jointes peuvent être malveillantes. Veuillez vérifier avant de les ouvrir."
+    "maliciousAttachmentsWarningTitle": "Vos réponses contiennent des fichiers joints aux soumissions",
+    "maliciousAttachmentsWarningBody": "Ceux-ci se retrouvent dans un dossier imbriqué et seront marqués dans le fichier CSV ou HTML avec le symbole : « ⚠️ » si l’on soupçonne qu’il pourraient y avoir un potentiel de malveillance."
   },
   "processingPage": {
     "section-title": "Traitement des réponses",

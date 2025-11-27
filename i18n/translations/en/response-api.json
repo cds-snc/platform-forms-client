@@ -102,7 +102,8 @@
     "savedTo": "All form submission data can be found in: ",
     "chooseNewLocationButton": "Choose new location",
     "downloadResponsesButton": "Download responses",
-    "maliciousAttachmentsWarning": "⚠️ Warning: Some attachments may be malicious. Please verify before opening."
+    "maliciousAttachmentsWarningTitle": "Your responses contain files attached to submissions",
+    "maliciousAttachmentsWarningBody": "These are located in a nested folder and will be marked in the CSV or HTML file with the symbol: “⚠️” if we suspect that they could potentially be malicious."
   },
   "processingPage": {
     "section-title": "Processing responses",

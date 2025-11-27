@@ -129,7 +129,12 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
         </>
       )}
       {hasMaliciousAttachments && (
-        <p className="mb-4 text-red-600">{t("confirmationPage.maliciousAttachmentsWarning")}</p>
+        <div className="mb-8 bg-yellow-50 p-4">
+          <h3>
+            <span role="img">📎</span> {t("confirmationPage.maliciousAttachmentsWarningTitle")}
+          </h3>
+          <p>{t("confirmationPage.maliciousAttachmentsWarningBody")}</p>
+        </div>
       )}
       <div className="flex flex-row gap-4">
         <Button theme="secondary" onClick={handleGoBack}>
