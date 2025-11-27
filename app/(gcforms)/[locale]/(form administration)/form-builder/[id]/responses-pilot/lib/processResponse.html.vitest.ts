@@ -1,23 +1,28 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import {
-  prepareTestEnv,
+  prepareTestEnvFromFixtures,
   defaultSetProcessedSubmissionIds,
   defaultT,
+  type SubmissionFixture,
+  type PreparedTestEnv,
 } from "./__tests__/testHelpers";
+import submissionFixture from "./__tests__/fixtures/response-get-support.json";
+import templateFixture from "./__tests__/fixtures/template-get-support-cmeaj61dl0001xf01aja6mnpf.json";
 import InMemoryDirectoryHandle from "./__tests__/fsMock";
 import type { GCFormsApiClient } from "./apiClient";
 import type { FormProperties } from "@root/lib/types";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
-// Prepare test environment (mocks + in-memory env)
-const prepared = prepareTestEnv();
+// Prepare test environment (mocks + in-memory env) using explicit fixtures
+let preparedEnv: PreparedTestEnv;
 
 describe("processResponse (html)", () => {
   let dir: InMemoryDirectoryHandle;
-  let env: typeof prepared;
+  let env: PreparedTestEnv;
 
   beforeEach(() => {
-    env = prepared;
+    preparedEnv = prepareTestEnvFromFixtures(submissionFixture as SubmissionFixture, templateFixture as unknown);
+    env = preparedEnv;
     dir = env.dir;
   });
 

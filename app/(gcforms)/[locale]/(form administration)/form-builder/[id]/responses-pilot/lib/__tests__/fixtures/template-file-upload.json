@@ -1,0 +1,158 @@
+{
+  "titleEn": "A form with file upload",
+  "titleFr": "",
+  "introduction": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "confirmation": {
+    "descriptionEn": "",
+    "descriptionFr": "",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [1, 2, 3],
+  "elements": [
+    {
+      "id": 1,
+      "type": "fileInput",
+      "properties": {
+        "questionId": "",
+        "tags": [],
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Upload a file",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "fileType": ["pdf", "txt", "doc", "docx", "jpg", "jpeg", "png", "xls", "xlsx", "csv"]
+      },
+      "uuid": "0cc57d77-9a7b-4766-981f-d5001972fd1a"
+    },
+    {
+      "id": 2,
+      "type": "fileInput",
+      "properties": {
+        "questionId": "",
+        "tags": [],
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Upload another file",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "fileType": ["pdf", "txt", "doc", "docx", "jpg", "jpeg", "png", "xls", "xlsx", "csv"]
+      },
+      "uuid": "aca21644-d1e7-4508-a9db-f4a7504de6b9"
+    },
+    {
+      "id": 3,
+      "type": "dynamicRow",
+      "properties": {
+        "questionId": "",
+        "tags": [],
+        "subElements": [
+          {
+            "id": 301,
+            "type": "fileInput",
+            "properties": {
+              "questionId": "",
+              "tags": [],
+              "subElements": [],
+              "choices": [
+                {
+                  "en": "",
+                  "fr": ""
+                }
+              ],
+              "titleEn": "Upload a file",
+              "titleFr": "",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": "",
+              "fileType": ["pdf", "txt", "doc", "docx", "jpg", "jpeg", "png", "xls", "xlsx", "csv"]
+            },
+            "uuid": "ee2fe823-843e-418c-8ef2-4082f4407539"
+          }
+        ],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "A repeating set",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "dynamicRow": {
+          "rowTitleEn": "Entry",
+          "rowTitleFr": "Entrée",
+          "addButtonTextEn": "Add",
+          "removeButtonTextEn": "Remove",
+          "addButtonTextFr": "Ajouter",
+          "removeButtonTextFr": "Supprimer"
+        },
+        "maxNumberOfRows": 50
+      },
+      "uuid": "e7bc0fa3-8777-48be-9b98-e89a6138374b"
+    }
+  ],
+  "groups": {
+    "start": {
+      "name": "Start",
+      "titleEn": "Start page",
+      "titleFr": "Start page",
+      "elements": ["1", "2", "3"],
+      "nextAction": "review"
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "End (Review page and Confirmation)",
+      "titleFr": "End (Review page and Confirmation)",
+      "elements": [],
+      "nextAction": "end"
+    },
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Confirmation page",
+      "elements": []
+    }
+  },
+  "groupsLayout": [],
+  "lastGeneratedElementId": 3
+}
