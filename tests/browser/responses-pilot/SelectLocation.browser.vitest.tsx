@@ -61,11 +61,14 @@ describe("SelectLocation - Browser Mode", () => {
   it("should show toast when directory is selected and focused on Continue button", async () => {
     const { showDirectoryPicker } = await import("native-file-system-adapter");
     
-    // Mock the directory picker to return a mock handle
+    // Mock the directory picker to return a mock handle that exposes
+    // permission APIs so verifyPermission() returns granted.
     vi.mocked(showDirectoryPicker).mockResolvedValueOnce({
       name: "test-directory",
       kind: "directory",
       getDirectoryHandle: vi.fn().mockResolvedValue({}),
+      queryPermission: vi.fn().mockResolvedValue("granted"),
+      requestPermission: vi.fn().mockResolvedValue("granted"),
     } as never);
 
     await render(<SelectLocation locale="en" id="test-form" />);
@@ -83,5 +86,30 @@ describe("SelectLocation - Browser Mode", () => {
     // Ensure Continue is focused after selection
     const continueButton = page.getByTestId("continue-button");
     await expect.element(continueButton).toHaveFocus();
+  });
+
+  it("should show permission denied toast when permission is denied", async () => {
+    const { showDirectoryPicker } = await import("native-file-system-adapter");
+
+    // Mock the directory picker to return a handle that denies permissions
+    vi.mocked(showDirectoryPicker).mockResolvedValueOnce({
+      name: "denied-directory",
+      kind: "directory",
+      getDirectoryHandle: vi.fn().mockResolvedValue({}),
+      queryPermission: vi.fn().mockResolvedValue("denied"),
+      requestPermission: vi.fn().mockRejectedValue(new Error("NotAllowedError")),
+    } as never);
+
+    await render(<SelectLocation locale="en" id="test-form" />);
+
+    const pickerButton = page.getByTestId("choose-location-button");
+    await pickerButton.click();
+
+    // Wait for toast to appear
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Check for permission denied toast message
+    const toast = page.getByText(/unable to modify folder contents|permission denied/i);
+    await expect.element(toast).toBeInTheDocument();
   });
 });
