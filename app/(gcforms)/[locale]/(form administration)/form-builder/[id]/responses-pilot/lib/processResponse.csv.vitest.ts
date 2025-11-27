@@ -10,8 +10,8 @@ import {
 } from "./__tests__/testHelpers";
 import submissionFixture from "./__tests__/fixtures/response-get-support.json";
 import templateFixture from "./__tests__/fixtures/template-get-support-cmeaj61dl0001xf01aja6mnpf.json";
-import submissionFixtureWithNull from "./__tests__/fixtures/response-cmi3mb7eo0001ye01vie0rx52.json";
-import templateFixtureWithNull from "./__tests__/fixtures/template-cmi3mb7eo0001ye01vie0rx52.json";
+import submissionFixtureWithNull from "./__tests__/fixtures/response-null-cmi3mb7eo0001ye01vie0rx52.json";
+import templateFixtureWithNull from "./__tests__/fixtures/template-null-cmi3mb7eo0001ye01vie0rx52.json";
 
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import type { FormProperties } from "@gcforms/types";
