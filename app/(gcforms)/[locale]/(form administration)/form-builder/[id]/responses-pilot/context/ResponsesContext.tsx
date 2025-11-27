@@ -58,6 +58,7 @@ interface ResponsesContextType {
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
   currentSubmissionId: string | null;
+  setCurrentSubmissionId: Dispatch<SetStateAction<string | null>>;
   resetState: () => void;
   resetNewSubmissions: () => void;
   logger: ResponseDownloadLogger;
@@ -341,6 +342,7 @@ export const ResponsesProvider = ({
         interrupt: isProcessingInterrupted,
         setInterrupt,
         currentSubmissionId,
+        setCurrentSubmissionId,
         resetState,
         resetNewSubmissions,
         logger: loggerRef.current,

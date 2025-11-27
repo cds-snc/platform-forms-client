@@ -5,6 +5,7 @@ import { ResponsesProvider } from "@responses-pilot/context/ResponsesContext";
 import { ContentWrapper } from "@responses-pilot/ContentWrapper";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { ApiClientSetter } from "./AplClientSetter";
+import { CurrentSubmissionIdSetter } from "./CurrentSubmissionIdSetter";
 import { GCFormsApiClient } from "@responses-pilot/lib/apiClient";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 
@@ -32,10 +33,13 @@ export function TestWrapper({
   overrides,
   children,
 }: RenderWithProvidersOptions) {
+  const currentSubmissionId = overrides?.currentSubmissionId as string | undefined;
+
   return (
     <BrowserResponsesAppProvider overrides={overrides}>
       <ResponsesProvider locale={locale} formId={formId}>
         {mockApiClient && <ApiClientSetter mockClient={mockApiClient} />}
+        {currentSubmissionId && <CurrentSubmissionIdSetter submissionId={currentSubmissionId} />}
         <h1 className="mb-4">Responses</h1>
         <PilotBadge className="mb-8" />
         <ContentWrapper>{children}</ContentWrapper>
