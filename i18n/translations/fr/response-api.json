@@ -1,6 +1,9 @@
 {
   "section-title": "Réponses (Pilote)",
   "stepOf": "Étape {{current}} de {{total}}",
+  "responsesPilot": {
+    "responsesSwitchLink": "Revenir à l'affichage classique des Réponses"
+  },
   "not-supported": {
     "title": "Navigateur web non compatible",
     "body": "Ce navigateur ne peut pas utiliser l'API d'accès au système de fichiers. Essayez un autre navigateur ou autorisez votre navigateur à enregistrer des fichiers sur votre appareil."
@@ -21,7 +24,7 @@
       "heading": "Ensuite, suivez ces étapes :",
       "stepOf": "Étape {{current}} de {{total}}",
       "uploadKey": {
-        "title": "Téléversez votre fichier de clé API.",
+        "title": "Sélectionnez votre fichier de clé API.",
         "detail": "C'est ainsi que vous vous authentifierez en toute sécurité pour obtenir toutes les nouvelles réponses."
       },
       "chooseLocation": {
@@ -35,18 +38,18 @@
     }
   },
   "loadKeyPage": {
-    "title": "Téléversez le fichier de clé API",
-    "detail": "Téléversez la clé API générée dans les Paramètres pour accéder à toutes les réponses disponibles de votre formulaire en un seul téléchargement. Veillez à décompresser le dossier contenant le fichier JSON.",
+    "title": "Utilisez votre clé API pour vous authentifier",
+    "detail": "Sélectionnez le fichier de clé API qui a été générée dans les Paramètres pour accéder à toutes les réponses disponibles de votre formulaire en un seul téléchargement.",
     "chooseFileButton": "Téléverser la clé API",
     "noNewResponsesAvailable": "Aucune nouvelle réponse",
     "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
     "newResponsesAvailable": "De nouvelles réponses sont disponibles",
     "checkForNewResponses": "Vérifier les nouvelles réponses",
     "downloadResponses": "Choisir l'emplacement",
-    "uploadSuccessTitle": "La clé API a été téléchargée avec succès",
+    "uploadSuccessTitle": "Vous avez été authentifié avec succès.",
     "uploadSuccessMessage": "Vous pouvez maintenant récupérer toutes les nouvelles réponses pour ce formulaire.",
-    "uploadFailedTitle": "Échec du téléchargement de la clé API",
-    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la téléverser à nouveau.",
+    "uploadFailedTitle": "Échec d'authentification avec la clé API",
+    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la mettre à nouveau.",
     "lostKey": {
       "link": "Vous n'avez pas votre clé API?",
       "lostKeyTip": {
@@ -90,6 +93,7 @@
     }
   },
   "confirmationPage": {
+    "section-title": "Résultats",
     "successTitle": "Succès !",
     "errorTitle": "Téléchargement interrompu",
     "partialSuccessTitle": "Téléchargement partiel terminé",
@@ -101,6 +105,7 @@
     "downloadResponsesButton": "Télécharger les réponses"
   },
   "processingPage": {
+    "section-title": "Traitement des réponses",
     "processingTitle": "Téléchargement en cours",
     "pleaseWait": "Veuillez patienter...",
     "processingSubmission": "Traitement de la soumission : {{submissionId}}",
@@ -131,15 +136,15 @@
     },
     "fileLockedError": {
       "title": "Impossible de modifier le fichier",
-      "message": "Impossible d'écrire dans le fichier CSV. Le fichier peut être verrouillé par une autre application. Veuillez fermer le fichier et réessayer."
+      "message": "Impossible d'écrire dans le fichier CSV. Le fichier pourrait être ouvert ou verrouillé. Veuillez fermer le fichier et réessayer."
     },
     "invalidStateError": {
       "title": "Fichier dans un état invalide",
-      "message": "Le fichier CSV est dans un état invalide et ne peut pas être modifié. Le fichier peut être verrouillé ou corrompu."
+      "message": "Le fichier CSV est dans un état invalide et ne peut pas être modifié. Le fichier pourrait être ouvert, verrouillé, ou corrompu."
     },
     "quotaExceededError": {
       "title": "Espace de stockage dépassé",
-      "message": "Espace de stockage insuffisant pour écrire dans le fichier. Veuillez libérer de l'espace et réessayer."
+      "message": "Vous n'avez pas assez d'espace de stockage pour écrire dans le fichier. Veuillez libérer de l'espace et réessayer."
     }
   }
 }

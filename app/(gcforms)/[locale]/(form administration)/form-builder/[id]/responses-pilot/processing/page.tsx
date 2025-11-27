@@ -9,12 +9,11 @@ export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const params = await props.params;
-
   const { locale } = params;
 
-  const { t } = await serverTranslation("form-builder-responses", { lang: locale });
+  const { t } = await serverTranslation("response-api", { lang: locale });
   return {
-    title: `${t("responsesPilot.pageTitle")} — ${t("gcForms")}`,
+    title: `${t("section-title")} — ${t("processingPage.section-title")}`,
   };
 }
 

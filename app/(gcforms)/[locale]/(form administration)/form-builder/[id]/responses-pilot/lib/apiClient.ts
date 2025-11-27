@@ -22,6 +22,7 @@ export class GCFormsApiClient {
   private rateLimitRemaining: number | null = null;
   private privateApiKey: PrivateApiKey;
   private accessToken: string;
+  private projectId: string;
   private tokenTimestamp: number;
   private readonly TOKEN_VALIDITY_MS = 1200000; // 20 minutes
 
@@ -29,12 +30,19 @@ export class GCFormsApiClient {
     formId: string,
     apiUrl: string,
     privateApiKey: PrivateApiKey,
-    accessToken: string
+    accessToken: string,
+    projectId: string
   ) {
     this.formId = formId;
     this.privateApiKey = privateApiKey;
     this.accessToken = accessToken;
+    this.projectId = projectId;
     this.tokenTimestamp = Date.now();
+
+    // eslint-disable-next-line no-console
+    console.log("GCFormsApiClient initialized for formId:", formId);
+    // eslint-disable-next-line no-console
+    console.log("Using projectId:", projectId);
 
     this.httpClient = axios.create({
       baseURL: apiUrl,
@@ -59,7 +67,7 @@ export class GCFormsApiClient {
     const tokenAge = Date.now() - this.tokenTimestamp;
 
     if (tokenAge >= this.TOKEN_VALIDITY_MS) {
-      this.accessToken = await getAccessTokenFromApiKey(this.privateApiKey);
+      this.accessToken = await getAccessTokenFromApiKey(this.privateApiKey, this.projectId);
       this.tokenTimestamp = Date.now();
     }
   }
