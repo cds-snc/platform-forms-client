@@ -312,5 +312,8 @@
       "title": "Réponses en retard",
       "description": "Récupérez et confirmez les soumissions avec l'API"
     }
+  },
+  "responsesPilot": {
+    "responsesPilotLink": "Essayer les nouvelles Réponses (Pilote)"
   }
 }
