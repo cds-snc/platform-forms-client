@@ -1,7 +1,7 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { InvitationNotFoundError } from "./exceptions";
 import { authorization } from "@lib/privileges";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { AccessControlError } from "@lib/auth/errors";
 
 /**
@@ -31,7 +31,8 @@ export const cancelInvitation = async (invitationId: string) => {
         e.user.id,
         { type: "Form", id: invitation.templateId },
         "AccessDenied",
-        `User ${e.user.id} does not have permission to cancel invitation`
+        AuditLogAccessDeniedDetails.AccessDenied_CancelInvitation,
+        { userId: e.user.id }
       );
     }
     throw e;
@@ -44,7 +45,8 @@ export const cancelInvitation = async (invitationId: string) => {
     user.id,
     { type: "Form", id: invitation.templateId },
     "InvitationCancelled",
-    `${user.id} cancelled invitation for ${invitation.email}`
+    AuditLogDetails.CancelInvitation,
+    { userId: user.id, invitationEmail: invitation.email }
   );
 };
 

@@ -10,7 +10,12 @@ import { submissionTypeExists } from "@lib/vault";
 import { VaultStatus } from "@lib/types";
 import { ServerActionError } from "@root/lib/types/form-builder-types";
 
-import { retrieveEvents, logEvent } from "@lib/auditLogs";
+import {
+  retrieveEvents,
+  logEvent,
+  AuditLogDetails,
+  AuditLogAccessDeniedDetails,
+} from "@lib/auditLogs";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -56,7 +61,12 @@ export const getEventsForForm = AuthenticatedAction(async (session, formId: stri
   try {
     await authorization.canViewForm(formId).catch((e) => {
       if (e instanceof AccessControlError) {
-        logEvent(e.user.id, { type: "User" }, "AccessDenied", "Attempted to get users emails");
+        logEvent(
+          e.user.id,
+          { type: "User" },
+          "AccessDenied",
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserEmails
+        );
       }
       throw e;
     });
@@ -84,7 +94,8 @@ export const getEventsForForm = AuthenticatedAction(async (session, formId: stri
       userId,
       { type: "Form", id: formId },
       "AuditLogsRead",
-      `User ${userId} read audit logs for form ${formId}`
+      AuditLogDetails.UserAuditLogsRead,
+      { callingUserId: userId, formId: formId }
     );
 
     return events.map((event) => {

@@ -13,7 +13,7 @@ import {
   VaultSubmission,
   StartFromExclusiveResponse,
 } from "@lib/types";
-import { logEvent } from "./auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
 import {
   unprocessedSubmissionsCacheCheck,
   unprocessedSubmissionsCachePut,
@@ -43,7 +43,8 @@ export const submissionTypeExists = async (formID: string, status: VaultStatus) 
           id: formID,
         },
         "AccessDenied",
-        `Attempted to check response status for form ${formID}`
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToCheckResponseStatus,
+        { formID }
       );
     throw e;
   });
@@ -109,7 +110,8 @@ export async function listAllSubmissions(
             id: formID,
           },
           "AccessDenied",
-          `Attempted to list responses for form ${formID}`
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToListResponses,
+          { formID }
         );
       throw e;
     });
@@ -204,7 +206,8 @@ export async function listAllSubmissions(
         id: formID,
       },
       "ListResponses",
-      `List all responses ${status ? `of status ${status} ` : ""}for form ${formID}`
+      AuditLogDetails.ListAllResponsesForForm,
+      { formID, status: status ? `of status ${status} ` : "" }
     );
 
     logMessage.info("HealthCheck: list submissions success");
@@ -245,7 +248,8 @@ export async function retrieveSubmissionRemovalDate(
             id: formID,
           },
           "AccessDenied",
-          `Attempted to retrieve response for form ${formID}`
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToRetrieveResponse,
+          { formID }
         );
       throw e;
     });
@@ -295,7 +299,8 @@ export async function retrieveSubmissions(
             id: formID,
           },
           "AccessDenied",
-          `Attempted to retrieve responses for form ${formID}`
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToRetrieveResponse,
+          { formID }
         );
       throw e;
     });
@@ -377,7 +382,8 @@ export async function retrieveSubmissions(
             id: item.submissionID,
           },
           "RetrieveResponses",
-          `Retrieve selected responses for form ${formID} with ID ${item.submissionID}`
+          AuditLogDetails.RetreiveSelectedFormResponses,
+          { formID, submissionID: item.submissionID }
         );
       });
     }
@@ -495,7 +501,8 @@ export async function deleteDraftFormResponses(formID: string) {
             id: formID,
           },
           "AccessDenied",
-          `Attempted to delete all responses for form ${formID}`
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteResponses,
+          { formID }
         );
       throw e;
     });
@@ -575,7 +582,8 @@ export async function deleteDraftFormResponses(formID: string) {
       user.id,
       { type: "Form", id: formID },
       "DeleteResponses",
-      `Deleted draft responses for form ${formID}.`
+      AuditLogDetails.DeletedDraftResponsesForForm,
+      { formID }
     );
 
     return {
@@ -615,7 +623,8 @@ async function getSubmissionsFromConfirmationCodes(
           id: formId,
         },
         "AccessDenied",
-        `Attempted to confirm responses for form ${formId}`
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses,
+        { formId }
       );
     throw e;
   });
@@ -699,7 +708,8 @@ export const confirmResponses = async (confirmationCodes: string[], formId: stri
           id: formId,
         },
         "AccessDenied",
-        `Attempted to confirm responses for form ${formId}`
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses,
+        { formId }
       );
     throw e;
   });
@@ -786,7 +796,8 @@ export const confirmResponses = async (confirmationCodes: string[], formId: stri
             user.id,
             { type: "Response", id: confirmation.name },
             "ConfirmResponse",
-            `Confirmed response for form ${formId}`
+            AuditLogDetails.ConfirmedResponsesForForm,
+            { formId }
           )
         );
       } catch (e) {

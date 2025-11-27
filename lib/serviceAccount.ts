@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { authorization } from "@lib/privileges";
 import * as ZitadelConnector from "@lib/integration/zitadelConnector";
 
@@ -33,18 +33,16 @@ export const deleteKey = async (templateId: string) => {
     user.id,
     { type: "ServiceAccount" },
     "DeleteAPIKey",
-    `User :${user.id} deleted service account ${
-      serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
-    }`
+    AuditLogDetails.DeletedServiceAccount,
+    { userId: user.id, serviceAccountID: serviceAccountID ?? "", templateId }
   );
 
   logEvent(
     user.id,
     { type: "Form", id: templateId },
     "DeleteAPIKey",
-    `User :${user.id} deleted service account ${
-      serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
-    }`
+    AuditLogDetails.DeletedServiceAccount,
+    { userId: user.id, serviceAccountID: serviceAccountID ?? "", templateId }
   );
 };
 
@@ -130,17 +128,16 @@ export const createKey = async (templateId: string) => {
     },
   });
 
-  logEvent(
-    user.id,
-    { type: "ServiceAccount" },
-    "CreateAPIKey",
-    `User :${user.id} created API key for service account ${serviceAccountId}`
-  );
+  logEvent(user.id, { type: "ServiceAccount" }, "CreateAPIKey", AuditLogDetails.CreatedNewApiKey, {
+    userId: user.id,
+    serviceAccountId,
+  });
   logEvent(
     user.id,
     { type: "Form", id: templateId },
     "CreateAPIKey",
-    `User :${user.id} created API key for service account ${serviceAccountId}`
+    AuditLogDetails.CreatedNewApiKey,
+    { userId: user.id, serviceAccountId }
   );
 
   return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
@@ -185,7 +182,8 @@ export const refreshKey = async (templateId: string) => {
     user.id,
     { type: "ServiceAccount" },
     "RefreshAPIKey",
-    `User :${user.id} generated a new API key for service account ${serviceAccountId} `
+    AuditLogDetails.GeneratedNewApiKey,
+    { userId: user.id, serviceAccountId }
   );
 
   return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);

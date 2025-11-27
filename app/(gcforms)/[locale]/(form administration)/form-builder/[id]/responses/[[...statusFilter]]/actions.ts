@@ -2,7 +2,7 @@
 
 import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/form-builder-types";
 import { getAppSetting } from "@lib/appSettings";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { ucfirst } from "@lib/client/clientHelpers";
 import {
   Answer,
@@ -519,7 +519,8 @@ const logDownload = async (
       userId,
       { type: "Response", id: item.id },
       "DownloadResponse",
-      `Downloaded form response in ${format} for submission ID ${item.id}`
+      AuditLogDetails.DownloadedFormResponses,
+      { format: format, "item.id": item.id }
     );
   });
 };
