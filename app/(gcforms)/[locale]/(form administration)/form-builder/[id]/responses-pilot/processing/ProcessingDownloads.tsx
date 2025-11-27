@@ -68,19 +68,21 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
           <FocusHeader headingTag="h2" dataTestId="processing-page-title">
             {t("processingPage.processingTitle")}
           </FocusHeader>
-          {currentSubmissionId ? (
-            <>
-              {/* Visual message — hidden from assistive tech */}
-              <p className="mb-4 text-xl" aria-hidden="true">
-                {t("processingPage.processingSubmission", { submissionId: currentSubmissionId })}
-              </p>
+          <div aria-live="polite">
+            {currentSubmissionId ? (
+              <>
+                {/* Visual message — hidden from assistive tech */}
+                <p className="mb-4 text-xl" aria-hidden="true">
+                  {t("processingPage.processingSubmission", { submissionId: currentSubmissionId })}
+                </p>
 
-              {/* Screen-reader only: announce a generic 'please wait' message */}
-              <p className="sr-only">{t("processingPage.pleaseWait")}</p>
-            </>
-          ) : (
-            <p className="mb-4 text-xl">{t("processingPage.pleaseWait")}</p>
-          )}
+                {/* Screen-reader only: announce a generic 'please wait' message */}
+                <p className="sr-only">{t("processingPage.pleaseWait")}</p>
+              </>
+            ) : (
+              <p className="mb-4 text-xl">{t("processingPage.pleaseWait")}</p>
+            )}
+          </div>
           <p className="mb-8">{t("processingPage.note")}</p>
           {!interrupt && (
             <Button theme="secondary" onClick={handleInterrupt} disabled={isNavigating}>
