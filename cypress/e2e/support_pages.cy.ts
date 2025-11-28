@@ -25,9 +25,15 @@ describe("Support Pages", () => {
       cy.get("#errorMessageemail").should("be.visible");
     });
 
+    it("Non GoC email stops submission", () => {
+      cy.typeInField("#email", "good@email.com");
+      cy.get("button[type='submit']").click();
+      cy.get("#errorMessageemail").should("be.visible");
+    });
+
     it("Valid submission succeeds", () => {
       cy.typeInField("#name", "1");
-      cy.typeInField("#email", "good@email.com");
+      cy.typeInField("#email", "good@cds-snc.ca");
       cy.get("label[for='request-question']").click();
       cy.typeInField("#description", "1");
       cy.get("button[type='submit']").click();
@@ -61,9 +67,15 @@ describe("Support Pages", () => {
       cy.get("#errorMessageemail").should("be.visible");
     });
 
+    it("Non GoC email stops submission", () => {
+      cy.typeInField("#email", "good@email.com");
+      cy.get("button[type='submit']").click();
+      cy.get("#errorMessageemail").should("be.visible");
+    });
+
     it("Valid submission succeeds", () => {
       cy.typeInField("#name", "1");
-      cy.typeInField("#email", "good@email.com");
+      cy.typeInField("#email", "good@cds-snc.ca");
       cy.typeInField("#department", "1");
       cy.typeInField("#branch", "1");
       cy.typeInField("#jobTitle", "1");
