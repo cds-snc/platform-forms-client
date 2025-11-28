@@ -14,9 +14,20 @@ import { TextInput } from "../../../components/client/TextInput";
 import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
 import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
-import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
+import {
+  email,
+  minLength,
+  object,
+  safeParse,
+  string,
+  toLowerCase,
+  trim,
+  pipe,
+  check,
+} from "valibot";
 import { useState } from "react";
 import { Success } from "../../../components/client/Success";
+import { isValidGovEmail } from "@root/lib/validation/validation";
 
 export const ContactForm = () => {
   const {
@@ -56,7 +67,8 @@ export const ContactForm = () => {
         toLowerCase(),
         trim(),
         minLength(1, t("input-validation.required", { ns: "common" })),
-        email(t("input-validation.email", { ns: "common" }))
+        email(t("input-validation.email", { ns: "common" })),
+        check((email) => isValidGovEmail(email), t("input-validation.validGovEmail"))
       ),
       department: pipe(string(), minLength(1, t("input-validation.required", { ns: "common" }))),
       // Note: branch and jobTitle are not required/validated
