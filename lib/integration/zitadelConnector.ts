@@ -141,6 +141,19 @@ export async function createMachineKey(
   }
 }
 
+export async function deleteMachineKey(userId: string, keyId: string): Promise<void> {
+  const connectionInformation = getConnectionInformation();
+
+  try {
+    await zitadelApiManagementGotInstance.delete(
+      `${connectionInformation.url}/management/v1/users/${userId}/keys/${keyId}`
+    );
+  } catch (error) {
+    logMessage.error(error);
+    throw new Error(`Failed to delete machine key for user ${userId}`);
+  }
+}
+
 export async function getMachineUserKeyById(
   userId: string,
   keyId: string
