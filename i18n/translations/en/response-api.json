@@ -48,7 +48,7 @@
     "uploadSuccessTitle": "You were successfully authenticated.",
     "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
     "uploadFailedTitle": "Authentication failed with API key",
-    "uploadFailedMessage": "Make sure you select the correct file. If it's not working, try regenerating a new API key and adding it again.",
+    "uploadFailedMessage": "Make sure you select the correct file. If it's not working, try regenerating a new API key for your form and adding it again.",
     "lostKey": {
       "link": "Don't have API key?",
       "lostKeyTip": {
@@ -62,7 +62,7 @@
   "locationPage": {
     "title": "Select a save location ",
     "subheading": "Decide where new responses will be downloaded.",
-    "detail": "To add response data to an existing CSV, select the folder where it is currently saved. Make sure the CSV file name still includes the form ID, as it did when originally downloaded.",
+    "detail": "To add response data to an existing CSV file, select the folder where it is currently saved. Make sure the file name does not change, and appears as it did when originally downloaded.",
     "chooseLocationButton": "Choose location",
     "locationSelected": {
       "title": "Save location selected",

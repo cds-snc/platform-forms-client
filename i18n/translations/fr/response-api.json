@@ -16,7 +16,7 @@
       "generateKey": "Générez une clé API pour votre formulaire dans les Paramètres.",
       "generateKeyDetail": "C'est ainsi que vous pourrez accéder aux nouvelles réponses.",
       "browserSupport": "Assurez-vous d'utiliser Google Chrome ou Microsoft Edge.",
-      "browserSupportDetail": "Votre navigateur demandera l'autorisation d'enregistrer des fichiers sur votre appareil.",
+      "browserSupportDetail": "Votre navigateur demandera l'autorisation d'enregistrer ou copier des fichiers sur votre appareil.",
       "attachSafety": "Soyez prudent lorsque vous ouvrez des pièces jointes.",
       "attachSafetyDetail": "Vérifiez les fichiers avant de les ouvrir, analysez les attributs des fichiers malveillants, suivez les avertissements."
     },
@@ -49,7 +49,7 @@
     "uploadSuccessTitle": "Vous avez été authentifié avec succès.",
     "uploadSuccessMessage": "Vous pouvez maintenant récupérer toutes les nouvelles réponses pour ce formulaire.",
     "uploadFailedTitle": "Échec d'authentification avec la clé API",
-    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API et de la mettre à nouveau.",
+    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API pour votre formulaire et de la mettre à nouveau.",
     "lostKey": {
       "link": "Vous n'avez pas votre clé API?",
       "lostKeyTip": {
@@ -63,7 +63,7 @@
   "locationPage": {
     "title": "Sélectionnez un emplacement d’enregistrement",
     "subheading": "Decidez où les nouvelles réponses seront téléchargées.",
-    "detail": "Pour ajouter des données de réponse à un fichier CSV existant, sélectionnez le dossier dans lequel il est actuellement enregistré. Assurez-vous que le nom du fichier inclut toujours l'identifiant du formulaire, comme lors du téléchargement initial.",
+    "detail": "Pour ajouter des données de réponse à un fichier CSV existant, sélectionnez le dossier dans lequel il est actuellement enregistré. Assurez-vous que le nom du fichier n'a pas changé depuis le téléchargement initial afin que les nouvelles données soient ajoutées au même fichier.",
     "chooseLocationButton": "Choisir l'emplacement",
     "locationSelected": {
       "title": "Emplacement de sauvegarde sélectionné",
