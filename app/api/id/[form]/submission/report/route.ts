@@ -8,7 +8,7 @@ import { MiddlewareProps, VaultStatus, WithRequired } from "@lib/types";
 import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
 import { getAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { AccessControlError } from "@lib/auth/errors";
 import { vaultStatusFromStatusCreatedAt } from "@lib/vault";
 
@@ -212,7 +212,7 @@ export const PUT = middleware(
           ability.user.id,
           { type: "Form", id: formId },
           "AccessDenied",
-          `Attempted to identify response problem without form ownership`
+          AuditLogAccessDeniedDetails.AccessDenied_IdentifyProblemResponse
         );
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
@@ -241,7 +241,8 @@ export const PUT = middleware(
             ability.user.id,
             { type: "Response", id: problem.name },
             "IdentifyProblemResponse",
-            `Identified problem response for form ${formId}`
+            AuditLogAccessDeniedDetails.AccessDenied_IdentifiedProblemResponse,
+            { formId }
           )
         );
       }
