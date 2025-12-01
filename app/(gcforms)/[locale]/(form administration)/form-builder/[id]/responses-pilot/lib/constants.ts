@@ -1,12 +1,13 @@
 /**
- * Number of submissions to process in each batch
- */
-export const BATCH_SIZE = 5;
-
-/**
  * Delay in milliseconds to wait for async operations to cleanup when interrupted
  */
 export const INTERRUPT_CLEANUP_DELAY_MS = 500;
+
+/**
+ * Note: if you change any of these folder names, consider how it may impact
+ * existing users who may have already downloaded responses to disk with the
+ * old folder names. You may need to implement a migration strategy.
+ */
 
 /**
  * Folder within the selected directory to store HTML downloads
