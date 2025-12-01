@@ -94,7 +94,7 @@ export const getEventsForForm = AuthenticatedAction(async (session, formId: stri
       userId,
       { type: "Form", id: formId },
       "AuditLogsRead",
-      AuditLogDetails.UserAuditLogsRead,
+      AuditLogDetails.FormAuditLogsRead,
       { callingUserId: userId, formId: formId }
     );
 

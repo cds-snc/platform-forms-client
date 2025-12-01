@@ -133,6 +133,78 @@ export enum AuditLogDetails {
   RevokedPrivilege = "Revoked privilege ${privilege} from user ${email} (userID: ${userId}) by ${userEmail} (userID: ${abilityUserId})",
 }
 
+type AuditDetailsParams = {
+  [AuditLogDetails.UserAuditLogsRead]: { callingUserId: string; userId: string };
+  [AuditLogDetails.FormAuditLogsRead]: { callingUserId: string; formId: string };
+  [AuditLogDetails.GetAuditSubject]: { subject: string };
+  [AuditLogDetails.DownloadedFormResponses]: { format: string; "item.id": string };
+  [AuditLogDetails.IncreasedThrottling]: { userId: string; formId: string; weeks: string };
+  [AuditLogDetails.PermanentIncreasedThrottling]: { userId: string; formId: string };
+  [AuditLogDetails.ResetThrottling]: { userId: string; formId: string };
+  [AuditLogDetails.DeclinedInvitation]: { userId: string };
+  [AuditLogDetails.AcceptedInvitation]: { userId: string };
+  [AuditLogDetails.AccessGranted]: { grantedUserId: string };
+  [AuditLogDetails.CancelInvitation]: { userId: string; invitationEmail: string };
+  [AuditLogDetails.UserInvited]: { userEmail: string; invitationEmail: string };
+  [AuditLogDetails.CognitoUserIdentifier]: { userId: string };
+  [AuditLogDetails.UpdatedNotificationSettings]: {
+    userId: string;
+    formId: string;
+    enabled: string;
+  };
+  [AuditLogDetails.ConfirmedResponsesForForm]: { formId: string };
+  [AuditLogDetails.DeletedDraftResponsesForForm]: { formId: string };
+  [AuditLogDetails.RetreiveSelectedFormResponses]: { formID: string; submissionID: string };
+  [AuditLogDetails.ListAllResponsesForForm]: { status: string; formID: string };
+  [AuditLogDetails.UserActiveStatusUpdate]: {
+    email: string;
+    userID: string;
+    active: string;
+    privilegedUserEmail: string;
+    privilegedUserId: string;
+  };
+  [AuditLogDetails.AccessedAllSystemForms]: never;
+  [AuditLogDetails.ClonedForm]: never;
+  [AuditLogDetails.UpdateClosingDate]: never;
+  [AuditLogDetails.RetrieveFormUsers]: never;
+  [AuditLogDetails.RevokeFormAccess]: { userId: string };
+  [AuditLogDetails.SetDeliveryToVault]: never;
+  [AuditLogDetails.SetSaveAndResume]: { saveAndResume: string };
+  [AuditLogDetails.SetFormPurpose]: { formPurpose: string };
+  [AuditLogDetails.FormContentUpdated]: never;
+  [AuditLogDetails.UpdatedFormName]: { newFormName: string };
+  [AuditLogDetails.GrantFormAccess]: { userID: string };
+  [AuditLogDetails.AccessedForms]: { formList: string };
+  [AuditLogDetails.ChangeDeliveryOption]: { deliveryOption: string };
+  [AuditLogDetails.ChangeSecurityAttribute]: { securityAttribute: string };
+  [AuditLogDetails.AccessGrantedTo]: { userList: string };
+  [AuditLogDetails.AccessRevokedFor]: { userList: string };
+  [AuditLogDetails.GeneratedNewApiKey]: { userId: string; serviceAccountId: string };
+  [AuditLogDetails.CreatedNewApiKey]: { userId: string; serviceAccountId: string };
+  [AuditLogDetails.DeletedServiceAccount]: {
+    userId: string;
+    serviceAccountID: string;
+    templateId: string;
+  };
+  [AuditLogDetails.UpdatedAppSetting]: { settingData: string };
+  [AuditLogDetails.CreatedAppSetting]: { settingData: string };
+  [AuditLogDetails.DeletedAppSetting]: { internalId: string };
+  [AuditLogDetails.GrantedPrivilege]: {
+    privilege: string;
+    email: string;
+    userId: string;
+    userEmail: string;
+    abilityUserId: string;
+  };
+  [AuditLogDetails.RevokedPrivilege]: {
+    privilege: string;
+    email: string;
+    userId: string;
+    userEmail: string;
+    abilityUserId: string;
+  };
+};
+
 export enum AuditLogAccessDeniedDetails {
   AccessDenied_AttemptedToReadFormObject = "Attemped to read form object",
   AccessDenied_AttemptToCreateForm = "Attempted to create a Form",
@@ -184,6 +256,46 @@ export enum AuditLogAccessDeniedDetails {
   AccessDenied_AttemptToCreateSetting = "Attempted to create setting",
 }
 
+type AuditAccessDeniedParams = {
+  [K in AuditLogAccessDeniedDetails]: K extends AuditLogAccessDeniedDetails.AccessDenied_IdentifiedProblemResponse
+    ? { formId: string }
+    : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToModifyPrivilege
+      ? { userId: string }
+      : K extends AuditLogAccessDeniedDetails.AccessDenied_CancelInvitation
+        ? { userId: string }
+        : K extends AuditLogAccessDeniedDetails.AccessDenied_NoInvitePermission
+          ? { userId: string }
+          : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserById
+            ? { id: string }
+            : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptedToUpdateUserActiveStatus
+              ? { targetUserId: string }
+              : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToAccessUnprocessedSubmissions
+                ? { userId: string }
+                : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToCheckResponseStatus
+                  ? { formID: string }
+                  : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToListResponses
+                    ? { formID: string }
+                    : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToRetrieveResponse
+                      ? { formID: string }
+                      : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteResponses
+                        ? { formID: string }
+                        : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses
+                          ? { formID: string }
+                          : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToAddNoteToUser
+                            ? { userId: string }
+                            : K extends AuditLogAccessDeniedDetails.PasswordAttemptsExceeded
+                              ? { sanitizedUsername: string }
+                              : K extends AuditLogAccessDeniedDetails.MFAAttemptsExceeded
+                                ? { sanitizedEmail: string }
+                                : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToEnableFlag
+                                  ? { flagKey: string }
+                                  : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToDisableFlag
+                                    ? { flagKey: string }
+                                    : never;
+};
+
+type AllAuditParams = AuditDetailsParams & AuditAccessDeniedParams;
+
 let queueUrlRef: string | null = null;
 
 const getQueueURL = async () => {
@@ -219,13 +331,18 @@ const resolveDescription = (
   return descriptionFinal;
 };
 
-export const logEvent = async (
+export const logEvent = async <T extends keyof AllAuditParams | undefined = undefined>(
   userId: string,
   subject: { type: keyof typeof AuditSubjectType; id?: string },
   event: AuditLogEventStrings,
-  description?: AuditLogDetails | AuditLogAccessDeniedDetails,
-  descriptionParams?: Record<string, string>
+  ...args: T extends keyof AllAuditParams
+    ? AllAuditParams[T] extends never
+      ? [description: T]
+      : [description: T, descriptionParams: AllAuditParams[T]]
+    : []
 ): Promise<void> => {
+  const description = args[0] as AuditLogDetails | AuditLogAccessDeniedDetails | undefined;
+  const descriptionParams = args[1] as Record<string, string> | undefined;
   const descriptionFinal = resolveDescription(description, descriptionParams);
 
   const auditLog = JSON.stringify({
