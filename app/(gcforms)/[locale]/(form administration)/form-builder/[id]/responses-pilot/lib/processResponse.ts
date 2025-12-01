@@ -1,7 +1,12 @@
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import { CompleteAttachment, FormSubmission } from "./types";
 import { decryptFormSubmission } from "./utils";
-import { ATTACHMENTS_FOLDER, MALICIOUS_ATTACHMENTS_FOLDER, RAW_RESPONSE_FOLDER } from "./constants";
+import {
+  ATTACHMENTS_FOLDER,
+  MALICIOUS_ATTACHMENTS_FOLDER,
+  MAPPING_FILENAME,
+  RAW_RESPONSE_FOLDER,
+} from "./constants";
 import { FormProperties } from "@root/lib/types";
 import { GCFormsApiClient } from "./apiClient";
 import { writeHtml } from "./htmlWriter";
@@ -65,7 +70,7 @@ export const processResponse = async ({
     );
 
     // Write a mapping file for attachments
-    const mappingFileHandle = await responseAttachmentsDirectory.getFileHandle("mapping.json", {
+    const mappingFileHandle = await responseAttachmentsDirectory.getFileHandle(MAPPING_FILENAME, {
       create: true,
     });
     const mappingFileStream = await mappingFileHandle.createWritable({ keepExistingData: false });

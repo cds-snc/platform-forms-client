@@ -15,6 +15,7 @@ import responseUniqueNames from "./__tests__/fixtures/response-attachments-uniqu
 import responseDuplicateNames from "./__tests__/fixtures/response-attachments-duplicates-26-11-6ae44.json";
 import responseMalicious from "./__tests__/fixtures/response-attachments-malicious.json";
 import templateFixture from "./__tests__/fixtures/template-file-upload.json";
+import { MAPPING_FILENAME } from "./constants";
 
 type AttachmentMapping = Record<string, { originalName: string; actualName: string; isPotentiallyMalicious: boolean; }>;
 
@@ -79,7 +80,7 @@ describe("processResponse - attachment handling", () => {
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
 
       // Verify mapping file was created
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       expect(mappingHandle).toBeDefined();
 
       // Verify all 4 attachment files were created
@@ -121,7 +122,7 @@ describe("processResponse - attachment handling", () => {
       // Verify mapping file exists
       const attachmentsDir = await testDir.getDirectoryHandle("attachments");
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
       const mapping = JSON.parse(mappingContent) as AttachmentMapping;
@@ -214,7 +215,7 @@ describe("processResponse - attachment handling", () => {
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
 
       // Read mapping.json to determine actual filenames used and assert they exist
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
       const mapping = JSON.parse(mappingContent) as AttachmentMapping;
@@ -261,7 +262,7 @@ describe("processResponse - attachment handling", () => {
       // Verify mapping file
       const attachmentsDir = await testDir.getDirectoryHandle("attachments");
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
       const mapping = JSON.parse(mappingContent) as AttachmentMapping;
@@ -331,7 +332,7 @@ describe("processResponse - attachment handling", () => {
 
       // Verify each renamed file has content
       // Use mapping.json to determine filenames, then verify each file has content
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
       const mapping = JSON.parse(mappingContent) as AttachmentMapping;
@@ -455,7 +456,7 @@ describe("processResponse - attachment handling", () => {
       // Verify mapping file
       const attachmentsDir = await testDir.getDirectoryHandle("attachments");
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
       const mapping = JSON.parse(mappingContent);
