@@ -295,7 +295,7 @@ export const updateActiveStatus = async (
       AuditLogDetails.UserActiveStatusUpdate,
       {
         email: user.email,
-        userId: userID,
+        userID: userID,
         active: active ? "activated" : "deactivated",
         privilegedUserEmail: privilegedUser.email,
         privilegedUserId: abilityUser.id,

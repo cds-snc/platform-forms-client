@@ -866,7 +866,7 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
     { type: "Form", id: formID },
     "GrantFormAccess",
     AuditLogDetails.GrantFormAccess,
-    { userId: userID }
+    { userID: userID }
   );
 
   notifyOwnersOwnerAdded(

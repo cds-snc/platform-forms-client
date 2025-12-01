@@ -583,7 +583,7 @@ export async function deleteDraftFormResponses(formID: string) {
       { type: "Form", id: formID },
       "DeleteResponses",
       AuditLogDetails.DeletedDraftResponsesForForm,
-      { formID }
+      { formId: formID }
     );
 
     return {
@@ -624,7 +624,7 @@ async function getSubmissionsFromConfirmationCodes(
         },
         "AccessDenied",
         AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses,
-        { formId }
+        { formID: formId }
       );
     throw e;
   });
@@ -709,7 +709,7 @@ export const confirmResponses = async (confirmationCodes: string[], formId: stri
         },
         "AccessDenied",
         AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses,
-        { formId }
+        { formID: formId }
       );
     throw e;
   });

@@ -35,18 +35,24 @@ export const deleteKey = async (templateId: string) => {
       user.id,
       { type: "ServiceAccount" },
       "DeleteAPIKey",
-      `User :${user.id} deleted service account ${
-        serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
-      }`
+      AuditLogDetails.DeletedServiceAccount,
+      {
+        serviceAccountID: serviceAccountID ?? "",
+        templateId: templateId,
+        userId: user.id,
+      }
     );
 
     logEvent(
       user.id,
       { type: "Form", id: templateId },
       "DeleteAPIKey",
-      `User :${user.id} deleted service account ${
-        serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
-      }`
+      AuditLogDetails.DeletedServiceAccount,
+      {
+        serviceAccountID: serviceAccountID ?? "",
+        templateId: templateId,
+        userId: user.id,
+      }
     );
   } catch (error) {
     logMessage.error(
@@ -143,13 +149,21 @@ export const createKey = async (templateId: string) => {
       user.id,
       { type: "ServiceAccount" },
       "CreateAPIKey",
-      `User :${user.id} created API key for service account ${serviceAccountId}`
+      AuditLogDetails.CreatedNewApiKey,
+      {
+        serviceAccountId: serviceAccountId,
+        userId: user.id,
+      }
     );
     logEvent(
       user.id,
       { type: "Form", id: templateId },
       "CreateAPIKey",
-      `User :${user.id} created API key for service account ${serviceAccountId}`
+      AuditLogDetails.CreatedNewApiKey,
+      {
+        serviceAccountId: serviceAccountId,
+        userId: user.id,
+      }
     );
 
     return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
@@ -203,7 +217,11 @@ export const refreshKey = async (templateId: string) => {
       user.id,
       { type: "ServiceAccount" },
       "RefreshAPIKey",
-      `User :${user.id} generated a new API key for service account ${serviceAccountId} `
+      AuditLogDetails.GeneratedNewApiKey,
+      {
+        serviceAccountId: serviceAccountId,
+        userId: user.id,
+      }
     );
 
     return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
