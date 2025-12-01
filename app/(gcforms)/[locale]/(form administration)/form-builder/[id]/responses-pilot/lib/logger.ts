@@ -19,11 +19,20 @@ export class ResponseDownloadLogger {
   }
 
   setDirectoryHandle(handle: FileSystemDirectoryHandle) {
+    if (process.env.VITEST_BROWSER === "true") {
+      return;
+    }
     this.directoryHandle = handle;
     this.log("info", "Logging session started", { sessionId: this.sessionId });
   }
 
   private async writeToFile(entry: LogEntry): Promise<void> {
+    // Skip writing to disk when running browser-mode Vitest to avoid
+    // calling file system APIs in test environments.
+    if (process.env.VITEST_BROWSER === "true") {
+      return;
+    }
+
     if (!this.directoryHandle) {
       return;
     }
