@@ -42,6 +42,7 @@ export function TestWrapper({
     | undefined;
   const processedSubmissionIds = overrides?.processedSubmissionIds as Set<string> | undefined;
   const hasError = overrides?.hasError as boolean | undefined;
+  const hasMaliciousAttachments = overrides?.hasMaliciousAttachments as boolean | undefined;
 
   return (
     <BrowserResponsesAppProvider overrides={overrides}>
@@ -52,6 +53,7 @@ export function TestWrapper({
           directoryHandle={directoryHandle}
           processedSubmissionIds={processedSubmissionIds}
           hasError={hasError}
+          hasMaliciousAttachments={hasMaliciousAttachments}
         />
         <h1 className="mb-4">Responses</h1>
         <PilotBadge className="mb-8" />
