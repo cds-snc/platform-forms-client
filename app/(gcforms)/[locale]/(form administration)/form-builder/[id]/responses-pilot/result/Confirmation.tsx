@@ -23,10 +23,13 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     newFormSubmissions,
     hasError,
     setHasError,
+    hasMaliciousAttachments,
+    setHasMaliciousAttachments,
   } = useResponsesContext();
 
   const handleCheckResponses = useCallback(() => {
     setHasCheckedForResponses(true);
+    setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
   }, [resetProcessingCompleted, setHasError]);
@@ -38,6 +41,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   const handleSelectNewLocation = () => {
     // reset relevant state
     setProcessedSubmissionIds(new Set());
+    setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
     setInterrupt(false);
@@ -118,6 +122,14 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
           <p className="mb-0">{t("confirmationPage.savedTo")}</p>
           <p className="mb-8 font-bold">/{dirName}</p>
         </>
+      )}
+      {hasMaliciousAttachments && (
+        <div className="mb-8 bg-yellow-50 p-4">
+          <h3>
+            <span role="img">📎</span> {t("confirmationPage.maliciousAttachmentsWarningTitle")}
+          </h3>
+          <p>{t("confirmationPage.maliciousAttachmentsWarningBody")}</p>
+        </div>
       )}
       <div className="flex flex-row gap-4">
         <Button theme="secondary" onClick={handleGoBack}>

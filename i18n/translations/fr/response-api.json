@@ -102,7 +102,9 @@
     "downloadedResponsesOther": "{{formattedCount}} réponses ont été téléchargées",
     "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
     "chooseNewLocationButton": "Choisir un nouvel emplacement",
-    "downloadResponsesButton": "Télécharger les réponses"
+    "downloadResponsesButton": "Télécharger les réponses",
+    "maliciousAttachmentsWarningTitle": "Vos réponses contiennent des fichiers joints aux soumissions",
+    "maliciousAttachmentsWarningBody": "Ceux-ci se retrouvent dans un dossier imbriqué et seront marqués dans le fichier CSV ou HTML avec le symbole : « ⚠️ » si l’on soupçonne qu’il pourraient y avoir un potentiel de malveillance."
   },
   "processingPage": {
     "section-title": "Traitement des réponses",
