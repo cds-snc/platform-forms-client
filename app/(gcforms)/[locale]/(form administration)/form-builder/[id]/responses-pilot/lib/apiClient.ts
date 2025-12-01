@@ -9,10 +9,7 @@ import type {
 
 import { TokenRateLimitError } from "./errorsTypes";
 import { FormProperties } from "@root/lib/types";
-import {
-  addErrorSimulationInterceptor,
-  addRateLimitTrackingInterceptor,
-} from "./apiClientInterceptors";
+import { addRateLimitTrackingInterceptor } from "./apiClientInterceptors";
 import { getAccessTokenFromApiKey } from "./utils";
 
 export class GCFormsApiClient {
@@ -60,7 +57,6 @@ export class GCFormsApiClient {
     addRateLimitTrackingInterceptor(this.httpClient, (remaining) => {
       this.rateLimitRemaining = remaining;
     });
-    addErrorSimulationInterceptor(this.httpClient);
   }
 
   private async ensureValidToken(): Promise<void> {

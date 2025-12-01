@@ -6,8 +6,10 @@ import { ContentWrapper } from "@responses-pilot/ContentWrapper";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { ApiClientSetter } from "./AplClientSetter";
 import { CurrentSubmissionIdSetter } from "./CurrentSubmissionIdSetter";
+import { ContextSetters } from "./ContextSetters";
 import { GCFormsApiClient } from "@responses-pilot/lib/apiClient";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
+import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
 // Import to trigger i18next initialization
 import "@root/i18n/client";
@@ -34,12 +36,25 @@ export function TestWrapper({
   children,
 }: RenderWithProvidersOptions) {
   const currentSubmissionId = overrides?.currentSubmissionId as string | undefined;
+  const directoryHandle = overrides?.directoryHandle as
+    | FileSystemDirectoryHandle
+    | { name: string }
+    | undefined;
+  const processedSubmissionIds = overrides?.processedSubmissionIds as Set<string> | undefined;
+  const hasError = overrides?.hasError as boolean | undefined;
+  const hasMaliciousAttachments = overrides?.hasMaliciousAttachments as boolean | undefined;
 
   return (
     <BrowserResponsesAppProvider overrides={overrides}>
       <ResponsesProvider locale={locale} formId={formId}>
         {mockApiClient && <ApiClientSetter mockClient={mockApiClient} />}
         {currentSubmissionId && <CurrentSubmissionIdSetter submissionId={currentSubmissionId} />}
+        <ContextSetters
+          directoryHandle={directoryHandle}
+          processedSubmissionIds={processedSubmissionIds}
+          hasError={hasError}
+          hasMaliciousAttachments={hasMaliciousAttachments}
+        />
         <h1 className="mb-4">Responses</h1>
         <PilotBadge className="mb-8" />
         <ContentWrapper>{children}</ContentWrapper>

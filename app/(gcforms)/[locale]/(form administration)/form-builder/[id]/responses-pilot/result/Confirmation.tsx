@@ -2,17 +2,13 @@
 import { useCallback, useState } from "react";
 import { Button } from "@root/components/clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
-import { useRouter } from "next/navigation";
-import { useTranslation } from "@i18n/client";
+import { useResponsesApp } from "../context";
 import { Responses } from "../Responses";
 import { CheckForResponsesButton } from "../components/CheckForResponsesButton";
 import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 
 export const Confirmation = ({ locale, id }: { locale: string; id: string }) => {
-  const router = useRouter();
-
-  const { t } = useTranslation("response-api");
-
+  const { t, router } = useResponsesApp();
   const { directoryHandle } = useResponsesContext();
   const dirName = directoryHandle?.name || "";
   const [hasCheckedForResponses, setHasCheckedForResponses] = useState(false);
@@ -27,14 +23,16 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     newFormSubmissions,
     hasError,
     setHasError,
+    hasMaliciousAttachments,
+    setHasMaliciousAttachments,
   } = useResponsesContext();
 
   const handleCheckResponses = useCallback(() => {
     setHasCheckedForResponses(true);
+    setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [resetProcessingCompleted, setHasError, setHasMaliciousAttachments]);
 
   const handleGoBack = () => {
     router.push(`/${locale}/form-builder/${id}/responses-pilot?reset=true`);
@@ -43,6 +41,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   const handleSelectNewLocation = () => {
     // reset relevant state
     setProcessedSubmissionIds(new Set());
+    setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
     setInterrupt(false);
@@ -123,6 +122,14 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
           <p className="mb-0">{t("confirmationPage.savedTo")}</p>
           <p className="mb-8 font-bold">/{dirName}</p>
         </>
+      )}
+      {hasMaliciousAttachments && (
+        <div className="mb-8 bg-yellow-50 p-4">
+          <h3>
+            <span role="img">📎</span> {t("confirmationPage.maliciousAttachmentsWarningTitle")}
+          </h3>
+          <p>{t("confirmationPage.maliciousAttachmentsWarningBody")}</p>
+        </div>
       )}
       <div className="flex flex-row gap-4">
         <Button theme="secondary" onClick={handleGoBack}>
