@@ -15,6 +15,7 @@ import responseUniqueNames from "./__tests__/fixtures/response-attachments-uniqu
 import responseDuplicateNames from "./__tests__/fixtures/response-attachments-duplicates-26-11-6ae44.json";
 import responseMalicious from "./__tests__/fixtures/response-attachments-malicious.json";
 import templateFixture from "./__tests__/fixtures/template-file-upload.json";
+import { ATTACHMENTS_FOLDER, MALICIOUS_ATTACHMENTS_FOLDER, MAPPING_FILENAME } from "./constants";
 
 type AttachmentMapping = Record<string, { originalName: string; actualName: string; isPotentiallyMalicious: boolean; }>;
 
@@ -75,11 +76,11 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify attachments directory structure
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
 
       // Verify mapping file was created
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       expect(mappingHandle).toBeDefined();
 
       // Verify all 4 attachment files were created
@@ -119,9 +120,9 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify mapping file exists
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
       const mapping = JSON.parse(mappingContent) as AttachmentMapping;
@@ -210,11 +211,11 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify attachments directory structure
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
 
       // Read mapping.json to determine actual filenames used and assert they exist
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
       const mapping = JSON.parse(mappingContent) as AttachmentMapping;
@@ -259,9 +260,9 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify mapping file
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
       const mapping = JSON.parse(mappingContent) as AttachmentMapping;
@@ -326,12 +327,12 @@ describe("processResponse - attachment handling", () => {
         logger,
       });
 
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
 
       // Verify each renamed file has content
       // Use mapping.json to determine filenames, then verify each file has content
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
       const mapping = JSON.parse(mappingContent) as AttachmentMapping;
@@ -408,11 +409,11 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify attachments directory structure
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
 
       // Verify suspicious subdirectory was created
-      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle("suspicious");
+      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle(MALICIOUS_ATTACHMENTS_FOLDER);
       expect(suspiciousDir).toBeDefined();
 
       // Verify malicious files (test.txt and output.txt) are in suspicious folder
@@ -453,9 +454,9 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify mapping file
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
-      const mappingHandle = await responseAttachmentsDir.getFileHandle("mapping.json");
+      const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
       const mappingContent = await mappingFile.text();
       const mapping = JSON.parse(mappingContent);
@@ -518,9 +519,9 @@ describe("processResponse - attachment handling", () => {
         logger,
       });
 
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
-      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle("suspicious");
+      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle(MALICIOUS_ATTACHMENTS_FOLDER);
 
       // Both test.txt files exist: one safe in main dir, one malicious in suspicious dir
       // They should have the same name since they're in different directories
@@ -563,9 +564,9 @@ describe("processResponse - attachment handling", () => {
         logger,
       });
 
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
-      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle("suspicious");
+      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle(MALICIOUS_ATTACHMENTS_FOLDER);
 
       // Verify malicious files have content
       const testTxtHandle = await suspiciousDir.getFileHandle("test.txt");

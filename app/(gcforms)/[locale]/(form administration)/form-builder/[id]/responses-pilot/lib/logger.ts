@@ -1,4 +1,5 @@
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
+import { DOWNLOAD_LOG_FILENAME_PREFIX } from "./constants";
 
 type LogLevel = "info" | "warn" | "error" | "debug";
 
@@ -15,7 +16,7 @@ export class ResponseDownloadLogger {
   private writeQueue: Promise<void> = Promise.resolve();
 
   constructor() {
-    this.sessionId = `download-${Date.now()}`;
+    this.sessionId = `${Date.now()}`;
   }
 
   setDirectoryHandle(handle: FileSystemDirectoryHandle) {
@@ -38,7 +39,7 @@ export class ResponseDownloadLogger {
     }
 
     try {
-      const fileName = `download-log-${this.sessionId}.txt`;
+      const fileName = `${DOWNLOAD_LOG_FILENAME_PREFIX}${this.sessionId}.txt`;
       const fileHandle = await this.directoryHandle.getFileHandle(fileName, { create: true });
 
       // Get existing file content
