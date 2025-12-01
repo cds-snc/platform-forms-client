@@ -15,7 +15,7 @@ import responseUniqueNames from "./__tests__/fixtures/response-attachments-uniqu
 import responseDuplicateNames from "./__tests__/fixtures/response-attachments-duplicates-26-11-6ae44.json";
 import responseMalicious from "./__tests__/fixtures/response-attachments-malicious.json";
 import templateFixture from "./__tests__/fixtures/template-file-upload.json";
-import { MAPPING_FILENAME } from "./constants";
+import { ATTACHMENTS_FOLDER, MAPPING_FILENAME } from "./constants";
 
 type AttachmentMapping = Record<string, { originalName: string; actualName: string; isPotentiallyMalicious: boolean; }>;
 
@@ -76,7 +76,7 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify attachments directory structure
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
 
       // Verify mapping file was created
@@ -120,7 +120,7 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify mapping file exists
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
       const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
@@ -211,7 +211,7 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify attachments directory structure
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
 
       // Read mapping.json to determine actual filenames used and assert they exist
@@ -260,7 +260,7 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify mapping file
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
       const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
@@ -327,7 +327,7 @@ describe("processResponse - attachment handling", () => {
         logger,
       });
 
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
 
       // Verify each renamed file has content
@@ -409,7 +409,7 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify attachments directory structure
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
 
       // Verify suspicious subdirectory was created
@@ -454,7 +454,7 @@ describe("processResponse - attachment handling", () => {
       });
 
       // Verify mapping file
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
       const mappingHandle = await responseAttachmentsDir.getFileHandle(MAPPING_FILENAME);
       const mappingFile = await mappingHandle.getFile();
@@ -519,7 +519,7 @@ describe("processResponse - attachment handling", () => {
         logger,
       });
 
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
       const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle("suspicious");
 
@@ -564,7 +564,7 @@ describe("processResponse - attachment handling", () => {
         logger,
       });
 
-      const attachmentsDir = await testDir.getDirectoryHandle("attachments");
+      const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
       const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle("suspicious");
 
