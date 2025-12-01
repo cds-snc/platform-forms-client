@@ -2,17 +2,13 @@
 import { useCallback, useState } from "react";
 import { Button } from "@root/components/clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
-import { useRouter } from "next/navigation";
-import { useTranslation } from "@i18n/client";
+import { useResponsesApp } from "../context";
 import { Responses } from "../Responses";
 import { CheckForResponsesButton } from "../components/CheckForResponsesButton";
 import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 
 export const Confirmation = ({ locale, id }: { locale: string; id: string }) => {
-  const router = useRouter();
-
-  const { t } = useTranslation("response-api");
-
+  const { t, router } = useResponsesApp();
   const { directoryHandle } = useResponsesContext();
   const dirName = directoryHandle?.name || "";
   const [hasCheckedForResponses, setHasCheckedForResponses] = useState(false);
@@ -36,8 +32,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [resetProcessingCompleted, setHasError]);
 
   const handleGoBack = () => {
     router.push(`/${locale}/form-builder/${id}/responses-pilot?reset=true`);
