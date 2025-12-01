@@ -6,6 +6,7 @@ interface ContextSettersProps {
   directoryHandle?: FileSystemDirectoryHandle | { name: string };
   processedSubmissionIds?: Set<string>;
   hasError?: boolean;
+  hasMaliciousAttachments?: boolean;
 }
 
 // Test helper that sets multiple context values on mount
@@ -13,6 +14,7 @@ export function ContextSetters({
   directoryHandle,
   processedSubmissionIds,
   hasError,
+  hasMaliciousAttachments,
 }: ContextSettersProps) {
   const context = useResponsesContext();
 
@@ -26,7 +28,10 @@ export function ContextSetters({
     if (hasError !== undefined) {
       context.setHasError(hasError);
     }
-  }, [directoryHandle, processedSubmissionIds, hasError, context]);
+    if (hasMaliciousAttachments !== undefined) {
+      context.setHasMaliciousAttachments(hasMaliciousAttachments);
+    }
+  }, [directoryHandle, processedSubmissionIds, hasError, hasMaliciousAttachments, context]);
 
   return null;
 }

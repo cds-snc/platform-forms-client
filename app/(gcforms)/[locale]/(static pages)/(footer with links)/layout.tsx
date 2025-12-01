@@ -7,7 +7,7 @@ import { headers } from "next/headers";
 
 export default async function Layout(props: {
   children: React.ReactNode;
-  params: Promise<{ locale: string; id: string }>;
+  params: Promise<{ locale: string }>;
 }) {
   const params = await props.params;
   const pathname = (await headers()).get("x-path") ?? "";

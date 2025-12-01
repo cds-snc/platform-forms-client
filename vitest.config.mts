@@ -33,7 +33,7 @@ export default defineConfig({
     environment: "node",
     include:
       process.env.VITEST_BROWSER === "true"
-        ? ["tests/browser/**/*.browser.vitest.+(ts|tsx|js|jsx)"]
+        ? ["tests/browser/**/*.browser.vitest.+(ts|tsx|js|jsx)", "**/*.browser.vitest.+(ts|tsx|js|jsx)"]
         : ["__vitests__/**/*.test.ts", "lib/vitests/**/*.test.ts", "**/*.vitest.+(ts|tsx|js|jsx)"],
     exclude: [
       "**/node_modules/**",
