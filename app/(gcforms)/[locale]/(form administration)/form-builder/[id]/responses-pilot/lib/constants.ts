@@ -21,7 +21,7 @@ export const RAW_RESPONSE_FOLDER = "raw_data-donnee_brutes";
 /**
  * Folder within the selected directory to store attachments
  */
-export const ATTACHMENTS_FOLDER = "file_attachments-fichiers_jointe";
+export const ATTACHMENTS_FOLDER = "file_attachments-fichiers_joints";
 
 /**
  * Folder within the attachments directory to store potentially malicious attachments
