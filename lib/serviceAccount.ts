@@ -3,6 +3,7 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logEvent } from "@lib/auditLogs";
 import { authorization } from "@lib/privileges";
 import * as ZitadelConnector from "@lib/integration/zitadelConnector";
+import { logMessage } from "./logger";
 
 type ApiPrivateKey = {
   type: string;
@@ -15,37 +16,44 @@ type ApiPrivateKey = {
 export const deleteKey = async (templateId: string) => {
   const { user } = await authorization.canEditForm(templateId);
 
-  const serviceAccountID = await checkMachineUserExists(templateId);
+  try {
+    const serviceAccountID = await checkMachineUserExists(templateId);
 
-  if (serviceAccountID) {
-    await ZitadelConnector.deleteMachineUser(serviceAccountID);
+    if (serviceAccountID) {
+      await ZitadelConnector.deleteMachineUser(serviceAccountID);
+    }
+
+    await prisma.apiServiceAccount
+      .deleteMany({
+        where: {
+          templateId: templateId,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    logEvent(
+      user.id,
+      { type: "ServiceAccount" },
+      "DeleteAPIKey",
+      `User :${user.id} deleted service account ${
+        serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
+      }`
+    );
+
+    logEvent(
+      user.id,
+      { type: "Form", id: templateId },
+      "DeleteAPIKey",
+      `User :${user.id} deleted service account ${
+        serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
+      }`
+    );
+  } catch (error) {
+    logMessage.error(
+      `API key for form ${templateId} failed to be deleted. Reason ${(error as Error).message}`
+    );
+    throw new Error("Failed to delete API key");
   }
-
-  await prisma.apiServiceAccount
-    .deleteMany({
-      where: {
-        templateId: templateId,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  logEvent(
-    user.id,
-    { type: "ServiceAccount" },
-    "DeleteAPIKey",
-    `User :${user.id} deleted service account ${
-      serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
-    }`
-  );
-
-  logEvent(
-    user.id,
-    { type: "Form", id: templateId },
-    "DeleteAPIKey",
-    `User :${user.id} deleted service account ${
-      serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
-    }`
-  );
 };
 
 export const checkMachineUserExists = async (templateId: string) => {
@@ -104,91 +112,107 @@ export const checkKeyExists = async (templateId: string) => {
 export const createKey = async (templateId: string) => {
   const { user } = await authorization.canEditForm(templateId);
 
-  const serviceAccountId = await ZitadelConnector.getMachineUser(templateId).then((user) => {
-    // If a user does not exist then create one
-    if (!user) {
-      return ZitadelConnector.createMachineUser(
+  try {
+    const serviceAccountId = await ZitadelConnector.getMachineUser(templateId).then((user) => {
+      // If a user does not exist then create one
+      if (!user) {
+        return ZitadelConnector.createMachineUser(
+          templateId,
+          `API Service account for form ${templateId}`
+        ).then((r) => r.userId);
+      }
+      return user.userId;
+    });
+
+    const { privateKey, publicKey } = generateKeys();
+
+    const keyId = await ZitadelConnector.createMachineKey(serviceAccountId, publicKey).then(
+      (r) => r.keyId
+    );
+
+    await prisma.apiServiceAccount.create({
+      data: {
+        id: serviceAccountId,
+        publicKeyId: keyId,
         templateId,
-        `API Service account for form ${templateId}`
-      ).then((r) => r.userId);
-    }
-    return user.userId;
-  });
+        publicKey,
+      },
+    });
 
-  const { privateKey, publicKey } = generateKeys();
+    logEvent(
+      user.id,
+      { type: "ServiceAccount" },
+      "CreateAPIKey",
+      `User :${user.id} created API key for service account ${serviceAccountId}`
+    );
+    logEvent(
+      user.id,
+      { type: "Form", id: templateId },
+      "CreateAPIKey",
+      `User :${user.id} created API key for service account ${serviceAccountId}`
+    );
 
-  const keyId = await ZitadelConnector.createMachineKey(serviceAccountId, publicKey).then(
-    (r) => r.keyId
-  );
-
-  await prisma.apiServiceAccount.create({
-    data: {
-      id: serviceAccountId,
-      publicKeyId: keyId,
-      templateId,
-      publicKey,
-    },
-  });
-
-  logEvent(
-    user.id,
-    { type: "ServiceAccount" },
-    "CreateAPIKey",
-    `User :${user.id} created API key for service account ${serviceAccountId}`
-  );
-  logEvent(
-    user.id,
-    { type: "Form", id: templateId },
-    "CreateAPIKey",
-    `User :${user.id} created API key for service account ${serviceAccountId}`
-  );
-
-  return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
+    return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
+  } catch (error) {
+    logMessage.error(
+      `API key for form ${templateId} failed to be created. Reason ${(error as Error).message}`
+    );
+    throw new Error("Failed to create API key");
+  }
 };
 
 export const refreshKey = async (templateId: string) => {
   const { user } = await authorization.canEditForm(templateId);
 
-  // Get existing service account and key
-  const { id: serviceAccountId, publicKeyId } =
-    (await prisma.apiServiceAccount.findUnique({
+  try {
+    // Get existing service account and key
+    const { id: serviceAccountId, publicKeyId } =
+      (await prisma.apiServiceAccount.findUnique({
+        where: {
+          templateId: templateId,
+        },
+        select: { id: true, publicKeyId: true },
+      })) ?? {};
+
+    if (!serviceAccountId || !publicKeyId) {
+      throw new Error("No API key exists for this form");
+    }
+
+    await ZitadelConnector.deleteMachineKey(serviceAccountId, publicKeyId);
+
+    // Generate new keys
+    const { privateKey, publicKey } = generateKeys();
+
+    // Create new machine key in Zitadel
+    const keyId = await ZitadelConnector.createMachineKey(serviceAccountId, publicKey).then(
+      (r) => r.keyId
+    );
+
+    // Update DB with new public key id and public key
+    await prisma.apiServiceAccount.update({
       where: {
-        templateId: templateId,
+        templateId,
       },
-      select: { id: true, publicKeyId: true },
-    })) ?? {};
+      data: {
+        publicKey: publicKey,
+        publicKeyId: keyId,
+      },
+    });
 
-  if (!serviceAccountId || !publicKeyId) {
-    throw new Error("No API key exists for this form");
+    logEvent(
+      user.id,
+      { type: "ServiceAccount" },
+      "RefreshAPIKey",
+      `User :${user.id} generated a new API key for service account ${serviceAccountId} `
+    );
+
+    return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
+  } catch (error) {
+    logMessage.error(
+      `API key for form ${templateId} failed to be refreshed. Reason ${(error as Error).message}`
+    );
+    throw new Error("Failed to refresh API key");
   }
-
-  // Generate new keys
-  const { privateKey, publicKey } = generateKeys();
-
-  // Create new machine key in Zitadel
-  const keyId = await ZitadelConnector.createMachineKey(serviceAccountId, publicKey).then(
-    (r) => r.keyId
-  );
-
-  // Update DB with new public key id and public key
-  await prisma.apiServiceAccount.update({
-    where: {
-      templateId,
-    },
-    data: {
-      publicKey: publicKey,
-      publicKeyId: keyId,
-    },
-  });
-
-  logEvent(
-    user.id,
-    { type: "ServiceAccount" },
-    "RefreshAPIKey",
-    `User :${user.id} generated a new API key for service account ${serviceAccountId} `
-  );
-
-  return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
 };
 
 // Look at possibly moving this to the browser so the GCForms System is never in possession
