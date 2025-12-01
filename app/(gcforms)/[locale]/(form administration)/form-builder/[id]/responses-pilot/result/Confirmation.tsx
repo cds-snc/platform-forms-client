@@ -32,7 +32,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
-  }, [resetProcessingCompleted, setHasError]);
+  }, [resetProcessingCompleted, setHasError, setHasMaliciousAttachments]);
 
   const handleGoBack = () => {
     router.push(`/${locale}/form-builder/${id}/responses-pilot?reset=true`);

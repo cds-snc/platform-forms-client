@@ -142,4 +142,27 @@ describe("Confirmation - Browser Mode", () => {
     const message = page.getByText(/2 responses were downloaded/);
     await expect.element(message).toBeInTheDocument();
   });
+
+  it("should show malicious attachments warning when flagged", async () => {
+    const mockApiClient = {
+      getNewFormSubmissions: async () => [],
+      formId: "test-form",
+    } as unknown as GCFormsApiClient;
+
+    const mockProcessedSubmissionIds = new Set(["sub-1"]);
+
+    await render(<Confirmation locale="en" id="test-form" />, {
+      mockApiClient,
+      overrides: {
+        hasMaliciousAttachments: true,
+        processedSubmissionIds: mockProcessedSubmissionIds,
+      },
+    });
+
+    const title = page.getByText(enTranslations.confirmationPage.maliciousAttachmentsWarningTitle);
+    await expect.element(title).toBeInTheDocument();
+
+    const body = page.getByText(enTranslations.confirmationPage.maliciousAttachmentsWarningBody);
+    await expect.element(body).toBeInTheDocument();
+  });
 });
