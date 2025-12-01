@@ -15,7 +15,7 @@ import responseUniqueNames from "./__tests__/fixtures/response-attachments-uniqu
 import responseDuplicateNames from "./__tests__/fixtures/response-attachments-duplicates-26-11-6ae44.json";
 import responseMalicious from "./__tests__/fixtures/response-attachments-malicious.json";
 import templateFixture from "./__tests__/fixtures/template-file-upload.json";
-import { ATTACHMENTS_FOLDER, MAPPING_FILENAME } from "./constants";
+import { ATTACHMENTS_FOLDER, MALICIOUS_ATTACHMENTS_FOLDER, MAPPING_FILENAME } from "./constants";
 
 type AttachmentMapping = Record<string, { originalName: string; actualName: string; isPotentiallyMalicious: boolean; }>;
 
@@ -413,7 +413,7 @@ describe("processResponse - attachment handling", () => {
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
 
       // Verify suspicious subdirectory was created
-      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle("suspicious");
+      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle(MALICIOUS_ATTACHMENTS_FOLDER);
       expect(suspiciousDir).toBeDefined();
 
       // Verify malicious files (test.txt and output.txt) are in suspicious folder
@@ -521,7 +521,7 @@ describe("processResponse - attachment handling", () => {
 
       const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
-      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle("suspicious");
+      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle(MALICIOUS_ATTACHMENTS_FOLDER);
 
       // Both test.txt files exist: one safe in main dir, one malicious in suspicious dir
       // They should have the same name since they're in different directories
@@ -566,7 +566,7 @@ describe("processResponse - attachment handling", () => {
 
       const attachmentsDir = await testDir.getDirectoryHandle(ATTACHMENTS_FOLDER);
       const responseAttachmentsDir = await attachmentsDir.getDirectoryHandle(responseName);
-      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle("suspicious");
+      const suspiciousDir = await responseAttachmentsDir.getDirectoryHandle(MALICIOUS_ATTACHMENTS_FOLDER);
 
       // Verify malicious files have content
       const testTxtHandle = await suspiciousDir.getFileHandle("test.txt");
