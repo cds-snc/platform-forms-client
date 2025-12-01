@@ -16,7 +16,7 @@ export const HTML_DOWNLOAD_FOLDER = "html_responses-reponses_html";
 /**
  * Folder within the selected directory to store raw response data
  */
-export const RAW_RESPONSE_FOLDER = "raw_data-donnee_brutes";
+export const RAW_RESPONSE_FOLDER = "raw_data-donnees_brutes";
 
 /**
  * Folder within the selected directory to store attachments
