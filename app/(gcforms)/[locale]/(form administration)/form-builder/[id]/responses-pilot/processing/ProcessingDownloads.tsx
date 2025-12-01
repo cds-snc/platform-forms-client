@@ -47,6 +47,22 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!processingCompleted) {
+        event.preventDefault();
+        event.returnValue = ""; // Required for some browsers
+        return "Are you sure?"; // Custom message (may not be displayed by all browsers)
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [processingCompleted]);
+
   const handleInterrupt = useCallback(async () => {
     if (isNavigating) return; // Prevent double-click
 
