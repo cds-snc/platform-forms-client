@@ -35,7 +35,7 @@ const QuestionColumns = ({
           )}
         </dt>
         <dd
-          className={`py-4 pl-8`}
+          className={`flex-1 py-4 pl-8`}
           dangerouslySetInnerHTML={{ __html: newLineToHtml(item.answer) }}
         />
       </div>
@@ -87,7 +87,7 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
             lang,
           })}
         </dt>
-        <dd className="py-4 pl-8">{responseID}</dd>
+        <dd className="flex-1 py-4 pl-8">{responseID}</dd>
       </div>
       <div className="flex border-b border-gray py-4">
         <dt className="w-96 py-4 font-bold">
@@ -97,7 +97,7 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
             lang,
           })}
         </dt>
-        <dd className="py-4 pl-8">{formatDateTimeUTC(submissionDate)}</dd>
+        <dd className="flex-1 py-4 pl-8">{formatDateTimeUTC(submissionDate)}</dd>
       </div>
       <QuestionColumns submission={submission} lang={lang} />
     </dl>
