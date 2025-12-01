@@ -27,7 +27,6 @@ import {
 } from "../components/Toasts";
 import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
-import { useApiDebug } from "../lib/useApiDebug";
 import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
 
@@ -58,6 +57,8 @@ interface ResponsesContextType {
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
   currentSubmissionId: string | null;
+  hasMaliciousAttachments: boolean;
+  setHasMaliciousAttachments: Dispatch<SetStateAction<boolean>>;
   setCurrentSubmissionId: Dispatch<SetStateAction<string | null>>;
   resetState: () => void;
   resetNewSubmissions: () => void;
@@ -97,6 +98,7 @@ export const ResponsesProvider = ({
   const [hasError, setHasError] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<string>("");
   const [currentSubmissionId, setCurrentSubmissionId] = useState<string | null>(null);
+  const [hasMaliciousAttachments, setHasMaliciousAttachments] = useState<boolean>(false);
   const loggerRef = useRef(new ResponseDownloadLogger());
   const logger = loggerRef.current;
 
@@ -129,9 +131,6 @@ export const ResponsesProvider = ({
       }
     };
   }, []);
-
-  // Enable dev console helpers for simulating API errors
-  useApiDebug();
 
   const retrieveResponses = useCallback(async () => {
     if (!apiClient) {
@@ -234,6 +233,7 @@ export const ResponsesProvider = ({
             // eslint-disable-next-line no-await-in-loop
             await processResponse({
               setProcessedSubmissionIds,
+              setHasMaliciousAttachments,
               workingDirectoryHandle: directoryHandle,
               htmlDirectoryHandle,
               csvFileHandle,
@@ -310,6 +310,7 @@ export const ResponsesProvider = ({
     setNewFormSubmissions(null);
     setProcessedSubmissionIds(new Set());
     resetProcessingCompleted();
+    setHasMaliciousAttachments(false);
     setSelectedFormat("csv");
     setHasError(false);
     setInterrupt(false);
@@ -342,6 +343,8 @@ export const ResponsesProvider = ({
         interrupt: isProcessingInterrupted,
         setInterrupt,
         currentSubmissionId,
+        hasMaliciousAttachments,
+        setHasMaliciousAttachments,
         setCurrentSubmissionId,
         resetState,
         resetNewSubmissions,
