@@ -1260,7 +1260,7 @@ export async function cloneTemplate(formID: string): Promise<FormRecord | null> 
 
   const template = await prisma.template
     .findUnique({
-      where: { id: formID, ttl: { not: null } },
+      where: { id: formID, ttl: null },
       include: {
         deliveryOption: true,
         users: { select: { id: true } },
