@@ -31,6 +31,22 @@ class InMemoryWritable extends WritableStream {
       },
       close() {
         // No-op for in-memory
+        // On close, persist the content to a global capture map so browser tests can access it
+        try {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          if (typeof globalThis !== "undefined") {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            globalThis.__IN_MEMORY_FILES__ = globalThis.__IN_MEMORY_FILES__ || {};
+            // Persist using the captured `file` variable from the constructor
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            globalThis.__IN_MEMORY_FILES__[file.name] = file.content;
+          }
+        } catch {
+          // ignore
+        }
       },
       abort() {
         // No-op for in-memory
