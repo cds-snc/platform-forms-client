@@ -1226,6 +1226,21 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
  * Clone a template including associated users and delivery option
  */
 export async function cloneTemplate(formID: string): Promise<FormRecord | null> {
+  // Quick existence check: if the template doesn't exist (or is archived),
+  // return null before running authorization checks. This avoids triggering
+  // privilege lookups that can throw when subjects are missing.
+  const exists = await prisma.template
+    .findUnique({
+      where: { id: formID, ttl: null },
+      select: { id: true },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!exists) {
+    logMessage.warn(`[templates][cloneTemplate] Template ${formID} not found`);
+    return null;
+  }
+
   // Ensure the user can create a new form (needed to persist a clone)
   // and that they can edit the source form.
   const [createResult, editResult] = (await Promise.allSettled([
