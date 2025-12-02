@@ -7,6 +7,12 @@ import { formatDateTimeUTC } from "@lib/utils/form-builder";
 import { FormElementTypes } from "@lib/types";
 import { newLineToHtml } from "@lib/utils/newLineToHtml";
 
+/*
+ ⚡ NOTE: CSS is compiled 
+   see: lib/responseDownloadFormats/html/package.json command "compile"
+   If you update the CSS here, you need to re compile and commit compiled.ts
+*/
+
 const QuestionColumns = ({
   submission,
   lang,
@@ -85,19 +91,19 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
       className="border-y-2 border-gray"
     >
       <div className="flex border-b border-gray py-4">
-        <dt data-testid="col-question-response-id" className="w-96 py-4 font-bold">
+        <dt data-testid="col-question-response-id" className="w-96 flex-none py-4 font-bold">
           {orderLanguageStrings({
             stringEn: t("responseTemplate.responseNumber", { lng: "en" }),
             stringFr: t("responseTemplate.responseNumber", { lng: "fr" }),
             lang,
           })}
         </dt>
-        <dd data-testid="col-answer-response-id" className="flex-1 py-4 pl-8">
+        <dd data-testid="col-answer-response-id" className="min-w-0 flex-1 py-4 pl-8">
           {responseID}
         </dd>
       </div>
       <div className="flex border-b border-gray py-4">
-        <dt data-testid="col-question-submission-date" className="w-96 py-4 font-bold">
+        <dt data-testid="col-question-submission-date" className="w-96 flex-none py-4 font-bold">
           {orderLanguageStrings({
             stringEn: t("responseTemplate.submissionDate", { lng: "en" }),
             stringFr: t("responseTemplate.submissionDate", { lng: "fr" }),
