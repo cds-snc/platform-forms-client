@@ -43,6 +43,18 @@ export const AuditForm = ({ formId }: { formId: string }) => {
                 if (key === "event") {
                   value = `"${t(`auditDownload.events.${row.event}`)}"`; // Translate event names
                 }
+                if (key == "description") {
+                  // eventDesc contains the actual description text inside a JSON string
+                  // the rest are parameters for interpolation
+                  try {
+                    const descObj = JSON.parse(value);
+                    const eventDesc = descObj.eventDesc;
+                    delete descObj.eventDesc;
+                    value = String(t(`auditDownload.descriptions.${eventDesc}`, descObj));
+                  } catch {
+                    // Fallback to raw value if parsing fails
+                  }
+                }
                 // Escape double quotes by doubling them and wrap the whole string in double quotes.
                 value = `"${value.replace(/"/g, '""')}"`;
               }

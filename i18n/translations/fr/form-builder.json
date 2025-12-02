@@ -523,6 +523,32 @@
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié"
     },
+    "eventDetails": {
+      "CreatedForm": "Formulaire créé",
+      "UpdatedFormName": "Formulaire renommé en ${newFormName}",
+      "UpdatedFormContent": "Contenu du formulaire mis à jour",
+      "DuplicatedForm": "Formulaire dupliqué pour créer le formulaire ${newFormID}",
+      "ArchivedForm": "Formulaire archivé",
+      "RestoredForm": "Formulaire restauré",
+      "DownloadedForm": "Une copie du formulaire a été téléchargée",
+      "ChangeSecurityAttribute": "Classification changée à ${EN_securityAttribute}",
+      "SetFormPurpose": "Usage prévu défini comme ${EN_formPurpose}",
+      "SetSaveAndResume": "Sauvegarde de la progression définie à ${saveAndResume}",
+      "UpdateClosingDate": "Date de fermeture mise à jour à ${formStatus}",
+      "UpdatedNotificationSettings": "Paramètre de notification mis à jour à ${enabled} pour ${userEmail}",
+      "GeneratedAPIKey": "Clé API ${APIkeyID} générée par ${userEmail}",
+      "DeletedAPIKey": "Clé API ${APIkeyID} supprimée par ${userEmail}",
+      "IncreasedThrottling": "Débit de l'API fixé à ${throttlingRate} pour ${weeks} semaines",
+      "GrantAccess": "Accès accordé à ${userEmail}",
+      "RevokeAccess": "Accès révoqué pour ${userEmail}",
+      "UserInvited": "${userEmail} a invité ${invitationEmail}",
+      "AcceptedInvitation": "Invitation acceptée par ${userEmail}",
+      "DeclinedInvitation": "Invitation refusée par ${userEmail}",
+      "CancelInvitation": "Invitation annulée pour ${invitationEmail}",
+      "ReceivedFormResponses": "Réponse ${submissionId} reçue",
+      "DownloadedFormResponses": "Réponse ${submissionId} téléchargée en format ${format}",
+      "ConfirmedResponsesForForm": "Réponse ${submissionId} confirmée"
+    },
     "errorCreatingDownload": "Erreur lors de la création du téléchargement"
   },
   "switchToApiMode": {

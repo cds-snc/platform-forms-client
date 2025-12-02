@@ -89,41 +89,41 @@ export enum AuditLogDetails {
   FormAuditLogsRead = "User ${callingUserId} read audit logs for form ${formId}",
   GetAuditSubject = "Attempted to get events for Subject ${subject}",
   DownloadedFormResponses = "Downloaded form response in ${format} for submission ID ${item.id}",
-  IncreasedThrottling = "User ${userId} increased throttling rate on form ${formId} for ${weeks} week(s)",
+  IncreasedThrottling = "IncreasedThrottling",
   PermanentIncreasedThrottling = "User ${userId} permanently increased throttling rate on form ${formId}",
   ResetThrottling = "User ${userId} reset throttling rate on form ${formId}",
-  DeclinedInvitation = "${userId} has declined an invitation",
-  AcceptedInvitation = "${userId} has accepted an invitation",
+  DeclinedInvitation = "DeclinedInvitation",
+  AcceptedInvitation = "AcceptedInvitation",
   AccessGranted = "Access granted to ${grantedUserId}",
-  CancelInvitation = "User ${userId} cancelled invitation for ${invitationEmail}",
-  UserInvited = "User ${userEmail} invited ${invitationEmail}",
+  CancelInvitation = "CancelInvitation",
+  UserInvited = "UserInvited",
   CognitoUserIdentifier = "Cognito user unique identifier (sub): ${userId}",
-  UpdatedNotificationSettings = "`User :${userId} updated notifications setting on form ${formId} to ${enabled}",
-  ConfirmedResponsesForForm = "Confirmed responses for form ${formId}",
+  UpdatedNotificationSettings = "`UpdatedNotificationSettings",
+  ConfirmedResponsesForForm = "ConfirmedResponsesForForm",
   DeletedDraftResponsesForForm = "Deleted draft responses for form ${formId}",
   RetreiveSelectedFormResponses = "Retrieve selected responses for form ${formID} with ID ${submissionID}",
   ListAllResponsesForForm = "List all responses ${status} for form ${formID}",
   UserActiveStatusUpdate = "User ${email} (userID: ${userID}) was ${active} by user ${privilegedUserEmail} (userID: ${privilegedUserId})",
   AccessedAllSystemForms = "Accessed Forms: All System Forms",
-  ClonedForm = "Cloned Form",
-  UpdateClosingDate = "Updated closing date for Form",
+  ClonedForm = "DuplicatedForm",
+  UpdateClosingDate = "UpdateClosingDate",
   RetrieveFormUsers = "Retrieved users associated with Form",
   RevokeFormAccess = "Access revoked for ${userId}",
   SetDeliveryToVault = "Delivery Option set to the Vault",
-  SetSaveAndResume = "Form save and resume set to ${saveAndResume}",
-  SetFormPurpose = "Form Purpose set to ${formPurpose}",
-  FormContentUpdated = "Form content updated",
-  UpdatedFormName = "Updated form name to ${newFormName}",
+  SetSaveAndResume = "SetSaveAndResume",
+  SetFormPurpose = "SetFormPurpose",
+  FormContentUpdated = "UpdatedFormContent",
+  UpdatedFormName = "UpdatedFormName",
   GrantFormAccess = "Access granted to ${userID}",
   AccessedForms = "Accessed Forms: ${formList}",
   ChangeDeliveryOption = "Changed delivery option to ${deliveryOption}",
-  ChangeSecurityAttribute = "Changed security attribute to ${securityAttribute}",
-  AccessGrantedTo = "Access granted to ${userList}",
-  AccessRevokedFor = "Access revoked for ${userList}",
+  ChangeSecurityAttribute = "ChangeSecurityAttribute",
+  AccessGrantedTo = "GrantAccess",
+  AccessRevokedFor = "RevokeAccess",
   //API Keys
-  GeneratedNewApiKey = "User :${userId} generated a new API key for service account ${serviceAccountId}",
+  GeneratedNewApiKey = "GeneratedAPIKey",
   CreatedNewApiKey = "User :${userId} created API key for service account ${serviceAccountId}",
-  DeletedServiceAccount = "User :${userId} deleted service account ${serviceAccountID} for template ${templateId}",
+  DeletedServiceAccount = "DeletedAPIKey",
   // App Settings
   UpdatedAppSetting = "Updated setting with ${settingData}",
   CreatedAppSetting = "Created setting with ${settingData}",
@@ -320,15 +320,8 @@ const resolveDescription = (
   descriptionParams?: Record<string, string>
 ) => {
   if (!description) return undefined;
-  let descriptionFinal = description.toString();
-
-  if (descriptionParams) {
-    for (const [key, value] of Object.entries(descriptionParams)) {
-      const placeholder = new RegExp(`\\$\\{${key}\\}`, "g");
-      descriptionFinal = descriptionFinal.replace(placeholder, value);
-    }
-  }
-  return descriptionFinal;
+  const paramsJson = JSON.stringify({ eventDesc: description, ...descriptionParams });
+  return paramsJson;
 };
 
 export const logEvent = async <T extends keyof AllAuditParams | undefined = undefined>(
