@@ -13,7 +13,7 @@ import type {
 } from "native-file-system-adapter";
 import type React from "react";
 
-// Local stub for i18next `t` to avoid importing testHelpers (which uses Node crypto)
+// Local stub for i18next `t`
 const defaultT = ((k: string) => k) as import("i18next").TFunction;
 
 describe("processResponse -> browser injection", () => {
