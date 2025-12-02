@@ -321,13 +321,10 @@ const _getSubject = async (subject: {
         },
       });
     case "FormRecord":
-      // When `allowDeleted` is true we should include deleted records as well.
-      // Only apply a `ttl: null` constraint when deleted records are NOT allowed
-      // (i.e. we want only non-deleted templates).
       return prisma.template.findUniqueOrThrow({
         where: {
           id: subject.id,
-          ...(subject.allowDeleted ? {} : { ttl: null }),
+          ttl: subject.allowDeleted ? { not: null } : null,
         },
         select: {
           id: true,
