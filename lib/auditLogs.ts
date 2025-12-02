@@ -256,45 +256,37 @@ export enum AuditLogAccessDeniedDetails {
   AccessDenied_AttemptToCreateSetting = "Attempted to create setting",
 }
 
-type AuditAccessDeniedParams = {
-  [K in AuditLogAccessDeniedDetails]: K extends AuditLogAccessDeniedDetails.AccessDenied_IdentifiedProblemResponse
-    ? { formId: string }
-    : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToModifyPrivilege
-      ? { userId: string }
-      : K extends AuditLogAccessDeniedDetails.AccessDenied_CancelInvitation
-        ? { userId: string }
-        : K extends AuditLogAccessDeniedDetails.AccessDenied_NoInvitePermission
-          ? { userId: string }
-          : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserById
-            ? { id: string }
-            : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptedToUpdateUserActiveStatus
-              ? { targetUserId: string }
-              : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToAccessUnprocessedSubmissions
-                ? { userId: string }
-                : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToCheckResponseStatus
-                  ? { formID: string }
-                  : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToListResponses
-                    ? { formID: string }
-                    : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToRetrieveResponse
-                      ? { formID: string }
-                      : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteResponses
-                        ? { formID: string }
-                        : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses
-                          ? { formID: string }
-                          : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToAddNoteToUser
-                            ? { userId: string }
-                            : K extends AuditLogAccessDeniedDetails.PasswordAttemptsExceeded
-                              ? { sanitizedUsername: string }
-                              : K extends AuditLogAccessDeniedDetails.MFAAttemptsExceeded
-                                ? { sanitizedEmail: string }
-                                : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToEnableFlag
-                                  ? { flagKey: string }
-                                  : K extends AuditLogAccessDeniedDetails.AccessDenied_AttemptToDisableFlag
-                                    ? { flagKey: string }
-                                    : never;
+type AuditAccessDeniedParamsMap = {
+  [AuditLogAccessDeniedDetails.AccessDenied_IdentifiedProblemResponse]: { formId: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToModifyPrivilege]: { userId: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_CancelInvitation]: { userId: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_NoInvitePermission]: { userId: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserById]: { id: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptedToUpdateUserActiveStatus]: {
+    targetUserId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToAccessUnprocessedSubmissions]: {
+    userId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToCheckResponseStatus]: { formID: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToListResponses]: { formID: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToRetrieveResponse]: { formID: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteResponses]: { formID: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses]: { formID: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToAddNoteToUser]: { userId: string };
+  [AuditLogAccessDeniedDetails.PasswordAttemptsExceeded]: { sanitizedUsername: string };
+  [AuditLogAccessDeniedDetails.MFAAttemptsExceeded]: { sanitizedEmail: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToEnableFlag]: { flagKey: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDisableFlag]: { flagKey: string };
 };
 
-type AllAuditParams = AuditDetailsParams & AuditAccessDeniedParams;
+type AllAuditParams = {
+  [K in AuditLogDetails | AuditLogAccessDeniedDetails]: K extends keyof AuditDetailsParams
+    ? AuditDetailsParams[K]
+    : K extends keyof AuditAccessDeniedParamsMap
+      ? AuditAccessDeniedParamsMap[K]
+      : never;
+};
 
 let queueUrlRef: string | null = null;
 
