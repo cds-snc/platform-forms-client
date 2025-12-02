@@ -354,7 +354,7 @@ describe("Invitations", () => {
         "invited-user-id",
         { id: "template-id", type: "Form" },
         "InvitationAccepted",
-        "${userId} has accepted an invitation",
+        "AcceptedInvitation",
         { "userId" : "invited-user-id" }
       );
 

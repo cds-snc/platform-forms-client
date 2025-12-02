@@ -191,7 +191,7 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "DeleteAPIKey",
-        "User :${userId} deleted service account ${serviceAccountID} for template ${templateId}",
+        "DeletedAPIKey",
         {"serviceAccountID": serviceAccountID, "templateId": "templateId", "userId": "1"}
       );
     });
@@ -208,7 +208,7 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "DeleteAPIKey",
-        "User :${userId} deleted service account ${serviceAccountID} for template ${templateId}",
+        "DeletedAPIKey",
         {"templateId": "templateId", "userId": "1", "serviceAccountID": ""}
       );
     });
@@ -229,7 +229,7 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "DeleteAPIKey",
-        "User :${userId} deleted service account ${serviceAccountID} for template ${templateId}",
+        "DeletedAPIKey",
         {"serviceAccountID": serviceAccountID, "templateId": "templateId", "userId": "1"}
       );
     });

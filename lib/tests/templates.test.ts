@@ -356,7 +356,7 @@ describe("Template CRUD functions", () => {
         userID,
         { id: "test1", type: "Form" },
         "UpdateForm",
-        "Form content updated"
+        "UpdatedFormContent"
       );
     });
 
@@ -443,7 +443,7 @@ describe("Template CRUD functions", () => {
         userID,
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
-        "Access granted to ${userList}",
+        "GrantAccess",
         { "userList": "user2@test.ca" }
       );
 
@@ -511,7 +511,7 @@ describe("Template CRUD functions", () => {
         userID,
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
-        "Access granted to ${userList}",
+        "GrantAccess",
         { "userList": "user1@test.ca" }
       );
 
@@ -521,7 +521,7 @@ describe("Template CRUD functions", () => {
         userID,
         { id: "formTestID", type: "Form" },
         "RevokeFormAccess",
-        "Access revoked for ${userList}",
+        "RevokeAccess",
         { "userList": "user2@test.ca,user4@test.ca" }
       );
     });
