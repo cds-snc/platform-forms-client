@@ -7,6 +7,12 @@ import { formatDateTimeUTC } from "@lib/utils/form-builder";
 import { FormElementTypes } from "@lib/types";
 import { newLineToHtml } from "@lib/utils/newLineToHtml";
 
+/*
+ ⚡ NOTE: CSS is compiled 
+   see: lib/responseDownloadFormats/html/package.json command "compile"
+   If you update the CSS here, you need to re compile and commit compiled.ts
+*/
+
 const QuestionColumns = ({
   submission,
   lang,
@@ -19,7 +25,7 @@ const QuestionColumns = ({
   const renderRow = (index: number | string, lang: string, item: Answer) => {
     return (
       <div key={`row-${index}`} className="flex w-full flex-row border-b border-gray py-4">
-        <dt className="w-96 py-4 font-bold">
+        <dt data-testid={`col-question-${index}`} className="w-96 py-4 font-bold">
           {orderLanguageStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
           {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
             <>
@@ -35,7 +41,8 @@ const QuestionColumns = ({
           )}
         </dt>
         <dd
-          className={`py-4 pl-8`}
+          data-testid={`col-answer-${index}`}
+          className={`flex-1 py-4 pl-8`}
           dangerouslySetInnerHTML={{ __html: newLineToHtml(item.answer) }}
         />
       </div>
@@ -78,26 +85,34 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
   const { responseID, submissionDate, submission, lang = "en" } = props;
 
   return (
-    <dl id={`responseTableCol${capitalize(lang)}`} className="border-y-2 border-gray">
+    <dl
+      id={`responseTableCol${capitalize(lang)}`}
+      data-testid={`responseTableCol${capitalize(lang)}`}
+      className="border-y-2 border-gray"
+    >
       <div className="flex border-b border-gray py-4">
-        <dt className="w-96 py-4 font-bold">
+        <dt data-testid="col-question-response-id" className="w-96 flex-none py-4 font-bold">
           {orderLanguageStrings({
             stringEn: t("responseTemplate.responseNumber", { lng: "en" }),
             stringFr: t("responseTemplate.responseNumber", { lng: "fr" }),
             lang,
           })}
         </dt>
-        <dd className="py-4 pl-8">{responseID}</dd>
+        <dd data-testid="col-answer-response-id" className="min-w-0 flex-1 py-4 pl-8">
+          {responseID}
+        </dd>
       </div>
       <div className="flex border-b border-gray py-4">
-        <dt className="w-96 py-4 font-bold">
+        <dt data-testid="col-question-submission-date" className="w-96 flex-none py-4 font-bold">
           {orderLanguageStrings({
             stringEn: t("responseTemplate.submissionDate", { lng: "en" }),
             stringFr: t("responseTemplate.submissionDate", { lng: "fr" }),
             lang,
           })}
         </dt>
-        <dd className="py-4 pl-8">{formatDateTimeUTC(submissionDate)}</dd>
+        <dd data-testid="col-answer-submission-date" className="flex-1 py-4 pl-8">
+          {formatDateTimeUTC(submissionDate)}
+        </dd>
       </div>
       <QuestionColumns submission={submission} lang={lang} />
     </dl>
