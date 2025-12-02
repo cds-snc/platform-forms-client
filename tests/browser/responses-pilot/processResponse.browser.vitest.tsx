@@ -17,7 +17,7 @@ import type React from "react";
 const defaultT = ((k: string) => k) as import("i18next").TFunction;
 
 describe("processResponse -> browser injection", () => {
-  it("runs processResponse, injects HTML into page, and finds column items", async () => {
+  it("renders response HTML ", async () => {
     // Use fixtures from the repository (same fixtures used by the node unit test)
     const submission = submissionFixture as unknown as SubmissionFixture;
     const template = templateFixture as unknown as FormProperties;
