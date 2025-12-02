@@ -324,7 +324,7 @@ const _getSubject = async (subject: {
       return prisma.template.findUniqueOrThrow({
         where: {
           id: subject.id,
-          ttl: subject.allowDeleted ? { not: null } : null,
+          ...(subject.allowDeleted ? {} : { ttl: null }),
         },
         select: {
           id: true,
