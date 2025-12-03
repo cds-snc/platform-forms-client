@@ -117,6 +117,15 @@ describe("ProcessingDownloads - Browser Mode", () => {
       mockApiClient,
       overrides: { router: mockRouter },
     });
+
+    const cancelButton = page.getByText("Pause download");
+    await cancelButton.click();
+
+    // Wait for async operations
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Button should be disabled
+    await expect.element(cancelButton).toBeDisabled();
   });
 
   it("should display current submission id when processing", async () => {
