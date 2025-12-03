@@ -1,11 +1,9 @@
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
-import { dynamoDBDocumentClient, sqsClient } from "./integration/awsServicesConnector";
+import { dynamoDBDocumentClient, getQueueURL, sqsClient } from "./integration/awsServicesConnector";
 import { SendMessageCommand } from "@aws-sdk/client-sqs";
 import { logMessage } from "./logger";
 
-// TODO: Should these instead be pulled from environment variables?
 const DYNAMODB_NOTIFICATION_TABLE_NAME = "Notification";
-const SQS_NOTIFICATION_QUEUE_URL = "notification_queue"; // or even the method from auditLogs.ts getQueueURL()
 
 type NotificationParams = {
   notificationId?: string;
@@ -19,30 +17,18 @@ export const sendImmediatedNotification = async ({
   emails,
   subject,
   body,
-}: NotificationParams) => {
+}: NotificationParams): Promise<void> => {
   try {
-    const resultCreated = await createNotification({
-      notificationId,
-      emails,
-      subject,
-      body,
-    });
-    if (resultCreated.$metadata.httpStatusCode !== 200) {
-      throw new Error(`Failed to create notification with id ${notificationId}`);
-    }
-    // TEMP
-    // console.log("Notification created", resultCreated);
+    await createNotification({ notificationId, emails, subject, body });
+    logMessage.info(`Notification created with id ${notificationId}`);
 
-    const resultQueued = await queueNotification(notificationId!);
-    if (resultQueued.$metadata.httpStatusCode !== 200) {
-      throw new Error(`Failed to queue notification with id ${notificationId}`);
-    }
-    // TEMP
-    // console.log("Notification queued", resultQueued);
+    await queueNotification(notificationId!);
+    logMessage.info(`Notification queued with id ${notificationId}`);
   } catch (error) {
     logMessage.error(
       `Sending notification failed with id ${notificationId} and error: ${(error as Error).message}`
     );
+    //TODO could bubble error up or keep this as a "fire and forget" method -- throw error;
   }
 };
 
@@ -51,9 +37,9 @@ const createNotification = async ({
   emails,
   subject,
   body,
-}: NotificationParams) => {
+}: NotificationParams): Promise<void> => {
   const ttl = Math.floor(Date.now() / 1000) + 86400; // 24 hours from now
-  const updateItem = {
+  const command = new PutCommand({
     TableName: DYNAMODB_NOTIFICATION_TABLE_NAME,
     Item: {
       NotificationID: notificationId,
@@ -62,18 +48,28 @@ const createNotification = async ({
       Body: body,
       TTL: ttl,
     },
-  };
-  return dynamoDBDocumentClient.send(new PutCommand(updateItem));
+  });
+  const result = await dynamoDBDocumentClient.send(command);
+
+  if (result.$metadata.httpStatusCode !== 200) {
+    throw new Error(`Failed to create notification with id ${notificationId}`);
+  }
 };
 
 const queueNotification = async (notificationId: string) => {
-  const notificationMessage = JSON.stringify({
-    notificationId,
+  const queueUrl = await getQueueURL("NOTIFICATION_QUEUE_URL", "notification_queue");
+  if (!queueUrl) {
+    throw new Error("Notification Queue not connected");
+  }
+
+  const command = new SendMessageCommand({
+    MessageBody: JSON.stringify({ notificationId }),
+    QueueUrl: queueUrl,
   });
-  return sqsClient.send(
-    new SendMessageCommand({
-      MessageBody: notificationMessage,
-      QueueUrl: SQS_NOTIFICATION_QUEUE_URL,
-    })
-  );
+
+  const result = await sqsClient.send(command);
+
+  if (result.$metadata.httpStatusCode !== 200) {
+    throw new Error(`Failed to queue notification with id ${notificationId}`);
+  }
 };

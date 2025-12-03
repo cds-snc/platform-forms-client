@@ -2,7 +2,7 @@ import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { LambdaClient } from "@aws-sdk/client-lambda";
-import { SQSClient } from "@aws-sdk/client-sqs";
+import { GetQueueUrlCommand, SQSClient } from "@aws-sdk/client-sqs";
 import { S3Client } from "@aws-sdk/client-s3";
 
 const globalConfig = {
@@ -41,3 +41,16 @@ export const s3Client = new S3Client({
   ...globalConfig,
   ...(process.env.LOCAL_AWS_ENDPOINT && { forcePathStyle: true }),
 });
+
+export const getQueueURL = async (urlEnvName: string, urlQueueName: string) => {
+  if (process.env[urlEnvName]) {
+    return process.env[urlEnvName];
+  }
+
+  const data = await sqsClient.send(
+    new GetQueueUrlCommand({
+      QueueName: urlQueueName,
+    })
+  );
+  return data.QueueUrl ?? null;
+};
