@@ -491,8 +491,8 @@
     "title": "Obtenir une copie du formulaire"
   },
   "auditDownload": {
-    "description": "Obtenez une feuille de calcul avec l'historique de toutes les actions clés effectuées dans un formulaire, y compris la date de création, de mise à jour et d'archivage du formulaire. Les actions peuvent prendre plusieurs minutes pour apparaître dans le journal d'activité.",
-    "downloadBtnText": "Télécharger la feuille de calcul",
+    "description": "Obtenez une feuille de calcul avec l'historique de toutes les actions clés effectuées dans un formulaire, y compris la date de création, de mise à jour et d'archivage du formulaire. Les actions sont disponibles pour les derniers 30 jours et peuvent prendre quelques minutes pour apparaître dans le journal d'activité.",
+    "downloadBtnText": "Télécharger l'activité récente",
     "title": "Afficher l'activité du formulaire",
     "headers": {
       "formId": "Identifiant du formulaire",
@@ -504,13 +504,13 @@
     "events": {
       "CreateForm": "Formulaire créé",
       "ChangeDeliveryOption": "Option de livraison modifiée",
-      "ChangeSecurityAttribute": "Attribut de sécurité modifié",
-      "ChangeFormPurpose": "Titre du formulaire modifié",
+      "ChangeSecurityAttribute": "Classification des données modifiée",
+      "ChangeFormPurpose": "Usage prévu modifié",
       "ChangeFormSaveAndResume": "Option de sauvegarde et de reprise modifiée",
-      "ChangeFormName": "Titre du formulaire modifié",
+      "ChangeFormName": "Nom du formulaire modifié",
       "UpdateForm": "Formulaire mis à jour",
-      "UpdateNotificationsInterval": "Interval de notifications mis à jour",
-      "UpdateNotificationsUserSetting": "Paramètre utilisateur des notification mis à jour",
+      "UpdateNotificationsInterval": "Intervalle de notifications modifié",
+      "UpdateNotificationsUserSetting": "Paramètre utilisateur des notification modifié",
       "GrantFormAccess": "Accès au formulaire accordé",
       "RevokeFormAccess": "Accès au formulaire révoqué",
       "DownloadResponse": "Réponses téléchargées",
@@ -529,11 +529,11 @@
       "UpdatedFormContent": "Contenu du formulaire mis à jour",
       "DuplicatedForm": "Formulaire dupliqué pour créer le formulaire {newFormID}",
       "ArchivedForm": "Formulaire archivé",
-      "RestoredForm": "Formulaire restauré",
+      "RestoredForm": "Formulaire désarchivé",
       "DownloadedForm": "Une copie du formulaire a été téléchargée",
       "ChangeSecurityAttribute": "Classification changée à {securityAttribute}",
       "SetFormPurpose": "Usage prévu défini comme {formPurpose}",
-      "SetSaveAndResume": "Sauvegarde de la progression définie à {saveAndResume}",
+      "SetSaveAndResume": "La sauvegarde des réponses est {saveAndResume}",
       "UpdateClosingDate": "Date de fermeture mise à jour à {formStatus}",
       "UpdatedNotificationSettings": "Paramètre de notification mis à jour à {enabled} pour {userEmail}",
       "GeneratedAPIKey": "Clé API {APIkeyID} générée par {userEmail}",
@@ -549,7 +549,7 @@
       "DownloadedFormResponses": "Réponse {submissionId} téléchargée en format {format}",
       "ConfirmedResponsesForForm": "Réponse {submissionId} confirmée"
     },
-    "errorCreatingDownload": "Erreur lors de la création du téléchargement"
+    "errorCreatingDownload": "Une erreur s'est produite lors du téléchargement. Veuillez réessayer plus tard ou contacter l'équipe de soutien."
   },
   "switchToApiMode": {
     "title": "Passer à la livraison par API",

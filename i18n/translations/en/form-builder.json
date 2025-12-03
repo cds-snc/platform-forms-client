@@ -491,9 +491,9 @@
     "title": "Get a copy of your form"
   },
   "auditDownload": {
-    "description": "Obtain a spreadsheet with the history of all key actions taken in a form, including when a form was created, updated, and archived. Actions can take several minutes to appear in the activity log.",
-    "downloadBtnText": "Download activity log",
-    "title": "Download form activity",
+    "description": "Obtain a spreadsheet with the history of all key actions taken in a form, including when a form was created, updated, and archived. Actions are available for the last 30 days and may take several minutes to appear in the activity log.",
+    "downloadBtnText": "Download recent activity",
+    "title": "View form activity",
     "headers": {
       "formId": "Form ID",
       "userId": "Team member",
@@ -505,12 +505,12 @@
       "CreateForm": "Form created",
       "ChangeDeliveryOption": "Delivery option changed",
       "ChangeSecurityAttribute": "Data classification changed",
-      "ChangeFormPurpose": "Form purpose changed",
+      "ChangeFormPurpose": "Intended use changed",
       "ChangeFormSaveAndResume": "Save and resume option changed",
-      "ChangeFormName": "Form title changed",
+      "ChangeFormName": "Form name changed",
       "UpdateForm": "Form updated",
-      "UpdateNotificationsInterval": "Notifications interval updated",
-      "UpdateNotificationsUserSetting": "Notifications user setting updated",
+      "UpdateNotificationsInterval": "Notifications interval changed",
+      "UpdateNotificationsUserSetting": "Notifications user setting changed",
       "GrantFormAccess": "Granted form access",
       "RevokeFormAccess": "Revoked form access",
       "DownloadResponse": "Downloaded responses",
@@ -549,7 +549,7 @@
       "DownloadedFormResponses": "Downloaded submission {submissionId} as {format}",
       "ConfirmedResponsesForForm": "Confirmed response {submissionId}"
     },
-    "errorCreatingDownload": "Error creating download"
+    "errorCreatingDownload": "Something went wrong with the download. Please try again later or contact Support."
   },
   "switchToApiMode": {
     "title": "Switch to API delivery",
