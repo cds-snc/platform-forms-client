@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.2](https://github.com/cds-snc/platform-forms-client/compare/v4.6.1...v4.6.2) (2025-12-03)
+
+
+### Bug Fixes
+
+* duplicate form function ([#6485](https://github.com/cds-snc/platform-forms-client/issues/6485)) ([62a4dec](https://github.com/cds-snc/platform-forms-client/commit/62a4decc40f62ccf7ca07525665edfbc6b312fa7))
+
+
+### Miscellaneous Chores
+
+* add alerts for user feature flag ([#6491](https://github.com/cds-snc/platform-forms-client/issues/6491)) ([b13a17e](https://github.com/cds-snc/platform-forms-client/commit/b13a17eaf49394d4f9e6bf62920f5c17db34449c))
+* Content tweaks to the Support Form options ([#6486](https://github.com/cds-snc/platform-forms-client/issues/6486)) ([367d3dd](https://github.com/cds-snc/platform-forms-client/commit/367d3dd5535ac8d4d11a4cb4399c04458dd06a20))
+* fix alignment for response download ([#6483](https://github.com/cds-snc/platform-forms-client/issues/6483)) ([6121bca](https://github.com/cds-snc/platform-forms-client/commit/6121bcaf2c6ffe5875228732c7cd800dba670692))
+* Responses pilot - Bilingualize folder and filenames ([#6479](https://github.com/cds-snc/platform-forms-client/issues/6479)) ([325f11e](https://github.com/cds-snc/platform-forms-client/commit/325f11e50f640f168653a323f584d8f0d49dcd28))
+* update archive icon + nav tweaks ([#6488](https://github.com/cds-snc/platform-forms-client/issues/6488)) ([376ed2c](https://github.com/cds-snc/platform-forms-client/commit/376ed2cca10eeac59e266d84210e4864754fcfdc))
+
 ## [4.6.1](https://github.com/cds-snc/platform-forms-client/compare/v4.6.0...v4.6.1) (2025-12-01)
 
 
