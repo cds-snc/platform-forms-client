@@ -118,13 +118,14 @@ describe("ProcessingDownloads - Browser Mode", () => {
       overrides: { router: mockRouter },
     });
 
-    const cancelButton = page.getByText("Pause download");
+    const cancelButton = page.getByTestId("cancel-download");
+    
+    // Verify button is initially enabled
+    await expect.element(cancelButton).not.toBeDisabled();
+    
     await cancelButton.click();
 
-    // Wait for async operations
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    // Button should be disabled
+    // Button should be disabled immediately after click
     await expect.element(cancelButton).toBeDisabled();
   });
 
