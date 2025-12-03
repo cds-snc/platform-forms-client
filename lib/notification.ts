@@ -6,7 +6,7 @@ import { logMessage } from "./logger";
 const DYNAMODB_NOTIFICATION_TABLE_NAME = "Notification";
 
 type NotificationParams = {
-  notificationId?: string;
+  notificationId: string;
   emails: string[];
   subject: string;
   body: string;
@@ -32,6 +32,27 @@ export const sendImmediatedNotification = async ({
   }
 };
 
+export const notification = sendImmediatedNotification; // alias common case for convenience
+
+export const sendDeferredNotification = async ({
+  notificationId,
+  emails,
+  subject,
+  body,
+}: NotificationParams): Promise<void> => {
+  try {
+    await createNotification({ notificationId, emails, subject, body });
+    logMessage.info(`Deferred notification created with id ${notificationId}`);
+  } catch (error) {
+    logMessage.error(
+      `Creating deferred notification failed with id ${notificationId} and error: ${
+        (error as Error).message
+      }`
+    );
+    //TODO could bubble error up or keep this as a "fire and forget" method -- throw error;
+  }
+};
+
 const createNotification = async ({
   notificationId,
   emails,
@@ -49,6 +70,7 @@ const createNotification = async ({
       TTL: ttl,
     },
   });
+
   const result = await dynamoDBDocumentClient.send(command);
 
   if (result.$metadata.httpStatusCode !== 200) {
