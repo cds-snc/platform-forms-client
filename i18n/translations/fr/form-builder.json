@@ -551,11 +551,6 @@
     },
     "errorCreatingDownload": "Une erreur s'est produite lors du téléchargement. Veuillez réessayer plus tard ou contacter l'équipe de soutien."
   },
-  "switchToApiMode": {
-    "title": "Passer à la livraison par API",
-    "description": "Les nouvelles soumissions seront disponibles via le point de terminaison de l'API.",
-    "btnText": "Passer à la livraison par API"
-  },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
   "formMissingProperty": "Il manque : {{property}}",
