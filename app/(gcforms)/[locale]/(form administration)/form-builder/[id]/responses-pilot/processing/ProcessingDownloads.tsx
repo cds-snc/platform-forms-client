@@ -14,14 +14,8 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   const [isNavigating, setIsNavigating] = useState(false);
   const isMountedRef = useRef(false);
 
-  const {
-    processingCompleted,
-    setInterrupt,
-    interrupt,
-    resetNewSubmissions,
-    logger,
-    currentSubmissionId,
-  } = useResponsesContext();
+  const { processingCompleted, setInterrupt, resetNewSubmissions, logger, currentSubmissionId } =
+    useResponsesContext();
 
   useEffect(() => {
     if (processingCompleted) {
@@ -84,13 +78,14 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
             )}
           </div>
           <p className="mb-8">{t("processingPage.note")}</p>
-          {!interrupt && (
-            <Button theme="secondary" onClick={handleInterrupt} disabled={isNavigating}>
-              {isNavigating
-                ? t("processingPage.cancellingButton")
-                : t("processingPage.cancelButton")}
-            </Button>
-          )}
+          <Button
+            theme="secondary"
+            onClick={handleInterrupt}
+            disabled={isNavigating}
+            data-testid="cancel-download"
+          >
+            {isNavigating ? t("processingPage.cancellingButton") : t("processingPage.cancelButton")}
+          </Button>
         </div>
         <MapleLeafLoader />
       </div>

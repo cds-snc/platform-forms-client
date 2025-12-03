@@ -60,7 +60,7 @@ describe("ProcessingDownloads - Browser Mode", () => {
     await render(<ProcessingDownloads locale="en" id="test-form" />, { mockApiClient });
 
     // Loader should be present (MapleLeafLoader component)
-    const loaderContainer = document.querySelector('svg');
+    const loaderContainer = document.querySelector("svg");
     expect(loaderContainer).not.toBeNull();
   });
 
@@ -98,7 +98,25 @@ describe("ProcessingDownloads - Browser Mode", () => {
     await new Promise((resolve) => setTimeout(resolve, 600));
 
     // Router should be called to navigate to result page
-    expect(mockRouter.push).toHaveBeenCalledWith("/en/form-builder/test-form/responses-pilot/result");
+    expect(mockRouter.push).toHaveBeenCalledWith(
+      "/en/form-builder/test-form/responses-pilot/result"
+    );
+  });
+
+  it("should disable cancel button when navigating", async () => {
+    const mockApiClient = {
+      getNewFormSubmissions: async () => [],
+      formId: "test-form",
+    } as unknown as GCFormsApiClient;
+
+    const mockRouter = {
+      push: vi.fn(),
+    };
+
+    await render(<ProcessingDownloads locale="en" id="test-form" />, {
+      mockApiClient,
+      overrides: { router: mockRouter },
+    });
   });
 
   it("should display current submission id when processing", async () => {
