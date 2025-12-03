@@ -997,8 +997,8 @@
     "request": {
       "title": "Reason for reaching out",
       "option1": "Ask a question",
-      "option2": "Get help using GC Forms",
-      "apiOption": "Request technical support with the API",
+      "option2": "Get help setting up or using GC Forms",
+      "apiOption": "Request technical support with an API integration",
       "option3": "Report a problem with a published form",
       "option4": "Other"
     },
