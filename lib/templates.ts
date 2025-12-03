@@ -1253,12 +1253,15 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
 /**
  * Clone a template including associated users and delivery option
  */
-export async function cloneTemplate(formID: string): Promise<FormRecord | null> {
+export async function cloneTemplate(
+  formID: string,
+  allowDeleted: boolean
+): Promise<FormRecord | null> {
   // Ensure the user can create a new form (needed to persist a clone)
   // and that they can edit the source form.
   const [createResult, editResult] = (await Promise.allSettled([
     authorization.canCreateForm(),
-    authorization.canEditForm(formID, true),
+    authorization.canEditForm(formID, allowDeleted),
   ])) as Array<PromiseSettledResult<{ user: { id: string } }>>;
 
   if (createResult.status === "rejected") {
@@ -1288,7 +1291,7 @@ export async function cloneTemplate(formID: string): Promise<FormRecord | null> 
 
   const template = await prisma.template
     .findUnique({
-      where: { id: formID, ttl: { not: null } },
+      where: { id: formID, ttl: allowDeleted ? { not: null } : null },
       include: {
         deliveryOption: true,
         users: { select: { id: true } },

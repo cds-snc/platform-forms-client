@@ -159,9 +159,10 @@ export interface CardI {
   date: string;
   url: string;
   overdue: boolean;
+  status?: string;
 }
 
-export const Card = async ({ card }: { card: CardI }) => {
+export const Card = async ({ card, status }: { card: CardI; status?: string }) => {
   return (
     <div
       className="flex h-full flex-col justify-between rounded border-1 border-slate-500 bg-white"
@@ -196,6 +197,7 @@ export const Card = async ({ card }: { card: CardI }) => {
             isPublished={card.isPublished}
             ttl={card.ttl ? card.ttl : undefined}
             direction={"up"}
+            status={status}
           />
         </div>
       </div>
