@@ -29,7 +29,7 @@ export const Unarchive = ({
             clearTemplateStorage(id);
           } else {
             try {
-              const res = await cloneForm(id);
+              const res = await cloneForm(id, true);
               if (res && res.formRecord && !res.error) {
                 toast.success(t("card.menu.cloneSuccess"));
                 window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;
