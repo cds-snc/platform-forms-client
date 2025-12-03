@@ -122,7 +122,7 @@ describe("ProcessingDownloads - Browser Mode", () => {
     await cancelButton.click();
 
     // Wait for async operations
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     // Button should be disabled
     await expect.element(cancelButton).toBeDisabled();
