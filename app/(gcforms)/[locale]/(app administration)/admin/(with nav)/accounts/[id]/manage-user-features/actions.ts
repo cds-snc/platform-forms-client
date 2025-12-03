@@ -2,7 +2,7 @@
 import { addUserFeatureFlags, removeUserFeatureFlag } from "@lib/userFeatureFlags";
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
-import { logEvent } from "@root/lib/auditLogs";
+import { logEvent } from "@lib/auditLogs";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
