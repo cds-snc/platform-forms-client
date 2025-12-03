@@ -79,11 +79,6 @@
     },
     "viewAllProblemResponses": "View reported responses"
   },
-  "responsesPilot": {
-    "pageTitle": "Responses (Pilot)",
-    "responsesPilotLink": "Try out the new Responses (Pilot)",
-    "responsesSwitchLink": "Switch back to the classic Responses view"
-  },
   "supportWillContact": "Support will contact you",
   "reportedAsProblem": "Response reported as a problem",
   "downloadSuccess": {
@@ -317,5 +312,8 @@
       "title": "Overdue responses",
       "description": "Retrieve and confirm submissions via the API"
     }
+  },
+  "responsesPilot": {
+    "responsesPilotLink": "Try out the new Responses (Pilot)"
   }
 }

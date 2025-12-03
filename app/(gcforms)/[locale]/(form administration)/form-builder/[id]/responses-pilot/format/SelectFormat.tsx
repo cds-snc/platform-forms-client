@@ -1,20 +1,19 @@
 "use client";
 
 import { Button } from "@clientComponents/globals";
+import { useResponsesApp } from "../context";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { Radio } from "../../../components/shared/MultipleChoice";
-import { useRouter } from "next/navigation";
-import { useTranslation } from "@root/i18n/client";
+
 import { useCallback } from "react";
 import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
+import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
+import { getStepOf } from "../lib/getStepOf";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
-  const { t } = useTranslation("response-api");
-
+  const { t, router } = useResponsesApp();
   const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses, logger } =
     useResponsesContext();
-
-  const router = useRouter();
 
   const handleNext = useCallback(async () => {
     logger.info("Starting retrieval of form submissions");
@@ -38,8 +37,12 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
 
   return (
     <div>
-      <div className="mb-4">{t("stepOf", { current: 3, total: 3 })}</div>
-      <h1>{t("formatPage.title")}</h1>
+      <div className="mb-4" data-testid="step-indicator">
+        {t("stepOf", getStepOf("format"))}
+      </div>
+      <FocusHeader headingTag="h2" dataTestId="format-page-title">
+        {t("formatPage.title")}
+      </FocusHeader>
       <div>
         <p>
           <strong>{t("formatPage.subheading")}</strong>
@@ -49,6 +52,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
           <Radio
             name="format"
             id="format-csv"
+            data-testid="format-csv"
             value="csv"
             label={t("formatPage.formatOptions.csv.label")}
             hint={t("formatPage.formatOptions.csv.hint")}
@@ -57,6 +61,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
           <Radio
             name="format"
             id="format-html"
+            data-testid="format-html"
             value="html"
             label={t("formatPage.formatOptions.html.label")}
             onChange={handleFormatChange}
@@ -65,11 +70,17 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
       </div>
       <div className="flex flex-row gap-4">
         <LinkButton.Secondary
+          ddata-testid="back-button"
           href={`/${locale}/form-builder/${id}/responses-pilot/location?reset=true`}
         >
           {t("backButton")}
         </LinkButton.Secondary>
-        <Button theme="primary" disabled={!selectedFormat} onClick={handleNext}>
+        <Button
+          dataTestId="continue-button"
+          theme="primary"
+          disabled={!selectedFormat}
+          onClick={handleNext}
+        >
           {t("continueButton")}
         </Button>
       </div>

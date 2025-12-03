@@ -1,6 +1,9 @@
 {
   "section-title": "Responses (Pilot)",
   "stepOf": "Step {{current}} of {{total}}",
+  "responsesPilot": {
+    "responsesSwitchLink": "Switch back to the classic Responses view"
+  },
   "not-supported": {
     "title": "Web browser not supported",
     "body": "This browser cannot use the File System Access API. Try a different browser or give your browser permission to save files to your device."
@@ -20,7 +23,7 @@
     "steps": {
       "heading": "Then, follow these steps:",
       "uploadKey": {
-        "title": "Upload your API key file.",
+        "title": "Select your API key file.",
         "detail": "This is how you will securely authenticate to get all new responses."
       },
       "chooseLocation": {
@@ -34,18 +37,18 @@
     }
   },
   "loadKeyPage": {
-    "title": "Upload your API key file",
-    "detail": "Upload the API key you generated in Settings to get access to all your form's available responses in one download. Make sure to unzip the folder that contains the JSON file.",
-    "chooseFileButton": "Upload API Key",
+    "title": "Use your API key to authenticate yourself",
+    "detail": "Select the API key file that you generated in Settings to get access to all your form's available responses in one download.",
+    "chooseFileButton": "Select API Key",
     "noNewResponsesAvailable": "No new responses",
     "noNewResponsesDetail": "There are currently no new responses for this form.",
     "newResponsesAvailable": "New responses available",
     "checkForNewResponses": "Check for new responses",
     "downloadResponses": "Choose location",
-    "uploadSuccessTitle": "API key was successfully uploaded",
+    "uploadSuccessTitle": "You were successfully authenticated.",
     "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
-    "uploadFailedTitle": "API key upload failed",
-    "uploadFailedMessage": "Make sure you select the correct file. If it's not working, try regenerating a new API key and uploading it again.",
+    "uploadFailedTitle": "Authentication failed with API key",
+    "uploadFailedMessage": "Make sure you select the correct file. If it's not working, try regenerating a new API key for your form and adding it again.",
     "lostKey": {
       "link": "Don't have API key?",
       "lostKeyTip": {
@@ -59,7 +62,7 @@
   "locationPage": {
     "title": "Select a save location ",
     "subheading": "Decide where new responses will be downloaded.",
-    "detail": "To add response data to an existing CSV, select the folder where it is currently saved. Make sure the CSV file name still includes the form ID, as it did when originally downloaded.",
+    "detail": "To add response data to an existing CSV file, select the folder where it is currently saved. Make sure the file name does not change, and appears as it did when originally downloaded.",
     "chooseLocationButton": "Choose location",
     "locationSelected": {
       "title": "Save location selected",
@@ -89,14 +92,21 @@
     }
   },
   "confirmationPage": {
+    "section-title": "Results",
     "successTitle": "Success!",
+    "errorTitle": "Download interrupted",
+    "partialSuccessTitle": "Partial download completed",
+    "errorOccurred": "An error occurred during the download process",
     "downloadedResponsesOne": "{{formattedCount}} response was downloaded",
     "downloadedResponsesOther": "{{formattedCount}} responses were downloaded",
     "savedTo": "All form submission data can be found in: ",
     "chooseNewLocationButton": "Choose new location",
-    "downloadResponsesButton": "Download responses"
+    "downloadResponsesButton": "Download responses",
+    "maliciousAttachmentsWarningTitle": "Your responses contain files attached to submissions",
+    "maliciousAttachmentsWarningBody": "These are located in a nested folder and will be marked in the CSV or HTML file with the symbol: “⚠️” if we suspect that they could potentially be malicious."
   },
   "processingPage": {
+    "section-title": "Processing responses",
     "processingTitle": "Download in progress",
     "pleaseWait": "Please wait...",
     "processingSubmission": "Processing submission {{submissionId}}",
@@ -124,6 +134,22 @@
     "errorRetreivingSubmissions": {
       "title": "Error retrieving submissions",
       "message": "There was an error retrieving form submissions. Please try again later."
+    },
+    "fileLockedError": {
+      "title": "Unable to modify the file",
+      "message": "Cannot write to the CSV file. The file may be open, or locked by another application. Please close the file and try again."
+    },
+    "invalidStateError": {
+      "title": "File in invalid state",
+      "message": "The CSV file is in an invalid state and cannot be modified. The file may be open, locked, or corrupted."
+    },
+    "quotaExceededError": {
+      "title": "Storage space exceeded",
+      "message": "Not enough storage space is available to write to the file. Please free up space and try again."
+    },
+    "permissionError": {
+      "title": "Unable to modify folder contents",
+      "message": "Please grant your browser “edit” (or write) access to the selected folder. You can find this in the browser's menu. Your department may have blocked this functionality."
     }
   }
 }

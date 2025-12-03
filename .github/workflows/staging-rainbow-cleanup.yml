@@ -12,7 +12,7 @@ on:
         type: string
         required: true
   schedule:
-    - cron: "0 4 * * *" # Nightly at 4am
+    - cron: "0 5,17 * * *" # Every day at noon and midnight (EST)
 
 env:
   AWS_ACCOUNT_ID: ${{ vars.STAGING_AWS_ACCOUNT_ID }}
@@ -74,14 +74,23 @@ jobs:
               | jq -r '.[] | select(.Priority | tonumber > ${{ env.MAXIMUM_NUMBER_OF_RAINBOW_DEPLOYMENTS_TO_KEEP_ALIVE }}) | .RuleArn'
           ))
 
-          if [ ${#arn_list[*]} -gt 0 ]; then
-            deployment_ids=$(
-              aws elbv2 describe-tags \
-                --resource-arns "${arn_list[@]}" \
-                | jq -r '[.TagDescriptions[].Tags[] | select(.Key == "Name") | .Value | sub("^rainbow-"; "")]'
-            )
+          if [ ${#arn_list[@]} -gt 0 ]; then
+            deployment_ids=()
 
-            echo "ids=$(echo $deployment_ids | sed 's/ //g')" >> "$GITHUB_OUTPUT"
+            # Process ARNs in batches of 20
+            for ((i=0; i<${#arn_list[@]}; i+=20)); do
+              batch=("${arn_list[@]:i:20}")
+
+              batch_ids=$(aws elbv2 describe-tags \
+                --resource-arns "${batch[@]}" \
+                | jq -r '[.TagDescriptions[].Tags[] | select(.Key == "Name") | .Value | sub("^rainbow-"; "")][]')
+
+              deployment_ids+=($batch_ids)
+            done
+
+            json_array=$(printf "%s\n" "${deployment_ids[@]}" | sort -u | jq -R . | jq -s .)
+
+            echo "ids=$(echo $json_array | sed 's/ //g')" >> "$GITHUB_OUTPUT"
           fi
 
   cleanup-schedule-2:

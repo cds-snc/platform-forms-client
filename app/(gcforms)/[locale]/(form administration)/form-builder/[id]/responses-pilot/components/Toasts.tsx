@@ -78,3 +78,43 @@ export const ErrorRetreivingSubmissions = ({ code }: { code?: string }) => {
     </div>
   );
 };
+
+export const FileWriteError = () => {
+  const { t } = useTranslation("response-api");
+  return (
+    <div className="w-full">
+      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("toasts.invalidStateError.title")}</h3>
+      <p className="mb-2 text-black">{t("toasts.invalidStateError.message")}</p>
+    </div>
+  );
+};
+
+export const InvalidStateError = () => {
+  const { t } = useTranslation("response-api");
+  return (
+    <div className="w-full">
+      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("toasts.invalidStateError.title")}</h3>
+      <p className="mb-2 text-black">{t("toasts.invalidStateError.message")}</p>
+    </div>
+  );
+};
+
+export const QuotaExceededError = () => {
+  const { t } = useTranslation("response-api");
+  return (
+    <div className="w-full">
+      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("toasts.quotaExceededError.title")}</h3>
+      <p className="mb-2 text-black">{t("toasts.quotaExceededError.message")}</p>
+    </div>
+  );
+};
+
+export const NotAllowedError = () => {
+  const { t } = useTranslation("response-api");
+  return (
+    <div className="w-full">
+      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("toasts.permissionError.title")}</h3>
+      <p className="mb-2 text-black">{t("toasts.permissionError.message")}</p>
+    </div>
+  );
+};

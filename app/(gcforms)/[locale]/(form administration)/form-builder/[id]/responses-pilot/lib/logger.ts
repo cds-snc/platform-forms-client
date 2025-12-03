@@ -1,4 +1,5 @@
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
+import { DOWNLOAD_LOG_FILENAME_PREFIX } from "./constants";
 
 type LogLevel = "info" | "warn" | "error" | "debug";
 
@@ -15,21 +16,30 @@ export class ResponseDownloadLogger {
   private writeQueue: Promise<void> = Promise.resolve();
 
   constructor() {
-    this.sessionId = `download-${Date.now()}`;
+    this.sessionId = `${Date.now()}`;
   }
 
   setDirectoryHandle(handle: FileSystemDirectoryHandle) {
+    if (process.env.VITEST_BROWSER === "true") {
+      return;
+    }
     this.directoryHandle = handle;
     this.log("info", "Logging session started", { sessionId: this.sessionId });
   }
 
   private async writeToFile(entry: LogEntry): Promise<void> {
+    // Skip writing to disk when running browser-mode Vitest to avoid
+    // calling file system APIs in test environments.
+    if (process.env.VITEST_BROWSER === "true") {
+      return;
+    }
+
     if (!this.directoryHandle) {
       return;
     }
 
     try {
-      const fileName = `download-log-${this.sessionId}.txt`;
+      const fileName = `${DOWNLOAD_LOG_FILENAME_PREFIX}${this.sessionId}.txt`;
       const fileHandle = await this.directoryHandle.getFileHandle(fileName, { create: true });
 
       // Get existing file content
@@ -62,10 +72,7 @@ export class ResponseDownloadLogger {
 
     // Also log to console for debugging
     // eslint-disable-next-line no-console
-    console[level === "error" ? "error" : level === "warn" ? "warn" : "log"](
-      `[${level.toUpperCase()}] ${message}`,
-      data || ""
-    );
+    console["log"](`[${level.toUpperCase()}] ${message}`, data || "");
 
     // Queue write to avoid race conditions
     this.writeQueue = this.writeQueue.then(() => this.writeToFile(entry));
@@ -87,8 +94,16 @@ export class ResponseDownloadLogger {
               message: error.message,
               stack: error.stack,
               name: error.name,
+              cause: error.cause,
             }
-          : error,
+          : error instanceof DOMException
+            ? {
+                message: error.message,
+                name: error.name,
+                code: error.code,
+                cause: error.cause,
+              }
+            : error,
     });
   }
 

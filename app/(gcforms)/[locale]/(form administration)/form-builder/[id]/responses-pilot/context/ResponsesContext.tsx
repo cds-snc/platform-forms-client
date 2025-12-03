@@ -17,10 +17,16 @@ import { GCFormsApiClient } from "../lib/apiClient";
 import { initCsv } from "../lib/csvWriter";
 import { toast } from "../../../components/shared/Toast";
 import { useTranslation } from "@root/i18n/client";
-import { ErrorRetreivingSubmissions, TemplateFailed } from "../components/Toasts";
+import {
+  ErrorRetreivingSubmissions,
+  TemplateFailed,
+  FileWriteError,
+  InvalidStateError as InvalidStateErrorToast,
+  QuotaExceededError as QuotaExceededErrorToast,
+  NotAllowedError as NotAllowedErrorToast,
+} from "../components/Toasts";
 import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
-import { useApiDebug } from "../lib/useApiDebug";
 import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
 
@@ -44,11 +50,16 @@ interface ResponsesContextType {
   ) => Promise<void>;
   processingCompleted: boolean;
   resetProcessingCompleted: () => void;
+  hasError: boolean;
+  setHasError: Dispatch<SetStateAction<boolean>>;
   selectedFormat: string;
   setSelectedFormat: Dispatch<SetStateAction<string>>;
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
   currentSubmissionId: string | null;
+  hasMaliciousAttachments: boolean;
+  setHasMaliciousAttachments: Dispatch<SetStateAction<boolean>>;
+  setCurrentSubmissionId: Dispatch<SetStateAction<string | null>>;
   resetState: () => void;
   resetNewSubmissions: () => void;
   logger: ResponseDownloadLogger;
@@ -84,8 +95,10 @@ export const ResponsesProvider = ({
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
   const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
-  const [selectedFormat, setSelectedFormat] = useState<string>("csv");
+  const [hasError, setHasError] = useState(false);
+  const [selectedFormat, setSelectedFormat] = useState<string>("");
   const [currentSubmissionId, setCurrentSubmissionId] = useState<string | null>(null);
+  const [hasMaliciousAttachments, setHasMaliciousAttachments] = useState<boolean>(false);
   const loggerRef = useRef(new ResponseDownloadLogger());
   const logger = loggerRef.current;
 
@@ -119,9 +132,6 @@ export const ResponsesProvider = ({
     };
   }, []);
 
-  // Enable dev console helpers for simulating API errors
-  useApiDebug();
-
   const retrieveResponses = useCallback(async () => {
     if (!apiClient) {
       return [];
@@ -137,7 +147,7 @@ export const ResponsesProvider = ({
 
       return submissions;
     } catch (error) {
-      logger.info("Error loading submissions:", error);
+      logger.error("Error loading submissions:", error);
       setNewFormSubmissions([]);
       toast.error(<ErrorRetreivingSubmissions />, "wide");
       return [];
@@ -158,6 +168,7 @@ export const ResponsesProvider = ({
 
       // Reset interrupt state
       setInterrupt(false);
+      setHasError(false);
 
       let formId;
       let formTemplate;
@@ -212,7 +223,7 @@ export const ResponsesProvider = ({
         logger.info(`Processing next ${formResponses.length} submissions`);
         for (const response of formResponses) {
           if (interruptRef.current) {
-            logger.info("Processing interrupted by user");
+            logger.warn("Processing interrupted by user");
             break;
           }
 
@@ -222,6 +233,7 @@ export const ResponsesProvider = ({
             // eslint-disable-next-line no-await-in-loop
             await processResponse({
               setProcessedSubmissionIds,
+              setHasMaliciousAttachments,
               workingDirectoryHandle: directoryHandle,
               htmlDirectoryHandle,
               csvFileHandle,
@@ -236,8 +248,29 @@ export const ResponsesProvider = ({
             });
           } catch (error) {
             setInterrupt(true);
-            logger.info(`Error processing submission ID ${response.name}:`, error);
-            toast.error(<ErrorRetreivingSubmissions />, "wide");
+            setHasError(true);
+
+            // Check if this is a file write error from CSV writer by examining the cause
+            const errorCause = error instanceof Error ? error.cause : null;
+
+            logger.error(`Error processing submission ID ${response.name}:`, error);
+
+            if (errorCause instanceof DOMException) {
+              if (errorCause.name === "NoModificationAllowedError") {
+                toast.error(<FileWriteError />, "error-persistent");
+              } else if (errorCause.name === "InvalidStateError") {
+                toast.error(<InvalidStateErrorToast />, "error-persistent");
+              } else if (errorCause.name === "QuotaExceededError") {
+                toast.error(<QuotaExceededErrorToast />, "error-persistent");
+              } else if (errorCause.name === "NotAllowedError") {
+                // User has revoked permission - show generic error
+                toast.error(<NotAllowedErrorToast />, "error-persistent");
+              } else {
+                toast.error(<ErrorRetreivingSubmissions />, "error-persistent");
+              }
+            } else {
+              toast.error(<ErrorRetreivingSubmissions />, "error-persistent");
+            }
           }
         }
 
@@ -277,7 +310,9 @@ export const ResponsesProvider = ({
     setNewFormSubmissions(null);
     setProcessedSubmissionIds(new Set());
     resetProcessingCompleted();
+    setHasMaliciousAttachments(false);
     setSelectedFormat("csv");
+    setHasError(false);
     setInterrupt(false);
     interruptRef.current = false;
   }, [setInterrupt]);
@@ -301,11 +336,16 @@ export const ResponsesProvider = ({
         processResponses,
         processingCompleted,
         resetProcessingCompleted,
+        hasError,
+        setHasError,
         selectedFormat,
         setSelectedFormat,
         interrupt: isProcessingInterrupted,
         setInterrupt,
         currentSubmissionId,
+        hasMaliciousAttachments,
+        setHasMaliciousAttachments,
+        setCurrentSubmissionId,
         resetState,
         resetNewSubmissions,
         logger: loggerRef.current,

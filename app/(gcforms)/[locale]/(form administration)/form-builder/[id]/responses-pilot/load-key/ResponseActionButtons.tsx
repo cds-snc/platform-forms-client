@@ -1,13 +1,10 @@
 import { Button } from "@clientComponents/globals";
-import { useRouter } from "next/navigation";
-
-import { useTranslation } from "@i18n/client";
+import { useResponsesApp } from "../context";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { CheckForResponsesButton } from "../components/CheckForResponsesButton";
 
 export const ResponseActionButtons = () => {
-  const { t } = useTranslation(["response-api", "common"]);
-  const router = useRouter();
+  const { t, router } = useResponsesApp();
   const { apiClient, newFormSubmissions, resetState, locale, formId } = useResponsesContext();
 
   const handleBack = () => {
@@ -22,7 +19,7 @@ export const ResponseActionButtons = () => {
 
   return (
     <div className="mt-8 flex flex-row gap-4">
-      <Button theme="secondary" onClick={handleBack}>
+      <Button theme="secondary" onClick={handleBack} data-testid="back-to-start-button">
         {t("backToStart")}
       </Button>
 
@@ -33,6 +30,7 @@ export const ResponseActionButtons = () => {
           theme="primary"
           disabled={Boolean(!apiClient || (newFormSubmissions && newFormSubmissions.length === 0))}
           onClick={handleNext}
+          data-testid="continue-button"
         >
           {t("continueButton")}
         </Button>

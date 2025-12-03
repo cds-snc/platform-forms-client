@@ -1,7 +1,12 @@
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import { CompleteAttachment, FormSubmission } from "./types";
 import { decryptFormSubmission } from "./utils";
-import { ATTACHMENTS_FOLDER, RAW_RESPONSE_FOLDER } from "./constants";
+import {
+  ATTACHMENTS_FOLDER,
+  MALICIOUS_ATTACHMENTS_FOLDER,
+  MAPPING_FILENAME,
+  RAW_RESPONSE_FOLDER,
+} from "./constants";
 import { FormProperties } from "@root/lib/types";
 import { GCFormsApiClient } from "./apiClient";
 import { writeHtml } from "./htmlWriter";
@@ -13,6 +18,7 @@ import { ResponseDownloadLogger } from "./logger";
 
 export const processResponse = async ({
   setProcessedSubmissionIds,
+  setHasMaliciousAttachments,
   workingDirectoryHandle,
   htmlDirectoryHandle,
   csvFileHandle,
@@ -26,6 +32,7 @@ export const processResponse = async ({
   logger,
 }: {
   setProcessedSubmissionIds: React.Dispatch<React.SetStateAction<Set<string>>>;
+  setHasMaliciousAttachments: React.Dispatch<React.SetStateAction<boolean>>;
   workingDirectoryHandle: FileSystemDirectoryHandle;
   htmlDirectoryHandle: FileSystemDirectoryHandle | null;
   csvFileHandle: FileSystemFileHandle | null;
@@ -46,6 +53,33 @@ export const processResponse = async ({
     logger,
   });
 
+  if (confirmedResponse.attachments && confirmedResponse.attachments.size > 0) {
+    if (
+      Array.from(confirmedResponse.attachments.values()).some((att) => att.isPotentiallyMalicious)
+    ) {
+      setHasMaliciousAttachments(true);
+    }
+
+    const attachmentsDirectory = await workingDirectoryHandle.getDirectoryHandle(
+      ATTACHMENTS_FOLDER,
+      { create: true }
+    );
+    const responseAttachmentsDirectory = await attachmentsDirectory.getDirectoryHandle(
+      responseName,
+      { create: true }
+    );
+
+    // Write a mapping file for attachments
+    const mappingFileHandle = await responseAttachmentsDirectory.getFileHandle(MAPPING_FILENAME, {
+      create: true,
+    });
+    const mappingFileStream = await mappingFileHandle.createWritable({ keepExistingData: false });
+    await mappingFileStream.write(
+      JSON.stringify(Object.fromEntries(confirmedResponse.attachments), null, 2)
+    );
+    await mappingFileStream.close();
+  }
+
   switch (selectedFormat) {
     case "html":
       if (!htmlDirectoryHandle) {
@@ -56,6 +90,7 @@ export const processResponse = async ({
         htmlDirectoryHandle,
         formTemplate,
         submission: confirmedResponse,
+        attachments: confirmedResponse.attachments,
         formId,
         t,
       });
@@ -71,6 +106,7 @@ export const processResponse = async ({
         formTemplate,
         csvFileHandle,
         rawAnswers: confirmedResponse.rawAnswers,
+        attachments: confirmedResponse.attachments,
       });
       break;
   }
@@ -81,6 +117,18 @@ export const processResponse = async ({
     next.add(responseName);
     return next;
   });
+};
+
+export type ResponseFilenameMapping = Map<
+  string,
+  { originalName: string; actualName: string; isPotentiallyMalicious: boolean }
+>;
+
+export type AttachmentDownloadResult = {
+  id: string;
+  originalName: string;
+  actualName: string;
+  isPotentiallyMalicious: boolean;
 };
 
 const downloadAndConfirmResponse = async ({
@@ -105,7 +153,7 @@ const downloadAndConfirmResponse = async ({
     maxRetries: 6,
     onRetry: (attempt, error) => {
       const cause = error instanceof Error && error.cause ? error.cause : null;
-      logger.info(`Attempt ${attempt} to download submission ${responseName} failed: ${error}`, {
+      logger.warn(`Attempt ${attempt} to download submission ${responseName} failed: ${error}`, {
         cause,
       });
     },
@@ -139,6 +187,8 @@ const downloadAndConfirmResponse = async ({
   // Perform integrity check and confirm submission
   await integrityCheckAndConfirm(responseName, dataDirectoryHandle, apiClient, logger);
 
+  const fileNameMapping: ResponseFilenameMapping = new Map();
+
   // check if there are files to download
   if (decryptedResponse.attachments && decryptedResponse.attachments.length > 0) {
     const attachmentsDirectoryHandle = await workingDirectoryHandle.getDirectoryHandle(
@@ -156,40 +206,93 @@ const downloadAndConfirmResponse = async ({
       }
     );
 
-    await Promise.all(
-      decryptedResponse.attachments.map((attachment) =>
-        downloadAttachment(responseAttachmentsDirectoryHandle, attachment)
-      )
-    );
+    const downloadResults: AttachmentDownloadResult[] = [];
+
+    for (const attachment of decryptedResponse.attachments) {
+      // eslint-disable-next-line no-await-in-loop
+      const res = await downloadAttachment(responseAttachmentsDirectoryHandle, attachment);
+
+      downloadResults.push(res);
+    }
+
+    // Build mapping of attachment ID to filenames
+    downloadResults.forEach(({ id, originalName, actualName, isPotentiallyMalicious }) => {
+      fileNameMapping.set(id, { originalName, actualName, isPotentiallyMalicious });
+    });
   }
 
   return {
     submissionId: responseName,
     createdAt: new Date(decryptedResponse.createdAt).toISOString(),
     rawAnswers: JSON.parse(decryptedResponse.answers),
+    attachments: fileNameMapping,
   };
 };
 
 const downloadAttachment = async (
   responseAttachmentsDirectoryHandle: FileSystemDirectoryHandle,
   attachment: CompleteAttachment
-) => {
+): Promise<AttachmentDownloadResult> => {
   const response = await fetch(attachment.downloadLink);
   // Ensure the fetch was successful
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  // Create UUID folder for each attachment
-  const fileDir = await responseAttachmentsDirectoryHandle.getDirectoryHandle(attachment.id, {
-    create: true,
-  });
+  let attachmentDirectoryHandle = responseAttachmentsDirectoryHandle;
 
-  const fileStream = await fileDir
-    .getFileHandle(`${attachment.name}`, { create: true })
+  if (attachment.isPotentiallyMalicious) {
+    attachmentDirectoryHandle = await responseAttachmentsDirectoryHandle.getDirectoryHandle(
+      MALICIOUS_ATTACHMENTS_FOLDER,
+      {
+        create: true,
+      }
+    );
+  }
+
+  const uniqueFilename = await getUniqueFileName(attachmentDirectoryHandle, attachment.name);
+
+  const fileStream = await attachmentDirectoryHandle
+    .getFileHandle(`${uniqueFilename}`, { create: true })
     .then((handle) => handle.createWritable({ keepExistingData: false }));
 
   await response.body?.pipeTo(fileStream);
+
+  return {
+    id: attachment.id,
+    originalName: attachment.name,
+    actualName: uniqueFilename,
+    isPotentiallyMalicious: attachment.isPotentiallyMalicious,
+  };
+};
+
+const getUniqueFileName = async (
+  directoryHandle: FileSystemDirectoryHandle,
+  fileName: string
+): Promise<string> => {
+  // Split filename into name and extension
+  const lastDotIndex = fileName.lastIndexOf(".");
+  const name = lastDotIndex !== -1 ? fileName.substring(0, lastDotIndex) : fileName;
+  const extension = lastDotIndex !== -1 ? fileName.substring(lastDotIndex) : "";
+
+  let uniqueFileName = fileName;
+  let counter = 1;
+
+  // Check if file exists and increment counter until we find a unique name
+  while (true) {
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      await directoryHandle.getFileHandle(uniqueFileName);
+      // File exists, try next number
+      uniqueFileName = `${name} (${counter})${extension}`;
+      counter++;
+    } catch {
+      // File doesn't exist, we can use this name
+      break;
+    }
+  }
+
+  return uniqueFileName;
 };
 
 const integrityCheckAndConfirm = async (
