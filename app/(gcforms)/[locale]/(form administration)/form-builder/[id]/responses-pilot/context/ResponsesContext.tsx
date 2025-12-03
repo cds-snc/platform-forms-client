@@ -334,7 +334,6 @@ export const ResponsesProvider = ({
       retrieveResponses,
       selectedFormat,
       setInterrupt,
-      setProcessedSubmissionIds,
       t,
     ]
   );
