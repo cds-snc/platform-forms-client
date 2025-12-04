@@ -36,9 +36,7 @@ const sendImmediatedNotification = async ({
     await _queueNotification(id!);
     logMessage.info(`Immediate notification created and queued with id ${id}`);
   } catch (error) {
-    logMessage.error(
-      `Creating immediate notification failed with id ${id} and error: ${(error as Error).message}`
-    );
+    logMessage.info(`Error Creating immediate notification id ${id}: ${(error as Error).message}`);
   }
 };
 
@@ -50,12 +48,10 @@ const sendDeferredNotification = async ({
 }: NotificationRequiresId): Promise<void> => {
   try {
     await _createNotification({ notificationId, emails, subject, body });
-    logMessage.info(`Deferred notification created with id ${notificationId}`);
+    logMessage.info(`Deferred notification id ${notificationId}`);
   } catch (error) {
-    logMessage.error(
-      `Creating deferred notification failed with id ${notificationId} and error: ${
-        (error as Error).message
-      }`
+    logMessage.info(
+      `Error creating deferred notification id ${notificationId}: ${(error as Error).message}`
     );
   }
 };
