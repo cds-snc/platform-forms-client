@@ -22,6 +22,7 @@ async function downloadForm(lang: string, id: string) {
     link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
     document.body.appendChild(link);
     link.click();
+    window.URL.revokeObjectURL(tempUrl);
   } else {
     alert("error creating file download");
   }
