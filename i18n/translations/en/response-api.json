@@ -56,7 +56,8 @@
         "text1": "Only one API key file can be associated to a form at a time.",
         "text2": "Generate a new API key by going to",
         "link": " Settings > API integration"
-      }
+      },
+      "close": "Close"
     }
   },
   "locationPage": {

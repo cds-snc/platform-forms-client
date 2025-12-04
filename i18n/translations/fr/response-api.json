@@ -57,7 +57,8 @@
         "text1": "Un seul fichier de clé API peut être associée à un formulaire à la fois.",
         "text2": "Générez une nouvelle clé API en allant dans",
         "link": " Paramètres > Intégration API"
-      }
+      },
+      "close": "Fermer"
     }
   },
   "locationPage": {
