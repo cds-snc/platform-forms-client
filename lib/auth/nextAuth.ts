@@ -7,7 +7,7 @@ import { getOrCreateUser } from "@lib/users";
 import { prisma } from "@lib/integration/prismaConnector";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { getUserFeatureFlags } from "@lib/userFeatureFlags";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 import { JWT } from "next-auth/jwt";
 import { cache } from "react";
@@ -199,7 +199,8 @@ const {
         internalUser.id,
         { type: "User", id: internalUser.id },
         "UserSignIn",
-        `Cognito user unique identifier (sub): ${user.id}`
+        AuditLogDetails.CognitoUserIdentifier,
+        { userId: user.id ?? "" }
       );
     },
     async signOut(obj) {
