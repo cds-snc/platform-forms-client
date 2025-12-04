@@ -3,30 +3,28 @@ import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import Image from "next/image";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import axios from "axios";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import Loader from "@clientComponents/globals/Loader";
 import { Button, Alert } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
 import { checkUnprocessed } from "@lib/unprocessed/actions";
+import { getFormTemplate } from "@formBuilder/actions";
 
 async function downloadForm(lang: string, id: string) {
-  const url = `/api/templates/${id}`;
-  const response = await axios({
-    url,
-    method: "GET",
-    responseType: "json",
-    timeout: 5000,
-  });
-
-  const fileName = lang === "fr" ? response.data.form.titleFr : response.data.form.titleEn;
-  const data = JSON.stringify(response.data.form, null, 2);
-  const tempUrl = window.URL.createObjectURL(new Blob([data]));
-  const link = document.createElement("a");
-  link.href = tempUrl;
-  link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
-  document.body.appendChild(link);
-  link.click();
+  const template = await getFormTemplate(id);
+  if (template.formRecord) {
+    const formRecord = template.formRecord;
+    const fileName = lang === "fr" ? formRecord.titleFr : formRecord.titleEn;
+    const data = JSON.stringify(template, null, 2);
+    const tempUrl = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement("a");
+    link.href = tempUrl;
+    link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
+    document.body.appendChild(link);
+    link.click();
+  } else {
+    alert("error creating file download");
+  }
 }
 
 export const ConfirmFormDeleteDialog = ({
