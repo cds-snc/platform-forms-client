@@ -165,7 +165,7 @@ const sendEmailNotification = async (
     }
     const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
 
-    await notification({
+    await notification.immediate({
       notificationId: formId,
       emails,
       subject: multipleSubmissions
