@@ -10,7 +10,7 @@ import { LinkButton } from "@root/components/serverComponents/globals/Buttons/Li
 import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 import { getStepOf } from "../lib/getStepOf";
 
-const STORAGE_KEY_PREFIX = "responses-pilot-format-";
+export const STORAGE_KEY_PREFIX = "responses-pilot-format-";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { t, router } = useResponsesApp();

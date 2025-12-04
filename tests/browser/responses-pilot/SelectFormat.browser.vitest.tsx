@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { page } from "../vitestBrowserShim";
-import { SelectFormat } from "@responses-pilot/format/SelectFormat";
+import { SelectFormat, STORAGE_KEY_PREFIX } from "@responses-pilot/format/SelectFormat";
 import { render } from "./testUtils";
 import { setupFonts } from "./testHelpers";
 import { vi } from "vitest";
@@ -25,7 +25,7 @@ describe("SelectFormat - Browser Mode", () => {
 
   it("should default to CSV when no localStorage exists", async () => {
     // Ensure no saved format exists
-    localStorage.removeItem("responses-pilot-format-test-form");
+    localStorage.removeItem(`${STORAGE_KEY_PREFIX}test-form`);
 
     await render(<SelectFormat locale="en" id="test-form" />);
 
@@ -39,7 +39,7 @@ describe("SelectFormat - Browser Mode", () => {
 
   it("should load saved HTML format from localStorage", async () => {
     // Set HTML as the saved format in localStorage for this form
-    localStorage.setItem("responses-pilot-format-test-form", "html");
+    localStorage.setItem(`${STORAGE_KEY_PREFIX}test-form`, "html");
 
     await render(<SelectFormat locale="en" id="test-form" />);
 
@@ -51,7 +51,7 @@ describe("SelectFormat - Browser Mode", () => {
     await expect.element(page.getByTestId("continue-button")).toBeEnabled();
 
     // Clean up
-    localStorage.removeItem("responses-pilot-format-test-form");
+    localStorage.removeItem(`${STORAGE_KEY_PREFIX}test-form`);
   });
 
   it("should enable Continue when a format csv is selected", async () => {
