@@ -50,7 +50,17 @@ export const AuditForm = ({ formId }: { formId: string }) => {
                     const descObj = JSON.parse(value);
                     const eventDesc = descObj.eventDesc;
                     delete descObj.eventDesc;
-                    value = String(t(`auditDownload.descriptions.${eventDesc}`, descObj));
+
+                    // Loop through the params and translate them if they exist as a translation key
+                    Object.keys(descObj).forEach((paramKey) => {
+                      const paramValue = descObj[paramKey];
+                      const translatedParam = t(`auditDownload.eventParams.${paramValue}`);
+                      if (translatedParam !== `auditDownload.eventParams.${paramValue}`) {
+                        descObj[paramKey] = translatedParam;
+                      }
+                    });
+
+                    value = String(t(`auditDownload.eventDetails.${eventDesc}`, descObj));
                   } catch {
                     // Fallback to raw value if parsing fails
                   }
