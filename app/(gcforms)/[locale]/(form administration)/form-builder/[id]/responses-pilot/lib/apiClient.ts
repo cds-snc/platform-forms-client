@@ -7,10 +7,16 @@ import type {
   PrivateApiKey,
 } from "./types";
 
-import { TokenRateLimitError } from "./errorsTypes";
 import { FormProperties } from "@root/lib/types";
 import { addRateLimitTrackingInterceptor } from "./apiClientInterceptors";
 import { getAccessTokenFromApiKey } from "./utils";
+
+class TokenRateLimitError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "TokenRateLimitError";
+  }
+}
 
 export class GCFormsApiClient {
   private formId: string;
@@ -35,11 +41,6 @@ export class GCFormsApiClient {
     this.accessToken = accessToken;
     this.projectId = projectId;
     this.tokenTimestamp = Date.now();
-
-    // eslint-disable-next-line no-console
-    console.log("GCFormsApiClient initialized for formId:", formId);
-    // eslint-disable-next-line no-console
-    console.log("Using projectId:", projectId);
 
     this.httpClient = axios.create({
       baseURL: apiUrl,
