@@ -2,7 +2,7 @@ import { useTranslation } from "@i18n/client";
 import { Close } from "@serverComponents/icons/Close";
 
 export const LostKeyLink = () => {
-  const { t } = useTranslation(["response-api"]);
+  const { t } = useTranslation("response-api");
   return (
     <p className="relative mt-2 block">
       <button
