@@ -29,6 +29,7 @@ import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
 import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
+import { formatDuration } from "../lib/formatDuration";
 
 interface ResponsesContextType {
   locale: string;
@@ -132,6 +133,21 @@ export const ResponsesProvider = ({
     };
   }, []);
 
+  useEffect(() => {
+    const handleBeforeUnload = (_event: BeforeUnloadEvent) => {
+      if (!processingCompleted) {
+        logger.warn("Window unloading, interrupting processing if active.");
+        setInterrupt(true);
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [logger, processingCompleted, setInterrupt]);
+
   const retrieveResponses = useCallback(async () => {
     if (!apiClient) {
       return [];
@@ -165,6 +181,10 @@ export const ResponsesProvider = ({
   const processResponses = useCallback(
     async (initialSubmissions?: NewFormSubmission[]) => {
       logger.info("Beginning processing of form responses");
+
+      // Timer start
+      const startTime = Date.now();
+      let sessionCompleted = false;
 
       // Reset interrupt state
       setInterrupt(false);
@@ -283,6 +303,21 @@ export const ResponsesProvider = ({
         formResponses = await retrieveResponses();
       }
 
+      // Timer end
+      const endTime = Date.now();
+
+      const durationMs = endTime - startTime;
+      const durationStr = formatDuration(durationMs);
+
+      // Determine completion status
+      sessionCompleted = !interruptRef.current;
+
+      if (sessionCompleted) {
+        logger.info(`Processing session completed in ${durationStr}.`);
+      } else {
+        logger.warn(`Processing session interrupted after ${durationStr}.`);
+      }
+
       // Cleanup
       interruptRef.current = false;
 
@@ -340,7 +375,7 @@ export const ResponsesProvider = ({
         setHasError,
         selectedFormat,
         setSelectedFormat,
-        interrupt: isProcessingInterrupted,
+        interrupt: interruptRef.current,
         setInterrupt,
         currentSubmissionId,
         hasMaliciousAttachments,
