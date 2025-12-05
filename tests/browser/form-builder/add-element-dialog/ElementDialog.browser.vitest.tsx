@@ -6,20 +6,6 @@ import { setupFonts } from "../../helpers/setupFonts";
 
 import "@root/styles/app.scss";
 
-// Mock NextAuth to prevent auth API calls
-vi.mock("next-auth/react", () => ({
-  useSession: () => ({
-    data: null,
-    status: "unauthenticated",
-  }),
-  SessionProvider: ({ children }: { children: React.ReactNode }) => children,
-  signIn: vi.fn(),
-  signOut: vi.fn(),
-  getCsrfToken: vi.fn(),
-  getProviders: vi.fn(),
-  getSession: vi.fn(),
-}));
-
 describe("<ElementDialog />", () => {
   beforeAll(() => {
     setupFonts();

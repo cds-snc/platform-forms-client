@@ -1,7 +1,10 @@
-import React from "react";
-import { Description } from "../Description";
-import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
+import { describe, it, expect, vi } from "vitest";
+import { page } from "@vitest/browser/context";
+import { Description } from "@formBuilder/[id]/components/dialogs/MoreDialog/Description";
 import { FormElementTypes } from "@lib/types";
+import { render } from "../testUtils";
+
+import "@root/styles/app.scss";
 
 describe("<Description />", () => {
   const item = {
@@ -29,15 +32,13 @@ describe("<Description />", () => {
     questionNumber: 0,
   };
 
-  it("mounts", () => {
-    cy.viewport(800, 80);
+  it("mounts", async () => {
+    const setItemSpy = vi.fn();
 
-    const setItemSpy = cy.spy().as("setItem");
+    await render(<Description item={item} setItem={setItemSpy} />);
 
-    cy.mount(
-      <TemplateStoreProvider form="" isPublished={false}>
-        <Description item={item} setItem={setItemSpy} />
-      </TemplateStoreProvider>
-    );
+    // Verify the textarea is visible
+    const textarea = page.getByRole("textbox");
+    await expect.element(textarea).toBeVisible();
   });
 });
