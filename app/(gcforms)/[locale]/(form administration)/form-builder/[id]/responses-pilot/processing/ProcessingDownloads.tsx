@@ -13,9 +13,11 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
 
   const [isNavigating, setIsNavigating] = useState(false);
   const isMountedRef = useRef(false);
+  const isInterruptedRef = useRef(false);
 
   const {
     processingCompleted,
+    resetProcessingCompleted,
     setInterrupt,
     interrupt,
     resetNewSubmissions,
@@ -40,8 +42,10 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
 
     return () => {
       if (isMountedRef.current) {
-        logger.warn("ProcessingDownloads unmounted, interrupting processing.");
-        setInterrupt(true);
+        if (!isInterruptedRef.current && !processingCompleted) {
+          logger.warn("ProcessingDownloads unmounted, interrupting processing.");
+          setInterrupt(true);
+        }
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,6 +56,8 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
 
     setIsNavigating(true);
     setInterrupt(true);
+    isInterruptedRef.current = true;
+    resetProcessingCompleted();
     resetNewSubmissions();
 
     // Wait for async operations to see the interrupt and cleanup
@@ -59,7 +65,15 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
 
     // Now navigate
     router.push(`/${locale}/form-builder/${id}/responses-pilot/result`);
-  }, [setInterrupt, resetNewSubmissions, router, locale, id, isNavigating]);
+  }, [
+    isNavigating,
+    setInterrupt,
+    resetProcessingCompleted,
+    resetNewSubmissions,
+    router,
+    locale,
+    id,
+  ]);
 
   return (
     <div>
