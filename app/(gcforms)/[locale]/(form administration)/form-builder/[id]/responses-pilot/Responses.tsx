@@ -40,7 +40,7 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
           src="/img/api-new-responses.svg"
           alt={t("loadKeyPage.newResponsesAvailable")}
           width={218}
-          height={196}
+          height={143}
         />
       </div>
     </div>
@@ -57,7 +57,7 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
           src="/img/api-no-responses.svg"
           alt={t("loadKeyPage.noNewResponsesAvailable")}
           width={218}
-          height={196}
+          height={143}
         />
       </div>
     </div>
