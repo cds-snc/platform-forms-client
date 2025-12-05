@@ -8,8 +8,10 @@ export const CheckBox = () => {
   const { t } = useTranslation("form-builder");
   return (
     <>
-      <h3 className="mb-0">{t("addElementDialog.checkbox.title")}</h3>
-      <p>{t("addElementDialog.checkbox.description")}</p>
+      <h3 className="mb-0" data-testid="element-description-title">
+        {t("addElementDialog.checkbox.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.checkbox.description")}</p>
 
       <ExampleWrapper className="mt-4">
         <FormGroup name={"checkboxes"}>
