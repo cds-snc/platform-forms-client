@@ -378,4 +378,18 @@ describe("<ElementDialog />", () => {
     expect(handleAddTypeSpy).toHaveBeenCalledWith("dynamicRow");
     expect(handleCloseSpy).toHaveBeenCalledOnce();
   });
+
+  it("closes the dialog", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the close dialog button
+    const closeButton = page.getByTestId("close-dialog");
+    await closeButton.click();
+
+    // Verify the close handler was called
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
 });
