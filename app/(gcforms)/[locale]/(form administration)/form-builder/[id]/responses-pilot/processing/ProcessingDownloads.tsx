@@ -19,7 +19,6 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
     processingCompleted,
     resetProcessingCompleted,
     setInterrupt,
-    interrupt,
     resetNewSubmissions,
     logger,
     currentSubmissionId,
@@ -98,13 +97,14 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
             )}
           </div>
           <p className="mb-8">{t("processingPage.note")}</p>
-          {!interrupt && (
-            <Button theme="secondary" onClick={handleInterrupt} disabled={isNavigating}>
-              {isNavigating
-                ? t("processingPage.cancellingButton")
-                : t("processingPage.cancelButton")}
-            </Button>
-          )}
+          <Button
+            theme="secondary"
+            onClick={handleInterrupt}
+            disabled={isNavigating}
+            data-testid="cancel-download"
+          >
+            {isNavigating ? t("processingPage.cancellingButton") : t("processingPage.cancelButton")}
+          </Button>
         </div>
         <MapleLeafLoader />
       </div>
