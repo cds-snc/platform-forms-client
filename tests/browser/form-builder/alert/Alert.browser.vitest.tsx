@@ -20,13 +20,13 @@ describe("<Alert />", () => {
       
       const alert = page.getByTestId("alert");
       await expect.element(alert).toBeVisible();
-      await expect.element(alert).toHaveClass(/bg-emerald-50/);
+      await expect.element(alert).toHaveClass("bg-emerald-50");
       
       const alertIcon = page.getByTestId("alert-icon");
-      await expect.element(alertIcon).toHaveClass(/\[&_svg\]:fill-emerald-700/);
+      await expect.element(alertIcon).toHaveClass("[&_svg]:fill-emerald-700");
       
       const alertHeading = page.getByTestId("alert-heading");
-      await expect.element(alertHeading).toHaveClass(/text-emerald-700/);
+      await expect.element(alertHeading).toHaveClass("text-emerald-700");
     });
 
     it("Renders a WARNING alert", async () => {
@@ -34,13 +34,13 @@ describe("<Alert />", () => {
       
       const alert = page.getByTestId("alert");
       await expect.element(alert).toBeVisible();
-      await expect.element(alert).toHaveClass(/bg-yellow-50/);
+      await expect.element(alert).toHaveClass("bg-yellow-50");
       
       const alertIcon = page.getByTestId("alert-icon");
-      await expect.element(alertIcon).toHaveClass(/\[&_svg\]:fill-yellow-700/);
+      await expect.element(alertIcon).toHaveClass("[&_svg]:fill-yellow-700");
       
       const alertHeading = page.getByTestId("alert-heading");
-      await expect.element(alertHeading).toHaveClass(/text-slate-950/);
+      await expect.element(alertHeading).toHaveClass("text-slate-950");
     });
 
     it("Renders am INFO alert", async () => {
@@ -48,13 +48,13 @@ describe("<Alert />", () => {
       
       const alert = page.getByTestId("alert");
       await expect.element(alert).toBeVisible();
-      await expect.element(alert).toHaveClass(/bg-indigo-50/);
+      await expect.element(alert).toHaveClass("bg-indigo-50");
       
       const alertIcon = page.getByTestId("alert-icon");
-      await expect.element(alertIcon).toHaveClass(/\[&_svg\]:fill-slate-950/);
+      await expect.element(alertIcon).toHaveClass("[&_svg]:fill-slate-950");
       
       const alertHeading = page.getByTestId("alert-heading");
-      await expect.element(alertHeading).toHaveClass(/text-slate-950/);
+      await expect.element(alertHeading).toHaveClass("text-slate-950");
     });
 
     it("Renders am DANGER alert", async () => {
@@ -62,13 +62,13 @@ describe("<Alert />", () => {
       
       const alert = page.getByTestId("alert");
       await expect.element(alert).toBeVisible();
-      await expect.element(alert).toHaveClass(/bg-red-50/);
+      await expect.element(alert).toHaveClass("bg-red-50");
       
       const alertIcon = page.getByTestId("alert-icon");
-      await expect.element(alertIcon).toHaveClass(/\[&_svg\]:fill-red-700/);
+      await expect.element(alertIcon).toHaveClass("[&_svg]:fill-red-700");
       
       const alertHeading = page.getByTestId("alert-heading");
-      await expect.element(alertHeading).toHaveClass(/text-red-700/);
+      await expect.element(alertHeading).toHaveClass("text-red-700");
     });
   });
 
@@ -467,11 +467,11 @@ describe("<Alert />", () => {
       
       const alert = page.getByTestId("alert");
       await expect.element(alert).toBeVisible();
-      await expect.element(alert).toHaveClass(/gc-testClass/);
+      await expect.element(alert).toHaveClass("gc-testClass");
       
       const heading = page.getByTestId("alert-heading");
       await expect.element(heading).toBeVisible();
-      await expect.element(heading).toHaveClass(/gc-testHeadingClass/);
+      await expect.element(heading).toHaveClass("gc-testHeadingClass");
       
       const bodyElement = document.querySelectorAll("[data-testid='alert-body']")[1];
       expect(bodyElement).toBeTruthy();
@@ -492,16 +492,16 @@ describe("<Alert />", () => {
       
       const alert = page.getByTestId("alert");
       await expect.element(alert).toBeVisible();
-      await expect.element(alert).toHaveClass(/p-8/);
-      await expect.element(alert).toHaveClass(/mb-8/);
+      await expect.element(alert).toHaveClass("p-8");
+      await expect.element(alert).toHaveClass("mb-8");
       
       const alertClasses = await alert.element().className;
       expect(alertClasses).not.toContain("p-4");
       
       const heading = page.getByTestId("alert-heading");
       await expect.element(heading).toBeVisible();
-      await expect.element(heading).toHaveClass(/mb-8/);
-      await expect.element(heading).toHaveClass(/pb-8/);
+      await expect.element(heading).toHaveClass("mb-8");
+      await expect.element(heading).toHaveClass("pb-8");
       
       const headingClasses = await heading.element().className;
       expect(headingClasses).toContain("mb-8");
