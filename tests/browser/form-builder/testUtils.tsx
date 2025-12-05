@@ -38,7 +38,7 @@ export async function render(
   options?: Omit<RenderWithProvidersOptions, "children">
 ) {
   // Wait for i18next to load translations
-  await i18next.loadNamespaces(["form-builder", "manage-form-access"]);
+  await i18next.loadNamespaces(["form-builder", "manage-form-access", "admin-users"]);
 
   const result = vitestRender(
     <TestWrapper {...options} locale={options?.locale}>
