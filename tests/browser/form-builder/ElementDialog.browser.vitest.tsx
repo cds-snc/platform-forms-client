@@ -36,4 +36,56 @@ describe("<ElementDialog />", () => {
     expect(handleAddTypeSpy).toHaveBeenCalledWith("richText");
     expect(handleCloseSpy).toHaveBeenCalledOnce();
   });
+
+  it("adds a textField element", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the textField element
+    const textFieldElement = page.getByTestId("textField");
+    await textFieldElement.click();
+
+    // Verify the description content is visible on the right side
+    const descriptionTitle = page.getByTestId("element-description-title");
+    await expect.element(descriptionTitle).toBeVisible();
+    await expect.element(descriptionTitle).toHaveTextContent("Short answer");
+
+    const descriptionText = page.getByTestId("element-description-text");
+    await expect.element(descriptionText).toBeVisible();
+
+    // Press Enter to confirm
+    await userEvent.keyboard("{Enter}");
+
+    // Verify the handlers were called correctly
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("textField");
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
+
+  it("adds a textArea element", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the textArea element
+    const textAreaElement = page.getByTestId("textArea");
+    await textAreaElement.click();
+
+    // Verify the description content is visible on the right side
+    const descriptionTitle = page.getByTestId("element-description-title");
+    await expect.element(descriptionTitle).toBeVisible();
+    await expect.element(descriptionTitle).toHaveTextContent("Long answer");
+
+    const descriptionText = page.getByTestId("element-description-text");
+    await expect.element(descriptionText).toBeVisible();
+
+    // Press Enter to confirm
+    await userEvent.keyboard("{Enter}");
+
+    // Verify the handlers were called correctly
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("textArea");
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
 });
