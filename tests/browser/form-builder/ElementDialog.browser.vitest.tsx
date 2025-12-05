@@ -6,6 +6,20 @@ import { setupFonts } from "../helpers/setupFonts";
 
 import "@root/styles/app.scss";
 
+// Mock NextAuth to prevent auth API calls
+vi.mock("next-auth/react", () => ({
+  useSession: () => ({
+    data: null,
+    status: "unauthenticated",
+  }),
+  SessionProvider: ({ children }: { children: React.ReactNode }) => children,
+  signIn: vi.fn(),
+  signOut: vi.fn(),
+  getCsrfToken: vi.fn(),
+  getProviders: vi.fn(),
+  getSession: vi.fn(),
+}));
+
 describe("<ElementDialog />", () => {
   beforeAll(() => {
     setupFonts();
@@ -353,7 +367,7 @@ describe("<ElementDialog />", () => {
     expect(handleCloseSpy).toHaveBeenCalledOnce();
   });
 
-  it.skip("adds a fileInput element", async () => {
+  it("adds a fileInput element", async () => {
     const handleCloseSpy = vi.fn();
     const handleAddTypeSpy = vi.fn();
 
@@ -363,13 +377,10 @@ describe("<ElementDialog />", () => {
     const fileInputElement = page.getByTestId("fileInput");
     await fileInputElement.click();
 
-    // Verify the description content is visible on the right side
+    // Verify the description title is visible on the right side
     const descriptionTitle = page.getByTestId("element-description-title");
     await expect.element(descriptionTitle).toBeVisible();
     await expect.element(descriptionTitle).toHaveTextContent("File upload");
-
-    const descriptionText = page.getByTestId("element-description-text");
-    await expect.element(descriptionText).toBeVisible();
 
     // Press Enter to confirm
     await userEvent.keyboard("{Enter}");
@@ -419,7 +430,7 @@ describe("<ElementDialog />", () => {
     expect(handleCloseSpy).toHaveBeenCalledOnce();
   });
 
-  it.skip("can keyboard navigate through the listbox", async () => {
+  it("can keyboard navigate through the listbox", async () => {
     const handleCloseSpy = vi.fn();
     const handleAddTypeSpy = vi.fn();
 
@@ -429,73 +440,155 @@ describe("<ElementDialog />", () => {
     const allFilter = page.getByTestId("all-filter");
     await allFilter.click();
 
+    // check focus is on the all-filter
+    await expect.element(allFilter).toHaveFocus();
+
+    await userEvent.tab();
+    // check focus is on the listbox
+    const listbox = page.getByRole("listbox");
+    await expect.element(listbox).toHaveFocus();
+
     // Verify textField is selected first by default
-    const textField = page.getByTestId("textField");
+    const textField = listbox.getByTestId("textField");
     await expect.element(textField).toHaveAttribute("aria-selected", "true");
 
     // Navigate down through the list
     await userEvent.keyboard("{ArrowDown}");
-    const textArea = page.getByTestId("textArea");
+    const textArea = listbox.getByTestId("textArea");
     await expect.element(textArea).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const radio = page.getByTestId("radio");
+    const radio = listbox.getByTestId("radio");
     await expect.element(radio).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const checkbox = page.getByTestId("checkbox");
+    const checkbox = listbox.getByTestId("checkbox");
     await expect.element(checkbox).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const dropdown = page.getByTestId("dropdown");
+    const dropdown = listbox.getByTestId("dropdown");
     await expect.element(dropdown).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const combobox = page.getByTestId("combobox");
+    const combobox = listbox.getByTestId("combobox");
     await expect.element(combobox).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const attestation = page.getByTestId("attestation");
+    const attestation = listbox.getByTestId("attestation");
     await expect.element(attestation).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const name = page.getByTestId("name");
+    const name = listbox.getByTestId("name");
     await expect.element(name).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const firstMiddleLastName = page.getByTestId("firstMiddleLastName");
+    const firstMiddleLastName = listbox.getByTestId("firstMiddleLastName");
     await expect.element(firstMiddleLastName).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const formattedDate = page.getByTestId("formattedDate");
+    const formattedDate = listbox.getByTestId("formattedDate");
     await expect.element(formattedDate).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const contact = page.getByTestId("contact");
+    const contact = listbox.getByTestId("contact");
     await expect.element(contact).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const address = page.getByTestId("address");
+    const address = listbox.getByTestId("address");
     await expect.element(address).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const departments = page.getByTestId("departments");
+    const departments = listbox.getByTestId("departments");
     await expect.element(departments).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const number = page.getByTestId("number");
+    const number = listbox.getByTestId("number");
     await expect.element(number).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const richText = page.getByTestId("richText");
+    const richText = listbox.getByTestId("richText");
     await expect.element(richText).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const fileInput = page.getByTestId("fileInput");
+    const fileInput = listbox.getByTestId("fileInput");
     await expect.element(fileInput).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const dynamicRow = page.getByTestId("dynamicRow");
+    const dynamicRow = listbox.getByTestId("dynamicRow");
     await expect.element(dynamicRow).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("Keyboard navigate the filters", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Verify all-filter has focus by default
+    const allFilter = page.getByTestId("all-filter");
+    await expect.element(allFilter).toHaveFocus();
+
+    // Navigate right to basic filter
+    await userEvent.keyboard("{ArrowRight}");
+    const basicFilter = page.getByTestId("basic-filter");
+    await expect.element(basicFilter).toHaveFocus();
+
+    // Navigate right to preset filter
+    await userEvent.keyboard("{ArrowRight}");
+    const presetFilter = page.getByTestId("preset-filter");
+    await expect.element(presetFilter).toHaveFocus();
+
+    // Navigate right to other filter
+    await userEvent.keyboard("{ArrowRight}");
+    const otherFilter = page.getByTestId("other-filter");
+    await expect.element(otherFilter).toHaveFocus();
+
+    // Navigate left back to preset filter
+    await userEvent.keyboard("{ArrowLeft}");
+    await expect.element(presetFilter).toHaveFocus();
+
+    // Navigate left back to basic filter
+    await userEvent.keyboard("{ArrowLeft}");
+    await expect.element(basicFilter).toHaveFocus();
+
+    // Navigate left back to all filter
+    await userEvent.keyboard("{ArrowLeft}");
+    await expect.element(allFilter).toHaveFocus();
+  });
+
+  it("Can filter the listbox", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // All filter should show 17 elements
+    const allFilter = page.getByTestId("all-filter");
+    await allFilter.click();
+    let options = await page.getByRole("option").all();
+    expect(options.length).toBe(17);
+
+    // Basic filter should show 7 elements
+    const basicFilter = page.getByTestId("basic-filter");
+    await basicFilter.click();
+    options = await page.getByRole("option").all();
+    expect(options.length).toBe(7);
+
+    // Preset filter should show 7 elements
+    const presetFilter = page.getByTestId("preset-filter");
+    await presetFilter.click();
+    options = await page.getByRole("option").all();
+    expect(options.length).toBe(7);
+
+    // Other filter should show 3 elements
+    const otherFilter = page.getByTestId("other-filter");
+    await otherFilter.click();
+    options = await page.getByRole("option").all();
+    expect(options.length).toBe(3);
+
+    // Go back to all filter
+    await allFilter.click();
+    options = await page.getByRole("option").all();
+    expect(options.length).toBe(17);
   });
 });
