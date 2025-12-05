@@ -48,7 +48,7 @@ export const LostKeyPopover = ({ locale, id }: { locale: string; id: string }) =
       <button
         type="button"
         className="group absolute right-0 top-0 mr-4 mt-4 rounded p-2 hover:bg-gray-100 focus:bg-gray-100"
-        aria-label={t("close")}
+        aria-label={t("loadKeyPage.lostKey.close")}
         onClick={handleClose}
       >
         <Close className="inline-block group-focus:fill-white-default" />
