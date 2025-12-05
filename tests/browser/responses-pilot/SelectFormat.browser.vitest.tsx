@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { page } from "../vitestBrowserShim";
-import { SelectFormat } from "@responses-pilot/format/SelectFormat";
+import { SelectFormat, STORAGE_KEY_PREFIX } from "@responses-pilot/format/SelectFormat";
 import { render } from "./testUtils";
 import { setupFonts } from "./testHelpers";
 import { vi } from "vitest";
@@ -23,10 +23,35 @@ describe("SelectFormat - Browser Mode", () => {
     await expect.element(page.getByTestId("format-page-title")).toBeInTheDocument();
   });
 
-  it("should have Continue button disabled initially", async () => {
+  it("should default to CSV when no localStorage exists", async () => {
+    // Ensure no saved format exists
+    localStorage.removeItem(`${STORAGE_KEY_PREFIX}test-form`);
+
     await render(<SelectFormat locale="en" id="test-form" />);
 
-    await expect.element(page.getByTestId("continue-button")).toBeDisabled();
+    // CSV radio should be checked by default
+    const csvRadio = page.getByTestId("format-csv");
+    await expect.element(csvRadio).toBeChecked();
+
+    // Continue button should be enabled
+    await expect.element(page.getByTestId("continue-button")).toBeEnabled();
+  });
+
+  it("should load saved HTML format from localStorage", async () => {
+    // Set HTML as the saved format in localStorage for this form
+    localStorage.setItem(`${STORAGE_KEY_PREFIX}test-form`, "html");
+
+    await render(<SelectFormat locale="en" id="test-form" />);
+
+    // HTML radio should be checked
+    const htmlRadio = page.getByTestId("format-html");
+    await expect.element(htmlRadio).toBeChecked();
+
+    // Continue button should be enabled
+    await expect.element(page.getByTestId("continue-button")).toBeEnabled();
+
+    // Clean up
+    localStorage.removeItem(`${STORAGE_KEY_PREFIX}test-form`);
   });
 
   it("should enable Continue when a format csv is selected", async () => {
