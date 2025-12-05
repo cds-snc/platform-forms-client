@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       deployment-identifier:
-        description: "Deployment identifier"
+        description: "Deployment identifier (type 'all' to delete all Rainbow deployments)"
         type: string
         required: true
   schedule:
