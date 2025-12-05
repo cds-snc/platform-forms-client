@@ -248,4 +248,134 @@ describe("<ElementDialog />", () => {
     expect(handleAddTypeSpy).toHaveBeenCalledWith("attestation");
     expect(handleCloseSpy).toHaveBeenCalledOnce();
   });
+
+  it("adds a full name element", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the name element
+    const nameElement = page.getByTestId("name");
+    await nameElement.click();
+
+    // Verify the description content is visible on the right side
+    const descriptionTitle = page.getByTestId("element-description-title");
+    await expect.element(descriptionTitle).toBeVisible();
+    await expect.element(descriptionTitle).toHaveTextContent("Full name");
+
+    const descriptionText = page.getByTestId("element-description-text");
+    await expect.element(descriptionText).toBeVisible();
+
+    // Press Enter to confirm
+    await userEvent.keyboard("{Enter}");
+
+    // Verify the handlers were called correctly
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("name");
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
+
+  it("adds a individual names element", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the firstMiddleLastName element
+    const firstMiddleLastNameElement = page.getByTestId("firstMiddleLastName");
+    await firstMiddleLastNameElement.click();
+
+    // Verify the description content is visible on the right side
+    const descriptionTitle = page.getByTestId("element-description-title");
+    await expect.element(descriptionTitle).toBeVisible();
+    await expect.element(descriptionTitle).toHaveTextContent("Individual names");
+
+    const descriptionText = page.getByTestId("element-description-text");
+    await expect.element(descriptionText).toBeVisible();
+
+    // Press Enter to confirm
+    await userEvent.keyboard("{Enter}");
+
+    // Verify the handlers were called correctly
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("firstMiddleLastName");
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
+
+  it("adds an address element", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the address element
+    const addressElement = page.getByTestId("address");
+    await addressElement.click();
+
+    // Verify the description content is visible on the right side
+    const descriptionTitle = page.getByTestId("element-description-title");
+    await expect.element(descriptionTitle).toBeVisible();
+    await expect.element(descriptionTitle).toHaveTextContent("Address");
+
+    const descriptionText = page.getByTestId("element-description-text");
+    await expect.element(descriptionText).toBeVisible();
+
+    // Press Enter to confirm
+    await userEvent.keyboard("{Enter}");
+
+    // Verify the handlers were called correctly
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("address");
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
+
+  it("adds a contact element", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the contact element
+    const contactElement = page.getByTestId("contact");
+    await contactElement.click();
+
+    // Verify the description content is visible on the right side
+    const descriptionTitle = page.getByTestId("element-description-title");
+    await expect.element(descriptionTitle).toBeVisible();
+    await expect.element(descriptionTitle).toHaveTextContent("Contact");
+
+    const descriptionText = page.getByTestId("element-description-text");
+    await expect.element(descriptionText).toBeVisible();
+
+    // Press Enter to confirm
+    await userEvent.keyboard("{Enter}");
+
+    // Verify the handlers were called correctly
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("contact");
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
+
+  it("adds a dynamicRow contact element", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the dynamicRow element
+    const dynamicRowElement = page.getByTestId("dynamicRow");
+    await dynamicRowElement.click();
+
+    // Verify the description content is visible on the right side
+    const descriptionTitle = page.getByTestId("element-description-title");
+    await expect.element(descriptionTitle).toBeVisible();
+    await expect.element(descriptionTitle).toHaveTextContent("Repeating set");
+
+    const descriptionText = page.getByTestId("element-description-text");
+    await expect.element(descriptionText).toBeVisible();
+
+    // Press Enter to confirm
+    await userEvent.keyboard("{Enter}");
+
+    // Verify the handlers were called correctly
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("dynamicRow");
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
 });
