@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { page } from "@vitest/browser/context";
 import { AddElementButton } from "@formBuilder/[id]/edit/components/elements/element-dialog/AddElementButton";
-import { render } from "./testUtils";
-import { setupFonts } from "../helpers/setupFonts";
+import { render } from "../testUtils";
+import { setupFonts } from "../../helpers/setupFonts";
 
 import "@root/styles/app.scss";
 
