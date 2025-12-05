@@ -9,8 +9,12 @@ export const FirstMiddleLastName = () => {
 
   return (
     <div>
-      <h3 className="mb-0">{t("addElementDialog.firstMiddleLastName.title")}</h3>
-      <p>{t("addElementDialog.firstMiddleLastName.description")}</p>
+      <h3 data-testid="element-description-title" className="mb-0">
+        {t("addElementDialog.firstMiddleLastName.title")}
+      </h3>
+      <p data-testid="element-description-text">
+        {t("addElementDialog.firstMiddleLastName.description")}
+      </p>
 
       <ExampleWrapper className="mt-4">
         <h4 className="mb-4">{t("addElementDialog.firstMiddleLastName.whatIsYourName")}</h4>

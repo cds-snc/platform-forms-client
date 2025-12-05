@@ -9,8 +9,10 @@ export const Address = () => {
 
   return (
     <div>
-      <h3 className="mb-0">{t("addElementDialog.address.title")}</h3>
-      <p>{t("addElementDialog.address.description")}</p>
+      <h3 data-testid="element-description-title" className="mb-0">
+        {t("addElementDialog.address.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.address.description")}</p>
 
       <ExampleWrapper className="mt-4">
         <h4 className="mb-4">{t("addElementDialog.address.whatIsYourAddress")}</h4>

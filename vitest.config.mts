@@ -51,6 +51,7 @@ export default defineConfig({
       instances: [{ browser: "chromium" }],
       headless: process.env.CI === "true", // Headless in CI, headed locally
     },
+    setupFiles: process.env.VITEST_BROWSER === "true" ? ["./tests/browser/setup.ts"] : [],
     isolate: true,
     fileParallelism: false,
   },

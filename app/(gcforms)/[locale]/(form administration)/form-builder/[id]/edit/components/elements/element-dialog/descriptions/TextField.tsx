@@ -8,8 +8,10 @@ export const TextField = () => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
-      <h3 className="mb-0">{t("addElementDialog.textField.title")}</h3>
-      <p>{t("addElementDialog.textField.description")}</p>
+      <h3 className="mb-0" data-testid="element-description-title">
+        {t("addElementDialog.textField.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.textField.description")}</p>
 
       <ExampleWrapper className="gcds-input-wrapper mt-4">
         <Label htmlFor="name" className="gc-label">
