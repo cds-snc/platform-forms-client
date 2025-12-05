@@ -166,4 +166,86 @@ describe("<ElementDialog />", () => {
     expect(handleAddTypeSpy).toHaveBeenCalledWith("dropdown");
     expect(handleCloseSpy).toHaveBeenCalledOnce();
   });
+
+  it("adds a date element", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the formattedDate element
+    const formattedDateElement = page.getByTestId("formattedDate");
+    await formattedDateElement.click();
+
+    // Verify the description content is visible on the right side
+    const descriptionTitle = page.getByTestId("element-description-title");
+    await expect.element(descriptionTitle).toBeVisible();
+    await expect.element(descriptionTitle).toHaveTextContent("Date");
+
+    const descriptionText = page.getByTestId("element-description-text");
+    await expect.element(descriptionText).toBeVisible();
+
+    // Press Enter to confirm
+    await userEvent.keyboard("{Enter}");
+
+    // Verify the handlers were called correctly
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("formattedDate");
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
+
+  it("adds a number element", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the preset filter first to reveal the number element
+    const presetFilter = page.getByTestId("preset-filter");
+    await presetFilter.click();
+
+    // Click on the number element
+    const numberElement = page.getByTestId("number");
+    await numberElement.click();
+
+    // Verify the description content is visible on the right side
+    const descriptionTitle = page.getByTestId("element-description-title");
+    await expect.element(descriptionTitle).toBeVisible();
+    await expect.element(descriptionTitle).toHaveTextContent("Number");
+
+    const descriptionText = page.getByTestId("element-description-text");
+    await expect.element(descriptionText).toBeVisible();
+
+    // Press Enter to confirm
+    await userEvent.keyboard("{Enter}");
+
+    // Verify the handlers were called correctly
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("number");
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
+
+  it("adds a attestation element", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the attestation element
+    const attestationElement = page.getByTestId("attestation");
+    await attestationElement.click();
+
+    // Verify the description content is visible on the right side
+    const descriptionTitle = page.getByTestId("element-description-title");
+    await expect.element(descriptionTitle).toBeVisible();
+    await expect.element(descriptionTitle).toHaveTextContent("Attestation");
+
+    const descriptionText = page.getByTestId("element-description-text");
+    await expect.element(descriptionText).toBeVisible();
+
+    // Press Enter to confirm
+    await userEvent.keyboard("{Enter}");
+
+    // Verify the handlers were called correctly
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("attestation");
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
 });
