@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { render as vitestRender, cleanup } from "vitest-browser-react";
 import { BrowserFormBuilderProvider } from "./context/BrowserFormBuilderProvider";
+import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 
 // Import to trigger i18next initialization
 import "@root/i18n/client";
@@ -18,7 +19,11 @@ interface RenderWithProvidersOptions {
  * Wraps component with standard test providers
  */
 export function TestWrapper({ overrides, children }: RenderWithProvidersOptions) {
-  return <BrowserFormBuilderProvider overrides={overrides}>{children}</BrowserFormBuilderProvider>;
+  return (
+    <TemplateStoreProvider id="test-form-id">
+      <BrowserFormBuilderProvider overrides={overrides}>{children}</BrowserFormBuilderProvider>
+    </TemplateStoreProvider>
+  );
 }
 
 /**

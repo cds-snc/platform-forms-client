@@ -353,6 +353,32 @@ describe("<ElementDialog />", () => {
     expect(handleCloseSpy).toHaveBeenCalledOnce();
   });
 
+  it.skip("adds a fileInput element", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the fileInput element
+    const fileInputElement = page.getByTestId("fileInput");
+    await fileInputElement.click();
+
+    // Verify the description content is visible on the right side
+    const descriptionTitle = page.getByTestId("element-description-title");
+    await expect.element(descriptionTitle).toBeVisible();
+    await expect.element(descriptionTitle).toHaveTextContent("File upload");
+
+    const descriptionText = page.getByTestId("element-description-text");
+    await expect.element(descriptionText).toBeVisible();
+
+    // Press Enter to confirm
+    await userEvent.keyboard("{Enter}");
+
+    // Verify the handlers were called correctly
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("fileInput");
+    expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
+
   it("adds a dynamicRow contact element", async () => {
     const handleCloseSpy = vi.fn();
     const handleAddTypeSpy = vi.fn();
@@ -391,5 +417,85 @@ describe("<ElementDialog />", () => {
 
     // Verify the close handler was called
     expect(handleCloseSpy).toHaveBeenCalledOnce();
+  });
+
+  it.skip("can keyboard navigate through the listbox", async () => {
+    const handleCloseSpy = vi.fn();
+    const handleAddTypeSpy = vi.fn();
+
+    await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    // Click on the all-filter to show all elements
+    const allFilter = page.getByTestId("all-filter");
+    await allFilter.click();
+
+    // Verify textField is selected first by default
+    const textField = page.getByTestId("textField");
+    await expect.element(textField).toHaveAttribute("aria-selected", "true");
+
+    // Navigate down through the list
+    await userEvent.keyboard("{ArrowDown}");
+    const textArea = page.getByTestId("textArea");
+    await expect.element(textArea).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const radio = page.getByTestId("radio");
+    await expect.element(radio).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const checkbox = page.getByTestId("checkbox");
+    await expect.element(checkbox).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const dropdown = page.getByTestId("dropdown");
+    await expect.element(dropdown).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const combobox = page.getByTestId("combobox");
+    await expect.element(combobox).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const attestation = page.getByTestId("attestation");
+    await expect.element(attestation).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const name = page.getByTestId("name");
+    await expect.element(name).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const firstMiddleLastName = page.getByTestId("firstMiddleLastName");
+    await expect.element(firstMiddleLastName).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const formattedDate = page.getByTestId("formattedDate");
+    await expect.element(formattedDate).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const contact = page.getByTestId("contact");
+    await expect.element(contact).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const address = page.getByTestId("address");
+    await expect.element(address).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const departments = page.getByTestId("departments");
+    await expect.element(departments).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const number = page.getByTestId("number");
+    await expect.element(number).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const richText = page.getByTestId("richText");
+    await expect.element(richText).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const fileInput = page.getByTestId("fileInput");
+    await expect.element(fileInput).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const dynamicRow = page.getByTestId("dynamicRow");
+    await expect.element(dynamicRow).toHaveAttribute("aria-selected", "true");
   });
 });
