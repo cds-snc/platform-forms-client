@@ -26,6 +26,7 @@ export default defineConfig({
       "react-dom",
       "next/navigation",
       "native-file-system-adapter",
+      "usehooks-ts",
     ],
   },
   test: {
@@ -50,6 +51,7 @@ export default defineConfig({
       }),
       instances: [{ browser: "chromium" }],
       headless: process.env.CI === "true", // Headless in CI, headed locally
+      viewport: { width: 768, height: 1024 }, // Tablet size
     },
     setupFiles: process.env.VITEST_BROWSER === "true" ? ["./tests/browser/setup.ts"] : [],
     isolate: true,
