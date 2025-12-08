@@ -275,8 +275,6 @@ const downloadAttachment = async (
     );
   }
 
-  // const uniqueFilename = await getUniqueFileName(attachmentDirectoryHandle, attachment.name);
-
   const fileStream = await attachmentDirectoryHandle
     .getFileHandle(`${attachment.renameTo}`, { create: true })
     .then((handle) => handle.createWritable({ keepExistingData: false }));
