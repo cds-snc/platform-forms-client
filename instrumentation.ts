@@ -3,7 +3,7 @@ export async function register() {
     // Do not collect traces when doing active development or running tests
 
     if (process.env.NODE_ENV !== "development" && process.env.APP_ENV !== "test") {
-      // await import("./instrumentation.node");
+      await import("./instrumentation.node");
     }
 
     if (!process.env.REDIS_URL) {
