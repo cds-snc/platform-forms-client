@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.4](https://github.com/cds-snc/platform-forms-client/compare/v4.6.3...v4.6.4) (2025-12-05)
+
+
+### Miscellaneous Chores
+
+* add support for full Rainbow deployment cleanup in Github workflow for Production ([#6509](https://github.com/cds-snc/platform-forms-client/issues/6509)) ([7bc720a](https://github.com/cds-snc/platform-forms-client/commit/7bc720ac7b7586bf906e077cc3f56cc4a1293c76))
+* Browser mode tests element dialog + more dialog ([#6504](https://github.com/cds-snc/platform-forms-client/issues/6504)) ([b38c339](https://github.com/cds-snc/platform-forms-client/commit/b38c339510d6a3fa4ed93b0a5d1a10114c4a6a74))
+* port add panel actions test ([#6508](https://github.com/cds-snc/platform-forms-client/issues/6508)) ([5da413b](https://github.com/cds-snc/platform-forms-client/commit/5da413b8f9c81be0237a391b7e517fbe430b3b1b))
+* rainbow cleanup enhancements ([#6507](https://github.com/cds-snc/platform-forms-client/issues/6507)) ([1a0268b](https://github.com/cds-snc/platform-forms-client/commit/1a0268bdb0118eab0de3dd56bad562d65648a7d3))
+* responses pilot - disable pause when navigating  ([#6495](https://github.com/cds-snc/platform-forms-client/issues/6495)) ([ba85f2c](https://github.com/cds-snc/platform-forms-client/commit/ba85f2c2c59cfc5c99967be046c96ca62bcb94c8))
+* Responses pilot cleanup ([#6502](https://github.com/cds-snc/platform-forms-client/issues/6502)) ([1371d7f](https://github.com/cds-snc/platform-forms-client/commit/1371d7f43ddd323b309bd4a43a12bf95c5e327fb))
+* Responses pilot save format choice ([#6499](https://github.com/cds-snc/platform-forms-client/issues/6499)) ([bbcbce8](https://github.com/cds-snc/platform-forms-client/commit/bbcbce88a28bd0b450403621c518bf09ce18b650))
+* Responses pilot- Add processing time to logs ([#6496](https://github.com/cds-snc/platform-forms-client/issues/6496)) ([e0972d7](https://github.com/cds-snc/platform-forms-client/commit/e0972d7273e4067bc041d7cb685154246d7b950e))
+
+## [4.6.3](https://github.com/cds-snc/platform-forms-client/compare/v4.6.2...v4.6.3) (2025-12-04)
+
+
+### Miscellaneous Chores
+
+* bump next js 15.5.7 ([#6497](https://github.com/cds-snc/platform-forms-client/issues/6497)) ([8e0dd9a](https://github.com/cds-snc/platform-forms-client/commit/8e0dd9a7ddd892c29878c10bdc26670d6e4abe5a))
+
+## [4.6.2](https://github.com/cds-snc/platform-forms-client/compare/v4.6.1...v4.6.2) (2025-12-03)
+
+
+### Bug Fixes
+
+* duplicate form function ([#6485](https://github.com/cds-snc/platform-forms-client/issues/6485)) ([62a4dec](https://github.com/cds-snc/platform-forms-client/commit/62a4decc40f62ccf7ca07525665edfbc6b312fa7))
+
+
+### Miscellaneous Chores
+
+* add alerts for user feature flag ([#6491](https://github.com/cds-snc/platform-forms-client/issues/6491)) ([b13a17e](https://github.com/cds-snc/platform-forms-client/commit/b13a17eaf49394d4f9e6bf62920f5c17db34449c))
+* Content tweaks to the Support Form options ([#6486](https://github.com/cds-snc/platform-forms-client/issues/6486)) ([367d3dd](https://github.com/cds-snc/platform-forms-client/commit/367d3dd5535ac8d4d11a4cb4399c04458dd06a20))
+* fix alignment for response download ([#6483](https://github.com/cds-snc/platform-forms-client/issues/6483)) ([6121bca](https://github.com/cds-snc/platform-forms-client/commit/6121bcaf2c6ffe5875228732c7cd800dba670692))
+* Responses pilot - Bilingualize folder and filenames ([#6479](https://github.com/cds-snc/platform-forms-client/issues/6479)) ([325f11e](https://github.com/cds-snc/platform-forms-client/commit/325f11e50f640f168653a323f584d8f0d49dcd28))
+* update archive icon + nav tweaks ([#6488](https://github.com/cds-snc/platform-forms-client/issues/6488)) ([376ed2c](https://github.com/cds-snc/platform-forms-client/commit/376ed2cca10eeac59e266d84210e4864754fcfdc))
+
 ## [4.6.1](https://github.com/cds-snc/platform-forms-client/compare/v4.6.0...v4.6.1) (2025-12-01)
 
 

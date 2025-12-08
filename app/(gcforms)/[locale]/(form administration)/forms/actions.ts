@@ -69,9 +69,13 @@ export const restoreForm = AuthenticatedAction(
 );
 
 export const cloneForm = AuthenticatedAction(
-  async (_, id: string): Promise<{ formRecord: FormRecord | null; error?: string }> => {
+  async (
+    _,
+    id: string,
+    allowDeleted: boolean
+  ): Promise<{ formRecord: FormRecord | null; error?: string }> => {
     try {
-      const cloned = await cloneTemplate(id);
+      const cloned = await cloneTemplate(id, allowDeleted);
 
       if (!cloned) throw new Error("Failed to clone template");
 

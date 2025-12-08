@@ -128,7 +128,7 @@ export default async function Page(props: {
             <strong>{t("archivedNotice2")}</strong>
           </div>
         )}
-        <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} />
+        <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} status={status} />
       </div>
     );
   } catch (e) {
