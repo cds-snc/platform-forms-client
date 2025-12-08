@@ -61,7 +61,7 @@ describe("cloneTemplate", () => {
 
     (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(createdTemplate);
 
-    const result = await cloneTemplate("src1");
+    const result = await cloneTemplate("src1", false);
 
     expect(prismaMock.template.create).toHaveBeenCalledWith(
       expect.objectContaining({
