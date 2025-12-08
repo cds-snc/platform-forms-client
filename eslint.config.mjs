@@ -14,7 +14,6 @@ const eslintConfig = [
   {
     ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
-  reactYouMightNotNeedAnEffect.configs.recommended,
   ...tailwind.configs["flat/recommended"],
   ...compat.config({
     extends: ["next/core-web-vitals", "next/typescript", "prettier"],
@@ -86,6 +85,7 @@ const eslintConfig = [
           "brand__toggle",
           "brand__signature",
           "container-xl",
+          "tableLink",
         ],
       },
     },
