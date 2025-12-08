@@ -260,7 +260,7 @@ export const ResponsesProvider = ({
         logger.info(`Processing next ${formResponses.length} submissions`);
         for (const response of formResponses) {
           if (interruptRef.current) {
-            logger.warn("Processing interrupted by user");
+            logger.warn("Processing interrupted");
             break;
           }
 
