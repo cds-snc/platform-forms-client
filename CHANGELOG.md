@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.4](https://github.com/cds-snc/platform-forms-client/compare/v4.6.3...v4.6.4) (2025-12-05)
+
+
+### Miscellaneous Chores
+
+* add support for full Rainbow deployment cleanup in Github workflow for Production ([#6509](https://github.com/cds-snc/platform-forms-client/issues/6509)) ([7bc720a](https://github.com/cds-snc/platform-forms-client/commit/7bc720ac7b7586bf906e077cc3f56cc4a1293c76))
+* Browser mode tests element dialog + more dialog ([#6504](https://github.com/cds-snc/platform-forms-client/issues/6504)) ([b38c339](https://github.com/cds-snc/platform-forms-client/commit/b38c339510d6a3fa4ed93b0a5d1a10114c4a6a74))
+* port add panel actions test ([#6508](https://github.com/cds-snc/platform-forms-client/issues/6508)) ([5da413b](https://github.com/cds-snc/platform-forms-client/commit/5da413b8f9c81be0237a391b7e517fbe430b3b1b))
+* rainbow cleanup enhancements ([#6507](https://github.com/cds-snc/platform-forms-client/issues/6507)) ([1a0268b](https://github.com/cds-snc/platform-forms-client/commit/1a0268bdb0118eab0de3dd56bad562d65648a7d3))
+* responses pilot - disable pause when navigating  ([#6495](https://github.com/cds-snc/platform-forms-client/issues/6495)) ([ba85f2c](https://github.com/cds-snc/platform-forms-client/commit/ba85f2c2c59cfc5c99967be046c96ca62bcb94c8))
+* Responses pilot cleanup ([#6502](https://github.com/cds-snc/platform-forms-client/issues/6502)) ([1371d7f](https://github.com/cds-snc/platform-forms-client/commit/1371d7f43ddd323b309bd4a43a12bf95c5e327fb))
+* Responses pilot save format choice ([#6499](https://github.com/cds-snc/platform-forms-client/issues/6499)) ([bbcbce8](https://github.com/cds-snc/platform-forms-client/commit/bbcbce88a28bd0b450403621c518bf09ce18b650))
+* Responses pilot- Add processing time to logs ([#6496](https://github.com/cds-snc/platform-forms-client/issues/6496)) ([e0972d7](https://github.com/cds-snc/platform-forms-client/commit/e0972d7273e4067bc041d7cb685154246d7b950e))
+
 ## [4.6.3](https://github.com/cds-snc/platform-forms-client/compare/v4.6.2...v4.6.3) (2025-12-04)
 
 

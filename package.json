@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "4.6.3",
+  "version": "4.6.4",
   "private": true,
   "workspaces": [
     "utils/*",
@@ -43,7 +43,6 @@
     "cypress": "cypress open",
     "cypress:run": "CYPRESS_DEBUG=true cypress run --browser chrome",
     "cypress:e2e": "cypress run --browser chrome --e2e",
-    "cypress:component": "NEXT_PUBLIC_APP_ENV=test cypress run --browser chrome --component",
     "playwright": "playwright test --ui",
     "playwright:run": "playwright test",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
@@ -190,7 +189,6 @@
     "cypress": "^15.5.0",
     "cypress-axe": "^1.7.0",
     "cypress-each": "^1.14.1",
-    "cypress-plugin-tab": "^1.0.5",
     "cypress-terminal-report": "^7.3.3",
     "cypress-wait-until": "^3.0.2",
     "eslint": "^9.39.0",
