@@ -9,7 +9,9 @@ import { delay } from "@lib/utils/retryability";
 import { GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { logMessage } from "./logger";
 import { sqsClient, dynamoDBDocumentClient } from "./integration/awsServicesConnector";
-import { getUsersEmails } from "@lib/users";
+import { authorization } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth/errors";
+import { prisma } from "@lib/integration/prismaConnector";
 
 export enum AuditLogEvent {
   // Form Events
@@ -288,6 +290,35 @@ type AllAuditParams = {
       : never;
 };
 
+export const _getUsersEmails = async (
+  formId: string,
+  userIds: string[]
+): Promise<{ id: string; email: string }[]> => {
+  await authorization.canViewForm(formId).catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        e.user.id,
+        { type: "User" },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserEmails
+      );
+    }
+    throw e;
+  });
+
+  return prisma.user.findMany({
+    where: {
+      id: {
+        in: userIds,
+      },
+    },
+    select: {
+      id: true,
+      email: true,
+    },
+  });
+};
+
 let queueUrlRef: string | null = null;
 
 const getQueueURL = async () => {
@@ -448,7 +479,7 @@ export const retrieveEvents = async (
   if (options?.mapUserEmail) {
     const userIds = Array.from(new Set(eventItems.map((event) => event.UserID)));
     const formId = eventItems[0]?.Subject.split("#")[1];
-    const users = await getUsersEmails(formId, userIds);
+    const users = await _getUsersEmails(formId, userIds);
 
     eventItems.forEach((event) => {
       event.UserID = users.find((user) => user.id === event.UserID)?.email || "Unknown User";
