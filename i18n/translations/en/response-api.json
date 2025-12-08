@@ -14,25 +14,22 @@
     "beforeStart": {
       "heading": "Before you start",
       "generateKey": "Generate an API key for your form in Settings.",
-      "generateKeyDetail": "This is how you’ll be able to access new responses.",
+      "generateKeyDetail": "This is how you’ll more easily and securely retrieve all new responses.",
       "browserSupport": "Ensure you’re using Google Chrome or Microsoft Edge.",
-      "browserSupportDetail": "Your browser will ask for permission to save files to your device.",
+      "browserSupportDetail": "You'll be asked permission to copy and save files to your device. Agree to these browser pop-up alerts to continue.",
       "attachSafety": "Take caution when opening files attachments.",
-      "attachSafetyDetail": "Check files before opening, verify malicious file attributes, follow warning prompts."
+      "attachSafetyDetail": "Check files before opening them, verify malicious file attributes, and follow warning prompts."
     },
     "steps": {
       "heading": "Then, follow these steps:",
       "uploadKey": {
-        "title": "Select your API key file.",
-        "detail": "This is how you will securely authenticate to get all new responses."
+        "title": "Select your API key file et check for new responses."
       },
       "chooseLocation": {
-        "title": "Choose a download location for responses.",
-        "detail": "This is where new responses can be appended to files already found in the same folder."
+        "title": "Choose a download location for responses."
       },
       "selectFormat": {
-        "title": "Select the format of response files.",
-        "detail": "This is where you can pick whether you get individual copies in HTML or a CSV spreadsheet."
+        "title": "Select the format of response files."
       }
     }
   },
