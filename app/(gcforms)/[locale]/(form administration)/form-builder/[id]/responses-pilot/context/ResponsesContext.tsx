@@ -44,6 +44,7 @@ interface ResponsesContextType {
   retrieveResponses: () => Promise<NewFormSubmission[]>;
   newFormSubmissions: NewFormSubmission[] | null;
   processedSubmissionIds: Set<string>;
+  setProcessedSubmissionIds: Dispatch<SetStateAction<Set<string>>>;
   resetProcessedSubmissionIds: () => void;
   processResponses: (
     initialSubmissions?: NewFormSubmission[],
@@ -386,6 +387,7 @@ export const ResponsesProvider = ({
         retrieveResponses,
         newFormSubmissions,
         processedSubmissionIds,
+        setProcessedSubmissionIds,
         resetProcessedSubmissionIds,
         processResponses,
         processingCompleted,
