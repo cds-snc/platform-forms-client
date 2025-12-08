@@ -78,7 +78,7 @@
   "formatPage": {
     "title": "Choose a response file format",
     "subheading": "Select the format of new responses.",
-    "detail": "All downloads also include the raw data in JSON format. This allows for an automatic confirmation step without having to copy-paste receipt codes manually.",
+    "detail": "All downloads also include the 'raw data' in JSON format. This allows you to have the official submission record and allows for the automation of the confirmation step that checks integrity, removing the need to copy-paste receipt codes.",
     "formatOptions": {
       "csv": {
         "label": "Combined in spreadsheet (One CSV file)",

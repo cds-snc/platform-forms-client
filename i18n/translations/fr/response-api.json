@@ -79,7 +79,7 @@
   "formatPage": {
     "title": "Choisissez un format de fichier de réponse",
     "subheading": "Sélectionnez le format des nouvelles réponses.",
-    "detail": "Tous les téléchargements incluent également les données brutes au format JSON. Cela permet une étape de confirmation automatique sans avoir à copier-coller manuellement les codes de réception.",
+    "detail": "Tous les téléchargements incluent également les « données brutes » au format JSON. Cela permet d’obtenir le registre de la soumission officiel et d’automatiser l’étape de confirmation, éliminant ainsi le besoin de copier-coller les codes de réception.",
     "formatOptions": {
       "csv": {
         "label": "Combinées dans feuille de calcul (Un fichier CSV)",
