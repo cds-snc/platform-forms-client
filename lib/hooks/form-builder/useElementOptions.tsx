@@ -16,33 +16,148 @@ import {
   GavelIcon,
   DepartmentsIcon,
 } from "@serverComponents/icons";
+import dynamic from "next/dynamic";
 
 import { useIsAdminUser } from "./useIsAdminUser";
 
-import {
-  RichText,
-  Radio,
-  CheckBox,
-  DropDown,
-  TextField,
-  TextArea,
-  Number,
-  QuestionSet,
-  Attestation,
-  Address,
-  AddressComplete,
-  Name,
-  Contact,
-  FirstMiddleLastName,
-  FileInput,
-  Departments,
-  Combobox,
-  FormattedDate,
-  CustomJson,
-} from "@formBuilder/[id]/edit/components/elements/element-dialog";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFeatureFlags } from "../useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
+
+// Lazy load all description components
+const TextField = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/TextField").then(
+      (mod) => ({ default: mod.TextField })
+    ),
+  { ssr: false }
+);
+const TextArea = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/TextArea").then(
+      (mod) => ({ default: mod.TextArea })
+    ),
+  { ssr: false }
+);
+const RichText = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/RichText").then(
+      (mod) => ({ default: mod.RichText })
+    ),
+  { ssr: false }
+);
+const Radio = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Radio").then(
+      (mod) => ({ default: mod.Radio })
+    ),
+  { ssr: false }
+);
+const CheckBox = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/CheckBox").then(
+      (mod) => ({ default: mod.CheckBox })
+    ),
+  { ssr: false }
+);
+const DropDown = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/DropDown").then(
+      (mod) => ({ default: mod.DropDown })
+    ),
+  { ssr: false }
+);
+const Number = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Number").then(
+      (mod) => ({ default: mod.Number })
+    ),
+  { ssr: false }
+);
+const QuestionSet = dynamic(
+  () =>
+    import(
+      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/QuestionSet"
+    ).then((mod) => ({ default: mod.QuestionSet })),
+  { ssr: false }
+);
+const Attestation = dynamic(
+  () =>
+    import(
+      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Attestation"
+    ).then((mod) => ({ default: mod.Attestation })),
+  { ssr: false }
+);
+const Address = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Address").then(
+      (mod) => ({ default: mod.Address })
+    ),
+  { ssr: false }
+);
+const AddressComplete = dynamic(
+  () =>
+    import(
+      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/AddressComplete"
+    ).then((mod) => ({ default: mod.AddressComplete })),
+  { ssr: false }
+);
+const Name = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Name").then(
+      (mod) => ({ default: mod.Name })
+    ),
+  { ssr: false }
+);
+const Contact = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Contact").then(
+      (mod) => ({ default: mod.Contact })
+    ),
+  { ssr: false }
+);
+const FirstMiddleLastName = dynamic(
+  () =>
+    import(
+      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FirstMiddleLastName"
+    ).then((mod) => ({ default: mod.FirstMiddleLastName })),
+  { ssr: false }
+);
+const FileInput = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FileInput").then(
+      (mod) => ({ default: mod.FileInput })
+    ),
+  { ssr: false }
+);
+const Departments = dynamic(
+  () =>
+    import(
+      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Departments"
+    ).then((mod) => ({ default: mod.Departments })),
+  { ssr: false }
+);
+const Combobox = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Combobox").then(
+      (mod) => ({ default: mod.Combobox })
+    ),
+  { ssr: false }
+);
+const FormattedDate = dynamic(
+  () =>
+    import(
+      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FormattedDate"
+    ).then((mod) => ({ default: mod.FormattedDate })),
+  { ssr: false }
+);
+const CustomJson = dynamic(
+  () =>
+    import(
+      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/CustomJson"
+    ).then((mod) => ({ default: mod.CustomJson })),
+  { ssr: false }
+);
 
 export enum Groups {
   BASIC = "basic",
