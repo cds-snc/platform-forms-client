@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import InMemoryDirectoryHandle from "./__tests__/fsMock";
 import {
   prepareTestEnvFromFixtures,
-  defaultSetProcessedSubmissionIds,
+  defaultIncrementProcessedSubmissionsCount,
   defaultT,
   testLogger,
 } from "./__tests__/testHelpers";
@@ -60,7 +60,7 @@ describe("processResponse - attachment handling", () => {
       const htmlDir = await testDir.getDirectoryHandle("html", { create: true });
 
       await processResponse({
-        setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        incrementProcessedSubmissionsCount: defaultIncrementProcessedSubmissionsCount,
         setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
@@ -104,7 +104,7 @@ describe("processResponse - attachment handling", () => {
       const htmlDir = await testDir.getDirectoryHandle("html", { create: true });
 
       await processResponse({
-        setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        incrementProcessedSubmissionsCount: defaultIncrementProcessedSubmissionsCount,
         setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
@@ -195,7 +195,7 @@ describe("processResponse - attachment handling", () => {
       const htmlDir = await testDir.getDirectoryHandle("html", { create: true });
 
       await processResponse({
-        setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        incrementProcessedSubmissionsCount: defaultIncrementProcessedSubmissionsCount,
         setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
@@ -244,7 +244,7 @@ describe("processResponse - attachment handling", () => {
       const htmlDir = await testDir.getDirectoryHandle("html", { create: true });
 
       await processResponse({
-        setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        incrementProcessedSubmissionsCount: defaultIncrementProcessedSubmissionsCount,
         setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
@@ -312,7 +312,7 @@ describe("processResponse - attachment handling", () => {
       const htmlDir = await testDir.getDirectoryHandle("html", { create: true });
 
       await processResponse({
-        setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        incrementProcessedSubmissionsCount: defaultIncrementProcessedSubmissionsCount,
         setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
@@ -393,7 +393,7 @@ describe("processResponse - attachment handling", () => {
       const htmlDir = await testDir.getDirectoryHandle("html", { create: true });
 
       await processResponse({
-        setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        incrementProcessedSubmissionsCount: defaultIncrementProcessedSubmissionsCount,
         setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
@@ -438,7 +438,7 @@ describe("processResponse - attachment handling", () => {
       const htmlDir = await testDir.getDirectoryHandle("html", { create: true });
 
       await processResponse({
-        setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        incrementProcessedSubmissionsCount: defaultIncrementProcessedSubmissionsCount,
         setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
@@ -504,7 +504,7 @@ describe("processResponse - attachment handling", () => {
       const htmlDir = await testDir.getDirectoryHandle("html", { create: true });
 
       await processResponse({
-        setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        incrementProcessedSubmissionsCount: defaultIncrementProcessedSubmissionsCount,
         setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
@@ -549,7 +549,7 @@ describe("processResponse - attachment handling", () => {
       const htmlDir = await testDir.getDirectoryHandle("html", { create: true });
 
       await processResponse({
-        setProcessedSubmissionIds: defaultSetProcessedSubmissionIds,
+        incrementProcessedSubmissionsCount: defaultIncrementProcessedSubmissionsCount,
         setHasMaliciousAttachments: () => {},
         workingDirectoryHandle: testDir as unknown as FileSystemDirectoryHandle,
         htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,

@@ -1,6 +1,5 @@
 import crypto from "crypto";
 import { vi } from "vitest";
-import type React from "react";
 import InMemoryDirectoryHandle from "./fsMock";
 import type { GCFormsApiClient } from "../apiClient";
 import type { EncryptedFormSubmission } from "../types";
@@ -79,9 +78,13 @@ export const prepareTestEnvFromFixtures = (submission: SubmissionFixture, templa
 
 export type PreparedTestEnv = ReturnType<typeof prepareTestEnvFromFixtures>;
 
-// Default typed stubs for tests
-export const defaultSetProcessedSubmissionIds: React.Dispatch<React.SetStateAction<Set<string>>> =
-  (() => {}) as unknown as React.Dispatch<React.SetStateAction<Set<string>>>;
+export const defaultProcessedSubmissionsCount = {
+  current: 0,
+};
+
+export const defaultIncrementProcessedSubmissionsCount = () => {
+  defaultProcessedSubmissionsCount.current += 1;
+};
 
 export const defaultT: import("i18next").TFunction = ((k: string) =>
   k) as unknown as import("i18next").TFunction;
