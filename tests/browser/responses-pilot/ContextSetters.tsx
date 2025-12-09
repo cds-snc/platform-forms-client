@@ -4,7 +4,7 @@ import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
 interface ContextSettersProps {
   directoryHandle?: FileSystemDirectoryHandle | { name: string };
-  processedSubmissionIds?: Set<string>;
+  processedSubmissionsCount?: number;
   hasError?: boolean;
   hasMaliciousAttachments?: boolean;
 }
@@ -12,19 +12,23 @@ interface ContextSettersProps {
 // Test helper that sets multiple context values on mount
 export function ContextSetters({
   directoryHandle,
-  processedSubmissionIds,
+  processedSubmissionsCount,
   hasError,
   hasMaliciousAttachments,
-}: ContextSettersProps) {
-  const { setDirectoryHandle, setProcessedSubmissionIds, setHasError, setHasMaliciousAttachments } =
-    useResponsesContext();
+}: ContextSettersProps): null {
+  const {
+    setDirectoryHandle,
+    setHasError,
+    setHasMaliciousAttachments,
+    setProcessedSubmissionsCount,
+  } = useResponsesContext();
 
   useEffect(() => {
     if (directoryHandle) {
       setDirectoryHandle(directoryHandle as FileSystemDirectoryHandle);
     }
-    if (processedSubmissionIds) {
-      setProcessedSubmissionIds(processedSubmissionIds);
+    if (processedSubmissionsCount !== undefined) {
+      setProcessedSubmissionsCount(processedSubmissionsCount);
     }
     if (hasError !== undefined) {
       setHasError(hasError);
@@ -34,11 +38,11 @@ export function ContextSetters({
     }
   }, [
     directoryHandle,
-    processedSubmissionIds,
+    processedSubmissionsCount,
     hasError,
     hasMaliciousAttachments,
     setDirectoryHandle,
-    setProcessedSubmissionIds,
+    setProcessedSubmissionsCount,
     setHasError,
     setHasMaliciousAttachments,
   ]);
