@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.5](https://github.com/cds-snc/platform-forms-client/compare/v4.6.4...v4.6.5) (2025-12-09)
+
+
+### Miscellaneous Chores
+
+* Convert old Editor cypress component test to vitest browser ([#6513](https://github.com/cds-snc/platform-forms-client/issues/6513)) ([c9e6f86](https://github.com/cds-snc/platform-forms-client/commit/c9e6f8630515baacac40cd6bf27fa35a1b21c1bc))
+* Port more cypress component tests  ([#6510](https://github.com/cds-snc/platform-forms-client/issues/6510)) ([02f4ae0](https://github.com/cds-snc/platform-forms-client/commit/02f4ae02698efea5c5d5c454592b0bccb5caaeeb))
+* Rainbow cleanup Github action can handle successful deployment scenario ([#6516](https://github.com/cds-snc/platform-forms-client/issues/6516)) ([8042705](https://github.com/cds-snc/platform-forms-client/commit/80427059f784a0a8b492a65bce61ff31280c1fa9))
+* Responses pilot - logging and download attachments improvements ([#6524](https://github.com/cds-snc/platform-forms-client/issues/6524)) ([9e68cf9](https://github.com/cds-snc/platform-forms-client/commit/9e68cf9743a7442c0dc2c1c44f1b80f99da1cf9b))
+* update flow to prime users about os security alerts and raw JSON file purpose ([#6526](https://github.com/cds-snc/platform-forms-client/issues/6526)) ([ab7cf64](https://github.com/cds-snc/platform-forms-client/commit/ab7cf649e21eff731fe1c3acd0581675b5916f44))
+
 ## [4.6.4](https://github.com/cds-snc/platform-forms-client/compare/v4.6.3...v4.6.4) (2025-12-05)
 
 
