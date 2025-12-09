@@ -7,10 +7,7 @@ import templateFixture from "@responses-pilot/lib/__tests__/fixtures/template-ge
 import type { GCFormsApiClient } from "@responses-pilot/lib/apiClient";
 import type { ResponseDownloadLogger } from "@responses-pilot/lib/logger";
 import type { FormProperties } from "@root/lib/types";
-import type {
-  FileSystemDirectoryHandle,
-  FileSystemFileHandle,
-} from "native-file-system-adapter";
+import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import type React from "react";
 
 // Local stub for i18next `t`
@@ -27,7 +24,7 @@ describe("processResponse -> browser injection", () => {
     const formTemplate = template;
 
     const mockApiClient = {
-      getFormSubmission: async (_name: string) => ({} as unknown),
+      getFormSubmission: async (_name: string) => ({}) as unknown,
       confirmFormSubmission: async () => {},
       getFormTemplate: async () => formTemplate,
       getFormId: () => "test-form",
@@ -64,11 +61,11 @@ describe("processResponse -> browser injection", () => {
     // Import processResponse after setting up module mocks
     const { processResponse } = await import("@responses-pilot/lib/processResponse");
 
-    const setProcessedSubmissionIds: React.Dispatch<React.SetStateAction<Set<string>>> = () => {};
+    const incrementProcessedSubmissionsCount = vi.fn();
     const setHasMaliciousAttachments: React.Dispatch<React.SetStateAction<boolean>> = () => {};
 
     const opts: {
-      setProcessedSubmissionIds: React.Dispatch<React.SetStateAction<Set<string>>>;
+      incrementProcessedSubmissionsCount: () => void;
       setHasMaliciousAttachments: React.Dispatch<React.SetStateAction<boolean>>;
       workingDirectoryHandle: FileSystemDirectoryHandle;
       htmlDirectoryHandle: FileSystemDirectoryHandle | null;
@@ -82,7 +79,7 @@ describe("processResponse -> browser injection", () => {
       t: import("i18next").TFunction;
       logger: ResponseDownloadLogger;
     } = {
-      setProcessedSubmissionIds,
+      incrementProcessedSubmissionsCount,
       setHasMaliciousAttachments,
       workingDirectoryHandle: dir as unknown as FileSystemDirectoryHandle,
       htmlDirectoryHandle: dir as unknown as FileSystemDirectoryHandle,
@@ -103,7 +100,8 @@ describe("processResponse -> browser injection", () => {
     // globalThis.__IN_MEMORY_FILES__ is set by the in-memory writable on close
     // Read it from Node side and then inject into the browser page
     type InMemoryFiles = Record<string, string | undefined> | undefined;
-    const globalFiles = (globalThis as unknown as { __IN_MEMORY_FILES__?: InMemoryFiles }).__IN_MEMORY_FILES__;
+    const globalFiles = (globalThis as unknown as { __IN_MEMORY_FILES__?: InMemoryFiles })
+      .__IN_MEMORY_FILES__;
     const html = globalFiles?.["submission-1.html"];
 
     if (!html) throw new Error("No captured HTML found in __IN_MEMORY_FILES__");
