@@ -40,6 +40,7 @@ export const IntendedUse = ({
         checked={purposeOption === PurposeOption.admin}
         value={PurposeOption.admin}
         onChange={onChange}
+        data-testid="purpose-admin"
       />
       <div className="mb-4 ml-12 text-sm">
         <div>
@@ -62,6 +63,7 @@ export const IntendedUse = ({
         checked={purposeOption === PurposeOption.nonAdmin}
         value={PurposeOption.nonAdmin}
         onChange={onChange}
+        data-testid="purpose-non-admin"
       />
       <div className="mb-4 ml-12 text-sm">
         <div>

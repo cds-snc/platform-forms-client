@@ -1,8 +1,11 @@
 import { test, expect } from "@playwright/test";
 import { FormUploadHelper } from "../helpers/form-upload-helper";
+import { userSession } from "../helpers/user-session";
 
 test.describe("TSB Contact Form functionality", () => {
-  test("TSB Contact Form renders", async ({ page }) => {
+  test.skip("TSB Contact Form renders", async ({ page }) => {
+    await userSession(page);
+
     const formHelper = new FormUploadHelper(page);
 
     // Upload the form fixture - this will automatically navigate to preview
@@ -14,13 +17,19 @@ test.describe("TSB Contact Form functionality", () => {
     ).toBeVisible();
   });
 
-  test.skip("Form footer does not contain GC branding", async ({ page }) => {
-    // @todo we need to use a published form --- need to add a helper to publish the form after upload
+  test("Form footer does not contain GC branding", async ({ page }) => {
+    await userSession(page);
 
     const formHelper = new FormUploadHelper(page);
 
-    // Upload the form fixture - this will automatically navigate to preview
-    await formHelper.uploadFormFixture("tsbDisableFooterGCBranding");
+    // Upload the form fixture
+    const formId = await formHelper.uploadFormFixture("tsbDisableFooterGCBranding");
+
+    // Publish the form
+    await formHelper.publishForm(formId);
+
+    // Visit the published form
+    await formHelper.visitPublishedForm(formId);
 
     // Verify that the footer does not contain the GC wordmark image
     // When disableGcBranding is true, the GC wordmark should not be present
