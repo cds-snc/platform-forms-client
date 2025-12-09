@@ -77,8 +77,8 @@ jobs:
               echo "ids=$(echo $json_array | sed 's/ //g')" >> "$GITHUB_OUTPUT"
             fi
           else
-            echo "Unsupported workflow trigger event"
-            exit 1
+            echo "Unsupported workflow trigger event, will skip next step..."
+            echo 'ids=' >> "$GITHUB_OUTPUT"
           fi
 
   cleanup-deployment-ids:

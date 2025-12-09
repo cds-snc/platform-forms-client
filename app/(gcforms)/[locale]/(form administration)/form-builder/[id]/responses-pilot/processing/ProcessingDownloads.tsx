@@ -53,6 +53,7 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   const handleInterrupt = useCallback(async () => {
     if (isNavigating) return; // Prevent double-click
 
+    logger.info("User initiated interrupt of processing.");
     setIsNavigating(true);
     setInterrupt(true);
     isInterruptedRef.current = true;
@@ -66,6 +67,7 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
     router.push(`/${locale}/form-builder/${id}/responses-pilot/result`);
   }, [
     isNavigating,
+    logger,
     setInterrupt,
     resetProcessingCompleted,
     resetNewSubmissions,
