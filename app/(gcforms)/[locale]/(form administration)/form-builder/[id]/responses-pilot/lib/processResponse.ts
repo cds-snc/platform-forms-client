@@ -234,7 +234,7 @@ const downloadAndConfirmResponse = async ({
   };
 };
 
-const deduplicateAttachmentFilenames = (attachments: CompleteAttachment[]) => {
+export const deduplicateAttachmentFilenames = (attachments: CompleteAttachment[]) => {
   const nameCount: Record<string, number> = {};
   return attachments.map((attachment) => {
     const lastDot = attachment.name.lastIndexOf(".");
