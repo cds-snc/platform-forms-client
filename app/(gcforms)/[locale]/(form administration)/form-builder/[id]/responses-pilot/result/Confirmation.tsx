@@ -16,7 +16,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   const {
     retrieveResponses,
     processedSubmissionIds,
-    setProcessedSubmissionIds,
+    resetProcessedSubmissionIds,
     resetProcessingCompleted,
     setInterrupt,
     processResponses,
@@ -40,7 +40,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
   const handleSelectNewLocation = () => {
     // reset relevant state
-    setProcessedSubmissionIds(new Set());
+    resetProcessedSubmissionIds();
     setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
@@ -52,7 +52,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
   const handleDownload = async () => {
     // reset relevant state
-    setProcessedSubmissionIds(new Set());
+    resetProcessedSubmissionIds();
     resetProcessingCompleted();
     setHasError(false);
     setInterrupt(false);
