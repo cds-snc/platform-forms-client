@@ -14,7 +14,9 @@ test.describe("TSB Contact Form functionality", () => {
     ).toBeVisible();
   });
 
-  test("Form footer does not contain GC branding", async ({ page }) => {
+  test.skip("Form footer does not contain GC branding", async ({ page }) => {
+    // @todo we need to use a published form --- need to add a helper to publish the form after upload
+
     const formHelper = new FormUploadHelper(page);
 
     // Upload the form fixture - this will automatically navigate to preview
