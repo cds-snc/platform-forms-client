@@ -39,7 +39,7 @@ export const getEventsForUser = async (userId: string) => {
   return events;
 };
 
-export const getEventsForForm = async (formId: string) => {
+export const getFormEvents = async (formId: string) => {
   const {
     user: { id: callingUserId },
   } = await authorization.canViewAllForms();

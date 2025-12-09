@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { getEventsForForm } from "../actions";
+import { getFormEvents } from "../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
@@ -94,7 +94,7 @@ export const AuditForm = ({ formId }: { formId: string }) => {
   }
 
   const handleFormAudit = async (formId: string) => {
-    const events = await getEventsForForm(formId);
+    const events = await getFormEvents(formId);
     if (Array.isArray(events)) {
       retrieveFileBlob(events);
     } else {

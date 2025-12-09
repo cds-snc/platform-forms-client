@@ -57,7 +57,7 @@ export const unConfirmedResponsesExist = AuthenticatedAction(async (_, formId: s
   }
 });
 
-export const getEventsForForm = AuthenticatedAction(async (session, formId: string) => {
+export const getFormEvents = AuthenticatedAction(async (session, formId: string) => {
   try {
     await authorization.canViewForm(formId).catch((e) => {
       if (e instanceof AccessControlError) {
