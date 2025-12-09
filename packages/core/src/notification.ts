@@ -1,7 +1,7 @@
 import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { getAwsSQSQueueURL } from "./getAwsSQSQueueURL";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { getAwsSQSQueueURL } from "@gcforms/connectors";
 
 const globalConfig = {
   region: process.env.AWS_REGION ?? "ca-central-1",
