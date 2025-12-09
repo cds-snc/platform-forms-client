@@ -52,6 +52,7 @@ type CompleteAttachment = {
   isPotentiallyMalicious: boolean;
   md5: string;
   downloadLink: string;
+  renameTo?: string;
 };
 
 export type FormSubmission = {

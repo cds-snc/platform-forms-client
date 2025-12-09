@@ -31,6 +31,10 @@ import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
 import { formatDuration } from "../lib/formatDuration";
 
+type SetStateUpdater = (prev: Set<string>) => Set<string>;
+type SetStateValue = Set<string> | SetStateUpdater;
+type SetProcessedSubmissionIds = Dispatch<SetStateAction<Set<string>>>;
+
 interface ResponsesContextType {
   locale: string;
   formId: string;
@@ -44,7 +48,8 @@ interface ResponsesContextType {
   retrieveResponses: () => Promise<NewFormSubmission[]>;
   newFormSubmissions: NewFormSubmission[] | null;
   processedSubmissionIds: Set<string>;
-  setProcessedSubmissionIds: Dispatch<SetStateAction<Set<string>>>;
+  setProcessedSubmissionIds: SetProcessedSubmissionIds;
+  resetProcessedSubmissionIds: () => void;
   processResponses: (
     initialSubmissions?: NewFormSubmission[],
     format?: "csv" | "html"
@@ -94,7 +99,8 @@ export const ResponsesProvider = ({
   const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
-  const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
+  const processedSubmissionIdsRef = useRef<Set<string>>(new Set());
+  const [processedSubmissionIds, setProcessedSubmissionIdsState] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<string>("");
@@ -122,6 +128,24 @@ export const ResponsesProvider = ({
     },
     [isProcessingInterrupted]
   );
+
+  const setProcessedSubmissionIds: SetProcessedSubmissionIds = useCallback(
+    (value: SetStateValue) => {
+      const nextValue =
+        typeof value === "function"
+          ? (value as SetStateUpdater)(processedSubmissionIdsRef.current)
+          : value;
+
+      processedSubmissionIdsRef.current = nextValue;
+      setProcessedSubmissionIdsState(new Set(processedSubmissionIdsRef.current));
+    },
+    []
+  );
+
+  const resetProcessedSubmissionIds = useCallback(() => {
+    processedSubmissionIdsRef.current.clear();
+    setProcessedSubmissionIdsState(new Set());
+  }, []);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -159,7 +183,7 @@ export const ResponsesProvider = ({
       const submissions = await apiClient.getNewFormSubmissions();
       setNewFormSubmissions(submissions);
 
-      logger.info(`Retrieved ${submissions.length} new form submissions`);
+      logger.info(`Queued ${submissions.length} new form submissions for processing`);
 
       return submissions;
     } catch (error) {
@@ -243,7 +267,7 @@ export const ResponsesProvider = ({
         logger.info(`Processing next ${formResponses.length} submissions`);
         for (const response of formResponses) {
           if (interruptRef.current) {
-            logger.warn("Processing interrupted by user");
+            logger.warn("Processing interrupted");
             break;
           }
 
@@ -318,9 +342,10 @@ export const ResponsesProvider = ({
         logger.warn(`Processing session interrupted after ${durationStr}.`);
       }
 
+      logger.info(`Processed ${processedSubmissionIdsRef.current.size} submissions.`);
+
       // Cleanup
       interruptRef.current = false;
-
       setNewFormSubmissions(null);
       setCurrentSubmissionId(null);
       setProcessingCompleted(true);
@@ -334,6 +359,7 @@ export const ResponsesProvider = ({
       retrieveResponses,
       selectedFormat,
       setInterrupt,
+      setProcessedSubmissionIds,
       t,
     ]
   );
@@ -343,14 +369,14 @@ export const ResponsesProvider = ({
     setApiClient(null);
     setDirectoryHandle(null);
     setNewFormSubmissions(null);
-    setProcessedSubmissionIds(new Set());
+    resetProcessedSubmissionIds();
     resetProcessingCompleted();
     setHasMaliciousAttachments(false);
     setSelectedFormat("csv");
     setHasError(false);
     setInterrupt(false);
     interruptRef.current = false;
-  }, [setInterrupt]);
+  }, [resetProcessedSubmissionIds, setInterrupt]);
 
   return (
     <ResponsesContext.Provider
@@ -368,6 +394,7 @@ export const ResponsesProvider = ({
         newFormSubmissions,
         processedSubmissionIds,
         setProcessedSubmissionIds,
+        resetProcessedSubmissionIds,
         processResponses,
         processingCompleted,
         resetProcessingCompleted,
