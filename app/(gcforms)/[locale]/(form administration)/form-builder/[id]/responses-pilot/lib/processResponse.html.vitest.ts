@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import {
   prepareTestEnvFromFixtures,
-  defaultSetProcessedSubmissionIds,
   defaultT,
   type SubmissionFixture,
   type PreparedTestEnv,
+  defaultIncrementProcessedSubmissionsCount,
 } from "./__tests__/testHelpers";
 import submissionFixture from "./__tests__/fixtures/response-get-support.json";
 import templateFixture from "./__tests__/fixtures/template-get-support-cmeaj61dl0001xf01aja6mnpf.json";
@@ -38,11 +38,11 @@ describe("processResponse (html)", () => {
 
     const htmlDir = await dir.getDirectoryHandle("html", { create: true });
 
-    const setProcessedSubmissionIds = defaultSetProcessedSubmissionIds;
+    const incrementProcessedSubmissionsCount = defaultIncrementProcessedSubmissionsCount;
     const t = defaultT;
 
     await processResponse({
-      setProcessedSubmissionIds,
+      incrementProcessedSubmissionsCount,
       setHasMaliciousAttachments: () => {},
       workingDirectoryHandle: dir as unknown as FileSystemDirectoryHandle,
       htmlDirectoryHandle: htmlDir as unknown as FileSystemDirectoryHandle,
