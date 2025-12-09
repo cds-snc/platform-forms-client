@@ -19,12 +19,14 @@ export const Menu = ({
   isPublished,
   ttl,
   direction = "up",
+  status,
 }: {
   id: string;
   name: string;
   isPublished: boolean;
   ttl?: Date;
   direction?: "up" | "down";
+  status?: string;
 }) => {
   const {
     t,
@@ -59,7 +61,7 @@ export const Menu = ({
         // Start async clone but return immediate callback value to satisfy MenuDropdown
         (async () => {
           try {
-            const res = await cloneForm(id);
+            const res = await cloneForm(id, status === "archived");
             if (res && res.formRecord && !res.error) {
               toast.success(t("card.menu.cloneSuccess"));
               window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;
