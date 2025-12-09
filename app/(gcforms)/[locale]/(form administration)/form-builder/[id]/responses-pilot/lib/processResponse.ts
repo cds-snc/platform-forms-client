@@ -184,9 +184,6 @@ const downloadAndConfirmResponse = async ({
   await fileStream.write(decryptedData);
   await fileStream.close();
 
-  // Perform integrity check and confirm submission
-  await integrityCheckAndConfirm(responseName, dataDirectoryHandle, apiClient, logger);
-
   const fileNameMapping: ResponseFilenameMapping = new Map();
 
   // check if there are files to download
@@ -208,18 +205,26 @@ const downloadAndConfirmResponse = async ({
 
     const downloadResults: AttachmentDownloadResult[] = [];
 
-    for (const attachment of decryptedResponse.attachments) {
-      // eslint-disable-next-line no-await-in-loop
-      const res = await downloadAttachment(responseAttachmentsDirectoryHandle, attachment);
+    const responseAttachmentsWithRenameTo = deduplicateAttachmentFilenames(
+      decryptedResponse.attachments
+    );
 
-      downloadResults.push(res);
-    }
+    // async download all attachments
+    await Promise.all(
+      responseAttachmentsWithRenameTo.map(async (attachment) => {
+        const res = await downloadAttachment(responseAttachmentsDirectoryHandle, attachment);
+        downloadResults.push(res);
+      })
+    );
 
     // Build mapping of attachment ID to filenames
     downloadResults.forEach(({ id, originalName, actualName, isPotentiallyMalicious }) => {
       fileNameMapping.set(id, { originalName, actualName, isPotentiallyMalicious });
     });
   }
+
+  // Perform integrity check and confirm submission
+  await integrityCheckAndConfirm(responseName, dataDirectoryHandle, apiClient, logger);
 
   return {
     submissionId: responseName,
@@ -229,14 +234,34 @@ const downloadAndConfirmResponse = async ({
   };
 };
 
+export const deduplicateAttachmentFilenames = (attachments: CompleteAttachment[]) => {
+  const nameCount: Record<string, number> = {};
+  return attachments.map((attachment) => {
+    const lastDot = attachment.name.lastIndexOf(".");
+    const base = lastDot !== -1 ? attachment.name.substring(0, lastDot) : attachment.name;
+    const ext = lastDot !== -1 ? attachment.name.substring(lastDot) : "";
+    const key = attachment.name;
+    const count = nameCount[key] || 0;
+    nameCount[key] = count + 1;
+    let renameTo = attachment.name;
+    if (count > 0) {
+      renameTo = `${base} (${count})${ext}`;
+    }
+    return { ...attachment, renameTo };
+  });
+};
+
 const downloadAttachment = async (
   responseAttachmentsDirectoryHandle: FileSystemDirectoryHandle,
   attachment: CompleteAttachment
 ): Promise<AttachmentDownloadResult> => {
   const response = await fetch(attachment.downloadLink);
+
   // Ensure the fetch was successful
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    throw new Error(
+      `DownloadAttachment HTTP Error status: ${response.status} ${response.statusText}`
+    );
   }
 
   let attachmentDirectoryHandle = responseAttachmentsDirectoryHandle;
@@ -250,10 +275,8 @@ const downloadAttachment = async (
     );
   }
 
-  const uniqueFilename = await getUniqueFileName(attachmentDirectoryHandle, attachment.name);
-
   const fileStream = await attachmentDirectoryHandle
-    .getFileHandle(`${uniqueFilename}`, { create: true })
+    .getFileHandle(`${attachment.renameTo}`, { create: true })
     .then((handle) => handle.createWritable({ keepExistingData: false }));
 
   await response.body?.pipeTo(fileStream);
@@ -261,38 +284,9 @@ const downloadAttachment = async (
   return {
     id: attachment.id,
     originalName: attachment.name,
-    actualName: uniqueFilename,
+    actualName: attachment.renameTo || attachment.name,
     isPotentiallyMalicious: attachment.isPotentiallyMalicious,
   };
-};
-
-const getUniqueFileName = async (
-  directoryHandle: FileSystemDirectoryHandle,
-  fileName: string
-): Promise<string> => {
-  // Split filename into name and extension
-  const lastDotIndex = fileName.lastIndexOf(".");
-  const name = lastDotIndex !== -1 ? fileName.substring(0, lastDotIndex) : fileName;
-  const extension = lastDotIndex !== -1 ? fileName.substring(lastDotIndex) : "";
-
-  let uniqueFileName = fileName;
-  let counter = 1;
-
-  // Check if file exists and increment counter until we find a unique name
-  while (true) {
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      await directoryHandle.getFileHandle(uniqueFileName);
-      // File exists, try next number
-      uniqueFileName = `${name} (${counter})${extension}`;
-      counter++;
-    } catch {
-      // File doesn't exist, we can use this name
-      break;
-    }
-  }
-
-  return uniqueFileName;
 };
 
 const integrityCheckAndConfirm = async (

@@ -14,7 +14,7 @@ export const STORAGE_KEY_PREFIX = "responses-pilot-format-";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { t, router } = useResponsesApp();
-  const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses, logger } =
+  const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses } =
     useResponsesContext();
 
   // Load saved format from localStorage on mount if available
@@ -29,16 +29,12 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
   }, [id, setSelectedFormat]);
 
   const handleNext = useCallback(async () => {
-    logger.info("Starting retrieval of form submissions");
-
     const initialResponses = await retrieveResponses();
-
-    logger.info(`Retrieved ${initialResponses.length} form submissions`);
 
     processResponses(initialResponses);
 
     router.push(`/${locale}/form-builder/${id}/responses-pilot/processing`);
-  }, [logger, retrieveResponses, processResponses, router, locale, id]);
+  }, [retrieveResponses, processResponses, router, locale, id]);
 
   const handleFormatChange = useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
