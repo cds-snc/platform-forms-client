@@ -6,8 +6,6 @@ import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { notification } from "./notification";
 
-// TODO rename file to something like newSubmissionsNotification.ts
-
 // Hard coded since only one interval is supported currently
 const NOTIFICATIONS_INTERVAL = NotificationsInterval.DAY;
 
@@ -43,7 +41,7 @@ export const sendNotifications = async (formId: string, titleEn: string, titleFr
     case Status.SINGLE_EMAIL_SENT:
       // Single submissions email sent but not multiple submissions email, send multiple email
       Promise.all([
-        sendEmailNotification(users, formId, titleEn, titleFr, true),
+        sendEmailAfterSubmissionProcessed(users, formId, titleEn, titleFr, true),
         setMarker(formId, Status.MULTIPLE_EMAIL_SENT),
       ]);
       break;
@@ -53,7 +51,7 @@ export const sendNotifications = async (formId: string, titleEn: string, titleFr
     default:
       // No email has been sent, send single submission email
       Promise.all([
-        sendEmailNotification(users, formId, titleEn, titleFr, false),
+        sendEmailAfterSubmissionProcessed(users, formId, titleEn, titleFr, false),
         setMarker(formId),
       ]);
   }
@@ -145,7 +143,7 @@ const getMarker = async (formId: string) => {
     .catch((err) => logMessage.error(`getMarker: ${err}`));
 };
 
-const sendEmailNotification = async (
+const sendEmailAfterSubmissionProcessed = async (
   users: {
     email: string;
     enabled: boolean;
@@ -165,7 +163,7 @@ const sendEmailNotification = async (
     }
     const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
 
-    await notification.immediate({
+    await notification.deferred({
       notificationId: formId,
       emails,
       subject: multipleSubmissions
