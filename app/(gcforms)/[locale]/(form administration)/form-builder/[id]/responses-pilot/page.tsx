@@ -50,20 +50,9 @@ export default async function Page(props: {
           <h3 className="text-lg font-semibold">{t("startPage.steps.heading")}</h3>
         </div>
         <ol className="mt-3 list-decimal pl-6">
-          <li className="pb-3">
-            <strong>{t("startPage.steps.uploadKey.title")}</strong>
-            <div className="text-sm text-slate-700">{t("startPage.steps.uploadKey.detail")}</div>
-          </li>
-          <li className="pb-3">
-            <strong>{t("startPage.steps.chooseLocation.title")}</strong>
-            <div className="text-sm text-slate-700">
-              {t("startPage.steps.chooseLocation.detail")}
-            </div>
-          </li>
-          <li className="pb-3">
-            <strong>{t("startPage.steps.selectFormat.title")}</strong>
-            <div className="text-sm text-slate-700">{t("startPage.steps.selectFormat.detail")}</div>
-          </li>
+          <li className="pb-3">{t("startPage.steps.uploadKey.title")}</li>
+          <li className="pb-3">{t("startPage.steps.chooseLocation.title")}</li>
+          <li className="pb-3">{t("startPage.steps.selectFormat.title")}</li>
         </ol>
       </div>
 
