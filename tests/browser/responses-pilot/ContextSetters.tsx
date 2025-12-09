@@ -16,22 +16,32 @@ export function ContextSetters({
   hasError,
   hasMaliciousAttachments,
 }: ContextSettersProps) {
-  const context = useResponsesContext();
+  const { setDirectoryHandle, setProcessedSubmissionIds, setHasError, setHasMaliciousAttachments } =
+    useResponsesContext();
 
   useEffect(() => {
     if (directoryHandle) {
-      context.setDirectoryHandle(directoryHandle as FileSystemDirectoryHandle);
+      setDirectoryHandle(directoryHandle as FileSystemDirectoryHandle);
     }
     if (processedSubmissionIds) {
-      context.setProcessedSubmissionIds(processedSubmissionIds);
+      setProcessedSubmissionIds(processedSubmissionIds);
     }
     if (hasError !== undefined) {
-      context.setHasError(hasError);
+      setHasError(hasError);
     }
     if (hasMaliciousAttachments !== undefined) {
-      context.setHasMaliciousAttachments(hasMaliciousAttachments);
+      setHasMaliciousAttachments(hasMaliciousAttachments);
     }
-  }, [directoryHandle, processedSubmissionIds, hasError, hasMaliciousAttachments, context]);
+  }, [
+    directoryHandle,
+    processedSubmissionIds,
+    hasError,
+    hasMaliciousAttachments,
+    setDirectoryHandle,
+    setProcessedSubmissionIds,
+    setHasError,
+    setHasMaliciousAttachments,
+  ]);
 
   return null;
 }
