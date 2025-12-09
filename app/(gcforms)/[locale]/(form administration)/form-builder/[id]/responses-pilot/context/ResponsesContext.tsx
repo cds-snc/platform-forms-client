@@ -144,8 +144,8 @@ export const ResponsesProvider = ({
 
   const resetProcessedSubmissionIds = useCallback(() => {
     processedSubmissionIdsRef.current.clear();
-    setProcessedSubmissionIds(new Set());
-  }, [setProcessedSubmissionIds]);
+    setProcessedSubmissionIdsState(new Set());
+  }, []);
 
   // Cleanup on unmount
   useEffect(() => {
