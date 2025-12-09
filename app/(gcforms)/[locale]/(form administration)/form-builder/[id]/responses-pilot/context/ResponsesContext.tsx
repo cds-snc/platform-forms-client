@@ -31,6 +31,10 @@ import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
 import { formatDuration } from "../lib/formatDuration";
 
+type SetStateUpdater = (prev: Set<string>) => Set<string>;
+type SetStateValue = Set<string> | SetStateUpdater;
+type SetProcessedSubmissionIds = Dispatch<SetStateAction<Set<string>>>;
+
 interface ResponsesContextType {
   locale: string;
   formId: string;
@@ -44,7 +48,7 @@ interface ResponsesContextType {
   retrieveResponses: () => Promise<NewFormSubmission[]>;
   newFormSubmissions: NewFormSubmission[] | null;
   processedSubmissionIds: Set<string>;
-  setProcessedSubmissionIds: Dispatch<SetStateAction<Set<string>>>;
+  setProcessedSubmissionIds: SetProcessedSubmissionIds;
   resetProcessedSubmissionIds: () => void;
   processResponses: (
     initialSubmissions?: NewFormSubmission[],
@@ -125,16 +129,18 @@ export const ResponsesProvider = ({
     [isProcessingInterrupted]
   );
 
-  const setProcessedSubmissionIds: Dispatch<SetStateAction<Set<string>>> = useCallback((value) => {
-    const nextValue =
-      typeof value === "function"
-        ? (value as (v: Set<string>) => Set<string>)(processedSubmissionIdsRef.current)
-        : value;
+  const setProcessedSubmissionIds: SetProcessedSubmissionIds = useCallback(
+    (value: SetStateValue) => {
+      const nextValue =
+        typeof value === "function"
+          ? (value as SetStateUpdater)(processedSubmissionIdsRef.current)
+          : value;
 
-    setProcessedSubmissionIdsState(new Set(processedSubmissionIdsRef.current));
-
-    processedSubmissionIdsRef.current = nextValue;
-  }, []);
+      processedSubmissionIdsRef.current = nextValue;
+      setProcessedSubmissionIdsState(new Set(processedSubmissionIdsRef.current));
+    },
+    []
+  );
 
   const resetProcessedSubmissionIds = useCallback(() => {
     processedSubmissionIdsRef.current.clear();
