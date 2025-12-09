@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import InMemoryDirectoryHandle from "./__tests__/fsMock";
 import {
   prepareTestEnvFromFixtures,
-  defaultSetProcessedSubmissionIds,
+  defaultIncrementProcessedSubmissionsCount,
   defaultT,
   type SubmissionFixture,
   type PreparedTestEnv,
@@ -50,11 +50,11 @@ describe("processResponse", () => {
       create: true,
     })) as unknown as FileSystemFileHandle;
 
-    const setProcessedSubmissionIds = defaultSetProcessedSubmissionIds;
+    const incrementProcessedSubmissionsCount = defaultIncrementProcessedSubmissionsCount;
     const t = defaultT;
 
     await processResponse({
-      setProcessedSubmissionIds,
+      incrementProcessedSubmissionsCount,
       setHasMaliciousAttachments: () => {},
       workingDirectoryHandle: dir as unknown as FileSystemDirectoryHandle,
       htmlDirectoryHandle: null,
@@ -115,11 +115,11 @@ describe("processResponse with null values", () => {
       create: true,
     })) as unknown as FileSystemFileHandle;
 
-    const setProcessedSubmissionIds = defaultSetProcessedSubmissionIds;
+    const incrementProcessedSubmissionsCount = defaultIncrementProcessedSubmissionsCount;
     const t = defaultT;
 
     await processResponse({
-      setProcessedSubmissionIds,
+      incrementProcessedSubmissionsCount,
       setHasMaliciousAttachments: () => {},
       workingDirectoryHandle: dir as unknown as FileSystemDirectoryHandle,
       htmlDirectoryHandle: null,

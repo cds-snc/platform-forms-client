@@ -40,7 +40,7 @@ export function TestWrapper({
     | FileSystemDirectoryHandle
     | { name: string }
     | undefined;
-  const processedSubmissionIds = overrides?.processedSubmissionIds as Set<string> | undefined;
+  const processedSubmissionsCount = overrides?.processedSubmissionsCount as number | undefined;
   const hasError = overrides?.hasError as boolean | undefined;
   const hasMaliciousAttachments = overrides?.hasMaliciousAttachments as boolean | undefined;
 
@@ -51,7 +51,7 @@ export function TestWrapper({
         {currentSubmissionId && <CurrentSubmissionIdSetter submissionId={currentSubmissionId} />}
         <ContextSetters
           directoryHandle={directoryHandle}
-          processedSubmissionIds={processedSubmissionIds}
+          processedSubmissionsCount={processedSubmissionsCount}
           hasError={hasError}
           hasMaliciousAttachments={hasMaliciousAttachments}
         />
