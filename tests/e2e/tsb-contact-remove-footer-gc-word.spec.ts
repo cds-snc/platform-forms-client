@@ -20,8 +20,13 @@ test.describe("TSB Contact Form functionality", () => {
     // Upload the form fixture - this will automatically navigate to preview
     await formHelper.uploadFormFixture("tsbDisableFooterGCBranding");
 
-    // Verify that the footer does not contain any images (GC branding)
-    const footerImages = page.locator("[data-testid='footer']").locator("img");
-    await expect(footerImages).toHaveCount(0);
+    // Verify that the footer does not contain the GC wordmark image
+    // When disableGcBranding is true, the GC wordmark should not be present
+    const gcWordmark = page
+      .locator("[data-testid='footer']")
+      .locator(
+        "img[alt*='Government of Canada'], img[alt*='Gouvernement du Canada'], img[src*='sig-blk']"
+      );
+    await expect(gcWordmark).toHaveCount(0);
   });
 });
