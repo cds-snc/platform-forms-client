@@ -560,7 +560,8 @@
       "500 requests per minute": "500 requests per minute",
       "1000 requests per minute": "1000 requests per minute"
     },
-    "errorCreatingDownload": "Something went wrong with the download. Please try again later or contact Support."
+    "errorCreatingDownload": "Something went wrong with the download. Please try again later or contact Support.",
+    "noEvents": "No events found, it can take several minutes for recent activity to appear."
   },
   "formIntroduction": "Form introduction",
   "formInvalidProperty": "Invalid: {{property}}",

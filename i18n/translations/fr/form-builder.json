@@ -560,7 +560,8 @@
       "500 requests per minute": "500 demandes par minute",
       "1000 requests per minute": "1000 demandes par minute"
     },
-    "errorCreatingDownload": "Une erreur s'est produite lors du téléchargement. Veuillez réessayer plus tard ou contacter l'équipe de soutien."
+    "errorCreatingDownload": "Une erreur s'est produite lors du téléchargement. Veuillez réessayer plus tard ou contacter l'équipe de soutien.",
+    "noEvents": "Aucun événement trouvé, il peut falloir plusieurs minutes pour que l'activité récente apparaisse."
   },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",

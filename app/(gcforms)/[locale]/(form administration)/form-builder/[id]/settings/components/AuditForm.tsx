@@ -96,7 +96,11 @@ export const AuditForm = ({ formId }: { formId: string }) => {
   const handleFormAudit = async (formId: string) => {
     const events = await getFormEvents(formId);
     if (Array.isArray(events)) {
-      retrieveFileBlob(events);
+      if (events.length === 0) {
+        alert(t("auditDownload.noEvents"));
+      } else {
+        retrieveFileBlob(events);
+      }
     } else {
       alert(t("auditDownload.errorFetchingEvents"));
     }
