@@ -8,11 +8,12 @@ export type Organization = {
   [key: string]: string | null;
 };
 
-enum OrganizationType {
-  GCDepartment = "GC Department",
-  CrownCorp = "Crown Corp",
-  PTM = "PTM",
-}
+const OrganizationType = {
+  GCDepartment: "GC Department",
+  CrownCorp: "Crown Corp",
+  PTM: "PTM",
+} as const;
+type OrganizationType = (typeof OrganizationType)[keyof typeof OrganizationType];
 
 export const organizations: ManagedDataSet<Organization[]> = {
   values: organizationsData,
