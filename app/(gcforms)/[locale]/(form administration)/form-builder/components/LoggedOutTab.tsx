@@ -5,11 +5,12 @@ import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 
-export enum LoggedOutTabName {
-  PUBLISH = "publish",
-  RESPONSES = "responses",
-  SETTINGS = "settings",
-}
+export const LoggedOutTabName = {
+  PUBLISH: "publish",
+  RESPONSES: "responses",
+  SETTINGS: "settings",
+} as const;
+type LoggedOutTabName = (typeof LoggedOutTabName)[keyof typeof LoggedOutTabName];
 
 interface LoggedOutTabProps {
   tabName: LoggedOutTabName;
