@@ -17,7 +17,7 @@ import { withRetry } from "@root/lib/utils/retry";
 import { ResponseDownloadLogger } from "./logger";
 
 export const processResponse = async ({
-  setProcessedSubmissionIds,
+  incrementProcessedSubmissionsCount,
   setHasMaliciousAttachments,
   workingDirectoryHandle,
   htmlDirectoryHandle,
@@ -31,7 +31,7 @@ export const processResponse = async ({
   t,
   logger,
 }: {
-  setProcessedSubmissionIds: React.Dispatch<React.SetStateAction<Set<string>>>;
+  incrementProcessedSubmissionsCount: () => void;
   setHasMaliciousAttachments: React.Dispatch<React.SetStateAction<boolean>>;
   workingDirectoryHandle: FileSystemDirectoryHandle;
   htmlDirectoryHandle: FileSystemDirectoryHandle | null;
@@ -111,12 +111,7 @@ export const processResponse = async ({
       break;
   }
 
-  // Record individual submission ids so we have an accurate count
-  setProcessedSubmissionIds((prev) => {
-    const next = new Set(prev);
-    next.add(responseName);
-    return next;
-  });
+  incrementProcessedSubmissionsCount();
 };
 
 export type ResponseFilenameMapping = Map<

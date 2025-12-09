@@ -31,10 +31,6 @@ import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
 import { formatDuration } from "../lib/formatDuration";
 
-type SetStateUpdater = (prev: Set<string>) => Set<string>;
-type SetStateValue = Set<string> | SetStateUpdater;
-type SetProcessedSubmissionIds = Dispatch<SetStateAction<Set<string>>>;
-
 interface ResponsesContextType {
   locale: string;
   formId: string;
@@ -47,9 +43,10 @@ interface ResponsesContextType {
   setDirectoryHandle: Dispatch<SetStateAction<FileSystemDirectoryHandle | null>>;
   retrieveResponses: () => Promise<NewFormSubmission[]>;
   newFormSubmissions: NewFormSubmission[] | null;
-  processedSubmissionIds: Set<string>;
-  setProcessedSubmissionIds: SetProcessedSubmissionIds;
-  resetProcessedSubmissionIds: () => void;
+  processedSubmissionsCount: number;
+  incrementProcessedSubmissionsCount: () => void;
+  resetProcessedSubmissionsCount: () => void;
+  setProcessedSubmissionsCount: (count: number) => void;
   processResponses: (
     initialSubmissions?: NewFormSubmission[],
     format?: "csv" | "html"
@@ -99,8 +96,7 @@ export const ResponsesProvider = ({
   const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
-  const processedSubmissionIdsRef = useRef<Set<string>>(new Set());
-  const [processedSubmissionIds, setProcessedSubmissionIdsState] = useState<Set<string>>(new Set());
+  const processedSubmissionsCountRef = useRef<number>(0);
   const [processingCompleted, setProcessingCompleted] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<string>("");
@@ -129,22 +125,16 @@ export const ResponsesProvider = ({
     [isProcessingInterrupted]
   );
 
-  const setProcessedSubmissionIds: SetProcessedSubmissionIds = useCallback(
-    (value: SetStateValue) => {
-      const nextValue =
-        typeof value === "function"
-          ? (value as SetStateUpdater)(processedSubmissionIdsRef.current)
-          : value;
+  const incrementProcessedSubmissionsCount = useCallback(() => {
+    processedSubmissionsCountRef.current += 1;
+  }, []);
 
-      processedSubmissionIdsRef.current = nextValue;
-      setProcessedSubmissionIdsState(new Set(processedSubmissionIdsRef.current));
-    },
-    []
-  );
+  const resetProcessedSubmissionsCount = useCallback(() => {
+    processedSubmissionsCountRef.current = 0;
+  }, []);
 
-  const resetProcessedSubmissionIds = useCallback(() => {
-    processedSubmissionIdsRef.current.clear();
-    setProcessedSubmissionIdsState(new Set());
+  const setProcessedSubmissionsCount = useCallback((count: number) => {
+    processedSubmissionsCountRef.current = count;
   }, []);
 
   // Cleanup on unmount
@@ -276,7 +266,7 @@ export const ResponsesProvider = ({
           try {
             // eslint-disable-next-line no-await-in-loop
             await processResponse({
-              setProcessedSubmissionIds,
+              incrementProcessedSubmissionsCount,
               setHasMaliciousAttachments,
               workingDirectoryHandle: directoryHandle,
               htmlDirectoryHandle,
@@ -342,7 +332,7 @@ export const ResponsesProvider = ({
         logger.warn(`Processing session interrupted after ${durationStr}.`);
       }
 
-      logger.info(`Processed ${processedSubmissionIdsRef.current.size} submissions.`);
+      logger.info(`Processed ${processedSubmissionsCountRef.current} submissions.`);
 
       // Cleanup
       interruptRef.current = false;
@@ -353,13 +343,13 @@ export const ResponsesProvider = ({
     [
       apiClient,
       directoryHandle,
+      incrementProcessedSubmissionsCount,
       logger,
       newFormSubmissions,
       privateApiKey,
       retrieveResponses,
       selectedFormat,
       setInterrupt,
-      setProcessedSubmissionIds,
       t,
     ]
   );
@@ -369,14 +359,14 @@ export const ResponsesProvider = ({
     setApiClient(null);
     setDirectoryHandle(null);
     setNewFormSubmissions(null);
-    resetProcessedSubmissionIds();
     resetProcessingCompleted();
+    resetProcessedSubmissionsCount();
     setHasMaliciousAttachments(false);
     setSelectedFormat("csv");
     setHasError(false);
     setInterrupt(false);
     interruptRef.current = false;
-  }, [resetProcessedSubmissionIds, setInterrupt]);
+  }, [resetProcessedSubmissionsCount, setInterrupt]);
 
   return (
     <ResponsesContext.Provider
@@ -392,9 +382,10 @@ export const ResponsesProvider = ({
         setDirectoryHandle,
         retrieveResponses,
         newFormSubmissions,
-        processedSubmissionIds,
-        setProcessedSubmissionIds,
-        resetProcessedSubmissionIds,
+        processedSubmissionsCount: processedSubmissionsCountRef.current,
+        incrementProcessedSubmissionsCount,
+        resetProcessedSubmissionsCount,
+        setProcessedSubmissionsCount,
         processResponses,
         processingCompleted,
         resetProcessingCompleted,
