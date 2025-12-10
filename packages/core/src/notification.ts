@@ -2,6 +2,8 @@ import { SendMessageCommand, SQSClient, GetQueueUrlCommand } from "@aws-sdk/clie
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
+const DYNAMODB_NOTIFICATION_TABLE_NAME = "Notification";
+
 const globalConfig = {
   region: process.env.AWS_REGION ?? "ca-central-1",
 };
@@ -10,7 +12,7 @@ const sqsClient = new SQSClient({
   ...globalConfig,
 });
 
-export const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
+const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({
     ...globalConfig,
     // SDK retries use exponential backoff with jitter by default
@@ -18,8 +20,31 @@ export const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
   })
 );
 
-const DYNAMODB_NOTIFICATION_TABLE_NAME = "Notification";
+const getAwsSQSQueueURL = async (
+  urlEnvName: string,
+  urlQueueName: string
+): Promise<string | null> => {
+  if (process.env[urlEnvName]) {
+    return process.env[urlEnvName];
+  }
 
+  const data = await sqsClient.send(
+    new GetQueueUrlCommand({
+      QueueName: urlQueueName,
+    })
+  );
+  return data.QueueUrl ?? null;
+};
+
+/**
+ * Creates a notification record in DynamoDB. This record is later used by the
+ * notification lambda to send the email once queued by enqueueDeferredNotification.
+ *
+ * @param notificationId - Unique identifier for the notification
+ * @param emails - Array of email addresses to send the notification to
+ * @param subject - Email subject line
+ * @param body - Email body content
+ */
 export const createNotificationRecord = async ({
   notificationId,
   emails,
@@ -51,7 +76,16 @@ export const createNotificationRecord = async ({
   }
 };
 
-export const enqueueDeferredNotification = async (notificationId: string) => {
+/**
+ * Enques a notification ID in the SQS queue. When dequeued this triggers the
+ * notification lambda to process and send the email. The notification record must
+ * already exist in DynamoDB (created via createNotificationRecord) before calling
+ * this function.
+ *
+ * @param notificationId - Unique identifier for the notification to enqueue and
+ *   used by the notification lambda to look up the record in DynamoDB.
+ */
+export const enqueueDeferredNotification = async (notificationId: string): Promise<void> => {
   try {
     const queueUrl = await getAwsSQSQueueURL("NOTIFICATION_QUEUE_URL", "notification_queue");
     if (!queueUrl) {
@@ -71,20 +105,4 @@ export const enqueueDeferredNotification = async (notificationId: string) => {
       `Could not enqueue deferred notification id ${notificationId} + ${JSON.stringify(error)}`
     );
   }
-};
-
-const getAwsSQSQueueURL = async (
-  urlEnvName: string,
-  urlQueueName: string
-): Promise<string | null> => {
-  if (process.env[urlEnvName]) {
-    return process.env[urlEnvName];
-  }
-
-  const data = await sqsClient.send(
-    new GetQueueUrlCommand({
-      QueueName: urlQueueName,
-    })
-  );
-  return data.QueueUrl ?? null;
 };
