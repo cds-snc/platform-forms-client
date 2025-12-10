@@ -16,7 +16,7 @@ export default defineConfig({
     ? parseInt(process.env.PLAYWRIGHT_WORKERS)
     : process.env.CI
       ? 4
-      : 1,
+      : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI ? [["github"], ["list"]] : "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
