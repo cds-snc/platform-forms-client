@@ -521,7 +521,8 @@
       "CreateAPIKey": "Generated API Key",
       "DeleteAPIKey": "Deleted API Key",
       "RefreshAPIKey": "Re-generated API Key",
-      "PublishForm": "Form published"
+      "PublishForm": "Form published",
+      "UpdateFormJsonConfig": "Form JSON updated"
     },
     "eventDetails": {
       "CreatedForm": "Created form",
