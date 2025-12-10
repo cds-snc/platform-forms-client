@@ -23,12 +23,12 @@ describe("Confirmation - Browser Mode", () => {
       name: "my-responses-folder",
     };
 
-    const mockProcessedSubmissionIds = new Set(["sub-1", "sub-2", "sub-3"]);
+    const mockProcessedSubmissionsCount = 3;
 
     await render(<Confirmation locale="en" id="test-form" />, {
       mockApiClient,
       overrides: {
-        processedSubmissionIds: mockProcessedSubmissionIds,
+        processedSubmissionsCount: mockProcessedSubmissionsCount,
         directoryHandle: mockDirectoryHandle,
       },
     });
@@ -58,11 +58,11 @@ describe("Confirmation - Browser Mode", () => {
       formId: "test-form",
     } as unknown as GCFormsApiClient;
 
-    const mockProcessedSubmissionIds = new Set(["sub-1"]);
+    const mockProcessedSubmissionsCount = 1;
 
     await render(<Confirmation locale="en" id="test-form" />, {
       mockApiClient,
-      overrides: { processedSubmissionIds: mockProcessedSubmissionIds },
+      overrides: { processedSubmissionsCount: mockProcessedSubmissionsCount },
     });
 
     // Should show "1 response was downloaded"
@@ -80,12 +80,12 @@ describe("Confirmation - Browser Mode", () => {
       push: vi.fn(),
     };
 
-    const mockProcessedSubmissionIds = new Set(["sub-1", "sub-2", "sub-3"]);
+    const mockProcessedSubmissionsCount = 3;
 
     await render(<Confirmation locale="en" id="test-form" />, {
       mockApiClient,
 
-      overrides: { router: mockRouter, processedSubmissionIds: mockProcessedSubmissionIds },
+      overrides: { router: mockRouter, processedSubmissionsCount: mockProcessedSubmissionsCount },
     });
 
     const backButton = page.getByText(enTranslations.backToStart);
@@ -102,13 +102,13 @@ describe("Confirmation - Browser Mode", () => {
       formId: "test-form",
     } as unknown as GCFormsApiClient;
 
-    const mockProcessedSubmissionIds = new Set<string>();
+    const mockProcessedSubmissionsCount = 0;
 
     await render(<Confirmation locale="en" id="test-form" />, {
       mockApiClient,
       overrides: {
         hasError: true,
-        processedSubmissionIds: mockProcessedSubmissionIds,
+        processedSubmissionsCount: mockProcessedSubmissionsCount,
       },
     });
 
@@ -125,13 +125,13 @@ describe("Confirmation - Browser Mode", () => {
       formId: "test-form",
     } as unknown as GCFormsApiClient;
 
-    const mockProcessedSubmissionIds = new Set(["sub-1", "sub-2"]);
+    const mockProcessedSubmissionsCount = 2;
 
     await render(<Confirmation locale="en" id="test-form" />, {
       mockApiClient,
       overrides: {
         hasError: true,
-        processedSubmissionIds: mockProcessedSubmissionIds,
+        processedSubmissionsCount: mockProcessedSubmissionsCount,
       },
     });
 
@@ -149,13 +149,13 @@ describe("Confirmation - Browser Mode", () => {
       formId: "test-form",
     } as unknown as GCFormsApiClient;
 
-    const mockProcessedSubmissionIds = new Set(["sub-1"]);
+    const mockProcessedSubmissionsCount = 1;
 
     await render(<Confirmation locale="en" id="test-form" />, {
       mockApiClient,
       overrides: {
         hasMaliciousAttachments: true,
-        processedSubmissionIds: mockProcessedSubmissionIds,
+        processedSubmissionsCount: mockProcessedSubmissionsCount,
       },
     });
 

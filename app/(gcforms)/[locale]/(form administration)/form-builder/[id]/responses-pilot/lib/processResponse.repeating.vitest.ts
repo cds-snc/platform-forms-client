@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import InMemoryDirectoryHandle from "./__tests__/fsMock";
-import { prepareTestEnvFromFixtures, defaultSetProcessedSubmissionIds, defaultT, testLogger } from "./__tests__/testHelpers";
+import { prepareTestEnvFromFixtures, defaultIncrementProcessedSubmissionsCount, defaultT, testLogger } from "./__tests__/testHelpers";
 
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
 import type { FormProperties } from "@gcforms/types";
@@ -41,11 +41,11 @@ describe("processResponse - repeating set", () => {
       create: true,
     })) as unknown as FileSystemFileHandle;
 
-    const setProcessedSubmissionIds = defaultSetProcessedSubmissionIds;
+    const incrementProcessedSubmissionsCount = defaultIncrementProcessedSubmissionsCount;
     const t = defaultT;
 
     await processResponse({
-      setProcessedSubmissionIds,
+      incrementProcessedSubmissionsCount,
       setHasMaliciousAttachments: () => {},
       workingDirectoryHandle: dir as unknown as FileSystemDirectoryHandle,
       htmlDirectoryHandle: null,
