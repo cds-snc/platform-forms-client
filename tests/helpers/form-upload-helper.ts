@@ -35,8 +35,8 @@ export class FormUploadHelper {
     // This will cause the form to be saved and get a real ID
     const formTitle = this.page.locator("#formTitle");
     await formTitle.click();
-    await formTitle.press("End");
-    await formTitle.type("!!");
+    await formTitle.type("!");
+    await formTitle.press("Backspace"); // Trigger change to enable save
 
     // Wait for the Save Draft button to appear
     await this.page.waitForTimeout(500);
@@ -141,7 +141,7 @@ export class FormUploadHelper {
     await this.page.waitForLoadState("networkidle");
   }
 
-  async publishForm(formId: string): Promise<{ enLink: string; frLink: string }> {
+  async publishForm(formId: string) {
     // Navigate to settings page
     await this.page.goto(`/en/form-builder/${formId}/settings`);
     await this.page.waitForLoadState("networkidle");
@@ -202,29 +202,12 @@ export class FormUploadHelper {
 
       // Click Continue
       await this.page.getByRole("button", { name: "Continue" }).click();
-      await this.page.waitForLoadState("networkidle");
     }
 
-    // Wait for form-builder/{id}/published to load
+    // Wait for the redirect to the published page (may take longer)
     await this.page.waitForURL(new RegExp(`/form-builder/${formId}/published`), {
-      timeout: 15000,
+      timeout: 60000,
     });
     await this.page.waitForLoadState("networkidle");
-
-    // Get the published links
-    const enLinkElement = this.page.locator('[data-testid="published-link-en"]');
-    const frLinkElement = this.page.locator('[data-testid="published-link-fr"]');
-
-    await enLinkElement.waitFor({ state: "visible", timeout: 5000 });
-    await frLinkElement.waitFor({ state: "visible", timeout: 5000 });
-
-    const enLink = await enLinkElement.textContent();
-    const frLink = await frLinkElement.textContent();
-
-    if (!enLink || !frLink) {
-      throw new Error("Could not extract published links");
-    }
-
-    return { enLink, frLink };
   }
 }

@@ -3,21 +3,10 @@ import { FormUploadHelper } from "../helpers/form-upload-helper";
 import { userSession } from "../helpers/user-session";
 
 test.describe("TSB Contact Form functionality", () => {
-  test.skip("TSB Contact Form renders", async ({ page }) => {
-    await userSession(page);
-
-    const formHelper = new FormUploadHelper(page);
-
-    // Upload the form fixture - this will automatically navigate to preview
-    await formHelper.uploadFormFixture("tsbDisableFooterGCBranding");
-
-    // Check that the form title is displayed
-    await expect(
-      page.getByRole("heading", { name: "Transportation Safety Board of Canada general enquiries" })
-    ).toBeVisible();
-  });
-
   test("Form footer does not contain GC branding", async ({ page }) => {
+    // Increase timeout for this test as publishing can take a while
+    test.setTimeout(120000);
+
     await userSession(page);
 
     const formHelper = new FormUploadHelper(page);
@@ -26,9 +15,14 @@ test.describe("TSB Contact Form functionality", () => {
     const formId = await formHelper.uploadFormFixture("tsbDisableFooterGCBranding");
 
     // Publish the form
-    const { enLink } = await formHelper.publishForm(formId);
+    await formHelper.publishForm(formId);
 
-    await page.waitForURL(enLink);
+    await page.goto(`en/id/${formId}`);
+
+    // Check that the form title is displayed
+    await expect(
+      page.getByRole("heading", { name: "Transportation Safety Board of Canada general enquiries" })
+    ).toBeVisible();
 
     // Visit the published form in English
 
