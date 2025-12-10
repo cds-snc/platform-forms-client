@@ -51,3 +51,5 @@ export {
   ensureChoiceId,
   getElementsUsingChoiceId,
 } from "./helpers";
+
+export { createNotificationRecord, enqueueDeferredNotification } from "./notification";
