@@ -455,7 +455,7 @@
   "formatH3": "Format Heading 3",
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
-  "formattedDate": "Date",
+  "formattedDate": "Date & Time (UTC)",
   "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
     "title": "You must retrieve all responses before archiving this form.",

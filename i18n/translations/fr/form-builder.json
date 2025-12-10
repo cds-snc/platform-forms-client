@@ -498,7 +498,7 @@
       "formId": "Identifiant du formulaire",
       "userId": "Membre de l'équipe",
       "event": "Action du formulaire",
-      "timestamp": "Date",
+      "timestamp": "Date & heure (UTC)",
       "description": "Détails"
     },
     "events": {
