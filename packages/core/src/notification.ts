@@ -1,7 +1,6 @@
-import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
+import { SendMessageCommand, SQSClient, GetQueueUrlCommand } from "@aws-sdk/client-sqs";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { getAwsSQSQueueURL } from "@gcforms/connectors";
 
 const globalConfig = {
   region: process.env.AWS_REGION ?? "ca-central-1",
@@ -72,4 +71,20 @@ export const enqueueDeferredNotification = async (notificationId: string) => {
       `Could not enqueue deferred notification id ${notificationId} + ${JSON.stringify(error)}`
     );
   }
+};
+
+const getAwsSQSQueueURL = async (
+  urlEnvName: string,
+  urlQueueName: string
+): Promise<string | null> => {
+  if (process.env[urlEnvName]) {
+    return process.env[urlEnvName];
+  }
+
+  const data = await sqsClient.send(
+    new GetQueueUrlCommand({
+      QueueName: urlQueueName,
+    })
+  );
+  return data.QueueUrl ?? null;
 };
