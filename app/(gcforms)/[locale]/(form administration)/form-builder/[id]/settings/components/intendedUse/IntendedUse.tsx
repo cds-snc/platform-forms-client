@@ -10,11 +10,13 @@ import { FormPurposeHelpButton } from "../dialogs/FormPurposeHelpButton";
  * admin: The form is used to collect personal information
  * nonAdmin: The form is used to collect non-personal information
  */
-export enum PurposeOption {
-  none = "",
-  admin = "admin",
-  nonAdmin = "nonAdmin",
-}
+export const PurposeOption = {
+  none: "",
+  admin: "admin",
+  nonAdmin: "nonAdmin",
+} as const;
+
+export type PurposeOption = (typeof PurposeOption)[keyof typeof PurposeOption];
 
 export const IntendedUse = ({
   isPublished,

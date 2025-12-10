@@ -31,10 +31,12 @@ export const PrePublishDialog = ({
   const dialog = useDialogRef();
 
   const [prePublishStep, setPrePublishStep] = useState(0);
-  enum PrePublishSteps {
-    ReasonForPublish = 0,
-    FormTypeAndDescription = 1,
-  }
+
+  const PrePublishSteps = {
+    ReasonForPublish: 0,
+    FormTypeAndDescription: 1,
+  } as const;
+  type PrePublishSteps = (typeof PrePublishSteps)[keyof typeof PrePublishSteps];
 
   async function ContinuePublishSteps() {
     setError(false);
