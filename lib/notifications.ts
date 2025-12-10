@@ -82,7 +82,7 @@ export const getNotificationsUsers = async (formId: string) => {
 
   // Can happen with legacy forms that do not have users
   if (!usersAndNotificationsUsers) {
-    logMessage.info(`_getNotificationsUsers no users found for formId ${formId}`);
+    logMessage.debug(`_getNotificationsUsers no users found for formId ${formId}`);
     return null;
   }
 
@@ -114,7 +114,7 @@ const _getDeliveryOption = async (formId: string) => {
 
   // Can happen with legacy forms that do not have a deliveryOption
   if (!template) {
-    logMessage.info(`_getDeliveryOption template not found with id ${formId}`);
+    logMessage.debug(`_getDeliveryOption template not found with id ${formId}`);
     return null;
   }
 
@@ -132,7 +132,7 @@ const setMarker = async (formId: string, status: Status = Status.SINGLE_EMAIL_SE
       )
     )
     .catch((err) =>
-      logMessage.error(`setMarker: notification:formId:${formId} failed to set ${err}`)
+      logMessage.warn(`setMarker: notification:formId:${formId} failed to set ${err}`)
     );
 };
 
@@ -140,7 +140,7 @@ const getMarker = async (formId: string) => {
   const redis = await getRedisInstance();
   return redis
     .get(`notification:formId:${formId}`)
-    .catch((err) => logMessage.error(`getMarker: ${err}`));
+    .catch((err) => logMessage.warn(`getMarker: ${err}`));
 };
 
 const sendEmailAfterSubmissionProcessed = async (
@@ -158,7 +158,7 @@ const sendEmailAfterSubmissionProcessed = async (
     const HOST = await getOrigin();
 
     if (!Array.isArray(users) || users.length === 0) {
-      logMessage.error("sendEmailNotificationsToAllUsers missing users");
+      logMessage.debug("sendEmailNotificationsToAllUsers missing users");
       return;
     }
     const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
@@ -174,7 +174,7 @@ const sendEmailAfterSubmissionProcessed = async (
         : await singleSubmissionEmailTemplate(HOST, formTitleEn, formTitleFr),
     });
   } catch (error) {
-    logMessage.error(
+    logMessage.warn(
       `sendEmailNotification failed for formId ${formId} with error: ${(error as Error).message}`
     );
   }

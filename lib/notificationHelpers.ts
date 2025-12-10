@@ -17,7 +17,7 @@ const sendImmediatedNotification = async ({
   try {
     await createNotificationRecord({ notificationId: id, emails, subject, body });
     await enqueueDeferredNotification(id!);
-    logMessage.info(`Notification created and queued id ${id}`);
+    logMessage.debug(`Notification created and queued id ${id}`);
   } catch (error) {
     logMessage.warn(
       `Error creating and queueing notification id ${id}: ${(error as Error).message}`
@@ -38,7 +38,7 @@ const sendDeferredNotification = async ({
 }): Promise<void> => {
   try {
     await createNotificationRecord({ notificationId, emails, subject, body });
-    logMessage.info(`Notification created id ${notificationId}`);
+    logMessage.debug(`Notification created id ${notificationId}`);
   } catch (error) {
     logMessage.warn(
       `Error creating notification id ${notificationId}: ${(error as Error).message}`
