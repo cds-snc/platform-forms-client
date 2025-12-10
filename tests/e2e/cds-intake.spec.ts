@@ -6,7 +6,7 @@ test.describe("CDS Intake Form", () => {
     const formHelper = new FormUploadHelper(page);
 
     // Upload the form fixture - this will automatically navigate to preview
-    await formHelper.uploadFormFixture("cdsIntakeTestForm");
+    await formHelper.uploadFormFixture("cdsIntakeTestForm", true);
 
     // The form should be loaded at this point
     // Look for the specific form title
@@ -20,7 +20,7 @@ test.describe("CDS Intake Form", () => {
     const formHelper = new FormUploadHelper(page);
 
     // Upload the form fixture - this will automatically navigate to preview
-    await formHelper.uploadFormFixture("cdsIntakeTestForm");
+    await formHelper.uploadFormFixture("cdsIntakeTestForm", true);
 
     // Look for common form elements that might be in the CDS intake form
     const formElements = page.locator('input, textarea, select, button[type="submit"]');
