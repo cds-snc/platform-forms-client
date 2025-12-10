@@ -74,7 +74,7 @@ export const AuditForm = ({ formId }: { formId: string }) => {
         })
         .join("\r\n");
 
-      const csvContent = csvHeader + csvRows;
+      const csvContent = "\uFEFF" + csvHeader + csvRows;
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
