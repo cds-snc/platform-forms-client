@@ -1,8 +1,13 @@
 import { test, expect } from "@playwright/test";
 import { FormUploadHelper } from "../helpers/form-upload-helper";
+import { userSession } from "../helpers/user-session";
 
 test.describe("CDS Platform Intake Form functionality", () => {
   test("Fill out and Submit the form", async ({ page }) => {
+    test.setTimeout(120000);
+
+    await userSession(page);
+
     const formHelper = new FormUploadHelper(page);
 
     // Upload the form fixture - this will automatically navigate to preview

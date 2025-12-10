@@ -4,7 +4,7 @@ import path from "path";
 export class FormUploadHelper {
   constructor(private page: Page) {}
 
-  async uploadFormFixture(fixtureName: string): Promise<string> {
+  async uploadFormFixture(fixtureName: string, previewOnly: boolean = false): Promise<string> {
     // Navigate to form builder start page
     await this.page.goto("/en/form-builder");
 
@@ -22,6 +22,10 @@ export class FormUploadHelper {
 
     // Wait for the page to fully load
     await this.page.waitForLoadState("networkidle");
+
+    if (previewOnly) {
+      return "0000";
+    }
 
     // Click on the edit link in the left navigation using the testid
     const editLink = this.page.locator('[data-testid="edit"]');
