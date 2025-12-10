@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.14] - 2025-12-09
 
-- Add unitility function to get AWS SQS Queue URL
+- Add utility function to get AWS SQS Queue URL
 
 ## [2.2.13] - 2025-10-27
 
