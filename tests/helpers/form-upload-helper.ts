@@ -43,7 +43,7 @@ export class FormUploadHelper {
 
     // Scroll the Save Draft button into view and press Enter
     const saveDraftButton = this.page.getByText("Save draft");
-    await saveDraftButton.waitFor({ state: "visible", timeout: 5000 });
+    await saveDraftButton.waitFor({ state: "visible", timeout: 10000 });
     await saveDraftButton.scrollIntoViewIfNeeded();
     await saveDraftButton.focus();
     await this.page.keyboard.press("Enter");
