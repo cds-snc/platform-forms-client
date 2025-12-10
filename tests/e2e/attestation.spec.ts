@@ -6,6 +6,9 @@ test.describe("Attestation functionality", () => {
   let publishedFormPath: string;
 
   test.beforeAll(async ({ browser }) => {
+    // Set a longer timeout for the beforeAll hook since publishing takes time
+    test.setTimeout(120000);
+
     // Create a new page for setup
     const context = await browser.newContext();
     const page = await context.newPage();
