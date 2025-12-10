@@ -51,7 +51,11 @@ test.describe("Attestation functionality", () => {
     const formHelper = new FormUploadHelper(page);
 
     // Upload the form fixture - this will automatically navigate to preview
-    await formHelper.uploadFormFixture("attestationTestForm");
+    const formId = await formHelper.uploadFormFixture("attestationTestForm");
+
+    await formHelper.publishForm(formId);
+
+    await page.goto(`en/id/${formId}`);
 
     // Click both checkboxes
     await page.locator("div[data-testid='1.0']").locator("label").click();

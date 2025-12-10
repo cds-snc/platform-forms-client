@@ -2,23 +2,21 @@ import { test, expect } from "@playwright/test";
 import { FormUploadHelper } from "../helpers/form-upload-helper";
 
 test.describe("CDS Platform Intake Form functionality", () => {
-  test("CDS Platform Intake Form renders", async ({ page }) => {
+  test("Fill out and Submit the form", async ({ page }) => {
     const formHelper = new FormUploadHelper(page);
 
     // Upload the form fixture - this will automatically navigate to preview
-    await formHelper.uploadFormFixture("platformIntakeTestForm");
+    const formId = await formHelper.uploadFormFixture("platformIntakeTestForm");
+
+    // Add publish step
+    await formHelper.publishForm(formId);
+
+    await page.goto(`en/id/${formId}`);
 
     // Check that the form title is displayed
     await expect(
       page.getByRole("heading", { name: "Work with CDS on a Digital Form" })
     ).toBeVisible();
-  });
-
-  test("Fill out and Submit the form", async ({ page }) => {
-    const formHelper = new FormUploadHelper(page);
-
-    // Upload the form fixture - this will automatically navigate to preview
-    await formHelper.uploadFormFixture("platformIntakeTestForm");
 
     // Fill out the form fields
     await page.locator("input[id='2']").fill("Santa Claus");
