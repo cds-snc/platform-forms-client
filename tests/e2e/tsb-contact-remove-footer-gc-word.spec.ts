@@ -26,10 +26,11 @@ test.describe("TSB Contact Form functionality", () => {
     const formId = await formHelper.uploadFormFixture("tsbDisableFooterGCBranding");
 
     // Publish the form
-    await formHelper.publishForm(formId);
+    const { enLink } = await formHelper.publishForm(formId);
 
-    // Visit the published form
-    await formHelper.visitPublishedForm(formId);
+    await page.waitForURL(enLink);
+
+    // Visit the published form in English
 
     // Verify that the footer does not contain the GC wordmark image
     // When disableGcBranding is true, the GC wordmark should not be present

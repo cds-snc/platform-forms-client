@@ -141,28 +141,10 @@ export class FormUploadHelper {
     await this.page.waitForLoadState("networkidle");
   }
 
-  async publishForm(formId: string): Promise<void> {
+  async publishForm(formId: string): Promise<{ enLink: string; frLink: string }> {
     // Navigate to settings page
     await this.page.goto(`/en/form-builder/${formId}/settings`);
     await this.page.waitForLoadState("networkidle");
-
-    // Fill in "Tell us more about your form" dialog if it appears
-    const tellUsMoreDialog = this.page.getByRole("heading", {
-      name: "Tell us more about your form",
-    });
-    if (await tellUsMoreDialog.isVisible()) {
-      // Select type of form
-      const typeSelect = this.page.locator("select").first();
-      await typeSelect.selectOption({ index: 1 }); // Select first non-empty option
-
-      // Fill in description
-      const descriptionTextarea = this.page.locator("textarea").first();
-      await descriptionTextarea.fill("Test form description");
-
-      // Click Continue
-      await this.page.getByRole("button", { name: "Continue" }).click();
-      await this.page.waitForLoadState("networkidle");
-    }
 
     // Wait for settings page to be ready
     await this.page.waitForTimeout(1000);
@@ -182,17 +164,17 @@ export class FormUploadHelper {
     await this.page.waitForTimeout(1000); // Auto-save delay
 
     // Navigate to publish page
-    await this.page.goto(`/en/form-builder/${formId}/settings/publish`);
-    await this.page.waitForLoadState("networkidle");
+    await this.page.goto(`/en/form-builder/${formId}/publish`);
 
     // Click the Publish button to open the dialog
     const publishButton = this.page.getByRole("button", { name: /publish/i });
+
     if (await publishButton.isVisible()) {
       await publishButton.click();
-      await this.page.waitForTimeout(500);
+      await this.page.waitForTimeout(2000);
     }
 
-    // Fill in the "Publish form" dialog
+    // Fill in the "Publish form"
     const publishDialog = this.page.getByRole("heading", { name: "Publish form" });
     if (await publishDialog.isVisible()) {
       // Select a reason for publishing (first radio button)
@@ -203,14 +185,46 @@ export class FormUploadHelper {
       await this.page.getByRole("button", { name: "Continue" }).click();
       await this.page.waitForLoadState("networkidle");
     }
-  }
 
-  async visitPublishedForm(formId: string, language: string = "en"): Promise<void> {
-    // Navigate to the published form's public URL
-    await this.page.goto(`/${language}/id/${formId}`);
+    // Fill in "Tell us more about your form"
+    const tellUsMoreDialog = this.page.getByRole("heading", {
+      name: "Tell us more about your form",
+    });
+
+    if (await tellUsMoreDialog.isVisible()) {
+      // Select type of form
+      const typeSelect = this.page.locator("select").first();
+      await typeSelect.selectOption({ index: 1 }); // Select first non-empty option
+
+      // Fill in description
+      const descriptionTextarea = this.page.locator("textarea").first();
+      await descriptionTextarea.fill("Test form description");
+
+      // Click Continue
+      await this.page.getByRole("button", { name: "Continue" }).click();
+      await this.page.waitForLoadState("networkidle");
+    }
+
+    // Wait for form-builder/{id}/published to load
+    await this.page.waitForURL(new RegExp(`/form-builder/${formId}/published`), {
+      timeout: 15000,
+    });
     await this.page.waitForLoadState("networkidle");
 
-    // Wait for form content to load
-    await this.page.waitForSelector('form, [data-testid="form-content"], h1', { timeout: 10000 });
+    // Get the published links
+    const enLinkElement = this.page.locator('[data-testid="published-link-en"]');
+    const frLinkElement = this.page.locator('[data-testid="published-link-fr"]');
+
+    await enLinkElement.waitFor({ state: "visible", timeout: 5000 });
+    await frLinkElement.waitFor({ state: "visible", timeout: 5000 });
+
+    const enLink = await enLinkElement.textContent();
+    const frLink = await frLinkElement.textContent();
+
+    if (!enLink || !frLink) {
+      throw new Error("Could not extract published links");
+    }
+
+    return { enLink, frLink };
   }
 }
