@@ -135,11 +135,19 @@ test.describe("Security Questions Page", () => {
   test.describe("Test questions select behavior", () => {
     test("Select a question should update the selected 'value'", async ({ page }) => {
       await page.locator("#question1").selectOption(questions1);
-      await expect(page.locator("#question1 option:selected")).toHaveText(questions1);
+      await expect(page.locator("#question1")).toHaveValue(/./);
+      const selected1 = await page.locator("#question1 option[selected]").textContent();
+      expect(selected1).toBe(questions1);
+
       await page.locator("#question2").selectOption(questions2);
-      await expect(page.locator("#question2 option:selected")).toHaveText(questions2);
+      await expect(page.locator("#question2")).toHaveValue(/./);
+      const selected2 = await page.locator("#question2 option[selected]").textContent();
+      expect(selected2).toBe(questions2);
+
       await page.locator("#question3").selectOption(questions3);
-      await expect(page.locator("#question3 option:selected")).toHaveText(questions3);
+      await expect(page.locator("#question3")).toHaveValue(/./);
+      const selected3 = await page.locator("#question3 option[selected]").textContent();
+      expect(selected3).toBe(questions3);
     });
   });
 
