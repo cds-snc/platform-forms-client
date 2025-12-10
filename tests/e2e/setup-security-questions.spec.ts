@@ -135,19 +135,19 @@ test.describe("Security Questions Page", () => {
   test.describe("Test questions select behavior", () => {
     test("Select a question should update the selected 'value'", async ({ page }) => {
       await page.locator("#question1").selectOption(questions1);
-      await expect(page.locator("#question1")).toHaveValue(/./);
-      const selected1 = await page.locator("#question1 option[selected]").textContent();
-      expect(selected1).toBe(questions1);
+      const value1 = await page.locator("#question1").inputValue();
+      const text1 = await page.locator(`#question1 option[value="${value1}"]`).textContent();
+      expect(text1?.trim()).toBe(questions1);
 
       await page.locator("#question2").selectOption(questions2);
-      await expect(page.locator("#question2")).toHaveValue(/./);
-      const selected2 = await page.locator("#question2 option[selected]").textContent();
-      expect(selected2).toBe(questions2);
+      const value2 = await page.locator("#question2").inputValue();
+      const text2 = await page.locator(`#question2 option[value="${value2}"]`).textContent();
+      expect(text2?.trim()).toBe(questions2);
 
       await page.locator("#question3").selectOption(questions3);
-      await expect(page.locator("#question3")).toHaveValue(/./);
-      const selected3 = await page.locator("#question3 option[selected]").textContent();
-      expect(selected3).toBe(questions3);
+      const value3 = await page.locator("#question3").inputValue();
+      const text3 = await page.locator(`#question3 option[value="${value3}"]`).textContent();
+      expect(text3?.trim()).toBe(questions3);
     });
   });
 
