@@ -59,7 +59,7 @@ test.describe("Attestation functionality", () => {
 
     // Verify error messages
     await expect(page.locator("li")).toContainText("Check off all the boxes for");
-    await expect(getByTestId("errorMessage")).toContainText(
+    await expect(page.getByTestId("errorMessage")).toContainText(
       "Read and check all boxes to confirm the items in this section."
     );
   });
