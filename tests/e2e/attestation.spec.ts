@@ -3,29 +3,33 @@ import { FormUploadHelper } from "../helpers/form-upload-helper";
 import { userSession } from "../helpers/user-session";
 
 test.describe("Attestation functionality", () => {
-  test("Renders properly", async ({ page }) => {
-    const formHelper = new FormUploadHelper(page);
+  let publishedFormPath: string;
 
-    // Upload the form fixture - this will automatically navigate to preview
-    await formHelper.uploadFormFixture("attestationTestForm", true);
+  test.beforeAll(async ({ browser }) => {
+    // Create a new page for setup
+    const context = await browser.newContext();
+    const page = await context.newPage();
+
+    // Authenticate and publish the form once
+    await userSession(page);
+    const formHelper = new FormUploadHelper(page);
+    const formId = await formHelper.uploadFormFixture("attestationTestForm");
+    await formHelper.publishForm(formId);
+    publishedFormPath = `en/id/${formId}`;
+
+    // Clean up
+    await context.close();
+  });
+
+  test("Renders properly", async ({ page }) => {
+    await page.goto(publishedFormPath);
 
     // Check that the attestation text is displayed
     await expect(page.locator("body")).toContainText("all checkboxes required");
   });
 
   test("Displays error when submitting form without checking both boxes", async ({ page }) => {
-    test.setTimeout(120000);
-
-    await userSession(page);
-
-    const formHelper = new FormUploadHelper(page);
-
-    // Upload the form fixture - this will automatically navigate to preview
-    const formId = await formHelper.uploadFormFixture("attestationTestForm");
-
-    await formHelper.publishForm(formId);
-
-    await page.goto(`en/id/${formId}`);
+    await page.goto(publishedFormPath);
 
     // Submit without checking any boxes
     await page.locator("[type='submit']").click();
@@ -38,18 +42,7 @@ test.describe("Attestation functionality", () => {
   });
 
   test("Displays error when submitting form with a single checkbox selected", async ({ page }) => {
-    test.setTimeout(120000);
-
-    await userSession(page);
-
-    const formHelper = new FormUploadHelper(page);
-
-    // Upload the form fixture - this will automatically navigate to preview
-    const formId = await formHelper.uploadFormFixture("attestationTestForm");
-
-    await formHelper.publishForm(formId);
-
-    await page.goto(`en/id/${formId}`);
+    await page.goto(publishedFormPath);
 
     // Click only the first checkbox
     await page.locator("div[data-testid='1.0']").locator("label").click();
@@ -65,17 +58,7 @@ test.describe("Attestation functionality", () => {
   });
 
   test("Submits properly", async ({ page }) => {
-    test.setTimeout(120000);
-
-    await userSession(page);
-    const formHelper = new FormUploadHelper(page);
-
-    // Upload the form fixture - this will automatically navigate to preview
-    const formId = await formHelper.uploadFormFixture("attestationTestForm");
-
-    await formHelper.publishForm(formId);
-
-    await page.goto(`en/id/${formId}`);
+    await page.goto(publishedFormPath);
 
     // Click both checkboxes
     await page.locator("div[data-testid='1.0']").locator("label").click();
