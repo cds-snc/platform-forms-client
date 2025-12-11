@@ -17,7 +17,10 @@ test.describe("Form builder share", () => {
       await expect(menuItems).toContainText("You must");
       await expect(menuItems).toBeVisible();
 
-      await page.locator("[role='menuitem'] span").filter({ hasText: "name your form" }).click();
+      await page
+        .locator("[role='menuitem'] span.underline")
+        .filter({ hasText: "name your form" })
+        .click();
       await expect(page.locator(":focus")).toHaveAttribute("id", "fileName");
     });
 
@@ -41,7 +44,7 @@ test.describe("Form builder share", () => {
       await expect(previewSummary).toBeVisible();
       await previewSummary.click();
 
-      await expect(page.getByRole("heading", { level: 4 })).toContainText(
+      await expect(page.getByRole("heading", { level: 4 }).first()).toContainText(
         "Regular Test User has shared a form with you on GC Forms"
       );
 
@@ -77,11 +80,11 @@ test.describe("Form builder share", () => {
       await expect(previewSummary).toBeAttached();
       await previewSummary.click();
 
-      await expect(page.getByRole("heading", { level: 4 })).toContainText(
+      await expect(page.getByRole("heading", { level: 4 }).first()).toContainText(
         "A GC Forms user has shared a form with you on GC Forms"
       );
 
-      await page.getByRole("button", { name: "Close" }).click();
+      await page.getByTestId("close-dialog").click();
     });
   });
 });
