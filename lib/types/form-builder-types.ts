@@ -24,22 +24,25 @@ export interface Title {
   titleFr: string;
 }
 
-export enum LocalizedGroupProperties {
-  TITLE = "title",
-}
+export const LocalizedGroupProperties = {
+  TITLE: "title",
+} as const;
+export type LocalizedGroupProperties = keyof typeof LocalizedGroupProperties;
 
-export enum LocalizedFormProperties {
-  TITLE = "title",
-  REFERRER = "referrerUrl",
-  EMAIL_SUBJECT = "emailSubject",
-}
+export const LocalizedFormProperties = {
+  TITLE: "title",
+  REFERRER: "referrerUrl",
+  EMAIL_SUBJECT: "emailSubject",
+} as const;
+export type LocalizedFormProperties = keyof typeof LocalizedFormProperties;
 
-export enum LocalizedElementProperties {
-  TITLE = "title",
-  DESCRIPTION = "description",
-  PLACEHOLDER = "placeholder",
-  EXIT_URL = "exitUrl",
-}
+export const LocalizedElementProperties = {
+  TITLE: "title",
+  DESCRIPTION: "description",
+  PLACEHOLDER: "placeholder",
+  EXIT_URL: "exitUrl",
+} as const;
+export type LocalizedElementProperties = keyof typeof LocalizedElementProperties;
 
 export interface LocalizedProperty {
   <T extends string>(arg: T): `${T}${Capitalize<Language>}`;
