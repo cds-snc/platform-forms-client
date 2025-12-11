@@ -10,11 +10,13 @@ import { FormPurposeHelpButton } from "../dialogs/FormPurposeHelpButton";
  * admin: The form is used to collect personal information
  * nonAdmin: The form is used to collect non-personal information
  */
-export enum PurposeOption {
-  none = "",
-  admin = "admin",
-  nonAdmin = "nonAdmin",
-}
+export const PurposeOption = {
+  none: "",
+  admin: "admin",
+  nonAdmin: "nonAdmin",
+} as const;
+
+export type PurposeOption = (typeof PurposeOption)[keyof typeof PurposeOption];
 
 export const IntendedUse = ({
   isPublished,
@@ -40,6 +42,7 @@ export const IntendedUse = ({
         checked={purposeOption === PurposeOption.admin}
         value={PurposeOption.admin}
         onChange={onChange}
+        data-testid="purpose-admin"
       />
       <div className="mb-4 ml-12 text-sm">
         <div>
@@ -62,6 +65,7 @@ export const IntendedUse = ({
         checked={purposeOption === PurposeOption.nonAdmin}
         value={PurposeOption.nonAdmin}
         onChange={onChange}
+        data-testid="purpose-non-admin"
       />
       <div className="mb-4 ml-12 text-sm">
         <div>

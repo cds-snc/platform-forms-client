@@ -2,7 +2,6 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 import tailwind from "eslint-plugin-tailwindcss";
-import reactYouMightNotNeedAnEffect from "eslint-plugin-react-you-might-not-need-an-effect";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -15,7 +14,6 @@ const eslintConfig = [
   {
     ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
-  reactYouMightNotNeedAnEffect.configs.recommended,
   ...tailwind.configs["flat/recommended"],
   ...compat.config({
     extends: ["next/core-web-vitals", "next/typescript", "prettier"],
@@ -87,6 +85,7 @@ const eslintConfig = [
           "brand__toggle",
           "brand__signature",
           "container-xl",
+          "tableLink",
         ],
       },
     },
