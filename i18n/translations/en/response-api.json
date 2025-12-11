@@ -14,7 +14,7 @@
     "beforeStart": {
       "heading": "Before you start",
       "generateKey": "Generate an API key for your form in Settings.",
-      "generateKeyDetail": "This is how you’ll retrieve high-volumes of responses more easily and securely.",
+      "generateKeyDetail": "This is how you’ll retrieve high volumes of responses more easily and securely.",
       "browserSupport": "Ensure you’re using Google Chrome or Microsoft Edge.",
       "browserSupportDetail": "You'll be asked permission to copy and save files to your device. Accept these browser alerts to use the feature.",
       "attachSafety": "Take caution when opening files attachments.",
