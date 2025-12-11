@@ -522,7 +522,8 @@
       "DeleteAPIKey": "Clé API supprimée",
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
-      "UpdateFormJsonConfig": "JSON du formulaire mise à jour"
+      "UpdateFormJsonConfig": "JSON du formulaire mise à jour",
+      "UpdatedNotificationSettings": "Paramètre de notification mis à jour."
     },
     "eventDetails": {
       "CreatedForm": "Formulaire créé",
@@ -535,7 +536,7 @@
       "ChangeSecurityAttribute": "Classification changée à {{securityAttribute}}",
       "SetFormPurpose": "Usage prévu défini comme {{formPurpose}}",
       "SetSaveAndResume": "La sauvegarde des réponses est {{saveAndResume}}",
-      "UpdateClosingDate": "Date de fermeture mise à jour à {{formStatus}}",
+      "UpdateClosingDate": "Date de fermeture mise à jour",
       "UpdatedNotificationSettings": "Paramètre de notification mis à jour à {{enabled}} pour {{userEmail}}",
       "GeneratedAPIKey": "Clé API {{APIkeyID}} générée par {{userEmail}}",
       "DeletedAPIKey": "Clé API {{APIkeyID}} supprimée par {{userEmail}}",
