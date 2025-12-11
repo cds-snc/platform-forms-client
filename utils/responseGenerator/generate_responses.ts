@@ -3,6 +3,7 @@ import readline from "readline";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { config } from "dotenv";
 import { chunkArray } from "../../lib/utils";
+import axios from "axios";
 import {
   getRandomInt,
   generateResponseForQuestion,
@@ -10,7 +11,6 @@ import {
   TestFile,
 } from "./lib/responseGenerator";
 import { uploadFile } from "./lib/fileUpload";
-import { prisma } from "../../lib/integration/prismaConnector";
 
 interface SubmissionRequestBody {
   [key: string]: Response;
@@ -83,20 +83,20 @@ const main = async () => {
     console.info(`Getting form template from ${appEnv}`);
     process.env.AWS_PROFILE = appEnv;
 
-    // Get the form template directly from the database
-    // Note: Ensure your DATABASE_URL points to the correct environment (Local vs Staging Tunnel)
-    const template = await prisma.template.findUnique({
-      where: {
-        id: formID,
-      },
-    });
+    // Get the form template
+    const formTemplate = await axios
+      .get(
+        `${
+          appEnv === "staging" ? "https://forms-staging.cdssandbox.xyz" : "http://localhost:3000"
+        }/api/templates/${formID}`
+      )
+      .then(({ data }) => {
+        return data.form;
+      });
 
-    if (!template || !template.jsonConfig) {
-      throw new Error("Could not retrieve form template or template configuration is missing");
+    if (!formTemplate) {
+      throw new Error("Could not retrieve form template");
     }
-
-    // The JSON config in the DB matches the structure expected by createResponse
-    const formTemplate = template.jsonConfig as any;
 
     const encoder = new TextEncoder();
 
