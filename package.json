@@ -15,10 +15,10 @@
     "singleQuote": false
   },
   "scripts": {
-    "dev": "yarn prisma:dev && next dev --turbopack",
-    "dev:debug": "next dev --turbopack",
-    "dev:secure": "yarn prisma:dev && next dev --experimental-https --turbopack",
-    "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug --turbopack",
+    "dev": "yarn prisma:dev && next dev",
+    "dev:debug": "next dev",
+    "dev:secure": "yarn prisma:dev && next dev --experimental-https",
+    "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
     "start": "yarn prisma:deploy && NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
     "prisma:deploy": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=production",
     "prisma:dev": "prisma migrate dev --skip-seed && tsx prisma/seeds/seed_cli.ts --environment=development",
@@ -27,8 +27,8 @@
     "prisma:test": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=test",
     "prisma:generate": "prisma generate",
     "start:test": "yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
-    "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
-    "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build --turbopack",
+    "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev",
+    "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",
     "lint": "eslint . && tsc --noEmit",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix .",
@@ -69,7 +69,7 @@
     "@headless-tree/react": "^1.5.0",
     "@headlessui/react": "^2.2.9",
     "@neshca/cache-handler": "^1.2.1",
-    "@next/mdx": "15.5.7",
+    "@next/mdx": "16.0.8",
     "@opentelemetry/exporter-jaeger": "^2.0.1",
     "@opentelemetry/exporter-trace-otlp-http": "^0.203.0",
     "@opentelemetry/instrumentation-aws-sdk": "^0.63.0",
@@ -113,7 +113,7 @@
     "lodash.unset": "4.5.2",
     "markdown-to-jsx": "7.7.13",
     "native-file-system-adapter": "^3.0.1",
-    "next": "15.5.7",
+    "next": "16.0.8",
     "next-auth": "5.0.0-beta.29",
     "node-fetch": "^3.3.2",
     "pino": "10.0.0",
@@ -167,8 +167,8 @@
     "@types/node": "^24.7.2",
     "@types/node-fetch": "^2.6.9",
     "@types/pg": "^8.10.9",
-    "@types/react": "19.1.15",
-    "@types/react-dom": "19.1.9",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
     "@types/react-transition-group": "^4",
     "@types/unorm": "^1",
     "@types/uuid": "^8.3.4",
@@ -185,7 +185,7 @@
     "css-loader": "^6.8.1",
     "cssnano": "^5.1.15",
     "eslint": "^9.39.0",
-    "eslint-config-next": "15.5.7",
+    "eslint-config-next": "16.0.8",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-tailwindcss": "^3.17.5",
     "husky": "^9.0.10",
@@ -221,7 +221,7 @@
   ],
   "packageManager": "yarn@4.10.3",
   "resolutions": {
-    "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2"
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3"
   }
 }

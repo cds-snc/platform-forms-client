@@ -72,19 +72,14 @@ const nextConfig = {
       },
     ];
   },
-  serverExternalPackages: [
-    "@aws-sdk/lib-dynamodb",
-    "pino",
-    "@opentelemetry/sdk-node",
-  ],
+  serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino", "@opentelemetry/sdk-node"],
   experimental: {
-    // PPR is only supported in Next.js Canary branches
-    // ppr: true,
     serverActions: {
       // Note: this matches values in constants.ts
       bodySizeLimit: "10mb",
     },
   },
+  typedRoutes: true,
   turbopack: {
     rules: {
       "*.md": {
