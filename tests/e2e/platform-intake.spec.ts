@@ -4,7 +4,7 @@ import { userSession } from "../helpers/user-session";
 
 test.describe("CDS Platform Intake Form functionality", () => {
   test("Fill out and Submit the form", async ({ page }) => {
-    test.setTimeout(120000);
+    test.setTimeout(40000);
 
     await userSession(page);
 
