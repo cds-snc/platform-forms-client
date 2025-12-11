@@ -33,6 +33,10 @@
     "responsesPilot": {
       "title": "Responses Pilot",
       "description": "Enable new flow for downloading form responses with API key in browser"
+    },
+    "userSideAuditLogs": {
+      "title": "User Side Audit Logs",
+      "description": "Enable users to download audit logs directly from the form settings"
     }
   },
   "addFlag": "Add user feature flag",

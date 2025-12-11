@@ -9,6 +9,7 @@ export const FeatureFlags = {
   formTimer: "formTimer",
   hCaptcha: "hCaptcha",
   topBanner: "topBanner",
+  userSideAuditLogs: "userSideAuditLogs",
   ...UserFeatureFlags,
 } as const;
 

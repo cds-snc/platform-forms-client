@@ -2,7 +2,7 @@ import { getRedisInstance } from "@lib/integration/redisConnector";
 import flagInitialSettings from "../flags/default_flag_settings.json";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { FeatureFlagKeys, FeatureFlags, Flags, PickFlags } from "./types";
 
 /**
@@ -12,7 +12,13 @@ import { FeatureFlagKeys, FeatureFlags, Flags, PickFlags } from "./types";
 export const enableFlag = async (key: string): Promise<void> => {
   const { user } = await authorization.canManageFlags().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(e.user.id, { type: "Flag", id: key }, "AccessDenied", `Attempted to enable ${key}`);
+      logEvent(
+        e.user.id,
+        { type: "Flag", id: key },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToEnableFlag,
+        { flagKey: key }
+      );
     }
     throw e;
   });
@@ -28,7 +34,13 @@ export const enableFlag = async (key: string): Promise<void> => {
 export const disableFlag = async (key: string): Promise<void> => {
   const { user } = await authorization.canManageFlags().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(e.user.id, { type: "Flag", id: key }, "AccessDenied", `Attempted to disable ${key}`);
+      logEvent(
+        e.user.id,
+        { type: "Flag", id: key },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToDisableFlag,
+        { flagKey: key }
+      );
     }
     throw e;
   });
