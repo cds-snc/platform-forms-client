@@ -1,49 +1,36 @@
 import { test, expect } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 import { FormUploadHelper } from "../helpers/form-upload-helper";
 import { userSession } from "../helpers/user-session";
 
-// TODO: This test file requires @axe-core/playwright to be installed and configured
-// Install with: npm install --save-dev @axe-core/playwright
-// Then import and use: import AxeBuilder from '@axe-core/playwright';
-// See: https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright
+const A11Y_TAGS = ["wcag21aa", "wcag2aa", "best-practice", "section508"];
 
-const A11Y_OPTIONS = {
-  runOnly: {
-    type: "tag" as const,
-    values: ["wcag21aa", "wcag2aa", "best-practice", "section508"],
-  },
-};
-
-test.describe.skip("Accessibility (A11Y) Check", () => {
+test.describe("Accessibility (A11Y) Check", () => {
   test.describe("Form Components", () => {
     test("All components page Accessibility (A11Y) Check", async ({ page }) => {
       await userSession(page);
       const formHelper = new FormUploadHelper(page);
       const formID = await formHelper.uploadFormFixture("accessibilityTestForm");
-      
+
       await page.goto(`/en/id/${formID}`);
       await page.waitForLoadState("networkidle");
-      
-      // TODO: Replace with axe-core/playwright
-      // const accessibilityScanResults = await new AxeBuilder({ page })
-      //   .withTags(A11Y_OPTIONS.runOnly.values)
-      //   .analyze();
-      // expect(accessibilityScanResults.violations).toEqual([]);
+
+      const accessibilityScanResults = await new AxeBuilder({ page }).withTags(A11Y_TAGS).analyze();
+
+      expect(accessibilityScanResults.violations).toEqual([]);
     });
 
     test("Check error state accessibility", async ({ page }) => {
       await userSession(page);
       const formHelper = new FormUploadHelper(page);
       const formID = await formHelper.uploadFormFixture("cdsIntakeTestForm");
-      
+
       await page.goto(`/en/id/${formID}`);
       await page.waitForLoadState("networkidle");
-      
-      // TODO: Replace with axe-core/playwright
-      // const accessibilityScanResults = await new AxeBuilder({ page })
-      //   .withTags(A11Y_OPTIONS.runOnly.values)
-      //   .analyze();
-      // expect(accessibilityScanResults.violations).toEqual([]);
+
+      const accessibilityScanResults = await new AxeBuilder({ page }).withTags(A11Y_TAGS).analyze();
+
+      expect(accessibilityScanResults.violations).toEqual([]);
     });
   });
 
@@ -67,35 +54,35 @@ test.describe.skip("Accessibility (A11Y) Check", () => {
         // There should not be a user logged in - verify no session cookie
         const cookies = await page.context().cookies();
         expect(cookies.find((c) => c.name === "authjs.session-token")).toBeUndefined();
-        
+
         await page.goto(pageConfig.path);
         await page.waitForLoadState("networkidle");
-        
+
         // Ensure page has fully loaded
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-        
-        // TODO: Replace with axe-core/playwright
-        // const accessibilityScanResults = await new AxeBuilder({ page })
-        //   .withTags(A11Y_OPTIONS.runOnly.values)
-        //   .analyze();
-        // expect(accessibilityScanResults.violations).toEqual([]);
+
+        const accessibilityScanResults = await new AxeBuilder({ page })
+          .withTags(A11Y_TAGS)
+          .analyze();
+
+        expect(accessibilityScanResults.violations).toEqual([]);
       });
     }
   });
 
   test.describe("Error Pages", () => {
     test("404 Page", async ({ page }) => {
-      const response = await page.goto("/i_do_not_exist_or_should_not", { waitUntil: "networkidle" });
+      const response = await page.goto("/i_do_not_exist_or_should_not", {
+        waitUntil: "networkidle",
+      });
       expect(response?.status()).toBe(404);
-      
+
       // Ensure page has fully loaded
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-      
-      // TODO: Replace with axe-core/playwright
-      // const accessibilityScanResults = await new AxeBuilder({ page })
-      //   .withTags(A11Y_OPTIONS.runOnly.values)
-      //   .analyze();
-      // expect(accessibilityScanResults.violations).toEqual([]);
+
+      const accessibilityScanResults = await new AxeBuilder({ page }).withTags(A11Y_TAGS).analyze();
+
+      expect(accessibilityScanResults.violations).toEqual([]);
     });
   });
 });
