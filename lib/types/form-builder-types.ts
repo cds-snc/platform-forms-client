@@ -42,7 +42,8 @@ export const LocalizedElementProperties = {
   PLACEHOLDER: "placeholder",
   EXIT_URL: "exitUrl",
 } as const;
-export type LocalizedElementProperties = keyof typeof LocalizedElementProperties;
+export type LocalizedElementProperties =
+  (typeof LocalizedElementProperties)[keyof typeof LocalizedElementProperties];
 
 export interface LocalizedProperty {
   <T extends string>(arg: T): `${T}${Capitalize<Language>}`;
