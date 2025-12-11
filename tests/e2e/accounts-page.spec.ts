@@ -6,17 +6,10 @@ test.describe("Accounts Page", () => {
   const testUserEmail = "test.user@cds-snc.ca";
   const deactivatedUserEmail = "test.deactivated@cds-snc.ca";
 
-  test.beforeAll(async ({ browser }) => {
-    // Set a longer timeout for the beforeAll hook since login and page load can take time
-    test.setTimeout(120000);
-
-    // Create a new page for setup
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    await userSession(page, { admin: true });
-  });
-
   test.beforeEach(async ({ page }) => {
+    // Set a longer timeout for the beforeEach hook since login and page load can take time
+    test.setTimeout(120000);
+    await userSession(page, { admin: true });
     await page.goto("/en/admin/accounts");
     await page.waitForLoadState("networkidle");
   });
@@ -28,29 +21,19 @@ test.describe("Accounts Page", () => {
   test.describe("Accounts tabs/filters and cards", () => {
     test("Clicking tabs/filters updates with expected content", async ({ page }) => {
       await page.getByRole("button", { name: "All" }).click();
-      await expect(page.locator("ul[data-testid='accountsList'] li")).toContainText(adminUserEmail);
-      await expect(page.locator("ul[data-testid='accountsList'] li")).toContainText(testUserEmail);
-      await expect(page.locator("ul[data-testid='accountsList'] li")).toContainText(
-        deactivatedUserEmail
-      );
+      await expect(page.getByTestId(adminUserEmail)).toBeVisible();
+      await expect(page.getByTestId(testUserEmail)).toBeVisible();
+      await expect(page.getByTestId(deactivatedUserEmail)).toBeVisible();
 
       await page.getByRole("button", { name: "Active" }).click();
-      await expect(page.locator("ul[data-testid='accountsList'] li")).toContainText(adminUserEmail);
-      await expect(page.locator("ul[data-testid='accountsList'] li")).toContainText(testUserEmail);
-      await expect(
-        page.locator("ul[data-testid='accountsList'] li").filter({ hasText: deactivatedUserEmail })
-      ).not.toBeVisible();
+      await expect(page.getByTestId(adminUserEmail)).toBeVisible();
+      await expect(page.getByTestId(testUserEmail)).toBeVisible();
+      await expect(page.getByTestId(deactivatedUserEmail)).not.toBeVisible();
 
       await page.getByRole("button", { name: "Deactivated" }).click();
-      await expect(page.locator("ul[data-testid='accountsList'] li")).toContainText(
-        deactivatedUserEmail
-      );
-      await expect(
-        page.locator("ul[data-testid='accountsList'] li").filter({ hasText: adminUserEmail })
-      ).not.toBeVisible();
-      await expect(
-        page.locator("ul[data-testid='accountsList'] li").filter({ hasText: testUserEmail })
-      ).not.toBeVisible();
+      await expect(page.getByTestId(deactivatedUserEmail)).toBeVisible();
+      await expect(page.getByTestId(adminUserEmail)).not.toBeVisible();
+      await expect(page.getByTestId(testUserEmail)).not.toBeVisible();
     });
 
     // Skipping for now --- until we have time to dig in on this further
