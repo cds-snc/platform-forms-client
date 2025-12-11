@@ -39,7 +39,6 @@ export default defineConfig({
     exclude: [
       "**/node_modules/**",
       "**/dist/**",
-      "**/cypress/**",
       ...(process.env.VITEST_BROWSER === "true" ? [] : ["**/*.browser.vitest.+(ts|tsx|js|jsx)"]),
     ],
     browser: {
