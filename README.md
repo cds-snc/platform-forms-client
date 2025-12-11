@@ -96,43 +96,6 @@ Once the change is made, you will need to 'Log Out' and log back in. Alternative
 
 ## Testing
 
-This application uses Cypress for end-to-end testing.
+See package.json scripts for jest, playwright, and vitest
 
-When running tests, ensure you are not running 'yarn dev', instead run:
-
-```
-yarn build:test
-yarn start:test
-```
-
-Otherwise you'll receive errors about `(uncaught exception)Error: Hydration failed because the initial UI does not match what was rendered on the server.`
-
-If you want to clear the database and run the tests in a clean slate:
-
-```
-yarn dev:test # run in a separate terminal
-```
-
-If you want to run a specific test:
-
-```
-yarn cypress:e2e --spec "PATH_TO_TEST"
-```
-
-If you want to run the entire test suite:
-
-```
-yarn cypress:e2e
-# an error? see the screenshot in ./cypress/screenshots
-```
-
-If a test is failing, you can run the test tool:
-
-```
-yarn cypress
-# A chrome instance starts, then manually start and watch that test running
-```
-
-The application also uses Jest for unit testing. To run the tests, run `yarn test`.
-
-# Traduction en français à venir...
+Playwight is configured to run "yarn build:test && yarn start:test" for the web server

@@ -3,7 +3,7 @@
     "typeRoots": ["./types", "./node_modules/@types"],
     "target": "es5",
     "lib": ["es5", "dom"],
-    "types": ["cypress", "node", "cypress-axe", "cypress-wait-until"],
+    "types": ["node"],
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -31,9 +31,6 @@
     "../**/*.tsx",
     "../**/*.js",
     "../**/*.jsx",
-    "**/*.cy.tsx",
-    "**/*.cy.ts",
-    "../cypress.config.ts",
     "support/commands/selection-command.js"
   ]
 }
