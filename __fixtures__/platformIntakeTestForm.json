@@ -6,8 +6,8 @@
     "descriptionFr": "Inscrivez-vous pour en savoir plus sur le travail du SNC sur les formulaires"
   },
   "confirmation": {
-    "descriptionEn": "",
-    "descriptionFr": "",
+    "descriptionEn": "Thank you. Our team will contact you by email shortly.",
+    "descriptionFr": "Thank you. Our team will contact you by email shortly. [FR]",
     "referrerUrlEn": "https://digital.canada.ca/",
     "referrerUrlFr": "https://numerique.canada.ca/"
   },

@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@lib/utils";
 import { FormikProvider, useFormik } from "formik";
 import React from "react";
