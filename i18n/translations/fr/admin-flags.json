@@ -33,6 +33,10 @@
     "responsesPilot": {
       "title": "Réponses (Pilote)",
       "description": "Activer le nouveau flux pour le téléchargement des réponses dans le navigateur avec une clé API."
+    },
+    "userSideAuditLogs": {
+      "title": "Journaux d'audit côté utilisateur",
+      "description": "Permettre aux utilisateurs de télécharger les journaux d'audit directement depuis les paramètres du formulaire"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",
