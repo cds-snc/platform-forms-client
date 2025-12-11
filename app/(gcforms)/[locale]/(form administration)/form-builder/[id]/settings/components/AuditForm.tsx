@@ -5,6 +5,7 @@ import { Button } from "@clientComponents/globals";
 import { getFormEvents } from "../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const AuditForm = ({ formId }: { formId: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -12,6 +13,9 @@ export const AuditForm = ({ formId }: { formId: string }) => {
   const { form } = useTemplateStore((s) => ({
     form: s.form,
   }));
+
+  const { getFlag } = useFeatureFlags();
+  const canPerformUsersideAudit = getFlag("userSideAuditLogs");
 
   function retrieveFileBlob(
     events: {
@@ -108,16 +112,18 @@ export const AuditForm = ({ formId }: { formId: string }) => {
 
   return (
     <>
-      <div id="download-form" className="mb-10">
-        <h2>{t("auditDownload.title")}</h2>
-        <p className="mb-4" id="download-hint">
-          {t("auditDownload.description")}
-        </p>
+      {canPerformUsersideAudit && (
+        <div id="download-form" className="mb-10">
+          <h2>{t("auditDownload.title")}</h2>
+          <p className="mb-4" id="download-hint">
+            {t("auditDownload.description")}
+          </p>
 
-        <Button onClick={() => handleFormAudit(formId)} theme="primary">
-          {t("auditDownload.downloadBtnText")}
-        </Button>
-      </div>
+          <Button onClick={() => handleFormAudit(formId)} theme="primary">
+            {t("auditDownload.downloadBtnText")}
+          </Button>
+        </div>
+      )}
     </>
   );
 };
