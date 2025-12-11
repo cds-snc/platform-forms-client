@@ -142,6 +142,7 @@
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.914.0",
+    "@axe-core/playwright": "^4.11.0",
     "@babel/core": "^7.28.0",
     "@babel/preset-typescript": "^7.27.1",
     "@eslint/eslintrc": "^3",
