@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { userSession } from "../helpers/user-session";
+import { userSession } from "../../helpers/user-session";
 
 test.describe("User profile", () => {
   test.describe("Regular User", () => {

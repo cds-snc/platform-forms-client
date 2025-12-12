@@ -15,7 +15,6 @@ const createJestConfig = nextJest({
 const customJestConfig: Config = {
   workerIdleMemoryLimit: "1G",
   testPathIgnorePatterns: [
-    "<rootDir>/cypress/",
     "<rootDir>/public/static/scripts/",
     "<rootDir>/.next/",
     "<rootDir>/node_modules/",

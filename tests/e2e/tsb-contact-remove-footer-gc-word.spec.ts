@@ -5,7 +5,7 @@ import { userSession } from "../helpers/user-session";
 test.describe("TSB Contact Form functionality", () => {
   test("Form footer does not contain GC branding", async ({ page }) => {
     // Increase timeout for this test as publishing can take a while
-    test.setTimeout(120000);
+    test.setTimeout(40000);
 
     await userSession(page);
 

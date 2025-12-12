@@ -4,7 +4,16 @@ import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { cloneTemplate } from "../templates";
 import { logEvent } from "@lib/auditLogs";
 
-jest.mock("@lib/auditLogs");
+jest.mock("@lib/auditLogs", () => ({
+  __esModule: true,
+  logEvent: jest.fn(),
+  get AuditLogDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
+  },
+  get AuditLogAccessDeniedDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
+  }
+}));
 
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
@@ -52,7 +61,7 @@ describe("cloneTemplate", () => {
 
     (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(createdTemplate);
 
-    const result = await cloneTemplate("src1");
+    const result = await cloneTemplate("src1", false);
 
     expect(prismaMock.template.create).toHaveBeenCalledWith(
       expect.objectContaining({
