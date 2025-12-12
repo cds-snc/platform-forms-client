@@ -166,11 +166,12 @@ const CustomJson = dynamic(
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 
-export enum Groups {
-  BASIC = "basic",
-  PRESET = "preset",
-  OTHER = "other",
-}
+export const Groups = {
+  BASIC: "basic",
+  PRESET: "preset",
+  OTHER: "other",
+} as const;
+export type Groups = (typeof Groups)[keyof typeof Groups];
 
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");

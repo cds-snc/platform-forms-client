@@ -4,11 +4,12 @@ import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
 import { serverTranslation } from "@i18n";
 
-export enum LoggedOutTabName {
-  PUBLISH = "publish",
-  RESPONSES = "responses",
-  SETTINGS = "settings",
-}
+export const LoggedOutTabName = {
+  PUBLISH: "publish",
+  RESPONSES: "responses",
+  SETTINGS: "settings",
+} as const;
+export type LoggedOutTabName = (typeof LoggedOutTabName)[keyof typeof LoggedOutTabName];
 
 interface LoggedOutTabProps {
   tabName: LoggedOutTabName;

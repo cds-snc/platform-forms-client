@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
 
-export enum MessageType {
-  ERROR = "ERROR",
-}
+export const MessageType = {
+  ERROR: "ERROR",
+} as const;
+export type MessageType = (typeof MessageType)[keyof typeof MessageType];
 
 const BackgroundClasses = {
   error: "border-red bg-red-50",
