@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { DatabaseHelper } from "../helpers/database-helper";
+import { DatabaseHelper } from "../../helpers/database-helper";
 
-test.describe("Testing a basic frontend form", () => {
+test.describe("Testing a form element autocomplete attributes", () => {
   let publishedFormPath: string;
   let formId: string;
   let dbHelper: DatabaseHelper;
@@ -9,7 +9,7 @@ test.describe("Testing a basic frontend form", () => {
   test.beforeAll(async () => {
     // Create a published template directly in the database
     dbHelper = new DatabaseHelper();
-    formId = await dbHelper.createPublishedTemplate("kitchenSinkTestForm");
+    formId = await dbHelper.createPublishedTemplate("autocompleteAttributesTestForm");
     publishedFormPath = `en/id/${formId}`;
   });
 
@@ -25,7 +25,7 @@ test.describe("Testing a basic frontend form", () => {
     await page.goto(publishedFormPath);
 
     // Check that the attestation text is displayed
-    await expect(page.locator("body")).toContainText("A Kitchen Sink Form");
+    await expect(page.locator("h1")).toContainText("An Autocomplete Attribute Test Form");
   });
 
   test("Has correct autocomplete attributes on fields", async ({ page }) => {

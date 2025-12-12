@@ -1,12 +1,28 @@
 import { test, expect } from "@playwright/test";
-import { FormUploadHelper } from "../helpers/form-upload-helper";
+import { DatabaseHelper } from "../../helpers/database-helper";
 
 test.describe("CDS Intake Form", () => {
-  test("should load CDS intake form and display title", async ({ page }) => {
-    const formHelper = new FormUploadHelper(page);
+  let publishedFormPath: string;
+  let formId: string;
+  let dbHelper: DatabaseHelper;
 
-    // Upload the form fixture - this will automatically navigate to preview
-    await formHelper.uploadFormFixture("cdsIntakeTestForm", true);
+  test.beforeAll(async () => {
+    // Create a published template directly in the database
+    dbHelper = new DatabaseHelper();
+    formId = await dbHelper.createPublishedTemplate("requiredAttributesTestForm");
+    publishedFormPath = `en/id/${formId}`;
+  });
+
+  test.afterAll(async () => {
+    // Clean up: delete the template and disconnect
+    if (formId) {
+      await dbHelper.deleteTemplate(formId);
+    }
+    await dbHelper.disconnect();
+  });
+
+  test("should load CDS intake form and display title", async ({ page }) => {
+    await page.goto(publishedFormPath);
 
     // The form should be loaded at this point
     // Look for the specific form title
@@ -17,10 +33,7 @@ test.describe("CDS Intake Form", () => {
   });
 
   test("should be able to interact with form fields", async ({ page }) => {
-    const formHelper = new FormUploadHelper(page);
-
-    // Upload the form fixture - this will automatically navigate to preview
-    await formHelper.uploadFormFixture("cdsIntakeTestForm", true);
+    await page.goto(publishedFormPath);
 
     // Look for common form elements that might be in the CDS intake form
     const formElements = page.locator('input, textarea, select, button[type="submit"]');
