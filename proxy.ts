@@ -320,6 +320,7 @@ const authFlowRedirect = (
       !session.user.acceptableUse &&
       !onSupport &&
       !path.startsWith("/auth/policy") &&
+      path !== "/form-builder" &&
       // If they don't want to accept let them log out
       !path.startsWith("/auth/logout")
     ) {
