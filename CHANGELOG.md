@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.8](https://github.com/cds-snc/platform-forms-client/compare/v4.6.7...v4.6.8) (2025-12-12)
+
+
+### Miscellaneous Chores
+
+* Improved frontend form e2e tests ([#6557](https://github.com/cds-snc/platform-forms-client/issues/6557)) ([f3732e6](https://github.com/cds-snc/platform-forms-client/commit/f3732e6a371a8aa5124b57d385880ede521e022a))
+* update add element spec ([#6556](https://github.com/cds-snc/platform-forms-client/issues/6556)) ([ef28dbd](https://github.com/cds-snc/platform-forms-client/commit/ef28dbd353940051224046d3a4afc3f81e725059))
+
 ## [4.6.7](https://github.com/cds-snc/platform-forms-client/compare/v4.6.6...v4.6.7) (2025-12-12)
 
 
