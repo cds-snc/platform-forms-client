@@ -43,16 +43,6 @@ const nextConfig = {
     cacheHandler: require.resolve("./nextCacheHandler.mjs"),
     cacheMaxMemorySize: 0, // disable default in-memory caching
   }),
-  webpack: (config) => {
-    // Support reading markdown
-    config.module.rules.push({
-      test: /\.md$/,
-      type: "asset/source",
-    });
-
-    return config;
-  },
-
   async headers() {
     return [
       {
@@ -82,7 +72,11 @@ const nextConfig = {
       },
     ];
   },
-  serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
+  serverExternalPackages: [
+    "@aws-sdk/lib-dynamodb",
+    "pino",
+    "@opentelemetry/sdk-node",
+  ],
   experimental: {
     // PPR is only supported in Next.js Canary branches
     // ppr: true,
@@ -98,7 +92,7 @@ const nextConfig = {
         as: "*.js",
       },
     },
-  }
+  },
 };
 
 export default nextConfig;
