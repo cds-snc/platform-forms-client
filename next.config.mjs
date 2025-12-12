@@ -30,6 +30,9 @@ const securityHeaders = [
 
 const nextConfig = {
   deploymentId: process.env.NEXT_DEPLOYMENT_ID,
+  reactCompiler: {
+    compilationMode: 'annotation',
+  },
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
