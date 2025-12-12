@@ -29,6 +29,7 @@ const zitadelApiManagementGotInstance = got.extend({
         options.timeout = { request: 5000 };
         options.headers["Host"] = connectionInformation.trustedDomain; // This is required by Zitadel to accept requests. See https://zitadel.com/docs/self-hosting/manage/custom-domain#standard-config
         options.headers["Authorization"] = `Bearer ${apiManagementAccessToken}`;
+        options.headers["Accept"] = "application/json";
         options.retry.limit = 1;
         options.retry.errorCodes = ["ETIMEDOUT"];
       },
@@ -57,17 +58,18 @@ export async function createMachineUser(
 
   try {
     const response = await zitadelApiManagementGotInstance
-      .post(`${connectionInformation.url}/management/v1/users/machine`, {
+      .post(`${connectionInformation.url}/v2/users/new`, {
         json: {
           userName: userName,
-          name: userName,
-          description: description,
-          accessTokenType: "ACCESS_TOKEN_TYPE_JWT",
+          machine: {
+            name: userName,
+            description: description,
+          },
         },
       })
-      .json<{ userId: string }>();
+      .json<{ id: string }>();
 
-    return { userId: response.userId };
+    return { userId: response.id };
   } catch (error) {
     logMessage.error(error);
     throw new Error(`Failed to create machine user ${userName} in Zitadel`);
@@ -126,9 +128,8 @@ export async function createMachineKey(
 
   try {
     const response = await zitadelApiManagementGotInstance
-      .post(`${connectionInformation.url}/management/v1/users/${userId}/keys`, {
+      .post(`${connectionInformation.url}/v2/users/${userId}/keys`, {
         json: {
-          type: "KEY_TYPE_JSON",
           publicKey: Buffer.from(publicKey).toString("base64"),
         },
       })
@@ -146,7 +147,7 @@ export async function deleteMachineKey(userId: string, keyId: string): Promise<v
 
   try {
     await zitadelApiManagementGotInstance.delete(
-      `${connectionInformation.url}/management/v1/users/${userId}/keys/${keyId}`
+      `${connectionInformation.url}/v2/users/${userId}/keys/${keyId}`
     );
   } catch (error) {
     logMessage.error(error);
@@ -155,17 +156,33 @@ export async function deleteMachineKey(userId: string, keyId: string): Promise<v
 }
 
 export async function getMachineUserKeyById(
-  userId: string,
-  keyId: string
+  userId: string
 ): Promise<{ keyId: string } | undefined> {
   const connectionInformation = getConnectionInformation();
 
   try {
     const response = await zitadelApiManagementGotInstance
-      .get(`${connectionInformation.url}/management/v1/users/${userId}/keys/${keyId}`)
-      .json<{ key: { id: string } }>();
+      .post(`${connectionInformation.url}/v2/users/keys/search`, {
+        json: {
+          query: {
+            limit: 1,
+          },
+          queries: [
+            {
+              userIdFilter: {
+                id: userId,
+              },
+            },
+          ],
+        },
+      })
+      .json<{ result?: { id: string }[] }>();
 
-    return { keyId: response.key.id };
+    if (response.result !== undefined && response.result.length > 0) {
+      return { keyId: response.result[0].id };
+    } else {
+      return undefined;
+    }
   } catch (error) {
     logMessage.error(error);
     return undefined;
