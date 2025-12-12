@@ -3808,10 +3808,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.5.7":
-  version: 15.5.7
-  resolution: "@next/env@npm:15.5.7"
-  checksum: 10c0/f92d99e5fa3516c6b7699abafd9bd813f5c1889dd257ab098f1b71f93137f5e4f49792e22f6dddf8a59efcb134e8e84277c983ff88607b2a42aac651bfde78ea
+"@next/env@npm:15.5.9":
+  version: 15.5.9
+  resolution: "@next/env@npm:15.5.9"
+  checksum: 10c0/92c4e29d81a8e78c33c2da179648a4f478a9a6852966192e079007b19ec9955e72530d5ca7df55ea0efeccbf5b1c9d0efcaf80433e26af89c6478193e1d088f1
   languageName: node
   linkType: hard
 
@@ -3824,9 +3824,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/mdx@npm:15.5.7":
-  version: 15.5.7
-  resolution: "@next/mdx@npm:15.5.7"
+"@next/mdx@npm:15.5.9":
+  version: 15.5.9
+  resolution: "@next/mdx@npm:15.5.9"
   dependencies:
     source-map: "npm:^0.7.0"
   peerDependencies:
@@ -3837,7 +3837,7 @@ __metadata:
       optional: true
     "@mdx-js/react":
       optional: true
-  checksum: 10c0/2328270e2c9489d4417afc15188db2453526fd4021bc031f73c9a72661c8109a4c94e3c9012364f2efadc0418eeb08d2e3d35e533f984626b87e6acdfcfdc8ae
+  checksum: 10c0/31aa0ec7b2ad310c47992cd779447085369d99e5302a7a7bba4ab450164f2e9af597e10f01f64aa07f171ba75c8740d6568690c3229fa77690266a98895c440d
   languageName: node
   linkType: hard
 
@@ -12954,7 +12954,7 @@ __metadata:
     "@headlessui/react": "npm:^2.2.9"
     "@jest/globals": "npm:^30.2.0"
     "@neshca/cache-handler": "npm:^1.2.1"
-    "@next/mdx": "npm:15.5.7"
+    "@next/mdx": "npm:15.5.9"
     "@opentelemetry/exporter-jaeger": "npm:^2.0.1"
     "@opentelemetry/exporter-trace-otlp-http": "npm:^0.203.0"
     "@opentelemetry/instrumentation-aws-sdk": "npm:^0.63.0"
@@ -13047,7 +13047,7 @@ __metadata:
     lodash.unset: "npm:4.5.2"
     markdown-to-jsx: "npm:7.7.13"
     native-file-system-adapter: "npm:^3.0.1"
-    next: "npm:15.5.7"
+    next: "npm:15.5.9"
     next-auth: "npm:5.0.0-beta.29"
     node-fetch: "npm:^3.3.2"
     pino: "npm:10.0.0"
@@ -13059,10 +13059,10 @@ __metadata:
     prettier: "npm:^3.6.2"
     prisma: "npm:6"
     raw-loader: "npm:^4.0.2"
-    react: "npm:19.2.1"
+    react: "npm:19.2.3"
     react-app-polyfill: "npm:3.0.0"
     react-aria: "npm:3.44.0"
-    react-dom: "npm:19.2.1"
+    react-dom: "npm:19.2.3"
     react-i18next: "npm:^16.2.3"
     react-loading-skeleton: "npm:^3.5.0"
     react-roving-tabindex: "npm:^3.2.0"
@@ -15693,11 +15693,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:15.5.7":
-  version: 15.5.7
-  resolution: "next@npm:15.5.7"
+"next@npm:15.5.9":
+  version: 15.5.9
+  resolution: "next@npm:15.5.9"
   dependencies:
-    "@next/env": "npm:15.5.7"
+    "@next/env": "npm:15.5.9"
     "@next/swc-darwin-arm64": "npm:15.5.7"
     "@next/swc-darwin-x64": "npm:15.5.7"
     "@next/swc-linux-arm64-gnu": "npm:15.5.7"
@@ -15748,7 +15748,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 10c0/baf5b9f42416c478702b3894479b3d7862bc4abf18afe0e43b7fc7ed35567b8dc6cb76cd94906505bab9013cb8d0f3370cdc0451c01ec15ae5a638d37b5ba7c7
+  checksum: 10c0/6a120afbc45b96aa14debba6375602d6319093af4e3e8c648cf22b12ffb9db016c889df5e764cf5e0aa414ad60505db4e2095624a19f4b71316561076158651a
   languageName: node
   linkType: hard
 
@@ -17398,14 +17398,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.2.1":
-  version: 19.2.1
-  resolution: "react-dom@npm:19.2.1"
+"react-dom@npm:19.2.3":
+  version: 19.2.3
+  resolution: "react-dom@npm:19.2.3"
   dependencies:
     scheduler: "npm:^0.27.0"
   peerDependencies:
-    react: ^19.2.1
-  checksum: 10c0/e56b6b3d72314df580ca800b70a69a21c6372703c8f45d9b5451ca6519faefb2496d76ffa9c5adb94136d2bbf2fd303d0dfc208a2cd77ede3132877471af9470
+    react: ^19.2.3
+  checksum: 10c0/dc43f7ede06f46f3acc16ee83107c925530de9b91d1d0b3824583814746ff4c498ea64fd65cd83aba363205268adff52e2827c582634ae7b15069deaeabc4892
   languageName: node
   linkType: hard
 
@@ -17612,10 +17612,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.2.1":
-  version: 19.2.1
-  resolution: "react@npm:19.2.1"
-  checksum: 10c0/2b5eaf407abb3db84090434c20d6c5a8e447ab7abcd8fe9eaf1ddc299babcf31284ee9db7ea5671d21c85ac5298bd632fa1a7da1ed78d5b368a537f5e1cd5d62
+"react@npm:19.2.3":
+  version: 19.2.3
+  resolution: "react@npm:19.2.3"
+  checksum: 10c0/094220b3ba3a76c1b668f972ace1dd15509b157aead1b40391d1c8e657e720c201d9719537375eff08f5e0514748c0319063392a6f000e31303aafc4471f1436
   languageName: node
   linkType: hard
 
