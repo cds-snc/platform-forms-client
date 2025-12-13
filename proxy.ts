@@ -10,7 +10,7 @@ import type { AppRouteHandlerFnContext } from "next-auth/lib/types";
 import { JWT } from "next-auth/jwt";
 import { BODY_SIZE_LIMIT } from "@root/constants";
 
-const verboseDebug = false;
+const verboseDebug = true;
 
 const debugLogger = async (message: string) => {
   if (verboseDebug) {
