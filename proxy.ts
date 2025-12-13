@@ -82,7 +82,7 @@ export const config = {
 // TOMORROW
 // Stop files like .map.js from being included in the middleware
 
-export default async function middleware(req: NextRequest, ctx: AppRouteHandlerFnContext) {
+export default async function proxy(req: NextRequest, ctx: AppRouteHandlerFnContext) {
   const pathname = req.nextUrl.pathname;
   const searchParams = req.nextUrl.searchParams.toString();
 
@@ -320,6 +320,7 @@ const authFlowRedirect = (
       !session.user.acceptableUse &&
       !onSupport &&
       !path.startsWith("/auth/policy") &&
+      !path.startsWith("/auth/setup-security-questions") &&
       // If they don't want to accept let them log out
       !path.startsWith("/auth/logout")
     ) {

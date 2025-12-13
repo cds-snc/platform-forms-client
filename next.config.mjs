@@ -30,6 +30,9 @@ const securityHeaders = [
 
 const nextConfig = {
   deploymentId: process.env.NEXT_DEPLOYMENT_ID,
+  reactCompiler: {
+    compilationMode: "annotation",
+  },
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
@@ -72,24 +75,14 @@ const nextConfig = {
       },
     ];
   },
-  webpack: (config) => {
-    // Support reading markdown
-    config.module.rules.push({
-      test: /\.md$/,
-      type: "asset/source",
-    });
-
-    return config;
-  },
   serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino", "@opentelemetry/sdk-node"],
   experimental: {
-    // PPR is only supported in Next.js Canary branches
-    // ppr: true,
     serverActions: {
       // Note: this matches values in constants.ts
       bodySizeLimit: "10mb",
     },
   },
+  typedRoutes: true,
   turbopack: {
     rules: {
       "*.md": {
