@@ -10,7 +10,7 @@ import type { AppRouteHandlerFnContext } from "next-auth/lib/types";
 import { JWT } from "next-auth/jwt";
 import { BODY_SIZE_LIMIT } from "@root/constants";
 
-const verboseDebug = false;
+const verboseDebug = true;
 
 const debugLogger = async (message: string) => {
   if (verboseDebug) {
@@ -296,6 +296,8 @@ const authFlowRedirect = (
   const session = req.auth;
 
   const origin = req.nextUrl.origin;
+
+  logMessage.debug(JSON.stringify(session?.user));
 
   // Ignore if user is in the auth flow of MfA
   if (session && !onAuthFlow) {
