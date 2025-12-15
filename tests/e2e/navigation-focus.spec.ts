@@ -45,6 +45,7 @@ test.describe("Forms Navigation Focus", () => {
     test("Focus should be on H2 on navigating to a 'sub page'", async ({ page }) => {
       await page.locator("label[for='1.0']").click();
       await page.locator("button[data-testid='nextButton']").click();
+      await page.waitForTimeout(500);
 
       const focusedElement = await page.evaluate(() => document.activeElement?.tagName);
       expect(focusedElement).toBe("H2");
@@ -54,6 +55,7 @@ test.describe("Forms Navigation Focus", () => {
       await page.locator("label[for='1.0']").click();
       await page.locator("button[data-testid='nextButton']").click();
       await page.locator("button[data-testid='backButtonGroup']").click();
+      await page.waitForTimeout(500);
 
       const focusedElement = await page.evaluate(() => document.activeElement?.tagName);
       expect(focusedElement).toBe("H1");
@@ -73,6 +75,8 @@ test.describe("Forms Navigation Focus", () => {
         .first()
         .click(); // Go back to sub page A
 
+      await page.waitForTimeout(500);
+
       const focusedElement = await page.evaluate(() => document.activeElement?.tagName);
       expect(focusedElement).toBe("H2");
     });
@@ -87,6 +91,8 @@ test.describe("Forms Navigation Focus", () => {
       await page.locator("button[data-testid='nextButton']").click(); // Go to Review page
 
       await page.locator("button[data-testid='editButton-start']").first().click(); // Go back to the Start page
+
+      await page.waitForTimeout(500);
 
       const focusedElement = await page.evaluate(() => document.activeElement?.tagName);
       expect(focusedElement).toBe("H1");
