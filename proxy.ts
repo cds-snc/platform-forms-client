@@ -141,12 +141,13 @@ export default async function proxy(req: NextRequest, ctx: AppRouteHandlerFnCont
     if (layer3) return layer3;
 
     // Layer 4 - Auth Users Redirect
-
-    const layer4 = authFlowRedirect(reqWithAuth, pathname, pathLang, cookieLang);
-    if (layer4) return layer4;
+    // Skip auth flow redirects for prefetched routes to prevent navigation issues
+    if (!prefetchedRoute) {
+      const layer4 = authFlowRedirect(reqWithAuth, pathname, pathLang, cookieLang);
+      if (layer4) return layer4;
+    }
 
     // Final Layer - Set Content Security Policy
-
     return setCSP(reqWithAuth, pathname, cookieLang, pathLang);
   })(req, ctx);
 }
