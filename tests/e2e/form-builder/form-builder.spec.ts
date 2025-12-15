@@ -35,6 +35,10 @@ test.describe("Test FormBuilder", () => {
       .filter({ hasText: "Add a description to your form to help set expectations" })
       .click();
     await page.locator('[aria-label="Form introduction"]').fill("form description");
+
+    // Give it a second to save
+    await page.waitForTimeout(1000);
+
     await expect(page.locator('[aria-label="Form introduction"]')).toContainText(
       "form description"
     );
@@ -45,6 +49,10 @@ test.describe("Test FormBuilder", () => {
       .filter({ hasText: "Add a privacy statement to outline how you handle personal information" })
       .click();
     await page.locator('[aria-label="Privacy statement"]').fill("privacy statement");
+
+    // Give it a second to save
+    await page.waitForTimeout(1000);
+
     await expect(page.locator('[aria-label="Privacy statement"]')).toContainText(
       "privacy statement"
     );
@@ -92,6 +100,8 @@ test.describe("Test FormBuilder", () => {
     await expect(page.locator("#item1-describedby")).toContainText("Question 1 description");
     await expect(page.locator("#required-1-id")).toBeChecked();
 
+    // await page.waitForTimeout(1000);
+
     // preview form
     await page.getByTestId("preview").click();
     await expect(page.locator("[data-testid='preview-container'] h1")).toContainText(
@@ -119,6 +129,10 @@ test.describe("Test FormBuilder", () => {
 
     // publish form
     await page.getByTestId("publish").click();
+
+    // await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(2000);
+
     await expect(page.getByRole("heading", { level: 1 })).toContainText("You can't publish yet");
     await page.getByRole("link", { name: "create one now" }).click();
 
