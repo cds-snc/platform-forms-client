@@ -44,6 +44,7 @@ test.describe("Testing a basic frontend form", () => {
       await page
         .getByRole("textbox", { name: "Text Field 1" })
         .fill("This is 35 characters This is 35 ch");
+      await page.waitForTimeout(500);
       await expect(page.locator("#characterCountMessage2")).toBeVisible();
       await expect(page.locator("#characterCountMessage2")).toContainText(
         "You have 5 characters left."
@@ -55,6 +56,7 @@ test.describe("Testing a basic frontend form", () => {
       await page
         .getByRole("textbox", { name: "Text Field 1" })
         .fill("This is 48 characters This is 48 characters This");
+      await page.waitForTimeout(500);
       await expect(page.locator("#characterCountMessage2")).toBeVisible();
       await expect(page.locator("#characterCountMessage2")).toContainText("exceeded the limit");
     });
@@ -64,6 +66,7 @@ test.describe("Testing a basic frontend form", () => {
       await page
         .getByRole("textbox", { name: "Text Field 1" })
         .fill("This is too many characters. This is too many characters.");
+      await page.waitForTimeout(500);
       await page.locator("[type='submit']").click();
 
       await expect(
