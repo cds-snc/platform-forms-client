@@ -75,6 +75,15 @@ const nextConfig = {
       },
     ];
   },
+  webpack: (config) => {
+    // Support reading markdown
+    config.module.rules.push({
+      test: /\.md$/,
+      type: "asset/source",
+    });
+
+    return config;
+  },
   serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino", "@opentelemetry/sdk-node"],
   experimental: {
     serverActions: {
