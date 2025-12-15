@@ -23,13 +23,16 @@ test.describe("Test FormBuilder language switching", () => {
     await page.fill("#formTitle", "Cypress Test Form");
     await page.locator("summary").filter({ hasText: "Add a description" }).click();
     await page.fill('[aria-label="Form introduction"]', "form description in english");
+    await page.waitForTimeout(500);
 
     // Enter some English "page text"
     await page.fill('[aria-label="Page text 1"]', "page text in english");
+    await page.waitForTimeout(500);
 
     // Enter English Privacy Statement
     await page.locator("summary").filter({ hasText: "Add a privacy statement" }).click();
     await page.fill('[aria-label="Privacy statement"]', "privacy text in english");
+    await page.waitForTimeout(500);
 
     // Switch to French
     await page.locator('[data-testid="lang-switcher"]').click();
@@ -40,14 +43,19 @@ test.describe("Test FormBuilder language switching", () => {
 
     // Enter French Title and Description
     await page.fill("#formTitle", "Formulaire de test Cypress");
+    await page.waitForTimeout(500);
+
     await expect(page.locator("#formTitle")).toHaveValue("Formulaire de test Cypress");
     await page.fill('[aria-label="Form introduction"]', "form description in french");
+    await page.waitForTimeout(500);
 
     // Enter some French "page text"
     await page.fill('[aria-label="Page text 1"]', "page text in french");
+    await page.waitForTimeout(500);
 
     // Enter French Privacy Statement
     await page.fill('[aria-label="Privacy statement"]', "privacy text in french");
+    await page.waitForTimeout(500);
 
     // Switch back to English
     await page.locator('[data-testid="lang-switcher"]').click();
