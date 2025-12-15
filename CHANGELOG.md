@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.7](https://github.com/cds-snc/platform-forms-client/compare/v4.6.6...v4.6.7) (2025-12-12)
+
+
+### Miscellaneous Chores
+
+* Restore webpack ([#6561](https://github.com/cds-snc/platform-forms-client/issues/6561)) ([f947a25](https://github.com/cds-snc/platform-forms-client/commit/f947a2532252b24bc8c0410e5d868813f25d928c))
+
+## [4.6.6](https://github.com/cds-snc/platform-forms-client/compare/v4.6.5...v4.6.6) (2025-12-12)
+
+
+### Miscellaneous Chores
+
+* clean up open telemetry warnings ([#6546](https://github.com/cds-snc/platform-forms-client/issues/6546)) ([63edd1e](https://github.com/cds-snc/platform-forms-client/commit/63edd1e03e07d97224d82068080bd930fa148b08))
+* clearer indication of file size and format to users adding file upload component ([#6529](https://github.com/cds-snc/platform-forms-client/issues/6529)) ([61cca69](https://github.com/cds-snc/platform-forms-client/commit/61cca69d5ee1c34f20867c565d1c4ddb6b2bad6f))
+* Convert some cypress tests to playwright ([#6543](https://github.com/cds-snc/platform-forms-client/issues/6543)) ([8a6cd0b](https://github.com/cds-snc/platform-forms-client/commit/8a6cd0bdef1ee3699a5cff463876f7b5065f9e5c))
+* Enum Cleanup ([#6530](https://github.com/cds-snc/platform-forms-client/issues/6530)) ([0ecd27a](https://github.com/cds-snc/platform-forms-client/commit/0ecd27ad8038dfb3b5b2f66d5060ad269c7b94fd))
+* port char limit test ([#6542](https://github.com/cds-snc/platform-forms-client/issues/6542)) ([de40524](https://github.com/cds-snc/platform-forms-client/commit/de405243b790084d38461abe13986839bb40f5dd))
+* port more playwright tests ([#6535](https://github.com/cds-snc/platform-forms-client/issues/6535)) ([65233c2](https://github.com/cds-snc/platform-forms-client/commit/65233c2004189e26cf50c033ce793ef9f459dff0))
+* port names and title test to playwright ([#6532](https://github.com/cds-snc/platform-forms-client/issues/6532)) ([a8b1892](https://github.com/cds-snc/platform-forms-client/commit/a8b189295f8e6f7769a9e38f6d26e9546357f8b2))
+* Remove api/templates from response generator. ([#6553](https://github.com/cds-snc/platform-forms-client/issues/6553)) ([2199d26](https://github.com/cds-snc/platform-forms-client/commit/2199d26bd8578708d776cb5997845d5ed4c91a49))
+* remove cypress testing ([#6545](https://github.com/cds-snc/platform-forms-client/issues/6545)) ([02c432c](https://github.com/cds-snc/platform-forms-client/commit/02c432ced5b0228720f0a48e8a8c8b82cd9aa794))
+* remove webpack ([#6515](https://github.com/cds-snc/platform-forms-client/issues/6515)) ([21b1c51](https://github.com/cds-snc/platform-forms-client/commit/21b1c51e97271d98ebc55c0f919140a142247977))
+* Reorganize e2e tests ([#6549](https://github.com/cds-snc/platform-forms-client/issues/6549)) ([ef05939](https://github.com/cds-snc/platform-forms-client/commit/ef05939d7eee9225b7977e002ae10312e7204085))
+* Responses pilot- Convert processedResponseIds to simpler processedResponsesCount ([#6531](https://github.com/cds-snc/platform-forms-client/issues/6531)) ([8cd178a](https://github.com/cds-snc/platform-forms-client/commit/8cd178a5d41db9cd6c84c7f8f081ef082c149005))
+* update nextjs and react ([#6559](https://github.com/cds-snc/platform-forms-client/issues/6559)) ([12ccfb0](https://github.com/cds-snc/platform-forms-client/commit/12ccfb01778d7568e4f985e9ffde82d01198fd10))
+* update workflows to cache playwright ([#6548](https://github.com/cds-snc/platform-forms-client/issues/6548)) ([2133690](https://github.com/cds-snc/platform-forms-client/commit/21336902e04fbdc6f137d4356f6cd817dbf2444c))
+
 ## [4.6.5](https://github.com/cds-snc/platform-forms-client/compare/v4.6.4...v4.6.5) (2025-12-09)
 
 

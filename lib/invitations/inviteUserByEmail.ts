@@ -15,7 +15,7 @@ import { inviteToFormsEmailTemplate } from "@lib/invitations/emailTemplates/invi
 import { getOrigin } from "@lib/origin";
 import { logMessage } from "@lib/logger";
 import { Invitation } from "@prisma/client";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
@@ -33,7 +33,8 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
         e.user.id,
         { type: "Form", id: formId },
         "AccessDenied",
-        `User ${e.user.id} does not have permission to invite user`
+        AuditLogAccessDeniedDetails.AccessDenied_NoInvitePermission,
+        { userId: e.user.id }
       );
     }
     throw e;
@@ -89,7 +90,8 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
     user.id,
     { type: "Form", id: invitation.templateId },
     "InvitationCreated",
-    `${user.email} invited ${invitation.email}`
+    AuditLogDetails.UserInvited,
+    { userEmail: user.email, invitationEmail: invitation.email }
   );
 
   await _sendInvitationEmail(sender, invitation, message, template.formRecord);
