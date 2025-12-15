@@ -2,6 +2,8 @@ import { test, expect } from "@playwright/test";
 import { userSession } from "../../helpers/user-session";
 
 test.describe("Test acceptable use Page", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeEach(async ({ page }) => {
     await userSession(page, { acceptableUse: false });
     await page.goto("/en/auth/policy");
