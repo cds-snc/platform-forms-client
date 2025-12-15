@@ -1,9 +1,5 @@
 # Changelog
 
-## [2.0.2] - 2025-12-09
-
-- Add notification helpers
-
 ## [2.0.1] - 2025-11-12
 
 - Remove `.xml` and `.svg` file type support

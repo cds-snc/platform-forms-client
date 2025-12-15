@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/core",
-  "version": "2.0.2",
+  "version": "2.0.1",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -8,9 +8,6 @@
   },
   "packageManager": "yarn@4.10.3",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.948.0",
-    "@aws-sdk/client-sqs": "^3.948.0",
-    "@aws-sdk/lib-dynamodb": "^3.948.0",
     "file-type": "^21.0.0",
     "tsdown": "^0.15.0"
   },
