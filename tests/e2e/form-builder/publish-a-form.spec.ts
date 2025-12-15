@@ -20,8 +20,6 @@ test.describe("Publishing a form", () => {
   });
 
   test("Can publish a form", async ({ page }) => {
-    // await userSession(page);
-
     // Navigate to settings page
     await page.goto(`/en/form-builder/${formId}/settings`);
     await page.waitForLoadState("networkidle");
@@ -45,6 +43,8 @@ test.describe("Publishing a form", () => {
 
     // Navigate to publish page
     await page.goto(`/en/form-builder/${formId}/publish`);
+
+    await page.waitForTimeout(1000);
 
     // Click the Publish button to open the dialog
     const publishButton = page.getByRole("button", { name: /publish/i });
