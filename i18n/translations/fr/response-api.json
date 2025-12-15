@@ -10,7 +10,7 @@
   },
   "startPage": {
     "intro": "Obtenez les réponses de votre formulaire en quelques étapes grâce à une clé API.",
-    "nextButton": "Continuer",
+    "nextButton": "Commencer",
     "beforeStart": {
       "heading": "Avant de commencer",
       "generateKey": "Générez une clé API pour votre formulaire dans les Paramètres.",
@@ -36,7 +36,7 @@
   },
   "loadKeyPage": {
     "title": "Sélectionnez votre clé API",
-    "detail": "La clé API de votre formulaire vous permet d'accéder aux réponses sans avoir besoin de ressources de développement pour une intégration API programmatique. Cela vous permet d'obtenir plus de 150 réponses à la fois",
+    "detail": "La clé API de votre formulaire vous permet d'accéder aux réponses sans avoir besoin de ressources de développement pour une intégration API programmatique. Cela vous permet d'obtenir plus de 150 réponses à la fois et élimine l'étape de confirmation qui consistait à copier-coller les codes de réception.",
     "chooseFileButton": "Téléverser la clé API",
     "noNewResponsesAvailable": "Aucune nouvelle réponse",
     "noNewResponsesDetail": "Votre formulaire a reçu 0 nouvelle soumission.",
