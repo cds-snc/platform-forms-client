@@ -37,9 +37,14 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "setup",
+      name: "setup-auth",
       testDir: "./tests",
       testMatch: "**/auth.setup.ts",
+    },
+    {
+      name: "setup-auth-admin",
+      testDir: "./tests",
+      testMatch: "**/auth-admin.setup.ts",
     },
     {
       name: "Microsoft Edge",
@@ -48,11 +53,11 @@ export default defineConfig({
         channel: "msedge",
         headless: !!process.env.CI, // Run headless only in CI
         launchOptions: {
-          slowMo: 250, // Slow down actions for better visibility
+          slowMo: !process.env.CI ? 250 : 0, // Slow down actions for better visibility
         },
         storageState: "tests/.auth/user.json",
       },
-      dependencies: ["setup"],
+      dependencies: ["setup-auth", "setup-auth-admin"],
     },
   ],
 

@@ -2,12 +2,12 @@ import { test as setup } from "@playwright/test";
 import { userSession } from "./helpers";
 import { logMessage } from "@root/lib/logger";
 
-const authFile = "tests/.auth/user.json";
+const authFile = "tests/.auth/user-admin.json";
 
 setup("authenticate", async ({ page }) => {
   logMessage.info("Setting up authenticated user session for tests");
   await userSession(page, {
-    admin: false,
+    admin: true,
     acceptableUse: true,
   });
 

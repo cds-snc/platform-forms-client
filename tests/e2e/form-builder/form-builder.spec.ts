@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Test FormBuilder", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test("Renders form builder home page", async ({ page }) => {
     await page.goto("/en/form-builder");
     await expect(page.locator("[data-testid='start-new-form'] h2")).toContainText("Design a form");

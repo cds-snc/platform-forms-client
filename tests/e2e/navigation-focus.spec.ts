@@ -1,31 +1,20 @@
 import { test, expect } from "@playwright/test";
-import { FormUploadHelper } from "../helpers/form-upload-helper";
-import { userSession } from "../helpers/user-session";
+import { DatabaseHelper } from "../helpers";
 
 test.describe("Forms Navigation Focus", () => {
-  let publishedPath: string;
+  let publishedFormPath: string;
+  let formId: string;
+  let dbHelper: DatabaseHelper;
 
-  test.beforeAll(async ({ browser }) => {
-    test.setTimeout(120000);
-
-    // Create a new page for setup
-    const context = await browser.newContext();
-    const page = await context.newPage();
-
-    // Authenticate and publish the form once
-    await userSession(page);
-
-    const helper = new FormUploadHelper(page);
-    const formID = await helper.uploadFormFixture("navigationFocus");
-    await helper.publishForm(formID);
-    publishedPath = `/en/id/${formID}`;
-
-    await context.close();
+  test.beforeAll(async () => {
+    dbHelper = new DatabaseHelper();
+    formId = await dbHelper.createTemplate({ fixtureName: "navigationFocus", published: true });
+    publishedFormPath = `en/id/${formId}`;
   });
 
   test.describe("Focus should remain on the error container when there are validation errors", () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto(publishedPath);
+      await page.goto(publishedFormPath);
     });
 
     test("Focus error validation correctly", async ({ page }) => {
@@ -40,7 +29,7 @@ test.describe("Forms Navigation Focus", () => {
 
   test.describe("Focus is on the correct heading when navigating or in an error state", () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto(publishedPath);
+      await page.goto(publishedFormPath);
     });
 
     test("H1 should not be focussed on the initial Start page load", async ({ page }) => {

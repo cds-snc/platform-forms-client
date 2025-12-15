@@ -1,9 +1,7 @@
 import { test, expect, Page } from "@playwright/test";
-import { userSession } from "../../helpers";
 
 test.describe("Form builder names and titles", () => {
   test.beforeEach(async ({ page }: { page: Page }) => {
-    await userSession(page);
     await page.goto("http://localhost:3000/en/form-builder/0000/edit");
   });
 
