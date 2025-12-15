@@ -298,7 +298,9 @@ const authFlowRedirect = (
 
   const origin = req.nextUrl.origin;
 
-  logMessage.debug(JSON.stringify(session?.user));
+  logMessage.debug(
+    `Auth Flow Check - Path: ${path}, OnAuthFlow: ${onAuthFlow}, HasSession: ${!!session}, HasSecurityQuestions: ${session?.user?.hasSecurityQuestions}, AcceptableUse: ${session?.user?.acceptableUse}`
+  );
 
   // Ignore if user is in the auth flow of MfA
   if (session && !onAuthFlow) {
@@ -309,7 +311,7 @@ const authFlowRedirect = (
       !onSupport
     ) {
       logMessage.debug(
-        "Middlware Action: User has not setup security questions, redirecting to setup-security-questions"
+        `Middleware Action: User has not setup security questions, redirecting from ${path} to setup-security-questions`
       );
       // check if user has setup security questions setup
 
