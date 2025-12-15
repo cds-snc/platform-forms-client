@@ -14,31 +14,31 @@
     "beforeStart": {
       "heading": "Before you start",
       "generateKey": "Generate an API key for your form in Settings.",
-      "generateKeyDetail": "This is how you’ll more easily and securely retrieve all new responses.",
+      "generateKeyDetail": "This is how you’ll retrieve high volumes of responses more easily and securely.",
       "browserSupport": "Ensure you’re using Google Chrome or Microsoft Edge.",
-      "browserSupportDetail": "You'll be asked permission to copy and save files to your device. Agree to these browser pop-up alerts to continue.",
+      "browserSupportDetail": "You'll be asked permission to copy and save files to your device. Accept these browser alerts to use the feature.",
       "attachSafety": "Take caution when opening files attachments.",
       "attachSafetyDetail": "Check files before opening them, verify malicious file attributes, and follow warning prompts."
     },
     "steps": {
       "heading": "Then, follow these steps:",
       "uploadKey": {
-        "title": "Select your API key file et check for new responses."
+        "title": "Select your API key file to access new responses."
       },
       "chooseLocation": {
-        "title": "Choose a download location for responses."
+        "title": "Choose a download location to save response files."
       },
       "selectFormat": {
-        "title": "Select the format of response files."
+        "title": "Select the format of responses and download."
       }
     }
   },
   "loadKeyPage": {
-    "title": "Use your API key to authenticate yourself",
-    "detail": "Select the API key file that you generated in Settings to get access to all your form's available responses in one download.",
+    "title": "Select your API key",
+    "detail": "Your form’s API key unlocks access to responses without needing development resources for a custom API integration. This allows you to get more than 150 responses at a time and removes the confirmation step that involved copying-pasting receipt codes.",
     "chooseFileButton": "Select API Key",
     "noNewResponsesAvailable": "No new responses",
-    "noNewResponsesDetail": "There are currently no new responses for this form.",
+    "noNewResponsesDetail": "Your form has received 0 new submissions.",
     "newResponsesAvailable": "New responses available",
     "checkForNewResponses": "Check for new responses",
     "downloadResponses": "Choose location",
@@ -60,7 +60,7 @@
   "locationPage": {
     "title": "Select a save location ",
     "subheading": "Decide where new responses will be downloaded.",
-    "detail": "To add response data to an existing CSV file, select the folder where it is currently saved. Make sure the file name does not change, and appears as it did when originally downloaded.",
+    "detail": "You’ll be asked by your browser to authorize the writing of files to the selected folder. Make sure to allow this permission in your browser settings.",
     "chooseLocationButton": "Choose location",
     "locationSelected": {
       "title": "Save location selected",
@@ -77,12 +77,12 @@
   },
   "formatPage": {
     "title": "Choose a response file format",
-    "subheading": "Select the format of new responses.",
-    "detail": "All downloads also include the 'raw data' in JSON format. This allows you to have the official submission record and allows for the automation of the confirmation step that checks integrity, removing the need to copy-paste receipt codes.",
+    "subheading": "Select the format of responses.",
+    "detail": "Downloads will also include source data (JSON files). These raw data represents the “official submission of record” and provides an automatic check that the files you are getting match up to what’s been submitted.",
     "formatOptions": {
       "csv": {
-        "label": "Combined in spreadsheet (One CSV file)",
-        "hint": "Data appended, if there's an existing CSV in the folder seleted."
+        "label": "Spreadsheet (Combined in 1 CSV file)",
+        "hint": "Data can be appended, if a previous CSV exists in the folder seleted."
       },
       "html": {
         "label": "Individual copies (Separate HTML files)"
@@ -100,8 +100,8 @@
     "savedTo": "All form submission data can be found in: ",
     "chooseNewLocationButton": "Choose new location",
     "downloadResponsesButton": "Download responses",
-    "maliciousAttachmentsWarningTitle": "Your responses contain files attached to submissions",
-    "maliciousAttachmentsWarningBody": "These are located in a nested folder and will be marked in the CSV or HTML file with the symbol: “⚠️” if we suspect that they could potentially be malicious."
+    "maliciousAttachmentsWarningTitle": "Be cautious when opening files attached to submissions.",
+    "maliciousAttachmentsWarningBody": "You'll find file attachments in a separate folder with files that were scanned as “potentially malicious” in a nested folder. Check for “malicious” attributes or the “⚠️” symbol in responses and follow all warning prompts."
   },
   "processingPage": {
     "section-title": "Processing responses",
@@ -111,7 +111,7 @@
     "processingMessage": "Processing {{count}} responses...",
     "cancelButton": "Pause download",
     "cancellingButton": "Pausing...",
-    "note": "For large downloads, this can take some time."
+    "note": "For large downloads, you can expect it to take minutes for hundreds of responses and hours for thousands of responses."
   },
   "backButton": "Back",
   "backToStart": "Back to start",
@@ -147,7 +147,7 @@
     },
     "permissionError": {
       "title": "Unable to modify folder contents",
-      "message": "Please grant your browser “edit” (or write) access to the selected folder. You can find this in the browser's menu. Your department may have blocked this functionality."
+      "message": "Please grant your browser “edit” or “write” access to transfer responses to the selected folder. You can find this in the browser's menu. Your department may have blocked this functionality."
     }
   }
 }
