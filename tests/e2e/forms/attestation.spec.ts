@@ -9,7 +9,7 @@ test.describe("Testing attestation fields", () => {
   test.beforeAll(async () => {
     // Create a published template directly in the database
     dbHelper = new DatabaseHelper();
-    formId = await dbHelper.createPublishedTemplate("attestationTestForm");
+    formId = await dbHelper.createTemplate({ fixtureName: "attestationTestForm", published: true });
     publishedFormPath = `en/id/${formId}`;
   });
 
