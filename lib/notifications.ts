@@ -4,7 +4,7 @@ import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { notification } from "./notificationHelpers";
+import { notification } from "@gcforms/connectors";
 
 // Hard coded since only one interval is supported currently
 const NOTIFICATIONS_INTERVAL = NotificationsInterval.DAY;
@@ -163,7 +163,7 @@ const sendEmailAfterSubmissionProcessed = async (
     }
     const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
 
-    await notification.deferred({
+    await notification.sendDeferred({
       notificationId: formId,
       emails,
       subject: multipleSubmissions
