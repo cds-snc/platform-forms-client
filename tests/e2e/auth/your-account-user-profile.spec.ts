@@ -1,12 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { userSession } from "../../helpers/user-session";
 
 test.describe("User profile", () => {
   test.describe("Regular User", () => {
-    test.beforeEach(async ({ page }) => {
-      await userSession(page, { admin: false });
-    });
-
     test("Can navigate to Profile page", async ({ page }) => {
       await page.goto("/en/forms");
 
@@ -56,9 +51,7 @@ test.describe("User profile", () => {
   });
 
   test.describe("Admin User", () => {
-    test.beforeEach(async ({ page }) => {
-      await userSession(page, { admin: true });
-    });
+    test.use({ storageState: "tests/.auth/user-admin.json" });
 
     test("Can navigate to Profile page", async ({ page }) => {
       await page.goto("/en/forms");
