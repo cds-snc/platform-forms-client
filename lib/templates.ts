@@ -547,6 +547,17 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     throw new InvalidFormConfigError();
   }
 
+  const currentTemplate = await prisma.template.findUnique({
+    where: {
+      id: command.formID,
+    },
+    select: {
+      name: true,
+      deliveryOption: true,
+      securityAttribute: true,
+    },
+  });
+
   const updatedTemplate = await prisma.template
     .update({
       where: {
@@ -591,14 +602,17 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   if (formCache.cacheAvailable) formCache.invalidate(command.formID);
 
   // Log the audit events
-  logEvent(
-    user.id,
-    { type: "Form", id: command.formID },
-    "ChangeFormName",
-    AuditLogDetails.UpdatedFormName,
-    { newFormName: command.name ?? "" }
-  );
+  command.name &&
+    currentTemplate?.name != command.name &&
+    logEvent(
+      user.id,
+      { type: "Form", id: command.formID },
+      "ChangeFormName",
+      AuditLogDetails.UpdatedFormName,
+      { newFormName: command.name ?? "" }
+    );
   command.deliveryOption &&
+    command.deliveryOption !== currentTemplate?.deliveryOption &&
     logEvent(
       user.id,
       { type: "Form", id: command.formID },
@@ -611,6 +625,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
       }
     );
   command.securityAttribute &&
+    command.securityAttribute !== currentTemplate?.securityAttribute &&
     logEvent(
       user.id,
       { type: "Form", id: command.formID },
