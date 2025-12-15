@@ -29,7 +29,7 @@ const sendImmediate = async ({
     await _createNotificationRecord({ notificationId: id, emails, subject, body });
     await _enqueueDeferredNotification(id!);
   } catch (error) {
-    throw `Error creating immediate notification id ${id}: ${(error as Error).message}`;
+    throw `Error creating immediate notification id ${id} - ${(error as Error).message}`;
   }
 };
 
@@ -84,7 +84,7 @@ const _createNotificationRecord = async ({
     });
     await dynamoDBDocumentClient.send(command);
   } catch (error) {
-    throw new Error(`Could not create record - ${JSON.stringify(error)}`);
+    throw new Error(`Could not create record: ${JSON.stringify(error)}`);
   }
 };
 
