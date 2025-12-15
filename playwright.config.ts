@@ -37,6 +37,11 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: "setup",
+      testDir: "./tests",
+      testMatch: "**/auth.setup.ts",
+    },
+    {
       name: "Microsoft Edge",
       use: {
         ...devices["Desktop Edge"],
@@ -45,7 +50,9 @@ export default defineConfig({
         launchOptions: {
           slowMo: 250, // Slow down actions for better visibility
         },
+        storageState: "tests/.auth/user.json",
       },
+      dependencies: ["setup"],
     },
   ],
 
