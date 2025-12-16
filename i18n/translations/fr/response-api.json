@@ -111,7 +111,7 @@
     "processingMessage": "Traitement de {{count}} réponses...",
     "cancelButton": "Mettre en pause le téléchargement",
     "cancellingButton": "Mise en pause...",
-    "note": "Pour les téléchargements volumineux, vous pouvez vous attendre à ce que cela prenne quelques minutes pour des centaines de réponses et plusieurs heures pour des milliers de réponses."
+    "note": "Vous pouvez vous attendre à ce que cela prenne quelques minutes pour des centaines de réponses et plusieurs heures pour des milliers de réponses."
   },
   "backButton": "Retourner",
   "backToStart": "Retourner au début",

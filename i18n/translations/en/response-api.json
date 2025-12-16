@@ -110,7 +110,7 @@
     "processingMessage": "Processing {{count}} responses...",
     "cancelButton": "Pause download",
     "cancellingButton": "Pausing...",
-    "note": "For large downloads, you can expect it to take minutes for hundreds of responses and hours for thousands of responses."
+    "note": "You can expect it to take a few minutes for hundreds of responses and several hours for thousands of responses."
   },
   "backButton": "Back",
   "backToStart": "Back to start",
