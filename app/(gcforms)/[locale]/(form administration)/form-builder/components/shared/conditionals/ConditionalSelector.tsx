@@ -122,6 +122,8 @@ export const ConditionalSelector = ({
   updateElementId: (index: number, id: string) => void;
   removeSelector: (index: number) => void;
 }) => {
+  const currentElement = elements.find((el) => el.id === itemId);
+
   const { t } = useTranslation("form-builder");
 
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
@@ -134,7 +136,14 @@ export const ConditionalSelector = ({
   const questions = useMemo(() => {
     const items = elements
       .filter((item) => {
-        return item.id !== itemId;
+        return (
+          item.id !== itemId &&
+          // Prevent creating circular logic by filtering out questions
+          // that already have rules pointing to the current element.
+          !currentElement?.properties.conditionalRules?.some(
+            (rule) => rule.choiceId.split(".")[0] === String(item.id)
+          )
+        );
       })
       .map((question) => {
         const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
