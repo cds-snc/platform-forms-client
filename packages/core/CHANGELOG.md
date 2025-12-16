@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.2] - 2025-12-16
+
+- Fix infinite recursion bug in visibility check and add unit test coverage
+
 ## [2.0.1] - 2025-11-12
 
 - Remove `.xml` and `.svg` file type support
