@@ -33,6 +33,7 @@ import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
 import { BrandProperties, NotificationsInterval } from "@gcforms/types";
+import { logMessage } from "@lib/logger";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -514,7 +515,9 @@ Pour prévisualiser ce formulaire :
 
       return { success: true };
     } catch (error) {
-      return { success: false, error: (error as Error).message };
+      const message = (error as Error).message;
+      logMessage.info(`Error sharing form: ${message}`);
+      return { success: false, error: message };
     }
   }
 );
