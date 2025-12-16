@@ -165,7 +165,7 @@ export const ConditionalSelector = ({
     // Prepend empty option with default text
     items.unshift({ label: t("addConditionalRules.selectQuestion"), value: "" });
     return items;
-  }, [elements, itemId, language, localizeField, t]);
+  }, [currentElement?.properties.conditionalRules, elements, itemId, language, localizeField, t]);
 
   const choiceParentQuestion = choiceId?.split(".")[0] || null;
 
