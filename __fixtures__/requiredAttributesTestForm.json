@@ -1,0 +1,169 @@
+{
+  "titleEn": "A Required Attributes Test Form",
+  "titleFr": "",
+  "introduction": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "confirmation": {
+    "descriptionEn": "",
+    "descriptionFr": "",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [1, 2, 3, 4],
+  "elements": [
+    {
+      "id": 1,
+      "type": "textField",
+      "properties": {
+        "questionId": "",
+        "tags": [],
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "A Required Short Answer",
+        "titleFr": "",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      },
+      "uuid": "e853dee1-b66e-4fba-a5f0-e8a68b96089c"
+    },
+    {
+      "id": 2,
+      "type": "checkbox",
+      "properties": {
+        "questionId": "",
+        "tags": [],
+        "subElements": [],
+        "choices": [
+          {
+            "en": "One",
+            "fr": ""
+          },
+          {
+            "en": "Two",
+            "fr": ""
+          },
+          {
+            "en": "Three",
+            "fr": ""
+          }
+        ],
+        "titleEn": "A Required Multiple Choice",
+        "titleFr": "",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      },
+      "uuid": "9485a4ea-6fd8-4575-a018-47c65f71c271"
+    },
+    {
+      "id": 3,
+      "type": "radio",
+      "properties": {
+        "questionId": "",
+        "tags": [],
+        "subElements": [],
+        "choices": [
+          {
+            "en": "One",
+            "fr": ""
+          },
+          {
+            "en": "Two",
+            "fr": ""
+          },
+          {
+            "en": "Three",
+            "fr": ""
+          }
+        ],
+        "titleEn": "A Required Radio",
+        "titleFr": "",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      },
+      "uuid": "67474906-7b0b-4f08-b209-45902da0f193"
+    },
+    {
+      "id": 4,
+      "type": "dropdown",
+      "properties": {
+        "questionId": "",
+        "tags": [],
+        "subElements": [],
+        "choices": [
+          {
+            "en": "One",
+            "fr": ""
+          },
+          {
+            "en": "Two",
+            "fr": ""
+          },
+          {
+            "en": "Three",
+            "fr": ""
+          }
+        ],
+        "titleEn": "A Required Dropdown",
+        "titleFr": "",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      },
+      "uuid": "1ec7e4fb-8d18-4eca-9870-83fb3356de7e"
+    }
+  ],
+  "groups": {
+    "start": {
+      "name": "Start",
+      "titleEn": "Start page",
+      "titleFr": "Start page",
+      "elements": ["1", "2", "3", "4"],
+      "nextAction": "review"
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "End (Review page and Confirmation)",
+      "titleFr": "End (Review page and Confirmation)",
+      "elements": [],
+      "nextAction": "end"
+    },
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Confirmation page",
+      "elements": []
+    }
+  },
+  "groupsLayout": [],
+  "lastGeneratedElementId": 4
+}
