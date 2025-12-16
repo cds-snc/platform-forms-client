@@ -29,7 +29,7 @@ const sendImmediate = async ({
     await _createNotificationRecord({ notificationId: id, emails, subject, body });
     await _enqueueDeferredNotification(id!);
   } catch (error) {
-    throw `Error creating immediate notification id ${id} - ${(error as Error).message}`;
+    throw new Error(`Error creating immediate notification id ${id}`, { cause: error });
   }
 };
 
@@ -55,7 +55,7 @@ const sendDeferred = async ({
   try {
     await _createNotificationRecord({ notificationId, emails, subject, body });
   } catch (error) {
-    throw `Error creating deferred notification id ${notificationId} - ${(error as Error).message}`;
+    throw new Error(`Error creating deferred notification id ${notificationId}`, { cause: error });
   }
 };
 
@@ -84,7 +84,7 @@ const _createNotificationRecord = async ({
     });
     await dynamoDBDocumentClient.send(command);
   } catch (error) {
-    throw new Error(`Could not create record: ${JSON.stringify(error)}`);
+    throw new Error(`Could not create record`, { cause: error });
   }
 };
 
@@ -104,7 +104,7 @@ const _enqueueDeferredNotification = async (notificationId: string): Promise<voi
       throw new Error("Received null SQS message identifier");
     }
   } catch (error) {
-    throw new Error(`Could not enqueue: ${JSON.stringify(error)}`);
+    throw new Error(`Could not enqueue`, { cause: error });
   }
 };
 
