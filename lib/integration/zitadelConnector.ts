@@ -13,6 +13,7 @@ type ZitadelConnectionInformation = {
   url: string;
   trustedDomain: string;
   administrationKey: ZitadelAdministrationKey;
+  organizationId: string;
 };
 
 let connectionInformationCache: ZitadelConnectionInformation | undefined = undefined;
@@ -22,7 +23,7 @@ const zitadelApiManagementGotInstance = got.extend({
   hooks: {
     beforeRequest: [
       async (options) => {
-        const connectionInformation = getConnectionInformation();
+        const connectionInformation = await getConnectionInformation();
         const apiManagementAccessToken = await getApiManagementAccessToken(connectionInformation);
 
         options.http2 = true;
@@ -54,13 +55,14 @@ export async function createMachineUser(
   userName: string,
   description: string
 ): Promise<{ userId: string }> {
-  const connectionInformation = getConnectionInformation();
+  const connectionInformation = await getConnectionInformation();
 
   try {
     const response = await zitadelApiManagementGotInstance
       .post(`${connectionInformation.url}/v2/users/new`, {
         json: {
           userName: userName,
+          organizationId: connectionInformation.organizationId,
           machine: {
             name: userName,
             description: description,
@@ -77,7 +79,7 @@ export async function createMachineUser(
 }
 
 export async function getMachineUser(loginName: string): Promise<{ userId: string } | undefined> {
-  const connectionInformation = getConnectionInformation();
+  const connectionInformation = await getConnectionInformation();
 
   try {
     const response = await zitadelApiManagementGotInstance
@@ -110,7 +112,7 @@ export async function getMachineUser(loginName: string): Promise<{ userId: strin
 }
 
 export async function deleteMachineUser(userId: string): Promise<void> {
-  const connectionInformation = getConnectionInformation();
+  const connectionInformation = await getConnectionInformation();
 
   try {
     await zitadelApiManagementGotInstance.delete(`${connectionInformation.url}/v2/users/${userId}`);
@@ -124,12 +126,15 @@ export async function createMachineKey(
   userId: string,
   publicKey: string
 ): Promise<{ keyId: string }> {
-  const connectionInformation = getConnectionInformation();
+  const connectionInformation = await getConnectionInformation();
 
   try {
+    const expirationDate = new Date();
+    expirationDate.setFullYear(expirationDate.getFullYear() + 50);
     const response = await zitadelApiManagementGotInstance
       .post(`${connectionInformation.url}/v2/users/${userId}/keys`, {
         json: {
+          expirationDate,
           publicKey: Buffer.from(publicKey).toString("base64"),
         },
       })
@@ -143,7 +148,7 @@ export async function createMachineKey(
 }
 
 export async function deleteMachineKey(userId: string, keyId: string): Promise<void> {
-  const connectionInformation = getConnectionInformation();
+  const connectionInformation = await getConnectionInformation();
 
   try {
     await zitadelApiManagementGotInstance.delete(
@@ -158,7 +163,7 @@ export async function deleteMachineKey(userId: string, keyId: string): Promise<v
 export async function getMachineUserKeyById(
   userId: string
 ): Promise<{ keyId: string } | undefined> {
-  const connectionInformation = getConnectionInformation();
+  const connectionInformation = await getConnectionInformation();
 
   try {
     const response = await zitadelApiManagementGotInstance
@@ -189,7 +194,7 @@ export async function getMachineUserKeyById(
   }
 }
 
-function getConnectionInformation(): ZitadelConnectionInformation {
+async function getConnectionInformation(): Promise<ZitadelConnectionInformation> {
   if (connectionInformationCache === undefined) {
     if (!process.env.ZITADEL_URL) throw new Error("No ZITADEL_URL environment variable found");
     if (!process.env.ZITADEL_TRUSTED_DOMAIN)
@@ -197,10 +202,47 @@ function getConnectionInformation(): ZitadelConnectionInformation {
     if (!process.env.ZITADEL_ADMINISTRATION_KEY)
       throw new Error("No ZITADEL_ADMINISTRATION_KEY environment variable found");
 
+    const apiManagementAccessToken = await getApiManagementAccessToken({
+      url: process.env.ZITADEL_URL,
+      trustedDomain: process.env.ZITADEL_TRUSTED_DOMAIN,
+      administrationKey: JSON.parse(process.env.ZITADEL_ADMINISTRATION_KEY),
+    });
+
+    const response = await got
+      .post(`${process.env.ZITADEL_URL}/v2/organizations/_search`, {
+        http2: true,
+        timeout: { request: 5000 },
+        headers: {
+          Host: process.env.ZITADEL_TRUSTED_DOMAIN,
+          Authorization: `Bearer ${apiManagementAccessToken}`,
+          Accept: "application/json",
+        },
+        retry: {
+          limit: 1,
+          errorCodes: ["ETIMEDOUT"],
+        },
+        json: {
+          query: {
+            limit: 1,
+          },
+          queries: [
+            {
+              defaultQuery: {},
+            },
+          ],
+        },
+      })
+      .json<{ result?: { id: string }[] }>();
+
+    if (!response.result || response.result.length < 1) {
+      throw new Error("Could not find default organization in Zitadel");
+    }
+
     connectionInformationCache = {
       url: process.env.ZITADEL_URL,
       trustedDomain: process.env.ZITADEL_TRUSTED_DOMAIN,
       administrationKey: JSON.parse(process.env.ZITADEL_ADMINISTRATION_KEY),
+      organizationId: response.result[0].id,
     };
   }
 
@@ -208,7 +250,7 @@ function getConnectionInformation(): ZitadelConnectionInformation {
 }
 
 async function getApiManagementAccessToken(
-  connectionInformation: ZitadelConnectionInformation
+  connectionInformation: Omit<ZitadelConnectionInformation, "organizationId">
 ): Promise<string> {
   /**
    * Cache is invalidated after 25 minutes while the actual token is valid for 30 minutes.
@@ -229,7 +271,7 @@ async function getApiManagementAccessToken(
 }
 
 async function generateApiManagementAccessToken(
-  connectionInformation: ZitadelConnectionInformation
+  connectionInformation: Omit<ZitadelConnectionInformation, "organizationId">
 ): Promise<string> {
   const privateKey = createPrivateKey({
     key: connectionInformation.administrationKey.key,
