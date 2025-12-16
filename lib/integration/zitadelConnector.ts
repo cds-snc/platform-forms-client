@@ -61,7 +61,7 @@ export async function createMachineUser(
     const response = await zitadelApiManagementGotInstance
       .post(`${connectionInformation.url}/v2/users/new`, {
         json: {
-          userName: userName,
+          username: userName,
           organizationId: connectionInformation.organizationId,
           machine: {
             name: userName,
