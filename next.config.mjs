@@ -81,6 +81,10 @@ const nextConfig = {
       // Note: this matches values in constants.ts
       bodySizeLimit: "10mb",
     },
+    // Enable filesystem caching for `next dev`
+    turbopackFileSystemCacheForDev: true,
+    // Enable filesystem caching for `next build`
+    turbopackFileSystemCacheForBuild: true,
   },
   typedRoutes: true,
   turbopack: {

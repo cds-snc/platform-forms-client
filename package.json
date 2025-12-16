@@ -114,7 +114,7 @@
     "lodash.unset": "4.5.2",
     "markdown-to-jsx": "7.7.13",
     "native-file-system-adapter": "^3.0.1",
-    "next": "^16.0.10",
+    "next": "canary",
     "next-auth": "5.0.0-beta.29",
     "node-fetch": "^3.3.2",
     "pino": "10.0.0",
