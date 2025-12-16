@@ -78,14 +78,13 @@
   "formatPage": {
     "title": "Choose a response file format",
     "subheading": "Select the format of responses.",
-    "detail": "Downloads will also include source data (JSON files). These raw data represents the “official submission of record” and provides an automatic check that the files you are getting match up to what’s been submitted.",
+    "detail": "Downloads will also include source data (JSON files). This represents the “official submission of record” and provides an automatic check that the files you are getting match up to what’s been submitted.",
     "formatOptions": {
       "csv": {
-        "label": "Spreadsheet (Combined in 1 CSV file)",
-        "hint": "Data can be appended, if a previous CSV exists in the folder seleted."
+        "label": "<strong>Spreadsheet</strong> (Combined in 1 CSV file)"
       },
       "html": {
-        "label": "Individual copies (Separate HTML files)"
+        "label": "<strong>Individual copies</strong> (Separate HTML files)"
       }
     }
   },
