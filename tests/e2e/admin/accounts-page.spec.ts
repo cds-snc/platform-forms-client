@@ -19,27 +19,43 @@ test.describe("Accounts Page", () => {
 
     test.describe("Accounts tabs/filters and cards", () => {
       test("Clicking tabs/filters updates with expected content", async ({ page }) => {
-        await page.getByRole("button", { name: "All" }).click();
-        await expect(page.getByTestId(adminUserEmail)).toBeVisible();
-        await expect(page.getByTestId(testUserEmail)).toBeVisible();
-        await expect(page.getByTestId(deactivatedUserEmail)).toBeVisible();
+        await page
+          .getByRole("button", { name: "All" })
+          .click()
+          .then(async () => {
+            await expect(page.getByTestId(adminUserEmail)).toBeVisible();
+            await expect(page.getByTestId(testUserEmail)).toBeVisible();
+            await expect(page.getByTestId(deactivatedUserEmail)).toBeVisible();
+          });
 
-        await page.getByRole("button", { name: "Active" }).click();
-        await expect(page.getByTestId(adminUserEmail)).toBeVisible();
-        await expect(page.getByTestId(testUserEmail)).toBeVisible();
-        await expect(page.getByTestId(deactivatedUserEmail)).not.toBeVisible();
+        await page
+          .getByRole("button", { name: "Active" })
+          .click()
+          .then(async () => {
+            await expect(page.getByTestId(adminUserEmail)).toBeVisible();
+            await expect(page.getByTestId(testUserEmail)).toBeVisible();
+            await expect(page.getByTestId(deactivatedUserEmail)).not.toBeVisible();
+          });
 
-        await page.getByRole("button", { name: "Deactivated" }).click();
-        await expect(page.getByTestId(deactivatedUserEmail)).toBeVisible();
-        await expect(page.getByTestId(adminUserEmail)).not.toBeVisible();
-        await expect(page.getByTestId(testUserEmail)).not.toBeVisible();
+        await page
+          .getByRole("button", { name: "Deactivated" })
+          .click()
+          .then(async () => {
+            await expect(page.getByTestId(deactivatedUserEmail)).toBeVisible();
+            await expect(page.getByTestId(adminUserEmail)).not.toBeVisible();
+            await expect(page.getByTestId(testUserEmail)).not.toBeVisible();
+          });
       });
 
       test("Clicking manage forms navigates to the related page", async ({ page }) => {
         await page.getByRole("button", { name: "All" }).click();
-        await page.getByTestId(testUserEmail).getByRole("link", { name: "Manage forms" }).click();
-        await page.waitForLoadState("networkidle");
-        await expect(page.getByRole("heading", { level: 1 })).toContainText("Manage forms");
+        await page
+          .getByTestId(testUserEmail)
+          .getByRole("link", { name: "Manage forms" })
+          .click()
+          .then(async () => {
+            await expect(page.getByRole("heading", { level: 1 })).toContainText("Manage forms");
+          });
       });
     });
   });

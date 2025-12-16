@@ -43,35 +43,38 @@ test.describe("Testing a basic frontend form", () => {
       await page.goto(publishedFormPath);
       await page
         .getByRole("textbox", { name: "Text Field 1" })
-        .fill("This is 35 characters This is 35 ch");
-      await page.waitForTimeout(500);
-      await expect(page.locator("#characterCountMessage2")).toBeVisible();
-      await expect(page.locator("#characterCountMessage2")).toContainText(
-        "You have 5 characters left."
-      );
+        .fill("This is 35 characters This is 35 ch")
+        .then(async () => {
+          await expect(page.locator("#characterCountMessage2")).toBeVisible();
+          await expect(page.locator("#characterCountMessage2")).toContainText(
+            "You have 5 characters left."
+          );
+        });
     });
 
     test("displays an error message indicating too many characters", async ({ page }) => {
       await page.goto(publishedFormPath);
       await page
         .getByRole("textbox", { name: "Text Field 1" })
-        .fill("This is 48 characters This is 48 characters This");
-      await page.waitForTimeout(500);
-      await expect(page.locator("#characterCountMessage2")).toBeVisible();
-      await expect(page.locator("#characterCountMessage2")).toContainText("exceeded the limit");
+        .fill("This is 48 characters This is 48 characters This")
+        .then(async () => {
+          await expect(page.locator("#characterCountMessage2")).toBeVisible();
+          await expect(page.locator("#characterCountMessage2")).toContainText("exceeded the limit");
+        });
     });
 
     test("won't submit the form if the number of characters is too many", async ({ page }) => {
       await page.goto(publishedFormPath);
       await page
         .getByRole("textbox", { name: "Text Field 1" })
-        .fill("This is too many characters. This is too many characters.");
-      await page.waitForTimeout(500);
-      await page.locator("[type='submit']").click();
+        .fill("This is too many characters. This is too many characters.")
+        .then(async () => {
+          page.locator("[type='submit']").click();
 
-      await expect(
-        page.getByRole("heading", { name: /Please correct the errors on/ })
-      ).toBeVisible();
+          await expect(
+            page.getByRole("heading", { name: /Please correct the errors on/ })
+          ).toBeVisible();
+        });
     });
   });
 });
