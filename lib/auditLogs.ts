@@ -75,7 +75,7 @@ export const AuditLogEvent = {
   AuditLogsRead: "AuditLogsRead",
 } as const;
 
-export type AuditLogEventStrings = keyof typeof AuditLogEvent;
+export type AuditLogEvent = keyof typeof AuditLogEvent;
 
 export const AuditSubjectType = {
   User: "User",
@@ -366,7 +366,7 @@ const resolveDescription = (
 export const logEvent = async <T extends keyof AllAuditParams | undefined = undefined>(
   userId: string,
   subject: { type: keyof typeof AuditSubjectType; id?: string },
-  event: AuditLogEventStrings,
+  event: AuditLogEvent,
   ...args: T extends keyof AllAuditParams
     ? AllAuditParams[T] extends never
       ? [description: T]

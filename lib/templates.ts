@@ -10,7 +10,7 @@ import {
 } from "@lib/types";
 import { Prisma } from "@prisma/client";
 import { authorization, getAbility } from "./privileges";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, AuditLogEvent, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { deleteKey } from "./serviceAccount";
@@ -629,7 +629,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     logEvent(
       user.id,
       { type: "Form", id: command.formID },
-      "ChangeSecurityAttribute",
+      AuditLogEvent.ChangeSecurityAttribute,
       AuditLogDetails.ChangeSecurityAttribute,
       { securityAttribute: command.securityAttribute ?? "" }
     );
@@ -1655,7 +1655,13 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
-  logEvent(user.id, { type: "Form", id: formID }, "ChangeSecurityAttribute");
+  logEvent(
+    user.id,
+    { type: "Form", id: formID },
+    AuditLogEvent.ChangeSecurityAttribute,
+    AuditLogDetails.ChangeSecurityAttribute,
+    { securityAttribute: securityAttribute ?? "" }
+  );
 
   return _parseTemplate(updatedTemplate);
 };
