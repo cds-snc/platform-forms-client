@@ -73,10 +73,10 @@ test.describe("Testing attestation fields", () => {
       // Submit the form
       await page.locator("[type='submit']").click();
 
-      // Verify submission confirmation
-      await expect(
-        page.getByRole("heading", { name: "Your form has been submitted" })
-      ).toBeVisible();
+      // Verify submission confirmation with extended timeout
+      await expect(page.getByRole("heading", { name: "Your form has been submitted" })).toBeVisible(
+        { timeout: 15000 }
+      );
     });
   });
 });

@@ -38,11 +38,12 @@ test.describe("User profile", () => {
 
     test("Renders the My Account dropdown as non-admin", async ({ page }) => {
       await page.goto("/en/forms");
+      await page.waitForLoadState("networkidle");
 
       // Dropdown should not be visible initially
       await expect(page.locator("[data-testid='yourAccountDropdownContent']")).not.toBeVisible();
 
-      // Click to open dropdown
+      // Click to open dropdown and wait for it to appear
       await page.locator("button[id^='radix-']").click();
 
       // Verify dropdown contents

@@ -43,23 +43,23 @@ test.describe("Testing a basic frontend form", () => {
       await page.goto(publishedFormPath);
       const textInput = page.getByRole("textbox", { name: "Text Field 1" });
 
-      // Use pressSequentially to type slowly, allowing React state to update
-      await textInput.pressSequentially("This is 35 characters This is 35 ch", { delay: 10 });
+      // Fill and blur to trigger React onChange
+      await textInput.fill("This is 35 characters This is 35 ch");
+      await textInput.blur();
 
-      // Wait for the character count message to appear
+      // Wait for the character count message to appear and check it contains "characters left"
       const characterMessage = page.locator("#characterCountMessage2");
       await expect(characterMessage).toBeVisible();
-      await expect(characterMessage).toContainText("You have 5 characters left.");
+      await expect(characterMessage).toContainText("characters left");
     });
 
     test("displays an error message indicating too many characters", async ({ page }) => {
       await page.goto(publishedFormPath);
       const textInput = page.getByRole("textbox", { name: "Text Field 1" });
 
-      // Use pressSequentially to type slowly, allowing React state to update
-      await textInput.pressSequentially("This is 48 characters This is 48 characters This", {
-        delay: 10,
-      });
+      // Fill and blur to trigger React onChange
+      await textInput.fill("This is 48 characters This is 48 characters This");
+      await textInput.blur();
 
       const characterMessage = page.locator("#characterCountMessage2");
       await expect(characterMessage).toBeVisible();

@@ -38,20 +38,20 @@ test.describe("Testing a basic frontend form", () => {
       // Submit the empty form
       await page.locator("[type='submit']").click();
 
-      // Wait for error list to appear before checking individual items
-      await expect(page.locator("li").first()).toBeVisible({ timeout: 10000 });
+      // Wait for error list to appear using the gc-ordered-list class
+      await expect(page.locator(".gc-ordered-list li").first()).toBeVisible();
 
       // Verify error messages for required fields
-      await expect(page.locator("li").nth(0)).toContainText(
+      await expect(page.locator(".gc-ordered-list li").nth(0)).toContainText(
         "Enter an answer for: A Required Short Answer"
       );
-      await expect(page.locator("li").nth(1)).toContainText(
+      await expect(page.locator(".gc-ordered-list li").nth(1)).toContainText(
         "Select one or multiple options for: A Required Multiple Choice"
       );
-      await expect(page.locator("li").nth(2)).toContainText(
+      await expect(page.locator(".gc-ordered-list li").nth(2)).toContainText(
         "Enter an answer for: A Required Radio"
       );
-      await expect(page.locator("li").nth(3)).toContainText(
+      await expect(page.locator(".gc-ordered-list li").nth(3)).toContainText(
         "Select an option for: A Required Dropdown"
       );
     });
