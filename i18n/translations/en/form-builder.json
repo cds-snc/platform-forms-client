@@ -498,7 +498,7 @@
       "formId": "Form ID",
       "userId": "Team member",
       "event": "Form action",
-      "timestamp": "Date",
+      "timestamp": "Date and time (UTC)",
       "description": "Details"
     },
     "events": {
