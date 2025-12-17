@@ -67,6 +67,7 @@ test.describe("Testing a basic frontend form", () => {
 
       // Submit the form and wait for the success heading to appear
       await page.locator("[type='submit']").click();
+      await page.waitForTimeout(1000); // Add a short wait to ensure form submission processing
 
       // Verify submission confirmation with extended timeout
       await expect(page.getByRole("heading", { name: "Your form has been submitted" })).toBeVisible(

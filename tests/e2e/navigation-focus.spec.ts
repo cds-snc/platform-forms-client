@@ -21,6 +21,7 @@ test.describe("Forms Navigation Focus", () => {
       await page.locator("label[for='1.0']").click();
       await page.locator("button[data-testid='nextButton']").click();
       await page.locator("button[data-testid='nextButton']").click(); // Trigger validation error
+      await page.waitForTimeout(500);
 
       const focusedElement = await page.evaluate(() => document.activeElement?.id);
       expect(focusedElement).toBe("gc-form-errors");
