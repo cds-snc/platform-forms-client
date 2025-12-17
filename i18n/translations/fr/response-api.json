@@ -14,9 +14,9 @@
     "beforeStart": {
       "heading": "Avant de commencer",
       "generateKey": "Générez une clé API pour votre formulaire dans les Paramètres.",
-      "generateKeyDetail": "C'est ainsi que vous pourrez récupérer plus facilement et en toute sécurité les nouvelles réponses.",
+      "generateKeyDetail": "C'est ainsi que vous pourrez récupérer plus facilement et en toute sécurité un grand nombre de réponses.",
       "browserSupport": "Assurez-vous d'utiliser Google Chrome ou Microsoft Edge.",
-      "browserSupportDetail": "Vous serez invité à autoriser la copie et l'enregistrement de fichiers sur votre appareil. Acceptez ces messagestre d'alerte du navigateur.",
+      "browserSupportDetail": "On vous demandera d'autoriser la copie et l'enregistrement de fichiers sur votre appareil. Acceptez ces alertes du navigateur pour utiliser la fonctionnalité.",
       "attachSafety": "Soyez prudent lorsque vous ouvrez des pièces jointes.",
       "attachSafetyDetail": "Vérifiez les fichiers avant de les ouvrir, analysez les attributs des fichiers malveillants et suivez les avertissements."
     },
@@ -24,22 +24,22 @@
       "heading": "Ensuite, suivez ces étapes :",
       "stepOf": "Étape {{current}} de {{total}}",
       "uploadKey": {
-        "title": "Sélectionnez votre fichier de clé API et vérifiez s'il y a de nouvelles réponses."
+        "title": "Sélectionnez votre fichier de clé API pour accéder aux nouvelles réponses."
       },
       "chooseLocation": {
-        "title": "Choisissez un emplacement de téléchargement pour les réponses."
+        "title": "Choisissez un emplacement de téléchargement pour enregistrer les fichiers de réponses."
       },
       "selectFormat": {
-        "title": "Sélectionnez le format des fichiers de réponse."
+        "title": "Sélectionnez le format des réponses et téléchargez."
       }
     }
   },
   "loadKeyPage": {
-    "title": "Utilisez votre clé API pour vous authentifier",
-    "detail": "Sélectionnez le fichier de clé API qui a été générée dans les Paramètres pour accéder à toutes les réponses disponibles de votre formulaire en un seul téléchargement.",
+    "title": "Sélectionnez votre clé API",
+    "detail": "La clé API de votre formulaire vous permet d'accéder aux réponses sans avoir besoin de ressources de développement pour une intégration API programmatique. Cela vous permet d'obtenir plus de 150 réponses à la fois et élimine l'étape de confirmation qui consistait à copier-coller les codes de réception.",
     "chooseFileButton": "Téléverser la clé API",
     "noNewResponsesAvailable": "Aucune nouvelle réponse",
-    "noNewResponsesDetail": "Il n'y a actuellement aucune nouvelle réponse pour ce formulaire.",
+    "noNewResponsesDetail": "Votre formulaire a reçu 0 nouvelle soumission.",
     "newResponsesAvailable": "De nouvelles réponses sont disponibles",
     "checkForNewResponses": "Vérifier les nouvelles réponses",
     "downloadResponses": "Choisir l'emplacement",
@@ -60,8 +60,8 @@
   },
   "locationPage": {
     "title": "Sélectionnez un emplacement d’enregistrement",
-    "subheading": "Decidez où les nouvelles réponses seront téléchargées.",
-    "detail": "Pour ajouter des données de réponse à un fichier CSV existant, sélectionnez le dossier dans lequel il est actuellement enregistré. Assurez-vous que le nom du fichier n'a pas changé depuis le téléchargement initial afin que les nouvelles données soient ajoutées au même fichier.",
+    "subheading": "Décidez où les nouvelles réponses seront téléchargées.",
+    "detail": "Votre navigateur vous demandera d'autoriser l'écriture de fichiers dans le dossier sélectionné. Veillez à autoriser cette permission dans les paramètres de votre navigateur.",
     "chooseLocationButton": "Choisir l'emplacement",
     "locationSelected": {
       "title": "Emplacement de sauvegarde sélectionné",
@@ -78,12 +78,11 @@
   },
   "formatPage": {
     "title": "Choisissez un format de fichier de réponse",
-    "subheading": "Sélectionnez le format des nouvelles réponses.",
-    "detail": "Tous les téléchargements incluent également les « données brutes » au format JSON. Cela permet d’obtenir le registre de la soumission officiel et d’automatiser l’étape de confirmation, éliminant ainsi le besoin de copier-coller les codes de réception.",
+    "subheading": "Sélectionnez le format des réponses.",
+    "detail": "Les téléchargements comprennent également les données sources (fichiers JSON). Ces données brutes » représentent un « registre officiel de la soumission ». et permet d’automatiser l’étape de vérifier automatiquement que les fichiers que vous recevez correspondent bien à ceux qui ont été soumis.",
     "formatOptions": {
       "csv": {
-        "label": "Combinées dans feuille de calcul (Un fichier CSV)",
-        "hint": "Données ajoutées au fichier CSV, s'il existe déjà dans le dossier sélectionné."
+        "label": "Feuille de calcul (Combinées dans 1 fichier CSV)"
       },
       "html": {
         "label": "Copies individuelles (Fichiers HTML séparés)"
@@ -101,8 +100,8 @@
     "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
     "chooseNewLocationButton": "Choisir un nouvel emplacement",
     "downloadResponsesButton": "Télécharger les réponses",
-    "maliciousAttachmentsWarningTitle": "Vos réponses contiennent des fichiers joints aux soumissions",
-    "maliciousAttachmentsWarningBody": "Ceux-ci se retrouvent dans un dossier imbriqué et seront marqués dans le fichier CSV ou HTML avec le symbole : « ⚠️ » si l’on soupçonne qu’il pourraient y avoir un potentiel de malveillance."
+    "maliciousAttachmentsWarningTitle": "Soyez prudent en ouvrant les fichiers joints aux soumissions.",
+    "maliciousAttachmentsWarningBody": "Vous trouverez les fichiers joints dans un dossier distinct — les fichiers analysés comme « potentiellement malveillants » étant placés dans un dossier imbriqué. Vérifiez la présence d'attributs « malveillants » ou du symbole « ⚠️ » dans les réponses et suivez tous les avertissements."
   },
   "processingPage": {
     "section-title": "Traitement des réponses",
@@ -112,7 +111,7 @@
     "processingMessage": "Traitement de {{count}} réponses...",
     "cancelButton": "Mettre en pause le téléchargement",
     "cancellingButton": "Mise en pause...",
-    "note": "Pour les téléchargements volumineux, cela peut prendre un certain temps."
+    "note": "Vous pouvez vous attendre à ce que cela prenne quelques minutes pour des centaines de réponses et plusieurs heures pour des milliers de réponses."
   },
   "backButton": "Retourner",
   "backToStart": "Retourner au début",
@@ -148,7 +147,7 @@
     },
     "permissionError": {
       "title": "Impossible de modifier le contenu du dossier",
-      "message": "Veuillez accorder à votre navigateur l'accès de « modification » (ou accès en écriture) au dossier sélectionné. Vous trouverez cette option dans le menu du navigateur. Il est possible que votre ministère ait bloqué cette fonctionnalité."
+      "message": "Veuillez accorder à votre navigateur l'accès de « modification » ou accès « en écriture » au dossier sélectionné. Vous trouverez cette option dans le menu du navigateur. Il est possible que votre ministère ait bloqué cette fonctionnalité."
     }
   }
 }
