@@ -556,3 +556,12 @@ export const updateBranding = AuthenticatedAction(
     }
   }
 );
+
+export async function getFormTemplate(id: string) {
+  try {
+    const formConfig = await getFormJSONConfig(id);
+    return { formRecord: formConfig, error: null };
+  } catch (_) {
+    return { formRecord: null, error: "error" };
+  }
+}

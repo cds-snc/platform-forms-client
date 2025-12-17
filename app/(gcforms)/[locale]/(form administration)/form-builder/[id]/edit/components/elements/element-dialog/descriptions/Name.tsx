@@ -9,8 +9,10 @@ export const Name = () => {
 
   return (
     <div>
-      <h3 className="mb-0">{t("addElementDialog.name.title")}</h3>
-      <p>{t("addElementDialog.name.description")}</p>
+      <h3 data-testid="element-description-title" className="mb-0">
+        {t("addElementDialog.name.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.name.description")}</p>
 
       <ExampleWrapper className="gcds-input-wrapper mt-4">
         <Label htmlFor="name" className="gc-label">

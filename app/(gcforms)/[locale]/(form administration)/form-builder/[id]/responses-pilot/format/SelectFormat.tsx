@@ -5,34 +5,47 @@ import { useResponsesApp } from "../context";
 import { useResponsesContext } from "../context/ResponsesContext";
 import { Radio } from "../../../components/shared/MultipleChoice";
 
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { LinkButton } from "@root/components/serverComponents/globals/Buttons/LinkButton";
 import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 import { getStepOf } from "../lib/getStepOf";
 
+export const STORAGE_KEY_PREFIX = "responses-pilot-format-";
+
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { t, router } = useResponsesApp();
-  const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses, logger } =
+  const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses } =
     useResponsesContext();
 
+  // Load saved format from localStorage on mount if available
+  useEffect(() => {
+    const storageKey = `${STORAGE_KEY_PREFIX}${id}`;
+    const savedFormat = localStorage.getItem(storageKey);
+    if (savedFormat && (savedFormat === "csv" || savedFormat === "html")) {
+      setSelectedFormat(savedFormat);
+    } else {
+      setSelectedFormat("csv"); // default to csv
+    }
+  }, [id, setSelectedFormat]);
+
   const handleNext = useCallback(async () => {
-    logger.info("Starting retrieval of form submissions");
-
     const initialResponses = await retrieveResponses();
-
-    logger.info(`Retrieved ${initialResponses.length} form submissions`);
 
     processResponses(initialResponses);
 
     router.push(`/${locale}/form-builder/${id}/responses-pilot/processing`);
-  }, [logger, retrieveResponses, processResponses, router, locale, id]);
+  }, [retrieveResponses, processResponses, router, locale, id]);
 
   const handleFormatChange = useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
       const value = evt.target.value;
       setSelectedFormat(value);
+
+      // Save to localStorage for this specific form
+      const storageKey = `${STORAGE_KEY_PREFIX}${id}`;
+      localStorage.setItem(storageKey, value);
     },
-    [setSelectedFormat]
+    [setSelectedFormat, id]
   );
 
   return (
@@ -55,8 +68,8 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
             data-testid="format-csv"
             value="csv"
             label={t("formatPage.formatOptions.csv.label")}
-            hint={t("formatPage.formatOptions.csv.hint")}
             onChange={handleFormatChange}
+            checked={selectedFormat === "csv"}
           />
           <Radio
             name="format"
@@ -65,6 +78,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
             value="html"
             label={t("formatPage.formatOptions.html.label")}
             onChange={handleFormatChange}
+            checked={selectedFormat === "html"}
           />
         </div>
       </div>

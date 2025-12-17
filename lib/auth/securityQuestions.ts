@@ -2,7 +2,7 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { scrypt, randomBytes } from "crypto";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 
 export type SecurityQuestionId = string;
 
@@ -90,7 +90,12 @@ export async function createSecurityAnswers(
 ): Promise<void> {
   const { user } = await authorization.canUpdateSecurityQuestions().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(e.user.id, { type: "User" }, "AccessDenied", "Attempted to create security answers");
+      logEvent(
+        e.user.id,
+        { type: "User" },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToCreateSecurityAnswers
+      );
     }
     throw e;
   });
@@ -141,7 +146,12 @@ export async function createSecurityAnswers(
 export async function updateSecurityAnswer(command: UpdateSecurityAnswerCommand): Promise<void> {
   const { user } = await authorization.canUpdateSecurityQuestions().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(e.user.id, { type: "User" }, "AccessDenied", "Attempted to update security answers");
+      logEvent(
+        e.user.id,
+        { type: "User" },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateSecurityAnswers
+      );
     }
     throw e;
   });

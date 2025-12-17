@@ -15,8 +15,6 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
   const {
     retrieveResponses,
-    processedSubmissionIds,
-    setProcessedSubmissionIds,
     resetProcessingCompleted,
     setInterrupt,
     processResponses,
@@ -25,6 +23,8 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     setHasError,
     hasMaliciousAttachments,
     setHasMaliciousAttachments,
+    resetProcessedSubmissionsCount,
+    processedSubmissionsCount,
   } = useResponsesContext();
 
   const handleCheckResponses = useCallback(() => {
@@ -40,7 +40,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
   const handleSelectNewLocation = () => {
     // reset relevant state
-    setProcessedSubmissionIds(new Set());
+    resetProcessedSubmissionsCount();
     setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
@@ -52,7 +52,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
   const handleDownload = async () => {
     // reset relevant state
-    setProcessedSubmissionIds(new Set());
+    resetProcessedSubmissionsCount();
     resetProcessingCompleted();
     setHasError(false);
     setInterrupt(false);
@@ -95,7 +95,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     <div>
       <p className="mb-0 text-base">
         {hasError
-          ? processedSubmissionIds.size > 0
+          ? processedSubmissionsCount > 0
             ? t("confirmationPage.partialSuccessTitle")
             : t("confirmationPage.errorTitle")
           : t("confirmationPage.successTitle")}
@@ -103,11 +103,11 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
       <FocusHeader headingTag="h2" dataTestId="confirmation-page-title">
         {(() => {
           // If error occurred with no successful downloads, show error message
-          if (hasError && processedSubmissionIds.size === 0) {
+          if (hasError && processedSubmissionsCount === 0) {
             return t("confirmationPage.errorOccurred");
           }
 
-          const count = processedSubmissionIds.size || 0;
+          const count = processedSubmissionsCount || 0;
           const formatted = new Intl.NumberFormat(locale).format(count);
           const key =
             count === 1

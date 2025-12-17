@@ -4,7 +4,7 @@ import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 
 interface ContextSettersProps {
   directoryHandle?: FileSystemDirectoryHandle | { name: string };
-  processedSubmissionIds?: Set<string>;
+  processedSubmissionsCount?: number;
   hasError?: boolean;
   hasMaliciousAttachments?: boolean;
 }
@@ -12,26 +12,40 @@ interface ContextSettersProps {
 // Test helper that sets multiple context values on mount
 export function ContextSetters({
   directoryHandle,
-  processedSubmissionIds,
+  processedSubmissionsCount,
   hasError,
   hasMaliciousAttachments,
-}: ContextSettersProps) {
-  const context = useResponsesContext();
+}: ContextSettersProps): null {
+  const {
+    setDirectoryHandle,
+    setHasError,
+    setHasMaliciousAttachments,
+    setProcessedSubmissionsCount,
+  } = useResponsesContext();
 
   useEffect(() => {
     if (directoryHandle) {
-      context.setDirectoryHandle(directoryHandle as FileSystemDirectoryHandle);
+      setDirectoryHandle(directoryHandle as FileSystemDirectoryHandle);
     }
-    if (processedSubmissionIds) {
-      context.setProcessedSubmissionIds(processedSubmissionIds);
+    if (processedSubmissionsCount !== undefined) {
+      setProcessedSubmissionsCount(processedSubmissionsCount);
     }
     if (hasError !== undefined) {
-      context.setHasError(hasError);
+      setHasError(hasError);
     }
     if (hasMaliciousAttachments !== undefined) {
-      context.setHasMaliciousAttachments(hasMaliciousAttachments);
+      setHasMaliciousAttachments(hasMaliciousAttachments);
     }
-  }, [directoryHandle, processedSubmissionIds, hasError, hasMaliciousAttachments, context]);
+  }, [
+    directoryHandle,
+    processedSubmissionsCount,
+    hasError,
+    hasMaliciousAttachments,
+    setDirectoryHandle,
+    setProcessedSubmissionsCount,
+    setHasError,
+    setHasMaliciousAttachments,
+  ]);
 
   return null;
 }

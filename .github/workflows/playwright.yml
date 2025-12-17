@@ -71,7 +71,17 @@ jobs:
       - name: "Install dependencies"
         run: yarn workspaces focus gcforms
 
+      - name: Cache Playwright binaries
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
       - name: Install Playwright Browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install msedge --with-deps
 
       - name: Run Playwright Tests
