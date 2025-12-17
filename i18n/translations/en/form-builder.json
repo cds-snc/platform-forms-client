@@ -881,7 +881,7 @@
       },
       "sessionUser": {
         "title": "Receive email notifications",
-        "description": "Find out when there are new form responses",
+        "description": "Find out that your form received submissions (up to a maximum of two notifications per day).",
         "toggle": {
           "title": "Get notified at {{email}}",
           "on": "On",
