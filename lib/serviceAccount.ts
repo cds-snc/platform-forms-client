@@ -108,11 +108,11 @@ export const checkKeyExists = async (templateId: string) => {
   const { userId, publicKeyId } = await _getApiUserPublicKeyId(templateId);
 
   if (!userId || !publicKeyId) {
-    return false;
+    return undefined;
   }
 
-  const remoteKey = await ZitadelConnector.getMachineUserKeyById(userId);
-  return remoteKey?.keyId === publicKeyId ? remoteKey.keyId : false;
+  const remoteKeys = await ZitadelConnector.getMachineUserKeysById(userId);
+  return remoteKeys.some(({ id }) => id === publicKeyId) ? publicKeyId : undefined;
 };
 
 export const createKey = async (templateId: string) => {
