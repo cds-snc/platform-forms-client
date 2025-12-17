@@ -27,7 +27,7 @@ const sendImmediate = async ({
   const id = notificationId ?? randomUUID();
   try {
     await _createNotificationRecord({ notificationId: id, emails, subject, body });
-    await _enqueueDeferredNotification(id!);
+    await enqueueDeferredNotification(id!);
   } catch (error) {
     throw new Error(`Error creating immediate notification id ${id}`, { cause: error });
   }
@@ -88,7 +88,7 @@ const _createNotificationRecord = async ({
   }
 };
 
-const _enqueueDeferredNotification = async (notificationId: string): Promise<void> => {
+const enqueueDeferredNotification = async (notificationId: string): Promise<void> => {
   try {
     const queueUrl = await getAwsSQSQueueURL("NOTIFICATION_QUEUE_URL", "notification_queue");
     if (!queueUrl) {
@@ -111,5 +111,5 @@ const _enqueueDeferredNotification = async (notificationId: string): Promise<voi
 export const notification = {
   sendImmediate,
   sendDeferred,
-  enqueueDeferredNotification: _enqueueDeferredNotification,
+  enqueueDeferredNotification,
 };
