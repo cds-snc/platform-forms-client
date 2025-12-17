@@ -1,7 +1,6 @@
 import { getPublicTemplateByID } from "@lib/templates";
 import { cn } from "@lib/utils";
 import { TextPage, ClosedPage } from "@clientComponents/forms";
-import { getRenderedForm } from "@lib/formBuilder";
 import { dateHasPast } from "@lib/utils";
 import { getLocalizedProperty } from "@lib/utils";
 import { notFound } from "next/navigation";
@@ -67,7 +66,6 @@ export default async function Page(props0: {
 
   const language = locale as "en" | "fr";
   const classes = cn("gc-form-wrapper");
-  const currentForm = getRenderedForm(formRecord, language);
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
   const isAllowGrouping = allowGrouping();
 
@@ -126,7 +124,6 @@ export default async function Page(props0: {
               </>
             }
             formRecord={formRecord}
-            currentForm={currentForm}
             allowGrouping={isAllowGrouping}
           />
         </FormDelayProvider>
