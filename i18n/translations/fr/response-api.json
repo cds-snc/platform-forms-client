@@ -88,8 +88,8 @@
         "label": "Copies individuelles (Fichiers HTML séparés)"
       }
     },
-    "previewCsvStructure": "Aperçu de la structure des fichiers pour les réponses CSV",
-    "previewHtmlStructure": "Aperçu de la structure des fichiers pour les réponses HTML"
+    "previewCsvStructure": "Aperçu de la structure des fichiers pour les réponses CSV :",
+    "previewHtmlStructure": "Aperçu de la structure des fichiers pour les réponses HTML :"
   },
   "confirmationPage": {
     "section-title": "Résultats",
