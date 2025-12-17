@@ -1059,7 +1059,7 @@
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
   "submittedResponsesTextVault": {
-    "text1": "En cliquant sur « Soumettre », la réponse sera disponible pour récupération :",
+    "text1": "En cliquant sur « Soumettre », vous pourrez tester la récupération des réponses :",
     "text2": "Allez aux Réponses"
   },
   "support": {
