@@ -491,7 +491,7 @@
     "title": "Get a copy of your form"
   },
   "auditDownload": {
-    "description": "Obtain a spreadsheet with the history of all key actions taken in a form, including when a form was created, updated, and archived. Actions are available for the last 30 days and may take several minutes to appear in the activity log.",
+    "description": "Get a spreadsheet with the history of a form's recent key actions. These may take a few minutes to appear in the activity log and will be available for up to 30 days.",
     "downloadBtnText": "Download recent activity",
     "title": "View form activity",
     "headers": {

@@ -491,7 +491,7 @@
     "title": "Obtenir une copie du formulaire"
   },
   "auditDownload": {
-    "description": "Obtenez une feuille de calcul avec l'historique de toutes les actions clés effectuées dans un formulaire, y compris la date de création, de mise à jour et d'archivage du formulaire. Les actions sont disponibles pour les derniers 30 jours et peuvent prendre quelques minutes pour apparaître dans le journal d'activité.",
+    "description": "Obtenez une feuille de calcul avec l'historique des dernières actions clés effectuées dans un formulaire. Celles-ci sont disponibles pourraient prendre quelques minutes pour apparaître dans le journal d'activité et seront disponibles jusqu'à 30 jours.",
     "downloadBtnText": "Télécharger l'activité récente",
     "title": "Afficher l'activité du formulaire",
     "headers": {
