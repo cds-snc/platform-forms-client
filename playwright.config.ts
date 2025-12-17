@@ -53,7 +53,7 @@ export default defineConfig({
         channel: "msedge",
         headless: !!process.env.CI, // Run headless only in CI
         launchOptions: {
-          slowMo: 240, // Slow down actions for better visibility
+          slowMo: 100, // Slow down actions for better visibility
         },
         storageState: "tests/.auth/user.json",
       },
