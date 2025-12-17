@@ -888,7 +888,7 @@
       },
       "sessionUser": {
         "title": "Recevoir des notifications par courriel",
-        "description": "Soyez informé que votre formulaire a reçu des soumissions (jusqu'à deux notifications par jour maximum).",
+        "description": "Soyez informé que votre formulaire a reçu des nouvelles soumissions (jusqu'à un maximum de deux notifications par jour).",
         "toggle": {
           "title": "Recevoir des notifications à {{email}}",
           "on": "Activé",
