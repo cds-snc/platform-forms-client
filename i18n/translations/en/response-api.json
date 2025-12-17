@@ -81,10 +81,10 @@
     "detail": "Downloads will also include source data (JSON files). This represents the “official submission of record” and provides an automatic check that the files you are getting match up to what’s been submitted.",
     "formatOptions": {
       "csv": {
-        "label": "<strong>Spreadsheet</strong> (Combined in 1 CSV file)"
+        "label": "Spreadsheet (Combined in 1 CSV file)"
       },
       "html": {
-        "label": "<strong>Individual copies</strong> (Separate HTML files)"
+        "label": "Individual copies (Separate HTML files)"
       }
     }
   },

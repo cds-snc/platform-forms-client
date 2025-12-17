@@ -82,10 +82,10 @@
     "detail": "Les téléchargements comprennent également les données sources (fichiers JSON). Ces données brutes » représentent un « registre officiel de la soumission ». et permet d’automatiser l’étape de vérifier automatiquement que les fichiers que vous recevez correspondent bien à ceux qui ont été soumis.",
     "formatOptions": {
       "csv": {
-        "label": "<strong>Feuille de calcul</strong> (Combinées dans 1 fichier CSV)"
+        "label": "Feuille de calcul (Combinées dans 1 fichier CSV)"
       },
       "html": {
-        "label": "<strong>Copies individuelles</strong> (Fichiers HTML séparés)"
+        "label": "Copies individuelles (Fichiers HTML séparés)"
       }
     }
   },
