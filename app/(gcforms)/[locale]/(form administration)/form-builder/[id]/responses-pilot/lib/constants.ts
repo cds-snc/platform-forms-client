@@ -9,6 +9,8 @@ export const INTERRUPT_CLEANUP_DELAY_MS = 500;
  * old folder names. You may need to implement a migration strategy.
  */
 
+export const SOURCE_FOLDER = "source";
+
 /**
  * Folder within the selected directory to store HTML downloads
  */

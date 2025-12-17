@@ -10,6 +10,8 @@ import { LinkButton } from "@root/components/serverComponents/globals/Buttons/Li
 import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 import { getStepOf } from "../lib/getStepOf";
 
+import { CsvDirectory, HtmlDirectory } from "../components/folder-preview/DirectoryPreview";
+
 export const STORAGE_KEY_PREFIX = "responses-pilot-format-";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
@@ -56,7 +58,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
       <FocusHeader headingTag="h2" dataTestId="format-page-title">
         {t("formatPage.title")}
       </FocusHeader>
-      <div>
+      <div className="mb-12">
         <p>
           <strong>{t("formatPage.subheading")}</strong>
         </p>
@@ -82,6 +84,12 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
           />
         </div>
       </div>
+
+      <div className="mb-12">
+        {selectedFormat === "csv" && <CsvDirectory filename={`${id}.csv`} />}
+        {selectedFormat === "html" && <HtmlDirectory />}
+      </div>
+
       <div className="flex flex-row gap-4">
         <LinkButton.Secondary
           ddata-testid="back-button"
