@@ -162,25 +162,31 @@ export const checkVisibilityRecursive = (
 
   const elId = element.id.toString();
 
-  if (checked[elId]) {
+  // Check if already computed
+  if (checked[elId] !== undefined) {
     return checked[elId];
   }
 
+  // Mark as being checked (prevents circular dependency infinite loops)
+  // Assume false during recursion to break cycles
+  checked[elId] = false;
+
   // At least one rule must be satisfied for the element to be visible
-  return rules.some((rule) => {
+  const isVisible = rules.some((rule) => {
     const [elementId] = rule.choiceId.split(".");
     const ruleParent = getElementById(formElements, elementId);
     if (!ruleParent) return matchRule(rule, formElements, values);
 
-    const isVisible =
+    return (
       checkVisibilityRecursive(formRecord, ruleParent, values, checked) &&
-      matchRule(rule, formElements, values);
-
-    // Prevents re-checking the same element
-    checked[elId] = isVisible;
-
-    return isVisible;
+      matchRule(rule, formElements, values)
+    );
   });
+
+  // Update with final computed value
+  checked[elId] = isVisible;
+
+  return isVisible;
 };
 
 export const isElementVisible = (
