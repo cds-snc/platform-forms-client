@@ -105,11 +105,17 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
         </div>
       </div>
 
-      <div className="mb-12">
+      <div className="mb-12" data-testid="directory-preview">
         {selectedFormat === "csv" && (
-          <CsvDirectory showAttachments={showAttachments} filename={`${id}.csv`} />
+          <div data-testid="csv-directory">
+            <CsvDirectory showAttachments={showAttachments} filename={`${id}.csv`} />
+          </div>
         )}
-        {selectedFormat === "html" && <HtmlDirectory showAttachments={showAttachments} />}
+        {selectedFormat === "html" && (
+          <div data-testid="html-directory">
+            <HtmlDirectory showAttachments={showAttachments} />
+          </div>
+        )}
       </div>
 
       <div className="flex flex-row gap-4">

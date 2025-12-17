@@ -111,4 +111,59 @@ describe("SelectFormat - Browser Mode", () => {
     // Expect router.push called with processing route
     expect(pushSpy).toHaveBeenCalledWith("/en/form-builder/test-form/responses-pilot/processing");
   });
+
+  it("should display CsvDirectory when CSV format is selected", async () => {
+    localStorage.removeItem(`${STORAGE_KEY_PREFIX}test-form`);
+
+    await render(<SelectFormat locale="en" id="test-form" />);
+
+    // Select CSV format (should be default, but verify by clicking)
+    await page.getByTestId("format-csv").click();
+
+    // CsvDirectory should be visible
+    const csvDirectory = page.getByTestId("csv-directory");
+    await expect.element(csvDirectory).toBeVisible();
+
+    // HtmlDirectory should not be visible
+    const htmlDirectory = document.querySelector('[data-testid="html-directory"]');
+    expect(htmlDirectory).toBeNull();
+  });
+
+  it("should display HtmlDirectory when HTML format is selected", async () => {
+    localStorage.removeItem(`${STORAGE_KEY_PREFIX}test-form`);
+
+    await render(<SelectFormat locale="en" id="test-form" />);
+
+    // Select HTML format
+    await page.getByTestId("format-html").click();
+
+    // HtmlDirectory should be visible
+    const htmlDirectory = page.getByTestId("html-directory");
+    await expect.element(htmlDirectory).toBeVisible();
+
+    // CsvDirectory should not be visible
+    const csvDirectory = document.querySelector('[data-testid="csv-directory"]');
+    expect(csvDirectory).toBeNull();
+  });
+
+  it("should switch between CSV and HTML directory views", async () => {
+    localStorage.removeItem(`${STORAGE_KEY_PREFIX}test-form`);
+
+    await render(<SelectFormat locale="en" id="test-form" />);
+
+    // Start with CSV (default)
+    await page.getByTestId("format-csv").click();
+    let csvDirectory = page.getByTestId("csv-directory");
+    await expect.element(csvDirectory).toBeVisible();
+
+    // Switch to HTML
+    await page.getByTestId("format-html").click();
+    const htmlDirectory = page.getByTestId("html-directory");
+    await expect.element(htmlDirectory).toBeVisible();
+
+    // Switch back to CSV
+    await page.getByTestId("format-csv").click();
+    csvDirectory = page.getByTestId("csv-directory");
+    await expect.element(csvDirectory).toBeVisible();
+  });
 });
