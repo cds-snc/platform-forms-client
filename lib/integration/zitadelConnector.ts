@@ -160,9 +160,7 @@ export async function deleteMachineKey(userId: string, keyId: string): Promise<v
   }
 }
 
-export async function getMachineUserKeyById(
-  userId: string
-): Promise<{ keyId: string } | undefined> {
+export async function getMachineUserKeysById(userId: string): Promise<{ id: string }[]> {
   const connectionInformation = await getConnectionInformation();
 
   try {
@@ -184,13 +182,13 @@ export async function getMachineUserKeyById(
       .json<{ result?: { id: string }[] }>();
 
     if (response.result !== undefined && response.result.length > 0) {
-      return { keyId: response.result[0].id };
+      return response.result;
     } else {
-      return undefined;
+      return [];
     }
   } catch (error) {
     logMessage.error(error);
-    return undefined;
+    return [];
   }
 }
 

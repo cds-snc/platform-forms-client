@@ -15,7 +15,7 @@ jest.mock("@lib/auditLogs", () => ({
   },
   get AuditLogAccessDeniedDetails() {
     return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
-  }
+  },
 }));
 
 jest.mock("@lib/templates");
@@ -27,7 +27,7 @@ jest.mock("@lib/integration/zitadelConnector", () => ({
   getMachineUser: jest.fn(),
   deleteMachineUser: jest.fn(),
   createMachineKey: jest.fn(),
-  getMachineUserKeyById: jest.fn(),
+  getMachineUserKeysById: jest.fn(),
 }));
 
 const userId = "1";
@@ -76,7 +76,7 @@ describe("Service Account functions", () => {
         publicKeyId: keyId,
       });
 
-      (ZitadelConnector.getMachineUserKeyById as jest.Mock).mockResolvedValueOnce({ keyId });
+      (ZitadelConnector.getMachineUserKeysById as jest.Mock).mockResolvedValueOnce([{ id: keyId }]);
 
       const result = await checkKeyExists(userId);
       expect(result).toBe(keyId);
@@ -88,10 +88,10 @@ describe("Service Account functions", () => {
         null
       );
 
-      (ZitadelConnector.getMachineUserKeyById as jest.Mock).mockResolvedValueOnce({ keyId });
+      (ZitadelConnector.getMachineUserKeysById as jest.Mock).mockResolvedValueOnce([{ id: keyId }]);
 
       const result = await checkKeyExists("testUser");
-      expect(result).toBe(false);
+      expect(result).toBeFalsy();
     });
     it("should return false if key is out of sync", async () => {
       const userId = "testUser";
@@ -102,13 +102,15 @@ describe("Service Account functions", () => {
         publicKeyId: keyId,
       });
 
-      (ZitadelConnector.getMachineUserKeyById as jest.Mock).mockResolvedValueOnce({
-        keyId: "differentKey",
-      });
+      (ZitadelConnector.getMachineUserKeysById as jest.Mock).mockResolvedValueOnce([
+        {
+          id: "differentKey",
+        },
+      ]);
 
       const result = await checkKeyExists(userId);
 
-      expect(result).toBe(false);
+      expect(result).toBeFalsy();
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
       mockAuthorizationFail(userId);
@@ -139,7 +141,7 @@ describe("Service Account functions", () => {
         { type: "ServiceAccount" },
         "CreateAPIKey",
         "User :${userId} created API key for service account ${serviceAccountId}",
-        { "serviceAccountId": "serviceAccountUser", "userId": "1" }
+        { serviceAccountId: "serviceAccountUser", userId: "1" }
       );
     });
     it("should create a key if an existing user exists", async () => {
@@ -160,7 +162,7 @@ describe("Service Account functions", () => {
         { type: "ServiceAccount" },
         "CreateAPIKey",
         "User :${userId} created API key for service account ${serviceAccountId}",
-        { "serviceAccountId": "templateId", "userId": "1" }
+        { serviceAccountId: "templateId", userId: "1" }
       );
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
@@ -192,7 +194,7 @@ describe("Service Account functions", () => {
         { type: "ServiceAccount" },
         "DeleteAPIKey",
         "DeletedAPIKey",
-        {"serviceAccountID": serviceAccountID, "templateId": "templateId", "userId": "1"}
+        { serviceAccountID: serviceAccountID, templateId: "templateId", userId: "1" }
       );
     });
     it("should delete a key if there is not an existing user in the IDP", async () => {
@@ -209,7 +211,7 @@ describe("Service Account functions", () => {
         { type: "ServiceAccount" },
         "DeleteAPIKey",
         "DeletedAPIKey",
-        {"templateId": "templateId", "userId": "1", "serviceAccountID": ""}
+        { templateId: "templateId", userId: "1", serviceAccountID: "" }
       );
     });
     it("should not throw an Error if the key does not exist in the database", async () => {
@@ -230,7 +232,7 @@ describe("Service Account functions", () => {
         { type: "ServiceAccount" },
         "DeleteAPIKey",
         "DeletedAPIKey",
-        {"serviceAccountID": serviceAccountID, "templateId": "templateId", "userId": "1"}
+        { serviceAccountID: serviceAccountID, templateId: "templateId", userId: "1" }
       );
     });
 
