@@ -68,7 +68,6 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
             data-testid="format-csv"
             value="csv"
             label={t("formatPage.formatOptions.csv.label")}
-            hint={t("formatPage.formatOptions.csv.hint")}
             onChange={handleFormatChange}
             checked={selectedFormat === "csv"}
           />

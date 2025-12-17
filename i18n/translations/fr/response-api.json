@@ -82,8 +82,7 @@
     "detail": "Les téléchargements comprennent également les données sources (fichiers JSON). Ces données brutes » représentent un « registre officiel de la soumission ». et permet d’automatiser l’étape de vérifier automatiquement que les fichiers que vous recevez correspondent bien à ceux qui ont été soumis.",
     "formatOptions": {
       "csv": {
-        "label": "Feuille de calcul (Combinées dans 1 fichier CSV)",
-        "hint": "Les données peuvent être ajoutées au fichier précédent, s'il existe déjà un CSV dans le dossier sélectionné."
+        "label": "Feuille de calcul (Combinées dans 1 fichier CSV)"
       },
       "html": {
         "label": "Copies individuelles (Fichiers HTML séparés)"
@@ -112,7 +111,7 @@
     "processingMessage": "Traitement de {{count}} réponses...",
     "cancelButton": "Mettre en pause le téléchargement",
     "cancellingButton": "Mise en pause...",
-    "note": "Pour les téléchargements volumineux, vous pouvez vous attendre à ce que cela prenne quelques minutes pour des centaines de réponses et plusieurs heures pour des milliers de réponses."
+    "note": "Vous pouvez vous attendre à ce que cela prenne quelques minutes pour des centaines de réponses et plusieurs heures pour des milliers de réponses."
   },
   "backButton": "Retourner",
   "backToStart": "Retourner au début",
