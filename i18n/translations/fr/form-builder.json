@@ -1478,45 +1478,42 @@
       "cancel": "Annuler",
       "removeClosingDate": "Supprimer la date de fermeture",
       "removeConfirm": "Cliquer à nouveau pour confirmer"
-    }
-  },
-  "systemHealthCheck": {
-    "title": "Santé du système"
-  },
-  "saveAndResume": {
-    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications.",
-    "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "title": "Permettre la sauvegarde des réponses",
-    "toggleOn": "Activé",
-    "toggleOff": "Désactivé",
-    "toggleDescription": {
-      "text1": "Reprendre le remplissage d'un formulaire en cours",
-      "text2": "Cela permet aux utilisateur·rice·s de prendre une pause et de compléter le formulaire plus tard. Les personnes qui remplissent le formulaire peuvent également obtenir une copie de leurs réponses une fois le formulaire soumis."
     },
-    "a11yDescription": "Sauvegarder les réponses en cours et reprendre le formulaire plus tard",
-    "saveButton": "Enregistrer"
-  },
-  "sortOptions": {
-    "label": "Ordonner la liste :",
-    "none": "telle que saisie",
-    "ascending": "alphabétique (A-Z)",
-    "descending": "alphabétique inversé (Z-A)"
-  },
-  "translations": {
-    "formDescription": "Description du formulaire"
-  },
-  "en": "English",
-  "fr": "Français",
-  "beta": {
-    "tag": "Nouveauté :",
-    "text": "Fonctionnalité à l'essai",
-    "loadingError": "Ce formulaire contient un composant « pilote » qui n'est pas encore disponible pour tous les utilisateurs. Pour en savoir plus sur cette fonctionnalité limitée, veuillez contacter l'équipe de soutien."
-  },
-  "pilot": {
-    "tag": "Pilote :",
-    "text": "Fonctionnalité à l'essai"
-  },
-  "fileUploadApiWarning": {
-    "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
+    "saveAndResume": {
+      "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications.",
+      "savedSuccessMessage": "Vos modifications ont été enregistrées.",
+      "title": "Permettre la sauvegarde des réponses",
+      "toggleOn": "Activé",
+      "toggleOff": "Désactivé",
+      "toggleDescription": {
+        "text1": "Reprendre le remplissage d'un formulaire en cours",
+        "text2": "Cela permet aux utilisateur·rice·s de prendre une pause et de compléter le formulaire plus tard. Les personnes qui remplissent le formulaire peuvent également obtenir une copie de leurs réponses une fois le formulaire soumis."
+      },
+      "a11yDescription": "Sauvegarder les réponses en cours et reprendre le formulaire plus tard",
+      "saveButton": "Enregistrer"
+    },
+    "sortOptions": {
+      "label": "Ordonner la liste :",
+      "none": "telle que saisie",
+      "ascending": "alphabétique (A-Z)",
+      "descending": "alphabétique inversé (Z-A)"
+    },
+    "translations": {
+      "formDescription": "Description du formulaire"
+    },
+    "en": "English",
+    "fr": "Français",
+    "beta": {
+      "tag": "Nouveauté :",
+      "text": "Fonctionnalité à l'essai",
+      "loadingError": "Ce formulaire contient un composant « pilote » qui n'est pas encore disponible pour tous les utilisateurs. Pour en savoir plus sur cette fonctionnalité limitée, veuillez contacter l'équipe de soutien."
+    },
+    "pilot": {
+      "tag": "Pilote :",
+      "text": "Fonctionnalité à l'essai"
+    },
+    "fileUploadApiWarning": {
+      "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
+    }
   }
 }

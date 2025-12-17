@@ -455,7 +455,7 @@
   "formatH3": "Format Heading 3",
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
-  "formattedDate": "Date & Time (UTC)",
+  "formattedDate": "Date",
   "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
     "title": "You must retrieve all responses before archiving this form.",
@@ -1468,45 +1468,42 @@
       "cancel": "Cancel",
       "removeClosingDate": "Remove closing date",
       "removeConfirm": "Click again to confirm"
-    }
-  },
-  "systemHealthCheck": {
-    "title": "System health"
-  },
-  "saveAndResume": {
-    "savedErrorMessage": "There was an error saving your changes.",
-    "savedSuccessMessage": "Your changes have been saved.",
-    "title": "Enable saving answers",
-    "toggleOn": "On",
-    "toggleOff": "Off",
-    "toggleDescription": {
-      "text1": "To continue filling out a form in progress",
-      "text2": "This gives users the option to pause and finish filling out a form later. It also provides people filling out a form with a copy of their answers once the form has been submitted."
     },
-    "a11yDescription": "Save progress and resume the form later",
-    "saveButton": "Save"
-  },
-  "sortOptions": {
-    "label": "Order list:",
-    "none": "as entered",
-    "ascending": "alphabetically (A-Z)",
-    "descending": "reverse alphabetical (Z-A)"
-  },
-  "translations": {
-    "formDescription": "Form description"
-  },
-  "en": "English",
-  "fr": "Français",
-  "beta": {
-    "tag": "New:",
-    "text": "Trial feature ",
-    "loadingError": "This form contains a 'Pilot' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
-  },
-  "pilot": {
-    "tag": "Pilot:",
-    "text": "Trial feature "
-  },
-  "fileUploadApiWarning": {
-    "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
+    "saveAndResume": {
+      "savedErrorMessage": "There was an error saving your changes.",
+      "savedSuccessMessage": "Your changes have been saved.",
+      "title": "Enable saving answers",
+      "toggleOn": "On",
+      "toggleOff": "Off",
+      "toggleDescription": {
+        "text1": "To continue filling out a form in progress",
+        "text2": "This gives users the option to pause and finish filling out a form later. It also provides people filling out a form with a copy of their answers once the form has been submitted."
+      },
+      "a11yDescription": "Save progress and resume the form later",
+      "saveButton": "Save"
+    },
+    "sortOptions": {
+      "label": "Order list:",
+      "none": "as entered",
+      "ascending": "alphabetically (A-Z)",
+      "descending": "reverse alphabetical (Z-A)"
+    },
+    "translations": {
+      "formDescription": "Form description"
+    },
+    "en": "English",
+    "fr": "Français",
+    "beta": {
+      "tag": "New:",
+      "text": "Trial feature ",
+      "loadingError": "This form contains a 'Pilot' component, which is not yet available to all users. To learn more about this limited feature, contact Support."
+    },
+    "pilot": {
+      "tag": "Pilot:",
+      "text": "Trial feature "
+    },
+    "fileUploadApiWarning": {
+      "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
+    }
   }
 }
