@@ -1,19 +1,13 @@
 import { getPublicTemplateByID } from "@lib/templates";
-import { cn } from "@lib/utils";
-import { TextPage, ClosedPage } from "@clientComponents/forms";
 import { dateHasPast } from "@lib/utils";
 import { getLocalizedProperty } from "@lib/utils";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayout";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
-import { FormWrapper } from "./clientSide";
+import { PageContent } from "./pageContent";
 import { allowGrouping } from "@lib/groups/utils/allowGrouping";
 import { serverTranslation } from "@i18n";
-import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
-import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
-import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
-import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
 
@@ -65,7 +59,6 @@ export default async function Page(props0: {
   }
 
   const language = locale as "en" | "fr";
-  const classes = cn("gc-form-wrapper");
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
   const isAllowGrouping = allowGrouping();
 
@@ -74,73 +67,33 @@ export default async function Page(props0: {
     isPastClosingDate = dateHasPast(Date.parse(formRecord.closingDate));
   }
 
-  let pageContent = null;
-  let dateModified = true;
-
-  // Closed page
-  if (isPastClosingDate) {
-    pageContent = <ClosedPage language={language} formRecord={formRecord} />;
-  }
-  const saveAndResume = formRecord?.saveAndResume;
-
-  // Resume form page
-  if (saveAndResume && step === "resume") {
-    dateModified = false;
-    pageContent = (
-      <ResumeForm
-        titleEn={formRecord.form.titleEn}
-        titleFr={formRecord.form.titleFr}
-        formId={formId}
-      />
-    );
-  }
-
-  // Confirmation
-  // Note: We can look to remove this route in the future
-  // With save and resume enabled we will re-render the form vs have a confirmation page route
-  if (step === "confirmation") {
-    dateModified = false;
-    pageContent = (
-      <div className={classes}>
-        <TextPage formId={formId} formRecord={formRecord} />
-      </div>
-    );
-  }
+  const saveAndResume = formRecord?.saveAndResume || false;
 
   const footer = (
     <Footer className="mt-4" disableGcBranding={formRecord?.form.brand?.disableGcBranding} />
   );
-
-  // Form page
-  if (!pageContent) {
-    pageContent = (
-      <div className={classes}>
-        <FormDelayProvider>
-          <FormWrapper
-            header={
-              <>
-                <ClosingNotice language={language} closingDate={formRecord.closingDate} />
-                <GcdsH1 tabIndex={-1}>{formTitle}</GcdsH1>
-              </>
-            }
-            formRecord={formRecord}
-            allowGrouping={isAllowGrouping}
-          />
-        </FormDelayProvider>
-      </div>
-    );
-  }
 
   return (
     <FormDisplayLayout
       pathname={pathname}
       language={language}
       formRecord={formRecord}
-      dateModified={dateModified}
+      dateModified={
+        !isPastClosingDate && step !== "confirmation" && !(saveAndResume && step === "resume")
+      }
       footer={footer}
     >
       <GCFormsProvider formRecord={formRecord} nonce={nonce}>
-        {pageContent}
+        <PageContent
+          formRecord={formRecord}
+          language={language}
+          formTitle={formTitle}
+          isPastClosingDate={isPastClosingDate}
+          step={step}
+          formId={formId}
+          saveAndResume={saveAndResume}
+          isAllowGrouping={isAllowGrouping}
+        />
       </GCFormsProvider>
     </FormDisplayLayout>
   );
