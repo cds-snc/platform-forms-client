@@ -41,8 +41,8 @@ test.describe("Testing attestation fields", () => {
       // Submit without checking any boxes
       await page.locator("[type='submit']").click();
 
-      // Wait for error list to appear
-      await expect(page.locator("li").first()).toBeVisible();
+      // Wait for error list to appear using ordered list selector
+      await expect(page.locator(".gc-ordered-list li").first()).toBeVisible();
 
       // Verify error messages
       await expect(page.locator("li")).toContainText("Check off all the boxes for");

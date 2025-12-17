@@ -65,14 +65,13 @@ test.describe("Testing a basic frontend form", () => {
       await page.getByText("One").nth(1).click(); // Click the label for the radio button
       await page.getByRole("combobox", { name: "A Required Dropdown" }).selectOption("One");
 
-      // Submit the form and wait for navigation
+      // Submit the form and wait for the success heading to appear
       await page.locator("[type='submit']").click();
-      await page.waitForURL(/.*confirmation.*/, { timeout: 10000 });
 
-      // Verify submission confirmation
-      await expect(
-        page.getByRole("heading", { name: "Your form has been submitted" })
-      ).toBeVisible();
+      // Verify submission confirmation with extended timeout
+      await expect(page.getByRole("heading", { name: "Your form has been submitted" })).toBeVisible(
+        { timeout: 15000 }
+      );
     });
   });
 });

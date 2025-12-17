@@ -41,13 +41,14 @@ test.describe("Testing a basic frontend form", () => {
 
     test("displays a message with the number of characters remaining", async ({ page }) => {
       await page.goto(publishedFormPath);
-      await page
-        .getByRole("textbox", { name: "Text Field 1" })
-        .fill("This is 35 characters This is 35 ch");
+      const textInput = page.getByRole("textbox", { name: "Text Field 1" });
 
-      // Wait for the character count message to appear (it may be debounced)
+      // Use pressSequentially to type slowly, allowing React state to update
+      await textInput.pressSequentially("This is 35 characters This is 35 ch", { delay: 10 });
+
+      // Wait for the character count message to appear
       const characterMessage = page.locator("#characterCountMessage2");
-      await expect(characterMessage).toBeVisible({ timeout: 10000 });
+      await expect(characterMessage).toBeVisible();
       await expect(characterMessage).toContainText("You have 5 characters left.");
     });
 
@@ -55,9 +56,10 @@ test.describe("Testing a basic frontend form", () => {
       await page.goto(publishedFormPath);
       const textInput = page.getByRole("textbox", { name: "Text Field 1" });
 
-      // Type text exceeding limit and blur to trigger onChange
-      await textInput.fill("This is 48 characters This is 48 characters This");
-      await textInput.blur();
+      // Use pressSequentially to type slowly, allowing React state to update
+      await textInput.pressSequentially("This is 48 characters This is 48 characters This", {
+        delay: 10,
+      });
 
       const characterMessage = page.locator("#characterCountMessage2");
       await expect(characterMessage).toBeVisible();
