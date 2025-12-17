@@ -37,6 +37,7 @@ test.describe("Testing a basic frontend form", () => {
 
       // Submit the empty form
       await page.locator("[type='submit']").click();
+      await page.waitForTimeout(1000); // Add a short wait to ensure form submission processing
 
       // Wait for error list to appear using the gc-ordered-list class with extended timeout
       await expect(page.locator(".gc-ordered-list li").first()).toBeVisible({ timeout: 10000 });

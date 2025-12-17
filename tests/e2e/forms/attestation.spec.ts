@@ -40,6 +40,7 @@ test.describe("Testing attestation fields", () => {
 
       // Submit without checking any boxes
       await page.locator("[type='submit']").click();
+      await page.waitForTimeout(1000); // Add a short wait to ensure form submission processing
 
       // Wait for error list to appear using ordered list selector with extended timeout
       await expect(page.locator(".gc-ordered-list li").first()).toBeVisible({ timeout: 10000 });
