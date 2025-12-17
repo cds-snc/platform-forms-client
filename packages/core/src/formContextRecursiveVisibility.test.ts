@@ -1095,4 +1095,83 @@ describe("Recursive visibility check", () => {
 
     expect(checkVisibilityRecursive(formRecord, getElement(13), valuesThree)).toBe(false);
   });
+
+  test("Circular dependency should not cause infinite recursion", async () => {
+    // This test uses elements similar to heavy.json where element 7 depends on 11, and 11 depends on 7
+    const formRecord = {
+      id: "test-circular",
+      form: {
+        titleEn: "Test Circular",
+        titleFr: "",
+        elements: [
+          {
+            id: 5,
+            type: "radio",
+            properties: {
+              titleEn: "Question 5",
+              titleFr: "",
+              choices: [
+                { en: "Yes", fr: "Oui" },
+                { en: "No", fr: "Non" },
+              ],
+              conditionalRules: [],
+              subElements: [],
+              validation: { required: false },
+            },
+          },
+          {
+            id: 7,
+            type: "radio",
+            properties: {
+              titleEn: "Question 7",
+              titleFr: "",
+              choices: [
+                { en: "Yes", fr: "Oui" },
+                { en: "No", fr: "Non" },
+              ],
+              // Element 7 depends on element 5 AND element 11
+              conditionalRules: [{ choiceId: "5.0" }, { choiceId: "11.0" }],
+              subElements: [],
+              validation: { required: false },
+            },
+          },
+          {
+            id: 11,
+            type: "radio",
+            properties: {
+              titleEn: "Question 11",
+              titleFr: "",
+              choices: [
+                { en: "Yes", fr: "Oui" },
+                { en: "No", fr: "Non" },
+              ],
+              // Element 11 depends on element 7 - CIRCULAR!
+              conditionalRules: [{ choiceId: "7.0" }],
+              subElements: [],
+              validation: { required: false },
+            },
+          },
+        ],
+      },
+    } as unknown as PublicFormRecord;
+
+    const values = {
+      "5": "5.0", // Answer "Yes" to question 5
+      "7": "",
+      "11": "",
+    };
+
+    const element7 = formRecord.form.elements.find((el) => el.id === 7) as FormElement;
+    const element11 = formRecord.form.elements.find((el) => el.id === 11) as FormElement;
+
+    // This should not throw "Maximum call stack size exceeded"
+    // Both elements should be invisible due to circular dependency
+    expect(() => checkVisibilityRecursive(formRecord, element7, values)).not.toThrow();
+    expect(() => checkVisibilityRecursive(formRecord, element11, values)).not.toThrow();
+
+    // The actual visibility result when there's a circular dependency:
+    // Element 7 depends on 11, but 11 depends on 7, so both are invisible
+    expect(checkVisibilityRecursive(formRecord, element7, values)).toBe(false);
+    expect(checkVisibilityRecursive(formRecord, element11, values)).toBe(false);
+  });
 });
