@@ -25,11 +25,13 @@ test.describe("Accounts Page", () => {
         await expect(page.getByTestId(deactivatedUserEmail)).toBeVisible();
 
         await page.getByRole("button", { name: "Active" }).click();
+        // Wait for filter to apply
+        await expect(page.getByTestId(deactivatedUserEmail)).not.toBeVisible();
         await expect(page.getByTestId(adminUserEmail)).toBeVisible();
         await expect(page.getByTestId(testUserEmail)).toBeVisible();
-        await expect(page.getByTestId(deactivatedUserEmail)).not.toBeVisible();
 
         await page.getByRole("button", { name: "Deactivated" }).click();
+        // Wait for filter to apply
         await expect(page.getByTestId(deactivatedUserEmail)).toBeVisible();
         await expect(page.getByTestId(adminUserEmail)).not.toBeVisible();
         await expect(page.getByTestId(testUserEmail)).not.toBeVisible();
@@ -38,7 +40,9 @@ test.describe("Accounts Page", () => {
       test("Clicking manage forms navigates to the related page", async ({ page }) => {
         await page.getByRole("button", { name: "All" }).click();
         await page.getByTestId(testUserEmail).getByRole("link", { name: "Manage forms" }).click();
-        await page.waitForLoadState("networkidle");
+
+        // Wait for navigation to complete
+        await page.waitForURL(/.*manage-forms.*/);
         await expect(page.getByRole("heading", { level: 1 })).toContainText("Manage forms");
       });
     });

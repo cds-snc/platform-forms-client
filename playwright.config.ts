@@ -52,6 +52,10 @@ export default defineConfig({
         ...devices["Desktop Edge"],
         channel: "msedge",
         headless: !!process.env.CI, // Run headless only in CI
+        launchOptions: {
+          // Small slowMo only in CI to help with React state synchronization
+          slowMo: process.env.CI ? 50 : 0,
+        },
         storageState: "tests/.auth/user.json",
       },
       dependencies: ["setup-auth", "setup-auth-admin"],

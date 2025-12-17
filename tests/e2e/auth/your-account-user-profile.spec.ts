@@ -4,9 +4,13 @@ test.describe("User profile", () => {
   test.describe("Regular User", () => {
     test("Can navigate to Profile page", async ({ page }) => {
       await page.goto("/en/forms");
+      await page.waitForLoadState("networkidle");
 
-      // Click the account dropdown button
+      // Click the account dropdown button and wait for dropdown to appear
       await page.locator("button[id^='radix-']").click();
+      await page.waitForSelector("[data-testid='yourAccountDropdownContent']", {
+        state: "visible",
+      });
 
       // Click Profile in the dropdown
       await page.locator("[data-testid='yourAccountDropdownContent']").getByText("Profile").click();
@@ -55,9 +59,13 @@ test.describe("User profile", () => {
 
     test("Can navigate to Profile page", async ({ page }) => {
       await page.goto("/en/forms");
+      await page.waitForLoadState("networkidle");
 
-      // Click the account dropdown button
+      // Click the account dropdown button and wait for dropdown to appear
       await page.locator("button[id^='radix-']").click();
+      await page.waitForSelector("[data-testid='yourAccountDropdownContent']", {
+        state: "visible",
+      });
 
       // Click Profile in the dropdown
       await page.locator("[data-testid='yourAccountDropdownContent']").getByText("Profile").click();

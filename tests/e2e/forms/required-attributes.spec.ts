@@ -64,10 +64,10 @@ test.describe("Testing a basic frontend form", () => {
       await page.getByRole("checkbox", { name: "One" }).check({ force: true });
       await page.getByText("One").nth(1).click(); // Click the label for the radio button
       await page.getByRole("combobox", { name: "A Required Dropdown" }).selectOption("One");
-      await page.waitForTimeout(500);
 
-      // Submit the form
+      // Submit the form and wait for navigation
       await page.locator("[type='submit']").click();
+      await page.waitForURL(/.*confirmation.*/, { timeout: 10000 });
 
       // Verify submission confirmation
       await expect(

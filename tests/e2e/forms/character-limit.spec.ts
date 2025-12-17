@@ -53,13 +53,15 @@ test.describe("Testing a basic frontend form", () => {
 
     test("displays an error message indicating too many characters", async ({ page }) => {
       await page.goto(publishedFormPath);
-      await page
-        .getByRole("textbox", { name: "Text Field 1" })
-        .fill("This is 48 characters This is 48 characters This")
-        .then(async () => {
-          await expect(page.locator("#characterCountMessage2")).toBeVisible();
-          await expect(page.locator("#characterCountMessage2")).toContainText("exceeded the limit");
-        });
+      const textInput = page.getByRole("textbox", { name: "Text Field 1" });
+
+      // Type text exceeding limit and blur to trigger onChange
+      await textInput.fill("This is 48 characters This is 48 characters This");
+      await textInput.blur();
+
+      const characterMessage = page.locator("#characterCountMessage2");
+      await expect(characterMessage).toBeVisible();
+      await expect(characterMessage).toContainText("exceeded the limit");
     });
 
     test("won't submit the form if the number of characters is too many", async ({ page }) => {
