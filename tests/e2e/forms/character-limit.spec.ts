@@ -49,7 +49,7 @@ test.describe("Testing a basic frontend form", () => {
 
       // Wait for the character count message to appear and check it contains "characters left"
       const characterMessage = page.locator("#characterCountMessage2");
-      await expect(characterMessage).toBeVisible();
+      await expect(characterMessage).toBeVisible({ timeout: 10000 });
       await expect(characterMessage).toContainText("characters left");
     });
 

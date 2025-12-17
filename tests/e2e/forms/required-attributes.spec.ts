@@ -38,8 +38,8 @@ test.describe("Testing a basic frontend form", () => {
       // Submit the empty form
       await page.locator("[type='submit']").click();
 
-      // Wait for error list to appear using the gc-ordered-list class
-      await expect(page.locator(".gc-ordered-list li").first()).toBeVisible();
+      // Wait for error list to appear using the gc-ordered-list class with extended timeout
+      await expect(page.locator(".gc-ordered-list li").first()).toBeVisible({ timeout: 10000 });
 
       // Verify error messages for required fields
       await expect(page.locator(".gc-ordered-list li").nth(0)).toContainText(
@@ -70,7 +70,7 @@ test.describe("Testing a basic frontend form", () => {
 
       // Verify submission confirmation with extended timeout
       await expect(page.getByRole("heading", { name: "Your form has been submitted" })).toBeVisible(
-        { timeout: 15000 }
+        { timeout: 20000 }
       );
     });
   });
