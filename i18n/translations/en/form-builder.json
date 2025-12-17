@@ -199,8 +199,8 @@
       "title": "Repeating set"
     },
     "fileInput": {
-      "description": "A way to add supporting documentation. Each file can be up to 10 MB in size. Files can be in PDF, Word, Excel, CSV, PNG, JPG, or TXT format.",
-      "label": "Add file",
+      "description": "A way to add supporting documentation, such PNG or JPEG images, and PDF, Word, or Excel files. Each file can be up to 10 MB.",
+      "label": "Upload file",
       "title": "File upload"
     },
     "fileInputDefault": {

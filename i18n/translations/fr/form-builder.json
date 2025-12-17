@@ -199,7 +199,7 @@
       "title": "Ensemble récurrent"
     },
     "fileInput": {
-      "description": "Un moyen d'ajouter des documents à l'appui. Chaque fichier peut avoir une taille maximale de 10 Mo. Les fichiers peuvent être au format PDF, Word, Excel, CSV, PNG, JPG ou TXT.",
+      "description": "Un moyen d'ajouter des documents à l'appui tels que des images PNG ou JPEG, et fichiers PDF, Word ou Excel. Chaque fichier peut avoir une taille maximale de 10 Mo.",
       "label": "Téléverser un fichier",
       "title": "Téléverseur de fichier"
     },
