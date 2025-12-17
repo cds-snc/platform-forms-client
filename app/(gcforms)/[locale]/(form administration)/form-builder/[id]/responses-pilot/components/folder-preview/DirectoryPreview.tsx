@@ -79,6 +79,7 @@ export const FileIcon = () => {
     <Image
       src="/img/file-emoji.png"
       alt=""
+      aria-hidden="true"
       width="20"
       height="20"
       className={cn("inline-block mr-2")}
@@ -99,6 +100,7 @@ export const FolderIcon = ({ level }: { level?: number }) => {
     <Image
       src="/img/folder-emoji.png"
       alt=""
+      aria-hidden="true"
       width="20"
       height="20"
       className={cn("inline-block mr-2", levelClass)}
