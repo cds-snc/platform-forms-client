@@ -16,7 +16,7 @@ export const CsvDirectory = ({ filename = "example.csv" }: { filename: string })
   const { t } = useResponsesApp();
   return (
     <>
-      <p className="font-bold mb-6">{t("formatPage.previewCsvStructure")}</p>
+      <p className="mb-4 font-bold">{t("formatPage.previewCsvStructure")}</p>
       <DirectoryPreview>
         <DirectoryItem>
           <FileIcon />
@@ -33,7 +33,7 @@ export const HtmlDirectory = () => {
   const { t } = useResponsesApp();
   return (
     <>
-      <p className="font-bold mb-6">{t("formatPage.previewHtmlStructure")}</p>
+      <p className="mb-4 font-bold">{t("formatPage.previewHtmlStructure")}</p>
       <DirectoryPreview>
         <DirectoryItem>
           <FolderIcon />
@@ -88,7 +88,7 @@ export const DirectoryItem = ({ children }: { children: React.ReactNode }) => {
 
 export const DirectoryPreview = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="bg-slate-50 border-slate-500 border-1 rounded-md p-4 pr-10 w-fit">
+    <div className="w-fit rounded-md border-1 border-slate-500 bg-slate-50 p-4 pr-10">
       {children}
     </div>
   );
