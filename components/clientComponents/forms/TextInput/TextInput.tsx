@@ -11,6 +11,7 @@ export interface TextInputProps extends InputFieldProps {
   placeholder?: string;
   spellCheck?: boolean;
   allowNegativeNumbers?: boolean;
+  stepCount?: number;
 }
 
 export const TextInput = (
@@ -27,6 +28,7 @@ export const TextInput = (
     maxLength,
     spellCheck,
     allowNegativeNumbers,
+    stepCount,
   } = props;
   const [field, meta, helpers] = useField(props);
   const { t } = useTranslation("common");
@@ -69,33 +71,23 @@ export const TextInput = (
   const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
 
   const checkNumericValues = (key: string, currentTarget: EventTarget & HTMLInputElement) => {
-    if (!allowNegativeNumbers) {
-      // Restrict a user from entering anything but a number
-      if (!/[0-9]+/.test(key)) {
-        return false;
-      }
-    } else {
-      // Prevent typing before an existing minus
-      const { value, selectionStart, selectionEnd } = currentTarget;
-      const minusIndex = value.indexOf("-");
-      const isBeforeMinus =
-        minusIndex !== -1 &&
-        selectionStart !== null &&
-        selectionEnd !== null &&
-        selectionStart <= minusIndex &&
-        selectionEnd <= minusIndex;
+    const { value, selectionStart, selectionEnd } = currentTarget;
+    const start = selectionStart ?? 0;
+    const end = selectionEnd ?? 0;
 
-      if (isBeforeMinus) {
-        return false;
-      }
-      // Allow digits, or a single leading minus for negatives
-      const isDigit = /^\d$/.test(key);
-      const isLeadingMinus =
-        key === "-" && currentTarget.selectionStart === 0 && !currentTarget.value.includes("-");
+    // Calculate the value after the key press
+    const futureValue = value.slice(0, start) + key + value.slice(end);
 
-      if (!(isDigit || isLeadingMinus)) {
-        return false;
-      }
+    const negativePattern = allowNegativeNumbers ? "-?" : "";
+    const decimalSeparator = t("decimalSeparator");
+    const escapedSeparator = decimalSeparator === "." ? "\\." : decimalSeparator;
+    const decimalPattern =
+      stepCount && stepCount > 0 ? `(${escapedSeparator}\\d{0,${stepCount}})?` : "";
+
+    const regex = new RegExp(`^${negativePattern}\\d*${decimalPattern}$`);
+
+    if (!regex.test(futureValue)) {
+      return false;
     }
   };
 
