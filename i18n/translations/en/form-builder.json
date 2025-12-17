@@ -54,7 +54,7 @@
       "departments": "Add department",
       "combobox": "Add searchable list",
       "formattedDate": "Add date",
-      "customJson": "Add custom json"
+      "customJson": "Add custom JSON"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
