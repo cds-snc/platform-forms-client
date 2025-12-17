@@ -38,6 +38,9 @@ test.describe("Testing a basic frontend form", () => {
       // Submit the empty form
       await page.locator("[type='submit']").click();
 
+      // Wait for error list to appear before checking individual items
+      await expect(page.locator("li").first()).toBeVisible({ timeout: 10000 });
+
       // Verify error messages for required fields
       await expect(page.locator("li").nth(0)).toContainText(
         "Enter an answer for: A Required Short Answer"

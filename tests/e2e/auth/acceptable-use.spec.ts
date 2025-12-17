@@ -14,7 +14,8 @@ test.describe("Test acceptable use Page", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: "Know your responsibilities" })
     ).toBeVisible();
-    await expect(page.locator("#acceptableUse")).toContainText("Agree");
+    // Use getByRole to avoid duplicate ID issue
+    await expect(page.getByRole("button", { name: "Agree" })).toBeVisible();
   });
 
   test("Fr page renders properly", async ({ page }) => {
@@ -25,7 +26,8 @@ test.describe("Test acceptable use Page", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: "Connaissez vos responsabilités" })
     ).toBeVisible();
-    await expect(page.locator("#acceptableUse")).toContainText("Accepter");
+    // Use getByRole to avoid duplicate ID issue
+    await expect(page.getByRole("button", { name: "Accepter" })).toBeVisible();
   });
 
   test("Agree to the terms of use", async ({ page }) => {

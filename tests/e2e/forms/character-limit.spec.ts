@@ -43,13 +43,12 @@ test.describe("Testing a basic frontend form", () => {
       await page.goto(publishedFormPath);
       await page
         .getByRole("textbox", { name: "Text Field 1" })
-        .fill("This is 35 characters This is 35 ch")
-        .then(async () => {
-          await expect(page.locator("#characterCountMessage2")).toBeVisible();
-          await expect(page.locator("#characterCountMessage2")).toContainText(
-            "You have 5 characters left."
-          );
-        });
+        .fill("This is 35 characters This is 35 ch");
+
+      // Wait for the character count message to appear (it may be debounced)
+      const characterMessage = page.locator("#characterCountMessage2");
+      await expect(characterMessage).toBeVisible({ timeout: 10000 });
+      await expect(characterMessage).toContainText("You have 5 characters left.");
     });
 
     test("displays an error message indicating too many characters", async ({ page }) => {
