@@ -11,8 +11,32 @@ import {
   MALICIOUS_ATTACHMENTS_FOLDER,
 } from "../../lib/constants";
 import { useResponsesApp } from "../../context";
+import { FormElement, FormElementTypes } from "@root/packages/types/src/form-types";
 
-export const CsvDirectory = ({ filename = "example.csv" }: { filename: string }) => {
+export const hasFileInputElement = ({ elements }: { elements?: FormElement[] }) => {
+  // Helper function to recursively check for file input elements
+  const checkForFileInput = (elements?: FormElement[]): boolean => {
+    if (!elements) return false;
+
+    return elements.some(
+      (element) =>
+        // Check if the current element is a file input
+        element.type === FormElementTypes.fileInput ||
+        // Check sub-elements if they exist
+        (element.properties?.subElements && checkForFileInput(element.properties.subElements))
+    );
+  };
+
+  return checkForFileInput(elements);
+};
+
+export const CsvDirectory = ({
+  filename = "example.csv",
+  showAttachments,
+}: {
+  filename: string;
+  showAttachments?: boolean;
+}) => {
   const { t } = useResponsesApp();
   return (
     <>
@@ -22,14 +46,14 @@ export const CsvDirectory = ({ filename = "example.csv" }: { filename: string })
           <FileIcon />
           <Name name={filename} bold />
         </DirectoryItem>
-        <AttachmentsDirectory />
+        {showAttachments && <AttachmentsDirectory />}
         <SourceDirectory />
       </DirectoryPreview>
     </>
   );
 };
 
-export const HtmlDirectory = () => {
+export const HtmlDirectory = ({ showAttachments }: { showAttachments?: boolean }) => {
   const { t } = useResponsesApp();
   return (
     <>
@@ -39,7 +63,7 @@ export const HtmlDirectory = () => {
           <FolderIcon />
           <Name name={HTML_DOWNLOAD_FOLDER} bold />
         </DirectoryItem>
-        <AttachmentsDirectory />
+        {showAttachments && <AttachmentsDirectory />}
         <SourceDirectory />
       </DirectoryPreview>
     </>
@@ -96,7 +120,7 @@ export const DirectoryPreview = ({ children }: { children: React.ReactNode }) =>
 
 export const AttachmentsDirectory = () => {
   return (
-    <>
+    <div data-testid="attachments-directory">
       <DirectoryItem>
         <FolderIcon />
         <Name name={ATTACHMENTS_FOLDER} />
@@ -105,7 +129,7 @@ export const AttachmentsDirectory = () => {
         <FolderIcon level={1} />
         {"/"} <Name name={MALICIOUS_ATTACHMENTS_FOLDER} />
       </DirectoryItem>
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { Button } from "@clientComponents/globals";
 import { useResponsesApp } from "../context";
 import { useResponsesContext } from "../context/ResponsesContext";
@@ -10,14 +11,33 @@ import { LinkButton } from "@root/components/serverComponents/globals/Buttons/Li
 import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 import { getStepOf } from "../lib/getStepOf";
 
-import { CsvDirectory, HtmlDirectory } from "../components/folder-preview/DirectoryPreview";
+import {
+  CsvDirectory,
+  HtmlDirectory,
+  hasFileInputElement,
+} from "../components/folder-preview/DirectoryPreview";
 
 export const STORAGE_KEY_PREFIX = "responses-pilot-format-";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { t, router } = useResponsesApp();
-  const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses } =
+  const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses, apiClient } =
     useResponsesContext();
+
+  const [showAttachments, setShowAttachments] = useState(false);
+
+  // Check if the form has file input elements to determine if attachments folder should be shown in preview
+  useEffect(() => {
+    async function loadTemplateAndCheckForFileInputs() {
+      const template = apiClient && (await apiClient.getFormTemplate());
+      const showAttachments = template && hasFileInputElement({ elements: template.elements });
+
+      if (showAttachments) {
+        setShowAttachments(true);
+      }
+    }
+    loadTemplateAndCheckForFileInputs();
+  }, [apiClient]);
 
   // Load saved format from localStorage on mount if available
   useEffect(() => {
@@ -86,8 +106,10 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
       </div>
 
       <div className="mb-12">
-        {selectedFormat === "csv" && <CsvDirectory filename={`${id}.csv`} />}
-        {selectedFormat === "html" && <HtmlDirectory />}
+        {selectedFormat === "csv" && (
+          <CsvDirectory showAttachments={showAttachments} filename={`${id}.csv`} />
+        )}
+        {selectedFormat === "html" && <HtmlDirectory showAttachments={showAttachments} />}
       </div>
 
       <div className="flex flex-row gap-4">
