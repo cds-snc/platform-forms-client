@@ -1,20 +1,36 @@
-import { SendMessageCommand } from "@aws-sdk/client-sqs";
-import { PutCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
+import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { randomUUID } from "crypto";
-import { dynamoDBDocumentClient, getAwsSQSQueueURL, sqsClient } from "./utils";
+import { ErrorWithCause } from "./types/errors";
+import { getAwsSQSQueueURL } from "./utils";
 
 const DYNAMODB_NOTIFICATION_TABLE_NAME = "Notification";
+
+const globalConfig = {
+  region: process.env.AWS_REGION ?? "ca-central-1",
+};
+
+export const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
+  new DynamoDBClient({
+    ...globalConfig,
+    // SDK retries use exponential backoff with jitter by default
+    maxAttempts: 15,
+  })
+);
+
+export const sqsClient = new SQSClient({
+  ...globalConfig,
+});
 
 /**
  * Creates a notification record in DynamoDB and enqueues it for immediate sending.
  *
- * @param notificationId - Unique identifier for the notification
  * @param emails - Array of email addresses to send the notification to
  * @param subject - Email subject line
  * @param body - Email body content
  */
 const sendImmediate = async ({
-  notificationId,
   emails,
   subject,
   body,
@@ -24,12 +40,14 @@ const sendImmediate = async ({
   subject: string;
   body: string;
 }): Promise<void> => {
-  const id = notificationId ?? randomUUID();
+  const notificationId = randomUUID();
   try {
-    await _createNotificationRecord({ notificationId: id, emails, subject, body });
-    await _enqueueDeferredNotification(id!);
+    await _createRecord({ notificationId, emails, subject, body });
+    await enqueueDeferred(notificationId);
   } catch (error) {
-    throw `Error creating immediate notification id ${id} - ${(error as Error).message}`;
+    throw new ErrorWithCause(`Error creating immediate notification id ${notificationId}`, {
+      cause: error,
+    });
   }
 };
 
@@ -53,13 +71,15 @@ const sendDeferred = async ({
   body: string;
 }): Promise<void> => {
   try {
-    await _createNotificationRecord({ notificationId, emails, subject, body });
+    await _createRecord({ notificationId, emails, subject, body });
   } catch (error) {
-    throw `Error creating deferred notification id ${notificationId} - ${(error as Error).message}`;
+    throw new ErrorWithCause(`Error creating deferred notification id ${notificationId}`, {
+      cause: error,
+    });
   }
 };
 
-const _createNotificationRecord = async ({
+const _createRecord = async ({
   notificationId,
   emails,
   subject,
@@ -84,11 +104,11 @@ const _createNotificationRecord = async ({
     });
     await dynamoDBDocumentClient.send(command);
   } catch (error) {
-    throw new Error(`Could not create record: ${JSON.stringify(error)}`);
+    throw new ErrorWithCause(`Could not create record`, { cause: error });
   }
 };
 
-const _enqueueDeferredNotification = async (notificationId: string): Promise<void> => {
+const enqueueDeferred = async (notificationId: string): Promise<void> => {
   try {
     const queueUrl = await getAwsSQSQueueURL("NOTIFICATION_QUEUE_URL", "notification_queue");
     if (!queueUrl) {
@@ -104,12 +124,12 @@ const _enqueueDeferredNotification = async (notificationId: string): Promise<voi
       throw new Error("Received null SQS message identifier");
     }
   } catch (error) {
-    throw new Error(`Could not enqueue: ${JSON.stringify(error)}`);
+    throw new ErrorWithCause(`Could not enqueue`, { cause: error });
   }
 };
 
 export const notification = {
   sendImmediate,
   sendDeferred,
-  enqueueDeferredNotification: _enqueueDeferredNotification,
+  enqueueDeferred,
 };
