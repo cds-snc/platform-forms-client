@@ -111,7 +111,7 @@ export const checkKeyExists = async (templateId: string) => {
     return false;
   }
 
-  const remoteKey = await ZitadelConnector.getMachineUserKeyById(userId, publicKeyId);
+  const remoteKey = await ZitadelConnector.getMachineUserKeyById(userId);
   return remoteKey?.keyId === publicKeyId ? remoteKey.keyId : false;
 };
 
