@@ -10,30 +10,39 @@ import {
   ATTACHMENTS_FOLDER,
   MALICIOUS_ATTACHMENTS_FOLDER,
 } from "../../lib/constants";
+import { useResponsesApp } from "../../context";
 
 export const CsvDirectory = ({ filename = "example.csv" }: { filename: string }) => {
+  const { t } = useResponsesApp();
   return (
-    <DirectoryPreview>
-      <DirectoryItem>
-        <FileIcon />
-        <Name name={filename} bold />
-      </DirectoryItem>
-      <AttachmentsDirectory />
-      <SourceDirectory />
-    </DirectoryPreview>
+    <>
+      <p className="font-bold mb-6">{t("formatPage.previewCsvStructure")}</p>
+      <DirectoryPreview>
+        <DirectoryItem>
+          <FileIcon />
+          <Name name={filename} bold />
+        </DirectoryItem>
+        <AttachmentsDirectory />
+        <SourceDirectory />
+      </DirectoryPreview>
+    </>
   );
 };
 
 export const HtmlDirectory = () => {
+  const { t } = useResponsesApp();
   return (
-    <DirectoryPreview>
-      <DirectoryItem>
-        <FolderIcon />
-        <Name name={HTML_DOWNLOAD_FOLDER} bold />
-      </DirectoryItem>
-      <AttachmentsDirectory />
-      <SourceDirectory />
-    </DirectoryPreview>
+    <>
+      <p className="font-bold mb-6">{t("formatPage.previewHtmlStructure")}</p>
+      <DirectoryPreview>
+        <DirectoryItem>
+          <FolderIcon />
+          <Name name={HTML_DOWNLOAD_FOLDER} bold />
+        </DirectoryItem>
+        <AttachmentsDirectory />
+        <SourceDirectory />
+      </DirectoryPreview>
+    </>
   );
 };
 

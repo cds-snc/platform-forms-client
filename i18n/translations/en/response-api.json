@@ -86,7 +86,9 @@
       "html": {
         "label": "Individual copies (Separate HTML files)"
       }
-    }
+    },
+    "previewCsvStructure": "Preview of the file structure for CSV responses:",
+    "previewHtmlStructure": "Preview of the file structure for HTML responses:"
   },
   "confirmationPage": {
     "section-title": "Results",
