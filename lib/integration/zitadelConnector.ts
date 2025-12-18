@@ -170,7 +170,7 @@ export async function getMachineUserKeysById(userId: string): Promise<{ id: stri
           filters: [
             {
               userIdFilter: {
-                userId: userId,
+                id: userId,
                 method: "TEXT_FILTER_METHOD_EQUALS",
               },
             },
