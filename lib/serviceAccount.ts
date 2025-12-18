@@ -112,6 +112,8 @@ export const checkKeyExists = async (templateId: string) => {
   }
 
   const remoteKeys = await ZitadelConnector.getMachineUserKeysById(userId);
+  logMessage.info(`DB public key Id: ${publicKeyId}`);
+  logMessage.info(`Remote Keys: ${remoteKeys.map(({ id }) => id)}`);
   return remoteKeys.some(({ id }) => id === publicKeyId) ? publicKeyId : undefined;
 };
 
