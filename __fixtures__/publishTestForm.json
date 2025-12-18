@@ -1,0 +1,70 @@
+{
+  "titleEn": "A Publishable Form",
+  "titleFr": "A Publishable Form (FR)",
+  "introduction": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "A Privacy Statement",
+    "descriptionFr": "A Privacy Statement (FR)"
+  },
+  "confirmation": {
+    "descriptionEn": "Confirmed",
+    "descriptionFr": "Confirmed (FR)",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [1],
+  "elements": [
+    {
+      "id": 1,
+      "type": "textField",
+      "properties": {
+        "questionId": "",
+        "tags": [],
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Just one question",
+        "titleFr": "Just one question (FR)",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      },
+      "uuid": "afff49e6-1cdb-482d-82f8-9ef8ad6879ef"
+    }
+  ],
+  "groups": {
+    "start": {
+      "name": "Start",
+      "titleEn": "Start page",
+      "titleFr": "Start page",
+      "elements": ["1"],
+      "nextAction": "review"
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "End (Review page and Confirmation)",
+      "titleFr": "End (Review page and Confirmation)",
+      "elements": [],
+      "nextAction": "end"
+    },
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Confirmation page",
+      "elements": []
+    }
+  },
+  "groupsLayout": [],
+  "lastGeneratedElementId": 1
+}

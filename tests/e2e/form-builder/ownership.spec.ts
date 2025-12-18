@@ -1,28 +1,26 @@
 import { test, expect } from "@playwright/test";
-import { FormUploadHelper } from "../../helpers/form-upload-helper";
-import { userSession } from "../../helpers/user-session";
+import { DatabaseHelper } from "@root/tests/helpers";
 
 test.describe("Form Ownership", () => {
-  let formID: string;
+  let formId: string;
+  let dbHelper: DatabaseHelper;
 
-  test.beforeAll(async ({ browser }) => {
-    // Create a new page for setup
-    const context = await browser.newContext();
-    const page = await context.newPage();
+  test.beforeAll(async () => {
+    dbHelper = new DatabaseHelper();
+    formId = await dbHelper.createTemplate({ fixtureName: "cdsIntakeTestForm", published: false });
+  });
 
-    // Authenticate and create the form once
-    await userSession(page, { admin: false });
-    const formHelper = new FormUploadHelper(page);
-    formID = await formHelper.uploadFormFixture("cdsIntakeTestForm");
-
-    // Clean up
-    await context.close();
+  test.afterAll(async () => {
+    // Clean up: delete the template and disconnect
+    if (formId) {
+      await dbHelper.deleteTemplate(formId);
+    }
+    await dbHelper.disconnect();
   });
 
   test.describe("Regular User", () => {
     test("Non-Admin cannot manage Form Ownership", async ({ page }) => {
-      await userSession(page, { admin: false });
-      await page.goto(`/en/form-builder/${formID}/settings`);
+      await page.goto(`/en/form-builder/${formId}/settings`);
       await page.waitForLoadState("networkidle");
 
       await expect(page.getByTestId("form-ownership")).not.toBeVisible();
@@ -30,9 +28,10 @@ test.describe("Form Ownership", () => {
   });
 
   test.describe("Admin User", () => {
+    test.use({ storageState: "tests/.auth/user-admin.json" });
+
     test.beforeEach(async ({ page }) => {
-      await userSession(page, { admin: true });
-      await page.goto(`/en/form-builder/${formID}/settings`);
+      await page.goto(`/en/form-builder/${formId}/settings`);
       await page.waitForLoadState("networkidle");
     });
 

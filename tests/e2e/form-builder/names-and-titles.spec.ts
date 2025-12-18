@@ -1,14 +1,14 @@
 import { test, expect, Page } from "@playwright/test";
-import { userSession } from "../../helpers";
 
 test.describe("Form builder names and titles", () => {
   test.beforeEach(async ({ page }: { page: Page }) => {
-    await userSession(page);
     await page.goto("http://localhost:3000/en/form-builder/0000/edit");
   });
 
   test("Autocompletes name with title on focus", async ({ page }) => {
     await page.fill("#formTitle", "Playwright Share Test Form");
+    await page.waitForTimeout(500);
+
     await page.focus("#fileName");
     // Clicking back to title to trigger potential blur/focus behavior
     await page.click("#formTitle");
@@ -18,6 +18,8 @@ test.describe("Form builder names and titles", () => {
 
   test("Accepts a blank name", async ({ page }) => {
     await page.fill("#formTitle", "Playwright Share Test Form");
+    await page.waitForTimeout(500);
+
     await page.click("#fileName");
     await page.locator("#fileName").fill("");
     const value = await page.locator("#fileName").inputValue();

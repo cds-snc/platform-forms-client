@@ -2,6 +2,8 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Login Page", () => {
   test.describe("User login screen", () => {
+    test.use({ storageState: { cookies: [], origins: [] } });
+
     test.beforeEach(async ({ page }) => {
       await page.goto("/en/auth/login");
     });
@@ -83,6 +85,8 @@ test.describe("Login Page", () => {
   });
 
   test.describe("User 2FA screen", () => {
+    test.use({ storageState: { cookies: [], origins: [] } });
+
     test.beforeEach(async ({ page }) => {
       await page.goto("/en/auth/login");
       await expect(page.locator("input[id='username']")).toBeVisible();
