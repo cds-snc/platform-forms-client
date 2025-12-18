@@ -9,7 +9,10 @@ test.describe("Testing a form element autocomplete attributes", () => {
   test.beforeAll(async () => {
     // Create a published template directly in the database
     dbHelper = new DatabaseHelper();
-    formId = await dbHelper.createPublishedTemplate("autocompleteAttributesTestForm");
+    formId = await dbHelper.createTemplate({
+      fixtureName: "autocompleteAttributesTestForm",
+      published: true,
+    });
     publishedFormPath = `en/id/${formId}`;
   });
 

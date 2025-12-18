@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Register Page", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeEach(async ({ page }) => {
     await page.goto("/en/auth/register");
     await expect(page.getByRole("heading", { name: "Create an account", level: 1 })).toBeVisible();
