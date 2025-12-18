@@ -61,12 +61,15 @@ describe("SelectLocation - Browser Mode", () => {
   it("should show toast when directory is selected and focused on Continue button", async () => {
     const { showDirectoryPicker } = await import("native-file-system-adapter");
     
-    // Mock the directory picker to return a mock handle that exposes
-    // permission APIs so verifyPermission() returns granted.
+    // Mock source directory
+    const mockSourceDir = {
+      getDirectoryHandle: vi.fn().mockResolvedValue({}),
+    };
+    
     vi.mocked(showDirectoryPicker).mockResolvedValueOnce({
       name: "test-directory",
       kind: "directory",
-      getDirectoryHandle: vi.fn().mockResolvedValue({}),
+      getDirectoryHandle: vi.fn().mockResolvedValue(mockSourceDir),
       queryPermission: vi.fn().mockResolvedValue("granted"),
       requestPermission: vi.fn().mockResolvedValue("granted"),
     } as never);
@@ -91,11 +94,16 @@ describe("SelectLocation - Browser Mode", () => {
   it("should show permission denied toast when permission is denied", async () => {
     const { showDirectoryPicker } = await import("native-file-system-adapter");
 
+    // Mock source directory
+    const mockSourceDir = {
+      getDirectoryHandle: vi.fn().mockResolvedValue({}),
+    };
+
     // Mock the directory picker to return a handle that denies permissions
     vi.mocked(showDirectoryPicker).mockResolvedValueOnce({
       name: "denied-directory",
       kind: "directory",
-      getDirectoryHandle: vi.fn().mockResolvedValue({}),
+      getDirectoryHandle: vi.fn().mockResolvedValue(mockSourceDir),
       queryPermission: vi.fn().mockResolvedValue("denied"),
       requestPermission: vi.fn().mockRejectedValue(new Error("NotAllowedError")),
     } as never);
