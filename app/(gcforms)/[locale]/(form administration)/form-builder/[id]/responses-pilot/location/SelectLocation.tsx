@@ -12,7 +12,7 @@ import { getStepOf } from "../lib/getStepOf";
 import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 import { verifyPermission } from "../lib/fileSystemHelpers";
 import { NotAllowedError } from "../components/Toasts";
-import { LOGS_FOLDER } from "../lib/constants";
+import { LOGS_FOLDER, SOURCE_FOLDER } from "../lib/constants";
 
 export const SelectLocation = ({ locale, id }: { locale: string; id: string }) => {
   const { t, router, searchParams } = useResponsesApp();
@@ -41,7 +41,13 @@ export const SelectLocation = ({ locale, id }: { locale: string; id: string }) =
       await new Promise((resolve) => setTimeout(resolve, 0));
       document.getElementById("continue-button")?.focus();
 
-      const logsDirectoryHandle = await handle.getDirectoryHandle(LOGS_FOLDER, { create: true });
+      const sourceDirectoryHandle = await handle.getDirectoryHandle(SOURCE_FOLDER, {
+        create: true,
+      });
+
+      const logsDirectoryHandle = await sourceDirectoryHandle.getDirectoryHandle(LOGS_FOLDER, {
+        create: true,
+      });
       logger.setDirectoryHandle(logsDirectoryHandle);
       logger.info(`Directory selected for response downloads: ${handle.name}`);
     },

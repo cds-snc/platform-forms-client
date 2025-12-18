@@ -54,6 +54,6 @@ export default defineConfig({
     },
     setupFiles: process.env.VITEST_BROWSER === "true" ? ["./tests/browser/setup.ts"] : [],
     isolate: true,
-    fileParallelism: false,
+    fileParallelism: true,
   },
 });
