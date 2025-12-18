@@ -1,23 +1,31 @@
 import { test, expect } from "@playwright/test";
-import { FormUploadHelper } from "../helpers/form-upload-helper";
-import { userSession } from "../helpers/user-session";
+import { DatabaseHelper } from "../helpers";
 
 test.describe("TSB Contact Form functionality", () => {
+  let publishedFormPath: string;
+  let formId: string;
+  let dbHelper: DatabaseHelper;
+
+  test.beforeAll(async () => {
+    // Create a published template directly in the database
+    dbHelper = new DatabaseHelper();
+    formId = await dbHelper.createTemplate({
+      fixtureName: "tsbDisableFooterGCBranding",
+      published: true,
+    });
+    publishedFormPath = `en/id/${formId}`;
+  });
+
+  test.afterAll(async () => {
+    // Clean up: delete the template and disconnect
+    if (formId) {
+      await dbHelper.deleteTemplate(formId);
+    }
+    await dbHelper.disconnect();
+  });
+
   test("Form footer does not contain GC branding", async ({ page }) => {
-    // Increase timeout for this test as publishing can take a while
-    test.setTimeout(40000);
-
-    await userSession(page);
-
-    const formHelper = new FormUploadHelper(page);
-
-    // Upload the form fixture
-    const formId = await formHelper.uploadFormFixture("tsbDisableFooterGCBranding");
-
-    // Publish the form
-    await formHelper.publishForm(formId);
-
-    await page.goto(`en/id/${formId}`);
+    await page.goto(publishedFormPath);
 
     // Check that the form title is displayed
     await expect(

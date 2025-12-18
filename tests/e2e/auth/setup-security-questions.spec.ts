@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Security Questions Page", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   // NOTE: looking at text values instead of Id's since each run would return different
   // generated question Id's
   const questions1 = "What was your favourite school subject?";

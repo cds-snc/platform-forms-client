@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Deactivated Page", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test("Reaches deactivated page after login", async ({ page }) => {
     await page.goto("/en/auth/login");
     await page.waitForLoadState("networkidle");

@@ -298,14 +298,14 @@
       "description": "Toutes les soumissions ont été livrées et confirmées avec succès."
     },
     "awatingDownload": {
-      "title": "État : En attente de livraison",
+      "title": "En attente de livraison",
       "description": "Les nouvelles soumissions peuvent être téléchargées avec une demande API",
       "new": "Nouvelles",
       "responses": "réponses",
       "available": "disponibles"
     },
     "awatingConfirm": {
-      "title": "État : En attente de confirmation",
+      "title": "En attente de confirmation",
       "description": "Les soumissions téléchargées peuvent être confirmées avec une demande API"
     },
     "overdue": {

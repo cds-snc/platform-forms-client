@@ -167,13 +167,11 @@ export async function getMachineUserKeysById(userId: string): Promise<{ id: stri
     const response = await zitadelApiManagementGotInstance
       .post(`${connectionInformation.url}/v2/users/keys/search`, {
         json: {
-          query: {
-            limit: 1,
-          },
-          queries: [
+          filters: [
             {
               userIdFilter: {
                 id: userId,
+                method: "TEXT_FILTER_METHOD_EQUALS",
               },
             },
           ],

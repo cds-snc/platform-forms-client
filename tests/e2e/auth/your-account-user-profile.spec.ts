@@ -1,17 +1,16 @@
 import { test, expect } from "@playwright/test";
-import { userSession } from "../../helpers/user-session";
 
 test.describe("User profile", () => {
   test.describe("Regular User", () => {
-    test.beforeEach(async ({ page }) => {
-      await userSession(page, { admin: false });
-    });
-
     test("Can navigate to Profile page", async ({ page }) => {
       await page.goto("/en/forms");
+      await page.waitForLoadState("networkidle");
 
-      // Click the account dropdown button
+      // Click the account dropdown button and wait for dropdown to appear
       await page.locator("button[id^='radix-']").click();
+      await page.waitForSelector("[data-testid='yourAccountDropdownContent']", {
+        state: "visible",
+      });
 
       // Click Profile in the dropdown
       await page.locator("[data-testid='yourAccountDropdownContent']").getByText("Profile").click();
@@ -39,11 +38,12 @@ test.describe("User profile", () => {
 
     test("Renders the My Account dropdown as non-admin", async ({ page }) => {
       await page.goto("/en/forms");
+      await page.waitForLoadState("networkidle");
 
       // Dropdown should not be visible initially
       await expect(page.locator("[data-testid='yourAccountDropdownContent']")).not.toBeVisible();
 
-      // Click to open dropdown
+      // Click to open dropdown and wait for it to appear
       await page.locator("button[id^='radix-']").click();
 
       // Verify dropdown contents
@@ -56,15 +56,17 @@ test.describe("User profile", () => {
   });
 
   test.describe("Admin User", () => {
-    test.beforeEach(async ({ page }) => {
-      await userSession(page, { admin: true });
-    });
+    test.use({ storageState: "tests/.auth/user-admin.json" });
 
     test("Can navigate to Profile page", async ({ page }) => {
       await page.goto("/en/forms");
+      await page.waitForLoadState("networkidle");
 
-      // Click the account dropdown button
+      // Click the account dropdown button and wait for dropdown to appear
       await page.locator("button[id^='radix-']").click();
+      await page.waitForSelector("[data-testid='yourAccountDropdownContent']", {
+        state: "visible",
+      });
 
       // Click Profile in the dropdown
       await page.locator("[data-testid='yourAccountDropdownContent']").getByText("Profile").click();
@@ -81,16 +83,17 @@ test.describe("User profile", () => {
 
     test("Renders the My Account dropdown as admin", async ({ page }) => {
       await page.goto("/en/forms");
+      await page.waitForLoadState("networkidle");
 
       // Dropdown should not be visible initially
       await expect(page.locator("[data-testid='yourAccountDropdownContent']")).not.toBeVisible();
 
-      // Click to open dropdown
+      // Click to open dropdown and wait for it to appear
       await page.locator("button[id^='radix-']").click();
+      const dropdown = page.locator("[data-testid='yourAccountDropdownContent']");
+      await expect(dropdown).toBeVisible({ timeout: 10000 });
 
       // Verify dropdown contents including admin link
-      const dropdown = page.locator("[data-testid='yourAccountDropdownContent']");
-      await expect(dropdown).toBeVisible();
       await expect(dropdown).toContainText("Profile");
       await expect(dropdown).toContainText("Sign out");
       await expect(dropdown).toContainText("Administration");

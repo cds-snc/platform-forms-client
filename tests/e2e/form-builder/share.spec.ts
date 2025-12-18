@@ -1,10 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { userSession } from "../../helpers/user-session";
 
 test.describe("Form builder share", () => {
   test.describe("Authenticated", () => {
     test.beforeEach(async ({ page }) => {
-      await userSession(page);
       await page.goto("/en/form-builder/0000/edit");
       await page.waitForLoadState("networkidle");
     });
@@ -53,6 +51,8 @@ test.describe("Form builder share", () => {
   });
 
   test.describe("UnAuthenticated", () => {
+    test.use({ storageState: { cookies: [], origins: [] } });
+
     test.beforeEach(async ({ page }) => {
       await page.goto("/en/form-builder/0000/edit");
       await page.waitForLoadState("networkidle");

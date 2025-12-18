@@ -1,18 +1,21 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { FormUploadHelper } from "../helpers/form-upload-helper";
-import { userSession } from "../helpers/user-session";
+import { DatabaseHelper } from "../helpers";
 
 const A11Y_TAGS = ["wcag21aa", "wcag2aa", "best-practice", "section508"];
 
 test.describe("Accessibility (A11Y) Check", () => {
+  let formId: string;
+  const dbHelper = new DatabaseHelper();
+
   test.describe("Form Components", () => {
     test("All components page Accessibility (A11Y) Check", async ({ page }) => {
-      await userSession(page);
-      const formHelper = new FormUploadHelper(page);
-      const formID = await formHelper.uploadFormFixture("accessibilityTestForm");
+      formId = await dbHelper.createTemplate({
+        fixtureName: "accessibilityTestForm",
+        published: true,
+      });
 
-      await page.goto(`/en/id/${formID}`);
+      await page.goto(`/en/id/${formId}`);
       await page.waitForLoadState("networkidle");
 
       const accessibilityScanResults = await new AxeBuilder({ page }).withTags(A11Y_TAGS).analyze();
@@ -21,11 +24,12 @@ test.describe("Accessibility (A11Y) Check", () => {
     });
 
     test("Check error state accessibility", async ({ page }) => {
-      await userSession(page);
-      const formHelper = new FormUploadHelper(page);
-      const formID = await formHelper.uploadFormFixture("cdsIntakeTestForm");
+      formId = await dbHelper.createTemplate({
+        fixtureName: "accessibilityTestForm",
+        published: true,
+      });
 
-      await page.goto(`/en/id/${formID}`);
+      await page.goto(`/en/id/${formId}`);
       await page.waitForLoadState("networkidle");
 
       const accessibilityScanResults = await new AxeBuilder({ page }).withTags(A11Y_TAGS).analyze();
@@ -35,6 +39,9 @@ test.describe("Accessibility (A11Y) Check", () => {
   });
 
   test.describe("Unauthenticated Pages", () => {
+    // Override storageState for this describe block to be unauthenticated
+    test.use({ storageState: { cookies: [], origins: [] } });
+
     const pages = [
       { title: "Language selection", path: "/" },
       { title: "Form builder landing", path: "/en/form-builder" },

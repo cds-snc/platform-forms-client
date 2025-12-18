@@ -37,15 +37,27 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "Microsoft Edge",
+      name: "setup-auth",
+      testDir: "./tests",
+      testMatch: "**/auth.setup.ts",
+    },
+    {
+      name: "setup-auth-admin",
+      testDir: "./tests",
+      testMatch: "**/auth-admin.setup.ts",
+    },
+    {
+      name: "Chromium",
       use: {
-        ...devices["Desktop Edge"],
-        channel: "msedge",
+        ...devices["Desktop Chromium"],
         headless: !!process.env.CI, // Run headless only in CI
         launchOptions: {
-          slowMo: 250, // Slow down actions for better visibility
+          // Small slowMo only in CI to help with React state synchronization
+          slowMo: process.env.CI ? 50 : 0,
         },
+        storageState: "tests/.auth/user.json",
       },
+      dependencies: ["setup-auth", "setup-auth-admin"],
     },
   ],
 

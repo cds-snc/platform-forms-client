@@ -11,14 +11,18 @@ export class DatabaseHelper {
 
   /**
    * Create a published template directly in the database from a fixture file
-   * @param fixtureName - Name of the fixture file (without .json extension)
-   * @param userEmail - User email to associate with the template (defaults to test user)
+   * @param options - Configuration options
+   * @param options.fixtureName - Name of the fixture file (without .json extension)
+   * @param options.userEmail - User email to associate with the template (defaults to test user)
+   * @param options.published - Whether the template should be published (defaults to true)
    * @returns The created template ID
    */
-  async createPublishedTemplate(
-    fixtureName: string,
-    userEmail: string = "test.user@cds-snc.ca" // Default test user from seed
-  ): Promise<string> {
+  async createTemplate(options: {
+    fixtureName: string;
+    userEmail?: string;
+    published?: boolean;
+  }): Promise<string> {
+    const { fixtureName, userEmail = "test.user@cds-snc.ca", published = true } = options;
     // Find the user by email
     const user = await this.prisma.user.findUnique({
       where: { email: userEmail },
@@ -38,11 +42,13 @@ export class DatabaseHelper {
       data: {
         name: formConfig.titleEn || "Test Form",
         jsonConfig: formConfig as Prisma.JsonObject,
-        isPublished: true,
-        formPurpose: "Testing purposes",
-        publishReason: "Initial",
-        publishFormType: "test",
-        publishDesc: "Test form created for automated testing",
+        isPublished: published,
+        ...(published && {
+          formPurpose: "Testing purposes",
+          publishReason: "Initial",
+          publishFormType: "test",
+          publishDesc: "Test form created for automated testing",
+        }),
         users: {
           connect: { id: user.id },
         },

@@ -9,7 +9,10 @@ test.describe("Testing a basic frontend form", () => {
   test.beforeAll(async () => {
     // Create a published template directly in the database
     dbHelper = new DatabaseHelper();
-    formId = await dbHelper.createPublishedTemplate("requiredAttributesTestForm");
+    formId = await dbHelper.createTemplate({
+      fixtureName: "requiredAttributesTestForm",
+      published: true,
+    });
     publishedFormPath = `en/id/${formId}`;
   });
 
@@ -34,18 +37,22 @@ test.describe("Testing a basic frontend form", () => {
 
       // Submit the empty form
       await page.locator("[type='submit']").click();
+      await page.waitForTimeout(1000); // Add a short wait to ensure form submission processing
+
+      // Wait for error list to appear using the gc-ordered-list class with extended timeout
+      await expect(page.locator(".gc-ordered-list li").first()).toBeVisible({ timeout: 10000 });
 
       // Verify error messages for required fields
-      await expect(page.locator("li").nth(0)).toContainText(
+      await expect(page.locator(".gc-ordered-list li").nth(0)).toContainText(
         "Enter an answer for: A Required Short Answer"
       );
-      await expect(page.locator("li").nth(1)).toContainText(
+      await expect(page.locator(".gc-ordered-list li").nth(1)).toContainText(
         "Select one or multiple options for: A Required Multiple Choice"
       );
-      await expect(page.locator("li").nth(2)).toContainText(
+      await expect(page.locator(".gc-ordered-list li").nth(2)).toContainText(
         "Enter an answer for: A Required Radio"
       );
-      await expect(page.locator("li").nth(3)).toContainText(
+      await expect(page.locator(".gc-ordered-list li").nth(3)).toContainText(
         "Select an option for: A Required Dropdown"
       );
     });
@@ -59,13 +66,14 @@ test.describe("Testing a basic frontend form", () => {
       await page.getByText("One").nth(1).click(); // Click the label for the radio button
       await page.getByRole("combobox", { name: "A Required Dropdown" }).selectOption("One");
 
-      // Submit the form
+      // Submit the form and wait for the success heading to appear
       await page.locator("[type='submit']").click();
+      await page.waitForTimeout(1000); // Add a short wait to ensure form submission processing
 
-      // Verify submission confirmation
-      await expect(
-        page.getByRole("heading", { name: "Your form has been submitted" })
-      ).toBeVisible();
+      // Verify submission confirmation with extended timeout
+      await expect(page.getByRole("heading", { name: "Your form has been submitted" })).toBeVisible(
+        { timeout: 20000 }
+      );
     });
   });
 });

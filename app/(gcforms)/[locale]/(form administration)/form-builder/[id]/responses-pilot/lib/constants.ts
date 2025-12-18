@@ -15,6 +15,11 @@ export const INTERRUPT_CLEANUP_DELAY_MS = 500;
 export const HTML_DOWNLOAD_FOLDER = "html_responses-reponses_html";
 
 /**
+ * Folder within the selected directory to store raw and log files
+ */
+export const SOURCE_FOLDER = "source";
+
+/**
  * Folder within the selected directory to store raw response data
  */
 export const RAW_RESPONSE_FOLDER = "raw_data-donnees_brutes";
