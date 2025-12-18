@@ -298,14 +298,14 @@
       "description": "All submissions have been retrieved and confirmed"
     },
     "awatingDownload": {
-      "title": "Status: Awaiting retrieval",
+      "title": "Awaiting retrieval",
       "description": "Waiting for the API request to download new submissions",
       "new": "New",
       "responses": "responses",
       "available": "available"
     },
     "awatingConfirm": {
-      "title": "Status: Awaiting confirmation",
+      "title": "Awaiting confirmation",
       "description": "Waiting for the API request to confirm retrieved submissions."
     },
     "overdue": {
