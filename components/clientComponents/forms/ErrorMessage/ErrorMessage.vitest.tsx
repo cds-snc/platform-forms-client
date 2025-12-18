@@ -1,12 +1,14 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import { describe, it, expect, afterAll } from "vitest";
 import { ErrorMessage } from "@clientComponents/forms";
 
 describe("ErrorMessage component", () => {
-  afterAll(cleanup);
+  afterAll(() => cleanup());
   const text = "This is an error";
   it("renders without errors", () => {
     render(<ErrorMessage>{text}</ErrorMessage>);

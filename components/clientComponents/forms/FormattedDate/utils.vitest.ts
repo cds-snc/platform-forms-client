@@ -7,6 +7,13 @@ import {
 } from "./utils";
 import { DateFormat, DateObject } from "./types";
 
+// Helper to call getFormattedDateFromObject with unknown inputs without using `any`.
+const callGetFormattedDateFromObject = (fmt: DateFormat | undefined, obj: unknown) =>
+  (getFormattedDateFromObject as unknown as (f: DateFormat | undefined, o: unknown) => string)(
+    fmt as DateFormat | undefined,
+    obj
+  );
+
 describe("getFormattedDateFromObject", () => {
   const dateObject: DateObject = { YYYY: 2023, MM: 5, DD: 15 };
 
@@ -42,9 +49,9 @@ describe("getFormattedDateFromObject", () => {
   });
 
   it('returns "-" for invalid date objects', () => {
-    expect(getFormattedDateFromObject("YYYY-MM-DD", {} as DateObject)).toBe("-");
-    expect(getFormattedDateFromObject("YYYY-MM-DD", { YYYY: 2023 } as DateObject)).toBe("-");
-    expect(getFormattedDateFromObject("YYYY-MM-DD", { YYYY: 2023, MM: 5 } as DateObject)).toBe("-");
+    expect(callGetFormattedDateFromObject("YYYY-MM-DD", {})).toBe("-");
+    expect(callGetFormattedDateFromObject("YYYY-MM-DD", { YYYY: 2023 })).toBe("-");
+    expect(callGetFormattedDateFromObject("YYYY-MM-DD", { YYYY: 2023, MM: 5 })).toBe("-");
   });
 });
 

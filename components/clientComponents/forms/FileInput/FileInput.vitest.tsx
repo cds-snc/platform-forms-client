@@ -1,11 +1,13 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
 import { render } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { Formik } from "formik";
 import { FileInput } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
+import { describe, it, expect } from "vitest";
 
 const inputProps = {
   id: "pdf",
