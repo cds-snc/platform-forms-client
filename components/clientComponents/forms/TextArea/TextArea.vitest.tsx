@@ -59,71 +59,40 @@ const textAreaData2 = {
 
 describe("Generate a text area", () => {
   afterEach(() => cleanup());
-  describe.each([["en"], ["fr"]] as Array<[Language]>)("renders without errors", (lang: Language) => {
-    it("renders without errors", () => {
-      render(<GenerateElement element={textAreaData} language={lang} />);
+  describe.each([["en"], ["fr"]] as Array<[Language]>)(
+    "renders without errors",
+    (lang: Language) => {
+      it("renders without errors", () => {
+        render(<GenerateElement element={textAreaData} language={lang} />);
 
-      const title = (lang === "en" ? textAreaData.properties.titleEn : textAreaData.properties.titleFr)!;
-      const description =
-        (lang === "en" ? textAreaData.properties.descriptionEn : textAreaData.properties.descriptionFr)!;
-      const placeholder =
-        (lang === "en" ? textAreaData.properties.placeholderEn : textAreaData.properties.placeholderFr)!;
+        const title = (
+          lang === "en" ? textAreaData.properties.titleEn : textAreaData.properties.titleFr
+        )!;
+        const description = (
+          lang === "en"
+            ? textAreaData.properties.descriptionEn
+            : textAreaData.properties.descriptionFr
+        )!;
+        const placeholder = (
+          lang === "en"
+            ? textAreaData.properties.placeholderEn
+            : textAreaData.properties.placeholderFr
+        )!;
 
-      // Label properly renders
-      expect(screen.getByTestId("label")).toContainHTML(title);
-      // Description properly render
-      expect(screen.getByText(description)).toBeInTheDocument();
-      // Field marked as required and have aria described by
-      const renderedTextBox = screen.getByRole("textbox");
-      expect(renderedTextBox).toBeRequired();
-      expect(renderedTextBox).toHaveAccessibleDescription(description);
-      expect(screen.queryByTestId("required")).toBeInTheDocument();
-      // Placeholder properly renders
-      expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
-    });
-  });
-});
-
-describe("Verfify character count restrictions", () => {
-  let localScreen: ReturnType<typeof render>;
-  beforeEach(() => {
-    localScreen = render(<GenerateElement element={textAreaData} language={"en"} />);
-  });
-
-  it("does not display any message when not enough characters have been typed in", async () => {
-    const user = userEvent.setup();
-    const textInput = localScreen.getByRole("textbox");
-
-    await user.type(textInput, "This is 21 characters");
-
-    expect(screen.queryByText("characters left.")).not.toBeInTheDocument();
-  });
-
-  it("displays a message with the number of characters remaining", async () => {
-    const user = userEvent.setup();
-    const textInput = localScreen.getByRole("textbox");
-
-    await user.type(textInput, "This is 35 characters This is 35 ch");
-
-    const foundText = screen.queryByText((content) =>
-      typeof content === "string" &&
-      (content.includes("formElements.characterCount.part1") || /5[^\n]*characters/i.test(content))
-    );
-    expect(foundText).toBeInTheDocument();
-  });
-
-  it("displays a message indicating too many characters", async () => {
-    const user = userEvent.setup();
-    const textInput = localScreen.getByRole("textbox");
-
-    await user.type(textInput, "This is 48 characters This is 48 characters This");
-
-    const expectedKeyError =
-      "formElements.characterCount.part1-error" + " 8 " + "formElements.characterCount.part2-error";
-    const altErrorRegex = /exceed(ed|ed the).*8[^\n]*characters|8[^\n]*characters/i;
-    const foundError = screen.queryByText(expectedKeyError) || screen.queryByText(altErrorRegex);
-    expect(foundError).toBeInTheDocument();
-  });
+        // Label properly renders
+        expect(screen.getByTestId("label")).toContainHTML(title);
+        // Description properly render
+        expect(screen.getByText(description)).toBeInTheDocument();
+        // Field marked as required and have aria described by
+        const renderedTextBox = screen.getByRole("textbox");
+        expect(renderedTextBox).toBeRequired();
+        expect(renderedTextBox).toHaveAccessibleDescription(description);
+        expect(screen.queryByTestId("required")).toBeInTheDocument();
+        // Placeholder properly renders
+        expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
+      });
+    }
+  );
 });
 
 describe("Accessibility tests for the textarea component.", () => {
@@ -151,7 +120,11 @@ describe("Accessibility tests for the textarea component.", () => {
     const expectedEn = "You have 5 characters left.";
     const expectedFr = "Il vous reste 5 caractères.";
 
-    expect([expectedEn, expectedFr]).toContain((textbox.getAttribute("aria-describedby") && document.getElementById(textbox.getAttribute("aria-describedby")!)?.textContent) || "");
+    expect([expectedEn, expectedFr]).toContain(
+      (textbox.getAttribute("aria-describedby") &&
+        document.getElementById(textbox.getAttribute("aria-describedby")!)?.textContent) ||
+        ""
+    );
   });
 
   it("after typing more characters than the maxLength, the attribute is updated to indicate how many characters are too many.", async () => {
@@ -165,6 +138,10 @@ describe("Accessibility tests for the textarea component.", () => {
 
     const expectedEnError = "You've exceeded the limit by 8 characters.";
     const expectedFrError = "Vous avez dépassé la limite de 8 caractères.";
-    expect([expectedEnError, expectedFrError]).toContain((textbox.getAttribute("aria-describedby") && document.getElementById(textbox.getAttribute("aria-describedby")!)?.textContent) || "");
+    expect([expectedEnError, expectedFrError]).toContain(
+      (textbox.getAttribute("aria-describedby") &&
+        document.getElementById(textbox.getAttribute("aria-describedby")!)?.textContent) ||
+        ""
+    );
   });
 });
