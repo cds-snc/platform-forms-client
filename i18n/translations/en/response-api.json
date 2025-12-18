@@ -35,17 +35,17 @@
   },
   "loadKeyPage": {
     "title": "Select your API key",
-    "detail": "Your form’s API key unlocks access to responses without needing development resources for a custom API integration. This allows you to get more than 150 responses at a time and removes the confirmation step that involved copying-pasting receipt codes.",
+    "detail": "Your form’s API key unlocks access to responses without needing development resources for an API integration. This allows you to get more than 150 responses at a time and removes the copy-paste step with receipt codes.",
     "chooseFileButton": "Select API Key",
     "noNewResponsesAvailable": "No new responses",
-    "noNewResponsesDetail": "Your form has received 0 new submissions.",
+    "noNewResponsesDetail": "Your form has not received any new submissions.",
     "newResponsesAvailable": "New responses available",
     "checkForNewResponses": "Check for new responses",
     "downloadResponses": "Choose location",
-    "uploadSuccessTitle": "You were successfully authenticated.",
-    "uploadSuccessMessage": "You can now retrieve all new responses for this form.",
-    "uploadFailedTitle": "Authentication failed with API key",
-    "uploadFailedMessage": "Make sure you select the correct file. If it's not working, try regenerating a new API key for your form and adding it again.",
+    "uploadSuccessTitle": "You're now authenticated.",
+    "uploadSuccessMessage": "You can get all new responses for this form.",
+    "uploadFailedTitle": "Authentication failed",
+    "uploadFailedMessage": "Make sure you select the correct API key file. If it's not working, regenerate a new API key in Settings.",
     "lostKey": {
       "link": "Don't have API key?",
       "lostKeyTip": {
@@ -71,20 +71,20 @@
       "message": "New response data will be appended to the existing CSV file."
     },
     "getTemplateFailed": {
-      "title": "Failed to fetch form template",
+      "title": "Failed to fetch form",
       "message": "There was an error retrieving the form template. Please try again later."
     }
   },
   "formatPage": {
     "title": "Choose a response file format",
     "subheading": "Select the format of responses.",
-    "detail": "Downloads will also include source data (JSON files). This represents the “official submission of record” and provides an automatic check that the files you are getting match up to what’s been submitted.",
+    "detail": "Downloads will also include source data (JSON files). This represents the “official submission of record” and provides a check that what you get matches up to what’s been submitted.",
     "formatOptions": {
       "csv": {
-        "label": "Spreadsheet (Combined in 1 CSV file)"
+        "label": "Spreadsheet (Responses combined in 1 CSV file)"
       },
       "html": {
-        "label": "Individual copies (Separate HTML files)"
+        "label": "Individual copies (Separate HTML files for each response)"
       }
     }
   },
@@ -99,8 +99,8 @@
     "savedTo": "All form submission data can be found in: ",
     "chooseNewLocationButton": "Choose new location",
     "downloadResponsesButton": "Download responses",
-    "maliciousAttachmentsWarningTitle": "Be cautious when opening files attached to submissions.",
-    "maliciousAttachmentsWarningBody": "You'll find file attachments in a separate folder with files that were scanned as “potentially malicious” in a nested folder. Check for “malicious” attributes or the “⚠️” symbol in responses and follow all warning prompts."
+    "maliciousAttachmentsWarningTitle": "Be cautious when opening attached files.",
+    "maliciousAttachmentsWarningBody": "You'll find file attachments in a separate folder with files that were scanned as “suspicious” in a nested folder. Check for the “potentially malicious” attribute and the “⚠️” symbol in response files and follow all warning prompts."
   },
   "processingPage": {
     "section-title": "Processing responses",
@@ -142,7 +142,7 @@
     },
     "quotaExceededError": {
       "title": "Storage space exceeded",
-      "message": "Not enough storage space is available to write to the file. Please free up space and try again."
+      "message": "Not enough storage space is available to write to the file or folder. Please free up space and try again."
     },
     "permissionError": {
       "title": "Unable to modify folder contents",
