@@ -29,9 +29,10 @@ export const TextInput = (
     spellCheck,
     allowNegativeNumbers,
     stepCount,
+    lang,
   } = props;
   const [field, meta, helpers] = useField(props);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", { lng: lang });
 
   const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);
 
@@ -127,6 +128,7 @@ export const TextInput = (
         {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextInputChange}
+        key={type === "number" ? `${id}-${decimalSeparator}` : id}
         value={displayValue}
         // Note: not using type=number for numbers for UX reasons.
         // See: #4851 and https://tinyurl.com/2p9tm5vk
