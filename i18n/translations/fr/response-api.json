@@ -36,17 +36,17 @@
   },
   "loadKeyPage": {
     "title": "Sélectionnez votre clé API",
-    "detail": "La clé API de votre formulaire vous permet d'accéder aux réponses sans avoir besoin de ressources de développement pour une intégration API programmatique. Cela vous permet d'obtenir plus de 150 réponses à la fois et élimine l'étape de confirmation qui consistait à copier-coller les codes de réception.",
-    "chooseFileButton": "Téléverser la clé API",
+    "detail": "La clé API de votre formulaire vous permet d'accéder aux réponses sans avoir besoin de ressources de développement pour une intégration API. Cela vous permet d'obtenir plus de 150 réponses à la fois et élimine l'étape qui consiste à copier-coller les codes de réception.",
+    "chooseFileButton": "Sélectionner la clé API",
     "noNewResponsesAvailable": "Aucune nouvelle réponse",
-    "noNewResponsesDetail": "Votre formulaire a reçu 0 nouvelle soumission.",
+    "noNewResponsesDetail": "Votre formulaire n' pasa reçu de nouvelles soumissions.",
     "newResponsesAvailable": "De nouvelles réponses sont disponibles",
     "checkForNewResponses": "Vérifier les nouvelles réponses",
     "downloadResponses": "Choisir l'emplacement",
-    "uploadSuccessTitle": "Vous avez été authentifié avec succès.",
-    "uploadSuccessMessage": "Vous pouvez maintenant récupérer toutes les nouvelles réponses pour ce formulaire.",
-    "uploadFailedTitle": "Échec d'authentification avec la clé API",
-    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier. Si cela ne fonctionne pas, essayez de régénérer une nouvelle clé API pour votre formulaire et de la mettre à nouveau.",
+    "uploadSuccessTitle": "Vous êtes authentifié.",
+    "uploadSuccessMessage": "Vous pouvez récupérer toutes les nouvelles réponses au formulaire.",
+    "uploadFailedTitle": "Échec d'authentification",
+    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier de clé API. Si cela ne fonctionne pas, régénérez une nouvelle clé API dans les Paramètres.",
     "lostKey": {
       "link": "Vous n'avez pas votre clé API?",
       "lostKeyTip": {
@@ -72,20 +72,20 @@
       "message": "Les nouvelles données de réponse seront ajoutées au fichier CSV existant."
     },
     "getTemplateFailed": {
-      "title": "Failed to fetch form template",
-      "message": "There was an error retrieving the form template. Please try again later."
+      "title": "Échec de récupération du formulaire",
+      "message": "Une erreur s'est produite lors de la récupération du modèle de formulaire. Veuillez réessayer plus tard."
     }
   },
   "formatPage": {
     "title": "Choisissez un format de fichier de réponse",
     "subheading": "Sélectionnez le format des réponses.",
-    "detail": "Les téléchargements comprennent également les données sources (fichiers JSON). Ces données brutes » représentent un « registre officiel de la soumission ». et permet d’automatiser l’étape de vérifier automatiquement que les fichiers que vous recevez correspondent bien à ceux qui ont été soumis.",
+    "detail": "Les téléchargements comprennent également les données sources (fichiers JSON). Ces données brutes représentent les « soumissions officielles » et aident à vérifier que ce que vous recevez correspondent bien à ceux qui ont été soumis.",
     "formatOptions": {
       "csv": {
-        "label": "Feuille de calcul (Combinées dans 1 fichier CSV)"
+        "label": "Feuille de calcul (Réponses combinées dans 1 fichier CSV)"
       },
       "html": {
-        "label": "Copies individuelles (Fichiers HTML séparés)"
+        "label": "Copies individuelles (Fichiers HTML séparés pour chaque réponse)"
       }
     },
     "previewCsvStructure": "Aperçu de la structure des fichiers pour les réponses CSV :",
@@ -102,14 +102,14 @@
     "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
     "chooseNewLocationButton": "Choisir un nouvel emplacement",
     "downloadResponsesButton": "Télécharger les réponses",
-    "maliciousAttachmentsWarningTitle": "Soyez prudent en ouvrant les fichiers joints aux soumissions.",
-    "maliciousAttachmentsWarningBody": "Vous trouverez les fichiers joints dans un dossier distinct — les fichiers analysés comme « potentiellement malveillants » étant placés dans un dossier imbriqué. Vérifiez la présence d'attributs « malveillants » ou du symbole « ⚠️ » dans les réponses et suivez tous les avertissements."
+    "maliciousAttachmentsWarningTitle": "Soyez prudent en ouvrant les fichiers joints.",
+    "maliciousAttachmentsWarningBody": "Vous trouverez les fichiers joints dans un dossier distinct — les fichiers analysés comme étant « suspects » seront dans un dossier imbriqué. Vérifiez la présence d'attributs « potentiellement malveillants » et le symbole « ⚠️ » dans les fichiers de réponses et suivez tous les avertissements."
   },
   "processingPage": {
     "section-title": "Traitement des réponses",
     "processingTitle": "Téléchargement en cours",
     "pleaseWait": "Veuillez patienter...",
-    "processingSubmission": "Traitement de la soumission : {{submissionId}}",
+    "processingSubmission": "En traitement : soumission {{submissionId}}",
     "processingMessage": "Traitement de {{count}} réponses...",
     "cancelButton": "Mettre en pause le téléchargement",
     "cancellingButton": "Mise en pause...",
@@ -145,7 +145,7 @@
     },
     "quotaExceededError": {
       "title": "Espace de stockage dépassé",
-      "message": "L'espace de stockage est insuffisant pour écrire dans le fichier. Veuillez libérer de l'espace et réessayer."
+      "message": "L'espace de stockage est insuffisant pour écrire dans le fichier ou dossier. Veuillez libérer de l'espace et réessayer."
     },
     "permissionError": {
       "title": "Impossible de modifier le contenu du dossier",
