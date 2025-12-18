@@ -1,3 +1,5 @@
+import { type FileInputResponse } from "./form-response-types";
+
 // Utility type creator
 export type TypeOmit<Type, Key extends PropertyKey> = {
   [Property in keyof Type as Exclude<Property, Key>]: Type[Property];
@@ -58,6 +60,10 @@ export enum FormElementTypes {
   formattedDate = "formattedDate",
   customJson = "customJson",
 }
+
+export const BetaFormElementTypes = {
+  [FormElementTypes.addressComplete]: { flag: "addressComplete" },
+};
 
 export type ConditionalRule = {
   choiceId: string;
@@ -123,11 +129,13 @@ export interface ElementProperties {
   maxNumberOfRows?: number;
   autoComplete?: string;
   dateFormat?: string;
+  allowNegativeNumbers?: boolean;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;
   dynamicRow?: dynamicRowType;
   sortOrder?: SortValue;
+  strictValue?: boolean;
   [key: string]:
     | string
     | string[]
@@ -207,6 +215,7 @@ export type FormRecord = {
   id: string;
   createdAt?: string;
   updatedAt?: string;
+  ttl?: Date | null;
   name: string;
   form: FormProperties;
   isPublished: boolean;
@@ -220,6 +229,7 @@ export type FormRecord = {
     | string
     | boolean
     | number
+    | Date
     | FormProperties
     | DeliveryOption
     | ClosedDetails
@@ -259,3 +269,23 @@ export const NotificationsIntervalDefault = NotificationsInterval.DAY;
 
 export type NotificationsInterval =
   (typeof NotificationsInterval)[keyof typeof NotificationsInterval];
+
+export type DateFormat = "YYYY-MM-DD" | "DD-MM-YYYY" | "MM-DD-YYYY";
+
+export interface DateObject {
+  YYYY: number;
+  MM: number;
+  DD: number;
+}
+
+export enum DatePart {
+  DD = "day",
+  MM = "month",
+  YYYY = "year",
+}
+
+export interface FileInput extends FileInputResponse {
+  name: string;
+  size: number;
+  content: ArrayBuffer;
+}

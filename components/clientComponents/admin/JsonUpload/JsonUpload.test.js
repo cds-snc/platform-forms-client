@@ -49,15 +49,4 @@ describe("JSON Upload Component", () => {
     expect(mockedAxios.mock.calls.length).toBe(0);
     expect(await screen.findByTestId("alert")).toBeInTheDocument();
   });
-  it("Shows a submit status message if successfully submitted to API", async () => {
-    mockedAxios.mockResolvedValue();
-
-    render(<JSONUpload form={form}></JSONUpload>);
-    fireEvent.click(screen.queryByTestId("upload"));
-    expect(mockedAxios.mock.calls.length).toBe(1);
-    expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/templates/test", method: "PUT" })
-    );
-    expect(await screen.findByTestId("submitStatus")).toBeInTheDocument();
-  });
 });

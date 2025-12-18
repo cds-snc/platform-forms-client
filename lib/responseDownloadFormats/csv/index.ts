@@ -63,7 +63,10 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
           .join("\n");
       }
       let answerText = answer.answer;
-      if (specialChars.some((char) => answerText.startsWith(char))) {
+      if (
+        typeof answerText === "string" &&
+        specialChars.some((char) => answerText.startsWith(char))
+      ) {
         answerText = `'${answerText}`;
       }
       if (answerText == "") {

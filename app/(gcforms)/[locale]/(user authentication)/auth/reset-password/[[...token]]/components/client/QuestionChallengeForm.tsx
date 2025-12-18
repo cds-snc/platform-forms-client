@@ -26,7 +26,7 @@ export const QuestionChallengeForm = ({
 
   const langKey = language === "en" ? "questionEn" : "questionFr";
 
-  const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
+  const localFormAction = async (_: ErrorStates, formData: FormData) => {
     formData.append("question1Id", userSecurityQuestions[0].id);
     formData.append("question2Id", userSecurityQuestions[1].id);
     formData.append("question3Id", userSecurityQuestions[2].id);
@@ -37,10 +37,23 @@ export const QuestionChallengeForm = ({
       setConfirmationStage(true);
     }
 
-    return checkResult;
+    return {
+      ...checkResult,
+      formData: {
+        question1: formData.get("question1") as string,
+        question2: formData.get("question2") as string,
+        question3: formData.get("question3") as string,
+      },
+    };
   };
 
-  const [state, formAction] = useActionState(localFormAction, {});
+  const [state, formAction] = useActionState(localFormAction, {
+    formData: {
+      question1: "",
+      question2: "",
+      question3: "",
+    },
+  });
   if (confirmationStage) return <PasswordResetForm email={email} />;
 
   return (
@@ -104,6 +117,7 @@ export const QuestionChallengeForm = ({
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "question1")?.fieldValue
             }
+            defaultValue={state.formData?.question1 || ""}
           />
         </div>
 
@@ -124,6 +138,7 @@ export const QuestionChallengeForm = ({
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "question2")?.fieldValue
             }
+            defaultValue={state.formData?.question2 || ""}
           />
         </div>
 
@@ -144,6 +159,7 @@ export const QuestionChallengeForm = ({
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "question3")?.fieldValue
             }
+            defaultValue={state.formData?.question3 || ""}
           />
         </div>
 

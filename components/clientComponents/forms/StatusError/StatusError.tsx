@@ -25,16 +25,24 @@ const Text = ({
   );
 };
 
-export const StatusError = ({ formId, language }: { formId: string; language: Language }) => {
+export const StatusError = ({
+  formId,
+  language,
+  cta,
+}: {
+  formId: string;
+  language: Language;
+  cta?: React.ReactNode;
+}) => {
   const { t } = useTranslation("error");
   const link = `/${language}/id/${formId}`;
   return (
     <Alert
       type={ErrorStatus.ERROR}
-      tabIndex={0}
       id="gc-form-errors-server"
       autoFocus
       focussable={true}
+      cta={cta}
     >
       <h2>{t("sever-error.title")}</h2>
       <div className="mt-4">

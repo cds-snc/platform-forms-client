@@ -1,4 +1,4 @@
-import { type GroupsType } from "@lib/formContext";
+import { type GroupsType } from "@gcforms/types";
 import { getProperty } from "@lib/i18nHelpers";
 import { type Language } from "@lib/types/form-builder-types";
 

@@ -1,6 +1,6 @@
 import { useTranslation } from "@i18n/client";
 import { useState, useEffect } from "react";
-import { getEventsForForm, getEventsForUser } from "../actions";
+import { getFormEvents, getEventsForUser } from "../actions";
 import { logMessage } from "@lib/logger";
 import Loader from "@clientComponents/globals/Loader";
 
@@ -58,7 +58,7 @@ export const EventList = ({ userId, formId }: { userId?: string; formId?: string
   useEffect(() => {
     if (formId) {
       setIsLoading(true);
-      getEventsForForm(formId).then((events) => {
+      getFormEvents(formId).then((events) => {
         setEvents(sortedEvents(events));
         setIsLoading(false);
       });
@@ -104,12 +104,12 @@ export const EventList = ({ userId, formId }: { userId?: string; formId?: string
                   <tbody>
                     {eventItems.map(({ id, event, eventTime, description, subject }) => {
                       return (
-                        <tr className="border-b-1 " key={id}>
+                        <tr className="border-b-1" key={id}>
                           <td className="min-w-80 text-slate-600">
                             {eventTime} - {event}
                           </td>
                           <td className="px-4 text-slate-500">{subject}</td>
-                          <td className="break-words text-slate-500 ">{description ?? ""}</td>
+                          <td className="break-words text-slate-500">{description ?? ""}</td>
                         </tr>
                       );
                     })}

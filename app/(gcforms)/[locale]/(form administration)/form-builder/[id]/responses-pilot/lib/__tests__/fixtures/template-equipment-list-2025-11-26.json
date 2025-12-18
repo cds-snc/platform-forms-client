@@ -1,0 +1,105 @@
+{
+  "groups": {
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Page de confirmation",
+      "elements": []
+    },
+    "start": {
+      "name": "Start",
+      "titleEn": "Start page",
+      "titleFr": "Page de départ",
+      "elements": ["1"],
+      "nextAction": "review"
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "End (Review page and Confirmation)",
+      "titleFr": "Fin (Page récapitulative et confirmation)",
+      "elements": [],
+      "nextAction": "end"
+    }
+  },
+  "layout": [1],
+  "titleEn": "Equipment list",
+  "titleFr": "",
+  "elements": [
+    {
+      "id": 1,
+      "type": "dynamicRow",
+      "uuid": "df3e0a0f-aa04-47e5-aadb-d7e2b8d35ea0",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "List the names of the equipment you need",
+        "titleFr": "",
+        "dynamicRow": {
+          "rowTitleEn": "Entry",
+          "rowTitleFr": "Entrée",
+          "addButtonTextEn": "Add",
+          "addButtonTextFr": "Ajouter",
+          "removeButtonTextEn": "Remove",
+          "removeButtonTextFr": "Supprimer"
+        },
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [
+          {
+            "id": 101,
+            "type": "textField",
+            "uuid": "7875b71d-5dc9-49d6-b3bc-71c52c37ef43",
+            "properties": {
+              "tags": [],
+              "choices": [
+                {
+                  "en": "",
+                  "fr": ""
+                }
+              ],
+              "titleEn": "Name",
+              "titleFr": "",
+              "questionId": "",
+              "validation": {
+                "required": false
+              },
+              "subElements": [],
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          }
+        ],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "maxNumberOfRows": 50
+      }
+    }
+  ],
+  "confirmation": {
+    "descriptionEn": "",
+    "descriptionFr": "",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "groupsLayout": [],
+  "introduction": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "lastGeneratedElementId": 1
+}

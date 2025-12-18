@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 import { saveSessionProgress } from "@lib/utils/saveSessionProgress";
 
-import { type FormValues } from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";
@@ -159,7 +159,7 @@ export const Upload = ({ formId }: { formId: string }) => {
           <div className="m-10">
             <div className="flex items-center tablet:block">
               <ResumeUploadIcon className="group-focus:fill-white" />
-              <h2 className="!mb-1 p-0 !text-2xl tablet:!text-3xl">
+              <h2 className="!mb-1 !mt-0 p-0 !text-2xl tablet:!text-3xl">
                 {t("saveAndResume.resumePage.upload.title")}
               </h2>
             </div>

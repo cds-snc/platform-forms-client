@@ -132,6 +132,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
             maxLength={element.properties.validation?.maxLength}
+            allowNegativeNumbers={element.properties.allowNegativeNumbers}
           />
         </div>
       );
@@ -377,7 +378,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     case FormElementTypes.checkbox:
       return [];
     case FormElementTypes.fileInput:
-      return { name: null, size: null, based64EncodedFile: null };
+      return { name: null, size: null, content: null };
     case FormElementTypes.dynamicRow: {
       const dynamicRowInitialValue: Responses =
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {

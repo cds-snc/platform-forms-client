@@ -1,29 +1,36 @@
 import { useRef } from "react";
 
 import { type Language } from "@lib/types/form-builder-types";
-import { type FormValues } from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
+
+import { getValuesWithMatchedIds, getVisibleGroupsBasedOnValuesRecursive } from "@gcforms/core";
+
 import { type Theme } from "@clientComponents/globals/Buttons/themes";
 import { useTranslation } from "@i18n/client";
 
-import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { ReviewList } from "./ReviewList";
 import { getReviewItems } from "./helpers";
 
 import { EditButton } from "./EditButton";
-import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
+import { focusHeadingBySelector } from "@lib/client/clientHelpers";
 
 export const Review = ({ language }: { language: Language }): React.ReactElement | null => {
-  const { groups, getValues, formRecord, getGroupHistory } = useGCFormsContext();
+  const { groups, getValues, formRecord } = useGCFormsContext();
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   const { t } = useTranslation(["review", "common"]);
 
-  // Focus heading on load
-  useFocusIt({ elRef: groupsHeadingRef });
-
   const formValues: void | FormValues = getValues();
-  const groupHistoryIds = getGroupHistory();
+
   if (!formValues || !groups) throw new Error("Form values or groups are missing");
+
+  const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, formValues);
+
+  const groupHistoryIds = getVisibleGroupsBasedOnValuesRecursive(
+    formRecord,
+    valuesWithMatchedIds,
+    "start"
+  );
 
   const reviewItems = getReviewItems({
     formRecord: formRecord,
@@ -33,7 +40,17 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     language,
   });
 
-  const renderEditButton = ({ id, title, theme }: { id: string; title?: string; theme: Theme }) => {
+  const renderEditButton = ({
+    id,
+    title,
+    theme,
+    description,
+  }: {
+    id: string;
+    title?: string;
+    theme: Theme;
+    description?: string;
+  }) => {
     const editText = t("edit", { lng: language });
 
     return (
@@ -41,8 +58,9 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
         reviewItemId={id}
         theme={theme}
         onClick={() => {
-          tryFocusOnPageLoad("h2");
+          focusHeadingBySelector(["form h2", "h1"]);
         }}
+        description={description}
       >
         {title ? title : editText}
       </EditButton>

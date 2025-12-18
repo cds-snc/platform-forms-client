@@ -4,7 +4,8 @@ import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { ChoiceRule, getElementsWithRuleForChoice } from "@lib/formContext";
+import { type ChoiceRule } from "@gcforms/types";
+import { getElementsWithRuleForChoice } from "@gcforms/core";
 import { ConditionalSelector } from "@formBuilder/components/shared/conditionals/ConditionalSelector";
 import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
 import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";

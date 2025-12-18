@@ -4,7 +4,7 @@ import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 
 const ExitSvg = ({ title }: { title?: string }) => {
   return (

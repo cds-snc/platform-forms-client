@@ -21,7 +21,7 @@ import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
-import { Group } from "@lib/formContext";
+import { Group } from "@gcforms/types";
 import { TranslateCustomizeSet } from "./TranslateCustomizeSet";
 
 import { ExitUrl } from "./ExitUrl";

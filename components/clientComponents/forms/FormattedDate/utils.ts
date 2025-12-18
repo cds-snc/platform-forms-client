@@ -19,7 +19,7 @@ export const getFormattedDateFromObject = (
 
   // If the date object is invalid, return a dash
   if (!isValidDateObject(dateObject)) {
-    logMessage.info("Invalid date object", { dateObject });
+    logMessage.info(`Invalid date object: ${JSON.stringify(dateObject)}`);
     return "-";
   }
 
@@ -41,7 +41,7 @@ export const getFormattedDateFromObject = (
  */
 export const isValidDate = (dateObject: DateObject): boolean => {
   if (!isValidDateObject(dateObject)) {
-    logMessage.info("Invalid date object", { dateObject });
+    logMessage.info(`Invalid date object ${JSON.stringify(dateObject)}`);
     return false;
   }
 

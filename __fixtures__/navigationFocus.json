@@ -1,0 +1,144 @@
+{
+  "titleEn": "Navigation Focus",
+  "titleFr": "[FR]Navigation Focus",
+  "introduction": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "p",
+    "descriptionFr": "[FR]p"
+  },
+  "confirmation": {
+    "descriptionEn": "c",
+    "descriptionFr": "c",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [1, 2, 3],
+  "elements": [
+    {
+      "id": 3,
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "QB",
+        "titleFr": "[FR]QB",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      },
+      "uuid": "97d37bc1-a464-4514-9818-6dd1a416c6f2"
+    },
+    {
+      "id": 2,
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "QA",
+        "titleFr": "[FR]QA",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      },
+      "uuid": "ec3ad6f9-29a2-48da-83e7-d93b43eae478"
+    },
+    {
+      "id": 1,
+      "type": "radio",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "A",
+            "fr": "[FR]A"
+          },
+          {
+            "en": "B",
+            "fr": "[FR]B"
+          }
+        ],
+        "titleEn": "Page?",
+        "titleFr": "[FR]Page?",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      },
+      "uuid": "f86151dd-d246-4f44-9156-6058ab63229d"
+    }
+  ],
+  "groups": {
+    "start": {
+      "name": "Start",
+      "titleEn": "Start page",
+      "titleFr": "Start page",
+      "elements": ["1"],
+      "nextAction": [
+        {
+          "groupId": "bd4c615d-fef5-4a38-b1f0-c73954803867",
+          "choiceId": "1.0"
+        },
+        {
+          "groupId": "60756820-065f-42fd-9d8d-198770a46c7b",
+          "choiceId": "1.1"
+        }
+      ],
+      "autoFlow": false
+    },
+    "bd4c615d-fef5-4a38-b1f0-c73954803867": {
+      "name": "A",
+      "elements": ["2"],
+      "titleEn": "A",
+      "titleFr": "[FR]A",
+      "nextAction": "review",
+      "autoFlow": false
+    },
+    "60756820-065f-42fd-9d8d-198770a46c7b": {
+      "name": "B",
+      "elements": ["3"],
+      "titleEn": "B",
+      "titleFr": "[FR]B",
+      "nextAction": "review",
+      "autoFlow": true
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "End (Review page and Confirmation)",
+      "titleFr": "End (Review page and Confirmation)",
+      "elements": [],
+      "nextAction": "end"
+    },
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Confirmation page",
+      "elements": []
+    }
+  },
+  "groupsLayout": ["bd4c615d-fef5-4a38-b1f0-c73954803867", "60756820-065f-42fd-9d8d-198770a46c7b"],
+  "lastGeneratedElementId": 3
+}

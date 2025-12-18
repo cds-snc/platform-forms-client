@@ -35,35 +35,32 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       initialInputValue: field.value || "",
     });
 
-  /**
-   * aria-lablledby is provided by getInputProps(). Since we're not creating a lablel
-   * for the input here, we need to remove it to avoid accessibility issues.
-   */
-  const inputProps = getInputProps();
-  if ("aria-labelledby" in inputProps) {
-    delete inputProps["aria-labelledby"];
-  }
-
   return (
     <>
       <div className={classes} data-testid="combobox">
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
+        {/* Note: downshift adds and updates the role="combobox" aria-activedescendant relationship with the list below */}
         <input
-          {...inputProps}
+          {...getInputProps()}
           aria-describedby={ariaDescribedBy}
           id={id}
           required={required}
           {...(name && { name })}
           data-testid="combobox-input"
+          aria-autocomplete="list"
+          aria-haspopup="listbox"
+          aria-labelledby={`label-${id}`}
         />
 
+        {/* Note: downshift adds the role="listbox" and for the LI's below role="option" */}
         {items.length >= 1 && (
           <ul
             className={`${!(isOpen && items.length >= 1 && items[0] !== "") ? "hidden" : ""}`}
             {...getMenuProps()}
             data-testid="combobox-listbox"
             hidden={!isOpen}
+            aria-labelledby={`label-${id}`}
           >
             {isOpen &&
               items.length >= 1 &&

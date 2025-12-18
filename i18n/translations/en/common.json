@@ -46,15 +46,30 @@
     "date-invalid": "Enter a valid date.",
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
-    "file-size-too-large": "Select a smaller file.",
-    "file-size-too-large-all-files": "Files exceed the {{maxSizeInMb}} MB maximum. Upload smaller files.",
-    "file-submission": "There was a problem with the file submitted. Try uploading a different file format, such as PDF.",
+    "file-upload": {
+      "default": {
+        "heading": "There was a problem submitting your form",
+        "message": "The file {{fileName}} could not be uploaded."
+      },
+      "file-size-too-large": {
+        "message": "'{{fileName}}' is too big. Choose a file size that is less than {{maxSizeInMb}} MB."
+      },
+      "mime": {
+        "heading": "There was a problem submitting your form",
+        "message": "{{fileName}} could not be uploaded. Try saving the file in a different format and uploading it again."
+      },
+      "network-error": {
+        "heading": "There was a problem submitting your form",
+        "message": "Check your network connection and try to submit again later."
+      }
+    },
     "file-type-invalid": "Select a different file type.",
     "too-many-characters": "Shorten the response.",
     "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
     "validGovEmail": "Enter a valid government email address.",
     "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. Enter the email of the person in charge of your team. If that's you, add a colleague.",
     "min-length-4-characters": "Must be at least 4 characters.",
+    "mismatched-type": "The answer does not match the required type.",
     "MB": "MB",
     "KB": "KB",
     "bytes": "bytes",
@@ -194,7 +209,8 @@
     },
     "YYYY-MM-DD": "YYYY-MM-DD",
     "DD-MM-YYYY": "DD-MM-YYYY",
-    "MM-DD-YYYY": "MM-DD-YYYY"
+    "MM-DD-YYYY": "MM-DD-YYYY",
+    "roleDescription": "formatted date"
   },
   "start": "Start",
   "loadingResult": "Loading...",
@@ -325,6 +341,14 @@
     "removedMessage": "{{fileName}} removed"
   },
   "submitProgress": {
-    "text": "Submitting form..."
+    "text": "Submitting form...",
+    "uploadingFiles": "Uploading {{totalFiles}} files...",
+    "spinner": "Submitting form"
+  },
+  "saveFileWarning": {
+    "text": "You'll need to re-upload any files attached when you resume filling the form."
+  },
+  "confirmFileWarning": {
+    "text": "This copy of your answers will not include the files you attached to your submission."
   }
 }

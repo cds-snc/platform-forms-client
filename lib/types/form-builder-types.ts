@@ -24,22 +24,26 @@ export interface Title {
   titleFr: string;
 }
 
-export enum LocalizedGroupProperties {
-  TITLE = "title",
-}
+export const LocalizedGroupProperties = {
+  TITLE: "title",
+} as const;
+export type LocalizedGroupProperties = keyof typeof LocalizedGroupProperties;
 
-export enum LocalizedFormProperties {
-  TITLE = "title",
-  REFERRER = "referrerUrl",
-  EMAIL_SUBJECT = "emailSubject",
-}
+export const LocalizedFormProperties = {
+  TITLE: "title",
+  REFERRER: "referrerUrl",
+  EMAIL_SUBJECT: "emailSubject",
+} as const;
+export type LocalizedFormProperties = keyof typeof LocalizedFormProperties;
 
-export enum LocalizedElementProperties {
-  TITLE = "title",
-  DESCRIPTION = "description",
-  PLACEHOLDER = "placeholder",
-  EXIT_URL = "exitUrl",
-}
+export const LocalizedElementProperties = {
+  TITLE: "title",
+  DESCRIPTION: "description",
+  PLACEHOLDER: "placeholder",
+  EXIT_URL: "exitUrl",
+} as const;
+export type LocalizedElementProperties =
+  (typeof LocalizedElementProperties)[keyof typeof LocalizedElementProperties];
 
 export interface LocalizedProperty {
   <T extends string>(arg: T): `${T}${Capitalize<Language>}`;
@@ -84,18 +88,7 @@ export interface DropdownLabelProps {
 }
 
 /* https://github.com/microsoft/TypeScript/blob/main/lib/lib.dom.d.ts#L6282 */
-export interface CDSHTMLDialogElement extends HTMLElement {
-  open: boolean;
-  returnValue: string;
-  /**
-   * Closes the dialog element.
-   *
-   * The argument, if provided, provides a return value.
-   */
-  close(returnValue?: string): void;
-  /** Displays the dialog element. */
-  show(): void;
-  showModal(): void;
+export interface CDSHTMLDialogElement extends HTMLDialogElement {
   addEventListener<K extends keyof HTMLElementEventMap>(
     type: K,
     listener: (this: HTMLDialogElement, ev: HTMLElementEventMap[K]) => any, // eslint-disable-line  @typescript-eslint/no-explicit-any

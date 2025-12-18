@@ -22,7 +22,7 @@ const prismaClientSingleton = () => {
       template: {
         $allOperations({ args, query }) {
           if ("where" in args) {
-            args.where = { ...args.where, ttl: null };
+            args.where = { ttl: null, ...args.where };
           }
           return query(args);
         },
@@ -32,7 +32,6 @@ const prismaClientSingleton = () => {
 };
 
 declare global {
-  // eslint-disable-next-line no-var
   var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
 }
 
@@ -54,11 +53,11 @@ export const prismaErrors = <Error, T>(e: Error, returnValue: T): T => {
 
   // Return the backup value if a Prisma Error occurs
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
-    logMessage.info(e);
+    logMessage.info(e.message);
     return returnValue;
   }
 
   // Continue to raise the error if it is a different type of Error or not a handled Prisma Error.
-  logMessage.error(e);
+  logMessage.error(JSON.stringify(e));
   throw e;
 };

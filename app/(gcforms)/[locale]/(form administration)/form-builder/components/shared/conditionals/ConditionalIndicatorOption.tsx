@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
-import { getElementsUsingChoiceId } from "@lib/formContext";
+import { getElementsUsingChoiceId } from "@gcforms/core";
 import { FormElement } from "@lib/types";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { Button } from "@clientComponents/globals";

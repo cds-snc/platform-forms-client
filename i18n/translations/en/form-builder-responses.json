@@ -2,7 +2,7 @@
   "tabs": {
     "newResponses": {
       "title": "New responses available",
-      "message1": "Start by downloading responses. You can select multiples responses to download at once.",
+      "message1": "Start by downloading responses. You can select multiple responses to download at once.",
       "message2": "Then, sign off on their removal, as GC Forms only stores responses temporarily."
     },
     "downloadedResponses": {
@@ -209,7 +209,7 @@
     "confirmReceiptDialog": {
       "title": "Sign off on the removal of responses from GC Forms",
       "contentHeading": "GC Forms requires verification that responses were downloaded successfully",
-      "contentBody": "Why? Because things can go wrong when digital files move between computers. This step helps to verify that all files made it safely to your computer.",
+      "contentBody": "Why? Because things can go wrong when digital files move between computers. This step helps to verify that all files made it safely to your computer and that data shows up as expected, before it's removed.",
       "copyCode": "Copy-paste receipt codes from the <italic>Official Receipt and Record</italic> file",
       "copyCodeNote": "Use button at the top of the receipt file you got with the downloaded responses",
       "confirmReceipt": "Submit receipt codes",
@@ -298,19 +298,22 @@
       "description": "All submissions have been retrieved and confirmed"
     },
     "awatingDownload": {
-      "title": "Status: Awaiting retrieval",
+      "title": "Awaiting retrieval",
       "description": "Waiting for the API request to download new submissions",
       "new": "New",
       "responses": "responses",
       "available": "available"
     },
     "awatingConfirm": {
-      "title": "Status: Awaiting confirmation",
+      "title": "Awaiting confirmation",
       "description": "Waiting for the API request to confirm retrieved submissions."
     },
     "overdue": {
       "title": "Overdue responses",
       "description": "Retrieve and confirm submissions via the API"
     }
+  },
+  "responsesPilot": {
+    "responsesPilotLink": "Try out the new Responses (Pilot)"
   }
 }

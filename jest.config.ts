@@ -5,7 +5,7 @@
 import nextJest from "next/jest.js";
 import { pathsToModuleNameMapper } from "ts-jest";
 import type { Config } from "jest";
-import { compilerOptions } from "./tsconfig.json";
+import tsconfig from "./tsconfig.json" with { type: "json" };
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
@@ -15,7 +15,6 @@ const createJestConfig = nextJest({
 const customJestConfig: Config = {
   workerIdleMemoryLimit: "1G",
   testPathIgnorePatterns: [
-    "<rootDir>/cypress/",
     "<rootDir>/public/static/scripts/",
     "<rootDir>/.next/",
     "<rootDir>/node_modules/",
@@ -23,10 +22,11 @@ const customJestConfig: Config = {
     "<rootDir>/__fixtures__/",
     "<rootDir>/__tests__/",
     "<rootDir>/lib/vitests/",
+    "<rootDir>/packages/core",
   ],
   testMatch: ["/**/*.test.+(ts|tsx|js|jsx)"],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: "<rootDir>/",
     }),
     "^next-auth(/?.*)$": "<rootDir>/__utils__/mocks/next-auth",
@@ -50,7 +50,10 @@ const customJestConfig: Config = {
 
 const jestConfig = async () => ({
   ...(await createJestConfig(customJestConfig)()),
-  transformIgnorePatterns: ["/node_modules/(?!(next-auth|@auth|jose)/)"],
+  // Allow Jest to transform ESM modules that use import/export
+  transformIgnorePatterns: [
+    "/node_modules/(?!(next-auth|@auth|jose|react-error-boundary|@lexical/.*|lexical)/)",
+  ],
 });
 
 export default jestConfig;

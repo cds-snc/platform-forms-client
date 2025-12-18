@@ -52,19 +52,25 @@ export const SaveAndResume = ({ formId, language }: { formId: string; language: 
           <>{t("saveAndResume.more")}...</>
         </Button>
       </span>
-      <ConfirmDownloadDialog
-        type="progress"
-        language={language}
-        open={confirm}
-        handleClose={() => setConfirm(false)}
-      />
-      <MobileDrawer
-        drawerOpen={drawerOpen}
-        setDrawerOpen={setDrawerOpen}
-        formId={formId}
-        language={language}
-        type="progress"
-      />
+
+      {confirm && (
+        <ConfirmDownloadDialog
+          type="progress"
+          language={language}
+          open={confirm}
+          handleClose={() => setConfirm(false)}
+        />
+      )}
+
+      {drawerOpen && (
+        <MobileDrawer
+          drawerOpen={drawerOpen}
+          setDrawerOpen={setDrawerOpen}
+          formId={formId}
+          language={language}
+          type="progress"
+        />
+      )}
     </div>
   );
 };

@@ -20,17 +20,19 @@ import {
   updateSecurityAttribute,
   updateFormPurpose,
   updateFormSaveAndResume,
+  getFormJSONConfig,
+  updateFormJsonConfig,
 } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import { getFullTemplateByID } from "@lib/templates";
-import { isValidEmail } from "@lib/validation/isValidEmail";
+import { isValidEmail } from "@gcforms/core";
 import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
-import { NotificationsInterval } from "@gcforms/types";
+import { BrandProperties, NotificationsInterval } from "@gcforms/types";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -62,8 +64,6 @@ export const createOrUpdateTemplate = AuthenticatedAction(
     error?: string;
   }> => {
     try {
-      revalidatePath("/[locale]/forms", "page");
-
       if (id) {
         return await updateTemplate({
           id,
@@ -88,6 +88,9 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       if (!formRecord) {
         throw new Error("Failed to create template");
       }
+      // revalidatePath must be at the end of a function.  It leverages the error object to trigger
+      // and internal refresh and can have awkward results if used before an error is thrown by a following fn.
+      revalidatePath("/[locale]/forms", "page");
 
       return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
     } catch (_) {
@@ -515,3 +518,50 @@ Pour prévisualiser ce formulaire :
     }
   }
 );
+
+export const updateBranding = AuthenticatedAction(
+  async (
+    _,
+    {
+      formId,
+      branding,
+    }: {
+      formId: string;
+      branding: BrandProperties | undefined;
+    }
+  ): Promise<{
+    formRecord: { id: string; updatedAt: string | undefined } | null;
+    error?: string;
+  }> => {
+    try {
+      const formConfig = await getFormJSONConfig(formId);
+
+      if (!formConfig) {
+        throw new Error(`Failed to get template for branding update with formId ${formId}`);
+      }
+
+      const updatedFormConfig: FormProperties = {
+        ...formConfig,
+        brand: branding,
+      };
+      const formRecord = await updateFormJsonConfig(formId, updatedFormConfig);
+
+      if (!formRecord) {
+        throw new Error(`Failed to update template for branding update with formId ${formId}`);
+      }
+
+      return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
+    } catch (_) {
+      return { formRecord: null, error: "error" };
+    }
+  }
+);
+
+export async function getFormTemplate(id: string) {
+  try {
+    const formConfig = await getFormJSONConfig(id);
+    return { formRecord: formConfig, error: null };
+  } catch (_) {
+    return { formRecord: null, error: "error" };
+  }
+}

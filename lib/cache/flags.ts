@@ -2,8 +2,8 @@ import { getRedisInstance } from "@lib/integration/redisConnector";
 import flagInitialSettings from "../flags/default_flag_settings.json";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
-import { logEvent } from "@lib/auditLogs";
-import { FeatureFlagKeys, FeatureFlags, PickFlags } from "./types";
+import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
+import { FeatureFlagKeys, FeatureFlags, Flags, PickFlags } from "./types";
 
 /**
  * Enables an Application Setting Flag
@@ -12,7 +12,13 @@ import { FeatureFlagKeys, FeatureFlags, PickFlags } from "./types";
 export const enableFlag = async (key: string): Promise<void> => {
   const { user } = await authorization.canManageFlags().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(e.user.id, { type: "Flag", id: key }, "AccessDenied", `Attempted to enable ${key}`);
+      logEvent(
+        e.user.id,
+        { type: "Flag", id: key },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToEnableFlag,
+        { flagKey: key }
+      );
     }
     throw e;
   });
@@ -28,7 +34,13 @@ export const enableFlag = async (key: string): Promise<void> => {
 export const disableFlag = async (key: string): Promise<void> => {
   const { user } = await authorization.canManageFlags().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(e.user.id, { type: "Flag", id: key }, "AccessDenied", `Attempted to disable ${key}`);
+      logEvent(
+        e.user.id,
+        { type: "Flag", id: key },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToDisableFlag,
+        { flagKey: key }
+      );
     }
     throw e;
   });
@@ -49,6 +61,10 @@ const getKeys = async (): Promise<FeatureFlagKeys[]> => {
  * @returns Boolean value of Flag key
  */
 export const checkOne = async (key: string): Promise<boolean> => {
+  // If in test mode return true for any flag
+  if (process.env.APP_ENV === "test") {
+    return true;
+  }
   // If REDIS is not configured return the default values for the flags
   if (!process.env.REDIS_URL) {
     return (flagInitialSettings as Record<string, boolean>)[key];
@@ -63,15 +79,8 @@ export const checkOne = async (key: string): Promise<boolean> => {
  * @param ability User's Ability Instance
  * @returns An object of {flag: value ...}
  */
-export const checkAll = async (): Promise<{ [k: string]: boolean }> => {
-  const { user } = await authorization.canManageFlags().catch((e) => {
-    if (e instanceof AccessControlError) {
-      logEvent(e.user.id, { type: "Flag" }, "AccessDenied", "Attemped to list all Feature Flags");
-    }
-    throw e;
-  });
+export const checkAll = async (): Promise<Flags> => {
   const keys = await getKeys();
-  logEvent(user.id, { type: "Flag" }, "ListAllFlags");
   return checkMulti(keys);
 };
 
@@ -82,7 +91,11 @@ const checkMulti = async <T extends FeatureFlagKeys[]>(keys: T): Promise<PickFla
   const values = await redis.mget(keys.map((key) => `flag:${key}`));
 
   const mapped = keys.reduce((acc, key, index) => {
-    acc.set(key, values[index] === "1");
+    if (process.env.APP_ENV === "test") {
+      acc.set(key, true);
+    } else {
+      acc.set(key, values[index] === "1");
+    }
     return acc;
   }, new Map<string, boolean>());
 

@@ -15,9 +15,20 @@ import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGr
 import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
 import { useState } from "react";
-import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
+import {
+  email,
+  minLength,
+  object,
+  safeParse,
+  string,
+  toLowerCase,
+  trim,
+  pipe,
+  check,
+} from "valibot";
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+import { isValidGovEmail } from "@root/lib/validation/validation";
 
 export const SupportForm = () => {
   const {
@@ -47,7 +58,8 @@ export const SupportForm = () => {
         toLowerCase(),
         trim(),
         minLength(1, t("input-validation.required")),
-        email(t("input-validation.email"))
+        email(t("input-validation.email")),
+        check((email) => isValidGovEmail(email), t("input-validation.validGovEmail"))
       ),
       // radio input can send a non-string value when empty
       request: pipe(
@@ -91,7 +103,7 @@ export const SupportForm = () => {
             <ValidationMessage
               type={ErrorStatus.ERROR}
               validation={true}
-              tabIndex={0}
+              focussable={true}
               id="validationErrors"
               heading={t("input-validation.heading", { ns: "common" })}
             >
@@ -130,7 +142,14 @@ export const SupportForm = () => {
               <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
             </p>
           </Alert.Warning>
-          <form id="support" action={submitForm} noValidate>
+          <form
+            id="support"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitForm(new FormData(e.currentTarget));
+            }}
+            noValidate
+          >
             {errors.error && (
               <Alert.Danger focussable={true} title={t("error")} className="my-2">
                 <p>{t(errors.error)}</p>

@@ -22,6 +22,9 @@ env:
   COGNITO_USER_POOL_ID: ${{ secrets.STAGING_COGNITO_USER_POOL_ID}}
   GITHUB_SHA: ${{ github.sha }}
   HCAPTCHA_SITE_KEY: ${{ vars.STAGING_HCAPTCHA_SITE_KEY }}
+  ZITADEL_URL: https://auth.forms-staging.cdssandbox.xyz
+  ZITADEL_PROJECT_ID: "275372254274006635"
+  API_URL: https://api.forms-staging.cdssandbox.xyz
 
 permissions:
   id-token: write
@@ -51,10 +54,10 @@ jobs:
         run: echo "PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
 
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
       - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-pr-review-env
           role-session-name: PRReviewECRPush
@@ -71,6 +74,9 @@ jobs:
             --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
             --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
             --build-arg HCAPTCHA_SITE_KEY=$HCAPTCHA_SITE_KEY \
+            --build-arg ZITADEL_URL=$ZITADEL_URL \
+            --build-arg ZITADEL_PROJECT_ID=$ZITADEL_PROJECT_ID \
+            --build-arg API_URL=$API_URL \
             --build-arg NEXT_DEPLOYMENT_ID=$GITHUB_SHA .
 
       - name: Push Docker image to ECR
@@ -96,7 +102,7 @@ jobs:
         run: echo "PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
 
       - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-pr-review-env
           role-session-name: PRReviewDeploy
@@ -123,10 +129,15 @@ jobs:
             aws lambda wait function-active --function-name $FUNCTION_NAME-$PR_NUMBER
             aws lambda add-permission \
               --function-name $FUNCTION_NAME-$PR_NUMBER \
-              --statement-id FunctionURLAllowPublicAccess \
+              --statement-id AllowPublicInvokeFunctionUrl \
               --action lambda:InvokeFunctionUrl \
               --principal "*" \
               --function-url-auth-type NONE > /dev/null 2>&1
+            aws lambda add-permission \
+              --function-name $FUNCTION_NAME-$PR_NUMBER \
+              --statement-id AllowPublicInvokeFunction \
+              --action lambda:InvokeFunction \
+              --principal "*" > /dev/null 2>&1
 
             URL="$(aws lambda create-function-url-config --function-name $FUNCTION_NAME-$PR_NUMBER --auth-type NONE | jq .FunctionUrl)"
             echo "URL=$URL" >> $GITHUB_ENV

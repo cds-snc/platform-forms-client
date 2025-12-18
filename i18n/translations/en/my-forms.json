@@ -3,11 +3,14 @@
   "nav": {
     "drafts": "Drafts",
     "published": "Published",
-    "all": "All"
+    "all": "All",
+    "archived": "Archived"
   },
   "actions": {
     "resumeForm": "Resume editing form",
-    "createNewForm": "Create new form"
+    "createNewForm": "Create new form",
+    "unarchiveForm": "Restore form",
+    "duplicatePublishedForm": "Duplicate to edit and republish"
   },
   "cards": {
     "noForms": "You have no forms.",
@@ -17,27 +20,35 @@
   "card": {
     "states": {
       "draft": "Draft",
-      "published": "Published"
+      "published": "Published",
+      "archived": "Archived"
     },
     "title": {
       "notTranslatedEn": "No English translation",
       "notTranslatedFr": "No French translation"
     },
     "lastEdited": "Last edited",
+    "deleteDate": " Delete date: ",
+    "deletedIn": "Will be deleted in ",
+    "days": " days",
     "deliveryOption": {
       "email": "Responses get sent to:",
       "vault": "Responses page"
     },
     "menu": {
       "more": "More",
-      "save": "Save to computer",
+      "save": "Download copy",
       "copyLink": "Copy link",
       "preview": "Preview",
       "edit": "Edit",
       "settings": "Settings",
       "delete": "Delete",
+      "archive": "Archive",
       "coppiedToClipboard": "Copied to clipboard",
-      "somethingWentWrong": "Something went wrong"
+      "somethingWentWrong": "Something went wrong",
+      "clone": "Duplicate",
+      "cloneSuccess": "Form was duplicated.",
+      "cloneFailed": "Form could not be duplicated."
     },
     "actionRequired": {
       "description": "Action required: ",
@@ -72,7 +83,7 @@
     "useTheCopy": "Use the “Copy all receipt codes” button to copy and paste all the codes, signing off on the removal of these responses from GC Forms.",
     "copyCodes": {
       "title": "Sign off on removal of responses from GC Forms",
-      "description": "Once you've checked the downloaded responses, and are ready to remove these from GC Forms, copy and paste the receipt codes. This helps us know when responses have been transferred to you so we can remove the data from our system.",
+      "description": "Once you've checked the downloaded responses, and are ready to remove these from GC Forms, copy and paste the receipt codes. This action tells us you've taken custody of the data and lets us know that the data can be removed from our system.",
       "copyButton": "Copy all receipt codes"
     },
     "goToGcForms": "Go to GC Forms to sign off on removal",
@@ -93,6 +104,9 @@
   "navLabel": "Forms navigation",
   "errors": {
     "formDownloadNotExist": "The form you are trying to download does not exist.",
-    "formDownloadFailed": "Failed to download the form."
-  }
+    "formDownloadFailed": "Failed to download the form.",
+    "formUnarchiveFailed": "Failed to restore the form."
+  },
+  "archivedNotice": "You can access archived forms for 30 days.",
+  "archivedNotice2": "After that, forms will be permanently deleted."
 }

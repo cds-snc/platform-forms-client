@@ -14,7 +14,6 @@ export const CurrentGroupSelector = () => {
     <div className="relative ml-2 inline-block">
       <button
         style={{
-          // @ts-expect-error - CSS anchor positioning is not in the types yet
           anchorName: "--group-menu-trigger",
         }}
         type="button"

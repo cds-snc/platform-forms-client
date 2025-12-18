@@ -9,7 +9,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { cleanInput } from "@lib/utils/form-builder";
 import { useRefsContext } from "../../RefsContext";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 export const QuestionInput = ({
   index,
@@ -18,6 +18,7 @@ export const QuestionInput = ({
   onQuestionChange,
   describedById,
   placeholder = "question",
+  isInvalid = false,
 }: {
   index: number;
   id: number;
@@ -25,11 +26,12 @@ export const QuestionInput = ({
   onQuestionChange: (itemId: number, val: string, lang: Language) => void;
   describedById?: string;
   placeholder?: string;
+  isInvalid?: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
 
-  const { treeView } = useTreeRef();
+  const { headlessTree } = useTreeRef();
 
   const { refs } = useRefsContext();
   const getRef = (element: HTMLTextAreaElement) => {
@@ -91,11 +93,12 @@ export const QuestionInput = ({
       describedBy={describedById ?? undefined}
       onBlur={() => {
         updateValue(id, cleanInput(value));
-        treeView?.current?.updateItem(String(id), cleanInput(value));
+        headlessTree?.current?.rebuildTree();
       }}
       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateValue(id, e.target.value)}
       {...getLocalizationAttribute()}
       ariaLabel={t(placeholder)}
+      isInvalid={isInvalid}
     />
   );
 };

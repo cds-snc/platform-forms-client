@@ -1,0 +1,129 @@
+"use client";
+import React from "react";
+import { useTranslation } from "@i18n/client";
+import { Button } from "@clientComponents/globals";
+import { getFormEvents } from "../actions";
+import { getDate, slugify } from "@lib/client/clientHelpers";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+
+export const AuditForm = ({ formId }: { formId: string }) => {
+  const { t, i18n } = useTranslation("form-builder");
+
+  const { form } = useTemplateStore((s) => ({
+    form: s.form,
+  }));
+
+  const { getFlag } = useFeatureFlags();
+  const canPerformUsersideAudit = getFlag("userSideAuditLogs");
+
+  function retrieveFileBlob(
+    events: {
+      userId: string;
+      event: string;
+      timestamp: string;
+      description: string;
+    }[],
+    name?: string
+  ) {
+    try {
+      const columns = ["formId", "userId", "event", "timestamp", "description"];
+      const headers = [
+        t("auditDownload.headers.formId"),
+        t("auditDownload.headers.userId"),
+        t("auditDownload.headers.event"),
+        t("auditDownload.headers.timestamp"),
+        t("auditDownload.headers.description"),
+      ];
+      const csvHeader = headers.join(",") + "\r\n";
+
+      const csvRows = events
+        .map((row) => {
+          return columns
+            .map((columns) => {
+              const key = columns as keyof typeof row;
+              let value = row[key];
+              if (typeof value === "string") {
+                if (key === "event") {
+                  value = `"${t(`auditDownload.events.${row.event}`)}"`; // Translate event names
+                }
+                if (key == "description") {
+                  // eventDesc contains the actual description text inside a JSON string
+                  // the rest are parameters for interpolation
+                  try {
+                    const descObj = JSON.parse(value);
+                    const eventDesc = descObj.eventDesc;
+                    delete descObj.eventDesc;
+
+                    // Loop through the params and translate them if they exist as a translation key
+                    Object.keys(descObj).forEach((paramKey) => {
+                      const paramValue = descObj[paramKey];
+                      const translatedParam = t(`auditDownload.eventParams.${paramValue}`);
+                      if (translatedParam !== `auditDownload.eventParams.${paramValue}`) {
+                        descObj[paramKey] = translatedParam;
+                      }
+                    });
+
+                    value = String(t(`auditDownload.eventDetails.${eventDesc}`, descObj));
+                  } catch {
+                    // Fallback to raw value if parsing fails
+                  }
+                }
+                // Escape double quotes by doubling them and wrap the whole string in double quotes.
+                value = `"${value.replace(/"/g, '""')}"`;
+              }
+              return value;
+            })
+            .join(",");
+        })
+        .join("\r\n");
+
+      const csvContent = "\uFEFF" + csvHeader + csvRows;
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const fileName = name
+        ? name
+        : i18n.language === "fr"
+          ? form.titleFr + "-JournalAudit-fr"
+          : form.titleEn + "-AuditLog-en";
+
+      a.href = url;
+      a.download = slugify(`${fileName}-${getDate()}`) + ".csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      alert(t("auditDownload.errorCreatingDownload"));
+    }
+  }
+
+  const handleFormAudit = async (formId: string) => {
+    const events = await getFormEvents(formId);
+    if (Array.isArray(events)) {
+      if (events.length === 0) {
+        alert(t("auditDownload.noEvents"));
+      } else {
+        retrieveFileBlob(events);
+      }
+    } else {
+      alert(t("auditDownload.errorFetchingEvents"));
+    }
+  };
+
+  return (
+    <>
+      {canPerformUsersideAudit && (
+        <div id="download-form" className="mb-10">
+          <h2>{t("auditDownload.title")}</h2>
+          <p className="mb-4" id="download-hint">
+            {t("auditDownload.description")}
+          </p>
+
+          <Button onClick={() => handleFormAudit(formId)} theme="primary">
+            {t("auditDownload.downloadBtnText")}
+          </Button>
+        </div>
+      )}
+    </>
+  );
+};

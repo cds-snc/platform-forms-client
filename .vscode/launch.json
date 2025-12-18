@@ -5,12 +5,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Next.js: Cypress server-side",
-      "type": "node-terminal",
-      "request": "launch",
-      "command": "yarn dev:test"
-    },
-    {
       "name": "vscode-jest-tests",
       "type": "node",
       "request": "launch",
@@ -36,6 +30,12 @@
         "webpack-internal:///(ssr)/./*": "${workspaceFolder}/*",
         "turbopack:///[project]/*": "${workspaceFolder}/*"
       }
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000"
     }
   ]
 }

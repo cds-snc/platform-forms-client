@@ -8,8 +8,10 @@ export const RichText = () => {
 
   return (
     <div>
-      <h3 className="mb-0">{t("addElementDialog.richText.title")}</h3>
-      <p>{t("addElementDialog.richText.description")}</p>
+      <h3 className="mb-0" data-testid="element-description-title">
+        {t("addElementDialog.richText.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.richText.description")}</p>
 
       <ExampleWrapper className="mt-4">
         <div className="mb-5 mt-2">

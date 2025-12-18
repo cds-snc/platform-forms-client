@@ -30,9 +30,13 @@
       "title": "Bannière",
       "description": "Activer la bannière d'avertissement pour qu'elle soit visible"
     },
-    "fileUpload": {
-      "title": "Téléversement de fichier",
-      "description": "Activer le téléverseur de fichier en tant qu'élément pouvant être ajouté à un formulaire"
+    "responsesPilot": {
+      "title": "Réponses (Pilote)",
+      "description": "Activer le nouveau flux pour le téléchargement des réponses dans le navigateur avec une clé API."
+    },
+    "userSideAuditLogs": {
+      "title": "Téléchargement de l'activité du formulaire",
+      "description": "Activer le téléchargement des actions clés récentes dans un formulaire (au cours des 30 derniers jours) dans les Paramètres"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",
@@ -44,7 +48,7 @@
   "select-features": "Sélectionner les fonctionnalités",
   "add": "Ajouter",
   "cancel": "Annuler",
-  "remove": "Supprimer",
+  "remove": "Enlever",
   "userFlagHeader": "Contrôle des indicateurs de fonctionnalité spécifique à l'utilisateur",
   "userFlagSubHeader": "Ce paramètre remplace le statut de l'indicateur de fonctionnalité et donnera à un utilisateur spécifique l'accès à une fonctionnalité.",
   "noUserFlags": "Aucun indicateur de fonctionnalité utilisateur défini."

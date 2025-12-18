@@ -15,15 +15,28 @@ export const LoginForm = () => {
     i18n: { language },
   } = useTranslation(["login", "cognito-errors", "common"]);
 
-  const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
+  const localFormAction = async (_: ErrorStates, formData: FormData) => {
+    const formEntries = {
+      username: (formData.get("username") as string) || "",
+      password: (formData.get("password") as string) || "",
+    };
+
     const result = await login(language, _, formData);
     if (result.authFlowToken) {
       sessionStorage.setItem("authFlowToken", JSON.stringify(result.authFlowToken));
       router.push(`/${language}/auth/mfa`);
     }
-    return result;
+    return {
+      ...result,
+      formData: formEntries,
+    };
   };
-  const [state, formAction] = useActionState(localFormAction, {});
+  const [state, formAction] = useActionState(localFormAction, {
+    formData: {
+      username: "",
+      password: "",
+    },
+  });
   const router = useRouter();
 
   return (
@@ -89,6 +102,7 @@ export const LoginForm = () => {
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "username")?.fieldValue
             }
+            defaultValue={state.formData?.username || ""}
           />
         </div>
         <div className="gcds-input-wrapper">
@@ -104,6 +118,7 @@ export const LoginForm = () => {
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "password")?.fieldValue
             }
+            defaultValue={state.formData?.password || ""}
           />
         </div>
         <p className="mb-10">

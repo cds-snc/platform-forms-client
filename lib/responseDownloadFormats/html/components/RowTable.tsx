@@ -16,7 +16,10 @@ const QuestionRows = ({
   const { t } = customTranslate("common");
   const renderColumn = (index: number, lang: string, item: Answer, subItem = false) => {
     return (
-      <div className={`flex ${subItem ? "flex-row" : "flex-col"} border-b border-gray`}>
+      <div
+        key={`row-${index}`}
+        className={`flex ${subItem ? "flex-row" : "flex-col"} border-b border-gray`}
+      >
         <dt className="whitespace-nowrap border-b-2 border-gray p-4 font-bold">
           {String(item[getProperty("question", lang)])}
           {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
@@ -41,6 +44,8 @@ const QuestionRows = ({
 
   const answers = submission.answers.map((item, index) => {
     if (typeof item.answer === "string") {
+      return renderColumn(index, lang, item);
+    } else if (typeof item.answer === "object" && !Array.isArray(item.answer)) {
       return renderColumn(index, lang, item);
     } else {
       return (

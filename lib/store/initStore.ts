@@ -1,7 +1,7 @@
 import { TemplateStoreProps, InitialTemplateStoreProps } from "./types";
 import { Language } from "../types/form-builder-types";
 import { defaultForm } from "./defaults";
-import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
+import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { NotificationsIntervalDefault } from "@gcforms/types";
 

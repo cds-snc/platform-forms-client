@@ -1,11 +1,8 @@
-FROM node:22-alpine as base
+FROM node:22-alpine AS base
 
 ENV NODE_ENV=production
 ENV NEXT_OUTPUT_STANDALONE=true
 ENV NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY=UR78-BU29-RU35-EP49 
-
-# 10 MB --- alllow more for the main deployment
-ENV NEXT_PUBLIC_BODY_SIZE_LIMIT_WITH_FILES=10485760
 
 COPY . /src
 WORKDIR /src
@@ -22,12 +19,21 @@ ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
 ARG HCAPTCHA_SITE_KEY
 ENV NEXT_PUBLIC_HCAPTCHA_SITE_KEY=$HCAPTCHA_SITE_KEY
 
+ARG ZITADEL_URL
+ENV NEXT_PUBLIC_ZITADEL_URL=$ZITADEL_URL
+
+ARG ZITADEL_PROJECT_ID
+ENV NEXT_PUBLIC_ZITADEL_PROJECT_ID=$ZITADEL_PROJECT_ID
+
+ARG API_URL
+ENV NEXT_PUBLIC_API_URL=$API_URL
+
 RUN corepack enable && yarn set version stable
 RUN yarn workspaces focus gcforms
 RUN yarn build
 RUN yarn workspaces focus gcforms --production
 
-FROM node:22-alpine as final
+FROM node:22-alpine AS final
 LABEL maintainer="-"
 
 ENV PORT 3000

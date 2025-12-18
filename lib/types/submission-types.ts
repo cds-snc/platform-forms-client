@@ -8,12 +8,9 @@ export interface SubmissionRequestBody {
   [key: string]: Response;
 }
 
-export type SubmissionParsedRequest = {
-  fields: Record<string, Response>;
-  files: Record<string, ProcessedFile | ProcessedFile[]>;
-};
+export type SignedURLMap = Record<string, PostSignedURL>;
 
-export interface ProcessedFile {
-  name: string;
-  buffer: Buffer;
-}
+type PostSignedURL = {
+  url: string;
+  fields: Record<string, string>;
+};

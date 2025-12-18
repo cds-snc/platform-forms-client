@@ -9,8 +9,10 @@ export const Radio = () => {
 
   return (
     <>
-      <h3 className="mb-0">{t("addElementDialog.radio.title")}</h3>
-      <p>{t("addElementDialog.radio.description")}</p>
+      <h3 className="mb-0" data-testid="element-description-title">
+        {t("addElementDialog.radio.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.radio.description")}</p>
 
       <ExampleWrapper className="mt-4">
         <FormGroup name={"radios"}>

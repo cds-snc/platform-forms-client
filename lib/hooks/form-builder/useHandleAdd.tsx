@@ -6,6 +6,7 @@ import { blockLoader } from "../../utils/form-builder/blockLoader";
 import { elementLoader } from "@lib/utils/form-builder/elementLoader";
 import { logMessage } from "@lib/logger";
 import { getDefaultFileGroupTypes } from "@lib/fileInput/fileGroupsToFileTypes";
+import { MAX_DYNAMIC_ROW_AMOUNT } from "@root/constants";
 
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import {
@@ -14,15 +15,15 @@ import {
   setDescription,
   setTitle,
 } from "@lib/utils/form-builder/itemHelper";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import {
   getTranslatedElementProperties,
   getTranslatedDynamicRowProperties,
 } from "@formBuilder/actions";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTranslation } from "@i18n/client";
 import { v4 as uuid } from "uuid";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 export const useHandleAdd = () => {
   const { add, addSubItem, setChangeKey } = useTemplateStore((s) => ({
@@ -33,7 +34,7 @@ export const useHandleAdd = () => {
 
   const { t } = useTranslation("form-builder");
 
-  const { treeView } = useTreeRef();
+  const { headlessTree } = useTreeRef();
 
   const groupId = useGroupStore((state) => state.id);
 
@@ -67,7 +68,7 @@ export const useHandleAdd = () => {
 
   const loadError = t("failedToReadFormFile");
 
-  /* Note this callback is also in ElementPanel */
+  // Note: For Sub elements see handleAddSubElement (below)
   const handleAddElement = useCallback(
     async (index: number, type?: FormElementTypes) => {
       let id;
@@ -97,16 +98,22 @@ export const useHandleAdd = () => {
       }
 
       const item = await create(type as FormElementTypes);
-      if (item.type === "dynamicRow") {
-        item.properties.dynamicRow = await getTranslatedDynamicRowProperties();
-      }
 
-      if (item.type === FormElementTypes.fileInput) {
-        item.properties.fileType = getDefaultFileGroupTypes();
+      // Set default properties based on element type
+      switch (item.type) {
+        case FormElementTypes.fileInput:
+          item.properties.fileType = getDefaultFileGroupTypes();
+          break;
+        case FormElementTypes.dynamicRow:
+          item.properties.dynamicRow = await getTranslatedDynamicRowProperties();
+          item.properties.maxNumberOfRows = MAX_DYNAMIC_ROW_AMOUNT;
+          break;
+        default:
+          break;
       }
 
       id = await add(index, item.type, item, groupId);
-      treeView?.current?.addItem(String(id));
+      headlessTree?.current?.rebuildTree();
 
       const el = document.getElementById(`item-${id}`);
 
@@ -118,9 +125,10 @@ export const useHandleAdd = () => {
 
       el?.focus();
     },
-    [add, create, groupId, treeView, loadError]
+    [add, create, groupId, headlessTree, loadError]
   );
 
+  // Handle adding a sub-element
   const handleAddSubElement = useCallback(
     async (elId: number, subIndex: number, type?: FormElementTypes) => {
       let id;
@@ -156,8 +164,13 @@ export const useHandleAdd = () => {
 
       const item = await create(type as FormElementTypes);
 
-      if (item.type === FormElementTypes.fileInput) {
-        item.properties.fileType = getDefaultFileGroupTypes();
+      // Set default properties based on element type
+      switch (item.type) {
+        case FormElementTypes.fileInput:
+          item.properties.fileType = getDefaultFileGroupTypes();
+          break;
+        default:
+          break;
       }
 
       id = await addSubItem(elId, subIndex, item.type, item);

@@ -2,8 +2,8 @@
 import React from "react";
 
 import { FormElement } from "@lib/types";
-import { GroupsType } from "@lib/formContext";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { type GroupsType } from "@gcforms/types";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SingleActionSelect } from "./SingleActionSelect";

@@ -2,6 +2,7 @@
 import React from "react";
 import { cn } from "@lib/utils";
 import { ProtectedIcon } from "@serverComponents/icons";
+import { useTranslation } from "@i18n/client";
 
 export const classificationOptions = [
   { value: "Unclassified", en: "UNCLASSIFIED", fr: "NON CLASSIFIÉ" },
@@ -36,8 +37,11 @@ export const ClassificationSelect = ({
   disabled,
   ...rest
 }: ClassificationSelectProps) => {
+  const { t } = useTranslation("form-builder");
+
   return (
-    <div>
+    <div className="mb-10">
+      <h2>{t("settingsResponseDelivery.selectClassification")}</h2>
       <ProtectedIcon
         className={cn("mr-2 inline-block fill-black", disabled ? "fill-slate-400" : "")}
       />
@@ -48,7 +52,7 @@ export const ClassificationSelect = ({
         className={cn(
           "form-builder-dropdown my-0 inline-block min-w-[200px] text-black-default",
           className,
-          disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+          isPublished || disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
         )}
         onChange={(evt: React.ChangeEvent<HTMLSelectElement>) => {
           const val = evt.target.value;

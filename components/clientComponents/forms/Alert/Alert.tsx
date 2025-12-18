@@ -80,7 +80,7 @@ export const Alert = ({
         </Button>
       ) : null}
       <div className="gc-alert__body">
-        {heading && <h2 className="!mt-0">{heading}</h2>}
+        {typeof heading === "string" && <h2 className="!mt-0">{heading}</h2>}
         {children && (validation ? children : <div className="gc-alert__text">{children}</div>)}
       </div>
       {cta && <div>{cta}</div>}
