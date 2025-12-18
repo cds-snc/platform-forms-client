@@ -41,6 +41,7 @@
     "test:watch:vitest": "vitest --watch",
     "test:watch": "DEBUG_PRINT_LIMIT=10000  jest --watch",
     "playwright": "playwright test --ui",
+    "playwright:run:headless": "CI=true playwright test",
     "playwright:run": "playwright test",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
   },
