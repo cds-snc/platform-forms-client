@@ -81,8 +81,7 @@ jobs:
             playwright-${{ runner.os }}-
 
       - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install msedge --with-deps
+        run: npx playwright install chromium --with-deps
 
       - name: Run Playwright Tests
         run: yarn playwright:run

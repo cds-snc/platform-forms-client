@@ -47,10 +47,9 @@ export default defineConfig({
       testMatch: "**/auth-admin.setup.ts",
     },
     {
-      name: "Microsoft Edge",
+      name: "Chromium",
       use: {
-        ...devices["Desktop Edge"],
-        channel: "msedge",
+        ...devices["Desktop Chromium"],
         headless: !!process.env.CI, // Run headless only in CI
         launchOptions: {
           // Small slowMo only in CI to help with React state synchronization
