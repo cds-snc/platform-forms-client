@@ -6,6 +6,7 @@ import {
   MALICIOUS_ATTACHMENTS_FOLDER,
   MAPPING_FILENAME,
   RAW_RESPONSE_FOLDER,
+  SOURCE_FOLDER,
 } from "./constants";
 import { FormProperties } from "@root/lib/types";
 import { GCFormsApiClient } from "./apiClient";
@@ -139,9 +140,12 @@ const downloadAndConfirmResponse = async ({
   responseName: string;
   logger: ResponseDownloadLogger;
 }) => {
-  // Get or create raw data directory
+  // Get or create source directory, then raw data directory within it
+  const sourceDirectoryHandle: FileSystemDirectoryHandle =
+    await workingDirectoryHandle.getDirectoryHandle(SOURCE_FOLDER, { create: true });
+
   const dataDirectoryHandle: FileSystemDirectoryHandle =
-    await workingDirectoryHandle.getDirectoryHandle(RAW_RESPONSE_FOLDER, { create: true });
+    await sourceDirectoryHandle.getDirectoryHandle(RAW_RESPONSE_FOLDER, { create: true });
 
   // Retrieve encrypted response from API
   const encryptedSubmission = await withRetry(() => apiClient.getFormSubmission(responseName), {
