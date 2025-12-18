@@ -67,7 +67,7 @@ describe("fileChecksum", () => {
         content: null,
       } as unknown as FileInput;
 
-      expect(calculateFileChecksum(file)).rejects.toThrow(
+      await expect(calculateFileChecksum(file)).rejects.toThrow(
         "Unable to calculate checksum for file test.txt: no content available"
       );
     });

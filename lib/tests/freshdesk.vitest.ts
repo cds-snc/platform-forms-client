@@ -1,6 +1,8 @@
-jest.mock("node-fetch", () => jest.fn());
-jest.mock("@lib/origin", () => ({
-  getOrigin: jest.fn().mockReturnValue("http://localhost:3000"),
+import { describe, it, expect, vi } from "vitest";
+
+vi.mock("node-fetch", () => vi.fn());
+vi.mock("@lib/origin", () => ({
+  getOrigin: vi.fn().mockReturnValue("http://localhost:3000"),
 }));
 
 const baseData = {
@@ -14,26 +16,26 @@ const baseData = {
 import { tagHost, formatTicketData } from "@lib/integration/freshdesk";
 
 describe("Host tag", () => {
-  test("localhost returns Dev tag", () => {
+  it("localhost returns Dev tag", () => {
     expect(tagHost("http://localhost:3000")).toBe("Forms_Dev");
   });
 
-  test("staging url returns Staging tag", () => {
+  it("staging url returns Staging tag", () => {
     expect(tagHost("https://forms-staging.cdssandbox.xyz")).toBe("Forms_Staging");
   });
 
-  test("staging url returns Staging tag", () => {
+  it("staging url returns Staging tag", () => {
     expect(tagHost("https://forms-staging.cdssandbox.xyz")).toBe("Forms_Staging");
   });
 
-  test("production url returns Production tag", () => {
+  it("production url returns Production tag", () => {
     expect(tagHost("https://forms-formulaires.alpha.canada.ca")).toBe("Forms_Production");
     expect(tagHost("https://forms-formulaires.canada.ca")).toBe("Forms_Production");
   });
 });
 
 describe("Formats ticket data", () => {
-  test("branding request generates correct data", () => {
+  it("branding request generates correct data", () => {
     const brandingData = formatTicketData({
       type: "branding",
       name: "Test Name - brand",
@@ -57,7 +59,7 @@ describe("Formats ticket data", () => {
     expect(brandingData).toMatchObject(expectedData);
   });
 
-  test("publishing request generates correct data", () => {
+  it("publishing request generates correct data", () => {
     const publishingData = formatTicketData({
       type: "publishing",
       name: "Test Name - publishing",
@@ -81,7 +83,7 @@ describe("Formats ticket data", () => {
     expect(publishingData).toMatchObject(expectedData);
   });
 
-  test("contact request generates correct data", () => {
+  it("contact request generates correct data", () => {
     const contactData = formatTicketData({
       type: "contact",
       name: "Test Name - contact",
@@ -105,7 +107,7 @@ describe("Formats ticket data", () => {
     expect(contactData).toMatchObject(expectedData);
   });
 
-  test("form problem request generates correct data", () => {
+  it("form problem request generates correct data", () => {
     const requestData = formatTicketData({
       type: "problem",
       name: "Test Name - problem",
