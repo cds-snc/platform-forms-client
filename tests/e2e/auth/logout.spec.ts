@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Logout Page test", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
   test.beforeEach(async ({ page }) => {
     await page.goto("/en/auth/logout");
   });

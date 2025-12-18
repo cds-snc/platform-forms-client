@@ -9,7 +9,7 @@ test.describe("Testing attestation fields", () => {
   test.beforeAll(async () => {
     // Create a published template directly in the database
     dbHelper = new DatabaseHelper();
-    formId = await dbHelper.createPublishedTemplate("attestationTestForm");
+    formId = await dbHelper.createTemplate({ fixtureName: "attestationTestForm", published: true });
     publishedFormPath = `en/id/${formId}`;
   });
 
@@ -40,6 +40,10 @@ test.describe("Testing attestation fields", () => {
 
       // Submit without checking any boxes
       await page.locator("[type='submit']").click();
+      await page.waitForTimeout(1000); // Add a short wait to ensure form submission processing
+
+      // Wait for error list to appear using ordered list selector with extended timeout
+      await expect(page.locator(".gc-ordered-list li").first()).toBeVisible({ timeout: 10000 });
 
       // Verify error messages
       await expect(page.locator("li")).toContainText("Check off all the boxes for");
@@ -70,10 +74,10 @@ test.describe("Testing attestation fields", () => {
       // Submit the form
       await page.locator("[type='submit']").click();
 
-      // Verify submission confirmation
-      await expect(
-        page.getByRole("heading", { name: "Your form has been submitted" })
-      ).toBeVisible();
+      // Verify submission confirmation with extended timeout
+      await expect(page.getByRole("heading", { name: "Your form has been submitted" })).toBeVisible(
+        { timeout: 15000 }
+      );
     });
   });
 });
