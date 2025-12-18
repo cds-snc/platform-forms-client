@@ -35,12 +35,27 @@ export const TextInput = (
 
   const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);
 
+  const decimalSeparator = t("decimalSeparator");
+
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    helpers.setValue(event.target.value);
+    let newValue = event.target.value;
+
+    // If it's a number, ensure we store it with a dot for the system
+    if (type === "number") {
+      newValue = newValue.replace(decimalSeparator, ".");
+    }
+
+    helpers.setValue(newValue);
+
     if (maxLength) {
-      setRemainingCharacters(maxLength - event.target.value.length);
+      setRemainingCharacters(maxLength - newValue.length);
     }
   };
+
+  const displayValue =
+    type === "number" && field.value
+      ? String(field.value).replace(".", decimalSeparator)
+      : field.value;
 
   const characterCountMessages = {
     part1: t("formElements.characterCount.part1"),
@@ -79,7 +94,7 @@ export const TextInput = (
     const futureValue = value.slice(0, start) + key + value.slice(end);
 
     const negativePattern = allowNegativeNumbers ? "-?" : "";
-    const decimalSeparator = t("decimalSeparator");
+
     const escapedSeparator = decimalSeparator === "." ? "\\." : decimalSeparator;
     const decimalPattern =
       stepCount && stepCount > 0 ? `(${escapedSeparator}\\d{0,${stepCount}})?` : "";
@@ -112,6 +127,7 @@ export const TextInput = (
         {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextInputChange}
+        value={displayValue}
         // Note: not using type=number for numbers for UX reasons.
         // See: #4851 and https://tinyurl.com/2p9tm5vk
         {...(type === "number" && {
