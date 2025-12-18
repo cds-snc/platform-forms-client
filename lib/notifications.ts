@@ -1,10 +1,10 @@
-import { sendEmail } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { notification } from "@gcforms/connectors";
 
 // Hard coded since only one interval is supported currently
 const NOTIFICATIONS_INTERVAL = NotificationsInterval.DAY;
@@ -41,7 +41,7 @@ export const sendNotifications = async (formId: string, titleEn: string, titleFr
     case Status.SINGLE_EMAIL_SENT:
       // Single submissions email sent but not multiple submissions email, send multiple email
       Promise.all([
-        sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, true),
+        sendEmailAfterSubmissionProcessed(users, formId, titleEn, titleFr, true),
         setMarker(formId, Status.MULTIPLE_EMAIL_SENT),
       ]);
       break;
@@ -51,7 +51,7 @@ export const sendNotifications = async (formId: string, titleEn: string, titleFr
     default:
       // No email has been sent, send single submission email
       Promise.all([
-        sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, false),
+        sendEmailAfterSubmissionProcessed(users, formId, titleEn, titleFr, false),
         setMarker(formId),
       ]);
   }
@@ -80,8 +80,9 @@ export const getNotificationsUsers = async (formId: string) => {
     })
     .catch((e) => prismaErrors(e, null));
 
+  // Can happen with legacy forms that do not have users
   if (!usersAndNotificationsUsers) {
-    logMessage.warn(`_getNotificationsUsers no users found for formId ${formId}`);
+    logMessage.debug(`_getNotificationsUsers no users found for formId ${formId}`);
     return null;
   }
 
@@ -111,8 +112,9 @@ const _getDeliveryOption = async (formId: string) => {
     })
     .catch((e) => prismaErrors(e, null));
 
+  // Can happen with legacy forms that do not have a deliveryOption
   if (!template) {
-    logMessage.warn(`_getDeliveryOption template not found with id ${formId}`);
+    logMessage.debug(`_getDeliveryOption template not found with id ${formId}`);
     return null;
   }
 
@@ -130,7 +132,7 @@ const setMarker = async (formId: string, status: Status = Status.SINGLE_EMAIL_SE
       )
     )
     .catch((err) =>
-      logMessage.error(`setMarker: notification:formId:${formId} failed to set ${err}`)
+      logMessage.warn(`setMarker: notification:formId:${formId} failed to set ${err}`)
     );
 };
 
@@ -138,10 +140,10 @@ const getMarker = async (formId: string) => {
   const redis = await getRedisInstance();
   return redis
     .get(`notification:formId:${formId}`)
-    .catch((err) => logMessage.error(`getMarker: ${err}`));
+    .catch((err) => logMessage.warn(`getMarker: ${err}`));
 };
 
-const sendEmailNotificationsToAllUsers = async (
+const sendEmailAfterSubmissionProcessed = async (
   users: {
     email: string;
     enabled: boolean;
@@ -151,47 +153,31 @@ const sendEmailNotificationsToAllUsers = async (
   formTitleFr: string,
   multipleSubmissions: boolean = false
 ) => {
-  if (!Array.isArray(users) || users.length === 0) {
-    logMessage.error("sendEmailNotificationsToAllUsers missing users");
-    return;
-  }
-  users.forEach(
-    ({ email, enabled }) =>
-      enabled && sendEmailNotification(email, formId, formTitleEn, formTitleFr, multipleSubmissions)
-  );
-};
+  try {
+    const { t } = await serverTranslation("form-builder");
+    const HOST = await getOrigin();
 
-const sendEmailNotification = async (
-  email: string,
-  formId: string,
-  formTitleEn: string,
-  formTitleFr: string,
-  multipleSubmissions: boolean = false
-) => {
-  const { t } = await serverTranslation("form-builder");
-  const HOST = await getOrigin();
-  await sendEmail(
-    email,
-    {
+    if (!Array.isArray(users) || users.length === 0) {
+      logMessage.debug("sendEmailNotificationsToAllUsers missing users");
+      return;
+    }
+    const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
+
+    await notification.sendDeferred({
+      notificationId: formId,
+      emails,
       subject: multipleSubmissions
         ? t("settings.notifications.email.multipleSubmissions.subject")
         : t("settings.notifications.email.singleSubmission.subject"),
-      formResponse: multipleSubmissions
+      body: multipleSubmissions
         ? await multipleSubmissionsEmailTemplate(HOST, formTitleEn, formTitleFr)
         : await singleSubmissionEmailTemplate(HOST, formTitleEn, formTitleFr),
-    },
-    "notification"
-  )
-    .then(() =>
-      logMessage.debug(
-        `sendEmailNotification sent email to ${email} with formId ${formId} for type ${
-          multipleSubmissions ? "multiple email" : "single email"
-        }`
-      )
-    )
-    .catch(() =>
-      logMessage.error(`sendEmailNotification failed to send email ${email} with formId ${formId}`)
+    });
+  } catch (error) {
+    logMessage.warn(
+      `sendEmailNotification failed for formId ${formId} with error: ${(error as Error).message}`
     );
+  }
 };
 
 const singleSubmissionEmailTemplate = async (
