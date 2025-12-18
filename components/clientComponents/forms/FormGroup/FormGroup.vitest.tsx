@@ -1,10 +1,14 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { GenerateElement } from "@lib/formBuilder";
 import { Formik } from "formik";
+import { describe, test, afterEach } from "vitest";
+import type { FormElement } from "@gcforms/types";
+import { Language } from "@lib/types/form-builder-types";
 
 const radioButtonData = {
   id: 1,
@@ -28,22 +32,18 @@ const radioButtonData = {
       },
     ],
   },
-};
+} as const as FormElement;
 
-describe.each([["en"], ["fr"]])("Generate a form group", (lang) => {
-  afterEach(cleanup);
+describe.each([["en"], ["fr"]] as Array<[Language]>)("Generate a form group", (lang: Language) => {
+  afterEach(() => cleanup());
   test("renders properly", () => {
     render(
-      <Formik onSubmit={() => {}}>
+      <Formik onSubmit={() => {}} initialValues={{}}>
         <GenerateElement element={radioButtonData} language={lang} />
       </Formik>
     );
-    const title =
-        lang === "en" ? radioButtonData.properties.titleEn : radioButtonData.properties.titleFr,
-      description =
-        lang === "en"
-          ? radioButtonData.properties.descriptionEn
-          : radioButtonData.properties.descriptionFr;
+    const title = (lang === "en" ? radioButtonData.properties.titleEn : radioButtonData.properties.titleFr) as string;
+    const description = (lang === "en" ? radioButtonData.properties.descriptionEn : radioButtonData.properties.descriptionFr) as string;
 
     // Title are rendered
     screen.getAllByText(title).forEach((input) => {

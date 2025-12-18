@@ -1,9 +1,13 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
+import "@testing-library/jest-dom";
 import { cleanup, render, screen } from "@testing-library/react";
+import { describe, it, expect, afterEach } from "vitest";
 import { GenerateElement } from "@lib/formBuilder";
+import type { FormElement } from "@gcforms/types";
+import { Language } from "@lib/types/form-builder-types";
 
 const richTextData = {
   id: 3,
@@ -19,24 +23,23 @@ const richTextData = {
       required: false,
     },
   },
-};
+} as const as FormElement;
 
-describe("Generate a text area", () => {
-  afterEach(cleanup);
-  test.each([["en"], ["fr"]])("renders properly", (lang) => {
+describe("Generate a rich text element", () => {
+  afterEach(() => cleanup());
+
+  it.each([["en"], ["fr"]] as Array<[Language]>)("renders properly", (lang: Language) => {
     render(<GenerateElement element={richTextData} language={lang} />);
-    const title = lang === "en" ? richTextData.properties.titleEn : richTextData.properties.titleFr,
-      description =
-        lang === "en"
-          ? richTextData.properties.descriptionEn
-          : richTextData.properties.descriptionFr;
-    // Label properly renders
-    expect(screen.getByText(title)).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(title);
-    // Description properly render
-    expect(screen.getByText(description)).toBeInTheDocument();
+    const title = lang === "en" ? richTextData.properties.titleEn : richTextData.properties.titleFr;
+    const description =
+      lang === "en" ? richTextData.properties.descriptionEn : richTextData.properties.descriptionFr;
+
+    expect(screen.getByText(title!)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(title!);
+    expect(screen.getByText(description!)).toBeInTheDocument();
   });
-  test("Return null if no children", () => {
+
+  it("Return null if no children", () => {
     const emptyRichTextData = {
       id: 3,
       type: "richText",
@@ -46,21 +49,22 @@ describe("Generate a text area", () => {
         descriptionEn: "",
         descriptionFr: "",
       },
-    };
+    } as const as FormElement;
     render(<GenerateElement element={emptyRichTextData} language="en" />);
     expect(screen.queryByRole("label")).not.toBeInTheDocument();
     expect(screen.queryByTestId("richText")).not.toBeInTheDocument();
   });
-  test("Should not render raw HTML in markdown", () => {
-    const richTextWithHTML = { ...richTextData };
+
+  it("Should not render raw HTML in markdown", () => {
+    const richTextWithHTML = { ...richTextData } as FormElement;
     richTextWithHTML.properties.descriptionEn =
       "Testing <script data-testid='script'>alert('pwned')</script> this";
     render(<GenerateElement element={richTextWithHTML} language="en" />);
     expect(screen.queryByTestId("script")).not.toBeInTheDocument();
   });
 
-  test("Renders link with target attribute", () => {
-    const richTextWithHTML = { ...richTextData };
+  it("Renders link with target attribute", () => {
+    const richTextWithHTML = { ...richTextData } as FormElement;
     richTextWithHTML.properties.descriptionEn = "Testing [link](https://google.ca) this";
     render(<GenerateElement element={richTextWithHTML} language="en" />);
     expect(screen.queryByRole("link")).toHaveAttribute("target");

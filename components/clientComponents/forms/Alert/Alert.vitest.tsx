@@ -1,16 +1,18 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
+import "@testing-library/jest-dom";
 import { render, screen, cleanup } from "@testing-library/react";
+import { describe, it, expect, afterEach } from "vitest";
 
 import { Alert, ErrorStatus } from "./Alert";
 
 describe("Alert component", () => {
-  afterEach(cleanup);
+  afterEach(() => cleanup());
   const text = "This is an alert";
 
-  test("success alert", () => {
+  it("success alert", () => {
     render(
       <Alert type={ErrorStatus.SUCCESS} heading="Success status">
         {text}
@@ -21,7 +23,8 @@ describe("Alert component", () => {
     expect(alert).toHaveTextContent(text);
     expect(alert).toHaveTextContent("Success status");
   });
-  test("success warning", () => {
+
+  it("success warning", () => {
     render(
       <Alert type={ErrorStatus.WARNING} heading="Warning status">
         {text}
@@ -32,7 +35,8 @@ describe("Alert component", () => {
     expect(alert).toHaveTextContent(text);
     expect(alert).toHaveTextContent("Warning status");
   });
-  test("error alert", () => {
+
+  it("error alert", () => {
     render(
       <Alert type={ErrorStatus.ERROR} heading="Error status">
         {text}
@@ -43,7 +47,8 @@ describe("Alert component", () => {
     expect(alert).toHaveTextContent(text);
     expect(alert).toHaveTextContent("Error status");
   });
-  test("info alert", () => {
+
+  it("info alert", () => {
     render(
       <Alert type={ErrorStatus.INFO} heading="Info status">
         {text}
@@ -54,7 +59,8 @@ describe("Alert component", () => {
     expect(alert).toHaveTextContent(text);
     expect(alert).toHaveTextContent("Info status");
   });
-  test("validation alert", () => {
+
+  it("validation alert", () => {
     render(
       <Alert type={ErrorStatus.ERROR} validation heading="Validation status">
         {text}
