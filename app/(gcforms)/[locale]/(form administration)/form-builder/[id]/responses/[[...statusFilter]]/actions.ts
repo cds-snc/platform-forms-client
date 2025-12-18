@@ -143,10 +143,13 @@ export const getSubmissionsByFormat = AuthenticatedAction(
         const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
         const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
 
-        // If the download format is JSON, we always use "." as decimal separator
+        // If the download format is JSON or CSV, we always use "." as decimal separator
         const originalDecimalSeparator =
           lang === "fr" ? tFr("decimalSeparator") : tEn("decimalSeparator");
-        const decimalSeparator = format === DownloadFormat.JSON ? "." : originalDecimalSeparator;
+        const decimalSeparator =
+          format === DownloadFormat.JSON || format === DownloadFormat.CSV
+            ? "."
+            : originalDecimalSeparator;
 
         const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
