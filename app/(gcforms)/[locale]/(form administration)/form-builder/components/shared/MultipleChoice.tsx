@@ -6,6 +6,7 @@ interface MultipleChoiceProps {
   type: string;
   className?: string;
   label?: React.ReactElement | string;
+  hint?: React.ReactElement | string;
   value?: string;
   name?: string;
   id?: string;
@@ -21,6 +22,7 @@ interface MultipleChoiceProps {
 
 const MultipleChoice = ({
   label,
+  hint,
   value,
   name,
   id,
@@ -52,6 +54,7 @@ const MultipleChoice = ({
       {label}
     </label>
     {children}
+    {hint && <div className="ml-2 italic">{hint}</div>}
   </div>
 );
 

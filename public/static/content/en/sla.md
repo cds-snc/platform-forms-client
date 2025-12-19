@@ -19,6 +19,7 @@ GC Forms is a cloud-based service that is owned and operated by the Canadian Dig
 - Ensuring the system is available for use, with page load time less than 10 seconds in Canada on high-speed Internet, unless the product is experiencing a denial of service attack or there are issues with AWS.
 - Limiting the rate at which end users can submit responses to preserve the security of CDS and client systems.
 - Configuring hCaptcha so that suspected threats and spam are blocked, but genuine users can submit forms.
+- Implementing a basic file scanning feature to help detect potentially malicious files attached to forms.
 - Responding quickly to incidents. GC Forms follows the [TBS Directive on Security Management](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32611) and follows an Incident Response process to resolve issues in a timely manner.
 - Staffing on-call personnel 24/7, 365 days of the year to respond to Severity 1 incidents within 2 hours of detection.
 - Sharing application logs with the Canadian Centre for Cyber Security (CCCS). GC Forms follows the [Direction on the Secure Use of Commercial Cloud Services: Security Policy Implementation Notice (SPIN)](https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/cloud-services/direction-secure-use-commercial-cloud-services-spin.html).
@@ -37,9 +38,9 @@ CDS can suspend a service at any time for anything deemed as inappropriate use. 
 
 CDS is not responsible for issues or outages with AWS infrastructure that may impact system uptime and availability. CDS is also not responsible for Amazon infrastructure failure, AWS, or Simple Email Service (SES). CDS is responsible for updating clients on any information pertaining to an AWS outage.
 
-CDS  will not be providing additional support for malicious files, beyond telling the client if a file is safe or not.
+CDS  will not be providing additional support for malicious files, beyond telling the client if a file is safe or not, based on the output of the file scanning service.
 
-CDS is not responsible for issues or outages with hCaptcha that may impact system availability."
+CDS is not responsible for issues or outages with hCaptcha that may impact system availability.
 
 ## Uptime guarantee
 
@@ -93,4 +94,4 @@ In some cases, features provided by GC Forms may need to be depreciated. If a fe
 
 GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Last update:** July 16, 2025
+**Last update:** November 12, 2025

@@ -57,13 +57,15 @@ export default async function Layout(props: {
     }
   }
 
-  let apiKeyId: string | false | void = "";
+  let apiKeyId: string | undefined = undefined;
 
   try {
     // No need to fetch in test, it will always not exist
     if (formID) {
       apiKeyId =
-        process.env.APP_ENV === "test" || formID === "0000" ? false : await checkKeyExists(formID);
+        process.env.APP_ENV === "test" || formID === "0000"
+          ? undefined
+          : await checkKeyExists(formID);
     }
   } catch (e) {
     // no-op
@@ -89,6 +91,12 @@ export default async function Layout(props: {
                     containerId="wide"
                     autoClose={10000}
                     ariaLabel="Notifications: Alt+T"
+                    width="600px"
+                  />
+                  <ToastContainer
+                    containerId="error-persistent"
+                    autoClose={false}
+                    ariaLabel="Error notifications"
                     width="600px"
                   />
                   <div className="flex grow flex-row gap-7">

@@ -18,18 +18,19 @@ type FormTimerDispatchType = {
   disableTimer: () => void;
 };
 export const useFormTimer = (): [FormTimerStateType, FormTimerDispatchType] => {
-  enum actions {
-    START = "START",
-    CHECK = "CHECK",
-    DISABLE = "DISABLE",
-  }
+  const actions = {
+    START: "START",
+    CHECK: "CHECK",
+    DISABLE: "DISABLE",
+  } as const;
+  type actions = (typeof actions)[keyof typeof actions];
 
   function formTimerReducer(
     state: FormTimerStateType,
-    action: { type: string; timerDelay?: number }
+    action: { type: actions; timerDelay?: number }
   ): { canSubmit: boolean; remainingTime: number; timerDelay?: number; timeLock?: number } {
     switch (action.type) {
-      case "START": {
+      case actions.START: {
         if (!action.timerDelay) throw new Error("Missing timerDelay on start FormTimer action");
         const newTimeLock = Date.now() + action.timerDelay * 1000;
         return {
@@ -39,7 +40,7 @@ export const useFormTimer = (): [FormTimerStateType, FormTimerDispatchType] => {
           timeLock: newTimeLock,
         };
       }
-      case "CHECK": {
+      case actions.CHECK: {
         if (!state.timeLock)
           throw new Error("Start action must be called before Check on FormTimer");
         // Check if we're in test mode and disable the time lock for
@@ -50,7 +51,7 @@ export const useFormTimer = (): [FormTimerStateType, FormTimerDispatchType] => {
         // If there is less than a second remaining let the user know it's only a second
         return { ...state, canSubmit: false, remainingTime: timeLeft >= 1 ? timeLeft : 1 };
       }
-      case "DISABLE": {
+      case actions.DISABLE: {
         return { canSubmit: true, remainingTime: 0, timerDelay: 0, timeLock: 0 };
       }
       default: {

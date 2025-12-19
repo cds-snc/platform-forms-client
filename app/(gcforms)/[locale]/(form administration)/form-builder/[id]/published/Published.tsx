@@ -38,10 +38,16 @@ export const Published = async ({
           <h2 className="mb-1 pb-0"> {t("publishedTitle")}</h2>
           <p className="mb-5 mt-0">{t("publishedViewLinks")}</p>
           <p>
-            <strong>{t("english")}</strong> <a href={linkEn}>{linkEn}</a>
+            <strong>{t("english")}</strong>{" "}
+            <a href={linkEn} data-testid="published-link-en">
+              {linkEn}
+            </a>
           </p>
           <p>
-            <strong>{t("french")}</strong> <a href={linkFr}>{linkFr}</a>
+            <strong>{t("french")}</strong>{" "}
+            <a href={linkFr} data-testid="published-link-fr">
+              {linkFr}
+            </a>
           </p>
         </div>
       </div>

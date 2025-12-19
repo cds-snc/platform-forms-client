@@ -9,21 +9,25 @@ export const invokeSubmissionLambda = async (
   formID: string,
   fields: Responses,
   language: string,
-  securityAttribute: string
+  securityAttribute: string,
+  fileChecksums?: Record<string, string>
 ): Promise<{
   submissionId: string;
   fileURLMap?: SignedURLMap;
 }> => {
   try {
+    const payload = {
+      formID,
+      language,
+      responses: fields,
+      securityAttribute,
+      ...(fileChecksums && Object.keys(fileChecksums).length > 0 && { fileChecksums }),
+    };
+
     const lambdaInvokeResponse = await lambdaClient.send(
       new InvokeCommand({
         FunctionName: "Submission",
-        Payload: JSON.stringify({
-          formID,
-          language,
-          responses: fields,
-          securityAttribute,
-        }),
+        Payload: JSON.stringify(payload),
       })
     );
 

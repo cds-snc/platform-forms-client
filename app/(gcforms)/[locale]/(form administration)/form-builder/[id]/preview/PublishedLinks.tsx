@@ -12,9 +12,13 @@ export const PublishedLinks = ({ id, locale }: { id: string; locale: string }) =
       <p className="mb-2 mt-5">{t("publishedViewLinks", { ns: "form-builder" })}</p>
       <div className="grid grid-cols-[max-content_1fr] gap-x-2">
         <strong>{t("english")}</strong>
-        <a href={linkEn}>{linkEn}</a>
+        <a href={linkEn} data-testid="published-link-en">
+          {linkEn}
+        </a>
         <strong>{t("french")}</strong>
-        <a href={linkFr}>{linkFr}</a>
+        <a href={linkFr} data-testid="published-link-fr">
+          {linkFr}
+        </a>
       </div>
     </div>
   );

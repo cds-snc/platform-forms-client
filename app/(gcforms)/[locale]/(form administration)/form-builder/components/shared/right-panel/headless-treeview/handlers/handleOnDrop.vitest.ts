@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { Mock } from 'vitest';
 import { handleOnDrop } from './handleOnDrop';
 import { DragTarget, ItemInstance, insertItemsAtTarget, removeItemsFromParents, isOrderedDragTarget } from '@headless-tree/core';
 import { TreeItemData } from '../types';
@@ -49,21 +50,21 @@ const createMockFormElement = (id: number, type: string = 'textField'): FormElem
 
 describe('handleOnDrop', () => {
   // Mock callback functions
-  let mockGetSubElements: ReturnType<typeof vi.fn>;
-  let mockSetGroupsLayout: ReturnType<typeof vi.fn>;
-  let mockUpdateGroupElements: ReturnType<typeof vi.fn>;
-  let mockUpdateSubElements: ReturnType<typeof vi.fn>;
-  let mockAutoFlowAll: ReturnType<typeof vi.fn>;
+  let mockGetSubElements: Mock<(parentId: number) => FormElement[] | undefined>;
+  let mockSetGroupsLayout: Mock<(layout: string[]) => void>;
+  let mockUpdateGroupElements: Mock<(group: { id: string; elements: string[] }) => void>;
+  let mockUpdateSubElements: Mock<(elements: FormElement[], parentId: number) => void>;
+  let mockAutoFlowAll: Mock<() => void>;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Reset mock functions
-    mockGetSubElements = vi.fn();
-    mockSetGroupsLayout = vi.fn();
-    mockUpdateGroupElements = vi.fn();
-    mockUpdateSubElements = vi.fn();
-    mockAutoFlowAll = vi.fn();
+  mockGetSubElements = vi.fn() as Mock<(parentId: number) => FormElement[] | undefined>;
+  mockSetGroupsLayout = vi.fn() as Mock<(layout: string[]) => void>;
+  mockUpdateGroupElements = vi.fn() as Mock<(group: { id: string; elements: string[] }) => void>;
+  mockUpdateSubElements = vi.fn() as Mock<(elements: FormElement[], parentId: number) => void>;
+  mockAutoFlowAll = vi.fn() as Mock<() => void>;
 
     // Setup default mock implementations
     mockRemoveItemsFromParents.mockImplementation(async (items, callback) => {
@@ -82,7 +83,7 @@ describe('handleOnDrop', () => {
     it('should block non-ordered drops on root level', async () => {
       const items = [createMockItem('group1', 0)];
       const target = createMockTarget(createMockItem('root', -1));
-      
+
       mockIsOrderedDragTarget.mockReturnValue(false);
 
       await handleOnDrop(
@@ -103,7 +104,7 @@ describe('handleOnDrop', () => {
     it('should allow ordered drops on root level', async () => {
       const items = [createMockItem('group1', 0)];
       const target = createMockTarget(createMockItem('root', -1), 1);
-      
+
       mockIsOrderedDragTarget.mockReturnValue(true);
 
       await handleOnDrop(
@@ -123,7 +124,7 @@ describe('handleOnDrop', () => {
     it('should call setGroupsLayout and autoFlowAll for root level drops', async () => {
       const items = [createMockItem('group1', 0)];
       const target = createMockTarget(createMockItem('root', -1), 1);
-      
+
       mockIsOrderedDragTarget.mockReturnValue(true);
 
       await handleOnDrop(
@@ -145,7 +146,7 @@ describe('handleOnDrop', () => {
       const item2 = createMockItem('group2', 0);
       const items = [item1, item2];
       const target = createMockTarget(createMockItem('root', -1), 1);
-      
+
       mockIsOrderedDragTarget.mockReturnValue(true);
 
       await handleOnDrop(
@@ -165,9 +166,9 @@ describe('handleOnDrop', () => {
     it('should filter out locked items (policy, intro) from root layout', async () => {
       const items = [createMockItem('group1', 0)];
       const target = createMockTarget(createMockItem('root', -1), 1);
-      
+
       mockIsOrderedDragTarget.mockReturnValue(true);
-      
+
       // Mock the callbacks to include locked items
       mockRemoveItemsFromParents.mockImplementation(async (items, callback) => {
         await callback(items[0] as ItemInstance<unknown>, ['policy', 'intro', 'validGroup']);
@@ -198,7 +199,7 @@ describe('handleOnDrop', () => {
       const items = [createMockItem('element1', 1)];
       const targetGroup = createMockItem('group1', 0);
       const target = createMockTarget(targetGroup);
-      
+
       await handleOnDrop(
         items,
         target,
@@ -220,7 +221,7 @@ describe('handleOnDrop', () => {
       const items = [createMockItem('element1', 1)];
       const targetGroup = createMockItem('group1', 0);
       const target = createMockTarget(targetGroup);
-      
+
       mockRemoveItemsFromParents.mockImplementation(async (items, callback) => {
         await callback(targetGroup as ItemInstance<unknown>, ['policy', 'intro', 'validElement']);
       });
@@ -265,7 +266,7 @@ describe('handleOnDrop', () => {
       const items = [createMockItem('2', 2)]; // Moving element with id 2
       const targetElement = createMockItem('2', 1); // Use numeric ID that matches getSubElements call
       const target = createMockTarget(targetElement);
-      
+
       await handleOnDrop(
         items,
         target,
@@ -278,7 +279,7 @@ describe('handleOnDrop', () => {
 
       // Should be called twice - once for remove, once for insert
       expect(mockUpdateSubElements).toHaveBeenCalledTimes(2);
-      
+
       // First call should remove the moved element from original location
       expect(mockUpdateSubElements).toHaveBeenNthCalledWith(1,
         [mockSubElements[0], mockSubElements[2]], // Elements 1 and 3 (element 2 removed)
@@ -290,7 +291,7 @@ describe('handleOnDrop', () => {
       const items = [createMockItem('2', 2)]; // Moving element with id 2
       const targetElement = createMockItem('123', 1); // parentElement ID as number
       const target = createMockTarget(targetElement, 1); // Insert at index 1
-      
+
       mockIsOrderedDragTarget.mockReturnValue(true);
 
       await handleOnDrop(
@@ -317,7 +318,7 @@ describe('handleOnDrop', () => {
       const items = [createMockItem('2', 2)]; // Moving element with id 2
       const targetElement = createMockItem('123', 1);
       const target = createMockTarget(targetElement);
-      
+
       mockIsOrderedDragTarget.mockReturnValue(false);
 
       await handleOnDrop(
@@ -347,7 +348,7 @@ describe('handleOnDrop', () => {
       ]; // Moving elements 1 and 3
       const targetElement = createMockItem('456', 1);
       const target = createMockTarget(targetElement, 0); // Insert at beginning
-      
+
       mockIsOrderedDragTarget.mockReturnValue(true);
 
       await handleOnDrop(
@@ -374,7 +375,7 @@ describe('handleOnDrop', () => {
       const items = [createMockItem('1', 2)];
       const targetElement = createMockItem('999', 1);
       const target = createMockTarget(targetElement);
-      
+
       mockGetSubElements.mockReturnValue(undefined);
 
       await handleOnDrop(
@@ -396,7 +397,7 @@ describe('handleOnDrop', () => {
     it('should handle empty items array', async () => {
       const items: ItemInstance<TreeItemData>[] = [];
       const target = createMockTarget(createMockItem('root', -1), 1);
-      
+
       mockIsOrderedDragTarget.mockReturnValue(true);
 
       // Mock the insert callback to not call setFocused since there are no items
@@ -425,7 +426,7 @@ describe('handleOnDrop', () => {
     it('should handle items without valid IDs', async () => {
       const items = [createMockItem('', 0)];
       const target = createMockTarget(createMockItem('root', -1), 1);
-      
+
       mockIsOrderedDragTarget.mockReturnValue(true);
 
       await handleOnDrop(
@@ -444,9 +445,9 @@ describe('handleOnDrop', () => {
     it('should handle async operations properly', async () => {
       const items = [createMockItem('group1', 0)];
       const target = createMockTarget(createMockItem('root', -1), 1);
-      
+
       mockIsOrderedDragTarget.mockReturnValue(true);
-      
+
       // Make the mock functions async with delays
       mockRemoveItemsFromParents.mockImplementation(async (items, callback) => {
         await new Promise(resolve => setTimeout(resolve, 10));
@@ -459,7 +460,7 @@ describe('handleOnDrop', () => {
       });
 
       const startTime = Date.now();
-      
+
       await handleOnDrop(
         items,
         target,
@@ -471,7 +472,7 @@ describe('handleOnDrop', () => {
       );
 
       const endTime = Date.now();
-      
+
       // Should have waited for async operations
       expect(endTime - startTime).toBeGreaterThanOrEqual(20);
       expect(mockRemoveItemsFromParents).toHaveBeenCalled();
@@ -483,7 +484,7 @@ describe('handleOnDrop', () => {
     it('should call all provided callback functions when appropriate', async () => {
       const items = [createMockItem('group1', 0)];
       const target = createMockTarget(createMockItem('root', -1), 1);
-      
+
       mockIsOrderedDragTarget.mockReturnValue(true);
 
       await handleOnDrop(

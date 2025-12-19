@@ -29,7 +29,7 @@ export const generateCSP = (): { csp: string; nonce: string } => {
 
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    script-src 'self' 'nonce-${nonce}' 'wasm-unsafe-eval' 'strict-dynamic';
     style-src 'self' 'nonce-${nonce}';
     img-src 'self' blob: data:;
     font-src 'self';
@@ -38,7 +38,7 @@ export const generateCSP = (): { csp: string; nonce: string } => {
     form-action 'self';
     frame-src www.googletagmanager.com hcaptcha.com *.hcaptcha.com;
     frame-ancestors 'none';
-    connect-src 'self' www.googletagmanager.com www.google-analytics.com ws1.postescanada-canadapost.ca hcaptcha.com *.hcaptcha.com ${process.env.RELIABILITY_FILE_STORAGE}.s3.ca-central-1.amazonaws.com ;
+    connect-src 'self' www.googletagmanager.com www.google-analytics.com ws1.postescanada-canadapost.ca hcaptcha.com *.hcaptcha.com *.forms-staging.cdssandbox.xyz *.forms-formulaires.alpha.canada.ca *.s3.ca-central-1.amazonaws.com;
     block-all-mixed-content;
     upgrade-insecure-requests;
   `;

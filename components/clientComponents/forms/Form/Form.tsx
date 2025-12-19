@@ -36,6 +36,7 @@ import { ga } from "@lib/client/clientHelpers";
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 import { handleUploadError } from "@lib/fileInput/handleUploadError";
 import { hasFiles } from "@lib/fileExtractor";
+import { generateFileChecksums } from "@lib/utils/fileChecksum";
 
 import {
   copyObjectExcludingFileContent,
@@ -261,7 +262,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
  * This is the main Form component that wraps "InnerForm" withFormik hook, giving all of its components context
  * @param props
  */
-
 export const Form = withFormik<FormProps, Responses>({
   validateOnChange: false,
 
@@ -303,6 +303,7 @@ export const Form = withFormik<FormProps, Responses>({
       const { formValuesWithoutFileContent, fileObjsRef } =
         copyObjectExcludingFileContent(formValues);
 
+      const fileChecksums = await generateFileChecksums(fileObjsRef);
       let submitProgress = 0;
       let progressInterval: NodeJS.Timeout | undefined = undefined;
 
@@ -328,7 +329,8 @@ export const Form = withFormik<FormProps, Responses>({
         formValuesWithoutFileContent,
         formikBag.props.language,
         formikBag.props.formRecord.id,
-        formikBag.props.captchaToken?.current
+        formikBag.props.captchaToken?.current,
+        fileChecksums
       );
 
       clearInterval(progressInterval);

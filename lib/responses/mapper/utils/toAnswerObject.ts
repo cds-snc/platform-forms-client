@@ -1,5 +1,6 @@
 import { FormElement } from "@gcforms/types";
 import type { MappedAnswer } from "../types";
+import { Response } from "@gcforms/types";
 
 export const createAnswerObject = ({
   question,

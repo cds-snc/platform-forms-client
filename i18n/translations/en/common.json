@@ -69,6 +69,7 @@
     "validGovEmail": "Enter a valid government email address.",
     "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. Enter the email of the person in charge of your team. If that's you, add a colleague.",
     "min-length-4-characters": "Must be at least 4 characters.",
+    "mismatched-type": "The answer does not match the required type.",
     "MB": "MB",
     "KB": "KB",
     "bytes": "bytes",

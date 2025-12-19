@@ -16,8 +16,6 @@ import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { Button } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
-import { BetaBadge } from "@clientComponents/globals/BetaBadge";
-import { FileInputTrialDescription } from "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FileInput";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 export const PanelBody = ({
@@ -159,15 +157,11 @@ export const PanelBody = ({
 
           {isFileUpload && (
             <div className="mt-4 border-t border-dotted border-slate-800 pt-4">
-              <BetaBadge className="inline-block" />
               {!hasApiKeyId && (
                 <strong className="ml-2 inline-block text-sm font-bold text-red-700">
                   {t("fileUploadApiWarning.text")}
                 </strong>
               )}
-              <div className="mt-4 text-sm">
-                <FileInputTrialDescription />
-              </div>
             </div>
           )}
 
