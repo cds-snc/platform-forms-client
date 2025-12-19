@@ -21,10 +21,10 @@ export const sendEmail = async (email: string, personalisation: Personalisation,
         try {
           notifyCatcher(email, personalisation);
         } catch (e) {
-          logMessage.error("NotifyCatcher failed to catch the email", e);
+          logMessage.error(`NotifyCatcher failed to catch the email: ${(e as Error).message}`);
 
           // just log it out
-          logMessage.info("Development Notify email sending:", "", { email, personalisation });
+          logMessage.info("Development Notify email sending");
           logMessage.info("To: " + email);
           logMessage.info("Subject: " + personalisation.subject);
           logMessage.info("Body: " + personalisation.formResponse);
