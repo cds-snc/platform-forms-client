@@ -7,7 +7,7 @@ import { getOrCreateUser } from "@lib/users";
 import { prisma } from "@lib/integration/prismaConnector";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { getUserFeatureFlags } from "@lib/userFeatureFlags";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 import { JWT } from "next-auth/jwt";
 import { cache } from "react";
@@ -174,12 +174,17 @@ const {
         return;
       }
 
-      const requestHeaders = await headers();
+      try {
+        const requestHeaders = await headers();
 
-      if (requestHeaders.get("x-amzn-waf-cognito-login-outside-of-canada")) {
-        logMessage.info(
-          `[next-auth][sign-in] User ${user.email} (${internalUser.id}) signed in from outside of Canada`
-        );
+        if (requestHeaders.get("x-amzn-waf-cognito-login-outside-of-canada")) {
+          logMessage.info(
+            `[next-auth][sign-in] User ${user.email} (${internalUser.id}) signed in from outside of Canada`
+          );
+        }
+      } catch (error) {
+        // headers() can fail during build time, log but don't prevent sign-in
+        logMessage.debug(`Could not access request headers during sign-in event: ${error}`);
       }
 
       // Update lastLogin in the database
@@ -194,7 +199,8 @@ const {
         internalUser.id,
         { type: "User", id: internalUser.id },
         "UserSignIn",
-        `Cognito user unique identifier (sub): ${user.id}`
+        AuditLogDetails.CognitoUserIdentifier,
+        { userId: user.id ?? "" }
       );
     },
     async signOut(obj) {

@@ -3,7 +3,7 @@ import React, { useState, useEffect, createRef, useRef } from "react";
 import { cn } from "@lib/utils";
 import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
-import { FormElement } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { Description } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
@@ -55,12 +55,32 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     maxNumberOfRows,
   } = props;
   const [field, , helpers] = useField(props);
-  const [rows, setRows] = useState(() => Array(field.value.length).fill(rowElements));
+
+  // Helper function to create initial values for a new row
+  const createInitialRowValue = () => {
+    const initialValue: Record<string, string> = {};
+    rowElements.forEach((element, index) => {
+      // Initialize each field with an empty string to prevent controlled/uncontrolled warnings
+      if (element.type !== FormElementTypes.richText) {
+        initialValue[index.toString()] = "";
+      }
+    });
+    return initialValue;
+  };
+
+  // Ensure field.value is always a non-empty array to prevent controlled/uncontrolled switching
+  // and to ensure there's always at least one row to display
+  const fieldValue =
+    Array.isArray(field.value) && field.value.length > 0 ? field.value : [createInitialRowValue()]; // Initialize with proper field defaults
+
+  const [rows, setRows] = useState(() => Array(fieldValue.length).fill(rowElements));
   const rowRefs = useRef<Array<React.RefObject<HTMLFieldSetElement | null>>>(
-    Array(field.value.length).fill(createRef<HTMLFieldSetElement>())
+    Array(fieldValue.length).fill(createRef<HTMLFieldSetElement>())
   );
   const focusedRow = useRef<number | null>(null);
-  const [hasReachedMaxNumberOfRows, setHasReachedMaxNumberOfRows] = useState<boolean>(false);
+
+  // Compute this value directly instead of using state
+  const hasReachedMaxNumberOfRows = maxNumberOfRows ? rows.length >= maxNumberOfRows : false;
 
   const { t } = useTranslation();
 
@@ -78,23 +98,17 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     // When rows are added or deleted run the useEffect again to focus on the new row
   }, [rows.length]);
 
-  useEffect(() => {
-    if (maxNumberOfRows) {
-      setHasReachedMaxNumberOfRows(rows.length >= maxNumberOfRows);
-    }
-  }, [rows.length, maxNumberOfRows]);
-
   const addRow = () => {
     if (hasReachedMaxNumberOfRows) return;
-    // Set the newly added row'initial value (plucked out of initialValues)
-    const newValue = [...field.value];
-    newValue.push({}); // Push an empty object to the value array
+    // Set the newly added row's initial value with proper defaults for all fields
+    const newValue = [...fieldValue];
+    newValue.push(createInitialRowValue()); // Push an object with proper field defaults
     helpers.setValue(newValue);
     // Add the new row to the rows state
     setRows([...rows, rowElements]);
     // Add a new ref to the rowRefs state
     rowRefs.current.push(createRef<HTMLFieldSetElement>());
-    // Do not subtract one because the rows state has not yet updated it's length when this is called
+    // Do not subtract one because the rows state has not yet updated its length when this is called
     focusedRow.current = rows.length;
     // Let an AT user know a new repeating set was added
     announce(t("dynamicRow.addedMessage", { rowTitle: title, count: rows.length + 1 }));
@@ -102,7 +116,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
   const deleteRow = (index: number) => {
     // Remove the value from the formik state
-    const newValues = [...field.value];
+    const newValues = [...fieldValue];
     newValues.splice(index, 1);
     helpers.setValue(newValues);
     // Remove the row from the rows state

@@ -9,6 +9,7 @@ export interface FileInput extends FileInputResponse {
 export class MissingFormDataError extends Error {
   constructor(message?: string) {
     super(message ?? "MissingFormDataError");
+    this.name = "MissingFormDataError";
     Object.setPrototypeOf(this, MissingFormDataError.prototype);
   }
 }

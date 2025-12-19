@@ -1,10 +1,11 @@
 "use client";
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
 import { Editor } from "@gcforms/editor";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 const _debounced = debounce((updater) => {
   updater();
@@ -32,9 +33,7 @@ export const RichTextEditor = ({
   const [value, setValue] = useState(content);
   const { t, i18n } = useTranslation("form-builder");
 
-  useEffect(() => {
-    setValue(content);
-  }, [content]);
+  const { headlessTree } = useTreeRef();
 
   const updateValue = useCallback(
     (value: string) => {
@@ -45,7 +44,12 @@ export const RichTextEditor = ({
   );
 
   return (
-    <div className="gc-formview w-full rounded bg-white">
+    <div
+      className="gc-formview w-full rounded bg-white"
+      onBlur={() => {
+        headlessTree?.current?.rebuildTree();
+      }}
+    >
       <Editor
         locale={i18n.language}
         contentLocale={lang}

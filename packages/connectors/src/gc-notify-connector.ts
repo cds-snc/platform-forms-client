@@ -1,9 +1,12 @@
+import { Agent } from "https";
 import { getAwsSecret } from "./getAwsSecret";
 import axios, { AxiosError } from "axios";
 
 const API_URL: string = "https://api.notification.canada.ca";
 
 export type Personalisation = Record<string, string | boolean | Record<string, string | boolean>>;
+
+const httpsAgent = new Agent({ keepAlive: true });
 
 export class GCNotifyConnector {
   private apiUrl: string;
@@ -41,6 +44,7 @@ export class GCNotifyConnector {
   ): Promise<void> {
     try {
       await axios({
+        httpsAgent: httpsAgent,
         url: `${this.apiUrl}/v2/notifications/email`,
         method: "POST",
         timeout: this.timeout,

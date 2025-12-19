@@ -7,8 +7,8 @@
 }
 
 // Import CSS variables from gcds-tokens
-@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/heading.css";
-@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/label.css";
+@import "@cdssnc/gcds-tokens/build/web/css/components/heading.css";
+@import "@cdssnc/gcds-tokens/build/web/css/components/label.css";
 
 @include meta.load-css("_input");
 @include meta.load-css("_textarea");

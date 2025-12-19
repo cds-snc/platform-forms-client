@@ -45,8 +45,8 @@ export const submission = {
 
 export const result = {
   "1": [
-    { "0": "Test", "1": ["one", "two", "three"], "2": '{"YYYY":1900,"MM":1,"DD":1}' },
-    { "0": "test2", "1": ["one", "two"], "2": '{"YYYY":2024,"MM":11,"DD":28}' },
-    { "0": "test3", "1": ["two", "three"], "2": '{"YYYY":2025,"MM":11,"DD":28}' },
+    { "0": "Test", "1": ["one", "two", "three"], "2": { YYYY: 1900, MM: 1, DD: 1 } },
+    { "0": "test2", "1": ["one", "two"], "2": { YYYY: 2024, MM: 11, DD: 28 } },
+    { "0": "test3", "1": ["two", "three"], "2": { YYYY: 2025, MM: 11, DD: 28 } },
   ],
 };

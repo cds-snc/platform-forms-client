@@ -13,9 +13,10 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
 import { showReviewPage } from "@root/lib/utils/form-builder/showReviewPage";
-import { LockedSections } from "../../../(form administration)/form-builder/components/shared/right-panel/treeview/types";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty } from "@root/lib/utils";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+import { flattenStructureToValues, stripExcludedKeys } from "./lib/client/helpers";
 
 export const FormWrapper = ({
   formRecord,
@@ -71,11 +72,11 @@ export const FormWrapper = ({
   const getPageTitle = () => {
     const formTitle = String(formRecord.form[getLocalizedProperty("title", language)]);
 
-    if (currentGroup === LockedSections.START) {
+    if (currentGroup === LOCKED_GROUPS.START) {
       return formTitle;
     }
 
-    const isReviewPage = showReviewPage(formRecord.form) && currentGroup === LockedSections.REVIEW;
+    const isReviewPage = showReviewPage(formRecord.form) && currentGroup === LOCKED_GROUPS.REVIEW;
     if (isReviewPage) {
       return `${formTitle} - ${t("reviewForm", { lng: language, ns: "review" })}`;
     }
@@ -85,16 +86,29 @@ export const FormWrapper = ({
   const isMultiPageForm = showReviewPage(formRecord.form);
   useUpdateHeadTitle(getPageTitle(), isMultiPageForm);
 
+  const isEmptyForm = useMemo(() => {
+    try {
+      if (!savedValues) {
+        return false;
+      }
+      const elements = stripExcludedKeys(savedValues.values || {});
+      const elementValues = flattenStructureToValues(elements);
+      return elementValues.join("") === "";
+    } catch (e) {
+      return true;
+    }
+  }, [savedValues]);
+
   useEffect(() => {
     // Clear session storage after values are restored
     if (savedValues) {
       removeProgressStorage();
 
-      if (savedValues.language === language) {
+      if (savedValues.language === language && !isEmptyForm) {
         toast.success(formRestoredMessage, "public-facing-form");
       }
     }
-  }, [savedValues, formRestoredMessage, language]);
+  }, [savedValues, formRestoredMessage, language, isEmptyForm]);
 
   const initialValues = savedValues ? savedValues.values : undefined;
 

@@ -8,15 +8,17 @@ export const GcdsHeader = ({
   pathname,
   language,
   showLanguageToggle = true,
+  skipLink = true,
 }: {
   pathname: string;
   language: Language;
   showLanguageToggle?: boolean;
+  skipLink?: boolean;
 }) => {
   return (
     <div className="gcds-header__container">
       <header className="gcds-header">
-        <SkipLink />
+        {skipLink && <SkipLink />}
         <BrandContainer>
           <Fip language={language} />
           {showLanguageToggle && <LanguageToggle pathname={pathname} language={language} />}

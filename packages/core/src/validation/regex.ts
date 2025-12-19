@@ -35,6 +35,10 @@ export const getRegexByType = (
       regex: /^[\d|.|,| ]+/,
       error: t("input-validation.number"),
     },
+    canBeNegativeNumber: {
+      regex: /^-?\d+(\.\d+)?$/,
+      error: t("input-validation.number"),
+    },
     date: {
       regex: /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/, //mm/dd/yyyy
       error: t("input-validation.date"),

@@ -3,7 +3,6 @@ import React, { createContext, useContext, ReactNode } from "react";
 
 import { type FormValues, type GroupsType, type PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
 
 import { getNextAction, filterValuesByVisibleElements, idArraysMatch } from "@lib/formContext";
@@ -29,6 +28,7 @@ import {
 import { toggleSavedValues } from "@i18n/toggleSavedValues";
 
 import { type FileInputResponse } from "@lib/types";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -77,9 +77,9 @@ export const GCFormsProvider = ({
   nonce?: string;
 }) => {
   const groups: GroupsType = formRecord.form.groups || {};
-  const initialGroup = groups ? LockedSections.START : null;
+  const initialGroup = groups ? LOCKED_GROUPS.START : null;
   const values = React.useRef({});
-  const history = React.useRef<string[]>([LockedSections.START]);
+  const history = React.useRef<string[]>([LOCKED_GROUPS.START]);
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);

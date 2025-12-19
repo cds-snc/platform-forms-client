@@ -15,7 +15,9 @@ import { useToolbarState } from "../../context/ToolbarContext";
 import {
   formatBulletList,
   formatHeading,
+  formatIndent,
   formatNumberedList,
+  formatOutdent,
   formatParagraph,
 } from "../ToolbarPlugin/utils";
 import {
@@ -23,7 +25,9 @@ import {
   isFormatHeading,
   isFormatNumberedList,
   isFormatParagraph,
+  isIndent,
   isInsertLink,
+  isOutdent,
 } from "./shortcuts";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
@@ -62,6 +66,12 @@ export default function ShortcutsPlugin({
         setIsLinkEditMode(!toolbarState.isLink);
 
         editor.dispatchCommand(TOGGLE_LINK_COMMAND, url);
+      } else if (isIndent(event)) {
+        event.preventDefault();
+        formatIndent(editor);
+      } else if (isOutdent(event)) {
+        event.preventDefault();
+        formatOutdent(editor);
       }
 
       return false;

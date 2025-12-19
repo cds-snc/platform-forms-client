@@ -3,8 +3,8 @@ import { NodeProps } from "reactflow";
 import { useTranslation } from "@i18n/client";
 import { getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useGroupStore } from "@lib/groups/useGroupStore";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 export const EndNodeWithReview = (node: NodeProps) => {
   const { t } = useTranslation("form-builder");

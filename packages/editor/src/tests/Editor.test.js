@@ -27,7 +27,7 @@ describe("Lexical Editor", () => {
 
     const contentArea = rendered.container.querySelector('[id^="editor-"]');
     const toolbar = screen.getByTestId("toolbar");
-    const [h2, h3, bold, italic, bulletList, numberedList, link] =
+    const [h2, h3, bold, italic, bulletList, numberedList, link, indent, outdent] =
       within(toolbar).getAllByRole("button");
 
     const toolbarButtons = within(toolbar).getAllByRole("button");
@@ -39,12 +39,14 @@ describe("Lexical Editor", () => {
     expect(bulletList).toHaveAttribute("tabindex", "-1");
     expect(numberedList).toHaveAttribute("tabindex", "-1");
     expect(link).toHaveAttribute("tabindex", "-1");
+    expect(indent).toHaveAttribute("tabindex", "-1");
+    expect(outdent).toHaveAttribute("tabindex", "-1");
 
     // Toolbar has aria-controls attribute
     expect(toolbar).toHaveAttribute("aria-controls", contentArea.id);
 
-    // Toolbar contains 7 formatting buttons
-    expect(toolbarButtons).toHaveLength(7);
+    // Toolbar contains 9 formatting buttons
+    expect(toolbarButtons).toHaveLength(9);
 
     // Content area has default content and attributes
     expect(contentArea).toHaveAttribute("aria-label", "AriaLabel");

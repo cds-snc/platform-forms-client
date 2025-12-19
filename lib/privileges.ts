@@ -21,7 +21,7 @@ import { Session } from "next-auth";
 import get from "lodash/get";
 
 import { logMessage } from "./logger";
-import { logEvent } from "./auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
 import { checkOne } from "./cache/flags";
 import { InMemoryCache } from "./cache/inMemoryCache";
 import { auth } from "@lib/auth/nextAuth";
@@ -161,7 +161,8 @@ export const updatePrivilegesForUser = async (
           e.user.id,
           { type: "Privilege" },
           "AccessDenied",
-          `Attempted to modify privilege on user ${userID}`
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToModifyPrivilege,
+          { userId: userID }
         );
       }
       throw e;
@@ -219,9 +220,14 @@ export const updatePrivilegesForUser = async (
         userID,
         { type: "Privilege", id: privilege.id },
         "GrantPrivilege",
-        `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.name} to ${
-          user.email
-        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${abilityUser.id})`
+        AuditLogDetails.GrantedPrivilege,
+        {
+          privilege: privilegesInfo.find((p) => p.id === privilege.id)?.name ?? "",
+          email: user.email,
+          userId: user.id,
+          userEmail: privilegedUser?.email,
+          abilityUserId: abilityUser.id,
+        }
       )
     );
 
@@ -230,9 +236,14 @@ export const updatePrivilegesForUser = async (
         userID,
         { type: "Privilege", id: privilege.id },
         "RevokePrivilege",
-        `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.name} from ${
-          user.email
-        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${abilityUser.id})`
+        AuditLogDetails.RevokedPrivilege,
+        {
+          privilege: privilegesInfo.find((p) => p.id === privilege.id)?.name ?? "",
+          email: user.email,
+          userId: user.id,
+          userEmail: privilegedUser?.email,
+          abilityUserId: abilityUser.id,
+        }
       )
     );
 
@@ -298,7 +309,11 @@ export const getPrivilege = async (where: Prisma.PrivilegeWhereInput) => {
   }
 };
 
-const _getSubject = async (subject: { type: Extract<Subject, string>; id: string }) => {
+const _getSubject = async (subject: {
+  type: Extract<Subject, string>;
+  id: string;
+  allowDeleted: boolean;
+}) => {
   if (subject.id === "all") {
     return {};
   }
@@ -320,6 +335,7 @@ const _getSubject = async (subject: { type: Extract<Subject, string>; id: string
       return prisma.template.findUniqueOrThrow({
         where: {
           id: subject.id,
+          ttl: subject.allowDeleted ? { not: null } : null,
         },
         select: {
           id: true,
@@ -361,7 +377,8 @@ const _retrieveSubjects = async (
   subject: {
     type: Extract<Subject, string>;
     scope: "all" | { subjectId: string } | { subjectIds: string[] };
-  }
+  },
+  allowDeleted: boolean
 ) => {
   if (subject.scope === "all") {
     return [{}];
@@ -370,7 +387,11 @@ const _retrieveSubjects = async (
     const cachedItem = cache.get(`${subject.type}:${subject.scope.subjectId}`);
     if (cachedItem) return [cachedItem];
 
-    const item = await _getSubject({ type: subject.type, id: subject.scope.subjectId });
+    const item = await _getSubject({
+      type: subject.type,
+      id: subject.scope.subjectId,
+      allowDeleted: allowDeleted,
+    });
     cache.set(`${subject.type}:${subject.scope.subjectId}`, item);
     return [item];
   }
@@ -379,7 +400,7 @@ const _retrieveSubjects = async (
       const cachedItem = cache.get(`${subject.type}:${id}`);
       if (cachedItem) return cachedItem;
 
-      const item = await _getSubject({ type: subject.type, id });
+      const item = await _getSubject({ type: subject.type, id, allowDeleted: allowDeleted });
       cache.set(`${subject.type}:${id}`, item);
       return item;
     })
@@ -400,6 +421,7 @@ const _authorizationCheck = async (
       scope: "all" | { subjectId: string } | { subjectIds: string[] };
     };
     fields?: string[];
+    allowDeleted?: boolean;
   }[],
   logic: "all" | "one" = "all"
 ) => {
@@ -408,8 +430,8 @@ const _authorizationCheck = async (
   const ability = await getAbility();
 
   const result = await Promise.all(
-    rules.flatMap(async ({ action, subject, fields }) => {
-      const subjectsToValidate = await _retrieveSubjects(cache, subject);
+    rules.flatMap(async ({ action, subject, fields, allowDeleted }) => {
+      const subjectsToValidate = await _retrieveSubjects(cache, subject, allowDeleted ?? false);
 
       return subjectsToValidate.flatMap((subjectToValidate) => {
         if (fields) {
@@ -538,11 +560,12 @@ export const authorization = {
    * Can the user view this specific form
    * @param formId The ID of the form
    */
-  canViewForm: async (formId: string) => {
+  canViewForm: async (formId: string, allowDeleted?: boolean) => {
     return _authorizationCheck([
       {
         action: "view",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
+        allowDeleted: allowDeleted,
       },
     ]);
   },
@@ -550,11 +573,12 @@ export const authorization = {
    * Can the user edit this specific form
    * @param formId The ID of the form
    */
-  canEditForm: async (formId: string) => {
+  canEditForm: async (formId: string, allowDeleted?: boolean) => {
     return _authorizationCheck([
       {
         action: "update",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
+        allowDeleted: allowDeleted,
       },
     ]);
   },
@@ -567,6 +591,19 @@ export const authorization = {
       {
         action: "delete",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
+      },
+    ]);
+  },
+  /**
+   * Can the user restore this specific form
+   * @param formId The ID of the form
+   */
+  canRestoreForm: async (formId: string) => {
+    return _authorizationCheck([
+      {
+        action: "delete",
+        subject: { type: "FormRecord", scope: { subjectId: formId } },
+        allowDeleted: true,
       },
     ]);
   },

@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { BranchingIcon } from "@serverComponents/icons/BranchingIcon";
 import { Button } from "@clientComponents/globals";
 import { useRouter } from "next/navigation";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 export const AddBranchingButton = ({ id, locale }: { id: string; locale: string }) => {
   const { togglePanel } = useTreeRef();

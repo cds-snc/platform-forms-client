@@ -1,7 +1,7 @@
-import { autoFlowAllNextActions } from "@formBuilder/components/shared/right-panel/treeview/util/setNextAction";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { autoFlowAllNextActions } from "@root/lib/groups/utils/setNextAction";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { GroupsType } from "@gcforms/types";
-import { groupsHaveCustomRules } from "@formBuilder/components/shared/right-panel/treeview/util/setNextAction";
+import { groupsHaveCustomRules } from "@root/lib/groups/utils/setNextAction";
 
 export const useAutoFlowIfNoCustomRules = () => {
   const { getGroups, replaceGroups } = useGroupStore((s) => {

@@ -10,7 +10,7 @@ import {
 } from "@lib/types";
 import { Prisma } from "@prisma/client";
 import { authorization, getAbility } from "./privileges";
-import { logEvent } from "./auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { deleteKey } from "./serviceAccount";
@@ -56,6 +56,7 @@ const _parseTemplate = (template: {
   closedDetails?: Prisma.JsonValue | null;
   saveAndResume: boolean;
   notificationsInterval?: number | null;
+  ttl?: Date | null;
 }): FormRecord => {
   return {
     id: template.id,
@@ -90,6 +91,7 @@ const _parseTemplate = (template: {
     closedDetails: template.closedDetails as ClosedDetails,
     saveAndResume: template.saveAndResume,
     notificationsInterval: template.notificationsInterval as NotificationsInterval,
+    ...(template.ttl && { ttl: template.ttl }),
   };
 };
 
@@ -151,7 +153,12 @@ export class TemplateHasUnprocessedSubmissions extends Error {
  */
 export async function createTemplate(command: CreateTemplateCommand): Promise<FormRecord | null> {
   const { user } = await authorization.canCreateForm().catch((e) => {
-    logEvent(e.user.id, { type: "Form" }, "AccessDenied", "Attempted to create a Form");
+    logEvent(
+      e.user.id,
+      { type: "Form" },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToCreateForm
+    );
     throw e;
   });
 
@@ -244,7 +251,12 @@ export async function getAllTemplates(options?: {
     const { requestedWhere, sortByDateUpdated } = options ?? {};
     // Can a user view any Template
     const { user } = await authorization.canViewAllForms().catch((e) => {
-      logEvent(e.user.id, { type: "Form" }, "AccessDenied", "Attempted to access All System Forms");
+      logEvent(
+        e.user.id,
+        { type: "Form" },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttempttoAccessAllSystemForms
+      );
       throw e;
     });
 
@@ -279,7 +291,7 @@ export async function getAllTemplates(options?: {
 
     // Only log the event if templates are found
     if (templates.length > 0)
-      logEvent(user.id, { type: "Form" }, "ReadForm", "Accessed Forms: All System Forms");
+      logEvent(user.id, { type: "Form" }, "ReadForm", AuditLogDetails.AccessedAllSystemForms);
 
     return templates.map((template) => _parseTemplate(template));
   } catch (e) {
@@ -318,6 +330,7 @@ export async function getAllTemplatesForUser(
           id: true,
           created_at: true,
           updated_at: true,
+          ttl: true,
           name: true,
           jsonConfig: true,
           isPublished: true,
@@ -340,12 +353,9 @@ export async function getAllTemplatesForUser(
 
     // Only log the event if templates are found
     if (templates.length > 0)
-      logEvent(
-        ability.user.id,
-        { type: "Form" },
-        "ReadForm",
-        `Accessed Forms: ${templates.map((template) => template.id).toString()}`
-      );
+      logEvent(ability.user.id, { type: "Form" }, "ReadForm", AuditLogDetails.AccessedForms, {
+        formList: templates.map((template) => template.id).toString(),
+      });
 
     return templates.map((template) => _parseTemplate(template));
   } catch (e) {
@@ -417,14 +427,17 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
  * @param formID ID of form template
  * @returns FormRecord
  */
-export async function getFullTemplateByID(formID: string): Promise<FormRecord | null> {
+export async function getFullTemplateByID(
+  formID: string,
+  allowDeleted?: boolean
+): Promise<FormRecord | null> {
   try {
-    const { user } = await authorization.canViewForm(formID).catch((e) => {
+    const { user } = await authorization.canViewForm(formID, allowDeleted).catch((e) => {
       logEvent(
         e.user.id,
         { type: "Form", id: formID },
         "AccessDenied",
-        "Attemped to read form object"
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptedToReadFormObject
       );
       throw e;
     });
@@ -433,6 +446,7 @@ export async function getFullTemplateByID(formID: string): Promise<FormRecord | 
       .findUnique({
         where: {
           id: formID,
+          ttl: allowDeleted ? { not: null } : null,
         },
         include: {
           deliveryOption: true,
@@ -459,7 +473,7 @@ export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to retrieve users associated with Form"
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToListAssignedUsers
     );
     throw e;
   });
@@ -483,12 +497,7 @@ export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
 
   if (!templateWithAssociatedUsers) return null;
 
-  logEvent(
-    user.id,
-    { type: "Form", id: formID },
-    "ReadForm",
-    "Retrieved users associated with Form"
-  );
+  logEvent(user.id, { type: "Form", id: formID }, "ReadForm", AuditLogDetails.RetrieveFormUsers);
   return {
     formRecord: _parseTemplate(templateWithAssociatedUsers),
     users: templateWithAssociatedUsers.users,
@@ -506,7 +515,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
       e.user.id,
       { type: "Form", id: command.formID },
       "AccessDenied",
-      "Attempted to update Form"
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateForm
     );
     throw e;
   });
@@ -586,25 +595,35 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     user.id,
     { type: "Form", id: command.formID },
     "ChangeFormName",
-    `Updated Form name to ${command.name}`
+    AuditLogDetails.UpdatedFormName,
+    { newFormName: command.name ?? "" }
   );
   command.deliveryOption &&
     logEvent(
       user.id,
       { type: "Form", id: command.formID },
       "ChangeDeliveryOption",
-      `Change Delivery Option to: ${Object.keys(command.deliveryOption)
-        .map((key) => `${key}: ${command.deliveryOption && command.deliveryOption[key]}`)
-        .join(", ")}`
+      AuditLogDetails.ChangeDeliveryOption,
+      {
+        deliveryOption: Object.keys(command.deliveryOption)
+          .map((key) => `${key}: ${command.deliveryOption && command.deliveryOption[key]}`)
+          .join(", "),
+      }
     );
   command.securityAttribute &&
     logEvent(
       user.id,
       { type: "Form", id: command.formID },
       "ChangeSecurityAttribute",
-      `Updated security attribute to ${command.securityAttribute}`
+      AuditLogDetails.ChangeSecurityAttribute,
+      { securityAttribute: command.securityAttribute ?? "" }
     );
-  logEvent(user.id, { type: "Form", id: command.formID }, "UpdateForm", "Form content updated");
+  logEvent(
+    user.id,
+    { type: "Form", id: command.formID },
+    "UpdateForm",
+    AuditLogDetails.FormContentUpdated
+  );
 
   return _parseTemplate(updatedTemplate);
 }
@@ -623,7 +642,12 @@ export async function updateIsPublishedForTemplate(
   const newPublishStatus = isPublished;
 
   const { user } = await authorization.canPublishForm(formID).catch((e) => {
-    logEvent(e.user.id, { type: "Form", id: formID }, "AccessDenied", "Attempted to publish form");
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToPublishForm
+    );
     throw e;
   });
 
@@ -634,7 +658,7 @@ export async function updateIsPublishedForTemplate(
     } catch (e) {
       if (e instanceof TemplateAlreadyPublishedError) {
         // Already published, so we can just return the full template
-        return getFullTemplateByID(formID);
+        return getFullTemplateByID(formID, false);
       }
 
       throw e;
@@ -688,7 +712,7 @@ export async function removeAssignedUserFromTemplate(
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to remove assigned user for form"
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToRemoveAssignedUser
     );
     throw e;
   });
@@ -754,7 +778,8 @@ export async function removeAssignedUserFromTemplate(
     user.id,
     { type: "Form", id: formID },
     "RevokeFormAccess",
-    `Access revoked for ${userID}`
+    AuditLogDetails.RevokeFormAccess,
+    { userId: userID }
   );
 
   notifyOwnersOwnerRemoved(
@@ -777,7 +802,7 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to remove assigned user for form"
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToRemoveAssignedUser
     );
     throw e;
   });
@@ -836,7 +861,13 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
   // No changes
   if (updatedTemplate === null) return;
 
-  logEvent(user.id, { type: "Form", id: formID }, "GrantFormAccess", `Access granted to ${userID}`);
+  logEvent(
+    user.id,
+    { type: "Form", id: formID },
+    "GrantFormAccess",
+    AuditLogDetails.GrantFormAccess,
+    { userID: userID }
+  );
 
   notifyOwnersOwnerAdded(
     userToAdd,
@@ -938,7 +969,7 @@ export async function updateAssignedUsersForTemplate(
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to update assigned users for form"
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToSetAssignedUsers
     );
     throw e;
   });
@@ -1041,7 +1072,8 @@ export async function updateAssignedUsersForTemplate(
       user.id,
       { type: "Form", id: formID },
       "GrantFormAccess",
-      `Access granted to ${usersToAdd.map((user) => user.email ?? user.id).toString()}`
+      AuditLogDetails.AccessGrantedTo,
+      { userList: usersToAdd.map((user) => user.email ?? user.id).toString() }
     );
 
   usersToRemove.length > 0 &&
@@ -1049,7 +1081,8 @@ export async function updateAssignedUsersForTemplate(
       user.id,
       { type: "Form", id: formID },
       "RevokeFormAccess",
-      `Access revoked for ${usersToRemove.map((user) => user.email ?? user.id).toString()}`
+      AuditLogDetails.AccessRevokedFor,
+      { userList: usersToRemove.map((user) => user.email ?? user.id).toString() }
     );
 
   return _parseTemplate(updatedTemplate);
@@ -1064,7 +1097,7 @@ export async function updateFormPurpose(
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to set Form Purpose"
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToSetFormPurpose
     );
     throw e;
   });
@@ -1110,7 +1143,8 @@ export async function updateFormPurpose(
     user.id,
     { type: "Form", id: formID },
     "ChangeFormPurpose",
-    `Form Purpose set to ${formPurpose}`
+    AuditLogDetails.SetFormPurpose,
+    { formPurpose: formPurpose }
   );
 
   return _parseTemplate(updatedTemplate);
@@ -1125,7 +1159,7 @@ export async function updateFormSaveAndResume(
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to set save and resume"
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToSetSaveAndResume
     );
     throw e;
   });
@@ -1165,7 +1199,8 @@ export async function updateFormSaveAndResume(
     user.id,
     { type: "Form", id: formID },
     "ChangeFormSaveAndResume",
-    `Form save and resume set to ${saveAndResume}`
+    AuditLogDetails.SetSaveAndResume,
+    { saveAndResume: String(saveAndResume) }
   );
 
   return _parseTemplate(updatedTemplate);
@@ -1182,7 +1217,7 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to set Delivery Option to the Vault"
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToSetDeliveryToVault
     );
     throw e;
   });
@@ -1211,8 +1246,125 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
     user.id,
     { type: "Form", id: formID },
     "ChangeDeliveryOption",
-    "Delivery Option set to the Vault"
+    AuditLogDetails.SetDeliveryToVault
   );
+}
+
+/**
+ * Clone a template including associated users and delivery option
+ */
+export async function cloneTemplate(
+  formID: string,
+  allowDeleted: boolean
+): Promise<FormRecord | null> {
+  // Ensure the user can create a new form (needed to persist a clone)
+  // and that they can edit the source form.
+  const [createResult, editResult] = (await Promise.allSettled([
+    authorization.canCreateForm(),
+    authorization.canEditForm(formID, allowDeleted),
+  ])) as Array<PromiseSettledResult<{ user: { id: string } }>>;
+
+  if (createResult.status === "rejected") {
+    const e = createResult.reason as { user?: { id?: string } };
+    logEvent(
+      e?.user?.id ?? "unknown",
+      { type: "Form", id: formID },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToCloneFormNoCreate
+    );
+    throw createResult.reason;
+  }
+
+  if (editResult.status === "rejected") {
+    const e = editResult.reason as { user?: { id?: string } };
+    logEvent(
+      e?.user?.id ?? "unknown",
+      { type: "Form", id: formID },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToCloneFormNoEdit
+    );
+    throw editResult.reason;
+  }
+
+  // Extract the user from the fulfilled createResult
+  const { user } = (createResult as PromiseFulfilledResult<{ user: { id: string } }>).value;
+
+  const template = await prisma.template
+    .findUnique({
+      where: { id: formID, ttl: allowDeleted ? { not: null } : null },
+      include: {
+        deliveryOption: true,
+        users: { select: { id: true } },
+        notificationsUsers: { select: { id: true } },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!template) {
+    logMessage.warn(`[templates][cloneTemplate] Template ${formID} not found`);
+    return null;
+  }
+
+  // Build the create payload copying allowed fields. Do NOT copy apiServiceAccount or bearerToken.
+  const createData: Prisma.TemplateCreateInput = {
+    jsonConfig: template.jsonConfig as Prisma.JsonObject,
+    name: `Copy of ${template.name}`,
+    isPublished: false,
+    formPurpose: template.formPurpose,
+    publishReason: template.publishReason,
+    publishFormType: template.publishFormType,
+    publishDesc: template.publishDesc,
+    securityAttribute: template.securityAttribute,
+    saveAndResume: template.saveAndResume,
+    ...(template.notificationsInterval !== undefined && {
+      notificationsInterval: template.notificationsInterval,
+    }),
+    // connect only the current user (owners are not copied when cloning as the form will be a draft form)
+    users: {
+      connect: [{ id: user.id }],
+    },
+    // connect current user as a notificationsUser only if they were in the original notificationsUsers list
+    ...(template.notificationsUsers &&
+      template.notificationsUsers.some((u) => u.id === user.id) && {
+        notificationsUsers: {
+          connect: [{ id: user.id }],
+        },
+      }),
+    // NOTE: Do NOT copy deliveryOption when cloning - just default to the vault.
+  };
+
+  const createdTemplate = await prisma.template
+    .create({
+      data: createData,
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
+        saveAndResume: true,
+        notificationsInterval: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (createdTemplate === null) return null;
+
+  logEvent(
+    user.id,
+    { type: "Form", id: createdTemplate.id },
+    "CreateForm",
+    AuditLogDetails.ClonedForm
+  );
+
+  return _parseTemplate(createdTemplate);
 }
 
 /**
@@ -1222,14 +1374,33 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
  */
 export async function deleteTemplate(formID: string): Promise<FormRecord | null> {
   const { user } = await authorization.canDeleteForm(formID).catch((e) => {
-    logEvent(e.user.id, { type: "Form", id: formID }, "AccessDenied", "Attempted to delete Form");
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteForm
+    );
     throw e;
   });
 
-  // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
+  // Check if the form is draft or not.
+  const template = await prisma.template.findFirstOrThrow({
+    where: {
+      id: formID,
+    },
+    select: {
+      isPublished: true,
+    },
+  });
 
-  const numOfUnprocessedSubmissions = await unprocessedSubmissions(formID, true);
-  if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
+  if (!template) throw new TemplateNotFoundError();
+
+  // Only check submissions if the form is published.
+  if (template.isPublished) {
+    // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
+    const numOfUnprocessedSubmissions = await unprocessedSubmissions(formID, true);
+    if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
+  }
 
   // Check and delete any API keys from IDP
   await deleteKey(formID);
@@ -1272,6 +1443,87 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
   return _parseTemplate(templateMarkedAsDeleted);
 }
 
+/**
+ * Restores a form template from the archived state.
+ * @param formID ID of the form template
+ * @returns A boolean status if operation is sucessful
+ */
+export async function restoreTemplate(formID: string): Promise<FormRecord | null> {
+  const { user } = await authorization.canRestoreForm(formID).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToUnarchiveForm
+    );
+    throw e;
+  });
+
+  // Check if the form is archived.
+  const template = await prisma.template.findFirstOrThrow({
+    where: {
+      id: formID,
+      ttl: { not: null },
+    },
+    select: {
+      id: true,
+      created_at: true,
+      updated_at: true,
+      name: true,
+      jsonConfig: true,
+      isPublished: true,
+      deliveryOption: true,
+      securityAttribute: true,
+      formPurpose: true,
+      publishReason: true,
+      publishFormType: true,
+      publishDesc: true,
+      saveAndResume: true,
+      notificationsInterval: true,
+      ttl: true,
+    },
+  });
+
+  if (!template) throw new TemplateNotFoundError();
+
+  const templateMarkedToUnarchive = await prisma.template
+    .update({
+      where: {
+        id: formID,
+        ttl: { not: null },
+      },
+      data: {
+        ttl: null,
+      },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
+        saveAndResume: true,
+        notificationsInterval: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  // There was an error with Prisma, do not delete from Cache.
+  if (templateMarkedToUnarchive === null) return templateMarkedToUnarchive;
+
+  logEvent(user.id, { type: "Form", id: formID }, "UnarchiveForm");
+
+  if (formCache.cacheAvailable) formCache.invalidate(formID);
+
+  return _parseTemplate(templateMarkedToUnarchive);
+}
+
 // Remove and replace this utility with new authorization object in code
 export const checkUserHasTemplateOwnership = async (formID: string) => {
   await authorization.canEditForm(formID);
@@ -1308,7 +1560,7 @@ export const updateClosedData = async (
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to update closing date for Form"
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateClosingDate
     );
     throw e;
   });
@@ -1343,7 +1595,7 @@ export const updateClosedData = async (
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
-  logEvent(user.id, { type: "Form", id: formID }, "UpdateForm", "Updated closing date for Form");
+  logEvent(user.id, { type: "Form", id: formID }, "UpdateForm", AuditLogDetails.UpdateClosingDate);
   return { formID, closingDate };
 };
 
@@ -1353,7 +1605,7 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to update security attribute"
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateSecurityAttribute
     );
     throw e;
   });
@@ -1438,4 +1690,112 @@ export const checkIfClosed = async (formId: string) => {
   } catch (e) {
     return null;
   }
+};
+
+export const getFormJSONConfig = async (formId: string) => {
+  await authorization.canEditForm(formId).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formId },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToGetFormJson
+    );
+    throw e;
+  });
+
+  const result = await prisma.template
+    .findUnique({
+      where: { id: formId },
+      select: { jsonConfig: true },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!result) {
+    throw new Error(`Template not found when getting jsonConfig with formId ${formId}`);
+  }
+
+  let jsonConfig: FormProperties;
+  const raw = result.jsonConfig;
+
+  if (typeof raw === "string") {
+    // Only parse if (unexpectedly) stored as a string
+    jsonConfig = JSON.parse(raw) as FormProperties;
+  } else {
+    jsonConfig = raw as FormProperties;
+  }
+
+  return jsonConfig;
+};
+
+/**
+ * WARNING:
+ * Avoid using this function for any update that would modify the structure of the form
+ * e.g. groups, layouts, elements, etc.
+ * Doing so would cause an error in the infra pipeline when processing submissions.
+ */
+export const updateFormJsonConfig = async (formId: string, jsonConfig: FormProperties) => {
+  const { user } = await authorization.canEditForm(formId).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formId },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateFormJson
+    );
+    throw e;
+  });
+
+  const validationResult = validateTemplate(jsonConfig);
+
+  if (!validationResult.valid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Form config is invalid.\nReasons: ${JSON.stringify(
+        validationResult.errors
+      )}.\nConfig: ${JSON.stringify(jsonConfig)}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
+  const isValid = validateTemplateSize(JSON.stringify(jsonConfig));
+
+  if (!isValid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Template size exceeds the limit.\nConfig: ${JSON.stringify(
+        jsonConfig
+      )}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
+  const updatedTemplate = await prisma.template
+    .update({
+      where: {
+        id: formId,
+      },
+      data: { jsonConfig: jsonConfig as Prisma.JsonObject },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
+        saveAndResume: true,
+        notificationsInterval: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (updatedTemplate === null) return updatedTemplate;
+
+  if (formCache.cacheAvailable) formCache.invalidate(formId);
+
+  logEvent(user.id, { type: "Form", id: formId }, "UpdateFormJsonConfig");
+
+  return _parseTemplate(updatedTemplate);
 };

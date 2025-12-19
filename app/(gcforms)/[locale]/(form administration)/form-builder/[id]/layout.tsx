@@ -9,8 +9,8 @@ import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
 import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
-import { GroupStoreProvider } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
+import { GroupStoreProvider } from "@lib/groups/useGroupStore";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
@@ -57,13 +57,15 @@ export default async function Layout(props: {
     }
   }
 
-  let apiKeyId: string | false | void = "";
+  let apiKeyId: string | undefined = undefined;
 
   try {
     // No need to fetch in test, it will always not exist
     if (formID) {
       apiKeyId =
-        process.env.APP_ENV === "test" || formID === "0000" ? false : await checkKeyExists(formID);
+        process.env.APP_ENV === "test" || formID === "0000"
+          ? undefined
+          : await checkKeyExists(formID);
     }
   } catch (e) {
     // no-op
@@ -89,6 +91,12 @@ export default async function Layout(props: {
                     containerId="wide"
                     autoClose={10000}
                     ariaLabel="Notifications: Alt+T"
+                    width="600px"
+                  />
+                  <ToastContainer
+                    containerId="error-persistent"
+                    autoClose={false}
+                    ariaLabel="Error notifications"
                     width="600px"
                   />
                   <div className="flex grow flex-row gap-7">

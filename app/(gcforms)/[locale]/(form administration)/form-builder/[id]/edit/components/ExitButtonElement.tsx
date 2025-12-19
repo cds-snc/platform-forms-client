@@ -1,7 +1,7 @@
 import { useTranslation } from "@i18n/client";
 import Brand from "@clientComponents/globals/Brand";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { Language } from "@lib/types/form-builder-types";
 import { useState } from "react";
 
@@ -43,7 +43,7 @@ export const ExitButtonElement = ({
       </ul>
       <div>
         <p className="mb-4">{t("logic.exitButtonElement.buttonDescription")}</p>
-        <div className="mb-4">
+        <div className="mb-4 max-w-[400px]">
           <Brand brand={brand} />
         </div>
         <label className="mb-4 inline-block">{t("logic.exitButtonElement.buttonLabel")}</label>

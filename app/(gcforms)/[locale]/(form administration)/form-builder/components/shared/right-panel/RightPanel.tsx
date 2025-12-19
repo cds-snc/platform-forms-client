@@ -18,12 +18,14 @@ import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { useActivePathname } from "@lib/hooks/form-builder/useActivePathname";
 import { DownloadCSVWithGroups } from "@formBuilder/[id]/edit/translate/components/DownloadCSVWithGroups";
-import { useTreeRef } from "./treeview/provider/TreeRefProvider";
-import { TreeView } from "./treeview/TreeView";
+import { useTreeRef } from "./headless-treeview/provider/TreeRefProvider";
+
+import { HeadlessTreeView } from "./headless-treeview/TreeView";
+
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SelectNextAction } from "./logic/SelectNextAction";
-import { useGroupStore } from "./treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { Language } from "@lib/types/form-builder-types";
 import { announce } from "@gcforms/announce";
@@ -80,7 +82,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   const { activePathname } = useActivePathname();
-  const { treeView, togglePanel, open } = useTreeRef();
+  const { togglePanel, open } = useTreeRef();
   const getElement = useGroupStore((s) => s.getElement);
 
   const selectedElementId = useGroupStore((s) => s.selectedElementId);
@@ -144,6 +146,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
       <div className={cn("fixed right-0", fixedRange, open && "hidden")}>
         <div className="mr-4 mt-4">
           <CircleButton
+            id={!open ? "rightPanelTitle" : ""}
             title={t("rightPanel.openPanel")}
             onClick={() => {
               togglePanel && togglePanel(true);
@@ -172,7 +175,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                   <div className="p-6">
                     <div className="flex justify-between">
                       <div>
-                        <h2 id="rightPanelTitle" className="text-base" tabIndex={-1}>
+                        <h2 id={open ? "rightPanelTitle" : ""} className="text-base" tabIndex={-1}>
                           {t("rightPanel.openPanel")}
                         </h2>
                       </div>
@@ -180,7 +183,11 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                         <button
                           type="button"
                           className="relative rounded-md bg-white text-slate-500 hover:text-slate-600 focus:ring-2 focus:ring-indigo-500"
-                          onClick={() => togglePanel && togglePanel(false)}
+                          onClick={() => {
+                            togglePanel && togglePanel(false);
+                            // Focus management: move focus to the Pages heading when closing the panel
+                            document.getElementById("editPagesHeading")?.focus();
+                          }}
                         >
                           <span className="sr-only">{t("rightPanel.closePanel")}</span>
                           <RoundCloseIcon />
@@ -216,22 +223,19 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                     <TabPanels>
                       <TabPanel>
                         {/* Tree */}
-                        <SkipLinkReusable anchor="#pagesTitle">
-                          {t("skipLink.pages")}
-                        </SkipLinkReusable>
                         <div
                           className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll bg-slate-50"
                           aria-live="polite"
                         >
-                          <TreeView
-                            ref={treeView}
-                            addItem={() => {}}
-                            updateItem={() => {}}
-                            removeItem={() => {}}
-                            addPage={() => {}}
-                          />
+                          <HeadlessTreeView />
+                          <SkipLinkReusable anchor="#editPagesHeading">
+                            {t("skipLink.pages")}
+                          </SkipLinkReusable>
                         </div>
                         {/* end tree */}
+                        <SkipLinkReusable anchor="#editPagesHeading">
+                          {t("skipLink.pages")}
+                        </SkipLinkReusable>
                       </TabPanel>
                       <TabPanel>
                         {/* Translate */}

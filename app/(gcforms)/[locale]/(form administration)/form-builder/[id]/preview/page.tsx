@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { authCheckAndThrow } from "@lib/actions";
 import { notFound } from "next/navigation";
 import { Preview } from "./Preview";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
 import { ClientContainer } from "./ClientContainer";
 import { checkIfClosed } from "@lib/templates";
 import { ClosedDetails } from "@lib/types";

@@ -20,6 +20,7 @@ import { QuestionTagOptions } from "./QuestionTagOptions";
 import { QuestionIdOptions } from "./QuestionIdOptions";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { FileTypeOptions } from "./FileTypeOptions";
+import { NumberFieldOptions } from "./NumberFieldOptions";
 
 import { CopyItem } from "./CopyItem";
 
@@ -127,6 +128,8 @@ export const MoreDialog = () => {
               <FormattedDateOptions item={item} setItem={setItem} />
 
               <RequiredOptions item={item} setItem={setItem} />
+
+              <NumberFieldOptions item={item} setItem={setItem} />
 
               <DynamicRowOptions item={item} setItem={setItem} />
 

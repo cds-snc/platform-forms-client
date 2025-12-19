@@ -63,7 +63,6 @@ export enum FormElementTypes {
 
 export const BetaFormElementTypes = {
   [FormElementTypes.addressComplete]: { flag: "addressComplete" },
-  [FormElementTypes.fileInput]: { flag: "fileUpload" },
 };
 
 export type ConditionalRule = {
@@ -130,6 +129,7 @@ export interface ElementProperties {
   maxNumberOfRows?: number;
   autoComplete?: string;
   dateFormat?: string;
+  allowNegativeNumbers?: boolean;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;
@@ -215,6 +215,7 @@ export type FormRecord = {
   id: string;
   createdAt?: string;
   updatedAt?: string;
+  ttl?: Date | null;
   name: string;
   form: FormProperties;
   isPublished: boolean;
@@ -228,6 +229,7 @@ export type FormRecord = {
     | string
     | boolean
     | number
+    | Date
     | FormProperties
     | DeliveryOption
     | ClosedDetails

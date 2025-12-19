@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
@@ -80,6 +81,24 @@ export const ElementDialog = ({
     [setSelectedElement]
   );
 
+  const handleGroupChange = useCallback(
+    (
+      newGroupOrUpdater: SelectedGroupState | ((prev: SelectedGroupState) => SelectedGroupState)
+    ) => {
+      const newGroup =
+        typeof newGroupOrUpdater === "function"
+          ? newGroupOrUpdater(selectedGroup)
+          : newGroupOrUpdater;
+      setSelectedGroup(newGroup);
+      setSelectedElement(0);
+      // Focus the new group element immediately when selection changes
+      if (newGroup.ref.current) {
+        newGroup.ref.current.focus();
+      }
+    },
+    [selectedGroup]
+  );
+
   let id: FormElementTypes | undefined;
   let value = "";
   let Description = null;
@@ -94,14 +113,6 @@ export const ElementDialog = ({
     handleAddType && handleAddType(id);
     handleClose();
   }, [handleClose, handleAddType, id]);
-
-  // Retain focus on selected filter on change
-  useEffect(() => {
-    if (selectedGroup.ref.current) {
-      selectedGroup.ref.current.focus();
-    }
-    setSelectedElement(0);
-  }, [selectedGroup]);
 
   useEffect(() => {
     if (descriptionRef.current) {
@@ -133,7 +144,7 @@ export const ElementDialog = ({
         <Header>
           <h4>{t("addElement")}</h4>
           <ElementFilters
-            setSelectedGroup={setSelectedGroup}
+            setSelectedGroup={handleGroupChange}
             selectedGroup={selectedGroup}
             activeGroups={activeGroups}
           />

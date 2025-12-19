@@ -15,15 +15,15 @@ import {
   setDescription,
   setTitle,
 } from "@lib/utils/form-builder/itemHelper";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import {
   getTranslatedElementProperties,
   getTranslatedDynamicRowProperties,
 } from "@formBuilder/actions";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTranslation } from "@i18n/client";
 import { v4 as uuid } from "uuid";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 export const useHandleAdd = () => {
   const { add, addSubItem, setChangeKey } = useTemplateStore((s) => ({
@@ -34,7 +34,7 @@ export const useHandleAdd = () => {
 
   const { t } = useTranslation("form-builder");
 
-  const { treeView } = useTreeRef();
+  const { headlessTree } = useTreeRef();
 
   const groupId = useGroupStore((state) => state.id);
 
@@ -113,7 +113,7 @@ export const useHandleAdd = () => {
       }
 
       id = await add(index, item.type, item, groupId);
-      treeView?.current?.addItem(String(id));
+      headlessTree?.current?.rebuildTree();
 
       const el = document.getElementById(`item-${id}`);
 
@@ -125,7 +125,7 @@ export const useHandleAdd = () => {
 
       el?.focus();
     },
-    [add, create, groupId, treeView, loadError]
+    [add, create, groupId, headlessTree, loadError]
   );
 
   // Handle adding a sub-element
