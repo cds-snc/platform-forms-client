@@ -32,6 +32,9 @@ import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
 import { formatDuration } from "../lib/formatDuration";
 
+// Singleton logger instance
+const responseLogger = new ResponseDownloadLogger();
+
 interface ResponsesContextType {
   locale: string;
   formId: string;
@@ -103,7 +106,6 @@ export const ResponsesProvider = ({
   const [currentSubmissionId, setCurrentSubmissionId] = useState<string | null>(null);
   const [hasMaliciousAttachments, setHasMaliciousAttachments] = useState<boolean>(false);
   const [processedSubmissionsCount, setProcessedSubmissionsCountState] = useState<number>(0);
-  const loggerRef = useRef(new ResponseDownloadLogger());
   const processedSubmissionsCountRef = useRef<number>(0);
 
   const [isProcessingInterrupted, setIsProcessingInterrupted] = useState(false);
@@ -154,7 +156,7 @@ export const ResponsesProvider = ({
   useEffect(() => {
     const handleBeforeUnload = (_event: BeforeUnloadEvent) => {
       if (!processingCompleted) {
-        loggerRef.current.warn("Window unloading, interrupting processing if active.");
+        responseLogger.warn("Window unloading, interrupting processing if active.");
         setInterrupt(true);
       }
     };
@@ -171,17 +173,17 @@ export const ResponsesProvider = ({
       return [];
     }
 
-    loggerRef.current.info("Retrieving new form submissions");
+    responseLogger.info("Retrieving new form submissions");
 
     try {
       const submissions = await apiClient.getNewFormSubmissions();
       setNewFormSubmissions(submissions);
 
-      loggerRef.current.info(`Queued ${submissions.length} new form submissions for processing`);
+      responseLogger.info(`Queued ${submissions.length} new form submissions for processing`);
 
       return submissions;
     } catch (error) {
-      loggerRef.current.error("Error loading submissions:", error);
+      responseLogger.error("Error loading submissions:", error);
       setNewFormSubmissions([]);
       toast.error(<ErrorRetreivingSubmissions />, "wide");
       return [];
@@ -198,7 +200,7 @@ export const ResponsesProvider = ({
 
   const processResponses = useCallback(
     async (initialSubmissions?: NewFormSubmission[]) => {
-      loggerRef.current.info("Beginning processing of form responses");
+      responseLogger.info("Beginning processing of form responses");
 
       // Timer start
       const startTime = Date.now();
@@ -215,7 +217,7 @@ export const ResponsesProvider = ({
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
 
       if (!directoryHandle || !privateApiKey || !apiClient) {
-        loggerRef.current.error("Missing required context values, aborting processing");
+        responseLogger.error("Missing required context values, aborting processing");
         return;
       }
 
@@ -223,7 +225,7 @@ export const ResponsesProvider = ({
         formTemplate = await apiClient.getFormTemplate();
         formId = apiClient.getFormId();
       } catch (error) {
-        loggerRef.current.error("Error loading form template: ", error);
+        responseLogger.error("Error loading form template: ", error);
         toast.error(<TemplateFailed />, "wide");
         return;
       }
@@ -233,7 +235,7 @@ export const ResponsesProvider = ({
        */
       if (selectedFormat === "csv") {
         const result = await initCsv({ formId, dirHandle: directoryHandle, formTemplate });
-        loggerRef.current.info("Initialized CSV file: ", result.handle?.name);
+        responseLogger.info("Initialized CSV file: ", result.handle?.name);
 
         csvFileHandle = result && result.handle;
         const csvExists = result && !result.created;
@@ -251,17 +253,17 @@ export const ResponsesProvider = ({
         htmlDirectoryHandle = await directoryHandle.getDirectoryHandle(HTML_DOWNLOAD_FOLDER, {
           create: true,
         });
-        loggerRef.current.info("Initialized HTML directory: ", htmlDirectoryHandle.name);
+        responseLogger.info("Initialized HTML directory: ", htmlDirectoryHandle.name);
       }
 
       // Import decryption key once
       const decryptionKey = await importPrivateKeyDecrypt(privateApiKey.key);
 
       while (formResponses.length > 0 && !interruptRef.current) {
-        loggerRef.current.info(`Processing next ${formResponses.length} submissions`);
+        responseLogger.info(`Processing next ${formResponses.length} submissions`);
         for (const response of formResponses) {
           if (interruptRef.current) {
-            loggerRef.current.warn("Processing interrupted");
+            responseLogger.warn("Processing interrupted");
             break;
           }
 
@@ -282,7 +284,7 @@ export const ResponsesProvider = ({
               formId: String(formId),
               formTemplate: formTemplate!,
               t,
-              logger: loggerRef.current,
+              logger: responseLogger,
             });
           } catch (error) {
             setInterrupt(true);
@@ -291,7 +293,7 @@ export const ResponsesProvider = ({
             // Check if this is a file write error from CSV writer by examining the cause
             const errorCause = error instanceof Error ? error.cause : null;
 
-            loggerRef.current.error(`Error processing submission ID ${response.name}:`, error);
+            responseLogger.error(`Error processing submission ID ${response.name}:`, error);
 
             if (errorCause instanceof DOMException) {
               if (errorCause.name === "NoModificationAllowedError") {
@@ -331,12 +333,12 @@ export const ResponsesProvider = ({
       sessionCompleted = !interruptRef.current;
 
       if (sessionCompleted) {
-        loggerRef.current.info(`Processing session completed in ${durationStr}.`);
+        responseLogger.info(`Processing session completed in ${durationStr}.`);
       } else {
-        loggerRef.current.warn(`Processing session interrupted after ${durationStr}.`);
+        responseLogger.warn(`Processing session interrupted after ${durationStr}.`);
       }
 
-      loggerRef.current.info(`Processed ${processedSubmissionsCountRef.current} submissions.`);
+      responseLogger.info(`Processed ${processedSubmissionsCountRef.current} submissions.`);
 
       // Cleanup
       interruptRef.current = false;
@@ -403,8 +405,7 @@ export const ResponsesProvider = ({
       setCurrentSubmissionId,
       resetState,
       resetNewSubmissions,
-      // eslint-disable-next-line react-hooks/refs
-      logger: loggerRef.current,
+      logger: responseLogger,
     }),
     [
       locale,
