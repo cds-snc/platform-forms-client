@@ -14,7 +14,6 @@ import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 export type SelectedGroupState = {
   group: Groups | "all";
-  ref: React.RefObject<HTMLElement | null>;
 };
 
 const filterElementsByGroup = (elements: ElementOption[], selectedGroup: Groups | "all") => {
@@ -60,8 +59,8 @@ export const ElementDialog = ({
   const [selectedElement, setSelectedElement] = useState(0);
   const [selectedGroup, setSelectedGroup] = useState<SelectedGroupState>({
     group: "all",
-    ref: React.createRef<HTMLElement>(),
   });
+  const groupElementRef = useRef<HTMLElement>(null);
 
   // Retrieve elements applying any initial filters
   const filteredElements = useElementOptions(filterElements);
@@ -92,8 +91,8 @@ export const ElementDialog = ({
       setSelectedGroup(newGroup);
       setSelectedElement(0);
       // Focus the new group element immediately when selection changes
-      if (newGroup.ref.current) {
-        newGroup.ref.current.focus();
+      if (groupElementRef.current) {
+        groupElementRef.current.focus();
       }
     },
     [selectedGroup]
