@@ -30,7 +30,7 @@
     "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev",
     "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",
     "lint": "eslint . && tsc --noEmit",
-    "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
+    "lint:report": "eslint --output-file eslint_report.html --format html . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

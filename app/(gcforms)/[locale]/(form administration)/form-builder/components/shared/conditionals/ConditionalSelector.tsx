@@ -133,6 +133,11 @@ export const ConditionalSelector = ({
 
   const language = translationLanguagePriority;
 
+  const currentRules = useMemo(
+    () => currentElement?.properties.conditionalRules || [],
+    [currentElement?.properties.conditionalRules]
+  );
+
   const questions = useMemo(() => {
     const items = elements
       .filter((item) => {
@@ -140,9 +145,7 @@ export const ConditionalSelector = ({
           item.id !== itemId &&
           // Prevent creating circular logic by filtering out questions
           // that already have rules pointing to the current element.
-          !currentElement?.properties.conditionalRules?.some(
-            (rule) => rule.choiceId.split(".")[0] === String(item.id)
-          )
+          !currentRules?.some((rule) => rule.choiceId.split(".")[0] === String(item.id))
         );
       })
       .map((question) => {
@@ -165,7 +168,7 @@ export const ConditionalSelector = ({
     // Prepend empty option with default text
     items.unshift({ label: t("addConditionalRules.selectQuestion"), value: "" });
     return items;
-  }, [currentElement?.properties.conditionalRules, elements, itemId, language, localizeField, t]);
+  }, [currentRules, elements, itemId, language, localizeField, t]);
 
   const choiceParentQuestion = choiceId?.split(".")[0] || null;
 
