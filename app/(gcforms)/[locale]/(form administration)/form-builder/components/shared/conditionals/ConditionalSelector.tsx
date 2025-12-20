@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useMemo, useId } from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import { FormElement } from "@lib/types";
@@ -29,7 +29,7 @@ const ChoiceSelect = ({
   className?: string;
 }) => {
   const { t } = useTranslation("form-builder");
-  const labelId = `choice-select-${Date.now()}`;
+  const labelId = `choice-select-${useId()}`;
 
   if (!selected || selected === "1") {
     selected = "1.0";
@@ -74,7 +74,7 @@ const QuestionSelect = ({
   className?: string;
 }) => {
   const { t } = useTranslation("form-builder");
-  const labelId = `question-select-${Date.now()}`;
+  const labelId = `question-select-${useId()}`;
 
   return (
     <div className="mb-4">
