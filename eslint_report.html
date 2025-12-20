@@ -118,7 +118,7 @@
         <div id="overview" class="bg-2">
             <h1>ESLint Report</h1>
             <div>
-                <span>42 problems (42 errors, 0 warnings)</span> - Generated on Sat Dec 20 2025 15:17:51 GMT-0500 (Eastern Standard Time)
+                <span>36 problems (36 errors, 0 warnings)</span> - Generated on Sat Dec 20 2025 15:31:56 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <table>
@@ -2996,39 +2996,11 @@ Calling setState synchronously within an effect body causes cascading renders th
     </th>
 </tr>
 
-<tr class="bg-2" data-group="f-374">
+<tr class="bg-0" data-group="f-374">
     <th colspan="4">
         [+] /Users/tim.arney/projects/platform-forms-client/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/components/saveAndResume/SetSaveAndResume.tsx
-        <span>1 problem (1 error, 0 warnings)</span>
+        <span>0 problems</span>
     </th>
-</tr>
-<tr style="display: none;" class="f-374">
-    <td>27:5</td>
-    <td class="clr-2">Error</td>
-    <td>Compilation Skipped: Existing memoization could not be preserved
-
-React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. This value was memoized in source but not in compilation output.
-
-/Users/tim.arney/projects/platform-forms-client/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/components/saveAndResume/SetSaveAndResume.tsx:27:5
-  25 |
-  26 |   const saveFormStatus = useCallback(
-&#62; 27 |     async (newStatus: string) =&#62; {
-     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-&#62; 28 |       const saveAndResume = newStatus === &#34;off&#34; ? false : true;
-     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-&#62; 29 |
-     …
-     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-&#62; 41 |       toast.success(t(&#34;saveAndResume.savedSuccessMessage&#34;));
-     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-&#62; 42 |     },
-     | ^^^^^^ Could not preserve existing memoization
-  43 |     [status, t, setSaveAndResume, formId]
-  44 |   );
-  45 |</td>
-    <td>
-        <a href="" target="_blank" rel="noopener noreferrer">react-hooks/preserve-manual-memoization</a>
-    </td>
 </tr>
 
 <tr class="bg-0" data-group="f-375">
@@ -4840,34 +4812,11 @@ Calling setState synchronously within an effect body causes cascading renders th
     </th>
 </tr>
 
-<tr class="bg-2" data-group="f-610">
+<tr class="bg-0" data-group="f-610">
     <th colspan="4">
         [+] /Users/tim.arney/projects/platform-forms-client/components/clientComponents/admin/LeftNav/NavLink.tsx
-        <span>1 problem (1 error, 0 warnings)</span>
+        <span>0 problems</span>
     </th>
-</tr>
-<tr style="display: none;" class="f-610">
-    <td>24:7</td>
-    <td class="clr-2">Error</td>
-    <td>Error: Calling setState synchronously within an effect can trigger cascading renders
-
-Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
-* Update external systems with the latest state from React.
-* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
-
-Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
-
-/Users/tim.arney/projects/platform-forms-client/components/clientComponents/admin/LeftNav/NavLink.tsx:24:7
-  22 |   useEffect(() =&#62; {
-  23 |     if (pathname.includes(href)) {
-&#62; 24 |       setIsActive(true);
-     |       ^^^^^^^^^^^ Avoid calling setState() directly within an effect
-  25 |     } else {
-  26 |       setIsActive(false);
-  27 |     }</td>
-    <td>
-        <a href="" target="_blank" rel="noopener noreferrer">react-hooks/set-state-in-effect</a>
-    </td>
 </tr>
 
 <tr class="bg-0" data-group="f-611">
@@ -5778,124 +5727,11 @@ Calling setState synchronously within an effect body causes cascading renders th
     </th>
 </tr>
 
-<tr class="bg-2" data-group="f-721">
+<tr class="bg-0" data-group="f-721">
     <th colspan="4">
         [+] /Users/tim.arney/projects/platform-forms-client/components/clientComponents/globals/Header/YourAccountDropdown.tsx
-        <span>3 problems (3 errors, 0 warnings)</span>
+        <span>0 problems</span>
     </th>
-</tr>
-<tr style="display: none;" class="f-721">
-    <td>80:18</td>
-    <td class="clr-2">Error</td>
-    <td>Error: Cannot create components during render
-
-Components created during render will reset their state each time they are created. Declare components outside of render.
-
-/Users/tim.arney/projects/platform-forms-client/components/clientComponents/globals/Header/YourAccountDropdown.tsx:80:18
-  78 |                 className={`z-[1000] mt-1.5 min-w-[230px] rounded-lg border-1 border-slate-500 bg-white px-1.5 py-1 shadow-md`}
-  79 |               &#62;
-&#62; 80 |                 &#60;DropdownMenuItem href={`/${i18n.language}/profile`} text={t(&#34;adminNav.profile&#34;)} /&#62;
-     |                  ^^^^^^^^^^^^^^^^ This component is created during render
-  81 |
-  82 |                 {(ability?.can(&#34;view&#34;, &#34;Flag&#34;) || ability?.can(&#34;view&#34;, &#34;Privilege&#34;)) &#38;&#38; (
-  83 |                   &#60;DropdownMenuItem
-
-/Users/tim.arney/projects/platform-forms-client/components/clientComponents/globals/Header/YourAccountDropdown.tsx:39:28
-  37 |   };
-  38 |
-&#62; 39 |   const DropdownMenuItem = ({
-     |                            ^^
-&#62; 40 |     href,
-     | ^^^^^^^^^
-&#62; 41 |     text,
-     …
-     | ^^^^^^^^^
-&#62; 57 |     );
-     | ^^^^^^^^^
-&#62; 58 |   };
-     | ^^^^ The component is created during render here
-  59 |
-  60 |   return (
-  61 |     &#60;&#62;</td>
-    <td>
-        <a href="" target="_blank" rel="noopener noreferrer">react-hooks/static-components</a>
-    </td>
-</tr>
-
-<tr style="display: none;" class="f-721">
-    <td>83:20</td>
-    <td class="clr-2">Error</td>
-    <td>Error: Cannot create components during render
-
-Components created during render will reset their state each time they are created. Declare components outside of render.
-
-/Users/tim.arney/projects/platform-forms-client/components/clientComponents/globals/Header/YourAccountDropdown.tsx:83:20
-  81 |
-  82 |                 {(ability?.can(&#34;view&#34;, &#34;Flag&#34;) || ability?.can(&#34;view&#34;, &#34;Privilege&#34;)) &#38;&#38; (
-&#62; 83 |                   &#60;DropdownMenuItem
-     |                    ^^^^^^^^^^^^^^^^ This component is created during render
-  84 |                     href={`/${i18n.language}/admin`}
-  85 |                     text={t(&#34;adminNav.administration&#34;)}
-  86 |                   /&#62;
-
-/Users/tim.arney/projects/platform-forms-client/components/clientComponents/globals/Header/YourAccountDropdown.tsx:39:28
-  37 |   };
-  38 |
-&#62; 39 |   const DropdownMenuItem = ({
-     |                            ^^
-&#62; 40 |     href,
-     | ^^^^^^^^^
-&#62; 41 |     text,
-     …
-     | ^^^^^^^^^
-&#62; 57 |     );
-     | ^^^^^^^^^
-&#62; 58 |   };
-     | ^^^^ The component is created during render here
-  59 |
-  60 |   return (
-  61 |     &#60;&#62;</td>
-    <td>
-        <a href="" target="_blank" rel="noopener noreferrer">react-hooks/static-components</a>
-    </td>
-</tr>
-
-<tr style="display: none;" class="f-721">
-    <td>89:18</td>
-    <td class="clr-2">Error</td>
-    <td>Error: Cannot create components during render
-
-Components created during render will reset their state each time they are created. Declare components outside of render.
-
-/Users/tim.arney/projects/platform-forms-client/components/clientComponents/globals/Header/YourAccountDropdown.tsx:89:18
-  87 |                 )}
-  88 |                 &#60;DropdownMenu.Separator className=&#34;mb-2 border-b pt-2&#34; /&#62;
-&#62; 89 |                 &#60;DropdownMenuItem href=&#34;#&#34; onClick={handleLogout} text={t(&#34;adminNav.logout&#34;)} /&#62;
-     |                  ^^^^^^^^^^^^^^^^ This component is created during render
-  90 |               &#60;/DropdownMenu.Content&#62;
-  91 |             &#60;/DropdownMenu.Portal&#62;
-  92 |           &#60;/DropdownMenu.Root&#62;
-
-/Users/tim.arney/projects/platform-forms-client/components/clientComponents/globals/Header/YourAccountDropdown.tsx:39:28
-  37 |   };
-  38 |
-&#62; 39 |   const DropdownMenuItem = ({
-     |                            ^^
-&#62; 40 |     href,
-     | ^^^^^^^^^
-&#62; 41 |     text,
-     …
-     | ^^^^^^^^^
-&#62; 57 |     );
-     | ^^^^^^^^^
-&#62; 58 |   };
-     | ^^^^ The component is created during render here
-  59 |
-  60 |   return (
-  61 |     &#60;&#62;</td>
-    <td>
-        <a href="" target="_blank" rel="noopener noreferrer">react-hooks/static-components</a>
-    </td>
 </tr>
 
 <tr class="bg-0" data-group="f-722">
@@ -5970,34 +5806,11 @@ Calling setState synchronously within an effect body causes cascading renders th
     </th>
 </tr>
 
-<tr class="bg-2" data-group="f-729">
+<tr class="bg-0" data-group="f-729">
     <th colspan="4">
         [+] /Users/tim.arney/projects/platform-forms-client/components/clientComponents/globals/SubNavLink.tsx
-        <span>1 problem (1 error, 0 warnings)</span>
+        <span>0 problems</span>
     </th>
-</tr>
-<tr style="display: none;" class="f-729">
-    <td>40:7</td>
-    <td class="clr-2">Error</td>
-    <td>Error: Calling setState synchronously within an effect can trigger cascading renders
-
-Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
-* Update external systems with the latest state from React.
-* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
-
-Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
-
-/Users/tim.arney/projects/platform-forms-client/components/clientComponents/globals/SubNavLink.tsx:40:7
-  38 |     // Only one nav link can be active at a time
-  39 |     if (linkPathname === activePathname) {
-&#62; 40 |       setActive(true);
-     |       ^^^^^^^^^ Avoid calling setState() directly within an effect
-  41 |     } else {
-  42 |       if (!defaultActive) {
-  43 |         setActive(false);</td>
-    <td>
-        <a href="" target="_blank" rel="noopener noreferrer">react-hooks/set-state-in-effect</a>
-    </td>
 </tr>
 
 <tr class="bg-0" data-group="f-730">

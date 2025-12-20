@@ -13,6 +13,8 @@ import { getOverdueTemplateIds } from "@lib/overdue";
 import { Invitations } from "./components/Invitations/Invitations";
 import { prisma } from "@lib/integration/prismaConnector";
 
+const FALLBACK_DATE = Date.now().toString();
+
 export type FormsTemplate = {
   id: string;
   titleEn: string;
@@ -81,7 +83,7 @@ export default async function Page(props: {
         deliveryOption,
         name,
         isPublished,
-        date: updatedAt ?? Date.now().toString(),
+        date: updatedAt ?? FALLBACK_DATE,
         url: `/${locale}/id/${id}`,
         overdue: false,
         ttl: ttl ? new Date(ttl) : null,
