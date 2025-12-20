@@ -69,64 +69,55 @@ export const useHandleAdd = () => {
   const loadError = t("failedToReadFormFile");
 
   // Note: For Sub elements see handleAddSubElement (below)
-  const handleAddElement = useCallback(
-    async (index: number, type?: FormElementTypes) => {
-      let id;
+  const handleAddElement = async (index: number, type?: FormElementTypes) => {
+    let id;
 
-      if (type === "customJson") {
-        try {
-          await elementLoader(index, async (data, position) => {
-            id = await add(position, data.type, data, groupId);
-          });
-        } catch (e) {
-          logMessage.info(`${(e as Error).message}`);
-          toast.error(loadError);
-        }
-
-        return id;
+    if (type === "customJson") {
+      try {
+        await elementLoader(index, async (data, position) => {
+          id = await add(position, data.type, data, groupId);
+        });
+      } catch (e) {
+        logMessage.info(`${(e as Error).message}`);
+        toast.error(loadError);
       }
 
-      if (allowedTemplates.includes(type as TemplateTypes)) {
-        try {
-          await blockLoader(type as TemplateTypes, index, async (data, position) => {
-            id = await add(position, data.type, data, groupId);
-          });
-        } catch (e) {
-          toast.error(loadError);
-        }
-        return id;
+      return id;
+    }
+
+    if (allowedTemplates.includes(type as TemplateTypes)) {
+      try {
+        await blockLoader(type as TemplateTypes, index, async (data, position) => {
+          id = await add(position, data.type, data, groupId);
+        });
+      } catch (e) {
+        toast.error(loadError);
       }
+      return id;
+    }
 
-      const item = await create(type as FormElementTypes);
+    const item = await create(type as FormElementTypes);
 
-      // Set default properties based on element type
-      switch (item.type) {
-        case FormElementTypes.fileInput:
-          item.properties.fileType = getDefaultFileGroupTypes();
-          break;
-        case FormElementTypes.dynamicRow:
-          item.properties.dynamicRow = await getTranslatedDynamicRowProperties();
-          item.properties.maxNumberOfRows = MAX_DYNAMIC_ROW_AMOUNT;
-          break;
-        default:
-          break;
-      }
+    // Set default properties based on element type
+    if (item.type === FormElementTypes.fileInput) {
+      item.properties.fileType = getDefaultFileGroupTypes();
+    } else if (item.type === FormElementTypes.dynamicRow) {
+      item.properties.dynamicRow = await getTranslatedDynamicRowProperties();
+      item.properties.maxNumberOfRows = MAX_DYNAMIC_ROW_AMOUNT;
+    }
 
-      id = await add(index, item.type, item, groupId);
-      headlessTree?.current?.rebuildTree();
+    id = await add(index, item.type, item, groupId);
+    headlessTree?.current?.rebuildTree();
 
-      const el = document.getElementById(`item-${id}`);
-
-      if (!el) return id;
-
+    const el = document.getElementById(`item-${id}`);
+    if (el) {
       // Close all panel menus before focussing on the new element
-      const closeAll = new CustomEvent("close-all-panel-menus");
-      window && window.dispatchEvent(closeAll);
+      window?.dispatchEvent(new CustomEvent("close-all-panel-menus"));
+      el.focus();
+    }
 
-      el?.focus();
-    },
-    [add, create, groupId, headlessTree, loadError]
-  );
+    return id;
+  };
 
   // Handle adding a sub-element
   const handleAddSubElement = useCallback(
