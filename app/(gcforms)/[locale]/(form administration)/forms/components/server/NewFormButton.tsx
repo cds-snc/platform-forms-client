@@ -9,7 +9,7 @@ export const NewFormButton = async () => {
 
   return (
     <div className="mr-6 inline">
-      <LinkButton.Primary href={`/${language}/form-builder`}>
+      <LinkButton.Primary href={`/${language}/form-builder`} prefetch={false}>
         <>
           <span aria-hidden="true" className="mr-2 inline-block">
             +
