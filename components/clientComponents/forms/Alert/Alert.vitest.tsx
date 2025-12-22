@@ -6,7 +6,8 @@ import "@testing-library/jest-dom";
 import { render, screen, cleanup } from "@testing-library/react";
 import { describe, it, expect, afterEach } from "vitest";
 
-import { Alert, ErrorStatus } from "./Alert";
+import { Alert } from "./Alert";
+import { ErrorStatus } from "@lib/constants";
 
 describe("Alert component", () => {
   afterEach(() => cleanup());

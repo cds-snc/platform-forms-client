@@ -7,7 +7,7 @@ import { verify, getRedirectPath, ErrorStates } from "../../actions";
 import { Expired2faSession } from "./Expired2faSession";
 import { Locked2fa } from "./Locked2fa";
 import Link from "next/link";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { useFocusIt } from "@lib/hooks/useFocusIt";

@@ -8,3 +8,12 @@ export const HeadingLevel = {
 } as const;
 
 export type HeadingLevel = (typeof HeadingLevel)[keyof typeof HeadingLevel];
+
+export const ErrorStatus = {
+  SUCCESS: "SUCCESS",
+  WARNING: "WARNING",
+  ERROR: "ERROR",
+  INFO: "INFO",
+} as const;
+
+export type ErrorStatus = (typeof ErrorStatus)[keyof typeof ErrorStatus];
