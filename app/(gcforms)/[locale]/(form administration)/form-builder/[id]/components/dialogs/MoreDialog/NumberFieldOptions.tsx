@@ -15,6 +15,10 @@ export const NumberFieldOptions = ({
     return null;
   }
 
+  if (!item.properties.validation || item.properties.validation.type !== "number") {
+    return null;
+  }
+
   const checked = item.properties.allowNegativeNumbers;
 
   return (
@@ -45,6 +49,33 @@ export const NumberFieldOptions = ({
         >
           <span className="checkbox-label-text">{t("addElementDialog.number.allowNegative")}</span>
         </label>
+      </div>
+      <div>
+        <label
+          data-testid="stepCount"
+          className="gc-label mt-1"
+          htmlFor={`numberField-${item.id}-id-stepCount`}
+        >
+          {t("addElementDialog.number.decimalPlaces")}
+        </label>
+        <input
+          type="number"
+          className="gc-input-text mt-2"
+          id={`numberField-${item.id}-id-stepCount`}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const stepCount = parseInt(e.target.value, 10);
+            setItem({
+              ...item,
+              properties: {
+                ...item.properties,
+                ...{ stepCount },
+              },
+            });
+          }}
+          value={typeof item.properties.stepCount === "number" ? item.properties.stepCount : 0}
+          min={0}
+          step={1}
+        />
       </div>
     </section>
   );
