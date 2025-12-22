@@ -1,13 +1,14 @@
 import React, { type JSX } from "react";
 
-export enum HeadingLevel {
-  H1 = "h1",
-  H2 = "h2",
-  H3 = "h3",
-  H4 = "h4",
-  H5 = "h5",
-  H6 = "h6",
-}
+export const HeadingLevel = {
+  H1: "h1",
+  H2: "h2",
+  H3: "h3",
+  H4: "h4",
+  H5: "h5",
+  H6: "h6",
+} as const;
+type HeadingLevel = (typeof HeadingLevel)[keyof typeof HeadingLevel];
 
 export const Card = ({
   children,
