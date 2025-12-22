@@ -213,7 +213,7 @@ export const formatDateTimeUTC = (
   includeSeconds = false
 ) => {
   const arrayOffset = includeSeconds ? -5 : -8;
-  const date = new Date(timestamp || 0);
+  const date = new Date(timestamp);
   return date.toISOString().replace("T", " ").slice(0, arrayOffset) + " UTC";
 };
 
