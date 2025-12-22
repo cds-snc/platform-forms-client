@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.8](https://github.com/cds-snc/platform-forms-client/compare/v4.6.7...v4.6.8) (2025-12-18)
+
+
+### Bug Fixes
+
+* api key detection / sync issues ([#6594](https://github.com/cds-snc/platform-forms-client/issues/6594)) ([2077e59](https://github.com/cds-snc/platform-forms-client/commit/2077e5996f19e5d77cefd8266a127c333b2117bd))
+* logic of multiple api keys associated to machine user ([#6590](https://github.com/cds-snc/platform-forms-client/issues/6590)) ([68f33c1](https://github.com/cds-snc/platform-forms-client/commit/68f33c19bce52840e76e8da79a5824f8b06e58c0))
+* Visibility infinite recursion prevention ([#6581](https://github.com/cds-snc/platform-forms-client/issues/6581)) ([7bebeb2](https://github.com/cds-snc/platform-forms-client/commit/7bebeb21d3543bcdd65d8b65afca6d06164da11b))
+
+
+### Miscellaneous Chores
+
+* add rules of hooks plugin to current lint config ([#6568](https://github.com/cds-snc/platform-forms-client/issues/6568)) ([be7cc29](https://github.com/cds-snc/platform-forms-client/commit/be7cc29122ff6018f2f27dab2c447a13f125a111))
+* Change formattedDate from 'Date & Time (UTC)' to 'Date' to match function ([#6586](https://github.com/cds-snc/platform-forms-client/issues/6586)) ([32252e0](https://github.com/cds-snc/platform-forms-client/commit/32252e05d535be6fb5c2aae6ec5f2bb53b503530))
+* content tweaking ([#6588](https://github.com/cds-snc/platform-forms-client/issues/6588)) ([e6a094e](https://github.com/cds-snc/platform-forms-client/commit/e6a094efebe31fd994274e919fb6167e350771c3))
+* Content updates to clarify Response Pilot ([#6552](https://github.com/cds-snc/platform-forms-client/issues/6552)) ([c6e73f6](https://github.com/cds-snc/platform-forms-client/commit/c6e73f6a8395fd6686e970453b48a230bdc45a48))
+* Enum Cleanup (Part 2) ([#6555](https://github.com/cds-snc/platform-forms-client/issues/6555)) ([dfe393d](https://github.com/cds-snc/platform-forms-client/commit/dfe393da25538e34dd95168c2c76cc4378231906))
+* fix typos, formatting, other content pre-freeze ([#6577](https://github.com/cds-snc/platform-forms-client/issues/6577)) ([601bf0f](https://github.com/cds-snc/platform-forms-client/commit/601bf0ffaa333b6a0b3fdbba3f0c6fef81331851))
+* Improved frontend form e2e tests ([#6557](https://github.com/cds-snc/platform-forms-client/issues/6557)) ([f3732e6](https://github.com/cds-snc/platform-forms-client/commit/f3732e6a371a8aa5124b57d385880ede521e022a))
+* migrate Jest to vitest pt-1 ([#6576](https://github.com/cds-snc/platform-forms-client/issues/6576)) ([e4cbc0a](https://github.com/cds-snc/platform-forms-client/commit/e4cbc0a8e5853beb15ac78df0aaf5150f6482d4d))
+* Playwright auth and publishing test ([#6573](https://github.com/cds-snc/platform-forms-client/issues/6573)) ([3003b60](https://github.com/cds-snc/platform-forms-client/commit/3003b60f2830d46fcc75624480b4984c97f036cd))
+* port more jest tests ([#6596](https://github.com/cds-snc/platform-forms-client/issues/6596)) ([5ea3674](https://github.com/cds-snc/platform-forms-client/commit/5ea367482f10ba2fa8256a24964cd48762252f9f))
+* response pilot add folder preview ([#6592](https://github.com/cds-snc/platform-forms-client/issues/6592)) ([a6985cd](https://github.com/cds-snc/platform-forms-client/commit/a6985cdc21acb0043b62525bf96a6bc54ea0e422))
+* Responses pilot- Move raw and logs folders under source folder ([#6593](https://github.com/cds-snc/platform-forms-client/issues/6593)) ([aa15cf7](https://github.com/cds-snc/platform-forms-client/commit/aa15cf716f04e921f5e7ba41e040f76d169368a7))
+* synced file(s) with cds-snc/site-reliability-engineering ([#6440](https://github.com/cds-snc/platform-forms-client/issues/6440)) ([ca8de57](https://github.com/cds-snc/platform-forms-client/commit/ca8de573a9278381fde2d86a2b2115b6e1b67353))
+* synced local '.github/workflows/export_github_data.yml' with remote 'tools/sre_file_sync/export_github_data.yml' ([ca8de57](https://github.com/cds-snc/platform-forms-client/commit/ca8de573a9278381fde2d86a2b2115b6e1b67353))
+* update add element spec ([#6556](https://github.com/cds-snc/platform-forms-client/issues/6556)) ([ef28dbd](https://github.com/cds-snc/platform-forms-client/commit/ef28dbd353940051224046d3a4afc3f81e725059))
+* Update zitadel api calls ([#6567](https://github.com/cds-snc/platform-forms-client/issues/6567)) ([cfd7928](https://github.com/cds-snc/platform-forms-client/commit/cfd792898b3220efb060b406efc1d3f4b40aa111))
+
 ## [4.6.7](https://github.com/cds-snc/platform-forms-client/compare/v4.6.6...v4.6.7) (2025-12-12)
 
 
