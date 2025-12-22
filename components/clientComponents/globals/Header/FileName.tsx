@@ -98,7 +98,6 @@ export const FileNameInput = () => {
         onBlur={() => {
           if (content !== getName()) {
             updateField(`name`, content);
-            setHasManuallyEdited(true);
           }
         }}
         onChange={(e) => {
