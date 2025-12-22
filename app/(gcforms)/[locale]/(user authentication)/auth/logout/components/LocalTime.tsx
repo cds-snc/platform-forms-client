@@ -1,17 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 export const LocalTime = ({ locale }: { locale: string }) => {
-  const [time, setTime] = useState<string | null>(null);
+  let time: string | null = null;
 
-  useEffect(() => {
+  if (typeof window !== "undefined") {
     const logoutTime = sessionStorage.getItem("logoutTime");
     if (logoutTime) {
-      const parsedTime = JSON.parse(logoutTime);
-      setTime(parsedTime[locale]);
+      try {
+        const parsedTime = JSON.parse(logoutTime);
+        time = parsedTime[locale] || null;
+      } catch (error) {
+        // no-op
+      }
     }
-  }, [locale]);
+  }
 
   return <div className="mb-8 flex text-sm font-normal">{time ? time : <span>&nbsp;</span>}</div>;
 };

@@ -208,13 +208,16 @@ export const formatDateTimeLong = (updatedAt: number | undefined, locale = "en-C
 };
 
 // Note: GMT = UTC as far as date-time is concerned
-export const formatDateTimeUTC = (timestamp: number | undefined, includeSeconds = false) => {
+export const formatDateTimeUTC = (
+  timestamp: number | undefined = Date.now(),
+  includeSeconds = false
+) => {
   const arrayOffset = includeSeconds ? -5 : -8;
   const date = new Date(timestamp || 0);
   return date.toISOString().replace("T", " ").slice(0, arrayOffset) + " UTC";
 };
 
-export const formatDateTimeUTCFr = (timestamp: number | undefined) => {
+export const formatDateTimeUTCFr = (timestamp: number | undefined = Date.now()) => {
   const date = formatDateTimeUTC(timestamp);
   const parts = date.split(" ");
   const dateParts = parts[0].split("-");
