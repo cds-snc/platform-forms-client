@@ -1,3 +1,4 @@
+import React, { useId } from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
@@ -20,7 +21,7 @@ export const ChoiceSelect = ({
   addCatchAll?: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
-  const labelId = `choice-select-${Date.now()}`;
+  const labelId = `choice-select-${useId()}`;
 
   if (!selected || selected === "1") {
     selected = "1.0";
