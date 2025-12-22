@@ -1,3 +1,4 @@
+import React, { useId } from "react";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 
@@ -17,7 +18,7 @@ export const GroupSelect = ({
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   className?: string;
 }) => {
-  const labelId = `section-select-${Date.now()}`;
+  const labelId = `section-select-${useId()}`;
   const { t } = useTranslation("form-builder");
 
   return (

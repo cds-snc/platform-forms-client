@@ -65,7 +65,7 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
 
   const { autoFlowAll } = useAutoFlowIfNoCustomRules();
   const { getTitle } = useElementTitle();
-  const { headlessTree, startRenamingNewGroup } = useTreeRef();
+  const { headlessTree: headlessTreeRef, startRenamingNewGroup } = useTreeRef();
 
   const tree = useTree<TreeItemData>({
     initialState: getInitialTreeState(id ?? "start"),
@@ -169,10 +169,10 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
   } = useConfirmDeleteDialogState();
 
   useEffect(() => {
-    if (headlessTree) {
-      headlessTree.current = tree;
+    if (headlessTreeRef) {
+      headlessTreeRef.current = tree;
     }
-  }, [headlessTree, tree]);
+  }, [headlessTreeRef, tree]);
 
   // Sync tree with external store changes
   const { setActiveGroup, addPage } = useTreeHandlers();
