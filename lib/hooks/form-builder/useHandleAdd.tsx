@@ -26,6 +26,7 @@ import { v4 as uuid } from "uuid";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 export const useHandleAdd = () => {
+  "use memo";
   const { add, addSubItem, setChangeKey } = useTemplateStore((s) => ({
     add: s.add,
     addSubItem: s.addSubItem,
