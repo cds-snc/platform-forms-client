@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "4.6.5",
+  "version": "4.6.8",
   "private": true,
   "workspaces": [
     "utils/*",
@@ -15,9 +15,9 @@
     "singleQuote": false
   },
   "scripts": {
-    "dev": "yarn prisma:dev && next dev",
-    "dev:debug": "next dev",
-    "dev:secure": "yarn prisma:dev && next dev --experimental-https",
+    "dev": "yarn prisma:dev && next dev --turbopack",
+    "dev:debug": "next dev --turbopack",
+    "dev:secure": "yarn prisma:dev && next dev --experimental-https --turbopack",
     "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
     "start": "yarn prisma:deploy && NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
     "prisma:deploy": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=production",
@@ -27,10 +27,10 @@
     "prisma:test": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=test",
     "prisma:generate": "prisma generate",
     "start:test": "yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
-    "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev",
-    "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",
+    "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
+    "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build --turbopack",
     "lint": "eslint . && tsc --noEmit",
-    "lint:report": "eslint --output-file eslint_report.html --format html . --ext .js,.jsx,.ts,.tsx",
+    "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -41,6 +41,7 @@
     "test:watch:vitest": "vitest --watch",
     "test:watch": "DEBUG_PRINT_LIMIT=10000  jest --watch",
     "playwright": "playwright test --ui",
+    "playwright:run:headless": "CI=true playwright test",
     "playwright:run": "playwright test",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
   },
@@ -69,7 +70,7 @@
     "@headless-tree/react": "^1.5.0",
     "@headlessui/react": "^2.2.9",
     "@neshca/cache-handler": "^1.2.1",
-    "@next/mdx": "^16.0.10",
+    "@next/mdx": "15.5.9",
     "@opentelemetry/exporter-jaeger": "^2.0.1",
     "@opentelemetry/exporter-trace-otlp-http": "^0.203.0",
     "@opentelemetry/instrumentation-aws-sdk": "^0.63.0",
@@ -87,7 +88,6 @@
     "@types/mdx": "^2.0.13",
     "@vercel/otel": "^1.13.0",
     "axios": "^1.13.1",
-    "babel-plugin-react-compiler": "^1.0.0",
     "body-scroll-lock": "^4.0.0-beta.0",
     "clsx": "^2.1.1",
     "copy-to-clipboard": "3.3.3",
@@ -114,7 +114,7 @@
     "lodash.unset": "4.5.2",
     "markdown-to-jsx": "7.7.13",
     "native-file-system-adapter": "^3.0.1",
-    "next": "^16.0.10",
+    "next": "15.5.9",
     "next-auth": "5.0.0-beta.29",
     "node-fetch": "^3.3.2",
     "pino": "10.0.0",
@@ -168,8 +168,8 @@
     "@types/node": "^24.7.2",
     "@types/node-fetch": "^2.6.9",
     "@types/pg": "^8.10.9",
-    "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3",
+    "@types/react": "19.1.15",
+    "@types/react-dom": "19.1.9",
     "@types/react-transition-group": "^4",
     "@types/unorm": "^1",
     "@types/uuid": "^8.3.4",
@@ -186,7 +186,7 @@
     "css-loader": "^6.8.1",
     "cssnano": "^5.1.15",
     "eslint": "^9.39.0",
-    "eslint-config-next": "16.0.8",
+    "eslint-config-next": "15.5.7",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-tailwindcss": "^3.17.5",
@@ -213,7 +213,8 @@
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "4.0.13",
-    "vitest-browser-react": "^2.0.2"
+    "vitest-browser-react": "^2.0.2",
+    "webpack": "^5.102.0"
   },
   "browserslist": [
     ">0.2%",
@@ -223,7 +224,7 @@
   ],
   "packageManager": "yarn@4.10.3",
   "resolutions": {
-    "@types/react": "19.2.7",
-    "@types/react-dom": "19.2.3"
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2"
   }
 }
