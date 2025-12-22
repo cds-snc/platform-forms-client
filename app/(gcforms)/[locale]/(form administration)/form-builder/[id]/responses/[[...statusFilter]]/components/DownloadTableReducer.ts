@@ -1,10 +1,11 @@
 import { getDaysPassed } from "@lib/client/clientHelpers";
 import { VaultSubmissionOverview, VaultStatus } from "@lib/types";
 
-export enum TableActions {
-  UPDATE = "UPDATE",
-  RESET = "RESET",
-}
+export const TableActions = {
+  UPDATE: "UPDATE",
+  RESET: "RESET",
+} as const;
+export type TableActions = (typeof TableActions)[keyof typeof TableActions];
 
 interface ReducerTableItemsState {
   statusItems: Map<string, boolean>;
