@@ -18,6 +18,7 @@ export const TitleAndDescription = ({
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
+  const allowedStatus: VaultStatus[] = [VaultStatus.PROBLEM, VaultStatus.DOWNLOADED];
   return (
     <>
       {statusFilter == VaultStatus.NEW && (
@@ -68,7 +69,7 @@ export const TitleAndDescription = ({
           </div>
         </>
       )}
-      {[VaultStatus.PROBLEM, VaultStatus.DOWNLOADED].includes(statusFilter as VaultStatus) && (
+      {allowedStatus.includes(statusFilter as VaultStatus) && (
         <ConfirmDialog
           formId={formId}
           maxEntries={responseDownloadLimit}
