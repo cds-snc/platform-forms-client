@@ -1,7 +1,8 @@
-// Should match VaultStatus enum
-export enum StatusFilter {
-  NEW = "new",
-  DOWNLOADED = "downloaded",
-  CONFIRMED = "confirmed",
-  PROBLEM = "problem",
-}
+// Should match VaultStatus structure
+export const StatusFilter = {
+  NEW: "new",
+  DOWNLOADED: "downloaded",
+  CONFIRMED: "confirmed",
+  PROBLEM: "problem",
+} as const;
+export type StatusFilter = (typeof StatusFilter)[keyof typeof StatusFilter];
