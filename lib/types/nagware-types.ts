@@ -1,11 +1,11 @@
 import { VaultStatus } from "./retrieval-types";
 
 export const NagLevel = {
-  None: "None",
-  UnsavedSubmissionsOver21DaysOld: "UnsavedSubmissionsOver21DaysOld",
-  UnconfirmedSubmissionsOver21DaysOld: "UnconfirmedSubmissionsOver21DaysOld",
-  UnsavedSubmissionsOver35DaysOld: "UnsavedSubmissionsOver35DaysOld",
-  UnconfirmedSubmissionsOver35DaysOld: "UnconfirmedSubmissionsOver35DaysOld",
+  None: 0,
+  UnsavedSubmissionsOver21DaysOld: 1,
+  UnconfirmedSubmissionsOver21DaysOld: 2,
+  UnsavedSubmissionsOver35DaysOld: 3,
+  UnconfirmedSubmissionsOver35DaysOld: 4,
 } as const;
 export type NagLevel = (typeof NagLevel)[keyof typeof NagLevel];
 
