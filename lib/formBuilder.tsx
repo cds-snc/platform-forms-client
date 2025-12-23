@@ -385,7 +385,8 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
       const dynamicRowInitialValue: Responses =
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
           const subElementID = `${currentIndex}`;
-          if (![FormElementTypes.richText].includes(currentValue.type)) {
+          const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
+          if (!richTextElements.includes(currentValue.type)) {
             accumulator[subElementID] = _getElementInitialValue(currentValue, language);
           }
           return accumulator;
@@ -410,8 +411,10 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
 
   const initialValues: Responses = {};
 
+  const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
+
   formRecord.form.elements
-    .filter((element) => ![FormElementTypes.richText].includes(element.type))
+    .filter((element) => !richTextElements.includes(element.type))
     .forEach((element: FormElement) => {
       initialValues[element.id] = _getElementInitialValue(element, language);
     });
