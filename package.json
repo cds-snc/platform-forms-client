@@ -166,7 +166,7 @@
     "@types/lodash.merge": "^4",
     "@types/lodash.set": "^4.3.9",
     "@types/lodash.unset": "^4.5.9",
-    "@types/node": "^24.7.2",
+    "@types/node": "^25.0.3",
     "@types/node-fetch": "^2.6.9",
     "@types/pg": "^8.10.9",
     "@types/react": "^19.2.7",
@@ -227,5 +227,8 @@
   "resolutions": {
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }
