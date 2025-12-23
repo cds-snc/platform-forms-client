@@ -39,6 +39,7 @@ export const MFAForm = () => {
   useEffect(() => {
     const localToken = JSON.parse(sessionStorage.getItem("authFlowToken") ?? "{}");
     if (!localToken?.authenticationFlowToken || !localToken?.email) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsExpired(true);
     }
     authToken.current = localToken;
@@ -70,6 +71,7 @@ export const MFAForm = () => {
   useEffect(() => {
     switch (state.authError?.id) {
       case "2FALockedOutSession":
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsLocked(true);
         break;
       case "2FAExpiredSession":
@@ -84,6 +86,7 @@ export const MFAForm = () => {
       // If there are no visual errors, then the session is expired because email and authenticationFlowToken
       // didn't pass server side validation
       if (nonVisualErrors.length > 0) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsExpired(true);
         sessionStorage.removeItem("authFlowToken");
       }

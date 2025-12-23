@@ -22,17 +22,18 @@ export async function generateMetadata(props: {
   };
 }
 
+const Loading = () => (
+  <div className="flex h-full items-center justify-center ">
+    <Loader />
+  </div>
+);
+
 export default async function Page(props: { params: Promise<{ id: string; locale: string }> }) {
   const params = await props.params;
 
   const { id, locale } = params;
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
-  const Loading = () => (
-    <div className="flex h-full items-center justify-center ">
-      <Loader />
-    </div>
-  );
   return (
     <div id={id}>
       <h1 className="sr-only">{t("edit")}</h1>

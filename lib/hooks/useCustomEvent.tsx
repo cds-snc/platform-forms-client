@@ -33,6 +33,7 @@ export const useCustomEvent = () => {
   const documentRef = useRef<Document | null>(null);
 
   if (typeof window !== "undefined") {
+    // eslint-disable-next-line react-hooks/refs
     documentRef.current = window.document;
   }
 

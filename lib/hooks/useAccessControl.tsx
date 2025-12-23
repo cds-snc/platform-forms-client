@@ -25,6 +25,7 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
   //Do a deep comparison check on 'user' to ensure that the session has actually changed for values
   useEffect(() => {
     if (!isEqual(user, data?.user)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUser(data?.user);
     }
   }, [data, user]);
@@ -46,6 +47,7 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
 
   // Ensures that the ability is refreshed when the session is updated
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     refreshAbility();
     logMessage.debug("Refreshing Ability - useAccessControl hook - Session Updated");
   }, [refreshAbility]);

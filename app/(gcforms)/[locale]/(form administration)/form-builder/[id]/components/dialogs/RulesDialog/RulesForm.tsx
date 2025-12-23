@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useId } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
@@ -30,7 +30,7 @@ export const RulesForm = ({
   selectedOptionId: string | null;
 }) => {
   const { t } = useTranslation("form-builder");
-  const formId = `form-${Date.now()}`;
+  const formId = `form-${useId()}`;
   const [showLogicDetails, setShowLogicDetails] = useState(false);
 
   const { elements, form } = useTemplateStore((s) => ({

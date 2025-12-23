@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { PanelActions, PanelBodyRoot } from "./index";
@@ -24,7 +24,7 @@ export const ElementPanel = ({
   elements: FormElement[];
   formId: string;
 }) => {
-  const { getFocusInput, setChangeKey, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
+  const { setChangeKey, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
     useTemplateStore((s) => ({
       getFocusInput: s.getFocusInput,
       setChangeKey: s.setChangeKey,
@@ -35,7 +35,6 @@ export const ElementPanel = ({
       duplicateElement: s.duplicateElement,
     }));
 
-  const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
   const { headlessTree } = useTreeRef();
   const { handleAddElement } = useHandleAdd();
@@ -44,21 +43,7 @@ export const ElementPanel = ({
   if (ifFocus === false) {
     // Only run this 1 time
     setIfFocus(true);
-
-    // getFocusInput is only ever true if we press "duplicate" or "add question"
-    if (getFocusInput()) {
-      setClassName(
-        "bg-yellow-100 transition-colors ease-out duration-[1500ms] delay-500 outline-[2px] outline-blue-focus outline"
-      );
-    }
   }
-
-  useEffect(() => {
-    // remove the yellow background immediately, CSS transition will fade the colour
-    setClassName(className.replace("bg-yellow-100 ", ""));
-    // remove the blue outline after 2.1 seconds
-    setTimeout(() => setClassName(""), 2100);
-  }, [className]);
 
   const { focusWithinProps, isWithin } = useIsWithin();
   const { refs } = useRefsContext();
@@ -87,7 +72,6 @@ export const ElementPanel = ({
       {...focusWithinProps}
       className={cn(
         `element-${item.index}`,
-        className,
         "group",
         isWithin && "active",
         "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500  bg-white",

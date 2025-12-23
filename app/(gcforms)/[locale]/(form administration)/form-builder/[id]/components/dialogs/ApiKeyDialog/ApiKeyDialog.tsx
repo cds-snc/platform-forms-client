@@ -46,6 +46,9 @@ export const ApiKeyDialog = () => {
 
   const [hasError, setHasError] = useState(false);
 
+  // Handle Agreement - state
+  const [agreed, setAgreed] = useState(false);
+
   const handleOpen = useCallback((detail: APIKeyCustomEventDetails) => {
     if (detail) {
       detail.id && setId(detail.id);
@@ -60,9 +63,6 @@ export const ApiKeyDialog = () => {
       Event.off(EventKeys.openApiKeyDialog, handleOpen);
     };
   }, [Event, handleOpen]);
-
-  // Handle Agreement - state
-  const [agreed, setAgreed] = useState(false);
 
   const hasAgreed = (value: string) => {
     if (value === "AGREE" || value === "ACCEPTE") {

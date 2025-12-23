@@ -1,7 +1,7 @@
 "use client";
 
 import { Flags } from "@lib/cache/types";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useMemo } from "react";
 import { useSession } from "next-auth/react";
 
 const FeatureFlagsContext = createContext({
@@ -16,31 +16,18 @@ export const FeatureFlagsProvider = ({
   featureFlags: Flags;
 }) => {
   const { data: session } = useSession();
-  // Do initial merge of user and global flags
-  const [flags, setFlags] = useState(() => {
+
+  // Merge user and global flags using useMemo
+  const flags = useMemo(() => {
     const userFlags: string[] = session?.user?.featureFlags ?? [];
     // Loop through flags and set them to true if they are in the user's feature flags
     const userOverriddenFlags: Partial<Flags> = {};
     userFlags.forEach((flag) => {
-      userOverriddenFlags[flag as keyof typeof flags] = true;
+      userOverriddenFlags[flag as keyof Flags] = true;
     });
 
     return { ...featureFlags, ...userOverriddenFlags };
-  });
-
-  // If flags are changed on the session then ensure they are synced with state
-  useEffect(() => {
-    setFlags((prevFlags) => {
-      const userFlags: string[] = session?.user?.featureFlags ?? [];
-      // Loop through flags and set them to true if they are in the user's feature flags
-      const userOverriddenFlags: Partial<Flags> = {};
-      userFlags.forEach((flag) => {
-        userOverriddenFlags[flag as keyof typeof flags] = true;
-      });
-
-      return { ...prevFlags, ...userOverriddenFlags };
-    });
-  }, [session]);
+  }, [session?.user?.featureFlags, featureFlags]);
 
   return <FeatureFlagsContext.Provider value={{ flags }}>{children}</FeatureFlagsContext.Provider>;
 };

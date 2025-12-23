@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, type JSX } from "react";
+import React, { type JSX } from "react";
 import { cn } from "@lib/utils";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import Link from "next/link";
@@ -17,15 +17,7 @@ type LinkButtonProps = {
 
 export const LeftNav = ({ href, children, title = "", onClick, testid }: LinkButtonProps) => {
   const pathname = usePathname();
-  const [isActive, setIsActive] = useState(pathname.includes(href));
-
-  useEffect(() => {
-    if (pathname.includes(href)) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  }, [pathname, href]);
+  const isActive = pathname.includes(href);
 
   const classes = {
     base: "border-box flex h-[60px] w-[60px] items-center justify-center text-black-default no-underline ",

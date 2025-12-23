@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import { useId } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
@@ -27,7 +27,7 @@ export const ConditionalIndicatorOption = ({
     formElements: elements,
     choiceId: id,
   });
-  const rulesTitleId = `rules-title-${Date.now()}`;
+  const rulesTitleId = `rules-title-${useId()}`;
 
   const { refs } = useRefsContext();
 

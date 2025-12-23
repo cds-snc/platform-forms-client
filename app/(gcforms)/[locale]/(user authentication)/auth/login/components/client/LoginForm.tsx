@@ -15,6 +15,8 @@ export const LoginForm = () => {
     i18n: { language },
   } = useTranslation(["login", "cognito-errors", "common"]);
 
+  const router = useRouter();
+
   const localFormAction = async (_: ErrorStates, formData: FormData) => {
     const formEntries = {
       username: (formData.get("username") as string) || "",
@@ -37,7 +39,6 @@ export const LoginForm = () => {
       password: "",
     },
   });
-  const router = useRouter();
 
   return (
     <>

@@ -64,7 +64,7 @@ export const ResponseHtmlAggregated = ({
     }),
   ] as TableHeader[];
 
-  const dateTime = lang === "en" ? formatDateTimeUTC(Date.now()) : formatDateTimeUTCFr(Date.now());
+  const dateTime = lang === "en" ? formatDateTimeUTC() : formatDateTimeUTCFr();
 
   return (
     <html lang={lang}>

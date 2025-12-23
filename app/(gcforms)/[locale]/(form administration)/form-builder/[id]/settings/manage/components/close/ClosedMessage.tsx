@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useTranslation } from "@i18n/client";
 
@@ -33,8 +33,10 @@ export const ClosedMessage = ({
   // Track the current state for saving
   const currentDetailsRef = useRef<ClosedDetails | undefined>(closedDetails);
 
-  // Update current details ref whenever closedDetails changes
-  currentDetailsRef.current = closedDetails;
+  // Update current details ref whenever closedDetails changes (do not assign during render)
+  useEffect(() => {
+    currentDetailsRef.current = closedDetails;
+  }, [closedDetails]);
 
   const handleSave = useCallback(async () => {
     if (valid && onSave) {

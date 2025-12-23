@@ -1,6 +1,6 @@
 import { CancelIcon } from "@serverComponents/icons";
 import { getTemplateUsers } from "./actions";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useManageFormAccessDialog } from "./ManageFormAccessDialogContext";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { useSession } from "next-auth/react";
@@ -107,26 +107,31 @@ export const ManageUsers = () => {
 
   const [loading, setLoading] = useState(true);
 
-  /**
-   * Fetch users with access to the form
-   */
-  const fetchUsersWithAccess = useCallback(async () => {
-    const users = await getTemplateUsers(formId);
-
-    // Make sure the logged-in user is at the top of the list
-    const sorted = [...users].sort((a, b) => {
-      if (a.email === loggedInUserEmail) return -1;
-      if (b.email === loggedInUserEmail) return 1;
-      return 0;
-    });
-
-    setUsersWithAccess(sorted || []);
-    setLoading(false);
-  }, [formId, loggedInUserEmail]);
-
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchUsersWithAccess = async () => {
+      const users = await getTemplateUsers(formId);
+
+      if (!isMounted) return;
+
+      // Make sure the logged-in user is at the top of the list
+      const sorted = [...users].sort((a, b) => {
+        if (a.email === loggedInUserEmail) return -1;
+        if (b.email === loggedInUserEmail) return 1;
+        return 0;
+      });
+
+      setUsersWithAccess(sorted || []);
+      setLoading(false);
+    };
+
     fetchUsersWithAccess();
-  }, [fetchUsersWithAccess, formId, setUsersWithAccess]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [formId, loggedInUserEmail]);
 
   return (
     <>
