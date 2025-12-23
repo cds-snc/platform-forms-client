@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { BackArrowIcon, ForwardArrowIcon, StartIcon } from "@serverComponents/icons";
@@ -26,6 +26,7 @@ export const Pagination = ({
   responseDownloadLimit: number;
   recordCount: number;
 }) => {
+  "use memo";
   const {
     t,
     i18n: { language },
@@ -40,8 +41,6 @@ export const Pagination = ({
     ? `${startFromExclusiveResponse.name}_${startFromExclusiveResponse.createdAt}`
     : "end"; // If startFromExclusiveResponse is null, we're on the last page
 
-  const [keys, setKeys] = useState<string[]>(["start", lastEvaluatedResponse]);
-
   const redirectToFirstPageUrl = `/${language}/form-builder/${formId}/responses/${
     statusFilter ? `/${statusFilter}` : "/"
   }`;
@@ -51,33 +50,27 @@ export const Pagination = ({
     router.push(redirectToFirstPageUrl);
   }, [router, redirectToFirstPageUrl]);
 
-  // Update our keys state when the query param changes
-  useEffect(() => {
+  // Derive keys from query params during render instead of storing in state
+  const keys = useMemo(() => {
     if (!queryKeys) {
-      setKeys(["start", lastEvaluatedResponse]);
-    } else {
-      try {
-        const decodedQueryKeys = decodeBase64Url(queryKeys).split(",");
-
-        // If current lastEvaluatedResponse is not in the keys array, append it
-        if (!decodedQueryKeys.includes(lastEvaluatedResponse)) {
-          decodedQueryKeys.push(lastEvaluatedResponse);
-        }
-
-        setKeys(decodedQueryKeys);
-      } catch (e) {
-        // If the base64 encoded string has been tampered with, redirect to the first page
-        handleRedirectToFirstPage();
-      }
+      return ["start", lastEvaluatedResponse];
     }
-  }, [
-    formId,
-    language,
-    lastEvaluatedResponse,
-    queryKeys,
-    redirectToFirstPageUrl,
-    handleRedirectToFirstPage,
-  ]);
+
+    try {
+      const decodedQueryKeys = decodeBase64Url(queryKeys).split(",");
+
+      // If current lastEvaluatedResponse is not in the keys array, append it
+      if (!decodedQueryKeys.includes(lastEvaluatedResponse)) {
+        decodedQueryKeys.push(lastEvaluatedResponse);
+      }
+
+      return decodedQueryKeys;
+    } catch (e) {
+      // If the base64 encoded string has been tampered with, redirect to the first page
+      handleRedirectToFirstPage();
+      return ["start", lastEvaluatedResponse]; // Return fallback while redirecting
+    }
+  }, [queryKeys, lastEvaluatedResponse, handleRedirectToFirstPage]);
 
   // When going back, we pop the last item off the keys array
   const previousKeys = keys.slice(0, -1);

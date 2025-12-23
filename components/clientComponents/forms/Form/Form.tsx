@@ -202,7 +202,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             handleSubmit={handleSubmit}
             noValidate={true}
             isPublished={isPublished}
-            captchaToken={props.captchaToken}
+            captchaTokenRef={props.captchaToken}
           >
             {isGroupsCheck &&
               isShowReviewPage &&

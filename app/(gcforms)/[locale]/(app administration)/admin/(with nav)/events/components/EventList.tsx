@@ -51,29 +51,53 @@ export const EventList = ({ userId, formId }: { userId?: string; formId?: string
   );
 
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   logMessage.info(`userId: ${userId}`);
   logMessage.info(`formId: ${formId}`);
 
-  useEffect(() => {
-    if (formId) {
-      setIsLoading(true);
-      getFormEvents(formId).then((events) => {
-        setEvents(sortedEvents(events));
-        setIsLoading(false);
-      });
-    }
-  }, [formId]);
+  // Derive the "empty" state directly instead of setting it in an effect
+  const hasNoIds = !formId && !userId;
 
   useEffect(() => {
-    if (userId) {
-      setIsLoading(true);
-      getEventsForUser(userId).then((events) => {
-        setEvents(sortedEvents(events));
-        setIsLoading(false);
-      });
+    // Skip the effect entirely if we have no IDs
+    if (hasNoIds) {
+      return;
     }
-  }, [userId]);
+
+    // Prevent race conditions with cleanup
+    let isCancelled = false;
+
+    const fetchEvents = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const fetchedEvents = formId
+          ? await getFormEvents(formId)
+          : await getEventsForUser(userId!);
+
+        if (!isCancelled) {
+          setEvents(sortedEvents(fetchedEvents));
+          setIsLoading(false);
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          setError(err instanceof Error ? err : new Error("Failed to fetch events"));
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchEvents();
+
+    // Cleanup function to prevent state updates after unmount
+    return () => {
+      isCancelled = true;
+    };
+  }, [formId, userId, hasNoIds]);
+
+  // Clear events when we have no IDs (render-based, not effect-based)
+  const displayEvents = hasNoIds ? new Map() : events;
 
   const { t } = useTranslation(["admin-events", "admin-users"]);
 
@@ -83,13 +107,19 @@ export const EventList = ({ userId, formId }: { userId?: string; formId?: string
         <div className="flex size-full items-center justify-center">
           <Loader />
         </div>
-      ) : events.size === 0 ? (
+      ) : error ? (
+        <div className="mb-4">
+          <p className="text-red-700">
+            {t("errorLoadingEvents", { defaultValue: "Error loading events" })}
+          </p>
+        </div>
+      ) : displayEvents.size === 0 ? (
         <div className="mb-4">
           <p>{t("noEvents")}</p>
         </div>
       ) : (
         <ul className="m-0 list-none p-0">
-          {Array.from(events.entries()).map(([eventDay, eventItems]) => {
+          {Array.from(displayEvents.entries()).map(([eventDay, eventItems]) => {
             return (
               <li key={eventDay} className="mb-4">
                 <h2 className="mb-2">{eventDay}</h2>
@@ -102,17 +132,25 @@ export const EventList = ({ userId, formId }: { userId?: string; formId?: string
                     </tr>
                   </thead>
                   <tbody>
-                    {eventItems.map(({ id, event, eventTime, description, subject }) => {
-                      return (
-                        <tr className="border-b-1" key={id}>
-                          <td className="min-w-80 text-slate-600">
-                            {eventTime} - {event}
-                          </td>
-                          <td className="px-4 text-slate-500">{subject}</td>
-                          <td className="break-words text-slate-500">{description ?? ""}</td>
-                        </tr>
-                      );
-                    })}
+                    {eventItems.map(
+                      ({
+                        id,
+                        event,
+                        eventTime,
+                        description,
+                        subject,
+                      }: Record<string, string | number>) => {
+                        return (
+                          <tr className="border-b-1" key={id}>
+                            <td className="min-w-80 text-slate-600">
+                              {eventTime} - {event}
+                            </td>
+                            <td className="px-4 text-slate-500">{subject}</td>
+                            <td className="break-words text-slate-500">{description ?? ""}</td>
+                          </tr>
+                        );
+                      }
+                    )}
                   </tbody>
                 </table>
               </li>
