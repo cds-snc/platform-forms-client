@@ -7,7 +7,7 @@ import {
   ErrorListItem,
   Description,
 } from "@clientComponents/forms";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import Link from "next/link";
 import { Alert } from "@clientComponents/globals";
 import { TextInput } from "../../../components/client/TextInput";

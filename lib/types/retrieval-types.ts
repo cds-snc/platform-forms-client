@@ -1,11 +1,12 @@
 import { Responses } from "@lib/types";
 
-export enum VaultStatus {
-  NEW = "New",
-  DOWNLOADED = "Downloaded",
-  CONFIRMED = "Confirmed",
-  PROBLEM = "Problem",
-}
+export const VaultStatus = {
+  NEW: "New",
+  DOWNLOADED: "Downloaded",
+  CONFIRMED: "Confirmed",
+  PROBLEM: "Problem",
+} as const;
+export type VaultStatus = (typeof VaultStatus)[keyof typeof VaultStatus];
 
 export type VaultSubmission = {
   formID: string;

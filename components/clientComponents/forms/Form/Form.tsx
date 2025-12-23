@@ -15,7 +15,7 @@ import { EventKeys } from "@lib/hooks/useCustomEvent";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 
-import { ErrorStatus } from "../Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import {
   submitForm,
   isFormClosed,
