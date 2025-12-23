@@ -13,14 +13,6 @@ const eslintConfig = defineConfig([
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      // Downgrade React Compiler rules to off - enable one at a time as you fix them
-      // "react-hooks/preserve-manual-memoization": "off",
-      // "react-hooks/set-state-in-effect": "off",
-      // "react-hooks/static-components": "off",
-      // "react-hooks/refs": "warn",
-      // "react-hooks/purity": "off",
-      // "react-hooks/immutability": "off",
-      // "react-hooks/error-boundaries": "off",
     },
   },
   ...tailwind.configs["flat/recommended"],

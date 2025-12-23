@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 "use client";
 import React, { useState, useEffect, createRef, useRef } from "react";
 import { cn } from "@lib/utils";
@@ -125,8 +126,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
       newState.splice(index, 1);
       return newState;
     });
-    // Remove ref from the rowRefs state
-    rowRefs.current.splice(index, 1);
     focusedRow.current = index > 0 ? index - 1 : 0;
     // Let an AT user know a new repeating set was removed
     announce(
