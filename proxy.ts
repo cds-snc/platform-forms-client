@@ -298,10 +298,6 @@ const authFlowRedirect = (
 
   const origin = req.nextUrl.origin;
 
-  logMessage.debug(
-    `Auth Flow Check - Path: ${path}, OnAuthFlow: ${onAuthFlow}, HasSession: ${!!session}, HasSecurityQuestions: ${session?.user?.hasSecurityQuestions}, AcceptableUse: ${session?.user?.acceptableUse}`
-  );
-
   // Ignore if user is in the auth flow of MfA
   if (session && !onAuthFlow) {
     if (
