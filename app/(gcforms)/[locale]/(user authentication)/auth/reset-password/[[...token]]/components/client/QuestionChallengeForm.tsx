@@ -9,7 +9,7 @@ import { checkQuestionChallenge } from "../../action";
 import Link from "next/link";
 import { SecurityQuestion } from "@lib/auth";
 import { SubmitButton } from "./SubmitButton";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 
 export const QuestionChallengeForm = ({
   email,

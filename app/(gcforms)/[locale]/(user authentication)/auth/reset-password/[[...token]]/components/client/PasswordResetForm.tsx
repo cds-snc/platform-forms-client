@@ -12,8 +12,8 @@ import { useTranslation } from "@i18n/client";
 import { SubmitButton } from "./SubmitButton";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { resetPassword } from "../../action";
+import { ErrorStatus } from "@lib/constants";
 
 export const PasswordResetForm = ({ email }: { email: string }) => {
   const {
