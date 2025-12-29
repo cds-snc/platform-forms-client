@@ -81,6 +81,7 @@ const nextConfig = {
       // Note: this matches values in constants.ts
       bodySizeLimit: "10mb",
     },
+    viewTransition: true,
   },
   typedRoutes: true,
   turbopack: {
