@@ -21,6 +21,7 @@ import {
   containsLowerCaseCharacter,
   containsNumber,
   containsSymbol,
+  ensureLanguage,
 } from "@lib/validation/validation";
 import { deleteMagicLinkEntry } from "@lib/auth/passwordReset";
 import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
@@ -36,16 +37,17 @@ export interface ErrorStates {
     fieldKey: string;
     fieldValue: string;
   }[];
+  success?: boolean;
 }
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const sendResetLink = async (
-  language: string,
-  _: ErrorStates,
+  currentState: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
+  const language = ensureLanguage(formData.get("language") as string);
   const validationResult = await validateInitialResetForm(language, rawFormData);
   if (!validationResult.success) {
     return {
@@ -57,7 +59,7 @@ export const sendResetLink = async (
   }
 
   return sendPasswordResetLink(validationResult.output.username)
-    .then(() => ({}))
+    .then(() => ({ success: true }))
     .catch((error) => {
       logMessage.warn(error);
       return { authError: { title: "Interal Error" } };
@@ -65,11 +67,11 @@ export const sendResetLink = async (
 };
 
 export const checkQuestionChallenge = async (
-  language: string,
-  _: ErrorStates,
+  currentState: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
+  const language = ensureLanguage(formData.get("language") as string);
   const validationResult = await validateQuestionChallengeForm(language, rawFormData);
   if (!validationResult.success) {
     // Question Ids are not a user input field,  if missing the API is being hit manually
@@ -121,7 +123,7 @@ export const checkQuestionChallenge = async (
     deleteMagicLinkEntry(validationResult.output.email);
 
     await sendCongnitoCode(validationResult.output.email);
-    return {};
+    return { success: true };
   } catch (error) {
     logMessage.warn(
       `Error in Password Reset - Question Challenge: ${(error as Error).message} for user ${
@@ -135,11 +137,11 @@ export const checkQuestionChallenge = async (
 };
 
 export const resetPassword = async (
-  language: string,
-  _: ErrorStates,
+  currentState: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
+  const language = ensureLanguage(formData.get("language") as string);
   const validationResult = await validatePasswordResetForm(language, rawFormData);
   if (!validationResult.success) {
     // Username is not a user input field,  if missing the API is being hit manually
@@ -161,7 +163,7 @@ export const resetPassword = async (
   try {
     await resetCognitoPassword(username, confirmationCode.toString(), password);
     logPasswordReset(username);
-    return {};
+    return { success: true };
   } catch (err) {
     logMessage.warn(
       `Error in Password Reset - Password Confirmation: ${(err as Error).message} for user ${

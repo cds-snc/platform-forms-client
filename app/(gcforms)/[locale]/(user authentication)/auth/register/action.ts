@@ -33,18 +33,25 @@ export interface ErrorStates {
     authenticationFlowToken: string;
     email: string;
   };
+  formData?: {
+    name: string;
+    username: string;
+    password: string;
+    passwordConfirmation: string;
+  };
+  success?: boolean;
 }
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const register = async (
-  language: string,
-  _: ErrorStates,
+  currentState: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> => {
   const { COGNITO_APP_CLIENT_ID } = process.env;
-  const { t } = await serverTranslation("cognito-errors", { lang: language });
   const rawFormData = Object.fromEntries(formData.entries());
+  const language = formData.get("language") as string;
+  const { t } = await serverTranslation("cognito-errors", { lang: language });
 
   const result = await validate(language, rawFormData);
 
@@ -106,7 +113,16 @@ export const register = async (
 
   if (cognitoToken) {
     const authenticationFlowToken = await begin2FAAuthentication(cognitoToken);
-    return { authFlowToken: { authenticationFlowToken, email: result.output.username } };
+    return {
+      authFlowToken: { authenticationFlowToken, email: result.output.username },
+      formData: {
+        name: result.output.name,
+        username: result.output.username,
+        password: result.output.password,
+        passwordConfirmation: result.output.passwordConfirmation,
+      },
+      success: true,
+    };
   }
 
   return { validationErrors: [], authError: { title: t("InternalServiceException") } };

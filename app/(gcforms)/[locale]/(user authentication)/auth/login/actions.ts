@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { CognitoIdentityProviderServiceException } from "@aws-sdk/client-cognito-identity-provider";
 import { hasError } from "@lib/hasError";
 import { handleErrorById } from "@lib/auth/cognito";
-import { isValidGovEmail } from "@lib/validation/validation";
+import { isValidGovEmail, ensureLanguage } from "@lib/validation/validation";
 
 export interface ErrorStates {
   authError?: {
@@ -24,16 +24,18 @@ export interface ErrorStates {
     email: string;
     authenticationFlowToken: string;
   };
+  formData?: {
+    username: string;
+    password: string;
+  };
+  success?: boolean;
 }
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
-export const login = async (
-  language: string,
-  _: ErrorStates,
-  formData: FormData
-): Promise<ErrorStates> => {
+export const login = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
+  const language = ensureLanguage(formData.get("language") as string);
 
   const validationResult = await validate(language, rawFormData);
 
@@ -63,6 +65,7 @@ export const login = async (
         email: validationResult.output.username,
         authenticationFlowToken,
       },
+      success: true,
     };
   }
 
@@ -117,6 +120,7 @@ export const login = async (
         email: cognitoResult.email,
         authenticationFlowToken,
       },
+      success: true,
     };
   }
 

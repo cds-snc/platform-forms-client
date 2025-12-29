@@ -13,6 +13,7 @@ import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
+import { ensureLanguage } from "@root/lib/validation/validation";
 
 export interface ErrorStates {
   authError?: {
@@ -31,12 +32,9 @@ export interface ErrorStates {
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
-export const verify = async (
-  language: string,
-  _: ErrorStates,
-  formData: FormData
-): Promise<ErrorStates> => {
+export const verify = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
+  const language = ensureLanguage(formData.get("language") as string);
 
   const valid = await validate(language, rawFormData);
 

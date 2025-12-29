@@ -33,29 +33,40 @@ export default async function Page(props: {
   const { locale, token } = params;
 
   if (token && token[0]) {
+    let email: string | null = null;
+    let userSecurityQuestions: Awaited<ReturnType<typeof retrieveUserSecurityQuestions>> = [];
+    let errorType: "expired" | "invalid" | "redirect" | null = null;
+
     try {
-      const email = await getPasswordResetAuthenticatedUserEmailAddress(token[0]);
-
-      const userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
-
-      if (userSecurityQuestions.length === 0) {
-        // eslint-disable-next-line react-hooks/error-boundaries
-        return <CannotReset {...{ locale }} />;
-      }
-
-      // eslint-disable-next-line react-hooks/error-boundaries
-      return <QuestionChallengeForm email={email} userSecurityQuestions={userSecurityQuestions} />;
+      email = await getPasswordResetAuthenticatedUserEmailAddress(token[0]);
+      userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
     } catch (e) {
       if (e instanceof PasswordResetExpiredLink) {
-        return <ExpiredLink {...{ locale }} />;
+        errorType = "expired";
+      } else if (e instanceof PasswordResetInvalidLink) {
+        errorType = "invalid";
+      } else {
+        errorType = "redirect";
       }
-
-      if (e instanceof PasswordResetInvalidLink) {
-        return <InvalidLink {...{ locale }} />;
-      }
-
-      redirect(`/$locale/auth/login`);
     }
+
+    if (errorType === "expired") {
+      return <ExpiredLink {...{ locale }} />;
+    }
+
+    if (errorType === "invalid") {
+      return <InvalidLink {...{ locale }} />;
+    }
+
+    if (errorType === "redirect") {
+      redirect(`/${locale}/auth/login`);
+    }
+
+    if (userSecurityQuestions.length === 0) {
+      return <CannotReset {...{ locale }} />;
+    }
+
+    return <QuestionChallengeForm email={email!} userSecurityQuestions={userSecurityQuestions} />;
   } else {
     return (
       <div id="auth-panel">

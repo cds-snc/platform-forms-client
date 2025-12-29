@@ -1,11 +1,11 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { ErrorListItem, Label, TextInput, Alert } from "../../../../components/client/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { ErrorStates, register } from "../../action";
+import { register } from "../../action";
 import Link from "next/link";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { useRouter } from "next/navigation";
@@ -40,29 +40,16 @@ export const RegistrationForm = () => {
   const headingRef = useRef(null);
   const router = useRouter();
 
-  const localFormAction = async (_: ErrorStates, formData: FormData) => {
-    const formEntries = {
-      name: (formData.get("name") as string) || "",
-      username: (formData.get("username") as string) || "",
-      password: (formData.get("password") as string) || "",
-      passwordConfirmation: (formData.get("passwordConfirmation") as string) || "",
-    };
-
-    const result = await register(language, _, formData);
-    if (result.authFlowToken) {
-      sessionStorage.setItem("authFlowToken", JSON.stringify(result.authFlowToken));
-      router.push(`/${language}/auth/mfa`);
-    }
-
-    return {
-      ...result,
-      formData: formEntries,
-    };
-  };
-
-  const [state, formAction] = useActionState(localFormAction, {
+  const [state, formAction] = useActionState(register, {
     formData: { name: "", username: "", password: "", passwordConfirmation: "" },
   });
+
+  useEffect(() => {
+    if (state.success === true && state.authFlowToken) {
+      sessionStorage.setItem("authFlowToken", JSON.stringify(state.authFlowToken));
+      router.push(`/${language}/auth/mfa`);
+    }
+  }, [state, language, router]);
 
   return (
     <>
@@ -114,6 +101,7 @@ export const RegistrationForm = () => {
         </Link>
       </p>
       <form id="registration" action={formAction} noValidate>
+        <input type="hidden" name="language" value={language} />
         <div className="gcds-input-wrapper">
           <Label id={"label-name"} htmlFor={"name"} className="required" required>
             {t("signUpRegistration.fields.name.label")}

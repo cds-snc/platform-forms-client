@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useActionState } from "react";
 import { TextInput, Label, Alert, ErrorListItem } from "../../../../components/client/forms";
 import { useTranslation } from "@i18n/client";
-import { verify, getRedirectPath, ErrorStates } from "../../actions";
+import { verify, getRedirectPath } from "../../actions";
 import { Expired2faSession } from "./Expired2faSession";
 import { Locked2fa } from "./Locked2fa";
 import Link from "next/link";
@@ -28,50 +28,47 @@ export const MFAForm = () => {
   const [isLocked, setIsLocked] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const [isSubmittingStep1, setIsSubmittingStep1] = useState(false);
-  const [isSubmittingStep2, setIsSubmittingStep2] = useState(false);
+
   const { update: sessionUpdate } = useSession();
 
-  const authToken = useRef<{ email?: string; authenticationFlowToken?: string }>({});
+  const [authToken, setAuthToken] = useState<{ email?: string; authenticationFlowToken?: string }>(
+    {}
+  );
 
   const router = useRouter();
 
   useEffect(() => {
     const localToken = JSON.parse(sessionStorage.getItem("authFlowToken") ?? "{}");
     if (!localToken?.authenticationFlowToken || !localToken?.email) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsExpired(true);
     }
-    authToken.current = localToken;
+    setAuthToken(localToken);
     setIsReady(true);
   }, []);
 
-  const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
-    setIsSubmittingStep1(true);
-    formData.append("email", authToken.current.email ?? "");
-    formData.append("authenticationFlowToken", authToken.current.authenticationFlowToken ?? "");
-    const mfaState = await verify(language, _, formData);
-    if (mfaState.success) {
-      setIsSubmittingStep2(true);
-      // Let the Session Provider know that the user has been authenticated
+  const [state, formAction, isPending] = useActionState(verify, {});
+
+  const isRedirecting = state.success;
+
+  useEffect(() => {
+    if (state.success) {
       sessionUpdate();
       sessionStorage.removeItem("authFlowToken");
-      const result = await getRedirectPath(language);
-      if (result.callback) router.push(result.callback);
-      else router.push(`/${language}/auth/policy`);
-      return {};
-    }
-    // If there are errors re-enable the submit button
-    setIsSubmittingStep1(false);
-    return mfaState;
-  };
 
-  const [state, formAction] = useActionState(localFormAction, {});
+      getRedirectPath(language).then((result) => {
+        if (result.callback) {
+          router.push(result.callback);
+        } else {
+          router.push(`/${language}/auth/policy`);
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   useEffect(() => {
     switch (state.authError?.id) {
       case "2FALockedOutSession":
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsLocked(true);
         break;
       case "2FAExpiredSession":
@@ -86,7 +83,6 @@ export const MFAForm = () => {
       // If there are no visual errors, then the session is expired because email and authenticationFlowToken
       // didn't pass server side validation
       if (nonVisualErrors.length > 0) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsExpired(true);
         sessionStorage.removeItem("authFlowToken");
       }
@@ -153,12 +149,19 @@ export const MFAForm = () => {
         {t("verify.title")}
       </h1>
       <p className="mb-12 mt-10">{t("verify.emailHasBeenSent")}</p>
-      {isSubmittingStep2 ? (
+      {isRedirecting ? (
         <div className="flex items-center justify-center">
           <Loader />
         </div>
       ) : (
         <form id="verificationCodeForm" action={formAction} noValidate>
+          <input type="hidden" name="language" value={language} />
+          <input type="hidden" name="email" value={authToken.email} />
+          <input
+            type="hidden"
+            name="authenticationFlowToken"
+            value={authToken.authenticationFlowToken}
+          />
           <div className="gcds-input-wrapper">
             <Label
               id={"label-verificationCode"}
@@ -184,7 +187,7 @@ export const MFAForm = () => {
             />
           </div>
 
-          <SubmitButton loading={isSubmittingStep1} dataTestId="verify-submit">
+          <SubmitButton loading={isPending} dataTestId="verify-submit">
             {t("verify.confirmButton")}
           </SubmitButton>
 

@@ -1,8 +1,8 @@
 "use client";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { Alert, ErrorListItem, Label, TextInput } from "../../../../components/client/forms";
 import { useTranslation } from "@i18n/client";
-import { login, ErrorStates } from "../../actions";
+import { login } from "../../actions";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -17,28 +17,19 @@ export const LoginForm = () => {
 
   const router = useRouter();
 
-  const localFormAction = async (_: ErrorStates, formData: FormData) => {
-    const formEntries = {
-      username: (formData.get("username") as string) || "",
-      password: (formData.get("password") as string) || "",
-    };
-
-    const result = await login(language, _, formData);
-    if (result.authFlowToken) {
-      sessionStorage.setItem("authFlowToken", JSON.stringify(result.authFlowToken));
-      router.push(`/${language}/auth/mfa`);
-    }
-    return {
-      ...result,
-      formData: formEntries,
-    };
-  };
-  const [state, formAction] = useActionState(localFormAction, {
+  const [state, formAction] = useActionState(login, {
     formData: {
       username: "",
       password: "",
     },
   });
+
+  useEffect(() => {
+    if (state.success === true) {
+      sessionStorage.setItem("authFlowToken", JSON.stringify(state.authFlowToken));
+      router.push(`/${language}/auth/mfa`);
+    }
+  }, [state, language, router]);
 
   return (
     <>
@@ -86,6 +77,7 @@ export const LoginForm = () => {
         <Link href={`/${language}/auth/register`}>{t("signUpLink")}</Link>
       </p>
       <form id="login" action={formAction} noValidate>
+        <input type="hidden" name="language" value={language} />
         <div className="gcds-input-wrapper">
           <Label id={"label-username"} htmlFor={"username"} className="required" required>
             {t("fields.username.label")}
