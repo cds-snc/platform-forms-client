@@ -23,7 +23,7 @@ export const NumberFieldOptions = ({
 
   return (
     <section className="mb-4">
-      <div className="gc-input-checkbox">
+      <div className="gc-input-checkbox mb-4">
         <input
           type="checkbox"
           className="gc-input-checkbox__input"
