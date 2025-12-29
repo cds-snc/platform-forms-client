@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { useTranslation } from "@i18n/client";
@@ -8,7 +8,6 @@ import { Button, Alert } from "@clientComponents/globals";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { useRouter } from "next/navigation";
 import { toast } from "@formBuilder/components/shared/Toast";
-import { ErrorStates } from "../../actions";
 import { setupQuestions } from "../../actions";
 import { useSession } from "next-auth/react";
 
@@ -43,19 +42,18 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
 
   const supportHref = `/${language}/support`;
 
-  const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
-    const result = await setupQuestions(language, _, formData);
-    if (!result.validationErrors && !result.generalError) {
+  const [state, formAction] = useActionState(setupQuestions, {});
+
+  useEffect(() => {
+    if (state.success === true) {
       toast.success(t("success.title"));
       // force JWT token update / Set new Next-Auth cookie
-      await update();
-      router.push(`/${language}/auth/policy`);
+      update().then(() => {
+        router.push(`/${language}/auth/policy`);
+      });
     }
-
-    return result;
-  };
-
-  const [state, formAction] = useActionState(localFormAction, {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   const onSelect = () => {
     if (formRef.current !== null) {
@@ -80,6 +78,7 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
       <h1 className="gc-h2">{t("title")}</h1>
 
       <form id="updateSecurityQuestionsForm" ref={formRef} action={formAction} noValidate>
+        <input type="hidden" name="language" value={language} />
         <div className="mb-10 mt-4">
           <p className="font-bold">{t("description")}</p>
           <p id="requirementsListTitle">{t("requirementsTitle")}</p>

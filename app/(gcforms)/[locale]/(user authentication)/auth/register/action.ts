@@ -7,6 +7,7 @@ import {
   containsLowerCaseCharacter,
   containsNumber,
   containsSymbol,
+  ensureLanguage,
 } from "@lib/validation/validation";
 import { serverTranslation } from "@i18n";
 import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
@@ -50,7 +51,7 @@ export const register = async (
 ): Promise<ErrorStates> => {
   const { COGNITO_APP_CLIENT_ID } = process.env;
   const rawFormData = Object.fromEntries(formData.entries());
-  const language = formData.get("language") as string;
+  const language = ensureLanguage(formData.get("language") as string);
   const { t } = await serverTranslation("cognito-errors", { lang: language });
 
   const result = await validate(language, rawFormData);

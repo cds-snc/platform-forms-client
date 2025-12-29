@@ -5,6 +5,7 @@ import { serverTranslation } from "@i18n";
 import { createSecurityAnswers } from "@lib/auth";
 import { logMessage } from "@lib/logger";
 import { AuthenticatedAction } from "@lib/actions";
+import { ensureLanguage } from "@root/lib/validation/validation";
 
 export interface ErrorStates {
   validationErrors?: {
@@ -12,12 +13,14 @@ export interface ErrorStates {
     fieldValue: string;
   }[];
   generalError?: string;
+  success?: boolean;
 }
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const setupQuestions = AuthenticatedAction(
-  async (_, language: string, __: ErrorStates, formData: FormData): Promise<ErrorStates> => {
+  async (_, currentState: ErrorStates, formData: FormData): Promise<ErrorStates> => {
+    const language = ensureLanguage(formData.get("language") as string);
     const { t } = await serverTranslation(["setup-security-questions"], { lang: language });
 
     const rawFormData = Object.fromEntries(formData.entries());
@@ -38,7 +41,7 @@ export const setupQuestions = AuthenticatedAction(
       { questionId: result.output.question2, answer: result.output.answer2 },
       { questionId: result.output.question3, answer: result.output.answer3 },
     ])
-      .then(() => ({}))
+      .then(() => ({ success: true }))
       .catch((error) => {
         logMessage.warn(error);
         return { generalError: t("errors.serverError.title") };
