@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useActionState } from "react";
 import { TextInput, Label, Alert, ErrorListItem } from "../../../../../components/client/forms";
 import { PasswordResetForm } from "./PasswordResetForm";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { useTranslation } from "@i18n/client";
-import { ErrorStates, checkQuestionChallenge } from "../../action";
+import { checkQuestionChallenge } from "../../action";
 import Link from "next/link";
 import { SecurityQuestion } from "@lib/auth";
 import { SubmitButton } from "./SubmitButton";
@@ -22,38 +22,13 @@ export const QuestionChallengeForm = ({
     t,
     i18n: { language },
   } = useTranslation(["reset-password", "common"]);
-  const [confirmationStage, setConfirmationStage] = useState(false);
 
   const langKey = language === "en" ? "questionEn" : "questionFr";
 
-  const localFormAction = async (_: ErrorStates, formData: FormData) => {
-    formData.append("question1Id", userSecurityQuestions[0].id);
-    formData.append("question2Id", userSecurityQuestions[1].id);
-    formData.append("question3Id", userSecurityQuestions[2].id);
-    formData.append("email", email);
-    const checkResult = await checkQuestionChallenge(language, _, formData);
+  const [state, formAction] = useActionState(checkQuestionChallenge, {});
 
-    if (!checkResult.authError && !checkResult.validationErrors) {
-      setConfirmationStage(true);
-    }
+  const confirmationStage = state.success === true;
 
-    return {
-      ...checkResult,
-      formData: {
-        question1: formData.get("question1") as string,
-        question2: formData.get("question2") as string,
-        question3: formData.get("question3") as string,
-      },
-    };
-  };
-
-  const [state, formAction] = useActionState(localFormAction, {
-    formData: {
-      question1: "",
-      question2: "",
-      question3: "",
-    },
-  });
   if (confirmationStage) return <PasswordResetForm email={email} />;
 
   return (
@@ -100,6 +75,11 @@ export const QuestionChallengeForm = ({
       <h1 className="mb-12 mt-6 border-b-0">{t("securityQuestions.title")}</h1>
       <p className="mb-6 max-w-lg">{t("securityQuestions.description")}</p>
       <form id="resetPassword" action={formAction} noValidate>
+        <input type="hidden" name="question1Id" value={userSecurityQuestions[0].id} />
+        <input type="hidden" name="question2Id" value={userSecurityQuestions[1].id} />
+        <input type="hidden" name="question3Id" value={userSecurityQuestions[2].id} />
+        <input type="hidden" name="email" value={email} />
+        <input type="hidden" name="language" value={language} />
         <div className="gcds-input-wrapper">
           <Label
             id="label-question1"
@@ -117,7 +97,6 @@ export const QuestionChallengeForm = ({
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "question1")?.fieldValue
             }
-            defaultValue={state.formData?.question1 || ""}
           />
         </div>
 
@@ -138,7 +117,6 @@ export const QuestionChallengeForm = ({
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "question2")?.fieldValue
             }
-            defaultValue={state.formData?.question2 || ""}
           />
         </div>
 
@@ -159,7 +137,6 @@ export const QuestionChallengeForm = ({
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "question3")?.fieldValue
             }
-            defaultValue={state.formData?.question3 || ""}
           />
         </div>
 

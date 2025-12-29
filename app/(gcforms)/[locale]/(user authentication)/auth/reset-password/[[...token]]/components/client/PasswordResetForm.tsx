@@ -1,5 +1,5 @@
 "use client";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 
 import {
   TextInput,
@@ -13,7 +13,7 @@ import { SubmitButton } from "./SubmitButton";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
-import { ErrorStates, resetPassword } from "../../action";
+import { resetPassword } from "../../action";
 
 export const PasswordResetForm = ({ email }: { email: string }) => {
   const {
@@ -22,17 +22,13 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
   } = useTranslation("reset-password");
   const router = useRouter();
 
-  const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
-    formData.append("username", email);
-    const updatePassword = await resetPassword(language, _, formData);
-    if (!updatePassword.authError && !updatePassword.validationErrors) {
+  const [state, formAction] = useActionState(resetPassword, {});
+
+  useEffect(() => {
+    if (state.success === true) {
       router.push(`/${language}/auth/login`);
     }
-
-    return updatePassword;
-  };
-
-  const [state, formAction] = useActionState(localFormAction, {});
+  }, [state, language, router]);
   // the form to reset the password with the verification code
   return (
     <>
@@ -76,6 +72,8 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
         )}
       <h1 className="mb-12 mt-6 border-b-0">{t("resetPassword.title")}</h1>
       <form id="resetPassword" action={formAction} noValidate>
+        <input type="hidden" name="username" value={email} />
+        <input type="hidden" name="language" value={language} />
         <div className="gcds-input-wrapper">
           <Label
             id="label-confirmationCode"

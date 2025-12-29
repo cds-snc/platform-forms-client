@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useActionState } from "react";
 import {
   TextInput,
@@ -10,7 +10,7 @@ import {
 } from "../../../../../components/client/forms";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { useTranslation } from "@i18n/client";
-import { sendResetLink, ErrorStates } from "../../action";
+import { sendResetLink } from "../../action";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { SubmitButton } from "./SubmitButton";
 
@@ -26,18 +26,9 @@ export const InitiateResetForm = ({
     i18n: { language },
   } = useTranslation(["reset-password", "common"]);
 
-  const [linkSent, setLinkSent] = useState(false);
+  const [state, formAction] = useActionState(sendResetLink, {});
 
-  const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
-    const submitResult = await sendResetLink(language, _, formData);
-    if (submitResult.validationErrors || submitResult.authError) {
-      return submitResult;
-    }
-    setLinkSent(true);
-    return {};
-  };
-
-  const [state, formAction] = useActionState(localFormAction, {});
+  const linkSent = state.success === true;
 
   if (linkSent) return confirmationPage;
   if (state.authError) return errorPage;
@@ -72,6 +63,7 @@ export const InitiateResetForm = ({
         )}
       <h1 className="mb-12 mt-6 border-b-0">{t("provideUsername.title")}</h1>
       <form id="provideUsername" action={formAction} noValidate>
+        <input type="hidden" name="language" value={language} />
         <div className="gcds-input-wrapper">
           <Label id="label-username" htmlFor="username" className="required" required>
             {t("provideUsername.fields.username.label")}
