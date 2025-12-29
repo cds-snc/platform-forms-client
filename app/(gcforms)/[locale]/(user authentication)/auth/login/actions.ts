@@ -33,10 +33,7 @@ export interface ErrorStates {
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
-export const login = async (
-  _currentState: ErrorStates,
-  formData: FormData
-): Promise<ErrorStates> => {
+export const login = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
   const language = formData.get("language") as string;
 
