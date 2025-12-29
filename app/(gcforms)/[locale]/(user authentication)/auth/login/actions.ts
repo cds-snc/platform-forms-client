@@ -24,16 +24,21 @@ export interface ErrorStates {
     email: string;
     authenticationFlowToken: string;
   };
+  formData?: {
+    username: string;
+    password: string;
+  };
+  success?: boolean;
 }
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const login = async (
-  language: string,
-  _: ErrorStates,
+  _currentState: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
+  const language = formData.get("language") as string;
 
   const validationResult = await validate(language, rawFormData);
 
@@ -63,6 +68,7 @@ export const login = async (
         email: validationResult.output.username,
         authenticationFlowToken,
       },
+      success: true,
     };
   }
 
@@ -117,6 +123,7 @@ export const login = async (
         email: cognitoResult.email,
         authenticationFlowToken,
       },
+      success: true,
     };
   }
 
