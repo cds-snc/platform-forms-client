@@ -209,3 +209,5 @@ export const isResponseId = (field: string): boolean => {
   }
   return true;
 };
+
+export const ensureLanguage = (lang: string) => (lang === "en" || lang === "fr" ? lang : "en");

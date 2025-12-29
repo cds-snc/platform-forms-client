@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { CognitoIdentityProviderServiceException } from "@aws-sdk/client-cognito-identity-provider";
 import { hasError } from "@lib/hasError";
 import { handleErrorById } from "@lib/auth/cognito";
-import { isValidGovEmail } from "@lib/validation/validation";
+import { isValidGovEmail, ensureLanguage } from "@lib/validation/validation";
 
 export interface ErrorStates {
   authError?: {
@@ -35,7 +35,7 @@ export interface ErrorStates {
 
 export const login = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
-  const language = formData.get("language") as string;
+  const language = ensureLanguage(formData.get("language") as string);
 
   const validationResult = await validate(language, rawFormData);
 

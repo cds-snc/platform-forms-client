@@ -21,6 +21,7 @@ import {
   containsLowerCaseCharacter,
   containsNumber,
   containsSymbol,
+  ensureLanguage,
 } from "@lib/validation/validation";
 import { deleteMagicLinkEntry } from "@lib/auth/passwordReset";
 import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
@@ -46,7 +47,7 @@ export const sendResetLink = async (
   formData: FormData
 ): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
-  const language = formData.get("language") as string;
+  const language = ensureLanguage(formData.get("language") as string);
   const validationResult = await validateInitialResetForm(language, rawFormData);
   if (!validationResult.success) {
     return {
@@ -70,7 +71,7 @@ export const checkQuestionChallenge = async (
   formData: FormData
 ): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
-  const language = formData.get("language") as string;
+  const language = ensureLanguage(formData.get("language") as string);
   const validationResult = await validateQuestionChallengeForm(language, rawFormData);
   if (!validationResult.success) {
     // Question Ids are not a user input field,  if missing the API is being hit manually
@@ -140,7 +141,7 @@ export const resetPassword = async (
   formData: FormData
 ): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
-  const language = formData.get("language") as string;
+  const language = ensureLanguage(formData.get("language") as string);
   const validationResult = await validatePasswordResetForm(language, rawFormData);
   if (!validationResult.success) {
     // Username is not a user input field,  if missing the API is being hit manually
