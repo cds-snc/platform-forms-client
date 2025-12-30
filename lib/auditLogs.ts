@@ -153,8 +153,8 @@ type AuditDetailsParams = {
   [AuditLogDetails.IncreasedThrottling]: { userId: string; formId: string; weeks: string };
   [AuditLogDetails.PermanentIncreasedThrottling]: { userId: string; formId: string };
   [AuditLogDetails.ResetThrottling]: { userId: string; formId: string };
-  [AuditLogDetails.DeclinedInvitation]: { userId: string };
-  [AuditLogDetails.AcceptedInvitation]: { userId: string };
+  [AuditLogDetails.DeclinedInvitation]: { userEmail: string };
+  [AuditLogDetails.AcceptedInvitation]: { userEmail: string };
   [AuditLogDetails.AccessGranted]: { grantedUserId: string };
   [AuditLogDetails.CancelInvitation]: { userId: string; invitationEmail: string };
   [AuditLogDetails.UserInvited]: { userEmail: string; invitationEmail: string };
