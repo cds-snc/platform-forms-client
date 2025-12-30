@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { MFAForm } from "./components/client/MFAForm";
 import { redirect } from "next/navigation";
 import { authCheckAndThrow } from "@lib/actions";
+import { cookies } from "next/headers";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -28,9 +29,13 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
     redirect(`/${locale}/forms`);
   }
 
+  // Read authFlowToken from cookie
+  const authFlowTokenCookie = (await cookies()).get("authFlowToken");
+  const authToken = authFlowTokenCookie?.value ? JSON.parse(authFlowTokenCookie.value) : null;
+
   return (
     <div id="auth-panel">
-      <MFAForm />
+      <MFAForm authToken={authToken} />
     </div>
   );
 }

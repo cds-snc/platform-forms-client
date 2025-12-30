@@ -4,7 +4,7 @@ import * as v from "valibot";
 import { serverTranslation } from "@i18n";
 import { redirect } from "next/navigation";
 import { requestNew2FAVerificationCode } from "@lib/auth";
-import { signIn } from "@lib/auth";
+import { signIn, userHasSecurityQuestions } from "@lib/auth";
 import { handleErrorById, Missing2FASession } from "@lib/auth/cognito";
 import { cookies } from "next/headers";
 import { prisma } from "@lib/integration/prismaConnector";
@@ -93,11 +93,16 @@ export const verify = async (_: ErrorStates, formData: FormData): Promise<ErrorS
       },
     };
   }
+
   // Ensure all components get new Session data
   revalidatePath("/", "layout");
-  return {
-    success: true,
-  };
+
+  // Clear the authFlowToken cookie
+  (await cookies()).delete("authFlowToken");
+
+  // Determine redirect path and redirect
+  const redirectPath = await getRedirectPathInternal(email, language);
+  redirect(redirectPath);
 };
 
 export const resendVerificationCode = async (
@@ -158,6 +163,50 @@ export const getRedirectPath = AuthenticatedAction(async (session, locale: strin
 
   return { callback: `/${locale}/auth/policy` };
 });
+
+// Internal helper to get redirect path without requiring authenticated session
+const getRedirectPathInternal = async (email: string, locale: string): Promise<string> => {
+  // Check if user exists and has security questions set up
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!user) {
+    // New user, first time login - redirect to setup security questions
+    return `/${locale}/auth/setup-security-questions`;
+  }
+
+  // Check if user has security questions
+  const hasSecurityQuestions = await userHasSecurityQuestions({ userId: user.id });
+
+  if (!hasSecurityQuestions) {
+    return `/${locale}/auth/setup-security-questions`;
+  }
+
+  // Check for overdue submissions
+  const overdue = await getUnprocessedSubmissionsForUser(user.id).catch((err) => {
+    logMessage.warn(`Error getting unprocessed submissions for user ${user.id}: ${err.message}`);
+    return {};
+  });
+
+  let hasOverdueSubmissions = false;
+
+  Object.entries(overdue).forEach(([, value]) => {
+    if (value.level > 2) {
+      hasOverdueSubmissions = true;
+      return;
+    }
+  });
+
+  if (hasOverdueSubmissions) {
+    return `/${locale}/auth/restricted-access`;
+  }
+
+  return `/${locale}/auth/policy`;
+};
 
 // Internal and private functions - won't be converted into server actions
 

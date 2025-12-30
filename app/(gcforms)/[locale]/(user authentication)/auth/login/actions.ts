@@ -4,6 +4,7 @@ import * as v from "valibot";
 import { serverTranslation } from "@i18n";
 import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { CognitoIdentityProviderServiceException } from "@aws-sdk/client-cognito-identity-provider";
 import { hasError } from "@lib/hasError";
 import { handleErrorById } from "@lib/auth/cognito";
@@ -59,14 +60,23 @@ export const login = async (_: ErrorStates, formData: FormData): Promise<ErrorSt
         throw err;
       }
     });
-    return {
-      validationErrors: [],
-      authFlowToken: {
+
+    // Store auth token in cookie before redirecting
+    (await cookies()).set(
+      "authFlowToken",
+      JSON.stringify({
         email: validationResult.output.username,
         authenticationFlowToken,
-      },
-      success: true,
-    };
+      }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 5, // 5 minutes
+      }
+    );
+
+    redirect(`/${language}/auth/mfa`);
   }
 
   const cognitoResult: {
@@ -114,14 +124,22 @@ export const login = async (_: ErrorStates, formData: FormData): Promise<ErrorSt
       }
     });
 
-    return {
-      validationErrors: [],
-      authFlowToken: {
+    // Store auth token in cookie before redirecting
+    (await cookies()).set(
+      "authFlowToken",
+      JSON.stringify({
         email: cognitoResult.email,
         authenticationFlowToken,
-      },
-      success: true,
-    };
+      }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 5, // 5 minutes
+      }
+    );
+
+    redirect(`/${language}/auth/mfa`);
   }
 
   return {

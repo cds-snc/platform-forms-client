@@ -1,11 +1,11 @@
 "use client";
-import { useActionState, useEffect } from "react";
-import { Alert, ErrorListItem, Label, TextInput } from "../../../../components/client/forms";
+import { useActionState } from "react";
 import { useTranslation } from "@i18n/client";
-import { login } from "../../actions";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+import { login } from "../../actions";
+
+import { Alert, ErrorListItem, Label, TextInput } from "../../../../components/client/forms";
 import { ErrorStatus } from "@lib/constants";
 import { SubmitButtonAction } from "@clientComponents/globals/Buttons/SubmitButton";
 
@@ -15,21 +15,12 @@ export const LoginForm = () => {
     i18n: { language },
   } = useTranslation(["login", "cognito-errors", "common"]);
 
-  const router = useRouter();
-
   const [state, formAction] = useActionState(login, {
     formData: {
       username: "",
       password: "",
     },
   });
-
-  useEffect(() => {
-    if (state.success === true) {
-      sessionStorage.setItem("authFlowToken", JSON.stringify(state.authFlowToken));
-      router.push(`/${language}/auth/mfa`);
-    }
-  }, [state, language, router]);
 
   return (
     <>

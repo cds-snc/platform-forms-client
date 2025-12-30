@@ -1,9 +1,9 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import { useActionState } from "react";
 import { TextInput, Label, Alert, ErrorListItem } from "../../../../components/client/forms";
 import { useTranslation } from "@i18n/client";
-import { verify, getRedirectPath } from "../../actions";
+import { verify } from "../../actions";
 import { Expired2faSession } from "./Expired2faSession";
 import { Locked2fa } from "./Locked2fa";
 import Link from "next/link";
@@ -11,11 +11,12 @@ import { ErrorStatus } from "@lib/constants";
 import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
-import { Loader } from "@clientComponents/globals/Loader";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 
-export const MFAForm = () => {
+interface MFAFormProps {
+  authToken: { email?: string; authenticationFlowToken?: string } | null;
+}
+
+export const MFAForm = ({ authToken: authTokenProp }: MFAFormProps) => {
   const {
     t,
     i18n: { language },
@@ -25,71 +26,18 @@ export const MFAForm = () => {
 
   useFocusIt({ elRef: headingRef });
 
-  const [isLocked, setIsLocked] = useState(false);
-  const [isExpired, setIsExpired] = useState(false);
-  const [isReady, setIsReady] = useState(false);
-
-  const { update: sessionUpdate } = useSession();
-
-  const [authToken, setAuthToken] = useState<{ email?: string; authenticationFlowToken?: string }>(
-    {}
-  );
-
-  const router = useRouter();
-
-  useEffect(() => {
-    const localToken = JSON.parse(sessionStorage.getItem("authFlowToken") ?? "{}");
-    if (!localToken?.authenticationFlowToken || !localToken?.email) {
-      setIsExpired(true);
-    }
-    setAuthToken(localToken);
-    setIsReady(true);
-  }, []);
-
   const [state, formAction, isPending] = useActionState(verify, {});
 
-  const isRedirecting = state.success;
+  const isLocked = state.authError?.id === "2FALockedOutSession";
 
-  useEffect(() => {
-    if (state.success) {
-      sessionUpdate();
-      sessionStorage.removeItem("authFlowToken");
+  const hasNonVisualValidationErrors =
+    state.validationErrors?.some(({ fieldValue }) => !fieldValue) ?? false;
 
-      getRedirectPath(language).then((result) => {
-        if (result.callback) {
-          router.push(result.callback);
-        } else {
-          router.push(`/${language}/auth/policy`);
-        }
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
-
-  useEffect(() => {
-    switch (state.authError?.id) {
-      case "2FALockedOutSession":
-        setIsLocked(true);
-        break;
-      case "2FAExpiredSession":
-        setIsExpired(true);
-        break;
-    }
-  }, [state.authError]);
-
-  useEffect(() => {
-    if (state.validationErrors) {
-      const nonVisualErrors = state.validationErrors.filter(({ fieldValue }) => !fieldValue);
-      // If there are no visual errors, then the session is expired because email and authenticationFlowToken
-      // didn't pass server side validation
-      if (nonVisualErrors.length > 0) {
-        setIsExpired(true);
-        sessionStorage.removeItem("authFlowToken");
-      }
-    }
-  }, [state.validationErrors]);
-
-  if (!isReady) return <Loader />;
+  const isExpired =
+    !authTokenProp?.authenticationFlowToken ||
+    !authTokenProp?.email ||
+    state.authError?.id === "2FAExpiredSession" ||
+    hasNonVisualValidationErrors;
 
   if (isLocked) {
     return <Locked2fa />;
@@ -149,56 +97,50 @@ export const MFAForm = () => {
         {t("verify.title")}
       </h1>
       <p className="mb-12 mt-10">{t("verify.emailHasBeenSent")}</p>
-      {isRedirecting ? (
-        <div className="flex items-center justify-center">
-          <Loader />
-        </div>
-      ) : (
-        <form id="verificationCodeForm" action={formAction} noValidate>
-          <input type="hidden" name="language" value={language} />
-          <input type="hidden" name="email" value={authToken.email} />
-          <input
-            type="hidden"
-            name="authenticationFlowToken"
-            value={authToken.authenticationFlowToken}
+      <form id="verificationCodeForm" action={formAction} noValidate>
+        <input type="hidden" name="language" value={language} />
+        <input type="hidden" name="email" value={authTokenProp?.email ?? ""} />
+        <input
+          type="hidden"
+          name="authenticationFlowToken"
+          value={authTokenProp?.authenticationFlowToken ?? ""}
+        />
+        <div className="gcds-input-wrapper">
+          <Label
+            id={"label-verificationCode"}
+            htmlFor="verificationCode"
+            className="required"
+            required
+          >
+            {t("verify.fields.confirmationCode.label")}
+          </Label>
+          <div className="mb-2 text-sm text-black-default" id={"verificationCode-hint"}>
+            {t("verify.fields.confirmationCode.description")}
+          </div>
+          <TextInput
+            className="!w-36"
+            type="text"
+            id="verificationCode"
+            name="verificationCode"
+            ariaDescribedBy="verificationCode-hint"
+            required
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "verificationCode")?.fieldValue
+            }
           />
-          <div className="gcds-input-wrapper">
-            <Label
-              id={"label-verificationCode"}
-              htmlFor="verificationCode"
-              className="required"
-              required
-            >
-              {t("verify.fields.confirmationCode.label")}
-            </Label>
-            <div className="mb-2 text-sm text-black-default" id={"verificationCode-hint"}>
-              {t("verify.fields.confirmationCode.description")}
-            </div>
-            <TextInput
-              className="!w-36"
-              type="text"
-              id="verificationCode"
-              name="verificationCode"
-              ariaDescribedBy="verificationCode-hint"
-              required
-              validationError={
-                state.validationErrors?.find((e) => e.fieldKey === "verificationCode")?.fieldValue
-              }
-            />
-          </div>
+        </div>
 
-          <SubmitButton loading={isPending} dataTestId="verify-submit">
-            {t("verify.confirmButton")}
-          </SubmitButton>
+        <SubmitButton loading={isPending} dataTestId="verify-submit">
+          {t("verify.confirmButton")}
+        </SubmitButton>
 
-          <div className="mt-12 flex">
-            <Link className="mr-8" href={`/${language}/auth/mfa/resend`}>
-              {t("verify.resendConfirmationCodeButton")}
-            </Link>
-            <Link href={`/${language}/support`}>{t("verify.help")}</Link>
-          </div>
-        </form>
-      )}
+        <div className="mt-12 flex">
+          <Link className="mr-8" href={`/${language}/auth/mfa/resend`}>
+            {t("verify.resendConfirmationCodeButton")}
+          </Link>
+          <Link href={`/${language}/support`}>{t("verify.help")}</Link>
+        </div>
+      </form>
     </>
   );
 };
