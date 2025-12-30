@@ -1451,7 +1451,7 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
   // There was an error with Prisma, do not delete from Cache.
   if (templateMarkedAsDeleted === null) return templateMarkedAsDeleted;
 
-  logEvent(user.id, { type: "Form", id: formID }, "DeleteForm");
+  logEvent(user.id, { type: "Form", id: formID }, AuditLogEvent.DeleteForm);
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
@@ -1532,7 +1532,7 @@ export async function restoreTemplate(formID: string): Promise<FormRecord | null
   // There was an error with Prisma, do not delete from Cache.
   if (templateMarkedToUnarchive === null) return templateMarkedToUnarchive;
 
-  logEvent(user.id, { type: "Form", id: formID }, "UnarchiveForm");
+  logEvent(user.id, { type: "Form", id: formID }, AuditLogEvent.UnarchiveForm);
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 

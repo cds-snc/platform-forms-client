@@ -503,6 +503,8 @@
     },
     "events": {
       "CreateForm": "Formulaire créé",
+      "DeleteForm": "Formulaire archivé",
+      "UnarchiveForm": "Formulaire désarchivé",
       "ChangeDeliveryOption": "Option de livraison modifiée",
       "ChangeSecurityAttribute": "Classification des données modifiée",
       "ChangeFormPurpose": "Usage prévu modifié",
