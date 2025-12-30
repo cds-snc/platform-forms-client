@@ -42,6 +42,9 @@ jest.mock("@lib/auditLogs", () => ({
   get AuditLogDetails() {
     return jest.requireActual("@lib/auditLogs").AuditLogDetails;
   },
+  get AuditLogEvent() {
+    return jest.requireActual("@lib/auditLogs").AuditLogEvent;
+  },
   get AuditLogAccessDeniedDetails() {
     return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
   }
@@ -355,7 +358,7 @@ describe("Invitations", () => {
         { id: "template-id", type: "Form" },
         "InvitationAccepted",
         "AcceptedInvitation",
-        { "userId" : "invited-user-id" }
+        { "userEmail" : "invited@cds-snc.ca" }
       );
 
       // @TODO: these tests need to move to templates.test.ts

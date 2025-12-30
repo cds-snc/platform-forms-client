@@ -4,7 +4,7 @@ import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logMessage } from "@root/lib/logger";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { AuditLogDetails, logEvent } from "@root/lib/auditLogs";
+import { AuditLogDetails, logEvent, AuditLogEvent } from "@root/lib/auditLogs";
 import { getNotificationsUsers } from "@root/lib/notifications";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -35,7 +35,7 @@ export const updateNotificationsUser = AuthenticatedAction(
       logEvent(
         session.user.id,
         { type: "Form", id: formId },
-        "UpdateNotificationsUserSetting",
+        AuditLogEvent.UpdatedNotificationSettings,
         AuditLogDetails.UpdatedNotificationSettings,
         { userId: session.user.id, formId, enabled: user.enabled ? "enabled" : "disabled" }
       );

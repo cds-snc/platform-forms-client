@@ -7,7 +7,7 @@ import {
   UserNotFoundError,
 } from "./exceptions";
 import { getAbility } from "@lib/privileges";
-import { AuditLogDetails, logEvent } from "@lib/auditLogs";
+import { AuditLogDetails, AuditLogEvent, logEvent } from "@lib/auditLogs";
 import { notifyOwnersOwnerAdded } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { AccessControlError } from "@lib/auth/errors";
@@ -86,9 +86,9 @@ export const acceptInvitation = async (invitationId: string) => {
   logEvent(
     ability.user.id,
     { type: "Form", id: invitation.templateId },
-    "InvitationAccepted",
+    AuditLogEvent.InvitationAccepted,
     AuditLogDetails.AcceptedInvitation,
-    { userId: user.id }
+    { userEmail: user.email }
   );
 
   // some existing events may not yet have the 'invitedBy' attribute.

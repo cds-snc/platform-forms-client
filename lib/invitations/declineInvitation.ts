@@ -1,7 +1,7 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { InvitationNotFoundError, UserNotFoundError } from "./exceptions";
 import { getUser } from "@lib/users";
-import { AuditLogDetails, logEvent } from "@lib/auditLogs";
+import { AuditLogDetails, logEvent, AuditLogEvent } from "@lib/auditLogs";
 import { getAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { AccessControlError } from "@lib/auth/errors";
@@ -43,9 +43,9 @@ export const declineInvitation = async (invitationId: string) => {
   logEvent(
     ability.user.id,
     { type: "Form", id: invitation.templateId },
-    "InvitationDeclined",
+    AuditLogEvent.InvitationDeclined,
     AuditLogDetails.DeclinedInvitation,
-    { userId: user.id }
+    { userEmail: user.email }
   );
 };
 
