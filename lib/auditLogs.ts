@@ -104,7 +104,7 @@ export const AuditLogDetails = {
   CancelInvitation: "CancelInvitation",
   UserInvited: "UserInvited",
   CognitoUserIdentifier: "Cognito user unique identifier (sub): ${userId}",
-  UpdatedNotificationSettings: "`UpdatedNotificationSettings",
+  UpdatedNotificationSettings: "UpdatedNotificationSettings",
   ConfirmedResponsesForForm: "ConfirmedResponsesForForm",
   DeletedDraftResponsesForForm: "Deleted draft responses for form ${formId}",
   RetreiveSelectedFormResponses:
