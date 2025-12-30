@@ -43,6 +43,7 @@
     "playwright": "playwright test --ui",
     "playwright:run:headless": "CI=true playwright test",
     "playwright:run": "playwright test",
+    "upgrade": "next upgrade",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
   },
   "dependencies": {

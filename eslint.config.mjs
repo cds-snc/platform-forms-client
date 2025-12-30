@@ -29,6 +29,7 @@ const eslintConfig = defineConfig([
     "public/static/scripts/polyfills/**",
     "coverage/**",
     ".lintstagedrc.mjs",
+    "**/playwright-report/**/",
   ]),
   {
     rules: {
