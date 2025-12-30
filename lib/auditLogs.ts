@@ -41,7 +41,7 @@ export const AuditLogEvent = {
   ConfirmResponse: "ConfirmResponse",
   IdentifyProblemResponse: "IdentifyProblemResponse",
   ListResponses: "ListResponses",
-  DeleteResponses: "DeleteResponses",
+  DeleteDraftResponses: "DeleteDraftResponses",
   RetrieveResponses: "RetrieveResponses",
   // User Events
   UserRegistration: "UserRegistration",
