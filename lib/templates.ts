@@ -1213,9 +1213,9 @@ export async function updateFormSaveAndResume(
   logEvent(
     user.id,
     { type: "Form", id: formID },
-    "ChangeFormSaveAndResume",
+    AuditLogEvent.ChangeFormSaveAndResume,
     AuditLogDetails.SetSaveAndResume,
-    { saveAndResume: String(saveAndResume) }
+    { saveAndResume: saveAndResume ? "On" : "Off" }
   );
 
   return _parseTemplate(updatedTemplate);
