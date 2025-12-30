@@ -517,7 +517,7 @@
       "DownloadResponse": "Réponses téléchargées",
       "ConfirmResponse": "Réponses confirmées",
       "IdentifyProblemResponse": "Réponses signalées avec probléme",
-      "DeleteDraftResponses": "Brouillons de réponses supprimés",
+      "DeleteDraftResponses": "Réponses tests effacées lors de la publication.",
       "RetrieveResponses": "Réponses récupérées via l'API",
       "CreateAPIKey": "Clé API générée",
       "DeleteAPIKey": "Clé API supprimée",
