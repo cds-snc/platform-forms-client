@@ -6,6 +6,31 @@ import { useSession } from "next-auth/react";
 import { acceptPolicy } from "../../actions";
 import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
+let broadcastChannel: BroadcastChannel | null = null;
+
+function broadcast() {
+  if (typeof BroadcastChannel === "undefined") {
+    return {
+      postMessage: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    };
+  }
+
+  if (broadcastChannel === null) {
+    broadcastChannel = new BroadcastChannel("next-auth");
+  }
+
+  return broadcastChannel;
+}
+
+export const updateSessionProvider = () => {
+  broadcast().postMessage({
+    event: "session",
+    data: { trigger: "getSession" },
+  });
+};
+
 export const AcceptButton = () => {
   const {
     t,
@@ -33,6 +58,8 @@ export const AcceptButton = () => {
     await sessionUpdate({
       user: { acceptableUse: true },
     });
+
+    updateSessionProvider();
 
     sessionUpdatedRef.current = true;
     setIsUpdatingSession(false);
