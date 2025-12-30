@@ -602,12 +602,12 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   if (formCache.cacheAvailable) formCache.invalidate(command.formID);
 
   // Log the audit events
-  command.name &&
-    currentTemplate?.name != command.name &&
+  command.name !== undefined &&
+    (currentTemplate?.name ?? "") !== command.name &&
     logEvent(
       user.id,
       { type: "Form", id: command.formID },
-      "ChangeFormName",
+      AuditLogEvent.ChangeFormName,
       AuditLogDetails.UpdatedFormName,
       { newFormName: command.name ?? "" }
     );
