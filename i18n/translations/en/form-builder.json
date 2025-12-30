@@ -512,7 +512,6 @@
       "ChangeFormName": "Form name changed",
       "UpdateForm": "Form updated",
       "UpdateNotificationsInterval": "Notifications interval changed",
-      "UpdateNotificationsUserSetting": "Notifications user setting changed",
       "GrantFormAccess": "Granted form access",
       "RevokeFormAccess": "Revoked form access",
       "DownloadResponse": "Downloaded responses",

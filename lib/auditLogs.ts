@@ -29,7 +29,7 @@ export const AuditLogEvent = {
   GrantFormAccess: "GrantFormAccess",
   RevokeFormAccess: "RevokeFormAccess",
   UpdateNotificationsInterval: "UpdateNotificationsInterval",
-  UpdateNotificationsUserSetting: "UpdateNotificationsUserSetting",
+  UpdatedNotificationSettings: "UpdatedNotificationSettings",
   UpdateFormJsonConfig: "updateFormJsonConfig",
   // Invitations
   InvitationCreated: "InvitationCreated",
