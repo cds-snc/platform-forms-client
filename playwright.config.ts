@@ -63,7 +63,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "yarn build:test && yarn start:test",
+    command: "yarn build:standalone:test && yarn start:test:standalone",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
