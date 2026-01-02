@@ -29,7 +29,7 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
-  deploymentId: process.env.NEXT_DEPLOYMENT_ID,
+  deploymentId: process.env.NEXT_DEPLOYMENT_ID ?? "local-dev",
   reactCompiler: {
     compilationMode: "annotation",
   },
