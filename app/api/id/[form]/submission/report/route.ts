@@ -185,7 +185,7 @@ export const PUT = middleware(
         `User does not have an associated email address: ${JSON.stringify(session.user)} `
       );
 
-    const formId = props.params?.form;
+    const formId = (await props.params)?.form;
     const { entries, description, language = "en" }: APIProps = props.body;
 
     if (Array.isArray(formId) || !formId || !Array.isArray(entries) || !description || !entries) {

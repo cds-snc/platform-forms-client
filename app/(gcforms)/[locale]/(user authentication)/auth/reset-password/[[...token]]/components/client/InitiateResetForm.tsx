@@ -11,7 +11,7 @@ import {
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { useTranslation } from "@i18n/client";
 import { sendResetLink, ErrorStates } from "../../action";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { SubmitButton } from "./SubmitButton";
 
 export const InitiateResetForm = ({

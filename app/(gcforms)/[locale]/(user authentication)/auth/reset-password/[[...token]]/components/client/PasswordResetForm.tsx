@@ -12,7 +12,7 @@ import { useTranslation } from "@i18n/client";
 import { SubmitButton } from "./SubmitButton";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { ErrorStates, resetPassword } from "../../action";
 
 export const PasswordResetForm = ({ email }: { email: string }) => {

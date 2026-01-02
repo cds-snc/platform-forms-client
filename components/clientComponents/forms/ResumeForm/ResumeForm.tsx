@@ -26,10 +26,12 @@ export const ResumeForm = ({
   return (
     <>
       <div className="mb-4 flex flex-col items-center justify-center">
-        <GcdsH1>{title}</GcdsH1>
-        <Upload formId={formId} />
-        <Instructions />
-        <StartAgain formId={formId} />
+        <div>
+          <GcdsH1>{title}</GcdsH1>
+          <Upload formId={formId} />
+          <Instructions />
+          <StartAgain formId={formId} />
+        </div>
       </div>
       <ToastContainer limit={1} autoClose={false} containerId="resume" />
     </>

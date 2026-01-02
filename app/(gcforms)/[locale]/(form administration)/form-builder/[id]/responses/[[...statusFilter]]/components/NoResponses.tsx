@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Card, HeadingLevel, Text } from "@clientComponents/globals/card/Card";
+import { Card, Text } from "@clientComponents/globals/card/Card";
+import { HeadingLevel } from "@lib/constants";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";

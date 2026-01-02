@@ -6,7 +6,7 @@ import { login, ErrorStates } from "../../actions";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { SubmitButtonAction } from "@clientComponents/globals/Buttons/SubmitButton";
 
 export const LoginForm = () => {
@@ -14,6 +14,8 @@ export const LoginForm = () => {
     t,
     i18n: { language },
   } = useTranslation(["login", "cognito-errors", "common"]);
+
+  const router = useRouter();
 
   const localFormAction = async (_: ErrorStates, formData: FormData) => {
     const formEntries = {
@@ -37,7 +39,6 @@ export const LoginForm = () => {
       password: "",
     },
   });
-  const router = useRouter();
 
   return (
     <>

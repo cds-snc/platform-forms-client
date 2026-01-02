@@ -1,9 +1,9 @@
 "use client";
+import React, { useCallback, useEffect, useId } from "react";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useTranslation } from "@i18n/client";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import React, { useCallback, useEffect } from "react";
 import { RulesForm } from "./RulesForm";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 import { useRouter } from "next/navigation";
@@ -42,7 +42,7 @@ export const RulesDialog = () => {
     updateField: s.updateField,
   }));
 
-  const descriptionId = `descriptionId-${Date.now()}`;
+  const descriptionId = `descriptionId-${useId()}`;
 
   const handleOpenDialog = useCallback(
     (detail: RulesDialogEventDetails) => {

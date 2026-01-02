@@ -82,7 +82,7 @@ export const config = {
 // TOMORROW
 // Stop files like .map.js from being included in the middleware
 
-export default async function middleware(req: NextRequest, ctx: AppRouteHandlerFnContext) {
+export default async function proxy(req: NextRequest, ctx: AppRouteHandlerFnContext) {
   const pathname = req.nextUrl.pathname;
   const searchParams = req.nextUrl.searchParams.toString();
 
@@ -141,12 +141,13 @@ export default async function middleware(req: NextRequest, ctx: AppRouteHandlerF
     if (layer3) return layer3;
 
     // Layer 4 - Auth Users Redirect
-
-    const layer4 = authFlowRedirect(reqWithAuth, pathname, pathLang, cookieLang);
-    if (layer4) return layer4;
+    // Skip auth flow redirects for prefetched routes to prevent navigation issues
+    if (!prefetchedRoute) {
+      const layer4 = authFlowRedirect(reqWithAuth, pathname, pathLang, cookieLang);
+      if (layer4) return layer4;
+    }
 
     // Final Layer - Set Content Security Policy
-
     return setCSP(reqWithAuth, pathname, cookieLang, pathLang);
   })(req, ctx);
 }
@@ -306,7 +307,7 @@ const authFlowRedirect = (
       !onSupport
     ) {
       logMessage.debug(
-        "Middlware Action: User has not setup security questions, redirecting to setup-security-questions"
+        `Middleware Action: User has not setup security questions, redirecting from ${path} to setup-security-questions`
       );
       // check if user has setup security questions setup
 
@@ -320,6 +321,7 @@ const authFlowRedirect = (
       !session.user.acceptableUse &&
       !onSupport &&
       !path.startsWith("/auth/policy") &&
+      !path.startsWith("/auth/setup-security-questions") &&
       // If they don't want to accept let them log out
       !path.startsWith("/auth/logout")
     ) {

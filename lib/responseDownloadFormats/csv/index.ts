@@ -10,10 +10,12 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   const { t } = customTranslate("common");
   const { submissions } = formResponseSubmissions;
 
+  const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
+
   const sortedElements = sortByLayout({
     layout: formResponseSubmissions.formRecord.form.layout,
     elements: formResponseSubmissions.formRecord.form.elements,
-  }).filter((element) => ![FormElementTypes.richText].includes(element.type));
+  }).filter((element) => !richTextElements.includes(element.type));
 
   const header = sortedElements.map((element) => {
     return `${element.properties.titleEn}\n${element.properties.titleFr}${

@@ -8,7 +8,7 @@ import {
   Alert as ValidationMessage,
 } from "@clientComponents/forms";
 import { Alert } from "@clientComponents/globals";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { TextInput } from "../../../components/client/TextInput";
 import { TextArea } from "../../../components/client/TextArea";

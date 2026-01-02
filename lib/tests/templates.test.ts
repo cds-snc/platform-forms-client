@@ -68,11 +68,12 @@ const mockUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
  * admin: The form is used to collect personal information
  * nonAdmin: The form is used to collect non-personal information
  */
-export enum PurposeOption {
-  none = "",
-  admin = "admin",
-  nonAdmin = "nonAdmin",
-}
+export const PurposeOption = {
+  none: "",
+  admin: "admin",
+  nonAdmin: "nonAdmin",
+} as const;
+type PurposeOption = (typeof PurposeOption)[keyof typeof PurposeOption];
 
 const buildPrismaResponse = (
   id: string,

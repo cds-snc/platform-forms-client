@@ -34,6 +34,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     translationLanguagePriority,
     getLocalizationAttribute,
     isPublished,
+    getName,
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
@@ -42,6 +43,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     isPublished: s.isPublished,
+    getName: s.getName,
   }));
 
   const [value, setValue] = useState<string>(title);
@@ -49,6 +51,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   const router = useRouter();
   const focusTitle = searchParams?.get("focusTitle") ? true : false;
   const titleInput = useRef<HTMLTextAreaElement>(null);
+  const prevTitleRef = useRef<string>(title);
   const groupId = useGroupStore((state) => state.id);
   const getElement = useGroupStore((state) => state.getElement);
 
@@ -66,6 +69,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
 
   useEffect(() => {
     setValue(title);
+    prevTitleRef.current = title;
   }, [title]);
 
   useEffect(() => {
@@ -166,8 +170,21 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
                   placeholder={t("placeHolderFormTitle")}
                   value={value}
                   onBlur={() => {
-                    setValue(cleanInput(value));
-                    //
+                    const cleaned = cleanInput(value);
+                    setValue(cleaned);
+
+                    // Sync and save the form name.
+                    try {
+                      const currentName = getName();
+                      if (!currentName || currentName === prevTitleRef.current) {
+                        updateField(`name`, cleaned);
+                      }
+                    } catch (e) {
+                      // noop
+                    }
+
+                    // update the prevTitle for subsequent edits
+                    prevTitleRef.current = cleaned;
                   }}
                   onChange={updateValue}
                   {...getLocalizationAttribute()}

@@ -5,10 +5,10 @@ import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
-import React, { useEffect, useMemo, useState, type JSX } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSessionProgress";
-
+import { getRenderedForm } from "@lib/formBuilder";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
@@ -21,12 +21,10 @@ import { flattenStructureToValues, stripExcludedKeys } from "./lib/client/helper
 export const FormWrapper = ({
   formRecord,
   header,
-  currentForm,
   allowGrouping,
 }: {
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
   header: React.ReactNode;
-  currentForm: JSX.Element[];
   allowGrouping?: boolean | undefined;
 }) => {
   // TODO cast language as "en" | "fr" in TS below
@@ -46,6 +44,11 @@ export const FormWrapper = ({
   const [captchaFail, setCaptchaFail] = useState(false);
   const captchaToken = React.useRef("");
   const saveAndResume = formRecord?.saveAndResume;
+
+  // Generate form elements on the client to ensure Formik context is available
+  const currentForm = useMemo(() => {
+    return getRenderedForm(formRecord, language as Language);
+  }, [formRecord, language]);
 
   const formRestoredMessage = t("saveAndResume.formRestored");
   const router = useRouter();

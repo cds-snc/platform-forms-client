@@ -22,9 +22,10 @@ export async function detectOldUnprocessedSubmissions(
 
     const promptDays = parseInt(promptPhaseDays);
     const warnDays = parseInt(warnPhaseDays);
+    const allowedStatus: VaultStatus[] = [VaultStatus.NEW, VaultStatus.DOWNLOADED];
 
     const results = submissions
-      .filter((submission) => [VaultStatus.NEW, VaultStatus.DOWNLOADED].includes(submission.status))
+      .filter((submission) => allowedStatus.includes(submission.status))
       .reduce(
         (acc, current) => {
           const diffMs = Math.abs(currentDate - current.createdAt);

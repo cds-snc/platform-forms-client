@@ -1,9 +1,6 @@
 import { CacheHandler } from "@neshca/cache-handler";
 import createLruHandler from "@neshca/cache-handler/local-lru";
 
-// This file is currently in js module format because it is imported into next.config.mjs
-// Once Next.js config supports TypeScript this file can be converted to `ts` module format
-
 CacheHandler.onCreation(async () => {
   // Create an in-memory Least Recently Used cache to be used when running the web app in a Lambda function
   const localHandler = createLruHandler({
@@ -13,7 +10,7 @@ CacheHandler.onCreation(async () => {
 
   return {
     handlers: [localHandler],
-    ttl: { defaultStaleAge: 3600, estimateExpireAge: (staleAge) => staleAge * 2 },
+    ttl: { defaultStaleAge: 3600, estimateExpireAge: (staleAge: number) => staleAge * 2 },
   };
 });
 

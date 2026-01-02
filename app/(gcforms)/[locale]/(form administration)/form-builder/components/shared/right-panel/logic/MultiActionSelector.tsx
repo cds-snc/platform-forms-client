@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useId } from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
@@ -179,7 +179,7 @@ export const MultiActionSelector = ({
   };
 
   const { t } = useTranslation("form-builder");
-  const formId = `form-${Date.now()}`;
+  const formId = `form-${useId()}`;
   const { flow } = useFlowRef();
 
   const title = item

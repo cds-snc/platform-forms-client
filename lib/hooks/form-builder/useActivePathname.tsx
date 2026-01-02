@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { usePathname } from "next/navigation";
 export const cleanPath = (path = "") => {
   // remove id from path
@@ -16,11 +16,7 @@ export const cleanPath = (path = "") => {
 
 export const useActivePathname = () => {
   const asPath = usePathname();
-  const [activePathname, setActivePathname] = useState("");
-
-  useEffect(() => {
-    setActivePathname(cleanPath(asPath));
-  }, [asPath, setActivePathname]);
+  const activePathname = useMemo(() => cleanPath(asPath), [asPath]);
 
   return { asPath, activePathname, currentPage: activePathname.split("/").pop() };
 };

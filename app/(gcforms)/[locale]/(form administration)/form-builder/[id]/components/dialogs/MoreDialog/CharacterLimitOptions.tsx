@@ -14,8 +14,10 @@ export const CharacterLimitOptions = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
+  const allowedTypes: FormElementTypes[] = [FormElementTypes.textField, FormElementTypes.textArea];
+
   if (
-    ![FormElementTypes.textField, FormElementTypes.textArea].includes(item.type) ||
+    !allowedTypes.includes(item.type) ||
     (item.properties.validation?.type && item.properties.validation?.type !== "text")
   ) {
     return null;
