@@ -315,5 +315,6 @@
   },
   "responsesPilot": {
     "responsesPilotLink": "Essayer les nouvelles Réponses (Pilote)"
-  }
+  },
+  "decimalSeparator": ","
 }

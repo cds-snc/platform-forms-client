@@ -315,5 +315,6 @@
   },
   "responsesPilot": {
     "responsesPilotLink": "Try out the new Responses (Pilot)"
-  }
+  },
+  "decimalSeparator": "."
 }
