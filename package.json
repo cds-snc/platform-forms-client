@@ -43,7 +43,8 @@
     "playwright": "playwright test --ui",
     "playwright:run:headless": "CI=true playwright test",
     "playwright:run": "playwright test",
-    "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
+    "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install",
+    "upgrade": "yarn next upgrade"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
