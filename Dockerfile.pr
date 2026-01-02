@@ -68,7 +68,7 @@ WORKDIR /src
 COPY --from=build /src/.next/standalone ./
 COPY --from=build /src/.next/static ./.next/static
 
-COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
+COPY package.json yarn.lock .yarnrc.yml next.config.ts nextCacheHandler.ts ./
 COPY .yarn ./.yarn
 COPY public ./public
 COPY prisma ./prisma

@@ -1,49 +1,21 @@
-/** @type {import('next').NextConfig} */
+import type { NextConfig } from "next";
 
-import path from "path";
-import { fileURLToPath } from "url";
-import { createRequire } from "node:module";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const require = createRequire(import.meta.url);
-
-const isOutputStandalone = process.env.NEXT_OUTPUT_STANDALONE === "true";
-const securityHeaders = [
-  {
-    key: "Strict-Transport-Security",
-    value: "max-age=63072000; includeSubDomains; preload",
-  },
-  {
-    key: "X-XSS-Protection",
-    value: "1; mode=block",
-  },
-  {
-    key: "X-Frame-Options",
-    value: "DENY",
-  },
-  {
-    key: "X-Content-Type-Options",
-    value: "nosniff",
-  },
-];
-
-const nextConfig = {
-  deploymentId: process.env.NEXT_DEPLOYMENT_ID,
+const nextConfig: NextConfig = {
+  deploymentId: process.env.NEXT_DEPLOYMENT_ID ?? "local",
   reactCompiler: {
     compilationMode: "annotation",
   },
   sassOptions: {
-    includePaths: [path.join(__dirname, "styles")],
+    includePaths: ["./styles"],
   },
   poweredByHeader: false,
   compiler: {
     // Remove all console.* calls
     // removeConsole: false,
   },
-  output: isOutputStandalone ? "standalone" : undefined,
+  output: process.env.NEXT_OUTPUT_STANDALONE === "true" ? "standalone" : undefined,
   ...(process.env.LAMBDA_ENV && {
-    cacheHandler: require.resolve("./nextCacheHandler.mjs"),
+    cacheHandler: "./nextCacheHandler.ts",
     cacheMaxMemorySize: 0, // disable default in-memory caching
   }),
   async headers() {
@@ -51,7 +23,24 @@ const nextConfig = {
       {
         // Apply these headers to all routes in your application.
         source: "/:path*",
-        headers: securityHeaders,
+        headers: [
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
+          },
+          {
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+        ],
       },
     ];
   },
