@@ -35,7 +35,7 @@ load_non_existing_envs() {
     key="${line%%=*}"
     value="${line#*=}" 
 
-    if [ -z "$(var_expand "$key")" ] && [ $key != "NEXTAUTH_URL" ]; then # Check if environment variable doesn't exist
+    if [ -z "$(var_expand "$key")" ] && [ $key != "NEXTAUTH_URL" ] && [ $key != "ZITADEL_URL" ]; then # Check if environment variable doesn't exist
       export "${key}=${value}"
     fi
   done < $TMP_ENV_FILE
