@@ -54,7 +54,7 @@ describe("Test middleware handler", () => {
     expect(apiHandler).toHaveBeenCalledWith(req, { body: {}, user: "test1", session: "4" });
   });
   it("Middleware is called in order", async () => {
-    let orderTest = [];
+    const orderTest: string[] = [];
 
     const handler_1 = vi.fn(() => {
       return async () => {
