@@ -21,6 +21,7 @@ describe("Option", () => {
 
   it("renders without errors", () => {
     const rendered = render(
+      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
       <Providers form={store}>
         <Option parentIndex={0} index={0} id={1} initialValue="my test option" />
       </Providers>

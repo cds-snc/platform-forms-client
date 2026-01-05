@@ -26,6 +26,7 @@ describe("Options", () => {
       typeof Options
     >[0]["item"];
     const rendered = render(
+      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
       <Providers form={store}>
         <Options item={item} formId="test-form" />
       </Providers>
@@ -42,6 +43,7 @@ describe("Options", () => {
       properties: { ...store.elements[0]?.properties, choices: [] },
     } as unknown as Parameters<typeof Options>[0]["item"];
     const rendered = render(
+      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
       <Providers form={store}>
         <Options item={item} formId="test-form" />
       </Providers>

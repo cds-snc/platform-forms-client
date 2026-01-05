@@ -41,6 +41,7 @@ describe("Question", () => {
     >[0]["item"];
 
     const rendered = render(
+      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
       <Providers form={store}>
         <QuestionDescription item={item} describedById="described-by-id" />
       </Providers>

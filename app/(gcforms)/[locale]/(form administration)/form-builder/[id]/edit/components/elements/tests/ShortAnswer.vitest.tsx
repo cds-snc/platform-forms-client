@@ -13,15 +13,15 @@ vi.mock("next-auth/react", () => ({
     data: { user: { email: "test@example.com" } },
     status: "authenticated",
   }),
-  getSession: () =>
-    Promise.resolve({ user: { email: "test@example.com" } }),
+  getSession: () => Promise.resolve({ user: { email: "test@example.com" } }),
 }));
 
 describe("ShortAnswer", () => {
   afterEach(cleanup);
-  
+
   it("renders without errors", () => {
     const rendered = withProviders(
+      // @ts-expect-error - store has string type but FormProperties expects FormElementTypes
       store,
       <ShortAnswer data-testid="short-answer">test content</ShortAnswer>
     );
