@@ -118,5 +118,7 @@ vi.mock("next-auth/react", () => ({
     status: "authenticated",
   }),
   getSession: () => Promise.resolve({ user: { email: "test@example.com" } }),
+  signOut: async () => {},
+  signIn: async () => {},
   SessionProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
