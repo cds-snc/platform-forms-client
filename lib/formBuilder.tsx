@@ -135,6 +135,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             autoComplete={element.properties.autoComplete?.toString()}
             maxLength={element.properties.validation?.maxLength}
             allowNegativeNumbers={element.properties.allowNegativeNumbers}
+            stepCount={element.properties.stepCount}
+            lang={lang}
           />
         </div>
       );

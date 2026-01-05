@@ -250,7 +250,8 @@
       "title": "Chiffre",
       "amount": "Montant",
       "enterOnlyNumbers": "Saisissez un chiffre.",
-      "allowNegative": "permettre les valeurs numériques négatives"
+      "allowNegative": "permettre les valeurs numériques négatives",
+      "decimalPlaces": "Nombre de décimales pouvant être saisies"
     },
     "questionElement": "Éléments",
     "radio": {

@@ -131,6 +131,7 @@ export interface ElementProperties {
   autoComplete?: string;
   dateFormat?: string;
   allowNegativeNumbers?: boolean;
+  stepCount?: number;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;
