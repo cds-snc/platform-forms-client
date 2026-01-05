@@ -3,9 +3,8 @@
  */
 import { describe, it, expect, afterEach, vi } from "vitest";
 import React from "react";
-import { cleanup, render, waitFor } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import { Options } from "../Options";
-import userEvent from "@testing-library/user-event";
 import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
 
 // Mock NextAuth
@@ -14,8 +13,7 @@ vi.mock("next-auth/react", () => ({
     data: { user: { email: "test@example.com" } },
     status: "authenticated",
   }),
-  getSession: () =>
-    Promise.resolve({ user: { email: "test@example.com" } }),
+  getSession: () => Promise.resolve({ user: { email: "test@example.com" } }),
 }));
 
 describe("Options", () => {

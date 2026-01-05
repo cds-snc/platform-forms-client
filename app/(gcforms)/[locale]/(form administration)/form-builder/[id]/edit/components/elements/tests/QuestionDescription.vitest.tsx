@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import React from "react";
-import { cleanup, render, act } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import {
   defaultStore as store,
   Providers,
@@ -22,8 +22,7 @@ vi.mock("next-auth/react", () => ({
     data: { user: { email: "test@example.com" } },
     status: "authenticated",
   }),
-  getSession: () =>
-    Promise.resolve({ user: { email: "test@example.com" } }),
+  getSession: () => Promise.resolve({ user: { email: "test@example.com" } }),
 }));
 
 describe("Question", () => {
