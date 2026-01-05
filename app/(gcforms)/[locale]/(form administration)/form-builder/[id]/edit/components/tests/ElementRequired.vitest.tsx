@@ -30,6 +30,7 @@ describe("ElementRequired", () => {
     const onRequiredChange = vi.fn();
 
     const rendered = render(
+      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
       <Providers form={store}>
         <ElementRequired item={item} onRequiredChange={onRequiredChange} />
       </Providers>
