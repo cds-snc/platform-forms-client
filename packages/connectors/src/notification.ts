@@ -11,7 +11,7 @@ const globalConfig = {
   region: process.env.AWS_REGION ?? "ca-central-1",
 };
 
-export const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
+const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({
     ...globalConfig,
     // SDK retries use exponential backoff with jitter by default
@@ -19,7 +19,7 @@ export const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
   })
 );
 
-export const sqsClient = new SQSClient({
+const sqsClient = new SQSClient({
   ...globalConfig,
 });
 
