@@ -10,11 +10,21 @@ vi.mock("next/server", () => ({
     method: string;
     url: string;
     cookies: string;
+    private request: Request;
     constructor(request: Request) {
+      this.request = request;
       this.method = request.method;
       this.url = request.url;
       this.cookies = "";
     }
+    json = async () => {
+      try {
+        const text = await this.request.text();
+        return text ? JSON.parse(text) : {};
+      } catch {
+        return {};
+      }
+    };
   },
   NextResponse: class {
     constructor(

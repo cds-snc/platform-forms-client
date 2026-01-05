@@ -1,19 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { authCheckAndThrow } from "@lib/actions";
 import { sessionExists } from "@lib/middleware";
 import { MiddlewareReturn, UserAbility } from "@lib/types";
 
-const mockedAuth = jest.mocked(authCheckAndThrow, { shallow: true });
-jest.mock("@lib/actions");
+vi.mock("@lib/actions");
+
+const mockedAuth = vi.mocked(authCheckAndThrow);
 
 describe("Test a session middleware", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("Shouldn't allow a request with an invalid session", async () => {
-    (mockedAuth as jest.MockedFunction<any>).mockRejectedValue(new Error("No session found"));
+    mockedAuth.mockRejectedValueOnce(new Error("No session found"));
     const { response, next }: MiddlewareReturn = await sessionExists()();
     expect((await response?.json())?.error).toEqual("Unauthorized");
     expect(next).toBe(false);
