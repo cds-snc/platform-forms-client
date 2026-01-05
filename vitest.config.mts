@@ -52,7 +52,7 @@ export default defineConfig({
       headless: process.env.CI === "true", // Headless in CI, headed locally
       viewport: { width: 768, height: 1024 }, // Tablet size
     },
-    setupFiles: process.env.VITEST_BROWSER === "true" ? ["./tests/browser/setup.ts"] : [],
+    setupFiles: ["./__utils__/vitest.setup.ts"],
     isolate: true,
     fileParallelism: true,
   },

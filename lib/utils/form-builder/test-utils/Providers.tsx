@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { render, act } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { GroupStoreProvider } from "@lib/groups/useGroupStore";
 
@@ -15,10 +15,6 @@ Providers.propTypes = {
   form: PropTypes.object,
 };
 
-export const withProviders = async (store, Element) => {
-  let rendered = null;
-  await act(() => {
-    rendered = render(<Providers form={store}>{Element}</Providers>);
-  });
-  return rendered;
+export const withProviders = (store, Element) => {
+  return render(<Providers form={store}>{Element}</Providers>);
 };
