@@ -54,7 +54,7 @@
       "departments": "Add department",
       "combobox": "Add searchable list",
       "formattedDate": "Add date",
-      "customJson": "Add custom json"
+      "customJson": "Add custom JSON"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
@@ -199,8 +199,8 @@
       "title": "Repeating set"
     },
     "fileInput": {
-      "description": "A way to add supporting documentation. Each file can be up to 10 MB in size. Files can be in PDF, Word, Excel, CSV, PNG, JPG, or TXT format.",
-      "label": "Add file",
+      "description": "A way to add supporting documentation, such PNG or JPEG images, and PDF, Word, or Excel files. Each file can be up to 10 MB.",
+      "label": "Upload file",
       "title": "File upload"
     },
     "fileInputDefault": {
@@ -455,7 +455,7 @@
   "formatH3": "Format Heading 3",
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
-  "formattedDate": "Date & Time (UTC)",
+  "formattedDate": "Date",
   "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
     "title": "You must retrieve all responses before archiving this form.",
@@ -491,14 +491,14 @@
     "title": "Get a copy of your form"
   },
   "auditDownload": {
-    "description": "Obtain a spreadsheet with the history of all key actions taken in a form, including when a form was created, updated, and archived. Actions are available for the last 30 days and may take several minutes to appear in the activity log.",
+    "description": "Get a spreadsheet with the history of a form's recent key actions. These may take a few minutes to appear in the activity log and will be available for up to 30 days.",
     "downloadBtnText": "Download recent activity",
     "title": "View form activity",
     "headers": {
       "formId": "Form ID",
       "userId": "Team member",
       "event": "Form action",
-      "timestamp": "Date",
+      "timestamp": "Date and time (UTC)",
       "description": "Details"
     },
     "events": {
@@ -881,7 +881,7 @@
       },
       "sessionUser": {
         "title": "Receive email notifications",
-        "description": "Find out when there are new form responses",
+        "description": "Find out that your form has received new submissions (up to a maximum of two notifications per day).",
         "toggle": {
           "title": "Get notified at {{email}}",
           "on": "On",

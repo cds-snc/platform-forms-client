@@ -160,22 +160,18 @@ export async function deleteMachineKey(userId: string, keyId: string): Promise<v
   }
 }
 
-export async function getMachineUserKeyById(
-  userId: string
-): Promise<{ keyId: string } | undefined> {
+export async function getMachineUserKeysById(userId: string): Promise<{ id: string }[]> {
   const connectionInformation = await getConnectionInformation();
 
   try {
     const response = await zitadelApiManagementGotInstance
       .post(`${connectionInformation.url}/v2/users/keys/search`, {
         json: {
-          query: {
-            limit: 1,
-          },
-          queries: [
+          filters: [
             {
               userIdFilter: {
                 id: userId,
+                method: "TEXT_FILTER_METHOD_EQUALS",
               },
             },
           ],
@@ -184,13 +180,13 @@ export async function getMachineUserKeyById(
       .json<{ result?: { id: string }[] }>();
 
     if (response.result !== undefined && response.result.length > 0) {
-      return { keyId: response.result[0].id };
+      return response.result;
     } else {
-      return undefined;
+      return [];
     }
   } catch (error) {
     logMessage.error(error);
-    return undefined;
+    return [];
   }
 }
 

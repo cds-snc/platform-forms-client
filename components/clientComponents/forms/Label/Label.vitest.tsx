@@ -1,12 +1,14 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import { describe, it, expect, afterEach } from "vitest";
 import { Label } from "@clientComponents/forms";
 
 describe("Label component", () => {
-  afterEach(cleanup);
+  afterEach(() => cleanup());
   const text = "This is a label";
   it("renders without errors", () => {
     render(<Label htmlFor="testInput">{text}</Label>);
