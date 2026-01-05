@@ -4,7 +4,7 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, afterEach, beforeEach, vi } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { GenerateElement } from "@lib/formBuilder";
 
@@ -84,7 +84,9 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
   describe("renders without errors", () => {
     it("...initialState", () => {
       render(
+        // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
+          {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
           <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
@@ -114,7 +116,9 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     it("Add a row", async () => {
       const user = userEvent.setup();
       render(
+        // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
+          {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
           <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
@@ -164,7 +168,9 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     it("Delete a row", async () => {
       const user = userEvent.setup();
       render(
+        // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
+          {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
           <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
@@ -201,7 +207,9 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     it("Data reorders properly after row deletion", async () => {
       const user = userEvent.setup();
       render(
+        // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
+          {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
           <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
@@ -233,7 +241,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
       fields = screen.getAllByTestId("textInput");
       expect(fields).toHaveLength(6);
-      const fieldValues = fields.map((field) => field.value);
+      const fieldValues = fields.map((field) => (field as HTMLInputElement).value);
       // values [0, 1, 2] were deleted with row 1
       expect(fieldValues).toEqual(["3", "4", "5", "6", "7", "8"]);
     });
@@ -241,7 +249,9 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     it("Maximum number of rows", async () => {
       const user = userEvent.setup();
       render(
+        // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
+          {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
           <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
