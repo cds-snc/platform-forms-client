@@ -8,7 +8,10 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   resolve: {
     alias: {
-      "@responses-pilot": path.resolve(__dirname, "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot"),
+      "@responses-pilot": path.resolve(
+        __dirname,
+        "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot"
+      ),
     },
   },
   define: {
@@ -34,7 +37,10 @@ export default defineConfig({
     environment: "node",
     include:
       process.env.VITEST_BROWSER === "true"
-        ? ["tests/browser/**/*.browser.vitest.+(ts|tsx|js|jsx)", "**/*.browser.vitest.+(ts|tsx|js|jsx)"]
+        ? [
+            "tests/browser/**/*.browser.vitest.+(ts|tsx|js|jsx)",
+            "**/*.browser.vitest.+(ts|tsx|js|jsx)",
+          ]
         : ["__vitests__/**/*.test.ts", "lib/vitests/**/*.test.ts", "**/*.vitest.+(ts|tsx|js|jsx)"],
     exclude: [
       "**/node_modules/**",
