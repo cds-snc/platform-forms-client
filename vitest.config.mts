@@ -19,6 +19,7 @@ export default defineConfig({
   define: {
     "process.env.VITEST_BROWSER": JSON.stringify(process.env.VITEST_BROWSER || "false"),
     "process.env.VITEST_WATCH": JSON.stringify(process.env.VITEST_WATCH || "false"),
+    "process.env.APP_ENV": JSON.stringify(process.env.APP_ENV || "test"),
     global: "globalThis",
   },
   css: {
