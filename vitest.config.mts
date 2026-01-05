@@ -12,6 +12,8 @@ export default defineConfig({
         __dirname,
         "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot"
       ),
+      "next/server": path.resolve(__dirname, "./__mocks__/next/server.ts"),
+      "next-auth/lib/env": path.resolve(__dirname, "./__mocks__/next-auth/lib/env.js"),
     },
   },
   define: {

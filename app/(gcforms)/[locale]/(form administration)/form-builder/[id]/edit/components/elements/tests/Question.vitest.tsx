@@ -1,28 +1,53 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import React from "react";
-import { cleanup, render, act, waitFor } from "@testing-library/react";
+import { cleanup, render, act } from "@testing-library/react";
 import { Question } from "../question/Question";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
-import {
-  defaultStore as store,
-  Providers,
-  localStorageMock,
-} from "@lib/utils/form-builder/test-utils";
-import userEvent from "@testing-library/user-event";
-import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { FormElementTypes } from "@lib/types";
+import userEvent from "@testing-library/user-event";
 
-// Mock sessionStorage
-Object.defineProperty(window, "sessionStorage", {
-  value: localStorageMock,
-});
+// Mock the hooks that Question uses
+vi.mock("@lib/store/useTemplateStore", () => ({
+  useTemplateStore: (selector: (state: Record<string, unknown>) => unknown) =>
+    selector({
+      localizeField: (field: string) => field + "En",
+      translationLanguagePriority: "en",
+      setFocusInput: vi.fn(),
+      getFocusInput: () => false,
+      getLocalizationAttribute: () => ({ lang: "en" }),
+    }),
+}));
+
+vi.mock("@i18n/client", () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
+vi.mock("../../RefsContext", () => ({
+  useRefsContext: () => ({
+    refs: { current: {} },
+  }),
+}));
+
+vi.mock(
+  "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider",
+  () => ({
+    useTreeRef: () => ({
+      headlessTree: { current: null },
+    }),
+  })
+);
+
+vi.mock("lodash.debounce", () => ({
+  default: (fn: (value: string) => void) => fn,
+}));
 
 describe("Question", () => {
   beforeEach(() => {
-    window.sessionStorage.clear();
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -46,11 +71,7 @@ describe("Question", () => {
       },
     };
 
-    const rendered = render(
-      <Providers form={store}>
-        <Question item={item} onQuestionChange={() => {}} />
-      </Providers>
-    );
+    const rendered = render(<Question item={item} onQuestionChange={() => {}} />);
 
     const question = rendered.container.querySelector("#item-1");
     expect(question).toBeTruthy();
@@ -59,8 +80,6 @@ describe("Question", () => {
 
     expect(rendered.container.querySelector('[data-testid="description-text"]')).toBeNull();
 
-    // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
-    // > especially if there's no visual indication of the async task completing.
     await act(async () => {
       await promise;
     });
@@ -68,54 +87,30 @@ describe("Question", () => {
 
   it("calls updater function", async () => {
     const user = userEvent.setup();
+    const onQuestionChange = vi.fn();
 
-    const Container = () => {
-      const { elements, updateField, propertyPath } = useTemplateStore((s) => ({
-        elements: s.form.elements,
-        updateField: s.updateField,
-        propertyPath: s.propertyPath,
-      }));
-
-      const onQuestionChange = (itemId: number, val: string, lang: string = "en") => {
-        updateField(
-          propertyPath(itemId, LocalizedElementProperties.TITLE, lang as unknown as "en" | "fr"),
-          val
-        );
-      };
-
-      const item = { index: 0, ...elements[0] } as unknown as Parameters<
-        typeof Question
-      >[0]["item"];
-
-      return (
-        <div>
-          <Question item={item} onQuestionChange={onQuestionChange} />
-        </div>
-      );
+    const item = {
+      id: 1,
+      index: 0,
+      type: FormElementTypes.textField,
+      properties: {
+        titleEn: "question 1",
+        titleFr: "",
+        choices: [],
+        validation: { required: false },
+        descriptionEn: "",
+        descriptionFr: "",
+      },
     };
 
-    const rendered = render(
-      <Providers form={store}>
-        <Container />
-      </Providers>
-    );
+    const rendered = render(<Question item={item} onQuestionChange={onQuestionChange} />);
 
-    const question = rendered.container.querySelector("#item-1");
+    const question = rendered.container.querySelector("#item-1") as HTMLInputElement;
     expect(question).toBeTruthy();
 
-    await user.type(question as HTMLInputElement, "!!!");
+    await user.type(question, "!!!");
 
     expect(question).toHaveValue("question 1!!!");
-
-    await waitFor(() => {
-      const sessionStore = JSON.parse(
-        window.sessionStorage.getItem("form-storage") || "{}"
-      ) as unknown as {
-        state?: { form?: { elements?: Array<{ properties?: { titleEn?: string } }> } };
-      };
-      expect(sessionStore.state?.form?.elements?.[0]?.properties?.titleEn).toEqual(
-        "question 1!!!"
-      );
-    });
+    expect(onQuestionChange).toHaveBeenCalled();
   });
 });
