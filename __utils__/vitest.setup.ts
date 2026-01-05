@@ -10,3 +10,17 @@ vi.mock("next/server", () => ({
   headers: () => new Map(),
   cookies: () => ({ get: () => undefined }),
 }));
+// Mock useFeatureFlags to avoid auth/session calls
+vi.mock("@lib/hooks/useFeatureFlags", () => ({
+  useFeatureFlags: () => ({
+    getFlag: () => false,
+  }),
+}));
+// Mock NextAuth to avoid session fetch errors
+vi.mock("next-auth/react", () => ({
+  useSession: () => ({
+    data: { user: { email: "test@example.com" } },
+    status: "authenticated",
+  }),
+  getSession: () => Promise.resolve({ user: { email: "test@example.com" } }),
+}));
