@@ -6,7 +6,61 @@ import { vi } from "vitest";
 vi.mock("next/server", () => ({
   headers: () => new Map(),
   cookies: () => ({ get: () => undefined }),
+  NextRequest: class {
+    method: string;
+    url: string;
+    cookies: string;
+    constructor(request: Request) {
+      this.method = request.method;
+      this.url = request.url;
+      this.cookies = "";
+    }
+  },
+  NextResponse: class {
+    constructor(
+      public body: string | null,
+      public init?: Record<string, unknown>
+    ) {}
+    static json(data: unknown) {
+      const response = new this(JSON.stringify(data));
+      response.json = async () => data;
+      return response;
+    }
+    static next() {
+      return new this(null);
+    }
+    json = async () => {
+      try {
+        return JSON.parse(this.body || "{}");
+      } catch {
+        return {};
+      }
+    };
+  },
 }));
+
+vi.mock("next/headers", () => {
+  const mockState = { tokenValue: null as string | null };
+
+  const createHeadersObject = () => ({
+    get: vi.fn((name: string) => {
+      if (name === "x-csrf-token") {
+        return mockState.tokenValue;
+      }
+      return null;
+    }),
+  });
+
+  return {
+    headers: vi.fn(async () => createHeadersObject()),
+    cookies: vi.fn(async () => {
+      return {
+        get: vi.fn(),
+      };
+    }),
+    __mockState: mockState,
+  };
+});
 
 vi.mock("next-auth", () => ({
   default: () => ({
