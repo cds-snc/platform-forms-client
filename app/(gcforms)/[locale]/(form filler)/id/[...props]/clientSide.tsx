@@ -18,6 +18,8 @@ import { getLocalizedProperty } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { flattenStructureToValues, stripExcludedKeys } from "./lib/client/helpers";
 
+import { useSSE } from "@root/lib/hooks/useSSE";
+
 export const FormWrapper = ({
   formRecord,
   header,
@@ -44,6 +46,15 @@ export const FormWrapper = ({
   const [captchaFail, setCaptchaFail] = useState(false);
   const captchaToken = React.useRef("");
   const saveAndResume = formRecord?.saveAndResume;
+
+  const sseUrl = useMemo(() => {
+    const params = new URLSearchParams();
+    if (formRecord.closingDate) params.set("closingDate", String(formRecord.closingDate));
+    const qs = params.toString();
+    return `/api/sse/${encodeURIComponent(String(formRecord.id))}${qs ? `?${qs}` : ""}`;
+  }, [formRecord.id, formRecord.closingDate]);
+
+  const { isConnected, messages, error } = useSSE(sseUrl);
 
   // Generate form elements on the client to ensure Formik context is available
   const currentForm = useMemo(() => {
@@ -131,6 +142,19 @@ export const FormWrapper = ({
   return (
     <>
       {header}
+
+      <div>
+        <h1>SSE Connection</h1>
+        <p>Status: {isConnected ? "Connected" : "Disconnected"}</p>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <h2>Messages:</h2>
+        <ul>
+          {messages.map((msg, index) => (
+            <li key={index}>{JSON.stringify(msg)}</li>
+          ))}
+        </ul>
+      </div>
+
       <Form
         initialValues={initialValues || undefined}
         formRecord={formRecord}
