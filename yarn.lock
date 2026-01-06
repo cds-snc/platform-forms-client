@@ -2632,7 +2632,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@gcforms/connectors@workspace:packages/connectors"
   dependencies:
+    "@aws-sdk/client-dynamodb": "npm:^3.917.0"
     "@aws-sdk/client-secrets-manager": "npm:^3.917.0"
+    "@aws-sdk/client-sqs": "npm:^3.917.0"
+    "@aws-sdk/lib-dynamodb": "npm:^3.917.0"
     "@types/node": "npm:^24.6.1"
     axios: "npm:^1.12.2"
     postgres: "npm:^3.4.5"
