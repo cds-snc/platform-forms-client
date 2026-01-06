@@ -54,7 +54,7 @@ export const FormWrapper = ({
     return `/api/sse/${encodeURIComponent(String(formRecord.id))}${qs ? `?${qs}` : ""}`;
   }, [formRecord.id, formRecord.closingDate]);
 
-  const { isConnected, messages, error } = useSSE(sseUrl);
+  const { messages } = useSSE(sseUrl);
 
   // Generate form elements on the client to ensure Formik context is available
   const currentForm = useMemo(() => {
@@ -63,6 +63,19 @@ export const FormWrapper = ({
 
   const formRestoredMessage = t("saveAndResume.formRestored");
   const router = useRouter();
+
+  // Refresh the page if we receive a `closed` event from SSE
+  useEffect(() => {
+    if (!messages || messages.length === 0) return;
+    const last = messages[messages.length - 1];
+    if (last && last.type === "closed") {
+      try {
+        router.refresh();
+      } catch (_e) {
+        // ignore
+      }
+    }
+  }, [messages, router]);
 
   const savedValues = useMemo(() => {
     const result = restoreSessionProgress({
@@ -142,18 +155,6 @@ export const FormWrapper = ({
   return (
     <>
       {header}
-
-      <div>
-        <h1>SSE Connection</h1>
-        <p>Status: {isConnected ? "Connected" : "Disconnected"}</p>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <h2>Messages:</h2>
-        <ul>
-          {messages.map((msg, index) => (
-            <li key={index}>{JSON.stringify(msg)}</li>
-          ))}
-        </ul>
-      </div>
 
       <Form
         initialValues={initialValues || undefined}

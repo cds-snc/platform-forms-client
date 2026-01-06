@@ -1,7 +1,8 @@
 import { logMessage } from "@lib/logger";
 import { NextRequest } from "next/server";
+import Redis from "ioredis";
+import { createRedisSubscriber } from "@lib/integration/redisConnector";
 
-export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 export const GET = async (req: NextRequest, props: { params: Promise<Record<string, string>> }) => {
@@ -14,8 +15,11 @@ export const GET = async (req: NextRequest, props: { params: Promise<Record<stri
     // Create a new ReadableStream that emits SSE messages
     let pingTimer: number | undefined;
     let closingTimer: number | undefined;
+    // Redis subscriber instance (created per connection)
+    let subscriber: Redis | null = null;
+
     const stream = new ReadableStream({
-      start(controller) {
+      async start(controller) {
         // encoder helper
         const encoder = new TextEncoder();
 
@@ -63,6 +67,27 @@ export const GET = async (req: NextRequest, props: { params: Promise<Record<stri
           }
         }, pingInterval) as unknown as number;
 
+        // Subscribe to Redis channel for this form to receive cross-instance events
+        try {
+          subscriber = createRedisSubscriber();
+          await subscriber.subscribe(`forms:${formId}`);
+          subscriber.on("message", (_channel, message) => {
+            try {
+              const parsed = JSON.parse(message);
+              if (parsed && parsed.type === "closed") {
+                send("closed", JSON.stringify(parsed));
+                closeStream();
+              } else {
+                send("message", JSON.stringify(parsed));
+              }
+            } catch (e) {
+              logMessage.error(`Failed to parse Redis message: ${String(e)}`);
+            }
+          });
+        } catch (e) {
+          logMessage.error(`Failed to subscribe to Redis channel for form ${formId}: ${String(e)}`);
+        }
+
         // If a closingDate is provided, schedule a check to emit `closed` when it passes
         if (closingDateParam) {
           const closeTs = Date.parse(closingDateParam);
@@ -97,17 +122,9 @@ export const GET = async (req: NextRequest, props: { params: Promise<Record<stri
           } else {
             logMessage.info(`Invalid closingDate param: ${closingDateParam}`);
           }
-        } else {
-          // No closingDate provided — send a welcome message shortly after connect.
-          closingTimer = setTimeout(() => {
-            send(
-              "message",
-              JSON.stringify({ type: "message", payload: "Hello from SSE endpoint" })
-            );
-          }, 500) as unknown as number;
         }
       },
-      cancel(reason) {
+      async cancel(reason) {
         if (pingTimer) {
           clearInterval(pingTimer);
           pingTimer = undefined;
@@ -115,6 +132,24 @@ export const GET = async (req: NextRequest, props: { params: Promise<Record<stri
         if (closingTimer) {
           clearTimeout(closingTimer);
           closingTimer = undefined;
+        }
+        try {
+          // Clean up Redis subscriber
+          if (subscriber) {
+            try {
+              await subscriber.unsubscribe();
+            } catch (_e) {
+              // ignore
+            }
+            try {
+              await subscriber.quit();
+            } catch (_e) {
+              // ignore
+            }
+            subscriber = null;
+          }
+        } catch (e) {
+          logMessage.error(`Error cleaning up Redis subscriber: ${String(e)}`);
         }
         logMessage.info(`SSE stream canceled: ${String(reason)}`);
       },

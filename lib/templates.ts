@@ -12,6 +12,7 @@ import { Prisma } from "@prisma/client";
 import { authorization, getAbility } from "./privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
+import { getRedisInstance } from "./integration/redisConnector";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { deleteKey } from "./serviceAccount";
 import { ownerRemovedEmailTemplate } from "./invitations/emailTemplates/ownerRemovedEmailTemplate";
@@ -1594,6 +1595,19 @@ export const updateClosedData = async (
     .catch((e) => prismaErrors(e, null));
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
+
+  // Publish a Redis event so SSE subscribers across instances are notified
+  try {
+    const redis = await getRedisInstance();
+    const payload = JSON.stringify({
+      type: "closed",
+      formId: formID,
+      closedAt: closingDate === null ? null : new Date(String(closingDate)).toISOString(),
+    });
+    await redis.publish(`forms:${formID}`, payload);
+  } catch (e) {
+    logMessage.error(`Failed to publish Redis form closed event for ${formID}: ${String(e)}`);
+  }
 
   logEvent(user.id, { type: "Form", id: formID }, "UpdateForm", AuditLogDetails.UpdateClosingDate);
   return { formID, closingDate };
