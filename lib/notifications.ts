@@ -1,4 +1,4 @@
-import { notification } from "@root/packages/connectors/src";
+import { notification } from "@gcforms/connectors";
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
