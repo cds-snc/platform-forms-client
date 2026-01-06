@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import React, { createContext, useRef, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { createStore } from "zustand";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
@@ -178,21 +178,22 @@ export const TemplateStoreProvider = ({
   children,
   ...props
 }: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
-  const storeRef = useRef<TemplateStore>(null);
   const { getFlag } = useFeatureFlags();
-
   const { t } = useTranslation("form-builder");
-  try {
-    if (!storeRef.current) {
-      // When there is an incoming form with a different id clear it first
-      if (props.id) {
-        clearTemplateStorage(props.id);
-      }
-      storeRef.current = createTemplateStore(getFlag, props);
-    }
 
+  // Initialize store once on first mount only (empty dependency array)
+  const store = useMemo(() => {
+    // When there is an incoming form with a different id clear it first
+    if (props.id) {
+      clearTemplateStorage(props.id);
+    }
+    return createTemplateStore(getFlag, props);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty array - create store only once, never recreate
+
+  try {
     return (
-      <TemplateStoreContext.Provider value={storeRef.current}>
+      <TemplateStoreContext.Provider value={store}>
         <FlowRefProvider>
           <TreeRefProvider>{children}</TreeRefProvider>
         </FlowRefProvider>

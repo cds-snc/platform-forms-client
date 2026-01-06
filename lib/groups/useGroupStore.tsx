@@ -3,7 +3,7 @@ import { createStore } from "zustand";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
-import React, { createContext, useRef, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { TemplateStoreContext } from "@lib/store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { groupsToTreeData, TreeDataOptions } from "./utils/groupsToTreeData";
@@ -311,18 +311,16 @@ export const GroupStoreProvider = ({
   children,
   ...props
 }: React.PropsWithChildren<Partial<GroupStoreProps>>) => {
-  const storeRef = useRef<GroupStore | null>(null);
-
   const store = useContext(TemplateStoreContext);
   props.templateStore = store || undefined;
 
-  if (!storeRef.current) {
-    storeRef.current = createGroupStore(props);
-  }
+  // Initialize store once on first mount only (empty dependency array)
+  const groupStore = useMemo(() => {
+    return createGroupStore(props);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty array - create store only once, never recreate
 
-  return (
-    <GroupStoreContext.Provider value={storeRef.current}>{children}</GroupStoreContext.Provider>
-  );
+  return <GroupStoreContext.Provider value={groupStore}>{children}</GroupStoreContext.Provider>;
 };
 
 export const useGroupStore = <T,>(

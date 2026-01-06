@@ -3,5 +3,4 @@ export { default as Brand } from "./Brand";
 export { default as LanguageToggle } from "./Header/LanguageToggle";
 export { SkipLink } from "./SkipLink";
 export * as Alert from "./Alert/Alert";
-export { ErrorStatus } from "./Alert/Alert";
 export { ReactHydrationCheck } from "./ReactHydrationCheck";

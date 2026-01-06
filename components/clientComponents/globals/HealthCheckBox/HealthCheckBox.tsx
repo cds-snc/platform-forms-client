@@ -1,6 +1,7 @@
 import { cn } from "@lib/utils";
 import React, { ReactNode } from "react";
-import { defaultIcons, ErrorStatus } from "../Alert/Alert";
+import { defaultIcons } from "../Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { Trans } from "react-i18next";
 
 type HealthCheckBoxProps = {

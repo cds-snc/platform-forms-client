@@ -250,7 +250,8 @@
       "title": "Number",
       "amount": "Amount",
       "enterOnlyNumbers": "Enter a number.",
-      "allowNegative": "allow negative number values"
+      "allowNegative": "allow negative number values",
+      "decimalPlaces": "Number of decimal places that can be entered"
     },
     "questionElement": "Elements",
     "radio": {
