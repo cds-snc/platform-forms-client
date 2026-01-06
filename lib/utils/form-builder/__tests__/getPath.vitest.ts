@@ -1,4 +1,13 @@
-import { parseRootId, getElementIndexes, indexesToPath, getPath, getPathString } from "../getPath";
+import { describe, it, expect } from "vitest";
+import {
+  parseRootId,
+  getElementIndexes,
+  indexesToPath,
+  getPath,
+  getPathString,
+  Form,
+  Element,
+} from "../getPath";
 
 describe("Parse root ID", () => {
   it("parses root id", () => {
@@ -15,12 +24,12 @@ describe("Parse root ID", () => {
 
 describe("Get array indexes for path by element ID", () => {
   it("parses elIndex", () => {
-    const elements = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 12 }];
+    const elements: Element[] = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 12 }];
     expect(getElementIndexes(12, elements)).toEqual([3, null]);
   });
 
   it("parses 3 digit elIndex and subIndex", () => {
-    const elements = [
+    const elements: Element[] = [
       { id: 1 },
       { id: 2, properties: { subElements: [{ id: 201 }, { id: 202 }, { id: 203 }] } },
       { id: 3 },
@@ -32,7 +41,7 @@ describe("Get array indexes for path by element ID", () => {
   });
 
   it("parses 4 digit elIndex and subIndex", () => {
-    const elements = [
+    const elements: Element[] = [
       { id: 1 },
       { id: 2 },
       { id: 3 },
@@ -45,22 +54,24 @@ describe("Get array indexes for path by element ID", () => {
 });
 
 describe("Get paths by indexes", () => {
-  const form = {
-    elements: [
-      { id: 1 },
-      { id: 2 },
-      { id: 3 },
-      { id: 12, properties: { subElements: [{ id: 1201 }, { id: 1202 }, { id: 1210 }] } },
-    ],
-  };
-  const [elPath, subPath] = indexesToPath([3, 2], form);
-  expect(elPath).toEqual(form.elements[3]);
-  expect(subPath).toEqual(form.elements[3].properties?.subElements?.[2]);
+  it("returns element and subElement paths from indexes", () => {
+    const form: Form = {
+      elements: [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 12, properties: { subElements: [{ id: 1201 }, { id: 1202 }, { id: 1210 }] } },
+      ],
+    };
+    const [elPath, subPath] = indexesToPath([3, 2], form);
+    expect(elPath).toEqual(form.elements[3]);
+    expect(subPath).toEqual(form.elements[3].properties?.subElements?.[2]);
+  });
 });
 
 describe("Get path string by id", () => {
   it("gets element path", async () => {
-    const elements = [
+    const elements: Element[] = [
       { id: 1 },
       { id: 2 },
       { id: 3 },
@@ -83,7 +94,7 @@ describe("Get path string by id", () => {
 
   describe("Get paths by id", () => {
     it("gets element path", async () => {
-      const form = {
+      const form: Form = {
         elements: [
           { id: 1 },
           { id: 2 },
@@ -97,7 +108,7 @@ describe("Get path string by id", () => {
     });
 
     it("gets sub element path", async () => {
-      const form = {
+      const form: Form = {
         elements: [
           { id: 1 },
           { id: 2 },

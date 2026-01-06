@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import { NextRequest } from "next/server";
 import { jsonValidator } from "@lib/middleware";
 import templatesSchema from "../middleware/schemas/templates.schema.json";

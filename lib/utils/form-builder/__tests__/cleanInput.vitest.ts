@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import { cleanInput } from "../index";
 
 const template = {
@@ -11,7 +12,7 @@ const template = {
     logoTitleEn: "Canadian Digital Service",
     logoTitleFr: "Service numérique canadien",
   },
-};
+} as const;
 
 describe("cleanInput", () => {
   it("adds spaces when angle brackets detected for string", () => {

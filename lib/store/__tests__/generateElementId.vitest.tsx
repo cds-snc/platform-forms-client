@@ -1,24 +1,31 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
+import { describe, it, expect } from "vitest";
 import React from "react";
 import { useTemplateStore, TemplateStoreProvider } from "../useTemplateStore";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act, waitFor } from "@testing-library/react";
 import { FormElementTypes } from "@lib/types";
 
-const createStore = () => {
+const createStore = async () => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
-    <TemplateStoreProvider isPublished={false}>{children}</TemplateStoreProvider>
+    <TemplateStoreProvider>{children}</TemplateStoreProvider>
   );
 
   const { result } = renderHook(() => useTemplateStore((s) => s), { wrapper });
 
+  await waitFor(() => {
+    expect(result.current).not.toBeNull();
+  });
+
   act(() => {
-    result.current.initialize();
+    result.current!.initialize();
   });
 
   return result;
 };
+
+const promise = Promise.resolve();
 
 const defaultElements = [
   {
@@ -61,12 +68,13 @@ const defaultElements = [
 
 describe("generateElementId", () => {
   it("existing ids in order", async () => {
-    const result = createStore();
+    const result = await createStore();
 
     result.current.form = {
       titleEn: "Title en",
       titleFr: "Title fr",
-      elements: defaultElements, layout: []
+      elements: defaultElements,
+      layout: [],
     };
 
     // Ensure we have a default form to work with
@@ -88,10 +96,14 @@ describe("generateElementId", () => {
     });
 
     expect(result.current.form.lastGeneratedElementId).toBe(5);
+
+    await act(async () => {
+      await promise;
+    });
   });
 
   it("handles ids out of sequence", async () => {
-    const result = createStore();
+    const result = await createStore();
     const element = {
       id: 19, // <-- This is out of sequence
       type: FormElementTypes.textField,
@@ -109,7 +121,8 @@ describe("generateElementId", () => {
       titleEn: "Title en",
       titleFr: "Title fr",
       // Add element with ID of 19 at the start
-      elements: [element, ...defaultElements], layout: []
+      elements: [element, ...defaultElements],
+      layout: [],
     };
 
     // Ensure we have a default form to work with
@@ -127,16 +140,21 @@ describe("generateElementId", () => {
     });
 
     expect(result.current.form.lastGeneratedElementId).toBe(21);
+
+    await act(async () => {
+      await promise;
+    });
   });
 
   it("handles deleting an element", async () => {
-    const result = createStore();
+    const result = await createStore();
 
     result.current.form = {
       titleEn: "Title en",
       titleFr: "Title fr",
       // Add element with ID of 19 at the start
-      elements: defaultElements, layout: []
+      elements: defaultElements,
+      layout: [],
     };
 
     // Ensure we have a default form to work with
@@ -162,7 +180,7 @@ describe("generateElementId", () => {
   });
 
   it("handles 3 digit ids", async () => {
-    const result = createStore();
+    const result = await createStore();
 
     const element = {
       id: 201,
@@ -180,7 +198,8 @@ describe("generateElementId", () => {
     result.current.form = {
       titleEn: "Title en",
       titleFr: "Title fr",
-      elements: [element], layout: []
+      elements: [element],
+      layout: [],
     };
 
     // Ensure we have a default form to work with
@@ -192,11 +211,10 @@ describe("generateElementId", () => {
     });
 
     expect(result.current.form.lastGeneratedElementId).toBe(202);
-
   });
 
   it("handles 4 digit ids", async () => {
-    const result = createStore();
+    const result = await createStore();
 
     const element = {
       id: 2022,
@@ -214,7 +232,8 @@ describe("generateElementId", () => {
     result.current.form = {
       titleEn: "Title en",
       titleFr: "Title fr",
-      elements: [element], layout: []
+      elements: [element],
+      layout: [],
     };
 
     // Ensure we have a default form to work with
@@ -226,16 +245,16 @@ describe("generateElementId", () => {
     });
 
     expect(result.current.form.lastGeneratedElementId).toBe(2023);
-
   });
 
   it("handles starting a form from scratch", async () => {
-    const result = createStore();
+    const result = await createStore();
 
     result.current.form = {
       titleEn: "Title en",
       titleFr: "Title fr",
-      elements: [], layout: []
+      elements: [],
+      layout: [],
     };
 
     // Ensure we have a default form to work with
@@ -248,7 +267,6 @@ describe("generateElementId", () => {
     });
 
     expect(result.current.form.lastGeneratedElementId).toBe(1);
-
 
     act(() => {
       result.current.add(0);
@@ -273,11 +291,10 @@ describe("generateElementId", () => {
     });
 
     expect(result.current.form.lastGeneratedElementId).toBe(6);
-
   });
 
   it("gets highest element id", async () => {
-    const result = createStore();
+    const result = await createStore();
 
     const element = {
       id: 201,
@@ -298,11 +315,11 @@ describe("generateElementId", () => {
       elements: [
         defaultElements[0],
         defaultElements[1],
-        element, // <- Out of sequence and high id for testing purposes 
+        element, // <- Out of sequence and high id for testing purposes
         defaultElements[2],
-        defaultElements[10] // <-- This is purposely undefined - to test check for element.id
+        defaultElements[10], // <-- This is purposely undefined - to test check for element.id
       ],
-      layout: []
+      layout: [],
     };
 
     // Ensure we have a default form to work with
@@ -311,7 +328,5 @@ describe("generateElementId", () => {
 
     // Check that the highest element id is 201
     expect(result.current.getHighestElementId()).toBe(201);
-
   });
-
 });
