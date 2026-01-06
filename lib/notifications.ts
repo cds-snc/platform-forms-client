@@ -156,7 +156,7 @@ const sendEmailAfterSubmissionProcessed = async (
     const HOST = await getOrigin();
 
     if (!Array.isArray(users) || users.length === 0) {
-      logMessage.debug("sendEmailAfterSubmissionProcessed missing users");
+      logMessage.debug("Deferred notification skipped since missing users");
       return;
     }
     const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
@@ -173,7 +173,7 @@ const sendEmailAfterSubmissionProcessed = async (
     });
   } catch (error) {
     logMessage.warn(
-      `sendEmailAfterSubmissionProcessed failed for formId ${formId} with error: ${(error as Error).message}`
+      `Deferred notification failed for formId ${formId} with error: ${(error as Error).message}`
     );
   }
 };
