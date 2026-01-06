@@ -1,9 +1,10 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { GenerateElement } from "@lib/formBuilder";
 
@@ -81,9 +82,11 @@ const formRecord = {
 describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
   afterEach(cleanup);
   describe("renders without errors", () => {
-    test("...initialState", () => {
+    it("...initialState", () => {
       render(
+        // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
+          {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
           <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
@@ -110,15 +113,17 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
         })
       );
     });
-    test("Add a row", async () => {
+    it("Add a row", async () => {
       const user = userEvent.setup();
       render(
+        // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
+          {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
           <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)
-      window.HTMLElement.prototype.scrollIntoView = jest.fn();
+      window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
       const titleProp = lang === "en" ? "titleEn" : "titleFr";
 
@@ -160,15 +165,17 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
         })[1]
       );
     });
-    test("Delete a row", async () => {
+    it("Delete a row", async () => {
       const user = userEvent.setup();
       render(
+        // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
+          {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
           <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)
-      window.HTMLElement.prototype.scrollIntoView = jest.fn();
+      window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
       // Add a new row to ensure we have 2 rows
       await user.click(screen.getByTestId("add-row-button-1"));
@@ -197,15 +204,17 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
         })[0]
       );
     });
-    test("Data reorders properly after row deletion", async () => {
+    it("Data reorders properly after row deletion", async () => {
       const user = userEvent.setup();
       render(
+        // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
+          {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
           <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)
-      window.HTMLElement.prototype.scrollIntoView = jest.fn();
+      window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
       // Add 2 new rows to ensure we have 3 rows
       await user.click(screen.getByTestId("add-row-button-1"));
@@ -232,21 +241,23 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
       fields = screen.getAllByTestId("textInput");
       expect(fields).toHaveLength(6);
-      const fieldValues = fields.map((field) => field.value);
+      const fieldValues = fields.map((field) => (field as HTMLInputElement).value);
       // values [0, 1, 2] were deleted with row 1
       expect(fieldValues).toEqual(["3", "4", "5", "6", "7", "8"]);
     });
 
-    test("Maximum number of rows", async () => {
+    it("Maximum number of rows", async () => {
       const user = userEvent.setup();
       render(
+        // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
+          {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
           <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
 
       // mocking scroll into view function (not implemented in jsdom)
-      window.HTMLElement.prototype.scrollIntoView = jest.fn();
+      window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(1);
 

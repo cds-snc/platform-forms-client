@@ -8,12 +8,18 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   resolve: {
     alias: {
-      "@responses-pilot": path.resolve(__dirname, "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot"),
+      "@responses-pilot": path.resolve(
+        __dirname,
+        "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot"
+      ),
+      "next/server": path.resolve(__dirname, "./__mocks__/next/server.ts"),
+      "next-auth/lib/env": path.resolve(__dirname, "./__mocks__/next-auth/lib/env.js"),
     },
   },
   define: {
     "process.env.VITEST_BROWSER": JSON.stringify(process.env.VITEST_BROWSER || "false"),
     "process.env.VITEST_WATCH": JSON.stringify(process.env.VITEST_WATCH || "false"),
+    "process.env.APP_ENV": JSON.stringify(process.env.APP_ENV || "test"),
     global: "globalThis",
   },
   css: {
@@ -34,7 +40,10 @@ export default defineConfig({
     environment: "node",
     include:
       process.env.VITEST_BROWSER === "true"
-        ? ["tests/browser/**/*.browser.vitest.+(ts|tsx|js|jsx)", "**/*.browser.vitest.+(ts|tsx|js|jsx)"]
+        ? [
+            "tests/browser/**/*.browser.vitest.+(ts|tsx|js|jsx)",
+            "**/*.browser.vitest.+(ts|tsx|js|jsx)",
+          ]
         : ["__vitests__/**/*.test.ts", "lib/vitests/**/*.test.ts", "**/*.vitest.+(ts|tsx|js|jsx)"],
     exclude: [
       "**/node_modules/**",
@@ -52,7 +61,7 @@ export default defineConfig({
       headless: process.env.CI === "true", // Headless in CI, headed locally
       viewport: { width: 768, height: 1024 }, // Tablet size
     },
-    setupFiles: process.env.VITEST_BROWSER === "true" ? ["./tests/browser/setup.ts"] : [],
+    setupFiles: process.env.VITEST_BROWSER === "true" ? [] : ["./__utils__/vitest.setup.ts"],
     isolate: true,
     fileParallelism: true,
   },
