@@ -13,9 +13,7 @@ export const DownloadCSVWithGroups = () => {
   const { form, name } = useTemplateStore((s) => ({ form: s.form, name: s.name }));
   const { t, i18n } = useTranslation("form-builder");
 
-  let data = [];
-
-  const parseElement = (element: FormElement) => {
+  const parseElement = (element: FormElement, data: string[][]) => {
     const description =
       element.type === "richText" ? formatText("Page text/Texte de page") : formatText("");
 
@@ -27,7 +25,7 @@ export const DownloadCSVWithGroups = () => {
       ]);
 
       element.properties.subElements?.map((subElement) => {
-        parseElement(subElement);
+        parseElement(subElement, data);
       });
 
       return;
@@ -62,7 +60,7 @@ export const DownloadCSVWithGroups = () => {
   };
 
   const generateCSV = async () => {
-    data = [
+    const data: string[][] = [
       [formatText("Description"), formatText("English/Anglais"), formatText("French/Français")],
     ];
     data.push([formatText("Title/Titre"), formatText(form.titleEn), formatText(form.titleFr)]);
@@ -94,7 +92,7 @@ export const DownloadCSVWithGroups = () => {
         ]);
 
         groupElements.map((element) => {
-          parseElement(element);
+          parseElement(element, data);
         });
       });
     }

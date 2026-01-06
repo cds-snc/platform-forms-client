@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { Label } from "./Label";
@@ -17,28 +17,30 @@ export const QuestionIdOptions = ({
   setIsValid: (isValid: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const [error, setError] = React.useState<boolean>(false);
 
   const { form } = useTemplateStore((s) => ({
     form: s.form,
   }));
 
-  useEffect(() => {
+  const error = useMemo(() => {
     const questionId = item.properties.questionId;
     if (!questionId || questionId === "") {
-      setError(false);
-      setIsValid(true);
-      return;
+      return false;
     }
+    return !isUniqueQuestionId(form.elements, questionId, item);
+  }, [item, form.elements]);
 
-    if (isUniqueQuestionId(form.elements, questionId, item)) {
-      setError(false);
-      setIsValid(true);
-    } else {
-      setError(true);
-      setIsValid(false);
+  const isValid = useMemo(() => {
+    const questionId = item.properties.questionId;
+    if (!questionId || questionId === "") {
+      return true;
     }
-  }, [item.properties.questionId, form.elements, item, setIsValid]);
+    return isUniqueQuestionId(form.elements, questionId, item);
+  }, [item, form.elements]);
+
+  useEffect(() => {
+    setIsValid(isValid);
+  }, [isValid, setIsValid]);
 
   if (item.type === FormElementTypes.richText) {
     return null;

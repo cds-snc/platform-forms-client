@@ -1,5 +1,5 @@
 import { Alert } from "@clientComponents/forms";
-import { ErrorStatus } from "../Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { useTranslation } from "@i18n/client";
 import { Language } from "@lib/types/form-builder-types";
 import { Trans } from "react-i18next";
@@ -37,7 +37,13 @@ export const StatusError = ({
   const { t } = useTranslation("error");
   const link = `/${language}/id/${formId}`;
   return (
-    <Alert type={ErrorStatus.ERROR} id="gc-form-errors-server" autoFocus focussable={true} cta={cta}>
+    <Alert
+      type={ErrorStatus.ERROR}
+      id="gc-form-errors-server"
+      autoFocus
+      focussable={true}
+      cta={cta}
+    >
       <h2>{t("sever-error.title")}</h2>
       <div className="mt-4">
         <Text i18nKey="sever-error.body" values={{ formLink: link }} />

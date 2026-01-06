@@ -39,9 +39,11 @@ export default async function Page(props: {
       const userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
 
       if (userSecurityQuestions.length === 0) {
+        // eslint-disable-next-line react-hooks/error-boundaries
         return <CannotReset {...{ locale }} />;
       }
 
+      // eslint-disable-next-line react-hooks/error-boundaries
       return <QuestionChallengeForm email={email} userSecurityQuestions={userSecurityQuestions} />;
     } catch (e) {
       if (e instanceof PasswordResetExpiredLink) {
