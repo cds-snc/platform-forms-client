@@ -1,19 +1,20 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { middleware } from "@lib/middleware";
 import { NextRequest } from "next/server";
 
-const apiHandler = jest.fn();
+const apiHandler = vi.fn();
 
 describe("Test middleware handler", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
   it("Sucessfull middleware calls apiHandler", async () => {
-    const handler_1 = jest.fn(() => {
+    const handler_1 = vi.fn(() => {
       return async () => {
         return { next: true };
       };
     });
-    const handler_2 = jest.fn(() => {
+    const handler_2 = vi.fn(() => {
       return async () => {
         return { next: true };
       };
@@ -23,12 +24,12 @@ describe("Test middleware handler", () => {
     expect(apiHandler).toHaveBeenCalledTimes(1);
   });
   it("Failed middleware does not call apiHandler", async () => {
-    const handler_1 = jest.fn(() => {
+    const handler_1 = vi.fn(() => {
       return async () => {
         return { next: true };
       };
     });
-    const handler_2 = jest.fn(() => {
+    const handler_2 = vi.fn(() => {
       return async () => {
         return { next: false };
       };
@@ -38,12 +39,12 @@ describe("Test middleware handler", () => {
     expect(apiHandler).toHaveBeenCalledTimes(0);
   });
   it("Middleware passes props to apiHandler", async () => {
-    const handler_1 = jest.fn(() => {
+    const handler_1 = vi.fn(() => {
       return async () => {
         return { next: true, props: { user: "test1" } };
       };
     });
-    const handler_2 = jest.fn(() => {
+    const handler_2 = vi.fn(() => {
       return async () => {
         return { next: true, props: { session: "4" } };
       };
@@ -53,15 +54,15 @@ describe("Test middleware handler", () => {
     expect(apiHandler).toHaveBeenCalledWith(req, { body: {}, user: "test1", session: "4" });
   });
   it("Middleware is called in order", async () => {
-    let orderTest = [];
+    const orderTest: string[] = [];
 
-    const handler_1 = jest.fn(() => {
+    const handler_1 = vi.fn(() => {
       return async () => {
         orderTest.push("1");
         return { next: true };
       };
     });
-    const handler_2 = jest.fn(() => {
+    const handler_2 = vi.fn(() => {
       return async () => {
         orderTest.push("2");
         return { next: true };

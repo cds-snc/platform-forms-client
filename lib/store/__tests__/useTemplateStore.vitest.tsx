@@ -1,19 +1,24 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
+import { describe, it, expect } from "vitest";
 import React from "react";
 import { useTemplateStore, TemplateStoreProvider } from "../useTemplateStore";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act, waitFor } from "@testing-library/react";
 
-const createStore = () => {
+const createStore = async () => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
     <TemplateStoreProvider>{children}</TemplateStoreProvider>
   );
 
   const { result } = renderHook(() => useTemplateStore((s) => s), { wrapper });
 
+  await waitFor(() => {
+    expect(result.current).not.toBeNull();
+  });
+
   act(() => {
-    result.current.initialize();
+    result.current!.initialize();
   });
 
   return result;
@@ -23,7 +28,7 @@ const promise = Promise.resolve();
 
 describe("TemplateStore", () => {
   it("Updates the Element title", async () => {
-    const result = createStore();
+    const result = await createStore();
 
     expect(result.current.form.titleEn).toBe("");
 
@@ -42,7 +47,7 @@ describe("TemplateStore", () => {
   });
 
   it("Adds default elements to the Form", async () => {
-    const result = createStore();
+    const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
     // Add two elements
@@ -61,7 +66,7 @@ describe("TemplateStore", () => {
   });
 
   it("Inserts elements after the specified item index", async () => {
-    const result = createStore();
+    const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
     // Add multiple elements
@@ -91,7 +96,7 @@ describe("TemplateStore", () => {
   });
 
   it("Adds Choices to an Element", async () => {
-    const result = createStore();
+    const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
     // Add a default element
@@ -132,19 +137,19 @@ describe("TemplateStore", () => {
   });
 
   it("Updates existing choices", async () => {
-    const result = createStore();
+    const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
     act(() => {
       result.current.add();
       result.current.updateField(`form.elements[0].properties.choices[0].en`, "option 1!!");
-      result.current.updateField(`form.elements[0].properties.choices[0].fr`, "l’option 1!!");
+      result.current.updateField(`form.elements[0].properties.choices[0].fr`, "l'option 1!!");
     });
 
     if (result.current.form.elements[0].properties.choices) {
       expect(result.current.form.elements[0].properties.choices[0]).toEqual({
         en: "option 1!!",
-        fr: "l’option 1!!",
+        fr: "l'option 1!!",
       });
     } else {
       expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
@@ -156,7 +161,7 @@ describe("TemplateStore", () => {
   });
 
   it("Removes choices", async () => {
-    const result = createStore();
+    const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
     // Create an element with three choices
@@ -181,7 +186,7 @@ describe("TemplateStore", () => {
   });
 
   it("Duplicates an element and inserts after index of copied item", async () => {
-    const result = createStore();
+    const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
     // Create an element with three choices
@@ -211,7 +216,7 @@ describe("TemplateStore", () => {
   });
 
   it("Moves an element up", async () => {
-    const result = createStore();
+    const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
     act(() => {
@@ -238,7 +243,7 @@ describe("TemplateStore", () => {
   });
 
   it("Moves an element down", async () => {
-    const result = createStore();
+    const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
     act(() => {
@@ -265,7 +270,7 @@ describe("TemplateStore", () => {
   });
 
   it("Adds a validation type", async () => {
-    const result = createStore();
+    const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
     act(() => {
@@ -288,7 +293,7 @@ describe("TemplateStore", () => {
   });
 
   it("Removes a validation type", async () => {
-    const result = createStore();
+    const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
     act(() => {
@@ -322,7 +327,7 @@ describe("TemplateStore", () => {
   });
 
   it("Initializes the default form", async () => {
-    const result = createStore();
+    const result = await createStore();
 
     // Initial state
     expect(result.current.form.titleEn).toBe("");
@@ -353,7 +358,7 @@ describe("TemplateStore", () => {
   });
 
   it("Creates localized property", async () => {
-    const result = createStore();
+    const result = await createStore();
     let titleProp = "";
     let descProp = "";
 
