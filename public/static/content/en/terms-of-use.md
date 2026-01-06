@@ -58,7 +58,7 @@ Ensuring the API key associated with your form is secure to protect access to fo
 
 ## Practice continuous security
 
-- Use a valid individual government email belonging to an employee (not a shared inbox) to create your account and for two-factor authentication (2FA).
+- Use a valid individual government email belonging to an employee **(not a shared inbox)** to create your account and for two-factor authentication (2FA).
 - Do not share your password with anyone or store it where others could find it. If someone else needs access to a form, [contact us](/en/support).
 - Safeguard your API keys. If you suspect an API key has been compromised, notify us, and update your integration with a newly generated API key to secure access to form responses.
 - Ensure the privacy and security of protected information upon downloading form responses from GC Forms. If Responses are not saved and confirmed within 45 days, we will take necessary steps to ensure they are retrieved by the responsible program or service.
