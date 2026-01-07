@@ -85,6 +85,7 @@ export const GCFormsProvider = ({
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
 
+  // eslint-disable-next-line react-hooks/refs
   const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
   const filteredMatchedIds = matchedIds.filter((id) => {
     const parentId = id.split(".")[0];

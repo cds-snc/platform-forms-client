@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/connectors",
-  "version": "2.2.13",
+  "version": "2.2.15",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -25,7 +25,10 @@
     "connectors:prepack": "yarn prepack"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.917.0",
     "@aws-sdk/client-secrets-manager": "^3.917.0",
+    "@aws-sdk/client-sqs": "^3.917.0",
+    "@aws-sdk/lib-dynamodb": "^3.917.0",
     "axios": "^1.12.2",
     "postgres": "^3.4.5"
   },

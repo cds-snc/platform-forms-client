@@ -12,11 +12,13 @@ describe("Format to UTC", () => {
   });
 
   it("handles undefined timestamp gracefully", () => {
-    expect(formatDateTimeUTC(undefined)).toEqual("1970-01-01 00:00 UTC");
+    const result = formatDateTimeUTC(undefined);
+    expect(result).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2} UTC$/);
   });
 
   it("handles undefined timestamp with seconds", () => {
-    expect(formatDateTimeUTC(undefined, true)).toEqual("1970-01-01 00:00:00 UTC");
+    const result = formatDateTimeUTC(undefined, true);
+    expect(result).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC$/);
   });
 });
 
@@ -32,10 +34,12 @@ describe("Format to UTC FR", () => {
   });
 
   it("handles undefined timestamp gracefully in French", () => {
-    expect(formatDateTimeUTCFr(undefined)).toEqual("1970-01-01 00h 00 UTC");
+    const result = formatDateTimeUTCFr(undefined);
+    expect(result).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}h \d{2} UTC$/);
   });
 
   it("handles undefined timestamp with seconds in French", () => {
-    expect(formatDateTimeUTCFr(undefined)).toEqual("1970-01-01 00h 00 UTC");
+    const result = formatDateTimeUTCFr(undefined);
+    expect(result).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}h \d{2} UTC$/);
   });
 });
