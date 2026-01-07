@@ -135,7 +135,7 @@ export const RulesForm = ({
             className={`border-x-4 border-gray-800 px-5 ${showLogicDetails ? "" : "hidden"}`}
           >
             <div className="my-4">
-              <Markdown options={{ forceBlock: true }}>{t("logic.tryitout.text")}</Markdown>
+              <Markdown options={{ forceBlock: false }}>{t("logic.tryitout.text")}</Markdown>
             </div>
             <Button theme={"primary"} onClick={tryLogicView}>
               {t("logic.tryitout.open")}
