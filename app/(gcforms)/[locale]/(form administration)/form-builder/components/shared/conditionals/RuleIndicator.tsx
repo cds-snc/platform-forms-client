@@ -5,7 +5,7 @@ import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
 import { Button } from "@clientComponents/globals";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { findParentGroup } from "@lib/groups/utils/findParentGroup";
-import { toPlainText } from "@root/lib/utils/strings";
+import { toPlainText } from "@lib/utils/strings";
 
 export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   const { getChoice, getFormElementById, localizeField, translationLanguagePriority } =
