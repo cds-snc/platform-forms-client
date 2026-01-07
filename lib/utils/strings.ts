@@ -2,11 +2,11 @@ export const stripEntities = (text: string): string => {
   return text
     .replace(/&#32;/g, " ")
     .replace(/&#160;/g, " ")
-    .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'");
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&");
 };
 
 export const stripLineBreaks = (text: string): string => {
