@@ -2,10 +2,10 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
-import { removeMarkdown } from "@lib/groups/utils/itemType";
 import { Button } from "@clientComponents/globals";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { findParentGroup } from "@lib/groups/utils/findParentGroup";
+import { toPlainText } from "@root/lib/utils/strings";
 
 export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   const { getChoice, getFormElementById, localizeField, translationLanguagePriority } =
@@ -32,7 +32,7 @@ export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
 
   const titleKey = localizeField(LocalizedFormProperties.TITLE, translationLanguagePriority);
 
-  const title = removeMarkdown(element.properties[titleKey] || parentId.toString());
+  const title = toPlainText(element.properties[titleKey] || parentId.toString());
   const choiceValue = choice[translationLanguagePriority] || choiceId.toString();
 
   const parentGroup = findParentGroup(getTreeData(), parentId.toString());
