@@ -6,7 +6,7 @@ import { FormElement } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { toPlainText } from "@root/lib/utils/strings";
+import { toPlainText } from "@lib/utils/strings";
 
 type Choice = {
   label: string;
