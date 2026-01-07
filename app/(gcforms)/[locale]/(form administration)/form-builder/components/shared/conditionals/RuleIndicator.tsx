@@ -4,7 +4,7 @@ import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
 import { removeMarkdown } from "@lib/groups/utils/itemType";
 import { Button } from "@clientComponents/globals";
-import { useGroupStore } from "@root/lib/groups/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { findParentGroup } from "@lib/groups/utils/findParentGroup";
 
 export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
@@ -16,9 +16,9 @@ export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
       translationLanguagePriority: s.translationLanguagePriority,
     }));
 
-  const { setId, groups } = useGroupStore((s) => {
+  const { setId, getTreeData } = useGroupStore((s) => {
     return {
-      groups: s.groups,
+      getTreeData: s.getTreeData,
       setId: s.setId,
     };
   });
@@ -35,13 +35,15 @@ export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   const title = removeMarkdown(element.properties[titleKey] || parentId.toString());
   const choiceValue = choice[translationLanguagePriority] || choiceId.toString();
 
-  const parentGroup = findParentGroup(groups, choiceId);
+  const parentGroup = findParentGroup(getTreeData(), parentId.toString());
 
   const handleRuleIndicatorClick = (e: React.MouseEvent<HTMLElement>) => {
     const el = e.currentTarget as HTMLElement;
     const p = el.dataset.parentId;
     const c = el.dataset.childId;
-    const group = el.dataset.groupId || "start";
+
+    // const group = el.dataset.groupId || "start";
+    const group = parentGroup?.index.toString() || "start";
     if (!p || !c) return;
 
     // Ensure we are in the correct group where the element resides

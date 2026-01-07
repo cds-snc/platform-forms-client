@@ -9,6 +9,8 @@ import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { Button } from "@clientComponents/globals";
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { useCustomEvent, EventKeys } from "@lib/hooks/useCustomEvent";
+import { useGroupStore } from "@lib/groups/useGroupStore";
+import { findParentGroup } from "@lib/groups/utils/findParentGroup";
 
 export const ConditionalIndicatorOption = ({
   itemId,
@@ -23,6 +25,14 @@ export const ConditionalIndicatorOption = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const { Event } = useCustomEvent();
+
+  const { setId, getTreeData } = useGroupStore((s) => {
+    return {
+      getTreeData: s.getTreeData,
+      setId: s.setId,
+    };
+  });
+
   const questions = getElementsUsingChoiceId({
     formElements: elements,
     choiceId: id,
@@ -85,10 +95,16 @@ export const ConditionalIndicatorOption = ({
                 theme="link"
                 onClick={() => {
                   const id = Number(elementId);
-                  if (!refs || !refs.current) {
-                    return;
-                  }
-                  refs.current[id].focus();
+
+                  const parentGroup = findParentGroup(getTreeData(), elementId);
+                  setId(parentGroup?.index.toString() || "start");
+
+                  setTimeout(() => {
+                    if (!refs || !refs.current) {
+                      return;
+                    }
+                    refs.current[id].focus();
+                  }, 100);
                 }}
               >
                 {text}
