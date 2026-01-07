@@ -63,18 +63,21 @@ export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
         <Button
           theme="link"
           data-parent-id={String(parentId)}
-          data-child-id={String(childId+1)}
+          data-child-id={String(childId + 1)}
           data-group-id={parentGroup}
           onClick={handleRuleIndicatorClick}
           className="cursor-pointer items-start justify-start p-0 text-left underline"
         >
           <>
             <ConditionalIcon className="mr-2 mt-[-5px] inline" />
-            <span className="inline-block max-w-[200px] truncate align-middle" title={title}>
+            <span className="mr-2 inline-block max-w-[200px] truncate align-middle" title={title}>
               {title}
             </span>
-            <span className="mx-1">-</span>
-            <span className="font-medium">{choiceValue}</span>
+            <span>(</span>
+            <span className="mx-1 inline" title={choiceValue}>
+              {choiceValue}
+            </span>
+            <span>)</span>
           </>
         </Button>
       </div>
