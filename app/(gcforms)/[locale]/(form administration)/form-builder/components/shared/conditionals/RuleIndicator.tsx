@@ -63,7 +63,7 @@ export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
         <Button
           theme="link"
           data-parent-id={String(parentId)}
-          data-child-id={String(childId)}
+          data-child-id={String(childId+1)}
           data-group-id={parentGroup}
           onClick={handleRuleIndicatorClick}
           className="cursor-pointer items-start justify-start p-0 text-left underline"
