@@ -74,7 +74,7 @@ export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
               {title}
             </span>
             <span>(</span>
-            <span className="mx-1 inline" title={choiceValue}>
+            <span data-choide-id={choiceId} className="mx-1 inline" title={choiceValue}>
               {choiceValue}
             </span>
             <span>)</span>
