@@ -2,7 +2,7 @@
 import React from "react";
 import { cn } from "@lib/utils";
 import Markdown, { RuleType } from "markdown-to-jsx";
-import { stripEntities } from "@root/lib/utils/strings";
+import { stripEntities } from "@lib/utils/strings";
 
 interface RichTextProps {
   children?: string | undefined;

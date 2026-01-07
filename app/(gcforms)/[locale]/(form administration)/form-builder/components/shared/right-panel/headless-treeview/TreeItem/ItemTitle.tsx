@@ -3,7 +3,7 @@ import { useTranslation } from "@i18n/client";
 import { ItemProps } from "../types";
 
 import { useElementType } from "../hooks/useElementType";
-import { toPlainText } from "@root/lib/utils/strings";
+import { toPlainText } from "@lib/utils/strings";
 
 export const ItemTitle = ({ item }: ItemProps) => {
   const { t } = useTranslation("form-builder");
