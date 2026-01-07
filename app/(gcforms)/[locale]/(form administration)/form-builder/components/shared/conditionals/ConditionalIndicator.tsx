@@ -4,7 +4,6 @@ import { type FormElementWithIndex } from "@lib/types/form-builder-types";
 import { RuleIndicator } from "./RuleIndicator";
 
 export const ConditionalIndicator = ({ item }: { item: FormElementWithIndex }) => {
-  "use memo";
   const hasConditionalRules = item.properties.conditionalRules;
   if (!hasConditionalRules || !item.properties.conditionalRules) return null;
 
