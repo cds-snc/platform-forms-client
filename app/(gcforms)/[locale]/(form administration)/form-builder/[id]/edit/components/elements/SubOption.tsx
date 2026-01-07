@@ -62,6 +62,11 @@ export const SubOption = ({
     }
   }, [getFocusInput, setFocusInput]);
 
+  // Sync local state with prop changes when array operations occur
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
       setFocusInput(true);
