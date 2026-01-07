@@ -41,6 +41,16 @@ describe('stripEntities', () => {
     expect(stripEntities('&lt;div&gt; &amp; &quot;text&quot;')).toBe('<div> & "text"');
   });
 
+  test('prevents double-unescaping of entities', () => {
+    // &amp;lt; should decode to &lt; (literal text), not to <
+    expect(stripEntities('&amp;lt;')).toBe('&lt;');
+    expect(stripEntities('&amp;gt;')).toBe('&gt;');
+    expect(stripEntities('&amp;quot;')).toBe('&quot;');
+    expect(stripEntities('&amp;#39;')).toBe('&#39;');
+    // Real-world example: encoded HTML tag
+    expect(stripEntities('&amp;lt;script&amp;gt;')).toBe('&lt;script&gt;');
+  });
+
   test('returns unchanged text when no entities present', () => {
     expect(stripEntities('Hello world')).toBe('Hello world');
   });
