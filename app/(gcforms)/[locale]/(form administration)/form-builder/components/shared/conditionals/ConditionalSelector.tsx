@@ -6,6 +6,7 @@ import { FormElement } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { toPlainText } from "@root/lib/utils/strings";
 
 type Choice = {
   label: string;
@@ -94,7 +95,7 @@ const QuestionSelect = ({
         {questions.map(({ label, value }) => {
           return (
             <option key={value} value={value}>
-              {label}
+              {toPlainText(label)}
             </option>
           );
         })}

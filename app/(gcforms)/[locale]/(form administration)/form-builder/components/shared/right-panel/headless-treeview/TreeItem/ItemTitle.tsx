@@ -3,7 +3,7 @@ import { useTranslation } from "@i18n/client";
 import { ItemProps } from "../types";
 
 import { useElementType } from "../hooks/useElementType";
-import { removeMarkdown } from "@root/lib/groups/utils/itemType";
+import { toPlainText } from "@root/lib/utils/strings";
 
 export const ItemTitle = ({ item }: ItemProps) => {
   const { t } = useTranslation("form-builder");
@@ -37,7 +37,7 @@ export const ItemTitle = ({ item }: ItemProps) => {
 
   return (
     <div className="inline-block w-full truncate py-2">
-      {removeMarkdown(title)} <span className="hidden">{item.getId()}</span>
+      {toPlainText(title)} <span className="hidden">{item.getId()}</span>
     </div>
   );
 };
