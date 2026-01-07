@@ -11,7 +11,7 @@
         "label": "Email address",
         "hint": "Cannot be a shared inbox. Use your individual federal government email.",
         "error": {
-          "validGovEmail": "This field must be a valid federal government email."
+          "validGovEmail": "This field must be a valid federal government email belonging to an individual."
         }
       },
       "password": {

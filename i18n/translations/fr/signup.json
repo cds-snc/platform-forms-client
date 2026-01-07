@@ -11,7 +11,7 @@
         "label": "Adresse courriel",
         "hint": "Ne pas utiliser une adresse partagée. Entrez votre propre courriel du gouvernement fédéral.",
         "error": {
-          "validGovEmail": "Ce champ doit être une adresse valide du gouvernement fédéral."
+          "validGovEmail": "Ce champ doit être une adresse valide du gouvernement fédéral qui appartient à un individu."
         }
       },
       "password": {
