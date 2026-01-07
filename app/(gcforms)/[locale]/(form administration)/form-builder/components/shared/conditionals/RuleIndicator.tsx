@@ -4,6 +4,8 @@ import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
 import { removeMarkdown } from "@lib/groups/utils/itemType";
 import { Button } from "@clientComponents/globals";
+import { useGroupStore } from "@root/lib/groups/useGroupStore";
+import { findParentGroup } from "@lib/groups/utils/findParentGroup";
 
 export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   const { getChoice, getFormElementById, localizeField, translationLanguagePriority } =
@@ -13,6 +15,13 @@ export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
       localizeField: s.localizeField,
       translationLanguagePriority: s.translationLanguagePriority,
     }));
+
+  const { setId, groups } = useGroupStore((s) => {
+    return {
+      groups: s.groups,
+      setId: s.setId,
+    };
+  });
 
   const parentId = Number(choiceId.split(".")[0]);
   const childId = Number(choiceId.split(".")[1]);
@@ -26,16 +35,26 @@ export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   const title = removeMarkdown(element.properties[titleKey] || parentId.toString());
   const choiceValue = choice[translationLanguagePriority] || choiceId.toString();
 
+  const parentGroup = findParentGroup(groups, choiceId);
+
   const handleRuleIndicatorClick = (e: React.MouseEvent<HTMLElement>) => {
     const el = e.currentTarget as HTMLElement;
     const p = el.dataset.parentId;
     const c = el.dataset.childId;
+    const group = el.dataset.groupId || "start";
     if (!p || !c) return;
-    const target = document.getElementById(`option--${p}--${Number(c) + 1}`);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "center" });
-      (target as HTMLElement).focus();
-    }
+
+    // Ensure we are in the correct group where the element resides
+    setId(group);
+
+    // Add a delay to allow the tree to render the selected group
+    setTimeout(() => {
+      const target = document.getElementById(`option--${p}--${c}`);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        (target as HTMLElement).focus();
+      }
+    }, 100);
   };
 
   return (
@@ -45,6 +64,7 @@ export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
           theme="link"
           data-parent-id={String(parentId)}
           data-child-id={String(childId)}
+          data-group-id={parentGroup}
           onClick={handleRuleIndicatorClick}
           className="cursor-pointer items-start justify-start p-0 text-left underline"
         >
