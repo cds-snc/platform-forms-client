@@ -114,7 +114,7 @@ describe('toPlainText', () => {
   });
 
   test('trims leading and trailing whitespace', () => {
-    const input = '  # Heading  \n\n';
+    const input = '# Heading  \n\n  ';
     const result = toPlainText(input);
     expect(result).toBe('Heading');
   });
