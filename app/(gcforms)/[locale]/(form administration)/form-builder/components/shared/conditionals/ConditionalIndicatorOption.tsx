@@ -103,7 +103,8 @@ export const ConditionalIndicatorOption = ({
                     if (!refs || !refs.current) {
                       return;
                     }
-                    refs.current[id].focus();
+
+                    refs.current[id] && refs.current[id].focus();
                   }, 100);
                 }}
               >

@@ -72,14 +72,13 @@ export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
         >
           <>
             <ConditionalIcon className="mr-2 mt-[-5px] inline" />
-            <span className="mr-2 inline-block max-w-[200px] truncate align-middle" title={title}>
+            <span className="mr-2 inline-block max-w-[200px] truncate" title={title}>
               {title}
             </span>
-            <span>(</span>
-            <span data-choide-id={choiceId} className="mx-1 inline" title={choiceValue}>
-              {choiceValue}
+
+            <span data-choice-id={choiceId} className="mx-1 inline-block " title={choiceValue}>
+              <span>{`( ${choiceValue} ) `}</span>
             </span>
-            <span>)</span>
           </>
         </Button>
       </div>
