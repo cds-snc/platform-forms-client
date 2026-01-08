@@ -5,7 +5,7 @@ import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 import { formatDateTimeUTC } from "@lib/utils/form-builder";
 import { FormElementTypes } from "@lib/types";
-import { newLineToHtml } from "@lib/utils/newLineToHtml";
+import { formatUserInput } from "@root/lib/utils/strings";
 
 /*
  ⚡ NOTE: CSS is compiled 
@@ -43,7 +43,7 @@ const QuestionColumns = ({
         <dd
           data-testid={`col-answer-${index}`}
           className={`flex-1 py-4 pl-8`}
-          dangerouslySetInnerHTML={{ __html: newLineToHtml(item.answer) }}
+          dangerouslySetInnerHTML={{ __html: formatUserInput(String(item.answer)) }}
         />
       </div>
     );

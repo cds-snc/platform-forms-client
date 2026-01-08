@@ -4,7 +4,7 @@ import { customTranslate, getProperty, orderLanguageStrings } from "@lib/i18nHel
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 import { FormElementTypes } from "@lib/types";
-import { newLineToHtml } from "@lib/utils/newLineToHtml";
+import { formatUserInput } from "@root/lib/utils/strings";
 
 const QuestionRows = ({
   submission,
@@ -36,7 +36,7 @@ const QuestionRows = ({
           )}
         </dt>
         <dd className="p-4">
-          <p dangerouslySetInnerHTML={{ __html: newLineToHtml(item.answer) }}></p>
+          <p dangerouslySetInnerHTML={{ __html: formatUserInput(String(item.answer)) }}></p>
         </dd>
       </div>
     );
