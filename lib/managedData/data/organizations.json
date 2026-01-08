@@ -105,6 +105,13 @@
     "notify_organisation_id": null
   },
   {
+    "id": "001OO00000eGP0HYAW",
+    "name_eng": "Canada Water Agency",
+    "name_fra": "Agence de l’eau du Canada",
+    "type": "Crown Corp",
+    "notify_organisation_id": null
+  },
+  {
     "id": "001I90000050b2KIAQ",
     "name_eng": "Canadian Air Transport Security Authority",
     "name_fra": "L’Administration canadienne de la sûreté du transport aérien",
@@ -305,7 +312,7 @@
     "name_eng": "Department of Finance Canada",
     "name_fra": "Ministère des Finances Canada",
     "type": "GC Department",
-    "notify_organisation_id": null
+    "notify_organisation_id": "d79502d0-ae20-409c-bcb6-70b65d974140"
   },
   {
     "id": "001I9000004Vt5mIAC",
