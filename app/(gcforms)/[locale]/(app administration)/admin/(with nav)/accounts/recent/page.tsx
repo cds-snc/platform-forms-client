@@ -9,6 +9,7 @@ import { AddNoteDialog } from "./components/AddNoteDialog";
 import { authorization } from "@lib/privileges";
 import { AuthenticatedPage } from "@lib/pages/auth";
 import { authCheckAndThrow } from "@lib/actions";
+import { isPotentialSharedInbox } from "@lib/validation/validation";
 
 export default AuthenticatedPage(
   [authorization.canViewAllUsers, authorization.canManageAllUsers],
@@ -29,40 +30,8 @@ export default AuthenticatedPage(
       active: true,
     });
 
-    const flaggedSignups = await getUsers({
-      active: true,
-      createdAt: {
-        gte: from,
-      },
-      OR: [
-        {
-          email: {
-            startsWith: "%-%@",
-            not: {
-              startsWith: "%.%@",
-            },
-          },
-        },
-        {
-          AND: [
-            {
-              email: {
-                not: {
-                  startsWith: "%-%@",
-                },
-              },
-            },
-            {
-              email: {
-                not: {
-                  startsWith: "%.%@",
-                },
-              },
-            },
-          ],
-        },
-      ],
-    });
+    // Filter for potential shared inboxes based on email patterns
+    const flaggedSignups = recentSignups.filter((user) => isPotentialSharedInbox(user.email));
 
     let filteredSignups = recentSignups;
 

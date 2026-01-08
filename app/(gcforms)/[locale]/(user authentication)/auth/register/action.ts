@@ -7,6 +7,7 @@ import {
   containsLowerCaseCharacter,
   containsNumber,
   containsSymbol,
+  isPotentialSharedInbox,
 } from "@lib/validation/validation";
 import { serverTranslation } from "@i18n";
 import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
@@ -87,12 +88,7 @@ export const register = async (
   }
 
   // Check email for potential shared access email and flag to Slack if found
-  const addressPart = result.output.username.split("@")[0];
-
-  if (
-    (addressPart.includes("-") && !addressPart.includes(".")) ||
-    (!addressPart.includes(".") && !addressPart.includes("-"))
-  ) {
+  if (isPotentialSharedInbox(result.output.username)) {
     logMessage.warn(
       `Flagged new GC Forms account \nPotential shared access email address: ${result.output.username} \nReview and deactivate account if it's a shared inbox \n\nSeverity level: 2`
     );
