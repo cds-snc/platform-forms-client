@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import Image from "next/image";
 import { getDate, slugify } from "@lib/client/clientHelpers";
@@ -42,38 +42,31 @@ export const ConfirmFormDeleteDialog = ({
   const dialog = useDialogRef();
   const { t, i18n } = useTranslation("form-builder");
   const [unprocessed, setUnprocessed] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(isPublished ?? true);
   const [error, setError] = React.useState(false);
-
-  const checkForUnprocessed = useCallback(async () => {
-    setIsLoading(true);
-    setUnprocessed(false);
-
-    const result = await checkUnprocessed({ formId });
-    if (result.error) {
-      setUnprocessed(false);
-      setError(true);
-    } else {
-      setUnprocessed(false);
-      setError(false);
-      result.unprocessedSubmissions && setUnprocessed(true);
-    }
-  }, [formId]);
 
   useEffect(() => {
     if (isPublished) {
-      checkForUnprocessed()
-        .then(() => {
-          setIsLoading(false);
-        })
-        .catch(() => {
-          setIsLoading(false);
+      const fetchData = async () => {
+        try {
+          const result = await checkUnprocessed({ formId });
+          if (result.error) {
+            setUnprocessed(false);
+            setError(true);
+          } else {
+            setUnprocessed(result.unprocessedSubmissions ?? false);
+            setError(false);
+          }
+        } catch {
           setError(true);
-        });
-    } else {
-      setIsLoading(false);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
     }
-  }, [checkForUnprocessed, isPublished]);
+  }, [formId, isPublished]);
 
   if (isLoading) {
     return (

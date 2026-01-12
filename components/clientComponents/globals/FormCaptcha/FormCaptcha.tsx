@@ -12,7 +12,7 @@ export const FormCaptcha = ({
   lang,
   dataTestId = "",
   isPublished = true,
-  captchaToken,
+  captchaTokenRef,
   ...rest
 }: {
   children: React.ReactNode;
@@ -20,7 +20,7 @@ export const FormCaptcha = ({
   lang: string;
   dataTestId?: string;
   isPublished?: boolean;
-  captchaToken: React.RefObject<string> | undefined;
+  captchaTokenRef: React.RefObject<string> | undefined;
 } & React.FormHTMLAttributes<HTMLFormElement>) => {
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
@@ -43,8 +43,8 @@ export const FormCaptcha = ({
   }
 
   const onVerified = async (token: string) => {
-    if (captchaToken) {
-      captchaToken.current = token;
+    if (captchaTokenRef) {
+      captchaTokenRef.current = token;
     }
     handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };

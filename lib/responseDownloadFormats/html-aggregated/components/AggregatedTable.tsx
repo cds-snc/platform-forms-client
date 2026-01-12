@@ -2,7 +2,7 @@ import React from "react";
 import { Submission } from "@lib/responseDownloadFormats/types";
 import { getProperty } from "@lib/i18nHelpers";
 import { formatDate } from "@lib/client/clientHelpers";
-import { newLineToHtml } from "@lib/utils/newLineToHtml";
+import { formatUserInput } from "@lib/utils/strings";
 
 export interface TableHeader {
   title: string;
@@ -83,7 +83,7 @@ export const AggregatedTable = ({
                                           <div className="overflow-hidden">
                                             <span
                                               dangerouslySetInnerHTML={{
-                                                __html: newLineToHtml(response),
+                                                __html: formatUserInput(String(response)),
                                               }}
                                             ></span>
                                           </div>
@@ -104,7 +104,7 @@ export const AggregatedTable = ({
                       <div className="overflow-hidden">
                         <span
                           dangerouslySetInnerHTML={{
-                            __html: newLineToHtml(item.answer),
+                            __html: formatUserInput(String(item.answer)),
                           }}
                         ></span>
                       </div>

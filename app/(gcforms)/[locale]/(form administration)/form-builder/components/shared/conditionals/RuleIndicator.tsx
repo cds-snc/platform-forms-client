@@ -1,0 +1,89 @@
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+
+import { LocalizedFormProperties } from "@lib/types/form-builder-types";
+import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
+import { Button } from "@clientComponents/globals";
+import { useGroupStore } from "@lib/groups/useGroupStore";
+import { findParentGroup } from "@lib/groups/utils/findParentGroup";
+import { toPlainText } from "@lib/utils/strings";
+
+export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
+  const { getChoice, getFormElementById, localizeField, translationLanguagePriority } =
+    useTemplateStore((s) => ({
+      getChoice: s.getChoice,
+      getFormElementById: s.getFormElementById,
+      localizeField: s.localizeField,
+      translationLanguagePriority: s.translationLanguagePriority,
+    }));
+
+  const { setId, getTreeData } = useGroupStore((s) => {
+    return {
+      getTreeData: s.getTreeData,
+      setId: s.setId,
+    };
+  });
+
+  const parentId = Number(choiceId.split(".")[0]);
+  const childId = Number(choiceId.split(".")[1]);
+  const element = getFormElementById(parentId);
+  const choice = getChoice(parentId, childId);
+
+  if (!element || !choice) return null;
+
+  const titleKey = localizeField(LocalizedFormProperties.TITLE, translationLanguagePriority);
+
+  const title = toPlainText(element.properties[titleKey] || parentId.toString());
+  const choiceValue = choice[translationLanguagePriority] || choiceId.toString();
+
+  const parentGroup = findParentGroup(getTreeData(), parentId.toString());
+
+  const handleRuleIndicatorClick = (e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget as HTMLElement;
+    const p = el.dataset.parentId;
+    const c = el.dataset.childId;
+
+    // const group = el.dataset.groupId || "start";
+    const group = parentGroup?.index.toString() || "start";
+    if (!p || !c) return;
+
+    // Ensure we are in the correct group where the element resides
+    setId(group);
+
+    // Add a delay to allow the tree to render the selected group
+    setTimeout(() => {
+      const target = document.getElementById(`option--${p}--${c}`);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        (target as HTMLElement).focus();
+      }
+    }, 100);
+  };
+
+  return (
+    <div>
+      <div className="inline-block">
+        <Button
+          theme="link"
+          data-parent-id={String(parentId)}
+          data-child-id={String(childId + 1)}
+          data-group-id={parentGroup}
+          onClick={handleRuleIndicatorClick}
+          className="cursor-pointer items-start justify-start p-0 text-left underline"
+        >
+          <>
+            <ConditionalIcon className="mr-2 mt-[-5px] inline" />
+            <span className="mr-2 inline-block max-w-[200px] truncate" title={title}>
+              {title}
+            </span>
+
+            <span data-choice-id={choiceId} className="mx-1 inline-block " title={choiceValue}>
+              <span>{`( ${choiceValue} ) `}</span>
+            </span>
+          </>
+        </Button>
+      </div>
+
+      <span className="hidden">{`${choiceValue}`}</span>
+    </div>
+  );
+};

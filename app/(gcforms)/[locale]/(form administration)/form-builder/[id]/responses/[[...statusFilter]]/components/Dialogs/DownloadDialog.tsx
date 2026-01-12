@@ -85,8 +85,12 @@ export const DownloadDialog = ({
     });
   };
 
-  // Note: The API can provide additional formats, see DownloadFormat enum and update this array if needed
-  const availableFormats = [DownloadFormat.CSV, DownloadFormat.JSON, DownloadFormat.HTML_ZIPPED];
+  // Note: The API can provide additional formats, see DownloadFormat const and update this array if needed
+  const availableFormats: DownloadFormat[] = [
+    DownloadFormat.CSV,
+    DownloadFormat.JSON,
+    DownloadFormat.HTML_ZIPPED,
+  ];
 
   const handleDownload = async () => {
     setIsDownloading(true);

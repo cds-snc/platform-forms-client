@@ -1,4 +1,4 @@
-import { getAwsSecret } from "./getAwsSecret";
+import { getAwsSecret } from "./utils";
 import postgres, { Sql } from "postgres";
 
 export class PostgresConnector {

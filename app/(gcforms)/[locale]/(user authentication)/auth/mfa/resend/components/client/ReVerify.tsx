@@ -7,7 +7,7 @@ import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { getErrorText, resendVerificationCode } from "../../../actions";
 
 import { Alert } from "../../../../../components/client/forms/Alert";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import Link from "next/link";
 
 import { useFocusIt } from "@lib/hooks/useFocusIt";

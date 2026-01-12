@@ -1,6 +1,7 @@
 import { type Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
 import { FormItem } from "../../helpers";
+import { FormElementTypes } from "@gcforms/types";
 
 export const getReviewSectionFromDynamicRows = (formItem: FormItem, language: Language) => {
   const element = formItem.element;
@@ -21,7 +22,9 @@ export const getReviewSectionFromDynamicRows = (formItem: FormItem, language: La
     element.properties?.dynamicRow?.[
       getLocalizedProperty("rowTitle", language) as keyof typeof getLocalizedProperty
     ];
-  const subElements = element.properties?.subElements;
+  const subElements = element.properties?.subElements?.filter(
+    (sub) => sub.type !== FormElementTypes.richText
+  );
 
   // Get the children elements of the Dynamic Row
   const subFormItems = values.map((valueRows, parentRowIndex) => {

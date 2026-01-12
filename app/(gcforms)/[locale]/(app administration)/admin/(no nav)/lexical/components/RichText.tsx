@@ -3,6 +3,7 @@
 import { Editor } from "@gcforms/editor";
 import { useTranslation } from "@i18n/client";
 import { useCallback, useState } from "react";
+import { RichText as RichTextRenderer } from "@clientComponents/forms/RichText/RichText";
 
 export const RichText = () => {
   const { i18n } = useTranslation();
@@ -11,6 +12,7 @@ export const RichText = () => {
   const [enableMaxLength, setEnableMaxLength] = useState(false);
   const [maxLength, setMaxLength] = useState<number | undefined>(undefined);
   const [showTreeview, setShowTreeview] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   const updateValue = useCallback(
     (value: string) => {
@@ -27,12 +29,20 @@ export const RichText = () => {
             locale={i18n.language}
             content={value}
             contentLocale="en"
-            className="gc-formview gc-richText"
+            className="gc-formview"
             onChange={updateValue}
             enableDraggableBlocks={enableDraggableBlocks}
             maxLength={enableMaxLength ? maxLength : undefined}
             showTreeview={showTreeview}
           />
+          {showPreview && (
+            <div className="mt-8">
+              <h2 className="mb-4 text-xl font-bold">Preview</h2>
+              <div className="rounded-md border border-gray-300 p-4">
+                <RichTextRenderer>{value}</RichTextRenderer>
+              </div>
+            </div>
+          )}
         </div>
         <div className="flex-col">
           <div>
@@ -80,6 +90,18 @@ export const RichText = () => {
               }}
             />
             <label>Show treeview</label>
+            <div className="my-4">
+              <input
+                type="checkbox"
+                className="mr-2"
+                checked={showPreview}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.checked;
+                  setShowPreview(value);
+                }}
+              />
+              <label>Show preview</label>
+            </div>
           </div>
         </div>
       </div>

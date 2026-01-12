@@ -7,7 +7,7 @@ import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { ErrorStates, register } from "../../action";
 import Link from "next/link";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { useRouter } from "next/navigation";
 import { ga } from "@lib/client/clientHelpers";
 
