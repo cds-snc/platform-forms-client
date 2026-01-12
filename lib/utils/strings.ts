@@ -1,3 +1,6 @@
+import { escapeHtml } from "./escapeHtml";
+import { newLineToHtml } from "./newLineToHtml";
+
 export const stripEntities = (text: string): string => {
   return text
     .replace(/&#32;/g, " ")
@@ -39,4 +42,8 @@ export const stripMarkdown = (text: string): string => {
 
 export const toPlainText = (text: string): string => {
   return stripEntities(stripLineBreaks(stripMarkdown(text)));
+};
+
+export const formatUserInput = (text: string): string => {
+  return newLineToHtml(escapeHtml(text));
 };
