@@ -7,8 +7,12 @@ import { getElementsUsingChoiceId } from "@gcforms/core";
 import { FormElement } from "@lib/types";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { Button } from "@clientComponents/globals";
-import { LocalizedFormProperties } from "@lib/types/form-builder-types";
+import { LocalizedElementProperties, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { useCustomEvent, EventKeys } from "@lib/hooks/useCustomEvent";
+import { useGroupStore } from "@lib/groups/useGroupStore";
+import { findParentGroup } from "@lib/groups/utils/findParentGroup";
+import { Tooltip } from "@formBuilder/components/shared/Tooltip";
+import Markdown from "markdown-to-jsx";
 
 export const ConditionalIndicatorOption = ({
   itemId,
@@ -23,6 +27,14 @@ export const ConditionalIndicatorOption = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const { Event } = useCustomEvent();
+
+  const { setId, getTreeData } = useGroupStore((s) => {
+    return {
+      getTreeData: s.getTreeData,
+      setId: s.setId,
+    };
+  });
+
   const questions = getElementsUsingChoiceId({
     formElements: elements,
     choiceId: id,
@@ -39,6 +51,7 @@ export const ConditionalIndicatorOption = ({
   const language = translationLanguagePriority;
 
   const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
+  const descriptionKey = localizeField(LocalizedElementProperties.DESCRIPTION, language);
 
   if (!questions.length) {
     return (
@@ -75,25 +88,46 @@ export const ConditionalIndicatorOption = ({
       <ul className="list-none pl-4" aria-labelledby={rulesTitleId}>
         {questions.map(({ elementId }, index) => {
           const element = elements.find((element) => element.id === Number(elementId));
+          const parentGroup = findParentGroup(getTreeData(), elementId);
+
           let text = element?.properties?.[titleKey] || "";
           if (element?.type === "richText") {
             text = t("pageText", { ns: "form-builder" });
           }
           return (
             <li key={`${elementId}-${index}`} className="py-1 pl-4">
-              <Button
-                theme="link"
-                onClick={() => {
-                  const id = Number(elementId);
-                  if (!refs || !refs.current) {
-                    return;
-                  }
-                  refs.current[id].focus();
-                }}
-              >
-                {text}
-              </Button>
-              {" • "}
+              {element?.properties?.[descriptionKey] && (
+                <>
+                  <Tooltip.CustomTrigger
+                    side="right"
+                    tooltipClassName="max-w-xl"
+                    trigger={
+                      <Button
+                        theme="link"
+                        onClick={() => {
+                          const id = Number(elementId);
+
+                          setId(parentGroup?.index.toString() || "start");
+
+                          setTimeout(() => {
+                            if (!refs || !refs.current) {
+                              return;
+                            }
+
+                            refs.current[id] && refs.current[id].focus();
+                          }, 100);
+                        }}
+                      >
+                        {text}
+                      </Button>
+                    }
+                  >
+                    <Markdown>{element?.properties?.[descriptionKey] || ""}</Markdown>
+                  </Tooltip.CustomTrigger>
+                  {" • "}
+                </>
+              )}
+
               <Button
                 theme="link"
                 onClick={() => {

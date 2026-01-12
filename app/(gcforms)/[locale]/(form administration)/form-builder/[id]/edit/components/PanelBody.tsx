@@ -88,10 +88,10 @@ export const PanelBody = ({
             </div>
           </div>
 
-          <div className="mb-4 flex gap-4 text-sm">
+          <div className="mb-4 flex gap-8 text-sm">
             <div className="grow">
               <QuestionDescription item={item} describedById={describedById} />
-              <div className="flex">
+              <>
                 <div>
                   <SelectedElement item={item} elIndex={elIndex} formId={formId} />
                 </div>
@@ -107,7 +107,7 @@ export const PanelBody = ({
                     </Button>
                   </div>
                 )}
-              </div>
+              </>
 
               {maxLength && (
                 <div className="disabled pointer-events-none">
