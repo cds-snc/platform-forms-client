@@ -1,4 +1,4 @@
-import { formatUserInput } from "@root/lib/utils/strings";
+import { formatUserInput } from "@lib/utils/strings";
 import { FormItem } from "../helpers";
 
 export const BaseElement = ({

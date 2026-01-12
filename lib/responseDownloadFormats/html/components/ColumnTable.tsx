@@ -5,7 +5,7 @@ import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 import { formatDateTimeUTC } from "@lib/utils/form-builder";
 import { FormElementTypes } from "@lib/types";
-import { formatUserInput } from "@root/lib/utils/strings";
+import { formatUserInput } from "@lib/utils/strings";
 
 /*
  ⚡ NOTE: CSS is compiled 

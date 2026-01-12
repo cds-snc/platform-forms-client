@@ -4,7 +4,7 @@ import { customTranslate, getProperty, orderLanguageStrings } from "@lib/i18nHel
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 import { FormElementTypes } from "@lib/types";
-import { formatUserInput } from "@root/lib/utils/strings";
+import { formatUserInput } from "@lib/utils/strings";
 
 const QuestionRows = ({
   submission,
