@@ -7,6 +7,7 @@ import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
 import { Flags } from "@lib/cache/types";
 import { Announce } from "@gcforms/announce";
+import ErrorBoundary from "./ErrorBoundary";
 
 export const ClientContexts: React.FC<{
   session: Session | null;
@@ -25,7 +26,9 @@ export const ClientContexts: React.FC<{
       >
         <AccessControlProvider>
           <RefsProvider>
-            <FeatureFlagsProvider featureFlags={featureFlags}>{children}</FeatureFlagsProvider>
+            <FeatureFlagsProvider featureFlags={featureFlags}>
+              <ErrorBoundary>{children}</ErrorBoundary>
+            </FeatureFlagsProvider>
           </RefsProvider>
         </AccessControlProvider>
       </SessionProvider>
