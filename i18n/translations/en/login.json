@@ -7,7 +7,7 @@
   "fields": {
     "username": {
       "label": "Email address",
-      "description": "Must be a federal government email address."
+      "description": "Enter your own individual government email address."
     },
     "password": {
       "label": "Password",
