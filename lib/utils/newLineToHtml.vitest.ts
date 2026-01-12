@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { newLineToHtml } from "./newLineToHtml";
 
-describe("htmlNewline", () => {
+describe("newLineToHtml", () => {
   it("should replace \n with <br />", () => {
     const str = "a\nb\nc\nd\n";
     const result = newLineToHtml(str);
