@@ -1,26 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { ToggleLeft, ToggleRight } from "@serverComponents/icons";
 
 interface NotificationsToggleProps {
   className?: string;
-  isChecked: boolean;
-  toggleChecked: () => void;
+  userHasNotificationsEnabled: boolean;
+  toggleChecked: (enabled: boolean) => Promise<void>;
   onLabel: string;
   offLabel: string;
   tabIndex?: number;
   description?: string;
-  disabled?: boolean;
 }
 
 export const NotificationsToggle = ({
   className = "",
-  isChecked,
+  userHasNotificationsEnabled,
   toggleChecked,
   onLabel,
   offLabel,
   description,
-  disabled,
 }: NotificationsToggleProps) => {
+  const [isChecked, setIsChecked] = useState(userHasNotificationsEnabled);
+
+  const handleToggle = () => {
+    setIsChecked(!isChecked);
+    toggleChecked(!isChecked);
+  };
+
   const boldOn = isChecked ? "font-bold" : "font-normal";
   const boldOff = !isChecked ? "font-bold" : "font-normal";
 
@@ -29,27 +34,16 @@ export const NotificationsToggle = ({
       className={className}
       role="switch"
       aria-checked={isChecked}
-      {...(disabled && { "aria-disabled": true })}
       tabIndex={0}
-      onClick={() => {
-        if (disabled) {
-          return;
-        }
-        toggleChecked();
-      }}
+      onClick={handleToggle}
       onKeyDown={(e) => {
-        if (disabled) {
-          return;
-        }
         if (e.key === "Enter" || e.key === " ") {
-          // toggle the switch to the opposite state
-          toggleChecked();
-          // Stop the browser "space" key default behavior of scrolling down
+          handleToggle();
           e.preventDefault();
         }
       }}
     >
-      <div className={`whitespace-nowrap ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}>
+      <div className={`whitespace-nowrap`}>
         <span className="sr-only">{description}</span>
         <span
           id="notifications-switch-on"

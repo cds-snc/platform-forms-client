@@ -23,7 +23,7 @@ export const sendNotifications = async (formId: string, titleEn: string, titleFr
     return;
   }
 
-  const users = await getNotificationsUsers(formId);
+  const users = await getNotificationsUsersForForm(formId);
 
   // Some older forms may not have users, do nothing
   if (!Array.isArray(users) || users.length === 0) {
@@ -57,7 +57,29 @@ export const sendNotifications = async (formId: string, titleEn: string, titleFr
   }
 };
 
-export const getNotificationsUsers = async (formId: string) => {
+export const getUserNotificationSettingsForForm = async (formId: string, userId: string) => {
+  const template = await prisma.template
+    .findFirst({
+      where: {
+        id: formId,
+      },
+      select: {
+        notificationsUsers: {
+          where: {
+            id: userId,
+          },
+          select: {
+            id: true,
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  return !!template?.notificationsUsers.length;
+};
+
+export const getNotificationsUsersForForm = async (formId: string) => {
   const usersAndNotificationsUsers = await prisma.template
     .findUnique({
       where: {
@@ -73,7 +95,6 @@ export const getNotificationsUsers = async (formId: string) => {
         notificationsUsers: {
           select: {
             id: true,
-            email: true,
           },
         },
       },
@@ -81,22 +102,18 @@ export const getNotificationsUsers = async (formId: string) => {
     .catch((e) => prismaErrors(e, null));
 
   if (!usersAndNotificationsUsers) {
-    logMessage.warn(`_getNotificationsUsers no users found for formId ${formId}`);
+    logMessage.warn(`_getNotificationsUsersForForm no users found for formId ${formId}`);
     return null;
   }
 
   const { users, notificationsUsers } = usersAndNotificationsUsers;
+  const notificationsUserIds = new Set(notificationsUsers.map((u) => u.id));
 
-  return users.map((user) => {
-    const foundUser = notificationsUsers.find(
-      (notificationUser) => notificationUser.id === user.id
-    );
-    return {
-      id: user.id,
-      email: user.email,
-      enabled: foundUser ? true : false,
-    };
-  });
+  return users.map((user) => ({
+    id: user.id,
+    email: user.email,
+    enabled: notificationsUserIds.has(user.id),
+  }));
 };
 
 const _getDeliveryOption = async (formId: string) => {
