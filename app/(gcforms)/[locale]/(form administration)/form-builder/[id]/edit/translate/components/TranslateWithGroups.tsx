@@ -396,10 +396,10 @@ export const TranslateWithGroups = () => {
                   }
                   lang={secondaryLanguage}
                   ariaLabel={t("privacyStatement")}
-                  ariaDescribedBy={`privacyPolicy-${secondaryLanguage}->language`}
+                  ariaDescribedBy={`privacyPolicy-${secondaryLanguage}-language`}
                 />
                 <LanguageLabel
-                  id={`privacyPolicy-${secondaryLanguage}->language`}
+                  id={`privacyPolicy-${secondaryLanguage}-language`}
                   lang={secondaryLanguage}
                 >
                   <>{secondaryLanguage}</>
