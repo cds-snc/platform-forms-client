@@ -96,33 +96,38 @@ export const ConditionalIndicatorOption = ({
           }
           return (
             <li key={`${elementId}-${index}`} className="py-1 pl-4">
-              <Tooltip.CustomTrigger
-                side="right"
-                tooltipClassName="max-w-xl"
-                trigger={
-                  <Button
-                    theme="link"
-                    onClick={() => {
-                      const id = Number(elementId);
+              {element?.properties?.[descriptionKey] && (
+                <>
+                  <Tooltip.CustomTrigger
+                    side="right"
+                    tooltipClassName="max-w-xl"
+                    trigger={
+                      <Button
+                        theme="link"
+                        onClick={() => {
+                          const id = Number(elementId);
 
-                      setId(parentGroup?.index.toString() || "start");
+                          setId(parentGroup?.index.toString() || "start");
 
-                      setTimeout(() => {
-                        if (!refs || !refs.current) {
-                          return;
-                        }
+                          setTimeout(() => {
+                            if (!refs || !refs.current) {
+                              return;
+                            }
 
-                        refs.current[id] && refs.current[id].focus();
-                      }, 100);
-                    }}
+                            refs.current[id] && refs.current[id].focus();
+                          }, 100);
+                        }}
+                      >
+                        {text}
+                      </Button>
+                    }
                   >
-                    {text}
-                  </Button>
-                }
-              >
-                <Markdown>{element?.properties?.[descriptionKey] || ""}</Markdown>
-              </Tooltip.CustomTrigger>
-              {" • "}
+                    <Markdown>{element?.properties?.[descriptionKey] || ""}</Markdown>
+                  </Tooltip.CustomTrigger>
+                  {" • "}
+                </>
+              )}
+
               <Button
                 theme="link"
                 onClick={() => {
