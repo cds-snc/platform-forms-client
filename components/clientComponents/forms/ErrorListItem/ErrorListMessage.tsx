@@ -88,6 +88,9 @@ export const ErrorListMessage = ({
         },
       });
     default:
+      // 👉 Consider refactoring the below to be more robust if there are more error
+      // cases beyond the current default (empty answer) or maxLenth validation error.
+
       // For non default validation errors, use a specific error message if one exists
       if (
         defaultValue &&
