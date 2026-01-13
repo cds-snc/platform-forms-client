@@ -39,11 +39,11 @@ export default async function Page(props: { params: Promise<{ locale: string; id
 
   const template = await getFullTemplateByID(id);
 
-  if (!session) {
+  if (!session || !template) {
     redirect(`/${locale}/auth/login`);
   }
 
-  if (!template || !template.isPublished) {
+  if (!template.isPublished) {
     redirect(`/${locale}/form-builder/${id}/publish`);
   }
 

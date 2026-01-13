@@ -185,6 +185,10 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
 
       return { formRecord: response };
     } catch (error) {
+      // Re-throw redirect errors so Next.js can handle them properly
+      if ((error as Error).message === "NEXT_REDIRECT") {
+        throw error;
+      }
       return { formRecord: null, error: (error as Error).message };
     }
   }
