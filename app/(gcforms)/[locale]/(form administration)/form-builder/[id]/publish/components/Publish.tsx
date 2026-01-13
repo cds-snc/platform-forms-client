@@ -95,10 +95,12 @@ export const Publish = ({ id }: { id: string }) => {
       // Note we don't reset setPublishing(false) here as we're navigating away
       ga("publish_form");
     } catch (e) {
-      logMessage.error(e);
-      setError(true);
-      setErrorCode(500);
-      setPublishing(false);
+      if ((e as Error).message !== "NEXT_REDIRECT") {
+        logMessage.error(e);
+        setError(true);
+        setErrorCode(500);
+        setPublishing(false);
+      }
     }
   };
 

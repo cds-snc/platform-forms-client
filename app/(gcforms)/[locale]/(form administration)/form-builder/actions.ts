@@ -165,6 +165,8 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
     formRecord: FormRecord | null;
     error?: string;
   }> => {
+    let hasError;
+
     try {
       const response = await updateIsPublishedForTemplate(
         formID,
@@ -180,17 +182,15 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
       }
 
       revalidatePath("/form-builder/[id]", "layout");
-
-      redirectAfter && redirect(redirectAfter);
-
-      return { formRecord: response };
     } catch (error) {
-      // Re-throw redirect errors so Next.js can handle them properly
-      if ((error as Error).message === "NEXT_REDIRECT") {
-        throw error;
-      }
-      return { formRecord: null, error: (error as Error).message };
+      hasError = error;
     }
+
+    if (!hasError && redirectAfter) {
+      redirect(redirectAfter);
+    }
+
+    return { formRecord: null, error: (hasError as Error).message };
   }
 );
 
