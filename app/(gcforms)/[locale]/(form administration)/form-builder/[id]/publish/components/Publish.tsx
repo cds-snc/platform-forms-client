@@ -1,6 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
-import Head from "next/head";
+import { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -214,12 +213,13 @@ export const Publish = ({ id }: { id: string }) => {
       )}
 
       {getIsPublished() && (
-        <Head>
+        <>
           <meta
             httpEquiv="refresh"
             content={`0; url='/${i18n.language}/form-builder/${id}/published'`}
           />
-        </Head>
+          <div data-testid="redirecting-message" className="mt-5"></div>
+        </>
       )}
     </div>
   );
