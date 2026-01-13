@@ -1,23 +1,24 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { useTranslation } from "@i18n/client";
+import { useResponsesApp } from "../context";
 import { useResponsesContext } from "../context/ResponsesContext";
 import MapleLeafLoader from "@root/components/clientComponents/icons";
 import { Button } from "@root/components/clientComponents/globals";
-import { useRouter } from "next/navigation";
 import { INTERRUPT_CLEANUP_DELAY_MS } from "../lib/constants";
+import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 
 export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string }) => {
-  const router = useRouter();
-  const { t } = useTranslation("response-api");
+  const { t, router } = useResponsesApp();
+
   const [isNavigating, setIsNavigating] = useState(false);
   const isMountedRef = useRef(false);
+  const isInterruptedRef = useRef(false);
 
   const {
     processingCompleted,
+    resetProcessingCompleted,
     setInterrupt,
-    interrupt,
     resetNewSubmissions,
     logger,
     currentSubmissionId,
@@ -40,8 +41,10 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
 
     return () => {
       if (isMountedRef.current) {
-        logger.warn("ProcessingDownloads unmounted, interrupting processing.");
-        setInterrupt(true);
+        if (!isInterruptedRef.current && !processingCompleted) {
+          logger.warn("ProcessingDownloads unmounted, interrupting processing.");
+          setInterrupt(true);
+        }
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,8 +53,11 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
   const handleInterrupt = useCallback(async () => {
     if (isNavigating) return; // Prevent double-click
 
+    logger.info("User initiated interrupt of processing.");
     setIsNavigating(true);
     setInterrupt(true);
+    isInterruptedRef.current = true;
+    resetProcessingCompleted();
     resetNewSubmissions();
 
     // Wait for async operations to see the interrupt and cleanup
@@ -59,28 +65,48 @@ export const ProcessingDownloads = ({ locale, id }: { locale: string; id: string
 
     // Now navigate
     router.push(`/${locale}/form-builder/${id}/responses-pilot/result`);
-  }, [setInterrupt, resetNewSubmissions, router, locale, id, isNavigating]);
+  }, [
+    isNavigating,
+    logger,
+    setInterrupt,
+    resetProcessingCompleted,
+    resetNewSubmissions,
+    router,
+    locale,
+    id,
+  ]);
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="mb-4 text-2xl font-semibold">{t("processingPage.processingTitle")}</h2>
-          {currentSubmissionId ? (
-            <p className="mb-4 text-xl">
-              {t("processingPage.processingSubmission", { submissionId: currentSubmissionId })}
-            </p>
-          ) : (
-            <p className="mb-4 text-xl">{t("processingPage.pleaseWait")}</p>
-          )}
+          <FocusHeader headingTag="h2" dataTestId="processing-page-title">
+            {t("processingPage.processingTitle")}
+          </FocusHeader>
+          <div aria-live="polite" role="status">
+            {currentSubmissionId ? (
+              <>
+                {/* Visual message — hidden from assistive tech */}
+                <p className="mb-4 text-xl" aria-hidden="true">
+                  {t("processingPage.processingSubmission", { submissionId: currentSubmissionId })}
+                </p>
+
+                {/* Screen-reader only: announce a generic 'please wait' message */}
+                <p className="sr-only">{t("processingPage.pleaseWait")}</p>
+              </>
+            ) : (
+              <p className="mb-4 text-xl">{t("processingPage.pleaseWait")}</p>
+            )}
+          </div>
           <p className="mb-8">{t("processingPage.note")}</p>
-          {!interrupt && (
-            <Button theme="secondary" onClick={handleInterrupt} disabled={isNavigating}>
-              {isNavigating
-                ? t("processingPage.cancellingButton")
-                : t("processingPage.cancelButton")}
-            </Button>
-          )}
+          <Button
+            theme="secondary"
+            onClick={handleInterrupt}
+            disabled={isNavigating}
+            data-testid="cancel-download"
+          >
+            {isNavigating ? t("processingPage.cancellingButton") : t("processingPage.cancelButton")}
+          </Button>
         </div>
         <MapleLeafLoader />
       </div>

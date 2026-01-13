@@ -67,11 +67,6 @@ typings/
 .env*.local
 .env
 
-# Ignore cypress screenshots and videos
-cypress/screenshots
-cypress/videos
-cypress/downloads
-
 # next.js build output
 .next
 
@@ -114,3 +109,5 @@ dist
 
 test-results/
 playwright-report/
+tests/.auth/*.json
+eslint_report.html

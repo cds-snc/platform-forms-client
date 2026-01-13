@@ -2,25 +2,22 @@
 
 import { createKey, deleteKey, refreshKey } from "@lib/serviceAccount";
 import { revalidatePath } from "next/cache";
-import { promises as fs } from "fs";
-import path from "path";
 import { AuthenticatedAction } from "@lib/actions";
+import { authorization } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth/errors";
 
 import { submissionTypeExists } from "@lib/vault";
 import { VaultStatus } from "@lib/types";
 import { ServerActionError } from "@root/lib/types/form-builder-types";
 
-// Public facing functions - they can be used by anyone who finds the associated server action identifer
+import {
+  retrieveEvents,
+  logEvent,
+  AuditLogDetails,
+  AuditLogAccessDeniedDetails,
+} from "@lib/auditLogs";
 
-export const getReadmeContent = AuthenticatedAction(async () => {
-  try {
-    const readmePath = path.join(process.cwd(), "./public/static/api/Readme.md");
-    const content = await fs.readFile(readmePath, "utf-8");
-    return { content };
-  } catch (e) {
-    return { error: true };
-  }
-});
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const createServiceAccountKey = AuthenticatedAction(async (_, templateId: string) => {
   revalidatePath(
@@ -56,6 +53,61 @@ export const unConfirmedResponsesExist = AuthenticatedAction(async (_, formId: s
     return submissionTypeExists(formId, VaultStatus.DOWNLOADED);
   } catch (error) {
     // Throw sanitized error back to client
+    return { error: "There was an error. Please try again later." } as ServerActionError;
+  }
+});
+
+export const getFormEvents = AuthenticatedAction(async (session, formId: string) => {
+  try {
+    await authorization.canViewForm(formId).catch((e) => {
+      if (e instanceof AccessControlError) {
+        logEvent(
+          e.user.id,
+          { type: "User" },
+          "AccessDenied",
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserEmails
+        );
+      }
+      throw e;
+    });
+
+    const events = await retrieveEvents(
+      {
+        TableName: "AuditLogs",
+        IndexName: "SubjectByTimestamp",
+        Limit: 100,
+        KeyConditionExpression: "Subject = :formId",
+        ExpressionAttributeValues: {
+          ":formId": `Form#${formId}`,
+        },
+        ScanIndexForward: false,
+      },
+      {
+        filter: ["ReadForm", "AuditLogsRead", "ListResponses"],
+        mapUserEmail: true,
+      }
+    );
+
+    const userId = session.user.id;
+
+    logEvent(
+      userId,
+      { type: "Form", id: formId },
+      "AuditLogsRead",
+      AuditLogDetails.FormAuditLogsRead,
+      { callingUserId: userId, formId: formId }
+    );
+
+    return events.map((event) => {
+      return {
+        formId: event.subject.split("#")[1],
+        userId: event.userId,
+        event: event.event,
+        timestamp: new Date(event.timestamp).toISOString(),
+        description: event.description,
+      };
+    });
+  } catch (error) {
     return { error: "There was an error. Please try again later." } as ServerActionError;
   }
 });

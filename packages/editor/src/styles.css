@@ -1,3 +1,10 @@
 .gc-editor-container {
   position: relative;
 }
+
+/* Fix for Lexical's incorrect list nesting structure where nested ul/ol 
+   are placed in separate li elements, causing extra bullets to appear */
+.gc-editor-container li:has(> ul:only-child),
+.gc-editor-container li:has(> ol:only-child) {
+  list-style-type: none;
+}

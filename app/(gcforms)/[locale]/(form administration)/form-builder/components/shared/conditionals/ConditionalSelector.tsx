@@ -1,11 +1,12 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useMemo, useId } from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import { FormElement } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { toPlainText } from "@lib/utils/strings";
 
 type Choice = {
   label: string;
@@ -29,7 +30,7 @@ const ChoiceSelect = ({
   className?: string;
 }) => {
   const { t } = useTranslation("form-builder");
-  const labelId = `choice-select-${Date.now()}`;
+  const labelId = `choice-select-${useId()}`;
 
   if (!selected || selected === "1") {
     selected = "1.0";
@@ -74,7 +75,7 @@ const QuestionSelect = ({
   className?: string;
 }) => {
   const { t } = useTranslation("form-builder");
-  const labelId = `question-select-${Date.now()}`;
+  const labelId = `question-select-${useId()}`;
 
   return (
     <div className="mb-4">
@@ -94,7 +95,7 @@ const QuestionSelect = ({
         {questions.map(({ label, value }) => {
           return (
             <option key={value} value={value}>
-              {label}
+              {toPlainText(label)}
             </option>
           );
         })}
@@ -122,6 +123,8 @@ export const ConditionalSelector = ({
   updateElementId: (index: number, id: string) => void;
   removeSelector: (index: number) => void;
 }) => {
+  const currentElement = elements.find((el) => el.id === itemId);
+
   const { t } = useTranslation("form-builder");
 
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
@@ -131,10 +134,20 @@ export const ConditionalSelector = ({
 
   const language = translationLanguagePriority;
 
+  const currentRules = useMemo(
+    () => currentElement?.properties.conditionalRules || [],
+    [currentElement?.properties.conditionalRules]
+  );
+
   const questions = useMemo(() => {
     const items = elements
       .filter((item) => {
-        return item.id !== itemId;
+        return (
+          item.id !== itemId &&
+          // Prevent creating circular logic by filtering out questions
+          // that already have rules pointing to the current element.
+          !currentRules?.some((rule) => rule.choiceId.split(".")[0] === String(item.id))
+        );
       })
       .map((question) => {
         const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
@@ -156,7 +169,7 @@ export const ConditionalSelector = ({
     // Prepend empty option with default text
     items.unshift({ label: t("addConditionalRules.selectQuestion"), value: "" });
     return items;
-  }, [elements, itemId, language, localizeField, t]);
+  }, [currentRules, elements, itemId, language, localizeField, t]);
 
   const choiceParentQuestion = choiceId?.split(".")[0] || null;
 

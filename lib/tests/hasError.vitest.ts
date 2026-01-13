@@ -1,0 +1,88 @@
+import { describe, it, expect, vi } from "vitest";
+import { hasError } from "@lib/hasError";
+
+vi.unmock("axios");
+
+describe("Handles string values", () => {
+  it("error single value array", () => {
+    const message = "UsernameExistsException: An account with the given email already exists.";
+    expect(hasError(["UsernameExistsException"], message)).toBe(true);
+  });
+
+  it("no error single value array", () => {
+    const message = "CodeMismatchException: Invalid code provided, please try again.";
+    expect(hasError(["UsernameExistsException"], message)).toBe(false);
+  });
+
+  it("error multiple value array", () => {
+    const message = "CodeMismatchException: Invalid code provided, please try again.";
+    expect(hasError(["UsernameExistsException", "CodeMismatchException"], message)).toBe(true);
+  });
+
+  it("no error multiple value array", () => {
+    const message = "InternalServiceException: An error occurred.";
+    expect(hasError(["UsernameExistsException", "CodeMismatchException"], message)).toBe(false);
+  });
+
+  it("error single string", () => {
+    const message = "UsernameExistsException: An account with the given email already exists.";
+    expect(hasError("UsernameExistsException", message)).toBe(true);
+  });
+
+  it("no error single string", () => {
+    const message = "CodeMismatchException: Invalid code provided, please try again.";
+    expect(hasError("UsernameExistsException", message)).toBe(false);
+  });
+});
+
+describe("Handles Error messages", () => {
+  it("contains error message", () => {
+    const message = new Error(
+      "UsernameExistsException: An account with the given email already exists."
+    );
+    expect(hasError(["UsernameExistsException"], message)).toBe(true);
+  });
+
+  it("doesn't contain error message", () => {
+    const message = new Error("CodeMismatchException: Invalid code provided, please try again.");
+    expect(hasError(["UsernameExistsException"], message)).toBe(false);
+  });
+});
+
+describe("Handles Axios Error messages", () => {
+  it("has axios error identified", () => {
+    const error = {
+      config: {},
+      level: 50,
+      response: {
+        status: 400,
+        statusText: "Bad Request",
+        data: {
+          message: "UsernameExistsException: An account with the given email already exists.",
+        },
+      },
+      isAxiosError: true,
+      toJSON: () => ({}),
+    };
+
+    expect(hasError(["UsernameExistsException"], error)).toBe(true);
+  });
+
+  it("doesn't have axios error identified", () => {
+    const error = {
+      config: {},
+      level: 50,
+      response: {
+        status: 400,
+        statusText: "Bad Request",
+        data: {
+          message: "CodeMismatchException: Invalid code provided, please try again.",
+        },
+      },
+      isAxiosError: true,
+      toJSON: () => ({}),
+    };
+
+    expect(hasError(["UsernameExistsException"], error)).toBe(false);
+  });
+});

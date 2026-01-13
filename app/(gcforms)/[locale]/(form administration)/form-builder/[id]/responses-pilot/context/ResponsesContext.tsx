@@ -8,6 +8,7 @@ import {
   useCallback,
   useRef,
   useEffect,
+  useMemo,
   type Dispatch,
   type SetStateAction,
 } from "react";
@@ -23,12 +24,16 @@ import {
   FileWriteError,
   InvalidStateError as InvalidStateErrorToast,
   QuotaExceededError as QuotaExceededErrorToast,
+  NotAllowedError as NotAllowedErrorToast,
 } from "../components/Toasts";
 import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
-import { useApiDebug } from "../lib/useApiDebug";
 import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
+import { formatDuration } from "../lib/formatDuration";
+
+// Singleton logger instance
+const responseLogger = new ResponseDownloadLogger();
 
 interface ResponsesContextType {
   locale: string;
@@ -42,8 +47,10 @@ interface ResponsesContextType {
   setDirectoryHandle: Dispatch<SetStateAction<FileSystemDirectoryHandle | null>>;
   retrieveResponses: () => Promise<NewFormSubmission[]>;
   newFormSubmissions: NewFormSubmission[] | null;
-  processedSubmissionIds: Set<string>;
-  setProcessedSubmissionIds: Dispatch<SetStateAction<Set<string>>>;
+  processedSubmissionsCount: number;
+  incrementProcessedSubmissionsCount: () => void;
+  resetProcessedSubmissionsCount: () => void;
+  setProcessedSubmissionsCount: (count: number) => void;
   processResponses: (
     initialSubmissions?: NewFormSubmission[],
     format?: "csv" | "html"
@@ -57,6 +64,9 @@ interface ResponsesContextType {
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
   currentSubmissionId: string | null;
+  hasMaliciousAttachments: boolean;
+  setHasMaliciousAttachments: Dispatch<SetStateAction<boolean>>;
+  setCurrentSubmissionId: Dispatch<SetStateAction<string | null>>;
   resetState: () => void;
   resetNewSubmissions: () => void;
   logger: ResponseDownloadLogger;
@@ -90,13 +100,13 @@ export const ResponsesProvider = ({
   const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
-  const [processedSubmissionIds, setProcessedSubmissionIds] = useState<Set<string>>(new Set());
   const [processingCompleted, setProcessingCompleted] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [selectedFormat, setSelectedFormat] = useState<string>("csv");
+  const [selectedFormat, setSelectedFormat] = useState<string>("");
   const [currentSubmissionId, setCurrentSubmissionId] = useState<string | null>(null);
-  const loggerRef = useRef(new ResponseDownloadLogger());
-  const logger = loggerRef.current;
+  const [hasMaliciousAttachments, setHasMaliciousAttachments] = useState<boolean>(false);
+  const [processedSubmissionsCount, setProcessedSubmissionsCountState] = useState<number>(0);
+  const processedSubmissionsCountRef = useRef<number>(0);
 
   const [isProcessingInterrupted, setIsProcessingInterrupted] = useState(false);
   const interruptRef = useRef<boolean>(false);
@@ -118,6 +128,21 @@ export const ResponsesProvider = ({
     [isProcessingInterrupted]
   );
 
+  const incrementProcessedSubmissionsCount = useCallback(() => {
+    setProcessedSubmissionsCountState((prev) => prev + 1);
+    processedSubmissionsCountRef.current += 1;
+  }, []);
+
+  const resetProcessedSubmissionsCount = useCallback(() => {
+    setProcessedSubmissionsCountState(0);
+    processedSubmissionsCountRef.current = 0;
+  }, []);
+
+  const setProcessedSubmissionsCount = useCallback((count: number) => {
+    setProcessedSubmissionsCountState(count);
+    processedSubmissionsCountRef.current = count;
+  }, []);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -128,42 +153,58 @@ export const ResponsesProvider = ({
     };
   }, []);
 
-  // Enable dev console helpers for simulating API errors
-  useApiDebug();
+  useEffect(() => {
+    const handleBeforeUnload = (_event: BeforeUnloadEvent) => {
+      if (!processingCompleted) {
+        responseLogger.warn("Window unloading, interrupting processing if active.");
+        setInterrupt(true);
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [processingCompleted, setInterrupt]);
 
   const retrieveResponses = useCallback(async () => {
     if (!apiClient) {
       return [];
     }
 
-    logger.info("Retrieving new form submissions");
+    responseLogger.info("Retrieving new form submissions");
 
     try {
       const submissions = await apiClient.getNewFormSubmissions();
       setNewFormSubmissions(submissions);
 
-      logger.info(`Retrieved ${submissions.length} new form submissions`);
+      responseLogger.info(`Queued ${submissions.length} new form submissions for processing`);
 
       return submissions;
     } catch (error) {
-      logger.error("Error loading submissions:", error);
+      responseLogger.error("Error loading submissions:", error);
       setNewFormSubmissions([]);
       toast.error(<ErrorRetreivingSubmissions />, "wide");
       return [];
     }
-  }, [apiClient, logger]);
+  }, [apiClient]);
 
-  const resetNewSubmissions = () => {
+  const resetNewSubmissions = useCallback(() => {
     setNewFormSubmissions([]);
-  };
+  }, []);
 
-  const resetProcessingCompleted = () => {
+  const resetProcessingCompleted = useCallback(() => {
     setProcessingCompleted(false);
-  };
+  }, []);
 
   const processResponses = useCallback(
     async (initialSubmissions?: NewFormSubmission[]) => {
-      logger.info("Beginning processing of form responses");
+      responseLogger.info("Beginning processing of form responses");
+
+      // Timer start
+      const startTime = Date.now();
+      let sessionCompleted = false;
 
       // Reset interrupt state
       setInterrupt(false);
@@ -176,7 +217,7 @@ export const ResponsesProvider = ({
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
 
       if (!directoryHandle || !privateApiKey || !apiClient) {
-        logger.error("Missing required context values, aborting processing");
+        responseLogger.error("Missing required context values, aborting processing");
         return;
       }
 
@@ -184,7 +225,7 @@ export const ResponsesProvider = ({
         formTemplate = await apiClient.getFormTemplate();
         formId = apiClient.getFormId();
       } catch (error) {
-        logger.error("Error loading form template: ", error);
+        responseLogger.error("Error loading form template: ", error);
         toast.error(<TemplateFailed />, "wide");
         return;
       }
@@ -194,7 +235,7 @@ export const ResponsesProvider = ({
        */
       if (selectedFormat === "csv") {
         const result = await initCsv({ formId, dirHandle: directoryHandle, formTemplate });
-        logger.info("Initialized CSV file: ", result.handle?.name);
+        responseLogger.info("Initialized CSV file: ", result.handle?.name);
 
         csvFileHandle = result && result.handle;
         const csvExists = result && !result.created;
@@ -212,17 +253,17 @@ export const ResponsesProvider = ({
         htmlDirectoryHandle = await directoryHandle.getDirectoryHandle(HTML_DOWNLOAD_FOLDER, {
           create: true,
         });
-        logger.info("Initialized HTML directory: ", htmlDirectoryHandle.name);
+        responseLogger.info("Initialized HTML directory: ", htmlDirectoryHandle.name);
       }
 
       // Import decryption key once
       const decryptionKey = await importPrivateKeyDecrypt(privateApiKey.key);
 
       while (formResponses.length > 0 && !interruptRef.current) {
-        logger.info(`Processing next ${formResponses.length} submissions`);
+        responseLogger.info(`Processing next ${formResponses.length} submissions`);
         for (const response of formResponses) {
           if (interruptRef.current) {
-            logger.warn("Processing interrupted by user");
+            responseLogger.warn("Processing interrupted");
             break;
           }
 
@@ -231,7 +272,8 @@ export const ResponsesProvider = ({
           try {
             // eslint-disable-next-line no-await-in-loop
             await processResponse({
-              setProcessedSubmissionIds,
+              incrementProcessedSubmissionsCount,
+              setHasMaliciousAttachments,
               workingDirectoryHandle: directoryHandle,
               htmlDirectoryHandle,
               csvFileHandle,
@@ -242,7 +284,7 @@ export const ResponsesProvider = ({
               formId: String(formId),
               formTemplate: formTemplate!,
               t,
-              logger,
+              logger: responseLogger,
             });
           } catch (error) {
             setInterrupt(true);
@@ -251,7 +293,7 @@ export const ResponsesProvider = ({
             // Check if this is a file write error from CSV writer by examining the cause
             const errorCause = error instanceof Error ? error.cause : null;
 
-            logger.error(`Error processing submission ID ${response.name}:`, error);
+            responseLogger.error(`Error processing submission ID ${response.name}:`, error);
 
             if (errorCause instanceof DOMException) {
               if (errorCause.name === "NoModificationAllowedError") {
@@ -260,6 +302,9 @@ export const ResponsesProvider = ({
                 toast.error(<InvalidStateErrorToast />, "error-persistent");
               } else if (errorCause.name === "QuotaExceededError") {
                 toast.error(<QuotaExceededErrorToast />, "error-persistent");
+              } else if (errorCause.name === "NotAllowedError") {
+                // User has revoked permission - show generic error
+                toast.error(<NotAllowedErrorToast />, "error-persistent");
               } else {
                 toast.error(<ErrorRetreivingSubmissions />, "error-persistent");
               }
@@ -278,9 +323,25 @@ export const ResponsesProvider = ({
         formResponses = await retrieveResponses();
       }
 
+      // Timer end
+      const endTime = Date.now();
+
+      const durationMs = endTime - startTime;
+      const durationStr = formatDuration(durationMs);
+
+      // Determine completion status
+      sessionCompleted = !interruptRef.current;
+
+      if (sessionCompleted) {
+        responseLogger.info(`Processing session completed in ${durationStr}.`);
+      } else {
+        responseLogger.warn(`Processing session interrupted after ${durationStr}.`);
+      }
+
+      responseLogger.info(`Processed ${processedSubmissionsCountRef.current} submissions.`);
+
       // Cleanup
       interruptRef.current = false;
-
       setNewFormSubmissions(null);
       setCurrentSubmissionId(null);
       setProcessingCompleted(true);
@@ -288,7 +349,7 @@ export const ResponsesProvider = ({
     [
       apiClient,
       directoryHandle,
-      logger,
+      incrementProcessedSubmissionsCount,
       newFormSubmissions,
       privateApiKey,
       retrieveResponses,
@@ -303,48 +364,79 @@ export const ResponsesProvider = ({
     setApiClient(null);
     setDirectoryHandle(null);
     setNewFormSubmissions(null);
-    setProcessedSubmissionIds(new Set());
     resetProcessingCompleted();
+    resetProcessedSubmissionsCount();
+    setHasMaliciousAttachments(false);
     setSelectedFormat("csv");
     setHasError(false);
     setInterrupt(false);
     interruptRef.current = false;
-  }, [setInterrupt]);
+  }, [resetProcessedSubmissionsCount, resetProcessingCompleted, setInterrupt]);
 
-  return (
-    <ResponsesContext.Provider
-      value={{
-        locale,
-        formId,
-        isCompatible,
-        privateApiKey,
-        setPrivateApiKey,
-        apiClient,
-        setApiClient,
-        directoryHandle,
-        setDirectoryHandle,
-        retrieveResponses,
-        newFormSubmissions,
-        processedSubmissionIds,
-        setProcessedSubmissionIds,
-        processResponses,
-        processingCompleted,
-        resetProcessingCompleted,
-        hasError,
-        setHasError,
-        selectedFormat,
-        setSelectedFormat,
-        interrupt: isProcessingInterrupted,
-        setInterrupt,
-        currentSubmissionId,
-        resetState,
-        resetNewSubmissions,
-        logger: loggerRef.current,
-      }}
-    >
-      {children}
-    </ResponsesContext.Provider>
+  const contextValue = useMemo(
+    () => ({
+      locale,
+      formId,
+      isCompatible,
+      privateApiKey,
+      setPrivateApiKey,
+      apiClient,
+      setApiClient,
+      directoryHandle,
+      setDirectoryHandle,
+      retrieveResponses,
+      newFormSubmissions,
+      processedSubmissionsCount,
+      incrementProcessedSubmissionsCount,
+      resetProcessedSubmissionsCount,
+      setProcessedSubmissionsCount,
+      processResponses,
+      processingCompleted,
+      resetProcessingCompleted,
+      hasError,
+      setHasError,
+      selectedFormat,
+      setSelectedFormat,
+      interrupt: isProcessingInterrupted,
+      setInterrupt,
+      currentSubmissionId,
+      hasMaliciousAttachments,
+      setHasMaliciousAttachments,
+      setCurrentSubmissionId,
+      resetState,
+      resetNewSubmissions,
+      logger: responseLogger,
+    }),
+    [
+      locale,
+      formId,
+      isCompatible,
+      privateApiKey,
+      apiClient,
+      directoryHandle,
+      retrieveResponses,
+      newFormSubmissions,
+      processedSubmissionsCount,
+      incrementProcessedSubmissionsCount,
+      resetProcessedSubmissionsCount,
+      setProcessedSubmissionsCount,
+      processResponses,
+      processingCompleted,
+      resetProcessingCompleted,
+      hasError,
+      selectedFormat,
+      setSelectedFormat,
+      isProcessingInterrupted,
+      setInterrupt,
+      currentSubmissionId,
+      hasMaliciousAttachments,
+      setCurrentSubmissionId,
+      resetState,
+      resetNewSubmissions,
+    ]
   );
+
+  return <ResponsesContext.Provider value={contextValue}>{children}</ResponsesContext.Provider>;
 };
 
 export const useResponsesContext = () => {

@@ -2,38 +2,37 @@
 import { useCallback, useState } from "react";
 import { Button } from "@root/components/clientComponents/globals";
 import { useResponsesContext } from "../context/ResponsesContext";
-import { useRouter } from "next/navigation";
-import { useTranslation } from "@i18n/client";
+import { useResponsesApp } from "../context";
 import { Responses } from "../Responses";
 import { CheckForResponsesButton } from "../components/CheckForResponsesButton";
+import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 
 export const Confirmation = ({ locale, id }: { locale: string; id: string }) => {
-  const router = useRouter();
-
-  const { t } = useTranslation("response-api");
-
+  const { t, router } = useResponsesApp();
   const { directoryHandle } = useResponsesContext();
   const dirName = directoryHandle?.name || "";
   const [hasCheckedForResponses, setHasCheckedForResponses] = useState(false);
 
   const {
     retrieveResponses,
-    processedSubmissionIds,
-    setProcessedSubmissionIds,
     resetProcessingCompleted,
     setInterrupt,
     processResponses,
     newFormSubmissions,
     hasError,
     setHasError,
+    hasMaliciousAttachments,
+    setHasMaliciousAttachments,
+    resetProcessedSubmissionsCount,
+    processedSubmissionsCount,
   } = useResponsesContext();
 
   const handleCheckResponses = useCallback(() => {
     setHasCheckedForResponses(true);
+    setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [resetProcessingCompleted, setHasError, setHasMaliciousAttachments]);
 
   const handleGoBack = () => {
     router.push(`/${locale}/form-builder/${id}/responses-pilot?reset=true`);
@@ -41,7 +40,8 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
   const handleSelectNewLocation = () => {
     // reset relevant state
-    setProcessedSubmissionIds(new Set());
+    resetProcessedSubmissionsCount();
+    setHasMaliciousAttachments(false);
     resetProcessingCompleted();
     setHasError(false);
     setInterrupt(false);
@@ -52,7 +52,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
   const handleDownload = async () => {
     // reset relevant state
-    setProcessedSubmissionIds(new Set());
+    resetProcessedSubmissionsCount();
     resetProcessingCompleted();
     setHasError(false);
     setInterrupt(false);
@@ -95,19 +95,19 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
     <div>
       <p className="mb-0 text-base">
         {hasError
-          ? processedSubmissionIds.size > 0
+          ? processedSubmissionsCount > 0
             ? t("confirmationPage.partialSuccessTitle")
             : t("confirmationPage.errorTitle")
           : t("confirmationPage.successTitle")}
       </p>
-      <h2 className="mb-8">
+      <FocusHeader headingTag="h2" dataTestId="confirmation-page-title">
         {(() => {
           // If error occurred with no successful downloads, show error message
-          if (hasError && processedSubmissionIds.size === 0) {
+          if (hasError && processedSubmissionsCount === 0) {
             return t("confirmationPage.errorOccurred");
           }
 
-          const count = processedSubmissionIds.size || 0;
+          const count = processedSubmissionsCount || 0;
           const formatted = new Intl.NumberFormat(locale).format(count);
           const key =
             count === 1
@@ -115,13 +115,21 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
               : "confirmationPage.downloadedResponsesOther";
           return t(key, { count, formattedCount: formatted });
         })()}
-      </h2>
+      </FocusHeader>
 
       {dirName && (
         <>
           <p className="mb-0">{t("confirmationPage.savedTo")}</p>
           <p className="mb-8 font-bold">/{dirName}</p>
         </>
+      )}
+      {hasMaliciousAttachments && (
+        <div className="mb-8 bg-yellow-50 p-4">
+          <h3>
+            <span role="img">📎</span> {t("confirmationPage.maliciousAttachmentsWarningTitle")}
+          </h3>
+          <p>{t("confirmationPage.maliciousAttachmentsWarningBody")}</p>
+        </div>
       )}
       <div className="flex flex-row gap-4">
         <Button theme="secondary" onClick={handleGoBack}>

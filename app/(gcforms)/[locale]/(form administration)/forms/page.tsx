@@ -13,6 +13,8 @@ import { getOverdueTemplateIds } from "@lib/overdue";
 import { Invitations } from "./components/Invitations/Invitations";
 import { prisma } from "@lib/integration/prismaConnector";
 
+const FALLBACK_DATE = Date.now().toString();
+
 export type FormsTemplate = {
   id: string;
   titleEn: string;
@@ -51,89 +53,90 @@ export default async function Page(props: {
 
   const { locale } = params;
 
+  let session;
   try {
-    const { session } = await authCheckAndRedirect();
-
-    const { t } = await serverTranslation("my-forms", { lang: locale });
-
-    // Moved from Cards to Page to avoid component being cached when navigating back to this page
-    const options: TemplateOptions = {
-      requestedWhere: {
-        isPublished: status === "published" ? true : status === "draft" ? false : undefined,
-        ttl: status === "archived" ? { not: null } : null,
-      },
-      sortByDateUpdated: "desc",
-    };
-    const templates = (await getAllTemplatesForUser(options)).map((template) => {
-      const {
-        id,
-        form: { titleEn = "", titleFr = "" },
-        name,
-        deliveryOption = { emailAddress: "" },
-        isPublished,
-        updatedAt,
-        ttl,
-      } = template;
-      return {
-        id,
-        titleEn,
-        titleFr,
-        deliveryOption,
-        name,
-        isPublished,
-        date: updatedAt ?? Date.now().toString(),
-        url: `/${locale}/id/${id}`,
-        overdue: false,
-        ttl: ttl ? new Date(ttl) : null,
-      };
-    });
-
-    const invitations = await prisma.invitation.findMany({
-      where: {
-        email: {
-          equals: session.user.email,
-          mode: "insensitive",
-        },
-        expires: {
-          gt: new Date(),
-        },
-        template: {
-          ttl: null,
-        },
-      },
-      select: {
-        id: true,
-        email: true,
-        expires: true,
-        templateId: true,
-      },
-    });
-
-    const overdueTemplateIds = await getOverdueTemplateIds(
-      templates.map((template) => template.id)
-    );
-
-    return (
-      <div className="mx-auto w-[980px]">
-        <h1 className="mb-8 border-b-0">{t("title")}</h1>
-        <Invitations invitations={invitations} />
-        <div className="flex w-full justify-between">
-          <Navigation filter={status} />
-          <NewFormButton />
-        </div>
-        <ResumeEditingForm />
-        {status == "archived" && (
-          <div>
-            {t("archivedNotice")}&nbsp;
-            <strong>{t("archivedNotice2")}</strong>
-          </div>
-        )}
-        <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} />
-      </div>
-    );
+    const result = await authCheckAndRedirect();
+    session = result.session;
   } catch (e) {
     if (e instanceof AccessControlError) {
       redirect(`/${locale}/admin/unauthorized`);
     }
+    throw e;
   }
+
+  const { t } = await serverTranslation("my-forms", { lang: locale });
+
+  // Moved from Cards to Page to avoid component being cached when navigating back to this page
+  const options: TemplateOptions = {
+    requestedWhere: {
+      isPublished: status === "published" ? true : status === "draft" ? false : undefined,
+      ttl: status === "archived" ? { not: null } : null,
+    },
+    sortByDateUpdated: "desc",
+  };
+  const templates = (await getAllTemplatesForUser(options)).map((template) => {
+    const {
+      id,
+      form: { titleEn = "", titleFr = "" },
+      name,
+      deliveryOption = { emailAddress: "" },
+      isPublished,
+      updatedAt,
+      ttl,
+    } = template;
+    return {
+      id,
+      titleEn,
+      titleFr,
+      deliveryOption,
+      name,
+      isPublished,
+      date: updatedAt ?? FALLBACK_DATE,
+      url: `/${locale}/id/${id}`,
+      overdue: false,
+      ttl: ttl ? new Date(ttl) : null,
+    };
+  });
+
+  const invitations = await prisma.invitation.findMany({
+    where: {
+      email: {
+        equals: session.user.email,
+        mode: "insensitive",
+      },
+      expires: {
+        gt: new Date(),
+      },
+      template: {
+        ttl: null,
+      },
+    },
+    select: {
+      id: true,
+      email: true,
+      expires: true,
+      templateId: true,
+    },
+  });
+
+  const overdueTemplateIds = await getOverdueTemplateIds(templates.map((template) => template.id));
+
+  return (
+    <div className="mx-auto w-[980px]">
+      <h1 className="mb-8 border-b-0">{t("title")}</h1>
+      <Invitations invitations={invitations} />
+      <div className="flex w-full justify-between">
+        <Navigation filter={status} />
+        <NewFormButton />
+      </div>
+      <ResumeEditingForm />
+      {status == "archived" && (
+        <div>
+          {t("archivedNotice")}&nbsp;
+          <strong>{t("archivedNotice2")}</strong>
+        </div>
+      )}
+      <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} status={status} />
+    </div>
+  );
 }

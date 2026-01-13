@@ -1,4 +1,4 @@
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 ENV NODE_ENV=production
 ENV NEXT_OUTPUT_STANDALONE=true
@@ -22,6 +22,9 @@ ENV NEXT_PUBLIC_HCAPTCHA_SITE_KEY=$HCAPTCHA_SITE_KEY
 ARG ZITADEL_URL
 ENV NEXT_PUBLIC_ZITADEL_URL=$ZITADEL_URL
 
+ARG ZITADEL_PROJECT_ID
+ENV NEXT_PUBLIC_ZITADEL_PROJECT_ID=$ZITADEL_PROJECT_ID
+
 ARG API_URL
 ENV NEXT_PUBLIC_API_URL=$API_URL
 
@@ -30,7 +33,7 @@ RUN yarn workspaces focus gcforms
 RUN yarn build
 RUN yarn workspaces focus gcforms --production
 
-FROM node:22-alpine AS final
+FROM node:24-alpine AS final
 LABEL maintainer="-"
 
 ENV PORT 3000

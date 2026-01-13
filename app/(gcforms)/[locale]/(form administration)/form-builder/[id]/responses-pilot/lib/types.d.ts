@@ -19,39 +19,27 @@ export type EncryptedFormSubmission = {
   confirmationCode: string;
 };
 
-export enum FormSubmissionStatus {
-  New = "New",
-  Downloaded = "Downloaded",
-  Confirmed = "Confirmed",
-  Problem = "Problem",
-}
-
 export type FormSubmissionProblem = {
   contactEmail: string;
   description: string;
   preferredLanguage: string;
 };
 
-export enum SubmissionStatus {
-  New = "New",
-  Downloaded = "Downloaded",
-  Confirmed = "Confirmed",
-  Problem = "Problem",
-}
-
-export enum AttachmentScanStatus {
-  NoThreatsFound = "NoThreatsFound",
-  ThreatsFound = "ThreatsFound",
-  Unsupported = "Unsupported",
-  Failed = "Failed",
-}
+export const SubmissionStatus = {
+  New: "New",
+  Downloaded: "Downloaded",
+  Confirmed: "Confirmed",
+  Problem: "Problem",
+} as const;
+export type SubmissionStatus = (typeof SubmissionStatus)[keyof typeof SubmissionStatus];
 
 type CompleteAttachment = {
   id: string;
   name: string;
-  path: string;
-  scanStatus: AttachmentScanStatus;
+  isPotentiallyMalicious: boolean;
+  md5: string;
   downloadLink: string;
+  renameTo?: string;
 };
 
 export type FormSubmission = {

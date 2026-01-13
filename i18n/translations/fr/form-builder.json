@@ -199,18 +199,18 @@
       "title": "Ensemble récurrent"
     },
     "fileInput": {
-      "description": "Un moyen d'ajouter des documents à l'appui.",
+      "description": "Un moyen d'ajouter des documents à l'appui tels que des images PNG ou JPEG, et fichiers PDF, Word ou Excel. Chaque fichier peut avoir une taille maximale de 10 Mo.",
       "label": "Téléverser un fichier",
       "title": "Téléverseur de fichier"
     },
     "fileInputDefault": {
-      "text1": "Un moyen d'ajouter de la documentation à l'appui.",
+      "text1": "Un moyen d'ajouter de la documentation à l'appui. Chaque fichier peut avoir une taille maximale de 10 Mo. Les fichiers peuvent être au format PDF, Word, Excel, CSV, PNG, JPG ou TXT.",
       "text1x": "⚠️ Vous devez",
       "text2": "avoir une clé API configurée pour la récupération des données",
       "text3": "afin d'utiliser cet élément."
     },
     "fileInputWithApi": {
-      "description": "Un moyen d'ajouter de la documentation à l'appui."
+      "description": "Un moyen d'ajouter de la documentation à l'appui. Chaque fichier peut avoir une taille maximale de 10 Mo. Les fichiers peuvent être au format PDF, Word, Excel, CSV, PNG, JPG ou TXT."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "Quel est votre nom?",
@@ -250,7 +250,8 @@
       "title": "Chiffre",
       "amount": "Montant",
       "enterOnlyNumbers": "Saisissez un chiffre.",
-      "allowNegative": "permettre les valeurs numériques négatives"
+      "allowNegative": "permettre les valeurs numériques négatives",
+      "decimalPlaces": "Nombre de décimales pouvant être saisies"
     },
     "questionElement": "Éléments",
     "radio": {
@@ -489,6 +490,81 @@
     "description": "Conservez une version du formulaire enregistrée localement sur votre ordinateur ou utilisez ce fichier pour partager une ébauche en cours de développement.",
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Obtenir une copie du formulaire"
+  },
+  "auditDownload": {
+    "description": "Obtenez une feuille de calcul avec l'historique des dernières actions clés effectuées dans un formulaire. Celles-ci sont disponibles pourraient prendre quelques minutes pour apparaître dans le journal d'activité et seront disponibles jusqu'à 30 jours.",
+    "downloadBtnText": "Télécharger l'activité récente",
+    "title": "Afficher l'activité du formulaire",
+    "headers": {
+      "formId": "Identifiant du formulaire",
+      "userId": "Membre de l'équipe",
+      "event": "Action du formulaire",
+      "timestamp": "Date et heure (TUC)",
+      "description": "Détails"
+    },
+    "events": {
+      "CreateForm": "Formulaire créé",
+      "ChangeDeliveryOption": "Option de livraison modifiée",
+      "ChangeSecurityAttribute": "Classification des données modifiée",
+      "ChangeFormPurpose": "Usage prévu modifié",
+      "ChangeFormSaveAndResume": "Option de sauvegarde et de reprise modifiée",
+      "ChangeFormName": "Nom du formulaire modifié",
+      "UpdateForm": "Formulaire mis à jour",
+      "UpdateNotificationsInterval": "Intervalle de notifications modifié",
+      "UpdateNotificationsUserSetting": "Paramètre utilisateur des notification modifié",
+      "GrantFormAccess": "Accès au formulaire accordé",
+      "RevokeFormAccess": "Accès au formulaire révoqué",
+      "DownloadResponse": "Réponses téléchargées",
+      "ConfirmResponse": "Réponses confirmées",
+      "IdentifyProblemResponse": "Réponses signalées avec probléme",
+      "DeleteResponses": "Réponses supprimées",
+      "RetrieveResponses": "Réponses récupérées via l'API",
+      "CreateAPIKey": "Clé API générée",
+      "DeleteAPIKey": "Clé API supprimée",
+      "RefreshAPIKey": "Clé API re-générée",
+      "PublishForm": "Formulaire publié",
+      "UpdateFormJsonConfig": "JSON du formulaire mise à jour",
+      "UpdatedNotificationSettings": "Paramètre de notification mis à jour."
+    },
+    "eventDetails": {
+      "CreatedForm": "Formulaire créé",
+      "UpdatedFormName": "Formulaire renommé en {{newFormName}}",
+      "UpdatedFormContent": "Contenu du formulaire mis à jour",
+      "DuplicatedForm": "Formulaire dupliqué pour créer le formulaire {{newFormID}}",
+      "ArchivedForm": "Formulaire archivé",
+      "RestoredForm": "Formulaire désarchivé",
+      "DownloadedForm": "Une copie du formulaire a été téléchargée",
+      "ChangeSecurityAttribute": "Classification changée à {{securityAttribute}}",
+      "SetFormPurpose": "Usage prévu défini comme {{formPurpose}}",
+      "SetSaveAndResume": "La sauvegarde des réponses est {{saveAndResume}}",
+      "UpdateClosingDate": "Date de fermeture mise à jour",
+      "UpdatedNotificationSettings": "Paramètre de notification mis à jour à {{enabled}} pour {{userEmail}}",
+      "GeneratedAPIKey": "Clé API {{APIkeyID}} générée par {{userEmail}}",
+      "DeletedAPIKey": "Clé API {{APIkeyID}} supprimée par {{userEmail}}",
+      "IncreasedThrottling": "Débit de l'API fixé à {{throttlingRate}} pour {{weeks}} semaines",
+      "GrantAccess": "Accès accordé à {{userEmail}}",
+      "RevokeAccess": "Accès révoqué pour {{userEmail}}",
+      "UserInvited": "{{userEmail}} a invité {{invitationEmail}}",
+      "AcceptedInvitation": "Invitation acceptée par {{userEmail}}",
+      "DeclinedInvitation": "Invitation refusée par {{userEmail}}",
+      "CancelInvitation": "Invitation annulée pour {{invitationEmail}}",
+      "ReceivedFormResponses": "Réponse {{submissionId}} reçue",
+      "DownloadedFormResponses": "Réponse {{submissionId}} téléchargée en format {{format}}",
+      "ConfirmedResponsesForForm": "Réponse {{submissionId}} confirmée"
+    },
+    "eventParams": {
+      "Unclassified": "Non classifié",
+      "Protected A": "Protégé A",
+      "Protected B": "Protégé B",
+      "Administrative": "Administratif",
+      "Non-administrative": "Non administratif",
+      "On": "Activée",
+      "Off": "Désactivée",
+      "500 requests per minute": "500 demandes par minute",
+      "1000 requests per minute": "1000 demandes par minute"
+    },
+    "errorCreatingDownload": "Une erreur s'est produite lors du téléchargement. Veuillez réessayer plus tard ou contacter l'équipe de soutien.",
+    "noEvents": "Aucun événement trouvé, il peut falloir plusieurs minutes pour que l'activité récente apparaisse."
   },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
@@ -813,7 +889,7 @@
       },
       "sessionUser": {
         "title": "Recevoir des notifications par courriel",
-        "description": "Soyez informé lorsqu'il y a de nouvelles réponses au formulaire",
+        "description": "Soyez informé que votre formulaire a reçu des nouvelles soumissions (jusqu'à un maximum de deux notifications par jour).",
         "toggle": {
           "title": "Recevoir des notifications à {{email}}",
           "on": "Activé",
@@ -858,14 +934,14 @@
       "nonAdminInfoList": "<li>Recueillir l’adresse courriel d’une personne pour l’inscrire à un événement.</li><li>Recueillir l’âge ou l’identité de genre d’une personne pour un sondage.</li><li>Recueillir le nom ou l’adresse d’une entreprise pour administrer une subvention ou une contribution (tant qu’il ne s’agit pas des renseignements personnels d’une personne).</li>",
       "contactCoordinator": "Si vous doutez, nous vous recommandons de contacter votre <a href='https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp'>coordinateur·rice de l’accès à l’information et de la protection de la vie privée.</a>"
     },
-    "personalInfoDetails": "C’est-à-dire à des fins administratives, par exemple:",
+    "personalInfoDetails": "C’est-à-dire à des fins administratives, par exemple :",
     "personalInfoDetailsVals": {
       "1": "demandes ou candidatures",
       "2": "vérification d’admissibilité",
       "3": "validation d’identité"
     },
     "nonAdminInfo": "Renseignements ne servant pas à prendre une décision qui touche un individu",
-    "nonAdminInfoDetails": "C’est-à-dire à des fins non-administratives, par exemple:",
+    "nonAdminInfoDetails": "C’est-à-dire à des fins non-administratives, par exemple :",
     "nonAdminInfoDetailsVals": {
       "1": "statistiques",
       "2": "activités de recherche",
@@ -984,7 +1060,7 @@
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
   "submittedResponsesTextVault": {
-    "text1": "En cliquant sur « Soumettre », la réponse sera disponible pour récupération :",
+    "text1": "En cliquant sur « Soumettre », vous pourrez tester la récupération des réponses :",
     "text2": "Allez aux Réponses"
   },
   "support": {
@@ -1007,8 +1083,8 @@
     "request": {
       "title": "Raison pour laquelle vous nous contactez",
       "option1": "Poser une question",
-      "option2": "Obtenir de l'aide pour utiliser Formulaires GC",
-      "apiOption": "Demander de l'assistance technique avec l'API",
+      "option2": "Obtenir de l'aide pour configurer ou utiliser Formulaires GC",
+      "apiOption": "Demander de l'assistance technique avec une intégration API",
       "option3": "Signaler un problème avec un formulaire publié",
       "option4": "Autre"
     },
@@ -1325,7 +1401,7 @@
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",
-    "pageTitle": "Titre de la page"
+    "pageTitle": "Page de confirmation"
   },
   "next": "Continuer",
   "skipLink": {

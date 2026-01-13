@@ -35,7 +35,17 @@ import {
   mockGetAbility,
 } from "__utils__/authorization";
 
-jest.mock("@lib/auditLogs");
+jest.mock("@lib/auditLogs", () => ({
+  __esModule: true,
+  logEvent: jest.fn(),
+  get AuditLogDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
+  },
+  get AuditLogAccessDeniedDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
+  }
+}));
+
 jest.mock("@lib/serviceAccount");
 jest.mock("@lib/privileges");
 
@@ -58,11 +68,12 @@ const mockUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
  * admin: The form is used to collect personal information
  * nonAdmin: The form is used to collect non-personal information
  */
-export enum PurposeOption {
-  none = "",
-  admin = "admin",
-  nonAdmin = "nonAdmin",
-}
+export const PurposeOption = {
+  none: "",
+  admin: "admin",
+  nonAdmin: "nonAdmin",
+} as const;
+type PurposeOption = (typeof PurposeOption)[keyof typeof PurposeOption];
 
 const buildPrismaResponse = (
   id: string,
@@ -206,7 +217,8 @@ describe("Template CRUD functions", () => {
         userID,
         { type: "Form" },
         "ReadForm",
-        "Accessed Forms: formtestID"
+        "Accessed Forms: ${formList}",
+        { "formList": "formtestID" }
       );
     });
 
@@ -345,7 +357,7 @@ describe("Template CRUD functions", () => {
         userID,
         { id: "test1", type: "Form" },
         "UpdateForm",
-        "Form content updated"
+        "UpdatedFormContent"
       );
     });
 
@@ -432,7 +444,8 @@ describe("Template CRUD functions", () => {
         userID,
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
-        "Access granted to user2@test.ca"
+        "GrantAccess",
+        { "userList": "user2@test.ca" }
       );
 
       // Template has three users assigned to it to start
@@ -499,7 +512,8 @@ describe("Template CRUD functions", () => {
         userID,
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
-        "Access granted to user1@test.ca"
+        "GrantAccess",
+        { "userList": "user1@test.ca" }
       );
 
       // Log two removed
@@ -508,7 +522,8 @@ describe("Template CRUD functions", () => {
         userID,
         { id: "formTestID", type: "Form" },
         "RevokeFormAccess",
-        "Access revoked for user2@test.ca,user4@test.ca"
+        "RevokeAccess",
+        { "userList": "user2@test.ca,user4@test.ca" }
       );
     });
     it("Updates to published forms are not allowed", async () => {
@@ -742,7 +757,7 @@ describe("Template CRUD functions", () => {
         userID,
         { type: "Form" },
         "AccessDenied",
-        "Attempted to access All System Forms"
+        "Attempted to access all System Forms"
       );
     });
     it("Get a template", async () => {

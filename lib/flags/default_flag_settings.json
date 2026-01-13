@@ -3,5 +3,6 @@
   "formTimer": false,
   "hCaptcha": false,
   "topBanner": false,
-  "responsesPilot": false
+  "responsesPilot": false,
+  "userSideAuditLogs": false
 }

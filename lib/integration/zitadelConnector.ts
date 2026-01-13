@@ -13,6 +13,7 @@ type ZitadelConnectionInformation = {
   url: string;
   trustedDomain: string;
   administrationKey: ZitadelAdministrationKey;
+  organizationId: string;
 };
 
 let connectionInformationCache: ZitadelConnectionInformation | undefined = undefined;
@@ -22,13 +23,14 @@ const zitadelApiManagementGotInstance = got.extend({
   hooks: {
     beforeRequest: [
       async (options) => {
-        const connectionInformation = getConnectionInformation();
+        const connectionInformation = await getConnectionInformation();
         const apiManagementAccessToken = await getApiManagementAccessToken(connectionInformation);
 
         options.http2 = true;
         options.timeout = { request: 5000 };
         options.headers["Host"] = connectionInformation.trustedDomain; // This is required by Zitadel to accept requests. See https://zitadel.com/docs/self-hosting/manage/custom-domain#standard-config
         options.headers["Authorization"] = `Bearer ${apiManagementAccessToken}`;
+        options.headers["Accept"] = "application/json";
         options.retry.limit = 1;
         options.retry.errorCodes = ["ETIMEDOUT"];
       },
@@ -53,21 +55,23 @@ export async function createMachineUser(
   userName: string,
   description: string
 ): Promise<{ userId: string }> {
-  const connectionInformation = getConnectionInformation();
+  const connectionInformation = await getConnectionInformation();
 
   try {
     const response = await zitadelApiManagementGotInstance
-      .post(`${connectionInformation.url}/management/v1/users/machine`, {
+      .post(`${connectionInformation.url}/v2/users/new`, {
         json: {
-          userName: userName,
-          name: userName,
-          description: description,
-          accessTokenType: "ACCESS_TOKEN_TYPE_JWT",
+          username: userName,
+          organizationId: connectionInformation.organizationId,
+          machine: {
+            name: userName,
+            description: description,
+          },
         },
       })
-      .json<{ userId: string }>();
+      .json<{ id: string }>();
 
-    return { userId: response.userId };
+    return { userId: response.id };
   } catch (error) {
     logMessage.error(error);
     throw new Error(`Failed to create machine user ${userName} in Zitadel`);
@@ -75,7 +79,7 @@ export async function createMachineUser(
 }
 
 export async function getMachineUser(loginName: string): Promise<{ userId: string } | undefined> {
-  const connectionInformation = getConnectionInformation();
+  const connectionInformation = await getConnectionInformation();
 
   try {
     const response = await zitadelApiManagementGotInstance
@@ -108,7 +112,7 @@ export async function getMachineUser(loginName: string): Promise<{ userId: strin
 }
 
 export async function deleteMachineUser(userId: string): Promise<void> {
-  const connectionInformation = getConnectionInformation();
+  const connectionInformation = await getConnectionInformation();
 
   try {
     await zitadelApiManagementGotInstance.delete(`${connectionInformation.url}/v2/users/${userId}`);
@@ -122,13 +126,15 @@ export async function createMachineKey(
   userId: string,
   publicKey: string
 ): Promise<{ keyId: string }> {
-  const connectionInformation = getConnectionInformation();
+  const connectionInformation = await getConnectionInformation();
 
   try {
+    const expirationDate = new Date();
+    expirationDate.setFullYear(expirationDate.getFullYear() + 50);
     const response = await zitadelApiManagementGotInstance
-      .post(`${connectionInformation.url}/management/v1/users/${userId}/keys`, {
+      .post(`${connectionInformation.url}/v2/users/${userId}/keys`, {
         json: {
-          type: "KEY_TYPE_JSON",
+          expirationDate,
           publicKey: Buffer.from(publicKey).toString("base64"),
         },
       })
@@ -141,25 +147,50 @@ export async function createMachineKey(
   }
 }
 
-export async function getMachineUserKeyById(
-  userId: string,
-  keyId: string
-): Promise<{ keyId: string } | undefined> {
-  const connectionInformation = getConnectionInformation();
+export async function deleteMachineKey(userId: string, keyId: string): Promise<void> {
+  const connectionInformation = await getConnectionInformation();
 
   try {
-    const response = await zitadelApiManagementGotInstance
-      .get(`${connectionInformation.url}/management/v1/users/${userId}/keys/${keyId}`)
-      .json<{ key: { id: string } }>();
-
-    return { keyId: response.key.id };
+    await zitadelApiManagementGotInstance.delete(
+      `${connectionInformation.url}/v2/users/${userId}/keys/${keyId}`
+    );
   } catch (error) {
     logMessage.error(error);
-    return undefined;
+    throw new Error(`Failed to delete machine key for user ${userId}`);
   }
 }
 
-function getConnectionInformation(): ZitadelConnectionInformation {
+export async function getMachineUserKeysById(userId: string): Promise<{ id: string }[]> {
+  const connectionInformation = await getConnectionInformation();
+
+  try {
+    const response = await zitadelApiManagementGotInstance
+      .post(`${connectionInformation.url}/v2/users/keys/search`, {
+        json: {
+          filters: [
+            {
+              userIdFilter: {
+                id: userId,
+                method: "TEXT_FILTER_METHOD_EQUALS",
+              },
+            },
+          ],
+        },
+      })
+      .json<{ result?: { id: string }[] }>();
+
+    if (response.result !== undefined && response.result.length > 0) {
+      return response.result;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    logMessage.error(error);
+    return [];
+  }
+}
+
+async function getConnectionInformation(): Promise<ZitadelConnectionInformation> {
   if (connectionInformationCache === undefined) {
     if (!process.env.ZITADEL_URL) throw new Error("No ZITADEL_URL environment variable found");
     if (!process.env.ZITADEL_TRUSTED_DOMAIN)
@@ -167,10 +198,47 @@ function getConnectionInformation(): ZitadelConnectionInformation {
     if (!process.env.ZITADEL_ADMINISTRATION_KEY)
       throw new Error("No ZITADEL_ADMINISTRATION_KEY environment variable found");
 
+    const apiManagementAccessToken = await getApiManagementAccessToken({
+      url: process.env.ZITADEL_URL,
+      trustedDomain: process.env.ZITADEL_TRUSTED_DOMAIN,
+      administrationKey: JSON.parse(process.env.ZITADEL_ADMINISTRATION_KEY),
+    });
+
+    const response = await got
+      .post(`${process.env.ZITADEL_URL}/v2/organizations/_search`, {
+        http2: true,
+        timeout: { request: 5000 },
+        headers: {
+          Host: process.env.ZITADEL_TRUSTED_DOMAIN,
+          Authorization: `Bearer ${apiManagementAccessToken}`,
+          Accept: "application/json",
+        },
+        retry: {
+          limit: 1,
+          errorCodes: ["ETIMEDOUT"],
+        },
+        json: {
+          query: {
+            limit: 1,
+          },
+          queries: [
+            {
+              defaultQuery: {},
+            },
+          ],
+        },
+      })
+      .json<{ result?: { id: string }[] }>();
+
+    if (!response.result || response.result.length < 1) {
+      throw new Error("Could not find default organization in Zitadel");
+    }
+
     connectionInformationCache = {
       url: process.env.ZITADEL_URL,
       trustedDomain: process.env.ZITADEL_TRUSTED_DOMAIN,
       administrationKey: JSON.parse(process.env.ZITADEL_ADMINISTRATION_KEY),
+      organizationId: response.result[0].id,
     };
   }
 
@@ -178,7 +246,7 @@ function getConnectionInformation(): ZitadelConnectionInformation {
 }
 
 async function getApiManagementAccessToken(
-  connectionInformation: ZitadelConnectionInformation
+  connectionInformation: Omit<ZitadelConnectionInformation, "organizationId">
 ): Promise<string> {
   /**
    * Cache is invalidated after 25 minutes while the actual token is valid for 30 minutes.
@@ -199,7 +267,7 @@ async function getApiManagementAccessToken(
 }
 
 async function generateApiManagementAccessToken(
-  connectionInformation: ZitadelConnectionInformation
+  connectionInformation: Omit<ZitadelConnectionInformation, "organizationId">
 ): Promise<string> {
   const privateKey = createPrivateKey({
     key: connectionInformation.administrationKey.key,

@@ -35,6 +35,7 @@ export const LoadKey = ({ onLoadKey }: LoadKeyProps) => {
     <Button
       theme="secondary"
       className="mb-4"
+      data-testid="load-api-key-button"
       onClick={async () => {
         // null or undefined return means user aborted - do nothing
         const result = await onLoadKey();

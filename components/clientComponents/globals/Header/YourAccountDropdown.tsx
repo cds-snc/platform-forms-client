@@ -12,6 +12,27 @@ type YourAccountDropdownProps = {
   isAuthenticated: boolean;
 };
 
+const DropdownMenuItem = ({
+  href,
+  text,
+  onClick,
+}: {
+  href: string;
+  text: string;
+  onClick?: () => void;
+}) => {
+  return (
+    <DropdownMenu.Item onClick={onClick} asChild>
+      <Link
+        className="block rounded-md p-2 text-sm text-black !no-underline outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
+        href={href}
+      >
+        {text}
+      </Link>
+    </DropdownMenu.Item>
+  );
+};
+
 export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProps) => {
   const { i18n, t } = useTranslation("common");
   const { ability } = useAccessControl();
@@ -34,27 +55,6 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
 
     // Sign out the user
     signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
-  };
-
-  const DropdownMenuItem = ({
-    href,
-    text,
-    onClick,
-  }: {
-    href: string;
-    text: string;
-    onClick?: () => void;
-  }) => {
-    return (
-      <DropdownMenu.Item onClick={onClick} asChild>
-        <Link
-          className="block rounded-md p-2 text-sm text-black !no-underline outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
-          href={href}
-        >
-          {text}
-        </Link>
-      </DropdownMenu.Item>
-    );
   };
 
   return (

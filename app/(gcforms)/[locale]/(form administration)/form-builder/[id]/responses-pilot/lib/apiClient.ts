@@ -7,13 +7,16 @@ import type {
   PrivateApiKey,
 } from "./types";
 
-import { TokenRateLimitError } from "./errorsTypes";
 import { FormProperties } from "@root/lib/types";
-import {
-  addErrorSimulationInterceptor,
-  addRateLimitTrackingInterceptor,
-} from "./apiClientInterceptors";
+import { addRateLimitTrackingInterceptor } from "./apiClientInterceptors";
 import { getAccessTokenFromApiKey } from "./utils";
+
+class TokenRateLimitError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "TokenRateLimitError";
+  }
+}
 
 export class GCFormsApiClient {
   private formId: string;
@@ -22,6 +25,7 @@ export class GCFormsApiClient {
   private rateLimitRemaining: number | null = null;
   private privateApiKey: PrivateApiKey;
   private accessToken: string;
+  private projectId: string;
   private tokenTimestamp: number;
   private readonly TOKEN_VALIDITY_MS = 1200000; // 20 minutes
 
@@ -29,11 +33,13 @@ export class GCFormsApiClient {
     formId: string,
     apiUrl: string,
     privateApiKey: PrivateApiKey,
-    accessToken: string
+    accessToken: string,
+    projectId: string
   ) {
     this.formId = formId;
     this.privateApiKey = privateApiKey;
     this.accessToken = accessToken;
+    this.projectId = projectId;
     this.tokenTimestamp = Date.now();
 
     this.httpClient = axios.create({
@@ -52,14 +58,13 @@ export class GCFormsApiClient {
     addRateLimitTrackingInterceptor(this.httpClient, (remaining) => {
       this.rateLimitRemaining = remaining;
     });
-    addErrorSimulationInterceptor(this.httpClient);
   }
 
   private async ensureValidToken(): Promise<void> {
     const tokenAge = Date.now() - this.tokenTimestamp;
 
     if (tokenAge >= this.TOKEN_VALIDITY_MS) {
-      this.accessToken = await getAccessTokenFromApiKey(this.privateApiKey);
+      this.accessToken = await getAccessTokenFromApiKey(this.privateApiKey, this.projectId);
       this.tokenTimestamp = Date.now();
     }
   }

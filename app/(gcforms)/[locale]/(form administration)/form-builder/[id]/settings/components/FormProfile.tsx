@@ -8,7 +8,6 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { updateTemplateSecurityAttribute, updateTemplateFormPurpose } from "@formBuilder/actions";
 import { FormServerError, FormServerErrorCodes } from "@lib/types/form-builder-types";
 
-import { useRefresh } from "@lib/hooks/useRefresh";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import {
@@ -21,13 +20,13 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { Branding } from "./branding/Branding";
 import { DownloadForm } from "./DownloadForm";
 import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
+import { AuditForm } from "./AuditForm";
 
 import { IntendedUse, PurposeOption } from "./intendedUse/IntendedUse";
 
 export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
-  const { refreshData } = useRefresh();
   const lang = i18n.language === "en" ? "en" : "fr";
 
   const { id, formPurpose, updateField, securityAttribute, updateSecurityAttribute, isPublished } =
@@ -71,10 +70,8 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
       }
 
       toast.success(savedSuccessMessage);
-
-      refreshData && refreshData();
     },
-    [savedSuccessMessage, refreshData, id, updateSecurityAttribute]
+    [savedSuccessMessage, id, updateSecurityAttribute]
   );
 
   /*--------------------------------------------*
@@ -104,10 +101,8 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
       }
 
       toast.success(savedSuccessMessage);
-
-      refreshData && refreshData();
     },
-    [savedSuccessMessage, refreshData, id, updateField]
+    [savedSuccessMessage, id, updateField]
   );
 
   return (
@@ -148,6 +143,11 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
            * Download section
            *--------------------------------------------*/}
           <DownloadForm />
+
+          {/*--------------------------------------------*
+           * Audit Form section
+           *--------------------------------------------*/}
+          <AuditForm formId={id} />
         </div>
       )}
     </>
