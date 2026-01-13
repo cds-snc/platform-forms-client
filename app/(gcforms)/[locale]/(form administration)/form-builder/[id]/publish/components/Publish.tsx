@@ -1,5 +1,6 @@
 "use client";
 import React, { useCallback, useState } from "react";
+import Head from "next/head";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -36,12 +37,14 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished,
     getSchema,
     getName,
+    getIsPublished,
   } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
     setIsPublished: s.setIsPublished,
     getSchema: s.getSchema,
     getName: s.getName,
+    getIsPublished: s.getIsPublished,
   }));
 
   if (storeId && storeId !== id) {
@@ -208,6 +211,15 @@ export const Publish = ({ id }: { id: string }) => {
           handleClose={() => handlePrePublishClose()}
           handleConfirm={() => handlePrePublish()}
         />
+      )}
+
+      {getIsPublished() && (
+        <Head>
+          <meta
+            httpEquiv="refresh"
+            content={`0; url='/${i18n.language}/form-builder/${id}/published'`}
+          />
+        </Head>
       )}
     </div>
   );
