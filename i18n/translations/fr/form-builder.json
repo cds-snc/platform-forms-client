@@ -1401,7 +1401,7 @@
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",
-    "pageTitle": "Titre de la page"
+    "pageTitle": "Page de confirmation"
   },
   "next": "Continuer",
   "skipLink": {
