@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@gcforms/database";
-import { logEvent, retrieveEvents } from "@lib/auditLogs";
+import { AuditLogDetails, logEvent, retrieveEvents } from "@lib/auditLogs";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import {
@@ -34,12 +34,13 @@ export const getEventsForUser = async (userId: string) => {
     callingUserId,
     { type: "User", id: userId },
     "AuditLogsRead",
-    `User ${callingUserId} read audit logs for user ${userId}`
+    AuditLogDetails.UserAuditLogsRead,
+    { callingUserId, userId }
   );
   return events;
 };
 
-export const getEventsForForm = async (formId: string) => {
+export const getFormEvents = async (formId: string) => {
   const {
     user: { id: callingUserId },
   } = await authorization.canViewAllForms();
@@ -58,7 +59,8 @@ export const getEventsForForm = async (formId: string) => {
     callingUserId,
     { type: "Form", id: formId },
     "AuditLogsRead",
-    `User ${callingUserId} read audit logs for form ${formId}`
+    AuditLogDetails.FormAuditLogsRead,
+    { callingUserId, formId }
   );
   return events;
 };
@@ -74,12 +76,9 @@ const formSchema = object({
 export const findSubject = async (_: unknown, formData: FormData) => {
   authorization.hasAdministrationPrivileges().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(
-        e.user.id,
-        { type: "User" },
-        "AccessDenied",
-        `Attempted to get events for Subject ${formData.get("subject")}`
-      );
+      logEvent(e.user.id, { type: "User" }, "AccessDenied", AuditLogDetails.GetAuditSubject, {
+        subject: formData.get("subject") as string,
+      });
     }
     throw e;
   });
@@ -98,7 +97,9 @@ export const findSubject = async (_: unknown, formData: FormData) => {
   }
 
   // Is the input an email or a formId?
-  const isEmail = safeParse(emailSchema, subject.output, { abortPipeEarly: true });
+  const isEmail = safeParse(emailSchema, subject.output, {
+    abortPipeEarly: true,
+  });
 
   if (isEmail.success) {
     const userId = await prisma.user.findFirst({

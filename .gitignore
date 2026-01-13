@@ -67,10 +67,6 @@ typings/
 .env*.local
 .env
 .env.yarn
-# Ignore cypress screenshots and videos
-cypress/screenshots
-cypress/videos
-cypress/downloads
 
 # next.js build output
 .next
@@ -117,3 +113,6 @@ playwright-report/
 
 # Ignore generated Prisma Code
 packages/database/src/generated
+
+tests/.auth/*.json
+eslint_report.html

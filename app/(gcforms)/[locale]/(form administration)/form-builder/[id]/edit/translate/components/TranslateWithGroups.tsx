@@ -126,6 +126,21 @@ const Element = ({
 
   const { t } = useTranslation("form-builder");
 
+  const elementsWithOptions: FormElementTypes[] = [
+    FormElementTypes.radio,
+    FormElementTypes.checkbox,
+    FormElementTypes.dropdown,
+    FormElementTypes.combobox,
+  ];
+
+  const elementsWithText: FormElementTypes[] = [
+    FormElementTypes.textField,
+    FormElementTypes.textArea,
+    FormElementTypes.formattedDate,
+    FormElementTypes.addressComplete,
+    FormElementTypes.fileInput,
+  ];
+
   if (element.type === FormElementTypes.dynamicRow) {
     subElements = element.properties.subElements?.map((subElement) => {
       return (
@@ -152,12 +167,7 @@ const Element = ({
         <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
       )}
 
-      {[
-        FormElementTypes.radio,
-        FormElementTypes.checkbox,
-        FormElementTypes.dropdown,
-        FormElementTypes.combobox,
-      ].includes(element.type) && (
+      {elementsWithOptions.includes(element.type) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
           {(element.properties.descriptionEn || element.properties.descriptionFr) && (
@@ -167,13 +177,7 @@ const Element = ({
         </>
       )}
 
-      {[
-        FormElementTypes.textField,
-        FormElementTypes.textArea,
-        FormElementTypes.formattedDate,
-        FormElementTypes.addressComplete,
-        FormElementTypes.fileInput,
-      ].includes(element.type) && (
+      {elementsWithText.includes(element.type) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
           {(element.properties.descriptionEn || element.properties.descriptionFr) && (
@@ -392,10 +396,10 @@ export const TranslateWithGroups = () => {
                   }
                   lang={secondaryLanguage}
                   ariaLabel={t("privacyStatement")}
-                  ariaDescribedBy={`privacyPolicy-${secondaryLanguage}->language`}
+                  ariaDescribedBy={`privacyPolicy-${secondaryLanguage}-language`}
                 />
                 <LanguageLabel
-                  id={`privacyPolicy-${secondaryLanguage}->language`}
+                  id={`privacyPolicy-${secondaryLanguage}-language`}
                   lang={secondaryLanguage}
                 >
                   <>{secondaryLanguage}</>

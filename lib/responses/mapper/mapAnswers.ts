@@ -4,6 +4,7 @@ import { createFallbackMappedAnswer, createAnswerObject } from "./utils/toAnswer
 import { getAnswerAsString } from "./utils/toString";
 import { FormProperties } from "@gcforms/types";
 import { Response } from "@gcforms/types";
+import { ResponseFilenameMapping } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot/lib/processResponse";
 
 /**
  * Map raw response answers to the standardized MappedAnswer shape using a template.
@@ -19,16 +20,18 @@ import { Response } from "@gcforms/types";
 export const mapAnswers = ({
   formTemplate,
   rawAnswers,
+  attachments,
 }: {
   formTemplate: FormProperties;
   rawAnswers: Record<string, Response>;
+  attachments?: ResponseFilenameMapping;
 }): MappedAnswer[] => {
   const elementMap = getElementMap(formTemplate);
 
   const mappedAnswers: Array<MappedAnswer | null> = Object.entries(rawAnswers).map(
     ([questionId, rawAnswer]) => {
       const question = elementMap.get(Number(questionId));
-      return getMappedAnswer({ question, rawAnswer });
+      return getMappedAnswer({ question, rawAnswer, attachments });
     }
   );
 
@@ -43,21 +46,23 @@ export const mapAnswers = ({
 const getMappedAnswer = ({
   question,
   rawAnswer,
+  attachments,
 }: {
   question?: FormElement;
   rawAnswer: Response;
+  attachments?: ResponseFilenameMapping;
 }): MappedAnswer => {
   if (!question) {
     return createFallbackMappedAnswer({ rawAnswer });
   }
 
   if (question.type === FormElementTypes.dynamicRow && Array.isArray(rawAnswer)) {
-    return handleAnswerArray({ question, rawAnswers: rawAnswer });
+    return handleAnswerArray({ question, rawAnswers: rawAnswer, attachments });
   }
 
   return createAnswerObject({
     question,
-    answer: getAnswerAsString(question, rawAnswer as unknown),
+    answer: getAnswerAsString(question, rawAnswer as unknown, attachments),
   });
 };
 
@@ -71,9 +76,11 @@ const getMappedAnswer = ({
 const handleAnswerArray = ({
   question,
   rawAnswers,
+  attachments,
 }: {
   question?: FormElement;
   rawAnswers: Response[];
+  attachments?: ResponseFilenameMapping;
 }): MappedAnswer => {
   if (!question || !Array.isArray(rawAnswers)) {
     throw new Error("Invalid input for handleAnswerArray");
@@ -94,7 +101,7 @@ const handleAnswerArray = ({
         return createFallbackMappedAnswer({ questionId: index, rawAnswer: value });
       }
 
-      return getMappedAnswer({ question: subQuestion, rawAnswer: value });
+      return getMappedAnswer({ question: subQuestion, rawAnswer: value, attachments });
     });
 
     return subAnswers;

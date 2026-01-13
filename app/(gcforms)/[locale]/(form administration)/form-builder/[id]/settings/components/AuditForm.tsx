@@ -2,9 +2,10 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { getEventsForForm } from "../actions";
+import { getFormEvents } from "../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const AuditForm = ({ formId }: { formId: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -12,6 +13,9 @@ export const AuditForm = ({ formId }: { formId: string }) => {
   const { form } = useTemplateStore((s) => ({
     form: s.form,
   }));
+
+  const { getFlag } = useFeatureFlags();
+  const canPerformUsersideAudit = getFlag("userSideAuditLogs");
 
   function retrieveFileBlob(
     events: {
@@ -43,6 +47,28 @@ export const AuditForm = ({ formId }: { formId: string }) => {
                 if (key === "event") {
                   value = `"${t(`auditDownload.events.${row.event}`)}"`; // Translate event names
                 }
+                if (key == "description") {
+                  // eventDesc contains the actual description text inside a JSON string
+                  // the rest are parameters for interpolation
+                  try {
+                    const descObj = JSON.parse(value);
+                    const eventDesc = descObj.eventDesc;
+                    delete descObj.eventDesc;
+
+                    // Loop through the params and translate them if they exist as a translation key
+                    Object.keys(descObj).forEach((paramKey) => {
+                      const paramValue = descObj[paramKey];
+                      const translatedParam = t(`auditDownload.eventParams.${paramValue}`);
+                      if (translatedParam !== `auditDownload.eventParams.${paramValue}`) {
+                        descObj[paramKey] = translatedParam;
+                      }
+                    });
+
+                    value = String(t(`auditDownload.eventDetails.${eventDesc}`, descObj));
+                  } catch {
+                    // Fallback to raw value if parsing fails
+                  }
+                }
                 // Escape double quotes by doubling them and wrap the whole string in double quotes.
                 value = `"${value.replace(/"/g, '""')}"`;
               }
@@ -52,7 +78,7 @@ export const AuditForm = ({ formId }: { formId: string }) => {
         })
         .join("\r\n");
 
-      const csvContent = csvHeader + csvRows;
+      const csvContent = "\uFEFF" + csvHeader + csvRows;
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -72,9 +98,13 @@ export const AuditForm = ({ formId }: { formId: string }) => {
   }
 
   const handleFormAudit = async (formId: string) => {
-    const events = await getEventsForForm(formId);
+    const events = await getFormEvents(formId);
     if (Array.isArray(events)) {
-      retrieveFileBlob(events);
+      if (events.length === 0) {
+        alert(t("auditDownload.noEvents"));
+      } else {
+        retrieveFileBlob(events);
+      }
     } else {
       alert(t("auditDownload.errorFetchingEvents"));
     }
@@ -82,16 +112,18 @@ export const AuditForm = ({ formId }: { formId: string }) => {
 
   return (
     <>
-      <div id="download-form" className="mb-10">
-        <h2>{t("auditDownload.title")}</h2>
-        <p className="mb-4" id="download-hint">
-          {t("auditDownload.description")}
-        </p>
+      {canPerformUsersideAudit && (
+        <div id="download-form" className="mb-10">
+          <h2>{t("auditDownload.title")}</h2>
+          <p className="mb-4" id="download-hint">
+            {t("auditDownload.description")}
+          </p>
 
-        <Button onClick={() => handleFormAudit(formId)} theme="primary">
-          {t("auditDownload.downloadBtnText")}
-        </Button>
-      </div>
+          <Button onClick={() => handleFormAudit(formId)} theme="primary">
+            {t("auditDownload.downloadBtnText")}
+          </Button>
+        </div>
+      )}
     </>
   );
 };

@@ -110,3 +110,40 @@ export const featureFlagAllowedForUser = async (
   const userFlag = userFlags.find((matchFlag) => matchFlag === flag);
   return userFlag || flagEnabled ? true : false;
 };
+
+/**
+ * Get all user feature flags enabled.
+ * @returns Array of user and feature data
+ */
+export const getAllUsersWithFeatures = async (): Promise<
+  {
+    userText: string;
+    userId: string;
+    feature: string;
+  }[]
+> => {
+  try {
+    const usersWithFlags = await prisma.userFeature.findMany({
+      select: {
+        feature: true,
+        userId: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return usersWithFlags
+      .map((uf) => ({
+        feature: uf.feature,
+        userId: uf.userId,
+        userText: uf.user ? `${uf.user.name} (${uf.user.email})` : uf.userId,
+      }))
+      .sort((a, b) => a.userText.localeCompare(b.userText));
+  } catch (error) {
+    return [];
+  }
+};

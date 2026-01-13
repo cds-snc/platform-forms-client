@@ -1,5 +1,5 @@
 import { Agent } from "https";
-import { getAwsSecret } from "./getAwsSecret";
+import { getAwsSecret } from "./utils";
 import axios, { AxiosError } from "axios";
 
 const API_URL: string = "https://api.notification.canada.ca";

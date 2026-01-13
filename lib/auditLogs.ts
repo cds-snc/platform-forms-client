@@ -9,80 +9,331 @@ import { delay } from "@lib/utils/retryability";
 import { GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { logMessage } from "./logger";
 import { sqsClient, dynamoDBDocumentClient } from "./integration/awsServicesConnector";
-import { getUsersEmails } from "@lib/users";
+import { authorization } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth/errors";
+import { prisma } from "@lib/integration/prismaConnector";
 
-export enum AuditLogEvent {
+export const AuditLogEvent = {
   // Form Events
-  CreateForm = "CreateForm",
-  ReadForm = "ReadForm",
-  UpdateForm = "UpdateForm",
-  DeleteForm = "DeleteForm",
-  UnarchiveForm = "UnarchiveForm",
-  PublishForm = "PublishForm",
-  ChangeFormName = "ChangeFormName",
-  ChangeDeliveryOption = "ChangeDeliveryOption",
-  ChangeFormPurpose = "ChangeFormPurpose",
-  ChangeFormSaveAndResume = "ChangeFormSaveAndResume",
-  ChangeSecurityAttribute = "ChangeSecurityAttribute",
-  GrantFormAccess = "GrantFormAccess",
-  RevokeFormAccess = "RevokeFormAccess",
-  UpdateNotificationsInterval = "UpdateNotificationsInterval",
-  UpdateNotificationsUserSetting = "UpdateNotificationsUserSetting",
-  UpdateFormJsonConfig = "updateFormJsonConfig",
+  CreateForm: "CreateForm",
+  ReadForm: "ReadForm",
+  UpdateForm: "UpdateForm",
+  DeleteForm: "DeleteForm",
+  UnarchiveForm: "UnarchiveForm",
+  PublishForm: "PublishForm",
+  ChangeFormName: "ChangeFormName",
+  ChangeDeliveryOption: "ChangeDeliveryOption",
+  ChangeFormPurpose: "ChangeFormPurpose",
+  ChangeFormSaveAndResume: "ChangeFormSaveAndResume",
+  ChangeSecurityAttribute: "ChangeSecurityAttribute",
+  GrantFormAccess: "GrantFormAccess",
+  RevokeFormAccess: "RevokeFormAccess",
+  UpdateNotificationsInterval: "UpdateNotificationsInterval",
+  UpdateNotificationsUserSetting: "UpdateNotificationsUserSetting",
+  UpdateFormJsonConfig: "updateFormJsonConfig",
   // Invitations
-  InvitationCreated = "InvitationCreated",
-  InvitationAccepted = "InvitationAccepted",
-  InvitationDeclined = "InvitationDeclined",
-  InvitationCancelled = "InvitationCancelled",
+  InvitationCreated: "InvitationCreated",
+  InvitationAccepted: "InvitationAccepted",
+  InvitationDeclined: "InvitationDeclined",
+  InvitationCancelled: "InvitationCancelled",
   // Form Response Events
-  DownloadResponse = "DownloadResponse",
-  ConfirmResponse = "ConfirmResponse",
-  IdentifyProblemResponse = "IdentifyProblemResponse",
-  ListResponses = "ListResponses",
-  DeleteResponses = "DeleteResponses",
-  RetrieveResponses = "RetrieveResponses",
+  DownloadResponse: "DownloadResponse",
+  ConfirmResponse: "ConfirmResponse",
+  IdentifyProblemResponse: "IdentifyProblemResponse",
+  ListResponses: "ListResponses",
+  DeleteResponses: "DeleteResponses",
+  RetrieveResponses: "RetrieveResponses",
   // User Events
-  UserRegistration = "UserRegistration",
-  UserSignIn = "UserSignIn",
-  UserSignOut = "UserSignOut",
-  UserActivated = "UserActivated",
-  UserDeactivated = "UserDeactivated",
-  UserPasswordReset = "UserPasswordReset",
-  UserTooManyFailedAttempts = "UserTooManyFailedAttempts",
-  GrantPrivilege = "GrantPrivilege",
-  RevokePrivilege = "RevokePrivilege",
-  CreateSecurityAnswers = "CreateSecurityAnswers",
-  ChangeSecurityAnswers = "ChangeSecurityAnswers",
+  UserRegistration: "UserRegistration",
+  UserSignIn: "UserSignIn",
+  UserSignOut: "UserSignOut",
+  UserActivated: "UserActivated",
+  UserDeactivated: "UserDeactivated",
+  UserPasswordReset: "UserPasswordReset",
+  UserTooManyFailedAttempts: "UserTooManyFailedAttempts",
+  GrantPrivilege: "GrantPrivilege",
+  RevokePrivilege: "RevokePrivilege",
+  CreateSecurityAnswers: "CreateSecurityAnswers",
+  ChangeSecurityAnswers: "ChangeSecurityAnswers",
   // Application events
-  EnableFlag = "EnableFlag",
-  DisableFlag = "DisableFlag",
-  ListAllFlags = "ListAllFlags",
-  ListAllSettings = "ListAllSettings",
-  ListSetting = "ListSetting",
-  ChangeSetting = "ChangeSetting",
-  CreateSetting = "CreateSetting",
-  DeleteSetting = "DeleteSetting",
-  AccessDenied = "AccessDenied",
+  EnableFlag: "EnableFlag",
+  DisableFlag: "DisableFlag",
+  ListAllFlags: "ListAllFlags",
+  ListAllSettings: "ListAllSettings",
+  ListSetting: "ListSetting",
+  ChangeSetting: "ChangeSetting",
+  CreateSetting: "CreateSetting",
+  DeleteSetting: "DeleteSetting",
+  AccessDenied: "AccessDenied",
   // API Management
-  CreateAPIKey = "CreateAPIKey",
-  DeleteAPIKey = "DeleteAPIKey",
-  RefreshAPIKey = "RefreshAPIKey",
-  IncreaseThrottlingRate = "IncreaseThrottlingRate",
-  ResetThrottlingRate = "ResetThrottlingRate",
+  CreateAPIKey: "CreateAPIKey",
+  DeleteAPIKey: "DeleteAPIKey",
+  RefreshAPIKey: "RefreshAPIKey",
+  IncreaseThrottlingRate: "IncreaseThrottlingRate",
+  ResetThrottlingRate: "ResetThrottlingRate",
   // Audi Log events
-  AuditLogsRead = "AuditLogsRead",
-}
+  AuditLogsRead: "AuditLogsRead",
+} as const;
+
 export type AuditLogEventStrings = keyof typeof AuditLogEvent;
 
-export enum AuditSubjectType {
-  User = "User",
-  ServiceAccount = "ServiceAccount",
-  Form = "Form",
-  Response = "Response",
-  Privilege = "Privilege",
-  Flag = "Flag",
-  Setting = "Setting",
-}
+export const AuditSubjectType = {
+  User: "User",
+  ServiceAccount: "ServiceAccount",
+  Form: "Form",
+  Response: "Response",
+  Privilege: "Privilege",
+  Flag: "Flag",
+  Setting: "Setting",
+} as const;
+
+export type AuditSubjectType = (typeof AuditSubjectType)[keyof typeof AuditSubjectType];
+
+export const AuditLogDetails = {
+  UserAuditLogsRead: "User ${callingUserId} read audit logs for user ${userId}",
+  FormAuditLogsRead: "User ${callingUserId} read audit logs for form ${formId}",
+  GetAuditSubject: "Attempted to get events for Subject ${subject}",
+  DownloadedFormResponses: "Downloaded form response in ${format} for submission ID ${item.id}",
+  IncreasedThrottling: "IncreasedThrottling",
+  PermanentIncreasedThrottling:
+    "User ${userId} permanently increased throttling rate on form ${formId}",
+  ResetThrottling: "User ${userId} reset throttling rate on form ${formId}",
+  DeclinedInvitation: "DeclinedInvitation",
+  AcceptedInvitation: "AcceptedInvitation",
+  AccessGranted: "Access granted to ${grantedUserId}",
+  CancelInvitation: "CancelInvitation",
+  UserInvited: "UserInvited",
+  CognitoUserIdentifier: "Cognito user unique identifier (sub): ${userId}",
+  UpdatedNotificationSettings: "`UpdatedNotificationSettings",
+  ConfirmedResponsesForForm: "ConfirmedResponsesForForm",
+  DeletedDraftResponsesForForm: "Deleted draft responses for form ${formId}",
+  RetreiveSelectedFormResponses:
+    "Retrieve selected responses for form ${formID} with ID ${submissionID}",
+  ListAllResponsesForForm: "List all responses ${status} for form ${formID}",
+  UserActiveStatusUpdate:
+    "User ${email} (userID: ${userID}) was ${active} by user ${privilegedUserEmail} (userID: ${privilegedUserId})",
+  AccessedAllSystemForms: "Accessed Forms: All System Forms",
+  ClonedForm: "DuplicatedForm",
+  UpdateClosingDate: "UpdateClosingDate",
+  RetrieveFormUsers: "Retrieved users associated with Form",
+  RevokeFormAccess: "Access revoked for ${userId}",
+  SetDeliveryToVault: "Delivery Option set to the Vault",
+  SetSaveAndResume: "SetSaveAndResume",
+  SetFormPurpose: "SetFormPurpose",
+  FormContentUpdated: "UpdatedFormContent",
+  UpdatedFormName: "UpdatedFormName",
+  GrantFormAccess: "Access granted to ${userID}",
+  AccessedForms: "Accessed Forms: ${formList}",
+  ChangeDeliveryOption: "Changed delivery option to ${deliveryOption}",
+  ChangeSecurityAttribute: "ChangeSecurityAttribute",
+  AccessGrantedTo: "GrantAccess",
+  AccessRevokedFor: "RevokeAccess",
+  //API Keys
+  GeneratedNewApiKey: "GeneratedAPIKey",
+  CreatedNewApiKey: "User :${userId} created API key for service account ${serviceAccountId}",
+  DeletedServiceAccount: "DeletedAPIKey",
+  // App Settings
+  UpdatedAppSetting: "Updated setting with ${settingData}",
+  CreatedAppSetting: "Created setting with ${settingData}",
+  DeletedAppSetting: "Deleted setting with internalId: ${internalId}",
+  //Privilege Events
+  GrantedPrivilege:
+    "Granted privilege ${privilege} to user ${email} (userID: ${userId}) by ${userEmail} (userID: ${abilityUserId})",
+  RevokedPrivilege:
+    "Revoked privilege ${privilege} from user ${email} (userID: ${userId}) by ${userEmail} (userID: ${abilityUserId})",
+} as const;
+
+export type AuditLogDetails = (typeof AuditLogDetails)[keyof typeof AuditLogDetails];
+
+type AuditDetailsParams = {
+  [AuditLogDetails.UserAuditLogsRead]: { callingUserId: string; userId: string };
+  [AuditLogDetails.FormAuditLogsRead]: { callingUserId: string; formId: string };
+  [AuditLogDetails.GetAuditSubject]: { subject: string };
+  [AuditLogDetails.DownloadedFormResponses]: { format: string; "item.id": string };
+  [AuditLogDetails.IncreasedThrottling]: { userId: string; formId: string; weeks: string };
+  [AuditLogDetails.PermanentIncreasedThrottling]: { userId: string; formId: string };
+  [AuditLogDetails.ResetThrottling]: { userId: string; formId: string };
+  [AuditLogDetails.DeclinedInvitation]: { userId: string };
+  [AuditLogDetails.AcceptedInvitation]: { userId: string };
+  [AuditLogDetails.AccessGranted]: { grantedUserId: string };
+  [AuditLogDetails.CancelInvitation]: { userId: string; invitationEmail: string };
+  [AuditLogDetails.UserInvited]: { userEmail: string; invitationEmail: string };
+  [AuditLogDetails.CognitoUserIdentifier]: { userId: string };
+  [AuditLogDetails.UpdatedNotificationSettings]: {
+    userId: string;
+    formId: string;
+    enabled: string;
+  };
+  [AuditLogDetails.ConfirmedResponsesForForm]: { formId: string };
+  [AuditLogDetails.DeletedDraftResponsesForForm]: { formId: string };
+  [AuditLogDetails.RetreiveSelectedFormResponses]: { formID: string; submissionID: string };
+  [AuditLogDetails.ListAllResponsesForForm]: { status: string; formID: string };
+  [AuditLogDetails.UserActiveStatusUpdate]: {
+    email: string;
+    userID: string;
+    active: string;
+    privilegedUserEmail: string;
+    privilegedUserId: string;
+  };
+  [AuditLogDetails.AccessedAllSystemForms]: never;
+  [AuditLogDetails.ClonedForm]: never;
+  [AuditLogDetails.UpdateClosingDate]: never;
+  [AuditLogDetails.RetrieveFormUsers]: never;
+  [AuditLogDetails.RevokeFormAccess]: { userId: string };
+  [AuditLogDetails.SetDeliveryToVault]: never;
+  [AuditLogDetails.SetSaveAndResume]: { saveAndResume: string };
+  [AuditLogDetails.SetFormPurpose]: { formPurpose: string };
+  [AuditLogDetails.FormContentUpdated]: never;
+  [AuditLogDetails.UpdatedFormName]: { newFormName: string };
+  [AuditLogDetails.GrantFormAccess]: { userID: string };
+  [AuditLogDetails.AccessedForms]: { formList: string };
+  [AuditLogDetails.ChangeDeliveryOption]: { deliveryOption: string };
+  [AuditLogDetails.ChangeSecurityAttribute]: { securityAttribute: string };
+  [AuditLogDetails.AccessGrantedTo]: { userList: string };
+  [AuditLogDetails.AccessRevokedFor]: { userList: string };
+  [AuditLogDetails.GeneratedNewApiKey]: { userId: string; serviceAccountId: string };
+  [AuditLogDetails.CreatedNewApiKey]: { userId: string; serviceAccountId: string };
+  [AuditLogDetails.DeletedServiceAccount]: {
+    userId: string;
+    serviceAccountID: string;
+    templateId: string;
+  };
+  [AuditLogDetails.UpdatedAppSetting]: { settingData: string };
+  [AuditLogDetails.CreatedAppSetting]: { settingData: string };
+  [AuditLogDetails.DeletedAppSetting]: { internalId: string };
+  [AuditLogDetails.GrantedPrivilege]: {
+    privilege: string;
+    email: string;
+    userId: string;
+    userEmail: string;
+    abilityUserId: string;
+  };
+  [AuditLogDetails.RevokedPrivilege]: {
+    privilege: string;
+    email: string;
+    userId: string;
+    userEmail: string;
+    abilityUserId: string;
+  };
+};
+
+export const AuditLogAccessDeniedDetails = {
+  AccessDenied_AttemptedToReadFormObject: "Attemped to read form object",
+  AccessDenied_AttemptToCreateForm: "Attempted to create a Form",
+  AccessDenied_AttemptToDeleteForm: "Attempted to delete Form",
+  AccessDenied_AttemptToUnarchiveForm: "Attempted to unarchive form",
+  AccessDenied_AttemptToPublishForm: "Attempted to publish form",
+  AccessDenied_AttemptToUpdateForm: "Attempted to update Form",
+  AccessDenied_AttemptToUpdateFormJson: "Attempted to update form jsonConfig",
+  AccessDenied_AttemptToGetFormJson: "Attempted to get form jsonConfig",
+  AccessDenied_AttemptToUpdateSecurityAttribute: "Attempted to update security attribute",
+  AccessDenied_AttemptToUpdateClosingDate: "Attempted to update closing date for Form",
+  AccessDenied_AttemptToCloneFormNoEdit: "Attempted to clone Form - missing edit permission",
+  AccessDenied_AttemptToCloneFormNoCreate: "Attempted to clone Form - missing create permission",
+  AccessDenied_AttemptToSetDeliveryToVault: "Attempted to set Delivery Option to the Vault",
+  AccessDenied_AttemptToSetAssignedUsers: "Attempted to update assigned users for form",
+  AccessDenied_AttemptToRemoveAssignedUser: "Attempted to remove assigned user for form",
+  AccessDenied_AttemptToListAssignedUsers: "Attempted to retrieve users associated with Form",
+  AccessDenied_AttemptToSetSaveAndResume: "Attempted to set save and resume",
+  AccessDenied_AttemptToSetFormPurpose: "Attempted to set form purpose",
+  AccessDenied_AttempttoAccessAllSystemForms: "Attempted to access all System Forms",
+  AccessDenied_IdentifyProblemResponse:
+    "Attempted to identify problem response without form ownership",
+  AccessDenied_IdentifiedProblemResponse: "Identified problem response for form ${formId}",
+  AccessDenied_AttemptToModifyPrivilege: "Attempted to modify privilege on user ${userId}",
+  AccessDenied_CancelInvitation: "User ${userId} does not have permission to cancel invitation",
+  AccessDenied_NoInvitePermission: "User ${userId} does not have permission to invite user",
+  AccessDenied_AttemptedToGetUserEmails: "Attempted to get users emails",
+  AccessDenied_AttemptedToListUsers: "Attempted to list users",
+  AccessDenied_AttemptedToGetUserById: "Attempted to get user by id ${id}",
+  AccessDenied_AttemptedToUpdateUserActiveStatus: "Attempted to update user ${targetUserId} status",
+  AccessDenied_AttemptToAccessUnprocessedSubmissions:
+    "Attempted to get unprocessed submissions for user ${userId}",
+  AccessDenied_AttemptToCheckResponseStatus:
+    "Attempted to check response status for form ${formID}",
+  AccessDenied_AttemptToListResponses: "Attempted to list responses for form ${formID}",
+  AccessDenied_AttemptToRetrieveResponse: "Attempted to retrieve response for form ${formID}",
+  AccessDenied_AttemptToDeleteResponses: "Attempted to delete responses for form ${formID}",
+  AccessDenied_AttemptToConfirmResponses: "Attempted to confirm response for form ${formID}",
+  AccessDenied_AttemptToAddNoteToUser: "Attempted to add note to user ${userId}",
+  PasswordAttemptsExceeded: "Password attempts exceeded for ${sanitizedUsername}",
+  MFAAttemptsExceeded: "2FA attempts exceeded for ${sanitizedEmail}",
+  AccessDenied_AttemptToCreateSecurityAnswers: "Attempted to create security answers",
+  AccessDenied_AttemptToUpdateSecurityAnswers: "Attempted to update security answers",
+  // Feature Flag Auth
+  AccessDenied_AttemptToEnableFlag: "Attempted to enable flag ${flagKey}",
+  AccessDenied_AttemptToDisableFlag: "Attempted to disable flag ${flagKey}",
+  // App Setting Auth
+  AccessDenied_AttemptToListAllSettings: "Attempted to list all Settings",
+  AccessDenied_AttemptToListFullAppSettings: "Attempted to list full app Setting",
+  AccessDenied_AttemptToUpdateSetting: "Attempted to update setting",
+  AccessDenied_AttemptToDeleteSetting: "Attempted to delete setting",
+  AccessDenied_AttemptToCreateSetting: "Attempted to create setting",
+} as const;
+
+export type AuditLogAccessDeniedDetails =
+  (typeof AuditLogAccessDeniedDetails)[keyof typeof AuditLogAccessDeniedDetails];
+
+type AuditAccessDeniedParamsMap = {
+  [AuditLogAccessDeniedDetails.AccessDenied_IdentifiedProblemResponse]: { formId: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToModifyPrivilege]: { userId: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_CancelInvitation]: { userId: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_NoInvitePermission]: { userId: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserById]: { id: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptedToUpdateUserActiveStatus]: {
+    targetUserId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToAccessUnprocessedSubmissions]: {
+    userId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToCheckResponseStatus]: { formID: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToListResponses]: { formID: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToRetrieveResponse]: { formID: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteResponses]: { formID: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses]: { formID: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToAddNoteToUser]: { userId: string };
+  [AuditLogAccessDeniedDetails.PasswordAttemptsExceeded]: { sanitizedUsername: string };
+  [AuditLogAccessDeniedDetails.MFAAttemptsExceeded]: { sanitizedEmail: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToEnableFlag]: { flagKey: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDisableFlag]: { flagKey: string };
+};
+
+type AllAuditParams = {
+  [K in AuditLogDetails | AuditLogAccessDeniedDetails]: K extends keyof AuditDetailsParams
+    ? AuditDetailsParams[K]
+    : K extends keyof AuditAccessDeniedParamsMap
+      ? AuditAccessDeniedParamsMap[K]
+      : never;
+};
+
+export const _getUsersEmails = async (
+  formId: string,
+  userIds: string[]
+): Promise<{ id: string; email: string }[]> => {
+  await authorization.canViewForm(formId).catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        e.user.id,
+        { type: "User" },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserEmails
+      );
+    }
+    throw e;
+  });
+
+  return prisma.user.findMany({
+    where: {
+      id: {
+        in: userIds,
+      },
+    },
+    select: {
+      id: true,
+      email: true,
+    },
+  });
+};
 
 let queueUrlRef: string | null = null;
 
@@ -103,18 +354,35 @@ const getQueueURL = async () => {
   return queueUrlRef;
 };
 
-export const logEvent = async (
+const resolveDescription = (
+  description?: AuditLogDetails | AuditLogAccessDeniedDetails,
+  descriptionParams?: Record<string, string>
+) => {
+  if (!description) return undefined;
+  const paramsJson = JSON.stringify({ eventDesc: description, ...descriptionParams });
+  return paramsJson;
+};
+
+export const logEvent = async <T extends keyof AllAuditParams | undefined = undefined>(
   userId: string,
   subject: { type: keyof typeof AuditSubjectType; id?: string },
   event: AuditLogEventStrings,
-  description?: string
+  ...args: T extends keyof AllAuditParams
+    ? AllAuditParams[T] extends never
+      ? [description: T]
+      : [description: T, descriptionParams: AllAuditParams[T]]
+    : []
 ): Promise<void> => {
+  const description = args[0] as AuditLogDetails | AuditLogAccessDeniedDetails | undefined;
+  const descriptionParams = args[1] as Record<string, string> | undefined;
+  const descriptionFinal = resolveDescription(description, descriptionParams);
+
   const auditLog = JSON.stringify({
     userId,
     event,
     timestamp: Date.now(),
     subject,
-    description,
+    description: descriptionFinal,
   });
   try {
     const queueUrl = await getQueueURL();
@@ -227,7 +495,7 @@ export const retrieveEvents = async (
   if (options?.mapUserEmail) {
     const userIds = Array.from(new Set(eventItems.map((event) => event.UserID)));
     const formId = eventItems[0]?.Subject.split("#")[1];
-    const users = await getUsersEmails(formId, userIds);
+    const users = await _getUsersEmails(formId, userIds);
 
     eventItems.forEach((event) => {
       event.UserID = users.find((user) => user.id === event.UserID)?.email || "Unknown User";

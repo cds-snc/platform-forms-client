@@ -1,15 +1,19 @@
 {
-  "titleEn": "Lemonade Stand Funding",
-  "titleFr": "Financement des stands de limonade",
-  "confirmation": {
-    "descriptionEn": "#Your submission has been received \n\r Thank you for your interest. We will contact you within 3-5 business days.  \n\r [Go back](https://digital.canada.ca)",
-    "descriptionFr": "#[fr] Your submission has been received. \n\r Thank you for your interest. We will contact you within 3-5 business days. \n\r [Go back](https://digital.canada.ca)",
-    "referrerUrlEn": "",
-    "referrerUrlFr": ""
+  "titleEn": "An Attestation Test Form",
+  "titleFr": "An Attestation Test Form [FR]",
+  "introduction": {
+    "descriptionEn": "",
+    "descriptionFr": ""
   },
   "privacyPolicy": {
-    "descriptionEn": "Privacy statement",
-    "descriptionFr": "Avis de confidentialité"
+    "descriptionEn": "A privacy statement",
+    "descriptionFr": "A privacy statement [FR]"
+  },
+  "confirmation": {
+    "descriptionEn": "A confirmation message",
+    "descriptionFr": "A confirmation message",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
   },
   "layout": [1],
   "elements": [
@@ -17,25 +21,56 @@
       "id": 1,
       "type": "checkbox",
       "properties": {
-        "titleEn": "Do you attest that the information you are providing is true and correct to your knowledge?",
-        "titleFr": "Attestez-vous que les informations que vous fournissez sont, à votre connaissance, vraies et correctes?",
+        "subElements": [],
         "choices": [
           {
-            "en": "I prefer lemons to oranges.",
-            "fr": "Je préfère les citrons aux oranges."
+            "en": "Condition 1",
+            "fr": "Condition 1"
           },
           {
-            "en": "I agree to keep my lemonade stand a minimum of 1 metre from the sidewalk.",
-            "fr": "Je m'engage à maintenir mon stand de limonade à un minimum d'un mètre du trottoir."
+            "en": "Condition 2",
+            "fr": "Condition 2"
+          },
+          {
+            "en": "Condition 3",
+            "fr": "Condition 3"
           }
         ],
+        "titleEn": "I agree to:",
+        "titleFr": "J'accepte :",
         "validation": {
-          "all": true,
-          "required": true
+          "required": true,
+          "all": true
         },
         "descriptionEn": "",
-        "descriptionFr": ""
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
       }
     }
-  ]
+  ],
+  "groups": {
+    "start": {
+      "name": "Start",
+      "titleEn": "Start page",
+      "titleFr": "Start page",
+      "elements": ["1"],
+      "nextAction": "review"
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "End (Review page and Confirmation)",
+      "titleFr": "End (Review page and Confirmation)",
+      "elements": [],
+      "nextAction": "end"
+    },
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Confirmation page",
+      "elements": []
+    }
+  },
+  "groupsLayout": [],
+  "lastGeneratedElementId": 1
 }

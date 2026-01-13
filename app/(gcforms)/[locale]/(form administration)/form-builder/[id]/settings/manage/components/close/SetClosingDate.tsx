@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -48,14 +48,10 @@ export const SetClosingDate = ({
     return true;
   }, [closedMessage]);
 
-  const [status, setStatus] = useState(
-    dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open"
+  const status = useMemo(
+    () => (dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open"),
+    [closingDate]
   );
-
-  // Needed to sync the status with the closing date
-  useEffect(() => {
-    setStatus(dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open");
-  }, [closingDate]);
 
   const [showDateTimeDialog, setShowDateTimeDialog] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -72,7 +68,6 @@ export const SetClosingDate = ({
     if (pendingToggleValue === null) return;
 
     const newStatus = pendingToggleValue ? "open" : "closed";
-    setStatus(newStatus);
 
     // If closed, set date to now. If open, clear the closing date.
     const closeDate = newStatus === "closed" ? new Date().toISOString() : null;
@@ -84,8 +79,6 @@ export const SetClosingDate = ({
     });
 
     if (!result || result.error) {
-      // Revert the status on error
-      setStatus(newStatus === "closed" ? "open" : "closed");
       toast.error(t("closingDate.savedErrorMessage"));
       setShowConfirmDialog(false);
       setPendingToggleValue(null);

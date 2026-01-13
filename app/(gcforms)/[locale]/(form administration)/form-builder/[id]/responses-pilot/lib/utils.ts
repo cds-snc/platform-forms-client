@@ -50,7 +50,10 @@ export function importPrivateKeyDecrypt(pem: string): Promise<CryptoKey> {
   );
 }
 
-export async function getAccessTokenFromApiKey(apiKey: PrivateApiKey): Promise<string> {
+export async function getAccessTokenFromApiKey(
+  apiKey: PrivateApiKey,
+  productId: string
+): Promise<string> {
   const zitadelURL = process.env.NEXT_PUBLIC_ZITADEL_URL;
   if (!zitadelURL) {
     return Promise.reject(new Error("Zitadel URL is not set."));
@@ -75,7 +78,7 @@ export async function getAccessTokenFromApiKey(apiKey: PrivateApiKey): Promise<s
           new URLSearchParams({
             grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
             assertion: jwtSignedToken,
-            scope: `openid profile urn:zitadel:iam:org:project:id:275372254274006635:aud`,
+            scope: `openid profile urn:zitadel:iam:org:project:id:${productId}:aud`,
           }),
           {
             headers: {

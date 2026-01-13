@@ -2,8 +2,6 @@
 
 import { createKey, deleteKey, refreshKey } from "@lib/serviceAccount";
 import { revalidatePath } from "next/cache";
-import { promises as fs } from "fs";
-import path from "path";
 import { AuthenticatedAction } from "@lib/actions";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
@@ -12,19 +10,14 @@ import { submissionTypeExists } from "@lib/vault";
 import { VaultStatus } from "@lib/types";
 import { ServerActionError } from "@root/lib/types/form-builder-types";
 
-import { retrieveEvents, logEvent } from "@lib/auditLogs";
+import {
+  retrieveEvents,
+  logEvent,
+  AuditLogDetails,
+  AuditLogAccessDeniedDetails,
+} from "@lib/auditLogs";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
-
-export const getReadmeContent = AuthenticatedAction(async () => {
-  try {
-    const readmePath = path.join(process.cwd(), "./public/static/api/Readme.md");
-    const content = await fs.readFile(readmePath, "utf-8");
-    return { content };
-  } catch (e) {
-    return { error: true };
-  }
-});
 
 export const createServiceAccountKey = AuthenticatedAction(async (_, templateId: string) => {
   revalidatePath(
@@ -64,11 +57,16 @@ export const unConfirmedResponsesExist = AuthenticatedAction(async (_, formId: s
   }
 });
 
-export const getEventsForForm = AuthenticatedAction(async (session, formId: string) => {
+export const getFormEvents = AuthenticatedAction(async (session, formId: string) => {
   try {
     await authorization.canViewForm(formId).catch((e) => {
       if (e instanceof AccessControlError) {
-        logEvent(e.user.id, { type: "User" }, "AccessDenied", "Attempted to get users emails");
+        logEvent(
+          e.user.id,
+          { type: "User" },
+          "AccessDenied",
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserEmails
+        );
       }
       throw e;
     });
@@ -96,7 +94,8 @@ export const getEventsForForm = AuthenticatedAction(async (session, formId: stri
       userId,
       { type: "Form", id: formId },
       "AuditLogsRead",
-      `User ${userId} read audit logs for form ${formId}`
+      AuditLogDetails.FormAuditLogsRead,
+      { callingUserId: userId, formId: formId }
     );
 
     return events.map((event) => {

@@ -131,11 +131,13 @@ export const ResponseSection = ({
               {t("responseTemplate.rowTable", { lng: lang })}
             </a>
           </li>
-          <li className="mr-4">
-            <a href={`#confirmReceipt${capitalizedLang}`}>
-              {t("responseTemplate.confirmReceipt", { lng: lang })}
-            </a>
-          </li>
+          {showCodes && (
+            <li className="mr-4">
+              <a href={`#confirmReceipt${capitalizedLang}`}>
+                {t("responseTemplate.confirmReceipt", { lng: lang })}
+              </a>
+            </li>
+          )}
         </ul>
       </nav>
 

@@ -33,6 +33,10 @@
     "responsesPilot": {
       "title": "Réponses (Pilote)",
       "description": "Activer le nouveau flux pour le téléchargement des réponses dans le navigateur avec une clé API."
+    },
+    "userSideAuditLogs": {
+      "title": "Téléchargement de l'activité du formulaire",
+      "description": "Activer le téléchargement des actions clés récentes dans un formulaire (au cours des 30 derniers jours) dans les Paramètres"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",

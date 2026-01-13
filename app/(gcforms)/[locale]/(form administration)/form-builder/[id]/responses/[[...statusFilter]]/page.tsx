@@ -8,10 +8,6 @@ import { ResponsesContainer } from "./components/ResponsesContainer";
 import { redirect } from "next/navigation";
 import { StatusFilter } from "./types";
 import { getOverdueTemplateIds } from "@lib/overdue";
-import { isResponsesPilotModeEnabled } from "../actions";
-import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
-import { getFullTemplateByID } from "@root/lib/templates";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -117,18 +113,6 @@ export default async function Page(props: {
         <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
       </div>
     );
-  }
-
-  const template = await getFullTemplateByID(id);
-  const isEmailDelivery = template?.deliveryOption?.emailAddress !== undefined;
-
-  // Check if user has responses-pilot mode enabled via cookie and has access
-  const betaModeEnabled = await isResponsesPilotModeEnabled();
-  if (betaModeEnabled && session) {
-    const hasAccess = await featureFlagAllowedForUser(session.user.id, FeatureFlags.responsesPilot);
-    if (hasAccess && !isEmailDelivery) {
-      redirect(`/${locale}/form-builder/${id}/responses-pilot`);
-    }
   }
 
   const isApiRetrieval = id !== "0000" && !!(await checkKeyExists(id));

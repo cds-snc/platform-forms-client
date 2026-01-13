@@ -9,8 +9,10 @@ export const Contact = () => {
 
   return (
     <div>
-      <h3 className="mb-0">{t("addElementDialog.contact.title")}</h3>
-      <p>{t("addElementDialog.contact.description")}</p>
+      <h3 data-testid="element-description-title" className="mb-0">
+        {t("addElementDialog.contact.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.contact.description")}</p>
 
       <ExampleWrapper className="mt-4">
         <h4 className="mb-4">{t("addElementDialog.contact.howCanWeContactYou")}</h4>

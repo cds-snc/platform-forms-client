@@ -23,7 +23,7 @@ Formulaires GC est un service infonuagique créé et exploité par le Service nu
 - de répondre rapidement aux incidents : Formulaires GC respecte la [directive sur la gestion de la sécurité du SCT](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32611) et dispose d’un processus d’intervention en cas d’incident afin de résoudre rapidement les problèmes.
 - de mettre en place du personnel de garde 24 heures sur 24, 7 jours sur 7, 365 jours par année, pour répondre aux incidents de sévérité 1 dans les deux heures qui suivent leur détection.
 - de partager les journaux de l’application avec le Centre canadien pour la cybersécurité (CCC) : Formulaires GC respecte l’[Orientation sur l’utilisation sécurisée des services commerciaux d’informatique en nuage : Avis de mise en œuvre de la Politique sur la sécurité (AMOPS)](https://www.canada.ca/fr/gouvernement/systeme/gouvernement-numerique/innovations-gouvernementales-numeriques/services-informatique-nuage/orientation-utilisation-securisee-services-commerciaux-informatique-nuage-amops.html).
-- de désactiver les comptes dans les cas où l'adresse courriel du titulaire du compte n'est plus active (par exemple: un employé a quitté son ministère). La désactivation d'un compte entraîne la suppression permanente de tous les formulaires et réponses associés au compte.
+- de désactiver les comptes dans les cas où l'adresse courriel du titulaire du compte n'est plus active (par exemple : un employé a quitté son ministère). La désactivation d'un compte entraîne la suppression permanente de tous les formulaires et réponses associés au compte.
 
 Le SNC peut suspendre le service à tout moment en cas d’utilisation jugée inappropriée. Des avis de déconnexion justifiés seront fournis lorsque nécessaire.
 

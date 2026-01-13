@@ -14,13 +14,16 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "@root/*": ["*"],
       "@lib/*": ["lib/*"],
       "@api/*": ["app/api/*"],
       "@formBuilder/*": ["app/(gcforms)/[locale]/(form administration)/form-builder/*"],
+      "@responses-pilot/*": [
+        "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot/*"
+      ],
       "@serverComponents/*": ["components/serverComponents/*"],
       "@clientComponents/*": ["components/clientComponents/*"],
       "@jestFixtures/*": ["__fixtures__/*"],
@@ -44,17 +47,8 @@
     "types",
     "**/*.ts",
     "**/*.tsx",
-    "cypress/support/commands/selection-command.js",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "utils",
-    ".next",
-    "cypress",
-    "cypress.config.ts",
-    "**/*.cy.ts",
-    "**/*.cy.tsx",
-    "__tests__"
-  ]
+  "exclude": ["node_modules", "utils", ".next", "__tests__"]
 }

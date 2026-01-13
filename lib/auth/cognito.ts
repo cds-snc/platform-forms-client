@@ -3,8 +3,8 @@ import {
   AdminInitiateAuthCommandInput,
   CognitoIdentityProviderServiceException,
 } from "@aws-sdk/client-cognito-identity-provider";
-import { logEvent } from "@lib/auditLogs";
 import { prisma, prismaErrors } from "@gcforms/database";
+import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 import { logMessage } from "@lib/logger";
@@ -102,7 +102,8 @@ export const initiateSignIn = async ({
         prismaUser?.id ?? "unknown",
         { type: "User", id: prismaUser?.id ?? "unknown" },
         "UserTooManyFailedAttempts",
-        `Password attempts exceeded for ${sanitizedUsername}`
+        AuditLogAccessDeniedDetails.PasswordAttemptsExceeded,
+        { sanitizedUsername }
       );
 
       logMessage.warn("Cognito Lockout: Password attempts exceeded");
@@ -257,7 +258,8 @@ export const validate2FAVerificationCode = async (
           prismaUser?.id ?? "unknown",
           { type: "User", id: prismaUser?.id ?? "unknown" },
           "UserTooManyFailedAttempts",
-          `2FA attempts exceeded for ${sanitizedEmail}`
+          AuditLogAccessDeniedDetails.MFAAttemptsExceeded,
+          { sanitizedEmail }
         );
 
         logMessage.warn("2FA Lockout: Verification code attempts exceeded");

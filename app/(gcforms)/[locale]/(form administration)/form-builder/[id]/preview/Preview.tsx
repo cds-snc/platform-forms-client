@@ -117,6 +117,7 @@ export const Preview = ({
           status !== "authenticated" && ""
         }`}
         {...getLocalizationAttribute()}
+        data-testid="preview-container"
       >
         {status !== "authenticated" ? (
           <div className="mb-1 inline-block bg-purple-200 p-2">
@@ -199,7 +200,10 @@ export const Preview = ({
           <span className="mb-1 inline-block bg-slate-200 p-2">
             {t("confirmationPage", { ns: "form-builder" })}
           </span>
-          <div className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4">
+          <div
+            className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4"
+            data-testid="confirmation-container"
+          >
             <div className="gc-formview">
               <h1 className="mt-10" tabIndex={-1}>
                 {t("title", { ns: "confirmation", lng: language })}

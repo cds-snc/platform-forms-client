@@ -28,6 +28,8 @@ type LinkButtonProps = {
   isActive?: boolean;
   testid?: string;
   target?: string;
+  "data-testid"?: string;
+  prefetch?: boolean;
 };
 
 export const Default = ({ href, children, className, scroll }: LinkButtonProps) => {
@@ -38,20 +40,38 @@ export const Default = ({ href, children, className, scroll }: LinkButtonProps) 
   );
 };
 
-export const Primary = ({ href, children, className, scroll, target }: LinkButtonProps) => {
+export const Primary = ({
+  href,
+  children,
+  className,
+  scroll,
+  target,
+  prefetch = false,
+  "data-testid": dataTestId,
+}: LinkButtonProps) => {
   return (
     <Link
       scroll={scroll}
       href={href}
       className={cn(themes.primary, themes.base, themes.htmlLink, className)}
       target={target}
+      data-testid={dataTestId}
+      prefetch={prefetch}
     >
       {children}
     </Link>
   );
 };
 
-export const Secondary = ({ href, className, children, scroll, target }: LinkButtonProps) => {
+export const Secondary = ({
+  href,
+  className,
+  children,
+  scroll,
+  target,
+  "data-testid": dataTestId,
+  prefetch = false,
+}: LinkButtonProps) => {
   return (
     <Link
       scroll={scroll}
@@ -63,6 +83,8 @@ export const Secondary = ({ href, className, children, scroll, target }: LinkBut
         className
       )}
       target={target}
+      data-testid={dataTestId}
+      prefetch={prefetch}
     >
       {children}
     </Link>

@@ -7,7 +7,7 @@ import {
   UserNotFoundError,
 } from "./exceptions";
 import { getAbility } from "@lib/privileges";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { notifyOwnersOwnerAdded } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { AccessControlError } from "@lib/auth/errors";
@@ -87,7 +87,8 @@ export const acceptInvitation = async (invitationId: string) => {
     ability.user.id,
     { type: "Form", id: invitation.templateId },
     "InvitationAccepted",
-    `${user.id} has accepted an invitation`
+    AuditLogDetails.AcceptedInvitation,
+    { userId: user.id }
   );
 
   // some existing events may not yet have the 'invitedBy' attribute.
@@ -97,7 +98,8 @@ export const acceptInvitation = async (invitationId: string) => {
     invitation.invitedBy ?? ability.user.id,
     { type: "Form", id: invitation.templateId },
     "GrantFormAccess",
-    `Access granted to ${user.id}`
+    AuditLogDetails.AccessGranted,
+    { grantedUserId: user.id }
   );
 
   notifyOwnersOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);

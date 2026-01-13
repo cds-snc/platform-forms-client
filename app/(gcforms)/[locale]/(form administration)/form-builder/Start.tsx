@@ -133,6 +133,7 @@ export const Start = () => {
       </div>
       <div className="flex flex-col justify-center tablet:flex-row">
         <button
+          data-testid="start-new-form"
           className={boxClass}
           onClick={async (e) => {
             e.preventDefault();
@@ -148,6 +149,7 @@ export const Start = () => {
         </button>
         <label>
           <div
+            data-testid="start-upload-form"
             tabIndex={0}
             role="button"
             className={boxClass}

@@ -13,6 +13,7 @@ export const DirectoryPicker = ({
   return (
     <Button
       theme="secondary"
+      data-testid="choose-location-button"
       onClick={async () => {
         try {
           const dirHandle = await showDirectoryPicker();
