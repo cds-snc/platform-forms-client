@@ -84,6 +84,7 @@ export const Publish = ({ id }: { id: string }) => {
         publishFormType: formType,
         publishDescription: description,
         publishReason: reasonForPublish,
+        redirectAfter: `/${i18n.language}/form-builder/${id}/published`,
       });
       if (error || !formRecord) {
         throw new Error(error);
@@ -93,7 +94,6 @@ export const Publish = ({ id }: { id: string }) => {
 
       // Note we don't reset setPublishing(false) here as we're navigating away
       ga("publish_form");
-      router.push(`/${i18n.language}/form-builder/${id}/published`);
     } catch (e) {
       logMessage.error(e);
       setError(true);

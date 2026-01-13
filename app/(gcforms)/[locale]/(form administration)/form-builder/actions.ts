@@ -33,6 +33,7 @@ import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
 import { BrandProperties, NotificationsInterval } from "@gcforms/types";
+import { redirect } from "next/navigation";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -151,12 +152,14 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
       publishReason,
       publishFormType,
       publishDescription,
+      redirectAfter,
     }: {
       id: string;
       isPublished: boolean;
       publishReason: string;
       publishFormType: string;
       publishDescription: string;
+      redirectAfter?: string;
     }
   ): Promise<{
     formRecord: FormRecord | null;
@@ -177,6 +180,8 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
       }
 
       revalidatePath("/form-builder/[id]", "layout");
+
+      redirectAfter && redirect(redirectAfter);
 
       return { formRecord: response };
     } catch (error) {
