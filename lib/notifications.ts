@@ -57,6 +57,13 @@ export const sendNotifications = async (formId: string, titleEn: string, titleFr
   }
 };
 
+/**
+ * Returns whether the given user has notifications enabled for the given form
+ *
+ * @param formId
+ * @param userId
+ * @returns
+ */
 export const getUserNotificationSettingsForForm = async (formId: string, userId: string) => {
   const template = await prisma.template
     .findFirst({
@@ -79,6 +86,12 @@ export const getUserNotificationSettingsForForm = async (formId: string, userId:
   return !!template?.notificationsUsers.length;
 };
 
+/**
+ * Returns a list of users associated with the form and their notification settings
+ *
+ * @param formId
+ * @returns
+ */
 export const getNotificationsUsersForForm = async (formId: string) => {
   const usersAndNotificationsUsers = await prisma.template
     .findUnique({

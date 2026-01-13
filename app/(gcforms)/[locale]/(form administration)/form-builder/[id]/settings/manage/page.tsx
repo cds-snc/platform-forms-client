@@ -48,20 +48,24 @@ export default AuthenticatedPage(
       closedDetails = closedData?.closedDetails;
     }
 
+    // Get logged in user's notification setting for this form
     const loggedInUserNotificationsSetting = await getUserNotificationSettingsForForm(
       id,
       props.session.user.id
     );
 
+    // Get list of users and their notification settings for this form
     const userNotificationsForForm = await getNotificationsUsersForForm(id);
 
+    // Is the currently logged in user assigned to this form
     const userIsNotifiable = userNotificationsForForm
       ? userNotificationsForForm.some((user) => user.id === props.session.user.id)
       : false;
 
-    const filteredUserNotifications = userNotificationsForForm
-      ? userNotificationsForForm.filter((user) => user.id !== props.session.user.id)
-      : null;
+    // Remove logged in user from list for display
+    // const filteredUserNotifications = userNotificationsForForm
+    //   ? userNotificationsForForm.filter((user) => user.id !== props.session.user.id)
+    //   : null;
 
     return (
       <>
@@ -70,7 +74,7 @@ export default AuthenticatedPage(
           formId={id}
           userIsNotifiable={userIsNotifiable}
           userHasNotificationsEnabled={loggedInUserNotificationsSetting}
-          userNotificationsForForm={filteredUserNotifications}
+          userNotificationsForForm={userNotificationsForForm}
           loggedInUser={props.session.user}
         />
       </>
