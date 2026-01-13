@@ -88,6 +88,15 @@ export const ErrorListMessage = ({
         },
       });
     default:
+      // For non default validation errors, use a specific error message if one exists
+      if (
+        defaultValue &&
+        typeof defaultValue === "string" &&
+        !defaultValue.toString().includes(t("input-validation.error-list.default"))
+      ) {
+        return `${defaultValue}: ${question}`;
+      }
+
       return t("input-validation.error-list.default", {
         question,
         lng: language,
