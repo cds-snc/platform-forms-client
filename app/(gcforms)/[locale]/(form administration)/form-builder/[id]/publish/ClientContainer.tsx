@@ -19,10 +19,5 @@ export const ClientContainer = ({ children, id }: { children: React.ReactNode; i
     }
   }, [id, isPublished, language, router]);
 
-  // If published, show nothing while redirecting
-  if (isPublished !== undefined && isPublished) {
-    return null;
-  }
-
   return children;
 };

@@ -36,14 +36,12 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished,
     getSchema,
     getName,
-    getIsPublished,
   } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
     setIsPublished: s.setIsPublished,
     getSchema: s.getSchema,
     getName: s.getName,
-    getIsPublished: s.getIsPublished,
   }));
 
   if (storeId && storeId !== id) {
@@ -210,16 +208,6 @@ export const Publish = ({ id }: { id: string }) => {
           handleClose={() => handlePrePublishClose()}
           handleConfirm={() => handlePrePublish()}
         />
-      )}
-
-      {getIsPublished() && (
-        <>
-          <meta
-            httpEquiv="refresh"
-            content={`0; url='/${i18n.language}/form-builder/${id}/published'`}
-          />
-          <div data-testid="redirecting-message" className="mt-5"></div>
-        </>
       )}
     </div>
   );
