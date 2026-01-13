@@ -1,6 +1,7 @@
 import { GCNotifyConnector, type Personalisation } from "@gcforms/connectors";
 import { logMessage } from "@lib/logger";
 import { traceFunction } from "../otel";
+import { notifyCatcher } from "../notifyCatcher";
 const gcNotifyConnector = GCNotifyConnector.default(process.env.NOTIFY_API_KEY ?? "");
 
 export const sendEmail = async (email: string, personalisation: Personalisation, type: string) => {
@@ -14,6 +15,11 @@ export const sendEmail = async (email: string, personalisation: Personalisation,
       const templateId = process.env.TEMPLATE_ID;
       if (!templateId) {
         throw new Error("No Notify template ID configured.");
+      }
+
+      if (process.env.APP_ENV === "local") {
+        notifyCatcher(email, personalisation);
+        return;
       }
 
       await gcNotifyConnector.sendEmail(email, templateId, personalisation);
