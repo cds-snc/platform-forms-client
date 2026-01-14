@@ -3,10 +3,9 @@ import { fallbackLng, languages } from "./i18n/settings";
 import type { NextRequest } from "next/server";
 import { generateCSP } from "@lib/cspScripts";
 import { logMessage } from "@lib/logger";
-import { NextAuthRequest } from "next-auth/lib";
+import { NextAuthRequest } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
-import type { AppRouteHandlerFnContext } from "next-auth/lib/types";
 import { JWT } from "next-auth/jwt";
 import { BODY_SIZE_LIMIT } from "@root/constants";
 
@@ -82,7 +81,7 @@ export const config = {
 // TOMORROW
 // Stop files like .map.js from being included in the middleware
 
-export default async function proxy(req: NextRequest, ctx: AppRouteHandlerFnContext) {
+export default async function proxy(req: NextRequest, ctx: { params: Promise<unknown> }) {
   const pathname = req.nextUrl.pathname;
   const searchParams = req.nextUrl.searchParams.toString();
 

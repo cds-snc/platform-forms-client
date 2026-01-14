@@ -31,12 +31,11 @@ ENV NEXT_PUBLIC_API_URL=$API_URL
 RUN corepack enable && yarn set version stable
 RUN yarn workspaces focus gcforms
 RUN yarn build
-RUN yarn workspaces focus gcforms --production
 
 FROM node:24-alpine AS final
 LABEL maintainer="-"
 
-ENV PORT 3000
+ENV PORT=3000
 ENV NODE_ENV=production
 
 ARG COGNITO_APP_CLIENT_ID

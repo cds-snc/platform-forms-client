@@ -11,7 +11,7 @@ import { logMessage } from "./logger";
 import { sqsClient, dynamoDBDocumentClient } from "./integration/awsServicesConnector";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 
 export const AuditLogEvent = {
   // Form Events
