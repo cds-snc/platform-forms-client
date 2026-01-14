@@ -62,11 +62,6 @@ export default AuthenticatedPage(
       ? userNotificationsForForm.some((user) => user.id === props.session.user.id)
       : false;
 
-    // Remove logged in user from list for display
-    // const filteredUserNotifications = userNotificationsForForm
-    //   ? userNotificationsForForm.filter((user) => user.id !== props.session.user.id)
-    //   : null;
-
     return (
       <>
         {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}

@@ -32,15 +32,20 @@ export const Notifications = ({
   const updateNotificationsError = t("settings.notifications.error.updateNotifications");
   const updateNotificationsSuccess = t("settings.notifications.success.updateNotifications");
 
+  const [usersList, setUsersList] = React.useState(userNotificationsForForm);
+
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(
     userHasNotificationsEnabled
   );
 
-  const [usersList, setUsersList] = React.useState(userNotificationsForForm);
-
   const { getDeliveryOption } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
   }));
+
+  // This is a legacy published form with email delivery, don't show Notifications
+  if (getDeliveryOption()) {
+    return null;
+  }
 
   const handleToggleNotifications = async (enabled: boolean) => {
     const result = await updateNotificationsUser(formId, { ...loggedInUser, enabled });
@@ -59,16 +64,12 @@ export const Notifications = ({
     }
 
     toast.success(updateNotificationsSuccess);
+
     ga("form_notifications", {
       formId,
       action: enabled ? "enabled" : "disabled",
     });
   };
-
-  // This is a legacy published form with email delivery, don't show Notifications
-  if (getDeliveryOption()) {
-    return null;
-  }
 
   return (
     <div className="mb-10" data-testid="form-notifications">
