@@ -49,7 +49,7 @@ export default async function Page(props: { params: Promise<{ locale: string; id
   const linkFr = `${baseUrl}/fr/id/${id}`;
 
   if (!template.isPublished) {
-    redirect(`/${locale}/form-builder/${id}/publish`);
+    redirect(`/${locale}/form-builder/${id}/publish?from=published`);
   }
 
   return (
