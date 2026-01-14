@@ -81,6 +81,8 @@ export const Publish = ({ id }: { id: string }) => {
       // Optimistically set the form as published in the template store
       setId(id);
       setIsPublished(true);
+      // Note we don't reset setPublishing(false) here as we're navigating away
+      ga("publish_form");
 
       const { formRecord, error } = await updateTemplatePublishedStatus({
         id,
@@ -93,9 +95,6 @@ export const Publish = ({ id }: { id: string }) => {
       if (error || !formRecord) {
         throw new Error(error);
       }
-
-      // Note we don't reset setPublishing(false) here as we're navigating away
-      ga("publish_form");
     } catch (e) {
       if ((e as Error).message !== "NEXT_REDIRECT") {
         // Revert optimistic update
