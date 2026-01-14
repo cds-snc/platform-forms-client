@@ -115,7 +115,7 @@ export const getNotificationsUsersForForm = async (formId: string) => {
     .catch((e) => prismaErrors(e, null));
 
   if (!usersAndNotificationsUsers) {
-    logMessage.warn(`_getNotificationsUsersForForm no users found for formId ${formId}`);
+    logMessage.debug(`_getNotificationsUsers no users found for formId ${formId}`);
     return null;
   }
 
@@ -142,7 +142,7 @@ const _getDeliveryOption = async (formId: string) => {
     .catch((e) => prismaErrors(e, null));
 
   if (!template) {
-    logMessage.warn(`_getDeliveryOption template not found with id ${formId}`);
+    logMessage.debug(`_getDeliveryOption template not found with id ${formId}`);
     return null;
   }
 
@@ -182,7 +182,7 @@ const sendEmailNotificationsToAllUsers = async (
   multipleSubmissions: boolean = false
 ) => {
   if (!Array.isArray(users) || users.length === 0) {
-    logMessage.error("sendEmailNotificationsToAllUsers missing users");
+    logMessage.debug("sendEmailNotificationsToAllUsers missing users");
     return;
   }
   users.forEach(
