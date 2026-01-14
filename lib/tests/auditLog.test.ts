@@ -9,6 +9,11 @@ import { logEvent as logEventType } from "@lib/auditLogs";
 
 jest.mock("@aws-sdk/client-sqs");
 jest.unmock("@lib/auditLogs");
+jest.mock("@lib/ip", () => {
+  return {
+    getClientIp: jest.fn(() => Promise.resolve("1.1.1.1")),
+  };
+});
 
 let createdEnv: jest.Replaced<typeof process.env> | undefined = undefined;
 
@@ -101,6 +106,7 @@ describe("Audit Log Tests", () => {
           event: "UserSignIn",
           timestamp: currentTimeStamp,
           subject: { type: "User", id: "1" },
+          clientIp: "1.1.1.1",
         }),
         QueueUrl: "aws_test_url",
       });
