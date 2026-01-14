@@ -422,6 +422,25 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
   }
 }
 
+export async function getTemplatePublishedStatus(
+  formID: string
+): Promise<{ isPublished: boolean } | null> {
+  const template = await prisma.template
+    .findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        isPublished: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!template) return null;
+
+  return { isPublished: template.isPublished };
+}
+
 /**
  * Get a form template by ID (includes full template information but requires view permission)
  * @param formID ID of form template
