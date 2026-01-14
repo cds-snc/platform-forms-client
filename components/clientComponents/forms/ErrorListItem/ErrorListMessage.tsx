@@ -95,7 +95,7 @@ export const ErrorListMessage = ({
       if (
         defaultValue &&
         typeof defaultValue === "string" &&
-        !defaultValue.toString().includes(t("input-validation.required"))
+        !defaultValue.includes(t("input-validation.required"))
       ) {
         return `${defaultValue}: ${question}`;
       }
