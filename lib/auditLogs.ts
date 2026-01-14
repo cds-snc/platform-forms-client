@@ -29,7 +29,7 @@ export const AuditLogEvent = {
   GrantFormAccess: "GrantFormAccess",
   RevokeFormAccess: "RevokeFormAccess",
   UpdateNotificationsInterval: "UpdateNotificationsInterval",
-  UpdateNotificationsUserSetting: "UpdateNotificationsUserSetting",
+  UpdatedNotificationSettings: "UpdatedNotificationSettings",
   UpdateFormJsonConfig: "updateFormJsonConfig",
   // Invitations
   InvitationCreated: "InvitationCreated",
@@ -41,7 +41,7 @@ export const AuditLogEvent = {
   ConfirmResponse: "ConfirmResponse",
   IdentifyProblemResponse: "IdentifyProblemResponse",
   ListResponses: "ListResponses",
-  DeleteResponses: "DeleteResponses",
+  DeleteDraftResponses: "DeleteDraftResponses",
   RetrieveResponses: "RetrieveResponses",
   // User Events
   UserRegistration: "UserRegistration",
@@ -75,7 +75,7 @@ export const AuditLogEvent = {
   AuditLogsRead: "AuditLogsRead",
 } as const;
 
-export type AuditLogEventStrings = keyof typeof AuditLogEvent;
+export type AuditLogEvent = keyof typeof AuditLogEvent;
 
 export const AuditSubjectType = {
   User: "User",
@@ -104,7 +104,7 @@ export const AuditLogDetails = {
   CancelInvitation: "CancelInvitation",
   UserInvited: "UserInvited",
   CognitoUserIdentifier: "Cognito user unique identifier (sub): ${userId}",
-  UpdatedNotificationSettings: "`UpdatedNotificationSettings",
+  UpdatedNotificationSettings: "UpdatedNotificationSettings",
   ConfirmedResponsesForForm: "ConfirmedResponsesForForm",
   DeletedDraftResponsesForForm: "Deleted draft responses for form ${formId}",
   RetreiveSelectedFormResponses:
@@ -153,8 +153,8 @@ type AuditDetailsParams = {
   [AuditLogDetails.IncreasedThrottling]: { userId: string; formId: string; weeks: string };
   [AuditLogDetails.PermanentIncreasedThrottling]: { userId: string; formId: string };
   [AuditLogDetails.ResetThrottling]: { userId: string; formId: string };
-  [AuditLogDetails.DeclinedInvitation]: { userId: string };
-  [AuditLogDetails.AcceptedInvitation]: { userId: string };
+  [AuditLogDetails.DeclinedInvitation]: { userEmail: string };
+  [AuditLogDetails.AcceptedInvitation]: { userEmail: string };
   [AuditLogDetails.AccessGranted]: { grantedUserId: string };
   [AuditLogDetails.CancelInvitation]: { userId: string; invitationEmail: string };
   [AuditLogDetails.UserInvited]: { userEmail: string; invitationEmail: string };
@@ -366,7 +366,7 @@ const resolveDescription = (
 export const logEvent = async <T extends keyof AllAuditParams | undefined = undefined>(
   userId: string,
   subject: { type: keyof typeof AuditSubjectType; id?: string },
-  event: AuditLogEventStrings,
+  event: AuditLogEvent,
   ...args: T extends keyof AllAuditParams
     ? AllAuditParams[T] extends never
       ? [description: T]

@@ -13,7 +13,7 @@ import {
   VaultSubmission,
   StartFromExclusiveResponse,
 } from "@lib/types";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, AuditLogEvent, logEvent } from "./auditLogs";
 import {
   unprocessedSubmissionsCacheCheck,
   unprocessedSubmissionsCachePut,
@@ -581,7 +581,7 @@ export async function deleteDraftFormResponses(formID: string) {
     logEvent(
       user.id,
       { type: "Form", id: formID },
-      "DeleteResponses",
+      AuditLogEvent.DeleteDraftResponses,
       AuditLogDetails.DeletedDraftResponsesForForm,
       { formId: formID }
     );
