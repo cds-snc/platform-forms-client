@@ -12,6 +12,7 @@ import { sqsClient, dynamoDBDocumentClient } from "./integration/awsServicesConn
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import { prisma } from "@lib/integration/prismaConnector";
+import { getClientIP } from "./ip";
 
 export const AuditLogEvent = {
   // Form Events
@@ -377,13 +378,17 @@ export const logEvent = async <T extends keyof AllAuditParams | undefined = unde
   const descriptionParams = args[1] as Record<string, string> | undefined;
   const descriptionFinal = resolveDescription(description, descriptionParams);
 
+  const clientIp = await getClientIP();
+
   const auditLog = JSON.stringify({
     userId,
     event,
     timestamp: Date.now(),
     subject,
     description: descriptionFinal,
+    clientIp,
   });
+
   try {
     const queueUrl = await getQueueURL();
     if (!queueUrl) throw new Error("Audit Log Queue not connected");
