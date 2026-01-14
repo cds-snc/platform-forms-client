@@ -167,9 +167,9 @@
     "@types/unorm": "^1",
     "@types/uuid": "^8.3.4",
     "@vitejs/plugin-react": "^5.1.1",
-    "@vitest/browser": "^4.0.13",
-    "@vitest/browser-playwright": "^4.0.13",
-    "@vitest/ui": "^4.0.13",
+    "@vitest/browser": "^4.0.17",
+    "@vitest/browser-playwright": "^4.0.17",
+    "@vitest/ui": "^4.0.17",
     "autoprefixer": "^10.4.21",
     "aws-sdk-client-mock": "^3.0.0",
     "axe-core": "^4.10.3",
@@ -199,7 +199,7 @@
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "4.0.13",
+    "vitest": "^4.0.17",
     "vitest-browser-react": "^2.0.2"
   },
   "browserslist": [
