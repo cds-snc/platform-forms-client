@@ -10,6 +10,8 @@ import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 import { type HTMLProps } from "@lib/saveAndResume/types";
 import { copyObjectExcludingFileContent } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
 
+import { getValuesWithMatchedIds, getVisibleGroupsBasedOnValuesRecursive } from "@gcforms/core";
+
 export const useFormSubmissionData = ({
   language,
   type,
@@ -17,18 +19,19 @@ export const useFormSubmissionData = ({
   language: Language;
   type: "confirm" | "progress";
 }) => {
-  const {
-    groups,
-    getValues,
-    formRecord,
-    getGroupHistory,
-    getProgressData,
-    submissionId,
-    submissionDate,
-  } = useGCFormsContext();
+  const { groups, getValues, formRecord, getProgressData, submissionId, submissionDate } =
+    useGCFormsContext();
 
   const formValues: void | FormValues = getValues();
-  const groupHistoryIds = getGroupHistory();
+
+  const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, formValues || {});
+
+  const groupHistoryIds = getVisibleGroupsBasedOnValuesRecursive(
+    formRecord,
+    valuesWithMatchedIds,
+    "start"
+  );
+
   if (!formValues || !groups) throw new Error("Form values or groups are missing");
 
   // Clean up the values for use with the Review component (removing the file contents)
