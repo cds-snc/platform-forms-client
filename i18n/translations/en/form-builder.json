@@ -1391,7 +1391,7 @@
   },
   "confirmation": {
     "title": "Your form has been submitted",
-    "pageTitle": "Page title"
+    "pageTitle": "Confirmation page"
   },
   "next": "Continue",
   "skipLink": {
