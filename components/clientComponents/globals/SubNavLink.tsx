@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useMemo } from "react";
 import { useActivePathname } from "@lib/hooks/form-builder/useActivePathname";
 import { cn } from "@lib/utils";
 
@@ -26,10 +26,9 @@ export const SubNavLink = ({
   const activeClasses =
     "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white [&_svg]:focus:stroke-white";
 
-  const { asPath, activePathname } = useActivePathname();
-  const [active, setActive] = useState(defaultActive);
+  const { activePathname } = useActivePathname();
 
-  useEffect(() => {
+  const active = useMemo(() => {
     let linkPathname = new URL(href as string, location.href).pathname;
 
     const langRegex = /\/(en|fr)\//;
@@ -37,13 +36,11 @@ export const SubNavLink = ({
 
     // Only one nav link can be active at a time
     if (linkPathname === activePathname) {
-      setActive(true);
+      return true;
     } else {
-      if (!defaultActive) {
-        setActive(false);
-      }
+      return defaultActive;
     }
-  }, [asPath, href, setActive, activePathname, defaultActive]);
+  }, [href, activePathname, defaultActive]);
 
   return (
     <Link

@@ -4,7 +4,6 @@ import { isFutureDate } from "lib/utils/date/isFutureDate";
 import { useTranslation } from "@i18n/client";
 import { formClosingDateEst } from "lib/utils/date/utcToEst";
 import { logMessage } from "@lib/logger";
-import { useEffect, useState } from "react";
 
 export const ClosingNotice = ({
   closingDate,
@@ -14,14 +13,6 @@ export const ClosingNotice = ({
   language: string;
 }) => {
   const { t } = useTranslation("common");
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => setLoading(false), []);
-
-  if (loading) {
-    return null;
-  }
 
   if (!closingDate) {
     return null;

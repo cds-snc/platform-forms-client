@@ -208,13 +208,16 @@ export const formatDateTimeLong = (updatedAt: number | undefined, locale = "en-C
 };
 
 // Note: GMT = UTC as far as date-time is concerned
-export const formatDateTimeUTC = (timestamp: number | undefined, includeSeconds = false) => {
+export const formatDateTimeUTC = (
+  timestamp: number | undefined = Date.now(),
+  includeSeconds = false
+) => {
   const arrayOffset = includeSeconds ? -5 : -8;
-  const date = new Date(timestamp || 0);
+  const date = new Date(timestamp);
   return date.toISOString().replace("T", " ").slice(0, arrayOffset) + " UTC";
 };
 
-export const formatDateTimeUTCFr = (timestamp: number | undefined) => {
+export const formatDateTimeUTCFr = (timestamp: number | undefined = Date.now()) => {
   const date = formatDateTimeUTC(timestamp);
   const parts = date.split(" ");
   const dateParts = parts[0].split("-");
@@ -261,26 +264,6 @@ export const isAutoCompleteField = (type: string) => {
 export const getHost = () => {
   if (typeof window === "undefined") return "";
   return `${window.location.protocol}//${window.location.host}`;
-};
-
-export const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
-
-interface ElementType {
-  id: number;
-  type: string;
-}
-
-export const getQuestionNumber = (item: FormElement, elements: ElementType[], alpha?: boolean) => {
-  /* note we don't update the count when the item is richText */
-  const itemIndex = elements
-    .filter((object) => object.type !== "richText")
-    .findIndex((object) => object.id === item.id);
-
-  if (alpha) {
-    return alphabet[itemIndex];
-  }
-
-  return itemIndex + 1;
 };
 
 export const allowedTemplates = [

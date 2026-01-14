@@ -1,5 +1,5 @@
 import { Alert } from "@clientComponents/forms";
-import { ErrorStatus } from "../Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { useTranslation } from "@i18n/client";
 import { Language } from "@lib/types/form-builder-types";
 import { Trans } from "react-i18next";

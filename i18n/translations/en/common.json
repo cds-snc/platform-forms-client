@@ -85,6 +85,7 @@
   "required": "required",
   "all-required": "all checkboxes required",
   "required-field": "Required field",
+  "decimalSeparator": ".",
   "file-upload-button-text": "Choose file",
   "file-upload-sr-only-file-selected": "Currently selected file is",
   "file-upload-no-file-selected": "No file currently selected",

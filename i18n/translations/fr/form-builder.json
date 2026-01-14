@@ -250,7 +250,8 @@
       "title": "Chiffre",
       "amount": "Montant",
       "enterOnlyNumbers": "Saisissez un chiffre.",
-      "allowNegative": "permettre les valeurs numériques négatives"
+      "allowNegative": "permettre les valeurs numériques négatives",
+      "decimalPlaces": "Nombre de décimales pouvant être saisies"
     },
     "questionElement": "Éléments",
     "radio": {
@@ -1400,7 +1401,7 @@
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",
-    "pageTitle": "Titre de la page"
+    "pageTitle": "Page de confirmation"
   },
   "next": "Continuer",
   "skipLink": {

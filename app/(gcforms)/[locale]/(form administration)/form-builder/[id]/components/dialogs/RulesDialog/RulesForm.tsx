@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useId } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
@@ -30,7 +30,7 @@ export const RulesForm = ({
   selectedOptionId: string | null;
 }) => {
   const { t } = useTranslation("form-builder");
-  const formId = `form-${Date.now()}`;
+  const formId = `form-${useId()}`;
   const [showLogicDetails, setShowLogicDetails] = useState(false);
 
   const { elements, form } = useTemplateStore((s) => ({
@@ -135,7 +135,7 @@ export const RulesForm = ({
             className={`border-x-4 border-gray-800 px-5 ${showLogicDetails ? "" : "hidden"}`}
           >
             <div className="my-4">
-              <Markdown options={{ forceBlock: true }}>{t("logic.tryitout.text")}</Markdown>
+              <Markdown options={{ forceBlock: false }}>{t("logic.tryitout.text")}</Markdown>
             </div>
             <Button theme={"primary"} onClick={tryLogicView}>
               {t("logic.tryitout.open")}
