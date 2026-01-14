@@ -422,9 +422,7 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
   }
 }
 
-export async function getTemplatePublishedStatus(
-  formID: string
-): Promise<{ isPublished: boolean } | null> {
+export async function getTemplatePublishedStatus(formID: string): Promise<boolean | null> {
   const template = await prisma.template
     .findUnique({
       where: {
@@ -438,7 +436,7 @@ export async function getTemplatePublishedStatus(
 
   if (!template) return null;
 
-  return { isPublished: template.isPublished };
+  return template.isPublished;
 }
 
 /**
