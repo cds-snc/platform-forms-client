@@ -166,9 +166,10 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
     error?: string;
   }> => {
     let hasError;
+    let response: FormRecord | null = null;
 
     try {
-      const response = await updateIsPublishedForTemplate(
+      response = await updateIsPublishedForTemplate(
         formID,
         isPublished,
         publishReason,
@@ -181,7 +182,9 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
         );
       }
 
-      revalidatePath("/form-builder/[id]", "layout");
+      // Revalidate the form-builder layout and the specific published page
+      revalidatePath(`/form-builder/${formID}`, "layout");
+      revalidatePath(`/form-builder/${formID}/published`, "page");
     } catch (error) {
       hasError = error;
     }
@@ -190,7 +193,7 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
       redirect(redirectAfter);
     }
 
-    return { formRecord: null, error: (hasError as Error).message };
+    return { formRecord: response, error: hasError ? (hasError as Error).message : undefined };
   }
 );
 
