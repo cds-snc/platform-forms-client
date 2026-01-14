@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.7.1](https://github.com/cds-snc/platform-forms-client/compare/v4.7.0...v4.7.1) (2026-01-14)
+
+
+### Bug Fixes
+
+* address complete layout ([#6676](https://github.com/cds-snc/platform-forms-client/issues/6676)) ([420da33](https://github.com/cds-snc/platform-forms-client/commit/420da33bc41b2c1d80d454c5dcb8749561f5fabe))
+* publish page redirect ([#6677](https://github.com/cds-snc/platform-forms-client/issues/6677)) ([a42a6fa](https://github.com/cds-snc/platform-forms-client/commit/a42a6fa53acb33e07da1e108a38a11090e123a44))
+
+
+### Miscellaneous Chores
+
+* Ensure published is set for template store ([#6691](https://github.com/cds-snc/platform-forms-client/issues/6691)) ([28a10e5](https://github.com/cds-snc/platform-forms-client/commit/28a10e53b459bea3133174f90f79f96e0b2613a5))
+* Use forwarded headers for getOrigin() ([#6690](https://github.com/cds-snc/platform-forms-client/issues/6690)) ([3b3612d](https://github.com/cds-snc/platform-forms-client/commit/3b3612d9939a5af5a680d84424892dd69a304470))
+
 ## [4.7.0](https://github.com/cds-snc/platform-forms-client/compare/v4.6.8...v4.7.0) (2026-01-12)
 
 
