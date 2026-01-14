@@ -36,6 +36,8 @@ export const Notifications = ({
     userHasNotificationsEnabled
   );
 
+  const [usersList, setUsersList] = React.useState(userNotificationsForForm);
+
   const { getDeliveryOption } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
   }));
@@ -48,6 +50,14 @@ export const Notifications = ({
     }
 
     setNotificationsEnabled(enabled);
+
+    // Update the user in the list as well
+    if (usersList) {
+      setUsersList(
+        usersList.map((user) => (user.id === loggedInUser.id ? { ...user, enabled } : user))
+      );
+    }
+
     toast.success(updateNotificationsSuccess);
     ga("form_notifications", {
       formId,
@@ -70,9 +80,7 @@ export const Notifications = ({
           onToggle={handleToggleNotifications}
         />
       )}
-      {userNotificationsForForm && (
-        <NotificationsUsersList userNotificationsForForm={userNotificationsForForm} />
-      )}
+      {usersList && <NotificationsUsersList userNotificationsForForm={usersList} />}
     </div>
   );
 };
