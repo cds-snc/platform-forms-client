@@ -43,14 +43,14 @@ export default async function Page(props: { params: Promise<{ locale: string; id
     redirect(`/${locale}/auth/login`);
   }
 
-  if (!template.isPublished) {
-    redirect(`/${locale}/form-builder/${id}/publish`);
-  }
-
   const baseUrl = await getOrigin();
 
   const linkEn = `${baseUrl}/en/id/${id}`;
   const linkFr = `${baseUrl}/fr/id/${id}`;
+
+  if (!template.isPublished) {
+    redirect(`/${locale}/form-builder/${id}/publish`);
+  }
 
   return (
     <ViewTransition>
