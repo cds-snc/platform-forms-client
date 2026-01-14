@@ -33,6 +33,7 @@ import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
 import { BrandProperties, NotificationsInterval } from "@gcforms/types";
+import { redirect } from "next/navigation";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -151,17 +152,21 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
       publishReason,
       publishFormType,
       publishDescription,
+      redirectAfter,
     }: {
       id: string;
       isPublished: boolean;
       publishReason: string;
       publishFormType: string;
       publishDescription: string;
+      redirectAfter?: string;
     }
   ): Promise<{
     formRecord: FormRecord | null;
     error?: string;
   }> => {
+    let hasError;
+
     try {
       const response = await updateIsPublishedForTemplate(
         formID,
@@ -177,11 +182,15 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
       }
 
       revalidatePath("/form-builder/[id]", "layout");
-
-      return { formRecord: response };
     } catch (error) {
-      return { formRecord: null, error: (error as Error).message };
+      hasError = error;
     }
+
+    if (!hasError && redirectAfter) {
+      redirect(redirectAfter);
+    }
+
+    return { formRecord: null, error: (hasError as Error).message };
   }
 );
 

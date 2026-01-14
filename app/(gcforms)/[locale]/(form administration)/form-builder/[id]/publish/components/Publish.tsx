@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -84,6 +84,7 @@ export const Publish = ({ id }: { id: string }) => {
         publishFormType: formType,
         publishDescription: description,
         publishReason: reasonForPublish,
+        redirectAfter: `/${i18n.language}/form-builder/${id}/published`,
       });
       if (error || !formRecord) {
         throw new Error(error);
@@ -93,12 +94,13 @@ export const Publish = ({ id }: { id: string }) => {
 
       // Note we don't reset setPublishing(false) here as we're navigating away
       ga("publish_form");
-      router.replace(`/${i18n.language}/form-builder/${id}/published`);
     } catch (e) {
-      logMessage.error(e);
-      setError(true);
-      setErrorCode(500);
-      setPublishing(false);
+      if ((e as Error).message !== "NEXT_REDIRECT") {
+        logMessage.error(e);
+        setError(true);
+        setErrorCode(500);
+        setPublishing(false);
+      }
     }
   };
 
