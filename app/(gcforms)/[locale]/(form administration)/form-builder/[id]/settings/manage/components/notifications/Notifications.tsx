@@ -32,6 +32,10 @@ export const Notifications = ({
   const updateNotificationsError = t("settings.notifications.error.updateNotifications");
   const updateNotificationsSuccess = t("settings.notifications.success.updateNotifications");
 
+  const [notificationsEnabled, setNotificationsEnabled] = React.useState(
+    userHasNotificationsEnabled
+  );
+
   const { getDeliveryOption } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
   }));
@@ -43,6 +47,7 @@ export const Notifications = ({
       return;
     }
 
+    setNotificationsEnabled(enabled);
     toast.success(updateNotificationsSuccess);
     ga("form_notifications", {
       formId,
@@ -61,7 +66,7 @@ export const Notifications = ({
       {userIsNotifiable && (
         <NotificationsUserSetting
           loggedInUser={loggedInUser}
-          userHasNotificationsEnabled={userHasNotificationsEnabled}
+          userHasNotificationsEnabled={notificationsEnabled}
           onToggle={handleToggleNotifications}
         />
       )}

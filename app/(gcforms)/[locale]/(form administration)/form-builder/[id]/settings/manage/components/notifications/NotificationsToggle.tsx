@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { startTransition, useOptimistic } from "react";
 import { ToggleLeft, ToggleRight } from "@serverComponents/icons";
 
 interface NotificationsToggleProps {
@@ -19,21 +19,28 @@ export const NotificationsToggle = ({
   offLabel,
   description,
 }: NotificationsToggleProps) => {
-  const [isChecked, setIsChecked] = useState(userHasNotificationsEnabled);
+  const [optimisticEnabled, setOptimisticEnabled] = useOptimistic(
+    userHasNotificationsEnabled,
+    (state, newState: boolean) => newState
+  );
 
-  const handleToggle = () => {
-    setIsChecked(!isChecked);
-    toggleChecked(!isChecked);
+  const handleToggle = async () => {
+    const newValue = !optimisticEnabled;
+    startTransition(() => {
+      setOptimisticEnabled(newValue);
+    });
+
+    await toggleChecked(newValue);
   };
 
-  const boldOn = isChecked ? "font-bold" : "font-normal";
-  const boldOff = !isChecked ? "font-bold" : "font-normal";
+  const boldOn = optimisticEnabled ? "font-bold" : "font-normal";
+  const boldOff = !optimisticEnabled ? "font-bold" : "font-normal";
 
   return (
     <div
       className={className}
       role="switch"
-      aria-checked={isChecked}
+      aria-checked={optimisticEnabled}
       tabIndex={0}
       onClick={handleToggle}
       onKeyDown={(e) => {
@@ -52,8 +59,8 @@ export const NotificationsToggle = ({
         >
           {onLabel}
         </span>
-        {!isChecked && <ToggleLeft className="inline-block w-12 fill-slate-500" />}
-        {isChecked && <ToggleRight className="inline-block w-12 fill-emerald-500" />}
+        {!optimisticEnabled && <ToggleLeft className="inline-block w-12 fill-slate-500" />}
+        {optimisticEnabled && <ToggleRight className="inline-block w-12 fill-emerald-500" />}
         <span
           id="notifications-switch-off"
           className={`ml-1 text-sm ${boldOn} ml-2`}
