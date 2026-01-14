@@ -104,6 +104,7 @@ export const Publish = ({ id }: { id: string }) => {
         logMessage.error(e);
         setError(true);
         setErrorCode(500);
+        setPublishing(false);
         return;
       }
     }
