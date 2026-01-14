@@ -46,6 +46,18 @@ export const ErrorListMessage = ({
     }
   }
 
+  // Consider refactoring the below to be more robust if there are more error
+  // base/default cases beyond the current required answer.
+
+  // For non default validation errors, use a specific error message if one exists
+  if (
+    defaultValue &&
+    typeof defaultValue === "string" &&
+    !defaultValue.includes(t("input-validation.required"))
+  ) {
+    return `${defaultValue}: ${question}`;
+  }
+
   switch (elementType) {
     case FormElementTypes.attestation:
       return t("input-validation.error-list.check-all", {
@@ -72,18 +84,6 @@ export const ErrorListMessage = ({
         },
       });
     case FormElementTypes.fileInput:
-      // Consider refactoring the below to be more robust if there are more error
-      // cases beyond the current default (required answer) or max file size error.
-
-      // For non default validation errors, use a specific error message if one exists
-      if (
-        defaultValue &&
-        typeof defaultValue === "string" &&
-        !defaultValue.includes(t("input-validation.required"))
-      ) {
-        return `${defaultValue}: ${question}`;
-      }
-
       return t("input-validation.error-list.file-input", {
         question,
         lng: language,
@@ -100,18 +100,6 @@ export const ErrorListMessage = ({
         },
       });
     default:
-      // Consider refactoring the below to be more robust if there are more error
-      // cases beyond the current default (required answer) or maxLenth validation error.
-
-      // For non default validation errors, use a specific error message if one exists
-      if (
-        defaultValue &&
-        typeof defaultValue === "string" &&
-        !defaultValue.includes(t("input-validation.required"))
-      ) {
-        return `${defaultValue}: ${question}`;
-      }
-
       return t("input-validation.error-list.default", {
         question,
         lng: language,
