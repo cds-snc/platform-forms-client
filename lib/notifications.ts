@@ -93,7 +93,7 @@ export const getUserNotificationSettingsForForm = async (formId: string, userId:
  * @returns
  */
 export const getNotificationsUsersForForm = async (formId: string) => {
-  const usersAndNotificationsUsers = await prisma.template
+  const template = await prisma.template
     .findUnique({
       where: {
         id: formId,
@@ -103,29 +103,29 @@ export const getNotificationsUsersForForm = async (formId: string) => {
           select: {
             id: true,
             email: true,
-          },
-        },
-        notificationsUsers: {
-          select: {
-            id: true,
+            notificationsTemplates: {
+              where: {
+                id: formId,
+              },
+              select: {
+                id: true,
+              },
+            },
           },
         },
       },
     })
     .catch((e) => prismaErrors(e, null));
 
-  if (!usersAndNotificationsUsers) {
+  if (!template) {
     logMessage.debug(`_getNotificationsUsers no users found for formId ${formId}`);
     return null;
   }
 
-  const { users, notificationsUsers } = usersAndNotificationsUsers;
-  const notificationsUserIds = new Set(notificationsUsers.map((u) => u.id));
-
-  return users.map((user) => ({
+  return template.users.map((user) => ({
     id: user.id,
     email: user.email,
-    enabled: notificationsUserIds.has(user.id),
+    enabled: user.notificationsTemplates.length > 0,
   }));
 };
 
