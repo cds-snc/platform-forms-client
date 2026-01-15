@@ -156,7 +156,7 @@ export const TextInput = (
           },
         })}
       />
-      <div id={"characterCountMessage" + id} aria-live="polite">
+      <div id={"characterCountMessage" + id} className="gc-error-message" aria-live="polite">
         {characterCountMessages &&
           maxLength &&
           remainingCharacters < maxLength * 0.25 &&
