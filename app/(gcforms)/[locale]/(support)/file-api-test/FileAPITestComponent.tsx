@@ -1,6 +1,7 @@
 "use client";
 import { useState, useCallback, useLayoutEffect } from "react";
 import { Button, Alert } from "@clientComponents/globals";
+import { DownloadIcon, UploadIcon } from "@serverComponents/icons";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { verifyPermission } from "@responses-pilot/lib/fileSystemHelpers";
 
@@ -183,6 +184,7 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
           )}
         </div>
       )}
+      <AdditionalResources />
     </div>
   );
 };
@@ -294,5 +296,84 @@ const BrowserInfo = () => {
         )}
       </p>
     </Alert.Info>
+  );
+};
+
+const AdditionalResources = () => {
+  const resources = [
+    {
+      title: "MDN Web Docs",
+      url: "https://developer.mozilla.org/en-US/docs/Web/API/File_System_API",
+      description: "Comprehensive documentation on the File System API",
+    },
+    {
+      title: "Web.dev Guide",
+      url: "https://web.dev/file-system-access/",
+      description: "Google's guide with practical examples and best practices",
+    },
+  ];
+
+  const itResources = [
+    {
+      title: "Microsoft Edge - File System Read Ask For URLs",
+      url: "https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/filesystemreadaskforurls",
+      description:
+        "Allow GC Forms to ask for read access to files. Configure in Group Policy under Administrative Templates > Microsoft Edge > Content settings.",
+      icon: <DownloadIcon className="size-10" />,
+    },
+    {
+      title: "Microsoft Edge - File System Write Ask For URLs",
+      url: "https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/filesystemwriteaskforurls",
+      description:
+        "Allow GC Forms to ask for write access to files. Configure in Group Policy under Administrative Templates > Microsoft Edge > Content settings.",
+      icon: <UploadIcon className="size-10" />,
+    },
+  ];
+
+  return (
+    <div className="mt-8 border-t pt-6">
+      <h3 className="mb-4 text-lg font-bold">For IT Administrators</h3>
+      <div className="grid gap-3">
+        {itResources.map((resource) => (
+          <div
+            key={resource.title}
+            className="grid grid-cols-[80px_1fr] gap-4 rounded border border-slate-200 bg-slate-50 p-4 hover:bg-slate-100"
+          >
+            <div className="flex items-start justify-center text-blue-600">{resource.icon}</div>
+            <div>
+              <a
+                href={resource.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-blue-600 hover:underline"
+              >
+                {resource.title}
+              </a>
+              <p className="mt-1 text-sm text-slate-600">{resource.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h3 className="mb-4 mt-6 text-base font-bold">Additional Resources</h3>
+      <div className="grid gap-3">
+        {resources.map((resource) => (
+          <div
+            key={resource.title}
+            className="rounded border border-slate-200 bg-slate-50 p-4 hover:bg-slate-100"
+          >
+            <a
+              href={resource.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-blue-600 hover:underline"
+            >
+              {resource.title}
+            </a>
+            <p className="mt-1 text-sm text-slate-600">{resource.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
