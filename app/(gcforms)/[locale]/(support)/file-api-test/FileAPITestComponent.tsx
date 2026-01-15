@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useLayoutEffect } from "react";
 import { Button, Alert } from "@clientComponents/globals";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { verifyPermission } from "@responses-pilot/lib/fileSystemHelpers";
@@ -150,25 +150,23 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
     <div className="max-w-2xl" data-locale={locale}>
       <div className="mb-6">
         <h2 className="mb-3 text-xl font-bold">File System Access API Test</h2>
-        <p className="mb-4 text-sm text-slate-700">
-          Test if your browser supports File API needed for response downloads.
+        <p className="mb-4 text-slate-700">
+          Test if your browser supports File API needed for bulk response downloads.
         </p>
         {!selectedDirectory && (
-          <Button onClick={runTests} disabled={isRunning} theme="primary">
-            {isRunning ? "Running..." : "Select a directory and Run Tests"}
-          </Button>
-        )}
-        {selectedDirectory && (
-          <>
-            <Alert.Info className="mb-4">
-              <Alert.Title headingTag="h3">{selectedDirectory.name}</Alert.Title>
-            </Alert.Info>
-            <Button onClick={runTests} disabled={isRunning} theme="primary">
-              {isRunning ? "Running..." : "Run Tests Again"}
-            </Button>
-          </>
+          <div className="rounded bg-slate-100 p-4">
+            <div className="flex items-start gap-4">
+              <Button onClick={runTests} disabled={isRunning} theme="primary">
+                {isRunning ? "Running..." : "Select a directory"}
+              </Button>
+              <p className="mt-2.5 text-sm text-slate-700">
+                Click to select a directory for testing. You will be prompted to grant permissions.
+              </p>
+            </div>
+          </div>
         )}
       </div>
+      <BrowserInfo />
       {results.length > 0 && (
         <div className="space-y-3">
           <h3 className="font-bold">Results</h3>
@@ -176,6 +174,13 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
             <TestResultItem key={result.feature} result={result} />
           ))}
           <TestSummary results={results} />
+          {selectedDirectory && (
+            <div className="rounded bg-slate-100 p-4">
+              <Button onClick={runTests} disabled={isRunning} theme="primary">
+                {isRunning ? "Running..." : "Run Tests Again"}
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -225,11 +230,68 @@ const TestSummary = ({ results }: { results: TestResult[] }) => {
   const passed = results.filter((r) => r.status === "pass").length;
   const failed = results.filter((r) => r.status === "fail").length;
   const allPassed = failed === 0 && passed === results.length;
+
   return (
     <Alert.Info className={allPassed ? "bg-green-50" : "bg-yellow-50"}>
       <Alert.Title headingTag="h3">{allPassed ? "✓ All Passed" : `✗ ${failed} Failed`}</Alert.Title>
       <p className="mt-2 text-sm">
         {passed}/{results.length} tests passed
+      </p>
+    </Alert.Info>
+  );
+};
+
+const BrowserInfo = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <Alert.Info className="bg-blue-50">
+        <Alert.Title headingTag="h3">Browser: Loading...</Alert.Title>
+      </Alert.Info>
+    );
+  }
+
+  // Detect browser
+  const userAgent = typeof navigator !== "undefined" ? navigator.userAgent : "";
+  const isChrome = /Chrome/.test(userAgent) && !/Edge|Edg/.test(userAgent);
+  const isEdge = /Edge|Edg/.test(userAgent);
+
+  let browserName = "Unknown Browser";
+  let settingsUrl = "";
+
+  if (isChrome) {
+    browserName = "Google Chrome";
+    settingsUrl = "chrome://settings/content/filesystem";
+  } else if (isEdge) {
+    browserName = "Microsoft Edge";
+    settingsUrl = "edge://settings/privacy/sitePermissions/allPermissions/fileEditing";
+  }
+
+  return (
+    <Alert.Info className="bg-blue-50">
+      <Alert.Title headingTag="h3">{`Browser: ${browserName}`}</Alert.Title>
+      <p className="mt-2 text-sm">
+        {settingsUrl ? (
+          <>
+            To manage File System Access permissions, visit your browser settings:{" "}
+            <a
+              href={settingsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-blue-600 hover:underline"
+            >
+              {settingsUrl}
+            </a>
+          </>
+        ) : (
+          "Browser detection unavailable. Please check your browser documentation for File System Access settings."
+        )}
       </p>
     </Alert.Info>
   );
