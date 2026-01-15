@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isPotentialSharedInbox } from "./validation";
+import { isPotentialSharedInbox } from "./isPotentialSharedInbox";
 
 describe("isPotentialSharedInbox", () => {
   describe("Valid personal email patterns (should return false)", () => {

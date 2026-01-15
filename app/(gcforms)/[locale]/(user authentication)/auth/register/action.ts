@@ -7,7 +7,6 @@ import {
   containsLowerCaseCharacter,
   containsNumber,
   containsSymbol,
-  isPotentialSharedInbox,
 } from "@lib/validation/validation";
 import { serverTranslation } from "@i18n";
 import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
@@ -18,6 +17,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
 import { logMessage } from "@lib/logger";
+import { isPotentialSharedInbox } from "@lib/validation/isPotentialSharedInbox";
 
 export interface ErrorStates {
   authError?: {

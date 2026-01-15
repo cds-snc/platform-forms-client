@@ -9,7 +9,7 @@ import { AddNoteDialog } from "./components/AddNoteDialog";
 import { authorization } from "@lib/privileges";
 import { AuthenticatedPage } from "@lib/pages/auth";
 import { authCheckAndThrow } from "@lib/actions";
-import { isPotentialSharedInbox } from "@lib/validation/validation";
+import { isPotentialSharedInbox } from "@lib/validation/isPotentialSharedInbox";
 
 export default AuthenticatedPage(
   [authorization.canViewAllUsers, authorization.canManageAllUsers],
