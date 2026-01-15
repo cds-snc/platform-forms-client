@@ -75,7 +75,7 @@ export const getNotificationsUser = AuthenticatedAction(async (session, formId: 
 
     if (template === null) {
       logMessage.warn(
-        `Can not notifications setting for user with id ${userId}
+        `Cannot update notifications setting for user with id ${userId}
           on template ${formId}. Template does not exist`
       );
       return null;
@@ -86,7 +86,8 @@ export const getNotificationsUser = AuthenticatedAction(async (session, formId: 
     if (!user) {
       logMessage.warn(
         `Cannot find notifications setting for user with id ${userId}
-          on template ${formId}. User does not exist`
+          on template ${formId}. User does not exist. This may be caused by
+          an attempt to access another user's settings.`
       );
       return null;
     }

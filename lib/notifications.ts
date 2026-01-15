@@ -81,7 +81,7 @@ export const getNotificationsUsers = async (formId: string) => {
     .catch((e) => prismaErrors(e, null));
 
   if (!usersAndNotificationsUsers) {
-    logMessage.warn(`_getNotificationsUsers no users found for formId ${formId}`);
+    logMessage.debug(`_getNotificationsUsers no users found for formId ${formId}`);
     return null;
   }
 
@@ -112,7 +112,7 @@ const _getDeliveryOption = async (formId: string) => {
     .catch((e) => prismaErrors(e, null));
 
   if (!template) {
-    logMessage.warn(`_getDeliveryOption template not found with id ${formId}`);
+    logMessage.debug(`_getDeliveryOption template not found with id ${formId}`);
     return null;
   }
 

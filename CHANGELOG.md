@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.7.2](https://github.com/cds-snc/platform-forms-client/compare/v4.7.1...v4.7.2) (2026-01-14)
+
+
+### Bug Fixes
+
+* Lexical warning regarding QuoteNode ([#6614](https://github.com/cds-snc/platform-forms-client/issues/6614)) ([342fbca](https://github.com/cds-snc/platform-forms-client/commit/342fbcac5ddc5d925e8de8ce85a591039bca0745))
+* save progress html with repeated sections ([#6699](https://github.com/cds-snc/platform-forms-client/issues/6699)) ([5517078](https://github.com/cds-snc/platform-forms-client/commit/5517078b74a18254f4c416eeb663a40aa1f2baed))
+* Trim whitespace from string inputs before validation ([#5739](https://github.com/cds-snc/platform-forms-client/issues/5739)) ([d533798](https://github.com/cds-snc/platform-forms-client/commit/d533798b5cd518a9deb868deacea7e9524671541))
+* update the error list to use a specific error message if one exists ([#6682](https://github.com/cds-snc/platform-forms-client/issues/6682)) ([1a2edda](https://github.com/cds-snc/platform-forms-client/commit/1a2edda7a07cb8729d1d2dce36e630bed0059f12))
+
+
+### Miscellaneous Chores
+
+* Publish published redirects ([#6697](https://github.com/cds-snc/platform-forms-client/issues/6697)) ([f53c20b](https://github.com/cds-snc/platform-forms-client/commit/f53c20b169fce2dca70b7c8a5d57918f0024995f))
+* update notification log messages to be less noisy ([#6700](https://github.com/cds-snc/platform-forms-client/issues/6700)) ([8d2447f](https://github.com/cds-snc/platform-forms-client/commit/8d2447fdc2a5ac71ce977b6e6afd9c7b25d52e29))
+
+## [4.7.1](https://github.com/cds-snc/platform-forms-client/compare/v4.7.0...v4.7.1) (2026-01-14)
+
+
+### Bug Fixes
+
+* address complete layout ([#6676](https://github.com/cds-snc/platform-forms-client/issues/6676)) ([420da33](https://github.com/cds-snc/platform-forms-client/commit/420da33bc41b2c1d80d454c5dcb8749561f5fabe))
+* publish page redirect ([#6677](https://github.com/cds-snc/platform-forms-client/issues/6677)) ([a42a6fa](https://github.com/cds-snc/platform-forms-client/commit/a42a6fa53acb33e07da1e108a38a11090e123a44))
+
+
+### Miscellaneous Chores
+
+* Ensure published is set for template store ([#6691](https://github.com/cds-snc/platform-forms-client/issues/6691)) ([28a10e5](https://github.com/cds-snc/platform-forms-client/commit/28a10e53b459bea3133174f90f79f96e0b2613a5))
+* Use forwarded headers for getOrigin() ([#6690](https://github.com/cds-snc/platform-forms-client/issues/6690)) ([3b3612d](https://github.com/cds-snc/platform-forms-client/commit/3b3612d9939a5af5a680d84424892dd69a304470))
+
 ## [4.7.0](https://github.com/cds-snc/platform-forms-client/compare/v4.6.8...v4.7.0) (2026-01-12)
 
 

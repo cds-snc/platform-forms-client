@@ -3,7 +3,7 @@ import { serverTranslation } from "@i18n";
 import { authCheckAndThrow } from "@lib/actions";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getFullTemplateByID } from "@lib/templates";
+import { getTemplatePublishedStatus } from "@lib/templates";
 
 import { RocketIcon } from "@serverComponents/icons/RocketIcon";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
@@ -37,18 +37,17 @@ export default async function Page(props: { params: Promise<{ locale: string; id
     ability: null,
   }));
 
-  const template = await getFullTemplateByID(id);
-
-  if (!session || !template) {
+  if (!session) {
     redirect(`/${locale}/auth/login`);
   }
 
-  if (!template.isPublished) {
-    redirect(`/${locale}/form-builder/${id}/publish`);
+  const isPublished = await getTemplatePublishedStatus(id);
+
+  if (!isPublished) {
+    redirect(`/${locale}/form-builder/${id}/publish?from=published`);
   }
 
   const baseUrl = await getOrigin();
-
   const linkEn = `${baseUrl}/en/id/${id}`;
   const linkFr = `${baseUrl}/fr/id/${id}`;
 
