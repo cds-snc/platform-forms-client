@@ -167,14 +167,16 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
           </div>
         )}
       </div>
-      <BrowserInfo />
+
       {results.length > 0 && (
         <div className="space-y-3">
+          <BrowserInfo />
           <h3 className="font-bold">Results</h3>
           {results.map((result) => (
             <TestResultItem key={result.feature} result={result} />
           ))}
           <TestSummary results={results} />
+
           {selectedDirectory && (
             <div className="rounded bg-slate-100 p-4">
               <Button onClick={runTests} disabled={isRunning} theme="primary">
@@ -184,6 +186,7 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
           )}
         </div>
       )}
+
       <AdditionalResources />
     </div>
   );
