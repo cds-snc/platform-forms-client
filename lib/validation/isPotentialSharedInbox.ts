@@ -22,9 +22,6 @@ export const isPotentialSharedInbox = (email: string): boolean => {
 
   if (!localPart) return false;
 
-  // Very long emails are suspicious
-  if (localPart.length > 35) return true;
-
   // Count separator types
   const dotCount = (localPart.match(/\./g) || []).length;
   const hyphenCount = (localPart.match(/-/g) || []).length;
@@ -49,6 +46,9 @@ export const isPotentialSharedInbox = (email: string): boolean => {
   if (dotCount === 1 && hyphenCount <= 1) {
     return false;
   }
+
+  // Very long emails may be suspicious if they don't follow the explicitly valid pattern above
+  if (localPart.length > 35) return true;
 
   // Flag emails with hyphens but no dots (e.g., word-word@, word-word-word@)
   // Valid personal emails should have at least one dot
