@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 interface DateModifiedProps {
   updatedAt: string | undefined;
@@ -16,9 +17,15 @@ export const DateModified = ({
   saveAndResume = false,
 }: DateModifiedProps) => {
   const { t } = useTranslation("common");
+  const { Event } = useCustomEvent();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    // Listen for submission progress event
+    const handleProgressUpdate = () => {
+      setIsSubmitting(true);
+    };
+
     // Check if submission loader is visible in DOM
     const checkSubmissionInProgress = () => {
       const loader = document.querySelector(
@@ -32,6 +39,9 @@ export const DateModified = ({
       }
     };
 
+    // Set up event listener for submission progress
+    Event.on(EventKeys.submitProgress, handleProgressUpdate);
+
     /*
     Set up a mutation observer to watch for the submission progress loader --- the date modified is at the layout level so we don't have an easy way to know if a submission is in progress outside of checking the DOM
     */
@@ -44,8 +54,10 @@ export const DateModified = ({
     });
 
     return () => {
+      Event.off(EventKeys.submitProgress, handleProgressUpdate);
       observer.disconnect();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!updatedAt) return null;
