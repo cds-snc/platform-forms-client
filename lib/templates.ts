@@ -1272,7 +1272,8 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
  */
 export async function cloneTemplate(
   formID: string,
-  allowDeleted: boolean
+  allowDeleted: boolean,
+  locale: string = "en"
 ): Promise<FormRecord | null> {
   // Ensure the user can create a new form (needed to persist a clone)
   // and that they can edit the source form.
@@ -1322,10 +1323,12 @@ export async function cloneTemplate(
     return null;
   }
 
+  const name = locale === "fr" ? `Copie de ${template.name}` : `Copy of ${template.name}`;
+
   // Build the create payload copying allowed fields. Do NOT copy apiServiceAccount or bearerToken.
   const createData: Prisma.TemplateCreateInput = {
     jsonConfig: template.jsonConfig as Prisma.JsonObject,
-    name: `Copy of ${template.name}`,
+    name,
     isPublished: false,
     formPurpose: template.formPurpose,
     publishReason: template.publishReason,
