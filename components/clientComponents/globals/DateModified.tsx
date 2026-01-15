@@ -32,7 +32,9 @@ export const DateModified = ({
       }
     };
 
-    // Set up a mutation observer to watch for the submission modal
+    /*
+    Set up a mutation observer to watch for the submission progress loader --- the date modified is at the layout level so we don't have an easy way to know if a submission is in progress outside of checking the DOM
+    */
     const observer = new MutationObserver(checkSubmissionInProgress);
     observer.observe(document.body, {
       childList: true,
