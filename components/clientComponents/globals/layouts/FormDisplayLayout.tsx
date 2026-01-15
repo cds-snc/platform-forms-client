@@ -14,6 +14,9 @@ interface FormDisplayLayoutProps extends React.PropsWithChildren {
   footer?: JSX.Element;
   language: Language;
   pathname?: string;
+  isPastClosingDate?: boolean;
+  step?: string;
+  saveAndResume?: boolean;
 }
 
 const FormDisplayHeader = ({
@@ -42,6 +45,9 @@ const FormDisplayLayout = ({
   footer,
   language,
   pathname = "",
+  isPastClosingDate = false,
+  step = "",
+  saveAndResume = false,
 }: FormDisplayLayoutProps) => {
   return (
     <>
@@ -59,7 +65,14 @@ const FormDisplayLayout = ({
         >
           <main id="content" className="h-full" tabIndex={-1}>
             {children}
-            {dateModified && <DateModified updatedAt={formRecord.updatedAt} />}
+            {dateModified && (
+              <DateModified
+                updatedAt={formRecord.updatedAt}
+                isPastClosingDate={isPastClosingDate}
+                step={step}
+                saveAndResume={saveAndResume}
+              />
+            )}
           </main>
         </div>
         {footer}
