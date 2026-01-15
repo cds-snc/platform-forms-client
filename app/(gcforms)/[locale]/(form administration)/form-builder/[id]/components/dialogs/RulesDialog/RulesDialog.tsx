@@ -35,11 +35,11 @@ export const RulesDialog = () => {
 
   const choiceRulesRef = React.useRef<ChoiceRule[]>([]);
 
-  const { getFormElementWithIndexById, elements, formId, updateField } = useTemplateStore((s) => ({
+  const { getFormElementWithIndexById, elements, updateField, getId } = useTemplateStore((s) => ({
     getFormElementWithIndexById: s.getFormElementWithIndexById,
     elements: s.form.elements,
-    formId: s.id,
     updateField: s.updateField,
+    getId: s.getId,
   }));
 
   const descriptionId = `descriptionId-${useId()}`;
@@ -105,9 +105,11 @@ export const RulesDialog = () => {
   };
 
   const handletryLogicView = () => {
+    const id = getId() || "0000";
+
     // Toggle the panel open as it may be closed.
     togglePanel && togglePanel(true);
-    router.push(`/${i18n.language}/form-builder/${formId}/edit/logic`);
+    router.push(`/${i18n.language}/form-builder/${id}/edit/logic`);
   };
 
   return (
