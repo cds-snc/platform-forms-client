@@ -18,14 +18,12 @@ export const Menu = ({
   name,
   isPublished,
   ttl,
-  direction = "up",
   status,
 }: {
   id: string;
   name: string;
   isPublished: boolean;
   ttl?: Date;
-  direction?: "up" | "down";
   status?: string;
 }) => {
   const {
@@ -146,7 +144,7 @@ export const Menu = ({
 
   return (
     <>
-      <MenuDropdown id={id} items={menuItemsList} direction={direction}>
+      <MenuDropdown id={id} items={menuItemsList}>
         <span className="mr-1 text-[2rem]" aria-hidden="true">
           ⋮
         </span>

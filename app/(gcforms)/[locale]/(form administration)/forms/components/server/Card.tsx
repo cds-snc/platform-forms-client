@@ -196,7 +196,6 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
             name={card.name}
             isPublished={card.isPublished}
             ttl={card.ttl ? card.ttl : undefined}
-            direction={"up"}
             status={status}
           />
         </div>
