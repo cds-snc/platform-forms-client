@@ -46,7 +46,9 @@ test.describe("Testing attestation fields", () => {
       await expect(page.locator(".gc-ordered-list li").first()).toBeVisible({ timeout: 10000 });
 
       // Verify error messages
-      await expect(page.locator("li")).toContainText("Check off all the boxes for");
+      await expect(page.locator("li")).toContainText(
+        "Read and check all boxes to confirm the items in this section.: I agree to:"
+      );
       await expect(page.getByTestId("errorMessage")).toContainText(
         "Read and check all boxes to confirm the items in this section."
       );
@@ -57,7 +59,9 @@ test.describe("Testing attestation fields", () => {
       await page.locator("[type='submit']").click();
 
       // Verify error messages
-      await expect(page.locator("li")).toContainText("Check off all the boxes for");
+      await expect(page.locator("li")).toContainText(
+        "Read and check all boxes to confirm the items in this section.: I agree to:"
+      );
       await expect(page.getByTestId("errorMessage")).toContainText(
         "Read and check all boxes to confirm the items in this section."
       );
