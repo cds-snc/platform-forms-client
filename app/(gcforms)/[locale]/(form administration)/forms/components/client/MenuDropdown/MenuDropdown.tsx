@@ -3,7 +3,6 @@ import React, { useRef, useEffect, useState } from "react";
 import "./MenuDropdown.css";
 import { useTranslation } from "@i18n/client";
 import { Menu } from "./Menu";
-import { Overlay } from "@clientComponents/globals/Overlay/Overlay";
 
 export interface MenuDropdownItemCallback {
   message: string;
@@ -30,7 +29,6 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuListRef = useRef<HTMLUListElement>(null);
   const [menuDropdown, setMenuDropdown] = useState({} as Menu);
-  const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
     if (menuButtonRef.current && menuListRef.current) {
@@ -41,44 +39,30 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         })
       );
     }
-    // If the browser supports the popover API, set the attribute imperatively
-    // to avoid React/TypeScript prop typing issues.
+    // Set custom lowercase attributes and popover/anchor styles imperatively
     try {
-      if (typeof document.createElement("div").showPopover === "function") {
-        // set empty popover attribute on the menu
-        menuListRef.current?.setAttribute("popover", "");
-        // set popovertarget on the button to associate them declaratively
-        menuButtonRef.current?.setAttribute("popovertarget", `menu-${id}`);
-        // set invoker attributes from Frontend Masters pattern
-        menuButtonRef.current?.setAttribute("command", "toggle-popover");
-        menuButtonRef.current?.setAttribute("commandfor", `menu-${id}`);
-        menuButtonRef.current?.setAttribute("interestfor", `menu-${id}`);
-        // set inline anchor-name for the button so CSS can reference it
-        menuButtonRef.current?.setAttribute("style", `anchor-name: --card-${id};`);
-        // set position-anchor on the menu to reference the same anchor
-        menuListRef.current?.setAttribute("style", `position-anchor: --card-${id};`);
+      if (menuButtonRef.current) {
+        menuButtonRef.current.setAttribute("popovertarget", `menu-${id}`);
+        menuButtonRef.current.setAttribute("command", "toggle-popover");
+        menuButtonRef.current.setAttribute("commandfor", `menu-${id}`);
+        menuButtonRef.current.setAttribute("interestfor", `menu-${id}`);
+
+        // named anchor inline
+        menuButtonRef.current.style.setProperty("anchor-name", `--card-${id}`);
+      }
+      if (menuListRef.current) {
+        // menuListRef.current.setAttribute("popover", "");
+        menuListRef.current.style.setProperty("position-anchor", `--card-${id}`);
       }
     } catch (e) {
-      // ignore
+      // noop
     }
-  }, []);
-
-  const handleToggle = () => {
-    // Using an if-else vs. single toggle, to make sure the menu and overlay states stay in sync
-    if (menuDropdown.isOpen()) {
-      menuDropdown?.close();
-      setShowOverlay(false);
-    } else {
-      menuDropdown?.open();
-      setShowOverlay(true);
-    }
-  };
+  }, [id]);
 
   return (
     <>
       <div className="relative">
         <button
-          onClick={handleToggle}
           onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
             // Note: Avoiding sending as React.KeyboardEvent.. keeps the menu more generic
             menuDropdown?.onMenuButtonKey(e as unknown as KeyboardEvent);
@@ -89,19 +73,17 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
           aria-haspopup="true"
           aria-controls={`menu-${id}`}
           ref={menuButtonRef}
-          // Inline named anchor so the menu can position relative to this trigger
-          style={{ anchorName: `--card-${id}` } as React.CSSProperties}
         >
           {children}
         </button>
         <ul
           id={`menu-${id}`}
-          // Let the browser control visibility via the native popover when supported
           className={
             "z-50 m-0 p-0 bg-white-default border border-black-default list-none" +
             (direction === "up" ? " -top-[13rem]" : "")
           }
           role="menu"
+          popover="auto"
           tabIndex={-1}
           aria-labelledby={`button-${id}`}
           aria-activedescendant={`mi-${id}-0`}
@@ -163,7 +145,6 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
             })}
         </ul>
       </div>
-      {showOverlay && <Overlay callback={handleToggle} />}
     </>
   );
 };
