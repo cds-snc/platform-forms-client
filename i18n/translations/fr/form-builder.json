@@ -922,7 +922,7 @@
   "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
   "settingsPurposeAndUse": {
     "title": "Usage prévu",
-    "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui sont dans Formulaires GC depuis plus de 45 jours.",
+    "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui se trouvent dans Formulaires GC au-delà de 45 jours.",
     "personalInfo": "Renseignements personnels servant à prendre une décision qui touche un individu",
     "learnMore": "En savoir plus sur les fins administratives",
     "learnMoreBox": {
