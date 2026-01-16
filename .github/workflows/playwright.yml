@@ -38,6 +38,8 @@ jobs:
       TOKEN_SECRET: testKey
       APP_ENV: test
       NEXT_PUBLIC_APP_ENV: test
+      NEXT_PUBLIC_ZITADEL_URL: https://auth.forms-staging.cdssandbox.xyz
+      ZITADEL_CLIENT_ID: "11111111111111111"
       REDIS_URL: localhost
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/formsDB
       CI: true
