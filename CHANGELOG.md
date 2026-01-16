@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.7.3](https://github.com/cds-snc/platform-forms-client/compare/v4.7.2...v4.7.3) (2026-01-16)
+
+
+### Bug Fixes
+
+* French "Copy of" when duplicating a form in French interface ([#6705](https://github.com/cds-snc/platform-forms-client/issues/6705)) ([58ba395](https://github.com/cds-snc/platform-forms-client/commit/58ba395ec0089d3d4c7f056d90d852eb1ca6a3df))
+
+
+### Miscellaneous Chores
+
+* add branding for Winterlude ([#6710](https://github.com/cds-snc/platform-forms-client/issues/6710)) ([49a5bdd](https://github.com/cds-snc/platform-forms-client/commit/49a5bdd43480a8c896a0ead95f6b4b3dedf19643))
+* add client IP to audit logs ([#6703](https://github.com/cds-snc/platform-forms-client/issues/6703)) ([d8120aa](https://github.com/cds-snc/platform-forms-client/commit/d8120aaa12b5ba0503b1888eae2129f589a6e9b8))
+* content clarifications re: overdue responses ([#6711](https://github.com/cds-snc/platform-forms-client/issues/6711)) ([279fe6d](https://github.com/cds-snc/platform-forms-client/commit/279fe6d81f8660afcb905cfb40a4f1f081a80418))
+
 ## [4.7.2](https://github.com/cds-snc/platform-forms-client/compare/v4.7.1...v4.7.2) (2026-01-14)
 
 
