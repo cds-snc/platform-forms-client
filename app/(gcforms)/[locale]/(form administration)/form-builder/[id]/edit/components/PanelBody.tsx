@@ -96,7 +96,7 @@ export const PanelBody = ({
                   <SelectedElement item={item} elIndex={elIndex} formId={formId} />
                 </div>
                 {isFormattedDate && (
-                  <div className="mb-4 ml-4 self-end">
+                  <div className="my-4 ml-4 self-end">
                     <Button
                       theme="secondary"
                       onClick={() => {
@@ -113,6 +113,46 @@ export const PanelBody = ({
                 <div className="disabled pointer-events-none">
                   {t("maxCharacterLength")}
                   {maxLength}
+                </div>
+              )}
+
+              {isAddressComplete && (
+                <div>
+                  <div>
+                    {!item.properties.addressComponents?.canadianOnly && (
+                      <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
+                        {t("addElementDialog.addressComplete.country")}
+                      </div>
+                    )}
+                    <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
+                      {t("addElementDialog.addressComplete.street.label")}
+                    </div>
+                    <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
+                      {t("addElementDialog.addressComplete.city")}
+                    </div>
+                    <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
+                      {item.properties.addressComponents?.canadianOnly &&
+                        t("addElementDialog.addressComplete.components.province")}
+                      {!item.properties.addressComponents?.canadianOnly &&
+                        t("addElementDialog.addressComplete.components.provinceOrState")}
+                    </div>
+                    <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
+                      {item.properties.addressComponents?.canadianOnly &&
+                        t("addElementDialog.addressComplete.components.postalCode")}
+                      {!item.properties.addressComponents?.canadianOnly &&
+                        t("addElementDialog.addressComplete.components.postalCodeOrZip")}
+                    </div>
+                  </div>
+                  <div className="my-4 ml-4 self-end">
+                    <Button
+                      theme="secondary"
+                      onClick={() => {
+                        Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
+                      }}
+                    >
+                      {t("addElementDialog.addressComplete.customize")}
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>
@@ -144,14 +184,11 @@ export const PanelBody = ({
                   </Tooltip.Info>
                 </div>
               )}
-
-              {!isAddressComplete && (
-                <ElementRequired
-                  onRequiredChange={onRequiredChange}
-                  item={item}
-                  key={"element-required-" + item.id}
-                />
-              )}
+              <ElementRequired
+                onRequiredChange={onRequiredChange}
+                item={item}
+                key={"element-required-" + item.id}
+              />
             </div>
           </div>
 
@@ -164,53 +201,6 @@ export const PanelBody = ({
               )}
             </div>
           )}
-
-          <div>
-            {isAddressComplete && (
-              <div className="flex text-sm">
-                <div className="w-1/2">
-                  {!item.properties.addressComponents?.canadianOnly && (
-                    <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                      {t("addElementDialog.addressComplete.country")}
-                    </div>
-                  )}
-                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {t("addElementDialog.addressComplete.street.label")}
-                  </div>
-                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {t("addElementDialog.addressComplete.city")}
-                  </div>
-                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {item.properties.addressComponents?.canadianOnly &&
-                      t("addElementDialog.addressComplete.components.province")}
-                    {!item.properties.addressComponents?.canadianOnly &&
-                      t("addElementDialog.addressComplete.components.provinceOrState")}
-                  </div>
-                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {item.properties.addressComponents?.canadianOnly &&
-                      t("addElementDialog.addressComplete.components.postalCode")}
-                    {!item.properties.addressComponents?.canadianOnly &&
-                      t("addElementDialog.addressComplete.components.postalCodeOrZip")}
-                  </div>
-                </div>
-                <div className="my-4 ml-4 w-1/2 self-end">
-                  <ElementRequired
-                    onRequiredChange={onRequiredChange}
-                    item={item}
-                    key={"element-required-" + item.id}
-                  />
-                  <Button
-                    theme="secondary"
-                    onClick={() => {
-                      Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
-                    }}
-                  >
-                    {t("addElementDialog.addressComplete.customize")}
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       )}
     </>
