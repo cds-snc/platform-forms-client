@@ -912,7 +912,7 @@
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox. This can be a shared inbox.",
   "settingsPurposeAndUse": {
     "title": "Intended use",
-    "description": "We’ll use this to inform the retention of responses in GC Forms, that extend beyond 45 days.",
+    "description": "We’ll use this to inform the process for responses that stay in GC Forms beyond 45 days.",
     "personalInfo": "Personal information used to make a decision about an individual",
     "learnMore": "Learn more about administrative purposes",
     "learnMoreBox": {
