@@ -2,69 +2,29 @@
    Use CSS Anchor Positioning when supported to position the popover.
 */
 
-@supports (anchor-name: --any) {
-  /* The trigger button will set a named anchor inline (e.g. --card-<id>)
-     The menu will reference that anchor and the UA will position it.
-  */
+[popover] {
+  /* preferred placement: above the trigger, aligned to span-right */
+  position-area: top span-right;
+  /* flip strategies per Frontend Masters: https://frontendmasters.com/blog/popover-context-menus-with-anchor-positioning/ */
+  position-try:
+    flip-block,
+    flip-inline,
+    flip-block flip-inline;
 
-  [popover] {
-    /* Use the anchor named by the trigger (we set anchorName inline as --card-<id>) */
-    position-anchor: --card;
-    /* preferred placement: above the trigger, aligned to span-right */
-    position-area: top span-right;
-    /* try flipping strategies in a sensible order if space is constrained */
-    position-try:
-      flip-block,
-      flip-inline,
-      flip-block flip-inline;
+  /* animate and hide by default */
+  translate: 0 0;
+  opacity: 0;
+  display: none;
+  transition-property: translate, opacity, display;
+  transition-duration: 250ms;
+  transition-behavior: allow-discrete;
 
-    /* animate and hide by default */
-    translate: 0 0;
-    opacity: 0;
-    display: none;
-    transition-property: translate, opacity, display;
-    transition-duration: 250ms;
-    transition-behavior: allow-discrete;
-
-    left: auto !important;
-    right: auto !important;
-  }
-
-  [popover]:popover-open {
-    opacity: 1;
-    display: block;
-    translate: 0 0;
-  }
+  left: auto !important;
+  right: auto !important;
 }
 
-/* Fallback visual styling when anchor positioning isn't available */
-[popover],
-.menu-fallback {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  padding: 0.25rem 0;
-  border-radius: 4px;
-}
-/* MenuDropdown.css
-   Use CSS Anchor Positioning when supported to position the popover.
-*/
-
-@supports (anchor-name: --any) {
-  /* The trigger button will set --menu-anchor via inline style in future iterations if needed.
-     For now, we target the immediate containing block and let the UA position the popover
-     relative to the trigger using the popover API and position-anchor. */
-
-  [popover] {
-    position-anchor: --menu-anchor;
-    position-area: top span-right;
-    left: auto !important;
-    right: auto !important;
-  }
-}
-
-/* Fallback visual styling when anchor positioning isn't available */
-[popover],
-.menu-fallback {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  padding: 0.25rem 0;
-  border-radius: 4px;
+[popover]:popover-open {
+  opacity: 1;
+  display: block;
+  translate: 0 0;
 }

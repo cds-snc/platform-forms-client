@@ -24,7 +24,7 @@ interface MenuDropdownProps {
 }
 
 export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
-  const { children, id, items, direction } = props;
+  const { children, id, items } = props;
   const { t } = useTranslation(["common"]);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuListRef = useRef<HTMLUListElement>(null);
@@ -78,10 +78,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         </button>
         <ul
           id={`menu-${id}`}
-          className={
-            "z-50 m-0 p-0 bg-white-default border border-black-default list-none" +
-            (direction === "up" ? " -top-[13rem]" : "")
-          }
+          className={"z-50 m-0 list-none border border-black-default bg-white-default p-0"}
           role="menu"
           popover="auto"
           tabIndex={-1}
