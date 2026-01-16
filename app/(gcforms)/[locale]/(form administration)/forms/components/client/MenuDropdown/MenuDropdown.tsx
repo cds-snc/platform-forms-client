@@ -1,5 +1,6 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
+import "./MenuDropdown.css";
 import { useTranslation } from "@i18n/client";
 import { Menu } from "./Menu";
 import { Overlay } from "@clientComponents/globals/Overlay/Overlay";
@@ -40,6 +41,26 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         })
       );
     }
+    // If the browser supports the popover API, set the attribute imperatively
+    // to avoid React/TypeScript prop typing issues.
+    try {
+      if (typeof document.createElement("div").showPopover === "function") {
+        // set empty popover attribute on the menu
+        menuListRef.current?.setAttribute("popover", "");
+        // set popovertarget on the button to associate them declaratively
+        menuButtonRef.current?.setAttribute("popovertarget", `menu-${id}`);
+        // set invoker attributes from Frontend Masters pattern
+        menuButtonRef.current?.setAttribute("command", "toggle-popover");
+        menuButtonRef.current?.setAttribute("commandfor", `menu-${id}`);
+        menuButtonRef.current?.setAttribute("interestfor", `menu-${id}`);
+        // set inline anchor-name for the button so CSS can reference it
+        menuButtonRef.current?.setAttribute("style", `anchor-name: --card-${id};`);
+        // set position-anchor on the menu to reference the same anchor
+        menuListRef.current?.setAttribute("style", `position-anchor: --card-${id};`);
+      }
+    } catch (e) {
+      // ignore
+    }
   }, []);
 
   const handleToggle = () => {
@@ -68,13 +89,16 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
           aria-haspopup="true"
           aria-controls={`menu-${id}`}
           ref={menuButtonRef}
+          // Inline named anchor so the menu can position relative to this trigger
+          style={{ anchorName: `--card-${id}` } as React.CSSProperties}
         >
           {children}
         </button>
         <ul
           id={`menu-${id}`}
+          // Let the browser control visibility via the native popover when supported
           className={
-            "hidden absolute z-50 -left-[1rem] m-0 p-0 bg-white-default border border-black-default list-none" +
+            "z-50 m-0 p-0 bg-white-default border border-black-default list-none" +
             (direction === "up" ? " -top-[13rem]" : "")
           }
           role="menu"
