@@ -9,6 +9,7 @@ export const Loader = ({ message, className }: LoaderProps): React.ReactElement 
   return (
     <div
       id="react-hydration-loader"
+      data-id="submission-progress-loader"
       data-testid="loading-spinner"
       role="status"
       className={className}
