@@ -134,8 +134,8 @@
       "problem": "Problème",
       "done": "Complété",
       "downloadWithinXDays": "À téléchargez d'ici {{daysLeft}} jours",
-      "confirmWithinXDays": "À approuver pour supression d’ici {{daysLeft}} jours",
-      "removeWithinXDays": "Sera supprimée de manière permanente dans {{daysLeft}} jours",
+      "confirmWithinXDays": "À approuver d’ici {{daysLeft}} jours",
+      "removeWithinXDays": "Sera supprimée dans {{daysLeft}} jours",
       "overdue": "En retard",
       "wontRemove": "Ne peut pas être supprimée",
       "notSet": "Non réglée"
