@@ -1,8 +1,8 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
+import "./MenuDropdown.css";
 import { useTranslation } from "@i18n/client";
 import { Menu } from "./Menu";
-import { Overlay } from "@clientComponents/globals/Overlay/Overlay";
 
 export interface MenuDropdownItemCallback {
   message: string;
@@ -24,12 +24,11 @@ interface MenuDropdownProps {
 }
 
 export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
-  const { children, id, items, direction } = props;
+  const { children, id, items } = props;
   const { t } = useTranslation(["common"]);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuListRef = useRef<HTMLUListElement>(null);
   const [menuDropdown, setMenuDropdown] = useState({} as Menu);
-  const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
     if (menuButtonRef.current && menuListRef.current) {
@@ -40,24 +39,26 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         })
       );
     }
-  }, []);
 
-  const handleToggle = () => {
-    // Using an if-else vs. single toggle, to make sure the menu and overlay states stay in sync
-    if (menuDropdown.isOpen()) {
-      menuDropdown?.close();
-      setShowOverlay(false);
-    } else {
-      menuDropdown?.open();
-      setShowOverlay(true);
+    try {
+      if (menuButtonRef.current) {
+        menuButtonRef.current.setAttribute("popovertarget", `menu-${id}`);
+        menuButtonRef.current.setAttribute("command", "toggle-popover");
+        menuButtonRef.current.setAttribute("commandfor", `menu-${id}`);
+        menuButtonRef.current.style.setProperty("anchor-name", `--card-${id}`);
+      }
+      if (menuListRef.current) {
+        menuListRef.current.style.setProperty("position-anchor", `--card-${id}`);
+      }
+    } catch (e) {
+      // noop
     }
-  };
+  }, [id]);
 
   return (
     <>
       <div className="relative">
         <button
-          onClick={handleToggle}
           onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
             // Note: Avoiding sending as React.KeyboardEvent.. keeps the menu more generic
             menuDropdown?.onMenuButtonKey(e as unknown as KeyboardEvent);
@@ -73,11 +74,9 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         </button>
         <ul
           id={`menu-${id}`}
-          className={
-            "hidden absolute z-50 -left-[1rem] m-0 p-0 bg-white-default border border-black-default list-none" +
-            (direction === "up" ? " -top-[13rem]" : "")
-          }
+          className={"z-50 m-0 list-none border border-black-default bg-white-default p-0"}
           role="menu"
+          popover="auto"
           tabIndex={-1}
           aria-labelledby={`button-${id}`}
           aria-activedescendant={`mi-${id}-0`}
@@ -139,7 +138,6 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
             })}
         </ul>
       </div>
-      {showOverlay && <Overlay callback={handleToggle} />}
     </>
   );
 };
