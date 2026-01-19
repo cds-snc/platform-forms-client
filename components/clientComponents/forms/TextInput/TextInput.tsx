@@ -66,7 +66,13 @@ export const TextInput = (
   };
 
   const remainingCharactersMessage =
-    characterCountMessages.part1 + " " + remainingCharacters + " " + characterCountMessages.part2;
+    characterCountMessages.part1 +
+    " " +
+    remainingCharacters +
+    " " +
+    (remainingCharacters === 1 || remainingCharacters === 0
+      ? t("formElements.characterCount.part2-singular")
+      : characterCountMessages.part2);
 
   const tooManyCharactersMessage =
     characterCountMessages.part1Error +
