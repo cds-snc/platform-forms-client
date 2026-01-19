@@ -12,6 +12,7 @@ import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStat
 import { JWT } from "next-auth/jwt";
 import { cache } from "react";
 import { headers } from "next/headers";
+import { checkOne } from "@lib/cache/flags";
 
 /**
  * Checks the active status of a user using a cache strategy
@@ -217,6 +218,12 @@ const {
     async jwt({ token, account, trigger, session }) {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
+        // If the GCForms SSO provider was used, but is not enabled, refuse the session
+        const isZitadelLoginEnabled = await checkOne("zitadelLogin");
+        if (!isZitadelLoginEnabled && account.provider === "gcForms") {
+          throw new Error("Provider for GCForms SSO is not an active option");
+        }
+
         if (!token.email) {
           logMessage.error(`JWT token does not have an email for user with name ${token.name}`);
           throw new Error(`JWT token`);
