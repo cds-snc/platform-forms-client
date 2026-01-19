@@ -1,55 +1,56 @@
-import React from "react";
+import React, { startTransition, useOptimistic } from "react";
 import { ToggleLeft, ToggleRight } from "@serverComponents/icons";
 
 interface NotificationsToggleProps {
   className?: string;
-  isChecked: boolean;
-  toggleChecked: () => void;
+  userHasNotificationsEnabled: boolean;
+  toggleChecked: (enabled: boolean) => Promise<void>;
   onLabel: string;
   offLabel: string;
   tabIndex?: number;
   description?: string;
-  disabled?: boolean;
 }
 
 export const NotificationsToggle = ({
   className = "",
-  isChecked,
+  userHasNotificationsEnabled,
   toggleChecked,
   onLabel,
   offLabel,
   description,
-  disabled,
 }: NotificationsToggleProps) => {
-  const boldOn = isChecked ? "font-bold" : "font-normal";
-  const boldOff = !isChecked ? "font-bold" : "font-normal";
+  const [optimisticEnabled, setOptimisticEnabled] = useOptimistic(
+    userHasNotificationsEnabled,
+    (state, newState: boolean) => newState
+  );
+
+  const handleToggle = async () => {
+    const newValue = !optimisticEnabled;
+    startTransition(() => {
+      setOptimisticEnabled(newValue);
+    });
+
+    await toggleChecked(newValue);
+  };
+
+  const boldOn = optimisticEnabled ? "font-bold" : "font-normal";
+  const boldOff = !optimisticEnabled ? "font-bold" : "font-normal";
 
   return (
     <div
       className={className}
       role="switch"
-      aria-checked={isChecked}
-      {...(disabled && { "aria-disabled": true })}
+      aria-checked={optimisticEnabled}
       tabIndex={0}
-      onClick={() => {
-        if (disabled) {
-          return;
-        }
-        toggleChecked();
-      }}
+      onClick={handleToggle}
       onKeyDown={(e) => {
-        if (disabled) {
-          return;
-        }
         if (e.key === "Enter" || e.key === " ") {
-          // toggle the switch to the opposite state
-          toggleChecked();
-          // Stop the browser "space" key default behavior of scrolling down
+          handleToggle();
           e.preventDefault();
         }
       }}
     >
-      <div className={`whitespace-nowrap ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}>
+      <div className={`whitespace-nowrap`}>
         <span className="sr-only">{description}</span>
         <span
           id="notifications-switch-on"
@@ -58,8 +59,8 @@ export const NotificationsToggle = ({
         >
           {onLabel}
         </span>
-        {!isChecked && <ToggleLeft className="inline-block w-12 fill-slate-500" />}
-        {isChecked && <ToggleRight className="inline-block w-12 fill-emerald-500" />}
+        {!optimisticEnabled && <ToggleLeft className="inline-block w-12 fill-slate-500" />}
+        {optimisticEnabled && <ToggleRight className="inline-block w-12 fill-emerald-500" />}
         <span
           id="notifications-switch-off"
           className={`ml-1 text-sm ${boldOn} ml-2`}
