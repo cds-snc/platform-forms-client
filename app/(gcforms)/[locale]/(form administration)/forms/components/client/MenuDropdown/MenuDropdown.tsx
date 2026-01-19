@@ -39,19 +39,15 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         })
       );
     }
-    // Set custom lowercase attributes and popover/anchor styles imperatively
+
     try {
       if (menuButtonRef.current) {
         menuButtonRef.current.setAttribute("popovertarget", `menu-${id}`);
         menuButtonRef.current.setAttribute("command", "toggle-popover");
         menuButtonRef.current.setAttribute("commandfor", `menu-${id}`);
-        menuButtonRef.current.setAttribute("interestfor", `menu-${id}`);
-
-        // named anchor inline
         menuButtonRef.current.style.setProperty("anchor-name", `--card-${id}`);
       }
       if (menuListRef.current) {
-        // menuListRef.current.setAttribute("popover", "");
         menuListRef.current.style.setProperty("position-anchor", `--card-${id}`);
       }
     } catch (e) {
