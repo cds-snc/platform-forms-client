@@ -17,6 +17,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
 import { logMessage } from "@lib/logger";
+import { isPotentialSharedInbox } from "@lib/validation/isPotentialSharedInbox";
 
 export interface ErrorStates {
   authError?: {
@@ -87,12 +88,7 @@ export const register = async (
   }
 
   // Check email for potential shared access email and flag to Slack if found
-  const addressPart = result.output.username.split("@")[0];
-
-  if (
-    (addressPart.includes("-") && !addressPart.includes(".")) ||
-    (!addressPart.includes(".") && !addressPart.includes("-"))
-  ) {
+  if (isPotentialSharedInbox(result.output.username)) {
     logMessage.warn(
       `Flagged new GC Forms account \nPotential shared access email address: ${result.output.username} \nReview and deactivate account if it's a shared inbox \n\nSeverity level: 2`
     );

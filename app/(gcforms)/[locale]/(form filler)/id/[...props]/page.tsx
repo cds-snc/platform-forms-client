@@ -78,9 +78,9 @@ export default async function Page(props0: {
       pathname={pathname}
       language={language}
       formRecord={formRecord}
-      dateModified={
-        !isPastClosingDate && step !== "confirmation" && !(saveAndResume && step === "resume")
-      }
+      isPastClosingDate={isPastClosingDate}
+      step={step}
+      saveAndResume={saveAndResume}
       footer={footer}
     >
       <GCFormsProvider formRecord={formRecord} nonce={nonce}>
