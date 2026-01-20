@@ -11,12 +11,12 @@ import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Trans } from "react-i18next";
-import { Tooltip } from "@formBuilder/components/shared/Tooltip";
+
 import { Button } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { ManagedDataDetails } from "./ManagedDataDetails";
 
 export const PanelBody = ({
   item,
@@ -163,27 +163,7 @@ export const PanelBody = ({
                   {t(`autocompleteOptions.${item.properties.autoComplete}`)}
                 </div>
               )}
-              {item.properties.managedChoices && (
-                <div data-testid={`managedChoices-${item.id}`} className="mt-5 flex text-sm">
-                  <strong>{t("managedList.prefix")}</strong>{" "}
-                  <a
-                    href="https://github.com/cds-snc/gc-organisations"
-                    className="ml-2"
-                    target="_blank"
-                  >
-                    {t(`managedList.${item.properties.managedChoices}`)}
-                  </a>
-                  <Tooltip.Info side="top" triggerClassName="align-baseline ml-1">
-                    <strong>{t("tooltips.departmentElement.title")}</strong>
-                    <Trans
-                      ns="form-builder"
-                      i18nKey="tooltips.departmentElement.body"
-                      defaults="<a></a> <p></p>"
-                      components={{ a: <a />, p: <p /> }}
-                    />
-                  </Tooltip.Info>
-                </div>
-              )}
+              {item.properties.managedChoices && <ManagedDataDetails item={item} />}
               <ElementRequired
                 onRequiredChange={onRequiredChange}
                 item={item}
