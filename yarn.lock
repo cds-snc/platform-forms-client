@@ -3863,9 +3863,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/mdx@npm:16.1.1":
-  version: 16.1.1
-  resolution: "@next/mdx@npm:16.1.1"
+"@next/mdx@npm:16.1.4":
+  version: 16.1.4
+  resolution: "@next/mdx@npm:16.1.4"
   dependencies:
     source-map: "npm:^0.7.0"
   peerDependencies:
@@ -3876,7 +3876,7 @@ __metadata:
       optional: true
     "@mdx-js/react":
       optional: true
-  checksum: 10c0/591e2d28e5a345c24656b4918a5db91d10a206ace88d6a8171ba415e223b8cd2ad769dbe21bedb0cf9feadc1775be02ab72cecce71d52930811f12e3bff18394
+  checksum: 10c0/50fa39b820f2b638a604e493d0452d7c06a8f4f1fc3279c9ad6e02f12f9dc5d214b98f9c05d66e887c6db5aca3f04ec7642647271ee45dd2ccdc40eed537ea4b
   languageName: node
   linkType: hard
 
@@ -12847,7 +12847,7 @@ __metadata:
     "@headlessui/react": "npm:^2.2.9"
     "@jest/globals": "npm:^30.2.0"
     "@neshca/cache-handler": "npm:^1.2.1"
-    "@next/mdx": "npm:16.1.1"
+    "@next/mdx": "npm:16.1.4"
     "@opentelemetry/exporter-jaeger": "npm:^2.4.0"
     "@opentelemetry/exporter-trace-otlp-http": "npm:^0.210.0"
     "@opentelemetry/instrumentation-aws-sdk": "npm:^0.65.0"
