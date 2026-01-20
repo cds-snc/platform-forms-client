@@ -114,7 +114,7 @@
     "lodash.merge": "^4.6.2",
     "lodash.set": "4.3.2",
     "lodash.unset": "4.5.2",
-    "markdown-to-jsx": "9.6.0",
+    "markdown-to-jsx": "7.7.13",
     "native-file-system-adapter": "^3.0.1",
     "next": "16.1.4",
     "next-auth": "5.0.0-beta.29",
