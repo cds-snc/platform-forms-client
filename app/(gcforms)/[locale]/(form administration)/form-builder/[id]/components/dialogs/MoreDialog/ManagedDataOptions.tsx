@@ -2,7 +2,7 @@ import { FormElement, FormElementTypes } from "@lib/types";
 import { useTranslation } from "@root/i18n/client";
 import { useState } from "react";
 
-export const ManagedDataOrganizationsOptions = ({
+export const ManagedDataOptions = ({
   item,
   setItem,
 }: {
