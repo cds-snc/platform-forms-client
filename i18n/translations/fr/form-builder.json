@@ -595,12 +595,12 @@
   "managedList": {
     "prefix": "Liste gérée :",
     "departments": "Liste d’organisations du GC",
-    "crownCorporations": "Crown corporations",
-    "provincialTerritorial": "Provincial/Territorial",
-    "managedListOptions": "Organizations list options",
-    "includeDepartments": "Include departments",
-    "includeCrownCorporations": "Include crown corporations",
-    "includeProvincialTerritorial": "Include provincial/territorial"
+    "crownCorporations": "Sociétés d'État",
+    "provincialTerritorial": "Provinces et territoires",
+    "managedListOptions": "Options pour la liste d'organisations",
+    "includeDepartments": "Inclure les ministères et organismes",
+    "includeCrownCorporations": "Inclure les sociétés d'État",
+    "includeProvincialTerritorial": "Inclure les provinces et les territoires"
   },
   "maxCharacterLength": "Longueur maximale des caractères :",
   "maximumCharacterLength": "Longueur maximale des caractères",
