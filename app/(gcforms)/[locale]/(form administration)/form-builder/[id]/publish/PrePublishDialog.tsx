@@ -114,7 +114,7 @@ export const PrePublishDialog = ({
             <h3 className="gc-h4 mb-1 pb-0 text-lg">
               <div className="flex-col">
                 <span className="">{t("prePublishFormDialog.text1")}</span>
-                <legend className="gc-label required">
+                <legend className="gcds-label required">
                   <span data-testid="required" aria-hidden>
                     ({t("required")})
                   </span>
