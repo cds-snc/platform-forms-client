@@ -23,7 +23,7 @@ import { FileTypeOptions } from "./FileTypeOptions";
 import { NumberFieldOptions } from "./NumberFieldOptions";
 
 import { CopyItem } from "./CopyItem";
-import { ManagedDataOptions } from "./ManagedDataOrganizationsOptions";
+import { ManagedDataOptions } from "./ManagedDataOptions";
 
 export const MoreDialog = () => {
   const { getPathString, updateField, setChangeKey, getFormElementById } = useTemplateStore(
