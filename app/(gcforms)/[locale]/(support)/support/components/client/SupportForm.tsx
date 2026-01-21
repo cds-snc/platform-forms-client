@@ -181,9 +181,9 @@ export const SupportForm = () => {
               />
             </div>
             <fieldset className="focus-group">
-              <legend className="gc-label required">
+              <legend className="gcds-label required">
                 {t("support.request.title")}{" "}
-                <span data-testid="required" aria-hidden>
+                <span data-testid="required" className="label--required" aria-hidden>
                   ({t("required", { ns: "common" })})
                 </span>
               </legend>
