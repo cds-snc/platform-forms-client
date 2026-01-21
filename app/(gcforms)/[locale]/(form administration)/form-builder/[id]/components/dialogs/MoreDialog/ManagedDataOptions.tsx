@@ -14,8 +14,10 @@ export const ManagedDataOptions = ({
 
   if (typeof item.properties.managedChoices === "string") {
     initialManagedChoices = [item.properties.managedChoices];
-  } else {
-    initialManagedChoices = item.properties.managedChoices || [];
+  }
+
+  if (Array.isArray(item.properties.managedChoices)) {
+    initialManagedChoices = item.properties.managedChoices;
   }
 
   const [managedChoices, setManagedChoices] = useState<string[]>(initialManagedChoices);
