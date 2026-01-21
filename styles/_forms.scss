@@ -6,6 +6,8 @@
   }
 }
 
+@import "@cdssnc/gcds-tokens/build/web/css/components.css";
+
 // Import CSS variables from gcds-tokens
 @import "@cdssnc/gcds-tokens/build/web/css/components/heading.css";
 @import "@cdssnc/gcds-tokens/build/web/css/components/label.css";
@@ -26,7 +28,8 @@
 
 .gc-alert,
 .gc-error-message {
-  @apply md:text-sm text-base py-0 w-full text-red-700 mb-2;
+  @apply py-0 w-full mb-2;
+  color: var(--gcds-error-message-text-color);
 }
 
 .gc-error-message + .gc-input-text,

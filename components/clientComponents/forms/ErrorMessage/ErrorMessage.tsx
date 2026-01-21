@@ -15,7 +15,7 @@ export const ErrorMessage = (props: ErrorMessageProps): React.ReactElement => {
 
   return (
     <p data-testid="errorMessage" className={classes} id={id} role="alert">
-      {children}
+      <strong>{children}</strong>
     </p>
   );
 };
