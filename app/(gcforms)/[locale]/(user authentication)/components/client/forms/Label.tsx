@@ -34,9 +34,9 @@ export const Label = (props: LabelProps): React.ReactElement => {
 
   const classes = cn(
     {
-      "gc-label": !srOnly,
+      "gcds-label": !srOnly,
       "gc-sr-only": srOnly,
-      "gc-label--error": error,
+      "gcds-label--error": error,
     },
     className
   );

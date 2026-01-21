@@ -12,6 +12,7 @@
 
 @include meta.load-css("_input");
 @include meta.load-css("_textarea");
+@include meta.load-css("_label");
 @include meta.load-css("checkbox");
 @include meta.load-css("radio");
 @include meta.load-css("_dropdown");

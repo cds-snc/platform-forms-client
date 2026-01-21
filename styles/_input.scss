@@ -54,6 +54,11 @@
     background-color: var(--gcds-input-disabled-background);
     border-color: var(--gcds-input-disabled-text);
   }
+
+  .gcds-label,
+  .gcds-hint {
+    color: var(--gcds-input-disabled-text);
+  }
 }
 
 .gcds-input-wrapper input.gcds-error:not(:focus) {

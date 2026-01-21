@@ -54,6 +54,11 @@
     background-color: var(--gcds-textarea-disabled-background);
     border-color: var(--gcds-textarea-disabled-text);
   }
+
+  .gcds-label,
+  .gcds-hint {
+    color: var(--gcds-textarea-disabled-text);
+  }
 }
 
 .gcds-textarea-wrapper {
