@@ -16,7 +16,7 @@ export const Attestation = () => {
       <ExampleWrapper className="mt-4">
         <Label className="gcds-label">
           {t("addElementDialog.attest")}{" "}
-          <span className="text-red-default">({t("addElementDialog.allRequired")})</span>
+          <span className="label--required">({t("addElementDialog.allRequired")})</span>
         </Label>
 
         <div className="max-w-48 overflow-hidden p-2">
