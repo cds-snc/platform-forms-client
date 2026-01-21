@@ -8,9 +8,9 @@ export const ManagedDataDetails = ({ item }: { item: FormElement }) => {
 
   return (
     <div data-testid={`managedChoices-${item.id}`} className="mt-5 text-sm">
-      <div>
+      <div className="flex items-center">
         <strong>{t("managedList.prefix")}</strong>
-        <Tooltip.Info side="top" triggerClassName="align-baseline ml-1">
+        <Tooltip.Info side="top" triggerClassName="ml-1">
           <strong>{t("tooltips.departmentElement.title")}</strong>
           <Trans
             ns="form-builder"
