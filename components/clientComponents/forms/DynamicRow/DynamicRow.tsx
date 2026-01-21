@@ -145,7 +145,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
   return (
     <div id={field.name} data-testid={`formGroup-${field.name}`} className={classes} tabIndex={0}>
-      {title && <div className="gc-label">{title}</div>}
+      {title && <div className="gcds-label">{title}</div>}
       {description && <Description id={`${field.name}-desc`}>{description}</Description>}
       {rows.map((row, index) => {
         return (

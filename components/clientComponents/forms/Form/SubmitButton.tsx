@@ -82,7 +82,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
         {submitTooEarly &&
           (formTimerState.remainingTime > 0 ? (
             <>
-              <div role="alert" className="gc-label text-red-default">
+              <div role="alert" className="gcds-label text-red-default">
                 {t("spam-error.error-part-1")} {formTimerState.timerDelay}{" "}
                 {t("spam-error.error-part-2")}
                 <span className="sr-only">
@@ -98,7 +98,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
             </>
           ) : (
             <div role="alert">
-              <p className="gc-label text-green-default">{t("spam-error.success-message")}</p>
+              <p className="gcds-label text-green-default">{t("spam-error.success-message")}</p>
               <p className="gc-description">{t("spam-error.success-prompt")}</p>
             </div>
           ))}
