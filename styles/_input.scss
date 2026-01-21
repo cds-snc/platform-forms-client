@@ -1,3 +1,5 @@
+/* https://github.com/cds-snc/gcds-components/blob/main/packages/web/src/components/gcds-input/gcds-input.css */
+
 @import "@cdssnc/gcds-tokens/build/web/css/components/input.css";
 
 .gcds-input-wrapper {
@@ -33,7 +35,9 @@
     color: var(--gcds-input-default-text);
     border: var(--gcds-input-border-width) solid #000;
     border-radius: var(--gcds-input-border-radius);
-    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
+    transition:
+      border-color ease-in-out 0.15s,
+      box-shadow ease-in-out 0.15s,
       outline ease-in-out 0.15s;
   }
 }

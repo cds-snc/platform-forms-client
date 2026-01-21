@@ -57,7 +57,7 @@
     "@aws-sdk/s3-presigned-post": "^3.971.0",
     "@bufbuild/protobuf": "^2.10.2",
     "@casl/ability": "6.7.3",
-    "@cdssnc/gcds-tokens": "2.12.0",
+    "@cdssnc/gcds-tokens": "2.14.0",
     "@cdssnc/sanitize-pii": "^2.1.0",
     "@gcforms/announce": "workspace:*",
     "@gcforms/connectors": "workspace:*",

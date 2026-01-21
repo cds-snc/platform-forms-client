@@ -1730,10 +1730,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cdssnc/gcds-tokens@npm:2.12.0":
-  version: 2.12.0
-  resolution: "@cdssnc/gcds-tokens@npm:2.12.0"
-  checksum: 10c0/d5e2396d636a16e7d1607611ee8de7cec4e20b544781d7e862a69a499bc67ac0d4db5af6cff030cd95f3b4451c1f33c7b9d59ca6ea1ec6d8d797f20f3254242a
+"@cdssnc/gcds-tokens@npm:2.14.0":
+  version: 2.14.0
+  resolution: "@cdssnc/gcds-tokens@npm:2.14.0"
+  checksum: 10c0/b2cd5eb30d765426f1c7a3e1cb09f5c5150d3f05c5e6782d5212affc7ac0e2f8bb80fa0fbe1245c9816f0777aa5beb35da9af070c4770bf232f9971365b7c9ba
   languageName: node
   linkType: hard
 
@@ -12870,7 +12870,7 @@ __metadata:
     "@babel/preset-typescript": "npm:^7.27.1"
     "@bufbuild/protobuf": "npm:^2.10.2"
     "@casl/ability": "npm:6.7.3"
-    "@cdssnc/gcds-tokens": "npm:2.12.0"
+    "@cdssnc/gcds-tokens": "npm:2.14.0"
     "@cdssnc/sanitize-pii": "npm:^2.1.0"
     "@gcforms/announce": "workspace:*"
     "@gcforms/connectors": "workspace:*"
