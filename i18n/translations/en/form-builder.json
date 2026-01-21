@@ -600,7 +600,7 @@
     "managedListOptions": "Organizations list options",
     "includeDepartments": "Include departments",
     "includeCrownCorporations": "Include crown corporations",
-    "includeProvincialTerritorial": "Include provincial/territorial"
+    "includeProvincialTerritorial": "Include provinces and territories"
   },
   "maxCharacterLength": "Max character length: ",
   "maximumCharacterLength": "Maximum character length",
