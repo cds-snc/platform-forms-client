@@ -23,7 +23,9 @@ import { FileTypeOptions } from "./FileTypeOptions";
 import { NumberFieldOptions } from "./NumberFieldOptions";
 
 import { CopyItem } from "./CopyItem";
-import { ManagedDataOptions } from "./ManagedDataOptions";
+
+// Will re-enable after some futher discussion about crown corp managed data
+// import { ManagedDataOptions } from "./ManagedDataOptions";
 
 export const MoreDialog = () => {
   const { getPathString, updateField, setChangeKey, getFormElementById } = useTemplateStore(
@@ -125,7 +127,7 @@ export const MoreDialog = () => {
               </section>
               <AddressCompleteOptions item={item} setItem={setItem} />
               <FormattedDateOptions item={item} setItem={setItem} />
-              <ManagedDataOptions item={item} setItem={setItem} />
+              {/* <ManagedDataOptions item={item} setItem={setItem} /> */}
               <RequiredOptions item={item} setItem={setItem} />
               <NumberFieldOptions item={item} setItem={setItem} />
               <DynamicRowOptions item={item} setItem={setItem} />
