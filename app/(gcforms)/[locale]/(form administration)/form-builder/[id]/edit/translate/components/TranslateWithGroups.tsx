@@ -226,6 +226,23 @@ export const TranslateWithGroups = () => {
   const hasHydrated = useRehydrate();
   if (!hasHydrated) return null;
 
+  const privacyEn =
+    form.privacyPolicy?.[localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)] ??
+    "";
+
+  const privacyFr =
+    form.privacyPolicy?.[
+      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+    ] ?? "";
+
+  const confirmationEn =
+    form.confirmation?.[localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)] ??
+    "";
+
+  const confirmationFr =
+    form.confirmation?.[localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)] ??
+    "";
+
   return (
     <>
       <h1 className="sr-only">{t("edit")}</h1>
@@ -367,11 +384,7 @@ export const TranslateWithGroups = () => {
                     LocalizedElementProperties.DESCRIPTION,
                     primaryLanguage
                   )}`}
-                  content={
-                    form.privacyPolicy?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
-                    ] ?? ""
-                  }
+                  content={privacyEn}
                   lang={primaryLanguage}
                   ariaLabel={t("privacyStatement")}
                   ariaDescribedBy={`privacyPolicy-${primaryLanguage}-language`}
@@ -389,11 +402,7 @@ export const TranslateWithGroups = () => {
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage
                   )}`}
-                  content={
-                    form.privacyPolicy?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
-                    ] ?? ""
-                  }
+                  content={privacyFr}
                   lang={secondaryLanguage}
                   ariaLabel={t("privacyStatement")}
                   ariaDescribedBy={`privacyPolicy-${secondaryLanguage}-language`}
@@ -496,11 +505,7 @@ export const TranslateWithGroups = () => {
                     LocalizedElementProperties.DESCRIPTION,
                     primaryLanguage
                   )}`}
-                  content={
-                    form.confirmation?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
-                    ] ?? ""
-                  }
+                  content={confirmationEn}
                   lang={primaryLanguage}
                   ariaLabel={t("confirmationMessage")}
                   ariaDescribedBy={`confirmation-${primaryLanguage}-language`}
@@ -518,11 +523,7 @@ export const TranslateWithGroups = () => {
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage
                   )}`}
-                  content={
-                    form.confirmation?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
-                    ] ?? ""
-                  }
+                  content={confirmationFr}
                   lang={secondaryLanguage}
                   ariaLabel={t("confirmationMessage")}
                   ariaDescribedBy={`confirmation-${secondaryLanguage}-language`}
