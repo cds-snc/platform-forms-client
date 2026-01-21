@@ -2665,6 +2665,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@gcds-core/fonts@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@gcds-core/fonts@npm:1.0.0"
+  checksum: 10c0/e87e5db7bdfe844a5556daf5e7f9f1b84b8af85dca8a30de849000bdd37d091220a3b36c882852098e90deb59e42713d644905fd52290bfe54195e4a48f81d35
+  languageName: node
+  linkType: hard
+
 "@gcforms/announce@workspace:*, @gcforms/announce@workspace:packages/announce":
   version: 0.0.0-use.local
   resolution: "@gcforms/announce@workspace:packages/announce"
@@ -12872,6 +12879,7 @@ __metadata:
     "@casl/ability": "npm:6.7.3"
     "@cdssnc/gcds-tokens": "npm:2.14.0"
     "@cdssnc/sanitize-pii": "npm:^2.1.0"
+    "@gcds-core/fonts": "npm:^1.0.0"
     "@gcforms/announce": "workspace:*"
     "@gcforms/connectors": "workspace:*"
     "@gcforms/core": "workspace:*"

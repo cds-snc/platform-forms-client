@@ -12,6 +12,7 @@
 @import "@cdssnc/gcds-tokens/build/web/css/components/heading.css";
 @import "@cdssnc/gcds-tokens/build/web/css/components/label.css";
 
+@include meta.load-css("_icons");
 @include meta.load-css("_input");
 @include meta.load-css("_textarea");
 @include meta.load-css("_label");

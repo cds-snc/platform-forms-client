@@ -59,6 +59,7 @@
     "@casl/ability": "6.7.3",
     "@cdssnc/gcds-tokens": "2.14.0",
     "@cdssnc/sanitize-pii": "^2.1.0",
+    "@gcds-core/fonts": "^1.0.0",
     "@gcforms/announce": "workspace:*",
     "@gcforms/connectors": "workspace:*",
     "@gcforms/core": "workspace:*",
