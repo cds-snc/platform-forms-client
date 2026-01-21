@@ -594,7 +594,13 @@
   "longAnswerText": "Long answer",
   "managedList": {
     "prefix": "Managed list:",
-    "departments": "GC organizations"
+    "departments": "GC organizations",
+    "crownCorporations": "Crown corporations",
+    "provincialTerritorial": "Provinces and territories",
+    "managedListOptions": "Organizations list options",
+    "includeDepartments": "Include departments",
+    "includeCrownCorporations": "Include crown corporations",
+    "includeProvincialTerritorial": "Include provinces and territories"
   },
   "maxCharacterLength": "Max character length: ",
   "maximumCharacterLength": "Maximum character length",
