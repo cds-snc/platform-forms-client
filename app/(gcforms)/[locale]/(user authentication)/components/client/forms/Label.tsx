@@ -47,7 +47,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
     <>
       {children}
       {required && (
-        <span data-testid="required" aria-hidden>
+        <span data-testid="required" className="label--required" aria-hidden>
           {" "}
           ({validation?.all ? t("all-required") : t("required")})
         </span>
