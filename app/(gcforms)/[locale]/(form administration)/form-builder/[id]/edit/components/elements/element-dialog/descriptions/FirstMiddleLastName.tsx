@@ -19,19 +19,19 @@ export const FirstMiddleLastName = () => {
       <ExampleWrapper className="mt-4">
         <h4 className="mb-4">{t("addElementDialog.firstMiddleLastName.whatIsYourName")}</h4>
         <div className="gcds-input-wrapper mb-6">
-          <Label htmlFor="first" className="gc-label">
+          <Label htmlFor="first" className="gcds-label">
             {t("addElementDialog.firstMiddleLastName.first.label")}
           </Label>
           <TextInput id="first" type="text" name="first" autoComplete="given-name" />
         </div>
         <div className="gcds-input-wrapper mb-6">
-          <Label htmlFor="middle" className="gc-label">
+          <Label htmlFor="middle" className="gcds-label">
             {t("addElementDialog.firstMiddleLastName.middle.label")}
           </Label>
           <TextInput id="middle" type="text" name="middle" autoComplete="additional-name" />
         </div>
         <div className="gcds-input-wrapper mb-6">
-          <Label htmlFor="last" className="gc-label">
+          <Label htmlFor="last" className="gcds-label">
             {t("addElementDialog.firstMiddleLastName.last.label")}
           </Label>
           <TextInput id="last" type="text" name="last" autoComplete="family-name" />
