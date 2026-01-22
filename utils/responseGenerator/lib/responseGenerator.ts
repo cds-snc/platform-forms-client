@@ -123,11 +123,16 @@ export const generateResponseForQuestion = (
     case "radio":
     case "combobox":
       // single values only
-      // Check to see if it has managed choices
+      let dataFile;
+      // For managed choices, there can be multiple dataFiles. Pick one at random
+      if (question.properties.managedChoices && Array.isArray(question.properties.managedChoices)) {
+        const randomIndex = getRandomInt(question.properties.managedChoices.length - 1);
+        dataFile = question.properties.managedChoices[randomIndex];
+      }
       const choiceOptions1 =
         question.properties.choices ??
         (question.properties.managedChoices
-          ? managedData[question.properties.managedChoices]
+          ? managedData[dataFile ?? question.properties.managedChoices]
           : undefined);
       if (!choiceOptions1) {
         throw new Error("No Choice Options were provided for generator to select from");

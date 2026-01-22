@@ -53,7 +53,7 @@ export const NumberFieldOptions = ({
       <div>
         <label
           data-testid="stepCount"
-          className="gc-label mt-1"
+          className="gcds-label mt-1"
           htmlFor={`numberField-${item.id}-id-stepCount`}
         >
           {t("addElementDialog.number.decimalPlaces")}

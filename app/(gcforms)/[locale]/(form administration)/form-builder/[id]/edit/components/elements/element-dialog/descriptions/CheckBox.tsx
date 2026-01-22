@@ -15,7 +15,7 @@ export const CheckBox = () => {
 
       <ExampleWrapper className="mt-4">
         <FormGroup name={"checkboxes"}>
-          <legend className="gc-label">{t("addElementDialog.checkbox.chooseItems")}</legend>
+          <legend className="gcds-label">{t("addElementDialog.checkbox.chooseItems")}</legend>
           <Description>{t("addElementDialog.checkbox.selectAllThatApply")}</Description>
 
           <div className="max-w-48 overflow-hidden">
