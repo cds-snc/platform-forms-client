@@ -14,7 +14,7 @@ export const TextField = () => {
       <p data-testid="element-description-text">{t("addElementDialog.textField.description")}</p>
 
       <ExampleWrapper className="gcds-input-wrapper mt-4">
-        <Label htmlFor="name" className="gc-label">
+        <Label htmlFor="name" className="gcds-label">
           {t("addElementDialog.textField.enterAnswer")}
         </Label>
         <Description>{t("addElementDialog.textField.forExample")}</Description>

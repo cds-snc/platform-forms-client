@@ -156,9 +156,9 @@ export const ContactForm = () => {
               </Alert.Danger>
             )}
             <fieldset className="focus-group mt-14">
-              <legend className="gc-label required">
+              <legend className="gcds-label required">
                 {t("contactus.request.title")}{" "}
-                <span data-testid="required" aria-hidden>
+                <span data-testid="required" className="label--required" aria-hidden>
                   ({t("required")})
                 </span>
               </legend>
