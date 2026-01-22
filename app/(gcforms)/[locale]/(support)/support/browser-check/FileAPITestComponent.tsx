@@ -169,7 +169,7 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
 
         {!selectedDirectory && (
           <div className="mb-6">
-            <Button onClick={runTests} disabled={isRunning} theme="primary">
+            <Button onClick={runTests} disabled={isRunning} theme="secondary">
               {isRunning ? t("running", "Running...") : t("selectDirectory", "Select a folder")}
             </Button>
           </div>
@@ -185,7 +185,7 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
 
           {selectedDirectory && (
             <div className="mt-6">
-              <Button onClick={runTests} disabled={isRunning} theme="primary">
+              <Button onClick={runTests} disabled={isRunning} theme="secondary">
                 {isRunning ? t("running", "Running...") : t("runTests", "Run test again")}
               </Button>
             </div>
