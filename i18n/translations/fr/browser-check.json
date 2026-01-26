@@ -22,5 +22,14 @@
   "mdnWebDocs": "Documentation MDN Web",
   "mdnWebDocsDescription": "Documentation complète sur l'API du système de fichiers",
   "webDevGuide": "Guide Web.dev",
-  "webDevGuideDescription": "Guide de Google avec des exemples pratiques et les meilleures pratiques"
+  "webDevGuideDescription": "Guide de Google avec des exemples pratiques et les meilleures pratiques",
+  "supportForm": {
+    "title": "Besoin d'aide avec la compatibilité du navigateur?",
+    "description": "Envoyez-nous les informations de votre navigateur et nous vous aiderons avec les problèmes de téléchargement de fichiers.",
+    "email": "Adresse courriel gouvernementale",
+    "submit": "Envoyer la demande de soutien",
+    "submitting": "Envoi en cours...",
+    "successTitle": "Demande de soutien envoyée",
+    "successMessage": "Nous avons reçu votre demande et vous répondrons bientôt."
+  }
 }

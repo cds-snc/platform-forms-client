@@ -22,5 +22,14 @@
   "mdnWebDocs": "MDN Web Docs",
   "mdnWebDocsDescription": "Comprehensive documentation on the File System API",
   "webDevGuide": "Web.dev Guide",
-  "webDevGuideDescription": "Google's guide with practical examples and best practices"
+  "webDevGuideDescription": "Google's guide with practical examples and best practices",
+  "supportForm": {
+    "title": "Need help with browser compatibility?",
+    "description": "Send us your browser information and we'll help you with file download issues.",
+    "email": "Government email address",
+    "submit": "Send support request",
+    "submitting": "Sending...",
+    "successTitle": "Support request sent",
+    "successMessage": "We've received your request and will get back to you soon."
+  }
 }

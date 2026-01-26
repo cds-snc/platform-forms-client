@@ -1,9 +1,22 @@
 "use client";
 import { useState, useCallback } from "react";
 import { Button } from "@clientComponents/globals";
+import { Label } from "@clientComponents/forms";
+import { TextInput } from "../../components/client/TextInput";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { verifyPermission } from "@responses-pilot/lib/fileSystemHelpers";
-
+import { isValidGovEmail } from "@lib/validation/validation";
+import {
+  email,
+  minLength,
+  object,
+  safeParse,
+  string,
+  toLowerCase,
+  trim,
+  pipe,
+  check,
+} from "valibot";
 import { useTranslation } from "@i18n/client";
 
 declare global {
@@ -17,7 +30,41 @@ interface TestError {
   message: string;
 }
 
+interface ErrorStates {
+  validationErrors: {
+    fieldKey: string;
+    fieldValue: string;
+  }[];
+  error?: string;
+}
+
 type TestResult = true | TestError;
+
+const getBrowserInfo = () => {
+  if (typeof window === "undefined") return null;
+
+  const userAgent = navigator.userAgent;
+
+  // Basic browser detection
+  const isChrome = /Chrome/.test(userAgent) && /Google Inc/.test(navigator.vendor || "");
+  const isFirefox = /Firefox/.test(userAgent);
+  const isSafari = /Safari/.test(userAgent) && /Apple Computer/.test(navigator.vendor || "");
+  const isEdge = /Edg/.test(userAgent);
+
+  return {
+    browser: isChrome
+      ? "Chrome"
+      : isFirefox
+        ? "Firefox"
+        : isSafari
+          ? "Safari"
+          : isEdge
+            ? "Edge"
+            : "Unknown",
+    userAgent,
+    hasFileSystemAccess: !!window.showDirectoryPicker,
+  };
+};
 
 const TEST_FILENAME = ".gcforms-test-write.txt";
 const TEST_CONTENT = "GCForms File API Test - " + new Date().toISOString();
@@ -227,24 +274,69 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
                 readFile,
                 cleanUp,
               ].filter((test): test is TestResult => test !== null)}
+              testResults={{
+                readWritePermission,
+                readOnlyPermission,
+                createFile,
+                writeFile,
+                readFile,
+              }}
               locale={locale}
             />
 
-            {selectedDirectory && (
-              <div className="mt-6">
-                <Button onClick={runTests} disabled={isRunning} theme="secondary">
-                  {isRunning ? t("running") : t("runTests")}
-                </Button>
-              </div>
-            )}
+            {(() => {
+              // Check if the failure is due to user cancellation
+              const allTests = [
+                fileSystemAPI,
+                directoryPicker,
+                readWritePermission,
+                readOnlyPermission,
+                createFile,
+                writeFile,
+                readFile,
+                cleanUp,
+              ].filter((test): test is TestResult => test !== null);
+
+              const failedTests = allTests.filter((test): test is TestError => test !== true);
+              const isUserCancelled = failedTests.some(
+                (test) => test.message === "Directory selection was cancelled"
+              );
+
+              return (
+                isUserCancelled && (
+                  <div className="mt-6">
+                    <Button onClick={runTests} disabled={isRunning} theme="secondary">
+                      {isRunning ? t("running") : t("runTests")}
+                    </Button>
+                  </div>
+                )
+              );
+            })()}
           </div>
         )}
     </div>
   );
 };
 
-const OverallResult = ({ tests, locale }: { tests: TestResult[]; locale: string }) => {
+const OverallResult = ({
+  tests,
+  testResults,
+  locale,
+}: {
+  tests: TestResult[];
+  testResults: {
+    readWritePermission: TestResult | null;
+    readOnlyPermission: TestResult | null;
+    createFile: TestResult | null;
+    writeFile: TestResult | null;
+    readFile: TestResult | null;
+  };
+  locale: string;
+}) => {
   const { t } = useTranslation("browser-check", { lang: locale });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<ErrorStates>({ validationErrors: [] });
 
   const passed = tests.filter((test) => test === true).length;
   const failed = tests.filter((test) => test !== true).length;
@@ -260,6 +352,79 @@ const OverallResult = ({ tests, locale }: { tests: TestResult[]; locale: string 
   const isUserCancelled = failedTests.some(
     (test) => test.message === "Directory selection was cancelled"
   );
+
+  const getError = (fieldKey: string) => {
+    return errors.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.target as HTMLFormElement);
+    const emailValue = formData.get("email") as string;
+
+    const formEntries = {
+      email: emailValue,
+      browserData: JSON.stringify({
+        ...getBrowserInfo(),
+        testResults,
+      }),
+    };
+
+    const EmailSchema = object({
+      email: pipe(
+        string(),
+        toLowerCase(),
+        trim(),
+        minLength(1, t("input-validation.required", { ns: "common" })),
+        email(t("input-validation.email", { ns: "common" })),
+        check(
+          (email) => isValidGovEmail(email),
+          t("input-validation.validGovEmail", { ns: "common" })
+        )
+      ),
+    });
+
+    const validateForm = safeParse(EmailSchema, { email: emailValue }, { abortPipeEarly: true });
+
+    if (!validateForm.success) {
+      setErrors({
+        validationErrors: validateForm.issues.map((issue) => ({
+          fieldKey: issue.path?.[0].key as string,
+          fieldValue: issue.message,
+        })),
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      // Import the server action dynamically
+      const { browserCompatibilitySupport } = await import("../actions");
+      const submitFormData = new FormData();
+      Object.entries(formEntries).forEach(([key, value]) => {
+        submitFormData.append(key, value);
+      });
+
+      const result = await browserCompatibilitySupport(locale, errors, submitFormData);
+
+      if (result.error) {
+        setErrors({ ...result });
+        setIsSubmitting(false);
+        return;
+      }
+
+      setSubmitted(true);
+    } catch (error) {
+      setErrors({
+        error: "Failed to send support request",
+        validationErrors: [],
+      });
+    }
+
+    setIsSubmitting(false);
+  };
 
   const config = shouldShowSuccess
     ? {
@@ -277,6 +442,18 @@ const OverallResult = ({ tests, locale }: { tests: TestResult[]; locale: string 
         message: isUserCancelled ? t("testCancelled") : t("cannotDownload"),
       };
 
+  if (submitted) {
+    return (
+      <div className="rounded-md border border-green-200 bg-green-50 p-4">
+        <div className="mb-2 flex items-center gap-2">
+          <span className="gcds-icon gcds-icon-checkmark-circle text-green-600"></span>
+          <h3 className="text-lg font-semibold text-green-600">{t("supportForm.successTitle")}</h3>
+        </div>
+        <p className="text-slate-700">{t("supportForm.successMessage")}</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div
@@ -292,6 +469,37 @@ const OverallResult = ({ tests, locale }: { tests: TestResult[]; locale: string 
         <p className={`text-lg font-semibold ${config.badgeClass}`}>{config.title}</p>
       </div>
       <p className="text-left text-slate-700">{config.message}</p>
+
+      {!shouldShowSuccess && !isUserCancelled && (
+        <div className="mt-6">
+          <h4 className="mb-2 font-semibold">{t("supportForm.title")}</h4>
+          <p className="mb-4 text-sm">{t("supportForm.description")}</p>
+
+          {errors.error && (
+            <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3">
+              <p className="text-red-700">{errors.error}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className="gcds-input-wrapper mb-4">
+              <Label id="label-email" htmlFor="email" className="required" required>
+                {t("supportForm.email")}
+              </Label>
+              <TextInput
+                type="email"
+                id="email"
+                name="email"
+                className="required w-full max-w-md"
+                error={getError("email")}
+              />
+            </div>
+            <Button type="submit" disabled={isSubmitting} theme="primary">
+              {isSubmitting ? t("supportForm.submitting") : t("supportForm.submit")}
+            </Button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
