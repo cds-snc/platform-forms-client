@@ -9,7 +9,7 @@
   "runTests": "Run test again",
   "running": "Running...",
   "success": "Success",
-  "failed": "✗ Failed",
+  "failed": "Failed",
   "successMessage": "Success responses can be downloaded using your browser on this device.",
   "cannotDownload": "Cannot download responses using this browser on this device.",
   "testCancelled": "Test was cancelled. Please try again to check if responses can be downloaded using your browser on this device.",

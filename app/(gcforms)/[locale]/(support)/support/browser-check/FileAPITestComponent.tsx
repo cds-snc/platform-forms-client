@@ -264,15 +264,15 @@ const OverallResult = ({ tests, locale }: { tests: TestResult[]; locale: string 
   const config = shouldShowSuccess
     ? {
         className: "border border-green-200 bg-green-50",
-        badge: "✓",
         badgeClass: "text-green-600",
+        iconClass: "gcds-icon-checkmark-circle",
         title: t("success"),
         message: t("successMessage"),
       }
     : {
         className: "border border-red-200 bg-red-50",
-        badge: "✗",
         badgeClass: "text-red-600",
+        iconClass: "gcds-icon-exclamation-circle",
         title: t("failed"),
         message: isUserCancelled ? t("testCancelled") : t("cannotDownload"),
       };
@@ -280,12 +280,14 @@ const OverallResult = ({ tests, locale }: { tests: TestResult[]; locale: string 
   return (
     <div>
       <div
-        className={`inline-flex items-center gap-3 rounded-2xl px-4 py-3 ${config.className} mb-6`}
+        className={`inline-flex items-center gap-1 rounded-2xl px-4 py-2 ${config.className} mb-6`}
       >
         <div
-          className={`flex size-8 items-center justify-center rounded-full border-2 ${allPassed ? "border-green-600" : "border-red-600"}`}
+          className={`flex size-8 items-center justify-center ${allPassed ? "border-green-600" : "border-red-600"}`}
         >
-          <span className={`text-sm font-bold ${config.badgeClass}`}>{config.badge}</span>
+          <span
+            className={`gcds-icon ${config.iconClass} inline-block ${config.badgeClass}`}
+          ></span>
         </div>
         <p className={`text-lg font-semibold ${config.badgeClass}`}>{config.title}</p>
       </div>

@@ -9,7 +9,7 @@
   "runTests": "Réexécuter le test",
   "running": "Exécution en cours...",
   "success": "Succès",
-  "failed": "✗ Échoué",
+  "failed": "Échoué",
   "successMessage": "Les réponses peuvent être téléchargées avec succès en utilisant votre navigateur sur cet appareil.",
   "cannotDownload": "Impossible de télécharger les réponses en utilisant ce navigateur sur cet appareil.",
   "testCancelled": "Le test a été annulé. Veuillez réessayer pour vérifier si les réponses peuvent être téléchargées en utilisant votre navigateur sur cet appareil.",
