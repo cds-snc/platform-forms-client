@@ -3,8 +3,8 @@ import {
   AdminInitiateAuthCommandInput,
   CognitoIdentityProviderServiceException,
 } from "@aws-sdk/client-cognito-identity-provider";
+import { prisma, prismaErrors } from "@gcforms/database";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 import { logMessage } from "@lib/logger";

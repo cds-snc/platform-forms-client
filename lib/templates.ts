@@ -1,5 +1,5 @@
 import { formCache } from "./cache/formCache";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import {
   PublicFormRecord,
   FormRecord,
@@ -8,7 +8,7 @@ import {
   SecurityAttribute,
   ClosedDetails,
 } from "@lib/types";
-import { Prisma } from "@prisma/client";
+
 import { authorization, getAbility } from "./privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";

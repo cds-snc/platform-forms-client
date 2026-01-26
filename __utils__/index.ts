@@ -1,7 +1,1 @@
-export {
-  prismaMock,
-  PrismaClientInitializationError,
-  PrismaClientKnownRequestError,
-  PrismaClientUnknownRequestError,
-  PrismaClientValidationError,
-} from "./prismaConnector";
+export { prismaMock } from "./prismaConnector";

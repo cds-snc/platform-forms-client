@@ -1,5 +1,5 @@
-import { Prisma } from "@prisma/client";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { Prisma } from "@gcforms/database";
+import { prisma, prismaErrors } from "@gcforms/database";
 import { privilegeCheck, privilegePut, privilegeDelete } from "@lib/cache/privilegeCache";
 import {
   createMongoAbility,

@@ -1,7 +1,7 @@
 "use server";
 
 import { AuthenticatedAction } from "@lib/actions";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { TemplateUser } from "./types";
 import { AccessControlError } from "@lib/auth/errors";
 import {

@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User } from "@gcforms/database";
 
 export interface FormOwner {
   id: string;
