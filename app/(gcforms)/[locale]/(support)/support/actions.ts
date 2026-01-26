@@ -80,8 +80,8 @@ ${description}<br/>
     });
   } catch (error) {
     logMessage.error(`Failed to send support request: ${(error as Error).message}`);
-    const { t } = await serverTranslation(["common"], { lang: language });
-    return { error: t("errors.internalServiceError"), validationErrors: [] };
+
+    return { error: "Internal Service Error: Failed to send request", validationErrors: [] };
   }
   return { error: "", validationErrors: [] };
 }
