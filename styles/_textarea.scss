@@ -1,3 +1,5 @@
+/* https://github.com/cds-snc/gcds-components/blob/main/packages/web/src/components/gcds-input/gcds-input.css */
+
 @import "@cdssnc/gcds-tokens/build/web/css/components/textarea.css";
 
 .gcds-textarea-wrapper {
@@ -14,9 +16,13 @@
 .gcds-textarea-wrapper {
   width: 100%;
   max-width: 75ch;
-  font: var(--gcds-textarea-font);
+  font: var(--gcds-input-font-desktop);
   color: var(--gcds-textarea-default-text);
   transition: color ease-in-out 0.15s;
+
+  @media only screen and (width < 48em) {
+    font: var(--gcds-input-font-mobile);
+  }
 
   textarea {
     display: block;
@@ -33,7 +39,9 @@
     color: var(--gcds-textarea-default-text);
     border: var(--gcds-textarea-border-width) solid currentColor;
     border-radius: var(--gcds-textarea-border-radius);
-    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
+    transition:
+      border-color ease-in-out 0.15s,
+      box-shadow ease-in-out 0.15s,
       outline ease-in-out 0.15s;
   }
 }
@@ -45,6 +53,11 @@
     cursor: not-allowed;
     background-color: var(--gcds-textarea-disabled-background);
     border-color: var(--gcds-textarea-disabled-text);
+  }
+
+  .gcds-label,
+  .gcds-hint {
+    color: var(--gcds-textarea-disabled-text);
   }
 }
 

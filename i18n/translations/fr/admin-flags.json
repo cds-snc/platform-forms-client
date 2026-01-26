@@ -37,6 +37,10 @@
     "userSideAuditLogs": {
       "title": "Téléchargement de l'activité du formulaire",
       "description": "Activer le téléchargement des actions clés récentes dans un formulaire (au cours des 30 derniers jours) dans les Paramètres"
+    },
+    "zitadelLogin": {
+      "title": "Zitadel Login",
+      "description": "Enable Zitadel as a login method for users"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",

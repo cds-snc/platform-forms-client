@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.8.0](https://github.com/cds-snc/platform-forms-client/compare/v4.7.2...v4.8.0) (2026-01-20)
+
+
+### Features
+
+* Add Zitadel as user authentication source ([#6257](https://github.com/cds-snc/platform-forms-client/issues/6257)) ([ca9e735](https://github.com/cds-snc/platform-forms-client/commit/ca9e7356d826221711c40b3b9b7e81bc7e817872))
+
+
+### Bug Fixes
+
+* allow default or custom messages for all element types in error summary ([#6702](https://github.com/cds-snc/platform-forms-client/issues/6702)) ([8c43d77](https://github.com/cds-snc/platform-forms-client/commit/8c43d77df54efe531fd38ce4a6cdfac619fe8296))
+* French "Copy of" when duplicating a form in French interface ([#6705](https://github.com/cds-snc/platform-forms-client/issues/6705)) ([58ba395](https://github.com/cds-snc/platform-forms-client/commit/58ba395ec0089d3d4c7f056d90d852eb1ca6a3df))
+
+
+### Miscellaneous Chores
+
+* add branding for Winterlude ([#6710](https://github.com/cds-snc/platform-forms-client/issues/6710)) ([49a5bdd](https://github.com/cds-snc/platform-forms-client/commit/49a5bdd43480a8c896a0ead95f6b4b3dedf19643))
+* add client IP to audit logs ([#6703](https://github.com/cds-snc/platform-forms-client/issues/6703)) ([d8120aa](https://github.com/cds-snc/platform-forms-client/commit/d8120aaa12b5ba0503b1888eae2129f589a6e9b8))
+* Add more robust pattern matching to help identify potential shared emails ([#6662](https://github.com/cds-snc/platform-forms-client/issues/6662)) ([668c5db](https://github.com/cds-snc/platform-forms-client/commit/668c5db73510fe06c76abfc587f332348c377202))
+* content clarifications re: overdue responses ([#6711](https://github.com/cds-snc/platform-forms-client/issues/6711)) ([279fe6d](https://github.com/cds-snc/platform-forms-client/commit/279fe6d81f8660afcb905cfb40a4f1f081a80418))
+* Refactor notifications settings ([#6675](https://github.com/cds-snc/platform-forms-client/issues/6675)) ([cbf0e75](https://github.com/cds-snc/platform-forms-client/commit/cbf0e7520ecb747531352eda9063ea842819b0a1))
+* update hide modified on submit progress screen ([#6707](https://github.com/cds-snc/platform-forms-client/issues/6707)) ([9396b27](https://github.com/cds-snc/platform-forms-client/commit/9396b279c3a2e7e6f4d9694011571eab59a0e4f2))
+* use anchor menu + popover for forms dropdown ([#6712](https://github.com/cds-snc/platform-forms-client/issues/6712)) ([f93a302](https://github.com/cds-snc/platform-forms-client/commit/f93a3020b7e74cf1a0802fba78255bd8c1ff5717))
+
 ## [4.7.2](https://github.com/cds-snc/platform-forms-client/compare/v4.7.1...v4.7.2) (2026-01-14)
 
 
