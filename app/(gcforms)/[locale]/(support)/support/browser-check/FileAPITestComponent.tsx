@@ -12,17 +12,25 @@ declare global {
   }
 }
 
-interface TestResult {
-  feature: string;
-  status: "pass" | "fail" | "pending" | "not-applicable";
+interface TestError {
+  error: string;
   message: string;
 }
+
+type TestResult = true | TestError;
 
 const TEST_FILENAME = ".gcforms-test-write.txt";
 const TEST_CONTENT = "GCForms File API Test - " + new Date().toISOString();
 
 export const FileAPITestComponent = ({ locale }: { locale: string }) => {
-  const [results, setResults] = useState<TestResult[]>([]);
+  const [fileSystemAPI, setFileSystemAPI] = useState<TestResult | null>(null);
+  const [directoryPicker, setDirectoryPicker] = useState<TestResult | null>(null);
+  const [readWritePermission, setReadWritePermission] = useState<TestResult | null>(null);
+  const [readOnlyPermission, setReadOnlyPermission] = useState<TestResult | null>(null);
+  const [createFile, setCreateFile] = useState<TestResult | null>(null);
+  const [writeFile, setWriteFile] = useState<TestResult | null>(null);
+  const [readFile, setReadFile] = useState<TestResult | null>(null);
+  const [cleanUp, setCleanUp] = useState<TestResult | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [selectedDirectory, setSelectedDirectory] = useState<FileSystemDirectoryHandle | null>(
     null
@@ -30,22 +38,26 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
 
   const { t } = useTranslation("browser-check", { lang: locale });
 
-  const updateResult = (feature: string, status: TestResult["status"], message: string) => {
-    setResults((prev) => {
-      const filtered = prev.filter((r) => r.feature !== feature);
-      return [...filtered, { feature, status, message }];
-    });
-  };
-
   const runTests = useCallback(async () => {
     setIsRunning(true);
-    setResults([]);
+    // Reset all test results
+    setFileSystemAPI(null);
+    setDirectoryPicker(null);
+    setReadWritePermission(null);
+    setReadOnlyPermission(null);
+    setCreateFile(null);
+    setWriteFile(null);
+    setReadFile(null);
+    setCleanUp(null);
 
     const hasFileSystemAPI = !!window.showDirectoryPicker;
-    updateResult(
-      "File System Access API Available",
-      hasFileSystemAPI ? "pass" : "fail",
-      hasFileSystemAPI ? "File System Access API is available" : "Not available"
+    setFileSystemAPI(
+      hasFileSystemAPI
+        ? true
+        : {
+            error: "Browser does not support File System Access API",
+            message: "Not available",
+          }
     );
 
     if (!hasFileSystemAPI) {
@@ -57,16 +69,16 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
     try {
       dirHandle = await window.showDirectoryPicker();
       if (dirHandle) {
-        updateResult("Directory Picker", "pass", `Selected: ${dirHandle.name}`);
+        setDirectoryPicker(true);
         setSelectedDirectory(dirHandle);
       }
     } catch (error) {
       const err = error as Error;
-      updateResult(
-        "Directory Picker",
-        err.name === "AbortError" ? "not-applicable" : "fail",
-        err.message
-      );
+      const isAborted = err.name === "AbortError";
+      setDirectoryPicker({
+        error: err.message,
+        message: isAborted ? "Directory selection was cancelled" : "Failed to select directory",
+      });
       setIsRunning(false);
       return;
     }
@@ -77,18 +89,24 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
     }
 
     const hasReadwrite = await verifyPermission(dirHandle, "readwrite");
-    updateResult(
-      "ReadWrite Permission",
-      hasReadwrite ? "pass" : "fail",
-      hasReadwrite ? "You have readwrite permissions" : "No readwrite permission"
+    setReadWritePermission(
+      hasReadwrite
+        ? true
+        : {
+            error: "Insufficient permissions for file operations",
+            message: "No readwrite permission",
+          }
     );
 
     if (!hasReadwrite) {
       const hasRead = await verifyPermission(dirHandle, "read");
-      updateResult(
-        "Read-Only Permission",
-        hasRead ? "pass" : "fail",
-        hasRead ? "Read-only available" : "No permissions"
+      setReadOnlyPermission(
+        hasRead
+          ? true
+          : {
+              error: "No read permissions available",
+              message: "No permissions",
+            }
       );
       setIsRunning(false);
       return;
@@ -101,10 +119,13 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
     }
     try {
       testFileHandle = await dirHandle.getFileHandle(TEST_FILENAME, { create: true });
-      updateResult("Create File", "pass", `Created: ${TEST_FILENAME}`);
+      setCreateFile(true);
     } catch (error) {
       const err = error as Error;
-      updateResult("Create File", "fail", err.message);
+      setCreateFile({
+        error: err.message,
+        message: "Failed to create test file",
+      });
       setIsRunning(false);
       return;
     }
@@ -113,13 +134,16 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
       const writable = await testFileHandle.createWritable();
       await writable.write(TEST_CONTENT);
       await writable.close();
-      updateResult("Write to File", "pass", `Wrote ${TEST_CONTENT.length} bytes`);
+      setWriteFile(true);
     } catch (error) {
       const err = error as DOMException;
       let message = err.message;
       if (err.name === "NoModificationAllowedError") message = "File is locked";
       else if (err.name === "QuotaExceededError") message = "Not enough storage";
-      updateResult("Write to File", "fail", message);
+      setWriteFile({
+        error: message,
+        message: "Failed to write to file",
+      });
       setIsRunning(false);
       return;
     }
@@ -127,24 +151,34 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
     try {
       const file = await testFileHandle.getFile();
       const text = await file.text();
-      updateResult(
-        "Read from File",
-        text === TEST_CONTENT ? "pass" : "fail",
-        `Read ${text.length} bytes`
+      const success = text === TEST_CONTENT;
+      setReadFile(
+        success
+          ? true
+          : {
+              error: "File content mismatch",
+              message: "Failed to read file correctly",
+            }
       );
     } catch (error) {
       const err = error as Error;
-      updateResult("Read from File", "fail", err.message);
+      setReadFile({
+        error: err.message,
+        message: "Failed to read file",
+      });
     }
 
     try {
       if (dirHandle) {
         await dirHandle.removeEntry(TEST_FILENAME);
       }
-      updateResult("Clean Up", "pass", "Test file deleted");
+      setCleanUp(true);
     } catch (error) {
       const err = error as Error;
-      updateResult("Clean Up", "fail", err.message);
+      setCleanUp({
+        error: err.message,
+        message: "Failed to clean up",
+      });
     }
 
     setIsRunning(false);
@@ -153,103 +187,109 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
   return (
     <div data-locale={locale}>
       <div className="mb-6">
-        <div className="mb-6 font-semibold text-[#1B00C2]">{t("pilot", "browser-check")}</div>
+        <div className="mb-6 font-semibold text-[#1B00C2]">{t("pilot")}</div>
 
-        <h1 className="[&:after]:!content-none">{t("title", "browser-check")}</h1>
-        <p className="mb-4 text-slate-700">
-          {t(
-            "description",
-            "Test if your browser supports File API needed for bulk response downloads."
-          )}
-        </p>
+        <h1 className="[&:after]:!content-none">{t("title")}</h1>
+        <p className="mb-4 text-slate-700">{t("description")}</p>
         <ol className="mb-6 list-inside list-decimal space-y-1 text-slate-700">
-          <li>{t("step1", "Select a folder")}</li>
-          <li>{t("step2", 'Allow "This site to view and copy files"')}</li>
-          <li>{t("step3", "Save changes to the folder")}</li>
+          <li>{t("step1")}</li>
+          <li>{t("step2")}</li>
+          <li>{t("step3")}</li>
         </ol>
         {!selectedDirectory && (
           <div className="mb-6">
             <Button onClick={runTests} disabled={isRunning} theme="secondary">
-              {isRunning ? t("running", "Running...") : t("selectDirectory", "Select a folder")}
+              {isRunning ? t("running") : t("selectDirectory")}
             </Button>
           </div>
         )}
       </div>
 
-      {results.length > 0 && (
-        <div className="space-y-3">
-          {results.map((result) => (
-            <TestResultItem key={result.feature} result={result} />
-          ))}
-          <TestSummary results={results} />
+      {(fileSystemAPI ||
+        directoryPicker ||
+        readWritePermission ||
+        readOnlyPermission ||
+        createFile ||
+        writeFile ||
+        readFile ||
+        cleanUp) &&
+        !isRunning && (
+          <div>
+            <div className="mb-6 border-t border-slate-200"></div>
+            <OverallResult
+              tests={[
+                fileSystemAPI,
+                directoryPicker,
+                readWritePermission,
+                readOnlyPermission,
+                createFile,
+                writeFile,
+                readFile,
+                cleanUp,
+              ].filter((test): test is TestResult => test !== null)}
+              locale={locale}
+            />
 
-          {selectedDirectory && (
-            <div className="mt-6">
-              <Button onClick={runTests} disabled={isRunning} theme="secondary">
-                {isRunning ? t("running", "Running...") : t("runTests", "Run test again")}
-              </Button>
-            </div>
-          )}
-        </div>
-      )}
+            {selectedDirectory && (
+              <div className="mt-6">
+                <Button onClick={runTests} disabled={isRunning} theme="secondary">
+                  {isRunning ? t("running") : t("runTests")}
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
     </div>
   );
 };
 
-const TestResultItem = ({ result }: { result: TestResult }) => {
-  const configs = {
-    pass: {
-      className: "border border-green-200 bg-green-50",
-      badge: "✓",
-      badgeClass: "text-green-600",
-    },
-    fail: {
-      className: "border border-red-200 bg-red-50",
-      badge: "✗",
-      badgeClass: "text-red-600",
-    },
-    pending: {
-      className: "border border-yellow-200 bg-yellow-50",
-      badge: "⏳",
-      badgeClass: "text-yellow-600",
-    },
-    "not-applicable": {
-      className: "border border-slate-200 bg-slate-50",
-      badge: "○",
-      badgeClass: "text-slate-500",
-    },
-  };
-  const config = configs[result.status];
+const OverallResult = ({ tests, locale }: { tests: TestResult[]; locale: string }) => {
+  const { t } = useTranslation("browser-check", { lang: locale });
+
+  const passed = tests.filter((test) => test === true).length;
+  const failed = tests.filter((test) => test !== true).length;
+  const allPassed = failed === 0 && passed === tests.length;
+
+  // Check if all expected tests have completed for success
+  // For success, we need: FileAPI + DirectoryPicker + ReadWrite + CreateFile + WriteFile + ReadFile + CleanUp = 7 tests
+  const allTestsCompleted = tests.length >= 7;
+  const shouldShowSuccess = allPassed && allTestsCompleted;
+
+  // Check if the failure is due to user cancellation
+  const failedTests = tests.filter((test): test is TestError => test !== true);
+  const isUserCancelled = failedTests.some(
+    (test) => test.message === "Directory selection was cancelled"
+  );
+
+  const config = shouldShowSuccess
+    ? {
+        className: "border border-green-200 bg-green-50",
+        badge: "✓",
+        badgeClass: "text-green-600",
+        title: t("success"),
+        message: t("successMessage"),
+      }
+    : {
+        className: "border border-red-200 bg-red-50",
+        badge: "✗",
+        badgeClass: "text-red-600",
+        title: t("failed"),
+        message: isUserCancelled ? t("testCancelled") : t("cannotDownload"),
+      };
+
   return (
-    <div className={`rounded p-3 ${config.className}`}>
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <p className="text-sm font-medium">{result.feature}</p>
-          <p className="mt-1 text-xs text-slate-600">{result.message}</p>
+    <div>
+      <div
+        className={`inline-flex items-center gap-3 rounded-2xl px-4 py-3 ${config.className} mb-6`}
+      >
+        <div
+          className={`flex size-8 items-center justify-center rounded-full border-2 ${allPassed ? "border-green-600" : "border-red-600"}`}
+        >
+          <span className={`text-sm font-bold ${config.badgeClass}`}>{config.badge}</span>
         </div>
-        <span className={`ml-3 text-lg font-bold ${config.badgeClass}`}>{config.badge}</span>
+        <p className={`text-lg font-semibold ${config.badgeClass}`}>{config.title}</p>
       </div>
-    </div>
-  );
-};
-
-const TestSummary = ({ results }: { results: TestResult[] }) => {
-  const { t } = useTranslation("browser-check");
-
-  const passed = results.filter((r) => r.status === "pass").length;
-  const failed = results.filter((r) => r.status === "fail").length;
-  const allPassed = failed === 0 && passed === results.length;
-
-  return (
-    <div
-      className={`rounded border p-3 ${allPassed ? "border-green-200 bg-green-50" : "border-yellow-200 bg-yellow-50"}`}
-    >
-      <p className="text-sm font-medium">
-        {allPassed ? t("allPassed", "✓ All Passed") : `${t("failed", "✗ Failed")} - ${failed}`}
-      </p>
-      <p className="mt-1 text-xs text-slate-600">
-        {passed}/{results.length} {t("testsPassedSummary", "tests passed")}
-      </p>
+      <p className="text-left text-slate-700">{config.message}</p>
     </div>
   );
 };

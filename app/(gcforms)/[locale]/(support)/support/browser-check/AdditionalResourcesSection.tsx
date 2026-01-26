@@ -34,9 +34,7 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
 
   return (
     <div>
-      <h5 className="!mt-0 mb-4 text-lg font-bold text-slate-950">
-        {t("itAdministrators", "IT Administrators")}
-      </h5>
+      <h5 className="!mt-0 mb-4 text-lg font-bold text-slate-950">{t("itAdministrators")}</h5>
       <div className="mb-8 divide-y divide-slate-200">
         {itResources.map((resource) => (
           <div key={resource.title} className="grid grid-cols-[60px_1fr] gap-4 py-3 first:pt-0">
@@ -60,9 +58,7 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
         ))}
       </div>
 
-      <h5 className="mb-4 text-lg font-bold text-slate-950">
-        {t("additionalResources", "Additional Resources")}
-      </h5>
+      <h5 className="mb-4 text-lg font-bold text-slate-950">{t("additionalResources")}</h5>
       <div className="divide-y divide-[#D1D5DB]">
         {resources.map((resource) => (
           <div key={resource.title} className="py-3 first:pt-0">
