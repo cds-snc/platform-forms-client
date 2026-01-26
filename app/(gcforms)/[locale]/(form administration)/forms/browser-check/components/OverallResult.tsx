@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
+import { ga } from "@lib/client/clientHelpers";
 import { StatusBadge } from "./StatusBadge";
 import { SupportForm } from "./SupportForm";
 
@@ -42,6 +43,15 @@ export const OverallResult = ({ tests, testResults, locale, userEmail }: Overall
   const isUserCancelled = failedTests.some(
     (test) => test.message === "Directory selection was cancelled"
   );
+
+  // Send GA event when test results are available (excluding user cancellations)
+  useEffect(() => {
+    if (tests.length > 0 && !isUserCancelled) {
+      ga("browser_compatibility_test", {
+        success: shouldShowSuccess,
+      });
+    }
+  }, [tests.length, shouldShowSuccess, isUserCancelled]);
 
   const handleSubmitSuccess = () => {
     setSubmitted(true);
