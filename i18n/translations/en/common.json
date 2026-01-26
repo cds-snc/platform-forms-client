@@ -352,8 +352,5 @@
   },
   "confirmFileWarning": {
     "text": "This copy of your answers will not include the files you attached to your submission."
-  },
-  "errors": {
-    "internalServiceError": "Internal Service Error: Failed to send request"
   }
 }

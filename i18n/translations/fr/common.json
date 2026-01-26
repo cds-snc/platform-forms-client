@@ -351,8 +351,5 @@
   },
   "confirmFileWarning": {
     "text": "Cette copie de vos réponses n'aura pas les fichiers que vous avez joints à votre soumission."
-  },
-  "errors": {
-    "internalServiceError": "Erreur de service interne : Échec de l'envoi de la demande"
   }
 }
