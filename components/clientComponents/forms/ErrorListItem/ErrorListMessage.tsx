@@ -46,6 +46,18 @@ export const ErrorListMessage = ({
     }
   }
 
+  // Consider refactoring the below to be more robust if there are more error
+  // base/default cases beyond the current required answer.
+
+  // For non default validation errors, use a specific error message if one exists
+  if (
+    defaultValue &&
+    typeof defaultValue === "string" &&
+    !defaultValue.includes(t("input-validation.required"))
+  ) {
+    return `${defaultValue}: ${question}`;
+  }
+
   switch (elementType) {
     case FormElementTypes.attestation:
       return t("input-validation.error-list.check-all", {

@@ -93,6 +93,7 @@ const eslintConfig = defineConfig([
           "brand__signature",
           "container-xl",
           "tableLink",
+          "label--required",
         ],
       },
     },

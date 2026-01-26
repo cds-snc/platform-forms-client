@@ -57,9 +57,20 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   // Retrieve managed data from static json file if specified
   if (element.properties.managedChoices) {
-    const dataFile = element.properties.managedChoices;
-    const data = managedData[dataFile];
-    choices = data ? getLocaleChoices(data, lang) : [];
+    if (Array.isArray(element.properties.managedChoices)) {
+      // Handle multiple managed data files - merge and sort alphabetically
+      element.properties.managedChoices.forEach((dataFile) => {
+        const data = managedData[dataFile];
+        const fileChoices = data ? getLocaleChoices(data, lang) : [];
+        choices = choices.concat(fileChoices);
+      });
+      choices.sort((a, b) => a.localeCompare(b, lang));
+    } else {
+      // Backwards compatibility for single managed data file
+      const dataFile = element.properties.managedChoices;
+      const data = managedData[dataFile];
+      choices = data ? getLocaleChoices(data, lang) : [];
+    }
   }
 
   const subElements =
@@ -152,6 +163,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             maxLength={element.properties.validation?.maxLength}
+            lang={lang}
           />
         </div>
       );

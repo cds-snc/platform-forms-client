@@ -12,6 +12,7 @@ import { sqsClient, dynamoDBDocumentClient } from "./integration/awsServicesConn
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import { prisma } from "@gcforms/database";
+import { getClientIp } from "./ip";
 
 export const AuditLogEvent = {
   // Form Events
@@ -146,17 +147,36 @@ export const AuditLogDetails = {
 export type AuditLogDetails = (typeof AuditLogDetails)[keyof typeof AuditLogDetails];
 
 type AuditDetailsParams = {
-  [AuditLogDetails.UserAuditLogsRead]: { callingUserId: string; userId: string };
-  [AuditLogDetails.FormAuditLogsRead]: { callingUserId: string; formId: string };
+  [AuditLogDetails.UserAuditLogsRead]: {
+    callingUserId: string;
+    userId: string;
+  };
+  [AuditLogDetails.FormAuditLogsRead]: {
+    callingUserId: string;
+    formId: string;
+  };
   [AuditLogDetails.GetAuditSubject]: { subject: string };
-  [AuditLogDetails.DownloadedFormResponses]: { format: string; "item.id": string };
-  [AuditLogDetails.IncreasedThrottling]: { userId: string; formId: string; weeks: string };
-  [AuditLogDetails.PermanentIncreasedThrottling]: { userId: string; formId: string };
+  [AuditLogDetails.DownloadedFormResponses]: {
+    format: string;
+    "item.id": string;
+  };
+  [AuditLogDetails.IncreasedThrottling]: {
+    userId: string;
+    formId: string;
+    weeks: string;
+  };
+  [AuditLogDetails.PermanentIncreasedThrottling]: {
+    userId: string;
+    formId: string;
+  };
   [AuditLogDetails.ResetThrottling]: { userId: string; formId: string };
   [AuditLogDetails.DeclinedInvitation]: { userId: string };
   [AuditLogDetails.AcceptedInvitation]: { userId: string };
   [AuditLogDetails.AccessGranted]: { grantedUserId: string };
-  [AuditLogDetails.CancelInvitation]: { userId: string; invitationEmail: string };
+  [AuditLogDetails.CancelInvitation]: {
+    userId: string;
+    invitationEmail: string;
+  };
   [AuditLogDetails.UserInvited]: { userEmail: string; invitationEmail: string };
   [AuditLogDetails.CognitoUserIdentifier]: { userId: string };
   [AuditLogDetails.UpdatedNotificationSettings]: {
@@ -166,7 +186,10 @@ type AuditDetailsParams = {
   };
   [AuditLogDetails.ConfirmedResponsesForForm]: { formId: string };
   [AuditLogDetails.DeletedDraftResponsesForForm]: { formId: string };
-  [AuditLogDetails.RetreiveSelectedFormResponses]: { formID: string; submissionID: string };
+  [AuditLogDetails.RetreiveSelectedFormResponses]: {
+    formID: string;
+    submissionID: string;
+  };
   [AuditLogDetails.ListAllResponsesForForm]: { status: string; formID: string };
   [AuditLogDetails.UserActiveStatusUpdate]: {
     email: string;
@@ -191,8 +214,14 @@ type AuditDetailsParams = {
   [AuditLogDetails.ChangeSecurityAttribute]: { securityAttribute: string };
   [AuditLogDetails.AccessGrantedTo]: { userList: string };
   [AuditLogDetails.AccessRevokedFor]: { userList: string };
-  [AuditLogDetails.GeneratedNewApiKey]: { userId: string; serviceAccountId: string };
-  [AuditLogDetails.CreatedNewApiKey]: { userId: string; serviceAccountId: string };
+  [AuditLogDetails.GeneratedNewApiKey]: {
+    userId: string;
+    serviceAccountId: string;
+  };
+  [AuditLogDetails.CreatedNewApiKey]: {
+    userId: string;
+    serviceAccountId: string;
+  };
   [AuditLogDetails.DeletedServiceAccount]: {
     userId: string;
     serviceAccountID: string;
@@ -275,27 +304,55 @@ export type AuditLogAccessDeniedDetails =
   (typeof AuditLogAccessDeniedDetails)[keyof typeof AuditLogAccessDeniedDetails];
 
 type AuditAccessDeniedParamsMap = {
-  [AuditLogAccessDeniedDetails.AccessDenied_IdentifiedProblemResponse]: { formId: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToModifyPrivilege]: { userId: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_CancelInvitation]: { userId: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_NoInvitePermission]: { userId: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserById]: { id: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_IdentifiedProblemResponse]: {
+    formId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToModifyPrivilege]: {
+    userId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_CancelInvitation]: {
+    userId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_NoInvitePermission]: {
+    userId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserById]: {
+    id: string;
+  };
   [AuditLogAccessDeniedDetails.AccessDenied_AttemptedToUpdateUserActiveStatus]: {
     targetUserId: string;
   };
   [AuditLogAccessDeniedDetails.AccessDenied_AttemptToAccessUnprocessedSubmissions]: {
     userId: string;
   };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToCheckResponseStatus]: { formID: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToListResponses]: { formID: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToRetrieveResponse]: { formID: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteResponses]: { formID: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses]: { formID: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToAddNoteToUser]: { userId: string };
-  [AuditLogAccessDeniedDetails.PasswordAttemptsExceeded]: { sanitizedUsername: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToCheckResponseStatus]: {
+    formID: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToListResponses]: {
+    formID: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToRetrieveResponse]: {
+    formID: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteResponses]: {
+    formID: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses]: {
+    formID: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToAddNoteToUser]: {
+    userId: string;
+  };
+  [AuditLogAccessDeniedDetails.PasswordAttemptsExceeded]: {
+    sanitizedUsername: string;
+  };
   [AuditLogAccessDeniedDetails.MFAAttemptsExceeded]: { sanitizedEmail: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToEnableFlag]: { flagKey: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDisableFlag]: { flagKey: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToEnableFlag]: {
+    flagKey: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDisableFlag]: {
+    flagKey: string;
+  };
 };
 
 type AllAuditParams = {
@@ -359,7 +416,10 @@ const resolveDescription = (
   descriptionParams?: Record<string, string>
 ) => {
   if (!description) return undefined;
-  const paramsJson = JSON.stringify({ eventDesc: description, ...descriptionParams });
+  const paramsJson = JSON.stringify({
+    eventDesc: description,
+    ...descriptionParams,
+  });
   return paramsJson;
 };
 
@@ -377,13 +437,17 @@ export const logEvent = async <T extends keyof AllAuditParams | undefined = unde
   const descriptionParams = args[1] as Record<string, string> | undefined;
   const descriptionFinal = resolveDescription(description, descriptionParams);
 
+  const clientIp = await getClientIp();
+
   const auditLog = JSON.stringify({
     userId,
     event,
     timestamp: Date.now(),
     subject,
     description: descriptionFinal,
+    clientIp,
   });
+
   try {
     const queueUrl = await getQueueURL();
     if (!queueUrl) throw new Error("Audit Log Queue not connected");

@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.3] - 2025-12-18
+
+- Trim whitespace when validating text input
+
 ## [2.0.2] - 2025-12-16
 
 - Fix infinite recursion bug in visibility check and add unit test coverage

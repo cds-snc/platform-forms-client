@@ -14,7 +14,7 @@ export const CustomJson = () => {
         }
       >
         <div className="mt-4">
-          <Label htmlFor="custom-elements" className="gc-label">
+          <Label htmlFor="custom-elements" className="gcds-label">
             {t("addElementDialog.customJson.field.label")}
           </Label>
           <Description>{t("addElementDialog.customJson.field.description")}</Description>
