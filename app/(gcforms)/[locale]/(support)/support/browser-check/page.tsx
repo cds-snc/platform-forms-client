@@ -19,12 +19,12 @@ export default async function FileAPITestPage(props: { params: Promise<{ locale:
   const params = await props.params;
   const { locale } = params;
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div className="grid grid-cols-[1fr_450px] gap-8">
       {/* Left Column: Test Component */}
       <FileAPITestComponent locale={locale} />
 
       {/* Right Column: Resources */}
-      <div className="rounded-2xl border-1 border-slate-200 bg-white p-6">
+      <div className="rounded-2xl border-1 border-[#D1D5DB] bg-white p-6">
         <AdditionalResourcesSection locale={locale} />
       </div>
     </div>

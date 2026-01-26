@@ -153,20 +153,20 @@ export const FileAPITestComponent = ({ locale }: { locale: string }) => {
   return (
     <div data-locale={locale}>
       <div className="mb-6">
-        <h1>{t("title", "browser-check")}</h1>
+        <div className="mb-6 font-semibold text-[#1B00C2]">{t("pilot", "browser-check")}</div>
+
+        <h1 className="[&:after]:!content-none">{t("title", "browser-check")}</h1>
         <p className="mb-4 text-slate-700">
           {t(
             "description",
             "Test if your browser supports File API needed for bulk response downloads."
           )}
         </p>
-
         <ol className="mb-6 list-inside list-decimal space-y-1 text-slate-700">
           <li>{t("step1", "Select a folder")}</li>
           <li>{t("step2", 'Allow "This site to view and copy files"')}</li>
           <li>{t("step3", "Save changes to the folder")}</li>
         </ol>
-
         {!selectedDirectory && (
           <div className="mb-6">
             <Button onClick={runTests} disabled={isRunning} theme="secondary">

@@ -1,5 +1,6 @@
 {
   "title": "Compatibilité des navigateurs",
+  "pilot": "GC Forms • Pilot",
   "description": "Vérifiez si votre navigateur prend en charge l'API File API requise pour les téléchargements de réponses groupées.",
   "step1": "Sélectionner un dossier",
   "step2": "Autoriser \"Ce site à voir et copier les fichiers\"",

@@ -6,15 +6,15 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
 
   const itResources = [
     {
-      title: t("fileSystemReadAskForUrls"),
+      title: t("microsoftEdgeDownload"),
       url: "https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/filesystemreadaskforurls",
-      description: t("fileSystemReadAskForUrlsDescription"),
+      description: t("fileSystemRead"),
       icon: <DownloadIcon className="size-8 fill-slate-500" />,
     },
     {
-      title: t("fileSystemWriteAskForUrls"),
+      title: t("microsoftEdgeUpload"),
       url: "https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/filesystemwriteaskforurls",
-      description: t("fileSystemWriteAskForUrlsDescription"),
+      description: t("fileSystemWrite"),
       icon: <UploadIcon className="size-8 fill-slate-500" />,
     },
   ];
@@ -34,7 +34,9 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
 
   return (
     <div>
-      <h3 className="!mt-0 mb-4 text-lg font-bold">{t("itAdministrators", "IT Administrators")}</h3>
+      <h5 className="!mt-0 mb-4 text-lg font-bold text-slate-950">
+        {t("itAdministrators", "IT Administrators")}
+      </h5>
       <div className="mb-8 divide-y divide-slate-200">
         {itResources.map((resource) => (
           <div key={resource.title} className="grid grid-cols-[60px_1fr] gap-4 py-3 first:pt-0">
@@ -44,24 +46,24 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
                 href={resource.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mb-1 block text-sm 
-                font-medium
+                className="mb-1 block text-base 
+                font-bold
                 !text-slate-500 no-underline
                 
                 hover:underline"
               >
                 {resource.title}
               </a>
-              <p className="text-sm font-bold ">{resource.description}</p>
+              <p className="text-lg font-bold text-slate-950 ">{resource.description}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <h3 className="mb-4 text-base font-bold">
+      <h5 className="mb-4 text-lg font-bold text-slate-950">
         {t("additionalResources", "Additional Resources")}
-      </h3>
-      <div className="divide-y divide-slate-200">
+      </h5>
+      <div className="divide-y divide-[#D1D5DB]">
         {resources.map((resource) => (
           <div key={resource.title} className="py-3 first:pt-0">
             <a
@@ -69,13 +71,13 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
               target="_blank"
               rel="noopener noreferrer"
               className="mb-1 block 
-              text-sm
+              text-lg
               font-bold !text-current no-underline
               hover:underline"
             >
               {resource.title}
             </a>
-            <p className="text-sm !text-slate-600">{resource.description}</p>
+            <p className="text-lg !text-slate-800">{resource.description}</p>
           </div>
         ))}
       </div>
