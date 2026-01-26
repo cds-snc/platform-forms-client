@@ -11,7 +11,7 @@ export async function generateMetadata(props: {
   const { t } = await serverTranslation("browser-check", { lang: locale });
 
   return {
-    title: `${t("title", "Browser compatibility")} — GCForms`,
+    title: `${t("title")} — GCForms`,
   };
 }
 

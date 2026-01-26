@@ -6,12 +6,14 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
 
   const itResources = [
     {
+      id: "microsoft-edge-download",
       title: t("microsoftEdgeDownload"),
       url: "https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/filesystemreadaskforurls",
       description: t("fileSystemRead"),
       icon: <DownloadIcon className="size-8 fill-slate-500" />,
     },
     {
+      id: "microsoft-edge-upload",
       title: t("microsoftEdgeUpload"),
       url: "https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/filesystemwriteaskforurls",
       description: t("fileSystemWrite"),
@@ -21,11 +23,13 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
 
   const resources = [
     {
+      id: "mdn-web-docs",
       title: t("mdnWebDocs"),
       url: "https://developer.mozilla.org/en-US/docs/Web/API/File_System_API",
       description: t("mdnWebDocsDescription"),
     },
     {
+      id: "web-dev-guide",
       title: t("webDevGuide"),
       url: "https://web.dev/file-system-access/",
       description: t("webDevGuideDescription"),
@@ -33,11 +37,11 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
   ];
 
   return (
-    <div>
+    <div className="rounded-2xl border-1 border-[#D1D5DB] bg-white p-6">
       <h5 className="!mt-0 mb-4 text-lg font-bold text-slate-950">{t("itAdministrators")}</h5>
       <div className="mb-8 divide-y divide-slate-200">
         {itResources.map((resource) => (
-          <div key={resource.title} className="grid grid-cols-[60px_1fr] gap-4 py-3 first:pt-0">
+          <div key={resource.id} className="grid grid-cols-[60px_1fr] gap-4 py-3 first:pt-0">
             <div className="mt-1 flex items-start justify-center">{resource.icon}</div>
             <div>
               <a
@@ -61,7 +65,7 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
       <h5 className="mb-4 text-lg font-bold text-slate-950">{t("additionalResources")}</h5>
       <div className="divide-y divide-[#D1D5DB]">
         {resources.map((resource) => (
-          <div key={resource.title} className="py-3 first:pt-0">
+          <div key={resource.id} className="py-3 first:pt-0">
             <a
               href={resource.url}
               target="_blank"

@@ -14,7 +14,7 @@ export async function generateMetadata(props: {
   const { t } = await serverTranslation("browser-check", { lang: locale });
 
   return {
-    title: `${t("title", "Browser compatibility")} — GCForms`,
+    title: `${t("title")}`,
   };
 }
 
@@ -36,13 +36,8 @@ export default async function FileAPITestPage(props: { params: Promise<{ locale:
   return (
     <div className="mx-20 my-10">
       <div className="grid grid-cols-[1fr_450px] gap-8">
-        {/* Left Column: Test Component */}
         <FileAPITestComponent locale={locale} userEmail={userEmail} />
-
-        {/* Right Column: Resources */}
-        <div className="rounded-2xl border-1 border-[#D1D5DB] bg-white p-6">
-          <AdditionalResourcesSection locale={locale} />
-        </div>
+        <AdditionalResourcesSection locale={locale} />
       </div>
     </div>
   );

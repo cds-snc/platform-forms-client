@@ -91,7 +91,8 @@ ${description}<br/>
     });
   } catch (error) {
     logMessage.error(`Failed to send support request: ${(error as Error).message}`);
-    return { error: "Internal Service Error: Failed to send request", validationErrors: [] };
+    const { t } = await serverTranslation(["common"], { lang: language });
+    return { error: t("errors.internalServiceError"), validationErrors: [] };
   }
   return { error: "", validationErrors: [] };
 }
@@ -163,7 +164,8 @@ ${JSON.stringify(browserInfo.testResults, null, 2).replace(/\n/g, "<br/>")}.<br/
     });
   } catch (error) {
     logMessage.error(`Failed to send browser compatibility request: ${(error as Error).message}`);
-    return { error: "Internal Service Error: Failed to send request", validationErrors: [] };
+    const { t } = await serverTranslation(["common"], { lang: language });
+    return { error: t("errors.internalServiceError"), validationErrors: [] };
   }
 
   return { error: "", validationErrors: [] };
