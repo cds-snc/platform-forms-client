@@ -18,6 +18,8 @@ import {
 } from "valibot";
 import { useTranslation } from "@i18n/client";
 
+import { browserCompatibilitySupport } from "../actions";
+
 interface ErrorStates {
   validationErrors: {
     fieldKey: string;
@@ -105,8 +107,6 @@ export const SupportForm = ({
     }
 
     try {
-      // Import the server action dynamically
-      const { browserCompatibilitySupport } = await import("../actions");
       const submitFormData = new FormData();
       Object.entries(formEntries).forEach(([key, value]) => {
         submitFormData.append(key, value);
