@@ -80,7 +80,6 @@ ${description}<br/>
     });
   } catch (error) {
     logMessage.error(`Failed to send support request: ${(error as Error).message}`);
-
     return { error: "Internal Service Error: Failed to send request", validationErrors: [] };
   }
   return { error: "", validationErrors: [] };
