@@ -10,11 +10,14 @@ import type { TestError, TestResult } from "../types";
 interface OverallResultProps {
   tests: TestResult[];
   testResults: {
+    fileSystemAPI: TestResult | null;
+    directoryPicker: TestResult | null;
     readWritePermission: TestResult | null;
     readOnlyPermission: TestResult | null;
     createFile: TestResult | null;
     writeFile: TestResult | null;
     readFile: TestResult | null;
+    cleanUp: TestResult | null;
   };
   locale: string;
   userEmail?: string;

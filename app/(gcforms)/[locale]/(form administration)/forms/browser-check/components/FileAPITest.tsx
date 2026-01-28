@@ -210,11 +210,14 @@ export const FileAPITest = ({ locale, userEmail }: { locale: string; userEmail?:
           <OverallResult
             tests={completedTests}
             testResults={{
+              fileSystemAPI,
+              directoryPicker,
               readWritePermission,
               readOnlyPermission,
               createFile,
               writeFile,
               readFile,
+              cleanUp,
             }}
             locale={locale}
             userEmail={userEmail}

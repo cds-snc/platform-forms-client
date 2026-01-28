@@ -17,6 +17,7 @@ import {
   check,
 } from "valibot";
 import { useTranslation } from "@i18n/client";
+import type { TestResult } from "../types";
 
 import { browserCompatibilitySupport } from "../actions";
 
@@ -28,19 +29,15 @@ interface ErrorStates {
   error?: string;
 }
 
-interface TestError {
-  error?: string;
-  message: string;
-}
-
-type TestResult = true | TestError;
-
 interface TestResults {
+  fileSystemAPI: TestResult | null;
+  directoryPicker: TestResult | null;
   readWritePermission: TestResult | null;
   readOnlyPermission: TestResult | null;
   createFile: TestResult | null;
   writeFile: TestResult | null;
   readFile: TestResult | null;
+  cleanUp: TestResult | null;
 }
 
 interface SupportFormProps {
