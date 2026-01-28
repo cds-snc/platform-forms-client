@@ -5,13 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { ga } from "@lib/client/clientHelpers";
 import { StatusBadge } from "./StatusBadge";
 import { SupportForm } from "./SupportForm";
-
-interface TestError {
-  error?: string;
-  message: string;
-}
-
-type TestResult = true | TestError;
+import type { TestError, TestResult } from "../types";
 
 interface OverallResultProps {
   tests: TestResult[];

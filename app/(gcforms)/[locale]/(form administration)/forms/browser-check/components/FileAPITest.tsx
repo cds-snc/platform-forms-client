@@ -7,19 +7,13 @@ import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
 import { OverallResult } from "./OverallResult";
+import type { TestResult, TestError } from "../types";
 
 declare global {
   interface Window {
     showDirectoryPicker: () => Promise<FileSystemDirectoryHandle>;
   }
 }
-
-interface TestError {
-  error?: string;
-  message: string;
-}
-
-type TestResult = true | TestError;
 
 const TEST_FILENAME = ".gcforms-test-write.txt";
 const TEST_CONTENT = "GCForms File API Test - " + new Date().toISOString();
