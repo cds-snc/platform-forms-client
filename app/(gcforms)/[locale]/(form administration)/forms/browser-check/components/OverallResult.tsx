@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
+
 import { ga } from "@lib/client/clientHelpers";
 import { StatusBadge } from "./StatusBadge";
 import { SupportForm } from "./SupportForm";
 
 interface TestError {
-  error: string;
+  error?: string;
   message: string;
 }
 
@@ -34,7 +35,6 @@ export const OverallResult = ({ tests, testResults, locale, userEmail }: Overall
   const allPassed = failed === 0 && passed === tests.length;
 
   // Check if all expected tests have completed for success
-  // For success, we need: FileAPI + DirectoryPicker + ReadWrite + CreateFile + WriteFile + ReadFile + CleanUp = 7 tests
   const allTestsCompleted = tests.length >= 7;
   const shouldShowSuccess = allPassed && allTestsCompleted;
 

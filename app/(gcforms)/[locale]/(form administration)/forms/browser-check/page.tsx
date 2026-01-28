@@ -1,10 +1,12 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { FileAPITestComponent } from "./components/FileAPITestComponent";
-import { AdditionalResourcesSection } from "./components/AdditionalResourcesSection";
-import { authCheckAndRedirect } from "@lib/actions";
-import { AccessControlError } from "@lib/auth/errors";
 import { redirect } from "next/navigation";
+
+import { AccessControlError } from "@lib/auth/errors";
+import { authCheckAndRedirect } from "@lib/actions";
+
+import { FileAPITest } from "./components/FileAPITest";
+import { AdditionalResourcesSection } from "./components/AdditionalResourcesSection";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -36,7 +38,7 @@ export default async function FileAPITestPage(props: { params: Promise<{ locale:
   return (
     <div className="mx-20 my-10">
       <div className="grid grid-cols-[1fr_450px] gap-8">
-        <FileAPITestComponent locale={locale} userEmail={userEmail} />
+        <FileAPITest locale={locale} userEmail={userEmail} />
         <AdditionalResourcesSection locale={locale} />
       </div>
     </div>

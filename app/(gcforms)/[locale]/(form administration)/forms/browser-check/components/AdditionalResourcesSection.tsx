@@ -37,9 +37,10 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
   ];
 
   return (
-    <div className="rounded-2xl border-1 border-[#D1D5DB] bg-white p-6">
+    <div className="rounded-2xl border-1 border-gray-300 bg-white p-6">
+      {/* IT Administrators Section */}
       <h5 className="!mt-0 mb-4 text-lg font-bold text-slate-950">{t("itAdministrators")}</h5>
-      <div className="mb-8 divide-y divide-slate-200">
+      <div className="mb-8 divide-y divide-gray-300">
         {itResources.map((resource) => (
           <div key={resource.id} className="grid grid-cols-[60px_1fr] gap-4 py-3 first:pt-0">
             <div className="mt-1 flex items-start justify-center">{resource.icon}</div>
@@ -51,7 +52,6 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
                 className="mb-1 block text-base 
                 font-bold
                 !text-slate-500 no-underline
-                
                 hover:underline"
               >
                 {resource.title}
@@ -62,8 +62,9 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
         ))}
       </div>
 
+      {/* Additional Resources Section */}
       <h5 className="mb-4 text-lg font-bold text-slate-950">{t("additionalResources")}</h5>
-      <div className="divide-y divide-[#D1D5DB]">
+      <div className="divide-y divide-gray-300">
         {resources.map((resource) => (
           <div key={resource.id} className="py-3 first:pt-0">
             <a

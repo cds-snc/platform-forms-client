@@ -29,7 +29,7 @@ interface ErrorStates {
 }
 
 interface TestError {
-  error: string;
+  error?: string;
   message: string;
 }
 
