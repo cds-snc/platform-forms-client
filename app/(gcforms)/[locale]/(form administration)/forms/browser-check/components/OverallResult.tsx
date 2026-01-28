@@ -6,6 +6,7 @@ import { ga } from "@lib/client/clientHelpers";
 import { StatusBadge } from "./StatusBadge";
 import { SupportForm } from "./SupportForm";
 import type { TestError, TestResult } from "../types";
+import { cn } from "@root/lib/utils";
 
 interface OverallResultProps {
   tests: TestResult[];
@@ -58,10 +59,12 @@ export const OverallResult = ({ tests, testResults, locale, userEmail }: Overall
     return (
       <div className="rounded-md border border-green-200 bg-green-50 p-4">
         <div className="mb-2 flex items-start gap-2">
-          <span className="gcds-icon gcds-icon-checkmark-circle mt-0.5 text-green-600"></span>
-          <h3 className="text-lg font-semibold text-green-600">{t("supportForm.successTitle")}</h3>
+          <span className="gcds-icon gcds-icon-checkmark-circle mt-0.5 text-emerald-600"></span>
+          <h3 className="text-lg font-semibold text-emerald-600">
+            {t("supportForm.successTitle")}
+          </h3>
         </div>
-        <p className="text-slate-700">{t("supportForm.successMessage")}</p>
+        <p className="text-emerald-700">{t("supportForm.successMessage")}</p>
       </div>
     );
   }
@@ -79,7 +82,7 @@ export const OverallResult = ({ tests, testResults, locale, userEmail }: Overall
               : t("cannotDownload")
         }
       />
-      <p className="text-left text-slate-700">
+      <p className={cn("*text-left mb-6", shouldShowSuccess ? "text-emerald-700" : "text-red-600")}>
         {shouldShowSuccess
           ? t("successMessage")
           : isUserCancelled
