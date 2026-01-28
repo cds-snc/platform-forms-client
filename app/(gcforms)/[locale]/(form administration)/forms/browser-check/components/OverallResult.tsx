@@ -45,11 +45,12 @@ export const OverallResult = ({ tests, testResults, locale, userEmail }: Overall
   // Send GA event when test results are available (excluding user cancellations)
   useEffect(() => {
     if (tests.length > 0 && !isUserCancelled) {
-      ga("browser_compatibility_test", {
+      ga("file_api_browser_compat", {
         success: shouldShowSuccess,
+        emailDomain: userEmail ? userEmail.split("@")[1] : "unknown",
       });
     }
-  }, [tests.length, shouldShowSuccess, isUserCancelled]);
+  }, [tests.length, shouldShowSuccess, isUserCancelled, userEmail]);
 
   const handleSubmitSuccess = () => {
     setSubmitted(true);
