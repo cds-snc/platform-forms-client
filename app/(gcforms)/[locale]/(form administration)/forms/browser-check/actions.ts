@@ -68,7 +68,6 @@ export async function browserCompatibilitySupport(
       <tr style="background-color: #f0f0f0;">
         <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Test Name</th>
         <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Status</th>
-        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Details</th>
       </tr>
     `;
 
@@ -80,14 +79,11 @@ export async function browserCompatibilitySupport(
           : result?.message
             ? '<span style="color: red; font-weight: bold;">✗ Fail</span>'
             : '<span style="color: #999;">-</span>';
-      const details =
-        result === true ? "Test passed successfully" : result?.message ? result.message : "Not run";
 
       tableHTML += `
       <tr>
         <td style="border: 1px solid #ddd; padding: 8px;">${testName}</td>
         <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${status}</td>
-        <td style="border: 1px solid #ddd; padding: 8px;">${details}</td>
       </tr>
     `;
     });
@@ -99,22 +95,22 @@ export async function browserCompatibilitySupport(
   const emailBody = `
 User (${email}) has reported browser compatibility issues with File System Access API.<br/>
 <br/>
+Test Results:<br/>
+${generateTestResultsTable(browserInfo.testResults)}<br/>
+<br/>
 Browser Information:<br/>
 - Browser: ${browserInfo.browser || "Unknown"}<br/>
 - User Agent: ${browserInfo.userAgent || "Not provided"}<br/>
 <br/>
-Test Results:<br/>
-${generateTestResultsTable(browserInfo.testResults)}<br/>
-<br/>
 ****<br/>
 L'utilisateur (${email}) a signalé des problèmes de compatibilité de navigateur avec l'API d'accès au système de fichiers.<br/>
+<br/>
+Résultats des tests:<br/>
+${generateTestResultsTable(browserInfo.testResults)}<br/>
 <br/>
 Informations sur le navigateur:<br/>
 - Navigateur: ${browserInfo.browser || "Inconnu"}<br/>
 - Agent utilisateur: ${browserInfo.userAgent || "Non fourni"}<br/>
-<br/>
-Résultats des tests:<br/>
-${generateTestResultsTable(browserInfo.testResults)}<br/>
 `;
 
   logMessage.info(`Creating browser compatibility support ticket for ${email}`);
