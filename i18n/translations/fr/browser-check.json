@@ -11,7 +11,7 @@
   "success": "La vérification a réussie",
   "failed": "La vérification a échouée",
   "successMessage": "Merci d'avoir vérifié! Ce navigateur sur cet appareil est prêt à télécharger de grands volumes de réponses directement dans une fonctionnalité à venir. Restez à l'écoute pour plus d'informations.",
-  "cannotDownload": "Malheureusement, ce navigateur sur cet appareil ne peut pas télécharger les réponses à l'aide de cette fonctionnalité. Nous vous contacterons peut-être pour en savoir plus sur votre configuration. En attendant, vous pouvez réessayer avec un autre navigateur ou demander à votre administrateur informatique de vérifier si certains paramètres bloquent l'accès.",
+  "cannotDownload": "Malheureusement, ce navigateur sur cet appareil ne peut pas télécharger les réponses à l'aide de cette fonctionnalité. Vous pouvez réessayer avec un autre navigateur ou demander à votre administrateur informatique de vérifier si certains paramètres bloquent l'accès.",
   "testCancelled": "La vérification n'a pas été effectuée. Veuillez réessayer pour voir si les réponses peuvent être téléchargées à l'aide de votre navigateur sur cet appareil. Vous devrez peut-être essayer un autre navigateur ou sélectionner un nouveau dossier sur votre ordinateur.",
   "itAdministrators": "Ressources pour les administrateurs en TI",
   "microsoftEdgeDownload": "Autoriser Microsoft Edge à télécharger",
@@ -25,9 +25,9 @@
   "webDevGuideDescription": "Guide Google pour simplifier l'accès aux fichiers locaux",
   "supportForm": {
     "title": "Envoyez les résultats de la vérification de votre navigateur",
-    "description": "Envoyez-nous les informations relatives à votre navigateur en indiquant votre adresse courriel et nous examinerons votre cas en plus en détail. Nous vous contacterons peut-être  pour obtenir plus d'informations.",
+    "description": "Envoyez-nous les informations relatives à votre navigateur en indiquant votre adresse courriel et nous examinerons votre cas en plus en détail. Nous vous contacterons peut-être  pour en savoir plus sur votre configuration.",
     "email": "Votre adresse courriel",
-    "submit": "Envoyer les résultats de la vérification",
+    "submit": "Envoyer les résultats du navigateur",
     "submitting": "Envoi en cours...",
     "successTitle": "Merci, vos résultats ont été envoyées.",
     "successMessage": "Nous avons reçu vos renseignements et essayerons de vous répondre bientôt."
