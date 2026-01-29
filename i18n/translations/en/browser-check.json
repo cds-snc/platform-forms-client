@@ -10,7 +10,7 @@
   "running": "Running checks...",
   "success": "Passed",
   "failed": "Failed",
-  "successMessage": "This browser on this device can download responses.",
+  "successMessage": "Thank you for checking! This browser on this device is all set to download high volumes of responses directly in an upcoming feature. Stay tuned for more information.",
   "cannotDownload": "Cannot download responses using this browser on this device.",
   "testCancelled": "Test was cancelled. Please try again to check if responses can be downloaded using your browser on this device.",
   "itAdministrators": "IT Administrators",
