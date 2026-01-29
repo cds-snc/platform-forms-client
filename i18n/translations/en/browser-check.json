@@ -26,7 +26,7 @@
   "supportForm": {
     "title": "Submit your email",
     "description": "Send us your browser information and we'll help you with file download issues.",
-    "email": "Email address",
+    "email": "Your email address",
     "submit": "Send support request",
     "submitting": "Sending...",
     "successTitle": "Support request sent",
