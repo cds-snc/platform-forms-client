@@ -22,7 +22,7 @@
   "mdnWebDocs": "MDN Web Docs",
   "mdnWebDocsDescription": "Comprehensive documentation on the File System API",
   "webDevGuide": "Web.dev Guide",
-  "webDevGuideDescription": "Google's guide with practical examples and best practices",
+  "webDevGuideDescription": "Google's guide to simplifying access to local files",
   "supportForm": {
     "title": "Submit your email",
     "description": "Send us your browser information and we'll help you with file download issues.",
