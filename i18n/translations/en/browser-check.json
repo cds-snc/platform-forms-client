@@ -1,7 +1,7 @@
 {
   "title": "Check browser compatibility",
   "pilot": "GC Forms • Pilot",
-  "description": "Test if your browser supports File API needed for bulk response downloads.",
+  "description": "Help us understand if your browser can support the \"File System API\" needed for enhancements to download responses in bulk (more than 150 at once).",
   "step1": "Select a folder",
   "step2": "Allow \"This site to view and copy files\"",
   "step3": "Save changes to the folder",
