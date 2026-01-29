@@ -14,8 +14,8 @@ export const StatusBadge = ({ isSuccess, title, className = "" }: StatusBadgePro
         iconClass: "gcds-icon-checkmark-circle",
       }
     : {
-        className: "border border-red-200 bg-red-50",
-        badgeClass: "text-red-600",
+        className: "border border-gcds-red-100 bg-gcds-red-100",
+        badgeClass: "text-gcds-red-900",
         iconClass: "gcds-icon-warning-triangle",
       };
 
@@ -24,7 +24,7 @@ export const StatusBadge = ({ isSuccess, title, className = "" }: StatusBadgePro
       className={`inline-flex items-center gap-1 rounded-2xl px-4 py-2 ${config.className} mb-6 ${className}`}
     >
       <div
-        className={`flex items-center justify-center ${isSuccess ? "border-emerald-700" : "border-red-600"}`}
+        className={`flex items-center justify-center ${isSuccess ? "border-emerald-700" : "border-gcds-red-900"}`}
       >
         <span className={`gcds-icon ${config.iconClass} inline-block ${config.badgeClass}`}></span>
       </div>
