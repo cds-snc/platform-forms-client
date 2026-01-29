@@ -3,7 +3,7 @@
   "pilot": "GC Forms • Pilot",
   "description": "Help us understand if your browser can support the \"File System API\" needed for enhancements to download responses in bulk (more than 150 at once).",
   "step1": "Select a folder on your computer.",
-  "step2": "Allow \"This site to view and copy files\"",
+  "step2": "Allow \"This site to view, modify, and copy files\".",
   "step3": "Save changes to the folder",
   "selectDirectory": "Select a folder",
   "runTests": "Run test again",
