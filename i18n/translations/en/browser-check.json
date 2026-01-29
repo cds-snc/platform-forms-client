@@ -29,7 +29,7 @@
     "email": "Your email address",
     "submit": "Send support request",
     "submitting": "Sending...",
-    "successTitle": "Support request sent",
+    "successTitle": "Thank you, your results have been sent.",
     "successMessage": "We've received your information and will try to get back to you soon."
   }
 }
