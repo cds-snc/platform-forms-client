@@ -7,7 +7,7 @@
   "step3": "Save changes to the folder to check if the functionality is supported.",
   "selectDirectory": "Select a folder",
   "runTests": "Run checks again",
-  "running": "Running...",
+  "running": "Running checks...",
   "success": "Passed",
   "failed": "Failed",
   "successMessage": "This browser on this device can download responses.",
