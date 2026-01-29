@@ -14,7 +14,7 @@
   "cannotDownload": "Unfortunately, this browser on this device cannot  download responses using this functionality. We may follow up to learn more about your set-up. In the meantime, you can try again on a different browser or work with your IT administrator to see if any settings might be blocking access.",
   "testCancelled": "The checks were not completed. Please try again to see if responses can be downloaded using your browser on this device. You may need to try a different browser or select a new folder on your computer.",
   "itAdministrators": "Resources for IT Administrators",
-  "microsoftEdgeDownload": "Microsoft Edge download",
+  "microsoftEdgeDownload": "Allowing Microsoft Edge to download",
   "fileSystemRead": "File System Read Ask For URLs",
   "microsoftEdgeUpload": "Microsoft Edge upload",
   "fileSystemWrite": "Enable File System Write Ask for this URL",
