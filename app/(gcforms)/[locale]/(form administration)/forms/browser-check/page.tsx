@@ -37,7 +37,7 @@ export default async function FileAPITestPage(props: { params: Promise<{ locale:
 
   return (
     <div className="mx-20 my-10">
-      <div className="grid grid-cols-[1fr_450px] gap-8">
+      <div className="grid grid-cols-[1fr_450px] items-start gap-8">
         <FileAPITest locale={locale} userEmail={userEmail} />
         <AdditionalResourcesSection locale={locale} />
       </div>
