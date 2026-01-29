@@ -1,5 +1,5 @@
 {
-  "title": "Browser compatibility",
+  "title": "Check browser compatibility",
   "pilot": "GC Forms • Pilot",
   "description": "Test if your browser supports File API needed for bulk response downloads.",
   "step1": "Select a folder",
