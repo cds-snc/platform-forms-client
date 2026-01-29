@@ -24,7 +24,7 @@
   "webDevGuide": "Web.dev Guide",
   "webDevGuideDescription": "Google's guide to simplifying access to local files",
   "supportForm": {
-    "title": "Submit your email",
+    "title": "Submit results from the browser check",
     "description": "Send us your browser information by submitting your email and we'll investigate further. We may follow up to learn more.",
     "email": "Your email address",
     "submit": "Send support request",
