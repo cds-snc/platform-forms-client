@@ -42,7 +42,7 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
       <h5 className="!mt-0 mb-4 text-lg font-bold text-slate-950">{t("itAdministrators")}</h5>
       <div className="mb-8 divide-y divide-gray-300">
         {itResources.map((resource) => (
-          <div key={resource.id} className="grid grid-cols-[60px_1fr] gap-4 py-3 first:pt-0">
+          <div key={resource.id} className="grid grid-cols-[40px_1fr] gap-4 py-3 first:pt-0">
             <div className="mt-1 flex items-start justify-center">{resource.icon}</div>
             <div>
               <a
