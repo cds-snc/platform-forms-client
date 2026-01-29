@@ -6,7 +6,7 @@
   "step2": "Allow \"This site to view, modify, and copy files\".",
   "step3": "Save changes to the folder to check if the functionality is supported.",
   "selectDirectory": "Select a folder",
-  "runTests": "Run test again",
+  "runTests": "Run checks again",
   "running": "Running...",
   "success": "Passed",
   "failed": "Failed",
