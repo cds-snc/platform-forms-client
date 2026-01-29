@@ -3,7 +3,14 @@ import tokens from "@gcds-core/tokens/build/figma/figma.tokens.json";
 
 import colors from "tailwindcss/colors";
 
-const { red, green, blue, grayscale } = tokens.Tokens.color;
+const {
+  red,
+  green,
+  blue,
+  grayscale,
+  "blue-muted": blueMuted,
+  "blue-vivid": blueVivid,
+} = tokens.Tokens.color;
 
 module.exports = {
   theme: {
@@ -82,11 +89,6 @@ module.exports = {
           700: "#335075",
           800: "#26374a",
         },
-        indigo: {
-          50: "#EEF2FF",
-          500: "#6366F1",
-          700: "#4338CA",
-        },
         violet: {
           50: "#EDE9FE",
           500: "#A78BFA",
@@ -153,6 +155,8 @@ module.exports = {
             800: blue[800].value,
             850: blue[850].value,
             900: blue[900].value, // primary
+            muted: blueMuted.value,
+            vivid: blueVivid.value,
           },
           green: {
             100: green[100].value,
