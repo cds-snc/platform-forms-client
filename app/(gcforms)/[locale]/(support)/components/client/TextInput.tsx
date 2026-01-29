@@ -7,6 +7,7 @@ export interface TextInputProps extends InputFieldProps {
   placeholder?: string;
   autoComplete?: string;
   error: string;
+  defaultValue?: string;
 }
 
 export const TextInput = ({
@@ -19,6 +20,7 @@ export const TextInput = ({
   placeholder,
   autoComplete,
   error,
+  defaultValue,
 }: TextInputProps): React.ReactElement => {
   const classes = cn("gc-input-text", className);
   return (
@@ -33,6 +35,7 @@ export const TextInput = ({
         required={required}
         autoComplete={autoComplete ? autoComplete : "off"}
         placeholder={placeholder}
+        defaultValue={defaultValue}
         {...(ariaDescribedBy && { ...{ "aria-describedby": ariaDescribedBy } })}
       />
     </>
