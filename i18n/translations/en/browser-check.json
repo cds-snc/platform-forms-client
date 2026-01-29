@@ -17,7 +17,7 @@
   "microsoftEdgeDownload": "Microsoft Edge download",
   "fileSystemRead": "File System Read Ask For URLs",
   "microsoftEdgeUpload": "Microsoft Edge upload",
-  "fileSystemWrite": "File System Write Ask For URLs",
+  "fileSystemWrite": "Enable File System Write Ask for this URL",
   "additionalResources": "Additional Resources",
   "mdnWebDocs": "MDN Web Docs",
   "mdnWebDocsDescription": "Comprehensive documentation on the File System API",
