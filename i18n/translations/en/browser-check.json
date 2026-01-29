@@ -15,7 +15,7 @@
   "testCancelled": "The checks were not completed. Please try again to see if responses can be downloaded using your browser on this device. You may need to try a different browser or select a new folder on your computer.",
   "itAdministrators": "Resources for IT Administrators",
   "microsoftEdgeDownload": "Allowing Microsoft Edge to download",
-  "fileSystemRead": "File System Read Ask For URLs",
+  "fileSystemRead": "Enable File System Read Access for this URL",
   "microsoftEdgeUpload": "Allowing Microsoft Edge to upload",
   "fileSystemWrite": "Enable File System Write Ask for this URL",
   "additionalResources": "Learn more about the File System API",
