@@ -195,44 +195,48 @@ export const FileAPITest = ({ locale, userEmail }: { locale: string; userEmail?:
         </ol>
 
         {/* Show select directory button if no directory selected yet */}
-        {!selectedDirectory && (
-          <div className="mb-6">
-            <Button onClick={runTests} disabled={isRunning} theme="secondary">
-              {isRunning ? t("running") : t("selectDirectory")}
-            </Button>
-          </div>
-        )}
-      </div>
-
-      {allTests.some((test) => test !== null) && !isRunning && (
-        <div>
-          <div className="mb-6 border-t border-slate-200"></div>
-          <OverallResult
-            tests={completedTests}
-            testResults={{
-              fileSystemAPI,
-              directoryPicker,
-              readWritePermission,
-              readOnlyPermission,
-              createFile,
-              writeFile,
-              readFile,
-              cleanUp,
-            }}
-            locale={locale}
-            userEmail={userEmail}
-          />
-
-          {/* Show retry button if user cancelled directory selection */}
-          {isUserCancelled && (
-            <div className="mt-6">
+        <div aria-live="polite">
+          {!selectedDirectory && (
+            <div className="mb-6">
               <Button onClick={runTests} disabled={isRunning} theme="secondary">
-                {isRunning ? t("running") : t("runTests")}
+                {isRunning ? t("running") : t("selectDirectory")}
               </Button>
             </div>
           )}
         </div>
-      )}
+      </div>
+
+      <div aria-live="polite">
+        {allTests.some((test) => test !== null) && !isRunning && (
+          <div>
+            <div className="mb-6 border-t border-slate-200"></div>
+            <OverallResult
+              tests={completedTests}
+              testResults={{
+                fileSystemAPI,
+                directoryPicker,
+                readWritePermission,
+                readOnlyPermission,
+                createFile,
+                writeFile,
+                readFile,
+                cleanUp,
+              }}
+              locale={locale}
+              userEmail={userEmail}
+            />
+
+            {/* Show retry button if user cancelled directory selection */}
+            {isUserCancelled && (
+              <div className="mt-6">
+                <Button onClick={runTests} disabled={isRunning} theme="secondary">
+                  {isRunning ? t("running") : t("runTests")}
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
