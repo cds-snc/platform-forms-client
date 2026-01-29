@@ -1,9 +1,9 @@
-@import "@cdssnc/gcds-tokens/build/web/css/components/radio.css";
+@import "@gcds-core/tokens/build/web/css/components/radio.css";
 
 .gc-input-radio {
   position: relative;
   transition: color ease-in-out 0.15s;
-  
+
   margin: var(--gcds-radio-margin) !important;
 
   max-width: var(--gcds-radio-max-width);
@@ -19,7 +19,9 @@
       box-shadow: var(--gcds-radio-focus-box-shadow);
       background: var(--gcds-radio-focus-background);
       border-color: theme("colors.gcds.blue.850") !important;
-      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
+      transition:
+        border-color ease-in-out 0.15s,
+        box-shadow ease-in-out 0.15s,
         outline ease-in-out 0.15s;
     }
 
@@ -58,7 +60,9 @@
       position: absolute;
       border-radius: var(--gcds-radio-border-radius);
       border: var(--gcds-radio-input-border-width) solid theme("colors.black.default");
-      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
+      transition:
+        border-color ease-in-out 0.15s,
+        box-shadow ease-in-out 0.15s,
         outline ease-in-out 0.15s;
     }
 

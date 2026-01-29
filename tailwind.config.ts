@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import tokens from "@cdssnc/gcds-tokens/build/figma/figma.tokens.json";
+import tokens from "@gcds-core/tokens/build/figma/figma.tokens.json";
 
 import colors from "tailwindcss/colors";
 
@@ -144,7 +144,6 @@ module.exports = {
             500: grayscale[500].value,
             700: grayscale[700].value,
             800: grayscale[800].value,
-            1000: grayscale[1000].value,
           },
           blue: {
             100: blue[100].value,
