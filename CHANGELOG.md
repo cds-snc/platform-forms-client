@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.9.0](https://github.com/cds-snc/platform-forms-client/compare/v4.8.0...v4.9.0) (2026-01-29)
+
+
+### Features
+
+* Enable multiple data sets for Departments dropdown ([#6721](https://github.com/cds-snc/platform-forms-client/issues/6721)) ([b904a75](https://github.com/cds-snc/platform-forms-client/commit/b904a756f31be2cfb52858754d9bd24b467e01fc))
+
+
+### Miscellaneous Chores
+
+* add browser check page for file api ([#6704](https://github.com/cds-snc/platform-forms-client/issues/6704)) ([149578a](https://github.com/cds-snc/platform-forms-client/commit/149578abad6352c1c130d6023385a0a93a6500c5))
+* bump bump Next.js 16.1.6 ([#6738](https://github.com/cds-snc/platform-forms-client/issues/6738)) ([0b6d1fa](https://github.com/cds-snc/platform-forms-client/commit/0b6d1faa835f7461221495b6011d233a507a4730))
+* bump next js 16.1.4 ([#6714](https://github.com/cds-snc/platform-forms-client/issues/6714)) ([64409be](https://github.com/cds-snc/platform-forms-client/commit/64409be0b31f752f7f724f902a8972413ebbb61c))
+* **deps:** update all non-major docker images ([#6729](https://github.com/cds-snc/platform-forms-client/issues/6729)) ([769fbe3](https://github.com/cds-snc/platform-forms-client/commit/769fbe3c4fabf1edbba47b367c9f0b9911cdfba5))
+* **deps:** update all non-major github action dependencies ([#6730](https://github.com/cds-snc/platform-forms-client/issues/6730)) ([5939072](https://github.com/cds-snc/platform-forms-client/commit/59390721bf4eaa2d2a71f9d1f968a2145357cf89))
+* hide manage list options ([#6727](https://github.com/cds-snc/platform-forms-client/issues/6727)) ([0ce4967](https://github.com/cds-snc/platform-forms-client/commit/0ce4967307ec13f69dda5bb072df8591997255aa))
+* misc package bumps ([#6718](https://github.com/cds-snc/platform-forms-client/issues/6718)) ([ffa22f7](https://github.com/cds-snc/platform-forms-client/commit/ffa22f79a4ce13470366ca33e96d5c9499cbf70e))
+* package bumps aws + otel ([#6715](https://github.com/cds-snc/platform-forms-client/issues/6715)) ([9014459](https://github.com/cds-snc/platform-forms-client/commit/90144599f56cdfb362dd563ab391c44428d5b7a6))
+* revert md-jsx ([#6719](https://github.com/cds-snc/platform-forms-client/issues/6719)) ([67757aa](https://github.com/cds-snc/platform-forms-client/commit/67757aaddbe4f299f3d59d38666479d66af09786))
+* synced file(s) with cds-snc/site-reliability-engineering ([#6723](https://github.com/cds-snc/platform-forms-client/issues/6723)) ([1df2e03](https://github.com/cds-snc/platform-forms-client/commit/1df2e030b266ea7be9843bb5c7c53a8e6b5a67b2))
+* synced local '.github/workflows/backstage-catalog-helper.yml' with remote 'tools/sre_file_sync/backstage-catalog-helper.yml' ([1df2e03](https://github.com/cds-snc/platform-forms-client/commit/1df2e030b266ea7be9843bb5c7c53a8e6b5a67b2))
+* Upgrade gcds ([#6725](https://github.com/cds-snc/platform-forms-client/issues/6725)) ([480c5f5](https://github.com/cds-snc/platform-forms-client/commit/480c5f5357307d8bb1a0cd51f1c7b0b67dc9721c))
+
 ## [4.8.0](https://github.com/cds-snc/platform-forms-client/compare/v4.7.2...v4.8.0) (2026-01-20)
 
 
