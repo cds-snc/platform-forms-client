@@ -16,7 +16,7 @@
   "itAdministrators": "Resources for IT Administrators",
   "microsoftEdgeDownload": "Allowing Microsoft Edge to download",
   "fileSystemRead": "File System Read Ask For URLs",
-  "microsoftEdgeUpload": "Microsoft Edge upload",
+  "microsoftEdgeUpload": "Allowing Microsoft Edge to upload",
   "fileSystemWrite": "Enable File System Write Ask for this URL",
   "additionalResources": "Learn more about the File System API",
   "mdnWebDocs": "MDN Web Docs",
