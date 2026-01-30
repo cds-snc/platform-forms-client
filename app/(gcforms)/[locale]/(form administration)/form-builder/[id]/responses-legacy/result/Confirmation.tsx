@@ -35,19 +35,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
   }, [resetProcessingCompleted, setHasError, setHasMaliciousAttachments]);
 
   const handleGoBack = () => {
-    router.push(`/${locale}/form-builder/${id}/responses-pilot?reset=true`);
-  };
-
-  const handleSelectNewLocation = () => {
-    // reset relevant state
-    resetProcessedSubmissionsCount();
-    setHasMaliciousAttachments(false);
-    resetProcessingCompleted();
-    setHasError(false);
-    setInterrupt(false);
-
-    // navigate to location selection with reset param
-    router.push(`/${locale}/form-builder/${id}/responses-pilot/location?reset=true`);
+    router.push(`/${locale}/form-builder/${id}/responses-legacy?reset=true`);
   };
 
   const handleDownload = async () => {
@@ -61,7 +49,7 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
 
     processResponses(initialResponses);
 
-    router.push(`/${locale}/form-builder/${id}/responses-pilot/processing`);
+    router.push(`/${locale}/form-builder/${id}/responses-legacy/processing`);
   };
 
   if (hasCheckedForResponses) {
@@ -70,13 +58,6 @@ export const Confirmation = ({ locale, id }: { locale: string; id: string }) => 
         <Responses
           actions={
             <div className="mt-8 flex flex-row gap-4">
-              <Button
-                theme="secondary"
-                onClick={handleSelectNewLocation}
-                disabled={Boolean(!newFormSubmissions || newFormSubmissions.length < 1)}
-              >
-                {t("confirmationPage.chooseNewLocationButton")}
-              </Button>
               {newFormSubmissions && newFormSubmissions.length > 0 ? (
                 <Button theme="primary" onClick={handleDownload}>
                   {t("confirmationPage.downloadResponsesButton")}

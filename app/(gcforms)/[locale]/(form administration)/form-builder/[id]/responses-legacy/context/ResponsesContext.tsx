@@ -12,7 +12,12 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
-import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
+import {
+  FileSystemDirectoryHandle,
+  FileSystemFileHandle,
+  getOriginPrivateDirectory,
+  showSaveFilePicker,
+} from "native-file-system-adapter";
 import { NewFormSubmission, PrivateApiKey } from "../lib/types";
 import { GCFormsApiClient } from "../lib/apiClient";
 import { initCsv } from "../lib/csvWriter";
@@ -31,7 +36,7 @@ import { ResponseDownloadLogger } from "../lib/logger";
 import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
 import { formatDuration } from "../lib/formatDuration";
-
+import * as zip from "@zip.js/zip.js";
 // Singleton logger instance
 const responseLogger = new ResponseDownloadLogger();
 
@@ -44,7 +49,8 @@ interface ResponsesContextType {
   apiClient: GCFormsApiClient | null;
   setApiClient: Dispatch<SetStateAction<GCFormsApiClient | null>>;
   directoryHandle: FileSystemDirectoryHandle | null;
-  setDirectoryHandle: Dispatch<SetStateAction<FileSystemDirectoryHandle | null>>;
+  zipContext: zip.FS;
+  resetZipContext: () => void;
   retrieveResponses: () => Promise<NewFormSubmission[]>;
   newFormSubmissions: NewFormSubmission[] | null;
   processedSubmissionsCount: number;
@@ -99,6 +105,7 @@ export const ResponsesProvider = ({
   const [privateApiKey, setPrivateApiKey] = useState<PrivateApiKey | null>(null);
   const [apiClient, setApiClient] = useState<GCFormsApiClient | null>(null);
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null);
+  const [zipContext, setZipContext] = useState<zip.FS>(new zip.fs.FS());
   const [newFormSubmissions, setNewFormSubmissions] = useState<NewFormSubmission[] | null>(null);
   const [processingCompleted, setProcessingCompleted] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -128,6 +135,10 @@ export const ResponsesProvider = ({
     [isProcessingInterrupted]
   );
 
+  const resetZipContext = useCallback(() => {
+    setZipContext(new zip.fs.FS());
+  }, []);
+
   const incrementProcessedSubmissionsCount = useCallback(() => {
     setProcessedSubmissionsCountState((prev) => prev + 1);
     processedSubmissionsCountRef.current += 1;
@@ -151,6 +162,13 @@ export const ResponsesProvider = ({
         interruptRef.current = false;
       }
     };
+  }, []);
+
+  useEffect(() => {
+    // get Origin Private File System
+    getOriginPrivateDirectory()
+      .then((handle) => handle.getDirectoryHandle("tmp_responses", { create: true }))
+      .then((handle) => setDirectoryHandle(handle));
   }, []);
 
   useEffect(() => {
@@ -214,7 +232,7 @@ export const ResponsesProvider = ({
       let formTemplate;
       let csvFileHandle: FileSystemFileHandle | null = null;
       let htmlDirectoryHandle: FileSystemDirectoryHandle | null = null;
-      let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
+      const formResponses = [...(initialSubmissions || newFormSubmissions || [])];
 
       if (!directoryHandle || !privateApiKey || !apiClient) {
         responseLogger.error("Missing required context values, aborting processing");
@@ -319,9 +337,29 @@ export const ResponsesProvider = ({
         }
 
         // Get subsequent submissions
-        // eslint-disable-next-line no-await-in-loop
-        formResponses = await retrieveResponses();
+        // ToDo: Implement check and fetch of Last Evaluated Key Hash for subsequent responses
+
+        break;
+
+        // formResponses = await retrieveResponses();
       }
+
+      await zipContext.addFileSystemHandle(directoryHandle);
+
+      const zipped = await zipContext.exportBlob();
+
+      const zipFileHandle = await showSaveFilePicker({
+        _preferPolyfill: false,
+        suggestedName: `${formId}-date.zip`,
+        excludeAcceptAllOption: false, // default
+      });
+
+      await zipped.stream().pipeTo(await zipFileHandle.createWritable());
+
+      const rootHandle = await navigator.storage.getDirectory();
+
+      // Remove the root directory and all its contents recursively
+      await rootHandle.removeEntry("tmp_responses", { recursive: true });
 
       // Timer end
       const endTime = Date.now();
@@ -349,10 +387,11 @@ export const ResponsesProvider = ({
     [
       apiClient,
       directoryHandle,
+      zipContext,
       incrementProcessedSubmissionsCount,
       newFormSubmissions,
       privateApiKey,
-      retrieveResponses,
+      // retrieveResponses,
       selectedFormat,
       setInterrupt,
       t,
@@ -366,12 +405,13 @@ export const ResponsesProvider = ({
     setNewFormSubmissions(null);
     resetProcessingCompleted();
     resetProcessedSubmissionsCount();
+    resetZipContext();
     setHasMaliciousAttachments(false);
     setSelectedFormat("csv");
     setHasError(false);
     setInterrupt(false);
     interruptRef.current = false;
-  }, [resetProcessedSubmissionsCount, resetProcessingCompleted, setInterrupt]);
+  }, [resetProcessedSubmissionsCount, resetProcessingCompleted, setInterrupt, resetZipContext]);
 
   const contextValue = useMemo(
     () => ({
@@ -384,6 +424,8 @@ export const ResponsesProvider = ({
       setApiClient,
       directoryHandle,
       setDirectoryHandle,
+      zipContext,
+      resetZipContext,
       retrieveResponses,
       newFormSubmissions,
       processedSubmissionsCount,
@@ -414,6 +456,8 @@ export const ResponsesProvider = ({
       privateApiKey,
       apiClient,
       directoryHandle,
+      zipContext,
+      resetZipContext,
       retrieveResponses,
       newFormSubmissions,
       processedSubmissionsCount,

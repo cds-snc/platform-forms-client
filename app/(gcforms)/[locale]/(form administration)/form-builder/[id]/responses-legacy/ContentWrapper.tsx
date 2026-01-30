@@ -28,7 +28,7 @@ export const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
       <div>
         <div className="mt-4">
           <Link
-            data-testid="responses-pilot-switch-back-link"
+            data-testid="responses-legacy-switch-back-link"
             href={`/${i18n.language}/form-builder/${formId}/responses`}
             onClick={handleSwitchBack}
             className="text-black visited:text-black"

@@ -13,7 +13,7 @@ import { GCFormsApiClient } from "./apiClient";
 import { writeHtml } from "./htmlWriter";
 import { writeRow } from "./csvWriter";
 import { TFunction } from "i18next";
-import { md5 } from "hash-wasm";
+// import { md5 } from "hash-wasm";
 import { withRetry } from "@root/lib/utils/retry";
 import { ResponseDownloadLogger } from "./logger";
 
@@ -46,7 +46,7 @@ export const processResponse = async ({
   t: TFunction<string | string[], undefined>;
   logger: ResponseDownloadLogger;
 }) => {
-  const confirmedResponse = await downloadAndConfirmResponse({
+  const confirmedResponse = await downloadResponse({
     workingDirectoryHandle,
     apiClient,
     decryptionKey,
@@ -127,7 +127,7 @@ export type AttachmentDownloadResult = {
   isPotentiallyMalicious: boolean;
 };
 
-const downloadAndConfirmResponse = async ({
+const downloadResponse = async ({
   workingDirectoryHandle,
   apiClient,
   decryptionKey,
@@ -223,7 +223,7 @@ const downloadAndConfirmResponse = async ({
   }
 
   // Perform integrity check and confirm submission
-  await integrityCheckAndConfirm(responseName, dataDirectoryHandle, apiClient, logger);
+  // await integrityCheckAndConfirm(responseName, dataDirectoryHandle, apiClient, logger);
 
   return {
     submissionId: responseName,
@@ -288,57 +288,57 @@ const downloadAttachment = async (
   };
 };
 
-const integrityCheckAndConfirm = async (
-  submissionName: string,
-  dataDirectoryHandle: FileSystemDirectoryHandle,
-  apiClient: GCFormsApiClient,
-  logger: ResponseDownloadLogger
-) => {
-  try {
-    // Load file into memory
-    const fileHandle = await dataDirectoryHandle.getFileHandle(`${submissionName}.json`);
-    const file = await fileHandle.getFile();
-    const fileContent = await file.text();
-    const {
-      answers,
-      checksum,
-      confirmationCode,
-    }: { answers: string; checksum: string; confirmationCode: string } = JSON.parse(fileContent);
+// const integrityCheckAndConfirm = async (
+//   submissionName: string,
+//   dataDirectoryHandle: FileSystemDirectoryHandle,
+//   apiClient: GCFormsApiClient,
+//   logger: ResponseDownloadLogger
+// ) => {
+//   try {
+//     // Load file into memory
+//     const fileHandle = await dataDirectoryHandle.getFileHandle(`${submissionName}.json`);
+//     const file = await fileHandle.getFile();
+//     const fileContent = await file.text();
+//     const {
+//       answers,
+//       checksum,
+//       confirmationCode,
+//     }: { answers: string; checksum: string; confirmationCode: string } = JSON.parse(fileContent);
 
-    // Calculate checksum
-    const calculatedChecksum = await md5(answers);
+//     // Calculate checksum
+//     const calculatedChecksum = await md5(answers);
 
-    if (calculatedChecksum !== checksum) {
-      throw new Error(`Checksum mismatch for submission ${submissionName}. File removed.`);
-    }
+//     if (calculatedChecksum !== checksum) {
+//       throw new Error(`Checksum mismatch for submission ${submissionName}. File removed.`);
+//     }
 
-    // If checksums match, confirm the submission
-    await withRetry(() => apiClient.confirmFormSubmission(submissionName, confirmationCode), {
-      maxRetries: 6,
-      onRetry: (attempt, error) => {
-        const cause = error instanceof Error && error.cause ? error.cause : null;
-        logger.info(`Attempt ${attempt} to confirm submission ${submissionName} failed: ${error}`, {
-          cause,
-        });
-      },
-      onFinalFailure: async (error, totalAttempts) => {
-        const cause = error instanceof Error && error.cause ? error.cause : null;
-        logger.error(
-          `Failed to confirm submission ${submissionName} after ${totalAttempts} attempts: ${error}`,
-          { cause }
-        );
-      },
-      isRetryable: (error) => {
-        const err = error as { response?: { status?: number } };
-        // Retry on network errors or 5xx server errors, but not on 4xx client errors
-        return !err.response || (err.response.status !== undefined && err.response.status >= 500);
-      },
-    });
-  } catch (error) {
-    // Delete failed file from the directory
-    await dataDirectoryHandle.removeEntry(`${submissionName}.json`);
-    throw new Error(`Integrity check and confirm failed for submission ${submissionName}`, {
-      cause: error,
-    });
-  }
-};
+//     // If checksums match, confirm the submission
+//     await withRetry(() => apiClient.confirmFormSubmission(submissionName, confirmationCode), {
+//       maxRetries: 6,
+//       onRetry: (attempt, error) => {
+//         const cause = error instanceof Error && error.cause ? error.cause : null;
+//         logger.info(`Attempt ${attempt} to confirm submission ${submissionName} failed: ${error}`, {
+//           cause,
+//         });
+//       },
+//       onFinalFailure: async (error, totalAttempts) => {
+//         const cause = error instanceof Error && error.cause ? error.cause : null;
+//         logger.error(
+//           `Failed to confirm submission ${submissionName} after ${totalAttempts} attempts: ${error}`,
+//           { cause }
+//         );
+//       },
+//       isRetryable: (error) => {
+//         const err = error as { response?: { status?: number } };
+//         // Retry on network errors or 5xx server errors, but not on 4xx client errors
+//         return !err.response || (err.response.status !== undefined && err.response.status >= 500);
+//       },
+//     });
+//   } catch (error) {
+//     // Delete failed file from the directory
+//     await dataDirectoryHandle.removeEntry(`${submissionName}.json`);
+//     throw new Error(`Integrity check and confirm failed for submission ${submissionName}`, {
+//       cause: error,
+//     });
+//   }
+// };

@@ -10,7 +10,7 @@ export function CompatibilityGuard({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     if (!isCompatible) {
-      router.replace(`/${locale}/form-builder/${formId}/responses-pilot/not-supported`);
+      router.replace(`/${locale}/form-builder/${formId}/responses-legacy`);
     }
   }, [isCompatible, locale, formId, router]);
 

@@ -9436,6 +9436,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zip.js/zip.js@npm:^2.8.16":
+  version: 2.8.16
+  resolution: "@zip.js/zip.js@npm:2.8.16"
+  checksum: 10c0/12a8d9572aa9deef9d46f974defadc016ab48c25a17aed7e16d2271e544aa735cfbf2d977551c4a490466d2ae77748686aaf6b63153c59d2a5ea920ad33c0378
+  languageName: node
+  linkType: hard
+
 "abbrev@npm:^4.0.0":
   version: 4.0.0
   resolution: "abbrev@npm:4.0.0"
@@ -12939,6 +12946,7 @@ __metadata:
     "@vitest/browser": "npm:^4.0.13"
     "@vitest/browser-playwright": "npm:^4.0.13"
     "@vitest/ui": "npm:^4.0.13"
+    "@zip.js/zip.js": "npm:^2.8.16"
     autoprefixer: "npm:^10.4.21"
     aws-sdk-client-mock: "npm:^3.0.0"
     axe-core: "npm:^4.10.3"

@@ -56,7 +56,7 @@ export default async function Page(props: {
         </ol>
       </div>
 
-      <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-pilot/load-key`}>
+      <LinkButton.Primary href={`/${locale}/form-builder/${id}/responses-legacy/load-key`}>
         {t("startPage.nextButton")}
       </LinkButton.Primary>
     </div>

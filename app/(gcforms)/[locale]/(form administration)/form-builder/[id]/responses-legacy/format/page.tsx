@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { SelectFormat } from "./SelectFormat";
 import { ApiClientGuard } from "../guards/ApiClientGuard";
-import { LocationGuard } from "../guards/LocationGuard";
 import { getPageTitle } from "../lib/getPageTitle";
 
 export async function generateMetadata(props: {
@@ -21,9 +20,7 @@ export default async function Page(props: {
   return (
     <div>
       <ApiClientGuard>
-        <LocationGuard>
-          <SelectFormat locale={locale} id={id} />
-        </LocationGuard>
+        <SelectFormat locale={locale} id={id} />
       </ApiClientGuard>
     </div>
   );

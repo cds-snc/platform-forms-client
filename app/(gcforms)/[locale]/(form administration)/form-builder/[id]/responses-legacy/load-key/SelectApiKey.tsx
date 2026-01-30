@@ -35,7 +35,7 @@ export const SelectApiKey = ({ locale, id }: { locale: string; id: string }) => 
     resetState();
 
     // remove reset param without adding history
-    const cleanUrl = `/${locale}/form-builder/${id}/responses-pilot/load-key`;
+    const cleanUrl = `/${locale}/form-builder/${id}/responses-legacy/load-key`;
     router.replace(cleanUrl);
   }, [searchParams, resetState, router, locale, id]);
 

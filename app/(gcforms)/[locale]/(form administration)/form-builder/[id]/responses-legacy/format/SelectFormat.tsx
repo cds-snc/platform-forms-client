@@ -17,7 +17,7 @@ import {
   hasFileInputElement,
 } from "../components/folder-preview/DirectoryPreview";
 
-export const STORAGE_KEY_PREFIX = "responses-pilot-format-";
+export const STORAGE_KEY_PREFIX = "responses-legacy-format-";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { t, router } = useResponsesApp();
@@ -55,7 +55,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
 
     processResponses(initialResponses);
 
-    router.push(`/${locale}/form-builder/${id}/responses-pilot/processing`);
+    router.push(`/${locale}/form-builder/${id}/responses-legacy/processing`);
   }, [retrieveResponses, processResponses, router, locale, id]);
 
   const handleFormatChange = useCallback(
@@ -121,7 +121,7 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
       <div className="flex flex-row gap-4">
         <LinkButton.Secondary
           ddata-testid="back-button"
-          href={`/${locale}/form-builder/${id}/responses-pilot/location?reset=true`}
+          href={`/${locale}/form-builder/${id}/responses-legacy/load-key`}
         >
           {t("backButton")}
         </LinkButton.Secondary>
