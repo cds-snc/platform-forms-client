@@ -1,8 +1,5 @@
-
-@import "@cdssnc/gcds-tokens/build/web/css/global.css";
-@import "@cdssnc/gcds-tokens/build/web/css/tokens.css";
-
-
+@import "@gcds-core/tokens/build/web/css/global.css";
+@import "@gcds-core/tokens/build/web/css/tokens.css";
 
 @tailwind base;
 @tailwind components;

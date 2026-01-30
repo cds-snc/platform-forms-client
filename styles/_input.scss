@@ -1,6 +1,6 @@
 /* https://github.com/cds-snc/gcds-components/blob/main/packages/web/src/components/gcds-input/gcds-input.css */
 @layer reset, default, disabled, error, focus;
-@import "@cdssnc/gcds-tokens/build/web/css/components/input.css";
+@import "@gcds-core/tokens/build/web/css/components/input.css";
 
 .gcds-input-wrapper {
   display: block;

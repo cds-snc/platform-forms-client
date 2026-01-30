@@ -6,12 +6,11 @@
   }
 }
 
-@import "@cdssnc/gcds-tokens/build/web/css/components.css";
+@import "@gcds-core/tokens/build/web/css/components.css";
 
 // Import CSS variables from gcds-tokens
-@import "@cdssnc/gcds-tokens/build/web/css/components/heading.css";
-@import "@cdssnc/gcds-tokens/build/web/css/components/label.css";
-
+@import "@gcds-core/tokens/build/web/css/components/heading.css";
+@import "@gcds-core/tokens/build/web/css/components/label.css";
 @include meta.load-css("_icons");
 @include meta.load-css("_input");
 @include meta.load-css("_textarea");

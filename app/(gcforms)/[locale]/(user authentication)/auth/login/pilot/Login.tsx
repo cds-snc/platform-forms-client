@@ -19,7 +19,7 @@ export const Login = ({ language = "en" }) => {
       }}
     >
       <button
-        className="rounded-xl border-3 border-gcds-gray-500 p-3 text-blue-900 hover:border-gcds-blue-800 hover:bg-gcds-blue-800 hover:text-white-default active:border-black"
+        className="rounded-xl border-3 border-gcds-grayscale-500 p-3 text-gcds-blue-muted hover:border-gcds-blue-vivid hover:bg-gcds-blue-vivid hover:text-white-default active:border-black"
         type="submit"
       >
         Sign in with Zitadel

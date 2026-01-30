@@ -51,7 +51,7 @@ a {
   @apply underline text-blue-dark hover:text-blue-hover;
 }
 
-@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/global.css";
+@import "../node_modules/@gcds-core/tokens/build/web/css/global.css";
 
 .container-xl {
   max-width: var(--gcds-container-xl);
