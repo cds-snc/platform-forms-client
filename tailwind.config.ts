@@ -11,11 +11,22 @@ const {
   "blue-muted": blueMuted,
   "blue-vivid": blueVivid,
   purple,
+  yellow,
 } = tokens.Tokens.color;
+
+// Extract spacing tokens
+const spacing = Object.entries(tokens.Tokens.spacing).reduce(
+  (acc, [key, value]) => {
+    acc[key] = value.value;
+    return acc;
+  },
+  {} as Record<string, string>
+);
 
 module.exports = {
   theme: {
     extend: {
+      spacing,
       fontFamily: {
         sans: ["var(--font-noto-sans)"],
         "noto-sans": "var(--font-noto-sans)",
@@ -241,6 +252,26 @@ module.exports = {
             800: purple[800].value,
             850: purple[850].value,
             900: purple[900].value,
+          },
+          yellow: {
+            50: yellow[50].value,
+            100: yellow[100].value,
+            150: yellow[150].value,
+            200: yellow[200].value,
+            250: yellow[250].value,
+            300: yellow[300].value,
+            350: yellow[350].value,
+            400: yellow[400].value,
+            450: yellow[450].value,
+            500: yellow[500].value,
+            550: yellow[550].value,
+            600: yellow[600].value,
+            650: yellow[650].value,
+            700: yellow[700].value,
+            750: yellow[750].value,
+            800: yellow[800].value,
+            850: yellow[850].value,
+            900: yellow[900].value,
           },
         },
       },
