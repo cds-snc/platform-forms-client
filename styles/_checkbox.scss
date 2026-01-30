@@ -10,14 +10,14 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
   transition: color ease-in-out 0.15s;
 
   &:focus-within {
-    color: theme("colors.gcds.blue.850");
+    color: theme("colors.gcds.blue.vivid");
     // Input Box outline focused.
     .gc-checkbox-label:before {
-      outline: var(--gcds-checkbox-focus-outline-width) solid theme("colors.gcds.blue.850");
+      outline: var(--gcds-checkbox-focus-outline-width) solid theme("colors.gcds.blue.vivid");
       outline-offset: var(--gcds-checkbox-input-border-width);
       box-shadow: var(--gcds-checkbox-focus-box-shadow);
       background: var(--gcds-checkbox-focus-background);
-      border-color: theme("colors.gcds.blue.850") !important;
+      border-color: theme("colors.gcds.blue.vivid") !important;
       transition:
         border-color ease-in-out 0.15s,
         box-shadow ease-in-out 0.15s,
@@ -54,7 +54,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
     }
 
     &:focus + .gc-checkbox-label:before {
-      border: var(--gcds-checkbox-input-border-width) solid theme("colors.gcds.blue.850");
+      border: var(--gcds-checkbox-input-border-width) solid theme("colors.gcds.blue.vivid");
     }
 
     // Checkmark icon.

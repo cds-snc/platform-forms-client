@@ -11,14 +11,14 @@
   padding: var(--gcds-radio-padding) 0 0 !important;
 
   &:focus-within {
-    color: theme("colors.gcds.blue.850");
+    color: theme("colors.gcds.blue.vivid");
     // Input Box outline focused.
     .gc-radio-label:before {
-      outline: var(--gcds-radio-focus-outline-width) solid theme("colors.gcds.blue.850");
+      outline: var(--gcds-radio-focus-outline-width) solid theme("colors.gcds.blue.vivid");
       outline-offset: var(--gcds-radio-input-border-width);
       box-shadow: var(--gcds-radio-focus-box-shadow);
       background: var(--gcds-radio-focus-background);
-      border-color: theme("colors.gcds.blue.850") !important;
+      border-color: theme("colors.gcds.blue.vivid") !important;
       transition:
         border-color ease-in-out 0.15s,
         box-shadow ease-in-out 0.15s,
@@ -26,7 +26,7 @@
     }
 
     .gc-radio-label:after {
-      background-color: theme("colors.gcds.blue.850") !important;
+      background-color: theme("colors.gcds.blue.vivid") !important;
     }
   }
 
