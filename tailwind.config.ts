@@ -151,7 +151,7 @@ module.exports = {
         transparent: "transparent",
         // see: https://design-system.alpha.canada.ca/en/styles/colour/
         gcds: {
-          gray: {
+          grayscale: {
             50: grayscale[50].value,
             100: grayscale[100].value,
             150: grayscale[150].value,

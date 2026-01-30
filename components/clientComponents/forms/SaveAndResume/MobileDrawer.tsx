@@ -60,7 +60,7 @@ export const MobileDrawer = ({
       </div>
       <p className="my-6 px-4">{t("saveAndResume.protectYourDataNote")}</p>
 
-      <div className="sticky bottom-0 -mx-2 border-2 border-t-gcds-blue-900 bg-gcds-blue-100 p-4">
+      <div className="sticky bottom-0 -mx-2 border-2 border-t-gcds-blue-muted bg-gcds-blue-100 p-4">
         <Button
           theme="secondary"
           className="rounded-full bg-white"
