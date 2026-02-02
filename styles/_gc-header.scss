@@ -1,6 +1,6 @@
-@import "@cdssnc/gcds-tokens/build/web/css/components/header.css";
-@import "@cdssnc/gcds-tokens/build/web/css/components/lang-toggle.css";
-@import "@cdssnc/gcds-tokens/build/web/css/components/signature.css";
+@import "@gcds-core/tokens/build/web/css/components/header.css";
+@import "@gcds-core/tokens/build/web/css/components/lang-toggle.css";
+@import "@gcds-core/tokens/build/web/css/components/signature.css";
 
 .gcds-header__brand {
   container: component brand / inline-size;
@@ -136,7 +136,6 @@
     font-weight: 700;
   }
 }
-
 
 /* Override for Preview header  */
 .gc-form-preview-header {
