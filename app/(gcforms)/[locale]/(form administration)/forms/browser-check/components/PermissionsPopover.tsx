@@ -20,6 +20,13 @@ export const PermissionsHelpButton = () => {
 export const PermissionsPopover = ({ locale }: { locale: string }) => {
   const { t } = useTranslation("browser-check", { lang: locale });
 
+  const imageSizes = {
+    "file-api-read-en": { width: 554, height: 166 },
+    "file-api-edit-en": { width: 573, height: 152 },
+    "file-api-read-fr": { width: 516, height: 153 },
+    "file-api-edit-fr": { width: 516, height: 157 },
+  };
+
   const handleClose = () => {
     const popover = document.getElementById("permissions-popover") as HTMLElement & {
       hidePopover: () => void;
@@ -47,8 +54,8 @@ export const PermissionsPopover = ({ locale }: { locale: string }) => {
           <Image
             src={`/img/file-api-read-${locale}.png`}
             alt={t("permissionsHelp.viewImageAlt")}
-            width={560}
-            height={160}
+            width={imageSizes[`file-api-read-${locale}` as keyof typeof imageSizes].width}
+            height={imageSizes[`file-api-read-${locale}` as keyof typeof imageSizes].height}
             className="w-full"
           />
           <figcaption className="mt-3 text-sm text-gray-600">
@@ -60,8 +67,8 @@ export const PermissionsPopover = ({ locale }: { locale: string }) => {
           <Image
             src={`/img/file-api-edit-${locale}.png`}
             alt={t("permissionsHelp.editImageAlt")}
-            width={560}
-            height={160}
+            width={imageSizes[`file-api-edit-${locale}` as keyof typeof imageSizes].width}
+            height={imageSizes[`file-api-edit-${locale}` as keyof typeof imageSizes].height}
             className="w-full"
           />
           <figcaption className="mt-3 text-sm text-gray-600">
