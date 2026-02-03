@@ -50,26 +50,26 @@ export const PermissionsPopover = ({ locale }: { locale: string }) => {
       <p className="mb-6">{t("permissionsHelp.description")}</p>
 
       <div className="space-y-6">
-        <figure className="border-1 border-gray-200 p-4">
+        <figure className="p-4">
           <Image
             src={`/img/file-api-read-${locale}.png`}
             alt={t("permissionsHelp.viewImageAlt")}
             width={imageSizes[`file-api-read-${locale}` as keyof typeof imageSizes].width}
             height={imageSizes[`file-api-read-${locale}` as keyof typeof imageSizes].height}
-            className="w-full"
+            className="w-full rounded-md border-1 border-gray-300"
           />
           <figcaption className="mt-3 text-sm text-gray-600">
             {t("permissionsHelp.viewImageCaption")}
           </figcaption>
         </figure>
 
-        <figure className="border-1 border-gray-200 p-4">
+        <figure className="p-4">
           <Image
             src={`/img/file-api-edit-${locale}.png`}
             alt={t("permissionsHelp.editImageAlt")}
             width={imageSizes[`file-api-edit-${locale}` as keyof typeof imageSizes].width}
             height={imageSizes[`file-api-edit-${locale}` as keyof typeof imageSizes].height}
-            className="w-full"
+            className="w-full rounded-md border-1 border-gray-300"
           />
           <figcaption className="mt-3 text-sm text-gray-600">
             {t("permissionsHelp.editImageCaption")}
