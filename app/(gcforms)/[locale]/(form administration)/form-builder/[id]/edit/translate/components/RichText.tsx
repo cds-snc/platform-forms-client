@@ -13,7 +13,6 @@ export const RichText = ({
   primaryLanguage,
 }: {
   element: FormElement;
-  index: number;
   primaryLanguage: Language;
 }) => {
   const { t } = useTranslation("form-builder");
