@@ -34,12 +34,12 @@
   },
   "permissionsHelp": {
     "ariaLabel": "Learn more about browser permissions",
-    "title": "Browser Permissions for File Access",
+    "title": "Browser permissions for file access",
     "description": "When you select a folder, your browser will ask for permission to access files. Here's what you'll see:",
-    "viewImageAlt": "Browser dialog showing view permission prompt",
-    "viewImageCaption": "Prompt shown to users before the browser is granted read permission to view files in a folder.",
-    "editImageAlt": "Browser dialog showing edit permission prompt",
-    "editImageCaption": "Prompt shown to users before the browser is granted write permission on an existing file.",
+    "viewImageAlt": "Browser dialog requesting view permission",
+    "viewImageCaption": "Prompt displayed before the browser is granted permission to read files in a folder.",
+    "editImageAlt": "Browser dialog requesting edit permission",
+    "editImageCaption": "Prompt displayed before the browser is granted permission to write on an existing file.",
     "close": "Close"
   }
 }
