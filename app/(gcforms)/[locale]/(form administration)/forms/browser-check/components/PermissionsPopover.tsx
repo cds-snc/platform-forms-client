@@ -48,6 +48,7 @@ export const PermissionsPopover = ({ locale }: { locale: string }) => {
             src={`/img/file-api-read-${locale}.png`}
             alt={t("permissionsHelp.viewImageAlt")}
             width={560}
+            height={160}
             className="w-full"
           />
           <figcaption className="mt-3 text-sm text-gray-600">
@@ -60,6 +61,7 @@ export const PermissionsPopover = ({ locale }: { locale: string }) => {
             src={`/img/file-api-edit-${locale}.png`}
             alt={t("permissionsHelp.editImageAlt")}
             width={560}
+            height={160}
             className="w-full"
           />
           <figcaption className="mt-3 text-sm text-gray-600">
