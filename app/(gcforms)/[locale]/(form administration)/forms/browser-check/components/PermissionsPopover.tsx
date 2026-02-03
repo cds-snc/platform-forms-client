@@ -45,10 +45,9 @@ export const PermissionsPopover = ({ locale }: { locale: string }) => {
       <div className="space-y-6">
         <figure className="border-1 border-gray-200 p-4">
           <Image
-            src="/img/allow-view.png"
+            src={`/img/file-api-read-${locale}.png`}
             alt={t("permissionsHelp.viewImageAlt")}
-            width={600}
-            height={400}
+            width={560}
             className="w-full"
           />
           <figcaption className="mt-3 text-sm text-gray-600">
@@ -58,10 +57,9 @@ export const PermissionsPopover = ({ locale }: { locale: string }) => {
 
         <figure className="border-1 border-gray-200 p-4">
           <Image
-            src="/img/allow-edit.png"
+            src={`/img/file-api-edit-${locale}.png`}
             alt={t("permissionsHelp.editImageAlt")}
-            width={600}
-            height={400}
+            width={560}
             className="w-full"
           />
           <figcaption className="mt-3 text-sm text-gray-600">
