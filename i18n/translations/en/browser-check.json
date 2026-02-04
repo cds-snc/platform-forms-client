@@ -31,5 +31,15 @@
     "submitting": "Sending...",
     "successTitle": "Thank you, your results have been sent.",
     "successMessage": "We've received your information and will try to get back to you soon."
+  },
+  "permissionsHelp": {
+    "ariaLabel": "Learn more about browser permissions",
+    "title": "Browser permissions for file access",
+    "description": "When you select a folder, your browser will ask for permission to access files. Here's what you'll see:",
+    "viewImageAlt": "Browser dialog requesting view permission",
+    "viewImageCaption": "Prompt displayed before the browser is granted permission to read files in a folder.",
+    "editImageAlt": "Browser dialog requesting edit permission",
+    "editImageCaption": "Prompt displayed before the browser is granted permission to write on an existing file.",
+    "close": "Close"
   }
 }

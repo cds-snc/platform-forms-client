@@ -7,6 +7,7 @@ import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
 import { OverallResult } from "./OverallResult";
+import { PermissionsHelpButton, PermissionsPopover } from "./PermissionsPopover";
 import type { TestResult, TestError } from "../types";
 
 declare global {
@@ -190,9 +191,14 @@ export const FileAPITest = ({ locale, userEmail }: { locale: string; userEmail?:
         <p className="mb-4 text-slate-700">{t("description")}</p>
         <ol className="mb-6 list-inside list-decimal space-y-1 text-slate-700">
           <li>{t("step1")}</li>
-          <li>{t("step2")}</li>
+          <li>
+            {t("step2")}
+            <PermissionsHelpButton />
+          </li>
           <li>{t("step3")}</li>
         </ol>
+
+        <PermissionsPopover locale={locale} />
 
         {/* Show select directory button if no directory selected yet */}
         <div aria-live="polite">
