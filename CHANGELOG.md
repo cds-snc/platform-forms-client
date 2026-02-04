@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.9.2](https://github.com/cds-snc/platform-forms-client/compare/v4.9.1...v4.9.2) (2026-02-04)
+
+
+### Bug Fixes
+
+* Create unique element ids for Page Text elements on Translate screen ([#6758](https://github.com/cds-snc/platform-forms-client/issues/6758)) ([99e7a7b](https://github.com/cds-snc/platform-forms-client/commit/99e7a7bf2b16c9d2373f0c1582695c226b8689b4))
+
+
+### Miscellaneous Chores
+
+* add informational popover for file api alerts ([#6747](https://github.com/cds-snc/platform-forms-client/issues/6747)) ([b85db72](https://github.com/cds-snc/platform-forms-client/commit/b85db726c2df69b09f6e48d71b60f193bcf61a1a))
+* re-enable new client IP detection code ([#6752](https://github.com/cds-snc/platform-forms-client/issues/6752)) ([15210e7](https://github.com/cds-snc/platform-forms-client/commit/15210e7a9856cd0d95cbd9975783198d086195db))
+
 ## [4.9.1](https://github.com/cds-snc/platform-forms-client/compare/v4.9.0...v4.9.1) (2026-02-02)
 
 
