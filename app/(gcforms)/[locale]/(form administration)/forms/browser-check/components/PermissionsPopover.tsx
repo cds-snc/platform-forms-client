@@ -79,11 +79,11 @@ export const PermissionsPopover = ({ locale }: { locale: string }) => {
 
       <button
         type="button"
-        className="group absolute right-0 top-0 mr-4 mt-4 rounded p-2 hover:bg-gray-100 focus:bg-gray-100"
+        className="group absolute right-0 top-0 mr-4 mt-4 rounded p-2 hover:bg-gcds-blue-vivid focus:to-gcds-blue-vivid"
         aria-label={t("permissionsHelp.close")}
         onClick={handleClose}
       >
-        <Close className="inline-block group-focus:fill-white-default" />
+        <Close className="inline-block group-hover:fill-white group-active:fill-black" />
       </button>
     </div>
   );
