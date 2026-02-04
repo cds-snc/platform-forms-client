@@ -31,5 +31,15 @@
     "submitting": "Envoi en cours...",
     "successTitle": "Merci, vos résultats ont été envoyées.",
     "successMessage": "Nous avons reçu vos renseignements et essayerons de vous répondre bientôt."
+  },
+  "permissionsHelp": {
+    "ariaLabel": "En savoir plus sur les autorisations du navigateur",
+    "title": "Autorisations du navigateur pour l'accès aux fichiers",
+    "description": "Lorsque vous sélectionnez un dossier, votre navigateur vous demandera l'autorisation d'accéder aux fichiers. Voici ce que vous verrez :",
+    "viewImageAlt": "Boîte de dialogue du navigateur demandant l'autorisation de lecture",
+    "viewImageCaption": "Message affiché avant que le navigateur ne reçoive l'autorisation de lire les fichiers dans un dossier.",
+    "editImageAlt": "Boîte de dialogue du navigateur demandant l'autorisation de modification",
+    "editImageCaption": "Message affiché avant que le navigateur ne reçoive l'autorisation d'écrire sur un fichier existant.",
+    "close": "Fermer"
   }
 }
