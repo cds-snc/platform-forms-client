@@ -56,22 +56,13 @@ describe("estToUtc", () => {
     });
 
     it("should handle date just after spring forward (March 8, 2026)", () => {
-      // March 8, 2026 at 03:00 EDT should be March 8, 2026 at 07:00 UTC
-      // (clocks spring forward at 2am EST to 3am EDT, so EDT = UTC-4)
-      // However, on 2026-03-08 at 03:00, we're still in EST (UTC-5) until 2am
-      // Actually DST starts at 2am local time, so 3am is already EDT
-      // 3:00 EDT = 3:00 + 4 hours = 07:00 UTC
-      // But the function returns 08:00 UTC which suggests it's treating it as EST
-      // This is actually correct behavior - on the day of spring forward,
-      // the hour 2:00-2:59 doesn't exist. If someone enters 3:00 on March 8,
-      // they're in EDT (UTC-4), so 3:00 EDT = 07:00 UTC
-      // The test expectation should match actual behavior
+      // DST starts at 2:00 AM EST - clocks spring forward to 3:00 AM EDT
+      // 3:00 AM on March 8 is EDT (UTC-4)
+      // 3:00 EDT = 07:00 UTC
       const timestamp = estToUtc(2026, 3, 8, 3, 0);
       const result = new Date(timestamp);
 
-      // 3:00 AM on March 8 is EDT (after spring forward), so UTC-4
-      // 3:00 EDT = 07:00 UTC
-      expect(result.toISOString()).toBe("2026-03-08T08:00:00.000Z");
+      expect(result.toISOString()).toBe("2026-03-08T07:00:00.000Z");
     });
 
     it("should handle date just before fall back (November 1, 2026)", () => {
@@ -83,20 +74,13 @@ describe("estToUtc", () => {
     });
 
     it("should handle date just after fall back (November 1, 2026)", () => {
-      // November 1, 2026 at 03:00 EST should be November 1, 2026 at 08:00 UTC
-      // (clocks fall back at 2am EDT to 1am EST)
-      // However, the function determines the offset based on the UTC reference
-      // At 3:00 on Nov 1, 2026, we're in EST (UTC-5)
-      // But the actual behavior shows UTC-4, which suggests the reference calculation
-      // sees the date as still being in EDT
-      // This is a known ambiguity with DST transitions - the function
-      // consistently interprets the time based on Intl.DateTimeFormat behavior
+      // DST ends at 2:00 AM EDT - clocks fall back to 1:00 AM EST
+      // 3:00 AM on November 1 is EST (UTC-5) - after the transition
+      // 3:00 EST = 08:00 UTC
       const timestamp = estToUtc(2026, 11, 1, 3, 0);
       const result = new Date(timestamp);
 
-      // The function returns 07:00 UTC, indicating it treats this as EDT (UTC-4)
-      // 3:00 EDT = 07:00 UTC
-      expect(result.toISOString()).toBe("2026-11-01T07:00:00.000Z");
+      expect(result.toISOString()).toBe("2026-11-01T08:00:00.000Z");
     });
   });
 

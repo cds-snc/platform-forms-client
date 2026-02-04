@@ -96,6 +96,8 @@
     "copy-to-clipboard": "3.3.3",
     "csv-writer": "^1.6.0",
     "d3-hierarchy": "^3.1.2",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "downshift": "^9.0.10",
     "formik": "2.4.9",
     "fuse.js": "^7.1.0",
