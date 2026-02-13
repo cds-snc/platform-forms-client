@@ -341,4 +341,13 @@ export const options = [
     logoTitleEn: "Winterlude",
     logoTitleFr: "Bal de neige",
   },
+  {
+    name: "eccc",
+    urlEn: "https://www.canada.ca/en/environment-climate-change.html",
+    urlFr: "https://www.canada.ca/fr/environnement-changement-climatique.html",
+    logoEn: "/img/branding/eccc-en.svg",
+    logoFr: "/img/branding/eccc-fr.svg",
+    logoTitleEn: "Environment and Climate Change Canada",
+    logoTitleFr: "Environnement et Changement climatique Canada",
+  },
 ];
