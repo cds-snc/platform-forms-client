@@ -355,6 +355,10 @@
   "loginPilot": {
     "title": "Sign in to GC Forms",
     "description": "Use your GC account to access your forms and start new ones.",
-    "button": "Sign in"
+  },
+  "loginPilot": {
+    "title": "Se connecter à Formulaires GC",
+    "description": "Utilisez votre compte du gouvernement pour créer des formulaires et accéder aux réponses soumises.",
+    "button": "Se connecter"
   }
 }
