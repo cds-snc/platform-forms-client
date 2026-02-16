@@ -235,8 +235,8 @@
     "message3": "Check with your department’s communications team about announcements during the <a href='https://www.canada.ca/en/privy-council/services/publications/guidelines-conduct-ministers-state-exempt-staff-public-servants-election.html' className='text-white hover:text-white'>caretaker period</a>",
     "type4": "Retiring email delivery",
     "message4": "Published forms are unaffected. New forms will not have email data delivery as an option. <a href='https://articles.alpha.canada.ca/forms-formulaires/getting-form-responses/' className='text-white hover:text-white'>Learn more</a>",
-    "type5": "Help us",
-    "message5": "Test out an upcoming functionality by <a href='https://forms-formulaires.alpha.canada.ca/en/forms/browser-check' className='text-white hover:text-white'>checking your browser's compatibility</a>"
+    "type5": "Take one minute to help",
+    "message5": "Test an upcoming feature to improve response retrieval. <a href='https://forms-formulaires.alpha.canada.ca/en/forms/browser-check' className='text-white hover:text-white'>Check your browser</a>"
   },
   "closingNotice": {
     "title": "Form closing",
