@@ -353,10 +353,6 @@
     "text": "Cette copie de vos réponses n'aura pas les fichiers que vous avez joints à votre soumission."
   },
   "loginPilot": {
-    "title": "Sign in to GC Forms",
-    "description": "Use your GC account to access your forms and start new ones.",
-  },
-  "loginPilot": {
     "title": "Se connecter à Formulaires GC",
     "description": "Utilisez votre compte du gouvernement pour créer des formulaires et accéder aux réponses soumises.",
     "button": "Se connecter"
