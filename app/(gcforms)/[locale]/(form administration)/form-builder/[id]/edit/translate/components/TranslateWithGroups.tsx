@@ -164,7 +164,7 @@ const Element = ({
       )}
 
       {element.type === FormElementTypes.richText && (
-        <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
+        <RichText primaryLanguage={primaryLanguage} element={element} />
       )}
 
       {elementsWithOptions.includes(element.type) && (
@@ -225,6 +225,23 @@ export const TranslateWithGroups = () => {
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
   const hasHydrated = useRehydrate();
   if (!hasHydrated) return null;
+
+  const privacyEn =
+    form.privacyPolicy?.[localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)] ??
+    "";
+
+  const privacyFr =
+    form.privacyPolicy?.[
+      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+    ] ?? "";
+
+  const confirmationEn =
+    form.confirmation?.[localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)] ??
+    "";
+
+  const confirmationFr =
+    form.confirmation?.[localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)] ??
+    "";
 
   return (
     <>
@@ -367,11 +384,7 @@ export const TranslateWithGroups = () => {
                     LocalizedElementProperties.DESCRIPTION,
                     primaryLanguage
                   )}`}
-                  content={
-                    form.privacyPolicy?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
-                    ] ?? ""
-                  }
+                  content={privacyEn}
                   lang={primaryLanguage}
                   ariaLabel={t("privacyStatement")}
                   ariaDescribedBy={`privacyPolicy-${primaryLanguage}-language`}
@@ -389,11 +402,7 @@ export const TranslateWithGroups = () => {
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage
                   )}`}
-                  content={
-                    form.privacyPolicy?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
-                    ] ?? ""
-                  }
+                  content={privacyFr}
                   lang={secondaryLanguage}
                   ariaLabel={t("privacyStatement")}
                   ariaDescribedBy={`privacyPolicy-${secondaryLanguage}-language`}
@@ -496,11 +505,7 @@ export const TranslateWithGroups = () => {
                     LocalizedElementProperties.DESCRIPTION,
                     primaryLanguage
                   )}`}
-                  content={
-                    form.confirmation?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
-                    ] ?? ""
-                  }
+                  content={confirmationEn}
                   lang={primaryLanguage}
                   ariaLabel={t("confirmationMessage")}
                   ariaDescribedBy={`confirmation-${primaryLanguage}-language`}
@@ -518,11 +523,7 @@ export const TranslateWithGroups = () => {
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage
                   )}`}
-                  content={
-                    form.confirmation?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
-                    ] ?? ""
-                  }
+                  content={confirmationFr}
                   lang={secondaryLanguage}
                   ariaLabel={t("confirmationMessage")}
                   ariaDescribedBy={`confirmation-${secondaryLanguage}-language`}

@@ -17,19 +17,19 @@ export const Contact = () => {
       <ExampleWrapper className="mt-4">
         <h4 className="mb-4">{t("addElementDialog.contact.howCanWeContactYou")}</h4>
         <div className="gcds-input-wrapper mb-6">
-          <Label htmlFor="phone" className="gc-label">
+          <Label htmlFor="phone" className="gcds-label">
             {t("addElementDialog.contact.phone.label")}
           </Label>
           <TextInput type="text" id="phone" name="phone" autoComplete="tel" />
         </div>
         <div className="gcds-input-wrapper mb-6">
-          <Label htmlFor="email" className="gc-label">
+          <Label htmlFor="email" className="gcds-label">
             {t("addElementDialog.contact.email.label")}
           </Label>
           <TextInput type="text" id="email" name="email" autoComplete="email" />
         </div>
         <div className="gcds-input-wrapper mb-6">
-          <Label htmlFor="radio-english" className="gc-label">
+          <Label htmlFor="radio-english" className="gcds-label">
             {t("addElementDialog.contact.language.label")}
           </Label>
           <div className="overflow-hidden p-2">

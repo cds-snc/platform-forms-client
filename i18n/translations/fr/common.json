@@ -125,6 +125,7 @@
     "characterCount": {
       "part1": "Il vous reste",
       "part2": "caractères.",
+      "part2-singular": "caractère.",
       "part1-error": "Vous avez dépassé la limite de",
       "part2-error": "caractères."
     }
@@ -350,5 +351,10 @@
   },
   "confirmFileWarning": {
     "text": "Cette copie de vos réponses n'aura pas les fichiers que vous avez joints à votre soumission."
+  },
+  "loginPilot": {
+    "title": "Se connecter à Formulaires GC",
+    "description": "Utilisez votre compte du gouvernement pour créer des formulaires et accéder aux réponses soumises.",
+    "button": "Se connecter"
   }
 }

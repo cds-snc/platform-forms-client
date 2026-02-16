@@ -52,7 +52,7 @@ const jestConfig = async () => ({
   ...(await createJestConfig(customJestConfig)()),
   // Allow Jest to transform ESM modules that use import/export
   transformIgnorePatterns: [
-    "/node_modules/(?!(next-auth|@auth|jose|react-error-boundary|@lexical/.*|lexical)/)",
+    "/node_modules/(?!(next-auth|@auth|jose|react-error-boundary|@lexical/.*|lexical|markdown-to-jsx)/)",
   ],
 });
 

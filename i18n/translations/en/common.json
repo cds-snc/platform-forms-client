@@ -125,6 +125,7 @@
     "characterCount": {
       "part1": "You have",
       "part2": "characters left.",
+      "part2-singular": "character left.",
       "part1-error": "You've exceeded the limit by",
       "part2-error": "characters."
     }
@@ -351,5 +352,10 @@
   },
   "confirmFileWarning": {
     "text": "This copy of your answers will not include the files you attached to your submission."
+  },
+  "loginPilot": {
+    "title": "Sign in to GC Forms",
+    "description": "Use your government account to build forms and access submitted responses.",
+    "button": "Sign in"
   }
 }

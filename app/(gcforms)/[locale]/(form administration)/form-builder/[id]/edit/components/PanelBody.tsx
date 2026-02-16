@@ -11,12 +11,12 @@ import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Trans } from "react-i18next";
-import { Tooltip } from "@formBuilder/components/shared/Tooltip";
+
 import { Button } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { ManagedDataDetails } from "./ManagedDataDetails";
 
 export const PanelBody = ({
   item,
@@ -96,7 +96,7 @@ export const PanelBody = ({
                   <SelectedElement item={item} elIndex={elIndex} formId={formId} />
                 </div>
                 {isFormattedDate && (
-                  <div className="mb-4 ml-4 self-end">
+                  <div className="my-4 ml-4 self-end">
                     <Button
                       theme="secondary"
                       onClick={() => {
@@ -115,6 +115,46 @@ export const PanelBody = ({
                   {maxLength}
                 </div>
               )}
+
+              {isAddressComplete && (
+                <div>
+                  <div>
+                    {!item.properties.addressComponents?.canadianOnly && (
+                      <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
+                        {t("addElementDialog.addressComplete.country")}
+                      </div>
+                    )}
+                    <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
+                      {t("addElementDialog.addressComplete.street.label")}
+                    </div>
+                    <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
+                      {t("addElementDialog.addressComplete.city")}
+                    </div>
+                    <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
+                      {item.properties.addressComponents?.canadianOnly &&
+                        t("addElementDialog.addressComplete.components.province")}
+                      {!item.properties.addressComponents?.canadianOnly &&
+                        t("addElementDialog.addressComplete.components.provinceOrState")}
+                    </div>
+                    <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
+                      {item.properties.addressComponents?.canadianOnly &&
+                        t("addElementDialog.addressComplete.components.postalCode")}
+                      {!item.properties.addressComponents?.canadianOnly &&
+                        t("addElementDialog.addressComplete.components.postalCodeOrZip")}
+                    </div>
+                  </div>
+                  <div className="my-4 ml-4 self-end">
+                    <Button
+                      theme="secondary"
+                      onClick={() => {
+                        Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
+                      }}
+                    >
+                      {t("addElementDialog.addressComplete.customize")}
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="w-64">
               {item.properties.autoComplete && (
@@ -123,35 +163,12 @@ export const PanelBody = ({
                   {t(`autocompleteOptions.${item.properties.autoComplete}`)}
                 </div>
               )}
-              {item.properties.managedChoices && (
-                <div data-testid={`managedChoices-${item.id}`} className="mt-5 flex text-sm">
-                  <strong>{t("managedList.prefix")}</strong>{" "}
-                  <a
-                    href="https://github.com/cds-snc/gc-organisations"
-                    className="ml-2"
-                    target="_blank"
-                  >
-                    {t(`managedList.${item.properties.managedChoices}`)}
-                  </a>
-                  <Tooltip.Info side="top" triggerClassName="align-baseline ml-1">
-                    <strong>{t("tooltips.departmentElement.title")}</strong>
-                    <Trans
-                      ns="form-builder"
-                      i18nKey="tooltips.departmentElement.body"
-                      defaults="<a></a> <p></p>"
-                      components={{ a: <a />, p: <p /> }}
-                    />
-                  </Tooltip.Info>
-                </div>
-              )}
-
-              {!isAddressComplete && (
-                <ElementRequired
-                  onRequiredChange={onRequiredChange}
-                  item={item}
-                  key={"element-required-" + item.id}
-                />
-              )}
+              {item.properties.managedChoices && <ManagedDataDetails item={item} />}
+              <ElementRequired
+                onRequiredChange={onRequiredChange}
+                item={item}
+                key={"element-required-" + item.id}
+              />
             </div>
           </div>
 
@@ -164,53 +181,6 @@ export const PanelBody = ({
               )}
             </div>
           )}
-
-          <div>
-            {isAddressComplete && (
-              <div className="flex text-sm">
-                <div className="w-1/2">
-                  {!item.properties.addressComponents?.canadianOnly && (
-                    <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                      {t("addElementDialog.addressComplete.country")}
-                    </div>
-                  )}
-                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {t("addElementDialog.addressComplete.street.label")}
-                  </div>
-                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {t("addElementDialog.addressComplete.city")}
-                  </div>
-                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {item.properties.addressComponents?.canadianOnly &&
-                      t("addElementDialog.addressComplete.components.province")}
-                    {!item.properties.addressComponents?.canadianOnly &&
-                      t("addElementDialog.addressComplete.components.provinceOrState")}
-                  </div>
-                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {item.properties.addressComponents?.canadianOnly &&
-                      t("addElementDialog.addressComplete.components.postalCode")}
-                    {!item.properties.addressComponents?.canadianOnly &&
-                      t("addElementDialog.addressComplete.components.postalCodeOrZip")}
-                  </div>
-                </div>
-                <div className="my-4 ml-4 w-1/2 self-end">
-                  <ElementRequired
-                    onRequiredChange={onRequiredChange}
-                    item={item}
-                    key={"element-required-" + item.id}
-                  />
-                  <Button
-                    theme="secondary"
-                    onClick={() => {
-                      Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
-                    }}
-                  >
-                    {t("addElementDialog.addressComplete.customize")}
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       )}
     </>
