@@ -352,5 +352,10 @@
   },
   "confirmFileWarning": {
     "text": "This copy of your answers will not include the files you attached to your submission."
+  },
+  "loginPilot": {
+    "title": "Sign in to GC Forms",
+    "description": "Use your GC account to access your forms and start new ones.",
+    "button": "Sign in"
   }
 }
