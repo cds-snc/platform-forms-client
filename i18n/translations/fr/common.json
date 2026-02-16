@@ -351,5 +351,10 @@
   },
   "confirmFileWarning": {
     "text": "Cette copie de vos réponses n'aura pas les fichiers que vous avez joints à votre soumission."
+  },
+  "loginPilot": {
+    "title": "Se connecter à Formulaires GC",
+    "description": "Utilisez votre compte du gouvernement pour créer des formulaires et accéder aux réponses soumises.",
+    "button": "Se connecter"
   }
 }
