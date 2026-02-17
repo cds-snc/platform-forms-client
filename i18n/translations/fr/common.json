@@ -235,8 +235,8 @@
     "message3": "Veuillez vous renseigner auprès de l’équipe des communications de votre ministère au sujet d'annonces durant la <a href='https://www.canada.ca/fr/conseil-prive/services/publications/lignes-directrices-regissant-conduite-ministres-etat-membres-personnel-exonere-fonctionnaires-periode-electorale.html' className='text-white hover:text-white'>période de transition</a>",
     "type4": "Retraite de livraison par courriel",
     "message4": "Les formulaires publiés ne sont pas affectés. Les nouveaux formulaires n’auront pas l’option de livraison par courriel. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/obtenir-les-reponses-aux-formulaires/' className='text-white hover:text-white'>En savoir plus</a>",
-    "type5": "Aidez-nous",
-    "message5": "Aidez-nous à tester une fonctionnalité à venir : <a href='/fr/forms/browser-check' target='_blank' className='text-white hover:text-white'>Vérifier la compatibilité de votre navigateur</a>"
+    "type5": "Prenez une minute pour nous aider",
+    "message5": "Testez une fonctionnalité à venir qui améliorera la récupération des réponses : <a href='/fr/forms/browser-check' target='_blank' className='text-white hover:text-white'>Vérifiez votre navigateur</a>"
   },
   "closingNotice": {
     "title": "Fermeture du formulaire",
