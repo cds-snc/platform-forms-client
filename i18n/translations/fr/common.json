@@ -236,7 +236,7 @@
     "type4": "Retraite de livraison par courriel",
     "message4": "Les formulaires publiés ne sont pas affectés. Les nouveaux formulaires n’auront pas l’option de livraison par courriel. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/obtenir-les-reponses-aux-formulaires/' className='text-white hover:text-white'>En savoir plus</a>",
     "type5": "Aidez-nous",
-    "message5": "Testez une fonctionnalité à venir en <a href='https://forms-formulaires.alpha.canada.ca/fr/forms/browser-check' className='text-white hover:text-white'>vérifiant la compatibilité de votre navigateur</a>"
+    "message5": "Aidez-nous à tester une fonctionnalité à venir : <a href='/fr/forms/browser-check' target='_blank' className='text-white hover:text-white'>Vérifier la compatibilité de votre navigateur</a>"
   },
   "closingNotice": {
     "title": "Fermeture du formulaire",
