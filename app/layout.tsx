@@ -97,7 +97,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
       </head>
 
       <body className={"has-[.bkd-soft]:bg-gray-soft"}>
-        <ServiceWorker />
+        {process.env.NODE_ENV === "production" && <ServiceWorker />}
         {children}
       </body>
     </html>
