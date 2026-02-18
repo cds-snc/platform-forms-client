@@ -1,17 +1,19 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { PanelActions, PanelBodyRoot } from "./index";
 import { useIsWithin } from "@lib/hooks/form-builder/useIsWithin";
 import { useRefsContext } from "./RefsContext";
 import { FormElementTypes, FormElement } from "@lib/types";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 
 import { cn } from "@lib/utils";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 import { getTranslatedProperties } from "@formBuilder/actions";
+
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 export const ElementPanel = ({
   item,
@@ -22,7 +24,7 @@ export const ElementPanel = ({
   elements: FormElement[];
   formId: string;
 }) => {
-  const { getFocusInput, setChangeKey, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
+  const { setChangeKey, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
     useTemplateStore((s) => ({
       getFocusInput: s.getFocusInput,
       setChangeKey: s.setChangeKey,
@@ -33,30 +35,15 @@ export const ElementPanel = ({
       duplicateElement: s.duplicateElement,
     }));
 
-  const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
-  const { treeView } = useTreeRef();
+  const { headlessTree } = useTreeRef();
   const { handleAddElement } = useHandleAdd();
   const groupId = useGroupStore((state) => state.id);
 
   if (ifFocus === false) {
     // Only run this 1 time
     setIfFocus(true);
-
-    // getFocusInput is only ever true if we press "duplicate" or "add question"
-    if (getFocusInput()) {
-      setClassName(
-        "bg-yellow-100 transition-colors ease-out duration-[1500ms] delay-500 outline-[2px] outline-blue-focus outline"
-      );
-    }
   }
-
-  useEffect(() => {
-    // remove the yellow background immediately, CSS transition will fade the colour
-    setClassName(className.replace("bg-yellow-100 ", ""));
-    // remove the blue outline after 2.1 seconds
-    setTimeout(() => setClassName(""), 2100);
-  }, [className]);
 
   const { focusWithinProps, isWithin } = useIsWithin();
   const { refs } = useRefsContext();
@@ -76,20 +63,23 @@ export const ElementPanel = ({
     duplicateElement(item.id, groupId, en, fr);
   }, [duplicateElement, groupId, item.id, setFocusInput]);
 
+  const isFileUpload = item.type === "fileInput";
+  const { hasApiKeyId } = useFormBuilderConfig();
+
   return (
     <div
       id={`element-${item.id}`}
       {...focusWithinProps}
       className={cn(
         `element-${item.index}`,
-        className,
         "group",
         isWithin && "active",
         "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500  bg-white",
         !hasSubPanel && isWithin && "focus-within:bg-violet-50 hover:bg-violet-50",
         hasRules && "border-dashed border-1 border-slate-500",
         hasSubPanel &&
-          "border border-slate-500 hover:outline hover:outline-2 hover:outline-indigo-700 hover:outline-offset-[-1px] focus-within:outline focus-within:outline-2 focus-within:outline-indigo-700 focus-within:outline-offset-[-1px]"
+          "border border-slate-500 hover:outline hover:outline-2 hover:outline-indigo-700 hover:outline-offset-[-1px] focus-within:outline focus-within:outline-2 focus-within:outline-indigo-700 focus-within:outline-offset-[-1px]",
+        isFileUpload && !hasApiKeyId && "bg-red-50 hover:bg-red-50 focus-within:bg-red-50"
       )}
       onClick={(e) => {
         const el = e.target as HTMLElement;
@@ -131,10 +121,9 @@ export const ElementPanel = ({
         }}
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
-          treeView?.current && treeView?.current.removeItem(String(item.id));
-          remove(item.id, groupId);
 
-          setChangeKey(String(new Date().getTime()));
+          remove(item.id, groupId);
+          headlessTree?.current?.rebuildTree();
 
           // if index is 0, then highlight the form title
           if (item.index === 0) {

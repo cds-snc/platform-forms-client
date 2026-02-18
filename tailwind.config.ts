@@ -1,13 +1,32 @@
 import type { Config } from "tailwindcss";
-import tokens from "@cdssnc/gcds-tokens/build/figma/figma.tokens.json";
+import tokens from "@gcds-core/tokens/build/figma/figma.tokens.json";
 
 import colors from "tailwindcss/colors";
 
-const { red, green, blue, grayscale } = tokens.Tokens.color;
+const {
+  red,
+  green,
+  blue,
+  grayscale,
+  "blue-muted": blueMuted,
+  "blue-vivid": blueVivid,
+  purple,
+  yellow,
+} = tokens.Tokens.color;
+
+// Extract spacing tokens
+const spacing = Object.entries(tokens.Tokens.spacing).reduce(
+  (acc, [key, value]) => {
+    acc[key] = value.value;
+    return acc;
+  },
+  {} as Record<string, string>
+);
 
 module.exports = {
   theme: {
     extend: {
+      spacing,
       fontFamily: {
         sans: ["var(--font-noto-sans)"],
         "noto-sans": "var(--font-noto-sans)",
@@ -82,11 +101,6 @@ module.exports = {
           700: "#335075",
           800: "#26374a",
         },
-        indigo: {
-          50: "#EEF2FF",
-          500: "#6366F1",
-          700: "#4338CA",
-        },
         violet: {
           50: "#EDE9FE",
           500: "#A78BFA",
@@ -137,34 +151,127 @@ module.exports = {
         transparent: "transparent",
         // see: https://design-system.alpha.canada.ca/en/styles/colour/
         gcds: {
-          gray: {
+          grayscale: {
             50: grayscale[50].value,
             100: grayscale[100].value,
+            150: grayscale[150].value,
+            200: grayscale[200].value,
+            250: grayscale[250].value,
             300: grayscale[300].value,
+            350: grayscale[350].value,
+            400: grayscale[400].value,
+            450: grayscale[450].value,
             500: grayscale[500].value,
+            550: grayscale[550].value,
+            600: grayscale[600].value,
+            650: grayscale[650].value,
             700: grayscale[700].value,
+            750: grayscale[750].value,
             800: grayscale[800].value,
-            1000: grayscale[1000].value,
+            850: grayscale[850].value,
+            900: grayscale[900].value,
           },
           blue: {
+            50: blue[50].value,
             100: blue[100].value,
+            150: blue[150].value,
+            200: blue[200].value,
+            250: blue[250].value,
+            300: blue[300].value,
+            350: blue[350].value,
+            400: blue[400].value,
+            450: blue[450].value,
             500: blue[500].value,
+            550: blue[550].value,
+            600: blue[600].value,
+            650: blue[650].value,
             700: blue[700].value,
             750: blue[750].value,
             800: blue[800].value,
             850: blue[850].value,
             900: blue[900].value, // primary
+            muted: blueMuted.value,
+            vivid: blueVivid.value,
           },
           green: {
+            50: green[50].value,
             100: green[100].value,
+            150: green[150].value,
+            200: green[200].value,
+            250: green[250].value,
+            300: green[300].value,
+            350: green[350].value,
+            400: green[400].value,
+            450: green[450].value,
             500: green[500].value,
+            550: green[550].value,
+            600: green[600].value,
+            650: green[650].value,
             700: green[700].value,
+            750: green[750].value,
+            800: green[800].value,
+            850: green[850].value,
+            900: green[900].value,
           },
           red: {
+            50: red[50].value,
             100: red[100].value,
+            150: red[150].value,
+            200: red[200].value,
+            250: red[250].value,
+            300: red[300].value,
+            350: red[350].value,
+            400: red[400].value,
+            450: red[450].value,
             500: red[500].value,
+            550: red[550].value,
+            600: red[600].value,
+            650: red[650].value,
             700: red[700].value,
+            750: red[750].value,
+            800: red[800].value,
+            850: red[850].value,
             900: red[900].value,
+          },
+          purple: {
+            50: purple[50].value,
+            100: purple[100].value,
+            150: purple[150].value,
+            200: purple[200].value,
+            250: purple[250].value,
+            300: purple[300].value,
+            350: purple[350].value,
+            400: purple[400].value,
+            450: purple[450].value,
+            500: purple[500].value,
+            550: purple[550].value,
+            600: purple[600].value,
+            650: purple[650].value,
+            700: purple[700].value,
+            750: purple[750].value,
+            800: purple[800].value,
+            850: purple[850].value,
+            900: purple[900].value,
+          },
+          yellow: {
+            50: yellow[50].value,
+            100: yellow[100].value,
+            150: yellow[150].value,
+            200: yellow[200].value,
+            250: yellow[250].value,
+            300: yellow[300].value,
+            350: yellow[350].value,
+            400: yellow[400].value,
+            450: yellow[450].value,
+            500: yellow[500].value,
+            550: yellow[550].value,
+            600: yellow[600].value,
+            650: yellow[650].value,
+            700: yellow[700].value,
+            750: yellow[750].value,
+            800: yellow[800].value,
+            850: yellow[850].value,
+            900: yellow[900].value,
           },
         },
       },

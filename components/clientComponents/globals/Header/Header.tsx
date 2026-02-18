@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
-
 import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "./FileName";
 import { ShareDropdown } from "./ShareDropdown";
@@ -13,7 +12,7 @@ import { YourAccountDropdown } from "./YourAccountDropdown";
 import Markdown from "markdown-to-jsx";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
-
+import { SkipLink } from "../SkipLink";
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
   className?: string;
@@ -32,13 +31,13 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
   const [bannerMessage, setBannerMessage] = useState("");
 
   const { getFlag } = useFeatureFlags();
-  const isEnabled = getFlag(FeatureFlags.caretakerPeriod);
+  const isEnabled = getFlag(FeatureFlags.topBanner);
 
   useEffect(() => {
     async function fetchBannerData() {
       setBannerData(isEnabled);
-      setBannerMessage(t("campaignBanner.message3"));
-      setBannerType(t("campaignBanner.type3"));
+      setBannerMessage(t("campaignBanner.message5"));
+      setBannerType(t("campaignBanner.type5"));
     }
     fetchBannerData();
   }, [t, isEnabled]);
@@ -53,6 +52,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
           className
         )}
       >
+        <SkipLink />
         {isBannerEnabled && (
           <div className="bg-slate-800 p-4 text-white">
             <div className="mr-4 inline-block border-2 border-white-default px-2 py-1">

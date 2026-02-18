@@ -6,12 +6,13 @@ import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
 import { prisma } from "@lib/integration/prismaConnector";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
-import { logEvent } from "@lib/auditLogs";
+import { getUserFeatureFlags } from "@lib/userFeatureFlags";
+import { AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 import { JWT } from "next-auth/jwt";
 import { cache } from "react";
 import { headers } from "next/headers";
-// import ZitadelProvider from "next-auth/providers/zitadel";
+import { checkOne } from "@lib/cache/flags";
 
 /**
  * Checks the active status of a user using a cache strategy
@@ -49,23 +50,21 @@ const {
   signOut,
 } = NextAuth({
   providers: [
-    // Keep this commented out for now, as we are not using Zitadel for authentication within the app
-    // ZitadelProvider({
-    //   issuer: process.env.ZITADEL_ISSUER,
-    //   clientId: process.env.ZITADEL_CLIENT_ID,
-    //   checks: ["pkce"],
-    //   client: {
-    //     token_endpoint_auth_method: "none",
-    //   },
-    //   allowDangerousEmailAccountLinking: true,
-    //   async profile(profile) {
-    //     return {
-    //       id: profile.sub,
-    //       name: profile.name,
-    //       email: profile.email,
-    //     };
-    //   },
-    // }),
+    {
+      id: "gcForms", // signIn("my-provider") and will be part of the callback URL
+      name: "GC Forms", // optional, used on the default login page as the button text.
+      type: "oidc",
+      issuer: process.env.NEXT_PUBLIC_ZITADEL_URL,
+      clientId: process.env.ZITADEL_CLIENT_ID,
+      checks: ["pkce", "state"],
+      client: { token_endpoint_auth_method: "none" },
+      allowDangerousEmailAccountLinking: true,
+      authorization: {
+        params: {
+          scope: "openid email profile",
+        },
+      },
+    },
     CredentialsProvider({
       id: "mfa",
       name: "MultiFactorAuth",
@@ -136,7 +135,6 @@ const {
   },
   // Elastic Load Balancer safely sets the host header and ignores the incoming request headers
   trustHost: true,
-  debug: process.env.NODE_ENV !== "production",
   logger: {
     error(error) {
       if (!(error instanceof CredentialsSignin)) {
@@ -146,6 +144,11 @@ const {
     },
     warn(code) {
       logMessage.warn(`NextAuth warning - Code: ${code}`);
+    },
+    debug(code, ...message) {
+      // TODO.. switch back to debug
+      logMessage.info(code);
+      logMessage.info(message);
     },
   },
 
@@ -173,19 +176,33 @@ const {
         return;
       }
 
-      const requestHeaders = await headers();
+      try {
+        const requestHeaders = await headers();
 
-      if (requestHeaders.get("x-amzn-waf-cognito-login-outside-of-canada")) {
-        logMessage.info(
-          `[next-auth][sign-in] User ${user.email} (${internalUser.id}) signed in from outside of Canada`
-        );
+        if (requestHeaders.get("x-amzn-waf-cognito-login-outside-of-canada")) {
+          logMessage.info(
+            `[next-auth][sign-in] User ${user.email} (${internalUser.id}) signed in from outside of Canada`
+          );
+        }
+      } catch (error) {
+        // headers() can fail during build time, log but don't prevent sign-in
+        logMessage.debug(`Could not access request headers during sign-in event: ${error}`);
+      }
+
+      // Update lastLogin in the database
+      if (user.email) {
+        await prisma.user.update({
+          where: { email: user.email },
+          data: { lastLogin: new Date() },
+        });
       }
 
       logEvent(
         internalUser.id,
         { type: "User", id: internalUser.id },
         "UserSignIn",
-        `Cognito user unique identifier (sub): ${user.id}`
+        AuditLogDetails.CognitoUserIdentifier,
+        { userId: user.id ?? "" }
       );
     },
     async signOut(obj) {
@@ -201,6 +218,12 @@ const {
     async jwt({ token, account, trigger, session }) {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
+        // If the GCForms SSO provider was used, but is not enabled, refuse the session
+        const isZitadelLoginEnabled = await checkOne("zitadelLogin");
+        if (!isZitadelLoginEnabled && account.provider === "gcForms") {
+          throw new Error("Provider for GCForms SSO is not an active option");
+        }
+
         if (!token.email) {
           logMessage.error(`JWT token does not have an email for user with name ${token.name}`);
           throw new Error(`JWT token`);
@@ -224,7 +247,9 @@ const {
       // Only permit the updating of certain properties
 
       if (trigger === "update" && session) {
-        logMessage.debug(`Client Side Session update recieved for user ${token.email}`);
+        logMessage.debug(
+          `Client Side Session update recieved for user ${token.email} with ${JSON.stringify(session)}`
+        );
         token = {
           ...token,
           acceptableUse: session.user.acceptableUse,
@@ -265,6 +290,7 @@ const {
         // Used client side to immidiately log out a user if they have been deactivated
         ...(token.deactivated && { deactivated: token.deactivated }),
         hasSecurityQuestions: token.hasSecurityQuestions ?? false,
+        featureFlags: await getUserFeatureFlags(token.userId as string),
       };
       return session;
     },

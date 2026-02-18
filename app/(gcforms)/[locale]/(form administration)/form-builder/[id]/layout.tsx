@@ -1,7 +1,6 @@
 import { authCheckAndThrow } from "@lib/actions";
 import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
-import { SkipLink } from "@clientComponents/globals";
 import { Footer } from "@serverComponents/globals/Footer";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { AccessControlError } from "@lib/auth/errors";
@@ -10,8 +9,8 @@ import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
 import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
-import { GroupStoreProvider } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
+import { GroupStoreProvider } from "@lib/groups/useGroupStore";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
@@ -22,7 +21,6 @@ import {
   FormBuilderConfig,
   formBuilderConfigDefault,
 } from "@lib/hooks/useFormBuilderConfig";
-import { LiveRegion } from "@clientComponents/globals/LiveRegion";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -59,13 +57,15 @@ export default async function Layout(props: {
     }
   }
 
-  let apiKeyId: string | false | void = "";
+  let apiKeyId: string | undefined = undefined;
 
   try {
     // No need to fetch in test, it will always not exist
     if (formID) {
       apiKeyId =
-        process.env.APP_ENV === "test" || formID === "0000" ? false : await checkKeyExists(formID);
+        process.env.APP_ENV === "test" || formID === "0000"
+          ? undefined
+          : await checkKeyExists(formID);
     }
   } catch (e) {
     // no-op
@@ -81,11 +81,10 @@ export default async function Layout(props: {
       <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
         <SaveTemplateProvider>
           <RefStoreProvider>
-            <div>
-              <div className="flex flex-col">
-                <SkipLink />
+            <div className="h-full">
+              <div className="flex min-h-screen flex-col">
                 <Header context="formBuilder" className="mb-0" />
-                <div className="shrink-0 grow basis-auto bg-gray-soft">
+                <div className="flex shrink-0 grow basis-auto flex-col bg-gray-soft">
                   <ToastContainer containerId="default" />
                   <ToastContainer
                     limit={1}
@@ -94,7 +93,13 @@ export default async function Layout(props: {
                     ariaLabel="Notifications: Alt+T"
                     width="600px"
                   />
-                  <div className="flex h-full flex-row gap-7">
+                  <ToastContainer
+                    containerId="error-persistent"
+                    autoClose={false}
+                    ariaLabel="Error notifications"
+                    width="600px"
+                  />
+                  <div className="flex grow flex-row gap-7">
                     <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
                       <div className="sticky top-0">
                         <LeftNavigation id={id} />
@@ -104,6 +109,7 @@ export default async function Layout(props: {
                       <main
                         id="content"
                         className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
+                        tabIndex={-1}
                       >
                         {children}
                       </main>
@@ -111,9 +117,8 @@ export default async function Layout(props: {
                     </GroupStoreProvider>
                   </div>
                 </div>
+                <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
               </div>
-              <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
-              <LiveRegion />
             </div>
           </RefStoreProvider>
         </SaveTemplateProvider>

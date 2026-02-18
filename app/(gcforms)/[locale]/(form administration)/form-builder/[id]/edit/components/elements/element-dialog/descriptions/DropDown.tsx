@@ -8,11 +8,13 @@ export const DropDown = () => {
   const { t } = useTranslation("form-builder");
   return (
     <>
-      <h3 className="mb-0">{t("addElementDialog.dropdown.title")}</h3>
-      <p>{t("addElementDialog.dropdown.description")}</p>
+      <h3 data-testid="element-description-title" className="mb-0">
+        {t("addElementDialog.dropdown.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.dropdown.description")}</p>
 
       <ExampleWrapper className="mt-4">
-        <Label htmlFor="dropdown" className="gc-label">
+        <Label htmlFor="dropdown" className="gcds-label">
           {t("addElementDialog.dropdown.selectOption")}
         </Label>
         <Description>{t("addElementDialog.dropdown.selectOne")}</Description>

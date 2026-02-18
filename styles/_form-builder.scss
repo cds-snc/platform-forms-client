@@ -165,23 +165,6 @@
     background-position: center right 5px;
   }
 
-  /* start page laoding animation */
-  @keyframes maple-leaf-dash {
-    from {
-      stroke-dashoffset: 400;
-    }
-    to {
-      stroke-dashoffset: 0;
-    }
-  }
-
-  .maple-leaf-loader {
-    stroke-dasharray: 400;
-    stroke-dashoffset: 400;
-    animation: maple-leaf-dash 0.8s linear alternate infinite;
-  }
-  /* end page laoding animation */
-
   /* end form builder styles */
 }
 
@@ -249,4 +232,54 @@
 
 .flow-container {
   height: calc(100vh - 300px);
+}
+
+/* Global Maple Leaf Loader Animation */
+@keyframes maple-leaf-dash {
+  0% {
+    stroke-dashoffset: -400;
+    opacity: 0;
+  }
+  10% {
+    stroke-dashoffset: -400;
+    opacity: 1;
+  }
+  70% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  80% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  90% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: -400;
+    opacity: 0;
+  }
+}
+
+.maple-leaf-loader {
+  stroke-dasharray: 400;
+  stroke-dashoffset: -400;
+  opacity: 0;
+  animation: maple-leaf-dash 2s ease-out infinite;
+}
+
+.gc-lost-key-button {
+  anchor-name: --gc-lost-key-button;
+}
+
+.gc-lost-key-popover-content {
+  position: absolute;
+  position-anchor: --gc-lost-key-button;
+  inset: unset;
+  left: anchor(right);
+  top: anchor(center);
+  translate: 0 -50%;
+  margin-left: 0.5rem;
+  max-width: 650px;
 }

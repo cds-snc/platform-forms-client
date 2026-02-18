@@ -1,0 +1,155 @@
+{
+  "section-title": "Réponses (Pilote)",
+  "stepOf": "Étape {{current}} de {{total}}",
+  "responsesPilot": {
+    "responsesSwitchLink": "Revenir à l'affichage classique des Réponses"
+  },
+  "not-supported": {
+    "title": "Navigateur web non compatible",
+    "body": "Ce navigateur ne peut pas utiliser l'API d'accès au système de fichiers. Essayez un autre navigateur ou autorisez votre navigateur à enregistrer des fichiers sur votre appareil."
+  },
+  "startPage": {
+    "intro": "Obtenez les réponses de votre formulaire en quelques étapes grâce à une clé API.",
+    "nextButton": "Commencer",
+    "beforeStart": {
+      "heading": "Avant de commencer",
+      "generateKey": "Générez une clé API pour votre formulaire dans les Paramètres.",
+      "generateKeyDetail": "C'est ainsi que vous pourrez récupérer plus facilement et en toute sécurité un grand nombre de réponses.",
+      "browserSupport": "Assurez-vous d'utiliser Google Chrome ou Microsoft Edge.",
+      "browserSupportDetail": "On vous demandera d'autoriser la copie et l'enregistrement de fichiers sur votre appareil. Acceptez ces alertes du navigateur pour utiliser la fonctionnalité.",
+      "attachSafety": "Soyez prudent lorsque vous ouvrez des pièces jointes.",
+      "attachSafetyDetail": "Vérifiez les fichiers avant de les ouvrir, analysez les attributs des fichiers malveillants et suivez les avertissements."
+    },
+    "steps": {
+      "heading": "Ensuite, suivez ces étapes :",
+      "stepOf": "Étape {{current}} de {{total}}",
+      "uploadKey": {
+        "title": "Sélectionnez votre fichier de clé API pour accéder aux nouvelles réponses."
+      },
+      "chooseLocation": {
+        "title": "Choisissez un emplacement de téléchargement pour enregistrer les fichiers de réponses."
+      },
+      "selectFormat": {
+        "title": "Sélectionnez le format des réponses et téléchargez."
+      }
+    }
+  },
+  "loadKeyPage": {
+    "title": "Sélectionnez votre clé API",
+    "detail": "La clé API de votre formulaire vous permet d'accéder aux réponses sans avoir besoin de ressources de développement pour une intégration API. Cela vous permet d'obtenir plus de 150 réponses à la fois et élimine l'étape qui consiste à copier-coller les codes de réception.",
+    "chooseFileButton": "Sélectionner la clé API",
+    "noNewResponsesAvailable": "Aucune nouvelle réponse",
+    "noNewResponsesDetail": "Votre formulaire n' pasa reçu de nouvelles soumissions.",
+    "newResponsesAvailable": "De nouvelles réponses sont disponibles",
+    "checkForNewResponses": "Vérifier les nouvelles réponses",
+    "downloadResponses": "Choisir l'emplacement",
+    "uploadSuccessTitle": "Vous êtes authentifié.",
+    "uploadSuccessMessage": "Vous pouvez récupérer toutes les nouvelles réponses au formulaire.",
+    "uploadFailedTitle": "Échec d'authentification",
+    "uploadFailedMessage": "Assurez-vous de sélectionner le bon fichier de clé API. Si cela ne fonctionne pas, régénérez une nouvelle clé API dans les Paramètres.",
+    "lostKey": {
+      "link": "Vous n'avez pas votre clé API?",
+      "lostKeyTip": {
+        "title": "Vous n'avez pas votre clé API?",
+        "text1": "Un seul fichier de clé API peut être associée à un formulaire à la fois.",
+        "text2": "Générez une nouvelle clé API en allant dans",
+        "link": " Paramètres > Intégration API"
+      },
+      "close": "Fermer"
+    }
+  },
+  "locationPage": {
+    "title": "Sélectionnez un emplacement d’enregistrement",
+    "subheading": "Décidez où les nouvelles réponses seront téléchargées.",
+    "detail": "Votre navigateur vous demandera d'autoriser l'écriture de fichiers dans le dossier sélectionné. Veillez à autoriser cette permission dans les paramètres de votre navigateur.",
+    "chooseLocationButton": "Choisir l'emplacement",
+    "locationSelected": {
+      "title": "Emplacement de sauvegarde sélectionné",
+      "text1": "Les réponses seront placées dans :"
+    },
+    "csvDetected": {
+      "title": "Fichier de réponse CSV détecté dans le dossier cible",
+      "message": "Les nouvelles données de réponse seront ajoutées au fichier CSV existant."
+    },
+    "getTemplateFailed": {
+      "title": "Échec de récupération du formulaire",
+      "message": "Une erreur s'est produite lors de la récupération du modèle de formulaire. Veuillez réessayer plus tard."
+    }
+  },
+  "formatPage": {
+    "title": "Choisissez un format de fichier de réponse",
+    "subheading": "Sélectionnez le format des réponses.",
+    "detail": "Les téléchargements comprennent également les données sources (fichiers JSON). Ces données brutes représentent les « soumissions officielles » et aident à vérifier que ce que vous recevez correspondent bien à ceux qui ont été soumis.",
+    "formatOptions": {
+      "csv": {
+        "label": "Feuille de calcul (Réponses combinées dans 1 fichier CSV)"
+      },
+      "html": {
+        "label": "Copies individuelles (Fichiers HTML séparés pour chaque réponse)"
+      }
+    },
+    "previewCsvStructure": "Aperçu de la structure des fichiers pour les réponses CSV :",
+    "previewHtmlStructure": "Aperçu de la structure des fichiers pour les réponses HTML :"
+  },
+  "confirmationPage": {
+    "section-title": "Résultats",
+    "successTitle": "Succès !",
+    "errorTitle": "Téléchargement interrompu",
+    "partialSuccessTitle": "Téléchargement partiel terminé",
+    "errorOccurred": "Une erreur s'est produite pendant le processus de téléchargement",
+    "downloadedResponsesOne": "{{formattedCount}} réponse a été téléchargée",
+    "downloadedResponsesOther": "{{formattedCount}} réponses ont été téléchargées",
+    "savedTo": "Toutes les données de soumission de formulaire se trouvent dans :",
+    "chooseNewLocationButton": "Choisir un nouvel emplacement",
+    "downloadResponsesButton": "Télécharger les réponses",
+    "maliciousAttachmentsWarningTitle": "Soyez prudent en ouvrant les fichiers joints.",
+    "maliciousAttachmentsWarningBody": "Vous trouverez les fichiers joints dans un dossier distinct — les fichiers analysés comme étant « suspects » seront dans un dossier imbriqué. Vérifiez la présence d'attributs « potentiellement malveillants » et le symbole « ⚠️ » dans les fichiers de réponses et suivez tous les avertissements."
+  },
+  "processingPage": {
+    "section-title": "Traitement des réponses",
+    "processingTitle": "Téléchargement en cours",
+    "pleaseWait": "Veuillez patienter...",
+    "processingSubmission": "En traitement : soumission {{submissionId}}",
+    "processingMessage": "Traitement de {{count}} réponses...",
+    "cancelButton": "Mettre en pause le téléchargement",
+    "cancellingButton": "Mise en pause...",
+    "note": "Vous pouvez vous attendre à ce que cela prenne quelques minutes pour des centaines de réponses et plusieurs heures pour des milliers de réponses."
+  },
+  "backButton": "Retourner",
+  "backToStart": "Retourner au début",
+  "continueButton": "Continuer",
+  "failed-to-load-api-key": "La clé API n'a pas pu être téléversée",
+  "checkForNewResponsesButton": "Vérifier s'il y a des nouvelles réponses",
+  "checking": "Vérification en cours...",
+  "toasts": {
+    "rateLimitExceeded": {
+      "title": "Limite de débit dépassée",
+      "message": "Vous avez dépassé le nombre de requêtes autorisées. Veuillez attendre avant de réessayer."
+    },
+    "unknownError": {
+      "title": "Quelque chose a mal tourné",
+      "message": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard.",
+      "code": "Code d'erreur"
+    },
+    "errorRetreivingSubmissions": {
+      "title": "Erreur lors de la récupération des soumissions",
+      "message": "Une erreur est survenue lors de la récupération des soumissions du formulaire. Veuillez réessayer plus tard."
+    },
+    "fileLockedError": {
+      "title": "Impossible de modifier le fichier",
+      "message": "Impossible d'écrire dans le fichier CSV. Le fichier pourrait être ouvert ou verrouillé. Veuillez fermer le fichier et réessayer."
+    },
+    "invalidStateError": {
+      "title": "Fichier dans un état invalide",
+      "message": "Le fichier CSV est dans un état invalide et ne peut pas être modifié. Le fichier pourrait être ouvert, verrouillé, ou corrompu."
+    },
+    "quotaExceededError": {
+      "title": "Espace de stockage dépassé",
+      "message": "L'espace de stockage est insuffisant pour écrire dans le fichier ou dossier. Veuillez libérer de l'espace et réessayer."
+    },
+    "permissionError": {
+      "title": "Impossible de modifier le contenu du dossier",
+      "message": "Veuillez accorder à votre navigateur l'accès de « modification » ou accès « en écriture » au dossier sélectionné. Vous trouverez cette option dans le menu du navigateur. Il est possible que votre ministère ait bloqué cette fonctionnalité."
+    }
+  }
+}

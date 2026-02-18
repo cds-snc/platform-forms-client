@@ -10,6 +10,8 @@ export interface TextInputProps extends InputFieldProps {
   type: HTMLTextInputTypeAttribute;
   placeholder?: string;
   spellCheck?: boolean;
+  allowNegativeNumbers?: boolean;
+  stepCount?: number;
 }
 
 export const TextInput = (
@@ -25,18 +27,36 @@ export const TextInput = (
     autoComplete,
     maxLength,
     spellCheck,
+    allowNegativeNumbers,
+    stepCount,
+    lang,
   } = props;
   const [field, meta, helpers] = useField(props);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", { lng: lang });
 
   const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);
 
+  const decimalSeparator = t("decimalSeparator");
+
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    helpers.setValue(event.target.value);
+    let newValue = event.target.value;
+
+    // If it's a number, ensure we store it with a dot for the system
+    if (type === "number") {
+      newValue = newValue.replace(decimalSeparator, ".");
+    }
+
+    helpers.setValue(newValue);
+
     if (maxLength) {
-      setRemainingCharacters(maxLength - event.target.value.length);
+      setRemainingCharacters(maxLength - newValue.length);
     }
   };
+
+  const displayValue =
+    type === "number" && field.value
+      ? String(field.value).replace(".", decimalSeparator)
+      : field.value;
 
   const characterCountMessages = {
     part1: t("formElements.characterCount.part1"),
@@ -46,7 +66,13 @@ export const TextInput = (
   };
 
   const remainingCharactersMessage =
-    characterCountMessages.part1 + " " + remainingCharacters + " " + characterCountMessages.part2;
+    characterCountMessages.part1 +
+    " " +
+    remainingCharacters +
+    " " +
+    (remainingCharacters === 1 || remainingCharacters === 0
+      ? t("formElements.characterCount.part2-singular")
+      : characterCountMessages.part2);
 
   const tooManyCharactersMessage =
     characterCountMessages.part1Error +
@@ -65,6 +91,27 @@ export const TextInput = (
   };
 
   const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
+
+  const checkNumericValues = (key: string, currentTarget: EventTarget & HTMLInputElement) => {
+    const { value, selectionStart, selectionEnd } = currentTarget;
+    const start = selectionStart ?? 0;
+    const end = selectionEnd ?? 0;
+
+    // Calculate the value after the key press
+    const futureValue = value.slice(0, start) + key + value.slice(end);
+
+    const negativePattern = allowNegativeNumbers ? "-?" : "";
+
+    const escapedSeparator = decimalSeparator === "." ? "\\." : decimalSeparator;
+    const decimalPattern =
+      stepCount && stepCount > 0 ? `(${escapedSeparator}\\d{0,${stepCount}})?` : "";
+
+    const regex = new RegExp(`^${negativePattern}\\d*${decimalPattern}$`);
+
+    if (!regex.test(futureValue)) {
+      return false;
+    }
+  };
 
   return (
     <>
@@ -87,6 +134,8 @@ export const TextInput = (
         {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextInputChange}
+        key={type === "number" ? `${id}-${decimalSeparator}` : id}
+        value={displayValue}
         // Note: not using type=number for numbers for UX reasons.
         // See: #4851 and https://tinyurl.com/2p9tm5vk
         {...(type === "number" && {
@@ -106,14 +155,14 @@ export const TextInput = (
             ) {
               return;
             }
-            // Restrict a user from entering anything but a number
-            if (!/[0-9]+/.test(e.key)) {
+
+            if (checkNumericValues(e.key, e.currentTarget) === false) {
               e.preventDefault();
             }
           },
         })}
       />
-      <div id={"characterCountMessage" + id} aria-live="polite">
+      <div id={"characterCountMessage" + id} className="gc-error-message" aria-live="polite">
         {characterCountMessages &&
           maxLength &&
           remainingCharacters < maxLength * 0.25 &&

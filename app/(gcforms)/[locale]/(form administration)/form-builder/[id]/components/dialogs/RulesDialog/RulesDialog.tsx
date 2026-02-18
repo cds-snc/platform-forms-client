@@ -1,19 +1,16 @@
 "use client";
+import React, { useCallback, useEffect, useId } from "react";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useTranslation } from "@i18n/client";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import React, { useCallback, useEffect } from "react";
 import { RulesForm } from "./RulesForm";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 import { useRouter } from "next/navigation";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { Button } from "@clientComponents/globals/Buttons/Button";
-import {
-  ChoiceRule,
-  choiceRulesToConditonalRules,
-  cleanChoiceIdsFromRules,
-} from "@lib/formContext";
+import { type ChoiceRule } from "@gcforms/types";
+import { choiceRulesToConditonalRules, cleanChoiceIdsFromRules } from "@gcforms/core";
 import { getPathString } from "@lib/utils/form-builder/getPath";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 
@@ -38,14 +35,14 @@ export const RulesDialog = () => {
 
   const choiceRulesRef = React.useRef<ChoiceRule[]>([]);
 
-  const { getFormElementWithIndexById, elements, formId, updateField } = useTemplateStore((s) => ({
+  const { getFormElementWithIndexById, elements, updateField, getId } = useTemplateStore((s) => ({
     getFormElementWithIndexById: s.getFormElementWithIndexById,
     elements: s.form.elements,
-    formId: s.id,
     updateField: s.updateField,
+    getId: s.getId,
   }));
 
-  const descriptionId = `descriptionId-${Date.now()}`;
+  const descriptionId = `descriptionId-${useId()}`;
 
   const handleOpenDialog = useCallback(
     (detail: RulesDialogEventDetails) => {
@@ -108,9 +105,11 @@ export const RulesDialog = () => {
   };
 
   const handletryLogicView = () => {
+    const id = getId() || "0000";
+
     // Toggle the panel open as it may be closed.
     togglePanel && togglePanel(true);
-    router.push(`/${i18n.language}/form-builder/${formId}/edit/logic`);
+    router.push(`/${i18n.language}/form-builder/${id}/edit/logic`);
   };
 
   return (
@@ -145,7 +144,6 @@ export const RulesDialog = () => {
           }
         >
           <div className="p-5">
-            This is the {mode} rules dialog for item {item?.id}
             <p className="mb-4" id={descriptionId}>
               {t("addConditionalRules.modalDescription")}
             </p>

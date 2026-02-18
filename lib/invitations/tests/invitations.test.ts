@@ -30,12 +30,22 @@ jest.mock("@lib/privileges");
 jest.mock("@lib/integration/prismaConnector");
 jest.mock("@lib/integration/notifyConnector");
 jest.mock("@lib/logger");
-jest.mock("@lib/auditLogs");
 jest.mock("@lib/users");
 jest.mock("@lib/templates");
 jest.mock("@lib/invitations/emailTemplates/inviteToFormsEmailTemplate");
 jest.mock("@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate");
 jest.mock("@lib/invitations/emailTemplates/ownerAddedEmailTemplate");
+
+jest.mock("@lib/auditLogs", () => ({
+  __esModule: true,
+  logEvent: jest.fn(),
+  get AuditLogDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
+  },
+  get AuditLogAccessDeniedDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
+  }
+}));
 
 const userId = "test-user-id";
 jest.mock("@lib/origin", () => ({
@@ -144,7 +154,8 @@ describe("Invitations", () => {
         expect.objectContaining({
           subject: expect.any(String),
           formResponse: "email contents",
-        })
+        }),
+        "formInvitationToFutureUser"
       );
     });
 
@@ -192,7 +203,11 @@ describe("Invitations", () => {
         expect.stringContaining("forms")
       );
       expect(sendEmail).toHaveBeenCalledTimes(1);
-      expect(sendEmail).toHaveBeenCalledWith("invited@cds-snc.ca", expect.any(Object));
+      expect(sendEmail).toHaveBeenCalledWith(
+        "invited@cds-snc.ca",
+        expect.any(Object),
+        "formInvitationToExistingUser"
+      );
     });
 
     it("should reinvite a user whose invitation has expired", async () => {
@@ -263,7 +278,11 @@ describe("Invitations", () => {
         expect.stringContaining("register")
       );
       expect(sendEmail).toHaveBeenCalledTimes(1);
-      expect(sendEmail).toHaveBeenCalledWith("invited2@cds-snc.ca", expect.any(Object));
+      expect(sendEmail).toHaveBeenCalledWith(
+        "invited2@cds-snc.ca",
+        expect.any(Object),
+        "formInvitationToFutureUser"
+      );
     });
   });
 
@@ -304,6 +323,10 @@ describe("Invitations", () => {
         })
       ); // user exists
 
+      prismaMock.template.findUnique.mockResolvedValueOnce(
+        mockTemplate()
+      ); // template exists
+
       prismaMock.template.update.mockResolvedValueOnce(
         mockTemplate({
           id: "template-id",
@@ -331,7 +354,8 @@ describe("Invitations", () => {
         "invited-user-id",
         { id: "template-id", type: "Form" },
         "InvitationAccepted",
-        "invited-user-id has accepted an invitation"
+        "AcceptedInvitation",
+        { "userId" : "invited-user-id" }
       );
 
       // @TODO: these tests need to move to templates.test.ts

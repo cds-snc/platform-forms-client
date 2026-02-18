@@ -8,7 +8,7 @@ export const Success = ({ lang }: { lang: string }) => {
   return (
     <>
       <FocusHeader>{t("requestSuccess.title")}</FocusHeader>
-      <p className="-mt-8 mb-16 font-bold">{t("requestSuccess.weWillRespond")}</p>
+      <p className="mb-16 mt-8 font-bold">{t("requestSuccess.weWillRespond")}</p>
       <div className="mb-16">
         <LinkButton.Primary href={`/${lang}/forms`}>
           {t("requestSuccess.backToForms")}

@@ -19,7 +19,7 @@ const Pill = ({
 }) => {
   const selected = group === selectedGroup.group;
   const ref = useRef<Element>(null);
-  const groupObj = { group, ref } as SelectedGroupState;
+  const groupObj: SelectedGroupState = { group };
 
   const disabled = false;
 

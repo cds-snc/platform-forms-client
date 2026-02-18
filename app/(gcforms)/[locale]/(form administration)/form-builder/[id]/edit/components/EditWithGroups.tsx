@@ -13,7 +13,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { Section } from "./Section";
 import { FormElement } from "@lib/types";
 import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
@@ -34,6 +34,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     translationLanguagePriority,
     getLocalizationAttribute,
     isPublished,
+    getName,
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
@@ -42,6 +43,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     isPublished: s.isPublished,
+    getName: s.getName,
   }));
 
   const [value, setValue] = useState<string>(title);
@@ -49,6 +51,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   const router = useRouter();
   const focusTitle = searchParams?.get("focusTitle") ? true : false;
   const titleInput = useRef<HTMLTextAreaElement>(null);
+  const prevTitleRef = useRef<string>(title);
   const groupId = useGroupStore((state) => state.id);
   const getElement = useGroupStore((state) => state.getElement);
 
@@ -66,6 +69,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
 
   useEffect(() => {
     setValue(title);
+    prevTitleRef.current = title;
   }, [title]);
 
   useEffect(() => {
@@ -127,7 +131,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   return (
     <>
       <h1 className="sr-only">{t("edit")}</h1>
-      <div className="flex w-[800px]">
+      <div className="flex w-[700px]">
         <h2 id="editPagesHeading" className="whitespace-nowrap" tabIndex={-1}>
           {t("groups.editPagesHeading")}
         </h2>
@@ -143,6 +147,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       {/* Form Intro + Title Panel */}
       {groupId === "start" && (
         <RichTextLocked
+          id="intro"
           maxLength={20000}
           hydrated={hasHydrated}
           className="rounded-t-lg"
@@ -165,8 +170,21 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
                   placeholder={t("placeHolderFormTitle")}
                   value={value}
                   onBlur={() => {
-                    setValue(cleanInput(value));
-                    //
+                    const cleaned = cleanInput(value);
+                    setValue(cleaned);
+
+                    // Sync and save the form name.
+                    try {
+                      const currentName = getName();
+                      if (!currentName || currentName === prevTitleRef.current) {
+                        updateField(`name`, cleaned);
+                      }
+                    } catch (e) {
+                      // noop
+                    }
+
+                    // update the prevTitle for subsequent edits
+                    prevTitleRef.current = cleaned;
                   }}
                   onChange={updateValue}
                   {...getLocalizationAttribute()}
@@ -182,6 +200,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       {/* Privacy Panel */}
       {groupId === "start" && (
         <RichTextLocked
+          id="policy"
           maxLength={50000}
           beforeContent={<PrivacyDescriptionBefore />}
           summaryText={t("groups.privacy.summary")}
@@ -211,6 +230,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       {/* Confirmation*/}
       {groupId === "end" && (
         <RichTextLocked
+          id={"end"}
           maxLength={20000}
           summaryText={t("groups.confirmation.summary")}
           beforeContent={

@@ -18,7 +18,7 @@ export const LanguageLabel = ({
     <div
       id={id}
       className={cn(
-        "absolute bottom-0 right-0 mb-px mr-px rounded-sm border px-2 text-sm",
+        "absolute bottom-0 right-0 mb-px mr-px rounded-sm border px-2 text-sm z-100",
         lang === "en" ? "border-violet-400 bg-violet-300" : "border-fucsia-400 bg-fuchsia-300"
       )}
     >

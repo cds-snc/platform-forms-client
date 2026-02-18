@@ -1,5 +1,5 @@
 import { Alert } from "@clientComponents/forms";
-import { ErrorStatus } from "../Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { useTranslation } from "@i18n/client";
 import { Language } from "@lib/types/form-builder-types";
 import { Trans } from "react-i18next";
@@ -25,16 +25,24 @@ const Text = ({
   );
 };
 
-export const StatusError = ({ formId, language }: { formId: string; language: Language }) => {
+export const StatusError = ({
+  formId,
+  language,
+  cta,
+}: {
+  formId: string;
+  language: Language;
+  cta?: React.ReactNode;
+}) => {
   const { t } = useTranslation("error");
   const link = `/${language}/id/${formId}`;
   return (
     <Alert
       type={ErrorStatus.ERROR}
-      tabIndex={0}
       id="gc-form-errors-server"
       autoFocus
       focussable={true}
+      cta={cta}
     >
       <h2>{t("sever-error.title")}</h2>
       <div className="mt-4">

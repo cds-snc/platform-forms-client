@@ -6,7 +6,7 @@ import { login, ErrorStates } from "../../actions";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { SubmitButtonAction } from "@clientComponents/globals/Buttons/SubmitButton";
 
 export const LoginForm = () => {
@@ -15,16 +15,30 @@ export const LoginForm = () => {
     i18n: { language },
   } = useTranslation(["login", "cognito-errors", "common"]);
 
-  const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
+  const router = useRouter();
+
+  const localFormAction = async (_: ErrorStates, formData: FormData) => {
+    const formEntries = {
+      username: (formData.get("username") as string) || "",
+      password: (formData.get("password") as string) || "",
+    };
+
     const result = await login(language, _, formData);
     if (result.authFlowToken) {
       sessionStorage.setItem("authFlowToken", JSON.stringify(result.authFlowToken));
       router.push(`/${language}/auth/mfa`);
     }
-    return result;
+    return {
+      ...result,
+      formData: formEntries,
+    };
   };
-  const [state, formAction] = useActionState(localFormAction, {});
-  const router = useRouter();
+  const [state, formAction] = useActionState(localFormAction, {
+    formData: {
+      username: "",
+      password: "",
+    },
+  });
 
   return (
     <>
@@ -89,6 +103,7 @@ export const LoginForm = () => {
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "username")?.fieldValue
             }
+            defaultValue={state.formData?.username || ""}
           />
         </div>
         <div className="gcds-input-wrapper">
@@ -104,6 +119,7 @@ export const LoginForm = () => {
             validationError={
               state.validationErrors?.find((e) => e.fieldKey === "password")?.fieldValue
             }
+            defaultValue={state.formData?.password || ""}
           />
         </div>
         <p className="mb-10">

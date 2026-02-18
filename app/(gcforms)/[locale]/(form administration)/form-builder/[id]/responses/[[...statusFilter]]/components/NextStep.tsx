@@ -2,7 +2,7 @@ import { useTranslation } from "@i18n/client";
 import { getDaysPassed } from "@lib/client/clientHelpers";
 import { VaultSubmissionOverview } from "@lib/types";
 import { ExclamationIcon } from "@serverComponents/icons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { StatusFilter } from "../types";
 import Skeleton from "react-loading-skeleton";
 import { getSubmissionRemovalDate } from "../actions";
@@ -27,31 +27,54 @@ const ExclamationText = ({
 const RemovalDateLabel = ({ submission }: { submission: VaultSubmissionOverview }) => {
   const { t } = useTranslation("form-builder-responses");
   const [label, setLabel] = useState<string | null>(null);
+  const elementRef = useRef<HTMLParagraphElement>(null);
+  const hasLoadedRef = useRef(false);
 
-  const getRemovalByMessage = (removalAt?: Date | number) => {
-    const daysLeft = removalAt && getDaysPassed(removalAt);
-    if (daysLeft && daysLeft > 0) {
-      return t("downloadResponsesTable.status.removeWithinXDays", { daysLeft });
-    }
-    return "";
-  };
+  const getRemovalByMessage = useCallback(
+    (removalAt?: Date | number) => {
+      const daysLeft = removalAt && getDaysPassed(removalAt);
+      if (daysLeft && daysLeft > 0) {
+        return t("downloadResponsesTable.status.removeWithinXDays", { daysLeft });
+      }
+      return "";
+    },
+    [t]
+  );
 
   useEffect(() => {
-    getSubmissionRemovalDate(submission.formID, submission.name).then((value) => {
-      if (typeof value === "number") {
-        setLabel(getRemovalByMessage(value));
-      } else {
-        setLabel("-");
+    const element = elementRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasLoadedRef.current) {
+          hasLoadedRef.current = true;
+          getSubmissionRemovalDate(submission.formID, submission.name).then((value) => {
+            if (typeof value === "number") {
+              setLabel(getRemovalByMessage(value));
+            } else {
+              setLabel("-");
+            }
+          });
+        }
+      },
+      {
+        rootMargin: "50px", // Start loading slightly before the element is visible
       }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    );
 
-  if (label === null) {
-    return <Skeleton count={1} className="my-4 ml-4 w-[300px]" />;
-  }
+    if (element) {
+      observer.observe(element);
+    }
 
-  return <p>{label}</p>;
+    return () => {
+      if (element) {
+        observer.unobserve(element);
+      }
+    };
+  }, [submission.formID, submission.name, getRemovalByMessage]);
+
+  return (
+    <p ref={elementRef}>{label === null ? <Skeleton count={1} className="w-[300px]" /> : label}</p>
+  );
 };
 
 export const NextStep = ({

@@ -20,10 +20,6 @@
     "answerLength": "Must be at least 4 characters",
     "duplicateAnswer": "Answers cannot be the same. Create a unique answer for this question."
   },
-  "banner": {
-    "title": "We’ve added protection to keep your account and forms safe.",
-    "body": "You’ll be prompted with security questions when you reset your password."
-  },
   "success": {
     "title": "Your security questions have been saved"
   }

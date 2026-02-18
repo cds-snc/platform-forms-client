@@ -11,5 +11,8 @@
   "typography": "Typographie",
   "upload": "Téléverser",
   "viewTemplates": "Afficher les modèles",
-  "recentAccounts": "Comptes récents"
+  "recentAccounts": "Comptes récents",
+  "buttons": "Boutons",
+  "lexical": "Terrain de jeu Lexical",
+  "auditLogs": "Journaux d’audit"
 }

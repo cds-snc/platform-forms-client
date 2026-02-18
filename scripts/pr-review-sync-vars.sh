@@ -23,11 +23,11 @@ TASK_DEF="$(aws ecs describe-task-definition --task-definition "$TASK_DEF_ARN")"
 
 # Get env vars
 echo "🔎 Get task environment variables"
-ENV_VARS="$(echo "$TASK_DEF" | jq -r '.taskDefinition.containerDefinitions[0].environment | flatten[] | [.name,.value] | join("=")')"
+ENV_VARS="$(echo "$TASK_DEF" | jq -r '.taskDefinition.containerDefinitions[1].environment | flatten[] | [.name,.value] | join("=")')"
 
 # Get secrets
 echo "🔎 Get task secrets"
-SECRET_VARS="$(echo "$TASK_DEF" | jq -r '.taskDefinition.containerDefinitions[0].secrets | flatten[] | [.name,.valueFrom] | join("=")')"
+SECRET_VARS="$(echo "$TASK_DEF" | jq -r '.taskDefinition.containerDefinitions[1].secrets | flatten[] | [.name,.valueFrom] | join("=")')"
 while IFS= read -r SECRET; do
     SECRET_NAME="${SECRET%%=*}"
     SECRET_ARN="${SECRET#*=}"

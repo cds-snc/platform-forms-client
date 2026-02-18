@@ -1,27 +1,23 @@
 "use client";
 import React, { createContext, useContext, ReactNode } from "react";
 
+import { type FormValues, type GroupsType, type PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
-import { type PublicFormRecord } from "@lib/types";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
+
+import { getNextAction, filterValuesByVisibleElements, idArraysMatch } from "@lib/formContext";
 
 import {
   mapIdsToValues,
-  FormValues,
-  idArraysMatch,
-  GroupsType,
-  getNextAction,
-  filterShownElements,
-  filterValuesByShownElements,
-} from "@lib/formContext";
+  getValuesWithMatchedIds,
+  getVisibleGroupsBasedOnValuesRecursive,
+} from "@gcforms/core";
+
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import {
   getGroupHistory as _getGroupHistory,
   pushIdToHistory as _pushIdToHistory,
   clearHistoryAfterId as _clearHistoryAfterId,
-  getPreviousIdFromCurrentId,
-  getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
 
 import {
@@ -31,6 +27,9 @@ import {
 
 import { toggleSavedValues } from "@i18n/toggleSavedValues";
 
+import { type FileInputResponse } from "@lib/types";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
@@ -38,10 +37,9 @@ interface GCFormsContextValueType {
   filteredMatchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
-  previousGroup: string | null;
+  getPreviousGroup: (currentGroup: string) => string;
   setGroup: (group: string | null) => void;
   handleNextAction: () => void;
-  handlePreviousAction: () => void;
   hasNextAction: (group: string) => boolean;
   isOffBoardSection: (group: string) => boolean;
   formRecord: PublicFormRecord;
@@ -79,22 +77,16 @@ export const GCFormsProvider = ({
   nonce?: string;
 }) => {
   const groups: GroupsType = formRecord.form.groups || {};
-  const initialGroup = groups ? LockedSections.START : null;
+  const initialGroup = groups ? LOCKED_GROUPS.START : null;
   const values = React.useRef({});
-  const history = React.useRef<string[]>([LockedSections.START]);
+  const history = React.useRef<string[]>([LOCKED_GROUPS.START]);
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
-  const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
 
-  const inputHistoryValues = getInputHistoryValues(
-    (values.current || []) as FormValues,
-    (history.current || []) as string[],
-    groups
-  );
-  const shownElements = filterShownElements(formRecord.form.elements, matchedIds as string[]);
-  const filteredResponses = filterValuesByShownElements(inputHistoryValues, shownElements);
+  // eslint-disable-next-line react-hooks/refs
+  const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
   const filteredMatchedIds = matchedIds.filter((id) => {
     const parentId = id.split(".")[0];
     if (filteredResponses[parentId]) {
@@ -127,22 +119,10 @@ export const GCFormsProvider = ({
     if (hasNextAction(currentGroup)) {
       const nextAction = getNextAction(groups, currentGroup, filteredMatchedIds);
 
-      // Helpful for navigating to the last group
-      setPreviousGroup(currentGroup);
-
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
         pushIdToHistory(nextAction);
       }
-    }
-  };
-
-  const handlePreviousAction = () => {
-    if (!currentGroup) return;
-    const previousGroupId = getPreviousIdFromCurrentId(currentGroup, history.current);
-    if (previousGroupId) {
-      setGroup(previousGroupId);
-      clearHistoryAfterId(previousGroupId);
     }
   };
 
@@ -152,7 +132,7 @@ export const GCFormsProvider = ({
     formValues: Record<string, string[] | string>;
   }): void => {
     values.current = formValues;
-    const valueIds = mapIdsToValues(formRecord, formValues);
+    const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
     if (!idArraysMatch(matchedIds, valueIds)) {
       setMatchedIds(valueIds);
     }
@@ -187,9 +167,23 @@ export const GCFormsProvider = ({
   const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
 
   const getProgressData = () => {
+    const cleanedValues = {} as unknown as FormValues;
+
+    Object.entries(values.current).map(([key, value]) => {
+      let cleanedValue = value;
+
+      // For file inputs reset the values to null
+      if (value && typeof value === "object" && "size" in value) {
+        cleanedValue = { name: null, size: null, content: null } as FileInputResponse;
+      }
+
+      // For all other inputs just return the value
+      cleanedValues[key] = cleanedValue as string | string[];
+    });
+
     return {
       id: formRecord.id,
-      values: values.current,
+      values: cleanedValues,
       history: history.current,
       currentGroup: currentGroup || "",
     };
@@ -217,6 +211,21 @@ export const GCFormsProvider = ({
     return groupTitle({ groups, groupId, language });
   };
 
+  const getPreviousGroup = (currentGroup: string) => {
+    const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, values.current);
+    const visibleGroups = getVisibleGroupsBasedOnValuesRecursive(
+      formRecord,
+      valuesWithMatchedIds,
+      "start"
+    );
+
+    const idx = visibleGroups.indexOf(currentGroup);
+    if (idx === -1 || idx === 0) {
+      return currentGroup;
+    }
+    return visibleGroups[idx - 1];
+  };
+
   return (
     <GCFormsContext.Provider
       value={{
@@ -231,10 +240,9 @@ export const GCFormsProvider = ({
         filteredMatchedIds,
         groups,
         currentGroup,
-        previousGroup,
+        getPreviousGroup,
         setGroup,
         handleNextAction,
-        handlePreviousAction,
         hasNextAction,
         isOffBoardSection,
         groupsCheck,
@@ -272,12 +280,11 @@ export const useGCFormsContext = () => {
       filteredMatchedIds: [""],
       groups: {},
       currentGroup: "",
-      previousGroup: "",
+      getPreviousGroup: () => "",
       setGroup: () => void 0,
       hasNextAction: () => void 0,
       isOffBoardSection: () => false,
       handleNextAction: () => void 0,
-      handlePreviousAction: () => void 0,
       formRecord: {} as PublicFormRecord,
       groupsCheck: () => false,
       getGroupHistory: () => [],

@@ -1,0 +1,82 @@
+"use client";
+import { useTranslation } from "@i18n/client";
+import { FormElementTypes, FormElement } from "@lib/types";
+
+export const NumberFieldOptions = ({
+  item,
+  setItem,
+}: {
+  item: FormElement;
+  setItem: (item: FormElement) => void;
+}) => {
+  const { t } = useTranslation("form-builder");
+
+  if (item.type !== FormElementTypes.textField) {
+    return null;
+  }
+
+  if (!item.properties.validation || item.properties.validation.type !== "number") {
+    return null;
+  }
+
+  const checked = item.properties.allowNegativeNumbers;
+
+  return (
+    <section className="mb-4">
+      <div className="gc-input-checkbox mb-4">
+        <input
+          type="checkbox"
+          className="gc-input-checkbox__input"
+          id={`numberField-${item.id}-id-allowNegative`}
+          value={`numberField-${item.id}-value-allowNegative-` + checked}
+          defaultChecked={checked}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            // clone the existing properties so that we don't overwrite other keys in "allowNegativeNumbers"
+            const allowNegativeNumbers = e.target.checked;
+            setItem({
+              ...item,
+              properties: {
+                ...item.properties,
+                ...{ allowNegativeNumbers },
+              },
+            });
+          }}
+        />
+        <label
+          data-testid="allowNegative"
+          className="gc-checkbox-label"
+          htmlFor={`numberField-${item.id}-id-allowNegative`}
+        >
+          <span className="checkbox-label-text">{t("addElementDialog.number.allowNegative")}</span>
+        </label>
+      </div>
+      <div>
+        <label
+          data-testid="stepCount"
+          className="gcds-label mt-1"
+          htmlFor={`numberField-${item.id}-id-stepCount`}
+        >
+          {t("addElementDialog.number.decimalPlaces")}
+        </label>
+        <input
+          type="number"
+          className="gc-input-text mt-2"
+          id={`numberField-${item.id}-id-stepCount`}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const stepCount = parseInt(e.target.value, 10);
+            setItem({
+              ...item,
+              properties: {
+                ...item.properties,
+                ...{ stepCount },
+              },
+            });
+          }}
+          value={typeof item.properties.stepCount === "number" ? item.properties.stepCount : 0}
+          min={0}
+          step={1}
+        />
+      </div>
+    </section>
+  );
+};

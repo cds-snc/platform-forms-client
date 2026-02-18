@@ -11,6 +11,7 @@ import { cn } from "@lib/utils";
 import Skeleton from "react-loading-skeleton";
 
 export const RichTextLocked = ({
+  id,
   beforeContent = null,
   summaryText,
   detailsText,
@@ -22,6 +23,7 @@ export const RichTextLocked = ({
   hydrated,
   maxLength,
 }: {
+  id: string;
   beforeContent?: React.ReactElement | null;
   summaryText: string;
   detailsText?: React.ReactElement;
@@ -58,7 +60,7 @@ export const RichTextLocked = ({
         <EssentialBadge />
         {beforeContent && beforeContent}
         <div className="flex">{children}</div>
-        <details>
+        <details id={id}>
           <summary className="cursor-pointer text-sm font-bold underline">{summaryText}</summary>
           {detailsText && detailsText}
 

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ReactElement, type JSX } from "react";
 import { logMessage } from "@lib/logger";
 import {
@@ -55,9 +57,20 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   // Retrieve managed data from static json file if specified
   if (element.properties.managedChoices) {
-    const dataFile = element.properties.managedChoices;
-    const data = managedData[dataFile];
-    choices = data ? getLocaleChoices(data, lang) : [];
+    if (Array.isArray(element.properties.managedChoices)) {
+      // Handle multiple managed data files - merge and sort alphabetically
+      element.properties.managedChoices.forEach((dataFile) => {
+        const data = managedData[dataFile];
+        const fileChoices = data ? getLocaleChoices(data, lang) : [];
+        choices = choices.concat(fileChoices);
+      });
+      choices.sort((a, b) => a.localeCompare(b, lang));
+    } else {
+      // Backwards compatibility for single managed data file
+      const dataFile = element.properties.managedChoices;
+      const data = managedData[dataFile];
+      choices = data ? getLocaleChoices(data, lang) : [];
+    }
   }
 
   const subElements =
@@ -132,6 +145,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
             maxLength={element.properties.validation?.maxLength}
+            allowNegativeNumbers={element.properties.allowNegativeNumbers}
+            stepCount={element.properties.stepCount}
+            lang={lang}
           />
         </div>
       );
@@ -147,6 +163,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             maxLength={element.properties.validation?.maxLength}
+            lang={lang}
           />
         </div>
       );
@@ -228,11 +245,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
               className={isRequired ? "required" : ""}
               required={isRequired}
               lang={lang}
+              htmlFor={`${id}`}
             >
               {labelText}
             </Label>
           )}
-          {description && <Description id={`${id}`}>{description}</Description>}
+          {description && <Description id={`desc-${id}`}>{description}</Description>}
           <FileInput
             id={`${id}`}
             name={`${id}`}
@@ -376,12 +394,13 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     case FormElementTypes.checkbox:
       return [];
     case FormElementTypes.fileInput:
-      return { name: null, size: null, based64EncodedFile: null };
+      return { name: null, size: null, content: null };
     case FormElementTypes.dynamicRow: {
       const dynamicRowInitialValue: Responses =
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
           const subElementID = `${currentIndex}`;
-          if (![FormElementTypes.richText].includes(currentValue.type)) {
+          const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
+          if (!richTextElements.includes(currentValue.type)) {
             accumulator[subElementID] = _getElementInitialValue(currentValue, language);
           }
           return accumulator;
@@ -406,8 +425,10 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
 
   const initialValues: Responses = {};
 
+  const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
+
   formRecord.form.elements
-    .filter((element) => ![FormElementTypes.richText].includes(element.type))
+    .filter((element) => !richTextElements.includes(element.type))
     .forEach((element: FormElement) => {
       initialValues[element.id] = _getElementInitialValue(element, language);
     });

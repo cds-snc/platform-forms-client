@@ -7,16 +7,18 @@ import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { Validate, PublicFormRecord } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Button } from "@clientComponents/globals/Buttons/Button";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { Language } from "@lib/types/form-builder-types";
 
 import { getLocalizedProperty } from "@lib/utils";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
+import { ga, focusHeadingBySelector } from "@lib/client/clientHelpers";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { ForwardArrowIcon24x24 } from "@serverComponents/icons";
 import { isFormClosed } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useRouter } from "next/navigation";
+import { formHasGroups } from "@root/lib/utils/form-builder/formHasGroups";
+import { showReviewPage as hasReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 export const NextButton = ({
   validateForm,
@@ -52,9 +54,22 @@ export const NextButton = ({
   };
 
   if (
+    formHasGroups(formRecord.form) &&
+    currentGroup &&
+    !hasNextAction(currentGroup) &&
+    hasReviewPage(formRecord.form)
+  ) {
+    ga("form_has_dead_end", {
+      formId: formRecord.id,
+    });
+    // @todo investigate why we're hitting this dead end
+    // return <div data-testid="dead-end"></div>;
+  }
+
+  if (
     !currentGroup ||
-    currentGroup === LockedSections.REVIEW ||
-    currentGroup === LockedSections.END ||
+    currentGroup === LOCKED_GROUPS.REVIEW ||
+    currentGroup === LOCKED_GROUPS.END ||
     !hasNextAction(currentGroup) ||
     !showReviewPage(formRecord.form)
   ) {
@@ -108,9 +123,10 @@ export const NextButton = ({
           if (await handleValidation()) {
             updateFormDelay(formRecord.form, currentGroup);
             handleNextAction();
-            tryFocusOnPageLoad("h2");
+            focusHeadingBySelector("form h2");
           }
         }}
+        dataTestId="nextButton"
       >
         {!saveAndResumeEnabled ? (
           t("next", { lng: language })

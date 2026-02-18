@@ -1,52 +1,31 @@
 "use client";
-import React from "react";
-import useSWR from "swr";
+import React, { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import Image from "next/image";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import axios from "axios";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import Loader from "@clientComponents/globals/Loader";
 import { Button, Alert } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
-
-const fetcher = async (url: string) => {
-  try {
-    const res = await axios({
-      url,
-      method: "GET",
-      responseType: "json",
-      timeout: 5000,
-    });
-
-    if (res.data?.numberOfUnprocessedSubmissions > 0) {
-      return { error: "unprocessed" };
-    } else {
-      return res.data;
-    }
-  } catch (e) {
-    // handle using swr error
-    throw new Error("Something went wrong");
-  }
-};
+import { checkUnprocessed } from "@lib/unprocessed/actions";
+import { getFormTemplate } from "@formBuilder/actions";
 
 async function downloadForm(lang: string, id: string) {
-  const url = `/api/templates/${id}`;
-  const response = await axios({
-    url,
-    method: "GET",
-    responseType: "json",
-    timeout: 5000,
-  });
-
-  const fileName = lang === "fr" ? response.data.form.titleFr : response.data.form.titleEn;
-  const data = JSON.stringify(response.data.form, null, 2);
-  const tempUrl = window.URL.createObjectURL(new Blob([data]));
-  const link = document.createElement("a");
-  link.href = tempUrl;
-  link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
-  document.body.appendChild(link);
-  link.click();
+  const template = await getFormTemplate(id);
+  if (template.formRecord) {
+    const formRecord = template.formRecord;
+    const fileName = lang === "fr" ? formRecord.titleFr : formRecord.titleEn;
+    const data = JSON.stringify(template, null, 2);
+    const tempUrl = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement("a");
+    link.href = tempUrl;
+    link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
+    document.body.appendChild(link);
+    link.click();
+    window.URL.revokeObjectURL(tempUrl);
+  } else {
+    alert("error creating file download");
+  }
 }
 
 export const ConfirmFormDeleteDialog = ({
@@ -62,7 +41,32 @@ export const ConfirmFormDeleteDialog = ({
 }) => {
   const dialog = useDialogRef();
   const { t, i18n } = useTranslation("form-builder");
-  const { data, isLoading, error } = useSWR(`/api/id/${formId}/submission/unprocessed`, fetcher);
+  const [unprocessed, setUnprocessed] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(isPublished ?? true);
+  const [error, setError] = React.useState(false);
+
+  useEffect(() => {
+    if (isPublished) {
+      const fetchData = async () => {
+        try {
+          const result = await checkUnprocessed({ formId });
+          if (result.error) {
+            setUnprocessed(false);
+            setError(true);
+          } else {
+            setUnprocessed(result.unprocessedSubmissions ?? false);
+            setError(false);
+          }
+        } catch {
+          setError(true);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
+    }
+  }, [formId, isPublished]);
 
   if (isLoading) {
     return (
@@ -117,7 +121,7 @@ export const ConfirmFormDeleteDialog = ({
 
   const responsesLink = `/${i18n.language}/form-builder/${formId}/responses`;
 
-  if (data && data.error === "unprocessed") {
+  if (unprocessed && isPublished) {
     return (
       <Dialog handleClose={handleClose} dialogRef={dialog}>
         <div className="p-5">
@@ -126,7 +130,7 @@ export const ConfirmFormDeleteDialog = ({
               width={"326"}
               height={"228"}
               alt=""
-              className="center block"
+              className="block"
               src="/img/form-builder-download-responses.png"
             />
           </div>
@@ -155,16 +159,7 @@ export const ConfirmFormDeleteDialog = ({
       title={t("formDelete.title")}
     >
       <div className="p-5">
-        <div className="flex justify-center px-10">
-          <Image
-            width={"288"}
-            height={"206"}
-            alt=""
-            className="center block"
-            src="/img/form-builder-delete-dialog.svg"
-          />
-        </div>
-        <div className="mt-10">
+        <div>
           {isPublished ? (
             <>
               <p className="mb-6">{t("formDelete.published.message1")}</p>
@@ -176,7 +171,8 @@ export const ConfirmFormDeleteDialog = ({
           ) : (
             <>
               <p className="mb-6">{t("formDelete.draft.message1")}</p>
-              <p>{t("formDelete.draft.message2")}</p>
+              <p className="mb-6">{t("formDelete.draft.message2")}</p>
+              <p>{t("formDelete.draft.message3")}</p>
             </>
           )}
         </div>

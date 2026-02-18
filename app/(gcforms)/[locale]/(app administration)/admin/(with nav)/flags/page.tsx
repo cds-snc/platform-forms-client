@@ -4,7 +4,9 @@ import { authorization } from "@lib/privileges";
 import { AuthenticatedPage } from "@lib/pages/auth";
 import { Metadata } from "next";
 import { FlagList } from "./components/server/FlagList";
+import { UserList } from "./components/server/UserList";
 import { Loader } from "@clientComponents/globals/Loader";
+import { getAllUsersWithFeatures } from "@root/lib/userFeatureFlags";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -21,6 +23,7 @@ export async function generateMetadata(props: {
 
 export default AuthenticatedPage([authorization.canAccessFlags], async () => {
   const { t } = await serverTranslation("admin-flags");
+  const usersWithFeatures = await getAllUsersWithFeatures();
 
   return (
     <>
@@ -28,6 +31,11 @@ export default AuthenticatedPage([authorization.canAccessFlags], async () => {
       <p className="pb-8">{t("subTitle")}</p>
       <Suspense fallback={<Loader />}>
         <FlagList />
+      </Suspense>
+      <h1 className="my-10 border-0">{t("userFlagHeader")}</h1>
+      <p className="pb-8">{t("userFlagSubHeader")}</p>
+      <Suspense fallback={<Loader />}>
+        <UserList usersWithFeatures={usersWithFeatures} />
       </Suspense>
     </>
   );

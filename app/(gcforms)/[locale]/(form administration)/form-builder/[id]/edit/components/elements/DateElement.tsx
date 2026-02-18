@@ -17,7 +17,7 @@ export const DateElement = ({ dateFormat = "YYYY-MM-DD" }: { dateFormat?: DateFo
       case "DD":
         return DatePart.DD;
       default:
-        logMessage.info("Unknown date part", { part });
+        logMessage.info(`Unknown date part: ${JSON.stringify(part)}`);
         return;
     }
   });

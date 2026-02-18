@@ -10,7 +10,7 @@ export async function getOrigin(): Promise<string> {
 
   const h = await headers();
 
-  const detectedHost = h.get("host");
+  const detectedHost = h.get("x-forwarded-host");
   const detectedProtocol = h.get("x-forwarded-proto") ?? "https";
 
   const url = new URL(`${detectedProtocol}://${detectedHost}`);

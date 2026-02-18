@@ -14,7 +14,7 @@ const storage: StateStorage = {
     try {
       sessionStorage.setItem(name, value);
     } catch (error) {
-      logMessage.info("Error setting item in session storage", error);
+      logMessage.info(`Error setting item in session storage: ${JSON.stringify(error)}`);
     }
   },
   removeItem: async (name: string) => {

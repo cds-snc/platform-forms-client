@@ -15,7 +15,7 @@ import { inviteToFormsEmailTemplate } from "@lib/invitations/emailTemplates/invi
 import { getOrigin } from "@lib/origin";
 import { logMessage } from "@lib/logger";
 import { Invitation } from "@prisma/client";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
@@ -33,7 +33,8 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
         e.user.id,
         { type: "Form", id: formId },
         "AccessDenied",
-        `User ${e.user.id} does not have permission to invite user`
+        AuditLogAccessDeniedDetails.AccessDenied_NoInvitePermission,
+        { userId: e.user.id }
       );
     }
     throw e;
@@ -68,9 +69,9 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
 
   // check if user is already invited to the form
   const invitation = await _retrieveFormInvitationByEmail(email, formId)
-    .then((previousInvitation) => {
+    .then(async (previousInvitation) => {
       if (previousInvitation && previousInvitation.expires < new Date()) {
-        _deleteInvitation(previousInvitation.id);
+        await _deleteInvitation(previousInvitation.id);
         return _createInvitation(email, formId, user.id);
       }
       if (previousInvitation === null) {
@@ -89,7 +90,8 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
     user.id,
     { type: "Form", id: invitation.templateId },
     "InvitationCreated",
-    `${user.email} invited ${invitation.email}`
+    AuditLogDetails.UserInvited,
+    { userEmail: user.email, invitationEmail: invitation.email }
   );
 
   await _sendInvitationEmail(sender, invitation, message, template.formRecord);
@@ -189,10 +191,14 @@ const _sendInvitationEmail = async (
       formUrlFr
     );
 
-    await sendEmail(email, {
-      subject: "Invitation to access form | Invitation pour accéder au formulaire",
-      formResponse: emailContent,
-    });
+    await sendEmail(
+      email,
+      {
+        subject: "Invitation to access form | Invitation pour accéder au formulaire",
+        formResponse: emailContent,
+      },
+      "formInvitationToExistingUser"
+    );
 
     return;
   }
@@ -208,10 +214,14 @@ const _sendInvitationEmail = async (
     registerUrlFr
   );
 
-  await sendEmail(email, {
-    subject: "Invitation to access form | Invitation pour accéder au formulaire",
-    formResponse: emailContent,
-  });
+  await sendEmail(
+    email,
+    {
+      subject: "Invitation to access form | Invitation pour accéder au formulaire",
+      formResponse: emailContent,
+    },
+    "formInvitationToFutureUser"
+  );
 };
 
 /**

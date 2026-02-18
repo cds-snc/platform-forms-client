@@ -19,19 +19,20 @@ export const FormItemFactory = ({
   if (!formItem || !formItem.type) {
     return <></>;
   }
+  let itemType = formItem.type;
 
   // Overides with fileInput type to print the custom element below (vs. as an Input)
-  if ((formItem.values as FileInputResponse)?.based64EncodedFile !== undefined) {
-    formItem.type = FormElementTypes.fileInput;
+  if ((formItem.values as FileInputResponse)?.content !== undefined) {
+    itemType = FormElementTypes.fileInput;
   }
 
   // Note: order matters, from more specific to more generic
-  switch (formItem.type) {
+  switch (itemType) {
     case FormElementTypes.dynamicRow:
       return <DynamicRow formItem={formItem} language={language} />;
 
     case FormElementTypes.fileInput:
-      return <FileInput formItem={formItem} />;
+      return <FileInput formItem={formItem} language={language} />;
 
     case FormElementTypes.formattedDate:
       return <FormattedDate formItem={formItem} />;

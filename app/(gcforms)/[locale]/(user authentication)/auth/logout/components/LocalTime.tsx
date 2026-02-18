@@ -2,25 +2,29 @@
 
 import { useEffect, useState } from "react";
 
-/**
- * Get the user's local time.
- * The server time on AWS will always be in UTC. To get the user's local time, the browesrs locale
- * (run client side) is used to construct and return the user's local time.
- */
 export const LocalTime = ({ locale }: { locale: string }) => {
-  // Works around a hydration issue where the time rendered on the server doesn't match the cilent
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
+  const [time, setTime] = useState<string | null>(null);
 
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  return (
-    <>
-      {hydrated &&
-        new Date().toLocaleString(`${locale + "-CA"}`, {
-          timeZone: tz,
-        })}
-    </>
-  );
+  useEffect(() => {
+    let handle: number | undefined;
+    try {
+      const logoutTime = sessionStorage.getItem("logoutTime");
+      if (!logoutTime) return;
+      const parsedTime = JSON.parse(logoutTime);
+      // Defer state update to avoid synchronous setState inside effect
+      handle = window.setTimeout(() => {
+        setTime(parsedTime[locale] || null);
+      }, 0);
+    } catch (error) {
+      // no-op --- if parsing fails, we simply don't show the time
+    }
+
+    return () => {
+      if (handle) {
+        clearTimeout(handle);
+      }
+    };
+  }, [locale]);
+
+  return <div className="mb-8 flex text-sm font-normal">{time ? time : <span>&nbsp;</span>}</div>;
 };

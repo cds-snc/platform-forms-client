@@ -10,11 +10,9 @@ import { FieldsetLegend } from "./FieldsetLegend";
 
 export const RichText = ({
   element,
-  index,
   primaryLanguage,
 }: {
   element: FormElement;
-  index: number;
   primaryLanguage: Language;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -33,34 +31,34 @@ export const RichText = ({
         <FieldsetLegend>{t(element.type)}</FieldsetLegend>
         <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
           <div className="relative w-1/2 flex-1">
-            <LanguageLabel
-              id={`elements-${index}-description-${primaryLanguage}-language`}
-              lang={primaryLanguage}
-            >
-              <>{primaryLanguage}</>
-            </LanguageLabel>
             <RichTextEditor
               path={propertyPath(element.id, field, primaryLanguage)}
               content={element.properties[fieldEn] ?? ""}
               lang={primaryLanguage}
               ariaLabel={t("pageText") + " " + t(primaryLanguage)}
-              ariaDescribedBy={`elements-${index}-description-${primaryLanguage}-language`}
+              ariaDescribedBy={`elements-${element.id}-description-${primaryLanguage}-language`}
             />
+            <LanguageLabel
+              id={`elements-${element.id}-description-${primaryLanguage}-language`}
+              lang={primaryLanguage}
+            >
+              <>{primaryLanguage}</>
+            </LanguageLabel>
           </div>
           <div className="relative w-1/2 flex-1">
-            <LanguageLabel
-              id={`elements-${index}-description-${secondaryLanguage}-language`}
-              lang={secondaryLanguage}
-            >
-              <>{secondaryLanguage}</>
-            </LanguageLabel>
             <RichTextEditor
               path={propertyPath(element.id, field, secondaryLanguage)}
               content={element.properties[fieldFr] ?? ""}
               lang={secondaryLanguage}
               ariaLabel={t("pageText") + " " + secondaryLanguage}
-              ariaDescribedBy={`elements-${index}-description-${secondaryLanguage}-language`}
+              ariaDescribedBy={`elements-${element.id}-description-${secondaryLanguage}-language`}
             />
+            <LanguageLabel
+              id={`elements-${element.id}-description-${secondaryLanguage}-language`}
+              lang={secondaryLanguage}
+            >
+              <>{secondaryLanguage}</>
+            </LanguageLabel>
           </div>
         </div>
       </div>

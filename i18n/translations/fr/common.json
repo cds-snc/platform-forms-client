@@ -38,6 +38,7 @@
     "heading": "Veuillez corriger les erreurs sur la page.",
     "required": "Compléter le champ obligatoire afin de continuer.",
     "alphanumeric": "Entrer uniquement des lettres et des chiffres.",
+    "duplicateEmail": "Cette adresse courriel a déjà été ajoutée.",
     "text": "",
     "number": "Entrer un numéro.",
     "email": "Entrer une adresse courriel valide.",
@@ -45,16 +46,33 @@
     "date-invalid": "Entrer une date valide.",
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
-    "file-size-too-large": "Sélectionner un fichier plus petit.",
-    "file-size-too-large-all-files": "Les fichiers dépassent le maximum de 3.5 Mo. Téléversez des fichiers plus petits.",
-    "file-submission": "Il y a eu un problème avec le fichier soumis. Essayez de téléverser un autre format de fichier, tel que PDF.",
+    "file-upload": {
+      "default": {
+        "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
+        "message": "Le fichier « {{fileName}} » n'a pas pu être envoyé."
+      },
+      "file-size-too-large": {
+        "message": "Le fichier « {{fileName}} » est trop volumineux. Choisissez un fichier dont la taille est inférieure à {{maxSizeInMb}} Mo."
+      },
+      "mime": {
+        "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
+        "message": "{{fileName}} n'a pas pu être envoyé. Essayez d'enregistrer le fichier dans un autre format et de le téléverser à nouveau."
+      },
+      "network-error": {
+        "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
+        "message": "Vérifiez votre connexion réseau et réessayez plus tard."
+      }
+    },
     "file-type-invalid": "Sélectionner un autre type de fichier.",
     "too-many-characters": "Raccourcir la réponse.",
     "all-checkboxes-required": "Lisez et cochez toutes les cases pour confirmer les éléments de cette section.",
     "validGovEmail": "Entrer une adresse courriel valide du gouvernement.",
     "notSameAsUserEmail": "Il ne peut s'agir de votre propre adresse courriel. Entrez le courriel de la personne responsable de votre équipe. S'il s'agit de vous, ajoutez un·e collègue.",
     "min-length-4-characters": "Doit comporter au moins 4 caractères.",
+    "mismatched-type": "La réponse ne correspond pas au type requis.",
     "MB": "Mo",
+    "KB": "Ko",
+    "bytes": "octets",
     "error-list": {
       "default": "Saisissez une réponse pour : {{question}}",
       "select": "Sélectionnez une option pour : {{question}}",
@@ -67,7 +85,8 @@
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
   "required-field": "Champ obligatoire",
-  "file-upload-button-text": "Sélectionner un fichier",
+  "decimalSeparator": ",",
+  "file-upload-button-text": "Choisir un fichier",
   "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "dropdown-initial-option-text": "Pas de sélection",
@@ -106,6 +125,7 @@
     "characterCount": {
       "part1": "Il vous reste",
       "part2": "caractères.",
+      "part2-singular": "caractère.",
       "part1-error": "Vous avez dépassé la limite de",
       "part2-error": "caractères."
     }
@@ -191,7 +211,8 @@
     },
     "YYYY-MM-DD": "AAAA-MM-JJ",
     "DD-MM-YYYY": "JJ-MM-AAAA",
-    "MM-DD-YYYY": "MM-JJ-AAAA"
+    "MM-DD-YYYY": "MM-JJ-AAAA",
+    "roleDescription": "date mise en forme"
   },
   "start": "Départ",
   "loadingResult": "Chargement en cours...",
@@ -205,13 +226,17 @@
   },
   "exit": "Sortie",
   "campaignBanner": {
-    "enabled": "false",
+    "enabled": "true",
     "type": "À VENIR",
     "message": "<strong>En août</strong> : Créez des formulaires multipages avec une logique d’embranchement. <a href='/fr/contact' className='text-white hover:text-white'>S’abonner aux mises à jour</a>",
     "type2": "NOUVEAUTÉ",
     "message2": "Créez des formulaires complexes de plusieurs pages avec logique d’affichage et d’embranchement. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/configurer-formulaire-avec-logique/' className='text-white hover:text-white'>En savoir plus</a>",
     "type3": "Élection fédérale",
-    "message3": "Veuillez vous renseigner auprès de l’équipe des communications de votre ministère au sujet d'annonces durant la <a href='https://www.canada.ca/fr/conseil-prive/services/publications/lignes-directrices-regissant-conduite-ministres-etat-membres-personnel-exonere-fonctionnaires-periode-electorale.html' className='text-white hover:text-white'>période de transition</a>"
+    "message3": "Veuillez vous renseigner auprès de l’équipe des communications de votre ministère au sujet d'annonces durant la <a href='https://www.canada.ca/fr/conseil-prive/services/publications/lignes-directrices-regissant-conduite-ministres-etat-membres-personnel-exonere-fonctionnaires-periode-electorale.html' className='text-white hover:text-white'>période de transition</a>",
+    "type4": "Retraite de livraison par courriel",
+    "message4": "Les formulaires publiés ne sont pas affectés. Les nouveaux formulaires n’auront pas l’option de livraison par courriel. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/obtenir-les-reponses-aux-formulaires/' className='text-white hover:text-white'>En savoir plus</a>",
+    "type5": "Prenez une minute pour nous aider",
+    "message5": "Testez une fonctionnalité à venir qui améliorera la récupération des réponses : <a href='/fr/forms/browser-check' target='_blank' className='text-white hover:text-white'>Vérifiez votre navigateur</a>"
   },
   "closingNotice": {
     "title": "Fermeture du formulaire",
@@ -234,6 +259,11 @@
       "title": "Problème de téléversement",
       "description": "Essayez de téléverser à nouveau le fichier ou recommencez un nouveau formulaire et copiez-collez vos réponses du fichier.",
       "errorCode": "Code d'erreur : {{code}}"
+    },
+    "problemLoadingAnswers": {
+      "title": "Problème de téléversement du fichier",
+      "description": "Vérifiez que vous avez sélectionné le bon fichier. Essayez de téléverser à nouveau, ou recommencez un nouveau formulaire et copiez-collez vos réponses à partir de votre fichier.",
+      "errorCode": "Error code: {{code}}"
     },
     "resumePage": {
       "upload": {
@@ -308,5 +338,25 @@
   "conditional": {
     "activated": "L'élément {{title}} a été ajouté au formulaire"
   },
-  "version": "Version "
+  "version": "Version ",
+  "remove": "Supprimer",
+  "fileInput": {
+    "addedMessage": "{{fileName}} a été ajouté au formulaire",
+    "removedMessage": "{{fileName}} a été supprimé"
+  },
+  "submitProgress": {
+    "text": "Envoi du formulaire en cours...",
+    "uploadingFiles": "Téléversement de {{totalFiles}} fichiers..."
+  },
+  "saveFileWarning": {
+    "text": "Vous devrez téléverser à nouveau les fichiers joints lorsque vous poursuivrez le formulaire."
+  },
+  "confirmFileWarning": {
+    "text": "Cette copie de vos réponses n'aura pas les fichiers que vous avez joints à votre soumission."
+  },
+  "loginPilot": {
+    "title": "Se connecter à Formulaires GC",
+    "description": "Utilisez votre compte du gouvernement pour créer des formulaires et accéder aux réponses soumises.",
+    "button": "Se connecter"
+  }
 }

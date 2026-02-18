@@ -1,9 +1,9 @@
-import { maxResponsesSize } from "../../constants";
-import { TransformedResponse } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/transformFormResponses";
+import { MAX_RESPONSE_SIZE } from "../../constants";
+import { Response } from "@lib/types";
 
 export const validatePayloadSize = (
-  responses: TransformedResponse,
-  maxPayloadSize: number = maxResponsesSize
+  responses: Record<string, Response>,
+  maxPayloadSize: number = MAX_RESPONSE_SIZE
 ) => {
   try {
     const jsonString = JSON.stringify(responses);

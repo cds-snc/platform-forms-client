@@ -1,7 +1,4 @@
-import {
-  isFileExtensionValid,
-  isIndividualFileSizeValid,
-} from "@lib/validation/fileValidationClientSide";
+import { isFileExtensionValid } from "@gcforms/core";
 
 describe("File extension validator", () => {
   it.each([
@@ -12,7 +9,6 @@ describe("File extension validator", () => {
     ["docx", true],
     ["jpg", true],
     ["png", true],
-    ["numbers", true],
     ["PDF", true],
     ["CSV", true],
     ["ca", false],
@@ -21,19 +17,10 @@ describe("File extension validator", () => {
     ["mp3", false],
     ["tar", false],
     ["zip", false],
-    ["xml", true],
+    ["xml", false],
+    ["svg", false],
+    ["numbers", false],
   ])(`Should return true if file extension is valid (testing "%s")`, async (extension, isValid) => {
     expect(isFileExtensionValid(`file.${extension}`)).toBe(isValid);
-  });
-});
-
-describe("File size validator", () => {
-  it.each([
-    [1000, true],
-    [5000000, true],
-    [8389121, false],
-    [10000000, false],
-  ])(`Should return true if file size is valid (testing "%s")`, async (fileSize, isValid) => {
-    expect(isIndividualFileSizeValid(fileSize)).toBe(isValid);
   });
 });

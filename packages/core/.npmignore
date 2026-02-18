@@ -1,0 +1,12 @@
+# Only include what's needed for the package
+node_modules/
+*.log
+.env*
+.DS_Store
+src/**/*.test.ts
+src/**/*.spec.ts
+vitest.config.ts
+tsconfig.json
+
+# Include dist and src for publishing
+# Don't exclude dist here even though it's in .gitignore

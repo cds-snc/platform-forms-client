@@ -9,6 +9,7 @@ import { FormProperties, PublicFormRecord } from "@lib/types";
 import { RichText } from "@clientComponents/forms";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 
 import {
   FormServerErrorCodes,
@@ -18,7 +19,6 @@ import {
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { BackArrowIcon } from "@serverComponents/icons";
-import Brand from "@clientComponents/globals/Brand";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import Skeleton from "react-loading-skeleton";
 import { safeJSONParse } from "@lib/utils";
@@ -27,6 +27,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { defaultForm } from "@lib/store/defaults";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { PreviewFormWrapper } from "./PreviewFormWrapper";
+import { BrandHeader } from "@serverComponents/globals/GcdsHeader/BrandHeader";
 
 export const Preview = ({
   disableSubmit = true,
@@ -89,9 +90,10 @@ export const Preview = ({
   };
 
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
-  const settingsLink = `/${i18n.language}/form-builder/${id}/settings`;
 
   const brand = formRecord?.form ? formRecord.form.brand : null;
+
+  const hasCustom = brand?.logoEn && brand?.logoFr;
 
   const hasHydrated = useRehydrate();
 
@@ -115,6 +117,7 @@ export const Preview = ({
           status !== "authenticated" && ""
         }`}
         {...getLocalizationAttribute()}
+        data-testid="preview-container"
       >
         {status !== "authenticated" ? (
           <div className="mb-1 inline-block bg-purple-200 p-2">
@@ -124,21 +127,13 @@ export const Preview = ({
           </div>
         ) : email ? (
           <div className="mb-1 inline-block bg-purple-200 p-2">
-            {t("submittedResponsesText", { ns: "form-builder", email })}{" "}
-            <a className="visited:text-black-default" href={settingsLink}>
-              {t("submittedResponsesChange", { ns: "form-builder" })}
-            </a>
-            .
+            {t("submittedResponsesText", { ns: "form-builder", email })}.
           </div>
         ) : (
           <div className="mb-1 inline-block bg-purple-200 p-2">
             {t("submittedResponsesTextVault.text1", { ns: "form-builder" })}{" "}
             <a className="visited:text-black-default" href={responsesLink}>
               {t("submittedResponsesTextVault.text2", { ns: "form-builder" })}
-            </a>
-            .{" "}
-            <a className="visited:text-black-default" href={settingsLink}>
-              {t("submittedResponsesChange", { ns: "form-builder" })}
             </a>
             .
           </div>
@@ -152,10 +147,17 @@ export const Preview = ({
           </>
         )}
 
-        <div className="gc-formview">
-          <div className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
-            <Brand brand={brand} lang={language} className="max-w-[360px]" />
-          </div>
+        <div className="gc-formview gc-form-preview-header">
+          {hasCustom ? (
+            <BrandHeader
+              brand={brand}
+              pathname={""}
+              language={language}
+              showLanguageToggle={true}
+            />
+          ) : (
+            <GcdsHeader pathname={""} language={language} showLanguageToggle={false} />
+          )}
         </div>
 
         {sent ? (
@@ -198,7 +200,10 @@ export const Preview = ({
           <span className="mb-1 inline-block bg-slate-200 p-2">
             {t("confirmationPage", { ns: "form-builder" })}
           </span>
-          <div className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4">
+          <div
+            className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4"
+            data-testid="confirmation-container"
+          >
             <div className="gc-formview">
               <h1 className="mt-10" tabIndex={-1}>
                 {t("title", { ns: "confirmation", lng: language })}

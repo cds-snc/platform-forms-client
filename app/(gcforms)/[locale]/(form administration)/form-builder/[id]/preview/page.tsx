@@ -3,11 +3,12 @@ import { Metadata } from "next";
 import { authCheckAndThrow } from "@lib/actions";
 import { notFound } from "next/navigation";
 import { Preview } from "./Preview";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
 import { ClientContainer } from "./ClientContainer";
 import { checkIfClosed } from "@lib/templates";
 import { ClosedDetails } from "@lib/types";
 import { PreviewClosed } from "./PreviewClosed";
+import { Language } from "@lib/types/form-builder-types";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -22,10 +23,10 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
+export default async function Page(props: { params: Promise<{ id: string; locale: string }> }) {
   const params = await props.params;
 
-  const { id } = params;
+  const { id, locale } = params;
 
   const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
@@ -49,7 +50,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   }
 
   return (
-    <ClientContainer>
+    <ClientContainer id={id} locale={locale as Language}>
       <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />
     </ClientContainer>
   );

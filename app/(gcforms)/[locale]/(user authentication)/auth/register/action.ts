@@ -17,6 +17,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
 import { logMessage } from "@lib/logger";
+import { isPotentialSharedInbox } from "@lib/validation/isPotentialSharedInbox";
 
 export interface ErrorStates {
   authError?: {
@@ -87,12 +88,7 @@ export const register = async (
   }
 
   // Check email for potential shared access email and flag to Slack if found
-  const addressPart = result.output.username.split("@")[0];
-
-  if (
-    (addressPart.includes("-") && !addressPart.includes(".")) ||
-    (!addressPart.includes(".") && !addressPart.includes("-"))
-  ) {
+  if (isPotentialSharedInbox(result.output.username)) {
     logMessage.warn(
       `Flagged new GC Forms account \nPotential shared access email address: ${result.output.username} \nReview and deactivate account if it's a shared inbox \n\nSeverity level: 2`
     );
@@ -122,52 +118,56 @@ const validate = async (
 ) => {
   const { t } = await serverTranslation(["signup", "common"], { lang: language });
 
-  const formValidationSchema = v.object(
-    {
-      name: v.string([
+  const formValidationSchema = v.pipe(
+    v.object({
+      name: v.pipe(
+        v.string(),
         v.minLength(1, t("input-validation.required", { ns: "common" })),
-        v.maxLength(50, t("signUpRegistration.fields.name.error.maxLength")),
-      ]),
-      username: v.string([
+        v.maxLength(50, t("signUpRegistration.fields.name.error.maxLength"))
+      ),
+      username: v.pipe(
+        v.string(),
         v.toLowerCase(),
-        v.toTrimmed(),
+        v.trim(),
         v.minLength(1, t("input-validation.required", { ns: "common" })),
-        v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
-      ]),
-      password: v.string([
+        v.check((input) => isValidGovEmail(input), t("input-validation.validGovEmail"))
+      ),
+      password: v.pipe(
+        v.string(),
+        v.trim(),
         v.minLength(1, t("input-validation.required", { ns: "common" })),
         v.minLength(8, t("account.fields.password.error.minLength", { ns: "common" })),
         v.maxLength(50, t("account.fields.password.error.maxLength", { ns: "common" })),
-        v.custom(
+        v.check(
           (password) => containsLowerCaseCharacter(password),
           t("account.fields.password.error.oneLowerCase", { ns: "common" })
         ),
-        v.custom(
+        v.check(
           (password) => containsUpperCaseCharacter(password),
           t("account.fields.password.error.oneUpperCase", { ns: "common" })
         ),
-        v.custom(
+        v.check(
           (password) => containsNumber(password),
           t("account.fields.password.error.oneNumber", { ns: "common" })
         ),
-        v.custom(
+        v.check(
           (password) => containsSymbol(password),
           t("account.fields.password.error.oneSymbol", { ns: "common" })
-        ),
-      ]),
-      passwordConfirmation: v.string([
-        v.minLength(1, t("input-validation.required", { ns: "common" })),
-      ]),
-    },
-    [
-      v.forward(
-        v.custom(
-          (input) => input.password === input.passwordConfirmation,
-          t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
-        ),
-        ["passwordConfirmation"]
+        )
       ),
-    ]
+      passwordConfirmation: v.pipe(
+        v.string(),
+        v.trim(),
+        v.minLength(1, t("input-validation.required", { ns: "common" }))
+      ),
+    }),
+    v.forward(
+      v.check(
+        (input) => input.password === input.passwordConfirmation,
+        t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
+      ),
+      ["passwordConfirmation"]
+    )
   );
   return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
 };

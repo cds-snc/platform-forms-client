@@ -1,0 +1,145 @@
+"use client";
+import { useCallback, useState } from "react";
+import { Button } from "@root/components/clientComponents/globals";
+import { useResponsesContext } from "../context/ResponsesContext";
+import { useResponsesApp } from "../context";
+import { Responses } from "../Responses";
+import { CheckForResponsesButton } from "../components/CheckForResponsesButton";
+import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
+
+export const Confirmation = ({ locale, id }: { locale: string; id: string }) => {
+  const { t, router } = useResponsesApp();
+  const { directoryHandle } = useResponsesContext();
+  const dirName = directoryHandle?.name || "";
+  const [hasCheckedForResponses, setHasCheckedForResponses] = useState(false);
+
+  const {
+    retrieveResponses,
+    resetProcessingCompleted,
+    setInterrupt,
+    processResponses,
+    newFormSubmissions,
+    hasError,
+    setHasError,
+    hasMaliciousAttachments,
+    setHasMaliciousAttachments,
+    resetProcessedSubmissionsCount,
+    processedSubmissionsCount,
+  } = useResponsesContext();
+
+  const handleCheckResponses = useCallback(() => {
+    setHasCheckedForResponses(true);
+    setHasMaliciousAttachments(false);
+    resetProcessingCompleted();
+    setHasError(false);
+  }, [resetProcessingCompleted, setHasError, setHasMaliciousAttachments]);
+
+  const handleGoBack = () => {
+    router.push(`/${locale}/form-builder/${id}/responses-pilot?reset=true`);
+  };
+
+  const handleSelectNewLocation = () => {
+    // reset relevant state
+    resetProcessedSubmissionsCount();
+    setHasMaliciousAttachments(false);
+    resetProcessingCompleted();
+    setHasError(false);
+    setInterrupt(false);
+
+    // navigate to location selection with reset param
+    router.push(`/${locale}/form-builder/${id}/responses-pilot/location?reset=true`);
+  };
+
+  const handleDownload = async () => {
+    // reset relevant state
+    resetProcessedSubmissionsCount();
+    resetProcessingCompleted();
+    setHasError(false);
+    setInterrupt(false);
+
+    const initialResponses = await retrieveResponses();
+
+    processResponses(initialResponses);
+
+    router.push(`/${locale}/form-builder/${id}/responses-pilot/processing`);
+  };
+
+  if (hasCheckedForResponses) {
+    return (
+      <div>
+        <Responses
+          actions={
+            <div className="mt-8 flex flex-row gap-4">
+              <Button
+                theme="secondary"
+                onClick={handleSelectNewLocation}
+                disabled={Boolean(!newFormSubmissions || newFormSubmissions.length < 1)}
+              >
+                {t("confirmationPage.chooseNewLocationButton")}
+              </Button>
+              {newFormSubmissions && newFormSubmissions.length > 0 ? (
+                <Button theme="primary" onClick={handleDownload}>
+                  {t("confirmationPage.downloadResponsesButton")}
+                </Button>
+              ) : (
+                <CheckForResponsesButton callBack={handleCheckResponses} />
+              )}
+            </div>
+          }
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <p className="mb-0 text-base">
+        {hasError
+          ? processedSubmissionsCount > 0
+            ? t("confirmationPage.partialSuccessTitle")
+            : t("confirmationPage.errorTitle")
+          : t("confirmationPage.successTitle")}
+      </p>
+      <FocusHeader headingTag="h2" dataTestId="confirmation-page-title">
+        {(() => {
+          // If error occurred with no successful downloads, show error message
+          if (hasError && processedSubmissionsCount === 0) {
+            return t("confirmationPage.errorOccurred");
+          }
+
+          const count = processedSubmissionsCount || 0;
+          const formatted = new Intl.NumberFormat(locale).format(count);
+          const key =
+            count === 1
+              ? "confirmationPage.downloadedResponsesOne"
+              : "confirmationPage.downloadedResponsesOther";
+          return t(key, { count, formattedCount: formatted });
+        })()}
+      </FocusHeader>
+
+      {dirName && (
+        <>
+          <p className="mb-0">{t("confirmationPage.savedTo")}</p>
+          <p className="mb-8 font-bold">/{dirName}</p>
+        </>
+      )}
+      {hasMaliciousAttachments && (
+        <div className="mb-8 bg-yellow-50 p-4">
+          <h3>
+            <span role="img">📎</span> {t("confirmationPage.maliciousAttachmentsWarningTitle")}
+          </h3>
+          <p>{t("confirmationPage.maliciousAttachmentsWarningBody")}</p>
+        </div>
+      )}
+      <div className="flex flex-row gap-4">
+        <Button theme="secondary" onClick={handleGoBack}>
+          {t("backToStart")}
+        </Button>
+        <CheckForResponsesButton
+          disabled={Boolean(newFormSubmissions && newFormSubmissions.length === 0)}
+          callBack={handleCheckResponses}
+        />
+      </div>
+    </div>
+  );
+};

@@ -27,14 +27,15 @@ export interface Translations {
   fr: JSONValue;
 }
 
-export enum DownloadFormat {
-  HTML = "html",
-  CSV = "csv",
-  XLSX = "xlsx",
-  JSON = "json",
-  HTML_ZIPPED = "html-zipped",
-  HTML_AGGREGATED = "html-aggregated",
-}
+export const DownloadFormat = {
+  HTML: "html",
+  CSV: "csv",
+  XLSX: "xlsx",
+  JSON: "json",
+  HTML_ZIPPED: "html-zipped",
+  HTML_AGGREGATED: "html-aggregated",
+} as const;
+export type DownloadFormat = (typeof DownloadFormat)[keyof typeof DownloadFormat];
 
 export type HtmlResponse = {
   id: string;

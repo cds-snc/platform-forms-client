@@ -14,7 +14,17 @@ import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authoriz
 
 jest.mock("@lib/appSettings");
 jest.mock("@lib/privileges");
-jest.mock("@lib/auditLogs");
+
+jest.mock("@lib/auditLogs", () => ({
+  __esModule: true,
+  logEvent: jest.fn(),
+  get AuditLogDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
+  },
+  get AuditLogAccessDeniedDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
+  }
+}));
 
 const mockedGetAppSetting = jest.mocked(getAppSetting, { shallow: true });
 

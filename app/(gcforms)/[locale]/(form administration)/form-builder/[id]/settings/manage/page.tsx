@@ -1,13 +1,16 @@
-import { serverTranslation } from "@i18n";
-import { getTemplateWithAssociatedUsers, checkIfClosed } from "@lib/templates";
-import { authorization } from "@lib/privileges";
-import { getUsers } from "@lib/users";
-import { ManageForm } from "./ManageForm";
 import { Metadata } from "next";
-import { headers } from "next/headers";
-import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
-import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
+import { serverTranslation } from "@i18n";
+import { Session } from "next-auth";
+
+import { checkIfClosed } from "@lib/templates";
+import { authorization } from "@lib/privileges";
 import { AuthenticatedPage } from "@lib/pages/auth";
+import { SetClosingDate } from "./components/close/SetClosingDate";
+import { Notifications } from "./components/notifications/Notifications";
+import {
+  getNotificationsUsersForForm,
+  getUserNotificationSettingsForForm,
+} from "@root/lib/notifications";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -23,85 +26,53 @@ export async function generateMetadata(props: {
   };
 }
 
-export default AuthenticatedPage(async (props: { params: Promise<{ id: string }> }) => {
-  const params = await props.params;
+export default AuthenticatedPage(
+  async (props: {
+    params: Promise<{ id: string; locale: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+    session: Session;
+  }) => {
+    const { id } = await props.params;
 
-  const { id } = params;
+    let closedDetails;
 
-  let closedDetails;
+    const canSetClosingDate =
+      id !== "0000" ||
+      (await authorization
+        .canEditForm(id)
+        .then(() => true)
+        .catch(() => false));
 
-  const manageAllForms = await authorization
-    .canManageAllForms()
-    .then(() => true)
-    .catch(() => false);
-  const canSetClosingDate =
-    id !== "0000" ||
-    (await authorization
-      .canEditForm(id)
-      .then(() => true)
-      .catch(() => false));
+    if (canSetClosingDate) {
+      const closedData = await checkIfClosed(id);
+      closedDetails = closedData?.closedDetails;
+    }
 
-  const nonce = (await headers()).get("x-nonce");
+    // Get logged in user's notification setting for this form
+    const loggedInUserNotificationsSetting = await getUserNotificationSettingsForForm(
+      id,
+      props.session.user.id
+    );
 
-  if (canSetClosingDate) {
-    const closedData = await checkIfClosed(id);
-    closedDetails = closedData?.closedDetails;
-  }
+    // Get list of users and their notification settings for this form
+    const userNotificationsForForm = await getNotificationsUsersForForm(id);
 
-  if (!manageAllForms || id === "0000") {
+    // Is the currently logged in user assigned to this form
+    const userIsNotifiable = userNotificationsForForm
+      ? userNotificationsForForm.some((user) => user.id === props.session.user.id)
+      : false;
+
     return (
-      <ManageForm
-        nonce={nonce}
-        id={id}
-        canManageAllForms={false}
-        canSetClosingDate={canSetClosingDate}
-        closedDetails={closedDetails}
-      />
+      <>
+        {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
+        <Notifications
+          formId={id}
+          userIsNotifiable={userIsNotifiable}
+          userHasNotificationsEnabled={loggedInUserNotificationsSetting}
+          userNotificationsForForm={userNotificationsForForm}
+          loggedInUser={props.session.user}
+        />
+      </>
     );
   }
-
-  const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(id);
-
-  if (!templateWithAssociatedUsers) {
-    throw new Error("Template not found");
-  }
-
-  const allUsers = await getUsers().then((users) =>
-    users.map((user) => ({
-      id: user.id,
-      name: user.name || "",
-      email: user.email || "",
-    }))
-  );
-
-  const isPublished = templateWithAssociatedUsers.formRecord.isPublished;
-  const isVaultDelivery = !templateWithAssociatedUsers.formRecord.deliveryMethod;
-
-  return (
-    <>
-      <ManageForm
-        nonce={nonce}
-        id={id}
-        canManageAllForms={manageAllForms}
-        canSetClosingDate={canSetClosingDate}
-        formRecord={templateWithAssociatedUsers.formRecord}
-        usersAssignedToFormRecord={templateWithAssociatedUsers.users}
-        allUsers={allUsers}
-        closedDetails={closedDetails}
-      />
-      {/* 
-        - Only show for users with manage all forms privileges
-            - we do an additional check here in case the code above to reach this point changes later
-        - Only show for forms with vault delivery already set
-        - Only show for live forms 
-            - draft forms should use Response Delivery page
-      */}
-      {isPublished && manageAllForms && isVaultDelivery && (
-        <>
-          <ApiKeyDialog isVaultDelivery={true} />
-          <DeleteApiKeyDialog />
-        </>
-      )}
-    </>
-  );
-});
+);

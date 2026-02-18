@@ -1,29 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { getZitadelClient } from "@lib/integration/zitadelConnector";
-import {
-  checkMachineUserExists,
-  checkKeyExists,
-  createKey,
-  deleteKey,
-} from "@lib/serviceAccount";
-
+import { checkMachineUserExists, checkKeyExists, createKey, deleteKey } from "@lib/serviceAccount";
 import { mockAuthorizationPass, mockAuthorizationFail } from "__utils__/authorization";
 import { AccessControlError } from "@lib/auth/errors";
 import { prismaMock } from "@jestUtils";
 import { logEvent } from "@lib/auditLogs";
+import * as ZitadelConnector from "@lib/integration/zitadelConnector";
 
-jest.mock("@lib/auditLogs");
+jest.mock("@lib/auditLogs", () => ({
+  __esModule: true,
+  logEvent: jest.fn(),
+  get AuditLogDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
+  },
+  get AuditLogAccessDeniedDetails() {
+    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
+  },
+}));
+
 jest.mock("@lib/templates");
 jest.mock("@lib/privileges");
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
-jest.mock("@lib/integration/zitadelConnector");
-const mockedZitadel: jest.MockedFunction<any> = jest.mocked(getZitadelClient, { shallow: true });
+
+jest.mock("@lib/integration/zitadelConnector", () => ({
+  createMachineUser: jest.fn(),
+  getMachineUser: jest.fn(),
+  deleteMachineUser: jest.fn(),
+  createMachineKey: jest.fn(),
+  getMachineUserKeysById: jest.fn(),
+}));
 
 const userId = "1";
 
 describe("Service Account functions", () => {
   beforeEach(() => {
+    jest.resetAllMocks();
     mockAuthorizationPass(userId);
   });
 
@@ -31,9 +42,7 @@ describe("Service Account functions", () => {
     it("should return user ID if user exists", async () => {
       const userId = "testUser";
 
-      mockedZitadel.mockResolvedValue({
-        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: userId } }),
-      });
+      (ZitadelConnector.getMachineUser as jest.Mock).mockResolvedValueOnce({ userId });
 
       const result = await checkMachineUserExists(userId);
 
@@ -42,9 +51,7 @@ describe("Service Account functions", () => {
     it("should return undefined if user does not exist", async () => {
       const userId = "testUser";
 
-      mockedZitadel.mockResolvedValue({
-        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: undefined }),
-      });
+      (ZitadelConnector.getMachineUser as jest.Mock).mockResolvedValueOnce(undefined);
 
       const result = await checkMachineUserExists(userId);
 
@@ -64,14 +71,12 @@ describe("Service Account functions", () => {
       const userId = "testUser";
       const keyId = "test";
 
-      (prismaMock.apiServiceAccount.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.apiServiceAccount.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         id: userId,
         publicKeyId: keyId,
       });
 
-      mockedZitadel.mockResolvedValue({
-        getMachineKeyByIDs: jest.fn().mockResolvedValue({ key: { id: keyId } }),
-      });
+      (ZitadelConnector.getMachineUserKeysById as jest.Mock).mockResolvedValueOnce([{ id: keyId }]);
 
       const result = await checkKeyExists(userId);
       expect(result).toBe(keyId);
@@ -79,30 +84,33 @@ describe("Service Account functions", () => {
     it("should return false if key does not exist", async () => {
       const keyId = "test";
 
-      (prismaMock.apiServiceAccount.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
+      (prismaMock.apiServiceAccount.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce(
+        null
+      );
 
-      mockedZitadel.mockResolvedValue({
-        getMachineKeyByIDs: jest.fn().mockResolvedValue({ key: { id: keyId } }),
-      });
+      (ZitadelConnector.getMachineUserKeysById as jest.Mock).mockResolvedValueOnce([{ id: keyId }]);
 
       const result = await checkKeyExists("testUser");
-      expect(result).toBe(false);
+      expect(result).toBeFalsy();
     });
     it("should return false if key is out of sync", async () => {
       const userId = "testUser";
       const keyId = "test";
 
-      (prismaMock.apiServiceAccount.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.apiServiceAccount.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         id: userId,
         publicKeyId: keyId,
       });
 
-      mockedZitadel.mockResolvedValue({
-        getMachineKeyByIDs: jest.fn().mockResolvedValue({ key: { id: "differentKey" } }),
-      });
+      (ZitadelConnector.getMachineUserKeysById as jest.Mock).mockResolvedValueOnce([
+        {
+          id: "differentKey",
+        },
+      ]);
 
       const result = await checkKeyExists(userId);
-      expect(result).toBe(false);
+
+      expect(result).toBeFalsy();
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
       mockAuthorizationFail(userId);
@@ -115,11 +123,11 @@ describe("Service Account functions", () => {
   });
   describe("createKey", () => {
     it("should create a key if no current user exists", async () => {
-      mockedZitadel.mockResolvedValue({
-        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: undefined }),
-        addMachineUser: jest.fn().mockResolvedValue({ userId: "serviceAccountUser" }),
-        addMachineKey: jest.fn().mockResolvedValue({ keyId: "keyId" }),
+      (ZitadelConnector.getMachineUser as jest.Mock).mockResolvedValueOnce(undefined);
+      (ZitadelConnector.createMachineUser as jest.Mock).mockResolvedValueOnce({
+        userId: "serviceAccountUser",
       });
+      (ZitadelConnector.createMachineKey as jest.Mock).mockResolvedValueOnce({ keyId: "keyId" });
 
       const result = await createKey("templateId");
       expect(result).toMatchObject({
@@ -132,14 +140,15 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "CreateAPIKey",
-        "User :1 created API key for service account serviceAccountUser"
+        "User :${userId} created API key for service account ${serviceAccountId}",
+        { serviceAccountId: "serviceAccountUser", userId: "1" }
       );
     });
     it("should create a key if an existing user exists", async () => {
-      mockedZitadel.mockResolvedValue({
-        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: "templateId" } }),
-        addMachineKey: jest.fn().mockResolvedValue({ keyId: "keyId" }),
+      (ZitadelConnector.getMachineUser as jest.Mock).mockResolvedValueOnce({
+        userId: "templateId",
       });
+      (ZitadelConnector.createMachineKey as jest.Mock).mockResolvedValueOnce({ keyId: "keyId" });
 
       const result = await createKey("templateId");
       expect(result).toMatchObject({
@@ -152,7 +161,8 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "CreateAPIKey",
-        "User :1 created API key for service account templateId"
+        "User :${userId} created API key for service account ${serviceAccountId}",
+        { serviceAccountId: "templateId", userId: "1" }
       );
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
@@ -169,10 +179,11 @@ describe("Service Account functions", () => {
     it("should delete a key if there is an existing user in the IDP", async () => {
       const serviceAccountID = "123412341234";
 
-      mockedZitadel.mockResolvedValue({
-        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
-        removeUser: jest.fn().mockResolvedValue({}),
+      (ZitadelConnector.getMachineUser as jest.Mock).mockResolvedValueOnce({
+        userId: serviceAccountID,
       });
+      (ZitadelConnector.deleteMachineUser as jest.Mock).mockResolvedValueOnce({});
+
       (prismaMock.apiServiceAccount.deleteMany as jest.MockedFunction<any>).mockResolvedValue({
         count: 1,
       });
@@ -182,14 +193,14 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "DeleteAPIKey",
-        "User :1 deleted service account 123412341234"
+        "DeletedAPIKey",
+        { serviceAccountID: serviceAccountID, templateId: "templateId", userId: "1" }
       );
     });
     it("should delete a key if there is not an existing user in the IDP", async () => {
-      mockedZitadel.mockResolvedValue({
-        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: undefined }),
-        removeUser: jest.fn().mockResolvedValue({}),
-      });
+      (ZitadelConnector.getMachineUser as jest.Mock).mockResolvedValueOnce(undefined);
+      (ZitadelConnector.deleteMachineUser as jest.Mock).mockResolvedValueOnce({});
+
       (prismaMock.apiServiceAccount.deleteMany as jest.MockedFunction<any>).mockResolvedValue({
         count: 1,
       });
@@ -199,16 +210,18 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "DeleteAPIKey",
-        "User :1 deleted service account for template templateId"
+        "DeletedAPIKey",
+        { templateId: "templateId", userId: "1", serviceAccountID: "" }
       );
     });
     it("should not throw an Error if the key does not exist in the database", async () => {
       const serviceAccountID = "123412341234";
 
-      mockedZitadel.mockResolvedValue({
-        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
-        removeUser: jest.fn().mockResolvedValue({}),
+      (ZitadelConnector.getMachineUser as jest.Mock).mockResolvedValueOnce({
+        userId: serviceAccountID,
       });
+      (ZitadelConnector.deleteMachineUser as jest.Mock).mockResolvedValueOnce({});
+
       (prismaMock.apiServiceAccount.deleteMany as jest.MockedFunction<any>).mockResolvedValue({
         count: 0,
       });
@@ -218,7 +231,8 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "DeleteAPIKey",
-        "User :1 deleted service account 123412341234"
+        "DeletedAPIKey",
+        { serviceAccountID: serviceAccountID, templateId: "templateId", userId: "1" }
       );
     });
 

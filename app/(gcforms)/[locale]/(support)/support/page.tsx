@@ -16,5 +16,9 @@ export async function generateMetadata(props: {
 }
 
 export default async function Page() {
-  return <SupportForm />;
+  return (
+    <div className="gc-formview">
+      <SupportForm />
+    </div>
+  );
 }

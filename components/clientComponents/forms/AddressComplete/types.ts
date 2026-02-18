@@ -12,10 +12,11 @@ export interface AddressCompleteChoice {
 }
 
 // AutoComplete API returns Find or Retreive as a "next" status.
-export enum AddressCompleNext {
-  Find = "Find",
-  Retrieve = "Retrieve",
-}
+export const AddressCompleNext = {
+  Find: "Find",
+  Retrieve: "Retrieve",
+} as const;
+export type AddressCompleNext = (typeof AddressCompleNext)[keyof typeof AddressCompleNext];
 
 // Address Lookup API returns an array of objects like:
 export interface AddressCompleteResult {

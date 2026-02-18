@@ -4,6 +4,7 @@
   },
   "type": "module",
   "dependencies": {
-    "shelljs": "^0.8.5"
+    "shelljs": "^0.10.0",
+    "@gcds-core/tokens": "1.0.0"
   }
 }

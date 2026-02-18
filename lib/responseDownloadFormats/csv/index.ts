@@ -10,10 +10,12 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   const { t } = customTranslate("common");
   const { submissions } = formResponseSubmissions;
 
+  const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
+
   const sortedElements = sortByLayout({
     layout: formResponseSubmissions.formRecord.form.layout,
     elements: formResponseSubmissions.formRecord.form.elements,
-  }).filter((element) => ![FormElementTypes.richText].includes(element.type));
+  }).filter((element) => !richTextElements.includes(element.type));
 
   const header = sortedElements.map((element) => {
     return `${element.properties.titleEn}\n${element.properties.titleFr}${
@@ -27,11 +29,11 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   });
 
   header.unshift(
-    "Submission ID / Identifiant de soumission",
-    "Date of submission / Date de soumission"
+    "Submission ID \nIdentifiant de soumission",
+    "Date of submission \nDate de soumission"
   );
 
-  header.push("Receipt codes / Codes de réception");
+  header.push("Receipt codes \nCodes de réception");
 
   const csvStringifier = createCsvStringifier({
     header: header,
@@ -63,7 +65,10 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
           .join("\n");
       }
       let answerText = answer.answer;
-      if (specialChars.some((char) => answerText.startsWith(char))) {
+      if (
+        typeof answerText === "string" &&
+        specialChars.some((char) => answerText.startsWith(char))
+      ) {
         answerText = `'${answerText}`;
       }
       if (answerText == "") {

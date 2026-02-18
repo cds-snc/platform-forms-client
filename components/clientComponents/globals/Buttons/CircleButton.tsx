@@ -5,6 +5,7 @@ import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { Button } from "@clientComponents/globals";
 
 type CircleProps = {
+  id: string;
   children: JSX.Element | string;
   className?: string;
   title?: string;
@@ -18,11 +19,13 @@ export const CircleButton = ({
   onClick,
   className,
   dataTestId,
+  id,
 }: CircleProps) => {
   return (
     <div className="relative z-10 flex size-[50px]">
       <Tooltip.Simple text={title} side="left">
         <Button
+          id={id}
           theme="secondary"
           aria-label={title}
           onClick={onClick}

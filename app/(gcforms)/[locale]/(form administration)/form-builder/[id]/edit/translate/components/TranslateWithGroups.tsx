@@ -18,11 +18,13 @@ import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
-import { FormElement } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
-import { Group } from "@lib/formContext";
+import { Group } from "@gcforms/types";
 import { TranslateCustomizeSet } from "./TranslateCustomizeSet";
+
+import { ExitUrl } from "./ExitUrl";
 
 const GroupSection = ({
   groupId,
@@ -50,11 +52,15 @@ const GroupSection = ({
             key={primaryLanguage}
           >
             <div className="relative w-1/2 flex-1">
-              <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
+              <LanguageLabel
+                id={`group-${groupId}-title-${primaryLanguage}-language`}
+                lang={primaryLanguage}
+              >
                 <>{primaryLanguage}</>
               </LanguageLabel>
               <textarea
                 className="size-full p-4 focus:outline-blue-focus"
+                aria-label={group.name + " " + t("logic.translateTitle", { lng: primaryLanguage })}
                 id={`group-${groupId}-title-${primaryLanguage}`}
                 aria-describedby={`group-${groupId}-title-${primaryLanguage}-language`}
                 value={group[localizeField(LocalizedGroupProperties.TITLE, primaryLanguage)]}
@@ -70,11 +76,18 @@ const GroupSection = ({
               />
             </div>
             <div className="relative w-1/2 flex-1">
-              <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
+              <LanguageLabel
+                id={`group-${groupId}-title-${secondaryLanguage}-language`}
+                lang={secondaryLanguage}
+              >
                 <>{secondaryLanguage}</>
               </LanguageLabel>
+
               <textarea
                 className="size-full p-4 focus:outline-blue-focus"
+                aria-label={
+                  group.name + " " + t("logic.translateTitle", { lng: secondaryLanguage })
+                }
                 id={`group-${groupId}-title-${secondaryLanguage}`}
                 aria-describedby={`group-${groupId}-title-${secondaryLanguage}-language`}
                 value={group[localizeField(LocalizedGroupProperties.TITLE, secondaryLanguage)]}
@@ -113,7 +126,22 @@ const Element = ({
 
   const { t } = useTranslation("form-builder");
 
-  if (element.type === "dynamicRow") {
+  const elementsWithOptions: FormElementTypes[] = [
+    FormElementTypes.radio,
+    FormElementTypes.checkbox,
+    FormElementTypes.dropdown,
+    FormElementTypes.combobox,
+  ];
+
+  const elementsWithText: FormElementTypes[] = [
+    FormElementTypes.textField,
+    FormElementTypes.textArea,
+    FormElementTypes.formattedDate,
+    FormElementTypes.addressComplete,
+    FormElementTypes.fileInput,
+  ];
+
+  if (element.type === FormElementTypes.dynamicRow) {
     subElements = element.properties.subElements?.map((subElement) => {
       return (
         <Element
@@ -130,16 +158,16 @@ const Element = ({
     <>
       {questionNumber && (
         <SectionTitle>
-          {element.type === "richText" && <>{t("pageText")}</>}
-          {element.type !== "richText" && <>{"Question " + questionNumber}</>}
+          {element.type === FormElementTypes.richText && <>{t("pageText")}</>}
+          {element.type !== FormElementTypes.richText && <>{"Question " + questionNumber}</>}
         </SectionTitle>
       )}
 
-      {element.type === "richText" && (
-        <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
+      {element.type === FormElementTypes.richText && (
+        <RichText primaryLanguage={primaryLanguage} element={element} />
       )}
 
-      {["radio", "checkbox", "dropdown", "fileInput", "combobox"].includes(element.type) && (
+      {elementsWithOptions.includes(element.type) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
           {(element.properties.descriptionEn || element.properties.descriptionFr) && (
@@ -149,7 +177,7 @@ const Element = ({
         </>
       )}
 
-      {["textField", "textArea", "formattedDate", "addressComplete"].includes(element.type) && (
+      {elementsWithText.includes(element.type) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
           {(element.properties.descriptionEn || element.properties.descriptionFr) && (
@@ -167,7 +195,7 @@ const Element = ({
           {subElements}
         </>
       )}
-      {element.type === "dynamicRow" && (
+      {element.type === FormElementTypes.dynamicRow && (
         <>
           <TranslateCustomizeSet
             element={element}
@@ -198,11 +226,28 @@ export const TranslateWithGroups = () => {
   const hasHydrated = useRehydrate();
   if (!hasHydrated) return null;
 
+  const privacyEn =
+    form.privacyPolicy?.[localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)] ??
+    "";
+
+  const privacyFr =
+    form.privacyPolicy?.[
+      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+    ] ?? "";
+
+  const confirmationEn =
+    form.confirmation?.[localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)] ??
+    "";
+
+  const confirmationFr =
+    form.confirmation?.[localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)] ??
+    "";
+
   return (
     <>
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="mr-10">
-        <div className="flex w-[800px]">
+        <div className="flex w-[700px]">
           <h2 id="editTranslationsHeading" className="whitespace-nowrap" tabIndex={-1}>
             {t("groups.editTranslationsHeading")}
           </h2>
@@ -224,9 +269,7 @@ export const TranslateWithGroups = () => {
         <section>
           {/* FORM TITLE */}
           <fieldset>
-            <FieldsetLegend>
-              {t("formIntroduction")} - {t("title")}
-            </FieldsetLegend>
+            <FieldsetLegend>{t("formTitle")}</FieldsetLegend>
             <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
               <label htmlFor="form-title-en" className="sr-only">
                 <>{primaryLanguage}</>
@@ -277,15 +320,12 @@ export const TranslateWithGroups = () => {
           {/* INTRO */}
           {(form.introduction?.descriptionEn || form.introduction?.descriptionFr) && (
             <fieldset>
-              <FieldsetLegend>{t("description")}</FieldsetLegend>
+              <FieldsetLegend>{t("translations.formDescription")}</FieldsetLegend>
               <div
                 className="mb-10 flex gap-px divide-x-2 border border-gray-300"
                 key={primaryLanguage}
               >
                 <div className="relative w-1/2 flex-1">
-                  <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
-                    <>{primaryLanguage}</>
-                  </LanguageLabel>
                   <RichTextEditor
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
@@ -300,11 +340,11 @@ export const TranslateWithGroups = () => {
                     ariaLabel={t("description")}
                     ariaDescribedBy="form-introduction-english-language"
                   />
+                  <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
+                    <>{primaryLanguage}</>
+                  </LanguageLabel>
                 </div>
                 <div className="relative w-1/2 flex-1">
-                  <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
-                    <>{secondaryLanguage}</>
-                  </LanguageLabel>
                   <RichTextEditor
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
@@ -319,6 +359,9 @@ export const TranslateWithGroups = () => {
                     ariaLabel={t("description")}
                     ariaDescribedBy="form-introduction-french-language"
                   />
+                  <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
+                    <>{secondaryLanguage}</>
+                  </LanguageLabel>
                 </div>
               </div>
             </fieldset>
@@ -336,48 +379,40 @@ export const TranslateWithGroups = () => {
               key={primaryLanguage}
             >
               <div className="relative w-1/2 flex-1">
+                <RichTextEditor
+                  path={`form.privacyPolicy.${localizeField(
+                    LocalizedElementProperties.DESCRIPTION,
+                    primaryLanguage
+                  )}`}
+                  content={privacyEn}
+                  lang={primaryLanguage}
+                  ariaLabel={t("privacyStatement")}
+                  ariaDescribedBy={`privacyPolicy-${primaryLanguage}-language`}
+                />
                 <LanguageLabel
                   id={`privacyPolicy-${primaryLanguage}-language`}
                   lang={primaryLanguage}
                 >
                   <>{primaryLanguage}</>
                 </LanguageLabel>
-                <RichTextEditor
-                  path={`form.privacyPolicy.${localizeField(
-                    LocalizedElementProperties.DESCRIPTION,
-                    primaryLanguage
-                  )}`}
-                  content={
-                    form.privacyPolicy?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
-                    ] ?? ""
-                  }
-                  lang={primaryLanguage}
-                  ariaLabel={t("privacyStatement")}
-                  ariaDescribedBy={`privacyPolicy-${primaryLanguage}-language`}
-                />
               </div>
               <div className="relative w-1/2 flex-1">
-                <LanguageLabel
-                  id={`privacyPolicy-${secondaryLanguage}->language`}
-                  lang={secondaryLanguage}
-                >
-                  <>{secondaryLanguage}</>
-                </LanguageLabel>
                 <RichTextEditor
                   path={`form.privacyPolicy.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage
                   )}`}
-                  content={
-                    form.privacyPolicy?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
-                    ] ?? ""
-                  }
+                  content={privacyFr}
                   lang={secondaryLanguage}
                   ariaLabel={t("privacyStatement")}
-                  ariaDescribedBy={`privacyPolicy-${secondaryLanguage}->language`}
+                  ariaDescribedBy={`privacyPolicy-${secondaryLanguage}-language`}
                 />
+                <LanguageLabel
+                  id={`privacyPolicy-${secondaryLanguage}-language`}
+                  lang={secondaryLanguage}
+                >
+                  <>{secondaryLanguage}</>
+                </LanguageLabel>
               </div>
             </div>
           </fieldset>
@@ -409,18 +444,32 @@ export const TranslateWithGroups = () => {
             Object.keys(groups).map((groupKey) => {
               const thisGroup = groups[groupKey];
               const groupName = thisGroup.name;
+
+              const nextAction = groups[groupKey]?.nextAction;
+              const isExitPage = nextAction === "exit" ? true : false;
+
               if (groupKey == "review" || groupKey == "end" || groupKey == "start") return null;
               return (
                 <div key={groupKey}>
                   <SectionTitle>
                     {t("logic.pageTitle")} <em>{groupName}</em>
                   </SectionTitle>
+
                   <GroupSection
                     group={thisGroup}
                     groupId={groupKey}
                     primaryLanguage={primaryLanguage}
                     secondaryLanguage={secondaryLanguage}
                   />
+
+                  {isExitPage ? (
+                    <ExitUrl
+                      groupId={groupKey}
+                      group={thisGroup}
+                      primaryLanguage={primaryLanguage}
+                    />
+                  ) : null}
+
                   {sortGroup({ form, group: thisGroup }).map((element, index) => {
                     return (
                       <div className="section" id={`section-${index}`} key={element.id}>
@@ -451,48 +500,40 @@ export const TranslateWithGroups = () => {
               key={primaryLanguage}
             >
               <div className="relative w-1/2 flex-1">
+                <RichTextEditor
+                  path={`form.confirmation.${localizeField(
+                    LocalizedElementProperties.DESCRIPTION,
+                    primaryLanguage
+                  )}`}
+                  content={confirmationEn}
+                  lang={primaryLanguage}
+                  ariaLabel={t("confirmationMessage")}
+                  ariaDescribedBy={`confirmation-${primaryLanguage}-language`}
+                />
                 <LanguageLabel
                   id={`confirmation-${primaryLanguage}-language`}
                   lang={primaryLanguage}
                 >
                   <>{primaryLanguage}</>
                 </LanguageLabel>
+              </div>
+              <div className="relative w-1/2 flex-1">
                 <RichTextEditor
                   path={`form.confirmation.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
-                    primaryLanguage
+                    secondaryLanguage
                   )}`}
-                  content={
-                    form.confirmation?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
-                    ] ?? ""
-                  }
-                  lang={primaryLanguage}
+                  content={confirmationFr}
+                  lang={secondaryLanguage}
                   ariaLabel={t("confirmationMessage")}
-                  ariaDescribedBy={`confirmation-${primaryLanguage}-language`}
+                  ariaDescribedBy={`confirmation-${secondaryLanguage}-language`}
                 />
-              </div>
-              <div className="relative w-1/2 flex-1">
                 <LanguageLabel
                   id={`confirmation-${secondaryLanguage}-language`}
                   lang={secondaryLanguage}
                 >
                   <>{secondaryLanguage}</>
                 </LanguageLabel>
-                <RichTextEditor
-                  path={`form.confirmation.${localizeField(
-                    LocalizedElementProperties.DESCRIPTION,
-                    secondaryLanguage
-                  )}`}
-                  content={
-                    form.confirmation?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
-                    ] ?? ""
-                  }
-                  lang={secondaryLanguage}
-                  ariaLabel={t("confirmationMessage")}
-                  ariaDescribedBy={`confirmation-${secondaryLanguage}-language`}
-                />
               </div>
             </div>
           </fieldset>

@@ -1,9 +1,12 @@
-import { getAwsSecret } from "./getAwsSecret";
-import axios from "axios";
+import { Agent } from "https";
+import { getAwsSecret } from "./utils";
+import axios, { AxiosError } from "axios";
 
 const API_URL: string = "https://api.notification.canada.ca";
 
 export type Personalisation = Record<string, string | boolean | Record<string, string | boolean>>;
+
+const httpsAgent = new Agent({ keepAlive: true });
 
 export class GCNotifyConnector {
   private apiUrl: string;
@@ -41,6 +44,7 @@ export class GCNotifyConnector {
   ): Promise<void> {
     try {
       await axios({
+        httpsAgent: httpsAgent,
         url: `${this.apiUrl}/v2/notifications/email`,
         method: "POST",
         timeout: this.timeout,
@@ -57,6 +61,7 @@ export class GCNotifyConnector {
       });
     } catch (error) {
       let errorMessage = "";
+
       if (axios.isAxiosError(error)) {
         if (error.response) {
           /*
@@ -73,7 +78,14 @@ export class GCNotifyConnector {
            * is an instance of XMLHttpRequest in the browser and an instance
            * of http.ClientRequest in Node.js
            */
-          errorMessage = `Request timed out`;
+
+          if (error.code === AxiosError.ECONNABORTED) {
+            errorMessage = `Request timed out`;
+          } else {
+            errorMessage = `Error code: ${error.code ?? "n/a"} / Error stack: ${
+              error.stack ?? "n/a"
+            }`;
+          }
         }
       } else if (error instanceof Error) {
         errorMessage = `${(error as Error).message}`;

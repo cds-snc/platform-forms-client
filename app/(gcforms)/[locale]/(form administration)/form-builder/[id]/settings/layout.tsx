@@ -1,8 +1,10 @@
 import { serverTranslation } from "@i18n";
+
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { authCheckAndThrow } from "@lib/actions";
+import { Language } from "@lib/types/form-builder-types";
 import { SettingsNavigation } from "./components/SettingsNavigation";
-import { notFound } from "next/navigation";
+import { WaitForId } from "../components/WaitForId";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -23,7 +25,9 @@ export default async function Layout(props: {
   }
 
   if (id === "0000") {
-    return notFound();
+    // Handle case where a template may be saving but the id is not available yet
+    // see: https://github.com/cds-snc/platform-forms-client/issues/5470#issuecomment-2844798581
+    return <WaitForId locale={locale as Language} path="settings" />;
   }
 
   return (

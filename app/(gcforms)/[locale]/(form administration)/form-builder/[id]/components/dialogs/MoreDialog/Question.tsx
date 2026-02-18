@@ -23,7 +23,7 @@ export const Question = ({
 
   return (
     <div className="mb-2">
-      <Label htmlFor={`titleEn--modal--${item.id}`}>{label}</Label>
+      <Label htmlFor={`title--modal--${item.id}`}>{label}</Label>
       <Input
         id={`title--modal--${item.id}`}
         name={`item${item.id}`}

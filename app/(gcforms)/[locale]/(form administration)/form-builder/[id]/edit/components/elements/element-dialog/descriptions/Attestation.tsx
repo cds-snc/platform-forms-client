@@ -8,16 +8,18 @@ export const Attestation = () => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
-      <h3 className="mb-0">{t("addElementDialog.attestation.title")}</h3>
-      <p>{t("addElementDialog.attestation.description")}</p>
+      <h3 data-testid="element-description-title" className="mb-0">
+        {t("addElementDialog.attestation.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.attestation.description")}</p>
 
       <ExampleWrapper className="mt-4">
-        <Label className="gc-label">
+        <Label className="gcds-label">
           {t("addElementDialog.attest")}{" "}
-          <span className="text-red-default">({t("addElementDialog.allRequired")})</span>
+          <span className="label--required">({t("addElementDialog.allRequired")})</span>
         </Label>
 
-        <div className="overflow-hidden p-2">
+        <div className="max-w-48 overflow-hidden p-2">
           <Checkbox id="one" label={t("addElementDialog.condition1")} name={"nameOne"} />
           <Checkbox id="two" label={t("addElementDialog.condition2")} name={"nameTwo"} />
           <Checkbox id="three" label={t("addElementDialog.condition3")} name={"nameThree"} />

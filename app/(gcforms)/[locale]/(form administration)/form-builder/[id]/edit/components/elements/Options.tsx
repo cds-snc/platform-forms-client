@@ -52,11 +52,11 @@ const AddOptions = ({ index }: AddOptionsProps) => {
   );
 };
 
-type RenderIcon = (index: number) => ReactElement | string | undefined;
+type RenderIcon = ((index: number) => ReactElement | string) | undefined;
 
 interface OptionsProps {
   item: FormElementWithIndex;
-  renderIcon: RenderIcon;
+  renderIcon?: RenderIcon;
   formId: string;
 }
 
@@ -90,7 +90,7 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
     const initialValue = element.properties.choices?.[index][translationLanguagePriority] ?? "";
 
     return (
-      <fieldset key={`child-${item.id}-${index}`} aria-live="polite">
+      <fieldset key={`child-${item.id}-${index}-${translationLanguagePriority}`} aria-live="polite">
         <Option
           renderIcon={renderIcon}
           parentIndex={parentIndex}

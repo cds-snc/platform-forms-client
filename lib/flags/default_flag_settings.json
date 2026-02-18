@@ -2,5 +2,8 @@
   "addressComplete": false,
   "formTimer": false,
   "hCaptcha": false,
-  "caretakerPeriod": false
+  "topBanner": false,
+  "responsesPilot": false,
+  "userSideAuditLogs": false,
+  "zitadelLogin": false
 }

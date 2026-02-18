@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormValues } from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { getReviewItems } from "@clientComponents/forms/Review/helpers";
@@ -8,6 +8,9 @@ import { useCallback } from "react";
 import { slugify } from "@lib/client/clientHelpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 import { type HTMLProps } from "@lib/saveAndResume/types";
+import { copyObjectExcludingFileContent } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
+
+import { getValuesWithMatchedIds, getVisibleGroupsBasedOnValuesRecursive } from "@gcforms/core";
 
 export const useFormSubmissionData = ({
   language,
@@ -16,27 +19,29 @@ export const useFormSubmissionData = ({
   language: Language;
   type: "confirm" | "progress";
 }) => {
-  const {
-    groups,
-    getValues,
-    formRecord,
-    getGroupHistory,
-    matchedIds,
-    getProgressData,
-    submissionId,
-    submissionDate,
-  } = useGCFormsContext();
+  const { groups, getValues, formRecord, getProgressData, submissionId, submissionDate } =
+    useGCFormsContext();
 
   const formValues: void | FormValues = getValues();
-  const groupHistoryIds = getGroupHistory();
+
+  const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, formValues || {});
+
+  const groupHistoryIds = getVisibleGroupsBasedOnValuesRecursive(
+    formRecord,
+    valuesWithMatchedIds,
+    "start"
+  );
+
   if (!formValues || !groups) throw new Error("Form values or groups are missing");
 
+  // Clean up the values for use with the Review component (removing the file contents)
+  const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(formValues);
+
   const reviewItems = getReviewItems({
-    formElements: formRecord.form.elements,
-    formValues,
+    formRecord: formRecord,
+    formValues: formValuesWithoutFileContent as FormValues,
     groups,
     groupHistoryIds,
-    matchedIds,
     language,
   });
 

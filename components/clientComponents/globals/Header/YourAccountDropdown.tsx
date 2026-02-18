@@ -12,34 +12,49 @@ type YourAccountDropdownProps = {
   isAuthenticated: boolean;
 };
 
+const DropdownMenuItem = ({
+  href,
+  text,
+  onClick,
+}: {
+  href: string;
+  text: string;
+  onClick?: () => void;
+}) => {
+  return (
+    <DropdownMenu.Item onClick={onClick} asChild>
+      <Link
+        className="block rounded-md p-2 text-sm text-black !no-underline outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
+        href={href}
+      >
+        {text}
+      </Link>
+    </DropdownMenu.Item>
+  );
+};
+
 export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProps) => {
   const { i18n, t } = useTranslation("common");
   const { ability } = useAccessControl();
 
   const handleLogout = () => {
+    // Clear the template store
     clearTemplateStore();
-    signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
-  };
 
-  const DropdownMenuItem = ({
-    href,
-    text,
-    onClick,
-  }: {
-    href: string;
-    text: string;
-    onClick?: () => void;
-  }) => {
-    return (
-      <DropdownMenu.Item onClick={onClick} asChild>
-        <Link
-          className="block rounded-md p-2 text-sm text-black !no-underline outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
-          href={href}
-        >
-          {text}
-        </Link>
-      </DropdownMenu.Item>
-    );
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const timeOptions = { timeZone: tz };
+    const enTime = new Date().toLocaleString("en-CA", timeOptions);
+    const frTime = new Date().toLocaleString("fr-CA", timeOptions);
+
+    const logoutTime = JSON.stringify({
+      en: enTime,
+      fr: frTime,
+    });
+
+    sessionStorage.setItem("logoutTime", logoutTime);
+
+    // Sign out the user
+    signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
 
   return (

@@ -18,24 +18,38 @@ export const FileNameInput = () => {
   const fileName = getName();
   const isPublished = getIsPublished();
 
-  const [content, setContent] = useState(fileName);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isInitialFocus, setIsInitialFocus] = useState(false);
-  const [width, setWidth] = useState(0);
-  const span = useRef<HTMLElement | null>(null);
-
-  const fileNameInput = useRef<HTMLInputElement | null>(null);
-  const remoteRef = useRef<HTMLInputElement | null>(null);
-  const { setRef, removeRef } = useRefStore();
-
   const { title } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
   }));
 
+  // Use title if fileName is empty
+  const displayValue = fileName || title;
+  const [manualContent, setManualContent] = useState("");
+  const [hasManuallyEdited, setHasManuallyEdited] = useState(false);
+  const [width, setWidth] = useState(0);
+  const span = useRef<HTMLElement | null>(null);
+
+  // Derive content: use manual content if edited, otherwise use displayValue
+  const content = hasManuallyEdited ? manualContent : displayValue;
+
+  // Callback ref to measure span width whenever it updates
+  const spanRef = (node: HTMLElement | null) => {
+    span.current = node;
+    if (node) {
+      const newWidth = node.offsetWidth + 50;
+      if (newWidth !== width) {
+        setWidth(newWidth);
+      }
+    }
+  };
+
+  const fileNameInput = useRef<HTMLInputElement | null>(null);
+  const remoteRef = useRef<HTMLInputElement | null>(null);
+  const { setRef, removeRef } = useRefStore();
+
   useEffect(() => {
-    // @ts-expect-error -- TODO: fix this
-    setRef("fileNameInput", remoteRef);
+    setRef("fileNameInput", remoteRef as React.RefObject<HTMLElement>);
 
     return () => {
       removeRef("fileNameInput");
@@ -44,49 +58,22 @@ export const FileNameInput = () => {
 
   // React Hook that lets you customize the handle exposed as a ref
   // In this case we are only exposing the focus and select function
-  useImperativeHandle(
-    remoteRef,
-    () => {
-      return {
-        focus() {
-          fileNameInput.current?.focus();
-        },
-        select(): void {
-          fileNameInput.current?.select();
-        },
-      } as HTMLInputElement;
-    },
-    [fileNameInput]
-  );
-
-  useEffect(() => {
-    if (isEditing && isInitialFocus && fileNameInput.current?.value === "") {
-      setContent(title);
-
-      setTimeout(() => {
+  useImperativeHandle(remoteRef, () => {
+    return {
+      focus() {
+        fileNameInput.current?.focus();
+      },
+      select(): void {
         fileNameInput.current?.select();
-      }, 50);
-
-      setIsInitialFocus(false);
-    }
-  }, [isEditing, isInitialFocus, title]);
-
-  useEffect(() => {
-    // check if the fileName has changed from outside the component
-    if (!isEditing && content === "" && fileName !== content) {
-      setContent(fileName);
-    }
-
-    if (span?.current) {
-      setWidth(span.current?.offsetWidth + 50);
-    }
-  }, [content, fileName, isEditing]);
+      },
+    } as HTMLInputElement;
+  }, [fileNameInput]);
 
   const widthStyle = width ? { width: `${width}px` } : {};
 
   return (
     <div className="border-gcds-blue-800">
-      <span className={`invisible absolute px-2`} ref={span}>
+      <span className={`invisible absolute px-2`} ref={spanRef}>
         {content}
       </span>
       <input
@@ -101,15 +88,22 @@ export const FileNameInput = () => {
         placeholder={t("unnamedForm", { ns: "form-builder" })}
         value={content}
         onFocus={() => {
-          setIsEditing(true), setIsInitialFocus(true);
+          if (content === "") {
+            setManualContent(title);
+          }
+          setTimeout(() => {
+            fileNameInput.current?.select();
+          }, 50);
         }}
         onBlur={() => {
           if (content !== getName()) {
             updateField(`name`, content);
           }
-          setIsEditing(false);
         }}
-        onChange={(e) => setContent(e.target.value)}
+        onChange={(e) => {
+          setManualContent(e.target.value);
+          setHasManuallyEdited(true);
+        }}
         aria-label={t("formName", { ns: "form-builder" })}
         disabled={isPublished && true}
       />

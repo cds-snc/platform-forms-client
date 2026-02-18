@@ -15,7 +15,8 @@ export const ErrorMessage = (props: ErrorMessageProps): React.ReactElement => {
 
   return (
     <p data-testid="errorMessage" className={classes} id={id} role="alert">
-      {children}
+      <span className="gcds-icon gcds-icon-warning-triangle mr-10px inline-block"></span>
+      <strong>{children}</strong>
     </p>
   );
 };

@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { logMessage } from "@lib/logger";
 import { getOrigin } from "@lib/origin";
+import { sanitizePii } from "@cdssnc/sanitize-pii";
 
 interface createTicketProps {
   type: "branding" | "publishing" | "contact" | "problem";
@@ -28,7 +29,7 @@ export const formatTicketData = ({
       tags: [hostTag, "Forms_Request_Logo"],
     },
     publishing: {
-      subject: "Publishing permission request / Demande d’autorisation de publication",
+      subject: "Publishing permission / Autorisation de publication",
       type: "Go Live Request",
       tags: [hostTag, "Forms_Request_GoLive"],
     },
@@ -91,7 +92,17 @@ export const createTicket = async ({
   const username = process.env.FRESHDESK_API_KEY;
   const password = "X";
   const HOST = await getOrigin();
-  const data = formatTicketData({ type, name, email, description, language, host: HOST });
+
+  const sanitized_description = sanitizePii(description);
+
+  const data = formatTicketData({
+    type,
+    name,
+    email,
+    description: sanitized_description,
+    language,
+    host: HOST,
+  });
 
   if (!username) throw new Error("Freshdesk API key not found");
 

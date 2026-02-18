@@ -3,11 +3,12 @@ import { useRouter } from "next/navigation";
 
 import { saveSessionProgress } from "@lib/utils/saveSessionProgress";
 
-import { type FormValues } from "@lib/formContext";
+import { type FormValues } from "@gcforms/types";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorResuming } from "./ErrorResuming";
+import { ErrorLoading } from "./ErrorLoading";
 import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
 import { ResumeUploadIcon } from "@serverComponents/icons/ResumeUploadIcon";
 
@@ -121,6 +122,20 @@ export const Upload = ({ formId }: { formId: string }) => {
         router.push(`/${language}/id/${id}`);
       } catch (e) {
         const timestamp = Date.now();
+
+        if (
+          errorCode === FormServerErrorCodes.FORM_RESUME_INVALID_MISMATCHED_FORM_ID ||
+          errorCode === FormServerErrorCodes.FORM_RESUME_NO_TARGET ||
+          errorCode === FormServerErrorCodes.FORM_RESUME_NO_DATA ||
+          errorCode === FormServerErrorCodes.FORM_RESUME_NO_ELEMENT ||
+          errorCode === FormServerErrorCodes.FORM_RESUME_NO_FORM_ELEMENT_DATA
+        ) {
+          // Do not log these errors as they are expected in some cases
+          // (e.g. user uploads a file with a different form ID or wrong file).
+          toast.error(<ErrorLoading errorCode={`${errorCode}-${timestamp}`} />, "resume");
+          return;
+        }
+
         logClientError({ code: errorCode as FormServerErrorCodes, formId, timestamp });
         toast.error(<ErrorResuming errorCode={`${errorCode}-${timestamp}`} />, "resume");
       }
@@ -133,7 +148,7 @@ export const Upload = ({ formId }: { formId: string }) => {
         <div
           tabIndex={0}
           role="button"
-          className="group mb-8 flex h-auto w-full flex-col items-center justify-center rounded-3xl border-3 border-dashed border-indigo-500 bg-violet-50 text-left outline-none hover:cursor-pointer hover:border-indigo-700 hover:bg-violet-200 focus:cursor-pointer focus:border-gcds-blue-850 focus:bg-gcds-blue-850 focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-850 active:outline-[3px] active:outline-offset-2 active:outline-gcds-blue-850"
+          className="group mb-8 flex h-auto w-full flex-col items-center justify-center rounded-3xl border-3 border-dashed border-indigo-500 bg-violet-50 text-left outline-none hover:cursor-pointer hover:border-indigo-700 hover:bg-violet-200 focus:cursor-pointer focus:border-gcds-blue-vivid focus:bg-gcds-blue-vivid focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-vivid active:outline-[3px] active:outline-offset-2 active:outline-gcds-blue-vivid"
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               const uploadButton = document.getElementById("file-upload");
@@ -144,7 +159,7 @@ export const Upload = ({ formId }: { formId: string }) => {
           <div className="m-10">
             <div className="flex items-center tablet:block">
               <ResumeUploadIcon className="group-focus:fill-white" />
-              <h2 className="!mb-1 p-0 !text-2xl tablet:!text-3xl">
+              <h2 className="!mb-1 !mt-0 p-0 !text-2xl tablet:!text-3xl">
                 {t("saveAndResume.resumePage.upload.title")}
               </h2>
             </div>

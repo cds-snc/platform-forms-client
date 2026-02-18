@@ -9,6 +9,11 @@ import { logEvent as logEventType } from "@lib/auditLogs";
 
 jest.mock("@aws-sdk/client-sqs");
 jest.unmock("@lib/auditLogs");
+jest.mock("@lib/ip", () => {
+  return {
+    getClientIp: jest.fn(() => Promise.resolve("1.1.1.1")),
+  };
+});
 
 let createdEnv: jest.Replaced<typeof process.env> | undefined = undefined;
 
@@ -94,13 +99,14 @@ describe("Audit Log Tests", () => {
       jest.spyOn(global.Date, "now").mockImplementationOnce(() => currentTimeStamp);
 
       await logEvent("1", { type: "User", id: "1" }, "UserSignIn");
-      expect(mockedSQSClient.prototype.send).toBeCalledTimes(1);
-      expect(mockedSendMessageCommand).toBeCalledWith({
+      expect(mockedSQSClient.prototype.send).toHaveBeenCalledTimes(1);
+      expect(mockedSendMessageCommand).toHaveBeenCalledWith({
         MessageBody: JSON.stringify({
           userId: "1",
           event: "UserSignIn",
           timestamp: currentTimeStamp,
           subject: { type: "User", id: "1" },
+          clientIp: "1.1.1.1",
         }),
         QueueUrl: "aws_test_url",
       });

@@ -1,12 +1,31 @@
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { NewPageIcon } from "@serverComponents/icons/NewPageIcon";
 import { cn } from "@lib/utils";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
+import { useGroupStore } from "@root/lib/groups/useGroupStore";
+import { useCallback } from "react";
 
 export const AddPageButton = ({ className }: { className?: string }) => {
-  const { treeView, togglePanel } = useTreeRef();
+  const { togglePanel, startRenamingNewGroup, open: panelOpen } = useTreeRef();
   const { t } = useTranslation("form-builder");
+  const newSectionText = t("groups.newPage");
+
+  const { setId, addGroup } = useGroupStore((s) => ({
+    setId: s.setId,
+    addGroup: s.addGroup,
+  }));
+
+  // Keep track of groups changes to trigger sync
+  const addPage = useCallback(() => {
+    const id = addGroup(newSectionText);
+
+    setId(id);
+
+    startRenamingNewGroup && startRenamingNewGroup(id);
+
+    return id;
+  }, [addGroup, newSectionText, setId, startRenamingNewGroup]);
 
   return (
     <Button
@@ -16,11 +35,15 @@ export const AddPageButton = ({ className }: { className?: string }) => {
         className
       )}
       onClick={() => {
+        if (panelOpen) {
+          addPage();
+          return;
+        }
+
         togglePanel && togglePanel(true);
 
-        // add 1 sec delay to allow the panel to open
         setTimeout(() => {
-          treeView?.current?.addPage();
+          addPage();
         }, 500);
       }}
     >

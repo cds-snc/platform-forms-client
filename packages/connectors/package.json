@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/connectors",
-  "version": "2.0.2",
+  "version": "2.2.16",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -20,19 +20,22 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "build": "tsdown src/index.ts --format cjs,esm --dts --clean --splitting",
     "prepack": "yarn build",
     "connectors:prepack": "yarn prepack"
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.750.0",
-    "axios": "^1.8.4",
+    "@aws-sdk/client-dynamodb": "^3.971.0",
+    "@aws-sdk/client-secrets-manager": "^3.971.0",
+    "@aws-sdk/client-sqs": "^3.971.0",
+    "@aws-sdk/lib-dynamodb": "^3.971.0",
+    "axios": "^1.12.2",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
-    "@types/node": "^20.11.6",
-    "tsup": "^8.3.6",
-    "typescript": "^5.5.2"
+    "@types/node": "^24.6.1",
+    "tsdown": "^0.15.6",
+    "typescript": "^5.9.3"
   },
-  "packageManager": "yarn@4.6.0"
+  "packageManager": "yarn@4.10.3"
 }

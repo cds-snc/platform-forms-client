@@ -24,7 +24,8 @@ export async function generateMetadata(props: {
 export default AuthenticatedPage(
   [authorization.canViewAllUsers, authorization.canAccessPrivileges],
   async ({ params, searchParams }) => {
-    const { userState } = await searchParams;
+    const resolvedSearchParams = await searchParams;
+    const { userState } = resolvedSearchParams;
 
     if (Array.isArray(userState)) {
       throw new Error("Invalid user state, expected a string and received an array");
@@ -34,12 +35,14 @@ export default AuthenticatedPage(
 
     const { t } = await serverTranslation("admin-users", { lang: locale });
 
+    const query = resolvedSearchParams.query?.toString() || "";
+
     return (
       <>
         <h1 className="mb-0 border-0">{t("accounts")}</h1>
         <NavigtationFrame userState={userState}>
           <Suspense key={userState} fallback={<Loader />}>
-            <UsersList filter={userState} />
+            <UsersList filter={userState} query={query.trim()} />
           </Suspense>
         </NavigtationFrame>
       </>

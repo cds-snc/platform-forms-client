@@ -7,10 +7,12 @@ export const Cards = async ({
   filter,
   templates,
   overdueTemplateIds,
+  status,
 }: {
   filter?: string;
   templates: FormsTemplate[];
   overdueTemplateIds: string[];
+  status?: string;
 }) => {
   const { t } = await serverTranslation("my-forms");
 
@@ -33,7 +35,7 @@ export const Cards = async ({
 
               return (
                 <li className="flex flex-col" key={card.id}>
-                  <Card card={card} />
+                  <Card card={card} status={status} />
                 </li>
               );
             })}

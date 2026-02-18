@@ -5,6 +5,7 @@ import { FormElement, FormElementTypes, FormProperties, PropertyChoices } from "
 import { Description, publishRequiredFields, Title } from "../../types/form-builder-types";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useAccessControl } from "../useAccessControl";
+import { useFormBuilderConfig } from "../useFormBuilderConfig";
 
 export class MissingTranslation extends Error {
   constructor(message?: string) {
@@ -51,11 +52,12 @@ export const isFormElementTranslated = (element: FormElement) => {
     }
 
     // Only check choices for Select, Radio, and Checkbox
-    if (
-      [FormElementTypes.checkbox, FormElementTypes.radio, FormElementTypes.dropdown].includes(
-        element.type
-      )
-    ) {
+    const allowedTypes: FormElementTypes[] = [
+      FormElementTypes.checkbox,
+      FormElementTypes.radio,
+      FormElementTypes.dropdown,
+    ];
+    if (allowedTypes.includes(element.type)) {
       // Check choices if there are any
       if (element.properties.choices) {
         areChoicesTranslated(element.properties.choices);
@@ -94,6 +96,24 @@ export const useAllowPublish = () => {
   }));
 
   const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
+  const { hasApiKeyId } = useFormBuilderConfig();
+
+  const hasFileInputElement = useMemo(() => {
+    // Helper function to recursively check for file input elements
+    const checkForFileInput = (elements?: FormElement[]): boolean => {
+      if (!elements) return false;
+
+      return elements.some(
+        (element) =>
+          // Check if the current element is a file input
+          element.type === FormElementTypes.fileInput ||
+          // Check sub-elements if they exist
+          (element.properties?.subElements && checkForFileInput(element.properties.subElements))
+      );
+    };
+
+    return checkForFileInput(form?.elements);
+  }, [form?.elements]);
 
   // Note the key names here can be anthing but
   // the values must be booleans
@@ -106,8 +126,9 @@ export const useAllowPublish = () => {
         !!form?.confirmation?.descriptionEn || !!form?.confirmation?.descriptionFr,
       purpose: !!formPurpose,
       translate: isFormTranslated(form),
+      hasFileInputAndApiKey: hasFileInputElement ? hasApiKeyId : true,
     }),
-    [form, formPurpose]
+    [form, formPurpose, hasApiKeyId, hasFileInputElement]
   );
 
   const hasData = useCallback(
@@ -124,5 +145,12 @@ export const useAllowPublish = () => {
     return hasData(fields);
   }, [data, hasData]);
 
-  return { data, hasData, isPublishable, userCanPublish };
+  return {
+    data,
+    hasData,
+    hasFileInputElement,
+    hasApiKeyId,
+    isPublishable,
+    userCanPublish,
+  };
 };

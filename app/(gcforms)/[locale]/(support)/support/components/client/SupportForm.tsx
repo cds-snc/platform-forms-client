@@ -7,7 +7,7 @@ import {
   ErrorListItem,
   Description,
 } from "@clientComponents/forms";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import Link from "next/link";
 import { Alert } from "@clientComponents/globals";
 import { TextInput } from "../../../components/client/TextInput";
@@ -15,8 +15,20 @@ import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGr
 import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
 import { useState } from "react";
-import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
+import {
+  email,
+  minLength,
+  object,
+  safeParse,
+  string,
+  toLowerCase,
+  trim,
+  pipe,
+  check,
+} from "valibot";
 import { Success } from "../../../components/client/Success";
+import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+import { isValidGovEmail } from "@root/lib/validation/validation";
 
 export const SupportForm = () => {
   const {
@@ -34,19 +46,27 @@ export const SupportForm = () => {
   const submitForm = async (formData: FormData) => {
     const formEntries = Object.fromEntries(formData.entries());
 
+    if (!formEntries.request) {
+      // Set to empty string if the request field is not set
+      formEntries.request = "";
+    }
+
     const SupportSchema = object({
-      name: string([minLength(1, t("input-validation.required"))]),
-      email: string([
+      name: pipe(string(), minLength(1, t("input-validation.required"))),
+      email: pipe(
+        string(),
         toLowerCase(),
-        toTrimmed(),
+        trim(),
         minLength(1, t("input-validation.required")),
         email(t("input-validation.email")),
-      ]),
+        check((email) => isValidGovEmail(email), t("input-validation.validGovEmail"))
+      ),
       // radio input can send a non-string value when empty
-      request: string(t("input-validation.required"), [
-        minLength(1, t("input-validation.required")),
-      ]),
-      description: string([minLength(1, t("input-validation.required"))]),
+      request: pipe(
+        string(t("input-validation.required")),
+        minLength(1, t("input-validation.required"))
+      ),
+      description: pipe(string(), minLength(1, t("input-validation.required"))),
     });
 
     const validateForm = safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
@@ -83,7 +103,7 @@ export const SupportForm = () => {
             <ValidationMessage
               type={ErrorStatus.ERROR}
               validation={true}
-              tabIndex={0}
+              focussable={true}
               id="validationErrors"
               heading={t("input-validation.heading", { ns: "common" })}
             >
@@ -101,8 +121,8 @@ export const SupportForm = () => {
             </ValidationMessage>
           )}
 
-          <h1>{t("support.title")}</h1>
-          <p className="-mt-8 mb-6">
+          <GcdsH1>{t("support.title")}</GcdsH1>
+          <p className="mb-6">
             {t("support.experience")}
             <Link href={`https://articles.alpha.canada.ca/forms-formulaires/${language}/guidance`}>
               {t("support.guidanceLink")}
@@ -122,7 +142,14 @@ export const SupportForm = () => {
               <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
             </p>
           </Alert.Warning>
-          <form id="support" action={submitForm} noValidate>
+          <form
+            id="support"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitForm(new FormData(e.currentTarget));
+            }}
+            noValidate
+          >
             {errors.error && (
               <Alert.Danger focussable={true} title={t("error")} className="my-2">
                 <p>{t(errors.error)}</p>
@@ -154,9 +181,9 @@ export const SupportForm = () => {
               />
             </div>
             <fieldset className="focus-group">
-              <legend className="gc-label required">
+              <legend className="gcds-label required">
                 {t("support.request.title")}{" "}
-                <span data-testid="required" aria-hidden>
+                <span data-testid="required" className="label--required" aria-hidden>
                   ({t("required", { ns: "common" })})
                 </span>
               </legend>

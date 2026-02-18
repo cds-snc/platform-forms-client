@@ -24,11 +24,12 @@ export const CheckAll = ({
 }) => {
   const { t } = useTranslation("form-builder-responses");
 
-  enum allCheckedState {
-    NONE = "NONE",
-    SOME = "SOME",
-    ALL = "ALL",
-  }
+  const allCheckedState = {
+    NONE: "NONE",
+    SOME: "SOME",
+    ALL: "ALL",
+  } as const;
+  type allCheckedState = (typeof allCheckedState)[keyof typeof allCheckedState];
 
   const { checkedItems, allItems } = tableItems;
 
@@ -40,8 +41,8 @@ export const CheckAll = ({
     checkedItemsCount === 0
       ? allCheckedState.NONE
       : checkedItemsCount === allItemsCount
-      ? allCheckedState.ALL
-      : allCheckedState.SOME;
+        ? allCheckedState.ALL
+        : allCheckedState.SOME;
 
   /**
    * Check all items if none are checked, otherwise uncheck all items.
@@ -81,8 +82,8 @@ export const CheckAll = ({
           checkAllStatus === allCheckedState.ALL
             ? "true"
             : checkAllStatus === allCheckedState.SOME
-            ? "mixed"
-            : "false"
+              ? "mixed"
+              : "false"
         }
         tabIndex={0}
         onClick={handleCheckAll}

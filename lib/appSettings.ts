@@ -1,14 +1,19 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { authorization } from "./privileges";
 import { AccessControlError } from "@lib/auth/errors";
-import { logEvent } from "./auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { settingCheck, settingPut, settingDelete } from "@lib/cache/settingCache";
 
 export const getAllAppSettings = async () => {
   const { user } = await authorization.canAccessSettings().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(e.user.id, { type: "Setting" }, "AccessDenied", "Attempted to list all Settings");
+      logEvent(
+        e.user.id,
+        { type: "Setting" },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToListAllSettings
+      );
     }
     throw e;
   });
@@ -57,7 +62,7 @@ export const getFullAppSetting = async (internalId: string) => {
         e.user.id,
         { type: "Setting", id: internalId },
         "AccessDenied",
-        "Attempted to list full app Setting"
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToListFullAppSettings
       );
     }
     throw e;
@@ -99,7 +104,7 @@ export const updateAppSetting = async (internalId: string, settingData: SettingU
         e.user.id,
         { type: "Setting", id: internalId },
         "AccessDenied",
-        "Attempted to update setting"
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateSetting
       );
     }
     throw e;
@@ -125,7 +130,8 @@ export const updateAppSetting = async (internalId: string, settingData: SettingU
     user.id,
     { type: "Setting", id: internalId },
     "ChangeSetting",
-    `Updated setting with ${JSON.stringify(settingData)}`
+    AuditLogDetails.UpdatedAppSetting,
+    { settingData: JSON.stringify(settingData) }
   );
   if (settingData.value) {
     settingPut(internalId, settingData.value);
@@ -141,7 +147,12 @@ interface SettingCreateData extends SettingUpdateData {
 export const createAppSetting = async (settingData: SettingCreateData) => {
   const { user } = await authorization.canManageSettings().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(e.user.id, { type: "Setting" }, "AccessDenied", "Attempted to create setting");
+      logEvent(
+        e.user.id,
+        { type: "Setting" },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToCreateSetting
+      );
     }
     throw e;
   });
@@ -163,7 +174,8 @@ export const createAppSetting = async (settingData: SettingCreateData) => {
     user.id,
     { type: "Setting", id: createdSetting.internalId },
     "CreateSetting",
-    `Created setting with ${JSON.stringify(settingData)}`
+    AuditLogDetails.CreatedAppSetting,
+    { settingData: JSON.stringify(settingData) }
   );
   if (settingData.value) {
     settingPut(settingData.internalId, settingData.value);
@@ -178,7 +190,7 @@ export const deleteAppSetting = async (internalId: string) => {
         e.user.id,
         { type: "Setting", id: internalId },
         "AccessDenied",
-        "Attempted to delete setting"
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteSetting
       );
     }
     throw e;
@@ -203,7 +215,8 @@ export const deleteAppSetting = async (internalId: string) => {
     user.id,
     { type: "Setting", id: internalId },
     "DeleteSetting",
-    `Deleted setting with ${JSON.stringify(deletedSetting)}`
+    AuditLogDetails.DeletedAppSetting,
+    { internalId: deletedSetting.internalId }
   );
   settingDelete(internalId);
 };

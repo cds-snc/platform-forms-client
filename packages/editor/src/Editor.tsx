@@ -14,7 +14,6 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 
 import ContentEditable from "./ui/ContentEditable";
-import TabControlPlugin from "./plugins/TabControlPlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
 import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentPlugin";
@@ -28,6 +27,7 @@ import "./styles.css";
 import { ToolbarContext } from "./context/ToolbarContext";
 import ShortcutsPlugin from "./plugins/ShortcutsPlugin";
 import { MaxLengthPlugin } from "./plugins/MaxLengthPlugin";
+import DraggableBlockPlugin from "./plugins/DraggableBlockPlugin";
 
 interface EditorProps {
   id?: string;
@@ -39,6 +39,7 @@ interface EditorProps {
   contentLocale?: string;
   className?: string;
   maxLength?: number;
+  enableDraggableBlocks?: boolean;
 
   onChange?(...args: unknown[]): unknown;
 }
@@ -54,6 +55,7 @@ export const Editor = ({
   contentLocale = "en",
   className,
   maxLength,
+  enableDraggableBlocks = false,
 }: EditorProps) => {
   contentLocale = contentLocale || locale;
 
@@ -113,7 +115,6 @@ export const Editor = ({
             />
             <ListPlugin />
             <LinkPlugin />
-            <TabControlPlugin />
             <ListMaxIndentLevelPlugin maxDepth={5} />
 
             {floatingAnchorElem && (
@@ -123,6 +124,7 @@ export const Editor = ({
                   isLinkEditMode={isLinkEditMode}
                   setIsLinkEditMode={setIsLinkEditMode}
                 />
+                {enableDraggableBlocks && <DraggableBlockPlugin anchorElem={floatingAnchorElem} />}
               </>
             )}
             {maxLength && (

@@ -1,6 +1,10 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
+
+// Save actions
+import { downloadKey, _createKey, _regenKey } from "@formBuilder/[id]/settings/components/utils";
+
 import { cn } from "@lib/utils";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
@@ -9,48 +13,47 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ResponsibilityList } from "./ResponsibilityList";
 import { ConfirmationAgreement } from "./ConfirmationAgreement";
 import { Note } from "./Note";
-import { downloadKey, _createKey } from "@formBuilder/[id]/settings/components/utils";
 import { SubmitButton as DownloadButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import * as Alert from "@clientComponents/globals/Alert/Alert";
 import { logMessage } from "@lib/logger";
-import { sendResponsesToVault } from "@formBuilder/actions";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { GenerateKeySuccess } from "./GenerateKeySuccess";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
+
+import { type SecurityAttribute } from "@lib/types";
 
 type APIKeyCustomEventDetails = {
   id: string;
+  classification: SecurityAttribute;
 };
 
 /**
  * API Key Dialog
- * @param isVaultDelivery - boolean - Allows skipping the save request when a form is already saving to the vault -- example a live form swapping to API mode
  * @returns JSX.Element
  */
-export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: boolean }) => {
+export const ApiKeyDialog = () => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
-
-  const { resetDeliveryOption } = useTemplateStore((s) => ({
-    resetDeliveryOption: s.resetDeliveryOption,
-  }));
 
   // Setup + Open dialog
   const [id, setId] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const { updateApiKeyId } = useFormBuilderConfig();
+  const { updateApiKeyId, hasApiKeyId } = useFormBuilderConfig();
 
   // Handle loading state for download button
   const [generating, setGenerating] = useState(false);
 
   const [hasError, setHasError] = useState(false);
 
+  // Handle Agreement - state
+  const [agreed, setAgreed] = useState(false);
+
   const handleOpen = useCallback((detail: APIKeyCustomEventDetails) => {
     if (detail) {
       detail.id && setId(detail.id);
       setIsOpen(true);
+      setAgreed(false);
     }
   }, []);
 
@@ -60,9 +63,6 @@ export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: bo
       Event.off(EventKeys.openApiKeyDialog, handleOpen);
     };
   }, [Event, handleOpen]);
-
-  // Handle Agreement - state
-  const [agreed, setAgreed] = useState(false);
 
   const hasAgreed = (value: string) => {
     if (value === "AGREE" || value === "ACCEPTE") {
@@ -77,35 +77,22 @@ export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: bo
     dialog.current?.close();
     setHasError(false);
     setIsOpen(false);
+    setAgreed(false);
   };
 
   const handleSave = async () => {
     setHasError(false);
     setGenerating(true);
     try {
-      /*
-        Allows skipping the save request
-        if it's determined that the form responses 
-        are already being delivered to the vault
-      */
-      if (!isVaultDelivery) {
-        const result = await sendResponsesToVault({
-          id: id,
-        });
+      let key;
 
-        if (result.error) {
-          // Throw the generic key creation error
-          // Handling as generic as we're in the process of creating a key
-          throw new Error(result.error);
-        }
-
-        // Sync the template store with the new delivery option
-        resetDeliveryOption();
+      if (hasApiKeyId) {
+        key = await _regenKey(id);
+      } else {
+        key = await _createKey(id);
       }
 
-      const key = await _createKey(id);
       await downloadKey(JSON.stringify(key), id);
-
       setGenerating(false);
       updateApiKeyId(key.keyId);
       toast.success(<GenerateKeySuccess />, "wide");
@@ -136,15 +123,18 @@ export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: bo
     </>
   );
 
+  const dialogTitle = hasApiKeyId
+    ? t("settings.api.dialog.refreshTitle")
+    : t("settings.api.dialog.title");
+
+  const dialogHeading = hasApiKeyId
+    ? t("settings.api.dialog.refreshHeading")
+    : t("settings.api.dialog.heading");
+
   return (
     <>
       {isOpen && (
-        <Dialog
-          handleClose={handleClose}
-          dialogRef={dialog}
-          actions={actions}
-          title={t("settings.api.dialog.title")}
-        >
+        <Dialog handleClose={handleClose} dialogRef={dialog} actions={actions} title={dialogTitle}>
           <div className="p-5">
             {hasError && (
               <Alert.Danger className="mb-4">
@@ -154,7 +144,7 @@ export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: bo
                 <p className="mb-2">{t("settings.api.dialog.error.createFailed.message")} </p>
               </Alert.Danger>
             )}
-            <h3 className="mb-4">{t("settings.api.dialog.heading")}</h3>
+            <h3 className="mb-4">{dialogHeading}</h3>
             <ResponsibilityList />
             <ConfirmationAgreement handleAgreement={hasAgreed} />
             <Note />

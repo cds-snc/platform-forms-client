@@ -1,4 +1,5 @@
 # Conditions générales
+
 Les présentes conditions d’utilisation définissent les rôles et responsabilités d'[Emploi et Développement social Canada (EDSC)](https://www.canada.ca/fr/emploi-developpement-social.html) quant à l’hébergement de ce formulaire au nom d’un ministère ou organisme.
 
 Pour savoir comment le ministère ou l’organisme gère vos soumissions du formulaire, revenez au formulaire que vous consultiez.  
@@ -13,9 +14,11 @@ Le ministère ou l’organisme avec lequel vous communiquez protège également 
 
 Les renseignements personnels sont recueillis conformément à la [Loi sur la protection des renseignements personnels](https://laws.justice.gc.ca/fra/lois/p-21/index.html).
 
-### hCaptcha pour protéger la sécurité des formulaires
+### Nous utilisons hCaptcha et une fonction d'analyse de fichiers malveillants pour protéger la sécurité des formulaires
 
-L'utilisation de [hCaptcha](https://www.hcaptcha.com/) nous aide à détecter le spam, les abus automatisés et les menaces des robots. Apprenez-en plus sur la [politique de confidentialité](https://www.hcaptcha.com/privacy) et les [conditions d'utilisation](https://www.hcaptcha.com/terms) de ce fournisseur de services tiers.
+L'utilisation de [hCaptcha](https://www.hcaptcha.com/) nous aide à détecter et bloquer les spams, les abus automatisés et les menaces des robots. Apprenez-en plus sur la [politique de confidentialité](https://www.hcaptcha.com/privacy) et les [conditions d'utilisation](https://www.hcaptcha.com/terms) de ce fournisseur de services tiers.
+
+Nous analysons aussi les soumissions de formulaires grâce à un fournisseur de service tier pour détecter et signaler le contenu malveillant dans les fichiers joints, à l'aide de technologies antivirus de niveau commercial. Bien que nous nous efforcions de signaler les contenu potentiellement dangereux, aucun logiciel n'est parfait.
 
 ### Analytique Web pour améliorer votre expérience  
 
@@ -120,4 +123,4 @@ Bon nombre de plateformes de médias sociaux offrent plusieurs choix de langues 
 
 
 
-**Dernière mise à jour :** 19 mars 2025
+**Dernière mise à jour :** 12 novembre 2025

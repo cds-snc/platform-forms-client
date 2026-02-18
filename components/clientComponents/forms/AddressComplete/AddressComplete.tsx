@@ -272,7 +272,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <div className="mb-6 mt-4">
             <Label
               htmlFor={`${name}-country`}
-              className={props.required ? "gc-label required" : "gc-label"}
+              className={props.required ? "gcds-label required" : "gcds-label"}
               required={props.required}
               lang={lang}
             >
@@ -295,7 +295,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         <div className="mb-6">
           <Label
             htmlFor={`${name}-streetAddress`}
-            className={props.required ? "gc-label required" : "gc-label"}
+            className={props.required ? "gcds-label required" : "gcds-label"}
             required={props.required}
             lang={lang}
           >
@@ -331,7 +331,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         </div>
 
         <div className="mb-6">
-          <Label htmlFor={`${name}-city`} className="gc-label">
+          <Label htmlFor={`${name}-city`} className="gcds-label">
             {t("addElementDialog.addressComplete.city")}
           </Label>
           <input
@@ -347,7 +347,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         </div>
 
         <div className="mb-6">
-          <Label htmlFor={`${name}-province`} className="gc-label">
+          <Label htmlFor={`${name}-province`} className="gcds-label">
             {props.canadianOnly && t("addElementDialog.addressComplete.components.province")}
             {!props.canadianOnly &&
               t("addElementDialog.addressComplete.components.provinceOrState")}
@@ -365,7 +365,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         </div>
 
         <div className="mb-6">
-          <Label htmlFor={`${name}-postal`} className="gc-label">
+          <Label htmlFor={`${name}-postal`} className="gcds-label">
             {props.canadianOnly && t("addElementDialog.addressComplete.components.postalCode")}
             {!props.canadianOnly &&
               t("addElementDialog.addressComplete.components.postalCodeOrZip")}

@@ -1,3 +1,5 @@
+import { type FileInputResponse } from "./form-response-types";
+
 // Utility type creator
 export type TypeOmit<Type, Key extends PropertyKey> = {
   [Property in keyof Type as Exclude<Property, Key>]: Type[Property];
@@ -38,25 +40,31 @@ export type HTMLTextInputTypeAttribute =
   | "url";
 
 // all the possible types of form elements
-export enum FormElementTypes {
-  textField = "textField",
-  textArea = "textArea",
-  dropdown = "dropdown",
-  radio = "radio",
-  checkbox = "checkbox",
-  fileInput = "fileInput",
-  richText = "richText",
-  dynamicRow = "dynamicRow",
-  attestation = "attestation",
-  address = "address",
-  addressComplete = "addressComplete",
-  name = "name",
-  firstMiddleLastName = "firstMiddleLastName",
-  departments = "departments",
-  contact = "contact",
-  combobox = "combobox",
-  formattedDate = "formattedDate",
-}
+export const FormElementTypes = {
+  textField: "textField",
+  textArea: "textArea",
+  dropdown: "dropdown",
+  radio: "radio",
+  checkbox: "checkbox",
+  fileInput: "fileInput",
+  richText: "richText",
+  dynamicRow: "dynamicRow",
+  attestation: "attestation",
+  address: "address",
+  addressComplete: "addressComplete",
+  name: "name",
+  firstMiddleLastName: "firstMiddleLastName",
+  departments: "departments",
+  contact: "contact",
+  combobox: "combobox",
+  formattedDate: "formattedDate",
+  customJson: "customJson",
+} as const;
+export type FormElementTypes = (typeof FormElementTypes)[keyof typeof FormElementTypes];
+
+export const BetaFormElementTypes = {
+  [FormElementTypes.addressComplete]: { flag: "addressComplete" },
+};
 
 export type ConditionalRule = {
   choiceId: string;
@@ -104,6 +112,8 @@ export type SortValue = (typeof SortOption)[keyof typeof SortOption];
 
 // used to define attributes for the properties of an element in the form
 export interface ElementProperties {
+  questionId?: string;
+  tags?: string[];
   titleEn: string;
   titleFr: string;
   placeholderEn?: string;
@@ -112,21 +122,25 @@ export interface ElementProperties {
   descriptionFr?: string;
   validation?: ValidationProperties | undefined;
   choices?: PropertyChoices[];
-  managedChoices?: string;
+  managedChoices?: string | string[];
   subElements?: FormElement[];
-  fileType?: string | undefined;
+  fileType?: string | string[] | undefined;
   headingLevel?: string | undefined;
   isSectional?: boolean;
   maxNumberOfRows?: number;
   autoComplete?: string;
   dateFormat?: string;
+  allowNegativeNumbers?: boolean;
+  stepCount?: number;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;
   dynamicRow?: dynamicRowType;
   sortOrder?: SortValue;
+  strictValue?: boolean;
   [key: string]:
     | string
+    | string[]
     | number
     | boolean
     | Array<PropertyChoices>
@@ -155,6 +169,7 @@ export interface BrandProperties {
 // used to define attributes for a form element or field
 export interface FormElement {
   id: number;
+  uuid?: string;
   subId?: string;
   type: FormElementTypes;
   properties: ElementProperties;
@@ -202,6 +217,7 @@ export type FormRecord = {
   id: string;
   createdAt?: string;
   updatedAt?: string;
+  ttl?: Date | null;
   name: string;
   form: FormProperties;
   isPublished: boolean;
@@ -210,7 +226,17 @@ export type FormRecord = {
   closingDate?: string;
   closedDetails?: ClosedDetails;
   saveAndResume?: boolean;
-  [key: string]: string | boolean | FormProperties | DeliveryOption | ClosedDetails | undefined;
+  notificationsInterval?: NotificationsInterval;
+  [key: string]:
+    | string
+    | boolean
+    | number
+    | Date
+    | FormProperties
+    | DeliveryOption
+    | ClosedDetails
+    | undefined
+    | null;
 };
 
 export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
@@ -233,3 +259,36 @@ export const FormStatus = {
 } as const;
 
 export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];
+
+// Interval in minutes for sending email notifications. These are converted to seconds for the Redis ttl
+export const NotificationsInterval = {
+  OFF: null,
+  DAY: 1440,
+  WEEK: 10080,
+} as const;
+
+export const NotificationsIntervalDefault = NotificationsInterval.DAY;
+
+export type NotificationsInterval =
+  (typeof NotificationsInterval)[keyof typeof NotificationsInterval];
+
+export type DateFormat = "YYYY-MM-DD" | "DD-MM-YYYY" | "MM-DD-YYYY";
+
+export interface DateObject {
+  YYYY: number;
+  MM: number;
+  DD: number;
+}
+
+export const DatePart = {
+  DD: "day",
+  MM: "month",
+  YYYY: "year",
+} as const;
+export type DatePart = (typeof DatePart)[keyof typeof DatePart];
+
+export interface FileInput extends FileInputResponse {
+  name: string;
+  size: number;
+  content: ArrayBuffer;
+}

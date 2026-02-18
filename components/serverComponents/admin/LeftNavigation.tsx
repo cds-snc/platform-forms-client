@@ -4,6 +4,7 @@ import { AccountsIcon } from "@serverComponents/icons/AccountsIcon";
 import { SettingsIcon } from "@serverComponents/icons/SettingsIcon";
 import { FlagsIcon } from "@serverComponents/icons/FlagsIcon";
 import { authCheckAndThrow } from "@lib/actions";
+import { AuditLogIcon } from "@serverComponents/icons/AuditLogIcon";
 
 export const LeftNavigation = async () => {
   const {
@@ -47,6 +48,17 @@ export const LeftNavigation = async () => {
               title={t("adminNav.settings", { ns: "common" })}
             >
               <SettingsIcon />
+            </LeftNav>
+          </li>
+        )}
+        {ability?.can("view", "User") && (
+          <li>
+            <LeftNav
+              testid="events"
+              href={`/${language}/admin/events`}
+              title={t("adminNav.events", { ns: "common" })}
+            >
+              <AuditLogIcon className="pl-0.5" />
             </LeftNav>
           </li>
         )}

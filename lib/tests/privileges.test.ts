@@ -982,7 +982,7 @@ describe("Provided values can be interpolated in permission condition", () => {
       interpolatePermissionCondition(condition, {
         objectX,
       });
-    }).toThrowError(
+    }).toThrow(
       "Could not interpolate permission condition because of missing value (objectX.profile.userId)"
     );
   });
@@ -1003,6 +1003,6 @@ describe("Provided values can be interpolated in permission condition", () => {
       interpolatePermissionCondition(condition, {
         objectX,
       });
-    }).toThrowError("Could not find object path in permission condition placeholder");
+    }).toThrow("Could not find object path in permission condition placeholder");
   });
 });

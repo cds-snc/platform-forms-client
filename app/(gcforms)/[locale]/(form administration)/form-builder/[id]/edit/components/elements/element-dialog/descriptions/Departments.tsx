@@ -20,7 +20,7 @@ export const Departments = () => {
       <p>{t("addElementDialog.departments.description")}</p>
 
       <ExampleWrapper className="mt-4">
-        <Label htmlFor="dropdown" className="gc-label">
+        <Label htmlFor="dropdown" className="gcds-label">
           {t("addElementDialog.departments.selectOption")}
         </Label>
         <Description>{t("addElementDialog.departments.selectOne")}</Description>

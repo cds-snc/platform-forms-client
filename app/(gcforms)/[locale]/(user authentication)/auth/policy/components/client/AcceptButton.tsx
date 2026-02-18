@@ -7,6 +7,36 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
+// Needed for Cypress E2E testing for some reason
+// The broadcast should be called as part of the useSession update() fn but doesn't seem to be registering
+
+let broadcastChannel: BroadcastChannel | null = null;
+
+function broadcast() {
+  if (typeof BroadcastChannel === "undefined") {
+    return {
+      postMessage: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    };
+  }
+
+  if (broadcastChannel === null) {
+    broadcastChannel = new BroadcastChannel("next-auth");
+  }
+
+  return broadcastChannel;
+}
+
+export const updateSessionProvider = () => {
+  broadcast().postMessage({
+    event: "session",
+    data: { trigger: "getSession" },
+  });
+};
+
+// End of code needed for Cypress Testing
+
 export const AcceptButton = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +58,9 @@ export const AcceptButton = () => {
     const session = await update({
       user: { acceptableUse: true },
     });
+
+    // Needed for cypress e2e testing
+    updateSessionProvider();
 
     if (session?.user.newlyRegistered) {
       router.push(`/${language}/auth/account-created`);

@@ -33,10 +33,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
           role-session-name: ECSDeploy
@@ -45,7 +45,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@f9441e51686002eb8c6f13bdda4d6a2ef947cc77
+        uses: aws-actions/amazon-ecr-login@d63b14614fe5d7fc5e5e52c523dea4e876816cc4
 
       - name: Rainbow deployment
         uses: ./.github/workflows/rainbow-deployment
@@ -65,12 +65,12 @@ jobs:
         id: download-taskdef-form-viewer
         run: |
           aws ecs describe-task-definition --task-definition form-viewer --query taskDefinition > form_viewer.json
-          echo "container_name=$(jq -r '.containerDefinitions[0].name' form_viewer.json)" >> "$GITHUB_OUTPUT"
+          echo "container_name=$(jq -r '.containerDefinitions[1].name' form_viewer.json)" >> "$GITHUB_OUTPUT"
 
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@761759e89de3182eda4db4e0d29abb52ae280200
+        uses: aws-actions/amazon-ecs-render-task-definition@6b89923a897d41e9ad789181d8865b532ecf973c
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
@@ -78,7 +78,7 @@ jobs:
 
       - name: Render appspec for form viewer service
         run: |
-          CONTAINER_PORT=`jq '.containerDefinitions[0].portMappings[0].containerPort' form_viewer.json`
+          CONTAINER_PORT=`jq '.containerDefinitions[1].portMappings[0].containerPort' form_viewer.json`
           CONTAINER_NAME=${{ steps.download-taskdef-form-viewer.outputs.container_name }}
           TASKDEF_ARN=`jq -r '.taskDefinitionArn' form_viewer.json | cut -f 1-6 -d "/"`
           jq --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json
@@ -94,7 +94,7 @@ jobs:
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
         # v1.4.11
-        uses: aws-actions/amazon-ecs-deploy-task-definition@196ff9dff9d098565a7be8db93b3e3ab70180079
+        uses: aws-actions/amazon-ecs-deploy-task-definition@cbf54ec46642b86ff78c2f5793da6746954cf8ff
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer

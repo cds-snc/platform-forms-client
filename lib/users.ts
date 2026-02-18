@@ -2,7 +2,7 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import { DeactivationReason, DeactivationReasons, NagwareResult } from "./types";
-import { logEvent } from "./auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { Privilege, Prisma } from "@prisma/client";
 import { sendDeactivationEmail } from "@lib/deactivate";
@@ -127,7 +127,13 @@ export const getOrCreateUser = async ({
 export const getUser = async (id: string): Promise<AppUser> => {
   await authorization.canViewUser(id).catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(e.user.id, { type: "User" }, "AccessDenied", `Attempted to get user by id ${id}`);
+      logEvent(
+        e.user.id,
+        { type: "User" },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserById,
+        { id }
+      );
     }
     throw e;
   });
@@ -162,7 +168,12 @@ export const getUser = async (id: string): Promise<AppUser> => {
 export const getUsers = async (where?: Prisma.UserWhereInput): Promise<AppUser[] | never[]> => {
   await authorization.canViewAllUsers().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(e.user.id, { type: "User" }, "AccessDenied", "Attempted to list users");
+      logEvent(
+        e.user.id,
+        { type: "User" },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptedToListUsers
+      );
     }
     throw e;
   });
@@ -213,7 +224,8 @@ export const updateActiveStatus = async (
           e.user.id,
           { type: "User" },
           "AccessDenied",
-          `Attempted to update user ${userID} active status`
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptedToUpdateUserActiveStatus,
+          { targetUserId: userID }
         );
       }
       throw e;
@@ -251,9 +263,14 @@ export const updateActiveStatus = async (
       userID,
       { type: "User", id: userID },
       active ? "UserActivated" : "UserDeactivated",
-      `User ${user.email} (userID: ${userID}) was ${active ? "activated" : "deactivated"} by user ${
-        privilegedUser.email
-      } (userID: ${abilityUser.id})`
+      AuditLogDetails.UserActiveStatusUpdate,
+      {
+        email: user.email,
+        userID: userID,
+        active: active ? "activated" : "deactivated",
+        privilegedUserEmail: privilegedUser.email,
+        privilegedUserId: abilityUser.id,
+      }
     );
 
     if (!active && user.email) {
@@ -307,7 +324,8 @@ export const getUnprocessedSubmissionsForUser = async (userId: string) => {
         e.user.id,
         { type: "User" },
         "AccessDenied",
-        `Attempted to get unprocessed submssions for user ${userId}`
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToAccessUnprocessedSubmissions,
+        { userId }
       );
     }
     throw e;
@@ -323,7 +341,8 @@ export const addNoteToUser = async (id: string, note: string) => {
         e.user.id,
         { type: "User" },
         "AccessDenied",
-        `Attempted to add a note to user ${id}`
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToAddNoteToUser,
+        { userId: id }
       );
     }
     throw e;

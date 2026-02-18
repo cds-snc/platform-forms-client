@@ -8,7 +8,6 @@ import { ClosedFormIcon } from "@serverComponents/icons";
 
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
-import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -28,6 +27,7 @@ interface PageContextProps {
 
 const PageContent = ({ title, language, pageText }: PageContextProps) => {
   const { t } = useTranslation("form-closed");
+
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return (
@@ -55,13 +55,18 @@ const PageContent = ({ title, language, pageText }: PageContextProps) => {
 };
 
 const ClosedHeading = ({ language }: { language: "en" | "fr" }) => {
-  const { t } = useTranslation("form-closed");
+  const { t: tEn } = useTranslation("form-closed", { lng: "en" });
+  const { t: tFr } = useTranslation("form-closed", { lng: "fr" });
+
+  const enTitle = tEn("title", { lng: "en" });
+  const frTitle = tFr("title", { lng: "fr" });
+
   return (
     <>
       <ClosedFormIcon className="mr-5 mt-[-5px] inline-block" />{" "}
-      <GcdsH1 tabIndex={-1} className="!mb-6">
-        <span>{t("title", { ns: "form-closed", lng: language })}</span>
-      </GcdsH1>
+      <h1 tabIndex={-1} className="!mb-6 inline-block">
+        <span>{language === "en" ? enTitle : frTitle}</span>
+      </h1>
     </>
   );
 };
@@ -114,7 +119,7 @@ export const ClosedPage = (props: TextPageProps): React.ReactElement => {
       <LinkButton.Primary href={homeHref} target={target} className="mb-2 mr-3">
         <span>
           <BackArrowIcon className="mr-2 inline-block self-stretch fill-white" />
-          {t("backButton")}
+          {t("backButton", { lng: language })}
         </span>
       </LinkButton.Primary>
     </div>

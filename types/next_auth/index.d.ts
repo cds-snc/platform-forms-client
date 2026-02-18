@@ -13,6 +13,7 @@ declare module "next-auth" {
       newlyRegistered?: boolean;
       deactivated?: boolean;
       hasSecurityQuestions: boolean;
+      featureFlags?: string[];
     };
   }
 }

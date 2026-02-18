@@ -7,13 +7,13 @@ import { verify, getRedirectPath, ErrorStates } from "../../actions";
 import { Expired2faSession } from "./Expired2faSession";
 import { Locked2fa } from "./Locked2fa";
 import Link from "next/link";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { Loader } from "@clientComponents/globals/Loader";
 import { useRouter } from "next/navigation";
-import { updateSessionProvider } from "@lib/hooks/auth/updateSessionProvider";
+import { useSession } from "next-auth/react";
 
 export const MFAForm = () => {
   const {
@@ -30,6 +30,7 @@ export const MFAForm = () => {
   const [isReady, setIsReady] = useState(false);
   const [isSubmittingStep1, setIsSubmittingStep1] = useState(false);
   const [isSubmittingStep2, setIsSubmittingStep2] = useState(false);
+  const { update: sessionUpdate } = useSession();
 
   const authToken = useRef<{ email?: string; authenticationFlowToken?: string }>({});
 
@@ -38,6 +39,7 @@ export const MFAForm = () => {
   useEffect(() => {
     const localToken = JSON.parse(sessionStorage.getItem("authFlowToken") ?? "{}");
     if (!localToken?.authenticationFlowToken || !localToken?.email) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsExpired(true);
     }
     authToken.current = localToken;
@@ -52,7 +54,7 @@ export const MFAForm = () => {
     if (mfaState.success) {
       setIsSubmittingStep2(true);
       // Let the Session Provider know that the user has been authenticated
-      updateSessionProvider();
+      sessionUpdate();
       sessionStorage.removeItem("authFlowToken");
       const result = await getRedirectPath(language);
       if (result.callback) router.push(result.callback);
@@ -69,6 +71,7 @@ export const MFAForm = () => {
   useEffect(() => {
     switch (state.authError?.id) {
       case "2FALockedOutSession":
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsLocked(true);
         break;
       case "2FAExpiredSession":
@@ -83,6 +86,7 @@ export const MFAForm = () => {
       // If there are no visual errors, then the session is expired because email and authenticationFlowToken
       // didn't pass server side validation
       if (nonVisualErrors.length > 0) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsExpired(true);
         sessionStorage.removeItem("authFlowToken");
       }

@@ -12,10 +12,12 @@ export const Question = ({
   item,
   onQuestionChange,
   describedById,
+  isInvalid = false,
 }: {
   item: FormElementWithIndex;
   onQuestionChange: (itemId: number, val: string, lang: Language) => void;
   describedById?: string;
+  isInvalid?: boolean;
 }) => {
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -38,6 +40,7 @@ export const Question = ({
         describedById={describedById}
         onQuestionChange={onQuestionChange}
         placeholder={placeholder}
+        isInvalid={isInvalid}
       />
     </>
   );

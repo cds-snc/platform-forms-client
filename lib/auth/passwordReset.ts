@@ -91,10 +91,11 @@ export const getPasswordResetAuthenticatedUserEmailAddress = async (
 };
 
 const sendPasswordResetEmail = async (email: string, token: string) => {
-  try {
-    const baseUrl = await getOrigin();
+  const baseUrl = await getOrigin();
 
-    await sendEmail(email, {
+  await sendEmail(
+    email,
+    {
       subject: "Password reset | Réinitialisation de mot de passe",
       formResponse: `
 Reset your password with this link:
@@ -104,13 +105,7 @@ Reset your password with this link:
 Réinitialisez votre mot de passe avec ce lien :
 
 [${baseUrl}/fr/auth/reset-password/${token}](${baseUrl}/fr/auth/reset-password/${token})`,
-    });
-  } catch (err) {
-    logMessage.error(
-      `{"status": "failed", "message": "Notify failed to send the password reset email to ${email}", "error": ${
-        (err as Error).message
-      }.`
-    );
-    throw err;
-  }
+    },
+    "passwordReset"
+  );
 };

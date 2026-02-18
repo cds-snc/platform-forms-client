@@ -8,34 +8,54 @@ export const ErrorListMessage = ({
   defaultValue,
   elements,
   language,
+  subElement,
 }: {
   id: string | number | undefined;
   defaultValue: string | number | undefined;
   elements: FormElement[];
   language: string;
+  subElement?: FormElement;
 }) => {
   const { t } = useTranslation("form-builder");
 
   let question = "";
-  let element: FormElement | null = null;
+  let elementType;
 
-  try {
-    element = (elements && elements.find((element) => String(element.id) === String(id))) || null;
+  if (subElement) {
+    question = subElement.properties?.[getProperty("title", language)] as string;
+    elementType = subElement.type;
+  } else {
+    let element: FormElement | null = null;
+    try {
+      element = (elements && elements.find((element) => String(element.id) === String(id))) || null;
 
-    if (!element?.type || !defaultValue || !id) {
-      throw new Error("Invalid element");
+      if (!element?.type || !defaultValue || !id) {
+        throw new Error("Invalid element");
+      }
+
+      question = element.properties?.[getProperty("title", language)] as string;
+      question = truncateString(question);
+    } catch (error) {
+      return defaultValue;
     }
 
-    question = element.properties?.[getProperty("title", language)] as string;
-    question = truncateString(question);
-  } catch (error) {
-    return defaultValue;
+    elementType = element?.type;
+
+    if (element.properties.validation?.all === true) {
+      elementType = FormElementTypes.attestation;
+    }
   }
 
-  let elementType = element?.type;
+  // Consider refactoring the below to be more robust if there are more error
+  // base/default cases beyond the current required answer.
 
-  if (element.properties.validation?.all === true) {
-    elementType = FormElementTypes.attestation;
+  // For non default validation errors, use a specific error message if one exists
+  if (
+    defaultValue &&
+    typeof defaultValue === "string" &&
+    !defaultValue.includes(t("input-validation.required"))
+  ) {
+    return `${defaultValue}: ${question}`;
   }
 
   switch (elementType) {

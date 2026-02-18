@@ -16,7 +16,7 @@ export const NextSteps = ({
 
   return (
     <div className="flex w-full flex-row">
-      <div className="w-1/3">
+      <div className="w-fit">
         <div className="mb-4 rounded-lg border-2 border-slate-400 bg-violet-50 p-4">
           <div className="mb-2 text-xl font-bold">
             {t("saveAndResume.downloadProgressHtml.nextSteps.title", { lng: language })}
@@ -55,10 +55,10 @@ export const NextSteps = ({
           </div>
         </div>
         {/* Keep this info safe */}
-        <div className="mb-3">
+        <div className="mb-3 w-fit">
           <div>
-            <LightBulbIcon className="-mt-2 mr-2 inline-block" />
-            <h3 className="!my-0 mb-0 inline-block !text-xl font-bold">
+            <LightBulbIcon className="-mt-2 mr-2 inline" />
+            <h3 className="!my-0 mb-0 inline !text-xl font-bold">
               {t("saveAndResume.downloadProgressHtml.keepSafe.title", { lng: language })}
             </h3>
           </div>

@@ -7,7 +7,7 @@ import {
   UserNotFoundError,
 } from "./exceptions";
 import { getAbility } from "@lib/privileges";
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { notifyOwnersOwnerAdded } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { AccessControlError } from "@lib/auth/errors";
@@ -54,6 +54,20 @@ export const acceptInvitation = async (invitationId: string) => {
     throw new UserNotFoundError();
   }
 
+  // Check if the Template exists and is not deleted
+  const template = await prisma.template.findUnique({
+    where: {
+      id: invitation.templateId,
+    },
+  });
+
+  if (!template) {
+    logMessage.error(
+      `Template with ID ${invitation.templateId} not found for invitation ${invitationId}`
+    );
+    throw new UnableToAssignUserToTemplateError();
+  }
+
   // Ensures the logged in user is the user that was invited
   const ability = await getAbility();
   if (ability.user.id !== user.id) {
@@ -73,7 +87,8 @@ export const acceptInvitation = async (invitationId: string) => {
     ability.user.id,
     { type: "Form", id: invitation.templateId },
     "InvitationAccepted",
-    `${user.id} has accepted an invitation`
+    AuditLogDetails.AcceptedInvitation,
+    { userId: user.id }
   );
 
   // some existing events may not yet have the 'invitedBy' attribute.
@@ -83,7 +98,8 @@ export const acceptInvitation = async (invitationId: string) => {
     invitation.invitedBy ?? ability.user.id,
     { type: "Form", id: invitation.templateId },
     "GrantFormAccess",
-    `Access granted to ${user.id}`
+    AuditLogDetails.AccessGranted,
+    { grantedUserId: user.id }
   );
 
   notifyOwnersOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);

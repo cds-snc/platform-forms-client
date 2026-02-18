@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import React, { createContext, useRef, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { createStore } from "zustand";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
@@ -16,7 +16,7 @@ import unset from "lodash.unset";
  * Internal dependencies
  */
 import { TemplateStoreProps, TemplateStoreState, InitialTemplateStoreProps } from "./types";
-import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { getSchemaFromState, cleanInput } from "../utils/form-builder";
 import { Language } from "../types/form-builder-types";
@@ -53,8 +53,21 @@ import {
   localizeField,
   getFormElementIndexes,
 } from "./helpers/elements";
+import { transform } from "./helpers/elements/transformFormProperties";
+import { BetaComponentsError, checkForBetaComponents } from "../validation/betaCheck";
+import { useFeatureFlags } from "../hooks/useFeatureFlags";
+import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
+import { useTranslation } from "@root/i18n/client";
 
-const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
+const createTemplateStore = (
+  checkFeatureFlag: (flag: string) => boolean,
+  initProps?: Partial<InitialTemplateStoreProps>
+) => {
+  // If form elements are passed in check to see if they contain beta elements
+  if (initProps?.form?.elements) {
+    checkForBetaComponents(initProps.form.elements, checkFeatureFlag);
+  }
+
   const props = initStore(initProps);
   return createStore<TemplateStoreState>()(
     immer(
@@ -109,8 +122,18 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             importTemplate: importTemplate(set),
             getHighestElementId: getHighestElementId(set, get),
             generateElementId: generateElementId(set, get),
-            getSchema: () =>
-              JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2),
+            transform: transform(set, get),
+            getSchema: () => {
+              // hasHydrated should work here but we get an error. leaving this timeout for now.
+              setTimeout(() => {
+                if (!get().hasTransformed) {
+                  get().transform();
+                }
+                set({ hasTransformed: true });
+              }, 500);
+
+              return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
+            },
             getId: () => get().id,
             getIsPublished: () => get().isPublished,
             getFormElementById: getFormElementById(set, get),
@@ -130,6 +153,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             setIsPublished: (isPublished) => set({ isPublished }),
             setClosingDate: (value) => set({ closingDate: value }),
             setSaveAndResume: (value) => set({ saveAndResume: value }),
+            setNotificationsInterval: (value) => set({ notificationsInterval: value }),
             setGroupsLayout: (layout) => {
               set((state) => {
                 state.form.groupsLayout = layout;
@@ -137,6 +161,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             },
             updateSecurityAttribute: (value) => set({ securityAttribute: value }),
             resetDeliveryOption: () => set({ deliveryOption: undefined }),
+            setHasTransformed: () => set({ hasTransformed: true }),
           }),
           storageOptions
         )
@@ -153,22 +178,34 @@ export const TemplateStoreProvider = ({
   children,
   ...props
 }: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
-  const storeRef = useRef<TemplateStore>(null);
-  if (!storeRef.current) {
+  const { getFlag } = useFeatureFlags();
+  const { t } = useTranslation("form-builder");
+
+  // Initialize store once on first mount only (empty dependency array)
+  const store = useMemo(() => {
     // When there is an incoming form with a different id clear it first
     if (props.id) {
       clearTemplateStorage(props.id);
     }
-    storeRef.current = createTemplateStore(props);
-  }
+    return createTemplateStore(getFlag, props);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty array - create store only once, never recreate
 
-  return (
-    <TemplateStoreContext.Provider value={storeRef.current}>
-      <FlowRefProvider>
-        <TreeRefProvider>{children}</TreeRefProvider>
-      </FlowRefProvider>
-    </TemplateStoreContext.Provider>
-  );
+  try {
+    return (
+      <TemplateStoreContext.Provider value={store}>
+        <FlowRefProvider>
+          <TreeRefProvider>{children}</TreeRefProvider>
+        </FlowRefProvider>
+      </TemplateStoreContext.Provider>
+    );
+  } catch (e) {
+    if (e instanceof BetaComponentsError) {
+      return <ErrorPanel>{t("beta.loadingError")}</ErrorPanel>;
+    } else {
+      throw e;
+    }
+  }
 };
 
 export const useTemplateStore = <T,>(

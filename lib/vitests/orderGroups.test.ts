@@ -1,5 +1,5 @@
-import { expect } from 'vitest';
-import { GroupsType } from "@lib/formContext";
+import { expect } from "vitest";
+import { type GroupsType } from "@gcforms/types";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 
 describe("orderGroups function", () => {

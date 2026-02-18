@@ -1,4 +1,4 @@
-import { HeadingNode } from "@lexical/rich-text";
+import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { LinkNode } from "@lexical/link";
 import { ListItemNode, ListNode } from "@lexical/list";
 
@@ -15,5 +15,5 @@ export const editorConfig = {
     throw error;
   },
   // Any custom nodes go here
-  nodes: [HeadingNode, LinkNode, ListItemNode, ListNode],
+  nodes: [HeadingNode, QuoteNode, LinkNode, ListItemNode, ListNode],
 };

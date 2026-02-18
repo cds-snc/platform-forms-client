@@ -58,7 +58,7 @@ export const sendInvitation = AuthenticatedAction(
           errors.push(t("accessControlError"));
           throw e; // stop processing other emails
         }
-        logMessage.error("Invitation failed", e);
+        logMessage.error(`Invitation failed: ${JSON.stringify(e)}`);
         errors.push(t("invitationFailed", { email }));
       }
     });

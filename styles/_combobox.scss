@@ -5,7 +5,7 @@
   }
   ul {
     @apply absolute z-10 max-h-80 min-w-80 overflow-y-scroll p-0 bg-white border w-full;
-    border-color: theme("colors.gcds.gray.800");
+    border-color: theme("colors.gcds.grayscale.800");
     li {
       @apply px-3 py-2 flex flex-col text-black;
     }

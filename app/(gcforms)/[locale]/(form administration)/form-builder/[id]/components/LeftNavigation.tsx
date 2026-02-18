@@ -71,7 +71,12 @@ export const LeftNavigation = ({ id }: { id: string }) => {
         <li>
           <LeftNav
             testid="settings"
-            {...linkHelper({ route: `settings`, id, segment, language })}
+            {...linkHelper({
+              route: isPublished ? "settings/manage" : "settings",
+              id,
+              segment,
+              language,
+            })}
             title={t("pageSettings")}
           >
             <NavSettingsIcon />

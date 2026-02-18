@@ -31,10 +31,12 @@ export const PrePublishDialog = ({
   const dialog = useDialogRef();
 
   const [prePublishStep, setPrePublishStep] = useState(0);
-  enum PrePublishSteps {
-    ReasonForPublish = 0,
-    FormTypeAndDescription = 1,
-  }
+
+  const PrePublishSteps = {
+    ReasonForPublish: 0,
+    FormTypeAndDescription: 1,
+  } as const;
+  type PrePublishSteps = (typeof PrePublishSteps)[keyof typeof PrePublishSteps];
 
   async function ContinuePublishSteps() {
     setError(false);
@@ -112,7 +114,7 @@ export const PrePublishDialog = ({
             <h3 className="gc-h4 mb-1 pb-0 text-lg">
               <div className="flex-col">
                 <span className="">{t("prePublishFormDialog.text1")}</span>
-                <legend className="gc-label required">
+                <legend className="gcds-label required">
                   <span data-testid="required" aria-hidden>
                     ({t("required")})
                   </span>
@@ -176,7 +178,7 @@ export const PrePublishDialog = ({
               </Alert.Danger>
             )}
             <p className="mb-4 text-sm">{t("prePublishFormDialog.thisInformation")}</p>
-            <Label className="gc-label required" required={true}>
+            <Label className="gcds-label required" required={true}>
               {t("prePublishFormDialog.whatType")}
             </Label>
             <div className="mb-1">
@@ -184,6 +186,7 @@ export const PrePublishDialog = ({
                 className={cn(
                   "center-right-15px p-2 form-builder-dropdown my-0 inline-block min-w-[400px] text-black-default border-1 border-black"
                 )}
+                value={formType}
                 onChange={(e) => onFormTypeChange(e)}
               >
                 <option value="" disabled hidden>
@@ -196,7 +199,7 @@ export const PrePublishDialog = ({
                 ))}
               </select>
             </div>
-            <Label className="gc-label required" required={true}>
+            <Label className="gcds-label required" required={true}>
               {t("prePublishFormDialog.briefDesc")}
             </Label>
             <p>

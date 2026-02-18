@@ -9,32 +9,34 @@ export const Address = () => {
 
   return (
     <div>
-      <h3 className="mb-0">{t("addElementDialog.address.title")}</h3>
-      <p>{t("addElementDialog.address.description")}</p>
+      <h3 data-testid="element-description-title" className="mb-0">
+        {t("addElementDialog.address.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.address.description")}</p>
 
       <ExampleWrapper className="mt-4">
         <h4 className="mb-4">{t("addElementDialog.address.whatIsYourAddress")}</h4>
         <div className="gcds-input-wrapper mb-6">
-          <Label htmlFor="street" className="gc-label">
+          <Label htmlFor="street" className="gcds-label">
             {t("addElementDialog.address.street.label")}
           </Label>
           <Description>{t("addElementDialog.address.street.description")}</Description>
           <TextInput type="text" id="street" name="street" autoComplete="address-line1" />
         </div>
         <div className="gcds-input-wrapper mb-6">
-          <Label htmlFor="city" className="gc-label">
+          <Label htmlFor="city" className="gcds-label">
             {t("addElementDialog.address.city")}
           </Label>
           <TextInput type="text" id="city" name="city" autoComplete="address-level2" />
         </div>
         <div className="gcds-input-wrapper mb-6">
-          <Label htmlFor="province" className="gc-label">
+          <Label htmlFor="province" className="gcds-label">
             {t("addElementDialog.address.province")}
           </Label>
           <TextInput type="text" id="province" name="province" autoComplete="address-level1" />
         </div>
         <div className="gcds-input-wrapper mb-6">
-          <Label htmlFor="postal" className="gc-label">
+          <Label htmlFor="postal" className="gcds-label">
             {t("addElementDialog.address.postal")}
           </Label>
           <TextInput id="postal" type="text" name="postal" autoComplete="postal-code" />

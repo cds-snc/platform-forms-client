@@ -3,13 +3,7 @@ import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import type { JSX } from "react";
-
-export enum ErrorStatus {
-  SUCCESS,
-  WARNING,
-  ERROR,
-  INFO,
-}
+import { ErrorStatus } from "@lib/constants";
 
 interface AlertProps {
   type: ErrorStatus;
@@ -80,7 +74,7 @@ export const Alert = ({
         </Button>
       ) : null}
       <div className="gc-alert__body">
-        {heading && <h2>{heading}</h2>}
+        {heading && <h2 className="!mt-0">{heading}</h2>}
         {children && (validation ? children : <div className="gc-alert__text">{children}</div>)}
       </div>
       {cta && <div>{cta}</div>}

@@ -16,11 +16,11 @@ export const parseRootId = (id: number, elements?: Element[]) => {
   return rootId;
 };
 
-interface Form {
+export interface Form {
   elements: Element[];
 }
 
-interface Element {
+export interface Element {
   id: number;
   properties?: {
     subElements?: Element[];

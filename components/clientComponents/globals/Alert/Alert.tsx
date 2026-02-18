@@ -3,13 +3,7 @@ import React, { ReactNode, useEffect, useRef, useState, type JSX } from "react";
 import { CircleCheckIcon, InfoIcon, WarningIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
-
-export enum ErrorStatus {
-  SUCCESS = "SUCCESS",
-  WARNING = "WARNING",
-  ERROR = "ERROR",
-  INFO = "INFO",
-}
+import { ErrorStatus } from "@lib/constants";
 
 const headingClasses = {
   h2: "text-2xl font-semibold leading-10",
@@ -36,7 +30,7 @@ export const Title = ({
   return (
     <HeadingTag
       data-testid="alert-heading"
-      className={cn("!mb-0 pb-0", headingClasses[HeadingTag], statusClass, className)}
+      className={cn("!mb-0 pb-0 !mt-0", headingClasses[HeadingTag], statusClass, className)}
     >
       {children}
     </HeadingTag>

@@ -18,14 +18,22 @@ import {
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
   updateSecurityAttribute,
-  updateResponseDeliveryOption,
   updateFormPurpose,
   updateFormSaveAndResume,
+  getFormJSONConfig,
+  updateFormJsonConfig,
 } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
+import { getFullTemplateByID } from "@lib/templates";
+import { isValidEmail } from "@gcforms/core";
+import { slugify } from "@lib/client/clientHelpers";
+import { sendEmail } from "@lib/integration/notifyConnector";
+import { getOrigin } from "@lib/origin";
+import { BrandProperties, NotificationsInterval } from "@gcforms/types";
+import { redirect } from "next/navigation";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -35,6 +43,7 @@ export type CreateOrUpdateTemplateType = {
   securityAttribute?: SecurityAttribute;
   formPurpose?: FormPurpose;
   saveAndResume?: boolean;
+  notificationsInterval?: NotificationsInterval;
 };
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -49,14 +58,13 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       deliveryOption,
       securityAttribute,
       formPurpose,
+      notificationsInterval,
     }: CreateOrUpdateTemplateType
   ): Promise<{
     formRecord: { id: string; updatedAt: string | undefined } | null;
     error?: string;
   }> => {
     try {
-      revalidatePath("/[locale]/forms", "page");
-
       if (id) {
         return await updateTemplate({
           id,
@@ -75,11 +83,15 @@ export const createOrUpdateTemplate = AuthenticatedAction(
         deliveryOption: deliveryOption,
         securityAttribute: securityAttribute,
         formPurpose: formPurpose,
+        notificationsInterval,
       });
 
       if (!formRecord) {
         throw new Error("Failed to create template");
       }
+      // revalidatePath must be at the end of a function.  It leverages the error object to trigger
+      // and internal refresh and can have awkward results if used before an error is thrown by a following fn.
+      revalidatePath("/[locale]/forms", "page");
 
       return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
     } catch (_) {
@@ -140,19 +152,24 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
       publishReason,
       publishFormType,
       publishDescription,
+      redirectAfter,
     }: {
       id: string;
       isPublished: boolean;
       publishReason: string;
       publishFormType: string;
       publishDescription: string;
+      redirectAfter?: string;
     }
   ): Promise<{
     formRecord: FormRecord | null;
     error?: string;
   }> => {
+    let hasError;
+    let response: FormRecord | null = null;
+
     try {
-      const response = await updateIsPublishedForTemplate(
+      response = await updateIsPublishedForTemplate(
         formID,
         isPublished,
         publishReason,
@@ -165,12 +182,18 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
         );
       }
 
-      revalidatePath("/form-builder/[id]", "layout");
-
-      return { formRecord: response };
+      // Revalidate the form-builder layout and the specific published page
+      revalidatePath(`/form-builder/${formID}`, "layout");
+      revalidatePath(`/form-builder/${formID}/published`, "page");
     } catch (error) {
-      return { formRecord: null, error: (error as Error).message };
+      hasError = error;
     }
+
+    if (!hasError && redirectAfter) {
+      redirect(redirectAfter);
+    }
+
+    return { formRecord: response, error: hasError ? (hasError as Error).message : undefined };
   }
 );
 
@@ -334,39 +357,6 @@ export const updateTemplateUsers = AuthenticatedAction(
   }
 );
 
-export const updateTemplateDeliveryOption = AuthenticatedAction(
-  async (
-    _,
-    {
-      id: formID,
-      deliveryOption,
-    }: {
-      id: string;
-      deliveryOption: DeliveryOption | undefined;
-    }
-  ): Promise<{
-    formRecord: FormRecord | null;
-    error?: string;
-  }> => {
-    try {
-      if (!deliveryOption) {
-        throw new Error("Require Delivery Option Data");
-      }
-
-      const response = await updateResponseDeliveryOption(formID, deliveryOption);
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { ${formID}, ${deliveryOption} }`
-        );
-      }
-
-      return { formRecord: response };
-    } catch (error) {
-      return { formRecord: null, error: (error as Error).message };
-    }
-  }
-);
-
 export const sendResponsesToVault = AuthenticatedAction(
   async (
     _,
@@ -448,3 +438,142 @@ export const loadBlockTemplate = async ({
     return { data: [], error: (error as Error).message };
   }
 };
+
+export const shareForm = AuthenticatedAction(
+  async (
+    session,
+    {
+      formId,
+      emails,
+      filename,
+    }: {
+      formId: string;
+      emails: string[];
+      filename: string;
+    }
+  ): Promise<{
+    success?: boolean;
+    error?: string;
+  }> => {
+    try {
+      if (!emails || emails.length < 1 || !formId || !filename) {
+        throw new Error("Malformed request");
+      }
+
+      const template = await getFullTemplateByID(formId);
+
+      if (!template || !template.form) {
+        throw new Error("Form not found");
+      }
+
+      const base64data = Buffer.from(JSON.stringify(template.form)).toString("base64");
+
+      // Ensure valid email addresses
+      const cleanedEmails = emails.filter((email) => isValidEmail(email));
+
+      if (cleanedEmails.length < 1) {
+        throw new Error("Invalid email addresses");
+      }
+
+      let cleanedFilename = slugify(filename);
+
+      // Shorten file name to 50 characters
+      if (cleanedFilename.length > 50) {
+        cleanedFilename = cleanedFilename.substring(0, 50);
+      }
+
+      const HOST = await getOrigin();
+
+      // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
+      await Promise.all(
+        emails.map((email: string) => {
+          return sendEmail(
+            email,
+            {
+              application_file: {
+                file: base64data,
+                filename: `${cleanedFilename}.json`,
+                sending_method: "attach",
+              },
+              subject: "Form shared | Formulaire partagé",
+              formResponse: `
+**${session.user.name} (${session.user.email}) has shared a form with you.**
+
+To preview this form:
+- **Step 1**:
+  Save the attached JSON form file to your computer.
+- **Step 2**:
+  Go to [GC Forms](${HOST}). No account needed.
+- **Step 3**:
+  Select open a form file.
+
+****
+
+**${session.user.name} (${session.user.email}) a partagé un formulaire avec vous.**
+
+Pour prévisualiser ce formulaire :
+- **Étape 1 :**
+  Enregistrer le fichier de formulaire JSON ci-joint sur votre ordinateur.
+- **Étape 2 :**
+  Aller sur [Formulaires GC](${HOST}). Aucun compte n'est nécessaire.
+- **Étape 3 :**
+  Sélectionner "Ouvrir un formulaire".`,
+            },
+            "shareForm"
+          );
+        })
+      );
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  }
+);
+
+export const updateBranding = AuthenticatedAction(
+  async (
+    _,
+    {
+      formId,
+      branding,
+    }: {
+      formId: string;
+      branding: BrandProperties | undefined;
+    }
+  ): Promise<{
+    formRecord: { id: string; updatedAt: string | undefined } | null;
+    error?: string;
+  }> => {
+    try {
+      const formConfig = await getFormJSONConfig(formId);
+
+      if (!formConfig) {
+        throw new Error(`Failed to get template for branding update with formId ${formId}`);
+      }
+
+      const updatedFormConfig: FormProperties = {
+        ...formConfig,
+        brand: branding,
+      };
+      const formRecord = await updateFormJsonConfig(formId, updatedFormConfig);
+
+      if (!formRecord) {
+        throw new Error(`Failed to update template for branding update with formId ${formId}`);
+      }
+
+      return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
+    } catch (_) {
+      return { formRecord: null, error: "error" };
+    }
+  }
+);
+
+export async function getFormTemplate(id: string) {
+  try {
+    const formConfig = await getFormJSONConfig(id);
+    return { formRecord: formConfig, error: null };
+  } catch (_) {
+    return { formRecord: null, error: "error" };
+  }
+}

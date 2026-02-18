@@ -15,9 +15,10 @@ export interface TextAreaProps extends InputFieldProps {
 export const TextArea = (
   props: TextAreaProps & JSX.IntrinsicElements["textarea"]
 ): React.ReactElement => {
-  const { id, className, ariaDescribedBy, required, children, placeholder, maxLength } = props;
+  const { id, className, ariaDescribedBy, required, children, placeholder, maxLength, lang } =
+    props;
 
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", { lng: lang });
 
   const [field, meta, helpers] = useField(props);
 
@@ -38,7 +39,13 @@ export const TextArea = (
   };
 
   const remainingCharactersMessage =
-    characterCountMessages.part1 + " " + remainingCharacters + " " + characterCountMessages.part2;
+    characterCountMessages.part1 +
+    " " +
+    remainingCharacters +
+    " " +
+    (remainingCharacters === 1 || remainingCharacters === 0
+      ? t("formElements.characterCount.part2-singular")
+      : characterCountMessages.part2);
 
   const tooManyCharactersMessage =
     characterCountMessages.part1Error +

@@ -1,28 +1,41 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
 import tailwind from "eslint-plugin-tailwindcss";
+import reactHooks from "eslint-plugin-react-hooks";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  {
+    plugins: {
+      "react-hooks": reactHooks,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+    },
+  },
   ...tailwind.configs["flat/recommended"],
-  ...compat.config(
-    { 
-    extends: [
-      "next/core-web-vitals",
-      "next/typescript",
-      "prettier"
-    ],
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+    "node_modules/**",
+    "utils/**",
+    "**/dist/**",
+    "public/static/scripts/polyfills/**",
+    "coverage/**",
+    ".lintstagedrc.mjs",
+  ]),
+  {
     rules: {
       "no-console": "error",
       "no-await-in-loop": "error",
       "no-return-await": "error",
+      "react/no-jsx-in-try-catch": "off",
       "@typescript-eslint/no-require-imports": "off",
       "@typescript-eslint/no-unused-expressions": "off",
       "@typescript-eslint/no-unused-vars": [
@@ -32,18 +45,10 @@ const eslintConfig = [
           args: "after-used",
           ignoreRestSiblings: true,
           argsIgnorePattern: "^_",
-          caughtErrors: "none", // This allows unused catch parameters
+          caughtErrors: "none",
         },
-      ]
+      ],
     },
-    ignorePatterns: [
-      "/utils",
-      "/public/static/scripts/",
-      "/__tests__/api/",
-      "node_modules/",
-      "dist/",
-      "coverage/",
-    ],
     settings: {
       tailwindcss: {
         whitelist: [
@@ -80,11 +85,19 @@ const eslintConfig = [
           "bkd-soft",
           "legend-fieldset",
           "confirmation",
-          "active"
+          "active",
+          "brand__container",
+          "fip_flag",
+          "fip_text",
+          "brand__toggle",
+          "brand__signature",
+          "container-xl",
+          "tableLink",
+          "label--required",
         ],
       },
     },
-  }),
-];
+  },
+]);
 
 export default eslintConfig;

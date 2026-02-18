@@ -1,8 +1,10 @@
 name: Backstage Catalog Info Helper
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   update-catalog-info:
@@ -12,8 +14,9 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Run Backstage Catalog Info Helper
-        uses: cds-snc/backstage-catalog-info-helper-action@v0.3.1
+        uses: cds-snc/backstage-catalog-info-helper-action@cc75afc29a0ade6c41400132ff9e1222f8916ba6 # v0.3.1
         with:
           github_app_id: ${{ secrets.SRE_BOT_RW_APP_ID }}
           github_app_private_key: ${{ secrets.SRE_BOT_RW_PRIVATE_KEY }}
