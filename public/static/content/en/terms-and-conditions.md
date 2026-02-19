@@ -58,8 +58,6 @@ This is statistical data and does not directly identify you. No attempt is made 
 
 When a threat to the website or computer systems of the Government of Canada is detected, information is collected pursuant to section 161 of the [*Financial Administration Act*](https://laws-lois.justice.gc.ca/eng/acts/f-11/). The information may be shared with appropriate law enforcement authorities if suspected criminal activities are detected. Such information may be used for network security related statistical purposes, audit, evaluation, research, planning and reporting, and is included in [Personal Information Bank Security Incidents and Privacy Breaches (PSU 939)](https://www.canada.ca/en/treasury-board-secretariat/services/access-information-privacy/access-information/information-about-programs-information-holdings/standard-personal-information-banks.html#psu939).
 
-[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) is an advocate of responsible vulnerability disclosure. If you’ve found a vulnerability, let us know so we can fix it as soon as possible. 
-
 ## Using files located on non-Government of Canada servers
 
 To improve the functionality of this website, certain files (such as open source libraries, images, and scripts) may be delivered automatically to your browser via a trusted third-party server or content delivery network. The delivery of these files is intended to provide a seamless user experience by speeding response times and avoiding the need for each visitor to download these files. 
@@ -121,6 +119,4 @@ The Government of Canada's use of social media serves as an extension of its pre
 
 Many social media platforms have multiple language options and provide instructions on how to set your preferences. The Government of Canada respects the [*Official Languages Act*](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/) and is committed to ensuring that our information is available in both French and English and that both versions are of equal quality.
 
-
-
-**Last update:** November 12, 2025
+**Last update:** February 19, 2026
