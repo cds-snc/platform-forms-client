@@ -550,7 +550,7 @@ export async function deleteDraftFormResponses(formID: string) {
     }
 
     logMessage.debug(`Found ${accumulatedResponses.length} draft responses for form ${formID}.`);
-    logMessage.debug(accumulatedResponses);
+    logMessage.debug(accumulatedResponses.join(", "));
 
     // Batch delete all entries
     // The `BatchWriteCommand` can only take up to 25 `DeleteRequest` at a time.

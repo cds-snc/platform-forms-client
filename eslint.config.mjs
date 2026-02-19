@@ -52,9 +52,9 @@ const eslintConfig = defineConfig([
         "error",
         {
           selector:
-            "CallExpression[callee.object.name='logMessage'][callee.property.name=/^(debug|info|warn|error)$/] > ObjectExpression:first-child",
+            "CallExpression[callee.object.name='logMessage'][callee.property.name=/^(info|warn)$/] > ObjectExpression:first-child",
           message:
-            "logMessage only accepts string arguments. Use template literals instead: logMessage.error(`Failed: ${error.message}`)",
+            "logMessage.info() and logMessage.warn() only accept string arguments. Use template literals instead: logMessage.info(`User: ${userId}`)",
         },
       ],
     },

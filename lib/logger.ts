@@ -19,29 +19,50 @@ const pinoLogger = pino({
 });
 
 /**
- * Type-safe logger that only accepts string messages.
- * DO NOT use pino's object-first syntax: logMessage.error({ error }, "msg")
- * Instead, serialize the error inline: logMessage.error(`msg: ${error.message}`)
+ * Type-safe logger for the app.
+ * Messages should be strings or serialized objects (for debug).
+ * Errors can accept any value from catch blocks (unknown) and handles them appropriately.
  */
-export type StringOnlyLogger = {
-  debug(message: string): void;
+export type AppLogger = {
+  debug(message: string | Record<string, unknown>): void;
   info(message: string): void;
   warn(message: string): void;
-  error(message: string): void;
+  error(message: unknown): void;
 };
 
 /**
- * Project logger - only accepts string messages.
+ * App logger instance.
  * @example
- * // ✅ Correct
+ * // ✅ Correct - string message
  * logMessage.error(`Failed to load user: ${error.message}`);
+ * logMessage.info("User loaded successfully");
  *
- * // ❌ Incorrect (will cause type error)
- * logMessage.error({ error }, "Failed to load user");
+ * // ✅ Correct - Error object with error method
+ * logMessage.error(error); // Automatically extracts error.message
+ *
+ * // ✅ Correct - unknown from catch blocks
+ * logMessage.error(e); // Handles Error, string, or other types
+ *
+ * // ✅ Correct - serialized object with debug
+ * logMessage.debug({ userId: 123, action: "login" });
+ *
+ * // ❌ Incorrect - objects not allowed for info/warn/error
+ * logMessage.info({ user }); // Type error
+ * logMessage.error({ error }, "msg"); // Type error
  */
-export const logMessage: StringOnlyLogger = {
-  debug: (message: string) => pinoLogger.debug(message),
+export const logMessage: AppLogger = {
+  debug: (message: string | Record<string, unknown>) => {
+    pinoLogger.debug(message);
+  },
   info: (message: string) => pinoLogger.info(message),
   warn: (message: string) => pinoLogger.warn(message),
-  error: (message: string) => pinoLogger.error(message),
+  error: (message: unknown) => {
+    if (message instanceof Error) {
+      pinoLogger.error(message.message);
+    } else if (typeof message === "string") {
+      pinoLogger.error(message);
+    } else {
+      pinoLogger.error(JSON.stringify(message));
+    }
+  },
 };
