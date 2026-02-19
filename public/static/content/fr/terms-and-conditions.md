@@ -58,8 +58,6 @@ Il s'agit de données statistiques qui ne permettent pas de vous identifier dire
 
 Lorsque l’on détecte une menace pour le site du Service numérique canadien ou les systèmes informatiques du gouvernement du Canada, on recueille des données conformément à l’article 161 de la _[Loi sur la gestion des finances publiques](https://laws-lois.justice.gc.ca/fra/lois/f-11/)_. Si des activités criminelles sont détectées, ces données peuvent être communiquées aux autorités compétentes chargées de l’application de la loi. De tels renseignements peuvent être utilisés pour établir des statistiques sur la sécurité du réseau ainsi qu’à des fins de vérification, d’évaluation, de recherche, de planification et d’établissement de rapports, et figurent dans le [fichier de renseignements personnels POU 939 Incidents de sécurité et atteintes à la vie privée](https://www.canada.ca/fr/secretariat-conseil-tresor/services/acces-information-protection-reseignements-personnels/acces-information/renseignements-programmes-fonds-renseignements/fichiers-renseignements-personnels-ordinaires.html#pou939).
 
-[Emploi et Développement social Canada](https://www.canada.ca/fr/emploi-developpement-social.html) est un défenseur de la divulgation responsable des vulnérabilités. Si vous avez repéré une vulnérabilité, nous aimerions le savoir afin de la corriger. Veuillez consulter cet [Avis de sécurité](https://numerique.canada.ca/avis-de-securite/) pour en savoir plus.
-
 ## Emploi de fichiers situés sur des serveurs autres que ceux du gouvernement du Canada
 
 Afin d’améliorer la fonctionnalité des sites Web du gouvernement du Canada, certains fichiers (tels que les bibliothèques à code source ouvert, les images et les scripts) peuvent être téléchargés automatiquement vers votre navigateur à l’aide d’un serveur tiers ou d’un réseau de diffusion de contenu de confiance. La diffusion de ces fichiers vise à offrir une expérience utilisateur transparente en diminuant les temps de réponse et en évitant le téléchargement de ces fichiers par chaque visiteur. 
@@ -121,6 +119,4 @@ Le gouvernement du Canada utilise les médias sociaux pour étendre sa présence
 
 Bon nombre de plateformes de médias sociaux offrent plusieurs choix de langues et donnent des instructions pour définir des préférences. Le gouvernement du Canada respecte la _[Loi sur les langues officielles](https://laws-lois.justice.gc.ca/fra/lois/o-3.01/)_ et est déterminé à prendre les moyens nécessaires pour que son contenu soit disponible en français et en anglais et pour que la qualité soit égale dans les deux versions.
 
-
-
-**Dernière mise à jour :** 12 novembre 2025
+**Dernière mise à jour :** 19 février 2026
