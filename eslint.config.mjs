@@ -48,6 +48,15 @@ const eslintConfig = defineConfig([
           caughtErrors: "none",
         },
       ],
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "CallExpression[callee.object.name='logMessage'][callee.property.name=/^(debug|info|warn|error)$/] > ObjectExpression:first-child",
+          message:
+            "logMessage only accepts string arguments. Use template literals instead: logMessage.error(`Failed: ${error.message}`)",
+        },
+      ],
     },
     settings: {
       tailwindcss: {
