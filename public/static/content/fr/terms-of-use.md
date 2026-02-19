@@ -62,7 +62,7 @@ Vous avez pour responsabilité de veiller à ce que la clé API associée à vot
 - Protégez vos clés API. Si vous pensez qu'une clé API a été compromise, informez-nous, puis générez une nouvelle clé API et mettez à jour votre intégration pour sécuriser l'accès aux réponses de formulaire.
 - Assurez la confidentialité et la sécurité des renseignements protégés lors du téléchargement des réponses aux formulaires de Formulaires GC.
 - Signalez tout problème lié aux fonctionnalités de sécurité de Formulaires GC, par exemple si vous pensez que hCaptcha empêche les utilisateurs authentiques de remplir votre formulaire, ou en cas de résultats d'analyse de fichiers inexacts.
-- Signalez toute faille de sécurité et vulnérabilité en utilisant les étapes détaillées dans l’[avis de sécurité](https://numerique.canada.ca/avis-de-securite/).
+- Signalez toute faille de sécurité et vulnérabilité.
 
 ## Publication du formulaire dans les deux langues officielles
 

@@ -63,7 +63,7 @@ Ensuring the API key associated with your form is secure to protect access to fo
 - Safeguard your API keys. If you suspect an API key has been compromised, notify us, and update your integration with a newly generated API key to secure access to form responses.
 - Ensure the privacy and security of protected information upon downloading form responses from GC Forms. If Responses are not saved and confirmed within 45 days, we will take necessary steps to ensure they are retrieved by the responsible program or service.
 - Report any problems with GC Forms' security features, for example if you think hCaptcha may be blocking genuine users from completing your form, or for inaccurate file scanning results.
-- Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/security-notice/).
+- Report any security breach or vulnerability.
 
 ## Publish in both Official Languages
 
