@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.9.4](https://github.com/cds-snc/platform-forms-client/compare/v4.9.3...v4.9.4) (2026-02-19)
+
+
+### Miscellaneous Chores
+
+* add es lint rule and type for logger ([#6784](https://github.com/cds-snc/platform-forms-client/issues/6784)) ([98758da](https://github.com/cds-snc/platform-forms-client/commit/98758dae009bf17e44dd78a560d937e15b222452))
+* synced file(s) with cds-snc/site-reliability-engineering ([#6786](https://github.com/cds-snc/platform-forms-client/issues/6786)) ([751a8aa](https://github.com/cds-snc/platform-forms-client/commit/751a8aa91d3a1f556b47e8c5d75be0f8547f0fde))
+* synced local '.github/workflows/export_github_data.yml' with remote 'tools/sre_file_sync/export_github_data.yml' ([751a8aa](https://github.com/cds-snc/platform-forms-client/commit/751a8aa91d3a1f556b47e8c5d75be0f8547f0fde))
+
 ## [4.9.3](https://github.com/cds-snc/platform-forms-client/compare/v4.9.2...v4.9.3) (2026-02-17)
 
 
