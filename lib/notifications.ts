@@ -1,4 +1,4 @@
-import { sendEmail } from "@lib/integration/notifyConnector";
+import { notification } from "@gcforms/connectors";
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
@@ -41,7 +41,7 @@ export const sendNotifications = async (formId: string, titleEn: string, titleFr
     case Status.SINGLE_EMAIL_SENT:
       // Single submissions email sent but not multiple submissions email, send multiple email
       Promise.all([
-        sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, true),
+        sendEmailAfterSubmissionProcessed(users, formId, titleEn, titleFr, true),
         setMarker(formId, Status.MULTIPLE_EMAIL_SENT),
       ]);
       break;
@@ -51,7 +51,7 @@ export const sendNotifications = async (formId: string, titleEn: string, titleFr
     default:
       // No email has been sent, send single submission email
       Promise.all([
-        sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, false),
+        sendEmailAfterSubmissionProcessed(users, formId, titleEn, titleFr, false),
         setMarker(formId),
       ]);
   }
@@ -171,7 +171,7 @@ const getMarker = async (formId: string) => {
     .catch((err) => logMessage.error(`getMarker: ${err}`));
 };
 
-const sendEmailNotificationsToAllUsers = async (
+const sendEmailAfterSubmissionProcessed = async (
   users: {
     email: string;
     enabled: boolean;
@@ -181,47 +181,31 @@ const sendEmailNotificationsToAllUsers = async (
   formTitleFr: string,
   multipleSubmissions: boolean = false
 ) => {
-  if (!Array.isArray(users) || users.length === 0) {
-    logMessage.debug("sendEmailNotificationsToAllUsers missing users");
-    return;
-  }
-  users.forEach(
-    ({ email, enabled }) =>
-      enabled && sendEmailNotification(email, formId, formTitleEn, formTitleFr, multipleSubmissions)
-  );
-};
+  try {
+    const { t } = await serverTranslation("form-builder");
+    const HOST = await getOrigin();
 
-const sendEmailNotification = async (
-  email: string,
-  formId: string,
-  formTitleEn: string,
-  formTitleFr: string,
-  multipleSubmissions: boolean = false
-) => {
-  const { t } = await serverTranslation("form-builder");
-  const HOST = await getOrigin();
-  await sendEmail(
-    email,
-    {
+    if (!Array.isArray(users) || users.length === 0) {
+      logMessage.debug("Deferred notification skipped since missing users");
+      return;
+    }
+    const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
+
+    await notification.sendDeferred({
+      notificationId: formId,
+      emails,
       subject: multipleSubmissions
         ? t("settings.notifications.email.multipleSubmissions.subject")
         : t("settings.notifications.email.singleSubmission.subject"),
-      formResponse: multipleSubmissions
+      body: multipleSubmissions
         ? await multipleSubmissionsEmailTemplate(HOST, formTitleEn, formTitleFr)
         : await singleSubmissionEmailTemplate(HOST, formTitleEn, formTitleFr),
-    },
-    "notification"
-  )
-    .then(() =>
-      logMessage.debug(
-        `sendEmailNotification sent email to ${email} with formId ${formId} for type ${
-          multipleSubmissions ? "multiple email" : "single email"
-        }`
-      )
-    )
-    .catch(() =>
-      logMessage.error(`sendEmailNotification failed to send email ${email} with formId ${formId}`)
+    });
+  } catch (error) {
+    logMessage.warn(
+      `Deferred notification failed for formId ${formId} with error: ${(error as Error).message}`
     );
+  }
 };
 
 const singleSubmissionEmailTemplate = async (
