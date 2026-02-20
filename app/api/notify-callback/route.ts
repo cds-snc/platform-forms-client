@@ -168,7 +168,7 @@ export const POST = middleware([validAuthorizationHeader()], async (req, props) 
     await sqsClient.send(sendMessageCommand);
     return NextResponse.json({ status: "submission will be reprocessed" });
   } catch (error) {
-    logMessage.warn(error as Error);
+    logMessage.warn((error as Error).message);
     return NextResponse.json({ responses: "Processing error on the server side" }, { status: 500 });
   }
 });
