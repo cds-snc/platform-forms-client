@@ -64,7 +64,7 @@ latest_rainbow_rule_arn=$(
   aws elbv2 describe-rules \
     --listener-arn $listener_arn \
     --no-paginate \
-    --query "Rules[?contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow') && Priority=='1'].RuleArn" \
+    --query "Rules[?Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn && contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow') && Priority=='1'].RuleArn" \
     --output text
 )
 
