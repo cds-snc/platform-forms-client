@@ -1,27 +1,17 @@
-import { useState, useEffect } from "react";
-import { logMessage } from "@lib/logger";
+"use client";
+
 import Markdown from "markdown-to-jsx";
 import { Button } from "./Buttons";
+import { useUpdateRequired } from "@root/lib/hooks/useUpdateRequired";
+import { logMessage } from "@root/lib/logger";
 
 export const Update = () => {
-  const [updateNeeded, setUpdateNeeded] = useState(true);
-
-  const handleMessage = (event: MessageEvent) => {
-    logMessage.info(event.data);
-    if (event.data.type === "GCFORMS_UPDATE") {
-      setUpdateNeeded(true);
-    }
-  };
-
-  useEffect(() => {
-    navigator.serviceWorker.addEventListener("message", handleMessage);
-    return () => {
-      navigator.serviceWorker.removeEventListener("message", handleMessage);
-    };
-  }, []);
+  const updateRequired = useUpdateRequired(() =>
+    logMessage.info("This should hopefully now show the update page modal")
+  );
 
   // short circuit when no update needed
-  if (!updateNeeded) return null;
+  if (!updateRequired) return null;
 
   return (
     <div
@@ -42,16 +32,9 @@ export const Update = () => {
               window.location.reload();
             }}
             type="submit"
+            theme="primary"
           >
             {"Update"}
-          </Button>
-          <Button
-            onClick={() => {
-              setUpdateNeeded(false);
-            }}
-            type="button"
-          >
-            Cancel
           </Button>
         </div>
       </div>

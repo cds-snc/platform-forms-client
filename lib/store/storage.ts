@@ -1,3 +1,4 @@
+"use client";
 import { logMessage } from "@lib/logger";
 import { TemplateStoreState } from "./types";
 import { StateStorage } from "zustand/middleware";
