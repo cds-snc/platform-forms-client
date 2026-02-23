@@ -17,7 +17,7 @@ export class PostgresConnector {
   }
 
   private constructor(connectionUrl: string) {
-    this.postgresInstance = postgres(connectionUrl);
+    this.postgresInstance = postgres(connectionUrl, { ssl: "prefer" });
   }
 
   public executeSqlStatement(): Sql {
