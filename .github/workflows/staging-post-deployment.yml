@@ -1,0 +1,52 @@
+name: "Staging — Generate SBOM"
+
+on:
+  workflow_dispatch:
+
+# Limit execution to 1 and also makes new trigger events cancel currently running workflow
+concurrency:
+  group: staging-generate-sbom
+  cancel-in-progress: true
+
+permissions:
+  id-token: write
+  contents: write
+  security-events: write
+
+jobs:
+  push-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Build Form Viewer
+        run: |
+          docker build --platform=linux/amd64 --provenance false -t base \
+            --build-arg COGNITO_APP_CLIENT_ID="COGNITO_APP_CLIENT_ID" \
+            --build-arg COGNITO_USER_POOL_ID="COGNITO_USER_POOL_ID" \
+            --build-arg HCAPTCHA_SITE_KEY="HCAPTCHA_SITE_KEY" \
+            --build-arg ZITADEL_URL="ZITADEL_URL" \
+            --build-arg ZITADEL_PROJECT_ID="ZITADEL_PROJECT_ID" \
+            --build-arg API_URL="API_URL" \
+            --build-arg NEXT_DEPLOYMENT_ID=$GITHUB_SHA .
+
+      - name: Docker generate SBOM
+        uses: cds-snc/security-tools/.github/actions/generate-sbom@8d2322011f6b68da2fc47e60f23b41c1907e33e8 # v4.0.2
+        env:
+          TRIVY_DB_REPOSITORY: ${{ vars.TRIVY_DB_REPOSITORY }}
+        with:
+          docker_image: "base"
+          dockerfile_path: "Dockerfile"
+          sbom_name: "forms-client"
+          token: "${{ secrets.GITHUB_TOKEN }}"
+        continue-on-error: true # TODO: remove once Trivy ECR has been setup
+
+      - name: Report deployment to Sentinel
+        if: always()
+        uses: cds-snc/sentinel-forward-data-action@main
+        with:
+          input_data: '{"product": "forms", "sha": "${{ github.sha }}", "version": "${{ github.sha }}", "repository": "${{ github.repository }}", "environment": "staging", "status": "${{ job.status }}"}'
+          log_type: CDS_Product_Deployment_Data
+          log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
+          log_analytics_workspace_key: ${{ secrets.LOG_ANALYTICS_WORKSPACE_KEY }}
