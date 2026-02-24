@@ -51,7 +51,7 @@ export const invokeSubmissionLambda = async (
     }
   } catch (error) {
     // Logging error as info for debugging purpose
-    logMessage.info(error);
+    logMessage.info((error as Error).message);
     throw new SubmissionLambdaInvocationError((error as Error).message);
   }
 };

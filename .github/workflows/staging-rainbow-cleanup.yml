@@ -43,6 +43,8 @@ jobs:
       - name: Determine rainbow deployments to clean up
         id: determine-rainbow-deployments-ids-to-clean-up
         run: |
+          set -euo pipefail
+
           if [[ "${{ github.event_name }}" == "workflow_run" && "${{ github.event.workflow_run.conclusion }}" == "failure" ]]; then
             echo 'ids=["${{ github.event.workflow_run.head_sha }}"]' >> "$GITHUB_OUTPUT"
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.deployment-identifier }}" != "all" ]]; then
@@ -54,7 +56,7 @@ jobs:
               aws elbv2 describe-rules \
                 --listener-arn ${{ env.LOAD_BALANCER_LISTENER_ARN }} \
                 --no-paginate \
-                --query "Rules[?contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')]" \
+                --query "Rules[?Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn && contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')]" \
                 | jq --argjson max "$maxNumberOfRulesToSelect" -r '.[] | select(.Priority | tonumber > $max) | .RuleArn'
             ))
 
