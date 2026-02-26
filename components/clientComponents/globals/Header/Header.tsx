@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
@@ -9,6 +9,7 @@ import { FileNameInput } from "./FileName";
 import { ShareDropdown } from "./ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
+import { Button } from "@clientComponents/globals";
 import Markdown from "markdown-to-jsx";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
@@ -32,6 +33,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
 
   const { getFlag } = useFeatureFlags();
   const isEnabled = getFlag(FeatureFlags.topBanner);
+  const isZitadelLoginEnabled = getFlag(FeatureFlags.zitadelLogin);
 
   useEffect(() => {
     async function fetchBannerData() {
@@ -98,9 +100,21 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
             <ul className="mt-2 flex list-none px-0 text-base">
               {status !== "authenticated" && (
                 <li className="mr-2 py-2 text-base tablet:mr-4">
-                  <Link href={`/${language}/auth/login`} prefetch={false}>
-                    {t("loginMenu.login")}
-                  </Link>
+                  {isZitadelLoginEnabled ? (
+                    <form
+                      action={async () => {
+                        await signIn("gcForms", { redirectTo: `/${language}/auth/policy` });
+                      }}
+                    >
+                      <Button type="submit" theme="link">
+                        {t("loginMenu.login")}
+                      </Button>
+                    </form>
+                  ) : (
+                    <Link href={`/${language}/auth/login`} prefetch={false}>
+                      {t("loginMenu.login")}
+                    </Link>
+                  )}
                 </li>
               )}
               {

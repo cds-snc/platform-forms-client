@@ -1,6 +1,8 @@
 import { serverTranslation } from "@i18n";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { Metadata } from "next";
+import { authCheckAndRedirect } from "@lib/actions";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -15,7 +17,15 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page() {
+export default async function Page(props: { params: Promise<{ locale: string }> }) {
+  const params = await props.params;
+  const { locale } = params;
+
+  const { session } = await authCheckAndRedirect();
+  if (session.user.accountUrl) {
+    redirect(`/${locale}/forms`);
+  }
+
   const { t, i18n } = await serverTranslation(["signup"]);
 
   return (

@@ -1,6 +1,5 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { retrievePoolOfSecurityQuestions, retrieveUserSecurityQuestions } from "@lib/auth";
 import { Profile } from "./components/server/Profile";
 import { authCheckAndRedirect } from "@lib/actions";
 import { authorization } from "@lib/privileges";
@@ -24,23 +23,22 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
 
   const { locale } = params;
 
-  const { session, ability } = await authCheckAndRedirect();
+  const { session } = await authCheckAndRedirect();
 
-  if (session.user.accountUrl) {
-    redirect(`/${locale}/profile/oidc`);
+  if (!session.user.accountUrl) {
+    redirect(`/${locale}/profile`);
   }
 
   const userCanPublish = await authorization.hasPublishFormsPrivilege();
-  const [userQuestions, allQuestions] = await Promise.all([
-    retrieveUserSecurityQuestions({ userId: ability.user.id }),
-    retrievePoolOfSecurityQuestions(),
-  ]);
 
   return (
     <Profile
       locale={locale}
       email={session.user.email}
-      {...{ publishingStatus: userCanPublish, userQuestions, allQuestions }}
+      givenName={session.user.profile?.givenName}
+      familyName={session.user.profile?.familyName}
+      accountUrl={session.user.accountUrl}
+      publishingStatus={userCanPublish}
     />
   );
 }

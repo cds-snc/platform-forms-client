@@ -7,6 +7,13 @@ declare module "next-auth" {
       id: string;
       email: string;
       name: string | null;
+      profile?: {
+        givenName?: string;
+        familyName?: string;
+        preferredUsername?: string;
+        emailVerified?: boolean;
+      };
+      accountUrl?: string;
       lastLoginTime?: Date;
       privileges: RawRuleOf<MongoAbility<Abilities>>[];
       acceptableUse: boolean;
@@ -23,6 +30,15 @@ declare module "next-auth/jwt" {
     userId?: string;
     name: string;
     email: string;
+    profile?: {
+      givenName?: string;
+      familyName?: string;
+      preferredUsername?: string;
+      emailVerified?: boolean;
+    };
+    provider?: string;
+    issuer?: string;
+    accountUrl?: string;
     lastLoginTime?: Date;
     acceptableUse?: boolean;
     hasSecurityQuestions?: boolean;
