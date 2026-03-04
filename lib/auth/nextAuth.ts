@@ -245,6 +245,7 @@ const {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
         if (account.provider === "gcForms") {
+          /* ZITADEL OIDC provider - extract identity claims and store in token for use in session and authorization decisions  */
           const profileClaims = profile as
             | {
                 iss?: string;
