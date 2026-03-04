@@ -18,6 +18,9 @@ export async function generateMetadata(props: {
   };
 }
 
+/*
+Profile page for OIDC flow
+*/
 export default async function Page(props: { params: Promise<{ locale: string }> }) {
   const params = await props.params;
 
@@ -25,6 +28,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
 
   const { session } = await authCheckAndRedirect();
 
+  // Redirect if someone lands on this page and isn't an OIDC session
   if (!session.user.accountUrl) {
     redirect(`/${locale}/profile`);
   }
