@@ -1,5 +1,8 @@
 import { AdapterUser } from "next-auth/adapters";
 
+/*
+ * These functions sanitize user data before it's sent to the NextAuth adapter. They ensure that only valid fields are included and that the data types are correct.
+ */
 export const sanitizeAdapterCreateUser = (user: AdapterUser): AdapterUser => {
   return {
     id: user.id,
