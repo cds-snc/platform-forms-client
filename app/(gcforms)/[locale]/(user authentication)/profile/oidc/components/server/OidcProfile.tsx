@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { Icon } from "../../../components/server/Icon";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
-interface ProfileProps {
+interface OidcProfileProps {
   locale: string;
   email: string;
   givenName?: string;
@@ -13,14 +13,14 @@ interface ProfileProps {
 /*
  Profile page for OIDC flow
 */
-export const Profile = async ({
+export const OidcProfile = async ({
   locale,
   email,
   givenName,
   familyName,
   accountUrl,
   publishingStatus,
-}: ProfileProps) => {
+}: OidcProfileProps) => {
   const { t } = await serverTranslation(["profile"], { lang: locale });
 
   return (

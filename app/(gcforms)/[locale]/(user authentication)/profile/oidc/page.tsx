@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { Profile } from "./components/server/Profile";
+import { OidcProfile } from "./components/server/OidcProfile";
 import { authCheckAndRedirect } from "@lib/actions";
 import { authorization } from "@lib/privileges";
 import { redirect } from "next/navigation";
@@ -36,7 +36,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const userCanPublish = await authorization.hasPublishFormsPrivilege();
 
   return (
-    <Profile
+    <OidcProfile
       locale={locale}
       email={session.user.email}
       givenName={session.user.profile?.givenName}
