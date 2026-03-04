@@ -9,6 +9,9 @@ type FederatedLogoutProps = {
   clientId?: string;
 };
 
+/*
+ * This component handles federated logout for OIDC providers. It ensures that the user is redirected to the OIDC provider's end session endpoint with the appropriate parameters, and then back to the application after logout.
+ */
 export const FederatedLogout = ({
   endSessionEndpoint,
   returnTo,
