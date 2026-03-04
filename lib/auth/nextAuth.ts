@@ -82,7 +82,6 @@ const {
         },
       },
       profile(profile) {
-        logMessage.debug(`GCForms SSO profile information: ${JSON.stringify(profile)}`);
         return {
           id: profile.sub,
           name: profile.name,
@@ -248,8 +247,6 @@ const {
 
   callbacks: {
     async jwt({ token, account, profile, trigger, session }) {
-      logMessage.info(`JWT account information: ${JSON.stringify(account)}`);
-
       // account is only available on the first call to the JWT function
       if (account?.provider) {
         if (account.provider === "gcForms") {
