@@ -334,9 +334,6 @@ const {
       return token;
     },
     async session(params) {
-      logMessage.info(`==== session params ====`);
-      logMessage.info(JSON.stringify(params));
-
       const { session, token } = params as { session: Session; token: JWT };
       const userProfile = token.profile as
         | {
