@@ -181,8 +181,6 @@ const {
   adapter,
   events: {
     async signIn({ user }) {
-      logMessage.info(`User ${user.email} signed in ${JSON.stringify(user)}`);
-
       if (!user.email) {
         logMessage.error(
           "Could not produce UserSignIn audit log because of undefined email information"
