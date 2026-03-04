@@ -31,5 +31,9 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
     redirect(`/${locale}/forms`);
   }
 
+  {
+    /* For OIDC we redirect to the SSO login page */
+  }
+
   return <div id="auth-panel">{isOidc ? <OidcRedirect locale={locale} /> : <LoginForm />}</div>;
 }
