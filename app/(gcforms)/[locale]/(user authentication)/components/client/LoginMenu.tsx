@@ -1,15 +1,28 @@
 "use client";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
-import { logout } from "../action";
 import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { clearTemplateStore } from "@lib/store/utils";
 
 export const LoginMenu = () => {
   const { i18n, t } = useTranslation("common");
-  const handleClick = async () => {
+  const handleClick = () => {
     clearTemplateStore();
-    await logout(i18n.language);
+
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const timeOptions = { timeZone: tz };
+    const enTime = new Date().toLocaleString("en-CA", timeOptions);
+    const frTime = new Date().toLocaleString("fr-CA", timeOptions);
+
+    const logoutTime = JSON.stringify({
+      en: enTime,
+      fr: frTime,
+    });
+
+    sessionStorage.setItem("logoutTime", logoutTime);
+
+    void signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
   const session = useSession();
 
