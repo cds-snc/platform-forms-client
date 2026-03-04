@@ -25,7 +25,6 @@ export const getOrCreateUser = async ({
   email?: string | null;
   picture?: string | null;
 }): Promise<{
-  newlyRegistered?: boolean;
   name: string | null;
   email: string;
   privileges: Privilege[];
@@ -93,7 +92,7 @@ export const getOrCreateUser = async ({
 
     if (newUser !== null) {
       logEvent(newUser.id, { type: "User", id: newUser.id }, "UserRegistration");
-      return { ...newUser, newlyRegistered: true };
+      return newUser;
     }
 
     return null;

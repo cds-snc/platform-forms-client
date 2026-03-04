@@ -204,8 +204,8 @@ const _sendInvitationEmail = async (
   }
 
   // User does not exist, send invitation to register
-  const registerUrlEn = `${HOST}/en/auth/register`;
-  const registerUrlFr = `${HOST}/fr/auth/register`;
+  const registerUrlEn = `${HOST}/en/auth/policy`;
+  const registerUrlFr = `${HOST}/fr/auth/policy`;
 
   const emailContent = inviteToFormsEmailTemplate(
     sender.name || "",

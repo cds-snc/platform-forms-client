@@ -12,7 +12,7 @@ export const AuthenticatedAction = <Input extends unknown[], R>(
     const session = await auth();
     if (session === null) {
       const language = await getCurrentLanguage();
-      redirect(`/${language}/auth/login`);
+      redirect(`/${language}/auth/policy`);
     }
     return action(session, ...args);
   };
@@ -30,6 +30,6 @@ export const authCheckAndThrow = async () => {
 export const authCheckAndRedirect = async () => {
   return authCheckAndThrow().catch(async () => {
     const language = await getCurrentLanguage();
-    redirect(`/${language}/auth/login`);
+    redirect(`/${language}/auth/policy`);
   });
 };

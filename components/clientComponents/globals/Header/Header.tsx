@@ -33,7 +33,6 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
 
   const { getFlag } = useFeatureFlags();
   const isEnabled = getFlag(FeatureFlags.topBanner);
-  const isZitadelLoginEnabled = getFlag(FeatureFlags.zitadelLogin);
 
   useEffect(() => {
     async function fetchBannerData() {
@@ -100,21 +99,15 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
             <ul className="mt-2 flex list-none px-0 text-base">
               {status !== "authenticated" && (
                 <li className="mr-2 py-2 text-base tablet:mr-4">
-                  {isZitadelLoginEnabled ? (
-                    <form
-                      action={async () => {
-                        await signIn("gcForms", { redirectTo: `/${language}/auth/policy` });
-                      }}
-                    >
-                      <Button type="submit" theme="link">
-                        {t("loginMenu.login")}
-                      </Button>
-                    </form>
-                  ) : (
-                    <Link href={`/${language}/auth/login`} prefetch={false}>
+                  <form
+                    action={async () => {
+                      await signIn("gcForms", { redirectTo: `/${language}/auth/policy` });
+                    }}
+                  >
+                    <Button type="submit" theme="link">
                       {t("loginMenu.login")}
-                    </Link>
-                  )}
+                    </Button>
+                  </form>
                 </li>
               )}
               {

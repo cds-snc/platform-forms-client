@@ -29,7 +29,7 @@ export function AuthenticatedPage<T>(
     const session = await auth();
     const language: string = await getCurrentLanguage();
     if (session === null) {
-      redirect(`/${language}/auth/login`);
+      redirect(`/${language}/auth/policy`);
     }
 
     if (typeof arg1 === "function") {
@@ -65,7 +65,7 @@ export function AuthenticatedLayout<T>(
     const session = await auth();
     const language: string = await getCurrentLanguage();
     if (session === null) {
-      redirect(`/${language}/auth/login`);
+      redirect(`/${language}/auth/policy`);
     }
     if (typeof arg1 === "function") {
       return arg1({ ...props, session });

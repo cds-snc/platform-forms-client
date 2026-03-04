@@ -17,9 +17,7 @@ declare module "next-auth" {
       lastLoginTime?: Date;
       privileges: RawRuleOf<MongoAbility<Abilities>>[];
       acceptableUse: boolean;
-      newlyRegistered?: boolean;
       deactivated?: boolean;
-      hasSecurityQuestions: boolean;
       featureFlags?: string[];
     };
   }
@@ -36,13 +34,10 @@ declare module "next-auth/jwt" {
       preferredUsername?: string;
       emailVerified?: boolean;
     };
-    provider?: string;
     issuer?: string;
     accountUrl?: string;
     lastLoginTime?: Date;
     acceptableUse?: boolean;
-    hasSecurityQuestions?: boolean;
-    newlyRegistered?: boolean;
     deactivated?: boolean;
   }
 }

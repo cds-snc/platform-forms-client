@@ -17,8 +17,7 @@ interface LoggedOutTabProps {
 
 export const LoggedOutTab = async ({ tabName }: LoggedOutTabProps) => {
   const { t, i18n } = await serverTranslation("form-builder");
-  const signInLink = `/${i18n.language}/auth/login`;
-  const createAccountLink = `/${i18n.language}/auth/register`;
+  const signInLink = `/${i18n.language}/auth/policy`;
 
   return (
     <Card
@@ -30,16 +29,12 @@ export const LoggedOutTab = async ({ tabName }: LoggedOutTabProps) => {
     >
       <h1 className="gc-h2 text-[#748094]">{t(`loggedOutTab.${tabName}.title`)}</h1>
       <p className="mb-6">
-        {t(`loggedOutTab.${tabName}.text1`)} <a href={signInLink}>{t("loggedOutTab.text2")}</a>.{" "}
-        {t("loggedOutTab.text3")} <a href={createAccountLink}>{t("loggedOutTab.text4")}</a>.
+        {t(`loggedOutTab.${tabName}.text1`)} <a href={signInLink}>{t("loggedOutTab.text2")}</a>.
       </p>
       <p>
         <LinkButton.Primary href={signInLink} className="mr-4">
           {t("loggedOutTab.signinButton")}
         </LinkButton.Primary>
-        <LinkButton.Secondary href={createAccountLink}>
-          {t("loggedOutTab.createButton")}
-        </LinkButton.Secondary>
       </p>
     </Card>
   );

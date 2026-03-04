@@ -28,7 +28,6 @@ describe("Test a session middleware", () => {
         image: "null",
         deactivated: true,
         acceptableUse: false,
-        hasSecurityQuestions: true,
         privileges: [],
       },
     };
@@ -50,7 +49,6 @@ describe("Test a session middleware", () => {
         image: "null",
         deactivated: false,
         acceptableUse: true,
-        hasSecurityQuestions: true,
         privileges: [],
       },
     };

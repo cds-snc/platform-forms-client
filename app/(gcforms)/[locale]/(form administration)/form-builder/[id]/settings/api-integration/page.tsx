@@ -56,11 +56,6 @@ export default AuthenticatedPage(
       redirect(`/${locale}/auth/policy`);
     }
 
-    if (session && !session.user.hasSecurityQuestions) {
-      // If they haven't setup security questions Use redirect to policy page for acceptance
-      redirect(`/${locale}/auth/setup-security-questions`);
-    }
-
     // Get template and check if delivery option is email
     const template = await getFullTemplateByID(id);
     const isEmailDelivery = template?.deliveryOption?.emailAddress !== undefined;

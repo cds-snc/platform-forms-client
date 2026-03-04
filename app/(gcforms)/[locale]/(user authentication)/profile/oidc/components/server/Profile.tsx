@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { Icon } from "../../../components/server/Icon";
+import { Icon } from "./Icon";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
 interface ProfileProps {

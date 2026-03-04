@@ -55,18 +55,14 @@ export const AcceptButton = () => {
     setIsLoading(true);
 
     // Update the session to reflect the user has accepted the terms of use.
-    const session = await update({
+    await update({
       user: { acceptableUse: true },
     });
 
     // Needed for cypress e2e testing
     updateSessionProvider();
 
-    if (!session?.user.accountUrl && session?.user.newlyRegistered) {
-      router.push(`/${language}/auth/account-created`);
-    } else {
-      router.push(defaultRoute);
-    }
+    router.push(defaultRoute);
   };
 
   return (

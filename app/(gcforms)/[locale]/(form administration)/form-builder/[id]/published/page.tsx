@@ -38,7 +38,7 @@ export default async function Page(props: { params: Promise<{ locale: string; id
   }));
 
   if (!session) {
-    redirect(`/${locale}/auth/login`);
+    redirect(`/${locale}/auth/policy`);
   }
 
   const isPublished = await getTemplatePublishedStatus(id);

@@ -56,11 +56,7 @@ const { auth } = NextAuth({
         name: token.name ?? null,
         email: token.email,
         privileges: [],
-        ...(token.provider !== "gcForms" &&
-          token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
         ...(token.deactivated && { deactivated: token.deactivated }),
-        hasSecurityQuestions:
-          token.provider === "gcForms" ? true : (token.hasSecurityQuestions ?? false),
       };
       return session;
     },
@@ -291,7 +287,7 @@ const authFlowRedirect = (
 
   const lang = pathLang || cookieLang || fallbackLng;
 
-  const onAuthFlow = path.startsWith("/auth/mfa") || path.startsWith("/auth/restricted-access");
+  const onAuthFlow = path.startsWith("/auth/restricted-access");
 
   const onSupport =
     path.startsWith("/support") || path.startsWith("/sla") || path.startsWith("/terms-of-use");
@@ -302,28 +298,11 @@ const authFlowRedirect = (
 
   // Ignore if user is in the auth flow of MfA
   if (session && !onAuthFlow) {
+    // Redirect to policy page only if users aren't on the policy or support pages
     if (
-      !session.user.hasSecurityQuestions &&
-      !path.startsWith("/auth/setup-security-questions") &&
-      // Let them access support related pages if having issues with Security Questions
-      !onSupport
-    ) {
-      logMessage.debug(
-        `Middleware Action: User has not setup security questions, redirecting from ${path} to setup-security-questions`
-      );
-      // check if user has setup security questions setup
-
-      const securityQuestionsPage = new URL(`/${lang}/auth/setup-security-questions`, origin);
-      debugLogger(`Middleware: Redirecting to ${securityQuestionsPage}`);
-      return NextResponse.redirect(securityQuestionsPage);
-    }
-    // Redirect to policy page only if users aren't on the policy, support, or security questions page
-    if (
-      session.user.hasSecurityQuestions &&
       !session.user.acceptableUse &&
       !onSupport &&
       !path.startsWith("/auth/policy") &&
-      !path.startsWith("/auth/setup-security-questions") &&
       // If they don't want to accept let them log out
       !path.startsWith("/auth/logout")
     ) {
@@ -347,15 +326,7 @@ const pageRequiresAuth = (req: NextAuthRequest, pathname: string, pathLang: stri
   const path = pathname.replace(`/${pathLang}/`, "/");
   const session = req.auth;
 
-  const pathsRequiringAuth = [
-    "/admin",
-    "/forms",
-    "/unlock-publishing",
-    "/profile",
-    "/auth/setup-security-questions",
-    "/auth/policy",
-    "/auth/account-created",
-  ];
+  const pathsRequiringAuth = ["/admin", "/forms", "/unlock-publishing", "/profile", "/auth/policy"];
 
   const onProtectedPath = pathsRequiringAuth.find((protectedPath) => {
     // If the path is the same as the protected path or it starts with the protected path
@@ -365,7 +336,7 @@ const pageRequiresAuth = (req: NextAuthRequest, pathname: string, pathLang: stri
 
   if (!session && onProtectedPath) {
     debugLogger(`Middleware Action: Redirecting unauthenticated user to login page from ${path}`);
-    const login = new URL(`/${pathLang}/auth/login`, req.nextUrl.origin);
+    const login = new URL(`/${pathLang}/auth/policy`, req.nextUrl.origin);
     return NextResponse.redirect(login);
   }
 };

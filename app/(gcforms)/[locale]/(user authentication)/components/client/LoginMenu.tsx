@@ -1,9 +1,10 @@
 "use client";
 import { useTranslation } from "@i18n/client";
-import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { logout } from "../action";
 import { useSession } from "next-auth/react";
 import { clearTemplateStore } from "@lib/store/utils";
+import { Button } from "@clientComponents/globals";
 
 export const LoginMenu = () => {
   const { i18n, t } = useTranslation("common");
@@ -29,7 +30,15 @@ export const LoginMenu = () => {
           {t("loginMenu.logout")}
         </button>
       ) : (
-        <Link href={`/${i18n.language}/auth/login`}>{t("loginMenu.login")}</Link>
+        <form
+          action={async () => {
+            await signIn("gcForms", { redirectTo: `/${i18n.language}/auth/policy` });
+          }}
+        >
+          <Button type="submit" theme="link" className="p-0">
+            {t("loginMenu.login")}
+          </Button>
+        </form>
       )}
     </div>
   );

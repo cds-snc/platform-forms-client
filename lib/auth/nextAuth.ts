@@ -1,7 +1,5 @@
-import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { CredentialsSignin, Session } from "next-auth";
 import { AdapterUser } from "next-auth/adapters";
-import { userHasSecurityQuestions, validate2FAVerificationCode } from "@lib/auth/";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
@@ -13,7 +11,6 @@ import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStat
 import { JWT } from "next-auth/jwt";
 import { cache } from "react";
 import { headers } from "next/headers";
-import { checkOne } from "@lib/cache/flags";
 import {
   sanitizeAdapterCreateUser,
   sanitizeAdapterUpdateUser,
@@ -91,65 +88,6 @@ const {
         };
       },
     },
-
-    CredentialsProvider({
-      id: "mfa",
-      name: "MultiFactorAuth",
-      credentials: {
-        authenticationFlowToken: { label: "Authentication flow token", type: "text" },
-        username: { label: "Username", type: "text" },
-        verificationCode: { label: "Verification Code", type: "text" },
-      },
-      async authorize(credentials) {
-        const { authenticationFlowToken, username, verificationCode } = credentials ?? {};
-
-        // Check to ensure all required credentials were passed in
-        if (
-          typeof authenticationFlowToken !== "string" ||
-          typeof username !== "string" ||
-          typeof verificationCode !== "string"
-        ) {
-          return null;
-        }
-
-        // Check for test accounts being used
-        if (
-          [
-            "test.user@cds-snc.ca",
-            "test.admin@cds-snc.ca",
-            "test.deactivated@cds-snc.ca",
-            "test.withoutsecurityanswers@cds-snc.ca",
-          ].includes(username)
-        ) {
-          // If we're not in test mode throw an error
-          if (process.env.APP_ENV !== "test") {
-            logMessage.error(`Test account ${username} was used in a non-testing environment.`);
-            throw new Error("Test accounts misuse");
-          }
-
-          return {
-            // id is not used by the app, but is required by next-auth
-            id: "test",
-            email: username,
-          };
-        }
-
-        const { valid, decodedCognitoToken } = await validate2FAVerificationCode(
-          authenticationFlowToken,
-          username,
-          verificationCode
-        );
-
-        if (valid) {
-          if (!decodedCognitoToken) {
-            logMessage.error("Missing decoded Cognito token in 2FA validation result");
-            throw new Error("2FA validation");
-          }
-          return decodedCognitoToken;
-        }
-        return null;
-      },
-    }),
   ],
 
   // When building the app use a random UUID as the token secret
@@ -272,12 +210,6 @@ const {
           });
         }
 
-        // If the GCForms SSO provider was used, but is not enabled, refuse the session
-        const isZitadelLoginEnabled = await checkOne("zitadelLogin");
-        if (!isZitadelLoginEnabled && account.provider === "gcForms") {
-          throw new Error("Provider for GCForms SSO is not an active option");
-        }
-
         if (!token.email) {
           logMessage.error(`JWT token does not have an email for user with name ${token.name}`);
           throw new Error(`JWT token`);
@@ -290,14 +222,6 @@ const {
 
         token.userId = internalUser.id;
         token.lastLoginTime = new Date();
-        token.newlyRegistered = internalUser.newlyRegistered;
-        // Store provider to skip security questions for Zitadel users
-        token.provider = account.provider;
-
-        // Check if user has setup required Security Questions
-        if (account.provider !== "gcForms" && !token.hasSecurityQuestions) {
-          token.hasSecurityQuestions = await userHasSecurityQuestions({ userId: token.userId });
-        }
 
         // If name isn't passed in by the provider, use the name from the database
         if (!token.name) {
@@ -353,15 +277,11 @@ const {
         acceptableUse: token.acceptableUse ?? false,
         name: token.name ?? null,
         email: token.email,
-        accountUrl: token.provider === "gcForms" ? token.accountUrl : undefined,
+        accountUrl: token.accountUrl,
         privileges: await getPrivilegeRulesForUser(token.userId as string),
-        ...(token.provider !== "gcForms" &&
-          token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
         // Used client side to immidiately log out a user if they have been deactivated
         ...(token.deactivated && { deactivated: token.deactivated }),
         featureFlags: await getUserFeatureFlags(token.userId as string),
-        hasSecurityQuestions:
-          token.provider === "gcForms" ? true : (token.hasSecurityQuestions ?? false),
       };
       (session.user as Session["user"] & { profile?: typeof userProfile }).profile = userProfile;
       return session;
