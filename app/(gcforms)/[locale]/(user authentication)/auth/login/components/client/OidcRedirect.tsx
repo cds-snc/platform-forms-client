@@ -9,7 +9,7 @@ type OidcRedirectProps = {
 
 export const OidcRedirect = ({ locale }: OidcRedirectProps) => {
   useEffect(() => {
-    void signIn("gcForms", { redirectTo: `/${locale}/auth/policy` });
+    void signIn("gcForms", { redirectTo: `/${locale}/auth/policy` }, { max_age: 0 });
   }, [locale]);
 
   return null;

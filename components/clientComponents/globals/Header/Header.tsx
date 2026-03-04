@@ -103,7 +103,11 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
                   {isZitadelLoginEnabled ? (
                     <form
                       action={async () => {
-                        await signIn("gcForms", { redirectTo: `/${language}/auth/policy` });
+                        await signIn(
+                          "gcForms",
+                          { redirectTo: `/${language}/auth/policy` },
+                          { max_age: 0 }
+                        );
                       }}
                     >
                       <Button type="submit" theme="link">

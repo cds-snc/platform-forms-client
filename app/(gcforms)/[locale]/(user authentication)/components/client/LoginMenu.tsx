@@ -21,6 +21,10 @@ export const LoginMenu = () => {
     });
 
     sessionStorage.setItem("logoutTime", logoutTime);
+    const oidcIdToken = session.data?.user.oidcIdToken;
+    if (oidcIdToken) {
+      sessionStorage.setItem("oidcIdToken", oidcIdToken);
+    }
 
     void signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };

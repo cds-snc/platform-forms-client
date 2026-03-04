@@ -28,6 +28,11 @@ export const FederatedLogout = ({
     const url = new URL(endSessionEndpoint);
     const returnToUrl = new URL(returnTo, window.location.origin).toString();
     url.searchParams.set("post_logout_redirect_uri", returnToUrl);
+    const oidcIdToken = window.sessionStorage.getItem("oidcIdToken");
+    if (oidcIdToken) {
+      url.searchParams.set("id_token_hint", oidcIdToken);
+      window.sessionStorage.removeItem("oidcIdToken");
+    }
     if (clientId) {
       url.searchParams.set("client_id", clientId);
     }
