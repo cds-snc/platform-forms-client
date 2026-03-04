@@ -160,7 +160,6 @@ export const POST = middleware([validAuthorizationHeader()], async (req, props) 
 
     const sendMessageCommand = new SendMessageCommand({
       MessageBody: JSON.stringify({ submissionID: submissionID }),
-      MessageDeduplicationId: submissionID,
       MessageGroupId: "Group-" + submissionID,
       QueueUrl: queueUrl,
     });
