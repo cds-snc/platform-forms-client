@@ -26,6 +26,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
 
   const { session, ability } = await authCheckAndRedirect();
 
+  // For OIDC flow we want to move them to the OIDC profile page instead of showing the security questions
   if (session.user.accountUrl) {
     redirect(`/${locale}/profile/oidc`);
   }

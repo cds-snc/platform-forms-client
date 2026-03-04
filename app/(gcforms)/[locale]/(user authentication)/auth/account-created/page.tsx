@@ -22,6 +22,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const { locale } = params;
 
   const { session } = await authCheckAndRedirect();
+  // Skip the account created page for OIDC flow
   if (session.user.accountUrl) {
     redirect(`/${locale}/forms`);
   }
