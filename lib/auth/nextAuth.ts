@@ -234,9 +234,6 @@ const {
       );
     },
     async signOut(obj) {
-      logMessage.info("=== sign out ===");
-      logMessage.info(JSON.stringify(obj));
-
       if ("token" in obj && obj.token !== null) {
         // Token will always be availabe because we leverage JWT for session management
         const userId = (obj.token as JWT).userId ?? "Unknown User ID";
