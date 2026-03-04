@@ -10,7 +10,9 @@ interface ProfileProps {
   accountUrl?: string;
   publishingStatus: boolean;
 }
-
+/*
+ Profile page for OIDC flow
+*/
 export const Profile = async ({
   locale,
   email,
