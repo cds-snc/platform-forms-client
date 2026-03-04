@@ -24,7 +24,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const params = await props.params;
 
   const { locale } = params;
-  const isOidc = await checkOne(FeatureFlags.zitadelLogin);
+  const isOidc = process.env.APP_ENV !== "test" && (await checkOne(FeatureFlags.zitadelLogin));
 
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
   if (session) {
