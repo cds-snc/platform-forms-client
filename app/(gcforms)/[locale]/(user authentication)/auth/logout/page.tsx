@@ -1,4 +1,6 @@
 import { serverTranslation } from "@i18n";
+import { checkOne } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 import { Metadata } from "next";
 import { LocalTime } from "./components/LocalTime";
 import { SignInButton } from "./components/SignInButton";
@@ -17,15 +19,11 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page(props: {
-  params: Promise<{ locale: string }>;
-  searchParams: Promise<{ oidc?: string }>;
-}) {
+export default async function Page(props: { params: Promise<{ locale: string }> }) {
   const params = await props.params;
-  const searchParams = await props.searchParams;
 
   const { locale } = params;
-  const isOidc = searchParams.oidc === "1";
+  const isOidc = await checkOne(FeatureFlags.zitadelLogin);
 
   const { t } = await serverTranslation("logout", { lang: locale });
 

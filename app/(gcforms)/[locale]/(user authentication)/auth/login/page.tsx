@@ -1,6 +1,9 @@
 import { serverTranslation } from "@i18n";
+import { checkOne } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 import { Metadata } from "next";
 import { LoginForm } from "./components/client/LoginForm";
+import { OidcRedirect } from "./components/client/OidcRedirect";
 import { authCheckAndThrow } from "@lib/actions";
 import { redirect } from "next/navigation";
 
@@ -21,15 +24,12 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const params = await props.params;
 
   const { locale } = params;
+  const isOidc = await checkOne(FeatureFlags.zitadelLogin);
 
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
   if (session) {
     redirect(`/${locale}/forms`);
   }
 
-  return (
-    <div id="auth-panel">
-      <LoginForm />
-    </div>
-  );
+  return <div id="auth-panel">{isOidc ? <OidcRedirect locale={locale} /> : <LoginForm />}</div>;
 }
