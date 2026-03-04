@@ -132,6 +132,7 @@ export const getErrorText = async (language: string, errorID: string) => {
 };
 
 export const getRedirectPath = AuthenticatedAction(async (session, locale: string) => {
+  /* Skip for OIDC flow */
   if (
     !session.user.accountUrl &&
     (session.user.newlyRegistered || !session.user.hasSecurityQuestions)
