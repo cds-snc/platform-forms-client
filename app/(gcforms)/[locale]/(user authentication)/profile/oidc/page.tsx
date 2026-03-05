@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { retrievePoolOfSecurityQuestions, retrieveUserSecurityQuestions } from "@lib/auth";
-import { Profile } from "./components/server/Profile";
+import { OidcProfile } from "./components/server/OidcProfile";
 import { authCheckAndRedirect } from "@lib/actions";
 import { authorization } from "@lib/privileges";
 import { redirect } from "next/navigation";
@@ -19,29 +18,31 @@ export async function generateMetadata(props: {
   };
 }
 
+/*
+Profile page for OIDC flow
+*/
 export default async function Page(props: { params: Promise<{ locale: string }> }) {
   const params = await props.params;
 
   const { locale } = params;
 
-  const { session, ability } = await authCheckAndRedirect();
+  const { session } = await authCheckAndRedirect();
 
-  // For OIDC flow we want to move them to the OIDC profile page instead of showing the security questions
-  if (session.user.accountUrl) {
-    redirect(`/${locale}/profile/oidc`);
+  // Redirect if someone lands on this page and isn't an OIDC session
+  if (!session.user.accountUrl) {
+    redirect(`/${locale}/profile`);
   }
 
   const userCanPublish = await authorization.hasPublishFormsPrivilege();
-  const [userQuestions, allQuestions] = await Promise.all([
-    retrieveUserSecurityQuestions({ userId: ability.user.id }),
-    retrievePoolOfSecurityQuestions(),
-  ]);
 
   return (
-    <Profile
+    <OidcProfile
       locale={locale}
       email={session.user.email}
-      {...{ publishingStatus: userCanPublish, userQuestions, allQuestions }}
+      givenName={session.user.profile?.givenName}
+      familyName={session.user.profile?.familyName}
+      accountUrl={session.user.accountUrl}
+      publishingStatus={userCanPublish}
     />
   );
 }
