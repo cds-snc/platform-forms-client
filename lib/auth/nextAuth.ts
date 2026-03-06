@@ -244,8 +244,8 @@ const {
     async jwt({ token, account, profile, trigger, session }) {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
+        /* ZITADEL OIDC provider - extract identity claims and store in token for use in session and authorization decisions  */
         if (account.provider === "gcForms") {
-          /* ZITADEL OIDC provider - extract identity claims and store in token for use in session and authorization decisions  */
           const profileClaims = profile as
             | {
                 iss?: string;
@@ -260,6 +260,8 @@ const {
           if (oidcAccount.id_token) {
             token.oidcIdToken = oidcAccount.id_token;
           }
+
+          token.hasSecurityQuestions = true; // Set to true OICDC flow
 
           applyIdentityClaimsToToken(token, {
             iss: profileClaims?.iss,
@@ -291,7 +293,6 @@ const {
         token.newlyRegistered = internalUser.newlyRegistered;
         // Store provider to skip security questions for Zitadel users
         token.provider = account.provider;
-        token.hasSecurityQuestions = true; // Set to true OICDC flow
 
         // If name isn't passed in by the provider, use the name from the database
         if (!token.name) {
@@ -312,7 +313,7 @@ const {
         };
       }
 
-      // Any logic that needs to happen after JWT initializtion needs to be below this point.
+      // ⚠️  Any logic that needs to happen after JWT initializtion needs to be below this point.
 
       // Check if user has setup required Security Questions
       if (token.provider !== "gcForms" && !token.hasSecurityQuestions) {
