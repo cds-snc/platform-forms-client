@@ -1,0 +1,166 @@
+// Note: default font applied to html tag in _app.tsx
+@layer base {
+  body {
+    @apply text-base leading-7 text-slate-800;
+  }
+
+  h1 {
+    @apply text-3xl tablet:text-4xl font-semibold mb-6;
+  }
+
+  h2 {
+    @apply text-2xl tablet:text-3xl font-semibold mb-4;
+  }
+
+  h3 {
+    @apply text-xl tablet:text-2xl font-semibold mb-2;
+  }
+
+  h4 {
+    @apply text-lg tablet:text-xl font-semibold;
+  }
+
+  h5 {
+    @apply text-base tablet:text-lg font-normal;
+  }
+
+  // Wrapper for frontend forms and pages
+  .gc-formview,
+  .gc-authpages {
+    .text-base {
+      @apply text-xl leading-7;
+    }
+
+    @apply text-xl text-gray-front;
+  }
+
+  .gc-authpages {
+    h1 {
+      @apply border-b-0 pb-2 mb-12;
+    }
+  }
+}
+
+// Headings
+.gcds-page,
+.gc-formview {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+    margin-block-end: var(--gcds-heading-spacing-300);
+  }
+
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-block-start: var(--gcds-heading-spacing-600);
+  }
+
+  h1 {
+    max-width: var(--gcds-heading-character-limit-h1);
+    font: var(--gcds-heading-h1-desktop);
+    margin-block-start: var(--gcds-heading-spacing-0);
+  }
+
+  h1:after {
+    display: block;
+    content: "";
+    width: var(--gcds-heading-h1-border-width);
+    margin-block-start: var(--gcds-heading-h1-border-margin);
+    height: var(--gcds-heading-h1-border-height);
+    background-color: var(--gcds-heading-h1-border-background);
+  }
+
+  @media only screen and (width < 48em) {
+    h1 {
+      font: var(--gcds-heading-h1-mobile);
+    }
+  }
+
+  h2 {
+    max-width: var(--gcds-heading-character-limit-h2);
+    font: var(--gcds-heading-h2-desktop);
+  }
+
+  @media only screen and (width < 48em) {
+    h2 {
+      font: var(--gcds-heading-h2-mobile);
+    }
+  }
+
+  h3 {
+    max-width: var(--gcds-heading-character-limit-h3);
+    font: var(--gcds-heading-h3-desktop);
+  }
+
+  @media only screen and (width < 48em) {
+    h3 {
+      font: var(--gcds-heading-h3-mobile);
+    }
+  }
+
+  h4 {
+    max-width: var(--gcds-heading-character-limit-h4);
+    font: var(--gcds-heading-h4-desktop);
+  }
+
+  @media only screen and (width < 48em) {
+    h4 {
+      font: var(--gcds-heading-h4-mobile);
+    }
+  }
+
+  h5 {
+    max-width: var(--gcds-heading-character-limit-h5);
+    font: var(--gcds-heading-h5-desktop);
+  }
+
+  @media only screen and (width < 48em) {
+    h5 {
+      font: var(--gcds-heading-h5-mobile);
+    }
+  }
+
+  h6 {
+    max-width: var(--gcds-heading-character-limit-h6);
+    font: var(--gcds-heading-h6-desktop);
+  }
+
+  @media only screen and (width < 48em) {
+    h6 {
+      font: var(--gcds-heading-h6-mobile);
+    }
+  }
+}
+
+.gcds-page {
+  /* ----- Default GCDS typography styles ----- */
+  body {
+    font: var(--gcds-font-text);
+  }
+
+  @media only screen and (width < 48em) {
+    body {
+      font: var(--gcds-font-text-mobile);
+    }
+  }
+
+  p {
+    max-width: var(--gcds-text-character-limit);
+    font: var(--gcds-font-text);
+    margin-block-start: var(--gcds-heading-spacing-0);
+    margin-block-end: var(--gcds-heading-spacing-300);
+  }
+
+  @media only screen and (width < 48em) {
+    p {
+      font: var(--gcds-font-text-mobile);
+    }
+  }
+}

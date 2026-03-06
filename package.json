@@ -43,6 +43,7 @@
     "playwright": "playwright test --ui",
     "playwright:run:headless": "CI=true playwright test",
     "playwright:run": "playwright test",
+    "sync:forms-account-core": "node scripts/sync-forms-account-core.mjs",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install",
     "upgrade": "yarn next upgrade"
   },
