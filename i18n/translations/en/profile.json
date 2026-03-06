@@ -1,8 +1,18 @@
 {
   "title": "Profile",
+  "profilePanel": {
+    "title": "Personal details"
+  },
   "accountPanel": {
     "title": "Account information",
+    "givenName": "First name",
+    "familyName": "Last name",
+    "username": "Username",
     "email": "Email",
+    "emailVerified": "Email verified",
+    "verified": "Yes",
+    "notVerified": "No",
+    "manageAccount": "Manage account",
     "publishing": "Form publishing",
     "locked": "Locked",
     "unlocked": "Unlocked"

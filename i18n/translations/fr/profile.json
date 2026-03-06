@@ -1,8 +1,18 @@
 {
   "title": "Profil",
+  "profilePanel": {
+    "title": "Renseignements personnels"
+  },
   "accountPanel": {
     "title": "Informations de compte",
+    "givenName": "Prénom",
+    "familyName": "Nom",
+    "username": "Nom d'utilisateur",
     "email": "Courriel",
+    "emailVerified": "Courriel vérifié",
+    "verified": "Oui",
+    "notVerified": "Non",
+    "manageAccount": "Gérer le compte",
     "publishing": "Publication de formulaires",
     "locked": "Verrouillée",
     "unlocked": "Déverrouillée"

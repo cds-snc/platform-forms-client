@@ -62,7 +62,8 @@ export const AcceptButton = () => {
     // Needed for cypress e2e testing
     updateSessionProvider();
 
-    if (session?.user.newlyRegistered) {
+    // Skip for OIDC flow
+    if (!session?.user.accountUrl && session?.user.newlyRegistered) {
       router.push(`/${language}/auth/account-created`);
     } else {
       router.push(defaultRoute);
