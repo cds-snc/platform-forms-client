@@ -291,11 +291,7 @@ const {
         token.newlyRegistered = internalUser.newlyRegistered;
         // Store provider to skip security questions for Zitadel users
         token.provider = account.provider;
-
-        // Check if user has setup required Security Questions
-        if (account.provider !== "gcForms" && !token.hasSecurityQuestions) {
-          token.hasSecurityQuestions = await userHasSecurityQuestions({ userId: token.userId });
-        }
+        token.hasSecurityQuestions = true; // Set to true OICDC flow
 
         // If name isn't passed in by the provider, use the name from the database
         if (!token.name) {
@@ -317,6 +313,11 @@ const {
       }
 
       // Any logic that needs to happen after JWT initializtion needs to be below this point.
+
+      // Check if user has setup required Security Questions
+      if (token.provider !== "gcForms" && !token.hasSecurityQuestions) {
+        token.hasSecurityQuestions = await userHasSecurityQuestions({ userId: token.userId });
+      }
 
       // Check if user has been deactivated
       const userActive = await checkUserActiveStatus(token.userId ?? "");
