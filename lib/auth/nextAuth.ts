@@ -306,14 +306,19 @@ const {
       // Client side session update (e.g. when a user has accepted the Acceptable Use Policy)
       // Only permit the updating of certain properties
 
-      if (trigger === "update" && session) {
+      if (trigger === "update") {
         logMessage.debug(
           `Client Side Session update recieved for user ${token.email} with ${JSON.stringify(session)}`
         );
+
         token = {
           ...token,
-          acceptableUse: session.user.acceptableUse,
+          acceptableUse: session?.user.acceptableUse ?? token.acceptableUse,
         };
+
+        if (token.provider !== "gcForms" && token.userId) {
+          token.hasSecurityQuestions = await userHasSecurityQuestions({ userId: token.userId });
+        }
       }
 
       // Any logic that needs to happen after JWT initializtion needs to be below this point.
