@@ -22,9 +22,12 @@ const GET = async (req: NextRequest) => {
 
 const POST = async (req: NextRequest) => {
   if (
-    ["/api/auth/session", "/api/auth/signout", "/api/auth/signin/gcForms"].includes(
-      req.nextUrl.pathname
-    )
+    [
+      "/api/auth/session",
+      "/api/auth/signout",
+      "/api/auth/signin/gcForms",
+      "/api/auth/callback/gcForms",
+    ].includes(req.nextUrl.pathname)
   ) {
     return NextPOST(req);
   }
