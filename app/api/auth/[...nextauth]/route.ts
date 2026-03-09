@@ -3,8 +3,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { logMessage } from "@root/lib/logger";
 
 // Only allow methods and paths that the application uses for Authjs
+const enableAuthCallbackDiagnostics = process.env.AUTH_CALLBACK_DIAGNOSTICS === "true";
 
 const GET = async (req: NextRequest) => {
+  if (enableAuthCallbackDiagnostics && req.nextUrl.pathname === "/api/auth/callback/gcForms") {
+    const callbackError = req.nextUrl.searchParams.get("error");
+    logMessage.info(
+      `[auth-callback][GET] hasCode=${req.nextUrl.searchParams.has("code")} hasState=${req.nextUrl.searchParams.has("state")} error=${callbackError ?? "none"}`
+    );
+  }
+
   if (
     [
       "/api/auth/error",
@@ -22,12 +30,9 @@ const GET = async (req: NextRequest) => {
 
 const POST = async (req: NextRequest) => {
   if (
-    [
-      "/api/auth/session",
-      "/api/auth/signout",
-      "/api/auth/signin/gcForms",
-      "/api/auth/callback/gcForms",
-    ].includes(req.nextUrl.pathname)
+    ["/api/auth/session", "/api/auth/signout", "/api/auth/signin/gcForms"].includes(
+      req.nextUrl.pathname
+    )
   ) {
     return NextPOST(req);
   }

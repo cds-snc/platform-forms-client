@@ -60,6 +60,32 @@ const adapter = {
   },
 };
 
+const serializeForLog = (value: unknown): string => {
+  try {
+    return JSON.stringify(
+      value,
+      (_key, nestedValue) => {
+        if (nestedValue instanceof Error) {
+          return {
+            name: nestedValue.name,
+            message: nestedValue.message,
+            stack: nestedValue.stack,
+          };
+        }
+
+        if (typeof nestedValue === "bigint") {
+          return nestedValue.toString();
+        }
+
+        return nestedValue;
+      },
+      2
+    );
+  } catch {
+    return String(value);
+  }
+};
+
 const {
   handlers: { GET, POST },
   auth,
@@ -79,6 +105,7 @@ const {
       authorization: {
         params: {
           scope: "openid email profile",
+          response_mode: "query",
         },
       },
       profile(profile) {
@@ -159,13 +186,19 @@ const {
     maxAge: 2 * 60 * 60, // 2 hours
     updateAge: 30 * 60, // 30 minutes
   },
+  debug: process.env.AUTHJS_DEBUG === "true",
   // Elastic Load Balancer safely sets the host header and ignores the incoming request headers
   trustHost: true,
   logger: {
     error(error) {
       if (!(error instanceof CredentialsSignin)) {
         // Not a CredentialsSignin error which is for invalid 2FA credentials
-        logMessage.error(`NextAuth error: ${JSON.stringify(error)}.`);
+        logMessage.error(`NextAuth error: ${serializeForLog(error)}.`);
+
+        const callbackCause = (error as { cause?: { err?: unknown } } | undefined)?.cause?.err;
+        if (callbackCause) {
+          logMessage.error(`NextAuth callback cause: ${serializeForLog(callbackCause)}.`);
+        }
       }
     },
     warn(code) {
@@ -173,8 +206,8 @@ const {
     },
     debug(code, ...message) {
       // TODO.. switch back to debug
-      logMessage.info(code);
-      logMessage.debug((message as string[]).join(" "));
+      logMessage.info(typeof code === "string" ? code : serializeForLog(code));
+      logMessage.debug(message.map((part) => serializeForLog(part)).join(" "));
     },
   },
 
@@ -274,7 +307,10 @@ const {
 
         // If the GCForms SSO provider was used, but is not enabled, refuse the session
         const isZitadelLoginEnabled = await checkOne("zitadelLogin");
-        if (!isZitadelLoginEnabled && account.provider === "gcForms") {
+        const isLocalDevWithoutRedis =
+          process.env.NODE_ENV === "development" && !process.env.REDIS_URL;
+
+        if (!isZitadelLoginEnabled && account.provider === "gcForms" && !isLocalDevWithoutRedis) {
           throw new Error("Provider for GCForms SSO is not an active option");
         }
 
