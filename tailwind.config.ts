@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-const corePreset = require("./packages/core/tailwind-preset");
+import corePreset from "./packages/core/tailwind-preset";
 
 module.exports = {
   presets: [corePreset],
