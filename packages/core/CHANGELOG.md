@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.1.0] - 2026-03-06
+
+- Add shared style exports for forms, gc-header, typography, and toast.
+- Add a shared Tailwind preset for consumer apps.
+
 ## [2.0.3] - 2025-12-18
 
 - Trim whitespace when validating text input

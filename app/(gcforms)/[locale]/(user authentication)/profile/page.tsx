@@ -4,6 +4,7 @@ import { retrievePoolOfSecurityQuestions, retrieveUserSecurityQuestions } from "
 import { Profile } from "./components/server/Profile";
 import { authCheckAndRedirect } from "@lib/actions";
 import { authorization } from "@lib/privileges";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -25,8 +26,12 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
 
   const { session, ability } = await authCheckAndRedirect();
 
-  const userCanPublish = await authorization.hasPublishFormsPrivilege();
+  // For OIDC flow we want to move them to the OIDC profile page instead of showing the security questions
+  if (session.user.accountUrl) {
+    redirect(`/${locale}/profile/oidc`);
+  }
 
+  const userCanPublish = await authorization.hasPublishFormsPrivilege();
   const [userQuestions, allQuestions] = await Promise.all([
     retrieveUserSecurityQuestions({ userId: ability.user.id }),
     retrievePoolOfSecurityQuestions(),

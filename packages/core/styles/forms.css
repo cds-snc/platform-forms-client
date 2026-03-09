@@ -1,0 +1,2338 @@
+@charset "UTF-8";
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-link-focus-background: #1354ec;
+  --gcds-link-focus-outline-width: 0.25rem;
+  --gcds-link-focus-outline-offset: 0.125rem;
+  --gcds-link-focus-text: #ffffff;
+  --gcds-link-focus-border-radius: 0.125rem;
+  --gcds-link-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-link-font-small-desktop: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-link-font-small-mobile: 400 1rem/150% 'Noto Sans', sans-serif;
+  --gcds-link-font-regular-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-link-font-regular-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-link-decoration-thickness: 0.0625rem;
+  --gcds-link-hover-decoration-thickness: 0.125rem;
+  --gcds-link-underline-offset: 0.125rem;
+  --gcds-text-character-limit: 65ch;
+  --gcds-text-role-light: #ffffff;
+  --gcds-text-role-primary: #333333;
+  --gcds-text-role-secondary: #595959;
+  --gcds-text-size-body-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-text-size-body-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-text-size-small-desktop: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-text-size-small-mobile: 400 1rem/150% 'Noto Sans', sans-serif;
+  --gcds-text-spacing-0: 0rem;
+  --gcds-text-spacing-25: 0.125rem;
+  --gcds-text-spacing-50: 0.25rem;
+  --gcds-text-spacing-75: 0.375rem;
+  --gcds-text-spacing-100: 0.5rem;
+  --gcds-text-spacing-125: 0.625rem;
+  --gcds-text-spacing-150: 0.75rem;
+  --gcds-text-spacing-175: 0.875rem;
+  --gcds-text-spacing-200: 1rem;
+  --gcds-text-spacing-225: 1.125rem;
+  --gcds-text-spacing-250: 1.25rem;
+  --gcds-text-spacing-300: 1.5rem;
+  --gcds-text-spacing-350: 1.75rem;
+  --gcds-text-spacing-400: 2rem;
+  --gcds-text-spacing-450: 2.25rem;
+  --gcds-text-spacing-500: 2.5rem;
+  --gcds-text-spacing-550: 2.75rem;
+  --gcds-text-spacing-600: 3rem;
+  --gcds-text-spacing-650: 3.25rem;
+  --gcds-text-spacing-700: 3.5rem;
+  --gcds-text-spacing-750: 3.75rem;
+  --gcds-text-spacing-800: 4rem;
+  --gcds-text-spacing-850: 4.25rem;
+  --gcds-text-spacing-900: 4.5rem;
+  --gcds-text-spacing-950: 4.75rem;
+  --gcds-text-spacing-1000: 5rem;
+  --gcds-text-spacing-1050: 5.25rem;
+  --gcds-text-spacing-1100: 5.5rem;
+  --gcds-text-spacing-1150: 5.75rem;
+  --gcds-text-spacing-1200: 6rem;
+  --gcds-text-spacing-1250: 6.25rem;
+  --gcds-text-weight-bold: 700;
+  --gcds-container-border: 0.0625rem solid #8c8c8c;
+  --gcds-container-size-xs: 20rem;
+  --gcds-container-size-sm: 30rem;
+  --gcds-container-size-md: 48rem;
+  --gcds-container-size-lg: 62rem;
+  --gcds-container-size-xl: 71.25rem;
+  --gcds-container-size-full: 100%;
+  --gcds-container-spacing-0: 0rem;
+  --gcds-container-spacing-25: 0.125rem;
+  --gcds-container-spacing-50: 0.25rem;
+  --gcds-container-spacing-75: 0.375rem;
+  --gcds-container-spacing-100: 0.5rem;
+  --gcds-container-spacing-125: 0.625rem;
+  --gcds-container-spacing-150: 0.75rem;
+  --gcds-container-spacing-175: 0.875rem;
+  --gcds-container-spacing-200: 1rem;
+  --gcds-container-spacing-225: 1.125rem;
+  --gcds-container-spacing-250: 1.25rem;
+  --gcds-container-spacing-300: 1.5rem;
+  --gcds-container-spacing-350: 1.75rem;
+  --gcds-container-spacing-400: 2rem;
+  --gcds-container-spacing-450: 2.25rem;
+  --gcds-container-spacing-500: 2.5rem;
+  --gcds-container-spacing-550: 2.75rem;
+  --gcds-container-spacing-600: 3rem;
+  --gcds-container-spacing-650: 3.25rem;
+  --gcds-container-spacing-700: 3.5rem;
+  --gcds-container-spacing-750: 3.75rem;
+  --gcds-container-spacing-800: 4rem;
+  --gcds-container-spacing-850: 4.25rem;
+  --gcds-container-spacing-900: 4.5rem;
+  --gcds-container-spacing-950: 4.75rem;
+  --gcds-container-spacing-1000: 5rem;
+  --gcds-container-spacing-1050: 5.25rem;
+  --gcds-container-spacing-1100: 5.5rem;
+  --gcds-container-spacing-1150: 5.75rem;
+  --gcds-container-spacing-1200: 6rem;
+  --gcds-container-spacing-1250: 6.25rem;
+  --gcds-alert-border-width: 0.375rem;
+  --gcds-alert-button-border-radius: 0.375rem;
+  --gcds-alert-button-border-width: 0.125rem;
+  --gcds-alert-button-default-background: #ffffff;
+  --gcds-alert-button-default-text: #333333;
+  --gcds-alert-button-focus-background: #1354ec;
+  --gcds-alert-button-focus-text: #ffffff;
+  --gcds-alert-button-icon-padding: 0.75rem;
+  --gcds-alert-button-icon-width-and-height: 1.125rem;
+  --gcds-alert-button-margin: 0 0 0 0.875rem;
+  --gcds-alert-button-mobile-margin: 0.875rem 0 0;
+  --gcds-alert-button-outline-width: 0.25rem;
+  --gcds-alert-content-heading-font: 700 1.5rem/133% 'Lato', sans-serif;
+  --gcds-alert-content-heading-margin: 0 0 0.5rem;
+  --gcds-alert-content-heading-mobile-margin: 0 0 0.5rem;
+  --gcds-alert-content-slotted-list-margin: 1.5rem;
+  --gcds-alert-content-slotted-margin: 0.5rem;
+  --gcds-alert-font: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-alert-icon-mobile-margin: 0 0 0.875rem;
+  --gcds-alert-padding: 0.75rem 0.875rem;
+  --gcds-alert-text: #333333;
+  --gcds-alert-danger-background: #f9d2d7;
+  --gcds-alert-danger-icon: #861322;
+  --gcds-alert-danger-text: #333333;
+  --gcds-alert-info-background: #d6e4f5;
+  --gcds-alert-info-icon: #1f497a;
+  --gcds-alert-info-text: #333333;
+  --gcds-alert-success-background: #d6f5e1;
+  --gcds-alert-success-icon: #1f7a40;
+  --gcds-alert-success-text: #333333;
+  --gcds-alert-warning-background: #fcefcf;
+  --gcds-alert-warning-icon: #916808;
+  --gcds-alert-warning-text: #333333;
+  --gcds-breadcrumbs-item-arrow-margin: 0 0.5rem 0 0;
+  --gcds-breadcrumbs-item-font: 400 1rem/150% 'Noto Sans', sans-serif;
+  /** Mandatory elements alignment: sub-components of header use 16px font */
+  --gcds-breadcrumbs-item-margin: 0.5rem 0.25rem 0.5rem 0.125rem;
+  --gcds-breadcrumbs-margin: 0 0 0 -0.125rem;
+  --gcds-breadcrumbs-padding: 0 0 0 0.125rem;
+  --gcds-button-border-radius: 0.375rem;
+  --gcds-button-border-width: 0.125rem;
+  --gcds-button-danger-default-background: #b3192e;
+  --gcds-button-danger-default-text: #ffffff;
+  --gcds-button-danger-hover-background: #861322;
+  --gcds-button-font-desktop: 500 1.25rem/140% 'Noto Sans', sans-serif;
+  --gcds-button-font-mobile: 500 1.125rem/140% 'Noto Sans', sans-serif;
+  --gcds-button-padding: 0.625rem 1rem;
+  --gcds-button-primary-default-background: #26374a;
+  --gcds-button-primary-default-text: #ffffff;
+  --gcds-button-primary-hover-background: #1f497a;
+  --gcds-button-secondary-default-background: rgba(0, 0, 0, 0);
+  --gcds-button-secondary-default-text: #26374a;
+  --gcds-button-secondary-hover-background: #d6e4f5;
+  --gcds-button-mobile-margin: 0.125rem 0;
+  --gcds-button-mobile-width: 100%;
+  --gcds-button-shared-active-background: #000000;
+  --gcds-button-shared-active-text: #ffffff;
+  --gcds-button-shared-focus-background: #1354ec;
+  --gcds-button-shared-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-button-shared-focus-outline-width: 0.25rem;
+  --gcds-button-shared-focus-text: #ffffff;
+  --gcds-button-shared-disabled-opacity: 50%;
+  --gcds-button-small-font-desktop: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-button-small-font-mobile: 400 1rem/150% 'Noto Sans', sans-serif;
+  --gcds-button-small-padding: 0.375rem 1rem;
+  --gcds-button-start-default-background: #196636;
+  --gcds-button-start-default-text: #ffffff;
+  --gcds-button-start-hover-background: #0f3d20;
+  --gcds-button-start-font-desktop: 600 1.375rem/145% 'Noto Sans', sans-serif;
+  --gcds-button-start-font-mobile: 500 1.25rem/140% 'Noto Sans', sans-serif;
+  --gcds-button-start-padding: 0.75rem 2rem;
+  --gcds-button-width: fit-content;
+  --gcds-card-background-color: #ffffff;
+  --gcds-card-box-shadow: 0 0.125rem 0.5rem 0.125rem #00000010;
+  --gcds-card-color: #333333;
+  --gcds-card-description-font-desktop: 400 1.25rem/155% 'Noto Sans', sans-serif;
+  --gcds-card-description-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-card-focus-box-shadow: inset 0 0 0 0.125rem #1354ec;
+  --gcds-card-focus-link-background-color: rgba(0, 0, 0, 0);
+  --gcds-card-focus-link-border: none;
+  --gcds-card-focus-link-box-shadow: none;
+  --gcds-card-focus-link-color: #1f497a;
+  --gcds-card-focus-link-outline: none;
+  --gcds-card-focus-link-text-decoration-thickness: 0.125rem;
+  --gcds-card-focus-outline-offset: 0.125rem;
+  --gcds-card-focus-outline: 0.25rem solid #1354ec;
+  --gcds-card-hover-background-color: #f2f2f2;
+  --gcds-card-hover-box-shadow: 0 0.25rem 0.75rem 0.25rem #00000020;
+  --gcds-card-image-margin: 0 0 1.5rem;
+  --gcds-card-padding: 2.25rem 1.5rem;
+  --gcds-card-badge-background-color: #2962a3;
+  --gcds-card-badge-padding: 0 1.5rem;
+  --gcds-card-badge-mobile-padding: 0.125rem 1.5rem;
+  --gcds-card-title-font-desktop: 700 1.8125rem/137% 'Lato', sans-serif;
+  --gcds-card-title-font-mobile: 700 1.625rem/123% 'Lato', sans-serif;
+  --gcds-card-title-margin: 0 0 0.625rem;
+  --gcds-card-max-width: 34.125rem;
+  --gcds-checkbox-check-border-width: 0.3125rem;
+  --gcds-checkbox-check-height: 1.5rem;
+  --gcds-checkbox-check-left: 1rem;
+  --gcds-checkbox-check-top: 0.625rem;
+  --gcds-checkbox-check-width: 0.875rem;
+  --gcds-checkbox-danger-border: #b3192e;
+  --gcds-checkbox-default-background: #ffffff;
+  --gcds-checkbox-default-text: #333333;
+  --gcds-checkbox-disabled-background: #d9d9d9;
+  --gcds-checkbox-disabled-text: #808080;
+  --gcds-checkbox-fieldset-margin: 0 0 1rem;
+  --gcds-checkbox-focus-background: #ffffff;
+  --gcds-checkbox-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-checkbox-focus-color: #1354ec;
+  --gcds-checkbox-focus-outline-width: 0.25rem;
+  --gcds-checkbox-font: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-checkbox-input-border-radius: 0.125rem;
+  --gcds-checkbox-input-border-width: 0.125rem;
+  --gcds-checkbox-input-height-and-width: 3rem;
+  --gcds-checkbox-label-font-desktop: 500 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-checkbox-label-font-mobile: 500 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-checkbox-label-padding: 0 0 0 3.75rem;
+  --gcds-checkbox-legend-font-desktop: 700 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-checkbox-legend-font-mobile: 700 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-checkbox-legend-hint-margin: 0 0 1rem;
+  --gcds-checkbox-legend-margin: 0 0 0.125rem;
+  --gcds-checkbox-legend-required-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-checkbox-legend-required-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-checkbox-margin: 0 0 1.125rem;
+  --gcds-checkbox-max-width: 46.5rem;
+  --gcds-checkbox-padding: 0.5rem;
+  --gcds-date-input-danger-border: #b3192e;
+  --gcds-date-input-fieldset-font-desktop: 700 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-date-input-fieldset-font-mobile: 700 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-date-input-fieldset-hint-margin: 0.375rem 0 0.125rem;
+  --gcds-date-input-fieldset-required-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-date-input-fieldset-required-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-date-input-fieldset-required-margin: 0 0 0 0.375rem;
+  --gcds-date-input-fieldset-text: #333333;
+  --gcds-date-input-label-font-desktop: 500 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-date-input-label-font-mobile: 500 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-date-input-margin: 0.75rem;
+  --gcds-date-modified-description-margin: 0 0 0 0.125rem;
+  --gcds-date-modified-font: 400 1rem/150% 'Noto Sans', sans-serif;
+  /** Mandatory elements alignment: sub-components of footer use 16px font */
+  --gcds-date-modified-margin: 2.5rem 0 1rem;
+  --gcds-details-default-text: #1f497a;
+  --gcds-details-default-decoration-thickness: 0.0625rem;
+  --gcds-details-focus-background: #1354ec;
+  --gcds-details-focus-text: #ffffff;
+  --gcds-details-focus-border-radius: 0.125rem;
+  --gcds-details-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-details-focus-outline-offset: 0.125rem;
+  --gcds-details-focus-outline: 0.25rem solid #1354ec;
+  --gcds-details-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-details-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-details-font-small-desktop: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-details-font-small-mobile: 400 1rem/150% 'Noto Sans', sans-serif;
+  --gcds-details-hover-text: #1354ec;
+  --gcds-details-hover-decoration-thickness: 0.125rem;
+  --gcds-details-panel-border-color: #8c8c8c;
+  --gcds-details-panel-border-width: 0.375rem;
+  --gcds-details-panel-margin: 0.75rem 0 0 0.75rem;
+  --gcds-details-panel-padding: 0.75rem 0rem 0.75rem 1.75rem;
+  --gcds-details-panel-slotted-margin: 1.5rem;
+  --gcds-details-print-summary-font-weight: 600;
+  --gcds-details-print-summary-text: #333333;
+  --gcds-details-summary-arrow-border-left: 0.875rem;
+  --gcds-details-summary-arrow-border-top-bottom: 0.5rem;
+  --gcds-details-summary-arrow-left: 0.375rem;
+  --gcds-details-summary-arrow-top: 0.875rem;
+  --gcds-details-summary-padding: 0.375rem 0.375rem 0.375rem 2.5rem;
+  --gcds-error-message-text-color: #b3192e;
+  --gcds-error-summary-border-color: #b3192e;
+  --gcds-error-summary-border-width: 0.375rem;
+  --gcds-error-summary-link-color: #b3192e;
+  --gcds-error-summary-list-item-padding: 0 0 0.75rem 0.125rem;
+  --gcds-error-summary-list-margin: 0 0 0 1.25rem;
+  --gcds-error-summary-margin: 0 0 2.25rem;
+  --gcds-error-summary-max-width: 65ch;
+  --gcds-error-summary-text: #333333;
+  --gcds-error-summary-mobile-padding: 1.125rem;
+  --gcds-error-summary-padding: 2.5rem;
+  --gcds-fieldset-default-text: #333333;
+  --gcds-fieldset-legend-margin: 0 0 0.125rem;
+  --gcds-fieldset-legend-size-h2-desktop: 700 2.4375rem/123% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h2-mobile: 700 2.1875rem/125% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h3-desktop: 700 1.8125rem/137% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h3-mobile: 700 1.625rem/123% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h4-desktop: 700 1.6875rem/133% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h4-mobile: 700 1.5rem/133% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h5-desktop: 700 1.5rem/133% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h5-mobile: 700 1.375rem/127% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h6-desktop: 700 1.375rem/145% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h6-mobile: 700 1.25rem/140% 'Lato', sans-serif;
+  --gcds-file-uploader-button-background: #ffffff;
+  --gcds-file-uploader-button-border-radius: 0.375rem;
+  --gcds-file-uploader-button-border-width: 0.125rem;
+  --gcds-file-uploader-button-font-weight: 500;
+  --gcds-file-uploader-button-margin: 0 0 1.125rem;
+  --gcds-file-uploader-button-padding: 0.625rem 0.75rem;
+  --gcds-file-uploader-button-text: #26374a;
+  --gcds-file-uploader-default-text: #333333;
+  --gcds-file-uploader-disabled-background: #d9d9d9;
+  --gcds-file-uploader-disabled-text: #808080;
+  --gcds-file-uploader-font-desktop: 400 1.25rem/140% 'Noto Sans', sans-serif;
+  --gcds-file-uploader-font-mobile: 400 1.125rem/140% 'Noto Sans', sans-serif;
+  --gcds-file-uploader-file-border-color: #8c8c8c;
+  --gcds-file-uploader-file-border-width: 0.125rem;
+  --gcds-file-uploader-file-button-underline-offset: 0.25rem;
+  --gcds-file-uploader-file-button-default-text: #b3192e;
+  --gcds-file-uploader-file-button-default-decoration-thickness: 0.0625rem;
+  --gcds-file-uploader-file-button-hover-text: #861322;
+  --gcds-file-uploader-file-button-hover-decoration-thickness: 0.125rem;
+  --gcds-file-uploader-file-button-margin: 0 0 0 2.25rem;
+  --gcds-file-uploader-file-button-padding: 0.375rem 0.125rem;
+  --gcds-file-uploader-file-danger-border-color: #b3192e;
+  --gcds-file-uploader-file-focus-border-color: #1354ec;
+  --gcds-file-uploader-file-max-width: 30rem;
+  --gcds-file-uploader-file-padding: 0.75rem 1.125rem;
+  --gcds-file-uploader-focus-button-background: #1354ec;
+  --gcds-file-uploader-focus-button-text: #ffffff;
+  --gcds-file-uploader-focus-button-outline-width: 0.25rem;
+  --gcds-file-uploader-focus-button-outline-offset: 0.125rem;
+  --gcds-file-uploader-hover-button-background: #d6e4f5;
+  --gcds-file-uploader-active-button-background: #000000;
+  --gcds-file-uploader-active-button-text: #ffffff;
+  --gcds-footer-band-padding-desktop: 2.25rem 0;
+  --gcds-footer-band-padding-mobile: 1.5rem 0;
+  --gcds-footer-container-margin: 0 auto;
+  --gcds-footer-container-width: 71.25rem;
+  --gcds-footer-contextual-background: #33465c;
+  /** Footer background colour - Canada.ca style */
+  --gcds-footer-contextual-text: #ffffff;
+  --gcds-footer-font: 400 1rem/150% 'Noto Sans', sans-serif;
+  /** Mandatory elements alignment: sub-components of footer use 16px font. */
+  --gcds-footer-font-heading: 700 1.625rem/123% 'Lato', sans-serif;
+  /** Mandatory elements alignment: size 26px */
+  --gcds-footer-grid-gap: 1.5rem;
+  --gcds-footer-heading-margin: 0 0 1.5rem;
+  --gcds-footer-list-padding: 0;
+  --gcds-footer-main-background: #26374a;
+  --gcds-footer-main-nav-first-after-border-color: #ffffff;
+  --gcds-footer-main-nav-first-after-border-width: 0.25rem;
+  --gcds-footer-main-nav-first-after-width: 2.25rem;
+  --gcds-footer-main-text: #ffffff;
+  --gcds-footer-sub-background: #f2f2f2;
+  --gcds-footer-sub-listitem-before-margin: 0 0.75rem;
+  --gcds-footer-sub-signature-width: 10.25rem;
+  --gcds-footer-sub-signature-min-width: auto;
+  --gcds-footer-sub-signature-max-height: 2.4375rem;
+  --gcds-footer-sub-signature-margin: 0 0 0 auto;
+  --gcds-footer-sub-signature-sm-width: 6.25rem;
+  --gcds-footer-sub-signature-sm-max-height: 1.5rem;
+  --gcds-grid-columns-default-base: 1;
+  --gcds-grid-columns-default-tablet: 6;
+  --gcds-grid-columns-default-desktop: 12;
+  --gcds-grid-gap-150: 0.75rem;
+  --gcds-grid-gap-175: 0.875rem;
+  --gcds-grid-gap-200: 1rem;
+  --gcds-grid-gap-225: 1.125rem;
+  --gcds-grid-gap-250: 1.25rem;
+  --gcds-grid-gap-300: 1.5rem;
+  --gcds-grid-gap-350: 1.75rem;
+  --gcds-grid-gap-400: 2rem;
+  --gcds-grid-gap-450: 2.25rem;
+  --gcds-grid-gap-500: 2.5rem;
+  --gcds-grid-gap-550: 2.75rem;
+  --gcds-grid-gap-600: 3rem;
+  --gcds-grid-gap-650: 3.25rem;
+  --gcds-grid-gap-700: 3.5rem;
+  --gcds-grid-gap-750: 3.75rem;
+  --gcds-grid-gap-800: 4rem;
+  --gcds-header-brand-border-color: #d9d9d9;
+  --gcds-header-brand-border-width: 0.0625rem;
+  --gcds-header-brand-grid-gap: 0.5rem;
+  --gcds-header-brand-padding: 0.5rem 0 1rem;
+  --gcds-header-container-max-width: 71.25rem;
+  --gcds-header-margin: 0 0 3rem;
+  --gcds-header-menu-top-nav-mobile-trigger-margin: 1rem;
+  --gcds-header-skiptonav-top: 0.75rem;
+  --gcds-heading-character-limit-h1: 31ch;
+  --gcds-heading-character-limit-h2: 35ch;
+  --gcds-heading-character-limit-h3: 40ch;
+  --gcds-heading-character-limit-h4: 45ch;
+  --gcds-heading-character-limit-h5: 50ch;
+  --gcds-heading-character-limit-h6: 57ch;
+  --gcds-heading-default-text: #333333;
+  --gcds-heading-h1-border-background: #a62a1e;
+  /** Heading accent colour - Canada.ca style */
+  --gcds-heading-h1-border-height: 0.375rem;
+  --gcds-heading-h1-border-margin: 0.5rem;
+  --gcds-heading-h1-border-width: 4.5rem;
+  --gcds-heading-h1-desktop: 700 2.5625rem/117% 'Lato', sans-serif;
+  --gcds-heading-h1-mobile: 700 2.3125rem/119% 'Lato', sans-serif;
+  --gcds-heading-h2-desktop: 700 2.4375rem/123% 'Lato', sans-serif;
+  --gcds-heading-h2-mobile: 700 2.1875rem/125% 'Lato', sans-serif;
+  --gcds-heading-h3-desktop: 700 1.8125rem/137% 'Lato', sans-serif;
+  --gcds-heading-h3-mobile: 700 1.625rem/123% 'Lato', sans-serif;
+  --gcds-heading-h4-desktop: 700 1.6875rem/133% 'Lato', sans-serif;
+  --gcds-heading-h4-mobile: 700 1.5rem/133% 'Lato', sans-serif;
+  --gcds-heading-h5-desktop: 700 1.5rem/133% 'Lato', sans-serif;
+  --gcds-heading-h5-mobile: 700 1.375rem/127% 'Lato', sans-serif;
+  --gcds-heading-h6-desktop: 700 1.375rem/145% 'Lato', sans-serif;
+  --gcds-heading-h6-mobile: 700 1.25rem/140% 'Lato', sans-serif;
+  --gcds-heading-role-light: #ffffff;
+  --gcds-heading-role-primary: #333333;
+  --gcds-heading-role-secondary: #595959;
+  --gcds-heading-spacing-0: 0rem;
+  --gcds-heading-spacing-25: 0.125rem;
+  --gcds-heading-spacing-50: 0.25rem;
+  --gcds-heading-spacing-75: 0.375rem;
+  --gcds-heading-spacing-100: 0.5rem;
+  --gcds-heading-spacing-125: 0.625rem;
+  --gcds-heading-spacing-150: 0.75rem;
+  --gcds-heading-spacing-175: 0.875rem;
+  --gcds-heading-spacing-200: 1rem;
+  --gcds-heading-spacing-225: 1.125rem;
+  --gcds-heading-spacing-250: 1.25rem;
+  --gcds-heading-spacing-300: 1.5rem;
+  --gcds-heading-spacing-350: 1.75rem;
+  --gcds-heading-spacing-400: 2rem;
+  --gcds-heading-spacing-450: 2.25rem;
+  --gcds-heading-spacing-500: 2.5rem;
+  --gcds-heading-spacing-550: 2.75rem;
+  --gcds-heading-spacing-600: 3rem;
+  --gcds-heading-spacing-650: 3.25rem;
+  --gcds-heading-spacing-700: 3.5rem;
+  --gcds-heading-spacing-750: 3.75rem;
+  --gcds-heading-spacing-800: 4rem;
+  --gcds-heading-spacing-850: 4.25rem;
+  --gcds-heading-spacing-900: 4.5rem;
+  --gcds-heading-spacing-950: 4.75rem;
+  --gcds-heading-spacing-1000: 5rem;
+  --gcds-heading-spacing-1050: 5.25rem;
+  --gcds-heading-spacing-1100: 5.5rem;
+  --gcds-heading-spacing-1150: 5.75rem;
+  --gcds-heading-spacing-1200: 6rem;
+  --gcds-heading-spacing-1250: 6.25rem;
+  --gcds-hint-margin: -0.375rem 0 0.5rem;
+  --gcds-hint-text: #595959;
+  --gcds-icon-font-family: 'gcds-icons';
+  --gcds-icon-font-size-text-small: 1.125rem;
+  --gcds-icon-font-size-text: 1.25rem;
+  --gcds-icon-font-size-h6: 1.375rem;
+  --gcds-icon-font-size-h5: 1.5rem;
+  --gcds-icon-font-size-h4: 1.6875rem;
+  --gcds-icon-font-size-h3: 1.8125rem;
+  --gcds-icon-font-size-h2: 2.4375rem;
+  --gcds-icon-font-size-h1: 2.5625rem;
+  --gcds-icon-font-size-text-small-mobile: 1rem;
+  --gcds-icon-font-size-text-mobile: 1.125rem;
+  --gcds-icon-font-size-h6-mobile: 1.25rem;
+  --gcds-icon-font-size-h5-mobile: 1.375rem;
+  --gcds-icon-font-size-h4-mobile: 1.5rem;
+  --gcds-icon-font-size-h3-mobile: 1.625rem;
+  --gcds-icon-font-size-h2-mobile: 2.1875rem;
+  --gcds-icon-font-size-h1-mobile: 2.3125rem;
+  --gcds-icon-line-height-text-small: 155%;
+  --gcds-icon-line-height-text: 160%;
+  --gcds-icon-line-height-h6: 145%;
+  --gcds-icon-line-height-h5: 133%;
+  --gcds-icon-line-height-h4: 133%;
+  --gcds-icon-line-height-h3: 137%;
+  --gcds-icon-line-height-h2: 123%;
+  --gcds-icon-line-height-h1: 117%;
+  --gcds-icon-line-height-text-small-mobile: 150%;
+  --gcds-icon-line-height-text-mobile: 155%;
+  --gcds-icon-line-height-h6-mobile: 140%;
+  --gcds-icon-line-height-h5-mobile: 127%;
+  --gcds-icon-line-height-h4-mobile: 133%;
+  --gcds-icon-line-height-h3-mobile: 123%;
+  --gcds-icon-line-height-h2-mobile: 125%;
+  --gcds-icon-line-height-h1-mobile: 119%;
+  --gcds-icon-margin-0: 0rem;
+  --gcds-icon-margin-25: 0.125rem;
+  --gcds-icon-margin-50: 0.25rem;
+  --gcds-icon-margin-75: 0.375rem;
+  --gcds-icon-margin-100: 0.5rem;
+  --gcds-icon-margin-125: 0.625rem;
+  --gcds-icon-margin-150: 0.75rem;
+  --gcds-icon-margin-175: 0.875rem;
+  --gcds-icon-margin-200: 1rem;
+  --gcds-icon-margin-225: 1.125rem;
+  --gcds-icon-margin-250: 1.25rem;
+  --gcds-icon-margin-300: 1.5rem;
+  --gcds-icon-margin-350: 1.75rem;
+  --gcds-icon-margin-400: 2rem;
+  --gcds-icon-margin-450: 2.25rem;
+  --gcds-icon-margin-500: 2.5rem;
+  --gcds-icon-margin-550: 2.75rem;
+  --gcds-icon-margin-600: 3rem;
+  --gcds-icon-margin-650: 3.25rem;
+  --gcds-icon-margin-700: 3.5rem;
+  --gcds-icon-margin-750: 3.75rem;
+  --gcds-icon-margin-800: 4rem;
+  --gcds-icon-margin-850: 4.25rem;
+  --gcds-icon-margin-900: 4.5rem;
+  --gcds-icon-margin-950: 4.75rem;
+  --gcds-icon-margin-1000: 5rem;
+  --gcds-icon-margin-1050: 5.25rem;
+  --gcds-icon-margin-1100: 5.5rem;
+  --gcds-icon-margin-1150: 5.75rem;
+  --gcds-icon-margin-1200: 6rem;
+  --gcds-icon-margin-1250: 6.25rem;
+  --gcds-input-border-radius: 0.125rem;
+  --gcds-input-border-width: 0.125rem;
+  --gcds-input-danger-border: #b3192e;
+  --gcds-input-default-background: #ffffff;
+  --gcds-input-default-text: #333333;
+  --gcds-input-disabled-background: #d9d9d9;
+  --gcds-input-disabled-text: #808080;
+  --gcds-input-focus-border: #1354ec;
+  --gcds-input-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-input-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-input-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-input-margin: 0 0 1.5rem;
+  --gcds-input-min-width-and-height: 3rem;
+  --gcds-input-outline-width: 0.25rem;
+  --gcds-input-padding: 0.5rem;
+  --gcds-label-font-desktop: 600 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-label-font-mobile: 600 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-label-margin: 0 0 0.5rem;
+  --gcds-label-required-font-weight: 400;
+  --gcds-label-required-margin: 0 0 0 0.375rem;
+  --gcds-label-text: #333333;
+  --gcds-lang-toggle-font-desktop: 400 1rem/150% 'Noto Sans', sans-serif;
+  /** Mandatory elements alignment: sub-components of header use 16px font */
+  --gcds-lang-toggle-font-mobile: 700 1.125rem/155% 'Noto Sans', sans-serif;
+  /** Mandatory elements alignment: size 18px  */
+  --gcds-lang-toggle-padding: 0.375rem 0.625rem;
+  --gcds-nav-group-font: 500 1rem/150% 'Noto Sans', sans-serif;
+  --gcds-nav-group-mobile-background: #ffffff;
+  --gcds-nav-group-mobile-list-margin: 0.875rem 0 0;
+  --gcds-nav-group-mobile-padding: 0.5rem 0.875rem 4.75rem 0.875rem;
+  --gcds-nav-group-mobile-trigger-border-radius: 0.375rem;
+  --gcds-nav-group-mobile-trigger-border-width: 0.125rem;
+  --gcds-nav-group-mobile-trigger-margin: 0.5rem;
+  --gcds-nav-group-mobile-trigger-text: #26374a;
+  --gcds-nav-group-side-nav-dropdown-padding: 1.75rem;
+  --gcds-nav-group-side-nav-trigger-font-weight: 600;
+  --gcds-nav-group-side-nav-trigger-hover-background: #e6e6e6;
+  --gcds-nav-group-side-nav-trigger-icon-margin: 0.5rem;
+  --gcds-nav-group-side-nav-trigger-margin: 0.5rem;
+  --gcds-nav-group-top-nav-dropdown-background: #ffffff;
+  --gcds-nav-group-top-nav-dropdown-box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.25);
+  --gcds-nav-group-top-nav-dropdown-padding: 0.75rem 0.75rem 0.125rem;
+  --gcds-nav-group-top-nav-dropdown-width: 20rem;
+  --gcds-nav-group-top-nav-trigger-hover-text: #1354ec;
+  --gcds-nav-group-top-nav-trigger-hover-decoration-thickness: 0.125rem;
+  --gcds-nav-group-top-nav-trigger-decoration-thickness: 0.0625rem;
+  --gcds-nav-group-top-nav-trigger-underline-offset: 0.25rem;
+  --gcds-nav-group-top-nav-trigger-expanded-background-color: #e6e6e6;
+  --gcds-nav-group-top-nav-trigger-icon-margin: 0.5rem;
+  --gcds-nav-group-top-nav-trigger-padding: 1.125rem 1rem;
+  --gcds-nav-group-top-nav-trigger-text: #595959;
+  --gcds-nav-group-trigger-focus-background: #1354ec;
+  --gcds-nav-group-trigger-focus-text: #ffffff;
+  --gcds-nav-group-trigger-focus-border-radius: 0.125rem;
+  --gcds-nav-group-trigger-focus-outline-offset: 0.125rem;
+  --gcds-nav-group-trigger-focus-outline: 0.25rem solid #1354ec;
+  --gcds-nav-group-trigger-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-nav-group-trigger-hover-text: #1354ec;
+  --gcds-nav-group-trigger-max-width: 20rem;
+  --gcds-nav-group-trigger-padding: 0.625rem 0.75rem;
+  --gcds-nav-group-trigger-text: #333333;
+  --gcds-nav-link-active-border-color: #26374a;
+  --gcds-nav-link-active-font-weight: 700;
+  --gcds-nav-link-active-text: #26374a;
+  --gcds-nav-link-active-background: #d6e4f5;
+  --gcds-nav-link-border-width: 0.125rem;
+  --gcds-nav-link-default-text: #1f497a;
+  --gcds-nav-link-default-decoration-thickness: 0.0625rem;
+  --gcds-nav-link-default-max-width: 20rem;
+  --gcds-nav-link-default-underline-offset: 0.25rem;
+  --gcds-nav-link-focus-background: #1354ec;
+  --gcds-nav-link-focus-text: #ffffff;
+  --gcds-nav-link-focus-border-radius: 0.125rem;
+  --gcds-nav-link-focus-outline-offset: 0.125rem;
+  --gcds-nav-link-focus-outline: 0.25rem solid #1354ec;
+  --gcds-nav-link-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-nav-link-font: 500 1rem/150% 'Noto Sans', sans-serif;
+  --gcds-nav-link-hover-decoration-thickness: 0.125rem;
+  --gcds-nav-link-hover-text: #1354ec;
+  --gcds-nav-link-margin: 0.5rem;
+  --gcds-nav-link-padding: 0.625rem;
+  --gcds-nav-link-side-nav-hover-background: #f2f2f2;
+  --gcds-nav-link-side-nav-padding: 0.625rem 0.5rem;
+  --gcds-nav-link-top-nav-hover-background: #d9d9d9;
+  --gcds-nav-link-top-nav-home-font: 700 1rem/150% 'Noto Sans', sans-serif;
+  --gcds-nav-link-top-nav-home-padding: 1rem 0.125rem;
+  --gcds-nav-link-top-nav-padding: 1rem;
+  --gcds-nav-link-top-nav-text: #595959;
+  --gcds-nav-link-top-nav-text-primary: #333333;
+  --gcds-nav-link-top-nav-margin: 0;
+  --gcds-notice-border-width: 0.375rem;
+  --gcds-notice-content-heading-font-desktop: 700 1.8125rem/137% 'Lato', sans-serif;
+  --gcds-notice-content-heading-font-mobile: 700 1.625rem/123% 'Lato', sans-serif;
+  --gcds-notice-content-heading-margin-block-start-desktop: 1rem;
+  --gcds-notice-content-heading-margin-block-start-mobile: 1.25rem;
+  --gcds-notice-content-slotted-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-notice-content-slotted-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-notice-content-slotted-list-margin: 1.5rem;
+  --gcds-notice-content-slotted-margin: 0.5rem;
+  --gcds-notice-danger-text: #b3192e;
+  --gcds-notice-icon-after-height: calc(100% - (3rem + 0.5rem));
+  --gcds-notice-icon-before-height: 1.125rem;
+  --gcds-notice-icon-gap: 0.875rem;
+  --gcds-notice-icon-margin: 0.125rem auto 0;
+  --gcds-notice-icon-width: 2.25rem;
+  --gcds-notice-info-text: #2962a3;
+  --gcds-notice-text: #333333;
+  --gcds-notice-success-text: #196636;
+  --gcds-notice-warning-text: #f2ad0d;
+  --gcds-pagination-active-text: #ffffff;
+  --gcds-pagination-active-background: #26374a;
+  --gcds-pagination-border-radius: 0.125rem;
+  --gcds-pagination-border-width: 0.125rem;
+  --gcds-pagination-default-text: #1f497a;
+  --gcds-pagination-hover-background: #d6e4f5;
+  --gcds-pagination-hover-text: #1354ec;
+  --gcds-pagination-focus-background: #1354ec;
+  --gcds-pagination-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-pagination-focus-text: #ffffff;
+  --gcds-pagination-focus-outline-width: 0.25rem;
+  --gcds-pagination-font-desktop: 500 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-pagination-font-mobile: 500 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-pagination-list-end-button-padding: 0.5rem;
+  --gcds-pagination-listitem-margin: 0.375rem;
+  --gcds-pagination-mobile-list-item-margin: 0.125rem;
+  --gcds-pagination-mobile-list-prevnext-margin: 0.75rem auto 0;
+  --gcds-pagination-simple-label-font-weight: 400;
+  --gcds-pagination-simple-listitem-divider-border: 0.0625rem solid #8c8c8c;
+  --gcds-pagination-simple-listitem-divider-margin: 1rem;
+  --gcds-pagination-simple-listitem-divider-padding: 0 0 1rem 0;
+  --gcds-pagination-simple-listitem-margin: 0;
+  --gcds-pagination-simple-listitem-text-margin: 0 0 0.125rem;
+  --gcds-pagination-simple-padding: 0.5rem 0.75rem 0.5rem 0.125rem;
+  --gcds-radio-border-radius: 100%;
+  --gcds-radio-check-height-and-width: 1.125rem;
+  --gcds-radio-check-left: 0.9375rem;
+  --gcds-radio-check-top: 0.9375rem;
+  --gcds-radio-danger-border: #b3192e;
+  --gcds-radio-default-background: #ffffff;
+  --gcds-radio-default-text: #333333;
+  --gcds-radio-disabled-background: #d9d9d9;
+  --gcds-radio-disabled-border: #999999;
+  --gcds-radio-disabled-text: #808080;
+  --gcds-radio-error-message-margin: 0 0 0.5rem;
+  --gcds-radio-focus-background: #ffffff;
+  --gcds-radio-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-radio-focus-color: #1354ec;
+  --gcds-radio-focus-outline-width: 0.25rem;
+  --gcds-radio-font: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-radio-hint-margin: 0 0 1rem;
+  --gcds-radio-input-border-width: 0.125rem;
+  --gcds-radio-input-height-and-width: 3rem;
+  --gcds-radio-label-font-desktop: 500 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-radio-label-font-mobile: 500 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-radio-label-padding: 0 0 0 3.75rem;
+  --gcds-radio-legend-font-desktop: 700 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-radio-legend-font-mobile: 700 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-radio-legend-hint-margin: 0 0 1rem;
+  --gcds-radio-legend-margin: 0 0 0.125rem;
+  --gcds-radio-legend-required-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-radio-legend-required-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-radio-margin: 0 0 1.125rem;
+  --gcds-radio-max-width: 46.5rem;
+  --gcds-radio-padding: 0.5rem;
+  --gcds-search-border-color: #d9d9d9;
+  --gcds-search-border-width: 0.0625rem;
+  --gcds-search-button-width-height: 2.5rem;
+  --gcds-search-default-background: #ffffff;
+  --gcds-search-default-text: #333333;
+  --gcds-search-focus-border-color: #1354ec;
+  --gcds-search-focus-border-width: 0.125rem;
+  --gcds-search-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-search-focus-margin: 0 -0.125rem 0 0;
+  --gcds-search-font: 400 1rem/150% 'Noto Sans', sans-serif;
+  /** Mandatory elements alignment: sub-components of header use 16px font */
+  --gcds-search-margin: 0 0 0.125rem;
+  --gcds-search-max-height: 2.5rem;
+  --gcds-search-outline-width: 0.25rem;
+  --gcds-search-padding: 0.375rem 0 0.375rem 0.75rem;
+  --gcds-search-placeholder: #666666;
+  --gcds-select-arrow-position-x: calc(100% - 0.75rem);
+  --gcds-select-border-radius: 0.125rem;
+  --gcds-select-border-width: 0.125rem;
+  --gcds-select-danger-border: #b3192e;
+  --gcds-select-default-background: #ffffff;
+  --gcds-select-default-text: #333333;
+  --gcds-select-disabled-background: #d9d9d9;
+  --gcds-select-disabled-text: #808080;
+  --gcds-select-focus-border: #1354ec;
+  --gcds-select-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-select-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-select-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-select-margin: 0 0 1.5rem;
+  --gcds-select-min-width-and-height: 3rem;
+  --gcds-select-outline-width: 0.25rem;
+  --gcds-select-padding: 0.5rem 3.75rem 0.5rem 0.5rem;
+  --gcds-side-nav-heading-color: #333333;
+  --gcds-side-nav-heading-font: 700 1.5rem/133% 'Lato', sans-serif;
+  --gcds-side-nav-heading-margin: 0.5rem;
+  --gcds-side-nav-heading-padding: 0.625rem;
+  --gcds-side-nav-max-width: 20rem;
+  --gcds-signature-color-flag: #eb2d37;
+  /** Signature flag colour - FIP red */
+  --gcds-signature-color-text: #000000;
+  --gcds-signature-signature-height: 1.21875rem;
+  --gcds-signature-signature-height-desktop: 2.09375rem;
+  --gcds-signature-white-default: #ffffff;
+  --gcds-signature-wordmark-height: 3rem;
+  --gcds-stepper-font-desktop: 600 1.375rem/145% 'Lato', sans-serif;
+  --gcds-stepper-font-mobile: 600 1.25rem/140% 'Lato', sans-serif;
+  --gcds-stepper-margin-desktop: 0 0 0.5rem;
+  --gcds-stepper-margin-mobile: 0 0 0.25rem;
+  --gcds-textarea-border-radius: 0.125rem;
+  --gcds-textarea-border-width: 0.125rem;
+  --gcds-textarea-danger-border: #b3192e;
+  --gcds-textarea-default-background: #ffffff;
+  --gcds-textarea-default-text: #333333;
+  --gcds-textarea-disabled-background: #d9d9d9;
+  --gcds-textarea-disabled-text: #808080;
+  --gcds-textarea-focus-border: #1354ec;
+  --gcds-textarea-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-textarea-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-textarea-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-textarea-margin: 0 0 1.5rem;
+  --gcds-textarea-min-height: 3rem;
+  --gcds-textarea-outline-width: 0.25rem;
+  --gcds-textarea-padding: 0.5rem;
+  --gcds-top-nav-border-color: #d9d9d9;
+  --gcds-top-nav-border-width: 0.0625rem;
+  --gcds-top-nav-max-width: 71.25rem;
+  --gcds-topic-menu-border-width: 0.0625rem;
+  --gcds-topic-menu-button-background: #26374a;
+  --gcds-topic-menu-button-border: #26374a;
+  --gcds-topic-menu-button-expanded-background: #444444;
+  /** Colour mandated by policy */
+  --gcds-topic-menu-button-expanded-border-color: #444444;
+  /** Colour mandated by policy */
+  --gcds-topic-menu-button-expanded-text: #ffffff;
+  --gcds-topic-menu-button-home-background: #ffffff;
+  --gcds-topic-menu-button-home-border-color: #ffffff;
+  --gcds-topic-menu-button-home-text: #284162;
+  /** Colour mandated by policy: link colour */
+  --gcds-topic-menu-button-padding: 0.625rem 1.125rem;
+  --gcds-topic-menu-button-text: #ffffff;
+  --gcds-topic-menu-focus-background: #1354ec;
+  --gcds-topic-menu-focus-text: #ffffff;
+  --gcds-topic-menu-focus-border-radius: 0.125rem;
+  --gcds-topic-menu-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-topic-menu-focus-outline-offset: 0.125rem;
+  --gcds-topic-menu-focus-outline: 0.25rem solid #1354ec;
+  --gcds-topic-menu-font: 400 1rem/150% 'Noto Sans', sans-serif;
+  /** Mandatory elements alignment: sub-components of header use 16px font */
+  --gcds-topic-menu-max-width: 71.25rem;
+  --gcds-topic-menu-menuitem-border-block-end: #545961;
+  --gcds-topic-menu-menuitem-expanded-background: #ffffff;
+  --gcds-topic-menu-menuitem-expanded-text: #333333;
+  --gcds-topic-menu-menuitem-padding: 0.75rem 1.5rem;
+  --gcds-topic-menu-menuitem-text: #ffffff;
+  --gcds-topic-menu-menuitem-text-underline-offset: 0.25rem;
+  --gcds-topic-menu-menuitem-width: 22.5rem;
+  --gcds-topic-menu-mobile-item-expanded-margin-inline-start: 3.75rem;
+  --gcds-topic-menu-mobile-item-expanded-padding-inline-start: 3.75rem;
+  --gcds-topic-menu-mobile-mostrequested-background: #d6d9dd;
+  --gcds-topic-menu-mobile-mostrequested-border: #a8adb4;
+  --gcds-topic-menu-mobile-mostrequested-expanded-margin-inline-start: 6rem;
+  --gcds-topic-menu-mobile-mostrequested-hover-text: #000000;
+  --gcds-topic-menu-mobile-themelist-border: #f1f2f3;
+  --gcds-topic-menu-mobile-themelist-margin-block-start: 3rem;
+  --gcds-topic-menu-mobile-topiclist-item-first-menuitem-border: #d6d9dd;
+  --gcds-topic-menu-mobile-topiclist-item-first-menuitem-text: #000000;
+  --gcds-topic-menu-mobile-topiclist-item-last-menuitem-hover-text: #000000;
+  --gcds-topic-menu-mobile-topiclist-item-last-menuitem-text: #284162;
+  /** Colour mandated by policy: link colour */
+  --gcds-topic-menu-mobile-topiclist-menuitem-border-block-end: #d6d9dd;
+  --gcds-topic-menu-mobile-topiclist-menuitem-hover-text: #1354ec;
+  --gcds-topic-menu-mobile-topiclist-menuitem-padding: 0.875rem 1.5rem 0.875rem 0;
+  --gcds-topic-menu-mostrequested-item-last-margin-block-start: 0.875rem;
+  --gcds-topic-menu-mostrequested-item-width: 100%;
+  --gcds-topic-menu-themelist-background: #444444;
+  /** Colour mandated by policy */
+  --gcds-topic-menu-themelist-item-border: #444444;
+  /** Colour mandated by policy */
+  --gcds-topic-menu-themelist-text: #ffffff;
+  --gcds-topic-menu-themelist-width: 100%;
+  --gcds-topic-menu-topiclist-background: #ffffff;
+  --gcds-topic-menu-topiclist-border: #d6d9dd;
+  --gcds-topic-menu-topiclist-box-shadow: 0.5rem 0.5rem 0.5rem 0.375rem rgba(0,0,0,.1);
+  --gcds-topic-menu-topiclist-item-first-font: 700 1.8125rem/137% 'Noto Sans', sans-serif;
+  --gcds-topic-menu-topiclist-item-first-margin-block-end: 2.25rem;
+  --gcds-topic-menu-topiclist-item-last-left: 25rem;
+  --gcds-topic-menu-topiclist-item-last-top: 6rem;
+  --gcds-topic-menu-topiclist-left: 22.5rem;
+  --gcds-topic-menu-topiclist-margin-block-end: 1.5rem;
+  --gcds-topic-menu-topiclist-menuitem-hover-text: #1354ec;
+  --gcds-topic-menu-topiclist-menuitem-hover-text-decoration-thickness: 0.125rem;
+  --gcds-topic-menu-topiclist-menuitem-padding: 0.375rem 0;
+  --gcds-topic-menu-topiclist-menuitem-popup-font: 700 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-topic-menu-topiclist-menuitem-popup-text: #000000;
+  --gcds-topic-menu-topiclist-menuitem-text: #284162;
+  /** Colour mandated by policy: link colour */
+  --gcds-topic-menu-topiclist-min-height: 45.9375rem;
+  --gcds-topic-menu-topiclist-padding: 0 2.25rem 1.5rem 2.25rem;
+  --gcds-topic-menu-topiclist-text: #000000;
+  --gcds-topic-menu-topiclist-width: calc(100% - 22.5rem);
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-heading-character-limit-h1: 31ch;
+  --gcds-heading-character-limit-h2: 35ch;
+  --gcds-heading-character-limit-h3: 40ch;
+  --gcds-heading-character-limit-h4: 45ch;
+  --gcds-heading-character-limit-h5: 50ch;
+  --gcds-heading-character-limit-h6: 57ch;
+  --gcds-heading-default-text: #333333;
+  --gcds-heading-h1-border-background: #a62a1e;
+  /** Heading accent colour - Canada.ca style */
+  --gcds-heading-h1-border-height: 0.375rem;
+  --gcds-heading-h1-border-margin: 0.5rem;
+  --gcds-heading-h1-border-width: 4.5rem;
+  --gcds-heading-h1-desktop: 700 2.5625rem/117% 'Lato', sans-serif;
+  --gcds-heading-h1-mobile: 700 2.3125rem/119% 'Lato', sans-serif;
+  --gcds-heading-h2-desktop: 700 2.4375rem/123% 'Lato', sans-serif;
+  --gcds-heading-h2-mobile: 700 2.1875rem/125% 'Lato', sans-serif;
+  --gcds-heading-h3-desktop: 700 1.8125rem/137% 'Lato', sans-serif;
+  --gcds-heading-h3-mobile: 700 1.625rem/123% 'Lato', sans-serif;
+  --gcds-heading-h4-desktop: 700 1.6875rem/133% 'Lato', sans-serif;
+  --gcds-heading-h4-mobile: 700 1.5rem/133% 'Lato', sans-serif;
+  --gcds-heading-h5-desktop: 700 1.5rem/133% 'Lato', sans-serif;
+  --gcds-heading-h5-mobile: 700 1.375rem/127% 'Lato', sans-serif;
+  --gcds-heading-h6-desktop: 700 1.375rem/145% 'Lato', sans-serif;
+  --gcds-heading-h6-mobile: 700 1.25rem/140% 'Lato', sans-serif;
+  --gcds-heading-role-light: #ffffff;
+  --gcds-heading-role-primary: #333333;
+  --gcds-heading-role-secondary: #595959;
+  --gcds-heading-spacing-0: 0rem;
+  --gcds-heading-spacing-25: 0.125rem;
+  --gcds-heading-spacing-50: 0.25rem;
+  --gcds-heading-spacing-75: 0.375rem;
+  --gcds-heading-spacing-100: 0.5rem;
+  --gcds-heading-spacing-125: 0.625rem;
+  --gcds-heading-spacing-150: 0.75rem;
+  --gcds-heading-spacing-175: 0.875rem;
+  --gcds-heading-spacing-200: 1rem;
+  --gcds-heading-spacing-225: 1.125rem;
+  --gcds-heading-spacing-250: 1.25rem;
+  --gcds-heading-spacing-300: 1.5rem;
+  --gcds-heading-spacing-350: 1.75rem;
+  --gcds-heading-spacing-400: 2rem;
+  --gcds-heading-spacing-450: 2.25rem;
+  --gcds-heading-spacing-500: 2.5rem;
+  --gcds-heading-spacing-550: 2.75rem;
+  --gcds-heading-spacing-600: 3rem;
+  --gcds-heading-spacing-650: 3.25rem;
+  --gcds-heading-spacing-700: 3.5rem;
+  --gcds-heading-spacing-750: 3.75rem;
+  --gcds-heading-spacing-800: 4rem;
+  --gcds-heading-spacing-850: 4.25rem;
+  --gcds-heading-spacing-900: 4.5rem;
+  --gcds-heading-spacing-950: 4.75rem;
+  --gcds-heading-spacing-1000: 5rem;
+  --gcds-heading-spacing-1050: 5.25rem;
+  --gcds-heading-spacing-1100: 5.5rem;
+  --gcds-heading-spacing-1150: 5.75rem;
+  --gcds-heading-spacing-1200: 6rem;
+  --gcds-heading-spacing-1250: 6.25rem;
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-label-font-desktop: 600 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-label-font-mobile: 600 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-label-margin: 0 0 0.5rem;
+  --gcds-label-required-font-weight: 400;
+  --gcds-label-required-margin: 0 0 0 0.375rem;
+  --gcds-label-text: #333333;
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-input-border-radius: 0.125rem;
+  --gcds-input-border-width: 0.125rem;
+  --gcds-input-danger-border: #b3192e;
+  --gcds-input-default-background: #ffffff;
+  --gcds-input-default-text: #333333;
+  --gcds-input-disabled-background: #d9d9d9;
+  --gcds-input-disabled-text: #808080;
+  --gcds-input-focus-border: #1354ec;
+  --gcds-input-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-input-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-input-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-input-margin: 0 0 1.5rem;
+  --gcds-input-min-width-and-height: 3rem;
+  --gcds-input-outline-width: 0.25rem;
+  --gcds-input-padding: 0.5rem;
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-textarea-border-radius: 0.125rem;
+  --gcds-textarea-border-width: 0.125rem;
+  --gcds-textarea-danger-border: #b3192e;
+  --gcds-textarea-default-background: #ffffff;
+  --gcds-textarea-default-text: #333333;
+  --gcds-textarea-disabled-background: #d9d9d9;
+  --gcds-textarea-disabled-text: #808080;
+  --gcds-textarea-focus-border: #1354ec;
+  --gcds-textarea-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-textarea-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-textarea-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-textarea-margin: 0 0 1.5rem;
+  --gcds-textarea-min-height: 3rem;
+  --gcds-textarea-outline-width: 0.25rem;
+  --gcds-textarea-padding: 0.5rem;
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-checkbox-check-border-width: 0.3125rem;
+  --gcds-checkbox-check-height: 1.5rem;
+  --gcds-checkbox-check-left: 1rem;
+  --gcds-checkbox-check-top: 0.625rem;
+  --gcds-checkbox-check-width: 0.875rem;
+  --gcds-checkbox-danger-border: #b3192e;
+  --gcds-checkbox-default-background: #ffffff;
+  --gcds-checkbox-default-text: #333333;
+  --gcds-checkbox-disabled-background: #d9d9d9;
+  --gcds-checkbox-disabled-text: #808080;
+  --gcds-checkbox-fieldset-margin: 0 0 1rem;
+  --gcds-checkbox-focus-background: #ffffff;
+  --gcds-checkbox-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-checkbox-focus-color: #1354ec;
+  --gcds-checkbox-focus-outline-width: 0.25rem;
+  --gcds-checkbox-font: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-checkbox-input-border-radius: 0.125rem;
+  --gcds-checkbox-input-border-width: 0.125rem;
+  --gcds-checkbox-input-height-and-width: 3rem;
+  --gcds-checkbox-label-font-desktop: 500 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-checkbox-label-font-mobile: 500 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-checkbox-label-padding: 0 0 0 3.75rem;
+  --gcds-checkbox-legend-font-desktop: 700 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-checkbox-legend-font-mobile: 700 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-checkbox-legend-hint-margin: 0 0 1rem;
+  --gcds-checkbox-legend-margin: 0 0 0.125rem;
+  --gcds-checkbox-legend-required-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-checkbox-legend-required-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-checkbox-margin: 0 0 1.125rem;
+  --gcds-checkbox-max-width: 46.5rem;
+  --gcds-checkbox-padding: 0.5rem;
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-radio-border-radius: 100%;
+  --gcds-radio-check-height-and-width: 1.125rem;
+  --gcds-radio-check-left: 0.9375rem;
+  --gcds-radio-check-top: 0.9375rem;
+  --gcds-radio-danger-border: #b3192e;
+  --gcds-radio-default-background: #ffffff;
+  --gcds-radio-default-text: #333333;
+  --gcds-radio-disabled-background: #d9d9d9;
+  --gcds-radio-disabled-border: #999999;
+  --gcds-radio-disabled-text: #808080;
+  --gcds-radio-error-message-margin: 0 0 0.5rem;
+  --gcds-radio-focus-background: #ffffff;
+  --gcds-radio-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-radio-focus-color: #1354ec;
+  --gcds-radio-focus-outline-width: 0.25rem;
+  --gcds-radio-font: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-radio-hint-margin: 0 0 1rem;
+  --gcds-radio-input-border-width: 0.125rem;
+  --gcds-radio-input-height-and-width: 3rem;
+  --gcds-radio-label-font-desktop: 500 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-radio-label-font-mobile: 500 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-radio-label-padding: 0 0 0 3.75rem;
+  --gcds-radio-legend-font-desktop: 700 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-radio-legend-font-mobile: 700 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-radio-legend-hint-margin: 0 0 1rem;
+  --gcds-radio-legend-margin: 0 0 0.125rem;
+  --gcds-radio-legend-required-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-radio-legend-required-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-radio-margin: 0 0 1.125rem;
+  --gcds-radio-max-width: 46.5rem;
+  --gcds-radio-padding: 0.5rem;
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-select-arrow-position-x: calc(100% - 0.75rem);
+  --gcds-select-border-radius: 0.125rem;
+  --gcds-select-border-width: 0.125rem;
+  --gcds-select-danger-border: #b3192e;
+  --gcds-select-default-background: #ffffff;
+  --gcds-select-default-text: #333333;
+  --gcds-select-disabled-background: #d9d9d9;
+  --gcds-select-disabled-text: #808080;
+  --gcds-select-focus-border: #1354ec;
+  --gcds-select-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-select-font-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-select-font-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-select-margin: 0 0 1.5rem;
+  --gcds-select-min-width-and-height: 3rem;
+  --gcds-select-outline-width: 0.25rem;
+  --gcds-select-padding: 0.5rem 3.75rem 0.5rem 0.5rem;
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-link-focus-background: #1354ec;
+  --gcds-link-focus-outline-width: 0.25rem;
+  --gcds-link-focus-outline-offset: 0.125rem;
+  --gcds-link-focus-text: #ffffff;
+  --gcds-link-focus-border-radius: 0.125rem;
+  --gcds-link-focus-box-shadow: 0 0 0 0.125rem #ffffff;
+  --gcds-link-font-small-desktop: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-link-font-small-mobile: 400 1rem/150% 'Noto Sans', sans-serif;
+  --gcds-link-font-regular-desktop: 400 1.25rem/160% 'Noto Sans', sans-serif;
+  --gcds-link-font-regular-mobile: 400 1.125rem/155% 'Noto Sans', sans-serif;
+  --gcds-link-decoration-thickness: 0.0625rem;
+  --gcds-link-hover-decoration-thickness: 0.125rem;
+  --gcds-link-underline-offset: 0.125rem;
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-error-summary-border-color: #b3192e;
+  --gcds-error-summary-border-width: 0.375rem;
+  --gcds-error-summary-link-color: #b3192e;
+  --gcds-error-summary-list-item-padding: 0 0 0.75rem 0.125rem;
+  --gcds-error-summary-list-margin: 0 0 0 1.25rem;
+  --gcds-error-summary-margin: 0 0 2.25rem;
+  --gcds-error-summary-max-width: 65ch;
+  --gcds-error-summary-text: #333333;
+  --gcds-error-summary-mobile-padding: 1.125rem;
+  --gcds-error-summary-padding: 2.5rem;
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-fieldset-default-text: #333333;
+  --gcds-fieldset-legend-margin: 0 0 0.125rem;
+  --gcds-fieldset-legend-size-h2-desktop: 700 2.4375rem/123% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h2-mobile: 700 2.1875rem/125% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h3-desktop: 700 1.8125rem/137% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h3-mobile: 700 1.625rem/123% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h4-desktop: 700 1.6875rem/133% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h4-mobile: 700 1.5rem/133% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h5-desktop: 700 1.5rem/133% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h5-mobile: 700 1.375rem/127% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h6-desktop: 700 1.375rem/145% 'Lato', sans-serif;
+  --gcds-fieldset-legend-size-h6-mobile: 700 1.25rem/140% 'Lato', sans-serif;
+}
+
+@supports not (display: grid) {
+  input {
+    border: 1px solid #000;
+  }
+}
+
+@font-face {
+  font-family: "gcds-icons";
+
+  src: url("/fonts/icons/gcds-icons.eot");
+
+  src: url("/fonts/icons/gcds-icons.eot#iefix") format("embedded-opentype"), url("/fonts/icons/gcds-icons.ttf") format("truetype"), url("/fonts/icons/gcds-icons.woff") format("woff"), url("/fonts/icons/gcds-icons.svg") format("svg");
+
+  font-weight: normal;
+
+  font-style: normal;
+
+  font-display: block;
+}
+
+[class^=gcds-icon-],
+[class*=" gcds-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "gcds-icons" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.gcds-icon-checkmark-circle:before {
+  content: "\e908";
+}
+
+.gcds-icon-chevron-down:before {
+  content: "\e900";
+}
+
+.gcds-icon-chevron-left:before {
+  content: "\e901";
+}
+
+.gcds-icon-chevron-right:before {
+  content: "\e902";
+}
+
+.gcds-icon-chevron-up:before {
+  content: "\e903";
+}
+
+.gcds-icon-close:before {
+  content: "\e90b";
+}
+
+.gcds-icon-download:before {
+  content: "\e906";
+}
+
+.gcds-icon-email:before {
+  content: "\e905";
+}
+
+.gcds-icon-exclamation-circle:before {
+  content: "\e909";
+}
+
+.gcds-icon-external:before {
+  content: "\e904";
+}
+
+.gcds-icon-info-circle:before {
+  content: "\e90a";
+}
+
+.gcds-icon-phone:before {
+  content: "\e90c";
+}
+
+.gcds-icon-search:before {
+  content: "\e907";
+}
+
+.gcds-icon-warning-triangle:before {
+  content: "\e90d";
+}
+
+/* https://github.com/cds-snc/gcds-components/blob/main/packages/web/src/components/gcds-input/gcds-input.css */
+
+@layer reset, default, disabled, error, focus;
+
+.gcds-input-wrapper {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.gcds-input-wrapper input {
+  box-sizing: border-box;
+}
+
+.gcds-input-wrapper {
+  max-width: 75ch;
+  width: 100%;
+  font: var(--gcds-input-font-desktop);
+  color: var(--gcds-input-default-text);
+  transition: color ease-in-out 0.15s;
+}
+
+@media only screen and (width < 48em) {
+  .gcds-input-wrapper {
+    font: var(--gcds-input-font-mobile);
+  }
+}
+
+.gcds-input-wrapper input {
+  display: block;
+  min-width: var(--gcds-input-min-width-and-height);
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: var(--gcds-input-min-width-and-height);
+  font: inherit !important;
+  margin: var(--gcds-input-margin) !important;
+  padding: var(--gcds-input-padding) !important;
+  background-color: var(--gcds-input-default-background);
+  background-image: none;
+  color: var(--gcds-input-default-text);
+  border: var(--gcds-input-border-width) solid currentColor;
+  border-radius: var(--gcds-input-border-radius);
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, outline ease-in-out 0.15s;
+}
+
+.gcds-input-wrapper.gcds-disabled {
+  color: var(--gcds-input-disabled-text);
+}
+
+.gcds-input-wrapper.gcds-disabled input:disabled {
+  cursor: not-allowed;
+  background-color: var(--gcds-input-disabled-background);
+  border-color: var(--gcds-input-disabled-text);
+}
+
+.gcds-input-wrapper.gcds-disabled .gcds-label,
+.gcds-input-wrapper.gcds-disabled .gcds-hint {
+  color: var(--gcds-input-disabled-text);
+}
+
+.gcds-input-wrapper input.gcds-error:not(:focus) {
+  border-color: var(--gcds-input-danger-border);
+}
+
+.gcds-input-wrapper:focus-within {
+  color: var(--gcds-input-focus-color);
+}
+
+.gcds-input-wrapper:focus-within input:focus {
+  border-color: var(--gcds-input-focus-border);
+  outline: var(--gcds-input-outline-width) solid var(--gcds-input-focus-border);
+  outline-offset: var(--gcds-input-border-width);
+  box-shadow: var(--gcds-input-focus-box-shadow);
+}
+
+/* https://github.com/cds-snc/gcds-components/blob/main/packages/web/src/components/gcds-input/gcds-input.css */
+
+.gcds-textarea-wrapper {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.gcds-textarea-wrapper textarea {
+  box-sizing: border-box;
+}
+
+.gcds-textarea-wrapper {
+  width: 100%;
+  max-width: 75ch;
+  font: var(--gcds-input-font-desktop);
+  color: var(--gcds-textarea-default-text);
+  transition: color ease-in-out 0.15s;
+}
+
+@media only screen and (width < 48em) {
+  .gcds-textarea-wrapper {
+    font: var(--gcds-input-font-mobile);
+  }
+}
+
+.gcds-textarea-wrapper textarea {
+  display: block;
+  min-width: 50%;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: var(--gcds-textarea-min-height);
+  font: inherit;
+  margin: var(--gcds-textarea-margin) !important;
+  padding: var(--gcds-textarea-padding) !important;
+  background-color: var(--gcds-textarea-default-background);
+  background-image: none;
+  color: var(--gcds-textarea-default-text);
+  border: var(--gcds-textarea-border-width) solid currentColor;
+  border-radius: var(--gcds-textarea-border-radius);
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, outline ease-in-out 0.15s;
+}
+
+.gcds-textarea-wrapper.gcds-disabled {
+  color: var(--gcds-textarea-disabled-text);
+}
+
+.gcds-textarea-wrapper.gcds-disabled textarea:disabled {
+  cursor: not-allowed;
+  background-color: var(--gcds-textarea-disabled-background);
+  border-color: var(--gcds-textarea-disabled-text);
+}
+
+.gcds-textarea-wrapper.gcds-disabled .gcds-label,
+.gcds-textarea-wrapper.gcds-disabled .gcds-hint {
+  color: var(--gcds-textarea-disabled-text);
+}
+
+.gcds-textarea-wrapper .error-message-container {
+  display: block;
+}
+
+.gcds-textarea-wrapper textarea.gcds-error:not(:focus) {
+  border-color: var(--gcds-textarea-danger-border);
+}
+
+.gcds-textarea-wrapper:focus-within {
+  color: var(--gcds-textarea-focus-color);
+}
+
+.gcds-textarea-wrapper:focus-within textarea:focus {
+  border-color: var(--gcds-textarea-focus-border);
+  outline: var(--gcds-textarea-outline-width) solid var(--gcds-textarea-focus-border);
+  outline-offset: var(--gcds-textarea-border-width);
+  box-shadow: var(--gcds-textarea-focus-box-shadow);
+}
+
+/* https://github.com/cds-snc/gcds-components/blob/main/packages/web/src/components/gcds-label/gcds-label.css */
+
+@layer reset, default;
+
+@layer reset {
+  :host {
+    display: block;
+  }
+}
+
+@layer default {
+  .gcds-label {
+    display: block;
+    max-width: 100%;
+    font: var(--gcds-label-font-desktop);
+    margin: var(--gcds-label-margin) !important;
+    color: var(--gcds-label-text);
+    cursor: pointer;
+  }
+
+  @media only screen and (width < 48em) {
+    .gcds-label {
+      font: var(--gcds-label-font-mobile);
+    }
+  }
+
+  .gcds-label.label--hidden > span {
+    -webkit-clip-path: inset(100%);
+            clip-path: inset(100%);
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  .gcds-label .label--required {
+    font-weight: var(--gcds-label-required-font-weight);
+    margin: var(--gcds-label-required-margin) !important;
+  }
+}
+
+/* 
+Based on GC Design System Checkbox 
+See: https://design-system.alpha.canada.ca/en/components/checkbox/ 
+*/
+
+.gc-input-checkbox {
+  position: relative;
+  transition: color ease-in-out 0.15s;
+}
+
+.gc-input-checkbox:focus-within {
+  color: #1354ec;
+}
+
+.gc-input-checkbox:focus-within .gc-checkbox-label:before {
+  outline: var(--gcds-checkbox-focus-outline-width) solid #1354ec;
+  outline-offset: var(--gcds-checkbox-input-border-width);
+  box-shadow: var(--gcds-checkbox-focus-box-shadow);
+  background: var(--gcds-checkbox-focus-background);
+  border-color: #1354ec !important;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, outline ease-in-out 0.15s;
+}
+
+.gc-input-checkbox {
+  /* Html Input  */
+}
+
+.gc-input-checkbox .gc-input-checkbox__input{
+  position: absolute;
+  margin-right: 1rem;
+  border-color: transparent;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  border-width: var(--gcds-checkbox-input-border-width);
+  width: var(--gcds-checkbox-input-height-and-width);
+  height: var(--gcds-checkbox-input-height-and-width);
+}
+
+.gc-input-checkbox .gc-input-checkbox__input + .gc-checkbox-label{
+  position: relative;
+  cursor: pointer;
+  padding: 0rem;
+  display: inline-flex;
+}
+
+.gc-input-checkbox .gc-input-checkbox__input:disabled + .gc-checkbox-label {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.gc-input-checkbox .gc-input-checkbox__input + .gc-checkbox-label:before {
+  content: "";
+  margin-right: 1rem;
+  display: inline-block;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  width: var(--gcds-checkbox-input-height-and-width);
+  height: var(--gcds-checkbox-input-height-and-width);
+  border: var(--gcds-checkbox-input-border-width) solid #000;
+  border-radius: var(--gcds-checkbox-input-border-radius);
+}
+
+.gc-input-checkbox .gc-input-checkbox__input:focus + .gc-checkbox-label:before {
+  border: var(--gcds-checkbox-input-border-width) solid #1354ec;
+}
+
+.gc-input-checkbox .gc-input-checkbox__input:checked + .gc-checkbox-label:after {
+  content: "";
+  position: absolute;
+  border: var(--gcds-checkbox-check-border-width) solid currentcolor;
+  -webkit-border-start: 0 !important;
+          border-inline-start: 0 !important;
+  -webkit-border-before: 0 !important;
+          border-block-start: 0 !important;
+  height: var(--gcds-checkbox-check-height);
+  width: var(--gcds-checkbox-check-width);
+  left: var(--gcds-checkbox-check-left);
+  opacity: 1;
+  top: var(--gcds-checkbox-check-top);
+  transform: rotate(40deg);
+  transition: opacity 0.2s ease-in-out;
+}
+
+.gc-input-checkbox .checkbox-label-text {
+  font: var(--gcds-label-font-desktop);
+  font-family: var(--font-noto-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.gc-input-radio {
+  position: relative;
+  transition: color ease-in-out 0.15s;
+  margin: var(--gcds-radio-margin) !important;
+  max-width: var(--gcds-radio-max-width);
+  min-height: calc(var(--gcds-radio-input-height-and-width) - var(--gcds-radio-padding));
+  padding: var(--gcds-radio-padding) 0 0 !important;
+}
+
+.gc-input-radio:focus-within {
+  color: #1354ec;
+}
+
+.gc-input-radio:focus-within .gc-radio-label:before {
+  outline: var(--gcds-radio-focus-outline-width) solid #1354ec;
+  outline-offset: var(--gcds-radio-input-border-width);
+  box-shadow: var(--gcds-radio-focus-box-shadow);
+  background: var(--gcds-radio-focus-background);
+  border-color: #1354ec !important;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, outline ease-in-out 0.15s;
+}
+
+.gc-input-radio:focus-within .gc-radio-label:after {
+  background-color: #1354ec !important;
+}
+
+.gc-input-radio {
+  /* Html Input  */
+}
+
+.gc-input-radio .gc-radio__input {
+  opacity: 0;
+  border-color: transparent;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  position: absolute;
+  left: 0;
+  top: var(--gcds-radio-padding);
+  height: var(--gcds-radio-input-height-and-width);
+  width: var(--gcds-radio-input-height-and-width);
+}
+
+.gc-input-radio .gc-radio__input + .gc-radio-label{
+  position: relative;
+  cursor: pointer;
+  min-height: calc(var(--gcds-radio-input-height-and-width) - var(--gcds-radio-padding));
+}
+
+.gc-input-radio .gc-radio__input:disabled + .gc-radio-label {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.gc-input-radio .gc-radio__input + .gc-radio-label:before {
+  content: "";
+  top: 0;
+  left: 0;
+  height: var(--gcds-radio-input-height-and-width);
+  width: var(--gcds-radio-input-height-and-width);
+  position: absolute;
+  border-radius: var(--gcds-radio-border-radius);
+  border: var(--gcds-radio-input-border-width) solid #000;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, outline ease-in-out 0.15s;
+}
+
+.gc-input-radio .gc-radio__input:checked + .gc-radio-label:after {
+  content: "";
+  opacity: 1;
+  position: absolute;
+  left: var(--gcds-radio-check-left);
+  top: var(--gcds-radio-check-top);
+  border-radius: var(--gcds-radio-border-radius);
+  height: var(--gcds-radio-check-height-and-width);
+  width: var(--gcds-radio-check-height-and-width);
+  background-color: black;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.gc-input-radio .radio-label-text {
+  width: auto !important;
+  display: inline-block;
+  font: var(--gcds-label-font-desktop);
+  font-family: var(--font-noto-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  padding: var(--gcds-radio-label-padding) !important;
+}
+
+.gcds-select-wrapper {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+@media only screen and (width < 48em) {
+  .gcds-select-wrapper {
+    font: var(--gcds-select-font-mobile);
+  }
+}
+
+.gcds-select-wrapper select {
+  box-sizing: border-box;
+}
+
+.gcds-select-wrapper {
+  max-width: 75ch;
+  font: var(--gcds-select-font-desktop);
+  color: var(--gcds-select-default-text);
+  transition: color ease-in-out 0.15s;
+}
+
+.gcds-select-wrapper select {
+  display: block;
+  min-width: var(--gcds-select-min-width-and-height);
+  max-width: 100%;
+  height: auto;
+  min-height: var(--gcds-select-min-width-and-height);
+  font: inherit;
+  margin: var(--gcds-select-margin) !important;
+  padding: var(--gcds-select-padding) !important;
+  background-color: var(--gcds-select-default-background);
+  color: var(--gcds-select-default-text);
+  border: var(--gcds-select-border-width) solid currentColor;
+  border-radius: var(--gcds-select-border-radius);
+  box-sizing: border-box;
+  transition: all ease-in-out 0.15s;
+  /* Select arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg width='16' height='10' viewBox='0 0 16 10' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M0.799988 0.900024L7.79999 7.90003L14.8 0.900024' stroke='currentColor' stroke-width='2'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: var(--gcds-select-arrow-position-x);
+  background-position-y: 50%;
+}
+
+.gcds-select-wrapper.gcds-disabled {
+  color: var(--gcds-select-disabled-text);
+}
+
+.gcds-select-wrapper.gcds-disabled select:disabled {
+  cursor: not-allowed;
+  background-color: var(--gcds-select-disabled-background);
+  border-color: var(--gcds-select-disabled-text);
+}
+
+.gcds-select-wrapper.gcds-error:not(:focus-within) select {
+  border-color: var(--gcds-select-danger-border);
+}
+
+.gcds-select-wrapper:focus-within {
+  color: var(--gcds-select-focus-color);
+}
+
+.gcds-select-wrapper:focus-within select:focus {
+  border-color: var(--gcds-select-focus-border);
+  outline: var(--gcds-select-outline-width) solid var(--gcds-select-focus-border);
+  outline-offset: var(--gcds-select-border-width);
+  box-shadow: var(--gcds-select-focus-box-shadow);
+}
+
+.gc-alert{
+  margin-bottom: 3.5rem;
+  width: 83.333333%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+@media (max-width: 992px){
+  .gc-alert{
+    width: 100%;
+  }
+}
+
+.gc-alert.gc-alert--validation, .gc-alert.gc-alert--error {
+  border-width: var(--gcds-error-summary-border-width);
+  border-color: var(--gcds-error-summary-border-color);
+  padding: var(--gcds-error-summary-padding);
+  margin: var(--gcds-error-summary-margin);
+  color: var(--gcds-error-summary-text);
+}
+
+.gc-alert.gc-alert--validation h2, .gc-alert.gc-alert--error h2 {
+  color: var(--gcds-heading-default-text) !important;
+}
+
+.gc-alert.gc-alert--validation a, .gc-alert.gc-alert--error a {
+  color: var(--gcds-error-summary-link-color);
+}
+
+.gc-alert.gc-alert--success{
+  border-radius: 0.125rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(236 253 245 / var(--tw-bg-opacity, 1));
+  --tw-text-opacity: 1;
+  color: rgb(4 120 87 / var(--tw-text-opacity, 1));
+}
+
+@media (min-width: 1366px){
+  .gc-alert.gc-alert--success{
+    border-radius: 0.375rem;
+  }
+}
+
+.gc-alert .gc-alert__body{
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity, 1));
+}
+
+.gc-alert .gc-alert__body h3{
+  margin-bottom: 1.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(177 14 30 / var(--tw-text-opacity, 1));
+}
+
+.gc-alert .gc-alert__body ol{
+  list-style-position: inside;
+  padding-left: 0;
+}
+
+.gc-alert .gc-alert__body ol li{
+  margin-bottom: 0.5rem;
+}
+
+.gc-alert .gc-alert__body ol .gc-error-link{
+  margin-left: 0.5rem;
+  color: var(--gcds-error-summary-link-color);
+  transition: all 0.35s;
+}
+
+.gc-alert .gc-alert__body ol .gc-error-link:focus {
+  border-radius: var(--gcds-link-focus-border-radius);
+  background-color: var(--gcds-link-focus-background);
+  color: var(--gcds-link-focus-text);
+  box-shadow: var(--gcds-link-focus-box-shadow);
+  outline: var(--gcds-link-focus-outline-width) solid var(--gcds-link-focus-background);
+  outline-offset: var(--gcds-link-focus-outline-offset);
+  text-decoration: none;
+}
+
+.gc-combobox input {
+  background-image: url("/img/arrow-down.svg");
+  position: relative;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem !important;
+  display: block;
+  background-position: center right 15px;
+  background-repeat: no-repeat;
+}
+
+.gc-combobox ul{
+  position: absolute;
+  z-index: 10;
+  max-height: 20rem;
+  width: 100%;
+  min-width: 20rem;
+  overflow-y: scroll;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  padding: 0rem;
+  border-color: #333333;
+}
+
+.gc-combobox ul li{
+  display: flex;
+  flex-direction: column;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity, 1));
+}
+
+@layer reset, default, disabled, focus;
+
+@layer reset {
+  :host {
+    display: block;
+  }
+
+  :host .gcds-fieldset {
+    border: 0;
+    padding: 0;
+  }
+
+  :host legend {
+    padding: 0;
+  }
+
+  :host slot {
+    display: block;
+    margin: 0;
+  }
+}
+
+@layer default {
+  .gcds-fieldset {
+    color: var(--gcds-fieldset-default-text);
+  }
+
+  .gcds-fieldset legend {
+    font: var(--gcds-fieldset-font-desktop);
+    margin: var(--gcds-fieldset-legend-margin) !important;
+  }
+
+  @media only screen and (width < 48em) {
+    .gcds-fieldset legend {
+      font: var(--gcds-fieldset-font-mobile);
+    }
+  }
+
+  .gcds-fieldset legend .legend__required {
+    margin: var(--gcds-fieldset-legend-required-margin) !important;
+    font: var(--gcds-fieldset-legend-required-font-desktop);
+    vertical-align: middle;
+  }
+
+  @media only screen and (width < 48em) {
+    .gcds-fieldset legend .legend__required {
+      font: var(--gcds-fieldset-legend-required-font-mobile);
+    }
+  }
+}
+
+@layer disabled {
+  :host .gcds-fieldset:disabled {
+    color: var(--gcds-fieldset-disabled-text);
+  }
+}
+
+@layer focus {
+  :host .gcds-fieldset:focus-within {
+    color: var(--gcds-fieldset-focus-color);
+  }
+}
+
+.gc-fieldset ul{
+  margin-bottom: 3.5rem;
+}
+
+.gc-alert,
+.gc-error-message{
+  margin-bottom: 0.5rem;
+  width: 100%;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  color: var(--gcds-error-message-text-color);
+}
+
+.gc-error-message + .gc-input-text,
+.gc-error-message + .gc-textarea,
+.gc-error-message + .gc-dropdown{
+  --tw-border-opacity: 1;
+  border-color: rgb(185 28 28 / var(--tw-border-opacity, 1));
+}
+
+.gc-error-input{
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(185 28 28 / var(--tw-border-opacity, 1)) !important;
+}
+
+.gc-ordered-list{
+  margin-left: 0rem;
+  font-weight: 400;
+}
+
+.gc-p, .gc-richText p{
+  margin-bottom: 2.5rem;
+  width: 100%;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+@media (max-width: 550px){
+  .gc-p, .gc-richText p{
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+.gc-description{
+  margin-bottom: 0.75rem;
+  width: 75%;
+  font-size: 16px;
+  line-height: 22px;
+  --tw-text-opacity: 1;
+  color: rgb(88 88 88 / var(--tw-text-opacity, 1));
+}
+
+@media (max-width: 992px){
+  .gc-description{
+    width: 100%;
+  }
+}
+
+@media (max-width: 550px){
+  .gc-description{
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+}
+
+.gc-formview .gc-richText p:has(+ ul, + ol){
+  margin-bottom: 2.5rem;
+}
+
+.gc-richText p:has(+ ul, + ol){
+  margin-bottom: 0rem;
+}
+
+.gc-richText ul,
+.gc-richText ol{
+  margin-bottom: 2.5rem;
+}
+
+.gc-richText ul p,
+.gc-richText ol p{
+  margin-bottom: 0.25rem;
+}
+
+.gc-richText ul ul,
+.gc-richText ul ol,
+.gc-richText ol ul,
+.gc-richText ol ol{
+  margin-bottom: 0rem;
+}
+
+.gc-richText ol{
+  list-style-position: inside;
+}
+
+.gc-richText a{
+  --tw-text-opacity: 1;
+  color: rgb(40 65 98 / var(--tw-text-opacity, 1));
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
+
+.gc-richText a:hover{
+  --tw-text-opacity: 1;
+  color: rgb(5 53 210 / var(--tw-text-opacity, 1));
+}
+
+.gc-item-row{
+  margin-top: 0rem;
+  border-top-width: 2px;
+  --tw-border-opacity: 1;
+  border-color: rgb(11 12 12 / var(--tw-border-opacity, 1));
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  padding-left: 0rem;
+  padding-right: 0rem;
+  padding-top: 4rem;
+  padding-bottom: 0.75rem;
+}
+
+.gc-item-row h3{
+  margin-bottom: 2.5rem;
+  padding-bottom: 0rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+}
+
+@media (max-width: 550px){
+  .gc-item-row h3{
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
+.gc-form{
+  max-width: 75ch;
+}
+
+.gc-form-group{
+  margin-bottom: 0rem;
+}
+
+.gc-form-group .gc-input-radio:last-of-type,
+.gc-form-group .gc-input-checkbox:last-of-type{
+  padding-bottom: 0rem;
+}
+
+@media (max-width: 550px){
+  .gc-form-group .gc-input-radio:last-of-type,
+.gc-form-group .gc-input-checkbox:last-of-type{
+    margin-bottom: 2.5rem;
+  }
+}
+
+.gc-section-header{
+  margin-bottom: 4rem;
+  margin-top: 3rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(244 244 244 / var(--tw-bg-opacity, 1));
+  padding: 1.5rem;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+}
+
+@media (max-width: 550px){
+  .gc-section-header{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+.gc-label{
+  margin-bottom: 0.5rem;
+  display: block;
+  width: 75%;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+@media (max-width: 992px){
+  .gc-label{
+    width: 100%;
+  }
+}
+
+@media (max-width: 550px){
+  .gc-label{
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+.gc-label.required > span{
+  --tw-text-opacity: 1;
+  color: rgb(211 8 12 / var(--tw-text-opacity, 1));
+  content: " *";
+}
+
+.gc-plain-text{
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  width: 100%;
+}
+
+.gc-textarea{
+  margin-top: 0.5rem;
+  display: block;
+  height: 10rem;
+  width: 75%;
+  border-width: 2px;
+  border-style: solid;
+  --tw-border-opacity: 1;
+  border-color: rgb(11 12 12 / var(--tw-border-opacity, 1));
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 18px;
+  line-height: 28px;
+  --tw-text-opacity: 1;
+  color: rgb(74 85 104 / var(--tw-text-opacity, 1));
+}
+
+@media (max-width: 550px){
+  .gc-textarea{
+    width: 100%;
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+.gc-textarea.full-height{
+  height: auto;
+}
+
+.gc-textarea:focus{
+  --tw-border-opacity: 1;
+  border-color: rgb(48 63 195 / var(--tw-border-opacity, 1));
+  --tw-shadow: inset 0 0 0 2px #0535d2;
+  --tw-shadow-colored: inset 0 0 0 2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus-group{
+  margin-bottom: 3.5rem;
+}
+
+.focus-group:focus-within .gc-label,
+.focus-group:focus-within .legend-fieldset,
+.focus-group:focus-within .gc-description{
+  --tw-text-opacity: 1;
+  color: rgb(48 63 195 / var(--tw-text-opacity, 1));
+}
+
+.gc-form-group-context {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+.gc-input-text {
+  border: solid 2px black;
+  margin-top: 0.5rem;
+  width: 24rem;
+  border-width: 2px;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 18px;
+  line-height: 28px;
+  --tw-text-opacity: 1;
+  color: rgb(74 85 104 / var(--tw-text-opacity, 1));
+}
+
+@media (max-width: 550px){
+  .gc-input-text{
+    width: 100%;
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+.gc-input-text:focus{
+  --tw-border-opacity: 1;
+  border-color: rgb(48 63 195 / var(--tw-border-opacity, 1));
+  --tw-shadow: inset 0 0 0 2px #0535d2;
+  --tw-shadow-colored: inset 0 0 0 2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.gc-input-radio,
+.gc-input-checkbox{
+  display: flex;
+  padding-left: 0rem;
+  padding-right: 0rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.25rem;
+}
+
+.gc-radio-label,
+.gc-checkbox-label{
+  display: flex;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+}
+
+@media (max-width: 550px){
+  .gc-radio-label,
+.gc-checkbox-label{
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+.gc-radio-label .checkbox-label-text,
+.gc-radio-label .radio-label-text,
+.gc-checkbox-label .checkbox-label-text,
+.gc-checkbox-label .radio-label-text{
+  margin-top: 0.5rem;
+  width: 50rem;
+}
+
+@media (max-width: 992px){
+  .gc-radio-label .checkbox-label-text,
+.gc-radio-label .radio-label-text,
+.gc-checkbox-label .checkbox-label-text,
+.gc-checkbox-label .radio-label-text{
+    width: 30rem;
+  }
+}
+
+@media (max-width: 768px){
+  .gc-radio-label .checkbox-label-text,
+.gc-radio-label .radio-label-text,
+.gc-checkbox-label .checkbox-label-text,
+.gc-checkbox-label .radio-label-text{
+    width: 25rem;
+  }
+}
+
+@media (max-width: 550px){
+  .gc-radio-label .checkbox-label-text,
+.gc-radio-label .radio-label-text,
+.gc-checkbox-label .checkbox-label-text,
+.gc-checkbox-label .radio-label-text{
+    margin-top: 10px;
+    width: 24rem;
+  }
+}
+
+@media (max-width: 450px){
+  .gc-radio-label .checkbox-label-text,
+.gc-radio-label .radio-label-text,
+.gc-checkbox-label .checkbox-label-text,
+.gc-checkbox-label .radio-label-text{
+    width: 15rem;
+  }
+}
+
+@media (max-width: 320px){
+  .gc-radio-label .checkbox-label-text,
+.gc-radio-label .radio-label-text,
+.gc-checkbox-label .checkbox-label-text,
+.gc-checkbox-label .radio-label-text{
+    width: 14rem;
+  }
+}
+
+@media (max-width: 290px){
+  .gc-radio-label .checkbox-label-text,
+.gc-radio-label .radio-label-text,
+.gc-checkbox-label .checkbox-label-text,
+.gc-checkbox-label .radio-label-text{
+    width: 11.5rem;
+  }
+}
+
+.gc-file-input{
+  margin-top: 0.5rem;
+  margin-bottom: 3.5rem;
+  width: 100%;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-right: 0.5rem;
+  font-size: 18px;
+  line-height: 28px;
+  --tw-text-opacity: 1;
+  color: rgb(74 85 104 / var(--tw-text-opacity, 1));
+}
+
+@media (max-width: 550px){
+  .gc-file-input{
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+.gc-file-input:focus{
+  --tw-border-opacity: 1;
+  border-color: rgb(48 63 195 / var(--tw-border-opacity, 1));
+  --tw-shadow: inset 0 0 0 2px #0535d2;
+  --tw-shadow-colored: inset 0 0 0 2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.gc-file-input.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.gc-file-input-upload-button{
+  margin-bottom: 0rem;
+  display: inline-block;
+  text-align: center;
+}
+
+.gc-file-input [type=file] {
+  display: none;
+}
+
+.page-preview-form h1::before,
+.page-en-preview-form h1::before,
+.page-fr-preview-form h1::before {
+  content: "[Preview/Prévisualisation]";
+  margin-bottom: 2.5rem;
+  display: block;
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(4 120 87 / var(--tw-text-opacity, 1));
+}
+
+.validation-message{
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity, 1));
+}
+
+.gc-form-confirmation p{
+  font-size: 18px;
+  line-height: 28px;
+}
+
+@media (max-width: 550px){
+  .gc-form-confirmation p{
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+.confirmation-content{
+  position: relative;
+}
+
+.confirmation-list{
+  margin-bottom: 2.5rem;
+  list-style-position: inside;
+}
+
+.gc-confirmation-banner{
+  margin-bottom: 2.5rem;
+  width: 83.333333%;
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+@media (max-width: 992px){
+  .gc-confirmation-banner{
+    width: 100%;
+  }
+}
+
+@media (max-width: 550px){
+  .gc-confirmation-banner{
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+.gc-confirmation-banner h2{
+  margin-bottom: 1.5rem;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+@media (max-width: 550px){
+  .gc-confirmation-banner h2{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+.gc-confirmation-banner p:first-of-type{
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 550px){
+  .gc-confirmation-banner p:first-of-type{
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+.gc-confirmation-banner p:last-of-type{
+  font-weight: 700;
+}
+
+@media (max-width: 550px){
+  .gc-confirmation-banner p:last-of-type{
+    font-size: 16px;
+    line-height: 22px;
+  }
+}

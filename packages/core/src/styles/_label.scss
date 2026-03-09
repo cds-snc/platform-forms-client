@@ -1,0 +1,39 @@
+/* https://github.com/cds-snc/gcds-components/blob/main/packages/web/src/components/gcds-label/gcds-label.css */
+
+@layer reset, default;
+
+@layer reset {
+  :host {
+    display: block;
+  }
+}
+
+@layer default {
+  .gcds-label {
+    display: block;
+    max-width: 100%;
+    font: var(--gcds-label-font-desktop);
+    margin: var(--gcds-label-margin) !important;
+    color: var(--gcds-label-text);
+    cursor: pointer;
+
+    @media only screen and (width < 48em) {
+      font: var(--gcds-label-font-mobile);
+    }
+
+    &.label--hidden > span {
+      clip-path: inset(100%);
+      clip: rect(1px, 1px, 1px, 1px);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+
+    .label--required {
+      font-weight: var(--gcds-label-required-font-weight);
+      margin: var(--gcds-label-required-margin) !important;
+    }
+  }
+}
