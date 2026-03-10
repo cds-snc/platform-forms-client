@@ -350,4 +350,13 @@ export const options = [
     logoTitleEn: "Environment and Climate Change Canada",
     logoTitleFr: "Environnement et Changement climatique Canada",
   },
+  {
+    name: "eiboa",
+    urlEn: "https://eiboa-caae.service.canada.ca/en/index.shtml",
+    urlFr: "https://eiboa-caae.service.canada.ca/fr/index.shtml",
+    logoEn: "/img/branding/eiboa-en.svg",
+    logoFr: "/img/branding/eiboa-fr.svg",
+    logoTitleEn: "Employment Insurance Board of Appeal of Canada",
+    logoTitleFr: "Conseil d'appel en assurance-emploi du Canada",
+  },
 ];
