@@ -52,14 +52,21 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   return (
     <div className={cn("gcds-select-wrapper", meta.error && "gcds-error")}>
-      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={`errorMessage${id}`}>{meta.error}</ErrorMessage>}
+      {/* required attr removed to allow Formik to handle and avoid "required invalid data..." being announced before form validation */}
       <select
         data-testid="dropdown"
         className={classes}
         id={id}
         {...(name && { name })}
-        required={required}
-        aria-describedby={ariaDescribedBy}
+        // for chrome+talkback to not ignore required
+        aria-required={required}
+        aria-invalid={!!meta.error}
+        aria-describedby={
+          meta.error
+            ? `errorMessage${id}${ariaDescribedBy ? " " + ariaDescribedBy : ""}`
+            : ariaDescribedBy
+        }
         {...field}
       >
         {children ? (

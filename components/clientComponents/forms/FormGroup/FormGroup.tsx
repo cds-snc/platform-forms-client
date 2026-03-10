@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useField } from "formik";
 import { cn } from "@lib/utils";
 
 interface FormGroupProps {
@@ -8,12 +9,24 @@ interface FormGroupProps {
   className?: string;
   ariaDescribedBy?: string;
   error?: boolean;
+  required?: boolean;
 }
 
 export const FormGroup = (props: FormGroupProps): React.ReactElement => {
-  const { children, name, className, ariaDescribedBy, error } = props;
+  const { children, name, className, ariaDescribedBy, error, required } = props;
+  const [, meta] = useField(name);
 
-  const classes = cn("gc-form-group", "focus-group", { "gc-form-group--error": error }, className);
+  const hasError = error || !!meta.error;
+  const classes = cn(
+    "gc-form-group",
+    "focus-group",
+    { "gc-form-group--error": hasError },
+    className
+  );
+
+  const describedByIds = ariaDescribedBy
+    ? `errorMessage${name} ${ariaDescribedBy}`
+    : `errorMessage${name}`;
 
   return (
     <fieldset
@@ -21,7 +34,10 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
       id={name}
       data-testid="formGroup"
       className={classes}
-      aria-describedby={ariaDescribedBy}
+      aria-describedby={hasError ? describedByIds : ariaDescribedBy || undefined}
+      // help radio+checkboxes act more consistently (e.g. Chrome+TalkBack) when announcing a field is required
+      aria-required={required}
+      aria-invalid={hasError || undefined}
       // Used to programmatically focus a form group by e.g. a form validation skip ahead link
       // -1 is used over 0, so the group is not in the natural tab order which is confusing for AT
       tabIndex={-1}

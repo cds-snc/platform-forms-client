@@ -129,6 +129,9 @@ export const TextInput = (
         type={type === "number" ? "text" : type}
         spellCheck={spellCheck}
         required={required}
+        // for chrome+talkback to no ignore required
+        aria-required={required}
+        aria-invalid={!!meta.error}
         autoComplete={autoComplete ? autoComplete : "off"}
         placeholder={placeholder}
         {...ariaDescribedByIds()}
