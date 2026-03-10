@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { WarningIcon } from "@serverComponents/icons";
 import { formClosingDateEst } from "@lib/utils/date/utcToEst";
+import { estToUtc } from "@lib/utils/date/estToUtc";
 import { logMessage } from "@lib/logger";
 
 export const ClosingDateDialog = ({
@@ -97,14 +98,10 @@ export const ClosingDateDialog = ({
 
       const hours = Number(time.split(":")[0]);
       const minutes = Number(time.split(":")[1]);
-      const date = new Date(
-        Number(year),
-        Number(month) - 1,
-        Number(day),
-        Number(hours),
-        Number(minutes)
-      );
-      const timestamp = date.getTime();
+
+      // Convert Eastern Time input to UTC timestamp
+      // This ensures the closing time is correct regardless of the user's timezone
+      const timestamp = estToUtc(Number(year), Number(month), Number(day), hours, minutes);
 
       if (timestamp < Date.now()) {
         setHasErrors(true);

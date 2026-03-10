@@ -39,13 +39,13 @@ runs:
             --query 'sort_by(imageDetails, &imagePushedAt)[-2]' \
             | jq -r ".imageTags[0]"
         )
-        
+
         echo "value=$latest_release_identifier" >> $GITHUB_OUTPUT
 
     - name: Build Rainbow Lambda image
       shell: bash
       run: |
-        docker build -t rainbow \
+        docker build --platform=linux/amd64 --provenance false -t rainbow \
           -f Dockerfile.rainbow \
           --build-arg BASE_IMAGE=${{ inputs.ecr-registry-uri }}/${{ inputs.ecr-registry-form-viewer-repository-name }}:${{ steps.latest-release-identifier.outputs.value }} \
           --build-arg COGNITO_APP_CLIENT_ID=${{ inputs.cognito-app-client-id }} \

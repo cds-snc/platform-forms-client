@@ -1,0 +1,95 @@
+
+// LANGUAGE TOGGLE
+
+.gc-language-toggle {
+  @apply md:text-sm text-base text-right;
+
+  label {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    -webkit-clip-path: inset(50%) !important;
+    clip-path: inset(50%) !important;
+    border: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  button {
+    @apply shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0;
+  }
+
+  button:focus {
+    outline: none;
+    box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
+    @apply bg-blue-focus text-white-default;
+  }
+
+  button:active {
+    box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
+    @apply underline bg-blue-active text-white-default;
+  }
+}
+
+header {
+  .canada-flag {
+    @apply xxs:w-flag-fold xs:w-flag-5s md:w-flag-6s lg:mt-10 w-flag-desktop mt-0;
+
+    a:hover {
+      @apply hover:bg-white-default;
+    }
+
+    a:focus {
+      outline: 3px solid #303fc3;
+      outline-offset: 1px;
+      @apply bg-white-default;
+    }
+
+    a:active {
+      @apply bg-white-default;
+    }
+  }
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+#skip-link-container {
+  width: 100%;
+  position: absolute;
+  z-index: 5;
+  text-align: center;
+  top: 10px;
+  overflow: hidden;
+
+  #skip-link {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+
+    &:focus {
+      position: static;
+      padding: 5px;
+      width: auto;
+      height: auto;
+      overflow: auto;
+      text-align: center;
+    }
+  }
+}

@@ -55,9 +55,11 @@ const { auth } = NextAuth({
         name: token.name ?? null,
         email: token.email,
         privileges: [],
-        ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
+        ...(token.provider !== "gcForms" &&
+          token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
         ...(token.deactivated && { deactivated: token.deactivated }),
-        hasSecurityQuestions: token.hasSecurityQuestions ?? false,
+        hasSecurityQuestions:
+          token.provider === "gcForms" ? true : (token.hasSecurityQuestions ?? false),
       };
       return session;
     },

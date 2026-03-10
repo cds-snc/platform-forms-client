@@ -164,7 +164,7 @@ const Element = ({
       )}
 
       {element.type === FormElementTypes.richText && (
-        <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
+        <RichText primaryLanguage={primaryLanguage} element={element} />
       )}
 
       {elementsWithOptions.includes(element.type) && (

@@ -15,5 +15,5 @@ export async function getClientIp(): Promise<string> {
    * Only consider last IP as the source of truth as it has been added by AWS ECS Load balancer
    * See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/x-forwarded-headers.html#x-forwarded-for-append
    */
-  return xForwardedForHeader.split(",").at(-1) ?? FALLBACK_CLIENT_IP_ADDRESS;
+  return xForwardedForHeader.split(",").at(-1)?.trim() ?? FALLBACK_CLIENT_IP_ADDRESS;
 }
