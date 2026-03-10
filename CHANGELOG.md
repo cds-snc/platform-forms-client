@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.9.4](https://github.com/cds-snc/platform-forms-client/compare/v4.9.3...v4.9.4) (2026-03-10)
+
+
+### Bug Fixes
+
+* Add ssl option to postgres options ([#6792](https://github.com/cds-snc/platform-forms-client/issues/6792)) ([4773bfe](https://github.com/cds-snc/platform-forms-client/commit/4773bfe9e62ddab04f599ad7df88553a011edb8e))
+* Github actions to clean up Rainbow deployments ([#6790](https://github.com/cds-snc/platform-forms-client/issues/6790)) ([198213c](https://github.com/cds-snc/platform-forms-client/commit/198213c8cf88efe9dde4fe4de85323178570baad))
+* move security question check out of account if block ([#6826](https://github.com/cds-snc/platform-forms-client/issues/6826)) ([2b2995d](https://github.com/cds-snc/platform-forms-client/commit/2b2995d5f6dd01285fc098979b0752be0b2b416e))
+* remove MessageDeduplicationId from SQS message we send to the reliability_reprocessing_queue queue ([#6819](https://github.com/cds-snc/platform-forms-client/issues/6819)) ([11e8da3](https://github.com/cds-snc/platform-forms-client/commit/11e8da3c844b7c4a9495a99446cc2b88139a33c3))
+
+
+### Miscellaneous Chores
+
+* add ei-boa branding ([#6818](https://github.com/cds-snc/platform-forms-client/issues/6818)) ([e6d971e](https://github.com/cds-snc/platform-forms-client/commit/e6d971eb61a8c0587a6a4c82d9910d2ed4e9b059))
+* add es lint rule and type for logger ([#6784](https://github.com/cds-snc/platform-forms-client/issues/6784)) ([98758da](https://github.com/cds-snc/platform-forms-client/commit/98758dae009bf17e44dd78a560d937e15b222452))
+* bump zustand ([#6822](https://github.com/cds-snc/platform-forms-client/issues/6822)) ([a576513](https://github.com/cds-snc/platform-forms-client/commit/a576513a6861728df8d4b957dd537bc9b4a57407))
+* fix Github action including 'generate-sbom' sub-action ([#6812](https://github.com/cds-snc/platform-forms-client/issues/6812)) ([c4b57f6](https://github.com/cds-snc/platform-forms-client/commit/c4b57f69d1aad6fbf7470127af4e3e8c9331eff3))
+* initial setup for shared styles ([#6828](https://github.com/cds-snc/platform-forms-client/issues/6828)) ([2004f1b](https://github.com/cds-snc/platform-forms-client/commit/2004f1bd07454346f72c7565002dbc7e9d1c2e16))
+* Remove link to disclosure form ([#6785](https://github.com/cds-snc/platform-forms-client/issues/6785)) ([5f53f7c](https://github.com/cds-snc/platform-forms-client/commit/5f53f7c5a6d7481dc68f3d7e09f8cf60941da23d))
+* synced file(s) with cds-snc/site-reliability-engineering ([#6786](https://github.com/cds-snc/platform-forms-client/issues/6786)) ([751a8aa](https://github.com/cds-snc/platform-forms-client/commit/751a8aa91d3a1f556b47e8c5d75be0f8547f0fde))
+* synced local '.github/workflows/export_github_data.yml' with remote 'tools/sre_file_sync/export_github_data.yml' ([751a8aa](https://github.com/cds-snc/platform-forms-client/commit/751a8aa91d3a1f556b47e8c5d75be0f8547f0fde))
+* upgrade generate-sbom Github action from v4.0.1 to v4.0.2 ([#6821](https://github.com/cds-snc/platform-forms-client/issues/6821)) ([fbbe6ac](https://github.com/cds-snc/platform-forms-client/commit/fbbe6ac278cf2ea0bc2b5b77de3e7cd1c42280f6))
+* zitadel login proof of concept (feature flagged) ([#6807](https://github.com/cds-snc/platform-forms-client/issues/6807)) ([2a97a1d](https://github.com/cds-snc/platform-forms-client/commit/2a97a1d796a35b232ee5fed742f2887810652eb5))
+
 ## [4.9.3](https://github.com/cds-snc/platform-forms-client/compare/v4.9.2...v4.9.3) (2026-02-17)
 
 
