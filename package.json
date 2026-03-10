@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "4.9.3",
+  "version": "4.9.4",
   "private": true,
   "workspaces": [
     "utils/*",
@@ -144,7 +144,7 @@
     "usehooks-ts": "3.1.1",
     "uuid": "9.0.1",
     "valibot": "^1.2.0",
-    "zustand": "5.0.10"
+    "zustand": "5.0.11"
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.969.0",
