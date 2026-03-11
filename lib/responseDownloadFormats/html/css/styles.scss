@@ -59,8 +59,8 @@
 @tailwind utilities;
 
 // Pull in partial styles from the main styles directory
-@import "@gcforms/core/styles/_typography.scss";
-@import "@gcforms/core/styles/_gc-header.scss";
+@import "../../../../node_modules/@gcforms/core/styles/_typography.scss";
+@import "../../../../node_modules/@gcforms/core/styles/_gc-header.scss";
 
 .container-xl {
   max-width: var(--gcds-container-xl);

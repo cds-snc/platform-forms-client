@@ -4,12 +4,12 @@
 
 // Custom base CSS files
 @include meta.load-css("_base");
-@include meta.load-css("@gcforms/core/styles/_typography.scss");
+@include meta.load-css("../node_modules/@gcforms/core/styles/_typography.scss");
 @import "@gcforms/core/styles/forms.css";
 @include meta.load-css("_form-builder");
 @import "@gcforms/core/styles/header.css";
 @import "@gcforms/core/styles/gc-header.css";
-@include meta.load-css("@gcforms/core/styles/_toast.scss");
+@include meta.load-css("../node_modules/@gcforms/core/styles/_toast.scss");
 @include meta.load-css("animations");
 
 // Tailwind Utilities needs to be loaded last to use inline
