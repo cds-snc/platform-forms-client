@@ -28,17 +28,7 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
-  const {
-    children,
-    id,
-    name,
-    className,
-    choices = [],
-    required,
-    ariaDescribedBy,
-    lang,
-    sortOrder,
-  } = props;
+  const { children, id, name, className, choices = [], ariaDescribedBy, lang, sortOrder } = props;
   const { t } = useTranslation("common", { lng: lang });
   const [field, meta] = useField(props);
 
@@ -50,6 +40,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   const classes = cn("gc-dropdown", className, meta.error && "gcds-error");
 
+  // Attributes required and aria-required removed for a11y workaround. See #6835
   return (
     <div className={cn("gcds-select-wrapper", meta.error && "gcds-error")}>
       {meta.error && <ErrorMessage id={`errorMessage${id}`}>{meta.error}</ErrorMessage>}
@@ -58,9 +49,6 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
         className={classes}
         id={id}
         {...(name && { name })}
-        required={required}
-        // help browser+AT combinations recognize required and invalid for better announcements (e.g. Chrome+TalkBack)
-        aria-required={required}
         aria-invalid={!!meta.error}
         aria-describedby={
           meta.error

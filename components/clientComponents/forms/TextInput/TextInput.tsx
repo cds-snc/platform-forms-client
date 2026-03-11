@@ -21,7 +21,6 @@ export const TextInput = (
     id,
     type,
     className,
-    required,
     ariaDescribedBy,
     placeholder,
     autoComplete,
@@ -113,6 +112,7 @@ export const TextInput = (
     }
   };
 
+  // Attributes required and aria-required removed for a11y workaround. See #6835
   return (
     <>
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
@@ -128,9 +128,7 @@ export const TextInput = (
         id={id}
         type={type === "number" ? "text" : type}
         spellCheck={spellCheck}
-        required={required}
         // help browser+AT combinations recognize required and invalid for better announcements (e.g. Chrome+TalkBack)
-        aria-required={required}
         aria-invalid={!!meta.error}
         autoComplete={autoComplete ? autoComplete : "off"}
         placeholder={placeholder}

@@ -9,11 +9,10 @@ interface FormGroupProps {
   className?: string;
   ariaDescribedBy?: string;
   error?: boolean;
-  required?: boolean;
 }
 
 export const FormGroup = (props: FormGroupProps): React.ReactElement => {
-  const { children, name, className, ariaDescribedBy, error, required } = props;
+  const { children, name, className, ariaDescribedBy, error } = props;
   const [, meta] = useField(name);
 
   const hasError = error || !!meta.error;
@@ -28,6 +27,7 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
     ? `errorMessage${name} ${ariaDescribedBy}`
     : `errorMessage${name}`;
 
+  // Attribute aria-required removed for a11y workaround. See #6835
   return (
     <fieldset
       name={name}
@@ -35,8 +35,6 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
       data-testid="formGroup"
       className={classes}
       aria-describedby={hasError ? describedByIds : ariaDescribedBy || undefined}
-      // help radio+checkboxes act more consistently (e.g. Chrome+TalkBack) when announcing a field is required
-      aria-required={required}
       aria-invalid={hasError}
       // Used to programmatically focus a form group by e.g. a form validation skip ahead link
       // -1 is used over 0, so the group is not in the natural tab order which is confusing for AT

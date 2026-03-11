@@ -44,14 +44,18 @@ export const Label = (props: LabelProps): React.ReactElement => {
 
   const { t } = useTranslation("common", { lng: lang });
 
+  // Keep the "required" text "visible" to AT since it is used as the "source of truth" for
+  // announcing whether a field is required or not. See #6835
   const childrenElements = (
     <>
       {children}
-      {/* including "required" in the label is the only reliable way to have Android+TalkBack announce a field is required */}
       {required && (
         <span className="label--required" data-testid="required">
           {" "}
-          ({validation?.all ? t("all-required") : t("required")})
+          {/* Only Jaws (latest) announces symbols so paranthesis hidden explicitly for screen readers */}
+          <span aria-hidden="true">(</span>
+          {validation?.all ? t("all-required") : t("required")}
+          <span aria-hidden="true">)</span>
         </span>
       )}
       {/* {group && required && (

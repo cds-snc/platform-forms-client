@@ -178,11 +178,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup
-          name={`${id}`}
-          required={isRequired}
-          ariaDescribedBy={description ? `desc-${id}` : undefined}
-        >
+        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
@@ -205,11 +201,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup
-          name={`${id}`}
-          required={isRequired}
-          ariaDescribedBy={description ? `desc-${id}` : undefined}
-        >
+        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
@@ -229,7 +221,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             id={`${id}`}
             sortOrder={sortOrder}
             name={`${id}`}
-            required={isRequired}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}
             lang={lang}
@@ -335,7 +326,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             key={`${id}-${lang}`}
             splitAddress={addressComponents?.splitAddress}
             canadianOnly={addressComponents?.canadianOnly}
-            required={isRequired}
             lang={lang}
           />
         </div>
