@@ -3,7 +3,7 @@
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logMessage } from "@root/lib/logger";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@gcforms/database";
 import { AuditLogDetails, logEvent } from "@root/lib/auditLogs";
 
 export const updateNotificationsUser = AuthenticatedAction(
@@ -34,7 +34,11 @@ export const updateNotificationsUser = AuthenticatedAction(
         { type: "Form", id: formId },
         "UpdateNotificationsUserSetting",
         AuditLogDetails.UpdatedNotificationSettings,
-        { userId: session.user.id, formId, enabled: user.enabled ? "enabled" : "disabled" }
+        {
+          userId: session.user.id,
+          formId,
+          enabled: user.enabled ? "enabled" : "disabled",
+        }
       );
     } catch (_) {
       return {

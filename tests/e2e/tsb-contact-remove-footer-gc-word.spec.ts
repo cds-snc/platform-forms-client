@@ -21,7 +21,6 @@ test.describe("TSB Contact Form functionality", () => {
     if (formId) {
       await dbHelper.deleteTemplate(formId);
     }
-    await dbHelper.disconnect();
   });
 
   test("Form footer does not contain GC branding", async ({ page }) => {

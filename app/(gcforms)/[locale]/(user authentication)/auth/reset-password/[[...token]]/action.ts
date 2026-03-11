@@ -3,7 +3,7 @@
 import * as v from "valibot";
 import { serverTranslation } from "@i18n";
 import { sendPasswordResetLink, validateSecurityAnswers } from "@lib/auth";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@gcforms/database";
 import { logEvent } from "@lib/auditLogs";
 import { hasError } from "@lib/hasError";
 import { logMessage } from "@lib/logger";

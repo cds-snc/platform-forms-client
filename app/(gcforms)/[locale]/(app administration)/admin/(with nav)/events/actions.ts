@@ -1,6 +1,7 @@
 "use server";
+
+import { prisma } from "@gcforms/database";
 import { AuditLogDetails, logEvent, retrieveEvents } from "@lib/auditLogs";
-import { prisma } from "@lib/integration/prismaConnector";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import {
@@ -96,7 +97,9 @@ export const findSubject = async (_: unknown, formData: FormData) => {
   }
 
   // Is the input an email or a formId?
-  const isEmail = safeParse(emailSchema, subject.output, { abortPipeEarly: true });
+  const isEmail = safeParse(emailSchema, subject.output, {
+    abortPipeEarly: true,
+  });
 
   if (isEmail.success) {
     const userId = await prisma.user.findFirst({

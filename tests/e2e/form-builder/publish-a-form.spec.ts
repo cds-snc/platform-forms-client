@@ -16,7 +16,6 @@ test.describe("Publishing a form", () => {
     if (formId) {
       await dbHelper.deleteTemplate(formId);
     }
-    await dbHelper.disconnect();
   });
 
   test("Can publish a form", async ({ page }) => {

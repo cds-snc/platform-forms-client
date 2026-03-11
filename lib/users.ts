@@ -1,10 +1,9 @@
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors, Privilege, Prisma } from "@gcforms/database";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import { DeactivationReason, DeactivationReasons, NagwareResult } from "./types";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { Privilege, Prisma } from "@prisma/client";
 import { sendDeactivationEmail } from "@lib/deactivate";
 import { getAllTemplatesForUser } from "./templates";
 import { listAllSubmissions } from "./vault";

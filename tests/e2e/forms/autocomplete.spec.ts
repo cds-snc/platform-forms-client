@@ -21,7 +21,6 @@ test.describe("Testing a form element autocomplete attributes", () => {
     if (formId) {
       await dbHelper.deleteTemplate(formId);
     }
-    await dbHelper.disconnect();
   });
 
   test("Renders properly", async ({ page }) => {
