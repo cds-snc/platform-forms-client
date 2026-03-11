@@ -94,4 +94,4 @@ In some cases, features provided by GC Forms may need to be depreciated. If a fe
 
 GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Last update:** March 11, 2026
+**Last update:** March 10, 2026
