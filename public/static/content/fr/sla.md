@@ -94,4 +94,4 @@ Dans certains cas, les fonctionnalités fournies par Formulaires GC peuvent devo
 
 Formulaires GC est un produit à code source ouvert permettant à des tiers de créer leur propre version à l’aide du code disponible sur [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Dernière mise à jour :** 12 novembre 2025
+**Dernière mise à jour :** 11 mars 2026
