@@ -195,12 +195,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     }
     case FormElementTypes.radio: {
       const radioItems = choices.map((choice, index) => {
-        /* required attribute removed to allow Formik to handle and avoid "required invalid data..." being announced before form validation */
         return {
           key: `${id}.${index}`,
           id: `${id}.${index}`,
           name: `${id}`,
           label: choice,
+          required: isRequired,
         };
       });
 

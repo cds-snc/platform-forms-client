@@ -129,7 +129,7 @@ export const TextInput = (
         type={type === "number" ? "text" : type}
         spellCheck={spellCheck}
         required={required}
-        // for chrome+talkback to no ignore required
+        // help browser+AT combinations recognize required and invalid for better announcements (e.g. Chrome+TalkBack)
         aria-required={required}
         aria-invalid={!!meta.error}
         autoComplete={autoComplete ? autoComplete : "off"}

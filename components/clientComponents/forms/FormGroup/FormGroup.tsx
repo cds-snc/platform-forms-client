@@ -37,7 +37,7 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
       aria-describedby={hasError ? describedByIds : ariaDescribedBy || undefined}
       // help radio+checkboxes act more consistently (e.g. Chrome+TalkBack) when announcing a field is required
       aria-required={required}
-      aria-invalid={hasError || undefined}
+      aria-invalid={hasError}
       // Used to programmatically focus a form group by e.g. a form validation skip ahead link
       // -1 is used over 0, so the group is not in the natural tab order which is confusing for AT
       tabIndex={-1}
