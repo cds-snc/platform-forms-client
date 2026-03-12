@@ -5,31 +5,69 @@ import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SubOption } from "./SubOption";
 import { Button } from "@clientComponents/globals";
+import { ChoiceOptionsCsvUpload } from "@clientComponents/forms/ChoiceOptionsCsvUpload";
+import { FormElementTypes, type PropertyChoices } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
+import { MAX_CHOICE_AMOUNT } from "@root/constants";
+import { CopyChoiceOptionsCsvButton } from "@formBuilder/[id]/edit/components/CopyChoiceOptionsCsvButton";
 
-const AddOption = ({ elId, subIndex }: { elId: number; subIndex: number }) => {
+const AddOption = ({
+  elId,
+  subIndex,
+  choiceCount,
+  copyChoices,
+  onImport,
+}: {
+  elId: number;
+  subIndex: number;
+  choiceCount?: number;
+  copyChoices?: PropertyChoices[];
+  onImport?: (choices: PropertyChoices[]) => void;
+}) => {
   const { t } = useTranslation("form-builder");
   const { addSubChoice, setFocusInput, setChangeKey } = useTemplateStore((s) => ({
     addSubChoice: s.addSubChoice,
     setFocusInput: s.setFocusInput,
     setChangeKey: s.setChangeKey,
   }));
+  const isLimitReached = (choiceCount ?? 0) >= MAX_CHOICE_AMOUNT;
 
   return (
-    <>
-      <Button
-        className="!m-0 !mt-4"
-        theme="link"
-        id={`sub-add-option-${elId}`}
-        onClick={() => {
-          setFocusInput(true);
-          addSubChoice(elId, subIndex);
-          setChangeKey(String(new Date().getTime()));
-        }}
-      >
-        {t("addOption")}
-      </Button>
-    </>
+    <div className="flex flex-wrap items-center gap-x-1">
+      <div className="flex items-center gap-x-6">
+        <Button
+          className="!m-0 !mt-4"
+          theme="link"
+          id={`sub-add-option-${elId}`}
+          disabled={isLimitReached}
+          onClick={() => {
+            setFocusInput(true);
+            addSubChoice(elId, subIndex);
+            setChangeKey(String(new Date().getTime()));
+          }}
+        >
+          {t("addOption")}
+        </Button>
+        <CopyChoiceOptionsCsvButton choices={copyChoices} />
+      </div>
+      {isLimitReached && (
+        <strong className="ml-2 mt-4 inline-block text-sm font-bold text-red-700">
+          {t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT })}
+        </strong>
+      )}
+      {onImport && (
+        <>
+          <span className="mt-4 text-sm text-slate-700">{t("or")}</span>
+          <ChoiceOptionsCsvUpload
+            id={`sub-choice-options-${elId}-${subIndex}`}
+            onImport={(choices) => {
+              setFocusInput(false);
+              onImport(choices);
+            }}
+          />
+        </>
+      )}
+    </div>
   );
 };
 
@@ -42,18 +80,57 @@ export const SubOptions = ({
   item: FormElementWithIndex;
   renderIcon?: RenderIcon;
 }) => {
-  const { translationLanguagePriority, getFormElementById } = useTemplateStore((s) => ({
+  const {
+    translationLanguagePriority,
+    getFormElementById,
+    getFormElementIndexes,
+    updateField,
+    setChangeKey,
+  } = useTemplateStore((s) => ({
     translationLanguagePriority: s.translationLanguagePriority,
     getFormElementById: s.getFormElementById,
+    getFormElementIndexes: s.getFormElementIndexes,
+    updateField: s.updateField,
+    setChangeKey: s.setChangeKey,
   }));
 
   const subIndex = item.index;
 
   const element = getFormElementById(item.id);
-  const choices = element?.properties.choices || [{ en: "", fr: "" }];
+  const choices = element?.properties.choices;
+  const indexes = getFormElementIndexes(item.id);
+  const allowCsvUpload = [
+    FormElementTypes.radio,
+    FormElementTypes.checkbox,
+    FormElementTypes.dropdown,
+  ].some((type) => type === item.type);
 
-  if (!choices) {
-    return <AddOption elId={item.id} subIndex={subIndex} />;
+  if (!choices || choices.length === 0) {
+    return (
+      <AddOption
+        elId={item.id}
+        subIndex={subIndex}
+        choiceCount={choices?.length ?? 0}
+        onImport={
+          allowCsvUpload
+            ? (importedChoices) => {
+                if (indexes.length < 1 || !element) {
+                  return;
+                }
+
+                updateField(
+                  `form.elements[${Number(indexes[0])}].properties.subElements[${subIndex}].properties`,
+                  {
+                    ...element.properties,
+                    choices: importedChoices,
+                  }
+                );
+                setChangeKey(String(new Date().getTime()));
+              }
+            : undefined
+        }
+      />
+    );
   }
 
   const options = choices.map((child, choiceIndex) => {
@@ -77,7 +154,12 @@ export const SubOptions = ({
   return (
     <div className="mt-5">
       {options}
-      <AddOption elId={item.id} subIndex={subIndex} />
+      <AddOption
+        elId={item.id}
+        subIndex={subIndex}
+        choiceCount={choices.length}
+        copyChoices={choices}
+      />
     </div>
   );
 };

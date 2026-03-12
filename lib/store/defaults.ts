@@ -5,7 +5,7 @@ export const defaultField: FormElement = {
   type: FormElementTypes.textField,
   properties: {
     subElements: [],
-    choices: [{ en: "", fr: "" }],
+    choices: [],
     titleEn: "",
     titleFr: "",
     validation: {
