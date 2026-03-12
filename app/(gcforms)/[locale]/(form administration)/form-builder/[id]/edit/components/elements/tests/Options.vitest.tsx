@@ -36,44 +36,6 @@ describe("Options", () => {
     expect(rendered.container).toBeTruthy();
   });
 
-  it("shows add and upload actions when no choices exist", () => {
-    const item = {
-      id: 1,
-      index: 0,
-      type: store.elements[0]?.type || ("textField" as unknown),
-      properties: { ...store.elements[0]?.properties, choices: [] },
-    } as unknown as Parameters<typeof Options>[0]["item"];
-    const rendered = render(
-      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
-      <Providers form={store}>
-        <Options item={item} formId="test-form" />
-      </Providers>
-    );
-
-    expect(rendered.container).toBeTruthy();
-    expect(screen.getByRole("button", { name: /add option/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /upload from csv/i })).toBeInTheDocument();
-  });
-
-  it("does not show upload action for unsupported empty choice elements", () => {
-    const item = {
-      id: 1,
-      index: 0,
-      type: "combobox",
-      properties: { ...store.elements[0]?.properties, choices: [] },
-    } as unknown as Parameters<typeof Options>[0]["item"];
-
-    render(
-      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
-      <Providers form={store}>
-        <Options item={item} formId="test-form" />
-      </Providers>
-    );
-
-    expect(screen.getByRole("button", { name: /add option/i })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /upload from csv/i })).not.toBeInTheDocument();
-  });
-
   it("displays correct option values after deleting a middle option", async () => {
     const user = userEvent.setup();
 

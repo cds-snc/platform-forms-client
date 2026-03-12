@@ -87,7 +87,7 @@ export const SubOptions = ({
     FormElementTypes.radio,
     FormElementTypes.checkbox,
     FormElementTypes.dropdown,
-  ].includes(item.type);
+  ].some((type) => type === item.type);
 
   if (!choices || choices.length === 0) {
     return (

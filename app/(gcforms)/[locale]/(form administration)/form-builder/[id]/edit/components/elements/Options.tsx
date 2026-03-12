@@ -98,7 +98,7 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
     FormElementTypes.radio,
     FormElementTypes.checkbox,
     FormElementTypes.dropdown,
-  ].includes(item.type);
+  ].some((type) => type === item.type);
 
   if (!item) return null;
 
