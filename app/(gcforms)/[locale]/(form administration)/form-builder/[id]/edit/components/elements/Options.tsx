@@ -51,16 +51,18 @@ const AddOptions = ({ index, choiceCount = 0, copyChoices, onImport }: AddOption
   const isLimitReached = choiceCount >= MAX_CHOICE_AMOUNT;
 
   return (
-    <div className="flex flex-wrap items-center gap-x-6">
-      <AddButton
-        index={index}
-        disabled={isLimitReached}
-        onClick={() => {
-          setFocusInput(true);
-          addChoice(index);
-        }}
-      />
-      <CopyChoiceOptionsCsvButton choices={copyChoices} />
+    <div className="flex flex-wrap items-center gap-x-1">
+      <div className="flex items-center gap-x-6">
+        <AddButton
+          index={index}
+          disabled={isLimitReached}
+          onClick={() => {
+            setFocusInput(true);
+            addChoice(index);
+          }}
+        />
+        <CopyChoiceOptionsCsvButton choices={copyChoices} />
+      </div>
       {isLimitReached && (
         <strong className="ml-2 inline-block text-sm font-bold text-red-700 mt-4">
           {t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT })}

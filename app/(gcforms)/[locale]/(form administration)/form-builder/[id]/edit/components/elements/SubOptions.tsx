@@ -33,21 +33,23 @@ const AddOption = ({
   const isLimitReached = (choiceCount ?? 0) >= MAX_CHOICE_AMOUNT;
 
   return (
-    <div className="flex flex-wrap items-center gap-x-6">
-      <Button
-        className="!m-0 !mt-4"
-        theme="link"
-        id={`sub-add-option-${elId}`}
-        disabled={isLimitReached}
-        onClick={() => {
-          setFocusInput(true);
-          addSubChoice(elId, subIndex);
-          setChangeKey(String(new Date().getTime()));
-        }}
-      >
-        {t("addOption")}
-      </Button>
-      <CopyChoiceOptionsCsvButton choices={copyChoices} />
+    <div className="flex flex-wrap items-center gap-x-1">
+      <div className="flex items-center gap-x-6">
+        <Button
+          className="!m-0 !mt-4"
+          theme="link"
+          id={`sub-add-option-${elId}`}
+          disabled={isLimitReached}
+          onClick={() => {
+            setFocusInput(true);
+            addSubChoice(elId, subIndex);
+            setChangeKey(String(new Date().getTime()));
+          }}
+        >
+          {t("addOption")}
+        </Button>
+        <CopyChoiceOptionsCsvButton choices={copyChoices} />
+      </div>
       {isLimitReached && (
         <strong className="ml-2 mt-4 inline-block text-sm font-bold text-red-700">
           {t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT })}
