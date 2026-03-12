@@ -26,7 +26,7 @@ export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.Reac
   // map checkboxes
   return (
     <>
-      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={`errorMessage${field.name}`}>{meta.error}</ErrorMessage>}
       {choices}
     </>
   );

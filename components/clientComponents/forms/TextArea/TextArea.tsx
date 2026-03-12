@@ -77,6 +77,7 @@ export const TextArea = (
         {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextAreaChange}
+        aria-invalid={!!meta.error}
       >
         {children}
       </textarea>

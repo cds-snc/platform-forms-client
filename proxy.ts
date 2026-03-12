@@ -78,7 +78,12 @@ export const config = {
      - contain files with extentions
      */
   matcher:
-    "/((?!_next/static|_next/image|img|static|react_devtools|unsupported-browser|javascript-disabled|__nextjs_|.*\\.[^/]+?$).*)",
+    //
+    //
+    // DO NOT MERGE THIS CHANGE
+    //
+    //
+    "/((?!_next/static|_next/image|img|static|react_devtools|unsupported-browser|javascript-disabled|__nextjs_|a11y-test|.*\\.[^/]+?$).*)",
 };
 
 // TOMORROW

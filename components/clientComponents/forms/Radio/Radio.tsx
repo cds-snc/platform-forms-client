@@ -1,6 +1,6 @@
 "use client";
 import React, { type JSX } from "react";
-import { Field } from "formik";
+import { Field, useField } from "formik";
 import { Description } from "@clientComponents/forms";
 import { ChoiceFieldProps } from "@lib/types";
 
@@ -8,6 +8,7 @@ export const Radio = (
   props: ChoiceFieldProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
   const { id, label, required, name, ariaDescribedBy } = props;
+  const [, meta] = useField(name);
   return (
     <div className="gc-input-radio">
       {ariaDescribedBy ? (
@@ -22,6 +23,9 @@ export const Radio = (
         id={id}
         type="radio"
         required={required}
+        // fix for VO that looks at individual radio inputs vs. all other browser+AT
+        // that respect the parent if it has an aria-invalid
+        aria-invalid={!!meta.error}
         value={label} // This needs to be static... the actual label...
         name={name}
       />
