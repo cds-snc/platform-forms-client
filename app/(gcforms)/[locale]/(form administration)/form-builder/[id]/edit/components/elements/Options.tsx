@@ -64,7 +64,7 @@ const AddOptions = ({ index, choiceCount = 0, copyChoices, onImport }: AddOption
         <CopyChoiceOptionsCsvButton choices={copyChoices} />
       </div>
       {isLimitReached && (
-        <strong className="ml-2 inline-block text-sm font-bold text-red-700 mt-4">
+        <strong className="ml-2 mt-4 inline-block text-sm font-bold text-red-700">
           {t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT })}
         </strong>
       )}

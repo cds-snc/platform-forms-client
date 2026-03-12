@@ -37,10 +37,8 @@ describe("parseChoiceOptionsCsv", () => {
     expect(
       stringifyChoiceOptionsCsv([
         { en: "First", fr: "Premier" },
-        { en: 'Second, with comma', fr: 'Deuxieme "quoted" value' },
+        { en: "Second, with comma", fr: 'Deuxieme "quoted" value' },
       ])
-    ).toBe(
-      'en,fr\nFirst,Premier\n"Second, with comma","Deuxieme ""quoted"" value"'
-    );
+    ).toBe('en,fr\nFirst,Premier\n"Second, with comma","Deuxieme ""quoted"" value"');
   });
 });
