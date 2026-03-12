@@ -28,9 +28,10 @@ export const isFieldResponseValid = (
 
   switch (componentType) {
     case FormElementTypes.textField: {
-      const typedValue = String(value).trim();
+      const rawValue = String(value ?? "");
+      const typedValue = rawValue.trim();
       if (validator.required && !typedValue) return t("input-validation.required");
-      let currentRegex = getRegexByType(validator.type, t, value as string);
+      let currentRegex = getRegexByType(validator.type, t, rawValue);
 
       // Check if negative numbers are allowed.
       if (formElement.properties.allowNegativeNumbers && validator.type === "number") {
@@ -44,14 +45,15 @@ export const isFieldResponseValid = (
           return currentRegex.error;
         }
       }
-      if (validator.maxLength && (value as string).length > validator.maxLength)
+      if (validator.maxLength && rawValue.length > validator.maxLength)
         return t("input-validation.too-many-characters");
       break;
     }
     case FormElementTypes.textArea: {
-      const typedValue = String(value).trim();
+      const rawValue = String(value ?? "");
+      const typedValue = rawValue.trim();
       if (validator.required && !typedValue) return t("input-validation.required");
-      if (validator.maxLength && (value as string).length > validator.maxLength)
+      if (validator.maxLength && rawValue.length > validator.maxLength)
         return t("input-validation.too-many-characters");
       break;
     }

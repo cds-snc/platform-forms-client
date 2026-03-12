@@ -108,14 +108,7 @@ describe("TemplateStore", () => {
     expect(result.current.form.titleEn).toBe("");
     expect(result.current.form.elements).toHaveLength(1);
     expect(result.current.form.elements[0].properties.titleEn).toBe("");
-    // By default, there is one choice available
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(1);
-
-    if (result.current.form.elements[0].properties.choices) {
-      expect(result.current.form.elements[0].properties.choices[0]).toEqual({ en: "", fr: "" });
-    } else {
-      expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
-    }
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(0);
 
     // Add a choice to the element
     act(() => {
@@ -123,10 +116,10 @@ describe("TemplateStore", () => {
     });
 
     // Default choice expectations
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(1);
 
     if (result.current.form.elements[0].properties.choices) {
-      expect(result.current.form.elements[0].properties.choices[1]).toEqual({ en: "", fr: "" });
+      expect(result.current.form.elements[0].properties.choices[0]).toEqual({ en: "", fr: "" });
     } else {
       expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
     }
@@ -142,6 +135,7 @@ describe("TemplateStore", () => {
 
     act(() => {
       result.current.add();
+      result.current.addChoice(0);
       result.current.updateField(`form.elements[0].properties.choices[0].en`, "option 1!!");
       result.current.updateField(`form.elements[0].properties.choices[0].fr`, "l'option 1!!");
     });
@@ -164,21 +158,21 @@ describe("TemplateStore", () => {
     const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
-    // Create an element with three choices
+    // Create an element with two choices
     act(() => {
-      result.current.add(); // one choices is added by default
+      result.current.add();
       result.current.addChoice(0);
       result.current.addChoice(0);
     });
 
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(3);
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
 
     // Remove one choice
     act(() => {
       result.current.removeChoice(0, 0);
     });
 
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(1);
 
     await act(async () => {
       await promise;
