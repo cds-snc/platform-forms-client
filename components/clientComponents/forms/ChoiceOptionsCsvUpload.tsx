@@ -162,7 +162,7 @@ export const ChoiceOptionsCsvUpload = ({
         theme="secondary"
         popoverTarget={popoverId}
         aria-label={t("choiceOptionsUpload.helpButton")}
-        className="!m-0 !ml-1 !mt-4 !inline-flex !size-5 !items-center !justify-center !rounded-full !px-0 !py-0 text-[10px]"
+        className="!m-0 !ml-1 !mt-4 !inline-flex !size-5 !items-center !justify-center !rounded-full !p-0 text-[10px]"
       >
         ?
       </Button>
