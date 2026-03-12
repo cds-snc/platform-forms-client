@@ -5,6 +5,7 @@ import { describe, it, expect } from "vitest";
 import React from "react";
 import { useTemplateStore, TemplateStoreProvider } from "../useTemplateStore";
 import { renderHook, act, waitFor } from "@testing-library/react";
+import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
 const createStore = async () => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
@@ -123,6 +124,24 @@ describe("TemplateStore", () => {
     } else {
       expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
     }
+
+    await act(async () => {
+      await promise;
+    });
+  });
+
+  it("Does not add more than the maximum number of choices", async () => {
+    const result = await createStore();
+
+    act(() => {
+      result.current.add();
+
+      for (let index = 0; index < MAX_CHOICE_AMOUNT + 5; index += 1) {
+        result.current.addChoice(0);
+      }
+    });
+
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(MAX_CHOICE_AMOUNT);
 
     await act(async () => {
       await promise;

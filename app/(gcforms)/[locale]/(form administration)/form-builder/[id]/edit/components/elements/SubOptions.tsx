@@ -8,14 +8,17 @@ import { Button } from "@clientComponents/globals";
 import { ChoiceOptionsCsvUpload } from "@clientComponents/forms/ChoiceOptionsCsvUpload";
 import { FormElementTypes, type PropertyChoices } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
+import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
 const AddOption = ({
   elId,
   subIndex,
+  choiceCount,
   onImport,
 }: {
   elId: number;
   subIndex: number;
+  choiceCount?: number;
   onImport?: (choices: PropertyChoices[]) => void;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -24,6 +27,7 @@ const AddOption = ({
     setFocusInput: s.setFocusInput,
     setChangeKey: s.setChangeKey,
   }));
+  const isLimitReached = (choiceCount ?? 0) >= MAX_CHOICE_AMOUNT;
 
   return (
     <div className="flex flex-wrap items-center gap-x-1">
@@ -31,6 +35,7 @@ const AddOption = ({
         className="!m-0 !mt-4"
         theme="link"
         id={`sub-add-option-${elId}`}
+        disabled={isLimitReached}
         onClick={() => {
           setFocusInput(true);
           addSubChoice(elId, subIndex);
@@ -39,6 +44,11 @@ const AddOption = ({
       >
         {t("addOption")}
       </Button>
+      {isLimitReached && (
+        <strong className="ml-2 inline-block text-sm font-bold text-red-700">
+          {t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT })}
+        </strong>
+      )}
       {onImport && (
         <>
           <span className="mt-4 text-sm text-slate-700">{t("or")}</span>
@@ -94,6 +104,7 @@ export const SubOptions = ({
       <AddOption
         elId={item.id}
         subIndex={subIndex}
+        choiceCount={choices?.length ?? 0}
         onImport={
           allowCsvUpload
             ? (importedChoices) => {
@@ -137,7 +148,7 @@ export const SubOptions = ({
   return (
     <div className="mt-5">
       {options}
-      <AddOption elId={item.id} subIndex={subIndex} />
+      <AddOption elId={item.id} subIndex={subIndex} choiceCount={choices.length} />
     </div>
   );
 };

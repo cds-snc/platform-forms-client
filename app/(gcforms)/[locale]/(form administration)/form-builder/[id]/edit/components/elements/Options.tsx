@@ -9,19 +9,22 @@ import { ChoiceOptionsCsvUpload } from "@clientComponents/forms/ChoiceOptionsCsv
 import { FormElementTypes, type PropertyChoices } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ConditionalIndicatorOption } from "@formBuilder/components/shared/conditionals/ConditionalIndicatorOption";
+import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
 interface AddButtonProps {
   index: number;
+  disabled?: boolean;
   onClick(...args: unknown[]): unknown;
 }
 
-const AddButton = ({ index, onClick }: AddButtonProps) => {
+const AddButton = ({ index, onClick, disabled }: AddButtonProps) => {
   const { t } = useTranslation("form-builder");
   return (
     <Button
       className="!m-0 !mt-4"
       theme="link"
       id={`add-option-${index}`}
+      disabled={disabled}
       onClick={() => {
         onClick(index);
       }}
@@ -33,25 +36,33 @@ const AddButton = ({ index, onClick }: AddButtonProps) => {
 
 interface AddOptionsProps {
   index: number;
+  choiceCount?: number;
   onImport?: (choices: PropertyChoices[]) => void;
 }
 
-const AddOptions = ({ index, onImport }: AddOptionsProps) => {
+const AddOptions = ({ index, choiceCount = 0, onImport }: AddOptionsProps) => {
   const { t } = useTranslation("form-builder");
   const { addChoice, setFocusInput } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     setFocusInput: s.setFocusInput,
   }));
+  const isLimitReached = choiceCount >= MAX_CHOICE_AMOUNT;
 
   return (
     <div className="flex flex-wrap items-center gap-x-1">
       <AddButton
         index={index}
+        disabled={isLimitReached}
         onClick={() => {
           setFocusInput(true);
           addChoice(index);
         }}
       />
+      {isLimitReached && (
+        <strong className="ml-2 inline-block text-sm font-bold text-red-700 mt-4">
+          {t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT })}
+        </strong>
+      )}
       {onImport && (
         <>
           <span className="mt-4 text-sm text-slate-700">{t("or")}</span>
@@ -106,6 +117,7 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
     return (
       <AddOptions
         index={parentIndex}
+        choiceCount={choices?.length ?? 0}
         onImport={
           allowCsvUpload
             ? (importedChoices) => {
@@ -163,7 +175,7 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
       {options}
       <div className="mr-2 inline-block">
         <div className="mr-4 inline-block">
-          <AddOptions index={parentIndex} />
+          <AddOptions index={parentIndex} choiceCount={choices.length} />
         </div>
       </div>
     </div>

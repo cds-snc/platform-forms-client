@@ -7,6 +7,7 @@ import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Options } from "../Options";
 import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
+import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
 // Mock NextAuth
 vi.mock("next-auth/react", () => ({
@@ -95,5 +96,42 @@ describe("Options", () => {
       expect(screen.getByDisplayValue("Third Option")).toBeInTheDocument();
       expect(screen.getByDisplayValue("Fourth Option")).toBeInTheDocument();
     });
+  });
+
+  it("disables adding more options once the maximum is reached", async () => {
+    const maxChoices = Array.from({ length: MAX_CHOICE_AMOUNT }, (_, index) => ({
+      en: `Option ${index + 1}`,
+      fr: `Option ${index + 1} FR`,
+    }));
+
+    const testStore = {
+      ...store,
+      elements: [
+        {
+          id: 1,
+          type: "radio",
+          properties: {
+            titleEn: "Test Question",
+            titleFr: "Question de test",
+            choices: maxChoices,
+            validation: { required: false },
+          },
+        },
+      ],
+    };
+
+    const item = { index: 0, ...testStore.elements[0] } as unknown as Parameters<
+      typeof Options
+    >[0]["item"];
+
+    render(
+      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
+      <Providers form={testStore}>
+        <Options item={item} formId="test-form" />
+      </Providers>
+    );
+
+    expect(screen.getByRole("button", { name: "Add option" })).toBeDisabled();
+    expect(screen.getByText(`You can add up to ${MAX_CHOICE_AMOUNT} options.`)).toBeInTheDocument();
   });
 });

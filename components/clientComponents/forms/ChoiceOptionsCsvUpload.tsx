@@ -4,8 +4,10 @@ import React, { useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
+import * as Alert from "@clientComponents/globals/Alert/Alert";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { type PropertyChoices } from "@lib/types";
+import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
 const parseCsvRows = (text: string) => {
   const rows: string[][] = [];
@@ -56,7 +58,10 @@ const parseCsvRows = (text: string) => {
   return rows;
 };
 
-export const parseChoiceOptionsCsv = (text: string): PropertyChoices[] => {
+export const parseChoiceOptionsCsv = (
+  text: string,
+  maxChoices: number = MAX_CHOICE_AMOUNT
+): PropertyChoices[] => {
   const rows = parseCsvRows(text)
     .map((row) => row.map((column) => column.replace(/^\uFEFF/, "").trim()))
     .filter((row) => row.some((column) => column.length > 0));
@@ -70,6 +75,10 @@ export const parseChoiceOptionsCsv = (text: string): PropertyChoices[] => {
 
   if (dataRows.length === 0) {
     throw new Error("empty");
+  }
+
+  if (dataRows.length > maxChoices) {
+    throw new Error("too-many-rows");
   }
 
   return dataRows.map((row) => {
@@ -91,7 +100,7 @@ export const ChoiceOptionsCsvUpload = ({
   id: string;
   onImport: (choices: PropertyChoices[]) => void;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation(["form-builder", "common"]);
   const dialogRef = useDialogRef();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -133,7 +142,9 @@ export const ChoiceOptionsCsvUpload = ({
       setError(
         parseError instanceof Error && parseError.message === "invalid-columns"
           ? t("choiceOptionsUpload.errors.invalidColumns")
-          : t("choiceOptionsUpload.errors.empty")
+          : parseError instanceof Error && parseError.message === "too-many-rows"
+            ? t("choiceOptionsUpload.errors.maxChoices", { maxChoices: MAX_CHOICE_AMOUNT })
+            : t("choiceOptionsUpload.errors.empty")
       );
     }
   };
@@ -192,6 +203,12 @@ export const ChoiceOptionsCsvUpload = ({
         >
           <div className="p-4">
             <p className="mb-4">{t("choiceOptionsUpload.dialogDescription")}</p>
+            {error && (
+              <Alert.Danger focussable={true} className="mb-4">
+                <Alert.Title headingTag="h3">{t("error", { ns: "common" })}</Alert.Title>
+                <Alert.Body>{error}</Alert.Body>
+              </Alert.Danger>
+            )}
             <input
               ref={inputRef}
               type="file"
@@ -226,11 +243,6 @@ export const ChoiceOptionsCsvUpload = ({
                   </ul>
                 </details>
               </>
-            )}
-            {error && (
-              <p className="mt-3 text-sm text-red-700" role="alert">
-                {error}
-              </p>
             )}
           </div>
         </Dialog>

@@ -281,6 +281,7 @@
   "addMultiple": "Ajouter plusieurs options",
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter des options",
+  "choiceLimitReached": "Vous pouvez ajouter jusqu’à {{maxChoices}} options.",
   "choiceOptionsUpload": {
     "uploadButton": "Téléverser à partir d’un CSV",
     "helpButton": "Aide sur le format CSV des options",
@@ -297,7 +298,8 @@
     "errors": {
       "empty": "Le fichier CSV ne contient aucune option.",
       "invalidColumns": "Chaque ligne doit inclure une valeur anglaise dans la colonne 1 et une valeur française dans la colonne 2.",
-      "invalidType": "Téléversez un fichier .csv."
+      "invalidType": "Téléversez un fichier .csv.",
+      "maxChoices": "Vous pouvez importer jusqu’à {{maxChoices}} options."
     }
   },
   "addRules": "Ajouter des règles",

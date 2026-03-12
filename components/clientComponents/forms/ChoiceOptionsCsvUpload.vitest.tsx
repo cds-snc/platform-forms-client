@@ -4,6 +4,7 @@
 import { describe, expect, it } from "vitest";
 
 import { parseChoiceOptionsCsv } from "./ChoiceOptionsCsvUpload";
+import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
 describe("parseChoiceOptionsCsv", () => {
   it("parses csv rows and skips an en,fr header", () => {
@@ -21,5 +22,14 @@ describe("parseChoiceOptionsCsv", () => {
 
   it("throws when a row is missing english or french values", () => {
     expect(() => parseChoiceOptionsCsv("Only English,")).toThrow("invalid-columns");
+  });
+
+  it("throws when the csv exceeds the maximum number of choices", () => {
+    const rows = Array.from(
+      { length: MAX_CHOICE_AMOUNT + 1 },
+      (_, index) => `English ${index},French ${index}`
+    ).join("\n");
+
+    expect(() => parseChoiceOptionsCsv(rows)).toThrow("too-many-rows");
   });
 });

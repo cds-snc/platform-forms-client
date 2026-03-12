@@ -281,6 +281,7 @@
   "addMultiple": "Add multiple options",
   "addOption": "Add option",
   "addOptions": "Add options",
+  "choiceLimitReached": "You can add up to {{maxChoices}} options.",
   "choiceOptionsUpload": {
     "uploadButton": "Upload from CSV",
     "helpButton": "Help with CSV option format",
@@ -297,7 +298,8 @@
     "errors": {
       "empty": "The CSV file does not contain any options.",
       "invalidColumns": "Each row must include an English value in column 1 and a French value in column 2.",
-      "invalidType": "Upload a .csv file."
+      "invalidType": "Upload a .csv file.",
+      "maxChoices": "You can import up to {{maxChoices}} options."
     }
   },
   "addRules": "Add rules",
