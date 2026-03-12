@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>
+      a11y-test
+    </title>
+    <style>
+      body {
+        margin-left: 128px;
+        margin-right: 128px;
+        margin-top: 80px;
+      }
+
+      h1 {
+        font-size: 34px;
+        font-family: "Lato", sans-serif;
+        margin-bottom: 40px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #b10e1e;
+      }
+
+      hr {
+        margin-top: 64px;
+        margin-bottom: 64px;
+      }
+
+      p,
+      ul {
+        font-size: 20px;
+        font-family: "Noto Sans", sans-serif;
+      }
+
+      img {
+        width: 360px;
+      }
+
+      a img {
+        border: none;
+      }
+
+      #header {
+        margin-bottom: 80px;
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      ul li {
+        margin-top: 8px;
+      }
+
+      /* Copied from tailwindcss */
+      .visually-hidden {
+        clip: rect(0 0 0 0) !important;
+        clip-path: inset(50%) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+        width: 1px !important;
+        height: 1px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        position: absolute !important;
+        overflow: hidden !important;
+    }
+    </style>
+  </head>
+
+  <body>
+    <!-- <div id="header">
+      <a href="http://canada.ca/en.html" aria-label="Symbol of the Government of Canada">
+        <picture
+          ><img src="/img/sig-blk-en.png" alt="Symbol of the Government of Canada"
+        /></picture>
+      </a>
+    </div> -->
+    <div lang="en">
+      <h1>a11y test</h1>
+      <form>
+        <h2>
+            Test: will the browser+screen reader Announce "required"?
+        </h2>
+        
+        <h3>Add "required" to inputs and aria-hidden on label text "required" (CURRENT)</h3>
+        <div>
+            <label for="1a" id="label-1a">Question 1<span aria-hidden="true"> (required)</span></label>
+            <input id="1a" type="text" required autocomplete="off" placeholder="" name="1" value="">
+        </div>
+        <fieldset name="2a" id="2a" tabindex="-1">
+            <legend id="label-2a">Question 2<span aria-hidden="true"> (required)</span><i class="visually-hidden">Required field</i></legend>
+            <div class="gc-input-radio"><input id="2a.0" type="radio" required name="2a" value="1"><label tabindex="-1" class="gc-radio-label" for="2a.0"><span class="radio-label-text">1</span></label></div>
+            <div class="gc-input-radio"><input id="2a.1" type="radio" required name="2a" value="2"><label tabindex="-1" class="gc-radio-label" for="2a.1"><span class="radio-label-text">2</span></label></div>
+            <div class="gc-input-radio"><input id="2a.2" type="radio" required name="2a" value="3"><label tabindex="-1" class="gc-radio-label" for="2a.2"><span class="radio-label-text">3</span></label></div>
+        </fieldset>
+        <div>
+            <label for="3a" id="label-3a">Question 3<span aria-hidden="true"> (required)</span></label>
+            <div class="gcds-select-wrapper">
+                <select data-testid="dropdown" class="gc-dropdown" id="3a" name="3a">
+                    <option value="" selected="">No selection</option>
+                    <option id="3a.0" value="A">A</option>
+                    <option id="3a.1" value="B">B</option>
+                    <option id="3a.2" value="C">C</option>
+                </select>
+            </div>
+        </div>
+
+        <hr />
+
+        <h3>Add "required" + "aria-required" to inputs and aria-hidden on label text "(required)"</h3>
+        <div>
+            <label for="1b" id="label-1b">Question 1<span aria-hidden="true"> (required)</span></label>
+            <input id="1b" type="text" required aria-required="true" autocomplete="off" placeholder="" name="1b" value="">
+        </div>
+        <fieldset name="2b" id="2b" tabindex="-1">
+            <legend id="label-2b">Question 2<span aria-hidden="true"> (required)</span><i class="visually-hidden">Required field</i></legend>
+            <div class="gc-input-radio"><input id="2b.0" type="radio" required aria-required="true" name="2b" value="1"><label tabindex="-1" class="gc-radio-label" for="2b.0"><span class="radio-label-text">1</span></label></div>
+            <div class="gc-input-radio"><input id="2b.1" type="radio" required aria-required="true" name="2b" value="2"><label tabindex="-1" class="gc-radio-label" for="2b.1"><span class="radio-label-text">2</span></label></div>
+            <div class="gc-input-radio"><input id="2b.2" type="radio" required aria-required="true" name="2b" value="3"><label tabindex="-1" class="gc-radio-label" for="2b.2"><span class="radio-label-text">3</span></label></div>
+        </fieldset>
+        <div>
+            <label for="3b" id="label-3b">Question 3<span aria-hidden="true"> (required)</span></label>
+            <div class="gcds-select-wrapper">
+                <select data-testid="dropdown" class="gc-dropdown" id="3b" name="3b" required aria-required="true">
+                    <option value="" selected="">No selection</option>
+                    <option id="3b.0" value="A">A</option>
+                    <option id="3b.1" value="B">B</option>
+                    <option id="3b.2" value="C">C</option>
+                </select>
+            </div>
+        </div>
+
+        <hr />
+
+        <h3>Add "required" to inputs and plain visible "(required)" label text — no aria attributes (tests double-announcement)</h3>
+        <div>
+            <label for="1c" id="label-1c">Question 1 (required)</label>
+            <input id="1c" type="text" required autocomplete="off" placeholder="" name="1c" value="">
+        </div>
+        <fieldset name="2c" id="2c" tabindex="-1">
+            <legend id="label-2c">Question 2 (required)</legend>
+            <div class="gc-input-radio"><input id="2c.0" type="radio" required name="2c" value="1"><label tabindex="-1" class="gc-radio-label" for="2c.0"><span class="radio-label-text">1</span></label></div>
+            <div class="gc-input-radio"><input id="2c.1" type="radio" required name="2c" value="2"><label tabindex="-1" class="gc-radio-label" for="2c.1"><span class="radio-label-text">2</span></label></div>
+            <div class="gc-input-radio"><input id="2c.2" type="radio" required name="2c" value="3"><label tabindex="-1" class="gc-radio-label" for="2c.2"><span class="radio-label-text">3</span></label></div>
+        </fieldset>
+        <div>
+            <label for="3c" id="label-3c">Question 3 (required)</label>
+            <div class="gcds-select-wrapper">
+                <select data-testid="dropdown" class="gc-dropdown" id="3c" name="3c" required>
+                    <option value="" selected="">No selection</option>
+                    <option id="3c.0" value="A">A</option>
+                    <option id="3c.1" value="B">B</option>
+                    <option id="3c.2" value="C">C</option>
+                </select>
+            </div>
+        </div>
+
+        <hr />
+
+        <h3>Add "required" to inputs and visually-hidden "required" text in label only — no visible indicator</h3>
+        <div>
+            <label for="1d" id="label-1d">Question 1<span class="visually-hidden"> (required)</span></label>
+            <input id="1d" type="text" required autocomplete="off" placeholder="" name="1d" value="">
+        </div>
+        <fieldset name="2d" id="2d" tabindex="-1">
+            <legend id="label-2d">Question 2<i class="visually-hidden">Required field</i></legend>
+            <div class="gc-input-radio"><input id="2d.0" type="radio" required name="2d" value="1"><label tabindex="-1" class="gc-radio-label" for="2d.0"><span class="radio-label-text">1</span></label></div>
+            <div class="gc-input-radio"><input id="2d.1" type="radio" required name="2d" value="2"><label tabindex="-1" class="gc-radio-label" for="2d.1"><span class="radio-label-text">2</span></label></div>
+            <div class="gc-input-radio"><input id="2d.2" type="radio" required name="2d" value="3"><label tabindex="-1" class="gc-radio-label" for="2d.2"><span class="radio-label-text">3</span></label></div>
+        </fieldset>
+        <div>
+            <label for="3d" id="label-3d">Question 3<span class="visually-hidden"> (required)</span></label>
+            <div class="gcds-select-wrapper">
+                <select data-testid="dropdown" class="gc-dropdown" id="3d" name="3d" required>
+                    <option value="" selected="">No selection</option>
+                    <option id="3d.0" value="A">A</option>
+                    <option id="3d.1" value="B">B</option>
+                    <option id="3d.2" value="C">C</option>
+                </select>
+            </div>
+        </div>
+
+        <hr />
+
+        <h3>No "required" or "aria-required" on inputs — only label text (visible + visually-hidden) communicates required (CHOSEN SOLUTION)</h3>
+        <div>
+            <label for="1e" id="label-1e">Question 1<span aria-hidden="true"> (required)</span><span class="visually-hidden"> Required</span></label>
+            <input id="1e" type="text" autocomplete="off" placeholder="" name="1e" value="">
+        </div>
+        <fieldset name="2e" id="2e" tabindex="-1">
+            <legend id="label-2e">Question 2<span aria-hidden="true"> (required)</span><i class="visually-hidden">Required field</i></legend>
+            <div class="gc-input-radio"><input id="2e.0" type="radio" name="2e" value="1"><label tabindex="-1" class="gc-radio-label" for="2e.0"><span class="radio-label-text">1</span></label></div>
+            <div class="gc-input-radio"><input id="2e.1" type="radio" name="2e" value="2"><label tabindex="-1" class="gc-radio-label" for="2e.1"><span class="radio-label-text">2</span></label></div>
+            <div class="gc-input-radio"><input id="2e.2" type="radio" name="2e" value="3"><label tabindex="-1" class="gc-radio-label" for="2e.2"><span class="radio-label-text">3</span></label></div>
+        </fieldset>
+        <div>
+            <label for="3e" id="label-3e">Question 3<span aria-hidden="true"> (required)</span><span class="visually-hidden"> Required</span></label>
+            <div class="gcds-select-wrapper">
+                <select data-testid="dropdown" class="gc-dropdown" id="3e" name="3e">
+                    <option value="" selected="">No selection</option>
+                    <option id="3e.0" value="A">A</option>
+                    <option id="3e.1" value="B">B</option>
+                    <option id="3e.2" value="C">C</option>
+                </select>
+            </div>
+        </div>
+
+      </form>
+
+    </div>
+    <hr />
+    </div>
+  </body>
+</html>
