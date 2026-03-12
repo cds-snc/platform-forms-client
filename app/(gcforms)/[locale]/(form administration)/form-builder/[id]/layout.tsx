@@ -21,6 +21,7 @@ import {
   FormBuilderConfig,
   formBuilderConfigDefault,
 } from "@lib/hooks/useFormBuilderConfig";
+import { EditLockClient } from "./components/EditLockClient";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -111,6 +112,7 @@ export default async function Layout(props: {
                         className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
                         tabIndex={-1}
                       >
+                        <EditLockClient formId={id} />
                         {children}
                       </main>
                       {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}

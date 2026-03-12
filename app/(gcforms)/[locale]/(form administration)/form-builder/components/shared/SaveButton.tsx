@@ -83,6 +83,7 @@ const ErrorSavingForm = () => {
 };
 
 export const SaveButton = () => {
+  const { t } = useTranslation("form-builder");
   const {
     isPublished,
     id,
@@ -93,6 +94,8 @@ export const SaveButton = () => {
     securityAttribute,
     setId,
     notificationsInterval,
+    isLockedByOther,
+    editLock,
   } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
@@ -103,6 +106,8 @@ export const SaveButton = () => {
     securityAttribute: s.securityAttribute,
     setId: s.setId,
     notificationsInterval: s.notificationsInterval,
+    isLockedByOther: s.isLockedByOther,
+    editLock: s.editLock,
   }));
 
   const { templateIsDirty, createOrUpdateTemplate, resetState, updatedAt, setUpdatedAt } =
@@ -180,11 +185,27 @@ export const SaveButton = () => {
     return null;
   }
 
-  return status === "authenticated" ? (
+  if (status !== "authenticated") return null;
+
+  if (isLockedByOther) {
+    const name = editLock?.lockedByName || editLock?.lockedByEmail || t("editLock.unknownUser");
+    return (
+      <div
+        data-id={id}
+        className="mb-2 flex w-[700px] text-sm text-slate-500 laptop:text-base"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {t("editLock.readOnly", { name })}
+      </div>
+    );
+  }
+
+  return (
     <div
       data-id={id}
       className={cn(
-        "mb-2 flex w-[700px] text-sm laptop:text-base text-slate-500",
+        "mb-2 flex w-[700px] text-slate-500 text-sm laptop:text-base",
         id && error && "text-red-destructive"
       )}
       aria-live="polite"
@@ -201,5 +222,5 @@ export const SaveButton = () => {
       )}
       {updatedAt && <DateTime updatedAt={updatedAt} />}
     </div>
-  ) : null;
+  );
 };

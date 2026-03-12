@@ -575,6 +575,14 @@
   "french": "français",
   "gcForms": "Formulaires GC",
   "gcFormsEdit": "Modifier",
+  "editLock": {
+    "lockedMessage": "{{name}} modifie ce formulaire. Vous êtes en mode lecture seule.",
+    "readOnly": "Lecture seule : {{name}} modifie ce formulaire.",
+    "unknownUser": "Un autre utilisateur",
+    "takeover": "Prendre le contrôle",
+    "takingOver": "Prise de contrôle...",
+    "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer."
+  },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publier",
   "gcFormsPublished": "Publié",

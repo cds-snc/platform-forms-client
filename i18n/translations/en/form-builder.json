@@ -575,6 +575,14 @@
   "french": "French",
   "gcForms": "GC Forms",
   "gcFormsEdit": "Edit",
+  "editLock": {
+    "lockedMessage": "{{name}} is editing this form. You are in read-only mode.",
+    "readOnly": "Read-only: {{name}} is editing this form.",
+    "unknownUser": "Another user",
+    "takeover": "Take over editing",
+    "takingOver": "Taking over...",
+    "takeoverError": "Unable to take over. Please try again."
+  },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publish",
   "gcFormsPublished": "Published",

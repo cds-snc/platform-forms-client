@@ -209,15 +209,15 @@ const Element = ({
 };
 
 export const TranslateWithGroups = () => {
-  const { updateField, form, groups, localizeField, getLocalizationAttribute } = useTemplateStore(
-    (s) => ({
+  const { updateField, form, groups, localizeField, getLocalizationAttribute, isLockedByOther } =
+    useTemplateStore((s) => ({
       updateField: s.updateField,
       form: s.form,
       groups: s.form.groups,
       localizeField: s.localizeField,
       getLocalizationAttribute: s.getLocalizationAttribute,
-    })
-  );
+      isLockedByOther: s.isLockedByOther,
+    }));
   const { t } = useTranslation("form-builder");
 
   // Set default left-hand language
@@ -244,7 +244,7 @@ export const TranslateWithGroups = () => {
     "";
 
   return (
-    <>
+    <div className={isLockedByOther ? "pointer-events-none opacity-70" : undefined}>
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="mr-10">
         <div className="flex w-[700px]">
@@ -543,6 +543,6 @@ export const TranslateWithGroups = () => {
           {t("skipLink.translateSetup")}
         </SkipLinkReusable>
       </div>
-    </>
+    </div>
   );
 };

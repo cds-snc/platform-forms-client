@@ -34,6 +34,7 @@ import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
 import { BrandProperties, NotificationsInterval } from "@gcforms/types";
 import { redirect } from "next/navigation";
+import { assertTemplateEditLock, TemplateEditLockedError } from "@lib/editLocks";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -102,7 +103,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
 
 export const updateTemplate = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       id: formID,
       formConfig,
@@ -123,6 +124,7 @@ export const updateTemplate = AuthenticatedAction(
     error?: string;
   }> => {
     try {
+      await assertTemplateEditLock({ templateId: formID, userId: session.user.id });
       const formRecord = await updateDbTemplate({
         formID: formID,
         formConfig: formConfig,
@@ -137,7 +139,10 @@ export const updateTemplate = AuthenticatedAction(
       }
 
       return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
-    } catch (_) {
+    } catch (e) {
+      if (e instanceof TemplateEditLockedError) {
+        return { formRecord: null, error: "editLocked" };
+      }
       return { formRecord: null, error: "error" };
     }
   }

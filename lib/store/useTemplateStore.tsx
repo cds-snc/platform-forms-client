@@ -75,6 +75,10 @@ const createTemplateStore = (
         persist(
           (set, get) => ({
             ...props,
+            editLock: null,
+            isLockedByOther: false,
+            setEditLock: (lock) => set({ editLock: lock }),
+            setIsLockedByOther: (locked) => set({ isLockedByOther: locked }),
             toggleLang: () =>
               set((state) => {
                 state.lang = state.lang === "en" ? "fr" : "en";
@@ -90,36 +94,94 @@ const createTemplateStore = (
               get().lang !== get().translationLanguagePriority
                 ? { lang: get().translationLanguagePriority }
                 : undefined,
-            updateField: (path, value) =>
+            updateField: (path, value) => {
+              if (get().isLockedByOther) return;
               set((state) => {
                 update(state, path, cleanInput(value));
-              }),
-            unsetField: (path) =>
+              });
+            },
+            unsetField: (path) => {
+              if (get().isLockedByOther) return;
               set((state) => {
                 unset(state, path);
-              }),
+              });
+            },
             localizeField: localizeField(set, get),
             getPathString: getPathString(set, get),
             propertyPath: propertyPath(set, get),
-            moveUp: moveUp(set),
-            moveDown: moveDown(set),
-            subMoveUp: subMoveUp(set),
-            subMoveDown: subMoveDown(set),
-            add: add(set, get),
-            addSubItem: addSubItem(set, get),
-            addChoice: addChoice(set),
-            addLabeledChoice: addLabeledChoice(set),
-            addSubChoice: addSubChoice(set),
-            removeChoiceFromRules: removeChoiceFromRules(set),
-            removeChoiceFromNextActions: removeChoiceFromNextActions(set),
-            remove: remove(set),
-            removeSubItem: removeSubItem(set),
-            removeChoice: removeChoice(set),
-            removeSubChoice: removeSubChoice(set),
+            moveUp: (...args) => {
+              if (get().isLockedByOther) return;
+              return moveUp(set)(...args);
+            },
+            moveDown: (...args) => {
+              if (get().isLockedByOther) return;
+              return moveDown(set)(...args);
+            },
+            subMoveUp: (...args) => {
+              if (get().isLockedByOther) return;
+              return subMoveUp(set)(...args);
+            },
+            subMoveDown: (...args) => {
+              if (get().isLockedByOther) return;
+              return subMoveDown(set)(...args);
+            },
+            add: (...args) => {
+              if (get().isLockedByOther) return Promise.resolve(-1);
+              return add(set, get)(...args);
+            },
+            addSubItem: (...args) => {
+              if (get().isLockedByOther) return Promise.resolve(-1);
+              return addSubItem(set, get)(...args);
+            },
+            addChoice: (...args) => {
+              if (get().isLockedByOther) return;
+              return addChoice(set)(...args);
+            },
+            addLabeledChoice: (...args) => {
+              if (get().isLockedByOther) return Promise.resolve(-1);
+              return addLabeledChoice(set)(...args);
+            },
+            addSubChoice: (...args) => {
+              if (get().isLockedByOther) return;
+              return addSubChoice(set)(...args);
+            },
+            removeChoiceFromRules: (...args) => {
+              if (get().isLockedByOther) return;
+              return removeChoiceFromRules(set)(...args);
+            },
+            removeChoiceFromNextActions: (...args) => {
+              if (get().isLockedByOther) return;
+              return removeChoiceFromNextActions(set)(...args);
+            },
+            remove: (...args) => {
+              if (get().isLockedByOther) return;
+              return remove(set)(...args);
+            },
+            removeSubItem: (...args) => {
+              if (get().isLockedByOther) return;
+              return removeSubItem(set)(...args);
+            },
+            removeChoice: (...args) => {
+              if (get().isLockedByOther) return;
+              return removeChoice(set)(...args);
+            },
+            removeSubChoice: (...args) => {
+              if (get().isLockedByOther) return;
+              return removeSubChoice(set)(...args);
+            },
             getChoice: getChoice(set, get),
-            duplicateElement: duplicateElement(set, get),
-            initialize: initialize(set),
-            importTemplate: importTemplate(set),
+            duplicateElement: (...args) => {
+              if (get().isLockedByOther) return;
+              return duplicateElement(set, get)(...args);
+            },
+            initialize: (...args) => {
+              if (get().isLockedByOther) return;
+              return initialize(set)(...args);
+            },
+            importTemplate: (...args) => {
+              if (get().isLockedByOther) return;
+              return importTemplate(set)(...args);
+            },
             getHighestElementId: getHighestElementId(set, get),
             generateElementId: generateElementId(set, get),
             transform: transform(set, get),
