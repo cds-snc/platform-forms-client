@@ -45,7 +45,7 @@ export const isFieldResponseValid = (
           return currentRegex.error;
         }
       }
-      if (validator.maxLength && rawValue.length > validator.maxLength)
+      if (validator.maxLength && (value as string).length > validator.maxLength)
         return t("input-validation.too-many-characters");
       break;
     }
@@ -53,7 +53,7 @@ export const isFieldResponseValid = (
       const rawValue = String(value ?? "");
       const typedValue = rawValue.trim();
       if (validator.required && !typedValue) return t("input-validation.required");
-      if (validator.maxLength && rawValue.length > validator.maxLength)
+      if (validator.maxLength && (value as string).length > validator.maxLength)
         return t("input-validation.too-many-characters");
       break;
     }
