@@ -45,7 +45,7 @@ const AddOption = ({
         {t("addOption")}
       </Button>
       {isLimitReached && (
-        <strong className="ml-2 inline-block text-sm font-bold text-red-700">
+        <strong className="ml-2 mt-4 inline-block text-sm font-bold text-red-700">
           {t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT })}
         </strong>
       )}
