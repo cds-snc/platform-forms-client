@@ -38,10 +38,11 @@ const AddButton = ({ index, onClick, disabled }: AddButtonProps) => {
 interface AddOptionsProps {
   index: number;
   choiceCount?: number;
+  copyChoices?: PropertyChoices[];
   onImport?: (choices: PropertyChoices[]) => void;
 }
 
-const AddOptions = ({ index, choiceCount = 0, onImport }: AddOptionsProps) => {
+const AddOptions = ({ index, choiceCount = 0, copyChoices, onImport }: AddOptionsProps) => {
   const { t } = useTranslation("form-builder");
   const { addChoice, setFocusInput } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
@@ -50,7 +51,7 @@ const AddOptions = ({ index, choiceCount = 0, onImport }: AddOptionsProps) => {
   const isLimitReached = choiceCount >= MAX_CHOICE_AMOUNT;
 
   return (
-    <div className="flex flex-wrap items-center gap-x-1">
+    <div className="flex flex-wrap items-center gap-x-6">
       <AddButton
         index={index}
         disabled={isLimitReached}
@@ -59,6 +60,7 @@ const AddOptions = ({ index, choiceCount = 0, onImport }: AddOptionsProps) => {
           addChoice(index);
         }}
       />
+      <CopyChoiceOptionsCsvButton choices={copyChoices} />
       {isLimitReached && (
         <strong className="ml-2 inline-block text-sm font-bold text-red-700 mt-4">
           {t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT })}
@@ -174,12 +176,7 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
   return (
     <div className="mt-5">
       {options}
-      <div className="mr-2 inline-block">
-        <div className="mr-4 inline-block">
-          <AddOptions index={parentIndex} choiceCount={choices.length} />
-          <CopyChoiceOptionsCsvButton choices={choices} />
-        </div>
-      </div>
+      <AddOptions index={parentIndex} choiceCount={choices.length} copyChoices={choices} />
     </div>
   );
 };

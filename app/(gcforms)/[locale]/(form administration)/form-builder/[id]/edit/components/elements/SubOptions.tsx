@@ -15,11 +15,13 @@ const AddOption = ({
   elId,
   subIndex,
   choiceCount,
+  copyChoices,
   onImport,
 }: {
   elId: number;
   subIndex: number;
   choiceCount?: number;
+  copyChoices?: PropertyChoices[];
   onImport?: (choices: PropertyChoices[]) => void;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -31,7 +33,7 @@ const AddOption = ({
   const isLimitReached = (choiceCount ?? 0) >= MAX_CHOICE_AMOUNT;
 
   return (
-    <div className="flex flex-wrap items-center gap-x-1">
+    <div className="flex flex-wrap items-center gap-x-6">
       <Button
         className="!m-0 !mt-4"
         theme="link"
@@ -45,6 +47,7 @@ const AddOption = ({
       >
         {t("addOption")}
       </Button>
+      <CopyChoiceOptionsCsvButton choices={copyChoices} />
       {isLimitReached && (
         <strong className="ml-2 mt-4 inline-block text-sm font-bold text-red-700">
           {t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT })}
@@ -149,8 +152,12 @@ export const SubOptions = ({
   return (
     <div className="mt-5">
       {options}
-      <AddOption elId={item.id} subIndex={subIndex} choiceCount={choices.length} />
-      <CopyChoiceOptionsCsvButton choices={choices} />
+      <AddOption
+        elId={item.id}
+        subIndex={subIndex}
+        choiceCount={choices.length}
+        copyChoices={choices}
+      />
     </div>
   );
 };

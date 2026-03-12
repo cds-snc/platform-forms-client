@@ -27,21 +27,17 @@ export const CopyChoiceOptionsCsvButton = ({ choices }: { choices?: PropertyChoi
   }
 
   return (
-    <div>
-      <Button
-        theme="link"
-        className="!m-0 !mt-4 [&_svg]:focus:fill-white"
-        onClick={copyToClipboard}
-      >
-        <>
-          {copied ? <CheckIcon className="mr-2 size-4" /> : <CopyIcon className="mr-2 size-4" />}
-          <span>
-            {copied
-              ? t("choiceOptionsUpload.copyButtonCopied")
-              : t("choiceOptionsUpload.copyButton")}
-          </span>
-        </>
-      </Button>
-    </div>
+    <Button
+      theme="link"
+      className="!m-0 !mt-4 !w-56 justify-start [&_svg]:focus:fill-white"
+      onClick={copyToClipboard}
+    >
+      <>
+        {copied ? <CheckIcon className="mr-2 size-4" /> : <CopyIcon className="mr-2 size-4" />}
+        <span>
+          {copied ? t("choiceOptionsUpload.copyButtonCopied") : t("choiceOptionsUpload.copyButton")}
+        </span>
+      </>
+    </Button>
   );
 };
