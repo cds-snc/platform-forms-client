@@ -50,8 +50,7 @@ export const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.textArea: {
-      const rawValue = String(value ?? "");
-      const typedValue = rawValue.trim();
+      const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
       if (validator.maxLength && (value as string).length > validator.maxLength)
         return t("input-validation.too-many-characters");
