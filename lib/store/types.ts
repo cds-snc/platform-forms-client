@@ -37,6 +37,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   isLockedByOther: boolean;
   setEditLock: (lock: EditLockState | null) => void;
   setIsLockedByOther: (locked: boolean) => void;
+  setFromRecord: (record: FormRecord) => void;
   setHasTransformed: () => void;
   setHasHydrated: () => void;
   getFocusInput: () => boolean;

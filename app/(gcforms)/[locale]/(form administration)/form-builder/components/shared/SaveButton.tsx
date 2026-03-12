@@ -122,6 +122,9 @@ export const SaveButton = () => {
     if (status !== "authenticated") {
       return;
     }
+    if (isLockedByOther) {
+      return;
+    }
 
     // If the timeRef is within 2 secs of the current time, don't save
     if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
@@ -169,10 +172,12 @@ export const SaveButton = () => {
 
   useEffect(() => {
     return () => {
-      handleSave();
+      if (!isLockedByOther) {
+        handleSave();
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isLockedByOther]);
 
   if (isPublished) {
     return null;

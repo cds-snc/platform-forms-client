@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { FormRecord } from "@lib/types";
 
 type EditLockStatus = {
   locked: boolean;
@@ -34,6 +35,7 @@ export const useEditLock = ({
   const { status } = useSession();
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
+  const setFromRecord = useTemplateStore((s) => s.setFromRecord);
 
   const isOwnerRef = useRef(false);
   const heartbeatRef = useRef<number | null>(null);
@@ -89,6 +91,15 @@ export const useEditLock = ({
     return res.json();
   }, [formId]);
 
+  const refreshForm = useCallback(async () => {
+    const res = await fetch(`/api/templates/${formId}`, { method: "GET" });
+    if (!res.ok) return;
+    const record = (await res.json()) as FormRecord;
+    if (record?.form) {
+      setFromRecord(record);
+    }
+  }, [formId, setFromRecord]);
+
   const startHeartbeat = useCallback(() => {
     clearTimers();
     heartbeatRef.current = window.setInterval(async () => {
@@ -102,6 +113,9 @@ export const useEditLock = ({
     pollRef.current = window.setInterval(async () => {
       const pollResult = (await getStatus()) as EditLockStatus;
       updateStore(pollResult);
+      if (pollResult.locked && !pollResult.isOwner) {
+        await refreshForm();
+      }
       if (!pollResult.locked) {
         const retryResult = (await postAction("acquire")) as EditLockStatus;
         updateStore(retryResult);
@@ -110,7 +124,7 @@ export const useEditLock = ({
         }
       }
     }, EDIT_LOCK_HEARTBEAT_MS);
-  }, [clearTimers, getStatus, postAction, startHeartbeat, updateStore]);
+  }, [clearTimers, getStatus, postAction, refreshForm, startHeartbeat, updateStore]);
 
   const startTimers = useCallback(
     (statusResult: EditLockStatus, cancelled = false) => {
@@ -141,6 +155,9 @@ export const useEditLock = ({
       if (cancelled) return;
       updateStore(statusResult);
       startTimers(statusResult, cancelled);
+      if (!statusResult.isOwner) {
+        await refreshForm();
+      }
     };
 
     acquire();
@@ -158,6 +175,7 @@ export const useEditLock = ({
     clearTimers,
     getStatus,
     postAction,
+    refreshForm,
     sessionId,
     setEditLock,
     setIsLockedByOther,

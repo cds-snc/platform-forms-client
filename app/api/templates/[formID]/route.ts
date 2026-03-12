@@ -146,11 +146,20 @@ export const PUT = middleware(
         throw new MalformedAPIRequest("Invalid or missing formID");
       }
 
+      const shouldCheckLock =
+        formConfig !== undefined ||
+        isPublished !== undefined ||
+        users !== undefined ||
+        sendResponsesToVault !== undefined;
+
+      if (shouldCheckLock) {
+        const { session } = props as WithRequired<MiddlewareProps, "session">;
+        await assertTemplateEditLock({ templateId: formID, userId: session.user.id });
+      }
+
       let response;
 
       if (formConfig) {
-        const { session } = props as WithRequired<MiddlewareProps, "session">;
-        await assertTemplateEditLock({ templateId: formID, userId: session.user.id });
         response = await updateTemplate({
           formID: formID,
           formConfig: formConfig,

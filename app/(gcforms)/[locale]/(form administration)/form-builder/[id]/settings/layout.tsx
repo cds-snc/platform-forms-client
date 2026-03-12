@@ -5,6 +5,7 @@ import { authCheckAndThrow } from "@lib/actions";
 import { Language } from "@lib/types/form-builder-types";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 import { WaitForId } from "../components/WaitForId";
+import { SettingsLockClient } from "./components/SettingsLockClient";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -34,7 +35,7 @@ export default async function Layout(props: {
     <>
       <h1>{t("gcFormsSettings")}</h1>
       <SettingsNavigation id={id} />
-      {children}
+      <SettingsLockClient formId={id}>{children}</SettingsLockClient>
     </>
   );
 }
