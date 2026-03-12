@@ -65,6 +65,7 @@ test.describe("Test FormBuilder", () => {
     await page.fill("#item-1", "Question 1");
     await expect(page.locator("#item-1")).toHaveValue("Question 1");
 
+    await page.getByRole("button", { name: "Add option" }).click();
     await page.fill("#option--1--1", "option 1");
     await expect(page.locator("#option--1--1")).toHaveValue("option 1");
 
