@@ -58,6 +58,21 @@ const parseCsvRows = (text: string) => {
   return rows;
 };
 
+const escapeCsvValue = (value: string) => {
+  if (/[",\n\r]/.test(value)) {
+    return `"${value.replace(/"/g, '""')}"`;
+  }
+
+  return value;
+};
+
+export const stringifyChoiceOptionsCsv = (choices: PropertyChoices[]): string => {
+  return [
+    "en,fr",
+    ...choices.map(({ en, fr }) => `${escapeCsvValue(en)},${escapeCsvValue(fr)}`),
+  ].join("\n");
+};
+
 export const parseChoiceOptionsCsv = (
   text: string,
   maxChoices: number = MAX_CHOICE_AMOUNT

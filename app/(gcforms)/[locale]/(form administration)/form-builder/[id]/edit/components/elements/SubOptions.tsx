@@ -9,6 +9,7 @@ import { ChoiceOptionsCsvUpload } from "@clientComponents/forms/ChoiceOptionsCsv
 import { FormElementTypes, type PropertyChoices } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
+import { CopyChoiceOptionsCsvButton } from "@formBuilder/[id]/edit/components/CopyChoiceOptionsCsvButton";
 
 const AddOption = ({
   elId,
@@ -149,6 +150,7 @@ export const SubOptions = ({
     <div className="mt-5">
       {options}
       <AddOption elId={item.id} subIndex={subIndex} choiceCount={choices.length} />
+      <CopyChoiceOptionsCsvButton choices={choices} />
     </div>
   );
 };

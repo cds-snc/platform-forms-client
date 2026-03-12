@@ -10,6 +10,7 @@ import { FormElementTypes, type PropertyChoices } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ConditionalIndicatorOption } from "@formBuilder/components/shared/conditionals/ConditionalIndicatorOption";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
+import { CopyChoiceOptionsCsvButton } from "@formBuilder/[id]/edit/components/CopyChoiceOptionsCsvButton";
 
 interface AddButtonProps {
   index: number;
@@ -176,6 +177,7 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
       <div className="mr-2 inline-block">
         <div className="mr-4 inline-block">
           <AddOptions index={parentIndex} choiceCount={choices.length} />
+          <CopyChoiceOptionsCsvButton choices={choices} />
         </div>
       </div>
     </div>

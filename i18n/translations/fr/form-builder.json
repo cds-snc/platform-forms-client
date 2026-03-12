@@ -292,6 +292,8 @@
     "dialogDescription": "Sélectionnez un fichier .csv pour importer les options de cet élément.",
     "selectFile": "Choisir un fichier CSV",
     "noFileSelected": "Aucun fichier sélectionné",
+    "copyButton": "Copier le CSV des options",
+    "copyButtonCopied": "CSV copié",
     "importButton": "Importer les options",
     "previewCount": "{{count}} lignes prêtes à être importées",
     "previewSummary": "Aperçu des lignes",

@@ -3,7 +3,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { parseChoiceOptionsCsv } from "./ChoiceOptionsCsvUpload";
+import { parseChoiceOptionsCsv, stringifyChoiceOptionsCsv } from "./ChoiceOptionsCsvUpload";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
 describe("parseChoiceOptionsCsv", () => {
@@ -31,5 +31,16 @@ describe("parseChoiceOptionsCsv", () => {
     ).join("\n");
 
     expect(() => parseChoiceOptionsCsv(rows)).toThrow("too-many-rows");
+  });
+
+  it("stringifies choices into the upload csv format", () => {
+    expect(
+      stringifyChoiceOptionsCsv([
+        { en: "First", fr: "Premier" },
+        { en: 'Second, with comma', fr: 'Deuxieme "quoted" value' },
+      ])
+    ).toBe(
+      'en,fr\nFirst,Premier\n"Second, with comma","Deuxieme ""quoted"" value"'
+    );
   });
 });
