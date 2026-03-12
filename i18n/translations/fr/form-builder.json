@@ -281,6 +281,25 @@
   "addMultiple": "Ajouter plusieurs options",
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter des options",
+  "choiceOptionsUpload": {
+    "uploadButton": "Téléverser à partir d’un CSV",
+    "helpButton": "Aide sur le format CSV des options",
+    "helpTitle": "Format CSV",
+    "helpDescription": "Utilisez un fichier .csv avec l’anglais dans la première colonne et le français dans la deuxième. Une ligne d’en-tête en,fr est facultative.",
+    "exampleLabel": "Exemple",
+    "dialogTitle": "Téléverser des options à partir d’un CSV",
+    "dialogDescription": "Sélectionnez un fichier .csv pour importer les options de cet élément.",
+    "selectFile": "Choisir un fichier CSV",
+    "noFileSelected": "Aucun fichier sélectionné",
+    "importButton": "Importer les options",
+    "previewCount": "{{count}} lignes prêtes à être importées",
+    "previewSummary": "Aperçu des lignes",
+    "errors": {
+      "empty": "Le fichier CSV ne contient aucune option.",
+      "invalidColumns": "Chaque ligne doit inclure une valeur anglaise dans la colonne 1 et une valeur française dans la colonne 2.",
+      "invalidType": "Téléversez un fichier .csv."
+    }
+  },
   "addRules": "Ajouter des règles",
   "addQuestionToSet": "Ajouter un élément à l'ensemble",
   "addToSet": "Ajouter à l'ensemble",
@@ -399,6 +418,7 @@
   "descriptionDescription": "Le texte explicatif apparaît sous l'étiquette et avant le champ. Il est utilisé pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme ou donner un exemple.",
   "didYouFindThisToolHelpful": "Avez-vous trouvé Formulaires GC pertinent comme outil? <a href=\"/fr/contact\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Exporter en fichier CSV",
+  "or": "ou",
   "downloadResponsesTable": {
     "card": {
       "noResponses": "Vous n'avez pas reçu de réponses",

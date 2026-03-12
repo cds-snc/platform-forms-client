@@ -281,6 +281,25 @@
   "addMultiple": "Add multiple options",
   "addOption": "Add option",
   "addOptions": "Add options",
+  "choiceOptionsUpload": {
+    "uploadButton": "Upload from CSV",
+    "helpButton": "Help with CSV option format",
+    "helpTitle": "CSV format",
+    "helpDescription": "Use a .csv file with English in the first column and French in the second. A header row of en,fr is optional.",
+    "exampleLabel": "Example",
+    "dialogTitle": "Upload options from CSV",
+    "dialogDescription": "Select a .csv file to import options for this element.",
+    "selectFile": "Choose CSV file",
+    "noFileSelected": "No file selected",
+    "importButton": "Import options",
+    "previewCount": "{{count}} rows ready to import",
+    "previewSummary": "Preview rows",
+    "errors": {
+      "empty": "The CSV file does not contain any options.",
+      "invalidColumns": "Each row must include an English value in column 1 and a French value in column 2.",
+      "invalidType": "Upload a .csv file."
+    }
+  },
   "addRules": "Add rules",
   "addQuestionToSet": "Add form element to set",
   "addToSet": "Add to set",
@@ -399,6 +418,7 @@
   "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
   "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/contact\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
+  "or": "or",
   "downloadResponsesTable": {
     "card": {
       "noResponses": "You have not received responses",

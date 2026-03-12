@@ -5,6 +5,8 @@ import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Option } from "./Option";
 import { Button } from "@clientComponents/globals";
+import { ChoiceOptionsCsvUpload } from "@clientComponents/forms/ChoiceOptionsCsvUpload";
+import { FormElementTypes, type PropertyChoices } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ConditionalIndicatorOption } from "@formBuilder/components/shared/conditionals/ConditionalIndicatorOption";
 
@@ -31,16 +33,18 @@ const AddButton = ({ index, onClick }: AddButtonProps) => {
 
 interface AddOptionsProps {
   index: number;
+  onImport?: (choices: PropertyChoices[]) => void;
 }
 
-const AddOptions = ({ index }: AddOptionsProps) => {
+const AddOptions = ({ index, onImport }: AddOptionsProps) => {
+  const { t } = useTranslation("form-builder");
   const { addChoice, setFocusInput } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     setFocusInput: s.setFocusInput,
   }));
 
   return (
-    <>
+    <div className="flex flex-wrap items-center gap-x-1">
       <AddButton
         index={index}
         onClick={() => {
@@ -48,7 +52,19 @@ const AddOptions = ({ index }: AddOptionsProps) => {
           addChoice(index);
         }}
       />
-    </>
+      {onImport && (
+        <>
+          <span className="mt-4 text-sm text-slate-700">{t("or")}</span>
+          <ChoiceOptionsCsvUpload
+            id={`choice-options-${index}`}
+            onImport={(choices) => {
+              setFocusInput(false);
+              onImport(choices);
+            }}
+          />
+        </>
+      )}
+    </div>
   );
 };
 
@@ -61,9 +77,10 @@ interface OptionsProps {
 }
 
 export const Options = ({ item, renderIcon }: OptionsProps) => {
-  const { elements, translationLanguagePriority } = useTemplateStore((s) => ({
+  const { elements, translationLanguagePriority, updateField } = useTemplateStore((s) => ({
     elements: s.form.elements,
     translationLanguagePriority: s.translationLanguagePriority,
+    updateField: s.updateField,
   }));
 
   const parentIndex = elements.findIndex((element) => element.id === item.id);
@@ -77,11 +94,30 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
     return null;
   }
   const { choices } = element.properties;
+  const allowCsvUpload = [
+    FormElementTypes.radio,
+    FormElementTypes.checkbox,
+    FormElementTypes.dropdown,
+  ].includes(item.type);
 
   if (!item) return null;
 
-  if (!choices) {
-    return <AddOptions index={parentIndex} />;
+  if (!choices || choices.length === 0) {
+    return (
+      <AddOptions
+        index={parentIndex}
+        onImport={
+          allowCsvUpload
+            ? (importedChoices) => {
+                updateField(`form.elements[${parentIndex}].properties`, {
+                  ...element.properties,
+                  choices: importedChoices,
+                });
+              }
+            : undefined
+        }
+      />
+    );
   }
 
   const options = choices.map((child, index) => {
