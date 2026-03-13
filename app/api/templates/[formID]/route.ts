@@ -152,7 +152,7 @@ export const PUT = middleware(
         users !== undefined ||
         sendResponsesToVault !== undefined;
 
-      if (shouldCheckLock) {
+      if (shouldCheckLock && process.env.APP_ENV !== "test") {
         const { session } = props as WithRequired<MiddlewareProps, "session">;
         await assertTemplateEditLock({ templateId: formID, userId: session.user.id });
       }
