@@ -85,6 +85,7 @@ const ErrorSavingForm = () => {
 
 export const SaveButton = () => {
   const { t } = useTranslation("form-builder");
+  const lockChecksEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
   const {
     isPublished,
     id,
@@ -114,11 +115,12 @@ export const SaveButton = () => {
   const { templateIsDirty, createOrUpdateTemplate, resetState, updatedAt, setUpdatedAt } =
     useTemplateContext();
   const { status } = useSession();
+  const lockedByOther = lockChecksEnabled && isLockedByOther;
 
   const [error, setError] = useState(false);
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
-  const isLockedByOtherRef = useRef(isLockedByOther);
+  const isLockedByOtherRef = useRef(lockedByOther);
   const handleSaveRef = useRef<() => void>(() => undefined);
   const errorRef = useRef(error);
 
@@ -126,7 +128,7 @@ export const SaveButton = () => {
     if (status !== "authenticated") {
       return;
     }
-    if (isLockedByOther) {
+    if (lockedByOther) {
       return;
     }
 
@@ -178,7 +180,7 @@ export const SaveButton = () => {
     getId,
     getName,
     getSchema,
-    isLockedByOther,
+    lockedByOther,
     notificationsInterval,
     resetState,
     securityAttribute,
@@ -188,9 +190,9 @@ export const SaveButton = () => {
   ]);
 
   useEffect(() => {
-    isLockedByOtherRef.current = isLockedByOther;
+    isLockedByOtherRef.current = lockedByOther;
     handleSaveRef.current = handleSave;
-  }, [handleSave, isLockedByOther]);
+  }, [handleSave, lockedByOther]);
 
   useEffect(() => {
     errorRef.current = error;
@@ -233,7 +235,7 @@ export const SaveButton = () => {
 
   if (status !== "authenticated") return null;
 
-  if (isLockedByOther) {
+  if (lockedByOther) {
     const name = editLock?.lockedByName || editLock?.lockedByEmail || t("editLock.unknownUser");
     return (
       <div
