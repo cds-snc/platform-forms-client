@@ -18,7 +18,7 @@ export const SettingsLockClient = ({
   formId: string;
   children: React.ReactNode;
 }) => {
-  const enabled = formId !== "0000";
+  const enabled = process.env.NEXT_PUBLIC_APP_ENV !== "test" && formId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
 
   const { takeover } = useEditLock({ formId, enabled, sessionId });

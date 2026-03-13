@@ -22,7 +22,8 @@ const makeSessionId = () => {
 
 export const EditLockClient = ({ formId }: { formId: string }) => {
   const pathname = usePathname();
-  const enabled = isEditPath(pathname) && formId !== "0000";
+  const enabled =
+    process.env.NEXT_PUBLIC_APP_ENV !== "test" && isEditPath(pathname) && formId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
 
   const { takeover } = useEditLock({ formId, enabled, sessionId });
