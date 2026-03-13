@@ -35,7 +35,6 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     getLocalizationAttribute,
     isPublished,
     getName,
-    isLockedByOther,
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
@@ -45,7 +44,6 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     getLocalizationAttribute: s.getLocalizationAttribute,
     isPublished: s.isPublished,
     getName: s.getName,
-    isLockedByOther: s.isLockedByOther,
   }));
 
   const [value, setValue] = useState<string>(title);
@@ -131,7 +129,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   const hasHydrated = useRehydrate();
 
   return (
-    <div className={cn(isLockedByOther && "pointer-events-none opacity-70")}>
+    <div>
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="flex w-[700px]">
         <h2 id="editPagesHeading" className="whitespace-nowrap" tabIndex={-1}>

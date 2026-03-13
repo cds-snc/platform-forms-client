@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn, safeJSONParse } from "@lib/utils";
@@ -7,6 +7,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
@@ -117,8 +118,11 @@ export const SaveButton = () => {
   const [error, setError] = useState(false);
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
+  const isLockedByOtherRef = useRef(isLockedByOther);
+  const handleSaveRef = useRef<() => void>(() => undefined);
+  const errorRef = useRef(error);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (status !== "authenticated") {
       return;
     }
@@ -168,16 +172,53 @@ export const SaveButton = () => {
       toast.error(<ErrorSaving />, "wide");
       setError(true);
     }
-  };
+  }, [
+    createOrUpdateTemplate,
+    getDeliveryOption,
+    getId,
+    getName,
+    getSchema,
+    isLockedByOther,
+    notificationsInterval,
+    resetState,
+    securityAttribute,
+    setId,
+    setUpdatedAt,
+    status,
+  ]);
+
+  useEffect(() => {
+    isLockedByOtherRef.current = isLockedByOther;
+    handleSaveRef.current = handleSave;
+  }, [handleSave, isLockedByOther]);
+
+  useEffect(() => {
+    errorRef.current = error;
+  }, [error]);
+
+  useSubscibeToTemplateStore(
+    (s) => [
+      s.form,
+      s.name,
+      s.deliveryOption,
+      s.securityAttribute,
+      s.isPublished,
+      s.isLockedByOther,
+    ],
+    () => {
+      if (errorRef.current && !isLockedByOtherRef.current) {
+        setError(false);
+      }
+    }
+  );
 
   useEffect(() => {
     return () => {
-      if (!isLockedByOther) {
-        handleSave();
+      if (!isLockedByOtherRef.current) {
+        handleSaveRef.current();
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLockedByOther]);
+  }, []);
 
   if (isPublished) {
     return null;

@@ -22,6 +22,11 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
     return NextResponse.json({ error: "Invalid or missing formID" }, { status: 400 });
   }
 
+  const canViewForm = await authorization.canViewForm(formID).catch(() => null);
+  if (!canViewForm) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const status = await getEditLockStatus(formID, session.user.id);
   return NextResponse.json(status);
 });
@@ -33,6 +38,11 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
 
   if (!formID || typeof formID !== "string") {
     return NextResponse.json({ error: "Invalid or missing formID" }, { status: 400 });
+  }
+
+  const canEditForm = await authorization.canEditForm(formID).catch(() => null);
+  if (!canEditForm) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const { action, sessionId } = props.body as { action?: LockAction; sessionId?: string };
@@ -68,10 +78,6 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
     }
 
     if (action === "takeover") {
-      const canTakeover = await authorization.canManageAllForms().catch(() => null);
-      if (!canTakeover) {
-        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-      }
       const status = await takeoverEditLock({
         templateId: formID,
         userId: session.user.id,

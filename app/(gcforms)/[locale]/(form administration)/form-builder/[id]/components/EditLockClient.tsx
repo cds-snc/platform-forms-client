@@ -4,7 +4,6 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { EditLockBanner } from "./EditLockBanner";
-import { useIsAdminUser } from "@lib/hooks/form-builder/useIsAdminUser";
 
 const isEditPath = (pathname: string | null) => {
   if (!pathname) return false;
@@ -25,11 +24,10 @@ export const EditLockClient = ({ formId }: { formId: string }) => {
   const pathname = usePathname();
   const enabled = isEditPath(pathname) && formId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
-  const canTakeover = useIsAdminUser();
 
   const { takeover } = useEditLock({ formId, enabled, sessionId });
 
   if (!enabled) return null;
 
-  return <EditLockBanner canTakeover={canTakeover} takeover={takeover} />;
+  return <EditLockBanner takeover={takeover} />;
 };

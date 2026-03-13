@@ -107,15 +107,17 @@ export default async function Layout(props: {
                       </div>
                     </div>
                     <GroupStoreProvider>
-                      <main
-                        id="content"
-                        className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
-                        tabIndex={-1}
-                      >
-                        <EditLockClient formId={id} />
-                        {children}
-                      </main>
-                      {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
+                      <div className="relative flex w-full gap-7">
+                        <main
+                          id="content"
+                          className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
+                          tabIndex={-1}
+                        >
+                          <EditLockClient formId={id} />
+                          {children}
+                        </main>
+                        {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
+                      </div>
                     </GroupStoreProvider>
                   </div>
                 </div>
