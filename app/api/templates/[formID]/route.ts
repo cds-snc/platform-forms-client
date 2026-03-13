@@ -22,6 +22,12 @@ import { FormProperties, DeliveryOption, SecurityAttribute } from "@lib/types";
 import { AccessControlError } from "@lib/auth/errors";
 import { logMessage } from "@lib/logger";
 import { authCheckAndThrow } from "@lib/actions";
+import {
+  assertTemplateEditLock,
+  shouldEnforceTemplateEditLock,
+  TemplateEditLockedError,
+} from "@lib/editLocks";
+import { MiddlewareProps, WithRequired } from "@lib/types";
 
 class MalformedAPIRequest extends Error {
   constructor(message?: string) {
@@ -144,6 +150,21 @@ export const PUT = middleware(
         throw new MalformedAPIRequest("Invalid or missing formID");
       }
 
+      const shouldCheckLock =
+        formConfig !== undefined ||
+        isPublished !== undefined ||
+        users !== undefined ||
+        sendResponsesToVault !== undefined;
+
+      if (
+        shouldCheckLock &&
+        process.env.APP_ENV !== "test" &&
+        (await shouldEnforceTemplateEditLock(formID))
+      ) {
+        const { session } = props as WithRequired<MiddlewareProps, "session">;
+        await assertTemplateEditLock({ templateId: formID, userId: session.user.id });
+      }
+
       let response;
 
       if (formConfig) {
@@ -200,6 +221,8 @@ export const PUT = middleware(
 
       if (e instanceof AccessControlError) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      } else if (e instanceof TemplateEditLockedError) {
+        return NextResponse.json({ error: "editLocked", lock: e.lock }, { status: 423 });
       } else if (e instanceof TemplateAlreadyPublishedError) {
         return NextResponse.json({ error: "Can't update published form" }, { status: 409 });
       } else if (e instanceof MalformedAPIRequest) {

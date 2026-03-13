@@ -26,6 +26,10 @@ export const storageOptions = {
   name: "form-storage",
   storage: createJSONStorage(() => storage),
   skipHydration: true,
+  partialize: (state: TemplateStoreState) => {
+    const { editLock, isLockedByOther, ...rest } = state;
+    return rest;
+  },
   onRehydrateStorage: () => {
     logMessage.debug("Template Store Hydration starting");
     return (state: TemplateStoreState | undefined) => {

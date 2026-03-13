@@ -16,9 +16,10 @@ export const RichText = ({
   primaryLanguage: Language;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { localizeField, propertyPath } = useTemplateStore((s) => ({
+  const { localizeField, propertyPath, changeKey } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     propertyPath: s.propertyPath,
+    changeKey: s.changeKey,
   }));
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
   const field = LocalizedElementProperties.DESCRIPTION;
@@ -32,6 +33,7 @@ export const RichText = ({
         <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
           <div className="relative w-1/2 flex-1">
             <RichTextEditor
+              key={`${element.id}:description:${primaryLanguage}:${changeKey}`}
               path={propertyPath(element.id, field, primaryLanguage)}
               content={element.properties[fieldEn] ?? ""}
               lang={primaryLanguage}
@@ -47,6 +49,7 @@ export const RichText = ({
           </div>
           <div className="relative w-1/2 flex-1">
             <RichTextEditor
+              key={`${element.id}:description:${secondaryLanguage}:${changeKey}`}
               path={propertyPath(element.id, field, secondaryLanguage)}
               content={element.properties[fieldFr] ?? ""}
               lang={secondaryLanguage}

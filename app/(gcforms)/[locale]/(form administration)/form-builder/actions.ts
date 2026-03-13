@@ -34,6 +34,15 @@ import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
 import { BrandProperties, NotificationsInterval } from "@gcforms/types";
 import { redirect } from "next/navigation";
+import { assertTemplateEditLock, TemplateEditLockedError } from "@lib/editLocks";
+
+const assertTemplateEditLockIfEnabled = async (templateId: string, userId: string) => {
+  if (process.env.APP_ENV === "test") {
+    return;
+  }
+
+  await assertTemplateEditLock({ templateId, userId });
+};
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -102,7 +111,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
 
 export const updateTemplate = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       id: formID,
       formConfig,
@@ -123,6 +132,7 @@ export const updateTemplate = AuthenticatedAction(
     error?: string;
   }> => {
     try {
+      await assertTemplateEditLockIfEnabled(formID, session.user.id);
       const formRecord = await updateDbTemplate({
         formID: formID,
         formConfig: formConfig,
@@ -137,7 +147,10 @@ export const updateTemplate = AuthenticatedAction(
       }
 
       return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
-    } catch (_) {
+    } catch (e) {
+      if (e instanceof TemplateEditLockedError) {
+        return { formRecord: null, error: "editLocked" };
+      }
       return { formRecord: null, error: "error" };
     }
   }
@@ -145,7 +158,7 @@ export const updateTemplate = AuthenticatedAction(
 
 export const updateTemplatePublishedStatus = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       id: formID,
       isPublished,
@@ -169,6 +182,7 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
     let response: FormRecord | null = null;
 
     try {
+      await assertTemplateEditLockIfEnabled(formID, session.user.id);
       response = await updateIsPublishedForTemplate(
         formID,
         isPublished,
@@ -186,6 +200,9 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
       revalidatePath(`/form-builder/${formID}`, "layout");
       revalidatePath(`/form-builder/${formID}/published`, "page");
     } catch (error) {
+      if (error instanceof TemplateEditLockedError) {
+        return { formRecord: null, error: "editLocked" };
+      }
       hasError = error;
     }
 
@@ -199,7 +216,7 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
 
 export const updateTemplateFormPurpose = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       id: formID,
       formPurpose,
@@ -212,6 +229,7 @@ export const updateTemplateFormPurpose = AuthenticatedAction(
     error?: string;
   }> => {
     try {
+      await assertTemplateEditLockIfEnabled(formID, session.user.id);
       const response = await updateFormPurpose(formID, formPurpose);
       if (!response) {
         throw new Error(
@@ -221,6 +239,9 @@ export const updateTemplateFormPurpose = AuthenticatedAction(
 
       return { formRecord: response };
     } catch (error) {
+      if (error instanceof TemplateEditLockedError) {
+        return { formRecord: null, error: "editLocked" };
+      }
       return { formRecord: null, error: (error as Error).message };
     }
   }
@@ -228,7 +249,7 @@ export const updateTemplateFormPurpose = AuthenticatedAction(
 
 export const updateTemplateFormSaveAndResume = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       id: formID,
       saveAndResume,
@@ -241,6 +262,7 @@ export const updateTemplateFormSaveAndResume = AuthenticatedAction(
     error?: string;
   }> => {
     try {
+      await assertTemplateEditLockIfEnabled(formID, session.user.id);
       const response = await updateFormSaveAndResume(formID, saveAndResume);
       if (!response) {
         throw new Error(
@@ -250,6 +272,9 @@ export const updateTemplateFormSaveAndResume = AuthenticatedAction(
 
       return { formRecord: response };
     } catch (error) {
+      if (error instanceof TemplateEditLockedError) {
+        return { formRecord: null, error: "editLocked" };
+      }
       return { formRecord: null, error: (error as Error).message };
     }
   }
@@ -257,7 +282,7 @@ export const updateTemplateFormSaveAndResume = AuthenticatedAction(
 
 export const updateTemplateSecurityAttribute = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       id: formID,
       securityAttribute,
@@ -270,6 +295,7 @@ export const updateTemplateSecurityAttribute = AuthenticatedAction(
     error?: string;
   }> => {
     try {
+      await assertTemplateEditLockIfEnabled(formID, session.user.id);
       const response = await updateSecurityAttribute(formID, securityAttribute);
       if (!response) {
         throw new Error(
@@ -279,6 +305,9 @@ export const updateTemplateSecurityAttribute = AuthenticatedAction(
 
       return { formRecord: response };
     } catch (error) {
+      if (error instanceof TemplateEditLockedError) {
+        return { formRecord: null, error: "editLocked" };
+      }
       return { formRecord: null, error: (error as Error).message };
     }
   }
@@ -286,7 +315,7 @@ export const updateTemplateSecurityAttribute = AuthenticatedAction(
 
 export const closeForm = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       id: formID,
       closingDate,
@@ -302,6 +331,7 @@ export const closeForm = AuthenticatedAction(
     error?: string;
   }> => {
     try {
+      await assertTemplateEditLockIfEnabled(formID, session.user.id);
       // closingDate: null means the form is open, or will be set to be open
       // closingDate: a current or past date means the form is closed
       // closingDate: a future date means the form is scheduled to close in the future
@@ -319,6 +349,9 @@ export const closeForm = AuthenticatedAction(
 
       return response;
     } catch (error) {
+      if (error instanceof TemplateEditLockedError) {
+        return { formID: "", closingDate: null, error: "editLocked" };
+      }
       return { formID: "", closingDate: null, error: (error as Error).message };
     }
   }
@@ -326,7 +359,7 @@ export const closeForm = AuthenticatedAction(
 
 export const updateTemplateUsers = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       id: formID,
       users,
@@ -343,6 +376,7 @@ export const updateTemplateUsers = AuthenticatedAction(
     }
 
     try {
+      await assertTemplateEditLockIfEnabled(formID, session.user.id);
       const response = await updateAssignedUsersForTemplate(formID, users);
       if (!response) {
         throw new Error(
@@ -352,6 +386,9 @@ export const updateTemplateUsers = AuthenticatedAction(
 
       return { success: true };
     } catch (error) {
+      if (error instanceof TemplateEditLockedError) {
+        return { success: false, error: "editLocked" };
+      }
       return { success: false, error: (error as Error).message };
     }
   }
@@ -359,7 +396,7 @@ export const updateTemplateUsers = AuthenticatedAction(
 
 export const sendResponsesToVault = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       id: formID,
     }: {
@@ -370,12 +407,16 @@ export const sendResponsesToVault = AuthenticatedAction(
     error?: string;
   }> => {
     try {
+      await assertTemplateEditLockIfEnabled(formID, session.user.id);
       await removeDeliveryOption(formID);
 
       return {
         success: true,
       };
     } catch (error) {
+      if (error instanceof TemplateEditLockedError) {
+        return { success: false, error: "editLocked" };
+      }
       return { success: false, error: (error as Error).message };
     }
   }

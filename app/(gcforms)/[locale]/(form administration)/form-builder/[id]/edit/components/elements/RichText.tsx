@@ -8,15 +8,15 @@ import { useTranslation } from "@i18n/client";
 
 export const RichText = ({ id, elIndex }: { id: number; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
-  const { translationLanguagePriority, localizeField, form, propertyPath } = useTemplateStore(
-    (s) => ({
+  const { translationLanguagePriority, localizeField, form, propertyPath, changeKey } =
+    useTemplateStore((s) => ({
       localizeField: s.localizeField,
       translationLanguagePriority: s.translationLanguagePriority,
       form: s.form,
       lang: s.lang,
       propertyPath: s.propertyPath,
-    })
-  );
+      changeKey: s.changeKey,
+    }));
 
   const localizedField = localizeField(
     LocalizedElementProperties.DESCRIPTION,
@@ -34,6 +34,7 @@ export const RichText = ({ id, elIndex }: { id: number; elIndex: number }) => {
   return (
     <div key={translationLanguagePriority} className="flex rounded border-2" data-testid="richText">
       <RichTextEditor
+        key={`${path}:${translationLanguagePriority}:${changeKey}`}
         path={path}
         content={content || ""}
         lang={translationLanguagePriority}

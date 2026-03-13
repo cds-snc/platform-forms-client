@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn, safeJSONParse } from "@lib/utils";
@@ -7,6 +7,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
@@ -83,6 +84,8 @@ const ErrorSavingForm = () => {
 };
 
 export const SaveButton = () => {
+  const { t } = useTranslation("form-builder");
+  const lockChecksEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
   const {
     isPublished,
     id,
@@ -93,6 +96,8 @@ export const SaveButton = () => {
     securityAttribute,
     setId,
     notificationsInterval,
+    isLockedByOther,
+    editLock,
   } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
@@ -103,18 +108,27 @@ export const SaveButton = () => {
     securityAttribute: s.securityAttribute,
     setId: s.setId,
     notificationsInterval: s.notificationsInterval,
+    isLockedByOther: s.isLockedByOther,
+    editLock: s.editLock,
   }));
 
   const { templateIsDirty, createOrUpdateTemplate, resetState, updatedAt, setUpdatedAt } =
     useTemplateContext();
   const { status } = useSession();
+  const lockedByOther = lockChecksEnabled && isLockedByOther;
 
   const [error, setError] = useState(false);
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
+  const isLockedByOtherRef = useRef(lockedByOther);
+  const handleSaveRef = useRef<() => void>(() => undefined);
+  const errorRef = useRef(error);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (status !== "authenticated") {
+      return;
+    }
+    if (lockedByOther) {
       return;
     }
 
@@ -160,13 +174,52 @@ export const SaveButton = () => {
       toast.error(<ErrorSaving />, "wide");
       setError(true);
     }
-  };
+  }, [
+    createOrUpdateTemplate,
+    getDeliveryOption,
+    getId,
+    getName,
+    getSchema,
+    lockedByOther,
+    notificationsInterval,
+    resetState,
+    securityAttribute,
+    setId,
+    setUpdatedAt,
+    status,
+  ]);
+
+  useEffect(() => {
+    isLockedByOtherRef.current = lockedByOther;
+    handleSaveRef.current = handleSave;
+  }, [handleSave, lockedByOther]);
+
+  useEffect(() => {
+    errorRef.current = error;
+  }, [error]);
+
+  useSubscibeToTemplateStore(
+    (s) => [
+      s.form,
+      s.name,
+      s.deliveryOption,
+      s.securityAttribute,
+      s.isPublished,
+      s.isLockedByOther,
+    ],
+    () => {
+      if (errorRef.current && !isLockedByOtherRef.current) {
+        setError(false);
+      }
+    }
+  );
 
   useEffect(() => {
     return () => {
-      handleSave();
+      if (!isLockedByOtherRef.current) {
+        handleSaveRef.current();
+      }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isPublished) {
@@ -180,11 +233,27 @@ export const SaveButton = () => {
     return null;
   }
 
-  return status === "authenticated" ? (
+  if (status !== "authenticated") return null;
+
+  if (lockedByOther) {
+    const name = editLock?.lockedByName || editLock?.lockedByEmail || t("editLock.unknownUser");
+    return (
+      <div
+        data-id={id}
+        className="mb-2 flex w-[700px] text-sm text-slate-500 laptop:text-base"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {t("editLock.readOnly", { name })}
+      </div>
+    );
+  }
+
+  return (
     <div
       data-id={id}
       className={cn(
-        "mb-2 flex w-[700px] text-sm laptop:text-base text-slate-500",
+        "mb-2 flex w-[700px] text-slate-500 text-sm laptop:text-base",
         id && error && "text-red-destructive"
       )}
       aria-live="polite"
@@ -201,5 +270,5 @@ export const SaveButton = () => {
       )}
       {updatedAt && <DateTime updatedAt={updatedAt} />}
     </div>
-  ) : null;
+  );
 };

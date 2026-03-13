@@ -575,6 +575,15 @@
   "french": "French",
   "gcForms": "GC Forms",
   "gcFormsEdit": "Edit",
+  "editLock": {
+    "title": "This form is already being edited",
+    "lockedMessage": "{{name}} is currently working on this form, which means you cannot make changes unless you take over.",
+    "readOnly": "Read-only: {{name}} is editing this form.",
+    "unknownUser": "Another user",
+    "takeover": "Take over editing",
+    "takingOver": "Taking over...",
+    "takeoverError": "Unable to take over. Please try again."
+  },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publish",
   "gcFormsPublished": "Published",

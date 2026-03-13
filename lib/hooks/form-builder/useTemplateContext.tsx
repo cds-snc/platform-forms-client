@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useState, useContext, useRef } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
 import { logMessage } from "@lib/logger";
 import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -84,13 +84,13 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
 
   const templateIsDirty = useRef(false);
 
-  const resetState = () => {
+  const resetState = useCallback(() => {
     setNameChanged(null);
     setIntroChanged(null);
     setPrivacyChanged(null);
     setConfirmationChanged(null);
     templateIsDirty.current = false;
-  };
+  }, []);
 
   useSubscibeToTemplateStore(
     (s) => [s.form, s.isPublished, s.name, s.deliveryOption, s.securityAttribute],
@@ -135,23 +135,22 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     }
   );
 
-  return (
-    <TemplateApiContext.Provider
-      value={{
-        templateIsDirty,
-        updatedAt,
-        setUpdatedAt,
-        nameChanged,
-        introChanged,
-        privacyChanged,
-        confirmationChanged,
-        createOrUpdateTemplate,
-        resetState,
-      }}
-    >
-      {children}
-    </TemplateApiContext.Provider>
+  const contextValue = useMemo(
+    () => ({
+      templateIsDirty,
+      updatedAt,
+      setUpdatedAt,
+      nameChanged,
+      introChanged,
+      privacyChanged,
+      confirmationChanged,
+      createOrUpdateTemplate,
+      resetState,
+    }),
+    [updatedAt, nameChanged, introChanged, privacyChanged, confirmationChanged, resetState]
   );
+
+  return <TemplateApiContext.Provider value={contextValue}>{children}</TemplateApiContext.Provider>;
 }
 
 export const useTemplateContext = () => useContext(TemplateApiContext);
