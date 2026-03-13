@@ -576,7 +576,8 @@
   "gcForms": "GC Forms",
   "gcFormsEdit": "Edit",
   "editLock": {
-    "lockedMessage": "{{name}} is editing this form. You are in read-only mode.",
+    "title": "This form is already being edited",
+    "lockedMessage": "{{name}} is currently working on this form, which means you cannot make changes unless you take over.",
     "readOnly": "Read-only: {{name}} is editing this form.",
     "unknownUser": "Another user",
     "takeover": "Take over editing",

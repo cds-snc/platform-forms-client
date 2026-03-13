@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Button } from "@clientComponents/globals";
+import { WarningIcon } from "@serverComponents/icons";
 
 export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) => {
   const { t } = useTranslation("form-builder");
@@ -44,7 +45,7 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
       className="absolute inset-y-0 -left-7 right-0 z-50 flex items-start justify-center bg-slate-900/15 px-6 pt-24"
       role="dialog"
       aria-modal="true"
-      aria-label={t("editLock.lockedMessage", { name })}
+      aria-label={t("editLock.title")}
       aria-live="polite"
     >
       <div
@@ -52,18 +53,20 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
         tabIndex={-1}
         className="w-full max-w-2xl rounded-lg border border-slate-300 bg-white px-6 py-5 text-sm text-slate-700 shadow-xl"
       >
-        <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:justify-between sm:text-left">
-          <div className="max-w-xl">
-            <p className="text-base font-semibold text-slate-900">
-              {t("editLock.lockedMessage", { name })}
-            </p>
-            {takeoverError && <p className="mt-2 text-red-700">{t("editLock.takeoverError")}</p>}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex max-w-xl items-start gap-3 text-left">
+            <WarningIcon className="mt-0.5 size-8 shrink-0 fill-amber-500" />
+            <div>
+              <p className="mb-2 text-xl font-semibold text-slate-900">{t("editLock.title")}</p>
+              <p className="text-base text-slate-900">{t("editLock.lockedMessage", { name })}</p>
+              {takeoverError && <p className="mt-2 text-red-700">{t("editLock.takeoverError")}</p>}
+            </div>
           </div>
           <Button
-            theme="secondary"
+            theme="primary"
             onClick={handleTakeover}
             disabled={isTakingOver}
-            className="whitespace-nowrap"
+            className="self-center whitespace-nowrap sm:self-start"
           >
             {isTakingOver ? t("editLock.takingOver") : t("editLock.takeover")}
           </Button>

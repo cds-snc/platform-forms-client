@@ -576,7 +576,8 @@
   "gcForms": "Formulaires GC",
   "gcFormsEdit": "Modifier",
   "editLock": {
-    "lockedMessage": "{{name}} modifie ce formulaire. Vous êtes en mode lecture seule.",
+    "title": "Ce formulaire est deja en cours de modification",
+    "lockedMessage": "{{name}} travaille actuellement sur ce formulaire, ce qui signifie que vous ne pouvez pas y apporter de modifications a moins d'en prendre le controle.",
     "readOnly": "Lecture seule : {{name}} modifie ce formulaire.",
     "unknownUser": "Un autre utilisateur",
     "takeover": "Prendre le contrôle",
