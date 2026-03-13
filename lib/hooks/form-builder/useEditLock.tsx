@@ -23,7 +23,7 @@ type EditLockStatus = {
   } | null;
 };
 
-const EDIT_LOCK_HEARTBEAT_MS = 15_000;
+const EDIT_LOCK_HEARTBEAT_MS = 5_000;
 export const useEditLock = ({
   formId,
   enabled,
@@ -141,10 +141,7 @@ export const useEditLock = ({
       }
       updateStore(pollResult);
       if (pollResult.locked && !pollResult.isOwner && wasOwner) {
-        await syncServerState();
-        if (lockLoopTokenRef.current !== loopToken) {
-          return;
-        }
+        void syncServerState();
       }
       if (!pollResult.locked) {
         const retryResult = (await postAction("acquire")) as EditLockStatus;
@@ -153,11 +150,8 @@ export const useEditLock = ({
         }
         updateStore(retryResult);
         if (retryResult.isOwner) {
-          await refreshForm();
-          if (lockLoopTokenRef.current !== loopToken) {
-            return;
-          }
           startHeartbeat();
+          void refreshForm();
         }
       }
     }, EDIT_LOCK_HEARTBEAT_MS);
@@ -200,10 +194,10 @@ export const useEditLock = ({
       const statusResult = (await postAction("acquire")) as EditLockStatus;
       if (cancelled) return;
       updateStore(statusResult);
-      if (!statusResult.isOwner) {
-        await syncServerState();
-      }
       startTimers(statusResult, cancelled);
+      if (!statusResult.isOwner) {
+        void syncServerState();
+      }
     };
 
     acquire();
@@ -257,10 +251,8 @@ export const useEditLock = ({
 
         if (!nextStatus.isOwner) {
           if (wasOwner) {
-            await syncServerState();
-          }
-          if (wasOwner) {
             startPolling();
+            void syncServerState();
           }
         }
       })();
@@ -268,8 +260,7 @@ export const useEditLock = ({
 
     eventSource.addEventListener("lock-status", handleLockStatus);
     eventSource.onerror = () => {
-      eventSource.close();
-      if (eventSourceRef.current === eventSource) {
+      if (eventSource.readyState === EventSource.CLOSED && eventSourceRef.current === eventSource) {
         eventSourceRef.current = null;
       }
     };
@@ -289,8 +280,8 @@ export const useEditLock = ({
       throw new Error(statusResult.error);
     }
     updateStore(statusResult);
-    await refreshForm();
     startTimers(statusResult);
+    void refreshForm();
   }, [postAction, refreshForm, startTimers, updateStore]);
 
   return { takeover };

@@ -3,9 +3,11 @@ import { middleware, sessionExists } from "@lib/middleware";
 import { WithRequired, MiddlewareProps } from "@lib/types";
 import {
   acquireEditLock,
+  getEditLockDisabledStatus,
   getEditLockStatus,
   heartbeatEditLock,
   releaseEditLock,
+  shouldEnforceTemplateEditLock,
   takeoverEditLock,
   TemplateEditLockedError,
 } from "@lib/editLocks";
@@ -27,6 +29,10 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
+  if (!(await shouldEnforceTemplateEditLock(formID))) {
+    return NextResponse.json(getEditLockDisabledStatus());
+  }
+
   const status = await getEditLockStatus(formID, session.user.id);
   return NextResponse.json(status);
 });
@@ -46,6 +52,14 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
   }
 
   const { action, sessionId } = props.body as { action?: LockAction; sessionId?: string };
+
+  if (!(await shouldEnforceTemplateEditLock(formID))) {
+    if (action === "release") {
+      return NextResponse.json({ released: false });
+    }
+
+    return NextResponse.json(getEditLockDisabledStatus());
+  }
 
   try {
     if (action === "acquire") {

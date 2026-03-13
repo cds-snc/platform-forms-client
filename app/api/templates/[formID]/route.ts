@@ -22,7 +22,11 @@ import { FormProperties, DeliveryOption, SecurityAttribute } from "@lib/types";
 import { AccessControlError } from "@lib/auth/errors";
 import { logMessage } from "@lib/logger";
 import { authCheckAndThrow } from "@lib/actions";
-import { assertTemplateEditLock, TemplateEditLockedError } from "@lib/editLocks";
+import {
+  assertTemplateEditLock,
+  shouldEnforceTemplateEditLock,
+  TemplateEditLockedError,
+} from "@lib/editLocks";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 
 class MalformedAPIRequest extends Error {
@@ -152,7 +156,11 @@ export const PUT = middleware(
         users !== undefined ||
         sendResponsesToVault !== undefined;
 
-      if (shouldCheckLock && process.env.APP_ENV !== "test") {
+      if (
+        shouldCheckLock &&
+        process.env.APP_ENV !== "test" &&
+        (await shouldEnforceTemplateEditLock(formID))
+      ) {
         const { session } = props as WithRequired<MiddlewareProps, "session">;
         await assertTemplateEditLock({ templateId: formID, userId: session.user.id });
       }

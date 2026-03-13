@@ -20,10 +20,19 @@ const makeSessionId = () => {
   return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 };
 
-export const EditLockClient = ({ formId }: { formId: string }) => {
+export const EditLockClient = ({
+  formId,
+  assignedUsersCount,
+}: {
+  formId: string;
+  assignedUsersCount: number;
+}) => {
   const pathname = usePathname();
   const enabled =
-    process.env.NEXT_PUBLIC_APP_ENV !== "test" && isEditPath(pathname) && formId !== "0000";
+    process.env.NEXT_PUBLIC_APP_ENV !== "test" &&
+    isEditPath(pathname) &&
+    formId !== "0000" &&
+    assignedUsersCount >= 2;
   const [sessionId] = useState(() => makeSessionId());
 
   const { takeover } = useEditLock({ formId, enabled, sessionId });

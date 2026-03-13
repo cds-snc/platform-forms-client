@@ -1,7 +1,9 @@
+import { prisma } from "@lib/integration/prismaConnector";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 
 export const EDIT_LOCK_TTL_MS = 60_000;
-export const EDIT_LOCK_HEARTBEAT_MS = 15_000;
+export const EDIT_LOCK_HEARTBEAT_MS = 5_000;
+export const MIN_ASSIGNED_USERS_FOR_EDIT_LOCK = 2;
 const EDIT_LOCK_KEY_PREFIX = "edit-lock";
 const EDIT_LOCK_CHANNEL_PREFIX = "edit-lock-events";
 
@@ -237,6 +239,34 @@ const toEditLockInfo = (lock: EditLockInfo): EditLockInfo => ({
   lockedByEmail: lock.lockedByEmail ?? null,
   sessionId: lock.sessionId ?? null,
 });
+
+export const getEditLockDisabledStatus = (): EditLockStatus => ({
+  locked: false,
+  lockedByOther: false,
+  isOwner: true,
+  lock: null,
+});
+
+export const shouldEnforceTemplateEditLock = async (templateId: string): Promise<boolean> => {
+  const template = await prisma.template
+    .findUnique({
+      where: { id: templateId },
+      select: {
+        _count: {
+          select: {
+            users: true,
+          },
+        },
+      },
+    })
+    .catch(() => null);
+
+  if (!template) {
+    return true;
+  }
+
+  return template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
+};
 
 export const getEditLockStatus = async (
   templateId: string,

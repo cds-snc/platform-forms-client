@@ -4,7 +4,7 @@ import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Footer } from "@serverComponents/globals/Footer";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { AccessControlError } from "@lib/auth/errors";
-import { getFullTemplateByID } from "@lib/templates";
+import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
@@ -34,6 +34,7 @@ export default async function Layout(props: {
   const { children } = props;
 
   let initialForm: FormRecord | null = null;
+  let assignedUsersCount = 0;
 
   const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
@@ -45,13 +46,16 @@ export default async function Layout(props: {
   const allowGroupsFlag = allowGrouping();
 
   if (session && formID && formID !== "0000") {
-    initialForm = await getFullTemplateByID(formID).catch((e) => {
+    const templateWithUsers = await getTemplateWithAssociatedUsers(formID).catch((e) => {
       if (e instanceof AccessControlError) {
         redirect(`/${locale}/admin/unauthorized`);
       }
       logMessage.warn(`Error fetching Form Record for form-builder/[id] Layout: ${e.message}`);
       return null;
     });
+
+    initialForm = templateWithUsers?.formRecord ?? null;
+    assignedUsersCount = templateWithUsers?.users.length ?? 0;
 
     if (initialForm === null) {
       redirect(`/${locale}/404`);
@@ -113,7 +117,7 @@ export default async function Layout(props: {
                           className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
                           tabIndex={-1}
                         >
-                          <EditLockClient formId={id} />
+                          <EditLockClient formId={id} assignedUsersCount={assignedUsersCount} />
                           {children}
                         </main>
                         {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
