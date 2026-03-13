@@ -23,10 +23,6 @@ import { Language } from "../types/form-builder-types";
 import { storageOptions } from "./storage";
 import { clearTemplateStorage } from "./utils";
 import { initStore } from "./initStore";
-import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
-import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
-import { defaultForm } from "./defaults";
-import { NotificationsIntervalDefault } from "@gcforms/types";
 
 import {
   add,
@@ -46,7 +42,7 @@ import {
   removeSubChoice,
 } from "./helpers/remove";
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
-import { initialize, importTemplate } from "./helpers/init";
+import { initialize, importTemplate, setFromRecord } from "./helpers/init";
 import { generateElementId, getHighestElementId } from "./helpers/id";
 import {
   getFormElementById,
@@ -83,32 +79,7 @@ const createTemplateStore = (
             isLockedByOther: false,
             setEditLock: (lock) => set({ editLock: lock }),
             setIsLockedByOther: (locked) => set({ isLockedByOther: locked }),
-            setFromRecord: (record) =>
-              set((state) => {
-                const allowGroups = state.allowGroupsFlag;
-                state.id = record.id;
-                state.form = initializeGroups({ ...defaultForm, ...record.form }, allowGroups);
-
-                if (!state.form.groupsLayout) {
-                  state.form.groupsLayout = [];
-                } else {
-                  state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
-                }
-
-                state.isPublished = record.isPublished;
-                state.name = record.name;
-                state.securityAttribute = record.securityAttribute;
-                state.deliveryOption = record.deliveryOption;
-                state.formPurpose = record.formPurpose ?? "";
-                state.publishReason = record.publishReason ?? "";
-                state.publishFormType = record.publishFormType ?? "";
-                state.publishDesc = record.publishDesc ?? "";
-                state.closingDate = record.closingDate ?? null;
-                state.saveAndResume = record.saveAndResume ?? true;
-                state.notificationsInterval =
-                  record.notificationsInterval ?? NotificationsIntervalDefault;
-                state.changeKey = String(new Date().getTime());
-              }),
+            setFromRecord: setFromRecord(set),
             toggleLang: () =>
               set((state) => {
                 state.lang = state.lang === "en" ? "fr" : "en";

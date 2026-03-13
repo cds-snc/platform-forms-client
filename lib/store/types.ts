@@ -11,6 +11,7 @@ import {
   FormElement,
   FormProperties,
   FormElementTypes,
+  FormRecord,
   DeliveryOption,
   ElementProperties,
   SecurityAttribute,
