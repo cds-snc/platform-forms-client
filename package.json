@@ -120,7 +120,7 @@
     "markdown-to-jsx": "7.7.13",
     "native-file-system-adapter": "^3.0.1",
     "next": "16.1.6",
-    "next-auth": "5.0.0-beta.29",
+    "next-auth": "5.0.0-beta.30",
     "node-fetch": "^3.3.2",
     "pino": "10.0.0",
     "prisma": "6",
