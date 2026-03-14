@@ -34,8 +34,8 @@
   },
   "devDependencies": {
     "@types/node": "^24.6.1",
-    "tsdown": "^0.15.6",
+    "tsdown": "^0.21.0",
     "typescript": "^5.9.3"
   },
-  "packageManager": "yarn@4.10.3"
+  "packageManager": "yarn@4.12.0"
 }
