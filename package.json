@@ -56,7 +56,7 @@
     "@aws-sdk/lib-dynamodb": "^3.971.0",
     "@aws-sdk/s3-presigned-post": "^3.971.0",
     "@bufbuild/protobuf": "^2.10.2",
-    "@casl/ability": "6.7.3",
+    "@casl/ability": "6.7.5",
     "@cdssnc/sanitize-pii": "^2.1.0",
     "@gcds-core/fonts": "^1.0.0",
     "@gcds-core/tokens": "1.0.0",
