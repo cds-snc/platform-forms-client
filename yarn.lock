@@ -1721,12 +1721,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@casl/ability@npm:6.7.3":
-  version: 6.7.3
-  resolution: "@casl/ability@npm:6.7.3"
+"@casl/ability@npm:6.7.5":
+  version: 6.7.5
+  resolution: "@casl/ability@npm:6.7.5"
   dependencies:
     "@ucast/mongo2js": "npm:^1.3.0"
-  checksum: 10c0/c74139b0811ecff266a49a49eefef09290a0d0035bdb4701bef8f6ad951a2f05f5de71168e9037f89721ba3417e217646db05c510b3ce3d3b029ea88140b17d5
+  checksum: 10c0/ff80e1487ae1786a141b7559d61e10067eebf20649c084b9696e98c256d74520110084396019ceff0a77b03e50a1c1c960a5646903125ee71ade0f54eeeb46d9
   languageName: node
   linkType: hard
 
@@ -12892,7 +12892,7 @@ __metadata:
     "@babel/core": "npm:^7.28.0"
     "@babel/preset-typescript": "npm:^7.27.1"
     "@bufbuild/protobuf": "npm:^2.10.2"
-    "@casl/ability": "npm:6.7.3"
+    "@casl/ability": "npm:6.7.5"
     "@cdssnc/sanitize-pii": "npm:^2.1.0"
     "@gcds-core/fonts": "npm:^1.0.0"
     "@gcds-core/tokens": "npm:1.0.0"
