@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { EditLockBanner } from "@formBuilder/[id]/components/EditLockBanner";
 
@@ -22,10 +22,14 @@ export const SettingsLockClient = ({
   const [sessionId] = useState(() => makeSessionId());
 
   const { takeover } = useEditLock({ formId, enabled, sessionId });
+  const handleTakeover = useCallback(async () => {
+    await takeover();
+    window.location.reload();
+  }, [takeover]);
 
   return (
     <>
-      {enabled && <EditLockBanner takeover={takeover} />}
+      {enabled && <EditLockBanner takeover={handleTakeover} />}
       <div>{children}</div>
     </>
   );

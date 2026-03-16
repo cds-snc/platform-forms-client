@@ -279,9 +279,9 @@ export const useEditLock = ({
     if (statusResult?.error) {
       throw new Error(statusResult.error);
     }
+    await refreshForm();
     updateStore(statusResult);
     startTimers(statusResult);
-    void refreshForm();
   }, [postAction, refreshForm, startTimers, updateStore]);
 
   return { takeover };
