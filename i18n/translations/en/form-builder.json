@@ -582,6 +582,8 @@
     "unknownUser": "Another user",
     "takeover": "Take over editing",
     "takingOver": "Taking over...",
+    "syncingLatest": "Syncing the latest saved version of this form...",
+    "syncedLatest": "You now have the edit lock and the latest saved form has been loaded.",
     "takeoverError": "Unable to take over. Please try again."
   },
   "gcFormsApi": "API",

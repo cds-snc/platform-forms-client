@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import { WarningIcon } from "@serverComponents/icons";
 
@@ -33,6 +34,7 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
     setIsTakingOver(true);
     try {
       await takeover();
+      toast.success(t("editLock.syncedLatest"), "wide");
     } catch (e) {
       setTakeoverError(true);
     } finally {
@@ -59,6 +61,9 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
             <div>
               <p className="mb-2 text-xl font-semibold text-slate-900">{t("editLock.title")}</p>
               <p className="text-base text-slate-900">{t("editLock.lockedMessage", { name })}</p>
+              {isTakingOver && (
+                <p className="mt-2 text-base text-slate-700">{t("editLock.syncingLatest")}</p>
+              )}
               {takeoverError && <p className="mt-2 text-red-700">{t("editLock.takeoverError")}</p>}
             </div>
           </div>
