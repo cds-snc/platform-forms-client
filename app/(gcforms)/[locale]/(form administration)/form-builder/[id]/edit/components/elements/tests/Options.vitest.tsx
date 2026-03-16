@@ -9,6 +9,15 @@ import { Options } from "../Options";
 import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
+beforeAll(() => {
+  HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) {
+    this.setAttribute("open", "true");
+  });
+  HTMLDialogElement.prototype.close = vi.fn(function (this: HTMLDialogElement) {
+    this.removeAttribute("open");
+  });
+});
+
 // Mock NextAuth
 vi.mock("next-auth/react", () => ({
   useSession: () => ({
@@ -133,5 +142,97 @@ describe("Options", () => {
 
     expect(screen.getByRole("button", { name: "Add option" })).toBeDisabled();
     expect(screen.getByText(`You can add up to ${MAX_CHOICE_AMOUNT} options.`)).toBeInTheDocument();
+  });
+
+  it("clears all options after confirmation", async () => {
+    const user = userEvent.setup();
+
+    const testStore = {
+      ...store,
+      elements: [
+        {
+          id: 1,
+          type: "radio",
+          properties: {
+            titleEn: "Test Question",
+            titleFr: "Question de test",
+            choices: [
+              { en: "First Option", fr: "Première option" },
+              { en: "Second Option", fr: "Deuxième option" },
+            ],
+            validation: { required: false },
+          },
+        },
+      ],
+    };
+
+    const item = { index: 0, ...testStore.elements[0] } as unknown as Parameters<
+      typeof Options
+    >[0]["item"];
+
+    render(
+      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
+      <Providers form={testStore}>
+        <Options item={item} formId="test-form" />
+      </Providers>
+    );
+
+    await user.click(screen.getByRole("button", { name: "Clear options" }));
+
+    expect(screen.getByText("Clear all options?")).toBeInTheDocument();
+
+    await user.click(screen.getAllByRole("button", { name: "Clear options" })[1]);
+
+    await waitFor(() => {
+      expect(screen.queryByDisplayValue("First Option")).not.toBeInTheDocument();
+      expect(screen.queryByDisplayValue("Second Option")).not.toBeInTheDocument();
+    });
+
+    expect(screen.getByRole("button", { name: "Add option" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Clear options" })).not.toBeInTheDocument();
+  });
+
+  it("can reopen the clear options dialog after cancelling", async () => {
+    const user = userEvent.setup();
+
+    const testStore = {
+      ...store,
+      elements: [
+        {
+          id: 1,
+          type: "radio",
+          properties: {
+            titleEn: "Test Question",
+            titleFr: "Question de test",
+            choices: [{ en: "First Option", fr: "Première option" }],
+            validation: { required: false },
+          },
+        },
+      ],
+    };
+
+    const item = { index: 0, ...testStore.elements[0] } as unknown as Parameters<
+      typeof Options
+    >[0]["item"];
+
+    render(
+      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
+      <Providers form={testStore}>
+        <Options item={item} formId="test-form" />
+      </Providers>
+    );
+
+    await user.click(screen.getByRole("button", { name: "Clear options" }));
+    expect(screen.getByText("Clear all options?")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+    await waitFor(() => {
+      expect(screen.queryByText("Clear all options?")).not.toBeInTheDocument();
+    });
+
+    await user.click(screen.getByRole("button", { name: "Clear options" }));
+
+    expect(screen.getByText("Clear all options?")).toBeInTheDocument();
   });
 });
