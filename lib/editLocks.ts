@@ -252,6 +252,7 @@ export const shouldEnforceTemplateEditLock = async (templateId: string): Promise
     .findUnique({
       where: { id: templateId },
       select: {
+        isPublished: true,
         _count: {
           select: {
             users: true,
@@ -265,7 +266,7 @@ export const shouldEnforceTemplateEditLock = async (templateId: string): Promise
     return true;
   }
 
-  return template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
+  return !template.isPublished && template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
 };
 
 export const getEditLockStatus = async (

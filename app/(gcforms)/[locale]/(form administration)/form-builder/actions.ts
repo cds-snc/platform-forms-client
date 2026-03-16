@@ -34,10 +34,14 @@ import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
 import { BrandProperties, NotificationsInterval } from "@gcforms/types";
 import { redirect } from "next/navigation";
-import { assertTemplateEditLock, TemplateEditLockedError } from "@lib/editLocks";
+import {
+  assertTemplateEditLock,
+  shouldEnforceTemplateEditLock,
+  TemplateEditLockedError,
+} from "@lib/editLocks";
 
 const assertTemplateEditLockIfEnabled = async (templateId: string, userId: string) => {
-  if (process.env.APP_ENV === "test") {
+  if (process.env.APP_ENV === "test" || !(await shouldEnforceTemplateEditLock(templateId))) {
     return;
   }
 

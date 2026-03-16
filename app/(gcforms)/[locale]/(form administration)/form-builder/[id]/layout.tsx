@@ -34,7 +34,6 @@ export default async function Layout(props: {
   const { children } = props;
 
   let initialForm: FormRecord | null = null;
-  let assignedUsersCount = 0;
 
   const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
@@ -55,7 +54,6 @@ export default async function Layout(props: {
     });
 
     initialForm = templateWithUsers?.formRecord ?? null;
-    assignedUsersCount = templateWithUsers?.users.length ?? 0;
 
     if (initialForm === null) {
       redirect(`/${locale}/404`);
@@ -117,7 +115,7 @@ export default async function Layout(props: {
                           className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
                           tabIndex={-1}
                         >
-                          <EditLockClient formId={id} assignedUsersCount={assignedUsersCount} />
+                          <EditLockClient formId={id} />
                           {children}
                         </main>
                         {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
