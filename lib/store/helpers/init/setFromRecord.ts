@@ -6,6 +6,7 @@ import { defaultForm } from "../../defaults";
 import { type TemplateStore } from "../../types";
 
 export const setFromRecord: TemplateStore<"setFromRecord"> = (set) => (record) => {
+  // Normalize nullable template fields before merging server state into the builder store.
   const formPurpose = typeof record.formPurpose === "string" ? record.formPurpose : "";
   const publishReason = typeof record.publishReason === "string" ? record.publishReason : "";
   const publishFormType = typeof record.publishFormType === "string" ? record.publishFormType : "";
@@ -15,6 +16,7 @@ export const setFromRecord: TemplateStore<"setFromRecord"> = (set) => (record) =
   set((state) => {
     const allowGroups = state.allowGroupsFlag;
     state.id = record.id;
+    // Rebuild form/group structure from the latest saved record so the editor matches the server.
     state.form = initializeGroups({ ...defaultForm, ...record.form }, allowGroups);
 
     if (!state.form.groupsLayout) {
@@ -34,6 +36,7 @@ export const setFromRecord: TemplateStore<"setFromRecord"> = (set) => (record) =
     state.closingDate = closingDate;
     state.saveAndResume = record.saveAndResume ?? true;
     state.notificationsInterval = record.notificationsInterval ?? NotificationsIntervalDefault;
+    // Downstream editor surfaces use this to remount when server-synced content replaces local state.
     state.changeKey = String(new Date().getTime());
   });
 };
