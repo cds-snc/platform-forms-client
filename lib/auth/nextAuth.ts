@@ -165,11 +165,11 @@ const {
     error(error) {
       if (!(error instanceof CredentialsSignin)) {
         // Not a CredentialsSignin error which is for invalid 2FA credentials
-        logMessage.error(`NextAuth error: ${JSON.stringify(error)}.`);
+        logMessage.info(`NextAuth error: ${JSON.stringify(error)}.`);
       }
     },
     warn(code) {
-      logMessage.warn(`NextAuth warning - Code: ${code}`);
+      logMessage.info(`NextAuth warning - Code: ${code}`);
     },
     debug(code, ...message) {
       // TODO.. switch back to debug
@@ -325,7 +325,7 @@ const {
       if (!userActive) {
         // Client side auth lib will use this to immediately log out a user if they have been deactivated
         // Server side API calls will be caught in sessionExists middleware
-        logMessage.warn(
+        logMessage.info(
           `User ${token.userId} (${token.email}) was Deactivated during an active session`
         );
         token.deactivated = true;

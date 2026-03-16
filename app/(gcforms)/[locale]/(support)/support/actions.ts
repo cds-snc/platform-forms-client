@@ -24,7 +24,7 @@ export async function support(
   const rawData = Object.fromEntries(formData.entries());
   logMessage.info("Validating support form data");
   const validatedData = await validate(language, rawData).catch((e) => {
-    logMessage.warn(`Failed to validate support form: ${(e as Error).message}`);
+    logMessage.info(`Failed to validate support form: ${(e as Error).message}`);
     logMessage.info(JSON.stringify(rawData));
 
     return { success: false, issues: [] } as unknown as ReturnType<typeof validate>;

@@ -750,8 +750,8 @@ export async function removeAssignedUserFromTemplate(
   });
 
   if (template === null) {
-    logMessage.warn(
-      `Can not remove assigned user ${userID} on template ${formID}.  Template does not exist`
+    logMessage.info(
+      `Can not remove assigned user ${userID} on template ${formID}. Template does not exist`
     );
     throw new TemplateNotFoundError();
   }
@@ -759,8 +759,8 @@ export async function removeAssignedUserFromTemplate(
   const userToRemove = template.users.find((user) => user.id === userID);
 
   if (!userToRemove) {
-    logMessage.warn(
-      `Can not remove assigned user ${userID} on template ${formID}.  User is not assigned`
+    logMessage.info(
+      `Can not remove assigned user ${userID} on template ${formID}. User is not assigned`
     );
     throw new UserNotFoundError();
   }
@@ -840,14 +840,14 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
   });
 
   if (template === null) {
-    logMessage.warn(`Can not add user ${userID} to template ${formID}.  Template does not exist`);
+    logMessage.info(`Can not add user ${userID} to template ${formID}. Template does not exist`);
     throw new TemplateNotFoundError();
   }
 
   const userToAdd = template.users.find((user) => user.id === userID);
 
   if (!userToAdd) {
-    logMessage.warn(`Can not add user ${userID} to template ${formID}.  User does not exist`);
+    logMessage.info(`Can not add user ${userID} to template ${formID}. User does not exist`);
     throw new UserNotFoundError();
   }
 
@@ -1003,10 +1003,10 @@ export async function updateAssignedUsersForTemplate(
     .catch((e) => prismaErrors(e, null));
 
   if (template === null) {
-    logMessage.warn(
+    logMessage.info(
       `Can not update assigned users ${JSON.stringify(
         users
-      )} on template ${formID}.  Template does not exist`
+      )} on template ${formID}. Template does not exist`
     );
     return null;
   }
@@ -1319,7 +1319,7 @@ export async function cloneTemplate(
     .catch((e) => prismaErrors(e, null));
 
   if (!template) {
-    logMessage.warn(`[templates][cloneTemplate] Template ${formID} not found`);
+    logMessage.info(`[templates][cloneTemplate] Template ${formID} not found`);
     return null;
   }
 

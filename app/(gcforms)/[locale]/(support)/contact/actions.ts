@@ -24,7 +24,7 @@ export async function contact(
   const rawData = Object.fromEntries(formData.entries());
   logMessage.info("Validating contact form data");
   const result = await validate(language, rawData).catch((e) => {
-    logMessage.warn(`Failed to validate contact form: ${(e as Error).message}`);
+    logMessage.info(`Failed to validate contact form: ${(e as Error).message}`);
     logMessage.info(JSON.stringify(rawData));
 
     return { success: false, issues: [] } as unknown as ReturnType<typeof validate>;

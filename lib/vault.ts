@@ -591,15 +591,13 @@ export async function deleteDraftFormResponses(formID: string) {
     };
   } catch (error) {
     if (error instanceof TemplateAlreadyPublishedError) {
-      // Log a warning if the form is published
-      logMessage.warn(
+      logMessage.info(
         `Attempted to delete draft responses for form ${formID} but the form is published.`
       );
     } else {
       logMessage.error(
-        `Failed to delete form responses from the Vault during publishing for form ${formID}.`
+        `Failed to delete form responses from the Vault during publishing for form ${formID}. Reason ${(error as Error).message}`
       );
-      logMessage.error((error as Error).message);
     }
 
     throw error;

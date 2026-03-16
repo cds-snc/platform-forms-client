@@ -34,7 +34,7 @@ export const sendPasswordResetLink = async (email: string): Promise<void> => {
   });
 
   if (doesUserExist === null) {
-    logMessage.warn(
+    logMessage.info(
       `Someone requested a reset password link with an email address that does not exist (${email})`
     );
     return;

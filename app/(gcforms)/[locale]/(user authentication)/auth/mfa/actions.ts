@@ -144,7 +144,7 @@ export const getRedirectPath = AuthenticatedAction(async (session, locale: strin
   const user = session.user;
 
   const overdue = await getUnprocessedSubmissionsForUser(user.id).catch((err) => {
-    logMessage.warn(`Error getting unprocessed submissions for user ${user.id}: ${err.message}`);
+    logMessage.info(`Error getting unprocessed submissions for user ${user.id}: ${err.message}`);
     // Fail gracefully if we can't get the unprocessed submissions.
     return { callback: `/${locale}/auth/policy` };
   });

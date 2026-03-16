@@ -156,7 +156,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
         const fullFormTemplate = await getFullTemplateByID(formID);
 
         if (fullFormTemplate === null) {
-          logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);
+          logMessage.info(`getSubmissionsByFormat form not found: ${formID}`);
           throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
         }
 

@@ -59,7 +59,7 @@ export const sendResetLink = async (
   return sendPasswordResetLink(validationResult.output.username)
     .then(() => ({}))
     .catch((error) => {
-      logMessage.warn(error);
+      logMessage.info(error);
       return { authError: { title: "Interal Error" } };
     });
 };
@@ -123,7 +123,7 @@ export const checkQuestionChallenge = async (
     await sendCongnitoCode(validationResult.output.email);
     return {};
   } catch (error) {
-    logMessage.warn(
+    logMessage.info(
       `Error in Password Reset - Question Challenge: ${(error as Error).message} for user ${
         validationResult.output.email
       }`
@@ -163,7 +163,7 @@ export const resetPassword = async (
     logPasswordReset(username);
     return {};
   } catch (err) {
-    logMessage.warn(
+    logMessage.info(
       `Error in Password Reset - Password Confirmation: ${(err as Error).message} for user ${
         validationResult.output.username
       }`

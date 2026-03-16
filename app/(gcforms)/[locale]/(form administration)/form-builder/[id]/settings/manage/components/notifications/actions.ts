@@ -2,7 +2,6 @@
 
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
-import { logMessage } from "@root/lib/logger";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { AuditLogDetails, logEvent } from "@root/lib/auditLogs";
 
@@ -10,7 +9,6 @@ export const updateNotificationsUser = AuthenticatedAction(
   async (session, formId: string, user: { id: string; email: string; enabled: boolean } | null) => {
     try {
       if (!user || !user.id) {
-        logMessage.warn("No user provided for notifications settings update");
         throw new Error();
       }
 

@@ -26,7 +26,7 @@ export async function browserCompatibilitySupport(
   const rawData = Object.fromEntries(formData.entries());
 
   const validatedData = await validateBrowserSupport(language, rawData).catch((e) => {
-    logMessage.warn(`Failed to validate browser support form: ${(e as Error).message}`);
+    logMessage.info(`Failed to validate browser support form: ${(e as Error).message}`);
     logMessage.info(JSON.stringify(rawData));
     return { success: false, issues: [] } as unknown as ReturnType<typeof validateBrowserSupport>;
   });

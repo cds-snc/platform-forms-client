@@ -118,7 +118,7 @@ export const updateAppSetting = async (internalId: string, settingData: SettingU
       data: settingData,
     })
     .catch((e) => {
-      logMessage.warn(
+      logMessage.error(
         `Could not update setting with internalId: ${internalId} due to error: ${e.message}`
       );
       return prismaErrors(e, null);
@@ -162,7 +162,7 @@ export const createAppSetting = async (settingData: SettingCreateData) => {
       data: settingData,
     })
     .catch((e) => {
-      logMessage.warn(
+      logMessage.error(
         `Could not create setting with name: ${settingData.nameEn} due to error: ${e.message}`
       );
       return prismaErrors(e, null);
@@ -203,7 +203,7 @@ export const deleteAppSetting = async (internalId: string) => {
       },
     })
     .catch((e) => {
-      logMessage.warn(
+      logMessage.error(
         `Could not delete setting with internalId: ${internalId} due to error: ${e.message}`
       );
       return prismaErrors(e, null);

@@ -40,7 +40,7 @@ export const setupQuestions = AuthenticatedAction(
     ])
       .then(() => ({}))
       .catch((error) => {
-        logMessage.warn(error);
+        logMessage.info(error);
         return { generalError: t("errors.serverError.title") };
       });
   }

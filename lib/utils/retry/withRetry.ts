@@ -57,7 +57,7 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
       if (onRetry) {
         onRetry(attempt, error);
       } else {
-        logMessage.warn(`Retry attempt ${attempt} failed - ${error}, retrying in ${delay}ms`);
+        logMessage.info(`Retry attempt ${attempt} failed - ${error}, retrying in ${delay}ms`);
       }
 
       // eslint-disable-next-line no-await-in-loop

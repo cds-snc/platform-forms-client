@@ -14,7 +14,6 @@ import { GroupStoreProvider } from "@lib/groups/useGroupStore";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
-import { logMessage } from "@lib/logger";
 import { checkKeyExists } from "@lib/serviceAccount";
 import {
   FormBuilderConfigProvider,
@@ -48,7 +47,6 @@ export default async function Layout(props: {
       if (e instanceof AccessControlError) {
         redirect(`/${locale}/admin/unauthorized`);
       }
-      logMessage.warn(`Error fetching Form Record for form-builder/[id] Layout: ${e.message}`);
       return null;
     });
 

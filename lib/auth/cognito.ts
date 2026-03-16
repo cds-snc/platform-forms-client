@@ -106,7 +106,7 @@ export const initiateSignIn = async ({
         { sanitizedUsername }
       );
 
-      logMessage.warn("Cognito Lockout: Password attempts exceeded");
+      logMessage.info("Cognito Lockout: Password attempts exceeded");
     }
 
     logMessage.info("HealthCheck: cognito sign-in failure");
@@ -210,7 +210,7 @@ export const requestNew2FAVerificationCode = async (
   } catch (error) {
     logMessage.info("HealthCheck: request new 2fa code failure");
     if (error instanceof Missing2FASession) {
-      logMessage.warn(
+      logMessage.info(
         `Failed to send new verification code. User ${email} does not have an existing authentication flow token`
       );
       throw error;
@@ -262,7 +262,7 @@ export const validate2FAVerificationCode = async (
           { sanitizedEmail }
         );
 
-        logMessage.warn("2FA Lockout: Verification code attempts exceeded");
+        logMessage.info("2FA Lockout: Verification code attempts exceeded");
       }
       return { valid: false };
     }
@@ -293,7 +293,7 @@ export const validate2FAVerificationCode = async (
     };
   } catch (error) {
     logMessage.info("HealthCheck: 2fa code validation failure");
-    logMessage.warn(`Failed to validate verification code. Reason: ${(error as Error).message}.`);
+    logMessage.info(`Failed to validate verification code. Reason: ${(error as Error).message}.`);
     return {
       valid: false,
     };
