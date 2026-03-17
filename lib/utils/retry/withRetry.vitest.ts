@@ -4,6 +4,7 @@ import { withRetry, withRetryFallback } from "./withRetry";
 // Mock the logger
 vi.mock("@lib/logger", () => ({
   logMessage: {
+    info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
   },
@@ -23,7 +24,7 @@ describe("withRetry", () => {
   it("should retry on failure and eventually succeed", async () => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    
+
     const mockFn = vi
       .fn()
       .mockRejectedValueOnce(new Error("attempt 1"))
@@ -39,14 +40,14 @@ describe("withRetry", () => {
 
     expect(result).toBe("success");
     expect(mockFn).toHaveBeenCalledTimes(3);
-    
+
     vi.useRealTimers();
   });
 
   it("should exhaust retries and fail appropriately", async () => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    
+
     const error = new Error("persistent failure");
     const mockFn = vi.fn().mockRejectedValue(error);
 
@@ -57,14 +58,14 @@ describe("withRetry", () => {
 
     expect(result).toBe("fallback");
     expect(mockFn).toHaveBeenCalledTimes(2);
-    
+
     vi.useRealTimers();
   });
 
   it("should call onRetry callback when provided", async () => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    
+
     const mockFn = vi
       .fn()
       .mockRejectedValueOnce(new Error("attempt 1"))
@@ -80,13 +81,13 @@ describe("withRetry", () => {
 
     expect(onRetry).toHaveBeenCalledTimes(1);
     expect(onRetry).toHaveBeenCalledWith(1, expect.any(Error));
-    
+
     vi.useRealTimers();
   });
 
   it("should respect shouldRetry function", async () => {
     vi.clearAllMocks();
-    
+
     const error = new Error("non-retryable");
     const mockFn = vi.fn().mockRejectedValue(error);
 
@@ -100,30 +101,27 @@ describe("withRetry", () => {
   it("should call onFinalFailure callback when all retries fail", async () => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    
+
     const error = new Error("final failure");
     const mockFn = vi.fn().mockRejectedValue(error);
     const onFinalFailure = vi.fn();
 
     // Execute withRetry and expect it to reject
     const retryPromise = withRetry(mockFn, { maxRetries: 2, onFinalFailure });
-    
+
     // Fast-forward through the delays and await the rejection simultaneously
-    const [rejectionResult] = await Promise.allSettled([
-      retryPromise,
-      vi.runAllTimersAsync()
-    ]);
-    
+    const [rejectionResult] = await Promise.allSettled([retryPromise, vi.runAllTimersAsync()]);
+
     // Verify the promise was rejected with the expected error
-    expect(rejectionResult.status).toBe('rejected');
-    if (rejectionResult.status === 'rejected') {
+    expect(rejectionResult.status).toBe("rejected");
+    if (rejectionResult.status === "rejected") {
       expect(rejectionResult.reason).toEqual(error);
     }
 
     expect(mockFn).toHaveBeenCalledTimes(2);
     expect(onFinalFailure).toHaveBeenCalledTimes(1);
     expect(onFinalFailure).toHaveBeenCalledWith(error, 2);
-    
+
     vi.useRealTimers();
   });
 });
@@ -131,7 +129,7 @@ describe("withRetry", () => {
 describe("withRetryFallback", () => {
   it("should return result on success", async () => {
     vi.clearAllMocks();
-    
+
     const mockFn = vi.fn().mockResolvedValue("success");
 
     const result = await withRetryFallback(mockFn, "fallback");
@@ -143,7 +141,7 @@ describe("withRetryFallback", () => {
   it("should return fallback value after all retries fail", async () => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    
+
     const mockFn = vi.fn().mockRejectedValue(new Error("failure"));
 
     const promise = withRetryFallback(mockFn, "fallback", { maxRetries: 2 });
@@ -154,21 +152,21 @@ describe("withRetryFallback", () => {
 
     expect(result).toBe("fallback");
     expect(mockFn).toHaveBeenCalledTimes(2);
-    
+
     vi.useRealTimers();
   });
 
   it("should call onFinalFailure callback when all retries fail", async () => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    
+
     const error = new Error("final failure");
     const mockFn = vi.fn().mockRejectedValue(error);
     const onFinalFailure = vi.fn();
 
-    const promise = withRetryFallback(mockFn, "fallback", { 
-      maxRetries: 2, 
-      onFinalFailure 
+    const promise = withRetryFallback(mockFn, "fallback", {
+      maxRetries: 2,
+      onFinalFailure,
     });
 
     await vi.runAllTimersAsync();
@@ -179,7 +177,7 @@ describe("withRetryFallback", () => {
     expect(mockFn).toHaveBeenCalledTimes(2);
     expect(onFinalFailure).toHaveBeenCalledTimes(1);
     expect(onFinalFailure).toHaveBeenCalledWith(error, 2);
-    
+
     vi.useRealTimers();
   });
 });
