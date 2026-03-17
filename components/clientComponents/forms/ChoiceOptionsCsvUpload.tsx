@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
@@ -236,7 +236,16 @@ export const ChoiceOptionsCsvUpload = ({
                 await parseSelectedFile(file);
               }}
             />
-            <Button theme="secondary" onClick={() => inputRef.current?.click()}>
+            <Button
+              theme="secondary"
+              onClick={() => {
+                setError(null);
+                if (inputRef.current) {
+                  inputRef.current.value = "";
+                  inputRef.current.click();
+                }
+              }}
+            >
               {t("choiceOptionsUpload.selectFile")}
             </Button>
             <p className="mt-3 text-sm text-slate-700">
