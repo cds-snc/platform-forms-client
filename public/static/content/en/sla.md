@@ -19,7 +19,7 @@ GC Forms is a cloud-based service that is owned and operated by the Canadian Dig
 - Ensuring the system is available for use, with page load time less than 10 seconds in Canada on high-speed Internet, unless the product is experiencing a denial of service attack or there are issues with AWS.
 - Limiting the rate at which end users can submit responses to preserve the security of CDS and client systems.
 - Configuring hCaptcha so that suspected threats and spam are blocked, but genuine users can submit forms.
-- Implementing a basic file scanning feature to help detect potentially malicious files attached to forms.
+- Implementing a basic file scanning feature to help detect and alert clients to potentially malicious files attached to forms by end-users. CDS does not provide additional support for malicious files beyond this. As outlined in the [Terms of Use](https://forms-formulaires.alpha.canada.ca/en/terms-of-use), clients are responsible for deciding how to use this information.
 - Responding quickly to incidents. GC Forms follows the [TBS Directive on Security Management](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32611) and follows an Incident Response process to resolve issues in a timely manner.
 - Staffing on-call personnel 24/7, 365 days of the year to respond to Severity 1 incidents within 2 hours of detection.
 - Sharing application logs with the Canadian Centre for Cyber Security (CCCS). GC Forms follows the [Direction on the Secure Use of Commercial Cloud Services: Security Policy Implementation Notice (SPIN)](https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/cloud-services/direction-secure-use-commercial-cloud-services-spin.html).
