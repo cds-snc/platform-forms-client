@@ -1,11 +1,26 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { getRedisInstance } from "@lib/integration/redisConnector";
+import {
+  EDIT_LOCK_TTL_MS,
+  MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
+} from "@lib/formBuilderEditLockPresence";
+export {
+  EDIT_LOCK_HEARTBEAT_MS,
+  EDIT_LOCK_TTL_MS,
+  MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
+} from "@lib/formBuilderEditLockPresence";
 
-export const EDIT_LOCK_TTL_MS = 60_000;
-export const EDIT_LOCK_HEARTBEAT_MS = 5_000;
-export const MIN_ASSIGNED_USERS_FOR_EDIT_LOCK = 2;
 const EDIT_LOCK_KEY_PREFIX = "edit-lock";
 const EDIT_LOCK_CHANNEL_PREFIX = "edit-lock-events";
+
+export type EditLockPresenceStatus = "active" | "idle" | "away";
+export type EditLockVisibilityState = "visible" | "hidden";
+
+export type EditLockPresenceInput = {
+  lastActivityAt?: Date | null;
+  visibilityState?: EditLockVisibilityState | null;
+  presenceStatus?: EditLockPresenceStatus | null;
+};
 
 export type EditLockInfo = {
   templateId: string;
@@ -15,6 +30,9 @@ export type EditLockInfo = {
   lockedAt: Date;
   heartbeatAt: Date;
   expiresAt: Date;
+  lastActivityAt?: Date | null;
+  visibilityState?: EditLockVisibilityState | null;
+  presenceStatus?: EditLockPresenceStatus | null;
   sessionId?: string | null;
 };
 
@@ -37,10 +55,14 @@ export class TemplateEditLockedError extends Error {
 type EditLockStore = Map<string, EditLockInfo>;
 type EditLockSubscriber = () => void;
 type EditLockSubscriberStore = Map<string, Set<EditLockSubscriber>>;
-type StoredEditLockInfo = Omit<EditLockInfo, "lockedAt" | "heartbeatAt" | "expiresAt"> & {
+type StoredEditLockInfo = Omit<
+  EditLockInfo,
+  "lockedAt" | "heartbeatAt" | "expiresAt" | "lastActivityAt"
+> & {
   lockedAt: string;
   heartbeatAt: string;
   expiresAt: string;
+  lastActivityAt?: string | null;
 };
 
 type EditLockGlobal = typeof globalThis & {
@@ -75,8 +97,11 @@ const toStoredEditLockInfo = (lock: EditLockInfo): StoredEditLockInfo => ({
   lockedAt: lock.lockedAt.toISOString(),
   heartbeatAt: lock.heartbeatAt.toISOString(),
   expiresAt: lock.expiresAt.toISOString(),
+  lastActivityAt: lock.lastActivityAt?.toISOString() ?? null,
   lockedByName: lock.lockedByName ?? null,
   lockedByEmail: lock.lockedByEmail ?? null,
+  visibilityState: lock.visibilityState ?? null,
+  presenceStatus: lock.presenceStatus ?? null,
   sessionId: lock.sessionId ?? null,
 });
 
@@ -91,10 +116,13 @@ const fromStoredEditLockInfo = (raw: string | null): EditLockInfo | null => {
       ...parsed,
       lockedByName: parsed.lockedByName ?? null,
       lockedByEmail: parsed.lockedByEmail ?? null,
+      visibilityState: parsed.visibilityState ?? null,
+      presenceStatus: parsed.presenceStatus ?? null,
       sessionId: parsed.sessionId ?? null,
       lockedAt: new Date(parsed.lockedAt),
       heartbeatAt: new Date(parsed.heartbeatAt),
       expiresAt: new Date(parsed.expiresAt),
+      lastActivityAt: parsed.lastActivityAt ? new Date(parsed.lastActivityAt) : null,
     };
   } catch {
     return null;
@@ -237,7 +265,19 @@ const toEditLockInfo = (lock: EditLockInfo): EditLockInfo => ({
   ...lock,
   lockedByName: lock.lockedByName ?? null,
   lockedByEmail: lock.lockedByEmail ?? null,
+  lastActivityAt: lock.lastActivityAt ?? null,
+  visibilityState: lock.visibilityState ?? null,
+  presenceStatus: lock.presenceStatus ?? null,
   sessionId: lock.sessionId ?? null,
+});
+
+const getPresenceSnapshot = (
+  presence: EditLockPresenceInput | undefined,
+  now: Date
+): Required<EditLockPresenceInput> => ({
+  lastActivityAt: presence?.lastActivityAt ?? now,
+  visibilityState: presence?.visibilityState ?? "visible",
+  presenceStatus: presence?.presenceStatus ?? "active",
 });
 
 export const getEditLockDisabledStatus = (): EditLockStatus => ({
@@ -283,15 +323,18 @@ export const acquireEditLock = async ({
   userName,
   userEmail,
   sessionId,
+  presence,
 }: {
   templateId: string;
   userId: string;
   userName?: string | null;
   userEmail?: string | null;
   sessionId?: string | null;
+  presence?: EditLockPresenceInput;
 }): Promise<EditLockStatus> => {
   const now = new Date();
   const expiresAt = new Date(now.getTime() + EDIT_LOCK_TTL_MS);
+  const presenceSnapshot = getPresenceSnapshot(presence, now);
 
   const updated: EditLockInfo = {
     templateId,
@@ -301,6 +344,9 @@ export const acquireEditLock = async ({
     lockedAt: now,
     heartbeatAt: now,
     expiresAt,
+    lastActivityAt: presenceSnapshot.lastActivityAt,
+    visibilityState: presenceSnapshot.visibilityState,
+    presenceStatus: presenceSnapshot.presenceStatus,
     sessionId: sessionId ?? null,
   };
 
@@ -353,15 +399,18 @@ export const takeoverEditLock = async ({
   userName,
   userEmail,
   sessionId,
+  presence,
 }: {
   templateId: string;
   userId: string;
   userName?: string | null;
   userEmail?: string | null;
   sessionId?: string | null;
+  presence?: EditLockPresenceInput;
 }): Promise<EditLockStatus> => {
   const now = new Date();
   const expiresAt = new Date(now.getTime() + EDIT_LOCK_TTL_MS);
+  const presenceSnapshot = getPresenceSnapshot(presence, now);
   const updated: EditLockInfo = {
     templateId,
     lockedByUserId: userId,
@@ -370,6 +419,9 @@ export const takeoverEditLock = async ({
     lockedAt: now,
     heartbeatAt: now,
     expiresAt,
+    lastActivityAt: presenceSnapshot.lastActivityAt,
+    visibilityState: presenceSnapshot.visibilityState,
+    presenceStatus: presenceSnapshot.presenceStatus,
     sessionId: sessionId ?? null,
   };
 
@@ -389,13 +441,16 @@ export const heartbeatEditLock = async ({
   templateId,
   userId,
   sessionId,
+  presence,
 }: {
   templateId: string;
   userId: string;
   sessionId?: string | null;
+  presence?: EditLockPresenceInput;
 }): Promise<EditLockStatus> => {
   const now = new Date();
   const expiresAt = new Date(now.getTime() + EDIT_LOCK_TTL_MS);
+  const presenceSnapshot = getPresenceSnapshot(presence, now);
 
   if (redisEnabled()) {
     return withRedisWatch(templateId, async (current, redis) => {
@@ -415,6 +470,9 @@ export const heartbeatEditLock = async ({
         ...current,
         heartbeatAt: now,
         expiresAt,
+        lastActivityAt: presenceSnapshot.lastActivityAt,
+        visibilityState: presenceSnapshot.visibilityState,
+        presenceStatus: presenceSnapshot.presenceStatus,
       };
 
       const execResult = await redis
@@ -446,6 +504,9 @@ export const heartbeatEditLock = async ({
     ...normalized,
     heartbeatAt: now,
     expiresAt,
+    lastActivityAt: presenceSnapshot.lastActivityAt,
+    visibilityState: presenceSnapshot.visibilityState,
+    presenceStatus: presenceSnapshot.presenceStatus,
   };
   store.set(templateId, updated);
   return buildStatus(updated, userId);

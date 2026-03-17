@@ -3,12 +3,47 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import {
+  CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS,
+  CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS,
+  EDIT_LOCK_DETECT_PRESENCE,
+} from "@lib/formBuilderEditLockPresence";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import { WarningIcon } from "@serverComponents/icons";
 
+const formatRelativeTime = (value: string, locale: string) => {
+  const target = new Date(value);
+
+  if (Number.isNaN(target.getTime())) {
+    return null;
+  }
+
+  const diffMs = target.getTime() - Date.now();
+  const absMs = Math.abs(diffMs);
+  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+
+  // Under 1 minute, show seconds.
+  if (absMs < 60_000) {
+    return formatter.format(Math.round(diffMs / 1000), "second");
+  }
+
+  // Under 1 hour, show minutes.
+  if (absMs < 3_600_000) {
+    return formatter.format(Math.round(diffMs / 60_000), "minute");
+  }
+
+  // Under 1 day, show hours.
+  if (absMs < 86_400_000) {
+    return formatter.format(Math.round(diffMs / 3_600_000), "hour");
+  }
+
+  // Otherwise, fall back to days.
+  return formatter.format(Math.round(diffMs / 86_400_000), "day");
+};
+
 export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const { isLockedByOther, editLock } = useTemplateStore((s) => ({
     isLockedByOther: s.isLockedByOther,
     editLock: s.editLock,
@@ -16,8 +51,10 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
   const bannerRef = useRef<HTMLDivElement | null>(null);
   const [isTakingOver, setIsTakingOver] = useState(false);
   const [takeoverError, setTakeoverError] = useState(false);
+  const [timeTick, setTimeTick] = useState(() => Date.now());
 
   useEffect(() => {
+    // Do not move focus unless the takeover banner is actually visible.
     if (!isLockedByOther) {
       return;
     }
@@ -25,9 +62,41 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
     bannerRef.current?.focus();
   }, [isLockedByOther]);
 
+  useEffect(() => {
+    // Only keep the relative time display ticking while another user owns the lock.
+    if (!EDIT_LOCK_DETECT_PRESENCE || !isLockedByOther) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setTimeTick(Date.now());
+    }, CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [isLockedByOther]);
+
   if (!isLockedByOther) return null;
 
   const name = editLock?.lockedByName || editLock?.lockedByEmail || t("editLock.unknownUser");
+  // This is the lock TTL deadline from the server; nearing it means the owner's heartbeat is going stale.
+  const expiresAt = editLock?.expiresAt ? new Date(editLock.expiresAt) : null;
+
+  // If the lock is nearing expiration, or if the presence status is explicitly marked as stale, treat the lock as stale.
+  const isStale =
+    EDIT_LOCK_DETECT_PRESENCE && expiresAt
+      ? expiresAt.getTime() - timeTick <= CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS
+      : false;
+
+  // If the lock is stale, show "stale" status to encourage takeover. Otherwise, show the actual presence status reported by the server.
+  const presenceKey = isStale ? "stale" : (editLock?.presenceStatus ?? "away");
+
+  // If the lock is stale, show "stale" status to encourage takeover. Otherwise, show the actual presence status reported by the server.
+  const lastActivity =
+    EDIT_LOCK_DETECT_PRESENCE && editLock?.lastActivityAt
+      ? formatRelativeTime(editLock.lastActivityAt, i18n.language)
+      : null;
 
   const handleTakeover = async () => {
     setTakeoverError(false);
@@ -61,6 +130,24 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
             <div>
               <p className="mb-2 text-xl font-semibold text-slate-900">{t("editLock.title")}</p>
               <p className="text-base text-slate-900">{t("editLock.lockedMessage", { name })}</p>
+              {EDIT_LOCK_DETECT_PRESENCE && (
+                <div className="mt-3 flex flex-col gap-1 text-sm text-slate-700">
+                  <p>
+                    <span className="font-semibold text-slate-900">
+                      {t("editLock.statusLabel")}
+                    </span>{" "}
+                    {t(`editLock.statuses.${presenceKey}`)}
+                  </p>
+                  {lastActivity && (
+                    <p>
+                      <span className="font-semibold text-slate-900">
+                        {t("editLock.lastActivityLabel")}
+                      </span>{" "}
+                      {lastActivity}
+                    </p>
+                  )}
+                </div>
+              )}
               {isTakingOver && (
                 <p className="mt-2 text-base text-slate-700">{t("editLock.syncingLatest")}</p>
               )}

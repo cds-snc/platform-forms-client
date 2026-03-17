@@ -28,6 +28,9 @@ export type EditLockState = {
   lockedAt?: string | null;
   heartbeatAt?: string | null;
   expiresAt?: string | null;
+  lastActivityAt?: string | null;
+  visibilityState?: "visible" | "hidden" | null;
+  presenceStatus?: "active" | "idle" | "away" | null;
   isOwner?: boolean;
   lockedByOther?: boolean;
 };

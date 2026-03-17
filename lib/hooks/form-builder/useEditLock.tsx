@@ -6,6 +6,16 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormRecord } from "@lib/types";
 import { clearTemplateStore } from "@lib/store/utils";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
+import {
+  CLIENT_SIDE_EDIT_LOCK_ACTIVITY_THROTTLE_MS,
+  CLIENT_SIDE_EDIT_LOCK_AWAY_MS,
+  CLIENT_SIDE_EDIT_LOCK_IDLE_MS,
+  EDIT_LOCK_DETECT_PRESENCE,
+  EDIT_LOCK_HEARTBEAT_MS,
+} from "@lib/formBuilderEditLockPresence";
+
+type EditLockPresenceStatus = "active" | "idle" | "away";
+type EditLockVisibilityState = "visible" | "hidden";
 
 type EditLockStatus = {
   locked: boolean;
@@ -19,11 +29,13 @@ type EditLockStatus = {
     lockedAt: string;
     heartbeatAt: string;
     expiresAt: string;
+    lastActivityAt?: string | null;
+    visibilityState?: EditLockVisibilityState | null;
+    presenceStatus?: EditLockPresenceStatus | null;
     sessionId?: string | null;
   } | null;
 };
 
-const EDIT_LOCK_HEARTBEAT_MS = 5_000;
 export const useEditLock = ({
   formId,
   enabled,
@@ -44,6 +56,8 @@ export const useEditLock = ({
   const pollRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
   const lockLoopTokenRef = useRef(0);
+  const lastActivityAtRef = useRef(0);
+  const visibilityStateRef = useRef<EditLockVisibilityState>("visible");
 
   const updateStore = useCallback(
     (status: EditLockStatus) => {
@@ -57,6 +71,9 @@ export const useEditLock = ({
               lockedAt: status.lock.lockedAt,
               heartbeatAt: status.lock.heartbeatAt,
               expiresAt: status.lock.expiresAt,
+              lastActivityAt: status.lock.lastActivityAt ?? null,
+              visibilityState: status.lock.visibilityState ?? null,
+              presenceStatus: status.lock.presenceStatus ?? null,
               isOwner: status.isOwner,
               lockedByOther: !status.isOwner,
             }
@@ -86,10 +103,31 @@ export const useEditLock = ({
 
   const postAction = useCallback(
     async (action: "acquire" | "heartbeat" | "release" | "takeover") => {
+      const now = Date.now();
+      const lastActivityAt = lastActivityAtRef.current || now;
+      const idleMs = now - lastActivityAt;
+      const visibilityState = visibilityStateRef.current;
+      const presenceStatus: EditLockPresenceStatus =
+        visibilityState === "hidden" || idleMs >= CLIENT_SIDE_EDIT_LOCK_AWAY_MS
+          ? "away"
+          : idleMs >= CLIENT_SIDE_EDIT_LOCK_IDLE_MS
+            ? "idle"
+            : "active";
+
       const res = await fetch(`/api/templates/${formId}/edit-lock`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, sessionId }),
+        body: JSON.stringify({
+          action,
+          sessionId,
+          activity: EDIT_LOCK_DETECT_PRESENCE
+            ? {
+                lastActivityAt: new Date(lastActivityAt).toISOString(),
+                visibilityState,
+                presenceStatus,
+              }
+            : undefined,
+        }),
       });
       return res.json();
     },
@@ -226,6 +264,55 @@ export const useEditLock = ({
     syncServerState,
     updateStore,
   ]);
+
+  useEffect(() => {
+    if (!EDIT_LOCK_DETECT_PRESENCE || !enabled || status !== "authenticated") {
+      return;
+    }
+
+    const markActivity = (force = false) => {
+      const nextVisibilityState = document.visibilityState === "hidden" ? "hidden" : "visible";
+      const now = Date.now();
+
+      if (
+        !force &&
+        nextVisibilityState === visibilityStateRef.current &&
+        now - lastActivityAtRef.current < CLIENT_SIDE_EDIT_LOCK_ACTIVITY_THROTTLE_MS
+      ) {
+        return;
+      }
+
+      lastActivityAtRef.current = now;
+      visibilityStateRef.current = nextVisibilityState;
+    };
+
+    const handleVisibilityChange = () => {
+      visibilityStateRef.current = document.visibilityState === "hidden" ? "hidden" : "visible";
+      if (visibilityStateRef.current === "visible") {
+        markActivity(true);
+      }
+    };
+
+    const handleActivity = () => {
+      markActivity();
+    };
+
+    markActivity(true);
+
+    window.addEventListener("pointerdown", handleActivity, { passive: true });
+    window.addEventListener("keydown", handleActivity);
+    window.addEventListener("focus", handleActivity);
+    window.addEventListener("input", handleActivity, { passive: true });
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("pointerdown", handleActivity);
+      window.removeEventListener("keydown", handleActivity);
+      window.removeEventListener("focus", handleActivity);
+      window.removeEventListener("input", handleActivity);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [enabled, status]);
 
   useEffect(() => {
     if (!enabled || status !== "authenticated") {

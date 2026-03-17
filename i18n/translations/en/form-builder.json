@@ -579,6 +579,14 @@
     "title": "This form is already being edited",
     "lockedMessage": "{{name}} is currently working on this form, which means you cannot make changes unless you take over.",
     "readOnly": "Read-only: {{name}} is editing this form.",
+    "statusLabel": "Status:",
+    "lastActivityLabel": "Last activity:",
+    "statuses": {
+      "active": "Active now",
+      "idle": "Viewing, no recent activity",
+      "away": "Away",
+      "stale": "Connection stale"
+    },
     "unknownUser": "Another user",
     "takeover": "Take over editing",
     "takingOver": "Taking over...",

@@ -96,4 +96,29 @@ describe("editLocks with redis", () => {
     const unlockedStatus = await getEditLockStatus("form-2", "user-1");
     expect(unlockedStatus.locked).toBe(false);
   });
+
+  it("updates activity metadata on heartbeat", async () => {
+    await acquireEditLock({
+      templateId: "form-3",
+      userId: "user-1",
+      userName: "User One",
+      sessionId: "session-1",
+    });
+
+    const activityAt = new Date("2026-03-17T12:00:00.000Z");
+    const heartbeatStatus = await heartbeatEditLock({
+      templateId: "form-3",
+      userId: "user-1",
+      sessionId: "session-1",
+      presence: {
+        lastActivityAt: activityAt,
+        visibilityState: "hidden",
+        presenceStatus: "away",
+      },
+    });
+
+    expect(heartbeatStatus.lock?.lastActivityAt).toEqual(activityAt);
+    expect(heartbeatStatus.lock?.visibilityState).toBe("hidden");
+    expect(heartbeatStatus.lock?.presenceStatus).toBe("away");
+  });
 });

@@ -3,6 +3,9 @@ import { middleware, sessionExists } from "@lib/middleware";
 import { WithRequired, MiddlewareProps } from "@lib/types";
 import {
   acquireEditLock,
+  EditLockPresenceInput,
+  EditLockPresenceStatus,
+  EditLockVisibilityState,
   getEditLockDisabledStatus,
   getEditLockStatus,
   heartbeatEditLock,
@@ -14,6 +17,35 @@ import {
 import { authorization } from "@lib/privileges";
 
 type LockAction = "acquire" | "heartbeat" | "release" | "takeover";
+
+const isPresenceStatus = (value: unknown): value is EditLockPresenceStatus =>
+  value === "active" || value === "idle" || value === "away";
+
+const isVisibilityState = (value: unknown): value is EditLockVisibilityState =>
+  value === "visible" || value === "hidden";
+
+const parsePresence = (value: unknown): EditLockPresenceInput | undefined => {
+  if (!value || typeof value !== "object") {
+    return undefined;
+  }
+
+  const activity = value as {
+    lastActivityAt?: string;
+    visibilityState?: string;
+    presenceStatus?: string;
+  };
+
+  const lastActivityAt = activity.lastActivityAt ? new Date(activity.lastActivityAt) : undefined;
+
+  return {
+    lastActivityAt:
+      lastActivityAt && !Number.isNaN(lastActivityAt.getTime()) ? lastActivityAt : undefined,
+    visibilityState: isVisibilityState(activity.visibilityState)
+      ? activity.visibilityState
+      : undefined,
+    presenceStatus: isPresenceStatus(activity.presenceStatus) ? activity.presenceStatus : undefined,
+  };
+};
 
 export const GET = middleware([sessionExists()], async (_req, props) => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
@@ -51,7 +83,16 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const { action, sessionId } = props.body as { action?: LockAction; sessionId?: string };
+  const { action, sessionId, activity } = props.body as {
+    action?: LockAction;
+    sessionId?: string;
+    activity?: {
+      lastActivityAt?: string;
+      visibilityState?: string;
+      presenceStatus?: string;
+    };
+  };
+  const presence = parsePresence(activity);
 
   if (!(await shouldEnforceTemplateEditLock(formID))) {
     if (action === "release") {
@@ -69,6 +110,7 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
         userName: session.user.name ?? null,
         userEmail: session.user.email ?? null,
         sessionId: sessionId ?? null,
+        presence,
       });
       return NextResponse.json(status);
     }
@@ -78,6 +120,7 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
         templateId: formID,
         userId: session.user.id,
         sessionId: sessionId ?? null,
+        presence,
       });
       return NextResponse.json(status);
     }
@@ -98,6 +141,7 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
         userName: session.user.name ?? null,
         userEmail: session.user.email ?? null,
         sessionId: sessionId ?? null,
+        presence,
       });
       return NextResponse.json(status);
     }
