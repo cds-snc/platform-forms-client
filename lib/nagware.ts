@@ -16,7 +16,7 @@ export async function detectOldUnprocessedSubmissions(
     const currentDate = Date.now();
 
     if (!promptPhaseDays || !warnPhaseDays) {
-      logMessage.error("Nagware settings are not configured");
+      logMessage.warn("Nagware settings are not configured");
       return { level: NagLevel.None, numberOfSubmissions: 0 };
     }
 

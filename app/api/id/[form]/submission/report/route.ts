@@ -261,15 +261,13 @@ export const PUT = middleware(
         }),
       });
     } catch (error) {
-      if (error) {
-        logMessage.error(
-          `Failed to create ticket / contact the support team that user:${userEmail} reported problems with form submissions [${entries.map(
-            (submissionName) => submissionName
-          )}] on form \`${formId}\` at:${Date.now()}`
-        );
-      } else {
-        logMessage.error(error as Error);
-      }
+      logMessage.info((error as Error).message);
+      logMessage.error(
+        `Failed to create ticket / contact the support team that user:${userEmail} reported problems with form submissions [${entries.map(
+          (submissionName) => submissionName
+        )}] on form \`${formId}\` at:${Date.now()}`
+      );
+
       return NextResponse.json({ error: "Error on server side" }, { status: 500 });
     }
   }

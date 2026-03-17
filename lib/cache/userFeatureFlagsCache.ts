@@ -18,7 +18,7 @@ export const featureFlagsCheck = async (userID: string): Promise<string[] | null
         return JSON.parse(value);
       }
     } catch (e) {
-      logMessage.error(e as Error);
+      logMessage.info((e as Error).message);
       throw new Error("Could not connect to cache");
     }
   }
@@ -36,7 +36,7 @@ export const featureFlagsPut = async (userID: string, flags: string[]): Promise<
     await redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(flags));
     logMessage.debug(`Updating Cached Feature Flags for ${modifyParameter}`);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };
@@ -63,7 +63,7 @@ export const featureFlagsGetAll = async (): Promise<{ userID: string; flag: stri
     });
     return result;
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };

@@ -219,9 +219,7 @@ const sendEmailNotification = async (
         }`
       )
     )
-    .catch(() =>
-      logMessage.error(`sendEmailNotification failed to send email ${email} with formId ${formId}`)
-    );
+    .catch(() => {});
 };
 
 const singleSubmissionEmailTemplate = async (

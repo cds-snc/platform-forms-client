@@ -19,7 +19,7 @@ export const settingCheck = async (internalId: string): Promise<string | null> =
         return value;
       }
     } catch (e) {
-      logMessage.error(e as Error);
+      logMessage.info((e as Error).message);
       throw new Error("Could not connect to cache");
     }
   }
@@ -37,7 +37,7 @@ export const settingDelete = async (internalId: string): Promise<void> => {
     await redis.del(deleteParameter);
     logMessage.debug(`Deleting Cached Setting for ${deleteParameter}`);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };
@@ -52,7 +52,7 @@ export const settingPut = async (internalId: string, value: string): Promise<voi
     await redis.setex(modifyParameter, randomCacheExpiry(), value);
     logMessage.debug(`Updating Cached Setting for ${modifyParameter}`);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };
@@ -81,7 +81,7 @@ export const flushSettings = async () => {
       })
     );
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };

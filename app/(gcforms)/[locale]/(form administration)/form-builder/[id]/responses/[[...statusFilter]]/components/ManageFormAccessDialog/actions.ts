@@ -28,7 +28,7 @@ export const sendInvitation = AuthenticatedAction(
 
     const template = await getPublicTemplateByID(templateId);
     if (!template?.isPublished) {
-      logMessage.error(`Invitation failed - draft form ${templateId}`);
+      logMessage.info(`Invitation failed - draft form ${templateId}`);
       errors.push(t("draftFormError"));
 
       return {
@@ -58,7 +58,7 @@ export const sendInvitation = AuthenticatedAction(
           errors.push(t("accessControlError"));
           throw e; // stop processing other emails
         }
-        logMessage.error(`Invitation failed: ${JSON.stringify(e)}`);
+        logMessage.info(`Invitation failed: ${(e as Error).message}`);
         errors.push(t("invitationFailed", { email }));
       }
     });

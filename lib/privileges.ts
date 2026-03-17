@@ -252,13 +252,13 @@ export const updatePrivilegesForUser = async (
 
     return user.privileges;
   } catch (error) {
-    logMessage.error(error as Error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       // Error P2025: Record to update not found.
       return null;
+    } else {
+      logMessage.error(error as Error);
+      throw error;
     }
-
-    throw error;
   }
 };
 
@@ -461,8 +461,7 @@ const _authorizationCheck = async (
   )
     .then((results) => results.flat())
     .catch((e) => {
-      const data = JSON.stringify(rules);
-      logMessage.error(`Error in privilege check: ${e} data: ${data}`);
+      logMessage.info(`Error in privilege check: ${e} data: ${JSON.stringify(rules)}`);
       //  On any error in the promise chain, default to forbidden
       throw new AccessControlError(ability.user.id, "Access Control Forbidden Action");
     });

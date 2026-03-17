@@ -19,7 +19,7 @@ export const privilegeCheck = async (userID: string): Promise<Permission[] | nul
         return JSON.parse(value);
       }
     } catch (e) {
-      logMessage.error(e as Error);
+      logMessage.info((e as Error).message);
       throw new Error("Could not connect to cache");
     }
   }
@@ -37,7 +37,7 @@ export const privilegeDelete = async (userID: string): Promise<void> => {
     await redis.del(deleteParameter);
     logMessage.debug(`Deleting cached privileges for ${deleteParameter}`);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };
@@ -52,7 +52,7 @@ export const privilegePut = async (userID: string, privileges: Permission[]): Pr
     await redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(privileges));
     logMessage.debug(`Updating Cached Privileges for ${modifyParameter}`);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };
@@ -84,7 +84,7 @@ export const flushValues = async () => {
       })
     );
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };

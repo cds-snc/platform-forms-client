@@ -16,7 +16,7 @@ export const unprocessedSubmissionsCacheCheck = async (formID: string): Promise<
       return false;
     }
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };
@@ -33,7 +33,7 @@ export const unprocessedSubmissionsCachePut = async (
     await redis.setex(modifyParameter, randomCacheExpiry(), value ? "1" : "0");
     logMessage.debug(`Updating cached number of unprocessed submissions for ${modifyParameter}`);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };

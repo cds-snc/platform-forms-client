@@ -62,7 +62,7 @@ export const acceptInvitation = async (invitationId: string) => {
   });
 
   if (!template) {
-    logMessage.error(
+    logMessage.info(
       `Template with ID ${invitation.templateId} not found for invitation ${invitationId}`
     );
     throw new UnableToAssignUserToTemplateError();
@@ -79,7 +79,7 @@ export const acceptInvitation = async (invitationId: string) => {
 
   // assign user to form
   const updatedTemplate = await _assignUserToTemplate(user.id, invitation.templateId).catch((e) => {
-    logMessage.error(`Error assigning user to form: ${e}`);
+    logMessage.warn(`Error assigning user to form: ${e}`);
     throw new UnableToAssignUserToTemplateError();
   });
 
@@ -105,7 +105,7 @@ export const acceptInvitation = async (invitationId: string) => {
   notifyOwnersOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
 
   _deleteInvitation(invitationId).catch((e) => {
-    logMessage.error(`Error deleting invitation: ${e}`);
+    logMessage.warn(`Error deleting invitation: ${e}`);
   });
 };
 

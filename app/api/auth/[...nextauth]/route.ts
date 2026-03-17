@@ -16,7 +16,7 @@ const GET = async (req: NextRequest) => {
   ) {
     return NextGET(req);
   }
-  logMessage.error(`Attempted GET URL: ${req.nextUrl.pathname}`);
+  logMessage.info(`Attempted GET URL: ${req.nextUrl.pathname}`);
   return NextResponse.json({ error: "Bad Request" }, { status: 400 });
 };
 
@@ -28,7 +28,7 @@ const POST = async (req: NextRequest) => {
   ) {
     return NextPOST(req);
   }
-  logMessage.error(`Attempted POST URL: ${req.nextUrl.pathname}`);
+  logMessage.info(`Attempted POST URL: ${req.nextUrl.pathname}`);
   return NextResponse.json({ error: "Bad Request" }, { status: 400 });
 };
 

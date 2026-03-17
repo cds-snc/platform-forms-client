@@ -81,7 +81,7 @@ export const GET = async (req: NextRequest, props: { params: Promise<Record<stri
         { status: 400 }
       );
     } else {
-      logMessage.error(error);
+      logMessage.info((error as Error).message);
       return NextResponse.json(
         { error: `Internal server error. Reason: ${error.message}.` },
         { status: 500 }
@@ -208,7 +208,7 @@ export const PUT = middleware(
           { status: 400 }
         );
       } else {
-        logMessage.error(error);
+        logMessage.info((error as Error).message);
         return NextResponse.json(
           { error: `Internal server error. Reason: ${error.message}.` },
           { status: 500 }
@@ -245,7 +245,7 @@ export const DELETE = middleware([sessionExists()], async (req, props) => {
         { status: 400 }
       );
     } else {
-      logMessage.error(error);
+      logMessage.info((error as Error).message);
       return NextResponse.json(
         { error: `Internal server error. Reason: ${error.message}.` },
         { status: 500 }

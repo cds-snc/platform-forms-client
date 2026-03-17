@@ -37,7 +37,7 @@ export const declineInvitation = async (invitationId: string) => {
   }
 
   _deleteInvitation(invitationId).catch((e) => {
-    logMessage.error(`Error deleting invitation: ${e}`);
+    logMessage.warn(`Error deleting invitation: ${e}`);
   });
 
   logEvent(

@@ -18,7 +18,7 @@ export const activeStatusCheck = async (userID: string): Promise<boolean | null>
         return value === "1";
       }
     } catch (e) {
-      logMessage.error(e as Error);
+      logMessage.info((e as Error).message);
       throw new Error("Could not connect to cache");
     }
   }
@@ -36,7 +36,7 @@ export const activeStatusUpdate = async (userID: string, status: boolean): Promi
     await redis.setex(modifyParameter, randomCacheExpiry(), status ? "1" : "0");
     logMessage.debug(`Updating Cached User Status for ${modifyParameter}`);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };

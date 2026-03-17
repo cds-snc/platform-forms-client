@@ -182,7 +182,7 @@ const {
   events: {
     async signIn({ user }) {
       if (!user.email) {
-        logMessage.error(
+        logMessage.warn(
           "Could not produce UserSignIn audit log because of undefined email information"
         );
         return;
@@ -198,7 +198,7 @@ const {
       });
 
       if (internalUser === null) {
-        logMessage.error("Could not produce UserSignIn audit log because user does not exist");
+        logMessage.warn("Could not produce UserSignIn audit log because user does not exist");
         return;
       }
 

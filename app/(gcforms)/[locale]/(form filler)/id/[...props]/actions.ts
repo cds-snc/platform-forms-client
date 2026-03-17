@@ -19,6 +19,13 @@ import { MissingFormDataError } from "./lib/client/exceptions";
 import { valuesMatchErrorContainsElementType } from "@gcforms/core";
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
+class TemplateNotFoundError extends Error {
+  constructor() {
+    super("TemplateNotFoundError");
+    Object.setPrototypeOf(this, TemplateNotFoundError.prototype);
+  }
+}
+
 export async function isFormClosed(formId: string): Promise<boolean> {
   const closedDetails = await checkIfClosed(formId);
 
@@ -48,7 +55,7 @@ export async function submitForm(
       const template = await getPublicTemplateByID(formId);
 
       if (!template) {
-        throw new Error(`Could not find any form associated to identifier ${formId}`);
+        throw new TemplateNotFoundError();
       }
 
       if (template.closingDate && dateHasPast(Date.parse(template.closingDate))) {
@@ -120,12 +127,17 @@ export async function submitForm(
       sendNotifications(formId, template.form.titleEn, template.form.titleFr);
 
       return { id: formId, submissionId, fileURLMap };
-    } catch (e) {
-      logMessage.error(
-        `Could not submit response for form ${formId}. Received error: ${(e as Error).message}`
-      );
+    } catch (error) {
+      if (error instanceof TemplateNotFoundError === false) {
+        logMessage.error(
+          `Could not submit response for form ${formId}. Received error: ${(error as Error).message}`
+        );
+      }
 
-      return { id: formId, error: { name: (e as Error).name, message: (e as Error).message } };
+      return {
+        id: formId,
+        error: { name: (error as Error).name, message: (error as Error).message },
+      };
     }
   });
 }

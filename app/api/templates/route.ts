@@ -69,7 +69,7 @@ export const GET = middleware(
       if (error instanceof AccessControlError) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       } else {
-        logMessage.error(error);
+        logMessage.info((error as Error).message);
         return NextResponse.json(
           { error: `Internal server error. Reason: ${error.message}.` },
           { status: 500 }
@@ -134,7 +134,7 @@ export const POST = middleware(
       if (error instanceof AccessControlError) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       } else {
-        logMessage.error(error);
+        logMessage.info((error as Error).message);
         return NextResponse.json(
           { error: `Internal server error. Reason: ${error.message}.` },
           { status: 500 }

@@ -22,7 +22,7 @@ export const getThrottling = async (
     const expires = await redis.ttl(getParameter);
     return { rate: value, expires };
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };
@@ -44,7 +44,7 @@ export const setThrottlingExpiry = async (formId: string, weeks: number) => {
     );
     await redis.setex(modifyParameter, expiresDateInSeconds, THROTTLE_SETTING.high);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };
@@ -59,7 +59,7 @@ export const setPermanentThrottling = async (formId: string) => {
     logMessage.info(`Permanent throttling for ${formId}`);
     await redis.set(modifyParameter, THROTTLE_SETTING.high);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };
@@ -74,7 +74,7 @@ export const resetThrottling = async (formId: string) => {
     logMessage.info(`Removing throttling for ${formId}`);
     await redis.del(modifyParameter);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };

@@ -18,7 +18,7 @@ const checkValue = async (checkParameter: string) => {
         return JSON.parse(value);
       }
     } catch (e) {
-      logMessage.error(e as Error);
+      logMessage.info((e as Error).message);
       throw new Error("Could not connect to cache");
     }
   }
@@ -34,7 +34,7 @@ const deleteValue = async (deleteParameter: string) => {
     await redis.del(deleteParameter);
     logMessage.debug(`Deleting Cached value for ${deleteParameter}`);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };
@@ -47,7 +47,7 @@ const modifyValue = async (modifyParameter: string, template: PublicFormRecord |
     await redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(template));
     logMessage.debug(`Updating Cached value for ${modifyParameter}`);
   } catch (e) {
-    logMessage.error(e as Error);
+    logMessage.info((e as Error).message);
     throw new Error("Could not connect to cache");
   }
 };
