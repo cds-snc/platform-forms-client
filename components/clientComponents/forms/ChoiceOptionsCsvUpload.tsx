@@ -117,6 +117,7 @@ export const ChoiceOptionsCsvUpload = ({
 }) => {
   const { t } = useTranslation(["form-builder", "common"]);
   const dialogRef = useDialogRef();
+  const triggerButtonRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -133,6 +134,10 @@ export const ChoiceOptionsCsvUpload = ({
     if (inputRef.current) {
       inputRef.current.value = "";
     }
+
+    requestAnimationFrame(() => {
+      triggerButtonRef.current?.focus();
+    });
   };
 
   const parseSelectedFile = async (file: File | null) => {
@@ -181,7 +186,15 @@ export const ChoiceOptionsCsvUpload = ({
 
   return (
     <>
-      <Button className="!m-0 !mt-4" theme="link" onClick={() => setIsOpen(true)}>
+      <Button
+        className="!m-0 !mt-4"
+        theme="link"
+        onClick={() => setIsOpen(true)}
+        dataTestId={`${id}-upload-csv-trigger`}
+        buttonRef={(element) => {
+          triggerButtonRef.current = element;
+        }}
+      >
         {t("choiceOptionsUpload.uploadButton")}
       </Button>
       <Button
@@ -210,7 +223,11 @@ export const ChoiceOptionsCsvUpload = ({
           actions={
             <div className="flex gap-3">
               <Button onClick={handleImport}>{t("choiceOptionsUpload.importButton")}</Button>
-              <Button theme="secondary" onClick={handleCloseDialog}>
+              <Button
+                theme="secondary"
+                onClick={handleCloseDialog}
+                dataTestId={`${id}-cancel-upload-csv`}
+              >
                 {t("cancel")}
               </Button>
             </div>
