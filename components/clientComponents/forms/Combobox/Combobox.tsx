@@ -19,18 +19,6 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
-  // Whether the current device is iOS — used for the aria-posinset workaround below.
-  // Stored in a ref so it is set once after mount and never causes renders.
-  const isIOSRef = useRef(false);
-  useEffect(() => {
-    isIOSRef.current =
-      typeof navigator !== "undefined" &&
-      !!(
-        navigator.userAgent.match(/(iPod|iPhone|iPad)/g) &&
-        navigator.userAgent.match(/AppleWebKit/g)
-      );
-  }, []);
-
   // GOV.UK "bump" pattern for dual live regions.
   // Two alternating aria-live containers are used because some AT only announce
   // a live region when the DOM node's text content changes. If the same status
@@ -86,7 +74,6 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetMessage]);
 
   return (
@@ -147,28 +134,27 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
                 }}
               >
                 {item}
-                {/* iOS VoiceOver does not reliably announce aria-posinset /
-                    aria-setsize on listbox options. A visually-hidden text node
-                    with the position gives VoiceOver something to read directly.
-                    Technique from GOV.UK accessible-autocomplete. */}
-                {isIOSRef.current && (
-                  <span
-                    style={{
-                      border: 0,
-                      clip: "rect(0 0 0 0)",
-                      height: "1px",
-                      marginBottom: "-1px",
-                      marginRight: "-1px",
-                      overflow: "hidden",
-                      padding: 0,
-                      position: "absolute",
-                      whiteSpace: "nowrap",
-                      width: "1px",
-                    }}
-                  >
-                    {` ${index + 1} ${t("combobox-of")} ${items.length}`}
-                  </span>
-                )}
+                {/* iOS VoiceOver and some mobile AT do not reliably announce
+                    aria-posinset/aria-setsize on listbox options. A visually-hidden
+                    span with the position text ensures VoiceOver reads it directly.
+                    Inspired by GOV.UK accessible-autocomplete. Always rendered so
+                    React 19 SSR hydration stays consistent. */}
+                <span
+                  style={{
+                    border: 0,
+                    clip: "rect(0 0 0 0)",
+                    height: "1px",
+                    marginBottom: "-1px",
+                    marginRight: "-1px",
+                    overflow: "hidden",
+                    padding: 0,
+                    position: "absolute",
+                    whiteSpace: "nowrap",
+                    width: "1px",
+                  }}
+                >
+                  {` ${index + 1} ${t("combobox-of")} ${items.length}`}
+                </span>
               </li>
             ))}
         </ul>

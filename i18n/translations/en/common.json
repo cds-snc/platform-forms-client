@@ -93,6 +93,8 @@
   "combobox-results-available_one": "{{count}} option available",
   "combobox-results-available_other": "{{count}} options available",
   "combobox-no-results": "No options available",
+  "combobox-option-highlighted": "({{option}}, {{index}} of {{total}} is highlighted)",
+  "combobox-of": "of",
   "server-error": "Sorry, it seems there was a problem submitting your form. Please try again later.",
   "form-closed-error": "This form is closed and no longer accepting form submissions. Refresh this page for a more specific message about this closed form.",
   "title-full": "GC Forms - Formulaires GC",
