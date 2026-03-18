@@ -1,9 +1,10 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { Label } from "./Label";
 import { Input } from "@formBuilder/components/shared/Input";
 import { ErrorMessage } from "@clientComponents/forms";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 const isValidRegex = (pattern: string): boolean => {
   if (!pattern) return true;
@@ -24,6 +25,25 @@ export const CustomRegexOptions = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [regexError, setRegexError] = useState<string | null>(null);
+
+  const elements = useTemplateStore((s) => s.form.elements);
+
+  const previousPatterns = useMemo(() => {
+    const patterns = new Set<string>();
+    for (const el of elements) {
+      if (el.id !== item.id && el.properties.validation?.type === "custom") {
+        const regex = el.properties.validation?.regex;
+        if (regex) patterns.add(regex);
+      }
+      for (const sub of el.properties.subElements ?? []) {
+        if (sub.id !== item.id && sub.properties.validation?.type === "custom") {
+          const regex = sub.properties.validation?.regex;
+          if (regex) patterns.add(regex);
+        }
+      }
+    }
+    return Array.from(patterns);
+  }, [elements, item.id]);
 
   const validateAndSetPattern = useCallback(
     (value: string) => {
@@ -71,6 +91,27 @@ export const CustomRegexOptions = ({
         />
         {regexError && (
           <ErrorMessage id={`customRegexPattern-error-${item.id}`}>{regexError}</ErrorMessage>
+        )}
+        {previousPatterns.length > 0 && (
+          <div className="mt-4">
+            <p className="mb-2 font-bold">{t("moreDialog.customRegex.previousPatterns")}</p>
+            <ul
+              className="flex list-none flex-wrap gap-2 pl-0"
+              aria-label={t("moreDialog.customRegex.previousPatterns")}
+            >
+              {previousPatterns.map((pattern) => (
+                <li key={pattern}>
+                  <button
+                    type="button"
+                    className="rounded-lg border border-violet-800 bg-violet-100 px-2 py-1 font-mono text-sm hover:border-black hover:bg-gray-100 focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus"
+                    onClick={() => validateAndSetPattern(pattern)}
+                  >
+                    {pattern}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </section>
     </>

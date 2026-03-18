@@ -643,7 +643,8 @@
     "customRegex": {
       "title": "Modèle regex personnalisé",
       "description": "Ajoutez un modèle regex personnalisé pour valider la réponse à cette question. Assurez-vous de tester votre formulaire en profondeur si vous utilisez cette option.",
-      "errorInvalidRegex": "Le modèle regex n'est pas valide. Veuillez entrer un modèle regex valide."
+      "errorInvalidRegex": "Le modèle regex n'est pas valide. Veuillez entrer un modèle regex valide.",
+      "previousPatterns": "Modèles précédents"
     }
   },
   "moreOptions": "Plus d'options  ",
