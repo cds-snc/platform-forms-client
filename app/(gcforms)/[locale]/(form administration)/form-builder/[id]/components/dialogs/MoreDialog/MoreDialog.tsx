@@ -23,6 +23,7 @@ import { FileTypeOptions } from "./FileTypeOptions";
 import { NumberFieldOptions } from "./NumberFieldOptions";
 
 import { CopyItem } from "./CopyItem";
+import { CustomRegexOptions } from "./CustomRegexOptions";
 
 // Will re-enable after some futher discussion about crown corp managed data
 // import { ManagedDataOptions } from "./ManagedDataOptions";
@@ -135,6 +136,11 @@ export const MoreDialog = () => {
               <CharacterLimitOptions item={item} setItem={setItem} />
               <SortOptions item={item} setItem={setItem} />
               <FileTypeOptions item={item} setItem={setItem} />
+              {item.type === "textField" && (
+                <InfoDetails summary={t("moreDialog.customRegex.title")}>
+                  <CustomRegexOptions item={item} setItem={setItem} />
+                </InfoDetails>
+              )}
               {item.type !== "dynamicRow" && (
                 <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
                   <p className="mt-6">{t("moreDialog.apiOptionsSection.description")}</p>
