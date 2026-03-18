@@ -137,7 +137,7 @@ export const MoreDialog = () => {
               <SortOptions item={item} setItem={setItem} />
               <FileTypeOptions item={item} setItem={setItem} />
               {item.type === "textField" && (
-                <InfoDetails summary={t("moreDialog.customRegex.title")}>
+                <InfoDetails summary={t("moreDialog.customRegex.title")} className="mb-4">
                   <CustomRegexOptions item={item} setItem={setItem} />
                 </InfoDetails>
               )}
