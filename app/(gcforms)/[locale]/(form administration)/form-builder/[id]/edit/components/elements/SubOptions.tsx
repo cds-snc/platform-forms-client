@@ -10,6 +10,7 @@ import { FormElementTypes, type PropertyChoices } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 import { CopyChoiceOptionsCsvButton } from "@formBuilder/[id]/edit/components/CopyChoiceOptionsCsvButton";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 const AddOption = ({
   elId,
@@ -80,6 +81,7 @@ export const SubOptions = ({
   item: FormElementWithIndex;
   renderIcon?: RenderIcon;
 }) => {
+  const { t } = useTranslation("form-builder");
   const {
     translationLanguagePriority,
     getFormElementById,
@@ -126,6 +128,9 @@ export const SubOptions = ({
                   }
                 );
                 setChangeKey(String(new Date().getTime()));
+                toast.success(
+                  t("choiceOptionsUpload.successNotice", { count: importedChoices.length })
+                );
               }
             : undefined
         }

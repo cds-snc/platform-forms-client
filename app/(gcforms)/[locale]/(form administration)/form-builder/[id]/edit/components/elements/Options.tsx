@@ -12,6 +12,7 @@ import { ConditionalIndicatorOption } from "@formBuilder/components/shared/condi
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 import { CopyChoiceOptionsCsvButton } from "@formBuilder/[id]/edit/components/CopyChoiceOptionsCsvButton";
 import { ClearOptionsDialog } from "./ClearOptionsDialog";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 interface AddButtonProps {
   index: number;
@@ -108,6 +109,7 @@ interface OptionsProps {
 }
 
 export const Options = ({ item, renderIcon }: OptionsProps) => {
+  const { t } = useTranslation("form-builder");
   const {
     elements,
     translationLanguagePriority,
@@ -156,6 +158,9 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
                   ...element.properties,
                   choices: importedChoices,
                 });
+                toast.success(
+                  t("choiceOptionsUpload.successNotice", { count: importedChoices.length })
+                );
               }
             : undefined
         }

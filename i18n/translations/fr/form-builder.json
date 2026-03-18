@@ -301,6 +301,7 @@
     "copyButton": "Copier les options en CSV",
     "copyButtonCopied": "Options copiées en CSV",
     "importButton": "Importer les options",
+    "successNotice": "{{count}} options ont été ajoutées à partir du fichier CSV.",
     "previewCount": "{{count}} lignes prêtes à être importées",
     "previewSummary": "Aperçu des lignes",
     "errors": {

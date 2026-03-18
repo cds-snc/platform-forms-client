@@ -9,6 +9,37 @@ import { Options } from "../Options";
 import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
+const { toastSuccess } = vi.hoisted(() => ({
+  toastSuccess: vi.fn(),
+}));
+
+vi.mock("@clientComponents/forms/ChoiceOptionsCsvUpload", () => ({
+  ChoiceOptionsCsvUpload: ({
+    onImport,
+  }: {
+    onImport: (choices: { en: string; fr: string }[]) => void;
+  }) => (
+    <button
+      type="button"
+      data-testid="mock-choice-options-csv-upload"
+      onClick={() =>
+        onImport([
+          { en: "Imported Option 1", fr: "Option importee 1" },
+          { en: "Imported Option 2", fr: "Option importee 2" },
+        ])
+      }
+    >
+      Mock import choices
+    </button>
+  ),
+}));
+
+vi.mock("@formBuilder/components/shared/Toast", () => ({
+  toast: {
+    success: toastSuccess,
+  },
+}));
+
 beforeAll(() => {
   HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) {
     this.setAttribute("open", "true");
@@ -30,6 +61,7 @@ vi.mock("next-auth/react", () => ({
 describe("Options", () => {
   afterEach(() => {
     cleanup();
+    vi.clearAllMocks();
   });
 
   it("renders without errors", () => {
@@ -234,5 +266,42 @@ describe("Options", () => {
     await user.click(screen.getByRole("button", { name: "Clear options" }));
 
     expect(screen.getByText("Clear all options?")).toBeInTheDocument();
+  });
+
+  it("shows a success toast after importing options from CSV", async () => {
+    const user = userEvent.setup();
+
+    const testStore = {
+      ...store,
+      elements: [
+        {
+          id: 1,
+          type: "radio",
+          properties: {
+            titleEn: "Test Question",
+            titleFr: "Question de test",
+            choices: [],
+            validation: { required: false },
+          },
+        },
+      ],
+    };
+
+    const item = { index: 0, ...testStore.elements[0] } as unknown as Parameters<
+      typeof Options
+    >[0]["item"];
+
+    render(
+      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
+      <Providers form={testStore}>
+        <Options item={item} formId="test-form" />
+      </Providers>
+    );
+
+    await user.click(screen.getByTestId("mock-choice-options-csv-upload"));
+
+    await waitFor(() => {
+      expect(toastSuccess).toHaveBeenCalledWith("2 options were added from the CSV file.");
+    });
   });
 });
