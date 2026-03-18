@@ -32,6 +32,7 @@ const AddOption = ({
     setChangeKey: s.setChangeKey,
   }));
   const isLimitReached = (choiceCount ?? 0) >= MAX_CHOICE_AMOUNT;
+  const choiceLimitReachedMessage = t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT });
 
   return (
     <div className="flex flex-wrap items-center gap-x-1">
@@ -51,11 +52,13 @@ const AddOption = ({
         </Button>
         <CopyChoiceOptionsCsvButton choices={copyChoices} />
       </div>
-      {isLimitReached && (
-        <strong className="ml-2 mt-4 inline-block text-sm font-bold text-red-700">
-          {t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT })}
-        </strong>
-      )}
+      <div aria-live="polite">
+        {isLimitReached && (
+          <strong className={`mt-4 inline-block text-sm font-bold text-red-700`}>
+            {choiceLimitReachedMessage}
+          </strong>
+        )}
+      </div>
       {onImport && (
         <>
           <span className="mt-4 text-sm text-slate-700">{t("or")}</span>

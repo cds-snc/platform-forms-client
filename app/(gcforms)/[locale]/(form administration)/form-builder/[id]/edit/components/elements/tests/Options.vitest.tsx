@@ -173,7 +173,9 @@ describe("Options", () => {
     );
 
     expect(screen.getByRole("button", { name: "Add option" })).toBeDisabled();
-    expect(screen.getByText(`You can add up to ${MAX_CHOICE_AMOUNT} options.`)).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      `You can add up to ${MAX_CHOICE_AMOUNT} options.`
+    );
   });
 
   it("clears all options after confirmation", async () => {

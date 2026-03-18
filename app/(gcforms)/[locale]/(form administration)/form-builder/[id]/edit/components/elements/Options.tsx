@@ -58,6 +58,7 @@ const AddOptions = ({
     setFocusInput: s.setFocusInput,
   }));
   const isLimitReached = choiceCount >= MAX_CHOICE_AMOUNT;
+  const choiceLimitReachedMessage = t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT });
 
   return (
     <div className="flex flex-col items-start gap-y-3">
@@ -73,11 +74,15 @@ const AddOptions = ({
           />
           <CopyChoiceOptionsCsvButton choices={copyChoices} />
         </div>
-        {isLimitReached && (
-          <strong className="ml-2 mt-4 inline-block text-sm font-bold text-red-700">
-            {t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT })}
-          </strong>
-        )}
+
+        <div aria-live="polite">
+          {isLimitReached && (
+            <strong className={`mt-4 inline-block text-sm font-bold text-red-700`}>
+              {choiceLimitReachedMessage}
+            </strong>
+          )}
+        </div>
+
         {onImport && (
           <>
             <span className="mt-4 text-sm text-slate-700">{t("or")}</span>
