@@ -47,38 +47,43 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
         setValue(selectedItem);
       },
       initialInputValue: field.value || "",
-      stateReducer(state, actionChanges) {
-        const { changes, type } = actionChanges;
-        // On iOS: keep the list open when the input loses focus. We blur the input
-        // intentionally (see useEffect below) to dismiss the virtual keyboard so
-        // VoiceOver can swipe to list options. Without this, downshift would close
-        // the list the moment the input's blur fires.
-        if (isIOSRef.current && type === useCombobox.stateChangeTypes.InputBlur) {
-          return { ...changes, isOpen: state.isOpen };
-        }
-        return changes;
-      },
     });
 
   // iOS VoiceOver cannot navigate a custom combobox listbox while the virtual
   // keyboard is visible: the keyboard physically covers the list and the
   // aria-activedescendant pattern is not announced on iOS VoiceOver.
   //
-  // Fix: blur the input after the user pauses typing so the keyboard dismisses
-  // and they can swipe to navigate the list. This is a debounce — each keystroke
-  // resets the timer because `items` gets a new array reference on every
-  // Array.filter() call, re-running the effect and clearing the previous timer.
-  // The stateReducer above suppresses the resulting InputBlur so the list stays open.
+  // Fix: after the user pauses typing, set the input's readOnly DOM property to
+  // true. On iOS, this dismisses the virtual keyboard without firing a blur event
+  // and without changing document.activeElement — so the input stays focused,
+  // downshift keeps the list open, and VoiceOver can swipe right to navigate the
+  // list options. When the user taps the input again (onFocus below) or the list
+  // closes (isOpen → false), readOnly is reset and the keyboard returns.
+  //
+  // We mutate the DOM property directly rather than using React state because:
+  // 1. An effect mutating a DOM node is "updating an external system" — the
+  //    intended use of effects — and avoids the React compiler's cascading-setState
+  //    warning that fires when setState is called synchronously in an effect body.
+  // 2. No re-render is needed; the browser reacts to readOnly immediately.
+  //
+  // The debounce works because `items` is a new array reference on every
+  // Array.filter() call, so each keystroke cancels and resets the 700ms timer.
   useEffect(() => {
-    if (!isIOSRef.current || !isOpen) return;
+    if (!isIOSRef.current) return;
+    const inputEl = id ? (document.getElementById(id) as HTMLInputElement | null) : null;
+    if (!inputEl) return;
+
+    if (!isOpen) {
+      // List closed (selection made, Escape pressed, etc.) — restore keyboard for next time.
+      inputEl.readOnly = false;
+      return;
+    }
+
     const timer = setTimeout(() => {
-      const inputEl = id ? document.getElementById(id) : null;
-      if (inputEl && document.activeElement === inputEl) {
-        (inputEl as HTMLInputElement).blur();
-      }
-    }, 700); // long enough for the user to type multiple characters before dismissing
+      inputEl.readOnly = true;
+    }, 700); // long enough for a comfortable multi-character typing burst
     return () => clearTimeout(timer);
-  }, [isOpen, id, items]); // items in deps: changes on every keystroke, resetting the debounce
+  }, [isOpen, id, items]); // items in deps: new reference on each keystroke, resetting the debounce
 
   // Compute a status string — updating text inside an always-present node is
   // reliably announced by AT (unlike conditionally inserting a new populated node).
@@ -95,7 +100,14 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
 
         {/* Note: downshift adds and updates the role="combobox" aria-activedescendant relationship with the list below */}
         <input
-          {...getInputProps()}
+          {...getInputProps({
+            // Reset readOnly on focus — on iOS this restores the keyboard after the
+            // user has browsed the list and taps the input again to type more.
+            // On other browsers readOnly is never set, so this is always a no-op.
+            onFocus: (e: React.FocusEvent<HTMLInputElement>) => {
+              e.currentTarget.readOnly = false;
+            },
+          })}
           aria-describedby={ariaDescribedBy}
           id={id}
           required={required}
