@@ -285,7 +285,8 @@
     "button": "Supprimer les options",
     "title": "Supprimer toutes les options?",
     "description": "Cette action supprimera toutes les options pour cette question. Toutes les règles liées à ces options seront aussi supprimées.",
-    "confirm": "Supprimer les options"
+    "confirm": "Supprimer les options",
+    "successToast": "Les options ont été supprimées avec succès."
   },
   "choiceLimitReached": "Vous pouvez ajouter jusqu’à {{maxChoices}} options.",
   "choiceOptionsUpload": {

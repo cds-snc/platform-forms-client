@@ -214,6 +214,7 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
     }
 
     setShowClearDialog(false);
+    toast.success(t("clearOptions.successToast"));
   };
 
   return (

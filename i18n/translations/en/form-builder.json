@@ -285,7 +285,8 @@
     "button": "Clear options",
     "title": "Clear all options?",
     "description": "This will remove all options for this question. Any rules linked to these options will also be removed.",
-    "confirm": "Clear options"
+    "confirm": "Clear options",
+    "successToast": "Options were cleared successfully."
   },
   "choiceLimitReached": "You can add up to {{maxChoices}} options.",
   "choiceOptionsUpload": {

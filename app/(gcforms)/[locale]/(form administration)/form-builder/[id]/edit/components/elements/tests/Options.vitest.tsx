@@ -220,6 +220,7 @@ describe("Options", () => {
       expect(screen.queryByDisplayValue("Second Option")).not.toBeInTheDocument();
     });
 
+    expect(toastSuccess).toHaveBeenCalledWith("Options were cleared successfully.");
     expect(screen.getByRole("button", { name: "Add option" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Clear options" })).not.toBeInTheDocument();
   });
