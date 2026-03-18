@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, Label } from "@clientComponents/forms";
+import { Combobox, Description, Label } from "@clientComponents/forms";
 import { managedData } from "@lib/managedData";
 import { Language } from "@lib/types/form-builder-types";
 
@@ -20,26 +20,12 @@ export const Departments = () => {
       <p>{t("addElementDialog.departments.description")}</p>
 
       <ExampleWrapper className="mt-4">
-        <Label htmlFor="dropdown" className="gcds-label">
+        <Label htmlFor="dropdown" id="label-dropdown" className="gcds-label">
           {t("addElementDialog.departments.selectOption")}
         </Label>
         <Description id="dropdown">{t("addElementDialog.departments.selectOne")}</Description>
         <div className="overflow-hidden p-2">
-          <div className="gcds-select-wrapper">
-            <select
-              id="dropdown"
-              className="gc-dropdown"
-              aria-describedby="desc-dropdown"
-              defaultValue=""
-            >
-              <option value="">{t("addElementDialog.departments.example.select")}</option>
-              {choices?.map((choice) => (
-                <option key={choice} value={choice}>
-                  {choice}
-                </option>
-              ))}
-            </select>
-          </div>
+          <Combobox name="name" id="dropdown" ariaDescribedBy="desc-dropdown" choices={choices} />
         </div>
       </ExampleWrapper>
     </>
