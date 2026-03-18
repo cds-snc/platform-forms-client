@@ -59,8 +59,8 @@ export const CustomRegexOptions = ({
           ...item.properties,
           validation: {
             ...item.properties.validation,
-            regex: value,
-            type: "custom",
+            regex: value || undefined,
+            type: value ? "custom" : undefined,
             required: item.properties.validation?.required ?? false,
           },
         },
