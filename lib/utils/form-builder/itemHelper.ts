@@ -1,4 +1,4 @@
-import { FormElement, FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
+import { FormElement, FormElementTypes, ValidationInputType } from "@lib/types";
 import { Language, LocalizedElementProperties } from "../../types/form-builder-types";
 import { isValidatedTextType, isAutoCompleteField } from "@lib/utils/form-builder";
 
@@ -91,7 +91,7 @@ const updateTextElement = (element: FormElement, type: ElementType) => {
     newElement.properties.validation = {
       ...newElement.properties.validation,
       required: newElement.properties.validation?.required || false,
-      type: type as HTMLTextInputTypeAttribute,
+      type: type as ValidationInputType,
     };
 
     newElement.properties.autoComplete = type;
@@ -107,7 +107,7 @@ const updateTextElement = (element: FormElement, type: ElementType) => {
     newElement.properties.validation = {
       ...newElement.properties.validation,
       required: newElement.properties.validation?.required || false,
-      type: type as HTMLTextInputTypeAttribute,
+      type: type as ValidationInputType,
     };
   }
 

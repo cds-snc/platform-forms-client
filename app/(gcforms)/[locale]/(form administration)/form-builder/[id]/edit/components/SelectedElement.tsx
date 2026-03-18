@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
+import { FormElementTypes, ValidationInputType } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 
 import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
@@ -42,7 +42,7 @@ const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const validationType = item.properties?.validation?.type;
   const type = item.type;
 
-  let selectedType: FormElementTypes | HTMLTextInputTypeAttribute = type;
+  let selectedType: FormElementTypes | ValidationInputType = type;
 
   if (!type) {
     return elementOptions[1];
