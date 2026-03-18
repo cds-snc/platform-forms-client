@@ -25,6 +25,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
 
   useEffect(() => {
     // iPadOS 13+ reports as MacIntel but has touch points — check both.
+    // Note that Android TalkBack does not have the same issues and should work as is.
     isIOSRef.current =
       /iPad|iPhone|iPod/.test(navigator.userAgent) ||
       (/Mac/.test(navigator.platform) && navigator.maxTouchPoints > 1);
@@ -63,12 +64,11 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   // keyboard is visible: the keyboard physically covers the list and the
   // aria-activedescendant pattern is not announced on iOS VoiceOver.
   //
-  // Fix: when the list opens, wait one tick (so the typed character registers)
-  // then blur the input to dismiss the keyboard. The list stays open because
-  // the stateReducer above suppresses the resulting InputBlur action. VoiceOver
-  // users can then swipe right past the live-region status to reach the list
-  // options. The input element is found by its id to avoid passing an object
-  // ref into a function during render (React 19 compiler restriction).
+  // Fix: blur the input after the user pauses typing so the keyboard dismisses
+  // and they can swipe to navigate the list. This is a debounce — each keystroke
+  // resets the timer because `items` gets a new array reference on every
+  // Array.filter() call, re-running the effect and clearing the previous timer.
+  // The stateReducer above suppresses the resulting InputBlur so the list stays open.
   useEffect(() => {
     if (!isIOSRef.current || !isOpen) return;
     const timer = setTimeout(() => {
@@ -76,9 +76,9 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       if (inputEl && document.activeElement === inputEl) {
         (inputEl as HTMLInputElement).blur();
       }
-    }, 150);
+    }, 700); // long enough for the user to type multiple characters before dismissing
     return () => clearTimeout(timer);
-  }, [isOpen, id]);
+  }, [isOpen, id, items]); // items in deps: changes on every keystroke, resetting the debounce
 
   // Compute a status string — updating text inside an always-present node is
   // reliably announced by AT (unlike conditionally inserting a new populated node).
