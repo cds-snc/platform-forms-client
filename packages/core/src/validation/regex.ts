@@ -5,7 +5,7 @@
 export const getRegexByType = (
   type: string | undefined,
   t: (str: string) => string,
-  value?: string
+  regex?: string
 ) => {
   interface RegexProps {
     [key: string]: {
@@ -50,7 +50,7 @@ export const getRegexByType = (
   };
   if (type === "custom") {
     return {
-      regex: value ? new RegExp(value) : null,
+      regex: regex ? new RegExp(regex) : null,
       error: t("input-validation.regex"),
     };
   }

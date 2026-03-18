@@ -356,7 +356,16 @@
                 },
                 "type": {
                   "type": "string",
-                  "enum": ["email", "alphanumeric", "text", "name", "number", "phone", "date"]
+                  "enum": [
+                    "email",
+                    "alphanumeric",
+                    "text",
+                    "name",
+                    "number",
+                    "phone",
+                    "date",
+                    "custom"
+                  ]
                 },
                 "regex": {
                   "type": "string"

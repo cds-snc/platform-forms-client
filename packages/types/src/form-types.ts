@@ -37,7 +37,8 @@ export type HTMLTextInputTypeAttribute =
   | "password"
   | "search"
   | "tel"
-  | "url";
+  | "url"
+  | "custom";
 
 // all the possible types of form elements
 export const FormElementTypes = {

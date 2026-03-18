@@ -30,11 +30,12 @@ export const isFieldResponseValid = (
     case FormElementTypes.textField: {
       const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
-      let currentRegex = getRegexByType(validator.type, t, value as string);
+
+      let currentRegex = getRegexByType(validator.type, t, validator.regex);
 
       // Check if negative numbers are allowed.
       if (formElement.properties.allowNegativeNumbers && validator.type === "number") {
-        currentRegex = getRegexByType("canBeNegativeNumber", t, value as string);
+        currentRegex = getRegexByType("canBeNegativeNumber", t);
       }
 
       if (validator.type && currentRegex && currentRegex.regex) {
