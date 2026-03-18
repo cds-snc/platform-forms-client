@@ -1,0 +1,180 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-header-brand-border-color: #d9d9d9;
+  --gcds-header-brand-border-width: 0.0625rem;
+  --gcds-header-brand-grid-gap: 0.5rem;
+  --gcds-header-brand-padding: 0.5rem 0 1rem;
+  --gcds-header-container-max-width: 71.25rem;
+  --gcds-header-margin: 0 0 3rem;
+  --gcds-header-menu-top-nav-mobile-trigger-margin: 1rem;
+  --gcds-header-skiptonav-top: 0.75rem;
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-lang-toggle-font-desktop: 400 1rem/150% 'Noto Sans', sans-serif;
+  /** Mandatory elements alignment: sub-components of header use 16px font */
+  --gcds-lang-toggle-font-mobile: 700 1.125rem/155% 'Noto Sans', sans-serif;
+  /** Mandatory elements alignment: size 18px  */
+  --gcds-lang-toggle-padding: 0.375rem 0.625rem;
+}
+
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --gcds-signature-color-flag: #eb2d37;
+  /** Signature flag colour - FIP red */
+  --gcds-signature-color-text: #000000;
+  --gcds-signature-signature-height: 1.21875rem;
+  --gcds-signature-signature-height-desktop: 2.09375rem;
+  --gcds-signature-white-default: #ffffff;
+  --gcds-signature-wordmark-height: 3rem;
+}
+
+.gcds-header__brand {
+  container: component brand/inline-size;
+  -webkit-border-after: var(--gcds-header-brand-border-width) solid var(--gcds-header-brand-border-color);
+          border-block-end: var(--gcds-header-brand-border-width) solid var(--gcds-header-brand-border-color);
+  padding: var(--gcds-header-brand-padding);
+}
+
+@layer default {
+  .gcds-header__container {
+    margin: var(--gcds-header-margin) !important;
+  }
+
+  .gcds-header__container .gcds-header__container {
+    justify-content: space-between;
+    width: 90%;
+    max-width: var(--gcds-header-container-max-width);
+    margin: 0 auto;
+  }
+}
+
+@layer brand {
+  .gcds-header__container .gcds-header__brand {
+    container: component brand/inline-size;
+    -webkit-border-after: var(--gcds-header-brand-border-width) solid var(--gcds-header-brand-border-color);
+            border-block-end: var(--gcds-header-brand-border-width) solid var(--gcds-header-brand-border-color);
+    padding: var(--gcds-header-brand-padding);
+  }
+
+  .gcds-header__container .gcds-header__brand .brand__container {
+    display: grid;
+    grid-gap: var(--gcds-header-brand-grid-gap);
+    grid-template-columns: 1fr 0.1fr;
+    grid-template-areas: "signature toggle";
+    width: 90%;
+    max-width: var(--gcds-header-container-max-width);
+    margin: 0 auto;
+  }
+
+  .gcds-header__container .gcds-header__brand .brand__container :is(.brand__toggle) {
+    grid-area: toggle;
+    text-align: right;
+  }
+
+  .gcds-header__container .gcds-header__brand .brand__container :is(.brand__signature) {
+    grid-area: signature;
+    align-content: center;
+  }
+}
+
+@layer wide {
+  @container brand (width >= 51em) {
+    .gcds-header__container .gcds-header__brand .brand__container {
+      grid-template-areas: "toggle toggle" "signature search";
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+@layer reset, default, type.signature, type.wordmark, variant.colour, variant.white, desktop;
+
+.gcds-signature__container {
+  display: block;
+  width: -webkit-fit-content;
+  width: fit-content;
+}
+
+.gcds-signature {
+  display: flex;
+  align-items: center;
+}
+
+.gcds-signature svg {
+  display: block;
+  max-width: 100%;
+}
+
+.gcds-signature svg .fip_flag {
+  fill: var(--gcds-signature-color-flag);
+}
+
+.gcds-signature__container:not([type=wordmark]) svg {
+  height: var(--gcds-signature-signature-height);
+}
+
+/* Note: viewport specific style decision */
+
+.gcds-signature:not([type=wordmark]) svg {
+  height: var(--gcds-signature-signature-height);
+}
+
+@media screen and (width >= 64em) {
+  .gcds-signature:not([type=wordmark]) svg {
+    height: var(--gcds-signature-signature-height-desktop);
+  }
+}
+
+.gcds-lang-toggle a {
+  display: inline-block;
+  padding: var(--gcds-lang-toggle-padding);
+}
+
+.gcds-lang-toggle span {
+  display: none;
+}
+
+.gcds-lang-toggle abbr {
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+/* Note: viewport specific style decision */
+
+@media screen and (width >= 48em) {
+  .gcds-lang-toggle a {
+    font: var(--gcds-lang-toggle-font-desktop);
+    padding-inline: 0 !important;
+  }
+
+  .gcds-lang-toggle span {
+    display: initial;
+  }
+
+  .gcds-lang-toggle abbr {
+    display: none;
+  }
+}
+
+@media screen and (width < 48em) {
+  .gcds-lang-toggle a {
+    font: var(--gcds-lang-toggle-font-mobile);
+    font-weight: 700;
+  }
+}
+
+/* Override for Preview header  */
+
+.gc-form-preview-header .brand__container {
+  width: 100%;
+}

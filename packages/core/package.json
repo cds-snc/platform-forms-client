@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/core",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -18,7 +18,8 @@
     "vitest": "^1.0.0"
   },
   "scripts": {
-    "build": "tsdown src/index.ts --format cjs,esm --dts --clean",
+    "build": "tsdown src/index.ts --format cjs,esm --dts --clean && node scripts/build-styles.mjs",
+    "build:styles": "node scripts/build-styles.mjs",
     "test": "vitest --config vitest.config.ts",
     "test:watch": "vitest --config vitest.config.ts --watch",
     "prepack": "yarn build",
@@ -32,7 +33,10 @@
       "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
-    }
+    },
+    "./styles/*.css": "./styles/*.css",
+    "./styles/*": "./styles/*",
+    "./tailwind-preset": "./tailwind-preset.js"
   },
   "tsdown": {
     "entry": "src/index.ts",
@@ -40,6 +44,11 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "styles",
+    "tailwind-preset.js",
+    "tailwind-preset.d.ts",
+    "tailwind.build.config.js",
+    "scripts"
   ]
 }
