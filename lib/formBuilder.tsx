@@ -300,6 +300,25 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     }
     case FormElementTypes.combobox: {
+      // Managed choice lists (e.g. departments) use a native <select> for
+      // full mobile screen-reader support (TalkBack / VoiceOver hints).
+      if (element.properties.managedChoices) {
+        return (
+          <div className="focus-group">
+            {labelComponent}
+            {description && <Description id={`${id}`}>{description}</Description>}
+            <Dropdown
+              id={`${id}`}
+              name={`${id}`}
+              ariaDescribedBy={description ? `desc-${id}` : undefined}
+              choices={choices}
+              required={isRequired}
+              lang={lang}
+              key={`${id}-${lang}`}
+            />
+          </div>
+        );
+      }
       return (
         <div className="focus-group">
           {labelComponent}
