@@ -185,7 +185,7 @@ export const TemplateStoreProvider = ({
   const store = useMemo(() => {
     // When there is an incoming form with a different id clear it first
     if (props.id) {
-      clearTemplateStorage(props.id);
+      clearTemplateStorage(props.id, props.isPublished);
     }
     return createTemplateStore(getFlag, props);
     // eslint-disable-next-line react-hooks/exhaustive-deps

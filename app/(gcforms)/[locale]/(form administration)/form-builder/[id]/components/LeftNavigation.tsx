@@ -93,6 +93,17 @@ export const LeftNavigation = ({ id }: { id: string }) => {
             </LeftNav>
           </li>
         )}
+        {isPublished && (
+          <li>
+            <LeftNav
+              testid="published"
+              {...linkHelper({ route: "published", id, segment, language })}
+              title={t("published")}
+            >
+              <NavPublishIcon />
+            </LeftNav>
+          </li>
+        )}
         <li>
           <LeftNav
             testid="responses"

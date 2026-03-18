@@ -7,5 +7,10 @@
     "text2": "Open the form in Settings"
   },
   "backButton": "Back to home",
-  "defaultFormName": "Untitled form"
+  "defaultFormName": "Untitled form",
+  "temporarilyUnavailableAvailableMessage": "This form is available again. Reload this page to continue.",
+  "temporarilyUnavailableReload": "Reload page",
+  "temporarilyUnavailableUnavailableMessage": "This form is now offline for maintenance. Reload this page for the latest status.",
+  "temporarilyUnavailableTitle": "This form is offline for maintenance",
+  "temporarilyUnavailableBody": "This form is temporarily unavailable while maintenance is underway. Please check back later."
 }

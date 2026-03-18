@@ -41,6 +41,10 @@ export const processFormData = async ({
     throw new FormNotFoundError("No form could be found with that ID");
   }
 
+  if (!form.isPublished) {
+    throw new FormIsClosedError("Form is temporarily unavailable and not accepting submissions");
+  }
+
   // Check to see if form is closed and block response submission
   if (form.closingDate && new Date(form.closingDate) < new Date()) {
     throw new FormIsClosedError("Form is closed and not accepting submissions");

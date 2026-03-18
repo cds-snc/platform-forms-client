@@ -7,5 +7,10 @@
     "text2": "Ouvrir le formulaire dans les paramètres"
   },
   "backButton": "Retourner à l’accueil",
-  "defaultFormName": "Formulaire sans titre"
+  "defaultFormName": "Formulaire sans titre",
+  "temporarilyUnavailableAvailableMessage": "Ce formulaire est de nouveau disponible. Rechargez cette page pour continuer.",
+  "temporarilyUnavailableReload": "Recharger la page",
+  "temporarilyUnavailableUnavailableMessage": "Ce formulaire est maintenant hors ligne pour maintenance. Rechargez cette page pour obtenir l’etat le plus recent.",
+  "temporarilyUnavailableTitle": "Ce formulaire est hors ligne pour maintenance",
+  "temporarilyUnavailableBody": "Ce formulaire est temporairement indisponible pendant des travaux de maintenance. Veuillez revenir plus tard."
 }

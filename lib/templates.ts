@@ -439,6 +439,24 @@ export async function getTemplatePublishedStatus(formID: string): Promise<boolea
   return template.isPublished;
 }
 
+export async function hasPublishedTemplateArchive(formID: string): Promise<boolean> {
+  const templateArchive = await prisma.templateArchive
+    .findFirst({
+      where: {
+        templateId: formID,
+      },
+      select: {
+        id: true,
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  return templateArchive !== null;
+}
+
 /**
  * Get a form template by ID (includes full template information but requires view permission)
  * @param formID ID of form template
@@ -668,8 +686,11 @@ export async function updateIsPublishedForTemplate(
     throw e;
   });
 
-  // Delete all form responses created during draft mode
-  if (newPublishStatus && process.env.APP_ENV !== "test") {
+  const hasArchive = await hasPublishedTemplateArchive(formID);
+
+  // Delete draft responses on first publish only. Republish-from-edit must preserve
+  // existing responses and instead block until they are processed.
+  if (newPublishStatus && !hasArchive && process.env.APP_ENV !== "test") {
     try {
       await deleteDraftFormResponses(formID);
     } catch (e) {
@@ -680,25 +701,53 @@ export async function updateIsPublishedForTemplate(
 
       throw e;
     }
+  } else if (newPublishStatus && hasArchive) {
+    const numOfUnprocessedSubmissions = await unprocessedSubmissions(formID, true);
+    if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
   }
 
-  const updatedTemplate = await prisma.template
-    .update({
-      where: {
-        id: formID,
-        isPublished: {
-          not: newPublishStatus, // Only update if the current publish status is different from the new one,
+  const updatedTemplate = await prisma
+    .$transaction(async (transaction) => {
+      if (!newPublishStatus) {
+        const templateToArchive = await transaction.template.findUnique({
+          where: {
+            id: formID,
+          },
+          select: {
+            jsonConfig: true,
+            isPublished: true,
+          },
+        });
+
+        if (templateToArchive?.isPublished) {
+          await transaction.templateArchive.create({
+            data: {
+              templateId: formID,
+              jsonConfig: templateToArchive.jsonConfig as Prisma.InputJsonValue,
+            },
+          });
+        }
+      }
+
+      return transaction.template.update({
+        where: {
+          id: formID,
+          isPublished: {
+            not: newPublishStatus, // Only update if the current publish status is different from the new one,
+          },
         },
-      },
-      data: {
-        isPublished: newPublishStatus,
-        publishReason: publishReason,
-        publishFormType: publishFormType,
-        publishDesc: publishDescription,
-      },
-      include: {
-        deliveryOption: true,
-      },
+        data: {
+          isPublished: newPublishStatus,
+          ...(newPublishStatus && {
+            publishReason: publishReason,
+            publishFormType: publishFormType,
+            publishDesc: publishDescription,
+          }),
+        },
+        include: {
+          deliveryOption: true,
+        },
+      });
     })
     .catch((e) => prismaErrors(e, null));
 

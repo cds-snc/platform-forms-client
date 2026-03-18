@@ -6,7 +6,7 @@ export const clearTemplateStore = () => {
   sessionStorage.removeItem("form-storage");
 };
 
-export const clearTemplateStorage = (id: string) => {
+export const clearTemplateStorage = (id: string, isPublished?: boolean) => {
   if (typeof window === "undefined") return;
 
   const formStorage = sessionStorage.getItem("form-storage");
@@ -15,9 +15,15 @@ export const clearTemplateStorage = (id: string) => {
 
   const storage = JSON.parse(formStorage);
 
-  if (storage && storage.state.id !== id) {
+  if (
+    storage &&
+    (storage.state.id !== id ||
+      (typeof isPublished === "boolean" && storage.state.isPublished !== isPublished))
+  ) {
     sessionStorage.removeItem("form-storage");
-    logMessage.debug(`Cleared form-storage: ${id}, ${storage.state.id}`);
+    logMessage.debug(
+      `Cleared form-storage: ${id}, ${storage.state.id}, ${isPublished}, ${storage.state.isPublished}`
+    );
     return;
   }
 

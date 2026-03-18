@@ -26,7 +26,7 @@ import v8 from "v8";
 import { Prisma } from "@prisma/client";
 
 import { logEvent } from "@lib/auditLogs";
-import { unprocessedSubmissions } from "@lib/vault";
+import { deleteDraftFormResponses, unprocessedSubmissions } from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
 import { AccessControlError } from "@lib/auth/errors";
 import {
@@ -60,6 +60,9 @@ const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 jest.mock("@lib/vault");
 
 const mockUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
+  shallow: true,
+});
+const mockDeleteDraftFormResponses = jest.mocked(deleteDraftFormResponses, {
   shallow: true,
 });
 
@@ -110,6 +113,16 @@ describe("Template CRUD functions", () => {
 
     // Ensure vault submission count mock state does not leak between tests
     beforeEach(() => {
+      (prismaMock.$transaction as jest.MockedFunction<any>).mockImplementation(
+        async (callback: (transaction: typeof prismaMock) => Promise<unknown>) =>
+          callback(prismaMock)
+      );
+      (prismaMock.templateArchive.findFirst as jest.MockedFunction<any>).mockResolvedValue(null);
+      (prismaMock.templateArchive.create as jest.MockedFunction<any>).mockResolvedValue({
+        id: "archive-1",
+      });
+      mockDeleteDraftFormResponses.mockReset();
+      mockDeleteDraftFormResponses.mockResolvedValue({ responsesDeleted: 0 });
       mockUnprocessedSubmissions.mockReset();
       // Default to no unprocessed submissions unless a test overrides
       mockUnprocessedSubmissions.mockResolvedValue(false);
@@ -403,6 +416,61 @@ describe("Template CRUD functions", () => {
         { id: "formtestID", type: "Form" },
         "PublishForm"
       );
+    });
+
+    it("Archives the current published template before moving it back to draft", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        jsonConfig: formConfiguration,
+        isPublished: true,
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration, false)
+      );
+
+      const updatedTemplate = await updateIsPublishedForTemplate("formtestID", false, "", "", "");
+
+      expect(prismaMock.templateArchive.create).toHaveBeenCalledWith({
+        data: {
+          templateId: "formtestID",
+          jsonConfig: formConfiguration,
+        },
+      });
+
+      expect(updatedTemplate).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          isPublished: false,
+        })
+      );
+    });
+
+    it("Blocks republishing when archived forms still have unprocessed submissions", async () => {
+      (prismaMock.templateArchive.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+        id: "archive-1",
+      });
+      mockUnprocessedSubmissions.mockResolvedValueOnce(true);
+
+      await expect(updateIsPublishedForTemplate("formtestID", true, "", "", "")).rejects.toThrow(
+        TemplateHasUnprocessedSubmissions
+      );
+
+      expect(mockDeleteDraftFormResponses).not.toHaveBeenCalled();
+      expect(prismaMock.template.update).not.toHaveBeenCalled();
+    });
+
+    it("Skips draft response deletion when republishing a previously archived form", async () => {
+      (prismaMock.templateArchive.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+        id: "archive-1",
+      });
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration, true)
+      );
+
+      await updateIsPublishedForTemplate("formtestID", true, "", "", "");
+
+      expect(mockDeleteDraftFormResponses).not.toHaveBeenCalled();
+      expect(mockUnprocessedSubmissions).toHaveBeenCalledWith("formtestID", true);
     });
 
     it("Update assigned users for template", async () => {

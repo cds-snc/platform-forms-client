@@ -123,6 +123,26 @@ describe("submitForm", () => {
     );
   });
 
+  it("should reject submissions when the form is temporarily unpublished", async () => {
+    (getPublicTemplateByID as Mock).mockResolvedValue({
+      ...mockTemplate,
+      isPublished: false,
+    });
+
+    const result = await submitForm(mockValues, mockLanguage, mockFormId);
+
+    expect(result).toEqual({
+      id: mockFormId,
+      error: {
+        name: "FormClosedError",
+        message: "Form is temporarily unavailable",
+      },
+    });
+
+    expect(processFormData).not.toHaveBeenCalled();
+    expect(sendNotifications).not.toHaveBeenCalled();
+  });
+
   it("should successfully submit form and return submission details", async () => {
     const result = await submitForm(mockValues, mockLanguage, mockFormId);
 
@@ -222,4 +242,5 @@ describe("submitForm", () => {
       formRecord: templateWithFileInput,
       t: expect.any(Function)
     });
-  });});
+  });
+});

@@ -51,6 +51,13 @@ export async function submitForm(
         throw new Error(`Could not find any form associated to identifier ${formId}`);
       }
 
+      if (!template.isPublished) {
+        return {
+          id: formId,
+          error: { name: FormStatus.FORM_CLOSED_ERROR, message: "Form is temporarily unavailable" },
+        };
+      }
+
       if (template.closingDate && dateHasPast(Date.parse(template.closingDate))) {
         return {
           id: formId,

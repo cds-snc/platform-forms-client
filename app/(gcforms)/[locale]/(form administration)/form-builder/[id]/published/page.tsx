@@ -3,12 +3,13 @@ import { serverTranslation } from "@i18n";
 import { authCheckAndThrow } from "@lib/actions";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getTemplatePublishedStatus } from "@lib/templates";
+import { getTemplatePublishedStatus, hasPublishedTemplateArchive } from "@lib/templates";
 
 import { RocketIcon } from "@serverComponents/icons/RocketIcon";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { getOrigin } from "@lib/origin";
 import Markdown from "markdown-to-jsx";
+import { StartEditingPublishedFormButton } from "./components/StartEditingPublishedFormButton";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -41,9 +42,12 @@ export default async function Page(props: { params: Promise<{ locale: string; id
     redirect(`/${locale}/auth/login`);
   }
 
-  const isPublished = await getTemplatePublishedStatus(id);
+  const [isPublished, hasPublishedArchive] = await Promise.all([
+    getTemplatePublishedStatus(id),
+    hasPublishedTemplateArchive(id),
+  ]);
 
-  if (!isPublished) {
+  if (!isPublished && !hasPublishedArchive) {
     redirect(`/${locale}/form-builder/${id}/publish?from=published`);
   }
 
@@ -62,8 +66,13 @@ export default async function Page(props: { params: Promise<{ locale: string; id
             </div>
           </div>
           <div>
-            <h2 className="mb-1 pb-0"> {t("publishedTitle")}</h2>
-            <p className="mb-5 mt-0">{t("publishedViewLinks")}</p>
+            <h2 className="mb-1 pb-0">
+              {" "}
+              {isPublished ? t("publishedTitle") : t("publishedOfflineTitle")}
+            </h2>
+            <p className="mb-5 mt-0">
+              {isPublished ? t("publishedViewLinks") : t("publishedOfflineDescription")}
+            </p>
             <p>
               <strong>{t("english")}</strong>{" "}
               <a href={linkEn} data-testid="published-link-en">
@@ -82,6 +91,22 @@ export default async function Page(props: { params: Promise<{ locale: string; id
           <h3 className="mb-1">{t("publishedErrors")}</h3>
           <Markdown options={{ forceBlock: true }}>{t("ifYouAreExperiencingProblems")}</Markdown>
         </div>
+        {isPublished ? (
+          <StartEditingPublishedFormButton id={id} locale={language} />
+        ) : (
+          <div className="mb-10 max-w-3xl">
+            <h3 className="mb-1">{t("publishedOfflineActionsTitle")}</h3>
+            <p className="mb-4">{t("publishedOfflineActionsDescription")}</p>
+            <div className="flex gap-3">
+              <LinkButton.Primary href={`/${language}/form-builder/${id}/edit`}>
+                {t("edit")}
+              </LinkButton.Primary>
+              <LinkButton.Secondary href={`/${language}/form-builder/${id}/publish`}>
+                {t("publish")}
+              </LinkButton.Secondary>
+            </div>
+          </div>
+        )}
         <div className="mb-10">
           <h3 className="mb-1">{t("provideFeedback")}</h3>
           <Markdown options={{ forceBlock: true }}>{t("didYouFindThisToolHelpful")}</Markdown>
