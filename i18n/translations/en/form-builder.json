@@ -641,8 +641,9 @@
       "errorMaxRows": "The maximum number of answers cannot exceed {{maxRows}}."
     },
     "customRegex": {
-      "title": "Custom regex pattern",
-      "description": "Add a custom regex pattern to validate the answer to this question. Be sure to test your form thoroughly if you use this option.",
+      "title": "Customize input validation",
+      "description": "Use a regular expression (regex) to create custom validation for this question.",
+      "label": "Regex",
       "errorInvalidRegex": "The regex pattern is invalid. Please enter a valid regex pattern.",
       "previousPatterns": "Previous patterns"
     }

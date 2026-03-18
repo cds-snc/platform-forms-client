@@ -78,8 +78,12 @@ export const CustomRegexOptions = ({
   return (
     <>
       <section className="mb-4 mt-6">
-        <Label htmlFor={`questionId-${item.id}`}>{t("moreDialog.customRegex.title")}</Label>
-        <p>{t("moreDialog.customRegex.description")}</p>
+        <div className="mb-2">
+          <h3>{t("moreDialog.customRegex.title")}</h3>
+          <p>{t("moreDialog.customRegex.description")}</p>
+        </div>
+
+        <Label htmlFor={`questionId-${item.id}`}>{t("moreDialog.customRegex.label")}</Label>
         <Input
           id={`customRegexPattern-${item.id}`}
           name={`item${item.id}`}

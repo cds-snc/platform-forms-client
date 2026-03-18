@@ -641,10 +641,11 @@
       "errorMaxRows": "Le nombre maximal de réponses ne peut pas dépasser {{maxRows}}."
     },
     "customRegex": {
-      "title": "Modèle regex personnalisé",
-      "description": "Ajoutez un modèle regex personnalisé pour valider la réponse à cette question. Assurez-vous de tester votre formulaire en profondeur si vous utilisez cette option.",
-      "errorInvalidRegex": "Le modèle regex n'est pas valide. Veuillez entrer un modèle regex valide.",
-      "previousPatterns": "Modèles précédents"
+      "title": "Customize input validation",
+      "description": "Use a regular expression (regex) to create custom validation for this question.",
+      "label": "Regex",
+      "errorInvalidRegex": "The regex pattern is invalid. Please enter a valid regex pattern.",
+      "previousPatterns": "Previous patterns"
     }
   },
   "moreOptions": "Plus d'options  ",
