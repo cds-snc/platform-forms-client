@@ -79,7 +79,6 @@ export const CustomRegexOptions = ({
     <>
       <section className="mb-4 mt-6">
         <div className="mb-2">
-          <h3>{t("moreDialog.customRegex.title")}</h3>
           <p>{t("moreDialog.customRegex.description")}</p>
         </div>
 
