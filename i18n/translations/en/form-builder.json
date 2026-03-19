@@ -642,8 +642,8 @@
     },
     "customRegex": {
       "title": "Customize input validation",
-      "description": "Use a regular expression (regex) to create custom validation for this question.",
-      "label": "Regex",
+      "description": "Use a regular expression (regex) to create custom validation for this question. Suggestion to use Hint text to provide instructions on the expected format of the answer.",
+      "label": "Custom regex",
       "errorInvalidRegex": "The regex pattern is invalid. Please enter a valid regex pattern.",
       "previousPatterns": "Previous patterns"
     }
