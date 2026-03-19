@@ -31,7 +31,7 @@ export const defaultField: FormElement = {
     questionId: "",
     tags: [],
     subElements: [],
-    choices: [{ en: "", fr: "" }],
+    choices: [],
     titleEn: "",
     titleFr: "",
     validation: {

@@ -45,7 +45,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@d63b14614fe5d7fc5e5e52c523dea4e876816cc4
+        uses: aws-actions/amazon-ecr-login@cc05f4a4db45f6b446eee901ef3620a08754cbcf
 
       - name: Rainbow deployment
         uses: ./.github/workflows/rainbow-deployment
@@ -94,7 +94,7 @@ jobs:
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
         # v1.4.11
-        uses: aws-actions/amazon-ecs-deploy-task-definition@cbf54ec46642b86ff78c2f5793da6746954cf8ff
+        uses: aws-actions/amazon-ecs-deploy-task-definition@5fda33a2e6341c21114e3088fbe9aec20fd5b6ef
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer
