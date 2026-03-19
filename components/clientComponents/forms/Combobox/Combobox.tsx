@@ -119,6 +119,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           {isOpen &&
             items.map((item, index) => (
               <li
+                data-value={item}
                 className={cn(
                   "min-h-[44px]",
                   highlightedIndex === index && "bg-gcds-blue-100",
