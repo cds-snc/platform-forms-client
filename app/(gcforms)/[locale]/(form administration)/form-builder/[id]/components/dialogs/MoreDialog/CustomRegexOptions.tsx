@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { Label } from "./Label";
@@ -23,12 +23,13 @@ export const CustomRegexOptions = ({
   item: FormElement;
   setItem: (item: FormElement) => void;
 }) => {
+  "use memo";
   const { t } = useTranslation("form-builder");
   const [regexError, setRegexError] = useState<string | null>(null);
 
   const elements = useTemplateStore((s) => s.form.elements);
 
-  const previousPatterns = useMemo(() => {
+  const previousPatterns = (() => {
     const patterns = new Set<string>();
     for (const el of elements) {
       if (el.id !== item.id && el.properties.validation?.type === "custom") {
@@ -43,31 +44,28 @@ export const CustomRegexOptions = ({
       }
     }
     return Array.from(patterns);
-  }, [elements, item.id]);
+  })();
 
-  const validateAndSetPattern = useCallback(
-    (value: string) => {
-      if (!isValidRegex(value)) {
-        setRegexError(t("moreDialog.customRegex.errorInvalidRegex"));
-      } else {
-        setRegexError(null);
-      }
+  const validateAndSetPattern = (value: string) => {
+    if (!isValidRegex(value)) {
+      setRegexError(t("moreDialog.customRegex.errorInvalidRegex"));
+    } else {
+      setRegexError(null);
+    }
 
-      setItem({
-        ...item,
-        properties: {
-          ...item.properties,
-          validation: {
-            ...item.properties.validation,
-            regex: value || undefined,
-            type: value ? "custom" : undefined,
-            required: item.properties.validation?.required ?? false,
-          },
+    setItem({
+      ...item,
+      properties: {
+        ...item.properties,
+        validation: {
+          ...item.properties.validation,
+          regex: value || undefined,
+          type: value ? "custom" : undefined,
+          required: item.properties.validation?.required ?? false,
         },
-      });
-    },
-    [item, setItem, t]
-  );
+      },
+    });
+  };
 
   if (item.type !== FormElementTypes.textField) {
     return null;
