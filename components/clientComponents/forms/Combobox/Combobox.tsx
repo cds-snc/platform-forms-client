@@ -81,10 +81,15 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       <div className={classes} data-testid="combobox" {...(lang && { lang })}>
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
+        {/* Keyboard/touch instructions for AT users, always rendered alongside any passed description. */}
+        <span id={`${id}-hint`} className="sr-only">
+          {t("combobox-input-hint")}
+        </span>
+
         {/* downshift manages role="combobox", aria-activedescendant, and aria-expanded */}
         <input
           {...getInputProps()}
-          aria-describedby={ariaDescribedBy}
+          aria-describedby={[ariaDescribedBy, `${id}-hint`].filter(Boolean).join(" ")}
           id={id}
           required={required}
           aria-required={required}

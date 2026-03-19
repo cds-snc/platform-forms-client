@@ -23,7 +23,7 @@ export const Departments = () => {
         <Label htmlFor="dropdown" id="label-dropdown" className="gcds-label">
           {t("addElementDialog.departments.selectOption")}
         </Label>
-        <Description id="dropdown">{t("addElementDialog.departments.selectOne")}</Description>
+        <Description id="desc-dropdown">{t("addElementDialog.departments.selectOne")}</Description>
         <div className="overflow-hidden p-2">
           <Combobox name="name" id="dropdown" ariaDescribedBy="desc-dropdown" choices={choices} />
         </div>
