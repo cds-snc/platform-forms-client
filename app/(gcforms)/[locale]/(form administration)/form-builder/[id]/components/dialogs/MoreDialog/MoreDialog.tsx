@@ -136,7 +136,7 @@ export const MoreDialog = () => {
               <CharacterLimitOptions item={item} setItem={setItem} />
               <SortOptions item={item} setItem={setItem} />
               <FileTypeOptions item={item} setItem={setItem} />
-              {item.type === "textField" && (
+              {item.type === "textField" && item.properties.validation?.type !== "number" && (
                 <InfoDetails summary={t("moreDialog.customRegex.title")} className="mb-4">
                   <CustomRegexOptions item={item} setItem={setItem} />
                 </InfoDetails>
