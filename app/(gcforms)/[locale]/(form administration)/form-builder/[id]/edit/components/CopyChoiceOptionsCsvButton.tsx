@@ -5,6 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { stringifyChoiceOptionsCsv } from "@clientComponents/forms/ChoiceOptionsCsvUpload";
 import { type PropertyChoices } from "@lib/types";
+import { ALLOW_BULK_ADD } from "@root/constants";
 import { CheckIcon } from "@serverComponents/icons/CheckIcon";
 import { CopyIcon } from "@serverComponents/icons/CopyIcon";
 
@@ -22,7 +23,7 @@ export const CopyChoiceOptionsCsvButton = ({ choices }: { choices?: PropertyChoi
     setTimeout(() => setCopied(false), 2000);
   }, [choices]);
 
-  if (!choices?.length) {
+  if (!ALLOW_BULK_ADD || !choices?.length) {
     return null;
   }
 

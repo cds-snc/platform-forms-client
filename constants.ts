@@ -7,3 +7,4 @@ export const MAX_RESPONSE_SIZE = kbToBytes(380);
 
 export const MAX_DYNAMIC_ROW_AMOUNT = 50;
 export const MAX_CHOICE_AMOUNT = 400;
+export const ALLOW_BULK_ADD = false;

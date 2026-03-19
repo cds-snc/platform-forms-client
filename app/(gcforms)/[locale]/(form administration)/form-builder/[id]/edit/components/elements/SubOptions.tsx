@@ -8,7 +8,7 @@ import { Button } from "@clientComponents/globals";
 import { ChoiceOptionsCsvUpload } from "@clientComponents/forms/ChoiceOptionsCsvUpload";
 import { FormElementTypes, type PropertyChoices } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
-import { MAX_CHOICE_AMOUNT } from "@root/constants";
+import { ALLOW_BULK_ADD, MAX_CHOICE_AMOUNT } from "@root/constants";
 import { CopyChoiceOptionsCsvButton } from "@formBuilder/[id]/edit/components/CopyChoiceOptionsCsvButton";
 import { toast } from "@formBuilder/components/shared/Toast";
 
@@ -33,6 +33,7 @@ const AddOption = ({
   }));
   const isLimitReached = (choiceCount ?? 0) >= MAX_CHOICE_AMOUNT;
   const choiceLimitReachedMessage = t("choiceLimitReached", { maxChoices: MAX_CHOICE_AMOUNT });
+  const showBulkAddControls = ALLOW_BULK_ADD;
 
   return (
     <div className="flex flex-wrap items-center gap-x-1">
@@ -50,7 +51,7 @@ const AddOption = ({
         >
           {t("addOption")}
         </Button>
-        <CopyChoiceOptionsCsvButton choices={copyChoices} />
+        {showBulkAddControls && <CopyChoiceOptionsCsvButton choices={copyChoices} />}
       </div>
       <div aria-live="polite">
         {isLimitReached && (
@@ -59,7 +60,7 @@ const AddOption = ({
           </strong>
         )}
       </div>
-      {onImport && (
+      {showBulkAddControls && onImport && (
         <>
           <span className="mt-4 text-sm text-slate-700">{t("or")}</span>
           <ChoiceOptionsCsvUpload

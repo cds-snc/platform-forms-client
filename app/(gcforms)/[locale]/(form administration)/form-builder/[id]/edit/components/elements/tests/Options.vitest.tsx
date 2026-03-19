@@ -7,7 +7,7 @@ import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Options } from "../Options";
 import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
-import { MAX_CHOICE_AMOUNT } from "@root/constants";
+import { ALLOW_BULK_ADD, MAX_CHOICE_AMOUNT } from "@root/constants";
 
 const { toastSuccess } = vi.hoisted(() => ({
   toastSuccess: vi.fn(),
@@ -179,7 +179,7 @@ describe("Options", () => {
     expect(limitWarning.closest("div")).toHaveAttribute("aria-live", "polite");
   });
 
-  it("clears all options after confirmation", async () => {
+  (ALLOW_BULK_ADD ? it : it.skip)("clears all options after confirmation", async () => {
     const user = userEvent.setup();
 
     const testStore = {
@@ -228,7 +228,7 @@ describe("Options", () => {
     expect(screen.queryByRole("button", { name: "Clear options" })).not.toBeInTheDocument();
   });
 
-  it("can reopen the clear options dialog after cancelling", async () => {
+  (ALLOW_BULK_ADD ? it : it.skip)("can reopen the clear options dialog after cancelling", async () => {
     const user = userEvent.setup();
 
     const testStore = {
@@ -272,9 +272,7 @@ describe("Options", () => {
     expect(screen.getByText("Clear all options?")).toBeInTheDocument();
   });
 
-  it("shows a success toast after importing options from CSV", async () => {
-    const user = userEvent.setup();
-
+  it("hides bulk add controls when the global bulk add flag is off", () => {
     const testStore = {
       ...store,
       elements: [
@@ -284,7 +282,7 @@ describe("Options", () => {
           properties: {
             titleEn: "Test Question",
             titleFr: "Question de test",
-            choices: [],
+            choices: [{ en: "First Option", fr: "Première option" }],
             validation: { required: false },
           },
         },
@@ -302,10 +300,9 @@ describe("Options", () => {
       </Providers>
     );
 
-    await user.click(screen.getByTestId("mock-choice-options-csv-upload"));
-
-    await waitFor(() => {
-      expect(toastSuccess).toHaveBeenCalledWith("2 options were added from the CSV file.");
-    });
+    expect(ALLOW_BULK_ADD).toBe(false);
+    expect(screen.queryByTestId("mock-choice-options-csv-upload")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Copy options to CSV" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Clear options" })).not.toBeInTheDocument();
   });
 });
