@@ -19,9 +19,8 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
-  // GOV.UK "bump" pattern: two alternating aria-live regions guarantee a DOM
-  // mutation on every announcement, even when the message text hasn't changed.
-  // announcedMessage updates together with bump so each cycle fires AT once.
+  // Follow the Gov.uk (bump) pattern of two alternating live regions to ensure a duplicate
+  // update is still announced by AT. (usually ignored by default)
   const [bump, setBump] = useState(false);
   const [announcedMessage, setAnnouncedMessage] = useState("");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -42,23 +41,28 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
         setValue(selectedItem);
       },
       initialInputValue: field.value || "",
-      // Suppress downshift's built-in live region; the bump regions below handle all announcements.
+      // Suppress downshift's built-in live region so we can customize announcements and
+      // timing for better AT support
       getA11yStatusMessage: () => "",
     });
 
-  // 400ms for no-results (query clearly done), 1400ms otherwise to avoid mid-keystroke noise.
+  // Add some workarounds for onscreen keyboards: 400ms for no-results (query obviously done),
+  // 1400ms otherwise to avoid mid-keystroke noise when typing quickly. These are based on
+  // testing with iOS Safari+VoiceOver and may need adjustment for other AT/browser combos.
   const announcementDelay = isOpen && items.length === 0 ? 400 : 1400;
 
-  // Count only — aria-activedescendant handles option announcements during navigation.
-  // Excluding the highlighted item also prevents targetMessage from changing on arrow keys.
+  // Announce either a) the option item count when results are available, or b) a no-results
+  // message when the list is empty.
   const targetMessage = isOpen
     ? items.length > 0
       ? t("combobox-results-available", { count: items.length })
       : t("combobox-no-results")
     : "";
 
-  // Single debounced effect to avoid duplicate announcements.
-  // Skip on initial open — VoiceOver announces aria-expanded natively.
+  // Announce while a user is typing BUT stop duplicate announcements by:
+  // 1) Clearing any pending announcement whenever the input changes (debounce pattern).
+  // 2) Skipping the announcement entirely when the list first opens, since AT should
+  //    already be announcing that via aria-expanded.
   const prevIsOpenRef = useRef(false);
   useEffect(() => {
     const justOpened = isOpen && !prevIsOpenRef.current;
@@ -104,8 +108,8 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           spellCheck={false}
         />
 
-        {/* Dual alternating live regions (GOV.UK bump pattern) — ensures AT announces
-            every update even when the message text repeats. */}
+        {/* Dual alternating live regions (GOV.UK bump pattern) to ensure AT announce every update 
+            even when the message text repeats */}
         <div id={`${id}-live-a`} aria-live="polite" aria-atomic="true" className="sr-only">
           {bump ? announcedMessage : ""}
         </div>
@@ -113,7 +117,8 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           {bump ? "" : announcedMessage}
         </div>
 
-        {/* Always in DOM so aria-controls is never broken. downshift sets role="listbox"/"option". */}
+        {/* Ensure UL remains in the DOM so the aria-controls reference is never broken.
+            Note: downshift sets role="listbox"/"option". */}
         <ul
           {...getMenuProps()}
           tabIndex={-1}
@@ -138,7 +143,9 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
                 }}
               >
                 {item}
-                {/* iOS VoiceOver doesn't reliably read aria-posinset/setsize; inline position text as fallback. */}
+                {/* iOS VoiceOver doesn't reliably read aria-posinset/setsize. Inline position 
+                    text as fallback. This technique was taken from GOV.UK accessible-autocomplete
+                    and I don't fully understand it :) */}
                 <span
                   style={{
                     border: 0,
