@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.1] - 2026-03-19
+
+- Enable Custom Regex validation
+
 ## [2.1.0] - 2026-03-06
 
 - Add shared style exports for forms, gc-header, typography, and toast.
