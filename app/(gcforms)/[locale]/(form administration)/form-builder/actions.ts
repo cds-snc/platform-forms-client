@@ -12,6 +12,7 @@ import {
 } from "@lib/types";
 import {
   createTemplate as createDbTemplate,
+  createWorkingCopyForPublishedTemplate as createDbWorkingCopyForPublishedTemplate,
   removeDeliveryOption,
   updateAssignedUsersForTemplate,
   updateClosedData,
@@ -190,10 +191,44 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
     }
 
     if (!hasError && redirectAfter) {
-      redirect(redirectAfter);
+      redirect(redirectAfter.replace("[id]", response?.id ?? formID));
     }
 
     return { formRecord: response, error: hasError ? (hasError as Error).message : undefined };
+  }
+);
+
+export const createWorkingCopyForPublishedTemplate = AuthenticatedAction(
+  async (
+    _,
+    {
+      id: formID,
+      locale,
+    }: {
+      id: string;
+      locale?: string;
+    }
+  ): Promise<{
+    formRecord: FormRecord | null;
+    error?: string;
+  }> => {
+    try {
+      const response = await createDbWorkingCopyForPublishedTemplate(formID, locale);
+
+      if (!response) {
+        throw new Error(`Failed to create working copy for form ${formID}`);
+      }
+
+      revalidatePath(`/form-builder/${formID}`, "layout");
+      revalidatePath(`/form-builder/${formID}/published`, "page");
+      if (locale) {
+        revalidatePath(`/${locale}/forms`, "page");
+      }
+
+      return { formRecord: response };
+    } catch (error) {
+      return { formRecord: null, error: (error as Error).message };
+    }
   }
 );
 

@@ -48,6 +48,7 @@ model Template {
   name                  String          @default("")
   jsonConfig            Json
   isPublished           Boolean         @default(false)
+  sourceTemplateId      String?         @unique
   formPurpose           String          @default("")
   publishReason         String          @default("")
   publishFormType       String          @default("")
@@ -66,6 +67,8 @@ model Template {
   notificationsInterval Int?            @default(1440)
   notificationsUsers    User[]          @relation("TemplateNotificationsUsers")
   archives              TemplateArchive[]
+  sourceTemplate        Template?       @relation("TemplateWorkingCopy", fields: [sourceTemplateId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  workingCopy           Template?       @relation("TemplateWorkingCopy")
 }
 
 model TemplateArchive {

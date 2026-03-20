@@ -12,7 +12,11 @@ import { Prisma } from "@prisma/client";
 import { authorization, getAbility } from "./privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
+import {
+  responsesAwaitingConfirmationExist,
+  unprocessedSubmissions,
+  deleteDraftFormResponses,
+} from "./vault";
 import { deleteKey } from "./serviceAccount";
 import { ownerRemovedEmailTemplate } from "./invitations/emailTemplates/ownerRemovedEmailTemplate";
 import { sendEmail } from "./integration/notifyConnector";
@@ -32,6 +36,16 @@ const checkFlag = async (flag: string) => {
   );
 };
 
+const toOptionalJsonInput = (
+  value: Prisma.JsonValue | null | undefined
+): Prisma.InputJsonValue | typeof Prisma.JsonNull | undefined => {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  return value === null ? Prisma.JsonNull : (value as Prisma.InputJsonValue);
+};
+
 // ******************************************
 // Internal Module Functions
 // ******************************************
@@ -42,6 +56,7 @@ const _parseTemplate = (template: {
   name: string;
   jsonConfig: Prisma.JsonValue;
   isPublished: boolean;
+  sourceTemplateId?: string | null;
   deliveryOption: {
     emailAddress: string;
     emailSubjectEn: string | null;
@@ -69,6 +84,9 @@ const _parseTemplate = (template: {
     name: template.name,
     form: template.jsonConfig as FormProperties,
     isPublished: template.isPublished,
+    ...(template.sourceTemplateId && {
+      sourceTemplateId: template.sourceTemplateId,
+    }),
     ...(template.deliveryOption && {
       deliveryOption: {
         emailAddress: template.deliveryOption.emailAddress,
@@ -125,6 +143,11 @@ export type UpdateTemplateCommand = {
   notificationsInterval?: NotificationsInterval;
 };
 
+export type TemplateListRecord = FormRecord & {
+  hasWorkingDraft?: boolean;
+  workingDraftId?: string;
+};
+
 export class InvalidFormConfigError extends Error {
   constructor(message?: string) {
     super(message ?? "InvalidFormConfigError");
@@ -143,6 +166,13 @@ export class TemplateHasUnprocessedSubmissions extends Error {
   constructor(message?: string) {
     super(message ?? "TemplateHasUnprocessedSubmissions");
     Object.setPrototypeOf(this, TemplateHasUnprocessedSubmissions.prototype);
+  }
+}
+
+export class SourceTemplateMustBeOfflineError extends Error {
+  constructor(message?: string) {
+    super(message ?? "SourceTemplateMustBeOfflineError");
+    Object.setPrototypeOf(this, SourceTemplateMustBeOfflineError.prototype);
   }
 }
 
@@ -311,7 +341,7 @@ export type TemplateOptions = {
  */
 export async function getAllTemplatesForUser(
   options?: TemplateOptions
-): Promise<Array<FormRecord>> {
+): Promise<Array<TemplateListRecord>> {
   try {
     const ability = await getAbility();
 
@@ -342,6 +372,12 @@ export async function getAllTemplatesForUser(
           publishDesc: true,
           saveAndResume: true,
           notificationsInterval: true,
+          workingCopy: {
+            select: {
+              id: true,
+              ttl: true,
+            },
+          },
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -357,7 +393,17 @@ export async function getAllTemplatesForUser(
         formList: templates.map((template) => template.id).toString(),
       });
 
-    return templates.map((template) => _parseTemplate(template));
+    return templates.map((template) => {
+      const activeWorkingDraft = template.workingCopy && !template.workingCopy.ttl;
+
+      return {
+        ..._parseTemplate(template),
+        ...(activeWorkingDraft && {
+          hasWorkingDraft: true,
+          workingDraftId: template.workingCopy?.id,
+        }),
+      };
+    });
   } catch (e) {
     logMessage.error(e);
     return [];
@@ -497,6 +543,237 @@ export async function getFullTemplateByID(
   } catch (e) {
     return null;
   }
+}
+
+export async function createWorkingCopyForPublishedTemplate(
+  formID: string,
+  _locale: string = "en"
+): Promise<FormRecord | null> {
+  const getActiveWorkingCopy = async () => {
+    try {
+      return await prisma.template.findFirst({
+        where: {
+          sourceTemplateId: formID,
+          ttl: null,
+        },
+        include: {
+          deliveryOption: true,
+        },
+        orderBy: {
+          updated_at: "desc",
+        },
+      });
+    } catch (e) {
+      return prismaErrors(e, null);
+    }
+  };
+
+  const getArchivedWorkingCopy = async () => {
+    try {
+      return await prisma.template.findFirst({
+        where: {
+          sourceTemplateId: formID,
+          ttl: { not: null },
+        },
+        include: {
+          deliveryOption: true,
+        },
+        orderBy: {
+          updated_at: "desc",
+        },
+      });
+    } catch (e) {
+      return prismaErrors(e, null);
+    }
+  };
+
+  const [createResult, editResult] = (await Promise.allSettled([
+    authorization.canCreateForm(),
+    authorization.canEditForm(formID),
+  ])) as Array<PromiseSettledResult<{ user: { id: string } }>>;
+
+  if (createResult.status === "rejected") {
+    const error = createResult.reason as { user?: { id?: string } };
+    logEvent(
+      error?.user?.id ?? "unknown",
+      { type: "Form", id: formID },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToCloneFormNoCreate
+    );
+    throw createResult.reason;
+  }
+
+  if (editResult.status === "rejected") {
+    const error = editResult.reason as { user?: { id?: string } };
+    logEvent(
+      error?.user?.id ?? "unknown",
+      { type: "Form", id: formID },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToCloneFormNoEdit
+    );
+    throw editResult.reason;
+  }
+
+  const { user } = (createResult as PromiseFulfilledResult<{ user: { id: string } }>).value;
+
+  const existingWorkingCopy = await getActiveWorkingCopy();
+
+  if (existingWorkingCopy && !existingWorkingCopy.ttl) {
+    return _parseTemplate(existingWorkingCopy);
+  }
+
+  const archivedWorkingCopy = existingWorkingCopy?.ttl
+    ? existingWorkingCopy
+    : await getArchivedWorkingCopy();
+
+  if (archivedWorkingCopy) {
+    try {
+      await prisma.$executeRaw`
+        UPDATE "Template"
+        SET "sourceTemplateId" = NULL
+        WHERE id = ${archivedWorkingCopy.id}
+      `;
+    } catch (e) {
+      prismaErrors(e, null);
+    }
+  }
+
+  let template;
+  try {
+    template = await prisma.template.findUnique({
+      where: {
+        id: formID,
+      },
+      include: {
+        deliveryOption: true,
+        users: { select: { id: true } },
+        notificationsUsers: { select: { id: true } },
+      },
+    });
+  } catch (e) {
+    template = prismaErrors(e, null);
+  }
+
+  if (!template || template.ttl || !template.isPublished) {
+    logMessage.warn(
+      `[templates][createWorkingCopyForPublishedTemplate] Published template ${formID} not found`
+    );
+    return null;
+  }
+
+  const createWorkingCopy = async () => {
+    try {
+      return await prisma.template.create({
+        data: {
+          jsonConfig: template.jsonConfig as Prisma.JsonObject,
+          name: template.name,
+          isPublished: false,
+          sourceTemplateId: formID,
+          formPurpose: template.formPurpose,
+          publishReason: template.publishReason,
+          publishFormType: template.publishFormType,
+          publishDesc: template.publishDesc,
+          securityAttribute: template.securityAttribute,
+          saveAndResume: template.saveAndResume,
+          closingDate: template.closingDate,
+          ...(toOptionalJsonInput(template.closedDetails) !== undefined && {
+            closedDetails: toOptionalJsonInput(template.closedDetails),
+          }),
+          ...(template.notificationsInterval !== undefined && {
+            notificationsInterval: template.notificationsInterval,
+          }),
+          users: {
+            connect: template.users,
+          },
+          ...(template.notificationsUsers.length > 0 && {
+            notificationsUsers: {
+              connect: template.notificationsUsers,
+            },
+          }),
+          ...(template.deliveryOption && {
+            deliveryOption: {
+              create: {
+                emailAddress: template.deliveryOption.emailAddress,
+                emailSubjectEn: template.deliveryOption.emailSubjectEn,
+                emailSubjectFr: template.deliveryOption.emailSubjectFr,
+              },
+            },
+          }),
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          sourceTemplateId: true,
+          deliveryOption: true,
+          securityAttribute: true,
+          formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
+          closingDate: true,
+          closedDetails: true,
+          saveAndResume: true,
+          notificationsInterval: true,
+        },
+      });
+    } catch (e) {
+      return prismaErrors(e, null);
+    }
+  };
+
+  let createdTemplate = await createWorkingCopy();
+
+  if (createdTemplate === null) {
+    const activeWorkingCopy = await getActiveWorkingCopy();
+
+    if (activeWorkingCopy && !activeWorkingCopy.ttl) {
+      return _parseTemplate(activeWorkingCopy);
+    }
+
+    const linkedWorkingCopy = activeWorkingCopy?.ttl
+      ? activeWorkingCopy
+      : await getArchivedWorkingCopy();
+
+    if (linkedWorkingCopy?.ttl) {
+      try {
+        await prisma.$executeRaw`
+          UPDATE "Template"
+          SET "sourceTemplateId" = NULL
+          WHERE id = ${linkedWorkingCopy.id}
+        `;
+      } catch (e) {
+        prismaErrors(e, null);
+      }
+
+      createdTemplate = await createWorkingCopy();
+      if (createdTemplate) {
+        logEvent(
+          user.id,
+          { type: "Form", id: createdTemplate.id },
+          "CreateForm",
+          AuditLogDetails.ClonedForm
+        );
+
+        return _parseTemplate(createdTemplate);
+      }
+    }
+
+    const recoveredWorkingCopy = await getActiveWorkingCopy();
+    return recoveredWorkingCopy ? _parseTemplate(recoveredWorkingCopy) : null;
+  }
+
+  logEvent(
+    user.id,
+    { type: "Form", id: createdTemplate.id },
+    "CreateForm",
+    AuditLogDetails.ClonedForm
+  );
+
+  return _parseTemplate(createdTemplate);
 }
 
 export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
@@ -685,6 +962,182 @@ export async function updateIsPublishedForTemplate(
     );
     throw e;
   });
+
+  const templatePublishContext = await prisma.template
+    .findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        sourceTemplateId: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (newPublishStatus && templatePublishContext?.sourceTemplateId) {
+    await authorization.canPublishForm(templatePublishContext.sourceTemplateId);
+
+    const workingCopyHasResponsesAwaitingConfirmation =
+      await responsesAwaitingConfirmationExist(formID);
+
+    if (workingCopyHasResponsesAwaitingConfirmation) {
+      throw new TemplateHasUnprocessedSubmissions();
+    }
+
+    const sourceTemplateId = templatePublishContext.sourceTemplateId;
+    const sourceTemplateStatus = await prisma.template
+      .findUnique({
+        where: {
+          id: sourceTemplateId,
+        },
+        select: {
+          isPublished: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    const hasResponsesAwaitingConfirmation =
+      await responsesAwaitingConfirmationExist(sourceTemplateId);
+    if (sourceTemplateStatus?.isPublished && hasResponsesAwaitingConfirmation) {
+      throw new SourceTemplateMustBeOfflineError();
+    }
+
+    if (hasResponsesAwaitingConfirmation) throw new TemplateHasUnprocessedSubmissions();
+
+    if (process.env.APP_ENV !== "test") {
+      await deleteDraftFormResponses(formID);
+    }
+
+    const updatedSourceTemplate = await prisma
+      .$transaction(async (transaction) => {
+        const workingCopy = await transaction.template.findUnique({
+          where: {
+            id: formID,
+          },
+          include: {
+            deliveryOption: true,
+            users: {
+              select: {
+                id: true,
+              },
+            },
+            notificationsUsers: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        });
+
+        if (!workingCopy?.sourceTemplateId) {
+          return null;
+        }
+
+        const sourceTemplate = await transaction.template.findUnique({
+          where: {
+            id: workingCopy.sourceTemplateId,
+          },
+          select: {
+            id: true,
+            jsonConfig: true,
+            isPublished: true,
+          },
+        });
+
+        if (!sourceTemplate) {
+          return null;
+        }
+
+        if (sourceTemplate.isPublished) {
+          await transaction.templateArchive.create({
+            data: {
+              templateId: sourceTemplate.id,
+              jsonConfig: sourceTemplate.jsonConfig as Prisma.InputJsonValue,
+            },
+          });
+        }
+
+        await transaction.template.update({
+          where: {
+            id: sourceTemplate.id,
+          },
+          data: {
+            name: workingCopy.name,
+            jsonConfig: workingCopy.jsonConfig as Prisma.InputJsonValue,
+            isPublished: true,
+            formPurpose: workingCopy.formPurpose,
+            publishReason: publishReason,
+            publishFormType: publishFormType,
+            publishDesc: publishDescription,
+            securityAttribute: workingCopy.securityAttribute,
+            closingDate: workingCopy.closingDate,
+            ...(toOptionalJsonInput(workingCopy.closedDetails) !== undefined && {
+              closedDetails: toOptionalJsonInput(workingCopy.closedDetails),
+            }),
+            saveAndResume: workingCopy.saveAndResume,
+            notificationsInterval: workingCopy.notificationsInterval,
+            users: {
+              set: workingCopy.users,
+            },
+            notificationsUsers: {
+              set: workingCopy.notificationsUsers,
+            },
+          },
+        });
+
+        if (workingCopy.deliveryOption) {
+          await transaction.deliveryOption.upsert({
+            where: {
+              templateId: sourceTemplate.id,
+            },
+            create: {
+              templateId: sourceTemplate.id,
+              emailAddress: workingCopy.deliveryOption.emailAddress,
+              emailSubjectEn: workingCopy.deliveryOption.emailSubjectEn,
+              emailSubjectFr: workingCopy.deliveryOption.emailSubjectFr,
+            },
+            update: {
+              emailAddress: workingCopy.deliveryOption.emailAddress,
+              emailSubjectEn: workingCopy.deliveryOption.emailSubjectEn,
+              emailSubjectFr: workingCopy.deliveryOption.emailSubjectFr,
+            },
+          });
+        } else {
+          await transaction.deliveryOption.deleteMany({
+            where: {
+              templateId: sourceTemplate.id,
+            },
+          });
+        }
+
+        await transaction.template.delete({
+          where: {
+            id: workingCopy.id,
+          },
+        });
+
+        return transaction.template.findUnique({
+          where: {
+            id: sourceTemplate.id,
+          },
+          include: {
+            deliveryOption: true,
+          },
+        });
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (updatedSourceTemplate === null) return null;
+
+    if (formCache.cacheAvailable) {
+      formCache.invalidate(formID);
+      formCache.invalidate(sourceTemplateId);
+    }
+
+    logEvent(user.id, { type: "Form", id: sourceTemplateId }, "PublishForm");
+
+    return _parseTemplate(updatedSourceTemplate);
+  }
 
   const hasArchive = await hasPublishedTemplateArchive(formID);
 

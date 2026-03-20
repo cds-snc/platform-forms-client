@@ -228,6 +228,23 @@ export async function listAllSubmissions(
   }
 }
 
+export async function submissionsExist(formID: string): Promise<boolean> {
+  const response = await listAllSubmissions(formID, undefined, 1);
+  return response.submissions.length > 0;
+}
+
+export async function responsesAwaitingConfirmationExist(formID: string): Promise<boolean> {
+  await authorization.canViewForm(formID);
+
+  const responseArray = await Promise.all([
+    submissionTypeExists(formID, VaultStatus.NEW),
+    submissionTypeExists(formID, VaultStatus.DOWNLOADED),
+    submissionTypeExists(formID, VaultStatus.PROBLEM),
+  ]);
+
+  return responseArray.some((response) => response);
+}
+
 /**
  * This method returns the `RemovalDate` for a specific submission.
  * @param formID - The form ID of the response you want to retrieve

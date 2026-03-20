@@ -2,6 +2,7 @@
 import { prismaMock } from "@jestUtils";
 import {
   createTemplate,
+  createWorkingCopyForPublishedTemplate,
   getAllTemplates,
   getAllTemplatesForUser,
   getPublicTemplateByID,
@@ -14,6 +15,7 @@ import {
   updateAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
   removeDeliveryOption,
+  SourceTemplateMustBeOfflineError,
   TemplateHasUnprocessedSubmissions,
 } from "../templates";
 
@@ -26,7 +28,11 @@ import v8 from "v8";
 import { Prisma } from "@prisma/client";
 
 import { logEvent } from "@lib/auditLogs";
-import { deleteDraftFormResponses, unprocessedSubmissions } from "@lib/vault";
+import {
+  deleteDraftFormResponses,
+  responsesAwaitingConfirmationExist,
+  unprocessedSubmissions,
+} from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
 import { AccessControlError } from "@lib/auth/errors";
 import {
@@ -43,7 +49,7 @@ jest.mock("@lib/auditLogs", () => ({
   },
   get AuditLogAccessDeniedDetails() {
     return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
-  }
+  },
 }));
 
 jest.mock("@lib/serviceAccount");
@@ -60,6 +66,9 @@ const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 jest.mock("@lib/vault");
 
 const mockUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
+  shallow: true,
+});
+const mockResponsesAwaitingConfirmationExist = jest.mocked(responsesAwaitingConfirmationExist, {
   shallow: true,
 });
 const mockDeleteDraftFormResponses = jest.mocked(deleteDraftFormResponses, {
@@ -117,6 +126,7 @@ describe("Template CRUD functions", () => {
         async (callback: (transaction: typeof prismaMock) => Promise<unknown>) =>
           callback(prismaMock)
       );
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
       (prismaMock.templateArchive.findFirst as jest.MockedFunction<any>).mockResolvedValue(null);
       (prismaMock.templateArchive.create as jest.MockedFunction<any>).mockResolvedValue({
         id: "archive-1",
@@ -124,8 +134,10 @@ describe("Template CRUD functions", () => {
       mockDeleteDraftFormResponses.mockReset();
       mockDeleteDraftFormResponses.mockResolvedValue({ responsesDeleted: 0 });
       mockUnprocessedSubmissions.mockReset();
+      mockResponsesAwaitingConfirmationExist.mockReset();
       // Default to no unprocessed submissions unless a test overrides
       mockUnprocessedSubmissions.mockResolvedValue(false);
+      mockResponsesAwaitingConfirmationExist.mockResolvedValue(false);
     });
 
     it("Create a Template", async () => {
@@ -158,7 +170,7 @@ describe("Template CRUD functions", () => {
           id: "formtestID",
           form: formConfiguration,
           isPublished: false,
-          securityAttribute: "Unclassified"
+          securityAttribute: "Unclassified",
         })
       );
 
@@ -183,7 +195,6 @@ describe("Template CRUD functions", () => {
           form: formConfiguration,
           isPublished: false,
           securityAttribute: "Unclassified",
-
         }),
         expect.objectContaining({
           id: "formtestID2",
@@ -231,7 +242,7 @@ describe("Template CRUD functions", () => {
         { type: "Form" },
         "ReadForm",
         "Accessed Forms: ${formList}",
-        { "formList": "formtestID" }
+        { formList: "formtestID" }
       );
     });
 
@@ -350,7 +361,7 @@ describe("Template CRUD functions", () => {
         expect.objectContaining({
           where: {
             id: "test1",
-            isPublished: false
+            isPublished: false,
           },
           data: {
             jsonConfig: updatedFormConfig as unknown as Prisma.JsonObject,
@@ -408,7 +419,7 @@ describe("Template CRUD functions", () => {
           id: "formtestID",
           form: formConfiguration,
           isPublished: true,
-          securityAttribute: "Unclassified"
+          securityAttribute: "Unclassified",
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
@@ -416,6 +427,294 @@ describe("Template CRUD functions", () => {
         { id: "formtestID", type: "Form" },
         "PublishForm"
       );
+    });
+
+    it("Creates a draft working copy for a published form", async () => {
+      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue(null);
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        closingDate: null,
+        closedDetails: null,
+        users: [{ id: "1" }, { id: "2" }],
+        notificationsUsers: [{ id: "2" }],
+      });
+      (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("draft-copy", formConfiguration, false),
+        sourceTemplateId: "formtestID",
+        closingDate: null,
+        closedDetails: null,
+      });
+
+      const workingCopy = await createWorkingCopyForPublishedTemplate("formtestID");
+
+      expect(prismaMock.template.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            sourceTemplateId: "formtestID",
+            isPublished: false,
+            users: {
+              connect: [{ id: "1" }, { id: "2" }],
+            },
+            notificationsUsers: {
+              connect: [{ id: "2" }],
+            },
+          }),
+        })
+      );
+
+      expect(workingCopy).toEqual(
+        expect.objectContaining({
+          id: "draft-copy",
+          isPublished: false,
+          sourceTemplateId: "formtestID",
+        })
+      );
+    });
+
+    it("Clears a stale archived working copy before creating a new one", async () => {
+      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+        id: "stale-copy",
+        ttl: new Date(),
+        deliveryOption: null,
+        jsonConfig: formConfiguration,
+        isPublished: false,
+        name: "Stale working copy",
+        securityAttribute: "Unclassified",
+        formPurpose: "",
+        publishReason: "",
+        publishFormType: "",
+        publishDesc: "",
+        saveAndResume: true,
+        notificationsInterval: 1440,
+      });
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        closingDate: null,
+        closedDetails: null,
+        users: [{ id: "1" }],
+        notificationsUsers: [],
+      });
+      (prismaMock.$executeRaw as jest.MockedFunction<any>).mockResolvedValue(1);
+      (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("draft-copy", formConfiguration, false),
+        sourceTemplateId: "formtestID",
+        closingDate: null,
+        closedDetails: null,
+      });
+
+      const workingCopy = await createWorkingCopyForPublishedTemplate("formtestID");
+
+      expect(prismaMock.$executeRaw).toHaveBeenCalled();
+      expect(workingCopy).toEqual(
+        expect.objectContaining({
+          id: "draft-copy",
+          sourceTemplateId: "formtestID",
+        })
+      );
+    });
+
+    it("Recovers by returning an active working copy when create races with an existing linked draft", async () => {
+      (prismaMock.template.findFirst as jest.MockedFunction<any>)
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({
+          ...buildPrismaResponse("draft-copy", formConfiguration, false),
+          sourceTemplateId: "formtestID",
+          closingDate: null,
+          closedDetails: null,
+        })
+        .mockResolvedValueOnce({
+          ...buildPrismaResponse("draft-copy", formConfiguration, false),
+          sourceTemplateId: "formtestID",
+          closingDate: null,
+          closedDetails: null,
+        });
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        closingDate: null,
+        closedDetails: null,
+        users: [{ id: "1" }],
+        notificationsUsers: [],
+      });
+      (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(null);
+
+      const workingCopy = await createWorkingCopyForPublishedTemplate("formtestID");
+
+      expect(prismaMock.template.findFirst).toHaveBeenCalledTimes(3);
+      expect(workingCopy).toEqual(
+        expect.objectContaining({
+          id: "draft-copy",
+          sourceTemplateId: "formtestID",
+        })
+      );
+    });
+
+    it("Creates a new working copy after pre-clearing a stale linked draft", async () => {
+      (prismaMock.template.findFirst as jest.MockedFunction<any>)
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({
+          id: "stale-copy",
+          ttl: new Date(),
+          deliveryOption: null,
+          jsonConfig: formConfiguration,
+          isPublished: false,
+          name: "Stale working copy",
+          securityAttribute: "Unclassified",
+          formPurpose: "",
+          publishReason: "",
+          publishFormType: "",
+          publishDesc: "",
+          saveAndResume: true,
+          notificationsInterval: 1440,
+        });
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        closingDate: null,
+        closedDetails: null,
+        users: [{ id: "1" }],
+        notificationsUsers: [],
+      });
+      (prismaMock.$executeRaw as jest.MockedFunction<any>).mockResolvedValue(1);
+      (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValueOnce({
+        ...buildPrismaResponse("draft-copy", formConfiguration, false),
+        sourceTemplateId: "formtestID",
+        closingDate: null,
+        closedDetails: null,
+      });
+
+      const workingCopy = await createWorkingCopyForPublishedTemplate("formtestID");
+
+      expect(prismaMock.$executeRaw).toHaveBeenCalled();
+      expect(prismaMock.template.create).toHaveBeenCalledTimes(1);
+      expect(workingCopy).toEqual(
+        expect.objectContaining({
+          id: "draft-copy",
+          sourceTemplateId: "formtestID",
+        })
+      );
+    });
+
+    it("Publishes a working copy back into its source form", async () => {
+      const previousAppEnv = process.env.APP_ENV;
+      process.env.APP_ENV = "development";
+
+      try {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>)
+          .mockResolvedValueOnce({
+            sourceTemplateId: "live-form",
+          })
+          .mockResolvedValueOnce({
+            isPublished: true,
+          })
+          .mockResolvedValueOnce({
+            id: "draft-copy",
+            sourceTemplateId: "live-form",
+            name: "Updated form",
+            jsonConfig: formConfiguration,
+            deliveryOption: null,
+            formPurpose: "",
+            securityAttribute: "Unclassified",
+            closingDate: null,
+            closedDetails: null,
+            saveAndResume: true,
+            notificationsInterval: 1440,
+            users: [{ id: "1" }],
+            notificationsUsers: [{ id: "1" }],
+          })
+          .mockResolvedValueOnce({
+            id: "live-form",
+            jsonConfig: { old: true },
+            isPublished: true,
+          })
+          .mockResolvedValueOnce({
+            ...buildPrismaResponse("live-form", formConfiguration, true),
+            name: "Updated form",
+            closingDate: null,
+            closedDetails: null,
+          });
+
+        (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+          buildPrismaResponse("live-form", formConfiguration, true)
+        );
+
+        const updatedTemplate = await updateIsPublishedForTemplate("draft-copy", true, "", "", "");
+
+        expect(mockResponsesAwaitingConfirmationExist).toHaveBeenNthCalledWith(1, "draft-copy");
+        expect(mockResponsesAwaitingConfirmationExist).toHaveBeenNthCalledWith(2, "live-form");
+        expect(mockDeleteDraftFormResponses).toHaveBeenCalledWith("draft-copy");
+        expect(prismaMock.templateArchive.create).toHaveBeenCalledWith({
+          data: {
+            templateId: "live-form",
+            jsonConfig: { old: true },
+          },
+        });
+        expect(prismaMock.template.update).toHaveBeenCalledWith(
+          expect.objectContaining({
+            where: {
+              id: "live-form",
+            },
+            data: expect.objectContaining({
+              name: "Updated form",
+              jsonConfig: formConfiguration,
+              isPublished: true,
+              users: {
+                set: [{ id: "1" }],
+              },
+              notificationsUsers: {
+                set: [{ id: "1" }],
+              },
+            }),
+          })
+        );
+        expect(prismaMock.template.delete).toHaveBeenCalledWith({
+          where: {
+            id: "draft-copy",
+          },
+        });
+        expect(updatedTemplate).toEqual(
+          expect.objectContaining({
+            id: "live-form",
+            isPublished: true,
+          })
+        );
+      } finally {
+        process.env.APP_ENV = previousAppEnv;
+      }
+    });
+
+    it("Blocks publishing a working copy while the live source form is still online", async () => {
+      mockResponsesAwaitingConfirmationExist
+        .mockResolvedValueOnce(false)
+        .mockResolvedValueOnce(true);
+
+      (prismaMock.template.findUnique as jest.MockedFunction<any>)
+        .mockResolvedValueOnce({
+          sourceTemplateId: "live-form",
+        })
+        .mockResolvedValueOnce({
+          isPublished: true,
+        });
+
+      await expect(updateIsPublishedForTemplate("draft-copy", true, "", "", "")).rejects.toThrow(
+        SourceTemplateMustBeOfflineError
+      );
+
+      expect(mockDeleteDraftFormResponses).not.toHaveBeenCalled();
+      expect(prismaMock.template.update).not.toHaveBeenCalled();
+    });
+
+    it("Blocks publishing a working copy when the working copy itself has responses awaiting confirmation", async () => {
+      mockResponsesAwaitingConfirmationExist.mockResolvedValueOnce(true);
+
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
+        sourceTemplateId: "live-form",
+      });
+
+      await expect(updateIsPublishedForTemplate("draft-copy", true, "", "", "")).rejects.toThrow(
+        TemplateHasUnprocessedSubmissions
+      );
+
+      expect(mockResponsesAwaitingConfirmationExist).toHaveBeenCalledWith("draft-copy");
+      expect(prismaMock.template.update).not.toHaveBeenCalled();
     });
 
     it("Archives the current published template before moving it back to draft", async () => {
@@ -513,7 +812,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "GrantAccess",
-        { "userList": "user2@test.ca" }
+        { userList: "user2@test.ca" }
       );
 
       // Template has three users assigned to it to start
@@ -581,7 +880,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "GrantAccess",
-        { "userList": "user1@test.ca" }
+        { userList: "user1@test.ca" }
       );
 
       // Log two removed
@@ -591,7 +890,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "RevokeFormAccess",
         "RevokeAccess",
-        { "userList": "user2@test.ca,user4@test.ca" }
+        { userList: "user2@test.ca,user4@test.ca" }
       );
     });
     it("Updates to published forms are not allowed", async () => {
@@ -721,9 +1020,7 @@ describe("Template CRUD functions", () => {
 
       mockUnprocessedSubmissions.mockResolvedValueOnce(true);
 
-      await expect(deleteTemplate("formtestID")).rejects.toThrow(
-        TemplateHasUnprocessedSubmissions
-      );
+      await expect(deleteTemplate("formtestID")).rejects.toThrow(TemplateHasUnprocessedSubmissions);
 
       // Ensure no archival update was attempted
       expect(prismaMock.template.update).not.toHaveBeenCalledWith(
@@ -738,7 +1035,7 @@ describe("Template CRUD functions", () => {
         ...buildPrismaResponse("formtestID", formConfiguration, false),
         users: [{ id: "1" }],
       });
-      
+
       (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration, false),
         users: [{ id: "1" }],

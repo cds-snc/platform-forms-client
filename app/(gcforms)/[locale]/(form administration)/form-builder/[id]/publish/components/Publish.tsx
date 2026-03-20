@@ -21,8 +21,21 @@ import { PrePublishDialog } from "../PrePublishDialog";
 import { FormProperties } from "@lib/types";
 import { ga } from "@lib/client/clientHelpers";
 import { CheckList } from "./CheckList";
+import { TakeLiveFormOfflineButton } from "./TakeLiveFormOfflineButton";
 
-export const Publish = ({ id }: { id: string }) => {
+export const Publish = ({
+  id,
+  sourceTemplateId,
+  sourceTemplateIsPublished,
+  sourceTemplateHasUnprocessed,
+  workingCopyHasResponses,
+}: {
+  id: string;
+  sourceTemplateId?: string;
+  sourceTemplateIsPublished: boolean;
+  sourceTemplateHasUnprocessed: boolean;
+  workingCopyHasResponses: boolean;
+}) => {
   const { t, i18n } = useTranslation("form-builder");
   const router = useRouter();
   const { userCanPublish, isPublishable } = useAllowPublish();
@@ -90,7 +103,7 @@ export const Publish = ({ id }: { id: string }) => {
         publishFormType: formType,
         publishDescription: description,
         publishReason: reasonForPublish,
-        redirectAfter: `/${i18n.language}/form-builder/${id}/published`,
+        redirectAfter: `/${i18n.language}/form-builder/[id]/published`,
       });
       if (error || !formRecord) {
         throw new Error(error);
@@ -175,10 +188,52 @@ export const Publish = ({ id }: { id: string }) => {
         </Alert.Info>
       )}
 
-      {userCanPublish && (
+      {userCanPublish &&
+        !sourceTemplateId &&
+        !sourceTemplateHasUnprocessed &&
+        !workingCopyHasResponses && (
+          <Alert.Warning className="my-5 max-w-4xl">
+            <Alert.Title headingTag="h2">{t("logicPublishWarning.header")}</Alert.Title>
+            <p className="mb-5">{t("logicPublishWarning.text")}</p>
+          </Alert.Warning>
+        )}
+
+      {sourceTemplateId && sourceTemplateHasUnprocessed && (
+        <TakeLiveFormOfflineButton
+          sourceTemplateId={sourceTemplateId}
+          sourceTemplateIsPublished={sourceTemplateIsPublished}
+          hasUnprocessedSubmissions={sourceTemplateHasUnprocessed}
+          newResponsesHref={`/${i18n.language}/form-builder/${sourceTemplateId}/responses/new`}
+          downloadedResponsesHref={`/${i18n.language}/form-builder/${sourceTemplateId}/responses/downloaded`}
+          problemResponsesHref={`/${i18n.language}/form-builder/${sourceTemplateId}/responses/problem`}
+        />
+      )}
+
+      {workingCopyHasResponses && (
         <Alert.Warning className="my-5 max-w-4xl">
-          <Alert.Title headingTag="h2">{t("logicPublishWarning.header")}</Alert.Title>
-          <p className="mb-5">{t("logicPublishWarning.text")}</p>
+          <Alert.Title headingTag="h2">{t("workingCopyDraftResponsesTitle")}</Alert.Title>
+          <p className="mb-4">{t("workingCopyDraftResponsesDescription")}</p>
+          <p className="mb-4 font-semibold">{t("workingCopyDraftResponsesPending")}</p>
+          <p className="mb-4">
+            {t("workingCopyViewCurrentResponses")}{" "}
+            <a href={`/${i18n.language}/form-builder/${id}/responses/new`} className="underline">
+              {t("workingCopyViewLiveNewResponses")}
+            </a>{" "}
+            {t("workingCopyViewLiveResponsesComma")}{" "}
+            <a
+              href={`/${i18n.language}/form-builder/${id}/responses/downloaded`}
+              className="underline"
+            >
+              {t("workingCopyViewLiveDownloadedResponses")}
+            </a>{" "}
+            {t("workingCopyViewLiveResponsesAnd")}{" "}
+            <a
+              href={`/${i18n.language}/form-builder/${id}/responses/problem`}
+              className="underline"
+            >
+              {t("workingCopyViewLiveProblemResponses")}
+            </a>
+          </p>
         </Alert.Warning>
       )}
 
@@ -187,7 +242,11 @@ export const Publish = ({ id }: { id: string }) => {
       {userCanPublish && isPublishable() && (
         <>
           <Button
-            disabled={publishing || showPrePublishDialog}
+            disabled={
+              publishing ||
+              showPrePublishDialog ||
+              Boolean((sourceTemplateId && sourceTemplateHasUnprocessed) || workingCopyHasResponses)
+            }
             className="mt-5"
             onClick={handleOpenPrePublish}
           >

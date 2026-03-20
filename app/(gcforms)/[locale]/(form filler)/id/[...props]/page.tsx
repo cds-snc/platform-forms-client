@@ -106,7 +106,10 @@ export default async function Page(props0: {
   const formId = props[0];
   const step = props[1] ?? "";
   const formRecord = await getPublicTemplateByID(formId);
-  const hasPublishedArchive = formRecord ? await hasPublishedTemplateArchive(formId) : false;
+  // Working-copy releases take the live form offline before cutover.
+  // Always evaluate archive state here so the public route explicitly treats
+  // previously-published offline forms as maintenance, not as a draft 404.
+  const hasPublishedArchive = await hasPublishedTemplateArchive(formId);
   const isTemporarilyUnavailable = Boolean(
     formRecord && !formRecord.isPublished && hasPublishedArchive
   );

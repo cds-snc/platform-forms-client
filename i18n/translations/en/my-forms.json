@@ -54,6 +54,7 @@
       "description": "Action required: ",
       "linkText": "Sign off on responses"
     },
+    "workingDraft": "Working draft in progress",
     "unnamedForm": "Unnamed form file"
   },
   "responseTemplate": {

@@ -113,6 +113,53 @@ const CardTitle = async ({ name }: { name: string }) => {
   return <h2 className={classes}>{name ? name : t("card.unnamedForm")}</h2>;
 };
 
+const WorkingDraftBadge = async ({
+  id,
+  isPublished,
+  workingDraftId,
+  sourceTemplateId,
+}: {
+  id: string;
+  isPublished: boolean;
+  workingDraftId?: string;
+  sourceTemplateId?: string;
+}) => {
+  const {
+    t,
+    i18n: { language },
+  } = await serverTranslation("my-forms");
+
+  if (isPublished && workingDraftId) {
+    return (
+      <Link
+        href={`/${language}/form-builder/${workingDraftId}/edit/`}
+        className="mt-3 inline-flex self-start rounded border-1 border-blue-700 bg-blue-100 px-2 py-1 text-sm text-black"
+        prefetch={false}
+      >
+        {t("card.workingDraft")}
+      </Link>
+    );
+  }
+
+  if (!isPublished && sourceTemplateId) {
+    return (
+      <Link
+        href={`/${language}/form-builder/${id}/edit/`}
+        className="mt-3 inline-flex self-start rounded border-1 border-blue-700 bg-blue-100 px-2 py-1 text-sm text-black"
+        prefetch={false}
+      >
+        {t("card.workingDraft")}
+      </Link>
+    );
+  }
+
+  if (!isPublished || !workingDraftId) {
+    return null;
+  }
+
+  return null;
+};
+
 const CardDate = async ({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
   const { t } = await serverTranslation(["my-forms", "common"]);
   function formatDate(date: string) {
@@ -160,6 +207,9 @@ export interface CardI {
   url: string;
   overdue: boolean;
   status?: string;
+  hasWorkingDraft: boolean;
+  workingDraftId?: string;
+  sourceTemplateId?: string;
 }
 
 export const Card = async ({ card, status }: { card: CardI; status?: string }) => {
@@ -174,6 +224,12 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
             <CardTitle name={card.name} />
             <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
           </div>
+          <WorkingDraftBadge
+            id={card.id}
+            isPublished={card.isPublished}
+            workingDraftId={card.workingDraftId}
+            sourceTemplateId={card.sourceTemplateId}
+          />
         </div>
 
         <Suspense fallback={<Skeleton count={2} className="my-4 ml-4 w-[300px]" />}>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Alert, Button } from "@clientComponents/globals";
-import { updateTemplatePublishedStatus } from "@formBuilder/actions";
+import { createWorkingCopyForPublishedTemplate } from "@formBuilder/actions";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { clearTemplateStore } from "@lib/store/utils";
 
@@ -20,12 +20,9 @@ export const StartEditingPublishedFormButton = ({ id, locale }: { id: string; lo
     setHasError(false);
     setIsSubmitting(true);
 
-    const { formRecord, error } = await updateTemplatePublishedStatus({
+    const { formRecord, error } = await createWorkingCopyForPublishedTemplate({
       id,
-      isPublished: false,
-      publishReason: "",
-      publishFormType: "",
-      publishDescription: "",
+      locale,
     });
 
     if (error || !formRecord) {
@@ -34,10 +31,10 @@ export const StartEditingPublishedFormButton = ({ id, locale }: { id: string; lo
       return;
     }
 
-    setId(id);
+    setId(formRecord.id);
     setIsPublished(false);
     clearTemplateStore();
-    window.location.assign(`/${locale}/form-builder/${id}/edit`);
+    window.location.assign(`/${locale}/form-builder/${formRecord.id}/edit`);
   };
 
   return (

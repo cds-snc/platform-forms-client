@@ -7,7 +7,7 @@ import { Navigation } from "./components/server/Navigation";
 import { Cards } from "./components/server/Cards";
 import { NewFormButton } from "./components/server/NewFormButton";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
-import { getAllTemplatesForUser, TemplateOptions } from "@lib/templates";
+import { getAllTemplatesForUser, TemplateListRecord, TemplateOptions } from "@lib/templates";
 import { DeliveryOption } from "@lib/types";
 import { getOverdueTemplateIds } from "@lib/overdue";
 import { Invitations } from "./components/Invitations/Invitations";
@@ -26,6 +26,9 @@ export type FormsTemplate = {
   date: string;
   url: string;
   overdue: boolean;
+  hasWorkingDraft: boolean;
+  workingDraftId?: string;
+  sourceTemplateId?: string;
 };
 
 export async function generateMetadata(props: {
@@ -74,7 +77,7 @@ export default async function Page(props: {
     },
     sortByDateUpdated: "desc",
   };
-  const templates = (await getAllTemplatesForUser(options)).map((template) => {
+  const templates = (await getAllTemplatesForUser(options)).map((template: TemplateListRecord) => {
     const {
       id,
       form: { titleEn = "", titleFr = "" },
@@ -83,6 +86,9 @@ export default async function Page(props: {
       isPublished,
       updatedAt,
       ttl,
+      hasWorkingDraft,
+      workingDraftId,
+      sourceTemplateId,
     } = template;
     return {
       id,
@@ -95,6 +101,9 @@ export default async function Page(props: {
       url: `/${locale}/id/${id}`,
       overdue: false,
       ttl: ttl ? new Date(ttl) : null,
+      hasWorkingDraft: Boolean(hasWorkingDraft),
+      ...(workingDraftId && { workingDraftId }),
+      ...(sourceTemplateId && { sourceTemplateId }),
     };
   });
 

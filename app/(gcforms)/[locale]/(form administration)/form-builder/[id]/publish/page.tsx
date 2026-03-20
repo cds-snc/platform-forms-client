@@ -8,7 +8,8 @@ import { Language } from "@lib/types/form-builder-types";
 import { cn } from "@lib/utils";
 import { PublishCard } from "./components/PublishCard";
 import { PublishInfo } from "./components/PublishInfo";
-import { getTemplatePublishedStatus } from "@root/lib/templates";
+import { getFullTemplateByID, getTemplatePublishedStatus } from "@root/lib/templates";
+import { responsesAwaitingConfirmationExist } from "@root/lib/vault";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata(props: {
@@ -47,6 +48,17 @@ export default async function Page(props: { params: Promise<{ id: string; locale
     redirect(`/${locale}/form-builder/${id}/published`);
   }
 
+  const template = await getFullTemplateByID(id);
+  const sourceTemplateId =
+    typeof template?.sourceTemplateId === "string" ? template.sourceTemplateId : undefined;
+  const workingCopyHasResponsesAwaitingConfirmation = await responsesAwaitingConfirmationExist(id);
+  const sourceTemplateIsPublished = sourceTemplateId
+    ? await getTemplatePublishedStatus(sourceTemplateId)
+    : false;
+  const sourceTemplateHasResponsesAwaitingConfirmation = sourceTemplateId
+    ? await responsesAwaitingConfirmationExist(sourceTemplateId)
+    : false;
+
   const userCanPublish = await authorization
     .canPublishForm(id)
     .then(() => true)
@@ -61,7 +73,14 @@ export default async function Page(props: { params: Promise<{ id: string; locale
         )}
       >
         <div className={cn(userCanPublish && "tablet:col-span-1 laptop:col-span-2")}>
-          <PublishCard id={id} locale={locale as Language} />
+          <PublishCard
+            id={id}
+            locale={locale as Language}
+            sourceTemplateId={sourceTemplateId}
+            sourceTemplateIsPublished={sourceTemplateIsPublished ?? false}
+            sourceTemplateHasResponses={sourceTemplateHasResponsesAwaitingConfirmation}
+            workingCopyHasResponses={workingCopyHasResponsesAwaitingConfirmation}
+          />
         </div>
         {userCanPublish && (
           <div>
