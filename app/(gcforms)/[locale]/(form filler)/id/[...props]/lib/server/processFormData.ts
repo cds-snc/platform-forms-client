@@ -11,6 +11,7 @@ type ProcessFormDataParams = {
   formId: string;
   language?: string;
   fileChecksums?: Record<string, string>;
+  expectedUpdatedAt?: string;
 };
 
 export const processFormData = async ({
@@ -19,6 +20,7 @@ export const processFormData = async ({
   formId,
   language,
   fileChecksums,
+  expectedUpdatedAt,
 }: ProcessFormDataParams): Promise<{
   submissionId: string;
   fileURLMap?: SignedURLMap;
@@ -43,6 +45,10 @@ export const processFormData = async ({
 
   if (!form.isPublished) {
     throw new FormIsClosedError("Form is temporarily unavailable and not accepting submissions");
+  }
+
+  if (expectedUpdatedAt && form.updatedAt !== expectedUpdatedAt) {
+    throw new FormIsClosedError("Form content has changed. Reload the page to continue.");
   }
 
   // Check to see if form is closed and block response submission

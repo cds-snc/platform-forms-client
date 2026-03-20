@@ -67,6 +67,7 @@ describe("submitForm", () => {
   const mockTemplate: PublicFormRecord = {
     id: mockFormId,
     isPublished: true,
+    updatedAt: "2026-03-20T10:00:00.000Z",
     closingDate: undefined,
     securityAttribute: "Unclassified",
     form: {
@@ -136,6 +137,26 @@ describe("submitForm", () => {
       error: {
         name: "FormClosedError",
         message: "Form is temporarily unavailable",
+      },
+    });
+
+    expect(processFormData).not.toHaveBeenCalled();
+    expect(sendNotifications).not.toHaveBeenCalled();
+  });
+
+  it("should reject stale in-flight submissions after the live form changes", async () => {
+    (getPublicTemplateByID as Mock).mockResolvedValue({
+      ...mockTemplate,
+      updatedAt: "2026-03-20T10:05:00.000Z",
+    });
+
+    const result = await submitForm(mockValues, mockLanguage, mockTemplate);
+
+    expect(result).toEqual({
+      id: mockFormId,
+      error: {
+        name: "FormClosedError",
+        message: "Form content has changed. Reload the page to continue.",
       },
     });
 

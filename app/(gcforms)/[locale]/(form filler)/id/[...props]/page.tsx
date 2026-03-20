@@ -50,6 +50,7 @@ const TemporarilyUnavailablePage = ({
           initialAvailability={false}
           becameAvailableMessage={becameAvailableMessage}
           becameUnavailableMessage={becameUnavailableMessage}
+          contentUpdatedMessage={becameAvailableMessage}
           reloadLabel={reloadLabel}
         />
         <div className="mb-10 rounded-md border-1 border-blue-dark bg-gray-soft p-10">
@@ -170,6 +171,7 @@ export default async function Page(props0: {
             initialAvailability={true}
             becameAvailableMessage={t("temporarilyUnavailableAvailableMessage")}
             becameUnavailableMessage={t("temporarilyUnavailableUnavailableMessage")}
+            contentUpdatedMessage={t("temporarilyUnavailableUpdatedMessage")}
             reloadLabel={t("temporarilyUnavailableReload")}
             unavailableRedirectUrl={`/${language}/id/${formId}`}
           />

@@ -328,7 +328,7 @@ export const Form = withFormik<FormProps, Responses>({
       const result = await submitForm(
         formValuesWithoutFileContent,
         formikBag.props.language,
-        formikBag.props.formRecord.id,
+        formikBag.props.formRecord,
         formikBag.props.captchaToken?.current,
         fileChecksums
       );

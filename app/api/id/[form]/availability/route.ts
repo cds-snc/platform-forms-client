@@ -1,13 +1,33 @@
-import { getTemplatePublishedStatus } from "@lib/templates";
+import { prisma } from "@lib/integration/prismaConnector";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const encoder = new TextEncoder();
-const POLL_INTERVAL_MS = 10000;
+const POLL_INTERVAL_MS = 2000;
 
-const formatEvent = (event: string, data: Record<string, boolean | number>) => {
+const formatEvent = (
+  event: string,
+  data: Record<string, boolean | number | "availability" | "content">
+) => {
   return encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+};
+
+const getAvailabilitySnapshot = async (form: string) => {
+  const template = await prisma.template.findUnique({
+    where: {
+      id: form,
+    },
+    select: {
+      isPublished: true,
+      updated_at: true,
+    },
+  });
+
+  return {
+    available: Boolean(template?.isPublished),
+    updatedAt: template?.updated_at?.getTime() ?? null,
+  };
 };
 
 export async function GET(
@@ -24,6 +44,7 @@ export async function GET(
     start(controller) {
       let closed = false;
       let previousPublishedState: boolean | null = null;
+      let previousUpdatedAt: number | null = null;
 
       const close = () => {
         if (closed) {
@@ -35,10 +56,11 @@ export async function GET(
       };
 
       const checkAvailability = async () => {
-        const isPublished = Boolean(await getTemplatePublishedStatus(form));
+        const { available: isPublished, updatedAt } = await getAvailabilitySnapshot(form);
 
         if (previousPublishedState === null) {
           previousPublishedState = isPublished;
+          previousUpdatedAt = updatedAt;
           controller.enqueue(
             formatEvent("status", { available: isPublished, timestamp: Date.now() })
           );
@@ -47,12 +69,32 @@ export async function GET(
 
         if (previousPublishedState !== isPublished) {
           previousPublishedState = isPublished;
+          previousUpdatedAt = updatedAt;
           controller.enqueue(
-            formatEvent("changed", { available: isPublished, timestamp: Date.now() })
+            formatEvent("changed", {
+              available: isPublished,
+              timestamp: Date.now(),
+              reason: "availability",
+            })
           );
           close();
           return;
         }
+
+        if (isPublished && previousUpdatedAt !== null && updatedAt !== previousUpdatedAt) {
+          previousUpdatedAt = updatedAt;
+          controller.enqueue(
+            formatEvent("changed", {
+              available: true,
+              timestamp: Date.now(),
+              reason: "content",
+            })
+          );
+          close();
+          return;
+        }
+
+        previousUpdatedAt = updatedAt;
 
         controller.enqueue(
           formatEvent("status", { available: isPublished, timestamp: Date.now() })

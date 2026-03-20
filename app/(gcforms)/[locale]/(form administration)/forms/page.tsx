@@ -90,6 +90,9 @@ export default async function Page(props: {
       workingDraftId,
       sourceTemplateId,
     } = template;
+    const normalizedSourceTemplateId =
+      typeof sourceTemplateId === "string" ? sourceTemplateId : undefined;
+
     return {
       id,
       titleEn,
@@ -103,9 +106,37 @@ export default async function Page(props: {
       ttl: ttl ? new Date(ttl) : null,
       hasWorkingDraft: Boolean(hasWorkingDraft),
       ...(workingDraftId && { workingDraftId }),
-      ...(sourceTemplateId && { sourceTemplateId }),
+      ...(normalizedSourceTemplateId && { sourceTemplateId: normalizedSourceTemplateId }),
     };
   });
+
+  const sourceTemplateIds = [
+    ...new Set(
+      templates.flatMap(({ sourceTemplateId }) => (sourceTemplateId ? [sourceTemplateId] : []))
+    ),
+  ];
+  const publishedSourceTemplateIds = new Set(
+    sourceTemplateIds.length
+      ? (
+          await prisma.template.findMany({
+            where: {
+              id: {
+                in: sourceTemplateIds,
+              },
+              isPublished: true,
+              ttl: null,
+            },
+            select: {
+              id: true,
+            },
+          })
+        ).map(({ id }) => id)
+      : []
+  );
+
+  const visibleTemplates = templates.filter(
+    ({ sourceTemplateId }) => !sourceTemplateId || !publishedSourceTemplateIds.has(sourceTemplateId)
+  );
 
   const invitations = await prisma.invitation.findMany({
     where: {
@@ -128,7 +159,9 @@ export default async function Page(props: {
     },
   });
 
-  const overdueTemplateIds = await getOverdueTemplateIds(templates.map((template) => template.id));
+  const overdueTemplateIds = await getOverdueTemplateIds(
+    visibleTemplates.map((template) => template.id)
+  );
 
   return (
     <div className="mx-auto w-[980px]">
@@ -145,7 +178,7 @@ export default async function Page(props: {
           <strong>{t("archivedNotice2")}</strong>
         </div>
       )}
-      <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} status={status} />
+      <Cards templates={visibleTemplates} overdueTemplateIds={overdueTemplateIds} status={status} />
     </div>
   );
 }

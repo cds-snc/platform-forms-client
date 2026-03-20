@@ -364,6 +364,7 @@ export async function getAllTemplatesForUser(
           name: true,
           jsonConfig: true,
           isPublished: true,
+          sourceTemplateId: true,
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,
@@ -1003,6 +1004,62 @@ export async function updateIsPublishedForTemplate(
     }
 
     if (hasResponsesAwaitingConfirmation) throw new TemplateHasUnprocessedSubmissions();
+
+    if (sourceTemplateStatus?.isPublished) {
+      const sourceTemplateTakenOffline = await prisma
+        .$transaction(async (transaction) => {
+          const sourceTemplateToArchive = await transaction.template.findUnique({
+            where: {
+              id: sourceTemplateId,
+            },
+            select: {
+              jsonConfig: true,
+              isPublished: true,
+            },
+          });
+
+          if (!sourceTemplateToArchive?.isPublished) {
+            return sourceTemplateToArchive;
+          }
+
+          await transaction.templateArchive.create({
+            data: {
+              templateId: sourceTemplateId,
+              jsonConfig: sourceTemplateToArchive.jsonConfig as Prisma.InputJsonValue,
+            },
+          });
+
+          return transaction.template.update({
+            where: {
+              id: sourceTemplateId,
+              isPublished: {
+                not: false,
+              },
+            },
+            data: {
+              isPublished: false,
+            },
+            select: {
+              id: true,
+            },
+          });
+        })
+        .catch((e) => prismaErrors(e, null));
+
+      if (sourceTemplateTakenOffline === null) {
+        return null;
+      }
+
+      if (formCache.cacheAvailable) {
+        formCache.invalidate(sourceTemplateId);
+      }
+
+      if (process.env.APP_ENV !== "test" && process.env.NODE_ENV !== "test") {
+        // Give live availability watchers a chance to observe maintenance mode
+        // before the replacement version is published.
+        await new Promise((resolve) => setTimeout(resolve, 2200));
+      }
+    }
 
     if (process.env.APP_ENV !== "test") {
       await deleteDraftFormResponses(formID);

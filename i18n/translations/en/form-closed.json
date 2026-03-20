@@ -10,6 +10,7 @@
   "defaultFormName": "Untitled form",
   "temporarilyUnavailableAvailableMessage": "This form is available again. Reload this page to continue.",
   "temporarilyUnavailableReload": "Reload page",
+  "temporarilyUnavailableUpdatedMessage": "A new version of this form is available. Reload this page to continue.",
   "temporarilyUnavailableUnavailableMessage": "This form is now offline for maintenance. Reload this page for the latest status.",
   "temporarilyUnavailableTitle": "This form is offline for maintenance",
   "temporarilyUnavailableBody": "This form is temporarily unavailable while maintenance is underway. Please check back later."

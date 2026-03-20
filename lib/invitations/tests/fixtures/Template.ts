@@ -9,6 +9,7 @@ interface User {
 interface Template {
   id: string;
   name: string;
+  sourceTemplateId: string | null;
   securityAttribute: string;
   users?: User[];
   closingDate: Date;
@@ -32,6 +33,7 @@ export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
     id: "template-id",
     users: [{ id: "user-id", email: "test@cds-snc.ca", name: "test user" }],
     name: "template-name",
+    sourceTemplateId: null,
     securityAttribute: "Unclassified",
     closingDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     created_at: new Date(),

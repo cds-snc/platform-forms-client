@@ -43,12 +43,24 @@ export async function submitForm(
 }> {
   return traceFunction("submitForm", async () => {
     const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
+    const expectedUpdatedAt =
+      typeof formRecordOrId === "string" ? undefined : formRecordOrId.updatedAt;
 
     try {
       const template = await getPublicTemplateByID(formId);
 
       if (!template) {
         throw new Error(`Could not find any form associated to identifier ${formId}`);
+      }
+
+      if (expectedUpdatedAt && template.updatedAt !== expectedUpdatedAt) {
+        return {
+          id: formId,
+          error: {
+            name: FormStatus.FORM_CLOSED_ERROR,
+            message: "Form content has changed. Reload the page to continue.",
+          },
+        };
       }
 
       if (!template.isPublished) {
@@ -122,6 +134,7 @@ export async function submitForm(
         formId,
         language,
         fileChecksums,
+        ...(expectedUpdatedAt && { expectedUpdatedAt }),
       });
 
       sendNotifications(formId, template.form.titleEn, template.form.titleFr);

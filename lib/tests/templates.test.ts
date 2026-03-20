@@ -593,7 +593,7 @@ describe("Template CRUD functions", () => {
       );
     });
 
-    it("Publishes a working copy back into its source form", async () => {
+    it("Takes the live source offline before publishing a working copy back into it", async () => {
       const previousAppEnv = process.env.APP_ENV;
       process.env.APP_ENV = "development";
 
@@ -603,6 +603,10 @@ describe("Template CRUD functions", () => {
             sourceTemplateId: "live-form",
           })
           .mockResolvedValueOnce({
+            isPublished: true,
+          })
+          .mockResolvedValueOnce({
+            jsonConfig: { old: true },
             isPublished: true,
           })
           .mockResolvedValueOnce({
@@ -623,7 +627,7 @@ describe("Template CRUD functions", () => {
           .mockResolvedValueOnce({
             id: "live-form",
             jsonConfig: { old: true },
-            isPublished: true,
+            isPublished: false,
           })
           .mockResolvedValueOnce({
             ...buildPrismaResponse("live-form", formConfiguration, true),
@@ -632,9 +636,11 @@ describe("Template CRUD functions", () => {
             closedDetails: null,
           });
 
-        (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-          buildPrismaResponse("live-form", formConfiguration, true)
-        );
+        (prismaMock.template.update as jest.MockedFunction<any>)
+          .mockResolvedValueOnce({
+            id: "live-form",
+          })
+          .mockResolvedValueOnce(buildPrismaResponse("live-form", formConfiguration, true));
 
         const updatedTemplate = await updateIsPublishedForTemplate("draft-copy", true, "", "", "");
 
@@ -647,7 +653,22 @@ describe("Template CRUD functions", () => {
             jsonConfig: { old: true },
           },
         });
-        expect(prismaMock.template.update).toHaveBeenCalledWith(
+        expect(prismaMock.template.update).toHaveBeenNthCalledWith(
+          1,
+          expect.objectContaining({
+            where: {
+              id: "live-form",
+              isPublished: {
+                not: false,
+              },
+            },
+            data: {
+              isPublished: false,
+            },
+          })
+        );
+        expect(prismaMock.template.update).toHaveBeenNthCalledWith(
+          2,
           expect.objectContaining({
             where: {
               id: "live-form",
