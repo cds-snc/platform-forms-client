@@ -136,6 +136,7 @@
     "react-toastify": "11.0.5",
     "react-transition-group": "^4.4.5",
     "reactflow": "^11.11.3",
+    "recheck": "^4.5.0",
     "server-only": "^0.0.1",
     "tailwind-merge": "^2.2.0",
     "ts-command-line-args": "2.5.1",

@@ -42,7 +42,9 @@ export const MoreDialog = () => {
 
   const [item, setItem] = React.useState<FormElement | undefined>(undefined);
   const [isOpen, setIsOpen] = React.useState(false);
-  const [isValid, setIsValid] = React.useState(true);
+  const [isQuestionIdValid, setIsQuestionIdValid] = React.useState(true);
+  const [isCustomRegexValid, setIsCustomRegexValid] = React.useState(true);
+  const isValid = isQuestionIdValid && isCustomRegexValid;
   const { Event } = useCustomEvent();
   const dialog = useDialogRef();
   const { refs } = useRefsContext();
@@ -136,19 +138,24 @@ export const MoreDialog = () => {
               <CharacterLimitOptions item={item} setItem={setItem} />
               <SortOptions item={item} setItem={setItem} />
               <FileTypeOptions item={item} setItem={setItem} />
-              {item.type === "textField" && item.properties.validation?.type !== "number" && (
-                <InfoDetails summary={t("moreDialog.customRegex.title")} className="mb-4">
-                  <CustomRegexOptions item={item} setItem={setItem} />
-                </InfoDetails>
-              )}
+              <CustomRegexOptions
+                setIsValid={setIsCustomRegexValid}
+                item={item}
+                setItem={setItem}
+              />
+
               {item.type !== "dynamicRow" && (
                 <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
                   <p className="mt-6">{t("moreDialog.apiOptionsSection.description")}</p>
-                  <QuestionIdOptions setIsValid={setIsValid} item={item} setItem={setItem} />
+                  <QuestionIdOptions
+                    setIsValid={setIsQuestionIdValid}
+                    item={item}
+                    setItem={setItem}
+                  />
                   <QuestionTagOptions item={item} setItem={setItem} />
                 </InfoDetails>
               )}
-              <input type="submit" className="hidden" />
+              {isValid && <input type="submit" className="hidden" />}
             </form>
           </div>
         </Dialog>

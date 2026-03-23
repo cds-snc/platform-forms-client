@@ -4607,6 +4607,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pkgr/core@npm:^0.1.0":
+  version: 0.1.2
+  resolution: "@pkgr/core@npm:0.1.2"
+  checksum: 10c0/fd4acc154c8f1b5c544b6dd152b7ce68f6cbb8b92e9abf2e5d756d6e95052d08d0d693a668dea67af1386d62635b50adfe463cce03c5620402b468498cc7592f
+  languageName: node
+  linkType: hard
+
 "@pkgr/core@npm:^0.2.9":
   version: 0.2.9
   resolution: "@pkgr/core@npm:0.2.9"
@@ -13018,6 +13025,7 @@ __metadata:
     react-toastify: "npm:11.0.5"
     react-transition-group: "npm:^4.4.5"
     reactflow: "npm:^11.11.3"
+    recheck: "npm:^4.5.0"
     sass: "npm:^1.93.2"
     sass-loader: "npm:^16.0.5"
     server-only: "npm:^0.0.1"
@@ -17575,6 +17583,66 @@ __metadata:
   languageName: node
   linkType: hard
 
+"recheck-jar@npm:4.5.0":
+  version: 4.5.0
+  resolution: "recheck-jar@npm:4.5.0"
+  checksum: 10c0/f8c69da80e29bdf629fef341fad7acbdd4e1ed901d29ea1e71bf539274a6b78f2e5e1a47b2610cf7204540da3a3c18da2a9ea952f0a32f8f41fc2cebb554f2d8
+  languageName: node
+  linkType: hard
+
+"recheck-linux-x64@npm:4.5.0":
+  version: 4.5.0
+  resolution: "recheck-linux-x64@npm:4.5.0"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"recheck-macos-arm64@npm:4.5.0":
+  version: 4.5.0
+  resolution: "recheck-macos-arm64@npm:4.5.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"recheck-macos-x64@npm:4.5.0":
+  version: 4.5.0
+  resolution: "recheck-macos-x64@npm:4.5.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"recheck-windows-x64@npm:4.5.0":
+  version: 4.5.0
+  resolution: "recheck-windows-x64@npm:4.5.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"recheck@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "recheck@npm:4.5.0"
+  dependencies:
+    recheck-jar: "npm:4.5.0"
+    recheck-linux-x64: "npm:4.5.0"
+    recheck-macos-arm64: "npm:4.5.0"
+    recheck-macos-x64: "npm:4.5.0"
+    recheck-windows-x64: "npm:4.5.0"
+    synckit: "npm:0.9.2"
+  dependenciesMeta:
+    recheck-jar:
+      optional: true
+    recheck-linux-x64:
+      optional: true
+    recheck-macos-arm64:
+      optional: true
+    recheck-macos-x64:
+      optional: true
+    recheck-windows-x64:
+      optional: true
+  checksum: 10c0/eae8d32bd48dafec6072e64863f2557cbaef807101a61c62b1262b35b15d50006086ebcab76305c6fc69c2d00c98d4a179cd290347f2bd044001ca46b03346dc
+  languageName: node
+  linkType: hard
+
 "redent@npm:^3.0.0":
   version: 3.0.0
   resolution: "redent@npm:3.0.0"
@@ -18949,6 +19017,16 @@ __metadata:
   version: 3.2.4
   resolution: "symbol-tree@npm:3.2.4"
   checksum: 10c0/dfbe201ae09ac6053d163578778c53aa860a784147ecf95705de0cd23f42c851e1be7889241495e95c37cabb058edb1052f141387bef68f705afc8f9dd358509
+  languageName: node
+  linkType: hard
+
+"synckit@npm:0.9.2":
+  version: 0.9.2
+  resolution: "synckit@npm:0.9.2"
+  dependencies:
+    "@pkgr/core": "npm:^0.1.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/e0c262817444e5b872708adb6f5ad37951ba33f6b2d1d4477d45db1f57573a784618ceed5e6614e0225db330632b1f6b95bb74d21e4d013e45ad4bde03d0cb59
   languageName: node
   linkType: hard
 

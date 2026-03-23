@@ -677,7 +677,8 @@
       "description": "Use a regular expression (regex) to create custom validation for this question.",
       "label": "Regex",
       "errorInvalidRegex": "The regex pattern is invalid. Please enter a valid regex pattern.",
-      "previousPatterns": "Previous patterns"
+      "previousPatterns": "Previous patterns",
+      "errorUnsafeRegex": "The regex pattern is potentially unsafe. Please avoid patterns that could cause performance issues, such as those with nested quantifiers or excessive backtracking."
     }
   },
   "moreOptions": "Plus d'options  ",

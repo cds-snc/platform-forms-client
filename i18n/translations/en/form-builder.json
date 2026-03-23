@@ -674,10 +674,11 @@
     },
     "customRegex": {
       "title": "Customize input validation",
-      "description": "Use a regular expression (regex) to create custom validation for this question. Suggestion to use Hint text to provide instructions on the expected format of the answer.",
+      "description": "Use a regular expression (regex) to create custom validation for this question. Use Hint text to provide instructions on the expected format of the answer. Be sure to test your form thoroughly if you use this option to make sure the regex works as expected.",
       "label": "Custom regex",
       "errorInvalidRegex": "The regex pattern is invalid. Please enter a valid regex pattern.",
-      "previousPatterns": "Previous patterns"
+      "previousPatterns": "Previous patterns",
+      "errorUnsafeRegex": "The regex pattern is potentially unsafe. Please avoid patterns that could cause performance issues, such as those with nested quantifiers or excessive backtracking."
     }
   },
   "moreOptions": "More options",
