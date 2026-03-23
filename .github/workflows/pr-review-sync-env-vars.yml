@@ -1,10 +1,9 @@
 name: PR review sync envionment variables
 
 on:
-  workflow_run:
-    workflows: ["Deploy to Staging"]
-    types:
-      - completed
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *" # runs every hour
 
 env:
   AWS_ACCOUNT_ID: ${{ vars.STAGING_AWS_ACCOUNT_ID }}
