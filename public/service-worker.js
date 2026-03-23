@@ -5,6 +5,8 @@
 // @ts-expect-error - self is ServiceWorkerGlobalScope in worker context
 const sw = self;
 
+let triggerUpdate = false;
+
 /* eslint-disable no-console */
 
 sw.addEventListener("install", () => {
@@ -23,6 +25,28 @@ sw.addEventListener("fetch", (event) => {
     event.respondWith(
       new Promise((resolve) => {
         fetch(event.request).then((response) => {
+          // Here for testing purposes only, remove below before merging
+          if (triggerUpdate) {
+            const testingHeaders = new Headers(response.headers);
+            testingHeaders.set("x-nextjs-action-not-found", "1");
+            testingHeaders.set("cache-control", "no-cache, no-store, max-age=0, must-revalidate");
+
+            const modifiedResponse = new Response("Server action not found.", {
+              status: 404,
+              statusText: "Not Found",
+              headers: testingHeaders,
+            });
+
+            console.info("Asking clients to update");
+            broadcastMessageToClients({
+              type: "GCFORMS_UPDATE",
+              message: "Update is required to use server actions",
+            });
+
+            return resolve(modifiedResponse);
+          }
+          // Here for testing purposes only, remove above before merging
+
           if (
             response.status === 404 &&
             Boolean(response.headers.get("x-nextjs-action-not-found"))
