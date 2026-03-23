@@ -11,10 +11,6 @@ interface ComboboxProps extends InputFieldProps {
   choices?: string[];
 }
 
-// A number of warkarounds are used to support iPhone+Safari+VO and android+Chrome+Talkback.
-// If future issues are found, I strongly suggest using gov.uk's strategy of using a native
-// <select> element for mobile devices, and only using the custom combobox on desktop.
-
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const { id, name, className, choices = [], required, ariaDescribedBy, lang } = props;
   const classes = cn("gc-combobox gcds-input-wrapper", className);
@@ -28,9 +24,6 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const [bump, setBump] = useState(false);
   const [announcedMessage, setAnnouncedMessage] = useState("");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const voFocusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [items, setItems] = React.useState(choices);
   const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
@@ -87,43 +80,9 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
     };
   }, [targetMessage, announcementDelay, isOpen]);
 
-  // iPhone+VoiceOver: when a text field has focus and the on-screen keyboard is visible,
-  // VoiceOver enters "direct interaction mode" — swipe gestures move the text cursor
-  // instead of navigating the accessibility tree. The list is visible but unreachable
-  // via swipe. Fix: after typing debounces, move DOM focus to the listbox so VoiceOver
-  // exits text-interaction mode and can swipe right/left through the options.
-  // Inspired by WAI-ARIA Authoring Practices "select-only combobox".
-  useEffect(() => {
-    if (typeof window === "undefined" || !("ontouchstart" in window)) return;
-
-    if (voFocusTimerRef.current) clearTimeout(voFocusTimerRef.current);
-
-    if (isOpen && items.length > 0) {
-      voFocusTimerRef.current = setTimeout(() => {
-        // Only steal focus from the input itself — never disrupt other interactions.
-        if (id && document.activeElement?.id === id) {
-          const list = containerRef.current?.querySelector<HTMLElement>('[role="listbox"]');
-          list?.focus();
-        }
-      }, 1400);
-    }
-
-    return () => {
-      if (voFocusTimerRef.current) clearTimeout(voFocusTimerRef.current);
-    };
-  }, [isOpen, items, id]); // items reference changes on every filter keystroke → debounce resets
-
-  // When the list closes, return DOM focus to the input if the listbox had it.
-  useEffect(() => {
-    const list = containerRef.current?.querySelector<HTMLElement>('[role="listbox"]');
-    if (!isOpen && list && document.activeElement === list) {
-      if (id) document.getElementById(id)?.focus();
-    }
-  }, [isOpen, id]);
-
   return (
     <>
-      <div ref={containerRef} className={classes} data-testid="combobox" {...(lang && { lang })}>
+      <div className={classes} data-testid="combobox" {...(lang && { lang })}>
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
         {/* Keyboard/touch instructions for AT users, always rendered alongside any passed description. */}

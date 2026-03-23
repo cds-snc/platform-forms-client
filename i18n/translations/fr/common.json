@@ -94,7 +94,7 @@
   "combobox-results-available_other": "[FR]{{count}} options available",
   "combobox-no-results": "[FR]No options available",
   "combobox-of": "[FR]of",
-  "combobox-input-hint": "[FR]When results are available, use up and down arrows to review and enter to select. On touch devices with VoiceOver: after typing, focus will move to the list automatically; swipe right to navigate options and swipe left to return to the search field.",
+  "combobox-input-hint": "[FR]When results are available, use up and down arrows to review and enter to select. Touch device users, explore by touch or with swipe gestures.",
   "server-error": "Désolé, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
   "form-closed-error": "Ce formulaire est fermé et n'accepte plus de soumissions. Réinitialisez cette page pour un message plus spécifique par rapport à la fermeture du formulaire.",
   "title-full": "Formulaires GC - GC Forms",
