@@ -6,6 +6,7 @@
 const sw = self;
 
 let triggerUpdate = false;
+let triggerRef = null;
 
 /* eslint-disable no-console */
 
@@ -21,6 +22,7 @@ sw.addEventListener("activate", async () => {
 sw.addEventListener("fetch", (event) => {
   const requestMethod = event.request.method;
   const nextAction = Boolean(event.request.headers.get("next-action"));
+  fakeUpdateRequirement();
   if (requestMethod === "POST" && nextAction) {
     event.respondWith(
       new Promise((resolve) => {
@@ -42,6 +44,7 @@ sw.addEventListener("fetch", (event) => {
               type: "GCFORMS_UPDATE",
               message: "Update is required to use server actions",
             });
+            triggerUpdate = false;
 
             return resolve(modifiedResponse);
           }
@@ -71,3 +74,16 @@ function broadcastMessageToClients(messageData) {
     });
   });
 }
+
+// Here for testing purposes only, remove below before merging
+function fakeUpdateRequirement() {
+  // Set that a update is required every min.
+  if (!triggerUpdate && !triggerRef) {
+    console.info("Setting Timer to request site update");
+    triggerRef = setTimeout(() => {
+      triggerUpdate = true;
+      console.info("Update ready to be triggered");
+    }, 60000);
+  }
+}
+// Here for testing purposes only, remove above before merging
