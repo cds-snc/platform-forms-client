@@ -14,8 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy-form-viewer-service:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  sync-env-vars:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
