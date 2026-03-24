@@ -9,6 +9,11 @@ import { Options } from "../Options";
 import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
+const CLEAR_OPTIONS_TEXT = "Clear all options";
+const CLEAR_OPTIONS_CONFIRM_TEXT = "Remove all options";
+const CLEAR_OPTIONS_DIALOG_TITLE = "Remove all of the selection options?";
+const CLEAR_OPTIONS_SUCCESS_MESSAGE = "Options were successfully removed.";
+
 const { toastSuccess } = vi.hoisted(() => ({
   toastSuccess: vi.fn(),
 }));
@@ -173,7 +178,7 @@ describe("Options", () => {
     );
 
     expect(screen.getByRole("button", { name: "Add option" })).toBeDisabled();
-    const limitWarning = screen.getByText(`You can add up to ${MAX_CHOICE_AMOUNT} options.`);
+    const limitWarning = screen.getByText(`You can only add up to ${MAX_CHOICE_AMOUNT} options.`);
 
     expect(limitWarning).toBeInTheDocument();
     expect(limitWarning.closest("div")).toHaveAttribute("aria-live", "polite");
@@ -212,20 +217,20 @@ describe("Options", () => {
       </Providers>
     );
 
-    await user.click(screen.getByRole("button", { name: "Clear options" }));
+    await user.click(screen.getByRole("button", { name: CLEAR_OPTIONS_TEXT }));
 
-    expect(screen.getByText("Clear all options?")).toBeInTheDocument();
+    expect(screen.getByText(CLEAR_OPTIONS_DIALOG_TITLE)).toBeInTheDocument();
 
-    await user.click(screen.getAllByRole("button", { name: "Clear options" })[1]);
+    await user.click(screen.getByRole("button", { name: CLEAR_OPTIONS_CONFIRM_TEXT }));
 
     await waitFor(() => {
       expect(screen.queryByDisplayValue("First Option")).not.toBeInTheDocument();
       expect(screen.queryByDisplayValue("Second Option")).not.toBeInTheDocument();
     });
 
-    expect(toastSuccess).toHaveBeenCalledWith("Options were cleared successfully.");
+    expect(toastSuccess).toHaveBeenCalledWith(CLEAR_OPTIONS_SUCCESS_MESSAGE);
     expect(screen.getByRole("button", { name: "Add option" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Clear options" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: CLEAR_OPTIONS_TEXT })).not.toBeInTheDocument();
   });
 
   it("can reopen the clear options dialog after cancelling", async () => {
@@ -258,18 +263,18 @@ describe("Options", () => {
       </Providers>
     );
 
-    await user.click(screen.getByRole("button", { name: "Clear options" }));
-    expect(screen.getByText("Clear all options?")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: CLEAR_OPTIONS_TEXT }));
+    expect(screen.getByText(CLEAR_OPTIONS_DIALOG_TITLE)).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
     await waitFor(() => {
-      expect(screen.queryByText("Clear all options?")).not.toBeInTheDocument();
+      expect(screen.queryByText(CLEAR_OPTIONS_DIALOG_TITLE)).not.toBeInTheDocument();
     });
 
-    await user.click(screen.getByRole("button", { name: "Clear options" }));
+    await user.click(screen.getByRole("button", { name: CLEAR_OPTIONS_TEXT }));
 
-    expect(screen.getByText("Clear all options?")).toBeInTheDocument();
+    expect(screen.getByText(CLEAR_OPTIONS_DIALOG_TITLE)).toBeInTheDocument();
   });
 
   it("shows a success toast after importing options from CSV", async () => {

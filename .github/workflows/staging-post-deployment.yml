@@ -1,4 +1,4 @@
-name: "Staging — Generate SBOM"
+name: "Staging — Post deployment"
 
 on:
   push:
