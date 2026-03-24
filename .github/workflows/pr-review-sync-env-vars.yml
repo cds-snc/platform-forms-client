@@ -3,7 +3,7 @@ name: PR review sync envionment variables
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *" # runs every hour
+    - cron: "0 10-22 * * *" # runs every hour between 6 AM and 6 PM (EDT)
 
 env:
   AWS_ACCOUNT_ID: ${{ vars.STAGING_AWS_ACCOUNT_ID }}
