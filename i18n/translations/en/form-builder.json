@@ -673,12 +673,12 @@
       "errorMaxRows": "The maximum number of answers cannot exceed {{maxRows}}."
     },
     "customRegex": {
-      "title": "Customize input validation",
-      "description": "Use a regular expression (regex) to create custom validation for this question. Use Hint text to provide instructions on the expected format of the answer. Be sure to test your form thoroughly if you use this option to make sure the regex works as expected.",
-      "label": "Custom regex",
+      "title": "Customize advanced input validation",
+      "description": "You can use a regular expression (regex) to create custom validation for this question. Add hint text to your form to provide instructions on how to match expected format of the answer. Be sure to test your form thoroughly, if you use this option, to make sure the regex pattern works as expected.",
+      "label": "Custom regex pattern",
       "errorInvalidRegex": "The regex pattern is invalid. Please enter a valid regex pattern.",
       "previousPatterns": "Previous patterns",
-      "errorUnsafeRegex": "The regex pattern is potentially unsafe. Please avoid patterns that could cause performance issues, such as those with nested quantifiers or excessive backtracking."
+      "errorUnsafeRegex": "This regex pattern is potentially unsafe. Avoid patterns that could cause performance issues, such as those with nested quantifiers or excessive backtracking."
     }
   },
   "moreOptions": "More options",
