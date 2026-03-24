@@ -9,7 +9,7 @@
   "devDependencies": {
     "@types/cli-progress": "^3",
     "tsx": "^4.20.3",
-    "typescript": "^5.9.3"
+    "typescript": "6.0.2"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1012.0",
