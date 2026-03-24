@@ -368,4 +368,13 @@ export const options = [
     logoTitleEn: "Office of the Commissioner of Official Languages",
     logoTitleFr: "Commissariat aux langues officielles",
   },
+  {
+    name: "otc",
+    urlEn: "https://otc-cta.gc.ca/eng",
+    urlFr: "https://otc-cta.gc.ca/fra",
+    logoEn: "/img/branding/otc-cta-en.svg",
+    logoFr: "/img/branding/otc-cta-fr.svg",
+    logoTitleEn: "Canadian Transportation Agency",
+    logoTitleFr: "Office des transports du Canada",
+  },
 ];
