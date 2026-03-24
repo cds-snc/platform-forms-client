@@ -1087,6 +1087,7 @@
   "start": "Start",
   "startErrorTemplateSize": "The form file is too large",
   "startErrorDuplicateQuestionId": "Question IDs must be unique",
+  "startErrorInvalidCustomRegex": "Invalid or unsafe custom regex pattern",
   "startErrorParse": "Failed to read form file",
   "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",

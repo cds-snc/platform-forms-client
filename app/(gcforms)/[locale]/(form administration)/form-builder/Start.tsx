@@ -15,6 +15,7 @@ import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds"
 import { transformFormProperties } from "@lib/store/helpers/elements/transformFormProperties";
 import { BetaComponentsError, checkForBetaComponents } from "@lib/validation/betaCheck";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { validateCustomRegex } from "@root/lib/regex/validateCustomRegex";
 
 export const Start = () => {
   const {
@@ -63,6 +64,12 @@ export const Start = () => {
 
         if (data && !validateUniqueQuestionIds(data.elements)) {
           setErrors([{ message: t("startErrorDuplicateQuestionId") }]);
+          target.value = "";
+          return;
+        }
+
+        if (data && !validateCustomRegex(data.elements)) {
+          setErrors([{ message: t("startErrorInvalidCustomRegex") }]);
           target.value = "";
           return;
         }

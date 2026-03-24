@@ -5,25 +5,9 @@ import { Label } from "./Label";
 import { Input } from "@formBuilder/components/shared/Input";
 import { ErrorMessage } from "@clientComponents/forms";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { checkSync } from "recheck";
 import { InfoDetails } from "../../../../components/shared/InfoDetails";
-
-const isValidRegex = (pattern: string): boolean => {
-  if (!pattern) return true;
-  try {
-    new RegExp(pattern);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-const isSafeRegex = (pattern: string): boolean => {
-  if (!pattern) return true;
-
-  const result = checkSync(pattern, "", { timeout: 1000 });
-  return result.status === "safe";
-};
+import { isValidRegex } from "@root/lib/regex/isValidRegex";
+import { isSafeRegex } from "@root/lib/regex/isSafeRegex";
 
 export const CustomRegexOptions = ({
   item,
