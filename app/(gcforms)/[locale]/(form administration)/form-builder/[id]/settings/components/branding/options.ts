@@ -359,4 +359,13 @@ export const options = [
     logoTitleEn: "Employment Insurance Board of Appeal of Canada",
     logoTitleFr: "Conseil d'appel en assurance-emploi du Canada",
   },
+  {
+    name: "ocol",
+    urlEn: "https://www.clo-ocol.gc.ca",
+    urlFr: "https://www.clo-ocol.gc.ca/fr",
+    logoEn: "/img/branding/ocol-en.svg",
+    logoFr: "/img/branding/ocol-fr.svg",
+    logoTitleEn: "Office of the Commissioner of Official Languages",
+    logoTitleFr: "Commissariat aux langues officielles",
+  },
 ];
