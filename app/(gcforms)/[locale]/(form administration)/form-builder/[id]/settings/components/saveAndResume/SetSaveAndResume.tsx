@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -16,11 +16,8 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
     setSaveAndResume: s.setSaveAndResume,
   }));
 
-  const [status, setStatus] = useState(saveAndResume ? "on" : "off");
-
   const handleToggle = (value: boolean) => {
     const newStatus = value == true ? "off" : "on";
-    setStatus(newStatus);
     saveFormStatus(newStatus);
   };
 
@@ -37,7 +34,7 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
       return;
     }
 
-    setSaveAndResume(status === "off" ? false : true);
+    setSaveAndResume(saveAndResume);
     toast.success(t("saveAndResume.savedSuccessMessage"));
   };
 
@@ -48,7 +45,7 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
       <p>{t("saveAndResume.toggleDescription.text2")}</p>
 
       <SaveAndResumeToggle
-        isChecked={status === "off" ? false : true}
+        isChecked={saveAndResume}
         setIsChecked={handleToggle}
         onLabel={t("saveAndResume.toggleOn")}
         offLabel={t("saveAndResume.toggleOff")}
