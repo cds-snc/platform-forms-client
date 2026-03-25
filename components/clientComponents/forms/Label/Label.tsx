@@ -63,19 +63,9 @@ export const Label = (props: LabelProps): React.ReactElement => {
   );
 
   return group ? (
-    // Work around for Chrome+TalkBack double announce.
-    // See #5846 and https://adrianroselli.com/2022/07/use-legend-and-fieldset.html
-    // The <legend> is hidden from AT (aria-hidden) to prevent TalkBack traversing it
-    // as a standalone content node. The visible <div> carries the id so the parent
-    // <fieldset> can reference it via aria-labelledby for its accessible name.
-    <>
-      <legend aria-hidden="true" data-testid="label" className={"visually-hidden"}>
-        {childrenElements}
-      </legend>
-      <div id={id} className={classes}>
-        {childrenElements}
-      </div>
-    </>
+    <legend data-testid="label" className={classes} id={id}>
+      {childrenElements}
+    </legend>
   ) : (
     <label data-testid="label" className={classes} htmlFor={htmlFor} id={id}>
       {childrenElements}
