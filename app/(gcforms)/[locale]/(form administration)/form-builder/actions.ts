@@ -61,7 +61,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       notificationsInterval,
     }: CreateOrUpdateTemplateType
   ): Promise<{
-    formRecord: { id: string; updatedAt: string | undefined } | null;
+    formRecord: FormRecord | null;
     error?: string;
   }> => {
     try {
@@ -93,7 +93,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       // and internal refresh and can have awkward results if used before an error is thrown by a following fn.
       revalidatePath("/[locale]/forms", "page");
 
-      return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
+      return { formRecord };
     } catch (_) {
       return { formRecord: null, error: "error" };
     }
@@ -119,7 +119,7 @@ export const updateTemplate = AuthenticatedAction(
       formPurpose?: FormPurpose;
     }
   ): Promise<{
-    formRecord: { id: string; updatedAt: string | undefined } | null;
+    formRecord: FormRecord | null;
     error?: string;
   }> => {
     try {
@@ -136,7 +136,7 @@ export const updateTemplate = AuthenticatedAction(
         throw new Error("Failed to update template");
       }
 
-      return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
+      return { formRecord };
     } catch (_) {
       return { formRecord: null, error: "error" };
     }
