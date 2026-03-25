@@ -3,6 +3,7 @@
     "target": "es2020",
     "module": "esnext",
     "declaration": true,
+    "ignoreDeprecations": "6.0",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
