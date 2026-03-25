@@ -2697,7 +2697,7 @@ __metadata:
   dependencies:
     "@types/node": "npm:^24.6.1"
     tsup: "npm:^8.3.6"
-    typescript: "npm:6.0.2"
+    typescript: "npm:^6.0.2"
   languageName: unknown
   linkType: soft
 
@@ -10539,7 +10539,7 @@ __metadata:
     csv-writer: "npm:^1.6.0"
     dotenv: "npm:^16.3.1"
     tsx: "npm:^4.7.0"
-    typescript: "npm:6.0.2"
+    typescript: "npm:^6.0.2"
   languageName: unknown
   linkType: soft
 
@@ -13026,7 +13026,7 @@ __metadata:
     ts-command-line-args: "npm:2.5.1"
     ts-jest: "npm:^29.4.5"
     tsx: "npm:^4.20.6"
-    typescript: "npm:6.0.2"
+    typescript: "npm:^6.0.2"
     unorm: "npm:^1.6.0"
     usehooks-ts: "npm:3.1.1"
     uuid: "npm:9.0.1"
@@ -17768,7 +17768,7 @@ __metadata:
     lorem-ipsum: "npm:^2.0.8"
     tslib: "npm:^2.6.2"
     tsx: "npm:^4.7.0"
-    typescript: "npm:6.0.2"
+    typescript: "npm:^6.0.2"
     uuid: "npm:^13.0.0"
   languageName: unknown
   linkType: soft
@@ -19056,7 +19056,7 @@ __metadata:
     cli-progress: "npm:^3.12.0"
     p-limit: "npm:^6.2.0"
     tsx: "npm:^4.20.3"
-    typescript: "npm:6.0.2"
+    typescript: "npm:^6.0.2"
     uuid: "npm:^11.1.0"
   languageName: unknown
   linkType: soft
@@ -19577,7 +19577,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:6.0.2":
+"typescript@npm:6.0.2, typescript@npm:^6.0.2":
   version: 6.0.2
   resolution: "typescript@npm:6.0.2"
   bin:
@@ -19587,7 +19587,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A6.0.2#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A6.0.2#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^6.0.2#optional!builtin<compat/typescript>":
   version: 6.0.2
   resolution: "typescript@patch:typescript@npm%3A6.0.2#optional!builtin<compat/typescript>::version=6.0.2&hash=5786d5"
   bin:

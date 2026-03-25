@@ -7,14 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.9.6](https://github.com/cds-snc/platform-forms-client/compare/v4.9.5...v4.9.6) (2026-03-24)
 
-
-### Miscellaneous Chores
-
-* upgrade to TypeScript 6.0.2
-
-## [4.9.5](https://github.com/cds-snc/platform-forms-client/compare/v4.9.4...v4.9.5) (2026-03-18)
-
-
 ### Bug Fixes
 
 * resend mfa ([#6859](https://github.com/cds-snc/platform-forms-client/issues/6859)) ([88a1d27](https://github.com/cds-snc/platform-forms-client/commit/88a1d27117a2f9e52852940a7e47bfa72fb6d932))

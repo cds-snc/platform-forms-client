@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/node": "^24.6.1",
     "tsup": "^8.3.6",
-    "typescript": "6.0.2"
+    "typescript": "^6.0.2"
   },
   "packageManager": "yarn@4.10.3"
 }
