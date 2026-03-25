@@ -12,16 +12,16 @@ export interface ErrorListProps {
  * @param id The id of the input field that has the error and we need to focus
  */
 const scrollErrorInView = (id: string) => {
-  const inputElement = document.getElementById(id);
+  const element = document.getElementById(id);
   const labelElement = document.getElementById(`label-${id}`);
-  if (labelElement && inputElement) {
-    inputElement.focus();
-    labelElement.scrollIntoView();
-  }
-  if (inputElement) {
-    inputElement.focus();
-    inputElement.scrollIntoView();
-  }
+  // For fieldsets (radio/checkbox groups), focus the first input inside rather than
+  // the fieldset itself - avoids needing tabindex on the fieldset which causes
+  // screen readers to double-announce the group label.
+  const focusTarget =
+    element?.tagName === "FIELDSET" ? (element.querySelector("input") ?? element) : element;
+  const scrollTarget = labelElement ?? element;
+  focusTarget?.focus();
+  scrollTarget?.scrollIntoView();
 };
 
 /**
