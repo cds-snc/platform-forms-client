@@ -65,8 +65,10 @@ export const Label = (props: LabelProps): React.ReactElement => {
   return group ? (
     // Work around for Chrome+TalkBack double announce.
     // See #5846 and https://adrianroselli.com/2022/07/use-legend-and-fieldset.html
+    // aria-hidden on <legend> prevents TalkBack from navigating to it as a standalone
+    // content node. Chrome still uses it to compute the fieldset's accessible name.
     <>
-      <legend data-testid="label" className={"visually-hidden"} id={id}>
+      <legend aria-hidden="true" data-testid="label" className={"visually-hidden"} id={id}>
         {childrenElements}
       </legend>
       <div aria-hidden="true" className={classes}>
