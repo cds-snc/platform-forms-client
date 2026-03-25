@@ -181,8 +181,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <FormGroup
           name={`${id}`}
-          ariaDescribedBy={description ? `desc-${id}` : undefined}
-          ariaLabelledBy={description ? `label-${id} desc-${id}` : undefined}
+          ariaLabelledBy={description ? `label-${id} desc-${id}` : `label-${id}`}
         >
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
@@ -208,8 +207,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <FormGroup
           name={`${id}`}
-          ariaDescribedBy={description ? `desc-${id}` : undefined}
-          ariaLabelledBy={description ? `label-${id} desc-${id}` : undefined}
+          ariaLabelledBy={description ? `label-${id} desc-${id}` : `label-${id}`}
         >
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
