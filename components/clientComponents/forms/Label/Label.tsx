@@ -63,9 +63,16 @@ export const Label = (props: LabelProps): React.ReactElement => {
   );
 
   return group ? (
-    <legend data-testid="label" className={classes} id={id}>
-      {childrenElements}
-    </legend>
+    // Work around for Chrome+TalkBack double announce.
+    // See #5846 and https://adrianroselli.com/2022/07/use-legend-and-fieldset.html
+    <>
+      <legend data-testid="label" className={"visually-hidden"} id={id}>
+        {childrenElements}
+      </legend>
+      <div aria-hidden="true" className={classes}>
+        {childrenElements}
+      </div>
+    </>
   ) : (
     <label data-testid="label" className={classes} htmlFor={htmlFor} id={id}>
       {childrenElements}
