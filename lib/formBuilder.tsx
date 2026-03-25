@@ -179,10 +179,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup
-          name={`${id}`}
-          ariaLabelledBy={description ? `label-${id} desc-${id}` : `label-${id}`}
-        >
+        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
@@ -205,10 +202,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup
-          name={`${id}`}
-          ariaLabelledBy={description ? `label-${id} desc-${id}` : `label-${id}`}
-        >
+        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
