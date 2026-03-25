@@ -18,7 +18,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy-form-viewer-service:
+  deploy-rainbow-lambda:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

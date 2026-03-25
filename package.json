@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "4.9.5",
+  "version": "4.9.6",
   "private": true,
   "workspaces": [
     "utils/*",
@@ -208,7 +208,7 @@
     "sass-loader": "^16.0.5",
     "tailwindcss": "^3.4.0",
     "ts-jest": "^29.4.5",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "4.0.17",
     "vitest-browser-react": "^2.0.2"

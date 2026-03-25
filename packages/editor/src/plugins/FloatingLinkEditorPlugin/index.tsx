@@ -213,7 +213,7 @@ function FloatingLinkEditor({
   const monitorInputInteraction = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       if (isValidUrl(editedLinkUrl)) {
-        handleLinkSubmission(event as React.KeyboardEvent<HTMLInputElement>);
+        handleLinkSubmission(event);
       }
     } else if (event.key === "Escape") {
       event.preventDefault();
@@ -224,9 +224,7 @@ function FloatingLinkEditor({
     }
   };
 
-  const handleLinkSubmission = (
-    event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>
-  ) => {
+  const handleLinkSubmission = (event: React.SyntheticEvent<HTMLElement>) => {
     event.preventDefault();
     if (lastSelection !== null) {
       if (editedLinkUrl !== "") {
@@ -296,7 +294,7 @@ function FloatingLinkEditor({
               onClick={handleLinkSubmission}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
-                  handleLinkSubmission(event as React.KeyboardEvent<HTMLInputElement>);
+                  handleLinkSubmission(event);
                 }
                 if (event.key === "Escape") {
                   event.preventDefault();

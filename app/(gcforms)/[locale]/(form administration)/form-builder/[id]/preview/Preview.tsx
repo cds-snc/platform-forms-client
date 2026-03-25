@@ -38,19 +38,20 @@ export const Preview = ({
 }) => {
   const { status } = useSession();
   const { i18n } = useTranslation(["common", "confirmation"]);
-  const { id, getSchema, getIsPublished, getSecurityAttribute, closingDate } = useTemplateStore(
-    (s) => ({
+  const { id, getSchema, getIsPublished, getSecurityAttribute, closingDate, changeKey } =
+    useTemplateStore((s) => ({
       id: s.id,
       getSchema: s.getSchema,
       getIsPublished: s.getIsPublished,
       getSecurityAttribute: s.getSecurityAttribute,
       closingDate: s.closingDate,
-    })
-  );
+      changeKey: s.changeKey,
+    }));
 
   const isPastClosingDate = useIsFormClosed();
 
   const formParsed = safeJSONParse<FormProperties>(getSchema());
+  const previewRenderKey = `${id}:${changeKey}`;
   if (!formParsed) {
     toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
   }
@@ -182,6 +183,7 @@ export const Preview = ({
             {hasHydrated && (
               <GCFormsProvider formRecord={formRecord}>
                 <PreviewFormWrapper
+                  key={previewRenderKey}
                   formRecord={formRecord}
                   disableSubmit={disableSubmit}
                   allowGrouping={allowGrouping}

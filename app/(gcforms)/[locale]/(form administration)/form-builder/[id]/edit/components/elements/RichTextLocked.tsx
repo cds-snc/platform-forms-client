@@ -35,10 +35,11 @@ export const RichTextLocked = ({
   hydrated?: boolean;
   maxLength?: number;
 }) => {
-  const { localizeField, form, translationLanguagePriority } = useTemplateStore((s) => ({
+  const { localizeField, form, translationLanguagePriority, changeKey } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     form: s.form,
     translationLanguagePriority: s.translationLanguagePriority,
+    changeKey: s.changeKey,
   }));
 
   const localizedField = localizeField(
@@ -68,6 +69,7 @@ export const RichTextLocked = ({
           {hydrated && (
             <div key={translationLanguagePriority} className="mt-4 flex rounded border-2">
               <RichTextEditor
+                key={`${path}:${translationLanguagePriority}:${changeKey}`}
                 path={path}
                 content={content}
                 lang={translationLanguagePriority}
