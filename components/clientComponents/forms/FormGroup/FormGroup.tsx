@@ -7,11 +7,12 @@ interface FormGroupProps {
   name: string;
   className?: string;
   ariaDescribedBy?: string;
+  ariaLabelledBy?: string;
   error?: boolean;
 }
 
 export const FormGroup = (props: FormGroupProps): React.ReactElement => {
-  const { children, name, className, ariaDescribedBy, error } = props;
+  const { children, name, className, ariaDescribedBy, ariaLabelledBy, error } = props;
 
   const classes = cn("gc-form-group", "focus-group", { "gc-form-group--error": error }, className);
 
@@ -22,6 +23,7 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
       data-testid="formGroup"
       className={classes}
       aria-describedby={ariaDescribedBy}
+      aria-labelledby={ariaLabelledBy}
       // Used to programmatically focus a form group by e.g. a form validation skip ahead link
       // -1 is used over 0, so the group is not in the natural tab order which is confusing for AT
       tabIndex={-1}
