@@ -65,7 +65,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           {t("combobox-input-hint")}
         </span>
 
-        {/* downshift manages role="combobox", aria-activedescendant, and aria-expanded */}
+        {/* Note: downshift manages role="combobox", aria-activedescendant, and aria-expanded */}
         <input
           {...getInputProps()}
           aria-describedby={`${ariaDescribedBy} ${id}-hint`}
@@ -85,8 +85,8 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
 
         <AllowDuplicateAnnouncer id={id ?? ""} bump={bump} announcedMessage={announcedMessage} />
 
-        {/* Ensure UL remains in the DOM so the aria-controls reference is never broken.
-            Note: downshift sets role="listbox"/"option". */}
+        {/* Ensure UL remains in the DOM so the aria-controls reference is never broken. */}
+        {/* Note: downshift sets role="listbox"/"option". */}
         <ul
           {...getMenuProps()}
           tabIndex={-1}
