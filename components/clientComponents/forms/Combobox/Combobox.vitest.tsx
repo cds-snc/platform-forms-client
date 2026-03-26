@@ -57,8 +57,15 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Combobox component", (lang
     render(<GenerateElement element={comboboxData} language={lang} />);
 
     const title = lang === "en" ? comboboxData.properties.titleEn : comboboxData.properties.titleFr;
-    const description =
+    const shortDescription =
       lang === "en" ? comboboxData.properties.descriptionEn : comboboxData.properties.descriptionFr;
+    // The component appends its own hint (keyboard/touch instructions) via the {id}-hint span.
+    // The expected accessible description is the form's description + the component hint.
+    const componentHint =
+      lang === "en"
+        ? "When results are available, use the directional arrows to navigate: up and down arrows to review, enter to select. Touch device users, explore by touch or with swipe gestures."
+        : "Lorsque des résultats sont disponibles, utilisez les flèches directionnelles pour naviguer : les flèches en haut et en bas pour parcourir, puis la touche Entrée pour sélectionner. Pour les utilisateurs d'appareils tactiles, explorez par effleurement ou à l'aide de gestes de balayage.";
+    const fullDescription = `${shortDescription} ${componentHint}`;
 
     const combobox = screen.queryByTestId("combobox");
     const comboboxInput = screen.queryByTestId("combobox-input");
@@ -67,7 +74,7 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Combobox component", (lang
     expect(combobox).toBeInTheDocument();
     expect(comboboxInput).toBeInTheDocument();
     expect(comboboxListbox).toBeInTheDocument();
-    expect(comboboxInput).toHaveAccessibleDescription(description);
+    expect(comboboxInput).toHaveAccessibleDescription(fullDescription);
     expect(combobox).toHaveClass("gc-combobox");
 
     expect(

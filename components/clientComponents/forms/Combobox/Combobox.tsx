@@ -93,7 +93,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
         {/* downshift manages role="combobox", aria-activedescendant, and aria-expanded */}
         <input
           {...getInputProps()}
-          aria-describedby={[ariaDescribedBy, `${id}-hint`].filter(Boolean).join(" ")}
+          aria-describedby={`${ariaDescribedBy} ${id}-hint`}
           id={id}
           required={required}
           aria-required={required}
