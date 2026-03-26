@@ -35,6 +35,7 @@ export const setFromRecord: TemplateStore<"setFromRecord"> = (set) => (record) =
     state.closingDate = closingDate;
     state.saveAndResume = record.saveAndResume ?? true;
     state.notificationsInterval = record.notificationsInterval ?? NotificationsIntervalDefault;
-    state.changeKey = String(new Date().getTime());
+    // Keep changeKey updates with the later locked-editing rehydrate flow, not the basic save path.
+    // state.changeKey = String(new Date().getTime());
   });
 };
