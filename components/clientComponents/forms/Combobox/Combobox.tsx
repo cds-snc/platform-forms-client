@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { InputFieldProps } from "@lib/types";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
@@ -20,68 +20,26 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
-  // Used to detect touch-outside close (replaces InputBlur-based close on touch devices).
-  const containerRef = useRef<HTMLDivElement>(null);
-
   const [items, setItems] = React.useState(choices);
-  const {
-    isOpen,
-    getMenuProps,
-    getInputProps,
-    highlightedIndex,
-    getItemProps,
-    selectedItem,
-    closeMenu,
-  } = useCombobox({
-    onInputValueChange({ inputValue }) {
-      setItems(
-        choices.filter((choice) => {
-          return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
-        })
-      );
-      setValue(inputValue);
-    },
-    items,
-    onSelectedItemChange({ selectedItem }) {
-      setValue(selectedItem);
-    },
-    initialInputValue: field.value || "",
-
-    // Suppress downshift's built-in live region so we can customize announcements and
-    // timing for better AT support
-    getA11yStatusMessage: () => "",
-
-    // On touch devices, suppress the default InputBlur > closeMenu behaviour.
-    // iOS VoiceOver moves DOM focus outside the widget when swiping past the last
-    // option, which fires InputBlur and closes the list unexpectedly. A touchstart
-    // listener on the document (below) handles intentional close-on-touch-outside.
-    stateReducer(state, { type, changes }) {
-      if (
-        type === useCombobox.stateChangeTypes.InputBlur &&
-        state.isOpen &&
-        typeof window !== "undefined" &&
-        "ontouchstart" in window
-      ) {
-        return { ...changes, isOpen: true, highlightedIndex: state.highlightedIndex };
-      }
-      return changes;
-    },
-  });
-
-  // Touch devices: close the list when the user touches outside the combobox.
-  // This replaces the InputBlur-based close that was suppressed above to prevent
-  // iOS VoiceOver from closing the list when swiping past the last option.
-  useEffect(() => {
-    if (typeof window === "undefined" || !("ontouchstart" in window) || !isOpen) return;
-    const handleTouchOutside = (e: TouchEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        closeMenu();
-      }
-    };
-    document.addEventListener("touchstart", handleTouchOutside, { passive: true });
-    return () => document.removeEventListener("touchstart", handleTouchOutside);
-  }, [isOpen, closeMenu]);
-
+  const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
+    useCombobox({
+      onInputValueChange({ inputValue }) {
+        setItems(
+          choices.filter((choice) => {
+            return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
+          })
+        );
+        setValue(inputValue);
+      },
+      items,
+      onSelectedItemChange({ selectedItem }) {
+        setValue(selectedItem);
+      },
+      initialInputValue: field.value || "",
+      // Suppress downshift's built-in live region so we can customize announcements and
+      // timing for better AT support
+      getA11yStatusMessage: () => "",
+    });
   // Announce either a) the option item count when results are available, or b) a no-results
   // message when the list is empty.
   const targetMessage = isOpen
@@ -98,7 +56,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
 
   return (
     <>
-      <div ref={containerRef} className={classes} data-testid="combobox" {...(lang && { lang })}>
+      <div className={classes} data-testid="combobox" {...(lang && { lang })}>
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
         {/* Keyboard/touch instructions for AT users, always rendered alongside any passed description. */}
