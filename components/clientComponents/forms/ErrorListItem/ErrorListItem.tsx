@@ -7,16 +7,12 @@ export interface ErrorListProps {
   children?: React.ReactNode;
 }
 
-/**
- * scrollErrorInView [private] is called when you click on an error link at the top of the form
- * @param id The id of the input field that has the error and we need to focus
- */
 const scrollErrorInView = (id: string) => {
   const element = document.getElementById(id);
   const labelElement = document.getElementById(`label-${id}`);
   // For fieldsets (radio/checkbox groups), focus the first input inside rather than
-  // the fieldset itself - avoids needing tabindex on the fieldset which causes
-  // screen readers to double-announce the group label.
+  // the fieldset itself. This avoids needing a tabindex on the fieldset which causes
+  // Chrome+TalkBack to double-announce the group label.
   const focusTarget =
     element?.tagName === "FIELDSET" ? (element.querySelector("input") ?? element) : element;
   const scrollTarget = labelElement ?? element;
