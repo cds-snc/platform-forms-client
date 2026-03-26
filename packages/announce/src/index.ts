@@ -1,3 +1,3 @@
 export { Announce } from "./Announce";
 export { announce } from "../utils/announce";
-export { useRepeatingAnnouncer, RepeatingAnnouncer } from "./useRepeatingAnnouncer";
+export { useAllowDuplicateAnnouncer, AllowDuplicateAnnouncer } from "./useAllowDuplicateAnnouncer";

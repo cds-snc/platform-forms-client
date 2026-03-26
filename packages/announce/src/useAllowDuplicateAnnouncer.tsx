@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-interface UseRepeatingAnnouncerOptions {
+interface UseAllowDuplicateAnnouncerOptions {
   message: string;
   // Whether to use the shorter delay for onscreen keyboard workarounds
   delayCondition: boolean;
@@ -10,7 +10,7 @@ interface UseRepeatingAnnouncerOptions {
   isActive: boolean;
 }
 
-interface UseRepeatingAnnouncerResult {
+interface UseAllowDuplicateAnnouncerResult {
   // Toggle value — alternates on each announcement to force a DOM mutation
   bump: boolean;
   announcedMessage: string;
@@ -21,11 +21,11 @@ interface UseRepeatingAnnouncerResult {
  * even when the message text hasn't changed (screen readers normally ignore
  * duplicate live-region content). Inspired by the GOV.UK "bump" announcer pattern.
  */
-export function useRepeatingAnnouncer({
+export function useAllowDuplicateAnnouncer({
   message,
   delayCondition,
   isActive,
-}: UseRepeatingAnnouncerOptions): UseRepeatingAnnouncerResult {
+}: UseAllowDuplicateAnnouncerOptions): UseAllowDuplicateAnnouncerResult {
   const [bump, setBump] = useState(false);
   const [announcedMessage, setAnnouncedMessage] = useState("");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -57,7 +57,7 @@ export function useRepeatingAnnouncer({
   return { bump, announcedMessage };
 }
 
-interface RepeatingAnnouncerProps {
+interface AllowDuplicateAnnouncerProps {
   // Unique id prefix — renders as `{id}-live-a` and `{id}-live-b`.
   id: string;
   bump: boolean;
@@ -70,13 +70,17 @@ interface RepeatingAnnouncerProps {
  * renders the two alternating aria-live regions to "trick" AT into announcing
  * every message, including duplicates.
  *
- * Pair with `useRepeatingAnnouncer` to drive the props.
+ * Pair with `useAllowDuplicateAnnouncer` to drive the props.
  *
  * Usage:
- *   const { bump, announcedMessage } = useRepeatingAnnouncer({ ... });
- *   <RepeatingAnnouncer id={id} bump={bump} announcedMessage={announcedMessage} />
+ *   const { bump, announcedMessage } = useAllowDuplicateAnnouncer({ ... });
+ *   <AllowDuplicateAnnouncer id={id} bump={bump} announcedMessage={announcedMessage} />
  */
-export function RepeatingAnnouncer({ id, bump, announcedMessage }: RepeatingAnnouncerProps) {
+export function AllowDuplicateAnnouncer({
+  id,
+  bump,
+  announcedMessage,
+}: AllowDuplicateAnnouncerProps) {
   return (
     <>
       <div id={`${id}-live-a`} aria-live="polite" aria-atomic="true" className="sr-only">
