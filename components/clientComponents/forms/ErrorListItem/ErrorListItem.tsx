@@ -10,11 +10,14 @@ export interface ErrorListProps {
 const scrollErrorInView = (id: string) => {
   const element = document.getElementById(id);
   const labelElement = document.getElementById(`label-${id}`);
-  // For fieldsets (radio/checkbox groups), focus the first input inside rather than
-  // the fieldset itself. This avoids needing a tabindex on the fieldset which causes
-  // Chrome+TalkBack to double-announce the group label.
+  // For fieldsets (radio/checkbox groups), prefer the already-selected option so
+  // AT users aren't misled into thinking nothing was chosen. Fall back to the
+  // first input, then the fieldset itself.
   const focusTarget =
-    element?.tagName === "FIELDSET" ? (element.querySelector("input") ?? element) : element;
+    element?.tagName === "FIELDSET"
+      ? (((element.querySelector("input:checked") ??
+          element.querySelector("input")) as HTMLElement | null) ?? element)
+      : element;
   const scrollTarget = labelElement ?? element;
   focusTarget?.focus();
   scrollTarget?.scrollIntoView();
