@@ -313,4 +313,41 @@ describe("Options", () => {
       expect(toastSuccess).toHaveBeenCalledWith("2 options were added from the CSV file.");
     });
   });
+
+  it("allows searchable list options to be imported from CSV", async () => {
+    const user = userEvent.setup();
+
+    const testStore = {
+      ...store,
+      elements: [
+        {
+          id: 1,
+          type: "combobox",
+          properties: {
+            titleEn: "Searchable list",
+            titleFr: "Liste interrogeable",
+            choices: [],
+            validation: { required: false },
+          },
+        },
+      ],
+    };
+
+    const item = { index: 0, ...testStore.elements[0] } as unknown as Parameters<
+      typeof Options
+    >[0]["item"];
+
+    render(
+      // @ts-expect-error - store has string type but FormElement expects FormElementTypes
+      <Providers form={testStore}>
+        <Options item={item} formId="test-form" />
+      </Providers>
+    );
+
+    await user.click(screen.getByTestId("mock-choice-options-csv-upload"));
+
+    await waitFor(() => {
+      expect(toastSuccess).toHaveBeenCalledWith("2 options were added from the CSV file.");
+    });
+  });
 });
