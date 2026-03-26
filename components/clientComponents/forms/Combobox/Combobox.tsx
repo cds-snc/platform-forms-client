@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { InputFieldProps } from "@lib/types";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
+import { useRepeatingAnnouncer, RepeatingAnnouncer } from "@gcforms/announce";
 
 interface ComboboxProps extends InputFieldProps {
   choices?: string[];
@@ -18,12 +19,6 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
 
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
-
-  // Follow the Gov.uk (bump) pattern of two alternating live regions to ensure a duplicate
-  // update is still announced by AT. (usually ignored by default)
-  const [bump, setBump] = useState(false);
-  const [announcedMessage, setAnnouncedMessage] = useState("");
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [items, setItems] = React.useState(choices);
   const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
@@ -46,11 +41,6 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       getA11yStatusMessage: () => "",
     });
 
-  // Add some workarounds for onscreen keyboards: 400ms for no-results (query obviously done),
-  // 1400ms otherwise to avoid mid-keystroke noise when typing quickly. These are based on
-  // testing with iOS Safari+VoiceOver and may need adjustment for other AT/browser combos.
-  const announcementDelay = isOpen && items.length === 0 ? 400 : 1400;
-
   // Announce either a) the option item count when results are available, or b) a no-results
   // message when the list is empty.
   const targetMessage = isOpen
@@ -59,26 +49,11 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       : t("combobox-no-results")
     : "";
 
-  // Announce while a user is typing BUT stop duplicate announcements by:
-  // 1) Clearing any pending announcement whenever the input changes (debounce pattern).
-  // 2) Skipping the announcement entirely when the list first opens, since AT should
-  //    already be announcing that via aria-expanded.
-  const prevIsOpenRef = useRef(false);
-  useEffect(() => {
-    const justOpened = isOpen && !prevIsOpenRef.current;
-    prevIsOpenRef.current = isOpen;
-
-    if (justOpened) return;
-
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      setAnnouncedMessage(targetMessage);
-      setBump((b) => !b);
-    }, announcementDelay);
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, [targetMessage, announcementDelay, isOpen]);
+  const { bump, announcedMessage } = useRepeatingAnnouncer({
+    message: targetMessage,
+    delayCondition: isOpen && items.length > 0,
+    isActive: isOpen,
+  });
 
   return (
     <>
@@ -108,14 +83,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           spellCheck={false}
         />
 
-        {/* Dual alternating live regions (GOV.UK bump pattern) to ensure AT announce every update 
-            even when the message text repeats */}
-        <div id={`${id}-live-a`} aria-live="polite" aria-atomic="true" className="sr-only">
-          {bump ? announcedMessage : ""}
-        </div>
-        <div id={`${id}-live-b`} aria-live="polite" aria-atomic="true" className="sr-only">
-          {bump ? "" : announcedMessage}
-        </div>
+        <RepeatingAnnouncer id={id ?? ""} bump={bump} announcedMessage={announcedMessage} />
 
         {/* Ensure UL remains in the DOM so the aria-controls reference is never broken.
             Note: downshift sets role="listbox"/"option". */}
