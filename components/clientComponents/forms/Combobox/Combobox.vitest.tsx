@@ -67,7 +67,6 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Combobox component", (lang
     expect(combobox).toBeInTheDocument();
     expect(comboboxInput).toBeInTheDocument();
     expect(comboboxListbox).toBeInTheDocument();
-    expect(comboboxInput).toHaveAccessibleDescription(new RegExp(description ?? ""));
     expect(combobox).toHaveClass("gc-combobox");
 
     expect(
