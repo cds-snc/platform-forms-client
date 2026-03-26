@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
+import { slugify } from "./lib/client/clientHelpers";
 
 const nextConfig: NextConfig = {
-  deploymentId: process.env.NEXT_DEPLOYMENT_ID ?? "local",
+  deploymentId: slugify(process.env.NEXT_DEPLOYMENT_ID ?? "local"),
   reactCompiler: {
     compilationMode: "annotation",
   },
