@@ -28,7 +28,7 @@
 
 .gc-alert,
 .gc-error-message {
-  @apply py-0 w-full mb-2;
+  @apply mb-2 w-full py-0;
   color: var(--gcds-error-message-text-color);
 }
 
@@ -39,7 +39,7 @@
 }
 
 .gc-error-input {
-  @apply border-red-700 !important;
+  border-color: #b91c1c !important;
 }
 
 .gc-ordered-list {
@@ -47,11 +47,11 @@
 }
 
 .gc-p {
-  @apply md:text-sm text-xl mb-10 w-full;
+  @apply mb-10 w-full text-xl md:text-sm;
 }
 
 .gc-description {
-  @apply md:text-xs text-gray-text mb-3 text-sm w-3/4 xl:w-full;
+  @apply text-gray-text mb-3 w-3/4 text-sm md:text-xs xl:w-full;
 }
 
 .gc-formview .gc-richText p:has(+ ul, + ol) {
@@ -92,15 +92,15 @@
   }
 
   a {
-    @apply underline text-blue-dark hover:text-blue-hover;
+    @apply text-blue-dark hover:text-blue-hover underline;
   }
 }
 
 .gc-item-row {
-  @apply border-t-2 pt-16 pb-3 px-0 bg-white-default mt-0 border-black-form;
+  @apply bg-white-default border-black-form mt-0 border-t-2 px-0 pt-16 pb-3;
 
   h3 {
-    @apply md:text-lg font-bold text-2xl pb-0 mb-10;
+    @apply mb-10 pb-0 text-2xl font-bold md:text-lg;
   }
 }
 
@@ -113,16 +113,16 @@
 
   .gc-input-radio:last-of-type,
   .gc-input-checkbox:last-of-type {
-    @apply md:mb-10 pb-0;
+    @apply pb-0 md:mb-10;
   }
 }
 
 .gc-section-header {
-  @apply md:text-xl font-bold text-3xl mb-16 mt-12 p-6 bg-gray-background;
+  @apply bg-gray-background mt-12 mb-16 p-6 text-3xl font-bold md:text-xl;
 }
 
 .gc-label {
-  @apply md:text-sm block mb-2 text-base font-bold w-3/4 xl:w-full;
+  @apply mb-2 block w-3/4 text-base font-bold md:text-sm xl:w-full;
   &.required > span {
     @apply text-red-required;
     content: " *";
@@ -130,17 +130,17 @@
 }
 
 .gc-plain-text {
-  @apply w-full my-5;
+  @apply my-5 w-full;
 }
 
 .gc-textarea {
-  @apply md:text-sm md:w-full text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 w-3/4 h-40;
+  @apply border-black-form mt-2 block h-40 w-3/4 border-2 border-solid px-2 py-3 text-base text-gray-700 md:w-full md:text-sm;
   &.full-height {
     @apply h-auto;
   }
 
   &:focus {
-    @apply outline-none border-blue-focus shadow-input;
+    @apply border-blue-focus shadow-input outline-none;
   }
 }
 
@@ -171,21 +171,21 @@
 
 .gc-input-text {
   border: solid 2px black;
-  @apply md:w-full md:text-sm text-base text-gray-700 border-2 py-3 px-2 mt-2 w-96;
+  @apply mt-2 w-96 border-2 px-2 py-3 text-base text-gray-700 md:w-full md:text-sm;
 
   &:focus {
-    @apply outline-none border-blue-focus shadow-input;
+    @apply border-blue-focus shadow-input outline-none;
   }
 }
 
 .gc-input-radio,
 .gc-input-checkbox {
-  @apply flex pt-3 pb-1 px-0;
+  @apply flex px-0 pt-3 pb-1;
 }
 
 .gc-radio-label,
 .gc-checkbox-label {
-  @apply md:text-sm font-normal text-base flex;
+  @apply flex text-base font-normal md:text-sm;
 
   .checkbox-label-text,
   .radio-label-text {
@@ -194,10 +194,10 @@
 }
 
 .gc-file-input {
-  @apply w-full md:text-sm text-base text-gray-700 py-3 pr-2 mt-2 mb-14;
+  @apply mt-2 mb-14 w-full py-3 pr-2 text-base text-gray-700 md:text-sm;
 
   &:focus {
-    @apply outline-none border-blue-focus shadow-input;
+    @apply border-blue-focus shadow-input outline-none;
   }
 
   &.is-disabled {
@@ -207,7 +207,7 @@
 }
 
 .gc-file-input-upload-button {
-  @apply text-center inline-block mb-0;
+  @apply mb-0 inline-block text-center;
 }
 
 .gc-file-input [type="file"] {
@@ -238,14 +238,14 @@
 }
 
 .confirmation-list {
-  @apply list-inside mb-10;
+  @apply mb-10 list-inside;
 }
 
 .gc-confirmation-banner {
-  @apply bg-gray-200 py-16 px-20 mb-10 w-5/6 xl:w-full md:py-10 md:px-10;
+  @apply mb-10 w-5/6 bg-gray-200 px-20 py-16 md:px-10 md:py-10 xl:w-full;
 
   h2 {
-    @apply text-3xl mb-6 md:text-xl;
+    @apply mb-6 text-3xl md:text-xl;
   }
 
   p:first-of-type {

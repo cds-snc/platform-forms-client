@@ -49,7 +49,7 @@ export const CopyItem = ({ item }: { item: FormElement | undefined }) => {
     <div className="mr-6 flex w-full justify-end">
       <Button
         theme="secondary"
-        className="[&_svg]:focus:fill-white"
+        className="focus:[&_svg]:fill-white"
         onClick={copyToClipboard}
         data-testid="copy-item-button"
       >
