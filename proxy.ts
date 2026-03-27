@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { fallbackLng, languages } from "./i18n/settings";
-import type { NextRequest } from "next/server";
+import type { NextFetchEvent, NextMiddleware, NextRequest } from "next/server";
 import { generateCSP } from "@lib/cspScripts";
 import { logMessage } from "@lib/logger";
-import { NextAuthRequest } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
+import type { NextAuthRequest } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { BODY_SIZE_LIMIT } from "@root/constants";
 
@@ -83,7 +83,7 @@ export const config = {
 // TOMORROW
 // Stop files like .map.js from being included in the middleware
 
-export default async function proxy(req: NextRequest, ctx: { params: Promise<unknown> }) {
+export default async function proxy(req: NextRequest, ctx: NextFetchEvent) {
   const pathname = req.nextUrl.pathname;
   const searchParams = req.nextUrl.searchParams.toString();
 
@@ -136,7 +136,10 @@ export default async function proxy(req: NextRequest, ctx: { params: Promise<unk
 
   // Add Session Data to the req for the remaining levels
 
-  return auth((reqWithAuth) => {
+  const authCallback: (
+    reqWithAuth: NextAuthRequest,
+    event: NextFetchEvent
+  ) => ReturnType<NextMiddleware> = (reqWithAuth, _event) => {
     // Layer 3 - Pages with Required Auth
     const layer3 = pageRequiresAuth(reqWithAuth, pathname, pathLang);
     if (layer3) return layer3;
@@ -150,7 +153,11 @@ export default async function proxy(req: NextRequest, ctx: { params: Promise<unk
 
     // Final Layer - Set Content Security Policy
     return setCSP(reqWithAuth, pathname, cookieLang, pathLang);
-  })(req, ctx);
+  };
+
+  const authMiddleware = auth(authCallback);
+
+  return authMiddleware(req, ctx);
 }
 
 /**

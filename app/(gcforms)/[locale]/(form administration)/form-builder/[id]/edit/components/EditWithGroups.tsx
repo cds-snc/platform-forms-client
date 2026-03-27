@@ -129,7 +129,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   const hasHydrated = useRehydrate();
 
   return (
-    <>
+    <div>
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="flex w-[700px]">
         <h2 id="editPagesHeading" className="whitespace-nowrap" tabIndex={-1}>
@@ -258,6 +258,6 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       </div>
 
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
-    </>
+    </div>
   );
 };

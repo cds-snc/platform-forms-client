@@ -281,6 +281,37 @@
   "addMultiple": "Add multiple options",
   "addOption": "Add option",
   "addOptions": "Add options",
+  "clearOptions": {
+    "button": "Clear all options",
+    "title": "Remove all of the selection options?",
+    "description": "This will clear the entire set of options added for this question. Any conditional display or branching rules linked to these options will also be removed.",
+    "confirm": "Remove all options",
+    "successToast": "Options were successfully removed."
+  },
+  "choiceLimitReached": "You can only add up to {{maxChoices}} options.",
+  "choiceOptionsUpload": {
+    "uploadButton": "Upload list from CSV",
+    "helpButton": "Help with formatting the CSV file to upload a list of options.",
+    "helpTitle": "How to format the CSV file",
+    "helpDescription": "Create a spreadsheet with English in the first column and French in the second. Save the file in .csv format (Comma Separated Values).",
+    "exampleLabel": "Example",
+    "dialogTitle": "Upload list of options from CSV",
+    "dialogDescription": "Create a .csv  file to import selection options for this form element.",
+    "selectFile": "Choose file",
+    "noFileSelected": "No file selected",
+    "copyButton": "Copy options to CSV",
+    "copyButtonCopied": "Options copied to CSV",
+    "importButton": "Import CSV options",
+    "successNotice": "{{count}} options were added from the CSV file.",
+    "previewCount": "{{count}} options (rows) are ready to import",
+    "previewSummary": "Preview rows",
+    "errors": {
+      "empty": "The CSV file does not contain any options.",
+      "invalidColumns": "Each row must include an English value in column 1 and a French value in column 2.",
+      "invalidType": "Upload a .csv file.",
+      "maxChoices": "You can import up to {{maxChoices}} options maximum."
+    }
+  },
   "addRules": "Add rules",
   "addQuestionToSet": "Add form element to set",
   "addToSet": "Add to set",
@@ -399,6 +430,7 @@
   "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
   "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/contact\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
+  "or": "or",
   "downloadResponsesTable": {
     "card": {
       "noResponses": "You have not received responses",

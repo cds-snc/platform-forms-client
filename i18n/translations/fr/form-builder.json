@@ -281,6 +281,37 @@
   "addMultiple": "Ajouter plusieurs options",
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter des options",
+  "clearOptions": {
+    "button": "Supprimer les options",
+    "title": "Supprimer toutes les options?",
+    "description": "Vous effacerez l'ensemble des options ajoutéespour cette question. Toutes les règles conditionnelles d'affichage ou d'embranchement liées à ces options seront également supprimées.",
+    "confirm": "Supprimer toutes les options",
+    "successToast": "Les options ont été supprimées avec succès."
+  },
+  "choiceLimitReached": "Vous ne pouvez ajouter que {{maxChoices}} options au maximum.",
+  "choiceOptionsUpload": {
+    "uploadButton": "Téléverser une liste d’un CSV",
+    "helpButton": "Aide pour le format du fichier CSV afin d'ajouter une liste d'options",
+    "helpTitle": "Comment formater le fichier CSV",
+    "helpDescription": "Créez une feuille de calcul avec l'anglais dans la première colonne et le français dans la deuxième. Enregistrez le fichier au format .csv (valeurs séparées par des virgules).",
+    "exampleLabel": "Exemple",
+    "dialogTitle": "Téléverser une liste d'options d’un fichier CSV",
+    "dialogDescription": "Créez un fichier .csv pour importer les options de sélection pour cet élément de formulaire.",
+    "selectFile": "Choisir un fichier",
+    "noFileSelected": "Aucun fichier sélectionné",
+    "copyButton": "Copier les options vers un CSV",
+    "copyButtonCopied": "Options copiées en CSV",
+    "importButton": "Importer les options du CSV",
+    "successNotice": "{{count}} options ont été ajoutées à partir du fichier CSV.",
+    "previewCount": "{{count}} options (lignes) sont prêtes à être importées",
+    "previewSummary": "Aperçu des lignes",
+    "errors": {
+      "empty": "Le fichier CSV ne contient aucune option.",
+      "invalidColumns": "Chaque ligne doit inclure les valeurs en anglais dans la colonne 1 et les valeurs en français dans la colonne 2.",
+      "invalidType": "Téléversez un fichier .csv.",
+      "maxChoices": "Vous pouvez importer jusqu’à {{maxChoices}} options au maximum."
+    }
+  },
   "addRules": "Ajouter des règles",
   "addQuestionToSet": "Ajouter un élément à l'ensemble",
   "addToSet": "Ajouter à l'ensemble",
@@ -399,6 +430,7 @@
   "descriptionDescription": "Le texte explicatif apparaît sous l'étiquette et avant le champ. Il est utilisé pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme ou donner un exemple.",
   "didYouFindThisToolHelpful": "Avez-vous trouvé Formulaires GC pertinent comme outil? <a href=\"/fr/contact\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Exporter en fichier CSV",
+  "or": "ou",
   "downloadResponsesTable": {
     "card": {
       "noResponses": "Vous n'avez pas reçu de réponses",

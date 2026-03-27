@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.10.0](https://github.com/cds-snc/platform-forms-client/compare/v4.9.5...v4.10.0) (2026-03-26)
+
+
+### Features
+
+* bulk add choices ([#6841](https://github.com/cds-snc/platform-forms-client/issues/6841)) ([0f186d3](https://github.com/cds-snc/platform-forms-client/commit/0f186d3fcb6f04d2c8b2ce97e256d407e11d41c5))
+
+
+### Bug Fixes
+
+* Docker vulnerability scan to no longer pull image ([#6904](https://github.com/cds-snc/platform-forms-client/issues/6904)) ([d4731a4](https://github.com/cds-snc/platform-forms-client/commit/d4731a42d8716ab98697676c4cd750dbc8280cda))
+
+
+### Miscellaneous Chores
+
+* Add branding for Canadian Transportation Agency ([#6886](https://github.com/cds-snc/platform-forms-client/issues/6886)) ([ca77752](https://github.com/cds-snc/platform-forms-client/commit/ca77752ecd75bb4d002bc32312e75640b5fd81c5))
+* add changekey to ensure latest content on re-mount ([#6894](https://github.com/cds-snc/platform-forms-client/issues/6894)) ([221a9dc](https://github.com/cds-snc/platform-forms-client/commit/221a9dc36c3ca9dd38c4d2395b0162414d086a6f))
+* add csv upload to combobox ([#6903](https://github.com/cds-snc/platform-forms-client/issues/6903)) ([f14e428](https://github.com/cds-snc/platform-forms-client/commit/f14e4286cd1e57ea3e78f2dcdb21ce87275919b7))
+* add ignoreDeprecations to types package ([#6895](https://github.com/cds-snc/platform-forms-client/issues/6895)) ([6739a54](https://github.com/cds-snc/platform-forms-client/commit/6739a54ecbe56bd79fa89ceede7792507af23164))
+* Branding option for Office of the Commissioner of Official Languages ([51ef2f9](https://github.com/cds-snc/platform-forms-client/commit/51ef2f9656b9430d89fc1f18011a44e33d782dea))
+* bump aws packages ([#6871](https://github.com/cds-snc/platform-forms-client/issues/6871)) ([29a6a1e](https://github.com/cds-snc/platform-forms-client/commit/29a6a1ee1d2684c4ebd32e975770778299c23ed6))
+* bump radix components ([#6878](https://github.com/cds-snc/platform-forms-client/issues/6878)) ([d1643c4](https://github.com/cds-snc/platform-forms-client/commit/d1643c49dfd4d325c64aa539a1a7aa40192fca5a))
+* **deps:** update all non-major docker images ([#6848](https://github.com/cds-snc/platform-forms-client/issues/6848)) ([9c2e5d6](https://github.com/cds-snc/platform-forms-client/commit/9c2e5d6321f1ad5336f99145f6904ba911fdc767))
+* **deps:** update all non-major github action dependencies ([#6849](https://github.com/cds-snc/platform-forms-client/issues/6849)) ([793c637](https://github.com/cds-snc/platform-forms-client/commit/793c637e7497930a9b020e19a5c5f3b83dc106ec))
+* fix post deployment github action ([#6885](https://github.com/cds-snc/platform-forms-client/issues/6885)) ([bac5eb6](https://github.com/cds-snc/platform-forms-client/commit/bac5eb67c76313f272bbcd33877f20dc276dd18c))
+* fix some Github actions related to new deployment pipeline ([#6875](https://github.com/cds-snc/platform-forms-client/issues/6875)) ([ba0fa93](https://github.com/cds-snc/platform-forms-client/commit/ba0fa933344657e092123513e40950c4a1f5412c))
+* migrate GC Forms app deployment to new Code Pipeline solution (staging only) ([#6799](https://github.com/cds-snc/platform-forms-client/issues/6799)) ([6200052](https://github.com/cds-snc/platform-forms-client/commit/6200052a2e210930d3b8bfd1bb9b789a075569e6))
+* package bumps ([#6869](https://github.com/cds-snc/platform-forms-client/issues/6869)) ([fce22e7](https://github.com/cds-snc/platform-forms-client/commit/fce22e73db5f543a811a3d160375e6ce19d3a423))
+* remove duplicate string in error validation message ([#6893](https://github.com/cds-snc/platform-forms-client/issues/6893)) ([296b5ec](https://github.com/cds-snc/platform-forms-client/commit/296b5ecdcf70af8d93bedaf8b2ba690809f40b36)), closes [#6808](https://github.com/cds-snc/platform-forms-client/issues/6808)
+* Review content for importing lists of options from CSV ([#6877](https://github.com/cds-snc/platform-forms-client/issues/6877)) ([2e5ab51](https://github.com/cds-snc/platform-forms-client/commit/2e5ab5152e3726f347104f8d0f330c4ace1867a6))
+* synced file(s) with cds-snc/site-reliability-engineering ([#6832](https://github.com/cds-snc/platform-forms-client/issues/6832)) ([90a7f48](https://github.com/cds-snc/platform-forms-client/commit/90a7f487305d9e999f117a74026f79d1ea458d4e))
+* synced local '.github/workflows/export_github_data.yml' with remote 'tools/sre_file_sync/export_github_data.yml' ([90a7f48](https://github.com/cds-snc/platform-forms-client/commit/90a7f487305d9e999f117a74026f79d1ea458d4e))
+* update [@opentelemetry](https://github.com/opentelemetry) packages ([#6872](https://github.com/cds-snc/platform-forms-client/issues/6872)) ([fef2d7e](https://github.com/cds-snc/platform-forms-client/commit/fef2d7ec8d27e92e6d044880178699ef60faeea2))
+* update TypeScript 6.0 ([#6879](https://github.com/cds-snc/platform-forms-client/issues/6879)) ([d78d420](https://github.com/cds-snc/platform-forms-client/commit/d78d420b505bdbb21dee8a04737753e085d5d7d8))
+* upgrade to Next.js 16.2 ([#6867](https://github.com/cds-snc/platform-forms-client/issues/6867)) ([4f7d365](https://github.com/cds-snc/platform-forms-client/commit/4f7d365de01e4a1764d8be608180b91888c251a9))
+
+## [4.9.5](https://github.com/cds-snc/platform-forms-client/compare/v4.9.4...v4.9.5) (2026-03-18)
+
+
+### Bug Fixes
+
+* resend mfa ([#6859](https://github.com/cds-snc/platform-forms-client/issues/6859)) ([88a1d27](https://github.com/cds-snc/platform-forms-client/commit/88a1d27117a2f9e52852940a7e47bfa72fb6d932))
+
+
+### Miscellaneous Chores
+
+* remove duplicate files and pull from core ([#6836](https://github.com/cds-snc/platform-forms-client/issues/6836)) ([aef8211](https://github.com/cds-snc/platform-forms-client/commit/aef82111214aaf728b98c46ef1a2699226a39b92))
+
 ## [4.9.4](https://github.com/cds-snc/platform-forms-client/compare/v4.9.3...v4.9.4) (2026-03-10)
 
 

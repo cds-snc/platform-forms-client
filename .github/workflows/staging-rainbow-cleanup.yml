@@ -2,7 +2,7 @@ name: Rainbow cleanup (staging)
 
 on:
   workflow_run:
-    workflows: ["Deploy to Staging"]
+    workflows: ["Staging - Deploy Rainbow Lambda"]
     types:
       - completed
   workflow_dispatch:
