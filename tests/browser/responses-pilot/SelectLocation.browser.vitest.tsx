@@ -4,7 +4,7 @@ import { SelectLocation } from "@responses-pilot/location/SelectLocation";
 import { render } from "./testUtils";
 import { setupFonts } from "./testHelpers";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 // Mock the native-file-system-adapter module
 vi.mock("native-file-system-adapter", async () => {
