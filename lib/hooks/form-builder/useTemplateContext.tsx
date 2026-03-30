@@ -1,7 +1,9 @@
 "use client";
-import React, { createContext, useState, useContext, useRef } from "react";
+import React, { createContext, useState, useContext, useRef, useCallback } from "react";
+import isEqual from "lodash.isequal";
 import { logMessage } from "@lib/logger";
 import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
+import { FormRecord } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
 
@@ -9,10 +11,6 @@ interface TemplateApiType {
   templateIsDirty: React.MutableRefObject<boolean>;
   updatedAt: number | undefined;
   setUpdatedAt: React.Dispatch<React.SetStateAction<number | undefined>>;
-  nameChanged: boolean | null;
-  introChanged: boolean | null;
-  privacyChanged: boolean | null;
-  confirmationChanged: boolean | null;
   createOrUpdateTemplate:
     | (({
         id,
@@ -23,7 +21,7 @@ interface TemplateApiType {
         saveAndResume,
         notificationsInterval,
       }: CreateOrUpdateTemplateType) => Promise<{
-        formRecord: { id: string; updatedAt: string | undefined } | null;
+        formRecord: FormRecord | null;
         error?: string;
       }>)
     | null;
@@ -34,49 +32,25 @@ const defaultTemplateApi: TemplateApiType = {
   templateIsDirty: { current: false },
   updatedAt: undefined,
   setUpdatedAt: () => {},
-  nameChanged: null,
-  introChanged: null,
-  privacyChanged: null,
-  confirmationChanged: null,
   createOrUpdateTemplate: null,
   resetState: () => {},
 };
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
-interface Description {
-  descriptionEn: string | undefined;
-  descriptionFr: string | undefined;
-}
-
-const descriptionsMatch = (
-  obj: Description | Record<string, string> | undefined,
-  obj2: Description | Record<string, string> | undefined
-) => {
-  let en = true;
-  let fr = true;
-
-  if (!obj || !obj2) {
-    return false;
-  }
-
-  if (obj.descriptionEn && obj2.descriptionEn) {
-    en = obj.descriptionEn === obj2.descriptionEn;
-  }
-
-  if (obj.descriptionFr && obj2.descriptionFr) {
-    fr = obj.descriptionFr === obj2.descriptionFr;
-  }
-
-  return en && fr;
-};
+type TrackedState = [
+  form: unknown,
+  isPublished: boolean,
+  name: string,
+  deliveryOption: unknown,
+  securityAttribute: unknown,
+];
 
 export function SaveTemplateProvider({ children }: { children: React.ReactNode }) {
-  const [nameChanged, setNameChanged] = useState<boolean | null>(false);
-  const [introChanged, setIntroChanged] = useState<boolean | null>(false);
-  const [privacyChanged, setPrivacyChanged] = useState<boolean | null>(false);
-  const [confirmationChanged, setConfirmationChanged] = useState<boolean | null>(false);
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
+  // Tick state to force re-renders when templateIsDirty (a ref) changes.
+  // Without this, setting the ref alone won't cause SaveButton to re-read it.
+  const [, setDirtyTick] = useState(0);
 
   const { hasHydrated } = useTemplateStore((s) => ({
     hasHydrated: s.hasHydrated,
@@ -84,53 +58,37 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
 
   const templateIsDirty = useRef(false);
 
-  const resetState = () => {
-    setNameChanged(null);
-    setIntroChanged(null);
-    setPrivacyChanged(null);
-    setConfirmationChanged(null);
+  // Snapshot of tracked state at last save (or initial load).
+  // Deep-compared against current state to detect real changes.
+  const savedSnapshot = useRef<TrackedState | null>(null);
+
+  const resetState = useCallback(() => {
     templateIsDirty.current = false;
-  };
+    savedSnapshot.current = null; // Snapshot is captured on next subscription fire
+    setDirtyTick((t) => t + 1);
+  }, []);
 
+  // Single subscription — uses deep equality (lodash.isequal) to compare
+  // current state against the last-saved snapshot. This means changing a
+  // value and changing it back results in dirty = false.
   useSubscibeToTemplateStore(
-    (s) => [s.form, s.isPublished, s.name, s.deliveryOption, s.securityAttribute],
-    () => {
-      if (hasHydrated && !templateIsDirty.current) {
-        logMessage.debug(`TemplateContext: Local State out of sync with server`);
-        templateIsDirty.current = true;
-      }
-    }
-  );
+    (s) => [s.form, s.isPublished, s.name, s.deliveryOption, s.securityAttribute] as TrackedState,
+    (current, previous) => {
+      if (!hasHydrated) return;
 
-  useSubscibeToTemplateStore(
-    (s) => [s.getName() ?? ""],
-    (s, p) => {
-      if (p[0] !== s[0]) {
-        setNameChanged(true);
-      }
-    }
-  );
-
-  useSubscibeToTemplateStore(
-    (s) => [s.form.introduction, s.form.privacyPolicy, s.form.confirmation],
-    (s, p) => {
-      // look for changes in the descriptions
-      // if changes update the state to ensure the provider
-      // updates the save button
-      const introduction = descriptionsMatch(s[0], p[0]);
-      const privacyPolicy = descriptionsMatch(s[1], p[1]);
-      const confirmation = descriptionsMatch(s[2], p[2]);
-
-      if (introduction !== introChanged) {
-        setIntroChanged(introduction);
+      // Capture the pre-change state as the snapshot on first fire after mount or save
+      if (savedSnapshot.current === null) {
+        savedSnapshot.current = structuredClone(previous);
       }
 
-      if (privacyPolicy !== privacyChanged) {
-        setPrivacyChanged(privacyPolicy);
-      }
+      const dirty = !isEqual(current, savedSnapshot.current);
 
-      if (confirmation !== confirmationChanged) {
-        setConfirmationChanged(confirmation);
+      if (dirty !== templateIsDirty.current) {
+        logMessage.debug(
+          `TemplateContext: ${dirty ? "Local State out of sync with server" : "State reverted to saved"}`
+        );
+        templateIsDirty.current = dirty;
+        setDirtyTick((t) => t + 1);
       }
     }
   );
@@ -141,10 +99,6 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         templateIsDirty,
         updatedAt,
         setUpdatedAt,
-        nameChanged,
-        introChanged,
-        privacyChanged,
-        confirmationChanged,
         createOrUpdateTemplate,
         resetState,
       }}
