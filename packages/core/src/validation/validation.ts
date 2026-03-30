@@ -11,6 +11,7 @@ import { isInputTooLong } from "./text";
 import { isValidDate } from "./date";
 import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
+import { isSafeRegex } from "@root/lib/regex/isSafeRegex";
 
 export const isFieldResponseValid = (
   value: unknown,
@@ -39,10 +40,14 @@ export const isFieldResponseValid = (
       }
 
       if (validator.type && currentRegex && currentRegex.regex) {
-        // Check for different types of fields, email, date, number, custom etc
-        const regex = new RegExp(currentRegex.regex);
-        if (typedValue && !regex.test(typedValue)) {
-          return currentRegex.error;
+        // Check regex for safety before using it.
+        // Default allow to prevent data loss or blocking the form.
+        if (isSafeRegex(currentRegex.regex.source)) {
+          // Check for different types of fields, email, date, number, custom etc
+          const regex = new RegExp(currentRegex.regex);
+          if (typedValue && !regex.test(typedValue)) {
+            return currentRegex.error;
+          }
         }
       }
       if (validator.maxLength && (value as string).length > validator.maxLength)
