@@ -79,27 +79,27 @@ describe("<Combobox />", () => {
     await userEvent.keyboard("{ArrowDown}");
 
     let listItems = document.querySelectorAll("[data-testid=combobox-listbox] > li");
-    let selectedItem = Array.from(listItems).find((li) => li.textContent === "one");
+    let selectedItem = Array.from(listItems).find((li) => li.getAttribute("data-value") === "one");
     expect(selectedItem?.getAttribute("aria-selected")).toBe("true");
 
     await userEvent.keyboard("{ArrowDown}");
     listItems = document.querySelectorAll("[data-testid=combobox-listbox] > li");
-    selectedItem = Array.from(listItems).find((li) => li.textContent === "two");
+    selectedItem = Array.from(listItems).find((li) => li.getAttribute("data-value") === "two");
     expect(selectedItem?.getAttribute("aria-selected")).toBe("true");
 
     await userEvent.keyboard("{ArrowDown}");
     listItems = document.querySelectorAll("[data-testid=combobox-listbox] > li");
-    selectedItem = Array.from(listItems).find((li) => li.textContent === "three");
+    selectedItem = Array.from(listItems).find((li) => li.getAttribute("data-value") === "three");
     expect(selectedItem?.getAttribute("aria-selected")).toBe("true");
 
     await userEvent.keyboard("{ArrowDown}");
     listItems = document.querySelectorAll("[data-testid=combobox-listbox] > li");
-    selectedItem = Array.from(listItems).find((li) => li.textContent === "four");
+    selectedItem = Array.from(listItems).find((li) => li.getAttribute("data-value") === "four");
     expect(selectedItem?.getAttribute("aria-selected")).toBe("true");
 
     await userEvent.keyboard("{ArrowDown}");
     listItems = document.querySelectorAll("[data-testid=combobox-listbox] > li");
-    selectedItem = Array.from(listItems).find((li) => li.textContent === "five");
+    selectedItem = Array.from(listItems).find((li) => li.getAttribute("data-value") === "five");
     expect(selectedItem?.getAttribute("aria-selected")).toBe("true");
   });
 
