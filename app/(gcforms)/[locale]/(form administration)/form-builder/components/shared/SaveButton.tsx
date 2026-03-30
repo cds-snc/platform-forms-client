@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
-import { cn, safeJSONParse } from "@lib/utils";
+import { cn } from "@lib/utils";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
@@ -14,7 +14,6 @@ import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
 import { ErrorSaving } from "./ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
-import { FormProperties } from "@lib/types";
 
 const SaveDraft = ({
   updatedAt,
@@ -86,34 +85,14 @@ const ErrorSavingForm = () => {
 export const SaveButton = () => {
   const { t } = useTranslation("form-builder");
   const lockChecksEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
-  const {
-    isPublished,
-    id,
-    getSchema,
-    getId,
-    getName,
-    getDeliveryOption,
-    securityAttribute,
-    setId,
-    notificationsInterval,
-    isLockedByOther,
-    editLock,
-  } = useTemplateStore((s) => ({
+  const { isPublished, id, isLockedByOther, editLock } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
-    getId: s.getId,
-    getSchema: s.getSchema,
-    getName: s.getName,
-    getDeliveryOption: s.getDeliveryOption,
-    securityAttribute: s.securityAttribute,
-    setId: s.setId,
-    notificationsInterval: s.notificationsInterval,
     isLockedByOther: s.isLockedByOther,
     editLock: s.editLock,
   }));
 
-  const { templateIsDirty, createOrUpdateTemplate, resetState, updatedAt, setUpdatedAt } =
-    useTemplateContext();
+  const { saveDraft, saveDraftIfNeeded, templateIsDirty, updatedAt } = useTemplateContext();
   const { status } = useSession();
   const lockedByOther = lockChecksEnabled && isLockedByOther;
 
@@ -137,57 +116,20 @@ export const SaveButton = () => {
       return;
     }
 
-    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    const result = await saveDraft();
 
-    if (!formConfig) {
+    if (result.status === "invalid") {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;
     }
 
-    try {
-      if (!createOrUpdateTemplate) {
-        return;
-      }
-
-      const operationResult = await createOrUpdateTemplate({
-        id: getId(),
-        formConfig,
-        name: getName(),
-        deliveryOption: getDeliveryOption(),
-        securityAttribute: securityAttribute,
-        notificationsInterval: notificationsInterval,
-      });
-
-      if (operationResult.formRecord === null) {
-        throw new Error("Error saving template");
-      }
-
-      setId(operationResult.formRecord.id);
-      setUpdatedAt(
-        new Date(
-          operationResult.formRecord.updatedAt ? operationResult.formRecord.updatedAt : ""
-        ).getTime()
-      );
-      setError(false);
-      resetState();
-    } catch (error) {
+    if (result.status === "locked" || result.status === "error") {
       toast.error(<ErrorSaving />, "wide");
       setError(true);
+      return;
     }
-  }, [
-    createOrUpdateTemplate,
-    getDeliveryOption,
-    getId,
-    getName,
-    getSchema,
-    lockedByOther,
-    notificationsInterval,
-    resetState,
-    securityAttribute,
-    setId,
-    setUpdatedAt,
-    status,
-  ]);
+    setError(false);
+  }, [lockedByOther, saveDraft, status]);
 
   useEffect(() => {
     isLockedByOtherRef.current = lockedByOther;
@@ -217,10 +159,10 @@ export const SaveButton = () => {
   useEffect(() => {
     return () => {
       if (!isLockedByOtherRef.current) {
-        handleSaveRef.current();
+        void saveDraftIfNeeded();
       }
     };
-  }, []);
+  }, [saveDraftIfNeeded]);
 
   if (isPublished) {
     return null;

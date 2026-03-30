@@ -25,3 +25,6 @@ export const CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS = 15_000;
 
 // Recompute the banner's relative-time copy every 5 seconds while presence detection is visible.
 export const CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS = 5_000;
+
+// Give the current editor a short window to flush any dirty draft state before a takeover completes.
+export const EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS = 1_500;

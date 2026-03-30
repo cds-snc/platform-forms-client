@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { middleware, sessionExists } from "@lib/middleware";
 import { WithRequired, MiddlewareProps } from "@lib/types";
 import {
+  EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   acquireEditLock,
   EditLockPresenceInput,
   EditLockPresenceStatus,
@@ -9,6 +10,7 @@ import {
   getEditLockDisabledStatus,
   getEditLockStatus,
   heartbeatEditLock,
+  requestEditLockTakeoverSave,
   releaseEditLock,
   shouldEnforceTemplateEditLock,
   takeoverEditLock,
@@ -17,6 +19,11 @@ import {
 import { authorization } from "@lib/privileges";
 
 type LockAction = "acquire" | "heartbeat" | "release" | "takeover";
+
+const wait = async (timeMs: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, timeMs);
+  });
 
 const isPresenceStatus = (value: unknown): value is EditLockPresenceStatus =>
   value === "active" || value === "idle" || value === "away";
@@ -135,6 +142,13 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
     }
 
     if (action === "takeover") {
+      const currentStatus = await getEditLockStatus(formID, session.user.id);
+
+      if (currentStatus.locked && !currentStatus.isOwner) {
+        await requestEditLockTakeoverSave(formID);
+        await wait(EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS);
+      }
+
       const status = await takeoverEditLock({
         templateId: formID,
         userId: session.user.id,

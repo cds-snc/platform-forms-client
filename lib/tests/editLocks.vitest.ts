@@ -1,18 +1,22 @@
-import Redis from "ioredis-mock";
+import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   acquireEditLock,
   getEditLockStatus,
   heartbeatEditLock,
   releaseEditLock,
+  requestEditLockTakeoverSave,
+  subscribeToEditLockEvents,
   takeoverEditLock,
 } from "@lib/editLocks";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 
-jest.mock("@lib/integration/redisConnector", () => {
+vi.mock("@lib/integration/redisConnector", async () => {
+  const { default: Redis } = await import("ioredis-mock");
   const redis = new Redis();
+
   return {
-    getRedisInstance: jest.fn(async () => redis),
-    createRedisSubscriber: jest.fn(() => redis.duplicate()),
+    getRedisInstance: vi.fn(async () => redis),
+    createRedisSubscriber: vi.fn(() => redis.duplicate()),
   };
 });
 
@@ -20,9 +24,10 @@ describe("editLocks with redis", () => {
   const originalRedisUrl = process.env.REDIS_URL;
 
   beforeEach(async () => {
+    vi.clearAllMocks();
     process.env.REDIS_URL = "redis://test";
-    const redis = await getRedisInstance();
-    await redis.flushall();
+    const redisInstance = await getRedisInstance();
+    await redisInstance.flushall();
   });
 
   afterAll(() => {
@@ -120,5 +125,34 @@ describe("editLocks with redis", () => {
     expect(heartbeatStatus.lock?.lastActivityAt).toEqual(activityAt);
     expect(heartbeatStatus.lock?.visibilityState).toBe("hidden");
     expect(heartbeatStatus.lock?.presenceStatus).toBe("away");
+  });
+
+  it("emits a takeover save request before ownership changes in memory mode", async () => {
+    const previousRedisUrl = process.env.REDIS_URL;
+    delete process.env.REDIS_URL;
+
+    await acquireEditLock({
+      templateId: "form-4",
+      userId: "user-1",
+      userName: "User One",
+      sessionId: "session-1",
+    });
+
+    const events: string[] = [];
+    const unsubscribe = subscribeToEditLockEvents("form-4", (event) => {
+      events.push(event.type);
+    });
+
+    try {
+      await requestEditLockTakeoverSave("form-4");
+
+      const status = await getEditLockStatus("form-4", "user-1");
+      expect(status.isOwner).toBe(true);
+      expect(status.lock?.lockedByUserId).toBe("user-1");
+      expect(events).toEqual(["takeover-requested"]);
+    } finally {
+      unsubscribe();
+      process.env.REDIS_URL = previousRedisUrl;
+    }
   });
 });

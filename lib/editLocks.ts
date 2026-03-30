@@ -6,6 +6,7 @@ import {
 } from "@lib/formBuilderEditLockPresence";
 export {
   EDIT_LOCK_HEARTBEAT_MS,
+  EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   EDIT_LOCK_TTL_MS,
   MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
 } from "@lib/formBuilderEditLockPresence";
@@ -43,6 +44,10 @@ export type EditLockStatus = {
   lock: EditLockInfo | null;
 };
 
+export type EditLockEvent = {
+  type: "updated" | "takeover-requested";
+};
+
 export class TemplateEditLockedError extends Error {
   lock: EditLockInfo | null;
   constructor(message: string, lock: EditLockInfo | null) {
@@ -53,7 +58,7 @@ export class TemplateEditLockedError extends Error {
 }
 
 type EditLockStore = Map<string, EditLockInfo>;
-type EditLockSubscriber = () => void;
+type EditLockSubscriber = (event: EditLockEvent) => void;
 type EditLockSubscriberStore = Map<string, Set<EditLockSubscriber>>;
 type StoredEditLockInfo = Omit<
   EditLockInfo,
@@ -91,6 +96,7 @@ const redisEnabled = () => Boolean(process.env.REDIS_URL);
 const getEditLockKey = (templateId: string) => `${EDIT_LOCK_KEY_PREFIX}:${templateId}`;
 const getEditLockChannel = (templateId: string) => `${EDIT_LOCK_CHANNEL_PREFIX}:${templateId}`;
 const editLockTtlSeconds = Math.ceil(EDIT_LOCK_TTL_MS / 1000);
+const updatedEvent: EditLockEvent = { type: "updated" };
 
 const toStoredEditLockInfo = (lock: EditLockInfo): StoredEditLockInfo => ({
   ...lock,
@@ -157,7 +163,7 @@ const readMemoryLock = (templateId: string) => {
   const normalized = toEditLockInfo(lock);
   if (isExpired(normalized, now)) {
     store.delete(templateId);
-    notifyEditLockSubscribers(templateId);
+    notifyEditLockSubscribers(templateId, updatedEvent);
     return null;
   }
 
@@ -180,14 +186,14 @@ const readRedisLock = async (templateId: string) => {
   return toEditLockInfo(lock);
 };
 
-const publishEditLockEvent = async (templateId: string) => {
+const publishEditLockEvent = async (templateId: string, event: EditLockEvent = updatedEvent) => {
   if (redisEnabled()) {
     const redis = await getRedisInstance();
-    await redis.publish(getEditLockChannel(templateId), JSON.stringify({ type: "updated" }));
+    await redis.publish(getEditLockChannel(templateId), JSON.stringify(event));
     return;
   }
 
-  notifyEditLockSubscribers(templateId);
+  notifyEditLockSubscribers(templateId, event);
 };
 
 const storeRedisLock = async (lock: EditLockInfo) => {
@@ -231,13 +237,13 @@ const withRedisWatch = async <T>(
   return execute(0);
 };
 
-const notifyEditLockSubscribers = (templateId: string) => {
+const notifyEditLockSubscribers = (templateId: string, event: EditLockEvent) => {
   const subscribers = getEditLockSubscribers().get(templateId);
   if (!subscribers) {
     return;
   }
 
-  subscribers.forEach((subscriber) => subscriber());
+  subscribers.forEach((subscriber) => subscriber(event));
 };
 
 export const subscribeToEditLockEvents = (templateId: string, subscriber: EditLockSubscriber) => {
@@ -257,6 +263,10 @@ export const subscribeToEditLockEvents = (templateId: string, subscriber: EditLo
       subscriberStore.delete(templateId);
     }
   };
+};
+
+export const requestEditLockTakeoverSave = async (templateId: string) => {
+  await publishEditLockEvent(templateId, { type: "takeover-requested" });
 };
 
 const isExpired = (lock: EditLockInfo, now: Date) => lock.expiresAt.getTime() <= now.getTime();

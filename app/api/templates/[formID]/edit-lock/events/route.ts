@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { middleware, sessionExists } from "@lib/middleware";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { authorization } from "@lib/privileges";
-import { getEditLockStatus, subscribeToEditLockEvents } from "@lib/editLocks";
+import { EditLockEvent, getEditLockStatus, subscribeToEditLockEvents } from "@lib/editLocks";
 import { createRedisSubscriber } from "@lib/integration/redisConnector";
 import type Redis from "ioredis";
 
@@ -31,6 +31,19 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
       let unsubscribe: (() => void) | null = null;
       let subscriber: Redis | null = null;
 
+      const parseEvent = (raw: string): EditLockEvent => {
+        try {
+          const parsed = JSON.parse(raw) as Partial<EditLockEvent>;
+          if (parsed.type === "takeover-requested") {
+            return { type: "takeover-requested" };
+          }
+        } catch {
+          // no-op
+        }
+
+        return { type: "updated" };
+      };
+
       const sendStatus = async () => {
         if (closed) {
           return;
@@ -40,6 +53,25 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
         controller.enqueue(
           encoder.encode(`event: lock-status\ndata: ${JSON.stringify(status)}\n\n`)
         );
+      };
+
+      const sendTakeoverRequested = () => {
+        if (closed) {
+          return;
+        }
+
+        controller.enqueue(encoder.encode("event: takeover-requested\ndata: {}\n\n"));
+      };
+
+      const handleEvent = (event: EditLockEvent) => {
+        if (event.type === "takeover-requested") {
+          sendTakeoverRequested();
+          return;
+        }
+
+        void sendStatus().catch(() => {
+          // no-op: the stream may already be closed
+        });
       };
 
       const keepAlive = setInterval(() => {
@@ -81,18 +113,12 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
       if (process.env.REDIS_URL) {
         subscriber = createRedisSubscriber();
         void subscriber.subscribe(channel).then(() => {
-          subscriber?.on("message", () => {
-            void sendStatus().catch(() => {
-              // no-op: the stream may already be closed
-            });
+          subscriber?.on("message", (_messageChannel, message) => {
+            handleEvent(parseEvent(message));
           });
         });
       } else {
-        unsubscribe = subscribeToEditLockEvents(formID, () => {
-          void sendStatus().catch(() => {
-            // no-op: the stream may already be closed
-          });
-        });
+        unsubscribe = subscribeToEditLockEvents(formID, handleEvent);
       }
 
       void sendStatus().catch(() => {

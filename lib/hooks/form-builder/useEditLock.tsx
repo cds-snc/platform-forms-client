@@ -49,7 +49,7 @@ export const useEditLock = ({
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
   const setFromRecord = useTemplateStore((s) => s.setFromRecord);
-  const { resetState, setUpdatedAt } = useTemplateContext();
+  const { resetState, saveDraftIfNeeded, setUpdatedAt } = useTemplateContext();
 
   const isOwnerRef = useRef(false);
   const heartbeatRef = useRef<number | null>(null);
@@ -57,6 +57,7 @@ export const useEditLock = ({
   const eventSourceRef = useRef<EventSource | null>(null);
   const lockLoopTokenRef = useRef(0);
   const lastActivityAtRef = useRef(0);
+  const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const visibilityStateRef = useRef<EditLockVisibilityState>("visible");
 
   const updateStore = useCallback(
@@ -155,6 +156,22 @@ export const useEditLock = ({
     clearTemplateStore();
     await refreshForm();
   }, [refreshForm]);
+
+  const flushDraftBeforeTakeover = useCallback(async () => {
+    if (!isOwnerRef.current) {
+      return;
+    }
+
+    if (!takeoverSaveRef.current) {
+      takeoverSaveRef.current = (async () => {
+        await saveDraftIfNeeded();
+      })().finally(() => {
+        takeoverSaveRef.current = null;
+      });
+    }
+
+    await takeoverSaveRef.current;
+  }, [saveDraftIfNeeded]);
 
   const startHeartbeat = useCallback(() => {
     clearTimers();
@@ -345,7 +362,12 @@ export const useEditLock = ({
       })();
     };
 
+    const handleTakeoverRequested: EventListener = () => {
+      void flushDraftBeforeTakeover();
+    };
+
     eventSource.addEventListener("lock-status", handleLockStatus);
+    eventSource.addEventListener("takeover-requested", handleTakeoverRequested);
     eventSource.onerror = () => {
       if (eventSource.readyState === EventSource.CLOSED && eventSourceRef.current === eventSource) {
         eventSourceRef.current = null;
@@ -354,12 +376,22 @@ export const useEditLock = ({
 
     return () => {
       eventSource.removeEventListener("lock-status", handleLockStatus);
+      eventSource.removeEventListener("takeover-requested", handleTakeoverRequested);
       eventSource.close();
       if (eventSourceRef.current === eventSource) {
         eventSourceRef.current = null;
       }
     };
-  }, [clearEvents, enabled, formId, startPolling, status, syncServerState, updateStore]);
+  }, [
+    clearEvents,
+    enabled,
+    flushDraftBeforeTakeover,
+    formId,
+    startPolling,
+    status,
+    syncServerState,
+    updateStore,
+  ]);
 
   const takeover = useCallback(async () => {
     const statusResult = (await postAction("takeover")) as EditLockStatus & { error?: string };
