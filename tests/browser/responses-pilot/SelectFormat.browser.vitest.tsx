@@ -6,7 +6,7 @@ import { setupFonts } from "./testHelpers";
 import { vi } from "vitest";
 import { GCFormsApiClient } from "@responses-pilot/lib/apiClient";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("SelectFormat - Browser Mode", () => {
   beforeAll(() => {

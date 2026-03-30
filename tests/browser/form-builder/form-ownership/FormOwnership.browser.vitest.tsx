@@ -5,7 +5,7 @@ import { FormRecord } from "@lib/types";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 const allUsers = [
   { id: "1", name: "John Doe", email: "john.doe@test.com" },

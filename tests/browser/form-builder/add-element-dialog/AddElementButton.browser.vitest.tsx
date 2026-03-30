@@ -4,7 +4,7 @@ import { AddElementButton } from "@formBuilder/[id]/edit/components/elements/ele
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<AddElementButton />", () => {
 

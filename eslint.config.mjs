@@ -1,7 +1,6 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
-import tailwind from "eslint-plugin-tailwindcss";
 import reactHooks from "eslint-plugin-react-hooks";
 
 const eslintConfig = defineConfig([
@@ -15,8 +14,6 @@ const eslintConfig = defineConfig([
       ...reactHooks.configs.recommended.rules,
     },
   },
-  ...tailwind.configs["flat/recommended"],
-  // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
@@ -57,54 +54,6 @@ const eslintConfig = defineConfig([
             "logMessage.info() and logMessage.warn() only accept string arguments. Use template literals instead: logMessage.info(`User: ${userId}`)",
         },
       ],
-    },
-    settings: {
-      tailwindcss: {
-        whitelist: [
-          "(gc\\-).*",
-          "(gcds\\-).*",
-          "form-builder",
-          "form-builder-editor",
-          "page-container",
-          "visually-hidden",
-          "buttons",
-          "required",
-          "focus-group",
-          "canada-flag",
-          "account-wrapper",
-          "input-sizer",
-          "stacked",
-          "disabled",
-          "origin-radix-dropdown-menu",
-          "radio-label-text",
-          "checkbox-label-text",
-          "example-text",
-          "section",
-          "maple-leaf-loader",
-          "flow-container",
-          "rich-text-wrapper",
-          "editor",
-          "editor-input",
-          "link-editor",
-          "link-input",
-          "choice",
-          "text-entry",
-          "action",
-          "wave",
-          "bkd-soft",
-          "legend-fieldset",
-          "confirmation",
-          "active",
-          "brand__container",
-          "fip_flag",
-          "fip_text",
-          "brand__toggle",
-          "brand__signature",
-          "container-xl",
-          "tableLink",
-          "label--required",
-        ],
-      },
     },
   },
 ]);

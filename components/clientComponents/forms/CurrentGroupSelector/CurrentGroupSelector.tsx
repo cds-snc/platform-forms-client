@@ -18,7 +18,7 @@ export const CurrentGroupSelector = () => {
         }}
         type="button"
         popoverTarget="group-menu"
-        className="flex cursor-pointer rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+        className="hover:text-white-default focus:text-white-default flex cursor-pointer rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 focus:bg-gray-600 hover:[&_svg]:fill-white focus:[&_svg]:fill-white"
       >
         <MoreIcon className="size-5" />
       </button>
