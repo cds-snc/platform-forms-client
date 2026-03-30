@@ -46,6 +46,7 @@
     "date-invalid": "Enter a valid date.",
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
+    "combobox-strict": "Select a value from the list.",
     "file-upload": {
       "default": {
         "heading": "There was a problem submitting your form",
