@@ -57,7 +57,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     isLockedByOther,
     notificationsInterval,
     securityAttribute,
-    setId,
+    setFromRecord,
   } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
     getId: s.getId,
@@ -67,7 +67,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     isLockedByOther: s.isLockedByOther,
     notificationsInterval: s.notificationsInterval,
     securityAttribute: s.securityAttribute,
-    setId: s.setId,
+    setFromRecord: s.setFromRecord,
   }));
 
   const templateIsDirty = useRef(false);
@@ -108,7 +108,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         return { status: operationResult.error === "editLocked" ? "locked" : "error" };
       }
 
-      setId(operationResult.formRecord.id);
+      setFromRecord(operationResult.formRecord);
       setUpdatedAt(
         new Date(
           operationResult.formRecord.updatedAt ? operationResult.formRecord.updatedAt : ""
@@ -129,7 +129,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     notificationsInterval,
     resetState,
     securityAttribute,
-    setId,
+    setFromRecord,
     status,
   ]);
 
