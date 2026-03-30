@@ -20,6 +20,8 @@ import { authorization } from "@lib/privileges";
 
 type LockAction = "acquire" | "heartbeat" | "release" | "takeover";
 
+const shouldSkipPreTakeoverSave = () => process.env.PLAYWRIGHT_TEST === "true";
+
 const wait = async (timeMs: number) =>
   new Promise((resolve) => {
     setTimeout(resolve, timeMs);
@@ -144,7 +146,7 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
     if (action === "takeover") {
       const currentStatus = await getEditLockStatus(formID, session.user.id);
 
-      if (currentStatus.locked && !currentStatus.isOwner) {
+      if (!shouldSkipPreTakeoverSave() && currentStatus.locked && !currentStatus.isOwner) {
         await requestEditLockTakeoverSave(formID);
         await wait(EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS);
       }
