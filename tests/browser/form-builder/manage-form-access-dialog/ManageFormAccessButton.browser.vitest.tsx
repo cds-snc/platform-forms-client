@@ -4,7 +4,7 @@ import { ManageFormAccessButton } from "@root/app/(gcforms)/[locale]/(form admin
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<ManageFormAccessButton />", () => {
   beforeAll(() => {
