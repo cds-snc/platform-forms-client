@@ -17,6 +17,7 @@ sw.addEventListener("install", () => {
 
 sw.addEventListener("activate", async () => {
   console.info("service worker activated");
+  sw.clients.claim();
 });
 
 sw.addEventListener("fetch", (event) => {

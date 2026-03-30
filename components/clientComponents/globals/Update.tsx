@@ -2,13 +2,10 @@
 
 import Markdown from "markdown-to-jsx";
 import { Button } from "./Buttons";
-import { useUpdateRequired } from "@root/lib/hooks/useUpdateRequired";
-import { logMessage } from "@root/lib/logger";
+import { useAppUpdate } from "@lib/hooks/useAppUpdate";
 
 export const Update = () => {
-  const updateRequired = useUpdateRequired(() =>
-    logMessage.info("This should hopefully now show the update page modal")
-  );
+  const { updateRequired } = useAppUpdate();
 
   // short circuit when no update needed
   if (!updateRequired) return null;

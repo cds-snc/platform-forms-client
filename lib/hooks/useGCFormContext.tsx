@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, ReactNode, useCallback } from "react";
+import React, { createContext, useContext, ReactNode, useCallback, useEffect } from "react";
 
 import { type FormValues, type GroupsType, type PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -29,7 +29,7 @@ import { toggleSavedValues } from "@i18n/toggleSavedValues";
 
 import { type FileInputResponse } from "@lib/types";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-import { useUpdateRequired } from "./useUpdateRequired";
+import { useAppUpdate } from "@lib/hooks/useAppUpdate";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "../logger";
 
@@ -234,11 +234,16 @@ export const GCFormsProvider = ({
     }
     return visibleGroups[idx - 1];
   };
+  const { updateRequired } = useAppUpdate();
 
-  useUpdateRequired(() => {
-    logMessage.info(`Saving progress to session storage for form responses with lang: ${language}`);
-    saveSessionProgress(language as Language);
-  });
+  useEffect(() => {
+    if (updateRequired) {
+      logMessage.info(
+        `Saving progress to session storage for form responses with lang: ${language}`
+      );
+      saveSessionProgress(language as Language);
+    }
+  }, [updateRequired, language, saveSessionProgress]);
 
   return (
     <GCFormsContext.Provider
