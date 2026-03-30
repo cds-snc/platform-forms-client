@@ -4,7 +4,6 @@ import { InputFieldProps } from "@lib/types";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
-import isMobile from "is-mobile";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { useAllowDuplicateAnnouncer, AllowDuplicateAnnouncer } from "@gcforms/announce";
@@ -22,47 +21,25 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const { setValue } = helpers;
 
   const [items, setItems] = React.useState(choices);
-
-  // Track virtual focus for iOS+VoiceOver workaround. See #5847
-  const [virtualFocusIndex, setVirtualFocusIndex] = React.useState<number | null>(null);
-  // Detect iOS + VoiceOver (approximate mobile Safari)
-  const isIOS = React.useMemo(() => {
-    if (typeof window === "undefined") return false;
-    return isMobile({ tablet: true }) && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  }, []);
-
-  const combobox = useCombobox({
-    onInputValueChange({ inputValue }) {
-      setItems(
-        choices.filter((choice) => {
-          return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
-        })
-      );
-      setValue(inputValue);
-    },
-    items,
-    onSelectedItemChange({ selectedItem }) {
-      setValue(selectedItem);
-      setVirtualFocusIndex(null);
-    },
-    initialInputValue: field.value || "",
-    // Suppress downshift's built-in live region so we can customize announcements and
-    // timing for better AT support
-    getA11yStatusMessage: () => "",
-    // Prevent Downshift from closing on blur if iOS+VoiceOver and swipe navigation
-    onIsOpenChange: ({ isOpen, type }) => {
-      if (!isOpen && isIOS && type === useCombobox.stateChangeTypes.InputBlur) {
-        // Keep menu open if VoiceOver likely caused blur
-        combobox.openMenu();
-      }
-    },
-    onHighlightedIndexChange: ({ highlightedIndex }) => {
-      setVirtualFocusIndex(highlightedIndex);
-    },
-  });
   const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
-    combobox;
-
+    useCombobox({
+      onInputValueChange({ inputValue }) {
+        setItems(
+          choices.filter((choice) => {
+            return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
+          })
+        );
+        setValue(inputValue);
+      },
+      items,
+      onSelectedItemChange({ selectedItem }) {
+        setValue(selectedItem);
+      },
+      initialInputValue: field.value || "",
+      // Suppress downshift's built-in live region so we can customize announcements and
+      // timing for better AT support
+      getA11yStatusMessage: () => "",
+    });
   // Announce either a) the option item count when results are available, or b) a no-results
   // message when the list is empty.
   const targetMessage = isOpen
@@ -122,7 +99,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
                 data-value={item}
                 className={cn(
                   "min-h-[44px]",
-                  (highlightedIndex === index || virtualFocusIndex === index) && "bg-gcds-blue-100",
+                  highlightedIndex === index && "bg-gcds-blue-100",
                   selectedItem === item && "font-bold"
                 )}
                 key={item}
