@@ -17,7 +17,7 @@ vi.mock("formik", async () => {
     useField: vi.fn(() => [
       { field: { value: "" } },
       { meta: { touched: null, error: null } },
-      { setValue: vi.fn() },
+      { setValue: vi.fn(), setError: vi.fn(), setTouched: vi.fn() },
     ]),
   };
 });
