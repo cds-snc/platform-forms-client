@@ -17,7 +17,7 @@ vi.mock("formik", async () => {
     useField: vi.fn(() => [
       { field: { value: "" } },
       { meta: { touched: null, error: null } },
-      { setValue: vi.fn() },
+      { setValue: vi.fn(), setError: vi.fn(), setTouched: vi.fn() },
     ]),
   };
 });
@@ -88,8 +88,8 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Combobox component", (lang
     await userEvent.type(comboboxInput!, "N");
     await waitFor(() => expect(comboboxListbox).toBeVisible());
     const options = await within(comboboxListbox!).findAllByRole("option");
-      // Ensure at least two options are rendered and the first has non-empty text.
-      expect(options.length).toBeGreaterThanOrEqual(2);
+    // Ensure at least two options are rendered and the first has non-empty text.
+    expect(options.length).toBeGreaterThanOrEqual(2);
     const firstOptionText = options[0].textContent?.trim() || "";
     expect(firstOptionText.length).toBeGreaterThan(0);
   });

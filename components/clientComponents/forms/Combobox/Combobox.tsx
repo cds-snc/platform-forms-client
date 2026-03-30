@@ -10,17 +10,46 @@ import { useAllowDuplicateAnnouncer, AllowDuplicateAnnouncer } from "@gcforms/an
 
 interface ComboboxProps extends InputFieldProps {
   choices?: string[];
+  strictValue?: boolean;
 }
 
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
-  const { id, name, className, choices = [], required, ariaDescribedBy, lang } = props;
+  const { id, name, className, choices = [], required, ariaDescribedBy, strictValue, lang } = props;
   const classes = cn("gc-combobox gcds-input-wrapper", className);
   const { t } = useTranslation("common", { lng: lang });
 
   const [field, meta, helpers] = useField(props);
-  const { setValue } = helpers;
+  const { setError, setTouched, setValue } = helpers;
 
   const [items, setItems] = React.useState(choices);
+
+  const getMatchingChoice = (inputValue: string) => {
+    const normalizedInputValue = inputValue.trim().toLowerCase();
+
+    return choices.find((choice) => choice.trim().toLowerCase() === normalizedInputValue);
+  };
+
+  // Clear the field on blur if value does not match a choice (full match only)
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const matchingChoice = getMatchingChoice(inputValue);
+
+    if (matchingChoice) {
+      setValue(matchingChoice);
+      setError(undefined);
+    } else if (inputValue.trim()) {
+      setValue("");
+      setTouched(true, false);
+      setError(t("input-validation.combobox-strict"));
+    } else {
+      setError(undefined);
+    }
+
+    if (typeof field.onBlur === "function") {
+      field.onBlur(e);
+    }
+  };
+
   const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
     useCombobox({
       onInputValueChange({ inputValue }) {
@@ -29,10 +58,12 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
             return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
           })
         );
+        setError(undefined);
         setValue(inputValue);
       },
       items,
       onSelectedItemChange({ selectedItem }) {
+        setError(undefined);
         setValue(selectedItem);
       },
       initialInputValue: field.value || "",
@@ -54,6 +85,24 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
     isActive: isOpen,
   });
 
+  /**
+   * aria-lablledby is provided by getInputProps(). Since we're not creating a lablel
+   * for the input here, we need to remove it to avoid accessibility issues.
+   */
+  const inputProps = getInputProps(
+    strictValue
+      ? {
+          onBlur: handleBlur,
+        }
+      : undefined
+  );
+  if ("aria-labelledby" in inputProps) {
+    delete inputProps["aria-labelledby"];
+  }
+
+  inputProps.value = field.value || "";
+  const describedBy = [ariaDescribedBy, `${id}-hint`].filter(Boolean).join(" ");
+
   return (
     <>
       <div className={classes} data-testid="combobox" {...(lang && { lang })}>
@@ -66,8 +115,8 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
 
         {/* Note: downshift manages role="combobox", aria-activedescendant, and aria-expanded */}
         <input
-          {...getInputProps()}
-          aria-describedby={`${ariaDescribedBy} ${id}-hint`}
+          {...inputProps}
+          aria-describedby={describedBy}
           id={id}
           required={required}
           aria-required={required}
@@ -90,6 +139,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           {...getMenuProps()}
           tabIndex={-1}
           data-testid="combobox-listbox"
+          data-is-strict={strictValue}
           hidden={!isOpen || items.length === 0}
           aria-labelledby={`label-${id}`}
         >
@@ -98,7 +148,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
               <li
                 data-value={item}
                 className={cn(
-                  "min-h-[44px]",
+                  "min-h-11",
                   highlightedIndex === index && "bg-gcds-blue-100",
                   selectedItem === item && "font-bold"
                 )}
@@ -110,7 +160,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
                 }}
               >
                 {item}
-                {/* iOS VoiceOver doesn't reliably read aria-posinset/setsize. Inline position 
+                {/* iOS VoiceOver doesn't reliably read aria-posinset/setsize. Inline position
                     text as fallback. This technique was taken from GOV.UK accessible-autocomplete
                     and I don't fully understand it :) */}
                 <span
