@@ -100,9 +100,7 @@ export const SaveButton = () => {
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
   const isLockedByOtherRef = useRef(lockedByOther);
-  const handleSaveRef = useRef<() => void>(() => undefined);
   const errorRef = useRef(error);
-  const statusRef = useRef(status);
 
   const handleSave = useCallback(async () => {
     if (status !== "authenticated") {
@@ -134,16 +132,11 @@ export const SaveButton = () => {
 
   useEffect(() => {
     isLockedByOtherRef.current = lockedByOther;
-    handleSaveRef.current = handleSave;
   }, [handleSave, lockedByOther]);
 
   useEffect(() => {
     errorRef.current = error;
   }, [error]);
-
-  useEffect(() => {
-    statusRef.current = status;
-  }, [status]);
 
   useSubscibeToTemplateStore(
     (s) => [
@@ -163,7 +156,7 @@ export const SaveButton = () => {
 
   useEffect(() => {
     return () => {
-      if (statusRef.current === "authenticated" && !isLockedByOtherRef.current) {
+      if (!isLockedByOtherRef.current) {
         void saveDraftIfNeeded();
       }
     };
