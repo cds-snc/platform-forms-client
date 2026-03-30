@@ -91,7 +91,7 @@ export const SaveButton = () => {
     getName,
     getDeliveryOption,
     securityAttribute,
-    setId,
+    setFromRecord,
     notificationsInterval,
   } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
@@ -101,7 +101,7 @@ export const SaveButton = () => {
     getName: s.getName,
     getDeliveryOption: s.getDeliveryOption,
     securityAttribute: s.securityAttribute,
-    setId: s.setId,
+    setFromRecord: s.setFromRecord,
     notificationsInterval: s.notificationsInterval,
   }));
 
@@ -148,7 +148,7 @@ export const SaveButton = () => {
         throw new Error("Error saving template");
       }
 
-      setId(operationResult.formRecord.id);
+      setFromRecord(operationResult.formRecord);
       setUpdatedAt(
         new Date(
           operationResult.formRecord.updatedAt ? operationResult.formRecord.updatedAt : ""
@@ -156,7 +156,7 @@ export const SaveButton = () => {
       );
       setError(false);
       resetState();
-    } catch (error) {
+    } catch {
       toast.error(<ErrorSaving />, "wide");
       setError(true);
     }

@@ -3,6 +3,7 @@ import React, { createContext, useState, useContext, useRef, useCallback } from 
 import isEqual from "lodash.isequal";
 import { logMessage } from "@lib/logger";
 import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
+import { FormRecord } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
 
@@ -20,7 +21,7 @@ interface TemplateApiType {
         saveAndResume,
         notificationsInterval,
       }: CreateOrUpdateTemplateType) => Promise<{
-        formRecord: { id: string; updatedAt: string | undefined } | null;
+        formRecord: FormRecord | null;
         error?: string;
       }>)
     | null;
