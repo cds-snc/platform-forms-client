@@ -1,11 +1,11 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 
 test.describe.serial("Test FormBuilder Add Elements", () => {
   const addElementButtonText = "Add form element";
 
   test.use({ storageState: { cookies: [], origins: [] } });
 
-  const openPreview = async (page: Parameters<typeof test>[0]["page"]) => {
+  const openPreview = async (page: Page) => {
     await page.getByTestId("preview").click();
     await page.waitForURL(/\/en\/form-builder\/0000\/preview/);
     await expect(page.getByTestId("preview-container")).toBeVisible();
