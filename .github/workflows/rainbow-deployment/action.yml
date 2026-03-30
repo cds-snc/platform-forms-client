@@ -99,16 +99,20 @@ runs:
           --target-group-arn $target_group_arn \
           --targets Id=$lambda_arn
 
+        # We need to replace all dots with hyphens in release identifier for when a tag is being passed (v4.10.0 becomes v4-10-0)
+        DEPLOYMENT_IDENTIFIER=${{ inputs.latest-release-identifier }}
+        NEXTJS_COMPATIBLE_DEPLOYMENT_IDENTIFIER=${DEPLOYMENT_IDENTIFIER//./-}
+
         aws elbv2 create-rule \
           --listener-arn ${{ inputs.load-balancer-listener-arn }} \
-          --conditions "[{\"Field\":\"host-header\",\"Values\":[\"${{ inputs.hostname }}\"]},{\"Field\":\"http-header\",\"HttpHeaderConfig\":{\"HttpHeaderName\":\"x-deployment-id\",\"Values\":[\"${{ inputs.latest-release-identifier }}\"]}}]" \
+          --conditions "[{\"Field\":\"host-header\",\"Values\":[\"${{ inputs.hostname }}\"]},{\"Field\":\"http-header\",\"HttpHeaderConfig\":{\"HttpHeaderName\":\"x-deployment-id\",\"Values\":[\"${NEXTJS_COMPATIBLE_DEPLOYMENT_IDENTIFIER}\"]}}]" \
           --priority 1 \
           --actions Type=forward,TargetGroupArn=$target_group_arn \
           --tags Key=Name,Value=rainbow-${{ inputs.deployment-identifier }} > /dev/null 2>&1
 
         aws elbv2 create-rule \
           --listener-arn ${{ inputs.load-balancer-listener-arn }} \
-          --conditions "[{\"Field\":\"host-header\",\"Values\":[\"${{ inputs.hostname }}\"]},{\"Field\":\"query-string\",\"QueryStringConfig\":{\"Values\":[{\"Key\":\"dpl\",\"Value\":\"${{ inputs.latest-release-identifier }}\"}]}}]" \
+          --conditions "[{\"Field\":\"host-header\",\"Values\":[\"${{ inputs.hostname }}\"]},{\"Field\":\"query-string\",\"QueryStringConfig\":{\"Values\":[{\"Key\":\"dpl\",\"Value\":\"${NEXTJS_COMPATIBLE_DEPLOYMENT_IDENTIFIER}\"}]}}]" \
           --priority 2 \
           --actions Type=forward,TargetGroupArn=$target_group_arn \
           --tags Key=Name,Value=rainbow-${{ inputs.deployment-identifier }} > /dev/null 2>&1
