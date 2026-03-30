@@ -27,11 +27,14 @@ export default async function Page(props: { params: Promise<{ id: string; locale
   const params = await props.params;
 
   const { id, locale } = params;
+  const isAnonymousPreview = id === "0000";
 
-  const { session } = await authCheckAndThrow().catch(() => ({
-    session: null,
-    ability: null,
-  }));
+  const { session } = isAnonymousPreview
+    ? { session: null }
+    : await authCheckAndThrow().catch(() => ({
+        session: null,
+        ability: null,
+      }));
   const disableSubmit = id === "0000" || !session?.user;
 
   const isAllowGrouping = allowGrouping();

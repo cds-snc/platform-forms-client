@@ -98,6 +98,8 @@ export const Preview = ({
 
   const hasHydrated = useRehydrate();
 
+  const canRenderPreview = hasHydrated || currentForm.length > 0;
+
   if (isPastClosingDate) {
     // Force a hard refresh to the preview page to show the closed message
     const refreshContent = `0;url=/${i18n.language}/form-builder/${id}/preview`;
@@ -179,8 +181,8 @@ export const Preview = ({
               {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
                 t("gcFormsTest", { ns: "form-builder" })}
             </GcdsH1>
-            {!hasHydrated && <Skeleton count={5} height={40} className="mb-4" />}
-            {hasHydrated && (
+            {!canRenderPreview && <Skeleton count={5} height={40} className="mb-4" />}
+            {canRenderPreview && (
               <GCFormsProvider formRecord={formRecord}>
                 <PreviewFormWrapper
                   key={previewRenderKey}

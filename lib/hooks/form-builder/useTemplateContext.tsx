@@ -1,6 +1,7 @@
 "use client";
 import React, { createContext, useCallback, useContext, useRef, useState } from "react";
 import isEqual from "lodash.isequal";
+import { useSession } from "next-auth/react";
 import { logMessage } from "@lib/logger";
 import { safeJSONParse } from "@lib/utils";
 import { createOrUpdateTemplate } from "@formBuilder/actions";
@@ -45,6 +46,7 @@ const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 export function SaveTemplateProvider({ children }: { children: React.ReactNode }) {
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
   const [, setDirtyTick] = useState(0);
+  const { status } = useSession();
 
   const {
     getDeliveryOption,
@@ -78,6 +80,10 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   }, []);
 
   const saveDraft = useCallback(async (): Promise<SaveDraftResult> => {
+    if (status !== "authenticated") {
+      return { status: "skipped" };
+    }
+
     if (isLockedByOther) {
       return { status: "locked" };
     }
@@ -124,6 +130,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     resetState,
     securityAttribute,
     setId,
+    status,
   ]);
 
   const saveDraftIfNeeded = useCallback(async (): Promise<SaveDraftResult> => {
