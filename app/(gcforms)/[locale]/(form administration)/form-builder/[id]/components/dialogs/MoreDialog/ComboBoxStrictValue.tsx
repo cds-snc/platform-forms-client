@@ -20,9 +20,9 @@ export const ComboboxStrictValue = ({
       <div>
         <Checkbox
           data-testid="strictValue"
-          id={`required-${item.id}-id-modal`}
-          value={`required-${item.id}-value-modal-` + checked}
-          key={`required-${item.id}-modal-` + checked}
+          id={`strict-value-${item.id}-id-modal`}
+          value={`strict-value-${item.id}-value-modal-` + checked}
+          key={`strict-value-${item.id}-modal-` + checked}
           defaultChecked={checked}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setItem({
