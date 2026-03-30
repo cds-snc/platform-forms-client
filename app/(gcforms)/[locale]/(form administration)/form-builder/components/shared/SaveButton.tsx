@@ -70,7 +70,7 @@ const ErrorSavingForm = () => {
   return (
     <span className="inline-block">
       <span className="inline-block px-1">
-        <SavedFailIcon className="inline-block fill-red" />
+        <SavedFailIcon className="fill-red inline-block" />
       </span>
       <LinkButton
         href={supportHref}
@@ -180,7 +180,7 @@ export const SaveButton = () => {
     return (
       <div
         data-id={id}
-        className="mb-2 flex w-[700px] text-sm text-slate-500 laptop:text-base"
+        className="laptop:text-base mb-2 flex w-[700px] text-sm text-slate-500"
         aria-live="polite"
         aria-atomic="true"
       >
@@ -193,7 +193,7 @@ export const SaveButton = () => {
     <div
       data-id={id}
       className={cn(
-        "mb-2 flex w-[700px] text-slate-500 text-sm laptop:text-base",
+        "laptop:text-base mb-2 flex w-[700px] text-sm text-slate-500",
         id && error && "text-red-destructive"
       )}
       aria-live="polite"
