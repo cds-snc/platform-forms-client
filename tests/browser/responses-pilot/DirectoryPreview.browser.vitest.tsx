@@ -12,7 +12,7 @@ import {
   RAW_RESPONSE_FOLDER,
 } from "@responses-pilot/lib/constants";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<CsvDirectory />", () => {
   it("renders with default filename", async () => {

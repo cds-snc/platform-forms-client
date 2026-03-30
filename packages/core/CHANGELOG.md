@@ -1,8 +1,17 @@
 # Changelog
 
-## [2.1.1] - 2026-03-19
+## [2.2.1] - 2026-03-30
 
 - Enable Custom Regex validation
+
+## [2.2.0] - 2026-03-27
+
+- Update shared styles for Tailwind CSS v4 compatibility.
+- Replace `theme()` calls with CSS custom properties in SCSS sources.
+- Replace `@apply` with plain CSS where Sass can't parse TW v4 `!` prefix syntax.
+- Replace `bg-center-right-15px` custom utility with plain CSS `background-position`.
+- Sass-only build pipeline preserved (`build-styles.mjs`).
+- Tailwind preset (`tailwind-preset.js`) still ships for v3 consumer apps.
 
 ## [2.1.0] - 2026-03-06
 

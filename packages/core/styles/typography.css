@@ -1,0 +1,168 @@
+@layer base {
+  body {
+    @apply text-base leading-7 text-slate-800;
+  }
+  h1 {
+    @apply tablet:text-4xl mb-6 text-3xl font-semibold;
+  }
+  h2 {
+    @apply tablet:text-3xl mb-4 text-2xl font-semibold;
+  }
+  h3 {
+    @apply tablet:text-2xl mb-2 text-xl font-semibold;
+  }
+  h4 {
+    @apply tablet:text-xl text-lg font-semibold;
+  }
+  h5 {
+    @apply tablet:text-lg text-base font-normal;
+  }
+  .gc-formview .text-base,
+  .gc-authpages .text-base {
+    @apply text-xl leading-7;
+  }
+  .gc-formview,
+  .gc-authpages {
+    @apply text-gray-front text-xl;
+  }
+  .gc-authpages h1 {
+    @apply mb-12 border-b-0 pb-2;
+  }
+}
+.gcds-page h1,
+.gcds-page h2,
+.gcds-page h3,
+.gcds-page h4,
+.gcds-page h5,
+.gcds-page h6,
+.gc-formview h1,
+.gc-formview h2,
+.gc-formview h3,
+.gc-formview h4,
+.gc-formview h5,
+.gc-formview h6 {
+  text-wrap: balance;
+  margin-block-end: var(--gcds-heading-spacing-300);
+}
+
+.gcds-page h2,
+.gcds-page h3,
+.gcds-page h4,
+.gcds-page h5,
+.gcds-page h6,
+.gc-formview h2,
+.gc-formview h3,
+.gc-formview h4,
+.gc-formview h5,
+.gc-formview h6 {
+  margin-block-start: var(--gcds-heading-spacing-600);
+}
+
+.gcds-page h1,
+.gc-formview h1 {
+  max-width: var(--gcds-heading-character-limit-h1);
+  font: var(--gcds-heading-h1-desktop);
+  margin-block-start: var(--gcds-heading-spacing-0);
+}
+
+.gcds-page h1:after,
+.gc-formview h1:after {
+  display: block;
+  content: "";
+  width: var(--gcds-heading-h1-border-width);
+  margin-block-start: var(--gcds-heading-h1-border-margin);
+  height: var(--gcds-heading-h1-border-height);
+  background-color: var(--gcds-heading-h1-border-background);
+}
+
+@media only screen and (width < 48em) {
+  .gcds-page h1,
+  .gc-formview h1 {
+    font: var(--gcds-heading-h1-mobile);
+  }
+}
+.gcds-page h2,
+.gc-formview h2 {
+  max-width: var(--gcds-heading-character-limit-h2);
+  font: var(--gcds-heading-h2-desktop);
+}
+
+@media only screen and (width < 48em) {
+  .gcds-page h2,
+  .gc-formview h2 {
+    font: var(--gcds-heading-h2-mobile);
+  }
+}
+.gcds-page h3,
+.gc-formview h3 {
+  max-width: var(--gcds-heading-character-limit-h3);
+  font: var(--gcds-heading-h3-desktop);
+}
+
+@media only screen and (width < 48em) {
+  .gcds-page h3,
+  .gc-formview h3 {
+    font: var(--gcds-heading-h3-mobile);
+  }
+}
+.gcds-page h4,
+.gc-formview h4 {
+  max-width: var(--gcds-heading-character-limit-h4);
+  font: var(--gcds-heading-h4-desktop);
+}
+
+@media only screen and (width < 48em) {
+  .gcds-page h4,
+  .gc-formview h4 {
+    font: var(--gcds-heading-h4-mobile);
+  }
+}
+.gcds-page h5,
+.gc-formview h5 {
+  max-width: var(--gcds-heading-character-limit-h5);
+  font: var(--gcds-heading-h5-desktop);
+}
+
+@media only screen and (width < 48em) {
+  .gcds-page h5,
+  .gc-formview h5 {
+    font: var(--gcds-heading-h5-mobile);
+  }
+}
+.gcds-page h6,
+.gc-formview h6 {
+  max-width: var(--gcds-heading-character-limit-h6);
+  font: var(--gcds-heading-h6-desktop);
+}
+
+@media only screen and (width < 48em) {
+  .gcds-page h6,
+  .gc-formview h6 {
+    font: var(--gcds-heading-h6-mobile);
+  }
+}
+.gcds-page {
+  /* ----- Default GCDS typography styles ----- */
+}
+
+.gcds-page body {
+  font: var(--gcds-font-text);
+}
+
+@media only screen and (width < 48em) {
+  .gcds-page body {
+    font: var(--gcds-font-text-mobile);
+  }
+}
+.gcds-page p {
+  max-width: var(--gcds-text-character-limit);
+  font: var(--gcds-font-text);
+  margin-block-start: var(--gcds-heading-spacing-0);
+  margin-block-end: var(--gcds-heading-spacing-300);
+}
+
+@media only screen and (width < 48em) {
+  .gcds-page p {
+    font: var(--gcds-font-text-mobile);
+  }
+}

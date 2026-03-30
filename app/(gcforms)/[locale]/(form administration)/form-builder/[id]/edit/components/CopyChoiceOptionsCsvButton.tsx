@@ -29,7 +29,7 @@ export const CopyChoiceOptionsCsvButton = ({ choices }: { choices?: PropertyChoi
   return (
     <Button
       theme="link"
-      className="!m-0 !mt-4 !w-56 justify-start [&_svg]:focus:fill-white"
+      className="!m-0 !mt-4 !w-56 justify-start focus:[&_svg]:fill-white"
       onClick={copyToClipboard}
     >
       <>

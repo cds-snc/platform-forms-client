@@ -312,6 +312,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             className="relative"
             choices={choices}
+            lang={lang}
             key={`${id}-${lang}`}
           />
         </div>

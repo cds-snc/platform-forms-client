@@ -1,0 +1,482 @@
+@import "tailwindcss";
+
+/* ===== GCDS Tokens ===== */
+@import "@gcds-core/tokens/build/web/css/tokens.css";
+@import "@gcds-core/tokens/build/web/css/global.css";
+
+/* ===== Custom max-width breakpoint variants (inherited from legacy config) ===== */
+/* The original config used max-width breakpoints as defaults. */
+/* In TW v4, min-width is the default. These custom variants preserve max-width behavior. */
+@custom-variant xxl (@media (max-width: 1200px));
+@custom-variant xl (@media (max-width: 992px));
+@custom-variant lg (@media (max-width: 768px));
+@custom-variant md (@media (max-width: 550px));
+@custom-variant sm (@media (max-width: 450px));
+@custom-variant xs (@media (max-width: 320px));
+@custom-variant xxs (@media (max-width: 290px));
+
+/* ===== Theme: maps custom design tokens to Tailwind v4 theme namespace ===== */
+@theme {
+  /* Disable default Tailwind color palette — use only our custom colors */
+  --color-*: initial;
+
+  /* ----- Named breakpoints (min-width) ----- */
+  --breakpoint-tablet: 768px;
+  --breakpoint-laptop: 1366px;
+  --breakpoint-desktop: 1920px;
+
+  /* ----- Font family ----- */
+  --font-sans: var(--font-noto-sans), "Noto Sans", sans-serif;
+  --font-noto-sans: var(--font-noto-sans), "Noto Sans", sans-serif;
+  --font-lato: var(--font-lato), "Lato", sans-serif;
+  --font-mono: monospace;
+
+  /* ----- Font size ----- */
+  --text-sm: 16px;
+  --text-sm--line-height: 22px;
+  --text-base: 18px;
+  --text-base--line-height: 28px;
+  --text-xs: 0.75rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+
+  /* ----- Spacing (from GCDS tokens) ----- */
+  --spacing-0: var(--gcds-spacing-0);
+  --spacing-25: var(--gcds-spacing-25);
+  --spacing-50: var(--gcds-spacing-50);
+  --spacing-75: var(--gcds-spacing-75);
+  --spacing-100: var(--gcds-spacing-100);
+  --spacing-125: var(--gcds-spacing-125);
+  --spacing-150: var(--gcds-spacing-150);
+  --spacing-175: var(--gcds-spacing-175);
+  --spacing-200: var(--gcds-spacing-200);
+  --spacing-225: var(--gcds-spacing-225);
+  --spacing-250: var(--gcds-spacing-250);
+  --spacing-300: var(--gcds-spacing-300);
+  --spacing-350: var(--gcds-spacing-350);
+  --spacing-400: var(--gcds-spacing-400);
+  --spacing-450: var(--gcds-spacing-450);
+  --spacing-500: var(--gcds-spacing-500);
+  --spacing-550: var(--gcds-spacing-550);
+  --spacing-600: var(--gcds-spacing-600);
+  --spacing-650: var(--gcds-spacing-650);
+  --spacing-700: var(--gcds-spacing-700);
+  --spacing-750: var(--gcds-spacing-750);
+  --spacing-800: var(--gcds-spacing-800);
+  --spacing-850: var(--gcds-spacing-850);
+  --spacing-900: var(--gcds-spacing-900);
+  --spacing-950: var(--gcds-spacing-950);
+  --spacing-1000: var(--gcds-spacing-1000);
+  --spacing-1050: var(--gcds-spacing-1050);
+  --spacing-1100: var(--gcds-spacing-1100);
+  --spacing-1150: var(--gcds-spacing-1150);
+  --spacing-1200: var(--gcds-spacing-1200);
+  --spacing-1250: var(--gcds-spacing-1250);
+
+  /* ----- Colors: Application custom palette ----- */
+
+  /* Current / transparent */
+  --color-current: currentColor;
+  --color-transparent: transparent;
+
+  /* Red */
+  --color-red: #b10e1e;
+  --color-red-default: #b10e1e;
+  --color-red-50: #fef2f2;
+  --color-red-100: #f3e9e8;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-destructive: #bc3331;
+  --color-red-required: #d3080c;
+  --color-red-hover: #892406;
+  --color-red-focus: #b10e1e;
+
+  /* Purple / Violet */
+  --color-purple: #6300c7;
+  --color-purple-200: #ddd6fe;
+  --color-violet-50: #ede9fe;
+  --color-violet-100: #ede9fe;
+  --color-violet-200: #ddd6fe;
+  --color-violet-300: #c4b5fd;
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #a78bfa;
+  --color-violet-700: #7c3aed;
+  --color-violet-800: #5b21b6;
+
+  /* Indigo (standard Tailwind palette) */
+  --color-indigo-50: #eef2ff;
+  --color-indigo-500: #6366f1;
+  --color-indigo-600: #4f46e5;
+  --color-indigo-700: #4338ca;
+  --color-indigo-800: #3730a3;
+
+  /* Fuchsia */
+  --color-fuchsia-300: #f0abfc;
+
+  /* Primary (alias to indigo) */
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+
+  /* White */
+  --color-white: #ffffff;
+  --color-white-default: #ffffff;
+
+  /* Blue */
+  --color-blue: #26374a;
+  --color-blue-default: #26374a;
+  --color-blue-dark: #284162;
+  --color-blue-light: #335075;
+  --color-blue-hover: #0535d2;
+  --color-blue-focus: #303fc3;
+  --color-blue-active: #303fc3;
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #b2e3ff;
+  --color-blue-200: #dff8fd;
+  --color-blue-300: #4b98b2;
+  --color-blue-400: #335075;
+  --color-blue-500: #75b9e0;
+  --color-blue-600: #007cba;
+  --color-blue-700: #335075;
+  --color-blue-800: #26374a;
+
+  /* Slate */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f3f4f6;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+
+  /* Gray */
+  --color-gray: #eeeeee;
+  --color-gray-default: #eeeeee;
+  --color-gray-front: #333333;
+  --color-gray-selected: #e1e4e7;
+  --color-gray-text: #585858;
+  --color-gray-background: #f4f4f4;
+  --color-gray-light: #e2e8ef;
+  --color-gray-dark: #748094;
+  --color-gray-soft: #f9fafb;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f1f2f3;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #a0aec0;
+  --color-gray-600: #718096;
+  --color-gray-700: #4a5568;
+  --color-gray-800: #2d3748;
+
+  /* Yellow / Amber */
+  --color-yellow: #ffbf47;
+  --color-yellow-default: #ffbf47;
+  --color-yellow-50: #fffbeb;
+  --color-yellow-100: #fef3c7;
+  --color-yellow-200: #fde68a;
+  --color-yellow-300: #fcd34d;
+  --color-yellow-400: #fbbf24;
+  --color-yellow-500: #f59e0b;
+  --color-yellow-600: #d97706;
+  --color-yellow-700: #b45309;
+  --color-yellow-800: #92400e;
+  --color-yellow-900: #78350f;
+
+  /* Green / Emerald */
+  --color-green: #00703c;
+  --color-green-default: #00703c;
+  --color-green-700: #15803d;
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+
+  /* Black */
+  --color-black: #000000;
+  --color-black-default: #000000;
+  --color-black-form: #0b0c0c;
+
+  /* GCDS token colors (for gcds-* utilities) */
+  --color-gcds-grayscale-50: var(--gcds-color-grayscale-50);
+  --color-gcds-grayscale-100: var(--gcds-color-grayscale-100);
+  --color-gcds-grayscale-150: var(--gcds-color-grayscale-150);
+  --color-gcds-grayscale-200: var(--gcds-color-grayscale-200);
+  --color-gcds-grayscale-250: var(--gcds-color-grayscale-250);
+  --color-gcds-grayscale-300: var(--gcds-color-grayscale-300);
+  --color-gcds-grayscale-350: var(--gcds-color-grayscale-350);
+  --color-gcds-grayscale-400: var(--gcds-color-grayscale-400);
+  --color-gcds-grayscale-450: var(--gcds-color-grayscale-450);
+  --color-gcds-grayscale-500: var(--gcds-color-grayscale-500);
+  --color-gcds-grayscale-550: var(--gcds-color-grayscale-550);
+  --color-gcds-grayscale-600: var(--gcds-color-grayscale-600);
+  --color-gcds-grayscale-650: var(--gcds-color-grayscale-650);
+  --color-gcds-grayscale-700: var(--gcds-color-grayscale-700);
+  --color-gcds-grayscale-750: var(--gcds-color-grayscale-750);
+  --color-gcds-grayscale-800: var(--gcds-color-grayscale-800);
+  --color-gcds-grayscale-850: var(--gcds-color-grayscale-850);
+  --color-gcds-grayscale-900: var(--gcds-color-grayscale-900);
+
+  --color-gcds-blue-50: var(--gcds-color-blue-50);
+  --color-gcds-blue-100: var(--gcds-color-blue-100);
+  --color-gcds-blue-150: var(--gcds-color-blue-150);
+  --color-gcds-blue-200: var(--gcds-color-blue-200);
+  --color-gcds-blue-250: var(--gcds-color-blue-250);
+  --color-gcds-blue-300: var(--gcds-color-blue-300);
+  --color-gcds-blue-350: var(--gcds-color-blue-350);
+  --color-gcds-blue-400: var(--gcds-color-blue-400);
+  --color-gcds-blue-450: var(--gcds-color-blue-450);
+  --color-gcds-blue-500: var(--gcds-color-blue-500);
+  --color-gcds-blue-550: var(--gcds-color-blue-550);
+  --color-gcds-blue-600: var(--gcds-color-blue-600);
+  --color-gcds-blue-650: var(--gcds-color-blue-650);
+  --color-gcds-blue-700: var(--gcds-color-blue-700);
+  --color-gcds-blue-750: var(--gcds-color-blue-750);
+  --color-gcds-blue-800: var(--gcds-color-blue-800);
+  --color-gcds-blue-850: var(--gcds-color-blue-850);
+  --color-gcds-blue-900: var(--gcds-color-blue-900);
+  --color-gcds-blue-muted: var(--gcds-color-blue-muted);
+  --color-gcds-blue-vivid: var(--gcds-color-blue-vivid);
+
+  --color-gcds-green-50: var(--gcds-color-green-50);
+  --color-gcds-green-100: var(--gcds-color-green-100);
+  --color-gcds-green-150: var(--gcds-color-green-150);
+  --color-gcds-green-200: var(--gcds-color-green-200);
+  --color-gcds-green-250: var(--gcds-color-green-250);
+  --color-gcds-green-300: var(--gcds-color-green-300);
+  --color-gcds-green-350: var(--gcds-color-green-350);
+  --color-gcds-green-400: var(--gcds-color-green-400);
+  --color-gcds-green-450: var(--gcds-color-green-450);
+  --color-gcds-green-500: var(--gcds-color-green-500);
+  --color-gcds-green-550: var(--gcds-color-green-550);
+  --color-gcds-green-600: var(--gcds-color-green-600);
+  --color-gcds-green-650: var(--gcds-color-green-650);
+  --color-gcds-green-700: var(--gcds-color-green-700);
+  --color-gcds-green-750: var(--gcds-color-green-750);
+  --color-gcds-green-800: var(--gcds-color-green-800);
+  --color-gcds-green-850: var(--gcds-color-green-850);
+  --color-gcds-green-900: var(--gcds-color-green-900);
+
+  --color-gcds-red-50: var(--gcds-color-red-50);
+  --color-gcds-red-100: var(--gcds-color-red-100);
+  --color-gcds-red-150: var(--gcds-color-red-150);
+  --color-gcds-red-200: var(--gcds-color-red-200);
+  --color-gcds-red-250: var(--gcds-color-red-250);
+  --color-gcds-red-300: var(--gcds-color-red-300);
+  --color-gcds-red-350: var(--gcds-color-red-350);
+  --color-gcds-red-400: var(--gcds-color-red-400);
+  --color-gcds-red-450: var(--gcds-color-red-450);
+  --color-gcds-red-500: var(--gcds-color-red-500);
+  --color-gcds-red-550: var(--gcds-color-red-550);
+  --color-gcds-red-600: var(--gcds-color-red-600);
+  --color-gcds-red-650: var(--gcds-color-red-650);
+  --color-gcds-red-700: var(--gcds-color-red-700);
+  --color-gcds-red-750: var(--gcds-color-red-750);
+  --color-gcds-red-800: var(--gcds-color-red-800);
+  --color-gcds-red-850: var(--gcds-color-red-850);
+  --color-gcds-red-900: var(--gcds-color-red-900);
+
+  --color-gcds-purple-50: var(--gcds-color-purple-50);
+  --color-gcds-purple-100: var(--gcds-color-purple-100);
+  --color-gcds-purple-150: var(--gcds-color-purple-150);
+  --color-gcds-purple-200: var(--gcds-color-purple-200);
+  --color-gcds-purple-250: var(--gcds-color-purple-250);
+  --color-gcds-purple-300: var(--gcds-color-purple-300);
+  --color-gcds-purple-350: var(--gcds-color-purple-350);
+  --color-gcds-purple-400: var(--gcds-color-purple-400);
+  --color-gcds-purple-450: var(--gcds-color-purple-450);
+  --color-gcds-purple-500: var(--gcds-color-purple-500);
+  --color-gcds-purple-550: var(--gcds-color-purple-550);
+  --color-gcds-purple-600: var(--gcds-color-purple-600);
+  --color-gcds-purple-650: var(--gcds-color-purple-650);
+  --color-gcds-purple-700: var(--gcds-color-purple-700);
+  --color-gcds-purple-750: var(--gcds-color-purple-750);
+  --color-gcds-purple-800: var(--gcds-color-purple-800);
+  --color-gcds-purple-850: var(--gcds-color-purple-850);
+  --color-gcds-purple-900: var(--gcds-color-purple-900);
+
+  --color-gcds-yellow-50: var(--gcds-color-yellow-50);
+  --color-gcds-yellow-100: var(--gcds-color-yellow-100);
+  --color-gcds-yellow-150: var(--gcds-color-yellow-150);
+  --color-gcds-yellow-200: var(--gcds-color-yellow-200);
+  --color-gcds-yellow-250: var(--gcds-color-yellow-250);
+  --color-gcds-yellow-300: var(--gcds-color-yellow-300);
+  --color-gcds-yellow-350: var(--gcds-color-yellow-350);
+  --color-gcds-yellow-400: var(--gcds-color-yellow-400);
+  --color-gcds-yellow-450: var(--gcds-color-yellow-450);
+  --color-gcds-yellow-500: var(--gcds-color-yellow-500);
+  --color-gcds-yellow-550: var(--gcds-color-yellow-550);
+  --color-gcds-yellow-600: var(--gcds-color-yellow-600);
+  --color-gcds-yellow-650: var(--gcds-color-yellow-650);
+  --color-gcds-yellow-700: var(--gcds-color-yellow-700);
+  --color-gcds-yellow-750: var(--gcds-color-yellow-750);
+  --color-gcds-yellow-800: var(--gcds-color-yellow-800);
+  --color-gcds-yellow-850: var(--gcds-color-yellow-850);
+  --color-gcds-yellow-900: var(--gcds-color-yellow-900);
+
+  /* ----- Custom widths ----- */
+  --width-cr-label-desktop: 50rem;
+  --width-cr-label-1025: 30rem;
+  --width-cr-label-ipad: 25rem;
+  --width-cr-label-duo: 24rem;
+  --width-cr-label-6s: 15rem;
+  --width-cr-label-5s: 14rem;
+  --width-cr-label-fold: 11.5rem;
+  --width-flag-desktop: 22.5rem;
+  --width-flag-6s: 18rem;
+  --width-flag-5s: 16.5rem;
+  --width-flag-fold: 15rem;
+
+  /* ----- Custom margin ----- */
+  --spacing-10px: 10px;
+
+  /* ----- Max-width ----- */
+  --container-prose: 75ch;
+
+  /* ----- Background position ----- */
+  --background-position-center-right-15px: center right 15px;
+
+  /* ----- Inset ----- */
+  --inset-10px: 10px;
+  --inset-9px: 9px;
+
+  /* ----- Border width ----- */
+  --border-width-0: 0;
+  --border-width-1: 1px;
+  --border-width-1_5: 1.5px;
+  --border-width-2: 2px;
+  --border-width-2_5: 2.5px;
+  --border-width-3: 3px;
+  --border-width-4: 4px;
+  --border-width-5: 5px;
+  --border-width-8: 8px;
+
+  /* ----- Box shadow ----- */
+  --shadow-default: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-result: 0px 0px 12px -2px rgba(0, 0, 0, 0.4);
+  --shadow-input: inset 0 0 0 2px #0535d2;
+  --shadow-none:
+    var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  --shadow-logicSelected: inset 0 0 0 2px #6366f1;
+  --shadow-logicDefault: inset 0 0 0 5px transparent;
+  --shadow-offboardSelected: inset 0 0 0 2px #1e293b;
+  --shadow-offboardDefault: inset 0 0 0 5px transparent;
+
+  /* ----- Outline ----- */
+  --outline-color-default: #ffbf47;
+}
+
+/* ===== Tailwind source detection ===== */
+@source "../app/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../lib/**/*.{js,ts,jsx,tsx,mdx}";
+
+/* ===== Pre-compiled component CSS (may contain @apply — resolved by TW v4) ===== */
+@import "../packages/core/styles/typography.css";
+@import "../packages/core/styles/forms.css";
+@import "./form-builder.css";
+@import "../packages/core/styles/header.css";
+@import "../packages/core/styles/gc-header.css";
+@import "../packages/core/styles/toast.css";
+@import "./animations.css";
+
+/* ===== Utility layer: list-style-type extension ===== */
+@utility list-circle {
+  list-style-type: circle;
+}
+
+/* ===== Base styles ===== */
+@layer base {
+  *,
+  ::after,
+  ::before {
+    box-sizing: border-box;
+    border-color: var(--color-gray-200, #e5e7eb);
+  }
+
+  html,
+  body,
+  #__next,
+  #safeHydrate {
+    height: 100%;
+  }
+
+  body:has(dialog[open]) {
+    overflow: hidden;
+  }
+
+  html,
+  body {
+    color: var(--gcds-text-primary);
+  }
+
+  footer,
+  header {
+    background-color: #fff;
+  }
+
+  #page-container {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    max-width: 71.25rem;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 1366px) {
+    #page-container {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  .gc-richText {
+    width: auto;
+  }
+
+  @media (min-width: 768px) {
+    .gc-richText {
+      width: 75%;
+    }
+  }
+
+  ol {
+    list-style-type: decimal;
+    padding-left: 2.5rem;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: 2.5rem;
+  }
+
+  li ul {
+    list-style-type: circle;
+  }
+
+  a {
+    text-decoration-line: underline;
+    color: #284162;
+  }
+
+  a:hover {
+    color: #0535d2;
+  }
+
+  .container-xl {
+    max-width: var(--gcds-container-xl);
+    width: 100%;
+  }
+}
