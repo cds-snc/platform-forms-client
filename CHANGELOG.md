@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.10.1](https://github.com/cds-snc/platform-forms-client/compare/v4.10.0...v4.10.1) (2026-03-30)
+
+
+### Bug Fixes
+
+* chrome+talkback radio+checkbox legend double announce ([#6882](https://github.com/cds-snc/platform-forms-client/issues/6882)) ([1157323](https://github.com/cds-snc/platform-forms-client/commit/1157323e94e56b0de526513070e9e4251bd63c7e))
+
+
+### Miscellaneous Chores
+
+* bump Next.js  16.2.1 ([#6907](https://github.com/cds-snc/platform-forms-client/issues/6907)) ([ce8adb4](https://github.com/cds-snc/platform-forms-client/commit/ce8adb4a16e211b6f4e227eb2423bd3fc3c7cadc))
+* fix NextJS deployment identifier compatibility issue ([#6908](https://github.com/cds-snc/platform-forms-client/issues/6908)) ([f676c79](https://github.com/cds-snc/platform-forms-client/commit/f676c7924582aa1f5fb92d2d6577375a856a5560))
+* non relevant change to trigger Rainbow deployment ([#6913](https://github.com/cds-snc/platform-forms-client/issues/6913)) ([47c47c5](https://github.com/cds-snc/platform-forms-client/commit/47c47c51e4a9df7240410c905730a1cd3e039209))
+* non relevant change to trigger Rainbow deployment ([#6914](https://github.com/cds-snc/platform-forms-client/issues/6914)) ([77b3e3a](https://github.com/cds-snc/platform-forms-client/commit/77b3e3a25a3e131dcb808808ccd41d9c83411445))
+
 ## [4.10.0](https://github.com/cds-snc/platform-forms-client/compare/v4.9.5...v4.10.0) (2026-03-26)
 
 
