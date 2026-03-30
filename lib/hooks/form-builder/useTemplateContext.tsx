@@ -72,7 +72,6 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
 
   const templateIsDirty = useRef(false);
   const savedSnapshot = useRef<TrackedTemplateState | null>(null);
-
   const resetState = useCallback(() => {
     templateIsDirty.current = false;
     savedSnapshot.current = null;

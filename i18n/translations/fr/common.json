@@ -46,6 +46,7 @@
     "date-invalid": "Entrer une date valide.",
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
+    "combobox-strict": "Sélectionnez une valeur dans la liste.",
     "file-upload": {
       "default": {
         "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
@@ -90,6 +91,11 @@
   "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "dropdown-initial-option-text": "Pas de sélection",
+  "combobox-results-available_one": "{{count}} option disponible",
+  "combobox-results-available_other": "{{count}} options disponibles",
+  "combobox-no-results": "Aucune option disponible",
+  "combobox-of": "de",
+  "combobox-input-hint": "Lorsque des résultats sont disponibles, utilisez les flèches directionnelles pour naviguer : les flèches en haut et en bas pour parcourir, puis la touche Entrée pour sélectionner. Pour les utilisateurs d'appareils tactiles, explorez par effleurement ou à l'aide de gestes de balayage.",
   "server-error": "Désolé, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
   "form-closed-error": "Ce formulaire est fermé et n'accepte plus de soumissions. Réinitialisez cette page pour un message plus spécifique par rapport à la fermeture du formulaire.",
   "title-full": "Formulaires GC - GC Forms",

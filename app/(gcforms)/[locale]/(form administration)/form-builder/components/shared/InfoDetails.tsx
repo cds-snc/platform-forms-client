@@ -14,7 +14,7 @@ export const InfoDetails = ({
   return (
     <details className="group">
       <summary
-        className={`inline-block cursor-pointer list-none rounded-lg border-2 border-white-default p-2 hover:border-black-default hover:bg-gray-600 hover:text-white-default focus:bg-blue-focus focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus [&::-webkit-details-marker]:hidden [&_svg]:hover:fill-white [&_svg]:focus:fill-white ${className}`}
+        className={`border-white-default hover:border-black-default hover:text-white-default focus:bg-blue-focus focus:text-white-default focus:outline-blue-focus inline-block cursor-pointer list-none rounded-lg border-2 p-2 hover:bg-gray-600 focus:outline focus:outline-[3px] focus:outline-offset-2 hover:[&_svg]:fill-white focus:[&_svg]:fill-white [&::-webkit-details-marker]:hidden ${className}`}
       >
         {summary}
         <span className="inline group-open:hidden">

@@ -15,12 +15,12 @@ export const Tag = ({ tag, onRemove }: TagProps) => {
   return (
     <div
       data-testid="tag"
-      className="m-1 inline-block rounded-xl border-2 border-gray-default px-2"
+      className="border-gray-default m-1 inline-block rounded-xl border-2 px-2"
     >
       <span className="inline-block">
         {tag}
         <button
-          className="ml-2 p-px align-middle [&_svg]:fill-gray-500 [&_svg]:hover:fill-red-500 [&_svg]:focus:fill-red-500"
+          className="ml-2 p-px align-middle [&_svg]:fill-gray-500 hover:[&_svg]:fill-red-500 focus:[&_svg]:fill-red-500"
           onClick={() => onRemove(tag)}
           aria-label={label}
         >
