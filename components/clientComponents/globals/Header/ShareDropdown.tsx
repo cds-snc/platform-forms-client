@@ -38,7 +38,7 @@ export const ShareDropdown = () => {
       <DropdownMenuPrimitive.Root>
         {/* main share button */}
         <DropdownMenuPrimitive.Trigger asChild>
-          <button className="flex cursor-pointer rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
+          <button className="hover:text-white-default focus:text-white-default flex cursor-pointer rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 focus:bg-gray-600 hover:[&_svg]:fill-white focus:[&_svg]:fill-white">
             <span className="mr-1 inline-block">{t("share.title")}</span>
             <ChevronDown className="mt-[2px]" />
           </button>
@@ -59,7 +59,7 @@ export const ShareDropdown = () => {
                   }, 50);
                 }}
                 className={
-                  "flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                  "hover:text-white-default focus:text-white-default flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 focus:bg-gray-600 hover:[&_svg]:fill-white focus:[&_svg]:fill-white"
                 }
               >
                 <span>
@@ -80,7 +80,7 @@ export const ShareDropdown = () => {
                 }}
                 data-share="form-builder-share-email-attempt"
                 className={
-                  "flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                  "hover:text-white-default focus:text-white-default flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 focus:bg-gray-600 hover:[&_svg]:fill-white focus:[&_svg]:fill-white"
                 }
               >
                 <ShareIcon className="" />
@@ -93,7 +93,7 @@ export const ShareDropdown = () => {
               <DropdownMenuPrimitive.Sub>
                 <DropdownMenuPrimitive.SubTrigger
                   className={
-                    "flex w-full cursor-pointer select-none items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:fill-black-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                    "hover:text-white-default focus:text-white-default [&_svg]:fill-black-default flex w-full cursor-pointer items-center rounded-md p-2 text-sm outline-none select-none hover:bg-gray-600 focus:bg-gray-600 hover:[&_svg]:fill-white focus:[&_svg]:fill-white"
                   }
                 >
                   <LinkIcon className="mr-3 scale-125" />
@@ -110,7 +110,7 @@ export const ShareDropdown = () => {
                     {isPublished ? (
                       <LinksSubMenu />
                     ) : (
-                      <div className="select-none p-2">{t("share.unpublished")}</div>
+                      <div className="p-2 select-none">{t("share.unpublished")}</div>
                     )}
                   </DropdownMenuPrimitive.SubContent>
                 </DropdownMenuPrimitive.Portal>

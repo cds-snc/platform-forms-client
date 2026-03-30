@@ -6,7 +6,7 @@ import { Formik } from "formik";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<FormattedDate />", () => {
   beforeAll(() => {
