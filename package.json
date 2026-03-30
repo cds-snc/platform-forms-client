@@ -184,6 +184,7 @@
     "autoprefixer": "^10.4.21",
     "aws-sdk-client-mock": "^3.0.0",
     "axe-core": "^4.10.3",
+    "baseline-browser-mapping": "^2.10.12",
     "cssnano": "^5.1.15",
     "eslint": "^9.39.0",
     "eslint-config-next": "16.2.1",
