@@ -4,7 +4,7 @@ import { CharacterLimitOptions } from "@formBuilder/[id]/components/dialogs/More
 import { FormElementTypes } from "@lib/types";
 import { render } from "../testUtils";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<CharacterLimitOptions />", () => {
   const item = {

@@ -4,7 +4,7 @@ import { ConfirmAction } from "@root/app/(gcforms)/[locale]/(form administration
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<ConfirmAction />", () => {
   beforeAll(() => {

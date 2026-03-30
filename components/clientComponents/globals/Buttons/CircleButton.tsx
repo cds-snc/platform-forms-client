@@ -32,7 +32,7 @@ export const CircleButton = ({
           dataTestId={dataTestId}
           className={cn(
             className,
-            "rounded-full border-slate-300 hover:bg-white hover:border-indigo-700 focus:bg-slate-800 [&_svg]:focus:fill-white "
+            "rounded-full border-slate-300 hover:border-indigo-700 hover:bg-white focus:bg-slate-800 focus:[&_svg]:fill-white"
           )}
         >
           {children}

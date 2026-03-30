@@ -24,7 +24,7 @@ const DropdownMenuItem = ({
   return (
     <DropdownMenu.Item onClick={onClick} asChild>
       <Link
-        className="block rounded-md p-2 text-sm text-black !no-underline outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
+        className="focus:text-white-default block rounded-md p-2 text-sm text-black !no-underline outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600"
         href={href}
       >
         {text}
@@ -69,7 +69,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <div
-                className="flex cursor-pointer rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                className="hover:text-white-default focus:text-white-default flex cursor-pointer rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 focus:bg-gray-600 hover:[&_svg]:fill-white focus:[&_svg]:fill-white"
                 data-testid="yourAccountDropdown"
               >
                 <span className="mr-1 inline-block">{t("yourAccount")}</span>
