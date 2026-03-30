@@ -209,15 +209,15 @@ const Element = ({
 };
 
 export const TranslateWithGroups = () => {
-  const { updateField, form, groups, localizeField, getLocalizationAttribute } = useTemplateStore(
-    (s) => ({
+  const { updateField, form, groups, localizeField, getLocalizationAttribute, changeKey } =
+    useTemplateStore((s) => ({
       updateField: s.updateField,
       form: s.form,
       groups: s.form.groups,
       localizeField: s.localizeField,
       getLocalizationAttribute: s.getLocalizationAttribute,
-    })
-  );
+      changeKey: s.changeKey,
+    }));
   const { t } = useTranslation("form-builder");
 
   // Set default left-hand language
@@ -244,7 +244,7 @@ export const TranslateWithGroups = () => {
     "";
 
   return (
-    <>
+    <div>
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="mr-10">
         <div className="flex w-[700px]">
@@ -327,6 +327,7 @@ export const TranslateWithGroups = () => {
               >
                 <div className="relative w-1/2 flex-1">
                   <RichTextEditor
+                    key={`form-introduction:${primaryLanguage}:${changeKey}`}
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       primaryLanguage
@@ -346,6 +347,7 @@ export const TranslateWithGroups = () => {
                 </div>
                 <div className="relative w-1/2 flex-1">
                   <RichTextEditor
+                    key={`form-introduction:${secondaryLanguage}:${changeKey}`}
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       secondaryLanguage
@@ -380,6 +382,7 @@ export const TranslateWithGroups = () => {
             >
               <div className="relative w-1/2 flex-1">
                 <RichTextEditor
+                  key={`privacy:${primaryLanguage}:${changeKey}`}
                   path={`form.privacyPolicy.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     primaryLanguage
@@ -398,6 +401,7 @@ export const TranslateWithGroups = () => {
               </div>
               <div className="relative w-1/2 flex-1">
                 <RichTextEditor
+                  key={`privacy:${secondaryLanguage}:${changeKey}`}
                   path={`form.privacyPolicy.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage
@@ -501,6 +505,7 @@ export const TranslateWithGroups = () => {
             >
               <div className="relative w-1/2 flex-1">
                 <RichTextEditor
+                  key={`confirmation:${primaryLanguage}:${changeKey}`}
                   path={`form.confirmation.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     primaryLanguage
@@ -519,6 +524,7 @@ export const TranslateWithGroups = () => {
               </div>
               <div className="relative w-1/2 flex-1">
                 <RichTextEditor
+                  key={`confirmation:${secondaryLanguage}:${changeKey}`}
                   path={`form.confirmation.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage
@@ -543,6 +549,6 @@ export const TranslateWithGroups = () => {
           {t("skipLink.translateSetup")}
         </SkipLinkReusable>
       </div>
-    </>
+    </div>
   );
 };

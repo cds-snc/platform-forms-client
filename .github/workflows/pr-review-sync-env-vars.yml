@@ -1,10 +1,9 @@
 name: PR review sync envionment variables
 
 on:
-  workflow_run:
-    workflows: ["Deploy to Staging"]
-    types:
-      - completed
+  workflow_dispatch:
+  schedule:
+    - cron: "0 10-22 * * *" # runs every hour between 6 AM and 6 PM (EDT)
 
 env:
   AWS_ACCOUNT_ID: ${{ vars.STAGING_AWS_ACCOUNT_ID }}
@@ -15,8 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy-form-viewer-service:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  sync-env-vars:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
