@@ -41,13 +41,14 @@ export const isFieldResponseValid = (
 
       if (validator.type && currentRegex && currentRegex.regex) {
         // Check regex for safety before using it.
-        // Default allow to prevent data loss or blocking the form.
-        if (isSafeRegex(currentRegex.regex.source)) {
-          // Check for different types of fields, email, date, number, custom etc
-          const regex = new RegExp(currentRegex.regex);
-          if (typedValue && !regex.test(typedValue)) {
-            return currentRegex.error;
-          }
+        if (!isSafeRegex(currentRegex.regex.source)) {
+          return t("input-validation.invalidRegex");
+        }
+
+        // Check for different types of fields, email, date, number, custom etc
+        const regex = new RegExp(currentRegex.regex);
+        if (typedValue && !regex.test(typedValue)) {
+          return currentRegex.error;
         }
       }
       if (validator.maxLength && (value as string).length > validator.maxLength)
