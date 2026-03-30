@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/types",
-  "version": "1.0.28",
+  "version": "1.0.30",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/node": "^24.6.1",
     "tsup": "^8.3.6",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   },
   "packageManager": "yarn@4.10.3"
 }

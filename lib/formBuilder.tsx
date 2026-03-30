@@ -226,6 +226,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}
             lang={lang}
+            required={isRequired}
           />
         </div>
       );
