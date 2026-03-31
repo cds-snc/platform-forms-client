@@ -75,6 +75,10 @@ const createTemplateStore = (
         persist(
           (set, get) => ({
             ...props,
+            editLock: null,
+            isLockedByOther: false,
+            setEditLock: (lock) => set({ editLock: lock }),
+            setIsLockedByOther: (locked) => set({ isLockedByOther: locked }),
             setFromRecord: setFromRecord(set),
             toggleLang: () =>
               set((state) => {
