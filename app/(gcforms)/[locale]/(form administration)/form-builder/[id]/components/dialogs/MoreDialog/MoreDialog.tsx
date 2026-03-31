@@ -10,6 +10,7 @@ import { Description } from "./Description";
 import { AddressCompleteOptions } from "./AddressCompleteOptions";
 import { FormattedDateOptions } from "./FormattedDateOptions";
 import { RequiredOptions } from "./RequiredOptions";
+import { ComboboxStrictValue } from "./ComboBoxStrictValue";
 import { SortOptions } from "./SortOptions";
 import { DynamicRowOptions } from "./DynamicRowOptions";
 import { TextFieldOptions } from "./TextFieldOptions";
@@ -132,6 +133,7 @@ export const MoreDialog = () => {
               <FormattedDateOptions item={item} setItem={setItem} />
               {/* <ManagedDataOptions item={item} setItem={setItem} /> */}
               <RequiredOptions item={item} setItem={setItem} />
+              <ComboboxStrictValue item={item} setItem={setItem} />
               <NumberFieldOptions item={item} setItem={setItem} />
               <DynamicRowOptions item={item} setItem={setItem} />
               <TextFieldOptions item={item} setItem={setItem} />

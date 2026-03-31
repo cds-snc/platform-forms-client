@@ -1,0 +1,41 @@
+import { useTranslation } from "@i18n/client";
+import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
+import { FormElement } from "@lib/types";
+
+export const ComboboxStrictValue = ({
+  item,
+  setItem,
+}: {
+  item: FormElement;
+  setItem: (item: FormElement) => void;
+}) => {
+  const { t } = useTranslation("form-builder");
+  const checked = item.properties.strictValue;
+
+  return (
+    <section className="mb-4">
+      <div className="mb-2">
+        <h3>{t("strictValue.title")}</h3>
+      </div>
+      <div>
+        <Checkbox
+          data-testid="strictValue"
+          id={`strict-value-${item.id}-id-modal`}
+          value={`strict-value-${item.id}-value-modal-` + checked}
+          key={`strict-value-${item.id}-modal-` + checked}
+          defaultChecked={checked}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setItem({
+              ...item,
+              properties: {
+                ...item.properties,
+                strictValue: e.target.checked,
+              },
+            });
+          }}
+          label={t("strictValue.label")}
+        ></Checkbox>
+      </div>
+    </section>
+  );
+};
