@@ -56,6 +56,7 @@ export const useEditLock = ({
   const { status } = useSession();
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
+  const setChangeKey = useTemplateStore((s) => s.setChangeKey);
   const setFromRecord = useTemplateStore((s) => s.setFromRecord);
   const { resetState, saveDraft, setUpdatedAt, updatedAt } = useTemplateContext();
 
@@ -183,13 +184,14 @@ export const useEditLock = ({
 
         clearTemplateStore();
         setFromRecord(record);
+        setChangeKey(String(Date.now()));
         setUpdatedAt(recordUpdatedAt);
         resetState();
       };
 
       await fetchLatestRecord(0);
     },
-    [formId, resetState, setFromRecord, setUpdatedAt]
+    [formId, resetState, setChangeKey, setFromRecord, setUpdatedAt]
   );
 
   const syncServerState = useCallback(async () => {

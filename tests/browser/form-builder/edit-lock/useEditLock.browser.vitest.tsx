@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 const saveDraft = vi.fn(async () => ({ status: "saved" as const }));
 const saveDraftIfNeeded = vi.fn(async () => ({ status: "skipped" as const }));
@@ -93,14 +94,21 @@ const ownerLockStatus = {
 
 function EditLockHarness({
   onTakeoverReady,
+  onChangeKey,
 }: {
   onTakeoverReady?: (takeover: () => Promise<void>) => void;
+  onChangeKey?: (changeKey: string) => void;
 }) {
+  const changeKey = useTemplateStore((s) => s.changeKey);
   const { takeover } = useEditLock({ formId: "test-form-id", enabled: true, sessionId: "session-1" });
 
   useEffect(() => {
     onTakeoverReady?.(takeover);
   }, [onTakeoverReady, takeover]);
+
+  useEffect(() => {
+    onChangeKey?.(changeKey);
+  }, [changeKey, onChangeKey]);
 
   useEffect(() => {
     return () => {
@@ -203,8 +211,14 @@ describe("useEditLock", () => {
     });
 
     let takeover: (() => Promise<void>) | undefined;
+    const changeKeys: string[] = [];
 
-    await render(<EditLockHarness onTakeoverReady={(nextTakeover) => (takeover = nextTakeover)} />);
+    await render(
+      <EditLockHarness
+        onTakeoverReady={(nextTakeover) => (takeover = nextTakeover)}
+        onChangeKey={(changeKey) => changeKeys.push(changeKey)}
+      />
+    );
 
     await vi.waitFor(() => {
       expect(takeover).toBeDefined();
@@ -224,5 +238,8 @@ describe("useEditLock", () => {
     formFetchCalls.forEach(([, init]) => {
       expect(init).toMatchObject({ method: "GET", cache: "no-store" });
     });
+
+    expect(changeKeys.at(-1)).toBeDefined();
+    expect(changeKeys.at(-1)).not.toBe(changeKeys[0]);
   });
 });
