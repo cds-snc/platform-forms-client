@@ -100,7 +100,11 @@ function EditLockHarness({
   onChangeKey?: (changeKey: string) => void;
 }) {
   const changeKey = useTemplateStore((s) => s.changeKey);
-  const { takeover } = useEditLock({ formId: "test-form-id", enabled: true, sessionId: "session-1" });
+  const { takeover } = useEditLock({
+    formId: "test-form-id",
+    enabled: true,
+    sessionId: "session-1",
+  });
 
   useEffect(() => {
     onTakeoverReady?.(takeover);
