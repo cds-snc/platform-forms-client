@@ -20,11 +20,11 @@ export const getRegexByType = (
       error: t("input-validation.email"),
     },
     alphanumeric: {
-      regex: /^( )*[A-Za-z0-9\s]+( )*$/,
+      regex: /^[A-Za-z0-9\s]+$/,
       error: t("input-validation.alphanumeric") /* message needs a translation */,
     },
     text: {
-      regex: /^.*[^\n]+.*$/,
+      regex: /[^\n]/,
       error: t("input-validation.regex") /* TODO update */,
     },
     name: {
