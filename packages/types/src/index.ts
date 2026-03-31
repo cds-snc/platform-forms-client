@@ -30,6 +30,7 @@ import {
   FormValues,
   FileInput,
   NextActionRule,
+  ValidationInputType,
 } from "./form-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
@@ -83,3 +84,4 @@ export type {
 };
 
 export type { FileInput };
+export type { ValidationInputType };

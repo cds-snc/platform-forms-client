@@ -690,6 +690,14 @@
     },
     "dynamicRow": {
       "errorMaxRows": "Le nombre maximal de réponses ne peut pas dépasser {{maxRows}}."
+    },
+    "customRegex": {
+      "title": "Configurer la validation avancée des entrées",
+      "description": "Vous pouvez utiliser une expression régulière (regex) pour créer une validation personnalisée pour cette question.",
+      "label": "Modèle d'expression régulière (regex) personnalisé",
+      "errorInvalidRegex": "Le modèle d'expression régulière (regex) n'est pas valide. Veuillez saisir un modèle regex valide.",
+      "previousPatterns": "Modèles précédents",
+      "errorUnsafeRegex": "Ce modèle regex est potentiellement dangereux. Évitez les modèles susceptibles de causer des problèmes de performance, tels que ceux comportant des quantificateurs imbriqués ou un retour en arrière excessif. "
     }
   },
   "moreOptions": "Plus d'options  ",
@@ -1108,6 +1116,7 @@
   "start": "Commencer",
   "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
   "startErrorDuplicateQuestionId": "Les identifiants de questions doivent être uniques",
+  "startErrorInvalidCustomRegex": "Modèle regex personnalisé invalide ou non sécurisé",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
   "startFormIntro": "Ajoutez une description à votre formulaire pour aider à définir les attentes",
   "startH2": "Créer un formulaire",
