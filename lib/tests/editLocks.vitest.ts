@@ -1,12 +1,15 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  acknowledgeEditLockTakeoverSave,
   acquireEditLock,
+  clearEditLockTakeoverSaveAcknowledgement,
   getEditLockStatus,
   heartbeatEditLock,
   releaseEditLock,
   requestEditLockTakeoverSave,
   subscribeToEditLockEvents,
   takeoverEditLock,
+  waitForEditLockTakeoverSaveAcknowledgement,
 } from "@lib/editLocks";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 
@@ -154,5 +157,33 @@ describe("editLocks with redis", () => {
       unsubscribe();
       process.env.REDIS_URL = previousRedisUrl;
     }
+  });
+
+  it("waits for the current editor to acknowledge takeover save completion", async () => {
+    await acquireEditLock({
+      templateId: "form-5",
+      userId: "user-1",
+      userName: "User One",
+      sessionId: "session-1",
+    });
+
+    await clearEditLockTakeoverSaveAcknowledgement({
+      templateId: "form-5",
+      sessionId: "session-1",
+    });
+
+    const waitForSave = waitForEditLockTakeoverSaveAcknowledgement({
+      templateId: "form-5",
+      sessionId: "session-1",
+      timeoutMs: 500,
+    });
+
+    await acknowledgeEditLockTakeoverSave({
+      templateId: "form-5",
+      userId: "user-1",
+      sessionId: "session-1",
+    });
+
+    await expect(waitForSave).resolves.toBe(true);
   });
 });

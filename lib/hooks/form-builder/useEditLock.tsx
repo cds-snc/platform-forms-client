@@ -56,7 +56,6 @@ export const useEditLock = ({
   const { status } = useSession();
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
-  const setChangeKey = useTemplateStore((s) => s.setChangeKey);
   const setFromRecord = useTemplateStore((s) => s.setFromRecord);
   const { resetState, saveDraft, setUpdatedAt, updatedAt } = useTemplateContext();
 
@@ -112,7 +111,7 @@ export const useEditLock = ({
   }, []);
 
   const postAction = useCallback(
-    async (action: "acquire" | "heartbeat" | "release" | "takeover") => {
+    async (action: "acquire" | "heartbeat" | "release" | "takeover" | "takeover-save-complete") => {
       const now = Date.now();
       const lastActivityAt = lastActivityAtRef.current || now;
       const idleMs = now - lastActivityAt;
@@ -184,14 +183,13 @@ export const useEditLock = ({
 
         clearTemplateStore();
         setFromRecord(record);
-        setChangeKey(String(Date.now()));
         setUpdatedAt(recordUpdatedAt);
         resetState();
       };
 
       await fetchLatestRecord(0);
     },
-    [formId, resetState, setChangeKey, setFromRecord, setUpdatedAt]
+    [formId, resetState, setFromRecord, setUpdatedAt]
   );
 
   const syncServerState = useCallback(async () => {
@@ -205,14 +203,22 @@ export const useEditLock = ({
 
     if (!takeoverSaveRef.current) {
       takeoverSaveRef.current = (async () => {
-        await saveDraft();
+        try {
+          await saveDraft();
+        } finally {
+          try {
+            await postAction("takeover-save-complete");
+          } catch {
+            // no-op: takeover will fall back to the server timeout if the ack cannot be sent
+          }
+        }
       })().finally(() => {
         takeoverSaveRef.current = null;
       });
     }
 
     await takeoverSaveRef.current;
-  }, [saveDraft]);
+  }, [postAction, saveDraft]);
 
   const startHeartbeat = useCallback(() => {
     clearTimers();

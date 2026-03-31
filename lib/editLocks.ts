@@ -1,6 +1,7 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import {
+  EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   EDIT_LOCK_TTL_MS,
   MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
 } from "@lib/formBuilderEditLockPresence";
@@ -13,6 +14,8 @@ export {
 
 const EDIT_LOCK_KEY_PREFIX = "edit-lock";
 const EDIT_LOCK_CHANNEL_PREFIX = "edit-lock-events";
+const EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX = "edit-lock-takeover-save";
+const EDIT_LOCK_TAKEOVER_SAVE_ACK_POLL_MS = 100;
 
 export type EditLockPresenceStatus = "active" | "idle" | "away";
 export type EditLockVisibilityState = "visible" | "hidden";
@@ -73,6 +76,7 @@ type StoredEditLockInfo = Omit<
 type EditLockGlobal = typeof globalThis & {
   __editLockStore?: EditLockStore;
   __editLockSubscribers?: EditLockSubscriberStore;
+  __editLockTakeoverSaveAcks?: Map<string, number>;
 };
 
 const getEditLockStore = (): EditLockStore => {
@@ -91,12 +95,26 @@ const getEditLockSubscribers = (): EditLockSubscriberStore => {
   return globalWithStore.__editLockSubscribers;
 };
 
+const getEditLockTakeoverSaveAcks = (): Map<string, number> => {
+  const globalWithStore = globalThis as EditLockGlobal;
+  if (!globalWithStore.__editLockTakeoverSaveAcks) {
+    globalWithStore.__editLockTakeoverSaveAcks = new Map();
+  }
+  return globalWithStore.__editLockTakeoverSaveAcks;
+};
+
 const redisEnabled = () => Boolean(process.env.REDIS_URL);
 
 const getEditLockKey = (templateId: string) => `${EDIT_LOCK_KEY_PREFIX}:${templateId}`;
 const getEditLockChannel = (templateId: string) => `${EDIT_LOCK_CHANNEL_PREFIX}:${templateId}`;
+const getEditLockTakeoverSaveAckKey = (templateId: string, sessionId: string) =>
+  `${EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX}:${templateId}:${sessionId}`;
 const editLockTtlSeconds = Math.ceil(EDIT_LOCK_TTL_MS / 1000);
 const updatedEvent: EditLockEvent = { type: "updated" };
+const wait = async (timeMs: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, timeMs);
+  });
 
 const toStoredEditLockInfo = (lock: EditLockInfo): StoredEditLockInfo => ({
   ...lock,
@@ -267,6 +285,126 @@ export const subscribeToEditLockEvents = (templateId: string, subscriber: EditLo
 
 export const requestEditLockTakeoverSave = async (templateId: string) => {
   await publishEditLockEvent(templateId, { type: "takeover-requested" });
+};
+
+export const clearEditLockTakeoverSaveAcknowledgement = async ({
+  templateId,
+  sessionId,
+}: {
+  templateId: string;
+  sessionId?: string | null;
+}) => {
+  if (!sessionId) {
+    return;
+  }
+
+  const key = getEditLockTakeoverSaveAckKey(templateId, sessionId);
+
+  if (redisEnabled()) {
+    const redis = await getRedisInstance();
+    await redis.del(key);
+    return;
+  }
+
+  getEditLockTakeoverSaveAcks().delete(key);
+};
+
+export const acknowledgeEditLockTakeoverSave = async ({
+  templateId,
+  userId,
+  sessionId,
+}: {
+  templateId: string;
+  userId: string;
+  sessionId?: string | null;
+}) => {
+  if (!sessionId) {
+    return false;
+  }
+
+  const currentLock = redisEnabled() ? await readRedisLock(templateId) : readMemoryLock(templateId);
+  if (
+    !currentLock ||
+    currentLock.lockedByUserId !== userId ||
+    currentLock.sessionId !== sessionId
+  ) {
+    return false;
+  }
+
+  const key = getEditLockTakeoverSaveAckKey(templateId, sessionId);
+
+  if (redisEnabled()) {
+    const redis = await getRedisInstance();
+    await redis.set(key, "1", "PX", EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS);
+    return true;
+  }
+
+  getEditLockTakeoverSaveAcks().set(key, Date.now() + EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS);
+  return true;
+};
+
+const hasEditLockTakeoverSaveAcknowledgement = async ({
+  templateId,
+  sessionId,
+}: {
+  templateId: string;
+  sessionId?: string | null;
+}) => {
+  if (!sessionId) {
+    return false;
+  }
+
+  const key = getEditLockTakeoverSaveAckKey(templateId, sessionId);
+
+  if (redisEnabled()) {
+    const redis = await getRedisInstance();
+    return (await redis.get(key)) === "1";
+  }
+
+  const expiresAt = getEditLockTakeoverSaveAcks().get(key);
+  if (!expiresAt) {
+    return false;
+  }
+
+  if (expiresAt <= Date.now()) {
+    getEditLockTakeoverSaveAcks().delete(key);
+    return false;
+  }
+
+  return true;
+};
+
+export const waitForEditLockTakeoverSaveAcknowledgement = async ({
+  templateId,
+  sessionId,
+  timeoutMs,
+}: {
+  templateId: string;
+  sessionId?: string | null;
+  timeoutMs: number;
+}) => {
+  if (!sessionId) {
+    return false;
+  }
+
+  const deadline = Date.now() + timeoutMs;
+
+  const poll = async (): Promise<boolean> => {
+    if (await hasEditLockTakeoverSaveAcknowledgement({ templateId, sessionId })) {
+      await clearEditLockTakeoverSaveAcknowledgement({ templateId, sessionId });
+      return true;
+    }
+
+    if (Date.now() >= deadline) {
+      await clearEditLockTakeoverSaveAcknowledgement({ templateId, sessionId });
+      return false;
+    }
+
+    await wait(EDIT_LOCK_TAKEOVER_SAVE_ACK_POLL_MS);
+    return poll();
+  };
+
+  return poll();
 };
 
 const isExpired = (lock: EditLockInfo, now: Date) => lock.expiresAt.getTime() <= now.getTime();

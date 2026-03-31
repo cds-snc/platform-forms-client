@@ -171,6 +171,16 @@ describe("useEditLock", () => {
       expect(saveDraft).toHaveBeenCalledTimes(1);
     });
 
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock",
+        expect.objectContaining({
+          method: "POST",
+          body: expect.stringContaining('"action":"takeover-save-complete"'),
+        })
+      );
+    });
+
     expect(saveDraftIfNeeded).not.toHaveBeenCalled();
   });
 

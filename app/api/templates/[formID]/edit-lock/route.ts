@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { middleware, sessionExists } from "@lib/middleware";
 import { WithRequired, MiddlewareProps } from "@lib/types";
 import {
+  acknowledgeEditLockTakeoverSave,
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   acquireEditLock,
+  clearEditLockTakeoverSaveAcknowledgement,
   EditLockPresenceInput,
   EditLockPresenceStatus,
   EditLockVisibilityState,
@@ -15,10 +17,11 @@ import {
   shouldEnforceTemplateEditLock,
   takeoverEditLock,
   TemplateEditLockedError,
+  waitForEditLockTakeoverSaveAcknowledgement,
 } from "@lib/editLocks";
 import { authorization } from "@lib/privileges";
 
-type LockAction = "acquire" | "heartbeat" | "release" | "takeover";
+type LockAction = "acquire" | "heartbeat" | "release" | "takeover" | "takeover-save-complete";
 
 const shouldSkipPreTakeoverSave = () => process.env.PLAYWRIGHT_TEST === "true";
 
@@ -143,12 +146,34 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
       return NextResponse.json(result);
     }
 
+    if (action === "takeover-save-complete") {
+      const acknowledged = await acknowledgeEditLockTakeoverSave({
+        templateId: formID,
+        userId: session.user.id,
+        sessionId: sessionId ?? null,
+      });
+      return NextResponse.json({ acknowledged });
+    }
+
     if (action === "takeover") {
       const currentStatus = await getEditLockStatus(formID, session.user.id);
 
       if (!shouldSkipPreTakeoverSave() && currentStatus.locked && !currentStatus.isOwner) {
+        await clearEditLockTakeoverSaveAcknowledgement({
+          templateId: formID,
+          sessionId: currentStatus.lock?.sessionId ?? null,
+        });
         await requestEditLockTakeoverSave(formID);
-        await wait(EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS);
+
+        if (currentStatus.lock?.sessionId) {
+          await waitForEditLockTakeoverSaveAcknowledgement({
+            templateId: formID,
+            sessionId: currentStatus.lock.sessionId,
+            timeoutMs: EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
+          });
+        } else {
+          await wait(EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS);
+        }
       }
 
       const status = await takeoverEditLock({
