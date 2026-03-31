@@ -14,8 +14,8 @@ import {
   EDIT_LOCK_HEARTBEAT_MS,
 } from "@lib/formBuilderEditLockPresence";
 
-const SERVER_STATE_SYNC_MAX_ATTEMPTS = 5;
-const SERVER_STATE_SYNC_RETRY_MS = 250;
+const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
+const SERVER_STATE_SYNC_RETRY_MS = 500;
 
 const wait = async (timeMs: number) =>
   new Promise((resolve) => {
