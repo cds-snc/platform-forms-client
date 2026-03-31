@@ -47,6 +47,7 @@
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
     "invalidRegex": "There was a problem processing the form.",
+    "combobox-strict": "Select a value from the list.",
     "file-upload": {
       "default": {
         "heading": "There was a problem submitting your form",

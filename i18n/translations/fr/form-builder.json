@@ -1555,6 +1555,11 @@
   },
   "en": "English",
   "fr": "Français",
+  "strictValue": {
+    "title": "Assurer la valeur du choix",
+    "label": "Valeur stricte",
+    "description": "valeur stricte"
+  },
   "beta": {
     "tag": "Nouveauté :",
     "text": "Fonctionnalité à l'essai",

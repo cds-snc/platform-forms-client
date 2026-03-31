@@ -11,6 +11,7 @@ import {
   FormElement,
   FormProperties,
   FormElementTypes,
+  FormRecord,
   DeliveryOption,
   ElementProperties,
   SecurityAttribute,
@@ -22,6 +23,7 @@ import { NotificationsInterval } from "@gcforms/types";
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
+  setFromRecord: (record: FormRecord) => void;
   setHasTransformed: () => void;
   setHasHydrated: () => void;
   getFocusInput: () => boolean;
