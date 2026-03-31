@@ -11,6 +11,7 @@ import {
   FormElement,
   FormProperties,
   FormElementTypes,
+  FormRecord,
   DeliveryOption,
   ElementProperties,
   SecurityAttribute,
@@ -20,8 +21,27 @@ import { BrandProperties } from "@lib/types";
 import { type Indexes } from "@lib/utils/form-builder/getPath";
 import { NotificationsInterval } from "@gcforms/types";
 
+export type EditLockState = {
+  lockedByUserId?: string | null;
+  lockedByName?: string | null;
+  lockedByEmail?: string | null;
+  lockedAt?: string | null;
+  heartbeatAt?: string | null;
+  expiresAt?: string | null;
+  lastActivityAt?: string | null;
+  visibilityState?: "visible" | "hidden" | null;
+  presenceStatus?: "active" | "idle" | "away" | null;
+  isOwner?: boolean;
+  lockedByOther?: boolean;
+};
+
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
+  editLock: EditLockState | null;
+  isLockedByOther: boolean;
+  setEditLock: (lock: EditLockState | null) => void;
+  setIsLockedByOther: (locked: boolean) => void;
+  setFromRecord: (record: FormRecord) => void;
   setHasTransformed: () => void;
   setHasHydrated: () => void;
   getFocusInput: () => boolean;
@@ -123,4 +143,6 @@ export interface TemplateStoreProps {
   allowGroupsFlag: boolean;
   saveAndResume: boolean;
   notificationsInterval?: NotificationsInterval;
+  editLock?: EditLockState | null;
+  isLockedByOther?: boolean;
 }

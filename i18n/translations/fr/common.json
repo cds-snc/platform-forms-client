@@ -46,6 +46,8 @@
     "date-invalid": "Entrer une date valide.",
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
+    "invalidRegex": "Il y a eu un problème lors du traitement du formulaire.",
+    "combobox-strict": "Sélectionnez une valeur dans la liste.",
     "file-upload": {
       "default": {
         "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",

@@ -42,7 +42,7 @@ import {
   removeSubChoice,
 } from "./helpers/remove";
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
-import { initialize, importTemplate } from "./helpers/init";
+import { initialize, importTemplate, setFromRecord } from "./helpers/init";
 import { generateElementId, getHighestElementId } from "./helpers/id";
 import {
   getFormElementById,
@@ -75,6 +75,11 @@ const createTemplateStore = (
         persist(
           (set, get) => ({
             ...props,
+            editLock: null,
+            isLockedByOther: false,
+            setEditLock: (lock) => set({ editLock: lock }),
+            setIsLockedByOther: (locked) => set({ isLockedByOther: locked }),
+            setFromRecord: setFromRecord(set),
             toggleLang: () =>
               set((state) => {
                 state.lang = state.lang === "en" ? "fr" : "en";
