@@ -607,6 +607,25 @@
   "french": "français",
   "gcForms": "Formulaires GC",
   "gcFormsEdit": "Modifier",
+  "editLock": {
+    "title": "Ce formulaire est deja en cours de modification",
+    "lockedMessage": "{{name}} travaille actuellement sur ce formulaire, ce qui signifie que vous ne pouvez pas y apporter de modifications a moins d'en prendre le controle.",
+    "readOnly": "Lecture seule : {{name}} modifie ce formulaire.",
+    "statusLabel": "Statut :",
+    "lastActivityLabel": "Derniere activite :",
+    "statuses": {
+      "active": "Actif en ce moment",
+      "idle": "Consulte le formulaire, sans activite recente",
+      "away": "Absent",
+      "stale": "Connexion inactive"
+    },
+    "unknownUser": "Un autre utilisateur",
+    "takeover": "Prendre le contrôle",
+    "takingOver": "Prise de contrôle...",
+    "syncingLatest": "Synchronisation de la plus récente version enregistrée du formulaire...",
+    "syncedLatest": "Vous avez maintenant le verrou de modification et la plus récente version enregistrée du formulaire a été chargée.",
+    "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer."
+  },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publier",
   "gcFormsPublished": "Publié",
