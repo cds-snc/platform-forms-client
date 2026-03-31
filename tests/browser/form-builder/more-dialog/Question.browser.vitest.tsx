@@ -4,7 +4,7 @@ import { Question } from "@formBuilder/[id]/components/dialogs/MoreDialog/Questi
 import { FormElementTypes } from "@lib/types";
 import { render } from "../testUtils";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<Question />", () => {
   const item = {

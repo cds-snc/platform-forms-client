@@ -4,7 +4,7 @@ import { TextFieldOptions } from "@formBuilder/[id]/components/dialogs/MoreDialo
 import { FormElementTypes } from "@lib/types";
 import { render } from "../testUtils";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<TextFieldOptions />", () => {
   const item = {

@@ -10,14 +10,14 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
   transition: color ease-in-out 0.15s;
 
   &:focus-within {
-    color: theme("colors.gcds.blue.vivid");
+    color: var(--gcds-color-blue-vivid);
     // Input Box outline focused.
     .gc-checkbox-label:before {
-      outline: var(--gcds-checkbox-focus-outline-width) solid theme("colors.gcds.blue.vivid");
+      outline: var(--gcds-checkbox-focus-outline-width) solid var(--gcds-color-blue-vivid);
       outline-offset: var(--gcds-checkbox-input-border-width);
       box-shadow: var(--gcds-checkbox-focus-box-shadow);
       background: var(--gcds-checkbox-focus-background);
-      border-color: theme("colors.gcds.blue.vivid") !important;
+      border-color: var(--gcds-color-blue-vivid) !important;
       transition:
         border-color ease-in-out 0.15s,
         box-shadow ease-in-out 0.15s,
@@ -27,7 +27,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
 
   /* Html Input  */
   .gc-input-checkbox__input {
-    @apply mr-4 absolute bg-white-default border-transparent;
+    @apply bg-white-default absolute mr-4 border-transparent;
 
     border-width: var(--gcds-checkbox-input-border-width);
     width: var(--gcds-checkbox-input-height-and-width);
@@ -46,15 +46,15 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
     // Input Box outline default.
     & + .gc-checkbox-label:before {
       content: "";
-      @apply mr-4 inline-block bg-white-default;
+      @apply bg-white-default mr-4 inline-block;
       width: var(--gcds-checkbox-input-height-and-width);
       height: var(--gcds-checkbox-input-height-and-width);
-      border: var(--gcds-checkbox-input-border-width) solid theme("colors.black.default");
+      border: var(--gcds-checkbox-input-border-width) solid var(--gcds-color-black);
       border-radius: var(--gcds-checkbox-input-border-radius);
     }
 
     &:focus + .gc-checkbox-label:before {
-      border: var(--gcds-checkbox-input-border-width) solid theme("colors.gcds.blue.vivid");
+      border: var(--gcds-checkbox-input-border-width) solid var(--gcds-color-blue-vivid);
     }
 
     // Checkmark icon.
