@@ -30,7 +30,6 @@ ENV NEXT_PUBLIC_API_URL=$API_URL
 
 RUN corepack enable && yarn set version stable
 RUN yarn workspaces focus gcforms
-RUN yarn workspaces foreach --all --parallel --verbose run build
 RUN yarn build
 
 FROM node:24-alpine AS final

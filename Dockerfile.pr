@@ -32,7 +32,6 @@ ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
 RUN corepack enable && yarn set version stable
 RUN yarn workspaces focus gcforms
-RUN yarn workspaces foreach --all --parallel --verbose run build
 RUN yarn build
 
 FROM node:24-alpine AS final
