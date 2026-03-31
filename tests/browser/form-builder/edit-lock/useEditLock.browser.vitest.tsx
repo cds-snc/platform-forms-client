@@ -13,6 +13,12 @@ vi.mock("next-auth/react", () => ({
     data: { user: { id: "user-1" } },
     status: "authenticated",
   }),
+  SessionProvider: ({ children }: { children: React.ReactNode }) => children,
+  signIn: vi.fn(),
+  signOut: vi.fn(),
+  getCsrfToken: vi.fn(),
+  getProviders: vi.fn(),
+  getSession: vi.fn(),
 }));
 
 vi.mock("@lib/hooks/form-builder/useTemplateContext", () => ({
