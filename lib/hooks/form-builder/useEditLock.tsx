@@ -49,7 +49,7 @@ export const useEditLock = ({
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
   const setFromRecord = useTemplateStore((s) => s.setFromRecord);
-  const { resetState, saveDraftIfNeeded, setUpdatedAt } = useTemplateContext();
+  const { resetState, saveDraft, setUpdatedAt } = useTemplateContext();
 
   const isOwnerRef = useRef(false);
   const heartbeatRef = useRef<number | null>(null);
@@ -164,14 +164,14 @@ export const useEditLock = ({
 
     if (!takeoverSaveRef.current) {
       takeoverSaveRef.current = (async () => {
-        await saveDraftIfNeeded();
+        await saveDraft();
       })().finally(() => {
         takeoverSaveRef.current = null;
       });
     }
 
     await takeoverSaveRef.current;
-  }, [saveDraftIfNeeded]);
+  }, [saveDraft]);
 
   const startHeartbeat = useCallback(() => {
     clearTimers();
