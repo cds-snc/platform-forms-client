@@ -11,24 +11,18 @@ cd "$REPO_ROOT"
 
 BASE_REF="${1:-main}"
 REMOTE_REF="origin/${BASE_REF}"
-PACKAGE_NAME="mobx-react-lite"
+PACKAGE_NAME="synckit"
 
 git fetch origin "$BASE_REF"
 
 changed_dirs=$(
-  {
-    git diff --name-only "$REMOTE_REF"...HEAD -- packages/
-    git diff --cached --name-only -- packages/
-    git diff --name-only -- packages/
-  } \
+  git diff --name-only "$REMOTE_REF"...HEAD -- packages/ \
     | sed -n 's#^packages/\([^/]*\)/.*#\1#p' \
     | sort -u
 )
 
 root_dependency_graph_changed=false
-if ! git diff --quiet "$REMOTE_REF"...HEAD -- package.json yarn.lock \
-  || ! git diff --cached --quiet -- package.json yarn.lock \
-  || ! git diff --quiet -- package.json yarn.lock; then
+if ! git diff --quiet "$REMOTE_REF"...HEAD -- package.json yarn.lock; then
   root_dependency_graph_changed=true
 fi
 
@@ -57,7 +51,7 @@ describe_dependency_matches() {
   fi
 
   declared_dependencies=$(jq -r '
-    [.dependencies, .peerDependencies, .optionalDependencies]
+    [.dependencies, .devDependencies, .peerDependencies, .optionalDependencies]
     | map(select(. != null) | keys)
     | add
     | unique
@@ -65,7 +59,7 @@ describe_dependency_matches() {
   ' "$manifest_path")
 
   if [ -z "$declared_dependencies" ]; then
-    printf '✅ \033[0;32m%s has no declared dependencies to inspect\033[0m\n' "$label"
+    echo -e "✅ \033[0;32m${label} has no declared dependencies to inspect\033[0m"
     return
   fi
 
@@ -78,12 +72,10 @@ describe_dependency_matches() {
     | paste -sd' ' -)
 
   if [ -n "$matched_dependencies" ]; then
-    printf '☠️ \033[0;31m%s recursively depends on %s via: %s\033[0m\n' \
-      "$label" "$PACKAGE_NAME" "$matched_dependencies"
+    echo -e "☠️ \033[0;31m${label} recursively depends on ${PACKAGE_NAME} via: ${matched_dependencies}\033[0m"
     status=1
   else
-    printf '✅ \033[0;32m%s does not recursively depend on %s\033[0m\n' \
-      "$label" "$PACKAGE_NAME"
+    echo -e "✅ \033[0;32m${label} does not recursively depend on ${PACKAGE_NAME}\033[0m"
   fi
 }
 
