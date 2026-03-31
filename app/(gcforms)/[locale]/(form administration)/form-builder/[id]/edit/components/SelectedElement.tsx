@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
+import { FormElementTypes, ValidationInputType } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 
 import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
@@ -42,7 +42,7 @@ const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const validationType = item.properties?.validation?.type;
   const type = item.type;
 
-  let selectedType: FormElementTypes | HTMLTextInputTypeAttribute = type;
+  let selectedType: FormElementTypes | ValidationInputType = type;
 
   if (!type) {
     return elementOptions[1];
@@ -52,9 +52,13 @@ const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
      * That is to say, their "type" is "textField" but they have specalized validation "type"s.
      * So if we have a "textField", we want to first check properties.validation.type to see if
      * it is a true Short Answer, or one of the other types.
-     * The one exception to this is validationType === "text" types, for which we want to return "textField"
+     * The exceptions are validationType === "text" and validationType === "custom", for which
+     * we want to return "textField" since "custom" is not a distinct element option.
      */
-    selectedType = validationType && validationType !== "text" ? validationType : type;
+    selectedType =
+      validationType && validationType !== "text" && validationType !== "custom"
+        ? validationType
+        : type;
   }
 
   const selected = elementOptions.filter((item) => item.id === selectedType);
@@ -83,7 +87,6 @@ export const SelectedElement = ({
   formId: string;
 }) => {
   const { t } = useTranslation("form-builder");
-
   let element = null;
 
   const selected = useGetSelectedOption(item);

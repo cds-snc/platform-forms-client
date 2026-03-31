@@ -690,6 +690,14 @@
     },
     "dynamicRow": {
       "errorMaxRows": "The maximum number of answers cannot exceed {{maxRows}}."
+    },
+    "customRegex": {
+      "title": "Customize advanced input validation",
+      "description": "You can use a regular expression (regex) to create custom validation for this question. Add hint text to your form to provide instructions on how to match expected format of the answer. Be sure to test your form thoroughly, if you use this option, to make sure the regex pattern works as expected.",
+      "label": "Custom regex pattern",
+      "errorInvalidRegex": "The regex pattern is invalid. Please enter a valid regex pattern.",
+      "previousPatterns": "Previous patterns",
+      "errorUnsafeRegex": "This regex pattern is potentially unsafe. Avoid patterns that could cause performance issues, such as those with nested quantifiers or excessive backtracking."
     }
   },
   "moreOptions": "More options",
@@ -1098,6 +1106,7 @@
   "start": "Start",
   "startErrorTemplateSize": "The form file is too large",
   "startErrorDuplicateQuestionId": "Question IDs must be unique",
+  "startErrorInvalidCustomRegex": "Invalid or unsafe custom regex pattern",
   "startErrorParse": "Failed to read form file",
   "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",

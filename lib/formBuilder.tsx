@@ -20,6 +20,7 @@ import {
 import {
   FormElement,
   FormElementTypes,
+  HTMLTextInputTypeAttribute,
   PropertyChoices,
   PublicFormRecord,
   Responses,
@@ -96,12 +97,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
-  const textType =
+  const textType: HTMLTextInputTypeAttribute =
     element.properties?.validation?.type &&
     ["email", "name", "number", "password", "search", "tel", "url"].includes(
       element.properties.validation.type
     )
-      ? element.properties.validation.type
+      ? (element.properties.validation.type as HTMLTextInputTypeAttribute)
       : "text";
 
   const spellCheck =

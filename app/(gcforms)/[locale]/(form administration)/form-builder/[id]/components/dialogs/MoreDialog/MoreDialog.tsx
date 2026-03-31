@@ -24,6 +24,7 @@ import { FileTypeOptions } from "./FileTypeOptions";
 import { NumberFieldOptions } from "./NumberFieldOptions";
 
 import { CopyItem } from "./CopyItem";
+import { CustomRegexOptions } from "./CustomRegexOptions";
 
 // Will re-enable after some futher discussion about crown corp managed data
 // import { ManagedDataOptions } from "./ManagedDataOptions";
@@ -42,7 +43,9 @@ export const MoreDialog = () => {
 
   const [item, setItem] = React.useState<FormElement | undefined>(undefined);
   const [isOpen, setIsOpen] = React.useState(false);
-  const [isValid, setIsValid] = React.useState(true);
+  const [isQuestionIdValid, setIsQuestionIdValid] = React.useState(true);
+  const [isCustomRegexValid, setIsCustomRegexValid] = React.useState(true);
+  const isValid = isQuestionIdValid && isCustomRegexValid;
   const { Event } = useCustomEvent();
   const dialog = useDialogRef();
   const { refs } = useRefsContext();
@@ -137,14 +140,24 @@ export const MoreDialog = () => {
               <CharacterLimitOptions item={item} setItem={setItem} />
               <SortOptions item={item} setItem={setItem} />
               <FileTypeOptions item={item} setItem={setItem} />
+              <CustomRegexOptions
+                setIsValid={setIsCustomRegexValid}
+                item={item}
+                setItem={setItem}
+              />
+
               {item.type !== "dynamicRow" && (
                 <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
                   <p className="mt-6">{t("moreDialog.apiOptionsSection.description")}</p>
-                  <QuestionIdOptions setIsValid={setIsValid} item={item} setItem={setItem} />
+                  <QuestionIdOptions
+                    setIsValid={setIsQuestionIdValid}
+                    item={item}
+                    setItem={setItem}
+                  />
                   <QuestionTagOptions item={item} setItem={setItem} />
                 </InfoDetails>
               )}
-              <input type="submit" className="hidden" />
+              {isValid && <input type="submit" className="hidden" />}
             </form>
           </div>
         </Dialog>
