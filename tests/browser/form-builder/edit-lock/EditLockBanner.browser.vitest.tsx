@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
 import { type EditLockState } from "@lib/store/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -86,28 +86,6 @@ describe("<EditLockBanner />", () => {
     expect(lastActivityText).toContain("Last activity:");
   });
 
-  it("shows a loading state while takeover is in progress", async () => {
-    let resolveTakeover: (() => void) | undefined;
-    const takeover = vi.fn(
-      () =>
-        new Promise<void>((resolve) => {
-          resolveTakeover = resolve;
-        })
-    );
-
-    await render(
-      <EditLockBannerHarness editLock={buildLock()} isLockedByOther={true} takeover={takeover} />
-    );
-
-    await page.getByRole("button", { name: "Take over editing" }).click();
-
-    const loading = page.getByText("Syncing the latest saved version of this form...");
-    await expect.element(loading).toBeVisible();
-    await expect.element(page.getByRole("button", { name: "Taking over..." })).toBeDisabled();
-
-    resolveTakeover?.();
-  });
-
   it("shows an error when takeover fails", async () => {
     await render(
       <EditLockBannerHarness
@@ -122,5 +100,19 @@ describe("<EditLockBanner />", () => {
 
     const error = page.getByText("Unable to take over. Please try again.");
     await expect.element(error).toBeVisible();
+  });
+
+  it("shows a loading state while takeover is in progress", async () => {
+    const takeover = vi.fn(() => new Promise<void>(() => undefined));
+
+    await render(
+      <EditLockBannerHarness editLock={buildLock()} isLockedByOther={true} takeover={takeover} />
+    );
+
+    await page.getByRole("button", { name: "Take over editing" }).click();
+
+    const loading = page.getByText("Syncing the latest saved version of this form...");
+    await expect.element(loading).toBeVisible();
+    await expect.element(page.getByRole("button", { name: "Taking over..." })).toBeDisabled();
   });
 });
