@@ -1,5 +1,4 @@
 import { useTranslation } from "@i18n/client";
-import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { FormElement } from "@lib/types";
 
 export const ComboboxStrictValue = ({
@@ -12,13 +11,19 @@ export const ComboboxStrictValue = ({
   const { t } = useTranslation("form-builder");
   const checked = item.properties.strictValue;
 
+  if (item.type !== "combobox") {
+    return null;
+  }
+
   return (
     <section className="mb-4">
       <div className="mb-2">
         <h3>{t("strictValue.title")}</h3>
       </div>
-      <div>
-        <Checkbox
+      <div className="gc-input-checkbox">
+        <input
+          className="gc-input-checkbox__input"
+          type="checkbox"
           data-testid="strictValue"
           id={`strict-value-${item.id}-id-modal`}
           value={`strict-value-${item.id}-value-modal-` + checked}
@@ -33,8 +38,14 @@ export const ComboboxStrictValue = ({
               },
             });
           }}
-          label={t("strictValue.label")}
-        ></Checkbox>
+        />
+        <label
+          data-testid="strictValue-label"
+          className="gc-checkbox-label"
+          htmlFor={`strict-value-${item.id}-id-modal`}
+        >
+          <span className="checkbox-label-text">{t("strictValue.label")}</span>
+        </label>
       </div>
     </section>
   );
