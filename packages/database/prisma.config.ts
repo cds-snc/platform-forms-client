@@ -1,6 +1,6 @@
-import { defineConfig } from "prisma/config";
+import { defineConfig, env } from "prisma/config";
 
-const databaseURL = process.env.DATABASE_URL ?? "postgres://postgres:chummy@localhost:5432/forms";
+const databaseURL = env("DATABASE_URL");
 
 export default defineConfig({
   datasource: {
