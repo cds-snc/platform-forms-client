@@ -15,13 +15,13 @@
     "singleQuote": false
   },
   "scripts": {
-    "dev": "yarn db:dev && next dev",
+    "dev": "yarn db:generate && yarn db:dev && next dev",
     "dev:debug": "next dev",
-    "dev:secure": "yarn db:dev && next dev --experimental-https",
-    "build": "yarn workspaces foreach --all --parallel --verbose run build && next build",
+    "dev:secure": "yarn db:generate && yarn db:dev && next dev --experimental-https",
+    "build": "next build",
     "start": "NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
     "start:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
-    "dev:test": "yarn db:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
+    "dev:test": "yarn db:generate && yarn db:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
     "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",
     "lint": "eslint . && tsc --noEmit",
     "lint:report": "eslint --output-file eslint_report.html --format html . --ext .js,.jsx,.ts,.tsx",
