@@ -4,8 +4,8 @@ import isEqual from "lodash.isequal";
 import { useSession } from "next-auth/react";
 import { logMessage } from "@lib/logger";
 import { safeJSONParse } from "@lib/utils";
-import { createOrUpdateTemplate } from "@formBuilder/actions";
-import { FormProperties } from "@lib/types";
+import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
+import { FormProperties, FormRecord } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
 
@@ -15,18 +15,24 @@ type SaveDraftResult = {
   status: SaveDraftStatus;
 };
 
-type TrackedTemplateState = [
-  form: unknown,
-  isPublished: boolean,
-  name: string,
-  deliveryOption: unknown,
-  securityAttribute: unknown,
-];
-
 interface TemplateApiType {
   templateIsDirty: React.MutableRefObject<boolean>;
   updatedAt: number | undefined;
   setUpdatedAt: React.Dispatch<React.SetStateAction<number | undefined>>;
+  createOrUpdateTemplate:
+    | (({
+        id,
+        formConfig,
+        name,
+        deliveryOption,
+        securityAttribute,
+        saveAndResume,
+        notificationsInterval,
+      }: CreateOrUpdateTemplateType) => Promise<{
+        formRecord: FormRecord | null;
+        error?: string;
+      }>)
+    | null;
   saveDraft: () => Promise<SaveDraftResult>;
   saveDraftIfNeeded: () => Promise<SaveDraftResult>;
   resetState: () => void;
@@ -36,10 +42,19 @@ const defaultTemplateApi: TemplateApiType = {
   templateIsDirty: { current: false },
   updatedAt: undefined,
   setUpdatedAt: () => {},
+  createOrUpdateTemplate: null,
   saveDraft: async () => ({ status: "skipped" }),
   saveDraftIfNeeded: async () => ({ status: "skipped" }),
   resetState: () => {},
 };
+
+type TrackedTemplateState = [
+  form: unknown,
+  isPublished: boolean,
+  name: string,
+  deliveryOption: unknown,
+  securityAttribute: unknown,
+];
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
@@ -170,16 +185,21 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     }
   );
 
-  const contextValue = {
-    templateIsDirty,
-    updatedAt,
-    setUpdatedAt,
-    saveDraft,
-    saveDraftIfNeeded,
-    resetState,
-  };
-
-  return <TemplateApiContext.Provider value={contextValue}>{children}</TemplateApiContext.Provider>;
+  return (
+    <TemplateApiContext.Provider
+      value={{
+        templateIsDirty,
+        updatedAt,
+        setUpdatedAt,
+        createOrUpdateTemplate,
+        saveDraft,
+        saveDraftIfNeeded,
+        resetState,
+      }}
+    >
+      {children}
+    </TemplateApiContext.Provider>
+  );
 }
 
 export const useTemplateContext = () => useContext(TemplateApiContext);

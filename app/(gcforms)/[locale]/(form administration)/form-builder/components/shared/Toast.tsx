@@ -12,27 +12,27 @@ import {
 
 const contextClass = {
   success: {
-    classes: "bg-green-50 text-green-800 [&_svg]:fill-green-800",
+    classes: "gc-toast gc-toast--success",
     icon: <CircleCheckIcon className="my-2 mr-2 size-6 fill-green-800" />,
   },
   error: {
-    classes: "bg-red-100 text-red-800 [&_svg]:fill-red-800",
+    classes: "gc-toast gc-toast--error",
     icon: <WarningIcon className="my-2 mr-2 size-6 fill-red-800" />,
   },
   info: {
-    classes: "bg-blue-50 text-blue-600 [&_svg]:fill-blue-600",
+    classes: "gc-toast gc-toast--info",
     icon: <InfoIcon className="my-2 mr-2 size-6 fill-blue-600" />,
   },
   warn: {
-    classes: "bg-yellow-50 text-yellow-700 [&_svg]:fill-yellow-700",
+    classes: "gc-toast gc-toast--warn",
     icon: <WarningIcon className="my-2 mr-2 size-6 fill-yellow-700" />,
   },
   warning: {
-    classes: "bg-yellow-50 text-yellow-700 [&_svg]:fill-yellow-700",
+    classes: "gc-toast gc-toast--warning",
     icon: <WarningIcon className="my-2 mr-2 size-6 fill-yellow-700" />,
   },
   default: {
-    classes: "bg-white text-black [&_svg]:fill-black",
+    classes: "gc-toast gc-toast--default",
     icon: <InfoIcon className="my-2 mr-2 size-6 fill-black" />,
   },
 };
@@ -63,7 +63,7 @@ export const ToastContainer = ({
     <OriginalContainer
       containerId={containerId}
       toastClassName={(context?: ToastContext) => {
-        return `${contextClass[context?.type || "default"]["classes"]} 
+        return `${context?.defaultClassName || ""} ${contextClass[context?.type || "default"]["classes"]}
         relative drop-shadow-md p-1 rounded-md justify-between overflow-hidden p-4 cursor-pointer text-base`;
       }}
       style={{ width: width }}
