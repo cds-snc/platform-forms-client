@@ -3,6 +3,13 @@
 /* ===== GCDS Tokens ===== */
 @import "@gcds-core/tokens/build/web/css/tokens.css";
 @import "@gcds-core/tokens/build/web/css/global.css";
+@import "../packages/core/styles/typography.css";
+@import "../packages/core/styles/forms.css";
+@import "./form-builder.css";
+@import "../packages/core/styles/header.css";
+@import "../packages/core/styles/gc-header.css";
+@import "../packages/core/styles/toast.css";
+@import "./animations.css";
 
 /* ===== Custom max-width breakpoint variants (inherited from legacy config) ===== */
 /* The original config used max-width breakpoints as defaults. */
@@ -380,15 +387,6 @@
 @source "../app/**/*.{js,ts,jsx,tsx,mdx}";
 @source "../components/**/*.{js,ts,jsx,tsx,mdx}";
 @source "../lib/**/*.{js,ts,jsx,tsx,mdx}";
-
-/* ===== Pre-compiled component CSS (may contain @apply — resolved by TW v4) ===== */
-@import "../packages/core/styles/typography.css";
-@import "../packages/core/styles/forms.css";
-@import "./form-builder.css";
-@import "../packages/core/styles/header.css";
-@import "../packages/core/styles/gc-header.css";
-@import "../packages/core/styles/toast.css";
-@import "./animations.css";
 
 /* ===== Utility layer: list-style-type extension ===== */
 @utility list-circle {
