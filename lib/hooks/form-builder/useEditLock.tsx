@@ -14,6 +14,14 @@ import {
   EDIT_LOCK_HEARTBEAT_MS,
 } from "@lib/formBuilderEditLockPresence";
 
+const SERVER_STATE_SYNC_MAX_ATTEMPTS = 5;
+const SERVER_STATE_SYNC_RETRY_MS = 250;
+
+const wait = async (timeMs: number) =>
+  new Promise((resolve) => {
+    window.setTimeout(resolve, timeMs);
+  });
+
 type EditLockPresenceStatus = "active" | "idle" | "away";
 type EditLockVisibilityState = "visible" | "hidden";
 
@@ -49,7 +57,7 @@ export const useEditLock = ({
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
   const setFromRecord = useTemplateStore((s) => s.setFromRecord);
-  const { resetState, saveDraft, setUpdatedAt } = useTemplateContext();
+  const { resetState, saveDraft, setUpdatedAt, updatedAt } = useTemplateContext();
 
   const isOwnerRef = useRef(false);
   const heartbeatRef = useRef<number | null>(null);
@@ -136,26 +144,57 @@ export const useEditLock = ({
   );
 
   const getStatus = useCallback(async () => {
-    const res = await fetch(`/api/templates/${formId}/edit-lock`, { method: "GET" });
+    const res = await fetch(`/api/templates/${formId}/edit-lock`, {
+      method: "GET",
+      cache: "no-store",
+    });
     return res.json();
   }, [formId]);
 
-  const refreshForm = useCallback(async () => {
-    const res = await fetch(`/api/templates/${formId}`, { method: "GET" });
-    if (!res.ok) return;
-    const record = (await res.json()) as FormRecord;
-    if (record?.form) {
-      clearTemplateStore();
-      setFromRecord(record);
-      setUpdatedAt(record.updatedAt ? new Date(record.updatedAt).getTime() : undefined);
-      resetState();
-    }
-  }, [formId, resetState, setFromRecord, setUpdatedAt]);
+  const refreshForm = useCallback(
+    async (minimumUpdatedAt?: number) => {
+      const fetchLatestRecord = async (attempt: number): Promise<void> => {
+        const res = await fetch(`/api/templates/${formId}`, {
+          method: "GET",
+          cache: "no-store",
+        });
+
+        if (!res.ok) {
+          return;
+        }
+
+        const record = (await res.json()) as FormRecord;
+        if (!record?.form) {
+          return;
+        }
+
+        const recordUpdatedAt = record.updatedAt ? new Date(record.updatedAt).getTime() : undefined;
+        const shouldRetry =
+          minimumUpdatedAt !== undefined &&
+          recordUpdatedAt !== undefined &&
+          recordUpdatedAt <= minimumUpdatedAt &&
+          attempt < SERVER_STATE_SYNC_MAX_ATTEMPTS - 1;
+
+        if (shouldRetry) {
+          await wait(SERVER_STATE_SYNC_RETRY_MS);
+          await fetchLatestRecord(attempt + 1);
+          return;
+        }
+
+        clearTemplateStore();
+        setFromRecord(record);
+        setUpdatedAt(recordUpdatedAt);
+        resetState();
+      };
+
+      await fetchLatestRecord(0);
+    },
+    [formId, resetState, setFromRecord, setUpdatedAt]
+  );
 
   const syncServerState = useCallback(async () => {
-    clearTemplateStore();
-    await refreshForm();
-  }, [refreshForm]);
+    await refreshForm(updatedAt);
+  }, [refreshForm, updatedAt]);
 
   const flushDraftBeforeTakeover = useCallback(async () => {
     if (!isOwnerRef.current) {
@@ -394,14 +433,15 @@ export const useEditLock = ({
   ]);
 
   const takeover = useCallback(async () => {
+    const previousUpdatedAt = updatedAt;
     const statusResult = (await postAction("takeover")) as EditLockStatus & { error?: string };
     if (statusResult?.error) {
       throw new Error(statusResult.error);
     }
-    await refreshForm();
+    await refreshForm(previousUpdatedAt);
     updateStore(statusResult);
     startTimers(statusResult);
-  }, [postAction, refreshForm, startTimers, updateStore]);
+  }, [postAction, refreshForm, startTimers, updateStore, updatedAt]);
 
   return { takeover };
 };

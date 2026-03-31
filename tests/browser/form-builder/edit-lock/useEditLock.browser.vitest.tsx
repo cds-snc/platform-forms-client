@@ -7,6 +7,8 @@ const saveDraft = vi.fn(async () => ({ status: "saved" as const }));
 const saveDraftIfNeeded = vi.fn(async () => ({ status: "skipped" as const }));
 const resetState = vi.fn();
 const setUpdatedAt = vi.fn();
+let templateUpdatedAt: number | undefined;
+let fetchMock: ReturnType<typeof vi.fn>;
 
 vi.mock("next-auth/react", () => ({
   useSession: () => ({
@@ -27,6 +29,7 @@ vi.mock("@lib/hooks/form-builder/useTemplateContext", () => ({
     saveDraft,
     saveDraftIfNeeded,
     setUpdatedAt,
+    updatedAt: templateUpdatedAt,
   }),
 }));
 
@@ -88,8 +91,16 @@ const ownerLockStatus = {
   },
 };
 
-function EditLockHarness() {
-  useEditLock({ formId: "test-form-id", enabled: true, sessionId: "session-1" });
+function EditLockHarness({
+  onTakeoverReady,
+}: {
+  onTakeoverReady?: (takeover: () => Promise<void>) => void;
+}) {
+  const { takeover } = useEditLock({ formId: "test-form-id", enabled: true, sessionId: "session-1" });
+
+  useEffect(() => {
+    onTakeoverReady?.(takeover);
+  }, [onTakeoverReady, takeover]);
 
   useEffect(() => {
     return () => {
@@ -108,36 +119,35 @@ describe("useEditLock", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     MockEventSource.reset();
+    templateUpdatedAt = Date.parse("2026-03-31T12:00:00.000Z");
     vi.stubGlobal("EventSource", MockEventSource);
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-        const url = String(input);
+    fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
 
-        if (url.endsWith("/edit-lock") && init?.method === "POST") {
-          return {
-            ok: true,
-            json: async () => ownerLockStatus,
-          } as Response;
-        }
+      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
 
-        if (url.endsWith("/edit-lock") && init?.method === "GET") {
-          return {
-            ok: true,
-            json: async () => ownerLockStatus,
-          } as Response;
-        }
+      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
 
-        if (url.endsWith("/api/templates/test-form-id")) {
-          return {
-            ok: true,
-            json: async () => ({ form: { elements: [] }, updatedAt: new Date().toISOString() }),
-          } as Response;
-        }
+      if (url.endsWith("/api/templates/test-form-id")) {
+        return {
+          ok: true,
+          json: async () => ({ form: { elements: [] }, updatedAt: new Date().toISOString() }),
+        } as Response;
+      }
 
-        throw new Error(`Unexpected fetch: ${url}`);
-      })
-    );
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
+    vi.stubGlobal("fetch", fetchMock);
   });
 
   it("flushes with saveDraft when a takeover is requested", async () => {
@@ -154,5 +164,65 @@ describe("useEditLock", () => {
     });
 
     expect(saveDraftIfNeeded).not.toHaveBeenCalled();
+  });
+
+  it("refreshes until it sees a newer server version after takeover", async () => {
+    const staleUpdatedAt = "2026-03-31T12:00:00.000Z";
+    const freshUpdatedAt = "2026-03-31T12:00:03.000Z";
+    templateUpdatedAt = Date.parse(staleUpdatedAt);
+
+    const updatedAtResponses = [staleUpdatedAt, staleUpdatedAt, freshUpdatedAt];
+    fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+
+      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
+
+      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
+
+      if (url.endsWith("/api/templates/test-form-id")) {
+        return {
+          ok: true,
+          json: async () => ({
+            form: { elements: [] },
+            updatedAt: updatedAtResponses.shift() ?? freshUpdatedAt,
+          }),
+        } as Response;
+      }
+
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
+
+    let takeover: (() => Promise<void>) | undefined;
+
+    await render(<EditLockHarness onTakeoverReady={(nextTakeover) => (takeover = nextTakeover)} />);
+
+    await vi.waitFor(() => {
+      expect(takeover).toBeDefined();
+    });
+
+    await takeover?.();
+
+    await vi.waitFor(() => {
+      expect(setUpdatedAt).toHaveBeenCalledWith(Date.parse(freshUpdatedAt));
+    });
+
+    const formFetchCalls = fetchMock.mock.calls.filter(([input]) =>
+      String(input).endsWith("/api/templates/test-form-id")
+    );
+
+    expect(formFetchCalls).toHaveLength(3);
+    formFetchCalls.forEach(([, init]) => {
+      expect(init).toMatchObject({ method: "GET", cache: "no-store" });
+    });
   });
 });
