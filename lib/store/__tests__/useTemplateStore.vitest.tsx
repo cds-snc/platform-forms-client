@@ -402,7 +402,7 @@ describe("TemplateStore", () => {
   it("Rehydrates the store from a FormRecord", async () => {
     const result = await createStore();
     // changeKey is intentionally left unchanged here; the locked-editing rehydrate flow will own that.
-    // const previousChangeKey = result.current.changeKey;
+    const previousChangeKey = result.current.changeKey;
 
     const record: FormRecord = {
       id: "rehydrated-form",
@@ -445,7 +445,7 @@ describe("TemplateStore", () => {
     expect(result.current.closingDate).toBeNull();
     expect(result.current.saveAndResume).toBe(true);
     expect(result.current.notificationsInterval).toBe(NotificationsIntervalDefault);
-    // expect(result.current.changeKey).not.toBe(previousChangeKey);
+    expect(result.current.changeKey).not.toBe(previousChangeKey);
 
     await act(async () => {
       await promise;
