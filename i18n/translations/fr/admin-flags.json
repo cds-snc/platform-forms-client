@@ -20,7 +20,7 @@
     },
     "formTimer": {
       "title": "formTimer",
-      "description": "Activez formTimer pour retarder l'envoi d'un formulaire et contribuer à prévenir le spam"
+      "description": "Activer formTimer pour retarder l'envoi d'un formulaire et contribuer à prévenir le spam"
     },
     "hCaptcha": {
       "title": "hCaptcha",
@@ -39,8 +39,12 @@
       "description": "Activer le téléchargement des actions clés récentes dans un formulaire (au cours des 30 derniers jours) dans les Paramètres"
     },
     "zitadelLogin": {
-      "title": "Zitadel Login",
-      "description": "Enable Zitadel as a login method for users"
+      "title": "Connexion via Zitadel",
+      "description": "Activer Zitadel comme méthode de connexion pour les utilisateurs"
+    },
+    "lockedEditing": {
+      "title": "Rédaction collaborative verrouillée",
+      "description": "Activer la collaboration d'ébauches de formulaires, ce qui permet aux utilisateurs de verrouiller et de reprendre la rédaction d'un formulaire"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",
