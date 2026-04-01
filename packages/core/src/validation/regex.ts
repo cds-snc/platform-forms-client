@@ -1,3 +1,22 @@
+import { checkSync } from "recheck";
+
+export const isSafeRegex = (pattern: string): boolean => {
+  if (!pattern) return true;
+
+  const result = checkSync(pattern, "", { timeout: 1000 });
+  return result.status === "safe";
+};
+
+export const isValidRegex = (pattern: string): boolean => {
+  if (!pattern) return true;
+  try {
+    new RegExp(pattern);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
  * Also, defines the regex for validation, with a matching bilingual error message
