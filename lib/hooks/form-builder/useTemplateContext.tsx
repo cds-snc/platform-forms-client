@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useState, useContext, useRef, useCallback } from "react";
+import React, { createContext, useCallback, useContext, useRef, useState } from "react";
 import isEqual from "lodash.isequal";
 import { useSession } from "next-auth/react";
 import { logMessage } from "@lib/logger";
@@ -48,9 +48,7 @@ const defaultTemplateApi: TemplateApiType = {
   resetState: () => {},
 };
 
-const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
-
-type TrackedState = [
+type TrackedTemplateState = [
   form: unknown,
   isPublished: boolean,
   name: string,
@@ -58,10 +56,10 @@ type TrackedState = [
   securityAttribute: unknown,
 ];
 
+const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
+
 export function SaveTemplateProvider({ children }: { children: React.ReactNode }) {
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
-  // Tick state to force re-renders when templateIsDirty (a ref) changes.
-  // Without this, setting the ref alone won't cause SaveButton to re-read it.
   const [, setDirtyTick] = useState(0);
   const { status } = useSession();
 
@@ -88,15 +86,11 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   }));
 
   const templateIsDirty = useRef(false);
-
-  // Snapshot of tracked state at last save (or initial load).
-  // Deep-compared against current state to detect real changes.
-  const savedSnapshot = useRef<TrackedState | null>(null);
-
+  const savedSnapshot = useRef<TrackedTemplateState | null>(null);
   const resetState = useCallback(() => {
     templateIsDirty.current = false;
-    savedSnapshot.current = null; // Snapshot is captured on next subscription fire
-    setDirtyTick((t) => t + 1);
+    savedSnapshot.current = null;
+    setDirtyTick((tick) => tick + 1);
   }, []);
 
   const saveDraft = useCallback(async (): Promise<SaveDraftResult> => {
@@ -161,27 +155,32 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     return saveDraft();
   }, [saveDraft]);
 
-  // Single subscription — uses deep equality (lodash.isequal) to compare
-  // current state against the last-saved snapshot. This means changing a
-  // value and changing it back results in dirty = false.
   useSubscibeToTemplateStore(
-    (s) => [s.form, s.isPublished, s.name, s.deliveryOption, s.securityAttribute] as TrackedState,
+    (s) =>
+      [
+        s.form,
+        s.isPublished,
+        s.name,
+        s.deliveryOption,
+        s.securityAttribute,
+      ] as TrackedTemplateState,
     (current, previous) => {
-      if (!hasHydrated) return;
+      if (!hasHydrated) {
+        return;
+      }
 
-      // Capture the pre-change state as the snapshot on first fire after mount or save
       if (savedSnapshot.current === null) {
         savedSnapshot.current = structuredClone(previous);
       }
 
-      const dirty = !isEqual(current, savedSnapshot.current);
+      const isDirty = !isEqual(current, savedSnapshot.current);
 
-      if (dirty !== templateIsDirty.current) {
+      if (isDirty !== templateIsDirty.current) {
         logMessage.debug(
-          `TemplateContext: ${dirty ? "Local State out of sync with server" : "State reverted to saved"}`
+          `TemplateContext: ${isDirty ? "Local State out of sync with server" : "State reverted to saved"}`
         );
-        templateIsDirty.current = dirty;
-        setDirtyTick((t) => t + 1);
+        templateIsDirty.current = isDirty;
+        setDirtyTick((tick) => tick + 1);
       }
     }
   );

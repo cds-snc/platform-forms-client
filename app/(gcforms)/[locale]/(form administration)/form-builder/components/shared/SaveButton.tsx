@@ -1,19 +1,19 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
-import { cn, safeJSONParse } from "@lib/utils";
+import { cn } from "@lib/utils";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
 import { ErrorSaving } from "./ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
-import { FormProperties } from "@lib/types";
 
 const SaveDraft = ({
   updatedAt,
@@ -70,7 +70,7 @@ const ErrorSavingForm = () => {
   return (
     <span className="inline-block">
       <span className="inline-block px-1">
-        <SavedFailIcon className="inline-block fill-red" />
+        <SavedFailIcon className="fill-red inline-block" />
       </span>
       <LinkButton
         href={supportHref}
@@ -83,38 +83,30 @@ const ErrorSavingForm = () => {
 };
 
 export const SaveButton = () => {
-  const {
-    isPublished,
-    id,
-    getSchema,
-    getId,
-    getName,
-    getDeliveryOption,
-    securityAttribute,
-    setFromRecord,
-    notificationsInterval,
-  } = useTemplateStore((s) => ({
+  const { t } = useTranslation("form-builder");
+  const lockChecksEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
+  const { isPublished, id, isLockedByOther, editLock } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
-    getId: s.getId,
-    getSchema: s.getSchema,
-    getName: s.getName,
-    getDeliveryOption: s.getDeliveryOption,
-    securityAttribute: s.securityAttribute,
-    setFromRecord: s.setFromRecord,
-    notificationsInterval: s.notificationsInterval,
+    isLockedByOther: s.isLockedByOther,
+    editLock: s.editLock,
   }));
 
-  const { templateIsDirty, createOrUpdateTemplate, resetState, updatedAt, setUpdatedAt } =
-    useTemplateContext();
+  const { saveDraft, saveDraftIfNeeded, templateIsDirty, updatedAt } = useTemplateContext();
   const { status } = useSession();
+  const lockedByOther = lockChecksEnabled && isLockedByOther;
 
   const [error, setError] = useState(false);
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
+  const isLockedByOtherRef = useRef(lockedByOther);
+  const errorRef = useRef(error);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (status !== "authenticated") {
+      return;
+    }
+    if (lockedByOther) {
       return;
     }
 
@@ -123,51 +115,52 @@ export const SaveButton = () => {
       return;
     }
 
-    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    const result = await saveDraft();
 
-    if (!formConfig) {
+    if (result.status === "invalid") {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;
     }
 
-    try {
-      if (!createOrUpdateTemplate) {
-        return;
-      }
-
-      const operationResult = await createOrUpdateTemplate({
-        id: getId(),
-        formConfig,
-        name: getName(),
-        deliveryOption: getDeliveryOption(),
-        securityAttribute: securityAttribute,
-        notificationsInterval: notificationsInterval,
-      });
-
-      if (operationResult.formRecord === null) {
-        throw new Error("Error saving template");
-      }
-
-      setFromRecord(operationResult.formRecord);
-      setUpdatedAt(
-        new Date(
-          operationResult.formRecord.updatedAt ? operationResult.formRecord.updatedAt : ""
-        ).getTime()
-      );
-      setError(false);
-      resetState();
-    } catch {
+    if (result.status === "locked" || result.status === "error") {
       toast.error(<ErrorSaving />, "wide");
       setError(true);
+      return;
     }
-  };
+    setError(false);
+  }, [lockedByOther, saveDraft, status]);
+
+  useEffect(() => {
+    isLockedByOtherRef.current = lockedByOther;
+  }, [handleSave, lockedByOther]);
+
+  useEffect(() => {
+    errorRef.current = error;
+  }, [error]);
+
+  useSubscibeToTemplateStore(
+    (s) => [
+      s.form,
+      s.name,
+      s.deliveryOption,
+      s.securityAttribute,
+      s.isPublished,
+      s.isLockedByOther,
+    ],
+    () => {
+      if (errorRef.current && !isLockedByOtherRef.current) {
+        setError(false);
+      }
+    }
+  );
 
   useEffect(() => {
     return () => {
-      handleSave();
+      if (!isLockedByOtherRef.current) {
+        void saveDraftIfNeeded();
+      }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [saveDraftIfNeeded]);
 
   if (isPublished) {
     return null;
@@ -180,11 +173,27 @@ export const SaveButton = () => {
     return null;
   }
 
-  return status === "authenticated" ? (
+  if (status !== "authenticated") return null;
+
+  if (lockedByOther) {
+    const name = editLock?.lockedByName || editLock?.lockedByEmail || t("editLock.unknownUser");
+    return (
+      <div
+        data-id={id}
+        className="laptop:text-base mb-2 flex w-[700px] text-sm text-slate-500"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {t("editLock.readOnly", { name })}
+      </div>
+    );
+  }
+
+  return (
     <div
       data-id={id}
       className={cn(
-        "mb-2 flex w-[700px] text-sm laptop:text-base text-slate-500",
+        "laptop:text-base mb-2 flex w-[700px] text-sm text-slate-500",
         id && error && "text-red-destructive"
       )}
       aria-live="polite"
@@ -201,5 +210,5 @@ export const SaveButton = () => {
       )}
       {updatedAt && <DateTime updatedAt={updatedAt} />}
     </div>
-  ) : null;
+  );
 };
