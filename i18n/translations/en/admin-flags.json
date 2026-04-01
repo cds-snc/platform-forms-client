@@ -41,6 +41,10 @@
     "zitadelLogin": {
       "title": "Zitadel Login",
       "description": "Enable Zitadel as a login method for users"
+    },
+    "lockedEditing": {
+      "title": "Locked Editing",
+      "description": "Enable collaborative draft form editing with locking and user takeover capabilities"
     }
   },
   "addFlag": "Add user feature flag",

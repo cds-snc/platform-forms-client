@@ -41,6 +41,10 @@
     "zitadelLogin": {
       "title": "Zitadel Login",
       "description": "Enable Zitadel as a login method for users"
+    },
+    "lockedEditing": {
+      "title": "Édition verrouillée",
+      "description": "Activer l'édition collaborative de brouillons de formulaires avec verrouillage et capacités de reprise par utilisateur"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",
