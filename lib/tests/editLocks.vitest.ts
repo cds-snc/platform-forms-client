@@ -1,16 +1,39 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("@lib/integration/prismaConnector", () => ({
+  prisma: {
+    template: {
+      findUnique: vi.fn(),
+    },
+  },
+}));
+
+vi.mock("@lib/cache/formCache", () => ({
+  formCache: {
+    cacheAvailable: true,
+    check: vi.fn(async () => null),
+    set: vi.fn(),
+    invalidate: vi.fn(),
+  },
+}));
+
 import {
   acknowledgeEditLockTakeoverSave,
   acquireEditLock,
   clearEditLockTakeoverSaveAcknowledgement,
   getEditLockStatus,
   heartbeatEditLock,
+  invalidateTemplateEditLockUserCountCache,
   releaseEditLock,
   requestEditLockTakeoverSave,
+  shouldEnforceTemplateEditLock,
   subscribeToEditLockEvents,
   takeoverEditLock,
   waitForEditLockTakeoverSaveAcknowledgement,
 } from "@lib/editLocks";
+import type { FormProperties, PublicFormRecord } from "@lib/types";
+import { formCache } from "@lib/cache/formCache";
+import { prisma } from "@lib/integration/prismaConnector";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 
 vi.mock("@lib/integration/redisConnector", async () => {
@@ -25,12 +48,15 @@ vi.mock("@lib/integration/redisConnector", async () => {
 
 describe("editLocks with redis", () => {
   const originalRedisUrl = process.env.REDIS_URL;
+  const originalAppEnv = process.env.APP_ENV;
 
   beforeEach(async () => {
     vi.clearAllMocks();
     process.env.REDIS_URL = "redis://test";
+    process.env.APP_ENV = "development";
     const redisInstance = await getRedisInstance();
     await redisInstance.flushall();
+    vi.mocked(formCache.check).mockResolvedValue(null);
   });
 
   afterAll(() => {
@@ -40,6 +66,13 @@ describe("editLocks with redis", () => {
     }
 
     process.env.REDIS_URL = originalRedisUrl;
+
+    if (originalAppEnv === undefined) {
+      delete process.env.APP_ENV;
+      return;
+    }
+
+    process.env.APP_ENV = originalAppEnv;
   });
 
   it("allows another editor to take over an existing lock", async () => {
@@ -185,5 +218,41 @@ describe("editLocks with redis", () => {
     });
 
     await expect(waitForSave).resolves.toBe(true);
+  });
+
+  it("reuses the template cache for publish state and caches only the user-count threshold", async () => {
+    const findUniqueMock = prisma.template.findUnique as unknown as ReturnType<typeof vi.fn>;
+
+    const cachedTemplate: PublicFormRecord = {
+      id: "form-6",
+      form: {} as FormProperties,
+      isPublished: false,
+      securityAttribute: "Unclassified",
+    };
+
+    vi.mocked(formCache.check).mockResolvedValue(cachedTemplate);
+
+    findUniqueMock.mockResolvedValue({
+      isPublished: false,
+      _count: {
+        users: 2,
+      },
+    });
+
+    await expect(shouldEnforceTemplateEditLock("form-6")).resolves.toBe(true);
+    await expect(shouldEnforceTemplateEditLock("form-6")).resolves.toBe(true);
+    expect(prisma.template.findUnique).toHaveBeenCalledTimes(1);
+
+    await invalidateTemplateEditLockUserCountCache("form-6");
+
+    findUniqueMock.mockResolvedValue({
+      isPublished: false,
+      _count: {
+        users: 1,
+      },
+    });
+
+    await expect(shouldEnforceTemplateEditLock("form-6")).resolves.toBe(false);
+    expect(prisma.template.findUnique).toHaveBeenCalledTimes(2);
   });
 });

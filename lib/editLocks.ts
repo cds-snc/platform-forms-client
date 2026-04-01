@@ -1,5 +1,6 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { getRedisInstance } from "@lib/integration/redisConnector";
+import { formCache } from "./cache/formCache";
 import {
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   EDIT_LOCK_TTL_MS,
@@ -15,7 +16,9 @@ export {
 const EDIT_LOCK_KEY_PREFIX = "edit-lock";
 const EDIT_LOCK_CHANNEL_PREFIX = "edit-lock-events";
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX = "edit-lock-takeover-save";
+const EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX = "edit-lock-assigned-users-threshold";
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_POLL_MS = 100;
+const EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS = 300;
 
 export type EditLockPresenceStatus = "active" | "idle" | "away";
 export type EditLockVisibilityState = "visible" | "hidden";
@@ -109,6 +112,8 @@ const getEditLockKey = (templateId: string) => `${EDIT_LOCK_KEY_PREFIX}:${templa
 const getEditLockChannel = (templateId: string) => `${EDIT_LOCK_CHANNEL_PREFIX}:${templateId}`;
 const getEditLockTakeoverSaveAckKey = (templateId: string, sessionId: string) =>
   `${EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX}:${templateId}:${sessionId}`;
+const getEditLockAssignedUsersCacheKey = (templateId: string) =>
+  `${EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX}:${templateId}`;
 const editLockTtlSeconds = Math.ceil(EDIT_LOCK_TTL_MS / 1000);
 const updatedEvent: EditLockEvent = { type: "updated" };
 const wait = async (timeMs: number) =>
@@ -435,7 +440,42 @@ export const getEditLockDisabledStatus = (): EditLockStatus => ({
   lock: null,
 });
 
+export const invalidateTemplateEditLockUserCountCache = async (
+  templateId: string
+): Promise<void> => {
+  if (process.env.APP_ENV === "test" || !redisEnabled()) {
+    return;
+  }
+
+  const redis = await getRedisInstance();
+  await redis.del(getEditLockAssignedUsersCacheKey(templateId));
+};
+
 export const shouldEnforceTemplateEditLock = async (templateId: string): Promise<boolean> => {
+  const cachedTemplate = formCache.cacheAvailable
+    ? await formCache.check(templateId).catch(() => null)
+    : null;
+  const cachedIsPublished = cachedTemplate?.isPublished ?? null;
+
+  let cachedHasEnoughUsers: boolean | null = null;
+
+  if (process.env.APP_ENV !== "test" && redisEnabled()) {
+    const redis = await getRedisInstance();
+    const cachedValue = await redis.get(getEditLockAssignedUsersCacheKey(templateId));
+
+    if (cachedValue === "1") {
+      cachedHasEnoughUsers = true;
+    }
+
+    if (cachedValue === "0") {
+      cachedHasEnoughUsers = false;
+    }
+  }
+
+  if (cachedIsPublished !== null && cachedHasEnoughUsers !== null) {
+    return !cachedIsPublished && cachedHasEnoughUsers;
+  }
+
   const template = await prisma.template
     .findUnique({
       where: { id: templateId },
@@ -450,11 +490,24 @@ export const shouldEnforceTemplateEditLock = async (templateId: string): Promise
     })
     .catch(() => null);
 
+  const shouldEnforce =
+    !template ||
+    (!template.isPublished && template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK);
+
+  if (template && process.env.APP_ENV !== "test" && redisEnabled()) {
+    const redis = await getRedisInstance();
+    await redis.setex(
+      getEditLockAssignedUsersCacheKey(templateId),
+      EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS,
+      template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK ? "1" : "0"
+    );
+  }
+
   if (!template) {
     return true;
   }
 
-  return !template.isPublished && template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
+  return shouldEnforce;
 };
 
 export const getEditLockStatus = async (
