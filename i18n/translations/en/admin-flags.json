@@ -43,8 +43,6 @@
       "description": "Enable Zitadel as a login method for users"
     },
     "lockedEditing": {
-      "title": "Locked Editing",
-    "lockedEditing": {
       "title": "Locked collaborative editing",
       "description": "Enable sharing a draft form with handoffs that allows users to lock and take over editing"
     }
