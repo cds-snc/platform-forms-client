@@ -414,7 +414,7 @@ export const waitForEditLockTakeoverSaveAcknowledgement = async ({
 
 const isExpired = (lock: EditLockInfo, now: Date) => lock.expiresAt.getTime() <= now.getTime();
 
-const toEditLockInfo = (lock: EditLockInfo): EditLockInfo => ({
+const toEditLockInfo = (lock: EditLockInfo): Required<EditLockInfo> => ({
   ...lock,
   lockedByName: lock.lockedByName ?? null,
   lockedByEmail: lock.lockedByEmail ?? null,
