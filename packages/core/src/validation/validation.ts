@@ -11,7 +11,7 @@ import { isInputTooLong } from "./text";
 import { isValidDate } from "./date";
 import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
-import { isSafeRegex } from "@root/lib/regex/isSafeRegex";
+import { isSafeRegex } from "./regex";
 
 export const isFieldResponseValid = (
   value: unknown,
