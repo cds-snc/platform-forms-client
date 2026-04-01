@@ -43,8 +43,8 @@
       "description": "Enable Zitadel as a login method for users"
     },
     "lockedEditing": {
-      "title": "Édition verrouillée",
-      "description": "Activer l'édition collaborative de brouillons de formulaires avec verrouillage et capacités de reprise par utilisateur"
+      "title": "Rédaction collaborative verrouillée",
+      "description": "Activer la collaboration d'ébauches de formulaires, ce qui permet aux utilisateurs de verrouiller et de reprendre la rédaction d'un formulaire"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",
