@@ -111,12 +111,17 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
       };
 
       if (process.env.REDIS_URL) {
-        subscriber = createRedisSubscriber();
-        void subscriber.subscribe(channel).then(() => {
-          subscriber?.on("message", (_messageChannel, message) => {
-            handleEvent(parseEvent(message));
+        void createRedisSubscriber()
+          .then((redisSubscriber) => {
+            subscriber = redisSubscriber;
+
+            return subscriber.subscribe(channel);
+          })
+          .then(() => {
+            subscriber?.on("message", (_messageChannel, message) => {
+              handleEvent(parseEvent(message));
+            });
           });
-        });
       } else {
         unsubscribe = subscribeToEditLockEvents(formID, handleEvent);
       }
