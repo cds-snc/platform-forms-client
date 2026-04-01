@@ -4,6 +4,7 @@ import { MiddlewareProps, WithRequired } from "@lib/types";
 import { authorization } from "@lib/privileges";
 import { EditLockEvent, getEditLockStatus, subscribeToEditLockEvents } from "@lib/editLocks";
 import { createRedisSubscriber } from "@lib/integration/redisConnector";
+import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import type Redis from "ioredis";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +16,10 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
 
   if (!formID || typeof formID !== "string") {
     return NextResponse.json({ error: "Invalid or missing formID" }, { status: 400 });
+  }
+
+  if (!(await allowLockedEditing())) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
   const canEditForm = await authorization.canEditForm(formID).catch(() => null);

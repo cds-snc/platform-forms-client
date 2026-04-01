@@ -3,6 +3,7 @@ import { serverTranslation } from "@i18n";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { authCheckAndThrow } from "@lib/actions";
 import { Language } from "@lib/types/form-builder-types";
+import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 import { WaitForId } from "../components/WaitForId";
 import { SettingsLockClient } from "./components/SettingsLockClient";
@@ -18,6 +19,7 @@ export default async function Layout(props: {
   const { children } = props;
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
+  const allowLockedEditingFlag = await allowLockedEditing();
 
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
 
@@ -35,7 +37,9 @@ export default async function Layout(props: {
     <>
       <h1>{t("gcFormsSettings")}</h1>
       <SettingsNavigation id={id} />
-      <SettingsLockClient formId={id}>{children}</SettingsLockClient>
+      <SettingsLockClient formId={id} lockedEditingEnabled={allowLockedEditingFlag}>
+        {children}
+      </SettingsLockClient>
     </>
   );
 }

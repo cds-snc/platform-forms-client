@@ -56,6 +56,7 @@ describe("editLocks with redis", () => {
     process.env.APP_ENV = "development";
     const redisInstance = await getRedisInstance();
     await redisInstance.flushall();
+    await redisInstance.set("flag:lockedEditing", "1");
     vi.mocked(formCache.check).mockResolvedValue(null);
   });
 

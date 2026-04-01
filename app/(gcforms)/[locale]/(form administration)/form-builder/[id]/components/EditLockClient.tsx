@@ -21,12 +21,21 @@ const makeSessionId = () => {
   return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 };
 
-export const EditLockClient = ({ formId }: { formId: string }) => {
+export const EditLockClient = ({
+  formId,
+  lockedEditingEnabled,
+}: {
+  formId: string;
+  lockedEditingEnabled: boolean;
+}) => {
   const pathname = usePathname();
   const currentFormId = useTemplateStore((s) => s.id);
   const activeFormId = currentFormId || formId;
   const enabled =
-    process.env.NEXT_PUBLIC_APP_ENV !== "test" && isEditPath(pathname) && activeFormId !== "0000";
+    lockedEditingEnabled &&
+    process.env.NEXT_PUBLIC_APP_ENV !== "test" &&
+    isEditPath(pathname) &&
+    activeFormId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
 
   const { takeover } = useEditLock({ formId: activeFormId, enabled, sessionId });

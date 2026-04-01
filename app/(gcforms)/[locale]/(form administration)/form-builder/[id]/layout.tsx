@@ -16,6 +16,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { checkKeyExists } from "@lib/serviceAccount";
+import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import {
   FormBuilderConfigProvider,
   FormBuilderConfig,
@@ -43,6 +44,7 @@ export default async function Layout(props: {
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();
+  const allowLockedEditingFlag = await allowLockedEditing();
 
   if (session && formID && formID !== "0000") {
     const templateWithUsers = await getTemplateWithAssociatedUsers(formID).catch((e) => {
@@ -87,7 +89,7 @@ export default async function Layout(props: {
             <div className="h-full">
               <div className="flex min-h-screen flex-col">
                 <Header context="formBuilder" className="mb-0" />
-                <div className="flex shrink-0 grow basis-auto flex-col bg-gray-soft">
+                <div className="bg-gray-soft flex shrink-0 grow basis-auto flex-col">
                   <ToastContainer containerId="default" />
                   <ToastContainer
                     limit={1}
@@ -115,7 +117,10 @@ export default async function Layout(props: {
                           className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
                           tabIndex={-1}
                         >
-                          <EditLockClient formId={id} />
+                          <EditLockClient
+                            formId={id}
+                            lockedEditingEnabled={allowLockedEditingFlag}
+                          />
                           {children}
                         </main>
                         {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}

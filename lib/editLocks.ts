@@ -1,5 +1,6 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { getRedisInstance } from "@lib/integration/redisConnector";
+import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { formCache } from "./cache/formCache";
 import {
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
@@ -452,6 +453,10 @@ export const invalidateTemplateEditLockUserCountCache = async (
 };
 
 export const shouldEnforceTemplateEditLock = async (templateId: string): Promise<boolean> => {
+  if (!(await allowLockedEditing())) {
+    return false;
+  }
+
   const cachedTemplate = formCache.cacheAvailable
     ? await formCache.check(templateId).catch(() => null)
     : null;

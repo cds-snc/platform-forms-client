@@ -13,12 +13,15 @@ const makeSessionId = () => {
 
 export const SettingsLockClient = ({
   formId,
+  lockedEditingEnabled,
   children,
 }: {
   formId: string;
+  lockedEditingEnabled: boolean;
   children: React.ReactNode;
 }) => {
-  const enabled = process.env.NEXT_PUBLIC_APP_ENV !== "test" && formId !== "0000";
+  const enabled =
+    lockedEditingEnabled && process.env.NEXT_PUBLIC_APP_ENV !== "test" && formId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
 
   const { takeover } = useEditLock({ formId, enabled, sessionId });
