@@ -44,7 +44,9 @@
     },
     "lockedEditing": {
       "title": "Locked Editing",
-      "description": "Enable collaborative draft form editing with locking and user takeover capabilities"
+    "lockedEditing": {
+      "title": "Locked collaborative editing",
+      "description": "Enable sharing a draft form with handoffs that allows users to lock and take over editing"
     }
   },
   "addFlag": "Add user feature flag",
