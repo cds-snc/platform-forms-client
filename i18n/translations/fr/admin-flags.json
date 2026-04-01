@@ -20,7 +20,7 @@
     },
     "formTimer": {
       "title": "formTimer",
-      "description": "Activez formTimer pour retarder l'envoi d'un formulaire et contribuer à prévenir le spam"
+      "description": "Activer formTimer pour retarder l'envoi d'un formulaire et contribuer à prévenir le spam"
     },
     "hCaptcha": {
       "title": "hCaptcha",
