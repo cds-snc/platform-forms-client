@@ -31,10 +31,10 @@ import {
   takeoverEditLock,
   waitForEditLockTakeoverSaveAcknowledgement,
 } from "@lib/editLocks";
-import type { FormProperties, PublicFormRecord } from "@lib/types";
 import { formCache } from "@lib/cache/formCache";
 import { prisma } from "@lib/integration/prismaConnector";
 import { getRedisInstance } from "@lib/integration/redisConnector";
+import type { FormProperties, PublicFormRecord } from "@lib/types";
 
 vi.mock("@lib/integration/redisConnector", async () => {
   const { default: Redis } = await import("ioredis-mock");
@@ -62,10 +62,9 @@ describe("editLocks with redis", () => {
   afterAll(() => {
     if (originalRedisUrl === undefined) {
       delete process.env.REDIS_URL;
-      return;
+    } else {
+      process.env.REDIS_URL = originalRedisUrl;
     }
-
-    process.env.REDIS_URL = originalRedisUrl;
 
     if (originalAppEnv === undefined) {
       delete process.env.APP_ENV;

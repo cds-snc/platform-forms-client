@@ -68,8 +68,8 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
     return NextResponse.json({ error: "Invalid or missing formID" }, { status: 400 });
   }
 
-  const canViewForm = await authorization.canViewForm(formID).catch(() => null);
-  if (!canViewForm) {
+  const canEditForm = await authorization.canEditForm(formID).catch(() => null);
+  if (!canEditForm) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
