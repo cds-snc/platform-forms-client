@@ -5,6 +5,14 @@ import { AccessControlError } from "@lib/auth/errors";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { FeatureFlagKeys, FeatureFlags, Flags, PickFlags } from "./types";
 
+const getTestFlagValue = (key: string): boolean => {
+  if (key === FeatureFlags.zitadelLogin) {
+    return false;
+  }
+
+  return true;
+};
+
 /**
  * Enables an Application Setting Flag
  * @param key Applicaiton setting flag key
@@ -61,9 +69,9 @@ const getKeys = async (): Promise<FeatureFlagKeys[]> => {
  * @returns Boolean value of Flag key
  */
 export const checkOne = async (key: string): Promise<boolean> => {
-  // If in test mode return true for any flag
+  // Keep the legacy test shortcut, but force Zitadel off for browser auth flows.
   if (process.env.APP_ENV === "test") {
-    return true;
+    return getTestFlagValue(key);
   }
   // If REDIS is not configured return the default values for the flags
   if (!process.env.REDIS_URL) {
@@ -92,7 +100,7 @@ const checkMulti = async <T extends FeatureFlagKeys[]>(keys: T): Promise<PickFla
 
   const mapped = keys.reduce((acc, key, index) => {
     if (process.env.APP_ENV === "test") {
-      acc.set(key, true);
+      acc.set(key, getTestFlagValue(key));
     } else {
       acc.set(key, values[index] === "1");
     }
