@@ -33,11 +33,7 @@ export type FormBuilderPageProps = {
   hasBrandingRequestForm: boolean;
 };
 
-export type {
-  InputFieldProps,
-  CharacterCountMessages,
-  ChoiceFieldProps,
-} from "./component-utility-types";
+export type { InputFieldProps, ChoiceFieldProps } from "./component-utility-types";
 
 export type {
   LambdaResponse,

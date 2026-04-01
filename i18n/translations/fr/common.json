@@ -130,11 +130,10 @@
   },
   "formElements": {
     "characterCount": {
-      "part1": "Il vous reste",
-      "part2": "caractères.",
-      "part2-singular": "caractère.",
-      "part1-error": "Vous avez dépassé la limite de",
-      "part2-error": "caractères."
+      "remaining_one": "Il vous reste {{count}} caractère.",
+      "remaining_other": "Il vous reste {{count}} caractères.",
+      "exceeded_one": "Vous avez dépassé la limite de {{count}} caractère.",
+      "exceeded_other": "Vous avez dépassé la limite de {{count}} caractères."
     }
   },
   "dynamicRow": {

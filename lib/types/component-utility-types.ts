@@ -12,10 +12,3 @@ export interface InputFieldProps {
 export interface ChoiceFieldProps extends InputFieldProps {
   label: string;
 }
-
-export type CharacterCountMessages = {
-  part1: string;
-  part2: string;
-  part1Error: string;
-  part2Error: string;
-};
