@@ -2,10 +2,12 @@ import { NextResponse } from "next/server";
 import { middleware, sessionExists } from "@lib/middleware";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { authorization } from "@lib/privileges";
-import { EditLockEvent, getEditLockStatus, subscribeToEditLockEvents } from "@lib/editLocks";
-import { createRedisSubscriber } from "@lib/integration/redisConnector";
+import { EditLockEvent, getEditLockStatus } from "@lib/editLocks";
+import {
+  registerActiveEditLockStream,
+  subscribeToSharedEditLockEvents,
+} from "@lib/editLockEventStreams";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
-import type Redis from "ioredis";
 
 export const dynamic = "force-dynamic";
 
@@ -28,26 +30,12 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
   }
 
   const encoder = new TextEncoder();
-  const channel = `edit-lock-events:${formID}`;
 
   const stream = new ReadableStream({
     start(controller) {
       let closed = false;
-      let unsubscribe: (() => void) | null = null;
-      let subscriber: Redis | null = null;
-
-      const parseEvent = (raw: string): EditLockEvent => {
-        try {
-          const parsed = JSON.parse(raw) as Partial<EditLockEvent>;
-          if (parsed.type === "takeover-requested") {
-            return { type: "takeover-requested" };
-          }
-        } catch {
-          // no-op
-        }
-
-        return { type: "updated" };
-      };
+      let unsubscribe: (() => void | Promise<void>) | null = null;
+      let unregisterStream: (() => void) | null = null;
 
       const sendStatus = async () => {
         if (closed) {
@@ -92,20 +80,10 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
 
         closed = true;
         clearInterval(keepAlive);
-        unsubscribe?.();
+        unregisterStream?.();
 
-        if (subscriber) {
-          try {
-            await subscriber.unsubscribe(channel);
-          } catch {
-            // no-op
-          }
-          try {
-            await subscriber.quit();
-          } catch {
-            // no-op
-          }
-          subscriber = null;
+        if (unsubscribe) {
+          await unsubscribe();
         }
 
         try {
@@ -115,21 +93,22 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
         }
       };
 
-      if (process.env.REDIS_URL) {
-        void createRedisSubscriber()
-          .then((redisSubscriber) => {
-            subscriber = redisSubscriber;
+      unregisterStream = registerActiveEditLockStream(session.user.id, formID, close);
 
-            return subscriber.subscribe(channel);
-          })
-          .then(() => {
-            subscriber?.on("message", (_messageChannel, message) => {
-              handleEvent(parseEvent(message));
-            });
-          });
-      } else {
-        unsubscribe = subscribeToEditLockEvents(formID, handleEvent);
-      }
+      void (async () => {
+        try {
+          const unsubscribeEvents = await subscribeToSharedEditLockEvents(formID, handleEvent);
+
+          if (closed) {
+            await unsubscribeEvents();
+            return;
+          }
+
+          unsubscribe = unsubscribeEvents;
+        } catch {
+          void close();
+        }
+      })();
 
       void sendStatus().catch(() => {
         // no-op: connection will close naturally if the first send fails
