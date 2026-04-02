@@ -71,7 +71,7 @@ export const Dialog = ({
     >
       <div
         className={cn(
-          `tablet:mx-auto tablet:mt-8 laptop:mt-24 relative mt-6 max-h-[80%] max-w-[700px] overflow-y-auto rounded-xl border-1 border-slate-500 bg-white`,
+          `laptop:mt-24 tablet:mx-auto relative max-h-[80%] max-w-[700px] overflow-y-auto rounded-xl border-1 border-slate-500 bg-white`,
           className
         )}
       >

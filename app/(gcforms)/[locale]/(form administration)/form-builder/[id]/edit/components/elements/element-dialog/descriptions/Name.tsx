@@ -14,7 +14,7 @@ export const Name = () => {
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.name.description")}</p>
 
-      <ExampleWrapper className="gcds-input-wrapper mt-4!">
+      <ExampleWrapper className="gcds-input-wrapper">
         <Label htmlFor="name" className="gcds-label">
           {t("addElementDialog.name.label")}
         </Label>
