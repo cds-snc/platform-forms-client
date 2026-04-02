@@ -45,7 +45,7 @@ const WithApiDescription = ({ title }: { title: string }) => {
       <p data-testid="element-description-text">
         {t("addElementDialog.fileInputWithApi.description")}
       </p>
-      <ExampleWrapper className="my-4">
+      <ExampleWrapper>
         <Label htmlFor="name" className="gcds-label">
           {t("addElementDialog.fileInput.label")}
         </Label>
@@ -68,7 +68,7 @@ const DefaultDescription = ({ title, link }: { title: string; link: string }) =>
           {t("addElementDialog.fileInputDefault.text3")}
         </strong>
       </p>
-      <ExampleWrapper className="mt-4">
+      <ExampleWrapper>
         <Label htmlFor="name" className="gcds-label">
           {t("addElementDialog.fileInput.label")}
         </Label>
