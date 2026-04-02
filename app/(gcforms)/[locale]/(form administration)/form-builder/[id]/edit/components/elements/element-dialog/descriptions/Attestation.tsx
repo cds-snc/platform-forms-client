@@ -13,7 +13,7 @@ export const Attestation = () => {
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.attestation.description")}</p>
 
-      <ExampleWrapper className="mt-4">
+      <ExampleWrapper className="mt-4!">
         <Label className="gcds-label">
           {t("addElementDialog.attest")}{" "}
           <span className="label--required">({t("addElementDialog.allRequired")})</span>

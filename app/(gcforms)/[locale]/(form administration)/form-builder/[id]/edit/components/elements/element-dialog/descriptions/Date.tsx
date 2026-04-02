@@ -11,7 +11,7 @@ export const Date = () => {
       <h3 className="mb-0">{t("addElementDialog.date.title")}</h3>
       <p>{t("addElementDialog.date.description")}</p>
 
-      <ExampleWrapper className="mt-4">
+      <ExampleWrapper className="mt-4!">
         <Label htmlFor="name" className="gcds-label">
           {t("addElementDialog.date.title")}
         </Label>

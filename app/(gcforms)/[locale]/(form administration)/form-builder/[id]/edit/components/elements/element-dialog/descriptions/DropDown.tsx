@@ -13,7 +13,7 @@ export const DropDown = () => {
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.dropdown.description")}</p>
 
-      <ExampleWrapper className="mt-4">
+      <ExampleWrapper className="mt-4!">
         <Label htmlFor="dropdown" className="gcds-label">
           {t("addElementDialog.dropdown.selectOption")}
         </Label>

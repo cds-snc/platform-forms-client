@@ -14,7 +14,7 @@ export const Radio = () => {
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.radio.description")}</p>
 
-      <ExampleWrapper className="mt-4">
+      <ExampleWrapper className="mt-4!">
         <FormGroup name={"radios"}>
           <legend data-testid="label" className="gcds-label" id="label-1">
             {t("addElementDialog.radio.chooseAnOption")}

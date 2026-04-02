@@ -14,7 +14,7 @@ export const Contact = () => {
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.contact.description")}</p>
 
-      <ExampleWrapper className="mt-4">
+      <ExampleWrapper className="mt-4!">
         <h4 className="mb-4">{t("addElementDialog.contact.howCanWeContactYou")}</h4>
         <div className="gcds-input-wrapper mb-6">
           <Label htmlFor="phone" className="gcds-label">

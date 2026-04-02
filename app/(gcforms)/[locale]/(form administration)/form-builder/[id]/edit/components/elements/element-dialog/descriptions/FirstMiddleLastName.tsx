@@ -16,7 +16,7 @@ export const FirstMiddleLastName = () => {
         {t("addElementDialog.firstMiddleLastName.description")}
       </p>
 
-      <ExampleWrapper className="mt-4">
+      <ExampleWrapper className="mt-4!">
         <h4 className="mb-4">{t("addElementDialog.firstMiddleLastName.whatIsYourName")}</h4>
         <div className="gcds-input-wrapper mb-6">
           <Label htmlFor="first" className="gcds-label">
