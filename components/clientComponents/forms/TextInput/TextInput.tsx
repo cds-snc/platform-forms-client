@@ -53,6 +53,7 @@ export const TextInput = (
         className={classes}
         id={id}
         type={type}
+        key={id}
         spellCheck={spellCheck}
         required={required}
         autoComplete={autoComplete ? autoComplete : "off"}

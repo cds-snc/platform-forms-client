@@ -23,7 +23,6 @@ export const NumberInput = (
     required,
     ariaDescribedBy,
     placeholder,
-    autoComplete,
     maxLength,
     allowNegativeNumbers,
     stepCount,
@@ -79,21 +78,17 @@ export const NumberInput = (
   return (
     <>
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
-      <div id={`${id}-description-number`} hidden>
-        {t("number")}
-      </div>
       <input
         data-testid="numberInput"
         className={classes}
         id={id}
         type="text"
         required={required}
-        autoComplete={autoComplete ? autoComplete : "off"}
         placeholder={placeholder}
         {...ariaDescribedByIds(!!meta.error, ariaDescribedBy)}
         {...field}
         onChange={handleNumberInputChange}
-        key={`${id}-${decimalSeparator}`}
+        key={id}
         value={displayValue}
         inputMode="numeric"
         aria-describedby={`${id}-description-number`}
