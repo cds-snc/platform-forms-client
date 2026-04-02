@@ -620,6 +620,7 @@
       "stale": "Connexion inactive"
     },
     "unknownUser": "Un autre utilisateur",
+    "saveBlocked": "Enregistrement bloqué : {{name}} modifie ce formulaire.",
     "takeover": "Prendre le contrôle",
     "takingOver": "Prise de contrôle...",
     "syncingLatest": "Synchronisation de la plus récente version enregistrée du formulaire...",
