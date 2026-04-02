@@ -71,14 +71,14 @@ export const Dialog = ({
     >
       <div
         className={cn(
-          `relative max-h-[80%] overflow-y-auto rounded-xl border-1 border-slate-500 bg-white tablet:mx-auto max-w-[700px] laptop:mt-24`,
+          `tablet:mx-auto tablet:mt-8 laptop:mt-24 relative mt-6 max-h-[80%] max-w-[700px] overflow-y-auto rounded-xl border-1 border-slate-500 bg-white`,
           className
         )}
       >
         {title && (
           <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
             <h2
-              className="ml-4 mt-4 inline-block pb-4 text-2xl"
+              className="mt-4 ml-4 inline-block pb-4 text-2xl"
               id={`modal-title-${modalRandomId.current}`}
               tabIndex={-1}
             >
@@ -95,13 +95,13 @@ export const Dialog = ({
         )}
         <Button
           theme="link"
-          className="group absolute right-0 top-0 z-[1000] mr-4 mt-4"
+          className="group absolute top-0 right-0 z-[1000] mt-4 mr-4"
           aria-label={t("close")}
           onClick={close}
           dataTestId="close-dialog"
         >
           <span className="block">
-            <Close className="inline-block group-focus:fill-white-default" />
+            <Close className="group-focus:fill-white-default inline-block" />
           </span>
         </Button>
       </div>
