@@ -13,7 +13,7 @@ export const CheckBox = () => {
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.checkbox.description")}</p>
 
-      <ExampleWrapper className="mt-4!">
+      <ExampleWrapper>
         <FormGroup name={"checkboxes"}>
           <legend className="gcds-label">{t("addElementDialog.checkbox.chooseItems")}</legend>
           <Description>{t("addElementDialog.checkbox.selectAllThatApply")}</Description>

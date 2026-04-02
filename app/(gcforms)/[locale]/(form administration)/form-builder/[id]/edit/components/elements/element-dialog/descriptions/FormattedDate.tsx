@@ -15,7 +15,7 @@ export const FormattedDate = () => {
         {t("addElementDialog.formattedDate.description")}
       </p>
 
-      <ExampleWrapper className="mt-4!">
+      <ExampleWrapper>
         <Label htmlFor="formattedDate">{t("addElementDialog.formattedDate.label")}</Label>
         <FormattedDateComponent name={"formattedDate"} />
       </ExampleWrapper>

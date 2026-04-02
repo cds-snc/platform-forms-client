@@ -13,7 +13,7 @@ export const TextField = () => {
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.textField.description")}</p>
 
-      <ExampleWrapper className="gcds-input-wrapper mt-4!">
+      <ExampleWrapper className="gcds-input-wrapper">
         <Label htmlFor="name" className="gcds-label">
           {t("addElementDialog.textField.enterAnswer")}
         </Label>

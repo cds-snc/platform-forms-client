@@ -14,7 +14,7 @@ export const Address = () => {
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.address.description")}</p>
 
-      <ExampleWrapper className="mt-4!">
+      <ExampleWrapper>
         <h4 className="mb-4">{t("addElementDialog.address.whatIsYourAddress")}</h4>
         <div className="gcds-input-wrapper mb-6">
           <Label htmlFor="street" className="gcds-label">
