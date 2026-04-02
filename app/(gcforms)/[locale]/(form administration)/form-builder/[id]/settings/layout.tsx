@@ -6,7 +6,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 import { WaitForId } from "../components/WaitForId";
-import { SettingsLockClient } from "./components/SettingsLockClient";
+import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -37,9 +37,14 @@ export default async function Layout(props: {
     <>
       <h1>{t("gcFormsSettings")}</h1>
       <SettingsNavigation id={id} />
-      <SettingsLockClient formId={id} lockedEditingEnabled={allowLockedEditingFlag}>
+      <EditLockClient
+        formId={id}
+        lockedEditingEnabled={allowLockedEditingFlag}
+        restrictToEditPaths={false}
+        reloadOnTakeover={true}
+      >
         {children}
-      </SettingsLockClient>
+      </EditLockClient>
     </>
   );
 }
