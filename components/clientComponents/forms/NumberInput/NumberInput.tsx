@@ -29,7 +29,7 @@ export const NumberInput = (
     lang,
   } = props;
   const [field, meta, helpers] = useField(props);
-  const { t } = useTranslation("common", { lng: lang });
+  const { t, i18n } = useTranslation("common", { lng: lang });
 
   const { setRemainingCharacters, ariaDescribedByIds, CharacterCountDisplay } = useCharacterCount({
     maxLength,
@@ -88,7 +88,7 @@ export const NumberInput = (
         {...ariaDescribedByIds(!!meta.error, ariaDescribedBy)}
         {...field}
         onChange={handleNumberInputChange}
-        key={id}
+        key={`${id}-${i18n.language}`}
         value={displayValue}
         inputMode="numeric"
         aria-describedby={`${id}-description-number`}
