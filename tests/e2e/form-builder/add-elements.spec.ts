@@ -113,7 +113,7 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
     await expect(page.getByTestId("number")).toContainText("0123456789");
 
     await openPreview(page);
-    await expect(page.getByTestId("textInput")).toHaveAttribute("inputmode", "numeric");
+    await expect(page.getByTestId("numberInput")).toHaveAttribute("inputmode", "numeric");
   });
 
   test("Renders attestation block", async ({ page }) => {
