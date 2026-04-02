@@ -55,6 +55,9 @@ describe("<EditLockBanner />", () => {
     const title = page.getByText("This form is already being edited");
     await expect.element(title).toBeVisible();
 
+    const pilotBadge = page.getByText("Pilot:", { exact: false });
+    await expect.element(pilotBadge).toBeVisible();
+
     const message = page.getByText(
       "Avery Smith is currently working on this form, which means you cannot make changes unless you take over."
     );

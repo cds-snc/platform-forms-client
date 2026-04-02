@@ -4,7 +4,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { EditLockBanner } from "./EditLockBanner";
+import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
 
 const isEditPath = (pathname: string | null) => {
   if (!pathname) return false;

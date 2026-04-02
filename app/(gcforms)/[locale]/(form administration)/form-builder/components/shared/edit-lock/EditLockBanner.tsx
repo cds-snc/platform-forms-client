@@ -10,6 +10,7 @@ import {
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
+import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
 
 const formatRelativeTime = (value: string, locale: string) => {
@@ -111,7 +112,7 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
 
   return (
     <div
-      className="absolute inset-y-0 right-0 -left-7 z-50 flex items-start justify-center bg-slate-900/15 px-6 pt-24"
+      className="absolute inset-y-0 right-0 -left-7 z-[120] flex items-start justify-center bg-slate-900/15 px-6 pt-24"
       role="dialog"
       aria-modal="true"
       aria-label={t("editLock.title")}
@@ -126,6 +127,7 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
           <div className="flex max-w-xl items-start gap-3 text-left">
             <WarningIcon className="mt-0.5 size-8 shrink-0 fill-amber-500" />
             <div>
+              <PilotBadge className="mb-3" />
               <p className="mb-2 text-xl font-semibold text-slate-900">{t("editLock.title")}</p>
               <p className="text-base text-slate-900">{t("editLock.lockedMessage", { name })}</p>
               {EDIT_LOCK_DETECT_PRESENCE && (
