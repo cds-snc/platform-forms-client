@@ -15,6 +15,8 @@ import { usePathname } from "next/navigation";
 import { ErrorSaving } from "./ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 
+type SaveState = "idle" | "error" | "locked";
+
 const SaveDraft = ({
   updatedAt,
   handleSave,
@@ -64,9 +66,29 @@ const DateTime = ({ updatedAt }: { updatedAt: number }) => {
   return <span>{` - ${t("lastSaved", { ns: "form-builder" })} ${time}, ${date}`}</span>;
 };
 
-const ErrorSavingForm = () => {
+const ErrorSavingForm = ({
+  variant,
+  lockOwnerName,
+}: {
+  variant: Exclude<SaveState, "idle">;
+  lockOwnerName: string;
+}) => {
   const { t, i18n } = useTranslation(["common", "form-builder"]);
   const supportHref = `/${i18n.language}/support`;
+
+  if (variant === "locked") {
+    return (
+      <span className="inline-block">
+        <span className="inline-block px-1">
+          <SavedFailIcon className="fill-red inline-block" />
+        </span>
+        <span className="mr-2 inline-block text-red-700">
+          {t("editLock.saveBlocked", { ns: "form-builder", name: lockOwnerName })}
+        </span>
+      </span>
+    );
+  }
+
   return (
     <span className="inline-block">
       <span className="inline-block px-1">
@@ -74,7 +96,7 @@ const ErrorSavingForm = () => {
       </span>
       <LinkButton
         href={supportHref}
-        className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent focus:!text-red-700 active:bg-transparent active:!text-red-700"
+        className="mr-2 text-red-700! underline hover:no-underline focus:bg-transparent focus:text-red-700! active:bg-transparent active:text-red-700!"
       >
         {t("errorSavingForm.failedLink", { ns: "form-builder" })}
       </LinkButton>
@@ -95,12 +117,14 @@ export const SaveButton = () => {
   const { saveDraft, saveDraftIfNeeded, templateIsDirty, updatedAt } = useTemplateContext();
   const { status } = useSession();
   const lockedByOther = lockChecksEnabled && isLockedByOther;
+  const lockOwnerName =
+    editLock?.lockedByName || editLock?.lockedByEmail || t("editLock.unknownUser");
 
-  const [error, setError] = useState(false);
+  const [saveState, setSaveState] = useState<SaveState>("idle");
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
   const isLockedByOtherRef = useRef(lockedByOther);
-  const errorRef = useRef(error);
+  const saveStateRef = useRef(saveState);
 
   const handleSave = useCallback(async () => {
     if (status !== "authenticated") {
@@ -122,21 +146,27 @@ export const SaveButton = () => {
       return;
     }
 
-    if (result.status === "locked" || result.status === "error") {
-      toast.error(<ErrorSaving />, "wide");
-      setError(true);
+    if (result.status === "locked") {
+      toast.error(t("editLock.saveBlocked", { name: lockOwnerName }), "wide");
+      setSaveState("locked");
       return;
     }
-    setError(false);
-  }, [lockedByOther, saveDraft, status]);
+
+    if (result.status === "error") {
+      toast.error(<ErrorSaving />, "wide");
+      setSaveState("error");
+      return;
+    }
+    setSaveState("idle");
+  }, [lockOwnerName, lockedByOther, saveDraft, status, t]);
 
   useEffect(() => {
     isLockedByOtherRef.current = lockedByOther;
   }, [handleSave, lockedByOther]);
 
   useEffect(() => {
-    errorRef.current = error;
-  }, [error]);
+    saveStateRef.current = saveState;
+  }, [saveState]);
 
   useSubscibeToTemplateStore(
     (s) => [
@@ -148,8 +178,8 @@ export const SaveButton = () => {
       s.isLockedByOther,
     ],
     () => {
-      if (errorRef.current && !isLockedByOtherRef.current) {
-        setError(false);
+      if (saveStateRef.current !== "idle" && !isLockedByOtherRef.current) {
+        setSaveState("idle");
       }
     }
   );
@@ -176,7 +206,6 @@ export const SaveButton = () => {
   if (status !== "authenticated") return null;
 
   if (lockedByOther) {
-    const name = editLock?.lockedByName || editLock?.lockedByEmail || t("editLock.unknownUser");
     return (
       <div
         data-id={id}
@@ -184,7 +213,7 @@ export const SaveButton = () => {
         aria-live="polite"
         aria-atomic="true"
       >
-        {t("editLock.readOnly", { name })}
+        {t("editLock.readOnly", { name: lockOwnerName })}
       </div>
     );
   }
@@ -194,13 +223,13 @@ export const SaveButton = () => {
       data-id={id}
       className={cn(
         "laptop:text-base mb-2 flex w-[700px] text-sm text-slate-500",
-        id && error && "text-red-destructive"
+        id && saveState !== "idle" && "text-red-destructive"
       )}
       aria-live="polite"
       aria-atomic="true"
     >
-      {error ? (
-        <ErrorSavingForm />
+      {saveState !== "idle" ? (
+        <ErrorSavingForm variant={saveState} lockOwnerName={lockOwnerName} />
       ) : (
         <SaveDraft
           updatedAt={updatedAt}

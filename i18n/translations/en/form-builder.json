@@ -620,6 +620,7 @@
       "stale": "Connection stale"
     },
     "unknownUser": "Another user",
+    "saveBlocked": "Saving blocked: {{name}} is editing this form.",
     "takeover": "Take over editing",
     "takingOver": "Taking over...",
     "syncingLatest": "Syncing the latest saved version of this form...",

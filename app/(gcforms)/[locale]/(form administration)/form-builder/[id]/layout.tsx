@@ -22,7 +22,7 @@ import {
   FormBuilderConfig,
   formBuilderConfigDefault,
 } from "@lib/hooks/useFormBuilderConfig";
-import { EditLockClient } from "./components/EditLockClient";
+import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -112,18 +112,16 @@ export default async function Layout(props: {
                     </div>
                     <GroupStoreProvider>
                       <div className="relative flex w-full gap-7">
-                        <main
-                          id="content"
-                          className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
-                          tabIndex={-1}
-                        >
-                          <EditLockClient
-                            formId={id}
-                            lockedEditingEnabled={allowLockedEditingFlag}
-                          />
-                          {children}
-                        </main>
-                        {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
+                        <EditLockClient formId={id} lockedEditingEnabled={allowLockedEditingFlag}>
+                          <main
+                            id="content"
+                            className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
+                            tabIndex={-1}
+                          >
+                            {children}
+                          </main>
+                          {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
+                        </EditLockClient>
                       </div>
                     </GroupStoreProvider>
                   </div>
