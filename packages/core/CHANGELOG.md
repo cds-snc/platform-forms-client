@@ -1,9 +1,13 @@
 # Changelog
 
+## [2.2.3] - 2026-04-01
+
+- Move regex validation utils into package
+
 ## [2.2.2] - 2026-03-30
 
 - Enable Custom Regex validation
-- 
+
 ## [2.2.1] - 2026-03-31
 
 - Fix shared toast status styling after the Tailwind CSS v4 update by preserving React Toastify root classes and restoring toast background colors.

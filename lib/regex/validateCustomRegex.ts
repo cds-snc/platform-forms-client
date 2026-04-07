@@ -1,6 +1,5 @@
+import { isSafeRegex, isValidRegex } from "@gcforms/core";
 import { FormElement } from "../types";
-import { isSafeRegex } from "./isSafeRegex";
-import { isValidRegex } from "./isValidRegex";
 
 export const validateCustomRegex = (elements: FormElement[]) => {
   for (const element of elements) {

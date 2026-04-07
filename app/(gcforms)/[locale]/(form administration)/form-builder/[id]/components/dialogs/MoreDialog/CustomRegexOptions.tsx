@@ -6,8 +6,7 @@ import { Input } from "@formBuilder/components/shared/Input";
 import { ErrorMessage } from "@clientComponents/forms";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { InfoDetails } from "../../../../components/shared/InfoDetails";
-import { isValidRegex } from "@root/lib/regex/isValidRegex";
-import { isSafeRegex } from "@root/lib/regex/isSafeRegex";
+import { isSafeRegex, isValidRegex } from "@gcforms/core";
 
 export const CustomRegexOptions = ({
   item,
@@ -80,7 +79,7 @@ export const CustomRegexOptions = ({
   return (
     <>
       <InfoDetails summary={t("moreDialog.customRegex.title")} className="mb-4">
-        <section className="mb-4 mt-6">
+        <section className="mt-6 mb-4">
           <div className="mb-2">
             <p>{t("moreDialog.customRegex.description")}</p>
           </div>
@@ -109,7 +108,7 @@ export const CustomRegexOptions = ({
                   <li key={pattern}>
                     <button
                       type="button"
-                      className="rounded-lg border border-violet-800 bg-violet-100 px-2 py-1 font-mono text-sm hover:border-black hover:bg-gray-100 focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus"
+                      className="focus:outline-blue-focus rounded-lg border border-violet-800 bg-violet-100 px-2 py-1 font-mono text-sm hover:border-black hover:bg-gray-100 focus:outline focus:outline-[3px] focus:outline-offset-2"
                       onClick={() => validateAndSetPattern(pattern)}
                     >
                       {pattern}
