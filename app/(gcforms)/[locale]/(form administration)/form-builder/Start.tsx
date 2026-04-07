@@ -16,6 +16,7 @@ import { transformFormProperties } from "@lib/store/helpers/elements/transformFo
 import { BetaComponentsError, checkForBetaComponents } from "@lib/validation/betaCheck";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { validateCustomRegex } from "@root/lib/regex/validateCustomRegex";
+import { setImportedTemplate } from "@lib/store/importBuffer";
 
 export const Start = () => {
   const {
@@ -23,8 +24,7 @@ export const Start = () => {
     i18n: { language },
   } = useTranslation("form-builder");
   const router = useRouter();
-  const { importTemplate, initialize } = useTemplateStore((s) => ({
-    importTemplate: s.importTemplate,
+  const { initialize } = useTemplateStore((s) => ({
     initialize: s.initialize,
   }));
 
@@ -91,7 +91,8 @@ export const Start = () => {
         try {
           checkForBetaComponents(data.elements, getFlag);
 
-          importTemplate(data);
+          setImportedTemplate(data);
+          clearTemplateStore();
 
           ga("open_form_file");
           router.push(`/${language}/form-builder/0000/preview`);
@@ -138,7 +139,7 @@ export const Start = () => {
           </div>
         )}
       </div>
-      <div className="flex flex-col justify-center tablet:flex-row">
+      <div className="tablet:flex-row flex flex-col justify-center">
         <button
           data-testid="start-new-form"
           className={boxClass}
