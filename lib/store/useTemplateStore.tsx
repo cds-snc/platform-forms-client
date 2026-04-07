@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import React, { createContext, useContext, useMemo } from "react";
+import React, { createContext, useContext, useMemo, useEffect } from "react";
 import { createStore } from "zustand";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
@@ -58,6 +58,7 @@ import { BetaComponentsError, checkForBetaComponents } from "../validation/betaC
 import { useFeatureFlags } from "../hooks/useFeatureFlags";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { useTranslation } from "@root/i18n/client";
+import { getImportedTemplate } from "./importBuffer";
 
 const createTemplateStore = (
   checkFeatureFlag: (flag: string) => boolean,
@@ -253,6 +254,14 @@ export const TemplateStoreProvider = ({
     return createTemplateStore(getFlag, props);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty array - create store only once, never recreate
+
+  // Check for imported template from file upload (bypasses session storage race condition)
+  useEffect(() => {
+    const importedTemplate = getImportedTemplate();
+    if (importedTemplate) {
+      store.getState().importTemplate(importedTemplate);
+    }
+  }, [store]);
 
   try {
     return (
