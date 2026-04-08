@@ -15,6 +15,8 @@ export interface NumberInputProps extends InputFieldProps {
   stepCount?: number;
   maxLength?: number;
   currencyCode?: string;
+  numberMin?: number;
+  numberMax?: number;
 }
 
 const langToLocale = (lang?: string) => (lang === "fr" ? "fr-CA" : "en-CA");
@@ -32,6 +34,8 @@ export const NumberInput = (
     allowNegativeNumbers,
     stepCount,
     currencyCode,
+    numberMin,
+    numberMax,
     lang,
   } = props;
   const [field, meta, helpers] = useField(props);
@@ -79,9 +83,12 @@ export const NumberInput = (
     [helpers, maxLength, setRemainingCharacters]
   );
 
+  const minValue = numberMin ?? (allowNegativeNumbers ? undefined : 0);
+
   const numberFieldProps = {
     locale,
-    minValue: allowNegativeNumbers ? undefined : 0,
+    minValue,
+    maxValue: numberMax,
     formatOptions,
     value: Number.isNaN(numericValue) ? undefined : numericValue,
     onChange,

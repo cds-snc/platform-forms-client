@@ -252,6 +252,8 @@
       "enterOnlyNumbers": "Saisissez un chiffre.",
       "allowNegative": "permettre les valeurs numériques négatives",
       "decimalPlaces": "Nombre de décimales pouvant être saisies",
+      "min": "Valeur minimale",
+      "max": "Valeur maximale",
       "currency": "Devise",
       "currencyNone": "Aucune"
     },

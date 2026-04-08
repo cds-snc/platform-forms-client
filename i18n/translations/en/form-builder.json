@@ -252,6 +252,8 @@
       "enterOnlyNumbers": "Enter a number.",
       "allowNegative": "allow negative number values",
       "decimalPlaces": "Number of decimal places that can be entered",
+      "min": "Minimum value",
+      "max": "Maximum value",
       "currency": "Currency",
       "currencyNone": "None"
     },

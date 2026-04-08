@@ -79,6 +79,56 @@ export const NumberFieldOptions = ({
       </div>
       <div className="mt-4">
         <label
+          data-testid="numberMin"
+          className="gcds-label mt-1"
+          htmlFor={`numberField-${item.id}-id-numberMin`}
+        >
+          {t("addElementDialog.number.min")}
+        </label>
+        <input
+          type="number"
+          className="gc-input-text mt-2"
+          id={`numberField-${item.id}-id-numberMin`}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const numberMin = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
+            setItem({
+              ...item,
+              properties: {
+                ...item.properties,
+                numberMin,
+              },
+            });
+          }}
+          value={item.properties.numberMin ?? ""}
+        />
+      </div>
+      <div className="mt-4">
+        <label
+          data-testid="numberMax"
+          className="gcds-label mt-1"
+          htmlFor={`numberField-${item.id}-id-numberMax`}
+        >
+          {t("addElementDialog.number.max")}
+        </label>
+        <input
+          type="number"
+          className="gc-input-text mt-2"
+          id={`numberField-${item.id}-id-numberMax`}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const numberMax = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
+            setItem({
+              ...item,
+              properties: {
+                ...item.properties,
+                numberMax,
+              },
+            });
+          }}
+          value={item.properties.numberMax ?? ""}
+        />
+      </div>
+      <div className="mt-4">
+        <label
           data-testid="currencyCode"
           className="gcds-label mt-1"
           htmlFor={`numberField-${item.id}-id-currencyCode`}
