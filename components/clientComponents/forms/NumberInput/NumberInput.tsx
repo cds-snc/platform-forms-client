@@ -1,6 +1,8 @@
 "use client";
-import React, { type JSX } from "react";
+import React, { useCallback, useMemo, useRef, type JSX } from "react";
 import { useField } from "formik";
+import { useNumberField } from "react-aria";
+import { useNumberFieldState } from "@react-stately/numberfield";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { useTranslation } from "@i18n/client";
@@ -13,6 +15,8 @@ export interface NumberInputProps extends InputFieldProps {
   stepCount?: number;
   maxLength?: number;
 }
+
+const langToLocale = (lang?: string) => (lang === "fr" ? "fr-CA" : "en-CA");
 
 export const NumberInput = (
   props: NumberInputProps & JSX.IntrinsicElements["input"]
@@ -29,7 +33,8 @@ export const NumberInput = (
     lang,
   } = props;
   const [field, meta, helpers] = useField(props);
-  const { t, i18n } = useTranslation("common", { lng: lang });
+  const { i18n } = useTranslation("common", { lng: lang });
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { setRemainingCharacters, ariaDescribedByIds, CharacterCountDisplay } = useCharacterCount({
     maxLength,
@@ -37,76 +42,61 @@ export const NumberInput = (
     lang,
   });
 
-  const decimalSeparator = t("decimalSeparator");
+  const locale = langToLocale(lang);
 
-  const handleNumberInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = event.target.value;
-    newValue = newValue.replace(decimalSeparator, ".");
-    helpers.setValue(newValue);
+  const numericValue = field.value !== undefined && field.value !== "" ? Number(field.value) : NaN;
 
-    if (maxLength) {
-      setRemainingCharacters(maxLength - newValue.length);
-    }
+  const formatOptions = useMemo<Intl.NumberFormatOptions>(
+    () => ({
+      maximumFractionDigits: stepCount ?? 0,
+      useGrouping: false,
+    }),
+    [stepCount]
+  );
+
+  const onChange = useCallback(
+    (value: number) => {
+      if (Number.isNaN(value)) {
+        helpers.setValue("");
+      } else {
+        helpers.setValue(String(value));
+      }
+
+      if (maxLength) {
+        const strLength = Number.isNaN(value) ? 0 : String(value).length;
+        setRemainingCharacters(maxLength - strLength);
+      }
+    },
+    [helpers, maxLength, setRemainingCharacters]
+  );
+
+  const numberFieldProps = {
+    locale,
+    minValue: allowNegativeNumbers ? undefined : 0,
+    formatOptions,
+    value: Number.isNaN(numericValue) ? undefined : numericValue,
+    onChange,
+    isRequired: required,
   };
 
-  const displayValue = field.value
-    ? String(field.value).replace(".", decimalSeparator)
-    : field.value;
+  const state = useNumberFieldState(numberFieldProps);
+  const { inputProps } = useNumberField(numberFieldProps, state, inputRef);
 
   const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
-
-  const checkNumericValues = (key: string, currentTarget: EventTarget & HTMLInputElement) => {
-    const { value, selectionStart, selectionEnd } = currentTarget;
-    const start = selectionStart ?? 0;
-    const end = selectionEnd ?? 0;
-
-    const futureValue = value.slice(0, start) + key + value.slice(end);
-
-    const negativePattern = allowNegativeNumbers ? "-?" : "";
-
-    const escapedSeparator = decimalSeparator === "." ? "\\." : decimalSeparator;
-    const decimalPattern =
-      stepCount && stepCount > 0 ? `(${escapedSeparator}\\d{0,${stepCount}})?` : "";
-
-    const regex = new RegExp(`^${negativePattern}\\d*${decimalPattern}$`);
-
-    if (!regex.test(futureValue)) {
-      return false;
-    }
-  };
 
   return (
     <>
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
       <input
+        {...inputProps}
+        ref={inputRef}
         data-testid="numberInput"
         className={classes}
         id={id}
-        type="text"
-        required={required}
         placeholder={placeholder}
         {...ariaDescribedByIds(!!meta.error, ariaDescribedBy)}
-        {...field}
-        onChange={handleNumberInputChange}
         key={`${id}-${i18n.language}`}
-        value={displayValue}
-        inputMode="numeric"
         aria-describedby={`${id}-description-number`}
-        onKeyDown={(e) => {
-          if (
-            e.key.includes("Arrow") ||
-            e.key === "Backspace" ||
-            e.key === "Enter" ||
-            e.key === "Shift" ||
-            e.key === "Tab"
-          ) {
-            return;
-          }
-
-          if (checkNumericValues(e.key, e.currentTarget) === false) {
-            e.preventDefault();
-          }
-        }}
       />
       <CharacterCountDisplay />
     </>
