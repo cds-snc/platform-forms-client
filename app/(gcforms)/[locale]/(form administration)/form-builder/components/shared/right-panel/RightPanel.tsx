@@ -73,8 +73,9 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const router = useRouter();
   const { t, i18n } = useTranslation(["form-builder", "common"]);
 
-  const { id: storeId } = useTemplateStore((s) => ({
+  const { id: storeId, isLockedByOther } = useTemplateStore((s) => ({
     id: s.id,
+    isLockedByOther: s.isLockedByOther,
   }));
 
   if (storeId && storeId !== id) {
@@ -138,6 +139,10 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
     !activePathname.endsWith("/logic")
   ) {
     // Only show the right panel on the form builder edit and translate pages
+    return null;
+  }
+
+  if (isLockedByOther) {
     return null;
   }
 

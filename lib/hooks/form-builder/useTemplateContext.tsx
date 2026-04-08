@@ -1,18 +1,24 @@
 "use client";
-import React, { createContext, useState, useContext, useRef } from "react";
+import React, { createContext, useCallback, useContext, useRef, useState } from "react";
+import isEqual from "lodash.isequal";
+import { useSession } from "next-auth/react";
 import { logMessage } from "@lib/logger";
+import { safeJSONParse } from "@lib/utils";
 import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
+import { FormProperties, FormRecord } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
+
+export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
+
+type SaveDraftResult = {
+  status: SaveDraftStatus;
+};
 
 interface TemplateApiType {
   templateIsDirty: React.MutableRefObject<boolean>;
   updatedAt: number | undefined;
   setUpdatedAt: React.Dispatch<React.SetStateAction<number | undefined>>;
-  nameChanged: boolean | null;
-  introChanged: boolean | null;
-  privacyChanged: boolean | null;
-  confirmationChanged: boolean | null;
   createOrUpdateTemplate:
     | (({
         id,
@@ -23,10 +29,12 @@ interface TemplateApiType {
         saveAndResume,
         notificationsInterval,
       }: CreateOrUpdateTemplateType) => Promise<{
-        formRecord: { id: string; updatedAt: string | undefined } | null;
+        formRecord: FormRecord | null;
         error?: string;
       }>)
     | null;
+  saveDraft: () => Promise<SaveDraftResult>;
+  saveDraftIfNeeded: () => Promise<SaveDraftResult>;
   resetState: () => void;
 }
 
@@ -34,103 +42,145 @@ const defaultTemplateApi: TemplateApiType = {
   templateIsDirty: { current: false },
   updatedAt: undefined,
   setUpdatedAt: () => {},
-  nameChanged: null,
-  introChanged: null,
-  privacyChanged: null,
-  confirmationChanged: null,
   createOrUpdateTemplate: null,
+  saveDraft: async () => ({ status: "skipped" }),
+  saveDraftIfNeeded: async () => ({ status: "skipped" }),
   resetState: () => {},
 };
 
+type TrackedTemplateState = [
+  form: unknown,
+  isPublished: boolean,
+  name: string,
+  deliveryOption: unknown,
+  securityAttribute: unknown,
+];
+
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
-interface Description {
-  descriptionEn: string | undefined;
-  descriptionFr: string | undefined;
-}
-
-const descriptionsMatch = (
-  obj: Description | Record<string, string> | undefined,
-  obj2: Description | Record<string, string> | undefined
-) => {
-  let en = true;
-  let fr = true;
-
-  if (!obj || !obj2) {
-    return false;
-  }
-
-  if (obj.descriptionEn && obj2.descriptionEn) {
-    en = obj.descriptionEn === obj2.descriptionEn;
-  }
-
-  if (obj.descriptionFr && obj2.descriptionFr) {
-    fr = obj.descriptionFr === obj2.descriptionFr;
-  }
-
-  return en && fr;
-};
-
 export function SaveTemplateProvider({ children }: { children: React.ReactNode }) {
-  const [nameChanged, setNameChanged] = useState<boolean | null>(false);
-  const [introChanged, setIntroChanged] = useState<boolean | null>(false);
-  const [privacyChanged, setPrivacyChanged] = useState<boolean | null>(false);
-  const [confirmationChanged, setConfirmationChanged] = useState<boolean | null>(false);
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
+  const [, setDirtyTick] = useState(0);
+  const { status } = useSession();
 
-  const { hasHydrated } = useTemplateStore((s) => ({
+  const {
+    getDeliveryOption,
+    getId,
+    getName,
+    getSchema,
+    hasHydrated,
+    isLockedByOther,
+    notificationsInterval,
+    securityAttribute,
+    setFromRecord,
+  } = useTemplateStore((s) => ({
+    getDeliveryOption: s.getDeliveryOption,
+    getId: s.getId,
+    getName: s.getName,
+    getSchema: s.getSchema,
     hasHydrated: s.hasHydrated,
+    isLockedByOther: s.isLockedByOther,
+    notificationsInterval: s.notificationsInterval,
+    securityAttribute: s.securityAttribute,
+    setFromRecord: s.setFromRecord,
   }));
 
   const templateIsDirty = useRef(false);
-
-  const resetState = () => {
-    setNameChanged(null);
-    setIntroChanged(null);
-    setPrivacyChanged(null);
-    setConfirmationChanged(null);
+  const savedSnapshot = useRef<TrackedTemplateState | null>(null);
+  const resetState = useCallback(() => {
     templateIsDirty.current = false;
-  };
+    savedSnapshot.current = null;
+    setDirtyTick((tick) => tick + 1);
+  }, []);
 
-  useSubscibeToTemplateStore(
-    (s) => [s.form, s.isPublished, s.name, s.deliveryOption, s.securityAttribute],
-    () => {
-      if (hasHydrated && !templateIsDirty.current) {
-        logMessage.debug(`TemplateContext: Local State out of sync with server`);
-        templateIsDirty.current = true;
-      }
+  const saveDraft = useCallback(async (): Promise<SaveDraftResult> => {
+    if (status !== "authenticated") {
+      return { status: "skipped" };
     }
-  );
 
-  useSubscibeToTemplateStore(
-    (s) => [s.getName() ?? ""],
-    (s, p) => {
-      if (p[0] !== s[0]) {
-        setNameChanged(true);
-      }
+    if (isLockedByOther) {
+      return { status: "locked" };
     }
-  );
+
+    const formConfig = safeJSONParse<FormProperties>(getSchema());
+
+    if (!formConfig) {
+      return { status: "invalid" };
+    }
+
+    try {
+      const operationResult = await createOrUpdateTemplate({
+        id: getId(),
+        formConfig,
+        name: getName(),
+        deliveryOption: getDeliveryOption(),
+        securityAttribute,
+        notificationsInterval,
+      });
+
+      if (operationResult.formRecord === null) {
+        return { status: operationResult.error === "editLocked" ? "locked" : "error" };
+      }
+
+      setFromRecord(operationResult.formRecord);
+      setUpdatedAt(
+        new Date(
+          operationResult.formRecord.updatedAt ? operationResult.formRecord.updatedAt : ""
+        ).getTime()
+      );
+      resetState();
+
+      return { status: "saved" };
+    } catch {
+      return { status: "error" };
+    }
+  }, [
+    getDeliveryOption,
+    getId,
+    getName,
+    getSchema,
+    isLockedByOther,
+    notificationsInterval,
+    resetState,
+    securityAttribute,
+    setFromRecord,
+    status,
+  ]);
+
+  const saveDraftIfNeeded = useCallback(async (): Promise<SaveDraftResult> => {
+    if (!templateIsDirty.current) {
+      return { status: "skipped" };
+    }
+
+    return saveDraft();
+  }, [saveDraft]);
 
   useSubscibeToTemplateStore(
-    (s) => [s.form.introduction, s.form.privacyPolicy, s.form.confirmation],
-    (s, p) => {
-      // look for changes in the descriptions
-      // if changes update the state to ensure the provider
-      // updates the save button
-      const introduction = descriptionsMatch(s[0], p[0]);
-      const privacyPolicy = descriptionsMatch(s[1], p[1]);
-      const confirmation = descriptionsMatch(s[2], p[2]);
-
-      if (introduction !== introChanged) {
-        setIntroChanged(introduction);
+    (s) =>
+      [
+        s.form,
+        s.isPublished,
+        s.name,
+        s.deliveryOption,
+        s.securityAttribute,
+      ] as TrackedTemplateState,
+    (current, previous) => {
+      if (!hasHydrated) {
+        return;
       }
 
-      if (privacyPolicy !== privacyChanged) {
-        setPrivacyChanged(privacyPolicy);
+      if (savedSnapshot.current === null) {
+        savedSnapshot.current = structuredClone(previous);
       }
 
-      if (confirmation !== confirmationChanged) {
-        setConfirmationChanged(confirmation);
+      const isDirty = !isEqual(current, savedSnapshot.current);
+
+      if (isDirty !== templateIsDirty.current) {
+        logMessage.debug(
+          `TemplateContext: ${isDirty ? "Local State out of sync with server" : "State reverted to saved"}`
+        );
+        templateIsDirty.current = isDirty;
+        setDirtyTick((tick) => tick + 1);
       }
     }
   );
@@ -141,11 +191,9 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         templateIsDirty,
         updatedAt,
         setUpdatedAt,
-        nameChanged,
-        introChanged,
-        privacyChanged,
-        confirmationChanged,
         createOrUpdateTemplate,
+        saveDraft,
+        saveDraftIfNeeded,
         resetState,
       }}
     >

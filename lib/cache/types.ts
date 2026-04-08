@@ -11,6 +11,7 @@ export const FeatureFlags = {
   topBanner: "topBanner",
   userSideAuditLogs: "userSideAuditLogs",
   zitadelLogin: "zitadelLogin",
+  lockedEditing: "lockedEditing",
   ...UserFeatureFlags,
 } as const;
 

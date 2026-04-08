@@ -64,7 +64,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino", "@opentelemetry/sdk-node"],
+  serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino", "@opentelemetry/sdk-node", "recheck"],
   experimental: {
     serverActions: {
       // Note: this matches values in constants.ts

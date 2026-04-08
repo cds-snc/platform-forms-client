@@ -607,6 +607,26 @@
   "french": "français",
   "gcForms": "Formulaires GC",
   "gcFormsEdit": "Modifier",
+  "editLock": {
+    "title": "Ce formulaire est deja en cours de modification",
+    "lockedMessage": "{{name}} travaille actuellement sur ce formulaire, ce qui signifie que vous ne pouvez pas y apporter de modifications a moins d'en prendre le controle.",
+    "readOnly": "Lecture seule : {{name}} modifie ce formulaire.",
+    "statusLabel": "Statut :",
+    "lastActivityLabel": "Derniere activite :",
+    "statuses": {
+      "active": "Actif en ce moment",
+      "idle": "Consulte le formulaire, sans activite recente",
+      "away": "Absent",
+      "stale": "Connexion inactive"
+    },
+    "unknownUser": "Un autre utilisateur",
+    "saveBlocked": "Enregistrement bloqué : {{name}} modifie ce formulaire.",
+    "takeover": "Prendre le contrôle",
+    "takingOver": "Prise de contrôle...",
+    "syncingLatest": "Synchronisation de la plus récente version enregistrée du formulaire...",
+    "syncedLatest": "Vous avez maintenant le verrou de modification et la plus récente version enregistrée du formulaire a été chargée.",
+    "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer."
+  },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publier",
   "gcFormsPublished": "Publié",
@@ -671,6 +691,14 @@
     },
     "dynamicRow": {
       "errorMaxRows": "Le nombre maximal de réponses ne peut pas dépasser {{maxRows}}."
+    },
+    "customRegex": {
+      "title": "Configurer la validation avancée des entrées",
+      "description": "Vous pouvez utiliser une expression régulière (regex) pour créer une validation personnalisée pour cette question.",
+      "label": "Modèle d'expression régulière (regex) personnalisé",
+      "errorInvalidRegex": "Le modèle d'expression régulière (regex) n'est pas valide. Veuillez saisir un modèle regex valide.",
+      "previousPatterns": "Modèles précédents",
+      "errorUnsafeRegex": "Ce modèle regex est potentiellement dangereux. Évitez les modèles susceptibles de causer des problèmes de performance, tels que ceux comportant des quantificateurs imbriqués ou un retour en arrière excessif. "
     }
   },
   "moreOptions": "Plus d'options  ",
@@ -1089,6 +1117,7 @@
   "start": "Commencer",
   "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
   "startErrorDuplicateQuestionId": "Les identifiants de questions doivent être uniques",
+  "startErrorInvalidCustomRegex": "Modèle regex personnalisé invalide ou non sécurisé",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
   "startFormIntro": "Ajoutez une description à votre formulaire pour aider à définir les attentes",
   "startH2": "Créer un formulaire",
@@ -1546,6 +1575,11 @@
   },
   "en": "English",
   "fr": "Français",
+  "strictValue": {
+    "title": "Assurer la valeur du choix",
+    "label": "Valeur stricte",
+    "description": "valeur stricte"
+  },
   "beta": {
     "tag": "Nouveauté :",
     "text": "Fonctionnalité à l'essai",

@@ -39,6 +39,10 @@ export type HTMLTextInputTypeAttribute =
   | "tel"
   | "url";
 
+// Extends HTMLTextInputTypeAttribute with validation-only strategies that do not
+// map directly to an HTML <input type> value.
+export type ValidationInputType = HTMLTextInputTypeAttribute | "custom";
+
 // all the possible types of form elements
 export const FormElementTypes = {
   textField: "textField",
@@ -74,7 +78,7 @@ export type ConditionalRule = {
 // individual field
 export interface ValidationProperties {
   required: boolean;
-  type?: HTMLTextInputTypeAttribute;
+  type?: ValidationInputType;
   regex?: string;
   maxLength?: number;
   descriptionEN?: string;

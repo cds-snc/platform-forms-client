@@ -5,6 +5,8 @@ import { describe, it, expect } from "vitest";
 import React from "react";
 import { useTemplateStore, TemplateStoreProvider } from "../useTemplateStore";
 import { renderHook, act, waitFor } from "@testing-library/react";
+import { NotificationsIntervalDefault } from "@gcforms/types";
+import { FormRecord } from "@lib/types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
 const createStore = async () => {
@@ -391,6 +393,59 @@ describe("TemplateStore", () => {
 
     expect(titleProp).toBe("titleFr");
     expect(descProp).toBe("descriptionFr");
+
+    await act(async () => {
+      await promise;
+    });
+  });
+
+  it("Rehydrates the store from a FormRecord", async () => {
+    const result = await createStore();
+    // changeKey is intentionally left unchanged here; the locked-editing rehydrate flow will own that.
+    const previousChangeKey = result.current.changeKey;
+
+    const record: FormRecord = {
+      id: "rehydrated-form",
+      name: "Rehydrated form",
+      isPublished: true,
+      securityAttribute: "Protected B",
+      formPurpose: null,
+      publishReason: null,
+      publishFormType: null,
+      publishDesc: null,
+      form: {
+        titleEn: "Server title",
+        titleFr: "Titre serveur",
+        layout: [],
+        elements: [],
+      },
+    };
+
+    act(() => {
+      result.current.setFromRecord(record);
+    });
+
+    expect(result.current.id).toBe("rehydrated-form");
+    expect(result.current.name).toBe("Rehydrated form");
+    expect(result.current.isPublished).toBe(true);
+    expect(result.current.securityAttribute).toBe("Protected B");
+    expect(result.current.form.titleEn).toBe("Server title");
+    expect(result.current.form.introduction).toEqual({ descriptionEn: "", descriptionFr: "" });
+    expect(result.current.form.privacyPolicy).toEqual({ descriptionEn: "", descriptionFr: "" });
+    expect(result.current.form.confirmation).toEqual({
+      descriptionEn: "",
+      descriptionFr: "",
+      referrerUrlEn: "",
+      referrerUrlFr: "",
+    });
+    expect(result.current.formPurpose).toBe("");
+    expect(result.current.publishReason).toBe("");
+    expect(result.current.publishFormType).toBe("");
+    expect(result.current.publishDesc).toBe("");
+    expect(result.current.closingDate).toBeNull();
+    expect(result.current.saveAndResume).toBe(true);
+    expect(result.current.notificationsInterval).toBe(NotificationsIntervalDefault);
+    expect(result.current.changeKey).not.toBe(previousChangeKey);
 
     await act(async () => {
       await promise;

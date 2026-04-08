@@ -201,7 +201,10 @@ export const ChoiceOptionsCsvUpload = ({
         theme="secondary"
         popoverTarget={popoverId}
         aria-label={t("choiceOptionsUpload.helpButton")}
-        className="!m-0 !ml-1 !mt-4 !inline-flex !size-5 !items-center !justify-center !rounded-full !p-0 text-[10px]"
+        className="!m-0 !mt-4 !ml-1 !inline-flex !size-5 !items-center !justify-center !rounded-full !p-0 text-[10px]"
+        style={{
+          anchorName: `--${popoverId}-trigger`,
+        }}
       >
         ?
       </Button>
@@ -209,6 +212,10 @@ export const ChoiceOptionsCsvUpload = ({
         id={popoverId}
         popover="auto"
         className="max-w-md rounded-xl border-1 border-gray-500 bg-white p-4 shadow-lg"
+        style={{
+          positionAnchor: `--${popoverId}-trigger`,
+          positionArea: "bottom span-right",
+        }}
       >
         <h3 className="mb-2 text-lg">{t("choiceOptionsUpload.helpTitle")}</h3>
         <p className="mb-3 text-sm">{t("choiceOptionsUpload.helpDescription")}</p>

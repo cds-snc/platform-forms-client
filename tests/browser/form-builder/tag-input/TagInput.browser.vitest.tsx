@@ -4,7 +4,7 @@ import { TagInput } from "@root/packages/tag-input/src/TagInput";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<TagInput />", () => {
   beforeAll(() => {

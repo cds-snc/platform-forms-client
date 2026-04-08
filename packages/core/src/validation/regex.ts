@@ -1,3 +1,22 @@
+import { checkSync } from "recheck";
+
+export const isSafeRegex = (pattern: string): boolean => {
+  if (!pattern) return true;
+
+  const result = checkSync(pattern, "", { timeout: 1000 });
+  return result.status === "safe";
+};
+
+export const isValidRegex = (pattern: string): boolean => {
+  if (!pattern) return true;
+  try {
+    new RegExp(pattern);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
  * Also, defines the regex for validation, with a matching bilingual error message
@@ -5,7 +24,7 @@
 export const getRegexByType = (
   type: string | undefined,
   t: (str: string) => string,
-  value?: string
+  regex?: string
 ) => {
   interface RegexProps {
     [key: string]: {
@@ -20,11 +39,11 @@ export const getRegexByType = (
       error: t("input-validation.email"),
     },
     alphanumeric: {
-      regex: /^( )*[A-Za-z0-9\s]+( )*$/,
+      regex: /^[A-Za-z0-9\s]+$/,
       error: t("input-validation.alphanumeric") /* message needs a translation */,
     },
     text: {
-      regex: /^.*[^\n]+.*$/,
+      regex: /[^\n]/,
       error: t("input-validation.regex") /* TODO update */,
     },
     name: {
@@ -50,7 +69,7 @@ export const getRegexByType = (
   };
   if (type === "custom") {
     return {
-      regex: value ? new RegExp(value) : null,
+      regex: regex ? new RegExp(regex) : null,
       error: t("input-validation.regex"),
     };
   }

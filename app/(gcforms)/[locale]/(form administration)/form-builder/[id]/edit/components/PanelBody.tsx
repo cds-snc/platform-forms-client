@@ -38,6 +38,8 @@ export const PanelBody = ({
   const isAddressComplete = item.type === "addressComplete";
   const isFormattedDate = item.type === "formattedDate";
   const isFileUpload = item.type === "fileInput";
+  const hasCustomRegex =
+    item.properties.validation?.type === "custom" && item.properties.validation.regex;
 
   const { hasApiKeyId } = useFormBuilderConfig();
 
@@ -114,6 +116,9 @@ export const PanelBody = ({
                   {t("maxCharacterLength")}
                   {maxLength}
                 </div>
+              )}
+              {hasCustomRegex && (
+                <div className="text-sm text-slate-500">{t("moreDialog.customRegex.label")}</div>
               )}
 
               {isAddressComplete && (

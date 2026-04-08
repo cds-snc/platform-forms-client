@@ -5,7 +5,7 @@ import { FormElementTypes } from "@lib/types";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<PanelActions />", () => {
   beforeAll(() => {

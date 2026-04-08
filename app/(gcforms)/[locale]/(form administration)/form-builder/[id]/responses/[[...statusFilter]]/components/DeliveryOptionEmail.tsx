@@ -24,12 +24,12 @@ export const DeliveryOptionEmail = ({
   return (
     <>
       <div className="mb-8 flex flex-wrap items-baseline justify-between">
-        <h1 className="mb-0 border-none tablet:mb-4">{t("responses.email.title")}</h1>
+        <h1 className="tablet:mb-4 mb-0 border-none">{t("responses.email.title")}</h1>
         <nav className="flex gap-3">
           {!isPublished && (
             <Link
               href={`/${language}/form-builder/${formId}/settings`}
-              className="mb-0 mr-3 rounded-[100px] border-1 border-black px-5 py-1 text-black no-underline visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white"
+              className="laptop:py-2 mr-3 mb-0 rounded-[100px] border-1 border-black px-5 py-1 text-black no-underline visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white focus:[&_svg]:fill-white"
             >
               {t("responses.changeSetup")}
             </Link>

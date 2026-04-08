@@ -132,7 +132,7 @@ export const Option = ({
         onBlur={onBlur}
       />
       <Button
-        className="ml-2 flex max-h-9 max-w-9 items-center justify-center !rounded-full border-1 border-slate-800 bg-gray-selected !p-1.5 text-center  [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+        className="bg-gray-selected ml-2 flex max-h-9 max-w-9 items-center justify-center !rounded-full border-1 border-slate-800 !p-1.5 text-center hover:[&_svg]:fill-white focus:[&_svg]:fill-white"
         id={`remove--${id}--${index + 1}`}
         icon={<Close className="ml-[12px]" />}
         aria-label={`${t("removeOption")} ${value}`}

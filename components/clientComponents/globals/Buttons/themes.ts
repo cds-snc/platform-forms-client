@@ -1,5 +1,5 @@
 export const themes = {
-  base: "inline-flex items-center rounded-md border-2 border-solid p-3 leading-[24px] transition-all duration-150 ease-in-out focus:border-gcds-blue-vivid focus:bg-gcds-blue-vivid focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-vivid active:top-0.5 active:bg-black active:text-white-default active:outline-[3px] active:outline-offset-2 active:outline-gcds-blue-vivid disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark font-medium",
+  base: "inline-flex cursor-pointer items-center rounded-md border-2 border-solid p-3 leading-[24px] transition-all duration-150 ease-in-out focus:border-gcds-blue-vivid focus:bg-gcds-blue-vivid focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-vivid active:top-0.5 active:bg-black active:text-white-default active:outline-[3px] active:outline-offset-2 active:outline-gcds-blue-vivid disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark font-medium",
   htmlLink: "no-underline visited:text-white-default",
   primary:
     "border-gcds-blue-800 bg-gcds-blue-muted text-white-default hover:border-gcds-blue-800 hover:bg-gcds-blue-800 hover:text-white-default active:border-black",
