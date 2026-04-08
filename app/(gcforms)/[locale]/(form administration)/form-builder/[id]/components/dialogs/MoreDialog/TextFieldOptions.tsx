@@ -15,12 +15,15 @@ export const TextFieldOptions = ({
   const { t } = useTranslation("form-builder");
   const autocompleteSelectedValue = item.properties.autoComplete || "";
 
-  if (item.type !== FormElementTypes.textField) {
+  if (
+    item.type !== FormElementTypes.textField ||
+    (item.type === FormElementTypes.textField && item.properties.validation?.type === "number")
+  ) {
     return null;
   }
 
   return (
-    <section className="mb-4 mt-8">
+    <section className="mt-8 mb-4">
       <Label htmlFor="">{t("selectAutocomplete")}</Label>
       <Hint>{t("selectAutocompleteHint")}</Hint>
       <div>
@@ -37,7 +40,7 @@ export const TextFieldOptions = ({
           selectedValue={autocompleteSelectedValue as string}
         />{" "}
         <InfoDetails summary={t("autocompleteWhenNotToUse.title")}>
-          <div className="mb-8 mt-4 border-l-3 border-gray-500 pl-8">
+          <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
             <p className="mb-4 text-sm">{t("autocompleteWhenNotToUse.text1")}</p>
             <p className="text-sm">{t("autocompleteWhenNotToUse.text2")}</p>
           </div>

@@ -25,6 +25,7 @@ import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { NotificationsInterval } from "@gcforms/types";
 import { checkOne } from "@lib/cache/flags";
 import { checkForBetaComponentsAsync } from "./validation/betaCheck";
+import { invalidateTemplateEditLockUserCountCache } from "./editLocks";
 
 const checkFlag = async (flag: string) => {
   return (await Promise.all([checkOne(flag), authorization.canAccessBetaComponents(flag)])).reduce(
@@ -791,6 +792,8 @@ export async function removeAssignedUserFromTemplate(
 
   if (updatedTemplate === null) return;
 
+  await invalidateTemplateEditLockUserCountCache(formID);
+
   logEvent(
     user.id,
     { type: "Form", id: formID },
@@ -877,6 +880,8 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
 
   // No changes
   if (updatedTemplate === null) return;
+
+  await invalidateTemplateEditLockUserCountCache(formID);
 
   logEvent(
     user.id,
@@ -1051,6 +1056,8 @@ export async function updateAssignedUsersForTemplate(
     .catch((e) => prismaErrors(e, null));
 
   if (updatedTemplate === null) return updatedTemplate;
+
+  await invalidateTemplateEditLockUserCountCache(formID);
 
   const getUsersFromUserIds = (userIds: string[]) => {
     return Promise.all(

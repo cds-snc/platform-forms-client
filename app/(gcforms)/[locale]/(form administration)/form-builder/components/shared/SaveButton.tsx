@@ -1,19 +1,21 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
-import { cn, safeJSONParse } from "@lib/utils";
+import { cn } from "@lib/utils";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
 import { ErrorSaving } from "./ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
-import { FormProperties } from "@lib/types";
+
+type SaveState = "idle" | "error" | "locked";
 
 const SaveDraft = ({
   updatedAt,
@@ -64,9 +66,29 @@ const DateTime = ({ updatedAt }: { updatedAt: number }) => {
   return <span>{` - ${t("lastSaved", { ns: "form-builder" })} ${time}, ${date}`}</span>;
 };
 
-const ErrorSavingForm = () => {
+const ErrorSavingForm = ({
+  variant,
+  lockOwnerName,
+}: {
+  variant: Exclude<SaveState, "idle">;
+  lockOwnerName: string;
+}) => {
   const { t, i18n } = useTranslation(["common", "form-builder"]);
   const supportHref = `/${i18n.language}/support`;
+
+  if (variant === "locked") {
+    return (
+      <span className="inline-block">
+        <span className="inline-block px-1">
+          <SavedFailIcon className="fill-red inline-block" />
+        </span>
+        <span className="mr-2 inline-block text-red-700">
+          {t("editLock.saveBlocked", { ns: "form-builder", name: lockOwnerName })}
+        </span>
+      </span>
+    );
+  }
+
   return (
     <span className="inline-block">
       <span className="inline-block px-1">
@@ -74,7 +96,7 @@ const ErrorSavingForm = () => {
       </span>
       <LinkButton
         href={supportHref}
-        className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent focus:!text-red-700 active:bg-transparent active:!text-red-700"
+        className="mr-2 text-red-700! underline hover:no-underline focus:bg-transparent focus:text-red-700! active:bg-transparent active:text-red-700!"
       >
         {t("errorSavingForm.failedLink", { ns: "form-builder" })}
       </LinkButton>
@@ -83,38 +105,32 @@ const ErrorSavingForm = () => {
 };
 
 export const SaveButton = () => {
-  const {
-    isPublished,
-    id,
-    getSchema,
-    getId,
-    getName,
-    getDeliveryOption,
-    securityAttribute,
-    setFromRecord,
-    notificationsInterval,
-  } = useTemplateStore((s) => ({
+  const { t } = useTranslation("form-builder");
+  const lockChecksEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
+  const { isPublished, id, isLockedByOther, editLock } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
-    getId: s.getId,
-    getSchema: s.getSchema,
-    getName: s.getName,
-    getDeliveryOption: s.getDeliveryOption,
-    securityAttribute: s.securityAttribute,
-    setFromRecord: s.setFromRecord,
-    notificationsInterval: s.notificationsInterval,
+    isLockedByOther: s.isLockedByOther,
+    editLock: s.editLock,
   }));
 
-  const { templateIsDirty, createOrUpdateTemplate, resetState, updatedAt, setUpdatedAt } =
-    useTemplateContext();
+  const { saveDraft, saveDraftIfNeeded, templateIsDirty, updatedAt } = useTemplateContext();
   const { status } = useSession();
+  const lockedByOther = lockChecksEnabled && isLockedByOther;
+  const lockOwnerName =
+    editLock?.lockedByName || editLock?.lockedByEmail || t("editLock.unknownUser");
 
-  const [error, setError] = useState(false);
+  const [saveState, setSaveState] = useState<SaveState>("idle");
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
+  const isLockedByOtherRef = useRef(lockedByOther);
+  const saveStateRef = useRef(saveState);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (status !== "authenticated") {
+      return;
+    }
+    if (lockedByOther) {
       return;
     }
 
@@ -123,51 +139,58 @@ export const SaveButton = () => {
       return;
     }
 
-    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    const result = await saveDraft();
 
-    if (!formConfig) {
+    if (result.status === "invalid") {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;
     }
 
-    try {
-      if (!createOrUpdateTemplate) {
-        return;
-      }
-
-      const operationResult = await createOrUpdateTemplate({
-        id: getId(),
-        formConfig,
-        name: getName(),
-        deliveryOption: getDeliveryOption(),
-        securityAttribute: securityAttribute,
-        notificationsInterval: notificationsInterval,
-      });
-
-      if (operationResult.formRecord === null) {
-        throw new Error("Error saving template");
-      }
-
-      setFromRecord(operationResult.formRecord);
-      setUpdatedAt(
-        new Date(
-          operationResult.formRecord.updatedAt ? operationResult.formRecord.updatedAt : ""
-        ).getTime()
-      );
-      setError(false);
-      resetState();
-    } catch {
-      toast.error(<ErrorSaving />, "wide");
-      setError(true);
+    if (result.status === "locked") {
+      toast.error(t("editLock.saveBlocked", { name: lockOwnerName }), "wide");
+      setSaveState("locked");
+      return;
     }
-  };
+
+    if (result.status === "error") {
+      toast.error(<ErrorSaving />, "wide");
+      setSaveState("error");
+      return;
+    }
+    setSaveState("idle");
+  }, [lockOwnerName, lockedByOther, saveDraft, status, t]);
+
+  useEffect(() => {
+    isLockedByOtherRef.current = lockedByOther;
+  }, [handleSave, lockedByOther]);
+
+  useEffect(() => {
+    saveStateRef.current = saveState;
+  }, [saveState]);
+
+  useSubscibeToTemplateStore(
+    (s) => [
+      s.form,
+      s.name,
+      s.deliveryOption,
+      s.securityAttribute,
+      s.isPublished,
+      s.isLockedByOther,
+    ],
+    () => {
+      if (saveStateRef.current !== "idle" && !isLockedByOtherRef.current) {
+        setSaveState("idle");
+      }
+    }
+  );
 
   useEffect(() => {
     return () => {
-      handleSave();
+      if (!isLockedByOtherRef.current) {
+        void saveDraftIfNeeded();
+      }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [saveDraftIfNeeded]);
 
   if (isPublished) {
     return null;
@@ -180,18 +203,33 @@ export const SaveButton = () => {
     return null;
   }
 
-  return status === "authenticated" ? (
+  if (status !== "authenticated") return null;
+
+  if (lockedByOther) {
+    return (
+      <div
+        data-id={id}
+        className="laptop:text-base mb-2 flex w-[700px] text-sm text-slate-500"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {t("editLock.readOnly", { name: lockOwnerName })}
+      </div>
+    );
+  }
+
+  return (
     <div
       data-id={id}
       className={cn(
         "laptop:text-base mb-2 flex w-[700px] text-sm text-slate-500",
-        id && error && "text-red-destructive"
+        id && saveState !== "idle" && "text-red-destructive"
       )}
       aria-live="polite"
       aria-atomic="true"
     >
-      {error ? (
-        <ErrorSavingForm />
+      {saveState !== "idle" ? (
+        <ErrorSavingForm variant={saveState} lockOwnerName={lockOwnerName} />
       ) : (
         <SaveDraft
           updatedAt={updatedAt}
@@ -201,5 +239,5 @@ export const SaveButton = () => {
       )}
       {updatedAt && <DateTime updatedAt={updatedAt} />}
     </div>
-  ) : null;
+  );
 };

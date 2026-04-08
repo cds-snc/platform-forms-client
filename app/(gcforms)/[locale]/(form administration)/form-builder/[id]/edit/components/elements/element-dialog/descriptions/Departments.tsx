@@ -19,7 +19,7 @@ export const Departments = () => {
       <h3 className="mb-0">{t("addElementDialog.departments.title")}</h3>
       <p>{t("addElementDialog.departments.description")}</p>
 
-      <ExampleWrapper className="mt-4">
+      <ExampleWrapper>
         <Label htmlFor="dropdown" id="label-dropdown" className="gcds-label">
           {t("addElementDialog.departments.selectOption")}
         </Label>

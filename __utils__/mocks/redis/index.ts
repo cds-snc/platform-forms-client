@@ -4,5 +4,6 @@ jest.mock("@lib/integration/redisConnector", () => {
   const redis = new Redis();
   return {
     getRedisInstance: jest.fn(async () => redis),
+    createRedisSubscriber: jest.fn(() => redis.duplicate()),
   };
 });

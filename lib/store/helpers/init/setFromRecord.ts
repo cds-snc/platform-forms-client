@@ -14,7 +14,6 @@ export const setFromRecord: TemplateStore<"setFromRecord"> = (set) => (record) =
 
   set((state) => {
     const allowGroups = state.allowGroupsFlag;
-
     state.id = record.id;
     state.form = initializeGroups({ ...defaultForm, ...record.form }, allowGroups);
 
@@ -36,6 +35,6 @@ export const setFromRecord: TemplateStore<"setFromRecord"> = (set) => (record) =
     state.saveAndResume = record.saveAndResume ?? true;
     state.notificationsInterval = record.notificationsInterval ?? NotificationsIntervalDefault;
     // Keep changeKey updates with the later locked-editing rehydrate flow, not the basic save path.
-    // state.changeKey = String(new Date().getTime());
+    state.changeKey = String(new Date().getTime());
   });
 };

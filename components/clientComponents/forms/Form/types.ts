@@ -1,5 +1,5 @@
 import { type JSX } from "react";
-import { TFunction } from "i18next";
+import type { TFunction } from "i18next";
 import { FormikProps } from "formik";
 
 import { Language } from "@lib/types/form-builder-types";

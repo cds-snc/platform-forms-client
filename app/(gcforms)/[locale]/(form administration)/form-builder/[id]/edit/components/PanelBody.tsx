@@ -38,6 +38,8 @@ export const PanelBody = ({
   const isAddressComplete = item.type === "addressComplete";
   const isFormattedDate = item.type === "formattedDate";
   const isFileUpload = item.type === "fileInput";
+  const hasCustomRegex =
+    item.properties.validation?.type === "custom" && item.properties.validation.regex;
 
   const { hasApiKeyId } = useFormBuilderConfig();
 
@@ -62,7 +64,7 @@ export const PanelBody = ({
     <>
       {isRichText || isDynamicRow ? (
         <div className="my-4">
-          <div className={cn(isDynamicRow && "px-4 mb-2 mt-8")}>
+          <div className={cn(isDynamicRow && "mt-8 mb-2 px-4")}>
             <Question item={item} onQuestionChange={onQuestionChange} isInvalid={isInvalid} />
           </div>
 
@@ -78,7 +80,7 @@ export const PanelBody = ({
       ) : (
         <div data-id={item.id}>
           <div className="flex text-sm">
-            <div className="mt-4 w-full laptop:mt-0">
+            <div className="laptop:mt-0 mt-4 w-full">
               <Question
                 item={item}
                 onQuestionChange={onQuestionChange}
@@ -114,6 +116,9 @@ export const PanelBody = ({
                   {t("maxCharacterLength")}
                   {maxLength}
                 </div>
+              )}
+              {hasCustomRegex && (
+                <div className="text-sm text-slate-500">{t("moreDialog.customRegex.label")}</div>
               )}
 
               {isAddressComplete && (

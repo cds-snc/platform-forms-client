@@ -13,6 +13,7 @@ import {
   RichText,
   TextArea,
   TextInput,
+  NumberInput,
   ConditionalWrapper,
   Combobox,
   FormattedDate,
@@ -20,6 +21,7 @@ import {
 import {
   FormElement,
   FormElementTypes,
+  HTMLTextInputTypeAttribute,
   PropertyChoices,
   PublicFormRecord,
   Responses,
@@ -96,12 +98,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
-  const textType =
+  const textType: HTMLTextInputTypeAttribute =
     element.properties?.validation?.type &&
     ["email", "name", "number", "password", "search", "tel", "url"].includes(
       element.properties.validation.type
     )
-      ? element.properties.validation.type
+      ? (element.properties.validation.type as HTMLTextInputTypeAttribute)
       : "text";
 
   const spellCheck =
@@ -131,6 +133,26 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   switch (element.type) {
     case FormElementTypes.textField:
+      if (textType === "number") {
+        return (
+          <div className="focus-group gcds-input-wrapper">
+            {labelComponent}
+            {description && <Description id={`${id}`}>{description}</Description>}
+            <NumberInput
+              id={`${id}`}
+              name={`${id}`}
+              required={isRequired}
+              ariaDescribedBy={description ? `desc-${id}` : undefined}
+              placeholder={placeHolder.toString()}
+              autoComplete={element.properties.autoComplete?.toString()}
+              maxLength={element.properties.validation?.maxLength}
+              allowNegativeNumbers={element.properties.allowNegativeNumbers}
+              stepCount={element.properties.stepCount}
+              lang={lang}
+            />
+          </div>
+        );
+      }
       return (
         <div className="focus-group gcds-input-wrapper">
           {labelComponent}
@@ -145,8 +167,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
             maxLength={element.properties.validation?.maxLength}
-            allowNegativeNumbers={element.properties.allowNegativeNumbers}
-            stepCount={element.properties.stepCount}
             lang={lang}
           />
         </div>

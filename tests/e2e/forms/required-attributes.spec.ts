@@ -60,7 +60,8 @@ test.describe("Testing a basic frontend form", () => {
       await page.goto(publishedFormPath);
 
       // Fill in required fields
-      await page.getByRole("textbox", { name: "A Required Short Answer" }).fill("Testing");
+      // await page.getByRole("textbox", { name: "A Required Short Answer" }).fill("Testing");
+      await page.getByTestId("textInput").fill("Testing");
       await page.getByRole("checkbox", { name: "One" }).check({ force: true });
       await page.getByText("One").nth(1).click(); // Click the label for the radio button
       await page.getByRole("combobox", { name: "A Required Dropdown" }).selectOption("One");

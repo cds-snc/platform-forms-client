@@ -46,6 +46,7 @@
     "date-invalid": "Entrer une date valide.",
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
+    "invalidRegex": "Il y a eu un problème lors du traitement du formulaire.",
     "combobox-strict": "Sélectionnez une valeur dans la liste.",
     "file-upload": {
       "default": {
@@ -129,11 +130,10 @@
   },
   "formElements": {
     "characterCount": {
-      "part1": "Il vous reste",
-      "part2": "caractères.",
-      "part2-singular": "caractère.",
-      "part1-error": "Vous avez dépassé la limite de",
-      "part2-error": "caractères."
+      "remaining_one": "Il vous reste {{count}} caractère.",
+      "remaining_other": "Il vous reste {{count}} caractères.",
+      "exceeded_one": "Vous avez dépassé la limite de {{count}} caractère.",
+      "exceeded_other": "Vous avez dépassé la limite de {{count}} caractères."
     }
   },
   "dynamicRow": {
