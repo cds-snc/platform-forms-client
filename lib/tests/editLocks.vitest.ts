@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@lib/integration/prismaConnector", () => ({
+vi.mock("@gcforms/database", () => ({
   prisma: {
     template: {
       findUnique: vi.fn(),
@@ -32,7 +32,7 @@ import {
   waitForEditLockTakeoverSaveAcknowledgement,
 } from "@lib/editLocks";
 import { formCache } from "@lib/cache/formCache";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import type { FormProperties, PublicFormRecord } from "@lib/types";
 
