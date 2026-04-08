@@ -148,6 +148,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
               maxLength={element.properties.validation?.maxLength}
               allowNegativeNumbers={element.properties.allowNegativeNumbers}
               stepCount={element.properties.stepCount}
+              currencyCode={element.properties.currencyCode}
               lang={lang}
             />
           </div>

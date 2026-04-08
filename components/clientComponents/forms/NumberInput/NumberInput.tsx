@@ -14,6 +14,7 @@ export interface NumberInputProps extends InputFieldProps {
   allowNegativeNumbers?: boolean;
   stepCount?: number;
   maxLength?: number;
+  currencyCode?: string;
 }
 
 const langToLocale = (lang?: string) => (lang === "fr" ? "fr-CA" : "en-CA");
@@ -30,6 +31,7 @@ export const NumberInput = (
     maxLength,
     allowNegativeNumbers,
     stepCount,
+    currencyCode,
     lang,
   } = props;
   const [field, meta, helpers] = useField(props);
@@ -47,11 +49,18 @@ export const NumberInput = (
   const numericValue = field.value !== undefined && field.value !== "" ? Number(field.value) : NaN;
 
   const formatOptions = useMemo<Intl.NumberFormatOptions>(
-    () => ({
-      maximumFractionDigits: stepCount ?? 0,
-      useGrouping: false,
-    }),
-    [stepCount]
+    () =>
+      currencyCode
+        ? {
+            style: "currency",
+            currency: currencyCode,
+            useGrouping: false,
+          }
+        : {
+            maximumFractionDigits: stepCount ?? 0,
+            useGrouping: false,
+          },
+    [stepCount, currencyCode]
   );
 
   const onChange = useCallback(

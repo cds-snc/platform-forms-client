@@ -77,6 +77,38 @@ export const NumberFieldOptions = ({
           step={1}
         />
       </div>
+      <div className="mt-4">
+        <label
+          data-testid="currencyCode"
+          className="gcds-label mt-1"
+          htmlFor={`numberField-${item.id}-id-currencyCode`}
+        >
+          {t("addElementDialog.number.currency")}
+        </label>
+        <div className="gcds-select-wrapper">
+          <select
+            className="gc-dropdown mt-2"
+            id={`numberField-${item.id}-id-currencyCode`}
+            value={item.properties.currencyCode ?? ""}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              const currencyCode = e.target.value || undefined;
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  currencyCode,
+                },
+              });
+            }}
+          >
+            <option value="">{t("addElementDialog.number.currencyNone")}</option>
+            <option value="CAD">CAD ($)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+          </select>
+        </div>
+      </div>
     </section>
   );
 };

@@ -136,6 +136,7 @@ export interface ElementProperties {
   dateFormat?: string;
   allowNegativeNumbers?: boolean;
   stepCount?: number;
+  currencyCode?: string;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;

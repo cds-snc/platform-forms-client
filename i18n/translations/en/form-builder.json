@@ -251,7 +251,9 @@
       "amount": "Amount",
       "enterOnlyNumbers": "Enter a number.",
       "allowNegative": "allow negative number values",
-      "decimalPlaces": "Number of decimal places that can be entered"
+      "decimalPlaces": "Number of decimal places that can be entered",
+      "currency": "Currency",
+      "currencyNone": "None"
     },
     "questionElement": "Elements",
     "radio": {
