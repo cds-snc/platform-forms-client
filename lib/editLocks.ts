@@ -1,4 +1,4 @@
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { formCache } from "./cache/formCache";
