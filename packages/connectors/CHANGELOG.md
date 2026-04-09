@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-04-09
+
+### Changed
+
+- PostgresConnector constructor now requires a Postgres JSON connection object instead of basic connection URL
+
 ## [2.2.19] - 2026-03-24
 
 - Update TypeScript to 6.0.2

@@ -4,20 +4,20 @@ import postgres, { Sql } from "postgres";
 export class PostgresConnector {
   private postgresInstance: Sql;
 
-  public static defaultUsingPostgresConnectionUrlFromAwsSecret(
-    postgresConnectionUrlSecretIdentifier: string
+  public static defaultUsingPostgresJsonConnectionObjectFromAwsSecret(
+    secretArn: string
   ): Promise<PostgresConnector> {
-    return getAwsSecret(postgresConnectionUrlSecretIdentifier).then((postgresConnectionUrl) => {
-      if (postgresConnectionUrl === undefined) {
-        throw new Error("Postgres connection URL is undefined");
+    return getAwsSecret(secretArn).then((value) => {
+      if (value === undefined) {
+        throw new Error("Postgres JSON connection object is undefined");
       }
 
-      return new PostgresConnector(postgresConnectionUrl);
+      return new PostgresConnector(value);
     });
   }
 
-  private constructor(connectionUrl: string) {
-    this.postgresInstance = postgres(connectionUrl, { ssl: "prefer" });
+  private constructor(jsonConnectionObject: string) {
+    this.postgresInstance = postgres(JSON.parse(jsonConnectionObject));
   }
 
   public executeSqlStatement(): Sql {
