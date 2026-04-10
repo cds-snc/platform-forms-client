@@ -139,6 +139,8 @@ export interface ElementProperties {
   currencyCode?: string;
   numberMin?: number;
   numberMax?: number;
+  minDigits?: number;
+  maxDigits?: number;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;

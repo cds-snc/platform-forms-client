@@ -53,6 +53,17 @@ export const isFieldResponseValid = (
       }
       if (validator.maxLength && (value as string).length > validator.maxLength)
         return t("input-validation.too-many-characters");
+
+      if (validator.type === "number" && typedValue) {
+        const digitCount = typedValue.replace(/[^\d]/g, "").length;
+        if (formElement.properties.minDigits && digitCount < formElement.properties.minDigits) {
+          return t("input-validation.too-few-digits");
+        }
+        if (formElement.properties.maxDigits && digitCount > formElement.properties.maxDigits) {
+          return t("input-validation.too-many-digits");
+        }
+      }
+
       break;
     }
     case FormElementTypes.textArea: {

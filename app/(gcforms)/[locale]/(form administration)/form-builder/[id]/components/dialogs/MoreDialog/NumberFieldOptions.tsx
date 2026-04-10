@@ -129,6 +129,60 @@ export const NumberFieldOptions = ({
       </div>
       <div className="mt-4">
         <label
+          data-testid="minDigits"
+          className="gcds-label mt-1"
+          htmlFor={`numberField-${item.id}-id-minDigits`}
+        >
+          {t("addElementDialog.number.minDigits")}
+        </label>
+        <input
+          type="number"
+          className="gc-input-text mt-2"
+          id={`numberField-${item.id}-id-minDigits`}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const minDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
+            setItem({
+              ...item,
+              properties: {
+                ...item.properties,
+                minDigits,
+              },
+            });
+          }}
+          value={item.properties.minDigits ?? ""}
+          min={1}
+          step={1}
+        />
+      </div>
+      <div className="mt-4">
+        <label
+          data-testid="maxDigits"
+          className="gcds-label mt-1"
+          htmlFor={`numberField-${item.id}-id-maxDigits`}
+        >
+          {t("addElementDialog.number.maxDigits")}
+        </label>
+        <input
+          type="number"
+          className="gc-input-text mt-2"
+          id={`numberField-${item.id}-id-maxDigits`}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const maxDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
+            setItem({
+              ...item,
+              properties: {
+                ...item.properties,
+                maxDigits,
+              },
+            });
+          }}
+          value={item.properties.maxDigits ?? ""}
+          min={1}
+          step={1}
+        />
+      </div>
+      <div className="mt-4">
+        <label
           data-testid="currencyCode"
           className="gcds-label mt-1"
           htmlFor={`numberField-${item.id}-id-currencyCode`}

@@ -254,6 +254,8 @@
       "decimalPlaces": "Number of decimal places that can be entered",
       "min": "Minimum value",
       "max": "Maximum value",
+      "minDigits": "Minimum number of digits",
+      "maxDigits": "Maximum number of digits",
       "currency": "Currency",
       "currencyNone": "None"
     },

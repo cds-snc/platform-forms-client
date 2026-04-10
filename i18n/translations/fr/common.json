@@ -48,6 +48,8 @@
     "regex": "Veuillez utiliser le bon format.",
     "invalidRegex": "Il y a eu un problème lors du traitement du formulaire.",
     "combobox-strict": "Sélectionnez une valeur dans la liste.",
+    "too-few-digits": "Le nombre saisi ne contient pas assez de chiffres.",
+    "too-many-digits": "Le nombre saisi contient trop de chiffres.",
     "file-upload": {
       "default": {
         "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
