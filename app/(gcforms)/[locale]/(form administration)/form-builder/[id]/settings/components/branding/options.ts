@@ -377,4 +377,13 @@ export const options = [
     logoTitleEn: "Canadian Transportation Agency",
     logoTitleFr: "Office des transports du Canada",
   },
+  {
+    name: "dfo",
+    urlEn: "https://www.dfo-mpo.gc.ca/index-eng.html",
+    urlFr: "https://www.dfo-mpo.gc.ca/index-fra.html",
+    logoEn: "/img/branding/dfo-mpo-en.svg",
+    logoFr: "/img/branding/dfo-mpo-fr.svg",
+    logoTitleEn: "Fisheries and Oceans Canada",
+    logoTitleFr: "Pêches et Océans Canada",
+  },
 ];
