@@ -50,10 +50,7 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
 };
 
 // Temporary function to use the "unified sso auth" url without breaking API key generation or other code using the current "forms" Zitadel provider.
-const filterZitadelUrl = (url: string | undefined): string | undefined => {
-  if (!url) {
-    throw new Error("ZITADEL URL is not defined");
-  }
+const filterZitadelUrl = (url: string = ""): string => {
   return url.replace(/\/\/auth\.(.+?)\./, "//auth.");
 };
 
