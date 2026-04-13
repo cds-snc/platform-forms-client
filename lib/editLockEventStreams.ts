@@ -1,11 +1,18 @@
 import { createRedisSubscriber } from "@lib/integration/redisConnector";
-import { EditLockEvent } from "./editLocks";
+import { EditLockEvent, EditLockEventActor } from "./editLocks";
 import type Redis from "ioredis";
 
 const EDIT_LOCK_CHANNEL_PREFIX = "edit-lock-events";
 
 type EditLockRouteSubscriber = (event: EditLockEvent) => void;
 type EditLockStreamCloser = () => void | Promise<void>;
+
+export type EditLockEventStreamDebugSnapshot = {
+  channel: string;
+  sharedChannelSubscriberCount: number;
+  activeStreamCount: number;
+  activeStreamKeys: string[];
+};
 
 type EditLockEventStreamsGlobal = typeof globalThis & {
   __editLockEventStreamsState?: {
@@ -19,8 +26,31 @@ type EditLockEventStreamsGlobal = typeof globalThis & {
 const parseEvent = (raw: string): EditLockEvent => {
   try {
     const parsed = JSON.parse(raw) as Partial<EditLockEvent>;
+    const actor =
+      parsed.actor && typeof parsed.actor === "object"
+        ? ({
+            userId: typeof parsed.actor.userId === "string" ? parsed.actor.userId : "unknown-user",
+            userName:
+              typeof parsed.actor.userName === "string" || parsed.actor.userName === null
+                ? parsed.actor.userName
+                : null,
+            userEmail:
+              typeof parsed.actor.userEmail === "string" || parsed.actor.userEmail === null
+                ? parsed.actor.userEmail
+                : null,
+            sessionId:
+              typeof parsed.actor.sessionId === "string" || parsed.actor.sessionId === null
+                ? parsed.actor.sessionId
+                : null,
+          } satisfies EditLockEventActor)
+        : null;
+
     if (parsed.type === "takeover-requested") {
-      return { type: "takeover-requested" };
+      return { type: "takeover-requested", actor };
+    }
+
+    if (parsed.type === "updated") {
+      return { type: "updated", actor };
     }
   } catch {
     // no-op
@@ -144,5 +174,22 @@ export const registerActiveEditLockStream = (
     if (activeStreams.get(streamKey) === close) {
       activeStreams.delete(streamKey);
     }
+  };
+};
+
+export const getEditLockEventStreamDebugSnapshot = (
+  templateId: string
+): EditLockEventStreamDebugSnapshot => {
+  const channel = getChannel(templateId);
+  const { channelSubscribers, activeStreams } = getState();
+  const activeStreamKeys = Array.from(activeStreams.keys()).filter((streamKey) =>
+    streamKey.endsWith(`:${templateId}`)
+  );
+
+  return {
+    channel,
+    sharedChannelSubscriberCount: channelSubscribers.get(channel)?.size ?? 0,
+    activeStreamCount: activeStreamKeys.length,
+    activeStreamKeys,
   };
 };

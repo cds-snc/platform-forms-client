@@ -18,8 +18,10 @@ const EDIT_LOCK_KEY_PREFIX = "edit-lock";
 const EDIT_LOCK_CHANNEL_PREFIX = "edit-lock-events";
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX = "edit-lock-takeover-save";
 const EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX = "edit-lock-assigned-users-threshold";
+const EDIT_LOCK_EVENT_ACTOR_PREFIX = "edit-lock-event-actor";
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_POLL_MS = 100;
 const EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS = 300;
+const EDIT_LOCK_EVENT_ACTOR_TTL_SECONDS = 120;
 
 export type EditLockPresenceStatus = "active" | "idle" | "away";
 export type EditLockVisibilityState = "visible" | "hidden";
@@ -51,8 +53,16 @@ export type EditLockStatus = {
   lock: EditLockInfo | null;
 };
 
+export type EditLockEventActor = {
+  userId: string;
+  userName?: string | null;
+  userEmail?: string | null;
+  sessionId?: string | null;
+};
+
 export type EditLockEvent = {
   type: "updated" | "takeover-requested";
+  actor?: EditLockEventActor | null;
 };
 
 export class TemplateEditLockedError extends Error {
@@ -81,6 +91,7 @@ type EditLockGlobal = typeof globalThis & {
   __editLockStore?: EditLockStore;
   __editLockSubscribers?: EditLockSubscriberStore;
   __editLockTakeoverSaveAcks?: Map<string, number>;
+  __editLockRecentActors?: Map<string, EditLockEventActor>;
 };
 
 const getEditLockStore = (): EditLockStore => {
@@ -107,6 +118,14 @@ const getEditLockTakeoverSaveAcks = (): Map<string, number> => {
   return globalWithStore.__editLockTakeoverSaveAcks;
 };
 
+const getRecentEditLockActors = (): Map<string, EditLockEventActor> => {
+  const globalWithStore = globalThis as EditLockGlobal;
+  if (!globalWithStore.__editLockRecentActors) {
+    globalWithStore.__editLockRecentActors = new Map();
+  }
+  return globalWithStore.__editLockRecentActors;
+};
+
 const redisEnabled = () => Boolean(process.env.REDIS_URL);
 
 const getEditLockKey = (templateId: string) => `${EDIT_LOCK_KEY_PREFIX}:${templateId}`;
@@ -115,6 +134,8 @@ const getEditLockTakeoverSaveAckKey = (templateId: string, sessionId: string) =>
   `${EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX}:${templateId}:${sessionId}`;
 const getEditLockAssignedUsersCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX}:${templateId}`;
+const getEditLockEventActorKey = (templateId: string, eventType: EditLockEvent["type"]) =>
+  `${EDIT_LOCK_EVENT_ACTOR_PREFIX}:${templateId}:${eventType}`;
 const editLockTtlSeconds = Math.ceil(EDIT_LOCK_TTL_MS / 1000);
 const updatedEvent: EditLockEvent = { type: "updated" };
 const wait = async (timeMs: number) =>
@@ -211,6 +232,18 @@ const readRedisLock = async (templateId: string) => {
 };
 
 const publishEditLockEvent = async (templateId: string, event: EditLockEvent = updatedEvent) => {
+  if (event.actor?.userId) {
+    const actorKey = getEditLockEventActorKey(templateId, event.type);
+    getRecentEditLockActors().set(actorKey, event.actor);
+
+    if (redisEnabled()) {
+      const redis = await getRedisInstance();
+      await redis.setex(actorKey, EDIT_LOCK_EVENT_ACTOR_TTL_SECONDS, JSON.stringify(event.actor));
+      await redis.publish(getEditLockChannel(templateId), JSON.stringify(event));
+      return;
+    }
+  }
+
   if (redisEnabled()) {
     const redis = await getRedisInstance();
     await redis.publish(getEditLockChannel(templateId), JSON.stringify(event));
@@ -289,8 +322,42 @@ export const subscribeToEditLockEvents = (templateId: string, subscriber: EditLo
   };
 };
 
-export const requestEditLockTakeoverSave = async (templateId: string) => {
-  await publishEditLockEvent(templateId, { type: "takeover-requested" });
+export const getLocalEditLockSubscriberCount = (templateId: string): number => {
+  return getEditLockSubscribers().get(templateId)?.size ?? 0;
+};
+
+export const getRecentEditLockEventActor = async (
+  templateId: string,
+  eventType: EditLockEvent["type"]
+): Promise<EditLockEventActor | null> => {
+  const actorKey = getEditLockEventActorKey(templateId, eventType);
+  const inMemoryActor = getRecentEditLockActors().get(actorKey);
+  if (inMemoryActor) {
+    return inMemoryActor;
+  }
+
+  if (!redisEnabled()) {
+    return null;
+  }
+
+  const redis = await getRedisInstance();
+  const rawActor = await redis.get(actorKey);
+  if (!rawActor) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawActor) as EditLockEventActor;
+  } catch {
+    return null;
+  }
+};
+
+export const requestEditLockTakeoverSave = async (
+  templateId: string,
+  actor?: EditLockEventActor
+) => {
+  await publishEditLockEvent(templateId, { type: "takeover-requested", actor: actor ?? null });
 };
 
 export const clearEditLockTakeoverSaveAcknowledgement = async ({
@@ -580,7 +647,15 @@ export const acquireEditLock = async ({
       await storeRedisLock(updated);
     }
 
-    await publishEditLockEvent(templateId);
+    await publishEditLockEvent(templateId, {
+      type: "updated",
+      actor: {
+        userId,
+        userName: userName ?? null,
+        userEmail: userEmail ?? null,
+        sessionId: sessionId ?? null,
+      },
+    });
     return buildStatus(updated, userId);
   }
 
@@ -595,7 +670,15 @@ export const acquireEditLock = async ({
   }
 
   store.set(templateId, updated);
-  await publishEditLockEvent(templateId);
+  await publishEditLockEvent(templateId, {
+    type: "updated",
+    actor: {
+      userId,
+      userName: userName ?? null,
+      userEmail: userEmail ?? null,
+      sessionId: sessionId ?? null,
+    },
+  });
   return buildStatus(updated, userId);
 };
 
@@ -633,13 +716,29 @@ export const takeoverEditLock = async ({
 
   if (redisEnabled()) {
     await storeRedisLock(updated);
-    await publishEditLockEvent(templateId);
+    await publishEditLockEvent(templateId, {
+      type: "updated",
+      actor: {
+        userId,
+        userName: userName ?? null,
+        userEmail: userEmail ?? null,
+        sessionId: sessionId ?? null,
+      },
+    });
     return buildStatus(updated, userId);
   }
 
   const store = getEditLockStore();
   store.set(templateId, updated);
-  await publishEditLockEvent(templateId);
+  await publishEditLockEvent(templateId, {
+    type: "updated",
+    actor: {
+      userId,
+      userName: userName ?? null,
+      userEmail: userEmail ?? null,
+      sessionId: sessionId ?? null,
+    },
+  });
   return buildStatus(updated, userId);
 };
 
@@ -721,10 +820,14 @@ export const heartbeatEditLock = async ({
 export const releaseEditLock = async ({
   templateId,
   userId,
+  userName,
+  userEmail,
   sessionId,
 }: {
   templateId: string;
   userId: string;
+  userName?: string | null;
+  userEmail?: string | null;
   sessionId?: string | null;
 }): Promise<{ released: boolean }> => {
   if (redisEnabled()) {
@@ -744,7 +847,15 @@ export const releaseEditLock = async ({
         return null;
       }
 
-      await publishEditLockEvent(templateId);
+      await publishEditLockEvent(templateId, {
+        type: "updated",
+        actor: {
+          userId,
+          userName: userName ?? null,
+          userEmail: userEmail ?? null,
+          sessionId: sessionId ?? null,
+        },
+      });
       return { released: true };
     });
   }
@@ -761,7 +872,15 @@ export const releaseEditLock = async ({
   }
 
   store.delete(templateId);
-  await publishEditLockEvent(templateId);
+  await publishEditLockEvent(templateId, {
+    type: "updated",
+    actor: {
+      userId,
+      userName: userName ?? null,
+      userEmail: userEmail ?? null,
+      sessionId: sessionId ?? null,
+    },
+  });
   return { released: true };
 };
 

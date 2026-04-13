@@ -5,6 +5,7 @@ import { SettingsIcon } from "@serverComponents/icons/SettingsIcon";
 import { FlagsIcon } from "@serverComponents/icons/FlagsIcon";
 import { authCheckAndThrow } from "@lib/actions";
 import { AuditLogIcon } from "@serverComponents/icons/AuditLogIcon";
+import { BoltIcon } from "@serverComponents/icons/BoltIcon";
 
 export const LeftNavigation = async () => {
   const {
@@ -59,6 +60,17 @@ export const LeftNavigation = async () => {
               title={t("adminNav.events", { ns: "common" })}
             >
               <AuditLogIcon className="pl-0.5" />
+            </LeftNav>
+          </li>
+        )}
+        {ability?.can("view", "User") && (
+          <li>
+            <LeftNav
+              testid="debug"
+              href={`/${language}/admin/debug`}
+              title={t("adminNav.debug", { ns: "common" })}
+            >
+              <BoltIcon />
             </LeftNav>
           </li>
         )}

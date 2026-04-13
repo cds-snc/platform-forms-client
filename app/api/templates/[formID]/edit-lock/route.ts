@@ -141,6 +141,8 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
       const result = await releaseEditLock({
         templateId: formID,
         userId: session.user.id,
+        userName: session.user.name ?? null,
+        userEmail: session.user.email ?? null,
         sessionId: sessionId ?? null,
       });
       return NextResponse.json(result);
@@ -163,7 +165,12 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
           templateId: formID,
           sessionId: currentStatus.lock?.sessionId ?? null,
         });
-        await requestEditLockTakeoverSave(formID);
+        await requestEditLockTakeoverSave(formID, {
+          userId: session.user.id,
+          userName: session.user.name ?? null,
+          userEmail: session.user.email ?? null,
+          sessionId: sessionId ?? null,
+        });
 
         if (currentStatus.lock?.sessionId) {
           await waitForEditLockTakeoverSaveAcknowledgement({
