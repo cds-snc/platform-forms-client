@@ -1,6 +1,7 @@
 "use client";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes, FormElement } from "@lib/types";
+import { InfoDetails } from "../../../../components/shared/InfoDetails";
 
 export const NumberFieldOptions = ({
   item,
@@ -23,196 +24,203 @@ export const NumberFieldOptions = ({
 
   return (
     <section className="mb-4">
-      <div className="gc-input-checkbox mb-4">
-        <input
-          type="checkbox"
-          className="gc-input-checkbox__input"
-          id={`numberField-${item.id}-id-allowNegative`}
-          value={`numberField-${item.id}-value-allowNegative-` + checked}
-          defaultChecked={checked}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            // clone the existing properties so that we don't overwrite other keys in "allowNegativeNumbers"
-            const allowNegativeNumbers = e.target.checked;
-            setItem({
-              ...item,
-              properties: {
-                ...item.properties,
-                ...{ allowNegativeNumbers },
-              },
-            });
-          }}
-        />
-        <label
-          data-testid="allowNegative"
-          className="gc-checkbox-label"
-          htmlFor={`numberField-${item.id}-id-allowNegative`}
-        >
-          <span className="checkbox-label-text">{t("addElementDialog.number.allowNegative")}</span>
-        </label>
-      </div>
-      <div>
-        <label
-          data-testid="stepCount"
-          className="gcds-label mt-1"
-          htmlFor={`numberField-${item.id}-id-stepCount`}
-        >
-          {t("addElementDialog.number.decimalPlaces")}
-        </label>
-        <input
-          type="number"
-          className="gc-input-text mt-2"
-          id={`numberField-${item.id}-id-stepCount`}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const stepCount = parseInt(e.target.value, 10);
-            setItem({
-              ...item,
-              properties: {
-                ...item.properties,
-                ...{ stepCount },
-              },
-            });
-          }}
-          value={typeof item.properties.stepCount === "number" ? item.properties.stepCount : 0}
-          min={0}
-          step={1}
-        />
-      </div>
-      <div className="mt-4">
-        <label
-          data-testid="numberMin"
-          className="gcds-label mt-1"
-          htmlFor={`numberField-${item.id}-id-numberMin`}
-        >
-          {t("addElementDialog.number.min")}
-        </label>
-        <input
-          type="number"
-          className="gc-input-text mt-2"
-          id={`numberField-${item.id}-id-numberMin`}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const numberMin = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
-            setItem({
-              ...item,
-              properties: {
-                ...item.properties,
-                numberMin,
-              },
-            });
-          }}
-          value={item.properties.numberMin ?? ""}
-        />
-      </div>
-      <div className="mt-4">
-        <label
-          data-testid="numberMax"
-          className="gcds-label mt-1"
-          htmlFor={`numberField-${item.id}-id-numberMax`}
-        >
-          {t("addElementDialog.number.max")}
-        </label>
-        <input
-          type="number"
-          className="gc-input-text mt-2"
-          id={`numberField-${item.id}-id-numberMax`}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const numberMax = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
-            setItem({
-              ...item,
-              properties: {
-                ...item.properties,
-                numberMax,
-              },
-            });
-          }}
-          value={item.properties.numberMax ?? ""}
-        />
-      </div>
-      <div className="mt-4">
-        <label
-          data-testid="minDigits"
-          className="gcds-label mt-1"
-          htmlFor={`numberField-${item.id}-id-minDigits`}
-        >
-          {t("addElementDialog.number.minDigits")}
-        </label>
-        <input
-          type="number"
-          className="gc-input-text mt-2"
-          id={`numberField-${item.id}-id-minDigits`}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const minDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
-            setItem({
-              ...item,
-              properties: {
-                ...item.properties,
-                minDigits,
-              },
-            });
-          }}
-          value={item.properties.minDigits ?? ""}
-          min={1}
-          step={1}
-        />
-      </div>
-      <div className="mt-4">
-        <label
-          data-testid="maxDigits"
-          className="gcds-label mt-1"
-          htmlFor={`numberField-${item.id}-id-maxDigits`}
-        >
-          {t("addElementDialog.number.maxDigits")}
-        </label>
-        <input
-          type="number"
-          className="gc-input-text mt-2"
-          id={`numberField-${item.id}-id-maxDigits`}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const maxDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
-            setItem({
-              ...item,
-              properties: {
-                ...item.properties,
-                maxDigits,
-              },
-            });
-          }}
-          value={item.properties.maxDigits ?? ""}
-          min={1}
-          step={1}
-        />
-      </div>
-      <div className="mt-4">
-        <label
-          data-testid="currencyCode"
-          className="gcds-label mt-1"
-          htmlFor={`numberField-${item.id}-id-currencyCode`}
-        >
-          {t("addElementDialog.number.currency")}
-        </label>
-        <div className="gcds-select-wrapper">
-          <select
-            className="gc-dropdown mt-2"
-            id={`numberField-${item.id}-id-currencyCode`}
-            value={item.properties.currencyCode ?? ""}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              const currencyCode = e.target.value || undefined;
+      <InfoDetails className="mt-4" summary={t("Set number format")}>
+        <div className="gc-input-checkbox mb-4">
+          <input
+            type="checkbox"
+            className="gc-input-checkbox__input"
+            id={`numberField-${item.id}-id-allowNegative`}
+            value={`numberField-${item.id}-value-allowNegative-` + checked}
+            defaultChecked={checked}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              // clone the existing properties so that we don't overwrite other keys in "allowNegativeNumbers"
+              const allowNegativeNumbers = e.target.checked;
               setItem({
                 ...item,
                 properties: {
                   ...item.properties,
-                  currencyCode,
+                  ...{ allowNegativeNumbers },
                 },
               });
             }}
+          />
+          <label
+            data-testid="allowNegative"
+            className="gc-checkbox-label"
+            htmlFor={`numberField-${item.id}-id-allowNegative`}
           >
-            <option value="">{t("addElementDialog.number.currencyNone")}</option>
-            <option value="CAD">CAD ($)</option>
-            <option value="USD">USD ($)</option>
-            <option value="EUR">EUR (€)</option>
-            <option value="GBP">GBP (£)</option>
-          </select>
+            <span className="checkbox-label-text">
+              {t("addElementDialog.number.allowNegative")}
+            </span>
+          </label>
         </div>
-      </div>
+        <div>
+          <label
+            data-testid="stepCount"
+            className="gcds-label mt-1"
+            htmlFor={`numberField-${item.id}-id-stepCount`}
+          >
+            {t("addElementDialog.number.decimalPlaces")}
+          </label>
+          <input
+            type="number"
+            className="gc-input-text mt-2"
+            id={`numberField-${item.id}-id-stepCount`}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const stepCount = parseInt(e.target.value, 10);
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  ...{ stepCount },
+                },
+              });
+            }}
+            value={typeof item.properties.stepCount === "number" ? item.properties.stepCount : 0}
+            min={0}
+            step={1}
+          />
+        </div>
+        <div className="mt-4">
+          <label
+            data-testid="currencyCode"
+            className="gcds-label mt-1"
+            htmlFor={`numberField-${item.id}-id-currencyCode`}
+          >
+            {t("addElementDialog.number.currency")}
+          </label>
+          <div className="gcds-select-wrapper">
+            <select
+              className="gc-dropdown mt-2"
+              id={`numberField-${item.id}-id-currencyCode`}
+              value={item.properties.currencyCode ?? ""}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                const currencyCode = e.target.value || undefined;
+                setItem({
+                  ...item,
+                  properties: {
+                    ...item.properties,
+                    currencyCode,
+                  },
+                });
+              }}
+            >
+              <option value="">{t("addElementDialog.number.currencyNone")}</option>
+              <option value="CAD">CAD ($)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+            </select>
+          </div>
+        </div>
+      </InfoDetails>
+
+      <InfoDetails className="mt-4" summary={t("Set a range")}>
+        <div className="mt-4">
+          <label
+            data-testid="numberMin"
+            className="gcds-label mt-1"
+            htmlFor={`numberField-${item.id}-id-numberMin`}
+          >
+            {t("addElementDialog.number.min")}
+          </label>
+          <input
+            type="number"
+            className="gc-input-text mt-2"
+            id={`numberField-${item.id}-id-numberMin`}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const numberMin = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  numberMin,
+                },
+              });
+            }}
+            value={item.properties.numberMin ?? ""}
+          />
+        </div>
+        <div className="mt-4">
+          <label
+            data-testid="numberMax"
+            className="gcds-label mt-1"
+            htmlFor={`numberField-${item.id}-id-numberMax`}
+          >
+            {t("addElementDialog.number.max")}
+          </label>
+          <input
+            type="number"
+            className="gc-input-text mt-2"
+            id={`numberField-${item.id}-id-numberMax`}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const numberMax = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  numberMax,
+                },
+              });
+            }}
+            value={item.properties.numberMax ?? ""}
+          />
+        </div>
+        <div className="mt-4">
+          <label
+            data-testid="minDigits"
+            className="gcds-label mt-1"
+            htmlFor={`numberField-${item.id}-id-minDigits`}
+          >
+            {t("addElementDialog.number.minDigits")}
+          </label>
+          <input
+            type="number"
+            className="gc-input-text mt-2"
+            id={`numberField-${item.id}-id-minDigits`}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const minDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  minDigits,
+                },
+              });
+            }}
+            value={item.properties.minDigits ?? ""}
+            min={1}
+            step={1}
+          />
+        </div>
+        <div className="mt-4">
+          <label
+            data-testid="maxDigits"
+            className="gcds-label mt-1"
+            htmlFor={`numberField-${item.id}-id-maxDigits`}
+          >
+            {t("addElementDialog.number.maxDigits")}
+          </label>
+          <input
+            type="number"
+            className="gc-input-text mt-2"
+            id={`numberField-${item.id}-id-maxDigits`}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const maxDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  maxDigits,
+                },
+              });
+            }}
+            value={item.properties.maxDigits ?? ""}
+            min={1}
+            step={1}
+          />
+        </div>
+      </InfoDetails>
     </section>
   );
 };
