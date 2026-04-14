@@ -80,8 +80,10 @@ export const useEditLock = ({
   const startHeartbeatRef = useRef<() => void>(() => undefined);
   const startPollingRef = useRef<() => void>(() => undefined);
   const lockLoopTokenRef = useRef(0);
+  const updatedAtRef = useRef(updatedAt);
   const lastActivityAtRef = useRef(0);
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
+  const suppressReleaseRef = useRef(false);
   const visibilityStateRef = useRef<EditLockVisibilityState>("visible");
 
   const clearLockState = useCallback(() => {
@@ -111,6 +113,9 @@ export const useEditLock = ({
           : null
       );
       isOwnerRef.current = status.isOwner;
+      if (status.isOwner) {
+        suppressReleaseRef.current = false;
+      }
     },
     [setEditLock, setIsLockedByOther]
   );
@@ -218,14 +223,20 @@ export const useEditLock = ({
     [formId, resetState, setFromRecord, setUpdatedAt]
   );
 
+  useEffect(() => {
+    updatedAtRef.current = updatedAt;
+  }, [updatedAt]);
+
   const syncServerState = useCallback(async () => {
-    await refreshForm(updatedAt);
-  }, [refreshForm, updatedAt]);
+    await refreshForm(updatedAtRef.current);
+  }, [refreshForm]);
 
   const flushDraftBeforeTakeover = useCallback(async () => {
     if (!isOwnerRef.current) {
       return;
     }
+
+    suppressReleaseRef.current = true;
 
     if (!takeoverSaveRef.current) {
       takeoverSaveRef.current = (async () => {
@@ -393,7 +404,7 @@ export const useEditLock = ({
       cancelled = true;
       clearTimers();
       clearEvents();
-      if (isOwnerRef.current) {
+      if (isOwnerRef.current && !suppressReleaseRef.current) {
         postAction("release");
       }
     };
