@@ -21,10 +21,6 @@ export const LoginMenu = () => {
     });
 
     sessionStorage.setItem("logoutTime", logoutTime);
-    const oidcIdToken = session.data?.user.oidcIdToken;
-    if (oidcIdToken) {
-      sessionStorage.setItem("oidcIdToken", oidcIdToken);
-    }
 
     void signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
@@ -39,7 +35,7 @@ export const LoginMenu = () => {
       {session.status === "authenticated" ? (
         <button
           type="button"
-          className="border-0 bg-transparent text-blue-dark underline hover:text-blue-hover"
+          className="text-blue-dark hover:text-blue-hover border-0 bg-transparent underline"
           onClick={handleClick}
           lang={i18n.language}
         >

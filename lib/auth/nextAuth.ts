@@ -262,11 +262,6 @@ const {
               }
             | undefined;
 
-          const oidcAccount = account as { id_token?: string };
-          if (oidcAccount.id_token) {
-            token.oidcIdToken = oidcAccount.id_token;
-          }
-
           token.hasSecurityQuestions = true; // Set to true OICDC flow
 
           applyIdentityClaimsToToken(token, {
@@ -357,7 +352,6 @@ const {
         name: token.name ?? null,
         email: token.email,
         accountUrl: token.provider === "gcForms" ? token.accountUrl : undefined,
-        oidcIdToken: token.provider === "gcForms" ? token.oidcIdToken : undefined,
         privileges: await getPrivilegeRulesForUser(token.userId as string),
         ...(token.provider !== "gcForms" &&
           token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
