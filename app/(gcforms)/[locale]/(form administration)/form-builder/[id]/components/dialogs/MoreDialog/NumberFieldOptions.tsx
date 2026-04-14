@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes, FormElement } from "@lib/types";
 import { InfoDetails } from "../../../../components/shared/InfoDetails";
@@ -12,6 +13,12 @@ export const NumberFieldOptions = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
+  const isCurrency = !!item.properties.currencyCode;
+  const [decimalsEnabled, setDecimalsEnabled] = useState(
+    isCurrency || (typeof item.properties.stepCount === "number" && item.properties.stepCount > 0)
+  );
+  const showDecimals = isCurrency || decimalsEnabled;
+
   if (item.type !== FormElementTypes.textField) {
     return null;
   }
@@ -19,8 +26,6 @@ export const NumberFieldOptions = ({
   if (!item.properties.validation || item.properties.validation.type !== "number") {
     return null;
   }
-
-  const checked = item.properties.allowNegativeNumbers;
 
   return (
     <section className="mb-4">
@@ -30,16 +35,17 @@ export const NumberFieldOptions = ({
             type="checkbox"
             className="gc-input-checkbox__input"
             id={`numberField-${item.id}-id-allowNegative`}
-            value={`numberField-${item.id}-value-allowNegative-` + checked}
-            defaultChecked={checked}
+            value={
+              `numberField-${item.id}-value-allowNegative-` + item.properties.allowNegativeNumbers
+            }
+            defaultChecked={item.properties.allowNegativeNumbers}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              // clone the existing properties so that we don't overwrite other keys in "allowNegativeNumbers"
               const allowNegativeNumbers = e.target.checked;
               setItem({
                 ...item,
                 properties: {
                   ...item.properties,
-                  ...{ allowNegativeNumbers },
+                  allowNegativeNumbers,
                 },
               });
             }}
@@ -54,65 +60,97 @@ export const NumberFieldOptions = ({
             </span>
           </label>
         </div>
-        <div>
-          <label
-            data-testid="stepCount"
-            className="gcds-label mt-1"
-            htmlFor={`numberField-${item.id}-id-stepCount`}
-          >
-            {t("addElementDialog.number.decimalPlaces")}
-          </label>
+        <div className="gc-input-checkbox mb-4">
           <input
-            type="number"
-            className="gc-input-text mt-2"
-            id={`numberField-${item.id}-id-stepCount`}
+            type="checkbox"
+            className="gc-input-checkbox__input"
+            id={`numberField-${item.id}-id-currencyCode`}
+            defaultChecked={isCurrency}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const stepCount = parseInt(e.target.value, 10);
+              const currencyCode = e.target.checked ? "CAD" : undefined;
               setItem({
                 ...item,
                 properties: {
                   ...item.properties,
-                  ...{ stepCount },
+                  currencyCode,
+                  stepCount: e.target.checked ? 2 : item.properties.stepCount,
                 },
               });
             }}
-            value={typeof item.properties.stepCount === "number" ? item.properties.stepCount : 0}
-            min={0}
-            step={1}
           />
-        </div>
-        <div className="mt-4">
           <label
             data-testid="currencyCode"
-            className="gcds-label mt-1"
+            className="gc-checkbox-label"
             htmlFor={`numberField-${item.id}-id-currencyCode`}
           >
-            {t("addElementDialog.number.currency")}
+            <span className="checkbox-label-text">{t("addElementDialog.number.currency")}</span>
           </label>
-          <div className="gcds-select-wrapper">
-            <select
-              className="gc-dropdown mt-2"
-              id={`numberField-${item.id}-id-currencyCode`}
-              value={item.properties.currencyCode ?? ""}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                const currencyCode = e.target.value || undefined;
+        </div>
+        <div className="gc-input-checkbox mb-4">
+          <input
+            type="checkbox"
+            className="gc-input-checkbox__input"
+            id={`numberField-${item.id}-id-decimals`}
+            checked={showDecimals}
+            disabled={isCurrency}
+            aria-disabled={isCurrency}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setDecimalsEnabled(e.target.checked);
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  stepCount: e.target.checked ? 1 : 0,
+                },
+              });
+            }}
+          />
+          <label
+            data-testid="decimals"
+            className="gc-checkbox-label"
+            htmlFor={`numberField-${item.id}-id-decimals`}
+          >
+            <span className="checkbox-label-text">{t("addElementDialog.number.decimals")}</span>
+          </label>
+        </div>
+        {showDecimals && (
+          <div>
+            <label
+              data-testid="stepCount"
+              className="gcds-label mt-1"
+              htmlFor={`numberField-${item.id}-id-stepCount`}
+            >
+              {t("addElementDialog.number.decimalPlaces")}
+            </label>
+            <input
+              type="number"
+              className="gc-input-text mt-2"
+              id={`numberField-${item.id}-id-stepCount`}
+              disabled={isCurrency}
+              aria-disabled={isCurrency}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const parsed = parseInt(e.target.value, 10);
+                const stepCount = isNaN(parsed) ? undefined : parsed;
                 setItem({
                   ...item,
                   properties: {
                     ...item.properties,
-                    currencyCode,
+                    stepCount,
                   },
                 });
               }}
-            >
-              <option value="">{t("addElementDialog.number.currencyNone")}</option>
-              <option value="CAD">CAD ($)</option>
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="GBP">GBP (£)</option>
-            </select>
+              value={
+                isCurrency
+                  ? 2
+                  : typeof item.properties.stepCount === "number"
+                    ? item.properties.stepCount
+                    : ""
+              }
+              min={1}
+              step={1}
+            />
           </div>
-        </div>
+        )}
       </InfoDetails>
 
       <InfoDetails className="mt-4" summary={t("Set a range")}>

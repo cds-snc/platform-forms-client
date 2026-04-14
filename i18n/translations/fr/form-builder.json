@@ -257,7 +257,8 @@
       "minDigits": "Nombre minimum de chiffres",
       "maxDigits": "Nombre maximum de chiffres",
       "currency": "Devise",
-      "currencyNone": "Aucune"
+      "currencyNone": "Aucune",
+      "decimals": "Décimales"
     },
     "questionElement": "Éléments",
     "radio": {

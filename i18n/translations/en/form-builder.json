@@ -256,8 +256,9 @@
       "max": "Maximum value",
       "minDigits": "Minimum number of digits",
       "maxDigits": "Maximum number of digits",
-      "currency": "Currency",
-      "currencyNone": "None"
+      "currency": "currency",
+      "currencyNone": "None",
+      "decimals": "decimals"
     },
     "questionElement": "Elements",
     "radio": {
