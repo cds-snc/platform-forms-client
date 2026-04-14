@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes, FormElement } from "@lib/types";
-import { InfoDetails } from "../../../../components/shared/InfoDetails";
+import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
+import { LabelledInput } from "../../../../components/shared/LabelledInput";
 
 export const NumberFieldOptions = ({
   item,
@@ -154,109 +155,88 @@ export const NumberFieldOptions = ({
       </InfoDetails>
 
       <InfoDetails className="mt-4" summary={t("Set a range")}>
-        <div className="mt-4">
-          <label
-            data-testid="numberMin"
-            className="gcds-label mt-1"
-            htmlFor={`numberField-${item.id}-id-numberMin`}
-          >
-            {t("addElementDialog.number.min")}
-          </label>
-          <input
-            type="number"
-            className="gc-input-text mt-2"
-            id={`numberField-${item.id}-id-numberMin`}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const numberMin = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
-              setItem({
-                ...item,
-                properties: {
-                  ...item.properties,
-                  numberMin,
-                },
-              });
-            }}
-            value={item.properties.numberMin ?? ""}
-          />
+        <h3 className="mt-4">Value</h3>
+        <div className="mt-4 flex flex-row gap-4">
+          <LabelledInput label="Min" id={`numberField-${item.id}-id-numberMin`}>
+            <input
+              type="number"
+              className="gc-input-text mt-2"
+              id={`numberField-${item.id}-id-numberMin`}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const numberMin = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
+                setItem({
+                  ...item,
+                  properties: {
+                    ...item.properties,
+                    numberMin,
+                  },
+                });
+              }}
+              value={item.properties.numberMin ?? ""}
+            />
+          </LabelledInput>
+          <LabelledInput label="Max" id={`numberField-${item.id}-id-numberMax`}>
+            <input
+              type="number"
+              className="gc-input-text mt-2"
+              id={`numberField-${item.id}-id-numberMax`}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const numberMax = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
+                setItem({
+                  ...item,
+                  properties: {
+                    ...item.properties,
+                    numberMax,
+                  },
+                });
+              }}
+              value={item.properties.numberMax ?? ""}
+            />
+          </LabelledInput>
         </div>
-        <div className="mt-4">
-          <label
-            data-testid="numberMax"
-            className="gcds-label mt-1"
-            htmlFor={`numberField-${item.id}-id-numberMax`}
-          >
-            {t("addElementDialog.number.max")}
-          </label>
-          <input
-            type="number"
-            className="gc-input-text mt-2"
-            id={`numberField-${item.id}-id-numberMax`}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const numberMax = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
-              setItem({
-                ...item,
-                properties: {
-                  ...item.properties,
-                  numberMax,
-                },
-              });
-            }}
-            value={item.properties.numberMax ?? ""}
-          />
-        </div>
-        <div className="mt-4">
-          <label
-            data-testid="minDigits"
-            className="gcds-label mt-1"
-            htmlFor={`numberField-${item.id}-id-minDigits`}
-          >
-            {t("addElementDialog.number.minDigits")}
-          </label>
-          <input
-            type="number"
-            className="gc-input-text mt-2"
-            id={`numberField-${item.id}-id-minDigits`}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const minDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
-              setItem({
-                ...item,
-                properties: {
-                  ...item.properties,
-                  minDigits,
-                },
-              });
-            }}
-            value={item.properties.minDigits ?? ""}
-            min={1}
-            step={1}
-          />
-        </div>
-        <div className="mt-4">
-          <label
-            data-testid="maxDigits"
-            className="gcds-label mt-1"
-            htmlFor={`numberField-${item.id}-id-maxDigits`}
-          >
-            {t("addElementDialog.number.maxDigits")}
-          </label>
-          <input
-            type="number"
-            className="gc-input-text mt-2"
-            id={`numberField-${item.id}-id-maxDigits`}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const maxDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
-              setItem({
-                ...item,
-                properties: {
-                  ...item.properties,
-                  maxDigits,
-                },
-              });
-            }}
-            value={item.properties.maxDigits ?? ""}
-            min={1}
-            step={1}
-          />
+
+        <h3 className="mt-4">Number of Digits</h3>
+        <div className="mt-4 flex flex-row gap-4">
+          <LabelledInput label="Min" id={`numberField-${item.id}-id-minDigits`}>
+            <input
+              type="number"
+              className="gc-input-text mt-2"
+              id={`numberField-${item.id}-id-minDigits`}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const minDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
+                setItem({
+                  ...item,
+                  properties: {
+                    ...item.properties,
+                    minDigits,
+                  },
+                });
+              }}
+              value={item.properties.minDigits ?? ""}
+              min={1}
+              step={1}
+            />
+          </LabelledInput>
+          <LabelledInput label="Max" id={`numberField-${item.id}-id-maxDigits`}>
+            <input
+              type="number"
+              className="gc-input-text mt-2"
+              id={`numberField-${item.id}-id-maxDigits`}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const maxDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
+                setItem({
+                  ...item,
+                  properties: {
+                    ...item.properties,
+                    maxDigits,
+                  },
+                });
+              }}
+              value={item.properties.maxDigits ?? ""}
+              min={1}
+              step={1}
+            />
+          </LabelledInput>
         </div>
       </InfoDetails>
     </section>
