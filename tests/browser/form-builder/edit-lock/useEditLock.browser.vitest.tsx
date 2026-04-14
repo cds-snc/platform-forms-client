@@ -225,7 +225,9 @@ describe("useEditLock", () => {
       .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
 
     expect(lockPostBodies.filter(({ action }) => action === "release")).toHaveLength(0);
-    expect(lockPostBodies.filter(({ action }) => action === "takeover-save-complete")).toHaveLength(1);
+    expect(lockPostBodies.filter(({ action }) => action === "takeover-save-complete")).toHaveLength(
+      1
+    );
   });
 
   it("refreshes until it sees a newer server version after takeover", async () => {
