@@ -148,12 +148,13 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   ]);
 
   const saveDraftIfNeeded = useCallback(async (): Promise<SaveDraftResult> => {
-    if (!templateIsDirty.current) {
+    const id = getId();
+    if (!templateIsDirty.current && id !== "") {
       return { status: "skipped" };
     }
 
     return saveDraft();
-  }, [saveDraft]);
+  }, [saveDraft, getId]);
 
   useSubscibeToTemplateStore(
     (s) =>
