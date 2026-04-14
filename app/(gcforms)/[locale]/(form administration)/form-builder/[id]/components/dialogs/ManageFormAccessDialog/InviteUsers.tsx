@@ -64,7 +64,7 @@ export const InviteUsers = () => {
         />
       </section>
 
-      <section className="-mb-4 mt-4 flex gap-2">
+      <section className="mt-4 -mb-4 flex gap-2">
         <Button theme="secondary" onClick={() => setIsOpen(false)}>
           {t("back")}
         </Button>

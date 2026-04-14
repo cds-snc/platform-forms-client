@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeAll } from "vitest";
 import { page } from "@vitest/browser/context";
-import { ConfirmAction } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses/[[...statusFilter]]/components/ManageFormAccessDialog/ConfirmAction";
+import { ConfirmAction } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/components/dialogs/ManageFormAccessDialog/ConfirmAction";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 

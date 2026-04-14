@@ -29,7 +29,7 @@ export const UserActions = ({
   const handleRemoveUser = async (userId: string) => {
     const result = await removeUserFromForm(userId, formId);
     if (result.success) {
-      setUsersWithAccess(usersWithAccess.filter((user) => user.id !== userId));
+      setUsersWithAccess(usersWithAccess.filter((existingUser) => existingUser.id !== userId));
       return true;
     }
     return false;
@@ -41,7 +41,7 @@ export const UserActions = ({
 
   const handleCancelInvitation = async (id: string): Promise<boolean> => {
     cancelInvitation(id);
-    setUsersWithAccess(usersWithAccess.filter((user) => user.id !== id));
+    setUsersWithAccess(usersWithAccess.filter((existingUser) => existingUser.id !== id));
     return true;
   };
 
@@ -56,7 +56,7 @@ export const UserActions = ({
                 <button onClick={() => handleResendInvitation(user.email)}>
                   <RefreshIcon
                     title={t("resend")}
-                    className="rounded-full border-1.5 border-transparent hover:border-blue-focus"
+                    className="border-1.5 hover:border-blue-focus rounded-full border-transparent"
                   />
                 </button>
               </Tooltip.Simple>
@@ -69,7 +69,7 @@ export const UserActions = ({
                 icon={
                   <CancelIcon
                     title={t("deleteInvitation")}
-                    className="rounded-full border-1.5 border-transparent hover:border-blue-focus"
+                    className="border-1.5 hover:border-blue-focus rounded-full border-transparent"
                   />
                 }
                 callback={() => handleCancelInvitation(user.id)}
@@ -79,7 +79,6 @@ export const UserActions = ({
         </div>
       ) : (
         <div>
-          {/* Disable delete for current user or only remaining user */}
           {disableRow ? (
             <span></span>
           ) : (

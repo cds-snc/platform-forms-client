@@ -21,17 +21,9 @@ export const ManageUsers = () => {
 
   const { formId, emailList, setEmailList } = useManageFormAccessDialog();
 
-  /**
-   * Validate an email address
-   * Add an error for display if the email is invalid
-   *
-   * @param email
-   * @returns
-   */
   const isValidEmail = (email: string) => {
     let valid = true;
 
-    // User already has access
     if (
       usersWithAccess.find(
         (user) =>
@@ -43,19 +35,16 @@ export const ManageUsers = () => {
       valid = false;
     }
 
-    // Not a valid government email
     if (!isValidGovEmail(email)) {
       handleAddError(t("invalidEmail", { email }));
       return false;
     }
 
-    // Email already in the list
     if (emailList.some((e) => e.toLowerCase() === email.toLowerCase())) {
       handleAddError(t("emailAlreadyInList", { email }));
       valid = false;
     }
 
-    // Email domain must match the logged-in user's email domain
     const loggedInUserDomain = loggedInUserEmail.split("@");
     if (loggedInUserDomain.length < 2) {
       handleAddError(t("emailDomainMismatch", { email }));
@@ -71,21 +60,10 @@ export const ManageUsers = () => {
     return valid;
   };
 
-  /**
-   * Add an error to the list
-   * @param error
-   */
   const handleAddError = (error: string) => {
     setErrors((prevErrors: string[]) => [...prevErrors, error]);
   };
 
-  /**
-   * Handle adding one or more emails addresses to the list.
-   * Multiple emails can be delimited by comma or space.
-   * Emails are validated before being added to the list.
-   *
-   * @param emails
-   */
   const handleAddEmail = (emails: string) => {
     if (!emails) return;
     setErrors([]);
@@ -97,10 +75,6 @@ export const ManageUsers = () => {
     setSelectedEmail("");
   };
 
-  /**
-   * Remove an email from the list
-   * @param email
-   */
   const handleRemoveEmail = (email: string) => {
     setEmailList(emailList.filter((e) => e !== email));
   };
@@ -115,7 +89,6 @@ export const ManageUsers = () => {
 
       if (!isMounted) return;
 
-      // Make sure the logged-in user is at the top of the list
       const sorted = [...users].sort((a, b) => {
         if (a.email === loggedInUserEmail) return -1;
         if (b.email === loggedInUserEmail) return 1;

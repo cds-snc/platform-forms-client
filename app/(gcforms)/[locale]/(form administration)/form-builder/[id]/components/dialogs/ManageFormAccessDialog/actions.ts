@@ -10,11 +10,7 @@ import {
   TemplateNotFoundError,
   UserAlreadyHasAccessError,
 } from "@lib/invitations/exceptions";
-import {
-  getPublicTemplateByID,
-  getTemplateWithAssociatedUsers,
-  removeAssignedUserFromTemplate,
-} from "@lib/templates";
+import { getTemplateWithAssociatedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { logMessage } from "@lib/logger";
 import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
@@ -25,17 +21,6 @@ export const sendInvitation = AuthenticatedAction(
     const { t } = await serverTranslation("manage-form-access");
 
     const errors: string[] = [];
-
-    const template = await getPublicTemplateByID(templateId);
-    if (!template?.isPublished) {
-      logMessage.error(`Invitation failed - draft form ${templateId}`);
-      errors.push(t("draftFormError"));
-
-      return {
-        success: false,
-        errors,
-      };
-    }
 
     const invites = emails.map(async (email) => {
       try {
@@ -52,11 +37,11 @@ export const sendInvitation = AuthenticatedAction(
         }
         if (e instanceof TemplateNotFoundError) {
           errors.push(t("templateNotFound", { templateId }));
-          throw e; // stop processing other emails
+          throw e;
         }
         if (e instanceof AccessControlError) {
           errors.push(t("accessControlError"));
-          throw e; // stop processing other emails
+          throw e;
         }
         logMessage.error(`Invitation failed: ${JSON.stringify(e)}`);
         errors.push(t("invitationFailed", { email }));
@@ -65,7 +50,7 @@ export const sendInvitation = AuthenticatedAction(
 
     try {
       await Promise.allSettled(invites);
-    } catch (e) {
+    } catch {
       return {
         success: false,
         errors,
@@ -92,7 +77,7 @@ export const removeUserFromForm = AuthenticatedAction(async (_, userId: string, 
       success: true,
       message: "User removed",
     };
-  } catch (e) {
+  } catch {
     return {
       success: false,
       message: "Failed to remove user",
@@ -119,7 +104,7 @@ export const getTemplateUsers = AuthenticatedAction(async (_, formId: string) =>
   });
 
   const combinedUsers = [
-    ...(template?.users.map((user) => ({ ...user })) || []),
+    ...(template.users.map((user) => ({ ...user })) || []),
     ...invitations.map((invitation) => ({
       id: invitation.id,
       email: invitation.email,
