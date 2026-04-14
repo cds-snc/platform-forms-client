@@ -39,7 +39,7 @@ import {
   shouldEnforceTemplateEditLock,
   TemplateEditLockedError,
 } from "@lib/editLocks";
-import { validateTemplate } from "@root/lib/utils/form-builder/validate";
+import { validateTemplate } from "@lib/utils/form-builder/validate";
 
 const assertTemplateEditLockIfEnabled = async (templateId: string, userId: string) => {
   if (process.env.APP_ENV === "test" || !(await shouldEnforceTemplateEditLock(templateId))) {
