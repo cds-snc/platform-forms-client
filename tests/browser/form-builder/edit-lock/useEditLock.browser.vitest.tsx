@@ -95,11 +95,15 @@ const ownerLockStatus = {
 function EditLockHarness({
   onTakeoverReady,
   onChangeKey,
+  onLockStateChange,
 }: {
   onTakeoverReady?: (takeover: () => Promise<void>) => void;
   onChangeKey?: (changeKey: string) => void;
+  onLockStateChange?: (state: { isLockedByOther: boolean; hasEditLock: boolean }) => void;
 }) {
   const changeKey = useTemplateStore((s) => s.changeKey);
+  const isLockedByOther = useTemplateStore((s) => s.isLockedByOther);
+  const editLock = useTemplateStore((s) => s.editLock);
   const { takeover } = useEditLock({
     formId: "test-form-id",
     enabled: true,
@@ -113,6 +117,13 @@ function EditLockHarness({
   useEffect(() => {
     onChangeKey?.(changeKey);
   }, [changeKey, onChangeKey]);
+
+  useEffect(() => {
+    onLockStateChange?.({
+      isLockedByOther,
+      hasEditLock: editLock !== null,
+    });
+  }, [editLock, isLockedByOther, onLockStateChange]);
 
   useEffect(() => {
     return () => {
@@ -255,5 +266,47 @@ describe("useEditLock", () => {
 
     expect(changeKeys.at(-1)).toBeDefined();
     expect(changeKeys.at(-1)).not.toBe(changeKeys[0]);
+  });
+
+  it("does not mark the form as locked by another user when the edit-lock endpoint is unauthorized", async () => {
+    const lockStates: Array<{ isLockedByOther: boolean; hasEditLock: boolean }> = [];
+
+    fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+
+      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+        return {
+          ok: false,
+          json: async () => ({ error: "Unauthorized" }),
+        } as Response;
+      }
+
+      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+        return {
+          ok: false,
+          json: async () => ({ error: "Unauthorized" }),
+        } as Response;
+      }
+
+      if (url.endsWith("/api/templates/test-form-id")) {
+        return {
+          ok: true,
+          json: async () => ({ form: { elements: [] }, updatedAt: new Date().toISOString() }),
+        } as Response;
+      }
+
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
+
+    await render(<EditLockHarness onLockStateChange={(state) => lockStates.push(state)} />);
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock",
+        expect.objectContaining({ method: "POST" })
+      );
+    });
+
+    expect(lockStates.at(-1)).toEqual({ isLockedByOther: false, hasEditLock: false });
   });
 });
