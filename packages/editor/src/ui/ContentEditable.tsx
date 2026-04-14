@@ -3,7 +3,6 @@ import type { JSX } from "react";
 import "./ContentEditable.css";
 
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import * as React from "react";
 
 type Props = {
   className?: string;
@@ -27,8 +26,8 @@ export default function LexicalContentEditable({
       className={`${className ?? ""} gc-contenteditable`}
       aria-placeholder={placeholder}
       id={id}
-      aria-label={ariaLabel}
-      aria-describedby={ariaDescribedBy}
+      {...(ariaLabel && { "aria-label": ariaLabel })}
+      {...(ariaDescribedBy && { "aria-describedby": ariaDescribedBy })}
       placeholder={
         <div className={placeholderClassName || "gc-contenteditable-placeholder"}>
           {placeholder}
