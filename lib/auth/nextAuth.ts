@@ -49,6 +49,11 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
   return user?.active ?? false;
 };
 
+// Temporary function to use the "unified sso auth" url without breaking API key generation or other code using the current "forms" Zitadel provider.
+const filterZitadelUrl = (url: string = ""): string => {
+  return url.replace(/\/\/auth\.(.+?)\./, "//auth.");
+};
+
 const prismaAdapter = PrismaAdapter(prisma);
 const adapter = {
   ...prismaAdapter,
@@ -71,7 +76,7 @@ const {
       id: "gcForms", // signIn("my-provider") and will be part of the callback URL
       name: "GC Forms", // optional, used on the default login page as the button text.
       type: "oidc",
-      issuer: process.env.NEXT_PUBLIC_ZITADEL_URL,
+      issuer: filterZitadelUrl(process.env.NEXT_PUBLIC_ZITADEL_URL),
       clientId: process.env.ZITADEL_CLIENT_ID,
       checks: ["pkce", "state"],
       client: { token_endpoint_auth_method: "none" },

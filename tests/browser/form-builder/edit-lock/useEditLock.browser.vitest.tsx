@@ -95,11 +95,15 @@ const ownerLockStatus = {
 function EditLockHarness({
   onTakeoverReady,
   onChangeKey,
+  onLockStateChange,
 }: {
   onTakeoverReady?: (takeover: () => Promise<void>) => void;
   onChangeKey?: (changeKey: string) => void;
+  onLockStateChange?: (state: { isLockedByOther: boolean; hasEditLock: boolean }) => void;
 }) {
   const changeKey = useTemplateStore((s) => s.changeKey);
+  const isLockedByOther = useTemplateStore((s) => s.isLockedByOther);
+  const editLock = useTemplateStore((s) => s.editLock);
   const { takeover } = useEditLock({
     formId: "test-form-id",
     enabled: true,
@@ -113,6 +117,13 @@ function EditLockHarness({
   useEffect(() => {
     onChangeKey?.(changeKey);
   }, [changeKey, onChangeKey]);
+
+  useEffect(() => {
+    onLockStateChange?.({
+      isLockedByOther,
+      hasEditLock: editLock !== null,
+    });
+  }, [editLock, isLockedByOther, onLockStateChange]);
 
   useEffect(() => {
     return () => {
@@ -188,6 +199,37 @@ describe("useEditLock", () => {
     expect(saveDraftIfNeeded).not.toHaveBeenCalled();
   });
 
+  it("does not release on unmount during a takeover handoff", async () => {
+    const saveDraftDeferred = Promise.resolve({ status: "saved" as const });
+    saveDraft.mockImplementationOnce(() => saveDraftDeferred);
+
+    const rendered = await render(<EditLockHarness />);
+
+    await vi.waitFor(() => {
+      expect(MockEventSource.instances).toHaveLength(1);
+    });
+
+    MockEventSource.instances[0].emit("takeover-requested");
+    rendered.unmount();
+
+    await saveDraftDeferred;
+
+    await vi.waitFor(() => {
+      expect(saveDraft).toHaveBeenCalledTimes(1);
+    });
+
+    const lockPostBodies = fetchMock.mock.calls
+      .filter(([input, init]) => {
+        return String(input).endsWith("/edit-lock") && init?.method === "POST";
+      })
+      .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
+
+    expect(lockPostBodies.filter(({ action }) => action === "release")).toHaveLength(0);
+    expect(lockPostBodies.filter(({ action }) => action === "takeover-save-complete")).toHaveLength(
+      1
+    );
+  });
+
   it("refreshes until it sees a newer server version after takeover", async () => {
     const staleUpdatedAt = "2026-03-31T12:00:00.000Z";
     const freshUpdatedAt = "2026-03-31T12:00:03.000Z";
@@ -255,5 +297,108 @@ describe("useEditLock", () => {
 
     expect(changeKeys.at(-1)).toBeDefined();
     expect(changeKeys.at(-1)).not.toBe(changeKeys[0]);
+  });
+
+  it("does not release and reacquire after takeover refresh updates updatedAt", async () => {
+    const freshUpdatedAt = "2026-03-31T12:00:03.000Z";
+    templateUpdatedAt = Date.parse("2026-03-31T12:00:00.000Z");
+
+    fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+
+      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
+
+      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
+
+      if (url.endsWith("/api/templates/test-form-id")) {
+        return {
+          ok: true,
+          json: async () => ({
+            form: { elements: [] },
+            updatedAt: freshUpdatedAt,
+          }),
+        } as Response;
+      }
+
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
+
+    let takeover: (() => Promise<void>) | undefined;
+
+    await render(<EditLockHarness onTakeoverReady={(nextTakeover) => (takeover = nextTakeover)} />);
+
+    await vi.waitFor(() => {
+      expect(takeover).toBeDefined();
+      expect(MockEventSource.instances).toHaveLength(1);
+    });
+
+    await takeover?.();
+
+    await vi.waitFor(() => {
+      expect(setUpdatedAt).toHaveBeenCalledWith(Date.parse(freshUpdatedAt));
+    });
+
+    const lockPostBodies = fetchMock.mock.calls
+      .filter(([input, init]) => {
+        return String(input).endsWith("/edit-lock") && init?.method === "POST";
+      })
+      .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
+
+    expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(1);
+    expect(lockPostBodies.filter(({ action }) => action === "takeover")).toHaveLength(1);
+    expect(lockPostBodies.filter(({ action }) => action === "release")).toHaveLength(0);
+    expect(MockEventSource.instances).toHaveLength(1);
+  });
+
+  it("does not mark the form as locked by another user when the edit-lock endpoint is unauthorized", async () => {
+    const lockStates: Array<{ isLockedByOther: boolean; hasEditLock: boolean }> = [];
+
+    fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+
+      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+        return {
+          ok: false,
+          json: async () => ({ error: "Unauthorized" }),
+        } as Response;
+      }
+
+      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+        return {
+          ok: false,
+          json: async () => ({ error: "Unauthorized" }),
+        } as Response;
+      }
+
+      if (url.endsWith("/api/templates/test-form-id")) {
+        return {
+          ok: true,
+          json: async () => ({ form: { elements: [] }, updatedAt: new Date().toISOString() }),
+        } as Response;
+      }
+
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
+
+    await render(<EditLockHarness onLockStateChange={(state) => lockStates.push(state)} />);
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock",
+        expect.objectContaining({ method: "POST" })
+      );
+    });
+
+    expect(lockStates.at(-1)).toEqual({ isLockedByOther: false, hasEditLock: false });
   });
 });
