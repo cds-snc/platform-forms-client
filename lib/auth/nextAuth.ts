@@ -51,7 +51,8 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
 
 // Temporary function to use the "unified sso auth" url without breaking API key generation or other code using the current "forms" Zitadel provider.
 const filterZitadelUrl = (url: string = ""): string => {
-  return url.replace(/\/\/auth\.(.+?)\./, "//auth.");
+  // Handles case of https://auth.forms-staging.cdssandbox.xyz transforms to https://auth.cdssandbox.xyz
+  return url.replace("auth.forms-staging.", "auth.");
 };
 
 const prismaAdapter = PrismaAdapter(prisma);
@@ -261,11 +262,6 @@ const {
               }
             | undefined;
 
-          const oidcAccount = account as { id_token?: string };
-          if (oidcAccount.id_token) {
-            token.oidcIdToken = oidcAccount.id_token;
-          }
-
           token.hasSecurityQuestions = true; // Set to true OICDC flow
 
           applyIdentityClaimsToToken(token, {
@@ -356,7 +352,6 @@ const {
         name: token.name ?? null,
         email: token.email,
         accountUrl: token.provider === "gcForms" ? token.accountUrl : undefined,
-        oidcIdToken: token.provider === "gcForms" ? token.oidcIdToken : undefined,
         privileges: await getPrivilegeRulesForUser(token.userId as string),
         ...(token.provider !== "gcForms" &&
           token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
