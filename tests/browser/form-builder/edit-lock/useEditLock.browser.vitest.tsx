@@ -99,7 +99,8 @@ class MockBroadcastChannel {
   }
 
   postMessage(data: unknown) {
-    const channels = MockBroadcastChannel.channels.get(this.name) ?? new Set<MockBroadcastChannel>();
+    const channels =
+      MockBroadcastChannel.channels.get(this.name) ?? new Set<MockBroadcastChannel>();
     channels.forEach((channel) => {
       if (channel === this) {
         return;
