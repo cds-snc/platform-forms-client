@@ -160,7 +160,7 @@ export const NumberFieldOptions = ({
           <LabelledInput classNames="w-1/2" label="Min">
             <input
               type="number"
-              className="gc-input-text mt-0"
+              className="gc-input-text mt-0!"
               id={`numberField-${item.id}-id-numberMin`}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const numberMin = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
@@ -178,7 +178,7 @@ export const NumberFieldOptions = ({
           <LabelledInput classNames="w-1/2" label="Max">
             <input
               type="number"
-              className="gc-input-text mt-0"
+              className="gc-input-text mt-0!"
               id={`numberField-${item.id}-id-numberMax`}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const numberMax = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
@@ -200,7 +200,7 @@ export const NumberFieldOptions = ({
           <LabelledInput classNames="w-1/2" label="Min">
             <input
               type="number"
-              className="gc-input-text mt-0"
+              className="gc-input-text mt-0!"
               id={`numberField-${item.id}-id-minDigits`}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const minDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
@@ -220,7 +220,7 @@ export const NumberFieldOptions = ({
           <LabelledInput classNames="w-1/2" label="Max">
             <input
               type="number"
-              className="gc-input-text mt-0"
+              className="gc-input-text mt-0!"
               id={`numberField-${item.id}-id-maxDigits`}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const maxDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
