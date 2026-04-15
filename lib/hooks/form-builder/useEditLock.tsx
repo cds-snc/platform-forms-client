@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormRecord } from "@lib/types";
@@ -22,6 +22,12 @@ import {
 
 const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
 const SERVER_STATE_SYNC_RETRY_MS = 500;
+const EDIT_LOCK_TAB_COORDINATION_PREFIX = "edit-lock-tab";
+
+type EditLockTabMessage = {
+  type: "claim" | "release";
+  tabId: string;
+};
 
 const wait = async (timeMs: number) =>
   new Promise((resolve) => {
@@ -47,6 +53,13 @@ export const useEditLock = ({
   const heartbeatRef = useRef<number | null>(null);
   const pollRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
+  const coordinationChannelRef = useRef<BroadcastChannel | null>(null);
+  const leaderTabIdRef = useRef<string | null>(null);
+  const tabIdRef = useRef<string>(
+    typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`
+  );
   const startHeartbeatRef = useRef<() => void>(() => undefined);
   const startPollingRef = useRef<() => void>(() => undefined);
   const lockLoopTokenRef = useRef(0);
@@ -55,6 +68,15 @@ export const useEditLock = ({
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
   const visibilityStateRef = useRef<EditLockVisibilityState>("visible");
+  const [isLeaderTab, setIsLeaderTab] = useState(() => {
+    if (typeof document === "undefined") {
+      return true;
+    }
+
+    return document.visibilityState === "visible" && document.hasFocus();
+  });
+  const coordinationChannelName = `${EDIT_LOCK_TAB_COORDINATION_PREFIX}:${formId}`;
+  const effectiveEnabled = enabled && isLeaderTab;
 
   const clearLockState = useCallback(() => {
     setIsLockedByOther(false);
@@ -106,6 +128,41 @@ export const useEditLock = ({
     eventSourceRef.current?.close();
     eventSourceRef.current = null;
   }, []);
+
+  const isTabForeground = useCallback(() => {
+    if (typeof document === "undefined") {
+      return true;
+    }
+
+    return document.visibilityState === "visible" && document.hasFocus();
+  }, []);
+
+  const broadcastTabMessage = useCallback((message: EditLockTabMessage) => {
+    coordinationChannelRef.current?.postMessage(message);
+  }, []);
+
+  const claimLeadership = useCallback(() => {
+    leaderTabIdRef.current = tabIdRef.current;
+    setIsLeaderTab(true);
+    broadcastTabMessage({ type: "claim", tabId: tabIdRef.current });
+  }, [broadcastTabMessage]);
+
+  const releaseLeadership = useCallback(
+    (broadcast = true) => {
+      const isCurrentLeader = leaderTabIdRef.current === tabIdRef.current;
+
+      if (broadcast && isCurrentLeader) {
+        broadcastTabMessage({ type: "release", tabId: tabIdRef.current });
+      }
+
+      if (isCurrentLeader) {
+        leaderTabIdRef.current = null;
+      }
+
+      setIsLeaderTab(false);
+    },
+    [broadcastTabMessage]
+  );
 
   const postAction = useCallback(
     async (action: "acquire" | "heartbeat" | "release" | "takeover" | "takeover-save-complete") => {
@@ -336,7 +393,7 @@ export const useEditLock = ({
   );
 
   useEffect(() => {
-    if (!enabled) {
+    if (!effectiveEnabled) {
       clearTimers();
       clearEvents();
       clearLockState();
@@ -379,7 +436,7 @@ export const useEditLock = ({
       }
     };
   }, [
-    enabled,
+    effectiveEnabled,
     formId,
     clearLockState,
     clearTimers,
@@ -444,7 +501,7 @@ export const useEditLock = ({
   }, [enabled, status]);
 
   useEffect(() => {
-    if (!enabled || status !== "authenticated") {
+    if (!effectiveEnabled || status !== "authenticated") {
       clearEvents();
       return;
     }
@@ -496,13 +553,87 @@ export const useEditLock = ({
     };
   }, [
     clearEvents,
-    enabled,
+    effectiveEnabled,
     flushDraftBeforeTakeover,
     formId,
     startPolling,
     status,
     syncServerState,
     updateStore,
+  ]);
+
+  useEffect(() => {
+    if (!enabled || status !== "authenticated" || typeof BroadcastChannel === "undefined") {
+      setIsLeaderTab(true);
+      return;
+    }
+
+    const coordinationChannel = new BroadcastChannel(coordinationChannelName);
+    coordinationChannelRef.current = coordinationChannel;
+
+    const attemptLeadership = () => {
+      if (isTabForeground()) {
+        claimLeadership();
+        return;
+      }
+
+      releaseLeadership();
+    };
+
+    const handleMessage = (event: MessageEvent<EditLockTabMessage>) => {
+      const message = event.data;
+      if (!message || message.tabId === tabIdRef.current) {
+        return;
+      }
+
+      if (message.type === "claim") {
+        leaderTabIdRef.current = message.tabId;
+        setIsLeaderTab(false);
+        return;
+      }
+
+      if (message.type === "release" && leaderTabIdRef.current === message.tabId) {
+        leaderTabIdRef.current = null;
+
+        if (isTabForeground()) {
+          window.setTimeout(() => {
+            if (leaderTabIdRef.current === null) {
+              claimLeadership();
+            }
+          }, 0);
+        }
+      }
+    };
+
+    const handleFocusChange = () => {
+      attemptLeadership();
+    };
+
+    coordinationChannel.addEventListener("message", handleMessage as EventListener);
+    window.addEventListener("focus", handleFocusChange);
+    window.addEventListener("blur", handleFocusChange);
+    window.addEventListener("pagehide", handleFocusChange);
+    document.addEventListener("visibilitychange", handleFocusChange);
+
+    attemptLeadership();
+
+    return () => {
+      coordinationChannel.removeEventListener("message", handleMessage as EventListener);
+      window.removeEventListener("focus", handleFocusChange);
+      window.removeEventListener("blur", handleFocusChange);
+      window.removeEventListener("pagehide", handleFocusChange);
+      document.removeEventListener("visibilitychange", handleFocusChange);
+      releaseLeadership();
+      coordinationChannel.close();
+      coordinationChannelRef.current = null;
+    };
+  }, [
+    claimLeadership,
+    coordinationChannelName,
+    enabled,
+    isTabForeground,
+    releaseLeadership,
+    status,
   ]);
 
   const takeover = useCallback(async () => {
