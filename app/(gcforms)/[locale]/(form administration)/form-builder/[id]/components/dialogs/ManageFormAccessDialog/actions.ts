@@ -58,11 +58,11 @@ export const sendInvitation = AuthenticatedAction(
         }
         if (e instanceof TemplateNotFoundError) {
           errors.push(t("templateNotFound", { templateId }));
-          throw e;
+          throw e; // stop processing other emails
         }
         if (e instanceof AccessControlError) {
           errors.push(t("accessControlError"));
-          throw e;
+          throw e; // stop processing other emails
         }
         logMessage.error(`Invitation failed: ${JSON.stringify(e)}`);
         errors.push(t("invitationFailed", { email }));

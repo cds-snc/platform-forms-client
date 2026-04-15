@@ -79,6 +79,7 @@ export const UserActions = ({
         </div>
       ) : (
         <div>
+          {/* Disable delete for current user or only remaining user */}
           {disableRow ? (
             <span></span>
           ) : (

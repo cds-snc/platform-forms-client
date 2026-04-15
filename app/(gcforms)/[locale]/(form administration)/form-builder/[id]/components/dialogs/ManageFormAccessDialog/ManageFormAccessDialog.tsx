@@ -18,12 +18,18 @@ export const ManageFormAccessDialog = () => {
   const [isInvitationScreen, setIsInvitationScreen] = useState(false);
   const isManagementScreen = !isInvitationScreen;
 
+  /**
+   * Open the dialog
+   */
   const handleOpenDialog = useCallback(() => {
     setIsInvitationScreen(false);
     setEmailList([]);
     setIsOpen(true);
   }, [setEmailList, setIsOpen]);
 
+  /**
+   * Close the dialog and reset the data
+   */
   const handleCloseDialog = () => {
     setIsOpen(false);
     setIsInvitationScreen(false);
@@ -37,6 +43,11 @@ export const ManageFormAccessDialog = () => {
     };
   }, [Event, handleOpenDialog]);
 
+  /**
+   * Validate all emails in the list before submit.
+   *
+   * @returns boolean
+   */
   const validate = () => {
     return emailList.every((email) => isValidGovEmail(email));
   };
