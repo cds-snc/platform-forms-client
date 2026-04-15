@@ -4,24 +4,22 @@ export const LabelledInput = ({
   label,
   children,
   id,
+  classNames,
 }: {
   label: string;
   children: React.ReactElement;
   id: string;
+  classNames?: string;
 }) => {
   return (
-    <div className="mb-4 flex rounded-md border-1 border-black">
+    <div className={`mb-4 flex ${classNames ?? ""}`}>
       <label
         htmlFor={id}
-        className="block rounded-l-md border-r-1 border-black bg-slate-50 p-4 text-sm"
+        className="inline-block rounded-l-md border-t-2 border-b-2 border-l-2 border-black bg-slate-50 p-4 text-sm"
       >
         {label}
       </label>
-      {React.cloneElement(children, {
-        // @ts-expect-error -- Fix this
-        className: "block w-full rounded-r-md p-2 outline-offset-[-5px]",
-        id,
-      })}
+      {children}
     </div>
   );
 };

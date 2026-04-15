@@ -157,10 +157,10 @@ export const NumberFieldOptions = ({
       <InfoDetails className="mt-4" summary={t("Set a range")}>
         <h3 className="mt-4">Value</h3>
         <div className="mt-4 flex flex-row gap-4">
-          <LabelledInput label="Min" id={`numberField-${item.id}-id-numberMin`}>
+          <LabelledInput classNames="w-1/2" label="Min" id={`numberField-${item.id}-id-numberMin`}>
             <input
               type="number"
-              className="gc-input-text mt-2"
+              className="gc-input-text mt-0"
               id={`numberField-${item.id}-id-numberMin`}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const numberMin = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
@@ -175,10 +175,10 @@ export const NumberFieldOptions = ({
               value={item.properties.numberMin ?? ""}
             />
           </LabelledInput>
-          <LabelledInput label="Max" id={`numberField-${item.id}-id-numberMax`}>
+          <LabelledInput classNames="w-1/2" label="Max" id={`numberField-${item.id}-id-numberMax`}>
             <input
               type="number"
-              className="gc-input-text mt-2"
+              className="gc-input-text mt-0"
               id={`numberField-${item.id}-id-numberMax`}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const numberMax = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
@@ -197,10 +197,10 @@ export const NumberFieldOptions = ({
 
         <h3 className="mt-4">Number of Digits</h3>
         <div className="mt-4 flex flex-row gap-4">
-          <LabelledInput label="Min" id={`numberField-${item.id}-id-minDigits`}>
+          <LabelledInput classNames="w-1/2" label="Min" id={`numberField-${item.id}-id-minDigits`}>
             <input
               type="number"
-              className="gc-input-text mt-2"
+              className="gc-input-text mt-0"
               id={`numberField-${item.id}-id-minDigits`}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const minDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
@@ -217,10 +217,10 @@ export const NumberFieldOptions = ({
               step={1}
             />
           </LabelledInput>
-          <LabelledInput label="Max" id={`numberField-${item.id}-id-maxDigits`}>
+          <LabelledInput classNames="w-1/2" label="Max" id={`numberField-${item.id}-id-maxDigits`}>
             <input
               type="number"
-              className="gc-input-text mt-2"
+              className="gc-input-text mt-0"
               id={`numberField-${item.id}-id-maxDigits`}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const maxDigits = e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
