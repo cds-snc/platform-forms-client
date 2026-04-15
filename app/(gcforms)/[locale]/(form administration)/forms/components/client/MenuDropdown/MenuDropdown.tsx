@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, ReactNode } from "react";
 import "./MenuDropdown.css";
 import { useTranslation } from "@i18n/client";
 import { Menu } from "./Menu";
@@ -14,10 +14,11 @@ export interface MenuDropdownItemI {
   title: string;
   url?: string;
   callback?: () => MenuDropdownItemCallback;
+  element?: ReactNode;
 }
 
 interface MenuDropdownProps {
-  children: React.ReactNode;
+  children: ReactNode;
   id: string;
   items: Array<MenuDropdownItemI>;
   direction?: string;
@@ -65,7 +66,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
           }}
           type="button"
           id={`button-${id}`}
-          className="flex border-2 border-white-default py-1 pl-0 pr-1 aria-expanded:border-black-default"
+          className="border-white-default aria-expanded:border-black-default flex border-2 py-1 pr-1 pl-0"
           aria-haspopup="true"
           aria-controls={`menu-${id}`}
           ref={menuButtonRef}
@@ -74,7 +75,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         </button>
         <ul
           id={`menu-${id}`}
-          className={"z-50 m-0 list-none border border-black-default bg-white-default p-0"}
+          className={"border-black-default bg-white-default z-50 m-0 list-none border p-0"}
           role="menu"
           popover="auto"
           tabIndex={-1}
@@ -122,9 +123,11 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
                       </button>
                       <div
                         aria-live="polite"
-                        className="absolute top-8 line-clamp-1 hidden text-[.7rem] text-green-default"
+                        className="text-green-default absolute top-8 line-clamp-1 hidden text-[.7rem]"
                       ></div>
                     </>
+                  ) : item.element ? (
+                    item.element
                   ) : (
                     <a
                       href={item.url}

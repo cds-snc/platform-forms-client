@@ -5,6 +5,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.11.0](https://github.com/cds-snc/platform-forms-client/compare/v4.10.1...v4.11.0) (2026-04-14)
+
+
+### Features
+
+* add branding for DFO-MPO ([#6951](https://github.com/cds-snc/platform-forms-client/issues/6951)) ([951dd2c](https://github.com/cds-snc/platform-forms-client/commit/951dd2ca1bbe8206682d993800e77a5afd04c855))
+* Custom regex validation ([#6861](https://github.com/cds-snc/platform-forms-client/issues/6861)) ([9ac4e13](https://github.com/cds-snc/platform-forms-client/commit/9ac4e135c78db0d0123329436f86fb5d0483e755))
+* Locked draft editing - feature flagged. ([#6843](https://github.com/cds-snc/platform-forms-client/issues/6843)) ([8e5a09f](https://github.com/cds-snc/platform-forms-client/commit/8e5a09fe04c66bf048acb011f592b9ae78097779))
+
+
+### Bug Fixes
+
+* a11y update for combobox and department list ([#6862](https://github.com/cds-snc/platform-forms-client/issues/6862)) ([0b31f67](https://github.com/cds-snc/platform-forms-client/commit/0b31f674afd4d033d560c7e3c82c8df3a66f4806))
+* add combobox bulk upload in a repeating set ([#6972](https://github.com/cds-snc/platform-forms-client/issues/6972)) ([9b77c1f](https://github.com/cds-snc/platform-forms-client/commit/9b77c1f1964ce05fb1f0744c55545f08f9330726))
+* Fix strict combobox bugs ([#6948](https://github.com/cds-snc/platform-forms-client/issues/6948)) ([46cd0b8](https://github.com/cds-snc/platform-forms-client/commit/46cd0b83bb79e5eca766b8fb557923089c631e8a))
+* template dirty check ([#6978](https://github.com/cds-snc/platform-forms-client/issues/6978)) ([f4f9bb9](https://github.com/cds-snc/platform-forms-client/commit/f4f9bb949518d24c0d94a20acb4081baee504516))
+* toast background colour ([#6944](https://github.com/cds-snc/platform-forms-client/issues/6944)) ([746b056](https://github.com/cds-snc/platform-forms-client/commit/746b056d21c67c3b885cd7d09b23bcf7f8ae9ed9))
+* update nextAuth issuer filter ([#6975](https://github.com/cds-snc/platform-forms-client/issues/6975)) ([4faf7a5](https://github.com/cds-snc/platform-forms-client/commit/4faf7a599718fceb88495219b873a9f654157a6c))
+
+
+### Miscellaneous Chores
+
+* add code to gate heartbeat ([#6973](https://github.com/cds-snc/platform-forms-client/issues/6973)) ([f72f3d4](https://github.com/cds-snc/platform-forms-client/commit/f72f3d44e8aff4be77717557a4dcc9eb587124d1))
+* add feature flag for locked draft editing ([#6952](https://github.com/cds-snc/platform-forms-client/issues/6952)) ([090ad0d](https://github.com/cds-snc/platform-forms-client/commit/090ad0dfa32696de2a779f7714017c6f4f68c56f))
+* add set from record helper ([#6897](https://github.com/cds-snc/platform-forms-client/issues/6897)) ([f1b83e8](https://github.com/cds-snc/platform-forms-client/commit/f1b83e86e4865c55b3f8ba6b74a04262ee187e4b))
+* Check for db package ([#6945](https://github.com/cds-snc/platform-forms-client/issues/6945)) ([1ef8b78](https://github.com/cds-snc/platform-forms-client/commit/1ef8b7803b7a99e47f1023db91ad5f72b207c827))
+* edit lock ui ([#6939](https://github.com/cds-snc/platform-forms-client/issues/6939)) ([fede2c6](https://github.com/cds-snc/platform-forms-client/commit/fede2c6d3dc999d43150ffe3e2347a39283a0d8c))
+* edit lock ui updates ([#6957](https://github.com/cds-snc/platform-forms-client/issues/6957)) ([0dfd1c0](https://github.com/cds-snc/platform-forms-client/commit/0dfd1c0890471d964949615fc05678a76f0a3b1c))
+* Event cleanup after takeover ([#6974](https://github.com/cds-snc/platform-forms-client/issues/6974)) ([5f54a14](https://github.com/cds-snc/platform-forms-client/commit/5f54a145d043598debe9f85fb069c92764be8a4d))
+* filter sso url ([#6969](https://github.com/cds-snc/platform-forms-client/issues/6969)) ([34ce86a](https://github.com/cds-snc/platform-forms-client/commit/34ce86a7b1a11918445e4dce7b4bce0b4be7b76a))
+* Fix for race condition in Template import ([#6961](https://github.com/cds-snc/platform-forms-client/issues/6961)) ([fd3979b](https://github.com/cds-snc/platform-forms-client/commit/fd3979b8eb66b3735bc8581bc92e555665cfd740))
+* fix margins for all element dialog ([#6959](https://github.com/cds-snc/platform-forms-client/issues/6959)) ([3eb0add](https://github.com/cds-snc/platform-forms-client/commit/3eb0add7e4869ada38102f1b744fce93e66bccf8))
+* Move regex functions into core and update imports ([#6953](https://github.com/cds-snc/platform-forms-client/issues/6953)) ([5e6e098](https://github.com/cds-snc/platform-forms-client/commit/5e6e09801f2ecbb881a29964edc2417b25f02e78))
+* Refactor Text + Number inputs ([#6956](https://github.com/cds-snc/platform-forms-client/issues/6956)) ([51ecc10](https://github.com/cds-snc/platform-forms-client/commit/51ecc100b1bf7602d516034c96a5f87ee67ffe92))
+* remove federated sign out ([#6976](https://github.com/cds-snc/platform-forms-client/issues/6976)) ([6e3a6b4](https://github.com/cds-snc/platform-forms-client/commit/6e3a6b4c1746f3f83fee2329a32895ab512a11c4))
+* remove script ([#6949](https://github.com/cds-snc/platform-forms-client/issues/6949)) ([3e9ffc6](https://github.com/cds-snc/platform-forms-client/commit/3e9ffc6fa9c329b65afbdff6439ae1cf9f1fd87e))
+* shared Redis for draft edit ([#6955](https://github.com/cds-snc/platform-forms-client/issues/6955)) ([4d6865c](https://github.com/cds-snc/platform-forms-client/commit/4d6865c790e1dbbb8d8249152557da13dbd42751))
+* Tailwind CSS v4 ([#6910](https://github.com/cds-snc/platform-forms-client/issues/6910)) ([52a8cb6](https://github.com/cds-snc/platform-forms-client/commit/52a8cb6c255efa6649a716e2ee03c287c68d69ff))
+* update template diff check ([#6911](https://github.com/cds-snc/platform-forms-client/issues/6911)) ([be71ed2](https://github.com/cds-snc/platform-forms-client/commit/be71ed23900ff5b6cc3b2a567a6d5700b24c5be0))
+* Validate template before saving to template store ([#6977](https://github.com/cds-snc/platform-forms-client/issues/6977)) ([30ccfe0](https://github.com/cds-snc/platform-forms-client/commit/30ccfe0da7df8f9468efbe47749807827603960c))
+
+
+### Code Refactoring
+
+* add enforce strict value for combobox ([#5572](https://github.com/cds-snc/platform-forms-client/issues/5572)) ([de5fad2](https://github.com/cds-snc/platform-forms-client/commit/de5fad22abac00134346e22289abfe61b7917130))
+
 ## [4.10.1](https://github.com/cds-snc/platform-forms-client/compare/v4.10.0...v4.10.1) (2026-03-30)
 
 

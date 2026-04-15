@@ -6,10 +6,10 @@ import { DeliveryOptionEmail } from "./DeliveryOptionEmail";
 import { NavigationTabs } from "./NavigationTabs";
 import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
-import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
+import { ManageFormAccessDialogContainer } from "../../../components/dialogs/ManageFormAccessDialog";
+import { ManageFormAccessButton } from "../../../components/dialogs/ManageFormAccessDialog/ManageFormAccessButton";
 import { StatusFilter } from "../types";
 import { useTranslation } from "@i18n/client";
-import { ManageFormAccessButton } from "./ManageFormAccessDialog/ManageFormAccessButton";
 import { ResponseBetaLink } from "./ResponseBetaLink";
 
 export const ResponsesContainer = ({
@@ -49,7 +49,9 @@ export const ResponsesContainer = ({
             </div>
             {isPublished && (
               <div>
-                <ManageFormAccessButton />
+                <div className="mr-5">
+                  <ManageFormAccessButton />
+                </div>
               </div>
             )}
           </div>

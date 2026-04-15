@@ -39,6 +39,7 @@ import {
   shouldEnforceTemplateEditLock,
   TemplateEditLockedError,
 } from "@lib/editLocks";
+import { validateTemplate } from "@lib/utils/form-builder/validate";
 
 const assertTemplateEditLockIfEnabled = async (templateId: string, userId: string) => {
   if (process.env.APP_ENV === "test" || !(await shouldEnforceTemplateEditLock(templateId))) {
@@ -77,6 +78,12 @@ export const createOrUpdateTemplate = AuthenticatedAction(
     formRecord: FormRecord | null;
     error?: string;
   }> => {
+    const validationResult = validateTemplate(formConfig);
+
+    if (!validationResult.valid) {
+      return { formRecord: null, error: "validationError" };
+    }
+
     try {
       if (id) {
         return await updateTemplate({
