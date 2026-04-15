@@ -44,11 +44,6 @@ export const Menu = ({
     },
     {
       filtered: (isPublished ? true : false) || (ttl ? true : false),
-      title: t("card.menu.edit"),
-      url: `/${language}/form-builder/${id}/edit`,
-    },
-    {
-      filtered: (isPublished ? true : false) || (ttl ? true : false),
       title: t("card.menu.preview"),
       url: `/${language}/form-builder/${id}/preview`,
     },
