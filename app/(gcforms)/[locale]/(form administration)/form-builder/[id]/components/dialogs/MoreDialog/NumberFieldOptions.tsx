@@ -157,7 +157,7 @@ export const NumberFieldOptions = ({
       <InfoDetails className="mt-4" summary={t("Set a range")}>
         <h3 className="mt-4">Value</h3>
         <div className="mt-4 flex flex-row gap-4">
-          <LabelledInput classNames="w-1/2" label="Min" id={`numberField-${item.id}-id-numberMin`}>
+          <LabelledInput classNames="w-1/2" label="Min">
             <input
               type="number"
               className="gc-input-text mt-0"
@@ -175,7 +175,7 @@ export const NumberFieldOptions = ({
               value={item.properties.numberMin ?? ""}
             />
           </LabelledInput>
-          <LabelledInput classNames="w-1/2" label="Max" id={`numberField-${item.id}-id-numberMax`}>
+          <LabelledInput classNames="w-1/2" label="Max">
             <input
               type="number"
               className="gc-input-text mt-0"
@@ -197,7 +197,7 @@ export const NumberFieldOptions = ({
 
         <h3 className="mt-4">Number of Digits</h3>
         <div className="mt-4 flex flex-row gap-4">
-          <LabelledInput classNames="w-1/2" label="Min" id={`numberField-${item.id}-id-minDigits`}>
+          <LabelledInput classNames="w-1/2" label="Min">
             <input
               type="number"
               className="gc-input-text mt-0"
@@ -217,7 +217,7 @@ export const NumberFieldOptions = ({
               step={1}
             />
           </LabelledInput>
-          <LabelledInput classNames="w-1/2" label="Max" id={`numberField-${item.id}-id-maxDigits`}>
+          <LabelledInput classNames="w-1/2" label="Max">
             <input
               type="number"
               className="gc-input-text mt-0"
