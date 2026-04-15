@@ -1,6 +1,8 @@
 "use server";
 
 import { AuthenticatedAction } from "@lib/actions";
+import { checkOne } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 import { prisma } from "@lib/integration/prismaConnector";
 import { TemplateUser } from "./types";
 import { AccessControlError } from "@lib/auth/errors";
@@ -10,7 +12,11 @@ import {
   TemplateNotFoundError,
   UserAlreadyHasAccessError,
 } from "@lib/invitations/exceptions";
-import { getTemplateWithAssociatedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
+import {
+  getPublicTemplateByID,
+  getTemplateWithAssociatedUsers,
+  removeAssignedUserFromTemplate,
+} from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { logMessage } from "@lib/logger";
 import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
@@ -19,8 +25,23 @@ import { cancelInvitation as cancelInvitationAction } from "@lib/invitations/can
 export const sendInvitation = AuthenticatedAction(
   async (_, emails: string[], templateId: string, message: string) => {
     const { t } = await serverTranslation("manage-form-access");
+    const isLockedEditingEnabled = await checkOne(FeatureFlags.lockedEditing);
 
     const errors: string[] = [];
+
+    if (!isLockedEditingEnabled) {
+      const template = await getPublicTemplateByID(templateId);
+
+      if (!template?.isPublished) {
+        logMessage.error(`Invitation failed - draft form ${templateId}`);
+        errors.push(t("draftFormError"));
+
+        return {
+          success: false,
+          errors,
+        };
+      }
+    }
 
     const invites = emails.map(async (email) => {
       try {
