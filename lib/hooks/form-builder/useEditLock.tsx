@@ -7,6 +7,12 @@ import { FormRecord } from "@lib/types";
 import { clearTemplateStore } from "@lib/store/utils";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import {
+  isEditLockStatus,
+  type EditLockPresenceStatus,
+  type EditLockStatusPayload,
+  type EditLockVisibilityState,
+} from "@lib/editLockStatus";
+import {
   CLIENT_SIDE_EDIT_LOCK_ACTIVITY_THROTTLE_MS,
   CLIENT_SIDE_EDIT_LOCK_AWAY_MS,
   CLIENT_SIDE_EDIT_LOCK_IDLE_MS,
@@ -21,42 +27,6 @@ const wait = async (timeMs: number) =>
   new Promise((resolve) => {
     window.setTimeout(resolve, timeMs);
   });
-
-type EditLockPresenceStatus = "active" | "idle" | "away";
-type EditLockVisibilityState = "visible" | "hidden";
-
-type EditLockStatus = {
-  locked: boolean;
-  lockedByOther: boolean;
-  isOwner: boolean;
-  lock: {
-    templateId: string;
-    lockedByUserId: string;
-    lockedByName?: string | null;
-    lockedByEmail?: string | null;
-    lockedAt: string;
-    heartbeatAt: string;
-    expiresAt: string;
-    lastActivityAt?: string | null;
-    visibilityState?: EditLockVisibilityState | null;
-    presenceStatus?: EditLockPresenceStatus | null;
-    sessionId?: string | null;
-  } | null;
-};
-
-const isEditLockStatus = (value: unknown): value is EditLockStatus => {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
-
-  const candidate = value as Partial<EditLockStatus>;
-  return (
-    typeof candidate.locked === "boolean" &&
-    typeof candidate.lockedByOther === "boolean" &&
-    typeof candidate.isOwner === "boolean" &&
-    (candidate.lock === null || typeof candidate.lock === "object")
-  );
-};
 
 export const useEditLock = ({
   formId,
@@ -93,7 +63,7 @@ export const useEditLock = ({
   }, [setEditLock, setIsLockedByOther]);
 
   const updateStore = useCallback(
-    (status: EditLockStatus) => {
+    (status: EditLockStatusPayload) => {
       setIsLockedByOther(status.lockedByOther);
       setEditLock(
         status.lock
@@ -354,7 +324,7 @@ export const useEditLock = ({
   }, [startPolling]);
 
   const startTimers = useCallback(
-    (statusResult: EditLockStatus, cancelled = false) => {
+    (statusResult: EditLockStatusPayload, cancelled = false) => {
       if (cancelled) return;
       if (statusResult.isOwner) {
         startHeartbeat();
@@ -486,7 +456,7 @@ export const useEditLock = ({
       const messageEvent = event as MessageEvent<string>;
 
       void (async () => {
-        const nextStatus = JSON.parse(messageEvent.data) as EditLockStatus;
+        const nextStatus = JSON.parse(messageEvent.data) as EditLockStatusPayload;
         const wasOwner = isOwnerRef.current;
 
         if (!nextStatus.locked) {
@@ -537,7 +507,9 @@ export const useEditLock = ({
 
   const takeover = useCallback(async () => {
     const previousUpdatedAt = updatedAt;
-    const statusResult = (await postAction("takeover")) as EditLockStatus & { error?: string };
+    const statusResult = (await postAction("takeover")) as EditLockStatusPayload & {
+      error?: string;
+    };
     if (statusResult?.error) {
       throw new Error(statusResult.error);
     }
