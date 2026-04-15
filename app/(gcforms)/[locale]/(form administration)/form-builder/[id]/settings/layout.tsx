@@ -8,6 +8,7 @@ import { shouldEnforceTemplateEditLock } from "@lib/editLocks";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 import { WaitForId } from "../components/WaitForId";
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
+import { ManageFormAccessDialogContainer } from "../components/dialogs/ManageFormAccessDialog";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -40,7 +41,8 @@ export default async function Layout(props: {
   return (
     <>
       <h1>{t("gcFormsSettings")}</h1>
-      <SettingsNavigation id={id} />
+      <SettingsNavigation id={id} showManageAccess={allowLockedEditingFlag} />
+      {allowLockedEditingFlag && <ManageFormAccessDialogContainer formId={id} />}
       <EditLockClient
         formId={id}
         lockedEditingEnabled={enforceEditLockFlag}
