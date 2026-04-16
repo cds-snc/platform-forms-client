@@ -1,26 +1,39 @@
 "use client";
-import React, { useCallback, useMemo, useRef, useState, type JSX } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
-import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
 export interface NumberInputProps extends InputFieldProps {
   placeholder?: string;
   allowNegativeNumbers?: boolean;
   stepCount?: number;
-  maxLength?: number;
   currencyCode?: string;
   numberMin?: number;
   numberMax?: number;
+  minDigits?: number;
+  maxDigits?: number;
+  lang?: string;
 }
 
 const langToLocale = (lang?: string) => (lang === "fr" ? "fr-CA" : "en-CA");
 
-export const NumberInput = (
-  props: NumberInputProps & JSX.IntrinsicElements["input"]
-): React.ReactElement => {
+const BASE_ALLOWED_KEYS = [
+  "Backspace",
+  "Delete",
+  "Tab",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowUp",
+  "ArrowDown",
+  "Home",
+  "End",
+  ".",
+  ",",
+];
+
+export const NumberInput = (props: NumberInputProps): React.ReactElement => {
   const {
     id,
     className,
@@ -32,9 +45,8 @@ export const NumberInput = (
     currencyCode,
     lang,
   } = props;
+
   const [field, meta, helpers] = useField(props);
-  const { i18n } = useTranslation("common", { lng: lang });
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const locale = langToLocale(lang);
 
@@ -66,16 +78,15 @@ export const NumberInput = (
     return field.value && !Number.isNaN(num) ? formatForDisplay(num) : (field.value ?? "");
   });
 
-  // When locale or format options change, reformat the display from the stable Formik number
-  const [prevLocale, setPrevLocale] = useState(locale);
-  const [prevFormatOptions, setPrevFormatOptions] = useState(formatOptions);
-  if (locale !== prevLocale || formatOptions !== prevFormatOptions) {
+  // When locale or format options change, reformat the display from the stable Formik number.
+  // formatOptions identity is stable across renders thanks to useMemo above.
+  const [prevFormat, setPrevFormat] = useState({ locale, formatOptions });
+  if (prevFormat.locale !== locale || prevFormat.formatOptions !== formatOptions) {
     const num = Number(field.value);
     if (field.value !== undefined && field.value !== "" && !Number.isNaN(num)) {
-      setInputValue(new Intl.NumberFormat(locale, formatOptions).format(num));
+      setInputValue(formatForDisplay(num));
     }
-    setPrevLocale(locale);
-    setPrevFormatOptions(formatOptions);
+    setPrevFormat({ locale, formatOptions });
   }
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +95,7 @@ export const NumberInput = (
 
     // Allow intermediate states while typing
     if (raw === "" || raw === "-" || raw === "." || raw === "-.") {
-      helpers.setValue(raw === "" ? "" : raw);
+      helpers.setValue(raw);
       return;
     }
 
@@ -94,31 +105,16 @@ export const NumberInput = (
     }
   };
 
+  const allowedKeys = useMemo(() => {
+    const keys = new Set(BASE_ALLOWED_KEYS);
+    if (allowNegativeNumbers) keys.add("-");
+    if (currencyCode) keys.add("$");
+    return keys;
+  }, [allowNegativeNumbers, currencyCode]);
+
   const handleOnKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const allowedKeys = [
-      "Backspace",
-      "Delete",
-      "Tab",
-      "ArrowLeft",
-      "ArrowRight",
-      "ArrowUp",
-      "ArrowDown",
-      "Home",
-      "End",
-      ".",
-      ",",
-    ];
-
-    if (allowNegativeNumbers) {
-      allowedKeys.push("-");
-    }
-
-    if (currencyCode) {
-      allowedKeys.push("$");
-    }
-
-    const isDigit = event.key >= "0" && event.key <= "9";
-    const isAllowedKey = allowedKeys.includes(event.key);
+    const isDigit = /^\d$/.test(event.key);
+    const isAllowedKey = allowedKeys.has(event.key);
     const isModifier = event.ctrlKey || event.metaKey;
 
     if (!isDigit && !isAllowedKey && !isModifier) {
@@ -147,7 +143,6 @@ export const NumberInput = (
     <>
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
       <input
-        ref={inputRef}
         data-testid="numberInput"
         className={classes}
         id={id}
@@ -155,7 +150,6 @@ export const NumberInput = (
         {...(ariaDescribedBy && { "aria-describedby": ariaDescribedBy })}
         name={field.name}
         value={inputValue}
-        key={`${id}-${i18n.language}`}
         onChange={handleOnChange}
         onKeyDown={handleOnKeyDown}
         onBlur={handleOnBlur}
