@@ -2,6 +2,8 @@ import { createRedisSubscriber } from "@lib/integration/redisConnector";
 import { EditLockEvent } from "./editLocks";
 import type Redis from "ioredis";
 
+// Redis carries all edit-lock events on one shared channel; templateId in the
+// payload lets each app instance fan them back out to the right SSE listeners.
 const EDIT_LOCK_CHANNEL = "edit-lock-events";
 
 type EditLockRouteSubscriber = (event: EditLockEvent) => void;
@@ -43,6 +45,8 @@ type EditLockEventStreamsGlobal = typeof globalThis & {
 
 const parseEventMessage = (raw: string): EditLockRedisEventMessage | null => {
   try {
+    // Normalize the Redis payload before routing so malformed messages can be
+    // ignored without affecting the rest of the shared subscription.
     const parsed = JSON.parse(raw) as ParsedEditLockRedisEventMessage;
 
     const templateId = typeof parsed.templateId === "string" ? parsed.templateId : null;
@@ -85,7 +89,8 @@ const getSharedRedisSubscriber = async () => {
       try {
         const subscriber = await createRedisSubscriber();
 
-        // Broadcast Redis events to local listeners, for example: { type: "updated" }.
+        // One Redis subscription fans events back out to the local listeners for
+        // whichever template each SSE route is currently serving.
         subscriber.on("message", (messageChannel, message) => {
           if (messageChannel !== EDIT_LOCK_CHANNEL) {
             return;
@@ -122,6 +127,8 @@ const subscribeToRedisEditLockEvents = async (
 ) => {
   const { channelSubscribers } = getState();
   const subscribers = channelSubscribers.get(templateId) ?? new Set<EditLockRouteSubscriber>();
+  // Subscribe to Redis once for the process, then manage per-template listeners
+  // locally so opening more forms does not create more Redis channels.
   const shouldSubscribeToChannel = channelSubscribers.size === 0;
 
   subscribers.add(subscriber);
@@ -151,6 +158,7 @@ const subscribeToRedisEditLockEvents = async (
       return;
     }
 
+    // Drop the shared Redis subscription when the last local listener goes away.
     await redisSubscriber.unsubscribe(EDIT_LOCK_CHANNEL);
   };
 };
