@@ -3,10 +3,11 @@
 import { useCallback, useEffect, useRef } from "react";
 import "./Announce.css";
 
-export enum Priority {
-  LOW = "polite",
-  HIGH = "assertive",
-}
+export const Priority = {
+  LOW: "polite",
+  HIGH: "assertive",
+} as const;
+export type Priority = (typeof Priority)[keyof typeof Priority];
 
 interface Message {
   message: string;

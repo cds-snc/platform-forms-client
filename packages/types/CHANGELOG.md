@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.30] - 2026-03-30
+
+- Add ValidationInputType as sub-type of HTMLTextInputTypeAttribute
+
+## [1.0.29] - 2026-03-25
+
+- Add ignoreDeprecations
+
+## [1.0.28] - 2026-03-24
+
+- Update TypeScript to 6.0.2
+
+## [1.0.26] - 2025-01-20
+
+- Update type for managedChoices to support multiple data sets
+
 ## [1.0.25] - 2025-10-17
 
 - Remove File Upload as a beta option

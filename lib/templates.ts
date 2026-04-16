@@ -25,6 +25,7 @@ import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { NotificationsInterval } from "@gcforms/types";
 import { checkOne } from "@lib/cache/flags";
 import { checkForBetaComponentsAsync } from "./validation/betaCheck";
+import { invalidateTemplateEditLockUserCountCache } from "./editLocks";
 
 const checkFlag = async (flag: string) => {
   return (await Promise.all([checkOne(flag), authorization.canAccessBetaComponents(flag)])).reduce(
@@ -422,6 +423,23 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
   }
 }
 
+export async function getTemplatePublishedStatus(formID: string): Promise<boolean | null> {
+  const template = await prisma.template
+    .findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        isPublished: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!template) return null;
+
+  return template.isPublished;
+}
+
 /**
  * Get a form template by ID (includes full template information but requires view permission)
  * @param formID ID of form template
@@ -789,6 +807,8 @@ export async function removeAssignedUserFromTemplate(
 
   if (updatedTemplate === null) return;
 
+  await invalidateTemplateEditLockUserCountCache(formID);
+
   logEvent(
     user.id,
     { type: "Form", id: formID },
@@ -875,6 +895,8 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
 
   // No changes
   if (updatedTemplate === null) return;
+
+  await invalidateTemplateEditLockUserCountCache(formID);
 
   logEvent(
     user.id,
@@ -1049,6 +1071,8 @@ export async function updateAssignedUsersForTemplate(
     .catch((e) => prismaErrors(e, null));
 
   if (updatedTemplate === null) return updatedTemplate;
+
+  await invalidateTemplateEditLockUserCountCache(formID);
 
   const getUsersFromUserIds = (userIds: string[]) => {
     return Promise.all(
@@ -1270,7 +1294,8 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
  */
 export async function cloneTemplate(
   formID: string,
-  allowDeleted: boolean
+  allowDeleted: boolean,
+  locale: string = "en"
 ): Promise<FormRecord | null> {
   // Ensure the user can create a new form (needed to persist a clone)
   // and that they can edit the source form.
@@ -1320,10 +1345,12 @@ export async function cloneTemplate(
     return null;
   }
 
+  const name = locale === "fr" ? `Copie de ${template.name}` : `Copy of ${template.name}`;
+
   // Build the create payload copying allowed fields. Do NOT copy apiServiceAccount or bearerToken.
   const createData: Prisma.TemplateCreateInput = {
     jsonConfig: template.jsonConfig as Prisma.JsonObject,
-    name: `Copy of ${template.name}`,
+    name,
     isPublished: false,
     formPurpose: template.formPurpose,
     publishReason: template.publishReason,

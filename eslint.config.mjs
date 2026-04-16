@@ -1,27 +1,38 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-import tailwind from "eslint-plugin-tailwindcss";
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
 import reactHooks from "eslint-plugin-react-hooks";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
   {
-    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
+    plugins: {
+      "react-hooks": reactHooks,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+    },
   },
-  ...tailwind.configs["flat/recommended"],
-  ...compat.config({
-    extends: ["next/core-web-vitals", "next/typescript", "prettier"],
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+    "node_modules/**",
+    "utils/**",
+    "**/dist/**",
+    "public/static/scripts/polyfills/**",
+    "coverage/**",
+    ".lintstagedrc.mjs",
+  ]),
+  {
     rules: {
       "no-console": "error",
       "no-await-in-loop": "error",
       "no-return-await": "error",
+      "react/no-jsx-in-try-catch": "off",
       "@typescript-eslint/no-require-imports": "off",
       "@typescript-eslint/no-unused-expressions": "off",
       "@typescript-eslint/no-unused-vars": [
@@ -31,83 +42,20 @@ const eslintConfig = [
           args: "after-used",
           ignoreRestSiblings: true,
           argsIgnorePattern: "^_",
-          caughtErrors: "none", // This allows unused catch parameters
+          caughtErrors: "none",
+        },
+      ],
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "CallExpression[callee.object.name='logMessage'][callee.property.name=/^(info|warn)$/] > ObjectExpression:first-child",
+          message:
+            "logMessage.info() and logMessage.warn() only accept string arguments. Use template literals instead: logMessage.info(`User: ${userId}`)",
         },
       ],
     },
-    ignorePatterns: [
-      "/utils",
-      "/public/static/scripts/",
-      "/__tests__/api/",
-      "node_modules/",
-      "dist/",
-      "coverage/",
-    ],
-    settings: {
-      tailwindcss: {
-        whitelist: [
-          "(gc\\-).*",
-          "(gcds\\-).*",
-          "form-builder",
-          "form-builder-editor",
-          "page-container",
-          "visually-hidden",
-          "buttons",
-          "required",
-          "focus-group",
-          "canada-flag",
-          "account-wrapper",
-          "input-sizer",
-          "stacked",
-          "disabled",
-          "origin-radix-dropdown-menu",
-          "radio-label-text",
-          "checkbox-label-text",
-          "example-text",
-          "section",
-          "maple-leaf-loader",
-          "flow-container",
-          "rich-text-wrapper",
-          "editor",
-          "editor-input",
-          "link-editor",
-          "link-input",
-          "choice",
-          "text-entry",
-          "action",
-          "wave",
-          "bkd-soft",
-          "legend-fieldset",
-          "confirmation",
-          "active",
-          "brand__container",
-          "fip_flag",
-          "fip_text",
-          "brand__toggle",
-          "brand__signature",
-          "container-xl",
-          "tableLink",
-        ],
-      },
-    },
-  }),
-  {
-    files: ["**/*.{js,jsx,ts,tsx}"],
-    plugins: { "react-hooks": reactHooks },
-    rules: {
-      // Core hooks rules
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
-      "react-hooks/preserve-manual-memoization": "off",
-      "react-hooks/set-state-in-effect": "off",
-      "react-hooks/static-components": "off",
-      "react-hooks/refs": "off",
-      "react-hooks/purity": "off",
-      "react-hooks/immutability": "off",
-      "react-hooks/error-boundaries": "off",
-      "react-hooks/set-state-in-effect": "off",
-    },
   },
-];
+]);
 
 export default eslintConfig;

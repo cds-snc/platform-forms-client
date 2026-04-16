@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 import { requestNew2FAVerificationCode } from "@lib/auth";
 import { signIn } from "@lib/auth";
 import { handleErrorById, Missing2FASession } from "@lib/auth/cognito";
-import { cookies } from "next/headers";
 import { prisma } from "@lib/integration/prismaConnector";
 import { CredentialsSignin } from "next-auth";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
@@ -108,15 +107,7 @@ export const resendVerificationCode = async (
   authenticationFlowToken: string
 ): Promise<void | { error: string }> => {
   try {
-    const newCode = await requestNew2FAVerificationCode(authenticationFlowToken, email);
-    (await cookies()).set(
-      "authenticationFlow",
-      JSON.stringify({
-        authenticationFlowToken: newCode,
-        email,
-      }),
-      { secure: true, sameSite: "strict", maxAge: 60 * 15 }
-    );
+    await requestNew2FAVerificationCode(authenticationFlowToken, email);
   } catch (err) {
     if (err instanceof Missing2FASession) {
       redirect(`/${language}/auth/login`);
@@ -132,7 +123,11 @@ export const getErrorText = async (language: string, errorID: string) => {
 };
 
 export const getRedirectPath = AuthenticatedAction(async (session, locale: string) => {
-  if (session.user.newlyRegistered || !session.user.hasSecurityQuestions) {
+  /* Skip for OIDC flow */
+  if (
+    !session.user.accountUrl &&
+    (session.user.newlyRegistered || !session.user.hasSecurityQuestions)
+  ) {
     return { callback: `/${locale}/auth/setup-security-questions` };
   }
 

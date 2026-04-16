@@ -250,7 +250,8 @@
       "title": "Chiffre",
       "amount": "Montant",
       "enterOnlyNumbers": "Saisissez un chiffre.",
-      "allowNegative": "permettre les valeurs numériques négatives"
+      "allowNegative": "permettre les valeurs numériques négatives",
+      "decimalPlaces": "Nombre de décimales pouvant être saisies"
     },
     "questionElement": "Éléments",
     "radio": {
@@ -280,6 +281,37 @@
   "addMultiple": "Ajouter plusieurs options",
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter des options",
+  "clearOptions": {
+    "button": "Supprimer les options",
+    "title": "Supprimer toutes les options?",
+    "description": "Vous effacerez l'ensemble des options ajoutéespour cette question. Toutes les règles conditionnelles d'affichage ou d'embranchement liées à ces options seront également supprimées.",
+    "confirm": "Supprimer toutes les options",
+    "successToast": "Les options ont été supprimées avec succès."
+  },
+  "choiceLimitReached": "Vous ne pouvez ajouter que {{maxChoices}} options au maximum.",
+  "choiceOptionsUpload": {
+    "uploadButton": "Téléverser une liste d’un CSV",
+    "helpButton": "Aide pour le format du fichier CSV afin d'ajouter une liste d'options",
+    "helpTitle": "Comment formater le fichier CSV",
+    "helpDescription": "Créez une feuille de calcul avec l'anglais dans la première colonne et le français dans la deuxième. Enregistrez le fichier au format .csv (valeurs séparées par des virgules).",
+    "exampleLabel": "Exemple",
+    "dialogTitle": "Téléverser une liste d'options d’un fichier CSV",
+    "dialogDescription": "Créez un fichier .csv pour importer les options de sélection pour cet élément de formulaire.",
+    "selectFile": "Choisir un fichier",
+    "noFileSelected": "Aucun fichier sélectionné",
+    "copyButton": "Copier les options vers un CSV",
+    "copyButtonCopied": "Options copiées en CSV",
+    "importButton": "Importer les options du CSV",
+    "successNotice": "{{count}} options ont été ajoutées à partir du fichier CSV.",
+    "previewCount": "{{count}} options (lignes) sont prêtes à être importées",
+    "previewSummary": "Aperçu des lignes",
+    "errors": {
+      "empty": "Le fichier CSV ne contient aucune option.",
+      "invalidColumns": "Chaque ligne doit inclure les valeurs en anglais dans la colonne 1 et les valeurs en français dans la colonne 2.",
+      "invalidType": "Téléversez un fichier .csv.",
+      "maxChoices": "Vous pouvez importer jusqu’à {{maxChoices}} options au maximum."
+    }
+  },
   "addRules": "Ajouter des règles",
   "addQuestionToSet": "Ajouter un élément à l'ensemble",
   "addToSet": "Ajouter à l'ensemble",
@@ -398,6 +430,7 @@
   "descriptionDescription": "Le texte explicatif apparaît sous l'étiquette et avant le champ. Il est utilisé pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme ou donner un exemple.",
   "didYouFindThisToolHelpful": "Avez-vous trouvé Formulaires GC pertinent comme outil? <a href=\"/fr/contact\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Exporter en fichier CSV",
+  "or": "ou",
   "downloadResponsesTable": {
     "card": {
       "noResponses": "Vous n'avez pas reçu de réponses",
@@ -575,6 +608,26 @@
   "french": "français",
   "gcForms": "Formulaires GC",
   "gcFormsEdit": "Modifier",
+  "editLock": {
+    "title": "Ce formulaire est deja en cours de modification",
+    "lockedMessage": "{{name}} travaille actuellement sur ce formulaire, ce qui signifie que vous ne pouvez pas y apporter de modifications a moins d'en prendre le controle.",
+    "readOnly": "Lecture seule : {{name}} modifie ce formulaire.",
+    "statusLabel": "Statut :",
+    "lastActivityLabel": "Derniere activite :",
+    "statuses": {
+      "active": "Actif en ce moment",
+      "idle": "Consulte le formulaire, sans activite recente",
+      "away": "Absent",
+      "stale": "Connexion inactive"
+    },
+    "unknownUser": "Un autre utilisateur",
+    "saveBlocked": "Enregistrement bloqué : {{name}} modifie ce formulaire.",
+    "takeover": "Prendre le contrôle",
+    "takingOver": "Prise de contrôle...",
+    "syncingLatest": "Synchronisation de la plus récente version enregistrée du formulaire...",
+    "syncedLatest": "Vous avez maintenant le verrou de modification et la plus récente version enregistrée du formulaire a été chargée.",
+    "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer."
+  },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publier",
   "gcFormsPublished": "Publié",
@@ -594,7 +647,13 @@
   "longAnswerText": "Réponse longue",
   "managedList": {
     "prefix": "Liste gérée :",
-    "departments": "Liste d’organisations du GC"
+    "departments": "Liste d’organisations du GC",
+    "crownCorporations": "Sociétés d'État",
+    "provincialTerritorial": "Provinces et territoires",
+    "managedListOptions": "Options pour la liste d'organisations",
+    "includeDepartments": "Inclure les ministères et organismes",
+    "includeCrownCorporations": "Inclure les sociétés d'État",
+    "includeProvincialTerritorial": "Inclure les provinces et les territoires"
   },
   "maxCharacterLength": "Longueur maximale des caractères :",
   "maximumCharacterLength": "Longueur maximale des caractères",
@@ -633,6 +692,14 @@
     },
     "dynamicRow": {
       "errorMaxRows": "Le nombre maximal de réponses ne peut pas dépasser {{maxRows}}."
+    },
+    "customRegex": {
+      "title": "Configurer la validation avancée des entrées",
+      "description": "Vous pouvez utiliser une expression régulière (regex) pour créer une validation personnalisée pour cette question.",
+      "label": "Modèle d'expression régulière (regex) personnalisé",
+      "errorInvalidRegex": "Le modèle d'expression régulière (regex) n'est pas valide. Veuillez saisir un modèle regex valide.",
+      "previousPatterns": "Modèles précédents",
+      "errorUnsafeRegex": "Ce modèle regex est potentiellement dangereux. Évitez les modèles susceptibles de causer des problèmes de performance, tels que ceux comportant des quantificateurs imbriqués ou un retour en arrière excessif. "
     }
   },
   "moreOptions": "Plus d'options  ",
@@ -652,7 +719,7 @@
   "placeHolderFormTitle": "Titre du formulaire",
   "previewingIn": "Prévisualiser en :",
   "previewDisabledForPublishedForm": "La prévisualisation et les tests sont désactivés pour les formulaires publiés",
-  "privacyNoticeDescription": "<p className=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul><p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
+  "privacyNoticeDescription": "<p class=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul><p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
   "privacyStatement": "Avis de confidentialité ",
   "provideFeedback": "Aidez-nous à nous améliorer",
   "publish": "Publier",
@@ -922,7 +989,7 @@
   "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
   "settingsPurposeAndUse": {
     "title": "Usage prévu",
-    "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui sont dans Formulaires GC depuis plus de 45 jours.",
+    "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui se trouvent dans Formulaires GC au-delà de 45 jours.",
     "personalInfo": "Renseignements personnels servant à prendre une décision qui touche un individu",
     "learnMore": "En savoir plus sur les fins administratives",
     "learnMoreBox": {
@@ -1051,6 +1118,7 @@
   "start": "Commencer",
   "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
   "startErrorDuplicateQuestionId": "Les identifiants de questions doivent être uniques",
+  "startErrorInvalidCustomRegex": "Modèle regex personnalisé invalide ou non sécurisé",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
   "startFormIntro": "Ajoutez une description à votre formulaire pour aider à définir les attentes",
   "startH2": "Créer un formulaire",
@@ -1366,7 +1434,7 @@
     "editRules": "Modifier les embranchements de la page {{name}}",
     "privacy": {
       "beforeText": "<p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
-      "body": "<p className=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul>",
+      "body": "<p class=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul>",
       "description": "Ce qu'il faut préciser dans une déclaration de confidentialité :",
       "summary": "Ajouter un avis de confidentialité pour expliquer comment vous traitez les renseignements personnels"
     },
@@ -1401,7 +1469,7 @@
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",
-    "pageTitle": "Titre de la page"
+    "pageTitle": "Page de confirmation"
   },
   "next": "Continuer",
   "skipLink": {
@@ -1508,6 +1576,11 @@
   },
   "en": "English",
   "fr": "Français",
+  "strictValue": {
+    "title": "Assurer la valeur du choix",
+    "label": "Valeur stricte",
+    "description": "valeur stricte"
+  },
   "beta": {
     "tag": "Nouveauté :",
     "text": "Fonctionnalité à l'essai",

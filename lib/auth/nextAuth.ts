@@ -1,6 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { CredentialsSignin, Session } from "next-auth";
-import { validate2FAVerificationCode, userHasSecurityQuestions } from "@lib/auth/";
+import { AdapterUser } from "next-auth/adapters";
+import { userHasSecurityQuestions, validate2FAVerificationCode } from "@lib/auth/";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
@@ -12,7 +13,12 @@ import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStat
 import { JWT } from "next-auth/jwt";
 import { cache } from "react";
 import { headers } from "next/headers";
-// import ZitadelProvider from "next-auth/providers/zitadel";
+import { checkOne } from "@lib/cache/flags";
+import {
+  sanitizeAdapterCreateUser,
+  sanitizeAdapterUpdateUser,
+} from "@lib/auth/adapterUserSanitizers";
+import { applyIdentityClaimsToToken } from "@lib/auth/oidcIdentityClaims";
 
 /**
  * Checks the active status of a user using a cache strategy
@@ -43,6 +49,23 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
   return user?.active ?? false;
 };
 
+// Temporary function to use the "unified sso auth" url without breaking API key generation or other code using the current "forms" Zitadel provider.
+const filterZitadelUrl = (url: string = ""): string => {
+  // Handles case of https://auth.forms-staging.cdssandbox.xyz transforms to https://auth.cdssandbox.xyz
+  return url.replace("auth.forms-staging.", "auth.");
+};
+
+const prismaAdapter = PrismaAdapter(prisma);
+const adapter = {
+  ...prismaAdapter,
+  async createUser(user: AdapterUser) {
+    return prismaAdapter.createUser!(sanitizeAdapterCreateUser(user));
+  },
+  async updateUser(user: Partial<AdapterUser> & Pick<AdapterUser, "id">) {
+    return prismaAdapter.updateUser!(sanitizeAdapterUpdateUser(user));
+  },
+};
+
 const {
   handlers: { GET, POST },
   auth,
@@ -50,23 +73,30 @@ const {
   signOut,
 } = NextAuth({
   providers: [
-    // Keep this commented out for now, as we are not using Zitadel for authentication within the app
-    // ZitadelProvider({
-    //   issuer: process.env.ZITADEL_ISSUER,
-    //   clientId: process.env.ZITADEL_CLIENT_ID,
-    //   checks: ["pkce"],
-    //   client: {
-    //     token_endpoint_auth_method: "none",
-    //   },
-    //   allowDangerousEmailAccountLinking: true,
-    //   async profile(profile) {
-    //     return {
-    //       id: profile.sub,
-    //       name: profile.name,
-    //       email: profile.email,
-    //     };
-    //   },
-    // }),
+    {
+      id: "gcForms", // signIn("my-provider") and will be part of the callback URL
+      name: "GC Forms", // optional, used on the default login page as the button text.
+      type: "oidc",
+      issuer: filterZitadelUrl(process.env.NEXT_PUBLIC_ZITADEL_URL),
+      clientId: process.env.ZITADEL_CLIENT_ID,
+      checks: ["pkce", "state"],
+      client: { token_endpoint_auth_method: "none" },
+      allowDangerousEmailAccountLinking: true,
+      authorization: {
+        params: {
+          scope: "openid email profile",
+        },
+      },
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        };
+      },
+    },
+
     CredentialsProvider({
       id: "mfa",
       name: "MultiFactorAuth",
@@ -137,7 +167,6 @@ const {
   },
   // Elastic Load Balancer safely sets the host header and ignores the incoming request headers
   trustHost: true,
-  debug: process.env.NODE_ENV !== "production",
   logger: {
     error(error) {
       if (!(error instanceof CredentialsSignin)) {
@@ -148,9 +177,14 @@ const {
     warn(code) {
       logMessage.warn(`NextAuth warning - Code: ${code}`);
     },
+    debug(code, ...message) {
+      // TODO.. switch back to debug
+      logMessage.info(code);
+      logMessage.debug((message as string[]).join(" "));
+    },
   },
 
-  adapter: PrismaAdapter(prisma),
+  adapter,
   events: {
     async signIn({ user }) {
       if (!user.email) {
@@ -213,25 +247,57 @@ const {
   },
 
   callbacks: {
-    async jwt({ token, account, trigger, session }) {
+    async jwt({ token, account, profile, trigger, session }) {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
+        /* ZITADEL OIDC provider - extract identity claims and store in token for use in session and authorization decisions  */
+        if (account.provider === "gcForms") {
+          const profileClaims = profile as
+            | {
+                iss?: string;
+                given_name?: string;
+                family_name?: string;
+                preferred_username?: string;
+                email_verified?: boolean;
+              }
+            | undefined;
+
+          token.hasSecurityQuestions = true; // Set to true OICDC flow
+
+          applyIdentityClaimsToToken(token, {
+            iss: profileClaims?.iss,
+            given_name: profileClaims?.given_name,
+            family_name: profileClaims?.family_name,
+            preferred_username: profileClaims?.preferred_username,
+            email_verified: profileClaims?.email_verified,
+          });
+        }
+
+        // If the GCForms SSO provider was used, but is not enabled, refuse the session
+        const isZitadelLoginEnabled = await checkOne("zitadelLogin");
+        if (!isZitadelLoginEnabled && account.provider === "gcForms") {
+          throw new Error("Provider for GCForms SSO is not an active option");
+        }
+
         if (!token.email) {
           logMessage.error(`JWT token does not have an email for user with name ${token.name}`);
           throw new Error(`JWT token`);
         }
-        const user = await getOrCreateUser(token);
-        if (user === null) {
+        const internalUser = await getOrCreateUser(token);
+        if (internalUser === null) {
           logMessage.error(`Could not get or create user with email: ${token.email}`);
           throw new Error(`Invalid user`);
         }
 
-        token.userId = user.id;
+        token.userId = internalUser.id;
         token.lastLoginTime = new Date();
-        token.newlyRegistered = user.newlyRegistered;
+        token.newlyRegistered = internalUser.newlyRegistered;
+        // Store provider to skip security questions for Zitadel users
+        token.provider = account.provider;
+
         // If name isn't passed in by the provider, use the name from the database
         if (!token.name) {
-          token.name = user.name ?? "";
+          token.name = internalUser.name ?? "";
         }
       }
 
@@ -248,10 +314,10 @@ const {
         };
       }
 
-      // Any logic that needs to happen after JWT initializtion needs to be below this point.
+      // ⚠️  Any logic that needs to happen after JWT initializtion needs to be below this point.
 
       // Check if user has setup required Security Questions
-      if (!token.hasSecurityQuestions) {
+      if (token.provider !== "gcForms" && !token.hasSecurityQuestions) {
         token.hasSecurityQuestions = await userHasSecurityQuestions({ userId: token.userId });
       }
 
@@ -270,6 +336,14 @@ const {
     },
     async session(params) {
       const { session, token } = params as { session: Session; token: JWT };
+      const userProfile = token.profile as
+        | {
+            givenName?: string;
+            familyName?: string;
+            preferredUsername?: string;
+            emailVerified?: boolean;
+          }
+        | undefined;
       // Add info like 'role' to session object
       session.user = {
         id: token.userId ?? "",
@@ -277,13 +351,17 @@ const {
         acceptableUse: token.acceptableUse ?? false,
         name: token.name ?? null,
         email: token.email,
+        accountUrl: token.provider === "gcForms" ? token.accountUrl : undefined,
         privileges: await getPrivilegeRulesForUser(token.userId as string),
-        ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
+        ...(token.provider !== "gcForms" &&
+          token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
         // Used client side to immidiately log out a user if they have been deactivated
         ...(token.deactivated && { deactivated: token.deactivated }),
-        hasSecurityQuestions: token.hasSecurityQuestions ?? false,
         featureFlags: await getUserFeatureFlags(token.userId as string),
+        hasSecurityQuestions:
+          token.provider === "gcForms" ? true : (token.hasSecurityQuestions ?? false),
       };
+      (session.user as Session["user"] & { profile?: typeof userProfile }).profile = userProfile;
       return session;
     },
     async redirect({ url, baseUrl }) {

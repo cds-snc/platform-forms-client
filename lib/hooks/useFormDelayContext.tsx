@@ -15,6 +15,7 @@ const FormDelayContext = createContext<{
 
 export const FormDelayProvider = ({ children }: { children: React.ReactNode }) => {
   const [requiredQuestions, setRequiredQuestions] = useState(0);
+  // eslint-disable-next-line react-hooks/purity
   const startTime = useRef(Date.now());
   return (
     <FormDelayContext.Provider

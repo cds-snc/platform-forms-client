@@ -11,8 +11,8 @@ export const Combobox = () => {
       <h3 className="mb-0">{t("addElementDialog.combobox.title")}</h3>
       <p>{t("addElementDialog.combobox.description")}</p>
 
-      <ExampleWrapper className="mt-4">
-        <Label htmlFor="combobox" className="gc-label">
+      <ExampleWrapper>
+        <Label htmlFor="combobox" className="gcds-label">
           {t("addElementDialog.combobox.selectOption")}
         </Label>
         <Description>{t("addElementDialog.combobox.selectOne")}</Description>

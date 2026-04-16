@@ -14,8 +14,8 @@ export const TextArea = () => {
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.textArea.description")}</p>
 
-      <ExampleWrapper className="gcds-textarea-wrapper mt-4">
-        <Label htmlFor="textarea" className="gc-label">
+      <ExampleWrapper className="gcds-textarea-wrapper">
+        <Label htmlFor="textarea" className="gcds-label">
           {t("addElementDialog.textArea.enterAnswer")}
         </Label>
         <Description>{t("addElementDialog.textArea.forExample")}</Description>

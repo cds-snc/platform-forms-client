@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -8,6 +8,7 @@ import { SaveAndResumeToggle } from "./SaveAndResumeToggle";
 import { updateTemplateFormSaveAndResume } from "@formBuilder/actions";
 
 export const SetSaveAndResume = ({ formId }: { formId: string }) => {
+  "use memo";
   const { t } = useTranslation("form-builder");
 
   const { saveAndResume, setSaveAndResume } = useTemplateStore((s) => ({
@@ -15,33 +16,27 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
     setSaveAndResume: s.setSaveAndResume,
   }));
 
-  const [status, setStatus] = useState(saveAndResume ? "on" : "off");
-
   const handleToggle = (value: boolean) => {
     const newStatus = value == true ? "off" : "on";
-    setStatus(newStatus);
     saveFormStatus(newStatus);
   };
 
-  const saveFormStatus = useCallback(
-    async (newStatus: string) => {
-      const saveAndResume = newStatus === "off" ? false : true;
+  const saveFormStatus = async (newStatus: string) => {
+    const saveAndResume = newStatus === "off" ? false : true;
 
-      const result = await updateTemplateFormSaveAndResume({
-        id: formId,
-        saveAndResume,
-      });
+    const result = await updateTemplateFormSaveAndResume({
+      id: formId,
+      saveAndResume,
+    });
 
-      if (result?.error) {
-        toast.error(t("saveAndResume.savedErrorMessage"));
-        return;
-      }
+    if (result?.error) {
+      toast.error(t("saveAndResume.savedErrorMessage"));
+      return;
+    }
 
-      setSaveAndResume(status === "off" ? false : true);
-      toast.success(t("saveAndResume.savedSuccessMessage"));
-    },
-    [status, t, setSaveAndResume, formId]
-  );
+    setSaveAndResume(saveAndResume);
+    toast.success(t("saveAndResume.savedSuccessMessage"));
+  };
 
   return (
     <div className="mb-10">
@@ -50,7 +45,7 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
       <p>{t("saveAndResume.toggleDescription.text2")}</p>
 
       <SaveAndResumeToggle
-        isChecked={status === "off" ? false : true}
+        isChecked={saveAndResume}
         setIsChecked={handleToggle}
         onLabel={t("saveAndResume.toggleOn")}
         offLabel={t("saveAndResume.toggleOff")}

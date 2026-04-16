@@ -58,12 +58,13 @@ Ensuring the API key associated with your form is secure to protect access to fo
 
 ## Practice continuous security
 
-- Use a valid individual government email belonging to an employee (not a shared inbox) to create your account and for two-factor authentication (2FA).
+- Use a valid individual government email belonging to an employee **(not a shared inbox)** to create your account and for two-factor authentication (2FA).
 - Do not share your password with anyone or store it where others could find it. If someone else needs access to a form, [contact us](/en/support).
 - Safeguard your API keys. If you suspect an API key has been compromised, notify us, and update your integration with a newly generated API key to secure access to form responses.
+- Be careful when opening any files attached to form submissions: check if GC Forms' file scanning feature detected any potential harm; choose a secure location; follow security guidelines; and test with local anti-virus software if possible. You and your security team are responsible for deciding how you want to safeguard against malicious files. The safety of files cannot be guaranteed, as no software is perfect at detecting threats.
 - Ensure the privacy and security of protected information upon downloading form responses from GC Forms. If Responses are not saved and confirmed within 45 days, we will take necessary steps to ensure they are retrieved by the responsible program or service.
 - Report any problems with GC Forms' security features, for example if you think hCaptcha may be blocking genuine users from completing your form, or for inaccurate file scanning results.
-- Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/security-notice/).
+- Report any security breach or vulnerability.
 
 ## Publish in both Official Languages
 
@@ -91,4 +92,4 @@ We ask that clients not interfere with the format of JSON files, as any updates 
 
 For questions related to these terms of use, [contact us](/en/contact).
 
-**Last update:** November 12, 2025
+**Last update:** February 19, 2026

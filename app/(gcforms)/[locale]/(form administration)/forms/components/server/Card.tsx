@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
+import { DraftEditLink } from "../client/DraftEditLink";
 import { Unarchive } from "../client/Unarchive";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
@@ -12,10 +13,10 @@ const CardBanner = async ({ isPublished, ttl }: { isPublished: boolean; ttl: Dat
   return (
     <div
       className={
-        "self-start p-1 px-2 text-sm border-solid rounded" +
+        "self-start rounded border-solid p-1 px-2 text-sm" +
         (isPublished
-          ? " bg-emerald-500 border-emerald-700 text-black"
-          : " bg-yellow-300 border-yellow-700")
+          ? " border-emerald-700 bg-emerald-500 text-black"
+          : " border-yellow-700 bg-yellow-300")
       }
       aria-hidden="true"
     >
@@ -52,22 +53,27 @@ const CardLinks = async ({
 
   const responsesLink = `/${language}/form-builder/${id}/responses`;
 
-  const editLink = (
+  const editLink = isPublished ? (
     <Link
-      href={isPublished ? url : `/${language}/form-builder/${id}/edit/`}
+      href={url}
       className="my-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
-      target={isPublished ? "_blank" : "_self"}
+      target="_blank"
       aria-describedby={`card-title-${id} card-date-${id}`}
       rel="noreferrer"
       prefetch={false}
     >
-      {isPublished ? (
-        <PreviewIcon className="mr-2 inline-block" />
-      ) : (
-        <DesignIcon className="mr-2 inline-block" />
-      )}
-      {isPublished ? t("viewForm") : t("editForm")}
+      <PreviewIcon className="mr-2 inline-block" />
+      {t("viewForm")}
     </Link>
+  ) : (
+    <DraftEditLink
+      href={`/${language}/form-builder/${id}/edit/`}
+      formId={id}
+      className="my-4 block cursor-pointer text-left text-sm underline focus:fill-slate-500 active:fill-slate-500 disabled:opacity-70"
+    >
+      <DesignIcon className="mr-2 inline-block" />
+      {t("editForm")}
+    </DraftEditLink>
   );
 
   return (
@@ -86,7 +92,7 @@ const CardLinks = async ({
       {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
         <>
           {overdue ? (
-            <span className="mt-4 block text-sm text-red">
+            <span className="text-red mt-4 block text-sm">
               <MessageIcon className="mr-2 inline-block" />
               {t("card.actionRequired.description")} {""}
               <a href={responsesLink}>{t("card.actionRequired.linkText")}</a>
@@ -97,7 +103,7 @@ const CardLinks = async ({
               href={responsesLink}
               prefetch={false}
             >
-              <MessageIcon className="ml-px mr-2 inline-block" />
+              <MessageIcon className="mr-2 ml-px inline-block" />
               {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
             </Link>
           )}
@@ -196,7 +202,6 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
             name={card.name}
             isPublished={card.isPublished}
             ttl={card.ttl ? card.ttl : undefined}
-            direction={"up"}
             status={status}
           />
         </div>

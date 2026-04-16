@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -78,27 +78,34 @@ export const Publish = ({ id }: { id: string }) => {
     setPublishing(true);
 
     try {
+      // Optimistically set the form as published in the template store
+      setId(id);
+      setIsPublished(true);
+      // Note we don't reset setPublishing(false) here as we're navigating away
+      ga("publish_form");
+
       const { formRecord, error } = await updateTemplatePublishedStatus({
         id,
         isPublished: true,
         publishFormType: formType,
         publishDescription: description,
         publishReason: reasonForPublish,
+        redirectAfter: `/${i18n.language}/form-builder/${id}/published`,
       });
       if (error || !formRecord) {
         throw new Error(error);
       }
-      setId(formRecord?.id);
-      setIsPublished(formRecord?.isPublished);
-
-      // Note we don't reset setPublishing(false) here as we're navigating away
-      ga("publish_form");
-      router.replace(`/${i18n.language}/form-builder/${id}/published`);
     } catch (e) {
-      logMessage.error(e);
-      setError(true);
-      setErrorCode(500);
-      setPublishing(false);
+      if ((e as Error).message !== "NEXT_REDIRECT") {
+        // Revert optimistic update
+        setIsPublished(false);
+
+        logMessage.error(e);
+        setError(true);
+        setErrorCode(500);
+        setPublishing(false);
+        return;
+      }
     }
   };
 

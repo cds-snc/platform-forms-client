@@ -11,10 +11,10 @@ import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { ga } from "@lib/client/clientHelpers";
-import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds";
 import { transformFormProperties } from "@lib/store/helpers/elements/transformFormProperties";
 import { BetaComponentsError, checkForBetaComponents } from "@lib/validation/betaCheck";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { setImportedTemplate } from "@lib/store/importBuffer";
 
 export const Start = () => {
   const {
@@ -22,8 +22,7 @@ export const Start = () => {
     i18n: { language },
   } = useTranslation("form-builder");
   const router = useRouter();
-  const { importTemplate, initialize } = useTemplateStore((s) => ({
-    importTemplate: s.importTemplate,
+  const { initialize } = useTemplateStore((s) => ({
     initialize: s.initialize,
   }));
 
@@ -61,12 +60,6 @@ export const Start = () => {
 
         const data = transformFormProperties(safeJSONParse<FormProperties>(result, cleaner));
 
-        if (data && !validateUniqueQuestionIds(data.elements)) {
-          setErrors([{ message: t("startErrorDuplicateQuestionId") }]);
-          target.value = "";
-          return;
-        }
-
         if (!data) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
@@ -84,7 +77,8 @@ export const Start = () => {
         try {
           checkForBetaComponents(data.elements, getFlag);
 
-          importTemplate(data);
+          setImportedTemplate(data);
+          clearTemplateStore();
 
           ga("open_form_file");
           router.push(`/${language}/form-builder/0000/preview`);
@@ -131,7 +125,7 @@ export const Start = () => {
           </div>
         )}
       </div>
-      <div className="flex flex-col justify-center tablet:flex-row">
+      <div className="tablet:flex-row flex flex-col justify-center">
         <button
           data-testid="start-new-form"
           className={boxClass}

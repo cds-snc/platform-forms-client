@@ -119,10 +119,10 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       id={id}
       tabIndex={-1}
     >
-      <legend className={cn("gc-label", required && "required")} id={`label-${id}`}>
+      <legend className={cn("gcds-label", required && "required")} id={`label-${id}`}>
         {label}
         {required && (
-          <span data-testid="required" aria-hidden>
+          <span data-testid="required" className="label--required" aria-hidden>
             {" "}
             ({t("required")})
           </span>

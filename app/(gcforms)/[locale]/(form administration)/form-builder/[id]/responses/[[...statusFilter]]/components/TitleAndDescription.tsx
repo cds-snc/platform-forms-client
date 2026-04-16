@@ -4,6 +4,7 @@ import { VaultStatus } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { ConfirmDialog } from "./Dialogs/ConfirmDialog";
 import { Alert } from "@clientComponents/globals";
+import { v4 as uuid } from "uuid";
 
 export const TitleAndDescription = ({
   statusFilter,
@@ -14,10 +15,11 @@ export const TitleAndDescription = ({
   statusFilter: string;
   formId: string;
   responseDownloadLimit: number;
-  setForceRefresh: (refresh: number) => void;
+  setForceRefresh: (refresh: string) => void;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
+  const allowedStatus: VaultStatus[] = [VaultStatus.PROBLEM, VaultStatus.DOWNLOADED];
   return (
     <>
       {statusFilter == VaultStatus.NEW && (
@@ -68,12 +70,12 @@ export const TitleAndDescription = ({
           </div>
         </>
       )}
-      {[VaultStatus.PROBLEM, VaultStatus.DOWNLOADED].includes(statusFilter as VaultStatus) && (
+      {allowedStatus.includes(statusFilter as VaultStatus) && (
         <ConfirmDialog
           formId={formId}
           maxEntries={responseDownloadLimit}
           onSuccessfulConfirm={() => {
-            setForceRefresh(Date.now());
+            setForceRefresh(uuid());
             setShowSuccessAlert("confirmSuccess");
           }}
         />

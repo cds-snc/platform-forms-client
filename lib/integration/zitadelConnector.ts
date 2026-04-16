@@ -192,20 +192,21 @@ export async function getMachineUserKeysById(userId: string): Promise<{ id: stri
 
 async function getConnectionInformation(): Promise<ZitadelConnectionInformation> {
   if (connectionInformationCache === undefined) {
-    if (!process.env.ZITADEL_URL) throw new Error("No ZITADEL_URL environment variable found");
+    if (!process.env.NEXT_PUBLIC_ZITADEL_URL)
+      throw new Error("No ZITADEL_URL environment variable found");
     if (!process.env.ZITADEL_TRUSTED_DOMAIN)
       throw new Error("No ZITADEL_TRUSTED_DOMAIN environment variable found");
     if (!process.env.ZITADEL_ADMINISTRATION_KEY)
       throw new Error("No ZITADEL_ADMINISTRATION_KEY environment variable found");
 
     const apiManagementAccessToken = await getApiManagementAccessToken({
-      url: process.env.ZITADEL_URL,
+      url: process.env.NEXT_PUBLIC_ZITADEL_URL,
       trustedDomain: process.env.ZITADEL_TRUSTED_DOMAIN,
       administrationKey: JSON.parse(process.env.ZITADEL_ADMINISTRATION_KEY),
     });
 
     const response = await got
-      .post(`${process.env.ZITADEL_URL}/v2/organizations/_search`, {
+      .post(`${process.env.NEXT_PUBLIC_ZITADEL_URL}/v2/organizations/_search`, {
         http2: true,
         timeout: { request: 5000 },
         headers: {
@@ -235,7 +236,7 @@ async function getConnectionInformation(): Promise<ZitadelConnectionInformation>
     }
 
     connectionInformationCache = {
-      url: process.env.ZITADEL_URL,
+      url: process.env.NEXT_PUBLIC_ZITADEL_URL,
       trustedDomain: process.env.ZITADEL_TRUSTED_DOMAIN,
       administrationKey: JSON.parse(process.env.ZITADEL_ADMINISTRATION_KEY),
       organizationId: response.result[0].id,

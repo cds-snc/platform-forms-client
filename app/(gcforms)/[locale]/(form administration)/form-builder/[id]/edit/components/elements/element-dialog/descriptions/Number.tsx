@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, Label, TextInput } from "@clientComponents/forms";
+import { Description, Label, NumberInput } from "@clientComponents/forms";
 import { useTranslation } from "@i18n/client";
 
 export const Number = () => {
@@ -14,12 +14,12 @@ export const Number = () => {
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.number.description")}</p>
 
-      <ExampleWrapper className="gcds-input-wrapper mt-4">
-        <Label htmlFor="name" className="gc-label">
+      <ExampleWrapper className="gcds-input-wrapper">
+        <Label htmlFor="name" className="gcds-label">
           {t("addElementDialog.number.amount")}
         </Label>
         <Description>{t("addElementDialog.number.enterOnlyNumbers")}</Description>
-        <TextInput label="title" type="number" name="name" placeholder="123456789" />
+        <NumberInput label="title" name="name" placeholder="123456789" />
       </ExampleWrapper>
     </div>
   );

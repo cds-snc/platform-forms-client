@@ -114,7 +114,7 @@ export const PrePublishDialog = ({
             <h3 className="gc-h4 mb-1 pb-0 text-lg">
               <div className="flex-col">
                 <span className="">{t("prePublishFormDialog.text1")}</span>
-                <legend className="gc-label required">
+                <legend className="gcds-label required">
                   <span data-testid="required" aria-hidden>
                     ({t("required")})
                   </span>
@@ -178,7 +178,7 @@ export const PrePublishDialog = ({
               </Alert.Danger>
             )}
             <p className="mb-4 text-sm">{t("prePublishFormDialog.thisInformation")}</p>
-            <Label className="gc-label required" required={true}>
+            <Label className="gcds-label required" required={true}>
               {t("prePublishFormDialog.whatType")}
             </Label>
             <div className="mb-1">
@@ -199,7 +199,7 @@ export const PrePublishDialog = ({
                 ))}
               </select>
             </div>
-            <Label className="gc-label required" required={true}>
+            <Label className="gcds-label required" required={true}>
               {t("prePublishFormDialog.briefDesc")}
             </Label>
             <p>

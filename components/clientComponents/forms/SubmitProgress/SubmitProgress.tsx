@@ -63,6 +63,7 @@ export const SubmitProgress = ({ spinner = true }: { spinner?: boolean }) => {
   return (
     <div
       id="react-hydration-loader"
+      data-id="submission-progress-loader"
       data-testid="loading-spinner"
       role="status"
       className="flex flex-col items-center justify-center gap-2"

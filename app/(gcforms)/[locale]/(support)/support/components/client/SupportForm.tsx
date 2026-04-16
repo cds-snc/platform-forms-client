@@ -7,7 +7,7 @@ import {
   ErrorListItem,
   Description,
 } from "@clientComponents/forms";
-import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ErrorStatus } from "@lib/constants";
 import Link from "next/link";
 import { Alert } from "@clientComponents/globals";
 import { TextInput } from "../../../components/client/TextInput";
@@ -181,9 +181,9 @@ export const SupportForm = () => {
               />
             </div>
             <fieldset className="focus-group">
-              <legend className="gc-label required">
+              <legend className="gcds-label required">
                 {t("support.request.title")}{" "}
-                <span data-testid="required" aria-hidden>
+                <span data-testid="required" className="label--required" aria-hidden>
                   ({t("required", { ns: "common" })})
                 </span>
               </legend>

@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.19] - 2026-03-24
+
+- Update TypeScript to 6.0.2
+
+## [2.2.18] - 2026-03-19
+
+- Update AWS SDK packages to latest versions
+
+## [2.2.17] - 2026-02-23
+
+- Update postgres connector to use ssl
+
+## [2.2.16] - 2026-01-06
+
+- Update AWS-SDK packages
+
+## [2.2.15] - 2026-01-06
+
+- Add connector dependencies
+
+## [2.2.14] - 2025-12-15
+
+- Add notification helpers
+- Add utils for AWS
+
 ## [2.2.13] - 2025-10-27
 
 - Update AWS SDK package from version `3.917.0`

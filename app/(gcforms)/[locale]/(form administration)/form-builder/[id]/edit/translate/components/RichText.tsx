@@ -10,17 +10,16 @@ import { FieldsetLegend } from "./FieldsetLegend";
 
 export const RichText = ({
   element,
-  index,
   primaryLanguage,
 }: {
   element: FormElement;
-  index: number;
   primaryLanguage: Language;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { localizeField, propertyPath } = useTemplateStore((s) => ({
+  const { localizeField, propertyPath, changeKey } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     propertyPath: s.propertyPath,
+    changeKey: s.changeKey,
   }));
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
   const field = LocalizedElementProperties.DESCRIPTION;
@@ -34,14 +33,15 @@ export const RichText = ({
         <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
           <div className="relative w-1/2 flex-1">
             <RichTextEditor
+              key={`${element.id}:description:${primaryLanguage}:${changeKey}`}
               path={propertyPath(element.id, field, primaryLanguage)}
               content={element.properties[fieldEn] ?? ""}
               lang={primaryLanguage}
               ariaLabel={t("pageText") + " " + t(primaryLanguage)}
-              ariaDescribedBy={`elements-${index}-description-${primaryLanguage}-language`}
+              ariaDescribedBy={`elements-${element.id}-description-${primaryLanguage}-language`}
             />
             <LanguageLabel
-              id={`elements-${index}-description-${primaryLanguage}-language`}
+              id={`elements-${element.id}-description-${primaryLanguage}-language`}
               lang={primaryLanguage}
             >
               <>{primaryLanguage}</>
@@ -49,14 +49,15 @@ export const RichText = ({
           </div>
           <div className="relative w-1/2 flex-1">
             <RichTextEditor
+              key={`${element.id}:description:${secondaryLanguage}:${changeKey}`}
               path={propertyPath(element.id, field, secondaryLanguage)}
               content={element.properties[fieldFr] ?? ""}
               lang={secondaryLanguage}
               ariaLabel={t("pageText") + " " + secondaryLanguage}
-              ariaDescribedBy={`elements-${index}-description-${secondaryLanguage}-language`}
+              ariaDescribedBy={`elements-${element.id}-description-${secondaryLanguage}-language`}
             />
             <LanguageLabel
-              id={`elements-${index}-description-${secondaryLanguage}-language`}
+              id={`elements-${element.id}-description-${secondaryLanguage}-language`}
               lang={secondaryLanguage}
             >
               <>{secondaryLanguage}</>

@@ -37,6 +37,14 @@
     "userSideAuditLogs": {
       "title": "Download form activity",
       "description": "Enable the download of form key actions (in last 30 days) via Settings"
+    },
+    "zitadelLogin": {
+      "title": "Zitadel Login",
+      "description": "Enable Zitadel as a login method for users"
+    },
+    "lockedEditing": {
+      "title": "Locked collaborative editing",
+      "description": "Enable sharing a draft form with handoffs that allows users to lock and take over editing"
     }
   },
   "addFlag": "Add user feature flag",

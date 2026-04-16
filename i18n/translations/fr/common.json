@@ -46,6 +46,8 @@
     "date-invalid": "Entrer une date valide.",
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
+    "invalidRegex": "Il y a eu un problème lors du traitement du formulaire.",
+    "combobox-strict": "Sélectionnez une valeur dans la liste.",
     "file-upload": {
       "default": {
         "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
@@ -85,10 +87,16 @@
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
   "required-field": "Champ obligatoire",
+  "decimalSeparator": ",",
   "file-upload-button-text": "Choisir un fichier",
   "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "dropdown-initial-option-text": "Pas de sélection",
+  "combobox-results-available_one": "{{count}} option disponible",
+  "combobox-results-available_other": "{{count}} options disponibles",
+  "combobox-no-results": "Aucune option disponible",
+  "combobox-of": "de",
+  "combobox-input-hint": "Lorsque des résultats sont disponibles, utilisez les flèches directionnelles pour naviguer : les flèches en haut et en bas pour parcourir, puis la touche Entrée pour sélectionner. Pour les utilisateurs d'appareils tactiles, explorez par effleurement ou à l'aide de gestes de balayage.",
   "server-error": "Désolé, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
   "form-closed-error": "Ce formulaire est fermé et n'accepte plus de soumissions. Réinitialisez cette page pour un message plus spécifique par rapport à la fermeture du formulaire.",
   "title-full": "Formulaires GC - GC Forms",
@@ -122,10 +130,10 @@
   },
   "formElements": {
     "characterCount": {
-      "part1": "Il vous reste",
-      "part2": "caractères.",
-      "part1-error": "Vous avez dépassé la limite de",
-      "part2-error": "caractères."
+      "remaining_one": "Il vous reste {{count}} caractère.",
+      "remaining_other": "Il vous reste {{count}} caractères.",
+      "exceeded_one": "Vous avez dépassé la limite de {{count}} caractère.",
+      "exceeded_other": "Vous avez dépassé la limite de {{count}} caractères."
     }
   },
   "dynamicRow": {
@@ -224,7 +232,7 @@
   },
   "exit": "Sortie",
   "campaignBanner": {
-    "enabled": "false",
+    "enabled": "true",
     "type": "À VENIR",
     "message": "<strong>En août</strong> : Créez des formulaires multipages avec une logique d’embranchement. <a href='/fr/contact' className='text-white hover:text-white'>S’abonner aux mises à jour</a>",
     "type2": "NOUVEAUTÉ",
@@ -232,7 +240,9 @@
     "type3": "Élection fédérale",
     "message3": "Veuillez vous renseigner auprès de l’équipe des communications de votre ministère au sujet d'annonces durant la <a href='https://www.canada.ca/fr/conseil-prive/services/publications/lignes-directrices-regissant-conduite-ministres-etat-membres-personnel-exonere-fonctionnaires-periode-electorale.html' className='text-white hover:text-white'>période de transition</a>",
     "type4": "Retraite de livraison par courriel",
-    "message4": "Les formulaires publiés ne sont pas affectés. Les nouveaux formulaires n’auront pas l’option de livraison par courriel. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/obtenir-les-reponses-aux-formulaires/' className='text-white hover:text-white'>En savoir plus</a>"
+    "message4": "Les formulaires publiés ne sont pas affectés. Les nouveaux formulaires n’auront pas l’option de livraison par courriel. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/obtenir-les-reponses-aux-formulaires/' className='text-white hover:text-white'>En savoir plus</a>",
+    "type5": "Prenez une minute pour nous aider",
+    "message5": "Testez une fonctionnalité à venir qui améliorera la récupération des réponses : <a href='/fr/forms/browser-check' target='_blank' className='text-white hover:text-white'>Vérifiez votre navigateur</a>"
   },
   "closingNotice": {
     "title": "Fermeture du formulaire",
@@ -349,5 +359,10 @@
   },
   "confirmFileWarning": {
     "text": "Cette copie de vos réponses n'aura pas les fichiers que vous avez joints à votre soumission."
+  },
+  "loginPilot": {
+    "title": "Se connecter à Formulaires GC",
+    "description": "Utilisez votre compte du gouvernement pour créer des formulaires et accéder aux réponses soumises.",
+    "button": "Se connecter"
   }
 }

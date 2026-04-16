@@ -10,10 +10,12 @@ import { type Language } from "@lib/types/form-builder-types";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
   formRecord: PublicFormRecord;
-  dateModified?: boolean;
   footer?: JSX.Element;
   language: Language;
   pathname?: string;
+  isPastClosingDate?: boolean;
+  step?: string;
+  saveAndResume?: boolean;
 }
 
 const FormDisplayHeader = ({
@@ -38,10 +40,12 @@ const FormDisplayHeader = ({
 const FormDisplayLayout = ({
   children,
   formRecord,
-  dateModified = true,
   footer,
   language,
   pathname = "",
+  isPastClosingDate = false,
+  step = "",
+  saveAndResume = false,
 }: FormDisplayLayoutProps) => {
   return (
     <>
@@ -59,7 +63,12 @@ const FormDisplayLayout = ({
         >
           <main id="content" className="h-full" tabIndex={-1}>
             {children}
-            {dateModified && <DateModified updatedAt={formRecord.updatedAt} />}
+            <DateModified
+              updatedAt={formRecord.updatedAt}
+              isPastClosingDate={isPastClosingDate}
+              step={step}
+              saveAndResume={saveAndResume}
+            />
           </main>
         </div>
         {footer}

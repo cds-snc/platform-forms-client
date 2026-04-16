@@ -18,14 +18,12 @@ export const Menu = ({
   name,
   isPublished,
   ttl,
-  direction = "up",
   status,
 }: {
   id: string;
   name: string;
   isPublished: boolean;
   ttl?: Date;
-  direction?: "up" | "down";
   status?: string;
 }) => {
   const {
@@ -46,11 +44,6 @@ export const Menu = ({
     },
     {
       filtered: (isPublished ? true : false) || (ttl ? true : false),
-      title: t("card.menu.edit"),
-      url: `/${language}/form-builder/${id}/edit`,
-    },
-    {
-      filtered: (isPublished ? true : false) || (ttl ? true : false),
       title: t("card.menu.preview"),
       url: `/${language}/form-builder/${id}/preview`,
     },
@@ -61,7 +54,7 @@ export const Menu = ({
         // Start async clone but return immediate callback value to satisfy MenuDropdown
         (async () => {
           try {
-            const res = await cloneForm(id, status === "archived");
+            const res = await cloneForm(id, status === "archived", language);
             if (res && res.formRecord && !res.error) {
               toast.success(t("card.menu.cloneSuccess"));
               window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;
@@ -146,7 +139,7 @@ export const Menu = ({
 
   return (
     <>
-      <MenuDropdown id={id} items={menuItemsList} direction={direction}>
+      <MenuDropdown id={id} items={menuItemsList}>
         <span className="mr-1 text-[2rem]" aria-hidden="true">
           ⋮
         </span>

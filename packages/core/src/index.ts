@@ -51,3 +51,6 @@ export {
   ensureChoiceId,
   getElementsUsingChoiceId,
 } from "./helpers";
+
+export { isSafeRegex } from "./validation/regex";
+export { isValidRegex } from "./validation/regex";

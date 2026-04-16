@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getClientIP } from "@lib/ip";
+import { getClientIp } from "@lib/ip";
 import { logMessage } from "@lib/logger";
 import { withRetry } from "../utils/retry";
 
@@ -25,7 +25,7 @@ export const verifyHCaptchaToken = async (token: string, formId: string): Promis
   const data = new FormData();
   data.append("secret", siteVerifyKey);
   data.append("response", String(token));
-  data.append("remoteip", String(await getClientIP()));
+  data.append("remoteip", String(await getClientIp()));
 
   const hCaptchaApiUrl = "https://api.hcaptcha.com/siteverify";
 

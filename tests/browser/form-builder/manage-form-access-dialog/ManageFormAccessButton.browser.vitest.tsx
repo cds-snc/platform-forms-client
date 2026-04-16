@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { page } from "@vitest/browser/context";
-import { ManageFormAccessButton } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses/[[...statusFilter]]/components/ManageFormAccessDialog/ManageFormAccessButton";
+import { ManageFormAccessButton } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/components/dialogs/ManageFormAccessDialog/ManageFormAccessButton";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<ManageFormAccessButton />", () => {
   beforeAll(() => {

@@ -110,3 +110,4 @@ dist
 test-results/
 playwright-report/
 tests/.auth/*.json
+eslint_report.html

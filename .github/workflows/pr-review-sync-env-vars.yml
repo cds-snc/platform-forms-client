@@ -1,10 +1,9 @@
 name: PR review sync envionment variables
 
 on:
-  workflow_run:
-    workflows: ["Deploy to Staging"]
-    types:
-      - completed
+  workflow_dispatch:
+  schedule:
+    - cron: "0 10-22 * * *" # runs every hour between 6 AM and 6 PM (EDT)
 
 env:
   AWS_ACCOUNT_ID: ${{ vars.STAGING_AWS_ACCOUNT_ID }}
@@ -15,12 +14,11 @@ permissions:
   contents: read
 
 jobs:
-  deploy-form-viewer-service:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  sync-env-vars:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1

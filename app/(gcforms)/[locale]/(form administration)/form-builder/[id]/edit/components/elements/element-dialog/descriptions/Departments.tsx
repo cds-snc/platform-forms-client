@@ -19,13 +19,13 @@ export const Departments = () => {
       <h3 className="mb-0">{t("addElementDialog.departments.title")}</h3>
       <p>{t("addElementDialog.departments.description")}</p>
 
-      <ExampleWrapper className="mt-4">
-        <Label htmlFor="dropdown" className="gc-label">
+      <ExampleWrapper>
+        <Label htmlFor="dropdown" id="label-dropdown" className="gcds-label">
           {t("addElementDialog.departments.selectOption")}
         </Label>
-        <Description>{t("addElementDialog.departments.selectOne")}</Description>
+        <Description id="desc-dropdown">{t("addElementDialog.departments.selectOne")}</Description>
         <div className="overflow-hidden p-2">
-          <Combobox name="name" id="dropdown" choices={choices} />
+          <Combobox name="name" id="dropdown" ariaDescribedBy="desc-dropdown" choices={choices} />
         </div>
       </ExampleWrapper>
     </>

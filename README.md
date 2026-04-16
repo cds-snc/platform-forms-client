@@ -10,7 +10,7 @@ This repository is the web application for the GC Forms platform product.
 
 This is a [Next.js](https://nextjs.org/) and is built with:
 
-- Next.js >= 14.x
+- Next.js >= 16.x
 - Sass (Syntactically Awesome Style Sheets) for reusable styles
 - [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
 - [PostCSS](https://postcss.org/)

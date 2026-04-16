@@ -7,7 +7,7 @@
   "fields": {
     "username": {
       "label": "Adresse courriel",
-      "description": "Il faut fournir une adresse courriel du gouvernement fédéral."
+      "description": "Entrez votre propre adresse courriel individuelle du gouvernement."
     },
     "password": {
       "label": "Mot de passe",

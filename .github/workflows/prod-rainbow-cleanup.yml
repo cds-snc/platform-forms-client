@@ -31,7 +31,7 @@ jobs:
       ids: ${{ steps.determine-rainbow-deployments-ids-to-clean-up.outputs.ids }}
     steps:
       - name: Checkout
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
@@ -43,6 +43,8 @@ jobs:
       - name: Determine rainbow deployments to clean up
         id: determine-rainbow-deployments-ids-to-clean-up
         run: |
+          set -euo pipefail
+
           if [[ "${{ github.event_name }}" == "workflow_run" && "${{ github.event.workflow_run.conclusion }}" == "failure" ]]; then
             echo 'ids=["${{ github.event.workflow_run.head_sha }}"]' >> "$GITHUB_OUTPUT"
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.deployment-identifier }}" != "all" ]]; then
@@ -54,7 +56,7 @@ jobs:
               aws elbv2 describe-rules \
                 --listener-arn ${{ env.LOAD_BALANCER_LISTENER_ARN }} \
                 --no-paginate \
-                --query "Rules[?contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')]" \
+                --query "Rules[?Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn && contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')]" \
                 | jq --argjson max "$maxNumberOfRulesToSelect" -r '.[] | select(.Priority | tonumber > $max) | .RuleArn'
             ))
 
@@ -91,7 +93,7 @@ jobs:
         deployment-identifier: ${{ fromJSON(needs.generate-list-of-deployment-ids.outputs.ids) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1

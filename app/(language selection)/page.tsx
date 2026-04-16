@@ -10,6 +10,32 @@ import { Language } from "@lib/types/form-builder-types";
 
 export const dynamic = "force-dynamic";
 
+const SiteLink = ({
+  browserLanguage,
+  i18nLanguage,
+  languageT,
+}: {
+  browserLanguage: string;
+  i18nLanguage: string;
+  languageT: Record<string, (key: string) => string>;
+}) => {
+  const secondLanguage = i18nLanguage === "en" ? "fr" : "en";
+  return (
+    <Link
+      href={`/${i18nLanguage}/form-builder`}
+      className="mr-10 inline-flex no-underline focus:bg-white"
+    >
+      <span className="">
+        <SiteLogo title={languageT[browserLanguage]("title")} />
+      </span>
+      <h1 className="!mb-6 !ml-3 inline-block whitespace-nowrap border-none !font-noto-sans !text-[24px] font-semibold leading-10 text-[#1B00C2]">
+        <span lang={browserLanguage}>{languageT[browserLanguage]("title")}</span> -{" "}
+        <span lang={secondLanguage}>{languageT[secondLanguage]("title")}</span>
+      </h1>
+    </Link>
+  );
+};
+
 const Home = () => {
   // With the automatic language detection we can hopefully remove this page in the
   // near future
@@ -26,23 +52,6 @@ const Home = () => {
       return { ...acc, ...lang };
     });
 
-  const SiteLink = () => {
-    return (
-      <Link
-        href={`${i18n.language}/form-builder`}
-        className="mr-10 inline-flex no-underline focus:bg-white"
-      >
-        <span className="">
-          <SiteLogo title={languageT[browserLanguage]("title")} />
-        </span>
-        <h1 className="!mb-6 !ml-3 inline-block whitespace-nowrap border-none !font-noto-sans !text-[24px] font-semibold leading-10 text-[#1B00C2]">
-          <span lang={browserLanguage}>{languageT[browserLanguage]("title")}</span> -{" "}
-          <span lang={secondLanguage}>{languageT[secondLanguage]("title")}</span>
-        </h1>
-      </Link>
-    );
-  };
-
   return (
     <>
       <GcdsHeader showLanguageToggle={false} pathname="" language={browserLanguage as Language} />
@@ -53,7 +62,11 @@ const Home = () => {
             <div className="container-xl mt-10 flex items-center justify-center">
               <div className="w-[622px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-8">
                 <div className="flex  flex-col items-center">
-                  <SiteLink />
+                  <SiteLink
+                    browserLanguage={browserLanguage}
+                    i18nLanguage={i18n.language}
+                    languageT={languageT}
+                  />
                   <div className="flex justify-center gap-8">
                     <Link
                       href={`/${browserLanguage}/form-builder`}

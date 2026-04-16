@@ -10,6 +10,8 @@ export const FeatureFlags = {
   hCaptcha: "hCaptcha",
   topBanner: "topBanner",
   userSideAuditLogs: "userSideAuditLogs",
+  zitadelLogin: "zitadelLogin",
+  lockedEditing: "lockedEditing",
   ...UserFeatureFlags,
 } as const;
 

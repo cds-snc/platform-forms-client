@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" id="Layer_3" version="1.1" viewBox="22.16 139.27 417.14 37.46">
+  <!-- Generator: Adobe Illustrator 29.7.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 138)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #ff1101;
+      }
+
+      .st1 {
+        letter-spacing: -.02em;
+      }
+
+      .st1, .st2, .st3 {
+        isolation: isolate;
+      }
+
+      .st1, .st3 {
+        font-family: Helvetica, Helvetica;
+        font-size: 16.41px;
+      }
+    </style>
+  </defs>
+  <g class="st2">
+    <text class="st1" transform="translate(115.58 154.27)"><tspan x="0" y="0">Pêches et Océans</tspan></text>
+    <text class="st1" transform="translate(115.58 172.73)"><tspan x="0" y="0">Canada</tspan></text>
+  </g>
+  <g class="st2">
+    <text class="st3" transform="translate(279.68 154.27)"><tspan x="0" y="0">Fisheries and Oceans</tspan></text>
+    <text class="st3" transform="translate(279.68 172.73)"><tspan x="0" y="0">Canada</tspan></text>
+  </g>
+  <g>
+    <rect class="st0" x="22.16" y="141.86" width="15.62" height="31.24"/>
+    <rect class="st0" x="69" y="141.86" width="15.62" height="31.24"/>
+    <path class="st0" d="M51.24,148.55l2.14-4.34,2.11,4.18c.27.44.48.41.9.19l1.81-.9-1.18,5.84c-.25,1.14.41,1.48,1.11.7l2.59-2.77.69,1.57c.23.48.59.4,1.04.31l2.68-.56-.9,3.38-.02.07c-.1.44-.31.81.18,1.02l.95.47-5.52,4.67c-.57.58-.37.76-.16,1.41l.51,1.57-5.15-.93c-.63-.16-1.08-.16-1.09.35l.21,5.9h-1.55l.21-5.89c0-.58-.44-.56-1.48-.35l-4.76.92.62-1.57c.21-.6.26-1-.21-1.41l-5.64-4.6,1.04-.64c.3-.23.32-.48.16-.99l-1.06-3.44,2.72.58c.76.18.97,0,1.16-.42l.76-1.55,2.68,3.03c.48.56,1.15.19.93-.62l-1.29-6.33,1.99,1.15c.32.19.65.24.85-.12"/>
+  </g>
+</svg>

@@ -1,8 +1,8 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, ReactNode } from "react";
+import "./MenuDropdown.css";
 import { useTranslation } from "@i18n/client";
 import { Menu } from "./Menu";
-import { Overlay } from "@clientComponents/globals/Overlay/Overlay";
 
 export interface MenuDropdownItemCallback {
   message: string;
@@ -14,22 +14,22 @@ export interface MenuDropdownItemI {
   title: string;
   url?: string;
   callback?: () => MenuDropdownItemCallback;
+  element?: ReactNode;
 }
 
 interface MenuDropdownProps {
-  children: React.ReactNode;
+  children: ReactNode;
   id: string;
   items: Array<MenuDropdownItemI>;
   direction?: string;
 }
 
 export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
-  const { children, id, items, direction } = props;
+  const { children, id, items } = props;
   const { t } = useTranslation(["common"]);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuListRef = useRef<HTMLUListElement>(null);
   const [menuDropdown, setMenuDropdown] = useState({} as Menu);
-  const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
     if (menuButtonRef.current && menuListRef.current) {
@@ -40,31 +40,33 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         })
       );
     }
-  }, []);
 
-  const handleToggle = () => {
-    // Using an if-else vs. single toggle, to make sure the menu and overlay states stay in sync
-    if (menuDropdown.isOpen()) {
-      menuDropdown?.close();
-      setShowOverlay(false);
-    } else {
-      menuDropdown?.open();
-      setShowOverlay(true);
+    try {
+      if (menuButtonRef.current) {
+        menuButtonRef.current.setAttribute("popovertarget", `menu-${id}`);
+        menuButtonRef.current.setAttribute("command", "toggle-popover");
+        menuButtonRef.current.setAttribute("commandfor", `menu-${id}`);
+        menuButtonRef.current.style.setProperty("anchor-name", `--card-${id}`);
+      }
+      if (menuListRef.current) {
+        menuListRef.current.style.setProperty("position-anchor", `--card-${id}`);
+      }
+    } catch (e) {
+      // noop
     }
-  };
+  }, [id]);
 
   return (
     <>
       <div className="relative">
         <button
-          onClick={handleToggle}
           onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
             // Note: Avoiding sending as React.KeyboardEvent.. keeps the menu more generic
             menuDropdown?.onMenuButtonKey(e as unknown as KeyboardEvent);
           }}
           type="button"
           id={`button-${id}`}
-          className="flex border-2 border-white-default py-1 pl-0 pr-1 aria-expanded:border-black-default"
+          className="border-white-default aria-expanded:border-black-default flex border-2 py-1 pr-1 pl-0"
           aria-haspopup="true"
           aria-controls={`menu-${id}`}
           ref={menuButtonRef}
@@ -73,11 +75,9 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         </button>
         <ul
           id={`menu-${id}`}
-          className={
-            "hidden absolute z-50 -left-[1rem] m-0 p-0 bg-white-default border border-black-default list-none" +
-            (direction === "up" ? " -top-[13rem]" : "")
-          }
+          className={"border-black-default bg-white-default z-50 m-0 list-none border p-0"}
           role="menu"
+          popover="auto"
           tabIndex={-1}
           aria-labelledby={`button-${id}`}
           aria-activedescendant={`mi-${id}-0`}
@@ -123,9 +123,11 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
                       </button>
                       <div
                         aria-live="polite"
-                        className="absolute top-8 line-clamp-1 hidden text-[.7rem] text-green-default"
+                        className="text-green-default absolute top-8 line-clamp-1 hidden text-[.7rem]"
                       ></div>
                     </>
+                  ) : item.element ? (
+                    item.element
                   ) : (
                     <a
                       href={item.url}
@@ -139,7 +141,6 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
             })}
         </ul>
       </div>
-      {showOverlay && <Overlay callback={handleToggle} />}
     </>
   );
 };

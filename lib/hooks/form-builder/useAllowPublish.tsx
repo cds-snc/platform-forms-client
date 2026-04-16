@@ -52,11 +52,12 @@ export const isFormElementTranslated = (element: FormElement) => {
     }
 
     // Only check choices for Select, Radio, and Checkbox
-    if (
-      [FormElementTypes.checkbox, FormElementTypes.radio, FormElementTypes.dropdown].includes(
-        element.type
-      )
-    ) {
+    const allowedTypes: FormElementTypes[] = [
+      FormElementTypes.checkbox,
+      FormElementTypes.radio,
+      FormElementTypes.dropdown,
+    ];
+    if (allowedTypes.includes(element.type)) {
       // Check choices if there are any
       if (element.properties.choices) {
         areChoicesTranslated(element.properties.choices);

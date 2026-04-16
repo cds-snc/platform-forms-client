@@ -1,4 +1,4 @@
-import { getAwsSecret } from "./getAwsSecret";
+import { getAwsSecret } from "./utils";
 import postgres, { Sql } from "postgres";
 
 export class PostgresConnector {
@@ -17,7 +17,7 @@ export class PostgresConnector {
   }
 
   private constructor(connectionUrl: string) {
-    this.postgresInstance = postgres(connectionUrl);
+    this.postgresInstance = postgres(connectionUrl, { ssl: "prefer" });
   }
 
   public executeSqlStatement(): Sql {

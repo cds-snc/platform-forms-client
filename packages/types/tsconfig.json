@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "downlevelIteration": true,
     "module": "esnext",
     "declaration": true,
+    "ignoreDeprecations": "6.0",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "typeRoots": ["./node_modules/@types"],
-    "moduleResolution": "node"
+    "moduleResolution": "bundler"
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

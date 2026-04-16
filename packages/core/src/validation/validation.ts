@@ -11,6 +11,7 @@ import { isInputTooLong } from "./text";
 import { isValidDate } from "./date";
 import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
+import { isSafeRegex } from "./regex";
 
 export const isFieldResponseValid = (
   value: unknown,
@@ -28,16 +29,22 @@ export const isFieldResponseValid = (
 
   switch (componentType) {
     case FormElementTypes.textField: {
-      const typedValue = value as string;
+      const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
-      let currentRegex = getRegexByType(validator.type, t, value as string);
+
+      let currentRegex = getRegexByType(validator.type, t, validator.regex);
 
       // Check if negative numbers are allowed.
       if (formElement.properties.allowNegativeNumbers && validator.type === "number") {
-        currentRegex = getRegexByType("canBeNegativeNumber", t, value as string);
+        currentRegex = getRegexByType("canBeNegativeNumber", t);
       }
 
       if (validator.type && currentRegex && currentRegex.regex) {
+        // Check regex for safety before using it.
+        if (!isSafeRegex(currentRegex.regex.source)) {
+          return t("input-validation.invalidRegex");
+        }
+
         // Check for different types of fields, email, date, number, custom etc
         const regex = new RegExp(currentRegex.regex);
         if (typedValue && !regex.test(typedValue)) {
@@ -49,7 +56,7 @@ export const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.textArea: {
-      const typedValue = value as string;
+      const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
       if (validator.maxLength && (value as string).length > validator.maxLength)
         return t("input-validation.too-many-characters");
@@ -73,9 +80,15 @@ export const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.radio:
-    case FormElementTypes.combobox:
     case FormElementTypes.dropdown: {
       if (validator.required && (value === undefined || value === "")) {
+        return t("input-validation.required");
+      }
+      break;
+    }
+    case FormElementTypes.combobox: {
+      const trimmedValue = String(value).trim();
+      if (validator.required && (trimmedValue === undefined || trimmedValue === "")) {
         return t("input-validation.required");
       }
       break;

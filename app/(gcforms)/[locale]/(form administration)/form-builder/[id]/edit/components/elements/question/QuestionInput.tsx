@@ -51,7 +51,7 @@ export const QuestionInput = ({
   useEffect(() => {
     // see: https://github.com/cds-snc/platform-forms-client/pull/1194/commits/cf2d08676cb9dfa7bb500f713cc16cdf653c3e93
     if (refs && refs.current && getFocusInput()) {
-      refs.current[id].focus();
+      refs.current[id] && refs.current[id].focus();
       setFocusInput(false);
     }
   }, [getFocusInput, setFocusInput, id, refs]);

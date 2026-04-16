@@ -1,6 +1,6 @@
 "use client";
 
-import "../styles/app.scss";
+import "../styles/app.css";
 import "react-app-polyfill/stable";
 import { Noto_Sans, Lato } from "next/font/google";
 import { logMessage } from "@lib/logger";

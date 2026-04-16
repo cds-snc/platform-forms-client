@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, type JSX } from "react";
+import React, { type JSX } from "react";
 import { cn } from "@lib/utils";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import Link from "next/link";
@@ -17,25 +17,17 @@ type LinkButtonProps = {
 
 export const LeftNav = ({ href, children, title = "", onClick, testid }: LinkButtonProps) => {
   const pathname = usePathname();
-  const [isActive, setIsActive] = useState(pathname.includes(href));
-
-  useEffect(() => {
-    if (pathname.includes(href)) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  }, [pathname, href]);
+  const isActive = pathname.includes(href);
 
   const classes = {
     base: "border-box flex h-[60px] w-[60px] items-center justify-center text-black-default no-underline ",
-    hover: "hover:border-indigo-700 [&_svg]:hover:fill-indigo-700 hover:border-1 ",
+    hover: "hover:border-indigo-700 hover:[&_svg]:fill-indigo-700 hover:border-1 ",
     focus:
-      "focus:border-indigo-700 focus:bg-white [&_svg]:focus:fill-indigo-700 focus:outline-[0px] focus:outline-offset-0 focus:outline-indigo-700 focus:border-1",
+      "focus:border-indigo-700 focus:bg-white focus:[&_svg]:fill-indigo-700 focus:outline-[0px] focus:outline-offset-0 focus:outline-indigo-700 focus:border-1",
     active:
-      "active:top-0.5 active:bg-indigo-700 [&_svg]:active:fill-white active:text-white active:outline-[0px] active:outline-indigo-700",
+      "active:top-0.5 active:bg-indigo-700 active:[&_svg]:fill-white active:text-white active:outline-[0px] active:outline-indigo-700",
     isActive:
-      "bg-indigo-700 [&_svg]:fill-white [&_svg]:hover:fill-white outline-[0px] outline-indigo-700 focus:outline-[0px] focus:outline-offset-0",
+      "bg-indigo-700 [&_svg]:fill-white hover:[&_svg]:fill-white outline-[0px] outline-indigo-700 focus:outline-[0px] focus:outline-offset-0",
   };
 
   return (

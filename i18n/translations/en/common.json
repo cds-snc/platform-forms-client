@@ -46,6 +46,8 @@
     "date-invalid": "Enter a valid date.",
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
+    "invalidRegex": "There was a problem processing the form.",
+    "combobox-strict": "Select a value from the list.",
     "file-upload": {
       "default": {
         "heading": "There was a problem submitting your form",
@@ -67,7 +69,7 @@
     "too-many-characters": "Shorten the response.",
     "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
     "validGovEmail": "Enter a valid government email address.",
-    "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. Enter the email of the person in charge of your team. If that's you, add a colleague.",
+    "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. If that's you, add a colleague.",
     "min-length-4-characters": "Must be at least 4 characters.",
     "mismatched-type": "The answer does not match the required type.",
     "MB": "MB",
@@ -85,10 +87,16 @@
   "required": "required",
   "all-required": "all checkboxes required",
   "required-field": "Required field",
+  "decimalSeparator": ".",
   "file-upload-button-text": "Choose file",
   "file-upload-sr-only-file-selected": "Currently selected file is",
   "file-upload-no-file-selected": "No file currently selected",
   "dropdown-initial-option-text": "No selection",
+  "combobox-results-available_one": "{{count}} option available",
+  "combobox-results-available_other": "{{count}} options available",
+  "combobox-no-results": "No options available",
+  "combobox-of": "of",
+  "combobox-input-hint": "When results are available, use the directional arrows to navigate: up and down arrows to review, enter to select. Touch device users, explore by touch or with swipe gestures.",
   "server-error": "Sorry, it seems there was a problem submitting your form. Please try again later.",
   "form-closed-error": "This form is closed and no longer accepting form submissions. Refresh this page for a more specific message about this closed form.",
   "title-full": "GC Forms - Formulaires GC",
@@ -122,10 +130,10 @@
   },
   "formElements": {
     "characterCount": {
-      "part1": "You have",
-      "part2": "characters left.",
-      "part1-error": "You've exceeded the limit by",
-      "part2-error": "characters."
+      "remaining_one": "You have {{count}} character left.",
+      "remaining_other": "You have {{count}} characters left.",
+      "exceeded_one": "You've exceeded the limit by {{count}} character.",
+      "exceeded_other": "You've exceeded the limit by {{count}} characters."
     }
   },
   "dynamicRow": {
@@ -224,7 +232,7 @@
   },
   "exit": "Exit",
   "campaignBanner": {
-    "enabled": "false",
+    "enabled": "true",
     "type": "COMING SOON",
     "message": "<strong>In August</strong>: Build multi-page forms with branching logic. <a href='/en/contact' className='text-white hover:text-white'>Subscribe for updates</a>",
     "type2": "NEW",
@@ -232,7 +240,9 @@
     "type3": "Federal election",
     "message3": "Check with your department’s communications team about announcements during the <a href='https://www.canada.ca/en/privy-council/services/publications/guidelines-conduct-ministers-state-exempt-staff-public-servants-election.html' className='text-white hover:text-white'>caretaker period</a>",
     "type4": "Retiring email delivery",
-    "message4": "Published forms are unaffected. New forms will not have email data delivery as an option. <a href='https://articles.alpha.canada.ca/forms-formulaires/getting-form-responses/' className='text-white hover:text-white'>Learn more</a>"
+    "message4": "Published forms are unaffected. New forms will not have email data delivery as an option. <a href='https://articles.alpha.canada.ca/forms-formulaires/getting-form-responses/' className='text-white hover:text-white'>Learn more</a>",
+    "type5": "Take 1 minute to help",
+    "message5": "Test an upcoming functionality to improve response retrieval: <a href='/en/forms/browser-check' target='_blank' className='text-white hover:text-white'>Check your browser</a>"
   },
   "closingNotice": {
     "title": "Form closing",
@@ -350,5 +360,10 @@
   },
   "confirmFileWarning": {
     "text": "This copy of your answers will not include the files you attached to your submission."
+  },
+  "loginPilot": {
+    "title": "Sign in to GC Forms",
+    "description": "Use your government account to build forms and access submitted responses.",
+    "button": "Sign in"
   }
 }

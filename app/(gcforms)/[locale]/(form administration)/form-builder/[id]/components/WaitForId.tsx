@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 
@@ -10,12 +11,14 @@ export const WaitForId = ({ path, locale }: { locale: Language; path: string }) 
     id: s.id,
   }));
 
-  if (id) {
-    // Redirect to the path
-    // Not router push here ...
-    // It causes set state issues elsewhere in the app
-    window.location.href = `/${locale}/form-builder/${id}/${path}`;
-  }
+  useEffect(() => {
+    if (id) {
+      // Redirect to the path
+      // Not router push here ...
+      // It causes set state issues elsewhere in the app
+      window.location.href = `/${locale}/form-builder/${id}/${path}`;
+    }
+  }, [id, locale, path]);
 
   // Show loading spinner while waiting for id
   return (

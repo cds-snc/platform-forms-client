@@ -6,7 +6,7 @@ import { GCFormsApiClient } from "@responses-pilot/lib/apiClient";
 import { setupFonts } from "./testHelpers";
 import enTranslations from "@root/i18n/translations/en/response-api.json";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("SelectApiKey - Browser Mode", () => {
   beforeAll(() => {

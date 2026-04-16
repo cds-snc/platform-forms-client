@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ReactElement, type JSX } from "react";
 import { logMessage } from "@lib/logger";
 import {
@@ -11,6 +13,7 @@ import {
   RichText,
   TextArea,
   TextInput,
+  NumberInput,
   ConditionalWrapper,
   Combobox,
   FormattedDate,
@@ -18,6 +21,7 @@ import {
 import {
   FormElement,
   FormElementTypes,
+  HTMLTextInputTypeAttribute,
   PropertyChoices,
   PublicFormRecord,
   Responses,
@@ -55,9 +59,20 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   // Retrieve managed data from static json file if specified
   if (element.properties.managedChoices) {
-    const dataFile = element.properties.managedChoices;
-    const data = managedData[dataFile];
-    choices = data ? getLocaleChoices(data, lang) : [];
+    if (Array.isArray(element.properties.managedChoices)) {
+      // Handle multiple managed data files - merge and sort alphabetically
+      element.properties.managedChoices.forEach((dataFile) => {
+        const data = managedData[dataFile];
+        const fileChoices = data ? getLocaleChoices(data, lang) : [];
+        choices = choices.concat(fileChoices);
+      });
+      choices.sort((a, b) => a.localeCompare(b, lang));
+    } else {
+      // Backwards compatibility for single managed data file
+      const dataFile = element.properties.managedChoices;
+      const data = managedData[dataFile];
+      choices = data ? getLocaleChoices(data, lang) : [];
+    }
   }
 
   const subElements =
@@ -83,12 +98,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
-  const textType =
+  const textType: HTMLTextInputTypeAttribute =
     element.properties?.validation?.type &&
     ["email", "name", "number", "password", "search", "tel", "url"].includes(
       element.properties.validation.type
     )
-      ? element.properties.validation.type
+      ? (element.properties.validation.type as HTMLTextInputTypeAttribute)
       : "text";
 
   const spellCheck =
@@ -118,6 +133,26 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   switch (element.type) {
     case FormElementTypes.textField:
+      if (textType === "number") {
+        return (
+          <div className="focus-group gcds-input-wrapper">
+            {labelComponent}
+            {description && <Description id={`${id}`}>{description}</Description>}
+            <NumberInput
+              id={`${id}`}
+              name={`${id}`}
+              required={isRequired}
+              ariaDescribedBy={description ? `desc-${id}` : undefined}
+              placeholder={placeHolder.toString()}
+              autoComplete={element.properties.autoComplete?.toString()}
+              maxLength={element.properties.validation?.maxLength}
+              allowNegativeNumbers={element.properties.allowNegativeNumbers}
+              stepCount={element.properties.stepCount}
+              lang={lang}
+            />
+          </div>
+        );
+      }
       return (
         <div className="focus-group gcds-input-wrapper">
           {labelComponent}
@@ -132,7 +167,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
             maxLength={element.properties.validation?.maxLength}
-            allowNegativeNumbers={element.properties.allowNegativeNumbers}
+            lang={lang}
           />
         </div>
       );
@@ -148,6 +183,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             maxLength={element.properties.validation?.maxLength}
+            lang={lang}
           />
         </div>
       );
@@ -209,6 +245,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}
             lang={lang}
+            required={isRequired}
           />
         </div>
       );
@@ -289,11 +326,13 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <Combobox
+            strictValue={element.properties.strictValue}
             id={`${id}`}
             name={`${id}`}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             className="relative"
             choices={choices}
+            lang={lang}
             key={`${id}-${lang}`}
           />
         </div>
@@ -383,7 +422,8 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
       const dynamicRowInitialValue: Responses =
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
           const subElementID = `${currentIndex}`;
-          if (![FormElementTypes.richText].includes(currentValue.type)) {
+          const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
+          if (!richTextElements.includes(currentValue.type)) {
             accumulator[subElementID] = _getElementInitialValue(currentValue, language);
           }
           return accumulator;
@@ -408,8 +448,10 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
 
   const initialValues: Responses = {};
 
+  const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
+
   formRecord.form.elements
-    .filter((element) => ![FormElementTypes.richText].includes(element.type))
+    .filter((element) => !richTextElements.includes(element.type))
     .forEach((element: FormElement) => {
       initialValues[element.id] = _getElementInitialValue(element, language);
     });

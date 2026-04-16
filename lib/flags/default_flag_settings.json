@@ -4,5 +4,7 @@
   "hCaptcha": false,
   "topBanner": false,
   "responsesPilot": false,
-  "userSideAuditLogs": false
+  "userSideAuditLogs": false,
+  "zitadelLogin": false,
+  "lockedEditing": false
 }

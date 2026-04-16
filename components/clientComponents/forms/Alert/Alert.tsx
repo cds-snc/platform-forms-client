@@ -3,13 +3,7 @@ import React, { useEffect, useRef, type JSX } from "react";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-
-export enum ErrorStatus {
-  SUCCESS,
-  WARNING,
-  ERROR,
-  INFO,
-}
+import { ErrorStatus } from "@lib/constants";
 
 interface AlertProps {
   type: ErrorStatus;

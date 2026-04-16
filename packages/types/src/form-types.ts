@@ -39,27 +39,32 @@ export type HTMLTextInputTypeAttribute =
   | "tel"
   | "url";
 
+// Extends HTMLTextInputTypeAttribute with validation-only strategies that do not
+// map directly to an HTML <input type> value.
+export type ValidationInputType = HTMLTextInputTypeAttribute | "custom";
+
 // all the possible types of form elements
-export enum FormElementTypes {
-  textField = "textField",
-  textArea = "textArea",
-  dropdown = "dropdown",
-  radio = "radio",
-  checkbox = "checkbox",
-  fileInput = "fileInput",
-  richText = "richText",
-  dynamicRow = "dynamicRow",
-  attestation = "attestation",
-  address = "address",
-  addressComplete = "addressComplete",
-  name = "name",
-  firstMiddleLastName = "firstMiddleLastName",
-  departments = "departments",
-  contact = "contact",
-  combobox = "combobox",
-  formattedDate = "formattedDate",
-  customJson = "customJson",
-}
+export const FormElementTypes = {
+  textField: "textField",
+  textArea: "textArea",
+  dropdown: "dropdown",
+  radio: "radio",
+  checkbox: "checkbox",
+  fileInput: "fileInput",
+  richText: "richText",
+  dynamicRow: "dynamicRow",
+  attestation: "attestation",
+  address: "address",
+  addressComplete: "addressComplete",
+  name: "name",
+  firstMiddleLastName: "firstMiddleLastName",
+  departments: "departments",
+  contact: "contact",
+  combobox: "combobox",
+  formattedDate: "formattedDate",
+  customJson: "customJson",
+} as const;
+export type FormElementTypes = (typeof FormElementTypes)[keyof typeof FormElementTypes];
 
 export const BetaFormElementTypes = {
   [FormElementTypes.addressComplete]: { flag: "addressComplete" },
@@ -73,7 +78,7 @@ export type ConditionalRule = {
 // individual field
 export interface ValidationProperties {
   required: boolean;
-  type?: HTMLTextInputTypeAttribute;
+  type?: ValidationInputType;
   regex?: string;
   maxLength?: number;
   descriptionEN?: string;
@@ -121,7 +126,7 @@ export interface ElementProperties {
   descriptionFr?: string;
   validation?: ValidationProperties | undefined;
   choices?: PropertyChoices[];
-  managedChoices?: string;
+  managedChoices?: string | string[];
   subElements?: FormElement[];
   fileType?: string | string[] | undefined;
   headingLevel?: string | undefined;
@@ -130,6 +135,7 @@ export interface ElementProperties {
   autoComplete?: string;
   dateFormat?: string;
   allowNegativeNumbers?: boolean;
+  stepCount?: number;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;
@@ -278,11 +284,12 @@ export interface DateObject {
   DD: number;
 }
 
-export enum DatePart {
-  DD = "day",
-  MM = "month",
-  YYYY = "year",
-}
+export const DatePart = {
+  DD: "day",
+  MM: "month",
+  YYYY: "year",
+} as const;
+export type DatePart = (typeof DatePart)[keyof typeof DatePart];
 
 export interface FileInput extends FileInputResponse {
   name: string;

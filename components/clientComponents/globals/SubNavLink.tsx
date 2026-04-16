@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useMemo } from "react";
 import { useActivePathname } from "@lib/hooks/form-builder/useActivePathname";
 import { cn } from "@lib/utils";
 
@@ -22,14 +22,13 @@ export const SubNavLink = ({
   const baseClasses =
     "mb-4 mr-3 rounded-[100px] border-1 border-black bg-white px-5 pb-2 pt-1 no-underline laptop:py-2";
   const inactiveClasses =
-    "!text-black hover:bg-gray-600 hover:!text-white-default focus:border-1 focus:border-black focus:bg-blue-focus focus:!text-white focus:outline-none [&_svg]:hover:fill-white [&_svg]:hover:stroke-white [&_svg]:focus:fill-white";
+    "!text-black hover:bg-gray-600 hover:!text-white-default focus:border-1 focus:border-black focus:bg-blue-focus focus:!text-white focus:outline-none hover:[&_svg]:fill-white hover:[&_svg]:stroke-white focus:[&_svg]:fill-white";
   const activeClasses =
-    "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white [&_svg]:focus:stroke-white";
+    "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white focus:[&_svg]:stroke-white";
 
-  const { asPath, activePathname } = useActivePathname();
-  const [active, setActive] = useState(defaultActive);
+  const { activePathname } = useActivePathname();
 
-  useEffect(() => {
+  const active = useMemo(() => {
     let linkPathname = new URL(href as string, location.href).pathname;
 
     const langRegex = /\/(en|fr)\//;
@@ -37,13 +36,11 @@ export const SubNavLink = ({
 
     // Only one nav link can be active at a time
     if (linkPathname === activePathname) {
-      setActive(true);
+      return true;
     } else {
-      if (!defaultActive) {
-        setActive(false);
-      }
+      return defaultActive;
     }
-  }, [asPath, href, setActive, activePathname, defaultActive]);
+  }, [href, activePathname, defaultActive]);
 
   return (
     <Link
