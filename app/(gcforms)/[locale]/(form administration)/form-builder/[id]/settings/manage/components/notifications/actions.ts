@@ -5,7 +5,6 @@ import { ServerActionError } from "@lib/types/form-builder-types";
 import { logMessage } from "@root/lib/logger";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { AuditLogDetails, logEvent, AuditLogEvent } from "@root/lib/auditLogs";
-import { getNotificationsUsers } from "@root/lib/notifications";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
