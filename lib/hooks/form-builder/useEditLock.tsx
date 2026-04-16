@@ -23,6 +23,7 @@ import {
 
 const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
 const SERVER_STATE_SYNC_RETRY_MS = 500;
+const EDIT_LOCK_LEADER_TAB_ENABLED = false;
 
 const wait = async (timeMs: number) =>
   new Promise((resolve) => {
@@ -58,10 +59,10 @@ export const useEditLock = ({
   const suppressReleaseRef = useRef(false);
   const visibilityStateRef = useRef<EditLockVisibilityState>("visible");
   const { isLeaderTab } = useLeaderTab({
-    enabled: enabled && status === "authenticated",
+    enabled: EDIT_LOCK_LEADER_TAB_ENABLED && enabled && status === "authenticated",
     coordinationKey: formId,
   });
-  const effectiveEnabled = enabled && isLeaderTab;
+  const effectiveEnabled = enabled && (!EDIT_LOCK_LEADER_TAB_ENABLED || isLeaderTab);
 
   const clearLockState = useCallback(() => {
     setIsLockedByOther(false);
