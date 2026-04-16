@@ -3,7 +3,7 @@ import { EditLockEvent } from "./editLocks";
 import type Redis from "ioredis";
 
 // Redis carries all edit-lock events on one shared channel; templateId in the
-// payload lets each app instance fan them back out to the right SSE listeners.
+// payload allows to fan them back out to the right SSE listeners.
 const EDIT_LOCK_CHANNEL = "edit-lock-events";
 
 type EditLockRouteSubscriber = (event: EditLockEvent) => void;
