@@ -43,10 +43,9 @@ export const EditLockClient = ({
     process.env.NEXT_PUBLIC_APP_ENV !== "test" &&
     (!restrictToEditPaths || isEditPath(pathname)) &&
     activeFormId !== "0000";
-  const showLeaderTabDebugBadge = process.env.NEXT_PUBLIC_APP_ENV !== "production";
   const [sessionId] = useState(() => makeSessionId());
 
-  const { takeover, isLeaderTab } = useEditLock({ formId: activeFormId, enabled, sessionId });
+  const { takeover } = useEditLock({ formId: activeFormId, enabled, sessionId });
 
   const handleTakeover = async () => {
     await takeover();
@@ -62,14 +61,6 @@ export const EditLockClient = ({
 
   return (
     <>
-      {showLeaderTabDebugBadge && (
-        <div
-          data-testid="leader-tab-badge"
-          className="fixed top-4 right-4 z-50 rounded-full border border-slate-700 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow"
-        >
-          {isLeaderTab ? "Leader tab" : "Follower tab"}
-        </div>
-      )}
       <EditLockBanner takeover={handleTakeover} />
       {children}
     </>
