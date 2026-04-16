@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -34,6 +34,7 @@ export const EditLockClient = ({
   restrictToEditPaths?: boolean;
   reloadOnTakeover?: boolean;
 }) => {
+  "use memo";
   const pathname = usePathname();
   const currentFormId = useTemplateStore((s) => s.id);
   const activeFormId = currentFormId || formId;
@@ -42,17 +43,18 @@ export const EditLockClient = ({
     process.env.NEXT_PUBLIC_APP_ENV !== "test" &&
     (!restrictToEditPaths || isEditPath(pathname)) &&
     activeFormId !== "0000";
+  const showLeaderTabDebugBadge = process.env.NEXT_PUBLIC_APP_ENV !== "production";
   const [sessionId] = useState(() => makeSessionId());
 
-  const { takeover } = useEditLock({ formId: activeFormId, enabled, sessionId });
+  const { takeover, isLeaderTab } = useEditLock({ formId: activeFormId, enabled, sessionId });
 
-  const handleTakeover = useCallback(async () => {
+  const handleTakeover = async () => {
     await takeover();
 
     if (reloadOnTakeover) {
       window.location.reload();
     }
-  }, [reloadOnTakeover, takeover]);
+  };
 
   if (!enabled) {
     return children ? <>{children}</> : null;
@@ -60,6 +62,14 @@ export const EditLockClient = ({
 
   return (
     <>
+      {showLeaderTabDebugBadge && (
+        <div
+          data-testid="leader-tab-badge"
+          className="fixed top-4 right-4 z-50 rounded-full border border-slate-700 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow"
+        >
+          {isLeaderTab ? "Leader tab" : "Follower tab"}
+        </div>
+      )}
       <EditLockBanner takeover={handleTakeover} />
       {children}
     </>

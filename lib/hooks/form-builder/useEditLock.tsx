@@ -525,5 +525,5 @@ export const useEditLock = ({
     startTimers(statusResult);
   }, [postAction, refreshForm, startTimers, updateStore, updatedAt]);
 
-  return { takeover };
+  return { takeover, isLeaderTab };
 };
