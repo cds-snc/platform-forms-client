@@ -467,14 +467,16 @@ describe("useEditLock", () => {
     expect(lockStates.at(-1)).toEqual({ isLockedByOther: false, hasEditLock: false });
   });
 
-  it("does not open an EventSource when the tab is not active", async () => {
+  it("opens an EventSource even when the tab is not active if leader-tab coordination is disabled", async () => {
     setDocumentVisibility("hidden");
     setDocumentFocus(false);
 
     await render(<EditLockHarness />);
 
     await vi.waitFor(() => {
-      expect(MockEventSource.instances).toHaveLength(0);
+      expect(MockEventSource.instances).toHaveLength(1);
     });
+
+    expect(MockBroadcastChannel.channels.size).toBe(0);
   });
 });
