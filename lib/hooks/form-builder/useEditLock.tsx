@@ -6,6 +6,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormRecord } from "@lib/types";
 import { clearTemplateStore } from "@lib/store/utils";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
+import { useLeaderTab } from "@lib/hooks/form-builder/useLeaderTab";
 import {
   isEditLockStatus,
   type EditLockPresenceStatus,
@@ -37,6 +38,7 @@ export const useEditLock = ({
   enabled: boolean;
   sessionId: string;
 }) => {
+  "use memo";
   const { status } = useSession();
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
@@ -55,6 +57,11 @@ export const useEditLock = ({
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
   const visibilityStateRef = useRef<EditLockVisibilityState>("visible");
+  const { isLeaderTab } = useLeaderTab({
+    enabled: enabled && status === "authenticated",
+    coordinationKey: formId,
+  });
+  const effectiveEnabled = enabled && isLeaderTab;
 
   const clearLockState = useCallback(() => {
     setIsLockedByOther(false);
@@ -336,7 +343,7 @@ export const useEditLock = ({
   );
 
   useEffect(() => {
-    if (!enabled) {
+    if (!effectiveEnabled) {
       clearTimers();
       clearEvents();
       clearLockState();
@@ -379,7 +386,7 @@ export const useEditLock = ({
       }
     };
   }, [
-    enabled,
+    effectiveEnabled,
     formId,
     clearLockState,
     clearTimers,
@@ -444,7 +451,7 @@ export const useEditLock = ({
   }, [enabled, status]);
 
   useEffect(() => {
-    if (!enabled || status !== "authenticated") {
+    if (!effectiveEnabled || status !== "authenticated") {
       clearEvents();
       return;
     }
@@ -496,7 +503,7 @@ export const useEditLock = ({
     };
   }, [
     clearEvents,
-    enabled,
+    effectiveEnabled,
     flushDraftBeforeTakeover,
     formId,
     startPolling,
@@ -518,5 +525,5 @@ export const useEditLock = ({
     startTimers(statusResult);
   }, [postAction, refreshForm, startTimers, updateStore, updatedAt]);
 
-  return { takeover };
+  return { takeover, isLeaderTab };
 };

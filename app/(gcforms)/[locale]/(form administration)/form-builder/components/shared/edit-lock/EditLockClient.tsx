@@ -34,6 +34,7 @@ export const EditLockClient = ({
   restrictToEditPaths?: boolean;
   reloadOnTakeover?: boolean;
 }) => {
+  "use memo";
   const pathname = usePathname();
   const currentFormId = useTemplateStore((s) => s.id);
   const activeFormId = currentFormId || formId;
