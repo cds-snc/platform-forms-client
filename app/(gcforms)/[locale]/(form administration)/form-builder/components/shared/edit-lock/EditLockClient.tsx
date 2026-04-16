@@ -47,13 +47,13 @@ export const EditLockClient = ({
 
   const { takeover } = useEditLock({ formId: activeFormId, enabled, sessionId });
 
-  const handleTakeover = async () => {
+  const handleTakeover = useCallback(async () => {
     await takeover();
 
     if (reloadOnTakeover) {
       window.location.reload();
     }
-  };
+  }, [reloadOnTakeover, takeover]);
 
   if (!enabled) {
     return children ? <>{children}</> : null;
