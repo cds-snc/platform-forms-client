@@ -2,10 +2,35 @@ import { createRedisSubscriber } from "@lib/integration/redisConnector";
 import { EditLockEvent } from "./editLocks";
 import type Redis from "ioredis";
 
-const EDIT_LOCK_CHANNEL_PREFIX = "edit-lock-events";
+const EDIT_LOCK_CHANNEL = "edit-lock-events";
 
 type EditLockRouteSubscriber = (event: EditLockEvent) => void;
 type EditLockStreamCloser = () => void | Promise<void>;
+
+type EditLockRedisEventMessage = {
+  templateId: string;
+  event: EditLockEvent;
+};
+
+type ParsedEditLockRedisEventMessage = Partial<
+  EditLockRedisEventMessage & {
+    type?: EditLockEvent["type"];
+  }
+>;
+
+const getParsedEventType = (
+  parsed: ParsedEditLockRedisEventMessage
+): EditLockEvent["type"] | null => {
+  if (parsed.event?.type === "takeover-requested" || parsed.event?.type === "updated") {
+    return parsed.event.type;
+  }
+
+  if (parsed.type === "takeover-requested" || parsed.type === "updated") {
+    return parsed.type;
+  }
+
+  return null;
+};
 
 type EditLockEventStreamsGlobal = typeof globalThis & {
   __editLockEventStreamsState?: {
@@ -16,20 +41,25 @@ type EditLockEventStreamsGlobal = typeof globalThis & {
   };
 };
 
-const parseEvent = (raw: string): EditLockEvent => {
+const parseEventMessage = (raw: string): EditLockRedisEventMessage | null => {
   try {
-    const parsed = JSON.parse(raw) as Partial<EditLockEvent>;
-    if (parsed.type === "takeover-requested") {
-      return { type: "takeover-requested" };
+    const parsed = JSON.parse(raw) as ParsedEditLockRedisEventMessage;
+
+    const templateId = typeof parsed.templateId === "string" ? parsed.templateId : null;
+    const eventType = getParsedEventType(parsed);
+
+    if (templateId && eventType) {
+      return {
+        templateId,
+        event: { type: eventType },
+      };
     }
   } catch {
     // no-op
   }
 
-  return { type: "updated" };
+  return null;
 };
-
-const getChannel = (templateId: string) => `${EDIT_LOCK_CHANNEL_PREFIX}:${templateId}`;
 
 const getState = () => {
   const globalWithState = globalThis as EditLockEventStreamsGlobal;
@@ -57,13 +87,21 @@ const getSharedRedisSubscriber = async () => {
 
         // Broadcast Redis events to local listeners, for example: { type: "updated" }.
         subscriber.on("message", (messageChannel, message) => {
-          const subscribers = getState().channelSubscribers.get(messageChannel);
+          if (messageChannel !== EDIT_LOCK_CHANNEL) {
+            return;
+          }
+
+          const parsedMessage = parseEventMessage(message);
+          if (!parsedMessage) {
+            return;
+          }
+
+          const subscribers = getState().channelSubscribers.get(parsedMessage.templateId);
           if (!subscribers) {
             return;
           }
 
-          const event = parseEvent(message);
-          subscribers.forEach((channelSubscriber) => channelSubscriber(event));
+          subscribers.forEach((channelSubscriber) => channelSubscriber(parsedMessage.event));
         });
 
         state.redisSubscriber = subscriber;
@@ -82,22 +120,21 @@ const subscribeToRedisEditLockEvents = async (
   templateId: string,
   subscriber: EditLockRouteSubscriber
 ) => {
-  const channel = getChannel(templateId);
   const { channelSubscribers } = getState();
-  const subscribers = channelSubscribers.get(channel) ?? new Set<EditLockRouteSubscriber>();
-  const shouldSubscribeToChannel = subscribers.size === 0;
+  const subscribers = channelSubscribers.get(templateId) ?? new Set<EditLockRouteSubscriber>();
+  const shouldSubscribeToChannel = channelSubscribers.size === 0;
 
   subscribers.add(subscriber);
-  channelSubscribers.set(channel, subscribers);
+  channelSubscribers.set(templateId, subscribers);
 
   const redisSubscriber = await getSharedRedisSubscriber();
 
   if (shouldSubscribeToChannel) {
-    await redisSubscriber.subscribe(channel);
+    await redisSubscriber.subscribe(EDIT_LOCK_CHANNEL);
   }
 
   return async () => {
-    const currentSubscribers = channelSubscribers.get(channel);
+    const currentSubscribers = channelSubscribers.get(templateId);
     if (!currentSubscribers) {
       return;
     }
@@ -108,8 +145,13 @@ const subscribeToRedisEditLockEvents = async (
       return;
     }
 
-    channelSubscribers.delete(channel);
-    await redisSubscriber.unsubscribe(channel);
+    channelSubscribers.delete(templateId);
+
+    if (channelSubscribers.size > 0) {
+      return;
+    }
+
+    await redisSubscriber.unsubscribe(EDIT_LOCK_CHANNEL);
   };
 };
 
