@@ -3,6 +3,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { TakeoverDiffSnapshot } from "@lib/utils/form-builder/takeoverDiff";
 
 const saveDraft = vi.fn(async () => ({ status: "saved" as const }));
 const saveDraftIfNeeded = vi.fn(async () => ({ status: "skipped" as const }));
@@ -157,19 +158,38 @@ function EditLockHarness({
   onTakeoverReady,
   onChangeKey,
   onLockStateChange,
+  initializeRecord,
 }: {
-  onTakeoverReady?: (takeover: () => Promise<void>) => void;
+  onTakeoverReady?: (takeover: () => Promise<TakeoverDiffSnapshot | null>) => void;
   onChangeKey?: (changeKey: string) => void;
   onLockStateChange?: (state: { isLockedByOther: boolean; hasEditLock: boolean }) => void;
+  initializeRecord?: {
+    id: string;
+    form: Record<string, unknown>;
+    updatedAt?: string;
+    isPublished: boolean;
+    name: string;
+    securityAttribute: string;
+    saveAndResume: boolean;
+  };
 }) {
   const changeKey = useTemplateStore((s) => s.changeKey);
   const isLockedByOther = useTemplateStore((s) => s.isLockedByOther);
   const editLock = useTemplateStore((s) => s.editLock);
+  const setFromRecord = useTemplateStore((s) => s.setFromRecord);
   const { takeover } = useEditLock({
     formId: "test-form-id",
     enabled: true,
     sessionId: "session-1",
   });
+
+  useEffect(() => {
+    if (!initializeRecord) {
+      return;
+    }
+
+    setFromRecord(initializeRecord as never);
+  }, [initializeRecord, setFromRecord]);
 
   useEffect(() => {
     onTakeoverReady?.(takeover);
@@ -331,7 +351,7 @@ describe("useEditLock", () => {
       throw new Error(`Unexpected fetch: ${url}`);
     });
 
-    let takeover: (() => Promise<void>) | undefined;
+    let takeover: (() => Promise<TakeoverDiffSnapshot | null>) | undefined;
     const changeKeys: string[] = [];
 
     await render(
@@ -398,7 +418,7 @@ describe("useEditLock", () => {
       throw new Error(`Unexpected fetch: ${url}`);
     });
 
-    let takeover: (() => Promise<void>) | undefined;
+    let takeover: (() => Promise<TakeoverDiffSnapshot | null>) | undefined;
 
     await render(<EditLockHarness onTakeoverReady={(nextTakeover) => (takeover = nextTakeover)} />);
 
@@ -423,6 +443,70 @@ describe("useEditLock", () => {
     expect(lockPostBodies.filter(({ action }) => action === "takeover")).toHaveLength(1);
     expect(lockPostBodies.filter(({ action }) => action === "release")).toHaveLength(0);
     expect(MockEventSource.instances).toHaveLength(1);
+  });
+
+  it("returns a before and after snapshot when takeover loads different saved content", async () => {
+    fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+
+      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
+
+      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
+
+      if (url.endsWith("/api/templates/test-form-id")) {
+        return {
+          ok: true,
+          json: async () => ({
+            id: "test-form-id",
+            form: { titleEn: "After", titleFr: "", elements: [], groups: [], groupsLayout: [] },
+            updatedAt: "2026-03-31T12:00:03.000Z",
+            isPublished: false,
+            name: "After",
+            securityAttribute: "Protected B",
+            saveAndResume: true,
+          }),
+        } as Response;
+      }
+
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
+
+    let takeover: (() => Promise<TakeoverDiffSnapshot | null>) | undefined;
+
+    await render(
+      <EditLockHarness
+        onTakeoverReady={(nextTakeover) => (takeover = nextTakeover)}
+        initializeRecord={{
+          id: "test-form-id",
+          form: { titleEn: "Before", titleFr: "", elements: [], groups: [], groupsLayout: [] },
+          isPublished: false,
+          name: "Before",
+          securityAttribute: "Protected B",
+          saveAndResume: true,
+        }}
+      />
+    );
+
+    await vi.waitFor(() => {
+      expect(takeover).toBeDefined();
+    });
+
+    const snapshot = await takeover?.();
+
+    expect(snapshot).toMatchObject({
+      before: expect.stringContaining('"titleEn": "Before"'),
+      after: expect.stringContaining('"titleEn": "After"'),
+    });
   });
 
   it("does not mark the form as locked by another user when the edit-lock endpoint is unauthorized", async () => {

@@ -11557,6 +11557,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"diff@npm:^5.2.0":
+  version: 5.2.2
+  resolution: "diff@npm:5.2.2"
+  checksum: 10c0/52da594c54e9033423da26984b1449ae6accd782d5afc4431c9a192a8507ddc83120fe8f925d7220b9da5b5963c7b6f5e46add3660a00cb36df7a13420a09d4b
+  languageName: node
+  linkType: hard
+
 "diff@npm:^8.0.2":
   version: 8.0.2
   resolution: "diff@npm:8.0.2"
@@ -13211,6 +13218,7 @@ __metadata:
     d3-hierarchy: "npm:^3.1.2"
     date-fns: "npm:^4.1.0"
     date-fns-tz: "npm:^3.2.0"
+    diff: "npm:^5.2.0"
     downshift: "npm:^9.3.2"
     eslint: "npm:^9.39.0"
     eslint-config-next: "npm:16.2.4"

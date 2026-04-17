@@ -4,7 +4,14 @@ import { useCallback, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import {
+  clearTakeoverDiffSnapshot,
+  readTakeoverDiffSnapshot,
+  writeTakeoverDiffSnapshot,
+  type TakeoverDiffSnapshot,
+} from "@lib/utils/form-builder/takeoverDiff";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
+import { TakeoverDiffPanel } from "@formBuilder/components/shared/edit-lock/TakeoverDiffPanel";
 
 const isEditPath = (pathname: string | null) => {
   if (!pathname) return false;
@@ -44,16 +51,27 @@ export const EditLockClient = ({
     (!restrictToEditPaths || isEditPath(pathname)) &&
     activeFormId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
+  const [takeoverDiff, setTakeoverDiff] = useState<TakeoverDiffSnapshot | null>(() =>
+    readTakeoverDiffSnapshot(activeFormId)
+  );
 
   const { takeover } = useEditLock({ formId: activeFormId, enabled, sessionId });
 
   const handleTakeover = useCallback(async () => {
-    await takeover();
+    const diffSnapshot = await takeover();
+
+    if (diffSnapshot) {
+      setTakeoverDiff(diffSnapshot);
+      writeTakeoverDiffSnapshot(activeFormId, diffSnapshot);
+    } else {
+      setTakeoverDiff(null);
+      clearTakeoverDiffSnapshot(activeFormId);
+    }
 
     if (reloadOnTakeover) {
       window.location.reload();
     }
-  }, [reloadOnTakeover, takeover]);
+  }, [activeFormId, reloadOnTakeover, takeover]);
 
   if (!enabled) {
     return children ? <>{children}</> : null;
@@ -61,6 +79,13 @@ export const EditLockClient = ({
 
   return (
     <>
+      {takeoverDiff && (
+        <TakeoverDiffPanel
+          formId={activeFormId}
+          snapshot={takeoverDiff}
+          onDismiss={() => setTakeoverDiff(null)}
+        />
+      )}
       <EditLockBanner takeover={handleTakeover} />
       {children}
     </>

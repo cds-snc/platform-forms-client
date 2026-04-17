@@ -7,6 +7,7 @@ import { FormRecord } from "@lib/types";
 import { clearTemplateStore } from "@lib/store/utils";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { useLeaderTab } from "@lib/hooks/form-builder/useLeaderTab";
+import { TakeoverDiffSnapshot } from "@lib/utils/form-builder/takeoverDiff";
 import {
   isEditLockStatus,
   type EditLockPresenceStatus,
@@ -44,6 +45,7 @@ export const useEditLock = ({
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
   const setFromRecord = useTemplateStore((s) => s.setFromRecord);
+  const getSchema = useTemplateStore((s) => s.getSchema);
   const { resetState, saveDraft, setUpdatedAt, updatedAt } = useTemplateContext();
 
   const isOwnerRef = useRef(false);
@@ -514,6 +516,7 @@ export const useEditLock = ({
   ]);
 
   const takeover = useCallback(async () => {
+    const beforeSnapshot = getSchema();
     const previousUpdatedAt = updatedAt;
     const statusResult = (await postAction("takeover")) as EditLockStatusPayload & {
       error?: string;
@@ -522,9 +525,20 @@ export const useEditLock = ({
       throw new Error(statusResult.error);
     }
     await refreshForm(previousUpdatedAt);
+    const afterSnapshot = getSchema();
     updateStore(statusResult);
     startTimers(statusResult);
-  }, [postAction, refreshForm, startTimers, updateStore, updatedAt]);
+
+    if (beforeSnapshot === afterSnapshot) {
+      return null;
+    }
+
+    return {
+      before: beforeSnapshot,
+      after: afterSnapshot,
+      createdAt: Date.now(),
+    } satisfies TakeoverDiffSnapshot;
+  }, [getSchema, postAction, refreshForm, startTimers, updateStore, updatedAt]);
 
   return { takeover, isLeaderTab };
 };

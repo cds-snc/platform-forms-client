@@ -625,7 +625,18 @@
     "takingOver": "Prise de contrôle...",
     "syncingLatest": "Synchronisation de la plus récente version enregistrée du formulaire...",
     "syncedLatest": "Vous avez maintenant le verrou de modification et la plus récente version enregistrée du formulaire a été chargée.",
-    "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer."
+    "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer.",
+    "diff": {
+      "title": "Modifications enregistrées avant la prise de contrôle",
+      "description": "Passez en revue ce qui a changé entre votre dernière version locale et la plus récente version enregistrée chargée pendant la prise de contrôle.",
+      "dismiss": "Fermer",
+      "beforeLine": "Avant",
+      "afterLine": "Après",
+      "change": "Changement",
+      "unified": "Diff unifié",
+      "skipped": "{{count}} lignes inchangées masquées",
+      "tooLarge": "Ce diff est trop volumineux pour être affiché ici."
+    }
   },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publier",

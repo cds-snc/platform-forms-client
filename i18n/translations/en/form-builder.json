@@ -625,7 +625,18 @@
     "takingOver": "Taking over...",
     "syncingLatest": "Syncing the latest saved version of this form...",
     "syncedLatest": "You now have the edit lock and the latest saved form has been loaded.",
-    "takeoverError": "Unable to take over. Please try again."
+    "takeoverError": "Unable to take over. Please try again.",
+    "diff": {
+      "title": "Changes saved before you took over",
+      "description": "Review what changed between your last local version and the latest saved version loaded during takeover.",
+      "dismiss": "Dismiss",
+      "beforeLine": "Before",
+      "afterLine": "After",
+      "change": "Change",
+      "unified": "Unified diff",
+      "skipped": "{{count}} unchanged lines hidden",
+      "tooLarge": "This diff is too large to render inline."
+    }
   },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publish",
