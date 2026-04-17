@@ -352,6 +352,18 @@
               "description": "If set to true, the element will only accept values that are in the choices list.",
               "type": "boolean"
             },
+            "allowNegativeNumbers": {
+              "description": "If set to true, the number input will allow negative numbers.",
+              "type": "boolean"
+            },
+            "stepCount": {
+              "description": "The number of decimals allowed for a number input.",
+              "type": "number"
+            },
+            "currencyCode": {
+              "description": "The ISO 4217 currency code used to format the number input as currency (e.g. CAD, USD).",
+              "type": "string"
+            },
             "validation": {
               "type": "object",
               "properties": {
@@ -376,6 +388,24 @@
                 },
                 "maxLength": {
                   "description": "The maximum number of characters that can be entered in a textinput or textarea.",
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "minValue": {
+                  "description": "The minimum allowed numeric value for a number input.",
+                  "type": "number"
+                },
+                "maxValue": {
+                  "description": "The maximum allowed numeric value for a number input.",
+                  "type": "number"
+                },
+                "minDigits": {
+                  "description": "The minimum number of digits required for a number input.",
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "maxDigits": {
+                  "description": "The maximum number of digits allowed for a number input.",
                   "type": "integer",
                   "minimum": 1
                 },
