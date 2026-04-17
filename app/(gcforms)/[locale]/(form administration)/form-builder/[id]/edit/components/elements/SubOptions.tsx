@@ -108,6 +108,7 @@ export const SubOptions = ({
     FormElementTypes.radio,
     FormElementTypes.checkbox,
     FormElementTypes.dropdown,
+    FormElementTypes.combobox,
   ].some((type) => type === item.type);
 
   if (!choices || choices.length === 0) {

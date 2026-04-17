@@ -14,7 +14,6 @@ declare module "next-auth" {
         emailVerified?: boolean;
       };
       accountUrl?: string;
-      oidcIdToken?: string;
       lastLoginTime?: Date;
       privileges: RawRuleOf<MongoAbility<Abilities>>[];
       acceptableUse: boolean;
@@ -40,7 +39,6 @@ declare module "next-auth/jwt" {
     provider?: string;
     issuer?: string;
     accountUrl?: string;
-    oidcIdToken?: string;
     lastLoginTime?: Date;
     acceptableUse?: boolean;
     hasSecurityQuestions?: boolean;

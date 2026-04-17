@@ -54,6 +54,10 @@
       "description": "Action required: ",
       "linkText": "Sign off on responses"
     },
+    "editLock": {
+      "title": "Open form in read-only mode",
+      "description": "{{name}} is currently editing this draft. If you continue, the form will open in read-only mode until you take over editing."
+    },
     "unnamedForm": "Unnamed form file"
   },
   "responseTemplate": {
@@ -107,6 +111,7 @@
     "formDownloadFailed": "Failed to download the form.",
     "formUnarchiveFailed": "Failed to restore the form."
   },
+  "continueReadOnly": "Continue in read-only mode",
   "archivedNotice": "You can access archived forms for 30 days.",
   "archivedNotice2": "After that, forms will be permanently deleted."
 }
