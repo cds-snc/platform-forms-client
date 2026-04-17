@@ -87,7 +87,7 @@ export const UserActions = ({
               <ConfirmAction
                 callback={() => handleRemoveUser(user.id)}
                 confirmString={t("areYouSure")}
-                buttonLabel={t("remove", { email: user.email })}
+                buttonLabel={t("removeButtonLabel", { email: user.email })}
               />
             </Tooltip.Simple>
           )}

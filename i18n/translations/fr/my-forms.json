@@ -55,8 +55,8 @@
       "linkText": "Approuver la suppression de réponses"
     },
     "editLock": {
-      "title": "Ouvrir le formulaire en mode lecture seule",
-      "description": "{{name}} modifie actuellement cette ébauche. Si vous continuez, le formulaire s’ouvrira en mode lecture seule jusqu’à ce que vous preniez le contrôle de la modification."
+      "title": "Ouvrir le formulaire en mode « lecture seule ».",
+      "description": "{{name}} modifie actuellement cette ébauche. Si vous continuez, le formulaire s’ouvrira en mode « lecture seule » jusqu’à ce que vous preniez en charge la modification."
     },
     "unnamedForm": "Fichier sans nom"
   },
