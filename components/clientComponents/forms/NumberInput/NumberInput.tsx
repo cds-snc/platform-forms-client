@@ -4,6 +4,7 @@ import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { cn } from "@lib/utils";
+import { langToLocale, getNumberFormatOptions } from "./utils";
 
 export interface NumberInputProps extends InputFieldProps {
   placeholder?: string;
@@ -16,8 +17,6 @@ export interface NumberInputProps extends InputFieldProps {
   maxDigits?: number;
   lang?: string;
 }
-
-const langToLocale = (lang?: string) => (lang === "fr" ? "fr-CA" : "en-CA");
 
 const BASE_ALLOWED_KEYS = [
   "Backspace",
@@ -51,14 +50,7 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
   const locale = langToLocale(lang);
 
   const formatOptions = useMemo<Intl.NumberFormatOptions>(
-    () =>
-      currencyCode
-        ? { style: "currency", currency: currencyCode, useGrouping: true }
-        : {
-            minimumFractionDigits: stepCount ?? 0,
-            maximumFractionDigits: stepCount ?? 0,
-            useGrouping: true,
-          },
+    () => getNumberFormatOptions({ currencyCode, stepCount }),
     [stepCount, currencyCode]
   );
 
