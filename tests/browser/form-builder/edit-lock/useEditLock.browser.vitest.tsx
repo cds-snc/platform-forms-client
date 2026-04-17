@@ -479,4 +479,37 @@ describe("useEditLock", () => {
 
     expect(MockBroadcastChannel.channels.size).toBe(0);
   });
+
+  it("includes the derived presence activity in edit-lock requests", async () => {
+    setDocumentVisibility("hidden");
+
+    await render(<EditLockHarness />);
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock",
+        expect.objectContaining({ method: "POST" })
+      );
+    });
+
+    const acquireRequest = fetchMock.mock.calls.find(([input, init]) => {
+      return String(input).endsWith("/edit-lock") && init?.method === "POST";
+    });
+
+    const body = JSON.parse(String(acquireRequest?.[1]?.body)) as {
+      action: string;
+      activity?: {
+        lastActivityAt: string;
+        visibilityState: string;
+        presenceStatus: string;
+      };
+    };
+
+    expect(body.action).toBe("acquire");
+    expect(body.activity).toMatchObject({
+      visibilityState: "hidden",
+      presenceStatus: "away",
+    });
+    expect(body.activity?.lastActivityAt).toEqual(expect.any(String));
+  });
 });
