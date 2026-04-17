@@ -50,6 +50,8 @@
     "combobox-strict": "Select a value from the list.",
     "too-few-digits": "The number entered does not have enough digits.",
     "too-many-digits": "The number entered has too many digits.",
+    "too-small": "The number entered must be at least {{min}}.",
+    "too-large": "The number entered must be at most {{max}}.",
     "file-upload": {
       "default": {
         "heading": "There was a problem submitting your form",

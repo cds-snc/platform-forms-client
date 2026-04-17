@@ -51,15 +51,32 @@ export const isFieldResponseValid = (
           return currentRegex.error;
         }
       }
-      if (validator.maxLength && (value as string).length > validator.maxLength)
+
+      if (validator.maxLength && (value as string).length > validator.maxLength) {
         return t("input-validation.too-many-characters");
+      }
 
       if (validator.type === "number" && typedValue) {
+        const numericValue = Number(typedValue);
+        if (
+          validator.minValue != null &&
+          !Number.isNaN(numericValue) &&
+          numericValue < validator.minValue
+        ) {
+          return t("input-validation.too-small").replace("{{min}}", String(validator.minValue));
+        }
+        if (
+          validator.maxValue != null &&
+          !Number.isNaN(numericValue) &&
+          numericValue > validator.maxValue
+        ) {
+          return t("input-validation.too-large").replace("{{max}}", String(validator.maxValue));
+        }
         const digitCount = typedValue.replace(/[^\d]/g, "").length;
-        if (formElement.properties.minDigits && digitCount < formElement.properties.minDigits) {
+        if (validator.minDigits && digitCount < validator.minDigits) {
           return t("input-validation.too-few-digits");
         }
-        if (formElement.properties.maxDigits && digitCount > formElement.properties.maxDigits) {
+        if (validator.maxDigits && digitCount > validator.maxDigits) {
           return t("input-validation.too-many-digits");
         }
       }

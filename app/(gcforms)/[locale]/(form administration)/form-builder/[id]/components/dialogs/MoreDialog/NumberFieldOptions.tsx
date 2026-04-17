@@ -161,36 +161,44 @@ export const NumberFieldOptions = ({
             <input
               type="number"
               className="gc-input-text mt-0!"
-              id={`numberField-${item.id}-id-numberMin`}
+              id={`numberField-${item.id}-id-minValue`}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const numberMin = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
+                const minValue = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
                 setItem({
                   ...item,
                   properties: {
                     ...item.properties,
-                    numberMin,
+                    validation: {
+                      required: false,
+                      ...item.properties.validation,
+                      minValue,
+                    },
                   },
                 });
               }}
-              value={item.properties.numberMin ?? ""}
+              value={item.properties.validation?.minValue ?? ""}
             />
           </LabelledInput>
           <LabelledInput classNames="w-1/2" label="Max">
             <input
               type="number"
               className="gc-input-text mt-0!"
-              id={`numberField-${item.id}-id-numberMax`}
+              id={`numberField-${item.id}-id-maxValue`}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const numberMax = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
+                const maxValue = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
                 setItem({
                   ...item,
                   properties: {
                     ...item.properties,
-                    numberMax,
+                    validation: {
+                      required: false,
+                      ...item.properties.validation,
+                      maxValue,
+                    },
                   },
                 });
               }}
-              value={item.properties.numberMax ?? ""}
+              value={item.properties.validation?.maxValue ?? ""}
             />
           </LabelledInput>
         </div>
@@ -208,11 +216,15 @@ export const NumberFieldOptions = ({
                   ...item,
                   properties: {
                     ...item.properties,
-                    minDigits,
+                    validation: {
+                      required: false,
+                      ...item.properties.validation,
+                      minDigits,
+                    },
                   },
                 });
               }}
-              value={item.properties.minDigits ?? ""}
+              value={item.properties.validation?.minDigits ?? ""}
               min={1}
               step={1}
             />
@@ -228,11 +240,15 @@ export const NumberFieldOptions = ({
                   ...item,
                   properties: {
                     ...item.properties,
-                    maxDigits,
+                    validation: {
+                      required: false,
+                      ...item.properties.validation,
+                      maxDigits,
+                    },
                   },
                 });
               }}
-              value={item.properties.maxDigits ?? ""}
+              value={item.properties.validation?.maxDigits ?? ""}
               min={1}
               step={1}
             />

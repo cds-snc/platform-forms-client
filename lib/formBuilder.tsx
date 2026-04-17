@@ -144,13 +144,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
               required={isRequired}
               ariaDescribedBy={description ? `desc-${id}` : undefined}
               placeholder={placeHolder.toString()}
-              autoComplete={element.properties.autoComplete?.toString()}
-              maxLength={element.properties.validation?.maxLength}
               allowNegativeNumbers={element.properties.allowNegativeNumbers}
               stepCount={element.properties.stepCount}
               currencyCode={element.properties.currencyCode}
-              numberMin={element.properties.numberMin}
-              numberMax={element.properties.numberMax}
+              minValue={element.properties.validation?.minValue}
+              maxValue={element.properties.validation?.maxValue}
               lang={lang}
             />
           </div>

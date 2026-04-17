@@ -81,6 +81,10 @@ export interface ValidationProperties {
   type?: ValidationInputType;
   regex?: string;
   maxLength?: number;
+  minValue?: number;
+  maxValue?: number;
+  minDigits?: number;
+  maxDigits?: number;
   descriptionEN?: string;
   descriptionFR?: string;
   [key: string]: unknown;
@@ -137,10 +141,6 @@ export interface ElementProperties {
   allowNegativeNumbers?: boolean;
   stepCount?: number;
   currencyCode?: string;
-  numberMin?: number;
-  numberMax?: number;
-  minDigits?: number;
-  maxDigits?: number;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;

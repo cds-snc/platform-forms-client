@@ -11,8 +11,8 @@ export interface NumberInputProps extends InputFieldProps {
   allowNegativeNumbers?: boolean;
   stepCount?: number;
   currencyCode?: string;
-  numberMin?: number;
-  numberMax?: number;
+  minValue?: number;
+  maxValue?: number;
   minDigits?: number;
   maxDigits?: number;
   lang?: string;
