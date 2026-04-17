@@ -6,25 +6,16 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormRecord } from "@lib/types";
 import { clearTemplateStore } from "@lib/store/utils";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
-import { useLeaderTab } from "@lib/hooks/form-builder/useLeaderTab";
 import { TakeoverDiffSnapshot } from "@lib/utils/form-builder/takeoverDiff";
+import { useEditLockPresence } from "@lib/hooks/form-builder/useEditLockPresence";
+import { isEditLockStatus, type EditLockStatusPayload } from "@lib/editLockStatus";
 import {
-  isEditLockStatus,
-  type EditLockPresenceStatus,
-  type EditLockStatusPayload,
-  type EditLockVisibilityState,
-} from "@lib/editLockStatus";
-import {
-  CLIENT_SIDE_EDIT_LOCK_ACTIVITY_THROTTLE_MS,
-  CLIENT_SIDE_EDIT_LOCK_AWAY_MS,
-  CLIENT_SIDE_EDIT_LOCK_IDLE_MS,
   EDIT_LOCK_DETECT_PRESENCE,
   EDIT_LOCK_HEARTBEAT_MS,
 } from "@lib/formBuilderEditLockPresence";
 
 const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
 const SERVER_STATE_SYNC_RETRY_MS = 500;
-const EDIT_LOCK_LEADER_TAB_ENABLED = false;
 
 const wait = async (timeMs: number) =>
   new Promise((resolve) => {
@@ -56,15 +47,12 @@ export const useEditLock = ({
   const startPollingRef = useRef<() => void>(() => undefined);
   const lockLoopTokenRef = useRef(0);
   const updatedAtRef = useRef(updatedAt);
-  const lastActivityAtRef = useRef(0);
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
-  const visibilityStateRef = useRef<EditLockVisibilityState>("visible");
-  const { isLeaderTab } = useLeaderTab({
-    enabled: EDIT_LOCK_LEADER_TAB_ENABLED && enabled && status === "authenticated",
+  const { getActivitySnapshot } = useEditLockPresence({
+    enabled: EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
     coordinationKey: formId,
   });
-  const effectiveEnabled = enabled && (!EDIT_LOCK_LEADER_TAB_ENABLED || isLeaderTab);
 
   const clearLockState = useCallback(() => {
     setIsLockedByOther(false);
@@ -119,16 +107,7 @@ export const useEditLock = ({
 
   const postAction = useCallback(
     async (action: "acquire" | "heartbeat" | "release" | "takeover" | "takeover-save-complete") => {
-      const now = Date.now();
-      const lastActivityAt = lastActivityAtRef.current || now;
-      const idleMs = now - lastActivityAt;
-      const visibilityState = visibilityStateRef.current;
-      const presenceStatus: EditLockPresenceStatus =
-        visibilityState === "hidden" || idleMs >= CLIENT_SIDE_EDIT_LOCK_AWAY_MS
-          ? "away"
-          : idleMs >= CLIENT_SIDE_EDIT_LOCK_IDLE_MS
-            ? "idle"
-            : "active";
+      const activity = getActivitySnapshot();
 
       const res = await fetch(`/api/templates/${formId}/edit-lock`, {
         method: "POST",
@@ -136,20 +115,14 @@ export const useEditLock = ({
         body: JSON.stringify({
           action,
           sessionId,
-          activity: EDIT_LOCK_DETECT_PRESENCE
-            ? {
-                lastActivityAt: new Date(lastActivityAt).toISOString(),
-                visibilityState,
-                presenceStatus,
-              }
-            : undefined,
+          activity,
         }),
       });
 
       const payload = (await res.json().catch(() => null)) as unknown;
       return isEditLockStatus(payload) ? payload : null;
     },
-    [formId, sessionId]
+    [formId, getActivitySnapshot, sessionId]
   );
 
   const getStatus = useCallback(async () => {
@@ -346,7 +319,7 @@ export const useEditLock = ({
   );
 
   useEffect(() => {
-    if (!effectiveEnabled) {
+    if (!enabled) {
       clearTimers();
       clearEvents();
       clearLockState();
@@ -389,7 +362,7 @@ export const useEditLock = ({
       }
     };
   }, [
-    effectiveEnabled,
+    enabled,
     formId,
     clearLockState,
     clearTimers,
@@ -405,56 +378,7 @@ export const useEditLock = ({
   ]);
 
   useEffect(() => {
-    if (!EDIT_LOCK_DETECT_PRESENCE || !enabled || status !== "authenticated") {
-      return;
-    }
-
-    const markActivity = (force = false) => {
-      const nextVisibilityState = document.visibilityState === "hidden" ? "hidden" : "visible";
-      const now = Date.now();
-
-      if (
-        !force &&
-        nextVisibilityState === visibilityStateRef.current &&
-        now - lastActivityAtRef.current < CLIENT_SIDE_EDIT_LOCK_ACTIVITY_THROTTLE_MS
-      ) {
-        return;
-      }
-
-      lastActivityAtRef.current = now;
-      visibilityStateRef.current = nextVisibilityState;
-    };
-
-    const handleVisibilityChange = () => {
-      visibilityStateRef.current = document.visibilityState === "hidden" ? "hidden" : "visible";
-      if (visibilityStateRef.current === "visible") {
-        markActivity(true);
-      }
-    };
-
-    const handleActivity = () => {
-      markActivity();
-    };
-
-    markActivity(true);
-
-    window.addEventListener("pointerdown", handleActivity, { passive: true });
-    window.addEventListener("keydown", handleActivity);
-    window.addEventListener("focus", handleActivity);
-    window.addEventListener("input", handleActivity, { passive: true });
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      window.removeEventListener("pointerdown", handleActivity);
-      window.removeEventListener("keydown", handleActivity);
-      window.removeEventListener("focus", handleActivity);
-      window.removeEventListener("input", handleActivity);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, [enabled, status]);
-
-  useEffect(() => {
-    if (!effectiveEnabled || status !== "authenticated") {
+    if (!enabled || status !== "authenticated") {
       clearEvents();
       return;
     }
@@ -506,7 +430,7 @@ export const useEditLock = ({
     };
   }, [
     clearEvents,
-    effectiveEnabled,
+    enabled,
     flushDraftBeforeTakeover,
     formId,
     startPolling,
@@ -540,5 +464,5 @@ export const useEditLock = ({
     } satisfies TakeoverDiffSnapshot;
   }, [getSchema, postAction, refreshForm, startTimers, updateStore, updatedAt]);
 
-  return { takeover, isLeaderTab };
+  return { takeover };
 };
