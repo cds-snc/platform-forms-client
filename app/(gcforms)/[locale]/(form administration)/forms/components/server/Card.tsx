@@ -181,7 +181,6 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
             <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
           </div>
         </div>
-
         <Suspense fallback={<Skeleton count={2} className="my-4 ml-4 w-[300px]" />}>
           <CardLinks
             isPublished={card.isPublished}
@@ -192,6 +191,10 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
             ttl={card.ttl}
           />
         </Suspense>
+      </div>
+
+      <div className="mb-2 text-xs">
+        <p className="ml-4 italic">{card.id}</p>
       </div>
 
       <div className="mb-4 flex items-center justify-between px-3">
