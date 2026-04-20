@@ -35,7 +35,8 @@ export const useEditLock = ({
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
   const setFromRecord = useTemplateStore((s) => s.setFromRecord);
-  const { resetState, saveDraft, setUpdatedAt, updatedAt } = useTemplateContext();
+  const { resetState, saveDraft, saveDraftIfNeeded, setUpdatedAt, updatedAt } =
+    useTemplateContext();
 
   const isOwnerRef = useRef(false);
   const heartbeatRef = useRef<number | null>(null);
@@ -208,10 +209,26 @@ export const useEditLock = ({
     await takeoverSaveRef.current;
   }, [postAction, saveDraft]);
 
+  const autoSaveIfOwner = useCallback(
+    async (wasOwner: boolean) => {
+      if (!wasOwner) {
+        return;
+      }
+
+      try {
+        await saveDraftIfNeeded();
+      } catch {
+        // no-op: losing the lock should still fall back to state sync even if save fails
+      }
+    },
+    [saveDraftIfNeeded]
+  );
+
   const startHeartbeat = useCallback((): void => {
     clearTimers();
     const loopToken = lockLoopTokenRef.current;
     heartbeatRef.current = window.setInterval(async () => {
+      const wasOwner = isOwnerRef.current;
       const heartbeatResult = await postAction("heartbeat");
       if (lockLoopTokenRef.current !== loopToken) {
         return;
@@ -223,7 +240,17 @@ export const useEditLock = ({
         return;
       }
 
+      if (!heartbeatResult.isOwner) {
+        await autoSaveIfOwner(wasOwner);
+      }
+
       updateStore(heartbeatResult);
+
+      if (heartbeatResult.locked && !heartbeatResult.isOwner && wasOwner) {
+        startPollingRef.current();
+        void syncServerState();
+        return;
+      }
 
       if (!heartbeatResult.locked) {
         const retryResult = await postAction("acquire");
@@ -243,9 +270,12 @@ export const useEditLock = ({
         }
 
         startPollingRef.current();
+        if (wasOwner) {
+          void syncServerState();
+        }
       }
     }, EDIT_LOCK_HEARTBEAT_MS);
-  }, [clearLockState, clearTimers, postAction, updateStore]);
+  }, [autoSaveIfOwner, clearLockState, clearTimers, postAction, syncServerState, updateStore]);
 
   const startPolling = useCallback((): void => {
     clearTimers();
