@@ -266,6 +266,7 @@ export const useEditLock = ({
 
         updateStore(retryResult);
         if (retryResult.isOwner) {
+          void refreshForm();
           return;
         }
 
@@ -275,7 +276,15 @@ export const useEditLock = ({
         }
       }
     }, EDIT_LOCK_HEARTBEAT_MS);
-  }, [autoSaveIfOwner, clearLockState, clearTimers, postAction, syncServerState, updateStore]);
+  }, [
+    autoSaveIfOwner,
+    clearLockState,
+    clearTimers,
+    postAction,
+    refreshForm,
+    syncServerState,
+    updateStore,
+  ]);
 
   const startPolling = useCallback((): void => {
     clearTimers();

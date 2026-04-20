@@ -736,4 +736,84 @@ describe("useEditLock", () => {
     // Always restore real timers so this test does not leak clock state.
     vi.useRealTimers();
   });
+
+  it("reloads the server version before continuing when heartbeat reacquires the lock", async () => {
+    // Fake timers let the test trigger one heartbeat after the lock disappears.
+    vi.useFakeTimers();
+
+    const unlockedStatus = {
+      locked: false,
+      lockedByOther: false,
+      isOwner: false,
+      lock: null,
+    };
+
+    const freshUpdatedAt = "2026-03-31T12:00:05.000Z";
+    let heartbeatCallCount = 0;
+
+    fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+
+      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+        const body = JSON.parse(String(init.body)) as { action: string };
+
+        if (body.action === "heartbeat") {
+          heartbeatCallCount += 1;
+          return {
+            ok: true,
+            json: async () => (heartbeatCallCount === 1 ? unlockedStatus : ownerLockStatus),
+          } as Response;
+        }
+
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
+
+      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
+
+      if (url.endsWith("/api/templates/test-form-id")) {
+        return {
+          ok: true,
+          json: async () => ({
+            form: { elements: [] },
+            updatedAt: freshUpdatedAt,
+          }),
+        } as Response;
+      }
+
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
+
+    await render(<EditLockHarness />);
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock",
+        expect.objectContaining({ method: "POST" })
+      );
+    });
+
+    // Advance one heartbeat tick: the lock is missing, the same browser wins
+    // the reacquire, and it should reload before continuing to edit.
+    await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_MS);
+
+    await vi.waitFor(() => {
+      expect(setUpdatedAt).toHaveBeenCalledWith(Date.parse(freshUpdatedAt));
+    });
+
+    const formFetchCalls = fetchMock.mock.calls.filter(([input]) =>
+      String(input).endsWith("/api/templates/test-form-id")
+    );
+
+    expect(formFetchCalls).toHaveLength(1);
+
+    vi.useRealTimers();
+  });
 });
