@@ -3,6 +3,7 @@
 export const UserFeatureFlags = {
   addressComplete: "addressComplete",
   responsesPilot: "responsesPilot",
+  lockedEditing: "lockedEditing",
 } as const;
 
 export const FeatureFlags = {
@@ -11,7 +12,6 @@ export const FeatureFlags = {
   topBanner: "topBanner",
   userSideAuditLogs: "userSideAuditLogs",
   zitadelLogin: "zitadelLogin",
-  lockedEditing: "lockedEditing",
   ...UserFeatureFlags,
 } as const;
 
