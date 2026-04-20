@@ -28,8 +28,6 @@ const BASE_ALLOWED_KEYS = [
   "ArrowDown",
   "Home",
   "End",
-  ".",
-  ",",
 ];
 
 export const NumberInput = (props: NumberInputProps): React.ReactElement => {
@@ -101,13 +99,23 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
     const keys = new Set(BASE_ALLOWED_KEYS);
     if (allowNegativeNumbers) keys.add("-");
     if (currencyCode) keys.add("$");
+    if (currencyCode || (stepCount && stepCount > 0)) {
+      keys.add(".");
+      keys.add(",");
+    }
     return keys;
-  }, [allowNegativeNumbers, currencyCode]);
+  }, [allowNegativeNumbers, currencyCode, stepCount]);
 
   const handleOnKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const isDigit = /^\d$/.test(event.key);
     const isAllowedKey = allowedKeys.has(event.key);
     const isModifier = event.ctrlKey || event.metaKey;
+
+    // Block a second decimal separator if one already exists
+    if ((event.key === "." || event.key === ",") && inputValue.includes(".")) {
+      event.preventDefault();
+      return;
+    }
 
     if (!isDigit && !isAllowedKey && !isModifier) {
       event.preventDefault();
