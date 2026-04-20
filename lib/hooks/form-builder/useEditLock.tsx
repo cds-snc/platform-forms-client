@@ -35,7 +35,7 @@ export const useEditLock = ({
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
   const setFromRecord = useTemplateStore((s) => s.setFromRecord);
-  const { resetState, saveDraft, saveDraftIfNeeded, setUpdatedAt, updatedAt } =
+  const { templateIsDirty, resetState, saveDraft, saveDraftIfNeeded, setUpdatedAt, updatedAt } =
     useTemplateContext();
 
   const isOwnerRef = useRef(false);
@@ -183,6 +183,14 @@ export const useEditLock = ({
     await refreshForm(updatedAtRef.current);
   }, [refreshForm]);
 
+  const refreshAfterReacquireIfClean = useCallback(async () => {
+    if (templateIsDirty.current) {
+      return;
+    }
+
+    await refreshForm(updatedAtRef.current);
+  }, [refreshForm, templateIsDirty]);
+
   const flushDraftBeforeTakeover = useCallback(async () => {
     if (!isOwnerRef.current) {
       return;
@@ -266,7 +274,7 @@ export const useEditLock = ({
 
         updateStore(retryResult);
         if (retryResult.isOwner) {
-          void refreshForm();
+          void refreshAfterReacquireIfClean();
           return;
         }
 
@@ -281,7 +289,7 @@ export const useEditLock = ({
     clearLockState,
     clearTimers,
     postAction,
-    refreshForm,
+    refreshAfterReacquireIfClean,
     syncServerState,
     updateStore,
   ]);
@@ -321,7 +329,7 @@ export const useEditLock = ({
         updateStore(retryResult);
         if (retryResult.isOwner) {
           startHeartbeatRef.current();
-          void refreshForm();
+          void refreshAfterReacquireIfClean();
         }
       }
     }, EDIT_LOCK_HEARTBEAT_MS);
@@ -330,7 +338,7 @@ export const useEditLock = ({
     clearTimers,
     getStatus,
     postAction,
-    refreshForm,
+    refreshAfterReacquireIfClean,
     syncServerState,
     updateStore,
   ]);
@@ -400,14 +408,10 @@ export const useEditLock = ({
     };
   }, [
     enabled,
-    formId,
     clearLockState,
     clearTimers,
     clearEvents,
-    getStatus,
     postAction,
-    refreshForm,
-    sessionId,
     startTimers,
     status,
     syncServerState,

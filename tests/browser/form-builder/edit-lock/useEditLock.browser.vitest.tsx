@@ -9,6 +9,7 @@ const saveDraft = vi.fn(async () => ({ status: "saved" as const }));
 const saveDraftIfNeeded = vi.fn(async () => ({ status: "skipped" as const }));
 const resetState = vi.fn();
 const setUpdatedAt = vi.fn();
+const templateIsDirty = { current: false };
 let templateUpdatedAt: number | undefined;
 let fetchMock: ReturnType<typeof vi.fn>;
 
@@ -29,6 +30,7 @@ vi.mock("next-auth/react", () => ({
 // Expose the template-context side effects so tests can assert save and refresh behavior.
 vi.mock("@lib/hooks/form-builder/useTemplateContext", () => ({
   useTemplateContext: () => ({
+    templateIsDirty,
     resetState,
     saveDraft,
     saveDraftIfNeeded,
@@ -213,6 +215,7 @@ describe("useEditLock", () => {
     vi.clearAllMocks();
     MockEventSource.reset();
     MockBroadcastChannel.reset();
+    templateIsDirty.current = false;
     templateUpdatedAt = Date.parse("2026-03-31T12:00:00.000Z");
     vi.stubGlobal("EventSource", MockEventSource);
     vi.stubGlobal("BroadcastChannel", MockBroadcastChannel);
@@ -547,7 +550,6 @@ describe("useEditLock", () => {
 
     const freshUpdatedAt = "2026-03-31T12:00:03.000Z";
     const lockStates: Array<{ isLockedByOther: boolean; hasEditLock: boolean }> = [];
-    let heartbeatCallCount = 0;
 
     fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input);
@@ -566,11 +568,9 @@ describe("useEditLock", () => {
 
         if (body.action === "heartbeat") {
           // The first heartbeat is where User A learns that ownership already moved.
-          heartbeatCallCount += 1;
           return {
             ok: true,
-            json: async () =>
-              heartbeatCallCount === 1 ? lockedByOtherStatus : lockedByOtherStatus,
+            json: async () => lockedByOtherStatus,
           } as Response;
         }
 
@@ -737,7 +737,78 @@ describe("useEditLock", () => {
     vi.useRealTimers();
   });
 
-  it("reloads the server version before continuing when heartbeat reacquires the lock", async () => {
+  it("keeps local draft state intact when heartbeat reacquires the lock", async () => {
+    // Fake timers let the test trigger one heartbeat after the lock disappears.
+    vi.useFakeTimers();
+    templateIsDirty.current = true;
+
+    const unlockedStatus = {
+      locked: false,
+      lockedByOther: false,
+      isOwner: false,
+      lock: null,
+    };
+
+    let heartbeatCallCount = 0;
+
+    fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+
+      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+        const body = JSON.parse(String(init.body)) as { action: string };
+
+        if (body.action === "heartbeat") {
+          heartbeatCallCount += 1;
+          return {
+            ok: true,
+            json: async () => (heartbeatCallCount === 1 ? unlockedStatus : ownerLockStatus),
+          } as Response;
+        }
+
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
+
+      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
+
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
+
+    await render(<EditLockHarness />);
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock",
+        expect.objectContaining({ method: "POST" })
+      );
+    });
+
+    // Advance one heartbeat tick: the lock is missing, the same browser wins
+    // the reacquire, and local draft state should remain untouched.
+    await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_MS);
+
+    await vi.waitFor(() => {
+      expect(heartbeatCallCount).toBe(1);
+    });
+
+    const formFetchCalls = fetchMock.mock.calls.filter(([input]) =>
+      String(input).endsWith("/api/templates/test-form-id")
+    );
+
+    expect(setUpdatedAt).not.toHaveBeenCalled();
+    expect(formFetchCalls).toHaveLength(0);
+
+    vi.useRealTimers();
+  });
+
+  it("reloads the server version when heartbeat reacquires the lock and there are no local edits", async () => {
     // Fake timers let the test trigger one heartbeat after the lock disappears.
     vi.useFakeTimers();
 
@@ -801,10 +872,11 @@ describe("useEditLock", () => {
     });
 
     // Advance one heartbeat tick: the lock is missing, the same browser wins
-    // the reacquire, and it should reload before continuing to edit.
+    // the reacquire, and the clean client can safely resync from the server.
     await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_MS);
 
     await vi.waitFor(() => {
+      expect(heartbeatCallCount).toBe(1);
       expect(setUpdatedAt).toHaveBeenCalledWith(Date.parse(freshUpdatedAt));
     });
 
