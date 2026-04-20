@@ -132,13 +132,15 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       {description && <Description id={id}>{description}</Description>}
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
 
-      <div className="inline-flex gap-2">
+      <div className="flex flex-wrap items-start gap-2" data-testid="formattedDate-parts">
         <input type="hidden" {...field} value={field.value || ""} />
         {dateParts.map((part) => {
           // Not currently an option, for future use
           return part === DatePart.MM && monthSelector === "select" ? (
-            <div key={part}>
-              <label htmlFor={`${name}-${part}`}>{t(`formattedDate.${part}`)}</label>
+            <div key={part} className="w-auto max-w-none shrink-0">
+              <label className="mb-2 block" htmlFor={`${name}-${part}`}>
+                {t(`formattedDate.${part}`)}
+              </label>
               <select
                 name={`${name}-${part}`}
                 id={`${name}-${part}`}
@@ -155,8 +157,8 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
               </select>
             </div>
           ) : part === DatePart.MM ? (
-            <div key={part} className="gcds-input-wrapper !mr-2 flex flex-col">
-              <label className="mb-2" htmlFor={`${name}-${part}`}>
+            <div key={part} className="gcds-input-wrapper mr-2! w-auto! max-w-none! shrink-0">
+              <label className="mb-2 block" htmlFor={`${name}-${part}`}>
                 {t(`formattedDate.${part}`)}
               </label>
               <div id={`${id}-description-month`} hidden>
@@ -169,7 +171,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 inputMode="numeric"
                 aria-describedby={`${id}-description-month`}
                 autoComplete={autocomplete ? "bday-month" : undefined}
-                className={cn("!w-16", meta.error && "gc-error-input")}
+                className={cn("w-16!", meta.error && "gc-error-input")}
                 value={dateObject?.MM || ""}
                 onChange={(e) => setSelectedMonth(e.target.value)}
                 required={required}
@@ -177,8 +179,8 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
               />
             </div>
           ) : part === DatePart.YYYY ? (
-            <div key={part} className="gcds-input-wrapper !mr-2 !flex !flex-col">
-              <label className="mb-2" htmlFor={`${name}-${part}`}>
+            <div key={part} className="gcds-input-wrapper mr-2! w-auto! max-w-none! shrink-0">
+              <label className="mb-2 block" htmlFor={`${name}-${part}`}>
                 {t(`formattedDate.${part}`)}
               </label>
               <div id={`${id}-description-year`} hidden>
@@ -191,7 +193,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 inputMode="numeric"
                 aria-describedby={`${id}-description-year`}
                 autoComplete={autocomplete ? "bday-year" : undefined}
-                className={cn("!w-28", meta.error && "gc-error-input")}
+                className={cn("w-28!", meta.error && "gc-error-input")}
                 value={dateObject?.YYYY || ""}
                 onChange={(e) => setSelectedYear(e.target.value)}
                 required={required}
@@ -199,8 +201,8 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
               />
             </div>
           ) : (
-            <div key={part} className="gcds-input-wrapper !mr-2 flex flex-col">
-              <label className="!mr-2 mb-2" htmlFor={`${name}-${part}`}>
+            <div key={part} className="gcds-input-wrapper mr-2! w-auto! max-w-none! shrink-0">
+              <label className="mr-2! mb-2 block" htmlFor={`${name}-${part}`}>
                 {t(`formattedDate.${part}`)}
               </label>
               <div id={`${id}-description-day`} hidden>
@@ -213,7 +215,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 inputMode="numeric"
                 aria-describedby={`${id}-description-day`}
                 autoComplete={autocomplete ? "bday-day" : undefined}
-                className={cn("!w-16 !mr-2", meta.error && "gc-error-input")}
+                className={cn("mr-2! w-16!", meta.error && "gc-error-input")}
                 value={dateObject?.DD || ""}
                 onChange={(e) => setSelectedDay(e.target.value)}
                 required={required}
