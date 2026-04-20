@@ -182,16 +182,20 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
           </div>
         </div>
 
-        <Suspense fallback={<Skeleton count={2} className="my-4 ml-4 w-[300px]" />}>
-          <CardLinks
-            isPublished={card.isPublished}
-            url={card.url}
-            id={card.id}
-            deliveryOption={card.deliveryOption}
-            overdue={card.overdue}
-            ttl={card.ttl}
-          />
-        </Suspense>
+        <div className="mt-2 text-xs">
+          <p className="float-right mr-4 italic">{card.id}</p>
+
+          <Suspense fallback={<Skeleton count={2} className="my-4 ml-4 w-[300px]" />}>
+            <CardLinks
+              isPublished={card.isPublished}
+              url={card.url}
+              id={card.id}
+              deliveryOption={card.deliveryOption}
+              overdue={card.overdue}
+              ttl={card.ttl}
+            />
+          </Suspense>
+        </div>
       </div>
 
       <div className="mb-4 flex items-center justify-between px-3">
