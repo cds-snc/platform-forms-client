@@ -35,7 +35,7 @@ export const useEditLock = ({
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
   const setFromRecord = useTemplateStore((s) => s.setFromRecord);
-  const { templateIsDirty, resetState, saveDraft, saveDraftIfNeeded, setUpdatedAt, updatedAt } =
+  const { resetState, saveDraft, saveDraftIfNeeded, setUpdatedAt, updatedAt } =
     useTemplateContext();
 
   const isOwnerRef = useRef(false);
@@ -55,6 +55,12 @@ export const useEditLock = ({
 
   const clearLockState = useCallback(() => {
     setIsLockedByOther(false);
+    setEditLock(null);
+    isOwnerRef.current = false;
+  }, [setEditLock, setIsLockedByOther]);
+
+  const setTakeoverFallbackState = useCallback(() => {
+    setIsLockedByOther(true);
     setEditLock(null);
     isOwnerRef.current = false;
   }, [setEditLock, setIsLockedByOther]);
@@ -183,14 +189,6 @@ export const useEditLock = ({
     await refreshForm(updatedAtRef.current);
   }, [refreshForm]);
 
-  const refreshAfterReacquireIfClean = useCallback(async () => {
-    if (templateIsDirty.current) {
-      return;
-    }
-
-    await refreshForm(updatedAtRef.current);
-  }, [refreshForm, templateIsDirty]);
-
   const flushDraftBeforeTakeover = useCallback(async () => {
     if (!isOwnerRef.current) {
       return;
@@ -261,27 +259,8 @@ export const useEditLock = ({
       }
 
       if (!heartbeatResult.locked) {
-        const retryResult = await postAction("acquire");
-        if (lockLoopTokenRef.current !== loopToken) {
-          return;
-        }
-
-        if (!retryResult) {
-          clearTimers();
-          clearLockState();
-          return;
-        }
-
-        updateStore(retryResult);
-        if (retryResult.isOwner) {
-          void refreshAfterReacquireIfClean();
-          return;
-        }
-
-        startPollingRef.current();
-        if (wasOwner) {
-          void syncServerState();
-        }
+        clearTimers();
+        setTakeoverFallbackState();
       }
     }, EDIT_LOCK_HEARTBEAT_MS);
   }, [
@@ -289,7 +268,7 @@ export const useEditLock = ({
     clearLockState,
     clearTimers,
     postAction,
-    refreshAfterReacquireIfClean,
+    setTakeoverFallbackState,
     syncServerState,
     updateStore,
   ]);
@@ -315,30 +294,15 @@ export const useEditLock = ({
         void syncServerState();
       }
       if (!pollResult.locked) {
-        const retryResult = await postAction("acquire");
-        if (lockLoopTokenRef.current !== loopToken) {
-          return;
-        }
-
-        if (!retryResult) {
-          clearTimers();
-          clearLockState();
-          return;
-        }
-
-        updateStore(retryResult);
-        if (retryResult.isOwner) {
-          startHeartbeatRef.current();
-          void refreshAfterReacquireIfClean();
-        }
+        clearTimers();
+        setTakeoverFallbackState();
       }
     }, EDIT_LOCK_HEARTBEAT_MS);
   }, [
     clearLockState,
     clearTimers,
     getStatus,
-    postAction,
-    refreshAfterReacquireIfClean,
+    setTakeoverFallbackState,
     syncServerState,
     updateStore,
   ]);

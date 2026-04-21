@@ -626,7 +626,7 @@ describe("useEditLock", () => {
     vi.useRealTimers();
   });
 
-  it("attempts an auto-save before reacquiring when heartbeat shows the lock disappeared", async () => {
+  it("falls back to manual takeover when heartbeat shows the lock disappeared", async () => {
     // Fake timers give the test full control over when the heartbeat interval fires.
     vi.useFakeTimers();
 
@@ -638,20 +638,6 @@ describe("useEditLock", () => {
       lock: null,
     };
 
-    const lockedByOtherStatus = {
-      locked: true,
-      lockedByOther: true,
-      isOwner: false,
-      lock: {
-        ...ownerLockStatus.lock,
-        lockedByUserId: "user-2",
-        lockedByName: "User Two",
-        lockedByEmail: "user.two@example.com",
-        sessionId: "session-2",
-      },
-    };
-
-    const freshUpdatedAt = "2026-03-31T12:00:04.000Z";
     const lockStates: Array<{ isLockedByOther: boolean; hasEditLock: boolean }> = [];
 
     fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -661,20 +647,9 @@ describe("useEditLock", () => {
         const body = JSON.parse(String(init.body)) as { action: string };
 
         if (body.action === "acquire") {
-          // First acquire is the initial mount for User A. The second acquire is
-          // the post-restart race, where User B has already taken over.
-          const acquireCount = fetchMock.mock.calls.filter(([, requestInit]) => {
-            if (!requestInit || requestInit.method !== "POST") {
-              return false;
-            }
-
-            const requestBody = JSON.parse(String(requestInit.body)) as { action: string };
-            return requestBody.action === "acquire";
-          }).length;
-
           return {
             ok: true,
-            json: async () => (acquireCount === 1 ? ownerLockStatus : lockedByOtherStatus),
+            json: async () => ownerLockStatus,
           } as Response;
         }
 
@@ -687,24 +662,14 @@ describe("useEditLock", () => {
 
         return {
           ok: true,
-          json: async () => lockedByOtherStatus,
+          json: async () => ownerLockStatus,
         } as Response;
       }
 
       if (url.endsWith("/edit-lock") && init?.method === "GET") {
         return {
           ok: true,
-          json: async () => lockedByOtherStatus,
-        } as Response;
-      }
-
-      if (url.endsWith("/api/templates/test-form-id")) {
-        return {
-          ok: true,
-          json: async () => ({
-            form: { elements: [] },
-            updatedAt: freshUpdatedAt,
-          }),
+          json: async () => unlockedStatus,
         } as Response;
       }
 
@@ -721,23 +686,28 @@ describe("useEditLock", () => {
     });
 
     // Advance one heartbeat tick: useEditLock sees the missing lock, tries an
-    // auto-save, then attempts to reacquire and learns User B won.
+    // auto-save, and falls back to a manual takeover state.
     await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_MS);
 
     await vi.waitFor(() => {
-      // User A should attempt a last-minute save before falling back to the
-      // locked-by-other state after losing the reacquire race.
       expect(saveDraftIfNeeded).toHaveBeenCalledTimes(1);
-      expect(setUpdatedAt).toHaveBeenCalledWith(Date.parse(freshUpdatedAt));
     });
 
-    expect(lockStates.at(-1)).toEqual({ isLockedByOther: true, hasEditLock: true });
+    const lockPostBodies = fetchMock.mock.calls
+      .filter(([input, init]) => {
+        return String(input).endsWith("/edit-lock") && init?.method === "POST";
+      })
+      .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
+
+    expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(1);
+    expect(setUpdatedAt).not.toHaveBeenCalled();
+    expect(lockStates.at(-1)).toEqual({ isLockedByOther: true, hasEditLock: false });
 
     // Always restore real timers so this test does not leak clock state.
     vi.useRealTimers();
   });
 
-  it("keeps local draft state intact when heartbeat reacquires the lock", async () => {
+  it("keeps local draft state intact when heartbeat loses the lock", async () => {
     // Fake timers let the test trigger one heartbeat after the lock disappears.
     vi.useFakeTimers();
     templateIsDirty.current = true;
@@ -761,17 +731,10 @@ describe("useEditLock", () => {
           heartbeatCallCount += 1;
           return {
             ok: true,
-            json: async () => (heartbeatCallCount === 1 ? unlockedStatus : ownerLockStatus),
+            json: async () => unlockedStatus,
           } as Response;
         }
 
-        return {
-          ok: true,
-          json: async () => ownerLockStatus,
-        } as Response;
-      }
-
-      if (url.endsWith("/edit-lock") && init?.method === "GET") {
         return {
           ok: true,
           json: async () => ownerLockStatus,
@@ -790,8 +753,8 @@ describe("useEditLock", () => {
       );
     });
 
-    // Advance one heartbeat tick: the lock is missing, the same browser wins
-    // the reacquire, and local draft state should remain untouched.
+    // Advance one heartbeat tick: the lock is missing and local draft state
+    // should remain untouched while the UI waits for a manual takeover.
     await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_MS);
 
     await vi.waitFor(() => {
@@ -801,16 +764,36 @@ describe("useEditLock", () => {
     const formFetchCalls = fetchMock.mock.calls.filter(([input]) =>
       String(input).endsWith("/api/templates/test-form-id")
     );
+    const lockPostBodies = fetchMock.mock.calls
+      .filter(([input, init]) => {
+        return String(input).endsWith("/edit-lock") && init?.method === "POST";
+      })
+      .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
 
     expect(setUpdatedAt).not.toHaveBeenCalled();
     expect(formFetchCalls).toHaveLength(0);
+    expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(1);
 
     vi.useRealTimers();
   });
 
-  it("reloads the server version when heartbeat reacquires the lock and there are no local edits", async () => {
-    // Fake timers let the test trigger one heartbeat after the lock disappears.
+  it("switches to manual takeover when polling sees the lock disappear", async () => {
+    // Fake timers let the test trigger one polling interval after mounting into
+    // a locked-by-other state.
     vi.useFakeTimers();
+
+    const lockedByOtherStatus = {
+      locked: true,
+      lockedByOther: true,
+      isOwner: false,
+      lock: {
+        ...ownerLockStatus.lock,
+        lockedByUserId: "user-2",
+        lockedByName: "User Two",
+        lockedByEmail: "user.two@example.com",
+        sessionId: "session-2",
+      },
+    };
 
     const unlockedStatus = {
       locked: false,
@@ -819,33 +802,21 @@ describe("useEditLock", () => {
       lock: null,
     };
 
-    const freshUpdatedAt = "2026-03-31T12:00:05.000Z";
-    let heartbeatCallCount = 0;
-
+    const lockStates: Array<{ isLockedByOther: boolean; hasEditLock: boolean }> = [];
     fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input);
 
       if (url.endsWith("/edit-lock") && init?.method === "POST") {
-        const body = JSON.parse(String(init.body)) as { action: string };
-
-        if (body.action === "heartbeat") {
-          heartbeatCallCount += 1;
-          return {
-            ok: true,
-            json: async () => (heartbeatCallCount === 1 ? unlockedStatus : ownerLockStatus),
-          } as Response;
-        }
-
         return {
           ok: true,
-          json: async () => ownerLockStatus,
+          json: async () => lockedByOtherStatus,
         } as Response;
       }
 
       if (url.endsWith("/edit-lock") && init?.method === "GET") {
         return {
           ok: true,
-          json: async () => ownerLockStatus,
+          json: async () => unlockedStatus,
         } as Response;
       }
 
@@ -854,7 +825,7 @@ describe("useEditLock", () => {
           ok: true,
           json: async () => ({
             form: { elements: [] },
-            updatedAt: freshUpdatedAt,
+            updatedAt: "2026-03-31T12:00:05.000Z",
           }),
         } as Response;
       }
@@ -862,7 +833,7 @@ describe("useEditLock", () => {
       throw new Error(`Unexpected fetch: ${url}`);
     });
 
-    await render(<EditLockHarness />);
+    await render(<EditLockHarness onLockStateChange={(state) => lockStates.push(state)} />);
 
     await vi.waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
@@ -871,20 +842,26 @@ describe("useEditLock", () => {
       );
     });
 
-    // Advance one heartbeat tick: the lock is missing, the same browser wins
-    // the reacquire, and the clean client can safely resync from the server.
+    // Advance one poll tick: the previous owner is gone, and the client should
+    // wait for an explicit takeover instead of auto-acquiring.
     await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_MS);
 
     await vi.waitFor(() => {
-      expect(heartbeatCallCount).toBe(1);
-      expect(setUpdatedAt).toHaveBeenCalledWith(Date.parse(freshUpdatedAt));
+      expect(lockStates.at(-1)).toEqual({ isLockedByOther: true, hasEditLock: false });
     });
 
     const formFetchCalls = fetchMock.mock.calls.filter(([input]) =>
       String(input).endsWith("/api/templates/test-form-id")
     );
+    const lockPostBodies = fetchMock.mock.calls
+      .filter(([input, init]) => {
+        return String(input).endsWith("/edit-lock") && init?.method === "POST";
+      })
+      .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
 
     expect(formFetchCalls).toHaveLength(1);
+    expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(1);
+    expect(setUpdatedAt).toHaveBeenCalledTimes(1);
 
     vi.useRealTimers();
   });
