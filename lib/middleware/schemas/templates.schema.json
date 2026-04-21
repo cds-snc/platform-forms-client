@@ -235,7 +235,8 @@
             "attestation",
             "combobox",
             "addressComplete",
-            "formattedDate"
+            "formattedDate",
+            "numberInput"
           ]
         },
         "properties": {
