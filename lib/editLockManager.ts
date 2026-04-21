@@ -1,0 +1,695 @@
+import { prisma } from "@lib/integration/prismaConnector";
+import { getRedisInstance } from "@lib/integration/redisConnector";
+import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
+import {
+  acknowledgeEditLockTakeoverSave as storeEditLockTakeoverSaveAcknowledgement,
+  beginEditLockTakeover,
+  clearEditLockTakeover,
+  clearEditLockTakeoverSaveAcknowledgement,
+  hasPendingEditLockTakeover,
+  waitForEditLockTakeoverSaveAcknowledgement,
+} from "./editLockTakeoverState";
+import { formCache } from "./cache/formCache";
+import {
+  EDIT_LOCK_TTL_MS,
+  MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
+} from "@lib/formBuilderEditLockPresence";
+export {
+  EDIT_LOCK_HEARTBEAT_MS,
+  EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
+  EDIT_LOCK_TTL_MS,
+  MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
+} from "@lib/formBuilderEditLockPresence";
+
+const EDIT_LOCK_KEY_PREFIX = "edit-lock";
+const EDIT_LOCK_CHANNEL = "edit-lock-events";
+const EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX = "edit-lock-assigned-users-threshold";
+const EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS = 300;
+
+export type EditLockPresenceStatus = "active" | "idle" | "away";
+export type EditLockVisibilityState = "visible" | "hidden";
+
+export type EditLockPresenceInput = {
+  lastActivityAt?: Date | null;
+  visibilityState?: EditLockVisibilityState | null;
+  presenceStatus?: EditLockPresenceStatus | null;
+};
+
+export type EditLockInfo = {
+  templateId: string;
+  lockedByUserId: string;
+  lockedByName?: string | null;
+  lockedByEmail?: string | null;
+  lockedAt: Date;
+  heartbeatAt: Date;
+  expiresAt: Date;
+  lastActivityAt?: Date | null;
+  visibilityState?: EditLockVisibilityState | null;
+  presenceStatus?: EditLockPresenceStatus | null;
+  sessionId?: string | null;
+};
+
+export type EditLockStatus = {
+  locked: boolean;
+  lockedByOther: boolean;
+  isOwner: boolean;
+  lock: EditLockInfo | null;
+};
+
+export type EditLockEvent = {
+  type: "updated" | "takeover-requested";
+};
+
+export class TemplateEditLockedError extends Error {
+  lock: EditLockInfo | null;
+  constructor(message: string, lock: EditLockInfo | null) {
+    super(message);
+    this.lock = lock;
+    Object.setPrototypeOf(this, TemplateEditLockedError.prototype);
+  }
+}
+
+type EditLockStore = Map<string, EditLockInfo>;
+type EditLockSubscriber = (event: EditLockEvent) => void;
+type EditLockSubscriberStore = Map<string, Set<EditLockSubscriber>>;
+type StoredEditLockInfo = Omit<
+  EditLockInfo,
+  "lockedAt" | "heartbeatAt" | "expiresAt" | "lastActivityAt"
+> & {
+  lockedAt: string;
+  heartbeatAt: string;
+  expiresAt: string;
+  lastActivityAt?: string | null;
+};
+
+type EditLockGlobal = typeof globalThis & {
+  __editLockStore?: EditLockStore;
+  __editLockSubscribers?: EditLockSubscriberStore;
+};
+
+const getEditLockStore = (): EditLockStore => {
+  const globalWithStore = globalThis as EditLockGlobal;
+  if (!globalWithStore.__editLockStore) {
+    globalWithStore.__editLockStore = new Map();
+  }
+  return globalWithStore.__editLockStore;
+};
+
+const getEditLockSubscribers = (): EditLockSubscriberStore => {
+  const globalWithStore = globalThis as EditLockGlobal;
+  if (!globalWithStore.__editLockSubscribers) {
+    globalWithStore.__editLockSubscribers = new Map();
+  }
+  return globalWithStore.__editLockSubscribers;
+};
+
+const redisEnabled = () => Boolean(process.env.REDIS_URL);
+
+const getEditLockKey = (templateId: string) => `${EDIT_LOCK_KEY_PREFIX}:${templateId}`;
+const getEditLockAssignedUsersCacheKey = (templateId: string) =>
+  `${EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX}:${templateId}`;
+const editLockTtlSeconds = Math.ceil(EDIT_LOCK_TTL_MS / 1000);
+const updatedEvent: EditLockEvent = { type: "updated" };
+const toEditLockRedisEventMessage = (templateId: string, event: EditLockEvent) =>
+  JSON.stringify({ templateId, event });
+
+const toStoredEditLockInfo = (lock: EditLockInfo): StoredEditLockInfo => ({
+  ...lock,
+  lockedAt: lock.lockedAt.toISOString(),
+  heartbeatAt: lock.heartbeatAt.toISOString(),
+  expiresAt: lock.expiresAt.toISOString(),
+  lastActivityAt: lock.lastActivityAt?.toISOString() ?? null,
+  lockedByName: lock.lockedByName ?? null,
+  lockedByEmail: lock.lockedByEmail ?? null,
+  visibilityState: lock.visibilityState ?? null,
+  presenceStatus: lock.presenceStatus ?? null,
+  sessionId: lock.sessionId ?? null,
+});
+
+const fromStoredEditLockInfo = (raw: string | null): EditLockInfo | null => {
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as StoredEditLockInfo;
+    return {
+      ...parsed,
+      lockedByName: parsed.lockedByName ?? null,
+      lockedByEmail: parsed.lockedByEmail ?? null,
+      visibilityState: parsed.visibilityState ?? null,
+      presenceStatus: parsed.presenceStatus ?? null,
+      sessionId: parsed.sessionId ?? null,
+      lockedAt: new Date(parsed.lockedAt),
+      heartbeatAt: new Date(parsed.heartbeatAt),
+      expiresAt: new Date(parsed.expiresAt),
+      lastActivityAt: parsed.lastActivityAt ? new Date(parsed.lastActivityAt) : null,
+    };
+  } catch {
+    return null;
+  }
+};
+
+const buildStatus = (lock: EditLockInfo | null, userId?: string): EditLockStatus => {
+  if (!lock) {
+    return { locked: false, lockedByOther: false, isOwner: false, lock: null };
+  }
+
+  const normalized = toEditLockInfo(lock);
+  const isOwner = !!userId && normalized.lockedByUserId === userId;
+
+  return {
+    locked: true,
+    lockedByOther: !isOwner,
+    isOwner,
+    lock: normalized,
+  };
+};
+
+const readMemoryLock = (templateId: string) => {
+  const now = new Date();
+  const store = getEditLockStore();
+  const lock = store.get(templateId);
+
+  if (!lock) {
+    return null;
+  }
+
+  const normalized = toEditLockInfo(lock);
+  if (isExpired(normalized, now)) {
+    store.delete(templateId);
+    notifyEditLockSubscribers(templateId, updatedEvent);
+    return null;
+  }
+
+  return normalized;
+};
+
+const readRedisLock = async (templateId: string) => {
+  const redis = await getRedisInstance();
+  const lock = fromStoredEditLockInfo(await redis.get(getEditLockKey(templateId)));
+
+  if (!lock) {
+    return null;
+  }
+
+  if (isExpired(lock, new Date())) {
+    await redis.del(getEditLockKey(templateId));
+    return null;
+  }
+
+  return toEditLockInfo(lock);
+};
+
+const publishEditLockEvent = async (templateId: string, event: EditLockEvent = updatedEvent) => {
+  if (redisEnabled()) {
+    const redis = await getRedisInstance();
+    await redis.publish(EDIT_LOCK_CHANNEL, toEditLockRedisEventMessage(templateId, event));
+    return;
+  }
+
+  notifyEditLockSubscribers(templateId, event);
+};
+
+const storeRedisLock = async (lock: EditLockInfo) => {
+  const redis = await getRedisInstance();
+  await redis.set(
+    getEditLockKey(lock.templateId),
+    JSON.stringify(toStoredEditLockInfo(lock)),
+    "EX",
+    editLockTtlSeconds
+  );
+};
+
+const withRedisWatch = async <T>(
+  templateId: string,
+  operation: (
+    current: EditLockInfo | null,
+    redis: Awaited<ReturnType<typeof getRedisInstance>>
+  ) => Promise<T | null>
+): Promise<T> => {
+  const key = getEditLockKey(templateId);
+  const redis = await getRedisInstance();
+
+  const execute = async (attempt: number): Promise<T> => {
+    await redis.watch(key);
+    const current = fromStoredEditLockInfo(await redis.get(key));
+    const result = await operation(current ? toEditLockInfo(current) : null, redis);
+    if (result !== null) {
+      await redis.unwatch();
+      return result;
+    }
+
+    await redis.unwatch();
+
+    if (attempt >= 2) {
+      throw new Error(`Failed to update edit lock for ${templateId}`);
+    }
+
+    return execute(attempt + 1);
+  };
+
+  return execute(0);
+};
+
+const notifyEditLockSubscribers = (templateId: string, event: EditLockEvent) => {
+  const subscribers = getEditLockSubscribers().get(templateId);
+  if (!subscribers) {
+    return;
+  }
+
+  subscribers.forEach((subscriber) => subscriber(event));
+};
+
+export const subscribeToEditLockEvents = (templateId: string, subscriber: EditLockSubscriber) => {
+  const subscriberStore = getEditLockSubscribers();
+  const subscribers = subscriberStore.get(templateId) ?? new Set<EditLockSubscriber>();
+  subscribers.add(subscriber);
+  subscriberStore.set(templateId, subscribers);
+
+  return () => {
+    const currentSubscribers = subscriberStore.get(templateId);
+    if (!currentSubscribers) {
+      return;
+    }
+
+    currentSubscribers.delete(subscriber);
+    if (currentSubscribers.size === 0) {
+      subscriberStore.delete(templateId);
+    }
+  };
+};
+
+export const requestEditLockTakeoverSave = async (templateId: string) => {
+  await publishEditLockEvent(templateId, { type: "takeover-requested" });
+};
+
+export {
+  beginEditLockTakeover,
+  clearEditLockTakeover,
+  clearEditLockTakeoverSaveAcknowledgement,
+  waitForEditLockTakeoverSaveAcknowledgement,
+};
+
+export const acknowledgeEditLockTakeoverSave = async ({
+  templateId,
+  userId,
+  sessionId,
+}: {
+  templateId: string;
+  userId: string;
+  sessionId?: string | null;
+}) => {
+  if (!sessionId) {
+    return false;
+  }
+
+  const currentLock = redisEnabled() ? await readRedisLock(templateId) : readMemoryLock(templateId);
+  if (
+    !currentLock ||
+    currentLock.lockedByUserId !== userId ||
+    currentLock.sessionId !== sessionId
+  ) {
+    return false;
+  }
+
+  return storeEditLockTakeoverSaveAcknowledgement({ templateId, sessionId });
+};
+
+const isExpired = (lock: EditLockInfo, now: Date) => lock.expiresAt.getTime() <= now.getTime();
+
+const toEditLockInfo = (lock: EditLockInfo): Required<EditLockInfo> => ({
+  ...lock,
+  lockedByName: lock.lockedByName ?? null,
+  lockedByEmail: lock.lockedByEmail ?? null,
+  lastActivityAt: lock.lastActivityAt ?? null,
+  visibilityState: lock.visibilityState ?? null,
+  presenceStatus: lock.presenceStatus ?? null,
+  sessionId: lock.sessionId ?? null,
+});
+
+const getPresenceSnapshot = (
+  presence: EditLockPresenceInput | undefined,
+  now: Date
+): Required<EditLockPresenceInput> => ({
+  lastActivityAt: presence?.lastActivityAt ?? now,
+  visibilityState: presence?.visibilityState ?? "visible",
+  presenceStatus: presence?.presenceStatus ?? "active",
+});
+
+export const getEditLockDisabledStatus = (): EditLockStatus => ({
+  locked: false,
+  lockedByOther: false,
+  isOwner: true,
+  lock: null,
+});
+
+export const invalidateTemplateEditLockUserCountCache = async (
+  templateId: string
+): Promise<void> => {
+  if (process.env.APP_ENV === "test" || !redisEnabled()) {
+    return;
+  }
+
+  const redis = await getRedisInstance();
+  await redis.del(getEditLockAssignedUsersCacheKey(templateId));
+};
+
+export const shouldEnforceTemplateEditLock = async (templateId: string): Promise<boolean> => {
+  if (!(await allowLockedEditing())) {
+    return false;
+  }
+
+  const cachedTemplate = formCache.cacheAvailable
+    ? await formCache.check(templateId).catch(() => null)
+    : null;
+  const cachedIsPublished = cachedTemplate?.isPublished ?? null;
+
+  let cachedHasEnoughUsers: boolean | null = null;
+
+  if (process.env.APP_ENV !== "test" && redisEnabled()) {
+    const redis = await getRedisInstance();
+    const cachedValue = await redis.get(getEditLockAssignedUsersCacheKey(templateId));
+
+    if (cachedValue === "1") {
+      cachedHasEnoughUsers = true;
+    }
+
+    if (cachedValue === "0") {
+      cachedHasEnoughUsers = false;
+    }
+  }
+
+  if (cachedIsPublished !== null && cachedHasEnoughUsers !== null) {
+    return !cachedIsPublished && cachedHasEnoughUsers;
+  }
+
+  const template = await prisma.template
+    .findUnique({
+      where: { id: templateId },
+      select: {
+        isPublished: true,
+        _count: {
+          select: {
+            users: true,
+          },
+        },
+      },
+    })
+    .catch(() => null);
+
+  const shouldEnforce =
+    !template ||
+    (!template.isPublished && template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK);
+
+  if (template && process.env.APP_ENV !== "test" && redisEnabled()) {
+    const redis = await getRedisInstance();
+    await redis.setex(
+      getEditLockAssignedUsersCacheKey(templateId),
+      EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS,
+      template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK ? "1" : "0"
+    );
+  }
+
+  if (!template) {
+    return true;
+  }
+
+  return shouldEnforce;
+};
+
+export const getEditLockStatus = async (
+  templateId: string,
+  userId?: string
+): Promise<EditLockStatus> => {
+  const lock = redisEnabled() ? await readRedisLock(templateId) : readMemoryLock(templateId);
+  return buildStatus(lock, userId);
+};
+
+export const acquireEditLock = async ({
+  templateId,
+  userId,
+  userName,
+  userEmail,
+  sessionId,
+  presence,
+}: {
+  templateId: string;
+  userId: string;
+  userName?: string | null;
+  userEmail?: string | null;
+  sessionId?: string | null;
+  presence?: EditLockPresenceInput;
+}): Promise<EditLockStatus> => {
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + EDIT_LOCK_TTL_MS);
+  const presenceSnapshot = getPresenceSnapshot(presence, now);
+
+  const updated: EditLockInfo = {
+    templateId,
+    lockedByUserId: userId,
+    lockedByName: userName ?? null,
+    lockedByEmail: userEmail ?? null,
+    lockedAt: now,
+    heartbeatAt: now,
+    expiresAt,
+    lastActivityAt: presenceSnapshot.lastActivityAt,
+    visibilityState: presenceSnapshot.visibilityState,
+    presenceStatus: presenceSnapshot.presenceStatus,
+    sessionId: sessionId ?? null,
+  };
+
+  if (redisEnabled()) {
+    const redis = await getRedisInstance();
+    const existing = await readRedisLock(templateId);
+
+    if (existing && existing.lockedByUserId !== userId) {
+      return buildStatus(existing, userId);
+    }
+
+    if (!existing) {
+      const created = await redis.set(
+        getEditLockKey(templateId),
+        JSON.stringify(toStoredEditLockInfo(updated)),
+        "EX",
+        editLockTtlSeconds,
+        "NX"
+      );
+
+      if (created === null) {
+        return getEditLockStatus(templateId, userId);
+      }
+    } else {
+      await storeRedisLock(updated);
+    }
+
+    await publishEditLockEvent(templateId);
+    return buildStatus(updated, userId);
+  }
+
+  const store = getEditLockStore();
+  const existing = store.get(templateId);
+
+  if (existing) {
+    const normalized = toEditLockInfo(existing);
+    if (!isExpired(normalized, now) && normalized.lockedByUserId !== userId) {
+      return buildStatus(normalized, userId);
+    }
+  }
+
+  store.set(templateId, updated);
+  await publishEditLockEvent(templateId);
+  return buildStatus(updated, userId);
+};
+
+export const takeoverEditLock = async ({
+  templateId,
+  userId,
+  userName,
+  userEmail,
+  sessionId,
+  presence,
+}: {
+  templateId: string;
+  userId: string;
+  userName?: string | null;
+  userEmail?: string | null;
+  sessionId?: string | null;
+  presence?: EditLockPresenceInput;
+}): Promise<EditLockStatus> => {
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + EDIT_LOCK_TTL_MS);
+  const presenceSnapshot = getPresenceSnapshot(presence, now);
+  const updated: EditLockInfo = {
+    templateId,
+    lockedByUserId: userId,
+    lockedByName: userName ?? null,
+    lockedByEmail: userEmail ?? null,
+    lockedAt: now,
+    heartbeatAt: now,
+    expiresAt,
+    lastActivityAt: presenceSnapshot.lastActivityAt,
+    visibilityState: presenceSnapshot.visibilityState,
+    presenceStatus: presenceSnapshot.presenceStatus,
+    sessionId: sessionId ?? null,
+  };
+
+  if (redisEnabled()) {
+    await storeRedisLock(updated);
+    await publishEditLockEvent(templateId);
+    return buildStatus(updated, userId);
+  }
+
+  const store = getEditLockStore();
+  store.set(templateId, updated);
+  await publishEditLockEvent(templateId);
+  return buildStatus(updated, userId);
+};
+
+export const heartbeatEditLock = async ({
+  templateId,
+  userId,
+  sessionId,
+  presence,
+}: {
+  templateId: string;
+  userId: string;
+  sessionId?: string | null;
+  presence?: EditLockPresenceInput;
+}): Promise<EditLockStatus> => {
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + EDIT_LOCK_TTL_MS);
+  const presenceSnapshot = getPresenceSnapshot(presence, now);
+
+  if (redisEnabled()) {
+    return withRedisWatch(templateId, async (current, redis) => {
+      if (!current) {
+        const unlocked = buildStatus(null, userId);
+        const execResult = await redis.multi().exec();
+        return execResult ? unlocked : null;
+      }
+
+      if (current.lockedByUserId !== userId || (sessionId && current.sessionId !== sessionId)) {
+        const locked = buildStatus(current, userId);
+        const execResult = await redis.multi().exec();
+        return execResult ? locked : null;
+      }
+
+      const updated: EditLockInfo = {
+        ...current,
+        heartbeatAt: now,
+        expiresAt,
+        lastActivityAt: presenceSnapshot.lastActivityAt,
+        visibilityState: presenceSnapshot.visibilityState,
+        presenceStatus: presenceSnapshot.presenceStatus,
+      };
+
+      const execResult = await redis
+        .multi()
+        .set(
+          getEditLockKey(templateId),
+          JSON.stringify(toStoredEditLockInfo(updated)),
+          "EX",
+          editLockTtlSeconds
+        )
+        .exec();
+
+      return execResult ? buildStatus(updated, userId) : null;
+    });
+  }
+
+  const store = getEditLockStore();
+  const existing = store.get(templateId);
+  if (!existing) {
+    return buildStatus(null, userId);
+  }
+
+  const normalized = toEditLockInfo(existing);
+  if (normalized.lockedByUserId !== userId || (sessionId && normalized.sessionId !== sessionId)) {
+    return buildStatus(normalized, userId);
+  }
+
+  const updated: EditLockInfo = {
+    ...normalized,
+    heartbeatAt: now,
+    expiresAt,
+    lastActivityAt: presenceSnapshot.lastActivityAt,
+    visibilityState: presenceSnapshot.visibilityState,
+    presenceStatus: presenceSnapshot.presenceStatus,
+  };
+  store.set(templateId, updated);
+  return buildStatus(updated, userId);
+};
+
+export const releaseEditLock = async ({
+  templateId,
+  userId,
+  sessionId,
+}: {
+  templateId: string;
+  userId: string;
+  sessionId?: string | null;
+}): Promise<{ released: boolean }> => {
+  if (redisEnabled()) {
+    return withRedisWatch(templateId, async (current, redis) => {
+      if (!current) {
+        const execResult = await redis.multi().exec();
+        return execResult ? { released: false } : null;
+      }
+
+      if (current.lockedByUserId !== userId || (sessionId && current.sessionId !== sessionId)) {
+        const execResult = await redis.multi().exec();
+        return execResult ? { released: false } : null;
+      }
+
+      if (await hasPendingEditLockTakeover({ templateId, sessionId: current.sessionId })) {
+        const execResult = await redis.multi().exec();
+        return execResult ? { released: false } : null;
+      }
+
+      const execResult = await redis.multi().del(getEditLockKey(templateId)).exec();
+      if (!execResult) {
+        return null;
+      }
+
+      await publishEditLockEvent(templateId);
+      return { released: true };
+    });
+  }
+
+  const store = getEditLockStore();
+  const existing = store.get(templateId);
+  if (!existing) {
+    return { released: false };
+  }
+
+  const normalized = toEditLockInfo(existing);
+  if (normalized.lockedByUserId !== userId || (sessionId && normalized.sessionId !== sessionId)) {
+    return { released: false };
+  }
+
+  if (await hasPendingEditLockTakeover({ templateId, sessionId: normalized.sessionId })) {
+    return { released: false };
+  }
+
+  store.delete(templateId);
+  await publishEditLockEvent(templateId);
+  return { released: true };
+};
+
+export const assertTemplateEditLock = async ({
+  templateId,
+  userId,
+}: {
+  templateId: string;
+  userId: string;
+}) => {
+  const status = await getEditLockStatus(templateId, userId);
+  if (!status.isOwner) {
+    const name = status.lock?.lockedByName || status.lock?.lockedByEmail || "another user";
+    const message = status.lock
+      ? `Form is locked for editing by ${name}.`
+      : "Form is locked for editing until you acquire the lock.";
+    throw new TemplateEditLockedError(message, status.lock);
+  }
+};

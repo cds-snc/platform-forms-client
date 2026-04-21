@@ -20,6 +20,8 @@ vi.mock("@lib/cache/formCache", () => ({
 import {
   acknowledgeEditLockTakeoverSave,
   acquireEditLock,
+  beginEditLockTakeover,
+  clearEditLockTakeover,
   clearEditLockTakeoverSaveAcknowledgement,
   getEditLockStatus,
   heartbeatEditLock,
@@ -218,6 +220,45 @@ describe("editLocks with redis", () => {
     });
 
     await expect(waitForSave).resolves.toBe(true);
+  });
+
+  it("blocks release while a takeover handoff is pending", async () => {
+    await acquireEditLock({
+      templateId: "form-5b",
+      userId: "user-1",
+      userName: "User One",
+      sessionId: "session-1",
+    });
+
+    await beginEditLockTakeover({
+      templateId: "form-5b",
+      sessionId: "session-1",
+    });
+
+    const releasedDuringTakeover = await releaseEditLock({
+      templateId: "form-5b",
+      userId: "user-1",
+      sessionId: "session-1",
+    });
+
+    expect(releasedDuringTakeover.released).toBe(false);
+
+    const statusDuringTakeover = await getEditLockStatus("form-5b", "user-2");
+    expect(statusDuringTakeover.locked).toBe(true);
+    expect(statusDuringTakeover.lock?.lockedByUserId).toBe("user-1");
+
+    await clearEditLockTakeover({
+      templateId: "form-5b",
+      sessionId: "session-1",
+    });
+
+    const releasedAfterTakeover = await releaseEditLock({
+      templateId: "form-5b",
+      userId: "user-1",
+      sessionId: "session-1",
+    });
+
+    expect(releasedAfterTakeover.released).toBe(true);
   });
 
   it("reuses the template cache for publish state and caches only the user-count threshold", async () => {

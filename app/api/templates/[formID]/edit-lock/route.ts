@@ -5,6 +5,8 @@ import {
   acknowledgeEditLockTakeoverSave,
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   acquireEditLock,
+  beginEditLockTakeover,
+  clearEditLockTakeover,
   clearEditLockTakeoverSaveAcknowledgement,
   EditLockPresenceInput,
   EditLockPresenceStatus,
@@ -18,7 +20,7 @@ import {
   takeoverEditLock,
   TemplateEditLockedError,
   waitForEditLockTakeoverSaveAcknowledgement,
-} from "@lib/editLocks";
+} from "@lib/editLockManager";
 import { authorization } from "@lib/privileges";
 
 type LockAction = "acquire" | "heartbeat" | "release" | "takeover" | "takeover-save-complete";
@@ -159,20 +161,31 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
       const currentStatus = await getEditLockStatus(formID, session.user.id);
 
       if (!shouldSkipPreTakeoverSave() && currentStatus.locked && !currentStatus.isOwner) {
+        await beginEditLockTakeover({
+          templateId: formID,
+          sessionId: currentStatus.lock?.sessionId ?? null,
+        });
         await clearEditLockTakeoverSaveAcknowledgement({
           templateId: formID,
           sessionId: currentStatus.lock?.sessionId ?? null,
         });
-        await requestEditLockTakeoverSave(formID);
+        try {
+          await requestEditLockTakeoverSave(formID);
 
-        if (currentStatus.lock?.sessionId) {
-          await waitForEditLockTakeoverSaveAcknowledgement({
+          if (currentStatus.lock?.sessionId) {
+            await waitForEditLockTakeoverSaveAcknowledgement({
+              templateId: formID,
+              sessionId: currentStatus.lock.sessionId,
+              timeoutMs: EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
+            });
+          } else {
+            await wait(EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS);
+          }
+        } finally {
+          await clearEditLockTakeover({
             templateId: formID,
-            sessionId: currentStatus.lock.sessionId,
-            timeoutMs: EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
+            sessionId: currentStatus.lock?.sessionId ?? null,
           });
-        } else {
-          await wait(EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS);
         }
       }
 
