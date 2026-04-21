@@ -75,7 +75,6 @@ export const getFormEvents = AuthenticatedAction(async (session, formId: string)
       {
         TableName: "AuditLogs",
         IndexName: "SubjectByTimestamp",
-        Limit: 100,
         KeyConditionExpression: "Subject = :formId",
         ExpressionAttributeValues: {
           ":formId": `Form#${formId}`,
