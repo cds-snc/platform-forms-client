@@ -2,10 +2,37 @@ import { createRedisSubscriber } from "@lib/integration/redisConnector";
 import { EditLockEvent } from "./editLocks";
 import type Redis from "ioredis";
 
-const EDIT_LOCK_CHANNEL_PREFIX = "edit-lock-events";
+// Redis carries all edit-lock events on one shared channel; templateId in the
+// payload allows to fan them back out to the right SSE listeners.
+const EDIT_LOCK_CHANNEL = "edit-lock-events";
 
 type EditLockRouteSubscriber = (event: EditLockEvent) => void;
 type EditLockStreamCloser = () => void | Promise<void>;
+
+type EditLockRedisEventMessage = {
+  templateId: string;
+  event: EditLockEvent;
+};
+
+type ParsedEditLockRedisEventMessage = Partial<
+  EditLockRedisEventMessage & {
+    type?: EditLockEvent["type"];
+  }
+>;
+
+const getParsedEventType = (
+  parsed: ParsedEditLockRedisEventMessage
+): EditLockEvent["type"] | null => {
+  if (parsed.event?.type === "takeover-requested" || parsed.event?.type === "updated") {
+    return parsed.event.type;
+  }
+
+  if (parsed.type === "takeover-requested" || parsed.type === "updated") {
+    return parsed.type;
+  }
+
+  return null;
+};
 
 type EditLockEventStreamsGlobal = typeof globalThis & {
   __editLockEventStreamsState?: {
@@ -16,20 +43,27 @@ type EditLockEventStreamsGlobal = typeof globalThis & {
   };
 };
 
-const parseEvent = (raw: string): EditLockEvent => {
+const parseEventMessage = (raw: string): EditLockRedisEventMessage | null => {
   try {
-    const parsed = JSON.parse(raw) as Partial<EditLockEvent>;
-    if (parsed.type === "takeover-requested") {
-      return { type: "takeover-requested" };
+    // Normalize the Redis payload before routing so malformed messages can be
+    // ignored without affecting the rest of the shared subscription.
+    const parsed = JSON.parse(raw) as ParsedEditLockRedisEventMessage;
+
+    const templateId = typeof parsed.templateId === "string" ? parsed.templateId : null;
+    const eventType = getParsedEventType(parsed);
+
+    if (templateId && eventType) {
+      return {
+        templateId,
+        event: { type: eventType },
+      };
     }
   } catch {
     // no-op
   }
 
-  return { type: "updated" };
+  return null;
 };
-
-const getChannel = (templateId: string) => `${EDIT_LOCK_CHANNEL_PREFIX}:${templateId}`;
 
 const getState = () => {
   const globalWithState = globalThis as EditLockEventStreamsGlobal;
@@ -55,15 +89,24 @@ const getSharedRedisSubscriber = async () => {
       try {
         const subscriber = await createRedisSubscriber();
 
-        // Broadcast Redis events to local listeners, for example: { type: "updated" }.
+        // One Redis subscription fans events back out to the local listeners for
+        // whichever template each SSE route is currently serving.
         subscriber.on("message", (messageChannel, message) => {
-          const subscribers = getState().channelSubscribers.get(messageChannel);
+          if (messageChannel !== EDIT_LOCK_CHANNEL) {
+            return;
+          }
+
+          const parsedMessage = parseEventMessage(message);
+          if (!parsedMessage) {
+            return;
+          }
+
+          const subscribers = getState().channelSubscribers.get(parsedMessage.templateId);
           if (!subscribers) {
             return;
           }
 
-          const event = parseEvent(message);
-          subscribers.forEach((channelSubscriber) => channelSubscriber(event));
+          subscribers.forEach((channelSubscriber) => channelSubscriber(parsedMessage.event));
         });
 
         state.redisSubscriber = subscriber;
@@ -82,22 +125,23 @@ const subscribeToRedisEditLockEvents = async (
   templateId: string,
   subscriber: EditLockRouteSubscriber
 ) => {
-  const channel = getChannel(templateId);
   const { channelSubscribers } = getState();
-  const subscribers = channelSubscribers.get(channel) ?? new Set<EditLockRouteSubscriber>();
-  const shouldSubscribeToChannel = subscribers.size === 0;
+  const subscribers = channelSubscribers.get(templateId) ?? new Set<EditLockRouteSubscriber>();
+  // Subscribe to Redis once for the process, then manage per-template listeners
+  // locally so opening more forms does not create more Redis channels.
+  const shouldSubscribeToChannel = channelSubscribers.size === 0;
 
   subscribers.add(subscriber);
-  channelSubscribers.set(channel, subscribers);
+  channelSubscribers.set(templateId, subscribers);
 
   const redisSubscriber = await getSharedRedisSubscriber();
 
   if (shouldSubscribeToChannel) {
-    await redisSubscriber.subscribe(channel);
+    await redisSubscriber.subscribe(EDIT_LOCK_CHANNEL);
   }
 
   return async () => {
-    const currentSubscribers = channelSubscribers.get(channel);
+    const currentSubscribers = channelSubscribers.get(templateId);
     if (!currentSubscribers) {
       return;
     }
@@ -108,8 +152,14 @@ const subscribeToRedisEditLockEvents = async (
       return;
     }
 
-    channelSubscribers.delete(channel);
-    await redisSubscriber.unsubscribe(channel);
+    channelSubscribers.delete(templateId);
+
+    if (channelSubscribers.size > 0) {
+      return;
+    }
+
+    // Drop the shared Redis subscription when the last local listener goes away.
+    await redisSubscriber.unsubscribe(EDIT_LOCK_CHANNEL);
   };
 };
 

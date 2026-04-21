@@ -98,7 +98,7 @@ export const PanelBody = ({
                   <SelectedElement item={item} elIndex={elIndex} formId={formId} />
                 </div>
                 {isFormattedDate && (
-                  <div className="my-4 ml-4 self-end">
+                  <div className="my-4 self-end">
                     <Button
                       theme="secondary"
                       onClick={() => {
@@ -148,7 +148,7 @@ export const PanelBody = ({
                         t("addElementDialog.addressComplete.components.postalCodeOrZip")}
                     </div>
                   </div>
-                  <div className="my-4 ml-4 self-end">
+                  <div className="my-4 self-end">
                     <Button
                       theme="secondary"
                       onClick={() => {

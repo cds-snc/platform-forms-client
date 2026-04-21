@@ -29,6 +29,7 @@
   "optionalMessage": "Message (optional)",
   "peopleWithAccess": "People with access",
   "remove": "Remove invitation for {{email}}",
+  "removeButtonLabel": "Remove",
   "resend": "Re-send invitation to {{email}}",
   "templateNotFound": "Template not found {{templateId}}",
   "userAlreadyHasAccess": "{{email}} already has access",

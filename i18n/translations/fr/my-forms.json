@@ -54,6 +54,10 @@
       "description": "Action requise : ",
       "linkText": "Approuver la suppression de réponses"
     },
+    "editLock": {
+      "title": "Ouvrir le formulaire en mode « lecture seule ».",
+      "description": "{{name}} modifie actuellement cette ébauche. Si vous continuez, le formulaire s’ouvrira en mode « lecture seule » jusqu’à ce que vous preniez en charge la modification."
+    },
     "unnamedForm": "Fichier sans nom"
   },
   "responseTemplate": {
@@ -107,6 +111,7 @@
     "formDownloadFailed": "Le téléchargement du formulaire a échoué.",
     "formUnarchiveFailed": "La désarchivage du formulaire a échoué."
   },
+  "continueReadOnly": "Continuer en mode lecture seule",
   "archivedNotice": "Vous pouvez accéder à vos formulaires archivés pendant 30 jours.",
   "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés."
 }

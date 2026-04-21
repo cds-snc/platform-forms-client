@@ -27,7 +27,7 @@ export const FormCard = async ({
   return (
     <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id} id={`form-${id}`}>
       <div className="flex flex-row items-start justify-between">
-        <h2 className="mb-0 mr-2 overflow-hidden pb-0 text-base">
+        <h2 className="mr-2 mb-0 overflow-hidden pb-0 text-base">
           {language === "en" ? (
             <>
               {titleEn} / <span lang="fr">{titleFr}</span>
@@ -40,7 +40,7 @@ export const FormCard = async ({
         </h2>
 
         <span
-          className="block rounded px-2 py-1 "
+          className="block rounded px-2 py-1"
           style={{
             backgroundColor: backgroundColor,
             border: `2px solid ${borderColor}`,
@@ -49,19 +49,24 @@ export const FormCard = async ({
           {isPublished ? t("published") : t("draft")}
         </span>
       </div>
+
+      <div className="text-xs">
+        <p className="ml-4 italic">{id}</p>
+      </div>
+
       {overdue && <Overdue />}
       {/* linking to existing page for now */}
       <div className="mt-10 flex flex-row items-end justify-between">
         <div>
           <LinkButton.Secondary
             href={`/${language}/form-builder/${id}/settings/manage?backLink=${ability.user.id}`}
-            className="mb-2 mr-3"
+            className="mr-3 mb-2"
           >
             {t("manageOwnerships")}
           </LinkButton.Secondary>
           <LinkButton.Secondary
             href={`/${language}/form-builder/${id}/responses`}
-            className="mb-2 mr-3"
+            className="mr-3 mb-2"
           >
             {t("gotoResponses")}
           </LinkButton.Secondary>
