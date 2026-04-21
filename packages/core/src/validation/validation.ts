@@ -5,6 +5,7 @@ import {
   ValidationProperties,
   FileInputResponse,
   DateObject,
+  getElementType,
 } from "@gcforms/types";
 
 import { isInputTooLong } from "./text";
@@ -27,36 +28,28 @@ export const isFieldResponseValid = (
     return t("input-validation.too-many-characters");
   }
 
-  switch (componentType) {
-    case FormElementTypes.textField: {
+  const resolvedType = getElementType(formElement);
+
+  switch (resolvedType) {
+    case FormElementTypes.numberInput: {
       const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
 
-      let currentRegex = getRegexByType(validator.type, t, validator.regex);
+      let currentRegex = getRegexByType("number", t);
 
       // Check if negative numbers are allowed.
-      if (formElement.properties.allowNegativeNumbers && validator.type === "number") {
+      if (formElement.properties.allowNegativeNumbers) {
         currentRegex = getRegexByType("canBeNegativeNumber", t);
       }
 
-      if (validator.type && currentRegex && currentRegex.regex) {
-        // Check regex for safety before using it.
-        if (!isSafeRegex(currentRegex.regex.source)) {
-          return t("input-validation.invalidRegex");
-        }
-
-        // Check for different types of fields, email, date, number, custom etc
+      if (currentRegex && currentRegex.regex) {
         const regex = new RegExp(currentRegex.regex);
         if (typedValue && !regex.test(typedValue)) {
           return currentRegex.error;
         }
       }
 
-      if (validator.maxLength && (value as string).length > validator.maxLength) {
-        return t("input-validation.too-many-characters");
-      }
-
-      if (validator.type === "number" && typedValue) {
+      if (typedValue) {
         const numericValue = Number(typedValue);
         if (
           validator.minValue != null &&
@@ -79,6 +72,31 @@ export const isFieldResponseValid = (
         if (validator.maxDigits && digitCount > validator.maxDigits) {
           return t("input-validation.too-many-digits");
         }
+      }
+
+      break;
+    }
+    case FormElementTypes.textField: {
+      const typedValue = String(value).trim();
+      if (validator.required && !typedValue) return t("input-validation.required");
+
+      const currentRegex = getRegexByType(validator.type, t, validator.regex);
+
+      if (validator.type && currentRegex && currentRegex.regex) {
+        // Check regex for safety before using it.
+        if (!isSafeRegex(currentRegex.regex.source)) {
+          return t("input-validation.invalidRegex");
+        }
+
+        // Check for different types of fields, email, date, custom etc
+        const regex = new RegExp(currentRegex.regex);
+        if (typedValue && !regex.test(typedValue)) {
+          return currentRegex.error;
+        }
+      }
+
+      if (validator.maxLength && (value as string).length > validator.maxLength) {
+        return t("input-validation.too-many-characters");
       }
 
       break;

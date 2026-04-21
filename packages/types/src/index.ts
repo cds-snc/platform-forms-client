@@ -31,6 +31,7 @@ import {
   FileInput,
   NextActionRule,
   ValidationInputType,
+  getElementType,
 } from "./form-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
@@ -55,6 +56,7 @@ export type { AddressComponents };
 export type { ClosedDetails };
 export { FormElementTypes };
 export { FormStatus };
+export { getElementType };
 export { NotificationsInterval };
 export { NotificationsIntervalDefault };
 export { BetaFormElementTypes };

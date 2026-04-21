@@ -21,6 +21,7 @@ import {
   FormElementTypes,
   StartFromExclusiveResponse,
   VaultStatus,
+  getElementType,
 } from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
 import {
@@ -53,6 +54,7 @@ import {
 } from "@clientComponents/forms/AddressComplete/utils";
 import { serverTranslation } from "@i18n";
 import { traceFunction } from "@lib/otel";
+import { formatNumberForDisplay } from "@clientComponents/forms/NumberInput/utils";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -143,13 +145,14 @@ export const getSubmissionsByFormat = AuthenticatedAction(
         const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
         const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
 
-        // If the download format is JSON or CSV, we always use "." as decimal separator
-        const originalDecimalSeparator =
-          lang === "fr" ? tFr("decimalSeparator") : tEn("decimalSeparator");
-        const decimalSeparator =
-          format === DownloadFormat.JSON || format === DownloadFormat.CSV
-            ? "."
-            : originalDecimalSeparator;
+        // @TODO: cleanup/confirm
+        // // If the download format is JSON or CSV, we always use "." as decimal separator
+        // const originalDecimalSeparator =
+        //   lang === "fr" ? tFr("decimalSeparator") : tEn("decimalSeparator");
+        // const decimalSeparator =
+        //   format === DownloadFormat.JSON || format === DownloadFormat.CSV
+        //     ? "."
+        //     : originalDecimalSeparator;
 
         const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
@@ -238,7 +241,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                             type: subQuestion.type,
                             questionEn: subQuestion.properties.titleEn,
                             questionFr: subQuestion.properties.titleFr,
-                            answer: getAnswerAsString(subQuestion, value, decimalSeparator),
+                            answer: getAnswerAsString(subQuestion, value, lang),
                             ...(subQuestion.type === "formattedDate" && {
                               dateFormat: subQuestion.properties.dateFormat,
                             }),
@@ -308,7 +311,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                   type: question?.type,
                   questionEn: question?.properties.titleEn,
                   questionFr: question?.properties.titleFr,
-                  answer: getAnswerAsString(question, answer, decimalSeparator),
+                  answer: getAnswerAsString(question, answer, lang),
                   ...(question?.type === "formattedDate" && {
                     dateFormat: question.properties.dateFormat,
                   }),
@@ -476,7 +479,7 @@ const getDateAsString = (answer: DateObject | string | object, dateFormat: DateF
 const getAnswerAsString = (
   question: FormElement | undefined,
   answer: unknown,
-  decimalSeparator: string
+  lang?: Language
 ): string => {
   if (question && question.type === "checkbox") {
     return Array(answer).join(", ");
@@ -489,9 +492,16 @@ const getAnswerAsString = (
     return answer.name as string;
   }
 
-  if (question && question.type === FormElementTypes.textField && question.properties.stepCount) {
+  if (question && getElementType(question) === FormElementTypes.numberInput) {
     const answerString = answer as string;
-    return answerString.toString().replace(".", decimalSeparator);
+    if (isNaN(Number(answerString))) {
+      return answerString;
+    }
+
+    return formatNumberForDisplay(Number(answerString), lang, {
+      currencyCode: question.properties.currencyCode,
+      stepCount: question.properties.stepCount,
+    });
   }
 
   if (question && question.type === "formattedDate") {

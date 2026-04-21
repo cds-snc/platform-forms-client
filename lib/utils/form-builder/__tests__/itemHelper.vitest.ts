@@ -67,8 +67,8 @@ describe("Update elements", () => {
 
   it("sets properties for number", () => {
     const item = createElement(getItem(), "number");
-    expect(item.type).toEqual("textField");
-    expect(item.properties.validation?.type).toEqual("number");
+    expect(item.type).toEqual("numberInput");
+    expect(item.properties.validation?.required).toEqual(false);
   });
 
   it("sets properties for attestation", () => {

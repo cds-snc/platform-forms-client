@@ -26,6 +26,7 @@ import {
   PublicFormRecord,
   Responses,
   Response,
+  getElementType,
 } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
@@ -98,12 +99,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
-  const textType: HTMLTextInputTypeAttribute =
+  const textType: Exclude<HTMLTextInputTypeAttribute, "number"> =
     element.properties?.validation?.type &&
-    ["email", "name", "number", "password", "search", "tel", "url"].includes(
+    ["email", "name", "password", "search", "tel", "url"].includes(
       element.properties.validation.type
     )
-      ? (element.properties.validation.type as HTMLTextInputTypeAttribute)
+      ? (element.properties.validation.type as Exclude<HTMLTextInputTypeAttribute, "number">)
       : "text";
 
   const spellCheck =
@@ -131,29 +132,28 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   const sortOrder = element.properties.sortOrder ? element.properties.sortOrder.toString() : "none";
 
-  switch (element.type) {
+  switch (getElementType(element)) {
+    case FormElementTypes.numberInput:
+      return (
+        <div className="focus-group gcds-input-wrapper">
+          {labelComponent}
+          {description && <Description id={`${id}`}>{description}</Description>}
+          <NumberInput
+            id={`${id}`}
+            name={`${id}`}
+            required={isRequired}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
+            placeholder={placeHolder.toString()}
+            allowNegativeNumbers={element.properties.allowNegativeNumbers}
+            stepCount={element.properties.stepCount}
+            currencyCode={element.properties.currencyCode}
+            minValue={element.properties.validation?.minValue}
+            maxValue={element.properties.validation?.maxValue}
+            lang={lang}
+          />
+        </div>
+      );
     case FormElementTypes.textField:
-      if (textType === "number") {
-        return (
-          <div className="focus-group gcds-input-wrapper">
-            {labelComponent}
-            {description && <Description id={`${id}`}>{description}</Description>}
-            <NumberInput
-              id={`${id}`}
-              name={`${id}`}
-              required={isRequired}
-              ariaDescribedBy={description ? `desc-${id}` : undefined}
-              placeholder={placeHolder.toString()}
-              allowNegativeNumbers={element.properties.allowNegativeNumbers}
-              stepCount={element.properties.stepCount}
-              currencyCode={element.properties.currencyCode}
-              minValue={element.properties.validation?.minValue}
-              maxValue={element.properties.validation?.maxValue}
-              lang={lang}
-            />
-          </div>
-        );
-      }
       return (
         <div className="focus-group gcds-input-wrapper">
           {labelComponent}
