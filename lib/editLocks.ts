@@ -1,6 +1,7 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
+import { logMessage } from "@lib/logger";
 import { formCache } from "./cache/formCache";
 import {
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
@@ -122,6 +123,47 @@ const wait = async (timeMs: number) =>
   new Promise((resolve) => {
     setTimeout(resolve, timeMs);
   });
+
+const describeLockActor = (lock: Pick<EditLockInfo, "lockedByUserId" | "lockedByEmail"> | null) => {
+  if (!lock) {
+    return "none";
+  }
+
+  return [`userId=${lock.lockedByUserId}`, `email=${lock.lockedByEmail ?? "unknown"}`].join(" ");
+};
+
+const describeActionActor = ({
+  userId,
+  userEmail,
+}: {
+  userId: string;
+  userEmail?: string | null;
+}) => [`userId=${userId}`, `email=${userEmail ?? "unknown"}`].join(" ");
+
+const logEditLockAction = ({
+  action,
+  templateId,
+  actor,
+  owner,
+  result,
+}: {
+  action: "acquire" | "takeover" | "release";
+  templateId: string;
+  actor: string;
+  owner?: Pick<EditLockInfo, "lockedByUserId" | "lockedByEmail"> | null;
+  result: string;
+}) => {
+  const parts = [
+    "edit-lock",
+    `action=${action}`,
+    `templateId=${templateId}`,
+    `actor={${actor}}`,
+    `owner={${describeLockActor(owner ?? null)}}`,
+    `result=${result}`,
+  ];
+
+  logMessage.info(parts.join(" "));
+};
 
 const toStoredEditLockInfo = (lock: EditLockInfo): StoredEditLockInfo => ({
   ...lock,
@@ -427,12 +469,11 @@ const toEditLockInfo = (lock: EditLockInfo): Required<EditLockInfo> => ({
 });
 
 const getPresenceSnapshot = (
-  presence: EditLockPresenceInput | undefined,
-  now: Date
+  presence: EditLockPresenceInput | undefined
 ): Required<EditLockPresenceInput> => ({
-  lastActivityAt: presence?.lastActivityAt ?? now,
-  visibilityState: presence?.visibilityState ?? "visible",
-  presenceStatus: presence?.presenceStatus ?? "active",
+  lastActivityAt: presence?.lastActivityAt ?? null,
+  visibilityState: presence?.visibilityState ?? null,
+  presenceStatus: presence?.presenceStatus ?? null,
 });
 
 export const getEditLockDisabledStatus = (): EditLockStatus => ({
@@ -541,7 +582,8 @@ export const acquireEditLock = async ({
 }): Promise<EditLockStatus> => {
   const now = new Date();
   const expiresAt = new Date(now.getTime() + EDIT_LOCK_TTL_MS);
-  const presenceSnapshot = getPresenceSnapshot(presence, now);
+  const presenceSnapshot = getPresenceSnapshot(presence);
+  const actor = describeActionActor({ userId, userEmail });
 
   const updated: EditLockInfo = {
     templateId,
@@ -562,6 +604,13 @@ export const acquireEditLock = async ({
     const existing = await readRedisLock(templateId);
 
     if (existing && existing.lockedByUserId !== userId) {
+      logEditLockAction({
+        action: "acquire",
+        templateId,
+        actor,
+        owner: existing,
+        result: "blocked-by-other-owner",
+      });
       return buildStatus(existing, userId);
     }
 
@@ -575,10 +624,30 @@ export const acquireEditLock = async ({
       );
 
       if (created === null) {
+        logEditLockAction({
+          action: "acquire",
+          templateId,
+          actor,
+          result: "lost-race-retrying-status",
+        });
         return getEditLockStatus(templateId, userId);
       }
+
+      logEditLockAction({
+        action: "acquire",
+        templateId,
+        actor,
+        result: "created-lock",
+      });
     } else {
       await storeRedisLock(updated);
+      logEditLockAction({
+        action: "acquire",
+        templateId,
+        actor,
+        owner: existing,
+        result: "refreshed-existing-owner-lock",
+      });
     }
 
     await publishEditLockEvent(templateId);
@@ -591,11 +660,25 @@ export const acquireEditLock = async ({
   if (existing) {
     const normalized = toEditLockInfo(existing);
     if (!isExpired(normalized, now) && normalized.lockedByUserId !== userId) {
+      logEditLockAction({
+        action: "acquire",
+        templateId,
+        actor,
+        owner: normalized,
+        result: "blocked-by-other-owner",
+      });
       return buildStatus(normalized, userId);
     }
   }
 
   store.set(templateId, updated);
+  logEditLockAction({
+    action: "acquire",
+    templateId,
+    actor,
+    owner: existing ? toEditLockInfo(existing) : null,
+    result: existing ? "replaced-expired-lock" : "created-lock",
+  });
   await publishEditLockEvent(templateId);
   return buildStatus(updated, userId);
 };
@@ -617,7 +700,9 @@ export const takeoverEditLock = async ({
 }): Promise<EditLockStatus> => {
   const now = new Date();
   const expiresAt = new Date(now.getTime() + EDIT_LOCK_TTL_MS);
-  const presenceSnapshot = getPresenceSnapshot(presence, now);
+  const presenceSnapshot = getPresenceSnapshot(presence);
+  const actor = describeActionActor({ userId, userEmail });
+  const existing = redisEnabled() ? await readRedisLock(templateId) : readMemoryLock(templateId);
   const updated: EditLockInfo = {
     templateId,
     lockedByUserId: userId,
@@ -634,12 +719,26 @@ export const takeoverEditLock = async ({
 
   if (redisEnabled()) {
     await storeRedisLock(updated);
+    logEditLockAction({
+      action: "takeover",
+      templateId,
+      actor,
+      owner: existing,
+      result: existing ? "set-lock-to-new-owner" : "set-lock-without-existing-owner",
+    });
     await publishEditLockEvent(templateId);
     return buildStatus(updated, userId);
   }
 
   const store = getEditLockStore();
   store.set(templateId, updated);
+  logEditLockAction({
+    action: "takeover",
+    templateId,
+    actor,
+    owner: existing,
+    result: existing ? "set-lock-to-new-owner" : "set-lock-without-existing-owner",
+  });
   await publishEditLockEvent(templateId);
   return buildStatus(updated, userId);
 };
@@ -657,7 +756,7 @@ export const heartbeatEditLock = async ({
 }): Promise<EditLockStatus> => {
   const now = new Date();
   const expiresAt = new Date(now.getTime() + EDIT_LOCK_TTL_MS);
-  const presenceSnapshot = getPresenceSnapshot(presence, now);
+  const presenceSnapshot = getPresenceSnapshot(presence);
 
   if (redisEnabled()) {
     return withRedisWatch(templateId, async (current, redis) => {
@@ -728,14 +827,29 @@ export const releaseEditLock = async ({
   userId: string;
   sessionId?: string | null;
 }): Promise<{ released: boolean }> => {
+  const actor = describeActionActor({ userId });
+
   if (redisEnabled()) {
     return withRedisWatch(templateId, async (current, redis) => {
       if (!current) {
+        logEditLockAction({
+          action: "release",
+          templateId,
+          actor,
+          result: "no-lock-present",
+        });
         const execResult = await redis.multi().exec();
         return execResult ? { released: false } : null;
       }
 
       if (current.lockedByUserId !== userId || (sessionId && current.sessionId !== sessionId)) {
+        logEditLockAction({
+          action: "release",
+          templateId,
+          actor,
+          owner: current,
+          result: "denied-not-owner",
+        });
         const execResult = await redis.multi().exec();
         return execResult ? { released: false } : null;
       }
@@ -745,6 +859,13 @@ export const releaseEditLock = async ({
         return null;
       }
 
+      logEditLockAction({
+        action: "release",
+        templateId,
+        actor,
+        owner: current,
+        result: "released-lock",
+      });
       await publishEditLockEvent(templateId);
       return { released: true };
     });
@@ -753,15 +874,35 @@ export const releaseEditLock = async ({
   const store = getEditLockStore();
   const existing = store.get(templateId);
   if (!existing) {
+    logEditLockAction({
+      action: "release",
+      templateId,
+      actor,
+      result: "no-lock-present",
+    });
     return { released: false };
   }
 
   const normalized = toEditLockInfo(existing);
   if (normalized.lockedByUserId !== userId || (sessionId && normalized.sessionId !== sessionId)) {
+    logEditLockAction({
+      action: "release",
+      templateId,
+      actor,
+      owner: normalized,
+      result: "denied-not-owner",
+    });
     return { released: false };
   }
 
   store.delete(templateId);
+  logEditLockAction({
+    action: "release",
+    templateId,
+    actor,
+    owner: normalized,
+    result: "released-lock",
+  });
   await publishEditLockEvent(templateId);
   return { released: true };
 };

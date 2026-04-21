@@ -88,12 +88,14 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
       ? expiresAt.getTime() - timeTick <= CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS
       : false;
 
+  const hasPresenceDetails = EDIT_LOCK_DETECT_PRESENCE && Boolean(editLock?.presenceStatus);
+
   // If the lock is stale, show "stale" status to encourage takeover. Otherwise, show the actual presence status reported by the server.
   const presenceKey = isStale ? "stale" : (editLock?.presenceStatus ?? "away");
 
   // If the lock is stale, show "stale" status to encourage takeover. Otherwise, show the actual presence status reported by the server.
   const lastActivity =
-    EDIT_LOCK_DETECT_PRESENCE && editLock?.lastActivityAt
+    hasPresenceDetails && editLock?.lastActivityAt
       ? formatRelativeTime(editLock.lastActivityAt, i18n.language)
       : null;
 
@@ -131,7 +133,7 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
                 <PilotBadge className="mb-3" />
                 <p className="mb-2 text-xl font-semibold text-slate-900">{t("editLock.title")}</p>
                 <p className="text-base text-slate-900">{t("editLock.lockedMessage", { name })}</p>
-                {EDIT_LOCK_DETECT_PRESENCE && (
+                {hasPresenceDetails && (
                   <div className="mt-3 flex flex-col gap-1 text-sm text-slate-700">
                     <p>
                       <span className="font-semibold text-slate-900">
