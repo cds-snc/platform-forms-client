@@ -386,4 +386,13 @@ export const options = [
     logoTitleEn: "Fisheries and Oceans Canada",
     logoTitleFr: "Pêches et Océans Canada",
   },
+  {
+    name: "cra",
+    urlEn: "https://www.canada.ca/en/services/taxes.html",
+    urlFr: "https://www.canada.ca/fr/services/taxes.html",
+    logoEn: "/img/branding/cra-en.svg",
+    logoFr: "/img/branding/cra-fr.svg",
+    logoTitleEn: "Canada Revenue Agency",
+    logoTitleFr: "Agence du revenu du Canada",
+  },
 ];
