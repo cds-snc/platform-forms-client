@@ -187,20 +187,6 @@ export interface FormElement {
   brand?: BrandProperties;
 }
 
-/**
- * Resolves the effective element type, handling backwards compatibility for
- * legacy templates that stored number inputs as textField with validation.type "number".
- */
-export const getElementType = (element: FormElement): FormElementTypes => {
-  if (
-    element.type === FormElementTypes.textField &&
-    element.properties.validation?.type === "number"
-  ) {
-    return FormElementTypes.numberInput;
-  }
-  return element.type;
-};
-
 // defines the fields for the main form configuration object
 export interface FormProperties {
   titleEn: string;

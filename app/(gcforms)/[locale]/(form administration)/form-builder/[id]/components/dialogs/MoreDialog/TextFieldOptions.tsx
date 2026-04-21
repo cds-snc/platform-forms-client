@@ -1,7 +1,7 @@
 import { useTranslation } from "@i18n/client";
 import { AutocompleteOptions } from "./AutocompleteOptions";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
-import { FormElement, FormElementTypes, getElementType } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { Label } from "./Label";
 import { Hint } from "./Hint";
 
@@ -15,7 +15,7 @@ export const TextFieldOptions = ({
   const { t } = useTranslation("form-builder");
   const autocompleteSelectedValue = item.properties.autoComplete || "";
 
-  if (getElementType(item) !== FormElementTypes.textField) {
+  if (item.type !== FormElementTypes.textField) {
     return null;
   }
 

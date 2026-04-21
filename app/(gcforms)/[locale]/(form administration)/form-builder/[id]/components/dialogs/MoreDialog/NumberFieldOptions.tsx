@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { FormElementTypes, FormElement, getElementType } from "@lib/types";
+import { FormElementTypes, FormElement } from "@lib/types";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { LabelledInput } from "../../../../components/shared/LabelledInput";
 
@@ -20,7 +20,7 @@ export const NumberFieldOptions = ({
   );
   const showDecimals = isCurrency || decimalsEnabled;
 
-  if (getElementType(item) !== FormElementTypes.numberInput) {
+  if (item.type !== FormElementTypes.numberInput) {
     return null;
   }
 

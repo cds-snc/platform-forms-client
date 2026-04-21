@@ -26,12 +26,12 @@ import {
   PublicFormRecord,
   Responses,
   Response,
-  getElementType,
 } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
 import { AddressComplete } from "@clientComponents/forms/AddressComplete/AddressComplete";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
+import { isNumberInput } from "./utils/isNumberInput";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -132,27 +132,32 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   const sortOrder = element.properties.sortOrder ? element.properties.sortOrder.toString() : "none";
 
-  switch (getElementType(element)) {
-    case FormElementTypes.numberInput:
-      return (
-        <div className="focus-group gcds-input-wrapper">
-          {labelComponent}
-          {description && <Description id={`${id}`}>{description}</Description>}
-          <NumberInput
-            id={`${id}`}
-            name={`${id}`}
-            required={isRequired}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
-            placeholder={placeHolder.toString()}
-            allowNegativeNumbers={element.properties.allowNegativeNumbers}
-            stepCount={element.properties.stepCount}
-            currencyCode={element.properties.currencyCode}
-            minValue={element.properties.validation?.minValue}
-            maxValue={element.properties.validation?.maxValue}
-            lang={lang}
-          />
-        </div>
-      );
+  // Broke this out of the switch statement below for backwards
+  // compatibility with legacy number inputs that were stored
+  // as text fields with validation.type "number"
+  if (isNumberInput(element)) {
+    return (
+      <div className="focus-group gcds-input-wrapper">
+        {labelComponent}
+        {description && <Description id={`${id}`}>{description}</Description>}
+        <NumberInput
+          id={`${id}`}
+          name={`${id}`}
+          required={isRequired}
+          ariaDescribedBy={description ? `desc-${id}` : undefined}
+          placeholder={placeHolder.toString()}
+          allowNegativeNumbers={element.properties.allowNegativeNumbers}
+          stepCount={element.properties.stepCount}
+          currencyCode={element.properties.currencyCode}
+          minValue={element.properties.validation?.minValue}
+          maxValue={element.properties.validation?.maxValue}
+          lang={lang}
+        />
+      </div>
+    );
+  }
+
+  switch (element.type) {
     case FormElementTypes.textField:
       return (
         <div className="focus-group gcds-input-wrapper">
@@ -412,6 +417,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     case FormElementTypes.combobox:
     case FormElementTypes.formattedDate:
     case FormElementTypes.textField:
+    case FormElementTypes.numberInput:
     case FormElementTypes.textArea:
     case FormElementTypes.addressComplete:
       return "";

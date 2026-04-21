@@ -21,7 +21,6 @@ import {
   FormElementTypes,
   StartFromExclusiveResponse,
   VaultStatus,
-  getElementType,
 } from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
 import {
@@ -55,6 +54,7 @@ import {
 import { serverTranslation } from "@i18n";
 import { traceFunction } from "@lib/otel";
 import { formatNumberForDisplay } from "@clientComponents/forms/NumberInput/utils";
+import { isNumberInput } from "@root/lib/utils/isNumberInput";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -492,7 +492,7 @@ const getAnswerAsString = (
     return answer.name as string;
   }
 
-  if (question && getElementType(question) === FormElementTypes.numberInput) {
+  if (question && isNumberInput(question)) {
     const answerString = answer as string;
     if (isNaN(Number(answerString))) {
       return answerString;

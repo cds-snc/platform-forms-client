@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { FormElement, FormElementTypes, getElementType } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { Label } from "./Label";
 import { Input } from "@formBuilder/components/shared/Input";
 import { ErrorMessage } from "@clientComponents/forms";
@@ -23,7 +23,7 @@ export const CustomRegexOptions = ({
 
   const elements = useTemplateStore((s) => s.form.elements);
 
-  if (getElementType(item) !== FormElementTypes.textField) {
+  if (item.type !== FormElementTypes.textField) {
     return null;
   }
 

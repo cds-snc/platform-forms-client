@@ -5,7 +5,6 @@ import {
   ValidationProperties,
   FileInputResponse,
   DateObject,
-  getElementType,
 } from "@gcforms/types";
 
 import { isInputTooLong } from "./text";
@@ -28,9 +27,9 @@ export const isFieldResponseValid = (
     return t("input-validation.too-many-characters");
   }
 
-  const resolvedType = getElementType(formElement);
+  // @TODO: Number input validation for legacy number inputs
 
-  switch (resolvedType) {
+  switch (componentType) {
     case FormElementTypes.numberInput: {
       const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");

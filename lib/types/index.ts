@@ -1,4 +1,4 @@
-import { FormRecord, Responses, FormElementTypes, getElementType } from "@gcforms/types";
+import { FormRecord, Responses, FormElementTypes } from "@gcforms/types";
 
 export type {
   ConditionalRule,
@@ -23,7 +23,6 @@ export type {
 
 import { FormikErrors } from "formik";
 export { FormElementTypes };
-export { getElementType };
 
 export type { Submission, SubmissionRequestBody, SignedURLMap } from "./submission-types";
 
