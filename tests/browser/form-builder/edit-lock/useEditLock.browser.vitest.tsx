@@ -495,7 +495,7 @@ describe("useEditLock", () => {
     expect(MockBroadcastChannel.channels.size).toBe(0);
   });
 
-  it("includes the derived presence activity in edit-lock requests", async () => {
+  it("does not include presence activity in edit-lock requests", async () => {
     setDocumentVisibility("hidden");
 
     await render(<EditLockHarness />);
@@ -521,11 +521,7 @@ describe("useEditLock", () => {
     };
 
     expect(body.action).toBe("acquire");
-    expect(body.activity).toMatchObject({
-      visibilityState: "hidden",
-      presenceStatus: "away",
-    });
-    expect(body.activity?.lastActivityAt).toEqual(expect.any(String));
+    expect(body.activity).toBeUndefined();
   });
 
   it("syncs and switches to polling when a heartbeat shows another user won the lock", async () => {

@@ -15,6 +15,7 @@ import {
 
 const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
 const SERVER_STATE_SYNC_RETRY_MS = 500;
+const ENABLE_EDIT_LOCK_PRESENCE = false;
 
 const wait = async (timeMs: number) =>
   new Promise((resolve) => {
@@ -49,7 +50,11 @@ export const useEditLock = ({
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
   const { getActivitySnapshot } = useEditLockPresence({
-    enabled: EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
+    enabled:
+      ENABLE_EDIT_LOCK_PRESENCE &&
+      EDIT_LOCK_DETECT_PRESENCE &&
+      enabled &&
+      status === "authenticated",
     coordinationKey: formId,
   });
 
@@ -120,7 +125,7 @@ export const useEditLock = ({
         body: JSON.stringify({
           action,
           sessionId,
-          activity,
+          ...(activity ? { activity } : {}),
         }),
       });
 

@@ -1,5 +1,57 @@
 import pino from "pino";
 
+const LOGGER_SUPPRESS_PATTERNS_LOCAL_FILE = ".logger-suppress-patterns.local";
+
+const readLoggerSuppressPatternsFromLocalFile = () => {
+  if (typeof window !== "undefined") {
+    return [] as string[];
+  }
+
+  try {
+    const { existsSync, readFileSync } = require("node:fs") as typeof import("node:fs");
+    const { join } = require("node:path") as typeof import("node:path");
+    const filePath = join(process.cwd(), LOGGER_SUPPRESS_PATTERNS_LOCAL_FILE);
+
+    if (!existsSync(filePath)) {
+      return [] as string[];
+    }
+
+    return readFileSync(filePath, "utf8")
+      .split(/\r?\n/)
+      .map((pattern) => pattern.trim())
+      .filter((pattern) => pattern.length > 0 && !pattern.startsWith("#"));
+  } catch {
+    return [] as string[];
+  }
+};
+
+const parseLoggerFilterPatterns = () => {
+  const rawValue = process.env.LOGGER_SUPPRESS_PATTERNS;
+  const localPatterns = readLoggerSuppressPatternsFromLocalFile();
+
+  if (!rawValue) {
+    return localPatterns;
+  }
+
+  return [
+    ...localPatterns,
+    ...rawValue
+      .split(",")
+      .map((pattern) => pattern.trim())
+      .filter(Boolean),
+  ];
+};
+
+const suppressedLoggerPatterns = parseLoggerFilterPatterns();
+
+const shouldSuppressMessage = (message: string) => {
+  if (suppressedLoggerPatterns.length === 0) {
+    return false;
+  }
+
+  return suppressedLoggerPatterns.some((pattern) => message.includes(pattern));
+};
+
 const pinoLogger = pino({
   level: process.env.NODE_ENV === "development" ? "debug" : "info",
   browser: {
@@ -52,6 +104,12 @@ export type AppLogger = {
  */
 export const logMessage: AppLogger = {
   debug: (message: string | Record<string, unknown>) => {
+    const serializedMessage = typeof message === "string" ? message : JSON.stringify(message);
+
+    if (shouldSuppressMessage(serializedMessage)) {
+      return;
+    }
+
     pinoLogger.debug(message);
   },
   info: (message: string) => pinoLogger.info(message),
