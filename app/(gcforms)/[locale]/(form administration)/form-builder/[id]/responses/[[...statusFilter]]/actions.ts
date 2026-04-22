@@ -145,15 +145,6 @@ export const getSubmissionsByFormat = AuthenticatedAction(
         const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
         const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
 
-        // @TODO: cleanup/confirm
-        // // If the download format is JSON or CSV, we always use "." as decimal separator
-        // const originalDecimalSeparator =
-        //   lang === "fr" ? tFr("decimalSeparator") : tEn("decimalSeparator");
-        // const decimalSeparator =
-        //   format === DownloadFormat.JSON || format === DownloadFormat.CSV
-        //     ? "."
-        //     : originalDecimalSeparator;
-
         const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
         const fullFormTemplate = await getFullTemplateByID(formID);
