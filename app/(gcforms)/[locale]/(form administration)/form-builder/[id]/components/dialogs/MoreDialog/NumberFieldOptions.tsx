@@ -148,9 +148,6 @@ export const NumberFieldOptions = ({
             />
           </div>
         )}
-      </InfoDetails>
-
-      <InfoDetails className="mt-4" summary={t("Set a range")}>
         <h3 className="mt-4">Value</h3>
         <div className="mt-4 flex flex-row gap-4">
           <LabelledInput classNames="w-1/2" label="Min">
