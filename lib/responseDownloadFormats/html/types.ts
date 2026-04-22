@@ -1,3 +1,4 @@
+import { FormRecord } from "@root/lib/types";
 import { Submission } from "../types";
 
 export interface TableProps {
@@ -6,4 +7,5 @@ export interface TableProps {
   responseID: string;
   submissionDate: number;
   submission: Submission;
+  formRecord: FormRecord;
 }
