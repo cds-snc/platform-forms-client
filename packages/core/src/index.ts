@@ -41,6 +41,7 @@ export {
 
 export {
   getElementById,
+  getElementByIdDeep,
   findChoiceIndexByValue,
   isChoiceInputType,
   mapIdsToValues,

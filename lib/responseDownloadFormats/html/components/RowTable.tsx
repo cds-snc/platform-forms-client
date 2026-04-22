@@ -5,7 +5,7 @@ import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
-import { getElementById } from "@root/packages/core/src";
+import { getElementByIdDeep } from "@root/packages/core/src";
 import { formatNumberForDisplay } from "@root/components/clientComponents/forms/NumberInput/utils";
 
 const QuestionRows = ({
@@ -19,7 +19,7 @@ const QuestionRows = ({
 }): JSX.Element => {
   const { t } = customTranslate("common");
   const renderColumn = (index: number, lang: string, item: Answer, subItem = false) => {
-    const element = getElementById(formRecord.form.elements, String(item.questionId));
+    const element = getElementByIdDeep(formRecord.form.elements, String(item.questionId));
     let rawNumber;
     let numberInputValue;
     if (item.type === FormElementTypes.numberInput) {

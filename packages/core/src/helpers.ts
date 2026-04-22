@@ -8,13 +8,39 @@ import {
 } from "@gcforms/types";
 
 /**
- * Finds an element by its id in the form elements array.
+ * Finds a top-level element by id in the form elements array.
+ * @param elements - The form elements to search
+ * @param id - The id of the element to find
+ * @returns The top-level element with the specified id, or undefined if not found
+ */
+export const getElementById = (elements: FormElement[], id: string) => {
+  return elements.find((el) => el.id.toString() === id);
+};
+
+/**
+ * Finds an element by id in top-level elements and dynamic row subElements.
  * @param elements - The form elements to search
  * @param id - The id of the element to find
  * @returns The element with the specified id, or undefined if not found
  */
-export const getElementById = (elements: FormElement[], id: string) => {
-  return elements.find((el) => el.id.toString() === id);
+export const getElementByIdDeep = (elements: FormElement[], id: string) => {
+  for (const element of elements) {
+    if (element.id.toString() === id) {
+      return element;
+    }
+
+    if (element.properties?.subElements) {
+      const subElement = element.properties.subElements.find((subElement) => {
+        return subElement?.id.toString() === id;
+      });
+
+      if (subElement) {
+        return subElement;
+      }
+    }
+  }
+
+  return undefined;
 };
 
 /**

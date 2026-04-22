@@ -6,7 +6,7 @@ import { TableProps } from "../types";
 import { formatDateTimeUTC } from "@lib/utils/form-builder";
 import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
-import { getElementById } from "@root/packages/core/src";
+import { getElementByIdDeep } from "@root/packages/core/src";
 import { formatNumberForDisplay } from "@root/components/clientComponents/forms/NumberInput/utils";
 
 /*
@@ -27,7 +27,7 @@ const QuestionColumns = ({
   const { t } = customTranslate("common");
 
   const renderRow = (index: number | string, lang: string, item: Answer) => {
-    const element = getElementById(formRecord.form.elements, String(item.questionId));
+    const element = getElementByIdDeep(formRecord.form.elements, String(item.questionId));
     let rawNumber;
     let numberInputValue;
     if (item.type === FormElementTypes.numberInput) {
