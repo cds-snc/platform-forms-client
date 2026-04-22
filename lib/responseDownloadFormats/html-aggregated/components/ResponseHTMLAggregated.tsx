@@ -84,10 +84,10 @@ export const ResponseHtmlAggregated = ({
           <main id="content">
             <GcdsHeader language={"en"} skipLink={false} showLanguageToggle={false} pathname="" />
 
-            <div className="gc-formview container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
+            <div className="gc-formview container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]">
               <h1
                 id="main-header"
-                className="mb-6 mt-14"
+                className="mt-14 mb-6"
               >{`${formRecord.form[getProperty("title", lang)]}`}</h1>
 
               <div className="mb-14 border-2 border-dashed border-black bg-slate-50 p-8">
@@ -139,6 +139,7 @@ export const ResponseHtmlAggregated = ({
                         submissionDate={submission.createdAt}
                         submission={submission}
                         lang={lang}
+                        formRecord={formResponseSubmissions.formRecord}
                       />
                     </div>
                   );
