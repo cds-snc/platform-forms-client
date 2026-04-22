@@ -16,7 +16,7 @@ export {
 } from "@lib/formBuilderEditLockPresence";
 
 const EDIT_LOCK_KEY_PREFIX = "edit-lock";
-const EDIT_LOCK_CHANNEL = "edit-lock-events";
+const EDIT_LOCK_STREAM_PREFIX = "edit-lock-stream";
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX = "edit-lock-takeover-save";
 const EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX = "edit-lock-assigned-users-threshold";
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_POLL_MS = 100;
@@ -111,14 +111,13 @@ const getEditLockTakeoverSaveAcks = (): Map<string, number> => {
 const redisEnabled = () => Boolean(process.env.REDIS_URL);
 
 const getEditLockKey = (templateId: string) => `${EDIT_LOCK_KEY_PREFIX}:${templateId}`;
+const getEditLockStreamKey = (templateId: string) => `${EDIT_LOCK_STREAM_PREFIX}:${templateId}`;
 const getEditLockTakeoverSaveAckKey = (templateId: string, sessionId: string) =>
   `${EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX}:${templateId}:${sessionId}`;
 const getEditLockAssignedUsersCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX}:${templateId}`;
 const editLockTtlSeconds = Math.ceil(EDIT_LOCK_TTL_MS / 1000);
 const updatedEvent: EditLockEvent = { type: "updated" };
-const toEditLockRedisEventMessage = (templateId: string, event: EditLockEvent) =>
-  JSON.stringify({ templateId, event });
 const wait = async (timeMs: number) =>
   new Promise((resolve) => {
     setTimeout(resolve, timeMs);
@@ -256,7 +255,11 @@ const readRedisLock = async (templateId: string) => {
 const publishEditLockEvent = async (templateId: string, event: EditLockEvent = updatedEvent) => {
   if (redisEnabled()) {
     const redis = await getRedisInstance();
-    await redis.publish(EDIT_LOCK_CHANNEL, toEditLockRedisEventMessage(templateId, event));
+    const streamKey = getEditLockStreamKey(templateId);
+    // Append the event to the per-template stream.  The stream TTL is reset on
+    // every write so it stays alive as long as the lock itself is active.
+    await redis.xadd(streamKey, "*", "type", event.type, "templateId", templateId);
+    await redis.expire(streamKey, editLockTtlSeconds * 2);
     return;
   }
 
