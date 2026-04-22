@@ -64,7 +64,7 @@ export const PanelBody = ({
     <>
       {isRichText || isDynamicRow ? (
         <div className="my-4">
-          <div className={cn(isDynamicRow && "px-4 mb-2 mt-8")}>
+          <div className={cn(isDynamicRow && "mt-8 mb-2 px-4")}>
             <Question item={item} onQuestionChange={onQuestionChange} isInvalid={isInvalid} />
           </div>
 
@@ -80,7 +80,7 @@ export const PanelBody = ({
       ) : (
         <div data-id={item.id}>
           <div className="flex text-sm">
-            <div className="mt-4 w-full laptop:mt-0">
+            <div className="laptop:mt-0 mt-4 w-full">
               <Question
                 item={item}
                 onQuestionChange={onQuestionChange}
@@ -98,7 +98,7 @@ export const PanelBody = ({
                   <SelectedElement item={item} elIndex={elIndex} formId={formId} />
                 </div>
                 {isFormattedDate && (
-                  <div className="my-4 ml-4 self-end">
+                  <div className="my-4 self-end">
                     <Button
                       theme="secondary"
                       onClick={() => {
@@ -148,7 +148,7 @@ export const PanelBody = ({
                         t("addElementDialog.addressComplete.components.postalCodeOrZip")}
                     </div>
                   </div>
-                  <div className="my-4 ml-4 self-end">
+                  <div className="my-4 self-end">
                     <Button
                       theme="secondary"
                       onClick={() => {

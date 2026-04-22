@@ -66,6 +66,7 @@ typings/
 # dotenv environment variables file
 .env*.local
 .env
+.logger-suppress-patterns.local
 
 # next.js build output
 .next
