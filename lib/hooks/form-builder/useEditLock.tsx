@@ -299,36 +299,14 @@ export const useEditLock = ({
         void syncServerState();
       }
       if (!pollResult.locked) {
-        if (wasOwner) {
-          clearTimers();
-          setTakeoverFallbackState();
-        } else {
-          // Lock freed while we were waiting - try to claim it immediately
-          const acquireResult = await postAction("acquire");
-          if (lockLoopTokenRef.current !== loopToken) {
-            return;
-          }
-          if (!acquireResult) {
-            clearTimers();
-            clearLockState();
-            return;
-          }
-          updateStore(acquireResult);
-          if (acquireResult.isOwner) {
-            startHeartbeatRef.current();
-          } else {
-            // Another user won the race; keep polling
-            startPollingRef.current();
-            void syncServerState();
-          }
-        }
+        clearTimers();
+        setTakeoverFallbackState();
       }
     }, EDIT_LOCK_HEARTBEAT_MS);
   }, [
     clearLockState,
     clearTimers,
     getStatus,
-    postAction,
     setTakeoverFallbackState,
     syncServerState,
     updateStore,
@@ -360,6 +338,7 @@ export const useEditLock = ({
     clearEvents,
     flushDraftBeforeTakeover,
     startTimers,
+    setTakeoverFallbackState,
   });
   cbRef.current = {
     postAction,
@@ -370,6 +349,7 @@ export const useEditLock = ({
     clearEvents,
     flushDraftBeforeTakeover,
     startTimers,
+    setTakeoverFallbackState,
   };
   startHeartbeatRef.current = startHeartbeat;
   startPollingRef.current = startPolling;
@@ -436,19 +416,11 @@ export const useEditLock = ({
         const wasOwner = isOwnerRef.current;
 
         if (!nextStatus.locked) {
-          // Lock became free. If we were waiting for it, try to claim it now so
-          // the user doesn't have to wait for the next polling tick.
+          // Lock is free. Show the takeover overlay so the user can claim it
+          // explicitly via the "Take over" button.
           if (!wasOwner) {
-            const acquireResult = await cbRef.current.postAction("acquire");
-            if (!acquireResult) return;
-            cbRef.current.updateStore(acquireResult);
-            if (acquireResult.isOwner) {
-              startHeartbeatRef.current();
-            } else {
-              // Another user won the race; keep polling
-              startPollingRef.current();
-              void cbRef.current.syncServerState();
-            }
+            cbRef.current.clearTimers();
+            cbRef.current.setTakeoverFallbackState();
           }
           return;
         }
