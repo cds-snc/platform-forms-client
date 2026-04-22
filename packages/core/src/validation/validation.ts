@@ -27,54 +27,68 @@ export const isFieldResponseValid = (
     return t("input-validation.too-many-characters");
   }
 
-  // @TODO: Number input validation for legacy number inputs
+  // Broke this out of the switch statement below for backwards
+  // compatibility with legacy number inputs that were stored
+  // as text fields with validation.type "number"
+  if (
+    (componentType === FormElementTypes.textField && validator.type === "number") ||
+    componentType === FormElementTypes.numberInput
+  ) {
+    const typedValue = String(value).trim();
+
+    // Required check
+    if (validator.required && !typedValue) return t("input-validation.required");
+
+    // Number validation
+    let currentRegex = getRegexByType("number", t);
+
+    // Check if negative numbers are allowed.
+    if (formElement.properties.allowNegativeNumbers) {
+      currentRegex = getRegexByType("canBeNegativeNumber", t);
+    }
+
+    // Apply number validation
+    if (currentRegex && currentRegex.regex) {
+      const regex = new RegExp(currentRegex.regex);
+      if (typedValue && !regex.test(typedValue)) {
+        return currentRegex.error;
+      }
+    }
+
+    if (typedValue) {
+      const numericValue = Number(typedValue);
+
+      // MinValue and Max Value validation
+      if (
+        validator.minValue != null &&
+        !Number.isNaN(numericValue) &&
+        numericValue < validator.minValue
+      ) {
+        return t("input-validation.too-small").replace("{{min}}", String(validator.minValue));
+      }
+
+      if (
+        validator.maxValue != null &&
+        !Number.isNaN(numericValue) &&
+        numericValue > validator.maxValue
+      ) {
+        return t("input-validation.too-large").replace("{{max}}", String(validator.maxValue));
+      }
+
+      // minDigits and maxDigits validation
+      const digitCount = typedValue.replace(/[^\d]/g, "").length;
+      if (validator.minDigits && digitCount < validator.minDigits) {
+        return t("input-validation.too-few-digits");
+      }
+      if (validator.maxDigits && digitCount > validator.maxDigits) {
+        return t("input-validation.too-many-digits");
+      }
+    }
+
+    return null;
+  }
 
   switch (componentType) {
-    case FormElementTypes.numberInput: {
-      const typedValue = String(value).trim();
-      if (validator.required && !typedValue) return t("input-validation.required");
-
-      let currentRegex = getRegexByType("number", t);
-
-      // Check if negative numbers are allowed.
-      if (formElement.properties.allowNegativeNumbers) {
-        currentRegex = getRegexByType("canBeNegativeNumber", t);
-      }
-
-      if (currentRegex && currentRegex.regex) {
-        const regex = new RegExp(currentRegex.regex);
-        if (typedValue && !regex.test(typedValue)) {
-          return currentRegex.error;
-        }
-      }
-
-      if (typedValue) {
-        const numericValue = Number(typedValue);
-        if (
-          validator.minValue != null &&
-          !Number.isNaN(numericValue) &&
-          numericValue < validator.minValue
-        ) {
-          return t("input-validation.too-small").replace("{{min}}", String(validator.minValue));
-        }
-        if (
-          validator.maxValue != null &&
-          !Number.isNaN(numericValue) &&
-          numericValue > validator.maxValue
-        ) {
-          return t("input-validation.too-large").replace("{{max}}", String(validator.maxValue));
-        }
-        const digitCount = typedValue.replace(/[^\d]/g, "").length;
-        if (validator.minDigits && digitCount < validator.minDigits) {
-          return t("input-validation.too-few-digits");
-        }
-        if (validator.maxDigits && digitCount > validator.maxDigits) {
-          return t("input-validation.too-many-digits");
-        }
-      }
-
-      break;
-    }
     case FormElementTypes.textField: {
       const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
