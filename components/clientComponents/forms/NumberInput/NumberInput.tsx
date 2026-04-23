@@ -156,6 +156,7 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
         onKeyDown={handleOnKeyDown}
         onBlur={handleOnBlur}
         required={required}
+        inputMode="numeric"
       />
     </>
   );
