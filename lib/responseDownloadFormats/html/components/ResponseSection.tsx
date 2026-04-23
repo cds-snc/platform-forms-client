@@ -5,10 +5,11 @@ import { RowTable } from "./RowTable";
 import { getProperty } from "@lib/i18nHelpers";
 import { FormRecord } from "@gcforms/types";
 import { TFunction } from "i18next";
+import { Language } from "@root/lib/types/form-builder-types";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
-  lang: string;
+  lang: Language;
   responseID: string;
   submissionDate: number;
   formResponse: Submission;

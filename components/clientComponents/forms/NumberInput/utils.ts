@@ -1,3 +1,5 @@
+import { Language } from "@root/lib/types/form-builder-types";
+
 export const langToLocale = (lang?: string) => (lang === "fr" ? "fr-CA" : "en-CA");
 
 export interface NumberFormatConfig {
@@ -24,7 +26,7 @@ export const getNumberFormatOptions = (config: NumberFormatConfig): Intl.NumberF
  */
 export const formatNumberForDisplay = (
   value: number,
-  lang: string | undefined,
+  lang: Language,
   config: NumberFormatConfig
 ): string => {
   if (Number.isNaN(value)) return "";

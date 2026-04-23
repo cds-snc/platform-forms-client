@@ -7,6 +7,7 @@ import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
 import { getElementByIdDeep } from "@root/packages/core/src";
 import { formatNumberForDisplay } from "@root/components/clientComponents/forms/NumberInput/utils";
+import { Language } from "@root/lib/types/form-builder-types";
 
 const QuestionRows = ({
   submission,
@@ -14,11 +15,11 @@ const QuestionRows = ({
   formRecord,
 }: {
   submission: Submission;
-  lang: string;
+  lang: Language;
   formRecord: FormRecord;
 }): JSX.Element => {
   const { t } = customTranslate("common");
-  const renderColumn = (index: number, lang: string, item: Answer, subItem = false) => {
+  const renderColumn = (index: number, lang: Language, item: Answer, subItem = false) => {
     const element = getElementByIdDeep(formRecord.form.elements, String(item.questionId));
     let rawNumber;
     let numberInputValue;

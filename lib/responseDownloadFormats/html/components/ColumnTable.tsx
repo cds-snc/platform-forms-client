@@ -8,6 +8,7 @@ import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
 import { getElementByIdDeep } from "@root/packages/core/src";
 import { formatNumberForDisplay } from "@root/components/clientComponents/forms/NumberInput/utils";
+import { Language } from "@root/lib/types/form-builder-types";
 
 /*
  ⚡ NOTE: CSS is compiled 
@@ -21,12 +22,12 @@ const QuestionColumns = ({
   formRecord,
 }: {
   submission: Submission;
-  lang: string;
+  lang: Language;
   formRecord: FormRecord;
 }): JSX.Element => {
   const { t } = customTranslate("common");
 
-  const renderRow = (index: number | string, lang: string, item: Answer) => {
+  const renderRow = (index: number | string, lang: Language, item: Answer) => {
     const element = getElementByIdDeep(formRecord.form.elements, String(item.questionId));
     let rawNumber;
     let numberInputValue;

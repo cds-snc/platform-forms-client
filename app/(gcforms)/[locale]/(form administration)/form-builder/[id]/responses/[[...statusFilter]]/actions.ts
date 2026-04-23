@@ -489,7 +489,7 @@ const getAnswerAsString = (
       return answerString;
     }
 
-    return formatNumberForDisplay(Number(answerString), lang, {
+    return formatNumberForDisplay(Number(answerString), lang as Language, {
       currencyCode: question.properties.currencyCode,
       stepCount: question.properties.stepCount,
     });

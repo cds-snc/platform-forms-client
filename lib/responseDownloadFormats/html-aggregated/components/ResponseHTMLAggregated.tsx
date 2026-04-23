@@ -11,9 +11,10 @@ import { TableHeader } from "./AggregatedTable";
 import { CopyCodes } from "./CopyCodes";
 import { ProtectedLevel } from "./ProtectedLevel";
 import { formatDateTimeUTC, formatDateTimeUTCFr } from "@lib/utils/form-builder";
+import { Language } from "@root/lib/types/form-builder-types";
 
 interface HTMLDownloadProps {
-  lang: string;
+  lang: Language;
   formResponseSubmissions: FormResponseSubmissions;
   host: string;
 }
