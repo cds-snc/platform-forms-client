@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.4] - 2026-04-23
+
+- Support for new Advanced number input validation
+
 ## [2.2.3] - 2026-04-01
 
 - Move regex validation utils into package
