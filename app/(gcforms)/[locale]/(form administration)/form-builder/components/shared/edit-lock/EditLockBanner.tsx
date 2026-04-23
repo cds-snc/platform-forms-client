@@ -43,7 +43,13 @@ const formatRelativeTime = (value: string, locale: string) => {
   return formatter.format(Math.round(diffMs / 86_400_000), "day");
 };
 
-export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) => {
+export const EditLockBanner = ({
+  takeover,
+  presenceEnabled = false,
+}: {
+  takeover: () => Promise<void>;
+  presenceEnabled?: boolean;
+}) => {
   const { t, i18n } = useTranslation("form-builder");
   const { isLockedByOther, editLock } = useTemplateStore((s) => ({
     isLockedByOther: s.isLockedByOther,
@@ -60,10 +66,10 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
     }
 
     bannerRef.current?.focus();
-  }, [isLockedByOther]);
+  }, [isLockedByOther, presenceEnabled]);
 
   useEffect(() => {
-    if (!EDIT_LOCK_DETECT_PRESENCE || !isLockedByOther) {
+    if (!presenceEnabled || !EDIT_LOCK_DETECT_PRESENCE || !isLockedByOther) {
       return;
     }
 
@@ -74,7 +80,7 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
     return () => {
       window.clearInterval(interval);
     };
-  }, [isLockedByOther]);
+  }, [isLockedByOther, presenceEnabled]);
 
   if (!isLockedByOther) return null;
 
@@ -84,11 +90,12 @@ export const EditLockBanner = ({ takeover }: { takeover: () => Promise<void> }) 
 
   // If the lock is nearing expiration, or if the presence status is explicitly marked as stale, treat the lock as stale.
   const isStale =
-    EDIT_LOCK_DETECT_PRESENCE && expiresAt
+    presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && expiresAt
       ? expiresAt.getTime() - timeTick <= CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS
       : false;
 
-  const hasPresenceDetails = EDIT_LOCK_DETECT_PRESENCE && Boolean(editLock?.presenceStatus);
+  const hasPresenceDetails =
+    presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && Boolean(editLock?.presenceStatus);
 
   // If the lock is stale, show "stale" status to encourage takeover. Otherwise, show the actual presence status reported by the server.
   const presenceKey = isStale ? "stale" : (editLock?.presenceStatus ?? "away");
