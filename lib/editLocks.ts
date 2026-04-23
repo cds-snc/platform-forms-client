@@ -16,7 +16,7 @@ export {
 } from "@lib/formBuilderEditLockPresence";
 
 const EDIT_LOCK_KEY_PREFIX = "edit-lock";
-const EDIT_LOCK_CHANNEL = "edit-lock-events";
+const EDIT_LOCK_STREAM_PREFIX = "edit-lock-stream";
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX = "edit-lock-takeover-save";
 const EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX = "edit-lock-assigned-users-threshold";
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_POLL_MS = 100;
@@ -66,8 +66,6 @@ export class TemplateEditLockedError extends Error {
 }
 
 type EditLockStore = Map<string, EditLockInfo>;
-type EditLockSubscriber = (event: EditLockEvent) => void;
-type EditLockSubscriberStore = Map<string, Set<EditLockSubscriber>>;
 type StoredEditLockInfo = Omit<
   EditLockInfo,
   "lockedAt" | "heartbeatAt" | "expiresAt" | "lastActivityAt"
@@ -80,7 +78,6 @@ type StoredEditLockInfo = Omit<
 
 type EditLockGlobal = typeof globalThis & {
   __editLockStore?: EditLockStore;
-  __editLockSubscribers?: EditLockSubscriberStore;
   __editLockTakeoverSaveAcks?: Map<string, number>;
 };
 
@@ -90,14 +87,6 @@ const getEditLockStore = (): EditLockStore => {
     globalWithStore.__editLockStore = new Map();
   }
   return globalWithStore.__editLockStore;
-};
-
-const getEditLockSubscribers = (): EditLockSubscriberStore => {
-  const globalWithStore = globalThis as EditLockGlobal;
-  if (!globalWithStore.__editLockSubscribers) {
-    globalWithStore.__editLockSubscribers = new Map();
-  }
-  return globalWithStore.__editLockSubscribers;
 };
 
 const getEditLockTakeoverSaveAcks = (): Map<string, number> => {
@@ -111,14 +100,13 @@ const getEditLockTakeoverSaveAcks = (): Map<string, number> => {
 const redisEnabled = () => Boolean(process.env.REDIS_URL);
 
 const getEditLockKey = (templateId: string) => `${EDIT_LOCK_KEY_PREFIX}:${templateId}`;
+const getEditLockStreamKey = (templateId: string) => `${EDIT_LOCK_STREAM_PREFIX}:${templateId}`;
 const getEditLockTakeoverSaveAckKey = (templateId: string, sessionId: string) =>
   `${EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX}:${templateId}:${sessionId}`;
 const getEditLockAssignedUsersCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX}:${templateId}`;
 const editLockTtlSeconds = Math.ceil(EDIT_LOCK_TTL_MS / 1000);
 const updatedEvent: EditLockEvent = { type: "updated" };
-const toEditLockRedisEventMessage = (templateId: string, event: EditLockEvent) =>
-  JSON.stringify({ templateId, event });
 const wait = async (timeMs: number) =>
   new Promise((resolve) => {
     setTimeout(resolve, timeMs);
@@ -230,7 +218,6 @@ const readMemoryLock = (templateId: string) => {
   const normalized = toEditLockInfo(lock);
   if (isExpired(normalized, now)) {
     store.delete(templateId);
-    notifyEditLockSubscribers(templateId, updatedEvent);
     return null;
   }
 
@@ -254,13 +241,16 @@ const readRedisLock = async (templateId: string) => {
 };
 
 const publishEditLockEvent = async (templateId: string, event: EditLockEvent = updatedEvent) => {
-  if (redisEnabled()) {
-    const redis = await getRedisInstance();
-    await redis.publish(EDIT_LOCK_CHANNEL, toEditLockRedisEventMessage(templateId, event));
+  if (!redisEnabled()) {
     return;
   }
 
-  notifyEditLockSubscribers(templateId, event);
+  const redis = await getRedisInstance();
+  const streamKey = getEditLockStreamKey(templateId);
+  // Append the event to the per-template stream.  The stream TTL is reset on
+  // every write so it stays alive as long as the lock itself is active.
+  await redis.xadd(streamKey, "*", "type", event.type, "templateId", templateId);
+  await redis.expire(streamKey, editLockTtlSeconds * 2);
 };
 
 const storeRedisLock = async (lock: EditLockInfo) => {
@@ -302,34 +292,6 @@ const withRedisWatch = async <T>(
   };
 
   return execute(0);
-};
-
-const notifyEditLockSubscribers = (templateId: string, event: EditLockEvent) => {
-  const subscribers = getEditLockSubscribers().get(templateId);
-  if (!subscribers) {
-    return;
-  }
-
-  subscribers.forEach((subscriber) => subscriber(event));
-};
-
-export const subscribeToEditLockEvents = (templateId: string, subscriber: EditLockSubscriber) => {
-  const subscriberStore = getEditLockSubscribers();
-  const subscribers = subscriberStore.get(templateId) ?? new Set<EditLockSubscriber>();
-  subscribers.add(subscriber);
-  subscriberStore.set(templateId, subscribers);
-
-  return () => {
-    const currentSubscribers = subscriberStore.get(templateId);
-    if (!currentSubscribers) {
-      return;
-    }
-
-    currentSubscribers.delete(subscriber);
-    if (currentSubscribers.size === 0) {
-      subscriberStore.delete(templateId);
-    }
-  };
 };
 
 export const requestEditLockTakeoverSave = async (templateId: string) => {
@@ -499,6 +461,10 @@ export const shouldEnforceTemplateEditLock = async (templateId: string): Promise
     return false;
   }
 
+  const useRedisCache = process.env.APP_ENV !== "test" && redisEnabled();
+
+  // --- Check caches first ---
+
   const cachedTemplate = formCache.cacheAvailable
     ? await formCache.check(templateId).catch(() => null)
     : null;
@@ -506,55 +472,47 @@ export const shouldEnforceTemplateEditLock = async (templateId: string): Promise
 
   let cachedHasEnoughUsers: boolean | null = null;
 
-  if (process.env.APP_ENV !== "test" && redisEnabled()) {
+  if (useRedisCache) {
     const redis = await getRedisInstance();
     const cachedValue = await redis.get(getEditLockAssignedUsersCacheKey(templateId));
-
-    if (cachedValue === "1") {
-      cachedHasEnoughUsers = true;
-    }
-
-    if (cachedValue === "0") {
-      cachedHasEnoughUsers = false;
-    }
+    if (cachedValue === "1") cachedHasEnoughUsers = true;
+    else if (cachedValue === "0") cachedHasEnoughUsers = false;
   }
 
+  // Both values are cached — skip the DB entirely.
   if (cachedIsPublished !== null && cachedHasEnoughUsers !== null) {
     return !cachedIsPublished && cachedHasEnoughUsers;
   }
+
+  // --- Fill gaps from DB ---
 
   const template = await prisma.template
     .findUnique({
       where: { id: templateId },
       select: {
         isPublished: true,
-        _count: {
-          select: {
-            users: true,
-          },
-        },
+        _count: { select: { users: true } },
       },
     })
     .catch(() => null);
-
-  const shouldEnforce =
-    !template ||
-    (!template.isPublished && template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK);
-
-  if (template && process.env.APP_ENV !== "test" && redisEnabled()) {
-    const redis = await getRedisInstance();
-    await redis.setex(
-      getEditLockAssignedUsersCacheKey(templateId),
-      EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS,
-      template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK ? "1" : "0"
-    );
-  }
 
   if (!template) {
     return true;
   }
 
-  return shouldEnforce;
+  const hasEnoughUsers = template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
+
+  // Cache the user-count threshold so subsequent calls skip the DB.
+  if (useRedisCache) {
+    const redis = await getRedisInstance();
+    await redis.setex(
+      getEditLockAssignedUsersCacheKey(templateId),
+      EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS,
+      hasEnoughUsers ? "1" : "0"
+    );
+  }
+
+  return !template.isPublished && hasEnoughUsers;
 };
 
 export const getEditLockStatus = async (
