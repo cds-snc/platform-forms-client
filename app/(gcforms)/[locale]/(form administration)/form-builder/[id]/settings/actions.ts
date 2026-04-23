@@ -75,7 +75,7 @@ export const getFormEvents = AuthenticatedAction(async (session, formId: string)
       {
         TableName: "AuditLogs",
         IndexName: "SubjectByTimestamp",
-        Limit: 100,
+        Limit: 10000,
         KeyConditionExpression: "Subject = :formId",
         ExpressionAttributeValues: {
           ":formId": `Form#${formId}`,
@@ -108,6 +108,9 @@ export const getFormEvents = AuthenticatedAction(async (session, formId: string)
       };
     });
   } catch (error) {
+    if (error instanceof Error) {
+      return { error: error.message } as ServerActionError;
+    }
     return { error: "There was an error. Please try again later." } as ServerActionError;
   }
 });

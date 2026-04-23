@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 const isEditPath = (pathname: string | null) => {
   if (!pathname) return false;
@@ -24,16 +25,19 @@ const makeSessionId = () => {
 export const EditLockClient = ({
   formId,
   lockedEditingEnabled = true,
+  editLockPresenceEnabled = false,
   children,
   restrictToEditPaths = true,
   reloadOnTakeover = false,
 }: {
   formId: string;
   lockedEditingEnabled?: boolean;
+  editLockPresenceEnabled?: boolean;
   children?: React.ReactNode;
   restrictToEditPaths?: boolean;
   reloadOnTakeover?: boolean;
 }) => {
+  "use memo";
   const pathname = usePathname();
   const currentFormId = useTemplateStore((s) => s.id);
   const activeFormId = currentFormId || formId;
@@ -44,15 +48,23 @@ export const EditLockClient = ({
     activeFormId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
 
-  const { takeover } = useEditLock({ formId: activeFormId, enabled, sessionId });
+  const { takeover } = useEditLock({
+    formId: activeFormId,
+    enabled,
+    presenceEnabled: editLockPresenceEnabled,
+    sessionId,
+  });
 
-  const handleTakeover = useCallback(async () => {
+  const { headlessTree } = useTreeRef();
+
+  const handleTakeover = async () => {
     await takeover();
+    headlessTree?.current?.rebuildTree();
 
     if (reloadOnTakeover) {
       window.location.reload();
     }
-  }, [reloadOnTakeover, takeover]);
+  };
 
   if (!enabled) {
     return children ? <>{children}</> : null;
@@ -60,7 +72,7 @@ export const EditLockClient = ({
 
   return (
     <>
-      <EditLockBanner takeover={handleTakeover} />
+      <EditLockBanner takeover={handleTakeover} presenceEnabled={editLockPresenceEnabled} />
       {children}
     </>
   );

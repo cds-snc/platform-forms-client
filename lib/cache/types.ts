@@ -3,15 +3,15 @@
 export const UserFeatureFlags = {
   addressComplete: "addressComplete",
   responsesPilot: "responsesPilot",
+  lockedEditing: "lockedEditing",
+  userSideAuditLogs: "userSideAuditLogs",
 } as const;
 
 export const FeatureFlags = {
   formTimer: "formTimer",
   hCaptcha: "hCaptcha",
   topBanner: "topBanner",
-  userSideAuditLogs: "userSideAuditLogs",
   zitadelLogin: "zitadelLogin",
-  lockedEditing: "lockedEditing",
   ...UserFeatureFlags,
 } as const;
 

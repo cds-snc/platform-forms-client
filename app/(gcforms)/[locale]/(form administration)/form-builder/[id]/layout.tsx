@@ -17,6 +17,8 @@ import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { checkKeyExists } from "@lib/serviceAccount";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
+import { shouldEnforceTemplateEditLock } from "@lib/editLocks";
+import { getAppSettingAsBoolean } from "@lib/appSettings";
 import {
   FormBuilderConfigProvider,
   FormBuilderConfig,
@@ -45,6 +47,13 @@ export default async function Layout(props: {
 
   const allowGroupsFlag = allowGrouping();
   const allowLockedEditingFlag = await allowLockedEditing();
+  const editLockPresenceEnabled = allowLockedEditingFlag
+    ? await getAppSettingAsBoolean("editLockPresenceEnabled")
+    : false;
+  const enforceEditLockFlag =
+    allowLockedEditingFlag && formID && formID !== "0000"
+      ? await shouldEnforceTemplateEditLock(formID)
+      : false;
 
   if (session && formID && formID !== "0000") {
     const templateWithUsers = await getTemplateWithAssociatedUsers(formID).catch((e) => {
@@ -112,7 +121,11 @@ export default async function Layout(props: {
                     </div>
                     <GroupStoreProvider>
                       <div className="relative flex w-full gap-7">
-                        <EditLockClient formId={id} lockedEditingEnabled={allowLockedEditingFlag}>
+                        <EditLockClient
+                          formId={id}
+                          lockedEditingEnabled={enforceEditLockFlag}
+                          editLockPresenceEnabled={editLockPresenceEnabled}
+                        >
                           <main
                             id="content"
                             className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"

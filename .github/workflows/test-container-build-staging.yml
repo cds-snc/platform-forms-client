@@ -4,10 +4,6 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  COGNITO_APP_CLIENT_ID: ${{secrets.STAGING_COGNITO_APP_CLIENT_ID}}
-  COGNITO_USER_POOL_ID: ${{ secrets.STAGING_COGNITO_USER_POOL_ID}}
-
 jobs:
   test-container:
     runs-on: ubuntu-latest
@@ -18,5 +14,5 @@ jobs:
       - name: Build Container
         run: |
           docker build --platform=linux/amd64 --provenance false -t base \
-            --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
-            --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .
+            --build-arg COGNITO_APP_CLIENT_ID="COGNITO_APP_CLIENT_ID" \
+            --build-arg COGNITO_USER_POOL_ID="COGNITO_USER_POOL_ID" .

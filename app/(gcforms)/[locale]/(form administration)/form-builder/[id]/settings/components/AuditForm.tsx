@@ -106,7 +106,7 @@ export const AuditForm = ({ formId }: { formId: string }) => {
         retrieveFileBlob(events);
       }
     } else {
-      alert(t("auditDownload.errorFetchingEvents"));
+      alert(events.error);
     }
   };
 

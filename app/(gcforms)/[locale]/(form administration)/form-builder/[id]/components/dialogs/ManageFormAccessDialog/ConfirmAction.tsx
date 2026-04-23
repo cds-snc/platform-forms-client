@@ -15,7 +15,7 @@ type ConfirmActionProps = {
 export const ConfirmAction = ({
   callback,
   icon = (
-    <CancelIcon className="rounded-full border-1.5 border-transparent hover:border-blue-focus" />
+    <CancelIcon className="border-1.5 hover:border-blue-focus rounded-full border-transparent" />
   ),
   confirmString,
   buttonLabel,
