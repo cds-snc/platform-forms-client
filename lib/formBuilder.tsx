@@ -132,31 +132,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   const sortOrder = element.properties.sortOrder ? element.properties.sortOrder.toString() : "none";
 
-  // Broke this out of the switch statement below for backwards
-  // compatibility with legacy number inputs that were stored
-  // as text fields with validation.type "number"
-  if (isNumberInput(element)) {
-    return (
-      <div className="focus-group gcds-input-wrapper">
-        {labelComponent}
-        {description && <Description id={`${id}`}>{description}</Description>}
-        <NumberInput
-          id={`${id}`}
-          name={`${id}`}
-          required={isRequired}
-          ariaDescribedBy={description ? `desc-${id}` : undefined}
-          placeholder={placeHolder.toString()}
-          allowNegativeNumbers={element.properties.allowNegativeNumbers}
-          stepCount={element.properties.stepCount}
-          currencyCode={element.properties.currencyCode}
-          minValue={element.properties.validation?.minValue}
-          maxValue={element.properties.validation?.maxValue}
-          lang={lang}
-        />
-      </div>
-    );
-  }
-
   switch (element.type) {
     case FormElementTypes.textField:
       return (
@@ -383,6 +358,30 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     }
     default:
+      // Render NumberInputs with backwards compatibility
+      // for legacy number inputs that were stored as
+      // text fields with validation.type "number"
+      if (isNumberInput(element)) {
+        return (
+          <div className="focus-group gcds-input-wrapper">
+            {labelComponent}
+            {description && <Description id={`${id}`}>{description}</Description>}
+            <NumberInput
+              id={`${id}`}
+              name={`${id}`}
+              required={isRequired}
+              ariaDescribedBy={description ? `desc-${id}` : undefined}
+              placeholder={placeHolder.toString()}
+              allowNegativeNumbers={element.properties.allowNegativeNumbers}
+              stepCount={element.properties.stepCount}
+              currencyCode={element.properties.currencyCode}
+              minValue={element.properties.validation?.minValue}
+              maxValue={element.properties.validation?.maxValue}
+              lang={lang}
+            />
+          </div>
+        );
+      }
       return <></>;
   }
 }
