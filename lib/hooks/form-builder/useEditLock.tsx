@@ -43,7 +43,6 @@ export const useEditLock = ({
   const heartbeatRef = useRef<number | null>(null);
   const pollRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
-  const startHeartbeatRef = useRef<() => void>(() => undefined);
   const startPollingRef = useRef<() => void>(() => undefined);
   const lockLoopTokenRef = useRef(0);
   const updatedAtRef = useRef(updatedAt);
@@ -329,18 +328,7 @@ export const useEditLock = ({
   // callbacks without re-running the effect and restarting timers on every
   // store update. Zustand updates were previous causing an infinite loop
   // from the below as useEffect dependencies.
-  const cbRef = useRef({
-    postAction,
-    updateStore,
-    syncServerState,
-    clearLockState,
-    clearTimers,
-    clearEvents,
-    flushDraftBeforeTakeover,
-    startTimers,
-    setTakeoverFallbackState,
-  });
-  cbRef.current = {
+  const callbacks = {
     postAction,
     updateStore,
     syncServerState,
@@ -351,20 +339,13 @@ export const useEditLock = ({
     startTimers,
     setTakeoverFallbackState,
   };
-  startHeartbeatRef.current = startHeartbeat;
+  const cbRef = useRef(callbacks);
+  cbRef.current = callbacks;
   startPollingRef.current = startPolling;
 
   useEffect(() => {
-    if (!enabled) {
+    if (!enabled || status !== "authenticated") {
       cbRef.current.clearTimers();
-      cbRef.current.clearEvents();
-      cbRef.current.clearLockState();
-      return;
-    }
-
-    if (status !== "authenticated") {
-      cbRef.current.clearTimers();
-      cbRef.current.clearEvents();
       cbRef.current.clearLockState();
       return;
     }
@@ -392,7 +373,6 @@ export const useEditLock = ({
     return () => {
       cancelled = true;
       cbRef.current.clearTimers();
-      cbRef.current.clearEvents();
       if (isOwnerRef.current && !suppressReleaseRef.current) {
         cbRef.current.postAction("release");
       }
