@@ -15,6 +15,7 @@ import {
 
 const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
 const SERVER_STATE_SYNC_RETRY_MS = 500;
+const ENABLE_EDIT_LOCK_PRESENCE = false;
 
 const wait = async (timeMs: number) =>
   new Promise((resolve) => {
@@ -42,14 +43,17 @@ export const useEditLock = ({
   const heartbeatRef = useRef<number | null>(null);
   const pollRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
-  const startHeartbeatRef = useRef<() => void>(() => undefined);
   const startPollingRef = useRef<() => void>(() => undefined);
   const lockLoopTokenRef = useRef(0);
   const updatedAtRef = useRef(updatedAt);
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
   const { getActivitySnapshot } = useEditLockPresence({
-    enabled: EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
+    enabled:
+      ENABLE_EDIT_LOCK_PRESENCE &&
+      EDIT_LOCK_DETECT_PRESENCE &&
+      enabled &&
+      status === "authenticated",
     coordinationKey: formId,
   });
 
@@ -120,7 +124,7 @@ export const useEditLock = ({
         body: JSON.stringify({
           action,
           sessionId,
-          activity,
+          ...(activity ? { activity } : {}),
         }),
       });
 
@@ -307,14 +311,6 @@ export const useEditLock = ({
     updateStore,
   ]);
 
-  useEffect(() => {
-    startHeartbeatRef.current = startHeartbeat;
-  }, [startHeartbeat]);
-
-  useEffect(() => {
-    startPollingRef.current = startPolling;
-  }, [startPolling]);
-
   const startTimers = useCallback(
     (statusResult: EditLockStatusPayload, cancelled = false) => {
       if (cancelled) return;
@@ -327,36 +323,48 @@ export const useEditLock = ({
     [startHeartbeat, startPolling]
   );
 
-  useEffect(() => {
-    if (!enabled) {
-      clearTimers();
-      clearEvents();
-      clearLockState();
-      return;
-    }
+  // The main effect runs whenever "enabled" or "status" changes to start/stop
+  // the lock logic. The ref "container" is necessary to hold the latest
+  // callbacks without re-running the effect and restarting timers on every
+  // store update. Zustand updates were previous causing an infinite loop
+  // from the below as useEffect dependencies.
+  const callbacks = {
+    postAction,
+    updateStore,
+    syncServerState,
+    clearLockState,
+    clearTimers,
+    clearEvents,
+    flushDraftBeforeTakeover,
+    startTimers,
+    setTakeoverFallbackState,
+  };
+  const cbRef = useRef(callbacks);
+  cbRef.current = callbacks;
+  startPollingRef.current = startPolling;
 
-    if (status !== "authenticated") {
-      clearTimers();
-      clearEvents();
-      clearLockState();
+  useEffect(() => {
+    if (!enabled || status !== "authenticated") {
+      cbRef.current.clearTimers();
+      cbRef.current.clearLockState();
       return;
     }
 
     let cancelled = false;
 
     const acquire = async () => {
-      const statusResult = await postAction("acquire");
+      const statusResult = await cbRef.current.postAction("acquire");
       if (cancelled) return;
 
       if (!statusResult) {
-        clearLockState();
+        cbRef.current.clearLockState();
         return;
       }
 
-      updateStore(statusResult);
-      startTimers(statusResult, cancelled);
+      cbRef.current.updateStore(statusResult);
+      cbRef.current.startTimers(statusResult, cancelled);
       if (!statusResult.isOwner) {
-        void syncServerState();
+        void cbRef.current.syncServerState();
       }
     };
 
@@ -364,27 +372,16 @@ export const useEditLock = ({
 
     return () => {
       cancelled = true;
-      clearTimers();
-      clearEvents();
+      cbRef.current.clearTimers();
       if (isOwnerRef.current && !suppressReleaseRef.current) {
-        postAction("release");
+        cbRef.current.postAction("release");
       }
     };
-  }, [
-    enabled,
-    clearLockState,
-    clearTimers,
-    clearEvents,
-    postAction,
-    startTimers,
-    status,
-    syncServerState,
-    updateStore,
-  ]);
+  }, [enabled, status]);
 
   useEffect(() => {
     if (!enabled || status !== "authenticated") {
-      clearEvents();
+      cbRef.current.clearEvents();
       return;
     }
 
@@ -399,22 +396,28 @@ export const useEditLock = ({
         const wasOwner = isOwnerRef.current;
 
         if (!nextStatus.locked) {
+          // Lock is free. Show the takeover overlay so the user can claim it
+          // explicitly via the "Take over" button.
+          if (!wasOwner) {
+            cbRef.current.clearTimers();
+            cbRef.current.setTakeoverFallbackState();
+          }
           return;
         }
 
-        updateStore(nextStatus);
+        cbRef.current.updateStore(nextStatus);
 
         if (!nextStatus.isOwner) {
           if (wasOwner) {
-            startPolling();
-            void syncServerState();
+            startPollingRef.current();
+            void cbRef.current.syncServerState();
           }
         }
       })();
     };
 
     const handleTakeoverRequested: EventListener = () => {
-      void flushDraftBeforeTakeover();
+      void cbRef.current.flushDraftBeforeTakeover();
     };
 
     eventSource.addEventListener("lock-status", handleLockStatus);
@@ -433,16 +436,7 @@ export const useEditLock = ({
         eventSourceRef.current = null;
       }
     };
-  }, [
-    clearEvents,
-    enabled,
-    flushDraftBeforeTakeover,
-    formId,
-    startPolling,
-    status,
-    syncServerState,
-    updateStore,
-  ]);
+  }, [enabled, formId, status]);
 
   const takeover = useCallback(async () => {
     const previousUpdatedAt = updatedAt;

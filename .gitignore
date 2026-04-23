@@ -67,6 +67,7 @@ typings/
 .env*.local
 .env
 .env.yarn
+.logger-suppress-patterns.local
 
 # next.js build output
 .next

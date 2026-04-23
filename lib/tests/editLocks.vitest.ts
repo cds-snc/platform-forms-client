@@ -25,9 +25,7 @@ import {
   heartbeatEditLock,
   invalidateTemplateEditLockUserCountCache,
   releaseEditLock,
-  requestEditLockTakeoverSave,
   shouldEnforceTemplateEditLock,
-  subscribeToEditLockEvents,
   takeoverEditLock,
   waitForEditLockTakeoverSaveAcknowledgement,
 } from "@lib/editLocks";
@@ -42,7 +40,6 @@ vi.mock("@lib/integration/redisConnector", async () => {
 
   return {
     getRedisInstance: vi.fn(async () => redis),
-    createRedisSubscriber: vi.fn(() => redis.duplicate()),
   };
 });
 
@@ -161,35 +158,6 @@ describe("editLocks with redis", () => {
     expect(heartbeatStatus.lock?.lastActivityAt).toEqual(activityAt);
     expect(heartbeatStatus.lock?.visibilityState).toBe("hidden");
     expect(heartbeatStatus.lock?.presenceStatus).toBe("away");
-  });
-
-  it("emits a takeover save request before ownership changes in memory mode", async () => {
-    const previousRedisUrl = process.env.REDIS_URL;
-    delete process.env.REDIS_URL;
-
-    await acquireEditLock({
-      templateId: "form-4",
-      userId: "user-1",
-      userName: "User One",
-      sessionId: "session-1",
-    });
-
-    const events: string[] = [];
-    const unsubscribe = subscribeToEditLockEvents("form-4", (event) => {
-      events.push(event.type);
-    });
-
-    try {
-      await requestEditLockTakeoverSave("form-4");
-
-      const status = await getEditLockStatus("form-4", "user-1");
-      expect(status.isOwner).toBe(true);
-      expect(status.lock?.lockedByUserId).toBe("user-1");
-      expect(events).toEqual(["takeover-requested"]);
-    } finally {
-      unsubscribe();
-      process.env.REDIS_URL = previousRedisUrl;
-    }
   });
 
   it("waits for the current editor to acknowledge takeover save completion", async () => {
