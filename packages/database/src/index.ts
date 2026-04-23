@@ -1,2 +1,20 @@
 export { prisma, prismaErrors } from "./client";
-export { Prisma, PrismaClient } from "./generated/client";
+export {
+  Prisma,
+  PrismaClient,
+  Account,
+  ApiServiceAccount,
+  Session,
+  Template,
+  DeliveryOption,
+  Privilege,
+  User,
+  VerificationToken,
+  Setting,
+  CognitoCustom2FA,
+  SecurityQuestion,
+  SecurityAnswer,
+  MagicLink,
+  Invitation,
+  UserFeature,
+} from "./generated/client";
