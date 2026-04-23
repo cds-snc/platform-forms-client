@@ -26,7 +26,10 @@ export const NumberFieldOptions = ({
 
   return (
     <section className="mb-4">
-      <InfoDetails className="mt-4" summary={t("addElementDialog.number.setNumberFormat")}>
+      <InfoDetails
+        className="mt-4 text-2xl font-semibold"
+        summary={t("addElementDialog.number.setNumberFormat")}
+      >
         <div className="gc-input-checkbox mb-4">
           <input
             type="checkbox"

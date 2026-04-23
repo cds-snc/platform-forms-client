@@ -21,10 +21,11 @@ export const TextFieldOptions = ({
 
   return (
     <section className="mt-8 mb-4">
-      <Label htmlFor="">{t("selectAutocomplete")}</Label>
+      <Label htmlFor={`autocomplete--${item.id}`}>{t("selectAutocomplete")}</Label>
       <Hint>{t("selectAutocompleteHint")}</Hint>
       <div>
         <AutocompleteOptions
+          id={`autocomplete--${item.id}`}
           handleChange={(e) => {
             setItem({
               ...item,

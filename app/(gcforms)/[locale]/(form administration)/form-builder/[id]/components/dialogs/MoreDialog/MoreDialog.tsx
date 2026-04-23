@@ -129,10 +129,10 @@ export const MoreDialog = () => {
                 <Question item={item} setItem={setItem} />
                 <Description item={item} setItem={setItem} />
               </section>
+              <RequiredOptions item={item} setItem={setItem} />
               <AddressCompleteOptions item={item} setItem={setItem} />
               <FormattedDateOptions item={item} setItem={setItem} />
               {/* <ManagedDataOptions item={item} setItem={setItem} /> */}
-              <RequiredOptions item={item} setItem={setItem} />
               <ComboboxStrictValue item={item} setItem={setItem} />
               <NumberFieldOptions item={item} setItem={setItem} />
               <DynamicRowOptions item={item} setItem={setItem} />
@@ -147,7 +147,10 @@ export const MoreDialog = () => {
               />
 
               {item.type !== "dynamicRow" && (
-                <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
+                <InfoDetails
+                  summary={t("moreDialog.apiOptionsSection.title")}
+                  className="text-2xl font-semibold"
+                >
                   <p className="mt-6">{t("moreDialog.apiOptionsSection.description")}</p>
                   <QuestionIdOptions
                     setIsValid={setIsQuestionIdValid}
