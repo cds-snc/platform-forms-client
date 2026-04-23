@@ -247,10 +247,15 @@ const publishEditLockEvent = async (templateId: string, event: EditLockEvent = u
 
   const redis = await getRedisInstance();
   const streamKey = getEditLockStreamKey(templateId);
-  // Append the event to the per-template stream.  The stream TTL is reset on
-  // every write so it stays alive as long as the lock itself is active.
-  await redis.xadd(streamKey, "*", "type", event.type, "templateId", templateId);
-  await redis.expire(streamKey, editLockTtlSeconds * 2);
+  // Append the event to the per-template stream, capped to about 100 entries so it
+  // never grows uncrontrolably. TTL is reset on every write so it stays alive as
+  // long as the lock itself is active. Both commands are pipelined to save a
+  // round trip.
+  await redis
+    .multi()
+    .xadd(streamKey, "MAXLEN", "~", 100, "*", "type", event.type, "templateId", templateId)
+    .expire(streamKey, editLockTtlSeconds * 2)
+    .exec();
 };
 
 const storeRedisLock = async (lock: EditLockInfo) => {
@@ -719,15 +724,12 @@ export const heartbeatEditLock = async ({
   if (redisEnabled()) {
     return withRedisWatch(templateId, async (current, redis) => {
       if (!current) {
-        const unlocked = buildStatus(null, userId);
-        const execResult = await redis.multi().exec();
-        return execResult ? unlocked : null;
+        // Note that Redis watch already calls unwatch() so no manual call is needed
+        return buildStatus(null, userId);
       }
 
       if (current.lockedByUserId !== userId || (sessionId && current.sessionId !== sessionId)) {
-        const locked = buildStatus(current, userId);
-        const execResult = await redis.multi().exec();
-        return execResult ? locked : null;
+        return buildStatus(current, userId);
       }
 
       const updated: EditLockInfo = {
@@ -796,8 +798,7 @@ export const releaseEditLock = async ({
           actor,
           result: "no-lock-present",
         });
-        const execResult = await redis.multi().exec();
-        return execResult ? { released: false } : null;
+        return { released: false };
       }
 
       if (current.lockedByUserId !== userId || (sessionId && current.sessionId !== sessionId)) {
@@ -808,8 +809,7 @@ export const releaseEditLock = async ({
           owner: current,
           result: "denied-not-owner",
         });
-        const execResult = await redis.multi().exec();
-        return execResult ? { released: false } : null;
+        return { released: false };
       }
 
       const execResult = await redis.multi().del(getEditLockKey(templateId)).exec();
