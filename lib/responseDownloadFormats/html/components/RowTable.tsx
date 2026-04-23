@@ -5,9 +5,9 @@ import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
-import { getElementByIdDeep } from "@root/packages/core/src";
-import { formatNumberForDisplay } from "@root/components/clientComponents/forms/NumberInput/utils";
-import { Language } from "@root/lib/types/form-builder-types";
+import { getElementByIdDeep } from "@gcforms/core";
+import { formatNumberForDisplay } from "@clientComponents/forms/NumberInput/utils";
+import { Language } from "@lib/types/form-builder-types";
 
 const QuestionRows = ({
   submission,
