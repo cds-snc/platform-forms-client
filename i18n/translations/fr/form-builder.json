@@ -258,7 +258,8 @@
       "maxDigits": "Nombre maximum de chiffres",
       "currency": "Devise",
       "currencyNone": "Aucune",
-      "decimals": "Décimales"
+      "decimals": "Décimales",
+      "thousandsSeparator": "séparateur de milliers"
     },
     "questionElement": "Éléments",
     "radio": {

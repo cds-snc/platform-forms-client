@@ -5,6 +5,7 @@ export const langToLocale = (lang?: string) => (lang === "fr" ? "fr-CA" : "en-CA
 export interface NumberFormatConfig {
   currencyCode?: string;
   stepCount?: number;
+  useThousandsSeparator?: boolean;
 }
 
 export const getNumberFormatOptions = (config: NumberFormatConfig): Intl.NumberFormatOptions =>
@@ -13,7 +14,7 @@ export const getNumberFormatOptions = (config: NumberFormatConfig): Intl.NumberF
     : {
         minimumFractionDigits: config.stepCount ?? 0,
         maximumFractionDigits: config.stepCount ?? 0,
-        useGrouping: true,
+        useGrouping: config.useThousandsSeparator ?? false,
       };
 
 /**

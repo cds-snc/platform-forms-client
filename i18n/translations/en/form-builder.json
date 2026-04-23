@@ -258,7 +258,8 @@
       "maxDigits": "Maximum number of digits",
       "currency": "currency",
       "currencyNone": "None",
-      "decimals": "decimals"
+      "decimals": "decimals",
+      "thousandsSeparator": "thousands separator"
     },
     "questionElement": "Elements",
     "radio": {

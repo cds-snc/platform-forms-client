@@ -365,6 +365,10 @@
               "description": "The ISO 4217 currency code used to format the number input as currency (e.g. CAD, USD).",
               "type": "string"
             },
+            "useThousandsSeparator": {
+              "description": "If set to true, the number input will format numbers with a thousands separator.",
+              "type": "boolean"
+            },
             "validation": {
               "type": "object",
               "properties": {

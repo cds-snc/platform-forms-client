@@ -71,6 +71,9 @@ export const NumberFieldOptions = ({
                   ...item.properties,
                   currencyCode,
                   stepCount: e.target.checked ? 2 : item.properties.stepCount,
+                  useThousandsSeparator: e.target.checked
+                    ? true
+                    : item.properties.useThousandsSeparator,
                 },
               });
             }}
@@ -81,6 +84,35 @@ export const NumberFieldOptions = ({
             htmlFor={`numberField-${item.id}-id-currencyCode`}
           >
             <span className="checkbox-label-text">{t("addElementDialog.number.currency")}</span>
+          </label>
+        </div>
+        <div className="gc-input-checkbox mb-4">
+          <input
+            type="checkbox"
+            className="gc-input-checkbox__input"
+            id={`numberField-${item.id}-id-thousandsSeparator`}
+            checked={isCurrency || !!item.properties.useThousandsSeparator}
+            disabled={isCurrency}
+            aria-disabled={isCurrency}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const useThousandsSeparator = e.target.checked;
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  useThousandsSeparator,
+                },
+              });
+            }}
+          />
+          <label
+            data-testid="thousandsSeparator"
+            className="gc-checkbox-label"
+            htmlFor={`numberField-${item.id}-id-thousandsSeparator`}
+          >
+            <span className="checkbox-label-text">
+              {t("addElementDialog.number.thousandsSeparator")}
+            </span>
           </label>
         </div>
         <div className="gc-input-checkbox mb-4">

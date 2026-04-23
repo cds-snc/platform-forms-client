@@ -11,6 +11,7 @@ export interface NumberInputProps extends InputFieldProps {
   allowNegativeNumbers?: boolean;
   stepCount?: number;
   currencyCode?: string;
+  useThousandsSeparator?: boolean;
   minValue?: number;
   maxValue?: number;
   minDigits?: number;
@@ -40,6 +41,7 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
     allowNegativeNumbers,
     stepCount,
     currencyCode,
+    useThousandsSeparator,
     lang,
   } = props;
 
@@ -48,8 +50,8 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
   const locale = langToLocale(lang);
 
   const formatOptions = useMemo<Intl.NumberFormatOptions>(
-    () => getNumberFormatOptions({ currencyCode, stepCount }),
-    [stepCount, currencyCode]
+    () => getNumberFormatOptions({ currencyCode, stepCount, useThousandsSeparator }),
+    [stepCount, currencyCode, useThousandsSeparator]
   );
 
   // Format a raw number into a locale-aware display string

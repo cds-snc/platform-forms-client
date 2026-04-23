@@ -375,6 +375,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
               allowNegativeNumbers={element.properties.allowNegativeNumbers}
               stepCount={element.properties.stepCount}
               currencyCode={element.properties.currencyCode}
+              useThousandsSeparator={element.properties.useThousandsSeparator}
               minValue={element.properties.validation?.minValue}
               maxValue={element.properties.validation?.maxValue}
               lang={lang}

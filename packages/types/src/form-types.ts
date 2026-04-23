@@ -142,6 +142,7 @@ export interface ElementProperties {
   allowNegativeNumbers?: boolean;
   stepCount?: number;
   currencyCode?: string;
+  useThousandsSeparator?: boolean;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;

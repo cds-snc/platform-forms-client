@@ -36,6 +36,7 @@ const QuestionColumns = ({
       numberInputValue = formatNumberForDisplay(Number(rawNumber), lang, {
         currencyCode: element?.properties.currencyCode,
         stepCount: element?.properties.stepCount,
+        useThousandsSeparator: element?.properties.useThousandsSeparator,
       });
     }
     return (
