@@ -12,7 +12,7 @@ import { isValidDate } from "./date";
 import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
 import { isSafeRegex } from "./regex";
-import { isNumberInput } from "@root/lib/utils/isNumberInput";
+import { isNumberInput } from "../utils/isNumberInput";
 
 export const isFieldResponseValid = (
   value: unknown,

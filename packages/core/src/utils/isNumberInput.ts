@@ -1,4 +1,4 @@
-import { FormElement, FormElementTypes } from "../types";
+import { FormElement, FormElementTypes } from "@gcforms/types";
 
 /**
  * Resolves the effective element type, handling backwards compatibility for

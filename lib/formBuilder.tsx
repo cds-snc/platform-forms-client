@@ -31,7 +31,7 @@ import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
 import { AddressComplete } from "@clientComponents/forms/AddressComplete/AddressComplete";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
-import { isNumberInput } from "./utils/isNumberInput";
+import { isNumberInput } from "@gcforms/core";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {

@@ -54,7 +54,7 @@ import {
 import { serverTranslation } from "@i18n";
 import { traceFunction } from "@lib/otel";
 import { formatNumberForDisplay } from "@clientComponents/forms/NumberInput/utils";
-import { isNumberInput } from "@root/lib/utils/isNumberInput";
+import { isNumberInput } from "@gcforms/core";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
