@@ -26,7 +26,7 @@ export const NumberFieldOptions = ({
 
   return (
     <section className="mb-4">
-      <InfoDetails className="mt-4" summary={t("Set number format")}>
+      <InfoDetails className="mt-4" summary={t("addElementDialog.number.setNumberFormat")}>
         <div className="gc-input-checkbox mb-4">
           <input
             type="checkbox"
@@ -180,9 +180,9 @@ export const NumberFieldOptions = ({
             />
           </div>
         )}
-        <h3 className="mt-4">Value</h3>
+        <h3 className="mt-4">{t("addElementDialog.number.valueRange")}</h3>
         <div className="mt-4 flex flex-row gap-4">
-          <LabelledInput classNames="w-1/2" label="Min">
+          <LabelledInput classNames="w-1/2" label={t("addElementDialog.number.minShort")}>
             <input
               type="number"
               className="gc-input-text mt-0!"
@@ -204,7 +204,7 @@ export const NumberFieldOptions = ({
               value={item.properties.validation?.minValue ?? ""}
             />
           </LabelledInput>
-          <LabelledInput classNames="w-1/2" label="Max">
+          <LabelledInput classNames="w-1/2" label={t("addElementDialog.number.maxShort")}>
             <input
               type="number"
               className="gc-input-text mt-0!"
@@ -228,9 +228,9 @@ export const NumberFieldOptions = ({
           </LabelledInput>
         </div>
 
-        <h3 className="mt-4">Number of Digits</h3>
+        <h3 className="mt-4">{t("addElementDialog.number.numberOfDigits")}</h3>
         <div className="mt-4 flex flex-row gap-4">
-          <LabelledInput classNames="w-1/2" label="Min">
+          <LabelledInput classNames="w-1/2" label={t("addElementDialog.number.minShort")}>
             <input
               type="number"
               className="gc-input-text mt-0!"
@@ -254,7 +254,7 @@ export const NumberFieldOptions = ({
               step={1}
             />
           </LabelledInput>
-          <LabelledInput classNames="w-1/2" label="Max">
+          <LabelledInput classNames="w-1/2" label={t("addElementDialog.number.maxShort")}>
             <input
               type="number"
               className="gc-input-text mt-0!"
