@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 const isEditPath = (pathname: string | null) => {
   if (!pathname) return false;
@@ -46,14 +47,16 @@ export const EditLockClient = ({
   const [sessionId] = useState(() => makeSessionId());
 
   const { takeover } = useEditLock({ formId: activeFormId, enabled, sessionId });
+  const { headlessTree } = useTreeRef();
 
-  const handleTakeover = useCallback(async () => {
+  const handleTakeover = async () => {
     await takeover();
+    headlessTree?.current?.rebuildTree();
 
     if (reloadOnTakeover) {
       window.location.reload();
     }
-  }, [reloadOnTakeover, takeover]);
+  };
 
   if (!enabled) {
     return children ? <>{children}</> : null;
