@@ -108,9 +108,6 @@ export const getFormEvents = AuthenticatedAction(async (session, formId: string)
       };
     });
   } catch (error) {
-    if (error instanceof Error) {
-      return { error: error.message } as ServerActionError;
-    }
     return { error: "There was an error. Please try again later." } as ServerActionError;
   }
 });
