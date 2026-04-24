@@ -717,7 +717,7 @@ export const heartbeatEditLock = async ({
   const presenceSnapshot = getPresenceSnapshot(presence);
 
   if (redisEnabled()) {
-    return withRedisWatch(templateId, async (current, redis) => {
+    const result = await withRedisWatch(templateId, async (current, redis) => {
       if (!current) {
         const unlocked = buildStatus(null, userId);
         const execResult = await redis.multi().exec();
@@ -751,6 +751,14 @@ export const heartbeatEditLock = async ({
 
       return execResult ? buildStatus(updated, userId) : null;
     });
+
+    // Publish an SSE event so non-owners receive the updated presence status
+    // and expiresAt without needing to poll.
+    if (result.isOwner) {
+      await publishEditLockEvent(templateId);
+    }
+
+    return result;
   }
 
   const store = getEditLockStore();

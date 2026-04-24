@@ -313,11 +313,11 @@ export const useEditLock = ({
       if (cancelled) return;
       if (statusResult.isOwner) {
         startHeartbeat();
-      } else {
-        startPolling();
       }
+      // Non-owners receive lock status and presence updates via SSE (pushed by
+      // the owner's heartbeat events). No polling needed at startup.
     },
-    [startHeartbeat, startPolling]
+    [startHeartbeat]
   );
 
   // The main effect runs whenever "enabled" or "status" changes to start/stop
