@@ -6,9 +6,9 @@ import { TableProps } from "../types";
 import { formatDateTimeUTC } from "@lib/utils/form-builder";
 import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
-import { getElementByIdDeep } from "@root/packages/core/src";
-import { formatNumberForDisplay } from "@root/components/clientComponents/forms/NumberInput/utils";
-import { Language } from "@root/lib/types/form-builder-types";
+import { getElementByIdDeep } from "@gcforms/core";
+import { formatNumberForDisplay } from "@clientComponents/forms/NumberInput/utils";
+import { Language } from "@lib/types/form-builder-types";
 
 /*
  ⚡ NOTE: CSS is compiled 
