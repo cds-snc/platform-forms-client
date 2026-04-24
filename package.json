@@ -92,7 +92,7 @@
     "@types/body-scroll-lock": "^3.1.2",
     "@types/mdx": "^2.0.13",
     "@vercel/otel": "^2.1.1",
-    "@xyflow/react": "12.8.2",
+    "@xyflow/react": "12.10.2",
     "axios": "^1.13.6",
     "babel-plugin-react-compiler": "^1.0.0",
     "body-scroll-lock": "^4.0.0-beta.0",
