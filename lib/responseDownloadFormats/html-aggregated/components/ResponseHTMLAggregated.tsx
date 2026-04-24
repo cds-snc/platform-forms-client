@@ -121,7 +121,12 @@ export const ResponseHtmlAggregated = ({
               <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
 
               <div className="mt-14 overflow-x-auto">
-                <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
+                <AggregatedTable
+                  lang={lang}
+                  headers={headersForTable}
+                  submissions={submissions}
+                  formRecord={formResponseSubmissions.formRecord}
+                />
               </div>
 
               <h2 className="sr-only">

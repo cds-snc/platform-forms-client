@@ -6,9 +6,8 @@ import { TableProps } from "../types";
 import { formatDateTimeUTC } from "@lib/utils/form-builder";
 import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
-import { getElementByIdDeep } from "@gcforms/core";
-import { formatNumberForDisplay } from "@clientComponents/forms/NumberInput/utils";
 import { Language } from "@lib/types/form-builder-types";
+import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
 
 /*
  ⚡ NOTE: CSS is compiled 
@@ -28,17 +27,7 @@ const QuestionColumns = ({
   const { t } = customTranslate("common");
 
   const renderRow = (index: number | string, lang: Language, item: Answer) => {
-    const element = getElementByIdDeep(formRecord.form.elements, String(item.questionId));
-    let rawNumber;
-    let numberInputValue;
-    if (item.type === FormElementTypes.numberInput) {
-      rawNumber = parseFloat(String(item.answer).replace(/[^0-9.-]+/g, ""));
-      numberInputValue = formatNumberForDisplay(Number(rawNumber), lang, {
-        currencyCode: element?.properties.currencyCode,
-        stepCount: element?.properties.stepCount,
-        useThousandsSeparator: element?.properties.useThousandsSeparator,
-      });
-    }
+    const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
     return (
       <div key={`row-${index}`} className="border-gray flex w-full flex-row border-b py-4">
         <dt data-testid={`col-question-${index}`} className="w-96 py-4 font-bold">

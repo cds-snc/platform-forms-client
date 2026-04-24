@@ -53,8 +53,6 @@ import {
 } from "@clientComponents/forms/AddressComplete/utils";
 import { serverTranslation } from "@i18n";
 import { traceFunction } from "@lib/otel";
-import { formatNumberForDisplay } from "@clientComponents/forms/NumberInput/utils";
-import { isNumberInput } from "@gcforms/core";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -232,7 +230,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                             type: subQuestion.type,
                             questionEn: subQuestion.properties.titleEn,
                             questionFr: subQuestion.properties.titleFr,
-                            answer: getAnswerAsString(subQuestion, value, lang),
+                            answer: getAnswerAsString(subQuestion, value),
                             ...(subQuestion.type === "formattedDate" && {
                               dateFormat: subQuestion.properties.dateFormat,
                             }),
@@ -302,7 +300,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                   type: question?.type,
                   questionEn: question?.properties.titleEn,
                   questionFr: question?.properties.titleFr,
-                  answer: getAnswerAsString(question, answer, lang),
+                  answer: getAnswerAsString(question, answer),
                   ...(question?.type === "formattedDate" && {
                     dateFormat: question.properties.dateFormat,
                   }),
@@ -467,11 +465,7 @@ const getDateAsString = (answer: DateObject | string | object, dateFormat: DateF
   }
 };
 
-const getAnswerAsString = (
-  question: FormElement | undefined,
-  answer: unknown,
-  lang?: Language
-): string => {
+const getAnswerAsString = (question: FormElement | undefined, answer: unknown): string => {
   if (question && question.type === "checkbox") {
     return Array(answer).join(", ");
   }
@@ -481,19 +475,6 @@ const getAnswerAsString = (
       return ""; // If the answer is not an object or does not have a name, return empty string
     }
     return answer.name as string;
-  }
-
-  if (question && isNumberInput(question)) {
-    const answerString = answer as string;
-    if (isNaN(Number(answerString))) {
-      return answerString;
-    }
-
-    return formatNumberForDisplay(Number(answerString), lang as Language, {
-      currencyCode: question.properties.currencyCode,
-      stepCount: question.properties.stepCount,
-      useThousandsSeparator: question.properties.useThousandsSeparator,
-    });
   }
 
   if (question && question.type === "formattedDate") {

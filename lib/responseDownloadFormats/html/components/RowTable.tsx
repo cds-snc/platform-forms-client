@@ -5,9 +5,8 @@ import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
-import { getElementByIdDeep } from "@gcforms/core";
-import { formatNumberForDisplay } from "@clientComponents/forms/NumberInput/utils";
 import { Language } from "@lib/types/form-builder-types";
+import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
 
 const QuestionRows = ({
   submission,
@@ -20,17 +19,7 @@ const QuestionRows = ({
 }): JSX.Element => {
   const { t } = customTranslate("common");
   const renderColumn = (index: number, lang: Language, item: Answer, subItem = false) => {
-    const element = getElementByIdDeep(formRecord.form.elements, String(item.questionId));
-    let rawNumber;
-    let numberInputValue;
-    if (item.type === FormElementTypes.numberInput) {
-      rawNumber = parseFloat(String(item.answer).replace(/[^0-9.-]+/g, ""));
-      numberInputValue = formatNumberForDisplay(Number(rawNumber), lang, {
-        currencyCode: element?.properties.currencyCode,
-        stepCount: element?.properties.stepCount,
-        useThousandsSeparator: element?.properties.useThousandsSeparator,
-      });
-    }
+    const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
     return (
       <div
         key={`row-${index}`}

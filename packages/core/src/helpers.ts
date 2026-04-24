@@ -23,7 +23,7 @@ export const getElementById = (elements: FormElement[], id: string) => {
  * @param id - The id of the element to find
  * @returns The element with the specified id, or undefined if not found
  */
-export const getElementByIdDeep = (elements: FormElement[], id: string) => {
+export const getElementOrSubElementById = (elements: FormElement[], id: string) => {
   for (const element of elements) {
     if (element.id.toString() === id) {
       return element;

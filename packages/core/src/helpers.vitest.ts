@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { getElementById, getElementByIdDeep } from "./helpers";
+import { getElementById, getElementOrSubElementById } from "./helpers";
 import { FormElementTypes, type FormElement } from "@gcforms/types";
 
 describe("helpers element lookup", () => {
@@ -39,11 +39,11 @@ describe("helpers element lookup", () => {
   });
 
   it("finds top-level and nested subElements with getElementByIdDeep", () => {
-    expect(getElementByIdDeep(elements, "1")?.id).toBe(1);
-    expect(getElementByIdDeep(elements, "201")?.id).toBe(201);
+    expect(getElementOrSubElementById(elements, "1")?.id).toBe(1);
+    expect(getElementOrSubElementById(elements, "201")?.id).toBe(201);
   });
 
   it("returns undefined when no element is found", () => {
-    expect(getElementByIdDeep(elements, "9999")).toBeUndefined();
+    expect(getElementOrSubElementById(elements, "9999")).toBeUndefined();
   });
 });
