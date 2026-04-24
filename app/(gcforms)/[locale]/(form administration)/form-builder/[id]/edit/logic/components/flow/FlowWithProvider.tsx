@@ -8,7 +8,6 @@ import React, {
   useEffect,
   useState,
   useRef,
-  useMemo,
 } from "react";
 
 import {
@@ -63,6 +62,7 @@ export interface FlowProps {
 }
 
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, ref) => {
+  "use memo";
   const form = useTemplateStore((state) => state.form);
 
   const showReviewNode = false;
@@ -78,27 +78,23 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
   const reset = useRef(false);
   const [redrawing, setRedrawing] = useState(false);
   const [viewport, setViewport] = useState<Viewport | null>(null);
-  const flowSignature = useMemo(
-    () =>
-      JSON.stringify({
-        nodes: flowNodes.map((node) => ({
-          id: node.id,
-          parentId: node.parentId,
-          position: node.position,
-          type: node.type,
-          width: node.style?.width,
-          height: node.style?.height,
-          data: node.data,
-        })),
-        edges: flowEdges.map((edge) => ({
-          id: edge.id,
-          source: edge.source,
-          target: edge.target,
-          label: edge.label,
-        })),
-      }),
-    [flowNodes, flowEdges]
-  );
+  const flowSignature = JSON.stringify({
+    nodes: flowNodes.map((node) => ({
+      id: node.id,
+      parentId: node.parentId,
+      position: node.position,
+      type: node.type,
+      width: node.style?.width,
+      height: node.style?.height,
+      data: node.data,
+    })),
+    edges: flowEdges.map((edge) => ({
+      id: edge.id,
+      source: edge.source,
+      target: edge.target,
+      label: edge.label,
+    })),
+  });
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();

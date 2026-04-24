@@ -1,4 +1,3 @@
-import { useCallback, useMemo } from "react";
 import { MarkerType, type Edge, type Node } from "@xyflow/react";
 import { stratify, tree } from "d3-hierarchy";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
@@ -188,6 +187,7 @@ export const useFlowData = (
   showReviewNode: boolean,
   hasReviewPage: boolean
 ) => {
+  "use memo";
   const formGroups = useTemplateStore((state) => state.form.groups);
   const formElements = useTemplateStore((state) => state.form.elements || []);
   const startElements = getStartElements(lang).map((element) => ({
@@ -205,7 +205,7 @@ export const useFlowData = (
     endNode.type = "endNodeWithReview";
   }
 
-  const getData = useCallback(() => {
+  const getData = () => {
     const edges: Edge[] = [];
     const layoutEdges: Edge[] = [];
     const pageNodes: LayoutNode[] = [];
@@ -384,19 +384,9 @@ export const useFlowData = (
       edges,
       nodes: [...laidOutPageNodes, ...childNodes],
     };
-  }, [
-    treeItems,
-    formGroups,
-    formElements,
-    startElements,
-    reviewNode,
-    endNode,
-    lang,
-    showReviewNode,
-    hasReviewPage,
-  ]);
+  };
 
-  const data = useMemo(() => getData(), [getData]);
+  const data = getData();
 
   return { ...data, getData };
 };
