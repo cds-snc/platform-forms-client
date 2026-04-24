@@ -134,6 +134,32 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   switch (element.type) {
     case FormElementTypes.textField:
+    case FormElementTypes.numberInput:
+      // Render NumberInputs with backwards compatibility
+      // for legacy number inputs that were stored as
+      // text fields with validation.type "number"
+      if (isNumberInput(element)) {
+        return (
+          <div className="focus-group gcds-input-wrapper">
+            {labelComponent}
+            {description && <Description id={`${id}`}>{description}</Description>}
+            <NumberInput
+              id={`${id}`}
+              name={`${id}`}
+              required={isRequired}
+              ariaDescribedBy={description ? `desc-${id}` : undefined}
+              placeholder={placeHolder.toString()}
+              allowNegativeNumbers={element.properties.allowNegativeNumbers}
+              stepCount={element.properties.stepCount}
+              currencyCode={element.properties.currencyCode}
+              useThousandsSeparator={element.properties.useThousandsSeparator}
+              minValue={element.properties.validation?.minValue}
+              maxValue={element.properties.validation?.maxValue}
+              lang={lang}
+            />
+          </div>
+        );
+      }
       return (
         <div className="focus-group gcds-input-wrapper">
           {labelComponent}
@@ -358,31 +384,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     }
     default:
-      // Render NumberInputs with backwards compatibility
-      // for legacy number inputs that were stored as
-      // text fields with validation.type "number"
-      if (isNumberInput(element)) {
-        return (
-          <div className="focus-group gcds-input-wrapper">
-            {labelComponent}
-            {description && <Description id={`${id}`}>{description}</Description>}
-            <NumberInput
-              id={`${id}`}
-              name={`${id}`}
-              required={isRequired}
-              ariaDescribedBy={description ? `desc-${id}` : undefined}
-              placeholder={placeHolder.toString()}
-              allowNegativeNumbers={element.properties.allowNegativeNumbers}
-              stepCount={element.properties.stepCount}
-              currencyCode={element.properties.currencyCode}
-              useThousandsSeparator={element.properties.useThousandsSeparator}
-              minValue={element.properties.validation?.minValue}
-              maxValue={element.properties.validation?.maxValue}
-              lang={lang}
-            />
-          </div>
-        );
-      }
       return <></>;
   }
 }

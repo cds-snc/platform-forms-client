@@ -29,9 +29,63 @@ export const isFieldResponseValid = (
   }
 
   switch (componentType) {
-    case FormElementTypes.textField: {
+    case FormElementTypes.textField:
+    case FormElementTypes.numberInput: {
+      // Required check first
       const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
+
+      // Handle NumberInput validation with backwards compatibility
+      // for legacy number inputs that were stored as text fields
+      // with validation.type "number"
+      if (isNumberInput(formElement)) {
+        // Number validation
+        let currentRegex = getRegexByType("number", t);
+
+        // Check if negative numbers are allowed.
+        if (formElement.properties.allowNegativeNumbers) {
+          currentRegex = getRegexByType("canBeNegativeNumber", t);
+        }
+
+        // Apply number validation
+        if (currentRegex && currentRegex.regex) {
+          const regex = new RegExp(currentRegex.regex);
+          if (typedValue && !regex.test(typedValue)) {
+            return currentRegex.error;
+          }
+        }
+
+        const numericValue = Number(typedValue);
+
+        // MinValue and Max Value validation
+        if (
+          validator.minValue != null &&
+          !Number.isNaN(numericValue) &&
+          numericValue < validator.minValue
+        ) {
+          return t("input-validation.too-small").replace("{{min}}", String(validator.minValue));
+        }
+
+        if (
+          validator.maxValue != null &&
+          !Number.isNaN(numericValue) &&
+          numericValue > validator.maxValue
+        ) {
+          return t("input-validation.too-large").replace("{{max}}", String(validator.maxValue));
+        }
+
+        // minDigits and maxDigits validation
+        const digitCount = typedValue.replace(/[^\d]/g, "").length;
+        if (validator.minDigits && digitCount < validator.minDigits) {
+          return t("input-validation.too-few-digits");
+        }
+
+        if (validator.maxDigits && digitCount > validator.maxDigits) {
+          return t("input-validation.too-many-digits");
+        }
+
+        break;
+      }
 
       const currentRegex = getRegexByType(validator.type, t, validator.regex);
 
@@ -168,64 +222,6 @@ export const isFieldResponseValid = (
     case FormElementTypes.richText:
       break;
     default:
-      // Handle NumberInput validation with backwards compatibility
-      // for legacy number inputs that were stored as text fields
-      // with validation.type "number"
-      if (isNumberInput(formElement)) {
-        const typedValue = String(value).trim();
-
-        // Required check
-        if (validator.required && !typedValue) return t("input-validation.required");
-
-        // Number validation
-        let currentRegex = getRegexByType("number", t);
-
-        // Check if negative numbers are allowed.
-        if (formElement.properties.allowNegativeNumbers) {
-          currentRegex = getRegexByType("canBeNegativeNumber", t);
-        }
-
-        // Apply number validation
-        if (currentRegex && currentRegex.regex) {
-          const regex = new RegExp(currentRegex.regex);
-          if (typedValue && !regex.test(typedValue)) {
-            return currentRegex.error;
-          }
-        }
-
-        if (typedValue) {
-          const numericValue = Number(typedValue);
-
-          // MinValue and Max Value validation
-          if (
-            validator.minValue != null &&
-            !Number.isNaN(numericValue) &&
-            numericValue < validator.minValue
-          ) {
-            return t("input-validation.too-small").replace("{{min}}", String(validator.minValue));
-          }
-
-          if (
-            validator.maxValue != null &&
-            !Number.isNaN(numericValue) &&
-            numericValue > validator.maxValue
-          ) {
-            return t("input-validation.too-large").replace("{{max}}", String(validator.maxValue));
-          }
-
-          // minDigits and maxDigits validation
-          const digitCount = typedValue.replace(/[^\d]/g, "").length;
-          if (validator.minDigits && digitCount < validator.minDigits) {
-            return t("input-validation.too-few-digits");
-          }
-
-          if (validator.maxDigits && digitCount > validator.maxDigits) {
-            return t("input-validation.too-many-digits");
-          }
-        }
-
-        return null;
-      }
       throw `Validation for component ${componentType} is not handled`;
   }
   return null;
