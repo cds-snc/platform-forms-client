@@ -11,11 +11,13 @@ type GroupNodeData = {
   label: {
     name: string;
   };
+  canCollapse?: boolean;
+  isCollapsed?: boolean;
 };
 
 const PageSvg = ({ title }: { title?: string }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={36} height={36} fill="none">
+    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 36 36" fill="none">
       {title && <title>{title}</title>}
       <rect width={35} height={35} x={0.5} y={0.5} fill="#EDE9FE" rx={17.5} />
       <rect width={35} height={35} x={0.5} y={0.5} stroke="#4338CA" rx={17.5} />
@@ -44,21 +46,35 @@ export const GroupNode = ({ id, data }: NodeProps) => {
   return (
     <div
       className={cn(
-        "relative h-full w-full overflow-visible rounded-xl border-2 bg-slate-50/95 transition-colors",
+        "relative h-full w-full overflow-x-visible rounded-xl border-2 bg-slate-50/95 transition-colors",
+        "overflow-y-visible",
         groupIsSelected
           ? "shadow-logicSelected border-indigo-600 bg-violet-100"
           : "shadow-logicDefault border-indigo-400"
       )}
     >
-      <button
-        onClick={handleClick}
-        className="absolute top-4 right-4 z-20 cursor-pointer rounded-full outline-offset-4 outline-slate-800 hover:scale-110"
+      <div
+        className={cn(
+          "border-b border-slate-200",
+          nodeData.isCollapsed ? "px-3 py-1.5" : "px-4 py-4"
+        )}
       >
-        <PageSvg title={t("groups.editPage", { name: nodeData.label.name })} />
-      </button>
-
-      <div className="border-b border-slate-200 px-4 py-4 pr-16">
-        <div className="truncate text-lg font-semibold text-slate-700">{nodeData.label.name}</div>
+        <div className="flex items-center justify-between gap-2">
+          <div
+            className={cn(
+              "min-w-0 truncate font-semibold text-slate-700",
+              nodeData.isCollapsed ? "text-xs" : "text-lg"
+            )}
+          >
+            {nodeData.label.name}
+          </div>
+          <button
+            onClick={handleClick}
+            className="shrink-0 self-center rounded-full outline-offset-4 outline-slate-800 transition-transform hover:scale-110 [&_svg]:block"
+          >
+            <PageSvg title={t("groups.editPage", { name: nodeData.label.name })} />
+          </button>
+        </div>
       </div>
 
       <Handle

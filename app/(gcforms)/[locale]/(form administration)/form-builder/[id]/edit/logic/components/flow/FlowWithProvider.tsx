@@ -6,6 +6,7 @@ import React, {
   ReactElement,
   ForwardRefRenderFunction,
   useEffect,
+  useMemo,
   useState,
   useRef,
 } from "react";
@@ -39,18 +40,6 @@ import { Language } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { showReviewPage as hasReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
-const nodeTypes = {
-  groupNode: GroupNode,
-  elementNode: ElementNode,
-  offboardNode: OffboardNode,
-  endNode: EndNode,
-  endNodeWithReview: EndNodeWithReview,
-};
-
-const edgeTypes = {
-  flowEdge: FlowEdge,
-};
-
 import { Loader } from "@clientComponents/globals/Loader";
 
 const Loading = () => (
@@ -68,6 +57,22 @@ export interface FlowProps {
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, ref) => {
   "use memo";
   const form = useTemplateStore((state) => state.form);
+  const nodeTypes = useMemo(
+    () => ({
+      groupNode: GroupNode,
+      elementNode: ElementNode,
+      offboardNode: OffboardNode,
+      endNode: EndNode,
+      endNodeWithReview: EndNodeWithReview,
+    }),
+    []
+  );
+  const edgeTypes = useMemo(
+    () => ({
+      flowEdge: FlowEdge,
+    }),
+    []
+  );
 
   const showReviewNode = false;
   const hasReview = hasReviewPage(form);
@@ -170,7 +175,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
           if (viewport) {
             instance.setViewport(viewport);
           } else {
-            instance.fitView({ padding: 0.08 });
+            instance.fitView({ padding: 0.02 });
           }
         }}
       >

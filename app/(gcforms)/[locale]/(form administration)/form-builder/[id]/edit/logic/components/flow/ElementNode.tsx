@@ -10,6 +10,8 @@ import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-
 interface ElementNodeData {
   groupId: string;
   elementId?: number;
+  isCompact?: boolean;
+  hasRules?: boolean;
   label?: string;
 }
 
@@ -48,6 +50,7 @@ export const ElementNode = ({ data }: NodeProps) => {
     typeof nodeData.elementId === "number" ? getElement(nodeData.elementId) : undefined;
   const isBranchable =
     !!element && branchableTypes.has(element.type) && (element.properties.choices?.length ?? 0) > 0;
+  const showsConnector = isBranchable && !!nodeData.hasRules;
   const isSelected =
     isBranchable &&
     selectedGroupId === nodeData.groupId &&
@@ -79,7 +82,8 @@ export const ElementNode = ({ data }: NodeProps) => {
         togglePanel?.(true);
       }}
       className={cn(
-        "nodrag nopan group relative flex h-full w-full items-center rounded-lg border-2 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm transition-colors",
+        "nodrag nopan group relative flex h-full w-full items-center rounded-lg border-2 bg-white text-left text-slate-700 shadow-sm transition-colors",
+        nodeData.isCompact ? "px-2 py-1 text-[11px]" : "px-4 py-3 text-sm",
         isSelected ? "border-dashed border-violet-700" : "border-violet-200",
         (!nodeData.elementId || !isBranchable) && "cursor-default"
       )}
@@ -93,9 +97,14 @@ export const ElementNode = ({ data }: NodeProps) => {
         )}
       </div>
 
-      {isBranchable && (
+      {showsConnector && (
         <>
-          <div className="ml-3 shrink-0 rounded-full outline-offset-4 outline-slate-800 group-hover:scale-110">
+          <div
+            className={cn(
+              "shrink-0 rounded-full outline-offset-4 outline-slate-800 group-hover:scale-110",
+              nodeData.isCompact ? "ml-2 scale-75" : "ml-3"
+            )}
+          >
             <OptionRuleSvg title={t("groups.editRules", { name: label })} />
           </div>
           <Handle

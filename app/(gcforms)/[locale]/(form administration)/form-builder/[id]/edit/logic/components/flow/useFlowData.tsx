@@ -25,14 +25,22 @@ const LOCKED_SECTIONS = {
 } as const;
 
 const PAGE_WIDTH = 260;
+const PAGE_COLLAPSED_WIDTH = 190;
 const PAGE_HEADER_HEIGHT = 48;
 const PAGE_CHILD_HEIGHT = 60;
 const PAGE_CHILD_GAP = 8;
 const PAGE_PADDING = 12;
 const PAGE_MIN_HEIGHT = 144;
+const PAGE_COLLAPSED_HEADER_HEIGHT = 36;
+const PAGE_COLLAPSED_CHILD_HEIGHT = 30;
+const PAGE_COLLAPSED_CHILD_GAP = 2;
+const PAGE_COLLAPSED_PADDING = 6;
+const PAGE_COLLAPSED_MIN_HEIGHT = 56;
 const OFFBOARD_HEIGHT = 164;
 const LAYOUT_SPACING_X = 70;
-const LAYOUT_SPACING_Y = 8;
+const LAYOUT_SPACING_Y = 4;
+
+const branchableElementTypes: ReadonlySet<string> = new Set(["radio", "checkbox", "dropdown"]);
 
 type StaticChild = {
   data: string;
@@ -42,6 +50,8 @@ type StaticChild = {
 type FlowElementNodeData = {
   groupId: string;
   elementId?: number;
+  isCompact?: boolean;
+  hasRules?: boolean;
   label?: string;
 };
 
@@ -106,17 +116,29 @@ const getChoiceLabel = (
   return element.properties.choices[Number(choiceIndex)]?.[lang];
 };
 
-const getPageHeight = (childCount: number) => {
+const isBranchableElement = (element?: FormElement) => {
+  return (
+    !!element &&
+    branchableElementTypes.has(element.type) &&
+    (element.properties.choices?.length ?? 0) > 0
+  );
+};
+
+const getPageHeight = (
+  childCount: number,
+  minHeight = PAGE_MIN_HEIGHT,
+  childHeight = PAGE_CHILD_HEIGHT,
+  childGap = PAGE_CHILD_GAP,
+  pageHeaderHeight = PAGE_HEADER_HEIGHT,
+  pagePadding = PAGE_PADDING
+) => {
   if (!childCount) {
-    return PAGE_MIN_HEIGHT;
+    return minHeight;
   }
 
   return Math.max(
-    PAGE_MIN_HEIGHT,
-    PAGE_HEADER_HEIGHT +
-      PAGE_PADDING * 2 +
-      childCount * PAGE_CHILD_HEIGHT +
-      (childCount - 1) * PAGE_CHILD_GAP
+    minHeight,
+    pageHeaderHeight + pagePadding * 2 + childCount * childHeight + (childCount - 1) * childGap
   );
 };
 
@@ -131,15 +153,42 @@ const compactPageRows = (nodes: LayoutNode[]) => {
     return nodes;
   }
 
-  const sortedNodes = [...nodes].sort((left, right) => left.position.y - right.position.y);
+  const sortedNodes = [...nodes].sort(
+    (left, right) => left.position.y - right.position.y || left.position.x - right.position.x
+  );
   const compacted = new Map<string, number>();
-
-  let nextY = sortedNodes[0].position.y;
+  const placedNodes: Array<{ x: number; y: number; width: number; height: number }> = [];
+  const topY = Math.min(...sortedNodes.map((node) => node.position.y));
 
   for (const node of sortedNodes) {
-    compacted.set(node.id, nextY);
+    const width = typeof node.style?.width === "number" ? node.style.width : PAGE_WIDTH;
     const height = typeof node.style?.height === "number" ? node.style.height : PAGE_MIN_HEIGHT;
-    nextY += height + LAYOUT_SPACING_Y;
+    let candidateY = topY;
+
+    const blockers = placedNodes
+      .filter((placedNode) => {
+        const leftEdge = node.position.x;
+        const rightEdge = node.position.x + width;
+        const placedLeftEdge = placedNode.x;
+        const placedRightEdge = placedNode.x + placedNode.width;
+
+        return leftEdge < placedRightEdge && rightEdge > placedLeftEdge;
+      })
+      .sort((left, right) => left.y - right.y);
+
+    for (const blocker of blockers) {
+      if (candidateY + height > blocker.y - LAYOUT_SPACING_Y) {
+        candidateY = blocker.y + blocker.height + LAYOUT_SPACING_Y;
+      }
+    }
+
+    compacted.set(node.id, candidateY);
+    placedNodes.push({
+      x: node.position.x,
+      y: candidateY,
+      width,
+      height,
+    });
   }
 
   return nodes.map((node) => ({
@@ -147,6 +196,52 @@ const compactPageRows = (nodes: LayoutNode[]) => {
     position: {
       ...node.position,
       y: compacted.get(node.id) ?? node.position.y,
+    },
+  }));
+};
+
+const compactPageColumns = (nodes: LayoutNode[]) => {
+  if (nodes.length <= 1) {
+    return nodes;
+  }
+
+  const columns = new Map<number, LayoutNode[]>();
+
+  for (const node of nodes) {
+    const width = typeof node.style?.width === "number" ? node.style.width : PAGE_WIDTH;
+    const centerX = Math.round(node.position.x + width / 2);
+    const existingColumn = columns.get(centerX) ?? [];
+
+    existingColumn.push(node);
+    columns.set(centerX, existingColumn);
+  }
+
+  const sortedColumns = [...columns.entries()].sort(
+    ([leftCenter], [rightCenter]) => leftCenter - rightCenter
+  );
+  const compacted = new Map<string, number>();
+
+  let nextX = Math.min(...nodes.map((node) => node.position.x));
+
+  for (const [, columnNodes] of sortedColumns) {
+    const columnWidth = columnNodes.reduce((maxWidth, node) => {
+      const width = typeof node.style?.width === "number" ? node.style.width : PAGE_WIDTH;
+      return Math.max(maxWidth, width);
+    }, 0);
+
+    for (const node of columnNodes) {
+      const width = typeof node.style?.width === "number" ? node.style.width : PAGE_WIDTH;
+      compacted.set(node.id, nextX + (columnWidth - width) / 2);
+    }
+
+    nextX += columnWidth + LAYOUT_SPACING_X;
+  }
+
+  return nodes.map((node) => ({
+    ...node,
+    position: {
+      ...node.position,
+      x: compacted.get(node.id) ?? node.position.x,
     },
   }));
 };
@@ -222,7 +317,8 @@ const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[], hasReviewPage: bool
     position: positions.get(node.id) ?? node.position,
   }));
 
-  const compactedNodes = compactPageRows(laidOutNodes);
+  const horizontallyCompactedNodes = compactPageColumns(laidOutNodes);
+  const compactedNodes = compactPageRows(horizontallyCompactedNodes);
 
   return alignEndColumnToStart(compactedNodes, hasReviewPage);
 };
@@ -304,6 +400,11 @@ export const useFlowData = (
       const titleKey = "name" as const;
       const label = getLabelName(treeItem, key, lang, titleKey);
       const isOffBoardSection = treeItem.data.nextAction === "exit";
+      const elementsWithRules = new Set(
+        Array.isArray(group?.nextAction)
+          ? group.nextAction.map((action) => Number(action.choiceId.split(".")[0]))
+          : []
+      );
 
       let children: Array<TreeItem | StaticChild> = [];
 
@@ -318,7 +419,37 @@ export const useFlowData = (
         children = [...children, ...groupChildren];
       }
 
-      const pageHeight = isOffBoardSection ? OFFBOARD_HEIGHT : getPageHeight(children.length);
+      const childData = children.map((child) => {
+        const treeChild = !isStaticChild(child) ? child : undefined;
+        const elementId = treeChild ? Number(treeChild.index) : undefined;
+        const element = elementId ? formElements.find((item) => item.id === elementId) : undefined;
+
+        return {
+          child,
+          elementId,
+          isBranchable: isBranchableElement(element),
+        };
+      });
+
+      const hiddenChildCount = childData.filter((child) => !child.isBranchable).length;
+      const canCollapse = !isOffBoardSection && hiddenChildCount > 0;
+      const isCollapsed = canCollapse;
+      const visibleChildren = childData;
+      const pageWidth = isCollapsed ? PAGE_COLLAPSED_WIDTH : PAGE_WIDTH;
+      const pageHeaderHeight = isCollapsed ? PAGE_COLLAPSED_HEADER_HEIGHT : PAGE_HEADER_HEIGHT;
+      const pageChildHeight = isCollapsed ? PAGE_COLLAPSED_CHILD_HEIGHT : PAGE_CHILD_HEIGHT;
+      const pageChildGap = isCollapsed ? PAGE_COLLAPSED_CHILD_GAP : PAGE_CHILD_GAP;
+      const pagePadding = isCollapsed ? PAGE_COLLAPSED_PADDING : PAGE_PADDING;
+      const pageHeight = isOffBoardSection
+        ? OFFBOARD_HEIGHT
+        : getPageHeight(
+            visibleChildren.length,
+            isCollapsed ? PAGE_COLLAPSED_MIN_HEIGHT : PAGE_MIN_HEIGHT,
+            pageChildHeight,
+            pageChildGap,
+            pageHeaderHeight,
+            pagePadding
+          );
 
       pageNodes.push({
         id: String(key),
@@ -327,19 +458,19 @@ export const useFlowData = (
           label: {
             name: label,
           },
+          canCollapse,
+          isCollapsed,
         },
         type: isOffBoardSection ? "offboardNode" : "groupNode",
         style: {
-          width: PAGE_WIDTH,
+          width: isOffBoardSection ? PAGE_WIDTH : pageWidth,
           height: pageHeight,
         },
       });
 
       if (!isOffBoardSection) {
-        children.forEach((child, index) => {
+        visibleChildren.forEach(({ child, elementId }, index) => {
           const childKey = String(child.index);
-          const treeChild = !isStaticChild(child) ? child : undefined;
-          const elementId = treeChild ? Number(treeChild.index) : undefined;
 
           childNodes.push({
             id: getElementNodeId(String(key), childKey),
@@ -349,16 +480,18 @@ export const useFlowData = (
             draggable: false,
             selectable: true,
             position: {
-              x: PAGE_PADDING,
-              y: PAGE_HEADER_HEIGHT + PAGE_PADDING + index * (PAGE_CHILD_HEIGHT + PAGE_CHILD_GAP),
+              x: pagePadding,
+              y: pageHeaderHeight + pagePadding + index * (pageChildHeight + pageChildGap),
             },
             style: {
-              width: PAGE_WIDTH - PAGE_PADDING * 2,
-              height: PAGE_CHILD_HEIGHT,
+              width: pageWidth - pagePadding * 2,
+              height: pageChildHeight,
             },
             data: {
               groupId: String(key),
               elementId,
+              isCompact: isCollapsed,
+              hasRules: typeof elementId === "number" && elementsWithRules.has(elementId),
               label: isStaticChild(child) ? child.data : undefined,
             },
           });
