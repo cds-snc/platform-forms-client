@@ -27,6 +27,7 @@ const PageSvg = ({ title }: { title?: string }) => {
 export const GroupNode = ({ id, data }: NodeProps) => {
   const nodeData = data as GroupNodeData;
   const direction = layoutOptions.direction;
+  const isStartNode = id === "start";
   const setId = useGroupStore((state) => state.setId);
   const setSelectedElementId = useGroupStore((state) => state.setSelectedElementId);
   const selectedGroupId = useGroupStore((state) => state.id);
@@ -66,12 +67,14 @@ export const GroupNode = ({ id, data }: NodeProps) => {
         isConnectable={false}
         className="h-3! w-3! border-2! border-indigo-700! bg-white!"
       />
-      <Handle
-        type="target"
-        position={getTargetHandlePosition(direction)}
-        isConnectable={false}
-        className="h-3! w-3! border-2! border-indigo-700! bg-white!"
-      />
+      {!isStartNode ? (
+        <Handle
+          type="target"
+          position={getTargetHandlePosition(direction)}
+          isConnectable={false}
+          className="h-3! w-3! border-2! border-indigo-700! bg-white!"
+        />
+      ) : null}
     </div>
   );
 };

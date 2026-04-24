@@ -98,6 +98,11 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
       source: edge.source,
       target: edge.target,
       label: edge.label,
+      zIndex: edge.zIndex,
+      markerColor:
+        edge.markerEnd && typeof edge.markerEnd === "object" && "color" in edge.markerEnd
+          ? edge.markerEnd.color
+          : undefined,
       stroke: edge.style?.stroke,
       strokeWidth: edge.style?.strokeWidth,
       opacity: edge.style?.opacity,

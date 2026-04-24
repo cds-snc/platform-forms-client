@@ -27,13 +27,6 @@ const OptionRuleSvg = ({ title }: { title?: string }) => {
   );
 };
 
-const branchableTypes = new Set([
-  FormElementTypes.radio,
-  FormElementTypes.checkbox,
-  FormElementTypes.dropdown,
-  FormElementTypes.combobox,
-]);
-
 export const ElementNode = ({ data }: NodeProps) => {
   const nodeData = data as unknown as ElementNodeData;
   const getElement = useGroupStore((state) => state.getElement);
@@ -47,11 +40,11 @@ export const ElementNode = ({ data }: NodeProps) => {
 
   const element =
     typeof nodeData.elementId === "number" ? getElement(nodeData.elementId) : undefined;
+  const isBranchable = (element?.properties.choices?.length ?? 0) > 0;
   const isSelected =
-    selectedGroupId === nodeData.groupId && selectedElementId === nodeData.elementId;
-  const isBranchable =
-    !!element &&
-    branchableTypes.has(element.type as "radio" | "checkbox" | "dropdown" | "combobox");
+    isBranchable &&
+    selectedGroupId === nodeData.groupId &&
+    selectedElementId === nodeData.elementId;
 
   const getDefaultLabel = () => {
     if (element?.type === FormElementTypes.richText) {
@@ -69,17 +62,21 @@ export const ElementNode = ({ data }: NodeProps) => {
   return (
     <button
       onClick={(event) => {
+        if (!isBranchable || !nodeData.elementId) {
+          return;
+        }
+
         event.stopPropagation();
         setId(nodeData.groupId);
-        setSelectedElementId(nodeData.elementId || 0);
+        setSelectedElementId(nodeData.elementId);
         togglePanel?.(true);
       }}
       className={cn(
         "nodrag nopan group relative flex h-full w-full items-center rounded-lg border-2 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm transition-colors",
         isSelected ? "border-dashed border-violet-700" : "border-violet-200",
-        !nodeData.elementId && "cursor-default"
+        (!nodeData.elementId || !isBranchable) && "cursor-default"
       )}
-      disabled={!nodeData.elementId}
+      disabled={!nodeData.elementId || !isBranchable}
     >
       <div className="min-w-0 flex-1 truncate">
         {label ? (
@@ -98,7 +95,7 @@ export const ElementNode = ({ data }: NodeProps) => {
             type="source"
             position={Position.Right}
             isConnectable={false}
-            className="!right-[-8px] !h-3 !w-3 !border-2 !border-emerald-700 !bg-white"
+            className="-right-2! h-3! w-3! border-2! border-emerald-700! bg-white!"
           />
         </>
       )}

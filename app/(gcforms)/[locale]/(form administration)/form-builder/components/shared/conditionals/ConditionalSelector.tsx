@@ -141,6 +141,7 @@ export const ConditionalSelector = ({
     .filter((item) => {
       return (
         item.id !== itemId &&
+        (item.properties.choices?.length ?? 0) > 0 &&
         // Prevent creating circular logic by filtering out questions
         // that already have rules pointing to the current element.
         !currentRules.some((rule) => rule.choiceId.split(".")[0] === String(item.id))

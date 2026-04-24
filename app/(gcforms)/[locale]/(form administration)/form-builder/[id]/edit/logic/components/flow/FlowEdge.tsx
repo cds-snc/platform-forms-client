@@ -39,5 +39,9 @@ export const FlowEdge = ({
     borderRadius: 18,
   });
 
-  return <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />;
+  return (
+    <>
+      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+    </>
+  );
 };

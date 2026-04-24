@@ -55,11 +55,13 @@ const mutedLineStyle = {
   strokeWidth: 2,
   stroke: "#94A3B8",
   opacity: 0.9,
+  strokeDasharray: "none",
 };
 
 const highlightedLineStyle = {
-  strokeWidth: 4,
+  strokeWidth: 5,
   stroke: "#4338CA",
+  strokeDasharray: "none",
 };
 
 const arrowStyle = {
@@ -124,7 +126,57 @@ const rootLayoutNode: LayoutNode = {
   data: { label: { name: "" } },
 };
 
-const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[]) => {
+const compactPageRows = (nodes: LayoutNode[]) => {
+  if (nodes.length <= 1) {
+    return nodes;
+  }
+
+  const sortedNodes = [...nodes].sort((left, right) => left.position.y - right.position.y);
+  const compacted = new Map<string, number>();
+
+  let nextY = sortedNodes[0].position.y;
+
+  for (const node of sortedNodes) {
+    compacted.set(node.id, nextY);
+    const height = typeof node.style?.height === "number" ? node.style.height : PAGE_MIN_HEIGHT;
+    nextY += height + LAYOUT_SPACING_Y;
+  }
+
+  return nodes.map((node) => ({
+    ...node,
+    position: {
+      ...node.position,
+      y: compacted.get(node.id) ?? node.position.y,
+    },
+  }));
+};
+
+const alignEndColumnToStart = (nodes: LayoutNode[], hasReviewPage: boolean) => {
+  if (!hasReviewPage) {
+    return nodes;
+  }
+
+  const startNode = nodes.find((node) => node.id === LOCKED_SECTIONS.START);
+  const endNode = nodes.find((node) => node.id === LOCKED_SECTIONS.END);
+
+  if (!startNode || !endNode) {
+    return nodes;
+  }
+
+  return nodes.map((node) =>
+    node.id === LOCKED_SECTIONS.END
+      ? {
+          ...node,
+          position: {
+            ...node.position,
+            y: startNode.position.y,
+          },
+        }
+      : node
+  );
+};
+
+const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[], hasReviewPage: boolean) => {
   if (!nodes.length) {
     return nodes;
   }
@@ -165,10 +217,14 @@ const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[]) => {
     });
   }
 
-  return nodes.map((node) => ({
+  const laidOutNodes = nodes.map((node) => ({
     ...node,
     position: positions.get(node.id) ?? node.position,
   }));
+
+  const compactedNodes = compactPageRows(laidOutNodes);
+
+  return alignEndColumnToStart(compactedNodes, hasReviewPage);
 };
 
 const getLinearEdge = (
@@ -181,11 +237,14 @@ const getLinearEdge = (
   id: `e-${source}-${target}`,
   source,
   target,
+  animated: !!isHighlighted,
+  zIndex: isHighlighted ? 10 : 1,
   style: {
     ...(isHighlighted ? highlightedLineStyle : mutedLineStyle),
   },
   markerEnd: {
     ...arrowStyle,
+    color: isHighlighted ? highlightedLineStyle.stroke : mutedLineStyle.stroke,
   },
   ariaLabel: `From ${sourceLabel} to ${targetLabel || target}`,
 });
@@ -363,11 +422,14 @@ export const useFlowData = (
           id: `e-${source}-${action.choiceId}-${nextAction}`,
           source,
           target: nextAction,
+          animated: isHighlighted,
+          zIndex: isHighlighted ? 10 : 1,
           style: {
             ...(isHighlighted ? highlightedLineStyle : mutedLineStyle),
           },
           markerEnd: {
             ...arrowStyle,
+            color: isHighlighted ? highlightedLineStyle.stroke : mutedLineStyle.stroke,
           },
           label: getChoiceLabel(formElements, action.choiceId, lang),
           labelStyle: {
@@ -407,7 +469,7 @@ export const useFlowData = (
       },
     });
 
-    const laidOutPageNodes = layoutPageNodes(pageNodes, layoutEdges);
+    const laidOutPageNodes = layoutPageNodes(pageNodes, layoutEdges, hasReviewPage);
 
     return {
       edges,
