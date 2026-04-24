@@ -776,11 +776,7 @@ describe("useEditLock", () => {
     vi.useRealTimers();
   });
 
-  it("switches to manual takeover when polling sees the lock disappear", async () => {
-    // Fake timers let the test trigger one polling interval after mounting into
-    // a locked-by-other state.
-    vi.useFakeTimers();
-
+  it("switches to manual takeover when SSE reports the lock has disappeared", async () => {
     const lockedByOtherStatus = {
       locked: true,
       lockedByOther: true,
@@ -812,13 +808,6 @@ describe("useEditLock", () => {
         } as Response;
       }
 
-      if (url.endsWith("/edit-lock") && init?.method === "GET") {
-        return {
-          ok: true,
-          json: async () => unlockedStatus,
-        } as Response;
-      }
-
       if (url.endsWith("/api/templates/test-form-id")) {
         return {
           ok: true,
@@ -841,9 +830,12 @@ describe("useEditLock", () => {
       );
     });
 
-    // Advance one poll tick: the previous owner is gone, and the client should
+    // The SSE push tells the non-owner the lock is gone; the client should
     // wait for an explicit takeover instead of auto-acquiring.
-    await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_MS);
+    await vi.waitFor(() => {
+      expect(MockEventSource.instances).toHaveLength(1);
+    });
+    MockEventSource.instances[0].emit("lock-status", JSON.stringify(unlockedStatus));
 
     await vi.waitFor(() => {
       expect(lockStates.at(-1)).toEqual({ isLockedByOther: true, hasEditLock: false });
@@ -861,7 +853,5 @@ describe("useEditLock", () => {
     expect(formFetchCalls).toHaveLength(1);
     expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(1);
     expect(setUpdatedAt).toHaveBeenCalledTimes(1);
-
-    vi.useRealTimers();
   });
 });
