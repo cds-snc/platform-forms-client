@@ -257,7 +257,9 @@ export const useEditLock = ({
         updateStore(heartbeatResult);
 
         if (heartbeatResult.locked && !heartbeatResult.isOwner && wasOwner) {
-          startPollingRef.current();
+          // Lock was taken over: stop heartbeating and let SSE deliver future
+          // lock status updates (same as a non-owner that never held the lock).
+          clearTimers();
           void syncServerState();
           return;
         }
@@ -414,7 +416,9 @@ export const useEditLock = ({
 
         if (!nextStatus.isOwner) {
           if (wasOwner) {
-            startPollingRef.current();
+            // Lock was taken over: stop heartbeating and let SSE deliver future
+            // lock status updates (same as a non-owner that never held the lock).
+            cbRef.current.clearTimers();
             void cbRef.current.syncServerState();
           }
         }
