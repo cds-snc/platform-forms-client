@@ -42,6 +42,7 @@ export const useEditLock = ({
 
   const isOwnerRef = useRef(false);
   const heartbeatRef = useRef<number | null>(null);
+  const heartbeatPausedRef = useRef(false);
   const pollRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
   const startPollingRef = useRef<() => void>(() => undefined);
@@ -231,48 +232,57 @@ export const useEditLock = ({
     [saveDraftIfNeeded]
   );
 
-  const startHeartbeat = useCallback((): void => {
-    clearTimers();
-    const loopToken = lockLoopTokenRef.current;
-    heartbeatRef.current = window.setInterval(async () => {
-      const wasOwner = isOwnerRef.current;
-      const heartbeatResult = await postAction("heartbeat");
-      if (lockLoopTokenRef.current !== loopToken) {
-        return;
-      }
+  const startHeartbeat = useCallback(
+    (fireImmediately = false): void => {
+      clearTimers();
+      const loopToken = lockLoopTokenRef.current;
 
-      if (!heartbeatResult) {
-        clearTimers();
-        clearLockState();
-        return;
-      }
+      const runTick = async () => {
+        const wasOwner = isOwnerRef.current;
+        const heartbeatResult = await postAction("heartbeat");
+        if (lockLoopTokenRef.current !== loopToken) {
+          return;
+        }
 
-      if (!heartbeatResult.isOwner) {
-        await autoSaveIfOwner(wasOwner);
-      }
+        if (!heartbeatResult) {
+          clearTimers();
+          clearLockState();
+          return;
+        }
 
-      updateStore(heartbeatResult);
+        if (!heartbeatResult.isOwner) {
+          await autoSaveIfOwner(wasOwner);
+        }
 
-      if (heartbeatResult.locked && !heartbeatResult.isOwner && wasOwner) {
-        startPollingRef.current();
-        void syncServerState();
-        return;
-      }
+        updateStore(heartbeatResult);
 
-      if (!heartbeatResult.locked) {
-        clearTimers();
-        setTakeoverFallbackState();
+        if (heartbeatResult.locked && !heartbeatResult.isOwner && wasOwner) {
+          startPollingRef.current();
+          void syncServerState();
+          return;
+        }
+
+        if (!heartbeatResult.locked) {
+          clearTimers();
+          setTakeoverFallbackState();
+        }
+      };
+
+      if (fireImmediately) {
+        void runTick();
       }
-    }, EDIT_LOCK_HEARTBEAT_MS);
-  }, [
-    autoSaveIfOwner,
-    clearLockState,
-    clearTimers,
-    postAction,
-    setTakeoverFallbackState,
-    syncServerState,
-    updateStore,
-  ]);
+      heartbeatRef.current = window.setInterval(runTick, EDIT_LOCK_HEARTBEAT_MS);
+    },
+    [
+      autoSaveIfOwner,
+      clearLockState,
+      clearTimers,
+      postAction,
+      setTakeoverFallbackState,
+      syncServerState,
+      updateStore,
+    ]
+  );
 
   const startPolling = useCallback((): void => {
     clearTimers();
@@ -334,6 +344,7 @@ export const useEditLock = ({
     clearEvents,
     flushDraftBeforeTakeover,
     startTimers,
+    startHeartbeat,
     setTakeoverFallbackState,
   };
   const cbRef = useRef(callbacks);
@@ -382,9 +393,6 @@ export const useEditLock = ({
       return;
     }
 
-    const eventSource = new EventSource(`/api/templates/${formId}/edit-lock/events`);
-    eventSourceRef.current = eventSource;
-
     const handleLockStatus: EventListener = (event) => {
       const messageEvent = event as MessageEvent<string>;
 
@@ -417,23 +425,63 @@ export const useEditLock = ({
       void cbRef.current.flushDraftBeforeTakeover();
     };
 
-    eventSource.addEventListener("lock-status", handleLockStatus);
-    eventSource.addEventListener("takeover-requested", handleTakeoverRequested);
-    eventSource.onerror = () => {
-      if (eventSource.readyState === EventSource.CLOSED && eventSourceRef.current === eventSource) {
-        eventSourceRef.current = null;
+    const openEventSource = () => {
+      const es = new EventSource(`/api/templates/${formId}/edit-lock/events`);
+      es.addEventListener("lock-status", handleLockStatus);
+      es.addEventListener("takeover-requested", handleTakeoverRequested);
+      es.onerror = () => {
+        if (es.readyState === EventSource.CLOSED && eventSourceRef.current === es) {
+          eventSourceRef.current = null;
+        }
+      };
+      eventSourceRef.current = es;
+    };
+
+    openEventSource();
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        if (isOwnerRef.current) {
+          // Owner tab hidden: pause the heartbeat so we stop extending the lock
+          // while the user isn't actively viewing this tab.
+          if (heartbeatRef.current !== null) {
+            window.clearInterval(heartbeatRef.current);
+            heartbeatRef.current = null;
+            heartbeatPausedRef.current = true;
+          }
+        } else {
+          // Non-owner tab hidden: close SSE to free the server connection and
+          // the associated Redis XREAD reader (if this is the last subscriber).
+          eventSourceRef.current?.close();
+          eventSourceRef.current = null;
+        }
+      } else {
+        if (isOwnerRef.current && heartbeatPausedRef.current) {
+          // Owner tab visible again: resume immediately so the lock isn't left
+          // in a limbo state after a long absence.
+          heartbeatPausedRef.current = false;
+          cbRef.current.startHeartbeat(true);
+        } else if (!isOwnerRef.current && !eventSourceRef.current) {
+          // Non-owner tab visible again: reopen SSE and do an immediate status
+          // fetch to catch any lock changes that occurred while the tab was hidden.
+          openEventSource();
+          void getStatus().then((latestStatus) => {
+            if (latestStatus) {
+              cbRef.current.updateStore(latestStatus);
+            }
+          });
+        }
       }
     };
 
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
-      eventSource.removeEventListener("lock-status", handleLockStatus);
-      eventSource.removeEventListener("takeover-requested", handleTakeoverRequested);
-      eventSource.close();
-      if (eventSourceRef.current === eventSource) {
-        eventSourceRef.current = null;
-      }
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      eventSourceRef.current?.close();
+      eventSourceRef.current = null;
     };
-  }, [enabled, formId, status]);
+  }, [enabled, formId, getStatus, status]);
 
   const takeover = useCallback(async () => {
     const previousUpdatedAt = updatedAt;
