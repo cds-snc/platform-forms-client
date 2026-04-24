@@ -35,3 +35,38 @@ export const formatNumberForDisplay = (
   const options = getNumberFormatOptions(config);
   return new Intl.NumberFormat(locale, options).format(value);
 };
+
+/**
+ * Normalize a locale-formatted input string into a plain numeric string
+ * that `Number()` can parse.
+ *
+ * Steps:
+ *  1. Derive the locale's grouping separator and decimal separator via Intl.
+ *  2. Remove all grouping separators (e.g. "," in en-CA, narrow-no-break-space in fr-CA).
+ *  3. Replace the locale decimal separator with "." if it differs (e.g. "," → ".").
+ *  4. Strip any remaining non-numeric characters (currency symbols, etc.).
+ *
+ * @param raw    - The raw string value from the input element
+ * @param locale - The BCP 47 locale string (e.g. "en-CA", "fr-CA")
+ * @returns A string safe to pass to `Number()`, e.g. "1234.56"
+ */
+export const normalizeLocaleInput = (raw: string, locale: string): string => {
+  const parts = new Intl.NumberFormat(locale).formatToParts(1234567.89);
+  const groupSep = parts.find((p) => p.type === "group")?.value ?? "";
+  const decimalSep = parts.find((p) => p.type === "decimal")?.value ?? ".";
+
+  let result = raw;
+
+  if (groupSep) {
+    result = result.split(groupSep).join("");
+  }
+
+  if (decimalSep !== ".") {
+    result = result.replace(decimalSep, ".");
+  }
+
+  // Strip anything that's not a digit, decimal point, or leading minus
+  result = result.replace(/[^0-9.\-]/g, "");
+
+  return result;
+};

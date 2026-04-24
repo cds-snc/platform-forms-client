@@ -4,7 +4,7 @@ import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { cn } from "@lib/utils";
-import { langToLocale, getNumberFormatOptions } from "./utils";
+import { langToLocale, getNumberFormatOptions, normalizeLocaleInput } from "./utils";
 
 export interface NumberInputProps extends InputFieldProps {
   placeholder?: string;
@@ -85,13 +85,17 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
     const raw = event.target.value;
     setInputValue(raw);
 
-    // Allow intermediate states while typing
-    if (raw === "" || raw === "-" || raw === "." || raw === "-.") {
-      helpers.setValue(raw);
+    // Normalize locale-specific formatting (grouping separators, locale decimal,
+    // currency symbols) so that Number() can parse the result reliably.
+    const normalized = normalizeLocaleInput(raw, locale);
+
+    // Allow incomplete intermediate states while typing
+    if (normalized === "" || normalized === "-" || normalized === "." || normalized === "-.") {
+      helpers.setValue(normalized);
       return;
     }
 
-    const value = Number(raw);
+    const value = Number(normalized);
     if (!Number.isNaN(value)) {
       helpers.setValue(String(value));
     }
