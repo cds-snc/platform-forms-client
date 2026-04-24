@@ -13,6 +13,12 @@ interface ElementNodeData {
   label?: string;
 }
 
+const branchableTypes: ReadonlySet<string> = new Set([
+  FormElementTypes.radio,
+  FormElementTypes.checkbox,
+  FormElementTypes.dropdown,
+]);
+
 const OptionRuleSvg = ({ title }: { title?: string }) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={34} height={34} fill="none">
@@ -40,7 +46,8 @@ export const ElementNode = ({ data }: NodeProps) => {
 
   const element =
     typeof nodeData.elementId === "number" ? getElement(nodeData.elementId) : undefined;
-  const isBranchable = (element?.properties.choices?.length ?? 0) > 0;
+  const isBranchable =
+    !!element && branchableTypes.has(element.type) && (element.properties.choices?.length ?? 0) > 0;
   const isSelected =
     isBranchable &&
     selectedGroupId === nodeData.groupId &&

@@ -13,7 +13,6 @@ import React, {
 import {
   ReactFlow,
   Controls,
-  useStoreApi,
   ReactFlowProvider,
   useNodesState,
   useEdgesState,
@@ -110,16 +109,6 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
     })),
   });
 
-  // temp fix see: https://github.com/xyflow/xyflow/issues/3243
-  const store = useStoreApi();
-  if (process.env.NODE_ENV === "development") {
-    store.getState().onError = (code) => {
-      if (code === "002") {
-        return;
-      }
-    };
-  }
-
   useOnViewportChange({
     onChange: (viewport: Viewport) => {
       setViewport(viewport);
@@ -161,9 +150,11 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
   return (
     <>
       <ReactFlow
+        className="h-full w-full"
         disableKeyboardA11y={true}
         nodesFocusable={false}
         edgesFocusable={false}
+        minZoom={0.2}
         proOptions={{ hideAttribution: true }}
         nodesDraggable={false}
         nodes={nodes}

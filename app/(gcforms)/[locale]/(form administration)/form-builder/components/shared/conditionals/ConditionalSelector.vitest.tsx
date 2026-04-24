@@ -31,7 +31,7 @@ describe("ConditionalSelector", () => {
     cleanup();
   });
 
-  it("only lists rule targets that have choices", () => {
+  it("only lists radio, checkbox, and dropdown rule targets", () => {
     const { container } = render(
       <ConditionalSelector
         itemId={1}
@@ -81,6 +81,17 @@ describe("ConditionalSelector", () => {
               choices: [{ en: "B", fr: "B" }],
             },
           },
+          {
+            id: 5,
+            type: "combobox",
+            properties: {
+              titleEn: "Combobox target",
+              titleFr: "",
+              descriptionEn: "",
+              descriptionFr: "",
+              choices: [{ en: "C", fr: "C" }],
+            },
+          },
         ]}
         elementId={null}
         choiceId={"1.0"}
@@ -95,6 +106,8 @@ describe("ConditionalSelector", () => {
       text: option.textContent,
       value: option.value,
     }));
+
+    expect(questionOptions).not.toContainEqual({ text: "Combobox target", value: "5" });
 
     expect(questionOptions).toEqual([
       { text: "addConditionalRules.selectQuestion", value: "" },
