@@ -30,6 +30,7 @@ import { ElementNode } from "./ElementNode";
 import { OffboardNode } from "./OffboardNode";
 import { EndNode } from "./EndNode";
 import { EndNodeWithReview } from "./EndNodeWithReview";
+import { FlowEdge } from "./FlowEdge";
 import { edgeOptions } from "./options";
 
 import { useFlowRef } from "./provider/FlowRefProvider";
@@ -45,6 +46,10 @@ const nodeTypes = {
   offboardNode: OffboardNode,
   endNode: EndNode,
   endNodeWithReview: EndNodeWithReview,
+};
+
+const edgeTypes = {
+  flowEdge: FlowEdge,
 };
 
 import { Loader } from "@clientComponents/globals/Loader";
@@ -93,6 +98,10 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
       source: edge.source,
       target: edge.target,
       label: edge.label,
+      stroke: edge.style?.stroke,
+      strokeWidth: edge.style?.strokeWidth,
+      opacity: edge.style?.opacity,
+      labelFill: edge.labelStyle?.fill,
     })),
   });
 
@@ -115,7 +124,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
   useEffect(() => {
     setNodes(flowNodes);
     setEdges(flowEdges as Edge[]);
-  }, [flowSignature, setNodes, setEdges]);
+  }, [flowSignature, flowNodes, flowEdges, setNodes, setEdges]);
 
   useImperativeHandle(ref, () => ({
     updateEdges: () => {
@@ -157,6 +166,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
         onNodesChange={onNodesChange}
         edges={edges}
         onEdgesChange={onEdgesChange}
+        edgeTypes={edgeTypes}
         defaultEdgeOptions={edgeOptions}
         onInit={(instance) => {
           // If the user has modified the vieport (zoom, scroll, pan) restore it

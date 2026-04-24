@@ -6,6 +6,7 @@ import {
   TreeItemIndex,
 } from "@formBuilder/components/shared/right-panel/headless-treeview/types";
 import { type Group } from "@gcforms/types";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElement } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
@@ -30,8 +31,8 @@ const PAGE_CHILD_GAP = 8;
 const PAGE_PADDING = 12;
 const PAGE_MIN_HEIGHT = 144;
 const OFFBOARD_HEIGHT = 164;
-const LAYOUT_SPACING_X = 110;
-const LAYOUT_SPACING_Y = 36;
+const LAYOUT_SPACING_X = 70;
+const LAYOUT_SPACING_Y = 8;
 
 type StaticChild = {
   data: string;
@@ -50,9 +51,15 @@ const defaultEdges = {
   end: LOCKED_SECTIONS.END,
 } as const;
 
-const lineStyle = {
+const mutedLineStyle = {
   strokeWidth: 2,
-  stroke: "#6366F1",
+  stroke: "#94A3B8",
+  opacity: 0.9,
+};
+
+const highlightedLineStyle = {
+  strokeWidth: 4,
+  stroke: "#4338CA",
 };
 
 const arrowStyle = {
@@ -168,19 +175,29 @@ const getLinearEdge = (
   source: string,
   target: string,
   sourceLabel: string,
-  targetLabel?: string
+  targetLabel?: string,
+  isHighlighted?: boolean
 ): Edge => ({
   id: `e-${source}-${target}`,
   source,
   target,
   style: {
-    ...lineStyle,
+    ...(isHighlighted ? highlightedLineStyle : mutedLineStyle),
   },
   markerEnd: {
     ...arrowStyle,
   },
   ariaLabel: `From ${sourceLabel} to ${targetLabel || target}`,
 });
+
+const edgeTouchesGroup = (source: string, target: string, groupId: string) => {
+  if (!groupId) {
+    return false;
+  }
+
+  const elementPrefix = `${groupId}::element::`;
+  return source === groupId || target === groupId || source.startsWith(elementPrefix);
+};
 
 export const useFlowData = (
   lang: Language = "en",
@@ -190,6 +207,7 @@ export const useFlowData = (
   "use memo";
   const formGroups = useTemplateStore((state) => state.form.groups);
   const formElements = useTemplateStore((state) => state.form.elements || []);
+  const selectedGroupId = useGroupStore((state) => state.id);
   const startElements = getStartElements(lang).map((element) => ({
     index: element.id,
     data: element.data.label,
@@ -295,7 +313,10 @@ export const useFlowData = (
       const sourceLabel = group.name || label;
 
       if (typeof group.nextAction === "undefined") {
-        edges.push(getLinearEdge(String(key), defaultEdges.end, sourceLabel, "Confirmation"));
+        const isHighlighted = edgeTouchesGroup(String(key), defaultEdges.end, selectedGroupId);
+        edges.push(
+          getLinearEdge(String(key), defaultEdges.end, sourceLabel, "Confirmation", isHighlighted)
+        );
         layoutEdges.push(getLinearEdge(String(key), defaultEdges.end, sourceLabel, "Confirmation"));
         return;
       }
@@ -311,8 +332,15 @@ export const useFlowData = (
           nextAction = LOCKED_SECTIONS.END;
         }
 
+        const isHighlighted = edgeTouchesGroup(String(key), nextAction, selectedGroupId);
         edges.push(
-          getLinearEdge(String(key), nextAction, sourceLabel, formGroups?.[nextAction]?.name)
+          getLinearEdge(
+            String(key),
+            nextAction,
+            sourceLabel,
+            formGroups?.[nextAction]?.name,
+            isHighlighted
+          )
         );
         layoutEdges.push(
           getLinearEdge(String(key), nextAction, sourceLabel, formGroups?.[nextAction]?.name)
@@ -329,20 +357,21 @@ export const useFlowData = (
 
         const [elementId] = action.choiceId.split(".");
         const source = getElementNodeId(String(key), elementId);
+        const isHighlighted = edgeTouchesGroup(source, nextAction, selectedGroupId);
 
         edges.push({
           id: `e-${source}-${action.choiceId}-${nextAction}`,
           source,
           target: nextAction,
           style: {
-            ...lineStyle,
+            ...(isHighlighted ? highlightedLineStyle : mutedLineStyle),
           },
           markerEnd: {
             ...arrowStyle,
           },
           label: getChoiceLabel(formElements, action.choiceId, lang),
           labelStyle: {
-            fill: "#334155",
+            fill: isHighlighted ? "#312E81" : "#64748B",
             fontSize: 12,
             fontWeight: 600,
           },

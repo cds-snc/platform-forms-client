@@ -1,5 +1,6 @@
 import { Handle } from "@xyflow/react";
 import { NodeProps } from "@xyflow/react";
+import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
@@ -11,7 +12,9 @@ export const EndNodeWithReview = (node: NodeProps) => {
   const direction = layoutOptions.direction;
   const setId = useGroupStore((state) => state.setId);
   const setSelectedElementId = useGroupStore((state) => state.setSelectedElementId);
+  const selectedGroupId = useGroupStore((state) => state.id);
   const { togglePanel } = useTreeRef();
+  const groupIsSelected = selectedGroupId === node.id;
 
   const nodeClassName =
     "relative flex w-[100%] min-w-[200px] max-w-[200px] rounded-sm bg-slate-50 p-2 py-3 text-sm text-slate-600 border-red";
@@ -34,7 +37,12 @@ export const EndNodeWithReview = (node: NodeProps) => {
         }}
       >
         {/* Review  */}
-        <div className="border-red-hover shadow-offboardDefault relative mb-1 space-y-2 rounded-md border-1 bg-[#FEF2F2] p-4 text-white">
+        <div
+          className={cn(
+            "relative mb-1 space-y-2 rounded-md border-1 bg-[#FEF2F2] p-4 text-white",
+            groupIsSelected ? "border-red-hover shadow-offboardSelected" : "shadow-offboardDefault"
+          )}
+        >
           <div className={nodeClassName}>
             <div className="truncate">{t("logic.endNodeWithReview.reviewContent")}</div>
           </div>
@@ -45,7 +53,12 @@ export const EndNodeWithReview = (node: NodeProps) => {
           />
         </div>
         {/* End  */}
-        <div className="border-red-hover shadow-offboardDefault relative mb-4 space-y-2 rounded-md border-1 bg-[#FEF2F2] p-4 text-white">
+        <div
+          className={cn(
+            "relative mb-4 space-y-2 rounded-md border-1 bg-[#FEF2F2] p-4 text-white",
+            groupIsSelected ? "border-red-hover shadow-offboardSelected" : "shadow-offboardDefault"
+          )}
+        >
           <div className={nodeClassName}>
             <div className="truncate">{t("logic.endNode.confirmContent")}</div>
           </div>
