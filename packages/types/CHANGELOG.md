@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.31] - 2026-04-23
 
-- Add Element propperties to support Advanced number inputs
+- Add Element properties to support Advanced number inputs
 
 ## [1.0.30] - 2026-03-30
 
