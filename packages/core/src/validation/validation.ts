@@ -55,33 +55,35 @@ export const isFieldResponseValid = (
           }
         }
 
-        const numericValue = Number(typedValue);
+        if (typedValue) {
+          const numericValue = Number(typedValue);
 
-        // MinValue and Max Value validation
-        if (
-          validator.minValue != null &&
-          !Number.isNaN(numericValue) &&
-          numericValue < validator.minValue
-        ) {
-          return t("input-validation.too-small").replace("{{min}}", String(validator.minValue));
-        }
+          // MinValue and Max Value validation
+          if (
+            validator.minValue != null &&
+            !Number.isNaN(numericValue) &&
+            numericValue < validator.minValue
+          ) {
+            return t("input-validation.too-small").replace("{{min}}", String(validator.minValue));
+          }
 
-        if (
-          validator.maxValue != null &&
-          !Number.isNaN(numericValue) &&
-          numericValue > validator.maxValue
-        ) {
-          return t("input-validation.too-large").replace("{{max}}", String(validator.maxValue));
-        }
+          if (
+            validator.maxValue != null &&
+            !Number.isNaN(numericValue) &&
+            numericValue > validator.maxValue
+          ) {
+            return t("input-validation.too-large").replace("{{max}}", String(validator.maxValue));
+          }
 
-        // minDigits and maxDigits validation
-        const digitCount = typedValue.replace(/[^\d]/g, "").length;
-        if (validator.minDigits && digitCount < validator.minDigits) {
-          return t("input-validation.too-few-digits");
-        }
+          // minDigits and maxDigits validation
+          const digitCount = typedValue.replace(/[^\d]/g, "").length;
+          if (validator.minDigits && digitCount < validator.minDigits) {
+            return t("input-validation.too-few-digits");
+          }
 
-        if (validator.maxDigits && digitCount > validator.maxDigits) {
-          return t("input-validation.too-many-digits");
+          if (validator.maxDigits && digitCount > validator.maxDigits) {
+            return t("input-validation.too-many-digits");
+          }
         }
 
         break;
