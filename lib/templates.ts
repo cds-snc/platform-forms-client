@@ -10,7 +10,7 @@ import {
 } from "@lib/types";
 import { Prisma } from "@prisma/client";
 import { authorization, getAbility } from "./privileges";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, AuditLogEvent, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { deleteKey } from "./serviceAccount";
@@ -25,6 +25,7 @@ import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { NotificationsInterval } from "@gcforms/types";
 import { checkOne } from "@lib/cache/flags";
 import { checkForBetaComponentsAsync } from "./validation/betaCheck";
+import { invalidateTemplateEditLockUserCountCache } from "./editLocks";
 
 const checkFlag = async (flag: string) => {
   return (await Promise.all([checkOne(flag), authorization.canAccessBetaComponents(flag)])).reduce(
@@ -564,6 +565,17 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     throw new InvalidFormConfigError();
   }
 
+  const currentTemplate = await prisma.template.findUnique({
+    where: {
+      id: command.formID,
+    },
+    select: {
+      name: true,
+      deliveryOption: true,
+      securityAttribute: true,
+    },
+  });
+
   const updatedTemplate = await prisma.template
     .update({
       where: {
@@ -608,14 +620,17 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   if (formCache.cacheAvailable) formCache.invalidate(command.formID);
 
   // Log the audit events
-  logEvent(
-    user.id,
-    { type: "Form", id: command.formID },
-    "ChangeFormName",
-    AuditLogDetails.UpdatedFormName,
-    { newFormName: command.name ?? "" }
-  );
+  command.name !== undefined &&
+    (currentTemplate?.name ?? "") !== command.name &&
+    logEvent(
+      user.id,
+      { type: "Form", id: command.formID },
+      AuditLogEvent.ChangeFormName,
+      AuditLogDetails.UpdatedFormName,
+      { newFormName: command.name ?? "" }
+    );
   command.deliveryOption &&
+    command.deliveryOption !== currentTemplate?.deliveryOption &&
     logEvent(
       user.id,
       { type: "Form", id: command.formID },
@@ -628,10 +643,11 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
       }
     );
   command.securityAttribute &&
+    command.securityAttribute !== currentTemplate?.securityAttribute &&
     logEvent(
       user.id,
       { type: "Form", id: command.formID },
-      "ChangeSecurityAttribute",
+      AuditLogEvent.ChangeSecurityAttribute,
       AuditLogDetails.ChangeSecurityAttribute,
       { securityAttribute: command.securityAttribute ?? "" }
     );
@@ -791,6 +807,8 @@ export async function removeAssignedUserFromTemplate(
 
   if (updatedTemplate === null) return;
 
+  await invalidateTemplateEditLockUserCountCache(formID);
+
   logEvent(
     user.id,
     { type: "Form", id: formID },
@@ -877,6 +895,8 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
 
   // No changes
   if (updatedTemplate === null) return;
+
+  await invalidateTemplateEditLockUserCountCache(formID);
 
   logEvent(
     user.id,
@@ -1052,6 +1072,8 @@ export async function updateAssignedUsersForTemplate(
 
   if (updatedTemplate === null) return updatedTemplate;
 
+  await invalidateTemplateEditLockUserCountCache(formID);
+
   const getUsersFromUserIds = (userIds: string[]) => {
     return Promise.all(
       userIds.map((userId) => {
@@ -1215,9 +1237,9 @@ export async function updateFormSaveAndResume(
   logEvent(
     user.id,
     { type: "Form", id: formID },
-    "ChangeFormSaveAndResume",
+    AuditLogEvent.ChangeFormSaveAndResume,
     AuditLogDetails.SetSaveAndResume,
-    { saveAndResume: String(saveAndResume) }
+    { saveAndResume: saveAndResume ? "On" : "Off" }
   );
 
   return _parseTemplate(updatedTemplate);
@@ -1456,7 +1478,7 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
   // There was an error with Prisma, do not delete from Cache.
   if (templateMarkedAsDeleted === null) return templateMarkedAsDeleted;
 
-  logEvent(user.id, { type: "Form", id: formID }, "DeleteForm");
+  logEvent(user.id, { type: "Form", id: formID }, AuditLogEvent.DeleteForm);
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
@@ -1537,7 +1559,7 @@ export async function restoreTemplate(formID: string): Promise<FormRecord | null
   // There was an error with Prisma, do not delete from Cache.
   if (templateMarkedToUnarchive === null) return templateMarkedToUnarchive;
 
-  logEvent(user.id, { type: "Form", id: formID }, "UnarchiveForm");
+  logEvent(user.id, { type: "Form", id: formID }, AuditLogEvent.UnarchiveForm);
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
@@ -1660,7 +1682,13 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
-  logEvent(user.id, { type: "Form", id: formID }, "ChangeSecurityAttribute");
+  logEvent(
+    user.id,
+    { type: "Form", id: formID },
+    AuditLogEvent.ChangeSecurityAttribute,
+    AuditLogDetails.ChangeSecurityAttribute,
+    { securityAttribute: securityAttribute ?? "" }
+  );
 
   return _parseTemplate(updatedTemplate);
 };

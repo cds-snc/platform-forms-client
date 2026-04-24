@@ -4,7 +4,7 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { clearTemplateStore } from "@lib/store/utils";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 
@@ -24,7 +24,7 @@ const DropdownMenuItem = ({
   return (
     <DropdownMenu.Item onClick={onClick} asChild>
       <Link
-        className="block rounded-md p-2 text-sm text-black !no-underline outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
+        className="focus:text-white-default block rounded-md p-2 text-sm text-black no-underline! outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600"
         href={href}
       >
         {text}
@@ -36,7 +36,6 @@ const DropdownMenuItem = ({
 export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProps) => {
   const { i18n, t } = useTranslation("common");
   const { ability } = useAccessControl();
-  const session = useSession();
 
   const handleLogout = () => {
     // Clear the template store
@@ -53,10 +52,6 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
     });
 
     sessionStorage.setItem("logoutTime", logoutTime);
-    const oidcIdToken = session.data?.user.oidcIdToken;
-    if (oidcIdToken) {
-      sessionStorage.setItem("oidcIdToken", oidcIdToken);
-    }
 
     // Sign out the user
     signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
@@ -69,18 +64,18 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <div
-                className="flex cursor-pointer rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                className="hover:text-white-default focus:text-white-default flex cursor-pointer rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 focus:bg-gray-600 hover:[&_svg]:fill-white focus:[&_svg]:fill-white"
                 data-testid="yourAccountDropdown"
               >
                 <span className="mr-1 inline-block">{t("yourAccount")}</span>
-                <ChevronDown className="mt-[2px]" />
+                <ChevronDown className="mt-0.5" />
               </div>
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
               <DropdownMenu.Content
                 data-testid="yourAccountDropdownContent"
                 align="end"
-                className={`z-[1000] mt-1.5 min-w-[230px] rounded-lg border-1 border-slate-500 bg-white px-1.5 py-1 shadow-md`}
+                className={`z-1000 mt-1.5 min-w-57.5 rounded-lg border-1 border-slate-500 bg-white px-1.5 py-1 shadow-md`}
               >
                 <DropdownMenuItem href={`/${i18n.language}/profile`} text={t("adminNav.profile")} />
 

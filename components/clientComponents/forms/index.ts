@@ -9,6 +9,7 @@ export { Label } from "./Label/Label";
 export { Radio } from "./Radio/Radio";
 export { TextArea } from "./TextArea/TextArea";
 export { TextInput } from "./TextInput/TextInput";
+export { NumberInput } from "./NumberInput/NumberInput";
 export { TextPage } from "./TextPage/TextPage";
 export { ClosedPage } from "./ClosedPage/ClosedPage";
 export { FileInput } from "./FileInput/FileInput";

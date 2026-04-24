@@ -1,6 +1,8 @@
 "use server";
 
 import { AuthenticatedAction } from "@lib/actions";
+import { checkOne } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 import { prisma } from "@lib/integration/prismaConnector";
 import { TemplateUser } from "./types";
 import { AccessControlError } from "@lib/auth/errors";
@@ -23,18 +25,22 @@ import { cancelInvitation as cancelInvitationAction } from "@lib/invitations/can
 export const sendInvitation = AuthenticatedAction(
   async (_, emails: string[], templateId: string, message: string) => {
     const { t } = await serverTranslation("manage-form-access");
+    const isLockedEditingEnabled = await checkOne(FeatureFlags.lockedEditing);
 
     const errors: string[] = [];
 
-    const template = await getPublicTemplateByID(templateId);
-    if (!template?.isPublished) {
-      logMessage.error(`Invitation failed - draft form ${templateId}`);
-      errors.push(t("draftFormError"));
+    if (!isLockedEditingEnabled) {
+      const template = await getPublicTemplateByID(templateId);
 
-      return {
-        success: false,
-        errors,
-      };
+      if (!template?.isPublished) {
+        logMessage.error(`Invitation failed - draft form ${templateId}`);
+        errors.push(t("draftFormError"));
+
+        return {
+          success: false,
+          errors,
+        };
+      }
     }
 
     const invites = emails.map(async (email) => {
@@ -65,7 +71,7 @@ export const sendInvitation = AuthenticatedAction(
 
     try {
       await Promise.allSettled(invites);
-    } catch (e) {
+    } catch {
       return {
         success: false,
         errors,
@@ -92,7 +98,7 @@ export const removeUserFromForm = AuthenticatedAction(async (_, userId: string, 
       success: true,
       message: "User removed",
     };
-  } catch (e) {
+  } catch {
     return {
       success: false,
       message: "Failed to remove user",
@@ -119,7 +125,7 @@ export const getTemplateUsers = AuthenticatedAction(async (_, formId: string) =>
   });
 
   const combinedUsers = [
-    ...(template?.users.map((user) => ({ ...user })) || []),
+    ...(template.users.map((user) => ({ ...user })) || []),
     ...invitations.map((invitation) => ({
       id: invitation.id,
       email: invitation.email,

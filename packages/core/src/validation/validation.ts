@@ -11,6 +11,7 @@ import { isInputTooLong } from "./text";
 import { isValidDate } from "./date";
 import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
+import { isSafeRegex } from "./regex";
 
 export const isFieldResponseValid = (
   value: unknown,
@@ -30,14 +31,20 @@ export const isFieldResponseValid = (
     case FormElementTypes.textField: {
       const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
-      let currentRegex = getRegexByType(validator.type, t, value as string);
+
+      let currentRegex = getRegexByType(validator.type, t, validator.regex);
 
       // Check if negative numbers are allowed.
       if (formElement.properties.allowNegativeNumbers && validator.type === "number") {
-        currentRegex = getRegexByType("canBeNegativeNumber", t, value as string);
+        currentRegex = getRegexByType("canBeNegativeNumber", t);
       }
 
       if (validator.type && currentRegex && currentRegex.regex) {
+        // Check regex for safety before using it.
+        if (!isSafeRegex(currentRegex.regex.source)) {
+          return t("input-validation.invalidRegex");
+        }
+
         // Check for different types of fields, email, date, number, custom etc
         const regex = new RegExp(currentRegex.regex);
         if (typedValue && !regex.test(typedValue)) {

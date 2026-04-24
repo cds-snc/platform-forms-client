@@ -39,7 +39,7 @@ export const LinksSubMenu = () => {
   const menu = links.map(({ name, url }, i) => (
     <DropdownMenuPrimitive.Item
       key={`${name}-${i}`}
-      className="flex cursor-default select-none items-center rounded-md p-2 text-sm outline-none focus-within:bg-gray-600 focus-within:text-white-default hover:bg-gray-600 hover:text-white-default [&_span]:focus-within:text-white-default [&_span]:hover:text-white-default [&_svg]:focus-within:fill-white [&_svg]:hover:fill-white"
+      className="focus-within:text-white-default hover:text-white-default focus-within:[&_span]:text-white-default hover:[&_span]:text-white-default flex cursor-default items-center rounded-md p-2 text-sm outline-none select-none focus-within:bg-gray-600 hover:bg-gray-600 focus-within:[&_svg]:fill-white hover:[&_svg]:fill-white"
     >
       <div className="flex justify-between">
         <div className="mr-3 inline-block w-[90px]">{name}:</div>
@@ -48,13 +48,13 @@ export const LinksSubMenu = () => {
           <DropdownMenuPrimitive.Item asChild>
             <button
               data-share="form-builder-link"
-              className="mr-2 inline-block text-blue focus:outline focus:outline-offset-2 focus:outline-white-default [&_span]:focus-within:no-underline"
+              className="text-blue focus:outline-white-default mr-2 inline-block focus:outline focus:outline-offset-2 focus-within:[&_span]:no-underline"
               onClick={() => {
                 handleCopyToClipboard(url);
               }}
             >
               <CopyIcon className="scale-[80%]" />
-              <span className="mx-1 inline-block text-sm text-blue underline underline-offset-4 hover:no-underline">
+              <span className="text-blue mx-1 inline-block text-sm underline underline-offset-4 hover:no-underline">
                 {t("share.copy")}
               </span>
             </button>
@@ -67,7 +67,7 @@ export const LinksSubMenu = () => {
               data-share="form-builder-link"
               href={url}
               target="_blank"
-              className="mr-1 inline-block text-sm no-underline focus:bg-transparent focus:outline focus:outline-offset-2 focus:outline-white-default active:bg-transparent"
+              className="focus:outline-white-default mr-1 inline-block text-sm no-underline focus:bg-transparent focus:outline focus:outline-offset-2 active:bg-transparent"
               rel="noreferrer"
             >
               <ShareExternalLinkIcon className="scale-[70%]" />

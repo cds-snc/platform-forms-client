@@ -6,7 +6,7 @@ import { Formik } from "formik";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 
 describe("<FormattedDate />", () => {
   beforeAll(() => {
@@ -38,7 +38,9 @@ describe("<FormattedDate />", () => {
     await expect.element(dayNumber).toBeInTheDocument();
 
     // Default dateFormat is YYYY-MM-DD
-    const elements = document.querySelectorAll("[data-testid=formattedDate] [data-testid]");
+    const elements = document.querySelectorAll(
+      "[data-testid=formattedDate] input[data-testid], [data-testid=formattedDate] select[data-testid]"
+    );
     expect(elements[0].getAttribute("data-testid")).toBe("year-number");
     expect(elements[1].getAttribute("data-testid")).toBe("month-number");
     expect(elements[2].getAttribute("data-testid")).toBe("day-number");
@@ -59,7 +61,9 @@ describe("<FormattedDate />", () => {
     const formattedDate = page.getByTestId("formattedDate");
     await expect.element(formattedDate).toBeInTheDocument();
 
-    const elements = document.querySelectorAll("[data-testid=formattedDate] [data-testid]");
+    const elements = document.querySelectorAll(
+      "[data-testid=formattedDate] input[data-testid], [data-testid=formattedDate] select[data-testid]"
+    );
     expect(elements[0].getAttribute("data-testid")).toBe("day-number");
     expect(elements[1].getAttribute("data-testid")).toBe("month-number");
     expect(elements[2].getAttribute("data-testid")).toBe("year-number");
@@ -80,7 +84,9 @@ describe("<FormattedDate />", () => {
     const formattedDate = page.getByTestId("formattedDate");
     await expect.element(formattedDate).toBeInTheDocument();
 
-    const elements = document.querySelectorAll("[data-testid=formattedDate] [data-testid]");
+    const elements = document.querySelectorAll(
+      "[data-testid=formattedDate] input[data-testid], [data-testid=formattedDate] select[data-testid]"
+    );
     expect(elements[0].getAttribute("data-testid")).toBe("month-number");
     expect(elements[1].getAttribute("data-testid")).toBe("day-number");
     expect(elements[2].getAttribute("data-testid")).toBe("year-number");
@@ -101,7 +107,9 @@ describe("<FormattedDate />", () => {
     const formattedDate = page.getByTestId("formattedDate");
     await expect.element(formattedDate).toBeInTheDocument();
 
-    const elements = document.querySelectorAll("[data-testid=formattedDate] [data-testid]");
+    const elements = document.querySelectorAll(
+      "[data-testid=formattedDate] input[data-testid], [data-testid=formattedDate] select[data-testid]"
+    );
     expect(elements[0].getAttribute("data-testid")).toBe("year-number");
     expect(elements[1].getAttribute("data-testid")).toBe("month-number");
     expect(elements[2].getAttribute("data-testid")).toBe("day-number");
@@ -122,7 +130,9 @@ describe("<FormattedDate />", () => {
     const formattedDate = page.getByTestId("formattedDate");
     await expect.element(formattedDate).toBeInTheDocument();
 
-    const elements = document.querySelectorAll("[data-testid=formattedDate] [data-testid]");
+    const elements = document.querySelectorAll(
+      "[data-testid=formattedDate] input[data-testid], [data-testid=formattedDate] select[data-testid]"
+    );
     expect(elements[0].getAttribute("data-testid")).toBe("year-number");
     expect(elements[1].getAttribute("data-testid")).toBe("month-number");
     expect(elements[2].getAttribute("data-testid")).toBe("day-number");
@@ -191,5 +201,38 @@ describe("<FormattedDate />", () => {
     await expect.element(description).toBeInTheDocument();
     const descriptionText = await description.element().textContent;
     expect(descriptionText).toContain("This is a description");
+  });
+
+  it("keeps date part wrappers content-sized and top-aligned", async () => {
+    await render(
+      <Formik
+        initialValues={{}}
+        onSubmit={() => {
+          throw new Error("Function not implemented.");
+        }}
+      >
+        <FormattedDate name="formattedDate" />
+      </Formik>
+    );
+
+    const partsRow = document.querySelector("[data-testid='formattedDate-parts']") as HTMLElement;
+    expect(partsRow).toBeTruthy();
+
+    const partsRowStyles = window.getComputedStyle(partsRow);
+    expect(partsRowStyles.display).toBe("flex");
+    expect(partsRowStyles.alignItems).toBe("flex-start");
+
+    const wrappers = Array.from(
+      document.querySelectorAll("[data-testid='formattedDate-parts'] .gcds-input-wrapper")
+    ) as HTMLElement[];
+
+    expect(wrappers).toHaveLength(3);
+
+    wrappers.forEach((wrapper) => {
+      const styles = window.getComputedStyle(wrapper);
+      expect(styles.width).not.toBe(partsRowStyles.width);
+      expect(styles.maxWidth).toBe("none");
+      expect(styles.flexShrink).toBe("0");
+    });
   });
 });

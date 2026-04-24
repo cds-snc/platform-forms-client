@@ -31,7 +31,7 @@ export const DateElement = ({ dateFormat = "YYYY-MM-DD" }: { dateFormat?: DateFo
             <div
               className={cn(
                 "gc-input-text mt-1 h-10 border-gray-400",
-                part === DatePart.YYYY ? "w-28" : "w-16"
+                part === DatePart.YYYY ? "w-28!" : "w-16!"
               )}
             ></div>
           </div>
