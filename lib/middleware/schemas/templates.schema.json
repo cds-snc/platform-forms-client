@@ -359,7 +359,8 @@
             },
             "stepCount": {
               "description": "The number of decimals allowed for a number input.",
-              "type": "number"
+              "type": "integer",
+              "minimum": 0
             },
             "currencyCode": {
               "description": "The ISO 4217 currency code used to format the number input as currency (e.g. CAD, USD).",
