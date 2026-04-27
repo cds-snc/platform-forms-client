@@ -93,10 +93,27 @@ const xadd = vi.fn((...args: unknown[]) => {
 
 const expire = vi.fn(async () => 1);
 
+const makePipeline = () => {
+  const calls: Array<() => Promise<unknown>> = [];
+  const pipeline = {
+    xadd: (...args: unknown[]) => {
+      calls.push(() => (xadd as (...a: unknown[]) => Promise<unknown>)(...args));
+      return pipeline;
+    },
+    expire: (...args: unknown[]) => {
+      calls.push(() => (expire as (...a: unknown[]) => Promise<unknown>)(...args));
+      return pipeline;
+    },
+    exec: async () => Promise.all(calls.map((fn) => fn())),
+  };
+  return pipeline;
+};
+
 vi.mock("@lib/integration/redisConnector", () => ({
   getRedisInstance: vi.fn(async () => ({
     xadd,
     expire,
+    multi: vi.fn(() => makePipeline()),
     duplicate: vi.fn(() => {
       const reader = new MockRedisReaderConnection();
       mockReaderConnections.push(reader);
