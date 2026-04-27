@@ -8,6 +8,5 @@
 "!! Database Migration !!":
   - changed-files:
       - any-glob-to-any-file:
-          - prisma/migrations/**
-          - prisma/schema.prisma
-          - prisma/seeds/**
+          - packages/database/prisma/**
+          - packages/database/src/fixtures/**

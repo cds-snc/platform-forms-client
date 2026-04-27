@@ -1,4 +1,4 @@
-import { Setting } from "@prisma/client";
+import { Setting } from "../generated/client";
 
 type SettingCollection = {
   development: Setting[];
@@ -66,6 +66,16 @@ const responseDownloadLimit: Setting = {
   value: "20",
 };
 
+const editLockPresenceEnabled: Setting = {
+  internalId: "editLockPresenceEnabled",
+  nameEn: "Enable edit lock presence detection",
+  nameFr: "Activer la détection de présence pour le verrouillage d'édition",
+  descriptionEn: "Turn edit lock presence tracking on or off for the form builder experience.",
+  descriptionFr:
+    "Activez ou désactivez le suivi de présence du verrouillage d'édition dans l'expérience du générateur de formulaires.",
+  value: "false",
+};
+
 const allSettings = [
   brandingRequestFormSetting,
   nagwarePhaseEncouraged,
@@ -73,6 +83,7 @@ const allSettings = [
   nagwarePhaseWarned,
   nagwarePhaseEscalated,
   responseDownloadLimit,
+  editLockPresenceEnabled,
 ];
 
 export default {

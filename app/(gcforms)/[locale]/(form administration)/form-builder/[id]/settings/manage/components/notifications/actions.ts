@@ -3,8 +3,10 @@
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logMessage } from "@root/lib/logger";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { AuditLogDetails, logEvent } from "@root/lib/auditLogs";
+import { prisma, prismaErrors } from "@gcforms/database";
+import { AuditLogDetails, logEvent, AuditLogEvent } from "@root/lib/auditLogs";
+
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const updateNotificationsUser = AuthenticatedAction(
   async (session, formId: string, user: { id: string; email: string; enabled: boolean } | null) => {
@@ -32,9 +34,13 @@ export const updateNotificationsUser = AuthenticatedAction(
       logEvent(
         session.user.id,
         { type: "Form", id: formId },
-        "UpdateNotificationsUserSetting",
+        AuditLogEvent.UpdatedNotificationSettings,
         AuditLogDetails.UpdatedNotificationSettings,
-        { userId: session.user.id, formId, enabled: user.enabled ? "enabled" : "disabled" }
+        {
+          userId: session.user.id,
+          formId,
+          enabled: user.enabled ? "enabled" : "disabled",
+        }
       );
     } catch (_) {
       return {

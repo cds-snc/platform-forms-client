@@ -22,10 +22,12 @@ function EditLockBannerHarness({
   editLock,
   isLockedByOther,
   takeover,
+  presenceEnabled = false,
 }: {
   editLock: EditLockState | null;
   isLockedByOther: boolean;
   takeover: () => Promise<void>;
+  presenceEnabled?: boolean;
 }) {
   const setEditLock = useTemplateStore((state) => state.setEditLock);
   const setIsLockedByOther = useTemplateStore((state) => state.setIsLockedByOther);
@@ -35,7 +37,7 @@ function EditLockBannerHarness({
     setIsLockedByOther(isLockedByOther);
   }, [editLock, isLockedByOther, setEditLock, setIsLockedByOther]);
 
-  return <EditLockBanner takeover={takeover} />;
+  return <EditLockBanner takeover={takeover} presenceEnabled={presenceEnabled} />;
 }
 
 describe("<EditLockBanner />", () => {
@@ -73,6 +75,7 @@ describe("<EditLockBanner />", () => {
         editLock={buildLock({ expiresAt: new Date(Date.now() + 5_000).toISOString() })}
         isLockedByOther={true}
         takeover={vi.fn().mockResolvedValue(undefined)}
+        presenceEnabled={true}
       />
     );
 
@@ -117,5 +120,20 @@ describe("<EditLockBanner />", () => {
     const loading = page.getByText("Syncing the latest saved version of this form...");
     await expect.element(loading).toBeVisible();
     await expect.element(page.getByRole("button", { name: "Taking over..." })).toBeDisabled();
+  });
+
+  it("hides presence details when presence detection is disabled", async () => {
+    await render(
+      <EditLockBannerHarness
+        editLock={buildLock()}
+        isLockedByOther={true}
+        takeover={vi.fn().mockResolvedValue(undefined)}
+        presenceEnabled={false}
+      />
+    );
+
+    await expect.element(page.getByText("This form is already being edited")).toBeVisible();
+    await expect.element(page.getByText("Status:", { exact: false })).not.toBeInTheDocument();
+    await expect.element(page.getByText("Last activity:", { exact: false })).not.toBeInTheDocument();
   });
 });

@@ -24,10 +24,12 @@ const wait = async (timeMs: number) =>
 export const useEditLock = ({
   formId,
   enabled,
+  presenceEnabled,
   sessionId,
 }: {
   formId: string;
   enabled: boolean;
+  presenceEnabled: boolean;
   sessionId: string;
 }) => {
   "use memo";
@@ -35,25 +37,31 @@ export const useEditLock = ({
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
   const setFromRecord = useTemplateStore((s) => s.setFromRecord);
-  const { resetState, saveDraft, setUpdatedAt, updatedAt } = useTemplateContext();
+  const { resetState, saveDraft, saveDraftIfNeeded, setUpdatedAt, updatedAt } =
+    useTemplateContext();
 
   const isOwnerRef = useRef(false);
   const heartbeatRef = useRef<number | null>(null);
   const pollRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
-  const startHeartbeatRef = useRef<() => void>(() => undefined);
   const startPollingRef = useRef<() => void>(() => undefined);
   const lockLoopTokenRef = useRef(0);
   const updatedAtRef = useRef(updatedAt);
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
   const { getActivitySnapshot } = useEditLockPresence({
-    enabled: EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
+    enabled: presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
     coordinationKey: formId,
   });
 
   const clearLockState = useCallback(() => {
     setIsLockedByOther(false);
+    setEditLock(null);
+    isOwnerRef.current = false;
+  }, [setEditLock, setIsLockedByOther]);
+
+  const setTakeoverFallbackState = useCallback(() => {
+    setIsLockedByOther(true);
     setEditLock(null);
     isOwnerRef.current = false;
   }, [setEditLock, setIsLockedByOther]);
@@ -113,7 +121,7 @@ export const useEditLock = ({
         body: JSON.stringify({
           action,
           sessionId,
-          activity,
+          ...(activity ? { activity } : {}),
         }),
       });
 
@@ -208,10 +216,26 @@ export const useEditLock = ({
     await takeoverSaveRef.current;
   }, [postAction, saveDraft]);
 
+  const autoSaveIfOwner = useCallback(
+    async (wasOwner: boolean) => {
+      if (!wasOwner) {
+        return;
+      }
+
+      try {
+        await saveDraftIfNeeded();
+      } catch {
+        // no-op: losing the lock should still fall back to state sync even if save fails
+      }
+    },
+    [saveDraftIfNeeded]
+  );
+
   const startHeartbeat = useCallback((): void => {
     clearTimers();
     const loopToken = lockLoopTokenRef.current;
     heartbeatRef.current = window.setInterval(async () => {
+      const wasOwner = isOwnerRef.current;
       const heartbeatResult = await postAction("heartbeat");
       if (lockLoopTokenRef.current !== loopToken) {
         return;
@@ -223,29 +247,32 @@ export const useEditLock = ({
         return;
       }
 
+      if (!heartbeatResult.isOwner) {
+        await autoSaveIfOwner(wasOwner);
+      }
+
       updateStore(heartbeatResult);
 
-      if (!heartbeatResult.locked) {
-        const retryResult = await postAction("acquire");
-        if (lockLoopTokenRef.current !== loopToken) {
-          return;
-        }
-
-        if (!retryResult) {
-          clearTimers();
-          clearLockState();
-          return;
-        }
-
-        updateStore(retryResult);
-        if (retryResult.isOwner) {
-          return;
-        }
-
+      if (heartbeatResult.locked && !heartbeatResult.isOwner && wasOwner) {
         startPollingRef.current();
+        void syncServerState();
+        return;
+      }
+
+      if (!heartbeatResult.locked) {
+        clearTimers();
+        setTakeoverFallbackState();
       }
     }, EDIT_LOCK_HEARTBEAT_MS);
-  }, [clearLockState, clearTimers, postAction, updateStore]);
+  }, [
+    autoSaveIfOwner,
+    clearLockState,
+    clearTimers,
+    postAction,
+    setTakeoverFallbackState,
+    syncServerState,
+    updateStore,
+  ]);
 
   const startPolling = useCallback((): void => {
     clearTimers();
@@ -268,41 +295,18 @@ export const useEditLock = ({
         void syncServerState();
       }
       if (!pollResult.locked) {
-        const retryResult = await postAction("acquire");
-        if (lockLoopTokenRef.current !== loopToken) {
-          return;
-        }
-
-        if (!retryResult) {
-          clearTimers();
-          clearLockState();
-          return;
-        }
-
-        updateStore(retryResult);
-        if (retryResult.isOwner) {
-          startHeartbeatRef.current();
-          void refreshForm();
-        }
+        clearTimers();
+        setTakeoverFallbackState();
       }
     }, EDIT_LOCK_HEARTBEAT_MS);
   }, [
     clearLockState,
     clearTimers,
     getStatus,
-    postAction,
-    refreshForm,
+    setTakeoverFallbackState,
     syncServerState,
     updateStore,
   ]);
-
-  useEffect(() => {
-    startHeartbeatRef.current = startHeartbeat;
-  }, [startHeartbeat]);
-
-  useEffect(() => {
-    startPollingRef.current = startPolling;
-  }, [startPolling]);
 
   const startTimers = useCallback(
     (statusResult: EditLockStatusPayload, cancelled = false) => {
@@ -316,36 +320,48 @@ export const useEditLock = ({
     [startHeartbeat, startPolling]
   );
 
-  useEffect(() => {
-    if (!enabled) {
-      clearTimers();
-      clearEvents();
-      clearLockState();
-      return;
-    }
+  // The main effect runs whenever "enabled" or "status" changes to start/stop
+  // the lock logic. The ref "container" is necessary to hold the latest
+  // callbacks without re-running the effect and restarting timers on every
+  // store update. Zustand updates were previous causing an infinite loop
+  // from the below as useEffect dependencies.
+  const callbacks = {
+    postAction,
+    updateStore,
+    syncServerState,
+    clearLockState,
+    clearTimers,
+    clearEvents,
+    flushDraftBeforeTakeover,
+    startTimers,
+    setTakeoverFallbackState,
+  };
+  const cbRef = useRef(callbacks);
+  cbRef.current = callbacks;
+  startPollingRef.current = startPolling;
 
-    if (status !== "authenticated") {
-      clearTimers();
-      clearEvents();
-      clearLockState();
+  useEffect(() => {
+    if (!enabled || status !== "authenticated") {
+      cbRef.current.clearTimers();
+      cbRef.current.clearLockState();
       return;
     }
 
     let cancelled = false;
 
     const acquire = async () => {
-      const statusResult = await postAction("acquire");
+      const statusResult = await cbRef.current.postAction("acquire");
       if (cancelled) return;
 
       if (!statusResult) {
-        clearLockState();
+        cbRef.current.clearLockState();
         return;
       }
 
-      updateStore(statusResult);
-      startTimers(statusResult, cancelled);
+      cbRef.current.updateStore(statusResult);
+      cbRef.current.startTimers(statusResult, cancelled);
       if (!statusResult.isOwner) {
-        void syncServerState();
+        void cbRef.current.syncServerState();
       }
     };
 
@@ -353,31 +369,16 @@ export const useEditLock = ({
 
     return () => {
       cancelled = true;
-      clearTimers();
-      clearEvents();
+      cbRef.current.clearTimers();
       if (isOwnerRef.current && !suppressReleaseRef.current) {
-        postAction("release");
+        cbRef.current.postAction("release");
       }
     };
-  }, [
-    enabled,
-    formId,
-    clearLockState,
-    clearTimers,
-    clearEvents,
-    getStatus,
-    postAction,
-    refreshForm,
-    sessionId,
-    startTimers,
-    status,
-    syncServerState,
-    updateStore,
-  ]);
+  }, [enabled, status]);
 
   useEffect(() => {
     if (!enabled || status !== "authenticated") {
-      clearEvents();
+      cbRef.current.clearEvents();
       return;
     }
 
@@ -392,22 +393,28 @@ export const useEditLock = ({
         const wasOwner = isOwnerRef.current;
 
         if (!nextStatus.locked) {
+          // Lock is free. Show the takeover overlay so the user can claim it
+          // explicitly via the "Take over" button.
+          if (!wasOwner) {
+            cbRef.current.clearTimers();
+            cbRef.current.setTakeoverFallbackState();
+          }
           return;
         }
 
-        updateStore(nextStatus);
+        cbRef.current.updateStore(nextStatus);
 
         if (!nextStatus.isOwner) {
           if (wasOwner) {
-            startPolling();
-            void syncServerState();
+            startPollingRef.current();
+            void cbRef.current.syncServerState();
           }
         }
       })();
     };
 
     const handleTakeoverRequested: EventListener = () => {
-      void flushDraftBeforeTakeover();
+      void cbRef.current.flushDraftBeforeTakeover();
     };
 
     eventSource.addEventListener("lock-status", handleLockStatus);
@@ -426,16 +433,7 @@ export const useEditLock = ({
         eventSourceRef.current = null;
       }
     };
-  }, [
-    clearEvents,
-    enabled,
-    flushDraftBeforeTakeover,
-    formId,
-    startPolling,
-    status,
-    syncServerState,
-    updateStore,
-  ]);
+  }, [enabled, formId, status]);
 
   const takeover = useCallback(async () => {
     const previousUpdatedAt = updatedAt;
