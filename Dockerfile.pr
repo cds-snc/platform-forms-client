@@ -71,7 +71,6 @@ COPY --from=build /src/.next/static ./.next/static
 COPY package.json yarn.lock .yarnrc.yml next.config.ts nextCacheHandler.ts ./
 COPY .yarn ./.yarn
 COPY public ./public
-COPY prisma ./prisma
 COPY scripts/pr-review-entrypoint.sh ./entrypoint.sh
 # Update to latest yarn version
 RUN corepack enable && yarn set version stable
