@@ -11,7 +11,7 @@ import { logMessage } from "./logger";
 import { sqsClient, dynamoDBDocumentClient } from "./integration/awsServicesConnector";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { getClientIp } from "./ip";
 
 export const AuditLogEvent = {
@@ -147,17 +147,36 @@ export const AuditLogDetails = {
 export type AuditLogDetails = (typeof AuditLogDetails)[keyof typeof AuditLogDetails];
 
 type AuditDetailsParams = {
-  [AuditLogDetails.UserAuditLogsRead]: { callingUserId: string; userId: string };
-  [AuditLogDetails.FormAuditLogsRead]: { callingUserId: string; formId: string };
+  [AuditLogDetails.UserAuditLogsRead]: {
+    callingUserId: string;
+    userId: string;
+  };
+  [AuditLogDetails.FormAuditLogsRead]: {
+    callingUserId: string;
+    formId: string;
+  };
   [AuditLogDetails.GetAuditSubject]: { subject: string };
-  [AuditLogDetails.DownloadedFormResponses]: { format: string; "item.id": string };
-  [AuditLogDetails.IncreasedThrottling]: { userId: string; formId: string; weeks: string };
-  [AuditLogDetails.PermanentIncreasedThrottling]: { userId: string; formId: string };
+  [AuditLogDetails.DownloadedFormResponses]: {
+    format: string;
+    "item.id": string;
+  };
+  [AuditLogDetails.IncreasedThrottling]: {
+    userId: string;
+    formId: string;
+    weeks: string;
+  };
+  [AuditLogDetails.PermanentIncreasedThrottling]: {
+    userId: string;
+    formId: string;
+  };
   [AuditLogDetails.ResetThrottling]: { userId: string; formId: string };
   [AuditLogDetails.DeclinedInvitation]: { userEmail: string };
   [AuditLogDetails.AcceptedInvitation]: { userEmail: string };
   [AuditLogDetails.AccessGranted]: { grantedUserId: string };
-  [AuditLogDetails.CancelInvitation]: { userId: string; invitationEmail: string };
+  [AuditLogDetails.CancelInvitation]: {
+    userId: string;
+    invitationEmail: string;
+  };
   [AuditLogDetails.UserInvited]: { userEmail: string; invitationEmail: string };
   [AuditLogDetails.CognitoUserIdentifier]: { userId: string };
   [AuditLogDetails.UpdatedNotificationSettings]: {
@@ -167,7 +186,10 @@ type AuditDetailsParams = {
   };
   [AuditLogDetails.ConfirmedResponsesForForm]: { formId: string };
   [AuditLogDetails.DeletedDraftResponsesForForm]: { formId: string };
-  [AuditLogDetails.RetreiveSelectedFormResponses]: { formID: string; submissionID: string };
+  [AuditLogDetails.RetreiveSelectedFormResponses]: {
+    formID: string;
+    submissionID: string;
+  };
   [AuditLogDetails.ListAllResponsesForForm]: { status: string; formID: string };
   [AuditLogDetails.UserActiveStatusUpdate]: {
     email: string;
@@ -192,8 +214,14 @@ type AuditDetailsParams = {
   [AuditLogDetails.ChangeSecurityAttribute]: { securityAttribute: string };
   [AuditLogDetails.AccessGrantedTo]: { userList: string };
   [AuditLogDetails.AccessRevokedFor]: { userList: string };
-  [AuditLogDetails.GeneratedNewApiKey]: { userId: string; serviceAccountId: string };
-  [AuditLogDetails.CreatedNewApiKey]: { userId: string; serviceAccountId: string };
+  [AuditLogDetails.GeneratedNewApiKey]: {
+    userId: string;
+    serviceAccountId: string;
+  };
+  [AuditLogDetails.CreatedNewApiKey]: {
+    userId: string;
+    serviceAccountId: string;
+  };
   [AuditLogDetails.DeletedServiceAccount]: {
     userId: string;
     serviceAccountID: string;
@@ -276,27 +304,55 @@ export type AuditLogAccessDeniedDetails =
   (typeof AuditLogAccessDeniedDetails)[keyof typeof AuditLogAccessDeniedDetails];
 
 type AuditAccessDeniedParamsMap = {
-  [AuditLogAccessDeniedDetails.AccessDenied_IdentifiedProblemResponse]: { formId: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToModifyPrivilege]: { userId: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_CancelInvitation]: { userId: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_NoInvitePermission]: { userId: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserById]: { id: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_IdentifiedProblemResponse]: {
+    formId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToModifyPrivilege]: {
+    userId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_CancelInvitation]: {
+    userId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_NoInvitePermission]: {
+    userId: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptedToGetUserById]: {
+    id: string;
+  };
   [AuditLogAccessDeniedDetails.AccessDenied_AttemptedToUpdateUserActiveStatus]: {
     targetUserId: string;
   };
   [AuditLogAccessDeniedDetails.AccessDenied_AttemptToAccessUnprocessedSubmissions]: {
     userId: string;
   };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToCheckResponseStatus]: { formID: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToListResponses]: { formID: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToRetrieveResponse]: { formID: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteResponses]: { formID: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses]: { formID: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToAddNoteToUser]: { userId: string };
-  [AuditLogAccessDeniedDetails.PasswordAttemptsExceeded]: { sanitizedUsername: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToCheckResponseStatus]: {
+    formID: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToListResponses]: {
+    formID: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToRetrieveResponse]: {
+    formID: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteResponses]: {
+    formID: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToConfirmResponses]: {
+    formID: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToAddNoteToUser]: {
+    userId: string;
+  };
+  [AuditLogAccessDeniedDetails.PasswordAttemptsExceeded]: {
+    sanitizedUsername: string;
+  };
   [AuditLogAccessDeniedDetails.MFAAttemptsExceeded]: { sanitizedEmail: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToEnableFlag]: { flagKey: string };
-  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDisableFlag]: { flagKey: string };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToEnableFlag]: {
+    flagKey: string;
+  };
+  [AuditLogAccessDeniedDetails.AccessDenied_AttemptToDisableFlag]: {
+    flagKey: string;
+  };
 };
 
 type AllAuditParams = {
@@ -360,7 +416,10 @@ const resolveDescription = (
   descriptionParams?: Record<string, string>
 ) => {
   if (!description) return undefined;
-  const paramsJson = JSON.stringify({ eventDesc: description, ...descriptionParams });
+  const paramsJson = JSON.stringify({
+    eventDesc: description,
+    ...descriptionParams,
+  });
   return paramsJson;
 };
 
@@ -410,8 +469,19 @@ export const logEvent = async <T extends keyof AllAuditParams | undefined = unde
   }
 };
 
+const MAX_BATCH_GET_KEYS = 100;
+
+const chunkKeys = <T>(items: T[], size: number): T[][] => {
+  const chunks: T[][] = [];
+
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size));
+  }
+
+  return chunks;
+};
+
 export const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
-  let retries = 0;
   const maxRetries = 3;
   const auditLogs: Array<{
     UserID: string;
@@ -421,58 +491,59 @@ export const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => 
     Subject: string;
   }> = [];
 
-  const batchRequest = new BatchGetCommand({
-    RequestItems: {
-      AuditLogs: {
-        Keys: keys.map((event) => ({
-          UserID: event.UserID,
-          "Event#SubjectID#TimeStamp": event["Event#SubjectID#TimeStamp"],
-        })),
-      },
-    },
-  });
+  const keyChunks = chunkKeys(
+    keys.map((event) => ({
+      UserID: event.UserID,
+      "Event#SubjectID#TimeStamp": event["Event#SubjectID#TimeStamp"],
+    })),
+    MAX_BATCH_GET_KEYS
+  );
 
-  await dynamoDBDocumentClient.send(batchRequest).then(async (data: BatchGetCommandOutput) => {
-    auditLogs.push(
-      ...(data?.Responses?.AuditLogs?.map((item: Record<string, string | number>) => ({
-        UserID: item.UserID as string,
-        Event: item.Event as string,
-        TimeStamp: item.TimeStamp as number,
-        Description: item.Description as string,
-        Subject: item.Subject as string,
-      })) ?? [])
-    );
+  for (const keyChunk of keyChunks) {
+    let retries = 0;
+    let pendingKeys = keyChunk;
 
-    if (data.UnprocessedKeys?.AuditLogs) {
-      while (retries < maxRetries) {
-        // eslint-disable-next-line no-await-in-loop -- Intentional retry logic with delay
-        await delay(200); // Wait for 200ms second before retrying
-        const retryRequest = new BatchGetCommand({
-          RequestItems: {
-            AuditLogs: {
-              Keys: data.UnprocessedKeys.AuditLogs.Keys,
-            },
+    while (pendingKeys.length > 0) {
+      const batchRequest = new BatchGetCommand({
+        RequestItems: {
+          AuditLogs: {
+            Keys: pendingKeys,
           },
-        });
-        const retryResponse: BatchGetCommandOutput =
-          // eslint-disable-next-line no-await-in-loop -- Intentional retry logic
-          await dynamoDBDocumentClient.send(retryRequest);
-        auditLogs.push(
-          ...(retryResponse.Responses?.AuditLogs.map((item: Record<string, string | number>) => ({
-            UserID: item.UserID as string,
-            Event: item.Event as string,
-            TimeStamp: item.TimeStamp as number,
-            Description: item.Description as string,
-            Subject: item.Subject as string,
-          })) ?? [])
-        );
-        if (!retryResponse.UnprocessedKeys?.AuditLogs) {
-          break; // Exit the loop if there are no more unprocessed keys
-        }
-        retries++;
+        },
+      });
+
+      // eslint-disable-next-line no-await-in-loop -- Intentional retry logic
+      const data: BatchGetCommandOutput = await dynamoDBDocumentClient.send(batchRequest);
+
+      auditLogs.push(
+        ...(data.Responses?.AuditLogs?.map((item: Record<string, string | number>) => ({
+          UserID: item.UserID as string,
+          Event: item.Event as string,
+          TimeStamp: item.TimeStamp as number,
+          Description: item.Description as string,
+          Subject: item.Subject as string,
+        })) ?? [])
+      );
+
+      const unprocessedKeys = data.UnprocessedKeys?.AuditLogs?.Keys as
+        | Array<{ UserID: string; "Event#SubjectID#TimeStamp": string }>
+        | undefined;
+
+      if (!unprocessedKeys || unprocessedKeys.length === 0) {
+        break;
       }
+
+      if (retries >= maxRetries) {
+        break;
+      }
+
+      retries++;
+      pendingKeys = unprocessedKeys;
+      // eslint-disable-next-line no-await-in-loop -- Intentional retry logic with delay
+      await delay(200);
     }
-  });
+  }
+
   return auditLogs;
 };
 

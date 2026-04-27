@@ -15,7 +15,6 @@ test.describe("Form Ownership", () => {
     if (formId) {
       await dbHelper.deleteTemplate(formId);
     }
-    await dbHelper.disconnect();
   });
 
   test.describe("Regular User", () => {

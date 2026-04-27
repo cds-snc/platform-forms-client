@@ -5,7 +5,7 @@ import { userHasSecurityQuestions, validate2FAVerificationCode } from "@lib/auth
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { getUserFeatureFlags } from "@lib/userFeatureFlags";
 import { AuditLogDetails, logEvent } from "@lib/auditLogs";

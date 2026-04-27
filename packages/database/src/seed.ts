@@ -1,12 +1,16 @@
 /* eslint-disable no-console */
-import { Prisma, PrismaClient } from "@prisma/client";
+import { prisma, Prisma } from ".";
 import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
 import seedSettings from "./fixtures/settings";
 import seedUsers, { UserWithoutSecurityAnswers } from "./fixtures/users";
 import seedSecurityQuestions from "./fixtures/security-questions";
+import { parseArgs } from "node:util";
 
-const prisma = new PrismaClient();
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error("Database Connection URL missing");
+}
 
 async function createTemplates(env: string) {
   // see https://github.com/prisma/prisma/issues/9247#issuecomment-1249322729 for why this check is needed
@@ -128,7 +132,12 @@ async function createSecurityQuestions() {
   });
 }
 
-async function main(environment: string) {
+async function main() {
+  const {
+    values: { environment = "development" },
+  } = parseArgs({
+    options: { environment: { type: "string" } },
+  });
   try {
     console.log(`Seeding Database for ${environment} enviroment`);
     await Promise.all([
@@ -155,9 +164,10 @@ async function main(environment: string) {
     }
   } catch (e) {
     console.error(e);
+    process.exit(1);
   } finally {
     prisma.$disconnect;
   }
 }
 
-export default main;
+main();

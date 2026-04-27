@@ -168,10 +168,12 @@ function EditLockHarness({
   onTakeoverReady,
   onChangeKey,
   onLockStateChange,
+  presenceEnabled = false,
 }: {
   onTakeoverReady?: (takeover: () => Promise<void>) => void;
   onChangeKey?: (changeKey: string) => void;
   onLockStateChange?: (state: { isLockedByOther: boolean; hasEditLock: boolean }) => void;
+  presenceEnabled?: boolean;
 }) {
   const changeKey = useTemplateStore((s) => s.changeKey);
   const isLockedByOther = useTemplateStore((s) => s.isLockedByOther);
@@ -179,6 +181,7 @@ function EditLockHarness({
   const { takeover } = useEditLock({
     formId: "test-form-id",
     enabled: true,
+    presenceEnabled,
     sessionId: "session-1",
   });
 

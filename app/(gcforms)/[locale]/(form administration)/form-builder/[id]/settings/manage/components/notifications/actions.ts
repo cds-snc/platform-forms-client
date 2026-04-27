@@ -3,7 +3,7 @@
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logMessage } from "@root/lib/logger";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@gcforms/database";
 import { AuditLogDetails, logEvent, AuditLogEvent } from "@root/lib/auditLogs";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -36,7 +36,11 @@ export const updateNotificationsUser = AuthenticatedAction(
         { type: "Form", id: formId },
         AuditLogEvent.UpdatedNotificationSettings,
         AuditLogDetails.UpdatedNotificationSettings,
-        { userId: session.user.id, formId, enabled: user.enabled ? "enabled" : "disabled" }
+        {
+          userId: session.user.id,
+          formId,
+          enabled: user.enabled ? "enabled" : "disabled",
+        }
       );
     } catch (_) {
       return {
