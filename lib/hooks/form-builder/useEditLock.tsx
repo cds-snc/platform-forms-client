@@ -444,37 +444,41 @@ export const useEditLock = ({
     openEventSource();
 
     const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") {
-        if (isOwnerRef.current) {
-          // Owner tab hidden: pause the heartbeat so we stop extending the lock
-          // while the user isn't actively viewing this tab.
-          if (heartbeatRef.current !== null) {
-            window.clearInterval(heartbeatRef.current);
-            heartbeatRef.current = null;
-            heartbeatPausedRef.current = true;
-          }
-        } else {
-          // Non-owner tab hidden: close SSE to free the server connection and
-          // the associated Redis XREAD reader (if this is the last subscriber).
-          eventSourceRef.current?.close();
-          eventSourceRef.current = null;
-        }
-      } else {
-        if (isOwnerRef.current && heartbeatPausedRef.current) {
-          // Owner tab visible again: resume immediately so the lock isn't left
-          // in a limbo state after a long absence.
-          heartbeatPausedRef.current = false;
-          cbRef.current.startHeartbeat(true);
-        } else if (!isOwnerRef.current && !eventSourceRef.current) {
-          // Non-owner tab visible again: reopen SSE and do an immediate status
-          // fetch to catch any lock changes that occurred while the tab was hidden.
-          openEventSource();
-          void getStatus().then((latestStatus) => {
-            if (latestStatus) {
-              cbRef.current.updateStore(latestStatus);
-            }
-          });
-        }
+      const isHidden = document.visibilityState === "hidden";
+      const isOwner = isOwnerRef.current;
+
+      // Owner tab hidden: pause the heartbeat so we stop extending the lock
+      // while the user isn't actively viewing this tab.
+      if (isHidden && isOwner && heartbeatRef.current !== null) {
+        window.clearInterval(heartbeatRef.current);
+        heartbeatRef.current = null;
+        heartbeatPausedRef.current = true;
+        return;
+      }
+
+      // Non-owner tab hidden: close SSE to free the server connection and
+      // the associated Redis XREAD reader (if this is the last subscriber).
+      if (isHidden && !isOwner) {
+        eventSourceRef.current?.close();
+        eventSourceRef.current = null;
+        return;
+      }
+
+      // Owner tab visible again: resume immediately so the lock isn't left
+      // in a limbo state after a long absence.
+      if (!isHidden && isOwner && heartbeatPausedRef.current) {
+        heartbeatPausedRef.current = false;
+        cbRef.current.startHeartbeat(true);
+        return;
+      }
+
+      // Non-owner tab visible again: reopen SSE and do an immediate status
+      // fetch to catch any lock changes that occurred while the tab was hidden.
+      if (!isHidden && !isOwner && !eventSourceRef.current) {
+        openEventSource();
+        void getStatus().then((latestStatus) => {
+          if (latestStatus) cbRef.current.updateStore(latestStatus);
+        });
       }
     };
 
