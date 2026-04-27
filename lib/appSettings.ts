@@ -55,6 +55,11 @@ export const getAppSetting = async (internalId: string) => {
   return uncachedSetting?.value ?? null;
 };
 
+export const getAppSettingAsBoolean = async (internalId: string) => {
+  const value = await getAppSetting(internalId);
+  return value === "true";
+};
+
 export const getFullAppSetting = async (internalId: string) => {
   const { user } = await authorization.canAccessSettings().catch((e) => {
     if (e instanceof AccessControlError) {

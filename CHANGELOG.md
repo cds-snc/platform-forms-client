@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.12.0](https://github.com/cds-snc/platform-forms-client/compare/v4.11.0...v4.12.0) (2026-04-23)
+
+
+### Features
+
+* Adds the form ID to the Admin Manage page. ([#7009](https://github.com/cds-snc/platform-forms-client/issues/7009)) ([151b90a](https://github.com/cds-snc/platform-forms-client/commit/151b90ac492a43c740203d15690d9834537e2ea3))
+
+
+### Bug Fixes
+
+* Apostrophe in FR Attestation turns into [#39](https://github.com/cds-snc/platform-forms-client/issues/39) character on the Review Page ([#7027](https://github.com/cds-snc/platform-forms-client/issues/7027)) ([50cd63d](https://github.com/cds-snc/platform-forms-client/commit/50cd63d3d35ca69bc8069a1632e02f0f78c8c9b1))
+* date styling ([#7006](https://github.com/cds-snc/platform-forms-client/issues/7006)) ([a4a36e3](https://github.com/cds-snc/platform-forms-client/commit/a4a36e3aa360f6d83d8594a2ade01acad0c2387e))
+* Removes duplicate log events. ([#6575](https://github.com/cds-snc/platform-forms-client/issues/6575)) ([42ff345](https://github.com/cds-snc/platform-forms-client/commit/42ff345de3b361eb46d3cc94052180b63792d023))
+* update to use Redis streams and optimize a useEffect ([#7020](https://github.com/cds-snc/platform-forms-client/issues/7020)) ([a3b4f6f](https://github.com/cds-snc/platform-forms-client/commit/a3b4f6f4a599f14ade07b47fd2d962aea6b41e21))
+
+
+### Miscellaneous Chores
+
+* add const to turn on / off leader tab ([#6992](https://github.com/cds-snc/platform-forms-client/issues/6992)) ([e4ca998](https://github.com/cds-snc/platform-forms-client/commit/e4ca9983270318f2c76c81a053b30384fa403db9))
+* add CRA branding ([#7016](https://github.com/cds-snc/platform-forms-client/issues/7016)) ([9770b35](https://github.com/cds-snc/platform-forms-client/commit/9770b35a52ba70c78a1e1ad6d36da39b0f7dfd8d))
+* Add edit draft logic for re-acquire ([#7008](https://github.com/cds-snc/platform-forms-client/issues/7008)) ([4d90955](https://github.com/cds-snc/platform-forms-client/commit/4d9095513582c670d2e5831303a06fe92ec57085))
+* add edit lock check to forms card view ([#6981](https://github.com/cds-snc/platform-forms-client/issues/6981)) ([6965bc6](https://github.com/cds-snc/platform-forms-client/commit/6965bc61d057c9ba834abfa28a90f6bd58ec1365))
+* add edit lock logging ([#7014](https://github.com/cds-snc/platform-forms-client/issues/7014)) ([61ef837](https://github.com/cds-snc/platform-forms-client/commit/61ef8371ca5a6e937964620cb4ec2410921364b3))
+* add leader tab for edit lock ([#6985](https://github.com/cds-snc/platform-forms-client/issues/6985)) ([5eaaab5](https://github.com/cds-snc/platform-forms-client/commit/5eaaab50789b20220a7faa75a05c887fcdda77f7))
+* bump Next.js ([#6984](https://github.com/cds-snc/platform-forms-client/issues/6984)) ([d7914f0](https://github.com/cds-snc/platform-forms-client/commit/d7914f031dee9257aff50d4deaee1b4ef91debfc))
+* create dedicated use hook for edit presence ([#6996](https://github.com/cds-snc/platform-forms-client/issues/6996)) ([80f8a9a](https://github.com/cds-snc/platform-forms-client/commit/80f8a9ae38741467243a6301244e352d0a4dee2a))
+* fix manage access remove button label ([#6991](https://github.com/cds-snc/platform-forms-client/issues/6991)) ([2c7efa6](https://github.com/cds-snc/platform-forms-client/commit/2c7efa66c76fff4e08d0b5abdac383bf66709755))
+* manage access dialog under settings (feature flagged) ([#6980](https://github.com/cds-snc/platform-forms-client/issues/6980)) ([0463592](https://github.com/cds-snc/platform-forms-client/commit/0463592f87eba7f119cbb91ea595e25ea7742ca7))
+* remove useless reference to Github secrets in some Github actions ([#7019](https://github.com/cds-snc/platform-forms-client/issues/7019)) ([3c5128d](https://github.com/cds-snc/platform-forms-client/commit/3c5128db69c1bc4b7c4c45500ad61a3b9838dcda))
+* translation strings for read-only in locked editing ([#6995](https://github.com/cds-snc/platform-forms-client/issues/6995)) ([844c34c](https://github.com/cds-snc/platform-forms-client/commit/844c34c892cd3f53b53f64849306e5ed2f730314))
+* update user feature flags ([#6990](https://github.com/cds-snc/platform-forms-client/issues/6990)) ([de43ac6](https://github.com/cds-snc/platform-forms-client/commit/de43ac6ac8023d94af4fb84984adbcc2dec9f14c))
+* upgrade to Yarn 4.14.0 and set enableScripts to true to fix build issue in AWS CodeBuild ([#6989](https://github.com/cds-snc/platform-forms-client/issues/6989)) ([0d79395](https://github.com/cds-snc/platform-forms-client/commit/0d79395e6041335799168433a1e5b637321754fa))
+* use shared channel for edit lock events ([#6987](https://github.com/cds-snc/platform-forms-client/issues/6987)) ([3893089](https://github.com/cds-snc/platform-forms-client/commit/3893089d5916336dedc5982fb9315c538badbb00))
+
 ## [4.11.0](https://github.com/cds-snc/platform-forms-client/compare/v4.10.1...v4.11.0) (2026-04-14)
 
 
