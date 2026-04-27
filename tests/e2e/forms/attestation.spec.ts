@@ -18,7 +18,6 @@ test.describe("Testing attestation fields", () => {
     if (formId) {
       await dbHelper.deleteTemplate(formId);
     }
-    await dbHelper.disconnect();
   });
 
   test("Renders properly", async ({ page }) => {
