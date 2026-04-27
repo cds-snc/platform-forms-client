@@ -410,8 +410,19 @@ export const logEvent = async <T extends keyof AllAuditParams | undefined = unde
   }
 };
 
+const MAX_BATCH_GET_KEYS = 100;
+
+const chunkKeys = <T>(items: T[], size: number): T[][] => {
+  const chunks: T[][] = [];
+
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size));
+  }
+
+  return chunks;
+};
+
 export const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
-  let retries = 0;
   const maxRetries = 3;
   const auditLogs: Array<{
     UserID: string;
@@ -421,58 +432,59 @@ export const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => 
     Subject: string;
   }> = [];
 
-  const batchRequest = new BatchGetCommand({
-    RequestItems: {
-      AuditLogs: {
-        Keys: keys.map((event) => ({
-          UserID: event.UserID,
-          "Event#SubjectID#TimeStamp": event["Event#SubjectID#TimeStamp"],
-        })),
-      },
-    },
-  });
+  const keyChunks = chunkKeys(
+    keys.map((event) => ({
+      UserID: event.UserID,
+      "Event#SubjectID#TimeStamp": event["Event#SubjectID#TimeStamp"],
+    })),
+    MAX_BATCH_GET_KEYS
+  );
 
-  await dynamoDBDocumentClient.send(batchRequest).then(async (data: BatchGetCommandOutput) => {
-    auditLogs.push(
-      ...(data?.Responses?.AuditLogs?.map((item: Record<string, string | number>) => ({
-        UserID: item.UserID as string,
-        Event: item.Event as string,
-        TimeStamp: item.TimeStamp as number,
-        Description: item.Description as string,
-        Subject: item.Subject as string,
-      })) ?? [])
-    );
+  for (const keyChunk of keyChunks) {
+    let retries = 0;
+    let pendingKeys = keyChunk;
 
-    if (data.UnprocessedKeys?.AuditLogs) {
-      while (retries < maxRetries) {
-        // eslint-disable-next-line no-await-in-loop -- Intentional retry logic with delay
-        await delay(200); // Wait for 200ms second before retrying
-        const retryRequest = new BatchGetCommand({
-          RequestItems: {
-            AuditLogs: {
-              Keys: data.UnprocessedKeys.AuditLogs.Keys,
-            },
+    while (pendingKeys.length > 0) {
+      const batchRequest = new BatchGetCommand({
+        RequestItems: {
+          AuditLogs: {
+            Keys: pendingKeys,
           },
-        });
-        const retryResponse: BatchGetCommandOutput =
-          // eslint-disable-next-line no-await-in-loop -- Intentional retry logic
-          await dynamoDBDocumentClient.send(retryRequest);
-        auditLogs.push(
-          ...(retryResponse.Responses?.AuditLogs.map((item: Record<string, string | number>) => ({
-            UserID: item.UserID as string,
-            Event: item.Event as string,
-            TimeStamp: item.TimeStamp as number,
-            Description: item.Description as string,
-            Subject: item.Subject as string,
-          })) ?? [])
-        );
-        if (!retryResponse.UnprocessedKeys?.AuditLogs) {
-          break; // Exit the loop if there are no more unprocessed keys
-        }
-        retries++;
+        },
+      });
+
+      // eslint-disable-next-line no-await-in-loop -- Intentional retry logic
+      const data: BatchGetCommandOutput = await dynamoDBDocumentClient.send(batchRequest);
+
+      auditLogs.push(
+        ...(data.Responses?.AuditLogs?.map((item: Record<string, string | number>) => ({
+          UserID: item.UserID as string,
+          Event: item.Event as string,
+          TimeStamp: item.TimeStamp as number,
+          Description: item.Description as string,
+          Subject: item.Subject as string,
+        })) ?? [])
+      );
+
+      const unprocessedKeys = data.UnprocessedKeys?.AuditLogs?.Keys as
+        | Array<{ UserID: string; "Event#SubjectID#TimeStamp": string }>
+        | undefined;
+
+      if (!unprocessedKeys || unprocessedKeys.length === 0) {
+        break;
       }
+
+      if (retries >= maxRetries) {
+        break;
+      }
+
+      retries++;
+      pendingKeys = unprocessedKeys;
+      // eslint-disable-next-line no-await-in-loop -- Intentional retry logic with delay
+      await delay(200);
     }
-  });
+  }
+
   return auditLogs;
 };
 
