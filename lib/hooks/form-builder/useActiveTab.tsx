@@ -9,17 +9,17 @@ import {
   type SetStateAction,
 } from "react";
 
-const LEADER_TAB_COORDINATION_PREFIX = "leader-tab";
+const ACTIVE_TAB_COORDINATION_PREFIX = "active-tab";
 
-type LeaderTabMessage = {
+type ActiveTabMessage = {
   type: "claim" | "release";
   tabId: string;
 };
 
-type LeaderTabState = {
-  leaderTabIdRef: RefObject<string | null>;
+type ActiveTabState = {
+  activeTabIdRef: RefObject<string | null>;
   tabIdRef: RefObject<string>;
-  setIsLeaderTab: Dispatch<SetStateAction<boolean>>;
+  setIsActiveTab: Dispatch<SetStateAction<boolean>>;
 };
 
 const getTabId = () => {
@@ -38,47 +38,47 @@ const isTabForeground = () => {
   return document.visibilityState === "visible" && document.hasFocus();
 };
 
-const broadcastTabMessage = (coordinationChannel: BroadcastChannel, message: LeaderTabMessage) => {
+const broadcastTabMessage = (coordinationChannel: BroadcastChannel, message: ActiveTabMessage) => {
   coordinationChannel.postMessage(message);
 };
 
-const claimLeadership = (
-  { leaderTabIdRef, tabIdRef, setIsLeaderTab }: LeaderTabState,
+const claimActiveTab = (
+  { activeTabIdRef, tabIdRef, setIsActiveTab }: ActiveTabState,
   coordinationChannel: BroadcastChannel
 ) => {
-  leaderTabIdRef.current = tabIdRef.current;
-  setIsLeaderTab(true);
+  activeTabIdRef.current = tabIdRef.current;
+  setIsActiveTab(true);
   broadcastTabMessage(coordinationChannel, { type: "claim", tabId: tabIdRef.current });
 };
 
-const releaseLeadership = (
-  { leaderTabIdRef, tabIdRef, setIsLeaderTab }: LeaderTabState,
+const releaseActiveTab = (
+  { activeTabIdRef, tabIdRef, setIsActiveTab }: ActiveTabState,
   coordinationChannel: BroadcastChannel,
   broadcast = true
 ) => {
-  const isCurrentLeader = leaderTabIdRef.current === tabIdRef.current;
+  const isCurrentActive = activeTabIdRef.current === tabIdRef.current;
 
-  if (broadcast && isCurrentLeader) {
+  if (broadcast && isCurrentActive) {
     broadcastTabMessage(coordinationChannel, { type: "release", tabId: tabIdRef.current });
   }
 
-  if (isCurrentLeader) {
-    leaderTabIdRef.current = null;
+  if (isCurrentActive) {
+    activeTabIdRef.current = null;
   }
 
-  setIsLeaderTab(false);
+  setIsActiveTab(false);
 };
 
-const attemptLeadership = (state: LeaderTabState, coordinationChannel: BroadcastChannel) => {
+const attemptActiveTab = (state: ActiveTabState, coordinationChannel: BroadcastChannel) => {
   if (isTabForeground()) {
-    claimLeadership(state, coordinationChannel);
+    claimActiveTab(state, coordinationChannel);
     return;
   }
 
-  releaseLeadership(state, coordinationChannel);
+  releaseActiveTab(state, coordinationChannel);
 };
 
-export const useLeaderTab = ({
+export const useActiveTab = ({
   enabled,
   coordinationKey,
 }: {
@@ -87,44 +87,44 @@ export const useLeaderTab = ({
 }) => {
   "use memo";
   const coordinationChannelRef = useRef<BroadcastChannel | null>(null);
-  const leaderTabIdRef = useRef<string | null>(null);
+  const activeTabIdRef = useRef<string | null>(null);
   const tabIdRef = useRef<string>(getTabId());
-  const [isLeaderTab, setIsLeaderTab] = useState(() => isTabForeground());
-  const coordinationChannelName = `${LEADER_TAB_COORDINATION_PREFIX}:${coordinationKey}`;
-  const fallbackLeaderTab = !enabled || typeof BroadcastChannel === "undefined";
-  const leaderTabState = {
-    leaderTabIdRef,
+  const [isActiveTab, setIsActiveTab] = useState(() => isTabForeground());
+  const coordinationChannelName = `${ACTIVE_TAB_COORDINATION_PREFIX}:${coordinationKey}`;
+  const fallbackActiveTab = !enabled || typeof BroadcastChannel === "undefined";
+  const activeTabState = {
+    activeTabIdRef,
     tabIdRef,
-    setIsLeaderTab,
-  } satisfies LeaderTabState;
+    setIsActiveTab,
+  } satisfies ActiveTabState;
 
   useEffect(() => {
-    if (fallbackLeaderTab) {
+    if (fallbackActiveTab) {
       return;
     }
 
     const coordinationChannel = new BroadcastChannel(coordinationChannelName);
     coordinationChannelRef.current = coordinationChannel;
 
-    const handleMessage = (event: MessageEvent<LeaderTabMessage>) => {
+    const handleMessage = (event: MessageEvent<ActiveTabMessage>) => {
       const message = event.data;
       if (!message || message.tabId === tabIdRef.current) {
         return;
       }
 
       if (message.type === "claim") {
-        leaderTabIdRef.current = message.tabId;
-        setIsLeaderTab(false);
+        activeTabIdRef.current = message.tabId;
+        setIsActiveTab(false);
         return;
       }
 
-      if (message.type === "release" && leaderTabIdRef.current === message.tabId) {
-        leaderTabIdRef.current = null;
+      if (message.type === "release" && activeTabIdRef.current === message.tabId) {
+        activeTabIdRef.current = null;
 
         if (isTabForeground()) {
           window.setTimeout(() => {
-            if (leaderTabIdRef.current === null) {
-              claimLeadership(leaderTabState, coordinationChannel);
+            if (activeTabIdRef.current === null) {
+              claimActiveTab(activeTabState, coordinationChannel);
             }
           }, 0);
         }
@@ -132,7 +132,7 @@ export const useLeaderTab = ({
     };
 
     const handleFocusChange = () => {
-      attemptLeadership(leaderTabState, coordinationChannel);
+      attemptActiveTab(activeTabState, coordinationChannel);
     };
 
     coordinationChannel.addEventListener("message", handleMessage as EventListener);
@@ -141,7 +141,7 @@ export const useLeaderTab = ({
     window.addEventListener("pagehide", handleFocusChange);
     document.addEventListener("visibilitychange", handleFocusChange);
 
-    attemptLeadership(leaderTabState, coordinationChannel);
+    attemptActiveTab(activeTabState, coordinationChannel);
 
     return () => {
       coordinationChannel.removeEventListener("message", handleMessage as EventListener);
@@ -149,11 +149,11 @@ export const useLeaderTab = ({
       window.removeEventListener("blur", handleFocusChange);
       window.removeEventListener("pagehide", handleFocusChange);
       document.removeEventListener("visibilitychange", handleFocusChange);
-      releaseLeadership(leaderTabState, coordinationChannel);
+      releaseActiveTab(activeTabState, coordinationChannel);
       coordinationChannel.close();
       coordinationChannelRef.current = null;
     };
-  }, [coordinationChannelName, fallbackLeaderTab, leaderTabState]);
+  }, [coordinationChannelName, fallbackActiveTab, activeTabState]);
 
-  return { isLeaderTab: fallbackLeaderTab ? true : isLeaderTab };
+  return { isActiveTab: fallbackActiveTab ? true : isActiveTab };
 };
