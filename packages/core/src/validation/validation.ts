@@ -13,6 +13,7 @@ import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
 import { isSafeRegex } from "./regex";
 import { isNumberInput } from "../utils/isNumberInput";
+import { TFunction } from "i18next";
 
 export const isFieldResponseValid = (
   value: unknown,
@@ -20,7 +21,7 @@ export const isFieldResponseValid = (
   componentType: string,
   formElement: FormElement,
   validator: ValidationProperties,
-  t: (str: string) => string
+  t: TFunction<"common">
 ): string | null | Record<string, unknown>[] => {
   // Note that this will ignore a file upload since the value is an object. We could check the
   // file's file name length but this is probably not necessary since OS's have a filename limit.
@@ -64,7 +65,7 @@ export const isFieldResponseValid = (
             !Number.isNaN(numericValue) &&
             numericValue < validator.minValue
           ) {
-            return t("input-validation.too-small").replace("{{min}}", String(validator.minValue));
+            return t("input-validation.too-small", { min: String(validator.minValue) });
           }
 
           if (
@@ -72,7 +73,7 @@ export const isFieldResponseValid = (
             !Number.isNaN(numericValue) &&
             numericValue > validator.maxValue
           ) {
-            return t("input-validation.too-large").replace("{{max}}", String(validator.maxValue));
+            return t("input-validation.too-large", { max: String(validator.maxValue) });
           }
 
           // minDigits and maxDigits validation

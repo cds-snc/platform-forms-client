@@ -11,6 +11,7 @@ import {
   valueMatchesType,
   hasValue,
 } from "@gcforms/core";
+import { TFunction } from "i18next";
 
 /*
  Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit
@@ -29,6 +30,8 @@ export const validate = ({
 
   const errors = validateOnSubmit(values, {
     formRecord,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     t: (str) => str,
   });
   return errors;
@@ -43,7 +46,7 @@ export const validateOnSubmit = (
   values: Responses,
   props: {
     formRecord: PublicFormRecord;
-    t: (str: string) => string;
+    t: TFunction<"common">;
   }
 ): Responses => {
   const { errors } = validateVisibleElements(values, props);
@@ -54,7 +57,7 @@ export const validateVisibleElements = (
   values: Responses,
   props: {
     formRecord: PublicFormRecord;
-    t: (str: string) => string;
+    t: TFunction<"common">;
   }
 ): {
   errors: Responses;
