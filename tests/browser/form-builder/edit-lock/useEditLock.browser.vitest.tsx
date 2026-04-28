@@ -146,11 +146,7 @@ const setDocumentFocus = (isFocused: boolean) => {
 
 const getRequestUrl = (input: RequestInfo | URL) => new URL(String(input), "https://example.test");
 
-const isEditLockRequest = (
-  input: RequestInfo | URL,
-  method?: string,
-  requestType?: string
-) => {
+const isEditLockRequest = (input: RequestInfo | URL, method?: string, requestType?: string) => {
   const url = getRequestUrl(input);
 
   if (url.pathname !== "/api/templates/test-form-id/edit-lock") {
@@ -258,14 +254,20 @@ describe("useEditLock", () => {
     fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = getRequestUrl(input);
 
-      if (isEditLockRequest(input, init?.method, url.searchParams.get("requestType") ?? undefined) && init?.method === "POST") {
+      if (
+        isEditLockRequest(input, init?.method, url.searchParams.get("requestType") ?? undefined) &&
+        init?.method === "POST"
+      ) {
         return {
           ok: true,
           json: async () => ownerLockStatus,
         } as Response;
       }
 
-      if (isEditLockRequest(input, init?.method, url.searchParams.get("requestType") ?? undefined) && init?.method === "GET") {
+      if (
+        isEditLockRequest(input, init?.method, url.searchParams.get("requestType") ?? undefined) &&
+        init?.method === "GET"
+      ) {
         return {
           ok: true,
           json: async () => ownerLockStatus,
@@ -400,9 +402,7 @@ describe("useEditLock", () => {
       expect(setUpdatedAt).toHaveBeenCalledWith(Date.parse(freshUpdatedAt));
     });
 
-    const formFetchCalls = fetchMock.mock.calls.filter(([input]) =>
-      isTemplateRequest(input)
-    );
+    const formFetchCalls = fetchMock.mock.calls.filter(([input]) => isTemplateRequest(input));
 
     expect(formFetchCalls).toHaveLength(3);
     formFetchCalls.forEach(([, init]) => {
@@ -794,9 +794,7 @@ describe("useEditLock", () => {
       expect(heartbeatCallCount).toBe(1);
     });
 
-    const formFetchCalls = fetchMock.mock.calls.filter(([input]) =>
-      isTemplateRequest(input)
-    );
+    const formFetchCalls = fetchMock.mock.calls.filter(([input]) => isTemplateRequest(input));
     const lockPostBodies = fetchMock.mock.calls
       .filter(([input, init]) => {
         return isEditLockRequest(input) && init?.method === "POST";
@@ -883,9 +881,7 @@ describe("useEditLock", () => {
       expect(lockStates.at(-1)).toEqual({ isLockedByOther: true, hasEditLock: false });
     });
 
-    const formFetchCalls = fetchMock.mock.calls.filter(([input]) =>
-      isTemplateRequest(input)
-    );
+    const formFetchCalls = fetchMock.mock.calls.filter(([input]) => isTemplateRequest(input));
     const lockPostBodies = fetchMock.mock.calls
       .filter(([input, init]) => {
         return isEditLockRequest(input) && init?.method === "POST";
