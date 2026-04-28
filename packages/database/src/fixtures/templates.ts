@@ -544,7 +544,7 @@ const SimpleForm = {
     },
     {
       id: 9,
-      type: "numberInput",
+      type: "textField",
       properties: {
         choices: [
           {
@@ -556,6 +556,7 @@ const SimpleForm = {
         titleFr: "[fr] How many times have you filled out this form?",
         validation: {
           required: false,
+          type: "number",
         },
         descriptionEn: "",
         descriptionFr: "",
