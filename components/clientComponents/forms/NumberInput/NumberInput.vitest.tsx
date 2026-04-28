@@ -26,13 +26,14 @@ interface FormValues {
 }
 
 const renderNumberInput = (
-  props: React.ComponentProps<typeof NumberInput> = {},
+  props: Partial<React.ComponentProps<typeof NumberInput>> = {},
   { initialValue = "" } = {}
 ) => {
+  const { id = "amount", name = "amount", ...rest } = props;
   return render(
     <Formik<FormValues> initialValues={{ amount: initialValue }} onSubmit={vi.fn()}>
       <Form>
-        <NumberInput id="amount" name="amount" {...props} />
+        <NumberInput id={id} name={name} {...rest} />
       </Form>
     </Formik>
   );
@@ -200,8 +201,7 @@ describe("NumberInput Component", () => {
       expect(input.value).toContain("9,876,543");
     });
 
-    it("handles English decimal formatting", async () => {
-      const user = userEvent.setup();
+    it("handles English decimal formatting", () => {
       renderNumberInput({ lang: "en", stepCount: 2 }, { initialValue: "123.45" });
 
       const input = screen.getByTestId("numberInput") as HTMLInputElement;
@@ -210,8 +210,7 @@ describe("NumberInput Component", () => {
   });
 
   describe("Locale Formatting (French)", () => {
-    it("displays formatted number on blur with fr-CA locale", async () => {
-      const user = userEvent.setup();
+    it("displays formatted number on blur with fr-CA locale", () => {
       renderNumberInput(
         { lang: "fr", useThousandsSeparator: true, stepCount: 1 },
         { initialValue: "1234.5" }
@@ -223,8 +222,7 @@ describe("NumberInput Component", () => {
       expect(input.value).toMatch(/1\s+234/);
     });
 
-    it("handles French decimal formatting", async () => {
-      const user = userEvent.setup();
+    it("handles French decimal formatting", () => {
       renderNumberInput({ lang: "fr", stepCount: 2 }, { initialValue: "123.45" });
 
       const input = screen.getByTestId("numberInput") as HTMLInputElement;
@@ -258,7 +256,7 @@ describe("NumberInput Component", () => {
 
       await user.type(input, "1000,50");
       // The comma should be accepted as part of locale formatting
-      expect(input.value).toContain(",") || expect(input.value).toContain(".");
+      expect(input.value).toMatch(/[,.]/u);
     });
   });
 
