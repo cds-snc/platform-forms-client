@@ -43,6 +43,7 @@ jobs:
       REDIS_URL: localhost
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/formsDB
       CI: true
+      GITHUB_ACTION: true
 
     steps:
       - name: Checkout
