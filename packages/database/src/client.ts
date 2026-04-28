@@ -1,7 +1,28 @@
 import { PrismaClient, Prisma } from "./generated/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const certPath = path.join(__dirname, "global-bundle.pem");
+
+const connectionString = () => {
+  const envConnectiontring = process.env.DATABASE_URL;
+  if (!envConnectiontring) {
+    throw new Error("Missing Database Url Environment Variable");
+  }
+  // Check if there are already existing parameters and if not start a new parameter string
+  if (/5432\/forms$/i.test(envConnectiontring)) {
+    return envConnectiontring + `?sslmode=verify-full&sslrootcert=${certPath}`;
+  } else {
+    return envConnectiontring + `&sslmode=verify-full&sslrootcert=${certPath}`;
+  }
+};
+
+const adapter = new PrismaPg({
+  connectionString: connectionString(),
+});
 // Instantiate the extended Prisma client to infer its type
 const extendedPrisma = new PrismaClient({ adapter }).$extends({
   model: {
