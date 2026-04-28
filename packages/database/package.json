@@ -31,14 +31,14 @@
     "prepack": "yarn build"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^6.17.1",
-    "@prisma/client": "7",
-    "pg": "^8.16.3"
+    "@prisma/adapter-pg": "7.8.0",
+    "@prisma/client": "7.8.0",
+    "pg": "8.20.0"
   },
   "devDependencies": {
     "@types/node": "^24.7.1",
-    "@types/pg": "^8",
-    "prisma": "7",
+    "@types/pg": "8.20.0",
+    "prisma": "7.8.0",
     "ts-command-line-args": "^2.5.1",
     "tsdown": "^0.15.7",
     "tsx": "^4.20.6",
