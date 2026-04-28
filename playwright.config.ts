@@ -63,7 +63,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "yarn build:test && yarn start:test",
+    command: "yarn db:test && yarn build:test && yarn start:test",
     env: {
       ...process.env,
       APP_ENV: "test",

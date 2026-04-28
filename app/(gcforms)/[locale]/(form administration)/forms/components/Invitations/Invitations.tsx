@@ -1,7 +1,7 @@
 "use client";
 import { StarIcon } from "@serverComponents/icons/StarIcon";
 import { accept, decline } from "./actions";
-import { Invitation } from "@prisma/client";
+import { Invitation } from "@gcforms/database";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Trans } from "react-i18next";

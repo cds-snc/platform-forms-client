@@ -1,4 +1,4 @@
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { logMessage } from "@lib/logger";
@@ -9,7 +9,8 @@ import {
   MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
 } from "@lib/formBuilderEditLockPresence";
 export {
-  EDIT_LOCK_HEARTBEAT_MS,
+  EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
+  EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   EDIT_LOCK_TTL_MS,
   MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,

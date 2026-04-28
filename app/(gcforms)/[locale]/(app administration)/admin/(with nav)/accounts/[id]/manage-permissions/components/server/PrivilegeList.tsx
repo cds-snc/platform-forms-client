@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { AppUser } from "@lib/types/user-types";
-import type { Privilege as PType } from "@prisma/client";
+import type { Privilege as PType } from "@gcforms/database";
 import { Privilege } from "../client/Privilege";
 
 type PrivilegeList = Omit<PType, "permissions" | "priority">[];

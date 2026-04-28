@@ -1,22 +1,15 @@
-import { PrismaClient, Prisma } from "@prisma/client";
-import { mockDeep, mockReset, DeepMockProxy } from "jest-mock-extended";
-import { prisma } from "@lib/integration/prismaConnector";
+import { mockReset, DeepMockProxy } from "jest-mock-extended";
+import { prisma, PrismaClient } from "@gcforms/database";
 
-export const {
-  PrismaClientInitializationError,
-  PrismaClientKnownRequestError,
-  PrismaClientUnknownRequestError,
-  PrismaClientValidationError,
-} = Prisma;
-
-jest.mock("@lib/integration/prismaConnector", () => {
+jest.mock("@gcforms/database", () => {
   // Only mock prisma when were running in the Node jest environment
   if (typeof window === "undefined") {
-    const originalModule = jest.requireActual("@lib/integration/prismaConnector");
+    const originalModule = jest.requireActual("@gcforms/database");
+    const { mockDeep } = jest.requireActual("jest-mock-extended");
     return {
       __esModule: true,
       ...originalModule,
-      prisma: mockDeep<PrismaClient>(),
+      prisma: mockDeep() as DeepMockProxy<PrismaClient>,
     };
   } else {
     return {};

@@ -1,9 +1,9 @@
 "use server";
 
 import { AuthenticatedAction } from "@lib/actions";
+import { prisma } from "@gcforms/database";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
-import { prisma } from "@lib/integration/prismaConnector";
 import { TemplateUser } from "./types";
 import { AccessControlError } from "@lib/auth/errors";
 import {
