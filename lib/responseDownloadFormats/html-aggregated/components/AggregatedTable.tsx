@@ -28,10 +28,10 @@ export const AggregatedTable = ({
   return (
     <table id={`responseTableRow${capitalizedLang}`} className="w-full table-fixed text-left">
       <thead>
-        <tr key="">
-          {headers.map(({ title, type }) => (
+        <tr key={`headerRow${capitalizedLang}`}>
+          {headers.map(({ title, type }, index) => (
             <th
-              key=""
+              key={`headerCell${index}`}
               className={`${type === "dynamicRow" ? "w-96" : "w-64"} p-4 font-bold break-words`}
               style={{ maxWidth: type === "dynamicRow" ? "24rem" : "16rem" }}
             >
@@ -119,7 +119,11 @@ export const AggregatedTable = ({
                     );
                   }
                   return (
-                    <td key="" className="w-64 p-4 break-words" style={{ maxWidth: "16rem" }}>
+                    <td
+                      key={String(item.id)}
+                      className="w-64 p-4 break-words"
+                      style={{ maxWidth: "16rem" }}
+                    >
                       <div className="overflow-hidden">
                         {formattedNumberInput !== undefined ? (
                           <span>{formattedNumberInput}</span>
