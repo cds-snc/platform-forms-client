@@ -54,7 +54,7 @@ const runReaderLoop = async (templateId: string, state: TemplateReaderState): Pr
   while (!state.stopped) {
     try {
       // eslint-disable-next-line no-await-in-loop
-      const results = (await state.redis.xread(
+      const results = await state.redis.xread(
         "COUNT",
         100,
         "BLOCK",
@@ -62,7 +62,7 @@ const runReaderLoop = async (templateId: string, state: TemplateReaderState): Pr
         "STREAMS",
         streamKey,
         state.lastId
-      )) as Array<[string, Array<[string, string[]]>]> | null;
+      );
 
       if (state.stopped) {
         break;

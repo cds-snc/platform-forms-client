@@ -250,8 +250,11 @@ const publishEditLockEvent = async (templateId: string, event: EditLockEvent = u
   const streamKey = getEditLockStreamKey(templateId);
   // Append the event to the per-template stream.  The stream TTL is reset on
   // every write so it stays alive as long as the lock itself is active.
-  await redis.xadd(streamKey, "*", "type", event.type, "templateId", templateId);
-  await redis.expire(streamKey, editLockTtlSeconds * 2);
+  await redis
+    .multi()
+    .xadd(streamKey, "MAXLEN", "~", 100, "*", "type", event.type, "templateId", templateId)
+    .expire(streamKey, editLockTtlSeconds * 2)
+    .exec();
 };
 
 const storeRedisLock = async (lock: EditLockInfo) => {
