@@ -28,11 +28,11 @@ export const validate = ({
 }) => {
   values.currentGroup = currentGroup;
 
+  const identityT = ((key: string) => key) as unknown as TFunction<"common">;
+
   const errors = validateOnSubmit(values, {
     formRecord,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    t: (str) => str,
+    t: identityT,
   });
   return errors;
 };
