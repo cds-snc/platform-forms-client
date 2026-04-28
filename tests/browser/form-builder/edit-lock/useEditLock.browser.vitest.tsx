@@ -3,7 +3,10 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { EDIT_LOCK_HEARTBEAT_MS } from "@lib/formBuilderEditLockPresence";
+import {
+  EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
+  EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
+} from "@lib/formBuilderEditLockPresence";
 
 const saveDraft = vi.fn(async () => ({ status: "saved" as const }));
 const saveDraftIfNeeded = vi.fn(async () => ({ status: "skipped" as const }));
@@ -141,6 +144,31 @@ const setDocumentFocus = (isFocused: boolean) => {
   });
 };
 
+const getRequestUrl = (input: RequestInfo | URL) => new URL(String(input), "https://example.test");
+
+const isEditLockRequest = (
+  input: RequestInfo | URL,
+  method?: string,
+  requestType?: string
+) => {
+  const url = getRequestUrl(input);
+
+  if (url.pathname !== "/api/templates/test-form-id/edit-lock") {
+    return false;
+  }
+
+  if (requestType && url.searchParams.get("requestType") !== requestType) {
+    return false;
+  }
+
+  return !method || method.length > 0;
+};
+
+const isTemplateRequest = (input: RequestInfo | URL) => {
+  const url = getRequestUrl(input);
+  return url.pathname === "/api/templates/test-form-id";
+};
+
 // Shared happy-path lock payload: the current browser tab is User A and starts
 // each test as the active lock owner unless a test overrides the response.
 const ownerLockStatus = {
@@ -228,23 +256,23 @@ describe("useEditLock", () => {
     // Default network behavior for most tests: User A owns the lock and all
     // edit-lock reads and writes reflect that stable server state.
     fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
+      const url = getRequestUrl(input);
 
-      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+      if (isEditLockRequest(input, init?.method, url.searchParams.get("requestType") ?? undefined) && init?.method === "POST") {
         return {
           ok: true,
           json: async () => ownerLockStatus,
         } as Response;
       }
 
-      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+      if (isEditLockRequest(input, init?.method, url.searchParams.get("requestType") ?? undefined) && init?.method === "GET") {
         return {
           ok: true,
           json: async () => ownerLockStatus,
         } as Response;
       }
 
-      if (url.endsWith("/api/templates/test-form-id")) {
+      if (isTemplateRequest(input)) {
         return {
           ok: true,
           json: async () => ({ form: { elements: [] }, updatedAt: new Date().toISOString() }),
@@ -270,13 +298,16 @@ describe("useEditLock", () => {
     });
 
     await vi.waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledWith(
-        "/api/templates/test-form-id/edit-lock",
-        expect.objectContaining({
-          method: "POST",
-          body: expect.stringContaining('"action":"takeover-save-complete"'),
+      expect(
+        fetchMock.mock.calls.some(([input, init]) => {
+          return (
+            String(input) ===
+              "/api/templates/test-form-id/edit-lock?requestType=takeover-save-complete" &&
+            init?.method === "POST" &&
+            String(init.body).includes('"action":"takeover-save-complete"')
+          );
         })
-      );
+      ).toBe(true);
     });
 
     expect(saveDraftIfNeeded).not.toHaveBeenCalled();
@@ -303,7 +334,7 @@ describe("useEditLock", () => {
 
     const lockPostBodies = fetchMock.mock.calls
       .filter(([input, init]) => {
-        return String(input).endsWith("/edit-lock") && init?.method === "POST";
+        return isEditLockRequest(input) && init?.method === "POST";
       })
       .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
 
@@ -320,23 +351,23 @@ describe("useEditLock", () => {
 
     const updatedAtResponses = [staleUpdatedAt, staleUpdatedAt, freshUpdatedAt];
     fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
+      const url = getRequestUrl(input);
 
-      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+      if (isEditLockRequest(input) && init?.method === "POST") {
         return {
           ok: true,
           json: async () => ownerLockStatus,
         } as Response;
       }
 
-      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+      if (isEditLockRequest(input) && init?.method === "GET") {
         return {
           ok: true,
           json: async () => ownerLockStatus,
         } as Response;
       }
 
-      if (url.endsWith("/api/templates/test-form-id")) {
+      if (isTemplateRequest(input)) {
         return {
           ok: true,
           json: async () => ({
@@ -370,7 +401,7 @@ describe("useEditLock", () => {
     });
 
     const formFetchCalls = fetchMock.mock.calls.filter(([input]) =>
-      String(input).endsWith("/api/templates/test-form-id")
+      isTemplateRequest(input)
     );
 
     expect(formFetchCalls).toHaveLength(3);
@@ -387,23 +418,23 @@ describe("useEditLock", () => {
     templateUpdatedAt = Date.parse("2026-03-31T12:00:00.000Z");
 
     fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
+      const url = getRequestUrl(input);
 
-      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+      if (isEditLockRequest(input) && init?.method === "POST") {
         return {
           ok: true,
           json: async () => ownerLockStatus,
         } as Response;
       }
 
-      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+      if (isEditLockRequest(input) && init?.method === "GET") {
         return {
           ok: true,
           json: async () => ownerLockStatus,
         } as Response;
       }
 
-      if (url.endsWith("/api/templates/test-form-id")) {
+      if (isTemplateRequest(input)) {
         return {
           ok: true,
           json: async () => ({
@@ -433,7 +464,7 @@ describe("useEditLock", () => {
 
     const lockPostBodies = fetchMock.mock.calls
       .filter(([input, init]) => {
-        return String(input).endsWith("/edit-lock") && init?.method === "POST";
+        return isEditLockRequest(input) && init?.method === "POST";
       })
       .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
 
@@ -447,23 +478,23 @@ describe("useEditLock", () => {
     const lockStates: Array<{ isLockedByOther: boolean; hasEditLock: boolean }> = [];
 
     fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
+      const url = getRequestUrl(input);
 
-      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+      if (isEditLockRequest(input) && init?.method === "POST") {
         return {
           ok: false,
           json: async () => ({ error: "Unauthorized" }),
         } as Response;
       }
 
-      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+      if (isEditLockRequest(input) && init?.method === "GET") {
         return {
           ok: false,
           json: async () => ({ error: "Unauthorized" }),
         } as Response;
       }
 
-      if (url.endsWith("/api/templates/test-form-id")) {
+      if (isTemplateRequest(input)) {
         return {
           ok: true,
           json: async () => ({ form: { elements: [] }, updatedAt: new Date().toISOString() }),
@@ -477,7 +508,7 @@ describe("useEditLock", () => {
 
     await vi.waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
-        "/api/templates/test-form-id/edit-lock",
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
         expect.objectContaining({ method: "POST" })
       );
     });
@@ -495,6 +526,9 @@ describe("useEditLock", () => {
       expect(MockEventSource.instances).toHaveLength(1);
     });
 
+    expect(MockEventSource.instances[0].url).toBe(
+      "/api/templates/test-form-id/edit-lock/events?requestType=event-stream"
+    );
     expect(MockBroadcastChannel.channels.size).toBe(0);
   });
 
@@ -505,13 +539,13 @@ describe("useEditLock", () => {
 
     await vi.waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
-        "/api/templates/test-form-id/edit-lock",
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
         expect.objectContaining({ method: "POST" })
       );
     });
 
     const acquireRequest = fetchMock.mock.calls.find(([input, init]) => {
-      return String(input).endsWith("/edit-lock") && init?.method === "POST";
+      return isEditLockRequest(input, init?.method, "acquire") && init?.method === "POST";
     });
 
     const body = JSON.parse(String(acquireRequest?.[1]?.body)) as {
@@ -551,9 +585,9 @@ describe("useEditLock", () => {
     const lockStates: Array<{ isLockedByOther: boolean; hasEditLock: boolean }> = [];
 
     fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
+      const url = getRequestUrl(input);
 
-      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+      if (isEditLockRequest(input) && init?.method === "POST") {
         const body = JSON.parse(String(init.body)) as { action: string };
 
         // The first acquire is the initial mount where User A legitimately owns
@@ -579,14 +613,14 @@ describe("useEditLock", () => {
         } as Response;
       }
 
-      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+      if (isEditLockRequest(input) && init?.method === "GET") {
         return {
           ok: true,
           json: async () => lockedByOtherStatus,
         } as Response;
       }
 
-      if (url.endsWith("/api/templates/test-form-id")) {
+      if (isTemplateRequest(input)) {
         return {
           ok: true,
           json: async () => ({
@@ -603,14 +637,14 @@ describe("useEditLock", () => {
 
     await vi.waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
-        "/api/templates/test-form-id/edit-lock",
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
         expect.objectContaining({ method: "POST" })
       );
     });
 
     // Move the fake clock forward by one heartbeat interval so the callback
     // inside useEditLock runs exactly once.
-    await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_MS);
+    await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_INTERVAL_MS);
 
     await vi.waitFor(() => {
       // Once ownership is lost, useEditLock should refresh the form from the server
@@ -640,9 +674,9 @@ describe("useEditLock", () => {
     const lockStates: Array<{ isLockedByOther: boolean; hasEditLock: boolean }> = [];
 
     fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
+      const url = getRequestUrl(input);
 
-      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+      if (isEditLockRequest(input) && init?.method === "POST") {
         const body = JSON.parse(String(init.body)) as { action: string };
 
         if (body.action === "acquire") {
@@ -665,7 +699,7 @@ describe("useEditLock", () => {
         } as Response;
       }
 
-      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+      if (isEditLockRequest(input) && init?.method === "GET") {
         return {
           ok: true,
           json: async () => unlockedStatus,
@@ -679,14 +713,14 @@ describe("useEditLock", () => {
 
     await vi.waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
-        "/api/templates/test-form-id/edit-lock",
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
         expect.objectContaining({ method: "POST" })
       );
     });
 
     // Advance one heartbeat tick: useEditLock sees the missing lock, tries an
     // auto-save, and falls back to a manual takeover state.
-    await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_MS);
+    await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_INTERVAL_MS);
 
     await vi.waitFor(() => {
       expect(saveDraftIfNeeded).toHaveBeenCalledTimes(1);
@@ -694,7 +728,7 @@ describe("useEditLock", () => {
 
     const lockPostBodies = fetchMock.mock.calls
       .filter(([input, init]) => {
-        return String(input).endsWith("/edit-lock") && init?.method === "POST";
+        return isEditLockRequest(input) && init?.method === "POST";
       })
       .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
 
@@ -747,25 +781,25 @@ describe("useEditLock", () => {
 
     await vi.waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
-        "/api/templates/test-form-id/edit-lock",
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
         expect.objectContaining({ method: "POST" })
       );
     });
 
     // Advance one heartbeat tick: the lock is missing and local draft state
     // should remain untouched while the UI waits for a manual takeover.
-    await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_MS);
+    await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_INTERVAL_MS);
 
     await vi.waitFor(() => {
       expect(heartbeatCallCount).toBe(1);
     });
 
     const formFetchCalls = fetchMock.mock.calls.filter(([input]) =>
-      String(input).endsWith("/api/templates/test-form-id")
+      isTemplateRequest(input)
     );
     const lockPostBodies = fetchMock.mock.calls
       .filter(([input, init]) => {
-        return String(input).endsWith("/edit-lock") && init?.method === "POST";
+        return isEditLockRequest(input) && init?.method === "POST";
       })
       .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
 
@@ -803,23 +837,23 @@ describe("useEditLock", () => {
 
     const lockStates: Array<{ isLockedByOther: boolean; hasEditLock: boolean }> = [];
     fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
+      const url = getRequestUrl(input);
 
-      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+      if (isEditLockRequest(input) && init?.method === "POST") {
         return {
           ok: true,
           json: async () => lockedByOtherStatus,
         } as Response;
       }
 
-      if (url.endsWith("/edit-lock") && init?.method === "GET") {
+      if (isEditLockRequest(input) && init?.method === "GET") {
         return {
           ok: true,
           json: async () => unlockedStatus,
         } as Response;
       }
 
-      if (url.endsWith("/api/templates/test-form-id")) {
+      if (isTemplateRequest(input)) {
         return {
           ok: true,
           json: async () => ({
@@ -836,25 +870,25 @@ describe("useEditLock", () => {
 
     await vi.waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
-        "/api/templates/test-form-id/edit-lock",
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
         expect.objectContaining({ method: "POST" })
       );
     });
 
     // Advance one poll tick: the previous owner is gone, and the client should
     // wait for an explicit takeover instead of auto-acquiring.
-    await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_MS);
+    await vi.advanceTimersByTimeAsync(EDIT_LOCK_STATUS_POLL_INTERVAL_MS);
 
     await vi.waitFor(() => {
       expect(lockStates.at(-1)).toEqual({ isLockedByOther: true, hasEditLock: false });
     });
 
     const formFetchCalls = fetchMock.mock.calls.filter(([input]) =>
-      String(input).endsWith("/api/templates/test-form-id")
+      isTemplateRequest(input)
     );
     const lockPostBodies = fetchMock.mock.calls
       .filter(([input, init]) => {
-        return String(input).endsWith("/edit-lock") && init?.method === "POST";
+        return isEditLockRequest(input) && init?.method === "POST";
       })
       .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
 
