@@ -7,9 +7,11 @@ import { FormRecord } from "@lib/types";
 import { clearTemplateStore } from "@lib/store/utils";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { useEditLockPresence } from "@lib/hooks/form-builder/useEditLockPresence";
+import { useLeaderTab } from "@lib/hooks/form-builder/useLeaderTab";
 import { isEditLockStatus, type EditLockStatusPayload } from "@lib/editLockStatus";
 import {
   EDIT_LOCK_DETECT_PRESENCE,
+  EDIT_LOCK_LEADER_TAB_ENABLED,
   EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
   EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
 } from "@lib/formBuilderEditLockPresence";
@@ -64,9 +66,16 @@ export const useEditLock = ({
   const updatedAtRef = useRef(updatedAt);
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
+
+  const { isLeaderTab } = useLeaderTab({
+    enabled: enabled && EDIT_LOCK_LEADER_TAB_ENABLED && status === "authenticated",
+    coordinationKey: formId,
+  });
+
   const { getActivitySnapshot } = useEditLockPresence({
     enabled: presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
     coordinationKey: formId,
+    leaderTabEnabled: EDIT_LOCK_LEADER_TAB_ENABLED,
   });
 
   const clearLockState = useCallback(() => {
@@ -293,6 +302,7 @@ export const useEditLock = ({
   ]);
 
   // Non-owners poll on this interval while waiting for the lock state to change.
+  // If leader-tab coordination is enabled, only the leader tab polls to reduce requests.
   const startPolling = useCallback((): void => {
     clearTimers();
     const loopToken = lockLoopTokenRef.current;
@@ -333,11 +343,43 @@ export const useEditLock = ({
       if (statusResult.isOwner) {
         startHeartbeat();
       } else {
-        startPolling();
+        // For non-owners with leader-tab coordination, only start polling if this is the leader tab
+        if (!EDIT_LOCK_LEADER_TAB_ENABLED || isLeaderTab) {
+          startPolling();
+        }
       }
     },
-    [startHeartbeat, startPolling]
+    [startHeartbeat, startPolling, isLeaderTab]
   );
+
+  // When a non-owner tab's leader status changes, update polling state accordingly.
+  // Only the leader tab should have the polling interval active to reduce network traffic.
+  useEffect(() => {
+    // Only applies to non-owners with leader-tab coordination enabled
+    if (isOwnerRef.current || !EDIT_LOCK_LEADER_TAB_ENABLED) {
+      return;
+    }
+
+    if (isLeaderTab) {
+      // Tab just became the leader - start polling if not already running
+      if (!pollRef.current) {
+        startPollingRef.current();
+      } else {
+        // Poll immediately to refresh state before next interval tick
+        void getLockStatus().then((result) => {
+          if (result) {
+            cbRef.current.updateStore(result);
+          }
+        });
+      }
+    } else {
+      // Tab stopped being the leader - stop polling
+      if (pollRef.current) {
+        window.clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+    }
+  }, [isLeaderTab, getLockStatus]);
 
   // The main effect runs whenever "enabled" or "status" changes to start/stop
   // the lock logic. The ref "container" is necessary to hold the latest
