@@ -117,8 +117,10 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
     const isAllowedKey = allowedKeys.has(event.key);
     const isModifier = event.ctrlKey || event.metaKey;
 
+    const normalizedInputValue = normalizeLocaleInput(inputValue, locale);
+
     // Block a second decimal separator if one already exists
-    if ((event.key === "." || event.key === ",") && inputValue.includes(".")) {
+    if ((event.key === "." || event.key === ",") && normalizedInputValue.includes(".")) {
       event.preventDefault();
       return;
     }
