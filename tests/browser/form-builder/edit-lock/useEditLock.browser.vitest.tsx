@@ -755,9 +755,9 @@ describe("useEditLock", () => {
     let heartbeatCallCount = 0;
 
     fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
+      const url = getRequestUrl(input);
 
-      if (url.endsWith("/edit-lock") && init?.method === "POST") {
+      if (isEditLockRequest(input) && init?.method === "POST") {
         const body = JSON.parse(String(init.body)) as { action: string };
 
         if (body.action === "heartbeat") {
