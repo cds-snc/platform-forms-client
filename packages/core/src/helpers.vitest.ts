@@ -38,7 +38,7 @@ describe("helpers element lookup", () => {
     expect(getElementById(elements, "201")).toBeUndefined();
   });
 
-  it("finds top-level and nested subElements with getElementByIdDeep", () => {
+  it("finds top-level and nested subElements with getElementOrSubElementById", () => {
     expect(getElementOrSubElementById(elements, "1")?.id).toBe(1);
     expect(getElementOrSubElementById(elements, "201")?.id).toBe(201);
   });
