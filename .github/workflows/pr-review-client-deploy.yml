@@ -49,6 +49,8 @@ jobs:
     needs: [run-check]
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'Renovate') && needs.run-check.outputs.has-migrations == 'false' }}
     runs-on: ubuntu-latest
+    env:
+      GITHUB_ACTION: true
     steps:
       - name: Set envs
         run: echo "PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
