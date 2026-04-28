@@ -3,8 +3,8 @@ import {
   AdminInitiateAuthCommandInput,
   CognitoIdentityProviderServiceException,
 } from "@aws-sdk/client-cognito-identity-provider";
+import { prisma, prismaErrors } from "@gcforms/database";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 import { logMessage } from "@lib/logger";
@@ -180,7 +180,7 @@ export const begin2FAAuthentication = async ({
 export const requestNew2FAVerificationCode = async (
   authenticationFlowToken: AuthenticationFlowToken,
   email: string
-): Promise<string> => {
+): Promise<void> => {
   const sanitizedEmail = sanitizeEmailAddressForCognito(email);
 
   const verificationCode = await generateVerificationCode();
@@ -205,8 +205,6 @@ export const requestNew2FAVerificationCode = async (
     await sendVerificationCode(sanitizedEmail, verificationCode);
 
     logMessage.info("HealthCheck: request new 2fa code success");
-
-    return verificationCode;
   } catch (error) {
     logMessage.info("HealthCheck: request new 2fa code failure");
     if (error instanceof Missing2FASession) {

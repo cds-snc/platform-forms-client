@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-import corePreset from "./packages/core/tailwind-preset";
+import corePreset from "@gcforms/core/tailwind-preset";
 
 module.exports = {
   presets: [corePreset],

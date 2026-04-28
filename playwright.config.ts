@@ -63,9 +63,15 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "yarn build:test && yarn start:test",
+    command: "yarn db:test && yarn build:test && yarn start:test",
+    env: {
+      ...process.env,
+      APP_ENV: "test",
+      NEXT_PUBLIC_APP_ENV: "test",
+      PLAYWRIGHT_TEST: "true",
+    },
     url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: process.env.PLAYWRIGHT_REUSE_SERVER === "true",
     timeout: 120 * 1000,
   },
 });

@@ -5,7 +5,7 @@ import { Formik } from "formik";
 import { render } from "vitest-browser-react";
 import { setupFonts } from "../helpers/setupFonts";
 
-import "@root/styles/app.scss";
+import "@root/styles/app.css";
 import "@root/i18n/client";
 
 describe("<TextInput />", () => {

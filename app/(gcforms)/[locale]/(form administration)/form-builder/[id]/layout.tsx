@@ -4,7 +4,7 @@ import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Footer } from "@serverComponents/globals/Footer";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { AccessControlError } from "@lib/auth/errors";
-import { getFullTemplateByID } from "@lib/templates";
+import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
@@ -16,11 +16,15 @@ import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { checkKeyExists } from "@lib/serviceAccount";
+import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
+import { shouldEnforceTemplateEditLock } from "@lib/editLocks";
+import { getAppSettingAsBoolean } from "@lib/appSettings";
 import {
   FormBuilderConfigProvider,
   FormBuilderConfig,
   formBuilderConfigDefault,
 } from "@lib/hooks/useFormBuilderConfig";
+import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -42,15 +46,25 @@ export default async function Layout(props: {
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();
+  const allowLockedEditingFlag = await allowLockedEditing();
+  const editLockPresenceEnabled = allowLockedEditingFlag
+    ? await getAppSettingAsBoolean("editLockPresenceEnabled")
+    : false;
+  const enforceEditLockFlag =
+    allowLockedEditingFlag && formID && formID !== "0000"
+      ? await shouldEnforceTemplateEditLock(formID)
+      : false;
 
   if (session && formID && formID !== "0000") {
-    initialForm = await getFullTemplateByID(formID).catch((e) => {
+    const templateWithUsers = await getTemplateWithAssociatedUsers(formID).catch((e) => {
       if (e instanceof AccessControlError) {
         redirect(`/${locale}/admin/unauthorized`);
       }
       logMessage.warn(`Error fetching Form Record for form-builder/[id] Layout: ${e.message}`);
       return null;
     });
+
+    initialForm = templateWithUsers?.formRecord ?? null;
 
     if (initialForm === null) {
       redirect(`/${locale}/404`);
@@ -84,7 +98,7 @@ export default async function Layout(props: {
             <div className="h-full">
               <div className="flex min-h-screen flex-col">
                 <Header context="formBuilder" className="mb-0" />
-                <div className="flex shrink-0 grow basis-auto flex-col bg-gray-soft">
+                <div className="bg-gray-soft flex shrink-0 grow basis-auto flex-col">
                   <ToastContainer containerId="default" />
                   <ToastContainer
                     limit={1}
@@ -106,14 +120,22 @@ export default async function Layout(props: {
                       </div>
                     </div>
                     <GroupStoreProvider>
-                      <main
-                        id="content"
-                        className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
-                        tabIndex={-1}
-                      >
-                        {children}
-                      </main>
-                      {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
+                      <div className="relative flex w-full gap-7">
+                        <EditLockClient
+                          formId={id}
+                          lockedEditingEnabled={enforceEditLockFlag}
+                          editLockPresenceEnabled={editLockPresenceEnabled}
+                        >
+                          <main
+                            id="content"
+                            className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
+                            tabIndex={-1}
+                          >
+                            {children}
+                          </main>
+                          {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
+                        </EditLockClient>
+                      </div>
                     </GroupStoreProvider>
                   </div>
                 </div>

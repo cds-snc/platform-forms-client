@@ -1,4 +1,4 @@
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@gcforms/database";
 import { authorization } from "./privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
@@ -53,6 +53,11 @@ export const getAppSetting = async (internalId: string) => {
     settingPut(internalId, uncachedSetting.value);
   }
   return uncachedSetting?.value ?? null;
+};
+
+export const getAppSettingAsBoolean = async (internalId: string) => {
+  const value = await getAppSetting(internalId);
+  return value === "true";
 };
 
 export const getFullAppSetting = async (internalId: string) => {

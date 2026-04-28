@@ -13,8 +13,8 @@ export const RichText = () => {
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.richText.description")}</p>
 
-      <ExampleWrapper className="mt-4">
-        <div className="mb-5 mt-2">
+      <ExampleWrapper>
+        <div className="mt-2 mb-5">
           <Markdown options={{ forceBlock: true }}>
             {t("addElementDialog.richText.example")}
           </Markdown>

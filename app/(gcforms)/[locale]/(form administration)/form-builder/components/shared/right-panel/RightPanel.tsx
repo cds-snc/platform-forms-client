@@ -54,7 +54,7 @@ const TabButton = ({
             selected
               ? "border-indigo-500 text-indigo-600"
               : "border-transparent text-slate-500 hover:border-gray-300 hover:text-slate-700",
-            "whitespace-nowrap border-b-2 px-2 py-2 flex justify-center w-full",
+            "flex w-full justify-center border-b-2 px-2 py-2 whitespace-nowrap",
             className
           )}
           onClick={loadTab}
@@ -73,8 +73,9 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const router = useRouter();
   const { t, i18n } = useTranslation(["form-builder", "common"]);
 
-  const { id: storeId } = useTemplateStore((s) => ({
+  const { id: storeId, isLockedByOther } = useTemplateStore((s) => ({
     id: s.id,
+    isLockedByOther: s.isLockedByOther,
   }));
 
   if (storeId && storeId !== id) {
@@ -141,10 +142,14 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
     return null;
   }
 
+  if (isLockedByOther) {
+    return null;
+  }
+
   return (
     <section className="z-10 border-l border-slate-200 bg-white" aria-labelledby="rightPanelTitle">
       <div className={cn("fixed right-0", fixedRange, open && "hidden")}>
-        <div className="mr-4 mt-4">
+        <div className="mt-4 mr-4">
           <CircleButton
             id={!open ? "rightPanelTitle" : ""}
             title={t("rightPanel.openPanel")}

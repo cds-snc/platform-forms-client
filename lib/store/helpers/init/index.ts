@@ -1,3 +1,5 @@
 import { initialize } from "./initialize";
 import { importTemplate } from "./importTemplate";
-export { initialize, importTemplate };
+import { setFromRecord } from "./setFromRecord";
+
+export { initialize, importTemplate, setFromRecord };

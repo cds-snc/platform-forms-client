@@ -4,7 +4,7 @@ import { DeleteIcon, FolderIcon, InboxIcon } from "@serverComponents/icons";
 import { TabNavLink } from "@clientComponents/globals/TabNavLink";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
-import { ManageFormAccessButton } from "./ManageFormAccessDialog/ManageFormAccessButton";
+import { ManageFormAccessButton } from "../../../components/dialogs/ManageFormAccessDialog/ManageFormAccessButton";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const NavigationTabs = ({ formId }: { formId: string }) => {
@@ -27,7 +27,7 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
         active={pathname.includes("new") || pathname.endsWith("responses")}
         setAriaCurrent={true}
       >
-        <span className="text-sm laptop:text-base">
+        <span className="laptop:text-base text-sm">
           <InboxIcon className="inline-block size-7" /> {t("responses.status.new")}
         </span>
       </TabNavLink>
@@ -37,7 +37,7 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
         active={pathname.includes("downloaded")}
         setAriaCurrent={true}
       >
-        <span className="text-sm laptop:text-base">
+        <span className="laptop:text-base text-sm">
           <FolderIcon className="inline-block size-7" /> {t("responses.status.downloaded")}
         </span>
       </TabNavLink>
@@ -47,13 +47,13 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
         active={pathname.includes("confirmed")}
         setAriaCurrent={true}
       >
-        <span className="text-sm laptop:text-base">
+        <span className="laptop:text-base text-sm">
           <DeleteIcon className="inline-block size-7" /> {t("responses.status.deleted")}
         </span>
       </TabNavLink>
 
       {isPublished && (
-        <div className="absolute right-0">
+        <div className="absolute right-5 bottom-4">
           <ManageFormAccessButton />
         </div>
       )}

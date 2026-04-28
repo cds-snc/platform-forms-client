@@ -7,21 +7,20 @@ export interface ErrorListProps {
   children?: React.ReactNode;
 }
 
-/**
- * scrollErrorInView [private] is called when you click on an error link at the top of the form
- * @param id The id of the input field that has the error and we need to focus
- */
 const scrollErrorInView = (id: string) => {
-  const inputElement = document.getElementById(id);
+  const element = document.getElementById(id);
   const labelElement = document.getElementById(`label-${id}`);
-  if (labelElement && inputElement) {
-    inputElement.focus();
-    labelElement.scrollIntoView();
-  }
-  if (inputElement) {
-    inputElement.focus();
-    inputElement.scrollIntoView();
-  }
+  // For fieldsets (radio/checkbox groups), prefer the already-selected option so
+  // AT users aren't misled into thinking nothing was chosen. Fall back to the
+  // first input, then the fieldset itself.
+  const focusTarget =
+    element?.tagName === "FIELDSET"
+      ? (((element.querySelector("input:checked") ??
+          element.querySelector("input")) as HTMLElement | null) ?? element)
+      : element;
+  const scrollTarget = labelElement ?? element;
+  focusTarget?.focus();
+  scrollTarget?.scrollIntoView();
 };
 
 /**

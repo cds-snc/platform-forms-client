@@ -29,6 +29,7 @@
   "optionalMessage": "Message (optionnel)",
   "peopleWithAccess": "Personnes ayant accès",
   "remove": "Supprimer l'invitation pour {{email}}",
+  "removeButtonLabel": "Supprimer",
   "resend": "Renvoyer l'invitation pour {{email}}",
   "templateNotFound": "Gabarit non trouvé {{templateId}}",
   "userAlreadyHasAccess": "{{email}} a déjà accès",

@@ -1,7 +1,16 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 
 test.describe.serial("Test FormBuilder Add Elements", () => {
   const addElementButtonText = "Add form element";
+
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  const openPreview = async (page: Page) => {
+    await page.getByTestId("preview").click();
+    await page.waitForURL(/\/en\/form-builder\/0000\/preview/);
+    await expect(page.getByTestId("preview-container")).toBeVisible();
+    await expect(page.locator(".react-loading-skeleton")).toHaveCount(0);
+  };
 
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 }); // macbook-15 equivalent
@@ -48,6 +57,7 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
     await page.getByTestId("element-description-add-element").click();
 
     await expect(page.locator("#item-1")).toHaveAttribute("placeholder", "Question");
+    await page.getByRole("button", { name: "Add option" }).click();
     await expect(page.locator("#option--1--1")).toHaveAttribute("type", "text");
     await expect(page.locator("#option--1--1")).toHaveAttribute("placeholder", "Option 1");
     await expect(page.locator(".example-text")).toContainText("Radio buttons");
@@ -60,6 +70,7 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
     await page.getByTestId("element-description-add-element").click();
 
     await expect(page.locator("#item-1")).toHaveAttribute("placeholder", "Question");
+    await page.getByRole("button", { name: "Add option" }).click();
     await expect(page.locator("#option--1--1")).toHaveAttribute("placeholder", "Option 1");
     await expect(page.locator(".example-text")).toContainText("Checkboxes");
   });
@@ -72,6 +83,7 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
     await page.getByTestId("element-description-add-element").click();
 
     await expect(page.locator("#item-1")).toHaveAttribute("placeholder", "Question");
+    await page.getByRole("button", { name: "Add option" }).click();
     await expect(page.locator("#option--1--1")).toHaveAttribute("placeholder", "Option 1");
     await expect(page.locator(".example-text")).toContainText("Dropdown");
   });
@@ -89,16 +101,19 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
   test("Adds a Numeric field element", async ({ page }) => {
     await page.getByRole("button", { name: addElementButtonText }).click();
 
-    await page.getByTestId("preset-filter").click();
-    await page.getByTestId("number").click();
-    await page.getByTestId("element-description-add-element").click();
+    const addElementDialog = page.getByRole("dialog");
+    await expect(addElementDialog).toBeVisible();
+
+    await addElementDialog.getByTestId("preset-filter").click();
+    await addElementDialog.getByRole("option", { name: /^number$/i }).click();
+    await addElementDialog.getByTestId("element-description-add-element").click();
 
     await expect(page.locator("#item-1")).toHaveAttribute("placeholder", "Question");
     await expect(page.getByTestId("description-text")).toContainText("Enter a number");
     await expect(page.getByTestId("number")).toContainText("0123456789");
 
-    await page.goto("/en/form-builder/0000/preview");
-    await expect(page.getByTestId("textInput")).toHaveAttribute("inputmode", "numeric");
+    await openPreview(page);
+    await expect(page.getByTestId("numberInput")).toHaveAttribute("inputmode", "numeric");
   });
 
   test("Renders attestation block", async ({ page }) => {
@@ -116,7 +131,7 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
     await expect(page.locator("#required-1-id")).toBeDisabled();
     await expect(page.locator("#required-1-id")).toBeChecked();
 
-    await page.goto("/en/form-builder/0000/preview");
+    await openPreview(page);
     await expect(page.locator("#label-1")).toContainText("all checkboxes required");
     await expect(page.getByText("Condition 1")).toBeVisible();
     await expect(page.getByText("Condition 2")).toBeVisible();
@@ -149,7 +164,7 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
 
     await expect(page.getByTestId("autocomplete-1")).toContainText("Full name");
 
-    await page.goto("/en/form-builder/0000/preview");
+    await openPreview(page);
     await expect(page.getByTestId("textInput")).toHaveAttribute("autocomplete", "name");
   });
 
@@ -163,7 +178,7 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
     await expect(page.getByTestId("autocomplete-3")).toContainText("Middle name");
     await expect(page.getByTestId("autocomplete-4")).toContainText("Last name");
 
-    await page.goto("/en/form-builder/0000/preview");
+    await openPreview(page);
 
     const textInputs = page.getByTestId("textInput");
     await expect(textInputs.nth(0)).toHaveAttribute("autocomplete", "given-name");
@@ -180,7 +195,7 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
     await expect(page.getByTestId("autocomplete-2")).toContainText("Phone number");
     await expect(page.getByTestId("autocomplete-3")).toContainText("Email address");
 
-    await page.goto("/en/form-builder/0000/preview");
+    await openPreview(page);
 
     const textInputs = page.getByTestId("textInput");
     await expect(textInputs.nth(0)).toHaveAttribute("autocomplete", "tel");

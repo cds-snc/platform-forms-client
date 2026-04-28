@@ -6,8 +6,7 @@ import { redirect } from "next/navigation";
 import { requestNew2FAVerificationCode } from "@lib/auth";
 import { signIn } from "@lib/auth";
 import { handleErrorById, Missing2FASession } from "@lib/auth/cognito";
-import { cookies } from "next/headers";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { CredentialsSignin } from "next-auth";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { logMessage } from "@lib/logger";
@@ -108,15 +107,7 @@ export const resendVerificationCode = async (
   authenticationFlowToken: string
 ): Promise<void | { error: string }> => {
   try {
-    const newCode = await requestNew2FAVerificationCode(authenticationFlowToken, email);
-    (await cookies()).set(
-      "authenticationFlow",
-      JSON.stringify({
-        authenticationFlowToken: newCode,
-        email,
-      }),
-      { secure: true, sameSite: "strict", maxAge: 60 * 15 }
-    );
+    await requestNew2FAVerificationCode(authenticationFlowToken, email);
   } catch (err) {
     if (err instanceof Missing2FASession) {
       redirect(`/${language}/auth/login`);
@@ -185,7 +176,9 @@ const validate = async (
     authenticationFlowToken: v.pipe(v.string(), v.minLength(1)),
     email: v.pipe(v.string(), v.trim(), v.toLowerCase(), v.minLength(1)),
   });
-  return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
+  return v.safeParse(formValidationSchema, formEntries, {
+    abortPipeEarly: true,
+  });
 };
 
 const isUserActive = async (email: string) => {

@@ -5,6 +5,9 @@ import { describe, it, expect } from "vitest";
 import React from "react";
 import { useTemplateStore, TemplateStoreProvider } from "../useTemplateStore";
 import { renderHook, act, waitFor } from "@testing-library/react";
+import { NotificationsIntervalDefault } from "@gcforms/types";
+import { FormRecord } from "@lib/types";
+import { MAX_CHOICE_AMOUNT } from "@root/constants";
 
 const createStore = async () => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
@@ -108,7 +111,14 @@ describe("TemplateStore", () => {
     expect(result.current.form.titleEn).toBe("");
     expect(result.current.form.elements).toHaveLength(1);
     expect(result.current.form.elements[0].properties.titleEn).toBe("");
-    // By default, there is one choice available
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(0);
+
+    // Add a choice to the element
+    act(() => {
+      result.current.addChoice(0);
+    });
+
+    // Default choice expectations
     expect(result.current.form.elements[0].properties.choices).toHaveLength(1);
 
     if (result.current.form.elements[0].properties.choices) {
@@ -117,19 +127,23 @@ describe("TemplateStore", () => {
       expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
     }
 
-    // Add a choice to the element
+    await act(async () => {
+      await promise;
+    });
+  });
+
+  it("Does not add more than the maximum number of choices", async () => {
+    const result = await createStore();
+
     act(() => {
-      result.current.addChoice(0);
+      result.current.add();
+
+      for (let index = 0; index < MAX_CHOICE_AMOUNT + 5; index += 1) {
+        result.current.addChoice(0);
+      }
     });
 
-    // Default choice expectations
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
-
-    if (result.current.form.elements[0].properties.choices) {
-      expect(result.current.form.elements[0].properties.choices[1]).toEqual({ en: "", fr: "" });
-    } else {
-      expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
-    }
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(MAX_CHOICE_AMOUNT);
 
     await act(async () => {
       await promise;
@@ -142,6 +156,7 @@ describe("TemplateStore", () => {
 
     act(() => {
       result.current.add();
+      result.current.addChoice(0);
       result.current.updateField(`form.elements[0].properties.choices[0].en`, "option 1!!");
       result.current.updateField(`form.elements[0].properties.choices[0].fr`, "l'option 1!!");
     });
@@ -164,21 +179,21 @@ describe("TemplateStore", () => {
     const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
 
-    // Create an element with three choices
+    // Create an element with two choices
     act(() => {
-      result.current.add(); // one choices is added by default
+      result.current.add();
       result.current.addChoice(0);
       result.current.addChoice(0);
     });
 
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(3);
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
 
     // Remove one choice
     act(() => {
       result.current.removeChoice(0, 0);
     });
 
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(1);
 
     await act(async () => {
       await promise;
@@ -378,6 +393,59 @@ describe("TemplateStore", () => {
 
     expect(titleProp).toBe("titleFr");
     expect(descProp).toBe("descriptionFr");
+
+    await act(async () => {
+      await promise;
+    });
+  });
+
+  it("Rehydrates the store from a FormRecord", async () => {
+    const result = await createStore();
+    // changeKey is intentionally left unchanged here; the locked-editing rehydrate flow will own that.
+    const previousChangeKey = result.current.changeKey;
+
+    const record: FormRecord = {
+      id: "rehydrated-form",
+      name: "Rehydrated form",
+      isPublished: true,
+      securityAttribute: "Protected B",
+      formPurpose: null,
+      publishReason: null,
+      publishFormType: null,
+      publishDesc: null,
+      form: {
+        titleEn: "Server title",
+        titleFr: "Titre serveur",
+        layout: [],
+        elements: [],
+      },
+    };
+
+    act(() => {
+      result.current.setFromRecord(record);
+    });
+
+    expect(result.current.id).toBe("rehydrated-form");
+    expect(result.current.name).toBe("Rehydrated form");
+    expect(result.current.isPublished).toBe(true);
+    expect(result.current.securityAttribute).toBe("Protected B");
+    expect(result.current.form.titleEn).toBe("Server title");
+    expect(result.current.form.introduction).toEqual({ descriptionEn: "", descriptionFr: "" });
+    expect(result.current.form.privacyPolicy).toEqual({ descriptionEn: "", descriptionFr: "" });
+    expect(result.current.form.confirmation).toEqual({
+      descriptionEn: "",
+      descriptionFr: "",
+      referrerUrlEn: "",
+      referrerUrlFr: "",
+    });
+    expect(result.current.formPurpose).toBe("");
+    expect(result.current.publishReason).toBe("");
+    expect(result.current.publishFormType).toBe("");
+    expect(result.current.publishDesc).toBe("");
+    expect(result.current.closingDate).toBeNull();
+    expect(result.current.saveAndResume).toBe(true);
+    expect(result.current.notificationsInterval).toBe(NotificationsIntervalDefault);
+    expect(result.current.changeKey).not.toBe(previousChangeKey);
 
     await act(async () => {
       await promise;

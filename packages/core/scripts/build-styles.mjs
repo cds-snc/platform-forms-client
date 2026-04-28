@@ -11,8 +11,7 @@ const sourceDir = path.join(packageRoot, "src", "styles");
 const distDir = path.join(packageRoot, "dist");
 const distStylesDir = path.join(distDir, "styles");
 const packageStylesDir = path.join(packageRoot, "styles");
-const tmpDir = path.join(packageRoot, ".tmp", "styles");
-const entries = ["forms", "header", "gc-header", "icons"];
+const entries = ["forms", "header", "gc-header", "icons", "typography", "toast"];
 
 const run = (command, args) => {
   const result = spawnSync(command, args, {
@@ -27,27 +26,18 @@ const run = (command, args) => {
 
 const binPath = (name) => path.join(workspaceRoot, "node_modules", ".bin", name);
 
-rmSync(tmpDir, { recursive: true, force: true });
-mkdirSync(tmpDir, { recursive: true });
 mkdirSync(distStylesDir, { recursive: true });
 rmSync(packageStylesDir, { recursive: true, force: true });
 cpSync(sourceDir, packageStylesDir, { recursive: true });
 
 for (const entry of entries) {
   const inputFile = path.join(sourceDir, `${entry}.scss`);
-  const intermediateFile = path.join(tmpDir, `${entry}.css`);
   const outputFile = path.join(distStylesDir, `${entry}.css`);
   const packageCssFile = path.join(packageStylesDir, `${entry}.css`);
 
-  run(binPath("sass"), ["--no-source-map", inputFile, intermediateFile]);
-  run(binPath("tailwindcss"), [
-    "--config",
-    path.join(packageRoot, "tailwind.build.config.js"),
-    "--input",
-    intermediateFile,
-    "--output",
-    outputFile,
-  ]);
+  // Sass compilation only — @apply directives survive in the output
+  // and are resolved by the app's Tailwind v4 PostCSS pipeline
+  run(binPath("sass"), ["--no-source-map", inputFile, outputFile]);
 
   cpSync(outputFile, packageCssFile);
 }
@@ -60,5 +50,3 @@ if (existsSync(sourceAssetsDir)) {
   mkdirSync(distAssetsDir, { recursive: true });
   cpSync(sourceAssetsDir, distAssetsDir, { recursive: true });
 }
-
-rmSync(tmpDir, { recursive: true, force: true });
