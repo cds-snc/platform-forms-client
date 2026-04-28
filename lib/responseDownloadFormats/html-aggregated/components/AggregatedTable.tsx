@@ -63,7 +63,7 @@ export const AggregatedTable = ({
                   if (Array.isArray(item.answer)) {
                     return (
                       <td
-                        key={String(item.id)}
+                        key={String(item.questionId)}
                         className="w-96 p-4 break-words"
                         style={{ maxWidth: "24rem" }}
                       >
@@ -84,7 +84,7 @@ export const AggregatedTable = ({
                                       formRecord
                                     );
                                     return (
-                                      <tr key={String(subSubItem.id)}>
+                                      <tr key={String(subSubItem.questionId)}>
                                         <th
                                           className="w-1/2 p-2 break-words"
                                           style={{ maxWidth: "12rem" }}
@@ -120,7 +120,7 @@ export const AggregatedTable = ({
                   }
                   return (
                     <td
-                      key={String(item.id)}
+                      key={String(item.questionId)}
                       className="w-64 p-4 break-words"
                       style={{ maxWidth: "16rem" }}
                     >
