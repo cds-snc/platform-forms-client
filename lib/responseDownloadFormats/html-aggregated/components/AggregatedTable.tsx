@@ -62,7 +62,11 @@ export const AggregatedTable = ({
                   const formattedNumberInput = formatNumberInputAnswer(item, lang, formRecord);
                   if (Array.isArray(item.answer)) {
                     return (
-                      <td key="" className="w-96 p-4 break-words" style={{ maxWidth: "24rem" }}>
+                      <td
+                        key={String(item.id)}
+                        className="w-96 p-4 break-words"
+                        style={{ maxWidth: "24rem" }}
+                      >
                         <div className="overflow-hidden">
                           <table className="w-full table-fixed text-left">
                             <tbody>
@@ -80,7 +84,7 @@ export const AggregatedTable = ({
                                       formRecord
                                     );
                                     return (
-                                      <tr key="">
+                                      <tr key={String(subSubItem.id)}>
                                         <th
                                           className="w-1/2 p-2 break-words"
                                           style={{ maxWidth: "12rem" }}
