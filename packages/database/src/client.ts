@@ -8,13 +8,20 @@ const __dirnameTMP = path.dirname(__filenameTMP);
 const certPath = path.join(__dirnameTMP, "global-bundle.pem");
 
 const connectionString = () => {
-  // Don't throw an error because this package is also initialized when not being used to connect to the database.
-  // For example during vitest and other tesing suites
-  if (!process.env.DATABASE_URL) {
-    // eslint-disable-next-line no-console
-    console.warn("Missing Database Url Environment Variable");
+  if (process.env.APP_ENV === "test" && !process.env.DATABASE_URL) {
+    return "dummy_url_for_testing";
   }
-  const envConnectiontring = process.env.DATABASE_URL ?? "dummy_url_for_build";
+
+  if (!process.env.DATABASE_URL) {
+    throw new Error("Missing Database Url Environment Variable");
+  }
+
+  const envConnectiontring = process.env.DATABASE_URL;
+
+  if (process.env.GITHUB_ACTION) {
+    // CI Github Action environment does not support SSL
+    return envConnectiontring;
+  }
   // Check if there are already existing parameters and if not start a new parameter string
   if (/5432\/forms$/i.test(envConnectiontring)) {
     return envConnectiontring + `?sslmode=verify-full&sslrootcert=${certPath}`;
