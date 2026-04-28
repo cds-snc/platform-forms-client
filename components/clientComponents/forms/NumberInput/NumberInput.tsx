@@ -145,15 +145,19 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
 
   const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
 
+  const ariaDescribedByValue = [meta.error ? `errorMessage${id}` : null, ariaDescribedBy]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <>
-      {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={`errorMessage${id}`}>{meta.error}</ErrorMessage>}
       <input
         data-testid="numberInput"
         className={classes}
         id={id}
         placeholder={placeholder}
-        {...(ariaDescribedBy && { "aria-describedby": ariaDescribedBy })}
+        {...(ariaDescribedByValue && { "aria-describedby": ariaDescribedByValue })}
         name={field.name}
         value={inputValue}
         onChange={handleOnChange}
