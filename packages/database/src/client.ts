@@ -3,9 +3,9 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const certPath = path.join(__dirname, "global-bundle.pem");
+const __filenameTMP = fileURLToPath(import.meta.url);
+const __dirnameTMP = path.dirname(__filenameTMP);
+const certPath = path.join(__dirnameTMP, "global-bundle.pem");
 
 const connectionString = () => {
   const envConnectiontring = process.env.DATABASE_URL;
