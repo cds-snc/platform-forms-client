@@ -7,19 +7,36 @@ import { FormRecord } from "@lib/types";
 import { clearTemplateStore } from "@lib/store/utils";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { useEditLockPresence } from "@lib/hooks/form-builder/useEditLockPresence";
+import { useActiveTab } from "@lib/hooks/form-builder/useActiveTab";
 import { isEditLockStatus, type EditLockStatusPayload } from "@lib/editLockStatus";
 import {
   EDIT_LOCK_DETECT_PRESENCE,
-  EDIT_LOCK_HEARTBEAT_MS,
+  EDIT_LOCK_ACTIVE_TAB_ENABLED,
+  EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
+  EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
 } from "@lib/formBuilderEditLockPresence";
 
 const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
 const SERVER_STATE_SYNC_RETRY_MS = 500;
+type EditLockRequestType =
+  | "acquire"
+  | "heartbeat"
+  | "lock-status-poll"
+  | "release"
+  | "takeover"
+  | "takeover-save-complete"
+  | "event-stream";
 
 const wait = async (timeMs: number) =>
   new Promise((resolve) => {
     window.setTimeout(resolve, timeMs);
   });
+
+const buildEditLockUrl = (formId: string, requestType: EditLockRequestType) =>
+  `/api/templates/${formId}/edit-lock?requestType=${requestType}`;
+
+const buildEditLockEventsUrl = (formId: string) =>
+  `/api/templates/${formId}/edit-lock/events?requestType=event-stream`;
 
 export const useEditLock = ({
   formId,
@@ -49,9 +66,16 @@ export const useEditLock = ({
   const updatedAtRef = useRef(updatedAt);
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
+
+  const { isActiveTab } = useActiveTab({
+    enabled: enabled && EDIT_LOCK_ACTIVE_TAB_ENABLED && status === "authenticated",
+    coordinationKey: formId,
+  });
+
   const { getActivitySnapshot } = useEditLockPresence({
     enabled: presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
     coordinationKey: formId,
+    activeTabEnabled: EDIT_LOCK_ACTIVE_TAB_ENABLED,
   });
 
   const clearLockState = useCallback(() => {
@@ -115,7 +139,7 @@ export const useEditLock = ({
     async (action: "acquire" | "heartbeat" | "release" | "takeover" | "takeover-save-complete") => {
       const activity = getActivitySnapshot();
 
-      const res = await fetch(`/api/templates/${formId}/edit-lock`, {
+      const res = await fetch(buildEditLockUrl(formId, action), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -131,8 +155,10 @@ export const useEditLock = ({
     [formId, getActivitySnapshot, sessionId]
   );
 
-  const getStatus = useCallback(async () => {
-    const res = await fetch(`/api/templates/${formId}/edit-lock`, {
+  // When this tab does not own the lock, it polls lock status until ownership changes.
+  // This is the only recurring non-owner edit-lock request; other updates arrive via SSE.
+  const getLockStatus = useCallback(async () => {
+    const res = await fetch(buildEditLockUrl(formId, "lock-status-poll"), {
       method: "GET",
       cache: "no-store",
     });
@@ -231,6 +257,7 @@ export const useEditLock = ({
     [saveDraftIfNeeded]
   );
 
+  // Owners keep the lock alive on this interval while they still hold it.
   const startHeartbeat = useCallback((): void => {
     clearTimers();
     const loopToken = lockLoopTokenRef.current;
@@ -263,7 +290,7 @@ export const useEditLock = ({
         clearTimers();
         setTakeoverFallbackState();
       }
-    }, EDIT_LOCK_HEARTBEAT_MS);
+    }, EDIT_LOCK_HEARTBEAT_INTERVAL_MS);
   }, [
     autoSaveIfOwner,
     clearLockState,
@@ -274,12 +301,14 @@ export const useEditLock = ({
     updateStore,
   ]);
 
+  // Non-owners poll on this interval while waiting for the lock state to change.
+  // If active-tab coordination is enabled, only the active tab polls to reduce requests.
   const startPolling = useCallback((): void => {
     clearTimers();
     const loopToken = lockLoopTokenRef.current;
     pollRef.current = window.setInterval(async () => {
       const wasOwner = isOwnerRef.current;
-      const pollResult = await getStatus();
+      const pollResult = await getLockStatus();
       if (lockLoopTokenRef.current !== loopToken) {
         return;
       }
@@ -298,11 +327,11 @@ export const useEditLock = ({
         clearTimers();
         setTakeoverFallbackState();
       }
-    }, EDIT_LOCK_HEARTBEAT_MS);
+    }, EDIT_LOCK_STATUS_POLL_INTERVAL_MS);
   }, [
     clearLockState,
     clearTimers,
-    getStatus,
+    getLockStatus,
     setTakeoverFallbackState,
     syncServerState,
     updateStore,
@@ -314,11 +343,43 @@ export const useEditLock = ({
       if (statusResult.isOwner) {
         startHeartbeat();
       } else {
-        startPolling();
+        // For non-owners with active-tab coordination, only start polling if this is the active tab
+        if (!EDIT_LOCK_ACTIVE_TAB_ENABLED || isActiveTab) {
+          startPolling();
+        }
       }
     },
-    [startHeartbeat, startPolling]
+    [startHeartbeat, startPolling, isActiveTab]
   );
+
+  // When a non-owner tab's active status changes, update polling state accordingly.
+  // Only the active tab should have the polling interval active to reduce network traffic.
+  useEffect(() => {
+    // Only applies to non-owners with active-tab coordination enabled
+    if (isOwnerRef.current || !EDIT_LOCK_ACTIVE_TAB_ENABLED) {
+      return;
+    }
+
+    if (isActiveTab) {
+      // Tab just became active - start polling if not already running
+      if (!pollRef.current) {
+        startPollingRef.current();
+      } else {
+        // Poll immediately to refresh state before next interval tick
+        void getLockStatus().then((result) => {
+          if (result) {
+            cbRef.current.updateStore(result);
+          }
+        });
+      }
+    } else {
+      // Tab stopped being active - stop polling
+      if (pollRef.current) {
+        window.clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+    }
+  }, [isActiveTab, getLockStatus]);
 
   // The main effect runs whenever "enabled" or "status" changes to start/stop
   // the lock logic. The ref "container" is necessary to hold the latest
@@ -376,13 +437,18 @@ export const useEditLock = ({
     };
   }, [enabled, status]);
 
+  // Manage the shared SSE EventSource connection for edit-lock updates.
+  // If an SSE event is missed, the next owner heartbeat or non-owner status poll
+  // reconciles state from the server, and EventSource will retry on transient drops.
   useEffect(() => {
     if (!enabled || status !== "authenticated") {
       cbRef.current.clearEvents();
       return;
     }
 
-    const eventSource = new EventSource(`/api/templates/${formId}/edit-lock/events`);
+    // Owners and non-owners both keep the SSE stream open so either side can react
+    // immediately to lock changes without waiting for the next interval tick.
+    const eventSource = new EventSource(buildEditLockEventsUrl(formId));
     eventSourceRef.current = eventSource;
 
     const handleLockStatus: EventListener = (event) => {
@@ -406,6 +472,8 @@ export const useEditLock = ({
 
         if (!nextStatus.isOwner) {
           if (wasOwner) {
+            // Shared SSE event, but this branch is specifically the previous owner
+            // learning they lost the lock and switching into the non-owner path.
             startPollingRef.current();
             void cbRef.current.syncServerState();
           }
@@ -414,6 +482,8 @@ export const useEditLock = ({
     };
 
     const handleTakeoverRequested: EventListener = () => {
+      // Shared SSE event. Only the current owner does any work here because
+      // flushDraftBeforeTakeover() returns immediately for non-owners.
       void cbRef.current.flushDraftBeforeTakeover();
     };
 

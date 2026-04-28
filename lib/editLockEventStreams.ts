@@ -1,3 +1,5 @@
+import Redis from "ioredis";
+
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { EditLockEvent } from "./editLocks";
 
@@ -19,8 +21,7 @@ type TemplateReaderState = {
   // Last-consumed stream entry ID.  '$' on startup means "only new entries".
   lastId: string;
   stopped: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  redis: any;
+  redis: Redis;
 };
 
 type EditLockEventStreamsGlobal = typeof globalThis & {
@@ -53,15 +54,15 @@ const runReaderLoop = async (templateId: string, state: TemplateReaderState): Pr
   while (!state.stopped) {
     try {
       // eslint-disable-next-line no-await-in-loop
-      const results = (await state.redis.xread(
-        "BLOCK",
-        XREAD_BLOCK_MS,
+      const results = await state.redis.xread(
         "COUNT",
         100,
+        "BLOCK",
+        XREAD_BLOCK_MS,
         "STREAMS",
         streamKey,
         state.lastId
-      )) as Array<[string, Array<[string, string[]]>]> | null;
+      );
 
       if (state.stopped) {
         break;

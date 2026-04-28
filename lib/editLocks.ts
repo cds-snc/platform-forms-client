@@ -9,7 +9,8 @@ import {
   MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
 } from "@lib/formBuilderEditLockPresence";
 export {
-  EDIT_LOCK_HEARTBEAT_MS,
+  EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
+  EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   EDIT_LOCK_TTL_MS,
   MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
@@ -249,7 +250,18 @@ const publishEditLockEvent = async (templateId: string, event: EditLockEvent = u
   const streamKey = getEditLockStreamKey(templateId);
   // Append the event to the per-template stream.  The stream TTL is reset on
   // every write so it stays alive as long as the lock itself is active.
-  await redis.xadd(streamKey, "*", "type", event.type, "templateId", templateId);
+  // Note: XADD API params: key, MAXLEN ~ count (cap stream to ~100 entries lazily), * (auto-generate entry ID), ...field-value pairs
+  await redis.xadd(
+    streamKey,
+    "MAXLEN",
+    "~",
+    100,
+    "*",
+    "type",
+    event.type,
+    "templateId",
+    templateId
+  );
   await redis.expire(streamKey, editLockTtlSeconds * 2);
 };
 
