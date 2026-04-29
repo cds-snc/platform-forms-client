@@ -516,7 +516,7 @@ describe("useEditLock", () => {
     expect(lockStates.at(-1)).toEqual({ isLockedByOther: false, hasEditLock: false });
   });
 
-  it("opens an EventSource and initializes leader-tab coordination even when the tab is not active", async () => {
+  it("opens an EventSource and initializes active-tab coordination even when the tab is not active", async () => {
     setDocumentVisibility("hidden");
     setDocumentFocus(false);
 
@@ -529,8 +529,8 @@ describe("useEditLock", () => {
     expect(MockEventSource.instances[0].url).toBe(
       "/api/templates/test-form-id/edit-lock/events?requestType=event-stream"
     );
-    // With leader-tab coordination enabled, a BroadcastChannel is created
-    // for leader tab coordination even in background tabs
+    // With active-tab coordination enabled, a BroadcastChannel is created
+    // for coordination even in background tabs
     expect(MockBroadcastChannel.channels.size).toBe(1);
   });
 
