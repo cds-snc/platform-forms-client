@@ -75,7 +75,6 @@ export const useEditLock = ({
   const { getActivitySnapshot } = useEditLockPresence({
     enabled: presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
     coordinationKey: formId,
-    activeTabEnabled: EDIT_LOCK_ACTIVE_TAB_ENABLED,
   });
 
   const clearLockState = useCallback(() => {
