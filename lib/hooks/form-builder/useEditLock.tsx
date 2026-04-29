@@ -7,6 +7,7 @@ import { FormRecord } from "@lib/types";
 import { clearTemplateStore } from "@lib/store/utils";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { useEditLockPresence } from "@lib/hooks/form-builder/useEditLockPresence";
+import { useEditLockInactiveUser } from "@lib/hooks/form-builder/useEditLockInactiveTimeout";
 import { useActiveTab } from "@lib/hooks/form-builder/useActiveTab";
 import { isEditLockStatus, type EditLockStatusPayload } from "@lib/editLockStatus";
 import {
@@ -70,16 +71,26 @@ export const useEditLock = ({
   const suppressReleaseRef = useRef(false);
   const onInactiveTimeoutRef = useRef(onInactiveTimeout);
   onInactiveTimeoutRef.current = onInactiveTimeout;
+  const inactiveHandlerRef = useRef<() => void>(() => undefined);
+
+  // TODO: replace with dialog code
+  const inactiveCallback = useCallback(() => inactiveHandlerRef.current(), []);
 
   const { isActiveTab } = useActiveTab({
     enabled: enabled && EDIT_LOCK_ACTIVE_TAB_ENABLED && status === "authenticated",
     coordinationKey: formId,
   });
 
-  const { getActivitySnapshot, inactiveUser } = useEditLockPresence({
+  const { getActivitySnapshot, getLastActivityAt } = useEditLockPresence({
     enabled: presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
     coordinationKey: formId,
     activeTabEnabled: EDIT_LOCK_ACTIVE_TAB_ENABLED,
+  });
+
+  useEditLockInactiveUser({
+    enabled: presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
+    getLastActivityAt,
+    onTimeout: inactiveCallback,
   });
 
   const clearLockState = useCallback(() => {
@@ -266,19 +277,6 @@ export const useEditLock = ({
     clearTimers();
     const loopToken = lockLoopTokenRef.current;
     heartbeatRef.current = window.setInterval(async () => {
-      if (inactiveUser()) {
-        suppressReleaseRef.current = true;
-        clearTimers();
-        try {
-          await postAction("release");
-        } catch {
-          // no-op: proceed with cleanup regardless
-        }
-        clearLockState();
-        onInactiveTimeoutRef.current?.();
-        return;
-      }
-
       const wasOwner = isOwnerRef.current;
       const heartbeatResult = await postAction("heartbeat");
       if (lockLoopTokenRef.current !== loopToken) {
@@ -316,7 +314,6 @@ export const useEditLock = ({
     setTakeoverFallbackState,
     syncServerState,
     updateStore,
-    inactiveUser,
   ]);
 
   // Non-owners poll on this interval while waiting for the lock state to change.
@@ -418,6 +415,25 @@ export const useEditLock = ({
   const cbRef = useRef(callbacks);
   cbRef.current = callbacks;
   startPollingRef.current = startPolling;
+
+  // TODO - probably move into inactive callback for simplicity
+  // Update the inactive timeout handler every render so the inactivity check in
+  // useEditLockPresence always invokes the current closures for release and cleanup.
+  inactiveHandlerRef.current = () => {
+    suppressReleaseRef.current = true;
+    clearTimers();
+    void (async () => {
+      if (isOwnerRef.current) {
+        try {
+          await postAction("release");
+        } catch {
+          // no-op: proceed with cleanup regardless
+        }
+        clearLockState();
+      }
+      onInactiveTimeoutRef.current?.();
+    })();
+  };
 
   useEffect(() => {
     if (!enabled || status !== "authenticated") {

@@ -6,7 +6,6 @@ import {
   CLIENT_SIDE_EDIT_LOCK_ACTIVITY_THROTTLE_MS,
   CLIENT_SIDE_EDIT_LOCK_AWAY_MS,
   CLIENT_SIDE_EDIT_LOCK_IDLE_MS,
-  CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS,
 } from "@lib/formBuilderEditLockPresence";
 import { type EditLockPresenceStatus, type EditLockVisibilityState } from "@lib/editLockStatus";
 
@@ -119,11 +118,7 @@ export const useEditLockPresence = ({
     };
   }, [isTrackingPresence, markActivity]);
 
-  const inactiveUser = useCallback((): boolean => {
-    if (!isTrackingPresence) return false;
-    const lastActivityAt = lastActivityAtRef.current || Date.now();
-    return Date.now() - lastActivityAt >= CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS;
-  }, [isTrackingPresence]);
+  const getLastActivityAt = useCallback(() => lastActivityAtRef.current, []);
 
-  return { getActivitySnapshot, isActiveTab, inactiveUser };
+  return { getActivitySnapshot, getLastActivityAt, isActiveTab };
 };
