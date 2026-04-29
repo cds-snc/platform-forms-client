@@ -80,10 +80,9 @@ const editLockRedirectIdleMs: Setting = {
   internalId: "editLockRedirectIdleMs",
   nameEn: "Edit lock idle redirect timeout (ms)",
   nameFr: "Délai de redirection d'inactivité du verrou d'édition (ms)",
-  descriptionEn:
-    "How long the form builder can stay idle before the tab releases the edit lock and returns to the forms list.",
+  descriptionEn: "How long the form builder can stay idle before becoming inactive.",
   descriptionFr:
-    "Durée pendant laquelle le générateur de formulaires peut rester inactif avant que l'onglet libère le verrou d'édition et retourne à la liste des formulaires.",
+    "Durée pendant laquelle le générateur de formulaires peut rester inactif avant de devenir inactif.",
   value: "1800000",
 };
 
