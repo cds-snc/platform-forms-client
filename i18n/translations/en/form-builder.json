@@ -641,7 +641,10 @@
     "takingOver": "Taking over...",
     "syncingLatest": "Syncing the latest saved version of this form...",
     "syncedLatest": "You now have the edit lock and the latest saved form has been loaded.",
-    "takeoverError": "Unable to take over. Please try again."
+    "takeoverError": "Unable to take over. Please try again.",
+    "sessionExpiredTitle": "Your editing session expired",
+    "sessionExpiredMessage": "Editing was stopped because this form was idle for too long. Return to forms to reopen it if you still need to make changes.",
+    "returnToForms": "Return to forms"
   },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publish",
