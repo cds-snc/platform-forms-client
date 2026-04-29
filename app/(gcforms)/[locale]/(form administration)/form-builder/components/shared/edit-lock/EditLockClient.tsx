@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
@@ -38,6 +38,8 @@ export const EditLockClient = ({
   reloadOnTakeover?: boolean;
 }) => {
   "use memo";
+  const router = useRouter();
+  const { locale } = useParams<{ locale: string }>();
   const pathname = usePathname();
   const currentFormId = useTemplateStore((s) => s.id);
   const activeFormId = currentFormId || formId;
@@ -53,6 +55,7 @@ export const EditLockClient = ({
     enabled,
     presenceEnabled: editLockPresenceEnabled,
     sessionId,
+    onInactiveTimeout: () => router.push(`/${locale}/forms`),
   });
 
   const { headlessTree } = useTreeRef();

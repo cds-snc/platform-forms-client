@@ -43,11 +43,13 @@ export const useEditLock = ({
   enabled,
   presenceEnabled,
   sessionId,
+  onInactiveTimeout,
 }: {
   formId: string;
   enabled: boolean;
   presenceEnabled: boolean;
   sessionId: string;
+  onInactiveTimeout?: () => void;
 }) => {
   "use memo";
   const { status } = useSession();
@@ -66,13 +68,15 @@ export const useEditLock = ({
   const updatedAtRef = useRef(updatedAt);
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
+  const onInactiveTimeoutRef = useRef(onInactiveTimeout);
+  onInactiveTimeoutRef.current = onInactiveTimeout;
 
   const { isActiveTab } = useActiveTab({
     enabled: enabled && EDIT_LOCK_ACTIVE_TAB_ENABLED && status === "authenticated",
     coordinationKey: formId,
   });
 
-  const { getActivitySnapshot } = useEditLockPresence({
+  const { getActivitySnapshot, inactiveUser } = useEditLockPresence({
     enabled: presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
     coordinationKey: formId,
     activeTabEnabled: EDIT_LOCK_ACTIVE_TAB_ENABLED,
@@ -262,6 +266,19 @@ export const useEditLock = ({
     clearTimers();
     const loopToken = lockLoopTokenRef.current;
     heartbeatRef.current = window.setInterval(async () => {
+      if (inactiveUser()) {
+        suppressReleaseRef.current = true;
+        clearTimers();
+        try {
+          await postAction("release");
+        } catch {
+          // no-op: proceed with cleanup regardless
+        }
+        clearLockState();
+        onInactiveTimeoutRef.current?.();
+        return;
+      }
+
       const wasOwner = isOwnerRef.current;
       const heartbeatResult = await postAction("heartbeat");
       if (lockLoopTokenRef.current !== loopToken) {
@@ -299,6 +316,7 @@ export const useEditLock = ({
     setTakeoverFallbackState,
     syncServerState,
     updateStore,
+    inactiveUser,
   ]);
 
   // Non-owners poll on this interval while waiting for the lock state to change.

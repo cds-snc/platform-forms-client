@@ -36,6 +36,10 @@ export const CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS = 90_000;
 // Recompute the banner's relative-time copy every 5 seconds while presence detection is visible.
 export const CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS = 5_000;
 
+// Kick the current editor out of edit mode and release their lock after this long without activity.
+// This is intentionally much longer than the "away" threshold so brief distractions don't eject users.
+export const CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS = 1_800_000; // 30 minutes
+
 // Give the current editor a window to flush any dirty draft state before a takeover completes.
 // This must be generous enough for Lambda / cold-start environments where the full
 // SSE → saveDraft → ack round-trip can take several seconds.
