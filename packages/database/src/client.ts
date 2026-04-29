@@ -1,7 +1,7 @@
 import { PrismaClient, Prisma } from "./generated/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __filenameTMP = fileURLToPath(import.meta.url);
 const __dirnameTMP = path.dirname(__filenameTMP);

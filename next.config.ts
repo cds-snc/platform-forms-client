@@ -65,6 +65,14 @@ const nextConfig: NextConfig = {
     ];
   },
   serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino", "@opentelemetry/sdk-node", "recheck"],
+  transpilePackages: [
+    "@gcforms/database",
+    "@gcforms/connectors",
+    "@gcforms/announce",
+    "@gcforms/core",
+    "@gcforms/editor",
+    "@gcforms/tag-input",
+  ],
   experimental: {
     serverActions: {
       // Note: this matches values in constants.ts
