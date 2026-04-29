@@ -8,26 +8,31 @@ const __dirnameTMP = path.dirname(__filenameTMP);
 const certPath = path.join(__dirnameTMP, "global-bundle.pem");
 
 const connectionString = () => {
-  if (process.env.APP_ENV === "test" && !process.env.DATABASE_URL) {
-    return "dummy_url_for_testing";
+  if (
+    !["production", "development"].includes(process.env.NODE_ENV ?? "") &&
+    !process.env.DATABASE_URL
+  ) {
+    return "dummy_url_placeholder";
   }
 
   if (!process.env.DATABASE_URL) {
-    throw new Error("Missing Database Url Environment Variable");
+    throw new Error(
+      `Missing Database Url Environment Variable, current node env is ${process.env.NODE_ENV}`
+    );
   }
 
   const envConnectiontring = process.env.DATABASE_URL;
 
-  if (process.env.GITHUB_ACTION) {
-    // CI Github Action environment does not support SSL
-    return envConnectiontring;
+  // Check if the connection string is AWS RDS and if there are already existing parameters
+  if (/\.ca-central-1\.rds\.amazonaws\.com:5432/i.test(envConnectiontring)) {
+    if (/:5432\/forms$/i.test(envConnectiontring)) {
+      return envConnectiontring + `?sslmode=verify-full&sslrootcert=${certPath}`;
+    } else {
+      return envConnectiontring + `&sslmode=verify-full&sslrootcert=${certPath}`;
+    }
   }
-  // Check if there are already existing parameters and if not start a new parameter string
-  if (/5432\/forms$/i.test(envConnectiontring)) {
-    return envConnectiontring + `?sslmode=verify-full&sslrootcert=${certPath}`;
-  } else {
-    return envConnectiontring + `&sslmode=verify-full&sslrootcert=${certPath}`;
-  }
+  // Return no SSL connection string if not AWS RDS
+  return envConnectiontring;
 };
 
 const adapter = new PrismaPg({
