@@ -76,6 +76,16 @@ const editLockPresenceEnabled: Setting = {
   value: "false",
 };
 
+const editLockRedirectIdleMs: Setting = {
+  internalId: "editLockRedirectIdleMs",
+  nameEn: "Edit lock idle redirect timeout (ms)",
+  nameFr: "Délai de redirection d'inactivité du verrou d'édition (ms)",
+  descriptionEn: "How long the form builder can stay idle before becoming inactive.",
+  descriptionFr:
+    "Durée pendant laquelle le générateur de formulaires peut rester inactif avant de devenir inactif.",
+  value: "1800000",
+};
+
 const allSettings = [
   brandingRequestFormSetting,
   nagwarePhaseEncouraged,
@@ -84,6 +94,7 @@ const allSettings = [
   nagwarePhaseEscalated,
   responseDownloadLimit,
   editLockPresenceEnabled,
+  editLockRedirectIdleMs,
 ];
 
 export default {
