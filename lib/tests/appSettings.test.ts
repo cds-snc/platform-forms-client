@@ -22,7 +22,7 @@ jest.mock("@lib/auditLogs", () => ({
   },
   get AuditLogAccessDeniedDetails() {
     return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
-  }
+  },
 }));
 
 import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authorization";
@@ -154,8 +154,11 @@ describe("Application Settings", () => {
         userId,
         { id: "testSetting", type: "Setting" },
         "CreateSetting",
-        'Created setting with ${settingData}',
-        { settingData: '{"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}' }
+        "Created setting with ${settingData}",
+        {
+          settingData:
+            '{"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}',
+        }
       );
       expect(newSetting).toMatchObject({
         internalId: "testSetting",
@@ -214,8 +217,11 @@ describe("Application Settings", () => {
         userId,
         { id: "testSetting", type: "Setting" },
         "ChangeSetting",
-        'Updated setting with ${settingData}',
-        { settingData: '{"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}' }
+        "Updated setting with ${settingData}",
+        {
+          settingData:
+            '{"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}',
+        }
       );
       expect(newSetting).toMatchObject({
         internalId: "testSetting",
@@ -273,7 +279,7 @@ describe("Application Settings", () => {
         userId,
         { id: "testSetting", type: "Setting" },
         "DeleteSetting",
-        'Deleted setting with internalId: ${internalId}',
+        "Deleted setting with internalId: ${internalId}",
         { internalId: "testSetting" }
       );
     });
