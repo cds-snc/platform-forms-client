@@ -8,7 +8,6 @@ export type LayoutOptions = {
   algorithm: keyof typeof layoutAlgorithms;
 } & LayoutAlgorithmOptions;
 
-// todo --- needs to be fixed.
 function useAutoLayout(options: LayoutOptions) {
   const { setNodes, setEdges } = useReactFlow();
   const nodesInitialized = useNodesInitialized();
@@ -59,10 +58,7 @@ function useAutoLayout(options: LayoutOptions) {
       return;
     }
 
-    // The callback passed to `useEffect` cannot be `async` itself, so instead we
-    // create an async function here and call it immediately afterwards.
-
-    // runLayout();
+    void runLayout();
   }, [nodesInitialized, elements, runLayout]);
 
   return { runLayout };
