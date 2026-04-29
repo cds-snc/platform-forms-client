@@ -82,6 +82,10 @@ export const useEditLock = ({
     enabled: enabled && EDIT_LOCK_ACTIVE_TAB_ENABLED && status === "authenticated",
     coordinationKey: formId,
   });
+  // With active-tab coordination on, background tabs should release the SSE stream.
+  const isEventStreamAllowedInCurrentTab = EDIT_LOCK_ACTIVE_TAB_ENABLED ? isActiveTab : true;
+  const shouldKeepEventStreamOpen =
+    enabled && status === "authenticated" && !hasEditExpired && isEventStreamAllowedInCurrentTab;
 
   const handleIdleTimeout = useCallback(async () => {
     if (idleExpiryHandledRef.current) {
@@ -487,16 +491,14 @@ export const useEditLock = ({
   }, [enabled, status]);
 
   // Manage the shared SSE EventSource connection for edit-lock updates.
-  // If an SSE event is missed, the next owner heartbeat or non-owner status poll
-  // reconciles state from the server, and EventSource will retry on transient drops.
+  // If active-tab coordination is enabled, only the active tab keeps the SSE
+  // stream open. Owners still reconcile via heartbeat and non-owners via polling.
   useEffect(() => {
-    if (!enabled || status !== "authenticated") {
+    if (!shouldKeepEventStreamOpen) {
       cbRef.current.clearEvents();
       return;
     }
 
-    // Owners and non-owners both keep the SSE stream open so either side can react
-    // immediately to lock changes without waiting for the next interval tick.
     const eventSource = new EventSource(buildEditLockEventsUrl(formId));
     eventSourceRef.current = eventSource;
 
@@ -552,7 +554,7 @@ export const useEditLock = ({
         eventSourceRef.current = null;
       }
     };
-  }, [enabled, formId, status]);
+  }, [formId, shouldKeepEventStreamOpen]);
 
   const takeover = useCallback(async () => {
     const previousUpdatedAt = updatedAt;
