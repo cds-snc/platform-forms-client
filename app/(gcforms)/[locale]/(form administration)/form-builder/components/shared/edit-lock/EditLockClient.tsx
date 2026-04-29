@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
+import { EditLockSessionExpiredOverlay } from "@formBuilder/components/shared/edit-lock/EditLockSessionExpiredOverlay";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 const isEditPath = (pathname: string | null) => {
@@ -26,6 +27,7 @@ export const EditLockClient = ({
   formId,
   lockedEditingEnabled = true,
   editLockPresenceEnabled = false,
+  idleTimeoutMs,
   children,
   restrictToEditPaths = true,
   reloadOnTakeover = false,
@@ -33,6 +35,7 @@ export const EditLockClient = ({
   formId: string;
   lockedEditingEnabled?: boolean;
   editLockPresenceEnabled?: boolean;
+  idleTimeoutMs: number;
   children?: React.ReactNode;
   restrictToEditPaths?: boolean;
   reloadOnTakeover?: boolean;
@@ -48,11 +51,12 @@ export const EditLockClient = ({
     activeFormId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
 
-  const { takeover } = useEditLock({
+  const { takeover, hasEditExpired, returnToForms } = useEditLock({
     formId: activeFormId,
     enabled,
     presenceEnabled: editLockPresenceEnabled,
     sessionId,
+    idleTimeoutMs,
   });
 
   const { headlessTree } = useTreeRef();
@@ -72,6 +76,7 @@ export const EditLockClient = ({
 
   return (
     <>
+      {hasEditExpired && <EditLockSessionExpiredOverlay onReturnToForms={returnToForms} />}
       <EditLockBanner takeover={handleTakeover} presenceEnabled={editLockPresenceEnabled} />
       {children}
     </>

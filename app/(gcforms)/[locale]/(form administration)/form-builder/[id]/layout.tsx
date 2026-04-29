@@ -18,7 +18,11 @@ import { logMessage } from "@lib/logger";
 import { checkKeyExists } from "@lib/serviceAccount";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { shouldEnforceTemplateEditLock } from "@lib/editLocks";
-import { getAppSettingAsBoolean } from "@lib/appSettings";
+import { getAppSettingAsBoolean, getAppSettingAsNumber } from "@lib/appSettings";
+import {
+  EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS,
+  EDIT_LOCK_REDIRECT_IDLE_SETTING_ID,
+} from "@lib/formBuilderEditLockPresence";
 import {
   FormBuilderConfigProvider,
   FormBuilderConfig,
@@ -50,6 +54,12 @@ export default async function Layout(props: {
   const editLockPresenceEnabled = allowLockedEditingFlag
     ? await getAppSettingAsBoolean("editLockPresenceEnabled")
     : false;
+  const editLockRedirectIdleMs = allowLockedEditingFlag
+    ? await getAppSettingAsNumber(
+        EDIT_LOCK_REDIRECT_IDLE_SETTING_ID,
+        EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS
+      )
+    : EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS;
   const enforceEditLockFlag =
     allowLockedEditingFlag && formID && formID !== "0000"
       ? await shouldEnforceTemplateEditLock(formID)
@@ -125,6 +135,9 @@ export default async function Layout(props: {
                           formId={id}
                           lockedEditingEnabled={enforceEditLockFlag}
                           editLockPresenceEnabled={editLockPresenceEnabled}
+                          idleTimeoutMs={
+                            editLockRedirectIdleMs ?? EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS
+                          }
                         >
                           <main
                             id="content"

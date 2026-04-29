@@ -3,10 +3,11 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import {
-  EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
-  EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
-} from "@lib/formBuilderEditLockPresence";
+import { EDIT_LOCK_HEARTBEAT_INTERVAL_MS, EDIT_LOCK_STATUS_POLL_INTERVAL_MS } from "@lib/formBuilderEditLockPresence";
+
+const pushMock = vi.fn();
+let pathname = "/en/form-builder/test-form-id";
+const idleTimeoutMs = 1_800_000;
 
 const saveDraft = vi.fn(async () => ({ status: "saved" as const }));
 const saveDraftIfNeeded = vi.fn(async () => ({ status: "skipped" as const }));
@@ -28,6 +29,13 @@ vi.mock("next-auth/react", () => ({
   getCsrfToken: vi.fn(),
   getProviders: vi.fn(),
   getSession: vi.fn(),
+}));
+
+vi.mock("next/navigation", () => ({
+  usePathname: () => pathname,
+  useRouter: () => ({
+    push: pushMock,
+  }),
 }));
 
 // Expose the template-context side effects so tests can assert save and refresh behavior.
@@ -192,21 +200,24 @@ function EditLockHarness({
   onTakeoverReady,
   onChangeKey,
   onLockStateChange,
+  onEditExpiredChange,
   presenceEnabled = false,
 }: {
   onTakeoverReady?: (takeover: () => Promise<void>) => void;
   onChangeKey?: (changeKey: string) => void;
   onLockStateChange?: (state: { isLockedByOther: boolean; hasEditLock: boolean }) => void;
+  onEditExpiredChange?: (hasEditExpired: boolean) => void;
   presenceEnabled?: boolean;
 }) {
   const changeKey = useTemplateStore((s) => s.changeKey);
   const isLockedByOther = useTemplateStore((s) => s.isLockedByOther);
   const editLock = useTemplateStore((s) => s.editLock);
-  const { takeover } = useEditLock({
+  const { takeover, hasEditExpired } = useEditLock({
     formId: "test-form-id",
     enabled: true,
     presenceEnabled,
     sessionId: "session-1",
+    idleTimeoutMs,
   });
 
   useEffect(() => {
@@ -223,6 +234,10 @@ function EditLockHarness({
       hasEditLock: editLock !== null,
     });
   }, [editLock, isLockedByOther, onLockStateChange]);
+
+  useEffect(() => {
+    onEditExpiredChange?.(hasEditExpired);
+  }, [hasEditExpired, onEditExpiredChange]);
 
   useEffect(() => {
     return () => {
@@ -242,6 +257,8 @@ describe("useEditLock", () => {
     vi.clearAllMocks();
     MockEventSource.reset();
     MockBroadcastChannel.reset();
+    pushMock.mockReset();
+    pathname = "/en/form-builder/test-form-id";
     templateIsDirty.current = false;
     templateUpdatedAt = Date.parse("2026-03-31T12:00:00.000Z");
     vi.stubGlobal("EventSource", MockEventSource);
@@ -532,6 +549,164 @@ describe("useEditLock", () => {
     // With active-tab coordination enabled, a BroadcastChannel is created
     // for coordination even in background tabs
     expect(MockBroadcastChannel.channels.size).toBe(1);
+  });
+
+  it("marks the editing session expired after the configured idle timeout", async () => {
+    vi.useFakeTimers();
+    const expiredStates: boolean[] = [];
+
+    await render(
+      <EditLockHarness
+        presenceEnabled
+        onEditExpiredChange={(hasEditExpired) => expiredStates.push(hasEditExpired)}
+      />
+    );
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
+        expect.objectContaining({ method: "POST" })
+      );
+    });
+
+    await vi.advanceTimersByTimeAsync(idleTimeoutMs);
+
+    await vi.waitFor(() => {
+      expect(expiredStates.at(-1)).toBe(true);
+    });
+
+    expect(pushMock).not.toHaveBeenCalled();
+    expect(saveDraftIfNeeded).toHaveBeenCalledTimes(1);
+
+    vi.useRealTimers();
+  });
+
+  it("marks an inactive tab session expired after the configured idle timeout so it does not keep idle edit-lock connections open", async () => {
+    vi.useFakeTimers();
+    setDocumentVisibility("hidden");
+    setDocumentFocus(false);
+    const expiredStates: boolean[] = [];
+
+    await render(
+      <EditLockHarness
+        presenceEnabled
+        onEditExpiredChange={(hasEditExpired) => expiredStates.push(hasEditExpired)}
+      />
+    );
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
+        expect.objectContaining({ method: "POST" })
+      );
+    });
+
+    await vi.advanceTimersByTimeAsync(idleTimeoutMs);
+
+    await vi.waitFor(() => {
+      expect(expiredStates.at(-1)).toBe(true);
+    });
+
+    expect(pushMock).not.toHaveBeenCalled();
+
+    vi.useRealTimers();
+  });
+
+  it("does not mark a non-owner session expired after the idle timeout", async () => {
+    vi.useFakeTimers();
+    const expiredStates: boolean[] = [];
+
+    fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = getRequestUrl(input);
+      const lockedByOtherStatus = {
+        locked: true,
+        lockedByOther: true,
+        isOwner: false,
+        lock: {
+          ...ownerLockStatus.lock,
+          lockedByUserId: "user-2",
+          lockedByName: "User Two",
+          lockedByEmail: "user.two@example.com",
+          sessionId: "session-2",
+        },
+      };
+
+      if (isEditLockRequest(input) && init?.method === "POST") {
+        return {
+          ok: true,
+          json: async () => lockedByOtherStatus,
+        } as Response;
+      }
+
+      if (isEditLockRequest(input) && init?.method === "GET") {
+        return {
+          ok: true,
+          json: async () => lockedByOtherStatus,
+        } as Response;
+      }
+
+      if (isTemplateRequest(input)) {
+        return {
+          ok: true,
+          json: async () => ({ form: { elements: [] }, updatedAt: new Date().toISOString() }),
+        } as Response;
+      }
+
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
+
+    await render(
+      <EditLockHarness
+        presenceEnabled
+        onEditExpiredChange={(hasEditExpired) => expiredStates.push(hasEditExpired)}
+      />
+    );
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
+        expect.objectContaining({ method: "POST" })
+      );
+    });
+
+    await vi.advanceTimersByTimeAsync(idleTimeoutMs);
+
+    expect(expiredStates.at(-1)).not.toBe(true);
+    expect(pushMock).not.toHaveBeenCalled();
+
+    vi.useRealTimers();
+  });
+
+  it("marks the session expired on focus return when the browser delayed the background idle timer", async () => {
+    vi.useFakeTimers();
+    const expiredStates: boolean[] = [];
+
+    await render(
+      <EditLockHarness
+        presenceEnabled
+        onEditExpiredChange={(hasEditExpired) => expiredStates.push(hasEditExpired)}
+      />
+    );
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
+        expect.objectContaining({ method: "POST" })
+      );
+    });
+
+    setDocumentFocus(false);
+    vi.setSystemTime(Date.now() + idleTimeoutMs + 1_000);
+    setDocumentFocus(true);
+    window.dispatchEvent(new Event("focus"));
+
+    await vi.waitFor(() => {
+      expect(expiredStates.at(-1)).toBe(true);
+    });
+
+    expect(pushMock).not.toHaveBeenCalled();
+
+    vi.useRealTimers();
   });
 
   it("does not include presence activity in edit-lock requests", async () => {

@@ -2,6 +2,7 @@ import { prismaMock } from "@jestUtils";
 import {
   getAppSetting,
   getAllAppSettings,
+  getAppSettingAsNumber,
   createAppSetting,
   updateAppSetting,
   deleteAppSetting,
@@ -36,6 +37,14 @@ jest.mock("@lib/cache/settingCache", () => ({
 }));
 
 const userId = "1";
+const numericSettingRecord = {
+  internalId: "editLockRedirectIdleMs",
+  nameEn: "Edit lock idle redirect timeout (ms)",
+  nameFr: "Délai de redirection d'inactivité du verrou d'édition (ms)",
+  descriptionEn: "setting description",
+  descriptionFr: "description du paramètre",
+  value: "1800000",
+};
 
 describe("Application Settings", () => {
   beforeEach(() => {
@@ -59,6 +68,23 @@ describe("Application Settings", () => {
 
     expect(mockedLogEvent).not.toHaveBeenCalled();
     expect(setting).toEqual("123");
+  });
+  test("Get an application setting as number", async () => {
+    prismaMock.setting.findUnique.mockResolvedValue(numericSettingRecord);
+
+    const setting = await getAppSettingAsNumber("editLockRedirectIdleMs");
+
+    expect(setting).toEqual(1800000);
+  });
+  test("Get an application setting as number falls back when invalid", async () => {
+    prismaMock.setting.findUnique.mockResolvedValue({
+      ...numericSettingRecord,
+      value: "not-a-number",
+    });
+
+    const setting = await getAppSettingAsNumber("editLockRedirectIdleMs", 1800000);
+
+    expect(setting).toEqual(1800000);
   });
   test("Get all application settings", async () => {
     prismaMock.setting.findMany.mockResolvedValue([

@@ -17,6 +17,12 @@ vi.mock("@lib/cache/formCache", () => ({
   },
 }));
 
+vi.mock("@lib/appSettings", () => ({
+  getAppSettingAsNumber: vi.fn(async (_internalId: string, fallbackValue?: number) => {
+    return fallbackValue ?? null;
+  }),
+}));
+
 import {
   acknowledgeEditLockTakeoverSave,
   acquireEditLock,
@@ -30,6 +36,7 @@ import {
   waitForEditLockTakeoverSaveAcknowledgement,
 } from "@lib/editLocks";
 import { formCache } from "@lib/cache/formCache";
+import { getAppSettingAsNumber } from "@lib/appSettings";
 import { prisma } from "@gcforms/database";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import type { FormProperties, PublicFormRecord } from "@lib/types";
@@ -158,6 +165,79 @@ describe("editLocks with redis", () => {
     expect(heartbeatStatus.lock?.lastActivityAt).toEqual(activityAt);
     expect(heartbeatStatus.lock?.visibilityState).toBe("hidden");
     expect(heartbeatStatus.lock?.presenceStatus).toBe("away");
+  });
+
+  it("clears a stale lock from status reads when last activity exceeds the configured idle timeout", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-03-17T12:00:00.000Z"));
+    vi.mocked(getAppSettingAsNumber).mockResolvedValueOnce(10_000);
+
+    await acquireEditLock({
+      templateId: "form-stale-status",
+      userId: "user-1",
+      userName: "User One",
+      sessionId: "session-1",
+      presence: {
+        lastActivityAt: new Date("2026-03-17T12:00:00.000Z"),
+        visibilityState: "visible",
+        presenceStatus: "active",
+      },
+    });
+
+    vi.setSystemTime(new Date("2026-03-17T12:00:11.000Z"));
+    vi.mocked(getAppSettingAsNumber).mockResolvedValueOnce(10_000);
+
+    const status = await getEditLockStatus("form-stale-status", "user-2");
+
+    expect(status).toEqual({
+      locked: false,
+      lockedByOther: false,
+      isOwner: false,
+      lock: null,
+    });
+
+    vi.useRealTimers();
+  });
+
+  it("clears a stale owner lock on heartbeat when the client resumes after the idle deadline", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-03-17T12:00:00.000Z"));
+    vi.mocked(getAppSettingAsNumber).mockResolvedValueOnce(10_000);
+
+    await acquireEditLock({
+      templateId: "form-stale-heartbeat",
+      userId: "user-1",
+      userName: "User One",
+      sessionId: "session-1",
+      presence: {
+        lastActivityAt: new Date("2026-03-17T12:00:00.000Z"),
+        visibilityState: "visible",
+        presenceStatus: "active",
+      },
+    });
+
+    vi.setSystemTime(new Date("2026-03-17T12:00:11.000Z"));
+    vi.mocked(getAppSettingAsNumber).mockResolvedValueOnce(10_000);
+
+    const heartbeatStatus = await heartbeatEditLock({
+      templateId: "form-stale-heartbeat",
+      userId: "user-1",
+      sessionId: "session-1",
+      presence: {
+        lastActivityAt: new Date("2026-03-17T12:00:00.000Z"),
+        visibilityState: "hidden",
+        presenceStatus: "away",
+      },
+    });
+
+    expect(heartbeatStatus).toEqual({
+      locked: false,
+      lockedByOther: false,
+      isOwner: false,
+      lock: null,
+    });
+
+    vi.useRealTimers();
   });
 
   it("waits for the current editor to acknowledge takeover save completion", async () => {

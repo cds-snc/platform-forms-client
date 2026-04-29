@@ -5,7 +5,11 @@ import { authCheckAndThrow } from "@lib/actions";
 import { Language } from "@lib/types/form-builder-types";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { shouldEnforceTemplateEditLock } from "@lib/editLocks";
-import { getAppSettingAsBoolean } from "@lib/appSettings";
+import { getAppSettingAsBoolean, getAppSettingAsNumber } from "@lib/appSettings";
+import {
+  EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS,
+  EDIT_LOCK_REDIRECT_IDLE_SETTING_ID,
+} from "@lib/formBuilderEditLockPresence";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 import { WaitForId } from "../components/WaitForId";
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
@@ -26,6 +30,12 @@ export default async function Layout(props: {
   const editLockPresenceEnabled = allowLockedEditingFlag
     ? await getAppSettingAsBoolean("editLockPresenceEnabled")
     : false;
+  const editLockRedirectIdleMs = allowLockedEditingFlag
+    ? await getAppSettingAsNumber(
+        EDIT_LOCK_REDIRECT_IDLE_SETTING_ID,
+        EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS
+      )
+    : EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS;
   const enforceEditLockFlag = allowLockedEditingFlag
     ? await shouldEnforceTemplateEditLock(id)
     : false;
@@ -51,6 +61,7 @@ export default async function Layout(props: {
         formId={id}
         lockedEditingEnabled={enforceEditLockFlag}
         editLockPresenceEnabled={editLockPresenceEnabled}
+        idleTimeoutMs={editLockRedirectIdleMs ?? EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS}
         restrictToEditPaths={false}
         reloadOnTakeover={true}
       >

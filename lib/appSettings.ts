@@ -60,6 +60,17 @@ export const getAppSettingAsBoolean = async (internalId: string) => {
   return value === "true";
 };
 
+export const getAppSettingAsNumber = async (internalId: string, fallbackValue?: number) => {
+  const value = await getAppSetting(internalId);
+
+  if (value === null) {
+    return fallbackValue ?? null;
+  }
+
+  const parsedValue = Number(value);
+  return Number.isFinite(parsedValue) ? parsedValue : (fallbackValue ?? null);
+};
+
 export const getFullAppSetting = async (internalId: string) => {
   const { user } = await authorization.canAccessSettings().catch((e) => {
     if (e instanceof AccessControlError) {

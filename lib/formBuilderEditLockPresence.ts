@@ -12,6 +12,10 @@ export const EDIT_LOCK_DETECT_PRESENCE = true;
 // reducing redundant requests when multiple tabs have the same form open.
 export const EDIT_LOCK_ACTIVE_TAB_ENABLED = true;
 
+export const EDIT_LOCK_REDIRECT_IDLE_SETTING_ID = "editLockRedirectIdleMs";
+// Fall back to 30 minutes when the admin setting is missing so idle edit cleanup stays on by default.
+export const EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS = 1_800_000;
+
 // Refresh the owner's lock heartbeat once per minute to reduce network noise; the longer TTL above
 // provides enough slack that missing a single heartbeat should not immediately drop the lock.
 export const EDIT_LOCK_HEARTBEAT_INTERVAL_MS = 60_000;

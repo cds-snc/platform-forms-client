@@ -3,7 +3,10 @@ import { getRedisInstance } from "@lib/integration/redisConnector";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { logMessage } from "@lib/logger";
 import { formCache } from "./cache/formCache";
+import { getAppSettingAsNumber } from "./appSettings";
 import {
+  EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS,
+  EDIT_LOCK_REDIRECT_IDLE_SETTING_ID,
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   EDIT_LOCK_TTL_MS,
   MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
@@ -207,7 +210,22 @@ const buildStatus = (lock: EditLockInfo | null, userId?: string): EditLockStatus
   };
 };
 
-const readMemoryLock = (templateId: string) => {
+const getEditLockIdleTimeoutMs = async () => {
+  return getAppSettingAsNumber(
+    EDIT_LOCK_REDIRECT_IDLE_SETTING_ID,
+    EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS
+  );
+};
+
+const isEditLockIdleExpired = (lock: EditLockInfo, now: Date, idleTimeoutMs: number | null) => {
+  if (idleTimeoutMs === null || !lock.lastActivityAt) {
+    return false;
+  }
+
+  return now.getTime() - lock.lastActivityAt.getTime() >= idleTimeoutMs;
+};
+
+const readMemoryLock = async (templateId: string) => {
   const now = new Date();
   const store = getEditLockStore();
   const lock = store.get(templateId);
@@ -217,7 +235,11 @@ const readMemoryLock = (templateId: string) => {
   }
 
   const normalized = toEditLockInfo(lock);
-  if (isExpired(normalized, now)) {
+  const idleTimeoutMs = await getEditLockIdleTimeoutMs();
+  if (
+    isEditLockHeartbeatExpired(normalized, now) ||
+    isEditLockIdleExpired(normalized, now, idleTimeoutMs)
+  ) {
     store.delete(templateId);
     return null;
   }
@@ -233,8 +255,11 @@ const readRedisLock = async (templateId: string) => {
     return null;
   }
 
-  if (isExpired(lock, new Date())) {
+  const now = new Date();
+  const idleTimeoutMs = await getEditLockIdleTimeoutMs();
+  if (isEditLockHeartbeatExpired(lock, now) || isEditLockIdleExpired(lock, now, idleTimeoutMs)) {
     await redis.del(getEditLockKey(templateId));
+    await publishEditLockEvent(templateId);
     return null;
   }
 
@@ -345,7 +370,9 @@ export const acknowledgeEditLockTakeoverSave = async ({
     return false;
   }
 
-  const currentLock = redisEnabled() ? await readRedisLock(templateId) : readMemoryLock(templateId);
+  const currentLock = redisEnabled()
+    ? await readRedisLock(templateId)
+    : await readMemoryLock(templateId);
   if (
     !currentLock ||
     currentLock.lockedByUserId !== userId ||
@@ -430,7 +457,8 @@ export const waitForEditLockTakeoverSaveAcknowledgement = async ({
   return poll();
 };
 
-const isExpired = (lock: EditLockInfo, now: Date) => lock.expiresAt.getTime() <= now.getTime();
+const isEditLockHeartbeatExpired = (lock: EditLockInfo, now: Date) =>
+  lock.expiresAt.getTime() <= now.getTime();
 
 const toEditLockInfo = (lock: EditLockInfo): Required<EditLockInfo> => ({
   ...lock,
@@ -531,7 +559,7 @@ export const getEditLockStatus = async (
   templateId: string,
   userId?: string
 ): Promise<EditLockStatus> => {
-  const lock = redisEnabled() ? await readRedisLock(templateId) : readMemoryLock(templateId);
+  const lock = redisEnabled() ? await readRedisLock(templateId) : await readMemoryLock(templateId);
   return buildStatus(lock, userId);
 };
 
@@ -629,7 +657,7 @@ export const acquireEditLock = async ({
 
   if (existing) {
     const normalized = toEditLockInfo(existing);
-    if (!isExpired(normalized, now) && normalized.lockedByUserId !== userId) {
+    if (!isEditLockHeartbeatExpired(normalized, now) && normalized.lockedByUserId !== userId) {
       logEditLockAction({
         action: "acquire",
         templateId,
@@ -672,7 +700,9 @@ export const takeoverEditLock = async ({
   const expiresAt = new Date(now.getTime() + EDIT_LOCK_TTL_MS);
   const presenceSnapshot = getPresenceSnapshot(presence);
   const actor = describeActionActor({ userId, userEmail });
-  const existing = redisEnabled() ? await readRedisLock(templateId) : readMemoryLock(templateId);
+  const existing = redisEnabled()
+    ? await readRedisLock(templateId)
+    : await readMemoryLock(templateId);
   const updated: EditLockInfo = {
     templateId,
     lockedByUserId: userId,
@@ -727,6 +757,7 @@ export const heartbeatEditLock = async ({
   const now = new Date();
   const expiresAt = new Date(now.getTime() + EDIT_LOCK_TTL_MS);
   const presenceSnapshot = getPresenceSnapshot(presence);
+  const idleTimeoutMs = await getEditLockIdleTimeoutMs();
 
   if (redisEnabled()) {
     return withRedisWatch(templateId, async (current, redis) => {
@@ -734,6 +765,19 @@ export const heartbeatEditLock = async ({
         const unlocked = buildStatus(null, userId);
         const execResult = await redis.multi().exec();
         return execResult ? unlocked : null;
+      }
+
+      if (
+        isEditLockHeartbeatExpired(current, now) ||
+        isEditLockIdleExpired(current, now, idleTimeoutMs)
+      ) {
+        const execResult = await redis.multi().del(getEditLockKey(templateId)).exec();
+        if (!execResult) {
+          return null;
+        }
+
+        await publishEditLockEvent(templateId);
+        return buildStatus(null, userId);
       }
 
       if (current.lockedByUserId !== userId || (sessionId && current.sessionId !== sessionId)) {
@@ -772,6 +816,14 @@ export const heartbeatEditLock = async ({
   }
 
   const normalized = toEditLockInfo(existing);
+  if (
+    isEditLockHeartbeatExpired(normalized, now) ||
+    isEditLockIdleExpired(normalized, now, idleTimeoutMs)
+  ) {
+    store.delete(templateId);
+    return buildStatus(null, userId);
+  }
+
   if (normalized.lockedByUserId !== userId || (sessionId && normalized.sessionId !== sessionId)) {
     return buildStatus(normalized, userId);
   }

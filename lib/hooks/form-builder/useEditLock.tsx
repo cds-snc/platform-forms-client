@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormRecord } from "@lib/types";
@@ -13,6 +14,7 @@ import {
   EDIT_LOCK_DETECT_PRESENCE,
   EDIT_LOCK_ACTIVE_TAB_ENABLED,
   EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
+  EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS,
   EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
 } from "@lib/formBuilderEditLockPresence";
 
@@ -43,13 +45,17 @@ export const useEditLock = ({
   enabled,
   presenceEnabled,
   sessionId,
+  idleTimeoutMs = EDIT_LOCK_REDIRECT_IDLE_FALLBACK_MS,
 }: {
   formId: string;
   enabled: boolean;
   presenceEnabled: boolean;
   sessionId: string;
+  idleTimeoutMs?: number;
 }) => {
   "use memo";
+  const router = useRouter();
+  const pathname = usePathname();
   const { status } = useSession();
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
@@ -66,28 +72,69 @@ export const useEditLock = ({
   const updatedAtRef = useRef(updatedAt);
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
+  const idleExpiryHandledRef = useRef(false);
+  const [hasEditExpired, setHasEditExpired] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+  const language = pathname?.startsWith("/fr") ? "fr" : "en";
+  const formsPath = `/${language}/forms`;
 
   const { isActiveTab } = useActiveTab({
     enabled: enabled && EDIT_LOCK_ACTIVE_TAB_ENABLED && status === "authenticated",
     coordinationKey: formId,
   });
 
+  const handleIdleTimeout = useCallback(async () => {
+    if (idleExpiryHandledRef.current) {
+      return;
+    }
+
+    idleExpiryHandledRef.current = true;
+    cbRef.current.clearTimers();
+    cbRef.current.clearEvents();
+
+    try {
+      await saveDraftIfNeeded();
+    } catch {
+      // no-op: the expired-session fallback should still be shown even if autosave fails
+    }
+
+    if (isOwnerRef.current && !suppressReleaseRef.current) {
+      suppressReleaseRef.current = true;
+
+      try {
+        await cbRef.current.postAction("release");
+      } catch {
+        suppressReleaseRef.current = false;
+      }
+    }
+
+    setHasEditExpired(true);
+  }, [saveDraftIfNeeded]);
+
+  const returnToForms = useCallback(() => {
+    router.push(formsPath);
+  }, [formsPath, router]);
+
   const { getActivitySnapshot } = useEditLockPresence({
     enabled: presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
     coordinationKey: formId,
     activeTabEnabled: EDIT_LOCK_ACTIVE_TAB_ENABLED,
+    idleTimeoutMs,
+    onIdleTimeout: isOwner ? handleIdleTimeout : undefined,
   });
 
   const clearLockState = useCallback(() => {
     setIsLockedByOther(false);
     setEditLock(null);
     isOwnerRef.current = false;
+    setIsOwner(false);
   }, [setEditLock, setIsLockedByOther]);
 
   const setTakeoverFallbackState = useCallback(() => {
     setIsLockedByOther(true);
     setEditLock(null);
     isOwnerRef.current = false;
+    setIsOwner(false);
   }, [setEditLock, setIsLockedByOther]);
 
   const updateStore = useCallback(
@@ -111,6 +158,7 @@ export const useEditLock = ({
           : null
       );
       isOwnerRef.current = status.isOwner;
+      setIsOwner(status.isOwner);
       if (status.isOwner) {
         suppressReleaseRef.current = false;
       }
@@ -430,6 +478,7 @@ export const useEditLock = ({
 
     return () => {
       cancelled = true;
+      idleExpiryHandledRef.current = false;
       cbRef.current.clearTimers();
       if (isOwnerRef.current && !suppressReleaseRef.current) {
         cbRef.current.postAction("release");
@@ -518,5 +567,5 @@ export const useEditLock = ({
     startTimers(statusResult);
   }, [postAction, refreshForm, startTimers, updateStore, updatedAt]);
 
-  return { takeover };
+  return { hasEditExpired, returnToForms, takeover };
 };
