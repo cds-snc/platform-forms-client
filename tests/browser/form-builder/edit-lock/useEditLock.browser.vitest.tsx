@@ -36,6 +36,7 @@ vi.mock("next-auth/react", () => ({
 
 vi.mock("next/navigation", () => ({
   usePathname: () => pathname,
+  useParams: () => ({ locale: "en" }),
   useRouter: () => ({
     push: pushMock,
   }),
