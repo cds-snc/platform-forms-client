@@ -1,6 +1,7 @@
 import { PrismaClient, Prisma } from "./generated/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import * as path from "path";
+import { fileURLToPath } from "url";
 
 const connectionString = () => {
   if (
@@ -20,7 +21,8 @@ const connectionString = () => {
 
   // Check if the connection string is AWS RDS and if there are already existing parameters
   if (/\.ca-central-1\.rds\.amazonaws\.com:5432/i.test(envConnectiontring)) {
-    const certPath = path.resolve("./src/global-bundle.pem");
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const certPath = path.join(__dirname, "global-bundle.pem");
 
     if (/:5432\/forms$/i.test(envConnectiontring)) {
       return envConnectiontring + `?sslmode=verify-full&sslrootcert=${certPath}`;
