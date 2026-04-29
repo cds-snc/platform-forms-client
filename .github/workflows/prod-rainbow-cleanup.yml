@@ -2,7 +2,7 @@ name: Rainbow cleanup (production)
 
 on:
   workflow_run:
-    workflows: ["Deploy to Production"]
+    workflows: ["Production - Deploy Rainbow Lambda"]
     types:
       - completed
   workflow_dispatch:

@@ -626,7 +626,10 @@
     "takingOver": "Prise de contrôle...",
     "syncingLatest": "Synchronisation de la plus récente version enregistrée du formulaire...",
     "syncedLatest": "Vous avez maintenant le verrou de modification et la plus récente version enregistrée du formulaire a été chargée.",
-    "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer."
+    "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer.",
+    "sessionExpiredTitle": "Votre session de modification a expiré",
+    "sessionExpiredMessage": "La modification a été arrêtée parce que ce formulaire est resté inactif trop longtemps. Retournez à la liste des formulaires pour le rouvrir si vous devez encore apporter des changements.",
+    "returnToForms": "Retourner aux formulaires"
   },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publier",
