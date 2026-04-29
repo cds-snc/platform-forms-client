@@ -261,6 +261,8 @@
       "addValueRange": "Add value range",
       "numberOfDigits": "Number of digits",
       "limitNumberOfDigits": "Limit number of digits",
+      "invalidValueRange": "The minimum value must be less than the maximum value.",
+      "invalidDigitRange": "The minimum number of digits must be less than the maximum number of digits.",
       "minDigits": "Minimum number of digits",
       "maxDigits": "Maximum number of digits",
       "currency": "Currency",

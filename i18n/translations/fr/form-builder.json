@@ -261,6 +261,8 @@
       "addValueRange": "Ajouter une plage de valeurs",
       "numberOfDigits": "Nombre de chiffres",
       "limitNumberOfDigits": "Limiter le nombre de chiffres",
+      "invalidValueRange": "La valeur minimale doit etre inferieure a la valeur maximale.",
+      "invalidDigitRange": "Le nombre minimum de chiffres doit etre inferieur au nombre maximum de chiffres.",
       "minDigits": "Nombre minimum de chiffres",
       "maxDigits": "Nombre maximum de chiffres",
       "currency": "Devise",

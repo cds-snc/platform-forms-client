@@ -45,7 +45,8 @@ export const MoreDialog = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isQuestionIdValid, setIsQuestionIdValid] = React.useState(true);
   const [isCustomRegexValid, setIsCustomRegexValid] = React.useState(true);
-  const isValid = isQuestionIdValid && isCustomRegexValid;
+  const [isNumberFieldOptionsValid, setIsNumberFieldOptionsValid] = React.useState(true);
+  const isValid = isQuestionIdValid && isCustomRegexValid && isNumberFieldOptionsValid;
   const { Event } = useCustomEvent();
   const dialog = useDialogRef();
   const { refs } = useRefsContext();
@@ -134,7 +135,11 @@ export const MoreDialog = () => {
               <FormattedDateOptions item={item} setItem={setItem} />
               {/* <ManagedDataOptions item={item} setItem={setItem} /> */}
               <ComboboxStrictValue item={item} setItem={setItem} />
-              <NumberFieldOptions item={item} setItem={setItem} />
+              <NumberFieldOptions
+                item={item}
+                setItem={setItem}
+                setIsValid={setIsNumberFieldOptionsValid}
+              />
               <DynamicRowOptions item={item} setItem={setItem} />
               <TextFieldOptions item={item} setItem={setItem} />
               <CharacterLimitOptions item={item} setItem={setItem} />

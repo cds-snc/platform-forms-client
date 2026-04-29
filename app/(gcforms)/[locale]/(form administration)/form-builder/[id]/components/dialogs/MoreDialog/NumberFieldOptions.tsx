@@ -1,16 +1,19 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes, FormElement } from "@lib/types";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
+import { ErrorMessage } from "@clientComponents/forms";
 import { LabelledInput } from "../../../../components/shared/LabelledInput";
 
 export const NumberFieldOptions = ({
   item,
   setItem,
+  setIsValid,
 }: {
   item: FormElement;
   setItem: (item: FormElement) => void;
+  setIsValid: (isValid: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -27,6 +30,45 @@ export const NumberFieldOptions = ({
       typeof item.properties.validation?.maxDigits === "number"
   );
   const showDecimals = isCurrency || decimalsEnabled;
+
+  const hasInvalidValueRange = useMemo(() => {
+    if (!valueRangeEnabled) {
+      return false;
+    }
+
+    const minValue = item.properties.validation?.minValue;
+    const maxValue = item.properties.validation?.maxValue;
+
+    return typeof minValue === "number" && typeof maxValue === "number" && minValue >= maxValue;
+  }, [
+    item.properties.validation?.maxValue,
+    item.properties.validation?.minValue,
+    valueRangeEnabled,
+  ]);
+
+  const hasInvalidDigitRange = useMemo(() => {
+    if (!digitLimitEnabled) {
+      return false;
+    }
+
+    const minDigits = item.properties.validation?.minDigits;
+    const maxDigits = item.properties.validation?.maxDigits;
+
+    return typeof minDigits === "number" && typeof maxDigits === "number" && minDigits >= maxDigits;
+  }, [
+    item.properties.validation?.maxDigits,
+    item.properties.validation?.minDigits,
+    digitLimitEnabled,
+  ]);
+
+  const isValid = useMemo(
+    () => !hasInvalidValueRange && !hasInvalidDigitRange,
+    [hasInvalidDigitRange, hasInvalidValueRange]
+  );
+
+  useEffect(() => {
+    setIsValid(isValid);
+  }, [isValid, setIsValid]);
 
   if (item.type !== FormElementTypes.numberInput) {
     return null;
@@ -234,8 +276,15 @@ export const NumberFieldOptions = ({
               <LabelledInput classNames="w-1/2" label={t("addElementDialog.number.minShort")}>
                 <input
                   type="number"
-                  className="gc-input-text mt-0!"
+                  className={
+                    "gc-input-text mt-0!" +
+                    (hasInvalidValueRange ? " border-red-700! outline-2 outline-red-700!" : "")
+                  }
                   id={`numberField-${item.id}-id-minValue`}
+                  aria-invalid={hasInvalidValueRange}
+                  aria-describedby={
+                    hasInvalidValueRange ? `numberField-${item.id}-error-valueRange` : undefined
+                  }
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const minValue = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
                     setItem({
@@ -256,8 +305,15 @@ export const NumberFieldOptions = ({
               <LabelledInput classNames="w-1/2" label={t("addElementDialog.number.maxShort")}>
                 <input
                   type="number"
-                  className="gc-input-text mt-0!"
+                  className={
+                    "gc-input-text mt-0!" +
+                    (hasInvalidValueRange ? " border-red-700! outline-2 outline-red-700!" : "")
+                  }
                   id={`numberField-${item.id}-id-maxValue`}
+                  aria-invalid={hasInvalidValueRange}
+                  aria-describedby={
+                    hasInvalidValueRange ? `numberField-${item.id}-error-valueRange` : undefined
+                  }
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const maxValue = e.target.value !== "" ? parseFloat(e.target.value) : undefined;
                     setItem({
@@ -276,6 +332,11 @@ export const NumberFieldOptions = ({
                 />
               </LabelledInput>
             </div>
+            {hasInvalidValueRange && (
+              <ErrorMessage id={`numberField-${item.id}-error-valueRange`}>
+                {t("addElementDialog.number.invalidValueRange")}
+              </ErrorMessage>
+            )}
           </div>
         )}
         <div className="gc-input-checkbox mb-4">
@@ -321,8 +382,15 @@ export const NumberFieldOptions = ({
               <LabelledInput classNames="w-1/2" label={t("addElementDialog.number.minShort")}>
                 <input
                   type="number"
-                  className="gc-input-text mt-0!"
+                  className={
+                    "gc-input-text mt-0!" +
+                    (hasInvalidDigitRange ? " border-red-700! outline-2 outline-red-700!" : "")
+                  }
                   id={`numberField-${item.id}-id-minDigits`}
+                  aria-invalid={hasInvalidDigitRange}
+                  aria-describedby={
+                    hasInvalidDigitRange ? `numberField-${item.id}-error-digitRange` : undefined
+                  }
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const minDigits =
                       e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
@@ -346,8 +414,15 @@ export const NumberFieldOptions = ({
               <LabelledInput classNames="w-1/2" label={t("addElementDialog.number.maxShort")}>
                 <input
                   type="number"
-                  className="gc-input-text mt-0!"
+                  className={
+                    "gc-input-text mt-0!" +
+                    (hasInvalidDigitRange ? " border-red-700! outline-2 outline-red-700!" : "")
+                  }
                   id={`numberField-${item.id}-id-maxDigits`}
+                  aria-invalid={hasInvalidDigitRange}
+                  aria-describedby={
+                    hasInvalidDigitRange ? `numberField-${item.id}-error-digitRange` : undefined
+                  }
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const maxDigits =
                       e.target.value !== "" ? parseInt(e.target.value, 10) : undefined;
@@ -369,6 +444,11 @@ export const NumberFieldOptions = ({
                 />
               </LabelledInput>
             </div>
+            {hasInvalidDigitRange && (
+              <ErrorMessage id={`numberField-${item.id}-error-digitRange`}>
+                {t("addElementDialog.number.invalidDigitRange")}
+              </ErrorMessage>
+            )}
           </div>
         )}
       </InfoDetails>
