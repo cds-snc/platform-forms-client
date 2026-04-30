@@ -17,6 +17,7 @@
       "prettier-plugin-tailwindcss"
     ]
   },
+  "type": "module",
   "scripts": {
     "dev": "yarn db:generate && yarn db:dev && next dev",
     "dev:debug": "next dev",
