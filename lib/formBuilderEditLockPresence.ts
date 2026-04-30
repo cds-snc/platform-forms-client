@@ -33,3 +33,7 @@ export const CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS = 5_000;
 // This must be generous enough for Lambda / cold-start environments where the full
 // SSE → saveDraft → ack round-trip can take several seconds.
 export const EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS = 5_000;
+
+// Kick the current editor out of edit mode and release their lock after this long without activity.
+// This is intentionally much longer than the "away" threshold so brief distractions don't eject users.
+export const CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS = 1_800_000; // 30 minutes
