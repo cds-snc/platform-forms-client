@@ -246,37 +246,63 @@ const compactPageColumns = (nodes: LayoutNode[]) => {
   }));
 };
 
-const alignEndColumnToStart = (nodes: LayoutNode[], hasReviewPage: boolean) => {
-  if (!hasReviewPage) {
-    return nodes;
-  }
+const TRAILING_NODE_IDS: ReadonlyArray<string> = [LOCKED_SECTIONS.REVIEW, LOCKED_SECTIONS.END];
 
-  const startNode = nodes.find((node) => node.id === LOCKED_SECTIONS.START);
-  const endNode = nodes.find((node) => node.id === LOCKED_SECTIONS.END);
-
-  if (!startNode || !endNode) {
-    return nodes;
-  }
-
-  return nodes.map((node) =>
-    node.id === LOCKED_SECTIONS.END
-      ? {
-          ...node,
-          position: {
-            ...node.position,
-            y: startNode.position.y,
-          },
-        }
-      : node
+const placeTrailingNodes = (nodes: LayoutNode[]) => {
+  const trailingNodes = TRAILING_NODE_IDS.map((id) => nodes.find((node) => node.id === id)).filter(
+    (node): node is LayoutNode => Boolean(node)
   );
+
+  if (!trailingNodes.length) {
+    return nodes;
+  }
+
+  const mainNodes = nodes.filter((node) => !TRAILING_NODE_IDS.includes(node.id));
+  const startNode = nodes.find((node) => node.id === LOCKED_SECTIONS.START);
+  const startY = startNode?.position.y ?? 0;
+
+  // Compute the rightmost edge of all already-laid-out main nodes so we can
+  // place the trailing column(s) just past them.
+  const rightmostX = mainNodes.reduce((max, node) => {
+    const width = typeof node.style?.width === "number" ? node.style.width : PAGE_WIDTH;
+    return Math.max(max, node.position.x + width);
+  }, Number.NEGATIVE_INFINITY);
+
+  let nextX = Number.isFinite(rightmostX) ? rightmostX + LAYOUT_SPACING_X : 0;
+  const trailingPositions = new Map<string, { x: number; y: number }>();
+
+  for (const trailingNode of trailingNodes) {
+    const width =
+      typeof trailingNode.style?.width === "number" ? trailingNode.style.width : PAGE_WIDTH;
+    trailingPositions.set(trailingNode.id, { x: nextX, y: startY });
+    nextX += width + LAYOUT_SPACING_X;
+  }
+
+  return nodes.map((node) => {
+    const trailingPosition = trailingPositions.get(node.id);
+    if (!trailingPosition) {
+      return node;
+    }
+    return { ...node, position: trailingPosition };
+  });
 };
 
-const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[], hasReviewPage: boolean) => {
+const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[]) => {
   if (!nodes.length) {
     return nodes;
   }
 
-  const maxPageHeight = nodes.reduce((maxHeight, node) => {
+  // Trailing nodes (review / end) are positioned manually after layout so they
+  // don't inherit a sibling column from the d3-tree hierarchy when multiple
+  // groups feed into them.
+  const mainNodes = nodes.filter((node) => !TRAILING_NODE_IDS.includes(node.id));
+  const layoutEdges = edges.filter((edge) => !TRAILING_NODE_IDS.includes(edge.target));
+
+  if (!mainNodes.length) {
+    return placeTrailingNodes(nodes);
+  }
+
+  const maxPageHeight = mainNodes.reduce((maxHeight, node) => {
     const nodeHeight = typeof node.style?.height === "number" ? node.style.height : PAGE_MIN_HEIGHT;
     return Math.max(maxHeight, nodeHeight);
   }, PAGE_MIN_HEIGHT);
@@ -292,8 +318,8 @@ const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[], hasReviewPage: bool
         return undefined;
       }
 
-      return edges.find((edge) => edge.target === node.id)?.source || rootLayoutNode.id;
-    })([rootLayoutNode, ...nodes]);
+      return layoutEdges.find((edge) => edge.target === node.id)?.source || rootLayoutNode.id;
+    })([rootLayoutNode, ...mainNodes]);
 
   const laidOutRoot = layoutTree(hierarchy);
   const positions = new Map<string, { x: number; y: number }>();
@@ -312,15 +338,20 @@ const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[], hasReviewPage: bool
     });
   }
 
-  const laidOutNodes = nodes.map((node) => ({
+  const laidOutMainNodes = mainNodes.map((node) => ({
     ...node,
     position: positions.get(node.id) ?? node.position,
   }));
 
-  const horizontallyCompactedNodes = compactPageColumns(laidOutNodes);
-  const compactedNodes = compactPageRows(horizontallyCompactedNodes);
+  const horizontallyCompactedNodes = compactPageColumns(laidOutMainNodes);
+  const compactedMainNodes = compactPageRows(horizontallyCompactedNodes);
 
-  return alignEndColumnToStart(compactedNodes, hasReviewPage);
+  // Reassemble in the original order, then place trailing nodes in their own
+  // dedicated column to the right.
+  const compactedById = new Map(compactedMainNodes.map((node) => [node.id, node]));
+  const reassembled = nodes.map((node) => compactedById.get(node.id) ?? node);
+
+  return placeTrailingNodes(reassembled);
 };
 
 const getLinearEdge = (
@@ -334,7 +365,7 @@ const getLinearEdge = (
   source,
   target,
   animated: !!isHighlighted,
-  zIndex: isHighlighted ? 10 : 1,
+  zIndex: isHighlighted ? 10 : 0,
   style: {
     ...(isHighlighted ? highlightedLineStyle : mutedLineStyle),
   },
@@ -556,7 +587,7 @@ export const useFlowData = (
           source,
           target: nextAction,
           animated: isHighlighted,
-          zIndex: isHighlighted ? 10 : 1,
+          zIndex: isHighlighted ? 10 : 0,
           style: {
             ...(isHighlighted ? highlightedLineStyle : mutedLineStyle),
           },
@@ -602,7 +633,7 @@ export const useFlowData = (
       },
     });
 
-    const laidOutPageNodes = layoutPageNodes(pageNodes, layoutEdges, hasReviewPage);
+    const laidOutPageNodes = layoutPageNodes(pageNodes, layoutEdges);
 
     return {
       edges,
