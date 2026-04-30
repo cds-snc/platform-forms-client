@@ -13,6 +13,7 @@ import {
   EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
   EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
 } from "@lib/formBuilderEditLockPresence";
+import { useEditLockInactiveUser } from "./useEditLockInactiveTimeout";
 
 const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
 const SERVER_STATE_SYNC_RETRY_MS = 500;
@@ -69,6 +70,18 @@ export const useEditLock = ({
 
   const { getActivitySnapshot } = useEditLockPresence({ getIsActiveTab });
 
+  // const cleanupHeartbeat = useCallback(() => {
+  //   console.log("User identified as inactive due to inactivity timeout. This is where you'd trigger any additional handling needed for inactive users, such as showing a warning or releasing the lock.");
+  //   if (heartbeatRef.current) {
+  //     window.clearInterval(heartbeatRef.current);
+  //     heartbeatRef.current = null;
+  //   }
+  //   clearEvents();
+  // }, []);
+
+  const { startOwnerIdleTimer, clearOwnerIdleTimer, isOwnerIdleTimeExpired } =
+    useEditLockInactiveUser();
+
   const clearLockState = useCallback(() => {
     setIsLockedByOther(false);
     setEditLock(null);
@@ -104,9 +117,12 @@ export const useEditLock = ({
       isOwnerRef.current = status.isOwner;
       if (status.isOwner) {
         suppressReleaseRef.current = false;
+        startOwnerIdleTimer();
+      } else {
+        clearOwnerIdleTimer();
       }
     },
-    [setEditLock, setIsLockedByOther]
+    [setEditLock, setIsLockedByOther, startOwnerIdleTimer, clearOwnerIdleTimer]
   );
 
   const clearTimers = useCallback(() => {
@@ -509,5 +525,5 @@ export const useEditLock = ({
     startTimers(statusResult);
   }, [postAction, refreshForm, startTimers, updateStore, updatedAt]);
 
-  return { takeover, getIsActiveTab };
+  return { takeover, getIsActiveTab, isOwnerIdleTimeExpired };
 };

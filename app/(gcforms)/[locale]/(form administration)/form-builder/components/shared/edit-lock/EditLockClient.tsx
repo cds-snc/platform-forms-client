@@ -6,6 +6,7 @@ import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
+import { EditLockSessionExpiredOverlay } from "./EditLockSessionExpiredOverlay";
 
 const isEditPath = (pathname: string | null) => {
   if (!pathname) return false;
@@ -46,7 +47,7 @@ export const EditLockClient = ({
     activeFormId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
 
-  const { takeover, getIsActiveTab } = useEditLock({
+  const { takeover, getIsActiveTab, isOwnerIdleTimeExpired } = useEditLock({
     formId: activeFormId,
     enabled,
     sessionId,
@@ -69,6 +70,9 @@ export const EditLockClient = ({
 
   return (
     <>
+      {isOwnerIdleTimeExpired && (
+        <EditLockSessionExpiredOverlay onReturnToForms={() => "HELLO TEMP"} />
+      )}
       <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} />
       {children}
     </>
