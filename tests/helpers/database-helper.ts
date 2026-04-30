@@ -1,6 +1,7 @@
 import { prisma, Prisma } from "@gcforms/database";
 import * as fs from "fs";
 import * as path from "path";
+import { fileURLToPath } from "url";
 
 export class DatabaseHelper {
   /**
@@ -27,7 +28,8 @@ export class DatabaseHelper {
     }
 
     // Load the fixture file
-    const fixturePath = path.join(import.meta.url, "../__fixtures__", `${fixtureName}.json`);
+    const dirName = path.dirname(fileURLToPath(import.meta.url));
+    const fixturePath = path.join(dirName, "tests/__fixtures__", `${fixtureName}.json`);
     const fixtureContent = fs.readFileSync(fixturePath, "utf-8");
     const formConfig = JSON.parse(fixtureContent);
 
