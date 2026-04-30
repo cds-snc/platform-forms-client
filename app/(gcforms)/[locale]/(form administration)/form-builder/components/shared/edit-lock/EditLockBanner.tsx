@@ -93,6 +93,7 @@ export const EditLockBanner = ({
     : false;
 
   const hasPresenceDetails = Boolean(editLock?.presenceStatus);
+  const isActiveTab = getIsActiveTab();
 
   // If the lock is stale, show "stale" status to encourage takeover. Otherwise, show the actual presence status reported by the server.
   const presenceKey = isStale ? "stale" : (editLock?.presenceStatus ?? "away");
@@ -128,11 +129,9 @@ export const EditLockBanner = ({
         <div
           ref={bannerRef}
           tabIndex={-1}
-          className="pointer-events-auto w-full max-w-2xl rounded-lg border border-slate-300 bg-white px-6 py-5 text-sm text-slate-700 shadow-xl"
+          className="pointer-events-auto relative w-full max-w-2xl rounded-lg border border-slate-300 bg-white px-6 py-5 text-sm text-slate-700 shadow-xl"
         >
-          <div>
-            <h1>TEMP debug: getIsActiveTab={getIsActiveTab() ? "true" : "false"}</h1>
-          </div>
+          <div></div>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex max-w-xl items-start gap-3 text-left">
               <WarningIcon className="mt-0.5 size-8 shrink-0 fill-amber-500" />
@@ -174,6 +173,9 @@ export const EditLockBanner = ({
             >
               {isTakingOver ? t("editLock.takingOver") : t("editLock.takeover")}
             </Button>
+          </div>
+          <div className="sr-only" data-active-tab={isActiveTab ? "active" : "inactive"}>
+            tab {isActiveTab ? "active" : "inactive"}
           </div>
         </div>
       </div>

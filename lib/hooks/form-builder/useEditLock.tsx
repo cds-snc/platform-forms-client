@@ -67,7 +67,7 @@ export const useEditLock = ({
     coordinationKey: formId,
   });
 
-  const { getActivitySnapshot } = useEditLockPresence({ coordinationKey: formId });
+  const { getActivitySnapshot } = useEditLockPresence({ getIsActiveTab });
 
   const clearLockState = useCallback(() => {
     setIsLockedByOther(false);

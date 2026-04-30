@@ -22,12 +22,10 @@ function EditLockBannerHarness({
   editLock,
   isLockedByOther,
   takeover,
-  presenceEnabled = false,
 }: {
   editLock: EditLockState | null;
   isLockedByOther: boolean;
   takeover: () => Promise<void>;
-  presenceEnabled?: boolean;
 }) {
   const setEditLock = useTemplateStore((state) => state.setEditLock);
   const setIsLockedByOther = useTemplateStore((state) => state.setIsLockedByOther);
@@ -37,7 +35,7 @@ function EditLockBannerHarness({
     setIsLockedByOther(isLockedByOther);
   }, [editLock, isLockedByOther, setEditLock, setIsLockedByOther]);
 
-  return <EditLockBanner takeover={takeover} presenceEnabled={presenceEnabled} />;
+  return <EditLockBanner takeover={takeover} getIsActiveTab={() => true} />;
 }
 
 describe("<EditLockBanner />", () => {
@@ -75,7 +73,6 @@ describe("<EditLockBanner />", () => {
         editLock={buildLock({ expiresAt: new Date(Date.now() + 5_000).toISOString() })}
         isLockedByOther={true}
         takeover={vi.fn().mockResolvedValue(undefined)}
-        presenceEnabled={true}
       />
     );
 
@@ -128,7 +125,6 @@ describe("<EditLockBanner />", () => {
         editLock={buildLock()}
         isLockedByOther={true}
         takeover={vi.fn().mockResolvedValue(undefined)}
-        presenceEnabled={false}
       />
     );
 
