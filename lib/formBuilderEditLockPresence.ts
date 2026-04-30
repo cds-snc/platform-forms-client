@@ -36,4 +36,4 @@ export const EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS = 5_000;
 
 // Kick the current editor out of edit mode and release their lock after this long without activity.
 // This is intentionally much longer than the "away" threshold so brief distractions don't eject users.
-export const CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS = 5_000; // TEMP  was 1_800_000; // 30 minutes
+export const CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS = 30_000; // TEMP  was 1_800_000; // 30 minutes

@@ -7,6 +7,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 import { EditLockSessionExpiredOverlay } from "./EditLockSessionExpiredOverlay";
+import { useRouter } from "next/navigation";
 
 const isEditPath = (pathname: string | null) => {
   if (!pathname) return false;
@@ -38,9 +39,11 @@ export const EditLockClient = ({
 }) => {
   "use memo";
   const pathname = usePathname();
-  const { currentFormId, isLockedByOther } = useTemplateStore((s) => ({
+  const router = useRouter();
+  const { currentFormId, isLockedByOther, language } = useTemplateStore((s) => ({
     currentFormId: s.id,
     isLockedByOther: s.isLockedByOther,
+    language: s.lang,
   }));
   const activeFormId = currentFormId || formId;
   const enabled =
@@ -73,10 +76,14 @@ export const EditLockClient = ({
 
   const showSessionExpiredOverlay = isOwnerIdleTimeExpired && !isLockedByOther;
 
+  const returnToForms = () => {
+    router.push(`/${language}/forms`);
+  };
+
   return (
     <>
       {showSessionExpiredOverlay && (
-        <EditLockSessionExpiredOverlay onReturnToForms={() => "HELLO TEMP"} />
+        <EditLockSessionExpiredOverlay onReturnToForms={returnToForms} />
       )}
       <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} />
       {children}
