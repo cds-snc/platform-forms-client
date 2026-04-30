@@ -38,7 +38,10 @@ export const EditLockClient = ({
 }) => {
   "use memo";
   const pathname = usePathname();
-  const currentFormId = useTemplateStore((s) => s.id);
+  const { currentFormId, isLockedByOther } = useTemplateStore((s) => ({
+    currentFormId: s.id,
+    isLockedByOther: s.isLockedByOther,
+  }));
   const activeFormId = currentFormId || formId;
   const enabled =
     lockedEditingEnabled &&
@@ -68,9 +71,11 @@ export const EditLockClient = ({
     return children ? <>{children}</> : null;
   }
 
+  const showSessionExpiredOverlay = isOwnerIdleTimeExpired && !isLockedByOther;
+
   return (
     <>
-      {isOwnerIdleTimeExpired && (
+      {showSessionExpiredOverlay && (
         <EditLockSessionExpiredOverlay onReturnToForms={() => "HELLO TEMP"} />
       )}
       <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} />

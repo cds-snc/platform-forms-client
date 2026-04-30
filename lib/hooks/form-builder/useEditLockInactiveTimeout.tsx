@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS, // TODO update to use app setting
 } from "@lib/formBuilderEditLockPresence";
@@ -9,25 +9,32 @@ import {
  * Keeps track of whether a user is identified as inactive and if so
  * fires a callback.
  */
-export const useEditLockInactiveUser = () => {
+export const useEditLockInactiveUser = ({
+  onOwnerIdleTimeout,
+}: {
+  onOwnerIdleTimeout?: () => void;
+} = {}) => {
   const timeoutRef = useRef<number | null>(null);
-  const isOwnerIdleTimeExpired = useRef<boolean>(false);
+  const [isOwnerIdleTimeExpired, setIsOwnerIdleTimeExpired] = useState(false);
 
   const startOwnerIdleTimer = () => {
-    isOwnerIdleTimeExpired.current = false;
-    timeoutRef.current = window.setInterval(() => {
-      // console.log("~~~~~JAVASCRIPT TIMER");
-      isOwnerIdleTimeExpired.current = true;
+    setIsOwnerIdleTimeExpired(false);
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = window.setTimeout(() => {
+      setIsOwnerIdleTimeExpired(true);
+      timeoutRef.current = null;
+      onOwnerIdleTimeout?.();
     }, CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS);
   };
 
   const clearOwnerIdleTimer = () => {
     if (timeoutRef.current) {
-      // console.log("~~~~~CLEARING TIMER");
-      window.clearInterval(timeoutRef.current);
+      window.clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
-      isOwnerIdleTimeExpired.current = false;
     }
+    setIsOwnerIdleTimeExpired(false);
   };
 
   return { startOwnerIdleTimer, clearOwnerIdleTimer, isOwnerIdleTimeExpired };

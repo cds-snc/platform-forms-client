@@ -68,8 +68,6 @@ export const useEditLock = ({
     coordinationKey: formId,
   });
 
-  const { getActivitySnapshot } = useEditLockPresence({ getIsActiveTab });
-
   // const cleanupHeartbeat = useCallback(() => {
   //   console.log("User identified as inactive due to inactivity timeout. This is where you'd trigger any additional handling needed for inactive users, such as showing a warning or releasing the lock.");
   //   if (heartbeatRef.current) {
@@ -78,9 +76,6 @@ export const useEditLock = ({
   //   }
   //   clearEvents();
   // }, []);
-
-  const { startOwnerIdleTimer, clearOwnerIdleTimer, isOwnerIdleTimeExpired } =
-    useEditLockInactiveUser();
 
   const clearLockState = useCallback(() => {
     setIsLockedByOther(false);
@@ -93,6 +88,44 @@ export const useEditLock = ({
     setEditLock(null);
     isOwnerRef.current = false;
   }, [setEditLock, setIsLockedByOther]);
+
+  const clearTimers = useCallback(() => {
+    lockLoopTokenRef.current += 1;
+    if (heartbeatRef.current) {
+      window.clearInterval(heartbeatRef.current);
+      heartbeatRef.current = null;
+    }
+    if (pollRef.current) {
+      window.clearInterval(pollRef.current);
+      pollRef.current = null;
+    }
+  }, []);
+
+  const clearEvents = useCallback(() => {
+    eventSourceRef.current?.close();
+    eventSourceRef.current = null;
+  }, []);
+
+  const handleOwnerIdleTimeout = useCallback(() => {
+    clearTimers();
+    clearEvents();
+  }, [clearEvents, clearTimers]);
+
+  const { startOwnerIdleTimer, clearOwnerIdleTimer, isOwnerIdleTimeExpired } =
+    useEditLockInactiveUser({
+      onOwnerIdleTimeout: handleOwnerIdleTimeout,
+    });
+
+  const handleOwnerActivity = useCallback(() => {
+    if (isOwnerRef.current) {
+      startOwnerIdleTimer();
+    }
+  }, [startOwnerIdleTimer]);
+
+  const { getActivitySnapshot } = useEditLockPresence({
+    getIsActiveTab,
+    onActivity: handleOwnerActivity,
+  });
 
   const updateStore = useCallback(
     (status: EditLockStatusPayload) => {
@@ -124,23 +157,6 @@ export const useEditLock = ({
     },
     [setEditLock, setIsLockedByOther, startOwnerIdleTimer, clearOwnerIdleTimer]
   );
-
-  const clearTimers = useCallback(() => {
-    lockLoopTokenRef.current += 1;
-    if (heartbeatRef.current) {
-      window.clearInterval(heartbeatRef.current);
-      heartbeatRef.current = null;
-    }
-    if (pollRef.current) {
-      window.clearInterval(pollRef.current);
-      pollRef.current = null;
-    }
-  }, []);
-
-  const clearEvents = useCallback(() => {
-    eventSourceRef.current?.close();
-    eventSourceRef.current = null;
-  }, []);
 
   const postAction = useCallback(
     async (action: "acquire" | "heartbeat" | "release" | "takeover" | "takeover-save-complete") => {
