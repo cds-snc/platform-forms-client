@@ -1,41 +1,9 @@
 import { PrismaClient, Prisma } from "./generated/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import * as path from "path";
-import { fileURLToPath } from "url";
-
-const connectionString = () => {
-  if (
-    !["production", "development"].includes(process.env.NODE_ENV ?? "") &&
-    !process.env.DATABASE_URL
-  ) {
-    return "dummy_url_placeholder";
-  }
-
-  if (!process.env.DATABASE_URL) {
-    throw new Error(
-      `Missing Database Url Environment Variable, current node env is ${process.env.NODE_ENV}`
-    );
-  }
-
-  const envConnectiontring = process.env.DATABASE_URL;
-
-  // Check if the connection string is AWS RDS and if there are already existing parameters
-  if (/\.ca-central-1\.rds\.amazonaws\.com:5432/i.test(envConnectiontring)) {
-    const dirName = path.dirname(fileURLToPath(import.meta.url));
-    const certPath = path.join(dirName, "global-bundle.pem");
-
-    if (/:5432\/forms$/i.test(envConnectiontring)) {
-      return envConnectiontring + `?sslmode=verify-full&sslrootcert=${certPath}`;
-    } else {
-      return envConnectiontring + `&sslmode=verify-full&sslrootcert=${certPath}`;
-    }
-  }
-  // Return no SSL connection string if not AWS RDS
-  return envConnectiontring;
-};
+import { getConnectionUrl } from "./connection";
 
 const adapter = new PrismaPg({
-  connectionString: connectionString(),
+  connectionString: getConnectionUrl(),
 });
 // Instantiate the extended Prisma client to infer its type
 const extendedPrisma = new PrismaClient({ adapter }).$extends({

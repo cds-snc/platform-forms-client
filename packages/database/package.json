@@ -29,10 +29,11 @@
     "db:test": "prisma migrate reset --force && prisma db seed -- --environment test",
     "clean": "rm -fr ./src/generated && rm -fr ./dist",
     "prebuild": "yarn clean && yarn db:generate",
-    "build": "yarn prebuild && tsdown src/index.ts --format cjs,esm --dts --clean --splitting",
+    "build": "yarn prebuild && tsdown",
     "prepack": "yarn build"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.1038.0",
     "@prisma/adapter-pg": "7.8.0",
     "@prisma/client": "7.8.0",
     "pg": "8.20.0"
