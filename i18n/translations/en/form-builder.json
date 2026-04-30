@@ -527,6 +527,21 @@
     "description": "Get a spreadsheet with the history of a form's recent key actions. These may take a few minutes to appear in the activity log and will be available for up to 30 days.",
     "downloadBtnText": "Download recent activity",
     "title": "View form activity",
+    "dialog": {
+      "title": "Download form activity",
+      "downloadBtnText": "Download CSV",
+      "allEventsTitle": "All events",
+      "allEventsDescription": "Download all events that have occurred in the form.",
+      "allEventsCheckbox": "All form events",
+      "specificEventsTitle": "Specific events",
+      "specificEventsDescription": "Choose which events you would like to appear in the CSV.",
+      "specific": {
+        "formBuilding": "Form building",
+        "formCollaboration": "Form collaboration",
+        "responseDownloads": "Response downloads",
+        "apiIntegrations": "API integrations"
+      }
+    },
     "headers": {
       "formId": "Form ID",
       "userId": "Team member",
