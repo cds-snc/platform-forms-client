@@ -15,6 +15,7 @@ import {
   logEvent,
   AuditLogDetails,
   AuditLogAccessDeniedDetails,
+  FilterableEventTypes,
 } from "@lib/auditLogs";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -72,7 +73,7 @@ export const getFormEvents = AuthenticatedAction(
         throw e;
       });
 
-      const events = await retrieveEvents(
+      let events = await retrieveEvents(
         {
           TableName: "AuditLogs",
           IndexName: "SubjectByTimestamp",
@@ -90,7 +91,17 @@ export const getFormEvents = AuthenticatedAction(
       );
 
       if (filter && filter.length > 0) {
-        // todo: filter events based on pattern applied.
+        // get the major categories for the filters
+        const filterCategories = Object.keys(FilterableEventTypes).filter((key) =>
+          filter.includes(key)
+        );
+        // flatten the major categories into their individual event types as an array of strings
+        const appliedFilters = filterCategories.reduce((acc: string[], category) => {
+          const eventTypes = FilterableEventTypes[category as keyof typeof FilterableEventTypes];
+          return acc.concat(eventTypes);
+        }, []);
+        // filter the events based on the individual event types
+        events = events.filter((event) => appliedFilters.includes(event.event));
       }
 
       const userId = session.user.id;

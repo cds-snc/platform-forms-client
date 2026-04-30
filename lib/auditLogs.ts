@@ -76,6 +76,39 @@ export const AuditLogEvent = {
   AuditLogsRead: "AuditLogsRead",
 } as const;
 
+const FormBuildingEvents = [
+  AuditLogEvent.CreateForm,
+  AuditLogEvent.UpdateForm,
+  AuditLogEvent.DeleteForm,
+  AuditLogEvent.UnarchiveForm,
+  AuditLogEvent.PublishForm,
+  AuditLogEvent.ChangeFormName,
+  AuditLogEvent.ChangeDeliveryOption,
+  AuditLogEvent.ChangeFormPurpose,
+  AuditLogEvent.ChangeFormSaveAndResume,
+  AuditLogEvent.ChangeSecurityAttribute,
+];
+const FormCollaborationEvents = [AuditLogEvent.GrantFormAccess, AuditLogEvent.RevokeFormAccess];
+const ResponseEvents = [
+  AuditLogEvent.DownloadResponse,
+  AuditLogEvent.ConfirmResponse,
+  AuditLogEvent.IdentifyProblemResponse,
+  AuditLogEvent.ListResponses,
+  AuditLogEvent.DeleteDraftResponses,
+  AuditLogEvent.RetrieveResponses,
+];
+const ApiEvents = [
+  AuditLogEvent.CreateAPIKey,
+  AuditLogEvent.DeleteAPIKey,
+  AuditLogEvent.RefreshAPIKey,
+];
+export const FilterableEventTypes = {
+  formBuilding: FormBuildingEvents,
+  formCollaboration: FormCollaborationEvents,
+  responseDownloads: ResponseEvents,
+  apiIntegrations: ApiEvents,
+};
+
 export type AuditLogEvent = keyof typeof AuditLogEvent;
 
 export const AuditSubjectType = {
