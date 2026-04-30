@@ -102,11 +102,13 @@ export const useEditLock = ({
   }, []);
 
   const clearEvents = useCallback(() => {
+    console.log("CLEAR EVENTS");
     eventSourceRef.current?.close();
     eventSourceRef.current = null;
   }, []);
 
   const handleOwnerIdleTimeout = useCallback(() => {
+    console.log("CLEAR TIMERS AND EVENTS");
     clearTimers();
     clearEvents();
   }, [clearEvents, clearTimers]);
@@ -124,7 +126,7 @@ export const useEditLock = ({
 
   const { getActivitySnapshot } = useEditLockPresence({
     getIsActiveTab,
-    onActivity: handleOwnerActivity,
+    onActivity: () => console.log("onActivity called") //handleOwnerActivity,
   });
 
   const updateStore = useCallback(
@@ -149,9 +151,11 @@ export const useEditLock = ({
       );
       isOwnerRef.current = status.isOwner;
       if (status.isOwner) {
+        console.log("STORE startOwnerIdleTimer heatbeat");
         suppressReleaseRef.current = false;
         startOwnerIdleTimer();
       } else {
+        console.log("STORE clearOwnerIdleTimer heatbeat");
         clearOwnerIdleTimer();
       }
     },

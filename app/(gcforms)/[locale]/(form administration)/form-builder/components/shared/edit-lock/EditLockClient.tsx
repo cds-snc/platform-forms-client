@@ -76,6 +76,8 @@ export const EditLockClient = ({
 
   const showSessionExpiredOverlay = isOwnerIdleTimeExpired && !isLockedByOther;
 
+console.log("isOwnerIdleTimeExpired", isOwnerIdleTimeExpired, "isLockedByOther", isLockedByOther, "showSessionExpiredOverlay", showSessionExpiredOverlay);
+
   const returnToForms = () => {
     router.push(`/${language}/forms`);
   };

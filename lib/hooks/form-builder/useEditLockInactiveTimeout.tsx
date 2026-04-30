@@ -18,6 +18,8 @@ export const useEditLockInactiveUser = ({
   const [isOwnerIdleTimeExpired, setIsOwnerIdleTimeExpired] = useState(false);
 
   const startOwnerIdleTimer = () => {
+      console.log("Start Timer heatbeat");
+
     setIsOwnerIdleTimeExpired(false);
     if (timeoutRef.current) {
       window.clearTimeout(timeoutRef.current);
@@ -26,10 +28,14 @@ export const useEditLockInactiveUser = ({
       setIsOwnerIdleTimeExpired(true);
       timeoutRef.current = null;
       onOwnerIdleTimeout?.();
+
+      console.log("Owner idle timeout expired");
     }, CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS);
   };
 
   const clearOwnerIdleTimer = () => {
+        console.log("Clear Timer heatbeat");
+
     if (timeoutRef.current) {
       window.clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
