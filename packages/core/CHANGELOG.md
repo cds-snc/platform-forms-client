@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.5] - 2026-04-30
+
+- Modify import
+
 ## [2.2.4] - 2026-04-28
 
 - Add 'recheck' package to the list of dependencies
