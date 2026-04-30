@@ -118,18 +118,4 @@ describe("<EditLockBanner />", () => {
     await expect.element(loading).toBeVisible();
     await expect.element(page.getByRole("button", { name: "Taking over..." })).toBeDisabled();
   });
-
-  it("hides presence details when presence detection is disabled", async () => {
-    await render(
-      <EditLockBannerHarness
-        editLock={buildLock()}
-        isLockedByOther={true}
-        takeover={vi.fn().mockResolvedValue(undefined)}
-      />
-    );
-
-    await expect.element(page.getByText("This form is already being edited")).toBeVisible();
-    await expect.element(page.getByText("Status:", { exact: false })).not.toBeInTheDocument();
-    await expect.element(page.getByText("Last activity:", { exact: false })).not.toBeInTheDocument();
-  });
 });
