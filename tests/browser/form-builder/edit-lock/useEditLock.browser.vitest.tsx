@@ -192,20 +192,19 @@ function EditLockHarness({
   onTakeoverReady,
   onChangeKey,
   onLockStateChange,
-  presenceEnabled = false,
+  onActiveTabChange,
 }: {
   onTakeoverReady?: (takeover: () => Promise<void>) => void;
   onChangeKey?: (changeKey: string) => void;
   onLockStateChange?: (state: { isLockedByOther: boolean; hasEditLock: boolean }) => void;
-  presenceEnabled?: boolean;
+  onActiveTabChange?: (isActiveTab: boolean) => void;
 }) {
   const changeKey = useTemplateStore((s) => s.changeKey);
   const isLockedByOther = useTemplateStore((s) => s.isLockedByOther);
   const editLock = useTemplateStore((s) => s.editLock);
-  const { takeover } = useEditLock({
+  const { takeover, getIsActiveTab } = useEditLock({
     formId: "test-form-id",
     enabled: true,
-    presenceEnabled,
     sessionId: "session-1",
   });
 
@@ -223,6 +222,10 @@ function EditLockHarness({
       hasEditLock: editLock !== null,
     });
   }, [editLock, isLockedByOther, onLockStateChange]);
+
+  useEffect(() => {
+    onActiveTabChange?.(getIsActiveTab());
+  }, [getIsActiveTab, onActiveTabChange]);
 
   useEffect(() => {
     return () => {
@@ -532,6 +535,22 @@ describe("useEditLock", () => {
     // With active-tab coordination enabled, a BroadcastChannel is created
     // for coordination even in background tabs
     expect(MockBroadcastChannel.channels.size).toBe(1);
+  });
+
+  it("keeps the visible focused tab marked active while edit-lock presence is mounted", async () => {
+    const activeTabStates: boolean[] = [];
+
+    await render(<EditLockHarness onActiveTabChange={(isActiveTab) => activeTabStates.push(isActiveTab)} />);
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
+        expect.objectContaining({ method: "POST" })
+      );
+    });
+
+    expect(MockBroadcastChannel.channels.size).toBe(1);
+    expect(activeTabStates.at(-1)).toBe(true);
   });
 
   it("does not include presence activity in edit-lock requests", async () => {

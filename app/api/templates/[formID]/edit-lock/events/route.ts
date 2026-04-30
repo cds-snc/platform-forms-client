@@ -7,9 +7,20 @@ import {
   registerActiveEditLockStream,
   subscribeToSharedEditLockEvents,
 } from "@lib/editLockEventStreams";
+import { logMessage } from "@lib/logger";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 
 export const dynamic = "force-dynamic";
+
+const shouldDebugEditLockSse = true;
+
+const debugEditLockSse = (message: string, metadata: Record<string, unknown>) => {
+  if (!shouldDebugEditLockSse) {
+    return;
+  }
+
+  logMessage.debug({ message, ...metadata });
+};
 
 export const GET = middleware([sessionExists()], async (_req, props) => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
@@ -30,12 +41,19 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
   }
 
   const encoder = new TextEncoder();
+  const streamDebugContext = {
+    formID,
+    userId: session.user.id,
+  };
+  let closeStream: ((reason: string) => Promise<void>) | null = null;
 
   const stream = new ReadableStream({
     start(controller) {
       let closed = false;
       let unsubscribe: (() => void | Promise<void>) | null = null;
       let unregisterStream: (() => void) | null = null;
+
+      debugEditLockSse("edit-lock-sse-open", streamDebugContext);
 
       const sendStatus = async () => {
         if (closed) {
@@ -73,12 +91,16 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
         }
       }, 25000);
 
-      const close = async () => {
+      const close = async (reason: string) => {
         if (closed) {
           return;
         }
 
         closed = true;
+        debugEditLockSse("edit-lock-sse-close", {
+          ...streamDebugContext,
+          reason,
+        });
         clearInterval(keepAlive);
         unregisterStream?.();
 
@@ -93,7 +115,11 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
         }
       };
 
-      unregisterStream = registerActiveEditLockStream(session.user.id, formID, close);
+      closeStream = close;
+
+      unregisterStream = registerActiveEditLockStream(session.user.id, formID, () =>
+        close("replaced-by-newer-stream")
+      );
 
       void (async () => {
         try {
@@ -106,7 +132,7 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
 
           unsubscribe = unsubscribeEvents;
         } catch {
-          void close();
+          void close("subscribe-failed");
         }
       })();
 
@@ -115,8 +141,11 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
       });
 
       _req.signal.addEventListener("abort", () => {
-        void close();
+        void close("request-aborted");
       });
+    },
+    cancel() {
+      return closeStream?.("stream-cancelled");
     },
   });
 

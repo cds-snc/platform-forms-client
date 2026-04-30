@@ -6,6 +6,8 @@ import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
+import { EditLockSessionExpiredOverlay } from "./EditLockSessionExpiredOverlay";
+import { useRouter } from "next/navigation";
 
 const isEditPath = (pathname: string | null) => {
   if (!pathname) return false;
@@ -25,21 +27,24 @@ const makeSessionId = () => {
 export const EditLockClient = ({
   formId,
   lockedEditingEnabled = true,
-  editLockPresenceEnabled = false,
   children,
   restrictToEditPaths = true,
   reloadOnTakeover = false,
 }: {
   formId: string;
   lockedEditingEnabled?: boolean;
-  editLockPresenceEnabled?: boolean;
   children?: React.ReactNode;
   restrictToEditPaths?: boolean;
   reloadOnTakeover?: boolean;
 }) => {
   "use memo";
   const pathname = usePathname();
-  const currentFormId = useTemplateStore((s) => s.id);
+  const router = useRouter();
+  const { currentFormId, isLockedByOther, language } = useTemplateStore((s) => ({
+    currentFormId: s.id,
+    isLockedByOther: s.isLockedByOther,
+    language: s.lang,
+  }));
   const activeFormId = currentFormId || formId;
   const enabled =
     lockedEditingEnabled &&
@@ -48,10 +53,9 @@ export const EditLockClient = ({
     activeFormId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
 
-  const { takeover } = useEditLock({
+  const { takeover, getIsActiveTab, isOwnerIdleTimeExpired } = useEditLock({
     formId: activeFormId,
     enabled,
-    presenceEnabled: editLockPresenceEnabled,
     sessionId,
   });
 
@@ -70,9 +74,18 @@ export const EditLockClient = ({
     return children ? <>{children}</> : null;
   }
 
+  const showSessionExpiredOverlay = isOwnerIdleTimeExpired && !isLockedByOther;
+
+  const returnToForms = () => {
+    router.push(`/${language}/forms`);
+  };
+
   return (
     <>
-      <EditLockBanner takeover={handleTakeover} presenceEnabled={editLockPresenceEnabled} />
+      {showSessionExpiredOverlay && (
+        <EditLockSessionExpiredOverlay onReturnToForms={returnToForms} />
+      )}
+      <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} />
       {children}
     </>
   );
