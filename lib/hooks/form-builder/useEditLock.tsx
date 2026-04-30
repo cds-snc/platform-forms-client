@@ -59,12 +59,13 @@ export const useEditLock = ({
   const pollRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
   const startPollingRef = useRef<() => void>(() => undefined);
+  const startHeartbeatRef = useRef<() => void>(() => undefined);
   const lockLoopTokenRef = useRef(0);
   const updatedAtRef = useRef(updatedAt);
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
 
-  const { getIsActiveTab } = useActiveTab({
+  const { getIsActiveTab, isActiveTab } = useActiveTab({
     coordinationKey: formId,
   });
 
@@ -140,10 +141,14 @@ export const useEditLock = ({
   );
 
   const handleOwnerIdleTimeout = useCallback(async () => {
+    // Tear down owner-side timers immediately and reflect the loss of ownership
+    // in local state so the UI does not pretend we still own the lock while
+    // we wait for the release request and the resulting SSE event to round-trip.
     clearTimers();
+    setTakeoverFallbackState();
     await postAction("release");
     clearEvents();
-  }, [clearEvents, clearTimers, postAction]);
+  }, [clearEvents, clearTimers, postAction, setTakeoverFallbackState]);
 
   ownerIdleTimeoutHandlerRef.current = handleOwnerIdleTimeout;
 
@@ -290,6 +295,43 @@ export const useEditLock = ({
     [saveDraftIfNeeded]
   );
 
+  // When a non-owner discovers the lock is free (because the previous owner released
+  // it after their idle timeout, or its TTL expired on the server), try to take it
+  // ourselves instead of leaving the user staring at a "Take over" overlay.
+  // Only the active tab attempts the auto-acquire so background tabs do not race
+  // for ownership; inactive tabs simply fall back to the manual takeover overlay.
+  // Multiple users / browsers may still race, but the server uses NX semantics so
+  // only one wins; the loser falls back to polling against whoever did win.
+  const tryAutoAcquireFreeLock = useCallback(async (): Promise<boolean> => {
+    if (!getIsActiveTab()) {
+      setTakeoverFallbackState();
+      return false;
+    }
+
+    const acquireResult = await postAction("acquire");
+    if (!acquireResult) {
+      setTakeoverFallbackState();
+      return false;
+    }
+
+    updateStore(acquireResult);
+
+    if (acquireResult.isOwner) {
+      startHeartbeatRef.current();
+      return true;
+    }
+
+    // Lost the race — another tab/user beat us to it. Resume polling.
+    if (acquireResult.locked) {
+      startPollingRef.current();
+    } else {
+      setTakeoverFallbackState();
+    }
+    return false;
+  }, [getIsActiveTab, postAction, setTakeoverFallbackState, updateStore]);
+  const tryAutoAcquireFreeLockRef = useRef(tryAutoAcquireFreeLock);
+  tryAutoAcquireFreeLockRef.current = tryAutoAcquireFreeLock;
+
   // Owners keep the lock alive on this interval while they still hold it.
   const startHeartbeat = useCallback((): void => {
     clearTimers();
@@ -352,23 +394,34 @@ export const useEditLock = ({
         return;
       }
 
-      updateStore(pollResult);
       if (pollResult.locked && !pollResult.isOwner && wasOwner) {
+        updateStore(pollResult);
         void syncServerState();
+        return;
       }
-      if (!pollResult.locked) {
+
+      if (pollResult.locked && pollResult.isOwner) {
+        // Ownership transferred to us out-of-band (e.g. an explicit takeover
+        // landed while we were polling). Switch over to the heartbeat loop so
+        // we don't keep polling our own lock.
+        updateStore(pollResult);
         clearTimers();
-        setTakeoverFallbackState();
+        startHeartbeatRef.current();
+        return;
       }
+
+      if (!pollResult.locked) {
+        // The previous owner went away (idle release or TTL expiry). Stop polling
+        // and try to take the lock automatically rather than forcing the user to
+        // click "Take over" on an empty lock.
+        clearTimers();
+        void tryAutoAcquireFreeLockRef.current();
+        return;
+      }
+
+      updateStore(pollResult);
     }, EDIT_LOCK_STATUS_POLL_INTERVAL_MS);
-  }, [
-    clearLockState,
-    clearTimers,
-    getLockStatus,
-    setTakeoverFallbackState,
-    syncServerState,
-    updateStore,
-  ]);
+  }, [clearLockState, clearTimers, getLockStatus, syncServerState, updateStore]);
 
   const startTimers = useCallback(
     (statusResult: EditLockStatusPayload, cancelled = false) => {
@@ -393,7 +446,7 @@ export const useEditLock = ({
       return;
     }
 
-    if (getIsActiveTab()) {
+    if (isActiveTab) {
       // Tab just became active - start polling if not already running
       if (!pollRef.current) {
         startPollingRef.current();
@@ -412,7 +465,7 @@ export const useEditLock = ({
         pollRef.current = null;
       }
     }
-  }, [getLockStatus, getIsActiveTab]);
+  }, [getLockStatus, isActiveTab]);
 
   // The main effect runs whenever "enabled" or "status" changes to start/stop
   // the lock logic. The ref "container" is necessary to hold the latest
@@ -433,6 +486,7 @@ export const useEditLock = ({
   const cbRef = useRef(callbacks);
   cbRef.current = callbacks;
   startPollingRef.current = startPolling;
+  startHeartbeatRef.current = startHeartbeat;
 
   useEffect(() => {
     if (!enabled || status !== "authenticated") {
@@ -465,10 +519,18 @@ export const useEditLock = ({
       cancelled = true;
       cbRef.current.clearTimers();
       if (isOwnerRef.current && !suppressReleaseRef.current) {
-        cbRef.current.postAction("release");
+        // Use keepalive: true so the release request survives a tab close
+        // or page-navigation unmount and the server can free the lock
+        // promptly instead of waiting for the TTL to expire.
+        void fetch(buildEditLockUrl(formId, "release"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "release", sessionId }),
+          keepalive: true,
+        }).catch(() => undefined);
       }
     };
-  }, [enabled, status]);
+  }, [enabled, formId, sessionId, status]);
 
   // Manage the shared SSE EventSource connection for edit-lock updates.
   // If an SSE event is missed, the next owner heartbeat or non-owner status poll
@@ -488,15 +550,27 @@ export const useEditLock = ({
       const messageEvent = event as MessageEvent<string>;
 
       void (async () => {
-        const nextStatus = JSON.parse(messageEvent.data) as EditLockStatusPayload;
+        let nextStatus: EditLockStatusPayload;
+        try {
+          const parsed = JSON.parse(messageEvent.data) as unknown;
+          if (!isEditLockStatus(parsed)) {
+            return;
+          }
+          nextStatus = parsed;
+        } catch {
+          // Malformed SSE payload — ignore and let the next heartbeat / poll
+          // reconcile state from the server.
+          return;
+        }
         const wasOwner = isOwnerRef.current;
 
         if (!nextStatus.locked) {
-          // Lock is free. Show the takeover overlay so the user can claim it
-          // explicitly via the "Take over" button.
+          // Lock is free. Stop any non-owner polling and try to claim it
+          // automatically so the user does not have to click "Take over"
+          // when the previous owner has cleanly released their lock.
           if (!wasOwner) {
             cbRef.current.clearTimers();
-            cbRef.current.setTakeoverFallbackState();
+            void tryAutoAcquireFreeLockRef.current();
           }
           return;
         }

@@ -12,7 +12,9 @@ import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 
 export const dynamic = "force-dynamic";
 
-const shouldDebugEditLockSse = true;
+// Toggle verbose SSE lifecycle logging via DEBUG_EDIT_LOCK_SSE=true. Off by default
+// so production logs stay quiet; flip the env var when investigating connection issues.
+const shouldDebugEditLockSse = process.env.DEBUG_EDIT_LOCK_SSE === "true";
 
 const debugEditLockSse = (message: string, metadata: Record<string, unknown>) => {
   if (!shouldDebugEditLockSse) {

@@ -829,7 +829,7 @@ describe("useEditLock", () => {
     vi.useRealTimers();
   });
 
-  it("switches to manual takeover when polling sees the lock disappear", async () => {
+  it("auto-acquires the lock when polling sees it disappear", async () => {
     // Fake timers let the test trigger one polling interval after mounting into
     // a locked-by-other state.
     vi.useFakeTimers();
@@ -854,11 +854,26 @@ describe("useEditLock", () => {
       lock: null,
     };
 
+    let acquireCallCount = 0;
+
     const lockStates: Array<{ isLockedByOther: boolean; hasEditLock: boolean }> = [];
     fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = getRequestUrl(input);
 
       if (isEditLockRequest(input) && init?.method === "POST") {
+        const body = JSON.parse(String(init.body)) as { action: string };
+
+        if (body.action === "acquire") {
+          acquireCallCount += 1;
+          // First acquire: caller is locked out by user-2.
+          // Second acquire (after seeing the lock free): caller wins ownership.
+          return {
+            ok: true,
+            json: async () =>
+              acquireCallCount === 1 ? lockedByOtherStatus : ownerLockStatus,
+          } as Response;
+        }
+
         return {
           ok: true,
           json: async () => lockedByOtherStatus,
@@ -894,12 +909,13 @@ describe("useEditLock", () => {
       );
     });
 
-    // Advance one poll tick: the previous owner is gone, and the client should
-    // wait for an explicit takeover instead of auto-acquiring.
+    // Advance one poll tick: the previous owner is gone, so the client should
+    // automatically attempt to acquire the now-free lock instead of falling
+    // back to a manual takeover overlay.
     await vi.advanceTimersByTimeAsync(EDIT_LOCK_STATUS_POLL_INTERVAL_MS);
 
     await vi.waitFor(() => {
-      expect(lockStates.at(-1)).toEqual({ isLockedByOther: true, hasEditLock: false });
+      expect(lockStates.at(-1)).toEqual({ isLockedByOther: false, hasEditLock: true });
     });
 
     const formFetchCalls = fetchMock.mock.calls.filter(([input]) => isTemplateRequest(input));
@@ -909,8 +925,10 @@ describe("useEditLock", () => {
       })
       .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
 
+    // One initial form refresh after the locked-by-other acquire response, plus
+    // the auto-acquire that won ownership produced two acquire POSTs in total.
     expect(formFetchCalls).toHaveLength(1);
-    expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(1);
+    expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(2);
     expect(setUpdatedAt).toHaveBeenCalledTimes(1);
 
     vi.useRealTimers();
