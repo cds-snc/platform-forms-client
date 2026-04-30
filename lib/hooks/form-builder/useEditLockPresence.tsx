@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import { useActiveTab } from "@lib/hooks/form-builder/useActiveTab";
 import {
   CLIENT_SIDE_EDIT_LOCK_ACTIVITY_THROTTLE_MS,
   CLIENT_SIDE_EDIT_LOCK_AWAY_MS,
@@ -33,24 +32,12 @@ const getPresenceStatus = (
   return "active";
 };
 
-export const useEditLockPresence = ({
-  enabled,
-  coordinationKey,
-  activeTabEnabled = false,
-}: {
-  enabled: boolean;
-  coordinationKey: string;
-  activeTabEnabled?: boolean;
-}) => {
+export const useEditLockPresence = ({ getIsActiveTab }: { getIsActiveTab: () => boolean }) => {
   "use memo";
-  const { isActiveTab } = useActiveTab({
-    enabled: enabled && activeTabEnabled,
-    coordinationKey,
-  });
   const lastActivityAtRef = useRef(0);
   const visibilityStateRef = useRef<EditLockVisibilityState>("visible");
 
-  const isTrackingPresence = enabled && (!activeTabEnabled || isActiveTab);
+  const isTrackingPresence = getIsActiveTab();
 
   const markActivity = useCallback((force = false) => {
     const nextVisibilityState = getVisibilityState();
@@ -118,5 +105,5 @@ export const useEditLockPresence = ({
     };
   }, [isTrackingPresence, markActivity]);
 
-  return { getActivitySnapshot, isActiveTab };
+  return { getActivitySnapshot, getIsActiveTab };
 };

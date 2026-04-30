@@ -5,13 +5,6 @@ export const EDIT_LOCK_TTL_MS = 300_000;
 // Only enforce edit locking when more than one assigned person could plausibly edit the form.
 export const MIN_ASSIGNED_USERS_FOR_EDIT_LOCK = 2;
 
-// Wrap presence detection behind a single switch so the lock can fall back to the simpler editing-only UX.
-export const EDIT_LOCK_DETECT_PRESENCE = true;
-
-// Use active tab coordination so only the foreground tab sends edit-lock polling,
-// reducing redundant requests when multiple tabs have the same form open.
-export const EDIT_LOCK_ACTIVE_TAB_ENABLED = true;
-
 // Refresh the owner's lock heartbeat once per minute to reduce network noise; the longer TTL above
 // provides enough slack that missing a single heartbeat should not immediately drop the lock.
 export const EDIT_LOCK_HEARTBEAT_INTERVAL_MS = 60_000;
