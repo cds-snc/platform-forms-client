@@ -33,24 +33,13 @@ const getPresenceStatus = (
   return "active";
 };
 
-export const useEditLockPresence = ({
-  enabled,
-  coordinationKey,
-  activeTabEnabled = false,
-}: {
-  enabled: boolean;
-  coordinationKey: string;
-  activeTabEnabled?: boolean;
-}) => {
+export const useEditLockPresence = ({ coordinationKey }: { coordinationKey: string }) => {
   "use memo";
-  const { isActiveTab } = useActiveTab({
-    enabled: enabled && activeTabEnabled,
-    coordinationKey,
-  });
+  const { getIsActiveTab } = useActiveTab({ coordinationKey });
   const lastActivityAtRef = useRef(0);
   const visibilityStateRef = useRef<EditLockVisibilityState>("visible");
 
-  const isTrackingPresence = enabled && (!activeTabEnabled || isActiveTab);
+  const isTrackingPresence = getIsActiveTab();
 
   const markActivity = useCallback((force = false) => {
     const nextVisibilityState = getVisibilityState();
@@ -118,5 +107,5 @@ export const useEditLockPresence = ({
     };
   }, [isTrackingPresence, markActivity]);
 
-  return { getActivitySnapshot, isActiveTab };
+  return { getActivitySnapshot, getIsActiveTab };
 };

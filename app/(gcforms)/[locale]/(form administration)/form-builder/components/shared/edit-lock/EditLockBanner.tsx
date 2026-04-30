@@ -5,7 +5,6 @@ import { useTranslation } from "@i18n/client";
 import {
   CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS,
   CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS,
-  EDIT_LOCK_DETECT_PRESENCE,
 } from "@lib/formBuilderEditLockPresence";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -45,10 +44,10 @@ const formatRelativeTime = (value: string, locale: string) => {
 
 export const EditLockBanner = ({
   takeover,
-  presenceEnabled = false,
+  getIsActiveTab,
 }: {
   takeover: () => Promise<void>;
-  presenceEnabled?: boolean;
+  getIsActiveTab: () => boolean;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { isLockedByOther, editLock } = useTemplateStore((s) => ({
@@ -66,10 +65,10 @@ export const EditLockBanner = ({
     }
 
     bannerRef.current?.focus();
-  }, [isLockedByOther, presenceEnabled]);
+  }, [isLockedByOther]);
 
   useEffect(() => {
-    if (!presenceEnabled || !EDIT_LOCK_DETECT_PRESENCE || !isLockedByOther) {
+    if (!isLockedByOther) {
       return;
     }
 
@@ -80,7 +79,7 @@ export const EditLockBanner = ({
     return () => {
       window.clearInterval(interval);
     };
-  }, [isLockedByOther, presenceEnabled]);
+  }, [isLockedByOther]);
 
   if (!isLockedByOther) return null;
 
@@ -89,13 +88,11 @@ export const EditLockBanner = ({
   const expiresAt = editLock?.expiresAt ? new Date(editLock.expiresAt) : null;
 
   // If the lock is nearing expiration, or if the presence status is explicitly marked as stale, treat the lock as stale.
-  const isStale =
-    presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && expiresAt
-      ? expiresAt.getTime() - timeTick <= CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS
-      : false;
+  const isStale = expiresAt
+    ? expiresAt.getTime() - timeTick <= CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS
+    : false;
 
-  const hasPresenceDetails =
-    presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && Boolean(editLock?.presenceStatus);
+  const hasPresenceDetails = Boolean(editLock?.presenceStatus);
 
   // If the lock is stale, show "stale" status to encourage takeover. Otherwise, show the actual presence status reported by the server.
   const presenceKey = isStale ? "stale" : (editLock?.presenceStatus ?? "away");
@@ -133,6 +130,9 @@ export const EditLockBanner = ({
           tabIndex={-1}
           className="pointer-events-auto w-full max-w-2xl rounded-lg border border-slate-300 bg-white px-6 py-5 text-sm text-slate-700 shadow-xl"
         >
+          <div>
+            <h1>TEMP debug: getIsActiveTab={getIsActiveTab() ? "true" : "false"}</h1>
+          </div>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex max-w-xl items-start gap-3 text-left">
               <WarningIcon className="mt-0.5 size-8 shrink-0 fill-amber-500" />
