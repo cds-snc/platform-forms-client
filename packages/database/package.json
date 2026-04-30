@@ -8,13 +8,14 @@
   },
   "type": "module",
   "packageManager": "yarn@4.10.3",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
         "types": "./dist/index.d.ts",
-        "import": "./dist/index.mjs",
+        "import": "./dist/index.js",
         "require": "./dist/index.js"
       }
     }

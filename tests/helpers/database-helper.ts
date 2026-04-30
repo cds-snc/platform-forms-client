@@ -27,7 +27,7 @@ export class DatabaseHelper {
     }
 
     // Load the fixture file
-    const fixturePath = path.join(import.meta.url, "../../__fixtures__", `${fixtureName}.json`);
+    const fixturePath = path.join(import.meta.url, "tests/__fixtures__", `${fixtureName}.json`);
     const fixtureContent = fs.readFileSync(fixturePath, "utf-8");
     const formConfig = JSON.parse(fixtureContent);
 
