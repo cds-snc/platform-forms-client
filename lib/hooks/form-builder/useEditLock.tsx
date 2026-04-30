@@ -68,15 +68,6 @@ export const useEditLock = ({
     coordinationKey: formId,
   });
 
-  // const cleanupHeartbeat = useCallback(() => {
-  //   console.log("User identified as inactive due to inactivity timeout. This is where you'd trigger any additional handling needed for inactive users, such as showing a warning or releasing the lock.");
-  //   if (heartbeatRef.current) {
-  //     window.clearInterval(heartbeatRef.current);
-  //     heartbeatRef.current = null;
-  //   }
-  //   clearEvents();
-  // }, []);
-
   const clearTimers = useCallback(() => {
     lockLoopTokenRef.current += 1;
     if (heartbeatRef.current) {
