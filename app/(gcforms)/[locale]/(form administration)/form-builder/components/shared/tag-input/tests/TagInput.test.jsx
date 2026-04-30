@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React, { useState } from "react";
 import { render, cleanup } from "@testing-library/react";

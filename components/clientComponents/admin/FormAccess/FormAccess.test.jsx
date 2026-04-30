@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
@@ -8,7 +8,7 @@ import userEvent from "@testing-library/user-event";
 import mockedAxios from "axios";
 import FormAccess from "./FormAccess";
 
-jest.mock("axios");
+vi.mock("axios");
 
 describe("Form Access Component", () => {
   const formConfig = { id: "test0form00000id000asdf11" };

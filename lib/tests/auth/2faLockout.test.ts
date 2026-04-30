@@ -3,8 +3,8 @@ import { registerFailed2FAAttempt, clear2FALockout } from "@lib/auth/2faLockout"
 
 const redis = new Redis();
 
-jest.mock("@lib/integration/redisConnector", () => ({
-  getRedisInstance: jest.fn(() => redis),
+vi.mock("@lib/integration/redisConnector", () => ({
+  getRedisInstance: vi.fn(() => redis),
 }));
 
 const TEST_EMAIL = "myEmail@email.com";

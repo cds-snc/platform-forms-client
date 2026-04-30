@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
 import { TemplateStoreProvider } from "../../store/useTemplateStore";
@@ -57,7 +57,7 @@ Object.defineProperty(window, "sessionStorage", {
 describe("useAllowPublish", () => {
   beforeEach(() => {
     window.sessionStorage.clear();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it("checks required fields needed to publish or save", async () => {

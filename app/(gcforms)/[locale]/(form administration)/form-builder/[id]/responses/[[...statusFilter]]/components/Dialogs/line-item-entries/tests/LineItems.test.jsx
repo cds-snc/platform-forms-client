@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
 import { render, cleanup } from "@testing-library/react";
@@ -16,7 +16,7 @@ describe("LineItems", () => {
   });
 
   it("should render and handle callback", async () => {
-    const mockCallback = jest.fn((e) => e);
+    const mockCallback = vi.fn((e) => e);
     const values = ["one", "two", "three", "four"];
 
     const rendered = render(<LineItems values={values} onRemove={mockCallback} />);

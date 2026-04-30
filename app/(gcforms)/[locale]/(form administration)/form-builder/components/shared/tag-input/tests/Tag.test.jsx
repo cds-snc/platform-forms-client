@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
 import { render, cleanup } from "@testing-library/react";
@@ -12,7 +12,7 @@ describe("Tag", () => {
   });
 
   it("should render and handle callback", async () => {
-    const mockCallback = jest.fn((e) => e);
+    const mockCallback = vi.fn((e) => e);
     const rendered = render(<Tag tag={"test@example.com"} onRemove={mockCallback} />);
     expect(rendered.getByText("test@example.com")).toBeInTheDocument();
 
