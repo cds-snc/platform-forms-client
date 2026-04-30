@@ -10,8 +10,6 @@ import { useEditLockPresence } from "@lib/hooks/form-builder/useEditLockPresence
 import { useActiveTab } from "@lib/hooks/form-builder/useActiveTab";
 import { isEditLockStatus, type EditLockStatusPayload } from "@lib/editLockStatus";
 import {
-  EDIT_LOCK_DETECT_PRESENCE,
-  EDIT_LOCK_ACTIVE_TAB_ENABLED,
   EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
   EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
 } from "@lib/formBuilderEditLockPresence";
@@ -41,12 +39,10 @@ const buildEditLockEventsUrl = (formId: string) =>
 export const useEditLock = ({
   formId,
   enabled,
-  presenceEnabled,
   sessionId,
 }: {
   formId: string;
   enabled: boolean;
-  presenceEnabled: boolean;
   sessionId: string;
 }) => {
   "use memo";
@@ -67,16 +63,11 @@ export const useEditLock = ({
   const takeoverSaveRef = useRef<Promise<void> | null>(null);
   const suppressReleaseRef = useRef(false);
 
-  const { isActiveTab } = useActiveTab({
-    enabled: enabled && EDIT_LOCK_ACTIVE_TAB_ENABLED && status === "authenticated",
+  const { getIsActiveTab } = useActiveTab({
     coordinationKey: formId,
   });
 
-  const { getActivitySnapshot } = useEditLockPresence({
-    enabled: presenceEnabled && EDIT_LOCK_DETECT_PRESENCE && enabled && status === "authenticated",
-    coordinationKey: formId,
-    activeTabEnabled: EDIT_LOCK_ACTIVE_TAB_ENABLED,
-  });
+  const { getActivitySnapshot } = useEditLockPresence({ getIsActiveTab });
 
   const clearLockState = useCallback(() => {
     setIsLockedByOther(false);
@@ -344,23 +335,23 @@ export const useEditLock = ({
         startHeartbeat();
       } else {
         // For non-owners with active-tab coordination, only start polling if this is the active tab
-        if (!EDIT_LOCK_ACTIVE_TAB_ENABLED || isActiveTab) {
+        if (getIsActiveTab()) {
           startPolling();
         }
       }
     },
-    [startHeartbeat, startPolling, isActiveTab]
+    [startHeartbeat, startPolling, getIsActiveTab]
   );
 
   // When a non-owner tab's active status changes, update polling state accordingly.
   // Only the active tab should have the polling interval active to reduce network traffic.
   useEffect(() => {
     // Only applies to non-owners with active-tab coordination enabled
-    if (isOwnerRef.current || !EDIT_LOCK_ACTIVE_TAB_ENABLED) {
+    if (isOwnerRef.current) {
       return;
     }
 
-    if (isActiveTab) {
+    if (getIsActiveTab()) {
       // Tab just became active - start polling if not already running
       if (!pollRef.current) {
         startPollingRef.current();
@@ -379,7 +370,7 @@ export const useEditLock = ({
         pollRef.current = null;
       }
     }
-  }, [isActiveTab, getLockStatus]);
+  }, [getLockStatus, getIsActiveTab]);
 
   // The main effect runs whenever "enabled" or "status" changes to start/stop
   // the lock logic. The ref "container" is necessary to hold the latest
@@ -518,5 +509,5 @@ export const useEditLock = ({
     startTimers(statusResult);
   }, [postAction, refreshForm, startTimers, updateStore, updatedAt]);
 
-  return { takeover };
+  return { takeover, getIsActiveTab };
 };
