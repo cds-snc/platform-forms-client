@@ -68,6 +68,31 @@ export const useEditLock = ({
     coordinationKey: formId,
   });
 
+  const { getActivitySnapshot } = useEditLockPresence({
+    getIsActiveTab,
+    onActivity: () => console.log("onActivity called") 
+  });
+
+  const postAction = useCallback(
+    async (action: "acquire" | "heartbeat" | "release" | "takeover" | "takeover-save-complete") => {
+      const activity = getActivitySnapshot();
+
+      const res = await fetch(buildEditLockUrl(formId, action), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action,
+          sessionId,
+          ...(activity ? { activity } : {}),
+        }),
+      });
+
+      const payload = (await res.json().catch(() => null)) as unknown;
+      return isEditLockStatus(payload) ? payload : null;
+    },
+    [formId, getActivitySnapshot, sessionId]
+  );
+
   // const cleanupHeartbeat = useCallback(() => {
   //   console.log("User identified as inactive due to inactivity timeout. This is where you'd trigger any additional handling needed for inactive users, such as showing a warning or releasing the lock.");
   //   if (heartbeatRef.current) {
@@ -102,16 +127,15 @@ export const useEditLock = ({
   }, []);
 
   const clearEvents = useCallback(() => {
-    console.log("CLEAR EVENTS");
     eventSourceRef.current?.close();
     eventSourceRef.current = null;
   }, []);
 
-  const handleOwnerIdleTimeout = useCallback(() => {
-    console.log("CLEAR TIMERS AND EVENTS");
+  const handleOwnerIdleTimeout = useCallback(async () => {
     clearTimers();
+    await postAction("release");
     clearEvents();
-  }, [clearEvents, clearTimers]);
+  }, [clearEvents, clearTimers, postAction]);
 
   const { startOwnerIdleTimer, clearOwnerIdleTimer, isOwnerIdleTimeExpired } =
     useEditLockInactiveUser({
@@ -124,10 +148,7 @@ export const useEditLock = ({
     }
   }, [startOwnerIdleTimer]);
 
-  const { getActivitySnapshot } = useEditLockPresence({
-    getIsActiveTab,
-    onActivity: () => console.log("onActivity called") //handleOwnerActivity,
-  });
+  
 
   const updateStore = useCallback(
     (status: EditLockStatusPayload) => {
@@ -160,26 +181,6 @@ export const useEditLock = ({
       }
     },
     [setEditLock, setIsLockedByOther, startOwnerIdleTimer, clearOwnerIdleTimer]
-  );
-
-  const postAction = useCallback(
-    async (action: "acquire" | "heartbeat" | "release" | "takeover" | "takeover-save-complete") => {
-      const activity = getActivitySnapshot();
-
-      const res = await fetch(buildEditLockUrl(formId, action), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action,
-          sessionId,
-          ...(activity ? { activity } : {}),
-        }),
-      });
-
-      const payload = (await res.json().catch(() => null)) as unknown;
-      return isEditLockStatus(payload) ? payload : null;
-    },
-    [formId, getActivitySnapshot, sessionId]
   );
 
   // When this tab does not own the lock, it polls lock status until ownership changes.
