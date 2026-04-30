@@ -21,8 +21,8 @@ const connectionString = () => {
 
   // Check if the connection string is AWS RDS and if there are already existing parameters
   if (/\.ca-central-1\.rds\.amazonaws\.com:5432/i.test(envConnectiontring)) {
-    const __dirname = path.dirname(fileURLToPath(import.meta.url));
-    const certPath = path.join(__dirname, "global-bundle.pem");
+    const dirName = path.dirname(fileURLToPath(import.meta.url));
+    const certPath = path.join(dirName, "global-bundle.pem");
 
     if (/:5432\/forms$/i.test(envConnectiontring)) {
       return envConnectiontring + `?sslmode=verify-full&sslrootcert=${certPath}`;
