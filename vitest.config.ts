@@ -27,7 +27,7 @@ export default defineConfig({
     global: "globalThis",
   },
   css: {
-    postcss: "./postcss.config.cjs",
+    postcss: "./postcss.config.js",
   },
   optimizeDeps: {
     include: [
