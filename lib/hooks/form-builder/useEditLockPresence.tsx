@@ -88,10 +88,8 @@ export const useEditLockPresence = ({
     }
 
     const handleVisibilityChange = () => {
-      console.log("Visibility change detected");
       visibilityStateRef.current = getVisibilityState();
       if (visibilityStateRef.current === "visible") {
-        console.log("Visibility change detected - visible");
         markActivity(true);
       }
     };
