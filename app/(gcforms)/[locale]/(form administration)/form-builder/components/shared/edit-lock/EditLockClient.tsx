@@ -25,14 +25,12 @@ const makeSessionId = () => {
 export const EditLockClient = ({
   formId,
   lockedEditingEnabled = true,
-  editLockPresenceEnabled = false,
   children,
   restrictToEditPaths = true,
   reloadOnTakeover = false,
 }: {
   formId: string;
   lockedEditingEnabled?: boolean;
-  editLockPresenceEnabled?: boolean;
   children?: React.ReactNode;
   restrictToEditPaths?: boolean;
   reloadOnTakeover?: boolean;
@@ -48,10 +46,9 @@ export const EditLockClient = ({
     activeFormId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
 
-  const { takeover } = useEditLock({
+  const { takeover, getIsActiveTab } = useEditLock({
     formId: activeFormId,
     enabled,
-    presenceEnabled: editLockPresenceEnabled,
     sessionId,
   });
 
@@ -72,7 +69,7 @@ export const EditLockClient = ({
 
   return (
     <>
-      <EditLockBanner takeover={handleTakeover} presenceEnabled={editLockPresenceEnabled} />
+      <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} />
       {children}
     </>
   );
