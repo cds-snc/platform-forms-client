@@ -1,14 +1,14 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import mockedAxios from "axios";
 import FormAccess from "./FormAccess";
 
-jest.mock("axios");
+vi.mock("axios");
 
 describe("Form Access Component", () => {
   const formConfig = { id: "test0form00000id000asdf11" };
@@ -28,7 +28,7 @@ describe("Form Access Component", () => {
     });
 
     render(<FormAccess formID={formConfig.id}></FormAccess>);
-    expect(mockedAxios.mock.calls.length).toBe(1);
+    await waitFor(() => expect(mockedAxios).toHaveBeenCalledTimes(1));
     expect(mockedAxios).toHaveBeenCalledWith(
       expect.objectContaining({ url: `/api/id/${formConfig.id}/owners`, method: "GET" })
     );
@@ -51,7 +51,7 @@ describe("Form Access Component", () => {
 
     render(<FormAccess formID={formConfig.id}></FormAccess>);
 
-    const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
+  const input = await screen.findByLabelText("Email");
 
     await user.type(input, testEmailAddress);
 
@@ -95,7 +95,7 @@ describe("Form Access Component", () => {
 
     render(<FormAccess formID={formConfig.id}></FormAccess>);
 
-    const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
+  const input = await screen.findByLabelText("Email");
 
     await user.type(input, testEmailAddress);
     await user.click(screen.getByTestId("add-email"));
@@ -125,7 +125,7 @@ describe("Form Access Component", () => {
 
     render(<FormAccess formID={formConfig.id}></FormAccess>);
 
-    const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
+    const input = await screen.findByLabelText("Email");
 
     await user.type(input, testEmailAddress);
     await user.click(screen.getByTestId("add-email"));

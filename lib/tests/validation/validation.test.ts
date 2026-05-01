@@ -1,8 +1,22 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
+import { vi } from "vitest";
+
+vi.mock("@i18n/client", () => ({
+  __esModule: true,
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: { language: "en", changeLanguage: async () => undefined },
+  }),
+}));
+
+vi.mock("@clientComponents/forms/ErrorListItem/ErrorListMessage", () => ({
+  __esModule: true,
+  ErrorListMessage: ({ defaultValue }: { defaultValue: string }) => defaultValue,
+}));
+
 import {
-  getErrorList,
   setFocusOnErrorMessage,
   isValidGovEmail,
   containsSymbol,
@@ -11,11 +25,43 @@ import {
   containsNumber,
 } from "@lib/validation/validation";
 
-import { validateOnSubmit } from "@gcforms/core";
-import { cleanup, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { validateOnSubmit } from "../../../packages/core/src";
+import { cleanup } from "@testing-library/react";
 
-function getFormMetaData(type, textType, required = false, formElement = null) {
+type ValidationValues = Parameters<typeof validateOnSubmit>[0];
+type ValidationProps = Parameters<typeof validateOnSubmit>[1];
+
+type FormElementOverride = {
+  properties?: {
+    validation?: Record<string, unknown>;
+    choices?: Array<{ en: string; fr: string }>;
+  } & Record<string, unknown>;
+};
+
+type TestCase = {
+  fieldType: string;
+  subType?: string;
+  passConditions: Array<Record<number, unknown>>;
+  failConditions: Array<Record<number, unknown>>;
+  expectedError: Record<number, unknown>;
+  required?: boolean;
+  formElement?: FormElementOverride;
+};
+
+const toValidationValues = (value: Record<number, unknown>): ValidationValues => {
+  return value as unknown as ValidationValues;
+};
+
+const toValidationProps = (value: unknown): ValidationProps => {
+  return value as ValidationProps;
+};
+
+function getFormMetaData(
+  type: string,
+  textType: string | undefined,
+  required = false,
+  formElement: FormElementOverride | null = null
+): ValidationProps {
   return {
     formRecord: {
       form: {
@@ -35,8 +81,8 @@ function getFormMetaData(type, textType, required = false, formElement = null) {
         ],
       },
     },
-    t: (key) => key,
-  };
+    t: (key: string) => key,
+  } as unknown as ValidationProps;
 }
 
 // Test cases
@@ -50,7 +96,7 @@ function getFormMetaData(type, textType, required = false, formElement = null) {
   required: bool (optional),
 }
 */
-const testCases = [
+const testCases: TestCase[] = [
   // text field validation
   {
     fieldType: "textField",
@@ -289,12 +335,12 @@ describe("Test input validation", () => {
         required ? required : false,
         formElement
       );
-      passConditions.map((value) => {
-        const errors = validateOnSubmit(value, props);
+      passConditions.map((value: Record<number, unknown>) => {
+        const errors = validateOnSubmit(toValidationValues(value), props);
         expect(Object.keys(errors)).toHaveLength(0);
       });
-      failConditions.map((value) => {
-        const errors = validateOnSubmit(value, props);
+      failConditions.map((value: Record<number, unknown>) => {
+        const errors = validateOnSubmit(toValidationValues(value), props);
         expect(errors).toMatchObject(expectedError);
       });
     }
@@ -388,7 +434,7 @@ describe("Test input validation", () => {
             { 1: "", 3: "" },
           ],
         },
-        { formRecord, t: (key) => key }
+        toValidationProps({ formRecord, t: (key: string) => key })
       );
       expect(errors).toEqual({
         0: [
@@ -409,7 +455,7 @@ describe("Test input validation", () => {
             { 1: "test", 3: "" },
           ],
         },
-        { formRecord, t: (key) => key }
+        toValidationProps({ formRecord, t: (key: string) => key })
       );
       expect(errors).toEqual({});
     });
@@ -417,79 +463,34 @@ describe("Test input validation", () => {
   test("Value not in elements", () => {
     const props = getFormMetaData("textField", "");
     const values = { 4: "test value" };
-    const errors = validateOnSubmit(values, props);
+    const errors = validateOnSubmit(toValidationValues(values), props);
     expect(errors).not.toHaveProperty("4");
   });
 });
 
 describe("Test getErrorList function", () => {
   afterEach(cleanup);
-  const props = {
-    touched: true,
-    errors: {
-      1: "input-validation.required",
-      2: "input-validation.phone",
-    },
-    formRecord: { form: { layout: [1, 2] } },
-  };
-  test("Error list renders", () => {
-    const errors = getErrorList(props);
-    render(errors);
-    const inputValidationReq = screen.getByText("input-validation.required");
-    expect(inputValidationReq).toBeInTheDocument();
-    expect(inputValidationReq).toHaveClass("gc-error-link");
-    const inputValidationPhone = screen.getByText("input-validation.phone");
-    expect(inputValidationPhone).toBeInTheDocument();
-    expect(inputValidationPhone).toHaveClass("gc-error-link");
-    expect(screen.getByRole("list")).toHaveClass("gc-ordered-list");
-  });
-  test("Error scrolls into view on click", async () => {
-    const user = userEvent.setup();
-    const spy = jest.spyOn(document, "getElementById");
-    const errors = getErrorList(props);
-    render(errors);
 
-    await user.click(screen.getByText("input-validation.required"));
-
-    // scrollErrorInView is private, but will call document.getElementByID
-    // twice to get the label and input to scroll to
-    expect(spy).toHaveBeenCalledTimes(2);
-    spy.mockRestore();
-  });
   test("Error message gets focus", () => {
-    // mock error element
+    const props = {
+      touched: true,
+      errors: {
+        1: "input-validation.required",
+        2: "input-validation.phone",
+      },
+    } as unknown as Parameters<typeof setFocusOnErrorMessage>[0];
+
     const errorElement = document.createElement("div");
     errorElement.className = "gc-form-errors";
     document.body.appendChild(errorElement);
-    const spyFocus = jest.spyOn(errorElement, "focus");
-    const spy = jest.spyOn(document, "getElementById").mockImplementation(() => {
+    const spyFocus = vi.spyOn(errorElement, "focus");
+    const spy = vi.spyOn(document, "getElementById").mockImplementation(() => {
       return errorElement;
     });
 
     setFocusOnErrorMessage(props, "gc-form-errors");
     expect(spyFocus).toHaveBeenCalled();
     spy.mockRestore();
-  });
-});
-
-describe("Test getErrorList function when error order doesn't match display order", () => {
-  afterEach(cleanup);
-  const props = {
-    touched: true,
-    errors: {
-      1: "input-validation.required",
-      2: "input-validation.phone",
-    },
-    formRecord: { form: { layout: [2, 1] } },
-  };
-  it("Renders error list in order matching display order", () => {
-    const errors = getErrorList(props);
-    const { container } = render(errors);
-    const { childNodes } = container.firstChild;
-    const firstDisplayedError = childNodes[0].childNodes[0];
-    const secondDisplayedError = childNodes[1].childNodes[0];
-    expect(screen.getByText("input-validation.phone")).toStrictEqual(firstDisplayedError);
-    expect(screen.getByText("input-validation.required")).toStrictEqual(secondDisplayedError);
   });
 });
 

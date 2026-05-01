@@ -1,25 +1,19 @@
-import { mockReset, DeepMockProxy } from "jest-mock-extended";
+import { vi, beforeEach } from "vitest";
+import { mockReset, mockDeep, DeepMockProxy } from "vitest-mock-extended";
 import { prisma, PrismaClient } from "@gcforms/database";
 
-jest.mock("@gcforms/database", () => {
-  // Only mock prisma when were running in the Node jest environment
-  if (typeof window === "undefined") {
-    const originalModule = jest.requireActual("@gcforms/database");
-    const { mockDeep } = jest.requireActual("jest-mock-extended");
-    return {
-      __esModule: true,
-      ...originalModule,
-      prisma: mockDeep() as DeepMockProxy<PrismaClient>,
-    };
-  } else {
-    return {};
-  }
+vi.mock("@gcforms/database", async () => {
+  const originalModule =
+    await vi.importActual<typeof import("@gcforms/database")>("@gcforms/database");
+  return {
+    __esModule: true,
+    ...originalModule,
+    prisma: mockDeep<PrismaClient>(),
+  };
 });
-// Only mock prisma when were running in the Node jest environment
-if (typeof window === "undefined") {
-  beforeEach(() => {
-    mockReset(prismaMock);
-  });
-}
+
+beforeEach(() => {
+  mockReset(prismaMock);
+});
 
 export const prismaMock = prisma as unknown as DeepMockProxy<PrismaClient>;
