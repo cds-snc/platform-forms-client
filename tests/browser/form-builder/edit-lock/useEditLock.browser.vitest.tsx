@@ -3,10 +3,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import {
-  EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
-  EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
-} from "@root/constants";
+import { EDIT_LOCK_HEARTBEAT_INTERVAL_MS } from "@root/constants";
 
 const saveDraft = vi.fn(async () => ({ status: "saved" as const }));
 const saveDraftIfNeeded = vi.fn(async () => ({ status: "skipped" as const }));
