@@ -270,6 +270,9 @@
       "decimals": "Décimales",
       "thousandsSeparator": "séparateur de milliers"
     },
+    "numberInput": {
+      "title": "Nombre"
+    },
     "questionElement": "Éléments",
     "radio": {
       "description": "Une petite liste d’options en vue d'une sélection unique.",
