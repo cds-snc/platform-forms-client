@@ -1,5 +1,3 @@
-// Toggle verbose SSE lifecycle logging via DEBUG_EDIT_LOCK_SSE=true.
-export const SHOULD_DEBUG_EDIT_LOCK_SSE = false;
 import { kbToBytes, mbToBytes } from "@lib/utils/fileSize";
 
 // Note 5mb is also defined for Server actions in next.config.ts
@@ -54,3 +52,6 @@ export const EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS = 5_000;
 // This is intentionally much longer than the "away" threshold so brief distractions don't eject users.
 // 60sec
 export const CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS = 60_000;
+
+// Toggle verbose SSE lifecycle logging
+export const SHOULD_DEBUG_EDIT_LOCK_SSE = false;

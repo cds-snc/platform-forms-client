@@ -540,7 +540,9 @@ describe("useEditLock", () => {
   it("keeps the visible focused tab marked active while edit-lock presence is mounted", async () => {
     const activeTabStates: boolean[] = [];
 
-    await render(<EditLockHarness onActiveTabChange={(isActiveTab) => activeTabStates.push(isActiveTab)} />);
+    await render(
+      <EditLockHarness onActiveTabChange={(isActiveTab) => activeTabStates.push(isActiveTab)} />
+    );
 
     await vi.waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
@@ -828,5 +830,4 @@ describe("useEditLock", () => {
 
     vi.useRealTimers();
   });
-
 });
