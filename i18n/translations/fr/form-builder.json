@@ -751,6 +751,7 @@
   "whatYouNeedToKnow": "Ce qu’il faut savoir",
   "publishingDisablesEditing": "La publication désactive toute modification.",
   "publishingDisablesEditingDescription": "Une fois publié, vous ne pouvez plus apporter des modifications à ce formulaire. Si des modifications sont nécessaires après la publication, utilisez le fichier du formulaire pour créer et publier un nouveau formulaire.",
+  "publishingDisablesEditingDescription": "Une fois publié, vous ne pouvez plus apporter des modifications à ce formulaire. Si des modifications sont nécessaires après la publication, utilisez le fichier du formulaire pour créer et publier un nouveau formulaire.",
   "publishingLocksSettings": "La publication verrouille certains paramètres.",
   "publishingLocksSettingsDescription": "Plusieurs paramètres du formulaire ne seront plus modifiables, tels que la classification et l'usage prévu du formulaire.",
   "publishingRemovesTestResponses": "La publication supprime les réponses test.",
@@ -1284,7 +1285,7 @@
       "title": "Ce formulaire est maintenant fermé",
       "body": "Il n'accepte plus de soumissions."
     },
-    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien.",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l'équipe de soutien.",
     "message": {
       "title": " Personnaliser le message du formulaire fermé",
       "text1": "Indiquer aux personnes qui tentent d'accéder au formulaire quand et pourquoi il s'est fermé et où aller ensuite.",

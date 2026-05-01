@@ -7,14 +7,14 @@ import {
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   EDIT_LOCK_TTL_MS,
   MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
-} from "@lib/formBuilderEditLockPresence";
+} from "@root/constants";
 export {
   EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
   EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   EDIT_LOCK_TTL_MS,
   MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
-} from "@lib/formBuilderEditLockPresence";
+} from "@root/constants";
 
 const EDIT_LOCK_KEY_PREFIX = "edit-lock";
 const EDIT_LOCK_STREAM_PREFIX = "edit-lock-stream";

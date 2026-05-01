@@ -644,6 +644,8 @@
     "syncingLatest": "Syncing the latest saved version of this form...",
     "syncedLatest": "You now have the edit lock and the latest saved form has been loaded.",
     "takeoverError": "Unable to take over. Please try again.",
+    "takeoverAvailableMessage": "The form is now free to edit. You can take over editing this form.",
+    "takeoverAvailableTitle": "Form available for editing",
     "sessionExpiredTitle": "Your editing session expired",
     "sessionExpiredMessage": "Editing was stopped because this form was idle for too long. Return to forms to reopen it if you still need to make changes.",
     "returnToForms": "Return to forms"

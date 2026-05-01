@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-  type Dispatch,
-  type RefObject,
-  type SetStateAction,
-} from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 
 const ACTIVE_TAB_COORDINATION_PREFIX = "active-tab";
 
@@ -19,7 +12,8 @@ type ActiveTabMessage = {
 type ActiveTabState = {
   activeTabIdRef: RefObject<string | null>;
   tabIdRef: RefObject<string>;
-  setIsActiveTab: Dispatch<SetStateAction<boolean>>;
+  isActiveTabRef: RefObject<boolean>;
+  setIsActiveTab: (next: boolean) => void;
 };
 
 const getTabId = () => {
@@ -43,16 +37,17 @@ const broadcastTabMessage = (coordinationChannel: BroadcastChannel, message: Act
 };
 
 const claimActiveTab = (
-  { activeTabIdRef, tabIdRef, setIsActiveTab }: ActiveTabState,
+  { activeTabIdRef, tabIdRef, isActiveTabRef, setIsActiveTab }: ActiveTabState,
   coordinationChannel: BroadcastChannel
 ) => {
   activeTabIdRef.current = tabIdRef.current;
+  isActiveTabRef.current = true;
   setIsActiveTab(true);
   broadcastTabMessage(coordinationChannel, { type: "claim", tabId: tabIdRef.current });
 };
 
 const releaseActiveTab = (
-  { activeTabIdRef, tabIdRef, setIsActiveTab }: ActiveTabState,
+  { activeTabIdRef, tabIdRef, isActiveTabRef, setIsActiveTab }: ActiveTabState,
   coordinationChannel: BroadcastChannel,
   broadcast = true
 ) => {
@@ -66,6 +61,7 @@ const releaseActiveTab = (
     activeTabIdRef.current = null;
   }
 
+  isActiveTabRef.current = false;
   setIsActiveTab(false);
 };
 
@@ -78,23 +74,27 @@ const attemptActiveTab = (state: ActiveTabState, coordinationChannel: BroadcastC
   releaseActiveTab(state, coordinationChannel);
 };
 
-export const useActiveTab = ({
-  enabled,
-  coordinationKey,
-}: {
-  enabled: boolean;
-  coordinationKey: string;
-}) => {
+export const useActiveTab = ({ coordinationKey }: { coordinationKey: string }) => {
   "use memo";
   const coordinationChannelRef = useRef<BroadcastChannel | null>(null);
   const activeTabIdRef = useRef<string | null>(null);
   const tabIdRef = useRef<string>(getTabId());
-  const [isActiveTab, setIsActiveTab] = useState(() => isTabForeground());
+  const isActiveTabRef = useRef(isTabForeground());
+  // `isActiveTab` mirrors `isActiveTabRef` so consumers can react to active-tab
+  // changes via React state (effect deps, conditional rendering, etc.). The ref
+  // is kept for callers that need the latest value synchronously inside event
+  // handlers without paying for a render. Wrap setState so that calling it with
+  // the same value short-circuits and avoids redundant re-renders.
+  const [isActiveTab, setIsActiveTabState] = useState<boolean>(() => isTabForeground());
+  const setIsActiveTab = (next: boolean) => {
+    setIsActiveTabState((current) => (current === next ? current : next));
+  };
   const coordinationChannelName = `${ACTIVE_TAB_COORDINATION_PREFIX}:${coordinationKey}`;
-  const fallbackActiveTab = !enabled || typeof BroadcastChannel === "undefined";
+  const fallbackActiveTab = typeof BroadcastChannel === "undefined";
   const activeTabState = {
     activeTabIdRef,
     tabIdRef,
+    isActiveTabRef,
     setIsActiveTab,
   } satisfies ActiveTabState;
 
@@ -114,6 +114,7 @@ export const useActiveTab = ({
 
       if (message.type === "claim") {
         activeTabIdRef.current = message.tabId;
+        isActiveTabRef.current = false;
         setIsActiveTab(false);
         return;
       }
@@ -155,5 +156,12 @@ export const useActiveTab = ({
     };
   }, [coordinationChannelName, fallbackActiveTab, activeTabState]);
 
-  return { isActiveTab: fallbackActiveTab ? true : isActiveTab };
+  const getIsActiveTab = () => {
+    if (fallbackActiveTab) {
+      return true;
+    }
+    return isActiveTabRef.current;
+  };
+
+  return { getIsActiveTab, isActiveTab: fallbackActiveTab ? true : isActiveTab };
 };
