@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 
 const ACTIVE_TAB_COORDINATION_PREFIX = "active-tab";
 
@@ -13,6 +13,7 @@ type ActiveTabState = {
   activeTabIdRef: RefObject<string | null>;
   tabIdRef: RefObject<string>;
   isActiveTabRef: RefObject<boolean>;
+  setIsActiveTab: (next: boolean) => void;
 };
 
 const getTabId = () => {
@@ -36,16 +37,17 @@ const broadcastTabMessage = (coordinationChannel: BroadcastChannel, message: Act
 };
 
 const claimActiveTab = (
-  { activeTabIdRef, tabIdRef, isActiveTabRef }: ActiveTabState,
+  { activeTabIdRef, tabIdRef, isActiveTabRef, setIsActiveTab }: ActiveTabState,
   coordinationChannel: BroadcastChannel
 ) => {
   activeTabIdRef.current = tabIdRef.current;
   isActiveTabRef.current = true;
+  setIsActiveTab(true);
   broadcastTabMessage(coordinationChannel, { type: "claim", tabId: tabIdRef.current });
 };
 
 const releaseActiveTab = (
-  { activeTabIdRef, tabIdRef, isActiveTabRef }: ActiveTabState,
+  { activeTabIdRef, tabIdRef, isActiveTabRef, setIsActiveTab }: ActiveTabState,
   coordinationChannel: BroadcastChannel,
   broadcast = true
 ) => {
@@ -60,6 +62,7 @@ const releaseActiveTab = (
   }
 
   isActiveTabRef.current = false;
+  setIsActiveTab(false);
 };
 
 const attemptActiveTab = (state: ActiveTabState, coordinationChannel: BroadcastChannel) => {
@@ -77,12 +80,22 @@ export const useActiveTab = ({ coordinationKey }: { coordinationKey: string }) =
   const activeTabIdRef = useRef<string | null>(null);
   const tabIdRef = useRef<string>(getTabId());
   const isActiveTabRef = useRef(isTabForeground());
+  // `isActiveTab` mirrors `isActiveTabRef` so consumers can react to active-tab
+  // changes via React state (effect deps, conditional rendering, etc.). The ref
+  // is kept for callers that need the latest value synchronously inside event
+  // handlers without paying for a render. Wrap setState so that calling it with
+  // the same value short-circuits and avoids redundant re-renders.
+  const [isActiveTab, setIsActiveTabState] = useState<boolean>(() => isTabForeground());
+  const setIsActiveTab = (next: boolean) => {
+    setIsActiveTabState((current) => (current === next ? current : next));
+  };
   const coordinationChannelName = `${ACTIVE_TAB_COORDINATION_PREFIX}:${coordinationKey}`;
   const fallbackActiveTab = typeof BroadcastChannel === "undefined";
   const activeTabState = {
     activeTabIdRef,
     tabIdRef,
     isActiveTabRef,
+    setIsActiveTab,
   } satisfies ActiveTabState;
 
   useEffect(() => {
@@ -102,6 +115,7 @@ export const useActiveTab = ({ coordinationKey }: { coordinationKey: string }) =
       if (message.type === "claim") {
         activeTabIdRef.current = message.tabId;
         isActiveTabRef.current = false;
+        setIsActiveTab(false);
         return;
       }
 
@@ -149,5 +163,5 @@ export const useActiveTab = ({ coordinationKey }: { coordinationKey: string }) =
     return isActiveTabRef.current;
   };
 
-  return { getIsActiveTab };
+  return { getIsActiveTab, isActiveTab: fallbackActiveTab ? true : isActiveTab };
 };

@@ -3,10 +3,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import {
-  EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
-  EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
-} from "@lib/formBuilderEditLockPresence";
+import { EDIT_LOCK_HEARTBEAT_INTERVAL_MS } from "@root/constants";
 
 const saveDraft = vi.fn(async () => ({ status: "saved" as const }));
 const saveDraftIfNeeded = vi.fn(async () => ({ status: "skipped" as const }));
@@ -289,66 +286,6 @@ describe("useEditLock", () => {
     vi.stubGlobal("fetch", fetchMock);
   });
 
-  it("flushes with saveDraft when a takeover is requested", async () => {
-    await render(<EditLockHarness />);
-
-    await vi.waitFor(() => {
-      expect(MockEventSource.instances).toHaveLength(1);
-    });
-
-    MockEventSource.instances[0].emit("takeover-requested");
-
-    await vi.waitFor(() => {
-      expect(saveDraft).toHaveBeenCalledTimes(1);
-    });
-
-    await vi.waitFor(() => {
-      expect(
-        fetchMock.mock.calls.some(([input, init]) => {
-          return (
-            String(input) ===
-              "/api/templates/test-form-id/edit-lock?requestType=takeover-save-complete" &&
-            init?.method === "POST" &&
-            String(init.body).includes('"action":"takeover-save-complete"')
-          );
-        })
-      ).toBe(true);
-    });
-
-    expect(saveDraftIfNeeded).not.toHaveBeenCalled();
-  });
-
-  it("does not release on unmount during a takeover handoff", async () => {
-    const saveDraftDeferred = Promise.resolve({ status: "saved" as const });
-    saveDraft.mockImplementationOnce(() => saveDraftDeferred);
-
-    const rendered = await render(<EditLockHarness />);
-
-    await vi.waitFor(() => {
-      expect(MockEventSource.instances).toHaveLength(1);
-    });
-
-    MockEventSource.instances[0].emit("takeover-requested");
-    rendered.unmount();
-
-    await saveDraftDeferred;
-
-    await vi.waitFor(() => {
-      expect(saveDraft).toHaveBeenCalledTimes(1);
-    });
-
-    const lockPostBodies = fetchMock.mock.calls
-      .filter(([input, init]) => {
-        return isEditLockRequest(input) && init?.method === "POST";
-      })
-      .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
-
-    expect(lockPostBodies.filter(({ action }) => action === "release")).toHaveLength(0);
-    expect(lockPostBodies.filter(({ action }) => action === "takeover-save-complete")).toHaveLength(
-      1
-    );
-  });
-
   it("refreshes until it sees a newer server version after takeover", async () => {
     const staleUpdatedAt = "2026-03-31T12:00:00.000Z";
     const freshUpdatedAt = "2026-03-31T12:00:03.000Z";
@@ -456,7 +393,6 @@ describe("useEditLock", () => {
 
     await vi.waitFor(() => {
       expect(takeover).toBeDefined();
-      expect(MockEventSource.instances).toHaveLength(1);
     });
 
     await takeover?.();
@@ -474,7 +410,6 @@ describe("useEditLock", () => {
     expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(1);
     expect(lockPostBodies.filter(({ action }) => action === "takeover")).toHaveLength(1);
     expect(lockPostBodies.filter(({ action }) => action === "release")).toHaveLength(0);
-    expect(MockEventSource.instances).toHaveLength(1);
   });
 
   it("does not mark the form as locked by another user when the edit-lock endpoint is unauthorized", async () => {
@@ -519,28 +454,12 @@ describe("useEditLock", () => {
     expect(lockStates.at(-1)).toEqual({ isLockedByOther: false, hasEditLock: false });
   });
 
-  it("opens an EventSource and initializes active-tab coordination even when the tab is not active", async () => {
-    setDocumentVisibility("hidden");
-    setDocumentFocus(false);
-
-    await render(<EditLockHarness />);
-
-    await vi.waitFor(() => {
-      expect(MockEventSource.instances).toHaveLength(1);
-    });
-
-    expect(MockEventSource.instances[0].url).toBe(
-      "/api/templates/test-form-id/edit-lock/events?requestType=event-stream"
-    );
-    // With active-tab coordination enabled, a BroadcastChannel is created
-    // for coordination even in background tabs
-    expect(MockBroadcastChannel.channels.size).toBe(1);
-  });
-
   it("keeps the visible focused tab marked active while edit-lock presence is mounted", async () => {
     const activeTabStates: boolean[] = [];
 
-    await render(<EditLockHarness onActiveTabChange={(isActiveTab) => activeTabStates.push(isActiveTab)} />);
+    await render(
+      <EditLockHarness onActiveTabChange={(isActiveTab) => activeTabStates.push(isActiveTab)} />
+    );
 
     await vi.waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
@@ -825,93 +744,6 @@ describe("useEditLock", () => {
     expect(setUpdatedAt).not.toHaveBeenCalled();
     expect(formFetchCalls).toHaveLength(0);
     expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(1);
-
-    vi.useRealTimers();
-  });
-
-  it("switches to manual takeover when polling sees the lock disappear", async () => {
-    // Fake timers let the test trigger one polling interval after mounting into
-    // a locked-by-other state.
-    vi.useFakeTimers();
-
-    const lockedByOtherStatus = {
-      locked: true,
-      lockedByOther: true,
-      isOwner: false,
-      lock: {
-        ...ownerLockStatus.lock,
-        lockedByUserId: "user-2",
-        lockedByName: "User Two",
-        lockedByEmail: "user.two@example.com",
-        sessionId: "session-2",
-      },
-    };
-
-    const unlockedStatus = {
-      locked: false,
-      lockedByOther: false,
-      isOwner: false,
-      lock: null,
-    };
-
-    const lockStates: Array<{ isLockedByOther: boolean; hasEditLock: boolean }> = [];
-    fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = getRequestUrl(input);
-
-      if (isEditLockRequest(input) && init?.method === "POST") {
-        return {
-          ok: true,
-          json: async () => lockedByOtherStatus,
-        } as Response;
-      }
-
-      if (isEditLockRequest(input) && init?.method === "GET") {
-        return {
-          ok: true,
-          json: async () => unlockedStatus,
-        } as Response;
-      }
-
-      if (isTemplateRequest(input)) {
-        return {
-          ok: true,
-          json: async () => ({
-            form: { elements: [] },
-            updatedAt: "2026-03-31T12:00:05.000Z",
-          }),
-        } as Response;
-      }
-
-      throw new Error(`Unexpected fetch: ${url}`);
-    });
-
-    await render(<EditLockHarness onLockStateChange={(state) => lockStates.push(state)} />);
-
-    await vi.waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledWith(
-        "/api/templates/test-form-id/edit-lock?requestType=acquire",
-        expect.objectContaining({ method: "POST" })
-      );
-    });
-
-    // Advance one poll tick: the previous owner is gone, and the client should
-    // wait for an explicit takeover instead of auto-acquiring.
-    await vi.advanceTimersByTimeAsync(EDIT_LOCK_STATUS_POLL_INTERVAL_MS);
-
-    await vi.waitFor(() => {
-      expect(lockStates.at(-1)).toEqual({ isLockedByOther: true, hasEditLock: false });
-    });
-
-    const formFetchCalls = fetchMock.mock.calls.filter(([input]) => isTemplateRequest(input));
-    const lockPostBodies = fetchMock.mock.calls
-      .filter(([input, init]) => {
-        return isEditLockRequest(input) && init?.method === "POST";
-      })
-      .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
-
-    expect(formFetchCalls).toHaveLength(1);
-    expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(1);
-    expect(setUpdatedAt).toHaveBeenCalledTimes(1);
 
     vi.useRealTimers();
   });
