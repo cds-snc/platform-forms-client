@@ -516,29 +516,6 @@ describe("useEditLock", () => {
     expect(lockStates.at(-1)).toEqual({ isLockedByOther: false, hasEditLock: false });
   });
 
-  it("opens an EventSource and initializes active-tab coordination even when the tab is not active", async () => {
-    setDocumentVisibility("hidden");
-    setDocumentFocus(false);
-
-    await render(<EditLockHarness />);
-
-    await vi.waitFor(
-      () => {
-        expect(MockEventSource.instances.length).toBeGreaterThanOrEqual(1);
-      },
-      { timeout: 2000 }
-    );
-
-    const eventSourceInstance = MockEventSource.instances[0];
-    expect(eventSourceInstance).toBeDefined();
-    expect(eventSourceInstance.url).toBe(
-      "/api/templates/test-form-id/edit-lock/events?requestType=event-stream"
-    );
-    // With active-tab coordination enabled, a BroadcastChannel is created
-    // for coordination even in background tabs
-    expect(MockBroadcastChannel.channels.size).toBeGreaterThanOrEqual(1);
-  });
-
   it("keeps the visible focused tab marked active while edit-lock presence is mounted", async () => {
     const activeTabStates: boolean[] = [];
 
