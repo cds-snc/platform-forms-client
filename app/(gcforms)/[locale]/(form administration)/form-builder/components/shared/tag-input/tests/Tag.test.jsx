@@ -23,6 +23,6 @@ describe("Tag", () => {
     await userEvent.click(removeButtons[0]);
     expect(mockCallback).toHaveBeenCalledTimes(1);
     expect(mockCallback).toHaveBeenCalledWith("test@example.com");
-    expect(removeButtons[0]).toHaveAttribute("aria-label", "remove test@example.com");
+    expect(removeButtons[0]).toHaveAttribute("aria-label", "Remove test@example.com");
   });
 });

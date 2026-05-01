@@ -27,6 +27,7 @@ const sharedExclude = [
   "**/.next/**",
   "**/coverage/**",
   "tests/playwright/**",
+  "tests/**/*.setup.ts",
   "playwright-report/**",
   "test-results/**",
   "packages/core/**",
@@ -81,33 +82,17 @@ export default defineConfig({
             {
               extends: true,
               test: {
-                name: "vitest-native",
+                name: "vitest",
                 environment: "node",
                 include: [
                   "__vitests__/**/*.test.ts",
                   "lib/vitests/**/*.test.ts",
+                  "**/*.test.+(ts|tsx|js|jsx)",
                   "**/*.vitest.+(ts|tsx|js|jsx)",
                 ],
                 exclude: [...sharedExclude, "**/*.browser.vitest.+(ts|tsx|js|jsx)"],
-                setupFiles: ["./__utils__/vitest.setup.ts"],
-              },
-            },
-            {
-              extends: true,
-              test: {
-                name: "jest-migrated",
-                environment: "node",
-                include: ["**/*.test.+(ts|tsx|js|jsx)"],
-                exclude: [
-                  ...sharedExclude,
-                  "__vitests__/**",
-                  "lib/vitests/**",
-                  "**/*.vitest.+(ts|tsx|js|jsx)",
-                  "**/*.browser.vitest.+(ts|tsx|js|jsx)",
-                ],
                 setupFiles: [
                   "./__utils__/vitest.setup.ts",
-                  "./__utils__/vitest.jest-compat.setup.ts",
                   "./__utils__/prismaConnector.ts",
                 ],
               },
