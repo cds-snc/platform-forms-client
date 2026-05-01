@@ -23,13 +23,27 @@ const branchableTypes: ReadonlySet<string> = new Set([
 
 const OptionRuleSvg = ({ title }: { title?: string }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={34} height={34} fill="none">
+    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 34 34" fill="none">
       {title && <title>{title}</title>}
       <rect width={33} height={33} x={0.5} y={0.5} fill="#ECFDF5" rx={16.5} />
       <rect width={33} height={33} x={0.5} y={0.5} stroke="#047857" rx={16.5} />
       <path
         fill="#1E293B"
         d="M10 10v9c0 .55.196 1.02.588 1.413.391.391.862.587 1.412.587h8.2l-1.6 1.6L20 24l4-4-4-4-1.4 1.4 1.6 1.6H12v-9h-2Z"
+      />
+    </svg>
+  );
+};
+
+const AddRuleSvg = ({ title }: { title?: string }) => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 34 34" fill="none">
+      {title && <title>{title}</title>}
+      <rect width={33} height={33} x={0.5} y={0.5} fill="#ECFDF5" rx={16.5} />
+      <rect width={33} height={33} x={0.5} y={0.5} stroke="#047857" rx={16.5} />
+      <path
+        fill="#1E293B"
+        d="M16 10c.552 0 1 .448 1 1v5h5c.552 0 1 .448 1 1s-.448 1-1 1h-5v5c0 .552-.448 1-1 1s-1-.448-1-1v-5h-5c-.552 0-1-.448-1-1s.448-1 1-1h5v-5c0-.552.448-1 1-1Z"
       />
     </svg>
   );
@@ -50,7 +64,8 @@ export const ElementNode = ({ data }: NodeProps) => {
     typeof nodeData.elementId === "number" ? getElement(nodeData.elementId) : undefined;
   const isBranchable =
     !!element && branchableTypes.has(element.type) && (element.properties.choices?.length ?? 0) > 0;
-  const showsConnector = isBranchable && !!nodeData.hasRules;
+  const showsRuleAffordance = isBranchable;
+  const showsConnector = showsRuleAffordance && !!nodeData.hasRules;
   const isSelected =
     isBranchable &&
     selectedGroupId === nodeData.groupId &&
@@ -97,22 +112,29 @@ export const ElementNode = ({ data }: NodeProps) => {
         )}
       </div>
 
-      {showsConnector && (
+      {showsRuleAffordance && (
         <>
           <div
             className={cn(
-              "shrink-0 rounded-full outline-offset-4 outline-slate-800 group-hover:scale-110",
-              nodeData.isCompact ? "ml-2 scale-75" : "ml-3"
+              "shrink-0 rounded-full outline-offset-4 outline-slate-800 group-hover:scale-105",
+              nodeData.isCompact ? "ml-1.5 scale-75" : "ml-2"
             )}
           >
-            <OptionRuleSvg title={t("groups.editRules", { name: label })} />
+            {nodeData.hasRules ? (
+              <OptionRuleSvg title={t("groups.editRules", { name: label })} />
+            ) : (
+              <AddRuleSvg title={t("groups.addBranch")} />
+            )}
           </div>
-          <Handle
-            type="source"
-            position={Position.Right}
-            isConnectable={false}
-            className="-right-2! h-3! w-3! border-2! border-emerald-700! bg-white!"
-          />
+
+          {showsConnector && (
+            <Handle
+              type="source"
+              position={Position.Right}
+              isConnectable={false}
+              className="-right-2! h-3! w-3! border-2! border-emerald-700! bg-white!"
+            />
+          )}
         </>
       )}
     </button>
