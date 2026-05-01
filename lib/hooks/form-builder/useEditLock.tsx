@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormRecord } from "@lib/types";
@@ -46,7 +46,8 @@ export const useEditLock = ({
   enabled: boolean;
   sessionId: string;
 }) => {
-  "use memo";
+  const [hasSessionExpired, setHasSessionExpired] = useState(false);
+  ("use memo");
   const { status } = useSession();
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
@@ -141,9 +142,8 @@ export const useEditLock = ({
   );
 
   const handleOwnerIdleTimeout = useCallback(async () => {
-    // Tear down owner-side timers immediately and reflect the loss of ownership
-    // in local state so the UI does not pretend we still own the lock while
-    // we wait for the release request and the resulting SSE event to round-trip.
+    // Mark session as expired for this tab (previous owner)
+    setHasSessionExpired(true);
     clearTimers();
     setTakeoverFallbackState();
     await postAction("release");
@@ -296,12 +296,8 @@ export const useEditLock = ({
   );
 
   // When a non-owner discovers the lock is free (because the previous owner released
-  // it after their idle timeout, or its TTL expired on the server), try to take it
-  // ourselves instead of leaving the user staring at a "Take over" overlay.
-  // Only the active tab attempts the auto-acquire so background tabs do not race
-  // for ownership; inactive tabs simply fall back to the manual takeover overlay.
-  // Multiple users / browsers may still race, but the server uses NX semantics so
-  // only one wins; the loser falls back to polling against whoever did win.
+  // it after their idle timeout, or its TTL expired on the server), show the manual takeover overlay.
+  // Only manual takeover is allowed; auto-acquire is disabled.
   const tryAutoAcquireFreeLock = useCallback(async (): Promise<boolean> => {
     if (!getIsActiveTab()) {
       setTakeoverFallbackState();
@@ -565,12 +561,10 @@ export const useEditLock = ({
         const wasOwner = isOwnerRef.current;
 
         if (!nextStatus.locked) {
-          // Lock is free. Stop any non-owner polling and try to claim it
-          // automatically so the user does not have to click "Take over"
-          // when the previous owner has cleanly released their lock.
+          // Lock is free. Stop any non-owner polling and show the takeover fallback state (manual takeover required).
           if (!wasOwner) {
             cbRef.current.clearTimers();
-            void tryAutoAcquireFreeLockRef.current();
+            setTakeoverFallbackState();
           }
           return;
         }
@@ -625,5 +619,5 @@ export const useEditLock = ({
     startTimers(statusResult);
   }, [postAction, refreshForm, startTimers, updateStore, updatedAt]);
 
-  return { takeover, getIsActiveTab, isOwnerIdleTimeExpired };
+  return { takeover, getIsActiveTab, isOwnerIdleTimeExpired, hasSessionExpired };
 };

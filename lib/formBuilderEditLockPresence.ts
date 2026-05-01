@@ -7,11 +7,12 @@ export const MIN_ASSIGNED_USERS_FOR_EDIT_LOCK = 2;
 
 // Refresh the owner's lock heartbeat once per minute to reduce network noise; the longer TTL above
 // provides enough slack that missing a single heartbeat should not immediately drop the lock.
-export const EDIT_LOCK_HEARTBEAT_INTERVAL_MS = 60_000;
+export const EDIT_LOCK_HEARTBEAT_INTERVAL_MS = 30_000;
 
 // Non-owners check lock status on the same cadence so they can notice ownership changes without
 // spamming the server. This can diverge from the owner heartbeat interval later if needed.
-export const EDIT_LOCK_STATUS_POLL_INTERVAL_MS = 60_000;
+// 30 sec
+export const EDIT_LOCK_STATUS_POLL_INTERVAL_MS = 30_000;
 
 // Client-side only: throttle local activity updates to at most once per second so rapid input does not
 // churn timestamps before the next heartbeat is sent.
@@ -36,4 +37,6 @@ export const EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS = 5_000;
 
 // Kick the current editor out of edit mode and release their lock after this long without activity.
 // This is intentionally much longer than the "away" threshold so brief distractions don't eject users.
-export const CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS = 1_800_000; // 30 minutes
+
+// 60sec
+export const CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS = 60_000;
