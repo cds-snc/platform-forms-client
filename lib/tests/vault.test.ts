@@ -1,3 +1,4 @@
+import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Redis from "ioredis-mock";
 import { mockClient } from "aws-sdk-client-mock";
@@ -12,31 +13,27 @@ import { getAppSetting } from "@lib/appSettings";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authorization";
 
-jest.mock("@lib/appSettings");
-jest.mock("@lib/privileges");
+vi.mock("@lib/appSettings");
+vi.mock("@lib/privileges");
 
-jest.mock("@lib/auditLogs", () => ({
+vi.mock("@lib/auditLogs", async () => {
+  const __actual0 = await vi.importActual<any>("@lib/auditLogs");
+  return {
   __esModule: true,
-  logEvent: jest.fn(),
-  get AuditLogDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
-  },
-  get AuditLogEvent() {
-    return jest.requireActual("@lib/auditLogs").AuditLogEvent;
-  },
-  get AuditLogAccessDeniedDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
-  }
-}));
+  logEvent: vi.fn(),
+  AuditLogDetails: __actual0.AuditLogDetails,
+  AuditLogEvent: __actual0.AuditLogEvent,
+  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+});
 
-const mockedGetAppSetting = jest.mocked(getAppSetting, { shallow: true });
+const mockedGetAppSetting = vi.mocked(getAppSetting);
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
-jest.mock("@lib/integration/redisConnector", () => {
+vi.mock("@lib/integration/redisConnector", () => {
   const redis = new Redis();
   return {
-    getRedisInstance: jest.fn(async () => redis),
+    getRedisInstance: vi.fn(async () => redis),
   };
 });
 
@@ -166,7 +163,7 @@ describe("Deleting test responses (submissions)", () => {
   });
   it("Should be able to delete draft responses if the user is owner of the form", async () => {
     // Mock an unpublished form
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+    (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration, false),
     });
 
@@ -195,7 +192,7 @@ describe("Deleting test responses (submissions)", () => {
   });
 
   it("Should not be able to delete responses if the form is published", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+    (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration, true),
     });
 
