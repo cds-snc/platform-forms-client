@@ -223,4 +223,5 @@ describe("editLocks with redis", () => {
     await expect(shouldEnforceTemplateEditLock("form-6")).resolves.toBe(false);
     expect(prisma.template.findUnique).toHaveBeenCalledTimes(2);
   });
+
 });

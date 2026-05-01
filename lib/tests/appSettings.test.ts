@@ -13,27 +13,28 @@ import * as settingCache from "@lib/cache/settingCache";
 
 import { logEvent } from "@lib/auditLogs";
 
-jest.mock("@lib/auditLogs", () => ({
+vi.mock("@lib/auditLogs", async () => {
+  const __actual0 = await vi.importActual<typeof import("@lib/auditLogs")>("@lib/auditLogs");
+  return {
   __esModule: true,
-  logEvent: jest.fn(),
-  get AuditLogDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
-  },
-  get AuditLogAccessDeniedDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
-  }
-}));
+  logEvent: vi.fn(),
+  AuditLogDetails: __actual0.AuditLogDetails,
+  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+});
 
 import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authorization";
 
-const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
-jest.mock("@lib/privileges");
+const mockedLogEvent = vi.mocked(logEvent);
+vi.mock("@lib/privileges");
 
 // Needed because of a TypeScript error not allowing for non-default exported spyOn items.
-jest.mock("@lib/cache/settingCache", () => ({
+vi.mock("@lib/cache/settingCache", async () => {
+  const __actual0 = await vi.importActual<typeof import("@lib/cache/settingCache")>("@lib/cache/settingCache");
+  return {
   __esModule: true,
-  ...jest.requireActual("@lib/cache/settingCache"),
-}));
+  ...__actual0,
+};
+});
 
 const userId = "1";
 
@@ -42,7 +43,7 @@ describe("Application Settings", () => {
     mockAuthorizationPass(userId);
   });
   test("Get an application setting", async () => {
-    const cacheSpy = jest.spyOn(settingCache, "settingCheck");
+    const cacheSpy = vi.spyOn(settingCache, "settingCheck");
     prismaMock.setting.findUnique.mockResolvedValue({
       internalId: "testSetting",
       nameEn: "Test Setting",
@@ -105,7 +106,7 @@ describe("Application Settings", () => {
   });
   describe("Create an application setting", () => {
     test("Create an application setting sucessfully", async () => {
-      const cacheSpy = jest.spyOn(settingCache, "settingPut");
+      const cacheSpy = vi.spyOn(settingCache, "settingPut");
 
       const data = {
         internalId: "testSetting",
@@ -142,7 +143,7 @@ describe("Application Settings", () => {
     });
     test("Only users with correct privileges can create app settings", async () => {
       mockAuthorizationFail(userId);
-      const cacheSpy = jest.spyOn(settingCache, "settingPut");
+      const cacheSpy = vi.spyOn(settingCache, "settingPut");
 
       const data = {
         internalId: "testSetting",
@@ -165,7 +166,7 @@ describe("Application Settings", () => {
   });
   describe("Update an application setting", () => {
     test("Update an application setting sucessfully", async () => {
-      const cacheSpy = jest.spyOn(settingCache, "settingPut");
+      const cacheSpy = vi.spyOn(settingCache, "settingPut");
 
       const data = {
         internalId: "testSetting",
@@ -201,7 +202,7 @@ describe("Application Settings", () => {
       });
     });
     test("Only users with correct privileges can update app settings", async () => {
-      const cacheSpy = jest.spyOn(settingCache, "settingPut");
+      const cacheSpy = vi.spyOn(settingCache, "settingPut");
       mockAuthorizationFail(userId);
 
       const data = {
@@ -228,7 +229,7 @@ describe("Application Settings", () => {
   });
   describe("Delete an application setting", () => {
     test("Delete an application setting sucessfully", async () => {
-      const cacheSpy = jest.spyOn(settingCache, "settingDelete");
+      const cacheSpy = vi.spyOn(settingCache, "settingDelete");
 
       prismaMock.setting.delete.mockResolvedValue({
         internalId: "testSetting",
@@ -252,7 +253,7 @@ describe("Application Settings", () => {
       );
     });
     test("Only users with correct privileges can delete app settings", async () => {
-      const cacheSpy = jest.spyOn(settingCache, "settingDelete");
+      const cacheSpy = vi.spyOn(settingCache, "settingDelete");
       mockAuthorizationFail(userId);
 
       await expect(deleteAppSetting("testSetting")).rejects.toBeInstanceOf(AccessControlError);

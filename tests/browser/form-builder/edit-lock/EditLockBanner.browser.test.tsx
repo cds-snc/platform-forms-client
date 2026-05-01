@@ -1,3 +1,19 @@
+it("shows takeover available message and button when lock is expired", async () => {
+  const takeover = vi.fn().mockResolvedValue(undefined);
+  await render(
+    <EditLockBannerHarness editLock={null} isLockedByOther={true} takeover={takeover} />
+  );
+
+  const message = page.getByText(
+    "The form is now free to edit. You can take over editing this form."
+  );
+  await expect.element(message).toBeVisible();
+
+  const button = page.getByRole("button", { name: "Take over editing" });
+  await expect.element(button).toBeVisible();
+  await button.click();
+  expect(takeover).toHaveBeenCalled();
+});
 import { useEffect } from "react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";

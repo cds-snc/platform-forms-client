@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React, { useState } from "react";
 import { render, cleanup } from "@testing-library/react";
@@ -7,7 +7,7 @@ import { LineItemEntries } from "../LineItemEntries";
 import userEvent from "@testing-library/user-event";
 import { DialogStates } from "../../DialogStates";
 
-jest.mock("@i18n/client", () => ({
+vi.mock("@i18n/client", () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 

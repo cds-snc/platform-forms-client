@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React, { useEffect } from "react";
 import useFormTimer from "@lib/hooks/useFormTimer";

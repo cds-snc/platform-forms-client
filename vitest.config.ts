@@ -8,28 +8,44 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const sharedAliases = {
+  "@responses-pilot": path.resolve(
+    __dirname,
+    "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot"
+  ),
+  "next/server": path.resolve(__dirname, "./__mocks__/next/server.ts"),
+  "next-auth/lib/env": path.resolve(__dirname, "./__mocks__/next-auth/lib/env.js"),
+  "@lib": path.resolve(__dirname, "./lib"),
+};
+
+const sharedDefine = {
+  "process.env.VITEST_BROWSER": JSON.stringify(process.env.VITEST_BROWSER || "false"),
+  "process.env.VITEST_WATCH": JSON.stringify(process.env.VITEST_WATCH || "false"),
+  "process.env.APP_ENV": JSON.stringify(process.env.APP_ENV || "test"),
+  "process.env.DATABASE_URL": JSON.stringify("dummy_test_url"),
+  global: "globalThis",
+};
+
+const sharedExclude = [
+  "**/node_modules/**",
+  "**/dist/**",
+  "**/.next/**",
+  "**/coverage/**",
+  "tests/playwright/**",
+  "tests/**/*.setup.ts",
+  "playwright-report/**",
+  "test-results/**",
+  "packages/core/**",
+];
+
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   resolve: {
-    alias: {
-      "@responses-pilot": path.resolve(
-        __dirname,
-        "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot"
-      ),
-      "next/server": path.resolve(__dirname, "./__mocks__/next/server.ts"),
-      "next-auth/lib/env": path.resolve(__dirname, "./__mocks__/next-auth/lib/env.js"),
-    },
+    alias: sharedAliases,
+    extensions: [".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json"],
   },
-  define: {
-    "process.env.VITEST_BROWSER": JSON.stringify(process.env.VITEST_BROWSER || "false"),
-    "process.env.VITEST_WATCH": JSON.stringify(process.env.VITEST_WATCH || "false"),
-    "process.env.APP_ENV": JSON.stringify(process.env.APP_ENV || "test"),
-    "process.env.DATABASE_URL": JSON.stringify("dummy_test_url"),
-    global: "globalThis",
-  },
-  css: {
-    postcss: "./postcss.config.js",
-  },
+  define: sharedDefine,
+  css: { postcss: "./postcss.config.js" },
   optimizeDeps: {
     include: [
       "@testing-library/react",
@@ -42,32 +58,46 @@ export default defineConfig({
   },
   test: {
     globals: true,
-    environment: "node",
-    include:
-      process.env.VITEST_BROWSER === "true"
-        ? [
-            "tests/browser/**/*.browser.vitest.+(ts|tsx|js|jsx)",
-            "**/*.browser.vitest.+(ts|tsx|js|jsx)",
-          ]
-        : ["__vitests__/**/*.test.ts", "lib/vitests/**/*.test.ts", "**/*.vitest.+(ts|tsx|js|jsx)"],
-    exclude: [
-      "**/node_modules/**",
-      "**/dist/**",
-      ...(process.env.VITEST_BROWSER === "true" ? [] : ["**/*.browser.vitest.+(ts|tsx|js|jsx)"]),
-    ],
-    browser: {
-      enabled: process.env.VITEST_BROWSER === "true",
-      provider: playwright({
-        launchOptions: {
-          slowMo: 250, // Slow down by 250ms for better visibility
-        },
-      }),
-      instances: [{ browser: "chromium" }],
-      headless: process.env.CI === "true", // Headless in CI, headed locally
-      viewport: { width: 768, height: 1024 }, // Tablet size
-    },
-    setupFiles: process.env.VITEST_BROWSER === "true" ? [] : ["./__utils__/vitest.setup.ts"],
+    clearMocks: true,
     isolate: true,
     fileParallelism: true,
+    projects:
+      process.env.VITEST_BROWSER === "true"
+        ? [
+            {
+              extends: true,
+              test: {
+                name: "browser",
+                include: [
+                  "tests/browser/**/*.browser.test.+(ts|tsx|js|jsx)",
+                  "**/*.browser.test.+(ts|tsx|js|jsx)",
+                ],
+                exclude: sharedExclude,
+                browser: {
+                  enabled: true,
+                  provider: playwright({ launchOptions: { slowMo: 250 } }),
+                  instances: [{ browser: "chromium" }],
+                  headless: process.env.CI === "true",
+                  viewport: { width: 768, height: 1024 },
+                },
+              },
+            },
+          ]
+        : [
+            {
+              extends: true,
+              test: {
+                name: "vitest",
+                environment: "node",
+                include: [
+                  "__vitests__/**/*.test.ts",
+                  "lib/vitests/**/*.test.ts",
+                  "**/*.test.+(ts|tsx|js|jsx)",
+                ],
+                exclude: [...sharedExclude, "**/*.browser.test.+(ts|tsx|js|jsx)"],
+                setupFiles: ["./__utils__/vitest.setup.ts", "./__utils__/prismaConnector.ts"],
+              },
+            },
+          ],
   },
 });
