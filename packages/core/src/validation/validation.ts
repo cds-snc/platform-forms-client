@@ -59,20 +59,19 @@ export const isFieldResponseValid = (
         if (typedValue) {
           const numericValue = Number(typedValue);
 
+          // The number regex permits inputs like ".", ",", or whitespace which parse to NaN.
+          // Treat any non-empty value that fails to parse as a number as invalid so it cannot
+          // bypass the min/max checks below.
+          if (Number.isNaN(numericValue)) {
+            return currentRegex ? currentRegex.error : t("input-validation.number");
+          }
+
           // MinValue and Max Value validation
-          if (
-            validator.minValue != null &&
-            !Number.isNaN(numericValue) &&
-            numericValue < validator.minValue
-          ) {
+          if (validator.minValue != null && numericValue < validator.minValue) {
             return t("input-validation.too-small", { min: String(validator.minValue) });
           }
 
-          if (
-            validator.maxValue != null &&
-            !Number.isNaN(numericValue) &&
-            numericValue > validator.maxValue
-          ) {
+          if (validator.maxValue != null && numericValue > validator.maxValue) {
             return t("input-validation.too-large", { max: String(validator.maxValue) });
           }
 
