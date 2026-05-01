@@ -4,8 +4,12 @@
 import { renderHook } from "@testing-library/react";
 
 import { defaultForm } from "../../store/defaults";
-import { FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { useAllowPublish } from "../form-builder/useAllowPublish";
+
+type MockForm = Omit<typeof defaultForm, "elements"> & {
+  elements: FormElement[];
+};
 
 const mockState = vi.hoisted(() => ({
   store: {
@@ -36,7 +40,7 @@ vi.mock("../../store/useTemplateStore", () => ({
   useTemplateStore: (selector: (state: typeof mockState.store) => unknown) => selector(mockState.store),
 }));
 
-const createTranslatedForm = () => ({
+const createTranslatedForm = (): MockForm => ({
   ...structuredClone(defaultForm),
   titleEn: "Form title",
   titleFr: "Titre du formulaire",
@@ -69,6 +73,10 @@ const createTranslatedForm = () => ({
     },
   ],
 });
+
+const getMockForm = (): MockForm => {
+  return mockState.store.form as MockForm;
+};
 
 const getUncheckedItems = (data: Record<string, boolean>) =>
   Object.entries(data)
@@ -123,7 +131,9 @@ describe("useAllowPublish error list coverage", () => {
   });
 
   it("keeps the translation error in the checklist when localized content is incomplete", () => {
-    mockState.store.form.elements[0].properties.choices[0].fr = "";
+    const firstChoice = getMockForm().elements[0]?.properties.choices?.[0];
+    expect(firstChoice).toBeDefined();
+    firstChoice!.fr = "";
 
     const { result } = renderHook(() => useAllowPublish());
 
@@ -140,7 +150,7 @@ describe("useAllowPublish error list coverage", () => {
   });
 
   it("adds the API key checklist error when file inputs are present without an API key", () => {
-    mockState.store.form.elements.push({
+    getMockForm().elements.push({
       id: 2,
       type: FormElementTypes.fileInput,
       properties: {
