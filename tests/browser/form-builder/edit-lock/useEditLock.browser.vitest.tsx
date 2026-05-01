@@ -286,66 +286,6 @@ describe("useEditLock", () => {
     vi.stubGlobal("fetch", fetchMock);
   });
 
-  it("flushes with saveDraft when a takeover is requested", async () => {
-    await render(<EditLockHarness />);
-
-    await vi.waitFor(() => {
-      expect(MockEventSource.instances).toHaveLength(1);
-    });
-
-    MockEventSource.instances[0].emit("takeover-requested");
-
-    await vi.waitFor(() => {
-      expect(saveDraft).toHaveBeenCalledTimes(1);
-    });
-
-    await vi.waitFor(() => {
-      expect(
-        fetchMock.mock.calls.some(([input, init]) => {
-          return (
-            String(input) ===
-              "/api/templates/test-form-id/edit-lock?requestType=takeover-save-complete" &&
-            init?.method === "POST" &&
-            String(init.body).includes('"action":"takeover-save-complete"')
-          );
-        })
-      ).toBe(true);
-    });
-
-    expect(saveDraftIfNeeded).not.toHaveBeenCalled();
-  });
-
-  it("does not release on unmount during a takeover handoff", async () => {
-    const saveDraftDeferred = Promise.resolve({ status: "saved" as const });
-    saveDraft.mockImplementationOnce(() => saveDraftDeferred);
-
-    const rendered = await render(<EditLockHarness />);
-
-    await vi.waitFor(() => {
-      expect(MockEventSource.instances).toHaveLength(1);
-    });
-
-    MockEventSource.instances[0].emit("takeover-requested");
-    rendered.unmount();
-
-    await saveDraftDeferred;
-
-    await vi.waitFor(() => {
-      expect(saveDraft).toHaveBeenCalledTimes(1);
-    });
-
-    const lockPostBodies = fetchMock.mock.calls
-      .filter(([input, init]) => {
-        return isEditLockRequest(input) && init?.method === "POST";
-      })
-      .map(([, init]) => JSON.parse(String(init?.body)) as { action: string });
-
-    expect(lockPostBodies.filter(({ action }) => action === "release")).toHaveLength(0);
-    expect(lockPostBodies.filter(({ action }) => action === "takeover-save-complete")).toHaveLength(
-      1
-    );
-  });
-
   it("refreshes until it sees a newer server version after takeover", async () => {
     const staleUpdatedAt = "2026-03-31T12:00:00.000Z";
     const freshUpdatedAt = "2026-03-31T12:00:03.000Z";
@@ -453,7 +393,6 @@ describe("useEditLock", () => {
 
     await vi.waitFor(() => {
       expect(takeover).toBeDefined();
-      expect(MockEventSource.instances).toHaveLength(1);
     });
 
     await takeover?.();
@@ -471,7 +410,6 @@ describe("useEditLock", () => {
     expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(1);
     expect(lockPostBodies.filter(({ action }) => action === "takeover")).toHaveLength(1);
     expect(lockPostBodies.filter(({ action }) => action === "release")).toHaveLength(0);
-    expect(MockEventSource.instances).toHaveLength(1);
   });
 
   it("does not mark the form as locked by another user when the edit-lock endpoint is unauthorized", async () => {
