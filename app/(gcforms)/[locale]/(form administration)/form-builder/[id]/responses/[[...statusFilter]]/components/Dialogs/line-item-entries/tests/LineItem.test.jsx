@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
 import { render, cleanup } from "@testing-library/react";
@@ -16,7 +16,7 @@ describe("LineItem", () => {
   });
 
   it("should render and handle callback", async () => {
-    const mockCallback = jest.fn((e) => e);
+    const mockCallback = vi.fn((e) => e);
     const rendered = render(<LineItem value={"31-12-XCRV"} onRemove={mockCallback} />);
     expect(rendered.getByText("31-12-XCRV")).toBeInTheDocument();
 
@@ -27,9 +27,6 @@ describe("LineItem", () => {
     await userEvent.click(removeButtons[0]);
     expect(mockCallback).toHaveBeenCalledTimes(1);
     expect(mockCallback).toHaveBeenCalledWith("31-12-XCRV");
-    expect(removeButtons[0]).toHaveAttribute(
-      "aria-label",
-      "downloadResponsesModals.lineItemEntries.remove 31-12-XCRV"
-    );
+    expect(removeButtons[0]).toHaveAttribute("aria-label", "Remove 31-12-XCRV");
   });
 });

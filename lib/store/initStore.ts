@@ -6,6 +6,15 @@ import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { NotificationsIntervalDefault } from "@gcforms/types";
 
 export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
+  const initializedDefaultForm = initializeGroups(
+    { ...defaultForm },
+    initProps?.allowGroupsFlag || false
+  );
+
+  if (!initializedDefaultForm.groupsLayout) {
+    initializedDefaultForm.groupsLayout = [];
+  }
+
   const DEFAULT_PROPS: TemplateStoreProps = {
     id: "",
     lang: (initProps?.locale as Language) || "en",
@@ -13,7 +22,7 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
     focusInput: false,
     hasHydrated: false,
     hasTransformed: false,
-    form: defaultForm,
+    form: initializedDefaultForm,
     isPublished: false,
     name: "",
     securityAttribute: "Protected A",

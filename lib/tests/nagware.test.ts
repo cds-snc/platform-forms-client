@@ -2,7 +2,7 @@ import { NagLevel, NagwareSubmission, VaultStatus } from "@lib/types";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { getAppSetting } from "@lib/appSettings";
 
-jest.mock("@lib/appSettings");
+vi.mock("@lib/appSettings");
 
 function mockOldSubmission(status: VaultStatus, numberOfDaysInThePast: number): NagwareSubmission {
   return {
@@ -11,7 +11,7 @@ function mockOldSubmission(status: VaultStatus, numberOfDaysInThePast: number): 
   };
 }
 
-const mockedGetAppSetting = jest.mocked(getAppSetting, { shallow: true });
+const mockedGetAppSetting = vi.mocked(getAppSetting);
 
 describe("Nagware - detectOldUnprocessedSubmissions", () => {
   beforeAll(() => {
