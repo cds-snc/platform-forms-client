@@ -11,15 +11,15 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 describe("TreeRefProvider", () => {
-  it("opens the right panel by default and still allows toggling", () => {
+  it("starts with the right panel closed and still allows toggling", () => {
     const { result } = renderHook(() => useTreeRef(), { wrapper });
 
-    expect(result.current.open).toBe(true);
+    expect(result.current.open).toBe(false);
 
     act(() => {
-      result.current.togglePanel?.(false);
+      result.current.togglePanel?.(true);
     });
 
-    expect(result.current.open).toBe(false);
+    expect(result.current.open).toBe(true);
   });
 });
