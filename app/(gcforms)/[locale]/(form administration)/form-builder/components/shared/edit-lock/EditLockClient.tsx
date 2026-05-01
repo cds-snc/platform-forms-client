@@ -40,7 +40,7 @@ export const EditLockClient = ({
   "use memo";
   const pathname = usePathname();
   const router = useRouter();
-  const { currentFormId, isLockedByOther, language } = useTemplateStore((s) => ({
+  const { currentFormId, language } = useTemplateStore((s) => ({
     currentFormId: s.id,
     isLockedByOther: s.isLockedByOther,
     language: s.lang,
@@ -53,7 +53,7 @@ export const EditLockClient = ({
     activeFormId !== "0000";
   const [sessionId] = useState(() => makeSessionId());
 
-  const { takeover, getIsActiveTab, isOwnerIdleTimeExpired } = useEditLock({
+  const { takeover, getIsActiveTab, hasSessionExpired } = useEditLock({
     formId: activeFormId,
     enabled,
     sessionId,
@@ -74,7 +74,8 @@ export const EditLockClient = ({
     return children ? <>{children}</> : null;
   }
 
-  const showSessionExpiredOverlay = isOwnerIdleTimeExpired && !isLockedByOther;
+  // Show the session expired overlay only for the previous owner
+  const showSessionExpiredOverlay = hasSessionExpired;
 
   const returnToForms = () => {
     router.push(`/${language}/forms`);
@@ -82,10 +83,11 @@ export const EditLockClient = ({
 
   return (
     <>
-      {showSessionExpiredOverlay && (
+      {showSessionExpiredOverlay ? (
         <EditLockSessionExpiredOverlay onReturnToForms={returnToForms} />
+      ) : (
+        <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} />
       )}
-      <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} />
       {children}
     </>
   );
