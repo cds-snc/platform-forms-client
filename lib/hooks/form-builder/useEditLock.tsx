@@ -295,39 +295,6 @@ export const useEditLock = ({
     [saveDraftIfNeeded]
   );
 
-  // When a non-owner discovers the lock is free (because the previous owner released
-  // it after their idle timeout, or its TTL expired on the server), show the manual takeover overlay.
-  // Only manual takeover is allowed; auto-acquire is disabled.
-  const tryAutoAcquireFreeLock = useCallback(async (): Promise<boolean> => {
-    if (!getIsActiveTab()) {
-      setTakeoverFallbackState();
-      return false;
-    }
-
-    const acquireResult = await postAction("acquire");
-    if (!acquireResult) {
-      setTakeoverFallbackState();
-      return false;
-    }
-
-    updateStore(acquireResult);
-
-    if (acquireResult.isOwner) {
-      startHeartbeatRef.current();
-      return true;
-    }
-
-    // Lost the race — another tab/user beat us to it. Resume polling.
-    if (acquireResult.locked) {
-      startPollingRef.current();
-    } else {
-      setTakeoverFallbackState();
-    }
-    return false;
-  }, [getIsActiveTab, postAction, setTakeoverFallbackState, updateStore]);
-  const tryAutoAcquireFreeLockRef = useRef(tryAutoAcquireFreeLock);
-  tryAutoAcquireFreeLockRef.current = tryAutoAcquireFreeLock;
-
   // Owners keep the lock alive on this interval while they still hold it.
   const startHeartbeat = useCallback((): void => {
     clearTimers();
@@ -407,17 +374,22 @@ export const useEditLock = ({
       }
 
       if (!pollResult.locked) {
-        // The previous owner went away (idle release or TTL expiry). Stop polling
-        // and try to take the lock automatically rather than forcing the user to
-        // click "Take over" on an empty lock.
+        // The previous owner went away (idle release or TTL expiry). Stop polling.
         clearTimers();
-        void tryAutoAcquireFreeLockRef.current();
+        setTakeoverFallbackState();
         return;
       }
 
       updateStore(pollResult);
     }, EDIT_LOCK_STATUS_POLL_INTERVAL_MS);
-  }, [clearLockState, clearTimers, getLockStatus, syncServerState, updateStore]);
+  }, [
+    clearLockState,
+    clearTimers,
+    getLockStatus,
+    setTakeoverFallbackState,
+    syncServerState,
+    updateStore,
+  ]);
 
   const startTimers = useCallback(
     (statusResult: EditLockStatusPayload, cancelled = false) => {

@@ -12,14 +12,12 @@ import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 
 export const dynamic = "force-dynamic";
 
-// Toggle verbose SSE lifecycle logging via DEBUG_EDIT_LOCK_SSE=true.
-const shouldDebugEditLockSse = false;
+import { SHOULD_DEBUG_EDIT_LOCK_SSE } from "@root/constants";
 
 const debugEditLockSse = (message: string, metadata: Record<string, unknown>) => {
-  if (!shouldDebugEditLockSse) {
+  if (!SHOULD_DEBUG_EDIT_LOCK_SSE) {
     return;
   }
-
   logMessage.debug({ message, ...metadata });
 };
 

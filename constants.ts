@@ -1,3 +1,5 @@
+// Toggle verbose SSE lifecycle logging via DEBUG_EDIT_LOCK_SSE=true.
+export const SHOULD_DEBUG_EDIT_LOCK_SSE = false;
 import { kbToBytes, mbToBytes } from "@lib/utils/fileSize";
 
 // Note 5mb is also defined for Server actions in next.config.ts
