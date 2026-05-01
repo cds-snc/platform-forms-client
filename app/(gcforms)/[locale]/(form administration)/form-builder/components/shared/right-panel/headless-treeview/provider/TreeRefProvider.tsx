@@ -15,7 +15,7 @@ const TreeRefContext = createContext<treeContextType | null>(null);
 // Create a provider component for the tree ref context
 export const TreeRefProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const headlessTree = useRef<TreeInstance<TreeItemData> | null>(null);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const togglePanel = (state: boolean) => {
     setOpen(state);

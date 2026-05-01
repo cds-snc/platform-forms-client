@@ -162,6 +162,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       },
       addGroup: (name: string) => {
         const id = uuid();
+        const setChangeKey = get().templateStore.getState().setChangeKey;
 
         get().templateStore.setState((s) => {
           if (!s.form.groups) {
@@ -195,6 +196,8 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           groupsLayout.splice(groupsLayout.length, 0, id);
           s.form.groupsLayout = groupsLayout;
         });
+
+        setChangeKey(String(new Date().getTime()));
 
         return id;
       },
