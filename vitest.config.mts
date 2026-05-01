@@ -64,8 +64,8 @@ export default defineConfig({
               test: {
                 name: "browser",
                 include: [
-                  "tests/browser/**/*.browser.vitest.+(ts|tsx|js|jsx)",
-                  "**/*.browser.vitest.+(ts|tsx|js|jsx)",
+                  "tests/browser/**/*.browser.test.+(ts|tsx|js|jsx)",
+                  "**/*.browser.test.+(ts|tsx|js|jsx)",
                 ],
                 exclude: sharedExclude,
                 browser: {
@@ -88,9 +88,8 @@ export default defineConfig({
                   "__vitests__/**/*.test.ts",
                   "lib/vitests/**/*.test.ts",
                   "**/*.test.+(ts|tsx|js|jsx)",
-                  "**/*.vitest.+(ts|tsx|js|jsx)",
                 ],
-                exclude: [...sharedExclude, "**/*.browser.vitest.+(ts|tsx|js|jsx)"],
+                exclude: [...sharedExclude, "**/*.browser.test.+(ts|tsx|js|jsx)"],
                 setupFiles: [
                   "./__utils__/vitest.setup.ts",
                   "./__utils__/prismaConnector.ts",
