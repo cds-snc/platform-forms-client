@@ -68,4 +68,26 @@ describe("formatNumberInputAnswer", () => {
     });
     expect(result).toBe("$1,234.50");
   });
+
+  it("falls back to the raw answer when the value cannot be parsed as a number", () => {
+    vi.mocked(getElementOrSubElementById).mockReturnValue({
+      properties: {},
+    } as ReturnType<typeof getElementOrSubElementById>);
+
+    const formRecord = { form: { elements: [] } } as unknown as FormRecord;
+    const result = formatNumberInputAnswer(
+      {
+        questionId: 7,
+        questionEn: "Amount",
+        questionFr: "Montant",
+        answer: "not a number",
+        type: FormElementTypes.numberInput,
+      },
+      "en",
+      formRecord
+    );
+
+    expect(result).toBe("not a number");
+    expect(formatNumberForDisplay).not.toHaveBeenCalled();
+  });
 });
