@@ -12,7 +12,7 @@ import { isEditLockStatus, type EditLockStatusPayload } from "@lib/editLockStatu
 import {
   EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
   EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
-} from "../../../constants";
+} from "@root/constants";
 import { useEditLockInactiveUser } from "./useEditLockInactiveTimeout";
 
 const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
