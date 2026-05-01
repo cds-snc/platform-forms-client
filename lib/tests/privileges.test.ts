@@ -14,7 +14,7 @@ import {
   ManageApplicationSettings,
 } from "__utils__/permissions";
 import { Session } from "next-auth";
-import { prismaMock } from "@jestUtils";
+import { prismaMock } from "@testUtils";
 import { User } from "@gcforms/database";
 import { Action } from "@lib/types/privileges-types";
 import { checkOne } from "@lib/cache/flags";
