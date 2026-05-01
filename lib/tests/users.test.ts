@@ -1,7 +1,7 @@
 import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { prismaMock } from "@jestUtils";
+import { prismaMock } from "@testUtils";
 import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@gcforms/database";
 

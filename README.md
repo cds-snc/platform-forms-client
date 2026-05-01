@@ -96,6 +96,6 @@ Once the change is made, you will need to 'Log Out' and log back in. Alternative
 
 ## Testing
 
-See package.json scripts for jest, playwright, and vitest
+See package.json scripts for vitest and playwright
 
 Playwight is configured to run "yarn build:test && yarn start:test" for the web server
