@@ -8,6 +8,7 @@ import { FormattedDate } from "./FormElements/FormattedDate";
 import { FileInput } from "./FormElements/FileInput";
 import { DynamicRow } from "./FormElements/DyanmicRow/DynamicRow";
 import { RichText } from "./FormElements/RichText";
+import { NumberInput } from "./FormElements/NumberInput";
 
 export const FormItemFactory = ({
   formItem,
@@ -48,6 +49,10 @@ export const FormItemFactory = ({
     case FormElementTypes.checkbox:
     case FormElementTypes.attestation:
       return <BaseElementArray formItem={formItem} splitValues={true} />;
+
+    case FormElementTypes.textField:
+    case FormElementTypes.numberInput:
+      return <NumberInput lang={language} formItem={formItem} />;
 
     // Single value base Form elements e.g. input, textarea, radio, select, combobox, departments...
     default:
