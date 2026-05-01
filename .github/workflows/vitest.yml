@@ -31,4 +31,4 @@ jobs:
         run: yarn workspaces focus gcforms
 
       - name: Vitest Tests
-        run: yarn test:vitest
+        run: yarn test
