@@ -1,6 +1,6 @@
 import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { prismaMock } from "@jestUtils";
+import { prismaMock } from "@testUtils";
 import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { cloneTemplate } from "../templates";
 import { logEvent } from "@lib/auditLogs";

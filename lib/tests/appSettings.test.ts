@@ -1,4 +1,4 @@
-import { prismaMock } from "@jestUtils";
+import { prismaMock } from "@testUtils";
 import {
   getAppSetting,
   getAllAppSettings,
