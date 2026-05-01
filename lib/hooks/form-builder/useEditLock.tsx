@@ -46,8 +46,8 @@ export const useEditLock = ({
   enabled: boolean;
   sessionId: string;
 }) => {
+  "use memo";
   const [hasSessionExpired, setHasSessionExpired] = useState(false);
-  ("use memo");
   const { status } = useSession();
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
