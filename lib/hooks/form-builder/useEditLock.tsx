@@ -8,11 +8,9 @@ import { clearTemplateStore } from "@lib/store/utils";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { useEditLockPresence } from "@lib/hooks/form-builder/useEditLockPresence";
 import { useActiveTab } from "@lib/hooks/form-builder/useActiveTab";
+import { useEditLockHeartbeat } from "@lib/hooks/form-builder/useEditLockHeartbeat";
 import { isEditLockStatus, type EditLockStatusPayload } from "@lib/editLockStatus";
-import {
-  EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
-  EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
-} from "@lib/formBuilderEditLockPresence";
+import { EDIT_LOCK_STATUS_POLL_INTERVAL_MS } from "@lib/formBuilderEditLockPresence";
 
 const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
 const SERVER_STATE_SYNC_RETRY_MS = 500;
@@ -54,7 +52,7 @@ export const useEditLock = ({
     useTemplateContext();
 
   const isOwnerRef = useRef(false);
-  const heartbeatRef = useRef<number | null>(null);
+  // const heartbeatRef = useRef<number | null>(null);
   const pollRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
   const startPollingRef = useRef<() => void>(() => undefined);
@@ -111,10 +109,10 @@ export const useEditLock = ({
 
   const clearTimers = useCallback(() => {
     lockLoopTokenRef.current += 1;
-    if (heartbeatRef.current) {
-      window.clearInterval(heartbeatRef.current);
-      heartbeatRef.current = null;
-    }
+    // if (heartbeatRef.current) {
+    //   window.clearInterval(heartbeatRef.current);
+    //   heartbeatRef.current = null;
+    // }
     if (pollRef.current) {
       window.clearInterval(pollRef.current);
       pollRef.current = null;
@@ -233,64 +231,23 @@ export const useEditLock = ({
     await takeoverSaveRef.current;
   }, [postAction, saveDraft]);
 
-  const autoSaveIfOwner = useCallback(
-    async (wasOwner: boolean) => {
-      if (!wasOwner) {
-        return;
-      }
-
-      try {
-        await saveDraftIfNeeded();
-      } catch {
-        // no-op: losing the lock should still fall back to state sync even if save fails
-      }
-    },
-    [saveDraftIfNeeded]
-  );
-
-  // Owners keep the lock alive on this interval while they still hold it.
-  const startHeartbeat = useCallback((): void => {
-    clearTimers();
-    const loopToken = lockLoopTokenRef.current;
-    heartbeatRef.current = window.setInterval(async () => {
-      const wasOwner = isOwnerRef.current;
-      const heartbeatResult = await postAction("heartbeat");
-      if (lockLoopTokenRef.current !== loopToken) {
-        return;
-      }
-
-      if (!heartbeatResult) {
-        clearTimers();
-        clearLockState();
-        return;
-      }
-
-      if (!heartbeatResult.isOwner) {
-        await autoSaveIfOwner(wasOwner);
-      }
-
-      updateStore(heartbeatResult);
-
-      if (heartbeatResult.locked && !heartbeatResult.isOwner && wasOwner) {
-        startPollingRef.current();
-        void syncServerState();
-        return;
-      }
-
-      if (!heartbeatResult.locked) {
-        clearTimers();
-        setTakeoverFallbackState();
-      }
-    }, EDIT_LOCK_HEARTBEAT_INTERVAL_MS);
-  }, [
-    autoSaveIfOwner,
-    clearLockState,
-    clearTimers,
+  const { startHeartbeat, stopHeartbeat } = useEditLockHeartbeat({
+    // heartbeatRef,
+    lockLoopTokenRef,
+    isOwnerRef,
+    // startPollingRef,
     postAction,
-    setTakeoverFallbackState,
-    syncServerState,
+    // clearTimers,
+    clearLockState,
     updateStore,
-  ]);
+    // syncServerState,
+    setTakeoverFallbackState,
+    saveDraftIfNeeded,
+    onReleaseLock: () => {
+      startPollingRef.current();
+      void syncServerState();
+    },
+  });
 
   // Non-owners poll on this interval while waiting for the lock state to change.
   // If active-tab coordination is enabled, only the active tab polls to reduce requests.
@@ -333,11 +290,11 @@ export const useEditLock = ({
       if (cancelled) return;
       if (statusResult.isOwner) {
         startHeartbeat();
-      } else {
+        return;
+      }
+      if (getIsActiveTab()) {
         // For non-owners with active-tab coordination, only start polling if this is the active tab
-        if (getIsActiveTab()) {
-          startPolling();
-        }
+        startPolling();
       }
     },
     [startHeartbeat, startPolling, getIsActiveTab]
@@ -387,6 +344,7 @@ export const useEditLock = ({
     flushDraftBeforeTakeover,
     startTimers,
     setTakeoverFallbackState,
+    stopHeartbeat,
   };
   const cbRef = useRef(callbacks);
   cbRef.current = callbacks;
@@ -395,6 +353,9 @@ export const useEditLock = ({
   useEffect(() => {
     if (!enabled || status !== "authenticated") {
       cbRef.current.clearTimers();
+      // TODO poll
+      stopHeartbeat();
+
       cbRef.current.clearLockState();
       return;
     }
@@ -454,6 +415,8 @@ export const useEditLock = ({
           // explicitly via the "Take over" button.
           if (!wasOwner) {
             cbRef.current.clearTimers();
+            // TODO polling
+            stopHeartbeat();
             cbRef.current.setTakeoverFallbackState();
           }
           return;
@@ -494,7 +457,7 @@ export const useEditLock = ({
         eventSourceRef.current = null;
       }
     };
-  }, [enabled, formId, status]);
+  }, [enabled, formId, status, stopHeartbeat]);
 
   const takeover = useCallback(async () => {
     const previousUpdatedAt = updatedAt;
