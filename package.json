@@ -32,7 +32,6 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "test:vitest": "vitest run",
     "test:vitest:browser": "VITEST_BROWSER=true vitest --run",
     "test:vitest:browser:watch": "VITEST_BROWSER=true vitest --watch",
     "test:watch:vitest": "vitest --watch",
