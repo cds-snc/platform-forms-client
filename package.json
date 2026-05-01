@@ -148,7 +148,6 @@
     "@axe-core/playwright": "^4.11.0",
     "@babel/core": "^7.28.0",
     "@babel/preset-typescript": "^7.27.1",
-    "@jest/globals": "^30.2.0",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/cli": "^4.2.2",
     "@tailwindcss/postcss": "^4.2.2",
