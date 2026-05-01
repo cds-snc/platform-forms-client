@@ -98,7 +98,7 @@ export const EditLockBanner = ({
   // If the lock is stale, show "stale" status to encourage takeover. Otherwise, show the actual presence status reported by the server.
   const presenceKey = isStale ? "stale" : (editLock?.presenceStatus ?? "away");
 
-  // If the lock is expired (editLock is null but isLockedByOther is true), show a special message
+  // If the lock is expired (editLock is null but isLockedByOther is true), show "free to takeover" message
   const isTakeoverAvailable = isLockedByOther && !editLock;
   const takeoverAvailableTitle = t("editLock.takeoverAvailableTitle");
   // If the lock is stale, show "stale" status to encourage takeover. Otherwise, show the actual presence status reported by the server.
