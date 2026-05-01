@@ -5,7 +5,7 @@ import {
   CLIENT_SIDE_EDIT_LOCK_ACTIVITY_THROTTLE_MS,
   CLIENT_SIDE_EDIT_LOCK_AWAY_MS,
   CLIENT_SIDE_EDIT_LOCK_IDLE_MS,
-} from "@lib/formBuilderEditLockPresence";
+} from "../../../constants";
 import { type EditLockPresenceStatus, type EditLockVisibilityState } from "@lib/editLockStatus";
 
 type EditLockActivitySnapshot = {

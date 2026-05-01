@@ -12,7 +12,7 @@ import { isEditLockStatus, type EditLockStatusPayload } from "@lib/editLockStatu
 import {
   EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
   EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
-} from "@lib/formBuilderEditLockPresence";
+} from "../../../constants";
 import { useEditLockInactiveUser } from "./useEditLockInactiveTimeout";
 
 const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
@@ -604,7 +604,7 @@ export const useEditLock = ({
         eventSourceRef.current = null;
       }
     };
-  }, [enabled, formId, status]);
+  }, [enabled, formId, status, setTakeoverFallbackState]);
 
   const takeover = useCallback(async () => {
     const previousUpdatedAt = updatedAt;

@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import {
   CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS,
   CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS,
-} from "@lib/formBuilderEditLockPresence";
+} from "../../../../../../../../constants";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";

@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import {
   CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS, // TODO update to use app setting
-} from "@lib/formBuilderEditLockPresence";
+} from "../../../constants";
 
 const OWNER_IDLE_TIMER_RESET_THROTTLE_MS = Math.min(
   CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS / 2,

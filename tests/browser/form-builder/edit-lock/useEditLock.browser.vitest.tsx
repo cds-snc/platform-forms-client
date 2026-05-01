@@ -6,7 +6,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import {
   EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
   EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
-} from "@lib/formBuilderEditLockPresence";
+} from "../../../../constants";
 
 const saveDraft = vi.fn(async () => ({ status: "saved" as const }));
 const saveDraftIfNeeded = vi.fn(async () => ({ status: "skipped" as const }));
