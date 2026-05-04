@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeAll } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { FormOwnership } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/components/manageFormOwners/FormOwnership";
 import { FormRecord } from "@lib/types";
 import { render } from "../testUtils";

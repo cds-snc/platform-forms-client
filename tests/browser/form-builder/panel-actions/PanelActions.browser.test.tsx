@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeAll } from "vitest";
-import { page, userEvent } from "@vitest/browser/context";
+import { page, userEvent } from "vitest/browser";
 import { PanelActions } from "@formBuilder/[id]/edit/components/PanelActions";
 import { FormElementTypes } from "@lib/types";
 import { render } from "../testUtils";

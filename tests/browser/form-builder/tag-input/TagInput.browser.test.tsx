@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeAll } from "vitest";
-import { page, userEvent } from "@vitest/browser/context";
+import { page, userEvent } from "vitest/browser";
 import { TagInput } from "@root/packages/tag-input/src/TagInput";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";

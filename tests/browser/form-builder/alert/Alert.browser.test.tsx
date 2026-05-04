@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { Alert } from "@clientComponents/globals";
 import { CircleCheckIcon } from "@serverComponents/icons/CircleCheckIcon";
 import { Button } from "@clientComponents/globals";
