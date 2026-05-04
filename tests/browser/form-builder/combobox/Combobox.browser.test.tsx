@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { page, userEvent } from "@vitest/browser/context";
+import { page, userEvent } from "vitest/browser";
 import { Combobox } from "@clientComponents/forms/Combobox/Combobox";
 import { Formik } from "formik";
 import { render } from "../testUtils";

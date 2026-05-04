@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { CharacterLimitOptions } from "@formBuilder/[id]/components/dialogs/MoreDialog/CharacterLimitOptions";
 import { FormElementTypes } from "@lib/types";
 import { render } from "../testUtils";
