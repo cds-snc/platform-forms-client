@@ -4,7 +4,7 @@ import type { Mock, MockedFunction } from "vitest";
 import { checkMachineUserExists, checkKeyExists, createKey, deleteKey } from "@lib/serviceAccount";
 import { mockAuthorizationPass, mockAuthorizationFail } from "__utils__/authorization";
 import { AccessControlError } from "@lib/auth/errors";
-import { prismaMock } from "@jestUtils";
+import { prismaMock } from "@testUtils";
 import { logEvent } from "@lib/auditLogs";
 import * as ZitadelConnector from "@lib/integration/zitadelConnector";
 
