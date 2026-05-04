@@ -30,7 +30,8 @@ export const ChoiceSelect = ({
   // Get the parent question of the next action choice
   const choiceParentQuestion = selected?.split(".")[0] || null;
 
-  if (addCatchAll) {
+  // Keep the saved catch-all option selectable after reloads.
+  if (addCatchAll || selected?.includes("catch-all")) {
     choices = [
       {
         label: t("logic.choiceSelect.selectOption"),
@@ -58,7 +59,7 @@ export const ChoiceSelect = ({
         data-selected={selected}
         onChange={onChange}
         className={cn(
-          "center-right-15px inline-block p-2 border-black border-1 form-builder-dropdown my-0 w-[375px] text-black-default text-sm",
+          "center-right-15px form-builder-dropdown text-black-default my-0 inline-block w-93.75 border-1 border-black p-2 text-sm",
           className
         )}
         aria-labelledby={labelId}

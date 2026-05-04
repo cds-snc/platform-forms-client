@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState, useId } from "react";
+import React, { useEffect, useMemo, useState, useId } from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
@@ -159,6 +159,11 @@ export const MultiActionSelector = ({
     language: s.translationLanguagePriority,
   }));
 
+  // Resync local editor state once reloaded form data provides the current rules.
+  useEffect(() => {
+    setNextActions(initialNextActionRules);
+  }, [initialNextActionRules]);
+
   const updateGroupId = (index: number, id: string) => {
     const rules = [...nextActions];
     const choiceId = ensureChoiceId(rules[index]["choiceId"]);
@@ -213,7 +218,7 @@ export const MultiActionSelector = ({
       <div className="sticky top-0 flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
         <div>
           <SectionName lang={lang} sectionName={sectionName} />
-          <h3 className="mb-6 ml-2 mt-2 block text-sm font-normal">
+          <h3 className="mt-2 mb-6 ml-2 block text-sm font-normal">
             {t("logic.questionTitle")} <strong> {title}</strong>
           </h3>
 
@@ -221,7 +226,7 @@ export const MultiActionSelector = ({
             <span className="mr-2 pl-3 text-sm">{t("logic.addRule")}</span>
             <Button
               theme="secondary"
-              className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
+              className="p-0 hover:bg-indigo-500! hover:fill-white! focus:fill-white!"
               disabled={disableAdd}
               onClick={() => {
                 setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);

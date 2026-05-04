@@ -138,7 +138,8 @@ export const SelectNextAction = ({
           no - => section 2
         */
         <MultiActionSelector
-          key={`multi-action-select-${selectedGroupId}`}
+          // Remount per question so branching state does not bleed across selections.
+          key={`multi-action-select-${selectedGroupId}-${item.id}`}
           lang={lang}
           sectionName={sectionName}
           item={item}
