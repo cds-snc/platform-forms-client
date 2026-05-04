@@ -3,7 +3,6 @@
  */
 import React from "react";
 import { render } from "@testing-library/react";
-import "@testing-library/jest-dom";
 import { Formik } from "formik";
 import { FileInput } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";

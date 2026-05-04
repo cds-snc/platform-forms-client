@@ -3,7 +3,6 @@
  */
 import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
 import { describe, it, expect, afterAll } from "vitest";
 import { ErrorMessage } from "@clientComponents/forms";
 

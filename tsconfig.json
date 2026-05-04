@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./types", "./node_modules/@types", "@testing-library/jest-dom"],
+    "typeRoots": ["./types", "./node_modules/@types"],
     "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -24,8 +24,8 @@
       ],
       "@serverComponents/*": ["./components/serverComponents/*"],
       "@clientComponents/*": ["./components/clientComponents/*"],
-      "@jestFixtures/*": ["./__fixtures__/*"],
-      "@jestUtils": ["./__utils__"],
+      "@testFixtures/*": ["./__fixtures__/*"],
+      "@testUtils": ["./__utils__"],
       "@i18n": ["./i18n"],
       "@i18n/*": ["./i18n/*"],
       "@content/*": ["./public/static/content/*"],
