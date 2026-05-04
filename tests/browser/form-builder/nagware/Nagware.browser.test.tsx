@@ -1,12 +1,11 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { Nagware } from "@formBuilder/components/Nagware";
 import { NagLevel } from "@lib/types";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
 
 import "@root/styles/app.css";
-
 
 describe("<Nagware />", () => {
   beforeAll(() => {
@@ -25,7 +24,7 @@ describe("<Nagware />", () => {
 
     const alert = page.getByRole("alert");
     await expect.element(alert).toBeVisible();
-    
+
     const alertClass = await alert.element().getAttribute("class");
     expect(alertClass).toContain("bg-red-50");
 
@@ -45,7 +44,7 @@ describe("<Nagware />", () => {
 
     const alert = page.getByRole("alert");
     await expect.element(alert).toBeVisible();
-    
+
     const alertClass = await alert.element().getAttribute("class");
     expect(alertClass).toContain("bg-red-50");
 
@@ -65,7 +64,7 @@ describe("<Nagware />", () => {
 
     const alert = page.getByRole("alert");
     await expect.element(alert).toBeVisible();
-    
+
     const alertClass = await alert.element().getAttribute("class");
     expect(alertClass).toContain("bg-yellow-50");
 
@@ -85,7 +84,7 @@ describe("<Nagware />", () => {
 
     const alert = page.getByRole("alert");
     await expect.element(alert).toBeVisible();
-    
+
     const alertClass = await alert.element().getAttribute("class");
     expect(alertClass).toContain("bg-yellow-50");
 

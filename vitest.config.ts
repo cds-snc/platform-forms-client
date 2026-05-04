@@ -14,6 +14,7 @@ const sharedAliases = {
     "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot"
   ),
   "next/server": path.resolve(__dirname, "./__mocks__/next/server.ts"),
+  "next/image": path.resolve(__dirname, "./__mocks__/next/image.tsx"),
   "next-auth/lib/env": path.resolve(__dirname, "./__mocks__/next-auth/lib/env.js"),
   "@lib": path.resolve(__dirname, "./lib"),
 };

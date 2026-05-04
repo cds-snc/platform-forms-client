@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { page } from "../vitestBrowserShim";
+import { page } from "vitest/browser";
 import { SelectFormat, STORAGE_KEY_PREFIX } from "@responses-pilot/format/SelectFormat";
 import { render } from "./testUtils";
 import { setupFonts } from "./testHelpers";
