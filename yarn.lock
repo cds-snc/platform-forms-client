@@ -14271,7 +14271,6 @@ __metadata:
     react-swipeable: "npm:^7.0.2"
     react-toastify: "npm:11.0.5"
     react-transition-group: "npm:^4.4.5"
-    recheck: "npm:^4.5.0"
     sass: "npm:^1.93.2"
     sass-loader: "npm:^16.0.5"
     server-only: "npm:^0.0.1"
