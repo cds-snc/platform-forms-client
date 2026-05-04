@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { AddressCompleteOptions } from "@formBuilder/[id]/components/dialogs/MoreDialog/AddressCompleteOptions";
 import { FormElementTypes } from "@lib/types";
 import { render } from "../testUtils";
