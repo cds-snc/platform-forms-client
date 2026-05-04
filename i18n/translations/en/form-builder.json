@@ -265,7 +265,7 @@
       "invalidDigitRange": "The minimum number of digits must be less than the maximum number of digits.",
       "minDigits": "Minimum number of digits",
       "maxDigits": "Maximum number of digits",
-      "currency": "Currency",
+      "currency": "Currency ($)",
       "currencyNone": "None",
       "decimals": "Decimals",
       "thousandsSeparator": "Thousands separator"
