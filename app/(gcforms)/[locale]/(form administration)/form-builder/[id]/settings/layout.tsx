@@ -5,6 +5,8 @@ import { authCheckAndThrow } from "@lib/actions";
 import { Language } from "@lib/types/form-builder-types";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { shouldEnforceTemplateEditLock } from "@lib/editLocks";
+import { getAppSetting } from "@lib/appSettings";
+import { normalizeEditLockRedirectIdleMs } from "@lib/utils/form-builder/editLockRedirectIdleMs";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 import { WaitForId } from "../components/WaitForId";
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
@@ -25,6 +27,9 @@ export default async function Layout(props: {
   const enforceEditLockFlag = allowLockedEditingFlag
     ? await shouldEnforceTemplateEditLock(id)
     : false;
+  const ownerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(
+    await getAppSetting("editLockRedirectIdleMs")
+  );
 
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
 
@@ -46,6 +51,7 @@ export default async function Layout(props: {
       <EditLockClient
         formId={id}
         lockedEditingEnabled={enforceEditLockFlag}
+        ownerIdleTimeoutMs={ownerIdleTimeoutMs}
         restrictToEditPaths={false}
         reloadOnTakeover={true}
       >

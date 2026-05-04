@@ -41,10 +41,12 @@ export const useEditLock = ({
   formId,
   enabled,
   sessionId,
+  ownerIdleTimeoutMs,
 }: {
   formId: string;
   enabled: boolean;
   sessionId: string;
+  ownerIdleTimeoutMs?: number;
 }) => {
   "use memo";
   const [hasSessionExpired, setHasSessionExpired] = useState(false);
@@ -91,6 +93,7 @@ export const useEditLock = ({
 
   const { startOwnerIdleTimer, clearOwnerIdleTimer, isOwnerIdleTimeExpired } =
     useEditLockInactiveUser({
+      ownerIdleTimeoutMs,
       onOwnerIdleTimeout: () => {
         void ownerIdleTimeoutHandlerRef.current();
       },

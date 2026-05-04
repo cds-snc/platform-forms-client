@@ -1,27 +1,24 @@
 "use client";
 
 import { useRef, useState } from "react";
-import {
-  CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS, // TODO update to use app setting
-} from "@root/constants";
-
-const OWNER_IDLE_TIMER_RESET_THROTTLE_MS = Math.min(
-  CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS / 2,
-  5_000
-);
+import { normalizeEditLockRedirectIdleMs } from "@lib/utils/form-builder/editLockRedirectIdleMs";
 
 /**
  * Keeps track of whether a user is identified as inactive and if so
  * fires a callback.
  */
 export const useEditLockInactiveUser = ({
+  ownerIdleTimeoutMs,
   onOwnerIdleTimeout,
 }: {
+  ownerIdleTimeoutMs?: number;
   onOwnerIdleTimeout?: () => void;
 } = {}) => {
   const timeoutRef = useRef<number | null>(null);
   const lastTimerResetAtRef = useRef(0);
   const [isOwnerIdleTimeExpired, setIsOwnerIdleTimeExpired] = useState(false);
+  const normalizedOwnerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(ownerIdleTimeoutMs);
+  const ownerIdleTimerResetThrottleMs = Math.min(normalizedOwnerIdleTimeoutMs / 2, 5_000);
 
   const startOwnerIdleTimer = (force = false) => {
     const now = Date.now();
@@ -29,7 +26,7 @@ export const useEditLockInactiveUser = ({
     if (
       !force &&
       timeoutRef.current &&
-      now - lastTimerResetAtRef.current < OWNER_IDLE_TIMER_RESET_THROTTLE_MS
+      now - lastTimerResetAtRef.current < ownerIdleTimerResetThrottleMs
     ) {
       return;
     }
@@ -43,7 +40,7 @@ export const useEditLockInactiveUser = ({
       setIsOwnerIdleTimeExpired(true);
       timeoutRef.current = null;
       onOwnerIdleTimeout?.();
-    }, CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS);
+    }, normalizedOwnerIdleTimeoutMs);
   };
 
   const clearOwnerIdleTimer = () => {

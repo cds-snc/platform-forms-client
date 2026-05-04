@@ -2,15 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import {
-  CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS,
-  CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS,
-} from "@root/constants";
+import { CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS } from "@root/constants";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
+
+const RELATIVE_TIME_TICK_MS = 5_000;
 
 const formatRelativeTime = (value: string, locale: string) => {
   const target = new Date(value);
@@ -74,7 +73,7 @@ export const EditLockBanner = ({
 
     const interval = window.setInterval(() => {
       setTimeTick(Date.now());
-    }, CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS);
+    }, RELATIVE_TIME_TICK_MS);
 
     return () => {
       window.clearInterval(interval);
