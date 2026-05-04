@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/core",
-  "version": "2.2.6",
+  "version": "2.2.7",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -16,7 +16,7 @@
     "@gcforms/types": "*"
   },
   "devDependencies": {
-    "vitest": "^1.0.0"
+    "vitest": "^4.1.5"
   },
   "scripts": {
     "build": "tsdown src/index.ts --format cjs,esm --dts --clean && node scripts/build-styles.mjs",

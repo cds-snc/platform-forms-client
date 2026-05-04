@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { render, cleanup } from "vitest-browser-react";
 import { DownloadProgressHtml } from "./DownloadProgressHtml";
 import { formResponse, reviewItems } from "./fixtures/data";

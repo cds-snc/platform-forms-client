@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { page, userEvent } from "@vitest/browser/context";
+import { page, userEvent } from "vitest/browser";
 import { Question } from "@formBuilder/[id]/components/dialogs/MoreDialog/Question";
 import { FormElementTypes } from "@lib/types";
 import { render } from "../testUtils";

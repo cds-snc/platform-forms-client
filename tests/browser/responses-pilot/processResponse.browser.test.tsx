@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { page } from "../vitestBrowserShim";
+import { page } from "vitest/browser";
 import type { SubmissionFixture } from "@responses-pilot/lib/__tests__/testHelpers";
 import InMemoryDirectoryHandle from "@responses-pilot/lib/__tests__/fsMock";
 import submissionFixture from "@responses-pilot/lib/__tests__/fixtures/response-get-support.json";
@@ -106,15 +106,16 @@ describe("processResponse -> browser injection", () => {
 
     if (!html) throw new Error("No captured HTML found in __IN_MEMORY_FILES__");
 
-    // Inject into the browser page by writing to the document directly
-    // (the browser test environment exposes `document`)
+    // Inject into the browser page by setting innerHTML instead of using document.write
+    // (document.write/close cause iframe reloads in newer Vitest versions)
     if (typeof document === "undefined") {
       throw new Error("Browser document is not available in this test environment");
     }
 
-    document.open();
-    document.write("<!doctype html>" + html);
-    document.close();
+    // Create a container div and set innerHTML to inject the HTML content
+    const container = document.createElement("div");
+    container.innerHTML = html;
+    document.body.appendChild(container);
 
     // Ensure content is present
     await expect.element(page.getByRole("heading", { level: 1 })).toBeInTheDocument();
