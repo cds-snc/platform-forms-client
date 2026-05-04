@@ -2,11 +2,11 @@ import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Redis from "ioredis-mock";
 import { mockClient } from "aws-sdk-client-mock";
-import { prismaMock } from "@jestUtils";
+import { prismaMock } from "@testUtils";
 import { DynamoDBDocumentClient, QueryCommand, BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { AccessControlError } from "@lib/auth/errors";
 import { deleteDraftFormResponses, unprocessedSubmissions } from "@lib/vault";
-import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
+import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 import { DeliveryOption } from "@lib/types";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 import { getAppSetting } from "@lib/appSettings";

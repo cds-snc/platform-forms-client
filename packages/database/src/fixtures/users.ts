@@ -9,6 +9,23 @@ type UserCollection = {
   test: CreateAppUser[];
   [key: string]: Array<CreateAppUser>;
 };
+const developerEmail = process.env.DEVELOPER_EMAIL;
+const developerName = process.env.DEVELOPER_NAME;
+
+const LocalDeveloper: CreateAppUser = {
+  name: developerName ?? "generic",
+  email: developerEmail ?? "generic@cds-snc.ca",
+  active: true,
+  privileges: {
+    connect: [
+      { name: "Base" },
+      { name: "PublishForms" },
+      { name: "ManageApplicationSettings" },
+      { name: "ManageUsers" },
+      { name: "ManageForms" },
+    ],
+  },
+};
 
 const RegularUser: CreateAppUser = {
   name: "Regular Test User",
@@ -53,5 +70,10 @@ export const UserWithoutSecurityAnswers: CreateAppUser = {
 
 export default {
   test: [RegularUser, AdminUser, DeactivatedRegularUser],
-  development: [RegularUser, AdminUser, DeactivatedRegularUser],
+  development: [
+    RegularUser,
+    AdminUser,
+    DeactivatedRegularUser,
+    ...(developerEmail && developerName ? [LocalDeveloper] : []),
+  ],
 } as UserCollection;

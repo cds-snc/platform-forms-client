@@ -1,6 +1,6 @@
 import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { prismaMock } from "@jestUtils";
+import { prismaMock } from "@testUtils";
 import {
   createTemplate,
   getAllTemplates,
@@ -19,7 +19,7 @@ import {
 } from "../templates";
 
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
-import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
+import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 
 // structuredClone is available starting in Node 17.
 // Until we catch up... polyfill

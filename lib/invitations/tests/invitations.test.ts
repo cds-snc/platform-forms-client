@@ -1,5 +1,5 @@
 import type { Mock, MockedFunction } from "vitest";
-import { prismaMock } from "@jestUtils";
+import { prismaMock } from "@testUtils";
 import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { getUser } from "@lib/users";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";

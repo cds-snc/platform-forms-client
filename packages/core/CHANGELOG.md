@@ -1,8 +1,12 @@
 # Changelog
 
-## [2.2.5] - 2026-04-23
+## [2.2.6] - 2026-05-04
 
 - Support for new Advanced number input validation
+
+## [2.2.5] - 2026-04-30
+
+- Modify import
 
 ## [2.2.4] - 2026-04-28
 

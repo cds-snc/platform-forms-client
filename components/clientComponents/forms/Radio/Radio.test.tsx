@@ -1,7 +1,6 @@
 /**
  * @vitest-environment jsdom
  */
-import "@testing-library/jest-dom";
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import { GenerateElement } from "@lib/formBuilder";

@@ -12,6 +12,9 @@ if (!connectionString) {
   throw new Error("Database Connection URL missing");
 }
 
+const developerEmail = process.env.DEVELOPER_EMAIL;
+const developerName = process.env.DEVELOPER_NAME;
+
 async function createTemplates(env: string) {
   // see https://github.com/prisma/prisma/issues/9247#issuecomment-1249322729 for why this check is needed
   const templatePromises = seedTemplates[env].map((formConfig, index) =>
@@ -68,7 +71,7 @@ async function createSettings(env: string) {
   });
 }
 
-async function createUsers() {
+async function createUsers(environment: string) {
   await prisma.user.upsert({
     where: {
       email: UserWithoutSecurityAnswers.email,
@@ -81,7 +84,7 @@ async function createUsers() {
 
   const [q1, q2, q3] = await prisma.securityQuestion.findMany();
 
-  const users = seedUsers["test"].map((user) => {
+  const users = seedUsers[environment].map((user) => {
     return prisma.user.upsert({
       where: {
         email: user.email,
@@ -148,19 +151,23 @@ async function main() {
     ]);
 
     if (environment !== "production") {
-      console.log("Creating test Users");
-      try {
-        await createUsers();
-      } catch (e) {
-        if (e instanceof Prisma.PrismaClientKnownRequestError) {
-          // The .code property can be accessed in a type-safe manner
-          if (e.code === "P2002") {
-            console.log(
-              "There is a unique constraint violation, a new user cannot be created with this email"
-            ); // just log it and keep going
-          } else throw e;
-        }
-      }
+      console.log(`Creating ${environment} Users`);
+      await createUsers(environment);
+    }
+    if (environment === "development" && developerEmail && developerName) {
+      // associate templates to developer
+      console.log("Adding existing templates to developer account");
+      const templates = await prisma.template.findMany();
+      await prisma.user.update({
+        where: {
+          email: developerEmail,
+        },
+        data: {
+          templates: {
+            connect: templates.map((form) => ({ id: form.id })),
+          },
+        },
+      });
     }
   } catch (e) {
     console.error(e);
