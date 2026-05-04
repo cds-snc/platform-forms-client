@@ -124,9 +124,7 @@ export const NumberFieldOptions = ({
                   ...item.properties,
                   currencyCode,
                   stepCount: e.target.checked ? 2 : item.properties.stepCount,
-                  useThousandsSeparator: e.target.checked
-                    ? true
-                    : item.properties.useThousandsSeparator,
+                  useThousandsSeparator: e.target.checked,
                 },
               });
             }}
