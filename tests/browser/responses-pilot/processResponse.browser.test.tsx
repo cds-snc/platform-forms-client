@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { page } from "../vitestBrowserShim";
+import { page } from "vitest/browser";
 import type { SubmissionFixture } from "@responses-pilot/lib/__tests__/testHelpers";
 import InMemoryDirectoryHandle from "@responses-pilot/lib/__tests__/fsMock";
 import submissionFixture from "@responses-pilot/lib/__tests__/fixtures/response-get-support.json";

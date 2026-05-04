@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { render } from "./testUtils";
 import {
   CsvDirectory,

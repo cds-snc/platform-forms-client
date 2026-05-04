@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { Nagware } from "@formBuilder/components/Nagware";
 import { NagLevel } from "@lib/types";
 import { render } from "../testUtils";

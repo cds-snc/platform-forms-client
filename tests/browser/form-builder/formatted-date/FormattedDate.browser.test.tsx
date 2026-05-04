@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { FormattedDate } from "@clientComponents/forms/FormattedDate/FormattedDate";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 import { Formik } from "formik";

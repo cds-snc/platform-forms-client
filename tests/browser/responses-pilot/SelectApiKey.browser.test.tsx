@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { SelectApiKey } from "@responses-pilot/load-key/SelectApiKey";
 import { render } from "./testUtils";
 import { GCFormsApiClient } from "@responses-pilot/lib/apiClient";
