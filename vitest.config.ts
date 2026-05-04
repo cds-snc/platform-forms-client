@@ -3,6 +3,10 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const sharedAliases = {
   "@responses-pilot": path.resolve(
@@ -18,6 +22,7 @@ const sharedDefine = {
   "process.env.VITEST_BROWSER": JSON.stringify(process.env.VITEST_BROWSER || "false"),
   "process.env.VITEST_WATCH": JSON.stringify(process.env.VITEST_WATCH || "false"),
   "process.env.APP_ENV": JSON.stringify(process.env.APP_ENV || "test"),
+  "process.env.DATABASE_URL": JSON.stringify("dummy_test_url"),
   global: "globalThis",
 };
 
@@ -90,10 +95,7 @@ export default defineConfig({
                   "**/*.test.+(ts|tsx|js|jsx)",
                 ],
                 exclude: [...sharedExclude, "**/*.browser.test.+(ts|tsx|js|jsx)"],
-                setupFiles: [
-                  "./__utils__/vitest.setup.ts",
-                  "./__utils__/prismaConnector.ts",
-                ],
+                setupFiles: ["./__utils__/vitest.setup.ts", "./__utils__/prismaConnector.ts"],
               },
             },
           ],

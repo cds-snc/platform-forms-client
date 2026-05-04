@@ -1,7 +1,10 @@
 import { PrismaClient, Prisma } from "./generated/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { getConnectionUrl } from "./connection";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg({
+  connectionString: getConnectionUrl(),
+});
 // Instantiate the extended Prisma client to infer its type
 const extendedPrisma = new PrismaClient({ adapter }).$extends({
   model: {

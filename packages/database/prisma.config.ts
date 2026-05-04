@@ -1,10 +1,9 @@
-import { defineConfig, env } from "prisma/config";
-
-const databaseURL = env("DATABASE_URL");
+import { defineConfig } from "prisma/config";
+import { getConnectionUrl } from "./src/connection";
 
 export default defineConfig({
   datasource: {
-    url: databaseURL,
+    url: getConnectionUrl(),
   },
   schema: "prisma/schema.prisma",
   migrations: {
