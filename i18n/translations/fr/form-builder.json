@@ -262,7 +262,7 @@
       "numberOfDigits": "Nombre de chiffres",
       "limitNumberOfDigits": "Limiter le nombre de chiffres",
       "invalidValueRange": "La valeur minimale doit être inférieure à la valeur maximale.",
-      "invalidDigitRange": "Le nombre minimum de chiffres doit etre inferieur au nombre maximum de chiffres.",
+      "invalidDigitRange": "Le nombre minimum de chiffres doit être inférieur au nombre maximum de chiffres.",
       "minDigits": "Nombre minimum de chiffres",
       "maxDigits": "Nombre maximum de chiffres",
       "currency": "Devise",
