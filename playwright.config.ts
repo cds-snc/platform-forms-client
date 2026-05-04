@@ -32,7 +32,7 @@ export default defineConfig({
   },
 
   /* Global setup and teardown */
-  globalSetup: require.resolve("./tests/global-setup"),
+  globalSetup: "./tests/global-setup",
 
   /* Configure projects for major browsers */
   projects: [

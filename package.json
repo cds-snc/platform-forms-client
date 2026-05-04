@@ -17,11 +17,12 @@
       "prettier-plugin-tailwindcss"
     ]
   },
+  "type": "module",
   "scripts": {
     "dev": "yarn db:generate && yarn db:dev && next dev",
     "dev:debug": "next dev",
     "dev:secure": "yarn db:generate && yarn db:dev && next dev --experimental-https",
-    "build": "yarn workspaces foreach --all --parallel --verbose run build && next build",
+    "build": "yarn workspaces foreach --all --parallel --verbose run build && DATABASE_URL=dummy_placeholder_url_for_build next build",
     "start": "NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
     "start:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
     "dev:test": "yarn db:generate && yarn db:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
