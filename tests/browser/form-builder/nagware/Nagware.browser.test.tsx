@@ -7,7 +7,6 @@ import { setupFonts } from "../../helpers/setupFonts";
 
 import "@root/styles/app.css";
 
-
 describe("<Nagware />", () => {
   beforeAll(() => {
     setupFonts();
@@ -25,7 +24,7 @@ describe("<Nagware />", () => {
 
     const alert = page.getByRole("alert");
     await expect.element(alert).toBeVisible();
-    
+
     const alertClass = await alert.element().getAttribute("class");
     expect(alertClass).toContain("bg-red-50");
 
@@ -45,7 +44,7 @@ describe("<Nagware />", () => {
 
     const alert = page.getByRole("alert");
     await expect.element(alert).toBeVisible();
-    
+
     const alertClass = await alert.element().getAttribute("class");
     expect(alertClass).toContain("bg-red-50");
 
@@ -65,7 +64,7 @@ describe("<Nagware />", () => {
 
     const alert = page.getByRole("alert");
     await expect.element(alert).toBeVisible();
-    
+
     const alertClass = await alert.element().getAttribute("class");
     expect(alertClass).toContain("bg-yellow-50");
 
@@ -85,7 +84,7 @@ describe("<Nagware />", () => {
 
     const alert = page.getByRole("alert");
     await expect.element(alert).toBeVisible();
-    
+
     const alertClass = await alert.element().getAttribute("class");
     expect(alertClass).toContain("bg-yellow-50");
 

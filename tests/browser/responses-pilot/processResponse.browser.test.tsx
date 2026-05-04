@@ -112,7 +112,6 @@ describe("processResponse -> browser injection", () => {
       throw new Error("Browser document is not available in this test environment");
     }
 
-    const htmlContent = "<!doctype html>" + html;
     // Create a container div and set innerHTML to inject the HTML content
     const container = document.createElement("div");
     container.innerHTML = html;
