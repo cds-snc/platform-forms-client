@@ -46,9 +46,9 @@ vi.mock("@lib/editLocks", () => ({
 }));
 
 import { prisma } from "@gcforms/database";
-import { getAbility } from "@lib/privileges";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 import { acceptInvitation } from "@lib/invitations/acceptInvitation";
+import { mockGetAbility } from "__utils__/authorization";
 
 describe("acceptInvitation", () => {
   beforeEach(() => {
@@ -66,27 +66,63 @@ describe("acceptInvitation", () => {
       id: "user-2",
       name: "Owner Two",
       email: "owner.two@example.com",
+      image: null,
+      emailVerified: null,
+      lastLogin: new Date(),
       active: true,
+      notes: null,
+      createdAt: new Date(),
     });
 
     vi.mocked(prisma.template.findUnique).mockResolvedValue({
       id: "form-1",
+      created_at: new Date(),
+      updated_at: new Date(),
+      name: "Test Form",
+      jsonConfig: {},
+      isPublished: false,
+      securityAttribute: "Unclassified",
+      formPurpose: "test",
+      publishReason: "",
+      publishFormType: "",
+      publishDesc: "",
+      saveAndResume: false,
+      notificationsInterval: null,
+      bearerToken: null,
+      ttl: null,
+      closingDate: null,
+      closedDetails: null,
     });
 
     vi.mocked(prisma.template.update).mockResolvedValue({
+      id: "form-1",
+      created_at: new Date(),
+      updated_at: new Date(),
+      name: "Test Form",
       jsonConfig: {},
-      users: [{ id: "user-1", email: "owner.one@example.com" }],
+      isPublished: false,
+      securityAttribute: "Unclassified",
+      formPurpose: "test",
+      publishReason: "",
+      publishFormType: "",
+      publishDesc: "",
+      saveAndResume: false,
+      notificationsInterval: null,
+      bearerToken: null,
+      ttl: null,
+      closingDate: null,
+      closedDetails: null,
     });
 
     vi.mocked(prisma.invitation.delete).mockResolvedValue({
       id: "invitation-1",
+      templateId: "form-1",
+      email: "owner.two@example.com",
+      expires: new Date("2099-01-01T00:00:00.000Z"),
+      invitedBy: "user-1",
     });
 
-    vi.mocked(getAbility).mockResolvedValue({
-      user: {
-        id: "user-2",
-      },
-    });
+    mockGetAbility("user-2", "owner.two@example.com");
   });
 
   it("invalidates the edit-lock user count cache after assigning the invited user", async () => {
