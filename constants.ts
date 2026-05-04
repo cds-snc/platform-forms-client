@@ -20,7 +20,7 @@ export const MIN_ASSIGNED_USERS_FOR_EDIT_LOCK = 2;
 
 // Refresh the owner's lock heartbeat once per minute to reduce network noise; the longer TTL above
 // provides enough slack that missing a single heartbeat should not immediately drop the lock.
-export const EDIT_LOCK_HEARTBEAT_INTERVAL_MS = 30_000;
+export const EDIT_LOCK_HEARTBEAT_INTERVAL_MS = 60_000;
 
 // Non-owners check lock status on the same cadence so they can notice ownership changes without
 // spamming the server. This can diverge from the owner heartbeat interval later if needed.
@@ -40,18 +40,10 @@ export const CLIENT_SIDE_EDIT_LOCK_AWAY_MS = 120_000;
 // Surface a stale connection warning during the last 90 seconds of the longer lock TTL.
 export const CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS = 90_000;
 
-// Recompute the banner's relative-time copy every 5 seconds while presence detection is visible.
-export const CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS = 5_000;
-
 // Give the current editor a window to flush any dirty draft state before a takeover completes.
 // This must be generous enough for Lambda / cold-start environments where the full
 // SSE → saveDraft → ack round-trip can take several seconds.
 export const EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS = 5_000;
-
-// Kick the current editor out of edit mode and release their lock after this long without activity.
-// This is intentionally much longer than the "away" threshold so brief distractions don't eject users.
-// 30min
-export const CLIENT_SIDE_EDIT_LOCK_INACTIVE_TIMEOUT_MS = 1_800_000;
 
 // Toggle verbose SSE lifecycle logging
 export const SHOULD_DEBUG_EDIT_LOCK_SSE = false;

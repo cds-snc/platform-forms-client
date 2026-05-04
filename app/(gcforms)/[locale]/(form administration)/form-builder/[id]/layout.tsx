@@ -18,6 +18,8 @@ import { logMessage } from "@lib/logger";
 import { checkKeyExists } from "@lib/serviceAccount";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { shouldEnforceTemplateEditLock } from "@lib/editLocks";
+import { getAppSetting } from "@lib/appSettings";
+import { normalizeEditLockRedirectIdleMs } from "@lib/utils/form-builder/editLockRedirectIdleMs";
 import {
   FormBuilderConfigProvider,
   FormBuilderConfig,
@@ -50,6 +52,9 @@ export default async function Layout(props: {
     allowLockedEditingFlag && formID && formID !== "0000"
       ? await shouldEnforceTemplateEditLock(formID)
       : false;
+  const ownerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(
+    await getAppSetting("editLockRedirectIdleMs")
+  );
 
   if (session && formID && formID !== "0000") {
     const templateWithUsers = await getTemplateWithAssociatedUsers(formID).catch((e) => {
@@ -117,7 +122,11 @@ export default async function Layout(props: {
                     </div>
                     <GroupStoreProvider>
                       <div className="relative flex w-full gap-7">
-                        <EditLockClient formId={id} lockedEditingEnabled={enforceEditLockFlag}>
+                        <EditLockClient
+                          formId={id}
+                          lockedEditingEnabled={enforceEditLockFlag}
+                          ownerIdleTimeoutMs={ownerIdleTimeoutMs}
+                        >
                           <main
                             id="content"
                             className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
