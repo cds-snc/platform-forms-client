@@ -265,7 +265,7 @@
       "invalidDigitRange": "Le nombre minimum de chiffres doit être inférieur au nombre maximum de chiffres.",
       "minDigits": "Nombre minimum de chiffres",
       "maxDigits": "Nombre maximum de chiffres",
-      "currency": "Devise",
+      "currency": "Devise ($)",
       "currencyNone": "Aucune",
       "decimals": "Décimales",
       "thousandsSeparator": "séparateur de milliers"
