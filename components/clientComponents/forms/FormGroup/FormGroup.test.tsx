@@ -3,7 +3,6 @@
  */
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
 import { GenerateElement } from "@lib/formBuilder";
 import { Formik } from "formik";
 import { describe, test, afterEach } from "vitest";
