@@ -50,7 +50,6 @@ export const FormItemFactory = ({
     case FormElementTypes.attestation:
       return <BaseElementArray formItem={formItem} splitValues={true} />;
 
-    case FormElementTypes.textField:
     case FormElementTypes.numberInput:
       return <NumberInput lang={language} formItem={formItem} />;
 
