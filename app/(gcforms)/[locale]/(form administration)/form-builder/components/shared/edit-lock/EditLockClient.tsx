@@ -27,12 +27,14 @@ const makeSessionId = () => {
 export const EditLockClient = ({
   formId,
   lockedEditingEnabled = true,
+  ownerIdleTimeoutMs,
   children,
   restrictToEditPaths = true,
   reloadOnTakeover = false,
 }: {
   formId: string;
   lockedEditingEnabled?: boolean;
+  ownerIdleTimeoutMs?: number;
   children?: React.ReactNode;
   restrictToEditPaths?: boolean;
   reloadOnTakeover?: boolean;
@@ -57,6 +59,7 @@ export const EditLockClient = ({
     formId: activeFormId,
     enabled,
     sessionId,
+    ownerIdleTimeoutMs,
   });
 
   const { headlessTree } = useTreeRef();
