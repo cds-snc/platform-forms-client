@@ -257,7 +257,7 @@
       "max": "Valeur maximale",
       "minShort": "Min",
       "maxShort": "Max",
-      "valueRange": "Plage de valeurs",
+      "valueRange": "Série de valeurs",
       "addValueRange": "Ajouter une série de valeurs",
       "numberOfDigits": "Nombre de chiffres",
       "limitNumberOfDigits": "Limiter le nombre de chiffres",
