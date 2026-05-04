@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "target": "es2023",
-    "downlevelIteration": true,
     "module": "esnext",
     "declaration": true,
-    "outDir": "./dist",
+    "declarationMap": true,
+    "composite": true,
     "strict": true,
     "esModuleInterop": true,
     "typeRoots": ["./node_modules/@types"],
-    "moduleResolution": "node"
+    "moduleResolution": "bundler"
   },
-  "include": ["src"],
+  "include": ["src", "tsdown.config.ts"],
   "exclude": ["node_modules", "dist"]
 }
