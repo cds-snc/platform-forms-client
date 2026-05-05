@@ -24,7 +24,7 @@ import { logMessage } from "@lib/logger";
 import { authCheckAndThrow } from "@lib/actions";
 import {
   assertTemplateEditLock,
-  shouldEnforceTemplateEditLock,
+  shouldEnforceTemplateEditLockWithVerifiedUserCount,
   TemplateEditLockedError,
 } from "@lib/editLocks";
 import { MiddlewareProps, WithRequired } from "@lib/types";
@@ -159,7 +159,7 @@ export const PUT = middleware(
       if (
         shouldCheckLock &&
         process.env.APP_ENV !== "test" &&
-        (await shouldEnforceTemplateEditLock(formID))
+        (await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID))
       ) {
         const { session } = props as WithRequired<MiddlewareProps, "session">;
         await assertTemplateEditLock({ templateId: formID, userId: session.user.id });

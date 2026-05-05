@@ -14,7 +14,7 @@ import {
   heartbeatEditLock,
   requestEditLockTakeoverSave,
   releaseEditLock,
-  shouldEnforceTemplateEditLock,
+  shouldEnforceTemplateEditLockWithVerifiedUserCount,
   takeoverEditLock,
   TemplateEditLockedError,
   waitForEditLockTakeoverSaveAcknowledgement,
@@ -73,7 +73,7 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  if (!(await shouldEnforceTemplateEditLock(formID))) {
+  if (!(await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID))) {
     return NextResponse.json(getEditLockDisabledStatus());
   }
 
@@ -106,7 +106,7 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
   };
   const presence = parsePresence(activity);
 
-  if (!(await shouldEnforceTemplateEditLock(formID))) {
+  if (!(await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID))) {
     if (action === "release") {
       return NextResponse.json({ released: false });
     }

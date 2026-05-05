@@ -37,6 +37,11 @@ const buildEditLockUrl = (formId: string, requestType: EditLockRequestType) =>
 const buildEditLockEventsUrl = (formId: string) =>
   `/api/templates/${formId}/edit-lock/events?requestType=event-stream`;
 
+const isEditLockDisabledStatus = (status: EditLockStatusPayload | null | undefined) =>
+  Boolean(
+    status && !status.locked && !status.lockedByOther && status.isOwner && status.lock === null
+  );
+
 export const useEditLock = ({
   formId,
   enabled,
@@ -50,6 +55,7 @@ export const useEditLock = ({
 }) => {
   "use memo";
   const [hasSessionExpired, setHasSessionExpired] = useState(false);
+  const [serverLockingEnabled, setServerLockingEnabled] = useState(enabled);
   const { status } = useSession();
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
@@ -71,6 +77,8 @@ export const useEditLock = ({
   const { getIsActiveTab, isActiveTab } = useActiveTab({
     coordinationKey: formId,
   });
+
+  const lockingEnabled = enabled && serverLockingEnabled;
 
   const clearTimers = useCallback(() => {
     lockLoopTokenRef.current += 1;
@@ -105,6 +113,15 @@ export const useEditLock = ({
     isOwnerRef.current = false;
     clearOwnerIdleTimer();
   }, [clearOwnerIdleTimer, setEditLock, setIsLockedByOther]);
+
+  const standDownForDisabledLocking = useCallback(() => {
+    setServerLockingEnabled(false);
+    setHasSessionExpired(false);
+    suppressReleaseRef.current = false;
+    clearTimers();
+    clearEvents();
+    clearLockState();
+  }, [clearEvents, clearLockState, clearTimers]);
 
   const setTakeoverFallbackState = useCallback(() => {
     setIsLockedByOther(true);
@@ -250,6 +267,16 @@ export const useEditLock = ({
   );
 
   useEffect(() => {
+    if (!enabled) {
+      setServerLockingEnabled(false);
+      setHasSessionExpired(false);
+      return;
+    }
+
+    setServerLockingEnabled(true);
+  }, [enabled, formId]);
+
+  useEffect(() => {
     updatedAtRef.current = updatedAt;
   }, [updatedAt]);
 
@@ -315,6 +342,11 @@ export const useEditLock = ({
         return;
       }
 
+      if (isEditLockDisabledStatus(heartbeatResult)) {
+        standDownForDisabledLocking();
+        return;
+      }
+
       if (!heartbeatResult.isOwner) {
         await autoSaveIfOwner(wasOwner);
       }
@@ -357,6 +389,11 @@ export const useEditLock = ({
       if (!pollResult) {
         clearTimers();
         clearLockState();
+        return;
+      }
+
+      if (isEditLockDisabledStatus(pollResult)) {
+        standDownForDisabledLocking();
         return;
       }
 
@@ -412,6 +449,10 @@ export const useEditLock = ({
   // When a non-owner tab's active status changes, update polling state accordingly.
   // Only the active tab should have the polling interval active to reduce network traffic.
   useEffect(() => {
+    if (!lockingEnabled) {
+      return;
+    }
+
     // Only applies to non-owners with active-tab coordination enabled
     if (isOwnerRef.current) {
       return;
@@ -424,6 +465,11 @@ export const useEditLock = ({
       } else {
         // Poll immediately to refresh state before next interval tick
         void getLockStatus().then((result) => {
+          if (isEditLockDisabledStatus(result)) {
+            cbRef.current.standDownForDisabledLocking();
+            return;
+          }
+
           if (result) {
             cbRef.current.updateStore(result);
           }
@@ -436,7 +482,7 @@ export const useEditLock = ({
         pollRef.current = null;
       }
     }
-  }, [getLockStatus, isActiveTab]);
+  }, [getLockStatus, isActiveTab, lockingEnabled]);
 
   // The main effect runs whenever "enabled" or "status" changes to start/stop
   // the lock logic. The ref "container" is necessary to hold the latest
@@ -453,6 +499,7 @@ export const useEditLock = ({
     flushDraftBeforeTakeover,
     startTimers,
     setTakeoverFallbackState,
+    standDownForDisabledLocking,
   };
   const cbRef = useRef(callbacks);
   cbRef.current = callbacks;
@@ -460,7 +507,7 @@ export const useEditLock = ({
   startHeartbeatRef.current = startHeartbeat;
 
   useEffect(() => {
-    if (!enabled || status !== "authenticated") {
+    if (!lockingEnabled || status !== "authenticated") {
       cbRef.current.clearTimers();
       cbRef.current.clearLockState();
       return;
@@ -474,6 +521,11 @@ export const useEditLock = ({
 
       if (!statusResult) {
         cbRef.current.clearLockState();
+        return;
+      }
+
+      if (isEditLockDisabledStatus(statusResult)) {
+        cbRef.current.standDownForDisabledLocking();
         return;
       }
 
@@ -501,13 +553,13 @@ export const useEditLock = ({
         }).catch(() => undefined);
       }
     };
-  }, [enabled, formId, sessionId, status]);
+  }, [formId, lockingEnabled, sessionId, status]);
 
   // Manage the shared SSE EventSource connection for edit-lock updates.
   // If an SSE event is missed, the next owner heartbeat or non-owner status poll
   // reconciles state from the server, and EventSource will retry on transient drops.
   useEffect(() => {
-    if (!enabled || status !== "authenticated") {
+    if (!lockingEnabled || status !== "authenticated") {
       cbRef.current.clearEvents();
       return;
     }
@@ -534,6 +586,11 @@ export const useEditLock = ({
           return;
         }
         const wasOwner = isOwnerRef.current;
+
+        if (isEditLockDisabledStatus(nextStatus)) {
+          cbRef.current.standDownForDisabledLocking();
+          return;
+        }
 
         if (!nextStatus.locked) {
           // Lock is free. Stop any non-owner polling and show the takeover fallback state (manual takeover required).
@@ -579,7 +636,7 @@ export const useEditLock = ({
         eventSourceRef.current = null;
       }
     };
-  }, [enabled, formId, status, setTakeoverFallbackState]);
+  }, [formId, lockingEnabled, status, setTakeoverFallbackState]);
 
   const takeover = useCallback(async () => {
     const previousUpdatedAt = updatedAt;
@@ -589,10 +646,14 @@ export const useEditLock = ({
     if (statusResult?.error) {
       throw new Error(statusResult.error);
     }
+    if (isEditLockDisabledStatus(statusResult)) {
+      standDownForDisabledLocking();
+      return;
+    }
     await refreshForm(previousUpdatedAt);
     updateStore(statusResult);
     startTimers(statusResult);
-  }, [postAction, refreshForm, startTimers, updateStore, updatedAt]);
+  }, [postAction, refreshForm, standDownForDisabledLocking, startTimers, updateStore, updatedAt]);
 
   return { takeover, getIsActiveTab, isOwnerIdleTimeExpired, hasSessionExpired };
 };

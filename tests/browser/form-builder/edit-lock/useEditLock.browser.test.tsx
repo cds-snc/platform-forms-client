@@ -747,4 +747,22 @@ describe("useEditLock", () => {
 
     vi.useRealTimers();
   });
+
+  it("does not start lock polling when edit locking is disabled", async () => {
+    function DisabledHarness() {
+      useEditLock({
+        formId: "test-form-id",
+        enabled: false,
+        sessionId: "session-1",
+      });
+
+      return null;
+    }
+
+    await render(<DisabledHarness />);
+
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });
