@@ -268,7 +268,7 @@
       "currency": "Devise ($)",
       "currencyNone": "Aucune",
       "decimals": "Décimales",
-      "thousandsSeparator": "séparateur de milliers"
+      "thousandsSeparator": "Séparateur de milliers"
     },
     "numberInput": {
       "title": "Nombre"
