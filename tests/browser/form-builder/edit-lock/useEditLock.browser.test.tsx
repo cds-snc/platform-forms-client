@@ -190,19 +190,24 @@ function EditLockHarness({
   onChangeKey,
   onLockStateChange,
   onActiveTabChange,
+  onSessionExpiredChange,
+  ownerIdleTimeoutMs,
 }: {
   onTakeoverReady?: (takeover: () => Promise<void>) => void;
   onChangeKey?: (changeKey: string) => void;
   onLockStateChange?: (state: { isLockedByOther: boolean; hasEditLock: boolean }) => void;
   onActiveTabChange?: (isActiveTab: boolean) => void;
+  onSessionExpiredChange?: (hasSessionExpired: boolean) => void;
+  ownerIdleTimeoutMs?: number;
 }) {
   const changeKey = useTemplateStore((s) => s.changeKey);
   const isLockedByOther = useTemplateStore((s) => s.isLockedByOther);
   const editLock = useTemplateStore((s) => s.editLock);
-  const { takeover, getIsActiveTab } = useEditLock({
+  const { takeover, getIsActiveTab, hasSessionExpired } = useEditLock({
     formId: "test-form-id",
     enabled: true,
     sessionId: "session-1",
+    ownerIdleTimeoutMs,
   });
 
   useEffect(() => {
@@ -223,6 +228,10 @@ function EditLockHarness({
   useEffect(() => {
     onActiveTabChange?.(getIsActiveTab());
   }, [getIsActiveTab, onActiveTabChange]);
+
+  useEffect(() => {
+    onSessionExpiredChange?.(hasSessionExpired);
+  }, [hasSessionExpired, onSessionExpiredChange]);
 
   useEffect(() => {
     return () => {
@@ -680,6 +689,75 @@ describe("useEditLock", () => {
     vi.useRealTimers();
   });
 
+  it("shows session expired when an idle owner learns the lock disappeared before the idle timer callback runs", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-03-31T12:00:00.000Z"));
+
+    const unlockedStatus = {
+      locked: false,
+      lockedByOther: false,
+      isOwner: false,
+      lock: null,
+    };
+
+    const sessionExpiredStates: boolean[] = [];
+
+    fetchMock.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = getRequestUrl(input);
+
+      if (isEditLockRequest(input) && init?.method === "POST") {
+        const body = JSON.parse(String(init.body)) as { action: string };
+
+        if (body.action === "acquire") {
+          return {
+            ok: true,
+            json: async () => ownerLockStatus,
+          } as Response;
+        }
+
+        if (body.action === "heartbeat") {
+          return {
+            ok: true,
+            json: async () => unlockedStatus,
+          } as Response;
+        }
+
+        return {
+          ok: true,
+          json: async () => ownerLockStatus,
+        } as Response;
+      }
+
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
+
+    await render(
+      <EditLockHarness
+        ownerIdleTimeoutMs={15 * 60 * 1000}
+        onSessionExpiredChange={(value) => sessionExpiredStates.push(value)}
+      />
+    );
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/templates/test-form-id/edit-lock?requestType=acquire",
+        expect.objectContaining({ method: "POST" })
+      );
+    });
+
+    // Simulate a suspended tab: the wall clock moves past the idle threshold,
+    // but the client-side timeout callback has not fired yet.
+    vi.setSystemTime(new Date("2026-03-31T12:15:01.000Z"));
+
+    await vi.advanceTimersByTimeAsync(EDIT_LOCK_HEARTBEAT_INTERVAL_MS);
+
+    await vi.waitFor(() => {
+      expect(sessionExpiredStates.at(-1)).toBe(true);
+    });
+
+    vi.useRealTimers();
+  });
+
   it("keeps local draft state intact when heartbeat loses the lock", async () => {
     // Fake timers let the test trigger one heartbeat after the lock disappears.
     vi.useFakeTimers();
@@ -746,5 +824,23 @@ describe("useEditLock", () => {
     expect(lockPostBodies.filter(({ action }) => action === "acquire")).toHaveLength(1);
 
     vi.useRealTimers();
+  });
+
+  it("does not start lock polling when edit locking is disabled", async () => {
+    function DisabledHarness() {
+      useEditLock({
+        formId: "test-form-id",
+        enabled: false,
+        sessionId: "session-1",
+      });
+
+      return null;
+    }
+
+    await render(<DisabledHarness />);
+
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });

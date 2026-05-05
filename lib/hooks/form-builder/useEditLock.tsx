@@ -14,6 +14,7 @@ import {
   EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
 } from "@root/constants";
 import { useEditLockInactiveUser } from "./useEditLockInactiveTimeout";
+import { normalizeEditLockRedirectIdleMs } from "@lib/utils/form-builder/editLockRedirectIdleMs";
 
 const SERVER_STATE_SYNC_MAX_ATTEMPTS = 10;
 const SERVER_STATE_SYNC_RETRY_MS = 500;
@@ -37,6 +38,11 @@ const buildEditLockUrl = (formId: string, requestType: EditLockRequestType) =>
 const buildEditLockEventsUrl = (formId: string) =>
   `/api/templates/${formId}/edit-lock/events?requestType=event-stream`;
 
+const isEditLockDisabledStatus = (status: EditLockStatusPayload | null | undefined) =>
+  Boolean(
+    status && !status.locked && !status.lockedByOther && status.isOwner && status.lock === null
+  );
+
 export const useEditLock = ({
   formId,
   enabled,
@@ -50,7 +56,9 @@ export const useEditLock = ({
 }) => {
   "use memo";
   const [hasSessionExpired, setHasSessionExpired] = useState(false);
+  const [serverLockingEnabled, setServerLockingEnabled] = useState(enabled);
   const { status } = useSession();
+  const normalizedOwnerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(ownerIdleTimeoutMs);
   const setEditLock = useTemplateStore((s) => s.setEditLock);
   const setIsLockedByOther = useTemplateStore((s) => s.setIsLockedByOther);
   const setFromRecord = useTemplateStore((s) => s.setFromRecord);
@@ -58,6 +66,7 @@ export const useEditLock = ({
     useTemplateContext();
 
   const isOwnerRef = useRef(false);
+  const ownerLastActivityAtRef = useRef(Date.now());
   const heartbeatRef = useRef<number | null>(null);
   const pollRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
@@ -71,6 +80,8 @@ export const useEditLock = ({
   const { getIsActiveTab, isActiveTab } = useActiveTab({
     coordinationKey: formId,
   });
+
+  const lockingEnabled = enabled && serverLockingEnabled;
 
   const clearTimers = useCallback(() => {
     lockLoopTokenRef.current += 1;
@@ -106,6 +117,15 @@ export const useEditLock = ({
     clearOwnerIdleTimer();
   }, [clearOwnerIdleTimer, setEditLock, setIsLockedByOther]);
 
+  const standDownForDisabledLocking = useCallback(() => {
+    setServerLockingEnabled(false);
+    setHasSessionExpired(false);
+    suppressReleaseRef.current = false;
+    clearTimers();
+    clearEvents();
+    clearLockState();
+  }, [clearEvents, clearLockState, clearTimers]);
+
   const setTakeoverFallbackState = useCallback(() => {
     setIsLockedByOther(true);
     setEditLock(null);
@@ -113,7 +133,33 @@ export const useEditLock = ({
     clearOwnerIdleTimer();
   }, [clearOwnerIdleTimer, setEditLock, setIsLockedByOther]);
 
+  const setSessionExpiredFallbackState = useCallback(() => {
+    setHasSessionExpired(true);
+    clearTimers();
+    setTakeoverFallbackState();
+    clearEvents();
+  }, [clearEvents, clearTimers, setTakeoverFallbackState]);
+
+  // Background tabs can miss the idle timeout callback, so preserve the
+  // session-expired owner path if the lock disappears after that threshold.
+  const shouldShowOwnerSessionExpiredFallback = useCallback(
+    (wasOwner: boolean) => {
+      if (!wasOwner) {
+        return false;
+      }
+
+      if (hasSessionExpired || isOwnerIdleTimeExpired) {
+        return true;
+      }
+
+      return Date.now() - ownerLastActivityAtRef.current >= normalizedOwnerIdleTimeoutMs;
+    },
+    [hasSessionExpired, isOwnerIdleTimeExpired, normalizedOwnerIdleTimeoutMs]
+  );
+
   const handleOwnerActivity = useCallback(() => {
+    ownerLastActivityAtRef.current = Date.now();
+
     if (isOwnerRef.current) {
       startOwnerIdleTimer();
     }
@@ -146,12 +192,9 @@ export const useEditLock = ({
 
   const handleOwnerIdleTimeout = useCallback(async () => {
     // Mark session as expired for this tab (previous owner)
-    setHasSessionExpired(true);
-    clearTimers();
-    setTakeoverFallbackState();
+    setSessionExpiredFallbackState();
     await postAction("release");
-    clearEvents();
-  }, [clearEvents, clearTimers, postAction, setTakeoverFallbackState]);
+  }, [postAction, setSessionExpiredFallbackState]);
 
   ownerIdleTimeoutHandlerRef.current = handleOwnerIdleTimeout;
 
@@ -181,6 +224,7 @@ export const useEditLock = ({
       if (status.isOwner) {
         suppressReleaseRef.current = false;
         if (!wasOwner) {
+          ownerLastActivityAtRef.current = Date.now();
           startOwnerIdleTimer(true);
         }
       } else if (wasOwner || isOwnerIdleTimeExpired) {
@@ -250,6 +294,16 @@ export const useEditLock = ({
   );
 
   useEffect(() => {
+    if (!enabled) {
+      setServerLockingEnabled(false);
+      setHasSessionExpired(false);
+      return;
+    }
+
+    setServerLockingEnabled(true);
+  }, [enabled, formId]);
+
+  useEffect(() => {
     updatedAtRef.current = updatedAt;
   }, [updatedAt]);
 
@@ -310,8 +364,18 @@ export const useEditLock = ({
       }
 
       if (!heartbeatResult) {
+        if (shouldShowOwnerSessionExpiredFallback(wasOwner)) {
+          setSessionExpiredFallbackState();
+          return;
+        }
+
         clearTimers();
         clearLockState();
+        return;
+      }
+
+      if (isEditLockDisabledStatus(heartbeatResult)) {
+        standDownForDisabledLocking();
         return;
       }
 
@@ -328,6 +392,11 @@ export const useEditLock = ({
       }
 
       if (!heartbeatResult.locked) {
+        if (shouldShowOwnerSessionExpiredFallback(wasOwner)) {
+          setSessionExpiredFallbackState();
+          return;
+        }
+
         clearTimers();
         setTakeoverFallbackState();
       }
@@ -337,8 +406,11 @@ export const useEditLock = ({
     clearLockState,
     clearTimers,
     postAction,
+    setSessionExpiredFallbackState,
     setTakeoverFallbackState,
+    standDownForDisabledLocking,
     syncServerState,
+    shouldShowOwnerSessionExpiredFallback,
     updateStore,
   ]);
 
@@ -357,6 +429,11 @@ export const useEditLock = ({
       if (!pollResult) {
         clearTimers();
         clearLockState();
+        return;
+      }
+
+      if (isEditLockDisabledStatus(pollResult)) {
+        standDownForDisabledLocking();
         return;
       }
 
@@ -390,6 +467,7 @@ export const useEditLock = ({
     clearTimers,
     getLockStatus,
     setTakeoverFallbackState,
+    standDownForDisabledLocking,
     syncServerState,
     updateStore,
   ]);
@@ -412,6 +490,10 @@ export const useEditLock = ({
   // When a non-owner tab's active status changes, update polling state accordingly.
   // Only the active tab should have the polling interval active to reduce network traffic.
   useEffect(() => {
+    if (!lockingEnabled) {
+      return;
+    }
+
     // Only applies to non-owners with active-tab coordination enabled
     if (isOwnerRef.current) {
       return;
@@ -424,6 +506,11 @@ export const useEditLock = ({
       } else {
         // Poll immediately to refresh state before next interval tick
         void getLockStatus().then((result) => {
+          if (isEditLockDisabledStatus(result)) {
+            cbRef.current.standDownForDisabledLocking();
+            return;
+          }
+
           if (result) {
             cbRef.current.updateStore(result);
           }
@@ -436,7 +523,7 @@ export const useEditLock = ({
         pollRef.current = null;
       }
     }
-  }, [getLockStatus, isActiveTab]);
+  }, [getLockStatus, isActiveTab, lockingEnabled]);
 
   // The main effect runs whenever "enabled" or "status" changes to start/stop
   // the lock logic. The ref "container" is necessary to hold the latest
@@ -453,6 +540,7 @@ export const useEditLock = ({
     flushDraftBeforeTakeover,
     startTimers,
     setTakeoverFallbackState,
+    standDownForDisabledLocking,
   };
   const cbRef = useRef(callbacks);
   cbRef.current = callbacks;
@@ -460,7 +548,7 @@ export const useEditLock = ({
   startHeartbeatRef.current = startHeartbeat;
 
   useEffect(() => {
-    if (!enabled || status !== "authenticated") {
+    if (!lockingEnabled || status !== "authenticated") {
       cbRef.current.clearTimers();
       cbRef.current.clearLockState();
       return;
@@ -474,6 +562,11 @@ export const useEditLock = ({
 
       if (!statusResult) {
         cbRef.current.clearLockState();
+        return;
+      }
+
+      if (isEditLockDisabledStatus(statusResult)) {
+        cbRef.current.standDownForDisabledLocking();
         return;
       }
 
@@ -501,13 +594,13 @@ export const useEditLock = ({
         }).catch(() => undefined);
       }
     };
-  }, [enabled, formId, sessionId, status]);
+  }, [formId, lockingEnabled, sessionId, status]);
 
   // Manage the shared SSE EventSource connection for edit-lock updates.
   // If an SSE event is missed, the next owner heartbeat or non-owner status poll
   // reconciles state from the server, and EventSource will retry on transient drops.
   useEffect(() => {
-    if (!enabled || status !== "authenticated") {
+    if (!lockingEnabled || status !== "authenticated") {
       cbRef.current.clearEvents();
       return;
     }
@@ -535,7 +628,17 @@ export const useEditLock = ({
         }
         const wasOwner = isOwnerRef.current;
 
+        if (isEditLockDisabledStatus(nextStatus)) {
+          cbRef.current.standDownForDisabledLocking();
+          return;
+        }
+
         if (!nextStatus.locked) {
+          if (shouldShowOwnerSessionExpiredFallback(wasOwner)) {
+            setSessionExpiredFallbackState();
+            return;
+          }
+
           // Lock is free. Stop any non-owner polling and show the takeover fallback state (manual takeover required).
           if (!wasOwner) {
             cbRef.current.clearTimers();
@@ -579,7 +682,14 @@ export const useEditLock = ({
         eventSourceRef.current = null;
       }
     };
-  }, [enabled, formId, status, setTakeoverFallbackState]);
+  }, [
+    formId,
+    lockingEnabled,
+    setSessionExpiredFallbackState,
+    setTakeoverFallbackState,
+    shouldShowOwnerSessionExpiredFallback,
+    status,
+  ]);
 
   const takeover = useCallback(async () => {
     const previousUpdatedAt = updatedAt;
@@ -589,10 +699,14 @@ export const useEditLock = ({
     if (statusResult?.error) {
       throw new Error(statusResult.error);
     }
+    if (isEditLockDisabledStatus(statusResult)) {
+      standDownForDisabledLocking();
+      return;
+    }
     await refreshForm(previousUpdatedAt);
     updateStore(statusResult);
     startTimers(statusResult);
-  }, [postAction, refreshForm, startTimers, updateStore, updatedAt]);
+  }, [postAction, refreshForm, standDownForDisabledLocking, startTimers, updateStore, updatedAt]);
 
   return { takeover, getIsActiveTab, isOwnerIdleTimeExpired, hasSessionExpired };
 };
