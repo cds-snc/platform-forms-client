@@ -14,6 +14,8 @@ const waitForSaveAvailability = async () => {
 
 const saveDraft = vi.fn();
 const saveDraftIfNeeded = vi.fn(async () => ({ status: "skipped" as const }));
+const replace = vi.fn();
+let pathname = "/en/form-builder/test-form-id/translate";
 
 vi.mock("next-auth/react", () => ({
   useSession: () => ({
@@ -29,7 +31,8 @@ vi.mock("next-auth/react", () => ({
 }));
 
 vi.mock("next/navigation", () => ({
-  usePathname: () => "/en/form-builder/test-form-id/translate",
+  usePathname: () => pathname,
+  useRouter: () => ({ replace }),
   useParams: () => ({ locale: "en" }),
 }));
 
@@ -71,6 +74,7 @@ describe("<SaveButton />", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    pathname = "/en/form-builder/test-form-id/translate";
   });
 
   it("shows the generic save error for regular failures", async () => {
@@ -95,5 +99,17 @@ describe("<SaveButton />", () => {
 
     const error = page.getByText("Saving blocked: Avery Smith is editing this form.");
     await expect.element(error).toBeVisible();
+  });
+
+  it("replaces 0000 in the URL after a successful save when a real form id is returned", async () => {
+    pathname = "/en/form-builder/0000/translate";
+    saveDraft.mockResolvedValueOnce({ status: "saved" as const, formId: "real-form-id" });
+
+    await render(<SaveButtonHarness />);
+    await waitForSaveAvailability();
+
+    await page.getByRole("button", { name: "Save draft" }).click();
+
+    expect(replace).toHaveBeenCalledWith("/en/form-builder/real-form-id/translate");
   });
 });

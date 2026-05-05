@@ -13,6 +13,7 @@ export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "erro
 
 type SaveDraftResult = {
   status: SaveDraftStatus;
+  formId?: string;
 };
 
 interface TemplateApiType {
@@ -130,7 +131,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       );
       resetState();
 
-      return { status: "saved" };
+      return { status: "saved", formId: operationResult.formRecord.id };
     } catch {
       return { status: "error" };
     }

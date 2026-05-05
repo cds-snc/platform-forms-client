@@ -11,7 +11,7 @@ import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTempla
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ErrorSaving } from "./ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 
@@ -106,6 +106,7 @@ const ErrorSavingForm = ({
 
 export const SaveButton = () => {
   const { t } = useTranslation("form-builder");
+  const router = useRouter();
   const lockChecksEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
   const { isPublished, id, isLockedByOther, editLock } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
@@ -157,8 +158,17 @@ export const SaveButton = () => {
       setSaveState("error");
       return;
     }
+
+    if (result.status === "saved" && pathname?.includes("/form-builder/0000/")) {
+      const formId = result.formId;
+
+      if (formId && formId !== "0000") {
+        router.replace(pathname.replace("/form-builder/0000/", `/form-builder/${formId}/`));
+      }
+    }
+
     setSaveState("idle");
-  }, [lockOwnerName, lockedByOther, saveDraft, status, t]);
+  }, [lockOwnerName, lockedByOther, pathname, router, saveDraft, status, t]);
 
   useEffect(() => {
     isLockedByOtherRef.current = lockedByOther;
