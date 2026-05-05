@@ -251,7 +251,7 @@
       "amount": "Montant",
       "enterOnlyNumbers": "Saisissez un chiffre.",
       "setNumberFormat": "Définir le format des chiffres",
-      "allowNegative": "permettre les valeurs numériques négatives",
+      "allowNegative": "Permettre les valeurs numériques négatives",
       "decimalPlaces": "Nombre de décimales pouvant être saisies",
       "min": "Valeur minimale",
       "max": "Valeur maximale",
