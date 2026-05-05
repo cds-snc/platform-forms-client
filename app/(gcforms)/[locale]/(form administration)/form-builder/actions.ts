@@ -36,13 +36,16 @@ import { BrandProperties, NotificationsInterval } from "@gcforms/types";
 import { redirect } from "next/navigation";
 import {
   assertTemplateEditLock,
-  shouldEnforceTemplateEditLock,
+  shouldEnforceTemplateEditLockWithVerifiedUserCount,
   TemplateEditLockedError,
 } from "@lib/editLocks";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 
 const assertTemplateEditLockIfEnabled = async (templateId: string, userId: string) => {
-  if (process.env.APP_ENV === "test" || !(await shouldEnforceTemplateEditLock(templateId))) {
+  if (
+    process.env.APP_ENV === "test" ||
+    !(await shouldEnforceTemplateEditLockWithVerifiedUserCount(templateId))
+  ) {
     return;
   }
 

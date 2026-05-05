@@ -17,15 +17,16 @@ import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { checkKeyExists } from "@lib/serviceAccount";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
-import { shouldEnforceTemplateEditLock } from "@lib/editLocks";
 import { getAppSetting } from "@lib/appSettings";
 import { normalizeEditLockRedirectIdleMs } from "@lib/utils/form-builder/editLockRedirectIdleMs";
+import { shouldEnableTemplateEditLock } from "@lib/editLocks";
 import {
   FormBuilderConfigProvider,
   FormBuilderConfig,
   formBuilderConfigDefault,
 } from "@lib/hooks/useFormBuilderConfig";
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
+import { EditLockDebugMarker } from "@formBuilder/components/shared/edit-lock/EditLockDebugMarker";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -48,13 +49,10 @@ export default async function Layout(props: {
 
   const allowGroupsFlag = allowGrouping();
   const allowLockedEditingFlag = await allowLockedEditing();
-  const enforceEditLockFlag =
-    allowLockedEditingFlag && formID && formID !== "0000"
-      ? await shouldEnforceTemplateEditLock(formID)
-      : false;
   const ownerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(
     await getAppSetting("editLockRedirectIdleMs")
   );
+  let assignedUserCount = 0;
 
   if (session && formID && formID !== "0000") {
     const templateWithUsers = await getTemplateWithAssociatedUsers(formID).catch((e) => {
@@ -66,11 +64,22 @@ export default async function Layout(props: {
     });
 
     initialForm = templateWithUsers?.formRecord ?? null;
+    assignedUserCount = templateWithUsers?.users.length ?? 0;
 
     if (initialForm === null) {
       redirect(`/${locale}/404`);
     }
   }
+
+  const enforceEditLockFlag =
+    initialForm !== null
+      ? shouldEnableTemplateEditLock({
+          allowLockedEditing: allowLockedEditingFlag,
+          templateId: formID,
+          isPublished: initialForm.isPublished,
+          assignedUserCount,
+        })
+      : false;
 
   let apiKeyId: string | undefined = undefined;
 
@@ -117,6 +126,11 @@ export default async function Layout(props: {
                   <div className="flex grow flex-row gap-7">
                     <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
                       <div className="sticky top-0">
+                        <EditLockDebugMarker
+                          testId="edit-page-lock-debug"
+                          editLockEnabled={enforceEditLockFlag}
+                          assignedUserCount={assignedUserCount}
+                        />
                         <LeftNavigation id={id} />
                       </div>
                     </div>

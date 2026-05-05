@@ -4,8 +4,8 @@ import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/L
 import { authCheckAndThrow } from "@lib/actions";
 import { Language } from "@lib/types/form-builder-types";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
-import { shouldEnforceTemplateEditLock } from "@lib/editLocks";
 import { getAppSetting } from "@lib/appSettings";
+import { shouldEnforceTemplateEditLockWithVerifiedUserCount } from "@lib/editLocks";
 import { normalizeEditLockRedirectIdleMs } from "@lib/utils/form-builder/editLockRedirectIdleMs";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 import { WaitForId } from "../components/WaitForId";
@@ -25,7 +25,7 @@ export default async function Layout(props: {
   const { t } = await serverTranslation("form-builder", { lang: locale });
   const allowLockedEditingFlag = await allowLockedEditing();
   const enforceEditLockFlag = allowLockedEditingFlag
-    ? await shouldEnforceTemplateEditLock(id)
+    ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(id)
     : false;
   const ownerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(
     await getAppSetting("editLockRedirectIdleMs")
