@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.7] - 2026-05-04
+
+- Support for new Advanced number input validation
+
 ## [2.2.6] - 2026-05-04
 
 - Update vitest to ^4.1.5 for latest features and improvements

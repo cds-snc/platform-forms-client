@@ -41,6 +41,7 @@ export {
 
 export {
   getElementById,
+  getElementOrSubElementById,
   findChoiceIndexByValue,
   isChoiceInputType,
   mapIdsToValues,
@@ -54,3 +55,4 @@ export {
 
 export { isSafeRegex } from "./validation/regex";
 export { isValidRegex } from "./validation/regex";
+export { isNumberInput } from "./utils/isNumberInput";

@@ -7,7 +7,6 @@ type ElementType =
   | "phone"
   | "email"
   | "date"
-  | "number"
   | "repeatableQuestionSet"
   | "attestation"
   | "firstMiddleLastName"
@@ -116,6 +115,15 @@ const updateTextElement = (element: FormElement, type: ElementType) => {
 
 export const createElement = (element: FormElement, type: string) => {
   const newElement = { ...element };
+
+  if (type === "number") {
+    newElement.type = FormElementTypes.numberInput;
+    newElement.properties.validation = {
+      ...newElement.properties.validation,
+      required: newElement.properties.validation?.required || false,
+    };
+    return newElement;
+  }
 
   if (isTextField(type as FormElementTypes)) {
     return updateTextElement(newElement, type as ElementType);

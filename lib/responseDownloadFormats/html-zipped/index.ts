@@ -1,10 +1,14 @@
 import { ResponseHtml } from "../html/components/ResponseHtml";
 
 import { FormResponseSubmissions } from "../types";
+import { Language } from "@root/lib/types/form-builder-types";
 import { transform as transformAggregated } from "../html-aggregated";
 import { serverTranslation } from "@root/i18n";
 
-export const transform = async (formResponseSubmissions: FormResponseSubmissions, lang = "en") => {
+export const transform = async (
+  formResponseSubmissions: FormResponseSubmissions,
+  lang: Language = "en"
+) => {
   const { t } = await serverTranslation("my-forms");
 
   const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;

@@ -15,19 +15,17 @@ export const TextFieldOptions = ({
   const { t } = useTranslation("form-builder");
   const autocompleteSelectedValue = item.properties.autoComplete || "";
 
-  if (
-    item.type !== FormElementTypes.textField ||
-    (item.type === FormElementTypes.textField && item.properties.validation?.type === "number")
-  ) {
+  if (item.type !== FormElementTypes.textField) {
     return null;
   }
 
   return (
     <section className="mt-8 mb-4">
-      <Label htmlFor="">{t("selectAutocomplete")}</Label>
+      <Label htmlFor={`autocomplete--${item.id}`}>{t("selectAutocomplete")}</Label>
       <Hint>{t("selectAutocompleteHint")}</Hint>
       <div>
         <AutocompleteOptions
+          id={`autocomplete--${item.id}`}
           handleChange={(e) => {
             setItem({
               ...item,

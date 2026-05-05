@@ -121,11 +121,79 @@ const testCases: TestCase[] = [
     expectedError: { 1: "input-validation.email" },
   },
   {
-    fieldType: "textField",
+    fieldType: "numberInput",
     subType: "number",
     passConditions: [{ 1: "1" }, { 1: "4" }],
-    failConditions: [{ 1: "two" }, { 1: "four" }],
+    failConditions: [{ 1: "two" }, { 1: "four" }, { 1: "-1" }],
     expectedError: { 1: "input-validation.number" },
+  },
+  {
+    fieldType: "numberInput",
+    subType: "number",
+    passConditions: [{ 1: "-1" }, { 1: "-42" }],
+    failConditions: [{ 1: "two" }],
+    expectedError: { 1: "input-validation.number" },
+    formElement: {
+      properties: {
+        allowNegativeNumbers: true,
+      },
+    },
+  },
+  {
+    fieldType: "numberInput",
+    subType: "number",
+    passConditions: [{ 1: "5" }, { 1: "6" }],
+    failConditions: [{ 1: "4" }],
+    expectedError: { 1: "input-validation.too-small" },
+    formElement: {
+      properties: {
+        validation: {
+          minValue: 5,
+        },
+      },
+    },
+  },
+  {
+    fieldType: "numberInput",
+    subType: "number",
+    passConditions: [{ 1: "5" }, { 1: "4" }],
+    failConditions: [{ 1: "6" }],
+    expectedError: { 1: "input-validation.too-large" },
+    formElement: {
+      properties: {
+        validation: {
+          maxValue: 5,
+        },
+      },
+    },
+  },
+  {
+    fieldType: "numberInput",
+    subType: "number",
+    passConditions: [{ 1: "123" }, { 1: "1234" }],
+    failConditions: [{ 1: "12" }],
+    expectedError: { 1: "input-validation.too-few-digits" },
+    formElement: {
+      properties: {
+        validation: {
+          minDigits: 3,
+        },
+      },
+    },
+  },
+  {
+    fieldType: "numberInput",
+    subType: "number",
+    passConditions: [{ 1: "12" }, { 1: "123" }],
+    failConditions: [{ 1: "1234" }],
+    expectedError: { 1: "input-validation.too-many-digits" },
+    formElement: {
+      properties: {
+        validation: {
+          maxDigits: 3,
+        },
+      },
+    },
   },
   {
     fieldType: "textField",
