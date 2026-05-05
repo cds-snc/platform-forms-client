@@ -1,6 +1,3 @@
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 
 let connectionUrl = "";
@@ -19,35 +16,27 @@ const connectionString = async () => {
       `Missing Database Url Environment Variable, current node env is ${process.env.NODE_ENV}`
     );
   }
+
   let envConnectionString: string = envDatabaseUrl;
 
   // If the passed in variable is a secret ARN retrieve the secret
   if (/^arn\:aws\:secretsmanager\:/i.test(envDatabaseUrl)) {
     const secret = await getAwsSecret(envDatabaseUrl);
+
     if (!secret) {
       throw new Error(
         `Could not retrieve Database Url Secret, current node env is ${process.env.NODE_ENV}`
       );
     }
+
     envConnectionString = secret;
   }
-  connectionUrl = addSSLParameters(envConnectionString);
+
+  connectionUrl = envConnectionString;
 };
 
-const addSSLParameters = (envConnectionString: string) => {
-  if (/\.ca-central-1\.rds\.amazonaws\.com:5432/i.test(envConnectionString)) {
-    const __dirname = path.dirname(fileURLToPath(import.meta.url));
-    const certPath = path.join(__dirname, "global-bundle.pem");
-
-    if (/:5432\/forms$/i.test(envConnectionString)) {
-      return envConnectionString + `?sslmode=verify-full&sslrootcert=${certPath}`;
-    } else {
-      return envConnectionString + `&sslmode=verify-full&sslrootcert=${certPath}`;
-    }
-  }
-  return envConnectionString;
-};
 await connectionString();
+
 export const getConnectionUrl = () => {
   return connectionUrl;
 };
