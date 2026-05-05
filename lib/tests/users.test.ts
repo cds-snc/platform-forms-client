@@ -1,6 +1,7 @@
+import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { prismaMock } from "@jestUtils";
+import { prismaMock } from "@testUtils";
 import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@gcforms/database";
 
@@ -8,25 +9,23 @@ import { AccessControlError } from "@lib/auth/errors";
 import { ManageUsers, Base } from "__utils__/permissions";
 
 import { logEvent } from "@lib/auditLogs";
-jest.mock("@lib/privileges");
+vi.mock("@lib/privileges");
 
 import { JWT } from "next-auth/jwt";
 import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authorization";
 
 const userId = "1";
 
-jest.mock("@lib/auditLogs", () => ({
+vi.mock("@lib/auditLogs", async () => {
+  const __actual0 = await vi.importActual<any>("@lib/auditLogs");
+  return {
   __esModule: true,
-  logEvent: jest.fn(),
-  get AuditLogDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
-  },
-  get AuditLogAccessDeniedDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
-  }
-}));
+  logEvent: vi.fn(),
+  AuditLogDetails: __actual0.AuditLogDetails,
+  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+});
 
-const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+const mockedLogEvent = vi.mocked(logEvent);
 
 describe("User query tests should fail gracefully", () => {
   beforeEach(() => {
@@ -34,7 +33,7 @@ describe("User query tests should fail gracefully", () => {
   });
   it("getOrCreateUser should fail gracefully - create", async () => {
     prismaMock.user.findUnique.mockResolvedValue(null);
-    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({ id: "2" });
+    (prismaMock.privilege.findUnique as MockedFunction<any>).mockResolvedValue({ id: "2" });
     prismaMock.user.create.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Timed out", {
         code: "P2024",
@@ -54,7 +53,7 @@ describe("User query tests should fail gracefully", () => {
         clientVersion: "4.12.0",
       })
     );
-    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({ id: "2" });
+    (prismaMock.privilege.findUnique as MockedFunction<any>).mockResolvedValue({ id: "2" });
     prismaMock.user.create.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Timed out", {
         code: "P2024",
@@ -89,7 +88,7 @@ describe("getOrCreateUser", () => {
       privileges: ManageUsers,
     };
 
-    (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue(user);
+    (prismaMock.user.findUnique as MockedFunction<any>).mockResolvedValue(user);
 
     const result = await getOrCreateUser({ email: "fads@asdf.ca" } as JWT);
     expect(result).toMatchObject(user);
@@ -105,10 +104,10 @@ describe("getOrCreateUser", () => {
     };
 
     prismaMock.user.findUnique.mockResolvedValue(null);
-    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+    (prismaMock.privilege.findUnique as MockedFunction<any>).mockResolvedValue({
       id: "2",
     });
-    (prismaMock.user.create as jest.MockedFunction<any>).mockResolvedValue(user);
+    (prismaMock.user.create as MockedFunction<any>).mockResolvedValue(user);
 
     const result = await getOrCreateUser({
       name: "test",
@@ -160,7 +159,7 @@ describe("getUsers", () => {
       },
     ];
 
-    (prismaMock.user.findMany as jest.MockedFunction<any>).mockResolvedValue(returnedUsers);
+    (prismaMock.user.findMany as MockedFunction<any>).mockResolvedValue(returnedUsers);
 
     const result = await getUsers();
     expect(result).toMatchObject(returnedUsers);

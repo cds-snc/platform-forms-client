@@ -2,15 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import {
-  CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS,
-  CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS,
-} from "@lib/formBuilderEditLockPresence";
+import { CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS } from "@root/constants";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
+
+const RELATIVE_TIME_TICK_MS = 5_000;
 
 const formatRelativeTime = (value: string, locale: string) => {
   const target = new Date(value);
@@ -74,7 +73,7 @@ export const EditLockBanner = ({
 
     const interval = window.setInterval(() => {
       setTimeTick(Date.now());
-    }, CLIENT_SIDE_EDIT_LOCK_TIME_TICK_MS);
+    }, RELATIVE_TIME_TICK_MS);
 
     return () => {
       window.clearInterval(interval);
@@ -98,6 +97,9 @@ export const EditLockBanner = ({
   // If the lock is stale, show "stale" status to encourage takeover. Otherwise, show the actual presence status reported by the server.
   const presenceKey = isStale ? "stale" : (editLock?.presenceStatus ?? "away");
 
+  // If the lock is expired (editLock is null but isLockedByOther is true), show "free to takeover" message
+  const isTakeoverAvailable = isLockedByOther && !editLock;
+  const takeoverAvailableTitle = t("editLock.takeoverAvailableTitle");
   // If the lock is stale, show "stale" status to encourage takeover. Otherwise, show the actual presence status reported by the server.
   const lastActivity =
     hasPresenceDetails && editLock?.lastActivityAt
@@ -122,7 +124,7 @@ export const EditLockBanner = ({
       className="absolute inset-y-0 right-0 -left-7 z-120 bg-slate-900/15"
       role="dialog"
       aria-modal="true"
-      aria-label={t("editLock.title")}
+      aria-label={isTakeoverAvailable ? takeoverAvailableTitle : t("editLock.title")}
       aria-live="polite"
     >
       <div className="sticky top-24 flex justify-center px-6 pt-24">
@@ -137,25 +139,39 @@ export const EditLockBanner = ({
               <WarningIcon className="mt-0.5 size-8 shrink-0 fill-amber-500" />
               <div>
                 <PilotBadge className="mb-3" />
-                <p className="mb-2 text-xl font-semibold text-slate-900">{t("editLock.title")}</p>
-                <p className="text-base text-slate-900">{t("editLock.lockedMessage", { name })}</p>
-                {hasPresenceDetails && (
-                  <div className="mt-3 flex flex-col gap-1 text-sm text-slate-700">
-                    <p>
-                      <span className="font-semibold text-slate-900">
-                        {t("editLock.statusLabel")}
-                      </span>{" "}
-                      {t(`editLock.statuses.${presenceKey}`)}
+                <p className="mb-2 text-xl font-semibold text-slate-900">
+                  {isTakeoverAvailable ? takeoverAvailableTitle : t("editLock.title")}
+                </p>
+                {isTakeoverAvailable ? (
+                  <>
+                    <p className="text-base text-slate-900">
+                      {t("editLock.takeoverAvailableMessage")}
                     </p>
-                    {lastActivity && (
-                      <p>
-                        <span className="font-semibold text-slate-900">
-                          {t("editLock.lastActivityLabel")}
-                        </span>{" "}
-                        {lastActivity}
-                      </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-base text-slate-900">
+                      {t("editLock.lockedMessage", { name })}
+                    </p>
+                    {hasPresenceDetails && (
+                      <div className="mt-3 flex flex-col gap-1 text-sm text-slate-700">
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            {t("editLock.statusLabel")}
+                          </span>{" "}
+                          {t(`editLock.statuses.${presenceKey}`)}
+                        </p>
+                        {lastActivity && (
+                          <p>
+                            <span className="font-semibold text-slate-900">
+                              {t("editLock.lastActivityLabel")}
+                            </span>{" "}
+                            {lastActivity}
+                          </p>
+                        )}
+                      </div>
                     )}
-                  </div>
+                  </>
                 )}
                 {isTakingOver && (
                   <p className="mt-2 text-base text-slate-700">{t("editLock.syncingLatest")}</p>

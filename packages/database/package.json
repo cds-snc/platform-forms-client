@@ -1,45 +1,47 @@
 {
   "name": "@gcforms/database",
-  "version": "1.0.4",
+  "version": "1.0.8",
   "author": "Canadian Digital Service",
   "license": "MIT",
-  "type": "module",
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "packageManager": "yarn@4.10.3",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
         "types": "./dist/index.d.ts",
         "import": "./dist/index.js",
-        "default": "./dist/index.js"
+        "require": "./dist/index.js"
       }
     }
   },
   "scripts": {
     "reset": "prisma migrate reset -f --skip-seed",
     "db:generate": "DATABASE_URL=dummy_url_for_build prisma generate && tsx fixGeneratedPrisma.ts",
-    "db:studio": "sh -c 'prisma studio --url=\"${DATABASE_URL%&uselibpqcompat=true}\"'",
+    "db:studio": "prisma studio --url=\"${DATABASE_URL}&sslmode=prefer\"",
     "db:prod": "prisma migrate deploy && prisma db seed -- --environment production",
     "db:dev": "prisma migrate dev && prisma db seed -- --environment development",
     "db:test": "prisma migrate reset --force && prisma db seed -- --environment test",
-    "clean": "rm -fr ./src/generated",
+    "clean": "rm -fr ./src/generated && rm -fr ./dist",
     "prebuild": "yarn clean && yarn db:generate",
-    "build": "yarn prebuild && tsdown src/index.ts --format cjs,esm --dts --clean --splitting",
+    "build": "yarn prebuild && tsdown",
     "prepack": "yarn build"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^6.17.1",
-    "@prisma/client": "7",
-    "pg": "^8.16.3"
+    "@aws-sdk/client-secrets-manager": "^3.1038.0",
+    "@prisma/adapter-pg": "7.8.0",
+    "@prisma/client": "7.8.0",
+    "pg": "8.20.0"
   },
   "devDependencies": {
     "@types/node": "^24.7.1",
-    "@types/pg": "^8",
-    "prisma": "7",
+    "@types/pg": "8.20.0",
+    "prisma": "7.8.0",
     "ts-command-line-args": "^2.5.1",
     "tsdown": "^0.15.7",
     "tsx": "^4.20.6",

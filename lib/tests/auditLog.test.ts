@@ -1,37 +1,36 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { jest } from "@jest/globals";
+import type { MockedFunction } from "vitest";
 import {
   SQSClient as SQSClientType,
   SendMessageCommand as SendMessageCommandType,
 } from "@aws-sdk/client-sqs";
 import { logEvent as logEventType } from "@lib/auditLogs";
 
-jest.mock("@aws-sdk/client-sqs");
-jest.unmock("@lib/auditLogs");
-jest.mock("@lib/ip", () => {
+vi.mock("@aws-sdk/client-sqs");
+vi.unmock("@lib/auditLogs");
+vi.mock("@lib/ip", () => {
   return {
-    getClientIp: jest.fn(() => Promise.resolve("1.1.1.1")),
+    getClientIp: vi.fn(() => Promise.resolve("1.1.1.1")),
   };
 });
 
-let createdEnv: jest.Replaced<typeof process.env> | undefined = undefined;
+let originalEnv: NodeJS.ProcessEnv | undefined = undefined;
 
 describe("Audit Log Tests", () => {
   beforeEach(() => {
-    createdEnv = jest.replaceProperty(process, "env", {
+    originalEnv = process.env;
+    process.env = {
       ...process.env,
       AUDIT_LOG_QUEUE_URL: "test_queue_url",
-    });
+    };
   });
   afterAll(() => {
-    createdEnv?.restore();
+    if (originalEnv) process.env = originalEnv;
   });
 
   describe("SQS Setup tests", () => {
     // The reinitializtion of modules is required to refresh the SQS Setup state
     beforeEach(async () => {
-      jest.resetModules();
+      vi.resetModules();
     });
     it("Uses the ENV var to set the SQS instance URL", async () => {
       expect(process.env.AUDIT_LOG_QUEUE_URL).toBeTruthy();
@@ -45,13 +44,13 @@ describe("Audit Log Tests", () => {
       await reinitializedLogEvent("1", { type: "User", id: "1" }, "UserSignIn");
       expect(reinitializedSendMessageCommand).toHaveBeenCalledTimes(1);
       expect(
-        (reinitializedSendMessageCommand as jest.MockedFunction<any>).mock.calls[0][0]
+        (reinitializedSendMessageCommand as unknown as MockedFunction<(...args: unknown[]) => unknown>).mock.calls[0][0]
       ).toMatchObject({
         QueueUrl: "test_queue_url",
       });
     });
     it("Uses the call to AWS to set the SQS instance URL", async () => {
-      createdEnv?.restore();
+      delete process.env.AUDIT_LOG_QUEUE_URL;
       expect(process.env.AUDIT_LOG_QUEUE_URL).toBeFalsy();
       const reinitializedLogEvent = await import("@lib/auditLogs").then(
         (module) => module.logEvent
@@ -64,13 +63,13 @@ describe("Audit Log Tests", () => {
       }));
 
       // Remove the env var set by test setup
-      (reinitializedSQSClient.prototype.send as jest.MockedFunction<any>).mockResolvedValue({
+      (reinitializedSQSClient.prototype.send as unknown as MockedFunction<(...args: unknown[]) => unknown>).mockResolvedValue({
         QueueUrl: "aws_test_url",
       });
       await reinitializedLogEvent("1", { type: "User", id: "1" }, "UserSignIn");
       expect(reinitializedSendMessageCommand).toHaveBeenCalledTimes(1);
       expect(
-        (reinitializedSendMessageCommand as jest.MockedFunction<any>).mock.calls[0][0]
+        (reinitializedSendMessageCommand as unknown as MockedFunction<(...args: unknown[]) => unknown>).mock.calls[0][0]
       ).toMatchObject({
         QueueUrl: "aws_test_url",
       });
@@ -78,8 +77,8 @@ describe("Audit Log Tests", () => {
   });
   describe("Functionality Tests", () => {
     let logEvent: typeof logEventType;
-    let mockedSQSClient: jest.MockedClass<typeof SQSClientType>;
-    let mockedSendMessageCommand: jest.MockedClass<typeof SendMessageCommandType>;
+    let mockedSQSClient: MockedFunction<typeof SQSClientType>;
+    let mockedSendMessageCommand: MockedFunction<typeof SendMessageCommandType>;
 
     beforeAll(async () => {
       // Needed because we've already reset and cleared the modules in other tests.
@@ -90,13 +89,13 @@ describe("Audit Log Tests", () => {
         reinitializedSendMessageCommand: module.SendMessageCommand,
         reinitializedSQSClient: module.SQSClient,
       }));
-      mockedSQSClient = jest.mocked(reinitializedSQSClient);
-      mockedSendMessageCommand = jest.mocked(reinitializedSendMessageCommand);
+      mockedSQSClient = vi.mocked(reinitializedSQSClient);
+      mockedSendMessageCommand = vi.mocked(reinitializedSendMessageCommand);
       logEvent = await import("@lib/auditLogs").then((module) => module.logEvent);
     });
     it("Sends a properly formatted log to Audit Log Queue", async () => {
       const currentTimeStamp = Date.now();
-      jest.spyOn(global.Date, "now").mockImplementationOnce(() => currentTimeStamp);
+      vi.spyOn(global.Date, "now").mockImplementationOnce(() => currentTimeStamp);
 
       await logEvent("1", { type: "User", id: "1" }, "UserSignIn");
       expect(mockedSQSClient.prototype.send).toHaveBeenCalledTimes(1);
