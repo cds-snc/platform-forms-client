@@ -2,13 +2,16 @@ import { NextResponse } from "next/server";
 import { middleware, sessionExists } from "@lib/middleware";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { authorization } from "@lib/privileges";
-import { EditLockEvent, getEditLockStatus } from "@lib/editLocks";
+import {
+  EditLockEvent,
+  getEditLockStatus,
+  shouldEnforceTemplateEditLockWithVerifiedUserCount,
+} from "@lib/editLocks";
 import {
   registerActiveEditLockStream,
   subscribeToSharedEditLockEvents,
 } from "@lib/editLockEventStreams";
 import { logMessage } from "@lib/logger";
-import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +33,7 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
     return NextResponse.json({ error: "Invalid or missing formID" }, { status: 400 });
   }
 
-  if (!(await allowLockedEditing())) {
+  if (!(await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID))) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
