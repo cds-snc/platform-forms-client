@@ -77,7 +77,7 @@ describe("Util", () => {
     expect(isValidatedTextType("email" as FormElementTypes)).toEqual(true);
     expect(isValidatedTextType("tel" as unknown as FormElementTypes)).toEqual(true);
     expect(isValidatedTextType("date" as unknown as FormElementTypes)).toEqual(true);
-    expect(isValidatedTextType("number" as FormElementTypes)).toEqual(true);
+    expect(isValidatedTextType("number" as FormElementTypes)).toEqual(false);
   });
 
   it("removes element from group", () => {

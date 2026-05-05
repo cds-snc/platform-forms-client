@@ -51,11 +51,11 @@ export const getRegexByType = (
       error: t("input-validation.regex"), // No error message needed for regex
     },
     number: {
-      regex: /^[\d|.|,| ]+/,
+      regex: /^[\d., ]+$/,
       error: t("input-validation.number"),
     },
     canBeNegativeNumber: {
-      regex: /^-?\d+(\.\d+)?$/,
+      regex: /^-?[\d., ]+$/,
       error: t("input-validation.number"),
     },
     date: {

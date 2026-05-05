@@ -5,10 +5,11 @@ import { RowTable } from "./RowTable";
 import { getProperty } from "@lib/i18nHelpers";
 import { FormRecord } from "@gcforms/types";
 import { TFunction } from "i18next";
+import { Language } from "@root/lib/types/form-builder-types";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
-  lang: string;
+  lang: Language;
   responseID: string;
   submissionDate: number;
   formResponse: Submission;
@@ -116,7 +117,7 @@ export const ResponseSection = ({
       >
         <div
           id={`navTitle${capitalizedLang}`}
-          className="mr-4 bg-gray-800 py-1 pl-3 pr-4 text-white"
+          className="mr-4 bg-gray-800 py-1 pr-4 pl-3 text-white"
         >
           {t("responseTemplate.jumpTo", { lng: lang })}
         </div>
@@ -151,16 +152,17 @@ export const ResponseSection = ({
         submission={formResponse}
         lang={lang}
         data-clipboard-text=""
+        formRecord={formRecord}
       />
 
       <h3 id={`rowTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.rowTable", { lng: lang })}
       </h3>
       <p className="mt-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
-      <div className="mb-8 mt-4">
+      <div className="mt-4 mb-8">
         <div>
           <button
-            className="inline-flex items-center rounded-md border-2 border-solid border-blue bg-blue-default p-3 font-medium leading-[24px] text-white-default transition-all duration-150 ease-in-out hover:border-blue-light hover:bg-blue-light hover:text-white-default focus:border-blue-active focus:bg-blue-focus focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus active:top-0.5 active:border-black active:bg-black active:text-white-default active:outline-[3px] active:outline-offset-2 active:outline-blue-focus disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark"
+            className="border-blue bg-blue-default text-white-default hover:border-blue-light hover:bg-blue-light hover:text-white-default focus:border-blue-active focus:bg-blue-focus focus:text-white-default focus:outline-blue-focus active:text-white-default active:outline-blue-focus disabled:bg-gray-light disabled:text-gray-dark inline-flex items-center rounded-md border-2 border-solid p-3 leading-[24px] font-medium transition-all duration-150 ease-in-out focus:outline focus:outline-[3px] focus:outline-offset-2 active:top-0.5 active:border-black active:bg-black active:outline-[3px] active:outline-offset-2 disabled:cursor-not-allowed disabled:!border-none"
             id={`copyResponseButton${capitalizedLang}`}
             aria-labelledby={`copyResponseLabel${capitalizedLang}`}
             data-clipboard-text=""
@@ -171,7 +173,7 @@ export const ResponseSection = ({
         <div
           id={`copyResponseOutput${capitalizedLang}`}
           aria-live="polite"
-          className="mt-4 hidden text-green"
+          className="text-green mt-4 hidden"
         ></div>
       </div>
 
@@ -180,6 +182,7 @@ export const ResponseSection = ({
         submissionDate={submissionDate}
         submission={formResponse}
         lang={lang}
+        formRecord={formRecord}
       />
       {showCodes && (
         <>
@@ -193,10 +196,10 @@ export const ResponseSection = ({
             {confirmReceiptCode}
           </div>
 
-          <div className="mb-32 mt-4">
+          <div className="mt-4 mb-32">
             <div>
               <button
-                className="inline-flex items-center rounded-md border-2 border-solid border-blue bg-blue-default p-3 font-medium leading-[24px] text-white-default transition-all duration-150 ease-in-out hover:border-blue-light hover:bg-blue-light hover:text-white-default focus:border-blue-active focus:bg-blue-focus focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus active:top-0.5 active:border-black active:bg-black active:text-white-default active:outline-[3px] active:outline-offset-2 active:outline-blue-focus disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark"
+                className="border-blue bg-blue-default text-white-default hover:border-blue-light hover:bg-blue-light hover:text-white-default focus:border-blue-active focus:bg-blue-focus focus:text-white-default focus:outline-blue-focus active:text-white-default active:outline-blue-focus disabled:bg-gray-light disabled:text-gray-dark inline-flex items-center rounded-md border-2 border-solid p-3 leading-[24px] font-medium transition-all duration-150 ease-in-out focus:outline focus:outline-[3px] focus:outline-offset-2 active:top-0.5 active:border-black active:bg-black active:outline-[3px] active:outline-offset-2 disabled:cursor-not-allowed disabled:!border-none"
                 id={`copyCodeButton${capitalizedLang}`}
                 aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
                 data-clipboard-text={confirmReceiptCode}
@@ -207,7 +210,7 @@ export const ResponseSection = ({
             <div
               id={`copyCodeOutput${capitalizedLang}`}
               aria-live="polite"
-              className="mt-4 hidden text-green"
+              className="text-green mt-4 hidden"
             ></div>
           </div>
         </>

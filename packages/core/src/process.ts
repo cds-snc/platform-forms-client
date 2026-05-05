@@ -10,7 +10,9 @@ import {
   type SubElementTypeMismatch,
   valueMatchesType,
   hasValue,
-} from "./validation/valueMatchesType";
+} from "@gcforms/core";
+
+import { TFunction } from "i18next";
 
 /*
  Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit
@@ -27,9 +29,11 @@ export const validate = ({
 }) => {
   values.currentGroup = currentGroup;
 
+  const identityT = ((key: string) => key) as unknown as TFunction<"common">;
+
   const errors = validateOnSubmit(values, {
     formRecord,
-    t: (str) => str,
+    t: identityT,
   });
   return errors;
 };
@@ -43,7 +47,7 @@ export const validateOnSubmit = (
   values: Responses,
   props: {
     formRecord: PublicFormRecord;
-    t: (str: string) => string;
+    t: TFunction<"common">;
   }
 ): Responses => {
   const { errors } = validateVisibleElements(values, props);
@@ -54,7 +58,7 @@ export const validateVisibleElements = (
   values: Responses,
   props: {
     formRecord: PublicFormRecord;
-    t: (str: string) => string;
+    t: TFunction<"common">;
   }
 ): {
   errors: Responses;

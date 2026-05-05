@@ -46,6 +46,9 @@ const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
 
   if (!type) {
     return elementOptions[1];
+  } else if (type === FormElementTypes.numberInput) {
+    // numberInput elements map to the "number" element option in the dialog
+    selectedType = "number";
   } else if (type === "textField") {
     /**
      * Email, phone, and date fields are specialized text field types.

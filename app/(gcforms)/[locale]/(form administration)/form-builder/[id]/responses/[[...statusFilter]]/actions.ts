@@ -143,14 +143,6 @@ export const getSubmissionsByFormat = AuthenticatedAction(
         const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
         const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
 
-        // If the download format is JSON or CSV, we always use "." as decimal separator
-        const originalDecimalSeparator =
-          lang === "fr" ? tFr("decimalSeparator") : tEn("decimalSeparator");
-        const decimalSeparator =
-          format === DownloadFormat.JSON || format === DownloadFormat.CSV
-            ? "."
-            : originalDecimalSeparator;
-
         const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
         const fullFormTemplate = await getFullTemplateByID(formID);
@@ -238,7 +230,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                             type: subQuestion.type,
                             questionEn: subQuestion.properties.titleEn,
                             questionFr: subQuestion.properties.titleFr,
-                            answer: getAnswerAsString(subQuestion, value, decimalSeparator),
+                            answer: getAnswerAsString(subQuestion, value),
                             ...(subQuestion.type === "formattedDate" && {
                               dateFormat: subQuestion.properties.dateFormat,
                             }),
@@ -308,7 +300,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                   type: question?.type,
                   questionEn: question?.properties.titleEn,
                   questionFr: question?.properties.titleFr,
-                  answer: getAnswerAsString(question, answer, decimalSeparator),
+                  answer: getAnswerAsString(question, answer),
                   ...(question?.type === "formattedDate" && {
                     dateFormat: question.properties.dateFormat,
                   }),
@@ -473,11 +465,7 @@ const getDateAsString = (answer: DateObject | string | object, dateFormat: DateF
   }
 };
 
-const getAnswerAsString = (
-  question: FormElement | undefined,
-  answer: unknown,
-  decimalSeparator: string
-): string => {
+const getAnswerAsString = (question: FormElement | undefined, answer: unknown): string => {
   if (question && question.type === "checkbox") {
     return Array(answer).join(", ");
   }
@@ -487,11 +475,6 @@ const getAnswerAsString = (
       return ""; // If the answer is not an object or does not have a name, return empty string
     }
     return answer.name as string;
-  }
-
-  if (question && question.type === FormElementTypes.textField && question.properties.stepCount) {
-    const answerString = answer as string;
-    return answerString.toString().replace(".", decimalSeparator);
   }
 
   if (question && question.type === "formattedDate") {
