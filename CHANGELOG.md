@@ -5,6 +5,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.12.1](https://github.com/cds-snc/platform-forms-client/compare/v4.12.0...v4.12.1) (2026-05-05)
+
+
+### Bug Fixes
+
+* add tree refresh on lock takeover ([#7026](https://github.com/cds-snc/platform-forms-client/issues/7026)) ([93b3da3](https://github.com/cds-snc/platform-forms-client/commit/93b3da3dde7a254619e1f140e1c11b4b85cc198d))
+* enable batch processing of audit log pull. ([#7034](https://github.com/cds-snc/platform-forms-client/issues/7034)) ([f8f5272](https://github.com/cds-snc/platform-forms-client/commit/f8f5272bdf5cb76b4ab29032b4dbd6eead269c3c))
+* stop race condition that was stopping non-lock-owner polling ([#7059](https://github.com/cds-snc/platform-forms-client/issues/7059)) ([87018b2](https://github.com/cds-snc/platform-forms-client/commit/87018b201ec61f0d428226667d72100ce282ecdc))
+* tree view for unauthenticated users ([#7068](https://github.com/cds-snc/platform-forms-client/issues/7068)) ([c2cf592](https://github.com/cds-snc/platform-forms-client/commit/c2cf592fbe338ec3894a37a54fa99ba101afa46d))
+
+
+### Miscellaneous Chores
+
+* add a Redis Stream cap ([#7051](https://github.com/cds-snc/platform-forms-client/issues/7051)) ([38d9777](https://github.com/cds-snc/platform-forms-client/commit/38d977718d801be8efb075a74dbfa28562ce9ed0))
+* add draft edit presence enabled setting ([#7030](https://github.com/cds-snc/platform-forms-client/issues/7030)) ([71d6c92](https://github.com/cds-snc/platform-forms-client/commit/71d6c928b804d9af2ba3f0eb7399080570aa2008))
+* add edit lock ms setting ([#7058](https://github.com/cds-snc/platform-forms-client/issues/7058)) ([79e5afd](https://github.com/cds-snc/platform-forms-client/commit/79e5afdc9772d626d3bb8f2eaae92c3a29db2b45))
+* add edit session expired overlay ([#7057](https://github.com/cds-snc/platform-forms-client/issues/7057)) ([1bd0d16](https://github.com/cds-snc/platform-forms-client/commit/1bd0d16c30b6ee684639ad5862dd52d083155e7e))
+* add SSL support to Prisma/Postgres connection ([#7050](https://github.com/cds-snc/platform-forms-client/issues/7050)) ([ab24505](https://github.com/cds-snc/platform-forms-client/commit/ab2450596bc9cf21f111e36411f54b17b90662e7))
+* Add Standards Council of Canada to allowed email domains ([#7061](https://github.com/cds-snc/platform-forms-client/issues/7061)) ([bb93fc5](https://github.com/cds-snc/platform-forms-client/commit/bb93fc5c32008cc65f4bc96e71f054c0ed9f8b2b))
+* added missing global-bundle.pem file output folder in @gcforms/database package ([#7084](https://github.com/cds-snc/platform-forms-client/issues/7084)) ([e856b43](https://github.com/cds-snc/platform-forms-client/commit/e856b43bbae00d697a2b8475ceaa44c36488af27))
+* adding comments for edit lock ([#7046](https://github.com/cds-snc/platform-forms-client/issues/7046)) ([e3d0c6d](https://github.com/cds-snc/platform-forms-client/commit/e3d0c6d4e34dadcb1d1d216b76e9e80f9a039421))
+* cleanup some missed jest references  ([#7069](https://github.com/cds-snc/platform-forms-client/issues/7069)) ([6e6fd55](https://github.com/cds-snc/platform-forms-client/commit/6e6fd55f1a4fedb86408e38f33cbd1dca47e3fc0))
+* delete legacy deployment pipeline related content ([#7042](https://github.com/cds-snc/platform-forms-client/issues/7042)) ([d5e18d6](https://github.com/cds-snc/platform-forms-client/commit/d5e18d6787f00a4cfc9a453b76318e937801d075))
+* Display the error when an audit log fails. ([#7032](https://github.com/cds-snc/platform-forms-client/issues/7032)) ([cbcd360](https://github.com/cds-snc/platform-forms-client/commit/cbcd360421ed5c7078707a5faca7820a90ba4d99))
+* edit lock use idle session setting ([#7077](https://github.com/cds-snc/platform-forms-client/issues/7077)) ([fb2ffc4](https://github.com/cds-snc/platform-forms-client/commit/fb2ffc46fb6b2aa7717777b5393f359054a06661))
+* fix db studio connection URL ([#7080](https://github.com/cds-snc/platform-forms-client/issues/7080)) ([be09e0f](https://github.com/cds-snc/platform-forms-client/commit/be09e0f4e1901c3054f93d9ed2e35b339cc294f6))
+* fix redis type for streams ([#7047](https://github.com/cds-snc/platform-forms-client/issues/7047)) ([366e4a2](https://github.com/cds-snc/platform-forms-client/commit/366e4a2d521a2d117db8af4d397f14da3fc8c065))
+* invalidate user count on accept invite ([#7078](https://github.com/cds-snc/platform-forms-client/issues/7078)) ([9bbcf43](https://github.com/cds-snc/platform-forms-client/commit/9bbcf43d74fe5b94f298938d687b78fa646f2653))
+* invalidate user count on accept invite ([#7078](https://github.com/cds-snc/platform-forms-client/issues/7078)) ([fafb2d8](https://github.com/cds-snc/platform-forms-client/commit/fafb2d8b56ea7cc9d8fddae87a0ac9fe4a8fbce9))
+* leader tab polling for non lock owner ([#7048](https://github.com/cds-snc/platform-forms-client/issues/7048)) ([1e71f22](https://github.com/cds-snc/platform-forms-client/commit/1e71f22f51ae6351b27e6962d56035765bd53850))
+* lock-owner presence handling ([#7062](https://github.com/cds-snc/platform-forms-client/issues/7062)) ([e4900d4](https://github.com/cds-snc/platform-forms-client/commit/e4900d48b417a0c0d2f544fe063f443da765a322))
+* migrate jest to vitest ([#7064](https://github.com/cds-snc/platform-forms-client/issues/7064)) ([b5f3106](https://github.com/cds-snc/platform-forms-client/commit/b5f31069cd5879685ac5b6b10b3d8747e03a3552))
+* move recheck dependency from main app to core package ([#7049](https://github.com/cds-snc/platform-forms-client/issues/7049)) ([ae96ae8](https://github.com/cds-snc/platform-forms-client/commit/ae96ae873e2a503bba310aa5b007422c1f04d816))
+* Package Prisma into own NPM package ([#6233](https://github.com/cds-snc/platform-forms-client/issues/6233)) ([a038fd7](https://github.com/cds-snc/platform-forms-client/commit/a038fd7da786270538ca28391d4c35b0b5ee4710))
+* prebuild was being run on database package ([#7043](https://github.com/cds-snc/platform-forms-client/issues/7043)) ([c6ec7b9](https://github.com/cds-snc/platform-forms-client/commit/c6ec7b9a2392e47f84ad01b806fdb524d20cdb9f))
+* Re-enable audit log alerts. ([#7035](https://github.com/cds-snc/platform-forms-client/issues/7035)) ([73d8e99](https://github.com/cds-snc/platform-forms-client/commit/73d8e9971d3f72e057c1e3f0bb878c526e0cf834))
+* rename leader tab ([#7052](https://github.com/cds-snc/platform-forms-client/issues/7052)) ([cd65d27](https://github.com/cds-snc/platform-forms-client/commit/cd65d27d2a28405aae47a30644ef2f3785e437e1))
+* rework Github actions to let AWS CodePipeline handle deployment process in production ([a560201](https://github.com/cds-snc/platform-forms-client/commit/a5602016707b3f8e1d8421f726b833c976a0ccfb))
+* rework Github actions to let AWS CodePipeline handle the deployment process in production ([#6979](https://github.com/cds-snc/platform-forms-client/issues/6979)) ([a560201](https://github.com/cds-snc/platform-forms-client/commit/a5602016707b3f8e1d8421f726b833c976a0ccfb))
+* tweak URL when launching Prisma Studio ([#7054](https://github.com/cds-snc/platform-forms-client/issues/7054)) ([b75953d](https://github.com/cds-snc/platform-forms-client/commit/b75953d949a79583eda30b47384b1c607ee3482b))
+* update edit lock checks ([#7088](https://github.com/cds-snc/platform-forms-client/issues/7088)) ([1c42e9b](https://github.com/cds-snc/platform-forms-client/commit/1c42e9be05f6c9c888ffbc17a376a56171cbbcea))
+* update GitHub Actions to support Node.js 24 ([9a61c43](https://github.com/cds-snc/platform-forms-client/commit/9a61c4347e43da00d785c915ff5c7700ca885e49))
+* update node version 24 for github actions ([#7087](https://github.com/cds-snc/platform-forms-client/issues/7087)) ([9a61c43](https://github.com/cds-snc/platform-forms-client/commit/9a61c4347e43da00d785c915ff5c7700ca885e49))
+* update test suite packages ([#7081](https://github.com/cds-snc/platform-forms-client/issues/7081)) ([f539f8f](https://github.com/cds-snc/platform-forms-client/commit/f539f8f9286e192498391624f5ac10e0e9b1d552))
+* update to indicate form has free lock ([#7065](https://github.com/cds-snc/platform-forms-client/issues/7065)) ([1e75eb8](https://github.com/cds-snc/platform-forms-client/commit/1e75eb8a0c8245682b8ae1d43f954de08723cca6))
+
 ## [4.12.0](https://github.com/cds-snc/platform-forms-client/compare/v4.11.0...v4.12.0) (2026-04-23)
 
 
