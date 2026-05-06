@@ -25,17 +25,11 @@ const LOCKED_SECTIONS = {
 } as const;
 
 const PAGE_WIDTH = 260;
-const PAGE_COLLAPSED_WIDTH = 190;
 const PAGE_HEADER_HEIGHT = 48;
 const PAGE_CHILD_HEIGHT = 60;
 const PAGE_CHILD_GAP = 8;
 const PAGE_PADDING = 12;
 const PAGE_MIN_HEIGHT = 144;
-const PAGE_COLLAPSED_HEADER_HEIGHT = 36;
-const PAGE_COLLAPSED_CHILD_HEIGHT = 30;
-const PAGE_COLLAPSED_CHILD_GAP = 2;
-const PAGE_COLLAPSED_PADDING = 6;
-const PAGE_COLLAPSED_MIN_HEIGHT = 56;
 const OFFBOARD_HEIGHT = 164;
 const LAYOUT_SPACING_X = 70;
 const LAYOUT_SPACING_Y = 4;
@@ -50,7 +44,6 @@ type StaticChild = {
 type FlowElementNodeData = {
   groupId: string;
   elementId?: number;
-  isCompact?: boolean;
   hasRules?: boolean;
   label?: string;
 };
@@ -462,20 +455,17 @@ export const useFlowData = (
         };
       });
 
-      const hiddenChildCount = childData.filter((child) => !child.isBranchable).length;
-      const canCollapse = !isOffBoardSection && hiddenChildCount > 0;
-      const isCollapsed = canCollapse;
       const visibleChildren = childData;
-      const pageWidth = isCollapsed ? PAGE_COLLAPSED_WIDTH : PAGE_WIDTH;
-      const pageHeaderHeight = isCollapsed ? PAGE_COLLAPSED_HEADER_HEIGHT : PAGE_HEADER_HEIGHT;
-      const pageChildHeight = isCollapsed ? PAGE_COLLAPSED_CHILD_HEIGHT : PAGE_CHILD_HEIGHT;
-      const pageChildGap = isCollapsed ? PAGE_COLLAPSED_CHILD_GAP : PAGE_CHILD_GAP;
-      const pagePadding = isCollapsed ? PAGE_COLLAPSED_PADDING : PAGE_PADDING;
+      const pageWidth = PAGE_WIDTH;
+      const pageHeaderHeight = PAGE_HEADER_HEIGHT;
+      const pageChildHeight = PAGE_CHILD_HEIGHT;
+      const pageChildGap = PAGE_CHILD_GAP;
+      const pagePadding = PAGE_PADDING;
       const pageHeight = isOffBoardSection
         ? OFFBOARD_HEIGHT
         : getPageHeight(
             visibleChildren.length,
-            isCollapsed ? PAGE_COLLAPSED_MIN_HEIGHT : PAGE_MIN_HEIGHT,
+            PAGE_MIN_HEIGHT,
             pageChildHeight,
             pageChildGap,
             pageHeaderHeight,
@@ -489,8 +479,6 @@ export const useFlowData = (
           label: {
             name: label,
           },
-          canCollapse,
-          isCollapsed,
         },
         type: isOffBoardSection ? "offboardNode" : "groupNode",
         style: {
@@ -521,7 +509,6 @@ export const useFlowData = (
             data: {
               groupId: String(key),
               elementId,
-              isCompact: isCollapsed,
               hasRules: typeof elementId === "number" && elementsWithRules.has(elementId),
               label: isStaticChild(child) ? child.data : undefined,
             },
