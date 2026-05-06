@@ -9,7 +9,11 @@ export const isEditPath = (pathname: string | null) => {
   if (!pathname) return false;
   return (
     pathname.includes("/form-builder/") &&
-    (pathname.includes("/edit") || pathname.includes("/translate") || pathname.includes("/preview"))
+    (pathname.includes("/edit") ||
+      pathname.includes("/translate") ||
+      pathname.includes("/preview") ||
+      pathname.includes("/publish") ||
+      pathname.includes("/published"))
   );
 };
 
@@ -76,7 +80,9 @@ export const EditLockProvider = ({
 export const useEditLockContext = () => {
   const context = useContext(EditLockContext);
   if (context === null) {
-    throw new Error("useEditLockContext must be used within EditLockProvider");
+    throw new Error(
+      "useEditLockContext must be used within EditLockProvider. Wrap the calling component in EditLockProvider."
+    );
   }
   return context;
 };
