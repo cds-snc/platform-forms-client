@@ -10,7 +10,6 @@ import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-
 interface ElementNodeData {
   groupId: string;
   elementId?: number;
-  isCompact?: boolean;
   hasRules?: boolean;
   label?: string;
 }
@@ -98,7 +97,7 @@ export const ElementNode = ({ data }: NodeProps) => {
       }}
       className={cn(
         "nodrag nopan group relative flex h-full w-full items-center rounded-lg border-2 bg-white text-left text-slate-700 shadow-sm transition-colors",
-        nodeData.isCompact ? "px-2 py-1 text-[11px]" : "px-4 py-3 text-sm",
+        "px-4 py-3 text-sm",
         isSelected ? "border-dashed border-violet-700" : "border-violet-200",
         (!nodeData.elementId || !isBranchable) && "cursor-default"
       )}
@@ -117,7 +116,7 @@ export const ElementNode = ({ data }: NodeProps) => {
           <div
             className={cn(
               "shrink-0 rounded-full outline-offset-4 outline-slate-800 group-hover:scale-105",
-              nodeData.isCompact ? "ml-1.5 scale-75" : "ml-2"
+              "ml-2"
             )}
           >
             {nodeData.hasRules ? (
