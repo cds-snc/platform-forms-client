@@ -46,4 +46,4 @@ export const CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS = 90_000;
 export const EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS = 5_000;
 
 // Toggle verbose SSE lifecycle logging
-export const SHOULD_DEBUG_EDIT_LOCK_SSE = false;
+export const SHOULD_DEBUG_EDIT_LOCK_SSE = true;

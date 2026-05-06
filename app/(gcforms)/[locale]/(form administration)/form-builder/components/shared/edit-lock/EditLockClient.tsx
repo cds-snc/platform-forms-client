@@ -19,11 +19,15 @@ export const EditLockClient = ({
 }) => {
   const pathname = usePathname();
   const router = useRouter();
-  const { language } = useTemplateStore((s) => ({ language: s.lang }));
+  const { language, isPublished } = useTemplateStore((s) => ({
+    language: s.lang,
+    isPublished: s.isPublished,
+  }));
   const { takeover, getIsActiveTab, hasSessionExpired, isEnabled } = useEditLockContext();
   const { headlessTree } = useTreeRef();
 
-  const showLockedEdit = isEnabled && (!restrictToEditPaths || isEditPath(pathname));
+  const showLockedEdit =
+    isEnabled && !isPublished && (!restrictToEditPaths || isEditPath(pathname));
 
   const handleTakeover = async () => {
     await takeover();

@@ -105,7 +105,7 @@ vi.mock("@lib/integration/redisConnector", () => ({
   })),
 }));
 
-import { requestEditLockTakeoverSave } from "@lib/editLocks";
+import { publishEditLockPublishedEvent, requestEditLockTakeoverSave } from "@lib/editLocks";
 import { subscribeToSharedEditLockEvents } from "@lib/editLockEventStreams";
 
 describe("editLockEventStreams", () => {
@@ -190,6 +190,23 @@ describe("editLockEventStreams", () => {
 
     // Removing the last subscriber should stop the reader.
     await unsubB();
+    expect(mockReaderConnections[0].disconnect).toHaveBeenCalledTimes(1);
+  });
+
+  it("routes published events to subscribers on the matching template", async () => {
+    const events: string[] = [];
+
+    const unsubscribe = await subscribeToSharedEditLockEvents("form-4", (event) => {
+      events.push(event.type);
+    });
+
+    await publishEditLockPublishedEvent("form-4");
+
+    await vi.waitFor(() => {
+      expect(events).toEqual(["published"]);
+    });
+
+    await unsubscribe();
     expect(mockReaderConnections[0].disconnect).toHaveBeenCalledTimes(1);
   });
 });
