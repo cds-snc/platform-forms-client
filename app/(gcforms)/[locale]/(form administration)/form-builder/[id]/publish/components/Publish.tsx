@@ -32,14 +32,10 @@ export const Publish = ({ id }: { id: string }) => {
   const [errorCode, setErrorCode] = useState<null | number>(null);
   const {
     id: storeId,
-    setId,
-    setIsPublished,
     getSchema,
     getName,
   } = useTemplateStore((s) => ({
     id: s.id,
-    setId: s.setId,
-    setIsPublished: s.setIsPublished,
     getSchema: s.getSchema,
     getName: s.getName,
   }));
@@ -78,10 +74,6 @@ export const Publish = ({ id }: { id: string }) => {
     setPublishing(true);
 
     try {
-      // Optimistically set the form as published in the template store
-      setId(id);
-      setIsPublished(true);
-      // Note we don't reset setPublishing(false) here as we're navigating away
       ga("publish_form");
 
       const { formRecord, error } = await updateTemplatePublishedStatus({
@@ -97,9 +89,6 @@ export const Publish = ({ id }: { id: string }) => {
       }
     } catch (e) {
       if ((e as Error).message !== "NEXT_REDIRECT") {
-        // Revert optimistic update
-        setIsPublished(false);
-
         logMessage.error(e);
         setError(true);
         setErrorCode(500);
@@ -195,9 +184,7 @@ export const Publish = ({ id }: { id: string }) => {
           </Button>
           <div
             role="alert"
-            className={`ml-5 inline-block px-3 py-1 
-            ${error ? "bg-red-100 text-red-destructive" : ""}
-            ${!error ? "hidden" : ""}`}
+            className={`ml-5 inline-block px-3 py-1 ${error ? "text-red-destructive bg-red-100" : ""} ${!error ? "hidden" : ""}`}
           >
             <>{error && <p>{t("thereWasAnErrorPublishing")}</p>}</>
           </div>

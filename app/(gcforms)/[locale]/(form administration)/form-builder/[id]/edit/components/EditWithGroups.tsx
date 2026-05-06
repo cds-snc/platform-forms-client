@@ -74,7 +74,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
 
   useEffect(() => {
     if (isPublished) {
-      router.replace(`/${locale}/form-builder/${id}/settings/`);
+      router.replace(`/${locale}/form-builder/${id}/published`);
       return;
     }
   }, [router, isPublished, id, locale]);
@@ -135,7 +135,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
         <h2 id="editPagesHeading" className="whitespace-nowrap" tabIndex={-1}>
           {t("groups.editPagesHeading")}
         </h2>
-        <div className="ml-5 mt-2">
+        <div className="mt-2 ml-5">
           <SaveButton />
         </div>
       </div>
@@ -165,7 +165,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
                 <ExpandingInput
                   id="formTitle"
                   wrapperClassName="w-full laptop:w-3/4 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
-                  className="font-bold placeholder:text-slate-500 laptop:text-3xl"
+                  className="laptop:text-3xl font-bold placeholder:text-slate-500"
                   ref={titleInput}
                   placeholder={t("placeHolderFormTitle")}
                   value={value}
@@ -235,7 +235,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
           summaryText={t("groups.confirmation.summary")}
           beforeContent={
             <div>
-              <h2 className="my-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
+              <h2 className="laptop:mt-0 my-4 text-2xl">{t("richTextConfirmationTitle")}</h2>
               <p className="mb-4">{t("groups.confirmation.beforeText")}</p>
             </div>
           }
@@ -252,7 +252,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
           className={"rounded-lg"}
         />
       )}
-      <div className="my-12 flex max-w-[800px] justify-center laptop:my-10">
+      <div className="laptop:my-10 my-12 flex max-w-[800px] justify-center">
         <AddPageButton className="mr-5" />
         <AddBranchingButton id={id} locale={locale} />
       </div>

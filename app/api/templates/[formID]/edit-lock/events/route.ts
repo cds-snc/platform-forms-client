@@ -76,9 +76,22 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
         controller.enqueue(encoder.encode("event: takeover-requested\ndata: {}\n\n"));
       };
 
+      const sendPublished = () => {
+        if (closed) {
+          return;
+        }
+
+        controller.enqueue(encoder.encode("event: form-published\ndata: {}\n\n"));
+      };
+
       const handleEvent = (event: EditLockEvent) => {
         if (event.type === "takeover-requested") {
           sendTakeoverRequested();
+          return;
+        }
+
+        if (event.type === "published") {
+          sendPublished();
           return;
         }
 

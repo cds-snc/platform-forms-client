@@ -54,7 +54,7 @@ export type EditLockStatus = {
 };
 
 export type EditLockEvent = {
-  type: "updated" | "takeover-requested";
+  type: "updated" | "takeover-requested" | "published";
 };
 
 export class TemplateEditLockedError extends Error {
@@ -265,6 +265,10 @@ const publishEditLockEvent = async (templateId: string, event: EditLockEvent = u
   await redis.expire(streamKey, editLockTtlSeconds * 2);
 };
 
+export const publishEditLockPublishedEvent = async (templateId: string) => {
+  await publishEditLockEvent(templateId, { type: "published" });
+};
+
 const storeRedisLock = async (lock: EditLockInfo) => {
   const redis = await getRedisInstance();
   await redis.set(
@@ -470,10 +474,10 @@ export const shouldEnableTemplateEditLock = ({
 }): boolean =>
   Boolean(
     allowLockedEditing &&
-    templateId &&
-    templateId !== "0000" &&
-    !isPublished &&
-    assignedUserCount >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK
+      templateId &&
+      templateId !== "0000" &&
+      !isPublished &&
+      assignedUserCount >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK
   );
 
 export const invalidateTemplateEditLockUserCountCache = async (
