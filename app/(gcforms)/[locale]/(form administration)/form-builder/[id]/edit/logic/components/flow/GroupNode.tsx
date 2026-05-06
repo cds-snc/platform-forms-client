@@ -11,8 +11,6 @@ type GroupNodeData = {
   label: {
     name: string;
   };
-  canCollapse?: boolean;
-  isCollapsed?: boolean;
 };
 
 const PageSvg = ({ title }: { title?: string }) => {
@@ -53,19 +51,9 @@ export const GroupNode = ({ id, data }: NodeProps) => {
           : "shadow-logicDefault border-indigo-400"
       )}
     >
-      <div
-        className={cn(
-          "border-b border-slate-200",
-          nodeData.isCollapsed ? "px-3 py-1.5" : "px-4 py-4"
-        )}
-      >
+      <div className="border-b border-slate-200 px-4 py-4">
         <div className="flex items-center justify-between gap-2">
-          <div
-            className={cn(
-              "min-w-0 truncate font-semibold text-slate-700",
-              nodeData.isCollapsed ? "text-xs" : "text-lg"
-            )}
-          >
+          <div className="min-w-0 truncate text-base font-semibold text-slate-700">
             {nodeData.label.name}
           </div>
           <button
