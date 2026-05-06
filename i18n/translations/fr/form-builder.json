@@ -250,8 +250,28 @@
       "title": "Chiffre",
       "amount": "Montant",
       "enterOnlyNumbers": "Saisissez un chiffre.",
-      "allowNegative": "permettre les valeurs numériques négatives",
-      "decimalPlaces": "Nombre de décimales pouvant être saisies"
+      "setNumberFormat": "Définir le format des chiffres",
+      "allowNegative": "Permettre les valeurs numériques négatives",
+      "decimalPlaces": "Nombre de décimales pouvant être saisies",
+      "min": "Valeur minimale",
+      "max": "Valeur maximale",
+      "minShort": "Min",
+      "maxShort": "Max",
+      "valueRange": "Série de valeurs",
+      "addValueRange": "Ajouter une série de valeurs",
+      "numberOfDigits": "Nombre de chiffres",
+      "limitNumberOfDigits": "Limiter le nombre de chiffres",
+      "invalidValueRange": "La valeur minimale doit être inférieure à la valeur maximale.",
+      "invalidDigitRange": "Le nombre minimum de chiffres doit être inférieur au nombre maximum de chiffres.",
+      "minDigits": "Nombre minimum de chiffres",
+      "maxDigits": "Nombre maximum de chiffres",
+      "currency": "Devise ($)",
+      "currencyNone": "Aucune",
+      "decimals": "Décimales",
+      "thousandsSeparator": "Séparateur de milliers"
+    },
+    "numberInput": {
+      "title": "Nombre"
     },
     "questionElement": "Éléments",
     "radio": {

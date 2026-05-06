@@ -47,13 +47,13 @@ export const ResponseHtml = ({
           <main id="content">
             <h1 className="sr-only">{`${formRecord.form.titleEn} - ${formRecord.form.titleFr}`}</h1>
             <div className="mt-14" />
-            <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
+            <div className="container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]">
               <ProtectedWarning securityAttribute={securityAttribute} lang="en" t={t} />
             </div>
             <div className="mt-14" />
             <GcdsHeader language={"en"} skipLink={false} showLanguageToggle={false} pathname="" />
 
-            <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
+            <div className="container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]">
               <ResponseSection
                 formRecord={formRecord}
                 confirmReceiptCode={confirmationCode}
@@ -69,12 +69,12 @@ export const ResponseHtml = ({
             <div className="mt-20" />
             <div lang="fr">
               <div className="mt-14" />
-              <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
+              <div className="container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]">
                 <ProtectedWarning securityAttribute={securityAttribute} lang="fr" t={t} />
               </div>
               <div className="mt-14" />
               <GcdsHeader language={"fr"} skipLink={false} showLanguageToggle={false} pathname="" />
-              <div className="gc-formview container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
+              <div className="gc-formview container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]">
                 <ResponseSection
                   formRecord={formRecord}
                   confirmReceiptCode={confirmationCode}

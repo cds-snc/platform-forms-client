@@ -31,6 +31,7 @@ import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
 import { AddressComplete } from "@clientComponents/forms/AddressComplete/AddressComplete";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
+import { isNumberInput } from "@gcforms/core";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -98,12 +99,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
-  const textType: HTMLTextInputTypeAttribute =
+  const textType: Exclude<HTMLTextInputTypeAttribute, "number"> =
     element.properties?.validation?.type &&
-    ["email", "name", "number", "password", "search", "tel", "url"].includes(
+    ["email", "name", "password", "search", "tel", "url"].includes(
       element.properties.validation.type
     )
-      ? (element.properties.validation.type as HTMLTextInputTypeAttribute)
+      ? (element.properties.validation.type as Exclude<HTMLTextInputTypeAttribute, "number">)
       : "text";
 
   const spellCheck =
@@ -133,7 +134,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   switch (element.type) {
     case FormElementTypes.textField:
-      if (textType === "number") {
+    case FormElementTypes.numberInput:
+      // Render NumberInputs with backwards compatibility
+      // for legacy number inputs that were stored as
+      // text fields with validation.type "number"
+      if (isNumberInput(element)) {
         return (
           <div className="focus-group gcds-input-wrapper">
             {labelComponent}
@@ -144,10 +149,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
               required={isRequired}
               ariaDescribedBy={description ? `desc-${id}` : undefined}
               placeholder={placeHolder.toString()}
-              autoComplete={element.properties.autoComplete?.toString()}
-              maxLength={element.properties.validation?.maxLength}
               allowNegativeNumbers={element.properties.allowNegativeNumbers}
               stepCount={element.properties.stepCount}
+              currencyCode={element.properties.currencyCode}
+              useThousandsSeparator={element.properties.useThousandsSeparator}
+              minValue={element.properties.validation?.minValue}
+              maxValue={element.properties.validation?.maxValue}
               lang={lang}
             />
           </div>
@@ -411,6 +418,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     case FormElementTypes.combobox:
     case FormElementTypes.formattedDate:
     case FormElementTypes.textField:
+    case FormElementTypes.numberInput:
     case FormElementTypes.textArea:
     case FormElementTypes.addressComplete:
       return "";
