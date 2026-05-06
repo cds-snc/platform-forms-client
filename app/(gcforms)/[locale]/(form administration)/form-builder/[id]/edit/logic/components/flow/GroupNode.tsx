@@ -1,34 +1,23 @@
-import { Handle } from "reactflow";
-import { NodeProps } from "reactflow";
+import { Handle, NodeProps } from "@xyflow/react";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
+import { useTranslation } from "@i18n/client";
+import { useGroupStore } from "@lib/groups/useGroupStore";
 import { cn } from "@lib/utils";
 
-import { getSourceHandlePosition, getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
-import { useGroupStore } from "@lib/groups/useGroupStore";
-import { useElementTitle } from "@lib/hooks/useElementTitle";
-import { useTranslation } from "@i18n/client";
-import { FormElementTypes } from "@lib/types";
-import { GroupNodeType } from "../flow/useFlowData";
+import { getSourceHandlePosition, getTargetHandlePosition } from "./utils";
 
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
-
-const OptionRuleSvg = ({ title }: { title?: string }) => {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={34} height={34} fill="none">
-      {title && <title>{title}</title>}
-      <rect width={33} height={33} x={0.5} y={0.5} fill="#ECFDF5" rx={16.5} />
-      <rect width={33} height={33} x={0.5} y={0.5} stroke="#047857" rx={16.5} />
-      <path
-        fill="#1E293B"
-        d="M10 10v9c0 .55.196 1.02.588 1.413.391.391.862.587 1.412.587h8.2l-1.6 1.6L20 24l4-4-4-4-1.4 1.4 1.6 1.6H12v-9h-2Z"
-      />
-    </svg>
-  );
+type GroupNodeData = {
+  label: {
+    name: string;
+  };
+  canCollapse?: boolean;
+  isCollapsed?: boolean;
 };
 
-const QuestionRuleSvg = ({ title }: { title?: string }) => {
+const PageSvg = ({ title }: { title?: string }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={36} height={36} fill="none">
+    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 36 36" fill="none">
       {title && <title>{title}</title>}
       <rect width={35} height={35} x={0.5} y={0.5} fill="#EDE9FE" rx={17.5} />
       <rect width={35} height={35} x={0.5} y={0.5} stroke="#4338CA" rx={17.5} />
@@ -37,154 +26,71 @@ const QuestionRuleSvg = ({ title }: { title?: string }) => {
   );
 };
 
-export const GroupNode = (node: NodeProps) => {
+export const GroupNode = ({ id, data }: NodeProps) => {
+  const nodeData = data as GroupNodeData;
   const direction = layoutOptions.direction;
+  const isStartNode = id === "start";
   const setId = useGroupStore((state) => state.setId);
   const setSelectedElementId = useGroupStore((state) => state.setSelectedElementId);
-  const selectedElementId = useGroupStore((state) => state.selectedElementId);
   const selectedGroupId = useGroupStore((state) => state.id);
-  const getElement = useGroupStore((state) => state.getElement);
-  const groupIsSelected = selectedGroupId === node.id;
-  const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
+  const groupIsSelected = selectedGroupId === id;
   const { t } = useTranslation("form-builder");
-
-  const { getTitle } = useElementTitle();
   const { togglePanel } = useTreeRef();
 
-  const handleClick = {
-    onClick: () => {
-      setId(node.id);
-      // Reset selected element id
-      setSelectedElementId(0);
-      togglePanel && togglePanel(true);
-    },
-  };
-
-  const nodeClassName =
-    "relative flex w-[100%] min-w-[200px] max-w-[200px] rounded-sm bg-slate-50 p-2 py-3 text-sm text-slate-600 border-red";
-
-  const getDefaultLabelForElement = (elementType: FormElementTypes) => {
-    if (elementType === FormElementTypes.richText) {
-      return t("groups.treeView.emptyPageTextElement");
-    }
-    return t("groups.treeView.emptyFormElement");
+  const handleClick = () => {
+    setId(id);
+    setSelectedElementId(0);
+    togglePanel?.(true);
   };
 
   return (
-    <div>
-      <div>
-        <label
-          htmlFor={node.id}
-          className="inline-block w-5/6 max-w-[200px] truncate text-sm text-slate-600"
-        >
-          {/* Case of Review and End (no name) hide visually but include text required for a label */}
-          {node.data.label || <span className="sr-only">{node.id}</span>}
-        </label>
-      </div>
+    <div
+      className={cn(
+        "relative h-full w-full overflow-x-visible rounded-xl border-2 bg-slate-50/95 transition-colors",
+        "overflow-y-visible",
+        groupIsSelected
+          ? "shadow-logicSelected border-indigo-600 bg-violet-100"
+          : "shadow-logicDefault border-indigo-400"
+      )}
+    >
       <div
-        id={node.id}
         className={cn(
-          "space-y-2 rounded-md border-2 border-indigo-500 p-4 text-white",
-          groupIsSelected
-            ? "bg-violet-200 shadow-logicSelected"
-            : "bg-gray-soft shadow-logicDefault",
-          !groupIsSelected && "focus-within:bg-violet-100 focus-within:border-dashed",
-          "relative "
+          "border-b border-slate-200",
+          nodeData.isCollapsed ? "px-3 py-1.5" : "px-4 py-4"
         )}
       >
-        {/* Don't allow the end or review group rules to be edited */}
-        {node.id !== "end" && node.id !== "review" && (
-          <button
-            {...handleClick}
+        <div className="flex items-center justify-between gap-2">
+          <div
             className={cn(
-              "absolute right-[-20px] top-[-20px] cursor-pointer outline-offset-8 outline-slate-800 hover:scale-125 rounded-full"
+              "min-w-0 truncate font-semibold text-slate-700",
+              nodeData.isCollapsed ? "text-xs" : "text-lg"
             )}
           >
-            <QuestionRuleSvg title={t("groups.editPage", { name: node.data.label })} />
+            {nodeData.label.name}
+          </div>
+          <button
+            onClick={handleClick}
+            className="shrink-0 self-center rounded-full outline-offset-4 outline-slate-800 transition-transform hover:scale-110 [&_svg]:block"
+          >
+            <PageSvg title={t("groups.editPage", { name: nodeData.label.name })} />
           </button>
-        )}
-        {!node.data.children.length && <div className="min-h-[50px] min-w-[200px]"></div>}
-        {node.data.children.map((child: GroupNodeType) => {
-          const selected =
-            selectedElementId === Number(child.id)
-              ? "border-violet-800 border-2 border-dashed"
-              : "border-violet-200 border-2 border-solid";
-
-          const item = getElement(Number(child.id));
-
-          if (!item) {
-            if (
-              child.id === "introduction" ||
-              child.id === "privacy" ||
-              child.id === "confirmation" ||
-              child.id === "review"
-            ) {
-              return (
-                <div key={child.id} className={cn(nodeClassName)}>
-                  {child.data.label}
-                </div>
-              );
-            } else {
-              return null;
-            }
-          }
-
-          // Render "non-option" elements
-          // No click event as we can't select these
-          if (!typesWithOptions.includes(item.type)) {
-            return (
-              <div key={child.id} className={cn(nodeClassName)}>
-                <div className="truncate">
-                  {getTitle(item).substring(0, 300) || (
-                    <span className="italic">
-                      {getDefaultLabelForElement(child.type as FormElementTypes)}
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          }
-
-          // Render "option" elements
-          // This will allow the user to select the next action
-          // based on the option value
-          return (
-            <button
-              key={child.id}
-              onClick={(evt) => {
-                evt.stopPropagation();
-                setId(node.id);
-                setSelectedElementId(Number(child.id));
-                togglePanel && togglePanel(true);
-              }}
-              className={cn(
-                nodeClassName,
-                selected,
-                "focus:border-violet-800 outline-offset-8 outline-slate-800"
-              )}
-            >
-              <div className="w-full truncate pr-8">
-                {getTitle(item).substring(0, 200) || (
-                  <span className="italic">
-                    {getDefaultLabelForElement(child.type as FormElementTypes)}
-                  </span>
-                )}
-              </div>
-              <div className="absolute right-10px top-[6px] cursor-pointer hover:scale-125">
-                <OptionRuleSvg title={t("groups.editRules", { name: node.data.label })} />
-              </div>
-            </button>
-          );
-        })}
-        {node.id !== "end" && (
-          <Handle
-            type="source"
-            position={getSourceHandlePosition(direction)}
-            isConnectable={false}
-          />
-        )}
-        <Handle type="target" position={getTargetHandlePosition(direction)} isConnectable={false} />
+        </div>
       </div>
+
+      <Handle
+        type="source"
+        position={getSourceHandlePosition(direction)}
+        isConnectable={false}
+        className="h-3! w-3! border-2! border-indigo-700! bg-white!"
+      />
+      {!isStartNode ? (
+        <Handle
+          type="target"
+          position={getTargetHandlePosition(direction)}
+          isConnectable={false}
+          className="h-3! w-3! border-2! border-indigo-700! bg-white!"
+        />
+      ) : null}
     </div>
   );
 };

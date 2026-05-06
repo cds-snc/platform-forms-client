@@ -1,12 +1,18 @@
 "use client";
-import React, { useMemo, useId } from "react";
+import React, { useId } from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
-import { FormElement } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { toPlainText } from "@lib/utils/strings";
+
+const ruleTargetTypes: ReadonlySet<string> = new Set([
+  FormElementTypes.radio,
+  FormElementTypes.checkbox,
+  FormElementTypes.dropdown,
+]);
 
 type Choice = {
   label: string;
@@ -46,7 +52,7 @@ const ChoiceSelect = ({
         data-selected={selected}
         onChange={onChange}
         className={cn(
-          "center-right-15px inline-block p-2 border-black border-1 form-builder-dropdown my-0 w-[300px] text-black-default",
+          "center-right-15px form-builder-dropdown text-black-default my-0 inline-block w-[300px] border-1 border-black p-2",
           className
         )}
         aria-labelledby={labelId}
@@ -87,7 +93,7 @@ const QuestionSelect = ({
         data-selected={selected || ""}
         onChange={onChange}
         className={cn(
-          "center-right-15px inline-block p-2 border-black border-1 form-builder-dropdown my-0 w-[300px] text-black-default",
+          "center-right-15px form-builder-dropdown text-black-default my-0 inline-block w-[300px] border-1 border-black p-2",
           className
         )}
         aria-labelledby={labelId}
@@ -123,6 +129,7 @@ export const ConditionalSelector = ({
   updateElementId: (index: number, id: string) => void;
   removeSelector: (index: number) => void;
 }) => {
+  "use memo";
   const currentElement = elements.find((el) => el.id === itemId);
 
   const { t } = useTranslation("form-builder");
@@ -134,57 +141,45 @@ export const ConditionalSelector = ({
 
   const language = translationLanguagePriority;
 
-  const currentRules = useMemo(
-    () => currentElement?.properties.conditionalRules || [],
-    [currentElement?.properties.conditionalRules]
-  );
+  const currentRules = currentElement?.properties.conditionalRules || [];
 
-  const questions = useMemo(() => {
-    const items = elements
-      .filter((item) => {
-        return (
-          item.id !== itemId &&
-          // Prevent creating circular logic by filtering out questions
-          // that already have rules pointing to the current element.
-          !currentRules?.some((rule) => rule.choiceId.split(".")[0] === String(item.id))
-        );
-      })
-      .map((question) => {
-        const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
-        const descKey = localizeField(LocalizedElementProperties.DESCRIPTION, language);
+  const questions = elements
+    .filter((item) => {
+      return (
+        item.id !== itemId &&
+        ruleTargetTypes.has(item.type) &&
+        (item.properties.choices?.length ?? 0) > 0 &&
+        // Prevent creating circular logic by filtering out questions
+        // that already have rules pointing to the current element.
+        !currentRules.some((rule) => rule.choiceId.split(".")[0] === String(item.id))
+      );
+    })
+    .map((question) => {
+      const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
+      const descKey = localizeField(LocalizedElementProperties.DESCRIPTION, language);
 
-        let label = "";
-        if (question.properties[titleKey]) {
-          label = question.properties[titleKey] || "";
-        }
+      let label = "";
+      if (question.properties[titleKey]) {
+        label = question.properties[titleKey] || "";
+      }
 
-        if (label === "" && question.properties[descKey]) {
-          label = question.properties[descKey] || "";
-        }
+      if (label === "" && question.properties[descKey]) {
+        label = question.properties[descKey] || "";
+      }
 
-        const result = { label, value: `${question.id}` };
-        return result;
-      });
+      return { label, value: `${question.id}` };
+    });
 
-    // Prepend empty option with default text
-    items.unshift({ label: t("addConditionalRules.selectQuestion"), value: "" });
-    return items;
-  }, [currentRules, elements, itemId, language, localizeField, t]);
+  questions.unshift({ label: t("addConditionalRules.selectQuestion"), value: "" });
 
   const choiceParentQuestion = choiceId?.split(".")[0] || null;
 
   // The selected element "parent" of the choice
-  const selectedElement = useMemo(
-    () => elements.find((element) => element.id === Number(choiceParentQuestion)),
-    [choiceParentQuestion, elements]
-  );
+  const selectedElement = elements.find((element) => element.id === Number(choiceParentQuestion));
 
-  const choices = useMemo(() => {
-    return selectedElement?.properties.choices?.map((choice, index) => {
-      const result = { label: choice[language], value: `${choiceParentQuestion}.${index}` };
-      return result;
-    });
-  }, [selectedElement, choiceParentQuestion, language]);
+  const choices = selectedElement?.properties.choices?.map((choice, index) => {
+    return { label: choice[language], value: `${choiceParentQuestion}.${index}` };
+  });
 
   const handleQuestionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
