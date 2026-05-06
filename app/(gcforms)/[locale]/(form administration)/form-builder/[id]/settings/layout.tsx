@@ -4,9 +4,6 @@ import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/L
 import { authCheckAndThrow } from "@lib/actions";
 import { Language } from "@lib/types/form-builder-types";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
-import { getAppSetting } from "@lib/appSettings";
-import { shouldEnforceTemplateEditLockWithVerifiedUserCount } from "@lib/editLocks";
-import { normalizeEditLockRedirectIdleMs } from "@lib/utils/form-builder/editLockRedirectIdleMs";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 import { WaitForId } from "../components/WaitForId";
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
@@ -24,12 +21,6 @@ export default async function Layout(props: {
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
   const allowLockedEditingFlag = await allowLockedEditing();
-  const enforceEditLockFlag = allowLockedEditingFlag
-    ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(id)
-    : false;
-  const ownerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(
-    await getAppSetting("editLockRedirectIdleMs")
-  );
 
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
 
@@ -48,13 +39,7 @@ export default async function Layout(props: {
       <h1>{t("gcFormsSettings")}</h1>
       <SettingsNavigation id={id} showManageAccess={allowLockedEditingFlag} />
       {allowLockedEditingFlag && <ManageFormAccessDialogContainer formId={id} />}
-      <EditLockClient
-        formId={id}
-        lockedEditingEnabled={enforceEditLockFlag}
-        ownerIdleTimeoutMs={ownerIdleTimeoutMs}
-        restrictToEditPaths={false}
-        reloadOnTakeover={true}
-      >
+      <EditLockClient restrictToEditPaths={false} reloadOnTakeover={true}>
         {children}
       </EditLockClient>
     </>
