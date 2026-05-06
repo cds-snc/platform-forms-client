@@ -4,7 +4,7 @@
  * Oss plan - https://www.xyflow.com/open-source
  */
 
-import { type Node, type Edge } from "reactflow";
+import { type Node, type Edge } from "@xyflow/react";
 
 import d3Hierarchy from "./d3-hierarchy";
 
