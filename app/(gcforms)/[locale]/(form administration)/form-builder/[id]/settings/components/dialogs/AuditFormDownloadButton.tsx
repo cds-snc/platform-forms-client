@@ -274,7 +274,7 @@ export const AuditFormDownloadDialog = ({
 
   return (
     <>
-      <div className="ml-2 inline-block">
+      <div className="inline-block">
         <Button onClick={handleOpenDialog} theme="primary">
           {t("auditDownload.downloadBtnText")}
         </Button>
