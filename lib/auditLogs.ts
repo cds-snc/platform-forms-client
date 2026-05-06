@@ -134,7 +134,6 @@ export const AuditLogDetails = {
   ResetThrottling: "User ${userId} reset throttling rate on form ${formId}",
   DeclinedInvitation: "DeclinedInvitation",
   AcceptedInvitation: "AcceptedInvitation",
-  AccessGranted: "Access granted to ${grantedUserId}",
   CancelInvitation: "CancelInvitation",
   UserInvited: "UserInvited",
   CognitoUserIdentifier: "Cognito user unique identifier (sub): ${userId}",
@@ -205,7 +204,6 @@ type AuditDetailsParams = {
   [AuditLogDetails.ResetThrottling]: { userId: string; formId: string };
   [AuditLogDetails.DeclinedInvitation]: { userEmail: string };
   [AuditLogDetails.AcceptedInvitation]: { userEmail: string };
-  [AuditLogDetails.AccessGranted]: { grantedUserId: string };
   [AuditLogDetails.CancelInvitation]: {
     userId: string;
     invitationEmail: string;
