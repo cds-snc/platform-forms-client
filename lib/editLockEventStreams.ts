@@ -86,7 +86,11 @@ const runReaderLoop = async (templateId: string, state: TemplateReaderState): Pr
           }
 
           const eventType = fieldMap["type"];
-          if (eventType === "updated" || eventType === "takeover-requested") {
+          if (
+            eventType === "updated" ||
+            eventType === "takeover-requested" ||
+            eventType === "published"
+          ) {
             const event: EditLockEvent = { type: eventType };
             state.subscribers.forEach((subscriber) => subscriber(event));
           }
