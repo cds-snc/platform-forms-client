@@ -62,6 +62,7 @@ export const FormElementTypes = {
   contact: "contact",
   combobox: "combobox",
   formattedDate: "formattedDate",
+  numberInput: "numberInput",
   customJson: "customJson",
 } as const;
 export type FormElementTypes = (typeof FormElementTypes)[keyof typeof FormElementTypes];
@@ -81,6 +82,10 @@ export interface ValidationProperties {
   type?: ValidationInputType;
   regex?: string;
   maxLength?: number;
+  minValue?: number;
+  maxValue?: number;
+  minDigits?: number;
+  maxDigits?: number;
   descriptionEN?: string;
   descriptionFR?: string;
   [key: string]: unknown;
@@ -136,6 +141,8 @@ export interface ElementProperties {
   dateFormat?: string;
   allowNegativeNumbers?: boolean;
   stepCount?: number;
+  currencyCode?: string;
+  useThousandsSeparator?: boolean;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;

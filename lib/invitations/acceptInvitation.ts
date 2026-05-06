@@ -11,6 +11,7 @@ import { AuditLogDetails, AuditLogEvent, logEvent } from "@lib/auditLogs";
 import { notifyOwnersOwnerAdded } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { AccessControlError } from "@lib/auth/errors";
+import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 
 /**
  * Accept an invitation.
@@ -82,6 +83,8 @@ export const acceptInvitation = async (invitationId: string) => {
     logMessage.error(`Error assigning user to form: ${e}`);
     throw new UnableToAssignUserToTemplateError();
   });
+
+  await invalidateTemplateEditLockUserCountCache(invitation.templateId);
 
   logEvent(
     ability.user.id,

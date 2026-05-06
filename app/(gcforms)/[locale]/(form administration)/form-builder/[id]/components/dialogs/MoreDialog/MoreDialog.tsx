@@ -45,7 +45,8 @@ export const MoreDialog = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isQuestionIdValid, setIsQuestionIdValid] = React.useState(true);
   const [isCustomRegexValid, setIsCustomRegexValid] = React.useState(true);
-  const isValid = isQuestionIdValid && isCustomRegexValid;
+  const [isNumberFieldOptionsValid, setIsNumberFieldOptionsValid] = React.useState(true);
+  const isValid = isQuestionIdValid && isCustomRegexValid && isNumberFieldOptionsValid;
   const { Event } = useCustomEvent();
   const dialog = useDialogRef();
   const { refs } = useRefsContext();
@@ -116,7 +117,7 @@ export const MoreDialog = () => {
     <>
       {isOpen && (
         <Dialog dialogRef={dialog} actions={actions} handleClose={handleClose} title={dialogTitle}>
-          <div className="p-5">
+          <div className="overflow-hidden p-5">
             <form
               onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
                 updateField(getPathString(item.id), item.properties);
@@ -129,12 +130,16 @@ export const MoreDialog = () => {
                 <Question item={item} setItem={setItem} />
                 <Description item={item} setItem={setItem} />
               </section>
+              <RequiredOptions item={item} setItem={setItem} />
               <AddressCompleteOptions item={item} setItem={setItem} />
               <FormattedDateOptions item={item} setItem={setItem} />
               {/* <ManagedDataOptions item={item} setItem={setItem} /> */}
-              <RequiredOptions item={item} setItem={setItem} />
               <ComboboxStrictValue item={item} setItem={setItem} />
-              <NumberFieldOptions item={item} setItem={setItem} />
+              <NumberFieldOptions
+                item={item}
+                setItem={setItem}
+                setIsValid={setIsNumberFieldOptionsValid}
+              />
               <DynamicRowOptions item={item} setItem={setItem} />
               <TextFieldOptions item={item} setItem={setItem} />
               <CharacterLimitOptions item={item} setItem={setItem} />
@@ -147,7 +152,10 @@ export const MoreDialog = () => {
               />
 
               {item.type !== "dynamicRow" && (
-                <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
+                <InfoDetails
+                  summary={t("moreDialog.apiOptionsSection.title")}
+                  className="text-2xl font-semibold"
+                >
                   <p className="mt-6">{t("moreDialog.apiOptionsSection.description")}</p>
                   <QuestionIdOptions
                     setIsValid={setIsQuestionIdValid}

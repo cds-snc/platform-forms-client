@@ -23,7 +23,7 @@ export const CustomRegexOptions = ({
 
   const elements = useTemplateStore((s) => s.form.elements);
 
-  if (item.type !== "textField" || item.properties.validation?.type === "number") {
+  if (item.type !== FormElementTypes.textField) {
     return null;
   }
 
@@ -78,13 +78,18 @@ export const CustomRegexOptions = ({
 
   return (
     <>
-      <InfoDetails summary={t("moreDialog.customRegex.title")} className="mb-4">
+      <InfoDetails
+        summary={t("moreDialog.customRegex.title")}
+        className="mb-4 text-2xl font-semibold"
+      >
         <section className="mt-6 mb-4">
           <div className="mb-2">
             <p>{t("moreDialog.customRegex.description")}</p>
           </div>
 
-          <Label htmlFor={`questionId-${item.id}`}>{t("moreDialog.customRegex.label")}</Label>
+          <Label htmlFor={`customRegexPattern-${item.id}`}>
+            {t("moreDialog.customRegex.label")}
+          </Label>
           <Input
             id={`customRegexPattern-${item.id}`}
             name={`item${item.id}`}

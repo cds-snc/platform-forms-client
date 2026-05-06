@@ -1,7 +1,24 @@
 import { PrismaClient, Prisma } from "./generated/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { getConnectionUrl } from "./connection";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import fs from "node:fs";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const certPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "global-bundle.pem");
+const connectionUrl = getConnectionUrl();
+
+const adapter = new PrismaPg({
+  connectionString: connectionUrl,
+  // Test environment does not support SSL
+  ...(/\.ca-central-1\.rds\.amazonaws\.com:5432/i.test(connectionUrl) && {
+    ssl: {
+      rejectUnauthorized: true,
+      ca: fs.readFileSync(certPath),
+    },
+  }),
+});
+
 // Instantiate the extended Prisma client to infer its type
 const extendedPrisma = new PrismaClient({ adapter }).$extends({
   model: {
@@ -25,6 +42,7 @@ const extendedPrisma = new PrismaClient({ adapter }).$extends({
     },
   },
 });
+
 type ExtendedPrismaClient = typeof extendedPrisma;
 
 // Use globalThis for broader environment compatibility

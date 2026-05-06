@@ -1,13 +1,12 @@
 import { type LayoutOptions } from "./useAutoLayout";
-import { MarkerType } from "reactflow";
+import { MarkerType } from "@xyflow/react";
 
 export const edgeOptions = {
-  type: "simplebezier",
+  type: "flowEdge",
   selectable: false,
   focusable: false,
   animated: true,
-  markerEnd: { type: MarkerType.ArrowClosed },
-  pathOptions: { offset: 20, type: "straight" },
+  markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16 },
 };
 
 export const layoutOptions: LayoutOptions = {
