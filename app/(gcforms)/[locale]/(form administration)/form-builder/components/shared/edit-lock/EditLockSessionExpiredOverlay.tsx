@@ -4,13 +4,22 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
+import { useEffect, useRef } from "react";
+import { gaEditLock } from "./EditLockGA";
 
 export const EditLockSessionExpiredOverlay = ({
+  formId,
   onReturnToForms,
 }: {
+  formId: string;
   onReturnToForms: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
+
+  // Use a ref so formId doesn't need to be added to the dependency array and potentially cause
+  // the GA to be fired multiple times.
+  const formIdRef = useRef(formId);
+  useEffect(() => gaEditLock({ formId: formIdRef.current, description: "session_expired" }), []);
 
   return (
     <div

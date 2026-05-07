@@ -6,6 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { isEditLockStatus } from "@lib/editLockStatus";
+import { gaEditLock } from "../../../form-builder/components/shared/edit-lock/EditLockGA";
 
 export const DraftEditLink = ({
   href,
@@ -89,6 +90,7 @@ export const DraftEditLink = ({
           dialogRef.current?.close();
           setShowDialog(false);
           navigateToEditor();
+          gaEditLock({ formId, description: "accept_read_only" });
         }}
       >
         {t("continueReadOnly", { ns: "my-forms" })}
@@ -99,6 +101,7 @@ export const DraftEditLink = ({
         onClick={() => {
           dialogRef.current?.close();
           setShowDialog(false);
+          gaEditLock({ formId, description: "decline_read_only" });
         }}
       >
         {t("cancel", { ns: "form-builder" })}

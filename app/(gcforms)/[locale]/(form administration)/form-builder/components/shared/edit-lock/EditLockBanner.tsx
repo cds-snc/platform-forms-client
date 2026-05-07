@@ -8,6 +8,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
+import { gaEditLock } from "./EditLockGA";
 
 const RELATIVE_TIME_TICK_MS = 5_000;
 
@@ -42,9 +43,11 @@ const formatRelativeTime = (value: string, locale: string) => {
 };
 
 export const EditLockBanner = ({
+  formId,
   takeover,
   getIsActiveTab,
 }: {
+  formId: string;
   takeover: () => Promise<void>;
   getIsActiveTab: () => boolean;
 }) => {
@@ -52,6 +55,7 @@ export const EditLockBanner = ({
   const { isLockedByOther, editLock } = useTemplateStore((s) => ({
     isLockedByOther: s.isLockedByOther,
     editLock: s.editLock,
+    formId: s.id,
   }));
   const bannerRef = useRef<HTMLDivElement | null>(null);
   const [isTakingOver, setIsTakingOver] = useState(false);
@@ -112,6 +116,14 @@ export const EditLockBanner = ({
     try {
       await takeover();
       toast.success(t("editLock.syncedLatest"), "wide");
+
+      const description = isTakeoverAvailable
+        ? "takeover_available_lock"
+        : isStale
+          ? "takeover_stale_lock"
+          : "takeover_lock";
+      const extra = lastActivity ? { lastActivity } : undefined;
+      gaEditLock({ formId, description, extra });
     } catch (error) {
       setTakeoverError(true);
     } finally {
