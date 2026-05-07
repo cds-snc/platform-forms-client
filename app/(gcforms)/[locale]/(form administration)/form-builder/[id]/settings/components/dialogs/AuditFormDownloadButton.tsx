@@ -7,6 +7,8 @@ import { Button } from "@clientComponents/globals";
 import { getFormEvents } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 
+import { toast } from "@formBuilder/components/shared/Toast";
+
 import { Dialog, useDialogRef } from "../../../../components/shared/Dialog";
 import { FormProperties } from "@root/lib/types";
 
@@ -124,7 +126,7 @@ const AuditFormDownloadButton = ({
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
-      alert(t("auditDownload.errorCreatingDownload"));
+      toast.error(t("auditDownload.errorCreatingDownload"));
     }
   }
 
@@ -139,12 +141,12 @@ const AuditFormDownloadButton = ({
     const events = await getFormEvents(formId, filter);
     if (Array.isArray(events)) {
       if (events.length === 0) {
-        alert(t("auditDownload.noEvents"));
+        toast.error(t("auditDownload.noEvents"));
       } else {
         retrieveFileBlob(events);
       }
     } else {
-      alert(t("auditDownload.errorFetchingEvents"));
+      toast.error(t("auditDownload.errorFetchingEvents"));
     }
   };
 
