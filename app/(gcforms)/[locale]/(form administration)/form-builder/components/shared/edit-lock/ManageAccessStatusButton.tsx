@@ -44,7 +44,7 @@ export const ManageAccessStatusButton = ({
           aria-label={label}
           onClick={() => Event.fire("open-form-access-dialog")}
           className={[
-            "flex size-11 items-center justify-center rounded-full border transition-colors",
+            "flex size-11 cursor-pointer items-center justify-center rounded-full border transition-colors",
             "focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 focus:outline-none",
             editLockEnabled
               ? "border-emerald-300 bg-emerald-50 text-emerald-700"
