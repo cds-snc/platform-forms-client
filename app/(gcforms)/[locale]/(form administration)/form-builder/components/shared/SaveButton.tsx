@@ -15,10 +15,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { ErrorSaving } from "./ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 
-const sleep = async (sleepTimeInSeconds = 0, sleepTimeInMS = 0) => {
-  return new Promise((resolve) => setTimeout(resolve, sleepTimeInMS + sleepTimeInSeconds * 1000));
-};
-
 type SaveState = "idle" | "error" | "locked";
 
 const SaveDraft = ({
@@ -167,7 +163,6 @@ export const SaveButton = () => {
       const formId = result.formId;
 
       if (formId && formId !== "0000") {
-        await sleep(3, 0);
         router.replace(pathname.replace("/form-builder/0000/", `/form-builder/${formId}/`));
       }
     }
