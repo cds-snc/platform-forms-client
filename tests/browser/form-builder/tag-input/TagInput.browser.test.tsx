@@ -198,7 +198,7 @@ describe("<TagInput />", () => {
 
     const tags = document.querySelectorAll(".gc-tag");
     expect(tags.length).toBe(5);
-    const tagTexts = Array.from(tags).map(t => t.textContent);
+    const tagTexts = Array.from(tags).map((t) => t.textContent);
     expect(tagTexts).not.toContain("three");
   });
 
@@ -216,7 +216,7 @@ describe("<TagInput />", () => {
     removeButton.click();
 
     // Wait for update
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     const liveRegion = document.querySelector("#tag-input-live-region");
     expect(liveRegion).toBeTruthy();
@@ -291,7 +291,7 @@ describe("<TagInput />", () => {
     removeButton.click();
 
     // Wait for the tag to be removed by checking the DOM
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
     const tags = document.querySelectorAll(".gc-tag");
     expect(tags.length).toBe(1);
     expect(onTagRemove).toHaveBeenCalledWith("Tag one");
@@ -355,7 +355,9 @@ describe("<TagInput />", () => {
     expect(errorDivs.length).toBe(2);
 
     const errorContainer = page.getByTestId("tag-input-error");
-    await expect.element(errorContainer).toHaveTextContent("Tag must be at least 3 characters long");
+    await expect
+      .element(errorContainer)
+      .toHaveTextContent("Tag must be at least 3 characters long");
     await expect.element(errorContainer).toHaveTextContent("Tag must not include numbers");
   });
 
