@@ -132,6 +132,7 @@ export default async function Layout(props: {
                           <LeftNavigation id={id} />
                           {session && allowLockedEditingFlag && (
                             <ManageAccessStatusButton
+                              formId={id}
                               testId="edit-page-lock-debug"
                               editLockEnabled={enforceEditLockFlag}
                               assignedUserCount={assignedUserCount}
