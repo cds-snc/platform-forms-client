@@ -142,7 +142,7 @@ export default async function Layout(props: {
                       </div>
                       <GroupStoreProvider>
                         <div className="relative flex w-full gap-7">
-                          <EditLockClient>
+                          <EditLockClient formId={id}>
                             <main
                               id="content"
                               className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
