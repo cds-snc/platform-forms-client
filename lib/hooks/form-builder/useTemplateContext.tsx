@@ -90,7 +90,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   const savedSnapshot = useRef<TrackedTemplateState | null>(null);
   const saveInFlight = useRef(false);
   const queuedSaveRequested = useRef(false);
-  const queuedSaveWaiters = useRef<Array<(result: SaveDraftResult) => void>>([]);
+  const saveDraftQueue = useRef<Array<(result: SaveDraftResult) => void>>([]);
   const resetState = useCallback(() => {
     templateIsDirty.current = false;
     savedSnapshot.current = null;
@@ -175,7 +175,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     if (saveInFlight.current) {
       queuedSaveRequested.current = true;
       return new Promise<SaveDraftResult>((resolve) => {
-        queuedSaveWaiters.current.push(resolve);
+        saveDraftQueue.current.push(resolve);
       });
     }
 
@@ -187,7 +187,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       latestResult = await drainQueuedSaves(latestResult);
       return latestResult;
     } finally {
-      const waiters = queuedSaveWaiters.current.splice(0);
+      const waiters = saveDraftQueue.current.splice(0);
       saveInFlight.current = false;
 
       for (const resolve of waiters) {
