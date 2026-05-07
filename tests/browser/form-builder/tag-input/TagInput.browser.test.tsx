@@ -198,7 +198,7 @@ describe("<TagInput />", () => {
 
     const tags = document.querySelectorAll(".gc-tag");
     expect(tags.length).toBe(5);
-    const tagTexts = Array.from(tags).map(t => t.textContent);
+    const tagTexts = Array.from(tags).map((t) => t.textContent);
     expect(tagTexts).not.toContain("three");
   });
 
@@ -216,7 +216,7 @@ describe("<TagInput />", () => {
     removeButton.click();
 
     // Wait for update
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     const liveRegion = document.querySelector("#tag-input-live-region");
     expect(liveRegion).toBeTruthy();
@@ -242,6 +242,39 @@ describe("<TagInput />", () => {
     expect(onTagAdd).toHaveBeenCalledWith("New Tag");
   });
 
+  it("adds a tag on blur when configured", async () => {
+    const onTagAdd = vi.fn();
+
+    await render(
+      <div>
+        <TagInput
+          initialTags={[]}
+          onTagAdd={onTagAdd}
+          onBlur={(event, { addTag }) => {
+            const tag = event.currentTarget.value.trim();
+            if (!tag) {
+              return;
+            }
+
+            addTag(tag);
+            event.currentTarget.value = "";
+          }}
+        />
+      </div>
+    );
+
+    const input = page.getByTestId("tag-input");
+    await input.click();
+    await input.fill("blur@example.com");
+    await userEvent.keyboard("{Tab}");
+
+    const tags = document.querySelectorAll(".gc-tag");
+    expect(tags.length).toBe(1);
+    expect(tags[0].textContent).toContain("blur@example.com");
+    expect(onTagAdd).toHaveBeenCalledWith("blur@example.com");
+    await expect.element(input).toHaveValue("");
+  });
+
   it("calls onTagRemove handler when removing a tag", async () => {
     const onTagRemove = vi.fn();
 
@@ -258,7 +291,7 @@ describe("<TagInput />", () => {
     removeButton.click();
 
     // Wait for the tag to be removed by checking the DOM
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
     const tags = document.querySelectorAll(".gc-tag");
     expect(tags.length).toBe(1);
     expect(onTagRemove).toHaveBeenCalledWith("Tag one");
@@ -322,7 +355,45 @@ describe("<TagInput />", () => {
     expect(errorDivs.length).toBe(2);
 
     const errorContainer = page.getByTestId("tag-input-error");
-    await expect.element(errorContainer).toHaveTextContent("Tag must be at least 3 characters long");
+    await expect
+      .element(errorContainer)
+      .toHaveTextContent("Tag must be at least 3 characters long");
     await expect.element(errorContainer).toHaveTextContent("Tag must not include numbers");
+  });
+
+  it("shows validation errors on blur when configured", async () => {
+    const validateTag = (tag: string) => ({
+      isValid: tag.includes("@"),
+      errors: tag.includes("@") ? [] : ["Invalid email"],
+    });
+
+    await render(
+      <div>
+        <TagInput
+          initialTags={[]}
+          validateTag={validateTag}
+          onBlur={(event, { addTag }) => {
+            const tag = event.currentTarget.value.trim();
+            if (!tag) {
+              return;
+            }
+
+            addTag(tag);
+            event.currentTarget.value = "";
+          }}
+        />
+      </div>
+    );
+
+    const input = page.getByTestId("tag-input");
+    await input.click();
+    await input.fill("not-an-email");
+    await userEvent.keyboard("{Tab}");
+
+    const error = page.getByTestId("tag-input-error");
+    await expect.element(error).toHaveTextContent("Invalid email");
+    const tags = document.querySelectorAll(".gc-tag");
+    expect(tags.length).toBe(0);
+    await expect.element(input).toHaveValue("");
   });
 });
