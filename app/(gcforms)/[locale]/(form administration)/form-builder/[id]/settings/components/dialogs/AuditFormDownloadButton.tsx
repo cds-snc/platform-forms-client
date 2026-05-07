@@ -182,7 +182,7 @@ const AuditFormDownloadButton = ({
       actions={actions}
       title={t("auditDownload.dialog.title")}
     >
-      <div className="p-5">
+      <div className="gc-input-checkbox ml-5">
         <div>
           <h3 className="mb-2">{t("auditDownload.dialog.allEventsTitle")}</h3>
           <p className="mb-4">{t("auditDownload.dialog.allEventsDescription")}</p>
@@ -190,62 +190,66 @@ const AuditFormDownloadButton = ({
             type="checkbox"
             id="allEvents"
             name="allEvents"
-            className="mr-2"
+            className="gc-input-checkbox__input"
             checked={allEventsSelected}
             onChange={(e) => handleAllEventsChange(e.target.checked)}
           />
-          <label htmlFor="allEvents">{t("auditDownload.dialog.allEventsCheckbox")}</label>
+          <label htmlFor="allEvents" className="gc-checkbox-label">
+            {t("auditDownload.dialog.allEventsCheckbox")}
+          </label>
           <h3 className="mt-4 mb-2">{t("auditDownload.dialog.specificEventsTitle")}</h3>
-          <p className="mb-4">{t("auditDownload.dialog.specificEventsDescription")}</p>
-          <div>
+          <p className="gc-checkbox-label mb-4">
+            {t("auditDownload.dialog.specificEventsDescription")}
+          </p>
+          <div className="gc-input-checkbox">
             <input
               type="checkbox"
               id="specificEventsformBuilding"
               name="specificEventsformBuilding"
-              className="mr-2"
+              className="gc-input-checkbox__input"
               checked={specificEvents.formBuilding}
               onChange={(e) => handleSpecificEventChange("formBuilding", e.target.checked)}
             />
-            <label htmlFor="specificEventsformBuilding">
+            <label htmlFor="specificEventsformBuilding" className="gc-checkbox-label">
               {t("auditDownload.dialog.specific.formBuilding")}
             </label>
           </div>
-          <div>
+          <div className="gc-input-checkbox">
             <input
               type="checkbox"
               id="specificEventsformCollaboration"
               name="specificEventsformCollaboration"
-              className="mr-2"
+              className="gc-input-checkbox__input"
               checked={specificEvents.formCollaboration}
               onChange={(e) => handleSpecificEventChange("formCollaboration", e.target.checked)}
             />
-            <label htmlFor="specificEventsformCollaboration">
+            <label htmlFor="specificEventsformCollaboration" className="gc-checkbox-label">
               {t("auditDownload.dialog.specific.formCollaboration")}
             </label>
           </div>
-          <div>
+          <div className="gc-input-checkbox">
             <input
               type="checkbox"
               id="specificEventsresponseDownloads"
               name="specificEventsresponseDownloads"
-              className="mr-2"
+              className="gc-input-checkbox__input"
               checked={specificEvents.responseDownloads}
               onChange={(e) => handleSpecificEventChange("responseDownloads", e.target.checked)}
             />
-            <label htmlFor="specificEventsresponseDownloads">
+            <label htmlFor="specificEventsresponseDownloads" className="gc-checkbox-label">
               {t("auditDownload.dialog.specific.responseDownloads")}
             </label>
           </div>
-          <div>
+          <div className="gc-input-checkbox">
             <input
               type="checkbox"
               id="specificEventsapiIntegrations"
               name="specificEventsapiIntegrations"
-              className="mr-2"
+              className="gc-input-checkbox__input"
               checked={specificEvents.apiIntegrations}
               onChange={(e) => handleSpecificEventChange("apiIntegrations", e.target.checked)}
             />
-            <label htmlFor="specificEventsapiIntegrations">
+            <label htmlFor="specificEventsapiIntegrations" className="gc-checkbox-label">
               {t("auditDownload.dialog.specific.apiIntegrations")}
             </label>
           </div>
