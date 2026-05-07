@@ -47,7 +47,3 @@ export const EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS = 5_000;
 
 // Toggle verbose SSE lifecycle logging
 export const SHOULD_DEBUG_EDIT_LOCK_SSE = false;
-
-// Temporary gate for the left-nav manage-access status badge while the underlying
-// invitation-aware edit-lock behavior ships independently.
-export const SHOW_EDIT_LOCK_STATUS_BUTTON = true;

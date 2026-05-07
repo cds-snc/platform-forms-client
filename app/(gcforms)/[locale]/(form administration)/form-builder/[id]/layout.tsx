@@ -28,7 +28,6 @@ import {
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
 import { EditLockProvider } from "@formBuilder/components/shared/edit-lock/EditLockContext";
 import { EditLockDebugMarker } from "@formBuilder/components/shared/edit-lock/EditLockDebugMarker";
-import { SHOW_EDIT_LOCK_STATUS_BUTTON } from "@root/constants";
 import { ManageFormAccessDialogContainer } from "./components/dialogs/ManageFormAccessDialog";
 
 export default async function Layout(props: {
@@ -129,21 +128,13 @@ export default async function Layout(props: {
                     />
                     <div className="flex grow flex-row gap-7">
                       <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
-                        <div
-                          className={
-                            SHOW_EDIT_LOCK_STATUS_BUTTON
-                              ? "sticky top-0 flex h-screen flex-col pb-4"
-                              : "sticky top-0"
-                          }
-                        >
+                        <div className={"sticky top-0 flex h-screen flex-col pb-4"}>
                           <LeftNavigation id={id} />
-                          {SHOW_EDIT_LOCK_STATUS_BUTTON && (
-                            <EditLockDebugMarker
-                              testId="edit-page-lock-debug"
-                              editLockEnabled={enforceEditLockFlag}
-                              assignedUserCount={assignedUserCount}
-                            />
-                          )}
+                          <EditLockDebugMarker
+                            testId="edit-page-lock-debug"
+                            editLockEnabled={enforceEditLockFlag}
+                            assignedUserCount={assignedUserCount}
+                          />
                         </div>
                       </div>
                       <GroupStoreProvider>
