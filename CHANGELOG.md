@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.13.0](https://github.com/cds-snc/platform-forms-client/compare/v4.12.1...v4.13.0) (2026-05-06)
+
+
+### Features
+
+* Advanced NumberInput options ([#6963](https://github.com/cds-snc/platform-forms-client/issues/6963)) ([a255f06](https://github.com/cds-snc/platform-forms-client/commit/a255f065445effd8e8ac89e2356d260edfdfabc5))
+
+
+### Miscellaneous Chores
+
+* add event for edit lock publish flow ([#7098](https://github.com/cds-snc/platform-forms-client/issues/7098)) ([c77c9fa](https://github.com/cds-snc/platform-forms-client/commit/c77c9fa68daf1a3def9623d70c58f3bb5e41f551))
+* fix node widths ([#7095](https://github.com/cds-snc/platform-forms-client/issues/7095)) ([5893365](https://github.com/cds-snc/platform-forms-client/commit/58933654f75f3660eb21046c5fa55a9b5ab32fad))
+* move locked edit context to a shared provider ([#7096](https://github.com/cds-snc/platform-forms-client/issues/7096)) ([49b50bb](https://github.com/cds-snc/platform-forms-client/commit/49b50bbd826e85b34cda20615721044a23fc9cee))
+* rework SSL implementation in @gcforms/database package ([#7090](https://github.com/cds-snc/platform-forms-client/issues/7090)) ([9c19093](https://github.com/cds-snc/platform-forms-client/commit/9c19093a2124951e9628ee793a0ef638b7d42271))
+* Update to React flow 12x ([#7038](https://github.com/cds-snc/platform-forms-client/issues/7038)) ([1570f02](https://github.com/cds-snc/platform-forms-client/commit/1570f0289e22fa227180f56e26e8865efaf0057d))
+
 ## [4.12.1](https://github.com/cds-snc/platform-forms-client/compare/v4.12.0...v4.12.1) (2026-05-05)
 
 
