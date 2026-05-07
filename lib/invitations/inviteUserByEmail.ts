@@ -18,6 +18,7 @@ import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/aud
 import { isValidGovEmail } from "@lib/validation/validation";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
+import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 
 /**
  * Invite someone to the form by email
@@ -84,6 +85,8 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
         `Unable to process inviting user ${email} for form ${formId} by ${user.email}`
       );
     });
+
+  await invalidateTemplateEditLockUserCountCache(formId);
 
   logEvent(
     user.id,

@@ -26,11 +26,15 @@ import { cancelInvitation } from "../cancelInvitation";
 import { declineInvitation } from "../declineInvitation";
 import { logEvent } from "@lib/auditLogs";
 import { mockTemplate } from "./fixtures/Template";
+import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 vi.mock("@lib/privileges");
 vi.mock("@lib/integration/notifyConnector");
 vi.mock("@lib/logger");
 vi.mock("@lib/users");
 vi.mock("@lib/templates");
+vi.mock("@lib/editLocks", () => ({
+  invalidateTemplateEditLockUserCountCache: vi.fn(),
+}));
 vi.mock("@lib/invitations/emailTemplates/inviteToFormsEmailTemplate");
 vi.mock("@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate");
 vi.mock("@lib/invitations/emailTemplates/ownerAddedEmailTemplate");
@@ -38,19 +42,17 @@ vi.mock("@lib/invitations/emailTemplates/ownerAddedEmailTemplate");
 vi.mock("@lib/auditLogs", async () => {
   const __actual0 = await vi.importActual<typeof import("@lib/auditLogs")>("@lib/auditLogs");
   return {
-  __esModule: true,
-  logEvent: vi.fn(),
-  AuditLogDetails: __actual0.AuditLogDetails,
-  AuditLogEvent: __actual0.AuditLogEvent,
-  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+    logEvent: vi.fn(),
+    AuditLogDetails: __actual0.AuditLogDetails,
+    AuditLogEvent: __actual0.AuditLogEvent,
+    AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,
+  };
 });
 
 const userId = "test-user-id";
 vi.mock("@lib/origin", () => ({
   getOrigin: vi.fn().mockReturnValue("http://localhost:3000"),
 }));
-
-
 
 describe("Invitations", () => {
   beforeEach(() => {
@@ -157,6 +159,7 @@ describe("Invitations", () => {
         }),
         "formInvitationToFutureUser"
       );
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
 
     it("should invite a user who already has an account", async () => {
@@ -185,9 +188,7 @@ describe("Invitations", () => {
       (prismaMock.invitation.findFirst as Mock).mockResolvedValue(null);
 
       (
-        inviteToCollaborateEmailTemplate as MockedFunction<
-          typeof inviteToCollaborateEmailTemplate
-        >
+        inviteToCollaborateEmailTemplate as MockedFunction<typeof inviteToCollaborateEmailTemplate>
       ).mockReturnValue("email contents");
 
       await inviteUserByEmail("invited@cds-snc.ca", "form-id", "message");
@@ -208,6 +209,7 @@ describe("Invitations", () => {
         expect.any(Object),
         "formInvitationToExistingUser"
       );
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
 
     it("should reinvite a user whose invitation has expired", async () => {
@@ -283,6 +285,7 @@ describe("Invitations", () => {
         expect.any(Object),
         "formInvitationToFutureUser"
       );
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
   });
 
@@ -336,9 +339,9 @@ describe("Invitations", () => {
         })
       );
 
-      (
-        ownerAddedEmailTemplate as MockedFunction<typeof ownerAddedEmailTemplate>
-      ).mockReturnValue("email contents");
+      (ownerAddedEmailTemplate as MockedFunction<typeof ownerAddedEmailTemplate>).mockReturnValue(
+        "email contents"
+      );
 
       await acceptInvitation("invitation-id");
 
@@ -346,6 +349,7 @@ describe("Invitations", () => {
       expect(prismaMock.invitation.delete).toHaveBeenCalledWith({
         where: { id: "invitation-id" },
       });
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("template-id");
 
       // Log event
       expect(logEvent).toHaveBeenCalledWith(
@@ -353,7 +357,7 @@ describe("Invitations", () => {
         { id: "template-id", type: "Form" },
         "InvitationAccepted",
         "AcceptedInvitation",
-        { "userEmail" : "invited@cds-snc.ca" }
+        { userEmail: "invited@cds-snc.ca" }
       );
 
       // @TODO: these tests need to move to templates.test.ts
@@ -405,6 +409,7 @@ describe("Invitations", () => {
       expect(prismaMock.invitation.delete).toHaveBeenCalledWith({
         where: { id: "invitation-id" },
       });
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("template-id");
     });
 
     it("should throw InvitationNotFoundError if invitation is not found", async () => {
@@ -428,6 +433,7 @@ describe("Invitations", () => {
       await declineInvitation("invitation-id");
 
       expect(prismaMock.invitation.delete).toHaveBeenCalled();
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("template-id");
     });
 
     it("should throw InvitationNotFoundError if invitation is not found", async () => {

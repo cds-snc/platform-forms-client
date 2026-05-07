@@ -3,6 +3,7 @@ import { InvitationNotFoundError } from "./exceptions";
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { AccessControlError } from "@lib/auth/errors";
+import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 
 /**
  * Cancel an invitation
@@ -40,6 +41,7 @@ export const cancelInvitation = async (invitationId: string) => {
 
   // Delete the invitation
   await _deleteInvitation(invitationId);
+  await invalidateTemplateEditLockUserCountCache(invitation.templateId);
 
   logEvent(
     user.id,
