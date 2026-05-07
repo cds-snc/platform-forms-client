@@ -202,6 +202,7 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
               item={item}
               tree={tree}
               onFocus={setActiveGroup}
+              onBlur={() => saveDraftIfNeeded()}
               handleDelete={async (e) => {
                 const deletedItemName = item.getItemName();
 
