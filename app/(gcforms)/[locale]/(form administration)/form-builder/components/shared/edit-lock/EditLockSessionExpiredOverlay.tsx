@@ -17,7 +17,7 @@ export const EditLockSessionExpiredOverlay = ({
   const { t } = useTranslation("form-builder");
 
   // Use a ref so formId doesn't need to be added to the dependency array and potentially cause
-  // the GA to be fired multiple times.
+  // the GA event to be fired multiple times.
   const formIdRef = useRef(formId);
   useEffect(() => gaEditLock({ formId: formIdRef.current, description: "session_expired" }), []);
 
