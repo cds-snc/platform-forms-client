@@ -2,18 +2,18 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import { render } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
-import { EditLockDebugMarker } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/edit-lock/EditLockDebugMarker";
+import { ManageAccessStatusButton } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/edit-lock/ManageAccessStatusButton";
 
 import "@root/styles/app.css";
 
-describe("<EditLockDebugMarker />", () => {
+describe("<ManageAccessStatusButton />", () => {
   beforeAll(() => {
     setupFonts();
   });
 
-  it("renders a visible edit-lock status marker with debug attributes", async () => {
+  it("renders a visible manage access status button with state attributes", async () => {
     await render(
-      <EditLockDebugMarker
+      <ManageAccessStatusButton
         testId="edit-page-lock-debug"
         editLockEnabled={false}
         assignedUserCount={1}
@@ -34,7 +34,7 @@ describe("<EditLockDebugMarker />", () => {
     });
 
     await render(
-      <EditLockDebugMarker
+      <ManageAccessStatusButton
         testId="edit-page-lock-debug"
         editLockEnabled={true}
         assignedUserCount={2}

@@ -18,7 +18,7 @@ const PersonIcon = () => (
   </svg>
 );
 
-export const EditLockDebugMarker = ({
+export const ManageAccessStatusButton = ({
   testId,
   editLockEnabled,
   assignedUserCount,

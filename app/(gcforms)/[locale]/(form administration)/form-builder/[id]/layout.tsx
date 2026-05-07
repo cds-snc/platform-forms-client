@@ -27,7 +27,7 @@ import {
 } from "@lib/hooks/useFormBuilderConfig";
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
 import { EditLockProvider } from "@formBuilder/components/shared/edit-lock/EditLockContext";
-import { EditLockDebugMarker } from "@formBuilder/components/shared/edit-lock/EditLockDebugMarker";
+import { ManageAccessStatusButton } from "@formBuilder/components/shared/edit-lock/ManageAccessStatusButton";
 import { ManageFormAccessDialogContainer } from "./components/dialogs/ManageFormAccessDialog";
 
 export default async function Layout(props: {
@@ -50,7 +50,7 @@ export default async function Layout(props: {
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();
-  await allowLockedEditing();
+  const allowLockedEditingFlag = await allowLockedEditing();
   const ownerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(
     await getAppSetting("editLockRedirectIdleMs")
   );
@@ -130,11 +130,13 @@ export default async function Layout(props: {
                       <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
                         <div className={"sticky top-0 flex h-screen flex-col pb-4"}>
                           <LeftNavigation id={id} />
-                          <EditLockDebugMarker
-                            testId="edit-page-lock-debug"
-                            editLockEnabled={enforceEditLockFlag}
-                            assignedUserCount={assignedUserCount}
-                          />
+                          {session && allowLockedEditingFlag && (
+                            <ManageAccessStatusButton
+                              testId="edit-page-lock-debug"
+                              editLockEnabled={enforceEditLockFlag}
+                              assignedUserCount={assignedUserCount}
+                            />
+                          )}
                         </div>
                       </div>
                       <GroupStoreProvider>
