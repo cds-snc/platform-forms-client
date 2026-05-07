@@ -666,8 +666,17 @@ export const useEditLock = ({
       void cbRef.current.flushDraftBeforeTakeover();
     };
 
+    const handleFormPublished: EventListener = () => {
+      if (isOwnerRef.current) {
+        return;
+      }
+
+      void cbRef.current.syncServerState();
+    };
+
     eventSource.addEventListener("lock-status", handleLockStatus);
     eventSource.addEventListener("takeover-requested", handleTakeoverRequested);
+    eventSource.addEventListener("form-published", handleFormPublished);
     eventSource.onerror = () => {
       if (eventSource.readyState === EventSource.CLOSED && eventSourceRef.current === eventSource) {
         eventSourceRef.current = null;
@@ -677,6 +686,7 @@ export const useEditLock = ({
     return () => {
       eventSource.removeEventListener("lock-status", handleLockStatus);
       eventSource.removeEventListener("takeover-requested", handleTakeoverRequested);
+      eventSource.removeEventListener("form-published", handleFormPublished);
       eventSource.close();
       if (eventSourceRef.current === eventSource) {
         eventSourceRef.current = null;

@@ -1,68 +1,33 @@
 "use client";
 
-import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 import { EditLockSessionExpiredOverlay } from "./EditLockSessionExpiredOverlay";
 import { useRouter } from "next/navigation";
-
-const isEditPath = (pathname: string | null) => {
-  if (!pathname) return false;
-  return (
-    pathname.includes("/form-builder/") &&
-    (pathname.includes("/edit") || pathname.includes("/translate") || pathname.includes("/preview"))
-  );
-};
-
-const makeSessionId = () => {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID();
-  }
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-};
+import { useEditLockContext, isEditPath } from "./EditLockContext";
 
 export const EditLockClient = ({
-  formId,
-  lockedEditingEnabled = true,
-  ownerIdleTimeoutMs,
   children,
   restrictToEditPaths = true,
   reloadOnTakeover = false,
 }: {
-  formId: string;
-  lockedEditingEnabled?: boolean;
-  ownerIdleTimeoutMs?: number;
   children?: React.ReactNode;
   restrictToEditPaths?: boolean;
   reloadOnTakeover?: boolean;
 }) => {
-  "use memo";
   const pathname = usePathname();
   const router = useRouter();
-  const { currentFormId, language } = useTemplateStore((s) => ({
-    currentFormId: s.id,
-    isLockedByOther: s.isLockedByOther,
+  const { language, isPublished } = useTemplateStore((s) => ({
     language: s.lang,
+    isPublished: s.isPublished,
   }));
-  const activeFormId = currentFormId || formId;
-  const enabled =
-    lockedEditingEnabled &&
-    process.env.NEXT_PUBLIC_APP_ENV !== "test" &&
-    (!restrictToEditPaths || isEditPath(pathname)) &&
-    activeFormId !== "0000";
-  const [sessionId] = useState(() => makeSessionId());
-
-  const { takeover, getIsActiveTab, hasSessionExpired } = useEditLock({
-    formId: activeFormId,
-    enabled,
-    sessionId,
-    ownerIdleTimeoutMs,
-  });
-
+  const { takeover, getIsActiveTab, hasSessionExpired, isEnabled } = useEditLockContext();
   const { headlessTree } = useTreeRef();
+
+  const showLockedEdit =
+    isEnabled && !isPublished && (!restrictToEditPaths || isEditPath(pathname));
 
   const handleTakeover = async () => {
     await takeover();
@@ -73,7 +38,7 @@ export const EditLockClient = ({
     }
   };
 
-  if (!enabled) {
+  if (!showLockedEdit) {
     return children ? <>{children}</> : null;
   }
 

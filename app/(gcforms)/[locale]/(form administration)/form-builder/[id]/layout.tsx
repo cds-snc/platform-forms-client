@@ -26,6 +26,7 @@ import {
   formBuilderConfigDefault,
 } from "@lib/hooks/useFormBuilderConfig";
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
+import { EditLockProvider } from "@formBuilder/components/shared/edit-lock/EditLockContext";
 import { EditLockDebugMarker } from "@formBuilder/components/shared/edit-lock/EditLockDebugMarker";
 
 export default async function Layout(props: {
@@ -105,58 +106,60 @@ export default async function Layout(props: {
       <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
         <SaveTemplateProvider>
           <RefStoreProvider>
-            <div className="h-full">
-              <div className="flex min-h-screen flex-col">
-                <Header context="formBuilder" className="mb-0" />
-                <div className="bg-gray-soft flex shrink-0 grow basis-auto flex-col">
-                  <ToastContainer containerId="default" />
-                  <ToastContainer
-                    limit={1}
-                    containerId="wide"
-                    autoClose={10000}
-                    ariaLabel="Notifications: Alt+T"
-                    width="600px"
-                  />
-                  <ToastContainer
-                    containerId="error-persistent"
-                    autoClose={false}
-                    ariaLabel="Error notifications"
-                    width="600px"
-                  />
-                  <div className="flex grow flex-row gap-7">
-                    <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
-                      <div className="sticky top-0">
-                        <EditLockDebugMarker
-                          testId="edit-page-lock-debug"
-                          editLockEnabled={enforceEditLockFlag}
-                          assignedUserCount={assignedUserCount}
-                        />
-                        <LeftNavigation id={id} />
+            <EditLockProvider
+              formId={id}
+              lockedEditingEnabled={enforceEditLockFlag}
+              ownerIdleTimeoutMs={ownerIdleTimeoutMs}
+            >
+              <div className="h-full">
+                <div className="flex min-h-screen flex-col">
+                  <Header context="formBuilder" className="mb-0" />
+                  <div className="bg-gray-soft flex shrink-0 grow basis-auto flex-col">
+                    <ToastContainer containerId="default" />
+                    <ToastContainer
+                      limit={1}
+                      containerId="wide"
+                      autoClose={10000}
+                      ariaLabel="Notifications: Alt+T"
+                      width="600px"
+                    />
+                    <ToastContainer
+                      containerId="error-persistent"
+                      autoClose={false}
+                      ariaLabel="Error notifications"
+                      width="600px"
+                    />
+                    <div className="flex grow flex-row gap-7">
+                      <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
+                        <div className="sticky top-0">
+                          <EditLockDebugMarker
+                            testId="edit-page-lock-debug"
+                            editLockEnabled={enforceEditLockFlag}
+                            assignedUserCount={assignedUserCount}
+                          />
+                          <LeftNavigation id={id} />
+                        </div>
                       </div>
+                      <GroupStoreProvider>
+                        <div className="relative flex w-full gap-7">
+                          <EditLockClient>
+                            <main
+                              id="content"
+                              className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
+                              tabIndex={-1}
+                            >
+                              {children}
+                            </main>
+                            {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
+                          </EditLockClient>
+                        </div>
+                      </GroupStoreProvider>
                     </div>
-                    <GroupStoreProvider>
-                      <div className="relative flex w-full gap-7">
-                        <EditLockClient
-                          formId={id}
-                          lockedEditingEnabled={enforceEditLockFlag}
-                          ownerIdleTimeoutMs={ownerIdleTimeoutMs}
-                        >
-                          <main
-                            id="content"
-                            className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
-                            tabIndex={-1}
-                          >
-                            {children}
-                          </main>
-                          {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
-                        </EditLockClient>
-                      </div>
-                    </GroupStoreProvider>
                   </div>
+                  <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
                 </div>
-                <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
               </div>
-            </div>
+            </EditLockProvider>
           </RefStoreProvider>
         </SaveTemplateProvider>
       </TemplateStoreProvider>
