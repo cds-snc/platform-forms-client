@@ -29,6 +29,7 @@ import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLoc
 import { EditLockProvider } from "@formBuilder/components/shared/edit-lock/EditLockContext";
 import { EditLockDebugMarker } from "@formBuilder/components/shared/edit-lock/EditLockDebugMarker";
 import { SHOW_EDIT_LOCK_STATUS_BUTTON } from "@root/constants";
+import { ManageFormAccessDialogContainer } from "./components/dialogs/ManageFormAccessDialog";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -107,6 +108,7 @@ export default async function Layout(props: {
               lockedEditingEnabled={enforceEditLockFlag}
               ownerIdleTimeoutMs={ownerIdleTimeoutMs}
             >
+              <ManageFormAccessDialogContainer formId={id} />
               <div className="h-full">
                 <div className="flex min-h-screen flex-col">
                   <Header context="formBuilder" className="mb-0" />
