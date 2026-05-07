@@ -18,6 +18,8 @@ import {
   FilterableEventTypes,
 } from "@lib/auditLogs";
 
+import { logMessage } from "@lib/logger";
+
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const createServiceAccountKey = AuthenticatedAction(async (_, templateId: string) => {
@@ -124,6 +126,10 @@ export const getFormEvents = AuthenticatedAction(
         };
       });
     } catch (error) {
+      logMessage.error(
+        `Critical Error fetching form events for formId ${formId}: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+
       return { error: "There was an error. Please try again later." } as ServerActionError;
     }
   }
