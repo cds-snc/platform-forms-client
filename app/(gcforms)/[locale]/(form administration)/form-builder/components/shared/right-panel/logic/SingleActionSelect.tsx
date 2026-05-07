@@ -41,7 +41,7 @@ export const SingleActionSelect = ({
   const { t } = useTranslation(["form-builder", "common"]);
   const currentGroup = id;
   const [nextActionId, setNextActionId] = useState(nextAction);
-  const { saveDraft } = useTemplateContext();
+  const { saveDraftIfNeeded } = useTemplateContext();
 
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
   let groupItems = Object.keys(formGroups).map((key) => {
@@ -152,7 +152,7 @@ export const SingleActionSelect = ({
             // Add a delay to allow group state to update calling for redraw
             setTimeout(() => {
               flow.current?.redraw();
-              saveDraft();
+              saveDraftIfNeeded();
             }, 200);
 
             toast.success(t("logic.actionsSaved"));

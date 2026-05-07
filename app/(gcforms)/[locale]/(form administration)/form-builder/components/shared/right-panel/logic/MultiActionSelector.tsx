@@ -160,7 +160,7 @@ export const MultiActionSelector = ({
     language: s.translationLanguagePriority,
   }));
 
-  const { saveDraft } = useTemplateContext();
+  const { saveDraftIfNeeded } = useTemplateContext();
 
   const updateGroupId = (index: number, id: string) => {
     const rules = [...nextActions];
@@ -255,7 +255,7 @@ export const MultiActionSelector = ({
               parent && setGroupNextAction(parent as string, nextActions);
               setChangeKey(String(new Date().getTime()));
               flow.current?.redraw();
-              saveDraft();
+              saveDraftIfNeeded();
               toast.success(t("logic.actionsSaved"));
             }}
           >

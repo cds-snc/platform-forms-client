@@ -35,7 +35,7 @@ import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) => {
   const { t } = useTranslation("form-builder");
 
-  const { saveDraft } = useTemplateContext();
+  const { saveDraftIfNeeded } = useTemplateContext();
 
   const {
     getTreeData,
@@ -114,7 +114,7 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
       // Handle root-level groups/folders
       if (parent === "root" && data && (!data.type || data.type === "group")) {
         updateGroupName({ id, name: value });
-        saveDraft();
+        saveDraftIfNeeded();
         return;
       }
 
@@ -124,7 +124,7 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
           id: Number(id),
           text: value,
         });
-        saveDraft();
+        saveDraftIfNeeded();
         return;
       }
 
@@ -219,7 +219,7 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
                   autoFlowAll,
                   tree,
                   () => {
-                    saveDraft();
+                    saveDraftIfNeeded();
                     toast.success(
                       <div>
                         <h3>{t("groups.groupDeleted")}</h3>

@@ -22,7 +22,7 @@ export const LogicNavigation = () => {
     };
   });
 
-  const { saveDraft } = useTemplateContext();
+  const { saveDraftIfNeeded } = useTemplateContext();
 
   const { flow } = useFlowRef();
 
@@ -47,7 +47,7 @@ export const LogicNavigation = () => {
 
   const handleConfirmResetDialog = async () => {
     autoFlow();
-    await saveDraft();
+    await saveDraftIfNeeded();
     handleCloseResetDialog();
   };
 
