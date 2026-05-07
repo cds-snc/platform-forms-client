@@ -1,4 +1,5 @@
 import { SetStateAction } from "react";
+import { useRouter } from "next/navigation";
 import { TemplateUser } from "./types";
 import { useTranslation } from "@i18n/client";
 import { cancelInvitation, removeUserFromForm } from "./actions";
@@ -25,11 +26,13 @@ export const UserActions = ({
   disableRow: boolean;
 }) => {
   const { t } = useTranslation("manage-form-access");
+  const router = useRouter();
 
   const handleRemoveUser = async (userId: string) => {
     const result = await removeUserFromForm(userId, formId);
     if (result.success) {
       setUsersWithAccess(usersWithAccess.filter((existingUser) => existingUser.id !== userId));
+      router.refresh();
       return true;
     }
     return false;
@@ -40,8 +43,9 @@ export const UserActions = ({
   };
 
   const handleCancelInvitation = async (id: string): Promise<boolean> => {
-    cancelInvitation(id);
+    await cancelInvitation(id);
     setUsersWithAccess(usersWithAccess.filter((existingUser) => existingUser.id !== id));
+    router.refresh();
     return true;
   };
 
