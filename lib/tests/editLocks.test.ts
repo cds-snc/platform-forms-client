@@ -207,6 +207,7 @@ describe("editLocks with redis", () => {
       _count: {
         users: 2,
       },
+      invitations: [],
     });
 
     await expect(shouldEnforceTemplateEditLock("form-6")).resolves.toBe(true);
@@ -220,6 +221,7 @@ describe("editLocks with redis", () => {
       _count: {
         users: 1,
       },
+      invitations: [],
     });
 
     await expect(shouldEnforceTemplateEditLock("form-6")).resolves.toBe(false);
@@ -246,6 +248,22 @@ describe("editLocks with redis", () => {
     ).toBe(true);
   });
 
+  it("enables edit locking when one assigned user and one pending invitation can edit", async () => {
+    const findUniqueMock = prisma.template.findUnique as unknown as ReturnType<typeof vi.fn>;
+
+    vi.mocked(formCache.check).mockResolvedValue(null);
+
+    findUniqueMock.mockResolvedValue({
+      isPublished: false,
+      _count: {
+        users: 1,
+      },
+      invitations: [{ id: "invitation-1" }],
+    });
+
+    await expect(shouldEnforceTemplateEditLock("form-8")).resolves.toBe(true);
+  });
+
   it("revalidates a cached multi-user threshold when fresh assigned-user enforcement is required", async () => {
     const findUniqueMock = prisma.template.findUnique as unknown as ReturnType<typeof vi.fn>;
 
@@ -266,6 +284,7 @@ describe("editLocks with redis", () => {
       _count: {
         users: 1,
       },
+      invitations: [],
     });
 
     await expect(shouldEnforceTemplateEditLockWithVerifiedUserCount("form-7")).resolves.toBe(false);

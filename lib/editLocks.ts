@@ -541,6 +541,16 @@ const shouldEnforceTemplateEditLockInternal = async (
       select: {
         isPublished: true,
         _count: { select: { users: true } },
+        invitations: {
+          where: {
+            expires: {
+              gt: new Date(),
+            },
+          },
+          select: {
+            id: true,
+          },
+        },
       },
     })
     .catch(() => null);
@@ -549,7 +559,8 @@ const shouldEnforceTemplateEditLockInternal = async (
     return true;
   }
 
-  const hasEnoughUsers = template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
+  const hasEnoughUsers =
+    template._count.users + template.invitations.length >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
 
   // Cache the user-count threshold so subsequent calls skip the DB.
   if (useRedisCache) {

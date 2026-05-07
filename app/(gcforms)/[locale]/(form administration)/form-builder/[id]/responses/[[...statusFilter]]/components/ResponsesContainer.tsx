@@ -6,7 +6,7 @@ import { DeliveryOptionEmail } from "./DeliveryOptionEmail";
 import { NavigationTabs } from "./NavigationTabs";
 import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
-import { ManageFormAccessDialogContainer } from "../../../components/dialogs/ManageFormAccessDialog";
+
 import { ManageFormAccessButton } from "../../../components/dialogs/ManageFormAccessDialog/ManageFormAccessButton";
 import { StatusFilter } from "../types";
 import { useTranslation } from "@i18n/client";
@@ -63,7 +63,7 @@ export const ResponsesContainer = ({
             overdueAfter={overdueAfter}
             isApiRetrieval={true}
           />
-          <ManageFormAccessDialogContainer formId={id} />
+          {/* Dialog is now provided globally in layout */}
         </div>
       </>
     );
@@ -99,7 +99,7 @@ export const ResponsesContainer = ({
         />
         <ResponsesFooter formId={id} />
       </div>
-      <ManageFormAccessDialogContainer formId={id} />
+      {/* Dialog is now provided globally in layout */}
     </>
   );
 };
