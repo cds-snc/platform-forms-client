@@ -64,6 +64,7 @@ export const FormElementTypes = {
   formattedDate: "formattedDate",
   numberInput: "numberInput",
   customJson: "customJson",
+  starRating: "starRating",
 } as const;
 export type FormElementTypes = (typeof FormElementTypes)[keyof typeof FormElementTypes];
 
@@ -143,6 +144,7 @@ export interface ElementProperties {
   stepCount?: number;
   currencyCode?: string;
   useThousandsSeparator?: boolean;
+  numberOfStars?: number;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;

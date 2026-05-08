@@ -15,6 +15,7 @@ import {
   UploadIcon,
   GavelIcon,
   DepartmentsIcon,
+  StarIcon,
 } from "@serverComponents/icons";
 import dynamic from "next/dynamic";
 
@@ -58,6 +59,13 @@ const Radio = dynamic(
     import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Radio").then(
       (mod) => ({ default: mod.Radio })
     ),
+  { ssr: false, loading: () => <DescriptionLoading /> }
+);
+const StarRatingDescription = dynamic(
+  () =>
+    import(
+      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/StarRating"
+    ).then((mod) => ({ default: mod.StarRating })),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const CheckBox = dynamic(
@@ -255,6 +263,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("singleChoice"),
       icon: RadioIcon,
       description: Radio,
+      className: "",
+      group: groups.basic,
+    },
+    {
+      id: "starRating",
+      value: t("starRating"),
+      icon: StarIcon,
+      description: StarRatingDescription,
       className: "",
       group: groups.basic,
     },
