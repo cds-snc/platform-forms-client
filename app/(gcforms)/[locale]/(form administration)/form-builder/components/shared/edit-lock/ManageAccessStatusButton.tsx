@@ -19,10 +19,12 @@ const PersonIcon = () => (
 );
 
 export const ManageAccessStatusButton = ({
+  formId,
   testId,
   editLockEnabled,
   assignedUserCount,
 }: {
+  formId: string;
   testId: string;
   editLockEnabled: boolean;
   assignedUserCount: number;
@@ -30,6 +32,10 @@ export const ManageAccessStatusButton = ({
   const { t } = useTranslation("manage-form-access");
   const label = t("manageFormAccess");
   const { Event } = useCustomEvent();
+
+  if (formId === "0000") {
+    return null;
+  }
 
   return (
     <div
