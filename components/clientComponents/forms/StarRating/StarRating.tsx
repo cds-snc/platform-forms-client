@@ -24,7 +24,7 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
 
   // Roving tabindex: only the checked star (or the first if none selected) is
   // in the page Tab sequence. All others use tabIndex={-1} so the group acts
-  // as a single Tab stop, matching the ARIA rating radio group pattern.
+  // as a single Tab stop. This matches the W3C APG example.
   const getTabIndex = (starValue: number): number => {
     if (currentValue > 0) {
       return currentValue === starValue ? 0 : -1;
@@ -93,7 +93,7 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
             />
             <label
               htmlFor={`${id}.${starValue - 1}`}
-              className={`gc-star-rating__label cursor-pointer text-4xl leading-none select-none rounded${focused === starValue ? "outline-blue-focus outline outline-[3px] outline-offset-2" : ""}`}
+              className={`gc-star-rating__label cursor-pointer text-4xl leading-none select-none rounded${focused === starValue ? "outline-blue-focus outline-[3px] outline-offset-2" : ""}`}
               onMouseEnter={() => setHovered(starValue)}
               onMouseLeave={() => setHovered(null)}
             >
