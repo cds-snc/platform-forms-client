@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
@@ -8,6 +8,85 @@ import { useTranslation } from "@i18n/client";
 interface StarRatingProps extends InputFieldProps {
   numberOfStars?: number;
 }
+
+interface StarItemProps {
+  starValue: number;
+  index: number;
+  inputId: string;
+  name: string;
+  required: boolean | undefined;
+  checked: boolean;
+  tabIndex: number;
+  ariaLabel: string;
+  active: boolean;
+  focused: boolean;
+  inputRef: (el: HTMLInputElement | null) => void;
+  onChange: () => void;
+  onFocus: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur: () => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+}
+
+const StarItem = React.memo(function StarItem({
+  starValue,
+  inputId,
+  name,
+  required,
+  checked,
+  tabIndex,
+  ariaLabel,
+  active,
+  focused,
+  inputRef,
+  onChange,
+  onFocus,
+  onBlur,
+  onKeyDown,
+  onMouseEnter,
+  onMouseLeave,
+}: StarItemProps) {
+  return (
+    <React.Fragment>
+      <input
+        type="radio"
+        className="sr-only"
+        id={inputId}
+        name={name}
+        value={String(starValue)}
+        required={required}
+        checked={checked}
+        tabIndex={tabIndex}
+        aria-label={ariaLabel}
+        ref={inputRef}
+        onChange={onChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
+      />
+      <label
+        htmlFor={inputId}
+        className={`gc-star-rating__label cursor-pointer text-4xl leading-none select-none rounded${
+          focused ? "outline-blue-focus outline-[3px] outline-offset-2 outline-solid" : ""
+        }`}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        <span
+          className={
+            active
+              ? "gc-star-rating__star gc-star-rating__star--active text-yellow-400"
+              : "gc-star-rating__star text-gray-300"
+          }
+          aria-hidden="true"
+        >
+          ★
+        </span>
+      </label>
+    </React.Fragment>
+  );
+});
 
 export const StarRating = (props: StarRatingProps): React.ReactElement => {
   const { name, required, numberOfStars = 5, id, lang } = props;
@@ -20,42 +99,44 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
   const currentValue = field.value ? Number(field.value) : 0;
   const activeValue = hovered !== null ? hovered : currentValue;
 
-  const stars = Array.from({ length: numberOfStars }, (_, i) => i + 1);
+  // numberOfStars is a static prop — only recompute if it changes
+  const stars = useMemo(
+    () => Array.from({ length: numberOfStars }, (_, i) => i + 1),
+    [numberOfStars]
+  );
 
-  // Roving tabindex: only the checked star (or the first if none selected) is
-  // in the page Tab sequence. All others use tabIndex={-1} so the group acts
-  // as a single Tab stop. This matches the W3C APG example.
   const getTabIndex = (starValue: number): number => {
-    if (currentValue > 0) {
-      return currentValue === starValue ? 0 : -1;
-    }
+    if (currentValue > 0) return currentValue === starValue ? 0 : -1;
     return starValue === 1 ? 0 : -1;
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, starValue: number) => {
-    const currentIndex = stars.indexOf(starValue);
-    let newIndex: number;
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>, starValue: number) => {
+      const currentIndex = starValue - 1;
+      let newIndex: number;
 
-    switch (e.key) {
-      case "ArrowRight":
-      case "ArrowDown":
-        e.preventDefault();
-        newIndex = (currentIndex + 1) % stars.length;
-        break;
-      case "ArrowLeft":
-      case "ArrowUp":
-        e.preventDefault();
-        newIndex = (currentIndex - 1 + stars.length) % stars.length;
-        break;
-      default:
-        return;
-    }
+      switch (e.key) {
+        case "ArrowRight":
+        case "ArrowDown":
+          e.preventDefault();
+          newIndex = (currentIndex + 1) % stars.length;
+          break;
+        case "ArrowLeft":
+        case "ArrowUp":
+          e.preventDefault();
+          newIndex = (currentIndex - 1 + stars.length) % stars.length;
+          break;
+        default:
+          return;
+      }
 
-    const newValue = stars[newIndex];
-    helpers.setValue(String(newValue));
-    setHovered(newValue);
-    inputRefs.current[newIndex]?.focus();
-  };
+      const newValue = stars[newIndex];
+      helpers.setValue(String(newValue));
+      setHovered(newValue);
+      inputRefs.current[newIndex]?.focus();
+    },
+    [stars, helpers]
+  );
 
   const errorId = meta.error ? `error-${id}` : undefined;
 
@@ -71,49 +152,34 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
         aria-describedby={errorId}
       >
         {stars.map((starValue, index) => (
-          <React.Fragment key={starValue}>
-            <input
-              type="radio"
-              className="sr-only"
-              id={`${id}.${starValue - 1}`}
-              name={name}
-              value={String(starValue)}
-              required={required}
-              checked={field.value === String(starValue)}
-              tabIndex={getTabIndex(starValue)}
-              aria-label={t("starRating.starLabel", { count: starValue })}
-              ref={(el) => {
-                inputRefs.current[index] = el;
-              }}
-              onChange={() => helpers.setValue(String(starValue))}
-              onFocus={(e) => {
-                setHovered(starValue);
-                if (e.currentTarget.matches(":focus-visible")) setFocused(starValue);
-              }}
-              onBlur={() => {
-                setHovered(null);
-                setFocused(null);
-              }}
-              onKeyDown={(e) => handleKeyDown(e, starValue)}
-            />
-            <label
-              htmlFor={`${id}.${starValue - 1}`}
-              className={`gc-star-rating__label cursor-pointer text-4xl leading-none select-none rounded${focused === starValue ? "outline-blue-focus outline-[3px] outline-offset-2" : ""}`}
-              onMouseEnter={() => setHovered(starValue)}
-              onMouseLeave={() => setHovered(null)}
-            >
-              <span
-                className={
-                  activeValue >= starValue
-                    ? "gc-star-rating__star gc-star-rating__star--active text-yellow-400"
-                    : "gc-star-rating__star text-gray-300"
-                }
-                aria-hidden="true"
-              >
-                ★
-              </span>
-            </label>
-          </React.Fragment>
+          <StarItem
+            key={starValue}
+            starValue={starValue}
+            index={index}
+            inputId={`${id}.${starValue - 1}`}
+            name={name}
+            required={required}
+            checked={field.value === String(starValue)}
+            tabIndex={getTabIndex(starValue)}
+            ariaLabel={t("starRating.starLabel", { count: starValue })}
+            active={activeValue >= starValue}
+            focused={focused === starValue}
+            inputRef={(el) => {
+              inputRefs.current[index] = el;
+            }}
+            onChange={() => helpers.setValue(String(starValue))}
+            onFocus={(e) => {
+              setHovered(starValue);
+              if (e.currentTarget.matches(":focus-visible")) setFocused(starValue);
+            }}
+            onBlur={() => {
+              setHovered(null);
+              setFocused(null);
+            }}
+            onKeyDown={(e) => handleKeyDown(e, starValue)}
+            onMouseEnter={() => setHovered(starValue)}
+            onMouseLeave={() => setHovered(null)}
+          />
         ))}
       </div>
     </div>
