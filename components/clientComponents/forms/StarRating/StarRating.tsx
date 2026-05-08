@@ -7,6 +7,7 @@ import { useTranslation } from "@i18n/client";
 
 interface StarRatingProps extends InputFieldProps {
   numberOfStars?: number;
+  sparkleOnSelect?: boolean;
 }
 
 interface StarItemProps {
@@ -104,7 +105,7 @@ const StarItem = React.memo(function StarItem({
 });
 
 export const StarRating = (props: StarRatingProps): React.ReactElement => {
-  const { name, required, numberOfStars = 5, id, lang } = props;
+  const { name, required, numberOfStars = 5, sparkleOnSelect = false, id, lang } = props;
   const [field, meta, helpers] = useField(name);
   const [hovered, setHovered] = useState<number | null>(null);
   const [focused, setFocused] = useState<number | null>(null);
@@ -187,7 +188,7 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
             onSparkleEnd={() => setSparkleStar(null)}
             onChange={() => {
               helpers.setValue(String(starValue));
-              setSparkleStar(starValue);
+              if (sparkleOnSelect) setSparkleStar(starValue);
             }}
             onFocus={(e) => {
               setHovered(starValue);

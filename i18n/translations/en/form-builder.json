@@ -732,6 +732,10 @@
       "errorInvalidRegex": "The regex pattern is invalid. Please enter a valid regex pattern.",
       "previousPatterns": "Previous patterns",
       "errorUnsafeRegex": "This regex pattern is potentially unsafe. Avoid patterns that could cause performance issues, such as those with nested quantifiers or excessive backtracking."
+    },
+    "starRatingSparkle": {
+      "title": "Sparkle effect",
+      "checkboxLabel": "Show a sparkle animation when a star is selected"
     }
   },
   "moreOptions": "More options",

@@ -243,6 +243,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     }
     case FormElementTypes.starRating: {
       const numberOfStars = element.properties.numberOfStars ?? 5;
+      const sparkleOnSelect = element.properties.sparkleOnSelect ?? false;
       return (
         <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           {labelComponent}
@@ -252,6 +253,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             name={`${id}`}
             required={isRequired}
             numberOfStars={numberOfStars}
+            sparkleOnSelect={sparkleOnSelect}
             lang={lang}
           />
         </FormGroup>

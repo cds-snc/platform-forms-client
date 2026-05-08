@@ -145,6 +145,7 @@ export interface ElementProperties {
   currencyCode?: string;
   useThousandsSeparator?: boolean;
   numberOfStars?: number;
+  sparkleOnSelect?: boolean;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;

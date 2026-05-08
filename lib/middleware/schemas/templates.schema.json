@@ -377,6 +377,10 @@
               "minimum": 3,
               "maximum": 10
             },
+            "sparkleOnSelect": {
+              "description": "If true, a sparkle animation plays when a star is selected.",
+              "type": "boolean"
+            },
             "validation": {
               "type": "object",
               "properties": {

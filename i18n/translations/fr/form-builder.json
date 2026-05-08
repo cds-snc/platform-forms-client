@@ -730,6 +730,10 @@
       "errorInvalidRegex": "Le modèle d'expression régulière (regex) n'est pas valide. Veuillez saisir un modèle regex valide.",
       "previousPatterns": "Modèles précédents",
       "errorUnsafeRegex": "Ce modèle regex est potentiellement dangereux. Évitez les modèles susceptibles de causer des problèmes de performance, tels que ceux comportant des quantificateurs imbriqués ou un retour en arrière excessif. "
+    },
+    "starRatingSparkle": {
+      "title": "Effet scintillant",
+      "checkboxLabel": "Afficher une animation scintillante lorsqu'une étoile est sélectionnée"
     }
   },
   "moreOptions": "Plus d'options  ",
