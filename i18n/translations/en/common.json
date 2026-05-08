@@ -365,6 +365,10 @@
   "confirmFileWarning": {
     "text": "This copy of your answers will not include the files you attached to your submission."
   },
+  "starRating": {
+    "starLabel_one": "{{count}} star",
+    "starLabel_other": "{{count}} stars"
+  },
   "loginPilot": {
     "title": "Sign in to GC Forms",
     "description": "Use your government account to build forms and access submitted responses.",

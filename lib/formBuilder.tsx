@@ -252,6 +252,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             name={`${id}`}
             required={isRequired}
             numberOfStars={numberOfStars}
+            lang={lang}
           />
         </FormGroup>
       );
