@@ -98,23 +98,29 @@ Once the change is made, you will need to 'Log Out' and log back in. Alternative
 
 See package.json scripts for vitest and playwright
 
+### Local Playwright setup
+
+For local development, the local Playwright scripts install Chromium automatically before running.
+
 Playwight is configured to run "yarn build:test && yarn start:test" for the web server
 
 ### Running Playwright without resetting your dev schema
 
-Local Playwright runs currently execute `yarn db:test`, which resets the Prisma target before seeding test data. If your normal development workflow depends on a long-lived local schema with users, templates, and feature flags, use the isolated Playwright scripts instead:
+Local Playwright defaults to the isolated database path. The local scripts run `yarn db:test`, but they do it against a separate Playwright schema instead of your normal local development schema. That means your long-lived local users, templates, and feature flags are left alone. Use the local Playwright scripts:
 
 ```sh
-yarn playwright:isolated
+yarn playwright:ui:local
 ```
 
 or headless:
 
 ```sh
-yarn playwright:run:isolated
+yarn playwright:headless:local
 ```
 
 Those commands set `PLAYWRIGHT_ISOLATE_DB=true`, which keeps the same PostgreSQL server but rewrites the Prisma connection to use a separate schema named `playwright` by default. Your normal development schema is left alone.
+
+These local scripts install Chromium first and then run Playwright against the local isolated-db mode. The remaining `playwright:headless:ci` script is kept for CI-style headless runs.
 
 Reference:
 Prisma PostgreSQL connection string arguments: https://www.prisma.io/docs/orm/overview/databases/postgresql
@@ -123,19 +129,19 @@ Prisma multi-schema support: https://www.prisma.io/docs/orm/prisma-schema/data-m
 If you want a different schema name, set `PLAYWRIGHT_DB_SCHEMA`:
 
 ```sh
-PLAYWRIGHT_DB_SCHEMA=your_schema yarn playwright:run:isolated
+PLAYWRIGHT_DB_SCHEMA=your_schema yarn playwright:headless:local
 ```
 
 To run a single Playwright test file:
 
 ```sh
-yarn playwright:run:isolated tests/e2e/smoke.spec.ts
+yarn playwright:headless:local tests/e2e/smoke.spec.ts
 ```
 
 To run a single test by name:
 
 ```sh
-yarn playwright:run:isolated --grep "should load the homepage and display expected content"
+yarn playwright:headless:local --grep "should load the homepage and display expected content"
 ```
 
 ### Updating Browserslist data
