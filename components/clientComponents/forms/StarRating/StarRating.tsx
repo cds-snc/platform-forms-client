@@ -27,6 +27,8 @@ interface StarItemProps {
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
+  sparkle: boolean;
+  onSparkleEnd: () => void;
 }
 
 const StarItem = React.memo(function StarItem({
@@ -46,6 +48,8 @@ const StarItem = React.memo(function StarItem({
   onKeyDown,
   onMouseEnter,
   onMouseLeave,
+  sparkle,
+  onSparkleEnd,
 }: StarItemProps) {
   return (
     <React.Fragment>
@@ -67,12 +71,23 @@ const StarItem = React.memo(function StarItem({
       />
       <label
         htmlFor={inputId}
-        className={`gc-star-rating__label cursor-pointer text-4xl leading-none select-none rounded${
+        className={`gc-star-rating__label relative cursor-pointer text-4xl leading-none select-none rounded${
           focused ? "outline-blue-focus outline-[3px] outline-offset-2 outline-solid" : ""
         }`}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
+        {sparkle &&
+          [1, 2, 3, 4, 5, 6].map((n) => (
+            <span
+              key={n}
+              className={`gc-star-particle gc-star-particle--${n}`}
+              aria-hidden="true"
+              {...(n === 2 ? { onAnimationEnd: onSparkleEnd } : {})}
+            >
+              ★
+            </span>
+          ))}
         <span
           className={
             active
@@ -93,6 +108,7 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
   const [field, meta, helpers] = useField(name);
   const [hovered, setHovered] = useState<number | null>(null);
   const [focused, setFocused] = useState<number | null>(null);
+  const [sparkleStar, setSparkleStar] = useState<number | null>(null);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const { t } = useTranslation("common", { lng: lang });
 
@@ -167,7 +183,12 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
             inputRef={(el) => {
               inputRefs.current[index] = el;
             }}
-            onChange={() => helpers.setValue(String(starValue))}
+            sparkle={sparkleStar === starValue}
+            onSparkleEnd={() => setSparkleStar(null)}
+            onChange={() => {
+              helpers.setValue(String(starValue));
+              setSparkleStar(starValue);
+            }}
             onFocus={(e) => {
               setHovered(starValue);
               if (e.currentTarget.matches(":focus-visible")) setFocused(starValue);
