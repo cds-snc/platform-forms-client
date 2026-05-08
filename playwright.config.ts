@@ -1,6 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const isolatedSchemaName = process.env.PLAYWRIGHT_DB_SCHEMA ?? "playwright";
+const playwrightPort = process.env.PLAYWRIGHT_PORT ?? process.env.PORT ?? "3000";
+const playwrightBaseUrl = `http://localhost:${playwrightPort}`;
 
 function getPlaywrightDatabaseUrl() {
   if (process.env.PLAYWRIGHT_DATABASE_URL) {
@@ -29,6 +31,7 @@ const webServerEnv = Object.fromEntries(
     DATABASE_URL: playwrightDatabaseUrl,
     NEXT_PUBLIC_APP_ENV: "test",
     PLAYWRIGHT_TEST: "true",
+    PORT: playwrightPort,
   }).filter((entry): entry is [string, string] => typeof entry[1] === "string")
 );
 
@@ -54,7 +57,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: "http://localhost:3000",
+    baseURL: playwrightBaseUrl,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
     /* Take screenshot only on failures */
@@ -97,7 +100,7 @@ export default defineConfig({
   webServer: {
     command: "yarn db:test && yarn build:test && yarn start:test",
     env: webServerEnv,
-    url: "http://localhost:3000",
+    url: playwrightBaseUrl,
     reuseExistingServer: process.env.PLAYWRIGHT_REUSE_SERVER === "true",
     timeout: 120 * 1000,
   },
