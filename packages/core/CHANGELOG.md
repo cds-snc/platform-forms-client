@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.2.8] - 2026-05-08
+
+- Add new Star Rating input validation type
+
+
 ## [2.2.7] - 2026-05-04
 
 - Support for new Advanced number input validation
