@@ -1,5 +1,37 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const isolatedSchemaName = process.env.PLAYWRIGHT_DB_SCHEMA ?? "playwright";
+
+function getPlaywrightDatabaseUrl() {
+  if (process.env.PLAYWRIGHT_DATABASE_URL) {
+    return process.env.PLAYWRIGHT_DATABASE_URL;
+  }
+
+  if (process.env.PLAYWRIGHT_ISOLATE_DB !== "true") {
+    return process.env.DATABASE_URL;
+  }
+
+  if (!process.env.DATABASE_URL) {
+    return undefined;
+  }
+
+  const databaseUrl = new URL(process.env.DATABASE_URL);
+  databaseUrl.searchParams.set("schema", isolatedSchemaName);
+  return databaseUrl.toString();
+}
+
+const playwrightDatabaseUrl = getPlaywrightDatabaseUrl();
+
+const webServerEnv = Object.fromEntries(
+  Object.entries({
+    ...process.env,
+    APP_ENV: "test",
+    DATABASE_URL: playwrightDatabaseUrl,
+    NEXT_PUBLIC_APP_ENV: "test",
+    PLAYWRIGHT_TEST: "true",
+  }).filter((entry): entry is [string, string] => typeof entry[1] === "string")
+);
+
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
@@ -64,12 +96,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: "yarn db:test && yarn build:test && yarn start:test",
-    env: {
-      ...process.env,
-      APP_ENV: "test",
-      NEXT_PUBLIC_APP_ENV: "test",
-      PLAYWRIGHT_TEST: "true",
-    },
+    env: webServerEnv,
     url: "http://localhost:3000",
     reuseExistingServer: process.env.PLAYWRIGHT_REUSE_SERVER === "true",
     timeout: 120 * 1000,

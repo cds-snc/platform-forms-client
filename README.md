@@ -99,3 +99,47 @@ Once the change is made, you will need to 'Log Out' and log back in. Alternative
 See package.json scripts for vitest and playwright
 
 Playwight is configured to run "yarn build:test && yarn start:test" for the web server
+
+### Running Playwright without resetting your dev schema
+
+Local Playwright runs currently execute `yarn db:test`, which resets the Prisma target before seeding test data. If your normal development workflow depends on a long-lived local schema with users, templates, and feature flags, use the isolated Playwright scripts instead:
+
+```sh
+yarn playwright:isolated
+```
+
+or headless:
+
+```sh
+yarn playwright:run:isolated
+```
+
+Those commands set `PLAYWRIGHT_ISOLATE_DB=true`, which keeps the same PostgreSQL server but rewrites the Prisma connection to use a separate schema named `playwright` by default. Your normal development schema is left alone.
+
+If you want a different schema name, set `PLAYWRIGHT_DB_SCHEMA`:
+
+```sh
+PLAYWRIGHT_DB_SCHEMA=your_schema yarn playwright:run:isolated
+```
+
+To run a single Playwright test file:
+
+```sh
+yarn playwright:run:isolated tests/e2e/smoke.spec.ts
+```
+
+To run a single test by name:
+
+```sh
+yarn playwright:run:isolated --grep "should load the homepage and display expected content"
+```
+
+### Updating Browserslist data
+
+If you see a Browserslist warning about stale `caniuse-lite` data, update it with:
+
+```sh
+npx update-browserslist-db@latest
+```
+
+This updates the dependency data in `yarn.lock`, so include the lockfile change in your commit.
