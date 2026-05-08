@@ -106,7 +106,7 @@ Playwight is configured to run "yarn build:test && yarn start:test" for the web 
 
 ### Running Playwright without resetting your dev schema
 
-Local Playwright runs currently execute `yarn db:test`, which resets the Prisma target before seeding test data. If your normal development workflow depends on a long-lived local schema with users, templates, and feature flags, use the local Playwright scripts:
+Local Playwright defaults to the isolated database path. The local scripts run `yarn db:test`, but they do it against a separate Playwright schema instead of your normal local development schema. That means your long-lived local users, templates, and feature flags are left alone. Use the local Playwright scripts:
 
 ```sh
 yarn playwright:ui:local
