@@ -57,13 +57,18 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
     inputRefs.current[newIndex]?.focus();
   };
 
+  const errorId = meta.error ? `error-${id}` : undefined;
+
   return (
     <div className="gc-star-rating">
-      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={errorId}>{meta.error}</ErrorMessage>}
       <div
         className="gc-star-rating__stars flex gap-1"
         role="radiogroup"
         aria-labelledby={`label-${id}`}
+        aria-required={required || undefined}
+        aria-invalid={meta.error ? "true" : undefined}
+        aria-describedby={errorId}
       >
         {stars.map((starValue, index) => (
           <React.Fragment key={starValue}>
