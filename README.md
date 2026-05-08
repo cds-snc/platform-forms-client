@@ -116,6 +116,10 @@ yarn playwright:run:isolated
 
 Those commands set `PLAYWRIGHT_ISOLATE_DB=true`, which keeps the same PostgreSQL server but rewrites the Prisma connection to use a separate schema named `playwright` by default. Your normal development schema is left alone.
 
+Reference:
+Prisma PostgreSQL connection string arguments: https://www.prisma.io/docs/orm/overview/databases/postgresql
+Prisma multi-schema support: https://www.prisma.io/docs/orm/prisma-schema/data-model/multi-schema
+
 If you want a different schema name, set `PLAYWRIGHT_DB_SCHEMA`:
 
 ```sh
