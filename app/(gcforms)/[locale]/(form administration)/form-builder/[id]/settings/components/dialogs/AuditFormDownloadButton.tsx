@@ -182,21 +182,25 @@ const AuditFormDownloadButton = ({
       actions={actions}
       title={t("auditDownload.dialog.title")}
     >
-      <div className="gc-input-checkbox ml-5">
+      <div className="p-5">
         <div>
           <h3 className="mb-2">{t("auditDownload.dialog.allEventsTitle")}</h3>
           <p className="mb-4">{t("auditDownload.dialog.allEventsDescription")}</p>
-          <input
-            type="checkbox"
-            id="allEvents"
-            name="allEvents"
-            className="gc-input-checkbox__input"
-            checked={allEventsSelected}
-            onChange={(e) => handleAllEventsChange(e.target.checked)}
-          />
-          <label htmlFor="allEvents" className="gc-checkbox-label">
-            {t("auditDownload.dialog.allEventsCheckbox")}
-          </label>
+          <div className="gc-input-checkbox">
+            <input
+              type="checkbox"
+              id="allEvents"
+              name="allEvents"
+              className="gc-input-checkbox__input"
+              checked={allEventsSelected}
+              onChange={(e) => handleAllEventsChange(e.target.checked)}
+            />
+            <label htmlFor="allEvents" className="gc-checkbox-label">
+              <span className="checkbox-label-text">
+                {t("auditDownload.dialog.allEventsCheckbox")}
+              </span>
+            </label>
+          </div>
           <h3 className="mt-4 mb-2">{t("auditDownload.dialog.specificEventsTitle")}</h3>
           <p className="gc-checkbox-label mb-4">
             {t("auditDownload.dialog.specificEventsDescription")}
@@ -211,7 +215,9 @@ const AuditFormDownloadButton = ({
               onChange={(e) => handleSpecificEventChange("formBuilding", e.target.checked)}
             />
             <label htmlFor="specificEventsformBuilding" className="gc-checkbox-label">
-              {t("auditDownload.dialog.specific.formBuilding")}
+              <span className="checkbox-label-text">
+                {t("auditDownload.dialog.specific.formBuilding")}
+              </span>
             </label>
           </div>
           <div className="gc-input-checkbox">
@@ -224,7 +230,9 @@ const AuditFormDownloadButton = ({
               onChange={(e) => handleSpecificEventChange("formCollaboration", e.target.checked)}
             />
             <label htmlFor="specificEventsformCollaboration" className="gc-checkbox-label">
-              {t("auditDownload.dialog.specific.formCollaboration")}
+              <span className="checkbox-label-text">
+                {t("auditDownload.dialog.specific.formCollaboration")}
+              </span>
             </label>
           </div>
           <div className="gc-input-checkbox">
@@ -237,7 +245,9 @@ const AuditFormDownloadButton = ({
               onChange={(e) => handleSpecificEventChange("responseDownloads", e.target.checked)}
             />
             <label htmlFor="specificEventsresponseDownloads" className="gc-checkbox-label">
-              {t("auditDownload.dialog.specific.responseDownloads")}
+              <span className="checkbox-label-text">
+                {t("auditDownload.dialog.specific.responseDownloads")}
+              </span>
             </label>
           </div>
           <div className="gc-input-checkbox">
@@ -250,7 +260,9 @@ const AuditFormDownloadButton = ({
               onChange={(e) => handleSpecificEventChange("apiIntegrations", e.target.checked)}
             />
             <label htmlFor="specificEventsapiIntegrations" className="gc-checkbox-label">
-              {t("auditDownload.dialog.specific.apiIntegrations")}
+              <span className="checkbox-label-text">
+                {t("auditDownload.dialog.specific.apiIntegrations")}
+              </span>
             </label>
           </div>
         </div>
