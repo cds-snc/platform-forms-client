@@ -272,7 +272,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: StarIcon,
       description: StarRatingDescription,
       className: "",
-      group: groups.basic,
+      group: groups.other,
     },
     {
       id: "checkbox",
