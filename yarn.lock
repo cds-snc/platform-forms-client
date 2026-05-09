@@ -14231,7 +14231,7 @@ __metadata:
     lodash.isequal: "npm:^4.5.0"
     lodash.merge: "npm:^4.6.2"
     lodash.set: "npm:4.3.2"
-    lodash.unset: "npm:4.5.2"
+    lodash.unset: "npm:4.18.0"
     markdown-to-jsx: "npm:7.7.13"
     native-file-system-adapter: "npm:^3.0.1"
     next: "npm:16.2.6"
@@ -15819,10 +15819,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.unset@npm:4.5.2":
-  version: 4.5.2
-  resolution: "lodash.unset@npm:4.5.2"
-  checksum: 10c0/332d046ac8c457c249018719093d9891dbbdd4df9a15acb99689e7b22cbcc9fe49fc712748704a52c6843f3146978a3e1b407400ca63782e2e2df90ffb69eccf
+"lodash.unset@npm:4.18.0":
+  version: 4.18.0
+  resolution: "lodash.unset@npm:4.18.0"
+  checksum: 10c0/e724a133a3dc29185198401785f33bfea6f06d5b5274b15f1493811bf19bd554d01d1571c1a1a87a7714545a5af0ddfe9e71adf29231477414d7aa5aaa38877b
   languageName: node
   linkType: hard
 
