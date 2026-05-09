@@ -14265,7 +14265,7 @@ __metadata:
     typescript: "npm:^6.0.2"
     unorm: "npm:^1.6.0"
     usehooks-ts: "npm:3.1.1"
-    uuid: "npm:9.0.1"
+    uuid: "npm:13.0.1"
     valibot: "npm:^1.2.0"
     vite-tsconfig-paths: "npm:^6.1.1"
     vitest: "npm:^4.1.5"
@@ -19769,7 +19769,7 @@ __metadata:
     p-limit: "npm:^6.2.0"
     tsx: "npm:^4.20.3"
     typescript: "npm:^6.0.2"
-    uuid: "npm:^11.1.0"
+    uuid: "npm:^13.0.0"
   languageName: unknown
   linkType: soft
 
@@ -20516,30 +20516,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:9.0.1":
-  version: 9.0.1
-  resolution: "uuid@npm:9.0.1"
+"uuid@npm:13.0.1":
+  version: 13.0.1
+  resolution: "uuid@npm:13.0.1"
   bin:
-    uuid: dist/bin/uuid
-  checksum: 10c0/1607dd32ac7fc22f2d8f77051e6a64845c9bce5cd3dd8aa0070c074ec73e666a1f63c7b4e0f4bf2bc8b9d59dc85a15e17807446d9d2b17c8485fbc2147b27f9b
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^11.1.0":
-  version: 11.1.0
-  resolution: "uuid@npm:11.1.0"
-  bin:
-    uuid: dist/esm/bin/uuid
-  checksum: 10c0/34aa51b9874ae398c2b799c88a127701408cd581ee89ec3baa53509dd8728cbb25826f2a038f9465f8b7be446f0fbf11558862965b18d21c993684297628d4d3
+    uuid: dist-node/bin/uuid
+  checksum: 10c0/7bb8ad18b11871b7bd1b9161a60610c2b6ce8f7300d93932f92117a2ab9b40479dd23e81929ac848e8a7c45f78b8ed3333f88694b71c17ff3265e443f8684642
   languageName: node
   linkType: hard
 
 "uuid@npm:^13.0.0":
-  version: 13.0.0
-  resolution: "uuid@npm:13.0.0"
+  version: 13.0.2
+  resolution: "uuid@npm:13.0.2"
   bin:
     uuid: dist-node/bin/uuid
-  checksum: 10c0/950e4c18d57fef6c69675344f5700a08af21e26b9eff2bf2180427564297368c538ea11ac9fb2e6528b17fc3966a9fd2c5049361b0b63c7d654f3c550c9b3d67
+  checksum: 10c0/32c7ee84fa7c7966cc09b3a1514a752a8e2f609f15c00033fbaedc0255d577d1877b839f11ee537f37e587bbc620bbb98c3b3a1482931b8ed47d79497cd7a7cd
   languageName: node
   linkType: hard
 
