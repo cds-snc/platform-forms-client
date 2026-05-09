@@ -7,7 +7,7 @@
     "access": "public"
   },
   "type": "module",
-  "packageManager": "yarn@4.10.3",
+  "packageManager": "yarn@4.14.1",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -43,7 +43,7 @@
     "@types/pg": "8.20.0",
     "prisma": "7.8.0",
     "ts-command-line-args": "^2.5.1",
-    "tsdown": "^0.15.7",
+    "tsdown": "^0.21.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }
