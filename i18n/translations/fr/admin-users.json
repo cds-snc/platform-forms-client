@@ -61,9 +61,27 @@
   },
   "search": {
     "label": "Recherche",
-    "placeholder": "Rechercher par nom ou adresse courriel",
-    "noResults": "Aucun résultat trouvé",
-    "ariaLabel": "Recherche de comptes par nom ou par adresse courriel"
+    "placeholder": "Rechercher par adresse courriel ou nom d'utilisateur·rice",
+    "noResults": "Aucun compte correspondant trouvé",
+    "ariaLabel": "Recherche de comptes par adresse courriel ou nom d'utilisateur·rice",
+    "submit": "Rechercher",
+    "clear": "Effacer",
+    "propertyLabel": "Champ de recherche",
+    "statusLabel": "Statut",
+    "emptyState": "Recherchez par courriel, nom d'utilisateur·rice ou statut pour charger les comptes.",
+    "resultsSummary": "Affichage de {{start}} à {{end}} sur {{total}} comptes",
+    "properties": {
+      "all": "Tous les champs",
+      "id": "ID de l'utilisateur·rice",
+      "name": "Nom d'utilisateur·rice",
+      "email": "Adresse courriel"
+    },
+    "pagination": {
+      "ariaLabel": "Pagination des comptes",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "summary": "Affichage de {{start}} à {{end}} sur {{total}} comptes"
+    }
   },
   "manageUserFeatures": "Gérer les indicateurs de fonctionnalité utilisateur"
 }
