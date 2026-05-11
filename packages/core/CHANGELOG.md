@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.2.9] - 2026-05-11
+
+- Remove residual i18next dependency from package
 
 ## [2.2.8] - 2026-05-11
 
