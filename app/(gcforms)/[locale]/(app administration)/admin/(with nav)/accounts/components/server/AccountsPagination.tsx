@@ -50,35 +50,37 @@ export const AccountsPagination = async ({
 
   return (
     <nav
-      className="mt-6 mb-10 flex flex-col gap-4 border-t border-slate-300 pt-4 md:flex-row md:items-center md:justify-between"
+      className="sticky top-4 z-10 mb-4 w-full max-w-6xl bg-linear-to-b from-white via-white to-transparent pb-6"
       aria-label={t("search.pagination.ariaLabel")}
     >
-      <p className="m-0 text-sm text-slate-700">
-        {t("search.pagination.summary", {
-          start,
-          end,
-          total: totalCount,
-        })}
-      </p>
-      <div className="flex gap-3">
-        <Link
-          href={previousHref}
-          className={`pt-2 pr-2 pb-2 font-semibold text-slate-800 underline underline-offset-4 ${
-            page <= 1 ? "pointer-events-none opacity-50" : ""
-          }`}
-          aria-disabled={page <= 1}
-        >
-          {t("search.pagination.previous")}
-        </Link>
-        <Link
-          href={nextHref}
-          className={`px-2 py-2 font-semibold text-slate-800 underline underline-offset-4 ${
-            page >= totalPages ? "pointer-events-none opacity-50" : ""
-          }`}
-          aria-disabled={page >= totalPages}
-        >
-          {t("search.pagination.next")}
-        </Link>
+      <div className="flex items-center justify-between rounded-md border border-slate-300 bg-white px-4 py-3 shadow-sm">
+        <p className="m-0 text-sm text-slate-700">
+          {t("search.resultsSummary", {
+            start,
+            end,
+            total: totalCount,
+          })}
+        </p>
+        <div className="flex gap-3">
+          <Link
+            href={previousHref}
+            className={`pt-2 pr-2 pb-2 font-semibold text-slate-800 underline underline-offset-4 ${
+              page <= 1 ? "pointer-events-none opacity-50" : ""
+            }`}
+            aria-disabled={page <= 1}
+          >
+            {t("search.pagination.previous")}
+          </Link>
+          <Link
+            href={nextHref}
+            className={`px-2 py-2 font-semibold text-slate-800 underline underline-offset-4 ${
+              page >= totalPages ? "pointer-events-none opacity-50" : ""
+            }`}
+            aria-disabled={page >= totalPages}
+          >
+            {t("search.pagination.next")}
+          </Link>
+        </div>
       </div>
     </nav>
   );

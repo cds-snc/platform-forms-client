@@ -55,23 +55,22 @@ export const UsersList = async ({
     userState,
   });
 
-  const start = usersPage.totalCount === 0 ? 0 : (usersPage.page - 1) * usersPage.pageSize + 1;
-  const end = Math.min(usersPage.page * usersPage.pageSize, usersPage.totalCount);
-
   return (
     <div aria-live="polite">
       <ScrollHelper />
 
       {usersPage.totalCount > 0 ? (
         <>
-          <p className="mb-4 text-sm text-slate-700">
-            {t("search.resultsSummary", {
-              start,
-              end,
-              total: usersPage.totalCount,
-            })}
-          </p>
-          <ul data-testid="accountsList" className="m-0 list-none p-0">
+          <AccountsPagination
+            page={usersPage.page}
+            pageSize={usersPage.pageSize}
+            totalCount={usersPage.totalCount}
+            totalPages={usersPage.totalPages}
+            query={query}
+            property={property}
+            userState={userState}
+          />
+          <ul data-testid="accountsList" className="m-0 list-none p-0 pl-2">
             {usersPage.users.map((user) => {
               return (
                 <li
@@ -91,15 +90,6 @@ export const UsersList = async ({
               );
             })}
           </ul>
-          <AccountsPagination
-            page={usersPage.page}
-            pageSize={usersPage.pageSize}
-            totalCount={usersPage.totalCount}
-            totalPages={usersPage.totalPages}
-            query={query}
-            property={property}
-            userState={userState}
-          />
         </>
       ) : (
         <p className="text-lg font-semibold">
