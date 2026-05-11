@@ -86,7 +86,7 @@ export const DraftEditLink = ({
 
   const eventData: Record<string, unknown> = {
     ...(collaborators !== null && collaborators !== undefined && { collaborators }),
-    location: "edit",
+    location: "forms",
   };
 
   const actions = (
