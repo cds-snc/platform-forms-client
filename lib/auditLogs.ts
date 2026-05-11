@@ -601,6 +601,10 @@ export const retrieveEvents = async (
 
   if (options?.mapUserEmail) {
     const userIds = Array.from(new Set(eventItems.map((event) => event.UserID)));
+    if (userIds.length === 0) {
+      return [];
+    }
+
     const formId = eventItems[0]?.Subject.split("#")[1];
     const users = await _getUsersEmails(formId, userIds);
 
