@@ -2,17 +2,11 @@
 import React, { useId } from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { toPlainText } from "@lib/utils/strings";
-
-const ruleTargetTypes: ReadonlySet<string> = new Set([
-  FormElementTypes.radio,
-  FormElementTypes.checkbox,
-  FormElementTypes.dropdown,
-]);
 
 type Choice = {
   label: string;
@@ -110,7 +104,7 @@ const QuestionSelect = ({
   );
 };
 
-export const ConditionalSelector = ({
+export const ConditionalElementRuleSelector = ({
   itemId,
   elements,
   elementId,
@@ -147,8 +141,6 @@ export const ConditionalSelector = ({
     .filter((item) => {
       return (
         item.id !== itemId &&
-        ruleTargetTypes.has(item.type) &&
-        (item.properties.choices?.length ?? 0) > 0 &&
         // Prevent creating circular logic by filtering out questions
         // that already have rules pointing to the current element.
         !currentRules.some((rule) => rule.choiceId.split(".")[0] === String(item.id))
