@@ -1,4 +1,4 @@
-import { ga } from "@root/lib/client/clientHelpers";
+import { ga } from "@lib/client/clientHelpers";
 
 /**
  * Sends a Google Analytics event for edit lock interactions.
