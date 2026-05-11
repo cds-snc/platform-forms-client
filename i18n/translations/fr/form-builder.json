@@ -547,6 +547,21 @@
     "description": "Obtenez une feuille de calcul avec l'historique des dernières actions clés effectuées dans un formulaire. Celles-ci sont disponibles pourraient prendre quelques minutes pour apparaître dans le journal d'activité et seront disponibles jusqu'à 30 jours.",
     "downloadBtnText": "Télécharger l'activité récente",
     "title": "Afficher l'activité du formulaire",
+    "dialog": {
+      "title": "Télécharger l'activité du formulaire",
+      "downloadBtnText": "Télécharger CSV",
+      "allEventsTitle": "Tous les événements",
+      "allEventsDescription": "Téléchargez tous les événements qui se sont produits dans le formulaire.",
+      "allEventsCheckbox": "Tous les événements du formulaire",
+      "specificEventsTitle": "Événements spécifiques",
+      "specificEventsDescription": "Choisissez les événements que vous souhaitez voir apparaître dans le CSV.",
+      "specific": {
+        "formBuilding": "Création de formulaire",
+        "formCollaboration": "Collaboration sur le formulaire",
+        "responseDownloads": "Téléchargements de réponses",
+        "apiIntegrations": "Intégrations API"
+      }
+    },
     "headers": {
       "formId": "Identifiant du formulaire",
       "userId": "Membre de l'équipe",
