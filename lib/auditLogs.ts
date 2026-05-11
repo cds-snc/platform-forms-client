@@ -76,6 +76,39 @@ export const AuditLogEvent = {
   AuditLogsRead: "AuditLogsRead",
 } as const;
 
+const FormBuildingEvents = [
+  AuditLogEvent.CreateForm,
+  AuditLogEvent.UpdateForm,
+  AuditLogEvent.DeleteForm,
+  AuditLogEvent.UnarchiveForm,
+  AuditLogEvent.PublishForm,
+  AuditLogEvent.ChangeFormName,
+  AuditLogEvent.ChangeDeliveryOption,
+  AuditLogEvent.ChangeFormPurpose,
+  AuditLogEvent.ChangeFormSaveAndResume,
+  AuditLogEvent.ChangeSecurityAttribute,
+];
+const FormCollaborationEvents = [AuditLogEvent.GrantFormAccess, AuditLogEvent.RevokeFormAccess];
+const ResponseEvents = [
+  AuditLogEvent.DownloadResponse,
+  AuditLogEvent.ConfirmResponse,
+  AuditLogEvent.IdentifyProblemResponse,
+  AuditLogEvent.ListResponses,
+  AuditLogEvent.DeleteDraftResponses,
+  AuditLogEvent.RetrieveResponses,
+];
+const ApiEvents = [
+  AuditLogEvent.CreateAPIKey,
+  AuditLogEvent.DeleteAPIKey,
+  AuditLogEvent.RefreshAPIKey,
+];
+export const FilterableEventTypes = {
+  formBuilding: FormBuildingEvents,
+  formCollaboration: FormCollaborationEvents,
+  responseDownloads: ResponseEvents,
+  apiIntegrations: ApiEvents,
+};
+
 export type AuditLogEvent = keyof typeof AuditLogEvent;
 
 export const AuditSubjectType = {
@@ -101,7 +134,6 @@ export const AuditLogDetails = {
   ResetThrottling: "User ${userId} reset throttling rate on form ${formId}",
   DeclinedInvitation: "DeclinedInvitation",
   AcceptedInvitation: "AcceptedInvitation",
-  AccessGranted: "Access granted to ${grantedUserId}",
   CancelInvitation: "CancelInvitation",
   UserInvited: "UserInvited",
   CognitoUserIdentifier: "Cognito user unique identifier (sub): ${userId}",
@@ -172,7 +204,6 @@ type AuditDetailsParams = {
   [AuditLogDetails.ResetThrottling]: { userId: string; formId: string };
   [AuditLogDetails.DeclinedInvitation]: { userEmail: string };
   [AuditLogDetails.AcceptedInvitation]: { userEmail: string };
-  [AuditLogDetails.AccessGranted]: { grantedUserId: string };
   [AuditLogDetails.CancelInvitation]: {
     userId: string;
     invitationEmail: string;
@@ -570,6 +601,10 @@ export const retrieveEvents = async (
 
   if (options?.mapUserEmail) {
     const userIds = Array.from(new Set(eventItems.map((event) => event.UserID)));
+    if (userIds.length === 0) {
+      return [];
+    }
+
     const formId = eventItems[0]?.Subject.split("#")[1];
     const users = await _getUsersEmails(formId, userIds);
 
