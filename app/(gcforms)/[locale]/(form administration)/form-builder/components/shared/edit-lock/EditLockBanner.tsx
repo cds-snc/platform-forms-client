@@ -44,16 +44,14 @@ const formatRelativeTime = (value: string, locale: string) => {
 };
 
 export const EditLockBanner = ({
-  formId,
   takeover,
   getIsActiveTab,
 }: {
-  formId: string;
   takeover: () => Promise<void>;
   getIsActiveTab: () => boolean;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
-  const { isLockedByOther, editLock } = useTemplateStore((s) => ({
+  const { isLockedByOther, editLock, formId } = useTemplateStore((s) => ({
     isLockedByOther: s.isLockedByOther,
     editLock: s.editLock,
     formId: s.id,
@@ -119,18 +117,18 @@ export const EditLockBanner = ({
       await takeover();
       toast.success(t("editLock.syncedLatest"), "wide");
 
-      // construct and send the Google Analytics event
+      // Construct and send the Google Analytics event
       const description = isTakeoverAvailable
         ? "takeover_available_lock"
         : isStale
           ? "takeover_stale_lock"
           : "takeover_lock";
-      const location = pathname.split("/").filter(Boolean).at(-1);
-      const extra: Record<string, unknown> = {
-        ...(location && { location }),
+      const eventData: Record<string, unknown> = {
+        // dynamic since can banner can show in multiple locations
+        location: pathname.split("/").filter(Boolean).at(-1),
         ...(lastActivity && { lastActivity }),
       };
-      gaEditLock({ formId, description, extra });
+      gaEditLock({ formId, description, eventData });
     } catch (error) {
       setTakeoverError(true);
     } finally {

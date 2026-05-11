@@ -6,7 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { isEditLockStatus } from "@lib/editLockStatus";
-import { gaEditLock } from "../../../form-builder/components/shared/edit-lock/EditLockGA";
+import { gaEditLock } from "@formBuilder/components/shared/edit-lock/EditLockGA";
 
 export const DraftEditLink = ({
   href,
@@ -85,10 +85,9 @@ export const DraftEditLink = ({
     }
   };
 
-  const location = pathname.split("/").filter(Boolean).at(-1);
-  const gaData: Record<string, unknown> = {
-    ...(collaborators && { collaborators }),
-    ...(location && { location }),
+  const eventData: Record<string, unknown> = {
+    ...(collaborators !== null && collaborators !== undefined && { collaborators }),
+    ...(location && { location: pathname.split("/").filter(Boolean).at(-1) }),
   };
 
   const actions = (
@@ -99,7 +98,7 @@ export const DraftEditLink = ({
           dialogRef.current?.close();
           setShowDialog(false);
           navigateToEditor();
-          gaEditLock({ formId, description: "accept_read_only", extra: gaData });
+          gaEditLock({ formId, description: "accept_read_only", eventData });
         }}
       >
         {t("continueReadOnly", { ns: "my-forms" })}
@@ -110,7 +109,7 @@ export const DraftEditLink = ({
         onClick={() => {
           dialogRef.current?.close();
           setShowDialog(false);
-          gaEditLock({ formId, description: "decline_read_only", extra: gaData });
+          gaEditLock({ formId, description: "decline_read_only", eventData });
         }}
       >
         {t("cancel", { ns: "form-builder" })}

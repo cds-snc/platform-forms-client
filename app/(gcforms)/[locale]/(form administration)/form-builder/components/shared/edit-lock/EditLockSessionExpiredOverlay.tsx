@@ -4,8 +4,9 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { gaEditLock } from "./EditLockGA";
+import { usePathname } from "next/navigation";
 
 export const EditLockSessionExpiredOverlay = ({
   formId,
@@ -15,18 +16,16 @@ export const EditLockSessionExpiredOverlay = ({
   onReturnToForms: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
+  const pathname = usePathname();
 
-  // Use a ref so formId doesn't need to be added to the dependency array and potentially cause
-  // the GA event to be fired multiple times.
-  const formIdRef = useRef(formId);
   useEffect(() => {
-    const pathname = "edit"; // Hardcode to avoid include usePathname deps etc. It will always be the edit page
     gaEditLock({
-      formId: formIdRef.current,
+      formId,
       description: "session_expired",
-      extra: { location: pathname },
+      // Use path vs static since overlay can show in muliple places in the app
+      eventData: { location: pathname.split("/").filter(Boolean).at(-1) },
     });
-  }, []);
+  }, [formId, pathname]);
 
   return (
     <div

@@ -4,21 +4,21 @@ import { ga } from "@root/lib/client/clientHelpers";
  * Sends a Google Analytics event for edit lock interactions.
  * @param {string} formId - The ID of the form being edited.
  * @param {string} description - A description of the edit lock event (e.g. "start_read_only").
- * @param {Record<string, unknown>} [extra] - Optional additional key-value pairs to include in the event payload.
+ * @param {Record<string, unknown>} [eventData] - Optional additional key-value pairs to include in the event payload.
  */
 export const gaEditLock = ({
   formId,
   description,
-  extra,
+  eventData,
 }: {
   formId: string;
   description: string;
-  extra?: Record<string, unknown>;
+  eventData?: Record<string, unknown>;
 }) => {
   ga("edit_lock", {
+    ...eventData,
     formId,
     timestamp: Date.now(),
     description: description,
-    ...extra,
   });
 };

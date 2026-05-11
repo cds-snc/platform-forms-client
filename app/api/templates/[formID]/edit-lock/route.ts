@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { middleware, sessionExists } from "@lib/middleware";
 import { WithRequired, MiddlewareProps } from "@lib/types";
-import { prisma, prismaErrors } from "@gcforms/database";
 import {
   acknowledgeEditLockTakeoverSave,
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
@@ -81,17 +80,12 @@ export const GET = middleware([sessionExists()], async (req, props) => {
       ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID)
       : await shouldEnforceTemplateEditLock(formID);
 
-  const collaborators = await prisma.template
-    .findUnique({ where: { id: formID }, select: { _count: { select: { users: true } } } })
-    .then((t) => t?._count.users ?? null)
-    .catch((e) => prismaErrors(e, null));
-
   if (!shouldEnforceEditLock) {
-    return NextResponse.json({ ...getEditLockDisabledStatus(), collaborators });
+    return NextResponse.json(getEditLockDisabledStatus());
   }
 
   const status = await getEditLockStatus(formID, session.user.id);
-  return NextResponse.json({ ...status, collaborators });
+  return NextResponse.json({ ...status });
 });
 
 export const POST = middleware([sessionExists()], async (_req: NextRequest, props) => {

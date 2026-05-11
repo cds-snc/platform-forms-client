@@ -62,7 +62,7 @@ describe("EditLockClient", () => {
 
   it("renders the lock banner on edit paths while the form is unpublished", () => {
     render(
-      <EditLockClient>
+      <EditLockClient formId="test-form-id">
         <div>Child content</div>
       </EditLockClient>
     );
@@ -75,7 +75,7 @@ describe("EditLockClient", () => {
     mockState.store.isPublished = true;
 
     render(
-      <EditLockClient>
+      <EditLockClient formId="test-form-id">
         <div>Child content</div>
       </EditLockClient>
     );

@@ -56,7 +56,7 @@ export const EditLockClient = ({
       {showSessionExpiredOverlay ? (
         <EditLockSessionExpiredOverlay onReturnToForms={returnToForms} formId={formId} />
       ) : (
-        <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} formId={formId} />
+        <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} />
       )}
       {children}
     </>
