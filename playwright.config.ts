@@ -1,5 +1,40 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const isolatedSchemaName = process.env.PLAYWRIGHT_DB_SCHEMA ?? "playwright";
+const playwrightPort = process.env.PLAYWRIGHT_PORT ?? process.env.PORT ?? "3000";
+const playwrightBaseUrl = `http://localhost:${playwrightPort}`;
+
+function getPlaywrightDatabaseUrl() {
+  if (process.env.PLAYWRIGHT_DATABASE_URL) {
+    return process.env.PLAYWRIGHT_DATABASE_URL;
+  }
+
+  if (process.env.PLAYWRIGHT_ISOLATE_DB !== "true") {
+    return process.env.DATABASE_URL;
+  }
+
+  if (!process.env.DATABASE_URL) {
+    return undefined;
+  }
+
+  const databaseUrl = new URL(process.env.DATABASE_URL);
+  databaseUrl.searchParams.set("schema", isolatedSchemaName);
+  return databaseUrl.toString();
+}
+
+const playwrightDatabaseUrl = getPlaywrightDatabaseUrl();
+
+const webServerEnv = Object.fromEntries(
+  Object.entries({
+    ...process.env,
+    APP_ENV: "test",
+    DATABASE_URL: playwrightDatabaseUrl,
+    NEXT_PUBLIC_APP_ENV: "test",
+    PLAYWRIGHT_TEST: "true",
+    PORT: playwrightPort,
+  }).filter((entry): entry is [string, string] => typeof entry[1] === "string")
+);
+
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
@@ -22,7 +57,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: "http://localhost:3000",
+    baseURL: playwrightBaseUrl,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
     /* Take screenshot only on failures */
@@ -32,7 +67,7 @@ export default defineConfig({
   },
 
   /* Global setup and teardown */
-  globalSetup: require.resolve("./tests/global-setup"),
+  globalSetup: "./tests/global-setup",
 
   /* Configure projects for major browsers */
   projects: [
@@ -64,13 +99,8 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: "yarn db:test && yarn build:test && yarn start:test",
-    env: {
-      ...process.env,
-      APP_ENV: "test",
-      NEXT_PUBLIC_APP_ENV: "test",
-      PLAYWRIGHT_TEST: "true",
-    },
-    url: "http://localhost:3000",
+    env: webServerEnv,
+    url: playwrightBaseUrl,
     reuseExistingServer: process.env.PLAYWRIGHT_REUSE_SERVER === "true",
     timeout: 120 * 1000,
   },

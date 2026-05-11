@@ -1,4 +1,5 @@
-import { prismaMock } from "@jestUtils";
+import type { Mock, MockedFunction } from "vitest";
+import { prismaMock } from "@testUtils";
 import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { getUser } from "@lib/users";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
@@ -25,48 +26,46 @@ import { cancelInvitation } from "../cancelInvitation";
 import { declineInvitation } from "../declineInvitation";
 import { logEvent } from "@lib/auditLogs";
 import { mockTemplate } from "./fixtures/Template";
-jest.mock("@lib/privileges");
-jest.mock("@lib/integration/notifyConnector");
-jest.mock("@lib/logger");
-jest.mock("@lib/users");
-jest.mock("@lib/templates");
-jest.mock("@lib/invitations/emailTemplates/inviteToFormsEmailTemplate");
-jest.mock("@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate");
-jest.mock("@lib/invitations/emailTemplates/ownerAddedEmailTemplate");
-
-jest.mock("@lib/auditLogs", () => ({
-  __esModule: true,
-  logEvent: jest.fn(),
-  get AuditLogDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
-  },
-  get AuditLogEvent() {
-    return jest.requireActual("@lib/auditLogs").AuditLogEvent;
-  },
-  get AuditLogAccessDeniedDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
-  }
+import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
+vi.mock("@lib/privileges");
+vi.mock("@lib/integration/notifyConnector");
+vi.mock("@lib/logger");
+vi.mock("@lib/users");
+vi.mock("@lib/templates");
+vi.mock("@lib/editLocks", () => ({
+  invalidateTemplateEditLockUserCountCache: vi.fn(),
 }));
+vi.mock("@lib/invitations/emailTemplates/inviteToFormsEmailTemplate");
+vi.mock("@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate");
+vi.mock("@lib/invitations/emailTemplates/ownerAddedEmailTemplate");
+
+vi.mock("@lib/auditLogs", async () => {
+  const __actual0 = await vi.importActual<typeof import("@lib/auditLogs")>("@lib/auditLogs");
+  return {
+    logEvent: vi.fn(),
+    AuditLogDetails: __actual0.AuditLogDetails,
+    AuditLogEvent: __actual0.AuditLogEvent,
+    AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,
+  };
+});
 
 const userId = "test-user-id";
-jest.mock("@lib/origin", () => ({
-  getOrigin: jest.fn().mockReturnValue("http://localhost:3000"),
+vi.mock("@lib/origin", () => ({
+  getOrigin: vi.fn().mockReturnValue("http://localhost:3000"),
 }));
-
-
 
 describe("Invitations", () => {
   beforeEach(() => {
     mockAuthorizationPass(userId);
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("inviteUserByEmail", () => {
     it("should throw UserAlreadyHasAccessError if user already has access", async () => {
-      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
+      (getUser as MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
       (
-        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValue(mockTemplateWithUsers());
 
       await expect(inviteUserByEmail("test@cds-snc.ca", "form-id", "message")).rejects.toThrow(
@@ -75,14 +74,14 @@ describe("Invitations", () => {
     });
 
     it("should throw MismatchedEmailDomainError if email domain does not match sender's domain", async () => {
-      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue(
+      (getUser as MockedFunction<typeof getUser>).mockResolvedValue(
         mockAppUser({
           email: "test@cds-snc.ca",
         })
       );
 
       (
-        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValue(mockTemplateWithUsers());
 
       await expect(
@@ -91,10 +90,10 @@ describe("Invitations", () => {
     });
 
     it("should throw invalidDomainError if email is not a valid government email", async () => {
-      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
+      (getUser as MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
       (
-        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValue(mockTemplateWithUsers());
 
       await expect(inviteUserByEmail("test@notagovdomain", "form-id", "message")).rejects.toThrow(
@@ -104,9 +103,9 @@ describe("Invitations", () => {
 
     it("should throw TemplateNotFoundError if template is not found", async () => {
       (
-        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValue(null);
-      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
+      (getUser as MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
       await expect(inviteUserByEmail("test@example.com", "form-id", "message")).rejects.toThrow(
         TemplateNotFoundError
@@ -114,7 +113,7 @@ describe("Invitations", () => {
     });
 
     it("should invite a user who doesn't have a Forms account", async () => {
-      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce(
+      (getUser as MockedFunction<typeof getUser>).mockResolvedValueOnce(
         mockAppUser({
           email: "sender@cds-snc.ca",
           name: "sender",
@@ -122,7 +121,7 @@ describe("Invitations", () => {
       ); // sender
 
       (
-        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValueOnce(mockTemplateWithUsers());
 
       prismaMock.invitation.create.mockResolvedValueOnce(
@@ -132,12 +131,12 @@ describe("Invitations", () => {
       );
 
       // invitee does not have an account
-      (prismaMock.user.findFirst as jest.Mock).mockResolvedValueOnce(null);
+      (prismaMock.user.findFirst as Mock).mockResolvedValueOnce(null);
 
       // Previous invitation does not exist
-      (prismaMock.invitation.findFirst as jest.Mock).mockResolvedValue(null);
+      (prismaMock.invitation.findFirst as Mock).mockResolvedValue(null);
 
-      (inviteToFormsEmailTemplate as jest.Mock).mockReturnValue("email contents");
+      (inviteToFormsEmailTemplate as Mock).mockReturnValue("email contents");
 
       await inviteUserByEmail("invited@cds-snc.ca", "form-id", "message");
 
@@ -160,10 +159,11 @@ describe("Invitations", () => {
         }),
         "formInvitationToFutureUser"
       );
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
 
     it("should invite a user who already has an account", async () => {
-      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce(
+      (getUser as MockedFunction<typeof getUser>).mockResolvedValueOnce(
         mockAppUser({
           email: "sender@cds-snc.ca",
           name: "sender",
@@ -171,11 +171,11 @@ describe("Invitations", () => {
       ); // sender
 
       (
-        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValueOnce(mockTemplateWithUsers());
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (prismaMock.invitation.create as jest.MockedFunction<any>).mockResolvedValueOnce(
+      (prismaMock.invitation.create as MockedFunction<any>).mockResolvedValueOnce(
         mockInvitation({
           email: "invited@cds-snc.ca",
         })
@@ -185,12 +185,10 @@ describe("Invitations", () => {
       prismaMock.user.findFirst.mockResolvedValueOnce(mockUser());
 
       // Previous invitation does not exist
-      (prismaMock.invitation.findFirst as jest.Mock).mockResolvedValue(null);
+      (prismaMock.invitation.findFirst as Mock).mockResolvedValue(null);
 
       (
-        inviteToCollaborateEmailTemplate as jest.MockedFunction<
-          typeof inviteToCollaborateEmailTemplate
-        >
+        inviteToCollaborateEmailTemplate as MockedFunction<typeof inviteToCollaborateEmailTemplate>
       ).mockReturnValue("email contents");
 
       await inviteUserByEmail("invited@cds-snc.ca", "form-id", "message");
@@ -211,10 +209,11 @@ describe("Invitations", () => {
         expect.any(Object),
         "formInvitationToExistingUser"
       );
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
 
     it("should reinvite a user whose invitation has expired", async () => {
-      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce({
+      (getUser as MockedFunction<typeof getUser>).mockResolvedValueOnce({
         id: "1",
         email: "sender@cds-snc.ca",
         name: "sender",
@@ -225,10 +224,10 @@ describe("Invitations", () => {
       }); // sender
 
       // Mock out invitation delete
-      (prismaMock.invitation.delete as jest.Mock).mockResolvedValue(null);
+      (prismaMock.invitation.delete as Mock).mockResolvedValue(null);
 
       (
-        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValueOnce({
         formRecord: {
           id: "form-id",
@@ -261,10 +260,10 @@ describe("Invitations", () => {
       prismaMock.user.findFirst.mockResolvedValueOnce(null);
 
       // Previous invitation does not exist
-      (prismaMock.invitation.findFirst as jest.Mock).mockResolvedValue(null);
+      (prismaMock.invitation.findFirst as Mock).mockResolvedValue(null);
 
       (
-        inviteToFormsEmailTemplate as jest.MockedFunction<typeof inviteToFormsEmailTemplate>
+        inviteToFormsEmailTemplate as MockedFunction<typeof inviteToFormsEmailTemplate>
       ).mockReturnValue("email contents");
 
       await inviteUserByEmail("invited2@cds-snc.ca", "form-id", "message");
@@ -286,6 +285,7 @@ describe("Invitations", () => {
         expect.any(Object),
         "formInvitationToFutureUser"
       );
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
   });
 
@@ -339,9 +339,9 @@ describe("Invitations", () => {
         })
       );
 
-      (
-        ownerAddedEmailTemplate as jest.MockedFunction<typeof ownerAddedEmailTemplate>
-      ).mockReturnValue("email contents");
+      (ownerAddedEmailTemplate as MockedFunction<typeof ownerAddedEmailTemplate>).mockReturnValue(
+        "email contents"
+      );
 
       await acceptInvitation("invitation-id");
 
@@ -349,6 +349,7 @@ describe("Invitations", () => {
       expect(prismaMock.invitation.delete).toHaveBeenCalledWith({
         where: { id: "invitation-id" },
       });
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("template-id");
 
       // Log event
       expect(logEvent).toHaveBeenCalledWith(
@@ -356,7 +357,7 @@ describe("Invitations", () => {
         { id: "template-id", type: "Form" },
         "InvitationAccepted",
         "AcceptedInvitation",
-        { "userEmail" : "invited@cds-snc.ca" }
+        { userEmail: "invited@cds-snc.ca" }
       );
 
       // @TODO: these tests need to move to templates.test.ts
@@ -390,7 +391,7 @@ describe("Invitations", () => {
       );
 
       (
-        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValue(
         mockTemplateWithUsers({
           users: [
@@ -408,6 +409,7 @@ describe("Invitations", () => {
       expect(prismaMock.invitation.delete).toHaveBeenCalledWith({
         where: { id: "invitation-id" },
       });
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("template-id");
     });
 
     it("should throw InvitationNotFoundError if invitation is not found", async () => {
@@ -426,11 +428,12 @@ describe("Invitations", () => {
           email: "test@cds-snc.ca",
         })
       );
-      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
+      (getUser as MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
       await declineInvitation("invitation-id");
 
       expect(prismaMock.invitation.delete).toHaveBeenCalled();
+      expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("template-id");
     });
 
     it("should throw InvitationNotFoundError if invitation is not found", async () => {
@@ -447,7 +450,7 @@ describe("Invitations", () => {
         })
       );
 
-      (getUser as jest.Mock).mockRejectedValueOnce(new UserNotFoundError());
+      (getUser as Mock).mockRejectedValueOnce(new UserNotFoundError());
 
       await expect(declineInvitation("invitation-id")).rejects.toThrow(UserNotFoundError);
     });

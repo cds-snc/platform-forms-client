@@ -7,13 +7,14 @@ import {
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   EDIT_LOCK_TTL_MS,
   MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
-} from "@lib/formBuilderEditLockPresence";
+} from "@root/constants";
 export {
-  EDIT_LOCK_HEARTBEAT_MS,
+  EDIT_LOCK_HEARTBEAT_INTERVAL_MS,
+  EDIT_LOCK_STATUS_POLL_INTERVAL_MS,
   EDIT_LOCK_PRE_TAKEOVER_SAVE_WAIT_MS,
   EDIT_LOCK_TTL_MS,
   MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
-} from "@lib/formBuilderEditLockPresence";
+} from "@root/constants";
 
 const EDIT_LOCK_KEY_PREFIX = "edit-lock";
 const EDIT_LOCK_STREAM_PREFIX = "edit-lock-stream";
@@ -53,7 +54,7 @@ export type EditLockStatus = {
 };
 
 export type EditLockEvent = {
-  type: "updated" | "takeover-requested";
+  type: "updated" | "takeover-requested" | "published";
 };
 
 export class TemplateEditLockedError extends Error {
@@ -249,8 +250,23 @@ const publishEditLockEvent = async (templateId: string, event: EditLockEvent = u
   const streamKey = getEditLockStreamKey(templateId);
   // Append the event to the per-template stream.  The stream TTL is reset on
   // every write so it stays alive as long as the lock itself is active.
-  await redis.xadd(streamKey, "*", "type", event.type, "templateId", templateId);
+  // Note: XADD API params: key, MAXLEN ~ count (cap stream to ~100 entries lazily), * (auto-generate entry ID), ...field-value pairs
+  await redis.xadd(
+    streamKey,
+    "MAXLEN",
+    "~",
+    100,
+    "*",
+    "type",
+    event.type,
+    "templateId",
+    templateId
+  );
   await redis.expire(streamKey, editLockTtlSeconds * 2);
+};
+
+export const publishEditLockPublishedEvent = async (templateId: string) => {
+  await publishEditLockEvent(templateId, { type: "published" });
 };
 
 const storeRedisLock = async (lock: EditLockInfo) => {
@@ -445,6 +461,25 @@ export const getEditLockDisabledStatus = (): EditLockStatus => ({
   lock: null,
 });
 
+export const shouldEnableTemplateEditLock = ({
+  allowLockedEditing,
+  templateId,
+  isPublished,
+  assignedUserCount,
+}: {
+  allowLockedEditing: boolean;
+  templateId: string | null | undefined;
+  isPublished: boolean;
+  assignedUserCount: number;
+}): boolean =>
+  Boolean(
+    allowLockedEditing &&
+      templateId &&
+      templateId !== "0000" &&
+      !isPublished &&
+      assignedUserCount >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK
+  );
+
 export const invalidateTemplateEditLockUserCountCache = async (
   templateId: string
 ): Promise<void> => {
@@ -456,7 +491,14 @@ export const invalidateTemplateEditLockUserCountCache = async (
   await redis.del(getEditLockAssignedUsersCacheKey(templateId));
 };
 
-export const shouldEnforceTemplateEditLock = async (templateId: string): Promise<boolean> => {
+const shouldEnforceTemplateEditLockInternal = async (
+  templateId: string,
+  {
+    revalidateAssignedUserCount = false,
+  }: {
+    revalidateAssignedUserCount?: boolean;
+  } = {}
+): Promise<boolean> => {
   if (!(await allowLockedEditing())) {
     return false;
   }
@@ -480,7 +522,14 @@ export const shouldEnforceTemplateEditLock = async (templateId: string): Promise
   }
 
   // Both values are cached — skip the DB entirely.
-  if (cachedIsPublished !== null && cachedHasEnoughUsers !== null) {
+  if (
+    cachedIsPublished !== null &&
+    cachedHasEnoughUsers !== null &&
+    // A cached "single-user" or "published" result is safe to trust because it disables
+    // locking. When we are about to enforce locking, re-check the assigned-user count so a
+    // stale "multi-user" cache cannot keep single-user forms in a lockable state.
+    (!revalidateAssignedUserCount || cachedIsPublished || !cachedHasEnoughUsers)
+  ) {
     return !cachedIsPublished && cachedHasEnoughUsers;
   }
 
@@ -492,6 +541,16 @@ export const shouldEnforceTemplateEditLock = async (templateId: string): Promise
       select: {
         isPublished: true,
         _count: { select: { users: true } },
+        invitations: {
+          where: {
+            expires: {
+              gt: new Date(),
+            },
+          },
+          select: {
+            id: true,
+          },
+        },
       },
     })
     .catch(() => null);
@@ -500,7 +559,8 @@ export const shouldEnforceTemplateEditLock = async (templateId: string): Promise
     return true;
   }
 
-  const hasEnoughUsers = template._count.users >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
+  const hasEnoughUsers =
+    template._count.users + template.invitations.length >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
 
   // Cache the user-count threshold so subsequent calls skip the DB.
   if (useRedisCache) {
@@ -514,6 +574,18 @@ export const shouldEnforceTemplateEditLock = async (templateId: string): Promise
 
   return !template.isPublished && hasEnoughUsers;
 };
+
+export const shouldEnforceTemplateEditLock = async (templateId: string): Promise<boolean> =>
+  shouldEnforceTemplateEditLockInternal(templateId);
+
+// Use this on page-entry or mutation paths where a stale cached multi-user threshold would be
+// user-visible. It re-checks assigned-user count before enforcing edit locking.
+export const shouldEnforceTemplateEditLockWithVerifiedUserCount = async (
+  templateId: string
+): Promise<boolean> =>
+  shouldEnforceTemplateEditLockInternal(templateId, {
+    revalidateAssignedUserCount: true,
+  });
 
 export const getEditLockStatus = async (
   templateId: string,

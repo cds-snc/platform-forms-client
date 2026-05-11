@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.2.7] - 2026-05-04
+
+- Support for new Advanced number input validation
+
+## [2.2.6] - 2026-05-04
+
+- Update vitest to ^4.1.5 for latest features and improvements
+
+## [2.2.5] - 2026-04-30
+
+- Modify import
+
+## [2.2.4] - 2026-04-28
+
+- Add 'recheck' package to the list of dependencies
+
 ## [2.2.3] - 2026-04-01
 
 - Move regex validation utils into package

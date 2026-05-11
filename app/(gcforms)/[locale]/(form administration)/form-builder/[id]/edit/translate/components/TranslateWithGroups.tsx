@@ -59,7 +59,7 @@ const GroupSection = ({
                 <>{primaryLanguage}</>
               </LanguageLabel>
               <textarea
-                className="size-full p-4 focus:outline-blue-focus"
+                className="focus:outline-blue-focus size-full p-4"
                 aria-label={group.name + " " + t("logic.translateTitle", { lng: primaryLanguage })}
                 id={`group-${groupId}-title-${primaryLanguage}`}
                 aria-describedby={`group-${groupId}-title-${primaryLanguage}-language`}
@@ -84,7 +84,7 @@ const GroupSection = ({
               </LanguageLabel>
 
               <textarea
-                className="size-full p-4 focus:outline-blue-focus"
+                className="focus:outline-blue-focus size-full p-4"
                 aria-label={
                   group.name + " " + t("logic.translateTitle", { lng: secondaryLanguage })
                 }
@@ -135,6 +135,7 @@ const Element = ({
 
   const elementsWithText: FormElementTypes[] = [
     FormElementTypes.textField,
+    FormElementTypes.numberInput,
     FormElementTypes.textArea,
     FormElementTypes.formattedDate,
     FormElementTypes.addressComplete,
@@ -251,7 +252,7 @@ export const TranslateWithGroups = () => {
           <h2 id="editTranslationsHeading" className="whitespace-nowrap" tabIndex={-1}>
             {t("groups.editTranslationsHeading")}
           </h2>
-          <div className="ml-5 mt-2">
+          <div className="mt-2 ml-5">
             <SaveButton />
           </div>
         </div>
@@ -279,7 +280,7 @@ export const TranslateWithGroups = () => {
                   <>{primaryLanguage}</>
                 </LanguageLabel>
                 <textarea
-                  className="size-full p-4 focus:outline-blue-focus"
+                  className="focus:outline-blue-focus size-full p-4"
                   id="form-title-en"
                   aria-describedby="form-title-en-language"
                   value={form[localizeField(LocalizedFormProperties.TITLE, primaryLanguage)]}
@@ -300,7 +301,7 @@ export const TranslateWithGroups = () => {
                   <>{secondaryLanguage}</>
                 </LanguageLabel>
                 <textarea
-                  className="size-full p-4 focus:outline-blue-focus"
+                  className="focus:outline-blue-focus size-full p-4"
                   id="form-title-fr"
                   aria-describedby="form-title-fr-language"
                   value={form[localizeField(LocalizedFormProperties.TITLE, secondaryLanguage)]}

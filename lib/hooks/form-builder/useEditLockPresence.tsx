@@ -1,12 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import { useLeaderTab } from "@lib/hooks/form-builder/useLeaderTab";
 import {
   CLIENT_SIDE_EDIT_LOCK_ACTIVITY_THROTTLE_MS,
   CLIENT_SIDE_EDIT_LOCK_AWAY_MS,
   CLIENT_SIDE_EDIT_LOCK_IDLE_MS,
-} from "@lib/formBuilderEditLockPresence";
+} from "@root/constants";
 import { type EditLockPresenceStatus, type EditLockVisibilityState } from "@lib/editLockStatus";
 
 type EditLockActivitySnapshot = {
@@ -34,39 +33,37 @@ const getPresenceStatus = (
 };
 
 export const useEditLockPresence = ({
-  enabled,
-  coordinationKey,
-  leaderTabEnabled = false,
+  getIsActiveTab,
+  onActivity,
 }: {
-  enabled: boolean;
-  coordinationKey: string;
-  leaderTabEnabled?: boolean;
+  getIsActiveTab: () => boolean;
+  onActivity?: (lastActivityAt: number) => void;
 }) => {
   "use memo";
-  const { isLeaderTab } = useLeaderTab({
-    enabled: enabled && leaderTabEnabled,
-    coordinationKey,
-  });
   const lastActivityAtRef = useRef(0);
   const visibilityStateRef = useRef<EditLockVisibilityState>("visible");
 
-  const isTrackingPresence = enabled && (!leaderTabEnabled || isLeaderTab);
+  const isTrackingPresence = getIsActiveTab();
 
-  const markActivity = useCallback((force = false) => {
-    const nextVisibilityState = getVisibilityState();
-    const now = Date.now();
+  const markActivity = useCallback(
+    (force = false) => {
+      const nextVisibilityState = getVisibilityState();
+      const now = Date.now();
 
-    if (
-      !force &&
-      nextVisibilityState === visibilityStateRef.current &&
-      now - lastActivityAtRef.current < CLIENT_SIDE_EDIT_LOCK_ACTIVITY_THROTTLE_MS
-    ) {
-      return;
-    }
+      if (
+        !force &&
+        nextVisibilityState === visibilityStateRef.current &&
+        now - lastActivityAtRef.current < CLIENT_SIDE_EDIT_LOCK_ACTIVITY_THROTTLE_MS
+      ) {
+        return;
+      }
 
-    lastActivityAtRef.current = now;
-    visibilityStateRef.current = nextVisibilityState;
-  }, []);
+      lastActivityAtRef.current = now;
+      visibilityStateRef.current = nextVisibilityState;
+      onActivity?.(now);
+    },
+    [onActivity]
+  );
 
   const getActivitySnapshot = useCallback((): EditLockActivitySnapshot | undefined => {
     if (!isTrackingPresence) {
@@ -118,5 +115,5 @@ export const useEditLockPresence = ({
     };
   }, [isTrackingPresence, markActivity]);
 
-  return { getActivitySnapshot, isLeaderTab };
+  return { getActivitySnapshot, getIsActiveTab };
 };

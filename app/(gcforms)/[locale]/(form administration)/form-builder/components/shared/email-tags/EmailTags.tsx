@@ -12,7 +12,7 @@ export const EmailTags = ({
   const { t } = useTranslation(["common", "form-builder"]);
 
   return (
-    <section className="mb-4 mt-8">
+    <section className="mt-8 mb-4">
       <TagInput
         validateTag={(tag) => {
           let isValid = true;
@@ -34,6 +34,15 @@ export const EmailTags = ({
         label={t("share.emailLabel", { ns: "form-builder" })}
         description=""
         allowSpacesInTags={false}
+        onBlur={(event, { addTag }) => {
+          const tag = event.currentTarget.value.trim();
+          if (!tag) {
+            return;
+          }
+
+          addTag(tag);
+          event.currentTarget.value = "";
+        }}
         onTagAdd={(tag) => {
           setTags([...new Set([...tags, tag])]);
         }}

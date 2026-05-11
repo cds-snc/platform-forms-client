@@ -1,10 +1,14 @@
-import { Handle } from "reactflow";
-import { NodeProps } from "reactflow";
+import { Handle } from "@xyflow/react";
+import { NodeProps } from "@xyflow/react";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
 import { useGroupStore } from "@lib/groups/useGroupStore";
+
+interface OffboardNodeData {
+  label: string | { name: string };
+}
 
 const ExitSvg = ({ title }: { title?: string }) => {
   return (
@@ -27,13 +31,15 @@ const ExitSvg = ({ title }: { title?: string }) => {
 };
 
 export const OffboardNode = (node: NodeProps) => {
+  const nodeData = node.data as unknown as OffboardNodeData;
+  const label = typeof nodeData.label === "string" ? nodeData.label : nodeData.label?.name;
   const direction = layoutOptions.direction;
   const { t } = useTranslation("form-builder");
 
   const setId = useGroupStore((state) => state.setId);
   const setSelectedElementId = useGroupStore((state) => state.setSelectedElementId);
   const nodeClassName =
-    "relative flex w-[100%] min-w-[200px] max-w-[200px] rounded-sm bg-slate-50 p-2 py-3 text-sm text-slate-600 border-red";
+    "relative flex w-full min-w-0 rounded-sm bg-slate-50 p-2 py-3 text-sm text-slate-600 border-red";
 
   const selectedGroupId = useGroupStore((state) => state.id);
 
@@ -48,30 +54,26 @@ export const OffboardNode = (node: NodeProps) => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div>
-        <label
-          htmlFor={node.id}
-          className="inline-block w-5/6 max-w-[200px] truncate text-sm text-slate-600"
-        >
-          {node.data.label}
+        <label htmlFor={node.id} className="inline-block w-full truncate text-sm text-slate-600">
+          {label}
         </label>
       </div>
       <div
         id={node.id}
         className={cn(
-          "space-y-2 rounded-md border-1 border-slate-800 p-4 text-white",
+          "relative w-full space-y-2 rounded-md border-1 border-slate-800 p-4 text-white",
           groupIsSelected
-            ? "bg-[#FEF2F2] shadow-offboardSelected"
-            : "bg-[#FEF2F2] shadow-offboardDefault",
-          !groupIsSelected && "focus-within:bg-violet-100 focus-within:border-dashed",
-          "relative "
+            ? "shadow-offboardSelected bg-[#FEF2F2]"
+            : "shadow-offboardDefault bg-[#FEF2F2]",
+          !groupIsSelected && "focus-within:border-dashed focus-within:bg-violet-100"
         )}
       >
         <button
           {...handleClick}
           className={cn(
-            "absolute right-[-20px] top-[-20px] cursor-pointer outline-offset-8 outline-slate-800 hover:scale-125 rounded-full"
+            "absolute -top-5 -right-5 cursor-pointer rounded-full outline-offset-8 outline-slate-800 hover:scale-125"
           )}
         >
           <ExitSvg title={t("logic.exit.nodeIconLabel")} />

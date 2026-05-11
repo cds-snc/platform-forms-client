@@ -66,14 +66,14 @@ const responseDownloadLimit: Setting = {
   value: "20",
 };
 
-const editLockPresenceEnabled: Setting = {
-  internalId: "editLockPresenceEnabled",
-  nameEn: "Enable edit lock presence detection",
-  nameFr: "Activer la détection de présence pour le verrouillage d'édition",
-  descriptionEn: "Turn edit lock presence tracking on or off for the form builder experience.",
+const editLockRedirectIdleMs: Setting = {
+  internalId: "editLockRedirectIdleMs",
+  nameEn: "Edit lock idle redirect timeout (ms)",
+  nameFr: "Délai de redirection d'inactivité du verrou d'édition (ms)",
+  descriptionEn: "How long the form builder can stay idle before becoming inactive.",
   descriptionFr:
-    "Activez ou désactivez le suivi de présence du verrouillage d'édition dans l'expérience du générateur de formulaires.",
-  value: "false",
+    "Durée pendant laquelle le générateur de formulaires peut rester inactif avant de devenir inactif.",
+  value: "1800000",
 };
 
 const allSettings = [
@@ -83,7 +83,7 @@ const allSettings = [
   nagwarePhaseWarned,
   nagwarePhaseEscalated,
   responseDownloadLimit,
-  editLockPresenceEnabled,
+  editLockRedirectIdleMs,
 ];
 
 export default {

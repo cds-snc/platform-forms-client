@@ -15,9 +15,11 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 };
 
 export const AutocompleteOptions = ({
+  id,
   handleChange,
   selectedValue,
 }: {
+  id?: string;
   handleChange: (evt: ChangeEvent<HTMLSelectElement>) => void;
   selectedValue: string;
 }) => {
@@ -38,6 +40,7 @@ export const AutocompleteOptions = ({
   return (
     <div className="gcds-select-wrapper">
       <select
+        id={id}
         data-testid="autocomplete"
         className="gc-dropdown mb-4 inline-block"
         onChange={handleChange}

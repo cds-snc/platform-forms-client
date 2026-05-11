@@ -83,9 +83,9 @@ export const submission = {
         },
         {
           id: 10,
-          type: "textField",
+          type: "numberInput",
           properties: {
-            validation: { type: "number", required: false },
+            validation: { required: false },
           },
         },
         {

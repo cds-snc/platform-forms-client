@@ -1,21 +1,22 @@
+import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { prismaMock } from "@jestUtils";
+import { prismaMock } from "@testUtils";
 import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { cloneTemplate } from "../templates";
 import { logEvent } from "@lib/auditLogs";
 
-jest.mock("@lib/auditLogs", () => ({
+vi.mock("@lib/auditLogs", async () => {
+  const __actual0 = await vi.importActual<any>("@lib/auditLogs");
+  return {
   __esModule: true,
-  logEvent: jest.fn(),
-  get AuditLogDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
-  },
-  get AuditLogAccessDeniedDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
-  }
-}));
+  logEvent: vi.fn(),
+  AuditLogDetails: __actual0.AuditLogDetails,
+  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+});
 
-const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+vi.mock("@lib/privileges");
+
+const mockedLogEvent = vi.mocked(logEvent);
 
 describe("cloneTemplate", () => {
   const userID = "user1";
@@ -43,7 +44,7 @@ describe("cloneTemplate", () => {
       notificationsUsers: [{ id: "user2" }, { id: userID }],
     };
 
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(sourceTemplate);
+    (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(sourceTemplate);
 
     const createdTemplate = {
       id: "new1",
@@ -59,7 +60,7 @@ describe("cloneTemplate", () => {
       notificationsInterval: sourceTemplate.notificationsInterval,
     };
 
-    (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(createdTemplate);
+    (prismaMock.template.create as MockedFunction<any>).mockResolvedValue(createdTemplate);
 
     const result = await cloneTemplate("src1", false);
 
