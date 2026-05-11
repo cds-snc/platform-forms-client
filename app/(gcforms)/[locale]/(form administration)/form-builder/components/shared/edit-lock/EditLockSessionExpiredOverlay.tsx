@@ -22,7 +22,7 @@ export const EditLockSessionExpiredOverlay = ({
     gaEditLock({
       formId,
       description: "session_expired",
-      // Use path vs static since overlay can show in muliple places in the app
+      // Dynamic since can expired overlay can show in multiple locations
       eventData: { location: pathname.split("/").filter(Boolean).at(-1) },
     });
   }, [formId, pathname]);

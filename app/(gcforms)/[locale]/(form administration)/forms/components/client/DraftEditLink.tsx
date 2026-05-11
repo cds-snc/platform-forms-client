@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
@@ -30,7 +30,6 @@ export const DraftEditLink = ({
   const [lockedByName, setLockedByName] = useState<string | null>(null);
   const [showDialog, setShowDialog] = useState(false);
   const [collaborators, setCollaborators] = useState<number | null | undefined>(undefined);
-  const pathname = usePathname();
 
   const navigateToEditor = () => {
     router.push(href);
@@ -87,7 +86,7 @@ export const DraftEditLink = ({
 
   const eventData: Record<string, unknown> = {
     ...(collaborators !== null && collaborators !== undefined && { collaborators }),
-    ...(location && { location: pathname.split("/").filter(Boolean).at(-1) }),
+    location: "edit",
   };
 
   const actions = (
