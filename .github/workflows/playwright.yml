@@ -86,7 +86,7 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Run Playwright Tests
-        run: yarn playwright:run
+        run: yarn playwright:headless:ci
         env:
           PLAYWRIGHT_WORKERS: 4
 

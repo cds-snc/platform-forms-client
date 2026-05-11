@@ -37,9 +37,9 @@
     "test:vitest:browser:watch": "VITEST_BROWSER=true vitest --watch",
     "test:watch:vitest": "vitest --watch",
     "test:watch": "DEBUG_PRINT_LIMIT=10000  vitest --watch",
-    "playwright": "playwright test --ui",
-    "playwright:run:headless": "CI=true playwright test",
-    "playwright:run": "playwright test",
+    "playwright:ui:local": "playwright install chromium --with-deps && PLAYWRIGHT_ISOLATE_DB=true playwright test --ui",
+    "playwright:headless:local": "playwright install chromium --with-deps && PLAYWRIGHT_ISOLATE_DB=true playwright test",
+    "playwright:headless:ci": "CI=true playwright test",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install && yarn db:generate",
     "upgrade": "yarn next upgrade"
   },
