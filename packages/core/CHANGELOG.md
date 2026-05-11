@@ -3,7 +3,7 @@
 
 ## [2.2.8] - 2026-05-11
 
-- BREAKING: Remove i18next as a dependency from validation types. Introduced a local TranslateFn type for translation function signatures in validation. This keeps the core package framework-agnostic and avoids unnecessary dependencies.
+- Remove i18next as a dependency from validation types. Introduced a local TranslateFn type for translation function signatures in validation. This keeps the core package framework-agnostic and avoids unnecessary dependencies.
 
 ## [2.2.7] - 2026-05-04
 
