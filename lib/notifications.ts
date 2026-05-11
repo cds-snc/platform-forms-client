@@ -5,6 +5,7 @@ import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@gcforms/database";
+import { AuthenticatedAction } from "./actions";
 
 // Hard coded since only one interval is supported currently
 const NOTIFICATIONS_INTERVAL = NotificationsInterval.DAY;
@@ -275,3 +276,127 @@ const multipleSubmissionsEmailTemplate = async (
   *${t_fr("settings.notifications.email.multipleSubmissions.paragraph3")}*
     `;
 };
+
+const archivedFormEmailTemplate = async (
+  HOST: string,
+  formTitleEn: string,
+  formTitleFr: string,
+  actionEmail: string
+) => {
+  const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
+  const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
+  return `
+  ${t_en("settings.notifications.email.archivedForm.paragraph1")}
+  ${formTitleEn}
+  ${t_en("settings.notifications.email.archivedForm.paragraph2")}
+  ${actionEmail}
+  
+  **[${t_en("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
+  
+  *${t_en("settings.notifications.email.archivedForm.paragraph4")}*
+  
+  ---
+  
+  ${t_fr("settings.notifications.email.archivedForm.paragraph1")}
+  ${formTitleFr}
+  ${t_fr("settings.notifications.email.archivedForm.paragraph2")}
+  ${actionEmail}
+  
+  **[${t_fr("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
+  
+  *${t_fr("settings.notifications.email.archivedForm.paragraph4")}*
+    `;
+};
+
+const sendArchivedFormNotification = async (
+  email: string,
+  formId: string,
+  formTitleEn: string,
+  formTitleFr: string,
+  actionEmail: string
+) => {
+  const { t } = await serverTranslation("form-builder");
+  const HOST = await getOrigin();
+  await sendEmail(
+    email,
+    {
+      subject: t("settings.notifications.email.archivedForm.subject"),
+      formResponse: await archivedFormEmailTemplate(HOST, formTitleEn, formTitleFr, actionEmail),
+    },
+    "notification"
+  )
+    .then(() =>
+      logMessage.debug(
+        `sendArchivedFormNotification sent email to ${email} with formId ${formId} for type archived form`
+      )
+    )
+    .catch(() =>
+      logMessage.error(
+        `sendArchivedFormNotification failed to send email ${email} with formId ${formId}`
+      )
+    );
+};
+
+const sendArchivedFormNotificationsToAllUsers = async (
+  users: {
+    email: string;
+    enabled: boolean;
+  }[],
+  formId: string,
+  formTitleEn: string,
+  formTitleFr: string,
+  actionEmail: string
+) => {
+  if (!Array.isArray(users) || users.length === 0) {
+    logMessage.debug("sendArchivedFormNotificationsToAllUsers missing users");
+    return;
+  }
+  users.forEach(
+    ({ email, enabled }) =>
+      enabled && sendArchivedFormNotification(email, formId, formTitleEn, formTitleFr, actionEmail)
+  );
+};
+
+const getAllFormUsers = async (formId: string) => {
+  const template = await prisma.template
+    .findUnique({
+      where: {
+        id: formId,
+        ttl: { not: null },
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!template) {
+    logMessage.debug(`getAllFormUsers template not found with id ${formId}`);
+    return null;
+  }
+
+  return template.users.map((user) => ({
+    id: user.id,
+    email: user.email,
+    enabled: true,
+  }));
+};
+
+// Public facing function to send notifications to all related users on a form archival
+export const sendArchivedFormNotifications = AuthenticatedAction(
+  async (session, formId: string, titleEn: string, titleFr: string) => {
+    const users = await getAllFormUsers(formId);
+
+    // Some older forms may not have users, do nothing
+    if (!Array.isArray(users) || users.length === 0) {
+      return;
+    }
+
+    sendArchivedFormNotificationsToAllUsers(users, formId, titleEn, titleFr, session.user.email);
+  }
+);
