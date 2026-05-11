@@ -82,7 +82,7 @@ export const AccountsSearchForm = ({
           <input
             id="accounts-query"
             type="search"
-            className="w-full rounded-md border-2 border-slate-700 p-2"
+            className="w-full rounded-md border-2 border-slate-700 bg-white p-2"
             placeholder={t("search.placeholder")}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
