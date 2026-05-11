@@ -23,7 +23,6 @@ vi.mock("@lib/privileges", () => ({
 vi.mock("@lib/auditLogs", () => ({
   AuditLogDetails: {
     AcceptedInvitation: "AcceptedInvitation",
-    AccessGranted: "AccessGranted",
   },
   AuditLogEvent: {
     InvitationAccepted: "InvitationAccepted",
