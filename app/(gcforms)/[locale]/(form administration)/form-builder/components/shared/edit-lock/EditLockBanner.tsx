@@ -124,7 +124,7 @@ export const EditLockBanner = ({
           ? "takeover_stale_lock"
           : "takeover_lock";
       const eventData: Record<string, unknown> = {
-        // Dynamic since can banner can show in multiple locations
+        // Dynamic since the banner can show in multiple locations
         location: pathname.split("/").filter(Boolean).at(-1),
         ...(lastActivity && { lastActivity }),
       };
