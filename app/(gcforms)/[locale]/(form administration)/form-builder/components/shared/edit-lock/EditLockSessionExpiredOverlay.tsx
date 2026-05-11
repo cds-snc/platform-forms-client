@@ -19,7 +19,14 @@ export const EditLockSessionExpiredOverlay = ({
   // Use a ref so formId doesn't need to be added to the dependency array and potentially cause
   // the GA event to be fired multiple times.
   const formIdRef = useRef(formId);
-  useEffect(() => gaEditLock({ formId: formIdRef.current, description: "session_expired" }), []);
+  useEffect(() => {
+    const pathname = "edit"; // Hardcode to avoid include usePathname deps etc. It will always be the edit page
+    gaEditLock({
+      formId: formIdRef.current,
+      description: "session_expired",
+      extra: { location: pathname },
+    });
+  }, []);
 
   return (
     <div

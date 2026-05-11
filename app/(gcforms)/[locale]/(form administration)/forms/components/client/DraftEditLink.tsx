@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
@@ -30,6 +30,7 @@ export const DraftEditLink = ({
   const [lockedByName, setLockedByName] = useState<string | null>(null);
   const [showDialog, setShowDialog] = useState(false);
   const [collaborators, setCollaborators] = useState<number | null | undefined>(undefined);
+  const pathname = usePathname();
 
   const navigateToEditor = () => {
     router.push(href);
@@ -84,6 +85,12 @@ export const DraftEditLink = ({
     }
   };
 
+  const location = pathname.split("/").filter(Boolean).at(-1);
+  const gaData: Record<string, unknown> = {
+    ...(collaborators && { collaborators }),
+    ...(location && { location }),
+  };
+
   const actions = (
     <div className="flex gap-4">
       <Button
@@ -92,7 +99,7 @@ export const DraftEditLink = ({
           dialogRef.current?.close();
           setShowDialog(false);
           navigateToEditor();
-          gaEditLock({ formId, description: "accept_read_only", extra: { collaborators } });
+          gaEditLock({ formId, description: "accept_read_only", extra: gaData });
         }}
       >
         {t("continueReadOnly", { ns: "my-forms" })}
@@ -103,7 +110,7 @@ export const DraftEditLink = ({
         onClick={() => {
           dialogRef.current?.close();
           setShowDialog(false);
-          gaEditLock({ formId, description: "decline_read_only", extra: { collaborators } });
+          gaEditLock({ formId, description: "decline_read_only", extra: gaData });
         }}
       >
         {t("cancel", { ns: "form-builder" })}

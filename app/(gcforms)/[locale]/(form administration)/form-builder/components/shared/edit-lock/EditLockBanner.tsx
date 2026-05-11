@@ -9,6 +9,7 @@ import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
 import { gaEditLock } from "./EditLockGA";
+import { usePathname } from "next/navigation";
 
 const RELATIVE_TIME_TICK_MS = 5_000;
 
@@ -61,6 +62,7 @@ export const EditLockBanner = ({
   const [isTakingOver, setIsTakingOver] = useState(false);
   const [takeoverError, setTakeoverError] = useState(false);
   const [timeTick, setTimeTick] = useState(() => Date.now());
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isLockedByOther) {
@@ -117,12 +119,17 @@ export const EditLockBanner = ({
       await takeover();
       toast.success(t("editLock.syncedLatest"), "wide");
 
+      // construct and send the Google Analytics event
       const description = isTakeoverAvailable
         ? "takeover_available_lock"
         : isStale
           ? "takeover_stale_lock"
           : "takeover_lock";
-      const extra = lastActivity ? { lastActivity } : undefined;
+      const location = pathname.split("/").filter(Boolean).at(-1);
+      const extra: Record<string, unknown> = {
+        ...(location && { location }),
+        ...(lastActivity && { lastActivity }),
+      };
       gaEditLock({ formId, description, extra });
     } catch (error) {
       setTakeoverError(true);
