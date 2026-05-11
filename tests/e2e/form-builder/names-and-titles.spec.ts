@@ -2,7 +2,7 @@ import { test, expect, Page } from "@playwright/test";
 
 test.describe("Form builder names and titles", () => {
   test.beforeEach(async ({ page }: { page: Page }) => {
-    await page.goto("http://localhost:3000/en/form-builder/0000/edit");
+    await page.goto("/en/form-builder/0000/edit");
   });
 
   test("Autocompletes name with title on focus", async ({ page }) => {
