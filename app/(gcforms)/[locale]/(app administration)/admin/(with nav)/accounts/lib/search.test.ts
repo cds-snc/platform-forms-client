@@ -42,6 +42,6 @@ describe("accounts search params", () => {
       userState: "active",
     });
 
-    expect(params.toString()).toBe("query=abc+def&property=email&userState=active&page=3");
+    expect(params.toString()).toBe("query=abc+def&userState=active&page=3");
   });
 });
