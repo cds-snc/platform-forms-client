@@ -12,7 +12,7 @@ jobs:
       # Label used to access the service container
       postgres:
         # Docker Hub image
-        image: postgres@sha256:69e8582b781cb44fa4557b98ed586fe68361e320d9b12f9707494335634f4f3d
+        image: postgres@sha256:7e32e9833a6fb1c92c32552794cb6ed569d51b445a54907d35fc112ef39684db
         env:
           POSTGRES_PASSWORD: postgres
         # Set health checks to wait until postgres has started
@@ -25,7 +25,7 @@ jobs:
           - 5432:5432
       redis:
         # Docker Hub image
-        image: redis@sha256:1c054d54ecd1597bba52f4304bca5afbc5565ebe614c5b3d7dc5b7f8a0cd768d
+        image: redis@sha256:0c341492924cad6f5483f9133e43bd6c51ecdecbcadfac5b51657393b6a7936c
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
@@ -86,7 +86,7 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Run Playwright Tests
-        run: yarn playwright:run
+        run: yarn playwright:headless:ci
         env:
           PLAYWRIGHT_WORKERS: 4
 

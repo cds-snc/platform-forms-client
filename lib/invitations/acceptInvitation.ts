@@ -101,8 +101,8 @@ export const acceptInvitation = async (invitationId: string) => {
     invitation.invitedBy ?? ability.user.id,
     { type: "Form", id: invitation.templateId },
     "GrantFormAccess",
-    AuditLogDetails.AccessGranted,
-    { grantedUserId: user.id }
+    AuditLogDetails.AcceptedInvitation,
+    { userEmail: user.email }
   );
 
   notifyOwnersOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
