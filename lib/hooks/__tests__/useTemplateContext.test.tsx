@@ -4,7 +4,10 @@
 import React from "react";
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { SaveTemplateProvider, useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
+import {
+  SaveTemplateProvider,
+  useTemplateContext,
+} from "@lib/hooks/form-builder/useTemplateContext";
 
 type OperationResult = {
   formRecord: {
@@ -92,5 +95,136 @@ describe("useTemplateContext saveDraft concurrency", () => {
     });
 
     expect(createOrUpdateTemplateMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("resolves a burst of queued saveDraft calls with a single write for unchanged drafts", async () => {
+    let resolveSave: ((result: OperationResult) => void) | undefined;
+
+    createOrUpdateTemplateMock.mockImplementation(
+      () =>
+        new Promise<OperationResult>((resolve) => {
+          resolveSave = resolve;
+        })
+    );
+
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <SaveTemplateProvider>{children}</SaveTemplateProvider>
+    );
+
+    const { result } = renderHook(() => useTemplateContext(), { wrapper });
+
+    const queuedSaveCount = 25;
+    let savePromises: Array<Promise<{ status: string; formId?: string }>> = [];
+
+    await act(async () => {
+      savePromises = Array.from({ length: queuedSaveCount }, () => result.current.saveDraft());
+    });
+
+    expect(createOrUpdateTemplateMock).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      resolveSave?.({
+        formRecord: {
+          id: "form-1",
+          updatedAt: new Date().toISOString(),
+        },
+      });
+
+      const results = await Promise.all(savePromises);
+
+      expect(results).toHaveLength(queuedSaveCount);
+      for (const saveResult of results) {
+        expect(saveResult.status).toBe("saved");
+      }
+    });
+
+    expect(createOrUpdateTemplateMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("runs exactly one trailing write when a local edit appears while a save is in flight", async () => {
+    let resolveFirstSave: ((result: OperationResult) => void) | undefined;
+    let resolveSecondSave: ((result: OperationResult) => void) | undefined;
+    let storeSubscriber:
+      | ((
+          current: [unknown, boolean, string, unknown, unknown],
+          previous: [unknown, boolean, string, unknown, unknown]
+        ) => void)
+      | undefined;
+    let triggerLocalEditOnNextGetId = false;
+
+    subscribeMock.mockImplementation((_, listener) => {
+      storeSubscriber = listener;
+    });
+
+    mockStore.getId.mockImplementation(() => {
+      if (triggerLocalEditOnNextGetId && storeSubscriber) {
+        triggerLocalEditOnNextGetId = false;
+        storeSubscriber(
+          [{ title: "edited" }, false, "Test form", undefined, undefined],
+          [{ title: "initial" }, false, "Test form", undefined, undefined]
+        );
+      }
+
+      return "form-1";
+    });
+
+    createOrUpdateTemplateMock
+      .mockImplementationOnce(
+        () =>
+          new Promise<OperationResult>((resolve) => {
+            resolveFirstSave = resolve;
+          })
+      )
+      .mockImplementationOnce(
+        () =>
+          new Promise<OperationResult>((resolve) => {
+            resolveSecondSave = resolve;
+          })
+      );
+
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <SaveTemplateProvider>{children}</SaveTemplateProvider>
+    );
+
+    const { result } = renderHook(() => useTemplateContext(), { wrapper });
+
+    let firstSavePromise!: Promise<{ status: string; formId?: string }>;
+    let queuedSavePromise!: Promise<{ status: string; formId?: string }>;
+
+    await act(async () => {
+      firstSavePromise = result.current.saveDraft();
+      queuedSavePromise = result.current.saveDraft();
+    });
+
+    expect(createOrUpdateTemplateMock).toHaveBeenCalledTimes(1);
+
+    triggerLocalEditOnNextGetId = true;
+
+    await act(async () => {
+      resolveFirstSave?.({
+        formRecord: {
+          id: "form-1",
+          updatedAt: new Date().toISOString(),
+        },
+      });
+    });
+
+    expect(createOrUpdateTemplateMock).toHaveBeenCalledTimes(2);
+
+    await act(async () => {
+      resolveSecondSave?.({
+        formRecord: {
+          id: "form-1",
+          updatedAt: new Date().toISOString(),
+        },
+      });
+
+      const [firstResult, queuedResult] = await Promise.all([firstSavePromise, queuedSavePromise]);
+
+      expect(firstResult.status).toBe("saved");
+      expect(queuedResult.status).toBe("saved");
+    });
+
+    expect(createOrUpdateTemplateMock).toHaveBeenCalledTimes(2);
   });
 });
