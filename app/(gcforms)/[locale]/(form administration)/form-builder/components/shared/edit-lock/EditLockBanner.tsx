@@ -8,7 +8,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
-import { gaEditLock } from "./EditLockGA";
+import { gaEditLock, getLastSegmentOfPath } from "./EditLockGA";
 import { usePathname } from "next/navigation";
 
 const RELATIVE_TIME_TICK_MS = 5_000;
@@ -125,7 +125,7 @@ export const EditLockBanner = ({
           : "takeover_lock";
       const eventData: Record<string, unknown> = {
         // Dynamic since the banner can show in multiple locations
-        location: pathname.split("/").filter(Boolean).at(-1),
+        location: getLastSegmentOfPath(pathname),
         ...(lastActivity && { lastActivity }),
       };
       gaEditLock({ formId, description, eventData });

@@ -103,8 +103,8 @@ export const DraftEditLink = ({
         onClick={() => {
           dialogRef.current?.close();
           setShowDialog(false);
-          navigateToEditor();
           gaEditLock({ formId, description: "accept_read_only", eventData });
+          navigateToEditor();
         }}
       >
         {t("continueReadOnly", { ns: "my-forms" })}
