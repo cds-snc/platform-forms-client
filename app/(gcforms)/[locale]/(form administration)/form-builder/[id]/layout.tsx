@@ -50,7 +50,7 @@ export default async function Layout(props: {
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();
-  const allowLockedEditingFlag = await allowLockedEditing();
+  const allowLockedEditingFlag = await allowLockedEditing(session?.user.id);
   const ownerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(
     await getAppSetting("editLockRedirectIdleMs")
   );

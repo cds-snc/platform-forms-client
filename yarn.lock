@@ -9616,14 +9616,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.13.6":
-  version: 1.13.6
-  resolution: "axios@npm:1.13.6"
+"axios@npm:^1.16.0":
+  version: 1.16.0
+  resolution: "axios@npm:1.16.0"
   dependencies:
-    follow-redirects: "npm:^1.15.11"
+    follow-redirects: "npm:^1.16.0"
     form-data: "npm:^4.0.5"
-    proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/51fb5af055c3b85662fa97df17d986ae2c37d13bf86d50b6bb36b6b3a2dec6966a1d3a14ab3774b71707b155ae3597ed9b7babdf1a1a863d1a31840cb8e7ec71
+    proxy-from-env: "npm:^2.1.0"
+  checksum: 10c0/1c91a5221b77b76072026b4cc95ecdf38f7c3e33e63423abec09a85e6e9a12279637dcc9ac2ba1fc333e0c447fb3b0f46d7965acb5d7cea02d188e9c6d425c0b
   languageName: node
   linkType: hard
 
@@ -12046,6 +12046,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"follow-redirects@npm:^1.16.0":
+  version: 1.16.0
+  resolution: "follow-redirects@npm:1.16.0"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: 10c0/a1e2900163e6f1b4d1ed5c221b607f41decbab65534c63fe7e287e40a5d552a6496e7d9d7d976fa4ba77b4c51c11e5e9f683f10b43011ea11e442ff128d0e181
+  languageName: node
+  linkType: hard
+
 "for-each@npm:^0.3.3, for-each@npm:^0.3.5":
   version: 0.3.5
   resolution: "for-each@npm:0.3.5"
@@ -12268,7 +12278,7 @@ __metadata:
     "@xyflow/react": "npm:12.10.2"
     aws-sdk-client-mock: "npm:^3.0.0"
     axe-core: "npm:^4.10.3"
-    axios: "npm:^1.13.6"
+    axios: "npm:^1.16.0"
     babel-plugin-react-compiler: "npm:^1.0.0"
     baseline-browser-mapping: "npm:^2.10.12"
     body-scroll-lock: "npm:^4.0.0-beta.0"
@@ -12306,7 +12316,7 @@ __metadata:
     lodash.isequal: "npm:^4.5.0"
     lodash.merge: "npm:^4.6.2"
     lodash.set: "npm:4.3.2"
-    lodash.unset: "npm:4.5.2"
+    lodash.unset: "npm:4.18.0"
     markdown-to-jsx: "npm:7.7.13"
     native-file-system-adapter: "npm:^3.0.1"
     next: "npm:16.2.6"
@@ -13894,10 +13904,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.unset@npm:4.5.2":
-  version: 4.5.2
-  resolution: "lodash.unset@npm:4.5.2"
-  checksum: 10c0/332d046ac8c457c249018719093d9891dbbdd4df9a15acb99689e7b22cbcc9fe49fc712748704a52c6843f3146978a3e1b407400ca63782e2e2df90ffb69eccf
+"lodash.unset@npm:4.18.0":
+  version: 4.18.0
+  resolution: "lodash.unset@npm:4.18.0"
+  checksum: 10c0/e724a133a3dc29185198401785f33bfea6f06d5b5274b15f1493811bf19bd554d01d1571c1a1a87a7714545a5af0ddfe9e71adf29231477414d7aa5aaa38877b
   languageName: node
   linkType: hard
 
@@ -15879,13 +15889,6 @@ __metadata:
     "@types/node": "npm:>=13.7.0"
     long: "npm:^5.0.0"
   checksum: 10c0/913b676109ffb3c05d3d31e03a684e569be91f3bba8613da4a683d69d9dba948daa2afd7d2e7944d1aa6c417890c35d9d9a8883c1160affafb0f9670d59ef722
-  languageName: node
-  linkType: hard
-
-"proxy-from-env@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "proxy-from-env@npm:1.1.0"
-  checksum: 10c0/fe7dd8b1bdbbbea18d1459107729c3e4a2243ca870d26d34c2c1bcd3e4425b7bcc5112362df2d93cc7fb9746f6142b5e272fd1cc5c86ddf8580175186f6ad42b
   languageName: node
   linkType: hard
 

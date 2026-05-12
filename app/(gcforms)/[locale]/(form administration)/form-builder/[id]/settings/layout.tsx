@@ -19,9 +19,8 @@ export default async function Layout(props: {
   const { children } = props;
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
-  const allowLockedEditingFlag = await allowLockedEditing();
-
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
+  const allowLockedEditingFlag = await allowLockedEditing(session?.user.id);
 
   if (!session) {
     return <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />;
