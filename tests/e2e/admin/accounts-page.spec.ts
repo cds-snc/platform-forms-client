@@ -7,7 +7,6 @@ test.describe("Accounts Page", () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto("/en/admin/accounts");
-    await page.waitForLoadState("networkidle");
   });
 
   test.describe("Authenticated Admin User", () => {
@@ -18,7 +17,7 @@ test.describe("Accounts Page", () => {
     });
 
     test.describe("Accounts search and cards", () => {
-      test.skip("Submitting email search updates with expected content", async ({ page }) => {
+      test("Submitting email search updates with expected content", async ({ page }) => {
         await page.locator("#accounts-query").fill(testUserEmail);
         await page.getByRole("button", { name: "Search" }).click();
 
@@ -27,7 +26,7 @@ test.describe("Accounts Page", () => {
         await expect(page.getByTestId(deactivatedUserEmail)).not.toBeVisible();
       });
 
-      test.skip("Submitting deactivated status search updates with expected content", async ({
+      test("Submitting deactivated status search updates with expected content", async ({
         page,
       }) => {
         await page.locator("#accounts-status").selectOption("deactivated");
@@ -38,7 +37,7 @@ test.describe("Accounts Page", () => {
         await expect(page.getByTestId(testUserEmail)).not.toBeVisible();
       });
 
-      test.skip("Clicking manage forms navigates to the related page", async ({ page }) => {
+      test("Clicking manage forms navigates to the related page", async ({ page }) => {
         await page.locator("#accounts-query").fill(testUserEmail);
         await page.getByRole("button", { name: "Search" }).click();
         await page.getByTestId(testUserEmail).getByRole("link", { name: "Manage forms" }).click();
