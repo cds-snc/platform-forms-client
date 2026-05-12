@@ -28,6 +28,7 @@ export const TagInput = ({
   restrictDuplicates = true,
   allowSpacesInTags = true,
   maxTags,
+  onBlur,
   onTagAdd,
   onTagRemove,
   validateTag,
@@ -42,6 +43,10 @@ export const TagInput = ({
   restrictDuplicates?: boolean;
   allowSpacesInTags?: boolean;
   maxTags?: number;
+  onBlur?: (
+    event: React.FocusEvent<HTMLInputElement>,
+    helpers: { addTag: (tag: string) => void }
+  ) => void;
   onTagAdd?: (tag: string) => void;
   onTagRemove?: (tag: string) => void;
   validateTag?: (tag: string) => {
@@ -214,6 +219,10 @@ export const TagInput = ({
     }
   };
 
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    onBlur?.(event, { addTag: handleAddTag });
+  };
+
   return (
     <div className="gc-tag-input-container" onClick={() => tagInputRef.current?.focus()}>
       <label htmlFor={id} className="gc-tag-input-label">
@@ -244,6 +253,7 @@ export const TagInput = ({
           name={name}
           type="text"
           placeholder={placeholder}
+          onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           ref={tagInputRef}
         />

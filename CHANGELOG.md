@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.14.0](https://github.com/cds-snc/platform-forms-client/compare/v4.13.0...v4.14.0) (2026-05-11)
+
+
+### Features
+
+* Ability to Download Filtered Audit Logs / UX Improvement ([#7063](https://github.com/cds-snc/platform-forms-client/issues/7063)) ([447cc5d](https://github.com/cds-snc/platform-forms-client/commit/447cc5d8ac9c2837c160f5f885662a66c8d3a838))
+
+
+### Bug Fixes
+
+* element rules selector ([#7111](https://github.com/cds-snc/platform-forms-client/issues/7111)) ([4170d63](https://github.com/cds-snc/platform-forms-client/commit/4170d6312ff83ed75133c0c179ebf0770486d764))
+
+
+### Miscellaneous Chores
+
+* bump next.js ([#7106](https://github.com/cds-snc/platform-forms-client/issues/7106)) ([1159df5](https://github.com/cds-snc/platform-forms-client/commit/1159df57bed9c516cdb6d3c5c3bbadf05d9cd174))
+* fix focus test ([#7112](https://github.com/cds-snc/platform-forms-client/issues/7112)) ([97a7933](https://github.com/cds-snc/platform-forms-client/commit/97a793396dde54d3db8da58ad52909559fbff750))
+* handle blur for tag input ([#7101](https://github.com/cds-snc/platform-forms-client/issues/7101)) ([30f4d9d](https://github.com/cds-snc/platform-forms-client/commit/30f4d9da1f2877f5e6a7bc8b26638a0b5f98545d))
+* modify edit lock threshold ([#7100](https://github.com/cds-snc/platform-forms-client/issues/7100)) ([11f82a4](https://github.com/cds-snc/platform-forms-client/commit/11f82a41b4cf952b39b1763110a742753de8db2d))
+* no show for 0000 ([#7105](https://github.com/cds-snc/platform-forms-client/issues/7105)) ([3988753](https://github.com/cds-snc/platform-forms-client/commit/3988753c2ede5239e04f54a7cfcdcac4728ee5c2))
+* Playwright isolated runs for local dev ([#7107](https://github.com/cds-snc/platform-forms-client/issues/7107)) ([5f7141d](https://github.com/cds-snc/platform-forms-client/commit/5f7141d50ccda763b4fdf71512ecbe05f07e4d89))
+* update playwright scripts ([#7109](https://github.com/cds-snc/platform-forms-client/issues/7109)) ([340f3bc](https://github.com/cds-snc/platform-forms-client/commit/340f3bc12b053c76e2019dccb361fa177b7edf95))
+
+## [4.13.0](https://github.com/cds-snc/platform-forms-client/compare/v4.12.1...v4.13.0) (2026-05-06)
+
+
+### Features
+
+* Advanced NumberInput options ([#6963](https://github.com/cds-snc/platform-forms-client/issues/6963)) ([a255f06](https://github.com/cds-snc/platform-forms-client/commit/a255f065445effd8e8ac89e2356d260edfdfabc5))
+
+
+### Miscellaneous Chores
+
+* add event for edit lock publish flow ([#7098](https://github.com/cds-snc/platform-forms-client/issues/7098)) ([c77c9fa](https://github.com/cds-snc/platform-forms-client/commit/c77c9fa68daf1a3def9623d70c58f3bb5e41f551))
+* fix node widths ([#7095](https://github.com/cds-snc/platform-forms-client/issues/7095)) ([5893365](https://github.com/cds-snc/platform-forms-client/commit/58933654f75f3660eb21046c5fa55a9b5ab32fad))
+* move locked edit context to a shared provider ([#7096](https://github.com/cds-snc/platform-forms-client/issues/7096)) ([49b50bb](https://github.com/cds-snc/platform-forms-client/commit/49b50bbd826e85b34cda20615721044a23fc9cee))
+* rework SSL implementation in @gcforms/database package ([#7090](https://github.com/cds-snc/platform-forms-client/issues/7090)) ([9c19093](https://github.com/cds-snc/platform-forms-client/commit/9c19093a2124951e9628ee793a0ef638b7d42271))
+* Update to React flow 12x ([#7038](https://github.com/cds-snc/platform-forms-client/issues/7038)) ([1570f02](https://github.com/cds-snc/platform-forms-client/commit/1570f0289e22fa227180f56e26e8865efaf0057d))
+
 ## [4.12.1](https://github.com/cds-snc/platform-forms-client/compare/v4.12.0...v4.12.1) (2026-05-05)
 
 

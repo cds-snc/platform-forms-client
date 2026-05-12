@@ -137,5 +137,5 @@ export const getTemplateUsers = AuthenticatedAction(async (_, formId: string) =>
 });
 
 export const cancelInvitation = AuthenticatedAction(async (_, id: string) => {
-  cancelInvitationAction(id);
+  await cancelInvitationAction(id);
 });

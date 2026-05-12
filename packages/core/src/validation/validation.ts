@@ -13,7 +13,9 @@ import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
 import { isSafeRegex } from "./regex";
 import { isNumberInput } from "../utils/isNumberInput";
-import { TFunction } from "i18next";
+
+// Minimal translation function type to avoid i18next dependency
+export type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 
 export const isFieldResponseValid = (
   value: unknown,
@@ -21,7 +23,7 @@ export const isFieldResponseValid = (
   componentType: string,
   formElement: FormElement,
   validator: ValidationProperties,
-  t: TFunction<"common">
+  t: TranslateFn
 ): string | null | Record<string, unknown>[] => {
   // Note that this will ignore a file upload since the value is an object. We could check the
   // file's file name length but this is probably not necessary since OS's have a filename limit.

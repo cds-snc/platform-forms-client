@@ -12,6 +12,13 @@ test.describe("Forms Navigation Focus", () => {
     publishedFormPath = `en/id/${formId}`;
   });
 
+  test.afterAll(async () => {
+    // Clean up: delete the template and disconnect
+    if (formId) {
+      await dbHelper.deleteTemplate(formId);
+    }
+  });
+
   test.describe("Focus should remain on the error container when there are validation errors", () => {
     test.beforeEach(async ({ page }) => {
       await page.goto(publishedFormPath);
@@ -21,8 +28,7 @@ test.describe("Forms Navigation Focus", () => {
       await page.locator("label[for='1.0']").click();
       await page.locator("button[data-testid='nextButton']").click();
       await page.locator("button[data-testid='nextButton']").click(); // Trigger validation error
-      await page.waitForTimeout(500);
-
+      await expect(page.locator("#gc-form-errors")).toBeVisible();
       const focusedElement = await page.evaluate(() => document.activeElement?.id);
       expect(focusedElement).toBe("gc-form-errors");
     });

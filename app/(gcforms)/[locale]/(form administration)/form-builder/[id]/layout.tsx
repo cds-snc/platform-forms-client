@@ -19,7 +19,7 @@ import { checkKeyExists } from "@lib/serviceAccount";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { getAppSetting } from "@lib/appSettings";
 import { normalizeEditLockRedirectIdleMs } from "@lib/utils/form-builder/editLockRedirectIdleMs";
-import { shouldEnableTemplateEditLock } from "@lib/editLocks";
+import { shouldEnforceTemplateEditLockWithVerifiedUserCount } from "@lib/editLocks";
 import {
   FormBuilderConfigProvider,
   FormBuilderConfig,
@@ -27,7 +27,8 @@ import {
 } from "@lib/hooks/useFormBuilderConfig";
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
 import { EditLockProvider } from "@formBuilder/components/shared/edit-lock/EditLockContext";
-import { EditLockDebugMarker } from "@formBuilder/components/shared/edit-lock/EditLockDebugMarker";
+import { ManageAccessStatusButton } from "@formBuilder/components/shared/edit-lock/ManageAccessStatusButton";
+import { ManageFormAccessDialogContainer } from "./components/dialogs/ManageFormAccessDialog";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -49,7 +50,7 @@ export default async function Layout(props: {
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();
-  const allowLockedEditingFlag = await allowLockedEditing();
+  const allowLockedEditingFlag = await allowLockedEditing(session?.user.id);
   const ownerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(
     await getAppSetting("editLockRedirectIdleMs")
   );
@@ -73,13 +74,8 @@ export default async function Layout(props: {
   }
 
   const enforceEditLockFlag =
-    initialForm !== null
-      ? shouldEnableTemplateEditLock({
-          allowLockedEditing: allowLockedEditingFlag,
-          templateId: formID,
-          isPublished: initialForm.isPublished,
-          assignedUserCount,
-        })
+    initialForm !== null && formID !== null
+      ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID)
       : false;
 
   let apiKeyId: string | undefined = undefined;
@@ -111,6 +107,7 @@ export default async function Layout(props: {
               lockedEditingEnabled={enforceEditLockFlag}
               ownerIdleTimeoutMs={ownerIdleTimeoutMs}
             >
+              <ManageFormAccessDialogContainer formId={id} />
               <div className="h-full">
                 <div className="flex min-h-screen flex-col">
                   <Header context="formBuilder" className="mb-0" />
@@ -131,13 +128,16 @@ export default async function Layout(props: {
                     />
                     <div className="flex grow flex-row gap-7">
                       <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
-                        <div className="sticky top-0">
-                          <EditLockDebugMarker
-                            testId="edit-page-lock-debug"
-                            editLockEnabled={enforceEditLockFlag}
-                            assignedUserCount={assignedUserCount}
-                          />
+                        <div className={"sticky top-0 flex h-screen flex-col pb-4"}>
                           <LeftNavigation id={id} />
+                          {session && allowLockedEditingFlag && (
+                            <ManageAccessStatusButton
+                              formId={id}
+                              testId="edit-page-lock-debug"
+                              editLockEnabled={enforceEditLockFlag}
+                              assignedUserCount={assignedUserCount}
+                            />
+                          )}
                         </div>
                       </div>
                       <GroupStoreProvider>

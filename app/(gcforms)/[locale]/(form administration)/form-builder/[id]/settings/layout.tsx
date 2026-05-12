@@ -7,7 +7,6 @@ import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 import { WaitForId } from "../components/WaitForId";
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
-import { ManageFormAccessDialogContainer } from "../components/dialogs/ManageFormAccessDialog";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -20,9 +19,8 @@ export default async function Layout(props: {
   const { children } = props;
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
-  const allowLockedEditingFlag = await allowLockedEditing();
-
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
+  const allowLockedEditingFlag = await allowLockedEditing(session?.user.id);
 
   if (!session) {
     return <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />;
@@ -38,7 +36,6 @@ export default async function Layout(props: {
     <>
       <h1>{t("gcFormsSettings")}</h1>
       <SettingsNavigation id={id} showManageAccess={allowLockedEditingFlag} />
-      {allowLockedEditingFlag && <ManageFormAccessDialogContainer formId={id} />}
       <EditLockClient restrictToEditPaths={false} reloadOnTakeover={true}>
         {children}
       </EditLockClient>

@@ -53,6 +53,7 @@ export default defineConfig({
       "react",
       "react-dom",
       "next/navigation",
+      "@radix-ui/react-tooltip",
       "native-file-system-adapter",
       "usehooks-ts",
     ],

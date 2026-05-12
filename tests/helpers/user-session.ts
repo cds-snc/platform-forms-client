@@ -9,7 +9,7 @@ export async function userSession(
   const { admin = false, acceptableUse = true } = options;
 
   // Navigate to login page
-  await page.goto("http://localhost:3000/en/auth/login");
+  await page.goto("/en/auth/login");
 
   // Wait for login inputs
   await page.locator("input[id='username']").waitFor({ state: "visible" });
@@ -64,7 +64,7 @@ export async function userSession(
 
   if (acceptableUse) {
     // Visit policy page and accept
-    await page.goto("http://localhost:3000/en/auth/policy", { waitUntil: "networkidle" });
+    await page.goto("/en/auth/policy", { waitUntil: "networkidle" });
 
     // Wait for the accept button to be ready (visible and enabled)
     const acceptButton = page.locator("#acceptableUse");
