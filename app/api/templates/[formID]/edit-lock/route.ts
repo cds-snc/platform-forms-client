@@ -77,8 +77,8 @@ export const GET = middleware([sessionExists()], async (req, props) => {
 
   const shouldEnforceEditLock =
     requestType !== "lock-status-poll"
-      ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID)
-      : await shouldEnforceTemplateEditLock(formID);
+      ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID, session.user.id)
+      : await shouldEnforceTemplateEditLock(formID, session.user.id);
 
   if (!shouldEnforceEditLock) {
     return NextResponse.json(getEditLockDisabledStatus());
@@ -114,8 +114,8 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
 
   const shouldEnforceEditLock =
     action !== "heartbeat"
-      ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID)
-      : await shouldEnforceTemplateEditLock(formID);
+      ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID, session.user.id)
+      : await shouldEnforceTemplateEditLock(formID, session.user.id);
 
   if (!shouldEnforceEditLock) {
     if (action === "release") {
