@@ -46,15 +46,16 @@ const formatRelativeTime = (value: string, locale: string) => {
 export const EditLockBanner = ({
   takeover,
   getIsActiveTab,
+  formId,
 }: {
   takeover: () => Promise<void>;
   getIsActiveTab: () => boolean;
+  formId: string;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
-  const { isLockedByOther, editLock, formId } = useTemplateStore((s) => ({
+  const { isLockedByOther, editLock } = useTemplateStore((s) => ({
     isLockedByOther: s.isLockedByOther,
     editLock: s.editLock,
-    formId: s.id,
   }));
   const bannerRef = useRef<HTMLDivElement | null>(null);
   const [isTakingOver, setIsTakingOver] = useState(false);
