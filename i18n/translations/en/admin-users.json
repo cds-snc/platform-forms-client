@@ -61,7 +61,7 @@
   },
   "search": {
     "label": "Search",
-    "placeholder": "Search by email address or user name",
+    "placeholder": "Search",
     "noResults": "No matching accounts found",
     "ariaLabel": "Search accounts by email address or user name",
     "submit": "Search",

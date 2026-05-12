@@ -61,7 +61,7 @@
   },
   "search": {
     "label": "Recherche",
-    "placeholder": "Rechercher par adresse courriel ou nom d'utilisateur·rice",
+    "placeholder": "Rechercher",
     "noResults": "Aucun compte correspondant trouvé",
     "ariaLabel": "Recherche de comptes par adresse courriel ou nom d'utilisateur·rice",
     "submit": "Rechercher",

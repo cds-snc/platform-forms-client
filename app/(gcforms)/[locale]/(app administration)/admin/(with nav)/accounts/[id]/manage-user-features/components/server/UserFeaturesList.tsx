@@ -12,7 +12,7 @@ export const UserFeaturesList = async ({
   const { t } = await serverTranslation("admin-flags");
 
   return (
-    <table className="my-4 table-auto border-4">
+    <table className="table-auto border-1">
       <thead>
         <tr>
           <th className="border-2 p-2">{t("flag")}</th>

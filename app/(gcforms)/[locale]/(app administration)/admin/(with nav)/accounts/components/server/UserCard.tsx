@@ -3,6 +3,7 @@ import { MoreMenu } from "../client/MoreMenu";
 import { PublishPermission } from "../client/PublishPermission";
 import { AccountActivation } from "../client/AccountActivation";
 import { ManageFormsButton } from "../client/ManageFormsButton";
+import { UserNameEmail } from "@formBuilder/components/shared/account/UserNameEmail";
 
 export const UserCard = async ({
   user,
@@ -22,8 +23,7 @@ export const UserCard = async ({
   return (
     <>
       <div className="m-auto grow basis-1/3 p-4">
-        <h2 className="pb-6 text-base">{user.name}</h2>
-        <p className="mb-4">{user.email}</p>
+        <UserNameEmail name={user.name || ""} email={user.email} />
 
         <div className="flex flex-wrap gap-2">
           {canManageUser && (

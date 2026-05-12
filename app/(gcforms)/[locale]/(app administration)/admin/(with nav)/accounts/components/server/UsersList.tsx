@@ -42,7 +42,7 @@ export const UsersList = async ({
   if (!hasFilters) {
     return (
       <div aria-live="polite">
-        <p className="text-lg font-semibold">{t("search.emptyState")}</p>
+        <p className="ml-4 text-lg font-semibold">{t("search.emptyState")}</p>
       </div>
     );
   }
@@ -92,7 +92,7 @@ export const UsersList = async ({
           </ul>
         </>
       ) : (
-        <p className="text-lg font-semibold">
+        <p data-id="results" className="ml-4 text-lg font-semibold">
           {query
             ? t("search.noResults")
             : userState === "active"
