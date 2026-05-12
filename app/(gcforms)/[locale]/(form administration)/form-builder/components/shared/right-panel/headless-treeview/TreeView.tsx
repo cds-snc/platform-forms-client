@@ -114,7 +114,6 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
       // Handle root-level groups/folders
       if (parent === "root" && data && (!data.type || data.type === "group")) {
         updateGroupName({ id, name: value });
-        saveDraftIfNeeded();
         return;
       }
 
@@ -124,7 +123,6 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
           id: Number(id),
           text: value,
         });
-        saveDraftIfNeeded();
         return;
       }
 
@@ -202,7 +200,6 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
               item={item}
               tree={tree}
               onFocus={setActiveGroup}
-              onBlur={() => saveDraftIfNeeded()}
               handleDelete={async (e) => {
                 const deletedItemName = item.getItemName();
 
