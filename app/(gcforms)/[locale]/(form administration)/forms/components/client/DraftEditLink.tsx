@@ -29,7 +29,6 @@ export const DraftEditLink = ({
   const [isChecking, setIsChecking] = useState(false);
   const [lockedByName, setLockedByName] = useState<string | null>(null);
   const [showDialog, setShowDialog] = useState(false);
-  const [collaborators, setCollaborators] = useState<number | null | undefined>(undefined);
 
   const navigateToEditor = () => {
     router.push(href);
@@ -74,26 +73,14 @@ export const DraftEditLink = ({
       }
 
       const name = payload.lock?.lockedByName || payload.lock?.lockedByEmail || null;
-      const normalizedCollaborators =
-        typeof payload.collaborators === "number" ||
-        payload.collaborators === null ||
-        payload.collaborators === undefined
-          ? payload.collaborators
-          : undefined;
 
       setLockedByName(name);
-      setCollaborators(normalizedCollaborators);
       setShowDialog(true);
     } catch {
       navigateToEditor();
     } finally {
       setIsChecking(false);
     }
-  };
-
-  const eventData: Record<string, unknown> = {
-    ...(collaborators !== null && collaborators !== undefined && { collaborators }),
-    location: "forms",
   };
 
   const actions = (
@@ -103,7 +90,7 @@ export const DraftEditLink = ({
         onClick={() => {
           dialogRef.current?.close();
           setShowDialog(false);
-          gaEditLock({ formId, description: "accept_read_only", eventData });
+          gaEditLock({ formId, description: "accept_read_only", eventData: { location: "forms" } });
           navigateToEditor();
         }}
       >
@@ -115,7 +102,11 @@ export const DraftEditLink = ({
         onClick={() => {
           dialogRef.current?.close();
           setShowDialog(false);
-          gaEditLock({ formId, description: "decline_read_only", eventData });
+          gaEditLock({
+            formId,
+            description: "decline_read_only",
+            eventData: { location: "forms" },
+          });
         }}
       >
         {t("cancel", { ns: "form-builder" })}
