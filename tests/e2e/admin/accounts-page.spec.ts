@@ -17,28 +17,30 @@ test.describe("Accounts Page", () => {
       await expect(page.getByRole("heading", { level: 1 })).toContainText("Accounts");
     });
 
-    test.describe("Accounts tabs/filters and cards", () => {
-      test("Clicking tabs/filters updates with expected content", async ({ page }) => {
-        await page.getByRole("button", { name: "All" }).click();
-        await expect(page.getByTestId(adminUserEmail)).toBeVisible();
-        await expect(page.getByTestId(testUserEmail)).toBeVisible();
-        await expect(page.getByTestId(deactivatedUserEmail)).toBeVisible();
+    test.describe("Accounts search and cards", () => {
+      test("Submitting email search updates with expected content", async ({ page }) => {
+        await page.locator("#accounts-query").fill(testUserEmail);
+        await page.getByRole("button", { name: "Search" }).click();
 
-        await page.getByRole("button", { name: "Active" }).click();
-        // Wait for filter to apply
+        await expect(page.getByTestId(testUserEmail)).toBeVisible();
+        await expect(page.getByTestId(adminUserEmail)).not.toBeVisible();
         await expect(page.getByTestId(deactivatedUserEmail)).not.toBeVisible();
-        await expect(page.getByTestId(adminUserEmail)).toBeVisible();
-        await expect(page.getByTestId(testUserEmail)).toBeVisible();
+      });
 
-        await page.getByRole("button", { name: "Deactivated" }).click();
-        // Wait for filter to apply
+      test("Submitting deactivated status search updates with expected content", async ({
+        page,
+      }) => {
+        await page.locator("#accounts-status").selectOption("deactivated");
+        await page.getByRole("button", { name: "Search" }).click();
+
         await expect(page.getByTestId(deactivatedUserEmail)).toBeVisible();
         await expect(page.getByTestId(adminUserEmail)).not.toBeVisible();
         await expect(page.getByTestId(testUserEmail)).not.toBeVisible();
       });
 
       test("Clicking manage forms navigates to the related page", async ({ page }) => {
-        await page.getByRole("button", { name: "All" }).click();
+        await page.locator("#accounts-query").fill(testUserEmail);
+        await page.getByRole("button", { name: "Search" }).click();
         await page.getByTestId(testUserEmail).getByRole("link", { name: "Manage forms" }).click();
 
         // Wait for navigation to complete
