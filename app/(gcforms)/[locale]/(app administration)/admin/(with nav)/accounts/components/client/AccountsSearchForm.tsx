@@ -64,6 +64,7 @@ export const AccountsSearchForm = ({
 
   return (
     <form
+      id="accounts-search-form"
       className="mb-8 max-w-6xl rounded-lg border border-slate-300 bg-slate-50 p-4"
       onSubmit={(event) => {
         event.preventDefault();

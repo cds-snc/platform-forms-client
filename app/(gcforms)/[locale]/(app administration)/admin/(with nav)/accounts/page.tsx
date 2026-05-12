@@ -1,4 +1,4 @@
-import { Suspense, use } from "react";
+import { Suspense, use, ViewTransition } from "react";
 import { serverTranslation } from "@i18n";
 import { AuthenticatedPage } from "@lib/pages/auth";
 import { authorization } from "@lib/privileges";
@@ -8,6 +8,7 @@ import { ManageAccountsIcon } from "@serverComponents/icons/ManageAccountsIcon";
 import { UsersList } from "./components/server/UsersList";
 import { AccountsSearchForm } from "./components/client/AccountsSearchForm";
 import { parseAccountsSearchParams } from "./lib/search";
+import { accountsRouteTransition } from "./lib/viewTransitions";
 
 const AccountsPageContent = ({
   params,
@@ -22,7 +23,7 @@ const AccountsPageContent = ({
   const searchState = parseAccountsSearchParams(resolvedSearchParams);
 
   return (
-    <>
+    <ViewTransition {...accountsRouteTransition}>
       <div className="mb-6 flex items-center gap-3">
         <ManageAccountsIcon className="size-12 fill-slate-700" />
         <h1 className="mb-0 border-0">{t("accounts")}</h1>
@@ -46,7 +47,7 @@ const AccountsPageContent = ({
           hasFilters={searchState.hasFilters}
         />
       </Suspense>
-    </>
+    </ViewTransition>
   );
 };
 

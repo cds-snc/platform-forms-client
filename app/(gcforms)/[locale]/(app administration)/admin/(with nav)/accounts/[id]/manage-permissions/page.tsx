@@ -1,3 +1,4 @@
+import { ViewTransition } from "react";
 import { serverTranslation } from "@i18n";
 import { AuthenticatedPage } from "@lib/pages/auth";
 import { authorization, getAllPrivileges } from "@lib/privileges";
@@ -6,6 +7,11 @@ import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { Metadata } from "next";
 import { PrivilegeList } from "./components/server/PrivilegeList";
 import { UserNameEmail } from "@formBuilder/components/shared/account/UserNameEmail";
+import { buildAccountsSearchParams, parseAccountsSearchParams } from "../../lib/search";
+import {
+  accountsRouteTransition,
+  getAccountIdentityTransitionName,
+} from "../../lib/viewTransitions";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -22,8 +28,9 @@ export async function generateMetadata(props: {
 
 export default AuthenticatedPage<{ id: string }>(
   [authorization.canViewAllUsers, authorization.canAccessPrivileges],
-  async ({ params }) => {
+  async ({ params, searchParams }) => {
     const { id, locale } = await params;
+    const resolvedSearchParams = await searchParams;
 
     const formUser = await getUser(id);
 
@@ -59,14 +66,22 @@ export default AuthenticatedPage<{ id: string }>(
     );
 
     const { t } = await serverTranslation("admin-users", { lang: locale });
+    const backToAccountsState = parseAccountsSearchParams(resolvedSearchParams);
+    const backToAccountsParams = buildAccountsSearchParams(backToAccountsState);
+    backToAccountsParams.set("focus", formUser.id);
     return (
-      <>
-        <BackLink href={`/${locale}/admin/accounts?id=${formUser.id}`}>
+      <ViewTransition {...accountsRouteTransition}>
+        <BackLink
+          href={`/${locale}/admin/accounts?${backToAccountsParams.toString()}`}
+          transitionTypes={["nav-back"]}
+        >
           {t("backToAccounts")}
         </BackLink>
         <h1 className="mb-6 flex flex-col gap-4 border-0">{t("managePermissions")}</h1>
         <div className="mb-12">
-          <UserNameEmail name={formUser.name || ""} email={formUser.email} />
+          <ViewTransition name={getAccountIdentityTransitionName(formUser.id)}>
+            <UserNameEmail name={formUser.name || ""} email={formUser.email} />
+          </ViewTransition>
         </div>
         {/* Toast Message goes here */}
 
@@ -90,7 +105,7 @@ export default AuthenticatedPage<{ id: string }>(
             canManageUsers={canManageUsers}
           />
         </div>
-      </>
+      </ViewTransition>
     );
   }
 );
