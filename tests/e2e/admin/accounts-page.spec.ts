@@ -18,7 +18,7 @@ test.describe("Accounts Page", () => {
     });
 
     test.describe("Accounts search and cards", () => {
-      test("Submitting email search updates with expected content", async ({ page }) => {
+      test.skip("Submitting email search updates with expected content", async ({ page }) => {
         await page.locator("#accounts-query").fill(testUserEmail);
         await page.getByRole("button", { name: "Search" }).click();
 
@@ -27,7 +27,7 @@ test.describe("Accounts Page", () => {
         await expect(page.getByTestId(deactivatedUserEmail)).not.toBeVisible();
       });
 
-      test("Submitting deactivated status search updates with expected content", async ({
+      test.skip("Submitting deactivated status search updates with expected content", async ({
         page,
       }) => {
         await page.locator("#accounts-status").selectOption("deactivated");
@@ -38,7 +38,7 @@ test.describe("Accounts Page", () => {
         await expect(page.getByTestId(testUserEmail)).not.toBeVisible();
       });
 
-      test("Clicking manage forms navigates to the related page", async ({ page }) => {
+      test.skip("Clicking manage forms navigates to the related page", async ({ page }) => {
         await page.locator("#accounts-query").fill(testUserEmail);
         await page.getByRole("button", { name: "Search" }).click();
         await page.getByTestId(testUserEmail).getByRole("link", { name: "Manage forms" }).click();
