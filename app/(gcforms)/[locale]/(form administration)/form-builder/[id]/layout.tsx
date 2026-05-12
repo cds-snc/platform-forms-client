@@ -75,7 +75,7 @@ export default async function Layout(props: {
 
   const enforceEditLockFlag =
     initialForm !== null && formID !== null
-      ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID)
+      ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID, session?.user.id)
       : false;
 
   let apiKeyId: string | undefined = undefined;

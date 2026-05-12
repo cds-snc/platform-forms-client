@@ -2,8 +2,6 @@
 
 import { AuthenticatedAction } from "@lib/actions";
 import { prisma } from "@gcforms/database";
-import { checkOne } from "@lib/cache/flags";
-import { FeatureFlags } from "@lib/cache/types";
 import { TemplateUser } from "./types";
 import { AccessControlError } from "@lib/auth/errors";
 import {
@@ -21,11 +19,12 @@ import { serverTranslation } from "@i18n";
 import { logMessage } from "@lib/logger";
 import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
 import { cancelInvitation as cancelInvitationAction } from "@lib/invitations/cancelInvitation";
+import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 
 export const sendInvitation = AuthenticatedAction(
-  async (_, emails: string[], templateId: string, message: string) => {
+  async (session, emails: string[], templateId: string, message: string) => {
     const { t } = await serverTranslation("manage-form-access");
-    const isLockedEditingEnabled = await checkOne(FeatureFlags.lockedEditing);
+    const isLockedEditingEnabled = await allowLockedEditing(session.user.id);
 
     const errors: string[] = [];
 
