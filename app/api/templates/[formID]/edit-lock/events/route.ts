@@ -33,7 +33,7 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
     return NextResponse.json({ error: "Invalid or missing formID" }, { status: 400 });
   }
 
-  if (!(await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID))) {
+  if (!(await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID, session.user.id))) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 

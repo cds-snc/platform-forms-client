@@ -474,10 +474,10 @@ export const shouldEnableTemplateEditLock = ({
 }): boolean =>
   Boolean(
     allowLockedEditing &&
-      templateId &&
-      templateId !== "0000" &&
-      !isPublished &&
-      assignedUserCount >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK
+    templateId &&
+    templateId !== "0000" &&
+    !isPublished &&
+    assignedUserCount >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK
   );
 
 export const invalidateTemplateEditLockUserCountCache = async (
@@ -494,12 +494,14 @@ export const invalidateTemplateEditLockUserCountCache = async (
 const shouldEnforceTemplateEditLockInternal = async (
   templateId: string,
   {
+    userId,
     revalidateAssignedUserCount = false,
   }: {
+    userId?: string;
     revalidateAssignedUserCount?: boolean;
   } = {}
 ): Promise<boolean> => {
-  if (!(await allowLockedEditing())) {
+  if (!(await allowLockedEditing(userId))) {
     return false;
   }
 
@@ -575,15 +577,19 @@ const shouldEnforceTemplateEditLockInternal = async (
   return !template.isPublished && hasEnoughUsers;
 };
 
-export const shouldEnforceTemplateEditLock = async (templateId: string): Promise<boolean> =>
-  shouldEnforceTemplateEditLockInternal(templateId);
+export const shouldEnforceTemplateEditLock = async (
+  templateId: string,
+  userId?: string
+): Promise<boolean> => shouldEnforceTemplateEditLockInternal(templateId, { userId });
 
 // Use this on page-entry or mutation paths where a stale cached multi-user threshold would be
 // user-visible. It re-checks assigned-user count before enforcing edit locking.
 export const shouldEnforceTemplateEditLockWithVerifiedUserCount = async (
-  templateId: string
+  templateId: string,
+  userId?: string
 ): Promise<boolean> =>
   shouldEnforceTemplateEditLockInternal(templateId, {
+    userId,
     revalidateAssignedUserCount: true,
   });
 
