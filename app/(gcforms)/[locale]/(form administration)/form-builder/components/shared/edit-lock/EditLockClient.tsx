@@ -12,10 +12,12 @@ export const EditLockClient = ({
   children,
   restrictToEditPaths = true,
   reloadOnTakeover = false,
+  formId,
 }: {
   children?: React.ReactNode;
   restrictToEditPaths?: boolean;
   reloadOnTakeover?: boolean;
+  formId: string;
 }) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -52,9 +54,9 @@ export const EditLockClient = ({
   return (
     <>
       {showSessionExpiredOverlay ? (
-        <EditLockSessionExpiredOverlay onReturnToForms={returnToForms} />
+        <EditLockSessionExpiredOverlay onReturnToForms={returnToForms} formId={formId} />
       ) : (
-        <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} />
+        <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} formId={formId} />
       )}
       {children}
     </>
