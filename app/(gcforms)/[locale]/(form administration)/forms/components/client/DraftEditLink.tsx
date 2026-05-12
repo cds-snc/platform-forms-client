@@ -74,8 +74,15 @@ export const DraftEditLink = ({
       }
 
       const name = payload.lock?.lockedByName || payload.lock?.lockedByEmail || null;
+      const normalizedCollaborators =
+        typeof payload.collaborators === "number" ||
+        payload.collaborators === null ||
+        payload.collaborators === undefined
+          ? payload.collaborators
+          : undefined;
+
       setLockedByName(name);
-      setCollaborators(payload.collaborators);
+      setCollaborators(normalizedCollaborators);
       setShowDialog(true);
     } catch {
       navigateToEditor();
