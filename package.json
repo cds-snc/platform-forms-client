@@ -182,6 +182,7 @@
     "eslint": "^9.39.0",
     "eslint-config-next": "16.2.6",
     "eslint-config-prettier": "^9.1.2",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react-hooks": "^7.0.1",
     "husky": "^9.0.10",
     "ioredis-mock": "^8.13.1",
