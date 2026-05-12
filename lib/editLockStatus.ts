@@ -5,6 +5,7 @@ export type EditLockStatusPayload = {
   locked: boolean;
   lockedByOther: boolean;
   isOwner: boolean;
+  collaborators?: number | null;
   lock: {
     templateId: string;
     lockedByUserId: string;

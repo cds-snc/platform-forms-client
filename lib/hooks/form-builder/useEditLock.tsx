@@ -57,6 +57,7 @@ export const useEditLock = ({
   "use memo";
   const [hasSessionExpired, setHasSessionExpired] = useState(false);
   const [serverLockingEnabled, setServerLockingEnabled] = useState(enabled);
+  const [collaborators, setCollaborators] = useState<number | null>(null);
   const { status } = useSession();
   const normalizedOwnerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(ownerIdleTimeoutMs);
   const setEditLock = useTemplateStore((s) => s.setEditLock);
@@ -437,6 +438,10 @@ export const useEditLock = ({
         return;
       }
 
+      if (pollResult.collaborators != null) {
+        setCollaborators(pollResult.collaborators);
+      }
+
       if (pollResult.locked && !pollResult.isOwner && wasOwner) {
         updateStore(pollResult);
         void syncServerState();
@@ -718,5 +723,5 @@ export const useEditLock = ({
     startTimers(statusResult);
   }, [postAction, refreshForm, standDownForDisabledLocking, startTimers, updateStore, updatedAt]);
 
-  return { takeover, getIsActiveTab, isOwnerIdleTimeExpired, hasSessionExpired };
+  return { takeover, getIsActiveTab, isOwnerIdleTimeExpired, hasSessionExpired, collaborators };
 };
