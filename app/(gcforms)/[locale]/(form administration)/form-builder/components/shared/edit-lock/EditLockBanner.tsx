@@ -8,6 +8,8 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
+import { gaEditLock, getLastSegmentOfPath } from "./EditLockGA";
+import { usePathname } from "next/navigation";
 
 const RELATIVE_TIME_TICK_MS = 5_000;
 
@@ -44,9 +46,11 @@ const formatRelativeTime = (value: string, locale: string) => {
 export const EditLockBanner = ({
   takeover,
   getIsActiveTab,
+  formId,
 }: {
   takeover: () => Promise<void>;
   getIsActiveTab: () => boolean;
+  formId: string;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { isLockedByOther, editLock } = useTemplateStore((s) => ({
@@ -57,6 +61,7 @@ export const EditLockBanner = ({
   const [isTakingOver, setIsTakingOver] = useState(false);
   const [takeoverError, setTakeoverError] = useState(false);
   const [timeTick, setTimeTick] = useState(() => Date.now());
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isLockedByOther) {
@@ -112,6 +117,19 @@ export const EditLockBanner = ({
     try {
       await takeover();
       toast.success(t("editLock.syncedLatest"), "wide");
+
+      // Construct and send the Google Analytics event
+      const description = isTakeoverAvailable
+        ? "takeover_available_lock"
+        : isStale
+          ? "takeover_stale_lock"
+          : "takeover_lock";
+      const eventData: Record<string, unknown> = {
+        // Dynamic since the banner can show in multiple locations
+        location: getLastSegmentOfPath(pathname),
+        ...(lastActivity && { lastActivity }),
+      };
+      gaEditLock({ formId, description, eventData });
     } catch (error) {
       setTakeoverError(true);
     } finally {

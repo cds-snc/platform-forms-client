@@ -50,7 +50,7 @@ export default async function Layout(props: {
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();
-  const allowLockedEditingFlag = await allowLockedEditing();
+  const allowLockedEditingFlag = await allowLockedEditing(session?.user.id);
   const ownerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(
     await getAppSetting("editLockRedirectIdleMs")
   );
@@ -75,7 +75,7 @@ export default async function Layout(props: {
 
   const enforceEditLockFlag =
     initialForm !== null && formID !== null
-      ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID)
+      ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID, session?.user.id)
       : false;
 
   let apiKeyId: string | undefined = undefined;
@@ -142,7 +142,7 @@ export default async function Layout(props: {
                       </div>
                       <GroupStoreProvider>
                         <div className="relative flex w-full gap-7">
-                          <EditLockClient>
+                          <EditLockClient formId={id}>
                             <main
                               id="content"
                               className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
