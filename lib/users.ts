@@ -28,6 +28,14 @@ const userListSelect = {
   },
 } satisfies Prisma.UserSelect;
 
+const userExportSelect = {
+  id: true,
+  name: true,
+  email: true,
+  active: true,
+  lastLogin: true,
+} satisfies Prisma.UserSelect;
+
 export type UserSearchProperty = "all" | "name" | "email" | "id";
 export type UserSearchState = "active" | "deactivated";
 
@@ -45,6 +53,12 @@ export type UsersPage = {
   page: number;
   pageSize: number;
   totalPages: number;
+};
+
+export type ExportableUser = {
+  name: string | null;
+  email: string;
+  lastLogin: Date | null;
 };
 
 const authorizeViewAllUsers = async () => {
@@ -262,6 +276,22 @@ export const getUsers = async (where?: Prisma.UserWhereInput): Promise<AppUser[]
     .catch((e) => prismaErrors(e, []));
 
   return users;
+};
+
+export const getExportableUsers = async ({
+  userState,
+}: {
+  userState: UserSearchState;
+}): Promise<ExportableUser[]> => {
+  await Promise.all([authorization.canViewAllUsers(), authorization.canAccessPrivileges()]);
+
+  return prisma.user
+    .findMany({
+      where: { active: userState === "active" },
+      select: userExportSelect,
+      orderBy: [{ name: "asc" }, { email: "asc" }],
+    })
+    .catch((e) => prismaErrors(e, []));
 };
 
 export const getUsersPage = async ({

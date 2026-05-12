@@ -25,6 +25,9 @@
   "activateAccount": "Réactiver le compte",
   "moreMenu": "... Plus",
   "manageForms": "Gérer les formulaires",
+  "downloadActiveAccounts": "Télécharger les comptes activés",
+  "downloadActiveAccountsTooltip": "Télécharger le CSV des utilisateurs acti·ve·s",
+  "downloadDeactivatedAccounts": "Télécharger les comptes désactivés",
   "publishedFormsMustBeTransferred": {
     "text1": "Les formulaires publiés",
     "text2": "doivent être transférrés ou supprimés avant la désactivation."

@@ -7,6 +7,7 @@ import { Loader } from "@clientComponents/globals/Loader";
 import { ManageAccountsIcon } from "@serverComponents/icons/ManageAccountsIcon";
 import { UsersList } from "./components/server/UsersList";
 import { AccountsSearchForm } from "./components/client/AccountsSearchForm";
+import { DownloadAccountsButtons } from "./components/server/DownloadAccountsButtons";
 import { parseAccountsSearchParams } from "./lib/search";
 import { accountsRouteTransition } from "./lib/viewTransitions";
 
@@ -24,9 +25,10 @@ const AccountsPageContent = ({
 
   return (
     <ViewTransition {...accountsRouteTransition}>
-      <div className="mb-6 flex items-center gap-3">
+      <div className="mb-6 flex flex-wrap items-center gap-3">
         <ManageAccountsIcon className="size-12 fill-slate-700" />
         <h1 className="mb-0 border-0">{t("accounts")}</h1>
+        <DownloadAccountsButtons locale={locale} />
       </div>
       <AccountsSearchForm
         key={JSON.stringify({

@@ -25,6 +25,9 @@
   "activateAccount": "Reactivate account",
   "moreMenu": "... More",
   "manageForms": "Manage forms",
+  "downloadActiveAccounts": "Download active accounts",
+  "downloadActiveAccountsTooltip": "Download active users CSV",
+  "downloadDeactivatedAccounts": "Download deactivated accounts",
   "publishedFormsMustBeTransferred": {
     "text1": "Published forms",
     "text2": "must be transferred or deleted before deactivating."
