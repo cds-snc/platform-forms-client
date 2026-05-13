@@ -231,7 +231,7 @@ type AuditDetailsParams = {
   };
   [AuditLogDetails.AccessedAllSystemForms]: never;
   [AuditLogDetails.ClonedForm]: never;
-  [AuditLogDetails.UpdateClosingDate]: never;
+  [AuditLogDetails.UpdateClosingDate]: { closingDate: string };
   [AuditLogDetails.RetrieveFormUsers]: never;
   [AuditLogDetails.RevokeFormAccess]: { userId: string };
   [AuditLogDetails.SetDeliveryToVault]: never;

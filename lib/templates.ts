@@ -1637,7 +1637,9 @@ export const updateClosedData = async (
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
-  logEvent(user.id, { type: "Form", id: formID }, "UpdateForm", AuditLogDetails.UpdateClosingDate);
+  logEvent(user.id, { type: "Form", id: formID }, "UpdateForm", AuditLogDetails.UpdateClosingDate, {
+    closingDate: closingDate ?? "null",
+  });
   return { formID, closingDate };
 };
 
