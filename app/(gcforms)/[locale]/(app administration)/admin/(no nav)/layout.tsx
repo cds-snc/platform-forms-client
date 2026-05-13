@@ -28,7 +28,7 @@ export default AuthenticatedLayout(
                 <Link
                   id="logo"
                   href={`/${locale}/form-builder`}
-                  className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline focus:bg-white"
+                  className="mr-7 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline focus:bg-white"
                 >
                   <div className="inline-block h-[45px] w-[46px] p-2">
                     <SiteLogo title={t("title")} />
