@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import { FeatureFlags } from "@lib/cache/types";
@@ -60,6 +61,29 @@ export const AccountMenu = ({
   const canViewAdministration =
     ability?.can("view", "Flag") || ability?.can("view", "Privilege") || false;
 
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Add logic to handle aria-expanded and focus management when the popover is toggled
+  useEffect(() => {
+    const popover = popoverRef.current;
+    if (!popover) return;
+
+    const handleToggle = (event: Event) => {
+      const open = (event as ToggleEvent).newState === "open";
+      setIsOpen(open);
+      if (open) {
+        const firstFocusable = popover.querySelector<HTMLElement>(
+          "a[href], button:not([disabled])"
+        );
+        firstFocusable?.focus();
+      }
+    };
+
+    popover.addEventListener("toggle", handleToggle);
+    return () => popover.removeEventListener("toggle", handleToggle);
+  }, []);
+
   if (!user) {
     return null;
   }
@@ -94,7 +118,7 @@ export const AccountMenu = ({
         popoverTargetAction="toggle"
         interestfor="account-menu-popover"
         aria-label={t("accountMenu.label")}
-        aria-haspopup="menu"
+        aria-expanded={isOpen}
         aria-controls="account-menu-popover"
         className="account-menu-trigger flex size-11 cursor-pointer items-center justify-center rounded-full border border-slate-300 bg-slate-50 text-slate-500 transition-colors hover:border-slate-400 hover:bg-slate-100 hover:text-slate-700 focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 focus:outline-none"
       >
@@ -102,6 +126,7 @@ export const AccountMenu = ({
       </button>
 
       <div
+        ref={popoverRef}
         id="account-menu-popover"
         popover="hint"
         className="account-menu-popover z-20 w-[18rem] overflow-auto rounded-[1.75rem] border border-slate-300 bg-white p-0 text-slate-900 shadow-[0_20px_60px_rgba(15,23,42,0.18)]"
@@ -132,6 +157,9 @@ export const AccountMenu = ({
                   href={`/${locale}/unlock-publishing`}
                   className="underline underline-offset-2"
                 >
+                  <span className="sr-only">
+                    {t("accountPanel.publishing", { ns: "profile" })} -{" "}
+                  </span>
                   {t("accountPanel.locked", { ns: "profile" })}
                 </Link>
               )}
