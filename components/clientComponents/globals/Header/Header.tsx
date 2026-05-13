@@ -52,6 +52,7 @@ export const Header = ({
   }, [t, isEnabled]);
 
   const paddingTop = isBannerEnabled ? "py-0" : "py-2";
+  const logoHref = status === "authenticated" ? `/${language}/forms` : `/${language}/form-builder`;
 
   return (
     <>
@@ -75,7 +76,7 @@ export const Header = ({
         <div className="grid w-full grid-flow-col p-2">
           <div className="flex">
             <Link
-              href={`/${language}/form-builder`}
+              href={logoHref}
               prefetch={false}
               id="logo"
               className="mr-7 flex border-r-1 pr-[14px] text-3xl font-semibold !text-black no-underline focus:bg-white"
