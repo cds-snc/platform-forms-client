@@ -73,6 +73,7 @@ test.describe("Test FormBuilder", () => {
 
     await page.fill("#option--1--2", "option 2");
     await expect(page.locator("#option--1--2")).toHaveValue("option 2");
+    await page.waitForTimeout(200);
 
     // @todo re-visit this later
     // Confirmation message
@@ -117,9 +118,8 @@ test.describe("Test FormBuilder", () => {
     await expect(page.locator("[data-testid='preview-container'] #desc-1")).toContainText(
       "Question 1 description"
     );
-    await expect(
-      page.locator("[data-testid='preview-container'] .gc-input-radio").first()
-    ).toContainText("option 1");
+    await expect(page.locator("[data-testid='preview-container']")).toContainText("option 1");
+    await expect(page.locator("[data-testid='preview-container']")).toContainText("option 2");
     await expect(
       page.locator("[data-testid='preview-container'] #PreviewSubmitButton")
     ).toContainText("Sign in to test how you can submit and view responses");
