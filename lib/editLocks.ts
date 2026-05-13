@@ -499,8 +499,8 @@ export const invalidateTemplateEditLockUserCountCache = async (
 };
 
 /**
- * Get and determines lock user data. First tries the cache and if not available
- * then pulls from the DB. If the cache is available, the cache is also updated.
+ * Gets lock-related user data from the DB and computes the derived lock state.
+ * When `useRedisCache` is enabled, it also writes the computed values to Redis.
  */
 const fetchAndCacheUserData = async (
   templateId: string,
