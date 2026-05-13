@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import { FeatureFlags } from "@lib/cache/types";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { clearTemplateStore } from "@lib/store/utils";
 import "./AccountMenu.css";
 
 const PersonIcon = () => (
@@ -63,6 +64,25 @@ export const AccountMenu = ({
     return null;
   }
 
+  const handleLogout = () => {
+    clearTemplateStore();
+
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const timeOptions = { timeZone: tz };
+    const enTime = new Date().toLocaleString("en-CA", timeOptions);
+    const frTime = new Date().toLocaleString("fr-CA", timeOptions);
+
+    sessionStorage.setItem(
+      "logoutTime",
+      JSON.stringify({
+        en: enTime,
+        fr: frTime,
+      })
+    );
+
+    void signOut({ callbackUrl: `/${locale}/auth/logout` });
+  };
+
   return (
     <div
       data-testid={testId}
@@ -87,13 +107,21 @@ export const AccountMenu = ({
         className="account-menu-popover z-20 w-[18rem] overflow-auto rounded-[1.75rem] border border-slate-300 bg-white p-0 text-slate-900 shadow-[0_20px_60px_rgba(15,23,42,0.18)]"
       >
         <div className="flex min-h-0 flex-col">
-          <div className="px-6 pt-6">
+          <div
+            className={`border-b border-slate-300 px-6 py-5 ${
+              publishingEnabled ? "bg-emerald-50" : "bg-yellow-50"
+            }`}
+          >
+            <p className="m-0 truncate text-[1.05rem] font-semibold text-slate-900">
+              {user.name || t("accountMenu.fallbackName")}
+            </p>
+            <p className="m-0 truncate pt-1 pb-5 text-base text-slate-500">{user.email}</p>
             <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
               <span
                 className={
                   publishingEnabled
                     ? "size-2.5 rounded-full bg-emerald-600"
-                    : "size-2.5 rounded-full bg-red-700"
+                    : "size-2.5 rounded-full bg-yellow-700"
                 }
               />
               <span>{t("accountPanel.publishing", { ns: "profile" })} -</span>
@@ -154,15 +182,17 @@ export const AccountMenu = ({
                   </Link>
                 </li>
               )}
+              <li>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="cursor-pointer border-0 bg-transparent p-0 text-slate-600 hover:underline focus:underline"
+                >
+                  {t("adminNav.logout")}
+                </button>
+              </li>
             </ul>
           </nav>
-
-          <div className="mt-auto border-t border-slate-300 bg-emerald-50 px-6 py-5">
-            <p className="m-0 truncate text-[1.05rem] font-semibold text-slate-900">
-              {user.name || t("accountMenu.fallbackName")}
-            </p>
-            <p className="m-0 truncate pt-1 text-base text-slate-500">{user.email}</p>
-          </div>
         </div>
       </div>
     </div>
