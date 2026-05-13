@@ -30,9 +30,12 @@ import { TreeActions } from "./TreeActions";
 import { groupsHaveCustomRules } from "@lib/groups/utils/setNextAction";
 import { handleDelete } from "./handlers/handleDelete";
 import { lockedGroups, lockedItems } from "./constants";
+import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 
 export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) => {
   const { t } = useTranslation("form-builder");
+
+  const { saveDraftIfNeeded } = useTemplateContext();
 
   const {
     getTreeData,
@@ -214,6 +217,7 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
                   autoFlowAll,
                   tree,
                   () => {
+                    saveDraftIfNeeded();
                     toast.success(
                       <div>
                         <h3>{t("groups.groupDeleted")}</h3>

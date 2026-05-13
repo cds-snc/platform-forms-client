@@ -12,6 +12,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { canModifyNextAction } from "@lib/groups/utils/validateGroups";
 import { lockedGroups } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 
 const ExitIcon = () => {
   return (
@@ -40,6 +41,7 @@ export const SingleActionSelect = ({
   const { t } = useTranslation(["form-builder", "common"]);
   const currentGroup = id;
   const [nextActionId, setNextActionId] = useState(nextAction);
+  const { saveDraftIfNeeded } = useTemplateContext();
 
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
   let groupItems = Object.keys(formGroups).map((key) => {
@@ -80,7 +82,7 @@ export const SingleActionSelect = ({
             <span className="absolute top-[4px] inline-block">
               <ExitIcon />
             </span>
-            <span className="ml-6 mr-3 inline-block">{t("logic.exit.exitPanel.title1")}:</span>
+            <span className="mr-3 ml-6 inline-block">{t("logic.exit.exitPanel.title1")}:</span>
             <span className="inline-block font-normal">{t("logic.exit.exitPanel.title2")}</span>
           </h4>
           <p className="mb-4 text-sm italic">{t("logic.exit.exitPanel.description")}</p>
@@ -150,6 +152,7 @@ export const SingleActionSelect = ({
             // Add a delay to allow group state to update calling for redraw
             setTimeout(() => {
               flow.current?.redraw();
+              saveDraftIfNeeded();
             }, 200);
 
             toast.success(t("logic.actionsSaved"));

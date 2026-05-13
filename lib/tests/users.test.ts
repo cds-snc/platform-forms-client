@@ -2,7 +2,7 @@ import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { prismaMock } from "@testUtils";
-import { getUsers, getOrCreateUser } from "@lib/users";
+import { getUsers, getUsersPage, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@gcforms/database";
 
 import { AccessControlError } from "@lib/auth/errors";
@@ -163,6 +163,108 @@ describe("getUsers", () => {
 
     const result = await getUsers();
     expect(result).toMatchObject(returnedUsers);
+  });
+
+  it("Returns a paginated list of users filtered by email", async () => {
+    const returnedUsers = [
+      {
+        id: "5",
+        name: "user_2",
+        email: "user-2@test.ca",
+        active: true,
+        privileges: Base,
+      },
+    ];
+
+    prismaMock.user.count.mockResolvedValue(1);
+    (prismaMock.user.findMany as MockedFunction<any>).mockResolvedValue(returnedUsers);
+
+    const result = await getUsersPage({
+      page: 2,
+      pageSize: 10,
+      property: "email",
+      query: "user-2",
+      userState: "active",
+    });
+
+    expect(prismaMock.user.count).toHaveBeenCalledWith({
+      where: {
+        active: true,
+        OR: [{ email: { contains: "user-2", mode: "insensitive" } }],
+      },
+    });
+
+    expect(prismaMock.user.findMany).toHaveBeenCalledWith({
+      where: {
+        active: true,
+        OR: [{ email: { contains: "user-2", mode: "insensitive" } }],
+      },
+      select: expect.any(Object),
+      skip: 10,
+      take: 10,
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    });
+
+    expect(result).toEqual({
+      users: returnedUsers,
+      totalCount: 1,
+      page: 2,
+      pageSize: 10,
+      totalPages: 1,
+    });
+  });
+
+  it("Returns a paginated list of users filtered by id", async () => {
+    const returnedUsers = [
+      {
+        id: "cmp1aao3z000hmonbhu53dvcf",
+        name: "user_3",
+        email: "user-3@test.ca",
+        active: true,
+        privileges: Base,
+      },
+    ];
+
+    prismaMock.user.count.mockResolvedValue(1);
+    (prismaMock.user.findMany as MockedFunction<any>).mockResolvedValue(returnedUsers);
+
+    const result = await getUsersPage({
+      property: "id",
+      query: "cmp1aao3z000hmonbhu53dvcf",
+    });
+
+    expect(prismaMock.user.count).toHaveBeenCalledWith({
+      where: {
+        OR: [{ id: "cmp1aao3z000hmonbhu53dvcf" }],
+      },
+    });
+
+    expect(result.users).toEqual(returnedUsers);
+  });
+
+  it("Returns an empty page cleanly when user search fails", async () => {
+    prismaMock.user.count.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.12.0",
+      })
+    );
+    prismaMock.user.findMany.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.12.0",
+      })
+    );
+
+    const result = await getUsersPage({ query: "test" });
+
+    expect(result).toEqual({
+      users: [],
+      totalCount: 0,
+      page: 1,
+      pageSize: 24,
+      totalPages: 0,
+    });
   });
 });
 
