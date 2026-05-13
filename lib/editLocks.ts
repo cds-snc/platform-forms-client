@@ -622,7 +622,9 @@ const shouldEnforceTemplateEditLockInternal = async (
   const data = await fetchAndCacheUserData(templateId, useRedisCache);
 
   if (!data) {
-    return true; // TODO: should this instead be false?
+    // Default to enforcing the lock when template state cannot be determined so we do not
+    // accidentally allow unlocked editing for a template that should still be protected.
+    return true;
   }
 
   return !data.isPublished && data.hasEnoughUsers;
