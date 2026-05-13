@@ -576,9 +576,9 @@ export const getTemplateCollaboratorCount = async (
       getEditLockAssignedPendingUsersCountCacheKey(templateId)
     );
     if (cachedUserCount !== null && cachedPendingUserCount !== null) {
-      const parsedUserCount = parseInt(cachedUserCount, 10);
-      const parsedPendingUserCount = parseInt(cachedPendingUserCount, 10);
-      if (Number.isFinite(parsedUserCount) && Number.isFinite(parsedPendingUserCount)) {
+      const parsedUserCount = Number(cachedUserCount);
+      const parsedPendingUserCount = Number(cachedPendingUserCount);
+      if (Number.isInteger(parsedUserCount) && Number.isInteger(parsedPendingUserCount)) {
         return { userCount: parsedUserCount, pendingUserCount: parsedPendingUserCount };
       }
     }
