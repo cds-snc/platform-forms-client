@@ -34,7 +34,7 @@ interface EditLockContextValue {
   getIsActiveTab: () => boolean;
   hasSessionExpired: boolean;
   isEnabled: boolean;
-  collaborators: number | null;
+  userCount: number | null;
 }
 
 const EditLockContext = createContext<EditLockContextValue | null>(null);
@@ -62,7 +62,7 @@ export const EditLockProvider = ({
     (isEditPath(pathname) || isSettingsPath(pathname)) &&
     activeFormId !== "0000";
 
-  const { takeover, getIsActiveTab, hasSessionExpired, collaborators } = useEditLock({
+  const { takeover, getIsActiveTab, hasSessionExpired, userCount } = useEditLock({
     formId: activeFormId,
     enabled,
     sessionId,
@@ -71,7 +71,7 @@ export const EditLockProvider = ({
 
   return (
     <EditLockContext.Provider
-      value={{ takeover, getIsActiveTab, hasSessionExpired, isEnabled: enabled, collaborators }}
+      value={{ takeover, getIsActiveTab, hasSessionExpired, isEnabled: enabled, userCount }}
     >
       {children}
     </EditLockContext.Provider>

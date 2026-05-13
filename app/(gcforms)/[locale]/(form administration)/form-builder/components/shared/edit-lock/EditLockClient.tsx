@@ -25,7 +25,7 @@ export const EditLockClient = ({
     language: s.lang,
     isPublished: s.isPublished,
   }));
-  const { takeover, getIsActiveTab, hasSessionExpired, isEnabled, collaborators } =
+  const { takeover, getIsActiveTab, hasSessionExpired, isEnabled, userCount } =
     useEditLockContext();
   const { headlessTree } = useTreeRef();
 
@@ -61,7 +61,7 @@ export const EditLockClient = ({
           takeover={handleTakeover}
           getIsActiveTab={getIsActiveTab}
           formId={formId}
-          collaborators={collaborators}
+          userCount={userCount}
         />
       )}
       {children}
