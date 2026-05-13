@@ -22,7 +22,9 @@ export const QuestionList = async ({
   if (!questions.length) {
     return null;
   }
-  const filteredQuestions = allQuestions.filter((q) => !questions.some((uq) => uq.id === q.id));
+  const filteredQuestions = allQuestions.filter(
+    (question) => !questions.some((userQuestion) => userQuestion.id === question.id)
+  );
 
   return (
     <>
@@ -40,7 +42,6 @@ export const QuestionList = async ({
               <EditSecurityQuestionButton
                 questionNumber={index + 1}
                 questionId={question.id}
-                // Add back the existing selected question
                 questions={[...filteredQuestions, question]}
               />
             </div>

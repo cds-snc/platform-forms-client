@@ -4,7 +4,6 @@ import Link from "next/link";
 import { serverTranslation } from "@i18n";
 import { SiteLogo } from "@serverComponents/icons";
 import LanguageToggle from "@serverComponents/globals/LanguageToggle";
-import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccountDropdown";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 import { AuthenticatedLayout } from "@lib/pages/auth";
@@ -45,18 +44,14 @@ export default AuthenticatedLayout(
                 aria-label={t("mainNavAriaLabel", { ns: "common" })}
               >
                 <ul className="mt-2 flex list-none px-0 text-base">
-                  <li className="mr-2 py-2 text-base tablet:mr-4">
+                  <li className="tablet:mr-4 mr-2 py-2 text-base">
                     <Link href={`/${locale}/forms`} prefetch={false}>
                       {t("adminNav.myForms", { ns: "common" })}
                     </Link>
                   </li>
 
-                  <li className="mr-2 py-2 tablet:mr-4">
+                  <li className="tablet:mr-4 mr-2 py-2">
                     <LanguageToggle />
-                  </li>
-
-                  <li className="mr-5 text-base">
-                    <YourAccountDropdown isAuthenticated={true} />
                   </li>
                 </ul>
               </nav>

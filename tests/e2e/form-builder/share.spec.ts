@@ -9,16 +9,6 @@ test.describe("Form builder share", () => {
 
     test("Renders share flyout with name check", async ({ page }) => {
       await page.getByRole("button", { name: "Share" }).click();
-
-      const menuItems = page.locator("[role='menuitem']");
-      await expect(menuItems).toHaveCount(1);
-      await expect(menuItems).toContainText("You must");
-      await expect(menuItems).toBeVisible();
-
-      await page
-        .locator("[role='menuitem'] span.underline")
-        .filter({ hasText: "name your form" })
-        .click();
       await expect(page.locator(":focus")).toHaveAttribute("id", "fileName");
     });
 
@@ -29,11 +19,6 @@ test.describe("Form builder share", () => {
       await expect(page.locator("#fileName")).toHaveValue("Cypress Share Test Form");
 
       await page.getByRole("button", { name: "Share" }).click();
-
-      const menuItems = page.locator("[role='menuitem']");
-      await expect(menuItems).toHaveCount(1);
-
-      await page.locator("span").filter({ hasText: "Share by email" }).click();
       await expect(page.locator("dialog label")).toContainText("Email address");
 
       const previewSummary = page
@@ -63,11 +48,6 @@ test.describe("Form builder share", () => {
       await page.locator("#fileName").fill("Cypress Share Test Form");
 
       await page.getByRole("button", { name: "Share" }).click();
-
-      const menuItems = page.locator("[role='menuitem']");
-      await expect(menuItems).toHaveCount(1);
-
-      await page.locator("span").filter({ hasText: "Share by email" }).click();
 
       // Using toBeAttached instead of "exist" check
       await expect(page.locator("dialog").filter({ hasText: "Step 1" })).toBeAttached();

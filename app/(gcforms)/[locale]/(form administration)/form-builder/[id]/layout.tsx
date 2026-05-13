@@ -15,6 +15,7 @@ import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
+import { authorization } from "@lib/privileges";
 import { checkKeyExists } from "@lib/serviceAccount";
 import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { getAppSetting } from "@lib/appSettings";
@@ -27,7 +28,7 @@ import {
 } from "@lib/hooks/useFormBuilderConfig";
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
 import { EditLockProvider } from "@formBuilder/components/shared/edit-lock/EditLockContext";
-import { ManageAccessStatusButton } from "@formBuilder/components/shared/edit-lock/ManageAccessStatusButton";
+import { AccountMenu } from "@formBuilder/components/shared/account-menu/AccountMenu";
 import { ManageFormAccessDialogContainer } from "./components/dialogs/ManageFormAccessDialog";
 
 export default async function Layout(props: {
@@ -51,10 +52,12 @@ export default async function Layout(props: {
 
   const allowGroupsFlag = allowGrouping();
   const allowLockedEditingFlag = await allowLockedEditing(session?.user.id);
+  const publishFormsEnabled = session
+    ? await authorization.hasPublishFormsPrivilege().catch(() => false)
+    : false;
   const ownerIdleTimeoutMs = normalizeEditLockRedirectIdleMs(
     await getAppSetting("editLockRedirectIdleMs")
   );
-  let assignedUserCount = 0;
 
   if (session && formID && formID !== "0000") {
     const templateWithUsers = await getTemplateWithAssociatedUsers(formID).catch((e) => {
@@ -66,7 +69,6 @@ export default async function Layout(props: {
     });
 
     initialForm = templateWithUsers?.formRecord ?? null;
-    assignedUserCount = templateWithUsers?.users.length ?? 0;
 
     if (initialForm === null) {
       redirect(`/${locale}/404`);
@@ -110,7 +112,11 @@ export default async function Layout(props: {
               <ManageFormAccessDialogContainer formId={id} />
               <div className="h-full">
                 <div className="flex min-h-screen flex-col">
-                  <Header context="formBuilder" className="mb-0" />
+                  <Header
+                    context="formBuilder"
+                    className="mb-0"
+                    shareUsesManageAccess={allowLockedEditingFlag}
+                  />
                   <div className="bg-gray-soft flex shrink-0 grow basis-auto flex-col">
                     <ToastContainer containerId="default" />
                     <ToastContainer
@@ -128,14 +134,15 @@ export default async function Layout(props: {
                     />
                     <div className="flex grow flex-row gap-7">
                       <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
-                        <div className={"sticky top-0 flex h-screen flex-col pb-4"}>
-                          <LeftNavigation id={id} />
-                          {session && allowLockedEditingFlag && (
-                            <ManageAccessStatusButton
-                              formId={id}
-                              testId="edit-page-lock-debug"
-                              editLockEnabled={enforceEditLockFlag}
-                              assignedUserCount={assignedUserCount}
+                        <div className={"sticky top-0 flex h-full min-h-0 flex-col"}>
+                          <div className="min-h-0 flex-1 overflow-y-auto">
+                            <LeftNavigation id={id} />
+                          </div>
+                          {session && (
+                            <AccountMenu
+                              locale={locale}
+                              testId="account-menu-trigger"
+                              publishingEnabled={publishFormsEnabled}
                             />
                           )}
                         </div>

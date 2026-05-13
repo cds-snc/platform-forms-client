@@ -1,0 +1,28 @@
+.account-menu-trigger {
+  anchor-name: --form-builder-account-menu-trigger;
+}
+
+.account-menu-popover {
+  position-anchor: --form-builder-account-menu-trigger;
+  position-area: right span-bottom;
+  position-try:
+    flip-block,
+    flip-inline,
+    flip-block flip-inline;
+
+  inset: auto;
+  margin: 0 0 0 1.5rem;
+  max-height: calc(100vh - 2rem);
+  opacity: 0;
+  display: none;
+  transition-property: opacity, display, translate;
+  transition-duration: 180ms;
+  transition-behavior: allow-discrete;
+  translate: 0 0.5rem;
+}
+
+.account-menu-popover:popover-open {
+  opacity: 1;
+  display: block;
+  translate: 0 0;
+}
