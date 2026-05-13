@@ -5,7 +5,7 @@ import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
 import { useEffect } from "react";
-import { ga } from "@root/lib/client/clientHelpers";
+import { ga } from "@lib/client/clientHelpers";
 import { getLastSegmentOfPath } from "@root/lib/utils/strings";
 import { usePathname } from "next/navigation";
 
