@@ -52,6 +52,7 @@ export default async function Layout(props: {
 
   const allowGroupsFlag = allowGrouping();
   const allowLockedEditingFlag = await allowLockedEditing(session?.user.id);
+  const shareUsesManageAccess = allowLockedEditingFlag && formID !== "0000";
   const publishFormsEnabled = session
     ? await authorization.hasPublishFormsPrivilege().catch(() => false)
     : false;
@@ -115,7 +116,7 @@ export default async function Layout(props: {
                   <Header
                     context="formBuilder"
                     className="mb-0"
-                    shareUsesManageAccess={allowLockedEditingFlag}
+                    shareUsesManageAccess={shareUsesManageAccess}
                   />
                   <div className="bg-gray-soft flex shrink-0 grow basis-auto flex-col">
                     <ToastContainer containerId="default" />
