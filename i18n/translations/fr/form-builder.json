@@ -592,7 +592,8 @@
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
       "UpdateFormJsonConfig": "JSON du formulaire mise à jour",
-      "UpdatedNotificationSettings": "Paramètre de notification mis à jour."
+      "UpdatedNotificationSettings": "Paramètre de notification mis à jour.",
+      "InvitationAccepted": "Invitation acceptée"
     },
     "eventDetails": {
       "CreatedForm": "Formulaire créé",

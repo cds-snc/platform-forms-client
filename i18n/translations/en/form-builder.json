@@ -592,7 +592,8 @@
       "RefreshAPIKey": "Re-generated API Key",
       "PublishForm": "Form published",
       "UpdateFormJsonConfig": "Form JSON updated",
-      "UpdatedNotificationSettings": "Updated notifications setting."
+      "UpdatedNotificationSettings": "Updated notifications setting.",
+      "InvitationAccepted": "Invitation accepted"
     },
     "eventDetails": {
       "CreatedForm": "Created form",
