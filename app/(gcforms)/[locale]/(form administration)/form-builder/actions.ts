@@ -53,7 +53,7 @@ const assertTemplateEditLockIfEnabled = async ({
 }) => {
   if (
     process.env.APP_ENV === "test" ||
-    !(await shouldEnforceTemplateEditLockWithVerifiedUserCount(templateId))
+    !(await shouldEnforceTemplateEditLockWithVerifiedUserCount(templateId, userId))
   ) {
     return;
   }

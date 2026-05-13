@@ -3,7 +3,18 @@
 import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
-import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
+import { isValidGovEmail } from "@lib/validation/validation";
+import {
+  email,
+  minLength,
+  object,
+  safeParse,
+  string,
+  toLowerCase,
+  trim,
+  pipe,
+  check,
+} from "valibot";
 
 export interface ErrorStates {
   validationErrors: {
@@ -102,7 +113,8 @@ const validate = async (
       toLowerCase(),
       trim(),
       minLength(1, t("input-validation.required")),
-      email(t("input-validation.email"))
+      email(t("input-validation.email")),
+      check((email) => isValidGovEmail(email), t("input-validation.validGovEmail"))
     ),
     // radio input can send a non-string value when empty
     request: pipe(

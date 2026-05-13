@@ -19,9 +19,8 @@ export default async function Layout(props: {
   const { children } = props;
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
-  const allowLockedEditingFlag = await allowLockedEditing();
-
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
+  const allowLockedEditingFlag = await allowLockedEditing(session?.user.id);
 
   if (!session) {
     return <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />;
@@ -37,7 +36,7 @@ export default async function Layout(props: {
     <>
       <h1>{t("gcFormsSettings")}</h1>
       <SettingsNavigation id={id} showManageAccess={allowLockedEditingFlag} />
-      <EditLockClient restrictToEditPaths={false} reloadOnTakeover={true}>
+      <EditLockClient restrictToEditPaths={false} reloadOnTakeover={true} formId={id}>
         {children}
       </EditLockClient>
     </>
