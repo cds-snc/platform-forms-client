@@ -499,8 +499,8 @@ export const invalidateTemplateEditLockUserCountCache = async (
 };
 
 /**
- * Get and determines lock user data. First tries the cache and if not available
- * then pulls from the DB. If the cache is available, the cache is also updated.
+ * Gets lock-related user data from the DB and computes the derived lock state.
+ * When `useRedisCache` is enabled, it also writes the computed values to Redis.
  */
 const fetchAndCacheUserData = async (
   templateId: string,
@@ -561,7 +561,10 @@ export const getTemplateCollaboratorCount = async (templateId: string): Promise<
     const redis = await getRedisInstance();
     const cached = await redis.get(getEditLockAssignedUsersCountCacheKey(templateId));
     if (cached !== null) {
-      return parseInt(cached, 10);
+      const parsedCount = parseInt(cached, 10);
+      if (!Number.isNaN(parsedCount)) {
+        return parsedCount;
+      }
     }
   }
 
@@ -619,7 +622,9 @@ const shouldEnforceTemplateEditLockInternal = async (
   const data = await fetchAndCacheUserData(templateId, useRedisCache);
 
   if (!data) {
-    return true; // TODO: should this instead be false?
+    // Default to enforcing the lock when template state cannot be determined so we do not
+    // accidentally allow unlocked editing for a template that should still be protected.
+    return true;
   }
 
   return !data.isPublished && data.hasEnoughUsers;
