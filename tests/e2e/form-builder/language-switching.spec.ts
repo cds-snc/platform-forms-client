@@ -1,9 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Test FormBuilder language switching", () => {
-  const addElementButtonText = "Add form element";
-
   test("Can enter English and French text in Description", async ({ page }) => {
+    const addElementButton = page.getByTestId("add-element").filter({ visible: true });
     const langSwitcher = page.getByTestId("lang-switcher").filter({ visible: true });
 
     // Navigate to form builder
@@ -14,7 +13,8 @@ test.describe("Test FormBuilder language switching", () => {
     await expect(langSwitcher).toHaveAttribute("aria-activedescendant", "switch-english");
 
     // Setup a form with one question
-    await page.locator("button").filter({ hasText: addElementButtonText }).click();
+    await expect(addElementButton).toBeVisible();
+    await addElementButton.click();
     await page.locator('[data-testid="richText"]').click();
     await page.locator('[data-testid="element-description-add-element"]').click();
 

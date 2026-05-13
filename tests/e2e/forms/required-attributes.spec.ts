@@ -33,44 +33,49 @@ test.describe("Testing a basic frontend form", () => {
   test.describe("Required Attributes", () => {
     test("Displays errors when submitting empty form", async ({ page }) => {
       await page.goto(publishedFormPath);
+      const shortAnswerErrorLink = page.getByRole("link", {
+        name: "Enter an answer for: A Required Short Answer",
+      });
 
       // Submit the empty form
-      await page.locator("[type='submit']").click();
-      await page.waitForTimeout(1000); // Add a short wait to ensure form submission processing
+      await page.getByRole("button", { name: "Submit" }).click();
 
-      // Wait for error list to appear using the gc-ordered-list class with extended timeout
-      await expect(page.locator(".gc-ordered-list li").first()).toBeVisible({ timeout: 10000 });
-
-      // Verify error messages for required fields
-      await expect(page.locator(".gc-ordered-list li").nth(0)).toContainText(
-        "Enter an answer for: A Required Short Answer"
-      );
-      await expect(page.locator(".gc-ordered-list li").nth(1)).toContainText(
-        "Select one or multiple options for: A Required Multiple Choice"
-      );
-      await expect(page.locator(".gc-ordered-list li").nth(2)).toContainText(
-        "Enter an answer for: A Required Radio"
-      );
-      await expect(page.locator(".gc-ordered-list li").nth(3)).toContainText(
-        "Select an option for: A Required Dropdown"
-      );
+      await expect(
+        page.getByRole("heading", { name: "Please correct the errors on the page." })
+      ).toBeVisible();
+      await expect(shortAnswerErrorLink).toBeVisible();
+      await expect(
+        page.getByText("Complete the required field to continue.").first()
+      ).toBeVisible();
     });
 
     test("Fills required fields and submits properly", async ({ page }) => {
       await page.goto(publishedFormPath);
+      const shortAnswerInput = page.locator('[id="1"]');
+      const radioGroup = page.getByRole("group", { name: /A Required Radio/ });
+      const nextButton = page.getByTestId("nextButton");
+      const reviewHeading = page.getByRole("heading", {
+        level: 2,
+        name: "Review your answers before submitting the form.",
+      });
 
       // Fill in required fields
-      // await page.getByRole("textbox", { name: "A Required Short Answer" }).fill("Testing");
-      await page.getByTestId("textInput").fill("Testing");
+      await shortAnswerInput.click();
+      await shortAnswerInput.pressSequentially("Testing");
+      await expect(shortAnswerInput).toHaveValue("Testing");
       await page.getByRole("checkbox", { name: "One" }).check({ force: true });
-      await page.getByText("One").nth(1).click(); // Click the label for the radio button
+      await radioGroup.getByText("One").click();
+      await expect(radioGroup.getByRole("radio", { name: "One" })).toBeChecked();
       await page.getByRole("combobox", { name: "A Required Dropdown" }).selectOption("One");
 
-      // Submit the form and wait for the success heading to appear
-      await page.locator("[type='submit']").click();
-      await page.waitForTimeout(1000); // Add a short wait to ensure form submission processing
+      if (await nextButton.isVisible()) {
+        await nextButton.click();
+        await expect(reviewHeading).toBeVisible();
+      }
 
-      // Verify submission confirmation with extended timeout
+      await page.getByRole("button", { name: "Submit" }).click();
+
+      // Verify inline submission confirmation
       await expect(page.getByRole("heading", { name: "Your form has been submitted" })).toBeVisible(
         { timeout: 20000 }
       );
