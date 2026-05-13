@@ -13,6 +13,7 @@ export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "erro
 
 type SaveDraftResult = {
   status: SaveDraftStatus;
+  formId?: string;
 };
 
 interface TemplateApiType {
@@ -87,6 +88,9 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
 
   const templateIsDirty = useRef(false);
   const savedSnapshot = useRef<TrackedTemplateState | null>(null);
+  const saveInFlight = useRef(false);
+  const queuedSaveRequested = useRef(false);
+  const saveDraftQueue = useRef<Array<(result: SaveDraftResult) => void>>([]);
   const resetState = useCallback(() => {
     templateIsDirty.current = false;
     savedSnapshot.current = null;
@@ -130,7 +134,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       );
       resetState();
 
-      return { status: "saved" };
+      return { status: "saved", formId: operationResult.formRecord.id };
     } catch {
       return { status: "error" };
     }
@@ -147,14 +151,59 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     status,
   ]);
 
+  const drainQueuedSaves = useCallback(
+    async (latestResult: SaveDraftResult): Promise<SaveDraftResult> => {
+      if (!queuedSaveRequested.current) {
+        return latestResult;
+      }
+
+      queuedSaveRequested.current = false;
+
+      // Avoid a redundant trailing write when no additional local edits were made.
+      const id = getId();
+      if (!templateIsDirty.current && id !== "") {
+        return drainQueuedSaves(latestResult);
+      }
+
+      const nextResult = await saveDraft();
+      return drainQueuedSaves(nextResult);
+    },
+    [getId, saveDraft]
+  );
+
+  const queueSaveDraft = useCallback(async (): Promise<SaveDraftResult> => {
+    if (saveInFlight.current) {
+      queuedSaveRequested.current = true;
+      return new Promise<SaveDraftResult>((resolve) => {
+        saveDraftQueue.current.push(resolve);
+      });
+    }
+
+    saveInFlight.current = true;
+    let latestResult: SaveDraftResult = { status: "skipped" };
+
+    try {
+      latestResult = await saveDraft();
+      latestResult = await drainQueuedSaves(latestResult);
+      return latestResult;
+    } finally {
+      const waiters = saveDraftQueue.current.splice(0);
+      saveInFlight.current = false;
+
+      for (const resolve of waiters) {
+        resolve(latestResult);
+      }
+    }
+  }, [drainQueuedSaves, saveDraft]);
+
   const saveDraftIfNeeded = useCallback(async (): Promise<SaveDraftResult> => {
     const id = getId();
     if (!templateIsDirty.current && id !== "") {
       return { status: "skipped" };
     }
 
-    return saveDraft();
-  }, [saveDraft, getId]);
+    return queueSaveDraft();
+  }, [queueSaveDraft, getId]);
 
   useSubscibeToTemplateStore(
     (s) =>
@@ -193,7 +242,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         updatedAt,
         setUpdatedAt,
         createOrUpdateTemplate,
-        saveDraft,
+        saveDraft: queueSaveDraft,
         saveDraftIfNeeded,
         resetState,
       }}
