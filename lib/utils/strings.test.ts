@@ -1,4 +1,4 @@
-import { stripMarkdown, stripEntities, stripLineBreaks, toPlainText } from '@root/lib/utils/strings';
+import { stripMarkdown, stripEntities, stripLineBreaks, toPlainText, getLastSegmentOfPath } from '@root/lib/utils/strings';
 import { describe, test, expect } from 'vitest';
 
 // Define the fixtures
@@ -127,5 +127,35 @@ describe('toPlainText', () => {
     const input = '# Heading  \n\n  ';
     const result = toPlainText(input);
     expect(result).toBe('Heading');
+  });
+});
+
+describe('getLastSegmentOfPath', () => {
+  test('returns the last segment of a standard path', () => {
+    expect(getLastSegmentOfPath('/forms/123/edit')).toBe('edit');
+  });
+
+  test('returns the only segment of a single-segment path', () => {
+    expect(getLastSegmentOfPath('/forms')).toBe('forms');
+  });
+
+  test('returns the last segment when there is no leading slash', () => {
+    expect(getLastSegmentOfPath('forms/123/edit')).toBe('edit');
+  });
+
+  test('returns null for an empty string', () => {
+    expect(getLastSegmentOfPath('')).toBeNull();
+  });
+
+  test('returns null for a path that is only slashes', () => {
+    expect(getLastSegmentOfPath('///')).toBeNull();
+  });
+
+  test('ignores a trailing slash', () => {
+    expect(getLastSegmentOfPath('/forms/123/')).toBe('123');
+  });
+
+  test('handles a path with no slashes', () => {
+    expect(getLastSegmentOfPath('edit')).toBe('edit');
   });
 });
