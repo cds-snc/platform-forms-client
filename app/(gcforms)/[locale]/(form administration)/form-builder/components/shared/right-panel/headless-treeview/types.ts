@@ -18,6 +18,7 @@ export interface TreeItemProps {
   item: TreeItemInstance<TreeItemData>;
   tree: TreeInstance<TreeItemData>;
   onFocus: (item: TreeItemInstance<TreeItemData>) => void;
+  onBlur?: () => void;
   handleDelete?: (
     e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>
   ) => Promise<void>;
