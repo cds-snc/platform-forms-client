@@ -12,7 +12,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { logMessage } from "@lib/logger";
 import { dateHasPast } from "@lib/utils";
-import { ClosingDateToggle } from "../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/manage/components/close/ClosingDateToggle";
+import { ClosingDateToggle } from "@formBuilder/[id]/settings/manage/components/close/ClosingDateToggle";
 import { ChecklistItem } from "./ChecklistItem";
 import { PublishedFormLink } from "./PublishedFormLink";
 import "./PublishButton.css";
