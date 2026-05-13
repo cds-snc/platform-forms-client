@@ -391,6 +391,12 @@ export const PublishButton = ({ locale }: { locale: string }) => {
                   description={t("closingDate.status")}
                 />
               </div>
+              <Link
+                href={`/${locale}/form-builder/${formId}/settings/manage`}
+                className="mt-3 inline-block text-sm font-semibold text-slate-700 underline underline-offset-2 hover:text-slate-900"
+              >
+                {t("closedFormSettings")}
+              </Link>
             </div>
           </div>
         ) : (
