@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { DatabaseHelper } from "../../helpers/database-helper";
 
-test.describe("Testing a basic frontend form", () => {
+test.describe("Testing a basic frontend form", { tag: "@serial" }, () => {
   let publishedFormPath: string;
   let formId: string;
   let dbHelper: DatabaseHelper;

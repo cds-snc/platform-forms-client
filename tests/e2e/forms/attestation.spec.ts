@@ -10,7 +10,7 @@ const setCheckboxValue = async (locator: Locator, checked: boolean) => {
   await locator.press("Space");
 };
 
-test.describe("Testing attestation fields", () => {
+test.describe("Testing attestation fields", { tag: "@serial" }, () => {
   let publishedFormPath: string;
   let formId: string;
   let dbHelper: DatabaseHelper;
@@ -44,11 +44,6 @@ test.describe("Testing attestation fields", () => {
     });
 
     test("Displays error when submitting form without checking all boxes", async ({ page }) => {
-      test.fixme(
-        true,
-        "Current public attestation flow no longer exposes a stable validation surface in E2E."
-      );
-
       await page.goto(publishedFormPath);
       const condition1Checkbox = page.locator('[id="1.0"]');
       const errorMessage = page.getByTestId("errorMessage");
