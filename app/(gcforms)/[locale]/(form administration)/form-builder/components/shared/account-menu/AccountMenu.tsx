@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
-import { clearTemplateStore } from "@lib/store/utils";
 import "./AccountMenu.css";
 
 const PersonIcon = () => (
@@ -59,25 +58,6 @@ export const AccountMenu = ({
   if (!user) {
     return null;
   }
-
-  const handleLogout = () => {
-    clearTemplateStore();
-
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const timeOptions = { timeZone: tz };
-    const enTime = new Date().toLocaleString("en-CA", timeOptions);
-    const frTime = new Date().toLocaleString("fr-CA", timeOptions);
-
-    sessionStorage.setItem(
-      "logoutTime",
-      JSON.stringify({
-        en: enTime,
-        fr: frTime,
-      })
-    );
-
-    void signOut({ callbackUrl: `/${locale}/auth/logout` });
-  };
 
   return (
     <div
@@ -175,13 +155,6 @@ export const AccountMenu = ({
               {user.name || t("accountMenu.fallbackName")}
             </p>
             <p className="m-0 truncate pt-1 text-base text-slate-500">{user.email}</p>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="mt-4 cursor-pointer border-0 bg-transparent p-0 text-sm text-slate-600 underline underline-offset-2 hover:text-slate-800"
-            >
-              {t("adminNav.logout")}
-            </button>
           </div>
         </div>
       </div>
