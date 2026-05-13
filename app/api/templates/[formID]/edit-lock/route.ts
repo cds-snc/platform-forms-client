@@ -85,8 +85,10 @@ export const GET = middleware([sessionExists()], async (req, props) => {
     return NextResponse.json(getEditLockDisabledStatus());
   }
 
-  const { userCount, pendingUserCount } = await getTemplateCollaboratorCount(formID);
-  const status = await getEditLockStatus(formID, session.user.id);
+  const [{ userCount, pendingUserCount }, status] = await Promise.all([
+    getTemplateCollaboratorCount(formID),
+    getEditLockStatus(formID, session.user.id),
+  ]);
   return NextResponse.json({ ...status, userCount, pendingUserCount });
 });
 
