@@ -132,7 +132,7 @@ export const AccountMenu = ({
         ref={popoverRef}
         id="account-menu-popover"
         popover="hint"
-        className="account-menu-popover z-20 w-[18rem] overflow-auto rounded-[1.75rem] bg-white p-0 text-slate-900 shadow-[0_16px_40px_rgba(15,23,42,0.14)]"
+        className="account-menu-popover z-20 w-[18rem] overflow-auto rounded-lg bg-white p-0 text-slate-900 shadow-[0_16px_40px_rgba(15,23,42,0.14)]"
       >
         <div className="flex min-h-0 flex-col">
           <div className={`px-6 py-5 ${publishingEnabled ? "bg-emerald-50" : "bg-yellow-50"}`}>

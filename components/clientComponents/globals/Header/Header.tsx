@@ -13,6 +13,7 @@ import Markdown from "markdown-to-jsx";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
 import { SkipLink } from "../SkipLink";
+import { PublishButton } from "./PublishButton";
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
   className?: string;
@@ -116,16 +117,22 @@ export const Header = ({
                   )}
                 </li>
               )}
+              {isFormBuilder && (
+                <>
+                  <li className="tablet:mr-4 mr-2 text-base">
+                    <ShareButton manageAccessEnabled={shareUsesManageAccess} />
+                  </li>
+                  <li className="tablet:mr-4 mr-2 text-base">
+                    <PublishButton locale={language} />
+                  </li>
+                </>
+              )}
+              <div className="mr-4 border-r-1" />
               {
                 <li className="tablet:mr-4 mr-2 py-2">
                   <LanguageToggle />
                 </li>
               }
-              {isFormBuilder && (
-                <li className="tablet:mr-4 mr-2 text-base">
-                  <ShareButton manageAccessEnabled={shareUsesManageAccess} />
-                </li>
-              )}
             </ul>
           </nav>
         </div>

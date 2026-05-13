@@ -110,45 +110,45 @@ export default async function Layout(props: {
               lockedEditingEnabled={enforceEditLockFlag}
               ownerIdleTimeoutMs={ownerIdleTimeoutMs}
             >
-              <ManageFormAccessDialogContainer formId={id} />
-              <div className="h-full">
-                <div className="flex min-h-screen flex-col">
-                  <Header
-                    context="formBuilder"
-                    className="mb-0"
-                    shareUsesManageAccess={shareUsesManageAccess}
-                  />
-                  <div className="bg-gray-soft flex shrink-0 grow basis-auto flex-col">
-                    <ToastContainer containerId="default" />
-                    <ToastContainer
-                      limit={1}
-                      containerId="wide"
-                      autoClose={10000}
-                      ariaLabel="Notifications: Alt+T"
-                      width="600px"
+              <GroupStoreProvider>
+                <ManageFormAccessDialogContainer formId={id} />
+                <div className="h-full">
+                  <div className="flex min-h-screen flex-col">
+                    <Header
+                      context="formBuilder"
+                      className="mb-0"
+                      shareUsesManageAccess={shareUsesManageAccess}
                     />
-                    <ToastContainer
-                      containerId="error-persistent"
-                      autoClose={false}
-                      ariaLabel="Error notifications"
-                      width="600px"
-                    />
-                    <div className="flex grow flex-row gap-7">
-                      <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
-                        <div className={"sticky top-0 flex h-full min-h-0 flex-col"}>
-                          <div className="min-h-0 flex-1 overflow-y-auto">
-                            <LeftNavigation id={id} />
+                    <div className="bg-gray-soft flex shrink-0 grow basis-auto flex-col">
+                      <ToastContainer containerId="default" />
+                      <ToastContainer
+                        limit={1}
+                        containerId="wide"
+                        autoClose={10000}
+                        ariaLabel="Notifications: Alt+T"
+                        width="600px"
+                      />
+                      <ToastContainer
+                        containerId="error-persistent"
+                        autoClose={false}
+                        ariaLabel="Error notifications"
+                        width="600px"
+                      />
+                      <div className="flex grow flex-row gap-7">
+                        <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
+                          <div className={"sticky top-0 flex h-full min-h-0 flex-col"}>
+                            <div className="min-h-0 flex-1 overflow-y-auto">
+                              <LeftNavigation id={id} />
+                            </div>
+                            {session && (
+                              <AccountMenu
+                                locale={locale}
+                                testId="account-menu-trigger"
+                                publishingEnabled={publishFormsEnabled}
+                              />
+                            )}
                           </div>
-                          {session && (
-                            <AccountMenu
-                              locale={locale}
-                              testId="account-menu-trigger"
-                              publishingEnabled={publishFormsEnabled}
-                            />
-                          )}
                         </div>
-                      </div>
-                      <GroupStoreProvider>
                         <div className="relative flex w-full gap-7">
                           <EditLockClient formId={id}>
                             <main
@@ -161,12 +161,12 @@ export default async function Layout(props: {
                             {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
                           </EditLockClient>
                         </div>
-                      </GroupStoreProvider>
+                      </div>
                     </div>
+                    <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
                   </div>
-                  <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
                 </div>
-              </div>
+              </GroupStoreProvider>
             </EditLockProvider>
           </RefStoreProvider>
         </SaveTemplateProvider>
