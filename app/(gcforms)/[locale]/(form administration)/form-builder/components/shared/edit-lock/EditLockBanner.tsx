@@ -48,12 +48,10 @@ export const EditLockBanner = ({
   takeover,
   getIsActiveTab,
   formId,
-  userCount,
 }: {
   takeover: () => Promise<void>;
   getIsActiveTab: () => boolean;
   formId: string;
-  userCount?: number | null;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { isLockedByOther, editLock } = useTemplateStore((s) => ({
@@ -133,7 +131,6 @@ export const EditLockBanner = ({
         // Dynamic since the banner can show in multiple locations
         location: getLastSegmentOfPath(pathname),
         ...(lastActivity && { lastActivity }),
-        ...(userCount != null && { userCount }),
       });
     } catch (error) {
       setTakeoverError(true);

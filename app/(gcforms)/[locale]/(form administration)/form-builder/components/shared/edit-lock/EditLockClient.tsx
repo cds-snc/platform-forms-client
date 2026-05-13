@@ -25,8 +25,7 @@ export const EditLockClient = ({
     language: s.lang,
     isPublished: s.isPublished,
   }));
-  const { takeover, getIsActiveTab, hasSessionExpired, isEnabled, userCount } =
-    useEditLockContext();
+  const { takeover, getIsActiveTab, hasSessionExpired, isEnabled } = useEditLockContext();
   const { headlessTree } = useTreeRef();
 
   const showLockedEdit =
@@ -57,12 +56,7 @@ export const EditLockClient = ({
       {showSessionExpiredOverlay ? (
         <EditLockSessionExpiredOverlay onReturnToForms={returnToForms} formId={formId} />
       ) : (
-        <EditLockBanner
-          takeover={handleTakeover}
-          getIsActiveTab={getIsActiveTab}
-          formId={formId}
-          userCount={userCount}
-        />
+        <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} formId={formId} />
       )}
       {children}
     </>
