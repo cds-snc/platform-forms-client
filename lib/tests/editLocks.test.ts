@@ -22,6 +22,7 @@ import {
   acquireEditLock,
   clearEditLockTakeoverSaveAcknowledgement,
   getEditLockStatus,
+  getTemplateCollaboratorCount,
   heartbeatEditLock,
   invalidateTemplateEditLockUserCountCache,
   releaseEditLock,
@@ -290,4 +291,80 @@ describe("editLocks with redis", () => {
     await expect(shouldEnforceTemplateEditLockWithVerifiedUserCount("form-7")).resolves.toBe(false);
     expect(prisma.template.findUnique).toHaveBeenCalledTimes(1);
   });
+
+  describe("getTemplateCollaboratorCount", () => {
+    beforeEach(async () => {
+      const redis = await getRedisInstance();
+      await redis.del(
+        "edit-lock-assigned-users-count:form-cc",
+        "edit-lock-assigned-pending-users-count:form-cc"
+      );
+    });
+
+    it("returns userCount and pendingUserCount from the database on a cache miss", async () => {
+      vi.mocked(prisma.template.findUnique).mockResolvedValue({
+        isPublished: false,
+        _count: { users: 3 },
+        invitations: [{ id: "inv-1" }, { id: "inv-2" }],
+      } as never);
+
+      const result = await getTemplateCollaboratorCount("form-cc");
+      expect(result).toEqual({ userCount: 3, pendingUserCount: 2 });
+    });
+
+    it("returns cached values without hitting the database on a cache hit", async () => {
+      const redis = await getRedisInstance();
+      await redis.set("edit-lock-assigned-users-count:form-cc", "5");
+      await redis.set("edit-lock-assigned-pending-users-count:form-cc", "1");
+
+      const result = await getTemplateCollaboratorCount("form-cc");
+      expect(result).toEqual({ userCount: 5, pendingUserCount: 1 });
+      expect(prisma.template.findUnique).not.toHaveBeenCalled();
+    });
+
+    it("populates the Redis cache after a database fetch", async () => {
+      vi.mocked(prisma.template.findUnique).mockResolvedValue({
+        isPublished: false,
+        _count: { users: 2 },
+        invitations: [{ id: "inv-1" }],
+      } as never);
+
+      await getTemplateCollaboratorCount("form-cc");
+
+      const redis = await getRedisInstance();
+      expect(await redis.get("edit-lock-assigned-users-count:form-cc")).toBe("2");
+      expect(await redis.get("edit-lock-assigned-pending-users-count:form-cc")).toBe("1");
+    });
+
+    it("returns { userCount: null, pendingUserCount: null } when the template does not exist", async () => {
+      vi.mocked(prisma.template.findUnique).mockResolvedValue(null);
+
+      const result = await getTemplateCollaboratorCount("form-cc");
+      expect(result).toEqual({ userCount: null, pendingUserCount: null });
+    });
+
+    it("returns { userCount: null, pendingUserCount: null } when the database query throws an error", async () => {
+      vi.mocked(prisma.template.findUnique).mockRejectedValue(new Error("db error"));
+
+      const result = await getTemplateCollaboratorCount("form-cc");
+      expect(result).toEqual({ userCount: null, pendingUserCount: null });
+    });
+
+    it("treats a partial cache miss (only one key present) as a miss and fetches from database", async () => {
+      const redis = await getRedisInstance();
+      await redis.set("edit-lock-assigned-users-count:form-cc", "4");
+      // pendingUserCount key absent
+
+      vi.mocked(prisma.template.findUnique).mockResolvedValue({
+        isPublished: false,
+        _count: { users: 4 },
+        invitations: [{ id: "inv-1" }, { id: "inv-2" }, { id: "inv-3" }],
+      } as never);
+
+      const result = await getTemplateCollaboratorCount("form-cc");
+      expect(result).toEqual({ userCount: 4, pendingUserCount: 3 });
+      expect(prisma.template.findUnique).toHaveBeenCalledTimes(1);
+    });
+  });
+
 });
