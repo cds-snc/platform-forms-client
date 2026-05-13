@@ -22,6 +22,7 @@ export const EditLockSessionExpiredOverlay = ({
   useEffect(() => {
     ga("edit_lock_session_expired", {
       formId,
+      timestamp: new Date().getTime(),
       location: getLastSegmentOfPath(pathname),
     });
   }, [formId, pathname]);

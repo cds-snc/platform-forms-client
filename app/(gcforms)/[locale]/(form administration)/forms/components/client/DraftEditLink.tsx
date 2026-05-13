@@ -94,6 +94,7 @@ export const DraftEditLink = ({
           setShowDialog(false);
           ga("edit_lock_accept_read_only", {
             formId,
+            timestamp: new Date().getTime(),
             location: "forms",
             userCount,
           });
@@ -110,6 +111,7 @@ export const DraftEditLink = ({
           setShowDialog(false);
           ga("edit_lock_decline_read_only", {
             formId,
+            timestamp: new Date().getTime(),
             location: "forms",
             userCount,
           });

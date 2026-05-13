@@ -129,6 +129,7 @@ export const EditLockBanner = ({
           : "edit_lock_takeover_lock";
       ga(eventName, {
         formId,
+        timestamp: new Date().getTime(),
         // Dynamic since the banner can show in multiple locations
         location: getLastSegmentOfPath(pathname),
         ...(lastActivity && { lastActivity }),
