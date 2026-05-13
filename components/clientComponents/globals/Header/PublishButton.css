@@ -11,13 +11,13 @@
     flip-block flip-inline;
 
   inset: auto;
-  margin: 0.875rem 0 0;
+  margin: 1rem 0 0;
   opacity: 0;
   display: none;
   transition-property: opacity, display, translate;
   transition-duration: 180ms;
   transition-behavior: allow-discrete;
-  translate: 0 0.5rem;
+  translate: 0 0.125rem;
 }
 
 .publish-menu-popover:popover-open {

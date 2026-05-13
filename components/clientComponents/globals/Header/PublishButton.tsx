@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "@root/i18n/client";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 import { useGroupStore } from "@lib/groups/useGroupStore";
@@ -265,6 +265,18 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const showPublishAction = allChecksPass;
   const triggerLabel = isPublished ? t("published") : t("publish");
 
+  const triggerStyle = {
+    anchorName: "--form-builder-publish-menu-trigger",
+  } as CSSProperties;
+
+  const popoverStyle = {
+    positionAnchor: "--form-builder-publish-menu-trigger",
+    positionArea: "bottom span-right",
+    positionTry: "flip-block, flip-inline, flip-block flip-inline",
+    inset: "auto",
+    marginTop: "1rem",
+  } as CSSProperties;
+
   return (
     <div className="relative inline-block text-left">
       <button
@@ -276,6 +288,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
         aria-label={triggerLabel}
         aria-expanded={isOpen}
         aria-controls="publish-menu-popover"
+        style={triggerStyle}
         className="publish-menu-trigger hover:text-white-default focus:text-white-default flex cursor-pointer items-center gap-2 rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 focus:bg-gray-600"
       >
         <span className="inline-block">{triggerLabel}</span>
@@ -286,6 +299,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
         ref={popoverRef}
         id="publish-menu-popover"
         popover="hint"
+        style={popoverStyle}
         className="publish-menu-popover z-20 w-76 rounded-lg border border-slate-300 bg-white px-4 py-5 shadow-[0_8px_24px_rgba(15,23,42,0.14)]"
       >
         {isPublished ? (
