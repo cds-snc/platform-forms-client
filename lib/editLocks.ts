@@ -561,7 +561,10 @@ export const getTemplateCollaboratorCount = async (templateId: string): Promise<
     const redis = await getRedisInstance();
     const cached = await redis.get(getEditLockAssignedUsersCountCacheKey(templateId));
     if (cached !== null) {
-      return parseInt(cached, 10);
+      const parsedCount = parseInt(cached, 10);
+      if (!Number.isNaN(parsedCount)) {
+        return parsedCount;
+      }
     }
   }
 
