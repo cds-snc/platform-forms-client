@@ -4,7 +4,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "@root/i18n/client";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 import { useGroupStore } from "@lib/groups/useGroupStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { CancelIcon, CircleCheckIcon } from "@serverComponents/icons";
+import { updateTemplatePublishedStatus } from "@formBuilder/actions";
+import { ga } from "@lib/client/clientHelpers";
+import { logMessage } from "@lib/logger";
 import "./PublishButton.css";
 
 const ChevronDownIcon = () => (
@@ -57,8 +61,12 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const pathname = usePathname();
   const popoverRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [error, setError] = useState(false);
+  const isPublished = useTemplateStore((state) => state.isPublished);
   const setGroupId = useGroupStore((state) => state.setId);
   const {
+    userCanPublish,
     data: {
       title,
       questions,
@@ -125,9 +133,48 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     }
   };
 
+  const handlePublish = async () => {
+    if (!formId || publishing) {
+      return;
+    }
+
+    setError(false);
+    setPublishing(true);
+
+    try {
+      ga("publish_form");
+
+      const { formRecord, error } = await updateTemplatePublishedStatus({
+        id: formId,
+        isPublished: true,
+        publishFormType: "",
+        publishDescription: "",
+        publishReason: "",
+        redirectAfter: `/${locale}/form-builder/${formId}/published`,
+      });
+
+      if (error || !formRecord) {
+        throw new Error(error);
+      }
+    } catch (e) {
+      if ((e as Error).message !== "NEXT_REDIRECT") {
+        logMessage.error(e);
+        setError(true);
+        setPublishing(false);
+      }
+    }
+  };
+
   if (!formId) {
     return null;
   }
+
+  if (isPublished) {
+    return null;
+  }
+
+  const canPublishFromPopover = allChecksPass && userCanPublish && !publishing;
+  const showPublishAction = allChecksPass;
 
   return (
     <div className="relative inline-block text-left">
@@ -191,15 +238,23 @@ export const PublishButton = ({ locale }: { locale: string }) => {
           />
         </ul>
 
-        <div className="mt-6">
-          <button
-            type="button"
-            disabled={!allChecksPass}
-            className="w-full rounded-lg border-2 border-green-700 px-4 py-2 text-2xl font-semibold text-slate-700 enabled:cursor-pointer enabled:text-slate-900 enabled:hover:bg-green-100 disabled:cursor-not-allowed disabled:border-slate-400 disabled:text-slate-400"
-          >
-            {t("publish")}
-          </button>
-        </div>
+        {showPublishAction && (
+          <div className="mt-6">
+            <button
+              type="button"
+              onClick={handlePublish}
+              disabled={!canPublishFromPopover}
+              className="w-full rounded-lg border-2 border-emerald-700 bg-emerald-50 px-4 py-2 text-emerald-700 enabled:cursor-pointer enabled:text-slate-900 enabled:hover:bg-emerald-100 disabled:cursor-not-allowed disabled:border-slate-400 disabled:bg-slate-100 disabled:text-slate-400"
+            >
+              {t("readyToPublish")}
+            </button>
+            {error && (
+              <p role="alert" className="text-red-destructive mt-3 text-sm">
+                {t("thereWasAnErrorPublishing")}
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
