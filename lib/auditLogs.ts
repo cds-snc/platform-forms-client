@@ -214,6 +214,7 @@ type AuditDetailsParams = {
     userId: string;
     formId: string;
     enabled: string;
+    userEmail: string;
   };
   [AuditLogDetails.ConfirmedResponsesForForm]: { formId: string };
   [AuditLogDetails.DeletedDraftResponsesForForm]: { formId: string };

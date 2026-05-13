@@ -40,6 +40,7 @@ export const updateNotificationsUser = AuthenticatedAction(
           userId: session.user.id,
           formId,
           enabled: user.enabled ? "enabled" : "disabled",
+          userEmail: user.email,
         }
       );
     } catch (_) {
