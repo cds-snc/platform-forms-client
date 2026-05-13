@@ -85,9 +85,9 @@ export const GET = middleware([sessionExists()], async (req, props) => {
     return NextResponse.json(getEditLockDisabledStatus());
   }
 
-  const userCount = await getTemplateCollaboratorCount(formID);
+  const { userCount, pendingUserCount } = await getTemplateCollaboratorCount(formID);
   const status = await getEditLockStatus(formID, session.user.id);
-  return NextResponse.json({ ...status, userCount });
+  return NextResponse.json({ ...status, userCount, pendingUserCount });
 });
 
 export const POST = middleware([sessionExists()], async (_req: NextRequest, props) => {

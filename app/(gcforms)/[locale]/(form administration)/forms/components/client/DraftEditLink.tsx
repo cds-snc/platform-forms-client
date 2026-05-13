@@ -56,6 +56,9 @@ export const DraftEditLink = ({
 
     setIsChecking(true);
 
+    // Edit lock status is dynamic so a fetch is needed vs. using static props passed
+    // down from the layout level. Dynamic because a user can open a form in Edit mode
+    // then invite a user and change from Edit to Lock mode.
     try {
       const response = await fetch(`/api/templates/${formId}/edit-lock`, {
         method: "GET",
@@ -74,9 +77,14 @@ export const DraftEditLink = ({
       }
 
       const name = payload.lock?.lockedByName || payload.lock?.lockedByEmail || null;
-
       setLockedByName(name);
-      setUserCount(payload.userCount ?? null);
+
+      const userCount =
+        payload.userCount != null && payload.pendingUserCount != null
+          ? payload.userCount + payload.pendingUserCount
+          : null;
+      setUserCount(userCount);
+
       setShowDialog(true);
     } catch {
       navigateToEditor();

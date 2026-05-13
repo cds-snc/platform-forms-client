@@ -21,6 +21,8 @@ const EDIT_LOCK_STREAM_PREFIX = "edit-lock-stream";
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX = "edit-lock-takeover-save";
 const EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX = "edit-lock-assigned-users-threshold";
 const EDIT_LOCK_ASSIGNED_USERS_COUNT_CACHE_PREFIX = "edit-lock-assigned-users-count";
+const EDIT_LOCK_ASSIGNED_PENDING_USERS_COUNT_CACHE_PREFIX =
+  "edit-lock-assigned-pending-users-count";
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_POLL_MS = 100;
 const EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS = 300;
 
@@ -109,6 +111,8 @@ const getEditLockAssignedUsersCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX}:${templateId}`;
 const getEditLockAssignedUsersCountCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_USERS_COUNT_CACHE_PREFIX}:${templateId}`;
+const getEditLockAssignedPendingUsersCountCacheKey = (templateId: string) =>
+  `${EDIT_LOCK_ASSIGNED_PENDING_USERS_COUNT_CACHE_PREFIX}:${templateId}`;
 const editLockTtlSeconds = Math.ceil(EDIT_LOCK_TTL_MS / 1000);
 const updatedEvent: EditLockEvent = { type: "updated" };
 const wait = async (timeMs: number) =>
@@ -489,23 +493,26 @@ export const invalidateTemplateEditLockUserCountCache = async (
   if (process.env.APP_ENV === "test" || !redisEnabled()) {
     return;
   }
-
   const redis = await getRedisInstance();
-  // Cleanup any past cache.
   await Promise.all([
     redis.del(getEditLockAssignedUsersCacheKey(templateId)),
     redis.del(getEditLockAssignedUsersCountCacheKey(templateId)),
+    redis.del(getEditLockAssignedPendingUsersCountCacheKey(templateId)),
   ]);
 };
 
 /**
- * Gets lock-related user data from the DB and computes the derived lock state.
- * When `useRedisCache` is enabled, it also writes the computed values to Redis.
+ * Fetches edit lock data and updates the Redis cache.
  */
 const fetchAndCacheUserData = async (
   templateId: string,
   useRedisCache: boolean
-): Promise<{ isPublished: boolean; userCount: number; hasEnoughUsers: boolean } | null> => {
+): Promise<{
+  isPublished: boolean;
+  userCount: number;
+  pendingUserCount: number;
+  hasEnoughUsers: boolean;
+} | null> => {
   const template = await prisma.template
     .findUnique({
       where: { id: templateId },
@@ -524,11 +531,10 @@ const fetchAndCacheUserData = async (
     return null;
   }
 
-  const { userCount, hasEnoughUsers } = {
-    userCount: template._count.users,
-    hasEnoughUsers:
-      template._count.users + template.invitations.length >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK,
-  };
+  const userCount = template._count.users;
+  const pendingUserCount = template.invitations.length;
+  const hasEnoughUsers =
+    template._count.users + template.invitations.length >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
 
   if (useRedisCache) {
     const redis = await getRedisInstance();
@@ -543,33 +549,41 @@ const fetchAndCacheUserData = async (
         EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS,
         String(userCount)
       ),
+      redis.setex(
+        getEditLockAssignedPendingUsersCountCacheKey(templateId),
+        EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS,
+        String(pendingUserCount)
+      ),
     ]);
   }
 
-  return { isPublished: template.isPublished, userCount, hasEnoughUsers };
+  return { isPublished: template.isPublished, userCount, pendingUserCount, hasEnoughUsers };
 };
 
 /**
- * Get the number of confirmed users assigned to the form. Reads from the Redis
- * count cache when available (warmed by shouldEnforceTemplateEditLockInternal on
- * the same request path), falling back to a DB query that also warms the cache.
+ * Get the users and pending users count on this template. The Redis cached is used when
+ * available and falls back to a DB query when not, which also populates the cache for
+ * future calls.
  */
-export const getTemplateCollaboratorCount = async (templateId: string): Promise<number | null> => {
+export const getTemplateCollaboratorCount = async (
+  templateId: string
+): Promise<{ userCount: number | null; pendingUserCount: number | null }> => {
   const useRedisCache = process.env.APP_ENV !== "test" && redisEnabled();
-
   if (useRedisCache) {
     const redis = await getRedisInstance();
-    const cached = await redis.get(getEditLockAssignedUsersCountCacheKey(templateId));
-    if (cached !== null) {
-      const parsedCount = parseInt(cached, 10);
-      if (!Number.isNaN(parsedCount)) {
-        return parsedCount;
-      }
+    const cachedUserCount = await redis.get(getEditLockAssignedUsersCountCacheKey(templateId));
+    const cachedPendingUserCount = await redis.get(
+      getEditLockAssignedPendingUsersCountCacheKey(templateId)
+    );
+    if (cachedUserCount !== null && cachedPendingUserCount !== null) {
+      const parsedUserCount = parseInt(cachedUserCount, 10) ?? null;
+      const parsedPendingUserCount = parseInt(cachedPendingUserCount, 10) ?? null;
+      return { userCount: parsedUserCount, pendingUserCount: parsedPendingUserCount };
     }
   }
 
   const data = await fetchAndCacheUserData(templateId, useRedisCache);
-  return data?.userCount ?? null;
+  return { userCount: data?.userCount ?? null, pendingUserCount: data?.pendingUserCount ?? null };
 };
 
 const shouldEnforceTemplateEditLockInternal = async (
