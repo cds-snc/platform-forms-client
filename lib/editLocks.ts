@@ -576,9 +576,11 @@ export const getTemplateCollaboratorCount = async (
       getEditLockAssignedPendingUsersCountCacheKey(templateId)
     );
     if (cachedUserCount !== null && cachedPendingUserCount !== null) {
-      const parsedUserCount = parseInt(cachedUserCount, 10) ?? null;
-      const parsedPendingUserCount = parseInt(cachedPendingUserCount, 10) ?? null;
-      return { userCount: parsedUserCount, pendingUserCount: parsedPendingUserCount };
+      const parsedUserCount = parseInt(cachedUserCount, 10);
+      const parsedPendingUserCount = parseInt(cachedPendingUserCount, 10);
+      if (Number.isFinite(parsedUserCount) && Number.isFinite(parsedPendingUserCount)) {
+        return { userCount: parsedUserCount, pendingUserCount: parsedPendingUserCount };
+      }
     }
   }
 
