@@ -9,6 +9,11 @@ test.describe("Form builder share", () => {
 
     test("Renders share flyout with name check", async ({ page }) => {
       await page.getByRole("button", { name: "Share" }).click();
+      const missingNameMessage = page.locator("#share-name-required-message");
+      await expect(missingNameMessage).toContainText("You must");
+      await expect(missingNameMessage).toContainText("name your form");
+
+      await missingNameMessage.getByRole("button", { name: /name your form/i }).click();
       await expect(page.locator(":focus")).toHaveAttribute("id", "fileName");
     });
 
