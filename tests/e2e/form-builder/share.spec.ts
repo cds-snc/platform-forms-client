@@ -17,15 +17,16 @@ test.describe("Form builder share", () => {
       await expect(page.locator(":focus")).toHaveAttribute("id", "fileName");
     });
 
-    test("Renders manage access flow for authenticated users", async ({ page }) => {
+    test("Renders share via email for authenticated users (no edit ,lock feature flag)", async ({
+      page,
+    }) => {
       await expect(page.locator("#fileName")).toHaveAttribute("placeholder", "Unnamed form file");
 
       await page.fill("#fileName", "Cypress Share Test Form");
       await expect(page.locator("#fileName")).toHaveValue("Cypress Share Test Form");
 
       await page.getByRole("button", { name: "Share" }).click();
-      await expect(page.locator("dialog label")).toContainText("Share access");
-      await expect(page.getByRole("heading", { name: "People with access" })).toBeVisible();
+      await expect(page.locator("dialog label")).toContainText("Email address");
 
       await page.getByTestId("close-dialog").click();
     });
