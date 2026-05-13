@@ -78,7 +78,7 @@ const ChecklistItem = ({
   );
 };
 
-const PublishedLinkRow = ({
+const PublishedFormLink = ({
   label,
   href,
   copyLabel,
@@ -361,7 +361,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
           <div>
             <p className="mb-4 text-sm text-slate-600">{t("publishedViewLinks")}</p>
             <ul className="m-0 list-none space-y-3 p-0">
-              <PublishedLinkRow
+              <PublishedFormLink
                 label={t("publishedEnglish")}
                 href={publishedLinks.en}
                 openLabel={t("share.open")}
@@ -370,7 +370,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
                 copiedLabel={t("publishedCopied")}
                 onCopy={handleCopyPublishedLink}
               />
-              <PublishedLinkRow
+              <PublishedFormLink
                 label={t("publishedFrench")}
                 href={publishedLinks.fr}
                 openLabel={t("share.open")}
