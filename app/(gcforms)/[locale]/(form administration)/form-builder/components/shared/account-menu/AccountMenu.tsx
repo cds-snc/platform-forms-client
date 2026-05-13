@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
+import { FeatureFlags } from "@lib/cache/types";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import "./AccountMenu.css";
 
 const PersonIcon = () => (
@@ -50,8 +52,10 @@ export const AccountMenu = ({
   const { t } = useTranslation(["common", "profile", "form-builder"]);
   const { data } = useSession();
   const { ability } = useAccessControl();
+  const { getFlag } = useFeatureFlags();
 
   const user = data?.user;
+  const isZitadelLoginEnabled = getFlag(FeatureFlags.zitadelLogin);
   const canViewAdministration =
     ability?.can("view", "Flag") || ability?.can("view", "Privilege") || false;
 
@@ -126,27 +130,30 @@ export const AccountMenu = ({
                   </Link>
                 </li>
               )}
-              <li>
-                {user.accountUrl ? (
-                  <a
-                    href={user.accountUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 text-slate-600 no-underline hover:underline focus:underline"
+              {isZitadelLoginEnabled ? (
+                user.accountUrl && (
+                  <li>
+                    <a
+                      href={user.accountUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 text-slate-600 no-underline hover:underline focus:underline"
+                    >
+                      <span>{t("accountMenu.account")}</span>
+                      <ExternalLinkIcon />
+                    </a>
+                  </li>
+                )
+              ) : (
+                <li>
+                  <Link
+                    href={`/${locale}/profile`}
+                    className="text-slate-600 no-underline hover:underline focus:underline"
                   >
-                    <span>{t("accountMenu.account")}</span>
-                    <ExternalLinkIcon />
-                  </a>
-                ) : (
-                  <a
-                    href="#"
-                    className="inline-flex items-center gap-2 text-slate-600 no-underline hover:underline focus:underline"
-                  >
-                    <span>{t("accountMenu.account")}</span>
-                    <ExternalLinkIcon />
-                  </a>
-                )}
-              </li>
+                    {t("title", { ns: "profile" })}
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
 
