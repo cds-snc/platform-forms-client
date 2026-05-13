@@ -11,6 +11,7 @@ import { useTranslation } from "@i18n/client";
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { resetLockedSections } from "@lib/formContext";
 import { ResetFlowDialog } from "./ResetFlowDialog";
+import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 
 export const LogicNavigation = () => {
   const { t } = useTranslation("form-builder");
@@ -20,6 +21,8 @@ export const LogicNavigation = () => {
       replaceGroups: s.replaceGroups,
     };
   });
+
+  const { saveDraftIfNeeded } = useTemplateContext();
 
   const { flow } = useFlowRef();
 
@@ -44,6 +47,7 @@ export const LogicNavigation = () => {
 
   const handleConfirmResetDialog = async () => {
     autoFlow();
+    await saveDraftIfNeeded();
     handleCloseResetDialog();
   };
 
