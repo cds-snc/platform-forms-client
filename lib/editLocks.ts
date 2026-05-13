@@ -561,7 +561,7 @@ const fetchAndCacheUserData = async (
 };
 
 /**
- * Get the users and pending users count on this template. The Redis cached is used when
+ * Get the users and pending users count on this template. The Redis cache is used when
  * available and falls back to a DB query when not, which also populates the cache for
  * future calls.
  */
