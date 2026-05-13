@@ -27,24 +27,6 @@ const PersonIcon = () => (
   </svg>
 );
 
-const ArrowIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="8"
-    height="12"
-    viewBox="0 0 8 12"
-    fill="none"
-    aria-hidden="true"
-    focusable="false"
-  >
-    <path
-      d="M-8.77997e-05 1.41L4.57991 6L-8.82009e-05 10.59L1.40991 12L7.40991 6L1.40991 -2.62268e-07L-8.77997e-05 1.41Z"
-      fill="black"
-      fillOpacity="0.54"
-    />
-  </svg>
-);
-
 const ExternalLinkIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -144,7 +126,6 @@ export const AccountMenu = ({
         className="account-menu-trigger flex cursor-pointer items-center gap-3 bg-transparent text-slate-900 transition-opacity hover:opacity-80 focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 focus:outline-none"
       >
         <PersonIcon />
-        <ArrowIcon />
       </button>
 
       <div
