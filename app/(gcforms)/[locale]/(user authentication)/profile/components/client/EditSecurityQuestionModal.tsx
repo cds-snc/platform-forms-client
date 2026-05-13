@@ -85,7 +85,7 @@ const EditSecurityQuestionModal = ({
 
   const langKey = i18n.language === "en" ? "questionEn" : "questionFr";
 
-  const debouncedAnswerCheck = debounce(
+  const _debouncedAnswerCheck = debounce(
     useCallback(() => {
       if (!isAnswerInputValid(answerRef.current?.value)) {
         setIsFormWarning(false);
@@ -109,10 +109,10 @@ const EditSecurityQuestionModal = ({
     try {
       reset();
 
-      const nextQuestionId = questionRef.current?.value;
+      const questionId = questionRef.current?.value;
       const questionAnswer = answerRef.current?.value;
 
-      if (!nextQuestionId) {
+      if (!questionId) {
         throw Error("Question Id required for security question API call");
       }
 
@@ -121,11 +121,7 @@ const EditSecurityQuestionModal = ({
         return;
       }
 
-      const response = await updateSecurityQuestion(
-        originalQuestionId,
-        nextQuestionId,
-        questionAnswer
-      );
+      const response = await updateSecurityQuestion(originalQuestionId, questionId, questionAnswer);
       if (response?.error) {
         throw new Error(response.error);
       }
@@ -164,6 +160,7 @@ const EditSecurityQuestionModal = ({
       }
     >
       <div className="px-4">
+        {/* TODO: probably will not need the error since already selected questions can be removed programmatically */}
         {isFormError && (
           <Alert.Danger>
             <Alert.Title headingTag="h3">
@@ -198,9 +195,9 @@ const EditSecurityQuestionModal = ({
               defaultValue={questionId}
               ref={questionRef}
             >
-              {questions.map((question: Question) => (
-                <option key={question.id} value={question.id}>
-                  {question[langKey]}
+              {questions.map((q: Question) => (
+                <option key={q.id} value={q.id}>
+                  {q[langKey]}
                 </option>
               ))}
             </select>
@@ -234,7 +231,7 @@ const EditSecurityQuestionModal = ({
               aria-invalid={isAnswerInputError}
               aria-describedby="answerHint"
               ref={answerRef}
-              onChange={debouncedAnswerCheck}
+              onChange={_debouncedAnswerCheck}
             />
           </div>
         </div>

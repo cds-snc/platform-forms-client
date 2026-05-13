@@ -5,6 +5,8 @@ import { updateSecurityAnswer } from "@lib/auth";
 import { revalidatePath } from "next/cache";
 import * as v from "valibot";
 
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
+
 export const updateSecurityQuestion = AuthenticatedAction(
   async (_, oldQuestionId: string, newQuestionId: string, answer: string | undefined) => {
     const data = validateData({ oldQuestionId, newQuestionId, newAnswer: answer });
@@ -24,6 +26,8 @@ export const updateSecurityQuestion = AuthenticatedAction(
     return response;
   }
 );
+
+// Internal and private functions - won't be converted into server actions
 
 const validateData = (formData: { [k: string]: unknown }) => {
   const schema = v.object({
