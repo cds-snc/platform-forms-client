@@ -12,24 +12,16 @@ test.describe("Form builder share", () => {
       await expect(page.locator(":focus")).toHaveAttribute("id", "fileName");
     });
 
-    test("Renders share flyout for authenticated", async ({ page }) => {
+    test("Renders manage access flow for authenticated users", async ({ page }) => {
       await expect(page.locator("#fileName")).toHaveAttribute("placeholder", "Unnamed form file");
 
       await page.fill("#fileName", "Cypress Share Test Form");
       await expect(page.locator("#fileName")).toHaveValue("Cypress Share Test Form");
 
       await page.getByRole("button", { name: "Share" }).click();
-      await expect(page.locator("dialog label")).toContainText("Email address");
-
-      const previewSummary = page
-        .locator("summary")
-        .filter({ hasText: "See a preview of the email message" });
-      await expect(previewSummary).toBeVisible();
-      await previewSummary.click();
-
-      await expect(page.getByRole("heading", { level: 4 }).first()).toContainText(
-        "Regular Test User has shared a form with you on GC Forms"
-      );
+      await expect(page.locator("dialog label")).toContainText("Share access");
+      await expect(page.getByRole("heading", { name: "People with access" })).toBeVisible();
+      await expect(page.getByRole("button", { name: "Next" })).toBeDisabled();
 
       await page.getByTestId("close-dialog").click();
     });
