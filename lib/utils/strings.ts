@@ -47,3 +47,8 @@ export const toPlainText = (text: string): string => {
 export const formatUserInput = (text: string): string => {
   return newLineToHtml(escapeHtml(text));
 };
+
+export const getLastSegmentOfPath = (pathname: string): string | null => {
+  const segments = pathname.split("/").filter(Boolean);
+  return segments.length > 0 ? segments[segments.length - 1] : null;
+};

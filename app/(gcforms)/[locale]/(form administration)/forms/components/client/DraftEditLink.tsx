@@ -6,7 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { isEditLockStatus } from "@lib/editLockStatus";
-import { gaEditLock } from "@formBuilder/components/shared/edit-lock/EditLockGA";
+import { ga } from "@lib/client/clientHelpers";
 
 export const DraftEditLink = ({
   href,
@@ -28,6 +28,7 @@ export const DraftEditLink = ({
   const { t } = useTranslation(["my-forms", "form-builder", "common"]);
   const [isChecking, setIsChecking] = useState(false);
   const [lockedByName, setLockedByName] = useState<string | null>(null);
+  const [userCount, setUserCount] = useState<number | null>(null);
   const [showDialog, setShowDialog] = useState(false);
 
   const navigateToEditor = () => {
@@ -75,6 +76,7 @@ export const DraftEditLink = ({
       const name = payload.lock?.lockedByName || payload.lock?.lockedByEmail || null;
 
       setLockedByName(name);
+      setUserCount(payload.userCount ?? null);
       setShowDialog(true);
     } catch {
       navigateToEditor();
@@ -90,7 +92,11 @@ export const DraftEditLink = ({
         onClick={() => {
           dialogRef.current?.close();
           setShowDialog(false);
-          gaEditLock({ formId, description: "accept_read_only", eventData: { location: "forms" } });
+          ga("edit_lock_accept_read_only", {
+            formId,
+            location: "forms",
+            userCount,
+          });
           navigateToEditor();
         }}
       >
@@ -102,10 +108,10 @@ export const DraftEditLink = ({
         onClick={() => {
           dialogRef.current?.close();
           setShowDialog(false);
-          gaEditLock({
+          ga("edit_lock_decline_read_only", {
             formId,
-            description: "decline_read_only",
-            eventData: { location: "forms" },
+            location: "forms",
+            userCount,
           });
         }}
       >

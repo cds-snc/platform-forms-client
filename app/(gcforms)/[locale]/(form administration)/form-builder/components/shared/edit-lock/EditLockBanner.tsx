@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS } from "@root/constants";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { ga } from "@lib/client/clientHelpers";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
-import { gaEditLock, getLastSegmentOfPath } from "./EditLockGA";
-import { usePathname } from "next/navigation";
+import { getLastSegmentOfPath } from "@root/lib/utils/strings";
 
 const RELATIVE_TIME_TICK_MS = 5_000;
 
@@ -121,18 +122,18 @@ export const EditLockBanner = ({
       toast.success(t("editLock.syncedLatest"), "wide");
 
       // Construct and send the Google Analytics event
-      const description = isTakeoverAvailable
-        ? "takeover_available_lock"
+      const eventName = isTakeoverAvailable
+        ? "edit_lock_takeover_available_lock"
         : isStale
-          ? "takeover_stale_lock"
-          : "takeover_lock";
-      const eventData: Record<string, unknown> = {
+          ? "edit_lock_takeover_stale_lock"
+          : "edit_lock_takeover_lock";
+      ga(eventName, {
+        formId,
         // Dynamic since the banner can show in multiple locations
         location: getLastSegmentOfPath(pathname),
         ...(lastActivity && { lastActivity }),
         ...(userCount != null && { userCount }),
-      };
-      gaEditLock({ formId, description, eventData });
+      });
     } catch (error) {
       setTakeoverError(true);
     } finally {
