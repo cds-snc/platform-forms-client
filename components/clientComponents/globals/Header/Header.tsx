@@ -17,12 +17,14 @@ type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
   className?: string;
   shareUsesManageAccess?: boolean;
+  alwaysShowLoginLink?: boolean;
 };
 
 export const Header = ({
   context = "default",
   className,
   shareUsesManageAccess = false,
+  alwaysShowLoginLink = false,
 }: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
   const { status } = useSession();
@@ -91,7 +93,7 @@ export const Header = ({
           </div>
           <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
             <ul className="mt-2 flex list-none px-0 text-base">
-              {status !== "authenticated" && (
+              {(alwaysShowLoginLink || status !== "authenticated") && (
                 <li className="tablet:mr-4 mr-2 py-2 text-base">
                   {isZitadelLoginEnabled ? (
                     <form
