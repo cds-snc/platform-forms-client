@@ -1,14 +1,19 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@root/i18n/client";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { CancelIcon, CircleCheckIcon } from "@serverComponents/icons";
-import { updateTemplatePublishedStatus } from "@formBuilder/actions";
+import { closeForm, updateTemplatePublishedStatus } from "@formBuilder/actions";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { logMessage } from "@lib/logger";
+import { dateHasPast } from "@lib/utils";
+import { ClosingDateToggle } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/manage/components/close/ClosingDateToggle";
 import "./PublishButton.css";
 
 const ChevronDownIcon = () => (
@@ -133,9 +138,17 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const popoverRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [publishing, setPublishing] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [pendingToggleValue, setPendingToggleValue] = useState<boolean | null>(null);
   const [error, setError] = useState(false);
   const [copiedLink, setCopiedLink] = useState<"en" | "fr" | null>(null);
-  const isPublished = useTemplateStore((state) => state.isPublished);
+  const dialog = useDialogRef();
+  const { isPublished, closingDate, setClosingDate } = useTemplateStore((state) => ({
+    isPublished: state.isPublished,
+    closingDate: state.closingDate,
+    setClosingDate: state.setClosingDate,
+  }));
   const setGroupId = useGroupStore((state) => state.setId);
   const {
     userCanPublish,
@@ -183,6 +196,10 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const settings = purpose && hasFileInputAndApiKey;
   const allChecksPass =
     title && questions && privacyPolicy && confirmationMessage && translate && settings;
+  const formStatus = useMemo(
+    () => (dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open"),
+    [closingDate]
+  );
 
   const links = {
     title: `/${locale}/form-builder/${formId}/edit#formTitle`,
@@ -257,6 +274,44 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     }
   };
 
+  const handlePublishedStatusToggle = (isChecked: boolean) => {
+    setPendingToggleValue(isChecked);
+    setShowConfirmDialog(true);
+  };
+
+  const confirmPublishedStatusToggle = async () => {
+    if (!formId || updatingStatus || pendingToggleValue === null) {
+      return;
+    }
+
+    setUpdatingStatus(true);
+
+    const nextClosingDate = pendingToggleValue ? null : new Date().toISOString();
+    const result = await closeForm({
+      id: formId,
+      closingDate: nextClosingDate,
+    });
+
+    if (!result || result.error) {
+      toast.error(t("closingDate.savedErrorMessage"));
+      setUpdatingStatus(false);
+      setShowConfirmDialog(false);
+      setPendingToggleValue(null);
+      return;
+    }
+
+    setClosingDate(nextClosingDate);
+    toast.success(t("closingDate.savedSuccessMessage"));
+    setUpdatingStatus(false);
+    setShowConfirmDialog(false);
+    setPendingToggleValue(null);
+  };
+
+  const cancelPublishedStatusToggle = () => {
+    setShowConfirmDialog(false);
+    setPendingToggleValue(null);
+  };
+
   if (!formId) {
     return null;
   }
@@ -325,6 +380,18 @@ export const PublishButton = ({ locale }: { locale: string }) => {
                 onCopy={handleCopyPublishedLink}
               />
             </ul>
+            <div className="mt-5 border-t border-slate-200 pt-4">
+              <p className="mb-2 text-sm font-semibold text-slate-900">{t("closingDate.status")}</p>
+              <div className={updatingStatus ? "pointer-events-none opacity-60" : undefined}>
+                <ClosingDateToggle
+                  isChecked={formStatus === "open"}
+                  setIsChecked={handlePublishedStatusToggle}
+                  onLabel={t("closingDate.closed")}
+                  offLabel={t("closingDate.open")}
+                  description={t("closingDate.status")}
+                />
+              </div>
+            </div>
           </div>
         ) : (
           <>
@@ -387,6 +454,31 @@ export const PublishButton = ({ locale }: { locale: string }) => {
           </>
         )}
       </div>
+      {showConfirmDialog && (
+        <Dialog
+          handleClose={cancelPublishedStatusToggle}
+          dialogRef={dialog}
+          title={t("closingDate.confirmDialog.title")}
+          actions={
+            <>
+              <Button theme="secondary" onClick={cancelPublishedStatusToggle}>
+                {t("closingDate.confirmDialog.cancel")}
+              </Button>
+              <Button theme="primary" onClick={confirmPublishedStatusToggle} className="ml-4">
+                {t("closingDate.confirmDialog.confirm")}
+              </Button>
+            </>
+          }
+        >
+          <div className="p-5">
+            <p>
+              {pendingToggleValue
+                ? t("closingDate.confirmDialog.messageOpen")
+                : t("closingDate.confirmDialog.messageClosed")}
+            </p>
+          </div>
+        </Dialog>
+      )}
     </div>
   );
 };
