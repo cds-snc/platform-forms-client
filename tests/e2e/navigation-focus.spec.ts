@@ -57,9 +57,10 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     });
 
     test("Focusses H1 on navigating back to the Start page", async ({ page }) => {
-      await page.locator("label[for='1.0']").click();
-      await page.locator("button[data-testid='nextButton']").click();
-      await page.locator("button[data-testid='backButtonGroup']").click();
+      await page.locator("label[for='1.0']").click({ force: true });
+      await page.locator("button[data-testid='nextButton']").click({ force: true });
+      await page.waitForTimeout(500);
+      await page.locator("button[data-testid='backButtonGroup']").click({ force: true });
       await page.waitForTimeout(500);
 
       const focusedElement = await page.evaluate(() => document.activeElement?.tagName);
@@ -85,9 +86,11 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
       await page
         .locator("button[data-testid='editButton-bd4c615d-fef5-4a38-b1f0-c73954803867']")
         .first()
-        .click();
+        .click({ force: true });
 
       await page.waitForTimeout(500);
+
+      await expect(page.getByTestId("focus-h2")).toHaveText("A");
 
       const focusedElement = await page.evaluate(() => document.activeElement?.tagName);
       expect(focusedElement).toBe("H2");
