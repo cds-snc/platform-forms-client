@@ -572,10 +572,10 @@ export const getTemplateCollaboratorCount = async (
   const useRedisCache = process.env.APP_ENV !== "test" && redisEnabled();
   if (useRedisCache) {
     const redis = await getRedisInstance();
-    const cachedUserCount = await redis.get(getEditLockAssignedUsersCountCacheKey(templateId));
-    const cachedPendingUserCount = await redis.get(
-      getEditLockAssignedPendingUsersCountCacheKey(templateId)
-    );
+    const userCountCacheKey = getEditLockAssignedUsersCountCacheKey(templateId);
+    const pendingUserCountCacheKey = getEditLockAssignedPendingUsersCountCacheKey(templateId);
+    const cachedUserCount = await redis.get(userCountCacheKey);
+    const cachedPendingUserCount = await redis.get(pendingUserCountCacheKey);
     if (cachedUserCount !== null && cachedPendingUserCount !== null) {
       const parsedUserCount = Number(cachedUserCount);
       const parsedPendingUserCount = Number(cachedPendingUserCount);
@@ -587,6 +587,8 @@ export const getTemplateCollaboratorCount = async (
       ) {
         return { userCount: parsedUserCount, pendingUserCount: parsedPendingUserCount };
       }
+
+      await Promise.all([redis.del(userCountCacheKey), redis.del(pendingUserCountCacheKey)]);
     }
   }
 
