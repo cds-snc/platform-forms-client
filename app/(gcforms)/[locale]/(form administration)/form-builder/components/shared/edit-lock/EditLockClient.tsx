@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 import { EditLockSessionExpiredOverlay } from "./EditLockSessionExpiredOverlay";
-import { useRouter } from "next/navigation";
 import { useEditLockContext, isEditPath } from "./EditLockContext";
 import { toast } from "@formBuilder/components/shared/Toast";
 
@@ -35,10 +34,14 @@ export const EditLockClient = ({
   // Show takeover toast - Step 2: for pages that reload, show toast after reload
   const toastString = t("editLock.syncedLatest");
   useEffect(() => {
-    const toastKey = sessionStorage.getItem("showToast");
-    if (toastKey === "editLockTakeoverSuccess") {
-      toast.success(toastString, "wide");
-      sessionStorage.removeItem("showToast");
+    try {
+      const toastKey = sessionStorage.getItem("showToast");
+      if (toastKey === "editLockTakeoverSuccess") {
+        toast.success(toastString, "wide");
+        sessionStorage.removeItem("showToast");
+      }
+    } catch {
+      // Fail closed if storage is unavailable (e.g. blocked or sandboxed context)
     }
   }, [toastString]);
 
@@ -53,7 +56,7 @@ export const EditLockClient = ({
       sessionStorage.setItem("showToast", "editLockTakeoverSuccess");
       window.location.reload();
     } else {
-      // Show takeover toast - Step 1: Show toast immediately while the page is preparing to reload
+      // Show takeover toast immediately when no page reload will occur
       toast.success(t("editLock.syncedLatest"), "wide");
     }
   };
