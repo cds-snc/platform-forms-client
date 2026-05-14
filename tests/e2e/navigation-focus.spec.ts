@@ -25,9 +25,7 @@ test.describe("Forms Navigation Focus", { tag: "@serial" }, () => {
     });
 
     test("Focus error validation correctly", async ({ page }) => {
-      await page.locator("label[for='1.0']").click();
       await page.locator("button[data-testid='nextButton']").click();
-      await page.locator("button[data-testid='nextButton']").click(); // Trigger validation error
       await expect(page.locator("#gc-form-errors")).toBeVisible();
       const focusedElement = await page.evaluate(() => document.activeElement?.id);
       expect(focusedElement).toBe("gc-form-errors");

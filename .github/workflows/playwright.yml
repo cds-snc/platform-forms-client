@@ -85,13 +85,8 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
 
-      - name: Run Serial Tests
-        run: yarn playwright:headless:ci --grep @serial
-        env:
-          PLAYWRIGHT_WORKERS: 1
-
-      - name: Run Parallel Tests
-        run: yarn playwright:headless:ci --grep-invert @serial
+      - name: Run Playwright Tests
+        run: yarn playwright:headless:ci
         env:
           PLAYWRIGHT_WORKERS: 4
 
