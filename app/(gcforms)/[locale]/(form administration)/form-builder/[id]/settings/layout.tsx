@@ -34,7 +34,7 @@ export default async function Layout(props: {
     <>
       <h1>{t("gcFormsSettings")}</h1>
       <SettingsNavigation id={id} />
-      <EditLockClient restrictToEditPaths={false} reloadOnTakeover={true} formId={id}>
+      <EditLockClient restrictToEditPaths={false} refreshServerData={true} formId={id}>
         {children}
       </EditLockClient>
     </>

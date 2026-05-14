@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -13,12 +12,12 @@ import { toast } from "@formBuilder/components/shared/Toast";
 export const EditLockClient = ({
   children,
   restrictToEditPaths = true,
-  reloadOnTakeover = false,
+  refreshServerData = false,
   formId,
 }: {
   children?: React.ReactNode;
   restrictToEditPaths?: boolean;
-  reloadOnTakeover?: boolean;
+  refreshServerData?: boolean;
   formId: string;
 }) => {
   const pathname = usePathname();
@@ -31,20 +30,6 @@ export const EditLockClient = ({
   const { takeover, getIsActiveTab, hasSessionExpired, isEnabled } = useEditLockContext();
   const { headlessTree } = useTreeRef();
 
-  // Show takeover toast - Step 2: for pages that reload, show toast after reload
-  const toastString = t("editLock.syncedLatest");
-  useEffect(() => {
-    try {
-      const toastKey = sessionStorage.getItem("showToast");
-      if (toastKey === "editLockTakeoverSuccess") {
-        toast.success(toastString, "wide");
-        sessionStorage.removeItem("showToast");
-      }
-    } catch {
-      // Fail closed if storage is unavailable (e.g. blocked or sandboxed context)
-    }
-  }, [toastString]);
-
   const showLockedEdit =
     isEnabled && !isPublished && (!restrictToEditPaths || isEditPath(pathname));
 
@@ -52,13 +37,13 @@ export const EditLockClient = ({
     await takeover();
     headlessTree?.current?.rebuildTree();
 
-    if (reloadOnTakeover) {
-      sessionStorage.setItem("showToast", "editLockTakeoverSuccess");
-      window.location.reload();
-    } else {
-      // Show takeover toast immediately when no page reload will occur
-      toast.success(t("editLock.syncedLatest"), "wide");
+    // Refresh server-rendered data if needed (e.g., settings pages)
+    if (refreshServerData) {
+      router.refresh();
     }
+
+    // Show success toast after takeover completes
+    toast.success(t("editLock.syncedLatest"), "wide");
   };
 
   if (!showLockedEdit) {
