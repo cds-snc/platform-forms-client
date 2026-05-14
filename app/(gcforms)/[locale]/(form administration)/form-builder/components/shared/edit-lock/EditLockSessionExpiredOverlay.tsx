@@ -5,7 +5,8 @@ import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
 import { useEffect } from "react";
-import { gaEditLock, getLastSegmentOfPath } from "./EditLockGA";
+import { ga } from "@lib/client/clientHelpers";
+import { getLastSegmentOfPath } from "@root/lib/utils/strings";
 import { usePathname } from "next/navigation";
 
 export const EditLockSessionExpiredOverlay = ({
@@ -19,11 +20,10 @@ export const EditLockSessionExpiredOverlay = ({
   const pathname = usePathname();
 
   useEffect(() => {
-    gaEditLock({
+    ga("edit_lock_session_expired", {
       formId,
-      description: "session_expired",
-      // Dynamic since the session-expired overlay can show in multiple locations
-      eventData: { location: getLastSegmentOfPath(pathname) },
+      timestamp: new Date(),
+      location: getLastSegmentOfPath(pathname) ?? "unknown",
     });
   }, [formId, pathname]);
 
