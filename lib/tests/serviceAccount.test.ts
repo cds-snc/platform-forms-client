@@ -12,10 +12,11 @@ vi.mock("@lib/auditLogs", async () => {
   const __actual0 = await vi.importActual<any>("@lib/auditLogs");
   return {
   __esModule: true,
-  logEvent: vi.fn(),
-  AuditLogDetails: __actual0.AuditLogDetails,
-  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,
-};
+    logEvent: vi.fn(),
+    AuditLogDetails: __actual0.AuditLogDetails,
+    AuditLogEvent : __actual0.AuditLogEvent,
+    AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,
+  };
 });
 
 vi.mock("@lib/templates");
@@ -140,7 +141,7 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "CreateAPIKey",
-        "User :${userId} created API key for service account ${serviceAccountId}",
+        "CreatedNewAPIKey",
         { serviceAccountId: "serviceAccountUser", userId: "1" }
       );
     });
@@ -161,7 +162,7 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "CreateAPIKey",
-        "User :${userId} created API key for service account ${serviceAccountId}",
+        "CreatedNewAPIKey",
         { serviceAccountId: "templateId", userId: "1" }
       );
     });
