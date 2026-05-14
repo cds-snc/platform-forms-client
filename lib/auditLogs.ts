@@ -162,8 +162,8 @@ export const AuditLogDetails = {
   AccessGrantedTo: "GrantAccess",
   AccessRevokedFor: "RevokeAccess",
   //API Keys
-  GeneratedNewApiKey: "GeneratedAPIKey",
-  CreatedNewApiKey: "User :${userId} created API key for service account ${serviceAccountId}",
+  RefreshedApiKey: "RefreshedAPIKey",
+  CreatedNewApiKey: "CreatedNewAPIKey",
   DeletedServiceAccount: "DeletedAPIKey",
   // App Settings
   UpdatedAppSetting: "Updated setting with ${settingData}",
@@ -246,7 +246,7 @@ type AuditDetailsParams = {
   [AuditLogDetails.ChangeSecurityAttribute]: { securityAttribute: string };
   [AuditLogDetails.AccessGrantedTo]: { userList: string };
   [AuditLogDetails.AccessRevokedFor]: { userList: string };
-  [AuditLogDetails.GeneratedNewApiKey]: {
+  [AuditLogDetails.RefreshedApiKey]: {
     userId: string;
     serviceAccountId: string;
   };
