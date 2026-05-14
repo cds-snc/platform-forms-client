@@ -997,7 +997,7 @@
           "paragraph1": "Votre formulaire a été archivé :",
           "paragraph2": "Cette action a été effectuée par :",
           "paragraph3": "Le formulaire peut être restauré à partir du dossier d'archives. Dans les 30 jours suivant l'archivage.",
-          "paragraph4": "Après 30 jours, le formulaire sera supprimé définitivement, cela ne peut pas être annulé."
+          "paragraph4": "Après 30 jours, le formulaire sera définitivement supprimé, cela ne peut pas être annulé."
         }
       },
       "sessionUser": {
