@@ -28,7 +28,7 @@ export const DraftEditLink = ({
   const { t } = useTranslation(["my-forms", "form-builder", "common"]);
   const [isChecking, setIsChecking] = useState(false);
   const [lockedByName, setLockedByName] = useState<string | null>(null);
-  const [pendingUserCount, setPendingUserCount] = useState<number | null>(null);
+  const [collaboratorCount, setCollaboratorCount] = useState<number | null>(null);
   const [showDialog, setShowDialog] = useState(false);
 
   const navigateToEditor = () => {
@@ -79,11 +79,11 @@ export const DraftEditLink = ({
       const name = payload.lock?.lockedByName || payload.lock?.lockedByEmail || null;
       setLockedByName(name);
 
-      const pendingUserCount =
+      const collaboratorCount =
         typeof payload.pendingUserCount === "number" && typeof payload.userCount === "number"
           ? payload.pendingUserCount + payload.userCount
           : null;
-      setPendingUserCount(pendingUserCount);
+      setCollaboratorCount(collaboratorCount);
 
       setShowDialog(true);
     } catch {
@@ -104,7 +104,7 @@ export const DraftEditLink = ({
             formId,
             timestamp: new Date().getTime(),
             location: "forms",
-            ...(pendingUserCount !== null && { userCount: pendingUserCount }),
+            ...(collaboratorCount !== null && { userCount: collaboratorCount }),
           });
           navigateToEditor();
         }}
@@ -121,7 +121,7 @@ export const DraftEditLink = ({
             formId,
             timestamp: new Date().getTime(),
             location: "forms",
-            ...(pendingUserCount !== null && { userCount: pendingUserCount }),
+            ...(collaboratorCount !== null && { userCount: collaboratorCount }),
           });
         }}
       >
