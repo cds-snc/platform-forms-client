@@ -22,7 +22,7 @@ export const ChecklistItem = ({
       <Link
         href={href}
         onClick={() => onClick(href)}
-        className="text-xl text-slate-900 no-underline"
+        className="text-xl text-slate-900 no-underline hover:underline"
       >
         {label}
       </Link>
