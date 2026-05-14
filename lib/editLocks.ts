@@ -578,7 +578,12 @@ export const getTemplateCollaboratorCount = async (
     if (cachedUserCount !== null && cachedPendingUserCount !== null) {
       const parsedUserCount = Number(cachedUserCount);
       const parsedPendingUserCount = Number(cachedPendingUserCount);
-      if (Number.isInteger(parsedUserCount) && Number.isInteger(parsedPendingUserCount)) {
+      if (
+        Number.isSafeInteger(parsedUserCount) &&
+        parsedUserCount >= 0 &&
+        Number.isSafeInteger(parsedPendingUserCount) &&
+        parsedPendingUserCount >= 0
+      ) {
         return { userCount: parsedUserCount, pendingUserCount: parsedPendingUserCount };
       }
     }

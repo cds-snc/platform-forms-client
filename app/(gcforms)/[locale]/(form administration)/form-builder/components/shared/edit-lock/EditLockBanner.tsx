@@ -129,7 +129,7 @@ export const EditLockBanner = ({
         formId,
         timestamp: new Date().getTime(),
         // Dynamic since the banner can show in multiple locations
-        location: getLastSegmentOfPath(pathname),
+        location: getLastSegmentOfPath(pathname) ?? "unknown",
         ...(lastActivity && { lastActivity }),
       });
     } catch (error) {
