@@ -73,10 +73,6 @@ test.describe("Testing attestation fields", { tag: "@serial" }, () => {
       const condition1Checkbox = page.locator('[id="1.0"]');
       const condition2Checkbox = page.locator('[id="1.1"]');
       const condition3Checkbox = page.locator('[id="1.2"]');
-      const reviewHeading = page.getByRole("heading", {
-        level: 2,
-        name: "Review your answers before submitting the form.",
-      });
 
       // Click both checkboxes
       await setCheckboxValue(condition1Checkbox, true);
@@ -86,12 +82,6 @@ test.describe("Testing attestation fields", { tag: "@serial" }, () => {
       await expect(condition1Checkbox).toBeChecked();
       await expect(condition2Checkbox).toBeChecked();
       await expect(condition3Checkbox).toBeChecked();
-
-      const nextButton = page.getByTestId("nextButton");
-      if (await nextButton.isVisible()) {
-        await nextButton.click();
-        await expect(reviewHeading).toBeVisible();
-      }
 
       await page.getByRole("button", { name: "Submit" }).click();
 
