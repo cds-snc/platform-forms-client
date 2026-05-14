@@ -207,8 +207,8 @@ describe("editLocks with redis", () => {
       isPublished: false,
       _count: {
         users: 2,
+        invitations: 0,
       },
-      invitations: [],
     });
 
     await expect(shouldEnforceTemplateEditLock("form-6")).resolves.toBe(true);
@@ -221,8 +221,8 @@ describe("editLocks with redis", () => {
       isPublished: false,
       _count: {
         users: 1,
+        invitations: 0,
       },
-      invitations: [],
     });
 
     await expect(shouldEnforceTemplateEditLock("form-6")).resolves.toBe(false);
@@ -258,8 +258,8 @@ describe("editLocks with redis", () => {
       isPublished: false,
       _count: {
         users: 1,
+        invitations: 1,
       },
-      invitations: [{ id: "invitation-1" }],
     });
 
     await expect(shouldEnforceTemplateEditLock("form-8")).resolves.toBe(true);
@@ -304,8 +304,7 @@ describe("editLocks with redis", () => {
     it("returns userCount and pendingUserCount from the database on a cache miss", async () => {
       vi.mocked(prisma.template.findUnique).mockResolvedValue({
         isPublished: false,
-        _count: { users: 3 },
-        invitations: [{ id: "inv-1" }, { id: "inv-2" }],
+        _count: { users: 3, invitations: 2 },
       } as never);
 
       const result = await getTemplateCollaboratorCount("form-cc");
@@ -325,8 +324,7 @@ describe("editLocks with redis", () => {
     it("populates the Redis cache after a database fetch", async () => {
       vi.mocked(prisma.template.findUnique).mockResolvedValue({
         isPublished: false,
-        _count: { users: 2 },
-        invitations: [{ id: "inv-1" }],
+        _count: { users: 2, invitations: 1 },
       } as never);
 
       await getTemplateCollaboratorCount("form-cc");
@@ -357,8 +355,7 @@ describe("editLocks with redis", () => {
 
       vi.mocked(prisma.template.findUnique).mockResolvedValue({
         isPublished: false,
-        _count: { users: 4 },
-        invitations: [{ id: "inv-1" }, { id: "inv-2" }, { id: "inv-3" }],
+        _count: { users: 4, invitations: 3 },
       } as never);
 
       const result = await getTemplateCollaboratorCount("form-cc");
