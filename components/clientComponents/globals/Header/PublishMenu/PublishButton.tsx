@@ -366,16 +366,28 @@ export const PublishButton = ({ locale }: { locale: string }) => {
               />
             </ul>
 
+            {!userCanPublish && (
+              <div className="mt-6">
+                <Link href={`/${locale}/unlock-publishing`}>
+                  <Button theme="secondary" className="w-full">
+                    <div className="w-full text-center">{t("saveAndRequest")}</div>
+                  </Button>
+                </Link>
+              </div>
+            )}
+
             {showPublishAction && (
               <div className="mt-6">
-                <button
-                  type="button"
-                  onClick={handleOpenPrePublish}
-                  disabled={!canPublishFromPopover}
-                  className="w-full rounded-lg border-2 border-emerald-700 bg-emerald-50 px-4 py-2 text-emerald-700 enabled:cursor-pointer enabled:text-slate-900 enabled:hover:bg-emerald-100 disabled:cursor-not-allowed disabled:border-slate-400 disabled:bg-slate-100 disabled:text-slate-400"
-                >
-                  {t("readyToPublish")}
-                </button>
+                {userCanPublish && (
+                  <button
+                    type="button"
+                    onClick={handleOpenPrePublish}
+                    disabled={!canPublishFromPopover}
+                    className="w-full rounded-lg border-2 border-emerald-700 bg-emerald-50 px-4 py-2 text-emerald-700 enabled:cursor-pointer enabled:text-slate-900 enabled:hover:bg-emerald-100 disabled:cursor-not-allowed disabled:border-slate-400 disabled:bg-slate-100 disabled:text-slate-400"
+                  >
+                    {t("readyToPublish")}
+                  </button>
+                )}
                 {error && (
                   <p role="alert" className="text-red-destructive mt-3 text-sm">
                     {t("thereWasAnErrorPublishing")}
