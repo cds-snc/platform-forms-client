@@ -16,7 +16,7 @@ import { ClosingDateToggle } from "@formBuilder/[id]/settings/manage/components/
 import { ChecklistItem } from "./ChecklistItem";
 import { PublishedFormLink } from "./PublishedFormLink";
 import "./PublishButton.css";
-
+import { PrePublishDialog } from "@formBuilder/[id]/publish/PrePublishDialog";
 const ChevronDownIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -44,6 +44,10 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const [pendingToggleValue, setPendingToggleValue] = useState<boolean | null>(null);
   const [error, setError] = useState(false);
   const [copiedLink, setCopiedLink] = useState<"en" | "fr" | null>(null);
+  const [showPrePublishDialog, setShowPrePublishDialog] = useState(false);
+  const [formType, setFormType] = useState("");
+  const [description, setDescription] = useState("");
+  const [reasonForPublish, setReasonForPublish] = useState("");
   const dialog = useDialogRef();
   const { isPublished, closingDate, setClosingDate } = useTemplateStore((state) => ({
     isPublished: state.isPublished,
@@ -127,6 +131,22 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     }
   };
 
+  const handleOpenPrePublish = () => {
+    setShowPrePublishDialog(true);
+  };
+
+  const handlePrePublishClose = () => {
+    setDescription("");
+    setReasonForPublish("");
+    setFormType("");
+    setShowPrePublishDialog(false);
+  };
+
+  const handlePrePublish = () => {
+    setShowPrePublishDialog(false);
+    handlePublish();
+  };
+
   const handlePublish = async () => {
     if (!formId || publishing) {
       return;
@@ -141,9 +161,9 @@ export const PublishButton = ({ locale }: { locale: string }) => {
       const { formRecord, error } = await updateTemplatePublishedStatus({
         id: formId,
         isPublished: true,
-        publishFormType: "",
-        publishDescription: "",
-        publishReason: "",
+        publishFormType: formType,
+        publishDescription: description,
+        publishReason: reasonForPublish,
         redirectAfter: `/${locale}/form-builder/${formId}/published`,
       });
 
@@ -350,7 +370,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
               <div className="mt-6">
                 <button
                   type="button"
-                  onClick={handlePublish}
+                  onClick={handleOpenPrePublish}
                   disabled={!canPublishFromPopover}
                   className="w-full rounded-lg border-2 border-emerald-700 bg-emerald-50 px-4 py-2 text-emerald-700 enabled:cursor-pointer enabled:text-slate-900 enabled:hover:bg-emerald-100 disabled:cursor-not-allowed disabled:border-slate-400 disabled:bg-slate-100 disabled:text-slate-400"
                 >
@@ -390,6 +410,18 @@ export const PublishButton = ({ locale }: { locale: string }) => {
             </p>
           </div>
         </Dialog>
+      )}
+      {showPrePublishDialog && (
+        <PrePublishDialog
+          setDescription={setDescription}
+          setFormType={setFormType}
+          description={description}
+          formType={formType}
+          reasonForPublish={reasonForPublish}
+          setReasonForPublish={setReasonForPublish}
+          handleClose={handlePrePublishClose}
+          handleConfirm={handlePrePublish}
+        />
       )}
     </div>
   );
