@@ -16,6 +16,10 @@ vi.mock("@formBuilder/components/shared/Toast", () => ({
   },
 }));
 
+vi.mock("@i18n/client", () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 const mockState = vi.hoisted(() => ({
   store: {
     lang: "en",
@@ -113,6 +117,7 @@ describe("EditLockClient", () => {
     });
 
     expect(toastSuccess).toHaveBeenCalledOnce();
+    expect(toastSuccess).toHaveBeenCalledWith("editLock.syncedLatest", "wide");
     expect(sessionStorage.getItem("showToast")).toBeNull();
   });
 
