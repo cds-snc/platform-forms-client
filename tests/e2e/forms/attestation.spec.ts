@@ -10,7 +10,7 @@ const setCheckboxValue = async (locator: Locator, checked: boolean) => {
   await locator.press("Space");
 };
 
-test.describe("Testing attestation fields", { tag: "@serial" }, () => {
+test.describe("Testing attestation fields", { tag: "@published-form" }, () => {
   let publishedFormPath: string;
   let formId: string;
   let dbHelper: DatabaseHelper;
