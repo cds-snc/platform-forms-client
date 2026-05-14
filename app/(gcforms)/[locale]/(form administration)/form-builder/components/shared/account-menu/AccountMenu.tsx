@@ -19,11 +19,18 @@ const PersonIcon = () => (
     fill="none"
     aria-hidden="true"
     focusable="false"
+    className="stroke-slate-900 transition-colors group-hover:stroke-indigo-700"
   >
-    <path
-      d="M16.667 0C25.8668 0.000176351 33.333 7.4671 33.333 16.667C33.3328 25.8667 25.8667 33.3328 16.667 33.333C7.4671 33.333 0.00017634 25.8668 0 16.667C0 7.46699 7.46699 0 16.667 0ZM16.667 24.167C13.5337 24.167 9.16686 25.6338 8.4502 27.1338C10.7168 28.9336 13.5671 30 16.667 30C19.7669 29.9999 22.6172 28.9337 24.8838 27.1338C24.1838 25.6338 19.8003 24.1671 16.667 24.167ZM16.667 3.33301C9.31699 3.33301 3.33301 9.31699 3.33301 16.667C3.33308 19.7002 4.36649 22.4836 6.06641 24.7168C8.44974 21.8168 14.2337 20.833 16.667 20.833C19.1005 20.8331 24.8834 21.8169 27.2666 24.7168C28.9665 22.4835 29.9999 19.7002 30 16.667C30 9.3171 24.0168 3.33318 16.667 3.33301ZM16.667 6.66699C19.9002 6.66717 22.5 9.26678 22.5 12.5C22.5 15.7332 19.9002 18.3328 16.667 18.333C13.4337 18.333 10.833 15.7333 10.833 12.5C10.833 9.26667 13.4337 6.66699 16.667 6.66699ZM16.667 10C15.2837 10 14.167 11.1167 14.167 12.5C14.167 13.8833 15.2837 15 16.667 15C18.0502 14.9998 19.167 13.8832 19.167 12.5C19.167 11.1168 18.0502 10.0002 16.667 10Z"
-      fill="#020617"
-    />
+    <circle cx="17" cy="17" r="15" strokeWidth="2" />
+    <circle cx="17" cy="13.5" r="4.5" strokeWidth="2" />
+    <g clipPath="url(#avatar-clip)">
+      <path d="M5 28C5 21 11 21 17 21C23 21 29 21 29 28" strokeWidth="2" strokeLinecap="round" />
+    </g>
+    <defs>
+      <clipPath id="avatar-clip">
+        <circle cx="17" cy="17" r="15" />
+      </clipPath>
+    </defs>
   </svg>
 );
 
@@ -120,7 +127,7 @@ export const AccountMenu = ({
         aria-label={t("accountMenu.label")}
         aria-expanded={isOpen}
         aria-controls="account-menu-popover"
-        className="account-menu-trigger flex cursor-pointer items-center gap-3 bg-transparent text-slate-900 transition-opacity hover:opacity-80 focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 focus:outline-none"
+        className="account-menu-trigger group flex cursor-pointer items-center gap-3 bg-transparent text-slate-900 transition-opacity hover:opacity-80 focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 focus:outline-none"
       >
         <PersonIcon />
       </button>
