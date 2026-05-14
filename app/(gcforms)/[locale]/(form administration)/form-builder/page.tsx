@@ -35,7 +35,7 @@ export default async function StartPage(props: { params: Promise<{ locale: strin
       <SaveTemplateProvider>
         <div className="bg-gray-soft flex h-full flex-col">
           <SkipLink />
-          <Header className="mb-0" alwaysShowLoginLink />
+          <Header className="mb-0" />
           <div className="shrink-0 grow basis-auto">
             <div className="flex flex-row gap-10">
               <main id="content" className={cn("form-builder mt-5 mb-10 w-full")}>
