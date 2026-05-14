@@ -109,9 +109,9 @@ const getEditLockTakeoverSaveAckKey = (templateId: string, sessionId: string) =>
   `${EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX}:${templateId}:${sessionId}`;
 const getEditLockAssignedUsersCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX}:${templateId}`;
-const getEditLockAssignedUsersCountCacheKey = (templateId: string) =>
+export const getEditLockAssignedUsersCountCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_USERS_COUNT_CACHE_PREFIX}:${templateId}`;
-const getEditLockAssignedPendingUsersCountCacheKey = (templateId: string) =>
+export const getEditLockAssignedPendingUsersCountCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_PENDING_USERS_COUNT_CACHE_PREFIX}:${templateId}`;
 const editLockTtlSeconds = Math.ceil(EDIT_LOCK_TTL_MS / 1000);
 const updatedEvent: EditLockEvent = { type: "updated" };

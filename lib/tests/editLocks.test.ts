@@ -21,6 +21,8 @@ import {
   acknowledgeEditLockTakeoverSave,
   acquireEditLock,
   clearEditLockTakeoverSaveAcknowledgement,
+  getEditLockAssignedPendingUsersCountCacheKey,
+  getEditLockAssignedUsersCountCacheKey,
   getEditLockStatus,
   getTemplateCollaboratorCount,
   heartbeatEditLock,
@@ -296,8 +298,8 @@ describe("editLocks with redis", () => {
     beforeEach(async () => {
       const redis = await getRedisInstance();
       await redis.del(
-        "edit-lock-assigned-users-count:form-cc",
-        "edit-lock-assigned-pending-users-count:form-cc"
+        getEditLockAssignedUsersCountCacheKey("form-cc"),
+        getEditLockAssignedPendingUsersCountCacheKey("form-cc")
       );
     });
 
@@ -313,8 +315,8 @@ describe("editLocks with redis", () => {
 
     it("returns cached values without hitting the database on a cache hit", async () => {
       const redis = await getRedisInstance();
-      await redis.set("edit-lock-assigned-users-count:form-cc", "5");
-      await redis.set("edit-lock-assigned-pending-users-count:form-cc", "1");
+      await redis.set(getEditLockAssignedUsersCountCacheKey("form-cc"), "5");
+      await redis.set(getEditLockAssignedPendingUsersCountCacheKey("form-cc"), "1");
 
       const result = await getTemplateCollaboratorCount("form-cc");
       expect(result).toEqual({ userCount: 5, pendingUserCount: 1 });
@@ -330,8 +332,8 @@ describe("editLocks with redis", () => {
       await getTemplateCollaboratorCount("form-cc");
 
       const redis = await getRedisInstance();
-      expect(await redis.get("edit-lock-assigned-users-count:form-cc")).toBe("2");
-      expect(await redis.get("edit-lock-assigned-pending-users-count:form-cc")).toBe("1");
+      expect(await redis.get(getEditLockAssignedUsersCountCacheKey("form-cc"))).toBe("2");
+      expect(await redis.get(getEditLockAssignedPendingUsersCountCacheKey("form-cc"))).toBe("1");
     });
 
     it("returns { userCount: null, pendingUserCount: null } when the template does not exist", async () => {
@@ -350,7 +352,7 @@ describe("editLocks with redis", () => {
 
     it("treats a partial cache miss (only one key present) as a miss and fetches from database", async () => {
       const redis = await getRedisInstance();
-      await redis.set("edit-lock-assigned-users-count:form-cc", "4");
+      await redis.set(getEditLockAssignedUsersCountCacheKey("form-cc"), "4");
       // pendingUserCount key absent
 
       vi.mocked(prisma.template.findUnique).mockResolvedValue({
