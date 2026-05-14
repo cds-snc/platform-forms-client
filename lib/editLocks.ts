@@ -518,10 +518,11 @@ const fetchAndCacheUserData = async (
       where: { id: templateId },
       select: {
         isPublished: true,
-        _count: { select: { users: true } },
-        invitations: {
-          where: { expires: { gt: new Date() } },
-          select: { id: true },
+        _count: {
+          select: {
+            users: true,
+            invitations: { where: { expires: { gt: new Date() } } },
+          },
         },
       },
     })
@@ -532,9 +533,9 @@ const fetchAndCacheUserData = async (
   }
 
   const userCount = template._count.users;
-  const pendingUserCount = template.invitations.length;
+  const pendingUserCount = template._count.invitations;
   const hasEnoughUsers =
-    template._count.users + template.invitations.length >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
+    template._count.users + template._count.invitations >= MIN_ASSIGNED_USERS_FOR_EDIT_LOCK;
 
   if (useRedisCache) {
     const redis = await getRedisInstance();
