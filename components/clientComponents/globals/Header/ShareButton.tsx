@@ -75,7 +75,7 @@ export const ShareButton = ({ manageAccessEnabled = false }: { manageAccessEnabl
         aria-describedby={showNameRequiredMessage ? "share-name-required-message" : undefined}
         className="hover:text-white-default focus:text-white-default flex cursor-pointer rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 focus:bg-gray-600"
       >
-        <span className="inline-block">{t("share.title")}</span>dd
+        <span className="inline-block">{t("share.title")}</span>
       </button>
       {showNameRequiredMessage && (
         <div
