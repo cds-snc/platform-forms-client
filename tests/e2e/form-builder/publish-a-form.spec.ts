@@ -46,7 +46,7 @@ test.describe("Publishing a form", () => {
     await page.goto(`/en/form-builder/${formId}/publish`);
 
     // Click the Publish button to open the dialog
-    const publishButton = page.getByRole("button", { name: /publish/i });
+    const publishButton = page.getByRole("main").getByRole("button", { name: /publish/i });
     await expect(publishButton).toBeVisible();
     await publishButton.click();
 
