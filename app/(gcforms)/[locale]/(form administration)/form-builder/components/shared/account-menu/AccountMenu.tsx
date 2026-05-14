@@ -111,10 +111,7 @@ export const AccountMenu = ({
   };
 
   return (
-    <div
-      data-testid={testId}
-      className="sticky bottom-4 z-20 mt-auto flex justify-center px-4 py-4"
-    >
+    <div data-testid={testId} className="sticky bottom-4 z-20 mt-auto flex justify-center py-4">
       <button
         type="button"
         popoverTarget="account-menu-popover"
