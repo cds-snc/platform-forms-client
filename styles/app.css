@@ -5,6 +5,7 @@
 @import "@gcds-core/tokens/build/web/css/global.css";
 @import "../packages/core/styles/typography.css";
 @import "../packages/core/styles/forms.css";
+@import "../packages/core/styles/toast.css";
 @import "./form-builder.css";
 @import "../packages/core/styles/header.css";
 @import "../packages/core/styles/gc-header.css";
@@ -381,9 +382,6 @@
   /* ----- Outline ----- */
   --outline-color-default: #ffbf47;
 }
-
-/* ===== Toast styles (after @theme to use defined variables) ===== */
-@import "../packages/core/styles/toast.css";
 
 /* ===== Tailwind source detection ===== */
 @source "../app/**/*.{js,ts,jsx,tsx,mdx}";

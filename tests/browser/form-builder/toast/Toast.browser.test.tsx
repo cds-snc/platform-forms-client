@@ -70,10 +70,15 @@ describe("<Toast />", () => {
     const successStyles = window.getComputedStyle(successToast as HTMLElement);
     const errorStyles = window.getComputedStyle(errorToast as HTMLElement);
 
-    expect(successStyles.backgroundColor).not.toBe("rgb(255, 255, 255)");
-    expect(successStyles.color).not.toBe("rgb(117, 117, 117)");
-    expect(errorStyles.backgroundColor).not.toBe("rgb(255, 255, 255)");
-    expect(errorStyles.color).not.toBe("rgb(117, 117, 117)");
+    // Success toast should have green background (#ebfaf0) and dark green text (#14522b)
+    expect(successStyles.backgroundColor).toBe("rgb(235, 250, 240)");
+    expect(successStyles.color).toBe("rgb(20, 82, 43)");
+    
+    // Error toast should have light red background (#f9d2d7) and dark red text (#590d17)
+    expect(errorStyles.backgroundColor).toBe("rgb(249, 210, 215)");
+    expect(errorStyles.color).toBe("rgb(89, 13, 23)");
+    
+    // Success and error should have different backgrounds
     expect(errorStyles.backgroundColor).not.toBe(successStyles.backgroundColor);
   });
 });
