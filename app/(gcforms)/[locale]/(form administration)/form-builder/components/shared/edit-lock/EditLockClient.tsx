@@ -1,12 +1,15 @@
 "use client";
 
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 import { EditLockSessionExpiredOverlay } from "./EditLockSessionExpiredOverlay";
 import { useRouter } from "next/navigation";
 import { useEditLockContext, isEditPath } from "./EditLockContext";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 export const EditLockClient = ({
   children,
@@ -21,12 +24,23 @@ export const EditLockClient = ({
 }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const { t } = useTranslation("form-builder");
   const { language, isPublished } = useTemplateStore((s) => ({
     language: s.lang,
     isPublished: s.isPublished,
   }));
   const { takeover, getIsActiveTab, hasSessionExpired, isEnabled } = useEditLockContext();
   const { headlessTree } = useTreeRef();
+
+  // Show takeover toast - Step 2: for pages that reload, show toast after reload
+  const toastString = t("editLock.syncedLatest");
+  useEffect(() => {
+    const toastKey = sessionStorage.getItem("showToast");
+    if (toastKey === "editLockTakeoverSuccess") {
+      toast.success(toastString, "wide");
+      sessionStorage.removeItem("showToast");
+    }
+  }, [toastString]);
 
   const showLockedEdit =
     isEnabled && !isPublished && (!restrictToEditPaths || isEditPath(pathname));
@@ -36,7 +50,11 @@ export const EditLockClient = ({
     headlessTree?.current?.rebuildTree();
 
     if (reloadOnTakeover) {
+      sessionStorage.setItem("showToast", "editLockTakeoverSuccess");
       window.location.reload();
+    } else {
+      // Show takeover toast - Step 1: Show toast immediately while the page is preparing to reload
+      toast.success(t("editLock.syncedLatest"), "wide");
     }
   };
 
