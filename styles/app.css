@@ -8,6 +8,7 @@
 @import "./form-builder.css";
 @import "../packages/core/styles/header.css";
 @import "../packages/core/styles/gc-header.css";
+@import "../packages/core/styles/toast.css";
 @import "./animations.css";
 
 /* ===== Custom max-width breakpoint variants (inherited from legacy config) ===== */
