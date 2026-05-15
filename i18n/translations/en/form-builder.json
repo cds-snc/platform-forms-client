@@ -876,7 +876,7 @@
         "text1": "This section is for developers who want to use the API to pull form submission data to a target system with a custom integration. Once set-up, responses can be retrieved from the API endpoint programmatically. Visit our documentation site for more information.",
         "docsButton": {
           "text": "Go to API documentation",
-          "link": "https://cds-snc.github.io/forms-api/home"
+          "link": "https://cds-snc.github.io/forms-api"
         },
         "apiKey": {
           "title": "Retrieve submissions via API",
@@ -913,7 +913,7 @@
         "title": "API key generated",
         "message": "New responses are available through the API. Find out more about integration set-up in ",
         "docsLinkText": "API documentation",
-        "docsLink": "https://cds-snc.github.io/forms-api/home/"
+        "docsLink": "https://cds-snc.github.io/forms-api"
       },
       "keyExists": "API key already exists",
       "keyIdToolTip": {
@@ -1268,7 +1268,7 @@
     },
     "apiDocNotes": {
       "title": "Set up your API integration",
-      "text1": "To connect to our API endpoint and retrieve responses, follow the <a href='https://cds-snc.github.io/forms-api/home' target='_blank'>API documentation</a> for developers."
+      "text1": "To connect to our API endpoint and retrieve responses, follow the <a href='https://cds-snc.github.io/forms-api' target='_blank'>API documentation</a> for developers."
     },
     "vaultNote": {
       "text1": "PROTECTED B form responses must be downloaded from GC Forms.",
