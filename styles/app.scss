@@ -9,7 +9,7 @@
 @include meta.load-css("_form-builder");
 @import "@gcforms/core/styles/header.css";
 @import "@gcforms/core/styles/gc-header.css";
-@include meta.load-css("../node_modules/@gcforms/core/styles/_toast.scss");
+@import "@gcforms/core/styles/toast.css";
 @include meta.load-css("animations");
 
 // Tailwind Utilities needs to be loaded last to use inline
