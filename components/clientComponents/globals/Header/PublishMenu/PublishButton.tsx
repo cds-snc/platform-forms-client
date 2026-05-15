@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { useSession } from "next-auth/react";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@root/i18n/client";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
@@ -12,11 +12,12 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
 import { logMessage } from "@lib/logger";
 import { dateHasPast } from "@lib/utils";
-import { ClosingDateToggle } from "@formBuilder/[id]/settings/manage/components/close/ClosingDateToggle";
-import { ChecklistItem } from "./ChecklistItem";
-import { PublishedFormLink } from "./PublishedFormLink";
 import "./PublishButton.css";
 import { PrePublishDialog } from "@formBuilder/[id]/publish/PrePublishDialog";
+import { PublishPopoverPublishedView } from "./PublishPopoverPublishedView";
+import { PublishPopoverChecklistView } from "./PublishPopoverChecklistView";
+import { PublishPopoverUnauthenticatedView } from "./PublishPopoverUnauthenticatedView";
+
 const ChevronDownIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -35,6 +36,7 @@ const ChevronDownIcon = () => (
 
 export const PublishButton = ({ locale }: { locale: string }) => {
   const { t } = useTranslation("form-builder");
+  const { status } = useSession();
   const pathname = usePathname();
   const popoverRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -49,12 +51,15 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const [description, setDescription] = useState("");
   const [reasonForPublish, setReasonForPublish] = useState("");
   const dialog = useDialogRef();
+
   const { isPublished, closingDate, setClosingDate } = useTemplateStore((state) => ({
     isPublished: state.isPublished,
     closingDate: state.closingDate,
     setClosingDate: state.setClosingDate,
   }));
+
   const setGroupId = useGroupStore((state) => state.setId);
+
   const {
     userCanPublish,
     data: {
@@ -71,6 +76,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const formId = useMemo(() => {
     const parts = pathname.split("/").filter(Boolean);
     const formBuilderIndex = parts.indexOf("form-builder");
+
     if (formBuilderIndex === -1 || formBuilderIndex + 1 >= parts.length) {
       return undefined;
     }
@@ -86,6 +92,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     const handleToggle = (event: Event) => {
       const open = (event as ToggleEvent).newState === "open";
       setIsOpen(open);
+
       if (open) {
         const firstFocusable = popover.querySelector<HTMLElement>(
           "a[href], button:not([disabled])"
@@ -101,6 +108,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const settings = purpose && hasFileInputAndApiKey;
   const allChecksPass =
     title && questions && privacyPolicy && confirmationMessage && translate && settings;
+
   const formStatus = useMemo(
     () => (dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open"),
     [closingDate]
@@ -114,13 +122,41 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     confirmation: `/${locale}/form-builder/${formId}/edit#confirmation-text`,
     settings: `/${locale}/form-builder/${formId}/settings`,
   };
+
   const publishedLinks = {
     en: `/en/id/${formId}`,
     fr: `/fr/id/${formId}`,
   };
 
+  const isUnauthenticated = status === "unauthenticated";
+  const canPublishFromPopover = allChecksPass && !!userCanPublish && !publishing;
+  const showPublishAction = allChecksPass;
+  const triggerLabel = isPublished ? t("published") : t("publish");
+  const isPublishReady = !isPublished && allChecksPass && !!userCanPublish;
+  const signInLink = `/${locale}/auth/login`;
+  const createAccountLink = `/${locale}/auth/register`;
+  const unlockPublishingHref = `/${locale}/unlock-publishing`;
+  const settingsHref = `/${locale}/form-builder/${formId}/settings/manage`;
+
+  const triggerStyle = {
+    anchorName: "--form-builder-publish-menu-trigger",
+  } as CSSProperties;
+
+  const popoverStyle = {
+    positionAnchor: "--form-builder-publish-menu-trigger",
+    positionArea: "bottom span-right",
+    positionTry: "flip-block, flip-inline, flip-block flip-inline",
+    inset: "auto",
+    marginTop: "1rem",
+  } as CSSProperties;
+
+  const triggerClassName = isPublishReady
+    ? "publish-menu-trigger hover:text-slate-900 focus:text-slate-900 flex cursor-pointer items-center gap-2 rounded border-1 border-emerald-700 bg-emerald-50 px-3 py-1 hover:bg-emerald-100 focus:bg-emerald-100"
+    : "publish-menu-trigger hover:text-white-default focus:text-white-default flex cursor-pointer items-center gap-2 rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 focus:bg-gray-600";
+
   const handleChecklistLinkClick = (href: string) => {
     const hashPart = href.split("#")[1];
+
     if (hashPart === "formTitle" || hashPart === "privacy-text" || hashPart === "questions") {
       setGroupId("start");
       return;
@@ -158,7 +194,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     try {
       ga("publish_form");
 
-      const { formRecord, error } = await updateTemplatePublishedStatus({
+      const { formRecord, error: publishError } = await updateTemplatePublishedStatus({
         id: formId,
         isPublished: true,
         publishFormType: formType,
@@ -167,8 +203,8 @@ export const PublishButton = ({ locale }: { locale: string }) => {
         redirectAfter: `/${locale}/form-builder/${formId}/published`,
       });
 
-      if (error || !formRecord) {
-        throw new Error(error);
+      if (publishError || !formRecord) {
+        throw new Error(publishError);
       }
     } catch (e) {
       if ((e as Error).message !== "NEXT_REDIRECT") {
@@ -237,27 +273,6 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     return null;
   }
 
-  const canPublishFromPopover = allChecksPass && userCanPublish && !publishing;
-  const showPublishAction = allChecksPass;
-  const triggerLabel = isPublished ? t("published") : t("publish");
-  const isPublishReady = !isPublished && allChecksPass && userCanPublish;
-
-  const triggerStyle = {
-    anchorName: "--form-builder-publish-menu-trigger",
-  } as CSSProperties;
-
-  const popoverStyle = {
-    positionAnchor: "--form-builder-publish-menu-trigger",
-    positionArea: "bottom span-right",
-    positionTry: "flip-block, flip-inline, flip-block flip-inline",
-    inset: "auto",
-    marginTop: "1rem",
-  } as CSSProperties;
-
-  const triggerClassName = isPublishReady
-    ? "publish-menu-trigger hover:text-slate-900 focus:text-slate-900 flex cursor-pointer items-center gap-2 rounded border-1 border-emerald-700 bg-emerald-50 px-3 py-1 hover:bg-emerald-100 focus:bg-emerald-100"
-    : "publish-menu-trigger hover:text-white-default focus:text-white-default flex cursor-pointer items-center gap-2 rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 focus:bg-gray-600";
-
   return (
     <div className="relative inline-block text-left">
       <button
@@ -284,120 +299,43 @@ export const PublishButton = ({ locale }: { locale: string }) => {
         className="publish-menu-popover z-20 w-76 rounded-lg border border-slate-300 bg-white px-4 py-5 shadow-[0_8px_24px_rgba(15,23,42,0.14)]"
       >
         {isPublished ? (
-          <div>
-            <p className="mb-4 text-sm text-slate-600">{t("publishedViewLinks")}</p>
-            <ul className="m-0 list-none space-y-3 p-0">
-              <PublishedFormLink
-                label={t("publishedEnglish")}
-                href={publishedLinks.en}
-                openLabel={t("share.open")}
-                copyLabel={`${t("share.copy")} ${t("share.enLink")}`}
-                copied={copiedLink === "en"}
-                copiedLabel={t("publishedCopied")}
-                onCopy={handleCopyPublishedLink}
-              />
-              <PublishedFormLink
-                label={t("publishedFrench")}
-                href={publishedLinks.fr}
-                openLabel={t("share.open")}
-                copyLabel={`${t("share.copy")} ${t("share.frLink")}`}
-                copied={copiedLink === "fr"}
-                copiedLabel={t("publishedCopied")}
-                onCopy={handleCopyPublishedLink}
-              />
-            </ul>
-            <div className="mt-5 border-t border-slate-200 pt-4">
-              <p className="mb-2 text-sm font-semibold text-slate-900">{t("closingDate.status")}</p>
-              <div className={updatingStatus ? "pointer-events-none opacity-60" : undefined}>
-                <ClosingDateToggle
-                  isChecked={formStatus === "open"}
-                  setIsChecked={handlePublishedStatusToggle}
-                  onLabel={t("closingDate.closed")}
-                  offLabel={t("closingDate.open")}
-                  description={t("closingDate.status")}
-                />
-              </div>
-              <Link
-                href={`/${locale}/form-builder/${formId}/settings/manage`}
-                className="mt-3 inline-block text-sm font-semibold text-slate-700 underline underline-offset-2 hover:text-slate-900"
-              >
-                {t("closedFormSettings")}
-              </Link>
-            </div>
-          </div>
+          <PublishPopoverPublishedView
+            t={t}
+            publishedLinks={publishedLinks}
+            copiedLink={copiedLink}
+            onCopy={handleCopyPublishedLink}
+            updatingStatus={updatingStatus}
+            formStatus={formStatus}
+            onPublishedStatusToggle={handlePublishedStatusToggle}
+            settingsHref={settingsHref}
+          />
+        ) : isUnauthenticated ? (
+          <PublishPopoverUnauthenticatedView
+            t={t}
+            signInLink={signInLink}
+            createAccountLink={createAccountLink}
+          />
         ) : (
-          <>
-            <ul className="m-0 list-none space-y-3 p-0">
-              <ChecklistItem
-                checked={title}
-                href={links.title}
-                label={t("formTitle")}
-                onClick={handleChecklistLinkClick}
-              />
-              <ChecklistItem
-                checked={questions}
-                href={links.questions}
-                label={t("questions")}
-                onClick={handleChecklistLinkClick}
-              />
-              <ChecklistItem
-                checked={translate}
-                href={links.translate}
-                label={t("translate")}
-                onClick={handleChecklistLinkClick}
-              />
-              <ChecklistItem
-                checked={privacyPolicy}
-                href={links.privacy}
-                label={t("privacyStatement")}
-                onClick={handleChecklistLinkClick}
-              />
-              <ChecklistItem
-                checked={confirmationMessage}
-                href={links.confirmation}
-                label={t("formConfirmationMessage")}
-                onClick={handleChecklistLinkClick}
-              />
-              <ChecklistItem
-                checked={settings}
-                href={links.settings}
-                label={t("publishYourFormInstructions.settings")}
-                onClick={handleChecklistLinkClick}
-              />
-            </ul>
-
-            {!userCanPublish && (
-              <div className="mt-6">
-                <Link href={`/${locale}/unlock-publishing`}>
-                  <Button theme="secondary" className="w-full">
-                    <div className="w-full text-center">{t("saveAndRequest")}</div>
-                  </Button>
-                </Link>
-              </div>
-            )}
-
-            {showPublishAction && (
-              <div className="mt-6">
-                {userCanPublish && (
-                  <button
-                    type="button"
-                    onClick={handleOpenPrePublish}
-                    disabled={!canPublishFromPopover}
-                    className="w-full rounded-lg border-2 border-emerald-700 bg-emerald-50 px-4 py-2 text-emerald-700 enabled:cursor-pointer enabled:text-slate-900 enabled:hover:bg-emerald-100 disabled:cursor-not-allowed disabled:border-slate-400 disabled:bg-slate-100 disabled:text-slate-400"
-                  >
-                    {t("readyToPublish")}
-                  </button>
-                )}
-                {error && (
-                  <p role="alert" className="text-red-destructive mt-3 text-sm">
-                    {t("thereWasAnErrorPublishing")}
-                  </p>
-                )}
-              </div>
-            )}
-          </>
+          <PublishPopoverChecklistView
+            t={t}
+            title={title}
+            questions={questions}
+            translate={translate}
+            privacyPolicy={privacyPolicy}
+            confirmationMessage={confirmationMessage}
+            settings={settings}
+            links={links}
+            onChecklistLinkClick={handleChecklistLinkClick}
+            userCanPublish={!!userCanPublish}
+            showPublishAction={showPublishAction}
+            canPublishFromPopover={canPublishFromPopover}
+            onOpenPrePublish={handleOpenPrePublish}
+            error={error}
+            unlockPublishingHref={unlockPublishingHref}
+          />
         )}
       </div>
+
       {showConfirmDialog && (
         <Dialog
           handleClose={cancelPublishedStatusToggle}
@@ -423,6 +361,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
           </div>
         </Dialog>
       )}
+
       {showPrePublishDialog && (
         <PrePublishDialog
           setDescription={setDescription}
