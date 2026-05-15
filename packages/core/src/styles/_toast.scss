@@ -1,8 +1,8 @@
-:root {
+B :root {
   --toastify-color-light: #fff;
   --toastify-color-dark: #121212;
   --toastify-color-info: #3498db;
-  --toastify-color-success: #07bc0c;
+  --toastify-color-success: var(--color-gcds-green-450);
   --toastify-color-warning: #f1c40f;
   --toastify-color-error: hsl(6, 78%, 57%);
   --toastify-color-transparent: rgba(255, 255, 255, 0.7);

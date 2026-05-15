@@ -1,8 +1,8 @@
-:root {
+B :root {
   --toastify-color-light: #fff;
   --toastify-color-dark: #121212;
   --toastify-color-info: #3498db;
-  --toastify-color-success: var(--gcds-color-green-450);
+  --toastify-color-success: var(--color-gcds-green-450);
   --toastify-color-warning: #f1c40f;
   --toastify-color-error: hsl(6, 78%, 57%);
   --toastify-color-transparent: rgba(255, 255, 255, 0.7);
@@ -149,7 +149,7 @@
     border-radius: 0;
   }
 }
-.Toastify__toast-container[data-stacked="true"] {
+.Toastify__toast-container[data-stacked=true] {
   width: var(--toastify-toast-width);
 }
 
@@ -165,11 +165,11 @@
   transition: opacity 0.1s;
 }
 
-.Toastify__toast--stacked[data-collapsed="false"] {
+.Toastify__toast--stacked[data-collapsed=false] {
   overflow: visible;
 }
 
-.Toastify__toast--stacked[data-collapsed="true"]:not(:last-child) > * {
+.Toastify__toast--stacked[data-collapsed=true]:not(:last-child) > * {
   opacity: 0;
 }
 
@@ -182,19 +182,19 @@
   bottom: 100%;
 }
 
-.Toastify__toast--stacked[data-pos="top"] {
+.Toastify__toast--stacked[data-pos=top] {
   top: 0;
 }
 
-.Toastify__toast--stacked[data-pos="bot"] {
+.Toastify__toast--stacked[data-pos=bot] {
   bottom: 0;
 }
 
-.Toastify__toast--stacked[data-pos="bot"].Toastify__toast--stacked:before {
+.Toastify__toast--stacked[data-pos=bot].Toastify__toast--stacked:before {
   transform-origin: top;
 }
 
-.Toastify__toast--stacked[data-pos="top"].Toastify__toast--stacked:before {
+.Toastify__toast--stacked[data-pos=top].Toastify__toast--stacked:before {
   transform-origin: bottom;
 }
 
@@ -242,44 +242,6 @@
 .Toastify__toast-theme--light {
   background: var(--toastify-color-light);
   color: var(--toastify-text-color-light);
-}
-
-.Toastify__toast.gc-toast {
-  color: inherit;
-}
-
-.Toastify__toast.gc-toast svg {
-  fill: currentColor;
-}
-
-.Toastify__toast.gc-toast--success,
-.Toastify__toast.Toastify__toast--success {
-  background: var(--gcds-color-green-450) !important;
-  color: var(--color-gcds-green-800) !important;
-}
-
-.Toastify__toast.gc-toast--error,
-.Toastify__toast.Toastify__toast--error {
-  background: var(--color-gcds-red-100) !important;
-  color: var(--color-gcds-red-800) !important;
-}
-
-.Toastify__toast.gc-toast--info,
-.Toastify__toast.Toastify__toast--info {
-  background: var(--color-gcds-blue-50) !important;
-  color: var(--color-gcds-blue-800) !important;
-}
-
-.Toastify__toast.gc-toast--warn,
-.Toastify__toast.gc-toast--warning,
-.Toastify__toast.Toastify__toast--warning {
-  background: var(--color-gcds-yellow-50) !important;
-  color: var(--color-gcds-yellow-800) !important;
-}
-
-.Toastify__toast.gc-toast--default {
-  background: var(--toastify-color-light) !important;
-  color: #000 !important;
 }
 
 .Toastify__toast-theme--colored.Toastify__toast--default {
@@ -417,7 +379,7 @@
   border-bottom-right-radius: var(--toastify-toast-bd-radius);
 }
 
-.Toastify__progress-bar--wrp[data-hidden="true"] {
+.Toastify__progress-bar--wrp[data-hidden=true] {
   opacity: 0;
 }
 
@@ -439,11 +401,7 @@
 }
 
 @keyframes Toastify__bounceInRight {
-  from,
-  60%,
-  75%,
-  90%,
-  to {
+  from, 60%, 75%, 90%, to {
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
   from {
@@ -475,11 +433,7 @@
   }
 }
 @keyframes Toastify__bounceInLeft {
-  from,
-  60%,
-  75%,
-  90%,
-  to {
+  from, 60%, 75%, 90%, to {
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
   0% {
@@ -511,11 +465,7 @@
   }
 }
 @keyframes Toastify__bounceInUp {
-  from,
-  60%,
-  75%,
-  90%,
-  to {
+  from, 60%, 75%, 90%, to {
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
   from {
@@ -540,8 +490,7 @@
   20% {
     transform: translate3d(0, calc(var(--y) - 10px), 0);
   }
-  40%,
-  45% {
+  40%, 45% {
     opacity: 1;
     transform: translate3d(0, calc(var(--y) + 20px), 0);
   }
@@ -551,11 +500,7 @@
   }
 }
 @keyframes Toastify__bounceInDown {
-  from,
-  60%,
-  75%,
-  90%,
-  to {
+  from, 60%, 75%, 90%, to {
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
   0% {
@@ -580,8 +525,7 @@
   20% {
     transform: translate3d(0, calc(var(--y) - 10px), 0);
   }
-  40%,
-  45% {
+  40%, 45% {
     opacity: 1;
     transform: translate3d(0, calc(var(--y) + 20px), 0);
   }

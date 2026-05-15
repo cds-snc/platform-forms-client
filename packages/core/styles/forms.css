@@ -18,16 +18,12 @@
 @font-face {
   font-family: "gcds-icons";
   src: url("/fonts/icons/gcds-icons.eot");
-  src:
-    url("/fonts/icons/gcds-icons.eot#iefix") format("embedded-opentype"),
-    url("/fonts/icons/gcds-icons.ttf") format("truetype"),
-    url("/fonts/icons/gcds-icons.woff") format("woff"),
-    url("/fonts/icons/gcds-icons.svg") format("svg");
+  src: url("/fonts/icons/gcds-icons.eot#iefix") format("embedded-opentype"), url("/fonts/icons/gcds-icons.ttf") format("truetype"), url("/fonts/icons/gcds-icons.woff") format("woff"), url("/fonts/icons/gcds-icons.svg") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
-[class^="gcds-icon-"],
+[class^=gcds-icon-],
 [class*=" gcds-icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: "gcds-icons" !important;
@@ -138,10 +134,7 @@
   color: var(--gcds-input-default-text);
   border: var(--gcds-input-border-width) solid currentColor;
   border-radius: var(--gcds-input-border-radius);
-  transition:
-    border-color ease-in-out 0.15s,
-    box-shadow ease-in-out 0.15s,
-    outline ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, outline ease-in-out 0.15s;
 }
 
 .gcds-input-wrapper.gcds-disabled {
@@ -214,10 +207,7 @@
   color: var(--gcds-textarea-default-text);
   border: var(--gcds-textarea-border-width) solid currentColor;
   border-radius: var(--gcds-textarea-border-radius);
-  transition:
-    border-color ease-in-out 0.15s,
-    box-shadow ease-in-out 0.15s,
-    outline ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, outline ease-in-out 0.15s;
 }
 
 .gcds-textarea-wrapper.gcds-disabled {
@@ -308,10 +298,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
   box-shadow: var(--gcds-checkbox-focus-box-shadow);
   background: var(--gcds-checkbox-focus-background);
   border-color: var(--gcds-color-blue-vivid) !important;
-  transition:
-    border-color ease-in-out 0.15s,
-    box-shadow ease-in-out 0.15s,
-    outline ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, outline ease-in-out 0.15s;
 }
 
 .gc-input-checkbox {
@@ -389,10 +376,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
   box-shadow: var(--gcds-radio-focus-box-shadow);
   background: var(--gcds-radio-focus-background);
   border-color: var(--gcds-color-blue-vivid) !important;
-  transition:
-    border-color ease-in-out 0.15s,
-    box-shadow ease-in-out 0.15s,
-    outline ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, outline ease-in-out 0.15s;
 }
 
 .gc-input-radio:focus-within .gc-radio-label:after {
@@ -432,10 +416,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
   position: absolute;
   border-radius: var(--gcds-radio-border-radius);
   border: var(--gcds-radio-input-border-width) solid var(--gcds-color-black);
-  transition:
-    border-color ease-in-out 0.15s,
-    box-shadow ease-in-out 0.15s,
-    outline ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, outline ease-in-out 0.15s;
 }
 
 .gc-input-radio .gc-radio__input:checked + .gc-radio-label:after {
@@ -534,11 +515,10 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
 }
 
 .gc-alert {
-  @apply mb-14 w-5/6 px-12 py-8 xl:w-full;
+  @apply py-8 px-12 mb-14 w-5/6 xl:w-full;
 }
 
-.gc-alert.gc-alert--validation,
-.gc-alert.gc-alert--error {
+.gc-alert.gc-alert--validation, .gc-alert.gc-alert--error {
   border-width: var(--gcds-error-summary-border-width);
   border-color: var(--gcds-error-summary-border-color);
   padding: var(--gcds-error-summary-padding);
@@ -546,18 +526,16 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
   color: var(--gcds-error-summary-text);
 }
 
-.gc-alert.gc-alert--validation h2,
-.gc-alert.gc-alert--error h2 {
+.gc-alert.gc-alert--validation h2, .gc-alert.gc-alert--error h2 {
   color: var(--gcds-heading-default-text) !important;
 }
 
-.gc-alert.gc-alert--validation a,
-.gc-alert.gc-alert--error a {
+.gc-alert.gc-alert--validation a, .gc-alert.gc-alert--error a {
   color: var(--gcds-error-summary-link-color);
 }
 
 .gc-alert.gc-alert--success {
-  @apply laptop:rounded-md rounded-sm bg-emerald-50 text-emerald-700;
+  @apply bg-emerald-50 text-emerald-700 rounded-sm laptop:rounded-md;
 }
 
 .gc-alert .gc-alert__body {
@@ -565,7 +543,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
 }
 
 .gc-alert .gc-alert__body h3 {
-  @apply text-red-default mb-5;
+  @apply mb-5 text-red-default;
 }
 
 .gc-alert .gc-alert__body ol {
@@ -683,8 +661,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
   @apply ml-0 font-normal;
 }
 
-.gc-p,
-.gc-richText p {
+.gc-p, .gc-richText p {
   @apply mb-10 w-full text-xl md:text-sm;
 }
 
@@ -842,7 +819,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
   @apply mb-0 inline-block text-center;
 }
 
-.gc-file-input [type="file"] {
+.gc-file-input [type=file] {
   display: none;
 }
 

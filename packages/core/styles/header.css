@@ -1,14 +1,5 @@
 .gc-language-toggle {
-  text-align: right;
-  font-size: 18px;
-  line-height: 28px;
-}
-
-@media (max-width: 550px) {
-  .gc-language-toggle {
-    font-size: 16px;
-    line-height: 22px;
-  }
+  @apply md:text-sm text-base text-right;
 }
 
 .gc-language-toggle label {
@@ -26,85 +17,36 @@
 }
 
 .gc-language-toggle button {
-  border-width: 0;
-  background-color: transparent;
-  --tw-text-opacity: 1;
-  color: rgb(40 65 98 / var(--tw-text-opacity, 1));
-  -webkit-text-decoration-line: underline;
-          text-decoration-line: underline;
-  --tw-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  --tw-shadow-colored: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-
-.gc-language-toggle button:hover {
-  --tw-text-opacity: 1;
-  color: rgb(5 53 210 / var(--tw-text-opacity, 1));
+  @apply shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0;
 }
 
 .gc-language-toggle button:focus {
   outline: none;
   box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
-  --tw-bg-opacity: 1;
-  background-color: rgb(48 63 195 / var(--tw-bg-opacity, 1));
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+  @apply bg-blue-focus text-white-default;
 }
 
 .gc-language-toggle button:active {
   box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
-  --tw-bg-opacity: 1;
-  background-color: rgb(48 63 195 / var(--tw-bg-opacity, 1));
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-  -webkit-text-decoration-line: underline;
-          text-decoration-line: underline;
+  @apply underline bg-blue-active text-white-default;
 }
 
 header .canada-flag {
-  margin-top: 0rem;
-  width: 22.5rem;
+  @apply xxs:w-flag-fold xs:w-flag-5s md:w-flag-6s lg:mt-10 w-flag-desktop mt-0;
 }
 
-@media (max-width: 768px) {
-  header .canada-flag {
-    margin-top: 2.5rem;
-  }
-}
-
-@media (max-width: 550px) {
-  header .canada-flag {
-    width: 18rem;
-  }
-}
-
-@media (max-width: 320px) {
-  header .canada-flag {
-    width: 16.5rem;
-  }
-}
-
-@media (max-width: 290px) {
-  header .canada-flag {
-    width: 15rem;
-  }
-}
-
-header .canada-flag a:hover:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+header .canada-flag a:hover {
+  @apply hover:bg-white-default;
 }
 
 header .canada-flag a:focus {
   outline: 3px solid #303fc3;
   outline-offset: 1px;
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  @apply bg-white-default;
 }
 
 header .canada-flag a:active {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  @apply bg-white-default;
 }
 
 .visually-hidden {

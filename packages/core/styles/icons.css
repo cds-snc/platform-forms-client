@@ -1,17 +1,11 @@
 @font-face {
   font-family: "gcds-icons";
-
   src: url("/fonts/icons/gcds-icons.eot");
-
   src: url("/fonts/icons/gcds-icons.eot#iefix") format("embedded-opentype"), url("/fonts/icons/gcds-icons.ttf") format("truetype"), url("/fonts/icons/gcds-icons.woff") format("woff"), url("/fonts/icons/gcds-icons.svg") format("svg");
-
   font-weight: normal;
-
   font-style: normal;
-
   font-display: block;
 }
-
 [class^=gcds-icon-],
 [class*=" gcds-icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */

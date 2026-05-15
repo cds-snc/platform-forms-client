@@ -3,19 +3,19 @@
     @apply text-base leading-7 text-slate-800;
   }
   h1 {
-    @apply tablet:text-4xl mb-6 text-3xl font-semibold;
+    @apply text-3xl tablet:text-4xl font-semibold mb-6;
   }
   h2 {
-    @apply tablet:text-3xl mb-4 text-2xl font-semibold;
+    @apply text-2xl tablet:text-3xl font-semibold mb-4;
   }
   h3 {
-    @apply tablet:text-2xl mb-2 text-xl font-semibold;
+    @apply text-xl tablet:text-2xl font-semibold mb-2;
   }
   h4 {
-    @apply tablet:text-xl text-lg font-semibold;
+    @apply text-lg tablet:text-xl font-semibold;
   }
   h5 {
-    @apply tablet:text-lg text-base font-normal;
+    @apply text-base tablet:text-lg font-normal;
   }
   .gc-formview .text-base,
   .gc-authpages .text-base {
@@ -23,10 +23,10 @@
   }
   .gc-formview,
   .gc-authpages {
-    @apply text-gray-front text-xl;
+    @apply text-xl text-gray-front;
   }
   .gc-authpages h1 {
-    @apply mb-12 border-b-0 pb-2;
+    @apply border-b-0 pb-2 mb-12;
   }
 }
 .gcds-page h1,
