@@ -14,9 +14,9 @@ import { logMessage } from "@lib/logger";
 import { dateHasPast } from "@lib/utils";
 import "./PublishButton.css";
 import { PrePublishDialog } from "@formBuilder/[id]/publish/PrePublishDialog";
-import { PopoverPublishedView } from "./PublishPopoverPublishedView";
-import { PopoverChecklistView } from "./PublishPopoverChecklistView";
-import { PopoverUnauthenticatedView } from "./PublishPopoverUnauthenticatedView";
+import { PopoverPublishedView } from "./PopoverPublishedView";
+import { PopoverChecklistView } from "./PopoverChecklistView";
+import { PopoverUnauthenticatedView } from "./PopoverUnauthenticatedView";
 
 const ChevronDownIcon = () => (
   <svg
