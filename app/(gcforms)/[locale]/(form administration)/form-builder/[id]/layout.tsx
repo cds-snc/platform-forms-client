@@ -120,7 +120,7 @@ export default async function Layout(props: {
                       shareUsesManageAccess={shareUsesManageAccess}
                     />
                     <div className="bg-gray-soft flex shrink-0 grow basis-auto flex-col">
-                      <ToastContainer containerId="default" />
+                      <ToastContainer containerId="default" autoClose={false} />
                       <ToastContainer
                         limit={1}
                         containerId="wide"
