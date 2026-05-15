@@ -992,10 +992,10 @@
           "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Response options."
         },
         "archivedForm": {
-          "subject": "A form you are owner of has been archived | Un formulaire dont vous êtes propriétaire a été archivé",
+          "subject": "Your form has been archived | Votre formulaire a été archivé",
           "paragraph1": "Your form has been archived:",
           "paragraph2": "This was performed by:",
-          "paragraph3": "The form can be restored from the archive folder. Within 30 days of archiving.",
+          "paragraph3": "The form can be restored from the archive folder, within 30 days of archiving.",
           "paragraph4": "After 30 days the form will be deleted permanently, this cannot be undone."
         }
       },
