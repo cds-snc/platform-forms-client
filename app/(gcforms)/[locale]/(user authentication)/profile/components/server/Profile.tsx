@@ -22,8 +22,8 @@ export const Profile = async ({
   return (
     <>
       <h1 className="mb-2 border-b-0">{t("title")}</h1>
-      <div className="flex flex-col gap-4 tablet:flex-row">
-        <div className="w-full rounded-lg border bg-white p-4 laptop:w-1/2">
+      <div className="tablet:flex-row flex flex-col gap-4">
+        <div className="laptop:w-1/2 w-full rounded-lg border bg-white p-4">
           <h2 className="mb-6 pb-0 text-2xl">{t("accountPanel.title")}</h2>
           <div>
             <h3 className="mb-2 text-xl">{t("accountPanel.email")}</h3>
@@ -37,7 +37,7 @@ export const Profile = async ({
             </p>
           </div>
         </div>
-        <div className="w-full rounded-lg border bg-white p-4 laptop:w-1/2">
+        <div className="laptop:w-1/2 w-full rounded-lg border bg-white p-4">
           <h2 className="mb-6 pb-0 text-2xl">{t("securityPanel.title")}</h2>
           <QuestionList questions={userQuestions} allQuestions={allQuestions} />
         </div>

@@ -1,5 +1,4 @@
 import { defineConfig } from "vitest/config";
-import tsconfigPaths from "vite-tsconfig-paths";
 import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import path from "path";
@@ -9,6 +8,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const sharedAliases = {
+  "@root": path.resolve(__dirname),
+  "@formBuilder": path.resolve(
+    __dirname,
+    "app/(gcforms)/[locale]/(form administration)/form-builder"
+  ),
   "@responses-pilot": path.resolve(
     __dirname,
     "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot"
@@ -40,8 +44,9 @@ const sharedExclude = [
 ];
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  plugins: [react()],
   resolve: {
+    tsconfigPaths: true,
     alias: sharedAliases,
     extensions: [".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json"],
   },

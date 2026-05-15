@@ -3,15 +3,8 @@
 import { useTranslation } from "@i18n/client";
 import { TabNavLink } from "@clientComponents/globals/TabNavLink";
 import { usePathname } from "next/navigation";
-import { ManageFormAccessButton } from "../../components/dialogs/ManageFormAccessDialog/ManageFormAccessButton";
 
-export const SettingsNavigation = ({
-  id,
-  showManageAccess = false,
-}: {
-  id: string;
-  showManageAccess?: boolean;
-}) => {
+export const SettingsNavigation = ({ id }: { id: string }) => {
   const {
     t,
     i18n: { language },
@@ -54,12 +47,6 @@ export const SettingsNavigation = ({
           {t("settings.apiIntegration.navigation.title")}
         </span>
       </TabNavLink>
-
-      {showManageAccess && (
-        <div className="absolute right-5 bottom-4">
-          <ManageFormAccessButton />
-        </div>
-      )}
     </nav>
   );
 };

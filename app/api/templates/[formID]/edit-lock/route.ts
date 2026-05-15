@@ -11,6 +11,7 @@ import {
   EditLockVisibilityState,
   getEditLockDisabledStatus,
   getEditLockStatus,
+  getTemplateCollaboratorCount,
   heartbeatEditLock,
   requestEditLockTakeoverSave,
   releaseEditLock,
@@ -85,7 +86,12 @@ export const GET = middleware([sessionExists()], async (req, props) => {
   }
 
   const status = await getEditLockStatus(formID, session.user.id);
-  return NextResponse.json(status);
+  const collaboratorCounts =
+    requestType !== "lock-status-poll" && (status.locked || status.lockedByOther)
+      ? await getTemplateCollaboratorCount(formID)
+      : null;
+
+  return NextResponse.json({ ...status, ...(collaboratorCounts ?? {}) });
 });
 
 export const POST = middleware([sessionExists()], async (_req: NextRequest, props) => {

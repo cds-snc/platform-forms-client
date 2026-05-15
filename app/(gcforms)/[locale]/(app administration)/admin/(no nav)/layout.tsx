@@ -5,7 +5,6 @@ import { serverTranslation } from "@i18n";
 import { SiteLogo } from "@serverComponents/icons";
 
 import LanguageToggle from "@serverComponents/globals/LanguageToggle";
-import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccountDropdown";
 
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
@@ -50,9 +49,6 @@ export default AuthenticatedLayout(
                   </li>
                   <li className="tablet:mr-4 mr-2 py-2">
                     <LanguageToggle />
-                  </li>
-                  <li className="mr-5 text-base">
-                    <YourAccountDropdown isAuthenticated={true} />
                   </li>
                 </ul>
               </nav>
