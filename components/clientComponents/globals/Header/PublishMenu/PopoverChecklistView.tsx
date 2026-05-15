@@ -13,7 +13,7 @@ type ChecklistLinks = {
   settings: string;
 };
 
-export const PublishPopoverChecklistView = ({
+export const PopoverChecklistView = ({
   t,
   title,
   questions,

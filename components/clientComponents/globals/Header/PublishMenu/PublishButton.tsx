@@ -14,9 +14,9 @@ import { logMessage } from "@lib/logger";
 import { dateHasPast } from "@lib/utils";
 import "./PublishButton.css";
 import { PrePublishDialog } from "@formBuilder/[id]/publish/PrePublishDialog";
-import { PublishPopoverPublishedView } from "./PublishPopoverPublishedView";
-import { PublishPopoverChecklistView } from "./PublishPopoverChecklistView";
-import { PublishPopoverUnauthenticatedView } from "./PublishPopoverUnauthenticatedView";
+import { PopoverPublishedView } from "./PublishPopoverPublishedView";
+import { PopoverChecklistView } from "./PublishPopoverChecklistView";
+import { PopoverUnauthenticatedView } from "./PublishPopoverUnauthenticatedView";
 
 const ChevronDownIcon = () => (
   <svg
@@ -299,7 +299,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
         className="publish-menu-popover z-20 w-76 rounded-lg border border-slate-300 bg-white px-4 py-5 shadow-[0_8px_24px_rgba(15,23,42,0.14)]"
       >
         {isPublished ? (
-          <PublishPopoverPublishedView
+          <PopoverPublishedView
             t={t}
             publishedLinks={publishedLinks}
             copiedLink={copiedLink}
@@ -310,13 +310,13 @@ export const PublishButton = ({ locale }: { locale: string }) => {
             settingsHref={settingsHref}
           />
         ) : isUnauthenticated ? (
-          <PublishPopoverUnauthenticatedView
+          <PopoverUnauthenticatedView
             t={t}
             signInLink={signInLink}
             createAccountLink={createAccountLink}
           />
         ) : (
-          <PublishPopoverChecklistView
+          <PopoverChecklistView
             t={t}
             title={title}
             questions={questions}

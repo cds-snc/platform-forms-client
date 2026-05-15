@@ -4,7 +4,7 @@ import { PublishedFormLink } from "./PublishedFormLink";
 
 type Translate = (key: string) => string;
 
-export const PublishPopoverPublishedView = ({
+export const PopoverPublishedView = ({
   t,
   publishedLinks,
   copiedLink,

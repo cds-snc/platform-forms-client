@@ -2,7 +2,7 @@ import Link from "next/link";
 
 type Translate = (key: string) => string;
 
-export const PublishPopoverUnauthenticatedView = ({
+export const PopoverUnauthenticatedView = ({
   t,
   signInLink,
   createAccountLink,
