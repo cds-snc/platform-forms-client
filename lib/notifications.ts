@@ -323,7 +323,7 @@ const sendArchivedFormNotification = async (
       subject: t("settings.notifications.email.archivedForm.subject"),
       formResponse: await archivedFormEmailTemplate(HOST, formTitleEn, formTitleFr, actionEmail),
     },
-    "notification"
+    "archived_form_notification"
   )
     .then(() =>
       logMessage.debug(
