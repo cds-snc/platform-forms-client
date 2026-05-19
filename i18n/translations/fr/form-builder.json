@@ -664,7 +664,8 @@
     "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer.",
     "sessionExpiredTitle": "Votre session a expiré",
     "sessionExpiredMessage": "La modification a été arrêtée parce que ce formulaire était inactif. Veuillez rouvrir le formulaire pour y apporter des changements.",
-    "returnToForms": "Retourner aux formulaires"
+    "returnToForms": "Retourner aux formulaires",
+    "reloadPage": "Recharger"
   },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publier",

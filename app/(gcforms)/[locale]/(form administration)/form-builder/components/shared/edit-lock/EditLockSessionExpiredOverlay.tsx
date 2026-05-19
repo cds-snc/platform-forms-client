@@ -11,10 +11,10 @@ import { usePathname } from "next/navigation";
 
 export const EditLockSessionExpiredOverlay = ({
   formId,
-  onReturnToForms,
+  onReloadPage,
 }: {
   formId: string;
-  onReturnToForms: () => void;
+  onReloadPage: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const pathname = usePathname();
@@ -50,10 +50,10 @@ export const EditLockSessionExpiredOverlay = ({
             </div>
             <Button
               theme="primary"
-              onClick={onReturnToForms}
+              onClick={onReloadPage}
               className="self-center whitespace-nowrap hover:cursor-pointer sm:self-start"
             >
-              {t("editLock.returnToForms")}
+              {t("editLock.reloadPage")}
             </Button>
           </div>
         </div>
