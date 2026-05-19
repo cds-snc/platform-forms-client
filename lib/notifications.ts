@@ -275,3 +275,109 @@ const multipleSubmissionsEmailTemplate = async (
   *${t_fr("settings.notifications.email.multipleSubmissions.paragraph3")}*
     `;
 };
+
+const archivedFormEmailTemplate = async (
+  HOST: string,
+  formTitleEn: string,
+  formTitleFr: string,
+  actionEmail: string
+) => {
+  const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
+  const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
+  return `
+  ${t_en("settings.notifications.email.archivedForm.paragraph1")}
+  ${formTitleEn}
+  ${t_en("settings.notifications.email.archivedForm.paragraph2")}
+  ${actionEmail}
+  
+  **[${t_en("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
+  
+  *${t_en("settings.notifications.email.archivedForm.paragraph4")}*
+  
+  ---
+  
+  ${t_fr("settings.notifications.email.archivedForm.paragraph1")}
+  ${formTitleFr}
+  ${t_fr("settings.notifications.email.archivedForm.paragraph2")}
+  ${actionEmail}
+  
+  **[${t_fr("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
+  
+  *${t_fr("settings.notifications.email.archivedForm.paragraph4")}*
+    `;
+};
+
+const sendArchivedFormNotification = async (
+  email: string,
+  formId: string,
+  formTitleEn: string,
+  formTitleFr: string,
+  actionEmail: string
+) => {
+  const { t } = await serverTranslation("form-builder");
+  const HOST = await getOrigin();
+  await sendEmail(
+    email,
+    {
+      subject: t("settings.notifications.email.archivedForm.subject"),
+      formResponse: await archivedFormEmailTemplate(HOST, formTitleEn, formTitleFr, actionEmail),
+    },
+    "archived_form_notification"
+  )
+    .then(() =>
+      logMessage.debug(
+        `sendArchivedFormNotification sent email to ${email} with formId ${formId} for type archived form`
+      )
+    )
+    .catch(() =>
+      logMessage.error(
+        `sendArchivedFormNotification failed to send email ${email} with formId ${formId}`
+      )
+    );
+};
+
+const sendArchivedFormNotificationsToAllUsers = async (
+  users: {
+    email: string;
+  }[],
+  formId: string,
+  formTitleEn: string,
+  formTitleFr: string,
+  actionEmail: string
+) => {
+  if (!Array.isArray(users) || users.length === 0) {
+    logMessage.debug("sendArchivedFormNotificationsToAllUsers missing users");
+    return;
+  }
+  users.forEach(({ email }) =>
+    sendArchivedFormNotification(email, formId, formTitleEn, formTitleFr, actionEmail)
+  );
+};
+
+interface Session {
+  user: {
+    email: string;
+  };
+}
+
+// Public facing function to send notifications to all related users on a form archival
+export const sendArchivedFormNotifications = async (
+  session: Session,
+  formId: string,
+  titleEn: string,
+  titleFr: string,
+  templateUsers: { email: string }[]
+): Promise<void> => {
+  // Some older forms may not have users, do nothing
+  if (!Array.isArray(templateUsers) || templateUsers.length === 0) {
+    return;
+  }
+
+  sendArchivedFormNotificationsToAllUsers(
+    templateUsers,
+    formId,
+    titleEn,
+    titleFr,
+    session.user.email
+  );
+};

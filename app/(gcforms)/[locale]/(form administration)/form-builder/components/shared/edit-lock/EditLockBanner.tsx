@@ -6,7 +6,6 @@ import { useTranslation } from "@i18n/client";
 import { CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS } from "@root/constants";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { ga } from "@lib/client/clientHelpers";
-import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
@@ -117,7 +116,6 @@ export const EditLockBanner = ({
     setIsTakingOver(true);
     try {
       await takeover();
-      toast.success(t("editLock.syncedLatest"), "wide");
 
       // Construct and send the Google Analytics event
       const eventName = isTakeoverAvailable
