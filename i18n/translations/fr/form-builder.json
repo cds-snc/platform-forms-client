@@ -632,7 +632,7 @@
       "1000 requests per minute": "1000 demandes par minute"
     },
     "errorCreatingDownload": "Une erreur s'est produite lors du téléchargement. Veuillez réessayer plus tard ou contacter l'équipe de soutien.",
-    "noEvents": "Aucun événement trouvé, la compilation d'activités récentes peut prendre plusieurs minutes."
+    "noEvents": "Aucune activité trouvée dans les derniers 30 jours. L'activité récente peut prendre quelques minutes avant d'apparaître."
   },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
