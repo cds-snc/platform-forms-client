@@ -544,7 +544,7 @@
     "title": "Obtenir une copie du formulaire"
   },
   "auditDownload": {
-    "description": "Obtenez une feuille de calcul avec l'historique des dernières actions clés effectuées dans un formulaire. Celles-ci sont disponibles pourraient prendre quelques minutes pour apparaître dans le journal d'activité et seront disponibles jusqu'à 30 jours.",
+    "description": "Obtenez une feuille de calcul avec l'historique des dernières actions clés effectuées dans un formulaire. Celles-ci pourraient prendre quelques minutes pour apparaître dans le journal d'activité et seront disponibles jusqu'à 30 jours.",
     "downloadBtnText": "Télécharger l'activité récente",
     "title": "Afficher l'activité du formulaire",
     "dialog": {
@@ -554,12 +554,12 @@
       "allEventsDescription": "Téléchargez tous les événements qui se sont produits dans le formulaire.",
       "allEventsCheckbox": "Tous les événements du formulaire",
       "specificEventsTitle": "Événements spécifiques",
-      "specificEventsDescription": "Choisissez les événements que vous souhaitez voir apparaître dans le CSV.",
+      "specificEventsDescription": "Choisissez les événements que vous souhaitez avoir dans le CSV.",
       "specific": {
-        "formBuilding": "Création de formulaire",
-        "formCollaboration": "Collaboration sur le formulaire",
-        "responseDownloads": "Téléchargements de réponses",
-        "apiIntegrations": "Intégrations API"
+        "formBuilding": "Création du formulaires",
+        "formCollaboration": "Collaborateurs sur le formulaire",
+        "responseDownloads": "Récupération des réponses",
+        "apiIntegrations": "Intégration API"
       }
     },
     "headers": {
@@ -578,7 +578,7 @@
       "ChangeFormPurpose": "Usage prévu modifié",
       "ChangeFormSaveAndResume": "Option de sauvegarde et de reprise modifiée",
       "ChangeFormName": "Nom du formulaire modifié",
-      "UpdateForm": "Formulaire mis à jour",
+      "UpdateForm": "Contenu du formulaire mis à jour",
       "UpdateNotificationsInterval": "Intervalle de notifications modifié",
       "GrantFormAccess": "Accès au formulaire accordé",
       "RevokeFormAccess": "Accès au formulaire révoqué",
@@ -591,25 +591,26 @@
       "DeleteAPIKey": "Clé API supprimée",
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
-      "UpdateFormJsonConfig": "JSON du formulaire mise à jour",
-      "UpdatedNotificationSettings": "Paramètre de notification mis à jour.",
       "InvitationAccepted": "Invitation acceptée"
+      "UpdateFormJsonConfig": "Téléchargement d'une copie du formulaire",
+      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification"
     },
     "eventDetails": {
       "CreatedForm": "Formulaire créé",
-      "UpdatedFormName": "Formulaire renommé en {{newFormName}}",
+      "UpdatedFormName": "Formulaire renommé {{newFormName}}",
       "UpdatedFormContent": "Contenu du formulaire mis à jour",
-      "DuplicatedForm": "Formulaire dupliqué pour créer le formulaire {{newFormID}}",
+      "DuplicatedForm": "Formulaire dupliqué pour en créer un nouveau {{newFormID}}",
       "ArchivedForm": "Formulaire archivé",
       "RestoredForm": "Formulaire désarchivé",
       "DownloadedForm": "Une copie du formulaire a été téléchargée",
-      "ChangeSecurityAttribute": "Classification changée à {{securityAttribute}}",
-      "SetFormPurpose": "Usage prévu défini comme {{formPurpose}}",
-      "SetSaveAndResume": "La sauvegarde des réponses est {{saveAndResume}}",
-      "UpdateClosingDate": "Date de fermeture mise à jour à {{closingDate}}",
-      "UpdatedNotificationSettings": "Paramètre de notification mis à jour à {{enabled}} pour {{userEmail}}",
       "CreatedNewAPIKey": "Utilisateur :{{userId}} a créé une clé API pour le compte de service {{serviceAccountId}}",
       "RefreshedAPIKey": "Clé API {{APIkeyID}} re-générée par {{userEmail}}",
+      "ChangeSecurityAttribute": "Classification changée {{securityAttribute}}",
+      "SetFormPurpose": "Usage prévu défini {{formPurpose}}",
+      "SetSaveAndResume": "Changement de la sauvegarde des réponses {{saveAndResume}}",
+      "UpdateClosingDate": "Mise à jour de la date de fermeture {{closingDate}}",
+      "UpdatedNotificationSettings": "Paramètre de notification {{enabled}} pour {{userEmail}}",
+      "GeneratedAPIKey": "Clé API {{APIkeyID}} générée par {{userEmail}}",
       "DeletedAPIKey": "Clé API {{APIkeyID}} supprimée par {{userEmail}}",
       "IncreasedThrottling": "Débit de l'API fixé à {{throttlingRate}} pour {{weeks}} semaines",
       "GrantAccess": "Accès accordé à {{userEmail}}",
@@ -634,7 +635,7 @@
       "1000 requests per minute": "1000 demandes par minute"
     },
     "errorCreatingDownload": "Une erreur s'est produite lors du téléchargement. Veuillez réessayer plus tard ou contacter l'équipe de soutien.",
-    "noEvents": "Aucun événement trouvé, il peut falloir plusieurs minutes pour que l'activité récente apparaisse."
+    "noEvents": "Aucun événement trouvé, la compilation d'activités récentes peut prendre plusieurs minutes."
   },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
@@ -646,26 +647,26 @@
   "gcForms": "Formulaires GC",
   "gcFormsEdit": "Modifier",
   "editLock": {
-    "title": "Ce formulaire est deja en cours de modification",
-    "lockedMessage": "{{name}} travaille actuellement sur ce formulaire, ce qui signifie que vous ne pouvez pas y apporter de modifications a moins d'en prendre le controle.",
-    "readOnly": "Lecture seule : {{name}} modifie ce formulaire.",
+    "title": "Ce formulaire est déjà en cours de modification",
+    "lockedMessage": "{{name}} travaille actuellement sur ce formulaire. Vous ne pouvez pas y apporter de modifications à moins d'en prendre le contrôle.",
+    "readOnly": "En cours : {{name}} modifie ce formulaire.",
     "statusLabel": "Statut :",
-    "lastActivityLabel": "Derniere activite :",
+    "lastActivityLabel": "Dernière activité :",
     "statuses": {
       "active": "Actif en ce moment",
-      "idle": "Consulte le formulaire, sans activite recente",
+      "idle": "Ouvert, sans activité récente",
       "away": "Absent",
-      "stale": "Connexion inactive"
+      "stale": "Inactif"
     },
     "unknownUser": "Un autre utilisateur",
     "saveBlocked": "Enregistrement bloqué : {{name}} modifie ce formulaire.",
     "takeover": "Prendre le contrôle",
     "takingOver": "Prise de contrôle...",
     "syncingLatest": "Synchronisation de la plus récente version enregistrée du formulaire...",
-    "syncedLatest": "Vous avez maintenant le verrou de modification et la plus récente version enregistrée du formulaire a été chargée.",
+    "syncedLatest": "Vous modifiez maintenant la version enregistrée du formulaire la plus récente.",
     "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer.",
-    "sessionExpiredTitle": "Votre session de modification a expiré",
-    "sessionExpiredMessage": "La modification a été arrêtée parce que ce formulaire est resté inactif trop longtemps. Retournez à la liste des formulaires pour le rouvrir si vous devez encore apporter des changements.",
+    "sessionExpiredTitle": "Votre session a expiré",
+    "sessionExpiredMessage": "La modification a été arrêtée parce que ce formulaire était inactif. Veuillez rouvrir le formulaire pour y apporter des changements.",
     "returnToForms": "Retourner aux formulaires"
   },
   "gcFormsApi": "API",
