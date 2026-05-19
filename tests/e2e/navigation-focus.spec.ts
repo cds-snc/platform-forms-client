@@ -72,10 +72,12 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     }) => {
       await page.getByRole("radio", { name: "A" }).check({ force: true });
       await page.locator("button[data-testid='nextButton']").click();
+      await page.waitForTimeout(500);
       await expect(page.getByTestId("focus-h2")).toHaveText("A");
 
       await page.getByRole("textbox", { name: "QA" }).fill("test");
       await page.locator("button[data-testid='nextButton']").click();
+      await page.waitForTimeout(500);
       await expect(
         page.getByRole("heading", {
           level: 2,
