@@ -15,12 +15,12 @@ jobs:
     name: "Publish internal packages"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 2
 
       - name: Node.JS Setup
-        uses: actions/setup-node@670825a89dc0abd596e7a3abd0f5e3f6e5faf37c # v4.6.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: .nvmrc
           registry-url: "https://registry.npmjs.org"
