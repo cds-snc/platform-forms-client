@@ -651,8 +651,8 @@
     "lastActivityLabel": "Last activity:",
     "statuses": {
       "active": "Active session",
-      "idle": "No recent activity",
-      "away": "Away",
+      "idle": "Open session",
+      "away": "No recent activity",
       "stale": "Inactive session"
     },
     "unknownUser": "Another user",
