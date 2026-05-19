@@ -121,7 +121,7 @@ describe("EditLockClient", () => {
       );
 
       expect(mockState.toast.success).toHaveBeenCalledWith(
-        "You now have the edit lock and the latest saved form has been loaded.",
+        "editLock.syncedLatest",
         "wide"
       );
       expect(sessionStorage.getItem("showToast")).toBeNull();
@@ -194,7 +194,7 @@ describe("EditLockClient", () => {
         expect(mockState.editLockContext.takeover).toHaveBeenCalled();
       });
 
-      expect(toastSuccess).toHaveBeenCalledWith("editLock.syncedLatest", "wide");
+      expect(mockState.toast.success).toHaveBeenCalledWith("editLock.syncedLatest", "wide");
       expect(sessionStorage.getItem("showToast")).toBeNull();
     });
   });
