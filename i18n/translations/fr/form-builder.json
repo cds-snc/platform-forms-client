@@ -878,7 +878,7 @@
 
         "docsButton": {
           "text": "Accéder à la documentation API",
-          "link": "https://cds-snc.github.io/forms-api/accueil"
+          "link": "https://cds-snc.github.io/forms-api/fr"
         },
         "apiKey": {
           "title": "Récupérer les soumissions via l'API",
@@ -919,7 +919,7 @@
         "title": "La clé API a été générée",
         "message": "Les nouvelles réponses seront disponibles par l'API. Trouvez des instructions pour la configuration de l'intégration dans ",
         "docsLinkText": "la documentation API",
-        "docsLink": "https://cds-snc.github.io/forms-api/accueil/"
+        "docsLink": "https://cds-snc.github.io/forms-api/fr"
       },
       "keyExists": "La clé existe déjà",
       "keyIdToolTip": {
@@ -1284,7 +1284,7 @@
     },
     "apiDocNotes": {
       "title": "Configurez votre intégration API",
-      "text1": "Pour vous connecter à notre point de terminaison afin de récupérer des réponses, suivez la <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>Documentation API</a> pour développeurs."
+      "text1": "Pour vous connecter à notre point de terminaison afin de récupérer des réponses, suivez la <a href='https://cds-snc.github.io/forms-api/fr' target='_blank'>Documentation API</a> pour développeurs."
     },
     "vaultNote": {
       "text1": "Les réponses aux formulaires PROTÉGÉ B doivent être téléchargées de Formulaires GC",
