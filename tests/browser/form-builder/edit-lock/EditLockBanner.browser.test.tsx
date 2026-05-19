@@ -5,7 +5,7 @@ it("shows takeover available message and button when lock is expired", async () 
   );
 
   const message = page.getByText(
-    "The form is now free to edit. You can take over editing this form."
+    "The form is now available for editing."
   );
   await expect.element(message).toBeVisible();
 
@@ -51,7 +51,7 @@ function EditLockBannerHarness({
     setIsLockedByOther(isLockedByOther);
   }, [editLock, isLockedByOther, setEditLock, setIsLockedByOther]);
 
-  return <EditLockBanner takeover={takeover} getIsActiveTab={() => true} />;
+  return <EditLockBanner formId="1234" takeover={takeover} getIsActiveTab={() => true} />;
 }
 
 describe("<EditLockBanner />", () => {
@@ -75,7 +75,7 @@ describe("<EditLockBanner />", () => {
     await expect.element(pilotBadge).toBeVisible();
 
     const message = page.getByText(
-      "Avery Smith is currently working on this form, which means you cannot make changes unless you take over."
+      "Avery Smith is currently working on this form. You cannot make changes unless you take over."
     );
     await expect.element(message).toBeVisible();
 
@@ -92,11 +92,11 @@ describe("<EditLockBanner />", () => {
       />
     );
 
-    const status = page.getByText("Connection stale");
+    const status = page.getByText("Inactive");
     await expect.element(status).toBeVisible();
 
     const statusText = await status.element().textContent;
-    expect(statusText).toContain("Connection stale");
+    expect(statusText).toContain("Inactive");
 
     const lastActivity = page.getByText("Last activity:", { exact: false });
     await expect.element(lastActivity).toBeVisible();

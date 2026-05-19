@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
@@ -22,10 +22,8 @@ export const EditLockClient = ({
   formId: string;
 }) => {
   const pathname = usePathname();
-  const router = useRouter();
   const { t } = useTranslation("form-builder");
-  const { language, isPublished } = useTemplateStore((s) => ({
-    language: s.lang,
+  const { isPublished } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
   }));
   const { takeover, getIsActiveTab, hasSessionExpired, isEnabled } = useEditLockContext();
@@ -68,14 +66,14 @@ export const EditLockClient = ({
   // Show the session expired overlay only for the previous owner
   const showSessionExpiredOverlay = hasSessionExpired;
 
-  const returnToForms = () => {
-    router.push(`/${language}/forms`);
+  const reloadPage = () => {
+    window.location.reload();
   };
 
   return (
     <>
       {showSessionExpiredOverlay ? (
-        <EditLockSessionExpiredOverlay onReturnToForms={returnToForms} formId={formId} />
+        <EditLockSessionExpiredOverlay onReloadPage={reloadPage} formId={formId} />
       ) : (
         <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} formId={formId} />
       )}

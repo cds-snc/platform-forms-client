@@ -383,7 +383,7 @@
 }
 
 /* ===== Toast styles (after @theme to use defined variables) ===== */
-@import "../packages/core/styles/toast.css";
+@import "@gcforms/core/styles/toast.css";
 
 /* ===== Tailwind source detection ===== */
 @source "../app/**/*.{js,ts,jsx,tsx,mdx}";
