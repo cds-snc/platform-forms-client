@@ -5,7 +5,6 @@ import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@gcforms/database";
-import { AuthenticatedAction } from "./actions";
 
 // Hard coded since only one interval is supported currently
 const NOTIFICATIONS_INTERVAL = NotificationsInterval.DAY;
@@ -357,7 +356,19 @@ const sendArchivedFormNotificationsToAllUsers = async (
   );
 };
 
-const getAllFormUsers = async (formId: string) => {
+interface FormUser {
+  id: string;
+  email: string;
+  enabled: boolean;
+}
+
+interface Session {
+  user: {
+    email: string;
+  };
+}
+
+const getAllFormUsers = async (formId: string): Promise<FormUser[] | null> => {
   const template = await prisma.template
     .findUnique({
       where: {
@@ -388,15 +399,18 @@ const getAllFormUsers = async (formId: string) => {
 };
 
 // Public facing function to send notifications to all related users on a form archival
-export const sendArchivedFormNotifications = AuthenticatedAction(
-  async (session, formId: string, titleEn: string, titleFr: string) => {
-    const users = await getAllFormUsers(formId);
+export const sendArchivedFormNotifications = async (
+  session: Session,
+  formId: string,
+  titleEn: string,
+  titleFr: string
+): Promise<void> => {
+  const users = await getAllFormUsers(formId);
 
-    // Some older forms may not have users, do nothing
-    if (!Array.isArray(users) || users.length === 0) {
-      return;
-    }
-
-    sendArchivedFormNotificationsToAllUsers(users, formId, titleEn, titleFr, session.user.email);
+  // Some older forms may not have users, do nothing
+  if (!Array.isArray(users) || users.length === 0) {
+    return;
   }
-);
+
+  sendArchivedFormNotificationsToAllUsers(users, formId, titleEn, titleFr, session.user.email);
+};

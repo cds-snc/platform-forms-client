@@ -9,7 +9,7 @@ import { sendArchivedFormNotifications } from "@lib/notifications";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
-export const deleteForm = AuthenticatedAction(async (_, id: string) => {
+export const deleteForm = AuthenticatedAction(async (session, id: string) => {
   try {
     const template = await getPublicTemplateByID(id);
     if (!template) {
@@ -17,7 +17,7 @@ export const deleteForm = AuthenticatedAction(async (_, id: string) => {
     }
 
     await deleteTemplate(id);
-    await sendArchivedFormNotifications(id, template.form.titleEn, template.form.titleFr);
+    await sendArchivedFormNotifications(session, id, template.form.titleEn, template.form.titleFr);
 
     revalidatePath("app/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-forms");
   } catch (error) {

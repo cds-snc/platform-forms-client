@@ -37,7 +37,7 @@ export const getForm = AuthenticatedAction(
 
 // Note: copied from manage-forms actions and added revalidatePath()
 export const deleteForm = AuthenticatedAction(
-  async (_, id: string): Promise<void | { error?: string }> => {
+  async (session, id: string): Promise<void | { error?: string }> => {
     try {
       const template = await getPublicTemplateByID(id);
       if (!template) {
@@ -52,7 +52,12 @@ export const deleteForm = AuthenticatedAction(
         }
       });
 
-      await sendArchivedFormNotifications(id, template.form.titleEn, template.form.titleFr);
+      await sendArchivedFormNotifications(
+        session,
+        id,
+        template.form.titleEn,
+        template.form.titleFr
+      );
 
       revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
     } catch (e) {
