@@ -47,7 +47,7 @@ type ToastContext = {
 };
 
 export const ToastContainer = ({
-  autoClose = 3000,
+  autoClose = 7000,
   width = "",
   containerId = "",
   limit,
