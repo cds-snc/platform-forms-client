@@ -40,6 +40,9 @@ test.describe("Testing a basic frontend form", { tag: "@published-form" }, () =>
       // Submit the empty form
       await page.getByRole("button", { name: "Submit" }).click();
 
+      // wait for error messages to appear
+      await page.waitForTimeout(2000);
+
       await expect(
         page.getByRole("heading", { name: "Please correct the errors on the page." })
       ).toBeVisible();
