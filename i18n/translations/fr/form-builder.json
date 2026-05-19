@@ -549,12 +549,12 @@
     "title": "Afficher l'activité du formulaire",
     "dialog": {
       "title": "Télécharger l'activité du formulaire",
-      "downloadBtnText": "Télécharger CSV",
-      "allEventsTitle": "Tous les événements",
-      "allEventsDescription": "Téléchargez tous les événements qui se sont produits dans le formulaire.",
-      "allEventsCheckbox": "Tous les événements du formulaire",
+      "downloadBtnText": "Télécharger",
+      "allEventsTitle": "Tous les événements disponibles",
+      "allEventsDescription": "Téléchargez tous les événements qui se sont produits dans le formulaire dans les derniers 30 jours.",
+      "allEventsCheckbox": "Tous les événements disponibles",
       "specificEventsTitle": "Événements spécifiques",
-      "specificEventsDescription": "Choisissez les événements que vous souhaitez avoir dans le CSV.",
+      "specificEventsDescription": "Choisissez les événements que vous souhaitez avoir dans le fichier CSV.",
       "specific": {
         "formBuilding": "Création du formulaires",
         "formCollaboration": "Collaborateurs sur le formulaire",
@@ -650,10 +650,10 @@
     "statusLabel": "Statut :",
     "lastActivityLabel": "Dernière activité :",
     "statuses": {
-      "active": "Actif en ce moment",
-      "idle": "Ouvert, sans activité récente",
+      "active": "Session active",
+      "idle": "Aucune activité récente",
       "away": "Absent",
-      "stale": "Inactif"
+      "stale": "Session inactive"
     },
     "unknownUser": "Un autre utilisateur",
     "saveBlocked": "Enregistrement bloqué : {{name}} modifie ce formulaire.",

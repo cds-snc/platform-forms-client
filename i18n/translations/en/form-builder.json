@@ -549,12 +549,12 @@
     "title": "View form activity",
     "dialog": {
       "title": "Download form activity",
-      "downloadBtnText": "Download CSV",
-      "allEventsTitle": "All events",
-      "allEventsDescription": "Download all events that have occurred in the form.",
-      "allEventsCheckbox": "All form events",
+      "downloadBtnText": "Download",
+      "allEventsTitle": "All available events",
+      "allEventsDescription": "Download all events that have occurred in the form in the last 30 days.",
+      "allEventsCheckbox": "All available events",
       "specificEventsTitle": "Specific events",
-      "specificEventsDescription": "Choose which events you would like in the CSV.",
+      "specificEventsDescription": "Choose which events you would like in the CSV file.",
       "specific": {
         "formBuilding": "Creating the form",
         "formCollaboration": "Form collaborators",
@@ -650,10 +650,10 @@
     "statusLabel": "Status:",
     "lastActivityLabel": "Last activity:",
     "statuses": {
-      "active": "Active now",
-      "idle": "Open, no recent activity",
+      "active": "Active session",
+      "idle": "No recent activity",
       "away": "Away",
-      "stale": "Inactive"
+      "stale": "Inactive session"
     },
     "unknownUser": "Another user",
     "saveBlocked": "Saving blocked: {{name}} is editing this form.",
