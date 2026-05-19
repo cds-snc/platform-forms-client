@@ -339,7 +339,6 @@ const sendArchivedFormNotification = async (
 const sendArchivedFormNotificationsToAllUsers = async (
   users: {
     email: string;
-    enabled: boolean;
   }[],
   formId: string,
   formTitleEn: string,
@@ -350,17 +349,10 @@ const sendArchivedFormNotificationsToAllUsers = async (
     logMessage.debug("sendArchivedFormNotificationsToAllUsers missing users");
     return;
   }
-  users.forEach(
-    ({ email, enabled }) =>
-      enabled && sendArchivedFormNotification(email, formId, formTitleEn, formTitleFr, actionEmail)
+  users.forEach(({ email }) =>
+    sendArchivedFormNotification(email, formId, formTitleEn, formTitleFr, actionEmail)
   );
 };
-
-interface FormUser {
-  id: string;
-  email: string;
-  enabled: boolean;
-}
 
 interface Session {
   user: {
@@ -368,49 +360,24 @@ interface Session {
   };
 }
 
-const getAllFormUsers = async (formId: string): Promise<FormUser[] | null> => {
-  const template = await prisma.template
-    .findUnique({
-      where: {
-        id: formId,
-        ttl: { not: null },
-      },
-      select: {
-        users: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (!template) {
-    logMessage.debug(`getAllFormUsers template not found with id ${formId}`);
-    return null;
-  }
-
-  return template.users.map((user) => ({
-    id: user.id,
-    email: user.email,
-    enabled: true,
-  }));
-};
-
 // Public facing function to send notifications to all related users on a form archival
 export const sendArchivedFormNotifications = async (
   session: Session,
   formId: string,
   titleEn: string,
-  titleFr: string
+  titleFr: string,
+  templateUsers: { email: string }[]
 ): Promise<void> => {
-  const users = await getAllFormUsers(formId);
-
   // Some older forms may not have users, do nothing
-  if (!Array.isArray(users) || users.length === 0) {
+  if (!Array.isArray(templateUsers) || templateUsers.length === 0) {
     return;
   }
 
-  sendArchivedFormNotificationsToAllUsers(users, formId, titleEn, titleFr, session.user.email);
+  sendArchivedFormNotificationsToAllUsers(
+    templateUsers,
+    formId,
+    titleEn,
+    titleFr,
+    session.user.email
+  );
 };

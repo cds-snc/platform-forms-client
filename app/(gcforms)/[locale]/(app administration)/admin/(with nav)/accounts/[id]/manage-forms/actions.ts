@@ -4,20 +4,26 @@ import { deleteTemplate } from "@lib/templates";
 import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
-import { getPublicTemplateByID } from "@lib/templates";
+import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { sendArchivedFormNotifications } from "@lib/notifications";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const deleteForm = AuthenticatedAction(async (session, id: string) => {
   try {
-    const template = await getPublicTemplateByID(id);
+    const template = await getTemplateWithAssociatedUsers(id);
     if (!template) {
       throw new Error(`Invalid form archive attempt for form ID: ${id}`);
     }
 
     await deleteTemplate(id);
-    await sendArchivedFormNotifications(session, id, template.form.titleEn, template.form.titleFr);
+    await sendArchivedFormNotifications(
+      session,
+      id,
+      template.formRecord.form.titleEn,
+      template.formRecord.form.titleFr,
+      template.users
+    );
 
     revalidatePath("app/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-forms");
   } catch (error) {

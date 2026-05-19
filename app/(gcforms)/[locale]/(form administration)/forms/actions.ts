@@ -11,7 +11,7 @@ import { revalidatePath } from "next/cache";
 import { FormRecord } from "@lib/types";
 import { AuthenticatedAction } from "@lib/actions";
 import { sendArchivedFormNotifications } from "@lib/notifications";
-import { getPublicTemplateByID } from "@lib/templates";
+import { getTemplateWithAssociatedUsers } from "@lib/templates";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -39,7 +39,7 @@ export const getForm = AuthenticatedAction(
 export const deleteForm = AuthenticatedAction(
   async (session, id: string): Promise<void | { error?: string }> => {
     try {
-      const template = await getPublicTemplateByID(id);
+      const template = await getTemplateWithAssociatedUsers(id);
       if (!template) {
         throw new Error(`Invalid form archive attempt for form ID: ${id}`);
       }
@@ -55,8 +55,9 @@ export const deleteForm = AuthenticatedAction(
       await sendArchivedFormNotifications(
         session,
         id,
-        template.form.titleEn,
-        template.form.titleFr
+        template.formRecord.form.titleEn,
+        template.formRecord.form.titleFr,
+        template.users
       );
 
       revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
