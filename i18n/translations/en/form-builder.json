@@ -591,7 +591,7 @@
       "DeleteAPIKey": "Deleted API Key",
       "RefreshAPIKey": "Re-generated API Key",
       "PublishForm": "Form published",
-      "InvitationAccepted": "Invitation accepted"
+      "InvitationAccepted": "Invitation accepted",
       "UpdateFormJsonConfig": "Downloaded copy of the form",
       "UpdatedNotificationSettings": "Updated notification settings"
     },
