@@ -49,8 +49,13 @@ test.describe("Testing attestation fields", { tag: "@published-form" }, () => {
       const errorMessage = page.getByTestId("errorMessage");
 
       // Submit without checking any boxes
+
+      // focus the submit button
+      await page.getByRole("button", { name: "Submit" }).focus();
+
       await page.getByRole("button", { name: "Submit" }).click({ force: true });
-      await page.waitForTimeout(500);
+
+      await page.waitForTimeout(2000);
 
       await expect(errorMessage).toBeVisible();
 

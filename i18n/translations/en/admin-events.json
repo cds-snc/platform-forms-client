@@ -1,6 +1,6 @@
 {
   "title": "Audit Log Events",
-  "noEvents": "No events found.",
+  "noEvents": "No activity found for the last 30 days.",
   "event": "Event",
   "subject": "Subject",
   "description": "Description",

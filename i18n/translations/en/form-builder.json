@@ -549,12 +549,12 @@
     "title": "View form activity",
     "dialog": {
       "title": "Download form activity",
-      "downloadBtnText": "Download CSV",
-      "allEventsTitle": "All events",
-      "allEventsDescription": "Download all events that have occurred in the form.",
-      "allEventsCheckbox": "All form events",
+      "downloadBtnText": "Download",
+      "allEventsTitle": "All available events",
+      "allEventsDescription": "Download all events that have occurred in the form in the last 30 days.",
+      "allEventsCheckbox": "All available events",
       "specificEventsTitle": "Specific events",
-      "specificEventsDescription": "Choose which events you would like in the CSV.",
+      "specificEventsDescription": "Choose which events you would like in the CSV file.",
       "specific": {
         "formBuilding": "Creating the form",
         "formCollaboration": "Form collaborators",
@@ -632,7 +632,7 @@
       "1000 requests per minute": "1000 requests per minute"
     },
     "errorCreatingDownload": "Something went wrong with the download. Please try again later or contact Support.",
-    "noEvents": "No events found, compiling recent activity can take several minutes."
+    "noEvents": "No activity found for the last 30 days. Recent activity can take a few minutes to appear."
   },
   "formIntroduction": "Form introduction",
   "formInvalidProperty": "Invalid: {{property}}",
@@ -650,10 +650,10 @@
     "statusLabel": "Status:",
     "lastActivityLabel": "Last activity:",
     "statuses": {
-      "active": "Active now",
-      "idle": "Open, no recent activity",
-      "away": "Away",
-      "stale": "Inactive"
+      "active": "Active session",
+      "idle": "Open session",
+      "away": "No recent activity",
+      "stale": "Inactive session"
     },
     "unknownUser": "Another user",
     "saveBlocked": "Saving blocked: {{name}} is editing this form.",
@@ -991,6 +991,13 @@
           "paragraph1": "Your form received new submissions:",
           "paragraph2": "Retrieve responses from GC Forms",
           "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Response options."
+        },
+        "archivedForm": {
+          "subject": "Your form has been archived | Votre formulaire a été archivé",
+          "paragraph1": "Your form has been archived:",
+          "paragraph2": "This was performed by:",
+          "paragraph3": "The form can be restored from the archive folder, within 30 days of archiving.",
+          "paragraph4": "After 30 days the form will be deleted permanently, this cannot be undone."
         }
       },
       "sessionUser": {

@@ -549,12 +549,12 @@
     "title": "Afficher l'activité du formulaire",
     "dialog": {
       "title": "Télécharger l'activité du formulaire",
-      "downloadBtnText": "Télécharger CSV",
-      "allEventsTitle": "Tous les événements",
-      "allEventsDescription": "Téléchargez tous les événements qui se sont produits dans le formulaire.",
-      "allEventsCheckbox": "Tous les événements du formulaire",
+      "downloadBtnText": "Télécharger",
+      "allEventsTitle": "Tous les événements disponibles",
+      "allEventsDescription": "Téléchargez tous les événements qui se sont produits dans le formulaire dans les derniers 30 jours.",
+      "allEventsCheckbox": "Tous les événements disponibles",
       "specificEventsTitle": "Événements spécifiques",
-      "specificEventsDescription": "Choisissez les événements que vous souhaitez avoir dans le CSV.",
+      "specificEventsDescription": "Choisissez les événements que vous souhaitez avoir dans le fichier CSV.",
       "specific": {
         "formBuilding": "Création du formulaires",
         "formCollaboration": "Collaborateurs sur le formulaire",
@@ -632,7 +632,7 @@
       "1000 requests per minute": "1000 demandes par minute"
     },
     "errorCreatingDownload": "Une erreur s'est produite lors du téléchargement. Veuillez réessayer plus tard ou contacter l'équipe de soutien.",
-    "noEvents": "Aucun événement trouvé, la compilation d'activités récentes peut prendre plusieurs minutes."
+    "noEvents": "Aucune activité trouvée dans les derniers 30 jours. L'activité récente peut prendre quelques minutes avant d'apparaître."
   },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
@@ -650,10 +650,10 @@
     "statusLabel": "Statut :",
     "lastActivityLabel": "Dernière activité :",
     "statuses": {
-      "active": "Actif en ce moment",
-      "idle": "Ouvert, sans activité récente",
-      "away": "Absent",
-      "stale": "Inactif"
+      "active": "Session active",
+      "idle": "Session ouverte",
+      "away": "Aucune activité récente",
+      "stale": "Session inactive"
     },
     "unknownUser": "Un autre utilisateur",
     "saveBlocked": "Enregistrement bloqué : {{name}} modifie ce formulaire.",
@@ -997,6 +997,13 @@
           "paragraph1": "Votre formulaire a reçu des nouvelles soumissions :",
           "paragraph2": "Allez à Formulaires GC",
           "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
+        },
+        "archivedForm": {
+          "subject": "Un formulaire dont vous êtes propriétaire a été archivé | A form you are owner of has been archived",
+          "paragraph1": "Votre formulaire a été archivé :",
+          "paragraph2": "Cette action a été effectuée par :",
+          "paragraph3": "Le formulaire peut être désarchivé à partir du dossier d'archives, dans les 30 jours suivant l'archivage.",
+          "paragraph4": "Après 30 jours, le formulaire sera définitivement supprimé, cela ne peut pas être annulé."
         }
       },
       "sessionUser": {
