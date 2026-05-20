@@ -100,5 +100,5 @@ jobs:
         if: failure()
         with:
           name: playwright-traces
-          path: playwright-report/
+          path: test-results/
           retention-days: 1
