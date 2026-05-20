@@ -45,4 +45,43 @@ describe("useGroupStore addGroup", () => {
     expect(result.current.template.groups?.[newGroupId]?.name).toBe("New page");
     expect(result.current.template.changeKey).not.toBe("before-add-group");
   });
+
+  it("connects start to the first page in the current layout order after adding a page", async () => {
+    const { result } = renderHook(
+      () => ({
+        addGroup: useGroupStore((state) => state.addGroup),
+        template: useTemplateStore((state) => ({
+          groups: state.form.groups,
+          groupsLayout: state.form.groupsLayout,
+          setGroupsLayout: state.setGroupsLayout,
+        })),
+      }),
+      { wrapper }
+    );
+
+    await waitFor(() => {
+      expect(result.current).not.toBeNull();
+    });
+
+    let firstPageId = "";
+    let secondPageId = "";
+
+    act(() => {
+      firstPageId = result.current.addGroup("Page 1");
+      secondPageId = result.current.addGroup("Page 2");
+    });
+
+    act(() => {
+      // Simulate the tree order changing without relying on raw object key order.
+      result.current.template.setGroupsLayout([secondPageId, firstPageId]);
+    });
+
+    act(() => {
+      result.current.addGroup("Page 3");
+    });
+
+    // Start should reconnect to the first page in the current layout order.
+    expect(result.current.template.groupsLayout).toEqual([secondPageId, firstPageId, expect.any(String)]);
+    expect(result.current.template.groups?.start.nextAction).toBe(secondPageId);
+  });
 });
