@@ -320,7 +320,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
           fixedRange
         )}
       >
-        <div className="pointer-events-auto flex h-full flex-col border-l border-slate-200 bg-white">
+        <div className="pointer-events-auto flex h-full flex-col overflow-hidden border-t border-l border-slate-200 bg-white">
           <div className="p-6">
             <div className="flex justify-between">
               <div>
