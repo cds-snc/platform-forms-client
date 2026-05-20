@@ -4,6 +4,8 @@ import { SecurityQuestionsForm } from "./components/client/SecurityQuestionsForm
 import { retrievePoolOfSecurityQuestions } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { authCheckAndRedirect } from "@lib/actions";
+import { checkOne } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -24,9 +26,10 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const { locale } = params;
 
   const { session } = await authCheckAndRedirect();
+  const isZitadelLoginEnabled = await checkOne(FeatureFlags.zitadelLogin);
 
   if (session.user.hasSecurityQuestions) {
-    redirect(`/${locale}/profile`);
+    redirect(`/${locale}/${isZitadelLoginEnabled ? "forms" : "profile"}`);
   }
 
   // Removes any removed (deprecated) questions and formats for the related language

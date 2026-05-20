@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.10] - 2026-05-15
+
+- Adds toast background override to /src/styles/_toast.scss
+
 ## [2.2.9] - 2026-05-11
 
 - Remove residual i18next dependency from package

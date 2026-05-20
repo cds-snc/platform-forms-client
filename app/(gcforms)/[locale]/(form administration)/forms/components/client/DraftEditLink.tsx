@@ -6,6 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { isEditLockStatus } from "@lib/editLockStatus";
+import { ga } from "@lib/client/clientHelpers";
 
 export const DraftEditLink = ({
   href,
@@ -27,6 +28,7 @@ export const DraftEditLink = ({
   const { t } = useTranslation(["my-forms", "form-builder", "common"]);
   const [isChecking, setIsChecking] = useState(false);
   const [lockedByName, setLockedByName] = useState<string | null>(null);
+  const [collaboratorCount, setCollaboratorCount] = useState<number | null>(null);
   const [showDialog, setShowDialog] = useState(false);
 
   const navigateToEditor = () => {
@@ -54,6 +56,9 @@ export const DraftEditLink = ({
 
     setIsChecking(true);
 
+    // Edit lock status is dynamic so a fetch is needed vs. using static props passed
+    // down from the layout level. Dynamic because a user can open a form in Edit mode
+    // then invite a user and change from Edit to Lock mode.
     try {
       const response = await fetch(`/api/templates/${formId}/edit-lock`, {
         method: "GET",
@@ -73,6 +78,13 @@ export const DraftEditLink = ({
 
       const name = payload.lock?.lockedByName || payload.lock?.lockedByEmail || null;
       setLockedByName(name);
+
+      const collaboratorCount =
+        typeof payload.pendingUserCount === "number" && typeof payload.userCount === "number"
+          ? payload.pendingUserCount + payload.userCount
+          : null;
+      setCollaboratorCount(collaboratorCount);
+
       setShowDialog(true);
     } catch {
       navigateToEditor();
@@ -88,6 +100,12 @@ export const DraftEditLink = ({
         onClick={() => {
           dialogRef.current?.close();
           setShowDialog(false);
+          ga("edit_lock_accept_read_only", {
+            formId,
+            timestamp: Date.now(),
+            location: "forms",
+            ...(collaboratorCount !== null && { userCount: collaboratorCount }),
+          });
           navigateToEditor();
         }}
       >
@@ -99,6 +117,12 @@ export const DraftEditLink = ({
         onClick={() => {
           dialogRef.current?.close();
           setShowDialog(false);
+          ga("edit_lock_decline_read_only", {
+            formId,
+            timestamp: Date.now(),
+            location: "forms",
+            ...(collaboratorCount !== null && { userCount: collaboratorCount }),
+          });
         }}
       >
         {t("cancel", { ns: "form-builder" })}

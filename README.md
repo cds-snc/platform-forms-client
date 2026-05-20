@@ -136,6 +136,13 @@ To run a single Playwright test file:
 
 ```sh
 yarn playwright:headless:local tests/e2e/smoke.spec.ts
+
+```
+
+or multiple
+
+```bash
+yarn playwright:headless:local tests/e2e/forms/required-attributes.spec.ts tests/e2e/navigation-focus.spec.ts tests/e2e/forms/attestation.spec.ts
 ```
 
 To run a single test by name:

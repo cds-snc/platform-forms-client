@@ -3,7 +3,6 @@ import { serverTranslation } from "@i18n";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { authCheckAndThrow } from "@lib/actions";
 import { Language } from "@lib/types/form-builder-types";
-import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 import { WaitForId } from "../components/WaitForId";
 import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
@@ -20,7 +19,6 @@ export default async function Layout(props: {
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
-  const allowLockedEditingFlag = await allowLockedEditing(session?.user.id);
 
   if (!session) {
     return <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />;
@@ -35,8 +33,8 @@ export default async function Layout(props: {
   return (
     <>
       <h1>{t("gcFormsSettings")}</h1>
-      <SettingsNavigation id={id} showManageAccess={allowLockedEditingFlag} />
-      <EditLockClient restrictToEditPaths={false} reloadOnTakeover={true}>
+      <SettingsNavigation id={id} />
+      <EditLockClient restrictToEditPaths={false} reloadOnTakeover={true} formId={id}>
         {children}
       </EditLockClient>
     </>
