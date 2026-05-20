@@ -34,19 +34,49 @@ import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
 import { BrandProperties, NotificationsInterval } from "@gcforms/types";
 import { redirect } from "next/navigation";
+import { logMessage } from "@lib/logger";
 import {
+  acquireEditLock,
   assertTemplateEditLock,
-  shouldEnforceTemplateEditLock,
+  publishEditLockPublishedEvent,
+  shouldEnforceTemplateEditLockWithVerifiedUserCount,
   TemplateEditLockedError,
 } from "@lib/editLocks";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 
-const assertTemplateEditLockIfEnabled = async (templateId: string, userId: string) => {
-  if (process.env.APP_ENV === "test" || !(await shouldEnforceTemplateEditLock(templateId))) {
+const assertTemplateEditLockIfEnabled = async ({
+  templateId,
+  userId,
+}: {
+  templateId: string;
+  userId: string;
+}) => {
+  if (
+    process.env.APP_ENV === "test" ||
+    !(await shouldEnforceTemplateEditLockWithVerifiedUserCount(templateId, userId))
+  ) {
     return;
   }
 
-  await assertTemplateEditLock({ templateId, userId });
+  try {
+    await assertTemplateEditLock({ templateId, userId });
+  } catch (error) {
+    if (!(error instanceof TemplateEditLockedError)) {
+      throw error;
+    }
+
+    const reacquired = await acquireEditLock({
+      templateId,
+      userId,
+    });
+
+    if (!reacquired.isOwner) {
+      throw new TemplateEditLockedError(
+        "Form is locked for editing until you acquire the lock.",
+        reacquired.lock
+      );
+    }
+  }
 };
 
 export type CreateOrUpdateTemplateType = {
@@ -109,8 +139,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       if (!formRecord) {
         throw new Error("Failed to create template");
       }
-      // revalidatePath must be at the end of a function.  It leverages the error object to trigger
-      // and internal refresh and can have awkward results if used before an error is thrown by a following fn.
+
       revalidatePath("/[locale]/forms", "page");
 
       return { formRecord };
@@ -143,7 +172,10 @@ export const updateTemplate = AuthenticatedAction(
     error?: string;
   }> => {
     try {
-      await assertTemplateEditLockIfEnabled(formID, session.user.id);
+      await assertTemplateEditLockIfEnabled({
+        templateId: formID,
+        userId: session.user.id,
+      });
       const formRecord = await updateDbTemplate({
         formID: formID,
         formConfig: formConfig,
@@ -193,7 +225,10 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
     let response: FormRecord | null = null;
 
     try {
-      await assertTemplateEditLockIfEnabled(formID, session.user.id);
+      await assertTemplateEditLockIfEnabled({
+        templateId: formID,
+        userId: session.user.id,
+      });
       response = await updateIsPublishedForTemplate(
         formID,
         isPublished,
@@ -207,7 +242,16 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
         );
       }
 
-      // Revalidate the form-builder layout and the specific published page
+      if (isPublished) {
+        try {
+          await publishEditLockPublishedEvent(formID);
+        } catch (error) {
+          logMessage.warn(
+            `Failed to publish edit-lock published event for ${formID}: ${(error as Error).message}`
+          );
+        }
+      }
+
       revalidatePath(`/form-builder/${formID}`, "layout");
       revalidatePath(`/form-builder/${formID}/published`, "page");
     } catch (error) {
@@ -240,7 +284,10 @@ export const updateTemplateFormPurpose = AuthenticatedAction(
     error?: string;
   }> => {
     try {
-      await assertTemplateEditLockIfEnabled(formID, session.user.id);
+      await assertTemplateEditLockIfEnabled({
+        templateId: formID,
+        userId: session.user.id,
+      });
       const response = await updateFormPurpose(formID, formPurpose);
       if (!response) {
         throw new Error(
@@ -273,7 +320,10 @@ export const updateTemplateFormSaveAndResume = AuthenticatedAction(
     error?: string;
   }> => {
     try {
-      await assertTemplateEditLockIfEnabled(formID, session.user.id);
+      await assertTemplateEditLockIfEnabled({
+        templateId: formID,
+        userId: session.user.id,
+      });
       const response = await updateFormSaveAndResume(formID, saveAndResume);
       if (!response) {
         throw new Error(
@@ -306,7 +356,10 @@ export const updateTemplateSecurityAttribute = AuthenticatedAction(
     error?: string;
   }> => {
     try {
-      await assertTemplateEditLockIfEnabled(formID, session.user.id);
+      await assertTemplateEditLockIfEnabled({
+        templateId: formID,
+        userId: session.user.id,
+      });
       const response = await updateSecurityAttribute(formID, securityAttribute);
       if (!response) {
         throw new Error(
@@ -342,10 +395,10 @@ export const closeForm = AuthenticatedAction(
     error?: string;
   }> => {
     try {
-      await assertTemplateEditLockIfEnabled(formID, session.user.id);
-      // closingDate: null means the form is open, or will be set to be open
-      // closingDate: a current or past date means the form is closed
-      // closingDate: a future date means the form is scheduled to close in the future
+      await assertTemplateEditLockIfEnabled({
+        templateId: formID,
+        userId: session.user.id,
+      });
 
       if (closingDate && !isValidDateString(closingDate)) {
         throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
@@ -387,7 +440,10 @@ export const updateTemplateUsers = AuthenticatedAction(
     }
 
     try {
-      await assertTemplateEditLockIfEnabled(formID, session.user.id);
+      await assertTemplateEditLockIfEnabled({
+        templateId: formID,
+        userId: session.user.id,
+      });
       const response = await updateAssignedUsersForTemplate(formID, users);
       if (!response) {
         throw new Error(
@@ -418,7 +474,10 @@ export const sendResponsesToVault = AuthenticatedAction(
     error?: string;
   }> => {
     try {
-      await assertTemplateEditLockIfEnabled(formID, session.user.id);
+      await assertTemplateEditLockIfEnabled({
+        templateId: formID,
+        userId: session.user.id,
+      });
       await removeDeliveryOption(formID);
 
       return {

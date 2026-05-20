@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "module": "esnext",
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "typeRoots": ["./node_modules/@types"],
+    "moduleResolution": "bundler"
+  },
+  "include": ["src", "tsdown.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

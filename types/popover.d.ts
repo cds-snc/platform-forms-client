@@ -1,14 +1,18 @@
-// Allowed custom attributes for the experimental Popover API used in some components
-// This file augments React's HTML attributes so JSX accepts `popover` and `popovertarget`.
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
-declare global {
-  namespace JSX {
-    interface IntrinsicAttributes {
-      // allow passing these attributes to any intrinsic element
-      popover?: boolean | string;
-      popovertarget?: string;
-      anchorName?: string;
-    }
+// Allowed custom attributes for the experimental Popover API used in some components
+// This file augments React's HTML attributes so JSX accepts Popover API attributes.
+
+declare module "react" {
+  interface HTMLAttributes<T> {
+    popover?: boolean | string;
+    anchorName?: string;
+  }
+
+  interface ButtonHTMLAttributes<T> {
+    popovertarget?: string;
+    popovertargetaction?: string;
+    interestfor?: string;
   }
 }
 

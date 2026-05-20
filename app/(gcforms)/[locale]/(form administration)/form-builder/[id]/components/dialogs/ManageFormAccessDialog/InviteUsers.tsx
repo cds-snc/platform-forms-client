@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useManageFormAccessDialog } from "./ManageFormAccessDialogContext";
 import { sendInvitation } from "./actions";
 import { Button } from "@clientComponents/globals";
@@ -7,6 +8,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 
 export const InviteUsers = () => {
   const { t } = useTranslation("manage-form-access");
+  const router = useRouter();
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
 
@@ -18,6 +20,7 @@ export const InviteUsers = () => {
     if (result.success) {
       toast.success(t("invitationSent"), "wide");
       setIsOpen(false);
+      router.refresh();
     }
 
     if (result.errors) {

@@ -1,0 +1,50 @@
+{
+  "name": "@gcforms/database",
+  "version": "1.0.9",
+  "author": "Canadian Digital Service",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "packageManager": "yarn@4.10.3",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
+        "require": "./dist/index.js"
+      }
+    }
+  },
+  "scripts": {
+    "reset": "prisma migrate reset -f --skip-seed",
+    "db:generate": "DATABASE_URL=dummy_url_for_build prisma generate && tsx fixGeneratedPrisma.ts",
+    "db:studio": "prisma studio --url=\"${DATABASE_URL}&sslmode=prefer\"",
+    "db:prod": "prisma migrate deploy && prisma db seed -- --environment production",
+    "db:dev": "prisma migrate dev && prisma db seed -- --environment development",
+    "db:test": "prisma migrate reset --force && prisma db seed -- --environment test",
+    "clean": "rm -fr ./src/generated && rm -fr ./dist",
+    "prebuild": "yarn clean && yarn db:generate",
+    "build": "yarn prebuild && tsdown",
+    "prepack": "yarn build"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.1045.0",
+    "@prisma/adapter-pg": "7.8.0",
+    "@prisma/client": "7.8.0",
+    "pg": "8.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.1",
+    "@types/pg": "8.20.0",
+    "prisma": "7.8.0",
+    "ts-command-line-args": "^2.5.1",
+    "tsdown": "^0.15.7",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

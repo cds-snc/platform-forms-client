@@ -6,21 +6,28 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "./FileName";
-import { ShareDropdown } from "./ShareDropdown";
+import { ShareButton } from "./ShareButton";
 import LanguageToggle from "./LanguageToggle";
-import { YourAccountDropdown } from "./YourAccountDropdown";
 import { Button } from "@clientComponents/globals";
 import Markdown from "markdown-to-jsx";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
 import { SkipLink } from "../SkipLink";
+import { PublishButton } from "./PublishMenu/PublishButton";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
   className?: string;
+  shareUsesManageAccess?: boolean;
+  alwaysShowLoginLink?: boolean;
 };
 
-export const Header = ({ context = "default", className }: HeaderParams) => {
+export const Header = ({
+  context = "default",
+  className,
+  shareUsesManageAccess = false,
+  alwaysShowLoginLink = false,
+}: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
   const { status } = useSession();
   const {
@@ -46,6 +53,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
   }, [t, isEnabled]);
 
   const paddingTop = isBannerEnabled ? "py-0" : "py-2";
+  const logoHref = status === "authenticated" ? `/${language}/forms` : `/${language}/form-builder`;
 
   return (
     <>
@@ -58,7 +66,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
         <SkipLink />
         {isBannerEnabled && (
           <div className="bg-slate-800 p-4 text-white">
-            <div className="mr-4 inline-block border-2 border-white-default px-2 py-1">
+            <div className="border-white-default mr-4 inline-block border-2 px-2 py-1">
               {bannerType}
             </div>
             <div className="inline-block">
@@ -70,7 +78,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
         <div className="grid w-full grid-flow-col p-2">
           <div className="flex">
             <Link
-              href={`/${language}/form-builder`}
+              href={logoHref}
               prefetch={false}
               id="logo"
               className="mr-7 flex border-r-1 pr-[14px] text-3xl font-semibold !text-black no-underline focus:bg-white"
@@ -85,23 +93,12 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
                 {t("title", { ns: "common" })}
               </div>
             )}
-
-            {status === "authenticated" && (
-              <>
-                <div className="mt-3 box-border block h-[40px] px-2 py-1 font-semibold">
-                  <Link href={`/${language}/forms`}>
-                    {t("adminNav.allForms", { ns: "common" })}
-                  </Link>
-                  {isFormBuilder && <span className="mx-2 inline-block"> / </span>}
-                </div>
-              </>
-            )}
             {isFormBuilder && <FileNameInput />}
           </div>
           <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
             <ul className="mt-2 flex list-none px-0 text-base">
-              {status !== "authenticated" && (
-                <li className="mr-2 py-2 text-base tablet:mr-4">
+              {(alwaysShowLoginLink || status !== "authenticated") && (
+                <li className="tablet:mr-4 mr-2 py-2 text-base">
                   {isZitadelLoginEnabled ? (
                     <form
                       action={async () => {
@@ -123,19 +120,20 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
                   )}
                 </li>
               )}
-              {
-                <li className="mr-2 py-2 tablet:mr-4">
-                  <LanguageToggle />
-                </li>
-              }
               {isFormBuilder && (
-                <li className="mr-2 text-base tablet:mr-4">
-                  <ShareDropdown />
-                </li>
+                <>
+                  <li className="tablet:mr-4 mr-2 text-base">
+                    <ShareButton manageAccessEnabled={shareUsesManageAccess} />
+                  </li>
+                  <li className="tablet:mr-4 mr-2 text-base">
+                    <PublishButton locale={language} />
+                  </li>
+                </>
               )}
+              <div className="mr-4 border-r-1" />
               {
-                <li className="mr-5 text-base">
-                  <YourAccountDropdown isAuthenticated={status === "authenticated"} />
+                <li className="tablet:mr-4 mr-2 py-2">
+                  <LanguageToggle />
                 </li>
               }
             </ul>

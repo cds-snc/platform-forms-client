@@ -1,5 +1,5 @@
 import { type TemplateStore } from "../../types";
-import { type FormElement, type FormProperties } from "@gcforms/types";
+import { FormElementTypes, type FormElement, type FormProperties } from "@gcforms/types";
 import { cleanRules } from "@gcforms/core";
 import { logMessage } from "@lib/logger";
 import { v4 as uuid } from "uuid";
@@ -26,6 +26,15 @@ const ensureUUID = (element: FormElement) => {
   }
 };
 
+const updateNumberInputType = (element: FormElement) => {
+  if (
+    element.type === FormElementTypes.textField &&
+    element.properties.validation?.type === "number"
+  ) {
+    element.type = FormElementTypes.numberInput;
+  }
+};
+
 export const transformFormProperties = (form?: FormProperties): FormProperties => {
   if (!form) {
     return {} as FormProperties;
@@ -36,6 +45,7 @@ export const transformFormProperties = (form?: FormProperties): FormProperties =
   transformedForm.elements.forEach((element) => {
     cleanElementRules(transformedForm.elements, element);
     ensureUUID(element);
+    updateNumberInputType(element);
   });
 
   return transformedForm;

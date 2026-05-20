@@ -1,0 +1,58 @@
+name: "Production - Deploy Rainbow Lambda"
+
+on:
+  release:
+    types: [published]
+
+env:
+  AWS_ACCOUNT_ID: ${{ vars.PRODUCTION_AWS_ACCOUNT_ID }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-rainbow-lambda:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0 # We need to fetch tags for the Rainbow deployment process (can be removed once we get rid of it)
+
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
+          role-session-name: ECSDeploy
+          aws-region: ca-central-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@19d944daaa35f0fa1d3f7f8af1d3f2e5de25c5b7 # v2.1.4
+
+      # In Production we use the release tag to identify the version of the application that is currently deployed
+      - name: Find last deployed version tag
+        id: last-deployed-version-tag
+        run: |
+          TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))
+          echo "value=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Rainbow deployment
+        uses: ./.github/workflows/rainbow-deployment
+        with:
+          deployment-identifier: ${{ github.sha }}
+          latest-release-identifier: ${{ steps.last-deployed-version-tag.outputs.value }}
+          ecr-registry-uri: ${{ steps.login-ecr.outputs.registry }}
+          ecr-registry-form-viewer-repository-name: form_viewer_production
+          cognito-app-client-id: ${{ secrets.PRODUCTION_COGNITO_APP_CLIENT_ID }}
+          cognito-user-pool-id: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID }}
+          load-balancer-listener-arn: ${{ vars.PRODUCTION_LOAD_BALANCER_LISTENER_ARN }}
+          forms-lambda-client-role-arn: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/forms-lambda-client
+          forms-lambda-client-subnet-ids: ${{ secrets.PRODUCTION_FORMS_LAMBDA_CLIENT_SUBNET_IDS }}
+          forms-lambda-client-security-group-ids: ${{ secrets.PRODUCTION_FORMS_LAMBDA_CLIENT_SECURITY_GROUP_IDS }}
+          hostname: forms-formulaires.alpha.canada.ca
+
+      - name: Logout of Amazon ECR
+        if: always()
+        run: docker logout ${{ steps.login-ecr.outputs.registry }}

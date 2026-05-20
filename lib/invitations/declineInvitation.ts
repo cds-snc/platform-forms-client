@@ -1,10 +1,11 @@
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma } from "@gcforms/database";
 import { InvitationNotFoundError, UserNotFoundError } from "./exceptions";
 import { getUser } from "@lib/users";
 import { AuditLogDetails, logEvent, AuditLogEvent } from "@lib/auditLogs";
 import { getAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { AccessControlError } from "@lib/auth/errors";
+import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 
 /**
  * Decline an invitation
@@ -36,9 +37,12 @@ export const declineInvitation = async (invitationId: string) => {
     );
   }
 
-  _deleteInvitation(invitationId).catch((e) => {
+  await _deleteInvitation(invitationId).catch((e) => {
     logMessage.error(`Error deleting invitation: ${e}`);
+    throw e;
   });
+
+  await invalidateTemplateEditLockUserCountCache(invitation.templateId);
 
   logEvent(
     ability.user.id,

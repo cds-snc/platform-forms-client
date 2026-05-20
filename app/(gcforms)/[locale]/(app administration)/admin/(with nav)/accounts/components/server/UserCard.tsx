@@ -1,8 +1,11 @@
+import { ViewTransition } from "react";
 import { AppUser } from "@lib/types/user-types";
 import { MoreMenu } from "../client/MoreMenu";
 import { PublishPermission } from "../client/PublishPermission";
 import { AccountActivation } from "../client/AccountActivation";
 import { ManageFormsButton } from "../client/ManageFormsButton";
+import { UserNameEmail } from "@formBuilder/components/shared/account/UserNameEmail";
+import { getAccountIdentityTransitionName } from "../../lib/viewTransitions";
 
 export const UserCard = async ({
   user,
@@ -18,12 +21,14 @@ export const UserCard = async ({
   publishFormsId: string;
 }) => {
   const isCurrentUser = user.id === currentUserId;
+  const transitionName = getAccountIdentityTransitionName(user.id);
 
   return (
     <>
       <div className="m-auto grow basis-1/3 p-4">
-        <h2 className="pb-6 text-base">{user.name}</h2>
-        <p className="mb-4">{user.email}</p>
+        <ViewTransition name={transitionName}>
+          <UserNameEmail name={user.name || ""} email={user.email} />
+        </ViewTransition>
 
         <div className="flex flex-wrap gap-2">
           {canManageUser && (

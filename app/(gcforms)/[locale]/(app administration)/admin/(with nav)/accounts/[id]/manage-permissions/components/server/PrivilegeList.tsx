@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { AppUser } from "@lib/types/user-types";
-import type { Privilege as PType } from "@prisma/client";
+import type { Privilege as PType } from "@gcforms/database";
 import { Privilege } from "../client/Privilege";
 
 type PrivilegeList = Omit<PType, "permissions" | "priority">[];
@@ -18,7 +18,7 @@ export const PrivilegeList = async ({
   const userPrivileges = formUser.privileges.map((privilege) => privilege.id);
 
   return (
-    <ul className="m-0 mb-12 p-0">
+    <ul className="m-0 mb-6 p-0">
       {privileges?.map((privilege) => {
         const active = userPrivileges.includes(privilege.id);
         const description =

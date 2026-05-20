@@ -13,7 +13,7 @@ import { EditableInput } from "./EditableInput";
 import { DeleteIcon } from "@serverComponents/icons";
 import { lockedItems } from "../constants";
 
-export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) => {
+export const TreeItem = ({ item, tree, onFocus, onBlur, handleDelete }: TreeItemProps) => {
   const { isFormElement, isSectionElement, isRepeatingSet } = useElementType(item);
 
   const canDragItem = !lockedItems.includes(item.getId());
@@ -31,10 +31,16 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
       return {};
     }
 
+    const itemProps = item.getProps();
+
     return {
-      ...item.getProps(),
+      ...itemProps,
       onFocus: () => {
         onFocus(item);
+      },
+      onBlur: (e: React.FocusEvent<HTMLDivElement>) => {
+        itemProps.onBlur?.(e);
+        onBlur?.();
       },
       onDoubleClick: (e: React.MouseEvent) => {
         e.preventDefault();
@@ -60,8 +66,8 @@ export const TreeItem = ({ item, tree, onFocus, handleDelete }: TreeItemProps) =
       className={cn(
         "block max-w-full",
         isFormElement && "outline-none",
-        isSectionElement && "outline-indigo-700 outline-offset-[-4px]",
-        item.isDraggingOver() && item.isDragTarget() && "border-1 border-dashed border-blue-focus"
+        isSectionElement && "outline-offset-[-4px] outline-indigo-700",
+        item.isDraggingOver() && item.isDragTarget() && "border-blue-focus border-1 border-dashed"
       )}
     >
       <ItemContent item={item}>

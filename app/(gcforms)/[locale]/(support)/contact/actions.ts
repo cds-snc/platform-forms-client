@@ -3,7 +3,18 @@
 import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
-import { email, minLength, object, safeParse, string, toLowerCase, trim, pipe } from "valibot";
+import { isValidGovEmail } from "@lib/validation/validation";
+import {
+  email,
+  minLength,
+  object,
+  safeParse,
+  string,
+  toLowerCase,
+  trim,
+  pipe,
+  check,
+} from "valibot";
 
 export interface ErrorStates {
   validationErrors: {
@@ -126,7 +137,11 @@ const validate = async (
       toLowerCase(),
       trim(),
       minLength(1, t("input-validation.required", { ns: "common" })),
-      email(t("input-validation.email", { ns: "common" }))
+      email(t("input-validation.email", { ns: "common" })),
+      check(
+        (email) => isValidGovEmail(email),
+        t("input-validation.validGovEmail", { ns: "common" })
+      )
     ),
     department: pipe(string(), minLength(1, t("input-validation.required", { ns: "common" }))),
     // Note: branch and jobTitle are not required/validated

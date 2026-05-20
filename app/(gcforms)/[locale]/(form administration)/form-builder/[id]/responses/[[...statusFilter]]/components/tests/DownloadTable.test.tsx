@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import React from "react";
 import { act, render } from "@testing-library/react";
@@ -8,7 +8,7 @@ import { VaultSubmissionOverview, VaultStatus } from "@lib/types";
 import axios from "axios";
 import { StatusFilter } from "../../types";
 
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
   useSearchParams: () => ({
     get: (key: string) => {
       if (key === "keys") {
@@ -17,26 +17,26 @@ jest.mock("next/navigation", () => ({
       return undefined;
     },
   }),
-  usePathname: jest.fn(),
-  useParams: jest.fn(() => ({
+  usePathname: vi.fn(),
+  useParams: vi.fn(() => ({
     statusFilter: [],
   })),
   useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn(),
+    push: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
   }),
 }));
 
-jest.mock("../../actions", () => ({
+vi.mock("../../actions", () => ({
   __esModule: true,
-  getSubmissionsByFormat: jest.fn(),
+  getSubmissionsByFormat: vi.fn(),
 }));
 
 describe("Download Table", () => {
   it("Download Table should render", async () => {
     const promise = Promise.resolve();
-    const axiosSpy = jest.spyOn(axios, "get");
+    const axiosSpy = vi.spyOn(axios, "get");
 
     axiosSpy.mockImplementation((url: string) => {
       if (url === "/api/settings/nagwarePhaseEncouraged") {

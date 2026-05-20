@@ -22,6 +22,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { SectionName } from "./SectionName";
 import { Language } from "@lib/types/form-builder-types";
 import { lockedGroups } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 
 const GroupAndChoiceSelect = ({
   groupId,
@@ -159,6 +160,8 @@ export const MultiActionSelector = ({
     language: s.translationLanguagePriority,
   }));
 
+  const { saveDraftIfNeeded } = useTemplateContext();
+
   const updateGroupId = (index: number, id: string) => {
     const rules = [...nextActions];
     const choiceId = ensureChoiceId(rules[index]["choiceId"]);
@@ -213,7 +216,7 @@ export const MultiActionSelector = ({
       <div className="sticky top-0 flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
         <div>
           <SectionName lang={lang} sectionName={sectionName} />
-          <h3 className="mb-6 ml-2 mt-2 block text-sm font-normal">
+          <h3 className="mt-2 mb-6 ml-2 block text-sm font-normal">
             {t("logic.questionTitle")} <strong> {title}</strong>
           </h3>
 
@@ -252,6 +255,7 @@ export const MultiActionSelector = ({
               parent && setGroupNextAction(parent as string, nextActions);
               setChangeKey(String(new Date().getTime()));
               flow.current?.redraw();
+              saveDraftIfNeeded();
               toast.success(t("logic.actionsSaved"));
             }}
           >

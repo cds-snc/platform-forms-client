@@ -1,114 +1,173 @@
 "use client";
-import React, { type JSX } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
-import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
-import { useCharacterCount } from "@lib/hooks/useCharacterCount";
+import { langToLocale, getNumberFormatOptions, normalizeLocaleInput } from "./utils";
 
 export interface NumberInputProps extends InputFieldProps {
   placeholder?: string;
   allowNegativeNumbers?: boolean;
   stepCount?: number;
-  maxLength?: number;
+  currencyCode?: string;
+  useThousandsSeparator?: boolean;
+  minValue?: number;
+  maxValue?: number;
+  minDigits?: number;
+  maxDigits?: number;
+  lang?: string;
 }
 
-export const NumberInput = (
-  props: NumberInputProps & JSX.IntrinsicElements["input"]
-): React.ReactElement => {
+const BASE_ALLOWED_KEYS = [
+  "Backspace",
+  "Delete",
+  "Tab",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowUp",
+  "ArrowDown",
+  "Home",
+  "End",
+];
+
+export const NumberInput = (props: NumberInputProps): React.ReactElement => {
   const {
     id,
     className,
     required,
     ariaDescribedBy,
     placeholder,
-    maxLength,
     allowNegativeNumbers,
     stepCount,
+    currencyCode,
+    useThousandsSeparator,
     lang,
   } = props;
-  const [field, meta, helpers] = useField(props);
-  const { t, i18n } = useTranslation("common", { lng: lang });
 
-  const { setRemainingCharacters, ariaDescribedByIds, CharacterCountDisplay } = useCharacterCount({
-    maxLength,
-    id: id ?? "",
-    lang,
+  const [field, meta, helpers] = useField(props);
+
+  const locale = langToLocale(lang);
+
+  const formatOptions = useMemo<Intl.NumberFormatOptions>(
+    () => getNumberFormatOptions({ currencyCode, stepCount, useThousandsSeparator }),
+    [stepCount, currencyCode, useThousandsSeparator]
+  );
+
+  // Format a raw number into a locale-aware display string
+  const formatForDisplay = useCallback(
+    (value: number) => {
+      if (Number.isNaN(value)) return "";
+      return new Intl.NumberFormat(locale, formatOptions).format(value);
+    },
+    [locale, formatOptions]
+  );
+
+  // The display value shown in the input (locale-formatted).
+  // Formik holds the raw numeric string (e.g. "123.45") for DB storage.
+  const [inputValue, setInputValue] = useState(() => {
+    const num = Number(field.value);
+    return field.value && !Number.isNaN(num) ? formatForDisplay(num) : (field.value ?? "");
   });
 
-  const decimalSeparator = t("decimalSeparator");
+  // When locale or format options change, reformat the display from the stable Formik number.
+  // formatOptions identity is stable across renders thanks to useMemo above.
+  const [prevFormat, setPrevFormat] = useState({ locale, formatOptions });
+  if (prevFormat.locale !== locale || prevFormat.formatOptions !== formatOptions) {
+    const num = Number(field.value);
+    if (field.value !== undefined && field.value !== "" && !Number.isNaN(num)) {
+      setInputValue(formatForDisplay(num));
+    }
+    setPrevFormat({ locale, formatOptions });
+  }
 
-  const handleNumberInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = event.target.value;
-    newValue = newValue.replace(decimalSeparator, ".");
-    helpers.setValue(newValue);
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = event.target.value;
+    setInputValue(raw);
 
-    if (maxLength) {
-      setRemainingCharacters(maxLength - newValue.length);
+    // Normalize locale-specific formatting (grouping separators, locale decimal,
+    // currency symbols) so that Number() can parse the result reliably.
+    const normalized = normalizeLocaleInput(raw, locale);
+
+    // Allow incomplete intermediate states while typing
+    if (normalized === "" || normalized === "-" || normalized === "." || normalized === "-.") {
+      helpers.setValue(normalized);
+      return;
+    }
+
+    const value = Number(normalized);
+    if (!Number.isNaN(value)) {
+      helpers.setValue(String(value));
     }
   };
 
-  const displayValue = field.value
-    ? String(field.value).replace(".", decimalSeparator)
-    : field.value;
+  const allowedKeys = useMemo(() => {
+    const keys = new Set(BASE_ALLOWED_KEYS);
+    if (allowNegativeNumbers) keys.add("-");
+    if (currencyCode) keys.add("$");
+    if (currencyCode || (stepCount && stepCount > 0)) {
+      keys.add(".");
+      keys.add(",");
+    }
+    return keys;
+  }, [allowNegativeNumbers, currencyCode, stepCount]);
+
+  const handleOnKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const isDigit = /^\d$/.test(event.key);
+    const isAllowedKey = allowedKeys.has(event.key);
+    const isModifier = event.ctrlKey || event.metaKey;
+
+    const normalizedInputValue = normalizeLocaleInput(inputValue, locale);
+
+    // Block a second decimal separator if one already exists
+    if ((event.key === "." || event.key === ",") && normalizedInputValue.includes(".")) {
+      event.preventDefault();
+      return;
+    }
+
+    if (!isDigit && !isAllowedKey && !isModifier) {
+      event.preventDefault();
+    }
+  };
+
+  const handleOnBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    field.onBlur(event);
+
+    const num = Number(field.value);
+    if (field.value === "" || Number.isNaN(num)) {
+      setInputValue(field.value ?? "");
+      return;
+    }
+
+    // Store the clean number in Formik (for DB)
+    helpers.setValue(String(num));
+    // Show the formatted version in the input
+    setInputValue(formatForDisplay(num));
+  };
 
   const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
 
-  const checkNumericValues = (key: string, currentTarget: EventTarget & HTMLInputElement) => {
-    const { value, selectionStart, selectionEnd } = currentTarget;
-    const start = selectionStart ?? 0;
-    const end = selectionEnd ?? 0;
-
-    const futureValue = value.slice(0, start) + key + value.slice(end);
-
-    const negativePattern = allowNegativeNumbers ? "-?" : "";
-
-    const escapedSeparator = decimalSeparator === "." ? "\\." : decimalSeparator;
-    const decimalPattern =
-      stepCount && stepCount > 0 ? `(${escapedSeparator}\\d{0,${stepCount}})?` : "";
-
-    const regex = new RegExp(`^${negativePattern}\\d*${decimalPattern}$`);
-
-    if (!regex.test(futureValue)) {
-      return false;
-    }
-  };
+  const ariaDescribedByValue = [meta.error ? `errorMessage${id}` : null, ariaDescribedBy]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <>
-      {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={`errorMessage${id}`}>{meta.error}</ErrorMessage>}
       <input
         data-testid="numberInput"
         className={classes}
         id={id}
-        type="text"
-        required={required}
         placeholder={placeholder}
-        {...ariaDescribedByIds(!!meta.error, ariaDescribedBy)}
-        {...field}
-        onChange={handleNumberInputChange}
-        key={`${id}-${i18n.language}`}
-        value={displayValue}
+        {...(ariaDescribedByValue && { "aria-describedby": ariaDescribedByValue })}
+        name={field.name}
+        value={inputValue}
+        onChange={handleOnChange}
+        onKeyDown={handleOnKeyDown}
+        onBlur={handleOnBlur}
+        required={required}
         inputMode="numeric"
-        aria-describedby={`${id}-description-number`}
-        onKeyDown={(e) => {
-          if (
-            e.key.includes("Arrow") ||
-            e.key === "Backspace" ||
-            e.key === "Enter" ||
-            e.key === "Shift" ||
-            e.key === "Tab"
-          ) {
-            return;
-          }
-
-          if (checkNumericValues(e.key, e.currentTarget) === false) {
-            e.preventDefault();
-          }
-        }}
       />
-      <CharacterCountDisplay />
     </>
   );
 };

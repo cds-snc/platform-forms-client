@@ -1,5 +1,5 @@
 import { formCache } from "./cache/formCache";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import {
   PublicFormRecord,
   FormRecord,
@@ -8,7 +8,7 @@ import {
   SecurityAttribute,
   ClosedDetails,
 } from "@lib/types";
-import { Prisma } from "@prisma/client";
+
 import { authorization, getAbility } from "./privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, AuditLogEvent, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
@@ -901,9 +901,9 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
   logEvent(
     user.id,
     { type: "Form", id: formID },
-    "GrantFormAccess",
-    AuditLogDetails.GrantFormAccess,
-    { userID: userID }
+    AuditLogEvent.InvitationAccepted,
+    AuditLogDetails.AcceptedInvitation,
+    { userEmail: user.email }
   );
 
   notifyOwnersOwnerAdded(

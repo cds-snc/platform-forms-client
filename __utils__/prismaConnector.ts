@@ -1,32 +1,28 @@
-import { PrismaClient, Prisma } from "@prisma/client";
-import { mockDeep, mockReset, DeepMockProxy } from "jest-mock-extended";
-import { prisma } from "@lib/integration/prismaConnector";
+import { vi, beforeEach } from "vitest";
+import { mockReset, mockDeep, DeepMockProxy } from "vitest-mock-extended";
+import { prisma, PrismaClient, Prisma } from "@gcforms/database";
 
-export const {
-  PrismaClientInitializationError,
-  PrismaClientKnownRequestError,
-  PrismaClientUnknownRequestError,
-  PrismaClientValidationError,
-} = Prisma;
+vi.mock("@gcforms/database", () => ({
+  __esModule: true,
+  prisma: mockDeep<PrismaClient>(),
+  Prisma: mockDeep<typeof Prisma>(),
+  prismaErrors: vi.fn(<Error, T>(e: Error, returnValue: T): T => {
+    // If we're in test mode ignore that we cannot connect to the Prisma Backend
+    if (process.env.APP_ENV === "test" && e instanceof Prisma.PrismaClientInitializationError) {
+      return returnValue;
+    }
 
-jest.mock("@lib/integration/prismaConnector", () => {
-  // Only mock prisma when were running in the Node jest environment
-  if (typeof window === "undefined") {
-    const originalModule = jest.requireActual("@lib/integration/prismaConnector");
-    return {
-      __esModule: true,
-      ...originalModule,
-      prisma: mockDeep<PrismaClient>(),
-    };
-  } else {
-    return {};
-  }
+    // Return the backup value if a Prisma Error occurs
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      return returnValue;
+    }
+
+    throw e;
+  }),
+}));
+
+beforeEach(() => {
+  mockReset(prismaMock);
 });
-// Only mock prisma when were running in the Node jest environment
-if (typeof window === "undefined") {
-  beforeEach(() => {
-    mockReset(prismaMock);
-  });
-}
 
 export const prismaMock = prisma as unknown as DeepMockProxy<PrismaClient>;

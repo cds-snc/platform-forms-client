@@ -1,78 +1,82 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useEditLock } from "@lib/hooks/form-builder/useEditLock";
+import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { EditLockBanner } from "@formBuilder/components/shared/edit-lock/EditLockBanner";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
-
-const isEditPath = (pathname: string | null) => {
-  if (!pathname) return false;
-  return (
-    pathname.includes("/form-builder/") &&
-    (pathname.includes("/edit") || pathname.includes("/translate") || pathname.includes("/preview"))
-  );
-};
-
-const makeSessionId = () => {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID();
-  }
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-};
+import { EditLockSessionExpiredOverlay } from "./EditLockSessionExpiredOverlay";
+import { useEditLockContext, isEditPath } from "./EditLockContext";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 export const EditLockClient = ({
-  formId,
-  lockedEditingEnabled = true,
-  editLockPresenceEnabled = false,
   children,
   restrictToEditPaths = true,
   reloadOnTakeover = false,
+  formId,
 }: {
-  formId: string;
-  lockedEditingEnabled?: boolean;
-  editLockPresenceEnabled?: boolean;
   children?: React.ReactNode;
   restrictToEditPaths?: boolean;
   reloadOnTakeover?: boolean;
+  formId: string;
 }) => {
-  "use memo";
   const pathname = usePathname();
-  const currentFormId = useTemplateStore((s) => s.id);
-  const activeFormId = currentFormId || formId;
-  const enabled =
-    lockedEditingEnabled &&
-    process.env.NEXT_PUBLIC_APP_ENV !== "test" &&
-    (!restrictToEditPaths || isEditPath(pathname)) &&
-    activeFormId !== "0000";
-  const [sessionId] = useState(() => makeSessionId());
-
-  const { takeover } = useEditLock({
-    formId: activeFormId,
-    enabled,
-    presenceEnabled: editLockPresenceEnabled,
-    sessionId,
-  });
-
+  const { t } = useTranslation("form-builder");
+  const { isPublished } = useTemplateStore((s) => ({
+    isPublished: s.isPublished,
+  }));
+  const { takeover, getIsActiveTab, hasSessionExpired, isEnabled } = useEditLockContext();
   const { headlessTree } = useTreeRef();
+
+  // Show takeover toast - Step 2: for pages that reload, show toast after reload
+  const toastString = t("editLock.syncedLatest");
+  useEffect(() => {
+    try {
+      const toastKey = sessionStorage.getItem("showToast");
+      if (toastKey === "editLockTakeoverSuccess") {
+        toast.success(toastString, "wide");
+        sessionStorage.removeItem("showToast");
+      }
+    } catch {
+      // Fail closed if storage is unavailable (e.g. blocked or sandboxed context)
+    }
+  }, [toastString]);
+
+  const showLockedEdit =
+    isEnabled && !isPublished && (!restrictToEditPaths || isEditPath(pathname));
 
   const handleTakeover = async () => {
     await takeover();
     headlessTree?.current?.rebuildTree();
 
     if (reloadOnTakeover) {
+      sessionStorage.setItem("showToast", "editLockTakeoverSuccess");
       window.location.reload();
+    } else {
+      // Show takeover toast immediately when no page reload will occur
+      toast.success(t("editLock.syncedLatest"), "wide");
     }
   };
 
-  if (!enabled) {
+  if (!showLockedEdit) {
     return children ? <>{children}</> : null;
   }
 
+  // Show the session expired overlay only for the previous owner
+  const showSessionExpiredOverlay = hasSessionExpired;
+
+  const reloadPage = () => {
+    window.location.reload();
+  };
+
   return (
     <>
-      <EditLockBanner takeover={handleTakeover} presenceEnabled={editLockPresenceEnabled} />
+      {showSessionExpiredOverlay ? (
+        <EditLockSessionExpiredOverlay onReloadPage={reloadPage} formId={formId} />
+      ) : (
+        <EditLockBanner takeover={handleTakeover} getIsActiveTab={getIsActiveTab} formId={formId} />
+      )}
       {children}
     </>
   );

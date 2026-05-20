@@ -1,32 +1,31 @@
+import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { prismaMock } from "@jestUtils";
-import { getUsers, getOrCreateUser } from "@lib/users";
-import { Prisma } from "@prisma/client";
+import { prismaMock } from "@testUtils";
+import { getUsers, getUsersPage, getOrCreateUser } from "@lib/users";
+import { Prisma } from "@gcforms/database";
 
 import { AccessControlError } from "@lib/auth/errors";
 import { ManageUsers, Base } from "__utils__/permissions";
 
 import { logEvent } from "@lib/auditLogs";
-jest.mock("@lib/privileges");
+vi.mock("@lib/privileges");
 
 import { JWT } from "next-auth/jwt";
 import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authorization";
 
 const userId = "1";
 
-jest.mock("@lib/auditLogs", () => ({
+vi.mock("@lib/auditLogs", async () => {
+  const __actual0 = await vi.importActual<any>("@lib/auditLogs");
+  return {
   __esModule: true,
-  logEvent: jest.fn(),
-  get AuditLogDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
-  },
-  get AuditLogAccessDeniedDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
-  }
-}));
+  logEvent: vi.fn(),
+  AuditLogDetails: __actual0.AuditLogDetails,
+  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+});
 
-const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+const mockedLogEvent = vi.mocked(logEvent);
 
 describe("User query tests should fail gracefully", () => {
   beforeEach(() => {
@@ -34,7 +33,7 @@ describe("User query tests should fail gracefully", () => {
   });
   it("getOrCreateUser should fail gracefully - create", async () => {
     prismaMock.user.findUnique.mockResolvedValue(null);
-    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({ id: "2" });
+    (prismaMock.privilege.findUnique as MockedFunction<any>).mockResolvedValue({ id: "2" });
     prismaMock.user.create.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Timed out", {
         code: "P2024",
@@ -54,7 +53,7 @@ describe("User query tests should fail gracefully", () => {
         clientVersion: "4.12.0",
       })
     );
-    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({ id: "2" });
+    (prismaMock.privilege.findUnique as MockedFunction<any>).mockResolvedValue({ id: "2" });
     prismaMock.user.create.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Timed out", {
         code: "P2024",
@@ -89,7 +88,7 @@ describe("getOrCreateUser", () => {
       privileges: ManageUsers,
     };
 
-    (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue(user);
+    (prismaMock.user.findUnique as MockedFunction<any>).mockResolvedValue(user);
 
     const result = await getOrCreateUser({ email: "fads@asdf.ca" } as JWT);
     expect(result).toMatchObject(user);
@@ -105,10 +104,10 @@ describe("getOrCreateUser", () => {
     };
 
     prismaMock.user.findUnique.mockResolvedValue(null);
-    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+    (prismaMock.privilege.findUnique as MockedFunction<any>).mockResolvedValue({
       id: "2",
     });
-    (prismaMock.user.create as jest.MockedFunction<any>).mockResolvedValue(user);
+    (prismaMock.user.create as MockedFunction<any>).mockResolvedValue(user);
 
     const result = await getOrCreateUser({
       name: "test",
@@ -160,10 +159,112 @@ describe("getUsers", () => {
       },
     ];
 
-    (prismaMock.user.findMany as jest.MockedFunction<any>).mockResolvedValue(returnedUsers);
+    (prismaMock.user.findMany as MockedFunction<any>).mockResolvedValue(returnedUsers);
 
     const result = await getUsers();
     expect(result).toMatchObject(returnedUsers);
+  });
+
+  it("Returns a paginated list of users filtered by email", async () => {
+    const returnedUsers = [
+      {
+        id: "5",
+        name: "user_2",
+        email: "user-2@test.ca",
+        active: true,
+        privileges: Base,
+      },
+    ];
+
+    prismaMock.user.count.mockResolvedValue(1);
+    (prismaMock.user.findMany as MockedFunction<any>).mockResolvedValue(returnedUsers);
+
+    const result = await getUsersPage({
+      page: 2,
+      pageSize: 10,
+      property: "email",
+      query: "user-2",
+      userState: "active",
+    });
+
+    expect(prismaMock.user.count).toHaveBeenCalledWith({
+      where: {
+        active: true,
+        OR: [{ email: { contains: "user-2", mode: "insensitive" } }],
+      },
+    });
+
+    expect(prismaMock.user.findMany).toHaveBeenCalledWith({
+      where: {
+        active: true,
+        OR: [{ email: { contains: "user-2", mode: "insensitive" } }],
+      },
+      select: expect.any(Object),
+      skip: 10,
+      take: 10,
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    });
+
+    expect(result).toEqual({
+      users: returnedUsers,
+      totalCount: 1,
+      page: 2,
+      pageSize: 10,
+      totalPages: 1,
+    });
+  });
+
+  it("Returns a paginated list of users filtered by id", async () => {
+    const returnedUsers = [
+      {
+        id: "cmp1aao3z000hmonbhu53dvcf",
+        name: "user_3",
+        email: "user-3@test.ca",
+        active: true,
+        privileges: Base,
+      },
+    ];
+
+    prismaMock.user.count.mockResolvedValue(1);
+    (prismaMock.user.findMany as MockedFunction<any>).mockResolvedValue(returnedUsers);
+
+    const result = await getUsersPage({
+      property: "id",
+      query: "cmp1aao3z000hmonbhu53dvcf",
+    });
+
+    expect(prismaMock.user.count).toHaveBeenCalledWith({
+      where: {
+        OR: [{ id: "cmp1aao3z000hmonbhu53dvcf" }],
+      },
+    });
+
+    expect(result.users).toEqual(returnedUsers);
+  });
+
+  it("Returns an empty page cleanly when user search fails", async () => {
+    prismaMock.user.count.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.12.0",
+      })
+    );
+    prismaMock.user.findMany.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.12.0",
+      })
+    );
+
+    const result = await getUsersPage({ query: "test" });
+
+    expect(result).toEqual({
+      users: [],
+      totalCount: 0,
+      page: 1,
+      pageSize: 24,
+      totalPages: 0,
+    });
   });
 });
 

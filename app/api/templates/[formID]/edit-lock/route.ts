@@ -11,10 +11,12 @@ import {
   EditLockVisibilityState,
   getEditLockDisabledStatus,
   getEditLockStatus,
+  getTemplateCollaboratorCount,
   heartbeatEditLock,
   requestEditLockTakeoverSave,
   releaseEditLock,
   shouldEnforceTemplateEditLock,
+  shouldEnforceTemplateEditLockWithVerifiedUserCount,
   takeoverEditLock,
   TemplateEditLockedError,
   waitForEditLockTakeoverSaveAcknowledgement,
@@ -59,10 +61,11 @@ const parsePresence = (value: unknown): EditLockPresenceInput | undefined => {
   };
 };
 
-export const GET = middleware([sessionExists()], async (_req, props) => {
+export const GET = middleware([sessionExists()], async (req, props) => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
   const params = props.params instanceof Promise ? await props.params : props.params;
   const formID = params?.formID;
+  const requestType = req.nextUrl.searchParams.get("requestType");
 
   if (!formID || typeof formID !== "string") {
     return NextResponse.json({ error: "Invalid or missing formID" }, { status: 400 });
@@ -73,12 +76,22 @@ export const GET = middleware([sessionExists()], async (_req, props) => {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  if (!(await shouldEnforceTemplateEditLock(formID))) {
+  const shouldEnforceEditLock =
+    requestType !== "lock-status-poll"
+      ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID, session.user.id)
+      : await shouldEnforceTemplateEditLock(formID, session.user.id);
+
+  if (!shouldEnforceEditLock) {
     return NextResponse.json(getEditLockDisabledStatus());
   }
 
   const status = await getEditLockStatus(formID, session.user.id);
-  return NextResponse.json(status);
+  const collaboratorCounts =
+    requestType !== "lock-status-poll" && (status.locked || status.lockedByOther)
+      ? await getTemplateCollaboratorCount(formID)
+      : null;
+
+  return NextResponse.json({ ...status, ...(collaboratorCounts ?? {}) });
 });
 
 export const POST = middleware([sessionExists()], async (_req: NextRequest, props) => {
@@ -104,15 +117,21 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
       presenceStatus?: string;
     };
   };
-  const presence = parsePresence(activity);
 
-  if (!(await shouldEnforceTemplateEditLock(formID))) {
+  const shouldEnforceEditLock =
+    action !== "heartbeat"
+      ? await shouldEnforceTemplateEditLockWithVerifiedUserCount(formID, session.user.id)
+      : await shouldEnforceTemplateEditLock(formID, session.user.id);
+
+  if (!shouldEnforceEditLock) {
     if (action === "release") {
       return NextResponse.json({ released: false });
     }
 
     return NextResponse.json(getEditLockDisabledStatus());
   }
+
+  const presence = parsePresence(activity);
 
   try {
     if (action === "acquire") {

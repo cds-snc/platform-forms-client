@@ -12,6 +12,10 @@ import { isValidDate } from "./date";
 import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
 import { isSafeRegex } from "./regex";
+import { isNumberInput } from "../utils/isNumberInput";
+
+// Minimal translation function type to avoid i18next dependency
+export type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 
 export const isFieldResponseValid = (
   value: unknown,
@@ -19,7 +23,7 @@ export const isFieldResponseValid = (
   componentType: string,
   formElement: FormElement,
   validator: ValidationProperties,
-  t: (str: string) => string
+  t: TranslateFn
 ): string | null | Record<string, unknown>[] => {
   // Note that this will ignore a file upload since the value is an object. We could check the
   // file's file name length but this is probably not necessary since OS's have a filename limit.
@@ -28,16 +32,66 @@ export const isFieldResponseValid = (
   }
 
   switch (componentType) {
-    case FormElementTypes.textField: {
+    case FormElementTypes.textField:
+    case FormElementTypes.numberInput: {
+      // Required check first
       const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
 
-      let currentRegex = getRegexByType(validator.type, t, validator.regex);
+      // Handle NumberInput validation with backwards compatibility
+      // for legacy number inputs that were stored as text fields
+      // with validation.type "number"
+      if (isNumberInput(formElement)) {
+        // Number validation
+        let currentRegex = getRegexByType("number", t);
 
-      // Check if negative numbers are allowed.
-      if (formElement.properties.allowNegativeNumbers && validator.type === "number") {
-        currentRegex = getRegexByType("canBeNegativeNumber", t);
+        // Check if negative numbers are allowed.
+        if (formElement.properties.allowNegativeNumbers) {
+          currentRegex = getRegexByType("canBeNegativeNumber", t);
+        }
+
+        // Apply number validation
+        if (currentRegex && currentRegex.regex) {
+          const regex = new RegExp(currentRegex.regex);
+          if (typedValue && !regex.test(typedValue)) {
+            return currentRegex.error;
+          }
+        }
+
+        if (typedValue) {
+          const numericValue = Number(typedValue);
+
+          // The number regex permits inputs like ".", ",", or whitespace which parse to NaN.
+          // Treat any non-empty value that fails to parse as a number as invalid so it cannot
+          // bypass the min/max checks below.
+          if (Number.isNaN(numericValue)) {
+            return currentRegex ? currentRegex.error : t("input-validation.number");
+          }
+
+          // MinValue and Max Value validation
+          if (validator.minValue != null && numericValue < validator.minValue) {
+            return t("input-validation.too-small", { min: String(validator.minValue) });
+          }
+
+          if (validator.maxValue != null && numericValue > validator.maxValue) {
+            return t("input-validation.too-large", { max: String(validator.maxValue) });
+          }
+
+          // minDigits and maxDigits validation
+          const digitCount = typedValue.replace(/[^\d]/g, "").length;
+          if (validator.minDigits && digitCount < validator.minDigits) {
+            return t("input-validation.too-few-digits");
+          }
+
+          if (validator.maxDigits && digitCount > validator.maxDigits) {
+            return t("input-validation.too-many-digits");
+          }
+        }
+
+        break;
       }
+
+      const currentRegex = getRegexByType(validator.type, t, validator.regex);
 
       if (validator.type && currentRegex && currentRegex.regex) {
         // Check regex for safety before using it.
@@ -45,14 +99,17 @@ export const isFieldResponseValid = (
           return t("input-validation.invalidRegex");
         }
 
-        // Check for different types of fields, email, date, number, custom etc
+        // Check for different types of fields, email, date, custom etc
         const regex = new RegExp(currentRegex.regex);
         if (typedValue && !regex.test(typedValue)) {
           return currentRegex.error;
         }
       }
-      if (validator.maxLength && (value as string).length > validator.maxLength)
+
+      if (validator.maxLength && (value as string).length > validator.maxLength) {
         return t("input-validation.too-many-characters");
+      }
+
       break;
     }
     case FormElementTypes.textArea: {

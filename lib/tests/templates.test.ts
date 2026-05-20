@@ -1,5 +1,6 @@
+import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { prismaMock } from "@jestUtils";
+import { prismaMock } from "@testUtils";
 import {
   createTemplate,
   getAllTemplates,
@@ -18,12 +19,12 @@ import {
 } from "../templates";
 
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
-import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
+import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 
 // structuredClone is available starting in Node 17.
 // Until we catch up... polyfill
 import v8 from "v8";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@gcforms/database";
 
 import { logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
@@ -35,36 +36,30 @@ import {
   mockGetAbility,
 } from "__utils__/authorization";
 
-jest.mock("@lib/auditLogs", () => ({
+vi.mock("@lib/auditLogs", async () => {
+  const __actual0 = await vi.importActual<any>("@lib/auditLogs");
+  return {
   __esModule: true,
-  logEvent: jest.fn(),
-  get AuditLogDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogDetails;
-  },
-  get AuditLogEvent() {
-    return jest.requireActual("@lib/auditLogs").AuditLogEvent;
-  },
-  get AuditLogAccessDeniedDetails() {
-    return jest.requireActual("@lib/auditLogs").AuditLogAccessDeniedDetails;
-  }
-}));
+  logEvent: vi.fn(),
+  AuditLogDetails: __actual0.AuditLogDetails,
+  AuditLogEvent: __actual0.AuditLogEvent,
+  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+});
 
-jest.mock("@lib/serviceAccount");
-jest.mock("@lib/privileges");
+vi.mock("@lib/serviceAccount");
+vi.mock("@lib/privileges");
 
-const mockedDeleteKey = jest.mocked(deleteKey);
+const mockedDeleteKey = vi.mocked(deleteKey);
 
 const structuredClone = <T>(obj: T): T => {
   return v8.deserialize(v8.serialize(obj));
 };
 
-const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+const mockedLogEvent = vi.mocked(logEvent);
 
-jest.mock("@lib/vault");
+vi.mock("@lib/vault");
 
-const mockUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
-  shallow: true,
-});
+const mockUnprocessedSubmissions = vi.mocked(unprocessedSubmissions);
 
 /*
  * PurposeOption is used to determine the purpose of the form
@@ -119,11 +114,11 @@ describe("Template CRUD functions", () => {
     });
 
     it("Create a Template", async () => {
-      (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.create as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
-      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration, false)
       );
 
@@ -148,7 +143,7 @@ describe("Template CRUD functions", () => {
           id: "formtestID",
           form: formConfiguration,
           isPublished: false,
-          securityAttribute: "Unclassified"
+          securityAttribute: "Unclassified",
         })
       );
 
@@ -160,7 +155,7 @@ describe("Template CRUD functions", () => {
     });
 
     it("Get multiple Templates", async () => {
-      (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.template.findMany as MockedFunction<any>).mockResolvedValue([
         buildPrismaResponse("formtestID", formConfiguration),
         buildPrismaResponse("formtestID2", formConfiguration),
       ]);
@@ -173,7 +168,6 @@ describe("Template CRUD functions", () => {
           form: formConfiguration,
           isPublished: false,
           securityAttribute: "Unclassified",
-
         }),
         expect.objectContaining({
           id: "formtestID2",
@@ -191,7 +185,7 @@ describe("Template CRUD functions", () => {
     });
 
     it("No templates returned", async () => {
-      (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
+      (prismaMock.template.findMany as MockedFunction<any>).mockResolvedValue([]);
 
       const template = await getAllTemplates();
       expect(template).toEqual([]);
@@ -199,7 +193,7 @@ describe("Template CRUD functions", () => {
     });
 
     it("Get templates linked to the provided user", async () => {
-      (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.template.findMany as MockedFunction<any>).mockResolvedValue([
         buildPrismaResponse("formtestID", formConfiguration),
       ]);
 
@@ -226,7 +220,7 @@ describe("Template CRUD functions", () => {
     });
 
     it("Get a public template", async () => {
-      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
@@ -253,7 +247,7 @@ describe("Template CRUD functions", () => {
     });
 
     it("Get a full template", async () => {
-      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
@@ -284,7 +278,7 @@ describe("Template CRUD functions", () => {
     });
 
     it("Null returned when Template does not Exist", async () => {
-      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(null);
 
       const template = await getPublicTemplateByID("asdf");
       expect(template).toBe(null);
@@ -292,7 +286,7 @@ describe("Template CRUD functions", () => {
     });
 
     test("Get template by id returns null if item is marked as archived", async () => {
-      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration),
         ttl: new Date(),
       });
@@ -303,7 +297,7 @@ describe("Template CRUD functions", () => {
     });
 
     it("Get templates with associated users", async () => {
-      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
@@ -327,7 +321,7 @@ describe("Template CRUD functions", () => {
     it("Update Template", async () => {
       const updatedFormConfig = structuredClone(formConfiguration as FormProperties);
 
-      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("test1", updatedFormConfig, true)
       );
 
@@ -365,12 +359,12 @@ describe("Template CRUD functions", () => {
     });
 
     it("Update `isPublished` on a specific form", async () => {
-      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration),
         users: [{ id: "1" }],
       });
 
-      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration, true)
       );
 
@@ -398,7 +392,7 @@ describe("Template CRUD functions", () => {
           id: "formtestID",
           form: formConfiguration,
           isPublished: true,
-          securityAttribute: "Unclassified"
+          securityAttribute: "Unclassified",
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
@@ -410,14 +404,14 @@ describe("Template CRUD functions", () => {
 
     it("Update assigned users for template", async () => {
       // Template has one user assigned to it to start
-      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findFirst as MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration, true),
         users: [{ id: "1" }],
       });
-      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration, true)
       );
-      (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValueOnce({
+      (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValueOnce({
         email: "user2@test.ca",
       });
 
@@ -457,11 +451,11 @@ describe("Template CRUD functions", () => {
         users: [{ id: "2" }, { id: "3" }, { id: "4" }],
       };
 
-      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue(templateRecord);
-      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.findFirst as MockedFunction<any>).mockResolvedValue(templateRecord);
+      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration, true)
       );
-      (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>)
+      (prismaMock.user.findUniqueOrThrow as MockedFunction<any>)
         .mockResolvedValueOnce({
           email: "user1@test.ca",
         })
@@ -532,7 +526,7 @@ describe("Template CRUD functions", () => {
     it("Updates to published forms are not allowed", async () => {
       const updatedFormConfig = structuredClone(formConfiguration as FormProperties);
 
-      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(null);
+      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(null);
 
       await expect(async () => {
         await updateTemplate({
@@ -544,7 +538,7 @@ describe("Template CRUD functions", () => {
     });
 
     it("Remove DeliveryOption from template", async () => {
-      (prismaMock.template.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findFirstOrThrow as MockedFunction<any>).mockResolvedValue({
         isPublished: false,
       });
 
@@ -567,21 +561,21 @@ describe("Template CRUD functions", () => {
     });
 
     it("Delete template", async () => {
-      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration),
         users: [{ id: "1" }],
       });
       // Added: handle implementation using findFirst
-      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findFirst as MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration),
         users: [{ id: "1" }],
       });
       // New implementation uses findFirstOrThrow to fetch publication status
-      (prismaMock.template.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findFirstOrThrow as MockedFunction<any>).mockResolvedValue({
         isPublished: false,
       });
 
-      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
@@ -635,30 +629,28 @@ describe("Template CRUD functions", () => {
 
     // Test for published template with unprocessed submissions
     it("Published template with unprocessed submissions cannot be deleted", async () => {
-      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration, true),
         users: [{ id: "1" }],
       });
       // Added: handle implementation using findFirst
-      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findFirst as MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration, true),
         users: [{ id: "1" }],
       });
       // New implementation uses findFirstOrThrow to fetch publication status
-      (prismaMock.template.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findFirstOrThrow as MockedFunction<any>).mockResolvedValue({
         isPublished: true,
       });
 
       // Should never reach update when blocked
-      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration, true)
       );
 
       mockUnprocessedSubmissions.mockResolvedValueOnce(true);
 
-      await expect(deleteTemplate("formtestID")).rejects.toThrow(
-        TemplateHasUnprocessedSubmissions
-      );
+      await expect(deleteTemplate("formtestID")).rejects.toThrow(TemplateHasUnprocessedSubmissions);
 
       // Ensure no archival update was attempted
       expect(prismaMock.template.update).not.toHaveBeenCalledWith(
@@ -669,21 +661,21 @@ describe("Template CRUD functions", () => {
     });
 
     it("Draft (unpublished) template with unprocessed submissions can be deleted", async () => {
-      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration, false),
         users: [{ id: "1" }],
       });
-      
-      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+
+      (prismaMock.template.findFirst as MockedFunction<any>).mockResolvedValue({
         ...buildPrismaResponse("formtestID", formConfiguration, false),
         users: [{ id: "1" }],
       });
       // New implementation uses findFirstOrThrow to fetch publication status
-      (prismaMock.template.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.findFirstOrThrow as MockedFunction<any>).mockResolvedValue({
         isPublished: false,
       });
 
-      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration, false)
       );
 

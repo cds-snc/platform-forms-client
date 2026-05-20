@@ -1,3 +1,4 @@
+import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { interpolatePermissionCondition, authorization } from "@lib/privileges";
 import { auth } from "@lib/auth/nextAuth";
@@ -13,16 +14,16 @@ import {
   ManageApplicationSettings,
 } from "__utils__/permissions";
 import { Session } from "next-auth";
-import { prismaMock } from "@jestUtils";
-import { User } from "@prisma/client";
+import { prismaMock } from "@testUtils";
+import { User } from "@gcforms/database";
 import { Action } from "@lib/types/privileges-types";
 import { checkOne } from "@lib/cache/flags";
 
-jest.mock("@lib/cache/flags");
-jest.mock("@lib/auth/nextAuth");
+vi.mock("@lib/cache/flags");
+vi.mock("@lib/auth/nextAuth");
 
-const mockedCheckOne = checkOne as jest.MockedFunction<typeof checkOne>;
-const mockedAuth = auth as unknown as jest.MockedFunction<() => Promise<Session | null>>;
+const mockedCheckOne = checkOne as MockedFunction<typeof checkOne>;
+const mockedAuth = auth as unknown as MockedFunction<() => Promise<Session | null>>;
 
 type TestUser = {
   session: Session;
@@ -190,7 +191,7 @@ describe("Privilege Checks", () => {
           ]);
         });
         it.each(["view", "update", "delete"])("%s Form Record they own", async (action) => {
-          (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+          (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
             user1.formRecord
           );
 
@@ -204,7 +205,7 @@ describe("Privilege Checks", () => {
       });
       describe("User cannot", () => {
         it.each(["view", "update", "delete"])("%s Form Record they do not own", async (action) => {
-          (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+          (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
             user2.formRecord
           );
 
@@ -219,7 +220,7 @@ describe("Privilege Checks", () => {
         });
 
         it("publish a form", async () => {
-          (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+          (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
             user1.formRecord
           );
           await expect(
@@ -240,7 +241,7 @@ describe("Privilege Checks", () => {
     describe("User", () => {
       describe("User can", () => {
         it("modify their own security questions", async () => {
-          (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+          (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
             user1.db
           );
 
@@ -256,7 +257,7 @@ describe("Privilege Checks", () => {
           ]);
         });
         it("modify their own name", async () => {
-          (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+          (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
             user1.db
           );
 
@@ -274,7 +275,7 @@ describe("Privilege Checks", () => {
       });
       describe("User cannot", () => {
         it("modify email address", async () => {
-          (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+          (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
             user1.db
           );
 
@@ -292,7 +293,7 @@ describe("Privilege Checks", () => {
           ).rejects.toThrow(AccessControlError);
         });
         it("modify another user", async () => {
-          (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+          (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
             user2.db
           );
 
@@ -360,7 +361,7 @@ describe("Privilege Checks", () => {
     });
     describe("User can", () => {
       it("publish a form they own", async () => {
-        (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+        (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
           user1.formRecord
         );
 
@@ -378,7 +379,7 @@ describe("Privilege Checks", () => {
     });
     describe("User cannot", () => {
       it("publish a form they do not own", async () => {
-        (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+        (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
           user2.formRecord
         );
 
@@ -417,7 +418,7 @@ describe("Privilege Checks", () => {
       });
 
       it.each(["view", "update", "delete"])("%s another users form record", async (action) => {
-        (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+        (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
           user1.formRecord
         );
         await authorization.check([
@@ -447,7 +448,7 @@ describe("Privilege Checks", () => {
       });
 
       it("view any user", async () => {
-        (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+        (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(user1.db);
 
         await authorization.check([
           {
@@ -465,7 +466,7 @@ describe("Privilege Checks", () => {
     });
     describe("User cannot", () => {
       it.each(["update", "delete"])("%s a User", async (action) => {
-        (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+        (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(user1.db);
 
         await expect(
           authorization.check([
@@ -477,7 +478,7 @@ describe("Privilege Checks", () => {
         ).rejects.toThrow(AccessControlError);
       });
       it.each(["create", "update", "delete"])("%s a privilege", async (action) => {
-        (prismaMock.privilege.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        (prismaMock.privilege.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue({
           id: "1",
         });
 
@@ -506,7 +507,7 @@ describe("Privilege Checks", () => {
     });
     describe("User can", () => {
       it.each(["view", "update"])("%s any User", async (action) => {
-        (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+        (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(user1.db);
 
         await authorization.check([
           {
@@ -523,7 +524,7 @@ describe("Privilege Checks", () => {
     });
     describe("User cannot", () => {
       it.each(["create", "delete"])("%s a User", async (action) => {
-        (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+        (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(user1.db);
 
         await expect(
           authorization.check([
@@ -535,7 +536,7 @@ describe("Privilege Checks", () => {
         ).rejects.toThrow(AccessControlError);
       });
       it.each(["create", "update", "delete"])("%s a Privilege", async (action) => {
-        (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+        (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(user1.db);
 
         await expect(
           authorization.check([
@@ -575,7 +576,7 @@ describe("Privilege Checks", () => {
         await authorization.check([{ action: "view", subject: { type: "Setting", scope: "all" } }]);
       });
       it("can view any Setting", async () => {
-        (prismaMock.setting.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        (prismaMock.setting.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue({
           id: "1",
         });
         await authorization.check([
@@ -596,7 +597,7 @@ describe("Privilege Checks", () => {
         ).rejects.toThrow(AccessControlError);
       });
       it.each(["create", "update", "delete"])("%s a Setting", async (action) => {
-        (prismaMock.setting.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        (prismaMock.setting.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue({
           id: "1",
         });
         await expect(
@@ -638,7 +639,7 @@ describe("Privilege Checks", () => {
       });
       it.each(["view", "update", "delete"])("%s any Setting", async (action) => {
         mockedAuth.mockResolvedValue(adminUser.session);
-        (prismaMock.setting.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        (prismaMock.setting.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue({
           id: "1",
         });
         await authorization.check([
@@ -713,7 +714,7 @@ describe("Authorization Helpers", () => {
   it("Can view Form", async () => {
     mockedAuth.mockResolvedValue(user1.session);
 
-    (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+    (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
       user1.formRecord
     );
 
@@ -722,7 +723,7 @@ describe("Authorization Helpers", () => {
   it("Can not view Form", async () => {
     mockedAuth.mockResolvedValue(user1.session);
 
-    (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+    (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
       user2.formRecord
     );
 
@@ -733,7 +734,7 @@ describe("Authorization Helpers", () => {
   it("Can Edit Form", async () => {
     mockedAuth.mockResolvedValue(user1.session);
 
-    (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+    (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
       user1.formRecord
     );
 
@@ -742,7 +743,7 @@ describe("Authorization Helpers", () => {
   it("Can not Edit Form", async () => {
     mockedAuth.mockResolvedValue(user1.session);
 
-    (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+    (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
       user2.formRecord
     );
 
@@ -753,7 +754,7 @@ describe("Authorization Helpers", () => {
   it("Can Delete Form", async () => {
     mockedAuth.mockResolvedValue(user1.session);
 
-    (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+    (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
       user1.formRecord
     );
 
@@ -762,7 +763,7 @@ describe("Authorization Helpers", () => {
   it("Can not Delete Form", async () => {
     mockedAuth.mockResolvedValue(user1.session);
 
-    (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+    (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
       user2.formRecord
     );
 
@@ -776,7 +777,7 @@ describe("Authorization Helpers", () => {
     });
     mockedAuth.mockResolvedValue(user1.session);
 
-    (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+    (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
       user1.formRecord
     );
 
@@ -785,7 +786,7 @@ describe("Authorization Helpers", () => {
   it("Can not Publish Form", async () => {
     mockedAuth.mockResolvedValue(user1.session);
 
-    (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+    (prismaMock.template.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(
       user1.formRecord
     );
 
@@ -819,36 +820,36 @@ describe("Authorization Helpers", () => {
     adminUser.session.user.privileges = mockUserPrivileges(ManageUsers, {
       user: { id: adminUser.session.user.id },
     });
-    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+    (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(user1.db);
     mockedAuth.mockResolvedValue(adminUser.session);
     await authorization.canManageUser(user1.session.user.id);
   });
   it("Can not manage other users", async () => {
-    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+    (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(user1.db);
     mockedAuth.mockResolvedValue(user2.session);
     await expect(authorization.canManageUser(user2.session.user.id)).rejects.toBeInstanceOf(
       AccessControlError
     );
   });
   it("Can update security question on user", async () => {
-    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+    (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(user1.db);
     mockedAuth.mockResolvedValue(user1.session);
     await authorization.canUpdateSecurityQuestions();
   });
   it("Can not update security questions on another user", async () => {
-    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+    (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(user1.db);
     mockedAuth.mockResolvedValue(user2.session);
     await expect(authorization.canUpdateSecurityQuestions()).rejects.toBeInstanceOf(
       AccessControlError
     );
   });
   it("Can update name on user", async () => {
-    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+    (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(user1.db);
     mockedAuth.mockResolvedValue(user1.session);
     await authorization.canChangeUserName();
   });
   it("Can not update name on another user", async () => {
-    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+    (prismaMock.user.findUniqueOrThrow as MockedFunction<any>).mockResolvedValue(user1.db);
     mockedAuth.mockResolvedValue(user2.session);
     await expect(authorization.canChangeUserName()).rejects.toBeInstanceOf(AccessControlError);
   });

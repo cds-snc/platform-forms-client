@@ -1,5 +1,33 @@
 # Changelog
 
+## [2.2.10] - 2026-05-15
+
+- Adds toast background override to /src/styles/_toast.scss
+
+## [2.2.9] - 2026-05-11
+
+- Remove residual i18next dependency from package
+
+## [2.2.8] - 2026-05-11
+
+- Remove i18next as a dependency from validation types. Introduced a local TranslateFn type for translation function signatures in validation. This keeps the core package framework-agnostic and avoids unnecessary dependencies.
+
+## [2.2.7] - 2026-05-04
+
+- Support for new Advanced number input validation
+
+## [2.2.6] - 2026-05-04
+
+- Update vitest to ^4.1.5 for latest features and improvements
+
+## [2.2.5] - 2026-04-30
+
+- Modify import
+
+## [2.2.4] - 2026-04-28
+
+- Add 'recheck' package to the list of dependencies
+
 ## [2.2.3] - 2026-04-01
 
 - Move regex validation utils into package
