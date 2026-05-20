@@ -5,6 +5,7 @@ import { describe, it, expect, afterEach, vi, beforeEach } from "vitest";
 import React from "react";
 import { cleanup, render } from "@testing-library/react";
 import { RichTextLocked } from "../RichTextLocked";
+import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 // Mock child components
 vi.mock("../RichTextEditor", () => ({
@@ -52,13 +53,15 @@ describe("RichTextLocked", () => {
 
   it("renders rich text editor in a locked panel", () => {
     const { container } = render(
-      <RichTextLocked
-        id="test-id"
-        summaryText="Test Summary"
-        schemaProperty="introduction"
-        addElement={false}
-        hydrated={true}
-      />
+      <TreeRefProvider>
+        <RichTextLocked
+          id="test-id"
+          summaryText="Test Summary"
+          schemaProperty="introduction"
+          addElement={false}
+          hydrated={true}
+        />
+      </TreeRefProvider>
     );
 
     // Just verify the component renders without errors
