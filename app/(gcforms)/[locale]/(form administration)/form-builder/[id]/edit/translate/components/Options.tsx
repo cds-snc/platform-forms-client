@@ -35,7 +35,7 @@ export const Options = ({
               <FieldsetLegend>
                 {t(`addElementDialog.${element.type}.title`)}: {t("optionText")}
               </FieldsetLegend>
-              <div className="mb-10 flex gap-px divide-x-2 border-y border-r border-gray-300">
+              <div className="mb-10 flex w-full gap-px divide-x-2 border-y border-r border-gray-300">
                 <label
                   className="sr-only"
                   htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${primaryLanguage}`}

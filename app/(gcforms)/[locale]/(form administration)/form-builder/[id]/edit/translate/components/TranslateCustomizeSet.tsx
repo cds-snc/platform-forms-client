@@ -4,6 +4,7 @@ import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElement } from "@lib/types";
+import { FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS } from "../../../components/contentLayout";
 
 export const TranslateCustomizeSet = ({
   element,
@@ -55,11 +56,14 @@ export const TranslateCustomizeSet = ({
   return (
     <>
       {/* Start row title inputs */}
-      <fieldset>
+      <fieldset className={FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}>
         <FieldsetLegend>
           {t("dynamicRow.translate.repeatingSet")} {":"} {t("dynamicRow.translate.rowTitleText")}
         </FieldsetLegend>
-        <div className="mb-10 flex gap-px divide-x-2 border border-gray-300" key={primaryLanguage}>
+        <div
+          className="mb-10 flex w-full gap-px divide-x-2 border border-gray-300"
+          key={primaryLanguage}
+        >
           <div className="relative w-1/2 flex-1">
             <label htmlFor={`row-title-text-english-${element.id}`} className="sr-only">
               <>{primaryLanguage}</>
@@ -68,7 +72,7 @@ export const TranslateCustomizeSet = ({
               <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`row-title-text-french-${element.id}`}
               aria-describedby={`row-title-text-english-desc-${element.id}`}
               value={rowTitleEnValue}
@@ -88,7 +92,7 @@ export const TranslateCustomizeSet = ({
               <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`row-title-text-french-${element.id}`}
               aria-describedby={`row-title-text-french-desc-${element.id}`}
               value={rowTitleFrValue}
@@ -105,12 +109,15 @@ export const TranslateCustomizeSet = ({
       {/* End row title inputs */}
 
       {/* Start add button inputs */}
-      <fieldset>
+      <fieldset className={FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}>
         <FieldsetLegend>
           {t("dynamicRow.translate.repeatingSet")} {":"} {t("dynamicRow.translate.addButtonText")}
         </FieldsetLegend>
         {/* English */}
-        <div className="mb-10 flex gap-px divide-x-2 border border-gray-300" key={primaryLanguage}>
+        <div
+          className="mb-10 flex w-full gap-px divide-x-2 border border-gray-300"
+          key={primaryLanguage}
+        >
           <label htmlFor={`add-button-text-english-${element.id}`} className="sr-only">
             <>{primaryLanguage}</>
           </label>
@@ -119,7 +126,7 @@ export const TranslateCustomizeSet = ({
               <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`add-button-text-english-${element.id}`}
               aria-describedby={`add-button-text-english-desc-${element.id}`}
               value={addButtonEnValue}
@@ -143,7 +150,7 @@ export const TranslateCustomizeSet = ({
               <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`add-button-text-french-${element.id}`}
               aria-describedby={`add-button-text-french-desc-${element.id}`}
               value={addButtonFrValue}
@@ -160,12 +167,15 @@ export const TranslateCustomizeSet = ({
       {/* End add button inputs */}
 
       {/* Start remove button inputs */}
-      <fieldset>
+      <fieldset className={FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}>
         <FieldsetLegend>
           {t("dynamicRow.translate.repeatingSet")} {":"}{" "}
           {t("dynamicRow.translate.removeButtonText")}
         </FieldsetLegend>
-        <div className="mb-10 flex gap-px divide-x-2 border border-gray-300" key={primaryLanguage}>
+        <div
+          className="mb-10 flex w-full gap-px divide-x-2 border border-gray-300"
+          key={primaryLanguage}
+        >
           <div className="relative w-1/2 flex-1">
             <label htmlFor={`remove-button-text-english-${element.id}`} className="sr-only">
               <>{primaryLanguage}</>
@@ -177,7 +187,7 @@ export const TranslateCustomizeSet = ({
               <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`remove-button-text-french-${element.id}`}
               aria-describedby={`remove-button-text-english-desc-${element.id}`}
               value={removeButtonEnValue}
@@ -200,7 +210,7 @@ export const TranslateCustomizeSet = ({
               <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`remove-button-text-french-${element.id}`}
               aria-describedby={`remove-button-text-french-desc-${element.id}`}
               value={removeButtonFrValue}

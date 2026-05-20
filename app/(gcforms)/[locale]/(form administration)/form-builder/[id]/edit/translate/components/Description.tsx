@@ -30,7 +30,7 @@ export const Description = ({
         <FieldsetLegend>
           {t(`addElementDialog.${element.type}.title`)}: {t("inputDescription")}
         </FieldsetLegend>
-        <div className="mb-10 flex gap-px divide-x-2 border-y border-r border-gray-300">
+        <div className="mb-10 flex w-full gap-px divide-x-2 border-y border-r border-gray-300">
           <label
             className="sr-only"
             htmlFor={`element-${element.id}-description-${primaryLanguage}`}

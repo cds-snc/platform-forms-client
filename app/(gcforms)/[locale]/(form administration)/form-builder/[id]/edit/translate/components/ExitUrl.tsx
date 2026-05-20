@@ -59,7 +59,7 @@ export const ExitUrl = ({
       <div>
         <fieldset className={FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}>
           <FieldsetLegend>{t("logic.exitUrl.label")}</FieldsetLegend>
-          <div className="mb-10 flex gap-px divide-x-2 border-y border-r border-gray-300">
+          <div className="mb-10 flex w-full gap-px divide-x-2 border-y border-r border-gray-300">
             <FieldInput groupId={groupId} val={group[fieldPrimary] || ""} lang={primaryLanguage} />
             <FieldInput
               groupId={groupId}

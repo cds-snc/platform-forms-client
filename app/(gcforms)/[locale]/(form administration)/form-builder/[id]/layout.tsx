@@ -8,7 +8,6 @@ import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
-import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
 import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
 import { GroupStoreProvider } from "@lib/groups/useGroupStore";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
@@ -26,11 +25,10 @@ import {
   FormBuilderConfig,
   formBuilderConfigDefault,
 } from "@lib/hooks/useFormBuilderConfig";
-import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLockClient";
 import { EditLockProvider } from "@formBuilder/components/shared/edit-lock/EditLockContext";
 import { AccountMenu } from "@formBuilder/components/shared/account-menu/AccountMenu";
 import { ManageFormAccessDialogContainer } from "./components/dialogs/ManageFormAccessDialog";
-import { FormBuilderContentShell } from "./components/FormBuilderContentShell";
+import { FormBuilderWorkspace } from "./components/FormBuilderWorkspace";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -150,12 +148,13 @@ export default async function Layout(props: {
                             )}
                           </div>
                         </div>
-                        <div className="relative flex w-full min-w-0 gap-7">
-                          <EditLockClient formId={id}>
-                            <FormBuilderContentShell>{children}</FormBuilderContentShell>
-                            {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
-                          </EditLockClient>
-                        </div>
+                        <FormBuilderWorkspace
+                          id={id}
+                          lang={locale as Language}
+                          allowGroups={allowGroupsFlag}
+                        >
+                          {children}
+                        </FormBuilderWorkspace>
                       </div>
                     </div>
                     <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />

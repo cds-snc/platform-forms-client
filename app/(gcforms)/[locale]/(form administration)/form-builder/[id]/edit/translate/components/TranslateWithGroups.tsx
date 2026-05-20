@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { cn } from "@lib/utils";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { useTranslation } from "@i18n/client";
@@ -26,11 +25,7 @@ import { Group } from "@gcforms/types";
 import { TranslateCustomizeSet } from "./TranslateCustomizeSet";
 
 import { ExitUrl } from "./ExitUrl";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
-import {
-  FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS,
-  getFormBuilderContentMinWidthClass,
-} from "../../../components/contentLayout";
+import { FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS } from "../../../components/contentLayout";
 
 const GroupSection = ({
   groupId,
@@ -54,7 +49,7 @@ const GroupSection = ({
         <fieldset className={FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}>
           <FieldsetLegend>{t("logic.translateTitle")}</FieldsetLegend>
           <div
-            className="mb-10 flex gap-px divide-x-2 border border-gray-300"
+            className="mb-10 flex w-full gap-px divide-x-2 border border-gray-300"
             key={primaryLanguage}
           >
             <div className="relative w-1/2 flex-1">
@@ -216,7 +211,6 @@ const Element = ({
 };
 
 export const TranslateWithGroups = () => {
-  const { open } = useTreeRef();
   const { updateField, form, groups, localizeField, getLocalizationAttribute, changeKey } =
     useTemplateStore((s) => ({
       updateField: s.updateField,
@@ -254,17 +248,12 @@ export const TranslateWithGroups = () => {
   return (
     <div>
       <h1 className="sr-only">{t("edit")}</h1>
-      <div className={cn("mr-10", getFormBuilderContentMinWidthClass(open, "translate"))}>
-        <div
-          className={cn(
-            "flex items-start justify-between gap-4",
-            FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS
-          )}
-        >
+      <div className="overflow-x-auto pb-4">
+        <div className="flex w-[700px]">
           <h2 id="editTranslationsHeading" className="whitespace-nowrap" tabIndex={-1}>
             {t("groups.editTranslationsHeading")}
           </h2>
-          <div className="mt-2 ml-5 shrink-0">
+          <div className="mt-2 ml-5">
             <SaveButton />
           </div>
         </div>
@@ -283,11 +272,11 @@ export const TranslateWithGroups = () => {
           {/* FORM TITLE */}
           <fieldset className={FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}>
             <FieldsetLegend>{t("formTitle")}</FieldsetLegend>
-            <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
+            <div className="mb-10 flex w-full gap-px divide-x-2 border border-gray-300">
               <label htmlFor="form-title-en" className="sr-only">
                 <>{primaryLanguage}</>
               </label>
-              <div className="relative flex-1">
+              <div className="relative w-1/2 flex-1">
                 <LanguageLabel id="form-title-en-language" lang={primaryLanguage}>
                   <>{primaryLanguage}</>
                 </LanguageLabel>
@@ -308,7 +297,7 @@ export const TranslateWithGroups = () => {
               <label htmlFor="form-title-fr" className="sr-only" {...getLocalizationAttribute()}>
                 {secondaryLanguage}
               </label>
-              <div className="relative flex-1">
+              <div className="relative w-1/2 flex-1">
                 <LanguageLabel id="form-title-fr-language" lang={secondaryLanguage}>
                   <>{secondaryLanguage}</>
                 </LanguageLabel>
@@ -335,7 +324,7 @@ export const TranslateWithGroups = () => {
             <fieldset className={FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}>
               <FieldsetLegend>{t("translations.formDescription")}</FieldsetLegend>
               <div
-                className="mb-10 flex gap-px divide-x-2 border border-gray-300"
+                className="mb-10 flex w-full gap-px divide-x-2 border border-gray-300"
                 key={primaryLanguage}
               >
                 <div className="relative w-1/2 flex-1">
@@ -390,7 +379,7 @@ export const TranslateWithGroups = () => {
             <FieldsetLegend>{t("privacyStatement")}</FieldsetLegend>
 
             <div
-              className="mb-10 flex gap-px divide-x-2 border border-gray-300"
+              className="mb-10 flex w-full gap-px divide-x-2 border border-gray-300"
               key={primaryLanguage}
             >
               <div className="relative w-1/2 flex-1">
@@ -513,7 +502,7 @@ export const TranslateWithGroups = () => {
           <fieldset className={FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}>
             <FieldsetLegend>{t("confirmationMessage")}</FieldsetLegend>
             <div
-              className="mb-10 flex gap-px divide-x-2 border border-gray-300"
+              className="mb-10 flex w-full gap-px divide-x-2 border border-gray-300"
               key={primaryLanguage}
             >
               <div className="relative w-1/2 flex-1">
