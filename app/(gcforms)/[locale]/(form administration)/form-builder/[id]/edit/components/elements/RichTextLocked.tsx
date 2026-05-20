@@ -7,8 +7,13 @@ import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { EssentialBadge } from "@formBuilder/components/shared/EssentialBadge";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 import { FormElementTypes } from "@lib/types";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 import { cn } from "@lib/utils";
 import Skeleton from "react-loading-skeleton";
+import {
+  FORM_BUILDER_EDITOR_LANE_CLASS,
+  getFormBuilderContentMinWidthClass,
+} from "../../../components/contentLayout";
 
 export const RichTextLocked = ({
   id,
@@ -52,12 +57,18 @@ export const RichTextLocked = ({
   const path = `form.${schemaProperty}[${localizedField}]]`;
 
   const { handleAddElement } = useHandleAdd();
+  const { open } = useTreeRef();
 
   return (
     <div
-      className={cn("-mt-px h-auto max-w-[800px] border-1 border-slate-500 bg-white", className)}
+      className={cn(
+        "-mt-px h-auto border-1 border-slate-500 bg-white",
+        FORM_BUILDER_EDITOR_LANE_CLASS,
+        getFormBuilderContentMinWidthClass(open),
+        className
+      )}
     >
-      <div className="mx-5 mb-7 mt-5">
+      <div className="mx-5 mt-5 mb-7">
         <EssentialBadge />
         {beforeContent && beforeContent}
         <div className="flex">{children}</div>

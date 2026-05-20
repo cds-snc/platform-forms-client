@@ -150,6 +150,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
           top: ${nextHeaderBottom}px;
           right: 0;
           left: auto;
+          width: min(448px, 100vw);
           height: calc(100dvh - ${nextHeaderBottom}px - ${nextPanelBottomInset}px);
         }
       `);
@@ -292,7 +293,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
       ref={sectionRef}
       className={cn(
         "z-10 shrink-0 overflow-visible [transition-property:max-width,width] duration-500 ease-in-out motion-reduce:transition-none",
-        open ? "w-screen max-w-md" : "w-0"
+        open ? "w-md max-w-full" : "w-0"
       )}
       aria-labelledby="rightPanelTitle"
     >
@@ -315,7 +316,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
         id="rightPanelPopover"
         popover="manual"
         className={cn(
-          "fixed right-0 bottom-0 left-auto m-0 w-screen max-w-md translate-x-full rounded-none border-0 bg-transparent p-0 text-inherit opacity-0 shadow-none [transition-property:opacity,translate,overlay,display] transition-discrete duration-500 ease-in-out outline-none backdrop:bg-transparent [&:popover-open]:translate-x-0 [&:popover-open]:opacity-100 starting:[&:popover-open]:translate-x-full starting:[&:popover-open]:opacity-0",
+          "fixed right-0 bottom-0 left-auto m-0 translate-x-full rounded-none border-0 bg-transparent p-0 text-inherit opacity-0 shadow-none [transition-property:opacity,translate,overlay,display] transition-discrete duration-500 ease-in-out outline-none backdrop:bg-transparent [&:popover-open]:translate-x-0 [&:popover-open]:opacity-100 starting:[&:popover-open]:translate-x-full starting:[&:popover-open]:opacity-0",
           fixedRange
         )}
       >

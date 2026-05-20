@@ -24,6 +24,7 @@ import { ConfirmationTitle } from "./ConfirmationTitle";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { AddPageButton } from "./AddPageButton";
 import { AddBranchingButton } from "./AddBranchingButton";
+import { FORM_BUILDER_EDITOR_LANE_CLASS } from "../../components/contentLayout";
 
 export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) => {
   const { t } = useTranslation("form-builder");
@@ -131,16 +132,16 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   return (
     <div>
       <h1 className="sr-only">{t("edit")}</h1>
-      <div className="flex w-[700px]">
+      <div className={cn("flex items-start justify-between gap-4", FORM_BUILDER_EDITOR_LANE_CLASS)}>
         <h2 id="editPagesHeading" className="whitespace-nowrap" tabIndex={-1}>
           {t("groups.editPagesHeading")}
         </h2>
-        <div className="mt-2 ml-5">
+        <div className="mt-2 ml-5 shrink-0">
           <SaveButton />
         </div>
       </div>
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
-      <div className="flex max-w-[800px] justify-between">
+      <div className={cn("flex justify-between gap-4", FORM_BUILDER_EDITOR_LANE_CLASS)}>
         <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
         <LangSwitcher descriptionLangKey="editingIn" />
       </div>

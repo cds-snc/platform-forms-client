@@ -9,6 +9,7 @@ import { FieldsetLegend } from "./FieldsetLegend";
 import { useTranslation } from "@i18n/client";
 
 import { type Group } from "@gcforms/types";
+import { FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS } from "../../../components/contentLayout";
 
 const FieldInput = ({ groupId, val, lang }: { groupId: string; val: string; lang: Language }) => {
   const setExitButtonUrl = useGroupStore((state) => state.setExitButtonUrl);
@@ -56,7 +57,7 @@ export const ExitUrl = ({
   return (
     <>
       <div>
-        <fieldset>
+        <fieldset className={FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}>
           <FieldsetLegend>{t("logic.exitUrl.label")}</FieldsetLegend>
           <div className="mb-10 flex gap-px divide-x-2 border-y border-r border-gray-300">
             <FieldInput groupId={groupId} val={group[fieldPrimary] || ""} lang={primaryLanguage} />

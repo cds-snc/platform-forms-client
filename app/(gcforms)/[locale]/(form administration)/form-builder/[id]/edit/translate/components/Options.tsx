@@ -6,6 +6,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { FieldsetLegend } from "./FieldsetLegend";
 import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
+import { FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS } from "../../../components/contentLayout";
 
 export const Options = ({
   element,
@@ -30,7 +31,7 @@ export const Options = ({
       <div>
         {element.properties.choices?.map((choice, choiceIndex) => (
           <div className="choice" key={`choice-${choiceIndex}`}>
-            <fieldset>
+            <fieldset className={FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}>
               <FieldsetLegend>
                 {t(`addElementDialog.${element.type}.title`)}: {t("optionText")}
               </FieldsetLegend>

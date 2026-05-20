@@ -30,6 +30,7 @@ import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLoc
 import { EditLockProvider } from "@formBuilder/components/shared/edit-lock/EditLockContext";
 import { AccountMenu } from "@formBuilder/components/shared/account-menu/AccountMenu";
 import { ManageFormAccessDialogContainer } from "./components/dialogs/ManageFormAccessDialog";
+import { FormBuilderContentShell } from "./components/FormBuilderContentShell";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -149,15 +150,9 @@ export default async function Layout(props: {
                             )}
                           </div>
                         </div>
-                        <div className="relative flex w-full gap-7">
+                        <div className="relative flex w-full min-w-0 gap-7">
                           <EditLockClient formId={id}>
-                            <main
-                              id="content"
-                              className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
-                              tabIndex={-1}
-                            >
-                              {children}
-                            </main>
+                            <FormBuilderContentShell>{children}</FormBuilderContentShell>
                             {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
                           </EditLockClient>
                         </div>

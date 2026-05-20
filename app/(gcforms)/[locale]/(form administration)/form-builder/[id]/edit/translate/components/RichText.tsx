@@ -7,6 +7,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { FieldsetLegend } from "./FieldsetLegend";
+import { FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS } from "../../../components/contentLayout";
 
 export const RichText = ({
   element,
@@ -28,7 +29,7 @@ export const RichText = ({
 
   return (
     <>
-      <div className="text-entry">
+      <div className={`text-entry ${FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}`}>
         <FieldsetLegend>{t(element.type)}</FieldsetLegend>
         <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
           <div className="relative w-1/2 flex-1">

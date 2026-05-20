@@ -6,6 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { FormElement } from "@lib/types";
 import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { FieldsetLegend } from ".";
+import { FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS } from "../../../components/contentLayout";
 
 export const Title = ({
   element,
@@ -25,7 +26,7 @@ export const Title = ({
 
   return (
     <>
-      <fieldset>
+      <fieldset className={FORM_BUILDER_TRANSLATE_EDITOR_LANE_CLASS}>
         <FieldsetLegend>
           {t(`addElementDialog.${element.type}.title`)}: {t("questionTitle")}
         </FieldsetLegend>
@@ -41,7 +42,7 @@ export const Title = ({
               <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`element-${element.id}-title-${primaryLanguage}`}
               aria-describedby={`element-${element.id}-title-${primaryLanguage}-language`}
               value={element.properties[localizeField(field, primaryLanguage)]}
@@ -61,7 +62,7 @@ export const Title = ({
               <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`element-${element.id}-title-${secondaryLanguage}`}
               aria-describedby={`element-${element.id}-title-${secondaryLanguage}-language`}
               value={element.properties[localizeField(field, secondaryLanguage)]}
