@@ -1,7 +1,18 @@
 import { defineConfig, globalIgnores } from "eslint/config";
+import fs from "node:fs";
+import path from "node:path";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import importPlugin from "eslint-plugin-import";
 import reactHooks from "eslint-plugin-react-hooks";
+
+const packagesDir = path.resolve("packages");
+const packageDirList = fs.existsSync(packagesDir)
+  ? fs
+      .readdirSync(packagesDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => path.join(packagesDir, entry.name))
+  : [];
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -27,6 +38,29 @@ const eslintConfig = defineConfig([
     "coverage/**",
     ".lintstagedrc.mjs",
   ]),
+  {
+    files: ["packages/*/src/**/*.{js,jsx,ts,tsx,mts,cts}"],
+    plugins: {
+      import: importPlugin,
+    },
+    rules: {
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          packageDir: packageDirList,
+          devDependencies: [
+            "**/*.test.{js,jsx,ts,tsx,mts,cts}",
+            "**/*.spec.{js,jsx,ts,tsx,mts,cts}",
+            "**/*.vitest.{js,jsx,ts,tsx,mts,cts}",
+            "**/__tests__/**",
+          ],
+          includeTypes: true,
+          optionalDependencies: true,
+          peerDependencies: true,
+        },
+      ],
+    },
+  },
   {
     rules: {
       "no-console": "error",

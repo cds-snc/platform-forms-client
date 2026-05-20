@@ -4,13 +4,28 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
+import { useEffect } from "react";
+import { ga } from "@lib/client/clientHelpers";
+import { getLastSegmentOfPath } from "@root/lib/utils/strings";
+import { usePathname } from "next/navigation";
 
 export const EditLockSessionExpiredOverlay = ({
-  onReturnToForms,
+  formId,
+  onReloadPage,
 }: {
-  onReturnToForms: () => void;
+  formId: string;
+  onReloadPage: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
+  const pathname = usePathname();
+
+  useEffect(() => {
+    ga("edit_lock_session_expired", {
+      formId,
+      timestamp: new Date(),
+      location: getLastSegmentOfPath(pathname) ?? "unknown",
+    });
+  }, [formId, pathname]);
 
   return (
     <div
@@ -35,10 +50,10 @@ export const EditLockSessionExpiredOverlay = ({
             </div>
             <Button
               theme="primary"
-              onClick={onReturnToForms}
+              onClick={onReloadPage}
               className="self-center whitespace-nowrap hover:cursor-pointer sm:self-start"
             >
-              {t("editLock.returnToForms")}
+              {t("editLock.reloadPage")}
             </Button>
           </div>
         </div>

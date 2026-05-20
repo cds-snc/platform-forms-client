@@ -1,0 +1,27 @@
+.publish-menu-trigger {
+  anchor-name: --form-builder-publish-menu-trigger;
+}
+
+.publish-menu-popover {
+  position-anchor: --form-builder-publish-menu-trigger;
+  position-area: bottom span-right;
+  position-try:
+    flip-block,
+    flip-inline,
+    flip-block flip-inline;
+
+  inset: auto;
+  margin: 1rem 0 0;
+  opacity: 0;
+  display: none;
+  transition-property: opacity, display, translate;
+  transition-duration: 180ms;
+  transition-behavior: allow-discrete;
+  translate: 0 0.125rem;
+}
+
+.publish-menu-popover:popover-open {
+  opacity: 1;
+  display: block;
+  translate: 0 0;
+}

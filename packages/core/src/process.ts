@@ -1,9 +1,6 @@
 import { Responses, PublicFormRecord, GroupsType, FormValues } from "@gcforms/types";
-
-import { isFieldResponseValid } from "./validation/validation";
-
+import { isFieldResponseValid, TranslateFn } from "./validation/validation";
 import { inGroup } from "./helpers";
-
 import { checkVisibilityRecursive } from "./visibility";
 import {
   type ValueMatchErrors,
@@ -11,8 +8,6 @@ import {
   valueMatchesType,
   hasValue,
 } from "@gcforms/core";
-
-import { TFunction } from "i18next";
 
 /*
  Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit
@@ -29,7 +24,7 @@ export const validate = ({
 }) => {
   values.currentGroup = currentGroup;
 
-  const identityT = ((key: string) => key) as unknown as TFunction<"common">;
+  const identityT = ((key: string) => key) as unknown as TranslateFn;
 
   const errors = validateOnSubmit(values, {
     formRecord,
@@ -47,7 +42,7 @@ export const validateOnSubmit = (
   values: Responses,
   props: {
     formRecord: PublicFormRecord;
-    t: TFunction<"common">;
+    t: TranslateFn;
   }
 ): Responses => {
   const { errors } = validateVisibleElements(values, props);
@@ -58,7 +53,7 @@ export const validateVisibleElements = (
   values: Responses,
   props: {
     formRecord: PublicFormRecord;
-    t: TFunction<"common">;
+    t: TranslateFn;
   }
 ): {
   errors: Responses;

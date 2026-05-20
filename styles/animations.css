@@ -78,3 +78,38 @@
   .gc-star-particle--5 { --tx: 0px;   --ty: 28px;  animation-delay: 10ms; }
   .gc-star-particle--6 { --tx: -26px; --ty: 10px;  animation-delay: 20ms; }
 }
+
+::view-transition-old(.accounts-nav-forward) {
+  animation: 90ms linear both accounts-fade reverse;
+}
+
+::view-transition-new(.accounts-nav-forward) {
+  animation: 120ms ease-out both accounts-fade;
+}
+
+::view-transition-old(.accounts-nav-back) {
+  animation: 90ms linear both accounts-fade reverse;
+}
+
+::view-transition-new(.accounts-nav-back) {
+  animation: 120ms ease-out both accounts-fade;
+}
+
+@keyframes accounts-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

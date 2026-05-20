@@ -200,6 +200,14 @@
   },
   "mainNavAriaLabel": "Navigation principale",
   "yourAccount": "Votre compte",
+  "accountMenu": {
+    "label": "Menu du compte",
+    "editing": "Modification -",
+    "release": "Publication",
+    "gcFormsProfile": "Profil GC Forms",
+    "account": "Compte",
+    "fallbackName": "Utilisateur GC Forms"
+  },
   "dateModified": "Date de modification ",
   "formattedDate": {
     "year": "Année",

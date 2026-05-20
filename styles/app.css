@@ -8,7 +8,6 @@
 @import "./form-builder.css";
 @import "../packages/core/styles/header.css";
 @import "../packages/core/styles/gc-header.css";
-@import "../packages/core/styles/toast.css";
 @import "./animations.css";
 
 /* ===== Custom max-width breakpoint variants (inherited from legacy config) ===== */
@@ -382,6 +381,9 @@
   /* ----- Outline ----- */
   --outline-color-default: #ffbf47;
 }
+
+/* ===== Toast styles (after @theme to use defined variables) ===== */
+@import "@gcforms/core/styles/toast.css";
 
 /* ===== Tailwind source detection ===== */
 @source "../app/**/*.{js,ts,jsx,tsx,mdx}";

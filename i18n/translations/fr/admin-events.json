@@ -1,6 +1,6 @@
 {
   "title": "Événements du journal d'audit",
-  "noEvents": "Aucun événement trouvé.",
+  "noEvents": "Aucun événement trouvé dans les derniers 30 jours.",
   "event": "Evénement",
   "subject": "Sujet",
   "description": "Description",

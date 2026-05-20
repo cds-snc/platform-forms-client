@@ -18,7 +18,7 @@ export const PrivilegeList = async ({
   const userPrivileges = formUser.privileges.map((privilege) => privilege.id);
 
   return (
-    <ul className="m-0 mb-12 p-0">
+    <ul className="m-0 mb-6 p-0">
       {privileges?.map((privilege) => {
         const active = userPrivileges.includes(privilege.id);
         const description =

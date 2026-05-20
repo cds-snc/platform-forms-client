@@ -81,7 +81,7 @@
         "titleEn": "Page?",
         "titleFr": "[FR]Page?",
         "validation": {
-          "required": false
+          "required": true
         },
         "descriptionEn": "",
         "descriptionFr": "",
