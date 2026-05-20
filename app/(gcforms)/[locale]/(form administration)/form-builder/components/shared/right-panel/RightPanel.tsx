@@ -266,7 +266,10 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   return (
     <section
       ref={sectionRef}
-      className={cn("z-10 shrink-0 overflow-visible", open ? "w-screen max-w-md" : "w-0")}
+      className={cn(
+        "z-10 shrink-0 overflow-visible [transition-property:max-width,width] duration-500 ease-in-out motion-reduce:transition-none",
+        open ? "w-screen max-w-md" : "w-0"
+      )}
       aria-labelledby="rightPanelTitle"
     >
       <div className={cn("fixed right-0", fixedRange, open && "hidden")}>
