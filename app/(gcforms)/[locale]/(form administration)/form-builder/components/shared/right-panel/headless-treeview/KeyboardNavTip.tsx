@@ -20,7 +20,7 @@ export const KeyboardNavTip = () => {
         <div
           id="keyboard-nav-tip"
           role="tooltip"
-          className="pointer-events-none absolute top-full right-0 z-20 mt-2 hidden w-72 rounded-md border border-violet-400 bg-violet-100 p-4 font-normal whitespace-normal group-focus-within:block group-hover:block"
+          className="pointer-events-none absolute top-full right-0 z-20 mt-2 hidden! w-72 rounded-md border border-violet-400 bg-violet-100 p-4 font-normal whitespace-normal group-focus-within:block! group-hover:block!"
         >
           <Markdown options={{ forceBlock: true }}>
             {t("groups.treeView.keyboardNav.body")}
