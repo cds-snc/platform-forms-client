@@ -147,11 +147,13 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
       setHeaderBottom(nextHeaderBottom);
       popoverStyleSheetRef.current?.replaceSync(`
         #rightPanelPopover {
-          top: ${nextHeaderBottom}px;
-          right: 0;
-          left: auto;
-          width: min(448px, 100vw);
-          height: calc(100dvh - ${nextHeaderBottom}px - ${nextPanelBottomInset}px);
+          position: fixed !important;
+          top: ${nextHeaderBottom}px !important;
+          right: 0 !important;
+          left: auto !important;
+          bottom: auto !important;
+          width: min(448px, 100vw) !important;
+          height: calc(100dvh - ${nextHeaderBottom}px - ${nextPanelBottomInset}px) !important;
         }
       `);
     };
@@ -263,10 +265,13 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
     }
 
     if (open && !isOpen) {
-      popover.showPopover();
-      requestAnimationFrame(() => {
-        document.getElementById("rightPanelTitle")?.focus();
-      });
+      // Use setTimeout to ensure CSS transitions are computed before opening
+      setTimeout(() => {
+        popover.showPopover();
+        requestAnimationFrame(() => {
+          document.getElementById("rightPanelTitle")?.focus();
+        });
+      }, 10);
       return;
     }
 
