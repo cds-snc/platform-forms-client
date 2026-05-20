@@ -81,7 +81,11 @@ describe("useGroupStore addGroup", () => {
     });
 
     // Start should reconnect to the first page in the current layout order.
-    expect(result.current.template.groupsLayout).toEqual([secondPageId, firstPageId, expect.any(String)]);
+    expect(result.current.template.groupsLayout).toEqual([
+      secondPageId,
+      firstPageId,
+      expect.any(String),
+    ]);
     expect(result.current.template.groups?.start.nextAction).toBe(secondPageId);
   });
 });
