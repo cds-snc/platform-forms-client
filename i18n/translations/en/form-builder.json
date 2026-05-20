@@ -585,7 +585,7 @@
       "DownloadResponse": "Downloaded responses",
       "ConfirmResponse": "Confirmed responses",
       "IdentifyProblemResponse": "Reported problem with responses",
-      "DeleteDraftResponses": "Test responses cleared while publishing",
+      "DeleteDraftResponses": "Test responses cleared when form was published",
       "RetrieveResponses": "Retrieved responses via API",
       "CreateAPIKey": "Generated API Key",
       "DeleteAPIKey": "Deleted API Key",
