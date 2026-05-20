@@ -177,6 +177,22 @@ export const GCFormsProvider = ({
         cleanedValue = { name: null, size: null, content: null } as FileInputResponse;
       }
 
+      // For repeating sets (dynamicRow), reset any file inputs within rows
+      if (Array.isArray(value)) {
+        cleanedValue = value.map((row) => {
+          if (row && typeof row === "object" && !Array.isArray(row)) {
+            const cleanedRow = { ...(row as Record<string, unknown>) };
+            for (const [rowKey, rowValue] of Object.entries(cleanedRow)) {
+              if (rowValue && typeof rowValue === "object" && "size" in rowValue) {
+                cleanedRow[rowKey] = { name: null, size: null, content: null };
+              }
+            }
+            return cleanedRow;
+          }
+          return row;
+        });
+      }
+
       // For all other inputs just return the value
       cleanedValues[key] = cleanedValue as string | string[];
     });
