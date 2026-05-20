@@ -62,7 +62,7 @@ export const Header = ({
 
   return (
     <>
-      <header className={cn("bg-gray-soft relative mb-5 px-0", className, paddingTop)}>
+      <header className={cn("bg-gray-soft relative mb-5 px-2", className, paddingTop)}>
         <SkipLink />
         {isBannerEnabled && (
           <div className="bg-slate-800 p-4 text-white">
@@ -92,7 +92,7 @@ export const Header = ({
             )}
             {isFormBuilder && <FileNameInput />}
           </div>
-          <div className="ml-auto rounded-xl bg-white p-4">
+          <div className="ml-auto rounded-xl bg-white px-4 py-2">
             <nav aria-label={t("mainNavAriaLabel", { ns: "common" })}>
               <ul className="flex list-none items-center justify-end px-0 text-base">
                 {(alwaysShowLoginLink || status !== "authenticated") && (
