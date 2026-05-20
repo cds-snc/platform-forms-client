@@ -5,7 +5,6 @@ import { serverTranslation } from "@i18n";
 import { SiteLogo } from "@serverComponents/icons";
 
 import LanguageToggle from "@serverComponents/globals/LanguageToggle";
-import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccountDropdown";
 
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
@@ -29,7 +28,7 @@ export default AuthenticatedLayout(
                 <Link
                   id="logo"
                   href={`/${locale}/form-builder`}
-                  className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline focus:bg-white"
+                  className="mr-7 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline focus:bg-white"
                 >
                   <div className="inline-block h-[45px] w-[46px] p-2">
                     <SiteLogo title={t("title")} />
@@ -45,20 +44,17 @@ export default AuthenticatedLayout(
                 aria-label={t("mainNavAriaLabel", { ns: "common" })}
               >
                 <ul className="mt-2 flex list-none px-0 text-base">
-                  <li className="mr-2 py-2 text-base tablet:mr-4">
+                  <li className="tablet:mr-4 mr-2 py-2 text-base">
                     <Link href={`/${locale}/forms`}>{t("adminNav.myForms", { ns: "common" })}</Link>
                   </li>
-                  <li className="mr-2 py-2 tablet:mr-4">
+                  <li className="tablet:mr-4 mr-2 py-2">
                     <LanguageToggle />
-                  </li>
-                  <li className="mr-5 text-base">
-                    <YourAccountDropdown isAuthenticated={true} />
                   </li>
                 </ul>
               </nav>
             </div>
           </header>
-          <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
+          <div className="laptop:mx-32 desktop:mx-64 mx-4 shrink-0 grow basis-auto">
             <ToastContainer />
             <>
               <div>

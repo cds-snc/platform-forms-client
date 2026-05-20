@@ -25,6 +25,9 @@
   "activateAccount": "Reactivate account",
   "moreMenu": "... More",
   "manageForms": "Manage forms",
+  "downloadActiveAccounts": "Download active accounts",
+  "downloadActiveAccountsTooltip": "Download active users CSV",
+  "downloadDeactivatedAccounts": "Download deactivated accounts",
   "publishedFormsMustBeTransferred": {
     "text1": "Published forms",
     "text2": "must be transferred or deleted before deactivating."
@@ -61,9 +64,27 @@
   },
   "search": {
     "label": "Search",
-    "placeholder": "Search by name or email address",
-    "noResults": "No results found",
-    "ariaLabel": "Search accounts by name or email address"
+    "placeholder": "Search",
+    "noResults": "No matching accounts found",
+    "ariaLabel": "Search accounts by email address or user name",
+    "submit": "Search",
+    "clear": "Clear",
+    "propertyLabel": "Search field",
+    "statusLabel": "Status",
+    "emptyState": "Search by email, user name, or status to load accounts.",
+    "resultsSummary": "Showing {{start}} to {{end}} of {{total}} accounts",
+    "properties": {
+      "all": "All fields",
+      "id": "User ID",
+      "name": "User name",
+      "email": "Email address"
+    },
+    "pagination": {
+      "ariaLabel": "Accounts pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "summary": "Showing {{start}} to {{end}} of {{total}} accounts"
+    }
   },
   "manageUserFeatures": "Manage user features"
 }

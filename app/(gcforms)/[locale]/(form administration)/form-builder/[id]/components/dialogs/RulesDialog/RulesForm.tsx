@@ -6,7 +6,7 @@ import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { type ChoiceRule } from "@gcforms/types";
 import { getElementsWithRuleForChoice } from "@gcforms/core";
-import { ConditionalSelector } from "@formBuilder/components/shared/conditionals/ConditionalSelector";
+import { ConditionalElementRuleSelector } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/conditionals/ConditionalElementRuleSelector";
 import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
 import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
 
@@ -98,7 +98,7 @@ export const RulesForm = ({
       <div className="mb-6" aria-live="polite" aria-relevant="all">
         {choiceRules.map((rule, index) => {
           return (
-            <ConditionalSelector
+            <ConditionalElementRuleSelector
               itemId={item.id}
               index={index}
               key={`${rule.choiceId}-${index}`}

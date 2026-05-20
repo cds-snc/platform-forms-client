@@ -5,6 +5,8 @@ import { Profile } from "./components/server/Profile";
 import { authCheckAndRedirect } from "@lib/actions";
 import { authorization } from "@lib/privileges";
 import { redirect } from "next/navigation";
+import { checkOne } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -25,10 +27,10 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const { locale } = params;
 
   const { session, ability } = await authCheckAndRedirect();
+  const isZitadelLoginEnabled = await checkOne(FeatureFlags.zitadelLogin);
 
-  // For OIDC flow we want to move them to the OIDC profile page instead of showing the security questions
-  if (session.user.accountUrl) {
-    redirect(`/${locale}/profile/oidc`);
+  if (isZitadelLoginEnabled || session.user.accountUrl) {
+    redirect(`/${locale}/forms`);
   }
 
   const userCanPublish = await authorization.hasPublishFormsPrivilege();

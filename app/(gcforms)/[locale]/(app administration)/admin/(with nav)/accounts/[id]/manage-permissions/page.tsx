@@ -1,3 +1,4 @@
+import { ViewTransition } from "react";
 import { serverTranslation } from "@i18n";
 import { AuthenticatedPage } from "@lib/pages/auth";
 import { authorization, getAllPrivileges } from "@lib/privileges";
@@ -5,6 +6,12 @@ import { getUser } from "@lib/users";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { Metadata } from "next";
 import { PrivilegeList } from "./components/server/PrivilegeList";
+import { UserNameEmail } from "@formBuilder/components/shared/account/UserNameEmail";
+import { buildAccountsSearchParams, parseAccountsSearchParams } from "../../lib/search";
+import {
+  accountsRouteTransition,
+  getAccountIdentityTransitionName,
+} from "../../lib/viewTransitions";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -21,8 +28,9 @@ export async function generateMetadata(props: {
 
 export default AuthenticatedPage<{ id: string }>(
   [authorization.canViewAllUsers, authorization.canAccessPrivileges],
-  async ({ params }) => {
+  async ({ params, searchParams }) => {
     const { id, locale } = await params;
+    const resolvedSearchParams = await searchParams;
 
     const formUser = await getUser(id);
 
@@ -58,38 +66,46 @@ export default AuthenticatedPage<{ id: string }>(
     );
 
     const { t } = await serverTranslation("admin-users", { lang: locale });
+    const backToAccountsState = parseAccountsSearchParams(resolvedSearchParams);
+    const backToAccountsParams = buildAccountsSearchParams(backToAccountsState);
+    backToAccountsParams.set("focus", formUser.id);
     return (
-      <>
-        <BackLink href={`/${locale}/admin/accounts?id=${formUser.id}`}>
+      <ViewTransition {...accountsRouteTransition}>
+        <BackLink
+          href={`/${locale}/admin/accounts?${backToAccountsParams.toString()}`}
+          transitionTypes={["nav-back"]}
+        >
           {t("backToAccounts")}
         </BackLink>
-        <h1 className="mb-6 flex flex-col gap-4 border-0">
-          <div>
-            <span className="block text-base">{formUser.name}</span>
-            <span className="block text-base font-normal">{formUser.email}</span>
-          </div>
-          {t("managePermissions")}
-        </h1>
+        <h1 className="mb-6 flex flex-col gap-4 border-0">{t("managePermissions")}</h1>
+        <div className="mb-12">
+          <ViewTransition name={getAccountIdentityTransitionName(formUser.id)}>
+            <UserNameEmail name={formUser.name || ""} email={formUser.email} />
+          </ViewTransition>
+        </div>
         {/* Toast Message goes here */}
-        <h2>{t("userAdministration")}</h2>
-        <PrivilegeList
-          formUser={formUser}
-          privileges={userPrivileges}
-          canManageUsers={canManageUsers}
-        />
-        <h2>{t("accountAdministration")}</h2>
-        <PrivilegeList
-          formUser={formUser}
-          privileges={accountPrivileges}
-          canManageUsers={canManageUsers}
-        />
-        <h2>{t("systemAdministration")}</h2>
-        <PrivilegeList
-          formUser={formUser}
-          privileges={systemPrivileges}
-          canManageUsers={canManageUsers}
-        />
-      </>
+
+        <div>
+          <h2>{t("userAdministration")}</h2>
+          <PrivilegeList
+            formUser={formUser}
+            privileges={userPrivileges}
+            canManageUsers={canManageUsers}
+          />
+          <h2>{t("accountAdministration")}</h2>
+          <PrivilegeList
+            formUser={formUser}
+            privileges={accountPrivileges}
+            canManageUsers={canManageUsers}
+          />
+          <h2>{t("systemAdministration")}</h2>
+          <PrivilegeList
+            formUser={formUser}
+            privileges={systemPrivileges}
+            canManageUsers={canManageUsers}
+          />
+        </div>
+      </ViewTransition>
     );
   }
 );

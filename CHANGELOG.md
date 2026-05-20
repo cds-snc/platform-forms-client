@@ -5,6 +5,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.14.1](https://github.com/cds-snc/platform-forms-client/compare/v4.14.0...v4.14.1) (2026-05-13)
+
+
+### Bug Fixes
+
+* Prevent unknown error when no Events occur in AuditLog on old Templates ([#7118](https://github.com/cds-snc/platform-forms-client/issues/7118)) ([aed28bc](https://github.com/cds-snc/platform-forms-client/commit/aed28bc95171e8e0ded0edef7f2e8e1cdca0388c))
+* Save behaviour ([#7094](https://github.com/cds-snc/platform-forms-client/issues/7094)) ([df7376a](https://github.com/cds-snc/platform-forms-client/commit/df7376a5e99a22caff1e619e9a5826a859e1f936))
+* use local type for translation function ([#7117](https://github.com/cds-snc/platform-forms-client/issues/7117)) ([ba20309](https://github.com/cds-snc/platform-forms-client/commit/ba20309b8d11b71161baef5901cb9ce3cb1e6ba4))
+* validate email server side when processing support/contact form submissions ([#7137](https://github.com/cds-snc/platform-forms-client/issues/7137)) ([11c6284](https://github.com/cds-snc/platform-forms-client/commit/11c628474337375ddcead8133c2455041d1130f5))
+* validate email server side when processing support/contact forms ([11c6284](https://github.com/cds-snc/platform-forms-client/commit/11c628474337375ddcead8133c2455041d1130f5))
+
+
+### Miscellaneous Chores
+
+* Add eslint rule to prevent external dependencies in packages ([#7125](https://github.com/cds-snc/platform-forms-client/issues/7125)) ([3c569a4](https://github.com/cds-snc/platform-forms-client/commit/3c569a41f5b2c1650a7526c98baecc35d196a550))
+* add GA to Locked Editing ([#7102](https://github.com/cds-snc/platform-forms-client/issues/7102)) ([8795ec5](https://github.com/cds-snc/platform-forms-client/commit/8795ec527ccb2b8b58260d5924a87b2ffe8bbafa))
+* bump packages for stying and formatting ([#7119](https://github.com/cds-snc/platform-forms-client/issues/7119)) ([2f938ff](https://github.com/cds-snc/platform-forms-client/commit/2f938ff9d4b4c2ab121203d3219d54e66fb2e3d7))
+* bump unset + axios ([#7124](https://github.com/cds-snc/platform-forms-client/issues/7124)) ([eef7880](https://github.com/cds-snc/platform-forms-client/commit/eef7880ebdea42dfcf902edaff97934536423e4d))
+* bump uuid ([#7135](https://github.com/cds-snc/platform-forms-client/issues/7135)) ([855173b](https://github.com/cds-snc/platform-forms-client/commit/855173b352d81e241e5aed91a53fddeb1e79b4b9))
+* **deps:** update all non-major docker images ([#7073](https://github.com/cds-snc/platform-forms-client/issues/7073)) ([a6a1b8c](https://github.com/cds-snc/platform-forms-client/commit/a6a1b8c87468d0a0405cdf57b60dc9190f742156))
+* **deps:** update all non-major github action dependencies ([#7075](https://github.com/cds-snc/platform-forms-client/issues/7075)) ([dea54f3](https://github.com/cds-snc/platform-forms-client/commit/dea54f3fc78b6975ed6541d8e38cb1cf86d75142))
+* ensure user level checks edit lock ([#7136](https://github.com/cds-snc/platform-forms-client/issues/7136)) ([a41aa8d](https://github.com/cds-snc/platform-forms-client/commit/a41aa8d1220097841e081cc75c270fe776277d3a))
+* package bumps for AWS and [@opentelemetry](https://github.com/opentelemetry) ([#7115](https://github.com/cds-snc/platform-forms-client/issues/7115)) ([45f662e](https://github.com/cds-snc/platform-forms-client/commit/45f662e1b9642b71f1ee8d6e8581ad22a5ba5dfa))
+* remove residual i18next dependency from Core package ([#7122](https://github.com/cds-snc/platform-forms-client/issues/7122)) ([12cda9f](https://github.com/cds-snc/platform-forms-client/commit/12cda9f78adebe11c73906bd429a0468bb299cf9))
+* synced file(s) with cds-snc/site-reliability-engineering ([#6946](https://github.com/cds-snc/platform-forms-client/issues/6946)) ([0d8b928](https://github.com/cds-snc/platform-forms-client/commit/0d8b928c44608cf75b2dae571048af31b8914ca9))
+* update flag check for edit lock ([#7128](https://github.com/cds-snc/platform-forms-client/issues/7128)) ([9540079](https://github.com/cds-snc/platform-forms-client/commit/9540079ffa21dc3f472b90c82b53e5f2ff796519))
+* User accounts page ([#7126](https://github.com/cds-snc/platform-forms-client/issues/7126)) ([7acc09c](https://github.com/cds-snc/platform-forms-client/commit/7acc09cc08497beb7d94c6dccb22c8513491a014))
+
+## [4.14.0](https://github.com/cds-snc/platform-forms-client/compare/v4.13.0...v4.14.0) (2026-05-11)
+
+
+### Features
+
+* Ability to Download Filtered Audit Logs / UX Improvement ([#7063](https://github.com/cds-snc/platform-forms-client/issues/7063)) ([447cc5d](https://github.com/cds-snc/platform-forms-client/commit/447cc5d8ac9c2837c160f5f885662a66c8d3a838))
+
+
+### Bug Fixes
+
+* element rules selector ([#7111](https://github.com/cds-snc/platform-forms-client/issues/7111)) ([4170d63](https://github.com/cds-snc/platform-forms-client/commit/4170d6312ff83ed75133c0c179ebf0770486d764))
+
+
+### Miscellaneous Chores
+
+* bump next.js ([#7106](https://github.com/cds-snc/platform-forms-client/issues/7106)) ([1159df5](https://github.com/cds-snc/platform-forms-client/commit/1159df57bed9c516cdb6d3c5c3bbadf05d9cd174))
+* fix focus test ([#7112](https://github.com/cds-snc/platform-forms-client/issues/7112)) ([97a7933](https://github.com/cds-snc/platform-forms-client/commit/97a793396dde54d3db8da58ad52909559fbff750))
+* handle blur for tag input ([#7101](https://github.com/cds-snc/platform-forms-client/issues/7101)) ([30f4d9d](https://github.com/cds-snc/platform-forms-client/commit/30f4d9da1f2877f5e6a7bc8b26638a0b5f98545d))
+* modify edit lock threshold ([#7100](https://github.com/cds-snc/platform-forms-client/issues/7100)) ([11f82a4](https://github.com/cds-snc/platform-forms-client/commit/11f82a41b4cf952b39b1763110a742753de8db2d))
+* no show for 0000 ([#7105](https://github.com/cds-snc/platform-forms-client/issues/7105)) ([3988753](https://github.com/cds-snc/platform-forms-client/commit/3988753c2ede5239e04f54a7cfcdcac4728ee5c2))
+* Playwright isolated runs for local dev ([#7107](https://github.com/cds-snc/platform-forms-client/issues/7107)) ([5f7141d](https://github.com/cds-snc/platform-forms-client/commit/5f7141d50ccda763b4fdf71512ecbe05f07e4d89))
+* update playwright scripts ([#7109](https://github.com/cds-snc/platform-forms-client/issues/7109)) ([340f3bc](https://github.com/cds-snc/platform-forms-client/commit/340f3bc12b053c76e2019dccb361fa177b7edf95))
+
 ## [4.13.0](https://github.com/cds-snc/platform-forms-client/compare/v4.12.1...v4.13.0) (2026-05-06)
 
 

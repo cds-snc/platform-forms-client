@@ -263,6 +263,18 @@ export const TemplateStoreProvider = ({
     }
   }, [store]);
 
+  useEffect(() => {
+    const state = store.getState();
+
+    if (typeof props.isPublished === "boolean" && state.isPublished !== props.isPublished) {
+      state.setIsPublished(props.isPublished);
+    }
+
+    if (props.closingDate !== undefined && state.closingDate !== props.closingDate) {
+      state.setClosingDate(props.closingDate ?? null);
+    }
+  }, [store, props.isPublished, props.closingDate]);
+
   try {
     return (
       <TemplateStoreContext.Provider value={store}>

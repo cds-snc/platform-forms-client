@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { CLIENT_SIDE_EDIT_LOCK_STALE_THRESHOLD_MS } from "@root/constants";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { toast } from "@formBuilder/components/shared/Toast";
+import { ga } from "@lib/client/clientHelpers";
 import { Button } from "@clientComponents/globals";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { WarningIcon } from "@serverComponents/icons";
+import { getLastSegmentOfPath } from "@root/lib/utils/strings";
 
 const RELATIVE_TIME_TICK_MS = 5_000;
 
@@ -44,9 +46,11 @@ const formatRelativeTime = (value: string, locale: string) => {
 export const EditLockBanner = ({
   takeover,
   getIsActiveTab,
+  formId,
 }: {
   takeover: () => Promise<void>;
   getIsActiveTab: () => boolean;
+  formId: string;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { isLockedByOther, editLock } = useTemplateStore((s) => ({
@@ -57,6 +61,7 @@ export const EditLockBanner = ({
   const [isTakingOver, setIsTakingOver] = useState(false);
   const [takeoverError, setTakeoverError] = useState(false);
   const [timeTick, setTimeTick] = useState(() => Date.now());
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isLockedByOther) {
@@ -111,7 +116,20 @@ export const EditLockBanner = ({
     setIsTakingOver(true);
     try {
       await takeover();
-      toast.success(t("editLock.syncedLatest"), "wide");
+
+      // Construct and send the Google Analytics event
+      const eventName = isTakeoverAvailable
+        ? "edit_lock_takeover_available_lock"
+        : isStale
+          ? "edit_lock_takeover_stale_lock"
+          : "edit_lock_takeover_lock";
+      ga(eventName, {
+        formId,
+        timestamp: new Date(),
+        // Dynamic since the banner can show in multiple locations
+        location: getLastSegmentOfPath(pathname) ?? "unknown",
+        ...(lastActivity && { lastActivity }),
+      });
     } catch (error) {
       setTakeoverError(true);
     } finally {
