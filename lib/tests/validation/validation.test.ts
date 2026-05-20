@@ -523,6 +523,11 @@ describe("Gov Email domain validator", () => {
     ["test@invcanada.ca", true],
     ["test.test@scc-ccn.ca", true],
     ["test.test@scc.ca", true],
+    ["test@parl.gc.ca", false],
+    ["test@ourcommons.ca", false],
+    ["test@sencanada.ca", false],
+    ["test@lop.parl.ca", false],
+    ["test@ciec-ccie.parl.gc.ca", false],
   ])(`Should return true if email is valid (testing "%s")`, async (email, isValid) => {
     expect(isValidGovEmail(email)).toBe(isValid);
   });

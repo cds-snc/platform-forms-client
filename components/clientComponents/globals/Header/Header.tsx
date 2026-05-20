@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
+import { AccountMenu } from "@formBuilder/components/shared/account-menu/AccountMenu";
 import { cn } from "@lib/utils";
 import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "./FileName";
@@ -20,6 +21,8 @@ type HeaderParams = {
   className?: string;
   shareUsesManageAccess?: boolean;
   alwaysShowLoginLink?: boolean;
+  showAccountMenu?: boolean;
+  accountMenuPublishingEnabled?: boolean;
 };
 
 export const Header = ({
@@ -27,6 +30,8 @@ export const Header = ({
   className,
   shareUsesManageAccess = false,
   alwaysShowLoginLink = false,
+  showAccountMenu = false,
+  accountMenuPublishingEnabled = false,
 }: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
   const { status } = useSession();
@@ -122,6 +127,16 @@ export const Header = ({
                       <PublishButton locale={language} />
                     </li>
                   </>
+                )}
+                {showAccountMenu && status === "authenticated" && (
+                  <li className="tablet:mr-4 mr-2 py-2 text-base">
+                    <AccountMenu
+                      locale={language}
+                      testId="forms-account-menu-trigger"
+                      publishingEnabled={accountMenuPublishingEnabled}
+                      placement="header"
+                    />
+                  </li>
                 )}
                 <li className="mr-4 h-6 border-r border-gray-500" aria-hidden="true" />
                 <li className="tablet:mr-4 mr-2 py-2">
