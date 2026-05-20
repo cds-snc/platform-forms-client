@@ -9,6 +9,8 @@ interface TooltipProps {
   triggerClassName?: string;
   children: React.ReactNode | string;
   side?: "left" | "right" | "top" | "bottom";
+  align?: "start" | "center" | "end";
+  sideOffset?: number;
   iconTitle?: string;
   label?: string;
 }
@@ -23,6 +25,8 @@ const Simple = ({
   tooltipClassName = "",
   triggerClassName = "",
   side = "left",
+  align = "center",
+  sideOffset = 4,
 }: TooltipSimpleProps) => {
   return (
     <TooltipPrimitive.Provider delayDuration={100}>
@@ -31,10 +35,11 @@ const Simple = ({
           <span>{children}</span>
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
-          sideOffset={4}
+          sideOffset={sideOffset}
           side={side}
+          align={align}
           className={cn(
-            "inline-flex items-center rounded-md px-4 py-2 bg-slate-800",
+            "inline-flex items-center rounded-md bg-slate-800 px-4 py-2",
             tooltipClassName
           )}
         >
@@ -55,16 +60,19 @@ const CustomTrigger = ({
   children,
   tooltipClassName = "",
   side = "left",
+  align = "center",
+  sideOffset = 4,
 }: CustomTooltipProps) => {
   return (
     <TooltipPrimitive.Provider delayDuration={100}>
       <TooltipPrimitive.Root>
         <TooltipPrimitive.Trigger asChild>{trigger}</TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
-          sideOffset={4}
+          sideOffset={sideOffset}
           side={side}
+          align={align}
           className={cn(
-            "max-w-80 bg-violet-100 p-4 border border-violet-400 z-[1000] rounded-md",
+            "z-1000 max-w-80 rounded-md border border-violet-400 bg-violet-100 p-4",
             tooltipClassName
           )}
         >
@@ -81,6 +89,8 @@ const Info = ({
   tooltipClassName = "",
   triggerClassName = "",
   side = "left",
+  align = "center",
+  sideOffset = 4,
   iconTitle,
   // Works but an html label would be more future proof - otherwise fails WCAG SC, all controls have a label
   // TODO update all tooltips to use pass a label, then replace aria-labe with an html label
@@ -95,10 +105,11 @@ const Info = ({
           </button>
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
-          sideOffset={4}
+          sideOffset={sideOffset}
           side={side}
+          align={align}
           className={cn(
-            "max-w-80 bg-violet-100 p-4 border border-violet-400 z-[1000] rounded-md",
+            "z-1000 max-w-80 rounded-md border border-violet-400 bg-violet-100 p-4",
             tooltipClassName
           )}
         >
