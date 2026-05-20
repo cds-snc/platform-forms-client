@@ -68,6 +68,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const openButtonRef = useRef<HTMLDivElement | null>(null);
   const suppressToggleSyncRef = useRef(false);
+  const popoverStyleSheetRef = useRef<CSSStyleSheet | null>(null);
 
   const { id: storeId, isLockedByOther } = useTemplateStore((s) => ({
     id: s.id,
@@ -98,7 +99,6 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   const [headerBottom, setHeaderBottom] = useState(0);
-  const [panelBottomInset, setPanelBottomInset] = useState(0);
   const [hasBlockingDialog, setHasBlockingDialog] = useState(false);
   const isBannerEnabled = t("campaignBanner.enabled");
   const isHeaderVisible = headerBottom > 0;
@@ -112,23 +112,47 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
       ? "top-20"
       : "top-0";
 
-  // Observe if the header is offscreen
-  // Used to determine the position of the right panel button "toggle" button
+  useEffect(() => {
+    if (!("adoptedStyleSheets" in document)) {
+      return;
+    }
+
+    const sheet = new CSSStyleSheet();
+
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+    popoverStyleSheetRef.current = sheet;
+
+    return () => {
+      document.adoptedStyleSheets = document.adoptedStyleSheets.filter(
+        (adoptedSheet) => adoptedSheet !== sheet
+      );
+      popoverStyleSheetRef.current = null;
+    };
+  }, []);
+
+  // Observe if the header is offscreen and keep the popover aligned to the
+  // visible builder area without using inline styles.
   useEffect(() => {
     const header = document.querySelector("header");
     const footer = document.querySelector("footer");
     const section = sectionRef.current;
 
     const updateViewportOffsets = () => {
-      setHeaderBottom(Math.max(header?.getBoundingClientRect().bottom ?? 0, 0));
-
+      const nextHeaderBottom = Math.max(header?.getBoundingClientRect().bottom ?? 0, 0);
       const sectionBottom = section?.getBoundingClientRect().bottom ?? window.innerHeight;
       const footerTop = footer?.getBoundingClientRect().top ?? window.innerHeight;
       const panelBoundaryBottom = Math.min(sectionBottom, footerTop);
-
       const nextPanelBottomInset = Math.max(window.innerHeight - panelBoundaryBottom, 0);
 
-      setPanelBottomInset(nextPanelBottomInset);
+      setHeaderBottom(nextHeaderBottom);
+      popoverStyleSheetRef.current?.replaceSync(`
+        #rightPanelPopover {
+          top: ${nextHeaderBottom}px;
+          right: 0;
+          left: auto;
+          height: calc(100dvh - ${nextHeaderBottom}px - ${nextPanelBottomInset}px);
+        }
+      `);
     };
 
     updateViewportOffsets();
@@ -290,13 +314,10 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
         ref={popoverRef}
         id="rightPanelPopover"
         popover="manual"
-        className="fixed right-0 m-0 w-screen max-w-md translate-x-full rounded-none border-0 bg-transparent p-0 text-inherit opacity-0 shadow-none [transition-property:opacity,translate,overlay,display] transition-discrete duration-500 ease-in-out outline-none backdrop:bg-transparent [&:popover-open]:translate-x-0 [&:popover-open]:opacity-100 starting:[&:popover-open]:translate-x-full starting:[&:popover-open]:opacity-0"
-        style={{
-          top: `${headerBottom}px`,
-          right: 0,
-          left: "auto",
-          height: `calc(100dvh - ${headerBottom}px - ${panelBottomInset}px)`,
-        }}
+        className={cn(
+          "fixed right-0 bottom-0 left-auto m-0 w-screen max-w-md translate-x-full rounded-none border-0 bg-transparent p-0 text-inherit opacity-0 shadow-none [transition-property:opacity,translate,overlay,display] transition-discrete duration-500 ease-in-out outline-none backdrop:bg-transparent [&:popover-open]:translate-x-0 [&:popover-open]:opacity-100 starting:[&:popover-open]:translate-x-full starting:[&:popover-open]:opacity-0",
+          fixedRange
+        )}
       >
         <div className="pointer-events-auto flex h-full flex-col border-l border-slate-200 bg-white">
           <div className="p-6">
