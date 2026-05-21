@@ -148,6 +148,7 @@ export const AuditLogDetails = {
   AccessedAllSystemForms: "Accessed Forms: All System Forms",
   ClonedForm: "DuplicatedForm",
   UpdateClosingDate: "UpdateClosingDate",
+  RemoveClosingDate: "RemoveClosingDate",
   RetrieveFormUsers: "Retrieved users associated with Form",
   RevokeFormAccess: "Access revoked for ${userId}",
   SetDeliveryToVault: "Delivery Option set to the Vault",
@@ -233,6 +234,7 @@ type AuditDetailsParams = {
   [AuditLogDetails.AccessedAllSystemForms]: never;
   [AuditLogDetails.ClonedForm]: never;
   [AuditLogDetails.UpdateClosingDate]: { closingDate: string };
+  [AuditLogDetails.RemoveClosingDate]: never;
   [AuditLogDetails.RetrieveFormUsers]: never;
   [AuditLogDetails.RevokeFormAccess]: { userId: string };
   [AuditLogDetails.SetDeliveryToVault]: never;
