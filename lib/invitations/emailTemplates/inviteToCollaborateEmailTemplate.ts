@@ -19,7 +19,7 @@ export const inviteToCollaborateEmailTemplate = (
 ): string => `
 (la version française suit)
 
-You’ve been invited to access form responses in GC Forms by ${senderName}.
+You’ve been invited to access a form in GC Forms by ${senderName}.
 
 ${message}
 
@@ -27,7 +27,7 @@ ${message}
 
 ===
 
-Vous avez été invité à accéder aux réponses de formulaire dans Formulaires GC par ${senderName}.
+Vous avez été invité à accéder à un formulaire dans Formulaires GC par ${senderName}.
 
 ${message}
 
