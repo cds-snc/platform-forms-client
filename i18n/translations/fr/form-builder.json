@@ -669,7 +669,7 @@
     "sessionExpiredTitle": "Votre session a expiré",
     "sessionExpiredMessage": "Vos modifications ont été enregistrées. Vous pouvez reprendre le formulaire pour y apporter des changements en actualisant la page.",
     "returnToForms": "Retourner aux formulaires",
-    "reloadPage": "Réinitialiser le formulaire"
+    "reloadPage": "Actualiser le formulaire"
   },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publier",
