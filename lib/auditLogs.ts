@@ -251,7 +251,7 @@ type AuditDetailsParams = {
     serviceAccountId: string;
   };
   [AuditLogDetails.CreatedNewApiKey]: {
-    userId: string;
+    userEmail: string;
     serviceAccountId: string;
   };
   [AuditLogDetails.DeletedServiceAccount]: {

@@ -604,7 +604,7 @@
       "RestoredForm": "Restored form",
       "DownloadedForm": "Downloaded a copy of the form",
       "RefreshedAPIKey": "API key {{APIkeyID}} refreshed by {{userEmail}}",
-      "CreatedNewAPIKey": "User account {{userId}} generated an API key for the form {{serviceAccountId}}",
+      "CreatedNewAPIKey": "User account {{userEmail}} generated an API key for the form {{serviceAccountId}}",
       "ChangeSecurityAttribute": "Changed classification to: {{securityAttribute}}",
       "SetFormPurpose": "Set intended use to: {{formPurpose}}",
       "SetSaveAndResume": "Updated saving progress to: {{saveAndResume}}",
