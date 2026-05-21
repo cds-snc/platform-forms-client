@@ -591,6 +591,7 @@
       "DeleteAPIKey": "Clé API supprimée",
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
+      "InvitationAccepted": "Invitation acceptée",
       "UpdateFormJsonConfig": "Téléchargement d'une copie du formulaire",
       "UpdatedNotificationSettings": "Mise à jour des paramètres de notification"
     },
@@ -602,6 +603,8 @@
       "ArchivedForm": "Formulaire archivé",
       "RestoredForm": "Formulaire désarchivé",
       "DownloadedForm": "Une copie du formulaire a été téléchargée",
+      "CreatedNewAPIKey": "Le compte utilisateur {{userId}} a généré une clé API pour le formulaire {{serviceAccountId}}",
+      "RefreshedAPIKey": "Clé API {{APIkeyID}} re-générée par {{userEmail}}",
       "ChangeSecurityAttribute": "Classification modifiée à : {{securityAttribute}}",
       "SetFormPurpose": "Usage prévu défini comme :{{formPurpose}}",
       "SetSaveAndResume": "Sauvegarde des réponses modifiée à :{{saveAndResume}}",

@@ -162,8 +162,8 @@ export const AuditLogDetails = {
   AccessGrantedTo: "GrantAccess",
   AccessRevokedFor: "RevokeAccess",
   //API Keys
-  GeneratedNewApiKey: "GeneratedAPIKey",
-  CreatedNewApiKey: "User :${userId} created API key for service account ${serviceAccountId}",
+  RefreshedApiKey: "RefreshedAPIKey",
+  CreatedNewApiKey: "CreatedNewAPIKey",
   DeletedServiceAccount: "DeletedAPIKey",
   // App Settings
   UpdatedAppSetting: "Updated setting with ${settingData}",
@@ -214,6 +214,7 @@ type AuditDetailsParams = {
     userId: string;
     formId: string;
     enabled: string;
+    userEmail: string;
   };
   [AuditLogDetails.ConfirmedResponsesForForm]: { formId: string };
   [AuditLogDetails.DeletedDraftResponsesForForm]: { formId: string };
@@ -231,7 +232,7 @@ type AuditDetailsParams = {
   };
   [AuditLogDetails.AccessedAllSystemForms]: never;
   [AuditLogDetails.ClonedForm]: never;
-  [AuditLogDetails.UpdateClosingDate]: never;
+  [AuditLogDetails.UpdateClosingDate]: { closingDate: string };
   [AuditLogDetails.RetrieveFormUsers]: never;
   [AuditLogDetails.RevokeFormAccess]: { userId: string };
   [AuditLogDetails.SetDeliveryToVault]: never;
@@ -245,7 +246,7 @@ type AuditDetailsParams = {
   [AuditLogDetails.ChangeSecurityAttribute]: { securityAttribute: string };
   [AuditLogDetails.AccessGrantedTo]: { userList: string };
   [AuditLogDetails.AccessRevokedFor]: { userList: string };
-  [AuditLogDetails.GeneratedNewApiKey]: {
+  [AuditLogDetails.RefreshedApiKey]: {
     userId: string;
     serviceAccountId: string;
   };
