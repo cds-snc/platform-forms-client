@@ -603,7 +603,7 @@
       "ArchivedForm": "Formulaire archivé",
       "RestoredForm": "Formulaire désarchivé",
       "DownloadedForm": "Une copie du formulaire a été téléchargée",
-      "CreatedNewAPIKey": "Utilisateur :{{userId}} a créé une clé API pour le compte de service {{serviceAccountId}}",
+      "CreatedNewAPIKey": "Le compte utilisateur {{userId}} a généré une clé API pour le formulaire {{serviceAccountId}}",
       "RefreshedAPIKey": "Clé API {{APIkeyID}} re-générée par {{userEmail}}",
       "ChangeSecurityAttribute": "Classification changée {{securityAttribute}}",
       "SetFormPurpose": "Usage prévu défini {{formPurpose}}",
