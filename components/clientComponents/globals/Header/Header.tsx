@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
+import { AccountMenu } from "@formBuilder/components/shared/account-menu/AccountMenu";
 import { cn } from "@lib/utils";
 import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "./FileName";
@@ -20,6 +21,8 @@ type HeaderParams = {
   className?: string;
   shareUsesManageAccess?: boolean;
   alwaysShowLoginLink?: boolean;
+  showAccountMenu?: boolean;
+  accountMenuPublishingEnabled?: boolean;
 };
 
 export const Header = ({
@@ -27,6 +30,8 @@ export const Header = ({
   className,
   shareUsesManageAccess = false,
   alwaysShowLoginLink = false,
+  showAccountMenu = false,
+  accountMenuPublishingEnabled = false,
 }: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
   const { status } = useSession();
@@ -57,30 +62,23 @@ export const Header = ({
 
   return (
     <>
-      <header
-        className={cn(
-          "mb-5 border-b-1 border-gray-500 bg-white px-0 " + paddingTop + " relative",
-          className
-        )}
-      >
+      <header className={cn("bg-gray-soft relative mb-5 px-2", className, paddingTop)}>
         <SkipLink />
         {isBannerEnabled && (
           <div className="bg-slate-800 p-4 text-white">
-            <div className="border-white-default mr-4 inline-block border-2 px-2 py-1">
-              {bannerType}
-            </div>
+            <div className="mr-4 inline-block border-2 px-2 py-1">{bannerType}</div>
             <div className="inline-block">
               <Markdown options={{ forceBlock: true }}>{bannerMessage}</Markdown>
             </div>
           </div>
         )}
-        <div className="grid w-full grid-flow-col p-2">
-          <div className="flex">
+        <div className="flex w-full items-center justify-between gap-4">
+          <div className="flex min-w-0 items-center rounded-xl bg-white py-2 pr-4 pl-1">
             <Link
               href={logoHref}
               prefetch={false}
               id="logo"
-              className="mr-7 flex border-r-1 pr-[14px] text-3xl font-semibold !text-black no-underline focus:bg-white"
+              className="mr-7 text-3xl font-semibold text-black! no-underline focus:bg-white"
             >
               <div className="inline-block h-[45px] w-[46px] p-2">
                 <SiteLogo title={t("title")} />
@@ -94,49 +92,59 @@ export const Header = ({
             )}
             {isFormBuilder && <FileNameInput />}
           </div>
-          <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
-            <ul className="mt-2 flex list-none px-0 text-base">
-              {(alwaysShowLoginLink || status !== "authenticated") && (
-                <li className="tablet:mr-4 mr-2 py-2 text-base">
-                  {isZitadelLoginEnabled ? (
-                    <form
-                      action={async () => {
-                        await signIn(
-                          "gcForms",
-                          { redirectTo: `/${language}/auth/policy` },
-                          { max_age: 0 }
-                        );
-                      }}
-                    >
-                      <Button type="submit" theme="link">
+          <div className="ml-auto rounded-xl bg-white px-4 py-2">
+            <nav aria-label={t("mainNavAriaLabel", { ns: "common" })}>
+              <ul className="flex list-none items-center justify-end px-0 text-base">
+                {(alwaysShowLoginLink || status !== "authenticated") && (
+                  <li className="tablet:mr-4 mr-2 py-2 text-base">
+                    {isZitadelLoginEnabled ? (
+                      <form
+                        action={async () => {
+                          await signIn(
+                            "gcForms",
+                            { redirectTo: `/${language}/auth/policy` },
+                            { max_age: 0 }
+                          );
+                        }}
+                      >
+                        <Button type="submit" theme="link">
+                          {t("loginMenu.login")}
+                        </Button>
+                      </form>
+                    ) : (
+                      <Link href={`/${language}/auth/login`} prefetch={false}>
                         {t("loginMenu.login")}
-                      </Button>
-                    </form>
-                  ) : (
-                    <Link href={`/${language}/auth/login`} prefetch={false}>
-                      {t("loginMenu.login")}
-                    </Link>
-                  )}
-                </li>
-              )}
-              {isFormBuilder && (
-                <>
-                  <li className="tablet:mr-4 mr-2 text-base">
-                    <ShareButton manageAccessEnabled={shareUsesManageAccess} />
+                      </Link>
+                    )}
                   </li>
-                  <li className="tablet:mr-4 mr-2 text-base">
-                    <PublishButton locale={language} />
+                )}
+                {isFormBuilder && (
+                  <>
+                    <li className="tablet:mr-4 mr-2 text-base">
+                      <ShareButton manageAccessEnabled={shareUsesManageAccess} />
+                    </li>
+                    <li className="tablet:mr-4 mr-2 text-base">
+                      <PublishButton locale={language} />
+                    </li>
+                  </>
+                )}
+                {showAccountMenu && status === "authenticated" && (
+                  <li className="tablet:mr-4 mr-2 py-2 text-base">
+                    <AccountMenu
+                      locale={language}
+                      testId="forms-account-menu-trigger"
+                      publishingEnabled={accountMenuPublishingEnabled}
+                      placement="header"
+                    />
                   </li>
-                </>
-              )}
-              <div className="mr-4 border-r-1" />
-              {
+                )}
+                <li className="mr-4 h-6 border-r border-gray-500" aria-hidden="true" />
                 <li className="tablet:mr-4 mr-2 py-2">
                   <LanguageToggle />
                 </li>
-              }
-            </ul>
-          </nav>
+              </ul>
+            </nav>
+          </div>
         </div>
       </header>
     </>

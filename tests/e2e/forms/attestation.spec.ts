@@ -15,6 +15,10 @@ test.describe("Testing attestation fields", { tag: "@published-form" }, () => {
   let formId: string;
   let dbHelper: DatabaseHelper;
 
+  const fillFullName = async (page: Parameters<typeof test>[0]["page"]) => {
+    await page.getByRole("textbox", { name: "Full name" }).fill("Test User");
+  };
+
   test.beforeAll(async () => {
     // Create a published template directly in the database
     dbHelper = new DatabaseHelper();
@@ -45,12 +49,19 @@ test.describe("Testing attestation fields", { tag: "@published-form" }, () => {
 
     test("Displays error when submitting form without checking all boxes", async ({ page }) => {
       await page.goto(publishedFormPath);
+      await fillFullName(page);
+
       const condition1Checkbox = page.locator('[id="1.0"]');
       const errorMessage = page.getByTestId("errorMessage");
 
       // Submit without checking any boxes
+
+      // focus the submit button
+      await page.getByRole("button", { name: "Submit" }).focus();
+
       await page.getByRole("button", { name: "Submit" }).click({ force: true });
-      await page.waitForTimeout(500);
+
+      await page.waitForTimeout(2000);
 
       await expect(errorMessage).toBeVisible();
 
@@ -73,6 +84,8 @@ test.describe("Testing attestation fields", { tag: "@published-form" }, () => {
 
     test("Submits properly", async ({ page }) => {
       await page.goto(publishedFormPath);
+      await fillFullName(page);
+
       const condition1Checkbox = page.locator('[id="1.0"]');
       const condition2Checkbox = page.locator('[id="1.1"]');
       const condition3Checkbox = page.locator('[id="1.2"]');

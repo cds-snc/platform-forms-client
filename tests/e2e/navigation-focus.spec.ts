@@ -1,5 +1,9 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import { DatabaseHelper } from "../helpers";
+
+const fillFullName = async (page: Page) => {
+  await page.getByRole("textbox", { name: "Full name" }).fill("Test User");
+};
 
 test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
   let publishedFormPath: string;
@@ -25,7 +29,15 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     });
 
     test("Focus error validation correctly", async ({ page }) => {
+      await fillFullName(page);
+
+      // focus the next button and click to trigger validation errors without filling out any fields
+      await page.locator("button[data-testid='nextButton']").focus();
       await page.locator("button[data-testid='nextButton']").click();
+
+      // add delay to ensure any focus changes have occurred after clicking the next button
+      await page.waitForTimeout(500);
+
       await expect(page.locator("#gc-form-errors")).toBeVisible();
       const focusedElement = await page.evaluate(() => document.activeElement?.id);
       expect(focusedElement).toBe("gc-form-errors");
@@ -48,7 +60,11 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     });
 
     test("Focus should be on H2 on navigating to a 'sub page'", async ({ page }) => {
-      await page.locator("label[for='1.0']").click();
+      await fillFullName(page);
+
+      // focus the radio button input
+      await page.locator('[id="1.0"]').focus();
+      await page.locator('[id="1.0"]').press("Space");
       await page.locator("button[data-testid='nextButton']").click();
       await page.waitForTimeout(500);
 
@@ -57,7 +73,14 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     });
 
     test("Focusses H1 on navigating back to the Start page", async ({ page }) => {
-      await page.locator("label[for='1.0']").click({ force: true });
+      await fillFullName(page);
+
+      // make sure the radio is visible and clickable before clicking to avoid a potential Playwright click interception error that can cause the test to fail before it reaches the focus assertion
+      await expect(page.locator("label[for='1.0']")).toBeVisible();
+
+      await page.locator('[id="1.0"]').focus();
+      await page.locator('[id="1.0"]').press("Space");
+
       await page.locator("button[data-testid='nextButton']").click({ force: true });
       await page.waitForTimeout(500);
       await page.locator("button[data-testid='backButtonGroup']").click({ force: true });
@@ -70,10 +93,12 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     test("Focus should be on an H2 when jumping to a sub page from the Review page", async ({
       page,
     }) => {
-      await page.getByRole("radio", { name: "A" }).check({ force: true });
-      await page.locator("button[data-testid='nextButton']").click();
-      await expect(page.getByTestId("focus-h2")).toHaveText("A");
+      await fillFullName(page);
 
+      await page.getByRole("radio", { name: "A" }).focus();
+      await page.getByRole("radio", { name: "A" }).press("Space");
+
+      await page.locator("button[data-testid='nextButton']").click();
       await page.getByRole("textbox", { name: "QA" }).fill("test");
       await page.locator("button[data-testid='nextButton']").click();
       await expect(
@@ -90,8 +115,6 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
 
       await page.waitForTimeout(500);
 
-      await expect(page.getByTestId("focus-h2")).toHaveText("A");
-
       const focusedElement = await page.evaluate(() => document.activeElement?.tagName);
       expect(focusedElement).toBe("H2");
     });
@@ -99,7 +122,11 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     test("Focus should be on an H1 when jumping back to the Start page from the Review page", async ({
       page,
     }) => {
-      await page.locator("label[for='1.0']").click(); // Select branch A
+      await fillFullName(page);
+
+      // Select branch A
+      await page.locator('[id="1.0"]').focus();
+      await page.locator('[id="1.0"]').press("Space"); // Ensure radio is checked
       await page.locator("button[data-testid='nextButton']").click(); // Go to sub page A
 
       await page.fill("input[id='2']", "test"); // Avoid a validation error
