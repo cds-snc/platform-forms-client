@@ -652,7 +652,7 @@
     "statuses": {
       "active": "Active session",
       "idle": "Open session",
-      "away": "No recent activity",
+      "away": "Paused session",
       "stale": "Inactive session"
     },
     "unknownUser": "Another user",

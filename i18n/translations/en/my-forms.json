@@ -55,8 +55,8 @@
       "linkText": "Sign off on responses"
     },
     "editLock": {
-      "title": "Open form in read-only mode",
-      "description": "{{name}} is currently editing this draft. If you continue, the form will open in read-only mode until you take over editing."
+      "title": "Open form in progress",
+      "description": "{{name}} is currently editing this draft. If you continue, the form will remain locked until you decide to take over editing. Only one person can edit a form at a time."
     },
     "unnamedForm": "Unnamed form file"
   },
@@ -111,7 +111,7 @@
     "formDownloadFailed": "Failed to download the form.",
     "formUnarchiveFailed": "Failed to restore the form."
   },
-  "continueReadOnly": "Continue in read-only mode",
+  "continueReadOnly": "Continue to form",
   "archivedNotice": "You can access archived forms for 30 days.",
   "archivedNotice2": "After that, forms will be permanently deleted."
 }
