@@ -257,7 +257,7 @@ type AuditDetailsParams = {
     serviceAccountId: string;
   };
   [AuditLogDetails.DeletedServiceAccount]: {
-    userId: string;
+    userEmail: string;
     serviceAccountID: string;
     templateId: string;
   };
