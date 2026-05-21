@@ -195,7 +195,7 @@ describe("Service Account functions", () => {
         { type: "ServiceAccount" },
         "DeleteAPIKey",
         "DeletedAPIKey",
-        { serviceAccountID: serviceAccountID, templateId: "templateId", userId: "1" }
+        { serviceAccountID: serviceAccountID, templateId: "templateId", userEmail: undefined }
       );
     });
     it("should delete a key if there is not an existing user in the IDP", async () => {
@@ -212,7 +212,7 @@ describe("Service Account functions", () => {
         { type: "ServiceAccount" },
         "DeleteAPIKey",
         "DeletedAPIKey",
-        { templateId: "templateId", userId: "1", serviceAccountID: "" }
+        { templateId: "templateId", userEmail: undefined, serviceAccountID: "" }
       );
     });
     it("should not throw an Error if the key does not exist in the database", async () => {
@@ -233,7 +233,7 @@ describe("Service Account functions", () => {
         { type: "ServiceAccount" },
         "DeleteAPIKey",
         "DeletedAPIKey",
-        { serviceAccountID: serviceAccountID, templateId: "templateId", userId: "1" }
+        { serviceAccountID: serviceAccountID, templateId: "templateId", userEmail: undefined }
       );
     });
 

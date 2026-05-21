@@ -39,7 +39,7 @@ export const deleteKey = async (templateId: string) => {
       {
         serviceAccountID: serviceAccountID ?? "",
         templateId: templateId,
-        userId: user.id,
+        userEmail: user.email,
       }
     );
 
@@ -51,7 +51,7 @@ export const deleteKey = async (templateId: string) => {
       {
         serviceAccountID: serviceAccountID ?? "",
         templateId: templateId,
-        userId: user.id,
+        userEmail: user.email,
       }
     );
   } catch (error) {

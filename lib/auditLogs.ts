@@ -232,7 +232,7 @@ type AuditDetailsParams = {
     privilegedUserId: string;
   };
   [AuditLogDetails.AccessedAllSystemForms]: never;
-  [AuditLogDetails.ClonedForm]: never;
+  [AuditLogDetails.ClonedForm]: { newFormID: string };
   [AuditLogDetails.UpdateClosingDate]: { closingDate: string };
   [AuditLogDetails.RemoveClosingDate]: never;
   [AuditLogDetails.RetrieveFormUsers]: never;
@@ -257,7 +257,7 @@ type AuditDetailsParams = {
     serviceAccountId: string;
   };
   [AuditLogDetails.DeletedServiceAccount]: {
-    userId: string;
+    userEmail: string;
     serviceAccountID: string;
     templateId: string;
   };
