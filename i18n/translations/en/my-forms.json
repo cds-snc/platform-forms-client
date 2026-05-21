@@ -4,7 +4,8 @@
     "drafts": "Drafts",
     "published": "Published",
     "all": "All",
-    "archived": "Archived"
+    "archived": "Archived",
+    "shared": "Shared"
   },
   "actions": {
     "resumeForm": "Resume editing form",

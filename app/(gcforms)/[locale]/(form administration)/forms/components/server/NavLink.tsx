@@ -14,11 +14,10 @@ export const NavLink = ({
   active: boolean;
 }) => {
   const baseClasses =
-    "mb-4 mr-3 rounded-[100px] border-1 border-black bg-white px-5 pb-2 pt-2 no-underline laptop:py-2";
+    "block w-full px-4 py-3 mb-2 text-left no-underline rounded transition-colors";
   const inactiveClasses =
-    "!text-black hover:bg-gray-600 hover:!text-white-default focus:border-1 focus:border-black focus:bg-blue-focus focus:!text-white focus:outline-none hover:[&_svg]:fill-white hover:[&_svg]:stroke-white focus:[&_svg]:fill-white";
-  const activeClasses =
-    "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white focus:[&_svg]:stroke-white";
+    "!text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-focus";
+  const activeClasses = "bg-[#475569] !text-white [&_svg]:fill-white [&_svg]:stroke-white";
 
   return (
     <Link

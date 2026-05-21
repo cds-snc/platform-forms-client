@@ -26,7 +26,7 @@ export const Cards = async ({
         className={`pt-8`}
       >
         {templates.length > 0 ? (
-          <ol className="grid grid-cols-2 gap-4 p-0">
+          <ol className="grid grid-cols-[repeat(auto-fit,250px)] justify-items-start gap-4 p-0">
             {templates.map((card) => {
               // Check if the form has an overdue submission
               if (overdueTemplateIds.includes(card.id)) {
@@ -34,7 +34,7 @@ export const Cards = async ({
               }
 
               return (
-                <li className="flex flex-col" key={card.id}>
+                <li className="flex w-full max-w-[250px] flex-col" key={card.id}>
                   <Card card={card} status={status} />
                 </li>
               );

@@ -13,16 +13,20 @@ export const Navigation = async ({ filter }: { filter?: string }) => {
     "inline-block group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <nav className="flex flex-wrap" aria-label={t("navLabel")}>
-      <NavLink href={`/${language}/forms`} id="tab-all" active={filter === "all" || !filter}>
+    <nav
+      className="flex flex-col rounded border border-slate-200 bg-white p-2"
+      aria-label={t("navLabel")}
+    >
+      {/* TODO - only show if shared templates */}
+      <NavLink href={`/${language}/forms`} id="tab-all" active={filter === "shared" || !filter}>
         <>
-          <FolderIcon className={cn(iconClassname, "w-5 h-5")} />
-          {t("nav.all")}
+          <FolderIcon className={cn(iconClassname, "h-5 w-5")} />
+          {t("nav.shared")}
         </>
       </NavLink>
       <NavLink href={`/${language}/forms?status=draft`} id="tab-drafts" active={filter === "draft"}>
         <>
-          <PageIcon className={cn(iconClassname, "w-5 h-5")} />
+          <PageIcon className={cn(iconClassname, "h-5 w-5")} />
           {t("nav.drafts")}
         </>
       </NavLink>
@@ -32,7 +36,7 @@ export const Navigation = async ({ filter }: { filter?: string }) => {
         active={filter === "published"}
       >
         <>
-          <GlobeIcon className={cn(iconClassname, "w-5 h-5")} />
+          <GlobeIcon className={cn(iconClassname, "h-5 w-5")} />
           {t("nav.published")}
         </>
       </NavLink>

@@ -122,21 +122,27 @@ export default async function Page(props: {
   const overdueTemplateIds = await getOverdueTemplateIds(templates.map((template) => template.id));
 
   return (
-    <div className="mx-auto w-[980px]">
-      <h1 className="mb-8 border-b-0">{t("title")}</h1>
-      <Invitations invitations={invitations} />
-      <div className="flex w-full justify-between">
+    <div className="m-4 grid grid-cols-[300px_1fr] gap-8">
+      <div>
         <Navigation filter={status} />
-        <NewFormButton />
       </div>
-      <ResumeEditingForm />
-      {status == "archived" && (
-        <div>
-          {t("archivedNotice")}&nbsp;
-          <strong>{t("archivedNotice2")}</strong>
+      <div>
+        {/* TODO where to put this stuff? */}
+        <div className="mb-4">
+          <h1 className="mb-8 border-b-0">{t("title")}</h1>
+          <Invitations invitations={invitations} />
+          <NewFormButton />
+          <ResumeEditingForm />
+          {status == "archived" && (
+            <div>
+              {t("archivedNotice")}&nbsp;
+              <strong>{t("archivedNotice2")}</strong>
+            </div>
+          )}
         </div>
-      )}
-      <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} status={status} />
+
+        <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} status={status} />
+      </div>
     </div>
   );
 }

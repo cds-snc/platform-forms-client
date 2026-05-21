@@ -1,31 +1,29 @@
 import React, { Suspense } from "react";
-import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
+import { EnvelopeIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
-import { DraftEditLink } from "../client/DraftEditLink";
+// import { DraftEditLink } from "../client/DraftEditLink";
 import { Unarchive } from "../client/Unarchive";
 import { serverTranslation } from "@i18n";
-import Link from "next/link";
+// import Link from "next/link";
 import { DeliveryOption } from "@lib/types";
 import Skeleton from "react-loading-skeleton";
 
 const CardBanner = async ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
   const { t } = await serverTranslation("my-forms");
+  let bulletColor = "bg-yellow-400";
+  if (isPublished) bulletColor = "bg-emerald-500";
+  if (ttl) bulletColor = "bg-orange-400";
   return (
-    <div
-      className={
-        "self-start rounded border-solid p-1 px-2 text-sm" +
-        (isPublished
-          ? " border-emerald-700 bg-emerald-500 text-black"
-          : " border-yellow-700 bg-yellow-300")
-      }
-      aria-hidden="true"
-    >
+    <span className="flex items-center gap-1 self-start text-sm" aria-hidden="true">
+      <span
+        className={`inline-block h-3 w-3 rounded-full border-1 border-slate-500 ${bulletColor} `}
+      ></span>
       {ttl
         ? t("card.states.archived")
         : isPublished
           ? t("card.states.published")
           : t("card.states.draft")}
-    </div>
+    </span>
   );
 };
 
@@ -40,10 +38,10 @@ interface CardLinksProps {
 
 const CardLinks = async ({
   isPublished,
-  url,
+  // url,
   id,
   deliveryOption,
-  overdue,
+  // overdue,
   ttl,
 }: CardLinksProps) => {
   const {
@@ -51,34 +49,34 @@ const CardLinks = async ({
     i18n: { language },
   } = await serverTranslation("my-forms");
 
-  const responsesLink = `/${language}/form-builder/${id}/responses`;
+  // const responsesLink = `/${language}/form-builder/${id}/responses`;
 
-  const editLink = isPublished ? (
-    <Link
-      href={url}
-      className="my-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
-      target="_blank"
-      aria-describedby={`card-title-${id} card-date-${id}`}
-      rel="noreferrer"
-      prefetch={false}
-    >
-      <PreviewIcon className="mr-2 inline-block" />
-      {t("viewForm")}
-    </Link>
-  ) : (
-    <DraftEditLink
-      href={`/${language}/form-builder/${id}/edit/`}
-      formId={id}
-      className="my-4 block cursor-pointer text-left text-sm underline focus:fill-slate-500 active:fill-slate-500 disabled:opacity-70"
-    >
-      <DesignIcon className="mr-2 inline-block" />
-      {t("editForm")}
-    </DraftEditLink>
-  );
+  // const editLink = isPublished ? (
+  //   <Link
+  //     href={url}
+  //     className="my-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
+  //     target="_blank"
+  //     aria-describedby={`card-title-${id} card-date-${id}`}
+  //     rel="noreferrer"
+  //     prefetch={false}
+  //   >
+  //     <PreviewIcon className="mr-2 inline-block" />
+  //     {t("viewForm")}
+  //   </Link>
+  // ) : (
+  //   <DraftEditLink
+  //     href={`/${language}/form-builder/${id}/edit/`}
+  //     formId={id}
+  //     className="my-4 block cursor-pointer text-left text-sm underline focus:fill-slate-500 active:fill-slate-500 disabled:opacity-70"
+  //   >
+  //     <DesignIcon className="mr-2 inline-block" />
+  //     {t("editForm")}
+  //   </DraftEditLink>
+  // );
 
   return (
-    <div className="mb-4 px-3">
-      {ttl == null && editLink}
+    <div className="mb-4">
+      {/* {ttl == null && editLink} */}
       {ttl != null && <Unarchive id={id} isPublished={isPublished} language={language} />}
 
       {/* Email delivery */}
@@ -89,7 +87,7 @@ const CardLinks = async ({
         </span>
       )}
       {/* Vault delivery */}
-      {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
+      {/* {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
         <>
           {overdue ? (
             <span className="text-red mt-4 block text-sm">
@@ -108,14 +106,14 @@ const CardLinks = async ({
             </Link>
           )}
         </>
-      )}
+      )} */}
     </div>
   );
 };
 
 const CardTitle = async ({ name }: { name: string }) => {
   const { t } = await serverTranslation("my-forms");
-  const classes = "mb-0 mr-2 overflow-hidden pb-0 text-base font-bold";
+  const classes = "mb-0 mr-2 overflow-hidden pb-0 text-base font-bold line-clamp-3";
   return <h2 className={classes}>{name ? name : t("card.unnamedForm")}</h2>;
 };
 
@@ -138,7 +136,7 @@ const CardDate = async ({ id, date, ttl }: { id: string; date: string; ttl?: Dat
     : 0;
 
   return (
-    <div id={`card-date-${id}`} className="text-sm">
+    <div id={`card-date-${id}`} className="mb-2 text-sm">
       {t("card.lastEdited")}: {formatDate(date)}
       {ttl != null && (
         <>
@@ -171,34 +169,13 @@ export interface CardI {
 export const Card = async ({ card, status }: { card: CardI; status?: string }) => {
   return (
     <div
-      className="flex h-full flex-col justify-between rounded border-1 border-slate-500 bg-white"
+      className="flex h-full flex-col justify-between rounded border-1 border-slate-500 bg-white p-2 pb-4"
       data-testid={`card-${card.id}`}
     >
-      <div className="mt-3 flex flex-col justify-between">
-        <div className="flex flex-col px-3">
-          <div className="flex h-full justify-between">
-            <CardTitle name={card.name} />
-            <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
-          </div>
-        </div>
-        <Suspense fallback={<Skeleton count={2} className="my-4 ml-4 w-[300px]" />}>
-          <CardLinks
-            isPublished={card.isPublished}
-            url={card.url}
-            id={card.id}
-            deliveryOption={card.deliveryOption}
-            overdue={card.overdue}
-            ttl={card.ttl}
-          />
-        </Suspense>
-      </div>
+      <div className="mb-2 flex items-center justify-between">
+        {/* TODO */}
+        <p className="text-sm">Shared with 5 people</p>
 
-      <div className="mb-2 text-xs">
-        <p className="ml-4 italic">{card.id}</p>
-      </div>
-
-      <div className="mb-4 flex items-center justify-between px-3">
-        <CardDate id={card.id} date={card.date} ttl={card.ttl} />
         <div className="flex items-center text-sm">
           <Menu
             id={card.id}
@@ -207,6 +184,33 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
             ttl={card.ttl ? card.ttl : undefined}
             status={status}
           />
+        </div>
+      </div>
+
+      <CardTitle name={card.name} />
+      <Suspense fallback={<Skeleton count={2} className="my-4 ml-4 w-[300px]" />}>
+        <CardLinks
+          isPublished={card.isPublished}
+          url={card.url}
+          id={card.id}
+          deliveryOption={card.deliveryOption}
+          overdue={card.overdue}
+          ttl={card.ttl}
+        />
+      </Suspense>
+
+      {/* <div className="mb-2 text-xs">
+          <p className="ml-4 italic">{card.id}</p>
+        </div> */}
+
+      <div>
+        <CardDate id={card.id} date={card.date} ttl={card.ttl} />
+
+        {/* TODO */}
+        <div className="mb-2 text-sm">By: [first name]</div>
+
+        <div>
+          <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
         </div>
       </div>
     </div>

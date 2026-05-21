@@ -4,7 +4,8 @@
     "drafts": "Ébauches",
     "published": "Publiés",
     "all": "Tous",
-    "archived": "Archivés"
+    "archived": "Archivés",
+    "shared": "Shared"
   },
   "actions": {
     "resumeForm": "Reprendre la rédaction de formulaire en cours",

@@ -62,7 +62,7 @@ export const Header = ({
 
   return (
     <>
-      <header className={cn("bg-gray-soft relative mb-5 px-2", className, paddingTop)}>
+      <header className={cn("bg-gray-soft relative px-2", className, paddingTop)}>
         <SkipLink />
         {isBannerEnabled && (
           <div className="bg-slate-800 p-4 text-white">
@@ -72,8 +72,8 @@ export const Header = ({
             </div>
           </div>
         )}
-        <div className="flex w-full items-center justify-between gap-4">
-          <div className="flex min-w-0 items-center rounded-xl bg-white py-2 pr-4 pl-1">
+        <div className="flex w-full items-center justify-between gap-4 rounded-xl border-1 border-gray-200 bg-white">
+          <div className="flex min-w-0 items-center py-2 pr-4 pl-1">
             <Link
               href={logoHref}
               prefetch={false}

@@ -140,10 +140,10 @@ export const Menu = ({
   return (
     <>
       <MenuDropdown id={id} items={menuItemsList}>
-        <span className="mr-1 text-[2rem]" aria-hidden="true">
+        <span className="text-[1.5rem]" aria-hidden="true">
           ⋮
         </span>
-        {t("card.menu.more")}
+        {/* {t("card.menu.more")} */}
       </MenuDropdown>
       <ConfirmDelete
         onDeleted={() => {
