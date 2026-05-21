@@ -152,7 +152,7 @@ export const createKey = async (templateId: string) => {
       AuditLogDetails.CreatedNewApiKey,
       {
         serviceAccountId: serviceAccountId,
-        userEmail: user.email,
+        userId: user.id,
       }
     );
     logEvent(
@@ -162,7 +162,7 @@ export const createKey = async (templateId: string) => {
       AuditLogDetails.CreatedNewApiKey,
       {
         serviceAccountId: serviceAccountId,
-        userEmail: user.email,
+        userId: user.id,
       }
     );
 
