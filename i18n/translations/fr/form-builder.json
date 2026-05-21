@@ -609,6 +609,7 @@
       "SetFormPurpose": "Usage prévu défini comme :{{formPurpose}}",
       "SetSaveAndResume": "Sauvegarde des réponses modifiée à :{{saveAndResume}}",
       "UpdateClosingDate": "Date de fermeture modifiée à : {{closingDate}}",
+      "RemoveClosingDate": "Date de fermeture supprimée.",
       "UpdatedNotificationSettings": "Paramètre de notification {{enabled}} pour {{userEmail}}",
       "GeneratedAPIKey": "Clé API {{APIkeyID}} générée par {{userEmail}}",
       "DeletedAPIKey": "Clé API {{APIkeyID}} supprimée par {{userEmail}}",
