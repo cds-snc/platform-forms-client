@@ -1403,7 +1403,8 @@ export async function cloneTemplate(
     user.id,
     { type: "Form", id: createdTemplate.id },
     "CreateForm",
-    AuditLogDetails.ClonedForm
+    AuditLogDetails.ClonedForm,
+    { newFormID: createdTemplate.id }
   );
 
   return _parseTemplate(createdTemplate);
