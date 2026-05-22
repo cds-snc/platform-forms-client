@@ -669,9 +669,9 @@
     "takeoverAvailableMessage": "The form is now available for editing.",
     "takeoverAvailableTitle": "Form available for editing",
     "sessionExpiredTitle": "Your session expired",
-    "sessionExpiredMessage": "Editing was stopped because the form was idle. Re-open the form to make changes.",
+    "sessionExpiredMessage": "Your changes were saved. You can return to your form and keep making changes by re-loading the page.",
     "returnToForms": "Return to forms",
-    "reloadPage": "Reload"
+    "reloadPage": "Re-load form"
   },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publish",

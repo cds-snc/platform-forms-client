@@ -667,9 +667,9 @@
     "syncedLatest": "Vous modifiez maintenant la version enregistrée du formulaire la plus récente.",
     "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer.",
     "sessionExpiredTitle": "Votre session a expiré",
-    "sessionExpiredMessage": "La modification a été arrêtée parce que ce formulaire était inactif. Veuillez rouvrir le formulaire pour y apporter des changements.",
+    "sessionExpiredMessage": "Vos modifications ont été enregistrées. Vous pouvez reprendre le formulaire pour y apporter des changements en actualisant la page.",
     "returnToForms": "Retourner aux formulaires",
-    "reloadPage": "Recharger"
+    "reloadPage": "Actualiser le formulaire"
   },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publier",
