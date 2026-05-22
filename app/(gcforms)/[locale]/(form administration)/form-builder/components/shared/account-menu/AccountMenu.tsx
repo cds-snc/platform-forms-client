@@ -145,6 +145,7 @@ export const AccountMenu = ({
       >
         <div className="flex min-h-0 flex-col">
           <div
+            data-testid="account-menu-header"
             className={`px-6 py-5 ${
               publishingEnabled === true
                 ? "bg-emerald-50"
@@ -162,8 +163,12 @@ export const AccountMenu = ({
               {user.email}
             </p>
             {publishingEnabled !== undefined && (
-              <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
+              <div
+                data-testid="account-menu-publishing-status"
+                className="flex items-center gap-2 text-sm font-semibold text-slate-800"
+              >
                 <span
+                  data-testid="account-menu-publishing-indicator"
                   className={
                     publishingEnabled
                       ? "size-2.5 rounded-full bg-emerald-600"
