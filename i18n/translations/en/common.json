@@ -273,6 +273,10 @@
     "more": "More",
     "cancel": "Cancel",
     "formRestored": "Your answers were loaded to the form.",
+    "formRestoredWarning": {
+      "title": "Review answers from another form",
+      "message": "⚠️ These saved answers came from a different form. Review them carefully before you continue."
+    },
     "resumeUploadError": {
       "title": "Problem loading answers",
       "description": "Try uploading the file again or restart a new form and copy-paste your answers from the file.",

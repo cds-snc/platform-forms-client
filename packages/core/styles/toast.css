@@ -277,6 +277,11 @@
   color: var(--color-gcds-yellow-800) !important;
 }
 
+.Toastify__toast.gc-toast--lavender {
+  background: var(--gcds-color-purple-50) !important;
+  color: #000 !important;
+}
+
 .Toastify__toast.gc-toast--default {
   background: var(--toastify-color-light) !important;
   color: #000 !important;

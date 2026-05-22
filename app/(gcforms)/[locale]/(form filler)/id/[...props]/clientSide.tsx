@@ -17,6 +17,7 @@ import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { flattenStructureToValues, stripExcludedKeys } from "./lib/client/helpers";
+import { FormRestoredWarning } from "@clientComponents/forms/ResumeForm/FormRestoredWarning";
 
 export const FormWrapper = ({
   formRecord,
@@ -108,10 +109,14 @@ export const FormWrapper = ({
       removeProgressStorage();
 
       if (savedValues.language === language && !isEmptyForm) {
-        toast.success(formRestoredMessage, "public-facing-form");
+        if (savedValues.sourceFormId && savedValues.sourceFormId !== formRecord.id) {
+          toast.lavender(<FormRestoredWarning />, "public-facing-form-wide");
+        } else {
+          toast.success(formRestoredMessage, "public-facing-form");
+        }
       }
     }
-  }, [savedValues, formRestoredMessage, language, isEmptyForm]);
+  }, [savedValues, language, isEmptyForm, formRecord.id, formRestoredMessage]);
 
   const initialValues = savedValues ? savedValues.values : undefined;
 
@@ -172,7 +177,15 @@ export const FormWrapper = ({
       </Form>
 
       {saveAndResume && (
-        <ToastContainer limit={1} autoClose={false} containerId="public-facing-form" />
+        <>
+          <ToastContainer limit={1} autoClose={false} containerId="public-facing-form" />
+          <ToastContainer
+            limit={1}
+            autoClose={false}
+            containerId="public-facing-form-wide"
+            width="750px"
+          />
+        </>
       )}
     </>
   );

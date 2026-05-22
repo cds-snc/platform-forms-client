@@ -273,6 +273,10 @@
     "more": "Plus",
     "cancel": "Annuler",
     "formRestored": "Vos réponses jusqu'à présent ont été ajoutées au formulaire.",
+    "formRestoredWarning": {
+      "title": "Vérifiez des réponses d'un autre formulaire",
+      "message": "⚠️ Ces réponses sauvegardées proviennent d'un autre formulaire. Vérifiez-les attentivement avant de continuer."
+    },
     "resumeUploadError": {
       "title": "Problème de téléversement",
       "description": "Essayez de téléverser à nouveau le fichier ou recommencez un nouveau formulaire et copiez-collez vos réponses du fichier.",

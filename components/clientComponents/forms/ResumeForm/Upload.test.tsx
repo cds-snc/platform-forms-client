@@ -125,6 +125,7 @@ describe("Upload", () => {
         values: { firstName: "Avery" },
         history: ["start"],
         currentGroup: "start",
+        sourceFormId: "previous-form",
       });
     });
 

@@ -44,12 +44,19 @@ export const Upload = ({ formId }: { formId: string }) => {
     null
   );
 
-  const restoreProgress = ({ id, values, history, currentGroup }: ResumeFormResponse) => {
+  const restoreProgress = ({
+    id,
+    values,
+    history,
+    currentGroup,
+    sourceFormId,
+  }: ResumeFormResponse & { sourceFormId?: string }) => {
     saveSessionProgress(language, {
       id,
       values,
       history,
       currentGroup,
+      sourceFormId,
     });
     router.push(`/${language}/id/${id}`);
   };
@@ -65,6 +72,7 @@ export const Upload = ({ formId }: { formId: string }) => {
       values: pendingMismatchResume.values,
       history: pendingMismatchResume.history,
       currentGroup: pendingMismatchResume.currentGroup,
+      sourceFormId: pendingMismatchResume.sourceFormId,
     });
     setPendingMismatchResume(null);
   };

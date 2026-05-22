@@ -46,6 +46,12 @@ type ToastContext = {
   rtl?: boolean;
 };
 
+const widthClassNames: Record<string, string> = {
+  "750px":
+    "w-[750px] max-w-[calc(100vw-2rem)] [--toastify-toast-width:750px] max-md:w-[calc(100vw-2rem)] max-md:[--toastify-toast-width:calc(100vw-2rem)]",
+  "600px": "w-[600px] [--toastify-toast-width:600px]",
+};
+
 export const ToastContainer = ({
   autoClose = 7000,
   width = "",
@@ -59,14 +65,19 @@ export const ToastContainer = ({
   limit?: number;
   ariaLabel?: string;
 }) => {
+  const widthClassName = widthClassNames[width] ?? "";
+
   return (
     <OriginalContainer
       containerId={containerId}
       toastClassName={(context?: ToastContext) => {
-        return `${context?.defaultClassName || ""} ${contextClass[context?.type || "default"]["classes"]}
+        const variantClassName =
+          context?.defaultClassName || contextClass[context?.type || "default"]["classes"];
+
+        return `${variantClassName}
         relative drop-shadow-md p-1 rounded-md justify-between overflow-hidden p-4 cursor-pointer text-base`;
       }}
-      style={{ width: width }}
+      className={widthClassName}
       position="top-center"
       autoClose={autoClose}
       hideProgressBar={true}
@@ -109,6 +120,12 @@ export const toast = {
   },
   warning: (message: string | JSX.Element, containerId = "") => {
     originalToast.warning(toastContent(message, "warning"), { containerId });
+  },
+  lavender: (message: string | JSX.Element, containerId = "default") => {
+    originalToast(message, {
+      containerId,
+      className: "gc-toast gc-toast--lavender !rounded-none !shadow-none",
+    });
   },
   default: (message: string | JSX.Element, containerId = "default") => {
     originalToast(toastContent(message, "default"), { containerId });
