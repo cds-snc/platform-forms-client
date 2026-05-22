@@ -293,10 +293,10 @@
         "description": "Continuez à partir de votre formulaire sauvegardé en cours"
       },
       "mismatchedForm": {
-        "title": "Utiliser ces réponses?",
-        "description": "⚠️ Ce fichier sauvegardé appartient à un autre formulaire que celui que vous essayez de poursuivre.",
-        "warning": "Si vous continuez quand même, nous téléverserons les réponses sauvegardées dans ce formulaire afin que vous puissiez les vérifier et les mettre à jour ici.",
-        "matchingFormLink": "Accéder plutôt au formulaire correspondant",
+        "title": "Souhaitez-vous poursuivre le formulaire avec ces réponses?",
+        "description": "⚠️ Ces réponses sauvegardées proviennent d'un formulaire ou d'une version différente de celle que vous essayez de poursuivre.",
+        "warning": "Si vous continuez quand même, vous devrez vérifier toutes les réponses téléversées dans ce formulaire pour vous assurer qu'elles sont correctes.",
+        "matchingFormLink": "Aller au formulaire d'origine à la place",
         "cancel": "Annuler",
         "continue": "Continuer quand même"
       },
