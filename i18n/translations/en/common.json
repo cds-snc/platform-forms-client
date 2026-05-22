@@ -274,8 +274,8 @@
     "cancel": "Cancel",
     "formRestored": "Your answers were loaded to the form.",
     "formRestoredWarning": {
-      "title": "Review answers from another form",
-      "message": "These saved answers came from a different form. Review them carefully before you continue."
+      "title": "Check your answers carefully",
+      "message": "Your saved answers were based on a different original form. Review them carefully before submitting."
     },
     "resumeUploadError": {
       "title": "Problem loading answers",
