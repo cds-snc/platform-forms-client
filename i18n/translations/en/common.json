@@ -289,10 +289,10 @@
         "description": "Upload your saved form in progress"
       },
       "mismatchedForm": {
-        "title": "Use these answers?",
-        "description": "⚠️ This saved file belongs to a different form than the one you're trying to continue.",
-        "warning": "If you continue anyway, we'll load the saved answers into this form so you can review and update them here.",
-        "matchingFormLink": "Go to the matching form instead",
+        "title": "Continue the form with these answers?",
+        "description": "⚠️ This saved progress was from a different form or version than the one you're trying to continue filling out.",
+        "warning": "If you continue anyway, you will need to review all the answers that get loaded into this form to ensure they are correct.",
+        "matchingFormLink": "Go to the original form instead",
         "cancel": "Cancel",
         "continue": "Continue anyway"
       },
