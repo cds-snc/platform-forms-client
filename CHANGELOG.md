@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.15.1](https://github.com/cds-snc/platform-forms-client/compare/v4.15.0...v4.15.1) (2026-05-22)
+
+
+### Bug Fixes
+
+* Audit Log Fixes -&gt; Duplicate a Form && Deleted API Key Messages ([#7216](https://github.com/cds-snc/platform-forms-client/issues/7216)) ([65c1ca2](https://github.com/cds-snc/platform-forms-client/commit/65c1ca22cddd640e16200c4da0aa49cc4c08b104))
+* Audit Log Message Closing Date vs Remove Closing Date ([#7215](https://github.com/cds-snc/platform-forms-client/issues/7215)) ([b315e1c](https://github.com/cds-snc/platform-forms-client/commit/b315e1c19f94a26152683905f728ced5b0a48cbd))
+* publish check on start page ([#7231](https://github.com/cds-snc/platform-forms-client/issues/7231)) ([d7ebc4d](https://github.com/cds-snc/platform-forms-client/commit/d7ebc4df6da67828d0d50b7de8d75709eb6bf732))
+* Several missing i18n messages for audit log entries. ([#7143](https://github.com/cds-snc/platform-forms-client/issues/7143)) ([bbf8cd5](https://github.com/cds-snc/platform-forms-client/commit/bbf8cd51fe9fdd8769998d707266b40aaf11a814))
+
+
+### Miscellaneous Chores
+
+* content tweaks for activity log ([#7229](https://github.com/cds-snc/platform-forms-client/issues/7229)) ([18227bd](https://github.com/cds-snc/platform-forms-client/commit/18227bdbdd6c7963bf98cebaf541640fd08fd4d1))
+* update content for expired session ([#7223](https://github.com/cds-snc/platform-forms-client/issues/7223)) ([eb583af](https://github.com/cds-snc/platform-forms-client/commit/eb583af18642341d3ec6594e0c2873f2ad4bde22))
+* update email notifications for form collaborators  ([#7213](https://github.com/cds-snc/platform-forms-client/issues/7213)) ([2c81287](https://github.com/cds-snc/platform-forms-client/commit/2c8128701da2e957790f8773d939f70a1f2f46a9))
+
 ## [4.15.0](https://github.com/cds-snc/platform-forms-client/compare/v4.14.1...v4.15.0) (2026-05-21)
 
 
