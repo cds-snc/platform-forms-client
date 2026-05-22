@@ -597,7 +597,7 @@
     },
     "eventDetails": {
       "CreatedForm": "Created form",
-      "UpdatedFormName": "Renamed form {{newFormName}}",
+      "UpdatedFormName": "Renamed form to: {{newFormName}}",
       "UpdatedFormContent": "Updated form content",
       "DuplicatedForm": "Duplicated form to create a new one {{newFormID}}",
       "ArchivedForm": "Archived form",

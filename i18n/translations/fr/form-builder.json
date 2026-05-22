@@ -597,7 +597,7 @@
     },
     "eventDetails": {
       "CreatedForm": "Formulaire créé",
-      "UpdatedFormName": "Formulaire renommé {{newFormName}}",
+      "UpdatedFormName": "Formulaire renommé à :{{newFormName}}",
       "UpdatedFormContent": "Contenu du formulaire mis à jour",
       "DuplicatedForm": "Formulaire dupliqué pour en créer un nouveau {{newFormID}}",
       "ArchivedForm": "Formulaire archivé",
