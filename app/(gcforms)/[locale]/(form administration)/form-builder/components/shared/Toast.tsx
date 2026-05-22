@@ -121,10 +121,10 @@ export const toast = {
   warning: (message: string | JSX.Element, containerId = "") => {
     originalToast.warning(toastContent(message, "warning"), { containerId });
   },
-  lavender: (message: string | JSX.Element, containerId = "default") => {
+  notice: (message: string | JSX.Element, containerId = "default") => {
     originalToast(message, {
       containerId,
-      className: "gc-toast gc-toast--lavender !rounded-none !shadow-none",
+      className: "gc-toast gc-toast--notice-warning !rounded-none !shadow-none",
     });
   },
   default: (message: string | JSX.Element, containerId = "default") => {

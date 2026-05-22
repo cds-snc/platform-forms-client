@@ -110,7 +110,7 @@ export const FormWrapper = ({
 
       if (savedValues.language === language && !isEmptyForm) {
         if (savedValues.sourceFormId && savedValues.sourceFormId !== formRecord.id) {
-          toast.lavender(<FormRestoredWarning />, "public-facing-form-wide");
+          toast.notice(<FormRestoredWarning />, "public-facing-form-wide");
         } else {
           toast.success(formRestoredMessage, "public-facing-form");
         }
