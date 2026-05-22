@@ -78,7 +78,7 @@ export const Dialog = ({
         {title && (
           <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
             <h2
-              className="mt-4 ml-4 inline-block pb-4 text-2xl"
+              className="mt-4 ml-4 inline-block pb-4 text-2xl!"
               id={`modal-title-${modalRandomId.current}`}
               tabIndex={-1}
             >
