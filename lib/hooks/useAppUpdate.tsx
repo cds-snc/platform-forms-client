@@ -11,7 +11,12 @@ const AppUpdateContext = createContext({
 
 export const AppUpdateProvider = ({ children }: { children: React.ReactNode }) => {
   const [updateRequired, setUpdateRequired] = useState(false);
-  const [updateTriggered, setUpdateTriggered] = useState(false);
+  const updateTriggered =
+    typeof window !== "undefined" ? Boolean(sessionStorage?.getItem("gcFormsUpdate")) : false;
+
+  if (updateTriggered) {
+    logMessage.debug("useAppUpdate flagging update was triggered");
+  }
 
   const handleMessage = (event: MessageEvent) => {
     logMessage.info("Message to Update Recieved");
@@ -29,14 +34,10 @@ export const AppUpdateProvider = ({ children }: { children: React.ReactNode }) =
     };
   }, []);
 
-  // Only run on initial page load
+  // After an update clean up and remove the update flag from session storage
   useEffect(() => {
-    const localUpdate = Boolean(sessionStorage?.getItem("gcFormsUpdate"));
-    if (localUpdate) {
-      sessionStorage.removeItem("gcFormsUpdate");
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setUpdateTriggered(true);
-    }
+    logMessage.debug("Removing session storage update flag");
+    sessionStorage.removeItem("gcFormsUpdate");
   }, []);
 
   return (

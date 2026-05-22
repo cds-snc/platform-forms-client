@@ -4,10 +4,11 @@ import isEqual from "lodash.isequal";
 import { useSession } from "next-auth/react";
 import { logMessage } from "@lib/logger";
 import { safeJSONParse } from "@lib/utils";
-import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
-import { FormProperties, FormRecord } from "@lib/types";
+import { createOrUpdateTemplate } from "@formBuilder/actions";
+import { FormProperties } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
+import { useAppUpdate } from "../useAppUpdate";
 
 export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
 
@@ -17,23 +18,10 @@ type SaveDraftResult = {
 };
 
 interface TemplateApiType {
-  templateIsDirty: React.MutableRefObject<boolean>;
+  templateIsDirty: React.RefObject<boolean>;
   updatedAt: number | undefined;
   setUpdatedAt: React.Dispatch<React.SetStateAction<number | undefined>>;
-  createOrUpdateTemplate:
-    | (({
-        id,
-        formConfig,
-        name,
-        deliveryOption,
-        securityAttribute,
-        saveAndResume,
-        notificationsInterval,
-      }: CreateOrUpdateTemplateType) => Promise<{
-        formRecord: FormRecord | null;
-        error?: string;
-      }>)
-    | null;
+
   saveDraft: () => Promise<SaveDraftResult>;
   saveDraftIfNeeded: () => Promise<SaveDraftResult>;
   resetState: () => void;
@@ -43,7 +31,6 @@ const defaultTemplateApi: TemplateApiType = {
   templateIsDirty: { current: false },
   updatedAt: undefined,
   setUpdatedAt: () => {},
-  createOrUpdateTemplate: null,
   saveDraft: async () => ({ status: "skipped" }),
   saveDraftIfNeeded: async () => ({ status: "skipped" }),
   resetState: () => {},
@@ -63,6 +50,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
   const [, setDirtyTick] = useState(0);
   const { status } = useSession();
+  const { updateTriggered } = useAppUpdate();
 
   const {
     getDeliveryOption,
@@ -86,11 +74,12 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     setFromRecord: s.setFromRecord,
   }));
 
-  const templateIsDirty = useRef(false);
+  const templateIsDirty = useRef(updateTriggered);
   const savedSnapshot = useRef<TrackedTemplateState | null>(null);
   const saveInFlight = useRef(false);
   const queuedSaveRequested = useRef(false);
   const saveDraftQueue = useRef<Array<(result: SaveDraftResult) => void>>([]);
+
   const resetState = useCallback(() => {
     templateIsDirty.current = false;
     savedSnapshot.current = null;
@@ -241,7 +230,6 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         templateIsDirty,
         updatedAt,
         setUpdatedAt,
-        createOrUpdateTemplate,
         saveDraft: queueSaveDraft,
         saveDraftIfNeeded,
         resetState,

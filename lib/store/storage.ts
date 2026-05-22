@@ -4,21 +4,18 @@ import { TemplateStoreState } from "./types";
 import { StateStorage } from "zustand/middleware";
 import { createJSONStorage } from "zustand/middleware";
 
-/* Note: "async" getItem is intentional here to work-around a hydration issue   */
-/* https://github.com/pmndrs/zustand/issues/324#issuecomment-1031392610 */
-
 const storage: StateStorage = {
-  getItem: async (name: string) => {
+  getItem: (name: string) => {
     return sessionStorage.getItem(name) || null;
   },
-  setItem: async (name: string, value: string) => {
+  setItem: (name: string, value: string) => {
     try {
       sessionStorage.setItem(name, value);
     } catch (error) {
       logMessage.info(`Error setting item in session storage: ${JSON.stringify(error)}`);
     }
   },
-  removeItem: async (name: string) => {
+  removeItem: (name: string) => {
     sessionStorage.removeItem(name);
   },
 };
@@ -37,5 +34,12 @@ export const storageOptions = {
       logMessage.debug("Template Store Hydrationfinished");
       state?.setHasHydrated();
     };
+  },
+
+  merge: (persisted: unknown, current: TemplateStoreState) => {
+    logMessage.debug("Merging state action");
+    const persistedState = persisted as TemplateStoreState;
+
+    return { ...current, ...persistedState };
   },
 };
