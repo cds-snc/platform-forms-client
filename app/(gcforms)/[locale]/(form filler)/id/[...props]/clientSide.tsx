@@ -178,12 +178,18 @@ export const FormWrapper = ({
 
       {saveAndResume && (
         <>
-          <ToastContainer limit={1} autoClose={false} containerId="public-facing-form" />
+          <ToastContainer
+            limit={1}
+            autoClose={false}
+            containerId="public-facing-form"
+            ariaLabel="Form notifications: Alt+T"
+          />
           <ToastContainer
             limit={1}
             autoClose={false}
             containerId="public-facing-form-wide"
             width="750px"
+            ariaLabel="Restore warning notifications: Alt+T"
           />
         </>
       )}
