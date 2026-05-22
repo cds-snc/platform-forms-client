@@ -288,6 +288,14 @@
         "title": "Téléversez vos réponses",
         "description": "Continuez à partir de votre formulaire sauvegardé en cours"
       },
+      "mismatchedForm": {
+        "title": "Utiliser ces réponses?",
+        "description": "⚠️ Ce fichier sauvegardé appartient à un autre formulaire que celui que vous essayez de poursuivre.",
+        "warning": "Si vous continuez quand même, nous téléverserons les réponses sauvegardées dans ce formulaire afin que vous puissiez les vérifier et les mettre à jour ici.",
+        "matchingFormLink": "Accéder plutôt au formulaire correspondant",
+        "cancel": "Annuler",
+        "continue": "Continuer quand même"
+      },
       "restart": {
         "title": "Commencez le formulaire",
         "description": "Remplissez un nouveau formulaire"

@@ -288,6 +288,14 @@
         "title": "Load your answers",
         "description": "Upload your saved form in progress"
       },
+      "mismatchedForm": {
+        "title": "Use these answers?",
+        "description": "⚠️ This saved file belongs to a different form than the one you're trying to continue.",
+        "warning": "If you continue anyway, we'll load the saved answers into this form so you can review and update them here.",
+        "matchingFormLink": "Go to the matching form instead",
+        "cancel": "Cancel",
+        "continue": "Continue anyway"
+      },
       "restart": {
         "title": "Start blank form",
         "description": "Fill out a new form"
