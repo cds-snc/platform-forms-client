@@ -274,8 +274,8 @@
     "cancel": "Annuler",
     "formRestored": "Vos réponses jusqu'à présent ont été ajoutées au formulaire.",
     "formRestoredWarning": {
-      "title": "Vérifiez des réponses d'un autre formulaire",
-      "message": "Ces réponses sauvegardées proviennent d'un autre formulaire. Vérifiez-les attentivement avant de continuer."
+      "title": "Vérifiez attentivement vos réponses",
+      "message": "Vos réponses sauvegardées proviennent d'un autre formulaire d'origine. Vérifiez-les attentivement avant de les soumettre."
     },
     "resumeUploadError": {
       "title": "Problème de téléversement",
