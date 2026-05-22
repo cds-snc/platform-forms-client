@@ -48,9 +48,9 @@ describe("<AccountMenu />", () => {
       });
 
       await render(
-        <AccountMenu 
-          locale="en" 
-          testId="account-menu-test" 
+        <AccountMenu
+          locale="en"
+          testId="account-menu-test"
           publishingEnabled={true}
           placement="header"
         />
@@ -77,9 +77,9 @@ describe("<AccountMenu />", () => {
       });
 
       await render(
-        <AccountMenu 
-          locale="en" 
-          testId="account-menu-test" 
+        <AccountMenu
+          locale="en"
+          testId="account-menu-test"
           publishingEnabled={false}
           placement="header"
         />
@@ -105,13 +105,7 @@ describe("<AccountMenu />", () => {
         update: vi.fn(),
       });
 
-      await render(
-        <AccountMenu 
-          locale="en" 
-          testId="account-menu-test" 
-          placement="header"
-        />
-      );
+      await render(<AccountMenu locale="en" testId="account-menu-test" placement="header" />);
 
       const button = page.getByRole("button", { name: /account/i });
       await button.click();
@@ -127,18 +121,14 @@ describe("<AccountMenu />", () => {
         update: vi.fn(),
       });
 
-      await render(
-        <AccountMenu 
-          locale="en" 
-          testId="account-menu-test" 
-          placement="header"
-        />
-      );
+      await render(<AccountMenu locale="en" testId="account-menu-test" placement="header" />);
 
       const button = page.getByRole("button", { name: /account/i });
       await button.click();
 
-      const publishingStatus = document.querySelector('[data-testid="account-menu-publishing-status"]');
+      const publishingStatus = document.querySelector(
+        '[data-testid="account-menu-publishing-status"]'
+      );
       expect(publishingStatus).toBeNull();
     });
 
@@ -150,9 +140,9 @@ describe("<AccountMenu />", () => {
       });
 
       await render(
-        <AccountMenu 
-          locale="en" 
-          testId="account-menu-test" 
+        <AccountMenu
+          locale="en"
+          testId="account-menu-test"
           publishingEnabled={true}
           placement="header"
         />
@@ -173,9 +163,9 @@ describe("<AccountMenu />", () => {
       });
 
       await render(
-        <AccountMenu 
-          locale="en" 
-          testId="account-menu-test" 
+        <AccountMenu
+          locale="en"
+          testId="account-menu-test"
           publishingEnabled={false}
           placement="header"
         />
