@@ -136,7 +136,7 @@ const CardDate = async ({ id, date, ttl }: { id: string; date: string; ttl?: Dat
     : 0;
 
   return (
-    <div id={`card-date-${id}`} className="mb-2 text-sm">
+    <div id={`card-date-${id}`} className="mb-1 text-sm">
       {t("card.lastEdited")}: {formatDate(date)}
       {ttl != null && (
         <>
@@ -167,9 +167,10 @@ export interface CardI {
 }
 
 export const Card = async ({ card, status }: { card: CardI; status?: string }) => {
+  const isEditing = true;
   return (
     <div
-      className="flex h-full flex-col rounded border-1 border-slate-500 bg-white p-2 pb-4"
+      className={`flex h-full flex-col rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${isEditing && "bg-yellow-50"}`}
       data-testid={`card-${card.id}`}
     >
       <div className="mb-2 flex items-center justify-between">
@@ -207,9 +208,9 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
         <CardDate id={card.id} date={card.date} ttl={card.ttl} />
 
         {/* TODO */}
-        <div className="mb-2 text-sm">By: [first name]</div>
+        <div className="text-sm">By: [first name]</div>
 
-        <div>
+        <div className="mt-3">
           <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
         </div>
       </div>
