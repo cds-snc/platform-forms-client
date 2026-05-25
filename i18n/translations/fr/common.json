@@ -35,38 +35,38 @@
   "lang-toggle": "Sélection de la langue",
   "submitButton": "Soumettre",
   "input-validation": {
-    "heading": "Veuillez corriger les erreurs sur la page.",
-    "required": "Compléter le champ obligatoire afin de continuer.",
-    "alphanumeric": "Entrer uniquement des lettres et des chiffres.",
-    "duplicateEmail": "Cette adresse courriel a déjà été ajoutée.",
+    "heading": "Veuillez corriger les erreurs sur la page",
+    "required": "Compléter le champ obligatoire afin de continuer",
+    "alphanumeric": "Entrer uniquement des lettres et des chiffres",
+    "duplicateEmail": "Cette adresse courriel a déjà été ajoutée",
     "text": "",
-    "number": "Entrer un numéro.",
-    "email": "Entrer une adresse courriel valide.",
-    "date": "Entrer une date valide au format mm/jj/aaaa.",
-    "date-invalid": "Entrer une date valide.",
-    "phone": "Entrer un numéro de téléphone valide.",
-    "regex": "Veuillez utiliser le bon format.",
-    "invalidRegex": "Il y a eu un problème lors du traitement du formulaire.",
-    "combobox-strict": "Sélectionnez une valeur dans la liste.",
-    "too-few-digits": "Le chiffre saisi ne contient pas assez de chiffres.",
-    "too-many-digits": "Le chiffre saisi contient trop de chiffres.",
-    "too-small": "Le chiffre saisi doit être au moins {{min}}.",
-    "too-large": "Le chiffre saisi doit être au plus {{max}}.",
+    "number": "Entrer un numéro",
+    "email": "Entrer une adresse courriel valide",
+    "date": "Entrer une date valide au format mm/jj/aaaa",
+    "date-invalid": "Entrer une date valide",
+    "phone": "Entrer un numéro de téléphone valide",
+    "regex": "Veuillez utiliser le bon format",
+    "invalidRegex": "Il y a eu un problème lors du traitement du formulaire",
+    "combobox-strict": "Sélectionnez une valeur dans la liste",
+    "too-few-digits": "Le chiffre saisi ne contient pas assez de chiffres",
+    "too-many-digits": "Le chiffre saisi contient trop de chiffres",
+    "too-small": "Le chiffre saisi doit être au moins {{min}}",
+    "too-large": "Le chiffre saisi doit être au plus {{max}}",
     "file-upload": {
       "default": {
-        "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
-        "message": "Le fichier « {{fileName}} » n'a pas pu être envoyé."
+        "heading": "Il y a eu un problème lors de la soumission de votre formulaire",
+        "message": "Le fichier « {{fileName}} » n'a pas pu être envoyé"
       },
       "file-size-too-large": {
-        "message": "Le fichier « {{fileName}} » est trop volumineux. Choisissez un fichier dont la taille est inférieure à {{maxSizeInMb}} Mo."
+        "message": "Le fichier « {{fileName}} » est trop volumineux. Choisissez un fichier dont la taille est inférieure à {{maxSizeInMb}} Mo"
       },
       "mime": {
-        "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
-        "message": "{{fileName}} n'a pas pu être envoyé. Essayez d'enregistrer le fichier dans un autre format et de le téléverser à nouveau."
+        "heading": "Il y a eu un problème lors de la soumission de votre formulaire",
+        "message": "{{fileName}} n'a pas pu être envoyé. Essayez d'enregistrer le fichier dans un autre format et de le téléverser à nouveau"
       },
       "network-error": {
-        "heading": "Il y a eu un problème lors de la soumission de votre formulaire.",
-        "message": "Vérifiez votre connexion réseau et réessayez plus tard."
+        "heading": "Il y a eu un problème lors de la soumission de votre formulaire",
+        "message": "Vérifiez votre connexion réseau et réessayez plus tard"
       }
     },
     "file-type-invalid": "Sélectionner un autre type de fichier.",
