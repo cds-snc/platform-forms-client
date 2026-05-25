@@ -7,7 +7,7 @@ test.describe("Form builder names and titles", () => {
 
   test("Autocompletes name with title on focus", async ({ page }) => {
     const input = page.locator("#formTitle");
-    await input.pressSequentially("Playwright Share Test Form");
+    await input.pressSequentially("Playwright Share Test Form", { delay: 200 });
     await page.click("#fileName");
     await expect(page.locator("#fileName")).toHaveValue("Playwright Share Test Form");
   });
