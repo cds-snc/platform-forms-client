@@ -238,21 +238,6 @@ const AuditFormDownloadButton = ({
           <div className="gc-input-checkbox">
             <input
               type="checkbox"
-              id="specificEventsresponseDownloads"
-              name="specificEventsresponseDownloads"
-              className="gc-input-checkbox__input"
-              checked={specificEvents.responseDownloads}
-              onChange={(e) => handleSpecificEventChange("responseDownloads", e.target.checked)}
-            />
-            <label htmlFor="specificEventsresponseDownloads" className="gc-checkbox-label">
-              <span className="checkbox-label-text">
-                {t("auditDownload.dialog.specific.responseDownloads")}
-              </span>
-            </label>
-          </div>
-          <div className="gc-input-checkbox">
-            <input
-              type="checkbox"
               id="specificEventsapiIntegrations"
               name="specificEventsapiIntegrations"
               className="gc-input-checkbox__input"
