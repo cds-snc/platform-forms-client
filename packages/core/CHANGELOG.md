@@ -2,12 +2,12 @@
 
 ## [2.2.11] - 2026-05-25
 
+- Adds toast background override to /src/styles/_toast.scss
+
+## [2.2.10] - 2026-05-25
+
 - Ignore stale cross-page `nextAction` rules when reconstructing visible groups so published forms keep Back/Next and review flows on the current page's branch.
 - Update shared toast shell styling to support custom notice-style restore messaging.
-
-## [2.2.10] - 2026-05-15
-
-- Adds toast background override to /src/styles/_toast.scss
 
 ## [2.2.9] - 2026-05-11
 
