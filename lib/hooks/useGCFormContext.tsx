@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode, useCallback, useEffect } from "react";
 
 import { type FormValues, type GroupsType, type PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -29,6 +29,9 @@ import { toggleSavedValues } from "@i18n/toggleSavedValues";
 
 import { type FileInputResponse } from "@lib/types";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+import { useAppUpdate } from "@lib/hooks/useAppUpdate";
+import { useTranslation } from "@i18n/client";
+import { logMessage } from "../logger";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -84,6 +87,9 @@ export const GCFormsProvider = ({
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
+  const {
+    i18n: { language },
+  } = useTranslation();
 
   // eslint-disable-next-line react-hooks/refs
   const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
@@ -205,19 +211,22 @@ export const GCFormsProvider = ({
     };
   };
 
-  const saveSessionProgress = (language: Language = "en") => {
-    const vals =
-      language === "en"
-        ? values.current
-        : (toggleSavedValues(formRecord.form, { values: values.current }, "en") as FormValues);
+  const saveSessionProgress = useCallback(
+    (language: Language = "en") => {
+      const vals =
+        language === "en"
+          ? values.current
+          : (toggleSavedValues(formRecord.form, { values: values.current }, "en") as FormValues);
 
-    saveToSession(language, {
-      id: formRecord.id,
-      values: vals,
-      history: history.current,
-      currentGroup: currentGroup || "",
-    });
-  };
+      saveToSession(language, {
+        id: formRecord.id,
+        values: vals,
+        history: history.current,
+        currentGroup: currentGroup || "",
+      });
+    },
+    [formRecord, currentGroup]
+  );
 
   const restoreSessionProgress = (language: Language) => {
     return restoreSession({ id: formRecord.id, form: formRecord.form, language });
@@ -241,6 +250,16 @@ export const GCFormsProvider = ({
     }
     return visibleGroups[idx - 1];
   };
+  const { updateRequired } = useAppUpdate();
+
+  useEffect(() => {
+    if (updateRequired) {
+      logMessage.info(
+        `Saving progress to session storage for form responses with lang: ${language}`
+      );
+      saveSessionProgress(language as Language);
+    }
+  }, [updateRequired, language, saveSessionProgress]);
 
   return (
     <GCFormsContext.Provider

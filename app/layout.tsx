@@ -10,6 +10,8 @@ import { Noto_Sans, Lato } from "next/font/google";
 import { googleTagManager } from "@lib/cspScripts";
 import { headers } from "next/headers";
 import { auth } from "@lib/auth";
+import ServiceWorker from "@clientComponents/globals/ServiceWorker";
+import { Update } from "@clientComponents/globals/Update";
 
 export const dynamic = "force-dynamic";
 
@@ -95,7 +97,11 @@ export default async function Layout({ children }: { children: React.ReactNode }
         </noscript>
       </head>
 
-      <body className={"has-[.bkd-soft]:bg-gray-soft"}>{children}</body>
+      <body className={"has-[.bkd-soft]:bg-gray-soft"}>
+        {process.env.NODE_ENV === "production" && <ServiceWorker />}
+        <Update />
+        {children}
+      </body>
     </html>
   );
 }
