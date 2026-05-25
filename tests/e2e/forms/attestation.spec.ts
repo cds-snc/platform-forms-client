@@ -67,7 +67,7 @@ test.describe("Testing attestation fields", { tag: "@published-form" }, () => {
 
       // Verify error messages
       await expect(errorMessage).toContainText(
-        "Read and check all boxes to confirm the items in this section."
+        "Read and check all boxes to confirm the items in this section"
       );
 
       await setCheckboxValue(condition1Checkbox, true);
@@ -78,7 +78,7 @@ test.describe("Testing attestation fields", { tag: "@published-form" }, () => {
 
       // Verify error messages
       await expect(errorMessage).toContainText(
-        "Read and check all boxes to confirm the items in this section."
+        "Read and check all boxes to confirm the items in this section"
       );
     });
 
