@@ -362,5 +362,4 @@ describe("editLocks with redis", () => {
       expect(prisma.template.findUnique).toHaveBeenCalledTimes(1);
     });
   });
-
 });
