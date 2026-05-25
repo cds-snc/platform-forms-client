@@ -148,6 +148,7 @@ export const AuditLogDetails = {
   AccessedAllSystemForms: "Accessed Forms: All System Forms",
   ClonedForm: "DuplicatedForm",
   UpdateClosingDate: "UpdateClosingDate",
+  RemoveClosingDate: "RemoveClosingDate",
   RetrieveFormUsers: "Retrieved users associated with Form",
   RevokeFormAccess: "Access revoked for ${userId}",
   SetDeliveryToVault: "Delivery Option set to the Vault",
@@ -162,8 +163,8 @@ export const AuditLogDetails = {
   AccessGrantedTo: "GrantAccess",
   AccessRevokedFor: "RevokeAccess",
   //API Keys
-  GeneratedNewApiKey: "GeneratedAPIKey",
-  CreatedNewApiKey: "User :${userId} created API key for service account ${serviceAccountId}",
+  RefreshedApiKey: "RefreshedAPIKey",
+  CreatedNewApiKey: "CreatedNewAPIKey",
   DeletedServiceAccount: "DeletedAPIKey",
   // App Settings
   UpdatedAppSetting: "Updated setting with ${settingData}",
@@ -214,6 +215,7 @@ type AuditDetailsParams = {
     userId: string;
     formId: string;
     enabled: string;
+    userEmail: string;
   };
   [AuditLogDetails.ConfirmedResponsesForForm]: { formId: string };
   [AuditLogDetails.DeletedDraftResponsesForForm]: { formId: string };
@@ -230,8 +232,9 @@ type AuditDetailsParams = {
     privilegedUserId: string;
   };
   [AuditLogDetails.AccessedAllSystemForms]: never;
-  [AuditLogDetails.ClonedForm]: never;
-  [AuditLogDetails.UpdateClosingDate]: never;
+  [AuditLogDetails.ClonedForm]: { newFormID: string };
+  [AuditLogDetails.UpdateClosingDate]: { closingDate: string };
+  [AuditLogDetails.RemoveClosingDate]: never;
   [AuditLogDetails.RetrieveFormUsers]: never;
   [AuditLogDetails.RevokeFormAccess]: { userId: string };
   [AuditLogDetails.SetDeliveryToVault]: never;
@@ -245,7 +248,7 @@ type AuditDetailsParams = {
   [AuditLogDetails.ChangeSecurityAttribute]: { securityAttribute: string };
   [AuditLogDetails.AccessGrantedTo]: { userList: string };
   [AuditLogDetails.AccessRevokedFor]: { userList: string };
-  [AuditLogDetails.GeneratedNewApiKey]: {
+  [AuditLogDetails.RefreshedApiKey]: {
     userId: string;
     serviceAccountId: string;
   };
@@ -254,7 +257,7 @@ type AuditDetailsParams = {
     serviceAccountId: string;
   };
   [AuditLogDetails.DeletedServiceAccount]: {
-    userId: string;
+    userEmail: string;
     serviceAccountID: string;
     templateId: string;
   };

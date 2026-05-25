@@ -11,10 +11,12 @@ export const youHaveBeenRemovedEmailTemplate = (
 ): string => `
 (la version française suit)
 
-Your access was removed for the form: ${formTitleEn || formTitleFr}.
+Your access was removed for the form: 
+${formTitleEn || formTitleFr}
 
 ======
 
-Vous n’avez plus accès au formulaire : ${formTitleFr || formTitleEn}
+Vous n’avez plus accès au formulaire : 
+${formTitleFr || formTitleEn}
 
 `;

@@ -5,6 +5,62 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.15.1](https://github.com/cds-snc/platform-forms-client/compare/v4.15.0...v4.15.1) (2026-05-22)
+
+
+### Bug Fixes
+
+* Audit Log Fixes -&gt; Duplicate a Form && Deleted API Key Messages ([#7216](https://github.com/cds-snc/platform-forms-client/issues/7216)) ([65c1ca2](https://github.com/cds-snc/platform-forms-client/commit/65c1ca22cddd640e16200c4da0aa49cc4c08b104))
+* Audit Log Message Closing Date vs Remove Closing Date ([#7215](https://github.com/cds-snc/platform-forms-client/issues/7215)) ([b315e1c](https://github.com/cds-snc/platform-forms-client/commit/b315e1c19f94a26152683905f728ced5b0a48cbd))
+* publish check on start page ([#7231](https://github.com/cds-snc/platform-forms-client/issues/7231)) ([d7ebc4d](https://github.com/cds-snc/platform-forms-client/commit/d7ebc4df6da67828d0d50b7de8d75709eb6bf732))
+* Several missing i18n messages for audit log entries. ([#7143](https://github.com/cds-snc/platform-forms-client/issues/7143)) ([bbf8cd5](https://github.com/cds-snc/platform-forms-client/commit/bbf8cd51fe9fdd8769998d707266b40aaf11a814))
+
+
+### Miscellaneous Chores
+
+* content tweaks for activity log ([#7229](https://github.com/cds-snc/platform-forms-client/issues/7229)) ([18227bd](https://github.com/cds-snc/platform-forms-client/commit/18227bdbdd6c7963bf98cebaf541640fd08fd4d1))
+* update content for expired session ([#7223](https://github.com/cds-snc/platform-forms-client/issues/7223)) ([eb583af](https://github.com/cds-snc/platform-forms-client/commit/eb583af18642341d3ec6594e0c2873f2ad4bde22))
+* update email notifications for form collaborators  ([#7213](https://github.com/cds-snc/platform-forms-client/issues/7213)) ([2c81287](https://github.com/cds-snc/platform-forms-client/commit/2c8128701da2e957790f8773d939f70a1f2f46a9))
+
+## [4.15.0](https://github.com/cds-snc/platform-forms-client/compare/v4.14.1...v4.15.0) (2026-05-21)
+
+
+### Features
+
+* Notify all owners when a form is archived. ([#7129](https://github.com/cds-snc/platform-forms-client/issues/7129)) ([897fea7](https://github.com/cds-snc/platform-forms-client/commit/897fea7fa5e7e03ea96f82579490380994758d9d))
+* update share menu and add "account" menu ([#7139](https://github.com/cds-snc/platform-forms-client/issues/7139)) ([c079957](https://github.com/cds-snc/platform-forms-client/commit/c079957525be054c8300c804bfb79cb0eeffafda))
+
+
+### Bug Fixes
+
+* broken GC Forms API documentation links ([#7158](https://github.com/cds-snc/platform-forms-client/issues/7158)) ([cc0c5f8](https://github.com/cds-snc/platform-forms-client/commit/cc0c5f8a759322788f3f49b4eec3ca031722339f))
+* Fix auto flow start order ([#7193](https://github.com/cds-snc/platform-forms-client/issues/7193)) ([5617f21](https://github.com/cds-snc/platform-forms-client/commit/5617f2109990bf980ae934f721ed5dd6635f8e98))
+* fix toast background ([#7147](https://github.com/cds-snc/platform-forms-client/issues/7147)) ([6812428](https://github.com/cds-snc/platform-forms-client/commit/68124288204c864ecbffbeed55a594a86bd71432))
+
+
+### Miscellaneous Chores
+
+* add account menu to forms layout ([#7198](https://github.com/cds-snc/platform-forms-client/issues/7198)) ([23f30cd](https://github.com/cds-snc/platform-forms-client/commit/23f30cdc15c2e7abd978ee36224f6e380be5c523))
+* add excludes for vaild email domains ([#7194](https://github.com/cds-snc/platform-forms-client/issues/7194)) ([8dafad2](https://github.com/cds-snc/platform-forms-client/commit/8dafad2a5a204fe19f4f21abe8816e5be7a4c05a))
+* add Playwright trace to local + ci upload ([#7191](https://github.com/cds-snc/platform-forms-client/issues/7191)) ([3bf287b](https://github.com/cds-snc/platform-forms-client/commit/3bf287b4acd348b2e0caa55fe285639274e27194))
+* add reload for edit session time-out ([#7176](https://github.com/cds-snc/platform-forms-client/issues/7176)) ([258be3d](https://github.com/cds-snc/platform-forms-client/commit/258be3dbc0989197669ad42ddca3a3768687703a))
+* Add some space around header components and fix padding ([#7207](https://github.com/cds-snc/platform-forms-client/issues/7207)) ([f9337d2](https://github.com/cds-snc/platform-forms-client/commit/f9337d21baa8940ae7a17d676c82c14e4764b0ad))
+* Added logged-out state to new Publish menu ([#7159](https://github.com/cds-snc/platform-forms-client/issues/7159)) ([a9e0673](https://github.com/cds-snc/platform-forms-client/commit/a9e0673f2937064e1439b265f5c46ce84a25b6ae))
+* content clarifications for new features ([#7185](https://github.com/cds-snc/platform-forms-client/issues/7185)) ([57592d4](https://github.com/cds-snc/platform-forms-client/commit/57592d437ba336a811c85c001c2308698764381b))
+* content tweaks for form events ([#7205](https://github.com/cds-snc/platform-forms-client/issues/7205)) ([b90f8e4](https://github.com/cds-snc/platform-forms-client/commit/b90f8e4e0aaec1f4ec1f0d34e3912be21db8f1b6))
+* Content updates for shared drafts and key actions ([#7172](https://github.com/cds-snc/platform-forms-client/issues/7172)) ([47f442e](https://github.com/cds-snc/platform-forms-client/commit/47f442ecc2c2fd816b876a3951535d753c937981))
+* Edit lock takeover toast on settings page ([#7179](https://github.com/cds-snc/platform-forms-client/issues/7179)) ([5a69664](https://github.com/cds-snc/platform-forms-client/commit/5a69664621b47e659a4bef18db59dbb03740da6b))
+* edit-lock GA updates ([#7138](https://github.com/cds-snc/platform-forms-client/issues/7138)) ([ec21869](https://github.com/cds-snc/platform-forms-client/commit/ec21869720a9f8c48361ac1b2ec05ce18f1a0360))
+* fix path for trace reports ([#7197](https://github.com/cds-snc/platform-forms-client/issues/7197)) ([ba364f6](https://github.com/cds-snc/platform-forms-client/commit/ba364f6116c3b057e65b1be12be6dc4500d1b9ee))
+* fix toast background color ([#7156](https://github.com/cds-snc/platform-forms-client/issues/7156)) ([4a5b3f2](https://github.com/cds-snc/platform-forms-client/commit/4a5b3f2f67b6097b9899cb89d3958f398f7e5a04))
+* fix toast import ([#7175](https://github.com/cds-snc/platform-forms-client/issues/7175)) ([e8a43c2](https://github.com/cds-snc/platform-forms-client/commit/e8a43c2c5c05ccbdfdb9ff1846592a40064dd43b))
+* Header sidebar restyle ([#7189](https://github.com/cds-snc/platform-forms-client/issues/7189)) ([8ef71c5](https://github.com/cds-snc/platform-forms-client/commit/8ef71c50fb9724a253947caba837a0fd2d555a3e))
+* remove reference to read only and recent activity ([#7209](https://github.com/cds-snc/platform-forms-client/issues/7209)) ([1c757ba](https://github.com/cds-snc/platform-forms-client/commit/1c757ba1d2b7455878a6d9e524c79cc36269847b))
+* update edit lock timing ([#7186](https://github.com/cds-snc/platform-forms-client/issues/7186)) ([16570e9](https://github.com/cds-snc/platform-forms-client/commit/16570e9e04052c7c8f285f0825fb001b8e9bba33))
+* update playwright tests ([#7188](https://github.com/cds-snc/platform-forms-client/issues/7188)) ([2a7c895](https://github.com/cds-snc/platform-forms-client/commit/2a7c895781771a3fa8f227dcd647c396a72387b6))
+* update playwright tests ([#7210](https://github.com/cds-snc/platform-forms-client/issues/7210)) ([f0f373e](https://github.com/cds-snc/platform-forms-client/commit/f0f373e488413fa2163a768fef508e62e118e4f2))
+* version bump for publish package ([#7174](https://github.com/cds-snc/platform-forms-client/issues/7174)) ([ed82727](https://github.com/cds-snc/platform-forms-client/commit/ed82727fe8dcb159dc228cb30322a1b812ce7102))
+
 ## [4.14.1](https://github.com/cds-snc/platform-forms-client/compare/v4.14.0...v4.14.1) (2026-05-13)
 
 

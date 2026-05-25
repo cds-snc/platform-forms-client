@@ -13,9 +13,11 @@ export const ownerRemovedEmailTemplate = (
 ): string => `
 (la version française suit)
 
-${formOwner} no longer has access to responses for the form: ${formTitleEn || formTitleFr}.
+${formOwner} no longer has access to the form: 
+${formTitleEn || formTitleFr}
 
 ======
 
-${formOwner} n’a plus accès aux réponses du formulaire ${formTitleFr || formTitleEn}.:
+${formOwner} n’a plus accès au formulaire : 
+${formTitleFr || formTitleEn}
 `;

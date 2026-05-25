@@ -1,5 +1,9 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import { DatabaseHelper } from "../helpers";
+
+const fillFullName = async (page: Page) => {
+  await page.getByRole("textbox", { name: "Full name" }).fill("Test User");
+};
 
 test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
   let publishedFormPath: string;
@@ -25,6 +29,8 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     });
 
     test("Focus error validation correctly", async ({ page }) => {
+      await fillFullName(page);
+
       // focus the next button and click to trigger validation errors without filling out any fields
       await page.locator("button[data-testid='nextButton']").focus();
       await page.locator("button[data-testid='nextButton']").click();
@@ -54,6 +60,8 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     });
 
     test("Focus should be on H2 on navigating to a 'sub page'", async ({ page }) => {
+      await fillFullName(page);
+
       // focus the radio button input
       await page.locator('[id="1.0"]').focus();
       await page.locator('[id="1.0"]').press("Space");
@@ -65,6 +73,8 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     });
 
     test("Focusses H1 on navigating back to the Start page", async ({ page }) => {
+      await fillFullName(page);
+
       // make sure the radio is visible and clickable before clicking to avoid a potential Playwright click interception error that can cause the test to fail before it reaches the focus assertion
       await expect(page.locator("label[for='1.0']")).toBeVisible();
 
@@ -83,6 +93,8 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     test("Focus should be on an H2 when jumping to a sub page from the Review page", async ({
       page,
     }) => {
+      await fillFullName(page);
+
       await page.getByRole("radio", { name: "A" }).focus();
       await page.getByRole("radio", { name: "A" }).press("Space");
 
@@ -110,6 +122,8 @@ test.describe("Forms Navigation Focus", { tag: "@published-form" }, () => {
     test("Focus should be on an H1 when jumping back to the Start page from the Review page", async ({
       page,
     }) => {
+      await fillFullName(page);
+
       // Select branch A
       await page.locator('[id="1.0"]').focus();
       await page.locator('[id="1.0"]').press("Space"); // Ensure radio is checked
