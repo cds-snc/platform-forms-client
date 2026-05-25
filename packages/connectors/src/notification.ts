@@ -35,7 +35,6 @@ const sendImmediate = async ({
   subject,
   body,
 }: {
-  notificationId?: string;
   emails: string[];
   subject: string;
   body: string;

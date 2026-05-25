@@ -291,35 +291,6 @@ const archivedFormEmailTemplate = async (
     `;
 };
 
-const sendArchivedFormNotification = async (
-  email: string,
-  formId: string,
-  formTitleEn: string,
-  formTitleFr: string,
-  actionEmail: string
-) => {
-  const { t } = await serverTranslation("form-builder");
-  const HOST = await getOrigin();
-  await sendEmail(
-    email,
-    {
-      subject: t("settings.notifications.email.archivedForm.subject"),
-      formResponse: await archivedFormEmailTemplate(HOST, formTitleEn, formTitleFr, actionEmail),
-    },
-    "archived_form_notification"
-  )
-    .then(() =>
-      logMessage.debug(
-        `sendArchivedFormNotification sent email to ${email} with formId ${formId} for type archived form`
-      )
-    )
-    .catch(() =>
-      logMessage.error(
-        `sendArchivedFormNotification failed to send email ${email} with formId ${formId}`
-      )
-    );
-};
-
 const sendArchivedFormNotificationsToAllUsers = async (
   users: {
     email: string;
@@ -333,9 +304,21 @@ const sendArchivedFormNotificationsToAllUsers = async (
     logMessage.debug("sendArchivedFormNotificationsToAllUsers missing users");
     return;
   }
-  users.forEach(({ email }) =>
-    sendArchivedFormNotification(email, formId, formTitleEn, formTitleFr, actionEmail)
-  );
+
+  try {
+    const { t } = await serverTranslation("form-builder");
+    const HOST = await getOrigin();
+
+    await notification.sendImmediate({
+      emails: users.map((u) => u.email),
+      subject: t("settings.notifications.email.archivedForm.subject"),
+      body: await archivedFormEmailTemplate(HOST, formTitleEn, formTitleFr, actionEmail),
+    });
+  } catch (error) {
+    logMessage.warn(
+      `Immediate notification failed for archived form ${formId} with error: ${(error as Error).message}`
+    );
+  }
 };
 
 interface Session {
