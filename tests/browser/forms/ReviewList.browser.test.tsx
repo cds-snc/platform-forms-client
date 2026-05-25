@@ -215,9 +215,7 @@ describe("<ReviewList />", () => {
       language: "en",
     });
 
-    await render(
-      <ReviewList language="en" reviewItems={reviewItems} startSectionTitle="Start" />
-    );
+    await render(<ReviewList language="en" reviewItems={reviewItems} startSectionTitle="Start" />);
 
     await expect
       .element(
@@ -228,7 +226,9 @@ describe("<ReviewList />", () => {
       )
       .toBeVisible();
 
-    await expect.element(page.getByText(/Would you like to continue with registration/i)).toBeVisible();
+    await expect
+      .element(page.getByText(/Would you like to continue with registration/i))
+      .toBeVisible();
     await expect.element(page.getByText(/Do you currently live in Canada/i)).toBeVisible();
     await expect
       .element(page.getByText(/Would you like to join the waiting list if a spot opens up/i))
