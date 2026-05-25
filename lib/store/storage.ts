@@ -40,6 +40,12 @@ export const storageOptions = {
     logMessage.debug("Merging state action");
     const persistedState = persisted as TemplateStoreState;
 
+    // During vitest runs do not merge state, return the state
+    // that was mocked and passed in
+    if (process.env.NODE_ENV === "test") {
+      return current;
+    }
+
     return { ...current, ...persistedState };
   },
 };

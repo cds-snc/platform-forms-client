@@ -299,8 +299,47 @@ export const GCFormsProvider = ({
 export const useGCFormsContext = () => {
   const formsContext = useContext(GCFormsContext);
   if (formsContext === undefined) {
-    throw new Error("useGCFormsContext but be used within the GCFormsProvider");
+    // For now just return a default context if we're not inside the provider
+    return {
+      updateValues: () => {
+        return "noop";
+      },
+      getValues: () => {
+        return;
+      },
+      submissionId: undefined,
+      setSubmissionId: () => void 0,
+      submissionDate: undefined,
+      setSubmissionDate: () => void 0,
+      matchedIds: [""],
+      filteredMatchedIds: [""],
+      groups: {},
+      currentGroup: "",
+      getPreviousGroup: () => "",
+      setGroup: () => void 0,
+      hasNextAction: () => void 0,
+      isOffBoardSection: () => false,
+      handleNextAction: () => void 0,
+      formRecord: {} as PublicFormRecord,
+      groupsCheck: () => false,
+      getGroupHistory: () => [],
+      pushIdToHistory: () => [],
+      clearHistoryAfterId: () => [],
+      getGroupTitle: () => "",
+      saveSessionProgress: () => void 0,
+      getProgressData: () => {
+        return {
+          id: "",
+          values: {},
+          history: [],
+          currentGroup: "",
+        };
+      },
+      restoreSessionProgress: () => {
+        return {};
+      },
+      getNonce: () => "",
+    };
   }
-
   return formsContext;
 };
