@@ -122,7 +122,7 @@ export default async function Page(props: {
   const overdueTemplateIds = await getOverdueTemplateIds(templates.map((template) => template.id));
 
   return (
-    <div className="m-4 grid grid-cols-[300px_1fr] gap-8">
+    <div className="m-4 grid grid-cols-[23.5em_1fr] gap-8">
       <div>
         <Navigation filter={status} />
       </div>

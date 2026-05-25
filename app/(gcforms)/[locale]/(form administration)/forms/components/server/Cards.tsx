@@ -34,7 +34,7 @@ export const Cards = async ({
               }
 
               return (
-                <li className="flex w-full max-w-[250px] flex-col" key={card.id}>
+                <li className="flex w-full max-w-[16.25em] flex-col" key={card.id}>
                   <Card card={card} status={status} />
                 </li>
               );
