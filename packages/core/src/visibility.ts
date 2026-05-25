@@ -57,13 +57,26 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
       visibleGroups
     );
   } else if (Array.isArray(nextAction)) {
-    // If nextAction is an array, we need to check each rule
-    // Check for catch-all value
-    const catchAllRule = nextAction.find((action) => action.choiceId.includes("catch-all"));
+    const currentGroupElementIds = new Set((groups[currentGroup].elements || []).map(String));
+    const relevantNextActions = nextAction.filter((action) => {
+      if (action.choiceId.includes("catch-all")) {
+        return true;
+      }
+
+      const elementId = action.choiceId.split(".")[0];
+      return currentGroupElementIds.has(elementId);
+    });
+
+    // Only use rules from the page we are currently walking.
+    // Some forms keep old rules from earlier pages. The old behavior could follow one of those
+    // old rules, go back up the form, and miss answers that should appear on the review page.
+    const catchAllRule = relevantNextActions.find((action) =>
+      action.choiceId.includes("catch-all")
+    );
 
     let matchFound = false;
 
-    for (const action of nextAction) {
+    for (const action of relevantNextActions) {
       const elementId = action.choiceId.split(".")[0];
 
       // When we find a matching action, continue to the next group
