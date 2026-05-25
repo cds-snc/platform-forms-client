@@ -273,6 +273,10 @@
     "more": "More",
     "cancel": "Cancel",
     "formRestored": "Your answers were loaded to the form.",
+    "formRestoredWarning": {
+      "title": "Check your answers carefully",
+      "message": "Your saved answers were based on a different original form. Review them carefully before submitting."
+    },
     "resumeUploadError": {
       "title": "Problem loading answers",
       "description": "Try uploading the file again or restart a new form and copy-paste your answers from the file.",
@@ -287,6 +291,14 @@
       "upload": {
         "title": "Load your answers",
         "description": "Upload your saved form in progress"
+      },
+      "mismatchedForm": {
+        "title": "Continue the form with these answers?",
+        "description": "⚠️ This saved progress was from a different form or version than the one you're trying to continue filling out.",
+        "warning": "If you continue anyway, you will need to review all the answers that get loaded into this form to ensure they are correct.",
+        "matchingFormLink": "Go to the original form instead",
+        "cancel": "Cancel",
+        "continue": "Continue anyway"
       },
       "restart": {
         "title": "Start blank form",
