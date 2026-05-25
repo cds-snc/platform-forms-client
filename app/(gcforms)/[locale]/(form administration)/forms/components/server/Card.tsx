@@ -169,7 +169,7 @@ export interface CardI {
 export const Card = async ({ card, status }: { card: CardI; status?: string }) => {
   return (
     <div
-      className="flex h-full flex-col justify-between rounded border-1 border-slate-500 bg-white p-2 pb-4"
+      className="flex h-full flex-col rounded border-1 border-slate-500 bg-white p-2 pb-4"
       data-testid={`card-${card.id}`}
     >
       <div className="mb-2 flex items-center justify-between">
@@ -203,7 +203,7 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
           <p className="ml-4 italic">{card.id}</p>
         </div> */}
 
-      <div>
+      <div className="mt-auto">
         <CardDate id={card.id} date={card.date} ttl={card.ttl} />
 
         {/* TODO */}
