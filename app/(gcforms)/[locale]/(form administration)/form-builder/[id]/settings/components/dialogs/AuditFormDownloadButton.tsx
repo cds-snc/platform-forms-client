@@ -153,7 +153,7 @@ const AuditFormDownloadButton = ({
   const actions = (
     <>
       <Button
-        theme="primary"
+        theme="secondary"
         onClick={() => {
           dialog.current?.close();
           handleClose();
