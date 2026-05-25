@@ -8,6 +8,7 @@ import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { allowGrouping } from "@lib/groups/utils/allowGrouping";
+import { authorization } from "@root/lib/privileges";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -30,12 +31,19 @@ export default async function StartPage(props: { params: Promise<{ locale: strin
   const { locale } = params;
 
   const allowGroupsFlag = allowGrouping();
+
+  const publishFormsEnabled = await authorization.hasPublishFormsPrivilege().catch(() => false);
+
   return (
     <TemplateStoreProvider {...{ locale, allowGroupsFlag }}>
       <SaveTemplateProvider>
         <div className="bg-gray-soft flex h-full flex-col">
           <SkipLink />
-          <Header className="mb-0" showAccountMenu />
+          <Header
+            className="mb-0"
+            showAccountMenu
+            accountMenuPublishingEnabled={publishFormsEnabled}
+          />
           <div className="shrink-0 grow basis-auto">
             <div className="flex flex-row gap-10">
               <main id="content" className={cn("form-builder mt-5 mb-10 w-full")}>

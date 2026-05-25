@@ -148,6 +148,7 @@ export const AuditLogDetails = {
   AccessedAllSystemForms: "Accessed Forms: All System Forms",
   ClonedForm: "DuplicatedForm",
   UpdateClosingDate: "UpdateClosingDate",
+  RemoveClosingDate: "RemoveClosingDate",
   RetrieveFormUsers: "Retrieved users associated with Form",
   RevokeFormAccess: "Access revoked for ${userId}",
   SetDeliveryToVault: "Delivery Option set to the Vault",
@@ -231,8 +232,9 @@ type AuditDetailsParams = {
     privilegedUserId: string;
   };
   [AuditLogDetails.AccessedAllSystemForms]: never;
-  [AuditLogDetails.ClonedForm]: never;
+  [AuditLogDetails.ClonedForm]: { newFormID: string };
   [AuditLogDetails.UpdateClosingDate]: { closingDate: string };
+  [AuditLogDetails.RemoveClosingDate]: never;
   [AuditLogDetails.RetrieveFormUsers]: never;
   [AuditLogDetails.RevokeFormAccess]: { userId: string };
   [AuditLogDetails.SetDeliveryToVault]: never;
@@ -255,7 +257,7 @@ type AuditDetailsParams = {
     serviceAccountId: string;
   };
   [AuditLogDetails.DeletedServiceAccount]: {
-    userId: string;
+    userEmail: string;
     serviceAccountID: string;
     templateId: string;
   };
