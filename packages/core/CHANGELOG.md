@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.2.11] - 2026-05-25
+## [2.2.12] - 2026-05-25
 
 - Adds toast background override to /src/styles/_toast.scss
 
