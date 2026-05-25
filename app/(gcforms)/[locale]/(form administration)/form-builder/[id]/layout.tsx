@@ -17,7 +17,6 @@ import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { authorization } from "@lib/privileges";
 import { checkKeyExists } from "@lib/serviceAccount";
-import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { getAppSetting } from "@lib/appSettings";
 import { normalizeEditLockRedirectIdleMs } from "@lib/utils/form-builder/editLockRedirectIdleMs";
 import { shouldEnforceTemplateEditLockWithVerifiedUserCount } from "@lib/editLocks";
@@ -51,8 +50,7 @@ export default async function Layout(props: {
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();
-  const allowLockedEditingFlag = await allowLockedEditing(session?.user.id);
-  const shareUsesManageAccess = allowLockedEditingFlag && formID !== "0000";
+  const shareUsesManageAccess = formID !== "0000";
   const publishFormsEnabled = session
     ? await authorization.hasPublishFormsPrivilege().catch(() => false)
     : false;
