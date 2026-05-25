@@ -5,6 +5,5 @@
   "topBanner": false,
   "responsesPilot": false,
   "userSideAuditLogs": false,
-  "zitadelLogin": false,
-  "lockedEditing": false
+  "zitadelLogin": false
 }
