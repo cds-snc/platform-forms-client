@@ -127,6 +127,26 @@ export const setFocusOnErrorMessage = (props: FormikProps<Responses>, errorId: s
  * @returns {boolean} The validation result
  */
 export const isValidGovEmail = (email: string): boolean => {
+  // List of excluded government domain patterns
+  // Using wildcard patterns to exclude all subdomains (e.g., *.parl.gc.ca)
+  const excludedDomainPatterns = [
+    ".parl.gc.ca", // Excludes *.parl.gc.ca (e.g., lop.parl.gc.ca, ciec-ccie.parl.gc.ca)
+    ".parl.ca", // Excludes *.parl.ca (e.g., lop.parl.ca)
+    ".ourcommons.ca", // Excludes *.ourcommons.ca
+    ".sencanada.ca", // Excludes *.sencanada.ca
+  ];
+
+  // Extract domain from email (part after @)
+  const emailLower = email.toLowerCase();
+  const domainMatch = emailLower.match(/@(.+)$/);
+  const domain = domainMatch ? domainMatch[1] : "";
+
+  // Check if domain matches any excluded pattern
+  // Prepend dot to domain for pattern matching (e.g., "parl.gc.ca" becomes ".parl.gc.ca")
+  if (excludedDomainPatterns.some((pattern) => `.${domain}`.endsWith(pattern))) {
+    return false;
+  }
+
   const regex =
     /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+(\+[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]*)?)@((?:[a-zA-Z0-9-.]+\.gc\.ca|cds-snc\.freshdesk\.com)|(canada|cds-snc|scc-ccn|scc|elections|rcafinnovation|canadacouncil|nfb|debates-debats|invcanada|gg)\.ca)$/;
   return regex.test(email);

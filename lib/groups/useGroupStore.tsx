@@ -13,10 +13,11 @@ import { findNextGroup } from "./utils/findNextGroup";
 import { findPreviousGroup } from "./utils/findPreviousGroup";
 import { getGroupFromId } from "./utils/getGroupFromId";
 import { type Group, type GroupsType } from "@gcforms/types";
-import { autoFlowAllNextActions, autoFlowGroupNextActions } from "./utils/setNextAction";
+import { autoFlowAllNextActions } from "./utils/setNextAction";
 import { setGroupNextAction } from "./utils/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
 import { FormElement } from "@lib/types";
+import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { lockedGroups } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { v4 as uuid } from "uuid";
 import { TreeItemIndex } from "@formBuilder/components/shared/right-panel/headless-treeview/types";
@@ -168,8 +169,16 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           if (!s.form.groups) {
             s.form.groups = {} as GroupsType;
           }
+          const currentGroupsLayout =
+            s.form.groupsLayout && s.form.groupsLayout.length > 0
+              ? s.form.groupsLayout
+              : Object.keys(s.form.groups).filter((groupId) => !lockedGroups.includes(groupId));
+
+          // Tree order is tracked in groupsLayout, so derive the insert position from that
+          // instead of raw object key order. This keeps start connected to the first visible page.
+          const orderedGroups = orderGroups(s.form.groups, currentGroupsLayout) || s.form.groups;
           const newObject: GroupsType = {};
-          const keys = Object.keys(s.form.groups);
+          const keys = Object.keys(orderedGroups);
           let newGroupAdded = false;
 
           for (let i = 0; i < keys.length; i++) {
@@ -181,18 +190,18 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
               newGroupAdded = true;
             }
 
-            newObject[key] = s.form.groups[key];
+            newObject[key] = orderedGroups[key];
           }
 
-          // If no end or review section exists, add the new group at the end
           if (!newGroupAdded) {
             newObject[id] = { name, elements: [], titleEn: "", titleFr: "" };
           }
 
-          s.form.groups = autoFlowGroupNextActions(newObject, id);
+          // Recompute the full linear chain because start may also need to be rewired
+          // when the current layout order no longer matches the raw groups object order.
+          s.form.groups = autoFlowAllNextActions(newObject, true);
 
-          // Add id to groupsLayout
-          const groupsLayout = [...(s.form.groupsLayout || [])];
+          const groupsLayout = [...currentGroupsLayout];
           groupsLayout.splice(groupsLayout.length, 0, id);
           s.form.groupsLayout = groupsLayout;
         });

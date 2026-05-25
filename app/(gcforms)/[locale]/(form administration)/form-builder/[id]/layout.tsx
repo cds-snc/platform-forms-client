@@ -135,7 +135,7 @@ export default async function Layout(props: {
                         width="600px"
                       />
                       <div className="flex grow flex-row gap-7">
-                        <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
+                        <div id="left-nav" className="z-10">
                           <div className={"sticky top-0 flex h-full min-h-0 flex-col"}>
                             <div className="min-h-0 flex-1 overflow-y-auto">
                               <LeftNavigation id={id} />

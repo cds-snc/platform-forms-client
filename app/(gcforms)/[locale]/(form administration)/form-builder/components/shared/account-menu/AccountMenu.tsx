@@ -56,10 +56,12 @@ export const AccountMenu = ({
   locale,
   testId,
   publishingEnabled,
+  placement = "sidebar",
 }: {
   locale: string;
   testId: string;
-  publishingEnabled: boolean;
+  publishingEnabled?: boolean;
+  placement?: "sidebar" | "header";
 }) => {
   const { t } = useTranslation(["common", "profile", "form-builder"]);
   const { data } = useSession();
@@ -83,10 +85,7 @@ export const AccountMenu = ({
       const open = (event as ToggleEvent).newState === "open";
       setIsOpen(open);
       if (open) {
-        const firstFocusable = popover.querySelector<HTMLElement>(
-          "a[href], button:not([disabled])"
-        );
-        firstFocusable?.focus();
+        popover.focus();
       }
     };
 
@@ -97,6 +96,11 @@ export const AccountMenu = ({
   if (!user) {
     return null;
   }
+
+  const containerClassName =
+    placement === "header"
+      ? "relative flex items-center justify-center"
+      : "sticky bottom-4 z-20 mt-auto flex justify-center py-4";
 
   const handleLogout = () => {
     clearTemplateStore();
@@ -118,7 +122,7 @@ export const AccountMenu = ({
   };
 
   return (
-    <div data-testid={testId} className="sticky bottom-4 z-20 mt-auto flex justify-center py-4">
+    <div data-testid={testId} className={containerClassName}>
       <button
         type="button"
         popoverTarget="account-menu-popover"
@@ -136,37 +140,57 @@ export const AccountMenu = ({
         ref={popoverRef}
         id="account-menu-popover"
         popover="hint"
-        className="account-menu-popover z-20 w-[18rem] overflow-auto rounded-lg bg-white p-0 text-slate-900 shadow-[0_16px_40px_rgba(15,23,42,0.14)]"
+        tabIndex={-1}
+        className="account-menu-popover z-20 w-[18rem] overflow-auto rounded-lg border border-slate-300 bg-white p-0 text-slate-900 shadow-[0_16px_40px_rgba(15,23,42,0.14)]"
       >
         <div className="flex min-h-0 flex-col">
-          <div className={`px-6 py-5 ${publishingEnabled ? "bg-emerald-50" : "bg-yellow-50"}`}>
+          <div
+            data-testid="account-menu-header"
+            className={`px-6 py-5 ${
+              publishingEnabled === true
+                ? "bg-emerald-50"
+                : publishingEnabled === false
+                  ? "bg-yellow-50"
+                  : "bg-slate-100"
+            }`}
+          >
             <p className="m-0 truncate text-[1.05rem] font-semibold text-slate-900">
               {user.name || t("accountMenu.fallbackName")}
             </p>
-            <p className="m-0 truncate pt-1 pb-5 text-base text-slate-500">{user.email}</p>
-            <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
-              <span
-                className={
-                  publishingEnabled
-                    ? "size-2.5 rounded-full bg-emerald-600"
-                    : "size-2.5 rounded-full bg-yellow-700"
-                }
-              />
-              <span>{t("accountPanel.publishing", { ns: "profile" })} -</span>
-              {publishingEnabled ? (
-                <span>{t("accountPanel.unlocked", { ns: "profile" })}</span>
-              ) : (
-                <Link
-                  href={`/${locale}/unlock-publishing`}
-                  className="underline underline-offset-2"
-                >
-                  <span className="sr-only">
-                    {t("accountPanel.publishing", { ns: "profile" })} -{" "}
-                  </span>
-                  {t("accountPanel.locked", { ns: "profile" })}
-                </Link>
-              )}
-            </div>
+            <p
+              className={`m-0 truncate pt-1 text-base text-slate-700 ${publishingEnabled !== undefined ? "pb-5" : ""}`}
+            >
+              {user.email}
+            </p>
+            {publishingEnabled !== undefined && (
+              <div
+                data-testid="account-menu-publishing-status"
+                className="flex items-center gap-2 text-sm font-semibold text-slate-800"
+              >
+                <span
+                  data-testid="account-menu-publishing-indicator"
+                  className={
+                    publishingEnabled
+                      ? "size-2.5 rounded-full bg-emerald-600"
+                      : "size-2.5 rounded-full bg-yellow-700"
+                  }
+                />
+                <span>{t("accountPanel.publishing", { ns: "profile" })} -</span>
+                {publishingEnabled ? (
+                  <span>{t("accountPanel.unlocked", { ns: "profile" })}</span>
+                ) : (
+                  <Link
+                    href={`/${locale}/unlock-publishing`}
+                    className="underline underline-offset-2"
+                  >
+                    <span className="sr-only">
+                      {t("accountPanel.publishing", { ns: "profile" })} -{" "}
+                    </span>
+                    {t("accountPanel.locked", { ns: "profile" })}
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
 
           <nav className="flex-1 px-6 py-6" aria-label={t("accountMenu.label")}>

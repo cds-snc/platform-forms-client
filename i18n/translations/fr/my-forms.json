@@ -10,7 +10,7 @@
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
     "createNewForm": "Créer un nouveau formulaire",
     "unarchiveForm": "Désarchiver le formulaire",
-    "duplicatePublishedForm": "Dupliquer pour modifier et republier"
+    "duplicatePublishedForm": "Copier en tant que nouvelle ébauche"
   },
   "cards": {
     "noForms": "Vous n’avez aucun formulaire.",
@@ -56,7 +56,7 @@
     },
     "editLock": {
       "title": "Ouvrir le formulaire en mode « lecture seule ».",
-      "description": "{{name}} modifie actuellement cette ébauche. Si vous continuez, le formulaire s’ouvrira en mode « lecture seule » jusqu’à ce que vous preniez en charge la modification."
+      "description": "{{name}} modifie actuellement cette ébauche. Si vous continuez, le formulaire restera vérouillé jusqu’à ce que vous décidez de prendre en charge la modification. Seule une personne peut modifier un formulaire à la fois."
     },
     "unnamedForm": "Fichier sans nom"
   },
@@ -111,7 +111,7 @@
     "formDownloadFailed": "Le téléchargement du formulaire a échoué.",
     "formUnarchiveFailed": "La désarchivage du formulaire a échoué."
   },
-  "continueReadOnly": "Continuer en mode lecture seule",
+  "continueReadOnly": "Continuer vers le formulaire",
   "archivedNotice": "Vous pouvez accéder à vos formulaires archivés pendant 30 jours.",
   "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés."
 }
