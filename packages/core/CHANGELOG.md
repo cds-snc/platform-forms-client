@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.11] - 2026-05-08
+
+- Add new Star Rating input validation type
+
 ## [2.2.10] - 2026-05-15
 
 - Adds toast background override to /src/styles/_toast.scss

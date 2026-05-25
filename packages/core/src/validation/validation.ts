@@ -137,6 +137,7 @@ export const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.radio:
+    case FormElementTypes.starRating:
     case FormElementTypes.dropdown: {
       if (validator.required && (value === undefined || value === "")) {
         return t("input-validation.required");

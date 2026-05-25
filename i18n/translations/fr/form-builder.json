@@ -38,6 +38,7 @@
       "textField": "Ajouter une réponse courte",
       "textArea": "Ajouter une réponse longue",
       "radio": "Ajouter des boutons radio",
+      "starRating": "Ajouter une évaluation par étoiles",
       "checkbox": "Ajouter des cases à cocher",
       "dropdown": "Ajouter une liste déroulante",
       "fileInput": "Ajouter un téléverseur de fichier",
@@ -279,6 +280,12 @@
       "title": "Boutons radio",
       "chooseAnOption": "Question",
       "selectOnlyOne": "Sélectionnez une option."
+    },
+    "starRating": {
+      "description": "Un élément d'évaluation par étoiles où les utilisateurs sélectionnent une note de 1 à N étoiles.",
+      "title": "Évaluation par étoiles",
+      "exampleQuestion": "Comment évalueriez-vous votre expérience?",
+      "numberOfStars": "Nombre d'étoiles"
     },
     "richText": {
       "description": "Élément de texte enrichi pour insérer des en-têtes, des paragraphes, des listes ou des liens.",
@@ -743,6 +750,10 @@
       "errorInvalidRegex": "Le modèle d'expression régulière (regex) n'est pas valide. Veuillez saisir un modèle regex valide.",
       "previousPatterns": "Modèles précédents",
       "errorUnsafeRegex": "Ce modèle regex est potentiellement dangereux. Évitez les modèles susceptibles de causer des problèmes de performance, tels que ceux comportant des quantificateurs imbriqués ou un retour en arrière excessif. "
+    },
+    "starRatingSparkle": {
+      "title": "Effet scintillant",
+      "checkboxLabel": "Afficher une animation scintillante lorsqu'une étoile est sélectionnée"
     }
   },
   "moreOptions": "Plus d'options  ",
@@ -1171,6 +1182,7 @@
   "shortAnswerText": "Réponse courte",
   "signInToTest": "<a href=\"/fr/auth/login\">Connectez-vous</a> pour tester comment vous pouvez soumettre et visualiser les réponses.",
   "singleChoice": "Boutons radio",
+  "starRating": "Évaluation par étoiles",
   "start": "Commencer",
   "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
   "startErrorDuplicateQuestionId": "Les identifiants de questions doivent être uniques",

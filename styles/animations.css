@@ -48,6 +48,37 @@
   }
 }
 
+@keyframes star-particle {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--tx, 0px)), calc(-50% + var(--ty, 0px))) scale(0);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .gc-star-particle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 0.45em;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    animation: star-particle 500ms ease-out forwards;
+  }
+
+  .gc-star-particle--1 { --tx: -20px; --ty: -22px; }
+  .gc-star-particle--2 { --tx: 0px;   --ty: -28px; animation-delay: 30ms; }
+  .gc-star-particle--3 { --tx: 22px;  --ty: -20px; animation-delay: 15ms; }
+  .gc-star-particle--4 { --tx: 26px;  --ty: 10px;  animation-delay: 25ms; }
+  .gc-star-particle--5 { --tx: 0px;   --ty: 28px;  animation-delay: 10ms; }
+  .gc-star-particle--6 { --tx: -26px; --ty: 10px;  animation-delay: 20ms; }
+}
+
 ::view-transition-old(.accounts-nav-forward) {
   animation: 90ms linear both accounts-fade reverse;
 }

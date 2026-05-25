@@ -496,6 +496,10 @@ describe("<ElementDialog />", () => {
     await expect.element(richText).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
+    const starRating = listbox.getByTestId("starRating");
+    await expect.element(starRating).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
     const fileInput = listbox.getByTestId("fileInput");
     await expect.element(fileInput).toHaveAttribute("aria-selected", "true");
 
@@ -548,11 +552,11 @@ describe("<ElementDialog />", () => {
 
     await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
-    // All filter should show 17 elements
+    // All filter should show 18 elements
     const allFilter = page.getByTestId("all-filter");
     await allFilter.click();
     let options = await page.getByRole("option").all();
-    expect(options.length).toBe(17);
+    expect(options.length).toBe(18);
 
     // Basic filter should show 7 elements
     const basicFilter = page.getByTestId("basic-filter");
@@ -566,15 +570,15 @@ describe("<ElementDialog />", () => {
     options = await page.getByRole("option").all();
     expect(options.length).toBe(7);
 
-    // Other filter should show 3 elements
+    // Other filter should show 4 elements
     const otherFilter = page.getByTestId("other-filter");
     await otherFilter.click();
     options = await page.getByRole("option").all();
-    expect(options.length).toBe(3);
+    expect(options.length).toBe(4);
 
     // Go back to all filter
     await allFilter.click();
     options = await page.getByRole("option").all();
-    expect(options.length).toBe(17);
+    expect(options.length).toBe(18);
   });
 });
