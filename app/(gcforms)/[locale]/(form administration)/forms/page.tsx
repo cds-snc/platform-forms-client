@@ -123,16 +123,20 @@ export default async function Page(props: {
 
   return (
     <div className="m-4 grid grid-cols-[23.5em_1fr] gap-8">
+      <h1 className="sr-only">{t("title")}</h1>
       <div>
         <Navigation filter={status} />
       </div>
       <div>
-        {/* TODO where to put this stuff? */}
-        <div className="mb-4">
-          <h1 className="mb-8 border-b-0">{t("title")}</h1>
-          <Invitations invitations={invitations} />
+        <div className="flex justify-between">
+          <div>
+            <Invitations invitations={invitations} />
+            <ResumeEditingForm />
+          </div>
           <NewFormButton />
-          <ResumeEditingForm />
+        </div>
+
+        <div className="mb-4">
           {status == "archived" && (
             <div>
               {t("archivedNotice")}&nbsp;
