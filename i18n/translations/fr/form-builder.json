@@ -613,7 +613,7 @@
       "UpdateClosingDate": "Date de fermeture modifiée à : {{closingDate}}",
       "RemoveClosingDate": "Date de fermeture supprimée.",
       "UpdatedNotificationSettings": "Paramètre de notification {{enabled}} pour {{userEmail}}",
-      "GrantAccess": "Accès accordé à {{userEmail}}",
+      "GrantAccess": "Accès accordé à {{userList}}",
       "RevokeAccess": "Accès révoqué pour {{userEmail}}",
       "UserInvited": "{{userEmail}} a invité {{invitationEmail}}",
       "AcceptedInvitation": "Invitation acceptée par {{userEmail}}",
