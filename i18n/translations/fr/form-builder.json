@@ -622,7 +622,7 @@
       "ReceivedFormResponses": "Réponse {{submissionId}} reçue",
       "DownloadedFormResponses": "Réponse {{submissionId}} téléchargée en format {{format}}",
       "ConfirmedResponsesForForm": "Réponse {{submissionId}} confirmée",
-      "DeletedDraftResponses": "Réponses brouillon supprimées"
+      "DeletedDraftResponses": "Réponses de l'ébauche de formulaire supprimées"
     },
     "eventParams": {
       "Unclassified": "Non classifié",

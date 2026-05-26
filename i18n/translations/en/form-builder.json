@@ -594,7 +594,7 @@
       "InvitationAccepted": "Invitation accepted",
       "UpdateFormJsonConfig": "Downloaded copy of the form",
       "UpdatedNotificationSettings": "Updated notification settings",
-      "DeletedDraftResponses": "Deleted draft responses"
+      "DeletedDraftResponses": "Deleted draft form responses"
     },
     "eventDetails": {
       "CreatedForm": "Created form",
