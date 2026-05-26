@@ -1399,13 +1399,9 @@ export async function cloneTemplate(
 
   if (createdTemplate === null) return null;
 
-  logEvent(
-    user.id,
-    { type: "Form", id: createdTemplate.id },
-    "CreateForm",
-    AuditLogDetails.ClonedForm,
-    { newFormID: createdTemplate.id }
-  );
+  logEvent(user.id, { type: "Form", id: formID }, "CreateForm", AuditLogDetails.ClonedForm, {
+    newFormID: createdTemplate.id,
+  });
 
   return _parseTemplate(createdTemplate);
 }
