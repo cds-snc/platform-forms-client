@@ -593,7 +593,8 @@
       "PublishForm": "Form published",
       "InvitationAccepted": "Invitation accepted",
       "UpdateFormJsonConfig": "Downloaded copy of the form",
-      "UpdatedNotificationSettings": "Updated notification settings"
+      "UpdatedNotificationSettings": "Updated notification settings",
+      "DeletedDraftResponses": "Deleted draft responses"
     },
     "eventDetails": {
       "CreatedForm": "Created form",
