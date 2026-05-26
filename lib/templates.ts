@@ -1635,13 +1635,15 @@ export const updateClosedData = async (
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
   if (closingDate) {
+    const date = new Date(closingDate);
+
     logEvent(
       user.id,
       { type: "Form", id: formID },
       "UpdateForm",
       AuditLogDetails.UpdateClosingDate,
       {
-        closingDate: closingDate,
+        closingDate: date.toISOString(),
       }
     );
   } else {
