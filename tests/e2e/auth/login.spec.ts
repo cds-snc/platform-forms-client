@@ -42,7 +42,7 @@ test.describe("Login Page", () => {
       await page.locator("button[type='submit']").click();
       await expect(page.locator("[id='errorMessageusername']")).toBeVisible();
       await expect(page.locator("[id='errorMessageusername']")).toContainText(
-        "Enter a valid government email address."
+        "Enter a valid government email address"
       );
     });
 
