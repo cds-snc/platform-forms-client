@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.15.2](https://github.com/cds-snc/platform-forms-client/compare/v4.15.1...v4.15.2) (2026-05-25)
+
+
+### Bug Fixes
+
+* DateModified sometimes appears to be in the future ([#7246](https://github.com/cds-snc/platform-forms-client/issues/7246)) ([9d60183](https://github.com/cds-snc/platform-forms-client/commit/9d6018363025c5701800d647982df9743607b406))
+* fix stale rules ([#7242](https://github.com/cds-snc/platform-forms-client/issues/7242)) ([797c276](https://github.com/cds-snc/platform-forms-client/commit/797c276acc3dc61d67afa6f112c5741e4426c1b5))
+
+
+### Miscellaneous Chores
+
+* allow continue anyway for saved data mismatch ([#7232](https://github.com/cds-snc/platform-forms-client/issues/7232)) ([f047c75](https://github.com/cds-snc/platform-forms-client/commit/f047c7502c9112375eed47f6184e5120c3882fa7))
+* Fix background colour on rightPanel ([#7235](https://github.com/cds-snc/platform-forms-client/issues/7235)) ([e5f7ee4](https://github.com/cds-snc/platform-forms-client/commit/e5f7ee44d71fa1531a83792cdc06d0d727941a68))
+* Remove locked editing flag ([#7247](https://github.com/cds-snc/platform-forms-client/issues/7247)) ([291fd46](https://github.com/cds-snc/platform-forms-client/commit/291fd46b12e6af3a7ab3f8931b065bdd7535f24c))
+* Remove Responses Category from Audit Log ([#7243](https://github.com/cds-snc/platform-forms-client/issues/7243)) ([9de25fd](https://github.com/cds-snc/platform-forms-client/commit/9de25fd2429e56d1179eddef14087a6c7ee6300a))
+* Swap Audit Log Close to Secondary button. ([#7244](https://github.com/cds-snc/platform-forms-client/issues/7244)) ([f99820e](https://github.com/cds-snc/platform-forms-client/commit/f99820e982e5940446f554fd83b2299bb084a8ee))
+* synced file(s) with cds-snc/site-reliability-engineering ([#7239](https://github.com/cds-snc/platform-forms-client/issues/7239)) ([f4a3df8](https://github.com/cds-snc/platform-forms-client/commit/f4a3df849e3ad9f711e93e38899c965644221ce6))
+* synced local '.github/workflows/ossf-scorecard.yml' with remote 'tools/sre_file_sync/ossf-scorecard.yml' ([f4a3df8](https://github.com/cds-snc/platform-forms-client/commit/f4a3df849e3ad9f711e93e38899c965644221ce6))
+* tweak error message punctuation ([#7245](https://github.com/cds-snc/platform-forms-client/issues/7245)) ([082c025](https://github.com/cds-snc/platform-forms-client/commit/082c025baa78b919c9c270b8a07b7b148e7d930b))
+
 ## [4.15.1](https://github.com/cds-snc/platform-forms-client/compare/v4.15.0...v4.15.1) (2026-05-22)
 
 
