@@ -14,7 +14,12 @@ import { inviteToCollaborateEmailTemplate } from "@lib/invitations/emailTemplate
 import { inviteToFormsEmailTemplate } from "@lib/invitations/emailTemplates/inviteToFormsEmailTemplate";
 import { getOrigin } from "@lib/origin";
 import { logMessage } from "@lib/logger";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
+import {
+  AuditLogAccessDeniedDetails,
+  AuditLogDetails,
+  AuditLogEvent,
+  logEvent,
+} from "@lib/auditLogs";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
@@ -91,7 +96,7 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
   logEvent(
     user.id,
     { type: "Form", id: invitation.templateId },
-    "InvitationCreated",
+    AuditLogEvent.InvitationCreated,
     AuditLogDetails.UserInvited,
     { userEmail: user.email, invitationEmail: invitation.email }
   );

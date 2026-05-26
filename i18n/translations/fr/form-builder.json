@@ -593,7 +593,8 @@
       "PublishForm": "Formulaire publié",
       "InvitationAccepted": "Invitation acceptée",
       "UpdateFormJsonConfig": "Téléchargement d'une copie du formulaire",
-      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification"
+      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
+      "InvitationCreated": "Invitation envoyée à un utilisateur pour collaborer sur le formulaire"
     },
     "eventDetails": {
       "CreatedForm": "Formulaire créé",
