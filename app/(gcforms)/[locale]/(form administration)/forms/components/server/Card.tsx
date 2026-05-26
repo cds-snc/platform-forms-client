@@ -7,6 +7,7 @@ import { serverTranslation } from "@i18n";
 // import Link from "next/link";
 import { DeliveryOption } from "@lib/types";
 import Skeleton from "react-loading-skeleton";
+import { DraftEditLink } from "../client/DraftEditLink";
 
 const CardBanner = async ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
   const { t } = await serverTranslation("my-forms");
@@ -167,6 +168,10 @@ export interface CardI {
 }
 
 export const Card = async ({ card, status }: { card: CardI; status?: string }) => {
+  const {
+    t,
+    i18n: { language },
+  } = await serverTranslation("my-forms");
   const isEditing = true;
   return (
     <div
@@ -174,7 +179,7 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
       data-testid={`card-${card.id}`}
     >
       <div className="mb-2 flex items-center justify-between">
-        {/* TODO */}
+        {/* TODO case of 0 people? */}
         <p className="text-sm">Shared with 5 people</p>
 
         <div className="flex items-center text-sm">
@@ -189,7 +194,8 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
       </div>
 
       <CardTitle name={card.name} />
-      <Suspense fallback={<Skeleton count={2} className="my-4 ml-4 w-[300px]" />}>
+
+      <Suspense fallback={<Skeleton count={2} className="my-3 w-[300px]" />}>
         <CardLinks
           isPublished={card.isPublished}
           url={card.url}
@@ -200,19 +206,35 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
         />
       </Suspense>
 
-      {/* <div className="mb-2 text-xs">
-          <p className="ml-4 italic">{card.id}</p>
-        </div> */}
-
       <div className="mt-auto">
-        <CardDate id={card.id} date={card.date} ttl={card.ttl} />
+        {!card.isPublished && !card.ttl && !isEditing && (
+          <div>
+            <CardDate id={card.id} date={card.date} ttl={card.ttl} />
+            <div className="mt-2 text-sm">By: [first name]</div>
+          </div>
+        )}
 
-        {/* TODO */}
-        <div className="text-sm">By: [first name]</div>
+        {!card.isPublished && !card.ttl && isEditing && (
+          <div>
+            <div className="mb-2 text-sm">[first name] editing</div>
+            <div className="flex items-center">
+              <div className="mr-2 text-sm">Read only -</div>
+              <DraftEditLink
+                href={`/${language}/form-builder/${card.id}/edit/`}
+                formId={card.id}
+                className="block cursor-pointer text-left text-sm underline focus:fill-slate-500 active:fill-slate-500 disabled:opacity-70"
+              >
+                {t("editForm")}
+              </DraftEditLink>
+            </div>
+          </div>
+        )}
 
         <div className="mt-3">
           <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
         </div>
+
+        {card.isPublished && <p className="mt-3 text-xs italic">{card.id}</p>}
       </div>
     </div>
   );
