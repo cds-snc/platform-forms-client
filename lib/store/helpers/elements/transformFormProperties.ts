@@ -35,20 +35,66 @@ const updateNumberInputType = (element: FormElement) => {
   }
 };
 
+const cleanFormStructure = (form: FormProperties) => {
+  // Make sure groups exist before we use them to decide which elements are valid.
+  const cleanedForm = initializeGroups({ ...form }, true);
+
+  // Clean groupsLayout
+  if (cleanedForm.groupsLayout && cleanedForm.groupsLayout.length > 0) {
+    cleanedForm.groupsLayout = cleanedForm.groupsLayout.filter((id) => !lockedGroups.includes(id));
+
+    cleanedForm.groupsLayout = cleanedForm.groupsLayout.filter((id) =>
+      Object.prototype.hasOwnProperty.call(cleanedForm.groups || {}, id)
+    );
+  } else {
+    cleanedForm.groupsLayout = Object.entries(cleanedForm.groups || {})
+      .filter(([id, _group]) => {
+        return !lockedGroups.includes(id);
+      })
+      .map(([id, _group]) => id);
+  }
+
+  // Remove any elements that are not in a group.
+  const elementIdsInGroups = new Set<string>();
+
+  Object.values(cleanedForm.groups || {}).forEach((group) => {
+    group.elements.forEach((elementId) => {
+      elementIdsInGroups.add(elementId);
+    });
+  });
+
+  cleanedForm.elements = cleanedForm.elements.filter((element) => {
+    return elementIdsInGroups.has(element.id.toString());
+  });
+
+  // Keep layout in sync with elements.
+  if (cleanedForm.layout) {
+    cleanedForm.layout = cleanedForm.layout.filter((id) =>
+      cleanedForm.elements.some((element) => element.id === id)
+    );
+  }
+
+  return cleanedForm;
+};
+
+const cleanElements = (form: FormProperties) => {
+  form.elements.forEach((element) => {
+    cleanElementRules(form.elements, element);
+    ensureUUID(element);
+    updateNumberInputType(element);
+  });
+};
+
 export const transformFormProperties = (form?: FormProperties): FormProperties => {
   if (!form) {
     return {} as FormProperties;
   }
 
   const transformedForm = JSON.parse(JSON.stringify(form)) as FormProperties;
+  const cleanedForm = cleanFormStructure(transformedForm);
+  cleanElements(cleanedForm);
 
-  transformedForm.elements.forEach((element) => {
-    cleanElementRules(transformedForm.elements, element);
-    ensureUUID(element);
-    updateNumberInputType(element);
-  });
-
-  return transformedForm;
+  return cleanedForm;
 };
 
 export const hasCleanedRules = (elements: FormElement[], element: FormElement) => {
@@ -66,8 +112,7 @@ export const hasCleanedRules = (elements: FormElement[], element: FormElement) =
 
 export const transform: TemplateStore<"transform"> = (set) => () => {
   set((state) => {
-    // Make sure groups are initialized
-    state.form = initializeGroups({ ...state.form }, true);
+    state.form = cleanFormStructure(state.form);
 
     // Clean rules and ensure UUIDs
     state.form.elements.forEach((element, index) => {
@@ -75,50 +120,11 @@ export const transform: TemplateStore<"transform"> = (set) => () => {
         state.form.elements[index] = { ...element, uuid: uuid() };
       }
 
-      const rules = hasCleanedRules(state.form.elements, element);
+      const rules = hasCleanedRules(state.form.elements, state.form.elements[index]);
 
       if (rules) {
         state.form.elements[index].properties.conditionalRules = rules;
       }
     });
-
-    // Clean groupsLayout
-    if (state.form.groupsLayout && state.form.groupsLayout.length > 0) {
-      // Remove locked groups (start, end, review) if they exist
-      state.form.groupsLayout = state.form.groupsLayout.filter((id) => !lockedGroups.includes(id));
-
-      // Ensure all group ids exist in form.groups
-      state.form.groupsLayout = state.form.groupsLayout.filter((id) =>
-        Object.entries(state.form.groups || {}).some(([key, _group]) => key === id)
-      );
-    } else {
-      // Create a groupsLayout if it's missing or empty
-      state.form.groupsLayout = Object.entries(state.form.groups || {})
-        .filter(([id, _group]) => {
-          return !lockedGroups.includes(id);
-        })
-        .map(([id, _group]) => id);
-    }
-
-    // Clean elements array based on groups (only those in groups are kept)
-    const elementIdsInGroups = new Set<string>();
-
-    Object.values(state.form.groups || {}).forEach((group) => {
-      group.elements.forEach((elementId) => {
-        elementIdsInGroups.add(elementId);
-      });
-    });
-
-    state.form.elements = state.form.elements.filter((element) => {
-      // ensure element.id exists in any elements array in the groups object
-      return elementIdsInGroups.has(element.id.toString());
-    });
-
-    // Clean form layout
-    if (state.form.layout) {
-      state.form.layout = state.form.layout.filter((id) =>
-        state.form.elements.some((element) => element.id === id)
-      );
-    }
   });
 };
