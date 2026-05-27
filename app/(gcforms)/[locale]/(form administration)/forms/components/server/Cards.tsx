@@ -16,8 +16,6 @@ type EditLockInfo = {
   visibilityState: "visible" | "hidden" | null;
   presenceStatus: "active" | "idle" | "away" | null;
   sessionId: string | null;
-  userCount: number | null;
-  pendingUserCount: number | null;
 };
 
 type EditLocksResponse = {
@@ -76,6 +74,7 @@ export const Cards = ({
           }
 
           const lockInfo = data.editLocks[template.id];
+
           if (!lockInfo) {
             // Lock no longer exists, remove edit lock info
             return {
@@ -98,8 +97,6 @@ export const Cards = ({
               visibilityState: lockInfo.visibilityState,
               presenceStatus: lockInfo.presenceStatus,
               sessionId: lockInfo.sessionId,
-              userCount: lockInfo.userCount,
-              pendingUserCount: lockInfo.pendingUserCount,
             },
           };
         })

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { logMessage } from "@lib/logger";
 import { getEditLockInfoWithCollaborators } from "@lib/editLockUtils";
+import { middleware, sessionExists } from "@lib/middleware";
+import { MiddlewareProps, WithRequired } from "@lib/types";
+import { authorization } from "@lib/privileges";
 
 type EditLockResponse = {
   lockedByUserId: string;
@@ -13,37 +16,61 @@ type EditLockResponse = {
   visibilityState: string | null;
   presenceStatus: string | null;
   sessionId: string | null;
-  userCount: number | null;
-  pendingUserCount: number | null;
 };
 
 /**
- * API endpoint to get edit-lock information for specified template IDs
+ * API endpoint to get edit-lock information for specified templateIds
+ *
+ * Secured: Requires authentication and verifies user has access to requested templates
+ *
+ * Even though POST is not the RESTful choice it allows passing templateIds in the body vs.
+ * URL query. If it were a URL query the templateIds would potentially show up in logs.
  */
-export async function POST(request: NextRequest) {
+export const POST = middleware([sessionExists()], async (_req: NextRequest, props) => {
+  const { session, body } = props as WithRequired<MiddlewareProps, "session"> & {
+    body: { templateIds?: unknown };
+  };
+
   try {
-    const { templateIds } = await request.json();
+    const { templateIds } = body;
 
     if (!Array.isArray(templateIds)) {
       return NextResponse.json({ error: "templateIds must be an array" }, { status: 400 });
+    }
+
+    if (templateIds.length === 0) {
+      return NextResponse.json({ editLocks: {} });
+    }
+
+    // Note/TODO: This could also be done in a single DB call but I opted for code reuse ATM. May want to come back to this to optimize.
+    //
+    // Security: Verify user has access to all requested templates
+    // Check all templates in parallel using existing authorization pattern
+    const accessChecks = await Promise.all(
+      templateIds.map((templateId) => authorization.canViewForm(templateId).catch(() => null))
+    );
+
+    // If any check failed, deny access
+    if (accessChecks.some((result) => result === null)) {
+      logMessage.warn(
+        `User ${session.user.id} attempted to access edit-locks for templates without permission`
+      );
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     if (!process.env.REDIS_URL) {
       return NextResponse.json({ editLocks: {} });
     }
 
-    const { lockInfoMap, collaboratorCountMap } =
-      await getEditLockInfoWithCollaborators(templateIds);
+    const { lockInfoMap } = await getEditLockInfoWithCollaborators(templateIds);
 
-    // Convert to response format
+    // Convert lock info to response format (only for templates with active locks)
     const editLocks = templateIds.reduce(
       (acc, templateId) => {
         const lockInfo = lockInfoMap.get(templateId);
         if (!lockInfo) {
           return acc;
         }
-
-        const collaboratorCount = collaboratorCountMap.get(templateId);
 
         acc[templateId] = {
           lockedByUserId: lockInfo.lockedByUserId,
@@ -56,8 +83,6 @@ export async function POST(request: NextRequest) {
           visibilityState: lockInfo.visibilityState ?? null,
           presenceStatus: lockInfo.presenceStatus ?? null,
           sessionId: lockInfo.sessionId ?? null,
-          userCount: collaboratorCount?.userCount ?? null,
-          pendingUserCount: collaboratorCount?.pendingUserCount ?? null,
         };
 
         return acc;
@@ -70,4 +95,4 @@ export async function POST(request: NextRequest) {
     logMessage.error(`Error fetching edit-lock info: ${error}`);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-}
+});

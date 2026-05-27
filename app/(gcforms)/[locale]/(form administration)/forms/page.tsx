@@ -18,7 +18,7 @@ import { getTemplateIdsWithEditLocks, getEditLockInfoWithCollaborators } from "@
 const FALLBACK_DATE = Date.now().toString();
 
 // Polling interval for edit-lock updates (in milliseconds)
-const EDIT_LOCK_POLL_INTERVAL_MS = 5000; // 5 seconds
+const EDIT_LOCK_POLL_INTERVAL_MS = 2000; // 2 seconds -- set to a high number later like 5 or 10 seconds to reduce load
 
 async function combineTemplatesWithLockInfo(
   templates: FormsTemplate[]
@@ -30,8 +30,8 @@ async function combineTemplatesWithLockInfo(
     return templates;
   }
 
-  // Fetch all lock info and collaborator counts
-  const { lockInfoMap, collaboratorCountMap } = await getEditLockInfoWithCollaborators(
+  // Fetch lock info (without collaborator counts - those come from DB)
+  const { lockInfoMap } = await getEditLockInfoWithCollaborators(
     templatesWithLocks.map((t) => t.id)
   );
 
@@ -42,7 +42,6 @@ async function combineTemplatesWithLockInfo(
     }
 
     const lockInfo = lockInfoMap.get(template.id);
-    const collaboratorCount = collaboratorCountMap.get(template.id);
 
     if (!lockInfo) {
       return template;
@@ -61,8 +60,6 @@ async function combineTemplatesWithLockInfo(
         visibilityState: lockInfo.visibilityState ?? null,
         presenceStatus: lockInfo.presenceStatus ?? null,
         sessionId: lockInfo.sessionId ?? null,
-        userCount: collaboratorCount?.userCount ?? null,
-        pendingUserCount: collaboratorCount?.pendingUserCount ?? null,
       },
     };
   });
@@ -80,6 +77,10 @@ export type FormsTemplate = {
   url: string;
   overdue: boolean;
   hasEditLock: boolean;
+  collaboratorCount: {
+    userCount: number;
+    pendingUserCount: number;
+  };
 };
 
 export type FormsTemplateWithLockInfo = FormsTemplate & {
@@ -94,8 +95,6 @@ export type FormsTemplateWithLockInfo = FormsTemplate & {
     visibilityState: EditLockVisibilityState | null;
     presenceStatus: EditLockPresenceStatus | null;
     sessionId: string | null;
-    userCount: number | null;
-    pendingUserCount: number | null;
   } | null;
 };
 
@@ -148,6 +147,14 @@ export default async function Page(props: {
   const allTemplates = await getAllTemplatesForUser(options);
   const templateIdsWithEditLocks = await getTemplateIdsWithEditLocks();
 
+  // Type for template with counts from DB
+  type TemplateWithCounts = (typeof allTemplates)[number] & {
+    _count: {
+      users: number;
+      invitations: number;
+    };
+  };
+
   const templates = allTemplates.map((template) => {
     const {
       id,
@@ -158,6 +165,12 @@ export default async function Page(props: {
       updatedAt,
       ttl,
     } = template;
+
+    // Calculate collaborator count from DB data
+    const templateWithCounts = template as TemplateWithCounts;
+    const userCount = templateWithCounts._count?.users ?? 0;
+    const pendingUserCount = templateWithCounts._count?.invitations ?? 0;
+
     return {
       id,
       titleEn,
@@ -170,6 +183,10 @@ export default async function Page(props: {
       overdue: false,
       ttl: ttl ? new Date(ttl) : null,
       hasEditLock: templateIdsWithEditLocks.has(id),
+      collaboratorCount: {
+        userCount,
+        pendingUserCount,
+      },
     };
   });
 

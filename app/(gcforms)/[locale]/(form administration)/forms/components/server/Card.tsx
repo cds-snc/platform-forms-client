@@ -138,6 +138,10 @@ export interface CardI {
 }
 
 type CardIWithLockInfo = CardI & {
+  collaboratorCount: {
+    userCount: number;
+    pendingUserCount: number;
+  };
   editLockInfo?: {
     lockedByUserId: string;
     lockedByName: string | null;
@@ -149,8 +153,6 @@ type CardIWithLockInfo = CardI & {
     visibilityState: EditLockVisibilityState | null;
     presenceStatus: EditLockPresenceStatus | null;
     sessionId: string | null;
-    userCount: number | null;
-    pendingUserCount: number | null;
   } | null;
 };
 
@@ -160,11 +162,7 @@ export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: strin
   const language = params?.locale as string;
 
   const collaboratorCount =
-    card.editLockInfo &&
-    card.editLockInfo.userCount !== null &&
-    card.editLockInfo.pendingUserCount !== null
-      ? card.editLockInfo.userCount + card.editLockInfo.pendingUserCount
-      : 0;
+    card.collaboratorCount.userCount + card.collaboratorCount.pendingUserCount;
 
   return (
     <div
