@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, createEvent, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Upload } from "./Upload";
@@ -132,5 +132,98 @@ describe("Upload", () => {
     expect(pushMock).toHaveBeenCalledWith("/en/id/current-form");
     expect(toastErrorMock).not.toHaveBeenCalled();
     expect(logClientErrorMock).not.toHaveBeenCalled();
+  });
+
+  it("shows drag feedback and restores progress from a dropped file", async () => {
+    mockFileContents = createSavedFormFile({
+      id: "current-form",
+      values: { firstName: "Avery" },
+    });
+
+    render(<Upload formId="current-form" />);
+
+    const hotspot = screen.getByRole("button", {
+      name: "saveAndResume.resumePage.upload.title",
+    });
+    const droppedFile = new File(["resume"], "resume.html", { type: "text/html" });
+
+    expect(hotspot).toHaveClass("min-h-50");
+    expect(hotspot).toHaveAttribute("aria-pressed", "false");
+
+    const dragData = {
+      dataTransfer: {
+        files: [droppedFile],
+      },
+    };
+
+    fireEvent.dragEnter(hotspot, dragData);
+    fireEvent.dragOver(hotspot, dragData);
+
+    expect(hotspot).toHaveClass("bg-violet-200");
+    expect(hotspot).toHaveAttribute("aria-pressed", "true");
+
+    fireEvent.drop(hotspot, dragData);
+
+    await waitFor(() => {
+      expect(saveSessionProgressMock).toHaveBeenCalledWith("en", {
+        id: "current-form",
+        values: { firstName: "Avery" },
+        history: ["start"],
+        currentGroup: "start",
+        sourceFormId: undefined,
+      });
+    });
+
+    expect(pushMock).toHaveBeenCalledWith("/en/id/current-form");
+    expect(hotspot).toHaveClass("min-h-50");
+    expect(hotspot).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("keeps the drag state active while moving within the hotspot", () => {
+    vi.useFakeTimers();
+
+    render(<Upload formId="current-form" />);
+
+    const hotspot = screen.getByRole("button", {
+      name: "saveAndResume.resumePage.upload.title",
+    });
+    const description = screen.getByText("saveAndResume.resumePage.upload.description");
+
+    fireEvent.dragEnter(hotspot, {
+      dataTransfer: {
+        files: [new File(["resume"], "resume.html", { type: "text/html" })],
+      },
+    });
+    fireEvent.dragOver(hotspot, {
+      dataTransfer: {
+        files: [new File(["resume"], "resume.html", { type: "text/html" })],
+      },
+    });
+
+    expect(hotspot).toHaveAttribute("aria-pressed", "true");
+
+    const dragLeaveWithinHotspot = createEvent.dragLeave(hotspot);
+    Object.defineProperty(dragLeaveWithinHotspot, "relatedTarget", {
+      value: description,
+    });
+
+    fireEvent(hotspot, dragLeaveWithinHotspot);
+
+    expect(hotspot).toHaveAttribute("aria-pressed", "true");
+
+    const dragLeaveHotspot = createEvent.dragLeave(hotspot);
+    Object.defineProperty(dragLeaveHotspot, "relatedTarget", {
+      value: document.body,
+    });
+
+    fireEvent(hotspot, dragLeaveHotspot);
+
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+
+    expect(hotspot).toHaveAttribute("aria-pressed", "false");
+
+    vi.useRealTimers();
   });
 });

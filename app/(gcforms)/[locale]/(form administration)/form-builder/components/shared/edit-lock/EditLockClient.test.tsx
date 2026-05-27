@@ -5,20 +5,6 @@ import { render, screen } from "@testing-library/react";
 
 import { EditLockClient } from "./EditLockClient";
 
-const { toastSuccess } = vi.hoisted(() => ({
-  toastSuccess: vi.fn(),
-}));
-
-vi.mock("@formBuilder/components/shared/Toast", () => ({
-  toast: {
-    success: toastSuccess,
-  },
-}));
-
-vi.mock("@i18n/client", () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
-}));
-
 const mockState = vi.hoisted(() => ({
   store: {
     lang: "en",
@@ -33,6 +19,10 @@ const mockState = vi.hoisted(() => ({
   toast: {
     success: vi.fn(),
   },
+}));
+
+vi.mock("@i18n/client", () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
 }));
 
 vi.mock("next/navigation", () => ({
