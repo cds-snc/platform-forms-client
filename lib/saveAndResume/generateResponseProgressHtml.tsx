@@ -5,7 +5,7 @@ import { DownloadConfirmHtml } from "@lib/saveAndResume/DownloadConfirmHtml";
 import { type HTMLProps } from "@lib/saveAndResume/types";
 import { logMessage } from "@lib/logger";
 
-export const generateDownloadHtml = async (props: HTMLProps) => {
+export const generateResponseProgressHtml = async (props: HTMLProps) => {
   try {
     const formId = props.formId;
 
