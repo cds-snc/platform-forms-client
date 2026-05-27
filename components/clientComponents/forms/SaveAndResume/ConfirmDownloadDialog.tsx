@@ -12,7 +12,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { useFormSubmissionData } from "@lib/hooks/useFormSubmissionData";
 import { toast } from "@formBuilder/components/shared/Toast";
 
-import { generateResponseProgressHtml } from "@root/lib/saveAndResume/generateResponseProgressHtml";
+import { generateResponseProgressHtml } from "@lib/saveAndResume/generateResponseProgressHtml";
 import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
 import { logMessage } from "@lib/logger";
 
