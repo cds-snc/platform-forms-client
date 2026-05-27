@@ -593,7 +593,8 @@
       "PublishForm": "Formulaire publié",
       "InvitationAccepted": "Invitation acceptée",
       "UpdateFormJsonConfig": "Téléchargement d'une copie du formulaire",
-      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification"
+      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
+      "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée"
     },
     "eventDetails": {
       "CreatedForm": "Formulaire créé",
@@ -613,8 +614,7 @@
       "UpdateClosingDate": "Date de fermeture modifiée à : {{closingDate}}",
       "RemoveClosingDate": "Date de fermeture supprimée.",
       "UpdatedNotificationSettings": "Paramètre de notification {{enabled}} pour {{userEmail}}",
-
-      "GrantAccess": "Accès accordé à {{userEmail}}",
+      "GrantAccess": "Accès accordé à {{userList}}",
       "RevokeAccess": "Accès révoqué pour {{userEmail}}",
       "UserInvited": "{{userEmail}} a invité {{invitationEmail}}",
       "AcceptedInvitation": "Invitation acceptée par {{userEmail}}",
@@ -622,7 +622,8 @@
       "CancelInvitation": "Invitation annulée pour {{invitationEmail}}",
       "ReceivedFormResponses": "Réponse {{submissionId}} reçue",
       "DownloadedFormResponses": "Réponse {{submissionId}} téléchargée en format {{format}}",
-      "ConfirmedResponsesForForm": "Réponse {{submissionId}} confirmée"
+      "ConfirmedResponsesForForm": "Réponse {{submissionId}} confirmée",
+      "DeletedDraftResponses": "Réponses de l'ébauche de formulaire supprimées"
     },
     "eventParams": {
       "Unclassified": "Non classifié",
