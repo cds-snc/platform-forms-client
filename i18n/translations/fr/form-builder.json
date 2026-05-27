@@ -594,7 +594,7 @@
       "InvitationAccepted": "Invitation acceptée",
       "UpdateFormJsonConfig": "Téléchargement d'une copie du formulaire",
       "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
-      "InvitationCreated": "Invitation envoyée à un utilisateur pour collaborer sur le formulaire"
+      "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée"
     },
     "eventDetails": {
       "CreatedForm": "Formulaire créé",
