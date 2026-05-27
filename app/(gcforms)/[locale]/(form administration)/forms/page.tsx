@@ -77,6 +77,7 @@ export type FormsTemplate = {
   url: string;
   overdue: boolean;
   hasEditLock: boolean;
+  isShared: boolean;
   collaboratorCount: {
     userCount: number;
     pendingUserCount: number;
@@ -171,6 +172,10 @@ export default async function Page(props: {
     const userCount = templateWithCounts._count?.users ?? 0;
     const pendingUserCount = templateWithCounts._count?.invitations ?? 0;
 
+    // Determine if template is shared (has 1 or more collaborators beyond owner)
+    // userCount includes the owner, so we need at least 2 total (owner + 1 collaborator)
+    const isShared = userCount + pendingUserCount >= 2;
+
     return {
       id,
       titleEn,
@@ -183,6 +188,7 @@ export default async function Page(props: {
       overdue: false,
       ttl: ttl ? new Date(ttl) : null,
       hasEditLock: templateIdsWithEditLocks.has(id),
+      isShared,
       collaboratorCount: {
         userCount,
         pendingUserCount,
@@ -191,6 +197,12 @@ export default async function Page(props: {
   });
 
   const templatesWithEditLocks = await combineTemplatesWithLockInfo(templates);
+
+  // Filter templates based on status, including "shared" status
+  const filteredTemplates =
+    status === "shared" || !status
+      ? templatesWithEditLocks.filter((template) => template.isShared)
+      : templatesWithEditLocks;
 
   const invitations = await prisma.invitation.findMany({
     where: {
@@ -214,7 +226,7 @@ export default async function Page(props: {
   });
 
   const overdueTemplateIds = await getOverdueTemplateIds(
-    templatesWithEditLocks.map((template) => template.id)
+    filteredTemplates.map((template) => template.id)
   );
 
   return (
@@ -243,7 +255,7 @@ export default async function Page(props: {
 
         <Cards
           filter={status}
-          initialTemplates={templatesWithEditLocks}
+          initialTemplates={filteredTemplates}
           overdueTemplateIds={overdueTemplateIds}
           status={status}
           pollIntervalMs={EDIT_LOCK_POLL_INTERVAL_MS}

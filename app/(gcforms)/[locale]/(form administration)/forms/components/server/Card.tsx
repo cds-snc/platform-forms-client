@@ -134,6 +134,8 @@ export interface CardI {
   date: string;
   url: string;
   overdue: boolean;
+  hasEditLock?: boolean;
+  isShared: boolean;
   status?: string;
 }
 
@@ -161,8 +163,9 @@ export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: strin
   const params = useParams();
   const language = params?.locale as string;
 
+  // Exclude the owner from the count (userCount includes owner)
   const collaboratorCount =
-    card.collaboratorCount.userCount + card.collaboratorCount.pendingUserCount;
+    card.collaboratorCount.userCount - 1 + card.collaboratorCount.pendingUserCount;
 
   return (
     <div
