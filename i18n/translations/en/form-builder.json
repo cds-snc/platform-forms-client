@@ -593,7 +593,8 @@
       "PublishForm": "Form published",
       "InvitationAccepted": "Invitation accepted",
       "UpdateFormJsonConfig": "Downloaded copy of the form",
-      "UpdatedNotificationSettings": "Updated notification settings"
+      "UpdatedNotificationSettings": "Updated notification settings",
+      "DeletedDraftResponses": "Deleted draft form responses"
     },
     "eventDetails": {
       "CreatedForm": "Created form",
@@ -614,7 +615,7 @@
       "UpdateClosingDate": "Updated closing date to: {{closingDate}}",
       "RemoveClosingDate": "Removed closing date.",
       "UpdatedNotificationSettings": "Updated notifications setting to: {{enabled}} for {{userEmail}}",
-      "GrantAccess": "Access granted to {{userEmail}}",
+      "GrantAccess": "Access granted to {{userList}}",
       "RevokeAccess": "Access revoked for {{userEmail}}",
       "UserInvited": "{{userEmail}} invited {{invitationEmail}}",
       "AcceptedInvitation": "Invitation accepted by {{userEmail}}",
