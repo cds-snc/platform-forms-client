@@ -2,7 +2,7 @@ import Drawer from "./Drawer";
 import { SaveProgressIcon, UploadIcon } from "@serverComponents/icons";
 import { Button } from "@clientComponents/globals";
 import { Language } from "@lib/types/form-builder-types";
-import { generateDownloadHtmlClient } from "@lib/saveAndResume/generateDownloadHtmlClient";
+import { generateDownloadHtml } from "@root/lib/saveAndResume/generateDownloadHtml";
 import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
 import { useTranslation } from "@i18n/client";
 import { useFormSubmissionData } from "@lib/hooks/useFormSubmissionData";
@@ -37,7 +37,7 @@ export const MobileDrawer = ({
     if (!drawerOpen) return;
 
     try {
-      const html = await generateDownloadHtmlClient(getOptions());
+      const html = await generateDownloadHtml(getOptions());
 
       if (!html.data || html.data === "") {
         throw new Error("Error generating download progress html");
