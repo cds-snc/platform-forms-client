@@ -16,7 +16,6 @@ import {
   NumberInput,
   ConditionalWrapper,
   Combobox,
-  FormattedDate,
 } from "@clientComponents/forms";
 import {
   FormElement,
@@ -30,8 +29,8 @@ import {
 import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
 import { AddressComplete } from "@clientComponents/forms/AddressComplete/AddressComplete";
-import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 import { isNumberInput } from "@gcforms/core";
+import { getClientElementDefinition } from "@lib/form-elements/registry";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -51,6 +50,11 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
 
 // This function renders the form elements with passed in properties.
 function _buildForm(element: FormElement, lang: string): ReactElement {
+  const registeredElementDefinition = getClientElementDefinition(element.type);
+  if (registeredElementDefinition?.renderPublic) {
+    return registeredElementDefinition.renderPublic({ element, lang });
+  }
+
   const id = element.subId ?? element.id;
 
   let choices =
@@ -358,26 +362,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             splitAddress={addressComponents?.splitAddress}
             canadianOnly={addressComponents?.canadianOnly}
             required={isRequired}
-            lang={lang}
-          />
-        </div>
-      );
-    }
-    case FormElementTypes.formattedDate: {
-      return (
-        <div className="focus-group">
-          <FormattedDate
-            label={labelText}
-            description={description}
-            id={`${id}`}
-            name={`${id}`}
-            required={isRequired}
-            dateFormat={
-              element.properties.dateFormat
-                ? (element.properties.dateFormat as DateFormat)
-                : undefined
-            }
-            autocomplete={element.properties.autoComplete}
             lang={lang}
           />
         </div>

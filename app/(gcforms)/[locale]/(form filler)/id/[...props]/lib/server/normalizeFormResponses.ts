@@ -8,6 +8,7 @@ import {
 } from "@lib/types";
 import { isValidDateObject } from "@root/components/clientComponents/forms/FormattedDate/utils";
 import { logMessage } from "@root/lib/logger";
+import { getSharedElementDefinition } from "@lib/form-elements/registry";
 import { DateObject } from "@root/packages/types/src";
 
 interface FileInputObj extends FileInputResponse {
@@ -112,6 +113,11 @@ export const fillData = (
     return value;
   }
 
+  const sharedElementDefinition = getSharedElementDefinition(element.type);
+  if (sharedElementDefinition?.normalizeResponse) {
+    return sharedElementDefinition.normalizeResponse(value, element);
+  }
+
   try {
     switch (element.type) {
       case FormElementTypes.dynamicRow:
@@ -123,11 +129,6 @@ export const fillData = (
         return checkboxFiller(value as Response);
       case FormElementTypes.fileInput:
         return fileInputFiller(value as Response);
-      case FormElementTypes.formattedDate:
-        if (typeof value === "string") {
-          return deserializeDateObject(value);
-        }
-        return value;
       case FormElementTypes.address:
         // @TODO: deserialize address object as above
         return value;

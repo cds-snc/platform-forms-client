@@ -17,6 +17,7 @@ import { cn } from "@lib/utils";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { ManagedDataDetails } from "./ManagedDataDetails";
+import { getClientElementDefinition } from "@lib/form-elements/registry";
 
 export const PanelBody = ({
   item,
@@ -36,7 +37,6 @@ export const PanelBody = ({
   const isDynamicRow = item.type === "dynamicRow";
 
   const isAddressComplete = item.type === "addressComplete";
-  const isFormattedDate = item.type === "formattedDate";
   const isFileUpload = item.type === "fileInput";
   const hasCustomRegex =
     item.properties.validation?.type === "custom" && item.properties.validation.regex;
@@ -52,6 +52,7 @@ export const PanelBody = ({
   }));
 
   const { Event } = useCustomEvent();
+  const registeredElementDefinition = getClientElementDefinition(item.type);
 
   const description =
     properties[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)];
@@ -97,18 +98,15 @@ export const PanelBody = ({
                 <div>
                   <SelectedElement item={item} elIndex={elIndex} formId={formId} />
                 </div>
-                {isFormattedDate && (
-                  <div className="my-4 self-end">
-                    <Button
-                      theme="secondary"
-                      onClick={() => {
+                {registeredElementDefinition?.renderPanelBodyAction
+                  ? registeredElementDefinition.renderPanelBodyAction({
+                      item,
+                      t,
+                      openMoreDialog: () => {
                         Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
-                      }}
-                    >
-                      <>{t("addElementDialog.formattedDate.customizeDate")}</>
-                    </Button>
-                  </div>
-                )}
+                      },
+                    })
+                  : null}
               </>
 
               {maxLength && (

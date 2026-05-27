@@ -79,6 +79,7 @@ export interface ElementOption {
   description?: JSXElementConstructor<any> | ComponentType | JSX.Element | any;
   className?: string;
   group: { id: string; value: string };
+  displayOrder?: number;
 }
 
 export type ElementOptionsFilter = (elements: ElementOption[]) => ElementOption[];

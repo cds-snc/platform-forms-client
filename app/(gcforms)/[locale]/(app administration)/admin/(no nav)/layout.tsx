@@ -28,14 +28,14 @@ export default AuthenticatedLayout(
                 <Link
                   id="logo"
                   href={`/${locale}/form-builder`}
-                  className="mr-7 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline focus:bg-white"
+                  className="mr-7 flex border-r-1 pr-[0.77rem] text-3xl font-semibold text-black! no-underline focus:bg-white"
                 >
-                  <div className="inline-block h-[45px] w-[46px] p-2">
+                  <div className="inline-block h-11.25 w-11.5 p-2">
                     <SiteLogo title={t("title")} />
                   </div>
                 </Link>
 
-                <div className="mt-3 box-border block h-[40px] px-2 py-1 text-xl font-semibold">
+                <div className="mt-3 box-border block h-10 px-2 py-1 text-xl font-semibold">
                   {t("title", { ns: "admin-login" })}
                 </div>
               </div>

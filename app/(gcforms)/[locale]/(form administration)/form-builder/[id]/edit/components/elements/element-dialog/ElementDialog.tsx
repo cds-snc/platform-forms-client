@@ -26,19 +26,19 @@ const filterElementsByGroup = (elements: ElementOption[], selectedGroup: Groups 
 
 const Header = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="absolute top-0 z-[1000] min-h-[60px] w-full border-b border-slate-800 bg-violet-100 p-4">
+    <div className="absolute top-0 z-1000 min-h-15 w-full border-b border-slate-800 bg-violet-100 p-4">
       {children}
     </div>
   );
 };
 
 const Body = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex w-full py-[70px]">{children}</div>;
+  return <div className="flex w-full py-17.5">{children}</div>;
 };
 
 const ElementDialogFooter = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="absolute bottom-0 z-[100] flex min-h-[60px] w-full gap-4 border-t border-slate-800 bg-white p-4">
+    <div className="absolute bottom-0 z-100 flex min-h-15 w-full gap-4 border-t border-slate-800 bg-white p-4">
       {children}
     </div>
   );
@@ -167,7 +167,7 @@ export const ElementDialog = ({
 
           {/* DESCRIPTION */}
           <div
-            className="mt-14 w-2/3 overflow-y-scroll bg-slate-100 px-4 pb-8 pt-2"
+            className="mt-14 w-2/3 overflow-y-scroll bg-slate-100 px-4 pt-2 pb-8"
             ref={descriptionRef}
           >
             <div role="region" aria-label={`${value} ${t("addElementDialog.example")}`} id={id}>

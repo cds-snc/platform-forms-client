@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { page } from "vitest/browser";
-import { FormattedDateOptions } from "@formBuilder/[id]/components/dialogs/MoreDialog/FormattedDateOptions";
+import { FormattedDateEditOptions as FormattedDateOptions } from "@lib/form-elements/formattedDate/EditOptions";
 import { FormElementTypes } from "@lib/types";
 import { render } from "../testUtils";
 

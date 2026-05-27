@@ -8,7 +8,6 @@ import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { Question } from "./Question";
 import { Description } from "./Description";
 import { AddressCompleteOptions } from "./AddressCompleteOptions";
-import { FormattedDateOptions } from "./FormattedDateOptions";
 import { RequiredOptions } from "./RequiredOptions";
 import { ComboboxStrictValue } from "./ComboBoxStrictValue";
 import { SortOptions } from "./SortOptions";
@@ -21,10 +20,10 @@ import { QuestionTagOptions } from "./QuestionTagOptions";
 import { QuestionIdOptions } from "./QuestionIdOptions";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { FileTypeOptions } from "./FileTypeOptions";
-import { NumberFieldOptions } from "./NumberFieldOptions";
 
 import { CopyItem } from "./CopyItem";
 import { CustomRegexOptions } from "./CustomRegexOptions";
+import { getClientElementDefinition } from "@lib/form-elements/registry";
 
 // Will re-enable after some futher discussion about crown corp managed data
 // import { ManagedDataOptions } from "./ManagedDataOptions";
@@ -45,8 +44,8 @@ export const MoreDialog = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isQuestionIdValid, setIsQuestionIdValid] = React.useState(true);
   const [isCustomRegexValid, setIsCustomRegexValid] = React.useState(true);
-  const [isNumberFieldOptionsValid, setIsNumberFieldOptionsValid] = React.useState(true);
-  const isValid = isQuestionIdValid && isCustomRegexValid && isNumberFieldOptionsValid;
+  const [isRegisteredEditOptionsValid, setIsRegisteredEditOptionsValid] = React.useState(true);
+  const isValid = isQuestionIdValid && isCustomRegexValid && isRegisteredEditOptionsValid;
   const { Event } = useCustomEvent();
   const dialog = useDialogRef();
   const { refs } = useRefsContext();
@@ -61,6 +60,7 @@ export const MoreDialog = () => {
       if (detail) {
         const freshItem = getFormElementById(detail.itemId);
         setItem(freshItem);
+        setIsRegisteredEditOptionsValid(true);
         setIsOpen(true);
       }
     },
@@ -112,6 +112,7 @@ export const MoreDialog = () => {
     </>
   );
   const dialogTitle = t("moreOptions");
+  const RegisteredEditOptions = getClientElementDefinition(item.type)?.EditOptionsComponent;
 
   return (
     <>
@@ -132,14 +133,15 @@ export const MoreDialog = () => {
               </section>
               <RequiredOptions item={item} setItem={setItem} />
               <AddressCompleteOptions item={item} setItem={setItem} />
-              <FormattedDateOptions item={item} setItem={setItem} />
+              {RegisteredEditOptions ? (
+                <RegisteredEditOptions
+                  item={item}
+                  setItem={setItem}
+                  setIsValid={setIsRegisteredEditOptionsValid}
+                />
+              ) : null}
               {/* <ManagedDataOptions item={item} setItem={setItem} /> */}
               <ComboboxStrictValue item={item} setItem={setItem} />
-              <NumberFieldOptions
-                item={item}
-                setItem={setItem}
-                setIsValid={setIsNumberFieldOptionsValid}
-              />
               <DynamicRowOptions item={item} setItem={setItem} />
               <TextFieldOptions item={item} setItem={setItem} />
               <CharacterLimitOptions item={item} setItem={setItem} />

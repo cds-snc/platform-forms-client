@@ -4,11 +4,10 @@ import { BaseElementArray } from "./FormElements/BaseElementArray";
 import { FormItem } from "./helpers";
 import { Language } from "@lib/types/form-builder-types";
 import { AddressComplete } from "./FormElements/AddressComplete/AddressComplete";
-import { FormattedDate } from "./FormElements/FormattedDate";
 import { FileInput } from "./FormElements/FileInput";
 import { DynamicRow } from "./FormElements/DyanmicRow/DynamicRow";
 import { RichText } from "./FormElements/RichText";
-import { NumberInput } from "./FormElements/NumberInput";
+import { getClientElementDefinition } from "@lib/form-elements/registry";
 
 export const FormItemFactory = ({
   formItem,
@@ -27,6 +26,11 @@ export const FormItemFactory = ({
     itemType = FormElementTypes.fileInput;
   }
 
+  const registeredElementDefinition = getClientElementDefinition(itemType);
+  if (registeredElementDefinition?.renderReview) {
+    return registeredElementDefinition.renderReview({ formItem, language });
+  }
+
   // Note: order matters, from more specific to more generic
   switch (itemType) {
     case FormElementTypes.dynamicRow:
@@ -34,9 +38,6 @@ export const FormItemFactory = ({
 
     case FormElementTypes.fileInput:
       return <FileInput formItem={formItem} language={language} />;
-
-    case FormElementTypes.formattedDate:
-      return <FormattedDate formItem={formItem} />;
 
     case FormElementTypes.addressComplete:
     case FormElementTypes.address: // TODO deprecated?
@@ -49,9 +50,6 @@ export const FormItemFactory = ({
     case FormElementTypes.checkbox:
     case FormElementTypes.attestation:
       return <BaseElementArray formItem={formItem} splitValues={true} />;
-
-    case FormElementTypes.numberInput:
-      return <NumberInput lang={language} formItem={formItem} />;
 
     // Single value base Form elements e.g. input, textarea, radio, select, combobox, departments...
     default:

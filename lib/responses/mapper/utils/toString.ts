@@ -1,30 +1,20 @@
-import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";
-import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDate/utils";
 import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
 import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
+import { getSharedElementDefinition } from "@lib/form-elements/registry";
 
 import { FormElement } from "@root/packages/types/src/form-types";
 import { ResponseFilenameMapping } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot/lib/processResponse";
-
-const getDateAsString = (answer: DateObject | string | object, dateFormat: DateFormat): string => {
-  try {
-    if (typeof answer === "object" && "YYYY" in answer && "MM" in answer && "DD" in answer) {
-      const dateObject = answer as unknown as DateObject;
-      return getFormattedDateFromObject(dateFormat, dateObject);
-    }
-
-    const dateObject = JSON.parse(answer as string) as DateObject;
-    return getFormattedDateFromObject(dateFormat, dateObject);
-  } catch (e) {
-    return answer as string;
-  }
-};
 
 export const getAnswerAsString = (
   question: FormElement | undefined,
   answer: unknown,
   attachments?: ResponseFilenameMapping
 ): string => {
+  const sharedElementDefinition = question ? getSharedElementDefinition(question.type) : undefined;
+  if (question && sharedElementDefinition?.answerToString) {
+    return sharedElementDefinition.answerToString(question, answer, attachments);
+  }
+
   if (question && question.type === "checkbox") {
     return Array(answer).join(", ");
   }
@@ -43,17 +33,6 @@ export const getAnswerAsString = (
     const prefix = attachment?.isPotentiallyMalicious ? "⚠️ " : "";
 
     return attachment ? prefix + attachment.actualName : (answer as { name: string }).name || "";
-  }
-
-  if (question && question.type === "formattedDate") {
-    // Could be empty if the date was not required
-    if (!answer) {
-      return "";
-    }
-
-    const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
-
-    return getDateAsString(answer, dateFormat);
   }
 
   if (question && question.type === "addressComplete") {

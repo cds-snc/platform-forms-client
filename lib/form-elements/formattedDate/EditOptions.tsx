@@ -3,7 +3,7 @@ import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 
-export const FormattedDateOptions = ({
+export const FormattedDateEditOptions = ({
   item,
   setItem,
 }: {
@@ -33,7 +33,7 @@ export const FormattedDateOptions = ({
             ...item,
             properties: {
               ...item.properties,
-              ...{ autoComplete: e.target.value },
+              autoComplete: e.target.value,
             },
           });
         }}
@@ -50,7 +50,7 @@ export const FormattedDateOptions = ({
             ...item,
             properties: {
               ...item.properties,
-              ...{ autoComplete: e.target.value },
+              autoComplete: e.target.value,
             },
           });
         }}
@@ -69,7 +69,7 @@ export const FormattedDateOptions = ({
             ...item,
             properties: {
               ...item.properties,
-              ...{ dateFormat: e.target.value },
+              dateFormat: e.target.value,
             },
           });
         }}
@@ -86,7 +86,7 @@ export const FormattedDateOptions = ({
             ...item,
             properties: {
               ...item.properties,
-              ...{ dateFormat: e.target.value },
+              dateFormat: e.target.value,
             },
           });
         }}
@@ -103,7 +103,7 @@ export const FormattedDateOptions = ({
             ...item,
             properties: {
               ...item.properties,
-              ...{ dateFormat: e.target.value },
+              dateFormat: e.target.value,
             },
           });
         }}

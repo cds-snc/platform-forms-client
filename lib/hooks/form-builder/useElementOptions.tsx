@@ -1,9 +1,7 @@
 "use client";
 import { useTranslation } from "@i18n/client";
 import {
-  CalendarIcon,
   CheckIcon,
-  NumericFieldIcon,
   ParagraphIcon,
   RadioIcon,
   SelectMenuIcon,
@@ -19,10 +17,13 @@ import {
 import dynamic from "next/dynamic";
 
 import { useIsAdminUser } from "./useIsAdminUser";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFeatureFlags } from "../useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
+import { FormElementTypes } from "@lib/types";
+import { getClientElementDefinition } from "@lib/form-elements/registry";
 
 // Loading component for lazy-loaded descriptions
 const DescriptionLoading = () => (
@@ -74,25 +75,18 @@ const DropDown = dynamic(
     ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
-const Number = dynamic(
-  () =>
-    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Number").then(
-      (mod) => ({ default: mod.Number })
-    ),
-  { ssr: false, loading: () => <DescriptionLoading /> }
-);
 const QuestionSet = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/QuestionSet"
-    ).then((mod) => ({ default: mod.QuestionSet })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/QuestionSet").then(
+      (mod) => ({ default: mod.QuestionSet })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const Attestation = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Attestation"
-    ).then((mod) => ({ default: mod.Attestation })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Attestation").then(
+      (mod) => ({ default: mod.Attestation })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const Address = dynamic(
@@ -104,9 +98,9 @@ const Address = dynamic(
 );
 const AddressComplete = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/AddressComplete"
-    ).then((mod) => ({ default: mod.AddressComplete })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/AddressComplete").then(
+      (mod) => ({ default: mod.AddressComplete })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const Name = dynamic(
@@ -125,9 +119,9 @@ const Contact = dynamic(
 );
 const FirstMiddleLastName = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FirstMiddleLastName"
-    ).then((mod) => ({ default: mod.FirstMiddleLastName })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FirstMiddleLastName").then(
+      (mod) => ({ default: mod.FirstMiddleLastName })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const FileInput = dynamic(
@@ -139,9 +133,9 @@ const FileInput = dynamic(
 );
 const Departments = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Departments"
-    ).then((mod) => ({ default: mod.Departments })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Departments").then(
+      (mod) => ({ default: mod.Departments })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const Combobox = dynamic(
@@ -151,18 +145,11 @@ const Combobox = dynamic(
     ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
-const FormattedDate = dynamic(
-  () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FormattedDate"
-    ).then((mod) => ({ default: mod.FormattedDate })),
-  { ssr: false, loading: () => <DescriptionLoading /> }
-);
 const CustomJson = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/CustomJson"
-    ).then((mod) => ({ default: mod.CustomJson })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/CustomJson").then(
+      (mod) => ({ default: mod.CustomJson })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 
@@ -184,13 +171,23 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   const sortElements = (elementOptions: ElementOption[]) => {
     return elementOptions.sort((a, b) => {
       const order = Object.keys(groups);
-      return order.indexOf(a.group.id) - order.indexOf(b.group.id);
+      const groupOrder = order.indexOf(a.group.id) - order.indexOf(b.group.id);
+
+      if (groupOrder !== 0) {
+        return groupOrder;
+      }
+
+      const aDisplayOrder = a.displayOrder ?? globalThis.Number.MAX_SAFE_INTEGER;
+      const bDisplayOrder = b.displayOrder ?? globalThis.Number.MAX_SAFE_INTEGER;
+
+      return aDisplayOrder - bDisplayOrder;
     });
   };
 
   const { getFlag } = useFeatureFlags();
 
-  const isAdminUser = useIsAdminUser();
+  const isAdminUser = useIsAdminUser() ?? false;
+  const { hasApiKeyId } = useFormBuilderConfig();
 
   // Custom json is only available to admin users
   const allowCustomJson = isAdminUser;
@@ -224,6 +221,29 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     className: "",
     group: groups.preset,
   };
+
+  const getRegisteredElementOption = (type: FormElementTypes) => {
+    const definition = getClientElementDefinition(type);
+    const includeResult = definition?.includeIf?.({
+      getFlag,
+      isAdminUser,
+      hasApiKeyId,
+    });
+
+    if (includeResult === false) {
+      return null;
+    }
+
+    return (
+      definition?.buildAddElementOption?.({
+        t,
+        groups,
+      }) ?? null
+    );
+  };
+
+  const formattedDateOption = getRegisteredElementOption(FormElementTypes.formattedDate);
+  const numberInputOption = getRegisteredElementOption(FormElementTypes.numberInput);
 
   const elementOptions: ElementOption[] = [
     {
@@ -313,13 +333,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "",
       group: groups.preset,
     },
-    {
-      id: "formattedDate",
-      value: t("formattedDate"),
-      icon: CalendarIcon,
-      description: FormattedDate,
-      group: groups.preset,
-    },
+    ...(formattedDateOption ? [formattedDateOption] : []),
     {
       id: "contact",
       value: t("addElementDialog.contact.label"),
@@ -338,14 +352,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "",
       group: groups.preset,
     },
-    {
-      id: "number",
-      value: t("numericField"),
-      icon: NumericFieldIcon,
-      description: Number,
-      className: "separator",
-      group: groups.preset,
-    },
+    ...(numberInputOption ? [numberInputOption] : []),
     {
       id: "dynamicRow",
       value: t("dyanamicRow"),

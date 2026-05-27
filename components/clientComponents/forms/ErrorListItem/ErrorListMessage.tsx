@@ -2,6 +2,7 @@ import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { getProperty } from "@lib/i18nHelpers";
 import { truncateString } from "@lib/client/clientHelpers";
+import { getSharedElementDefinition } from "@lib/form-elements/registry";
 
 export const ErrorListMessage = ({
   id,
@@ -58,6 +59,11 @@ export const ErrorListMessage = ({
     return `${defaultValue}: ${question}`;
   }
 
+  const sharedElementDefinition = getSharedElementDefinition(elementType);
+  if (sharedElementDefinition?.getErrorListMessage) {
+    return sharedElementDefinition.getErrorListMessage({ question, language, t });
+  }
+
   switch (elementType) {
     case FormElementTypes.attestation:
       return t("input-validation.error-list.check-all", {
@@ -85,14 +91,6 @@ export const ErrorListMessage = ({
       });
     case FormElementTypes.fileInput:
       return t("input-validation.error-list.file-input", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-    case FormElementTypes.formattedDate:
-      return t("input-validation.error-list.date-invalid", {
         question,
         lng: language,
         interpolation: {

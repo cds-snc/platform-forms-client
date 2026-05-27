@@ -1,10 +1,10 @@
 import { safeJSONParse } from "@lib/utils";
-import { FormItem } from "../helpers";
 import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDate/utils";
 import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";
-import { BaseElement } from "./BaseElement";
+import { BaseElement } from "@clientComponents/forms/Review/FormElements/BaseElement";
+import { FormItem } from "@clientComponents/forms/Review/helpers";
 
-export const FormattedDate = ({
+export const FormattedDateReviewItem = ({
   formItem,
 }: {
   formItem: FormItem | undefined;

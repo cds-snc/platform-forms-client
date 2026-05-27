@@ -19,8 +19,8 @@ export const ErrorLoading = ({ errorCode }: { errorCode?: string }) => {
 
   return (
     <div className="w-full">
-      <h3 className="!mb-0 pb-2 text-xl font-semibold">
-        <WarningIcon className="mr-1 mt-[-4] inline-block size-8 fill-red-800" /> {title}
+      <h3 className="mb-0! pb-2 text-xl font-semibold">
+        <WarningIcon className="mt-[-4] mr-1 inline-block size-8 fill-red-800" /> {title}
       </h3>
       <p className="mb-2 text-black">{message} </p>
       <p className="mb-5 text-sm text-black">

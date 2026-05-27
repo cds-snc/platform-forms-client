@@ -1,19 +1,19 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "@i18n/client";
-import { FormElementTypes, FormElement } from "@lib/types";
-import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { ErrorMessage } from "@clientComponents/forms";
-import { LabelledInput } from "../../../../components/shared/LabelledInput";
+import { useTranslation } from "@i18n/client";
+import { FormElement, FormElementTypes } from "@lib/types";
+import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
+import { LabelledInput } from "@formBuilder/components/shared/LabelledInput";
 
-export const NumberFieldOptions = ({
+export const NumberInputEditOptions = ({
   item,
   setItem,
   setIsValid,
 }: {
   item: FormElement;
   setItem: (item: FormElement) => void;
-  setIsValid: (isValid: boolean) => void;
+  setIsValid?: (isValid: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -67,7 +67,7 @@ export const NumberFieldOptions = ({
   );
 
   useEffect(() => {
-    setIsValid(isValid);
+    setIsValid?.(isValid);
   }, [isValid, setIsValid]);
 
   if (item.type !== FormElementTypes.numberInput) {

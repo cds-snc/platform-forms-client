@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import { ExampleWrapper } from "./ExampleWrapper";
 import { Description, Label, NumberInput } from "@clientComponents/forms";
 import { useTranslation } from "@i18n/client";
+import { ExampleWrapper } from "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/ExampleWrapper";
 
-export const Number = () => {
+export const NumberInputDescription = () => {
   const { t } = useTranslation("form-builder");
 
   return (
@@ -15,11 +15,16 @@ export const Number = () => {
       <p data-testid="element-description-text">{t("addElementDialog.number.description")}</p>
 
       <ExampleWrapper className="gcds-input-wrapper">
-        <Label htmlFor="name" className="gcds-label">
+        <Label htmlFor="numberInputPreview" className="gcds-label">
           {t("addElementDialog.number.amount")}
         </Label>
         <Description>{t("addElementDialog.number.enterOnlyNumbers")}</Description>
-        <NumberInput label="title" name="name" placeholder="123456789" />
+        <NumberInput
+          label="title"
+          id="numberInputPreview"
+          name="numberInputPreview"
+          placeholder="123456789"
+        />
       </ExampleWrapper>
     </div>
   );
