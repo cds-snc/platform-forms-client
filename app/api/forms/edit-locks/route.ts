@@ -42,16 +42,18 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
       return NextResponse.json({ editLocks: {} });
     }
 
-    // Note/TODO: This could also be done in a single DB call but I opted for code reuse ATM. May want to come back to this to optimize.
-    //
-    // Security: Verify user has access to all requested templates
-    // Check all templates in parallel using existing authorization pattern
-    const accessChecks = await Promise.all(
-      templateIds.map((templateId) => authorization.canViewForm(templateId).catch(() => null))
-    );
-
-    // If any check failed, deny access
-    if (accessChecks.some((result) => result === null)) {
+    // Verify user has access to all requested templates using single batch DB query
+    try {
+      await authorization.check([
+        {
+          action: "view",
+          subject: {
+            type: "FormRecord",
+            scope: { subjectIds: templateIds },
+          },
+        },
+      ]);
+    } catch {
       logMessage.warn(
         `User ${session.user.id} attempted to access edit-locks for templates without permission`
       );
