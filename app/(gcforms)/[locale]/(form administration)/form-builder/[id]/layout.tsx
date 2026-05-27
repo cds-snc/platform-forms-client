@@ -17,7 +17,6 @@ import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { authorization } from "@lib/privileges";
 import { checkKeyExists } from "@lib/serviceAccount";
-import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { getAppSetting } from "@lib/appSettings";
 import { normalizeEditLockRedirectIdleMs } from "@lib/utils/form-builder/editLockRedirectIdleMs";
 import { shouldEnforceTemplateEditLockWithVerifiedUserCount } from "@lib/editLocks";
@@ -51,8 +50,7 @@ export default async function Layout(props: {
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();
-  const allowLockedEditingFlag = await allowLockedEditing(session?.user.id);
-  const shareUsesManageAccess = allowLockedEditingFlag && formID !== "0000";
+  const shareUsesManageAccess = formID !== "0000";
   const publishFormsEnabled = session
     ? await authorization.hasPublishFormsPrivilege().catch(() => false)
     : false;
@@ -135,7 +133,7 @@ export default async function Layout(props: {
                         width="600px"
                       />
                       <div className="flex grow flex-row gap-7">
-                        <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
+                        <div id="left-nav" className="z-10">
                           <div className={"sticky top-0 flex h-full min-h-0 flex-col"}>
                             <div className="min-h-0 flex-1 overflow-y-auto">
                               <LeftNavigation id={id} />

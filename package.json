@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "4.14.1",
+  "version": "4.15.3",
   "private": true,
   "workspaces": [
     "utils/*",
@@ -38,8 +38,8 @@
     "test:vitest:browser:watch": "VITEST_BROWSER=true vitest --watch",
     "test:watch:vitest": "vitest --watch",
     "test:watch": "DEBUG_PRINT_LIMIT=10000  vitest --watch",
-    "playwright:ui:local": "playwright install chromium --with-deps && PLAYWRIGHT_ISOLATE_DB=true playwright test --ui",
-    "playwright:headless:local": "playwright install chromium --with-deps && PLAYWRIGHT_ISOLATE_DB=true playwright test",
+    "playwright:ui:local": "playwright install chromium --with-deps && PLAYWRIGHT_ISOLATE_DB=true playwright test --ui --trace on",
+    "playwright:headless:local": "playwright install chromium --with-deps && PLAYWRIGHT_ISOLATE_DB=true playwright test --trace on",
     "playwright:headless:ci": "CI=true playwright test",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install && yarn db:generate",
     "upgrade": "yarn next upgrade"

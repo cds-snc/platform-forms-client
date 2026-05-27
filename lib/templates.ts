@@ -1399,12 +1399,9 @@ export async function cloneTemplate(
 
   if (createdTemplate === null) return null;
 
-  logEvent(
-    user.id,
-    { type: "Form", id: createdTemplate.id },
-    "CreateForm",
-    AuditLogDetails.ClonedForm
-  );
+  logEvent(user.id, { type: "Form", id: formID }, "CreateForm", AuditLogDetails.ClonedForm, {
+    newFormID: createdTemplate.id,
+  });
 
   return _parseTemplate(createdTemplate);
 }
@@ -1637,7 +1634,27 @@ export const updateClosedData = async (
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
-  logEvent(user.id, { type: "Form", id: formID }, "UpdateForm", AuditLogDetails.UpdateClosingDate);
+  if (closingDate) {
+    const date = new Date(closingDate);
+
+    logEvent(
+      user.id,
+      { type: "Form", id: formID },
+      "UpdateForm",
+      AuditLogDetails.UpdateClosingDate,
+      {
+        closingDate: date.toISOString(),
+      }
+    );
+  } else {
+    logEvent(
+      user.id,
+      { type: "Form", id: formID },
+      "UpdateForm",
+      AuditLogDetails.RemoveClosingDate
+    );
+  }
+
   return { formID, closingDate };
 };
 

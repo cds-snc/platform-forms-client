@@ -1,6 +1,9 @@
 @use "sass:meta";
-@tailwind base;
-@tailwind components;
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
 
 // Custom base CSS files
 @include meta.load-css("_base");
@@ -11,6 +14,3 @@
 @import "@gcforms/core/styles/gc-header.css";
 @include meta.load-css("../node_modules/@gcforms/core/styles/_toast.scss");
 @include meta.load-css("animations");
-
-// Tailwind Utilities needs to be loaded last to use inline
-@tailwind utilities;

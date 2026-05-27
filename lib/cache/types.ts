@@ -3,7 +3,6 @@
 export const UserFeatureFlags = {
   addressComplete: "addressComplete",
   responsesPilot: "responsesPilot",
-  lockedEditing: "lockedEditing",
   userSideAuditLogs: "userSideAuditLogs",
 } as const;
 
