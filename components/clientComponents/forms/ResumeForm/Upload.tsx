@@ -262,7 +262,7 @@ export const Upload = ({ formId }: { formId: string }) => {
             aria-label={t("saveAndResume.resumePage.upload.title")}
             aria-describedby="resume-upload-description"
             aria-pressed={isDragActive}
-            className={`group focus:border-gcds-blue-vivid focus:bg-gcds-blue-vivid focus:text-white-default focus:outline-gcds-blue-vivid active:outline-gcds-blue-vivid mb-8 flex h-auto min-h-72 w-full flex-col items-center justify-center rounded-3xl border-3 border-dashed text-left transition-all duration-150 outline-none hover:cursor-pointer focus:cursor-pointer focus:outline-[3px] focus:outline-offset-2 active:outline-[3px] active:outline-offset-2 ${
+            className={`group focus:border-gcds-blue-vivid focus:bg-gcds-blue-vivid focus:text-white-default focus:outline-gcds-blue-vivid active:outline-gcds-blue-vivid mb-8 flex h-auto min-h-50 w-full flex-col items-center justify-center rounded-3xl border-3 border-dashed text-left transition-all duration-150 outline-none hover:cursor-pointer focus:cursor-pointer focus:outline-[3px] focus:outline-offset-2 active:outline-[3px] active:outline-offset-2 ${
               isDragActive
                 ? "border-indigo-700 bg-violet-200"
                 : "border-indigo-500 bg-violet-50 hover:border-indigo-700 hover:bg-violet-200"
