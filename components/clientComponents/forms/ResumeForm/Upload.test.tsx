@@ -147,7 +147,7 @@ describe("Upload", () => {
     });
     const droppedFile = new File(["resume"], "resume.html", { type: "text/html" });
 
-    expect(hotspot).toHaveClass("min-h-72");
+    expect(hotspot).toHaveClass("min-h-50");
     expect(hotspot).toHaveAttribute("aria-pressed", "false");
 
     const dragData = {
@@ -175,7 +175,7 @@ describe("Upload", () => {
     });
 
     expect(pushMock).toHaveBeenCalledWith("/en/id/current-form");
-    expect(hotspot).toHaveClass("min-h-72");
+    expect(hotspot).toHaveClass("min-h-50");
     expect(hotspot).toHaveAttribute("aria-pressed", "false");
   });
 
