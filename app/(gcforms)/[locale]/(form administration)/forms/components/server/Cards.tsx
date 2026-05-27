@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Card } from "./Card";
 import { FormsTemplateWithLockInfo } from "../../page";
 import { useTranslation } from "@i18n/client";
@@ -38,16 +38,24 @@ export const Cards = ({
   const { t } = useTranslation("my-forms");
   const [templates, setTemplates] = useState<FormsTemplateWithLockInfo[]>(initialTemplates);
 
+  // Use ref to access latest templates without recreating fetchEditLockUpdates
+  const templatesRef = useRef(templates);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    templatesRef.current = templates;
+  }, [templates]);
+
   // Sync templates state when initialTemplates changes e.g. when navigating between tabs
   useEffect(() => {
     setTemplates(initialTemplates);
   }, [initialTemplates]);
 
   const fetchEditLockUpdates = useCallback(async () => {
-    // Get template IDs that have edit locks
-    const templateIdsWithLocks = templates.filter((t) => t.hasEditLock).map((t) => t.id);
+    // Poll for ALL templates to detect newly created locks
+    const templateIds = templatesRef.current.map((t) => t.id);
 
-    if (templateIdsWithLocks.length === 0) {
+    if (templateIds.length === 0) {
       return;
     }
 
@@ -57,7 +65,7 @@ export const Cards = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ templateIds: templateIdsWithLocks }),
+        body: JSON.stringify({ templateIds: templateIds }),
       });
 
       if (!response.ok) {
@@ -69,14 +77,10 @@ export const Cards = ({
       // Update templates with new lock info
       setTemplates((prevTemplates) =>
         prevTemplates.map((template) => {
-          if (!template.hasEditLock) {
-            return template;
-          }
-
           const lockInfo = data.editLocks[template.id];
 
           if (!lockInfo) {
-            // Lock no longer exists, remove edit lock info
+            // No lock exists for this template
             return {
               ...template,
               hasEditLock: false,
@@ -84,8 +88,10 @@ export const Cards = ({
             };
           }
 
+          // Lock exists, update it (whether new or existing)
           return {
             ...template,
+            hasEditLock: true,
             editLockInfo: {
               lockedByUserId: lockInfo.lockedByUserId,
               lockedByName: lockInfo.lockedByName,
@@ -102,11 +108,14 @@ export const Cards = ({
         })
       );
     } catch {
-      // Silently fail - we'll try again on next poll
+      // Silently fail - try again on next poll
     }
-  }, [templates]);
+  }, []);
 
   useEffect(() => {
+    // Call immediately on mount
+    void fetchEditLockUpdates();
+
     // Set up polling interval
     const intervalId = setInterval(() => {
       void fetchEditLockUpdates();

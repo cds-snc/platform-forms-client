@@ -355,6 +355,7 @@ export async function getAllTemplatesForUser(
               invitations: {
                 where: {
                   expires: {
+                    // filter out expired invitations (from the past)
                     gt: new Date(),
                   },
                 },
