@@ -12,6 +12,19 @@ import { useTranslation } from "@i18n/client";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
+// Card state types
+type CardState = "draft-editing" | "draft-readonly" | "published" | "archived";
+
+/**
+ * Helper to determine the card's current state based on its properties
+ */
+function getCardState(card: CardIWithLockInfo): CardState {
+  if (card.ttl) return "archived";
+  if (card.isPublished) return "published";
+  if (card.editLockInfo) return "draft-editing";
+  return "draft-readonly";
+}
+
 const CardBanner = ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
   const { t } = useTranslation("my-forms");
   let bulletColor = "bg-yellow-400";
@@ -87,6 +100,34 @@ const CardTitle = ({ name }: { name: string }) => {
   return <h2 className={classes}>{name ? name : t("card.unnamedForm")}</h2>;
 };
 
+interface CardHeaderProps {
+  collaboratorCount: number;
+  cardId: string;
+  name: string;
+  isPublished: boolean;
+  ttl?: Date;
+  status?: string;
+}
+
+const CardHeader = ({
+  collaboratorCount,
+  cardId,
+  name,
+  isPublished,
+  ttl,
+  status,
+}: CardHeaderProps) => {
+  return (
+    <div className="mb-2 flex items-center justify-between">
+      <p className="text-sm">Shared with {collaboratorCount} people</p>
+
+      <div className="flex items-center text-sm">
+        <Menu id={cardId} name={name} isPublished={isPublished} ttl={ttl} status={status} />
+      </div>
+    </div>
+  );
+};
+
 const CardDate = ({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
   const { t } = useTranslation("my-forms");
 
@@ -121,6 +162,65 @@ const CardDate = ({ id, date, ttl }: { id: string; date: string; ttl?: Date | nu
       )}
     </div>
   );
+};
+
+// Footer components for each card state
+
+interface CardFooterDraftReadonlyProps {
+  cardId: string;
+  date: string;
+  ttl?: Date | null;
+}
+
+const CardFooterDraftReadonly = ({ cardId, date, ttl }: CardFooterDraftReadonlyProps) => {
+  return (
+    <div>
+      <CardDate id={cardId} date={date} ttl={ttl} />
+      <div className="mt-2 text-sm">By: [first name]</div>
+    </div>
+  );
+};
+
+interface CardFooterDraftEditingProps {
+  lockedByName: string | null;
+  language: string;
+  cardId: string;
+}
+
+const CardFooterDraftEditing = ({
+  lockedByName,
+  language,
+  cardId,
+}: CardFooterDraftEditingProps) => {
+  const { t } = useTranslation("my-forms");
+  return (
+    <div>
+      <div className="mb-2 text-sm">{lockedByName} editing</div>
+      <div className="flex items-center">
+        <div className="mr-2 text-sm">Read only -</div>
+        <DraftEditLink
+          href={`/${language}/form-builder/${cardId}/edit/`}
+          formId={cardId}
+          className="block cursor-pointer text-left text-sm underline focus:fill-slate-500 active:fill-slate-500 disabled:opacity-70"
+        >
+          {t("editForm")}
+        </DraftEditLink>
+      </div>
+    </div>
+  );
+};
+
+interface CardFooterPublishedProps {
+  cardId: string;
+}
+
+const CardFooterPublished = ({ cardId }: CardFooterPublishedProps) => {
+  return <p className="mt-3 text-xs italic">{cardId}</p>;
+};
+
+// Archived footer doesn't need special content beyond the banner
+const CardFooterArchived = () => {
+  return null;
 };
 
 export interface CardI {
@@ -159,7 +259,6 @@ type CardIWithLockInfo = CardI & {
 };
 
 export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: string }) => {
-  const { t } = useTranslation("my-forms");
   const params = useParams();
   const language = params?.locale as string;
 
@@ -167,24 +266,22 @@ export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: strin
   const collaboratorCount =
     card.collaboratorCount.userCount - 1 + card.collaboratorCount.pendingUserCount;
 
+  // Determine card state for conditional rendering
+  const cardState = getCardState(card);
+
   return (
     <div
       className={`flex h-full flex-col rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo && "bg-yellow-50"}`}
       data-testid={`card-${card.id}`}
     >
-      <div className="mb-2 flex items-center justify-between">
-        <p className="text-sm">Shared with {collaboratorCount} people</p>
-
-        <div className="flex items-center text-sm">
-          <Menu
-            id={card.id}
-            name={card.name}
-            isPublished={card.isPublished}
-            ttl={card.ttl ? card.ttl : undefined}
-            status={status}
-          />
-        </div>
-      </div>
+      <CardHeader
+        collaboratorCount={collaboratorCount}
+        cardId={card.id}
+        name={card.name}
+        isPublished={card.isPublished}
+        ttl={card.ttl ? card.ttl : undefined}
+        status={status}
+      />
 
       <CardTitle name={card.name} />
 
@@ -201,34 +298,24 @@ export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: strin
       </Suspense>
 
       <div className="mt-auto">
-        {!card.isPublished && !card.ttl && !card.editLockInfo && (
-          <div>
-            <CardDate id={card.id} date={card.date} ttl={card.ttl} />
-            <div className="mt-2 text-sm">By: [first name]</div>
-          </div>
+        {cardState === "draft-readonly" && (
+          <CardFooterDraftReadonly cardId={card.id} date={card.date} ttl={card.ttl} />
         )}
 
-        {!card.isPublished && !card.ttl && card.editLockInfo && (
-          <div>
-            <div className="mb-2 text-sm">{card?.editLockInfo?.lockedByName} editing</div>
-            <div className="flex items-center">
-              <div className="mr-2 text-sm">Read only -</div>
-              <DraftEditLink
-                href={`/${language}/form-builder/${card.id}/edit/`}
-                formId={card.id}
-                className="block cursor-pointer text-left text-sm underline focus:fill-slate-500 active:fill-slate-500 disabled:opacity-70"
-              >
-                {t("editForm")}
-              </DraftEditLink>
-            </div>
-          </div>
+        {cardState === "draft-editing" && (
+          <CardFooterDraftEditing
+            lockedByName={card.editLockInfo?.lockedByName ?? null}
+            language={language}
+            cardId={card.id}
+          />
         )}
 
         <div className="mt-3">
           <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
         </div>
 
-        {card.isPublished && <p className="mt-3 text-xs italic">{card.id}</p>}
+        {cardState === "published" && <CardFooterPublished cardId={card.id} />}
+        {cardState === "archived" && <CardFooterArchived />}
       </div>
     </div>
   );
