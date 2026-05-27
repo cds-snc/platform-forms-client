@@ -1,16 +1,19 @@
+"use client";
+
 import React, { Suspense } from "react";
-import { EnvelopeIcon } from "@serverComponents/icons";
+import { EnvelopeIcon, MessageIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
-// import { DraftEditLink } from "../client/DraftEditLink";
 import { Unarchive } from "../client/Unarchive";
-import { serverTranslation } from "@i18n";
-// import Link from "next/link";
 import { DeliveryOption } from "@lib/types";
 import Skeleton from "react-loading-skeleton";
 import { DraftEditLink } from "../client/DraftEditLink";
+import { EditLockPresenceStatus, EditLockVisibilityState } from "@root/lib/editLocks";
+import { useTranslation } from "@i18n/client";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 
-const CardBanner = async ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
-  const { t } = await serverTranslation("my-forms");
+const CardBanner = ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
+  const { t } = useTranslation("my-forms");
   let bulletColor = "bg-yellow-400";
   if (isPublished) bulletColor = "bg-emerald-500";
   if (ttl) bulletColor = "bg-orange-400";
@@ -30,65 +33,31 @@ const CardBanner = async ({ isPublished, ttl }: { isPublished: boolean; ttl: Dat
 
 interface CardLinksProps {
   id: string;
-  url: string;
+  url?: string;
   isPublished: boolean;
   deliveryOption?: { emailAddress?: string } | null;
   overdue: boolean;
   ttl?: Date | null;
+  language: string;
 }
 
-const CardLinks = async ({
-  isPublished,
-  // url,
-  id,
-  deliveryOption,
-  // overdue,
-  ttl,
-}: CardLinksProps) => {
-  const {
-    t,
-    i18n: { language },
-  } = await serverTranslation("my-forms");
-
-  // const responsesLink = `/${language}/form-builder/${id}/responses`;
-
-  // const editLink = isPublished ? (
-  //   <Link
-  //     href={url}
-  //     className="my-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
-  //     target="_blank"
-  //     aria-describedby={`card-title-${id} card-date-${id}`}
-  //     rel="noreferrer"
-  //     prefetch={false}
-  //   >
-  //     <PreviewIcon className="mr-2 inline-block" />
-  //     {t("viewForm")}
-  //   </Link>
-  // ) : (
-  //   <DraftEditLink
-  //     href={`/${language}/form-builder/${id}/edit/`}
-  //     formId={id}
-  //     className="my-4 block cursor-pointer text-left text-sm underline focus:fill-slate-500 active:fill-slate-500 disabled:opacity-70"
-  //   >
-  //     <DesignIcon className="mr-2 inline-block" />
-  //     {t("editForm")}
-  //   </DraftEditLink>
-  // );
+const CardLinks = ({ isPublished, id, deliveryOption, overdue, ttl, language }: CardLinksProps) => {
+  const { t } = useTranslation("my-forms");
+  const responsesLink = `/${language}/form-builder/${id}/responses`;
 
   return (
     <div className="mb-4">
-      {/* {ttl == null && editLink} */}
       {ttl != null && <Unarchive id={id} isPublished={isPublished} language={language} />}
 
       {/* Email delivery */}
       {deliveryOption && deliveryOption.emailAddress && (
         <span className="mt-4 block text-sm">
           <EnvelopeIcon className="mr-2 inline-block" />
-          {t("card.deliveryOption.email", { ns: "my-forms" })} {deliveryOption.emailAddress}
+          {t("card.deliveryOption.email")} {deliveryOption.emailAddress}
         </span>
       )}
       {/* Vault delivery */}
-      {/* {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
+      {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
         <>
           {overdue ? (
             <span className="text-red mt-4 block text-sm">
@@ -107,19 +76,20 @@ const CardLinks = async ({
             </Link>
           )}
         </>
-      )} */}
+      )}
     </div>
   );
 };
 
-const CardTitle = async ({ name }: { name: string }) => {
-  const { t } = await serverTranslation("my-forms");
+const CardTitle = ({ name }: { name: string }) => {
+  const { t } = useTranslation("my-forms");
   const classes = "mb-0 mr-2 overflow-hidden pb-0 text-base font-bold line-clamp-3";
   return <h2 className={classes}>{name ? name : t("card.unnamedForm")}</h2>;
 };
 
-const CardDate = async ({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
-  const { t } = await serverTranslation(["my-forms", "common"]);
+const CardDate = ({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
+  const { t } = useTranslation("my-forms");
+
   function formatDate(date: string) {
     const jsDate = new Date(date);
     return jsDate.toISOString().split("T")[0];
@@ -167,20 +137,42 @@ export interface CardI {
   status?: string;
 }
 
-export const Card = async ({ card, status }: { card: CardI; status?: string }) => {
-  const {
-    t,
-    i18n: { language },
-  } = await serverTranslation("my-forms");
-  const isEditing = true;
+type CardIWithLockInfo = CardI & {
+  editLockInfo?: {
+    lockedByUserId: string;
+    lockedByName: string | null;
+    lockedByEmail: string | null;
+    lockedAt: Date;
+    heartbeatAt: Date;
+    expiresAt: Date;
+    lastActivityAt: Date | null;
+    visibilityState: EditLockVisibilityState | null;
+    presenceStatus: EditLockPresenceStatus | null;
+    sessionId: string | null;
+    userCount: number | null;
+    pendingUserCount: number | null;
+  } | null;
+};
+
+export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: string }) => {
+  const { t } = useTranslation("my-forms");
+  const params = useParams();
+  const language = params?.locale as string;
+
+  const collaboratorCount =
+    card.editLockInfo &&
+    card.editLockInfo.userCount !== null &&
+    card.editLockInfo.pendingUserCount !== null
+      ? card.editLockInfo.userCount + card.editLockInfo.pendingUserCount
+      : 0;
+
   return (
     <div
-      className={`flex h-full flex-col rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${isEditing && "bg-yellow-50"}`}
+      className={`flex h-full flex-col rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo && "bg-yellow-50"}`}
       data-testid={`card-${card.id}`}
     >
       <div className="mb-2 flex items-center justify-between">
-        {/* TODO case of 0 people? */}
-        <p className="text-sm">Shared with 5 people</p>
+        <p className="text-sm">Shared with {collaboratorCount} people</p>
 
         <div className="flex items-center text-sm">
           <Menu
@@ -203,20 +195,21 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
           deliveryOption={card.deliveryOption}
           overdue={card.overdue}
           ttl={card.ttl}
+          language={language}
         />
       </Suspense>
 
       <div className="mt-auto">
-        {!card.isPublished && !card.ttl && !isEditing && (
+        {!card.isPublished && !card.ttl && !card.editLockInfo && (
           <div>
             <CardDate id={card.id} date={card.date} ttl={card.ttl} />
             <div className="mt-2 text-sm">By: [first name]</div>
           </div>
         )}
 
-        {!card.isPublished && !card.ttl && isEditing && (
+        {!card.isPublished && !card.ttl && card.editLockInfo && (
           <div>
-            <div className="mb-2 text-sm">[first name] editing</div>
+            <div className="mb-2 text-sm">{card?.editLockInfo?.lockedByName} editing</div>
             <div className="flex items-center">
               <div className="mr-2 text-sm">Read only -</div>
               <DraftEditLink
