@@ -1,5 +1,7 @@
-import { numberInputUiDefinition } from "./ui";
+import { publicDefinition } from "./public";
+import { builderDefinition } from "./builder";
 
 export const numberInputDefinition = {
-  ...numberInputUiDefinition,
+  ...publicDefinition,
+  ...builderDefinition,
 };

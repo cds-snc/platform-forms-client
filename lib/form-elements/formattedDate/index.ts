@@ -1,7 +1,9 @@
-import { formattedDateUiDefinition } from "./ui";
-import { formattedDateDataDefinition } from "./data";
+import { publicDefinition } from "./public";
+import { builderDefinition } from "./builder";
+import { sharedDefinition } from "./shared";
 
 export const formattedDateDefinition = {
-  ...formattedDateUiDefinition,
-  ...formattedDateDataDefinition,
+  ...publicDefinition,
+  ...builderDefinition,
+  ...sharedDefinition,
 };

@@ -33,7 +33,7 @@ const deserializeDateObject = (value: string): DateObject | string => {
   return value;
 };
 
-export const formattedDateDataDefinition: SharedElementDefinition = {
+export const sharedDefinition: SharedElementDefinition = {
   normalizeResponse: (value) => {
     if (typeof value === "string") {
       return deserializeDateObject(value);

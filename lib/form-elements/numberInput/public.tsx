@@ -1,22 +1,10 @@
 import React from "react";
-import { NumericFieldIcon } from "@serverComponents/icons";
 import { NumberInput as NumberInputElement } from "@clientComponents/forms";
 import { getLocalizedProperty } from "@lib/utils";
 import { type ClientElementDefinition } from "@lib/form-elements/clientHooks";
-import { NumberInputDescription } from "./Description";
-import { NumberInputEditOptions } from "./EditOptions";
 import { NumberInputReviewItem } from "./ReviewItem";
-import { NumberInputBuilderPreview } from "./BuilderPreview";
 
-export const numberInputUiDefinition: ClientElementDefinition = {
-  buildAddElementOption: ({ t, groups }) => ({
-    id: "number",
-    value: t("numericField"),
-    icon: NumericFieldIcon,
-    description: NumberInputDescription,
-    className: "separator",
-    group: groups.preset,
-  }),
+export const publicDefinition: ClientElementDefinition = {
   renderPublic: ({ element, lang }) => {
     const id = element.subId ?? element.id;
     const labelText = element.properties[getLocalizedProperty("title", lang)]?.toString();
@@ -53,6 +41,6 @@ export const numberInputUiDefinition: ClientElementDefinition = {
   renderReview: ({ formItem, language }) => (
     <NumberInputReviewItem formItem={formItem} lang={language} />
   ),
-  renderBuilderPreview: () => <NumberInputBuilderPreview data-testid="number" />,
-  EditOptionsComponent: NumberInputEditOptions,
 };
+
+export default publicDefinition;
