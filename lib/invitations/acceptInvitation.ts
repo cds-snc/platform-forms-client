@@ -86,21 +86,12 @@ export const acceptInvitation = async (invitationId: string) => {
 
   await invalidateTemplateEditLockUserCountCache(invitation.templateId);
 
-  logEvent(
-    ability.user.id,
-    { type: "Form", id: invitation.templateId },
-    AuditLogEvent.InvitationAccepted,
-    AuditLogDetails.AcceptedInvitation,
-    { userEmail: user.email }
-  );
-
   // some existing events may not yet have the 'invitedBy' attribute.
   // fallback to previous behavior
-
   logEvent(
     invitation.invitedBy ?? ability.user.id,
     { type: "Form", id: invitation.templateId },
-    "GrantFormAccess",
+    AuditLogEvent.InvitationAccepted,
     AuditLogDetails.AcceptedInvitation,
     { userEmail: user.email }
   );
