@@ -20,7 +20,8 @@
     "noForms": "Vous n’avez aucun formulaire.",
     "noDraftsForms": "Vous n’avez aucune ébauche enregistrée.",
     "noPublishedForms": "Vous n'avez aucun formulaire publié.",
-    "noRecentlyEditedForms": "Vous n'avez aucun formulaire récemment modifié."
+    "noRecentlyEditedForms": "Vous n'avez aucun formulaire récemment modifié.",
+    "editLockMessage": "[FR]Forms that are currently being edited will be available to read. Take over editing, or nudge a team member for locked forms."
   },
   "card": {
     "states": {

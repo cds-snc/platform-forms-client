@@ -203,6 +203,7 @@ export const Cards = ({
   // TODO: more testing with below live region. it may need to be placed higher in the tree
   return (
     <div aria-live="polite">
+      {(filter === "recentlyEdited" || !filter) && <p>{t("cards.editLockMessage")}</p>}
       <div
         id={`tabpanel-${filter}`}
         role="tabpanel"
