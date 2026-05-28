@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { EnvelopeIcon, MessageIcon } from "@serverComponents/icons";
+import { EnvelopeIcon, MessageIcon, GearIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
 import { Unarchive } from "../client/Unarchive";
 import { DeliveryOption } from "@lib/types";
@@ -27,7 +27,7 @@ const CardBanner = ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | nu
   if (isPublished) bulletColor = "bg-emerald-500";
   if (ttl) bulletColor = "bg-orange-400";
   return (
-    <div className="mt-3 flex items-center gap-1 self-start text-sm" aria-hidden="true">
+    <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
       <span
         className={`inline-block h-3 w-3 rounded-full border-1 border-slate-500 ${bulletColor} `}
       ></span>
@@ -53,13 +53,14 @@ interface CardLinksProps {
 const CardLinks = ({ isPublished, id, deliveryOption, overdue, ttl, language }: CardLinksProps) => {
   const { t } = useTranslation("my-forms");
   const responsesLink = `/${language}/form-builder/${id}/responses`;
+  const settingsLink = `/${language}/form-builder/${id}/settings`;
 
   if (!isPublished) {
     return <div className="mb-4" />;
   }
 
   return (
-    <div className="mb-4">
+    <div className="mt-2">
       {ttl != null && <Unarchive id={id} isPublished={isPublished} language={language} />}
 
       {/* Email delivery */}
@@ -69,6 +70,7 @@ const CardLinks = ({ isPublished, id, deliveryOption, overdue, ttl, language }: 
           {t("card.deliveryOption.email")} {deliveryOption.emailAddress}
         </span>
       )}
+
       {/* Vault delivery */}
       {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
         <>
@@ -89,6 +91,18 @@ const CardLinks = ({ isPublished, id, deliveryOption, overdue, ttl, language }: 
             </Link>
           )}
         </>
+      )}
+
+      {/* Settings link - only for published non-archived forms */}
+      {ttl == null && (
+        <Link
+          className="mt-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
+          href={settingsLink}
+          prefetch={false}
+        >
+          <GearIcon className="mr-2 inline-block" />
+          {t("card.menu.settings")}
+        </Link>
       )}
     </div>
   );
