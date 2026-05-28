@@ -18,7 +18,7 @@ import { getTemplateIdsWithEditLocks, getEditLockInfoWithCollaborators } from "@
 const FALLBACK_DATE = Date.now().toString();
 
 // Polling interval for edit-lock updates (in milliseconds)
-const EDIT_LOCK_POLL_INTERVAL_MS = 2000; // 2 seconds -- set to a high number later like 5 or 10 seconds to reduce load
+const EDIT_LOCK_POLL_INTERVAL_MS = 5000; // 5 seconds -- set to a high number later like 10 seconds to reduce load
 
 async function combineTemplatesWithLockInfo(
   templates: FormsTemplate[]

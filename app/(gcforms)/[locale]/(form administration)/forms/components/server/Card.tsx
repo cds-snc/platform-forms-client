@@ -104,34 +104,6 @@ const CardTitle = ({ name }: { name: string }) => {
   return <h2 className={classes}>{name ? name : t("card.unnamedForm")}</h2>;
 };
 
-// interface CardHeaderProps {
-//   collaboratorCount: number;
-//   cardId: string;
-//   name: string;
-//   isPublished: boolean;
-//   ttl?: Date;
-//   status?: string;
-// }
-
-// const CardHeader = ({
-//   collaboratorCount,
-//   cardId,
-//   name,
-//   isPublished,
-//   ttl,
-//   status,
-// }: CardHeaderProps) => {
-//   return (
-//     <div className="mb-2 flex items-center justify-between">
-//       <p className="text-sm mb-2">Shared with {collaboratorCount} people</p>
-
-//       <div className="flex items-center text-sm">
-//         <Menu id={cardId} name={name} isPublished={isPublished} ttl={ttl} status={status} />
-//       </div>
-//     </div>
-//   );
-// };
-
 const CardDate = ({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
   const { t } = useTranslation("my-forms");
 
@@ -167,8 +139,6 @@ const CardDate = ({ id, date, ttl }: { id: string; date: string; ttl?: Date | nu
     </div>
   );
 };
-
-// Footer components for each card state
 
 interface CardFooterDraftReadonlyProps {
   cardId: string;

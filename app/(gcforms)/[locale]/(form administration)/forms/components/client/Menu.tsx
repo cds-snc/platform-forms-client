@@ -48,6 +48,11 @@ export const Menu = ({
       url: `/${language}/form-builder/${id}/preview`,
     },
     {
+      filtered: isPublished || !!ttl,
+      title: t("card.menu.edit"),
+      url: `/${language}/form-builder/${id}/edit`,
+    },
+    {
       filtered: false,
       title: t("card.menu.clone"),
       callback: () => {
@@ -139,7 +144,7 @@ export const Menu = ({
 
   return (
     <>
-      <MenuDropdown id={id} items={menuItemsList}>
+      <MenuDropdown id={id} items={menuItemsList} name={name}>
         <span className="text-[1.5rem]" aria-hidden="true">
           ⋮
         </span>

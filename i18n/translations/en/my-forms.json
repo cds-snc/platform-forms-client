@@ -50,7 +50,8 @@
       "somethingWentWrong": "Something went wrong",
       "clone": "Duplicate",
       "cloneSuccess": "Form was duplicated.",
-      "cloneFailed": "Form could not be duplicated."
+      "cloneFailed": "Form could not be duplicated.",
+      "ariaLabel": "Menu for form {{name}}"
     },
     "actionRequired": {
       "description": "Action required: ",
