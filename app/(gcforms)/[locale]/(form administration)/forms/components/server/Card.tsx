@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { EnvelopeIcon, MessageIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
 import { Unarchive } from "../client/Unarchive";
@@ -12,12 +12,8 @@ import { useTranslation } from "@i18n/client";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
-// Card state types
 type CardState = "draft-editing" | "draft-readonly" | "published" | "archived";
 
-/**
- * Helper to determine the card's current state based on its properties
- */
 function getCardState(card: CardIWithLockInfo): CardState {
   if (card.ttl) return "archived";
   if (card.isPublished) return "published";
@@ -31,7 +27,7 @@ const CardBanner = ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | nu
   if (isPublished) bulletColor = "bg-emerald-500";
   if (ttl) bulletColor = "bg-orange-400";
   return (
-    <span className="flex items-center gap-1 self-start text-sm" aria-hidden="true">
+    <div className="mt-3 flex items-center gap-1 self-start text-sm" aria-hidden="true">
       <span
         className={`inline-block h-3 w-3 rounded-full border-1 border-slate-500 ${bulletColor} `}
       ></span>
@@ -40,7 +36,7 @@ const CardBanner = ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | nu
         : isPublished
           ? t("card.states.published")
           : t("card.states.draft")}
-    </span>
+    </div>
   );
 };
 
@@ -249,11 +245,10 @@ export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: strin
   // Determine card state for conditional rendering
   const cardState = getCardState(card);
 
+  const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo && "bg-yellow-50"}`;
+
   return (
-    <div
-      className={`grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo && "bg-yellow-50"}`}
-      data-testid={`card-${card.id}`}
-    >
+    <div className={wrapperClass} data-testid={`card-${card.id}`}>
       <div className="flex items-start" style={{ gridColumn: 2 }}>
         <Menu
           id={card.id}
@@ -294,9 +289,7 @@ export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: strin
             />
           )}
 
-          <div className="mt-3">
-            <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
-          </div>
+          <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
 
           {cardState === "published" && <CardFooterPublished cardId={card.id} />}
 
