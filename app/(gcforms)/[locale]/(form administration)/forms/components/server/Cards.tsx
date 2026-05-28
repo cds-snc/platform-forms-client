@@ -113,17 +113,44 @@ export const Cards = ({
   }, []);
 
   useEffect(() => {
-    // Call immediately on mount
-    void fetchEditLockUpdates();
+    let intervalId: NodeJS.Timeout | null = null;
 
-    // Set up polling interval
-    const intervalId = setInterval(() => {
+    const startPolling = () => {
+      // Call immediately when starting
       void fetchEditLockUpdates();
-    }, pollIntervalMs);
 
-    // Clean up on unmount
+      // Set up polling interval
+      intervalId = setInterval(() => {
+        void fetchEditLockUpdates();
+      }, pollIntervalMs);
+    };
+
+    const stopPolling = () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Tab became inactive - pause polling
+        stopPolling();
+      } else {
+        // Tab became active - resume polling
+        stopPolling(); // Clear any existing interval first
+        startPolling();
+      }
+    };
+
+    // Start polling on mount
+    startPolling();
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
-      clearInterval(intervalId);
+      stopPolling();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [fetchEditLockUpdates, pollIntervalMs]);
 
