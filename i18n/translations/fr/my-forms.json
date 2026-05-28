@@ -5,7 +5,7 @@
     "published": "Publiés",
     "all": "Tous",
     "archived": "Archivés",
-    "shared": "Shared"
+    "recentlyEdited": "Récemment modifié"
   },
   "actions": {
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
@@ -16,7 +16,8 @@
   "cards": {
     "noForms": "Vous n’avez aucun formulaire.",
     "noDraftsForms": "Vous n’avez aucune ébauche enregistrée.",
-    "noPublishedForms": "Vous n’avez aucun formulaire publié."
+    "noPublishedForms": "Vous n'avez aucun formulaire publié.",
+    "noRecentlyEditedForms": "Vous n'avez aucun formulaire récemment modifié."
   },
   "card": {
     "states": {

@@ -17,11 +17,14 @@ export const Navigation = async ({ filter }: { filter?: string }) => {
       className="flex flex-col rounded border border-slate-200 bg-white p-2"
       aria-label={t("navLabel")}
     >
-      {/* TODO - only show if shared templates */}
-      <NavLink href={`/${language}/forms`} id="tab-all" active={filter === "shared" || !filter}>
+      <NavLink
+        href={`/${language}/forms`}
+        id="tab-all"
+        active={filter === "recentlyEdited" || !filter}
+      >
         <>
           <FolderIcon className={cn(iconClassname, "h-5 w-5")} />
-          {t("nav.shared")}
+          {t("nav.recentlyEdited")}
         </>
       </NavLink>
       <NavLink href={`/${language}/forms?status=draft`} id="tab-drafts" active={filter === "draft"}>

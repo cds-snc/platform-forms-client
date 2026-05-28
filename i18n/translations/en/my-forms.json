@@ -5,7 +5,7 @@
     "published": "Published",
     "all": "All",
     "archived": "Archived",
-    "shared": "Shared"
+    "recentlyEdited": "Recently edited"
   },
   "actions": {
     "resumeForm": "Resume editing form",
@@ -16,7 +16,8 @@
   "cards": {
     "noForms": "You have no forms.",
     "noDraftsForms": "You have no draft forms.",
-    "noPublishedForms": "You have no published forms."
+    "noPublishedForms": "You have no published forms.",
+    "noRecentlyEditedForms": "You have no recently edited forms."
   },
   "card": {
     "states": {

@@ -66,7 +66,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
           }}
           type="button"
           id={`button-${id}`}
-          className="border-white-default aria-expanded:border-black-default flex border-2 py-1 pr-1 pl-0"
+          className="border-white-default aria-expanded:border-black-default flex cursor-pointer border-2 py-1 pr-1 pl-0"
           aria-haspopup="true"
           aria-controls={`menu-${id}`}
           ref={menuButtonRef}

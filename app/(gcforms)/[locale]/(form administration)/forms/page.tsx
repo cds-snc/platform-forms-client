@@ -198,10 +198,11 @@ export default async function Page(props: {
 
   const templatesWithEditLocks = await combineTemplatesWithLockInfo(templates);
 
-  // Filter templates based on status, including "shared" status
+  // Filter templates based on status
+  // For "recentlyEdited" (or no status), show the 4 most recently updated templates
   const filteredTemplates =
-    status === "shared" || !status
-      ? templatesWithEditLocks.filter((template) => template.isShared)
+    status === "recentlyEdited" || !status
+      ? templatesWithEditLocks.slice(0, 4)
       : templatesWithEditLocks;
 
   const invitations = await prisma.invitation.findMany({

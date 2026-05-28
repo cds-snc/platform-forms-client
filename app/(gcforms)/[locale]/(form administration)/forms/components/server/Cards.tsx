@@ -154,15 +154,8 @@ export const Cards = ({
     };
   }, [fetchEditLockUpdates, pollIntervalMs]);
 
-  const sharedScreenNoForms = () => {
-    return <div>TODO: Co-edit your forms with your team</div>;
-  };
-
-  // TODO
   const getNoFormsMessage = () => {
-    if (filter === "shared") {
-      return sharedScreenNoForms();
-    }
+    if (filter === "recentlyEdited" || !filter) return t("cards.noRecentlyEditedForms");
     if (filter === "draft") return t("cards.noDraftForms");
     if (filter === "published") return t("cards.noPublishedForms");
     if (filter === "archived") return t("cards.noArchivedForms");
