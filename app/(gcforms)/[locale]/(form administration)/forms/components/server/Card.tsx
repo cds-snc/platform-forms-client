@@ -58,6 +58,10 @@ const CardLinks = ({ isPublished, id, deliveryOption, overdue, ttl, language }: 
   const { t } = useTranslation("my-forms");
   const responsesLink = `/${language}/form-builder/${id}/responses`;
 
+  if (!isPublished) {
+    return <div className="mb-4" />;
+  }
+
   return (
     <div className="mb-4">
       {ttl != null && <Unarchive id={id} isPublished={isPublished} language={language} />}
@@ -100,33 +104,33 @@ const CardTitle = ({ name }: { name: string }) => {
   return <h2 className={classes}>{name ? name : t("card.unnamedForm")}</h2>;
 };
 
-interface CardHeaderProps {
-  collaboratorCount: number;
-  cardId: string;
-  name: string;
-  isPublished: boolean;
-  ttl?: Date;
-  status?: string;
-}
+// interface CardHeaderProps {
+//   collaboratorCount: number;
+//   cardId: string;
+//   name: string;
+//   isPublished: boolean;
+//   ttl?: Date;
+//   status?: string;
+// }
 
-const CardHeader = ({
-  collaboratorCount,
-  cardId,
-  name,
-  isPublished,
-  ttl,
-  status,
-}: CardHeaderProps) => {
-  return (
-    <div className="mb-2 flex items-center justify-between">
-      <p className="text-sm">Shared with {collaboratorCount} people</p>
+// const CardHeader = ({
+//   collaboratorCount,
+//   cardId,
+//   name,
+//   isPublished,
+//   ttl,
+//   status,
+// }: CardHeaderProps) => {
+//   return (
+//     <div className="mb-2 flex items-center justify-between">
+//       <p className="text-sm mb-2">Shared with {collaboratorCount} people</p>
 
-      <div className="flex items-center text-sm">
-        <Menu id={cardId} name={name} isPublished={isPublished} ttl={ttl} status={status} />
-      </div>
-    </div>
-  );
-};
+//       <div className="flex items-center text-sm">
+//         <Menu id={cardId} name={name} isPublished={isPublished} ttl={ttl} status={status} />
+//       </div>
+//     </div>
+//   );
+// };
 
 const CardDate = ({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
   const { t } = useTranslation("my-forms");
@@ -176,7 +180,7 @@ const CardFooterDraftReadonly = ({ cardId, date, ttl }: CardFooterDraftReadonlyP
   return (
     <div>
       <CardDate id={cardId} date={date} ttl={ttl} />
-      <div className="mt-2 text-sm">By: [first name]</div>
+      {/* Will do in a followup PR <div className="mt-2 text-sm">By: [first name]</div> */}
     </div>
   );
 };
@@ -271,51 +275,58 @@ export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: strin
 
   return (
     <div
-      className={`flex h-full flex-col rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo && "bg-yellow-50"}`}
+      className={`grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo && "bg-yellow-50"}`}
       data-testid={`card-${card.id}`}
     >
-      <CardHeader
-        collaboratorCount={collaboratorCount}
-        cardId={card.id}
-        name={card.name}
-        isPublished={card.isPublished}
-        ttl={card.ttl ? card.ttl : undefined}
-        status={status}
-      />
-
-      <CardTitle name={card.name} />
-
-      <Suspense fallback={<Skeleton count={2} className="my-3 w-[300px]" />}>
-        <CardLinks
-          isPublished={card.isPublished}
-          url={card.url}
+      <div className="flex items-start" style={{ gridColumn: 2 }}>
+        <Menu
           id={card.id}
-          deliveryOption={card.deliveryOption}
-          overdue={card.overdue}
-          ttl={card.ttl}
-          language={language}
+          name={card.name}
+          isPublished={card.isPublished}
+          ttl={card.ttl ? card.ttl : undefined}
+          status={status}
         />
-      </Suspense>
+      </div>
 
-      <div className="mt-auto">
-        {cardState === "draft-readonly" && (
-          <CardFooterDraftReadonly cardId={card.id} date={card.date} ttl={card.ttl} />
+      <div className="flex flex-col" style={{ gridColumn: 1, gridRow: 1 }}>
+        {collaboratorCount > 0 && (
+          <p className="mb-2 pt-2 text-sm">Shared with {collaboratorCount} people</p>
         )}
 
-        {cardState === "draft-editing" && (
-          <CardFooterDraftEditing
-            lockedByName={card.editLockInfo?.lockedByName ?? null}
+        <CardTitle name={card.name} />
+
+        <Suspense fallback={<Skeleton count={2} className="my-3 w-[300px]" />}>
+          <CardLinks
+            isPublished={card.isPublished}
+            url={card.url}
+            id={card.id}
+            deliveryOption={card.deliveryOption}
+            overdue={card.overdue}
+            ttl={card.ttl}
             language={language}
-            cardId={card.id}
           />
-        )}
+        </Suspense>
 
-        <div className="mt-3">
-          <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
+        <div className="mt-auto">
+          {cardState === "draft-readonly" && (
+            <CardFooterDraftReadonly cardId={card.id} date={card.date} ttl={card.ttl} />
+          )}
+
+          {cardState === "draft-editing" && (
+            <CardFooterDraftEditing
+              lockedByName={card.editLockInfo?.lockedByName ?? null}
+              language={language}
+              cardId={card.id}
+            />
+          )}
+
+          <div className="mt-3">
+            <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
+          </div>
+
+          {cardState === "published" && <CardFooterPublished cardId={card.id} />}
+          {cardState === "archived" && <CardFooterArchived />}
         </div>
-
-        {cardState === "published" && <CardFooterPublished cardId={card.id} />}
-        {cardState === "archived" && <CardFooterArchived />}
       </div>
     </div>
   );

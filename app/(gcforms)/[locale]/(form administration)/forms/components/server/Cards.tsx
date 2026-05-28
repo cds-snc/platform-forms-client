@@ -152,7 +152,7 @@ export const Cards = ({
         className={`pt-8`}
       >
         {templates.length > 0 ? (
-          <ol className="grid grid-cols-[repeat(auto-fit,16em)] justify-items-start gap-4 p-0">
+          <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
             {templates.map((card) => {
               // Check if the form has an overdue submission
               if (overdueTemplateIds.includes(card.id)) {
@@ -160,7 +160,7 @@ export const Cards = ({
               }
 
               return (
-                <li className="flex w-full max-w-[16em] flex-col" key={card.id}>
+                <li className="flex h-full w-full max-w-[16em]" key={card.id}>
                   <Card card={card} status={status} />
                 </li>
               );
