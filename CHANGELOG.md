@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.15.3](https://github.com/cds-snc/platform-forms-client/compare/v4.15.2...v4.15.3) (2026-05-27)
+
+
+### Bug Fixes
+
+* Add missing i18n for Inviting a User to Collaborate on a form ([#7257](https://github.com/cds-snc/platform-forms-client/issues/7257)) ([f062fd8](https://github.com/cds-snc/platform-forms-client/commit/f062fd88f7c6ab92f30ba3146b4a38fd7d445842))
+* Add missing message for deleting draft responses. ([#7252](https://github.com/cds-snc/platform-forms-client/issues/7252)) ([7866d42](https://github.com/cds-snc/platform-forms-client/commit/7866d4212d132cd702031c764cc2d28d2b52c78b))
+* Add Original formID to Event for Duplication of Forms ([#7249](https://github.com/cds-snc/platform-forms-client/issues/7249)) ([64baf90](https://github.com/cds-snc/platform-forms-client/commit/64baf90598b5e959304ac090b46555d736c95e1d))
+* Fix Date Format for Close Form Audit Log Event ([#7251](https://github.com/cds-snc/platform-forms-client/issues/7251)) ([981298c](https://github.com/cds-snc/platform-forms-client/commit/981298ca517f465d79e7b19d92a1fcaa36447735))
+
+
+### Miscellaneous Chores
+
+* add drag hotspot for resume form ([#7258](https://github.com/cds-snc/platform-forms-client/issues/7258)) ([82e4b51](https://github.com/cds-snc/platform-forms-client/commit/82e4b514af9becfcc2039506f6883fd1bfd7ac42))
+* Generate saved progress client side instead of on the server ([#7255](https://github.com/cds-snc/platform-forms-client/issues/7255)) ([ac5f4ad](https://github.com/cds-snc/platform-forms-client/commit/ac5f4adc5ddc92907dff171fbfa25199a6246027))
+
 ## [4.15.2](https://github.com/cds-snc/platform-forms-client/compare/v4.15.1...v4.15.2) (2026-05-25)
 
 
