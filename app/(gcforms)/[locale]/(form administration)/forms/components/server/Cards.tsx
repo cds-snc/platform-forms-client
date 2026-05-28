@@ -22,6 +22,8 @@ type EditLocksResponse = {
   editLocks: Record<string, EditLockInfo>;
 };
 
+const CARDS_PER_BATCH = 20; // Number of cards to render per batch
+
 export const Cards = ({
   filter,
   initialTemplates,
@@ -37,23 +39,58 @@ export const Cards = ({
 }) => {
   const { t } = useTranslation("my-forms");
   const [templates, setTemplates] = useState<FormsTemplateWithLockInfo[]>(initialTemplates);
+  const [displayedCount, setDisplayedCount] = useState<number>(CARDS_PER_BATCH);
 
   // Use ref to access latest templates without recreating fetchEditLockUpdates
   const templatesRef = useRef(templates);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   // Keep ref in sync with state
   useEffect(() => {
     templatesRef.current = templates;
   }, [templates]);
 
-  // Sync templates state when initialTemplates changes e.g. when navigating between tabs
+  // Sync templates state when initialTemplates changes (e.g. when navigating between tabs)
+  // This is necessary because templates state is mutated by polling, but needs to reset on tab change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setTemplates(initialTemplates);
+    setDisplayedCount(CARDS_PER_BATCH);
   }, [initialTemplates]);
 
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && displayedCount < templates.length) {
+          // Load more cards when sentinel comes into view
+          setDisplayedCount((prev) => Math.min(prev + CARDS_PER_BATCH, templates.length));
+        }
+      },
+      {
+        root: null, // viewport
+        rootMargin: "200px", // Start loading 200px before reaching the sentinel
+        threshold: 0,
+      }
+    );
+
+    const currentRef = loadMoreRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [displayedCount, templates.length]);
+
   const fetchEditLockUpdates = useCallback(async () => {
-    // Poll for ALL templates to detect newly created locks
-    const templateIds = templatesRef.current.map((t) => t.id);
+    // Poll only for displayed templates to reduce API payload
+    const displayedTemplates = templatesRef.current.slice(0, displayedCount);
+    const templateIds = displayedTemplates.map((t) => t.id);
 
     if (templateIds.length === 0) {
       return;
@@ -110,8 +147,9 @@ export const Cards = ({
     } catch {
       // Silently fail - try again on next poll
     }
-  }, []);
+  }, [displayedCount]);
 
+  // Poll for edit lock updates at regular intervals, and also pause/resume polling based on tab visibility
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
 
@@ -172,20 +210,26 @@ export const Cards = ({
         className={`pt-8`}
       >
         {templates.length > 0 ? (
-          <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
-            {templates.map((card) => {
-              // Check if the form has an overdue submission
-              if (overdueTemplateIds.includes(card.id)) {
-                card.overdue = true;
-              }
+          <>
+            <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
+              {templates.slice(0, displayedCount).map((card) => {
+                // Check if the form has an overdue submission
+                if (overdueTemplateIds.includes(card.id)) {
+                  card.overdue = true;
+                }
 
-              return (
-                <li className="flex h-full w-full max-w-[16em]" key={card.id}>
-                  <Card card={card} status={status} />
-                </li>
-              );
-            })}
-          </ol>
+                return (
+                  <li className="flex h-full w-full max-w-[16em]" key={card.id}>
+                    <Card card={card} status={status} />
+                  </li>
+                );
+              })}
+            </ol>
+            {/* "Sentinel" element for intersection observer */}
+            {displayedCount < templates.length && (
+              <div ref={loadMoreRef} className="h-4 w-full" aria-hidden="true" />
+            )}
+          </>
         ) : (
           getNoFormsMessage()
         )}
