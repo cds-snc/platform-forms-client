@@ -24,6 +24,8 @@
     "editLockMessage": "Forms that are currently being edited will be available to read. Take over editing, or nudge a team member for locked forms."
   },
   "card": {
+    "sharedWith_one": "Shared with {{count}} person",
+    "sharedWith_other": "Shared with {{count}} people",
     "states": {
       "draft": "Draft",
       "published": "Published",

@@ -140,6 +140,12 @@ const CardDate = ({ id, date, ttl }: { id: string; date: string; ttl?: Date | nu
   );
 };
 
+const CardCollaboratorCount = ({ collaboratorCount }: { collaboratorCount: number }) => {
+  const { t } = useTranslation("my-forms");
+  if (collaboratorCount <= 0) return null;
+  return <p className="mb-2 pt-2 text-sm">{t("card.sharedWith", { count: collaboratorCount })}</p>;
+};
+
 interface CardFooterDraftReadonlyProps {
   cardId: string;
   date: string;
@@ -259,9 +265,7 @@ export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: strin
       </div>
 
       <div className="flex flex-col" style={{ gridColumn: 1, gridRow: 1 }}>
-        {collaboratorCount > 0 && (
-          <p className="mb-2 pt-2 text-sm">Shared with {collaboratorCount} people</p>
-        )}
+        <CardCollaboratorCount collaboratorCount={collaboratorCount} />
 
         <CardTitle name={card.name} />
 
@@ -295,6 +299,7 @@ export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: strin
           </div>
 
           {cardState === "published" && <CardFooterPublished cardId={card.id} />}
+
           {cardState === "archived" && <CardFooterArchived />}
         </div>
       </div>
