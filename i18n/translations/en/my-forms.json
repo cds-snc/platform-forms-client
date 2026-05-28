@@ -9,7 +9,7 @@
   },
   "actions": {
     "resumeForm": "Resume editing form",
-    "createNewForm": "Create new form",
+    "createNewForm": "New form",
     "unarchiveForm": "Restore form",
     "duplicatePublishedForm": "Copy as new draft form"
   },

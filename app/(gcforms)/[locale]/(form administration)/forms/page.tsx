@@ -231,29 +231,24 @@ export default async function Page(props: {
   );
 
   return (
-    <div className="m-4 grid grid-cols-[23.5em_1fr] gap-8">
-      <h1 className="sr-only">{t("title")}</h1>
+    <div className="m-4 grid grid-cols-[23.5em_1fr_4em] gap-8">
       <div>
+        <h1 className="sr-only">{t("title")}</h1>
         <Navigation filter={status} />
       </div>
       <div>
-        <div className="flex justify-between">
-          <div>
-            <Invitations invitations={invitations} />
-            <ResumeEditingForm />
+        <div className="">
+          <Invitations invitations={invitations} />
+          <ResumeEditingForm />
+          <div className="mb-4">
+            {status == "archived" && (
+              <div>
+                {t("archivedNotice")}&nbsp;
+                <strong>{t("archivedNotice2")}</strong>
+              </div>
+            )}
           </div>
-          <NewFormButton />
         </div>
-
-        <div className="mb-4">
-          {status == "archived" && (
-            <div>
-              {t("archivedNotice")}&nbsp;
-              <strong>{t("archivedNotice2")}</strong>
-            </div>
-          )}
-        </div>
-
         <Cards
           filter={status}
           initialTemplates={filteredTemplates}
@@ -261,6 +256,9 @@ export default async function Page(props: {
           status={status}
           pollIntervalMs={EDIT_LOCK_POLL_INTERVAL_MS}
         />
+      </div>
+      <div className="mr-6">
+        <NewFormButton />
       </div>
     </div>
   );
