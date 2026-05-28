@@ -7,6 +7,9 @@
     "archived": "Archived",
     "recentlyEdited": "Recently edited"
   },
+  "account": {
+    "viewAccount": "View account"
+  },
   "actions": {
     "resumeForm": "Resume editing form",
     "createNewForm": "New form",

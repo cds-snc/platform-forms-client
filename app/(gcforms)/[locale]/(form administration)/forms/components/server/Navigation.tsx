@@ -13,10 +13,7 @@ export const Navigation = async ({ filter }: { filter?: string }) => {
     "inline-block group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <nav
-      className="flex flex-col rounded border border-slate-200 bg-white p-2"
-      aria-label={t("navLabel")}
-    >
+    <nav className="flex flex-col" aria-label={t("navLabel")}>
       <NavLink
         href={`/${language}/forms`}
         id="tab-all"

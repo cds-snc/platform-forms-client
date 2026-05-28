@@ -7,6 +7,9 @@
     "archived": "Archivés",
     "recentlyEdited": "Récemment modifié"
   },
+  "account": {
+    "viewAccount": "[FR]View account"
+  },
   "actions": {
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
     "createNewForm": "[FR]New Form",

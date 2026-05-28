@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
 import { Cards } from "./components/server/Cards";
 import { NewFormButton } from "./components/server/NewFormButton";
+import { AccountDetails } from "./components/server/AccountDetails";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
 import { getAllTemplatesForUser, TemplateOptions } from "@lib/templates";
 import { DeliveryOption } from "@lib/types";
@@ -231,12 +232,20 @@ export default async function Page(props: {
   );
 
   return (
-    <div className="m-4 grid grid-cols-[23.5em_1fr_4em] gap-8">
-      <div>
-        <h1 className="sr-only">{t("title")}</h1>
+    <div className="m-4 grid min-h-screen grid-cols-[20em_1fr_4em] gap-8">
+      <h1 className="sr-only">{t("title")}</h1>
+      <div className="self-start rounded border border-slate-200 bg-white p-2">
+        <AccountDetails
+          name={session.user.name}
+          email={session.user.email}
+          accountUrl={session.user.accountUrl}
+          isZitadelLoginEnabled={session.user.accountUrl ? true : false}
+          profileUrl={`/${locale}/profile`}
+          locale={locale}
+        />
         <Navigation filter={status} />
       </div>
-      <div>
+      <div className="flex h-full min-h-0 flex-col">
         <div className="">
           <Invitations invitations={invitations} />
           <ResumeEditingForm />
