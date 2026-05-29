@@ -10,7 +10,7 @@ import { ContentWrapper } from "./ContentWrapper";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { CompatibilityGuard } from "./guards/CompatibilityGuard";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
-import { getFullTemplateByID } from "@root/lib/templates";
+import { getFullTemplateByID, getTemplateVersionOptionsForTemplate } from "@root/lib/templates";
 
 export default async function ResponsesLayout(props: {
   children: React.ReactNode;
@@ -37,6 +37,7 @@ export default async function ResponsesLayout(props: {
 
   const template = await getFullTemplateByID(id);
   const isEmailDelivery = template?.deliveryOption?.emailAddress !== undefined;
+  const templateVersions = await getTemplateVersionOptionsForTemplate(id);
 
   if (!hasAccess || isEmailDelivery) {
     // Clear the cookie to prevent redirect loop
@@ -45,7 +46,7 @@ export default async function ResponsesLayout(props: {
 
   return (
     <ResponsesAppProvider _locale={locale}>
-      <ResponsesProvider locale={locale} formId={id}>
+      <ResponsesProvider locale={locale} formId={id} templateVersions={templateVersions}>
         <CompatibilityGuard>
           <h1 className="mb-4">{t("section-title")}</h1>
           <PilotBadge className="mb-8" />

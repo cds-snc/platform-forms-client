@@ -58,9 +58,13 @@ export async function submitForm(
         };
       }
 
-      const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
-      // Skip hCaptcha verification for form-builder Preview (drafts)
-      if (template?.isPublished && process.env.APP_ENV !== "test") {
+      const shouldVerifyHCaptcha =
+        template?.isPublished &&
+        process.env.APP_ENV !== "test" &&
+        process.env.NODE_ENV !== "development";
+
+      if (shouldVerifyHCaptcha) {
+        const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
         // hCaptcha runs regardless but only block submissions if the feature flag is enabled
         const captchaVerified = await verifyHCaptchaToken(captchaToken || "", formId);
         if (hCaptchaBlockingMode && !captchaVerified) {
@@ -113,6 +117,7 @@ export async function submitForm(
         responses: formData,
         securityAttribute: template.securityAttribute,
         formId,
+        templateVersionId: template.templateVersionId as string | undefined,
         language,
         fileChecksums,
       });

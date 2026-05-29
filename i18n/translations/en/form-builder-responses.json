@@ -192,6 +192,13 @@
       "csvDescription": "For lists, spreadsheets, or tables",
       "json": "JSON",
       "jsonDescription": "For API or data configuration",
+      "revision": {
+        "label": "Form revision",
+        "hint": "Choose the form version used for question labels in this download.",
+        "option": "Version {{versionNumber}} ({{status}})",
+        "current": "current",
+        "previous": "previous"
+      },
       "downloadAllAsZip": "Download all as ZIP (compressed) file",
       "cancel": "Cancel",
       "download": "Download"

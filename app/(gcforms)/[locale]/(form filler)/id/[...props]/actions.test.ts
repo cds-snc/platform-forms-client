@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach, Mock } from "vitest";
 import { submitForm } from "./actions";
 import { PublicFormRecord, Responses, FormElementTypes } from "@lib/types";
 
@@ -43,8 +43,6 @@ vi.mock("./lib/server/normalizeFormResponses", () => ({
 vi.mock("./lib/server/processFormData", () => ({
   processFormData: vi.fn(),
 }));
-
-
 
 import { getPublicTemplateByID } from "@lib/templates";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
@@ -91,9 +89,13 @@ describe("submitForm", () => {
     (normalizeFormResponses as Mock).mockReturnValue(mockValues);
     (processFormData as Mock).mockResolvedValue({
       submissionId: "test-submission-id",
-      fileURLMap: {}
+      fileURLMap: {},
     });
     (sendNotifications as Mock).mockResolvedValue(undefined);
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it("should return MissingFormDataError when file input validation fails", async () => {
@@ -101,8 +103,8 @@ describe("submitForm", () => {
     (validateVisibleElements as Mock).mockReturnValue({
       errors: {},
       valueMatchErrors: {
-        "file-input-1": ["File validation error"]
-      }
+        "file-input-1": ["File validation error"],
+      },
     });
     (valuesMatchErrorContainsElementType as Mock).mockReturnValue(true);
 
@@ -112,8 +114,8 @@ describe("submitForm", () => {
       id: mockFormId,
       error: {
         name: "MissingFormDataError",
-        message: "Form data validation failed due to file input errors"
-      }
+        message: "Form data validation failed due to file input errors",
+      },
     });
 
     // Verify that valuesMatchErrorContainsElementType was called with correct parameters
@@ -129,14 +131,14 @@ describe("submitForm", () => {
     expect(result).toEqual({
       id: mockFormId,
       submissionId: "test-submission-id",
-      fileURLMap: {}
+      fileURLMap: {},
     });
 
     // Verify function calls
     expect(getPublicTemplateByID).toHaveBeenCalledWith(mockFormId);
     expect(validateVisibleElements).toHaveBeenCalledWith(mockValues, {
       formRecord: mockTemplate,
-      t: expect.any(Function)
+      t: expect.any(Function),
     });
     expect(normalizeFormResponses).toHaveBeenCalledWith(mockTemplate, mockValues);
     expect(processFormData).toHaveBeenCalledWith({
@@ -144,7 +146,7 @@ describe("submitForm", () => {
       securityAttribute: mockTemplate.securityAttribute,
       formId: mockFormId,
       language: mockLanguage,
-      fileChecksums: undefined
+      fileChecksums: undefined,
     });
     expect(sendNotifications).toHaveBeenCalledWith(
       mockFormId,
@@ -153,12 +155,41 @@ describe("submitForm", () => {
     );
   });
 
+  it("should skip hCaptcha verification in local development", async () => {
+    vi.stubEnv("APP_ENV", "development");
+    vi.stubEnv("NODE_ENV", "development");
+
+    await submitForm(mockValues, mockLanguage, mockFormId);
+
+    expect(checkOne).not.toHaveBeenCalled();
+    expect(verifyHCaptchaToken).not.toHaveBeenCalled();
+  });
+
+  it("should verify hCaptcha for published forms outside local development and test", async () => {
+    vi.stubEnv("APP_ENV", "production");
+    vi.stubEnv("NODE_ENV", "production");
+    (checkOne as Mock).mockResolvedValue(true);
+    (verifyHCaptchaToken as Mock).mockResolvedValue(false);
+
+    const result = await submitForm(mockValues, mockLanguage, mockFormId, "bad-token");
+
+    expect(checkOne).toHaveBeenCalled();
+    expect(verifyHCaptchaToken).toHaveBeenCalledWith("bad-token", mockFormId);
+    expect(result).toEqual({
+      id: mockFormId,
+      error: {
+        name: "CaptchaVerificationError",
+        message: "Captcha verification failure",
+      },
+    });
+  });
+
   it("should return MissingFormDataError when submitting .exe file using real validation", async () => {
     // This test uses REAL validation functions (not mocked) to verify that
     // a .exe file is properly rejected by the validation logic
 
     // Import the actual validation functions
-    const actualCore = await vi.importActual("@gcforms/core") as {
+    const actualCore = (await vi.importActual("@gcforms/core")) as {
       validateVisibleElements: typeof validateVisibleElements;
       valuesMatchErrorContainsElementType: typeof valuesMatchErrorContainsElementType;
     };
@@ -196,11 +227,13 @@ describe("submitForm", () => {
 
     // Use real validation functions for this test instead of mocks
     (validateVisibleElements as Mock).mockImplementation(actualCore.validateVisibleElements);
-    (valuesMatchErrorContainsElementType as Mock).mockImplementation(actualCore.valuesMatchErrorContainsElementType);
+    (valuesMatchErrorContainsElementType as Mock).mockImplementation(
+      actualCore.valuesMatchErrorContainsElementType
+    );
 
     // Mock the translation function with a real implementation
     (serverTranslation as Mock).mockResolvedValue({
-      t: (key: string) => key // Simple passthrough translation
+      t: (key: string) => key, // Simple passthrough translation
     });
 
     const result = await submitForm(valuesWithExeFile, mockLanguage, mockFormId);
@@ -210,8 +243,8 @@ describe("submitForm", () => {
       id: mockFormId,
       error: {
         name: "MissingFormDataError",
-        message: "Form data validation failed due to file input errors"
-      }
+        message: "Form data validation failed due to file input errors",
+      },
     });
 
     // Verify that the template was fetched
@@ -220,6 +253,7 @@ describe("submitForm", () => {
     // Verify that real validation was called with our form data
     expect(validateVisibleElements).toHaveBeenCalledWith(valuesWithExeFile, {
       formRecord: templateWithFileInput,
-      t: expect.any(Function)
+      t: expect.any(Function),
     });
-  });});
+  });
+});

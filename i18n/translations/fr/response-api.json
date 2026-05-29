@@ -88,6 +88,13 @@
         "label": "Copies individuelles (Fichiers HTML séparés pour chaque réponse)"
       }
     },
+    "revision": {
+      "label": "Révision du formulaire",
+      "hint": "Choisissez la version du formulaire utilisée pour les libellés des questions dans ce téléchargement.",
+      "option": "Version {{versionNumber}} ({{status}})",
+      "current": "actuelle",
+      "previous": "précédente"
+    },
     "previewCsvStructure": "Aperçu de la structure des fichiers pour les réponses CSV :",
     "previewHtmlStructure": "Aperçu de la structure des fichiers pour les réponses HTML :"
   },

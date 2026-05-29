@@ -52,6 +52,7 @@ describe("Download Table", () => {
       <DownloadTable
         statusFilter={StatusFilter.NEW}
         vaultSubmissions={vaultSubmissions}
+        templateVersions={[]}
         formId="clg17xha50008efkgfgxa8l4f"
         formName={""}
         nagwareResult={null}

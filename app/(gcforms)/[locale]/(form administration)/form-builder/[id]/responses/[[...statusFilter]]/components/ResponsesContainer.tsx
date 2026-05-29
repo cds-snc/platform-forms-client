@@ -11,15 +11,18 @@ import { ManageFormAccessButton } from "../../../components/dialogs/ManageFormAc
 import { StatusFilter } from "../types";
 import { useTranslation } from "@i18n/client";
 import { ResponseBetaLink } from "./ResponseBetaLink";
+import type { TemplateVersionOption } from "@lib/types/form-builder-types";
 
 export const ResponsesContainer = ({
   hasOverdue,
+  templateVersions,
   responseDownloadLimit,
   overdueAfter,
   statusFilter,
   isApiRetrieval,
 }: {
   hasOverdue: boolean;
+  templateVersions: TemplateVersionOption[];
   responseDownloadLimit: number;
   overdueAfter: number;
   statusFilter: StatusFilter;
@@ -58,6 +61,7 @@ export const ResponsesContainer = ({
 
           <Responses
             hasOverdue={hasOverdue}
+            templateVersions={templateVersions}
             statusFilter={statusFilter}
             responseDownloadLimit={responseDownloadLimit}
             overdueAfter={overdueAfter}
@@ -93,6 +97,7 @@ export const ResponsesContainer = ({
         <NavigationTabs formId={id} />
         <Responses
           hasOverdue={hasOverdue}
+          templateVersions={templateVersions}
           statusFilter={statusFilter}
           responseDownloadLimit={responseDownloadLimit}
           overdueAfter={overdueAfter}

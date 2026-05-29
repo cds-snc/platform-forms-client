@@ -192,6 +192,13 @@
       "csvDescription": "Pour des listes, feuilles de calcul ou tableaux",
       "json": "JSON",
       "jsonDescription": "Pour API ou configuration des données",
+      "revision": {
+        "label": "Révision du formulaire",
+        "hint": "Choisissez la version du formulaire utilisée pour les libellés des questions dans ce téléchargement.",
+        "option": "Version {{versionNumber}} ({{status}})",
+        "current": "actuelle",
+        "previous": "précédente"
+      },
       "downloadAllAsZip": "Télécharger tout sous forme de fichier ZIP (compressé)",
       "cancel": "Annuler",
       "download": "Télécharger"

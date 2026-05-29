@@ -238,6 +238,13 @@ export type FormRecord = {
   closedDetails?: ClosedDetails;
   saveAndResume?: boolean;
   notificationsInterval?: NotificationsInterval;
+  templateVersionId?: string;
+  templateVersionNumber?: number;
+  templateVersionStatus?: "DRAFT" | "PUBLISHED" | "SUPERSEDED";
+  currentPublishedVersionId?: string | null;
+  currentDraftVersionId?: string | null;
+  hasDraftVersion?: boolean;
+  hasPublishedVersion?: boolean;
   [key: string]:
     | string
     | boolean

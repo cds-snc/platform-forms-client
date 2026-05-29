@@ -17,8 +17,8 @@ const developerName = process.env.DEVELOPER_NAME;
 
 async function createTemplates(env: string) {
   // see https://github.com/prisma/prisma/issues/9247#issuecomment-1249322729 for why this check is needed
-  const templatePromises = seedTemplates[env].map((formConfig, index) =>
-    prisma.template.upsert({
+  const templatePromises = seedTemplates[env].map(async (formConfig, index) => {
+    const template = await prisma.template.upsert({
       where: {
         id: `${index + 1}`,
       },
@@ -26,10 +26,36 @@ async function createTemplates(env: string) {
       create: {
         id: `${index + 1}`,
         name: formConfig.titleEn?.toString() ?? "",
+      },
+    });
+
+    const draftVersion = await prisma.templateVersion.upsert({
+      where: {
+        templateId_versionNumber: {
+          templateId: template.id,
+          versionNumber: 1,
+        },
+      },
+      update: {
         jsonConfig: formConfig !== null ? (formConfig as Prisma.JsonObject) : Prisma.JsonNull,
       },
-    })
-  );
+      create: {
+        templateId: template.id,
+        versionNumber: 1,
+        status: "DRAFT",
+        jsonConfig: formConfig !== null ? (formConfig as Prisma.JsonObject) : Prisma.JsonNull,
+      },
+    });
+
+    return prisma.template.update({
+      where: {
+        id: template.id,
+      },
+      data: {
+        currentDraftVersionId: draftVersion.id,
+      },
+    });
+  });
 
   return Promise.all(templatePromises);
 }

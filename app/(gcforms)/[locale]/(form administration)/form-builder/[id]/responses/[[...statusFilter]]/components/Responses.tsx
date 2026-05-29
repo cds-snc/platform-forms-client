@@ -16,9 +16,11 @@ import { StatusFilter } from "../types";
 import { SystemStatus } from "../../[statusFilter]/components/SystemStatus/SystemStatus";
 import { useFeatureDetect } from "@lib/hooks/useFeatureDetect";
 import { v4 as uuid } from "uuid";
+import type { TemplateVersionOption } from "@lib/types/form-builder-types";
 
 export interface ResponsesProps {
   hasOverdue: boolean;
+  templateVersions: TemplateVersionOption[];
   responseDownloadLimit: number;
   overdueAfter: number;
   statusFilter: StatusFilter;
@@ -27,6 +29,7 @@ export interface ResponsesProps {
 
 export const Responses = ({
   hasOverdue,
+  templateVersions,
   responseDownloadLimit,
   overdueAfter,
   statusFilter,
@@ -97,6 +100,7 @@ export const Responses = ({
               <DownloadTable
                 statusFilter={statusFilter}
                 vaultSubmissions={state.submissions}
+                templateVersions={templateVersions}
                 formName={formName}
                 formId={formId}
                 nagwareResult={nagwareResult}
@@ -132,6 +136,7 @@ export const Responses = ({
             <DownloadTable
               statusFilter={statusFilter}
               vaultSubmissions={state.submissions}
+              templateVersions={templateVersions}
               formName={formName}
               formId={formId}
               nagwareResult={nagwareResult}

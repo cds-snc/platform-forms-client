@@ -46,7 +46,7 @@ export function TestWrapper({
 
   return (
     <BrowserResponsesAppProvider overrides={overrides}>
-      <ResponsesProvider locale={locale} formId={formId}>
+      <ResponsesProvider locale={locale} formId={formId} templateVersions={[]}>
         {mockApiClient && <ApiClientSetter mockClient={mockApiClient} />}
         {currentSubmissionId && <CurrentSubmissionIdSetter submissionId={currentSubmissionId} />}
         <ContextSetters

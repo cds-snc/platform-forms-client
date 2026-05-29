@@ -51,8 +51,12 @@ model Template {
   created_at            DateTime        @default(now()) @db.Timestamptz(6)
   updated_at            DateTime        @updatedAt @db.Timestamptz(6)
   name                  String          @default("")
-  jsonConfig            Json
   isPublished           Boolean         @default(false)
+  currentPublishedVersionId String?     @unique
+  currentDraftVersionId     String?     @unique
+  currentPublishedVersion   TemplateVersion? @relation("CurrentPublishedVersion", fields: [currentPublishedVersionId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  currentDraftVersion       TemplateVersion? @relation("CurrentDraftVersion", fields: [currentDraftVersionId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  versions              TemplateVersion[] @relation("TemplateVersions")
   formPurpose           String          @default("")
   publishReason         String          @default("")
   publishFormType       String          @default("")
@@ -70,6 +74,35 @@ model Template {
   invitations           Invitation[]
   notificationsInterval Int?            @default(1440)
   notificationsUsers    User[]          @relation("TemplateNotificationsUsers")
+}
+
+model TemplateVersion {
+  id                   String                @id @default(cuid())
+  templateId           String
+  versionNumber        Int
+  status               TemplateVersionStatus
+  jsonConfig           Json
+  createdAt            DateTime              @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime              @updatedAt @db.Timestamptz(6)
+  publishedAt          DateTime?             @db.Timestamptz(6)
+  supersededAt         DateTime?             @db.Timestamptz(6)
+  createdByUserId      String?
+  publishedByUserId    String?
+  publishReason        String                @default("")
+  publishFormType      String                @default("")
+  publishDesc          String                @default("")
+  template             Template              @relation("TemplateVersions", fields: [templateId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  currentPublishedFor  Template?             @relation("CurrentPublishedVersion")
+  currentDraftFor      Template?             @relation("CurrentDraftVersion")
+
+  @@index([templateId, status])
+  @@unique([templateId, versionNumber])
+}
+
+enum TemplateVersionStatus {
+  DRAFT
+  PUBLISHED
+  SUPERSEDED
 }
 
 model DeliveryOption {

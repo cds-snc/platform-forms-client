@@ -87,6 +87,13 @@
         "label": "Individual copies (Separate HTML files for each response)"
       }
     },
+    "revision": {
+      "label": "Form revision",
+      "hint": "Choose the form version used for question labels in this download.",
+      "option": "Version {{versionNumber}} ({{status}})",
+      "current": "current",
+      "previous": "previous"
+    },
     "previewCsvStructure": "Preview of the file structure for CSV responses:",
     "previewHtmlStructure": "Preview of the file structure for HTML responses:"
   },

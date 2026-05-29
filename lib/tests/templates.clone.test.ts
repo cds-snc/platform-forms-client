@@ -26,11 +26,36 @@ describe("cloneTemplate", () => {
     mockGetAbility(userID);
   });
 
+  beforeEach(() => {
+    (prismaMock.$transaction as MockedFunction<any>).mockImplementation((transaction: any) =>
+      transaction(prismaMock)
+    );
+    (prismaMock.templateVersion.create as MockedFunction<any>).mockResolvedValue({ id: "new1-version-1" });
+  });
+
   it("should create a copy of a template with user connected", async () => {
+    const jsonConfig = { foo: "bar" };
     const sourceTemplate = {
       id: "src1",
       name: "Original",
-      jsonConfig: { foo: "bar" },
+      currentDraftVersionId: null,
+      currentPublishedVersionId: "src1-version-1",
+      currentDraftVersion: null,
+      currentPublishedVersion: {
+        id: "src1-version-1",
+        versionNumber: 1,
+        status: "PUBLISHED",
+        jsonConfig,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        publishedAt: new Date(),
+        supersededAt: null,
+        createdByUserId: null,
+        publishedByUserId: null,
+        publishReason: "",
+        publishFormType: "",
+        publishDesc: "",
+      },
       isPublished: true,
       formPurpose: "",
       publishReason: "",
@@ -49,7 +74,24 @@ describe("cloneTemplate", () => {
     const createdTemplate = {
       id: "new1",
       name: "Copy of Original",
-      jsonConfig: sourceTemplate.jsonConfig,
+      currentPublishedVersionId: null,
+      currentDraftVersionId: "new1-version-1",
+      currentPublishedVersion: null,
+      currentDraftVersion: {
+        id: "new1-version-1",
+        versionNumber: 1,
+        status: "DRAFT",
+        jsonConfig,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        publishedAt: null,
+        supersededAt: null,
+        createdByUserId: userID,
+        publishedByUserId: null,
+        publishReason: "",
+        publishFormType: "",
+        publishDesc: "",
+      },
       isPublished: false,
       securityAttribute: sourceTemplate.securityAttribute,
       formPurpose: sourceTemplate.formPurpose,
@@ -61,13 +103,13 @@ describe("cloneTemplate", () => {
     };
 
     (prismaMock.template.create as MockedFunction<any>).mockResolvedValue(createdTemplate);
+    (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(createdTemplate);
 
     const result = await cloneTemplate("src1", false);
 
     expect(prismaMock.template.create).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
-          jsonConfig: sourceTemplate.jsonConfig,
           name: `Copy of ${sourceTemplate.name}`,
           users: { connect: [{ id: userID }] },
           // current user is in notificationsUsers in the source so they should be connected
@@ -77,7 +119,17 @@ describe("cloneTemplate", () => {
       })
     );
 
-    expect(result).toEqual(expect.objectContaining({ id: "new1", form: sourceTemplate.jsonConfig }));
+    expect(prismaMock.templateVersion.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          jsonConfig,
+          status: "DRAFT",
+          versionNumber: 1,
+        }),
+      })
+    );
+
+    expect(result).toEqual(expect.objectContaining({ id: "new1", form: jsonConfig }));
     expect(mockedLogEvent).toHaveBeenCalled();
   });
 });

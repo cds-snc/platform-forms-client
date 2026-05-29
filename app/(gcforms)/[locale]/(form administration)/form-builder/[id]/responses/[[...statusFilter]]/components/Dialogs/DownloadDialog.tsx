@@ -16,9 +16,11 @@ import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { getSubmissionsByFormat } from "../../actions";
 import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/form-builder-types";
 import { FormBuilderError } from "../../exceptions";
+import type { TemplateVersionOption } from "@lib/types/form-builder-types";
 
 export const DownloadDialog = ({
   checkedItems,
+  templateVersions,
   isDialogVisible,
   setIsDialogVisible,
   setDownloadError,
@@ -28,6 +30,7 @@ export const DownloadDialog = ({
   responseDownloadLimit,
 }: {
   checkedItems: Map<string, boolean>;
+  templateVersions: TemplateVersionOption[];
   isDialogVisible: boolean;
   setIsDialogVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setDownloadError: React.Dispatch<React.SetStateAction<boolean | string>>;
@@ -40,6 +43,9 @@ export const DownloadDialog = ({
   const { t, i18n } = useTranslation("form-builder-responses");
   const defaultSelectedFormat = DownloadFormat.HTML_ZIPPED;
   const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>(defaultSelectedFormat);
+  const [selectedTemplateVersionId, setSelectedTemplateVersionId] = React.useState<string>(
+    templateVersions[0]?.id ?? ""
+  );
   const [zipAllFiles, setZipAllFiles] = React.useState<boolean>(true);
   const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
 
@@ -51,6 +57,7 @@ export const DownloadDialog = ({
 
   const handleClose = () => {
     setSelectedFormat(defaultSelectedFormat);
+    setSelectedTemplateVersionId(templateVersions[0]?.id ?? "");
     setZipAllFiles(true);
     setIsDialogVisible(false);
     dialogRef.current?.close();
@@ -92,6 +99,17 @@ export const DownloadDialog = ({
     DownloadFormat.HTML_ZIPPED,
   ];
 
+  const getVersionLabel = (version: TemplateVersionOption) => {
+    const statusLabel = version.isCurrentPublished
+      ? t("downloadResponsesModals.downloadDialog.revision.current")
+      : t("downloadResponsesModals.downloadDialog.revision.previous");
+
+    return t("downloadResponsesModals.downloadDialog.revision.option", {
+      versionNumber: version.versionNumber,
+      status: statusLabel,
+    });
+  };
+
   const handleDownload = async () => {
     setIsDownloading(true);
     setDownloadError(false);
@@ -116,6 +134,7 @@ export const DownloadDialog = ({
           ids: ids,
           format: DownloadFormat.HTML_ZIPPED,
           lang: i18n.language as Language,
+          templateVersionId: selectedTemplateVersionId || undefined,
         })) as HtmlZippedResponse | ServerActionError;
 
         if ("error" in response) {
@@ -145,6 +164,7 @@ export const DownloadDialog = ({
           ids: ids,
           format: DownloadFormat.CSV,
           lang: i18n.language as Language,
+          templateVersionId: selectedTemplateVersionId || undefined,
         })) as CSVResponse | ServerActionError;
 
         if ("error" in response) {
@@ -182,6 +202,7 @@ export const DownloadDialog = ({
           ids: ids,
           format: DownloadFormat.JSON,
           lang: i18n.language as Language,
+          templateVersionId: selectedTemplateVersionId || undefined,
         })) as JSONResponse | ServerActionError;
 
         if ("error" in response) {
@@ -238,6 +259,33 @@ export const DownloadDialog = ({
               </p>
 
               <div className="mt-4 flex flex-col gap-6">
+                {templateVersions.length > 0 && (
+                  <div>
+                    <label htmlFor="template-version" className="mb-2 block font-semibold">
+                      {t("downloadResponsesModals.downloadDialog.revision.label")}
+                    </label>
+                    <p className="mb-2 text-sm">
+                      {t("downloadResponsesModals.downloadDialog.revision.hint")}
+                    </p>
+                    <div className="gcds-select-wrapper max-w-md">
+                      <select
+                        id="template-version"
+                        name="templateVersion"
+                        value={selectedTemplateVersionId}
+                        disabled={templateVersions.length === 1}
+                        onChange={(event) => setSelectedTemplateVersionId(event.target.value)}
+                        className="gcds-select"
+                      >
+                        {templateVersions.map((version) => (
+                          <option key={version.id} value={version.id}>
+                            {getVersionLabel(version)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
+
                 <div className="gc-input-radio">
                   <input
                     type="radio"

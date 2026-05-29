@@ -48,17 +48,15 @@ export const LeftNavigation = ({ id }: { id: string }) => {
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
       <ul className="m-0 list-none p-0">
-        {!isPublished && (
-          <li>
-            <LeftNav
-              testid="edit"
-              {...linkHelper({ route: "edit", id, segment, language })}
-              title={t("edit")}
-            >
-              <NavEditIcon />
-            </LeftNav>
-          </li>
-        )}
+        <li>
+          <LeftNav
+            testid="edit"
+            {...linkHelper({ route: "edit", id, segment, language })}
+            title={t("edit")}
+          >
+            <NavEditIcon />
+          </LeftNav>
+        </li>
         <li>
           <LeftNav
             testid="preview"

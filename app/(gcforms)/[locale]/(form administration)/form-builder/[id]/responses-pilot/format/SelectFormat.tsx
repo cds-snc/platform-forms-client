@@ -16,28 +16,53 @@ import {
   HtmlDirectory,
   hasFileInputElement,
 } from "../components/folder-preview/DirectoryPreview";
+import { getResponseTemplateForVersion } from "../actions";
 
 export const STORAGE_KEY_PREFIX = "responses-pilot-format-";
 
 export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => {
   const { t, router } = useResponsesApp();
-  const { setSelectedFormat, selectedFormat, retrieveResponses, processResponses, apiClient } =
-    useResponsesContext();
+  const {
+    setSelectedFormat,
+    selectedFormat,
+    retrieveResponses,
+    processResponses,
+    templateVersions,
+    selectedTemplateVersionId,
+    setSelectedTemplateVersionId,
+  } = useResponsesContext();
 
   const [showAttachments, setShowAttachments] = useState(false);
 
   // Check if the form has file input elements to determine if attachments folder should be shown in preview
   useEffect(() => {
     async function loadTemplateAndCheckForFileInputs() {
-      const template = apiClient && (await apiClient.getFormTemplate());
+      if (!selectedTemplateVersionId) {
+        setShowAttachments(false);
+        return;
+      }
+
+      const template = await getResponseTemplateForVersion(id, selectedTemplateVersionId);
       const showAttachments = template && hasFileInputElement({ elements: template.elements });
 
-      if (showAttachments) {
-        setShowAttachments(true);
-      }
+      setShowAttachments(Boolean(showAttachments));
     }
     loadTemplateAndCheckForFileInputs();
-  }, [apiClient]);
+  }, [id, selectedTemplateVersionId]);
+
+  const getVersionLabel = useCallback(
+    (version: (typeof templateVersions)[number]) => {
+      const statusLabel = version.isCurrentPublished
+        ? t("formatPage.revision.current")
+        : t("formatPage.revision.previous");
+
+      return t("formatPage.revision.option", {
+        versionNumber: version.versionNumber,
+        status: statusLabel,
+      });
+    },
+    [t]
+  );
 
   // Load saved format from localStorage on mount if available
   useEffect(() => {
@@ -68,6 +93,13 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
       localStorage.setItem(storageKey, value);
     },
     [setSelectedFormat, id]
+  );
+
+  const handleTemplateVersionChange = useCallback(
+    (evt: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedTemplateVersionId(evt.target.value);
+    },
+    [setSelectedTemplateVersionId]
   );
 
   return (
@@ -103,6 +135,31 @@ export const SelectFormat = ({ locale, id }: { locale: string; id: string }) => 
             checked={selectedFormat === "html"}
           />
         </div>
+
+        {templateVersions.length > 0 && (
+          <div className="mb-6">
+            <label htmlFor="template-version" className="mb-2 block font-semibold">
+              {t("formatPage.revision.label")}
+            </label>
+            <p className="mb-2 text-sm">{t("formatPage.revision.hint")}</p>
+            <div className="gcds-select-wrapper max-w-md">
+              <select
+                id="template-version"
+                name="templateVersion"
+                value={selectedTemplateVersionId}
+                disabled={templateVersions.length === 1}
+                onChange={handleTemplateVersionChange}
+                className="gcds-select"
+              >
+                {templateVersions.map((version) => (
+                  <option key={version.id} value={version.id}>
+                    {getVersionLabel(version)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="mb-12" data-testid="directory-preview">

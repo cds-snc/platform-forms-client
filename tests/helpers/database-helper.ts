@@ -33,22 +33,44 @@ export class DatabaseHelper {
     const fixtureContent = fs.readFileSync(fixturePath, "utf-8");
     const formConfig = JSON.parse(fixtureContent);
 
-    // Create the template
-    const template = await prisma.template.create({
-      data: {
-        name: formConfig.titleEn || "Test Form",
-        jsonConfig: formConfig as Prisma.JsonObject,
-        isPublished: published,
-        ...(published && {
-          formPurpose: "Testing purposes",
-          publishReason: "Initial",
-          publishFormType: "test",
-          publishDesc: "Test form created for automated testing",
-        }),
-        users: {
-          connect: { id: user.id },
+    const template = await prisma.$transaction(async (tx) => {
+      const createdTemplate = await tx.template.create({
+        data: {
+          name: formConfig.titleEn || "Test Form",
+          isPublished: published,
+          ...(published && {
+            formPurpose: "Testing purposes",
+            publishReason: "Initial",
+            publishFormType: "test",
+            publishDesc: "Test form created for automated testing",
+          }),
+          users: {
+            connect: { id: user.id },
+          },
         },
-      },
+      });
+
+      const version = await tx.templateVersion.create({
+        data: {
+          templateId: createdTemplate.id,
+          versionNumber: 1,
+          status: published ? "PUBLISHED" : "DRAFT",
+          jsonConfig: formConfig as Prisma.JsonObject,
+          ...(published && {
+            publishedAt: new Date(),
+            publishReason: "Initial",
+            publishFormType: "test",
+            publishDesc: "Test form created for automated testing",
+          }),
+        },
+      });
+
+      return tx.template.update({
+        where: { id: createdTemplate.id },
+        data: published
+          ? { currentPublishedVersionId: version.id }
+          : { currentDraftVersionId: version.id },
+      });
     });
 
     return template.id;

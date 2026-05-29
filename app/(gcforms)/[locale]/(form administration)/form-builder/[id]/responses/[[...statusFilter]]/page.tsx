@@ -8,6 +8,7 @@ import { ResponsesContainer } from "./components/ResponsesContainer";
 import { redirect } from "next/navigation";
 import { StatusFilter } from "./types";
 import { getOverdueTemplateIds } from "@lib/overdue";
+import { getTemplateVersionOptionsForTemplate } from "@lib/templates";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -126,10 +127,12 @@ export default async function Page(props: {
 
   const overdueTemplateIds = await getOverdueTemplateIds([id]);
   const hasOverdue = overdueTemplateIds.length > 0;
+  const templateVersions = await getTemplateVersionOptionsForTemplate(id);
 
   return (
     <ResponsesContainer
       hasOverdue={hasOverdue}
+      templateVersions={templateVersions}
       responseDownloadLimit={Number(await getAppSetting("responseDownloadLimit"))}
       overdueAfter={Number(await getAppSetting("nagwarePhaseEncouraged"))}
       statusFilter={statusFilter as StatusFilter}

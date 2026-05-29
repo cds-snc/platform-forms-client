@@ -78,7 +78,8 @@ describe("acceptInvitation", () => {
       created_at: new Date(),
       updated_at: new Date(),
       name: "Test Form",
-      jsonConfig: {},
+      currentPublishedVersionId: null,
+      currentDraftVersionId: "version-1",
       isPublished: false,
       securityAttribute: "Unclassified",
       formPurpose: "test",
@@ -91,27 +92,13 @@ describe("acceptInvitation", () => {
       ttl: null,
       closingDate: null,
       closedDetails: null,
-    });
+    } as never);
 
     vi.mocked(prisma.template.update).mockResolvedValue({
-      id: "form-1",
-      created_at: new Date(),
-      updated_at: new Date(),
-      name: "Test Form",
-      jsonConfig: {},
-      isPublished: false,
-      securityAttribute: "Unclassified",
-      formPurpose: "test",
-      publishReason: "",
-      publishFormType: "",
-      publishDesc: "",
-      saveAndResume: false,
-      notificationsInterval: null,
-      bearerToken: null,
-      ttl: null,
-      closingDate: null,
-      closedDetails: null,
-    });
+      currentDraftVersion: { jsonConfig: {} },
+      currentPublishedVersion: null,
+      users: [],
+    } as never);
 
     vi.mocked(prisma.invitation.delete).mockResolvedValue({
       id: "invitation-1",

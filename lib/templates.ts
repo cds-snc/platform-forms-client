@@ -26,6 +26,7 @@ import { NotificationsInterval } from "@gcforms/types";
 import { checkOne } from "@lib/cache/flags";
 import { checkForBetaComponentsAsync } from "./validation/betaCheck";
 import { invalidateTemplateEditLockUserCountCache } from "./editLocks";
+import type { TemplateVersionOption } from "@lib/types/form-builder-types";
 
 const checkFlag = async (flag: string) => {
   return (await Promise.all([checkOne(flag), authorization.canAccessBetaComponents(flag)])).reduce(
@@ -33,16 +34,40 @@ const checkFlag = async (flag: string) => {
   );
 };
 
-// ******************************************
-// Internal Module Functions
-// ******************************************
-const _parseTemplate = (template: {
+const TEMPLATE_VERSION_STATUS = {
+  DRAFT: "DRAFT",
+  PUBLISHED: "PUBLISHED",
+  SUPERSEDED: "SUPERSEDED",
+} as const;
+
+type TemplateVersionStatus = (typeof TEMPLATE_VERSION_STATUS)[keyof typeof TEMPLATE_VERSION_STATUS];
+
+type TemplateVersionSnapshot = {
+  id: string;
+  versionNumber: number;
+  status: TemplateVersionStatus;
+  jsonConfig: Prisma.JsonValue;
+  createdAt?: Date;
+  updatedAt?: Date;
+  publishedAt?: Date | null;
+  supersededAt?: Date | null;
+  createdByUserId?: string | null;
+  publishedByUserId?: string | null;
+  publishReason?: string;
+  publishFormType?: string;
+  publishDesc?: string;
+};
+
+type TemplateRecordForParsing = {
   id: string;
   created_at?: Date;
   updated_at?: Date;
   name: string;
-  jsonConfig: Prisma.JsonValue;
   isPublished: boolean;
+  currentPublishedVersionId?: string | null;
+  currentDraftVersionId?: string | null;
+  currentPublishedVersion?: TemplateVersionSnapshot | null;
+  currentDraftVersion?: TemplateVersionSnapshot | null;
   deliveryOption: {
     emailAddress: string;
     emailSubjectEn: string | null;
@@ -58,7 +83,85 @@ const _parseTemplate = (template: {
   saveAndResume: boolean;
   notificationsInterval?: number | null;
   ttl?: Date | null;
-}): FormRecord => {
+};
+
+type TemplateVersionPointers = Pick<
+  TemplateRecordForParsing,
+  "currentDraftVersion" | "currentPublishedVersion"
+>;
+
+const templateVersionSelect = {
+  id: true,
+  versionNumber: true,
+  status: true,
+  jsonConfig: true,
+  createdAt: true,
+  updatedAt: true,
+  publishedAt: true,
+  supersededAt: true,
+  createdByUserId: true,
+  publishedByUserId: true,
+  publishReason: true,
+  publishFormType: true,
+  publishDesc: true,
+} satisfies Prisma.TemplateVersionSelect;
+
+const templateRecordInclude = {
+  deliveryOption: true,
+  currentDraftVersion: {
+    select: templateVersionSelect,
+  },
+  currentPublishedVersion: {
+    select: templateVersionSelect,
+  },
+} satisfies Prisma.TemplateInclude;
+
+const parseJsonConfig = (raw: Prisma.JsonValue): FormProperties => {
+  if (typeof raw === "string") {
+    return JSON.parse(raw) as FormProperties;
+  }
+
+  return raw as FormProperties;
+};
+
+const getBuilderVersion = (template: TemplateVersionPointers) => {
+  return template.currentDraftVersion ?? template.currentPublishedVersion ?? null;
+};
+
+const getPublishedVersion = (template: TemplateVersionPointers) => {
+  return template.currentPublishedVersion ?? null;
+};
+
+const getTemplateVersionForList = (template: TemplateVersionPointers) => {
+  return template.currentDraftVersion ?? template.currentPublishedVersion ?? null;
+};
+
+const getNotificationFormProperties = (template: TemplateVersionPointers): FormProperties => {
+  const version = getTemplateVersionForList(template);
+
+  if (!version) {
+    throw new Error("Template does not have a resolvable template version for notification");
+  }
+
+  return parseJsonConfig(version.jsonConfig);
+};
+
+// ******************************************
+// Internal Module Functions
+// ******************************************
+const _parseTemplate = (
+  template: TemplateRecordForParsing,
+  options?: {
+    version?: TemplateVersionSnapshot | null;
+    isPublished?: boolean;
+  }
+): FormRecord => {
+  const version = options?.version ?? getTemplateVersionForList(template);
+
+  if (!version) {
+    throw new Error(`Template ${template.id} does not have a resolvable template version`);
+  }
+
   return {
     id: template.id,
     ...(template.created_at && {
@@ -68,8 +171,15 @@ const _parseTemplate = (template: {
       updatedAt: template.updated_at.toString(),
     }),
     name: template.name,
-    form: template.jsonConfig as FormProperties,
-    isPublished: template.isPublished,
+    form: parseJsonConfig(version.jsonConfig),
+    isPublished: options?.isPublished ?? template.isPublished,
+    templateVersionId: version.id,
+    templateVersionNumber: version.versionNumber,
+    templateVersionStatus: version.status,
+    currentPublishedVersionId: template.currentPublishedVersionId,
+    currentDraftVersionId: template.currentDraftVersionId,
+    hasDraftVersion: Boolean(template.currentDraftVersionId),
+    hasPublishedVersion: Boolean(template.currentPublishedVersionId),
     ...(template.deliveryOption && {
       deliveryOption: {
         emailAddress: template.deliveryOption.emailAddress,
@@ -187,49 +297,60 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
     throw new InvalidFormConfigError();
   }
 
-  const createdTemplate = await prisma.template
-    .create({
-      data: {
-        jsonConfig: command.formConfig as Prisma.JsonObject,
-        ...(command.name && {
-          name: command.name,
-        }),
-        ...(command.deliveryOption && {
-          deliveryOption: {
-            create: {
-              emailAddress: command.deliveryOption.emailAddress,
-              emailSubjectEn: command.deliveryOption.emailSubjectEn,
-              emailSubjectFr: command.deliveryOption.emailSubjectFr,
+  const createdTemplate = await prisma
+    .$transaction(async (tx) => {
+      const template = await tx.template.create({
+        data: {
+          ...(command.name && {
+            name: command.name,
+          }),
+          ...(command.deliveryOption && {
+            deliveryOption: {
+              create: {
+                emailAddress: command.deliveryOption.emailAddress,
+                emailSubjectEn: command.deliveryOption.emailSubjectEn,
+                emailSubjectFr: command.deliveryOption.emailSubjectFr,
+              },
             },
+          }),
+          ...(command.securityAttribute && {
+            securityAttribute: command.securityAttribute as string,
+          }),
+          users: {
+            connect: { id: command.userID },
           },
-        }),
-        ...(command.securityAttribute && {
-          securityAttribute: command.securityAttribute as string,
-        }),
-        users: {
-          connect: { id: command.userID },
+          ...(command.formPurpose && { formPurpose: command.formPurpose }),
+          ...(command.notificationsInterval !== undefined && {
+            notificationsInterval: command.notificationsInterval,
+          }),
         },
-        ...(command.formPurpose && { formPurpose: command.formPurpose }),
-        ...(command.notificationsInterval !== undefined && {
-          notificationsInterval: command.notificationsInterval,
-        }),
-      },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-        saveAndResume: true,
-        notificationsInterval: true,
-      },
+        select: {
+          id: true,
+        },
+      });
+
+      const draftVersion = await tx.templateVersion.create({
+        data: {
+          templateId: template.id,
+          versionNumber: 1,
+          status: TEMPLATE_VERSION_STATUS.DRAFT,
+          jsonConfig: command.formConfig as Prisma.JsonObject,
+          createdByUserId: user.id,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      return tx.template.update({
+        where: {
+          id: template.id,
+        },
+        data: {
+          currentDraftVersionId: draftVersion.id,
+        },
+        include: templateRecordInclude,
+      });
     })
     .catch((e) => prismaErrors(e, null));
 
@@ -237,7 +358,10 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
 
   logEvent(user.id, { type: "Form", id: createdTemplate?.id }, "CreateForm");
 
-  return _parseTemplate(createdTemplate);
+  return _parseTemplate(createdTemplate, {
+    version: createdTemplate.currentDraftVersion,
+    isPublished: false,
+  });
 }
 
 /**
@@ -266,22 +390,7 @@ export async function getAllTemplates(options?: {
         where: {
           ...(requestedWhere && requestedWhere),
         },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          securityAttribute: true,
-          formPurpose: true,
-          publishReason: true,
-          publishFormType: true,
-          publishDesc: true,
-          saveAndResume: true,
-          notificationsInterval: true,
-        },
+        include: templateRecordInclude,
         ...(sortByDateUpdated && {
           orderBy: {
             updated_at: sortByDateUpdated,
@@ -327,23 +436,7 @@ export async function getAllTemplatesForUser(
             },
           },
         },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          ttl: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          securityAttribute: true,
-          formPurpose: true,
-          publishReason: true,
-          publishFormType: true,
-          publishDesc: true,
-          saveAndResume: true,
-          notificationsInterval: true,
-        },
+        include: templateRecordInclude,
         ...(sortByDateUpdated && {
           orderBy: {
             updated_at: sortByDateUpdated,
@@ -386,32 +479,17 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
         where: {
           id: formID,
         },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          securityAttribute: true,
-          formPurpose: true,
-          publishReason: true,
-          publishFormType: true,
-          publishDesc: true,
-          closingDate: true,
-          closedDetails: true,
-          saveAndResume: true,
-          ttl: true,
-          notificationsInterval: true,
-        },
+        include: templateRecordInclude,
       })
       .catch((e) => prismaErrors(e, null));
 
     // Short circuit the public record filtering if no form record is found or the form is marked as deleted (ttl != null)
-    if (!template || template.ttl) return null;
+    if (!template || template.ttl || !template.currentPublishedVersion) return null;
 
-    const parsedTemplate = _parseTemplate(template);
+    const parsedTemplate = _parseTemplate(template, {
+      version: getPublishedVersion(template),
+      isPublished: true,
+    });
     const publicFormRecord = onlyIncludePublicProperties(parsedTemplate);
 
     if (formCache.cacheAvailable) formCache.set(formID, publicFormRecord);
@@ -431,6 +509,8 @@ export async function getTemplatePublishedStatus(formID: string): Promise<boolea
       },
       select: {
         isPublished: true,
+        currentDraftVersionId: true,
+        currentPublishedVersionId: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -438,6 +518,35 @@ export async function getTemplatePublishedStatus(formID: string): Promise<boolea
   if (!template) return null;
 
   return template.isPublished;
+}
+
+export async function getTemplateVersionState(formID: string): Promise<{
+  isPublished: boolean;
+  hasDraftVersion: boolean;
+  currentPublishedVersionId?: string | null;
+  currentDraftVersionId?: string | null;
+} | null> {
+  const template = await prisma.template
+    .findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        isPublished: true,
+        currentPublishedVersionId: true,
+        currentDraftVersionId: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!template) return null;
+
+  return {
+    isPublished: template.isPublished,
+    hasDraftVersion: Boolean(template.currentDraftVersionId),
+    currentPublishedVersionId: template.currentPublishedVersionId,
+    currentDraftVersionId: template.currentDraftVersionId,
+  };
 }
 
 /**
@@ -466,9 +575,7 @@ export async function getFullTemplateByID(
           id: formID,
           ttl: allowDeleted ? { not: null } : null,
         },
-        include: {
-          deliveryOption: true,
-        },
+        include: templateRecordInclude,
       })
       .catch((e) => prismaErrors(e, null));
 
@@ -476,7 +583,126 @@ export async function getFullTemplateByID(
 
     logEvent(user.id, { type: "Form", id: formID }, "ReadForm");
 
-    return _parseTemplate(template);
+    const version = getBuilderVersion(template);
+
+    return _parseTemplate(template, {
+      version,
+      isPublished: version?.status === TEMPLATE_VERSION_STATUS.PUBLISHED,
+    });
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function getTemplateVersionOptionsForTemplate(
+  formID: string
+): Promise<TemplateVersionOption[]> {
+  const { user } = await authorization.canViewForm(formID).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptedToReadFormObject
+    );
+    throw e;
+  });
+
+  const template = await prisma.template
+    .findUnique({
+      where: {
+        id: formID,
+        ttl: null,
+      },
+      select: {
+        currentPublishedVersionId: true,
+        versions: {
+          where: {
+            status: {
+              in: [TEMPLATE_VERSION_STATUS.PUBLISHED, TEMPLATE_VERSION_STATUS.SUPERSEDED],
+            },
+          },
+          select: {
+            id: true,
+            versionNumber: true,
+            status: true,
+            createdAt: true,
+            publishedAt: true,
+          },
+          orderBy: {
+            versionNumber: "desc",
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!template) return [];
+
+  logEvent(user.id, { type: "Form", id: formID }, "ReadForm");
+
+  return template.versions.map((version) => ({
+    id: version.id,
+    versionNumber: version.versionNumber,
+    status: version.status,
+    createdAt: version.createdAt.toISOString(),
+    publishedAt: version.publishedAt?.toISOString() ?? null,
+    isCurrentPublished: template.currentPublishedVersionId === version.id,
+  }));
+}
+
+export async function getTemplateForResponseDownload(
+  formID: string,
+  templateVersionId?: string
+): Promise<FormRecord | null> {
+  try {
+    const { user } = await authorization.canViewForm(formID).catch((e) => {
+      logEvent(
+        e.user.id,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptedToReadFormObject
+      );
+      throw e;
+    });
+
+    const template = await prisma.template
+      .findUnique({
+        where: {
+          id: formID,
+          ttl: null,
+        },
+        include: templateRecordInclude,
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (!template) return null;
+
+    logEvent(user.id, { type: "Form", id: formID }, "ReadForm");
+
+    const requestedVersion = templateVersionId
+      ? await prisma.templateVersion
+          .findFirst({
+            where: {
+              id: templateVersionId,
+              templateId: formID,
+              status: {
+                in: [TEMPLATE_VERSION_STATUS.PUBLISHED, TEMPLATE_VERSION_STATUS.SUPERSEDED],
+              },
+            },
+            select: templateVersionSelect,
+          })
+          .catch((e) => prismaErrors(e, null))
+      : null;
+
+    if (templateVersionId && !requestedVersion) return null;
+
+    const version =
+      requestedVersion ?? getPublishedVersion(template) ?? getBuilderVersion(template);
+
+    return _parseTemplate(template, {
+      version,
+      isPublished: Boolean(getPublishedVersion(template)),
+    });
   } catch (e) {
     return null;
   }
@@ -501,6 +727,12 @@ export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
         id: formID,
       },
       include: {
+        currentDraftVersion: {
+          select: templateVersionSelect,
+        },
+        currentPublishedVersion: {
+          select: templateVersionSelect,
+        },
         deliveryOption: true,
         users: {
           select: {
@@ -516,8 +748,12 @@ export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
   if (!templateWithAssociatedUsers) return null;
 
   logEvent(user.id, { type: "Form", id: formID }, "ReadForm", AuditLogDetails.RetrieveFormUsers);
+  const version = getBuilderVersion(templateWithAssociatedUsers);
   return {
-    formRecord: _parseTemplate(templateWithAssociatedUsers),
+    formRecord: _parseTemplate(templateWithAssociatedUsers, {
+      version,
+      isPublished: version?.status === TEMPLATE_VERSION_STATUS.PUBLISHED,
+    }),
     users: templateWithAssociatedUsers.users,
   };
 }
@@ -573,45 +809,60 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
       name: true,
       deliveryOption: true,
       securityAttribute: true,
+      currentDraftVersionId: true,
     },
   });
 
-  const updatedTemplate = await prisma.template
-    .update({
-      where: {
-        id: command.formID,
-        isPublished: false,
-      },
-      data: {
-        jsonConfig: command.formConfig as Prisma.JsonObject,
-        name: command.name,
-        ...(command.deliveryOption && {
-          deliveryOption: {
-            upsert: {
-              create: {
-                emailAddress: command.deliveryOption.emailAddress,
-                emailSubjectEn: command.deliveryOption.emailSubjectEn,
-                emailSubjectFr: command.deliveryOption.emailSubjectFr,
-              },
-              update: {
-                emailAddress: command.deliveryOption.emailAddress,
-                emailSubjectEn: command.deliveryOption.emailSubjectEn,
-                emailSubjectFr: command.deliveryOption.emailSubjectFr,
+  if (!currentTemplate?.currentDraftVersionId) {
+    throw new TemplateAlreadyPublishedError(
+      "Create a new draft version before editing a published template."
+    );
+  }
+  const currentDraftVersionId = currentTemplate.currentDraftVersionId;
+
+  const updatedTemplate = await prisma
+    .$transaction(async (tx) => {
+      await tx.templateVersion.update({
+        where: {
+          id: currentDraftVersionId,
+        },
+        data: {
+          jsonConfig: command.formConfig as Prisma.JsonObject,
+        },
+      });
+
+      return tx.template.update({
+        where: {
+          id: command.formID,
+        },
+        data: {
+          name: command.name,
+          ...(command.deliveryOption && {
+            deliveryOption: {
+              upsert: {
+                create: {
+                  emailAddress: command.deliveryOption.emailAddress,
+                  emailSubjectEn: command.deliveryOption.emailSubjectEn,
+                  emailSubjectFr: command.deliveryOption.emailSubjectFr,
+                },
+                update: {
+                  emailAddress: command.deliveryOption.emailAddress,
+                  emailSubjectEn: command.deliveryOption.emailSubjectEn,
+                  emailSubjectFr: command.deliveryOption.emailSubjectFr,
+                },
               },
             },
-          },
-        }),
-        ...(command.securityAttribute && {
-          securityAttribute: command.securityAttribute as string,
-        }),
-        ...(command.formPurpose && { formPurpose: command.formPurpose }),
-        ...(command.notificationsInterval !== undefined && {
-          notificationsInterval: command.notificationsInterval as NotificationsInterval,
-        }),
-      },
-      include: {
-        deliveryOption: true,
-      },
+          }),
+          ...(command.securityAttribute && {
+            securityAttribute: command.securityAttribute as string,
+          }),
+          ...(command.formPurpose && { formPurpose: command.formPurpose }),
+          ...(command.notificationsInterval !== undefined && {
+            notificationsInterval: command.notificationsInterval as NotificationsInterval,
+          }),
+        },
+        include: templateRecordInclude,
+      });
     })
     .catch((e) => prismaErrors(e, null));
 
@@ -658,7 +909,10 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     AuditLogDetails.FormContentUpdated
   );
 
-  return _parseTemplate(updatedTemplate);
+  return _parseTemplate(updatedTemplate, {
+    version: updatedTemplate.currentDraftVersion,
+    isPublished: false,
+  });
 }
 
 /**
@@ -684,8 +938,18 @@ export async function updateIsPublishedForTemplate(
     throw e;
   });
 
-  // Delete all form responses created during draft mode
-  if (newPublishStatus && process.env.APP_ENV !== "test") {
+  if (!newPublishStatus) {
+    throw new Error("Unpublishing template versions is not supported.");
+  }
+
+  const templateVersionState = await getTemplateVersionState(formID);
+
+  // Delete all form responses created during first-time draft mode. Republish keeps live responses.
+  if (
+    newPublishStatus &&
+    process.env.APP_ENV !== "test" &&
+    templateVersionState?.isPublished === false
+  ) {
     try {
       await deleteDraftFormResponses(formID);
     } catch (e) {
@@ -698,23 +962,63 @@ export async function updateIsPublishedForTemplate(
     }
   }
 
-  const updatedTemplate = await prisma.template
-    .update({
-      where: {
-        id: formID,
-        isPublished: {
-          not: newPublishStatus, // Only update if the current publish status is different from the new one,
+  const updatedTemplate = await prisma
+    .$transaction(async (tx) => {
+      const template = await tx.template.findUnique({
+        where: {
+          id: formID,
         },
-      },
-      data: {
-        isPublished: newPublishStatus,
-        publishReason: publishReason,
-        publishFormType: publishFormType,
-        publishDesc: publishDescription,
-      },
-      include: {
-        deliveryOption: true,
-      },
+        include: templateRecordInclude,
+      });
+
+      if (!template) return null;
+
+      if (!template.currentDraftVersion) {
+        return template.isPublished ? template : null;
+      }
+
+      const now = new Date();
+
+      if (template.currentPublishedVersionId) {
+        await tx.templateVersion.update({
+          where: {
+            id: template.currentPublishedVersionId,
+          },
+          data: {
+            status: TEMPLATE_VERSION_STATUS.SUPERSEDED,
+            supersededAt: now,
+          },
+        });
+      }
+
+      await tx.templateVersion.update({
+        where: {
+          id: template.currentDraftVersion.id,
+        },
+        data: {
+          status: TEMPLATE_VERSION_STATUS.PUBLISHED,
+          publishedAt: now,
+          publishedByUserId: user.id,
+          publishReason,
+          publishFormType,
+          publishDesc: publishDescription,
+        },
+      });
+
+      return tx.template.update({
+        where: {
+          id: formID,
+        },
+        data: {
+          isPublished: true,
+          currentPublishedVersionId: template.currentDraftVersion.id,
+          currentDraftVersionId: null,
+          publishReason,
+          publishFormType,
+          publishDesc: publishDescription,
+        },
+        include: templateRecordInclude,
+      });
     })
     .catch((e) => prismaErrors(e, null));
 
@@ -724,7 +1028,85 @@ export async function updateIsPublishedForTemplate(
 
   logEvent(user.id, { type: "Form", id: formID }, "PublishForm");
 
-  return _parseTemplate(updatedTemplate);
+  return _parseTemplate(updatedTemplate, {
+    version: updatedTemplate.currentPublishedVersion,
+    isPublished: true,
+  });
+}
+
+export async function createDraftVersionForTemplate(formID: string): Promise<FormRecord | null> {
+  const { user } = await authorization.canEditForm(formID).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateForm
+    );
+    throw e;
+  });
+
+  const updatedTemplate = await prisma
+    .$transaction(async (tx) => {
+      const template = await tx.template.findUnique({
+        where: {
+          id: formID,
+        },
+        include: {
+          ...templateRecordInclude,
+          versions: {
+            select: {
+              versionNumber: true,
+            },
+            orderBy: {
+              versionNumber: "desc",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!template?.currentPublishedVersion) return null;
+
+      if (template.currentDraftVersion) {
+        return template;
+      }
+
+      const nextVersionNumber = (template.versions[0]?.versionNumber ?? 0) + 1;
+      const draftVersion = await tx.templateVersion.create({
+        data: {
+          templateId: formID,
+          versionNumber: nextVersionNumber,
+          status: TEMPLATE_VERSION_STATUS.DRAFT,
+          jsonConfig: template.currentPublishedVersion.jsonConfig as Prisma.JsonObject,
+          createdByUserId: user.id,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      return tx.template.update({
+        where: {
+          id: formID,
+        },
+        data: {
+          currentDraftVersionId: draftVersion.id,
+        },
+        include: templateRecordInclude,
+      });
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!updatedTemplate) return null;
+
+  if (formCache.cacheAvailable) formCache.invalidate(formID);
+
+  logEvent(user.id, { type: "Form", id: formID }, "UpdateForm", AuditLogDetails.FormContentUpdated);
+
+  return _parseTemplate(updatedTemplate, {
+    version: updatedTemplate.currentDraftVersion,
+    isPublished: false,
+  });
 }
 
 class TemplateNotFoundError extends Error {}
@@ -786,8 +1168,13 @@ export async function removeAssignedUserFromTemplate(
       where: {
         id: formID,
       },
-      select: {
-        jsonConfig: true,
+      include: {
+        currentDraftVersion: {
+          select: templateVersionSelect,
+        },
+        currentPublishedVersion: {
+          select: templateVersionSelect,
+        },
         users: {
           select: {
             id: true,
@@ -819,7 +1206,7 @@ export async function removeAssignedUserFromTemplate(
 
   notifyOwnersOwnerRemoved(
     userToRemove,
-    updatedTemplate.jsonConfig as FormProperties,
+    getNotificationFormProperties(updatedTemplate),
     updatedTemplate.users
   );
 }
@@ -874,8 +1261,13 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
       where: {
         id: formID,
       },
-      select: {
-        jsonConfig: true,
+      include: {
+        currentDraftVersion: {
+          select: templateVersionSelect,
+        },
+        currentPublishedVersion: {
+          select: templateVersionSelect,
+        },
         users: {
           select: {
             id: true,
@@ -908,7 +1300,7 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
 
   notifyOwnersOwnerAdded(
     userToAdd,
-    updatedTemplate.jsonConfig as FormProperties,
+    getNotificationFormProperties(updatedTemplate),
     updatedTemplate.users
   );
 }
@@ -1050,22 +1442,9 @@ export async function updateAssignedUsersForTemplate(
           disconnect: toRemove,
         },
       },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
+      include: {
+        ...templateRecordInclude,
         users: true,
-        saveAndResume: true,
-        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1091,7 +1470,7 @@ export async function updateAssignedUsersForTemplate(
   usersToAdd.forEach((user) => {
     notifyOwnersOwnerAdded(
       user,
-      updatedTemplate.jsonConfig as FormProperties,
+      getNotificationFormProperties(updatedTemplate),
       updatedTemplate.users
     );
   });
@@ -1101,7 +1480,7 @@ export async function updateAssignedUsersForTemplate(
   usersToRemove.forEach((user) => {
     notifyOwnersOwnerRemoved(
       user,
-      updatedTemplate.jsonConfig as FormProperties,
+      getNotificationFormProperties(updatedTemplate),
       updatedTemplate.users
     );
   });
@@ -1124,7 +1503,12 @@ export async function updateAssignedUsersForTemplate(
       { userList: usersToRemove.map((user) => user.email ?? user.id).toString() }
     );
 
-  return _parseTemplate(updatedTemplate);
+  const version = getBuilderVersion(updatedTemplate);
+
+  return _parseTemplate(updatedTemplate, {
+    version,
+    isPublished: version?.status === TEMPLATE_VERSION_STATUS.PUBLISHED,
+  });
 }
 
 export async function updateFormPurpose(
@@ -1150,22 +1534,7 @@ export async function updateFormPurpose(
       data: {
         formPurpose: formPurpose,
       },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishDesc: true,
-        publishFormType: true,
-        publishReason: true,
-        saveAndResume: true,
-        notificationsInterval: true,
-      },
+      include: templateRecordInclude,
     })
     .catch((e) => {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -1186,7 +1555,12 @@ export async function updateFormPurpose(
     { formPurpose: formPurpose }
   );
 
-  return _parseTemplate(updatedTemplate);
+  const version = getBuilderVersion(updatedTemplate);
+
+  return _parseTemplate(updatedTemplate, {
+    version,
+    isPublished: version?.status === TEMPLATE_VERSION_STATUS.PUBLISHED,
+  });
 }
 
 export async function updateFormSaveAndResume(
@@ -1211,22 +1585,7 @@ export async function updateFormSaveAndResume(
       data: {
         saveAndResume: saveAndResume ?? false,
       },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishDesc: true,
-        publishFormType: true,
-        publishReason: true,
-        saveAndResume: true,
-        notificationsInterval: true,
-      },
+      include: templateRecordInclude,
     })
     .catch((e) => {
       return prismaErrors(e, null);
@@ -1242,7 +1601,12 @@ export async function updateFormSaveAndResume(
     { saveAndResume: saveAndResume ? "On" : "Off" }
   );
 
-  return _parseTemplate(updatedTemplate);
+  const version = getBuilderVersion(updatedTemplate);
+
+  return _parseTemplate(updatedTemplate, {
+    version,
+    isPublished: version?.status === TEMPLATE_VERSION_STATUS.PUBLISHED,
+  });
 }
 
 /**
@@ -1333,6 +1697,12 @@ export async function cloneTemplate(
     .findUnique({
       where: { id: formID, ttl: allowDeleted ? { not: null } : null },
       include: {
+        currentDraftVersion: {
+          select: templateVersionSelect,
+        },
+        currentPublishedVersion: {
+          select: templateVersionSelect,
+        },
         deliveryOption: true,
         users: { select: { id: true } },
         notificationsUsers: { select: { id: true } },
@@ -1346,10 +1716,15 @@ export async function cloneTemplate(
   }
 
   const name = locale === "fr" ? `Copie de ${template.name}` : `Copy of ${template.name}`;
+  const sourceVersion = getBuilderVersion(template);
+
+  if (!sourceVersion) {
+    logMessage.warn(`[templates][cloneTemplate] Template ${formID} has no version to clone`);
+    return null;
+  }
 
   // Build the create payload copying allowed fields. Do NOT copy apiServiceAccount or bearerToken.
   const createData: Prisma.TemplateCreateInput = {
-    jsonConfig: template.jsonConfig as Prisma.JsonObject,
     name,
     isPublished: false,
     formPurpose: template.formPurpose,
@@ -1375,25 +1750,37 @@ export async function cloneTemplate(
     // NOTE: Do NOT copy deliveryOption when cloning - just default to the vault.
   };
 
-  const createdTemplate = await prisma.template
-    .create({
-      data: createData,
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-        saveAndResume: true,
-        notificationsInterval: true,
-      },
+  const createdTemplate = await prisma
+    .$transaction(async (tx) => {
+      const clonedTemplate = await tx.template.create({
+        data: createData,
+        select: {
+          id: true,
+        },
+      });
+
+      const draftVersion = await tx.templateVersion.create({
+        data: {
+          templateId: clonedTemplate.id,
+          versionNumber: 1,
+          status: TEMPLATE_VERSION_STATUS.DRAFT,
+          jsonConfig: sourceVersion.jsonConfig as Prisma.JsonObject,
+          createdByUserId: user.id,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      return tx.template.update({
+        where: {
+          id: clonedTemplate.id,
+        },
+        data: {
+          currentDraftVersionId: draftVersion.id,
+        },
+        include: templateRecordInclude,
+      });
     })
     .catch((e) => prismaErrors(e, null));
 
@@ -1403,7 +1790,10 @@ export async function cloneTemplate(
     newFormID: createdTemplate.id,
   });
 
-  return _parseTemplate(createdTemplate);
+  return _parseTemplate(createdTemplate, {
+    version: createdTemplate.currentDraftVersion,
+    isPublished: false,
+  });
 }
 
 /**
@@ -1453,22 +1843,7 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
       data: {
         ttl: dateIn30Days,
       },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-        saveAndResume: true,
-        notificationsInterval: true,
-      },
+      include: templateRecordInclude,
     })
     .catch((e) => prismaErrors(e, null));
 
@@ -1479,7 +1854,12 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
-  return _parseTemplate(templateMarkedAsDeleted);
+  const deletedVersion = getBuilderVersion(templateMarkedAsDeleted);
+
+  return _parseTemplate(templateMarkedAsDeleted, {
+    version: deletedVersion,
+    isPublished: deletedVersion?.status === TEMPLATE_VERSION_STATUS.PUBLISHED,
+  });
 }
 
 /**
@@ -1504,23 +1884,7 @@ export async function restoreTemplate(formID: string): Promise<FormRecord | null
       id: formID,
       ttl: { not: null },
     },
-    select: {
-      id: true,
-      created_at: true,
-      updated_at: true,
-      name: true,
-      jsonConfig: true,
-      isPublished: true,
-      deliveryOption: true,
-      securityAttribute: true,
-      formPurpose: true,
-      publishReason: true,
-      publishFormType: true,
-      publishDesc: true,
-      saveAndResume: true,
-      notificationsInterval: true,
-      ttl: true,
-    },
+    include: templateRecordInclude,
   });
 
   if (!template) throw new TemplateNotFoundError();
@@ -1534,22 +1898,7 @@ export async function restoreTemplate(formID: string): Promise<FormRecord | null
       data: {
         ttl: null,
       },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-        saveAndResume: true,
-        notificationsInterval: true,
-      },
+      include: templateRecordInclude,
     })
     .catch((e) => prismaErrors(e, null));
 
@@ -1560,7 +1909,12 @@ export async function restoreTemplate(formID: string): Promise<FormRecord | null
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
-  return _parseTemplate(templateMarkedToUnarchive);
+  const restoredVersion = getBuilderVersion(templateMarkedToUnarchive);
+
+  return _parseTemplate(templateMarkedToUnarchive, {
+    version: restoredVersion,
+    isPublished: restoredVersion?.status === TEMPLATE_VERSION_STATUS.PUBLISHED,
+  });
 }
 
 // Remove and replace this utility with new authorization object in code
@@ -1584,6 +1938,8 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
     closedDetails: template.closedDetails,
     form: template.form,
     isPublished: template.isPublished,
+    templateVersionId: template.templateVersionId,
+    templateVersionNumber: template.templateVersionNumber,
     securityAttribute: template.securityAttribute,
     saveAndResume: template.saveAndResume,
   };
@@ -1676,22 +2032,7 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
         isPublished: false,
       },
       data: { securityAttribute },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-        saveAndResume: true,
-        notificationsInterval: true,
-      },
+      include: templateRecordInclude,
     })
     .catch((e) => prismaErrors(e, null));
 
@@ -1707,7 +2048,12 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
     { securityAttribute: securityAttribute ?? "" }
   );
 
-  return _parseTemplate(updatedTemplate);
+  const version = getBuilderVersion(updatedTemplate);
+
+  return _parseTemplate(updatedTemplate, {
+    version,
+    isPublished: version?.status === TEMPLATE_VERSION_STATUS.PUBLISHED,
+  });
 };
 
 export const checkIfClosed = async (formId: string) => {
@@ -1771,7 +2117,7 @@ export const getFormJSONConfig = async (formId: string) => {
   const result = await prisma.template
     .findUnique({
       where: { id: formId },
-      select: { jsonConfig: true },
+      include: templateRecordInclude,
     })
     .catch((e) => prismaErrors(e, null));
 
@@ -1779,17 +2125,13 @@ export const getFormJSONConfig = async (formId: string) => {
     throw new Error(`Template not found when getting jsonConfig with formId ${formId}`);
   }
 
-  let jsonConfig: FormProperties;
-  const raw = result.jsonConfig;
+  const version = getBuilderVersion(result);
 
-  if (typeof raw === "string") {
-    // Only parse if (unexpectedly) stored as a string
-    jsonConfig = JSON.parse(raw) as FormProperties;
-  } else {
-    jsonConfig = raw as FormProperties;
+  if (!version) {
+    throw new Error(`Template version not found when getting jsonConfig with formId ${formId}`);
   }
 
-  return jsonConfig;
+  return parseJsonConfig(version.jsonConfig);
 };
 
 /**
@@ -1831,28 +2173,39 @@ export const updateFormJsonConfig = async (formId: string, jsonConfig: FormPrope
     throw new InvalidFormConfigError();
   }
 
-  const updatedTemplate = await prisma.template
-    .update({
-      where: {
-        id: formId,
-      },
-      data: { jsonConfig: jsonConfig as Prisma.JsonObject },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-        saveAndResume: true,
-        notificationsInterval: true,
-      },
+  const currentTemplate = await prisma.template.findUnique({
+    where: {
+      id: formId,
+    },
+    select: {
+      currentDraftVersionId: true,
+    },
+  });
+
+  if (!currentTemplate?.currentDraftVersionId) {
+    throw new TemplateAlreadyPublishedError(
+      "Create a new draft version before updating form jsonConfig."
+    );
+  }
+  const currentDraftVersionId = currentTemplate.currentDraftVersionId;
+
+  const updatedTemplate = await prisma
+    .$transaction(async (tx) => {
+      await tx.templateVersion.update({
+        where: {
+          id: currentDraftVersionId,
+        },
+        data: {
+          jsonConfig: jsonConfig as Prisma.JsonObject,
+        },
+      });
+
+      return tx.template.findUnique({
+        where: {
+          id: formId,
+        },
+        include: templateRecordInclude,
+      });
     })
     .catch((e) => prismaErrors(e, null));
 
@@ -1862,5 +2215,8 @@ export const updateFormJsonConfig = async (formId: string, jsonConfig: FormPrope
 
   logEvent(user.id, { type: "Form", id: formId }, "UpdateFormJsonConfig");
 
-  return _parseTemplate(updatedTemplate);
+  return _parseTemplate(updatedTemplate, {
+    version: updatedTemplate.currentDraftVersion,
+    isPublished: false,
+  });
 };

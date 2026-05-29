@@ -1,4 +1,4 @@
-import { prisma } from "@gcforms/database";
+import { prisma, Prisma } from "@gcforms/database";
 import { FormProperties } from "@lib/types";
 import {
   InvitationIsExpiredError,
@@ -96,7 +96,13 @@ export const acceptInvitation = async (invitationId: string) => {
     { userEmail: user.email }
   );
 
-  notifyOwnersOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
+  const version = updatedTemplate.currentDraftVersion ?? updatedTemplate.currentPublishedVersion;
+
+  if (!version) {
+    throw new UnableToAssignUserToTemplateError();
+  }
+
+  notifyOwnersOwnerAdded(user, parseJsonConfig(version.jsonConfig), updatedTemplate.users);
 
   _deleteInvitation(invitationId).catch((e) => {
     logMessage.error(`Error deleting invitation: ${e}`);
@@ -124,10 +130,27 @@ const _assignUserToTemplate = async (userId: string, formId: string) => {
       },
     },
     select: {
-      jsonConfig: true,
+      currentDraftVersion: {
+        select: {
+          jsonConfig: true,
+        },
+      },
+      currentPublishedVersion: {
+        select: {
+          jsonConfig: true,
+        },
+      },
       users: true,
     },
   });
+};
+
+const parseJsonConfig = (raw: Prisma.JsonValue): FormProperties => {
+  if (typeof raw === "string") {
+    return JSON.parse(raw) as FormProperties;
+  }
+
+  return raw as FormProperties;
 };
 
 /**

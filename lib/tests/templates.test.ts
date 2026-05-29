@@ -27,7 +27,7 @@ import v8 from "v8";
 import { Prisma } from "@gcforms/database";
 
 import { logEvent } from "@lib/auditLogs";
-import { unprocessedSubmissions } from "@lib/vault";
+import { deleteDraftFormResponses, unprocessedSubmissions } from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
 import { AccessControlError } from "@lib/auth/errors";
 import {
@@ -39,11 +39,12 @@ import {
 vi.mock("@lib/auditLogs", async () => {
   const __actual0 = await vi.importActual<any>("@lib/auditLogs");
   return {
-  __esModule: true,
-  logEvent: vi.fn(),
-  AuditLogDetails: __actual0.AuditLogDetails,
-  AuditLogEvent: __actual0.AuditLogEvent,
-  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+    __esModule: true,
+    logEvent: vi.fn(),
+    AuditLogDetails: __actual0.AuditLogDetails,
+    AuditLogEvent: __actual0.AuditLogEvent,
+    AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,
+  };
 });
 
 vi.mock("@lib/serviceAccount");
@@ -60,6 +61,7 @@ const mockedLogEvent = vi.mocked(logEvent);
 vi.mock("@lib/vault");
 
 const mockUnprocessedSubmissions = vi.mocked(unprocessedSubmissions);
+const mockDeleteDraftFormResponses = vi.mocked(deleteDraftFormResponses);
 
 /*
  * PurposeOption is used to determine the purpose of the form
@@ -81,13 +83,43 @@ const buildPrismaResponse = (
   formPurpose?: PurposeOption,
   securityAttribute = "Unclassified"
 ) => {
+  const version = {
+    id: `${id}-version-1`,
+    versionNumber: 1,
+    status: isPublished ? "PUBLISHED" : "DRAFT",
+    jsonConfig,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    publishedAt: isPublished ? new Date() : null,
+    supersededAt: null,
+    createdByUserId: null,
+    publishedByUserId: null,
+    publishReason: "",
+    publishFormType: "",
+    publishDesc: "",
+  };
+
   return {
     id,
-    jsonConfig,
+    created_at: new Date(),
+    updated_at: new Date(),
+    name: "",
     deliveryOption,
     formPurpose,
     isPublished,
+    currentPublishedVersionId: isPublished ? version.id : null,
+    currentDraftVersionId: isPublished ? null : version.id,
+    currentPublishedVersion: isPublished ? version : null,
+    currentDraftVersion: isPublished ? null : version,
     securityAttribute,
+    publishReason: "",
+    publishFormType: "",
+    publishDesc: "",
+    saveAndResume: true,
+    notificationsInterval: null,
+    ttl: null,
+    closingDate: null,
+    closedDetails: null,
     users: [
       {
         id: "1",
@@ -109,8 +141,21 @@ describe("Template CRUD functions", () => {
     // Ensure vault submission count mock state does not leak between tests
     beforeEach(() => {
       mockUnprocessedSubmissions.mockReset();
+      mockDeleteDraftFormResponses.mockReset();
       // Default to no unprocessed submissions unless a test overrides
       mockUnprocessedSubmissions.mockResolvedValue(false);
+      mockDeleteDraftFormResponses.mockResolvedValue({ responsesDeleted: 0 });
+      (prismaMock.$transaction as MockedFunction<any>).mockImplementation((transaction: any) => {
+        if (Array.isArray(transaction)) {
+          return Promise.all(transaction);
+        }
+
+        return transaction(prismaMock);
+      });
+      (prismaMock.templateVersion.create as MockedFunction<any>).mockResolvedValue({
+        id: "version-id",
+      });
+      (prismaMock.templateVersion.update as MockedFunction<any>).mockResolvedValue({});
     });
 
     it("Create a Template", async () => {
@@ -130,11 +175,20 @@ describe("Template CRUD functions", () => {
       expect(prismaMock.template.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: {
-            jsonConfig: formConfiguration,
             users: {
               connect: { id: "1" },
             },
           },
+        })
+      );
+
+      expect(prismaMock.templateVersion.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            jsonConfig: formConfiguration,
+            status: "DRAFT",
+            versionNumber: 1,
+          }),
         })
       );
 
@@ -215,13 +269,13 @@ describe("Template CRUD functions", () => {
         { type: "Form" },
         "ReadForm",
         "Accessed Forms: ${formList}",
-        { "formList": "formtestID" }
+        { formList: "formtestID" }
       );
     });
 
     it("Get a public template", async () => {
       (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("formtestID", formConfiguration)
+        buildPrismaResponse("formtestID", formConfiguration, true)
       );
 
       const template = await getPublicTemplateByID("formTestID");
@@ -239,7 +293,7 @@ describe("Template CRUD functions", () => {
           closingDate: undefined,
           id: "formtestID",
           form: formConfiguration,
-          isPublished: false,
+          isPublished: true,
           securityAttribute: "Unclassified",
         })
       );
@@ -321,8 +375,15 @@ describe("Template CRUD functions", () => {
     it("Update Template", async () => {
       const updatedFormConfig = structuredClone(formConfiguration as FormProperties);
 
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
+        name: "",
+        deliveryOption: undefined,
+        securityAttribute: "Unclassified",
+        currentDraftVersionId: "test1-version-1",
+      });
+
       (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("test1", updatedFormConfig, true)
+        buildPrismaResponse("test1", updatedFormConfig)
       );
 
       const updatedTemplate = await updateTemplate({
@@ -330,11 +391,10 @@ describe("Template CRUD functions", () => {
         formConfig: updatedFormConfig,
       });
 
-      expect(prismaMock.template.update).toHaveBeenCalledWith(
+      expect(prismaMock.templateVersion.update).toHaveBeenCalledWith(
         expect.objectContaining({
           where: {
-            id: "test1",
-            isPublished: false
+            id: "test1-version-1",
           },
           data: {
             jsonConfig: updatedFormConfig as unknown as Prisma.JsonObject,
@@ -346,7 +406,7 @@ describe("Template CRUD functions", () => {
         expect.objectContaining({
           id: "test1",
           form: updatedFormConfig,
-          isPublished: true,
+          isPublished: false,
           securityAttribute: "Unclassified",
         })
       );
@@ -374,12 +434,11 @@ describe("Template CRUD functions", () => {
         expect.objectContaining({
           where: {
             id: "formtestID",
-            isPublished: {
-              not: true,
-            },
           },
           data: {
             isPublished: true,
+            currentPublishedVersionId: "formtestID-version-1",
+            currentDraftVersionId: null,
             publishReason: "",
             publishFormType: "",
             publishDesc: "",
@@ -400,6 +459,91 @@ describe("Template CRUD functions", () => {
         { id: "formtestID", type: "Form" },
         "PublishForm"
       );
+    });
+
+    it("Re-publishes a draft for an already published form", async () => {
+      const originalAppEnv = process.env.APP_ENV;
+      process.env.APP_ENV = "production";
+
+      try {
+        const publishedVersion = {
+          id: "formtestID-version-1",
+          versionNumber: 1,
+          status: "PUBLISHED",
+          jsonConfig: formConfiguration,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          publishedAt: new Date(),
+          supersededAt: null,
+          createdByUserId: null,
+          publishedByUserId: null,
+          publishReason: "",
+          publishFormType: "",
+          publishDesc: "",
+        };
+        const draftVersion = {
+          ...publishedVersion,
+          id: "formtestID-version-2",
+          versionNumber: 2,
+          status: "DRAFT",
+          jsonConfig: { ...formConfiguration, titleEn: "Updated public title" },
+          publishedAt: null,
+        };
+        const templateWithDraft = {
+          ...buildPrismaResponse("formtestID", formConfiguration, true),
+          currentPublishedVersionId: publishedVersion.id,
+          currentDraftVersionId: draftVersion.id,
+          currentPublishedVersion: publishedVersion,
+          currentDraftVersion: draftVersion,
+          users: [{ id: "1" }],
+        };
+        const republishedTemplate = {
+          ...templateWithDraft,
+          currentPublishedVersionId: draftVersion.id,
+          currentDraftVersionId: null,
+          currentPublishedVersion: {
+            ...draftVersion,
+            status: "PUBLISHED",
+            publishedAt: new Date(),
+          },
+          currentDraftVersion: null,
+        };
+
+        (prismaMock.template.findUnique as MockedFunction<any>)
+          .mockResolvedValueOnce({
+            isPublished: true,
+            currentPublishedVersionId: publishedVersion.id,
+            currentDraftVersionId: draftVersion.id,
+          })
+          .mockResolvedValueOnce(templateWithDraft);
+        (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(republishedTemplate);
+
+        const updatedTemplate = await updateIsPublishedForTemplate("formtestID", true, "", "", "");
+
+        expect(mockDeleteDraftFormResponses).not.toHaveBeenCalled();
+        expect(prismaMock.templateVersion.update).toHaveBeenCalledWith(
+          expect.objectContaining({
+            where: { id: publishedVersion.id },
+            data: expect.objectContaining({ status: "SUPERSEDED" }),
+          })
+        );
+        expect(prismaMock.templateVersion.update).toHaveBeenCalledWith(
+          expect.objectContaining({
+            where: { id: draftVersion.id },
+            data: expect.objectContaining({ status: "PUBLISHED" }),
+          })
+        );
+        expect(updatedTemplate).toEqual(
+          expect.objectContaining({
+            templateVersionId: draftVersion.id,
+            templateVersionNumber: 2,
+            templateVersionStatus: "PUBLISHED",
+            form: draftVersion.jsonConfig,
+          })
+        );
+      } finally {
+        process.env.APP_ENV = originalAppEnv;
+      }
     });
 
     it("Update assigned users for template", async () => {
@@ -442,7 +586,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "GrantAccess",
-        { "userList": "user2@test.ca" }
+        { userList: "user2@test.ca" }
       );
 
       // Template has three users assigned to it to start
@@ -483,23 +627,6 @@ describe("Template CRUD functions", () => {
               disconnect: [{ id: "2" }, { id: "4" }],
             },
           },
-          select: {
-            id: true,
-            created_at: true,
-            updated_at: true,
-            name: true,
-            jsonConfig: true,
-            isPublished: true,
-            deliveryOption: true,
-            formPurpose: true,
-            publishReason: true,
-            publishFormType: true,
-            publishDesc: true,
-            securityAttribute: true,
-            users: true,
-            saveAndResume: true,
-            notificationsInterval: true,
-          },
         })
       );
 
@@ -510,7 +637,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "GrantAccess",
-        { "userList": "user1@test.ca" }
+        { userList: "user1@test.ca" }
       );
 
       // Log two removed
@@ -520,7 +647,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "RevokeFormAccess",
         "RevokeAccess",
-        { "userList": "user2@test.ca,user4@test.ca" }
+        { userList: "user2@test.ca,user4@test.ca" }
       );
     });
     it("Updates to published forms are not allowed", async () => {
@@ -590,22 +717,6 @@ describe("Template CRUD functions", () => {
           },
           data: {
             ttl: expect.any(Date),
-          },
-          select: {
-            id: true,
-            created_at: true,
-            updated_at: true,
-            name: true,
-            jsonConfig: true,
-            isPublished: true,
-            deliveryOption: true,
-            formPurpose: true,
-            publishReason: true,
-            publishFormType: true,
-            publishDesc: true,
-            securityAttribute: true,
-            saveAndResume: true,
-            notificationsInterval: true,
           },
         })
       );

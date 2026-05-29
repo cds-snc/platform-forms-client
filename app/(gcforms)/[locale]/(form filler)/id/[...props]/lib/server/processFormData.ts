@@ -9,14 +9,19 @@ type ProcessFormDataParams = {
   responses: Record<string, Response>;
   securityAttribute?: string;
   formId: string;
+  templateVersionId?: string;
   language?: string;
   fileChecksums?: Record<string, string>;
 };
+
+const mockSubmissionResultsEnabled = () =>
+  process.env.NODE_ENV === "development" && process.env.MOCK_SUBMISSION_RESULTS === "true";
 
 export const processFormData = async ({
   responses,
   securityAttribute,
   formId,
+  templateVersionId,
   language,
   fileChecksums,
 }: ProcessFormDataParams): Promise<{
@@ -53,12 +58,19 @@ export const processFormData = async ({
     throw new Error("Payload size is too large");
   }
 
+  if (mockSubmissionResultsEnabled()) {
+    const submissionId = `mock-submission-${form.id}-${Date.now()}`;
+    logMessage.info(`MOCK MODE - Response submitted for Form ID: ${form.id}`);
+    return { submissionId };
+  }
+
   try {
     const { submissionId, fileURLMap } = await invokeSubmissionLambda(
       form.id,
       responses,
       language ? language : "en",
       securityAttribute ? securityAttribute : "Protected A",
+      templateVersionId ?? (form.templateVersionId as string | undefined),
       fileChecksums
     );
 

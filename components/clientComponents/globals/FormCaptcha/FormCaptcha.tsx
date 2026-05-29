@@ -46,8 +46,11 @@ export const FormCaptcha = ({
     handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
 
-  // Skip the hCaptcha flow for test and Draft forms where we don't need an hCaptcha verification
-  const doHCaptchaFlow = process.env.NEXT_PUBLIC_APP_ENV !== "test" && isPublished;
+  // Skip the hCaptcha flow for local development, test, and draft forms.
+  const doHCaptchaFlow =
+    process.env.NODE_ENV !== "development" &&
+    process.env.NEXT_PUBLIC_APP_ENV !== "test" &&
+    isPublished;
 
   // see https://github.com/hCaptcha/react-hcaptcha
   return (

@@ -63,7 +63,7 @@ export default async function Page(props: { params: Promise<{ locale: string; id
           </div>
           <div>
             <h2 className="mb-1 pb-0"> {t("publishedTitle")}</h2>
-            <p className="mb-5 mt-0">{t("publishedViewLinks")}</p>
+            <p className="mt-0 mb-5">{t("publishedViewLinks")}</p>
             <p>
               <strong>{t("english")}</strong>{" "}
               <a href={linkEn} data-testid="published-link-en">
@@ -87,7 +87,11 @@ export default async function Page(props: { params: Promise<{ locale: string; id
           <Markdown options={{ forceBlock: true }}>{t("didYouFindThisToolHelpful")}</Markdown>
         </div>
         <div>
-          <LinkButton.Primary href={`/${language}/forms`}>{t("publishedBack")}</LinkButton.Primary>
+          <div className="flex flex-wrap gap-3">
+            <LinkButton.Secondary href={`/${language}/forms`}>
+              {t("publishedBack")}
+            </LinkButton.Secondary>
+          </div>
         </div>
       </div>
     </ViewTransition>

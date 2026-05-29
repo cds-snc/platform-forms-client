@@ -18,6 +18,7 @@ export type VaultSubmission = {
   status: VaultStatus;
   confirmationCode: string;
   name: string;
+  templateVersionId?: string;
   lastDownloadedBy: string;
   formSubmssionLanguage?: string;
   confirmedAt?: number;

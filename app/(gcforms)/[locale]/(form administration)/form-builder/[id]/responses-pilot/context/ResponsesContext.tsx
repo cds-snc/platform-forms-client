@@ -31,6 +31,8 @@ import { ResponseDownloadLogger } from "../lib/logger";
 import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
 import { formatDuration } from "../lib/formatDuration";
+import type { TemplateVersionOption } from "@lib/types/form-builder-types";
+import { getResponseTemplateForVersion } from "../actions";
 
 // Singleton logger instance
 const responseLogger = new ResponseDownloadLogger();
@@ -38,6 +40,9 @@ const responseLogger = new ResponseDownloadLogger();
 interface ResponsesContextType {
   locale: string;
   formId: string;
+  templateVersions: TemplateVersionOption[];
+  selectedTemplateVersionId: string;
+  setSelectedTemplateVersionId: Dispatch<SetStateAction<string>>;
   isCompatible: boolean;
   privateApiKey: PrivateApiKey | null;
   setPrivateApiKey: Dispatch<SetStateAction<PrivateApiKey | null>>;
@@ -78,7 +83,7 @@ const CsvDetected = () => {
   const { t } = useTranslation("response-api");
   return (
     <div className="w-full">
-      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("locationPage.csvDetected.title")}</h3>
+      <h3 className="mb-0! pb-0 text-xl font-semibold">{t("locationPage.csvDetected.title")}</h3>
       <p className="mb-2 text-black">{t("locationPage.csvDetected.message")}</p>
     </div>
   );
@@ -87,10 +92,12 @@ const CsvDetected = () => {
 export const ResponsesProvider = ({
   locale,
   formId,
+  templateVersions,
   children,
 }: {
   locale: string;
   formId: string;
+  templateVersions: TemplateVersionOption[];
   children: ReactNode;
 }) => {
   const [isCompatible] = useState(
@@ -103,6 +110,9 @@ export const ResponsesProvider = ({
   const [processingCompleted, setProcessingCompleted] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<string>("");
+  const [selectedTemplateVersionId, setSelectedTemplateVersionId] = useState<string>(
+    templateVersions[0]?.id ?? ""
+  );
   const [currentSubmissionId, setCurrentSubmissionId] = useState<string | null>(null);
   const [hasMaliciousAttachments, setHasMaliciousAttachments] = useState<boolean>(false);
   const [processedSubmissionsCount, setProcessedSubmissionsCountState] = useState<number>(0);
@@ -210,7 +220,7 @@ export const ResponsesProvider = ({
       setInterrupt(false);
       setHasError(false);
 
-      let formId;
+      let responseFormId = formId;
       let formTemplate;
       let csvFileHandle: FileSystemFileHandle | null = null;
       let htmlDirectoryHandle: FileSystemDirectoryHandle | null = null;
@@ -222,8 +232,13 @@ export const ResponsesProvider = ({
       }
 
       try {
-        formTemplate = await apiClient.getFormTemplate();
-        formId = apiClient.getFormId();
+        formTemplate = selectedTemplateVersionId
+          ? await getResponseTemplateForVersion(responseFormId, selectedTemplateVersionId)
+          : await apiClient.getFormTemplate();
+        if (!formTemplate) {
+          throw new Error("Failed to retrieve form template");
+        }
+        responseFormId = apiClient.getFormId();
       } catch (error) {
         responseLogger.error("Error loading form template: ", error);
         toast.error(<TemplateFailed />, "wide");
@@ -234,7 +249,11 @@ export const ResponsesProvider = ({
        * Initialize CSV if needed
        */
       if (selectedFormat === "csv") {
-        const result = await initCsv({ formId, dirHandle: directoryHandle, formTemplate });
+        const result = await initCsv({
+          formId: responseFormId,
+          dirHandle: directoryHandle,
+          formTemplate,
+        });
         responseLogger.info("Initialized CSV file: ", result.handle?.name);
 
         csvFileHandle = result && result.handle;
@@ -281,7 +300,7 @@ export const ResponsesProvider = ({
               decryptionKey,
               responseName: response.name,
               selectedFormat,
-              formId: String(formId),
+              formId: String(responseFormId),
               formTemplate: formTemplate!,
               t,
               logger: responseLogger,
@@ -349,11 +368,13 @@ export const ResponsesProvider = ({
     [
       apiClient,
       directoryHandle,
+      formId,
       incrementProcessedSubmissionsCount,
       newFormSubmissions,
       privateApiKey,
       retrieveResponses,
       selectedFormat,
+      selectedTemplateVersionId,
       setInterrupt,
       t,
     ]
@@ -368,15 +389,19 @@ export const ResponsesProvider = ({
     resetProcessedSubmissionsCount();
     setHasMaliciousAttachments(false);
     setSelectedFormat("csv");
+    setSelectedTemplateVersionId(templateVersions[0]?.id ?? "");
     setHasError(false);
     setInterrupt(false);
     interruptRef.current = false;
-  }, [resetProcessedSubmissionsCount, resetProcessingCompleted, setInterrupt]);
+  }, [resetProcessedSubmissionsCount, resetProcessingCompleted, setInterrupt, templateVersions]);
 
   const contextValue = useMemo(
     () => ({
       locale,
       formId,
+      templateVersions,
+      selectedTemplateVersionId,
+      setSelectedTemplateVersionId,
       isCompatible,
       privateApiKey,
       setPrivateApiKey,
@@ -410,6 +435,8 @@ export const ResponsesProvider = ({
     [
       locale,
       formId,
+      templateVersions,
+      selectedTemplateVersionId,
       isCompatible,
       privateApiKey,
       apiClient,

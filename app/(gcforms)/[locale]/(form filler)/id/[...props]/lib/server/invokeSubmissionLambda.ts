@@ -10,6 +10,7 @@ export const invokeSubmissionLambda = async (
   fields: Responses,
   language: string,
   securityAttribute: string,
+  templateVersionId?: string,
   fileChecksums?: Record<string, string>
 ): Promise<{
   submissionId: string;
@@ -21,6 +22,10 @@ export const invokeSubmissionLambda = async (
       language,
       responses: fields,
       securityAttribute,
+      ...(templateVersionId && {
+        templateVersionId,
+        TemplateVersionId: templateVersionId,
+      }),
       ...(fileChecksums && Object.keys(fileChecksums).length > 0 && { fileChecksums }),
     };
 

@@ -14,7 +14,7 @@ import {
   HtmlZippedResponse,
   JSONResponse,
 } from "@lib/responseDownloadFormats/types";
-import { getFullTemplateByID } from "@lib/templates";
+import { getTemplateForResponseDownload } from "@lib/templates";
 import {
   AddressComponents,
   FormElement,
@@ -124,11 +124,13 @@ export const getSubmissionsByFormat = AuthenticatedAction(
       ids,
       format = DownloadFormat.HTML,
       lang,
+      templateVersionId,
     }: {
       formID: string;
       ids: string[];
       format: DownloadFormat;
       lang: Language;
+      templateVersionId?: string;
     }
   ): Promise<
     | HtmlResponse
@@ -145,7 +147,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
 
         const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
-        const fullFormTemplate = await getFullTemplateByID(formID);
+        const fullFormTemplate = await getTemplateForResponseDownload(formID, templateVersionId);
 
         if (fullFormTemplate === null) {
           logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);

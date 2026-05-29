@@ -149,6 +149,15 @@ export interface ServerActionError {
   code?: FormServerErrorCodes;
 }
 
+export interface TemplateVersionOption {
+  id: string;
+  versionNumber: number;
+  status: "DRAFT" | "PUBLISHED" | "SUPERSEDED";
+  createdAt: string;
+  publishedAt?: string | null;
+  isCurrentPublished: boolean;
+}
+
 export interface FormServerError {
   formRecord: FormRecord | null;
   error?: string;

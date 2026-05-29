@@ -14,7 +14,10 @@ interface Template {
   closingDate: Date;
   created_at: Date;
   updated_at: Date;
-  jsonConfig: string;
+  currentPublishedVersionId: string | null;
+  currentDraftVersionId: string | null;
+  currentPublishedVersion?: { jsonConfig: object } | null;
+  currentDraftVersion?: { jsonConfig: object } | null;
   isPublished: boolean;
   formPurpose: string;
   publishReason: string;
@@ -36,7 +39,10 @@ export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
     closingDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     created_at: new Date(),
     updated_at: new Date(),
-    jsonConfig: "{}",
+    currentPublishedVersionId: null,
+    currentDraftVersionId: "template-version-id",
+    currentPublishedVersion: null,
+    currentDraftVersion: { jsonConfig: {} },
     isPublished: false,
     formPurpose: "form-purpose",
     publishReason: "publish-reason",
