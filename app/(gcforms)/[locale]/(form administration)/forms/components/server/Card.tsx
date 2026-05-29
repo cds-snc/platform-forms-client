@@ -4,33 +4,30 @@ import { Suspense, useMemo, memo } from "react";
 import { EnvelopeIcon, MessageIcon, GearIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
 import { Unarchive } from "../client/Unarchive";
-import { DeliveryOption } from "@lib/types";
 import Skeleton from "react-loading-skeleton";
 import { DraftEditLink } from "../client/DraftEditLink";
-import { EditLockPresenceStatus, EditLockVisibilityState } from "@root/lib/editLocks";
 import { useTranslation } from "@i18n/client";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-
-type CardState = "draft-editing" | "draft-readonly" | "published" | "archived";
-
-function getCardState(card: CardIWithLockInfo): CardState {
-  if (card.ttl) return "archived";
-  if (card.isPublished) return "published";
-  if (card.editLockInfo) return "draft-editing";
-  return "draft-readonly";
-}
+import { CardWithLockInfo } from "../types";
+import {
+  getCardState,
+  formatDateToYYYYMMDD,
+  daysUntilTTL,
+  isTTLWarningPeriod,
+  calculateCollaboratorCount,
+  getBannerColor,
+} from "../helpers";
 
 const CardBanner = memo(({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
   const { t } = useTranslation("my-forms");
-  let bulletColor = "bg-yellow-400";
-  if (isPublished) bulletColor = "bg-emerald-500";
-  if (ttl) bulletColor = "bg-orange-400";
+  const bulletColor = getBannerColor(isPublished, ttl);
+
   return (
     <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
       <span
-        className={`inline-block h-3 w-3 rounded-full border-1 border-slate-500 ${bulletColor} `}
-      ></span>
+        className={`inline-block h-3 w-3 rounded-full border-1 border-slate-500 ${bulletColor}`}
+      />
       {ttl
         ? t("card.states.archived")
         : isPublished
@@ -122,31 +119,23 @@ CardTitle.displayName = "CardTitle";
 const CardDate = memo(({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
   const { t } = useTranslation("my-forms");
 
-  function formatDate(date: string) {
-    const jsDate = new Date(date);
-    return jsDate.toISOString().split("T")[0];
-  }
-  function formatDateToString(date: Date) {
-    // Format date as YYYY-MM-DD
-    return date.toISOString().split("T")[0];
-  }
-
-  const ttlInNextFiveDays = ttl
-    ? new Date(ttl).getTime() - new Date().getTime() <= 5 * 24 * 60 * 60 * 1000
-    : false;
-  const ttlInDays = ttl
-    ? Math.ceil((ttl.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
-    : 0;
+  const formattedDate = formatDateToYYYYMMDD(date);
+  const showTTLWarning = ttl ? isTTLWarningPeriod(ttl) : false;
+  const daysRemaining = ttl ? daysUntilTTL(ttl) : 0;
 
   return (
     <div id={`card-date-${id}`} className="mb-1 text-sm">
-      {t("card.lastEdited")}: {formatDate(date)}
-      {ttl != null && (
+      {t("card.lastEdited")}: {formattedDate}
+      {ttl && (
         <>
-          <br /> <span>{t("card.deleteDate") + formatDateToString(ttl)}</span>
-          {ttlInNextFiveDays && (
+          <br />
+          <span>
+            {t("card.deleteDate")}
+            {formatDateToYYYYMMDD(ttl)}
+          </span>
+          {showTTLWarning && (
             <span className="ml-4 text-red-500">
-              {t("card.deletedIn")} {ttlInDays} {t("card.days")}
+              {t("card.deletedIn")} {daysRemaining} {t("card.days")}
             </span>
           )}
         </>
@@ -216,53 +205,26 @@ const CardFooterPublished = memo(({ cardId }: CardFooterPublishedProps) => {
 });
 CardFooterPublished.displayName = "CardFooterPublished";
 
-// Archived footer doesn't need special content beyond the banner
 const CardFooterArchived = memo(() => {
   return null;
 });
 CardFooterArchived.displayName = "CardFooterArchived";
 
-export interface CardI {
-  id: string;
-  titleEn: string;
-  titleFr: string;
-  deliveryOption: DeliveryOption;
-  name: string;
-  isPublished: boolean;
-  ttl: Date | null;
-  date: string;
-  url: string;
-  overdue: boolean;
-  hasEditLock?: boolean;
-  isShared: boolean;
-  status?: string;
-}
-
-type CardIWithLockInfo = CardI & {
-  collaboratorCount: {
-    userCount: number;
-    pendingUserCount: number;
-  };
-  editLockInfo?: {
-    lockedByUserId: string;
-    lockedByName: string | null;
-    lockedByEmail: string | null;
-    lockedAt: Date;
-    heartbeatAt: Date;
-    expiresAt: Date;
-    lastActivityAt: Date | null;
-    visibilityState: EditLockVisibilityState | null;
-    presenceStatus: EditLockPresenceStatus | null;
-    sessionId: string | null;
-  } | null;
-};
-
-const CardComponent = ({ card, status }: { card: CardIWithLockInfo; status?: string }) => {
+/**
+ * Main Card component that displays a form card with all its information
+ * Memoized to prevent unnecessary re-renders during polling updates
+ */
+const CardComponent = ({ card, status }: { card: CardWithLockInfo; status?: string }) => {
   const params = useParams();
   const language = params?.locale as string;
 
+  // Calculate collaborator count (excluding the owner)
   const collaboratorCount = useMemo(
-    () => card.collaboratorCount.userCount - 1 + card.collaboratorCount.pendingUserCount,
+    () =>
+      calculateCollaboratorCount(
+        card.collaboratorCount.userCount,
+        card.collaboratorCount.pendingUserCount
+      ),
     [card.collaboratorCount.userCount, card.collaboratorCount.pendingUserCount]
   );
 
@@ -327,5 +289,8 @@ const CardComponent = ({ card, status }: { card: CardIWithLockInfo; status?: str
   );
 };
 
-// Memoize the Card component to prevent unnecessary re-renders etc. chose this over React.memo so CardComponent shows in the dev tools
+/**
+ * Memoized Card export to prevent unnecessary re-renders
+ * Named CardComponent is retained for better DevTools debugging
+ */
 export const Card = memo(CardComponent);

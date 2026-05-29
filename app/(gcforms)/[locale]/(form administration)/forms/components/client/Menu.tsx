@@ -36,7 +36,7 @@ export const Menu = ({
     setShowConfirm(true);
   }, []);
 
-  // Without the useCallback here and below each menu would re-render on ever poll!
+  // Without the useCallback here and below each menu would re-render on every poll!
   const downloadForm = useCallback(
     async (name: string, id: string, ttl: Date | undefined) => {
       const { formRecord, error } = await getForm(id, ttl == null ? false : true);
@@ -63,7 +63,12 @@ export const Menu = ({
         link.click();
       }
     },
-    [t, language]
+    // Note: Intentionally omitting `t` from deps since it's stable and only needed at execution time
+    // Moving the strings up one level to vars that pass in also wouldn't help since they'd be reacreated
+    // on every render. This way the function is stable since since it doesn't depend on any changing
+    // values. Hope we can find a better way to handle this in the future..
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [language]
   );
 
   const copyLinkCallback = useCallback((): MenuDropdownItemCallback => {
@@ -77,7 +82,9 @@ export const Menu = ({
       message: t("card.menu.somethingWentWrong"),
       isError: true,
     };
-  }, [language, id, t]);
+    // Note: Same reason as above
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language, id]);
 
   const unfilteredMenuItemList = useMemo(
     () => [
