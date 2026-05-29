@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { TreeItemData } from "./types";
 import {
   syncDataLoaderFeature,
@@ -11,7 +11,7 @@ import {
 import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
 import { useTreeHandlers } from "./hooks/useTreeHandlers";
 import { TreeItem } from "./TreeItem/TreeItem";
-import { getInitialTreeState, createSafeItemLoader, createSafeChildrenLoader } from "./treeUtils";
+import { getInitialTreeState, createSafeDataLoader } from "./treeUtils";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -69,6 +69,7 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
   const { autoFlowAll } = useAutoFlowIfNoCustomRules();
   const { getTitle } = useElementTitle();
   const { headlessTree: headlessTreeRef, startRenamingNewGroup } = useTreeRef();
+  const dataLoader = useMemo(() => createSafeDataLoader(getTreeData), [getTreeData]);
 
   const tree = useTree<TreeItemData>({
     initialState: getInitialTreeState(id ?? "start"),
@@ -142,10 +143,7 @@ export const HeadlessTreeView = ({ children }: { children?: React.ReactNode }) =
       return true;
     },
     indent: 20,
-    dataLoader: {
-      getItem: createSafeItemLoader(getTreeData),
-      getChildren: createSafeChildrenLoader(getTreeData),
-    },
+    dataLoader,
     features: [
       syncDataLoaderFeature,
       selectionFeature,
