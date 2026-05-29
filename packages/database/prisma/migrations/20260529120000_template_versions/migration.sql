@@ -14,7 +14,7 @@ CREATE TABLE "TemplateVersion" (
     "status" "TemplateVersionStatus" NOT NULL,
     "jsonConfig" JSONB NOT NULL,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6) NOT NULL,
     "publishedAt" TIMESTAMPTZ(6),
     "supersededAt" TIMESTAMPTZ(6),
     "createdByUserId" TEXT,

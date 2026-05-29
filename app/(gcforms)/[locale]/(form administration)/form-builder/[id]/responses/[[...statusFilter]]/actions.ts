@@ -20,6 +20,7 @@ import {
   FormElement,
   FormElementTypes,
   StartFromExclusiveResponse,
+  VaultSubmission,
   VaultStatus,
 } from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
@@ -53,6 +54,11 @@ import {
 } from "@clientComponents/forms/AddressComplete/utils";
 import { serverTranslation } from "@i18n";
 import { traceFunction } from "@lib/otel";
+import {
+  getMockSubmissionOverviews,
+  getMockVaultSubmissions,
+  mockResponseSubmissionsEnabled,
+} from "./mockSubmissions";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -102,6 +108,13 @@ export const fetchSubmissions = AuthenticatedAction(
               createdAt: Number(splitLastKey[1]),
             };
           }
+        }
+
+        if (mockResponseSubmissionsEnabled()) {
+          return {
+            submissions: getMockSubmissionOverviews(formId, selectedStatus),
+            startFromExclusiveResponse: undefined,
+          };
         }
 
         const { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse } =
@@ -161,7 +174,10 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           );
         }
 
-        const queryResult = await retrieveSubmissions(formID, ids);
+        const useMockSubmissions = mockResponseSubmissionsEnabled();
+        const queryResult: VaultSubmission[] = useMockSubmissions
+          ? getMockVaultSubmissions({ formID, ids, form: fullFormTemplate.form })
+          : await retrieveSubmissions(formID, ids);
 
         if (!queryResult) {
           throw new FormBuilderError(
@@ -175,7 +191,11 @@ export const getSubmissionsByFormat = AuthenticatedAction(
         const responses = queryResult
           .sort((a, b) => a.createdAt - b.createdAt)
           .map((item) => {
-            const filteredSubmissionData = JSON.parse(String(item.formSubmission));
+            const formSubmission = item.formSubmission as unknown;
+            const filteredSubmissionData =
+              typeof formSubmission === "string"
+                ? JSON.parse(formSubmission)
+                : { ...(formSubmission as Record<string, unknown>) };
             // Remove ignored keys from the submission data
             Object.keys(filteredSubmissionData).forEach((key) => {
               if (IGNORED_KEYS.includes(key)) {
@@ -345,8 +365,10 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           };
         });
 
-        await updateLastDownloadedBy(responseIdStatusArray, formID);
-        await logDownload(responseIdStatusArray, format, session.user.id);
+        if (!useMockSubmissions) {
+          await updateLastDownloadedBy(responseIdStatusArray, formID);
+          await logDownload(responseIdStatusArray, format, session.user.id);
+        }
 
         switch (format) {
           case DownloadFormat.CSV:

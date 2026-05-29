@@ -8,10 +8,11 @@ import { logEvent } from "@lib/auditLogs";
 vi.mock("@lib/auditLogs", async () => {
   const __actual0 = await vi.importActual<any>("@lib/auditLogs");
   return {
-  __esModule: true,
-  logEvent: vi.fn(),
-  AuditLogDetails: __actual0.AuditLogDetails,
-  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+    __esModule: true,
+    logEvent: vi.fn(),
+    AuditLogDetails: __actual0.AuditLogDetails,
+    AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,
+  };
 });
 
 vi.mock("@lib/privileges");
@@ -30,7 +31,9 @@ describe("cloneTemplate", () => {
     (prismaMock.$transaction as MockedFunction<any>).mockImplementation((transaction: any) =>
       transaction(prismaMock)
     );
-    (prismaMock.templateVersion.create as MockedFunction<any>).mockResolvedValue({ id: "new1-version-1" });
+    (prismaMock.templateVersion.create as MockedFunction<any>).mockResolvedValue({
+      id: "new1-version-1",
+    });
   });
 
   it("should create a copy of a template with user connected", async () => {
