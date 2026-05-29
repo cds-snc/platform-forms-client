@@ -45,6 +45,8 @@ export const Cards = ({
   const templatesRef = useRef(templates);
   const displayedCountRef = useRef(displayedCount);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const fetchInProgressRef = useRef(false);
 
   // Keep refs in sync with state
   useEffect(() => {
@@ -85,6 +87,11 @@ export const Cards = ({
   }, [displayedCount, templates.length]);
 
   const fetchEditLockUpdates = useCallback(async () => {
+    // Deduplicate: skip if a fetch is already in progress
+    if (fetchInProgressRef.current) {
+      return;
+    }
+
     // Poll only for displayed templates to reduce API payload
     const displayedTemplates = templatesRef.current.slice(0, displayedCountRef.current);
     const templateIds = displayedTemplates.map((t) => t.id);
@@ -93,6 +100,15 @@ export const Cards = ({
       return;
     }
 
+    // Cancel any previous in-flight request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    // Create new abort controller for this request
+    abortControllerRef.current = new AbortController();
+    fetchInProgressRef.current = true;
+
     try {
       const response = await fetch("/api/forms/edit-locks", {
         method: "POST",
@@ -100,6 +116,7 @@ export const Cards = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ templateIds: templateIds }),
+        signal: abortControllerRef.current.signal,
       });
 
       if (!response.ok) {
@@ -141,8 +158,14 @@ export const Cards = ({
           };
         })
       );
-    } catch {
-      // Silently fail - try again on next poll
+    } catch (error) {
+      // Ignore AbortError - it's expected when cancelling requests
+      if (error instanceof Error && error.name === "AbortError") {
+        return;
+      }
+      // Silently fail other errors - try again on next poll
+    } finally {
+      fetchInProgressRef.current = false;
     }
   }, []);
 
@@ -186,16 +209,20 @@ export const Cards = ({
     return () => {
       stopPolling();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      // Cancel any in-flight request on unmount
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
     };
   }, [fetchEditLockUpdates, pollIntervalMs]);
 
-  const getNoFormsMessage = () => {
+  const getNoFormsMessage = useMemo(() => {
     if (filter === "recentlyEdited" || !filter) return t("cards.noRecentlyEditedForms");
     if (filter === "draft") return t("cards.noDraftForms");
     if (filter === "published") return t("cards.noPublishedForms");
     if (filter === "archived") return t("cards.noArchivedForms");
     return t("cards.noForms");
-  };
+  }, [filter, t]);
 
   // TODO: more testing with below live region. it may need to be placed higher in the tree
 
@@ -235,7 +262,7 @@ export const Cards = ({
             )}
           </>
         ) : (
-          getNoFormsMessage()
+          getNoFormsMessage
         )}
       </div>
     </div>

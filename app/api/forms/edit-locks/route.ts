@@ -92,7 +92,17 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
       {} as Record<string, EditLockResponse>
     );
 
-    return NextResponse.json({ editLocks });
+    return NextResponse.json(
+      { editLocks },
+      {
+        headers: {
+          // Prevent caching since lock info changes frequently (e.g. every 5s)
+          "Cache-Control": "no-store, must-revalidate",
+          // Allow browser to keep connection alive for subsequent polls
+          Connection: "keep-alive",
+        },
+      }
+    );
   } catch (error) {
     logMessage.error(`Error fetching edit-lock info: ${error}`);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
