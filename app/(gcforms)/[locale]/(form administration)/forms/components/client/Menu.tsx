@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import copy from "copy-to-clipboard";
 import { getForm, cloneForm } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 import {
@@ -36,100 +36,37 @@ export const Menu = ({
     setShowConfirm(true);
   }, []);
 
-  const unfilteredMenuItemList = [
-    {
-      filtered: isPublished ? false : true || (ttl ? true : false),
-      title: t("card.menu.copyLink"),
-      callback: copyLinkCallback,
-    },
-    {
-      filtered: (isPublished ? true : false) || (ttl ? true : false),
-      title: t("card.menu.preview"),
-      url: `/${language}/form-builder/${id}/preview`,
-    },
-    {
-      filtered: isPublished || !!ttl,
-      title: t("card.menu.edit"),
-      url: `/${language}/form-builder/${id}/edit`,
-    },
-    {
-      filtered: false,
-      title: t("card.menu.clone"),
-      callback: () => {
-        // Start async clone but return immediate callback value to satisfy MenuDropdown
-        (async () => {
-          try {
-            const res = await cloneForm(id, status === "archived", language);
-            if (res && res.formRecord && !res.error) {
-              toast.success(t("card.menu.cloneSuccess"));
-              window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;
-              return;
-            }
-            throw new Error(res?.error || "Clone failed");
-          } catch (e) {
-            toast.error(t("card.menu.cloneFailed"));
-          }
-        })();
-
-        return { message: "" };
-      },
-    },
-    {
-      filterd: ttl ? true : false,
-      title: t("card.menu.save"),
-      callback: () => {
-        downloadForm(name, id, ttl);
-        return { message: "" };
-      },
-    },
-    {
-      filtered: ttl ? true : false,
-      title: t("card.menu.settings"),
-      url: `/${language}/form-builder/${id}/settings`,
-    },
-    {
-      filtered: ttl ? true : false,
-      title: t("card.menu.archive"),
-      callback: () => {
-        handleDelete();
-        return {
-          message: "",
-        };
-      },
-    },
-  ];
-
-  const menuItemsList: Array<MenuDropdownItemI> = unfilteredMenuItemList.filter(
-    (item) => !item.filtered
-  ) as MenuDropdownItemI[];
-
-  async function downloadForm(name: string, id: string, ttl: Date | undefined) {
-    const { formRecord, error } = await getForm(id, ttl == null ? false : true);
-    if (error) {
-      if (error === "Form Not Found") {
-        toast.error(t("errors.formDownloadNotExist"));
-      } else {
-        toast.error(t("errors.formDownloadFailed"));
+  // Without the useCallback here and below each menu would re-render on ever poll!
+  const downloadForm = useCallback(
+    async (name: string, id: string, ttl: Date | undefined) => {
+      const { formRecord, error } = await getForm(id, ttl == null ? false : true);
+      if (error) {
+        if (error === "Form Not Found") {
+          toast.error(t("errors.formDownloadNotExist"));
+        } else {
+          toast.error(t("errors.formDownloadFailed"));
+        }
       }
-    }
 
-    if (formRecord) {
-      const fileName = name
-        ? name
-        : language === "fr"
-          ? formRecord.form.titleFr
-          : formRecord.form.titleEn;
-      const data = JSON.stringify(formRecord.form, null, 2);
-      const tempUrl = window.URL.createObjectURL(new Blob([data]));
-      const link = document.createElement("a");
-      link.href = tempUrl;
-      link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
-      document.body.appendChild(link);
-      link.click();
-    }
-  }
+      if (formRecord) {
+        const fileName = name
+          ? name
+          : language === "fr"
+            ? formRecord.form.titleFr
+            : formRecord.form.titleEn;
+        const data = JSON.stringify(formRecord.form, null, 2);
+        const tempUrl = window.URL.createObjectURL(new Blob([data]));
+        const link = document.createElement("a");
+        link.href = tempUrl;
+        link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
+        document.body.appendChild(link);
+        link.click();
+      }
+    },
+    [t, language]
+  );
 
-  function copyLinkCallback(): MenuDropdownItemCallback {
+  const copyLinkCallback = useCallback((): MenuDropdownItemCallback => {
     const path = `${window.location.origin}/${language}/id/${id}`;
     if (copy(path)) {
       return {
@@ -140,7 +77,78 @@ export const Menu = ({
       message: t("card.menu.somethingWentWrong"),
       isError: true,
     };
-  }
+  }, [language, id, t]);
+
+  const unfilteredMenuItemList = useMemo(
+    () => [
+      {
+        filtered: isPublished ? false : true || (ttl ? true : false),
+        title: t("card.menu.copyLink"),
+        callback: copyLinkCallback,
+      },
+      {
+        filtered: (isPublished ? true : false) || (ttl ? true : false),
+        title: t("card.menu.preview"),
+        url: `/${language}/form-builder/${id}/preview`,
+      },
+      {
+        filtered: isPublished || !!ttl,
+        title: t("card.menu.edit"),
+        url: `/${language}/form-builder/${id}/edit`,
+      },
+      {
+        filtered: false,
+        title: t("card.menu.clone"),
+        callback: () => {
+          // Start async clone but return immediate callback value to satisfy MenuDropdown
+          (async () => {
+            try {
+              const res = await cloneForm(id, status === "archived", language);
+              if (res && res.formRecord && !res.error) {
+                toast.success(t("card.menu.cloneSuccess"));
+                window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;
+                return;
+              }
+              throw new Error(res?.error || "Clone failed");
+            } catch (e) {
+              toast.error(t("card.menu.cloneFailed"));
+            }
+          })();
+
+          return { message: "" };
+        },
+      },
+      {
+        filterd: ttl ? true : false,
+        title: t("card.menu.save"),
+        callback: () => {
+          downloadForm(name, id, ttl);
+          return { message: "" };
+        },
+      },
+      {
+        filtered: ttl ? true : false,
+        title: t("card.menu.settings"),
+        url: `/${language}/form-builder/${id}/settings`,
+      },
+      {
+        filtered: ttl ? true : false,
+        title: t("card.menu.archive"),
+        callback: () => {
+          handleDelete();
+          return {
+            message: "",
+          };
+        },
+      },
+    ],
+    [isPublished, ttl, t, copyLinkCallback, language, id, status, handleDelete, downloadForm, name]
+  );
+
+  const menuItemsList: Array<MenuDropdownItemI> = useMemo(
+    () => unfilteredMenuItemList.filter((item) => !item.filtered) as MenuDropdownItemI[],
+    [unfilteredMenuItemList]
+  );
 
   return (
     <>

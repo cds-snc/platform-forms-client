@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { Card } from "./Card";
 import { FormsTemplateWithLockInfo } from "../../page";
 import { useTranslation } from "@i18n/client";
@@ -41,22 +41,19 @@ export const Cards = ({
   const [templates, setTemplates] = useState<FormsTemplateWithLockInfo[]>(initialTemplates);
   const [displayedCount, setDisplayedCount] = useState<number>(CARDS_PER_BATCH);
 
-  // Use ref to access latest templates without recreating fetchEditLockUpdates
+  // Use refs to access latest values without recreating fetchEditLockUpdates
   const templatesRef = useRef(templates);
+  const displayedCountRef = useRef(displayedCount);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  // Keep ref in sync with state
+  // Keep refs in sync with state
   useEffect(() => {
     templatesRef.current = templates;
   }, [templates]);
 
-  // Sync templates state when initialTemplates changes (e.g. when navigating between tabs)
-  // This is necessary because templates state is mutated by polling, but needs to reset on tab change
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    setTemplates(initialTemplates);
-    setDisplayedCount(CARDS_PER_BATCH);
-  }, [initialTemplates]);
+    displayedCountRef.current = displayedCount;
+  }, [displayedCount]);
 
   // Intersection Observer for infinite scroll
   useEffect(() => {
@@ -89,7 +86,7 @@ export const Cards = ({
 
   const fetchEditLockUpdates = useCallback(async () => {
     // Poll only for displayed templates to reduce API payload
-    const displayedTemplates = templatesRef.current.slice(0, displayedCount);
+    const displayedTemplates = templatesRef.current.slice(0, displayedCountRef.current);
     const templateIds = displayedTemplates.map((t) => t.id);
 
     if (templateIds.length === 0) {
@@ -147,7 +144,7 @@ export const Cards = ({
     } catch {
       // Silently fail - try again on next poll
     }
-  }, [displayedCount]);
+  }, []);
 
   // Poll for edit lock updates at regular intervals, and also pause/resume polling based on tab visibility
   useEffect(() => {
@@ -201,6 +198,19 @@ export const Cards = ({
   };
 
   // TODO: more testing with below live region. it may need to be placed higher in the tree
+
+  // This is important because otherwise a recalc would happen on user scroll, polling, parent change
+  const displayedCards = useMemo(() => {
+    return templates.slice(0, displayedCount).map((card) => {
+      // Check if the form has an overdue submission (without mutation)
+      if (overdueTemplateIds.includes(card.id)) {
+        return { ...card, overdue: true };
+      }
+      // otherwise returns original reference to prevent unnecessary re-renders of Card component
+      return card;
+    });
+  }, [templates, displayedCount, overdueTemplateIds]);
+
   return (
     <div aria-live="polite">
       {(filter === "recentlyEdited" || !filter) && <p>{t("cards.editLockMessage")}</p>}
@@ -213,18 +223,11 @@ export const Cards = ({
         {templates.length > 0 ? (
           <>
             <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
-              {templates.slice(0, displayedCount).map((card) => {
-                // Check if the form has an overdue submission
-                if (overdueTemplateIds.includes(card.id)) {
-                  card.overdue = true;
-                }
-
-                return (
-                  <li className="flex h-full w-full max-w-[16em]" key={card.id}>
-                    <Card card={card} status={status} />
-                  </li>
-                );
-              })}
+              {displayedCards.map((card) => (
+                <li className="flex h-full w-full max-w-[16em]" key={card.id}>
+                  <Card card={card} status={status} />
+                </li>
+              ))}
             </ol>
             {/* "Sentinel" element for intersection observer */}
             {displayedCount < templates.length && (

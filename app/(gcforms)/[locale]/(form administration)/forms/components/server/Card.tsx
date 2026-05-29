@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useMemo, memo } from "react";
 import { EnvelopeIcon, MessageIcon, GearIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
 import { Unarchive } from "../client/Unarchive";
@@ -21,7 +21,7 @@ function getCardState(card: CardIWithLockInfo): CardState {
   return "draft-readonly";
 }
 
-const CardBanner = ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
+const CardBanner = memo(({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
   const { t } = useTranslation("my-forms");
   let bulletColor = "bg-yellow-400";
   if (isPublished) bulletColor = "bg-emerald-500";
@@ -38,7 +38,8 @@ const CardBanner = ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | nu
           : t("card.states.draft")}
     </div>
   );
-};
+});
+CardBanner.displayName = "CardBanner";
 
 interface CardLinksProps {
   id: string;
@@ -50,71 +51,75 @@ interface CardLinksProps {
   language: string;
 }
 
-const CardLinks = ({ isPublished, id, deliveryOption, overdue, ttl, language }: CardLinksProps) => {
-  const { t } = useTranslation("my-forms");
-  const responsesLink = `/${language}/form-builder/${id}/responses`;
-  const settingsLink = `/${language}/form-builder/${id}/settings`;
+const CardLinks = memo(
+  ({ isPublished, id, deliveryOption, overdue, ttl, language }: CardLinksProps) => {
+    const { t } = useTranslation("my-forms");
+    const responsesLink = `/${language}/form-builder/${id}/responses`;
+    const settingsLink = `/${language}/form-builder/${id}/settings`;
 
-  if (!isPublished) {
-    return <div className="mb-4" />;
+    if (!isPublished) {
+      return <div className="mb-4" />;
+    }
+
+    return (
+      <div className="mt-2">
+        {ttl != null && <Unarchive id={id} isPublished={isPublished} language={language} />}
+
+        {/* Email delivery */}
+        {deliveryOption && deliveryOption.emailAddress && (
+          <span className="mt-4 block text-sm">
+            <EnvelopeIcon className="mr-2 inline-block" />
+            {t("card.deliveryOption.email")} {deliveryOption.emailAddress}
+          </span>
+        )}
+
+        {/* Vault delivery */}
+        {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
+          <>
+            {overdue ? (
+              <span className="text-red mt-4 block text-sm">
+                <MessageIcon className="mr-2 inline-block" />
+                {t("card.actionRequired.description")} {""}
+                <a href={responsesLink}>{t("card.actionRequired.linkText")}</a>
+              </span>
+            ) : (
+              <Link
+                className="mt-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
+                href={responsesLink}
+                prefetch={false}
+              >
+                <MessageIcon className="mr-2 ml-px inline-block" />
+                {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
+              </Link>
+            )}
+          </>
+        )}
+
+        {/* Settings link - only for published non-archived forms */}
+        {ttl == null && (
+          <Link
+            className="mt-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
+            href={settingsLink}
+            prefetch={false}
+          >
+            <GearIcon className="mr-2 inline-block" />
+            {t("card.menu.settings")}
+          </Link>
+        )}
+      </div>
+    );
   }
+);
+CardLinks.displayName = "CardLinks";
 
-  return (
-    <div className="mt-2">
-      {ttl != null && <Unarchive id={id} isPublished={isPublished} language={language} />}
-
-      {/* Email delivery */}
-      {deliveryOption && deliveryOption.emailAddress && (
-        <span className="mt-4 block text-sm">
-          <EnvelopeIcon className="mr-2 inline-block" />
-          {t("card.deliveryOption.email")} {deliveryOption.emailAddress}
-        </span>
-      )}
-
-      {/* Vault delivery */}
-      {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
-        <>
-          {overdue ? (
-            <span className="text-red mt-4 block text-sm">
-              <MessageIcon className="mr-2 inline-block" />
-              {t("card.actionRequired.description")} {""}
-              <a href={responsesLink}>{t("card.actionRequired.linkText")}</a>
-            </span>
-          ) : (
-            <Link
-              className="mt-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
-              href={responsesLink}
-              prefetch={false}
-            >
-              <MessageIcon className="mr-2 ml-px inline-block" />
-              {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
-            </Link>
-          )}
-        </>
-      )}
-
-      {/* Settings link - only for published non-archived forms */}
-      {ttl == null && (
-        <Link
-          className="mt-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
-          href={settingsLink}
-          prefetch={false}
-        >
-          <GearIcon className="mr-2 inline-block" />
-          {t("card.menu.settings")}
-        </Link>
-      )}
-    </div>
-  );
-};
-
-const CardTitle = ({ name }: { name: string }) => {
+const CardTitle = memo(({ name }: { name: string }) => {
   const { t } = useTranslation("my-forms");
   const classes = "mb-0 mr-2 overflow-hidden pb-0 text-base font-bold line-clamp-3";
   return <h2 className={classes}>{name ? name : t("card.unnamedForm")}</h2>;
-};
+});
+CardTitle.displayName = "CardTitle";
 
-const CardDate = ({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
+const CardDate = memo(({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
   const { t } = useTranslation("my-forms");
 
   function formatDate(date: string) {
@@ -148,13 +153,15 @@ const CardDate = ({ id, date, ttl }: { id: string; date: string; ttl?: Date | nu
       )}
     </div>
   );
-};
+});
+CardDate.displayName = "CardDate";
 
-const CardCollaboratorCount = ({ collaboratorCount }: { collaboratorCount: number }) => {
+const CardCollaboratorCount = memo(({ collaboratorCount }: { collaboratorCount: number }) => {
   const { t } = useTranslation("my-forms");
   if (collaboratorCount <= 0) return null;
   return <p className="mb-2 pt-2 text-sm">{t("card.sharedWith", { count: collaboratorCount })}</p>;
-};
+});
+CardCollaboratorCount.displayName = "CardCollaboratorCount";
 
 interface CardFooterDraftReadonlyProps {
   cardId: string;
@@ -162,14 +169,15 @@ interface CardFooterDraftReadonlyProps {
   ttl?: Date | null;
 }
 
-const CardFooterDraftReadonly = ({ cardId, date, ttl }: CardFooterDraftReadonlyProps) => {
+const CardFooterDraftReadonly = memo(({ cardId, date, ttl }: CardFooterDraftReadonlyProps) => {
   return (
     <div>
       <CardDate id={cardId} date={date} ttl={ttl} />
       {/* Will do in a followup PR <div className="mt-2 text-sm">By: [first name]</div> */}
     </div>
   );
-};
+});
+CardFooterDraftReadonly.displayName = "CardFooterDraftReadonly";
 
 interface CardFooterDraftEditingProps {
   lockedByName: string | null;
@@ -177,41 +185,42 @@ interface CardFooterDraftEditingProps {
   cardId: string;
 }
 
-const CardFooterDraftEditing = ({
-  lockedByName,
-  language,
-  cardId,
-}: CardFooterDraftEditingProps) => {
-  const { t } = useTranslation("my-forms");
-  return (
-    <div>
-      <div className="mb-2 text-sm">{lockedByName} editing</div>
-      <div className="flex items-center">
-        <div className="mr-2 text-sm">Read only -</div>
-        <DraftEditLink
-          href={`/${language}/form-builder/${cardId}/edit/`}
-          formId={cardId}
-          className="block cursor-pointer text-left text-sm underline focus:fill-slate-500 active:fill-slate-500 disabled:opacity-70"
-        >
-          {t("editForm")}
-        </DraftEditLink>
+const CardFooterDraftEditing = memo(
+  ({ lockedByName, language, cardId }: CardFooterDraftEditingProps) => {
+    const { t } = useTranslation("my-forms");
+    return (
+      <div>
+        <div className="mb-2 text-sm">{lockedByName} editing</div>
+        <div className="flex items-center">
+          <div className="mr-2 text-sm">Read only -</div>
+          <DraftEditLink
+            href={`/${language}/form-builder/${cardId}/edit/`}
+            formId={cardId}
+            className="block cursor-pointer text-left text-sm underline focus:fill-slate-500 active:fill-slate-500 disabled:opacity-70"
+          >
+            {t("editForm")}
+          </DraftEditLink>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
+CardFooterDraftEditing.displayName = "CardFooterDraftEditing";
 
 interface CardFooterPublishedProps {
   cardId: string;
 }
 
-const CardFooterPublished = ({ cardId }: CardFooterPublishedProps) => {
+const CardFooterPublished = memo(({ cardId }: CardFooterPublishedProps) => {
   return <p className="mt-3 text-xs italic">{cardId}</p>;
-};
+});
+CardFooterPublished.displayName = "CardFooterPublished";
 
 // Archived footer doesn't need special content beyond the banner
-const CardFooterArchived = () => {
+const CardFooterArchived = memo(() => {
   return null;
-};
+});
+CardFooterArchived.displayName = "CardFooterArchived";
 
 export interface CardI {
   id: string;
@@ -248,18 +257,22 @@ type CardIWithLockInfo = CardI & {
   } | null;
 };
 
-export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: string }) => {
+const CardComponent = ({ card, status }: { card: CardIWithLockInfo; status?: string }) => {
   const params = useParams();
   const language = params?.locale as string;
 
-  // Exclude the owner from the count (userCount includes owner)
-  const collaboratorCount =
-    card.collaboratorCount.userCount - 1 + card.collaboratorCount.pendingUserCount;
+  const collaboratorCount = useMemo(
+    () => card.collaboratorCount.userCount - 1 + card.collaboratorCount.pendingUserCount,
+    [card.collaboratorCount.userCount, card.collaboratorCount.pendingUserCount]
+  );
 
-  // Determine card state for conditional rendering
-  const cardState = getCardState(card);
+  const cardState = useMemo(() => getCardState(card), [card]);
 
-  const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo && "bg-yellow-50"}`;
+  const wrapperClass = useMemo(
+    () =>
+      `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : ""}`,
+    [card.editLockInfo]
+  );
 
   return (
     <div className={wrapperClass} data-testid={`card-${card.id}`}>
@@ -313,3 +326,6 @@ export const Card = ({ card, status }: { card: CardIWithLockInfo; status?: strin
     </div>
   );
 };
+
+// Memoize the Card component to prevent unnecessary re-renders etc. chose this over React.memo so CardComponent shows in the dev tools
+export const Card = memo(CardComponent);

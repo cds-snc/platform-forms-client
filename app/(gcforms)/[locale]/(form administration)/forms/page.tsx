@@ -259,6 +259,8 @@ export default async function Page(props: {
           </div>
         </div>
         <Cards
+          // tell react the state resets when tabs change
+          key={status || "default"}
           filter={status}
           initialTemplates={filteredTemplates}
           overdueTemplateIds={overdueTemplateIds}
