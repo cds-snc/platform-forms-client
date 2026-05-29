@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.15.4](https://github.com/cds-snc/platform-forms-client/compare/v4.15.3...v4.15.4) (2026-05-28)
+
+
+### Miscellaneous Chores
+
+* remove unused `RELIABILITY_FILE_STORAGE` environment variable from `.env.yarn.example` ([#7262](https://github.com/cds-snc/platform-forms-client/issues/7262)) ([5680acb](https://github.com/cds-snc/platform-forms-client/commit/5680acba065c274e77f9212cc399ee7a0191a996))
+* remove unused AWS S3 package ([#7263](https://github.com/cds-snc/platform-forms-client/issues/7263)) ([83f89ed](https://github.com/cds-snc/platform-forms-client/commit/83f89edb8cb5eebde3cbef5ab36da3b0f54b093a))
+* remove unused environment variable from `.env.yarn.example` ([5680acb](https://github.com/cds-snc/platform-forms-client/commit/5680acba065c274e77f9212cc399ee7a0191a996))
+* update lang toggle test ([#7264](https://github.com/cds-snc/platform-forms-client/issues/7264)) ([e502e68](https://github.com/cds-snc/platform-forms-client/commit/e502e68f6d9552b8d481cf04cb8327115378b754))
+* Use pressSequentially to fill input ([#7248](https://github.com/cds-snc/platform-forms-client/issues/7248)) ([49bedd6](https://github.com/cds-snc/platform-forms-client/commit/49bedd67cd05d11962f7adbb411ccd9adab12307))
+
 ## [4.15.3](https://github.com/cds-snc/platform-forms-client/compare/v4.15.2...v4.15.3) (2026-05-27)
 
 
