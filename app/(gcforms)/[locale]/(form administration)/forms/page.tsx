@@ -4,7 +4,7 @@ import { authCheckAndRedirect } from "@lib/actions";
 import { AccessControlError } from "@lib/auth/errors";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
-import { Cards } from "./components/server/Cards";
+import { Cards } from "./components/client/Cards";
 import { NewFormButton } from "./components/server/NewFormButton";
 import { AccountDetails } from "./components/server/AccountDetails";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
