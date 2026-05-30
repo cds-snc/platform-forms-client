@@ -11,6 +11,8 @@ import {
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LeftNav } from "@clientComponents/globals/Buttons/LeftNav";
 import { useSelectedLayoutSegment } from "next/navigation";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 const linkHelper = ({
   route,
@@ -34,10 +36,22 @@ export const LeftNavigation = ({ id }: { id: string }) => {
     t,
     i18n: { language },
   } = useTranslation("form-builder");
-  const { isPublished, id: storeId } = useTemplateStore((s) => ({
+  const { getFlag } = useFeatureFlags();
+  const {
+    isPublished,
+    currentDraftVersionId,
+    currentPublishedVersionId,
+    id: storeId,
+  } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
+    currentDraftVersionId: s.currentDraftVersionId,
+    currentPublishedVersionId: s.currentPublishedVersionId,
     id: s.id,
   }));
+
+  const templateVersioningEnabled = getFlag(FeatureFlags.templateVersioning);
+  const canEditPublishedForm =
+    templateVersioningEnabled && Boolean(currentDraftVersionId || currentPublishedVersionId);
 
   if (storeId && storeId !== id) {
     id = storeId;
@@ -48,7 +62,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
       <ul className="m-0 list-none p-0">
-        {!isPublished && (
+        {(!isPublished || canEditPublishedForm) && (
           <li>
             <LeftNav
               testid="edit"

@@ -22,11 +22,16 @@ import { PrivacyDescriptionBefore } from "./PrivacyDescriptionBefore";
 import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
 import { ConfirmationTitle } from "./ConfirmationTitle";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
+import { Button } from "@clientComponents/globals";
 import { AddPageButton } from "./AddPageButton";
 import { AddBranchingButton } from "./AddBranchingButton";
+import { createDraftVersion } from "@formBuilder/actions";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) => {
   const { t } = useTranslation("form-builder");
+  const { getFlag } = useFeatureFlags();
   const {
     title,
     localizeField,
@@ -34,6 +39,8 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     translationLanguagePriority,
     getLocalizationAttribute,
     isPublished,
+    currentDraftVersionId,
+    currentPublishedVersionId,
     getName,
   } = useTemplateStore((s) => ({
     title:
@@ -43,10 +50,14 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     isPublished: s.isPublished,
+    currentDraftVersionId: s.currentDraftVersionId,
+    currentPublishedVersionId: s.currentPublishedVersionId,
     getName: s.getName,
   }));
 
   const [value, setValue] = useState<string>(title);
+  const [creatingDraft, setCreatingDraft] = useState(false);
+  const [draftError, setDraftError] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const focusTitle = searchParams?.get("focusTitle") ? true : false;
@@ -72,12 +83,32 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     prevTitleRef.current = title;
   }, [title]);
 
+  const templateVersioningEnabled = getFlag(FeatureFlags.templateVersioning);
+  const canEditPublishedForm =
+    templateVersioningEnabled && Boolean(currentDraftVersionId || currentPublishedVersionId);
+
   useEffect(() => {
-    if (isPublished) {
+    if (isPublished && !canEditPublishedForm) {
       router.replace(`/${locale}/form-builder/${id}/published`);
+    }
+  }, [router, isPublished, canEditPublishedForm, id, locale]);
+
+  const handleCreateDraft = useCallback(async () => {
+    if (creatingDraft) return;
+
+    setDraftError(false);
+    setCreatingDraft(true);
+
+    const result = await createDraftVersion({ id });
+
+    if (result.error) {
+      setDraftError(true);
+      setCreatingDraft(false);
       return;
     }
-  }, [router, isPublished, id, locale]);
+
+    router.refresh();
+  }, [creatingDraft, id, router]);
 
   const _debounced = debounce(
     useCallback(
@@ -127,6 +158,28 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   }, [focusTitle]);
 
   const hasHydrated = useRehydrate();
+
+  if (
+    templateVersioningEnabled &&
+    isPublished &&
+    currentPublishedVersionId &&
+    !currentDraftVersionId
+  ) {
+    return (
+      <div className="max-w-xl">
+        <h1 className="mb-4">{t("publishedEditDraftTitle")}</h1>
+        <p className="mb-4 text-slate-700">{t("publishedEditDraftDescription")}</p>
+        {draftError && (
+          <p role="alert" className="mb-4 font-semibold text-red-700">
+            {t("createDraftVersionError")}
+          </p>
+        )}
+        <Button theme="primary" onClick={handleCreateDraft} disabled={creatingDraft}>
+          {creatingDraft ? t("creatingDraftVersion") : t("editPublishedForm")}
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div>

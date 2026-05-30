@@ -131,6 +131,8 @@ export interface TemplateStoreProps {
   hasTransformed: boolean;
   form: FormProperties;
   isPublished: boolean;
+  currentPublishedVersionId?: string | null;
+  currentDraftVersionId?: string | null;
   name: string;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;

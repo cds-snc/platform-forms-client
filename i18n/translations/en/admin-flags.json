@@ -26,6 +26,10 @@
       "title": "hCaptcha",
       "description": "Enable hCaptcha spam prevention"
     },
+    "templateVersioning": {
+      "title": "Template versioning",
+      "description": "Enable draft version and re-publish flow for form templates"
+    },
     "topBanner": {
       "title": "Banner",
       "description": "Enable warning banner to be visible"
