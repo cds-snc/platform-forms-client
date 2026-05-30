@@ -10,7 +10,7 @@ interface UseEditLockPollingProps {
 }
 
 /**
- * Custom hook to handle edit lock polling with request deduplication and cancellation
+ * Custom hook to handle edit lock polling with request deduplication
  */
 export function useEditLockPolling({
   templates,
@@ -33,7 +33,7 @@ export function useEditLockPolling({
   }, [displayedCount]);
 
   const fetchEditLockUpdates = useCallback(async () => {
-    // Deduplicate: skip if a fetch is already in progress
+    // Skip if a fetch is already in progress (polling cadence > request time in normal conditions)
     if (fetchInProgressRef.current) {
       return;
     }
@@ -46,12 +46,6 @@ export function useEditLockPolling({
       return;
     }
 
-    // Cancel any previous in-flight request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    // Create new abort controller for this request
     abortControllerRef.current = new AbortController();
     fetchInProgressRef.current = true;
 
@@ -92,7 +86,7 @@ export function useEditLockPolling({
             editLockInfo: {
               lockedByUserId: lockInfo.lockedByUserId,
               lockedByName: lockInfo.lockedByName,
-              lockedByEmail: lockInfo.lockedByEmail,
+              lockedByEmail: null,
               lockedAt: new Date(lockInfo.lockedAt),
               heartbeatAt: new Date(lockInfo.heartbeatAt),
               expiresAt: new Date(lockInfo.expiresAt),

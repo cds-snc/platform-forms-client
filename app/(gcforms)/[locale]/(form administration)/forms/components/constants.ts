@@ -17,3 +17,8 @@ export const TTL_WARNING_DAYS = 5;
  * Milliseconds in a day (for date calculations)
  */
 export const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
+
+/**
+ * Polling interval for edit-lock updates on the /forms dashboard.
+ */
+export const EDIT_LOCK_POLL_INTERVAL_MS = 5000;

@@ -15,11 +15,9 @@ import { Invitations } from "./components/Invitations/Invitations";
 import { prisma } from "@gcforms/database";
 import { EditLockPresenceStatus, EditLockVisibilityState } from "@lib/editLocks";
 import { getTemplateIdsWithEditLocks, getEditLockInfoWithCollaborators } from "@lib/editLockUtils";
+import { EDIT_LOCK_POLL_INTERVAL_MS } from "./components/constants";
 
 const FALLBACK_DATE = Date.now().toString();
-
-// Polling interval for edit-lock updates (in milliseconds)
-const EDIT_LOCK_POLL_INTERVAL_MS = 5000; // 5 seconds -- set to a high number later like 10 seconds to reduce load
 
 async function combineTemplatesWithLockInfo(
   templates: FormsTemplate[]

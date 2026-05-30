@@ -13,13 +13,13 @@ export const Cards = ({
   initialTemplates,
   overdueTemplateIds,
   status,
-  pollIntervalMs = 1000,
+  pollIntervalMs,
 }: {
   filter?: string;
   initialTemplates: FormsTemplateWithLockInfo[];
   overdueTemplateIds: string[];
   status?: string;
-  pollIntervalMs?: number;
+  pollIntervalMs: number;
 }) => {
   const { t } = useTranslation("my-forms");
   const [templates, setTemplates] = useState<FormsTemplateWithLockInfo[]>(initialTemplates);

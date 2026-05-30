@@ -12,7 +12,6 @@ export type CardState = "draft-editing" | "draft-readonly" | "published" | "arch
 export type EditLockInfo = {
   lockedByUserId: string;
   lockedByName: string | null;
-  lockedByEmail: string | null;
   lockedAt: string;
   heartbeatAt: string;
   expiresAt: string;

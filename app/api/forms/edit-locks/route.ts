@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { logMessage } from "@lib/logger";
-import { getEditLockInfoWithCollaborators } from "@lib/editLockUtils";
+import { getEditLockInfoForTemplates } from "@lib/editLockUtils";
 import { middleware, sessionExists } from "@lib/middleware";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { authorization } from "@lib/privileges";
@@ -8,7 +8,6 @@ import { authorization } from "@lib/privileges";
 type EditLockResponse = {
   lockedByUserId: string;
   lockedByName: string | null;
-  lockedByEmail: string | null;
   lockedAt: string;
   heartbeatAt: string;
   expiresAt: string;
@@ -17,6 +16,11 @@ type EditLockResponse = {
   presenceStatus: string | null;
   sessionId: string | null;
 };
+
+// Cap accepted templateIds per request to bound DB/Redis work
+const MAX_TEMPLATE_IDS_PER_REQUEST = 200;
+// Loose sanity check on individual ids (CUIDs, UUIDs, etc. all fit comfortably)
+const TEMPLATE_ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
 
 /**
  * API endpoint to get edit-lock information for specified templateIds
@@ -36,6 +40,17 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
 
     if (!Array.isArray(templateIds)) {
       return NextResponse.json({ error: "templateIds must be an array" }, { status: 400 });
+    }
+
+    if (templateIds.length > MAX_TEMPLATE_IDS_PER_REQUEST) {
+      return NextResponse.json(
+        { error: `templateIds exceeds maximum of ${MAX_TEMPLATE_IDS_PER_REQUEST}` },
+        { status: 400 }
+      );
+    }
+
+    if (!templateIds.every((id) => typeof id === "string" && TEMPLATE_ID_PATTERN.test(id))) {
+      return NextResponse.json({ error: "templateIds contains invalid values" }, { status: 400 });
     }
 
     if (templateIds.length === 0) {
@@ -64,42 +79,33 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
       return NextResponse.json({ editLocks: {} });
     }
 
-    const { lockInfoMap } = await getEditLockInfoWithCollaborators(templateIds);
+    // Lock info only. Collaborator counts are not needed for the polling response
+    // and fetching them fanned out one DB query per templateId.
+    const lockInfoMap = await getEditLockInfoForTemplates(templateIds);
 
-    // Convert lock info to response format (only for templates with active locks)
-    const editLocks = templateIds.reduce(
-      (acc, templateId) => {
-        const lockInfo = lockInfoMap.get(templateId);
-        if (!lockInfo) {
-          return acc;
-        }
-
-        acc[templateId] = {
-          lockedByUserId: lockInfo.lockedByUserId,
-          lockedByName: lockInfo.lockedByName ?? null,
-          lockedByEmail: lockInfo.lockedByEmail ?? null,
-          lockedAt: lockInfo.lockedAt.toISOString(),
-          heartbeatAt: lockInfo.heartbeatAt.toISOString(),
-          expiresAt: lockInfo.expiresAt.toISOString(),
-          lastActivityAt: lockInfo.lastActivityAt?.toISOString() ?? null,
-          visibilityState: lockInfo.visibilityState ?? null,
-          presenceStatus: lockInfo.presenceStatus ?? null,
-          sessionId: lockInfo.sessionId ?? null,
-        };
-
-        return acc;
-      },
-      {} as Record<string, EditLockResponse>
-    );
+    // Build response only for templates with active locks. Iterating the map (vs.
+    // the full templateIds list) avoids O(N) work for unlocked templates.
+    const editLocks: Record<string, EditLockResponse> = {};
+    for (const [templateId, lockInfo] of lockInfoMap) {
+      editLocks[templateId] = {
+        lockedByUserId: lockInfo.lockedByUserId,
+        lockedByName: lockInfo.lockedByName ?? null,
+        lockedAt: lockInfo.lockedAt.toISOString(),
+        heartbeatAt: lockInfo.heartbeatAt.toISOString(),
+        expiresAt: lockInfo.expiresAt.toISOString(),
+        lastActivityAt: lockInfo.lastActivityAt?.toISOString() ?? null,
+        visibilityState: lockInfo.visibilityState ?? null,
+        presenceStatus: lockInfo.presenceStatus ?? null,
+        sessionId: lockInfo.sessionId ?? null,
+      };
+    }
 
     return NextResponse.json(
       { editLocks },
       {
         headers: {
-          // Prevent caching since lock info changes frequently (e.g. every 5s)
+          // Prevent caching since lock info changes frequently
           "Cache-Control": "no-store, must-revalidate",
-          // Allow browser to keep connection alive for subsequent polls
-          Connection: "keep-alive",
         },
       }
     );
