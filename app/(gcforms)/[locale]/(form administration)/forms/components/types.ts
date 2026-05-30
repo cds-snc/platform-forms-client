@@ -7,17 +7,17 @@ import { EditLockPresenceStatus, EditLockVisibilityState } from "@root/lib/editL
 export type CardState = "draft-editing" | "draft-readonly" | "published" | "archived";
 
 /**
- * Edit lock information returned from the API
+ * Edit-lock info as returned by the /api/forms/edit-locks endpoint (dates as ISO strings).
  */
-export type EditLockInfo = {
+export type EditLockInfoDTO = {
   lockedByUserId: string;
   lockedByName: string | null;
   lockedAt: string;
   heartbeatAt: string;
   expiresAt: string;
   lastActivityAt: string | null;
-  visibilityState: "visible" | "hidden" | null;
-  presenceStatus: "active" | "idle" | "away" | null;
+  visibilityState: EditLockVisibilityState | null;
+  presenceStatus: EditLockPresenceStatus | null;
   sessionId: string | null;
 };
 
@@ -25,13 +25,28 @@ export type EditLockInfo = {
  * API response shape for edit locks
  */
 export type EditLocksResponse = {
-  editLocks: Record<string, EditLockInfo>;
+  editLocks: Record<string, EditLockInfoDTO>;
 };
 
 /**
- * Base card interface
+ * Edit-lock info as held in client state (dates as Date objects).
  */
-export interface CardData {
+export type EditLockInfoClient = {
+  lockedByUserId: string;
+  lockedByName: string | null;
+  lockedAt: Date;
+  heartbeatAt: Date;
+  expiresAt: Date;
+  lastActivityAt: Date | null;
+  visibilityState: EditLockVisibilityState | null;
+  presenceStatus: EditLockPresenceStatus | null;
+  sessionId: string | null;
+};
+
+/**
+ * Server-side template summary used by the /forms dashboard.
+ */
+export type FormsTemplate = {
   id: string;
   titleEn: string;
   titleFr: string;
@@ -42,29 +57,17 @@ export interface CardData {
   date: string;
   url: string;
   overdue: boolean;
-  hasEditLock?: boolean;
+  hasEditLock: boolean;
   isShared: boolean;
-  status?: string;
-}
-
-/**
- * Card data with edit lock and collaborator information
- */
-export type CardWithLockInfo = CardData & {
   collaboratorCount: {
     userCount: number;
     pendingUserCount: number;
   };
-  editLockInfo?: {
-    lockedByUserId: string;
-    lockedByName: string | null;
-    lockedByEmail: string | null;
-    lockedAt: Date;
-    heartbeatAt: Date;
-    expiresAt: Date;
-    lastActivityAt: Date | null;
-    visibilityState: EditLockVisibilityState | null;
-    presenceStatus: EditLockPresenceStatus | null;
-    sessionId: string | null;
-  } | null;
+};
+
+/**
+ * Template enriched with edit-lock info for client rendering.
+ */
+export type FormsTemplateWithLockInfo = FormsTemplate & {
+  editLockInfo?: EditLockInfoClient | null;
 };

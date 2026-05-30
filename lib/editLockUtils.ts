@@ -33,14 +33,25 @@ export async function getTemplateIdsWithEditLocks(): Promise<Set<string>> {
     }
 
     const redis = await getRedisInstance();
-    const keys = await redis.keys("edit-lock:*");
+    // scanStream wraps the SCAN cursor loop in a Node stream. Non-blocking like
+    // raw SCAN, avoids the await-in-loop pattern, and yields between batches.
+    const templateIds = new Set<string>();
+    const stream = redis.scanStream({ match: "edit-lock:*", count: 500 });
 
-    // Extract template IDs from keys (Redis format: "edit-lock:{templateId}")
-    const templateIds = keys
-      .map((key) => key.replace(/^edit-lock:/, ""))
-      .filter((id) => id.length > 0);
+    await new Promise<void>((resolve, reject) => {
+      stream.on("data", (keys: string[]) => {
+        for (const key of keys) {
+          const id = key.replace(/^edit-lock:/, "");
+          if (id.length > 0) {
+            templateIds.add(id);
+          }
+        }
+      });
+      stream.on("end", resolve);
+      stream.on("error", reject);
+    });
 
-    return new Set(templateIds);
+    return templateIds;
   } catch (error) {
     // TODO may want to be INFO instead since not serious if Redis is unavailable - just means edit-lock features won't work
     logMessage.error(`Error fetching edit-lock from Redis: ${error}`);

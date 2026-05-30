@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { Card } from "./Card";
-import { FormsTemplateWithLockInfo } from "../../page";
+import { FormsTemplateWithLockInfo } from "../types";
 import { useTranslation } from "@i18n/client";
 import { CARDS_PER_BATCH } from "../constants";
 import { useEditLockPolling } from "../hooks/useEditLockPolling";

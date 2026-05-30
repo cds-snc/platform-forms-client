@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import { FormsTemplateWithLockInfo } from "../../page";
-import { EditLocksResponse } from "../types";
+import { FormsTemplateWithLockInfo, EditLocksResponse } from "../types";
 
 interface UseEditLockPollingProps {
   templates: FormsTemplateWithLockInfo[];
@@ -65,39 +64,66 @@ export function useEditLockPolling({
 
       const data: EditLocksResponse = await response.json();
 
-      // Update templates with new lock info
-      onUpdate((prevTemplates) =>
-        prevTemplates.map((template) => {
-          const lockInfo = data.editLocks[template.id];
+      // Update templates with new lock info, preserving referential equality where
+      // nothing changed so memoized child Cards skip re-rendering on each poll.
+      onUpdate((prevTemplates) => {
+        let changed = false;
+        const next = prevTemplates.map((template) => {
+          const incoming = data.editLocks[template.id];
+          const previous = template.editLockInfo ?? null;
 
-          if (!lockInfo) {
-            // No lock exists for this template
-            return {
-              ...template,
-              hasEditLock: false,
-              editLockInfo: null,
-            };
+          if (!incoming) {
+            if (!template.hasEditLock && previous === null) {
+              return template;
+            }
+            changed = true;
+            return { ...template, hasEditLock: false, editLockInfo: null };
           }
 
-          // Lock exists, update it (whether new or existing)
+          const incomingLockedAt = new Date(incoming.lockedAt).getTime();
+          const incomingHeartbeatAt = new Date(incoming.heartbeatAt).getTime();
+          const incomingExpiresAt = new Date(incoming.expiresAt).getTime();
+          const incomingLastActivityAt = incoming.lastActivityAt
+            ? new Date(incoming.lastActivityAt).getTime()
+            : null;
+
+          if (
+            previous &&
+            template.hasEditLock &&
+            previous.lockedByUserId === incoming.lockedByUserId &&
+            previous.lockedByName === incoming.lockedByName &&
+            previous.visibilityState === incoming.visibilityState &&
+            previous.presenceStatus === incoming.presenceStatus &&
+            previous.sessionId === incoming.sessionId &&
+            previous.lockedAt.getTime() === incomingLockedAt &&
+            previous.heartbeatAt.getTime() === incomingHeartbeatAt &&
+            previous.expiresAt.getTime() === incomingExpiresAt &&
+            (previous.lastActivityAt?.getTime() ?? null) === incomingLastActivityAt
+          ) {
+            return template;
+          }
+
+          changed = true;
           return {
             ...template,
             hasEditLock: true,
             editLockInfo: {
-              lockedByUserId: lockInfo.lockedByUserId,
-              lockedByName: lockInfo.lockedByName,
-              lockedByEmail: null,
-              lockedAt: new Date(lockInfo.lockedAt),
-              heartbeatAt: new Date(lockInfo.heartbeatAt),
-              expiresAt: new Date(lockInfo.expiresAt),
-              lastActivityAt: lockInfo.lastActivityAt ? new Date(lockInfo.lastActivityAt) : null,
-              visibilityState: lockInfo.visibilityState,
-              presenceStatus: lockInfo.presenceStatus,
-              sessionId: lockInfo.sessionId,
+              lockedByUserId: incoming.lockedByUserId,
+              lockedByName: incoming.lockedByName,
+              lockedAt: new Date(incomingLockedAt),
+              heartbeatAt: new Date(incomingHeartbeatAt),
+              expiresAt: new Date(incomingExpiresAt),
+              lastActivityAt:
+                incomingLastActivityAt !== null ? new Date(incomingLastActivityAt) : null,
+              visibilityState: incoming.visibilityState,
+              presenceStatus: incoming.presenceStatus,
+              sessionId: incoming.sessionId,
             },
           };
-        })
-      );
+        });
+
+        return changed ? next : prevTemplates;
+      });
     } catch (error) {
       // Ignore AbortError - it's expected when cancelling requests
       if (error instanceof Error && error.name === "AbortError") {

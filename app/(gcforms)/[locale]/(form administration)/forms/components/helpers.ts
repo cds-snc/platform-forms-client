@@ -1,10 +1,10 @@
-import { CardWithLockInfo, CardState } from "./types";
+import { FormsTemplateWithLockInfo, CardState } from "./types";
 import { TTL_WARNING_DAYS, MILLISECONDS_PER_DAY } from "./constants";
 
 /**
  * Determines the current state of a card based on its properties
  */
-export function getCardState(card: CardWithLockInfo): CardState {
+export function getCardState(card: FormsTemplateWithLockInfo): CardState {
   if (card.ttl) return "archived";
   if (card.isPublished) return "published";
   if (card.editLockInfo) return "draft-editing";

@@ -9,7 +9,7 @@ import { DraftEditLink } from "../client/DraftEditLink";
 import { useTranslation } from "@i18n/client";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { CardWithLockInfo } from "../types";
+import { FormsTemplateWithLockInfo } from "../types";
 import {
   getCardState,
   formatDateToYYYYMMDD,
@@ -205,16 +205,11 @@ const CardFooterPublished = memo(({ cardId }: CardFooterPublishedProps) => {
 });
 CardFooterPublished.displayName = "CardFooterPublished";
 
-const CardFooterArchived = memo(() => {
-  return null;
-});
-CardFooterArchived.displayName = "CardFooterArchived";
-
 /**
  * Main Card component that displays a form card with all its information
  * Memoized to prevent unnecessary re-renders during polling updates
  */
-const CardComponent = ({ card, status }: { card: CardWithLockInfo; status?: string }) => {
+const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; status?: string }) => {
   const params = useParams();
   const language = params?.locale as string;
 
@@ -230,15 +225,11 @@ const CardComponent = ({ card, status }: { card: CardWithLockInfo; status?: stri
 
   const cardState = useMemo(() => getCardState(card), [card]);
 
-  const wrapperClass = useMemo(
-    () =>
-      `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : ""}`,
-    [card.editLockInfo]
-  );
+  const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : ""}`;
 
   return (
     <div className={wrapperClass} data-testid={`card-${card.id}`}>
-      <div className="flex items-start" style={{ gridColumn: 2 }}>
+      <div className="col-start-2 flex items-start">
         <Menu
           id={card.id}
           name={card.name}
@@ -248,7 +239,7 @@ const CardComponent = ({ card, status }: { card: CardWithLockInfo; status?: stri
         />
       </div>
 
-      <div className="flex flex-col" style={{ gridColumn: 1, gridRow: 1 }}>
+      <div className="col-start-1 row-start-1 flex flex-col">
         <CardCollaboratorCount collaboratorCount={collaboratorCount} />
 
         <CardTitle name={card.name} />
@@ -281,8 +272,6 @@ const CardComponent = ({ card, status }: { card: CardWithLockInfo; status?: stri
           <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
 
           {cardState === "published" && <CardFooterPublished cardId={card.id} />}
-
-          {cardState === "archived" && <CardFooterArchived />}
         </div>
       </div>
     </div>

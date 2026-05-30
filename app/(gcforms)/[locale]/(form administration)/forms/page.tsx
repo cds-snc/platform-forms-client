@@ -13,7 +13,6 @@ import { DeliveryOption } from "@lib/types";
 import { getOverdueTemplateIds } from "@lib/overdue";
 import { Invitations } from "./components/Invitations/Invitations";
 import { prisma } from "@gcforms/database";
-import { EditLockPresenceStatus, EditLockVisibilityState } from "@lib/editLocks";
 import { getTemplateIdsWithEditLocks, getEditLockInfoWithCollaborators } from "@lib/editLockUtils";
 import { EDIT_LOCK_POLL_INTERVAL_MS } from "./components/constants";
 
@@ -51,7 +50,6 @@ async function combineTemplatesWithLockInfo(
       editLockInfo: {
         lockedByUserId: lockInfo.lockedByUserId,
         lockedByName: lockInfo.lockedByName ?? null,
-        lockedByEmail: lockInfo.lockedByEmail ?? null,
         lockedAt: lockInfo.lockedAt,
         heartbeatAt: lockInfo.heartbeatAt,
         expiresAt: lockInfo.expiresAt,
@@ -64,39 +62,8 @@ async function combineTemplatesWithLockInfo(
   });
 }
 
-export type FormsTemplate = {
-  id: string;
-  titleEn: string;
-  titleFr: string;
-  deliveryOption: DeliveryOption;
-  name: string;
-  isPublished: boolean;
-  ttl: Date | null;
-  date: string;
-  url: string;
-  overdue: boolean;
-  hasEditLock: boolean;
-  isShared: boolean;
-  collaboratorCount: {
-    userCount: number;
-    pendingUserCount: number;
-  };
-};
-
-export type FormsTemplateWithLockInfo = FormsTemplate & {
-  editLockInfo?: {
-    lockedByUserId: string;
-    lockedByName: string | null;
-    lockedByEmail: string | null;
-    lockedAt: Date;
-    heartbeatAt: Date;
-    expiresAt: Date;
-    lastActivityAt: Date | null;
-    visibilityState: EditLockVisibilityState | null;
-    presenceStatus: EditLockPresenceStatus | null;
-    sessionId: string | null;
-  } | null;
-};
+export type { FormsTemplate, FormsTemplateWithLockInfo } from "./components/types";
+import type { FormsTemplate, FormsTemplateWithLockInfo } from "./components/types";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
