@@ -58,7 +58,6 @@ describe("editLocks with redis", () => {
     process.env.APP_ENV = "development";
     const redisInstance = await getRedisInstance();
     await redisInstance.flushall();
-    await redisInstance.set("flag:lockedEditing", "1");
     vi.mocked(formCache.check).mockResolvedValue(null);
   });
 
@@ -234,7 +233,6 @@ describe("editLocks with redis", () => {
   it("disables edit locking for draft forms with fewer than two assigned users", () => {
     expect(
       shouldEnableTemplateEditLock({
-        allowLockedEditing: true,
         templateId: "form-8",
         isPublished: false,
         assignedUserCount: 1,
@@ -243,7 +241,6 @@ describe("editLocks with redis", () => {
 
     expect(
       shouldEnableTemplateEditLock({
-        allowLockedEditing: true,
         templateId: "form-8",
         isPublished: false,
         assignedUserCount: 2,
@@ -365,5 +362,4 @@ describe("editLocks with redis", () => {
       expect(prisma.template.findUnique).toHaveBeenCalledTimes(1);
     });
   });
-
 });

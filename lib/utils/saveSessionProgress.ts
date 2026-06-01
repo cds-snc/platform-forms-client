@@ -14,11 +14,19 @@ export type Options = {
   values: FormValues;
   history: string[];
   currentGroup: string;
+  sourceFormId?: string;
+};
+
+type RestoredProgress = {
+  id: number;
+  language: Language;
+  values: FormValues | false;
+  sourceFormId?: string;
 };
 
 export const saveSessionProgress = (
   language: string = "en",
-  { id, values, history, currentGroup }: Options
+  { id, values, history, currentGroup, sourceFormId }: Options
 ) => {
   if (typeof sessionStorage === "undefined") {
     return false;
@@ -30,6 +38,7 @@ export const saveSessionProgress = (
     history: history,
     currentGroup: currentGroup,
     language: language,
+    sourceFormId: sourceFormId,
   });
 
   // Encode UTF-8 string to base64
@@ -45,7 +54,7 @@ export const restoreSessionProgress = ({
   id: string;
   form: FormProperties;
   language: Language;
-}): { id: number; language: Language; values: FormValues | false } | false => {
+}): RestoredProgress | false => {
   if (typeof sessionStorage === "undefined") {
     return false;
   }
@@ -69,10 +78,16 @@ export const restoreSessionProgress = ({
           id: parsedData.id,
           language: parsedData.language,
           values: vals ? (vals as FormValues) : false,
+          sourceFormId: parsedData.sourceFormId,
         };
       }
 
-      return { id: parsedData.id, language: parsedData.language, values: parsedData.values };
+      return {
+        id: parsedData.id,
+        language: parsedData.language,
+        values: parsedData.values,
+        sourceFormId: parsedData.sourceFormId,
+      };
     }
   } catch (e) {
     return false;

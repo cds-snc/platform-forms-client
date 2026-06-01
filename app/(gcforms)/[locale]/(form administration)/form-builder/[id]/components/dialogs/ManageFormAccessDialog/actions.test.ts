@@ -4,12 +4,7 @@ vi.mock("@lib/auth", () => ({
   auth: vi.fn().mockResolvedValue({ user: { id: "test-user-id" } }),
 }));
 
-vi.mock("@lib/cache/flags", () => ({
-  checkOne: vi.fn(),
-}));
-
 vi.mock("@lib/templates", () => ({
-  getPublicTemplateByID: vi.fn(),
   getTemplateWithAssociatedUsers: vi.fn(),
   removeAssignedUserFromTemplate: vi.fn(),
 }));
@@ -28,10 +23,8 @@ vi.mock("@lib/logger", () => ({
   },
 }));
 
-import { checkOne } from "@lib/cache/flags";
 import { serverTranslation } from "@i18n";
 import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
-import { getPublicTemplateByID } from "@lib/templates";
 import { sendInvitation } from "./actions";
 
 describe("sendInvitation", () => {
@@ -43,39 +36,9 @@ describe("sendInvitation", () => {
     (inviteUserByEmail as Mock).mockResolvedValue(undefined);
   });
 
-  it("returns a draft form error when locked editing is disabled", async () => {
-    (checkOne as Mock).mockResolvedValue(false);
-    (getPublicTemplateByID as Mock).mockResolvedValue({ isPublished: false });
-
+  it("sends invitations without a publish-status pre-check", async () => {
     const result = await sendInvitation(["invitee@cds-snc.ca"], "form-id", "message");
 
-    expect(getPublicTemplateByID).toHaveBeenCalledWith("form-id");
-    expect(inviteUserByEmail).not.toHaveBeenCalled();
-    expect(result).toEqual({
-      success: false,
-      errors: ["draftFormError"],
-    });
-  });
-
-  it("skips the publish check when locked editing is enabled", async () => {
-    (checkOne as Mock).mockResolvedValue(true);
-
-    const result = await sendInvitation(["invitee@cds-snc.ca"], "form-id", "message");
-
-    expect(getPublicTemplateByID).not.toHaveBeenCalled();
-    expect(inviteUserByEmail).toHaveBeenCalledWith("invitee@cds-snc.ca", "form-id", "message");
-    expect(result).toEqual({
-      success: true,
-    });
-  });
-
-  it("continues inviting when locked editing is disabled and the form is published", async () => {
-    (checkOne as Mock).mockResolvedValue(false);
-    (getPublicTemplateByID as Mock).mockResolvedValue({ isPublished: true });
-
-    const result = await sendInvitation(["invitee@cds-snc.ca"], "form-id", "message");
-
-    expect(getPublicTemplateByID).toHaveBeenCalledWith("form-id");
     expect(inviteUserByEmail).toHaveBeenCalledWith("invitee@cds-snc.ca", "form-id", "message");
     expect(result).toEqual({
       success: true,

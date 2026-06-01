@@ -1,6 +1,5 @@
 import { prisma } from "@gcforms/database";
 import { getRedisInstance } from "@lib/integration/redisConnector";
-import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { logMessage } from "@lib/logger";
 import { formCache } from "./cache/formCache";
 import {
@@ -469,18 +468,15 @@ export const getEditLockDisabledStatus = (): EditLockStatus => ({
 });
 
 export const shouldEnableTemplateEditLock = ({
-  allowLockedEditing,
   templateId,
   isPublished,
   assignedUserCount,
 }: {
-  allowLockedEditing: boolean;
   templateId: string | null | undefined;
   isPublished: boolean;
   assignedUserCount: number;
 }): boolean =>
   Boolean(
-    allowLockedEditing &&
     templateId &&
     templateId !== "0000" &&
     !isPublished &&
@@ -599,17 +595,11 @@ export const getTemplateCollaboratorCount = async (
 const shouldEnforceTemplateEditLockInternal = async (
   templateId: string,
   {
-    userId,
     revalidateAssignedUserCount = false,
   }: {
-    userId?: string;
     revalidateAssignedUserCount?: boolean;
   } = {}
 ): Promise<boolean> => {
-  if (!(await allowLockedEditing(userId))) {
-    return false;
-  }
-
   const useRedisCache = process.env.APP_ENV !== "test" && redisEnabled();
 
   // Check the cache first
@@ -656,17 +646,17 @@ const shouldEnforceTemplateEditLockInternal = async (
 
 export const shouldEnforceTemplateEditLock = async (
   templateId: string,
-  userId?: string
-): Promise<boolean> => shouldEnforceTemplateEditLockInternal(templateId, { userId });
+  _userId?: string
+): Promise<boolean> =>
+  shouldEnforceTemplateEditLockInternal(templateId, { revalidateAssignedUserCount: false });
 
 // Use this on page-entry or mutation paths where a stale cached multi-user threshold would be
 // user-visible. It re-checks assigned-user count before enforcing edit locking.
 export const shouldEnforceTemplateEditLockWithVerifiedUserCount = async (
   templateId: string,
-  userId?: string
+  _userId?: string
 ): Promise<boolean> =>
   shouldEnforceTemplateEditLockInternal(templateId, {
-    userId,
     revalidateAssignedUserCount: true,
   });
 
