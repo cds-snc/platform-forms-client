@@ -315,6 +315,7 @@ describe("Invitations", () => {
           email: "invited@cds-snc.ca",
           expires: new Date(Date.now() + 10000),
           templateId: "template-id",
+          invitedBy: "invited-user-id",
         })
       ); // invitation not expired
 
