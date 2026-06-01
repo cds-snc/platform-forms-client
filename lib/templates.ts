@@ -45,105 +45,6 @@ const isTemplateVersioningEnabled = async () => {
   return checkOne(FeatureFlags.templateVersioning);
 };
 
-const templateVersionSelect = {
-  id: true,
-  versionNumber: true,
-  status: true,
-  jsonConfig: true,
-} satisfies Prisma.TemplateVersionSelect;
-
-const templateRecordInclude = {
-  deliveryOption: true,
-  currentDraftVersion: {
-    select: templateVersionSelect,
-  },
-  currentPublishedVersion: {
-    select: templateVersionSelect,
-  },
-} satisfies Prisma.TemplateInclude;
-
-const isTemplateJsonConfigMirrorEnabled = () => {
-  return process.env.TEMPLATE_JSON_CONFIG_MIRROR !== "false";
-};
-
-const getTemplateJsonConfigCreateData = (jsonConfig: Prisma.JsonObject) => {
-  // Creates still seed Template.jsonConfig until the schema contract step removes the column.
-  return { jsonConfig };
-};
-
-const getTemplateJsonConfigMirrorData = (jsonConfig: Prisma.JsonObject) => {
-  return isTemplateJsonConfigMirrorEnabled() ? { jsonConfig } : {};
-};
-
-const parseJsonConfig = (raw: Prisma.JsonValue): FormProperties => {
-  if (typeof raw === "string") {
-    return JSON.parse(raw) as FormProperties;
-  }
-
-  return raw as FormProperties;
-};
-
-const getBuilderVersion = (
-  template: Pick<TemplateRecordForParsing, "currentDraftVersion" | "currentPublishedVersion">
-) => {
-  return template.currentDraftVersion ?? template.currentPublishedVersion ?? null;
-};
-
-const getResolvedTemplateRawConfig = (
-  template: {
-    jsonConfig: Prisma.JsonValue;
-    currentDraftVersion?: TemplateVersionConfigSnapshot | null;
-    currentPublishedVersion?: TemplateVersionConfigSnapshot | null;
-  },
-  options?: {
-    preferPublished?: boolean;
-    allowTemplateFallback?: boolean;
-  }
-) => {
-  const version = options?.preferPublished
-    ? (template.currentPublishedVersion ?? template.currentDraftVersion ?? null)
-    : (template.currentDraftVersion ?? template.currentPublishedVersion ?? null);
-
-  if (version) {
-    return version.jsonConfig;
-  }
-
-  if (options?.allowTemplateFallback ?? isTemplateJsonConfigMirrorEnabled()) {
-    return template.jsonConfig;
-  }
-
-  throw new Error("Template jsonConfig mirror is disabled and no template version is available.");
-};
-
-const getResolvedTemplateFormConfig = (
-  template: {
-    jsonConfig: Prisma.JsonValue;
-    currentDraftVersion?: TemplateVersionConfigSnapshot | null;
-    currentPublishedVersion?: TemplateVersionConfigSnapshot | null;
-  },
-  options?: {
-    preferPublished?: boolean;
-    allowTemplateFallback?: boolean;
-  }
-) => {
-  return parseJsonConfig(getResolvedTemplateRawConfig(template, options));
-};
-
-const getParsedTemplatePublishState = (
-  template: Pick<TemplateRecordForParsing, "isPublished" | "currentDraftVersionId">,
-  version?: TemplateVersionSnapshot | null
-) => {
-  if (template.currentDraftVersionId) {
-    return false;
-  }
-
-  if (version?.status === TEMPLATE_VERSION_STATUS.PUBLISHED) {
-    return true;
-  }
-
-  return template.isPublished;
-};
-
 // ******************************************
 // Internal Module Functions
 // ******************************************
@@ -2322,4 +2223,103 @@ export const updateFormJsonConfig = async (formId: string, jsonConfig: FormPrope
   return _parseTemplate(updatedTemplate, {
     version: getBuilderVersion(updatedTemplate),
   });
+};
+
+const templateVersionSelect = {
+  id: true,
+  versionNumber: true,
+  status: true,
+  jsonConfig: true,
+} satisfies Prisma.TemplateVersionSelect;
+
+const templateRecordInclude = {
+  deliveryOption: true,
+  currentDraftVersion: {
+    select: templateVersionSelect,
+  },
+  currentPublishedVersion: {
+    select: templateVersionSelect,
+  },
+} satisfies Prisma.TemplateInclude;
+
+const isTemplateJsonConfigMirrorEnabled = () => {
+  return process.env.TEMPLATE_JSON_CONFIG_MIRROR !== "false";
+};
+
+const getTemplateJsonConfigCreateData = (jsonConfig: Prisma.JsonObject) => {
+  // Creates still seed Template.jsonConfig until the schema contract step removes the column.
+  return { jsonConfig };
+};
+
+const getTemplateJsonConfigMirrorData = (jsonConfig: Prisma.JsonObject) => {
+  return isTemplateJsonConfigMirrorEnabled() ? { jsonConfig } : {};
+};
+
+const parseJsonConfig = (raw: Prisma.JsonValue): FormProperties => {
+  if (typeof raw === "string") {
+    return JSON.parse(raw) as FormProperties;
+  }
+
+  return raw as FormProperties;
+};
+
+const getBuilderVersion = (
+  template: Pick<TemplateRecordForParsing, "currentDraftVersion" | "currentPublishedVersion">
+) => {
+  return template.currentDraftVersion ?? template.currentPublishedVersion ?? null;
+};
+
+const getResolvedTemplateRawConfig = (
+  template: {
+    jsonConfig: Prisma.JsonValue;
+    currentDraftVersion?: TemplateVersionConfigSnapshot | null;
+    currentPublishedVersion?: TemplateVersionConfigSnapshot | null;
+  },
+  options?: {
+    preferPublished?: boolean;
+    allowTemplateFallback?: boolean;
+  }
+) => {
+  const version = options?.preferPublished
+    ? (template.currentPublishedVersion ?? template.currentDraftVersion ?? null)
+    : (template.currentDraftVersion ?? template.currentPublishedVersion ?? null);
+
+  if (version) {
+    return version.jsonConfig;
+  }
+
+  if (options?.allowTemplateFallback ?? isTemplateJsonConfigMirrorEnabled()) {
+    return template.jsonConfig;
+  }
+
+  throw new Error("Template jsonConfig mirror is disabled and no template version is available.");
+};
+
+const getResolvedTemplateFormConfig = (
+  template: {
+    jsonConfig: Prisma.JsonValue;
+    currentDraftVersion?: TemplateVersionConfigSnapshot | null;
+    currentPublishedVersion?: TemplateVersionConfigSnapshot | null;
+  },
+  options?: {
+    preferPublished?: boolean;
+    allowTemplateFallback?: boolean;
+  }
+) => {
+  return parseJsonConfig(getResolvedTemplateRawConfig(template, options));
+};
+
+const getParsedTemplatePublishState = (
+  template: Pick<TemplateRecordForParsing, "isPublished" | "currentDraftVersionId">,
+  version?: TemplateVersionSnapshot | null
+) => {
+  if (template.currentDraftVersionId) {
+    return false;
+  }
+
+  if (version?.status === TEMPLATE_VERSION_STATUS.PUBLISHED) {
+    return true;
+  }
+
+  return template.isPublished;
 };
