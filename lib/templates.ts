@@ -9,6 +9,13 @@ import {
   ClosedDetails,
 } from "@lib/types";
 
+import {
+  TEMPLATE_VERSION_STATUS,
+  TemplateVersionConfigSnapshot,
+  TemplateRecordForParsing,
+  TemplateVersionSnapshot,
+} from "@lib/types/template-types";
+
 import { authorization, getAbility } from "./privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, AuditLogEvent, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
@@ -36,53 +43,6 @@ const checkFlag = async (flag: string) => {
 
 const isTemplateVersioningEnabled = async () => {
   return checkOne(FeatureFlags.templateVersioning);
-};
-
-const TEMPLATE_VERSION_STATUS = {
-  DRAFT: "DRAFT",
-  PUBLISHED: "PUBLISHED",
-  SUPERSEDED: "SUPERSEDED",
-} as const;
-
-type TemplateVersionStatus = (typeof TEMPLATE_VERSION_STATUS)[keyof typeof TEMPLATE_VERSION_STATUS];
-
-type TemplateVersionSnapshot = {
-  id: string;
-  versionNumber: number;
-  status: TemplateVersionStatus;
-  jsonConfig: Prisma.JsonValue;
-};
-
-type TemplateVersionConfigSnapshot = {
-  jsonConfig: Prisma.JsonValue;
-};
-
-type TemplateRecordForParsing = {
-  id: string;
-  created_at?: Date;
-  updated_at?: Date;
-  name: string;
-  jsonConfig: Prisma.JsonValue;
-  isPublished: boolean;
-  currentPublishedVersionId?: string | null;
-  currentDraftVersionId?: string | null;
-  currentPublishedVersion?: TemplateVersionSnapshot | null;
-  currentDraftVersion?: TemplateVersionSnapshot | null;
-  deliveryOption: {
-    emailAddress: string;
-    emailSubjectEn: string | null;
-    emailSubjectFr: string | null;
-  } | null;
-  securityAttribute: string;
-  formPurpose: string;
-  publishReason: string;
-  publishFormType: string;
-  publishDesc: string;
-  closingDate?: Date | null;
-  closedDetails?: Prisma.JsonValue | null;
-  saveAndResume: boolean;
-  notificationsInterval?: number | null;
-  ttl?: Date | null;
 };
 
 const templateVersionSelect = {
