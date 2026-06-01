@@ -25,14 +25,6 @@ CREATE TABLE "TemplateVersion" (
     CONSTRAINT "TemplateVersion_pkey" PRIMARY KEY ("id")
 );
 
-UPDATE "Template"
-SET "currentPublishedVersionId" = 'tv_' || "id"
-WHERE "isPublished" = true;
-
-UPDATE "Template"
-SET "currentDraftVersionId" = 'tv_' || "id"
-WHERE "isPublished" = false;
-
 -- CreateIndex
 CREATE UNIQUE INDEX "Template_currentPublishedVersionId_key" ON "Template"("currentPublishedVersionId");
 CREATE UNIQUE INDEX "Template_currentDraftVersionId_key" ON "Template"("currentDraftVersionId");
