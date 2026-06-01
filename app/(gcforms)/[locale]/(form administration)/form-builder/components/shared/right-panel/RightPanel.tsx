@@ -29,8 +29,6 @@ import { useGroupStore } from "@lib/groups/useGroupStore";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { Language } from "@lib/types/form-builder-types";
 import { announce } from "@gcforms/announce";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
 
 const TabButton = ({
   text,
@@ -74,20 +72,10 @@ const TabButton = ({
 export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const router = useRouter();
   const { t, i18n } = useTranslation(["form-builder", "common"]);
-  const { getFlag } = useFeatureFlags();
 
-  const {
-    id: storeId,
-    isLockedByOther,
-    isPublished,
-    currentDraftVersionId,
-    currentPublishedVersionId,
-  } = useTemplateStore((s) => ({
+  const { id: storeId, isLockedByOther } = useTemplateStore((s) => ({
     id: s.id,
     isLockedByOther: s.isLockedByOther,
-    isPublished: s.isPublished,
-    currentDraftVersionId: s.currentDraftVersionId,
-    currentPublishedVersionId: s.currentPublishedVersionId,
   }));
 
   if (storeId && storeId !== id) {
@@ -155,15 +143,6 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   if (isLockedByOther) {
-    return null;
-  }
-
-  if (
-    getFlag(FeatureFlags.templateVersioning) &&
-    isPublished &&
-    currentPublishedVersionId &&
-    !currentDraftVersionId
-  ) {
     return null;
   }
 
