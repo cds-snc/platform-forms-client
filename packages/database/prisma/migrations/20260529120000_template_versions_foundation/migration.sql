@@ -25,35 +25,6 @@ CREATE TABLE "TemplateVersion" (
     CONSTRAINT "TemplateVersion_pkey" PRIMARY KEY ("id")
 );
 
--- Backfill each existing template into an initial version record. Runtime code
--- continues to read Template.jsonConfig until follow-up work switches over.
-INSERT INTO "TemplateVersion" (
-    "id",
-    "templateId",
-    "versionNumber",
-    "status",
-    "jsonConfig",
-    "createdAt",
-    "updatedAt",
-    "publishedAt",
-    "publishReason",
-    "publishFormType",
-    "publishDesc"
-)
-SELECT
-    'tv_' || "id",
-    "id",
-    1,
-    CASE WHEN "isPublished" THEN 'PUBLISHED'::"TemplateVersionStatus" ELSE 'DRAFT'::"TemplateVersionStatus" END,
-    "jsonConfig",
-    "created_at",
-    "updated_at",
-    CASE WHEN "isPublished" THEN "updated_at" ELSE NULL END,
-    "publishReason",
-    "publishFormType",
-    "publishDesc"
-FROM "Template";
-
 UPDATE "Template"
 SET "currentPublishedVersionId" = 'tv_' || "id"
 WHERE "isPublished" = true;

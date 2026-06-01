@@ -3,6 +3,7 @@
 import { useTranslation } from "@i18n/client";
 import copy from "copy-to-clipboard";
 import { getForm, cloneForm } from "../../actions";
+import { createDraftVersion } from "@formBuilder/actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useCallback, useState } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
@@ -61,6 +62,29 @@ export const Menu = ({
               return;
             }
             throw new Error(res?.error || "Clone failed");
+          } catch (e) {
+            toast.error(t("card.menu.cloneFailed"));
+          }
+        })();
+
+        return { message: "" };
+      },
+    },
+    {
+      filtered: isPublished ? false : true,
+      title: t("actions.duplicatePublishedForm"),
+      callback: () => {
+        // create a draft version for the published form within the same template
+        (async () => {
+          try {
+            const res = await createDraftVersion({ id });
+            if (res && !res.error) {
+              toast.success(t("card.menu.cloneSuccess"));
+              // navigate into edit for this form
+              window.location.href = `/${language}/form-builder/${id}/edit`;
+              return;
+            }
+            throw new Error(res?.error || "Create draft failed");
           } catch (e) {
             toast.error(t("card.menu.cloneFailed"));
           }

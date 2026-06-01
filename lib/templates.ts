@@ -985,21 +985,72 @@ export async function createDraftVersionForTemplate(formID: string): Promise<For
         },
       });
 
-      if (!template?.currentPublishedVersionId || !template.currentPublishedVersion) {
-        return null;
+      // Ensure we have a published version row to base the draft off of.
+      // Some templates may have `isPublished` true but no corresponding templateVersion row.
+      // In that case, create a published templateVersion first.
+      if (!template) return null;
+
+      const existingLatest = template.versions[0]?.versionNumber ?? 0;
+
+      let publishedVersionJson: Prisma.JsonValue | null = null;
+      let createdPublishedVersionId: string | null = null;
+
+      if (
+        template.isPublished &&
+        (!template.currentPublishedVersionId || !template.currentPublishedVersion)
+      ) {
+        const now = new Date();
+        const createdPublished = await tx.templateVersion.create({
+          data: {
+            templateId: formID,
+            versionNumber: existingLatest + 1,
+            status: TEMPLATE_VERSION_STATUS.PUBLISHED,
+            jsonConfig: template.jsonConfig as Prisma.JsonObject,
+            createdByUserId: user.id,
+            publishedAt: now,
+            publishedByUserId: user.id,
+            publishReason: template.publishReason ?? undefined,
+            publishFormType: template.publishFormType ?? undefined,
+            publishDesc: template.publishDesc ?? undefined,
+          },
+          select: {
+            id: true,
+            jsonConfig: true,
+          },
+        });
+
+        createdPublishedVersionId = createdPublished.id;
+        publishedVersionJson = createdPublished.jsonConfig as Prisma.JsonValue;
       }
 
+      // If a draft already exists return the (possibly updated) template.
       if (template.currentDraftVersion) {
+        if (createdPublishedVersionId) {
+          return tx.template.update({
+            where: { id: formID },
+            data: {
+              currentPublishedVersionId: createdPublishedVersionId,
+            },
+            include: templateRecordInclude,
+          });
+        }
+
         return template;
       }
 
-      const nextVersionNumber = (template.versions[0]?.versionNumber ?? 0) + 1;
+      const nextVersionNumber = (existingLatest ?? 0) + (createdPublishedVersionId ? 2 : 1);
+
+      const draftJson = template.currentPublishedVersion
+        ? (template.currentPublishedVersion.jsonConfig as Prisma.JsonObject)
+        : ((publishedVersionJson as Prisma.JsonObject) ??
+          (template.jsonConfig as Prisma.JsonObject));
+
       const draftVersion = await tx.templateVersion.create({
         data: {
           templateId: formID,
           versionNumber: nextVersionNumber,
           status: TEMPLATE_VERSION_STATUS.DRAFT,
-          jsonConfig: template.currentPublishedVersion.jsonConfig as Prisma.JsonObject,
+          jsonConfig: draftJson as Prisma.JsonObject,
           createdByUserId: user.id,
         },
         select: {
@@ -1007,13 +1058,19 @@ export async function createDraftVersionForTemplate(formID: string): Promise<For
         },
       });
 
+      const updateData: Record<string, unknown> = {
+        currentDraftVersionId: draftVersion.id,
+      };
+
+      if (createdPublishedVersionId) {
+        updateData.currentPublishedVersionId = createdPublishedVersionId;
+      }
+
       return tx.template.update({
         where: {
           id: formID,
         },
-        data: {
-          currentDraftVersionId: draftVersion.id,
-        },
+        data: updateData,
         include: templateRecordInclude,
       });
     })
