@@ -21,7 +21,7 @@
     }
   },
   "scripts": {
-    "reset": "prisma migrate reset -f",
+    "reset": "prisma migrate reset -f --skip-seed",
     "db:generate": "DATABASE_URL=dummy_url_for_build prisma generate && tsx fixGeneratedPrisma.ts",
     "db:studio": "prisma studio --url=\"${DATABASE_URL}&sslmode=prefer\"",
     "db:prod": "prisma migrate deploy && prisma db seed -- --environment production",
