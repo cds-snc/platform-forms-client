@@ -4,20 +4,28 @@
     "drafts": "Drafts",
     "published": "Published",
     "all": "All",
-    "archived": "Archived"
+    "archived": "Archived",
+    "recentlyEdited": "Recently edited"
+  },
+  "account": {
+    "viewAccount": "View account"
   },
   "actions": {
     "resumeForm": "Resume editing form",
-    "createNewForm": "Create new form",
+    "createNewForm": "New form",
     "unarchiveForm": "Restore form",
     "duplicatePublishedForm": "Copy as new draft form"
   },
   "cards": {
     "noForms": "You have no forms.",
     "noDraftsForms": "You have no draft forms.",
-    "noPublishedForms": "You have no published forms."
+    "noPublishedForms": "You have no published forms.",
+    "noRecentlyEditedForms": "You have no recently edited forms.",
+    "noArchivedForms": "You have no archived forms."
   },
   "card": {
+    "sharedWith_one": "Shared with {{count}} person",
+    "sharedWith_other": "Shared with {{count}} people",
     "states": {
       "draft": "Draft",
       "published": "Published",
@@ -48,7 +56,8 @@
       "somethingWentWrong": "Something went wrong",
       "clone": "Duplicate",
       "cloneSuccess": "Form was duplicated.",
-      "cloneFailed": "Form could not be duplicated."
+      "cloneFailed": "Form could not be duplicated.",
+      "ariaLabel": "Menu for form {{name}}"
     },
     "actionRequired": {
       "description": "Action required: ",
@@ -113,5 +122,12 @@
   },
   "continueReadOnly": "Continue to form",
   "archivedNotice": "You can access archived forms for 30 days.",
-  "archivedNotice2": "After that, forms will be permanently deleted."
+  "archivedNotice2": "After that, forms will be permanently deleted.",
+  "coEditingHelp": {
+    "title": "Co-editing forms",
+    "step1": "Select form",
+    "step2": "Manage access",
+    "step3": "Add team members",
+    "description": "Forms being edited will be available to read - one person can edit at a time."
+  }
 }

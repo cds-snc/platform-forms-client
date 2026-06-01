@@ -58,6 +58,10 @@ const _parseTemplate = (template: {
   saveAndResume: boolean;
   notificationsInterval?: number | null;
   ttl?: Date | null;
+  _count?: {
+    users: number;
+    invitations: number;
+  };
 }): FormRecord => {
   return {
     id: template.id,
@@ -93,6 +97,7 @@ const _parseTemplate = (template: {
     saveAndResume: template.saveAndResume,
     notificationsInterval: template.notificationsInterval as NotificationsInterval,
     ...(template.ttl && { ttl: template.ttl }),
+    ...(template._count && { _count: template._count }),
   };
 };
 
@@ -343,6 +348,20 @@ export async function getAllTemplatesForUser(
           publishDesc: true,
           saveAndResume: true,
           notificationsInterval: true,
+          // only count and not entire user info for privacy etc.
+          _count: {
+            select: {
+              users: true,
+              invitations: {
+                where: {
+                  expires: {
+                    // filter out expired invitations (from the past)
+                    gt: new Date(),
+                  },
+                },
+              },
+            },
+          },
         },
         ...(sortByDateUpdated && {
           orderBy: {
