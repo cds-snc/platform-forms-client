@@ -122,5 +122,12 @@
   },
   "continueReadOnly": "Continue to form",
   "archivedNotice": "You can access archived forms for 30 days.",
-  "archivedNotice2": "After that, forms will be permanently deleted."
+  "archivedNotice2": "After that, forms will be permanently deleted.",
+  "coEditingHelp": {
+    "title": "Co-editing forms",
+    "step1": "Select form",
+    "step2": "Manage access",
+    "step3": "Add team members",
+    "description": "Forms being edited will be available to read - one person can edit at a time."
+  }
 }

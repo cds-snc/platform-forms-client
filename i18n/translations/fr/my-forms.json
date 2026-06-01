@@ -122,5 +122,12 @@
   },
   "continueReadOnly": "Continuer vers le formulaire",
   "archivedNotice": "Vous pouvez accéder à vos formulaires archivés pendant 30 jours.",
-  "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés."
+  "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés.",
+  "coEditingHelp": {
+    "title": "[FR]Co-editing forms",
+    "step1": "[FR]Select form",
+    "step2": "[FR]Manage access",
+    "step3": "[FR]Add team members",
+    "description": "[FR]Forms being edited will be available to read - one person can edit at a time."
+  }
 }

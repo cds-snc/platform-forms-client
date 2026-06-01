@@ -64,6 +64,7 @@ async function combineTemplatesWithLockInfo(
 
 export type { FormsTemplate, FormsTemplateWithLockInfo } from "./components/types";
 import type { FormsTemplate, FormsTemplateWithLockInfo } from "./components/types";
+import { CoEditingHelp } from "./components/server/CoEditingHelp";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -199,21 +200,26 @@ export default async function Page(props: {
   return (
     <div className="m-4 grid min-h-screen grid-cols-[20em_1fr_4em] gap-8">
       <h1 className="sr-only">{t("title")}</h1>
-      <div className="self-start rounded border border-slate-200 bg-white p-2">
-        <AccountDetails
-          name={session.user.name}
-          email={session.user.email}
-          accountUrl={session.user.accountUrl}
-          isZitadelLoginEnabled={session.user.accountUrl ? true : false}
-          profileUrl={`/${locale}/profile`}
-          locale={locale}
-        />
-        <Navigation filter={status} />
+      <div>
+        <div className="self-start rounded border border-slate-200 bg-white p-2">
+          <AccountDetails
+            name={session.user.name}
+            email={session.user.email}
+            accountUrl={session.user.accountUrl}
+            isZitadelLoginEnabled={session.user.accountUrl ? true : false}
+            profileUrl={`/${locale}/profile`}
+            locale={locale}
+          />
+          <Navigation filter={status} />
+        </div>
+        <div className="mt-6 ml-2">
+          {status == "draft" && <ResumeEditingForm />}
+          <CoEditingHelp />
+        </div>
       </div>
       <div className="flex h-full min-h-0 flex-col">
         <div className="">
           <Invitations invitations={invitations} />
-          <ResumeEditingForm />
           <div className="mb-4">
             {status == "archived" && (
               <div>
