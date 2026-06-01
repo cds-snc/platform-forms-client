@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect, useRef, useMemo } from "react"
 import { cn } from "@lib/utils";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel } from ".";
 import { ConfirmationDescriptionWithGroups } from "./ConfirmationDescriptionWithGroups";
@@ -33,6 +33,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     updateField,
     translationLanguagePriority,
     getLocalizationAttribute,
+    isPublished,
     getName,
   } = useTemplateStore((s) => ({
     title:
@@ -41,13 +42,13 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     updateField: s.updateField,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
+    isPublished: s.isPublished,
     getName: s.getName,
   }));
 
   const [value, setValue] = useState<string>(title);
-
   const searchParams = useSearchParams();
-
+  const router = useRouter();
   const focusTitle = searchParams?.get("focusTitle") ? true : false;
   const titleInput = useRef<HTMLTextAreaElement>(null);
   const prevTitleRef = useRef<string>(title);
@@ -70,6 +71,13 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     setValue(title);
     prevTitleRef.current = title;
   }, [title]);
+
+  useEffect(() => {
+    if (isPublished) {
+      router.replace(`/${locale}/form-builder/${id}/published`);
+      return;
+    }
+  }, [router, isPublished, id, locale]);
 
   const _debounced = debounce(
     useCallback(
