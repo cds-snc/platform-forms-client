@@ -104,6 +104,19 @@ export default async function Page(props: {
 
   const { t } = await serverTranslation("my-forms", { lang: locale });
 
+  // TODO: ideally find a better way -OR- if not possible combine both queries into one and filter locally
+  // Do a separate query to check the count for all templates (not just a filterd subset)
+  // This is currently needed for the "Recently Edited" to show/hide based on a user having any templates
+  const totalTemplateCount = await prisma.template.count({
+    where: {
+      users: {
+        some: {
+          id: session.user.id,
+        },
+      },
+    },
+  });
+
   // Moved from Cards to Page to avoid component being cached when navigating back to this page
   const options: TemplateOptions = {
     requestedWhere: {
@@ -210,7 +223,7 @@ export default async function Page(props: {
             profileUrl={`/${locale}/profile`}
             locale={locale}
           />
-          <Navigation filter={status} templateCount={allTemplates.length} />
+          <Navigation filter={status} templateCount={totalTemplateCount} />
         </div>
         <div className="mt-6 ml-2">
           {status == "draft" && <ResumeEditingForm />}
