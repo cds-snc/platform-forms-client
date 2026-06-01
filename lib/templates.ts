@@ -70,6 +70,7 @@ const _parseTemplate = (
     isPublished: options?.isPublished ?? getParsedTemplatePublishState(template, version),
     currentPublishedVersionId: template.currentPublishedVersionId ?? null,
     currentDraftVersionId: template.currentDraftVersionId ?? null,
+    versionNumber: version?.versionNumber ?? null,
     ...(template.deliveryOption && {
       deliveryOption: {
         emailAddress: template.deliveryOption.emailAddress,

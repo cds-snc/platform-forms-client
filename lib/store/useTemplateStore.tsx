@@ -219,6 +219,7 @@ const createTemplateStore = (
               set({
                 currentPublishedVersionId: versionIds.currentPublishedVersionId ?? null,
                 currentDraftVersionId: versionIds.currentDraftVersionId ?? null,
+                versionNumber: versionIds.versionNumber ?? null,
               }),
             setClosingDate: (value) => set({ closingDate: value }),
             setSaveAndResume: (value) => set({ saveAndResume: value }),
@@ -277,11 +278,13 @@ export const TemplateStoreProvider = ({
 
     if (
       state.currentPublishedVersionId !== (props.currentPublishedVersionId ?? null) ||
-      state.currentDraftVersionId !== (props.currentDraftVersionId ?? null)
+      state.currentDraftVersionId !== (props.currentDraftVersionId ?? null) ||
+      state.versionNumber !== (props.versionNumber ?? null)
     ) {
       state.setTemplateVersionIds({
         currentPublishedVersionId: props.currentPublishedVersionId,
         currentDraftVersionId: props.currentDraftVersionId,
+        versionNumber: props.versionNumber,
       });
     }
 
@@ -293,6 +296,7 @@ export const TemplateStoreProvider = ({
     props.isPublished,
     props.currentPublishedVersionId,
     props.currentDraftVersionId,
+    props.versionNumber,
     props.closingDate,
   ]);
 

@@ -26,6 +26,7 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
     isPublished: false,
     currentPublishedVersionId: null,
     currentDraftVersionId: null,
+    versionNumber: null,
     name: "",
     securityAttribute: "Protected A",
     formPurpose: "",
