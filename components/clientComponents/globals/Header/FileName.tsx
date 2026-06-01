@@ -9,11 +9,14 @@ import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 
 export const FileNameInput = () => {
   const { t } = useTranslation(["form-builder"]);
-  const { updateField, getName, getIsPublished } = useTemplateStore((s) => ({
-    getName: s.getName,
-    updateField: s.updateField,
-    getIsPublished: s.getIsPublished,
-  }));
+  const { updateField, getName, getIsPublished, currentDraftVersionId, versionNumber } =
+    useTemplateStore((s) => ({
+      getName: s.getName,
+      updateField: s.updateField,
+      getIsPublished: s.getIsPublished,
+      currentDraftVersionId: s.currentDraftVersionId,
+      versionNumber: s.versionNumber,
+    }));
 
   const fileName = getName();
   const isPublished = getIsPublished();
@@ -48,6 +51,11 @@ export const FileNameInput = () => {
   const remoteRef = useRef<HTMLInputElement | null>(null);
   const { setRef, removeRef } = useRefStore();
 
+  const versionInfo =
+    currentDraftVersionId && versionNumber
+      ? `id: ${currentDraftVersionId} - v${versionNumber}`
+      : null;
+
   useEffect(() => {
     setRef("fileNameInput", remoteRef as React.RefObject<HTMLElement>);
 
@@ -81,8 +89,8 @@ export const FileNameInput = () => {
         style={widthStyle}
         ref={fileNameInput}
         className={cn(
-          "border-1 border-[#1B00C2] rounded-md px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] text-base font-bold text-ellipsis placeholder-slate-500 mt-3",
-          !isPublished && "hover:border-1 hover:border-gray-default"
+          "laptop:min-w-[250px] laptop:max-w-[500px] mt-3 max-w-[200px] min-w-[220px] rounded-md border-1 border-[#1B00C2] px-2 py-1 text-base font-bold text-ellipsis placeholder-slate-500",
+          !isPublished && "hover:border-gray-default hover:border-1"
         )}
         name="filename"
         placeholder={t("unnamedForm", { ns: "form-builder" })}
@@ -107,6 +115,8 @@ export const FileNameInput = () => {
         aria-label={t("formName", { ns: "form-builder" })}
         disabled={isPublished && true}
       />
+
+      <span className="hidden">{versionInfo}</span>
     </div>
   );
 };

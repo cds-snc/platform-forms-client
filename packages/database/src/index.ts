@@ -6,6 +6,8 @@ export {
   type ApiServiceAccount,
   type Session,
   type Template,
+  type TemplateVersion,
+  TemplateVersionStatus,
   type DeliveryOption,
   type Privilege,
   type User,

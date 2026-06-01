@@ -232,6 +232,9 @@ export type FormRecord = {
   name: string;
   form: FormProperties;
   isPublished: boolean;
+  currentPublishedVersionId?: string | null;
+  currentDraftVersionId?: string | null;
+  versionNumber?: number | null;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string;
