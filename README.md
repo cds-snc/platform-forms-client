@@ -71,14 +71,6 @@ Username: localstack_postgres
 Password: chummy
 ```
 
-### Reset your database
-
-To reset your database from the root directory run
-
-```
-yarn workspace @gcforms/database reset
-```
-
 #### Redis GUI
 
 You can download RedisInsight (see download link at the bottom of this [page](https://redis.com/redis-enterprise/redis-insight/)).
