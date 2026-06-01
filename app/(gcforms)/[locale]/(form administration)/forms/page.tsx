@@ -210,7 +210,7 @@ export default async function Page(props: {
             profileUrl={`/${locale}/profile`}
             locale={locale}
           />
-          <Navigation filter={status} templateCount={filteredTemplates?.length} />
+          <Navigation filter={status} templateCount={allTemplates.length} />
         </div>
         <div className="mt-6 ml-2">
           {status == "draft" && <ResumeEditingForm />}

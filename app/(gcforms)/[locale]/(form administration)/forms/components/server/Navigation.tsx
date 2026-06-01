@@ -20,7 +20,7 @@ export const Navigation = async ({
 
   return (
     <nav className="flex flex-col" aria-label={t("navLabel")}>
-      {templateCount && templateCount > 0 && (
+      {templateCount != null && templateCount > 0 && (
         <NavLink
           href={`/${language}/forms`}
           id="tab-all"
