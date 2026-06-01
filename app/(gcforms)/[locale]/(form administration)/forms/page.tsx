@@ -210,7 +210,7 @@ export default async function Page(props: {
             profileUrl={`/${locale}/profile`}
             locale={locale}
           />
-          <Navigation filter={status} />
+          <Navigation filter={status} templateCount={filteredTemplates?.length} />
         </div>
         <div className="mt-6 ml-2">
           {status == "draft" && <ResumeEditingForm />}
@@ -220,14 +220,14 @@ export default async function Page(props: {
       <div className="flex h-full min-h-0 flex-col">
         <div className="">
           <Invitations invitations={invitations} />
-          <div className="mb-4">
-            {status == "archived" && (
+          {status == "archived" && (
+            <div className="mb-4">
               <div>
                 {t("archivedNotice")}&nbsp;
                 <strong>{t("archivedNotice2")}</strong>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <Cards
           // tell react the state resets when tabs change

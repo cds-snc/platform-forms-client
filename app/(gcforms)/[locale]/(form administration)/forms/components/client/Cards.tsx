@@ -69,13 +69,7 @@ export const Cards = ({
 
   return (
     <div aria-live="polite">
-      {(filter === "recentlyEdited" || !filter) && <p>{t("cards.editLockMessage")}</p>}
-      <div
-        id={`tabpanel-${filter}`}
-        role="tabpanel"
-        aria-labelledby={`tab-${filter}`}
-        className="pt-8"
-      >
+      <div id={`tabpanel-${filter}`} role="tabpanel" aria-labelledby={`tab-${filter}`}>
         {templates.length > 0 ? (
           <>
             <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">

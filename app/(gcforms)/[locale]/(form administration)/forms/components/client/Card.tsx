@@ -95,7 +95,7 @@ const CardLinks = memo(
         {/* Settings link - only for published non-archived forms */}
         {ttl == null && (
           <Link
-            className="mt-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
+            className="mt-2 block text-sm focus:fill-slate-500 active:fill-slate-500"
             href={settingsLink}
             prefetch={false}
           >

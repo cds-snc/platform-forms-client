@@ -20,8 +20,7 @@
     "noForms": "You have no forms.",
     "noDraftsForms": "You have no draft forms.",
     "noPublishedForms": "You have no published forms.",
-    "noRecentlyEditedForms": "You have no recently edited forms.",
-    "editLockMessage": "Forms that are currently being edited will be available to read. Take over editing, or nudge a team member for locked forms."
+    "noRecentlyEditedForms": "You have no recently edited forms."
   },
   "card": {
     "sharedWith_one": "Shared with {{count}} person",

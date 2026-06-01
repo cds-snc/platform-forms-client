@@ -7,19 +7,22 @@ export const NewFormButton = async () => {
     i18n: { language },
   } = await serverTranslation("my-forms");
 
+  const className =
+    "flex h-10 w-10 items-center justify-center rounded-full text-xl shadow bg-violet-700 border-1 border-violet-700 hover:bg-slate-500";
+
   return (
     <div className="flex flex-col items-center">
       <LinkButton.Primary
         href={`/${language}/form-builder`}
         prefetch={false}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-600 text-xl text-white shadow hover:bg-slate-500 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+        className={className}
         ariaLabelledby="create-new-form-text"
       >
         <span aria-hidden="true" className="">
           +
         </span>
       </LinkButton.Primary>
-      <div id="create-new-form-text" className="mt-1 text-sm text-nowrap text-blue-700">
+      <div id="create-new-form-text" className="mt-1 text-sm text-nowrap text-violet-700">
         {t("actions.createNewForm")}
       </div>
     </div>
