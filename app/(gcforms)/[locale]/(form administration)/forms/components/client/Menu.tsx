@@ -79,7 +79,6 @@ export const Menu = ({
           try {
             const res = await createDraftVersion({ id });
             if (res && !res.error) {
-              toast.success(t("card.menu.cloneSuccess"));
               // navigate into edit for this form
               window.location.href = `/${language}/form-builder/${id}/edit`;
               return;
