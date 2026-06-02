@@ -29,7 +29,8 @@
     "states": {
       "draft": "Ébauche",
       "published": "Publié",
-      "archived": "Archivé"
+      "archived": "Archivé",
+      "lastEditedBy": "[FR]By: {{lastEditedBy}}"
     },
     "title": {
       "notTranslatedEn": "Untitled form",

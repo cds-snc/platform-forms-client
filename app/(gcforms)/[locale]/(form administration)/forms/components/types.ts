@@ -70,4 +70,5 @@ export type FormsTemplate = {
  */
 export type FormsTemplateWithLockInfo = FormsTemplate & {
   editLockInfo?: EditLockInfoClient | null;
+  lastEditedBy?: string | null;
 };

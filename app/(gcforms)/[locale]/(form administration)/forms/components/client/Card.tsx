@@ -38,18 +38,23 @@ const CardBanner = memo(({ isPublished, ttl }: { isPublished: boolean; ttl: Date
 });
 CardBanner.displayName = "CardBanner";
 
-interface CardLinksProps {
-  id: string;
-  url?: string;
-  isPublished: boolean;
-  deliveryOption?: { emailAddress?: string } | null;
-  overdue: boolean;
-  ttl?: Date | null;
-  language: string;
-}
-
 const CardLinks = memo(
-  ({ isPublished, id, deliveryOption, overdue, ttl, language }: CardLinksProps) => {
+  ({
+    isPublished,
+    id,
+    deliveryOption,
+    overdue,
+    ttl,
+    language,
+  }: {
+    id: string;
+    url?: string;
+    isPublished: boolean;
+    deliveryOption?: { emailAddress?: string } | null;
+    overdue: boolean;
+    ttl?: Date | null;
+    language: string;
+  }) => {
     const { t } = useTranslation("my-forms");
     const responsesLink = `/${language}/form-builder/${id}/responses`;
     const settingsLink = `/${language}/form-builder/${id}/settings`;
@@ -109,11 +114,27 @@ const CardLinks = memo(
 );
 CardLinks.displayName = "CardLinks";
 
-const CardTitle = memo(({ name }: { name: string }) => {
-  const { t } = useTranslation("my-forms");
-  const classes = "mb-0 mr-2 overflow-hidden pb-0 text-base font-bold line-clamp-3";
-  return <h2 className={classes}>{name ? name : t("card.unnamedForm")}</h2>;
-});
+const CardTitle = memo(
+  ({ id, name, isPublished }: { id: string; name: string; isPublished: boolean }) => {
+    const {
+      t,
+      i18n: { language },
+    } = useTranslation("my-forms");
+    const classes =
+      "mb-0 mr-2 block w-full overflow-hidden pb-0 text-left text-base font-bold line-clamp-3 no-underline text-inherit";
+    const publishedLink = `/${language}/form-builder/${id}/responses`;
+    const draftLink = `/${language}/form-builder/${id}/edit/`;
+    return isPublished ? (
+      <Link className={classes} href={publishedLink} prefetch={false}>
+        {name ? name : t("card.unnamedForm")}
+      </Link>
+    ) : (
+      <DraftEditLink href={draftLink} formId={id} className={classes}>
+        {name ? name : t("card.unnamedForm")}
+      </DraftEditLink>
+    );
+  }
+);
 CardTitle.displayName = "CardTitle";
 
 const CardDate = memo(({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
@@ -152,30 +173,41 @@ const CardCollaboratorCount = memo(({ collaboratorCount }: { collaboratorCount: 
 });
 CardCollaboratorCount.displayName = "CardCollaboratorCount";
 
-interface CardFooterDraftReadonlyProps {
-  cardId: string;
-  date: string;
-  ttl?: Date | null;
-}
-
-const CardFooterDraftReadonly = memo(({ cardId, date, ttl }: CardFooterDraftReadonlyProps) => {
-  return (
-    <div>
-      <CardDate id={cardId} date={date} ttl={ttl} />
-      {/* Will do in a followup PR <div className="mt-2 text-sm">By: [first name]</div> */}
-    </div>
-  );
-});
+const CardFooterDraftReadonly = memo(
+  ({
+    cardId,
+    date,
+    ttl,
+    lastEditedBy,
+  }: {
+    cardId: string;
+    date: string;
+    ttl?: Date | null;
+    lastEditedBy?: string | null;
+  }) => {
+    const { t } = useTranslation("my-forms");
+    return (
+      <div>
+        <CardDate id={cardId} date={date} ttl={ttl} />
+        {lastEditedBy && (
+          <div className="mt-2 text-sm">{t("cards.lastEditedBy", { lastEditedBy })}</div>
+        )}
+      </div>
+    );
+  }
+);
 CardFooterDraftReadonly.displayName = "CardFooterDraftReadonly";
 
-interface CardFooterDraftEditingProps {
-  lockedByName: string | null;
-  language: string;
-  cardId: string;
-}
-
 const CardFooterDraftEditing = memo(
-  ({ lockedByName, language, cardId }: CardFooterDraftEditingProps) => {
+  ({
+    lockedByName,
+    language,
+    cardId,
+  }: {
+    lockedByName: string | null;
+    language: string;
+    cardId: string;
+  }) => {
     const { t } = useTranslation("my-forms");
     return (
       <div>
@@ -196,11 +228,7 @@ const CardFooterDraftEditing = memo(
 );
 CardFooterDraftEditing.displayName = "CardFooterDraftEditing";
 
-interface CardFooterPublishedProps {
-  cardId: string;
-}
-
-const CardFooterPublished = memo(({ cardId }: CardFooterPublishedProps) => {
+const CardFooterPublished = memo(({ cardId }: { cardId: string }) => {
   return <p className="mt-3 text-xs italic">{cardId}</p>;
 });
 CardFooterPublished.displayName = "CardFooterPublished";
@@ -242,7 +270,7 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
       <div className="col-start-1 row-start-1 flex flex-col">
         <CardCollaboratorCount collaboratorCount={collaboratorCount} />
 
-        <CardTitle name={card.name} />
+        <CardTitle id={card.id} name={card.name} isPublished={card.isPublished} />
 
         <Suspense fallback={<Skeleton count={2} className="my-3 w-[300px]" />}>
           <CardLinks
@@ -258,7 +286,12 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
 
         <div className="mt-auto">
           {cardState === "draft-readonly" && (
-            <CardFooterDraftReadonly cardId={card.id} date={card.date} ttl={card.ttl} />
+            <CardFooterDraftReadonly
+              cardId={card.id}
+              date={card.date}
+              ttl={card.ttl}
+              lastEditedBy={card.lastEditedBy}
+            />
           )}
 
           {cardState === "draft-editing" && (
