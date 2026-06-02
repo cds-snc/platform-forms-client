@@ -77,6 +77,7 @@ model Template {
   invitations           Invitation[]
   notificationsInterval Int?            @default(1440)
   notificationsUsers    User[]          @relation("TemplateNotificationsUsers")
+  @@index([lastEditedByUserId])
 }
 
 model TemplateVersion {
