@@ -48,7 +48,7 @@ export const Cards = ({
   // Get the appropriate message when there are no forms to display
   const emptyStateMessage = useMemo(() => {
     if (filter === "recentlyEdited" || !filter) return t("cards.noRecentlyEditedForms");
-    if (filter === "draft") return t("cards.noDraftForms");
+    if (filter === "draft") return t("cards.noDraftsForms");
     if (filter === "published") return t("cards.noPublishedForms");
     if (filter === "archived") return t("cards.noArchivedForms");
     return t("cards.noForms");

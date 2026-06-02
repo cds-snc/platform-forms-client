@@ -233,10 +233,6 @@ const CardFooterPublished = memo(({ cardId }: { cardId: string }) => {
 });
 CardFooterPublished.displayName = "CardFooterPublished";
 
-/**
- * Main Card component that displays a form card with all its information
- * Memoized to prevent unnecessary re-renders during polling updates
- */
 const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; status?: string }) => {
   const params = useParams();
   const language = params?.locale as string;
@@ -310,7 +306,6 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
     </div>
   );
 };
-
 /**
  * Memoized Card export to prevent unnecessary re-renders
  * Named CardComponent is retained for better DevTools debugging
