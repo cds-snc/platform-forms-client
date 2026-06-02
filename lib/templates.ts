@@ -1860,7 +1860,14 @@ export const updateFormJsonConfig = async (formId: string, jsonConfig: FormPrope
 
   if (formCache.cacheAvailable) formCache.invalidate(formId);
 
-  logEvent(user.id, { type: "Form", id: formId }, "UpdateFormJsonConfig");
+  const brandName = jsonConfig.brand?.name ?? "N/A";
+  logEvent(
+    user.id,
+    { type: "Form", id: formId },
+    AuditLogEvent.UpdateFormBranding,
+    AuditLogDetails.UpdateFormBranding,
+    { brand: brandName }
+  );
 
   return _parseTemplate(updatedTemplate);
 };

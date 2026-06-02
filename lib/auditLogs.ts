@@ -31,7 +31,7 @@ export const AuditLogEvent = {
   RevokeFormAccess: "RevokeFormAccess",
   UpdateNotificationsInterval: "UpdateNotificationsInterval",
   UpdatedNotificationSettings: "UpdatedNotificationSettings",
-  UpdateFormJsonConfig: "updateFormJsonConfig",
+  UpdateFormBranding: "UpdateFormBranding",
   // Invitations
   InvitationCreated: "InvitationCreated",
   InvitationAccepted: "InvitationAccepted",
@@ -87,6 +87,7 @@ const FormBuildingEvents = [
   AuditLogEvent.ChangeFormPurpose,
   AuditLogEvent.ChangeFormSaveAndResume,
   AuditLogEvent.ChangeSecurityAttribute,
+  AuditLogEvent.UpdateFormBranding,
 ];
 const FormCollaborationEvents = [AuditLogEvent.GrantFormAccess, AuditLogEvent.RevokeFormAccess];
 const ResponseEvents = [
@@ -149,6 +150,7 @@ export const AuditLogDetails = {
   ClonedForm: "DuplicatedForm",
   UpdateClosingDate: "UpdateClosingDate",
   RemoveClosingDate: "RemoveClosingDate",
+  UpdateFormBranding: "UpdateFormBranding",
   RetrieveFormUsers: "Retrieved users associated with Form",
   RevokeFormAccess: "Access revoked for ${userId}",
   SetDeliveryToVault: "Delivery Option set to the Vault",
@@ -278,6 +280,7 @@ type AuditDetailsParams = {
     userEmail: string;
     abilityUserId: string;
   };
+  [AuditLogDetails.UpdateFormBranding]: { brand: string };
 };
 
 export const AuditLogAccessDeniedDetails = {
