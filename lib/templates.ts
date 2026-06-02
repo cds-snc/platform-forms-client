@@ -808,7 +808,7 @@ export async function updateIsPublishedForTemplate(
   });
 
   const templateVersionState = await getTemplateVersionState(formID);
-  const supportsVersionedPublishing = Boolean(
+  const supportsVersionedPublishing: boolean = Boolean(
     (templateVersionState?.currentDraftVersionId ||
       templateVersionState?.currentPublishedVersionId) &&
     (templateVersioningEnabled || templateVersionState?.isPublished === false)
@@ -891,8 +891,8 @@ export async function updateIsPublishedForTemplate(
               currentPublishedVersionId: publishedVersion.id,
               currentDraftVersionId: null,
               publishReason,
-              publishFormType,
-              publishDesc: publishDescription,
+              publishFormType: publishFormType || template.publishFormType || "",
+              publishDesc: publishDescription || template.publishDesc || "",
             },
             include: templateRecordInclude,
           });

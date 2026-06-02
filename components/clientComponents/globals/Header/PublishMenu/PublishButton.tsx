@@ -384,6 +384,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
 
       {showPrePublishDialog && (
         <PrePublishDialog
+          hasCurrentlyPublishedVersion={currentPublishedVersionId !== null}
           setDescription={setDescription}
           setFormType={setFormType}
           description={description}

@@ -8,6 +8,13 @@ import { cn } from "@lib/utils";
 
 import { Label } from "@clientComponents/forms";
 
+const PrePublishSteps = {
+  ReasonForPublish: 0,
+  FormTypeAndDescription: 1,
+} as const;
+
+type PrePublishSteps = (typeof PrePublishSteps)[keyof typeof PrePublishSteps];
+
 export const PrePublishDialog = ({
   handleClose,
   handleConfirm,
@@ -32,13 +39,16 @@ export const PrePublishDialog = ({
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
 
-  const [prePublishStep, setPrePublishStep] = useState(0);
+  const [prePublishStep, setPrePublishStep] = useState<PrePublishSteps>(
+    PrePublishSteps.ReasonForPublish
+  );
 
-  const PrePublishSteps = {
-    ReasonForPublish: 0,
-    FormTypeAndDescription: 1,
-  } as const;
-  type PrePublishSteps = (typeof PrePublishSteps)[keyof typeof PrePublishSteps];
+  const isPublishReasonStep = prePublishStep === PrePublishSteps.ReasonForPublish;
+  const actionLabel = hasCurrentlyPublishedVersion
+    ? t("republish")
+    : isPublishReasonStep
+      ? t("continue")
+      : t("publish");
 
   async function ContinuePublishSteps() {
     setError(false);
@@ -46,7 +56,6 @@ export const PrePublishDialog = ({
       if (reasonForPublish == "") {
         setError(true);
       } else {
-        // If the form has already been published and is being edited, skip the next step and move onto confirming the publish so that the user doesn't have to re-enter information that they've already provided
         if (hasCurrentlyPublishedVersion) {
           handleConfirm();
           return;
@@ -94,7 +103,7 @@ export const PrePublishDialog = ({
   const actions = (
     <div className="flex gap-4">
       <Button theme="primary" onClick={ContinuePublishSteps}>
-        {t("continue")}
+        {actionLabel}
       </Button>
 
       <Button
@@ -112,7 +121,11 @@ export const PrePublishDialog = ({
     <div className="form-builder">
       {prePublishStep == PrePublishSteps.ReasonForPublish && (
         <Dialog
-          title={t("prePublishFormDialog.title")}
+          title={
+            hasCurrentlyPublishedVersion
+              ? t("prePublishFormDialog.republishTitle")
+              : t("prePublishFormDialog.title")
+          }
           dialogRef={dialog}
           actions={actions}
           className="max-h-[80%] overflow-y-scroll"

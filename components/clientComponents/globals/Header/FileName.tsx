@@ -111,13 +111,15 @@ export const FileNameInput = () => {
         disabled={isPublished && true}
       />
 
-      <div
-        data-draft-id={currentDraftVersionId}
-        className="inline-block self-start rounded border-solid border-yellow-700 bg-yellow-300 p-1 px-2 text-sm"
-      >
-        {t("card.states.draft", { ns: "my-forms" })} - {t("version", { ns: "my-forms" })}{" "}
-        {versionNumber}
-      </div>
+      {currentDraftVersionId && versionNumber && (
+        <div
+          data-draft-id={currentDraftVersionId}
+          className="inline-block self-start rounded border-solid border-yellow-700 bg-yellow-300 p-1 px-2 text-sm"
+        >
+          {t("card.states.draft", { ns: "my-forms" })} - {t("version", { ns: "my-forms" })}{" "}
+          {versionNumber}
+        </div>
+      )}
     </div>
   );
 };

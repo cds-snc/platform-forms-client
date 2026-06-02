@@ -772,6 +772,7 @@
   "privacyStatement": "Avis de confidentialité ",
   "provideFeedback": "Aidez-nous à nous améliorer",
   "publish": "Publier",
+  "republish": "Publier de nouveau",
   "readyToPublish": "Prêt à publier",
   "published": "Publié",
   "publishedBack": "Retourner aux formulaires",
@@ -809,6 +810,7 @@
   },
   "prePublishFormDialog": {
     "title": "Publier le formulaire",
+    "republishTitle": "Publier de nouveau le formulaire",
     "text1": "Pourquoi souhaitez-vous publier le formulaire?",
     "readyForPublicUse": "Formulaire prêt pour un usage par le public",
     "readyForInternalUse": "Formulaire prêt pour un usage interne",

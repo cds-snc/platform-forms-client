@@ -701,6 +701,80 @@ describe("Template CRUD functions", () => {
       );
     });
 
+    it("Re-publish preserves template publish metadata when no new values are provided", async () => {
+      const republishedConfig = structuredClone(formConfiguration as FormProperties);
+      republishedConfig.titleEn = "Updated title";
+
+      (prismaMock.template.findUnique as MockedFunction<any>)
+        .mockResolvedValueOnce({
+          isPublished: true,
+          currentDraftVersionId: "draft-version-2",
+          currentPublishedVersionId: "published-version-1",
+        })
+        .mockResolvedValueOnce({
+          ...buildVersionedPrismaResponse({
+            id: "formtestID",
+            jsonConfig: formConfiguration,
+            isPublished: true,
+            currentDraftVersionId: "draft-version-2",
+            currentPublishedVersionId: "published-version-1",
+            currentDraftVersion: buildVersionSnapshot(
+              "draft-version-2",
+              republishedConfig,
+              "DRAFT",
+              2
+            ),
+            currentPublishedVersion: buildVersionSnapshot(
+              "published-version-1",
+              formConfiguration,
+              "PUBLISHED"
+            ),
+          }),
+          publishFormType: "existing-type",
+          publishDesc: "existing-description",
+        });
+
+      (prismaMock.templateVersion.update as MockedFunction<any>)
+        .mockResolvedValueOnce(undefined)
+        .mockResolvedValueOnce({
+          id: "draft-version-2",
+          jsonConfig: republishedConfig,
+        });
+
+      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
+        buildVersionedPrismaResponse({
+          id: "formtestID",
+          jsonConfig: republishedConfig,
+          isPublished: true,
+          currentDraftVersionId: null,
+          currentPublishedVersionId: "draft-version-2",
+          currentDraftVersion: null,
+          currentPublishedVersion: buildVersionSnapshot(
+            "draft-version-2",
+            republishedConfig,
+            "PUBLISHED",
+            2
+          ),
+        })
+      );
+
+      (prismaMock.$transaction as MockedFunction<any>).mockImplementation((callback: any) =>
+        callback(prismaMock)
+      );
+
+      await updateIsPublishedForTemplate("formtestID", true, "reason", "", "");
+
+      expect(prismaMock.template.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            publishReason: "reason",
+            publishFormType: "existing-type",
+            publishDesc: "existing-description",
+          }),
+        })
+      );
+    });
+
     it("Does not mirror published config back to Template when mirroring is disabled", async () => {
       const previousMirrorSetting = process.env.TEMPLATE_JSON_CONFIG_MIRROR;
       process.env.TEMPLATE_JSON_CONFIG_MIRROR = "false";
