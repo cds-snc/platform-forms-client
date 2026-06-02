@@ -128,6 +128,8 @@
     "step1": "[FR]Select form",
     "step2": "[FR]Manage access",
     "step3": "[FR]Add team members",
-    "description": "[FR]Forms being edited will be available to read - one person can edit at a time."
+    "descriptionStart": "[FR]Forms being edited will be available to read -",
+    "descriptionBold": "[FR]one person can edit at a time",
+    "descriptionEnd": "[FR]."
   }
 }

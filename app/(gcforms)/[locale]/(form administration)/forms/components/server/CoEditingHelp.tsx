@@ -11,7 +11,10 @@ export const CoEditingHelp = async () => {
         <li>{t("coEditingHelp.step2")}</li>
         <li>{t("coEditingHelp.step3")}</li>
       </ol>
-      <p className="mt-3">{t("coEditingHelp.description")}</p>
+      <p className="mt-3">
+        {t("coEditingHelp.descriptionStart")} <strong>{t("coEditingHelp.descriptionBold")}</strong>{" "}
+        {t("coEditingHelp.descriptionEnd")}
+      </p>
     </div>
   );
 };
