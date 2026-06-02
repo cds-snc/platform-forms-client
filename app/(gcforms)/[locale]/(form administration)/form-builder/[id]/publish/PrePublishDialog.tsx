@@ -17,6 +17,7 @@ export const PrePublishDialog = ({
   reasonForPublish,
   formType,
   description,
+  hasCurrentlyPublishedVersion,
 }: {
   handleClose: () => void;
   handleConfirm: () => void;
@@ -26,6 +27,7 @@ export const PrePublishDialog = ({
   reasonForPublish: string;
   formType: string;
   description: string;
+  hasCurrentlyPublishedVersion?: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
@@ -44,6 +46,12 @@ export const PrePublishDialog = ({
       if (reasonForPublish == "") {
         setError(true);
       } else {
+        // If the form has already been published and is being edited, skip the next step and move onto confirming the publish so that the user doesn't have to re-enter information that they've already provided
+        if (hasCurrentlyPublishedVersion) {
+          handleConfirm();
+          return;
+        }
+
         setPrePublishStep(PrePublishSteps.FormTypeAndDescription);
       }
     } else {
@@ -184,7 +192,7 @@ export const PrePublishDialog = ({
             <div className="mb-1">
               <select
                 className={cn(
-                  "center-right-15px p-2 form-builder-dropdown my-0 inline-block min-w-[400px] text-black-default border-1 border-black"
+                  "center-right-15px form-builder-dropdown text-black-default my-0 inline-block min-w-[400px] border-1 border-black p-2"
                 )}
                 value={formType}
                 onChange={(e) => onFormTypeChange(e)}
