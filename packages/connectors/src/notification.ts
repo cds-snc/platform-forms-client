@@ -90,7 +90,7 @@ const _createRecord = async ({
   body: string;
 }): Promise<void> => {
   try {
-    const ttl = Math.floor(Date.now() / 1000) + 86400; // 24 hours from now
+    const ttl = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
     const command = new PutCommand({
       TableName: DYNAMODB_NOTIFICATION_TABLE_NAME,
       Item: {
