@@ -874,8 +874,6 @@ export async function updateIsPublishedForTemplate(
               publishedAt: now,
               publishedByUserId: user.id,
               publishReason,
-              publishFormType,
-              publishDesc: publishDescription,
             },
             select: {
               id: true,
