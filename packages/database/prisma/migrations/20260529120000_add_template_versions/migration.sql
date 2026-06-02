@@ -20,8 +20,6 @@ CREATE TABLE "TemplateVersion" (
     "createdByUserId" TEXT,
     "publishedByUserId" TEXT,
     "publishReason" TEXT NOT NULL DEFAULT '',
-    "publishFormType" TEXT NOT NULL DEFAULT '',
-    "publishDesc" TEXT NOT NULL DEFAULT '',
 
     CONSTRAINT "TemplateVersion_pkey" PRIMARY KEY ("id")
 );
