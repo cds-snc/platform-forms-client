@@ -1008,8 +1008,6 @@ export async function createDraftVersionForTemplate(formID: string): Promise<For
             publishedAt: now,
             publishedByUserId: user.id,
             publishReason: template.publishReason ?? undefined,
-            publishFormType: template.publishFormType ?? undefined,
-            publishDesc: template.publishDesc ?? undefined,
           },
           select: {
             id: true,
