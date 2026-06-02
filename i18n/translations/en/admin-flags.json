@@ -45,6 +45,10 @@
     "zitadelLogin": {
       "title": "Zitadel Login",
       "description": "Enable Zitadel as a login method for users"
+    },
+    "templateVersioning": {
+      "title": "Template versioning",
+      "description": "Enable draft version and re-publish flow for form templates"
     }
   },
   "addFlag": "Add user feature flag",
