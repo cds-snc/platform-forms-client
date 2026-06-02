@@ -8,7 +8,7 @@ import { useRefStore } from "@lib/hooks/form-builder/useRefStore";
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 
 export const FileNameInput = () => {
-  const { t } = useTranslation(["form-builder"]);
+  const { t } = useTranslation(["form-builder", "my-forms"]);
   const { updateField, getName, getIsPublished, currentDraftVersionId, versionNumber } =
     useTemplateStore((s) => ({
       getName: s.getName,
@@ -51,11 +51,6 @@ export const FileNameInput = () => {
   const remoteRef = useRef<HTMLInputElement | null>(null);
   const { setRef, removeRef } = useRefStore();
 
-  const versionInfo =
-    currentDraftVersionId && versionNumber
-      ? `id: ${currentDraftVersionId} - v${versionNumber}`
-      : null;
-
   useEffect(() => {
     setRef("fileNameInput", remoteRef as React.RefObject<HTMLElement>);
 
@@ -89,7 +84,7 @@ export const FileNameInput = () => {
         style={widthStyle}
         ref={fileNameInput}
         className={cn(
-          "laptop:min-w-[250px] laptop:max-w-[500px] mt-3 max-w-[200px] min-w-[220px] rounded-md border-1 border-[#1B00C2] px-2 py-1 text-base font-bold text-ellipsis placeholder-slate-500",
+          "laptop:min-w-62.5 laptop:max-w-[500px] mt-3 mr-2 max-w-[200px] min-w-55 rounded-md border-1 border-[#1B00C2] px-2 py-1 text-base font-bold text-ellipsis placeholder-slate-500",
           !isPublished && "hover:border-gray-default hover:border-1"
         )}
         name="filename"
@@ -116,7 +111,13 @@ export const FileNameInput = () => {
         disabled={isPublished && true}
       />
 
-      <span className="hidden">{versionInfo}</span>
+      <div
+        data-draft-id={currentDraftVersionId}
+        className="inline-block self-start rounded border-solid border-yellow-700 bg-yellow-300 p-1 px-2 text-sm"
+      >
+        {t("card.states.draft", { ns: "my-forms" })} - {t("version", { ns: "my-forms" })}{" "}
+        {versionNumber}
+      </div>
     </div>
   );
 };
