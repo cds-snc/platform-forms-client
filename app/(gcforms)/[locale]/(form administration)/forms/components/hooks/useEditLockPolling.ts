@@ -1,13 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { FormsTemplateWithLockInfo, EditLocksResponse } from "../types";
 
-interface UseEditLockPollingProps {
-  templates: FormsTemplateWithLockInfo[];
-  displayedCount: number;
-  pollIntervalMs: number;
-  onUpdate: (updater: (prev: FormsTemplateWithLockInfo[]) => FormsTemplateWithLockInfo[]) => void;
-}
-
 /**
  * Custom hook to handle edit lock polling with request deduplication
  */
@@ -16,7 +9,12 @@ export function useEditLockPolling({
   displayedCount,
   pollIntervalMs,
   onUpdate,
-}: UseEditLockPollingProps) {
+}: {
+  templates: FormsTemplateWithLockInfo[];
+  displayedCount: number;
+  pollIntervalMs: number;
+  onUpdate: (updater: (prev: FormsTemplateWithLockInfo[]) => FormsTemplateWithLockInfo[]) => void;
+}) {
   const templatesRef = useRef(templates);
   const displayedCountRef = useRef(displayedCount);
   const abortControllerRef = useRef<AbortController | null>(null);

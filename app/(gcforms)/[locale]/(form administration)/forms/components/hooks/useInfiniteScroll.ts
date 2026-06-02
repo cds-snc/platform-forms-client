@@ -1,12 +1,6 @@
 import { useEffect, useRef, RefObject } from "react";
 import { INFINITE_SCROLL_ROOT_MARGIN } from "../constants";
 
-interface UseInfiniteScrollProps {
-  displayedCount: number;
-  totalCount: number;
-  onLoadMore: () => void;
-}
-
 /**
  * Custom hook to handle infinite scroll with Intersection Observer
  * @returns ref to attach to the sentinel element
@@ -15,7 +9,11 @@ export function useInfiniteScroll({
   displayedCount,
   totalCount,
   onLoadMore,
-}: UseInfiniteScrollProps): RefObject<HTMLDivElement | null> {
+}: {
+  displayedCount: number;
+  totalCount: number;
+  onLoadMore: () => void;
+}): RefObject<HTMLDivElement | null> {
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
