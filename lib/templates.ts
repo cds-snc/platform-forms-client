@@ -289,6 +289,7 @@ export async function getAllTemplates(options?: {
           name: true,
           jsonConfig: true,
           isPublished: true,
+          currentDraftVersionId: true,
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,

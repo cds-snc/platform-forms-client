@@ -308,6 +308,28 @@ describe("Template CRUD functions", () => {
       expect(mockedLogEvent).toHaveBeenCalledTimes(0);
     });
 
+    it("Get a public template for a versioned draft using the effective draft publish state", async () => {
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(
+        buildVersionedPrismaResponse({
+          id: "formtestID",
+          jsonConfig: formConfiguration,
+          isPublished: true,
+          currentDraftVersionId: "draft-version-2",
+        })
+      );
+
+      const template = await getPublicTemplateByID("formTestID");
+
+      expect(template).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        })
+      );
+    });
+
     it("Get a full template", async () => {
       (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
