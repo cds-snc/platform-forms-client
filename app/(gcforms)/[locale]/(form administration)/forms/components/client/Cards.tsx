@@ -30,14 +30,14 @@ export const Cards = ({
     setDisplayedCount((prev) => Math.min(prev + CARDS_PER_BATCH, templates.length));
   }, [templates.length]);
 
-  // Set up infinite scroll
+  // Setup infinite scroll
   const loadMoreRef = useInfiniteScroll({
     displayedCount,
     totalCount: templates.length,
     onLoadMore: handleLoadMore,
   });
 
-  // Set up edit lock polling
+  // Setup edit lock polling
   useEditLockPolling({
     templates,
     displayedCount,

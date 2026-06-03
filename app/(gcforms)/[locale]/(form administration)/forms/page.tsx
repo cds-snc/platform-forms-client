@@ -189,7 +189,7 @@ export default async function Page(props: {
   const templatesWithEditLocks = await combineTemplatesWithLockInfo(templates);
 
   // Filter templates based on status
-  // For "recentlyEdited" (or no status), show the 4 most recently updated templates
+  // For "recentlyEdited", show the 4 most recently updated templates
   const filteredTemplates =
     status === "recentlyEdited" || !status
       ? templatesWithEditLocks.slice(0, 4)

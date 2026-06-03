@@ -33,8 +33,8 @@ export async function getTemplateIdsWithEditLocks(): Promise<Set<string>> {
     }
 
     const redis = await getRedisInstance();
-    // scanStream wraps the SCAN cursor loop in a Node stream. Non-blocking like
-    // raw SCAN, avoids the await-in-loop pattern, and yields between batches.
+    // The scanStream wraps the SCAN cursor loop in a Node stream. This is non-blocking
+    // and and yields between batches.
     const templateIds = new Set<string>();
     const stream = redis.scanStream({ match: "edit-lock:*", count: 500 });
 
@@ -69,7 +69,7 @@ export async function getEditLockInfoForTemplates(
   }
 
   try {
-    // Build Redis keys for all templates and fetch in a single MGET call
+    // Build Redis keys for all templates and fetch in a single MGET call \o/
     const redis = await getRedisInstance();
     const redisKeys = templateIds.map((id) => `edit-lock:${id}`);
     const lockDataArray = await redis.mget(...redisKeys);
@@ -87,6 +87,7 @@ export async function getEditLockInfoForTemplates(
 
     return lockInfoMap;
   } catch (error) {
+    // TODO may want to be INFO instead since not serious if Redis is unavailable - just means edit-lock features won't work
     logMessage.error(`Error fetching edit lock info from Redis: ${error}`);
     return lockInfoMap;
   }

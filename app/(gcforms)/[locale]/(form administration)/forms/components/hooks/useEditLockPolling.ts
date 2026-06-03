@@ -85,6 +85,7 @@ export function useEditLockPolling({
             ? new Date(incoming.lastActivityAt).getTime()
             : null;
 
+          // No change - do nothing (return unchanged template)
           if (
             previous &&
             template.hasEditLock &&
@@ -101,6 +102,7 @@ export function useEditLockPolling({
             return template;
           }
 
+          // Changed - update template with new lock info so it can be re-rendered
           changed = true;
           return {
             ...template,
