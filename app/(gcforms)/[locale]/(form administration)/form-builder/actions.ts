@@ -12,7 +12,6 @@ import {
 } from "@lib/types";
 import {
   createTemplate as createDbTemplate,
-  createDraftVersionForTemplate,
   removeDeliveryOption,
   updateAssignedUsersForTemplate,
   updateClosedData,
@@ -259,45 +258,6 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
       if (error instanceof TemplateEditLockedError) {
         return { formRecord: null, error: "editLocked" };
       }
-      hasError = error;
-    }
-
-    if (!hasError && redirectAfter) {
-      redirect(redirectAfter);
-    }
-
-    return { formRecord: response, error: hasError ? (hasError as Error).message : undefined };
-  }
-);
-
-export const createDraftVersion = AuthenticatedAction(
-  async (
-    _,
-    {
-      id: formID,
-      redirectAfter,
-    }: {
-      id: string;
-      redirectAfter?: string;
-    }
-  ): Promise<{
-    formRecord: FormRecord | null;
-    error?: string;
-  }> => {
-    let hasError;
-    let response: FormRecord | null = null;
-
-    try {
-      response = await createDraftVersionForTemplate(formID);
-
-      if (!response) {
-        throw new Error(`Unable to create a draft version for ${formID}`);
-      }
-
-      revalidatePath(`/form-builder/${formID}`, "layout");
-      revalidatePath(`/form-builder/${formID}/published`, "page");
-      revalidatePath(`/form-builder/${formID}/publish`, "page");
-    } catch (error) {
       hasError = error;
     }
 
