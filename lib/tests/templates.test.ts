@@ -3,7 +3,6 @@ import type { MockedFunction } from "vitest";
 import { prismaMock } from "@testUtils";
 import {
   createTemplate,
-  createDraftVersionForTemplate,
   getAllTemplates,
   getAllTemplatesForUser,
   getPublicTemplateByID,
@@ -17,7 +16,6 @@ import {
   TemplateAlreadyPublishedError,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
-  updateFormJsonConfig,
 } from "../templates";
 
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
@@ -41,12 +39,11 @@ import {
 vi.mock("@lib/auditLogs", async () => {
   const __actual0 = await vi.importActual<any>("@lib/auditLogs");
   return {
-    __esModule: true,
-    logEvent: vi.fn(),
-    AuditLogDetails: __actual0.AuditLogDetails,
-    AuditLogEvent: __actual0.AuditLogEvent,
-    AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,
-  };
+  __esModule: true,
+  logEvent: vi.fn(),
+  AuditLogDetails: __actual0.AuditLogDetails,
+  AuditLogEvent: __actual0.AuditLogEvent,
+  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
 });
 
 vi.mock("@lib/serviceAccount");
@@ -100,42 +97,6 @@ const buildPrismaResponse = (
   };
 };
 
-const buildVersionSnapshot = (
-  id: string,
-  jsonConfig: object,
-  status: "DRAFT" | "PUBLISHED" | "SUPERSEDED",
-  versionNumber = 1
-) => ({
-  id,
-  versionNumber,
-  status,
-  jsonConfig,
-});
-
-const buildVersionedPrismaResponse = ({
-  id,
-  jsonConfig,
-  isPublished = false,
-  currentDraftVersionId = null,
-  currentPublishedVersionId = null,
-  currentDraftVersion = null,
-  currentPublishedVersion = null,
-}: {
-  id: string;
-  jsonConfig: object;
-  isPublished?: boolean;
-  currentDraftVersionId?: string | null;
-  currentPublishedVersionId?: string | null;
-  currentDraftVersion?: ReturnType<typeof buildVersionSnapshot> | null;
-  currentPublishedVersion?: ReturnType<typeof buildVersionSnapshot> | null;
-}) => ({
-  ...buildPrismaResponse(id, jsonConfig, isPublished),
-  currentDraftVersionId,
-  currentPublishedVersionId,
-  currentDraftVersion,
-  currentPublishedVersion,
-});
-
 const userID = "user1";
 
 describe("Template CRUD functions", () => {
@@ -153,23 +114,12 @@ describe("Template CRUD functions", () => {
     });
 
     it("Create a Template", async () => {
-      (prismaMock.$transaction as MockedFunction<any>).mockImplementation((callback: any) =>
-        callback(prismaMock)
+      (prismaMock.template.create as MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
       );
 
-      (prismaMock.template.create as MockedFunction<any>).mockResolvedValue({ id: "formtestID" });
-
-      (prismaMock.templateVersion.create as MockedFunction<any>).mockResolvedValue({
-        id: "version-1",
-      });
-
       (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildVersionedPrismaResponse({
-          id: "formtestID",
-          jsonConfig: formConfiguration,
-          currentDraftVersionId: "version-1",
-          currentDraftVersion: buildVersionSnapshot("version-1", formConfiguration, "DRAFT"),
-        })
+        buildPrismaResponse("formtestID", formConfiguration, false)
       );
 
       const newTemplate = await createTemplate({
@@ -188,23 +138,11 @@ describe("Template CRUD functions", () => {
         })
       );
 
-      expect(prismaMock.templateVersion.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          data: expect.objectContaining({
-            templateId: "formtestID",
-            versionNumber: 1,
-            status: "DRAFT",
-            jsonConfig: formConfiguration,
-          }),
-        })
-      );
-
       expect(newTemplate).toEqual(
         expect.objectContaining({
           id: "formtestID",
           form: formConfiguration,
           isPublished: false,
-          currentDraftVersionId: "version-1",
           securityAttribute: "Unclassified",
         })
       );
@@ -277,7 +215,7 @@ describe("Template CRUD functions", () => {
         { type: "Form" },
         "ReadForm",
         "Accessed Forms: ${formList}",
-        { formList: "formtestID" }
+        { "formList": "formtestID" }
       );
     });
 
@@ -306,28 +244,6 @@ describe("Template CRUD functions", () => {
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledTimes(0);
-    });
-
-    it("Get a public template for a versioned draft using the effective draft publish state", async () => {
-      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(
-        buildVersionedPrismaResponse({
-          id: "formtestID",
-          jsonConfig: formConfiguration,
-          isPublished: true,
-          currentDraftVersionId: "draft-version-2",
-        })
-      );
-
-      const template = await getPublicTemplateByID("formTestID");
-
-      expect(template).toEqual(
-        expect.objectContaining({
-          id: "formtestID",
-          form: formConfiguration,
-          isPublished: true,
-          securityAttribute: "Unclassified",
-        })
-      );
     });
 
     it("Get a full template", async () => {
@@ -418,7 +334,7 @@ describe("Template CRUD functions", () => {
         expect.objectContaining({
           where: {
             id: "test1",
-            isPublished: false,
+            isPublished: false
           },
           data: {
             jsonConfig: updatedFormConfig as unknown as Prisma.JsonObject,
@@ -439,56 +355,6 @@ describe("Template CRUD functions", () => {
         { id: "test1", type: "Form" },
         "UpdateForm",
         "UpdatedFormContent"
-      );
-    });
-
-    it("Update form jsonConfig on a versioned draft", async () => {
-      const updatedFormConfig = structuredClone(formConfiguration as FormProperties);
-
-      (prismaMock.template.findUnique as MockedFunction<any>)
-        .mockResolvedValueOnce({
-          isPublished: true,
-          currentDraftVersionId: "draft-version-2",
-          currentPublishedVersionId: "published-version-1",
-        })
-        .mockResolvedValueOnce(
-          buildVersionedPrismaResponse({
-            id: "formtestID",
-            jsonConfig: formConfiguration,
-            isPublished: true,
-            currentDraftVersionId: "draft-version-2",
-            currentPublishedVersionId: "published-version-1",
-            currentDraftVersion: buildVersionSnapshot(
-              "draft-version-2",
-              updatedFormConfig,
-              "DRAFT",
-              2
-            ),
-            currentPublishedVersion: buildVersionSnapshot(
-              "published-version-1",
-              formConfiguration,
-              "PUBLISHED"
-            ),
-          })
-        );
-
-      (prismaMock.$transaction as MockedFunction<any>).mockImplementation((callback: any) =>
-        callback(prismaMock)
-      );
-
-      await updateFormJsonConfig("formtestID", updatedFormConfig);
-
-      expect(prismaMock.templateVersion.update).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: { id: "draft-version-2" },
-          data: { jsonConfig: updatedFormConfig },
-        })
-      );
-
-      expect(prismaMock.template.update).not.toHaveBeenCalledWith(
-        expect.objectContaining({
-          data: expect.objectContaining({ jsonConfig: updatedFormConfig }),
-        })
       );
     });
 
@@ -536,344 +402,6 @@ describe("Template CRUD functions", () => {
       );
     });
 
-    it("Create a draft version for a published versioned form", async () => {
-      (prismaMock.$transaction as MockedFunction<any>).mockImplementation((callback: any) =>
-        callback(prismaMock)
-      );
-
-      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValueOnce({
-        id: "formtestID",
-        created_at: new Date("2026-01-01T00:00:00.000Z"),
-        updated_at: new Date("2026-01-01T00:00:00.000Z"),
-        name: "Test form",
-        jsonConfig: formConfiguration,
-        isPublished: true,
-        currentPublishedVersionId: "published-version-1",
-        currentDraftVersionId: null,
-        deliveryOption: null,
-        securityAttribute: "Unclassified",
-        formPurpose: "",
-        publishReason: "",
-        publishFormType: "",
-        publishDesc: "",
-        saveAndResume: true,
-        notificationsInterval: null,
-        currentPublishedVersion: buildVersionSnapshot(
-          "published-version-1",
-          formConfiguration,
-          "PUBLISHED"
-        ),
-        currentDraftVersion: null,
-        versions: [{ versionNumber: 1 }],
-      });
-
-      (prismaMock.templateVersion.create as MockedFunction<any>).mockResolvedValue({
-        id: "draft-version-2",
-      });
-
-      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildVersionedPrismaResponse({
-          id: "formtestID",
-          jsonConfig: formConfiguration,
-          isPublished: true,
-          currentDraftVersionId: "draft-version-2",
-          currentPublishedVersionId: "published-version-1",
-          currentDraftVersion: buildVersionSnapshot(
-            "draft-version-2",
-            formConfiguration,
-            "DRAFT",
-            2
-          ),
-          currentPublishedVersion: buildVersionSnapshot(
-            "published-version-1",
-            formConfiguration,
-            "PUBLISHED"
-          ),
-        })
-      );
-
-      const draftTemplate = await createDraftVersionForTemplate("formtestID");
-
-      expect(prismaMock.templateVersion.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          data: expect.objectContaining({
-            templateId: "formtestID",
-            versionNumber: 2,
-            status: "DRAFT",
-            jsonConfig: formConfiguration,
-          }),
-        })
-      );
-
-      expect(draftTemplate).toEqual(
-        expect.objectContaining({
-          id: "formtestID",
-          form: formConfiguration,
-          isPublished: true,
-          currentDraftVersionId: "draft-version-2",
-          currentPublishedVersionId: "published-version-1",
-        })
-      );
-    });
-
-    it("Re-publish promotes the current draft version", async () => {
-      const republishedConfig = structuredClone(formConfiguration as FormProperties);
-      republishedConfig.titleEn = "Updated title";
-
-      (prismaMock.template.findUnique as MockedFunction<any>)
-        .mockResolvedValueOnce({
-          isPublished: true,
-          currentDraftVersionId: "draft-version-2",
-          currentPublishedVersionId: "published-version-1",
-        })
-        .mockResolvedValueOnce(
-          buildVersionedPrismaResponse({
-            id: "formtestID",
-            jsonConfig: formConfiguration,
-            isPublished: true,
-            currentDraftVersionId: "draft-version-2",
-            currentPublishedVersionId: "published-version-1",
-            currentDraftVersion: buildVersionSnapshot(
-              "draft-version-2",
-              republishedConfig,
-              "DRAFT",
-              2
-            ),
-            currentPublishedVersion: buildVersionSnapshot(
-              "published-version-1",
-              formConfiguration,
-              "PUBLISHED"
-            ),
-          })
-        );
-
-      (prismaMock.templateVersion.update as MockedFunction<any>)
-        .mockResolvedValueOnce(undefined)
-        .mockResolvedValueOnce({
-          id: "draft-version-2",
-          jsonConfig: republishedConfig,
-        });
-
-      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildVersionedPrismaResponse({
-          id: "formtestID",
-          jsonConfig: republishedConfig,
-          isPublished: true,
-          currentDraftVersionId: null,
-          currentPublishedVersionId: "draft-version-2",
-          currentDraftVersion: null,
-          currentPublishedVersion: buildVersionSnapshot(
-            "draft-version-2",
-            republishedConfig,
-            "PUBLISHED",
-            2
-          ),
-        })
-      );
-
-      (prismaMock.$transaction as MockedFunction<any>).mockImplementation((callback: any) =>
-        callback(prismaMock)
-      );
-
-      const updatedTemplate = await updateIsPublishedForTemplate(
-        "formtestID",
-        true,
-        "reason",
-        "external",
-        "description"
-      );
-
-      expect(prismaMock.templateVersion.update).toHaveBeenNthCalledWith(
-        1,
-        expect.objectContaining({
-          where: { id: "published-version-1" },
-          data: expect.objectContaining({ status: "SUPERSEDED" }),
-        })
-      );
-
-      expect(prismaMock.templateVersion.update).toHaveBeenNthCalledWith(
-        2,
-        expect.objectContaining({
-          where: { id: "draft-version-2" },
-          data: expect.objectContaining({
-            status: "PUBLISHED",
-            publishReason: "reason",
-          }),
-        })
-      );
-
-      expect(prismaMock.template.update).toHaveBeenCalledWith(
-        expect.objectContaining({
-          data: expect.objectContaining({
-            jsonConfig: republishedConfig,
-            currentPublishedVersionId: "draft-version-2",
-            currentDraftVersionId: null,
-          }),
-        })
-      );
-
-      expect(updatedTemplate).toEqual(
-        expect.objectContaining({
-          id: "formtestID",
-          form: republishedConfig,
-          isPublished: true,
-          currentPublishedVersionId: "draft-version-2",
-          currentDraftVersionId: null,
-        })
-      );
-    });
-
-    it("Re-publish preserves template publish metadata when no new values are provided", async () => {
-      const republishedConfig = structuredClone(formConfiguration as FormProperties);
-      republishedConfig.titleEn = "Updated title";
-
-      (prismaMock.template.findUnique as MockedFunction<any>)
-        .mockResolvedValueOnce({
-          isPublished: true,
-          currentDraftVersionId: "draft-version-2",
-          currentPublishedVersionId: "published-version-1",
-        })
-        .mockResolvedValueOnce({
-          ...buildVersionedPrismaResponse({
-            id: "formtestID",
-            jsonConfig: formConfiguration,
-            isPublished: true,
-            currentDraftVersionId: "draft-version-2",
-            currentPublishedVersionId: "published-version-1",
-            currentDraftVersion: buildVersionSnapshot(
-              "draft-version-2",
-              republishedConfig,
-              "DRAFT",
-              2
-            ),
-            currentPublishedVersion: buildVersionSnapshot(
-              "published-version-1",
-              formConfiguration,
-              "PUBLISHED"
-            ),
-          }),
-          publishFormType: "existing-type",
-          publishDesc: "existing-description",
-        });
-
-      (prismaMock.templateVersion.update as MockedFunction<any>)
-        .mockResolvedValueOnce(undefined)
-        .mockResolvedValueOnce({
-          id: "draft-version-2",
-          jsonConfig: republishedConfig,
-        });
-
-      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildVersionedPrismaResponse({
-          id: "formtestID",
-          jsonConfig: republishedConfig,
-          isPublished: true,
-          currentDraftVersionId: null,
-          currentPublishedVersionId: "draft-version-2",
-          currentDraftVersion: null,
-          currentPublishedVersion: buildVersionSnapshot(
-            "draft-version-2",
-            republishedConfig,
-            "PUBLISHED",
-            2
-          ),
-        })
-      );
-
-      (prismaMock.$transaction as MockedFunction<any>).mockImplementation((callback: any) =>
-        callback(prismaMock)
-      );
-
-      await updateIsPublishedForTemplate("formtestID", true, "reason", "", "");
-
-      expect(prismaMock.template.update).toHaveBeenCalledWith(
-        expect.objectContaining({
-          data: expect.objectContaining({
-            publishReason: "reason",
-            publishFormType: "existing-type",
-            publishDesc: "existing-description",
-          }),
-        })
-      );
-    });
-
-    it("Does not mirror published config back to Template when mirroring is disabled", async () => {
-      const previousMirrorSetting = process.env.TEMPLATE_JSON_CONFIG_MIRROR;
-      process.env.TEMPLATE_JSON_CONFIG_MIRROR = "false";
-
-      const republishedConfig = structuredClone(formConfiguration as FormProperties);
-      republishedConfig.titleEn = "Mirror disabled title";
-
-      (prismaMock.template.findUnique as MockedFunction<any>)
-        .mockResolvedValueOnce({
-          isPublished: true,
-          currentDraftVersionId: "draft-version-2",
-          currentPublishedVersionId: "published-version-1",
-        })
-        .mockResolvedValueOnce(
-          buildVersionedPrismaResponse({
-            id: "formtestID",
-            jsonConfig: formConfiguration,
-            isPublished: true,
-            currentDraftVersionId: "draft-version-2",
-            currentPublishedVersionId: "published-version-1",
-            currentDraftVersion: buildVersionSnapshot(
-              "draft-version-2",
-              republishedConfig,
-              "DRAFT",
-              2
-            ),
-            currentPublishedVersion: buildVersionSnapshot(
-              "published-version-1",
-              formConfiguration,
-              "PUBLISHED"
-            ),
-          })
-        );
-
-      (prismaMock.templateVersion.update as MockedFunction<any>)
-        .mockResolvedValueOnce(undefined)
-        .mockResolvedValueOnce({
-          id: "draft-version-2",
-          jsonConfig: republishedConfig,
-        });
-
-      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildVersionedPrismaResponse({
-          id: "formtestID",
-          jsonConfig: formConfiguration,
-          isPublished: true,
-          currentDraftVersionId: null,
-          currentPublishedVersionId: "draft-version-2",
-          currentDraftVersion: null,
-          currentPublishedVersion: buildVersionSnapshot(
-            "draft-version-2",
-            republishedConfig,
-            "PUBLISHED",
-            2
-          ),
-        })
-      );
-
-      (prismaMock.$transaction as MockedFunction<any>).mockImplementation((callback: any) =>
-        callback(prismaMock)
-      );
-
-      try {
-        await updateIsPublishedForTemplate("formtestID", true, "reason", "external", "description");
-
-        expect(prismaMock.template.update).toHaveBeenCalledWith(
-          expect.objectContaining({
-            data: expect.not.objectContaining({
-              jsonConfig: republishedConfig,
-            }),
-          })
-        );
-      } finally {
-        process.env.TEMPLATE_JSON_CONFIG_MIRROR = previousMirrorSetting;
-      }
-    });
-
     it("Update assigned users for template", async () => {
       // Template has one user assigned to it to start
       (prismaMock.template.findFirst as MockedFunction<any>).mockResolvedValue({
@@ -914,7 +442,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "GrantAccess",
-        { userList: "user2@test.ca" }
+        { "userList": "user2@test.ca" }
       );
 
       // Template has three users assigned to it to start
@@ -955,25 +483,22 @@ describe("Template CRUD functions", () => {
               disconnect: [{ id: "2" }, { id: "4" }],
             },
           },
-          include: {
+          select: {
+            id: true,
+            created_at: true,
+            updated_at: true,
+            name: true,
+            jsonConfig: true,
+            isPublished: true,
             deliveryOption: true,
-            currentDraftVersion: {
-              select: {
-                id: true,
-                versionNumber: true,
-                status: true,
-                jsonConfig: true,
-              },
-            },
-            currentPublishedVersion: {
-              select: {
-                id: true,
-                versionNumber: true,
-                status: true,
-                jsonConfig: true,
-              },
-            },
+            formPurpose: true,
+            publishReason: true,
+            publishFormType: true,
+            publishDesc: true,
+            securityAttribute: true,
             users: true,
+            saveAndResume: true,
+            notificationsInterval: true,
           },
         })
       );
@@ -985,7 +510,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "GrantAccess",
-        { userList: "user1@test.ca" }
+        { "userList": "user1@test.ca" }
       );
 
       // Log two removed
@@ -995,7 +520,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "RevokeFormAccess",
         "RevokeAccess",
-        { userList: "user2@test.ca,user4@test.ca" }
+        { "userList": "user2@test.ca,user4@test.ca" }
       );
     });
     it("Updates to published forms are not allowed", async () => {
