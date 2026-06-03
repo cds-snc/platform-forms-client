@@ -21,7 +21,7 @@ import {
   updateFormPurpose,
   updateFormSaveAndResume,
   getFormJSONConfig,
-  updateFormJsonConfig,
+  updateFormBranding,
 } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
@@ -667,7 +667,7 @@ export const updateBranding = AuthenticatedAction(
         ...formConfig,
         brand: branding,
       };
-      const formRecord = await updateFormJsonConfig(formId, updatedFormConfig);
+      const formRecord = await updateFormBranding(formId, updatedFormConfig);
 
       if (!formRecord) {
         throw new Error(`Failed to update template for branding update with formId ${formId}`);
