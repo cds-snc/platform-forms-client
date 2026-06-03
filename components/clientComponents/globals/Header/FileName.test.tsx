@@ -20,7 +20,7 @@ const renderComponent = (props?: {
   return render(
     <TemplateStoreProvider id="test-form-id" {...props}>
       <RefStoreProvider>
-        <FileNameInput />
+        <FileNameInput templateVersioningEnabled={true} />
       </RefStoreProvider>
     </TemplateStoreProvider>
   );
