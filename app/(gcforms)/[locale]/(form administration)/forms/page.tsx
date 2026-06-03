@@ -15,8 +15,44 @@ import { Invitations } from "./components/Invitations/Invitations";
 import { prisma } from "@gcforms/database";
 import { getTemplateIdsWithEditLocks, getEditLockInfoWithCollaborators } from "@lib/editLockUtils";
 import { EDIT_LOCK_POLL_INTERVAL_MS } from "./components/constants";
+import { CoEditingHelp } from "./components/server/CoEditingHelp";
+import type { FormsTemplate, FormsTemplateWithLockInfo } from "./components/types";
 
-const FALLBACK_DATE = Date.now().toString();
+const getStatusTitle = (status: string | undefined, t: (key: string) => string): string => {
+  const defaultStatus = t("nav.recentlyEdited");
+  const statusTitleMap: Record<string, string> = {
+    draft: t("nav.drafts"),
+    published: t("nav.published"),
+    archived: t("nav.archived"),
+    recentlyEdited: t("nav.recentlyEdited"),
+  };
+  return status ? statusTitleMap[status] : defaultStatus;
+};
+
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ status?: string }>;
+}): Promise<Metadata> {
+  const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
+  const { locale } = params;
+  const { status } = searchParams;
+  const { t } = await serverTranslation("my-forms", { lang: locale });
+
+  // const defaultStatus = t("nav.recentlyEdited");
+  // const statusTitleMap: Record<string, string> = {
+  //   draft: t("nav.drafts"),
+  //   published: t("nav.published"),
+  //   archived: t("nav.archived"),
+  //   recentlyEdited: t("nav.recentlyEdited"),
+  // };
+
+  // const subtitle = status ? statusTitleMap[status] : defaultStatus;
+  const subtitle = getStatusTitle(status, t);
+
+  return {
+    title: subtitle ? `${subtitle} — ${t("title")}` : t("title"),
+  };
+}
 
 async function combineTemplatesWithLockInfo(
   templates: FormsTemplate[]
@@ -62,35 +98,7 @@ async function combineTemplatesWithLockInfo(
   });
 }
 
-export type { FormsTemplate, FormsTemplateWithLockInfo } from "./components/types";
-import type { FormsTemplate, FormsTemplateWithLockInfo } from "./components/types";
-import { CoEditingHelp } from "./components/server/CoEditingHelp";
-
-export async function generateMetadata(props: {
-  params: Promise<{ locale: string }>;
-  searchParams: Promise<{ status?: string }>;
-}): Promise<Metadata> {
-  const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
-
-  const { locale } = params;
-  const { status } = searchParams;
-
-  const { t } = await serverTranslation("my-forms", { lang: locale });
-
-  const defaultStatus = t("nav.recentlyEdited");
-  const statusTitleMap: Record<string, string> = {
-    draft: t("nav.drafts"),
-    published: t("nav.published"),
-    archived: t("nav.archived"),
-    recentlyEdited: t("nav.recentlyEdited"),
-  };
-
-  const subtitle = status ? statusTitleMap[status] : defaultStatus;
-
-  return {
-    title: subtitle ? `${subtitle} — ${t("title")}` : t("title"),
-  };
-}
+const FALLBACK_DATE = Date.now().toString();
 
 export default async function Page(props: {
   params: Promise<{ locale: string }>;
@@ -225,7 +233,7 @@ export default async function Page(props: {
 
   return (
     <div className="m-4 grid min-h-screen grid-cols-[20em_1fr_4em] gap-8">
-      <h1 className="sr-only">{t("title")}</h1>
+      <h1 className="sr-only">{`${getStatusTitle(status, t)} - ${t("title")}`}</h1>
       <div>
         <div className="self-start rounded border border-slate-200 bg-white p-2">
           <AccountDetails
