@@ -35,6 +35,7 @@
       "email": "Réponses envoyées à :",
       "vault": "Page Réponses"
     },
+    "draftVersion": "Draft - version {{versionNumber}}",
     "menu": {
       "more": "Plus",
       "save": "Télécharger une copie",

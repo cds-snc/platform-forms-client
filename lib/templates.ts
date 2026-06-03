@@ -67,7 +67,7 @@ const _parseTemplate = (
     }),
     name: template.name,
     form: version ? parseJsonConfig(version.jsonConfig) : getResolvedTemplateFormConfig(template),
-    isPublished: options?.isPublished ?? getParsedTemplatePublishState(template, version),
+    isPublished: template.isPublished,
     currentPublishedVersionId: template.currentPublishedVersionId ?? null,
     currentDraftVersionId: template.currentDraftVersionId ?? null,
     versionNumber: version?.versionNumber ?? null,
@@ -360,6 +360,9 @@ export async function getAllTemplatesForUser(
           publishDesc: true,
           saveAndResume: true,
           notificationsInterval: true,
+          currentDraftVersionId: true,
+          currentPublishedVersionId: true,
+          currentDraftVersion: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -2362,19 +2365,4 @@ const getResolvedTemplateFormConfig = (
   }
 ) => {
   return parseJsonConfig(getResolvedTemplateRawConfig(template, options));
-};
-
-const getParsedTemplatePublishState = (
-  template: Pick<TemplateRecordForParsing, "isPublished" | "currentDraftVersionId">,
-  version?: TemplateVersionSnapshot | null
-) => {
-  if (template.currentDraftVersionId) {
-    return false;
-  }
-
-  if (version?.status === TEMPLATE_VERSION_STATUS.PUBLISHED) {
-    return true;
-  }
-
-  return template.isPublished;
 };
