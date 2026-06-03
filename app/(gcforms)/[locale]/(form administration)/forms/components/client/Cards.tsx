@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect, startTransition, ViewTransition } from "react";
 import { Card } from "./Card";
 import { FormsTemplateWithLockInfo } from "../types";
 import { useTranslation } from "@i18n/client";
@@ -25,9 +25,18 @@ export const Cards = ({
   const [templates, setTemplates] = useState<FormsTemplateWithLockInfo[]>(initialTemplates);
   const [displayedCount, setDisplayedCount] = useState<number>(CARDS_PER_BATCH);
 
+  useEffect(() => {
+    startTransition(() => {
+      setTemplates(initialTemplates);
+      setDisplayedCount(CARDS_PER_BATCH);
+    });
+  }, [initialTemplates]);
+
   // Handle loading more cards on scroll
   const handleLoadMore = useCallback(() => {
-    setDisplayedCount((prev) => Math.min(prev + CARDS_PER_BATCH, templates.length));
+    startTransition(() => {
+      setDisplayedCount((prev) => Math.min(prev + CARDS_PER_BATCH, templates.length));
+    });
   }, [templates.length]);
 
   // Setup infinite scroll
@@ -42,7 +51,11 @@ export const Cards = ({
     templates,
     displayedCount,
     pollIntervalMs,
-    onUpdate: setTemplates,
+    onUpdate: (nextTemplates) => {
+      startTransition(() => {
+        setTemplates(nextTemplates);
+      });
+    },
   });
 
   // Get the appropriate message when there are no forms to display
@@ -68,7 +81,7 @@ export const Cards = ({
   }, [templates, displayedCount, overdueTemplateIds]);
 
   return (
-    <div aria-live="polite">
+    <ViewTransition name="forms-tab-switch">
       <div id={`tabpanel-${filter}`} role="tabpanel" aria-labelledby={`tab-${filter}`}>
         {templates.length > 0 ? (
           <>
@@ -88,6 +101,6 @@ export const Cards = ({
           emptyStateMessage
         )}
       </div>
-    </div>
+    </ViewTransition>
   );
 };
