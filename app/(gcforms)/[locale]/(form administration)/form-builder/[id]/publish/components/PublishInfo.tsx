@@ -9,7 +9,7 @@ export const PublishInfo = async ({
   isPublished,
 }: {
   locale: Language;
-  isPublished: boolean;
+  isPublished?: boolean;
 }) => {
   const { t } = await serverTranslation("form-builder", { lang: locale });
 

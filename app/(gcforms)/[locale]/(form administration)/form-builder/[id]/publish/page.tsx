@@ -8,7 +8,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { cn } from "@lib/utils";
 import { PublishCard } from "./components/PublishCard";
 import { PublishInfo } from "./components/PublishInfo";
-import { getTemplateVersionState } from "@root/lib/templates";
+import { getTemplatePublishedStatus } from "@root/lib/templates";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata(props: {
@@ -41,9 +41,9 @@ export default async function Page(props: { params: Promise<{ id: string; locale
     return <WaitForId locale={locale as Language} path="publish" />;
   }
 
-  const templateVersionState = await getTemplateVersionState(id);
+  const isPublished = await getTemplatePublishedStatus(id);
 
-  if (templateVersionState?.isPublished && !templateVersionState.currentDraftVersionId) {
+  if (isPublished) {
     redirect(`/${locale}/form-builder/${id}/published`);
   }
 
@@ -65,10 +65,7 @@ export default async function Page(props: { params: Promise<{ id: string; locale
         </div>
         {userCanPublish && (
           <div>
-            <PublishInfo
-              isPublished={templateVersionState?.isPublished || false}
-              locale={locale as Language}
-            />
+            <PublishInfo locale={locale as Language} />
           </div>
         )}
       </div>

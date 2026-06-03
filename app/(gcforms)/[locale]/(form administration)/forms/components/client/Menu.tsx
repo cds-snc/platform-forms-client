@@ -3,13 +3,10 @@
 import { useTranslation } from "@i18n/client";
 import copy from "copy-to-clipboard";
 import { getForm, cloneForm } from "../../actions";
-import { createDraftVersion } from "@formBuilder/actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useCallback, useState } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { logMessage } from "@lib/logger";
 import {
   MenuDropdown,
   MenuDropdownItemCallback,
@@ -34,8 +31,6 @@ export const Menu = ({
     i18n: { language },
   } = useTranslation("my-forms");
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
-  const { getFlag } = useFeatureFlags();
-  const templateVersioningEnabled = getFlag("templateVersioning");
 
   const handleDelete = useCallback(() => {
     setShowConfirm(true);
@@ -68,29 +63,6 @@ export const Menu = ({
             throw new Error(res?.error || "Clone failed");
           } catch (e) {
             toast.error(t("card.menu.cloneFailed"));
-          }
-        })();
-
-        return { message: "" };
-      },
-    },
-    {
-      filtered: isPublished && templateVersioningEnabled ? false : true,
-      title: t("actions.duplicatePublishedForm"),
-      callback: () => {
-        // create a draft version for the published form within the same template
-        (async () => {
-          try {
-            const res = await createDraftVersion({ id });
-            if (res && !res.error) {
-              // navigate into edit for this form
-              window.location.href = `/${language}/form-builder/${id}/edit`;
-              return;
-            }
-            throw new Error(res?.error || "Create draft failed");
-          } catch (e) {
-            logMessage.error(`createDraftVersion failed for ${id}: ${e}`);
-            toast.error(t("card.menu.somethingWentWrong"));
           }
         })();
 
