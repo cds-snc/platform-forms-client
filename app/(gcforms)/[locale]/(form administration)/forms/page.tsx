@@ -37,18 +37,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { status } = searchParams;
   const { t } = await serverTranslation("my-forms", { lang: locale });
-
-  // const defaultStatus = t("nav.recentlyEdited");
-  // const statusTitleMap: Record<string, string> = {
-  //   draft: t("nav.drafts"),
-  //   published: t("nav.published"),
-  //   archived: t("nav.archived"),
-  //   recentlyEdited: t("nav.recentlyEdited"),
-  // };
-
-  // const subtitle = status ? statusTitleMap[status] : defaultStatus;
   const subtitle = getStatusTitle(status, t);
-
   return {
     title: subtitle ? `${subtitle} — ${t("title")}` : t("title"),
   };
