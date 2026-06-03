@@ -578,13 +578,7 @@ export async function deleteDraftFormResponses(formID: string) {
       );
     }
 
-    logEvent(
-      user.id,
-      { type: "Form", id: formID },
-      AuditLogEvent.DeleteDraftResponses,
-      AuditLogDetails.DeletedDraftResponsesForForm,
-      { formId: formID }
-    );
+    logEvent(user.id, { type: "Form", id: formID }, AuditLogEvent.DeleteDraftResponses);
 
     return {
       responsesDeleted: accumulatedResponses.length,

@@ -140,7 +140,6 @@ export const AuditLogDetails = {
   CognitoUserIdentifier: "Cognito user unique identifier (sub): ${userId}",
   UpdatedNotificationSettings: "UpdatedNotificationSettings",
   ConfirmedResponsesForForm: "ConfirmedResponsesForForm",
-  DeletedDraftResponsesForForm: "DeletedDraftResponses",
   RetreiveSelectedFormResponses:
     "Retrieve selected responses for form ${formID} with ID ${submissionID}",
   ListAllResponsesForForm: "List all responses ${status} for form ${formID}",
@@ -220,7 +219,6 @@ type AuditDetailsParams = {
     userEmail: string;
   };
   [AuditLogDetails.ConfirmedResponsesForForm]: { formId: string };
-  [AuditLogDetails.DeletedDraftResponsesForForm]: { formId: string };
   [AuditLogDetails.RetreiveSelectedFormResponses]: {
     formID: string;
     submissionID: string;
