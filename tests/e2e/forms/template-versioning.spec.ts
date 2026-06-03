@@ -4,8 +4,6 @@ import { prisma, Prisma } from "@gcforms/database";
 import { UserFeatureFlags } from "@lib/cache/types";
 
 test.describe("Republishing a form with template versioning", { tag: "@published-form" }, () => {
-  test.fixme();
-
   let formId: string;
   let dbHelper: DatabaseHelper;
   let adminUserId: string;
