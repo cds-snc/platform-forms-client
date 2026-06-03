@@ -20,6 +20,7 @@ import {
 } from "../helpers";
 
 const CardBanner = memo(({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
+  //TODO try "use memo";
   const { t } = useTranslation("my-forms");
   const bulletColor = getBannerColor(isPublished, ttl);
 
@@ -121,7 +122,7 @@ const CardTitle = memo(
       i18n: { language },
     } = useTranslation("my-forms");
     const classes =
-      "mb-0 mr-2 block w-full overflow-hidden pb-0 text-left text-base font-bold line-clamp-3 no-underline text-inherit";
+      "mb-0 mr-2 block w-full overflow-hidden pb-0 text-left text-base font-bold line-clamp-3 no-underline text-inherit hover:underline focus:underline active:underline";
     const publishedLink = `/${language}/form-builder/${id}/responses`;
     const draftLink = `/${language}/form-builder/${id}/edit/`;
     return isPublished ? (
