@@ -65,7 +65,10 @@ export default async function Page(props: { params: Promise<{ id: string; locale
         </div>
         {userCanPublish && (
           <div>
-            <PublishInfo locale={locale as Language} />
+            <PublishInfo
+              isPublished={templateVersionState?.isPublished || false}
+              locale={locale as Language}
+            />
           </div>
         )}
       </div>
