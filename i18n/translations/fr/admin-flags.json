@@ -41,6 +41,10 @@
     "zitadelLogin": {
       "title": "Connexion via Zitadel",
       "description": "Activer Zitadel comme méthode de connexion pour les utilisateurs"
+    },
+    "templateVersioning": {
+      "title": "Versionnement des modèles",
+      "description": "Activer le flux de version brouillon et de republication pour les modèles de formulaire"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",
