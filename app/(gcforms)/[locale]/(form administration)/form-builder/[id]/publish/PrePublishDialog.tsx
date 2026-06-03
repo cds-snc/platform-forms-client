@@ -8,6 +8,13 @@ import { cn } from "@lib/utils";
 
 import { Label } from "@clientComponents/forms";
 
+const PrePublishSteps = {
+  ReasonForPublish: 0,
+  FormTypeAndDescription: 1,
+} as const;
+
+type PrePublishSteps = (typeof PrePublishSteps)[keyof typeof PrePublishSteps];
+
 export const PrePublishDialog = ({
   handleClose,
   handleConfirm,
@@ -17,6 +24,7 @@ export const PrePublishDialog = ({
   reasonForPublish,
   formType,
   description,
+  hasCurrentlyPublishedVersion,
 }: {
   handleClose: () => void;
   handleConfirm: () => void;
@@ -26,17 +34,21 @@ export const PrePublishDialog = ({
   reasonForPublish: string;
   formType: string;
   description: string;
+  hasCurrentlyPublishedVersion?: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
 
-  const [prePublishStep, setPrePublishStep] = useState(0);
+  const [prePublishStep, setPrePublishStep] = useState<PrePublishSteps>(
+    PrePublishSteps.ReasonForPublish
+  );
 
-  const PrePublishSteps = {
-    ReasonForPublish: 0,
-    FormTypeAndDescription: 1,
-  } as const;
-  type PrePublishSteps = (typeof PrePublishSteps)[keyof typeof PrePublishSteps];
+  const isPublishReasonStep = prePublishStep === PrePublishSteps.ReasonForPublish;
+  const actionLabel = hasCurrentlyPublishedVersion
+    ? t("republish")
+    : isPublishReasonStep
+      ? t("continue")
+      : t("publish");
 
   async function ContinuePublishSteps() {
     setError(false);
@@ -44,6 +56,11 @@ export const PrePublishDialog = ({
       if (reasonForPublish == "") {
         setError(true);
       } else {
+        if (hasCurrentlyPublishedVersion) {
+          handleConfirm();
+          return;
+        }
+
         setPrePublishStep(PrePublishSteps.FormTypeAndDescription);
       }
     } else {
@@ -86,7 +103,7 @@ export const PrePublishDialog = ({
   const actions = (
     <div className="flex gap-4">
       <Button theme="primary" onClick={ContinuePublishSteps}>
-        {t("continue")}
+        {actionLabel}
       </Button>
 
       <Button
@@ -104,7 +121,11 @@ export const PrePublishDialog = ({
     <div className="form-builder">
       {prePublishStep == PrePublishSteps.ReasonForPublish && (
         <Dialog
-          title={t("prePublishFormDialog.title")}
+          title={
+            hasCurrentlyPublishedVersion
+              ? t("prePublishFormDialog.republishTitle")
+              : t("prePublishFormDialog.title")
+          }
           dialogRef={dialog}
           actions={actions}
           className="max-h-[80%] overflow-y-scroll"
@@ -184,7 +205,7 @@ export const PrePublishDialog = ({
             <div className="mb-1">
               <select
                 className={cn(
-                  "center-right-15px p-2 form-builder-dropdown my-0 inline-block min-w-[400px] text-black-default border-1 border-black"
+                  "center-right-15px form-builder-dropdown text-black-default my-0 inline-block min-w-[400px] border-1 border-black p-2"
                 )}
                 value={formType}
                 onChange={(e) => onFormTypeChange(e)}

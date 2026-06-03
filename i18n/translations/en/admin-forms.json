@@ -6,5 +6,6 @@
   "manageOwnerships": "Manage ownership",
   "overdueResponses": "Overdue responses",
   "noForms": "No forms found",
-  "deleteForm": "Delete form"
+  "deleteForm": "Delete form",
+  "createDraftVersion": "Create draft version"
 }
