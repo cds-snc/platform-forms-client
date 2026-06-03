@@ -253,21 +253,9 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
 
   return (
     <div className={wrapperClass} data-testid={`card-${card.id}`}>
-      <div className="col-start-2 flex items-start">
-        <Menu
-          id={card.id}
-          name={card.name}
-          isPublished={card.isPublished}
-          ttl={card.ttl ? card.ttl : undefined}
-          status={status}
-        />
-      </div>
-
-      <div className="col-start-1 row-start-1 flex flex-col">
+      <div className="row-start-1 mt-1 flex flex-col">
         <CardCollaboratorCount collaboratorCount={collaboratorCount} />
-
         <CardTitle id={card.id} name={card.name} isPublished={card.isPublished} />
-
         <Suspense fallback={<Skeleton count={2} className="my-3 w-[300px]" />}>
           <CardLinks
             isPublished={card.isPublished}
@@ -279,7 +267,6 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
             language={language}
           />
         </Suspense>
-
         <div className="mt-auto">
           {cardState === "draft-readonly" && (
             <CardFooterDraftReadonly
@@ -289,7 +276,6 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
               lastEditedBy={card.lastEditedBy}
             />
           )}
-
           {cardState === "draft-editing" && (
             <CardFooterDraftEditing
               lockedByName={card.editLockInfo?.lockedByName ?? null}
@@ -297,11 +283,18 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
               cardId={card.id}
             />
           )}
-
           <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
-
           {cardState === "published" && <CardFooterPublished cardId={card.id} />}
         </div>
+      </div>
+      <div className="flex items-start">
+        <Menu
+          id={card.id}
+          name={card.name}
+          isPublished={card.isPublished}
+          ttl={card.ttl ? card.ttl : undefined}
+          status={status}
+        />
       </div>
     </div>
   );
