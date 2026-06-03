@@ -597,7 +597,7 @@
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
       "InvitationAccepted": "Invitation acceptée",
-      "UpdateFormJsonConfig": "Téléchargement d'une copie du formulaire",
+      "UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
       "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
       "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée"
     },
@@ -605,6 +605,7 @@
       "CreatedForm": "Formulaire créé",
       "UpdatedFormName": "Formulaire renommé à :{{newFormName}}",
       "UpdatedFormContent": "Contenu du formulaire mis à jour",
+      "UpdateFormBranding": "Image de marque du formulaire mise à jour : {{brand}}",
       "DuplicatedForm": "Formulaire dupliqué pour en créer un nouveau {{newFormID}}",
       "ArchivedForm": "Formulaire archivé",
       "RestoredForm": "Formulaire désarchivé",

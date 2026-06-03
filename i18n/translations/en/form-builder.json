@@ -597,7 +597,7 @@
       "RefreshAPIKey": "Re-generated API Key",
       "PublishForm": "Form published",
       "InvitationAccepted": "Invitation accepted",
-      "UpdateFormJsonConfig": "Downloaded copy of the form",
+      "UpdateFormBranding": "Updated form branding",
       "UpdatedNotificationSettings": "Updated notification settings",
       "DeletedDraftResponses": "Deleted draft form responses",
       "InvitationCreated": "Invited a user to collaborate on the form"
@@ -606,6 +606,7 @@
       "CreatedForm": "Created form",
       "UpdatedFormName": "Renamed form to: {{newFormName}}",
       "UpdatedFormContent": "Updated form content",
+      "UpdateFormBranding": "Updated form branding to: {{brand}}",
       "DuplicatedForm": "Duplicated form to create a new one {{newFormID}}",
       "ArchivedForm": "Archived form",
       "RestoredForm": "Restored form",
