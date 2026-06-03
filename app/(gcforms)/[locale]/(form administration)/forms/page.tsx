@@ -68,14 +68,27 @@ import { CoEditingHelp } from "./components/server/CoEditingHelp";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ status?: string }>;
 }): Promise<Metadata> {
-  const params = await props.params;
+  const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
 
   const { locale } = params;
+  const { status } = searchParams;
 
   const { t } = await serverTranslation("my-forms", { lang: locale });
+
+  const defaultStatus = t("nav.recentlyEdited");
+  const statusTitleMap: Record<string, string> = {
+    draft: t("nav.drafts"),
+    published: t("nav.published"),
+    archived: t("nav.archived"),
+    recentlyEdited: t("nav.recentlyEdited"),
+  };
+
+  const subtitle = status ? statusTitleMap[status] : defaultStatus;
+
   return {
-    title: t("title"),
+    title: subtitle ? `${subtitle} — ${t("title")}` : t("title"),
   };
 }
 
