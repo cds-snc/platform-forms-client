@@ -82,7 +82,7 @@ test.describe("Publishing a form", () => {
       page.waitForURL(new RegExp(`/form-builder/${formId}/published`), {
         timeout: 60000,
       }),
-      page.getByRole("button", { name: "Continue" }).click(),
+      page.getByRole("button", { name: "Publish" }).click(),
     ]);
 
     await page.waitForLoadState("networkidle");
