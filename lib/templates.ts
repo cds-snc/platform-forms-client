@@ -1643,7 +1643,7 @@ export const updateClosedData = async (
       "UpdateForm",
       AuditLogDetails.UpdateClosingDate,
       {
-        closingDate: date.toISOString(),
+        closingDate: date.toLocaleDateString("en-CA"),
       }
     );
   } else {
