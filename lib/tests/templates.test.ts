@@ -324,7 +324,7 @@ describe("Template CRUD functions", () => {
         expect.objectContaining({
           id: "formtestID",
           form: formConfiguration,
-          isPublished: false,
+          isPublished: true,
           securityAttribute: "Unclassified",
         })
       );
@@ -609,7 +609,7 @@ describe("Template CRUD functions", () => {
         expect.objectContaining({
           id: "formtestID",
           form: formConfiguration,
-          isPublished: false,
+          isPublished: true,
           currentDraftVersionId: "draft-version-2",
           currentPublishedVersionId: "published-version-1",
         })
