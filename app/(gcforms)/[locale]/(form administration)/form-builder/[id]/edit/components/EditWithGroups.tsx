@@ -35,6 +35,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     getLocalizationAttribute,
     isPublished,
     getName,
+    currentDraftVersionId,
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
@@ -43,6 +44,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     isPublished: s.isPublished,
+    currentDraftVersionId: s.currentDraftVersionId,
     getName: s.getName,
   }));
 
@@ -73,11 +75,11 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   }, [title]);
 
   useEffect(() => {
-    if (isPublished) {
+    if (isPublished && !currentDraftVersionId) {
       router.replace(`/${locale}/form-builder/${id}/published`);
       return;
     }
-  }, [router, isPublished, id, locale]);
+  }, [router, isPublished, id, locale, currentDraftVersionId]);
 
   const _debounced = debounce(
     useCallback(
