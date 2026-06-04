@@ -1,6 +1,21 @@
 import { useCallback, useEffect, useRef } from "react";
 import { FormsTemplateWithLockInfo, EditLocksResponse } from "../types";
 
+const PROGRESSIVE_BACKOFF = {
+  step1: {
+    threshold: 5 * 60 * 1000, // 5 minutes of inactivity
+    pollIntervalMs: 10 * 1000, // 10 seconds
+  },
+  step2: {
+    threshold: 10 * 60 * 1000, // 10 minutes of inactivity
+    pollIntervalMs: 30 * 1000, // 30 seconds
+  },
+  step3: {
+    threshold: 20 * 60 * 1000, // 20 minutes of inactivity
+    pollIntervalMs: 60 * 1000, // 60 seconds
+  },
+};
+
 /**
  * Custom hook to handle edit lock polling with request deduplication
  */
@@ -19,6 +34,8 @@ export function useEditLockPolling({
   const displayedCountRef = useRef(displayedCount);
   const abortControllerRef = useRef<AbortController | null>(null);
   const fetchInProgressRef = useRef(false);
+  const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastActivityAtRef = useRef<number>(Date.now());
 
   // Keep refs in sync with state
   useEffect(() => {
@@ -135,51 +152,103 @@ export function useEditLockPolling({
     }
   }, [onUpdate]);
 
-  // Poll for edit lock updates at regular intervals
-  // Also pause/resume polling based on tab visibility
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout | null = null;
+  const getDynamicPollIntervalMs = useCallback(() => {
+    const idleMs = Date.now() - lastActivityAtRef.current;
 
-    const startPolling = () => {
-      // Call immediately when starting
+    if (idleMs >= PROGRESSIVE_BACKOFF.step3.threshold) {
+      return PROGRESSIVE_BACKOFF.step3.pollIntervalMs;
+    }
+
+    if (idleMs >= PROGRESSIVE_BACKOFF.step2.threshold) {
+      return PROGRESSIVE_BACKOFF.step2.pollIntervalMs;
+    }
+
+    if (idleMs >= PROGRESSIVE_BACKOFF.step1.threshold) {
+      return PROGRESSIVE_BACKOFF.step1.pollIntervalMs;
+    }
+
+    return pollIntervalMs;
+  }, [pollIntervalMs]);
+
+  const clearScheduledPoll = useCallback(() => {
+    if (timeoutIdRef.current) {
+      clearTimeout(timeoutIdRef.current);
+      timeoutIdRef.current = null;
+    }
+  }, []);
+
+  const scheduleNextPoll = useCallback(() => {
+    clearScheduledPoll();
+
+    if (document.hidden) {
+      return;
+    }
+
+    timeoutIdRef.current = setTimeout(() => {
       void fetchEditLockUpdates();
+      scheduleNextPoll();
+    }, getDynamicPollIntervalMs());
+  }, [clearScheduledPoll, fetchEditLockUpdates, getDynamicPollIntervalMs]);
 
-      // Set up polling interval
-      intervalId = setInterval(() => {
-        void fetchEditLockUpdates();
-      }, pollIntervalMs);
+  const markActivity = useCallback(() => {
+    lastActivityAtRef.current = Date.now();
+    scheduleNextPoll();
+  }, [scheduleNextPoll]);
+
+  // Poll for edit lock updates with progressive backoff based on inactivity.
+  // Also pause/resume polling based on tab visibility.
+  useEffect(() => {
+    const startPolling = () => {
+      if (document.hidden) {
+        return;
+      }
+
+      // Call immediately when starting.
+      void fetchEditLockUpdates();
+      scheduleNextPoll();
     };
 
     const stopPolling = () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-        intervalId = null;
-      }
+      clearScheduledPoll();
     };
 
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        // Tab became inactive - pause polling
+        // Tab became inactive - pause polling.
         stopPolling();
       } else {
-        // Tab became active - resume polling
-        stopPolling(); // Clear any existing interval first
+        // Tab became active - treat as activity and restart immediately.
+        markActivity();
         startPolling();
       }
     };
 
-    // Start polling on mount
+    const handleActivity = () => {
+      markActivity();
+    };
+
+    // Start polling on mount.
     startPolling();
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    // Presence detection for progressive backoff
+    document.addEventListener("visibilitychange", handleVisibilityChange); // TODO probably not needed since we won't be polling when hidden, could leave just in case
+    window.addEventListener("pointerdown", handleActivity, { passive: true });
+    window.addEventListener("keydown", handleActivity);
+    window.addEventListener("focus", handleActivity);
+    window.addEventListener("input", handleActivity, { passive: true });
 
     return () => {
       stopPolling();
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      // Cancel any in-flight request on unmount
+      // Clean up progressive backoff listeners
+      document.removeEventListener("visibilitychange", handleVisibilityChange); // TODO probably not needed since we won't be polling when hidden, could leave just in case
+      window.removeEventListener("pointerdown", handleActivity);
+      window.removeEventListener("keydown", handleActivity);
+      window.removeEventListener("focus", handleActivity);
+      window.removeEventListener("input", handleActivity);
+      // Cancel any in-flight request on unmount.
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
     };
-  }, [fetchEditLockUpdates, pollIntervalMs]);
+  }, [clearScheduledPoll, fetchEditLockUpdates, markActivity, scheduleNextPoll]);
 }
