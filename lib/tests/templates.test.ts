@@ -9,13 +9,13 @@ import {
   getFullTemplateByID,
   updateTemplate,
   deleteTemplate,
-  onlyIncludePublicProperties,
   updateIsPublishedForTemplate,
   getTemplateWithAssociatedUsers,
   updateAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
+  toPublicFormRecord,
 } from "../templates";
 
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
@@ -713,7 +713,7 @@ describe("Template CRUD functions", () => {
         securityAttribute: "Unclassified",
       };
 
-      const publicFormRecord = onlyIncludePublicProperties(formRecord);
+      const publicFormRecord = toPublicFormRecord(formRecord);
 
       expect(publicFormRecord).toHaveProperty("id");
       expect(publicFormRecord).toHaveProperty("form");

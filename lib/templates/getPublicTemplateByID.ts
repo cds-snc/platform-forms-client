@@ -1,8 +1,9 @@
 import { formCache } from "../cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { PublicFormRecord } from "@lib/types";
-import { onlyIncludePublicProperties, parseTemplate } from "./internal";
+import { parseTemplate } from "./internal";
 import { logMessage } from "@lib/logger";
+import { toPublicFormRecord } from "./toPublicFormRecord";
 
 /**
  * Get a form template by ID (only includes public information but does not require any permission)
@@ -51,7 +52,7 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
     if (!template || template.ttl) return null;
 
     const parsedTemplate = parseTemplate(template);
-    const publicFormRecord = onlyIncludePublicProperties(parsedTemplate);
+    const publicFormRecord = toPublicFormRecord(parsedTemplate);
 
     if (formCache.cacheAvailable) formCache.set(formID, publicFormRecord);
 
