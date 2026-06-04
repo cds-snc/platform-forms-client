@@ -8,7 +8,7 @@ import { FormRecord, PublicFormRecord } from "@lib/types";
  * @param template A Form Record, containing all the properties
  * @returns a Public Form Record, with only the public properties
  */
-export const toPublicFormRecord = (template: FormRecord): PublicFormRecord => {
+export const mapTemplateToPublicFormRecord = (template: FormRecord): PublicFormRecord => {
   return {
     id: template.id,
     updatedAt: template.updatedAt,

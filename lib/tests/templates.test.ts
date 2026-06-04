@@ -15,7 +15,7 @@ import {
   TemplateAlreadyPublishedError,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
-  toPublicFormRecord,
+  mapTemplateToPublicFormRecord,
 } from "../templates";
 
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
@@ -713,7 +713,7 @@ describe("Template CRUD functions", () => {
         securityAttribute: "Unclassified",
       };
 
-      const publicFormRecord = toPublicFormRecord(formRecord);
+      const publicFormRecord = mapTemplateToPublicFormRecord(formRecord);
 
       expect(publicFormRecord).toHaveProperty("id");
       expect(publicFormRecord).toHaveProperty("form");

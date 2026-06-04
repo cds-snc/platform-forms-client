@@ -18,7 +18,7 @@ export { cloneTemplate } from "./cloneTemplate";
 export { deleteTemplate } from "./deleteTemplate";
 export { restoreTemplate } from "./restoreTemplate";
 export { assertCanEditTemplate } from "./assertCanEditTemplate";
-export { toPublicFormRecord } from "./toPublicFormRecord";
+export { mapTemplateToPublicFormRecord } from "./toPublicFormRecord";
 export { updateClosedData } from "./updateClosedData";
 export { updateSecurityAttribute } from "./updateSecurityAttribute";
 export { getTemplateClosureState } from "./getTemplateClosureState";
