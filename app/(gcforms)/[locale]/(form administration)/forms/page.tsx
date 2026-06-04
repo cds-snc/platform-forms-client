@@ -5,7 +5,6 @@ import { AccessControlError } from "@lib/auth/errors";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
 import { Cards } from "./components/client/Cards";
-import { NewFormButton } from "./components/server/NewFormButton";
 import { AccountDetails } from "./components/server/AccountDetails";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
 import { getAllTemplatesForUser, TemplateOptions } from "@lib/templates";
@@ -208,7 +207,7 @@ export default async function Page(props: {
   );
 
   return (
-    <div className="m-4 grid min-h-screen grid-cols-[20em_1fr_4em] gap-8">
+    <div className="m-4 grid min-h-screen grid-cols-[20em_1fr] gap-8">
       <h1 className="sr-only">{`${getStatusTitle(status, t)} - ${t("title")}`}</h1>
       <div>
         <div className="self-start rounded border border-slate-200 bg-white p-2">
@@ -248,9 +247,6 @@ export default async function Page(props: {
           status={status}
           pollIntervalMs={EDIT_LOCK_POLL_INTERVAL_MS}
         />
-      </div>
-      <div className="mr-6">
-        <NewFormButton />
       </div>
     </div>
   );

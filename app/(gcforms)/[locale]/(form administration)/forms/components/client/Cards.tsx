@@ -7,6 +7,7 @@ import { useTranslation } from "@i18n/client";
 import { CARDS_PER_BATCH } from "../constants";
 import { useEditLockPolling } from "../hooks/useEditLockPolling";
 import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
+import { NewFormButton } from "./NewFormButton";
 
 export const Cards = ({
   filter,
@@ -86,6 +87,11 @@ export const Cards = ({
         {templates.length > 0 ? (
           <>
             <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
+              {(status === "draft" || !status) && (
+                <li className="flex h-full w-full max-w-[16em]" key={-1}>
+                  <NewFormButton />
+                </li>
+              )}
               {displayedCards.map((card) => (
                 <li className="flex h-full w-full max-w-[16em]" key={card.id}>
                   <Card card={card} status={status} />

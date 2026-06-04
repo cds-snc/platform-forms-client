@@ -246,7 +246,7 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
 
   const cardState = useMemo(() => getCardState(card), [card]);
 
-  const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : ""}`;
+  const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded-md border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : ""}`;
 
   return (
     <div className={wrapperClass} data-testid={`card-${card.id}`}>
