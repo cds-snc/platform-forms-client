@@ -25,7 +25,11 @@ test.describe("Form builder share", () => {
       await page.fill("#fileName", "Cypress Share Test Form");
       await expect(page.locator("#fileName")).toHaveValue("Cypress Share Test Form");
 
+      // Open the Share popover, then use the "Share form file" action
       await page.getByRole("button", { name: "Share" }).click();
+      await expect(page.getByRole("button", { name: "Share form file" })).toBeAttached();
+
+      await page.getByRole("button", { name: "Share form file" }).click();
       await expect(page.locator("dialog label")).toContainText("Email address");
 
       await page.getByTestId("close-dialog").click();
