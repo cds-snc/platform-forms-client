@@ -4,7 +4,7 @@ import { FormRecord } from "@lib/types";
 
 import { authorization } from "../privileges";
 import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "../auditLogs";
-import { TemplateNotFoundError } from "./errors";
+import { TemplateNotFoundError } from "./internal/errors";
 import { parseTemplate } from "./shared";
 
 /**

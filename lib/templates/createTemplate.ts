@@ -8,7 +8,7 @@ import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { checkForBetaComponentsAsync } from "../validation/betaCheck";
 import { NotificationsInterval } from "@gcforms/types";
 import { checkFlag, parseTemplate } from "./shared";
-import { InvalidFormConfigError } from "./errors";
+import { InvalidFormConfigError } from "./internal/errors";
 
 // ******************************************
 // Exportable Module Functions

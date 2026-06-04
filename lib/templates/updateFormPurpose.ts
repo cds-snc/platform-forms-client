@@ -3,7 +3,7 @@ import { FormRecord } from "@lib/types";
 
 import { authorization } from "../privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "../auditLogs";
-import { TemplateAlreadyPublishedError } from "./errors";
+import { TemplateAlreadyPublishedError } from "./internal/errors";
 import { parseTemplate } from "./shared";
 
 export async function updateFormPurpose(

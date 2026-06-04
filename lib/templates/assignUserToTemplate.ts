@@ -8,7 +8,7 @@ import {
   logEvent,
 } from "../auditLogs";
 import { logMessage } from "@lib/logger";
-import { TemplateNotFoundError, UserNotFoundError } from "./errors";
+import { TemplateNotFoundError, UserNotFoundError } from "./internal/errors";
 import { invalidateTemplateEditLockUserCountCache } from "../editLocks";
 import { notifyOwnersOwnerAdded } from "./notifications";
 

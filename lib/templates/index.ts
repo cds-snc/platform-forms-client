@@ -26,11 +26,8 @@ export { updateFormBranding } from "./updateFormBranding";
 export { notifyOwnersOwnerAdded, notifyOwnersOwnerRemoved } from "./notifications";
 
 export {
-  InvalidFormConfigError,
   TemplateAlreadyPublishedError,
   TemplateHasUnprocessedSubmissions,
-  TemplateNotFoundError,
-  UserNotFoundError,
-} from "./errors";
+} from "./internal/errors";
 
 export type { TemplateOptions } from "./getAllTemplatesForUser";

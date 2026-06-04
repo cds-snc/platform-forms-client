@@ -2,7 +2,7 @@ import { prisma } from "@gcforms/database";
 
 import { authorization } from "../privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "../auditLogs";
-import { TemplateAlreadyPublishedError, TemplateNotFoundError } from "./errors";
+import { TemplateAlreadyPublishedError, TemplateNotFoundError } from "./internal/errors";
 
 /**
  * Remove DeliveryOption from template. Form responses will be sent to the Vault.

@@ -13,7 +13,7 @@ import { checkForBetaComponentsAsync } from "../validation/betaCheck";
 import { logMessage } from "@lib/logger";
 import { checkFlag, parseTemplate } from "./shared";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
-import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "./errors";
+import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "./internal/errors";
 import { validateTemplateSize } from "../utils/validateTemplateSize";
 
 type UpdateTemplateCommand = {

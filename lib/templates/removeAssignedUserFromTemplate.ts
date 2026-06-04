@@ -2,7 +2,7 @@ import { authorization } from "../privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "../auditLogs";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { logMessage } from "@lib/logger";
-import { TemplateNotFoundError, UserNotFoundError } from "./errors";
+import { TemplateNotFoundError, UserNotFoundError } from "./internal/errors";
 import { invalidateTemplateEditLockUserCountCache } from "../editLocks";
 import { notifyOwnersOwnerRemoved } from "./notifications";
 import { FormProperties } from "@lib/types";

@@ -6,7 +6,7 @@ import { authorization } from "../privileges";
 import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "../auditLogs";
 import { unprocessedSubmissions } from "../vault";
 import { deleteKey } from "../serviceAccount";
-import { TemplateHasUnprocessedSubmissions, TemplateNotFoundError } from "./errors";
+import { TemplateHasUnprocessedSubmissions, TemplateNotFoundError } from "./internal/errors";
 import { parseTemplate } from "./shared";
 
 /**
