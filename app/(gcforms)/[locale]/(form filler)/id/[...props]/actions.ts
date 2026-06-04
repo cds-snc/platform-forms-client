@@ -17,6 +17,8 @@ import { traceFunction } from "@lib/otel";
 
 import { MissingFormDataError } from "./lib/client/exceptions";
 import { valuesMatchErrorContainsElementType } from "@gcforms/core";
+import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
+
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function isFormClosed(formId: string): Promise<boolean> {
@@ -58,9 +60,10 @@ export async function submitForm(
         };
       }
 
-      const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
-      // Skip hCaptcha verification for form-builder Preview (drafts)
-      if (template?.isPublished && process.env.APP_ENV !== "test") {
+      const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished);
+
+      if (shouldVerifyHCaptcha) {
+        const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
         // hCaptcha runs regardless but only block submissions if the feature flag is enabled
         const captchaVerified = await verifyHCaptchaToken(captchaToken || "", formId);
         if (hCaptchaBlockingMode && !captchaVerified) {
