@@ -10,11 +10,6 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 
-// Remove and replace this utility with new authorization object in code
-export const checkUserHasTemplateOwnership = async (formID: string) => {
-  await authorization.canEditForm(formID);
-};
-
 export const updateClosedData = async (
   formID: string,
   closingDate: string | null,
