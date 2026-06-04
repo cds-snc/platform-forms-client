@@ -1,8 +1,7 @@
 "use client";
 import { useState, useEffect, createContext, useContext } from "react";
 import { logMessage } from "../logger";
-import Markdown from "markdown-to-jsx";
-import { Button } from "@clientComponents/globals/Buttons";
+import { AppUpdater } from "@clientComponents/globals/Update";
 
 const AppUpdateContext = createContext({
   updateTriggered: false,
@@ -11,6 +10,7 @@ const AppUpdateContext = createContext({
 
 export const AppUpdateProvider = ({ children }: { children: React.ReactNode }) => {
   const [updateRequired, setUpdateRequired] = useState(false);
+
   const updateTriggered =
     typeof window !== "undefined" ? Boolean(sessionStorage?.getItem("gcFormsUpdate")) : false;
 
@@ -42,7 +42,7 @@ export const AppUpdateProvider = ({ children }: { children: React.ReactNode }) =
 
   return (
     <AppUpdateContext.Provider value={{ updateRequired, updateTriggered }}>
-      {updateRequired && <Update />}
+      {updateRequired && <AppUpdater />}
       {children}
     </AppUpdateContext.Provider>
   );
@@ -54,34 +54,4 @@ export const useAppUpdate = () => {
     throw new Error("useAppUpdate must be used within the AppUpdateProvider");
   }
   return context;
-};
-
-export const Update = () => {
-  return (
-    <div
-      id="modal-backdrop"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-    >
-      <div className="m-4 w-full max-w-lg rounded-lg bg-white p-8 shadow-lg">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold">{"GCForms needs to update"}</h2>
-        </div>
-
-        <Markdown options={{ forceBlock: true }}>
-          {"To continue use GCForms you must update to the lastest version."}
-        </Markdown>
-        <div className="mt-4 flex justify-end">
-          <Button
-            onClick={() => {
-              window.location.reload();
-            }}
-            type="submit"
-            theme="primary"
-          >
-            {"Update"}
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
 };

@@ -389,5 +389,17 @@
     "title": "Sign in to GC Forms",
     "description": "Use your government account to build forms and access submitted responses.",
     "button": "Sign in"
+  },
+  "appUpdate": {
+    "builder": {
+      "title": "GC Forms has been updated.",
+      "description": "Refresh your page to continue to the latest version of the application. Your latest changes will be saved.",
+      "button": "Refresh page"
+    },
+    "user": {
+      "title": "This form has been updated. ",
+      "description": "Go to the latest version. The answers you've entered will be saved.",
+      "button": "Refresh page"
+    }
   }
 }
