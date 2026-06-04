@@ -34,10 +34,12 @@ export const Publish = ({ id }: { id: string }) => {
     id: storeId,
     getSchema,
     getName,
+    currentPublishedVersionId,
   } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
     getName: s.getName,
+    currentPublishedVersionId: s.currentPublishedVersionId,
   }));
 
   if (storeId && storeId !== id) {
@@ -193,6 +195,7 @@ export const Publish = ({ id }: { id: string }) => {
 
       {showPrePublishDialog && (
         <PrePublishDialog
+          hasCurrentlyPublishedVersion={currentPublishedVersionId !== null}
           setDescription={setDescription}
           setFormType={setFormType}
           description={description}

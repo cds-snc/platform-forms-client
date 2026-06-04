@@ -12,13 +12,13 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { useFormSubmissionData } from "@lib/hooks/useFormSubmissionData";
 import { toast } from "@formBuilder/components/shared/Toast";
 
-import { generateDownloadHtml } from "@lib/saveAndResume/actions";
+import { generateResponseProgressHtml } from "@lib/saveAndResume/generateResponseProgressHtml";
 import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
 import { logMessage } from "@lib/logger";
 
 import { SaveFileWarning } from "./FileWarning/SaveFileWarning";
 
-export type handleCloseType = (value: boolean) => void;
+export type handleCloseType = () => void;
 
 export const ConfirmDownloadDialog = ({
   open,
@@ -53,34 +53,34 @@ export const ConfirmDownloadDialog = ({
   const handleSave = useCallback(async () => {
     try {
       setSaving(true);
-      const html = await generateDownloadHtml(getOptions());
+      const html = await generateResponseProgressHtml(getOptions());
 
       if (!html.data || html.data === "") {
-        setSaving(false);
         throw new Error("Error generating download progress html");
       }
 
       await downloadDataAsBlob(html.data, fileName, { "text/html": [".html"] });
-
-      setSaving(false);
+      return true;
     } catch (error) {
       logMessage.error(error);
-      setSaving(false);
       toast.error(generateHtmlError, "public-facing-form");
+      return false;
+    } finally {
+      setSaving(false);
     }
   }, [generateHtmlError, fileName, getOptions]);
 
   const doClose = () => {
-    handleClose(false);
+    handleClose();
     previousActiveElement.current?.focus();
   };
 
   return (
     <AlertDialog.Root open={open}>
       <AlertDialog.Portal>
-        <AlertDialog.Overlay className="fixed inset-0 z-[200] h-screen w-screen bg-gray-500/70" />
+        <AlertDialog.Overlay className="fixed inset-0 z-200 h-screen w-screen bg-gray-500/70" />
         <AlertDialog.Content
-          className="fixed left-1/2 top-1/2 z-[201] w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-4 shadow-2xl"
+          className="fixed top-1/2 left-1/2 z-201 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-4 shadow-2xl"
           onOpenAutoFocus={() =>
             (previousActiveElement.current = document.activeElement as HTMLElement)
           }
@@ -88,7 +88,7 @@ export const ConfirmDownloadDialog = ({
           onEscapeKeyDown={doClose}
           aria-describedby="alert-dialog-description"
         >
-          <AlertDialog.Title className="text-2xl font-extrabold leading-tight">
+          <AlertDialog.Title className="text-2xl leading-tight font-extrabold">
             {t(`${tParent}.prompt.title`)}
           </AlertDialog.Title>
           <div id="alert-dialog-description">
@@ -103,7 +103,7 @@ export const ConfirmDownloadDialog = ({
                     {t(`${tParent}.prompt.text2`)}
                   </li>
                 </ol>
-                <div className="mb-2 ml-6 mt-6 font-bold italic">
+                <div className="mt-6 mb-2 ml-6 font-bold italic">
                   {t(`${tParent}.prompt.text3`)}
                 </div>
               </>
@@ -112,23 +112,25 @@ export const ConfirmDownloadDialog = ({
             {type === "confirm" && (
               <>
                 {open && <SaveFileWarning formValues={formValues} type={type} />}
-                <div className="mb-4 mt-6">{t(`${tParent}.prompt.description`)}</div>
+                <div className="mt-6 mb-4">{t(`${tParent}.prompt.description`)}</div>
               </>
             )}
           </div>
 
           <div style={{ display: "flex", gap: 15, justifyContent: "flex-end" }}>
             <AlertDialog.Cancel asChild>
-              <Button onClick={() => handleClose(false)} theme="secondary">
+              <Button onClick={handleClose} theme="secondary">
                 {t(`${tParent}.prompt.cancel`)}
               </Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action asChild>
               <Button
                 disabled={saving}
-                onClick={() => {
-                  handleSave();
-                  handleClose(true);
+                onClick={async () => {
+                  const saved = await handleSave();
+                  if (saved) {
+                    handleClose();
+                  }
                 }}
                 theme="primary"
               >

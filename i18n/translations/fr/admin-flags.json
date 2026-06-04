@@ -42,9 +42,9 @@
       "title": "Connexion via Zitadel",
       "description": "Activer Zitadel comme méthode de connexion pour les utilisateurs"
     },
-    "lockedEditing": {
-      "title": "Rédaction collaborative verrouillée",
-      "description": "Activer la collaboration d'ébauches de formulaires, ce qui permet aux utilisateurs de verrouiller et de reprendre la rédaction d'un formulaire"
+    "templateVersioning": {
+      "title": "Versionnement des modèles",
+      "description": "Activer le flux de version brouillon et de republication pour les modèles de formulaire"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",

@@ -11,7 +11,7 @@ test.describe("Register Page", () => {
   test("Error on submitting a form with an empty name field", async ({ page }) => {
     await page.locator("button[type='submit']").click();
     await expect(page.locator("#errorMessagename")).toContainText(
-      "Complete the required field to continue."
+      "Complete the required field to continue"
     );
   });
 
@@ -24,7 +24,7 @@ test.describe("Register Page", () => {
   test("Error on submitting a form with an empty email field", async ({ page }) => {
     await page.locator("button[type='submit']").click();
     await expect(page.locator("#errorMessageusername")).toContainText(
-      "Complete the required field to continue."
+      "Complete the required field to continue"
     );
   });
 
@@ -32,7 +32,7 @@ test.describe("Register Page", () => {
     await page.fill("input[id='username']", "myemail@email");
     await page.locator("button[type='submit']").click();
     await expect(page.locator("#errorMessageusername")).toContainText(
-      "Enter a valid government email address."
+      "Enter a valid government email address"
     );
   });
 
@@ -40,7 +40,7 @@ test.describe("Register Page", () => {
     await page.fill("input[id='username']", "myemail@email.com");
     await page.locator("button[type='submit']").click();
     await expect(page.locator("#errorMessageusername")).toContainText(
-      "Enter a valid government email address."
+      "Enter a valid government email address"
     );
   });
 
@@ -53,7 +53,7 @@ test.describe("Register Page", () => {
   test("Error on submitting a form with an empty password field", async ({ page }) => {
     await page.locator("button[type='submit']").click();
     await expect(page.locator("#errorMessagepassword")).toContainText(
-      "Complete the required field to continue."
+      "Complete the required field to continue"
     );
   });
 
@@ -129,7 +129,7 @@ test.describe("Register Page", () => {
     await page.fill("input[id='passwordConfirmation']", "Password1!!!!!!!");
     await page.locator("button[type='submit']").click();
     await expect(page.locator("#errorMessagepasswordConfirmation")).toContainText(
-      "The entries for password must match."
+      "The entries for password must match"
     );
   });
 

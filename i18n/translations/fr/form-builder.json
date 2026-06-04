@@ -495,8 +495,13 @@
   "duplicate": "Dupliquer",
   "dyanamicRow": "Ensemble récurrent",
   "edit": "Modifier",
+  "editPublishedForm": "Créer une version brouillon",
   "editingIn": "Modifier en :",
   "editLink": "Modifier un lien  ",
+  "publishedEditDraftTitle": "Modifier ce formulaire publié",
+  "publishedEditDraftDescription": "Créez une version brouillon pour apporter des changements sans toucher au formulaire en ligne. Vous pourrez publier le brouillon lorsqu'il sera prêt.",
+  "createDraftVersionError": "Impossible de créer une version brouillon pour le moment. Réessayez.",
+  "creatingDraftVersion": "Création de la version brouillon",
   "elementActions": "Actions des éléments",
   "email": "Courriel",
   "english": "anglais",
@@ -592,13 +597,15 @@
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
       "InvitationAccepted": "Invitation acceptée",
-      "UpdateFormJsonConfig": "Téléchargement d'une copie du formulaire",
-      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification"
+      "UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
+      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
+      "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée"
     },
     "eventDetails": {
       "CreatedForm": "Formulaire créé",
       "UpdatedFormName": "Formulaire renommé à :{{newFormName}}",
       "UpdatedFormContent": "Contenu du formulaire mis à jour",
+      "UpdateFormBranding": "Image de marque du formulaire mise à jour : {{brand}}",
       "DuplicatedForm": "Formulaire dupliqué pour en créer un nouveau {{newFormID}}",
       "ArchivedForm": "Formulaire archivé",
       "RestoredForm": "Formulaire désarchivé",
@@ -613,8 +620,7 @@
       "UpdateClosingDate": "Date de fermeture modifiée à : {{closingDate}}",
       "RemoveClosingDate": "Date de fermeture supprimée.",
       "UpdatedNotificationSettings": "Paramètre de notification {{enabled}} pour {{userEmail}}",
-
-      "GrantAccess": "Accès accordé à {{userEmail}}",
+      "GrantAccess": "Accès accordé à {{userList}}",
       "RevokeAccess": "Accès révoqué pour {{userEmail}}",
       "UserInvited": "{{userEmail}} a invité {{invitationEmail}}",
       "AcceptedInvitation": "Invitation acceptée par {{userEmail}}",
@@ -622,7 +628,8 @@
       "CancelInvitation": "Invitation annulée pour {{invitationEmail}}",
       "ReceivedFormResponses": "Réponse {{submissionId}} reçue",
       "DownloadedFormResponses": "Réponse {{submissionId}} téléchargée en format {{format}}",
-      "ConfirmedResponsesForForm": "Réponse {{submissionId}} confirmée"
+      "ConfirmedResponsesForForm": "Réponse {{submissionId}} confirmée",
+      "DeletedDraftResponses": "Réponses de l'ébauche de formulaire supprimées"
     },
     "eventParams": {
       "Unclassified": "Non classifié",
@@ -766,6 +773,7 @@
   "privacyStatement": "Avis de confidentialité ",
   "provideFeedback": "Aidez-nous à nous améliorer",
   "publish": "Publier",
+  "republish": "Publier de nouveau",
   "readyToPublish": "Prêt à publier",
   "published": "Publié",
   "publishedBack": "Retourner aux formulaires",
@@ -803,6 +811,7 @@
   },
   "prePublishFormDialog": {
     "title": "Publier le formulaire",
+    "republishTitle": "Publier de nouveau le formulaire",
     "text1": "Pourquoi souhaitez-vous publier le formulaire?",
     "readyForPublicUse": "Formulaire prêt pour un usage par le public",
     "readyForInternalUse": "Formulaire prêt pour un usage interne",

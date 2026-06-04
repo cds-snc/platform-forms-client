@@ -829,3 +829,9 @@
   background: var(--color-gcds-yellow-50) !important;
   color: var(--color-gcds-yellow-800) !important;
 }
+
+.Toastify__toast.gc-toast--notice-warning {
+  background: var(--toastify-color-light) !important;
+  border: 1px solid var(--gcds-color-grayscale-150);
+  color: #000 !important;
+}

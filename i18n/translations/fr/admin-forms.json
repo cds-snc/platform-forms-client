@@ -6,5 +6,6 @@
   "manageOwnerships": "Gérer les propriétaires",
   "overdueResponses": "Réponses en retard",
   "noForms": "Aucun formulaire trouvé",
-  "deleteForm": "Supprimer le formulaire"
+  "deleteForm": "Supprimer le formulaire",
+  "createDraftVersion": "Créer une ébauche"
 }

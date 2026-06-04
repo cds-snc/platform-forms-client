@@ -1,6 +1,5 @@
 import { prisma } from "@gcforms/database";
 import { getRedisInstance } from "@lib/integration/redisConnector";
-import { allowLockedEditing } from "@lib/utils/form-builder/allowLockedEditing";
 import { logMessage } from "@lib/logger";
 import { formCache } from "./cache/formCache";
 import {
@@ -25,6 +24,14 @@ const EDIT_LOCK_ASSIGNED_PENDING_USERS_COUNT_CACHE_PREFIX =
   "edit-lock-assigned-pending-users-count";
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_POLL_MS = 100;
 const EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS = 300;
+
+const getEffectiveTemplatePublishState = ({
+  isPublished,
+  currentDraftVersionId,
+}: {
+  isPublished: boolean;
+  currentDraftVersionId?: string | null;
+}) => !currentDraftVersionId && isPublished;
 
 export type EditLockPresenceStatus = "active" | "idle" | "away";
 export type EditLockVisibilityState = "visible" | "hidden";
@@ -469,18 +476,15 @@ export const getEditLockDisabledStatus = (): EditLockStatus => ({
 });
 
 export const shouldEnableTemplateEditLock = ({
-  allowLockedEditing,
   templateId,
   isPublished,
   assignedUserCount,
 }: {
-  allowLockedEditing: boolean;
   templateId: string | null | undefined;
   isPublished: boolean;
   assignedUserCount: number;
 }): boolean =>
   Boolean(
-    allowLockedEditing &&
     templateId &&
     templateId !== "0000" &&
     !isPublished &&
@@ -518,6 +522,7 @@ const fetchAndCacheUserData = async (
       where: { id: templateId },
       select: {
         isPublished: true,
+        currentDraftVersionId: true,
         _count: {
           select: {
             users: true,
@@ -532,6 +537,7 @@ const fetchAndCacheUserData = async (
     return null;
   }
 
+  const isPublished = getEffectiveTemplatePublishState(template);
   const userCount = template._count.users;
   const pendingUserCount = template._count.invitations;
   const hasEnoughUsers =
@@ -558,7 +564,7 @@ const fetchAndCacheUserData = async (
     ]);
   }
 
-  return { isPublished: template.isPublished, userCount, pendingUserCount, hasEnoughUsers };
+  return { isPublished, userCount, pendingUserCount, hasEnoughUsers };
 };
 
 /**
@@ -599,17 +605,11 @@ export const getTemplateCollaboratorCount = async (
 const shouldEnforceTemplateEditLockInternal = async (
   templateId: string,
   {
-    userId,
     revalidateAssignedUserCount = false,
   }: {
-    userId?: string;
     revalidateAssignedUserCount?: boolean;
   } = {}
 ): Promise<boolean> => {
-  if (!(await allowLockedEditing(userId))) {
-    return false;
-  }
-
   const useRedisCache = process.env.APP_ENV !== "test" && redisEnabled();
 
   // Check the cache first
@@ -656,17 +656,17 @@ const shouldEnforceTemplateEditLockInternal = async (
 
 export const shouldEnforceTemplateEditLock = async (
   templateId: string,
-  userId?: string
-): Promise<boolean> => shouldEnforceTemplateEditLockInternal(templateId, { userId });
+  _userId?: string
+): Promise<boolean> =>
+  shouldEnforceTemplateEditLockInternal(templateId, { revalidateAssignedUserCount: false });
 
 // Use this on page-entry or mutation paths where a stale cached multi-user threshold would be
 // user-visible. It re-checks assigned-user count before enforcing edit locking.
 export const shouldEnforceTemplateEditLockWithVerifiedUserCount = async (
   templateId: string,
-  userId?: string
+  _userId?: string
 ): Promise<boolean> =>
   shouldEnforceTemplateEditLockInternal(templateId, {
-    userId,
     revalidateAssignedUserCount: true,
   });
 
