@@ -39,48 +39,6 @@ export type UpdateTemplateCommand = {
   notificationsInterval?: NotificationsInterval;
 };
 
-/**
- * Get a form template by ID (includes full template information but requires view permission)
- * @param formID ID of form template
- * @returns FormRecord
- */
-export async function getFullTemplateByID(
-  formID: string,
-  allowDeleted?: boolean
-): Promise<FormRecord | null> {
-  try {
-    const { user } = await authorization.canViewForm(formID, allowDeleted).catch((e) => {
-      logEvent(
-        e.user.id,
-        { type: "Form", id: formID },
-        "AccessDenied",
-        AuditLogAccessDeniedDetails.AccessDenied_AttemptedToReadFormObject
-      );
-      throw e;
-    });
-
-    const template = await prisma.template
-      .findUnique({
-        where: {
-          id: formID,
-          ttl: allowDeleted ? { not: null } : null,
-        },
-        include: {
-          deliveryOption: true,
-        },
-      })
-      .catch((e) => prismaErrors(e, null));
-
-    if (!template) return null;
-
-    logEvent(user.id, { type: "Form", id: formID }, "ReadForm");
-
-    return _parseTemplate(template);
-  } catch (e) {
-    return null;
-  }
-}
-
 export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
   formRecord: FormRecord;
   users: { id: string; name: string | null; email: string }[];
