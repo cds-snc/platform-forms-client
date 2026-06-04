@@ -1,0 +1,20 @@
+{
+  "name": "form_generator",
+  "version": "0.1.0",
+  "description": "Generate draft forms and insert them into the database",
+  "main": "generate_forms.ts",
+  "scripts": {
+    "generate": "tsx generate_forms.ts"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@types/node": "^24.6.1",
+    "@types/pg": "^8.11.0",
+    "dotenv": "^16.3.1",
+    "pg": "^8.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^6.0.2",
+    "uuid": "^11.0.0"
+  },
+  "packageManager": "yarn@4.10.3"
+}
