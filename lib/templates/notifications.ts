@@ -1,6 +1,7 @@
 import { FormProperties } from "@lib/types";
 import { youHaveBeenRemovedEmailTemplate } from "../invitations/emailTemplates/youHaveBeenRemovedEmailTemplate";
 import { ownerRemovedEmailTemplate } from "../invitations/emailTemplates/ownerRemovedEmailTemplate";
+import { ownerAddedEmailTemplate } from "../invitations/emailTemplates/ownerAddedEmailTemplate";
 import { sendEmail } from "../integration/notifyConnector";
 
 /**
@@ -45,6 +46,36 @@ export const notifyOwnersOwnerRemoved = async (
         formResponse: ownerRemovedEmailContent,
       },
       "notifyOtherOwnersOfRemovedOwner"
+    );
+  });
+};
+
+/**
+ * Notify all owners when ownership changes (owner added)
+ *
+ * @param user New owner
+ * @param form Form properties object
+ * @param users Current owners
+ */
+export const notifyOwnersOwnerAdded = async (
+  userToAdd: { name: string | null; email: string },
+  form: FormProperties,
+  users: { id: string; email: string }[]
+) => {
+  const emailContent = ownerAddedEmailTemplate(
+    form.titleEn,
+    form.titleFr,
+    userToAdd.name || userToAdd.email
+  );
+
+  users.forEach((owner) => {
+    sendEmail(
+      owner.email,
+      {
+        subject: "Ownership change notification | Notification de changement de propriété",
+        formResponse: emailContent,
+      },
+      "notifyAddedOwner"
     );
   });
 };
