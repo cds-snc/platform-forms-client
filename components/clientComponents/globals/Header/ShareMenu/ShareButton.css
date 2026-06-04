@@ -5,7 +5,10 @@
 .share-menu-popover {
   position-anchor: --form-builder-share-menu-trigger;
   position-area: bottom span-right;
-  position-try: flip-block, flip-inline, flip-block flip-inline;
+  position-try:
+    flip-block,
+    flip-inline,
+    flip-block flip-inline;
 
   inset: auto;
   margin: 0.5rem 0 0;
