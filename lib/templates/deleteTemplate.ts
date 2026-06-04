@@ -7,7 +7,7 @@ import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "../auditLo
 import { unprocessedSubmissions } from "../vault";
 import { deleteKey } from "../serviceAccount";
 import { TemplateHasUnprocessedSubmissions, TemplateNotFoundError } from "./internal/errors";
-import { parseTemplate } from "./shared";
+import { parseTemplate } from "./internal";
 
 /**
  * Deletes a form template. The template will stay in the database for 30 days in an archived state until a lambda function deletes it from the database.

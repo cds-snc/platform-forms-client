@@ -7,7 +7,7 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { checkForBetaComponentsAsync } from "../validation/betaCheck";
 import { NotificationsInterval } from "@gcforms/types";
-import { checkFlag, parseTemplate } from "./shared";
+import { checkFlag, parseTemplate } from "./internal";
 import { InvalidFormConfigError } from "./internal/errors";
 
 // ******************************************

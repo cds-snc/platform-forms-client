@@ -17,7 +17,7 @@ export { cloneTemplate } from "./cloneTemplate";
 export { deleteTemplate } from "./deleteTemplate";
 export { restoreTemplate } from "./restoreTemplate";
 export { checkUserHasTemplateOwnership } from "./checkUserHasTemplateOwnership";
-export { onlyIncludePublicProperties } from "./shared";
+export { onlyIncludePublicProperties } from "./internal";
 export { updateClosedData } from "./updateClosedData";
 export { updateSecurityAttribute } from "./updateSecurityAttribute";
 export { checkIfClosed } from "./checkIfClosed";

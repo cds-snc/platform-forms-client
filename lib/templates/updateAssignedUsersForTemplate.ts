@@ -6,7 +6,7 @@ import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "../audit
 import { logMessage } from "@lib/logger";
 import { invalidateTemplateEditLockUserCountCache } from "../editLocks";
 import { notifyOwnersOwnerAdded, notifyOwnersOwnerRemoved } from "./internal/notifications";
-import { parseTemplate } from "./shared";
+import { parseTemplate } from "./internal";
 
 /**
  * Add/remove (sync) users to a form

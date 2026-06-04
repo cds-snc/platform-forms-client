@@ -11,7 +11,7 @@ import {
 } from "../auditLogs";
 import { checkForBetaComponentsAsync } from "../validation/betaCheck";
 import { logMessage } from "@lib/logger";
-import { checkFlag, parseTemplate } from "./shared";
+import { checkFlag, parseTemplate } from "./internal";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "./internal/errors";
 import { validateTemplateSize } from "../utils/validateTemplateSize";

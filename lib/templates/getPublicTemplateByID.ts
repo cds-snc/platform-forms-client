@@ -1,7 +1,7 @@
 import { formCache } from "../cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { PublicFormRecord } from "@lib/types";
-import { onlyIncludePublicProperties, parseTemplate } from "./shared";
+import { onlyIncludePublicProperties, parseTemplate } from "./internal";
 import { logMessage } from "@lib/logger";
 
 /**

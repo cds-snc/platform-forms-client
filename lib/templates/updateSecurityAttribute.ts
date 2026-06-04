@@ -8,7 +8,7 @@ import {
   AuditLogEvent,
   logEvent,
 } from "../auditLogs";
-import { parseTemplate } from "./shared";
+import { parseTemplate } from "./internal";
 
 export const updateSecurityAttribute = async (formID: string, securityAttribute: string) => {
   const { user } = await authorization.canEditForm(formID).catch((e) => {

@@ -12,7 +12,7 @@ import { logMessage } from "@lib/logger";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { InvalidFormConfigError } from "./internal/errors";
-import { parseTemplate } from "./shared";
+import { parseTemplate } from "./internal";
 
 /**
  * WARNING:

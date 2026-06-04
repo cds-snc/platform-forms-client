@@ -5,7 +5,7 @@ import { FormRecord } from "@lib/types";
 import { authorization } from "../privileges";
 import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "../auditLogs";
 import { TemplateNotFoundError } from "./internal/errors";
-import { parseTemplate } from "./shared";
+import { parseTemplate } from "./internal";
 
 /**
  * Restores a form template from the archived state.

@@ -4,7 +4,7 @@ import { FormRecord } from "@lib/types";
 import { authorization } from "../privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "../auditLogs";
 import { logMessage } from "@lib/logger";
-import { parseTemplate } from "./shared";
+import { parseTemplate } from "./internal";
 
 /**
  * Clone a template including associated users and delivery option

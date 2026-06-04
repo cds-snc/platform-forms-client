@@ -8,7 +8,7 @@ import {
   AuditLogEvent,
   logEvent,
 } from "../auditLogs";
-import { parseTemplate } from "./shared";
+import { parseTemplate } from "./internal";
 
 export async function updateFormSaveAndResume(
   formID: string,

@@ -6,7 +6,7 @@ import { AuditLogAccessDeniedDetails, logEvent } from "../auditLogs";
 import { deleteDraftFormResponses } from "../vault";
 import { TemplateAlreadyPublishedError } from "./internal/errors";
 import { getFullTemplateByID } from "./getFullTemplateByID";
-import { parseTemplate } from "./shared";
+import { parseTemplate } from "./internal";
 
 /**
  * Update `isPublished` value for a specific form.
