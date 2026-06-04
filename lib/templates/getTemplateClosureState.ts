@@ -3,7 +3,7 @@ import { prisma, prismaErrors } from "@gcforms/database";
 import { ClosedDetails } from "@lib/types";
 import { dateHasPast } from "@lib/utils";
 
-export const checkIfClosed = async (formId: string) => {
+export const getTemplateClosureState = async (formId: string) => {
   try {
     let isPastClosingDate = false;
     let template = null;

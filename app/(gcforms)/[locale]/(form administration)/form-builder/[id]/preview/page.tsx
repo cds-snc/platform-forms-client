@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Preview } from "./Preview";
 import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
 import { ClientContainer } from "./ClientContainer";
-import { checkIfClosed } from "@lib/templates";
+import { getTemplateClosureState } from "@lib/templates";
 import { ClosedDetails } from "@lib/types";
 import { PreviewClosed } from "./PreviewClosed";
 import { Language } from "@lib/types/form-builder-types";
@@ -46,7 +46,7 @@ export default async function Page(props: { params: Promise<{ id: string; locale
   }
 
   // A non authenticated user can't set a closing date on a form.
-  const closedDetails = session ? await checkIfClosed(id) : null;
+  const closedDetails = session ? await getTemplateClosureState(id) : null;
 
   if (closedDetails && closedDetails.isPastClosingDate) {
     return <PreviewClosed closedDetails={closedDetails.closedDetails as ClosedDetails} />;

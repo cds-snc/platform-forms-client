@@ -21,7 +21,7 @@ export { assertCanEditTemplate } from "./assertCanEditTemplate";
 export { toPublicFormRecord } from "./toPublicFormRecord";
 export { updateClosedData } from "./updateClosedData";
 export { updateSecurityAttribute } from "./updateSecurityAttribute";
-export { checkIfClosed } from "./checkIfClosed";
+export { getTemplateClosureState } from "./checkIfClosed";
 export { getFormJSONConfig } from "./getFormJSONConfig";
 export { updateFormBranding } from "./updateFormBranding";
 export { notifyOwnersOwnerAdded, notifyOwnersOwnerRemoved } from "./internal/notifications";
