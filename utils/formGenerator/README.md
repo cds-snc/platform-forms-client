@@ -9,3 +9,6 @@
 
 3. Install and run it
 `cd utils/formGenerator && yarn generate`
+
+4. Re-run dev
+`yarn dev`
