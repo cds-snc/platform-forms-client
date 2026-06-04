@@ -5,7 +5,7 @@ import { FormRecord, FormProperties, ClosedDetails } from "@lib/types";
 import { authorization } from "./privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, AuditLogEvent, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
+import { unprocessedSubmissions } from "./vault";
 import { deleteKey } from "./serviceAccount";
 import { ownerRemovedEmailTemplate } from "./invitations/emailTemplates/ownerRemovedEmailTemplate";
 import { sendEmail } from "./integration/notifyConnector";
@@ -16,72 +16,6 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { invalidateTemplateEditLockUserCountCache } from "./editLocks";
-
-/**
- * Update `isPublished` value for a specific form.
- */
-export async function updateIsPublishedForTemplate(
-  formID: string,
-  isPublished: boolean,
-  publishReason: string,
-  publishFormType: string,
-  publishDescription: string
-): Promise<FormRecord | null> {
-  // Alias the isPublished value to newPublishStatus for clarity within the function
-  const newPublishStatus = isPublished;
-
-  const { user } = await authorization.canPublishForm(formID).catch((e) => {
-    logEvent(
-      e.user.id,
-      { type: "Form", id: formID },
-      "AccessDenied",
-      AuditLogAccessDeniedDetails.AccessDenied_AttemptToPublishForm
-    );
-    throw e;
-  });
-
-  // Delete all form responses created during draft mode
-  if (newPublishStatus && process.env.APP_ENV !== "test") {
-    try {
-      await deleteDraftFormResponses(formID);
-    } catch (e) {
-      if (e instanceof TemplateAlreadyPublishedError) {
-        // Already published, so we can just return the full template
-        return getFullTemplateByID(formID, false);
-      }
-
-      throw e;
-    }
-  }
-
-  const updatedTemplate = await prisma.template
-    .update({
-      where: {
-        id: formID,
-        isPublished: {
-          not: newPublishStatus, // Only update if the current publish status is different from the new one,
-        },
-      },
-      data: {
-        isPublished: newPublishStatus,
-        publishReason: publishReason,
-        publishFormType: publishFormType,
-        publishDesc: publishDescription,
-      },
-      include: {
-        deliveryOption: true,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (updatedTemplate === null) return updatedTemplate;
-
-  if (formCache.cacheAvailable) formCache.invalidate(formID);
-
-  logEvent(user.id, { type: "Form", id: formID }, "PublishForm");
-
-  return _parseTemplate(updatedTemplate);
-}
 
 class TemplateNotFoundError extends Error {}
 class UserNotFoundError extends Error {}
