@@ -139,7 +139,7 @@ describe("Service Account functions", () => {
       });
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
-        { type: "ServiceAccount" },
+        { type: "Form", id: "templateId" },
         "CreateAPIKey",
         "CreatedNewAPIKey",
         { serviceAccountId: "serviceAccountUser", userId: "1" }
@@ -160,7 +160,7 @@ describe("Service Account functions", () => {
       });
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
-        { type: "ServiceAccount" },
+        { type: "Form", id: "templateId" },
         "CreateAPIKey",
         "CreatedNewAPIKey",
         { serviceAccountId: "templateId", userId: "1" }
@@ -192,7 +192,7 @@ describe("Service Account functions", () => {
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
-        { type: "ServiceAccount" },
+        { type: "Form", id: "templateId" },
         "DeleteAPIKey",
         "DeletedAPIKey",
         { serviceAccountID: serviceAccountID, templateId: "templateId", userEmail: undefined }
@@ -209,7 +209,7 @@ describe("Service Account functions", () => {
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
-        { type: "ServiceAccount" },
+        { type: "Form", id: "templateId" },
         "DeleteAPIKey",
         "DeletedAPIKey",
         { templateId: "templateId", userEmail: undefined, serviceAccountID: "" }
@@ -230,7 +230,7 @@ describe("Service Account functions", () => {
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
-        { type: "ServiceAccount" },
+        { type: "Form", id: "templateId" },
         "DeleteAPIKey",
         "DeletedAPIKey",
         { serviceAccountID: serviceAccountID, templateId: "templateId", userEmail: undefined }

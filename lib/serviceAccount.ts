@@ -135,22 +135,12 @@ export const createKey = async (templateId: string) => {
 
     logEvent(
       user.id,
-      { type: "ServiceAccount" },
-      AuditLogEvent.CreateAPIKey,
-      AuditLogDetails.CreatedNewApiKey,
-      {
-        serviceAccountId: serviceAccountId,
-        userId: user.id,
-      }
-    );
-    logEvent(
-      user.id,
       { type: "Form", id: templateId },
       AuditLogEvent.CreateAPIKey,
       AuditLogDetails.CreatedNewApiKey,
       {
         serviceAccountId: serviceAccountId,
-        userId: user.email,
+        userId: user.id,
       }
     );
 
