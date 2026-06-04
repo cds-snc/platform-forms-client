@@ -9,6 +9,7 @@ import { PopoverAuthenticatedView } from "./PopoverAuthenticatedView";
 import { PopoverUnauthenticatedView } from "./PopoverUnauthenticatedView";
 import { cn } from "@lib/utils";
 import { triggerClass } from "./styles";
+import "./ShareButton.css";
 import { useRefStore } from "@lib/hooks/form-builder/useRefStore";
 
 export const ShareButton = ({ manageAccessEnabled = false }: { manageAccessEnabled?: boolean }) => {
@@ -89,15 +90,7 @@ export const ShareButton = ({ manageAccessEnabled = false }: { manageAccessEnabl
     setShowNameRequiredMessage(false);
   };
 
-  const triggerStyle = { anchorName: "--form-builder-share-menu-trigger" } as React.CSSProperties;
-
-  const popoverStyle = {
-    positionAnchor: "--form-builder-share-menu-trigger",
-    positionArea: "bottom span-right",
-    positionTry: "flip-block, flip-inline, flip-block flip-inline",
-    inset: "auto",
-    marginTop: "0.5rem",
-  } as React.CSSProperties;
+  // Positioning handled via CSS rules in ShareButton.css (avoid inline styles for CSP)
 
   const canShowDropdown = status === "authenticated" && !!name;
 
@@ -149,7 +142,6 @@ export const ShareButton = ({ manageAccessEnabled = false }: { manageAccessEnabl
         aria-label={t("share.title")}
         aria-expanded={isOpen}
         aria-controls="share-menu-popover"
-        style={triggerStyle}
         className={cn(triggerClass)}
       >
         <span className="inline-block">{t("share.title")}</span>
@@ -191,7 +183,6 @@ export const ShareButton = ({ manageAccessEnabled = false }: { manageAccessEnabl
         ref={popoverRef}
         id="share-menu-popover"
         popover="hint"
-        style={popoverStyle}
         className="share-menu-popover z-20 w-64 rounded-lg border border-slate-300 bg-white px-4 py-3 shadow-[0_8px_24px_rgba(15,23,42,0.14)]"
       >
         {status === "authenticated" ? (
