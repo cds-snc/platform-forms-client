@@ -8,11 +8,11 @@ const PROGRESSIVE_BACKOFF = {
   },
   step2: {
     threshold: 10 * 60 * 1000, // 10 minutes of inactivity
-    pollIntervalMs: 30 * 1000, // 30 seconds
+    pollIntervalMs: 60 * 1000, // 1 minute
   },
   step3: {
     threshold: 20 * 60 * 1000, // 20 minutes of inactivity
-    pollIntervalMs: 60 * 1000, // 60 seconds
+    pollIntervalMs: 300 * 1000, // 5 minutes
   },
 };
 
