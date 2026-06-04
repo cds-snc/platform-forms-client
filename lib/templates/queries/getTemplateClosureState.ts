@@ -1,4 +1,4 @@
-import { formCache } from "../../cache/formCache";
+import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { ClosedDetails } from "@lib/types";
 import { dateHasPast } from "@lib/utils";

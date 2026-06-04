@@ -1,15 +1,15 @@
 import { prisma, prismaErrors } from "@gcforms/database";
 import { FormProperties } from "@lib/types";
-import { authorization } from "../../privileges";
+import { authorization } from "@lib/privileges";
 import {
   AuditLogAccessDeniedDetails,
   AuditLogDetails,
   AuditLogEvent,
   logEvent,
-} from "../../auditLogs";
+} from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
 import { TemplateNotFoundError, UserNotFoundError } from "../internal/errors";
-import { invalidateTemplateEditLockUserCountCache } from "../../editLocks";
+import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 import { notifyOwnersOwnerAdded } from "../internal/notifications";
 
 /**

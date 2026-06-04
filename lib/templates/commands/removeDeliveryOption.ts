@@ -1,7 +1,6 @@
 import { prisma } from "@gcforms/database";
-
-import { authorization } from "../../privileges";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "../../auditLogs";
+import { authorization } from "@lib/privileges";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { TemplateAlreadyPublishedError, TemplateNotFoundError } from "../internal/errors";
 
 /**

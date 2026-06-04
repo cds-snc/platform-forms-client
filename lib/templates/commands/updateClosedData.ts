@@ -1,10 +1,9 @@
-import { formCache } from "../../cache/formCache";
+import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { ClosedDetails } from "@lib/types";
-
-import { authorization } from "../../privileges";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "../../auditLogs";
-import { isValidISODate } from "../../utils/date/isValidISODate";
+import { authorization } from "@lib/privileges";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
+import { isValidISODate } from "@lib/utils/date/isValidISODate";
 
 export const updateClosedData = async (
   formID: string,

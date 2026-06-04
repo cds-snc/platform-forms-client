@@ -1,13 +1,12 @@
-import { formCache } from "../../cache/formCache";
+import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
-
-import { authorization } from "../../privileges";
+import { authorization } from "@lib/privileges";
 import {
   AuditLogAccessDeniedDetails,
   AuditLogDetails,
   AuditLogEvent,
   logEvent,
-} from "../../auditLogs";
+} from "@lib/auditLogs";
 import { parseTemplate } from "../internal";
 
 export const updateSecurityAttribute = async (formID: string, securityAttribute: string) => {

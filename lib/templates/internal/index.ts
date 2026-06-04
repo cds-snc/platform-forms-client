@@ -1,5 +1,5 @@
 import { Prisma } from "@gcforms/database";
-import { authorization } from "../../privileges";
+import { authorization } from "@lib/privileges";
 import { checkOne } from "@lib/cache/flags";
 import { FormRecord, FormProperties, SecurityAttribute, ClosedDetails } from "@lib/types";
 import { NotificationsInterval } from "@gcforms/types";

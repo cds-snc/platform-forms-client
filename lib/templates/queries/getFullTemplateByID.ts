@@ -1,7 +1,7 @@
 import { FormRecord } from "@lib/types";
 import { prisma, prismaErrors } from "@gcforms/database";
-import { authorization } from "../../privileges";
-import { AuditLogAccessDeniedDetails, logEvent } from "../../auditLogs";
+import { authorization } from "@lib/privileges";
+import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { parseTemplate } from "../internal";
 
 /**

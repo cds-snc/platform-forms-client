@@ -1,9 +1,9 @@
-import { formCache } from "../../cache/formCache";
+import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { FormRecord } from "@lib/types";
-import { authorization } from "../../privileges";
-import { AuditLogAccessDeniedDetails, logEvent } from "../../auditLogs";
-import { deleteDraftFormResponses } from "../../vault";
+import { authorization } from "@lib/privileges";
+import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
+import { deleteDraftFormResponses } from "@lib/vault";
 import { TemplateAlreadyPublishedError } from "../internal/errors";
 import { getFullTemplateByID } from "../queries/getFullTemplateByID";
 import { parseTemplate } from "../internal";

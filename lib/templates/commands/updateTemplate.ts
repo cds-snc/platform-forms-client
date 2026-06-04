@@ -1,20 +1,20 @@
-import { formCache } from "../../cache/formCache";
+import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { FormRecord, FormProperties, DeliveryOption, SecurityAttribute } from "@lib/types";
 import { NotificationsInterval } from "@gcforms/types";
-import { authorization } from "../../privileges";
+import { authorization } from "@lib/privileges";
 import {
   AuditLogAccessDeniedDetails,
   AuditLogDetails,
   AuditLogEvent,
   logEvent,
-} from "../../auditLogs";
-import { checkForBetaComponentsAsync } from "../../validation/betaCheck";
+} from "@lib/auditLogs";
+import { checkForBetaComponentsAsync } from "@lib/validation/betaCheck";
 import { logMessage } from "@lib/logger";
 import { checkFlag, parseTemplate } from "../internal";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "../internal/errors";
-import { validateTemplateSize } from "../../utils/validateTemplateSize";
+import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 
 type UpdateTemplateCommand = {
   formID: string;

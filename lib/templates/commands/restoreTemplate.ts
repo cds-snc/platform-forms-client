@@ -1,9 +1,8 @@
-import { formCache } from "../../cache/formCache";
+import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { FormRecord } from "@lib/types";
-
-import { authorization } from "../../privileges";
-import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "../../auditLogs";
+import { authorization } from "@lib/privileges";
+import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "@lib/auditLogs";
 import { TemplateNotFoundError } from "../internal/errors";
 import { parseTemplate } from "../internal";
 
