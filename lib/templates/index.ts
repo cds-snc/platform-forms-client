@@ -17,7 +17,7 @@ export { removeDeliveryOption } from "./removeDeliveryOption";
 export { cloneTemplate } from "./cloneTemplate";
 export { deleteTemplate } from "./deleteTemplate";
 export { restoreTemplate } from "./restoreTemplate";
-export { checkUserHasTemplateOwnership } from "./checkUserHasTemplateOwnership";
+export { assertCanEditTemplate } from "./assertCanEditTemplate";
 export { toPublicFormRecord } from "./toPublicFormRecord";
 export { updateClosedData } from "./updateClosedData";
 export { updateSecurityAttribute } from "./updateSecurityAttribute";
