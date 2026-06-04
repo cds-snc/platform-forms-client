@@ -1,4 +1,4 @@
-import { FormRecord, PublicFormRecord } from "../types";
+import { FormRecord, PublicFormRecord } from "@lib/types";
 
 /*
  * Extract only the public properties from a form record.
