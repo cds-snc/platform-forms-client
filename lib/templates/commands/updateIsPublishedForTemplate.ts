@@ -1,12 +1,12 @@
-import { formCache } from "../cache/formCache";
+import { formCache } from "../../cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { FormRecord } from "@lib/types";
-import { authorization } from "../privileges";
-import { AuditLogAccessDeniedDetails, logEvent } from "../auditLogs";
-import { deleteDraftFormResponses } from "../vault";
-import { TemplateAlreadyPublishedError } from "./internal/errors";
-import { getFullTemplateByID } from "./getFullTemplateByID";
-import { parseTemplate } from "./internal";
+import { authorization } from "../../privileges";
+import { AuditLogAccessDeniedDetails, logEvent } from "../../auditLogs";
+import { deleteDraftFormResponses } from "../../vault";
+import { TemplateAlreadyPublishedError } from "../internal/errors";
+import { getFullTemplateByID } from "../queries/getFullTemplateByID";
+import { parseTemplate } from "../internal";
 
 /**
  * Update `isPublished` value for a specific form.

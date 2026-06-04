@@ -1,18 +1,18 @@
-import { formCache } from "../cache/formCache";
+import { formCache } from "../../cache/formCache";
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { FormProperties } from "@lib/types";
-import { authorization } from "../privileges";
+import { authorization } from "../../privileges";
 import {
   AuditLogAccessDeniedDetails,
   AuditLogDetails,
   AuditLogEvent,
   logEvent,
-} from "../auditLogs";
+} from "../../auditLogs";
 import { logMessage } from "@lib/logger";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
-import { InvalidFormConfigError } from "./internal/errors";
-import { parseTemplate } from "./internal";
+import { InvalidFormConfigError } from "../internal/errors";
+import { parseTemplate } from "../internal";
 
 /**
  * WARNING:

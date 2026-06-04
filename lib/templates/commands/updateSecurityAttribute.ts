@@ -1,14 +1,14 @@
-import { formCache } from "../cache/formCache";
+import { formCache } from "../../cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 
-import { authorization } from "../privileges";
+import { authorization } from "../../privileges";
 import {
   AuditLogAccessDeniedDetails,
   AuditLogDetails,
   AuditLogEvent,
   logEvent,
-} from "../auditLogs";
-import { parseTemplate } from "./internal";
+} from "../../auditLogs";
+import { parseTemplate } from "../internal";
 
 export const updateSecurityAttribute = async (formID: string, securityAttribute: string) => {
   const { user } = await authorization.canEditForm(formID).catch((e) => {

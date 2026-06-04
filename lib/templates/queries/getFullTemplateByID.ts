@@ -1,8 +1,8 @@
 import { FormRecord } from "@lib/types";
 import { prisma, prismaErrors } from "@gcforms/database";
-import { authorization } from "../privileges";
-import { AuditLogAccessDeniedDetails, logEvent } from "../auditLogs";
-import { parseTemplate } from "./internal";
+import { authorization } from "../../privileges";
+import { AuditLogAccessDeniedDetails, logEvent } from "../../auditLogs";
+import { parseTemplate } from "../internal";
 
 /**
  * Get a form template by ID (includes full template information but requires view permission)

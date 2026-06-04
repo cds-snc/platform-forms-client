@@ -1,14 +1,14 @@
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { DeliveryOption, FormProperties, FormRecord, SecurityAttribute } from "@lib/types";
-import { authorization } from "../privileges";
-import { AuditLogAccessDeniedDetails, logEvent } from "../auditLogs";
+import { authorization } from "../../privileges";
+import { AuditLogAccessDeniedDetails, logEvent } from "../../auditLogs";
 import { logMessage } from "@lib/logger";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
-import { checkForBetaComponentsAsync } from "../validation/betaCheck";
+import { checkForBetaComponentsAsync } from "../../validation/betaCheck";
 import { NotificationsInterval } from "@gcforms/types";
-import { checkFlag, parseTemplate } from "./internal";
-import { InvalidFormConfigError } from "./internal/errors";
+import { checkFlag, parseTemplate } from "../internal";
+import { InvalidFormConfigError } from "../internal/errors";
 
 // ******************************************
 // Exportable Module Functions

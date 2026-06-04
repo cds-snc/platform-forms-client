@@ -1,13 +1,13 @@
-import { formCache } from "../cache/formCache";
+import { formCache } from "../../cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { FormRecord } from "@lib/types";
 
-import { authorization } from "../privileges";
-import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "../auditLogs";
-import { unprocessedSubmissions } from "../vault";
-import { deleteKey } from "../serviceAccount";
-import { TemplateHasUnprocessedSubmissions, TemplateNotFoundError } from "./internal/errors";
-import { parseTemplate } from "./internal";
+import { authorization } from "../../privileges";
+import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "../../auditLogs";
+import { unprocessedSubmissions } from "../../vault";
+import { deleteKey } from "../../serviceAccount";
+import { TemplateHasUnprocessedSubmissions, TemplateNotFoundError } from "../internal/errors";
+import { parseTemplate } from "../internal";
 
 /**
  * Deletes a form template. The template will stay in the database for 30 days in an archived state until a lambda function deletes it from the database.

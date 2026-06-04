@@ -1,9 +1,9 @@
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { FormRecord } from "@lib/types";
-import { getAbility } from "../privileges";
-import { AuditLogDetails, logEvent } from "../auditLogs";
+import { getAbility } from "../../privileges";
+import { AuditLogDetails, logEvent } from "../../auditLogs";
 import { logMessage } from "@lib/logger";
-import { parseTemplate } from "./internal";
+import { parseTemplate } from "../internal";
 
 export type TemplateOptions = {
   sortByDateUpdated?: "asc" | "desc";

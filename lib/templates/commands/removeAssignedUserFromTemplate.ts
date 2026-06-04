@@ -1,25 +1,22 @@
+import { authorization } from "../../privileges";
+import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "../../auditLogs";
 import { prisma, prismaErrors } from "@gcforms/database";
-import { FormProperties } from "@lib/types";
-import { authorization } from "../privileges";
-import {
-  AuditLogAccessDeniedDetails,
-  AuditLogDetails,
-  AuditLogEvent,
-  logEvent,
-} from "../auditLogs";
 import { logMessage } from "@lib/logger";
-import { TemplateNotFoundError, UserNotFoundError } from "./internal/errors";
-import { invalidateTemplateEditLockUserCountCache } from "../editLocks";
-import { notifyOwnersOwnerAdded } from "./internal/notifications";
+import { TemplateNotFoundError, UserNotFoundError } from "../internal/errors";
+import { invalidateTemplateEditLockUserCountCache } from "../../editLocks";
+import { notifyOwnersOwnerRemoved } from "../internal/notifications";
+import { FormProperties } from "@lib/types";
 
 /**
- * Assign a user to a form
+ * Remove a user from a form
  *
- * @param ability
- * @param formID
- * @param userID
+ * @param formID Form ID
+ * @param userID User to be removed ID
  */
-export async function addAssignedUserToTemplate(formID: string, userID: string): Promise<void> {
+export async function removeAssignedUserFromTemplate(
+  formID: string,
+  userID: string
+): Promise<void> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
       e.user.id,
@@ -46,14 +43,18 @@ export async function addAssignedUserToTemplate(formID: string, userID: string):
   });
 
   if (template === null) {
-    logMessage.warn(`Can not add user ${userID} to template ${formID}.  Template does not exist`);
+    logMessage.warn(
+      `Can not remove assigned user ${userID} on template ${formID}.  Template does not exist`
+    );
     throw new TemplateNotFoundError();
   }
 
-  const userToAdd = template.users.find((user) => user.id === userID);
+  const userToRemove = template.users.find((user) => user.id === userID);
 
-  if (!userToAdd) {
-    logMessage.warn(`Can not add user ${userID} to template ${formID}.  User does not exist`);
+  if (!userToRemove) {
+    logMessage.warn(
+      `Can not remove assigned user ${userID} on template ${formID}.  User is not assigned`
+    );
     throw new UserNotFoundError();
   }
 
@@ -73,7 +74,7 @@ export async function addAssignedUserToTemplate(formID: string, userID: string):
       },
       data: {
         users: {
-          connect: {
+          disconnect: {
             id: userID,
           },
         },
@@ -81,7 +82,6 @@ export async function addAssignedUserToTemplate(formID: string, userID: string):
     })
     .catch((e) => prismaErrors(e, null));
 
-  // No changes
   if (updatedTemplate === null) return;
 
   await invalidateTemplateEditLockUserCountCache(formID);
@@ -89,13 +89,13 @@ export async function addAssignedUserToTemplate(formID: string, userID: string):
   logEvent(
     user.id,
     { type: "Form", id: formID },
-    AuditLogEvent.InvitationAccepted,
-    AuditLogDetails.AcceptedInvitation,
-    { userEmail: user.email }
+    "RevokeFormAccess",
+    AuditLogDetails.RevokeFormAccess,
+    { userId: userID }
   );
 
-  notifyOwnersOwnerAdded(
-    userToAdd,
+  notifyOwnersOwnerRemoved(
+    userToRemove,
     updatedTemplate.jsonConfig as FormProperties,
     updatedTemplate.users
   );

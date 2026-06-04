@@ -1,14 +1,14 @@
 import { prisma, prismaErrors } from "@gcforms/database";
 import { FormRecord } from "@lib/types";
 
-import { authorization } from "../privileges";
+import { authorization } from "../../privileges";
 import {
   AuditLogAccessDeniedDetails,
   AuditLogDetails,
   AuditLogEvent,
   logEvent,
-} from "../auditLogs";
-import { parseTemplate } from "./internal";
+} from "../../auditLogs";
+import { parseTemplate } from "../internal";
 
 export async function updateFormSaveAndResume(
   formID: string,
