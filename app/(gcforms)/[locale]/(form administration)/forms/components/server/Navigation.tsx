@@ -3,13 +3,7 @@ import { ArchiveIcon, FolderIcon, GlobeIcon, PageIcon } from "@serverComponents/
 import { NavLink } from "./NavLink";
 import { cn } from "@lib/utils";
 
-export const Navigation = async ({
-  filter,
-  templateCount,
-}: {
-  filter?: string;
-  templateCount?: number;
-}) => {
+export const Navigation = async ({ filter }: { filter?: string; templateCount?: number }) => {
   const {
     t,
     i18n: { language },
@@ -20,18 +14,16 @@ export const Navigation = async ({
 
   return (
     <nav className="flex flex-col" aria-label={t("navLabel")}>
-      {templateCount != null && templateCount > 0 && (
-        <NavLink
-          href={`/${language}/forms`}
-          id="tab-all"
-          active={filter === "recentlyEdited" || !filter}
-        >
-          <>
-            <FolderIcon className={cn(iconClassname, "h-5 w-5")} />
-            {t("nav.recentlyEdited")}
-          </>
-        </NavLink>
-      )}
+      <NavLink
+        href={`/${language}/forms`}
+        id="tab-all"
+        active={filter === "recentlyEdited" || !filter}
+      >
+        <>
+          <FolderIcon className={cn(iconClassname, "h-5 w-5")} />
+          {t("nav.recentlyEdited")}
+        </>
+      </NavLink>
       <NavLink href={`/${language}/forms?status=draft`} id="tab-drafts" active={filter === "draft"}>
         <>
           <PageIcon className={cn(iconClassname, "h-5 w-5")} />
