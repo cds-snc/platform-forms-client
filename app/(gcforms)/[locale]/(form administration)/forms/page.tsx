@@ -26,6 +26,8 @@ export type FormsTemplate = {
   date: string;
   url: string;
   overdue: boolean;
+  hasDraft: boolean;
+  versionNumber?: number | null;
 };
 
 export async function generateMetadata(props: {
@@ -83,6 +85,8 @@ export default async function Page(props: {
       isPublished,
       updatedAt,
       ttl,
+      currentDraftVersionId,
+      versionNumber,
     } = template;
     return {
       id,
@@ -95,6 +99,8 @@ export default async function Page(props: {
       url: `/${locale}/id/${id}`,
       overdue: false,
       ttl: ttl ? new Date(ttl) : null,
+      hasDraft: currentDraftVersionId && isPublished ? true : false,
+      versionNumber,
     };
   });
 
