@@ -1,3 +1,4 @@
+// Public templates module API. Keep exports here intentional; prefer internal/* for implementation-only helpers.
 export { createTemplate } from "./createTemplate";
 export { getAllTemplates } from "./getAllTemplates";
 export { getAllTemplatesForUser } from "./getAllTemplatesForUser";
