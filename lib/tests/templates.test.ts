@@ -11,7 +11,7 @@ import {
   deleteTemplate,
   updateIsPublishedForTemplate,
   getTemplateWithAssignedUsers,
-  updateAssignedUsersForTemplate,
+  syncAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
@@ -418,7 +418,7 @@ describe("Template CRUD functions", () => {
       // We're just adding an additional user (2)
       const users: { id: string }[] = [{ id: "1" }, { id: "2" }];
 
-      await updateAssignedUsersForTemplate("formTestID", users);
+      await syncAssignedUsersForTemplate("formTestID", users);
 
       // Should just connect the new user
       expect(prismaMock.template.update).toHaveBeenCalledWith(
@@ -469,7 +469,7 @@ describe("Template CRUD functions", () => {
       // We're removing two (2,4) and adding one (1)
       const users2: { id: string }[] = [{ id: "1" }, { id: "3" }];
 
-      await updateAssignedUsersForTemplate("formTestID", users2);
+      await syncAssignedUsersForTemplate("formTestID", users2);
 
       // Connect 1, disconnect 2,4
       expect(prismaMock.template.update).toHaveBeenCalledWith(

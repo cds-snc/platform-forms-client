@@ -15,7 +15,7 @@ import { parseTemplate } from "./internal";
  * @param formID
  * @param users
  */
-export async function updateAssignedUsersForTemplate(
+export async function syncAssignedUsersForTemplate(
   formID: string,
   users: { id: string }[]
 ): Promise<FormRecord | null> {

@@ -10,7 +10,7 @@ export { updateTemplate } from "./updateTemplate";
 export { updateIsPublishedForTemplate } from "./updateIsPublishedForTemplate";
 export { removeAssignedUserFromTemplate } from "./removeAssignedUserFromTemplate";
 export { addAssignedUserToTemplate } from "./addAssignedUserToTemplate";
-export { updateAssignedUsersForTemplate } from "./updateAssignedUsersForTemplate";
+export { syncAssignedUsersForTemplate } from "./syncAssignedUsersForTemplate";
 export { updateFormPurpose } from "./updateFormPurpose";
 export { updateFormSaveAndResume } from "./updateFormSaveAndResume";
 export { removeDeliveryOption } from "./removeDeliveryOption";
