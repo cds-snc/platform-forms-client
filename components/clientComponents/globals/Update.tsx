@@ -3,6 +3,7 @@
 import Markdown from "markdown-to-jsx";
 import { Button } from "./Buttons";
 import { useAppUpdate } from "@lib/hooks/useAppUpdate";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { useTranslation } from "@i18n/client";
 import { useEffect, useState } from "react";
 
@@ -35,6 +36,16 @@ export const RocketIcon = ({ className, title }: { className?: string; title?: s
 export const AppUpdater = () => {
   const { updateRequired } = useAppUpdate();
 
+  // hide any visible toasts while the updater is active
+  // run on render/mount
+  useEffect(() => {
+    try {
+      toast.dismiss();
+    } catch (err) {
+      // ignore
+    }
+  }, []);
+
   // short circuit when no update needed
   if (!updateRequired) return null;
 
@@ -66,7 +77,8 @@ export const UpdateModal = () => {
   return (
     <div
       id="modal-backdrop"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      // Ensure this overlay sits above toasts (toast z-index defaults to 9999)
+      className="fixed inset-0 z-11000 flex items-center justify-center bg-black/20 backdrop-blur-sm"
     >
       <div className="m-4 w-full max-w-lg rounded-lg bg-white p-8 shadow-lg">
         <div className="flex items-center gap-3">

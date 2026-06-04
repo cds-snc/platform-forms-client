@@ -98,8 +98,11 @@ export default async function Layout({ children }: { children: React.ReactNode }
       </head>
 
       <body className={"has-[.bkd-soft]:bg-gray-soft"}>
-        {process.env.NODE_ENV === "production" && <ServiceWorker />}
+        {/* AppUpdater must be the very first element in the body */}
         <AppUpdater />
+        {process.env.NODE_ENV === "production" || process.env.APP_UPDATER === "true" ? (
+          <ServiceWorker />
+        ) : null}
         {children}
       </body>
     </html>
