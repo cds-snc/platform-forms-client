@@ -9,7 +9,7 @@ export { getTemplateWithAssociatedUsers } from "./getTemplateWithAssociatedUsers
 export { updateTemplate } from "./updateTemplate";
 export { updateIsPublishedForTemplate } from "./updateIsPublishedForTemplate";
 export { removeAssignedUserFromTemplate } from "./removeAssignedUserFromTemplate";
-export { assignUserToTemplate } from "./assignUserToTemplate";
+export { addAssignedUserToTemplate } from "./addAssignedUserToTemplate";
 export { updateAssignedUsersForTemplate } from "./updateAssignedUsersForTemplate";
 export { updateFormPurpose } from "./updateFormPurpose";
 export { updateFormSaveAndResume } from "./updateFormSaveAndResume";

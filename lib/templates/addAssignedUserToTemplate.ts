@@ -19,7 +19,7 @@ import { notifyOwnersOwnerAdded } from "./internal/notifications";
  * @param formID
  * @param userID
  */
-export async function assignUserToTemplate(formID: string, userID: string): Promise<void> {
+export async function addAssignedUserToTemplate(formID: string, userID: string): Promise<void> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
       e.user.id,
