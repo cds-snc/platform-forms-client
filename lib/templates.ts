@@ -7,112 +7,13 @@ import { AuditLogAccessDeniedDetails, AuditLogDetails, AuditLogEvent, logEvent }
 import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions } from "./vault";
 import { deleteKey } from "./serviceAccount";
-import { ownerRemovedEmailTemplate } from "./invitations/emailTemplates/ownerRemovedEmailTemplate";
 import { sendEmail } from "./integration/notifyConnector";
-import { youHaveBeenRemovedEmailTemplate } from "./invitations/emailTemplates/youHaveBeenRemovedEmailTemplate";
 import { ownerAddedEmailTemplate } from "./invitations/emailTemplates/ownerAddedEmailTemplate";
 import { isValidISODate } from "./utils/date/isValidISODate";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { invalidateTemplateEditLockUserCountCache } from "./editLocks";
-
-class TemplateNotFoundError extends Error {}
-class UserNotFoundError extends Error {}
-
-/**
- * Remove a user from a form
- *
- * @param formID Form ID
- * @param userID User to be removed ID
- */
-export async function removeAssignedUserFromTemplate(
-  formID: string,
-  userID: string
-): Promise<void> {
-  const { user } = await authorization.canEditForm(formID).catch((e) => {
-    logEvent(
-      e.user.id,
-      { type: "Form", id: formID },
-      "AccessDenied",
-      AuditLogAccessDeniedDetails.AccessDenied_AttemptToRemoveAssignedUser
-    );
-    throw e;
-  });
-
-  const template = await prisma.template.findUnique({
-    where: {
-      id: formID,
-    },
-    select: {
-      users: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-        },
-      },
-    },
-  });
-
-  if (template === null) {
-    logMessage.warn(
-      `Can not remove assigned user ${userID} on template ${formID}.  Template does not exist`
-    );
-    throw new TemplateNotFoundError();
-  }
-
-  const userToRemove = template.users.find((user) => user.id === userID);
-
-  if (!userToRemove) {
-    logMessage.warn(
-      `Can not remove assigned user ${userID} on template ${formID}.  User is not assigned`
-    );
-    throw new UserNotFoundError();
-  }
-
-  const updatedTemplate = await prisma.template
-    .update({
-      where: {
-        id: formID,
-      },
-      select: {
-        jsonConfig: true,
-        users: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-      },
-      data: {
-        users: {
-          disconnect: {
-            id: userID,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (updatedTemplate === null) return;
-
-  await invalidateTemplateEditLockUserCountCache(formID);
-
-  logEvent(
-    user.id,
-    { type: "Form", id: formID },
-    "RevokeFormAccess",
-    AuditLogDetails.RevokeFormAccess,
-    { userId: userID }
-  );
-
-  notifyOwnersOwnerRemoved(
-    userToRemove,
-    updatedTemplate.jsonConfig as FormProperties,
-    updatedTemplate.users
-  );
-}
 
 /**
  * Assign a user to a form
@@ -229,52 +130,6 @@ export const notifyOwnersOwnerAdded = async (
         formResponse: emailContent,
       },
       "notifyAddedOwner"
-    );
-  });
-};
-
-/**
- * Notify owners of ownership changes (owner removed)
- *
- * @param userToRemove User to be removed
- * @param form Form properties object
- * @param users Current owners
- */
-export const notifyOwnersOwnerRemoved = async (
-  userToRemove: { name: string | null; email: string },
-  form: FormProperties,
-  users: { id: string; email: string }[]
-) => {
-  // Send email to person who was removed
-  const youHaveBeenRemovedEmailContent = youHaveBeenRemovedEmailTemplate(
-    form.titleEn,
-    form.titleFr
-  );
-
-  sendEmail(
-    userToRemove.email,
-    {
-      subject: "Form access removed | Accès au formulaire supprimé",
-      formResponse: youHaveBeenRemovedEmailContent,
-    },
-    "notifyRemovedOwner"
-  );
-
-  // Send email to remaining owners
-  users.forEach((owner) => {
-    const ownerRemovedEmailContent = ownerRemovedEmailTemplate(
-      form.titleEn,
-      form.titleFr,
-      userToRemove.name || "An owner"
-    );
-
-    sendEmail(
-      owner.email,
-      {
-        subject: "Form access removed | Accès au formulaire supprimé",
-        formResponse: ownerRemovedEmailContent,
-      },
-      "notifyOtherOwnersOfRemovedOwner"
     );
   });
 };

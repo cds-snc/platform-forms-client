@@ -18,3 +18,6 @@ export class TemplateHasUnprocessedSubmissions extends Error {
     Object.setPrototypeOf(this, TemplateHasUnprocessedSubmissions.prototype);
   }
 }
+
+export class TemplateNotFoundError extends Error {}
+export class UserNotFoundError extends Error {}
