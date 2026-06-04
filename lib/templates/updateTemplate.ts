@@ -16,7 +16,7 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "./errors";
 import { validateTemplateSize } from "../utils/validateTemplateSize";
 
-export type UpdateTemplateCommand = {
+type UpdateTemplateCommand = {
   formID: string;
   formConfig: FormProperties;
   name?: string;
