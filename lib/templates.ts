@@ -13,68 +13,6 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 
-export async function updateFormPurpose(
-  formID: string,
-  formPurpose: string
-): Promise<FormRecord | null> {
-  const { user } = await authorization.canEditForm(formID).catch((e) => {
-    logEvent(
-      e.user.id,
-      { type: "Form", id: formID },
-      "AccessDenied",
-      AuditLogAccessDeniedDetails.AccessDenied_AttemptToSetFormPurpose
-    );
-    throw e;
-  });
-
-  const updatedTemplate = await prisma.template
-    .update({
-      where: {
-        id: formID,
-        isPublished: false,
-      },
-      data: {
-        formPurpose: formPurpose,
-      },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishDesc: true,
-        publishFormType: true,
-        publishReason: true,
-        saveAndResume: true,
-        notificationsInterval: true,
-      },
-    })
-    .catch((e) => {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === "P2025") {
-          throw new TemplateAlreadyPublishedError();
-        }
-      }
-      return prismaErrors(e, null);
-    });
-
-  if (updatedTemplate === null) return updatedTemplate;
-
-  logEvent(
-    user.id,
-    { type: "Form", id: formID },
-    "ChangeFormPurpose",
-    AuditLogDetails.SetFormPurpose,
-    { formPurpose: formPurpose }
-  );
-
-  return _parseTemplate(updatedTemplate);
-}
-
 export async function updateFormSaveAndResume(
   formID: string,
   saveAndResume: boolean
