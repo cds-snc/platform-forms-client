@@ -10,7 +10,7 @@ import {
   updateTemplate,
   deleteTemplate,
   updateIsPublishedForTemplate,
-  getTemplateWithAssociatedUsers,
+  getTemplateWithAssignedUsers,
   updateAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
   removeDeliveryOption,
@@ -301,7 +301,7 @@ describe("Template CRUD functions", () => {
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
-      await getTemplateWithAssociatedUsers("formtestID");
+      await getTemplateWithAssignedUsers("formtestID");
 
       expect(prismaMock.template.findUnique).toHaveBeenCalledWith(
         expect.objectContaining({

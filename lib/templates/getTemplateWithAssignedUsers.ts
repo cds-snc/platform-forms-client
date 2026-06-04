@@ -4,7 +4,7 @@ import { authorization } from "../privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "../auditLogs";
 import { parseTemplate } from "./internal";
 
-export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
+export async function getTemplateWithAssignedUsers(formID: string): Promise<{
   formRecord: FormRecord;
   users: { id: string; name: string | null; email: string }[];
 } | null> {

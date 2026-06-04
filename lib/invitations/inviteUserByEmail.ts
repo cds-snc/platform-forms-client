@@ -7,7 +7,7 @@ import {
   UserAlreadyHasAccessError,
   UserNotFoundError,
 } from "./exceptions";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates";
 import { prisma, Invitation } from "@gcforms/database";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { inviteToCollaborateEmailTemplate } from "@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate";
@@ -49,7 +49,7 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
     throw new UserNotFoundError();
   });
 
-  const template = await getTemplateWithAssociatedUsers(formId);
+  const template = await getTemplateWithAssignedUsers(formId);
 
   if (!template) {
     throw new TemplateNotFoundError();

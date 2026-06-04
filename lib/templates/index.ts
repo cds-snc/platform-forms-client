@@ -5,7 +5,7 @@ export { getAllTemplatesForUser } from "./getAllTemplatesForUser";
 export { getPublicTemplateByID } from "./getPublicTemplateByID";
 export { getTemplatePublishedStatus } from "./getTemplatePublishedStatus";
 export { getFullTemplateByID } from "./getFullTemplateByID";
-export { getTemplateWithAssociatedUsers } from "./getTemplateWithAssociatedUsers";
+export { getTemplateWithAssignedUsers } from "./getTemplateWithAssignedUsers";
 export { updateTemplate } from "./updateTemplate";
 export { updateIsPublishedForTemplate } from "./updateIsPublishedForTemplate";
 export { removeAssignedUserFromTemplate } from "./removeAssignedUserFromTemplate";
