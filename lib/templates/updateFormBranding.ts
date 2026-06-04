@@ -1,11 +1,18 @@
-import { formCache } from "./cache/formCache";
+import { formCache } from "../cache/formCache";
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { FormProperties } from "@lib/types";
-import { authorization } from "./privileges";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, AuditLogEvent, logEvent } from "./auditLogs";
+import { authorization } from "../privileges";
+import {
+  AuditLogAccessDeniedDetails,
+  AuditLogDetails,
+  AuditLogEvent,
+  logEvent,
+} from "../auditLogs";
 import { logMessage } from "@lib/logger";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
+import { InvalidFormConfigError } from "./errors";
+import { parseTemplate } from "./shared";
 
 /**
  * WARNING:
@@ -84,5 +91,5 @@ export const updateFormBranding = async (formId: string, jsonConfig: FormPropert
     { brand: brandName }
   );
 
-  return _parseTemplate(updatedTemplate);
+  return parseTemplate(updatedTemplate);
 };
