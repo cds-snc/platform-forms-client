@@ -45,8 +45,7 @@ export function calculateCollaboratorCount(userCount: number, pendingUserCount: 
 /**
  * Gets the appropriate bullet color for a card banner based on its state
  */
-export function getBannerColor(isPublished: boolean, ttl: Date | null): string {
-  if (ttl) return "bg-orange-400";
+export function getBannerColor(isPublished: boolean): string {
   if (isPublished) return "bg-emerald-500";
   return "bg-yellow-400";
 }

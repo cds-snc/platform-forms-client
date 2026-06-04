@@ -19,21 +19,17 @@ import {
   getBannerColor,
 } from "../helpers";
 
-const CardBanner = memo(({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
+const CardBanner = memo(({ isPublished }: { isPublished: boolean }) => {
   //TODO try "use memo";
   const { t } = useTranslation("my-forms");
-  const bulletColor = getBannerColor(isPublished, ttl);
+  const bulletColor = getBannerColor(isPublished);
 
   return (
     <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
       <span
         className={`inline-block h-3 w-3 rounded-full border-1 border-slate-500 ${bulletColor}`}
       />
-      {ttl
-        ? t("card.states.archived")
-        : isPublished
-          ? t("card.states.published")
-          : t("card.states.draft")}
+      {isPublished ? t("card.states.published") : t("card.states.draft")}
     </div>
   );
 });
@@ -284,7 +280,7 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
               cardId={card.id}
             />
           )}
-          <CardBanner isPublished={card.isPublished} ttl={card.ttl} />
+          <CardBanner isPublished={card.isPublished} />
           {cardState === "published" && <CardFooterPublished cardId={card.id} />}
         </div>
       </div>
