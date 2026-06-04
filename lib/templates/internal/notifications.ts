@@ -1,8 +1,8 @@
 import { FormProperties } from "@lib/types";
-import { youHaveBeenRemovedEmailTemplate } from "../invitations/emailTemplates/youHaveBeenRemovedEmailTemplate";
-import { ownerRemovedEmailTemplate } from "../invitations/emailTemplates/ownerRemovedEmailTemplate";
-import { ownerAddedEmailTemplate } from "../invitations/emailTemplates/ownerAddedEmailTemplate";
-import { sendEmail } from "../integration/notifyConnector";
+import { youHaveBeenRemovedEmailTemplate } from "../../invitations/emailTemplates/youHaveBeenRemovedEmailTemplate";
+import { ownerRemovedEmailTemplate } from "../../invitations/emailTemplates/ownerRemovedEmailTemplate";
+import { ownerAddedEmailTemplate } from "../../invitations/emailTemplates/ownerAddedEmailTemplate";
+import { sendEmail } from "../../integration/notifyConnector";
 
 /**
  * Notify owners of ownership changes (owner removed)

@@ -5,7 +5,7 @@ import { authorization } from "../privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "../auditLogs";
 import { logMessage } from "@lib/logger";
 import { invalidateTemplateEditLockUserCountCache } from "../editLocks";
-import { notifyOwnersOwnerAdded, notifyOwnersOwnerRemoved } from "./notifications";
+import { notifyOwnersOwnerAdded, notifyOwnersOwnerRemoved } from "./internal/notifications";
 import { parseTemplate } from "./shared";
 
 /**

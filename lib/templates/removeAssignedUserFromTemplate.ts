@@ -4,7 +4,7 @@ import { prisma, prismaErrors } from "@gcforms/database";
 import { logMessage } from "@lib/logger";
 import { TemplateNotFoundError, UserNotFoundError } from "./internal/errors";
 import { invalidateTemplateEditLockUserCountCache } from "../editLocks";
-import { notifyOwnersOwnerRemoved } from "./notifications";
+import { notifyOwnersOwnerRemoved } from "./internal/notifications";
 import { FormProperties } from "@lib/types";
 
 /**

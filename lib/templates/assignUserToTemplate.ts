@@ -10,7 +10,7 @@ import {
 import { logMessage } from "@lib/logger";
 import { TemplateNotFoundError, UserNotFoundError } from "./internal/errors";
 import { invalidateTemplateEditLockUserCountCache } from "../editLocks";
-import { notifyOwnersOwnerAdded } from "./notifications";
+import { notifyOwnersOwnerAdded } from "./internal/notifications";
 
 /**
  * Assign a user to a form

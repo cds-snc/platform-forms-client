@@ -23,7 +23,7 @@ export { updateSecurityAttribute } from "./updateSecurityAttribute";
 export { checkIfClosed } from "./checkIfClosed";
 export { getFormJSONConfig } from "./getFormJSONConfig";
 export { updateFormBranding } from "./updateFormBranding";
-export { notifyOwnersOwnerAdded, notifyOwnersOwnerRemoved } from "./notifications";
+export { notifyOwnersOwnerAdded, notifyOwnersOwnerRemoved } from "./internal/notifications";
 
 export {
   TemplateAlreadyPublishedError,
