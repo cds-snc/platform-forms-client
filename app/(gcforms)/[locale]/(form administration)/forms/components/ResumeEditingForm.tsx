@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import Skeleton from "react-loading-skeleton";
@@ -61,12 +61,16 @@ export const ResumeEditingForm = () => {
     }
   }, []);
 
+  const handleResumeClick = useCallback(() => {
+    ga("resume_editing_form_click", { formId: formIdRef.current });
+  }, []);
+
   return hasSession ? (
     <Link
       id={formIdRef.current}
       href={`/${i18n.language}/form-builder/${formIdRef.current}/edit`}
       className="mb-4 inline-block"
-      onClick={() => ga("resume_editing_form_click", { formId: formIdRef.current })}
+      onClick={handleResumeClick}
     >
       <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
     </Link>
