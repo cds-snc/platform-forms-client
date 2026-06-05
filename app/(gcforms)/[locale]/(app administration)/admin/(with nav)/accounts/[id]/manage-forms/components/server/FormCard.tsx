@@ -64,12 +64,12 @@ export const FormCard = async ({
       {/* linking to existing page for now */}
       <div className="mt-10 flex flex-row items-end justify-between">
         <div>
-          <LinkButton.Secondary
+          <a
             href={`/${language}/admin/accounts/${accountId}/manage-forms?manageOwnership=${id}`}
-            className="mr-3 mb-2"
+            className="mr-3 mb-2 inline-block"
           >
             {t("manageOwnerships")}
-          </LinkButton.Secondary>
+          </a>
           <LinkButton.Secondary
             href={`/${language}/form-builder/${id}/responses`}
             className="mr-3 mb-2"
