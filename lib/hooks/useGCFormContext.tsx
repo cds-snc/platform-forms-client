@@ -143,7 +143,6 @@ export const GCFormsProvider = ({
 
   const getValues = useCallback(() => {
     return values.current;
-    return {};
   }, []);
 
   const getNonce = () => {
