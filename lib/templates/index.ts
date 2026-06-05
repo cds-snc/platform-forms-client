@@ -1,29 +1,29 @@
 // Public templates module API. Keep exports here intentional; prefer internal/* for implementation-only helpers.
-export { createTemplate } from "./commands/createTemplate";
+export { createTemplate } from "./mutations/createTemplate";
 export { getAllTemplates } from "./queries/getAllTemplates";
 export { getAllTemplatesForUser } from "./queries/getAllTemplatesForUser";
 export { getPublicTemplateByID } from "./queries/getPublicTemplateByID";
 export { getTemplatePublishedStatus } from "./queries/getTemplatePublishedStatus";
 export { getFullTemplateByID } from "./queries/getFullTemplateByID";
 export { getTemplateWithAssignedUsers } from "./queries/getTemplateWithAssignedUsers";
-export { updateTemplate } from "./commands/updateTemplate";
-export { updateIsPublishedForTemplate } from "./commands/updateIsPublishedForTemplate";
-export { removeAssignedUserFromTemplate } from "./commands/removeAssignedUserFromTemplate";
-export { addAssignedUserToTemplate } from "./commands/addAssignedUserToTemplate";
-export { syncAssignedUsersForTemplate } from "./commands/syncAssignedUsersForTemplate";
-export { updateFormPurpose } from "./commands/updateFormPurpose";
-export { updateFormSaveAndResume } from "./commands/updateFormSaveAndResume";
-export { removeDeliveryOption } from "./commands/removeDeliveryOption";
-export { cloneTemplate } from "./commands/cloneTemplate";
-export { deleteTemplate } from "./commands/deleteTemplate";
-export { restoreTemplate } from "./commands/restoreTemplate";
+export { updateTemplate } from "./mutations/updateTemplate";
+export { updateIsPublishedForTemplate } from "./mutations/updateIsPublishedForTemplate";
+export { removeAssignedUserFromTemplate } from "./mutations/removeAssignedUserFromTemplate";
+export { addAssignedUserToTemplate } from "./mutations/addAssignedUserToTemplate";
+export { syncAssignedUsersForTemplate } from "./mutations/syncAssignedUsersForTemplate";
+export { updateFormPurpose } from "./mutations/updateFormPurpose";
+export { updateFormSaveAndResume } from "./mutations/updateFormSaveAndResume";
+export { removeDeliveryOption } from "./mutations/removeDeliveryOption";
+export { cloneTemplate } from "./mutations/cloneTemplate";
+export { deleteTemplate } from "./mutations/deleteTemplate";
+export { restoreTemplate } from "./mutations/restoreTemplate";
 export { assertCanEditTemplate } from "./guards/assertCanEditTemplate";
 export { mapTemplateToPublicFormRecord } from "./mappers/mapTemplateToPublicFormRecord";
-export { updateClosedData } from "./commands/updateClosedData";
-export { updateSecurityAttribute } from "./commands/updateSecurityAttribute";
+export { updateClosedData } from "./mutations/updateClosedData";
+export { updateSecurityAttribute } from "./mutations/updateSecurityAttribute";
 export { getTemplateClosureState } from "./queries/getTemplateClosureState";
 export { getFormJSONConfig } from "./queries/getFormJSONConfig";
-export { updateFormBranding } from "./commands/updateFormBranding";
+export { updateFormBranding } from "./mutations/updateFormBranding";
 export { notifyOwnersOwnerAdded, notifyOwnersOwnerRemoved } from "./internal/notifications";
 
 export {
