@@ -2,6 +2,7 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FormEvent, useRef } from "react";
+import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 
 /**
  * Acts as a hCaptcha wrapper to help simplify the wiring around adding hCaptcha to a form.
@@ -46,8 +47,7 @@ export const FormCaptcha = ({
     handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
 
-  // Skip the hCaptcha flow for test and Draft forms where we don't need an hCaptcha verification
-  const doHCaptchaFlow = process.env.NEXT_PUBLIC_APP_ENV !== "test" && isPublished;
+  const doHCaptchaFlow = shouldCheckCaptcha(isPublished);
 
   // see https://github.com/hCaptcha/react-hcaptcha
   return (
