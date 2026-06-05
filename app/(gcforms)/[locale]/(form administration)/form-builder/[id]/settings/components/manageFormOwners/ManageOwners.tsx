@@ -29,7 +29,9 @@ export const ManageOwners = async ({ id }: { id: string }) => {
     }))
   );
 
-  const nonce = (await headers()).get("x-nonce");
+  const h = await headers();
+  const hTyped = h as unknown as Headers;
+  const nonce = hTyped.get("x-nonce") || null;
 
   return (
     <FormOwnership
