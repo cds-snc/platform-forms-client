@@ -10,12 +10,14 @@ export const FormCard = async ({
   titleFr,
   isPublished,
   overdue,
+  accountId,
 }: {
   id: string;
   titleEn: string;
   titleFr: string;
   isPublished: boolean;
   overdue: boolean;
+  accountId: string;
 }) => {
   const backgroundColor = isPublished ? "#95CCA2" : "#FEE39F";
   const borderColor = isPublished ? "#95CCA2" : "#FFD875";
@@ -25,7 +27,11 @@ export const FormCard = async ({
   } = await serverTranslation("admin-forms");
   const { ability } = await authCheckAndThrow();
   return (
-    <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id} id={`form-${id}`}>
+    <li
+      className="relative z-40 mb-4 max-w-2xl rounded-md border-2 border-black p-4"
+      key={id}
+      id={`form-${id}`}
+    >
       <div className="flex flex-row items-start justify-between">
         <h2 className="mr-2 mb-0 overflow-hidden pb-0 text-base">
           {language === "en" ? (
@@ -59,7 +65,7 @@ export const FormCard = async ({
       <div className="mt-10 flex flex-row items-end justify-between">
         <div>
           <LinkButton.Secondary
-            href={`/${language}/form-builder/${id}/settings/manage?backLink=${ability.user.id}`}
+            href={`/${language}/admin/accounts/${accountId}/manage-forms?manageOwnership=${id}`}
             className="mr-3 mb-2"
           >
             {t("manageOwnerships")}

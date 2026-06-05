@@ -7,5 +7,11 @@
   "overdueResponses": "Réponses en retard",
   "noForms": "Aucun formulaire trouvé",
   "deleteForm": "Supprimer le formulaire",
-  "createDraftVersion": "Créer une ébauche"
+  "downloadForm": "Télécharger le formulaire",
+  "createDraftVersion": "Créer une ébauche",
+  "card": {
+    "menu": {
+      "more": "Plus"
+    }
+  }
 }
