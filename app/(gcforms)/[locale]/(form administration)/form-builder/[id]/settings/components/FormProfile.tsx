@@ -54,24 +54,32 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
 
   const saveSecurityAttribute = useCallback(
     async (classification: ClassificationType) => {
-      // Update local state
-      setClassification(classification);
+      // Optimistic update: save previous state for rollback
+      const prev = securityAttribute;
 
+      // Update local state immediately
+      setClassification(classification);
       updateSecurityAttribute(classification);
 
-      const resultAttribute = (await updateTemplateSecurityAttribute({
-        id,
-        securityAttribute: classification,
-      })) as FormServerError;
+      try {
+        const resultAttribute = (await updateTemplateSecurityAttribute({
+          id,
+          securityAttribute: classification,
+        })) as FormServerError;
 
-      if (resultAttribute?.error) {
+        if (resultAttribute?.error) {
+          throw new Error("Save failed");
+        }
+
+        toast.success(savedSuccessMessage);
+      } catch (err) {
+        // Rollback on failure
+        setClassification(prev ?? ("Protected A" as ClassificationType));
+        updateSecurityAttribute(prev ?? ("Protected A" as ClassificationType));
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
-        return;
       }
-
-      toast.success(savedSuccessMessage);
     },
-    [savedSuccessMessage, id, updateSecurityAttribute]
+    [savedSuccessMessage, id, updateSecurityAttribute, securityAttribute]
   );
 
   /*--------------------------------------------*
@@ -82,6 +90,8 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       const purposeOption = value as PurposeOption;
+      // Optimistic update: save previous value for rollback
+      const prev = formPurpose;
 
       // Update local state
       setPurposeOption(purposeOption);
@@ -89,20 +99,26 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
       // Update the template store
       updateField("formPurpose", purposeOption);
 
-      // Update the database
-      const result = await updateTemplateFormPurpose({
-        id,
-        formPurpose: purposeOption,
-      });
+      try {
+        // Update the database
+        const result = await updateTemplateFormPurpose({
+          id,
+          formPurpose: purposeOption,
+        });
 
-      if (result?.error) {
+        if (result?.error) {
+          throw new Error("Save failed");
+        }
+
+        toast.success(savedSuccessMessage);
+      } catch (err) {
+        // Rollback on failure
+        setPurposeOption(prev as PurposeOption);
+        updateField("formPurpose", prev as PurposeOption);
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.FORM_PURPOSE} />, "wide");
-        return;
       }
-
-      toast.success(savedSuccessMessage);
     },
-    [savedSuccessMessage, id, updateField]
+    [savedSuccessMessage, id, updateField, formPurpose]
   );
 
   return (
@@ -113,7 +129,7 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
            * Classification section
            *--------------------------------------------*/}
           <ClassificationSelect
-            className="max-w-[400px] truncate bg-gray-soft p-1 pr-10"
+            className="bg-gray-soft max-w-[400px] truncate p-1 pr-10"
             lang={lang}
             isPublished={isPublished}
             classification={classification}
