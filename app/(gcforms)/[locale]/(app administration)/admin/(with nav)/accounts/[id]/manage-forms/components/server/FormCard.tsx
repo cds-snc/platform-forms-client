@@ -2,6 +2,8 @@ import { serverTranslation } from "@i18n";
 import { authCheckAndThrow } from "@lib/actions";
 import { Overdue } from "./Overdue";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
+import { themes } from "@serverComponents/globals/Buttons/LinkButton";
+import { cn } from "@lib/utils";
 import { MoreMenu } from "../client/MoreMenu";
 
 export const FormCard = async ({
@@ -66,7 +68,12 @@ export const FormCard = async ({
         <div>
           <a
             href={`/${language}/admin/accounts/${accountId}/manage-forms?manageOwnership=${id}`}
-            className="mr-3 mb-2 inline-block"
+            className={cn(
+              "text-black-default visited:text-black-default active:text-black-default no-underline",
+              themes.secondary,
+              themes.base,
+              "mr-3 mb-2"
+            )}
           >
             {t("manageOwnerships")}
           </a>
