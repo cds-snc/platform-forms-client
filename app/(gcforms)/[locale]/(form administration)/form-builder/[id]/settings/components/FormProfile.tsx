@@ -59,7 +59,6 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
 
       // Update local state immediately
       setClassification(classification);
-      updateSecurityAttribute(classification);
 
       try {
         const resultAttribute = (await updateTemplateSecurityAttribute({
@@ -71,11 +70,13 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
           throw new Error("Save failed");
         }
 
+        // Update the template store after successful database update
+        updateSecurityAttribute(classification);
+
         toast.success(savedSuccessMessage);
       } catch (err) {
-        // Rollback on failure
+        // Rollback local state on failure
         setClassification(prev ?? ("Protected A" as ClassificationType));
-        updateSecurityAttribute(prev ?? ("Protected A" as ClassificationType));
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
       }
     },
@@ -96,9 +97,6 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
       // Update local state
       setPurposeOption(purposeOption);
 
-      // Update the template store
-      updateField("formPurpose", purposeOption);
-
       try {
         // Update the database
         const result = await updateTemplateFormPurpose({
@@ -110,11 +108,13 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
           throw new Error("Save failed");
         }
 
+        // Update the template store after successful database update
+        updateField("formPurpose", purposeOption);
+
         toast.success(savedSuccessMessage);
       } catch (err) {
-        // Rollback on failure
+        // Rollback local state on failure
         setPurposeOption(prev as PurposeOption);
-        updateField("formPurpose", prev as PurposeOption);
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.FORM_PURPOSE} />, "wide");
       }
     },
