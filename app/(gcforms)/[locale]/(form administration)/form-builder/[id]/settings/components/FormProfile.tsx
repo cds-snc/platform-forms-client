@@ -57,6 +57,8 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
       // Update local state
       setClassification(classification);
 
+      updateSecurityAttribute(classification);
+
       const resultAttribute = (await updateTemplateSecurityAttribute({
         id,
         securityAttribute: classification,
@@ -66,8 +68,6 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
         return;
       }
-      // Set local store state after a sucessfull server side save
-      updateSecurityAttribute(classification);
 
       toast.success(savedSuccessMessage);
     },
@@ -83,6 +83,9 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
       const { value } = event.target;
       const purposeOption = value as PurposeOption;
 
+      // Update local state
+      setPurposeOption(purposeOption);
+
       // Update the template store
       updateField("formPurpose", purposeOption);
 
@@ -96,8 +99,6 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.FORM_PURPOSE} />, "wide");
         return;
       }
-      // Update local state after server side is sucessful
-      setPurposeOption(purposeOption);
 
       toast.success(savedSuccessMessage);
     },
