@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import React from "react";
 import { themes } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
@@ -9,11 +9,12 @@ export const ManageFormsButton = ({ userId }: { userId: string }) => {
     t,
     i18n: { language },
   } = useTranslation("admin-users");
+
+  const href = `/${language}/admin/accounts/${userId}/manage-forms`;
+
   return (
-    <Link
-      scroll={false}
-      href={`/${language}/admin/accounts/${userId}/manage-forms`}
-      prefetch={false}
+    <a
+      href={href}
       className={cn(
         "text-black-default visited:text-black-default active:text-black-default no-underline focus:shadow-none active:shadow-none",
         themes.secondary,
@@ -21,6 +22,6 @@ export const ManageFormsButton = ({ userId }: { userId: string }) => {
       )}
     >
       {t("manageForms")}
-    </Link>
+    </a>
   );
 };
