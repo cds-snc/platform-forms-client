@@ -59,11 +59,13 @@ export const LocalDialog = ({
   }, [close, handleClose]);
 
   const modalRandomId = useRef(randomId());
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <dialog
       className="size-full bg-transparent bg-clip-padding p-0"
-      {...(title && { "aria-labelledby": `modal-title-${modalRandomId.current}` })}
+      {...(title && mounted ? { "aria-labelledby": `modal-title-${modalRandomId.current}` } : {})}
       ref={dialogRef}
       data-testid="local-dialog"
     >
@@ -80,7 +82,7 @@ export const LocalDialog = ({
             <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
               <h2
                 className="mt-4! mb-4! ml-2! inline-block px-4 text-2xl!"
-                id={`modal-title-${modalRandomId.current}`}
+                {...(mounted ? { id: `modal-title-${modalRandomId.current}` } : {})}
                 tabIndex={-1}
               >
                 {title}
