@@ -117,3 +117,5 @@ packages/database/src/generated
 
 tests/.auth/*.json
 eslint_report.html
+
+next-env.d.ts
