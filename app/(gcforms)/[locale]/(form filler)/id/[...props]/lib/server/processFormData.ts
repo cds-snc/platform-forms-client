@@ -10,6 +10,7 @@ type ProcessFormDataParams = {
   securityAttribute?: string;
   formId: string;
   language?: string;
+  versionId?: string;
   fileChecksums?: Record<string, string>;
 };
 
@@ -18,6 +19,7 @@ export const processFormData = async ({
   securityAttribute,
   formId,
   language,
+  versionId,
   fileChecksums,
 }: ProcessFormDataParams): Promise<{
   submissionId: string;
@@ -59,6 +61,7 @@ export const processFormData = async ({
       responses,
       language ? language : "en",
       securityAttribute ? securityAttribute : "Protected A",
+      versionId,
       fileChecksums
     );
 
