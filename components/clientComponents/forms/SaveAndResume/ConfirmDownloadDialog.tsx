@@ -14,7 +14,6 @@ import { toast } from "@formBuilder/components/shared/Toast";
 
 import { generateResponseProgressHtml } from "@lib/saveAndResume/generateResponseProgressHtml";
 import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
-import { logMessage } from "@lib/logger";
 
 import { SaveFileWarning } from "./FileWarning/SaveFileWarning";
 
@@ -62,7 +61,6 @@ export const ConfirmDownloadDialog = ({
       await downloadDataAsBlob(html.data, fileName, { "text/html": [".html"] });
       return true;
     } catch (error) {
-      logMessage.error(error);
       toast.error(generateHtmlError, "public-facing-form");
       return false;
     } finally {

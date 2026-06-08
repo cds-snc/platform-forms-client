@@ -31,12 +31,14 @@ export const SaveResponse = ({ language }: { language: Language }) => {
           <DownloadSubmissionIcon className="fill-white" />
         </>
       </DownloadConfirm>
-      <ConfirmDownloadDialog
-        type="confirm"
-        language={language}
-        open={confirm}
-        handleClose={() => setConfirm(false)}
-      />
+      {confirm && (
+        <ConfirmDownloadDialog
+          type="confirm"
+          language={language}
+          open={confirm}
+          handleClose={() => setConfirm(false)}
+        />
+      )}
     </div>
   );
 };
