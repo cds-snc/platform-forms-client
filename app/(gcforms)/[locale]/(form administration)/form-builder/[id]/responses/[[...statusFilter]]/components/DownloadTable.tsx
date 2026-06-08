@@ -330,6 +330,7 @@ export const DownloadTable = ({
         }}
         setDownloadError={setDownloadError}
         responseDownloadLimit={responseDownloadLimit}
+        checkedMeta={tableItems.allItems}
       />
     </>
   );

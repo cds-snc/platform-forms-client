@@ -195,7 +195,10 @@
       "jsonDescription": "For API or data configuration",
       "downloadAllAsZip": "Download all as ZIP (compressed) file",
       "cancel": "Cancel",
-      "download": "Download"
+      "download": "Download",
+      "chooseVersion": "Download responses for version",
+      "chooseVersionPlaceholder": "Select a version",
+      "chooseVersionRequired": "You can change the selected version if needed"
     },
     "confirmDeleteNewDialog": {
       "confirmAndDelete": "Confirm the removal of new responses",
