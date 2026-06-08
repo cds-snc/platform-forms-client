@@ -190,7 +190,7 @@
     "playwright": "^1.60.0",
     "postcss": "^8.4.32",
     "prettier": "^3.8.3",
-    "prettier-plugin-tailwindcss": "^0.7.2",
+    "prettier-plugin-tailwindcss": "^0.8.0",
     "raw-loader": "^4.0.2",
     "sass": "^1.94.1",
     "sass-loader": "^16.0.6",
