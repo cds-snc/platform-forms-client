@@ -25,12 +25,14 @@ export const SaveAndResumeButton = ({ language }: { language: Language }) => {
         </>
       </DownloadProgress>
 
-      <ConfirmDownloadDialog
-        type="progress"
-        language={language}
-        open={confirm}
-        handleClose={() => setConfirm(false)}
-      />
+      {confirm && (
+        <ConfirmDownloadDialog
+          type="progress"
+          language={language}
+          open={confirm}
+          handleClose={() => setConfirm(false)}
+        />
+      )}
     </div>
   );
 };
