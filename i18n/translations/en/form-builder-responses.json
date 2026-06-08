@@ -108,6 +108,7 @@
       "download": "Download",
       "nextStep": "Next step",
       "date": "Date",
+      "version": "Version",
       "warning": "Warning",
       "pagination": {
         "start": "Start",

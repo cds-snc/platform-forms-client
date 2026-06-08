@@ -163,11 +163,13 @@ export async function listAllSubmissions(
               "Status#CreatedAt": statusCreatedAt,
               CreatedAt: createdAt,
               Name: name,
+              VersionId: versionId,
             }) => ({
               formID,
               status: vaultStatusFromStatusCreatedAt(statusCreatedAt),
               name,
               createdAt,
+              versionId,
             })
           )
         );
@@ -197,6 +199,73 @@ export async function listAllSubmissions(
       };
     } else {
       submissionsRemaining = false;
+    }
+
+    // Enrich overviews with VersionId by BatchGet from primary table
+    if (accumulatedResponses.length > 0) {
+      try {
+        const keys = accumulatedResponses.map((r) => ({
+          FormID: formID,
+          NAME_OR_CONF: `NAME#${r.name}`,
+        }));
+        const chunkedKeys = chunkArray<{ FormID: string; NAME_OR_CONF: string }>(keys, 50);
+        const versionByName = new Map<string, string | null>();
+
+        for (const keysChunk of chunkedKeys) {
+          let attempt = 1;
+          let remainingKeys = keysChunk;
+          while (remainingKeys && remainingKeys.length > 0) {
+            const batch = new BatchGetCommand({
+              RequestItems: {
+                Vault: {
+                  Keys: remainingKeys,
+                  ProjectionExpression: "#name,VersionId,NAME_OR_CONF",
+                  ExpressionAttributeNames: {
+                    "#name": "Name",
+                  },
+                },
+              },
+            });
+
+            // eslint-disable-next-line no-await-in-loop
+            const batchResp = await dynamoDBDocumentClient.send(batch);
+
+            const items = (batchResp.Responses?.Vault ?? []) as Array<{
+              Name?: string;
+              VersionId?: string | null;
+            }>;
+            items.forEach((item) => {
+              if (item.Name) versionByName.set(item.Name, item.VersionId ?? null);
+            });
+
+            if (batchResp.UnprocessedKeys?.Vault?.Keys) {
+              remainingKeys = batchResp.UnprocessedKeys.Vault.Keys as {
+                FormID: string;
+                NAME_OR_CONF: string;
+              }[];
+              ++attempt;
+              const backOffTime = getExponentialBackoffTimeInMS(100, attempt, 2000, true);
+              logMessage.info(
+                `Retrying BatchGet for VersionId for form ${formID} attempt ${attempt} in ${backOffTime}ms`
+              );
+              // eslint-disable-next-line no-await-in-loop
+              await delay(backOffTime);
+            } else {
+              remainingKeys = [] as { FormID: string; NAME_OR_CONF: string }[];
+            }
+          }
+        }
+
+        // Merge VersionId into accumulatedResponses
+        accumulatedResponses = accumulatedResponses.map((r) => ({
+          ...r,
+          versionId: r.versionId ?? versionByName.get(r.name) ?? null,
+        }));
+      } catch (e) {
+        logMessage.warn(
+          `Failed to enrich submissions with VersionId for form ${formID}: ${String(e)}`
+        );
+      }
     }
 
     logEvent(
@@ -307,7 +376,7 @@ export async function retrieveSubmissions(
 
     const keys = ids.map((id) => {
       return { FormID: formID, NAME_OR_CONF: `NAME#${id.trim()}` };
-    }) as Record<string, string>[];
+    }) as { FormID: string; NAME_OR_CONF: string }[];
 
     // DynamoDB BatchGetItem can only retrieve 100 items at a time
     // Reducing to 50 in order to add some throttling
@@ -359,7 +428,7 @@ export async function retrieveSubmissions(
 
         // If there are unprocessed keys, we need to make another request
         if (response.UnprocessedKeys?.Vault?.Keys) {
-          keys = response.UnprocessedKeys.Vault.Keys;
+          keys = response.UnprocessedKeys.Vault.Keys as { FormID: string; NAME_OR_CONF: string }[];
           ++attempt;
           const backOffTime = getExponentialBackoffTimeInMS(100, attempt, 2000, true);
           logMessage.info(
@@ -368,7 +437,7 @@ export async function retrieveSubmissions(
           // eslint-disable-next-line no-await-in-loop
           await delay(backOffTime);
         } else {
-          keys = [];
+          keys = [] as { FormID: string; NAME_OR_CONF: string }[];
         }
       }
       submissions.push(...accumulatedResponses);

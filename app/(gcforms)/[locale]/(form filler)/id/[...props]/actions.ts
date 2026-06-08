@@ -111,7 +111,7 @@ export async function submitForm(
       }
 
       const formData = normalizeFormResponses(template, values);
-      const versionId = "2";
+      const versionId = "3";
 
       const { submissionId, fileURLMap } = await processFormData({
         responses: formData,

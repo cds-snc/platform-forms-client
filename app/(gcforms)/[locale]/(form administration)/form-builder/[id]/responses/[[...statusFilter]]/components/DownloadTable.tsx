@@ -146,7 +146,7 @@ export const DownloadTable = ({
                   setNoSelectedItemsError={setNoSelectedItemsError}
                 />
               </th>
-              <th scope="col" className="whitespace-nowrap p-4 text-left">
+              <th scope="col" className="p-4 text-left whitespace-nowrap">
                 {t("downloadResponsesTable.header.number")}
                 <Tooltip.Info
                   side="top"
@@ -168,6 +168,9 @@ export const DownloadTable = ({
                   <p>{t(`tooltips.downloadTable.date.body`)}</p>
                 </Tooltip.Info>
               </th>
+              <th scope="col" className="p-4 text-left">
+                {t("downloadResponsesTable.header.version")}
+              </th>
               <th scope="col" className="w-full p-4 text-left">
                 {t("downloadResponsesTable.header.nextStep")}
                 <Tooltip.Info
@@ -186,7 +189,7 @@ export const DownloadTable = ({
           </thead>
           <tbody>
             <tr className="border-y-1 border-slate-400 bg-slate-100 py-2">
-              <td colSpan={5} className="px-4 py-2">
+              <td colSpan={6} className="px-4 py-2">
                 <Pagination
                   startFromExclusiveResponse={startFromExclusiveResponse}
                   formId={formId}
@@ -210,11 +213,11 @@ export const DownloadTable = ({
                       (tableItems.statusItems.get(submission.name) ? " bg-purple-50" : "") +
                       (isBlocked ? " opacity-50" : "") +
                       (statusFilter === StatusFilter.NEW && removedRows.includes(submission.name)
-                        ? " transition-opacity opacity-50 ease-in-out duration-500"
+                        ? " opacity-50 transition-opacity duration-500 ease-in-out"
                         : "")
                   )}
                 >
-                  <td className="flex whitespace-nowrap pb-2 pl-9 pr-4">
+                  <td className="flex pr-4 pb-2 pl-9 whitespace-nowrap">
                     <div className="gc-input-checkbox">
                       <input
                         id={submission.name}
@@ -233,13 +236,16 @@ export const DownloadTable = ({
                   <th
                     scope="row"
                     id={submission.name}
-                    className="whitespace-nowrap px-4 font-normal"
+                    className="px-4 font-normal whitespace-nowrap"
                   >
                     <span className="sr-only">{t("downloadResponsesTable.header.download")}</span>
                     {submission.name}
                   </th>
-                  <td className="whitespace-nowrap px-4">{createdDateTime}</td>
-                  <td className="whitespace-nowrap px-4">
+                  <td className="px-4 whitespace-nowrap">{createdDateTime}</td>
+                  <td className="px-4 whitespace-nowrap">
+                    {submission.versionId ?? t("downloadResponsesTable.unknown")}
+                  </td>
+                  <td className="px-4 whitespace-nowrap">
                     <NextStep
                       statusFilter={statusFilter as StatusFilter}
                       submission={submission}
@@ -247,7 +253,7 @@ export const DownloadTable = ({
                       removedRows={removedRows}
                     />
                   </td>
-                  <td className="whitespace-nowrap text-center">
+                  <td className="text-center whitespace-nowrap">
                     <DownloadSingleButton
                       id={`button-${submission.name}`}
                       formId={submission.formID}
