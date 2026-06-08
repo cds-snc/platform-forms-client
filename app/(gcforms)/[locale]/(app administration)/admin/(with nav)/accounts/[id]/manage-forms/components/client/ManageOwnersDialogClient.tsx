@@ -21,6 +21,7 @@ export default function ManageOwnersDialogClient({ children }: { children: React
     <div className="flex gap-4">
       <Button
         theme="primary"
+        dataTestId="save-ownership"
         onClick={() => {
           Event.fire("save-manage-owners");
         }}
