@@ -4,13 +4,16 @@
   "description": "Add or update `StatusCreatedAt` property (using the existing `Status` and `CreatedAt` properties from the same item) in `NAME#` items.",
   "main": "main.ts",
   "scripts": {
-    "migrate": "tsx main.ts"
+    "query": "tsx main.ts"
   },
+  "type": "module",
   "keywords": [],
   "author": "Clément Janin",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.873.0",
+    "@aws-sdk/client-rds-data": "^3.901.0",
     "@aws-sdk/lib-dynamodb": "^3.873.0",
+    "@fast-csv/format": "^5.0.7",
     "dotenv": "^16.4.5",
     "tsx": "^4.19.2"
   },
