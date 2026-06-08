@@ -1157,6 +1157,8 @@
     "stepTwoDetails": "Allez sur <a href=\"/\" target=\"_blank\">Formulaires GC</a>. Aucun compte n'est nécessaire.",
     "stepTwoDetailsNoHTML": "Allez sur Formulaires GC (https://forms-formulaires.alpha.canada.ca/). Aucun compte n'est nécessaire.",
     "title": "Partager",
+    "manageAccess": "Gérer l’accès",
+    "file": "Partager le fichier du formulaire",
     "toPreview": "Pour prévisualiser ce formulaire :",
     "unauthenticated": {
       "copyInstructions": "Copier les instructions",
