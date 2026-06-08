@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { authCheckAndThrow } from "@lib/actions";
 import { Overdue } from "./Overdue";
-import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { themes } from "@serverComponents/globals/Buttons/LinkButton";
 import { cn } from "@lib/utils";
 import { MoreMenu } from "../client/MoreMenu";
@@ -63,7 +62,6 @@ export const FormCard = async ({
       </div>
 
       {overdue && <Overdue />}
-      {/* linking to existing page for now */}
       <div className="mt-10 flex flex-row items-end justify-between">
         <div>
           <a
@@ -77,12 +75,6 @@ export const FormCard = async ({
           >
             {t("manageOwnerships")}
           </a>
-          <LinkButton.Secondary
-            href={`/${language}/form-builder/${id}/responses`}
-            className="mr-3 mb-2"
-          >
-            {t("gotoResponses")}
-          </LinkButton.Secondary>
         </div>
         <div>
           {ability?.can("update", "FormRecord") && <MoreMenu id={id} isPublished={isPublished} />}
