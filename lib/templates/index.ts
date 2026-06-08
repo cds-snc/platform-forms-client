@@ -17,7 +17,6 @@ export { removeDeliveryOption } from "./mutations/removeDeliveryOption";
 export { cloneTemplate } from "./mutations/cloneTemplate";
 export { deleteTemplate } from "./mutations/deleteTemplate";
 export { restoreTemplate } from "./mutations/restoreTemplate";
-export { assertCanEditTemplate } from "./guards/assertCanEditTemplate";
 export { mapTemplateToPublicFormRecord } from "./mappers/mapTemplateToPublicFormRecord";
 export { updateClosedData } from "./mutations/updateClosedData";
 export { updateSecurityAttribute } from "./mutations/updateSecurityAttribute";
