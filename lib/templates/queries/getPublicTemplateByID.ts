@@ -1,9 +1,8 @@
 import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { PublicFormRecord } from "@lib/types";
-import { parseTemplate } from "../internal";
+import { mapTemplateToPublicFormRecord, parseTemplate } from "../internal";
 import { logMessage } from "@lib/logger";
-import { mapTemplateToPublicFormRecord } from "../mappers/mapTemplateToPublicFormRecord";
 
 /**
  * Get a form template by ID (only includes public information but does not require any permission)

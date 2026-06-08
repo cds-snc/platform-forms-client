@@ -1,8 +1,14 @@
 import { Prisma } from "@gcforms/database";
 import { authorization } from "@lib/privileges";
 import { checkOne } from "@lib/cache/flags";
-import { FormRecord, FormProperties, SecurityAttribute, ClosedDetails } from "@lib/types";
-import { NotificationsInterval } from "@gcforms/types";
+import {
+  FormRecord,
+  FormProperties,
+  SecurityAttribute,
+  ClosedDetails,
+  PublicFormRecord,
+  NotificationsInterval,
+} from "@gcforms/types";
 
 export const checkFlag = async (flag: string) => {
   return (await Promise.all([checkOne(flag), authorization.canAccessBetaComponents(flag)])).reduce(
@@ -70,5 +76,26 @@ export const parseTemplate = (template: {
     saveAndResume: template.saveAndResume,
     notificationsInterval: template.notificationsInterval as NotificationsInterval,
     ...(template.ttl && { ttl: template.ttl }),
+  };
+};
+
+/*
+ * Extract only the public properties from a form record.
+ * The public properties are the ones that are needed to display the form
+ * to unauthenticated users. (e.g. when filling out a form)
+ * Also sets some of the default values for properties that are not set.
+ * @param template A Form Record, containing all the properties
+ * @returns a Public Form Record, with only the public properties
+ */
+export const mapTemplateToPublicFormRecord = (template: FormRecord): PublicFormRecord => {
+  return {
+    id: template.id,
+    updatedAt: template.updatedAt,
+    closingDate: template.closingDate,
+    closedDetails: template.closedDetails,
+    form: template.form,
+    isPublished: template.isPublished,
+    securityAttribute: template.securityAttribute,
+    saveAndResume: template.saveAndResume,
   };
 };
