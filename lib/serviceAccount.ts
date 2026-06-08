@@ -140,7 +140,7 @@ export const createKey = async (templateId: string) => {
       AuditLogDetails.CreatedNewApiKey,
       {
         serviceAccountId: serviceAccountId,
-        userId: user.id,
+        userId: user.email,
       }
     );
 
