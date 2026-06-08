@@ -4,7 +4,7 @@ import { prisma, prismaErrors } from "@gcforms/database";
 import { logMessage } from "@lib/logger";
 import { TemplateNotFoundError, UserNotFoundError } from "../internal/errors";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
-import { notifyOwnersOwnerRemoved } from "../internal/notifications";
+import { notifyOwnerRemoved } from "../internal/notifications";
 import { FormProperties } from "@lib/types";
 
 /**
@@ -94,7 +94,7 @@ export async function removeAssignedUserFromTemplate(
     { userId: userID }
   );
 
-  notifyOwnersOwnerRemoved(
+  notifyOwnerRemoved(
     userToRemove,
     updatedTemplate.jsonConfig as FormProperties,
     updatedTemplate.users

@@ -11,7 +11,7 @@ import { sendEmail } from "@lib/integration/notifyConnector";
  * @param form Form properties object
  * @param users Current owners
  */
-export const notifyOwnersOwnerRemoved = async (
+export const notifyOwnerRemoved = async (
   userToRemove: { name: string | null; email: string },
   form: FormProperties,
   users: { id: string; email: string }[]
@@ -57,7 +57,7 @@ export const notifyOwnersOwnerRemoved = async (
  * @param form Form properties object
  * @param users Current owners
  */
-export const notifyOwnersOwnerAdded = async (
+export const notifyOwnerAdded = async (
   userToAdd: { name: string | null; email: string },
   form: FormProperties,
   users: { id: string; email: string }[]

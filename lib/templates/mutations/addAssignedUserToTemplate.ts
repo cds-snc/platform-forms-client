@@ -10,7 +10,7 @@ import {
 import { logMessage } from "@lib/logger";
 import { TemplateNotFoundError, UserNotFoundError } from "../internal/errors";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
-import { notifyOwnersOwnerAdded } from "../internal/notifications";
+import { notifyOwnerAdded } from "../internal/notifications";
 
 /**
  * Assign a user to a form
@@ -94,9 +94,5 @@ export async function addAssignedUserToTemplate(formID: string, userID: string):
     { userEmail: user.email }
   );
 
-  notifyOwnersOwnerAdded(
-    userToAdd,
-    updatedTemplate.jsonConfig as FormProperties,
-    updatedTemplate.users
-  );
+  notifyOwnerAdded(userToAdd, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
 }

@@ -23,7 +23,7 @@ export { updateSecurityAttribute } from "./mutations/updateSecurityAttribute";
 export { getTemplateClosureState } from "./queries/getTemplateClosureState";
 export { getFormJSONConfig } from "./queries/getFormJSONConfig";
 export { updateFormBranding } from "./mutations/updateFormBranding";
-export { notifyOwnersOwnerAdded, notifyOwnersOwnerRemoved } from "./internal/notifications";
+export { notifyOwnerAdded, notifyOwnerRemoved } from "./internal/notifications";
 
 export {
   TemplateAlreadyPublishedError,

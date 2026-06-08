@@ -4,7 +4,7 @@ import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
-import { notifyOwnersOwnerAdded, notifyOwnersOwnerRemoved } from "../internal/notifications";
+import { notifyOwnerAdded, notifyOwnerRemoved } from "../internal/notifications";
 import { parseTemplate } from "../internal";
 
 /**
@@ -107,21 +107,13 @@ export async function syncAssignedUsersForTemplate(
   const usersToAdd = await getUsersFromUserIds(toAdd.map((u) => u.id));
 
   usersToAdd.forEach((user) => {
-    notifyOwnersOwnerAdded(
-      user,
-      updatedTemplate.jsonConfig as FormProperties,
-      updatedTemplate.users
-    );
+    notifyOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
   });
 
   const usersToRemove = await getUsersFromUserIds(toRemove.map((u) => u.id));
 
   usersToRemove.forEach((user) => {
-    notifyOwnersOwnerRemoved(
-      user,
-      updatedTemplate.jsonConfig as FormProperties,
-      updatedTemplate.users
-    );
+    notifyOwnerRemoved(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
   });
 
   usersToAdd.length > 0 &&
