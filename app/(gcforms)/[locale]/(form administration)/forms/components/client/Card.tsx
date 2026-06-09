@@ -19,8 +19,11 @@ import {
   getBannerColor,
 } from "../helpers";
 
+// Future TODO: in time the annotation "use memo" could be tested again as it's much cleaner than
+// memo(). At the time of this comment, it fails to cache to cache and diff cards correctly. A quick
+// test is seeing if a polling edit update only updates the related card vs. updating all cards.
+
 const CardBanner = memo(({ isPublished }: { isPublished: boolean }) => {
-  //TODO try "use memo";
   const { t } = useTranslation("my-forms");
   const bulletColor = getBannerColor(isPublished);
 
@@ -296,8 +299,4 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
     </div>
   );
 };
-/**
- * Memoized Card export to prevent unnecessary re-renders
- * Named CardComponent is retained for better DevTools debugging
- */
 export const Card = memo(CardComponent);

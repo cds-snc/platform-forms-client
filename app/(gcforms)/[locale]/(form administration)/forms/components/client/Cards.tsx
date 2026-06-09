@@ -33,14 +33,12 @@ export const Cards = ({
     });
   }, [initialTemplates]);
 
-  // Handle loading more cards on scroll
+  // Setup infinite scroll
   const handleLoadMore = useCallback(() => {
     startTransition(() => {
       setDisplayedCount((prev) => Math.min(prev + CARDS_PER_BATCH, templates.length));
     });
   }, [templates.length]);
-
-  // Setup infinite scroll
   const loadMoreRef = useInfiniteScroll({
     displayedCount,
     totalCount: templates.length,
