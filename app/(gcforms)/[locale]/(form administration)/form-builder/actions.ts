@@ -10,7 +10,7 @@ import {
   FormPurpose,
   ClosedDetails,
 } from "@lib/types";
-import { updateSecurityAttribute, getFormJSONConfig, updateFormBranding } from "@lib/templates";
+import { getFormJSONConfig, updateFormBranding } from "@lib/templates";
 import { createTemplate as createDbTemplate } from "@lib/templates/mutations/createTemplate";
 import { updateTemplate as updateDbTemplate } from "@lib/templates/mutations/updateTemplate";
 import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
@@ -24,6 +24,7 @@ import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { updateSecurityAttribute } from "@lib/templates/mutations/updateSecurityAttribute";
 import { isValidEmail } from "@gcforms/core";
 import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";

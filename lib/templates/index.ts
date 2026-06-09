@@ -1,5 +1,4 @@
 // Public templates module API. Keep exports here intentional; prefer internal/* for imp
-export { updateSecurityAttribute } from "./mutations/updateSecurityAttribute";
 export { getTemplateClosureState } from "./queries/getTemplateClosureState";
 export { getFormJSONConfig } from "./queries/getFormJSONConfig";
 export { updateFormBranding } from "./mutations/updateFormBranding";
