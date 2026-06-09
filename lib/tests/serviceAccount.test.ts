@@ -143,7 +143,7 @@ describe("Service Account functions", () => {
         { type: "Form", id: "templateId" },
         "CreateAPIKey",
         "CreatedNewAPIKey",
-        { serviceAccountId: "serviceAccountUser", userId: userEmail }
+        { serviceAccountId: "serviceAccountUser", userEmail: userEmail }
       );
     });
     it("should create a key if an existing user exists", async () => {
@@ -164,7 +164,7 @@ describe("Service Account functions", () => {
         { type: "Form", id: "templateId" },
         "CreateAPIKey",
         "CreatedNewAPIKey",
-        { serviceAccountId: "templateId", userId: userEmail }
+        { serviceAccountId: "templateId", userEmail: userEmail }
       );
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {

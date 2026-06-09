@@ -140,7 +140,7 @@ export const createKey = async (templateId: string) => {
       AuditLogDetails.CreatedNewApiKey,
       {
         serviceAccountId: serviceAccountId,
-        userId: user.email,
+        userEmail: user.email,
       }
     );
 
@@ -198,7 +198,7 @@ export const refreshKey = async (templateId: string) => {
       AuditLogDetails.RefreshedApiKey,
       {
         serviceAccountId: serviceAccountId,
-        userId: user.email,
+        userEmail: user.email,
       }
     );
 
