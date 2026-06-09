@@ -2,7 +2,6 @@ import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prismaMock } from "@testUtils";
 import {
-  deleteTemplate,
   TemplateAlreadyPublishedError,
   TemplateHasUnprocessedSubmissions,
   mapTemplateToPublicFormRecord,
@@ -17,6 +16,7 @@ import { updateTemplate } from "@lib/templates/mutations/updateTemplate";
 import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
 import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
 import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
+import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 
