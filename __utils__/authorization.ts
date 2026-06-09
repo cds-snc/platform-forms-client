@@ -7,13 +7,13 @@ type MockedAuthFunction = {
   [key: string]: Mock;
 };
 
-export const mockAuthorizationPass = (userId: string) => {
+export const mockAuthorizationPass = (userId: string, email = "test.user@cds-snc.ca") => {
   const mockedAuth = authorization as unknown as MockedAuthFunction;
   for (const property in authorization) {
     if (typeof mockedAuth[property] === "function") {
       mockedAuth[property] = vi
         .fn()
-        .mockImplementation(() => Promise.resolve({ user: { id: userId } }));
+        .mockImplementation(() => Promise.resolve({ user: { id: userId, email: email } }));
     }
   }
 };

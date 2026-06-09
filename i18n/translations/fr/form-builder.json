@@ -610,7 +610,7 @@
       "ArchivedForm": "Formulaire archivé",
       "RestoredForm": "Formulaire désarchivé",
       "DownloadedForm": "Une copie du formulaire a été téléchargée",
-      "CreatedNewAPIKey": "Le compte utilisateur {{userId}} a généré une clé API : ID =  {{serviceAccountId}}",
+      "CreatedNewAPIKey": "Le compte utilisateur {{userEmail}} a généré une clé API : ID =  {{serviceAccountId}}",
       "GeneratedAPIKey": "Clé API générée par {{userEmail}}: ID = {{APIkeyID}",
       "RefreshedAPIKey": "Clé API re-générée par {{userEmail}}: ID = {{APIkeyID}}",
       "DeletedAPIKey": "Clé API supprimée par {{userEmail}}: ID = {{serviceAccountID}}",
