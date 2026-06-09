@@ -4,7 +4,6 @@ import { prismaMock } from "@testUtils";
 import {
   deleteTemplate,
   TemplateAlreadyPublishedError,
-  removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
   mapTemplateToPublicFormRecord,
 } from "../templates";
@@ -17,6 +16,7 @@ import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplate
 import { updateTemplate } from "@lib/templates/mutations/updateTemplate";
 import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
 import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
+import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 

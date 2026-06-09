@@ -11,7 +11,6 @@ import {
   ClosedDetails,
 } from "@lib/types";
 import {
-  removeDeliveryOption,
   updateClosedData,
   updateSecurityAttribute,
   getFormJSONConfig,
@@ -23,6 +22,7 @@ import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsP
 import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
 import { updateFormPurpose } from "@lib/templates/mutations/updateFormPurpose";
 import { updateFormSaveAndResume } from "@lib/templates/mutations/updateFormSaveAndResume";
+import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
