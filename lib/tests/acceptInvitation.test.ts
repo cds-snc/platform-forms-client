@@ -31,7 +31,7 @@ vi.mock("@lib/auditLogs", () => ({
 }));
 
 vi.mock("@lib/templates", () => ({
-  notifyOwnersOwnerAdded: vi.fn(),
+  notifyOwnerAdded: vi.fn(),
 }));
 
 vi.mock("@lib/logger", () => ({

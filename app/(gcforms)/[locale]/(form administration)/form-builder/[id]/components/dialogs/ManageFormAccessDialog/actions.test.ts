@@ -5,7 +5,7 @@ vi.mock("@lib/auth", () => ({
 }));
 
 vi.mock("@lib/templates", () => ({
-  getTemplateWithAssociatedUsers: vi.fn(),
+  getTemplateWithAssignedUsers: vi.fn(),
   removeAssignedUserFromTemplate: vi.fn(),
 }));
 

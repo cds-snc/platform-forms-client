@@ -54,24 +54,33 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
 
   const saveSecurityAttribute = useCallback(
     async (classification: ClassificationType) => {
-      // Update local state
+      // Optimistic update: save previous state for rollback
+      const prev = securityAttribute;
+
+      // Update local state immediately
       setClassification(classification);
 
-      updateSecurityAttribute(classification);
+      try {
+        const resultAttribute = (await updateTemplateSecurityAttribute({
+          id,
+          securityAttribute: classification,
+        })) as FormServerError;
 
-      const resultAttribute = (await updateTemplateSecurityAttribute({
-        id,
-        securityAttribute: classification,
-      })) as FormServerError;
+        if (resultAttribute?.error) {
+          throw new Error("Save failed");
+        }
 
-      if (resultAttribute?.error) {
+        // Update the template store after successful database update
+        updateSecurityAttribute(classification);
+
+        toast.success(savedSuccessMessage);
+      } catch (err) {
+        // Rollback local state on failure
+        setClassification(prev ?? ("Protected A" as ClassificationType));
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
-        return;
       }
-
-      toast.success(savedSuccessMessage);
     },
-    [savedSuccessMessage, id, updateSecurityAttribute]
+    [savedSuccessMessage, id, updateSecurityAttribute, securityAttribute]
   );
 
   /*--------------------------------------------*
@@ -82,27 +91,34 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       const purposeOption = value as PurposeOption;
+      // Optimistic update: save previous value for rollback
+      const prev = formPurpose;
 
       // Update local state
       setPurposeOption(purposeOption);
 
-      // Update the template store
-      updateField("formPurpose", purposeOption);
+      try {
+        // Update the database
+        const result = await updateTemplateFormPurpose({
+          id,
+          formPurpose: purposeOption,
+        });
 
-      // Update the database
-      const result = await updateTemplateFormPurpose({
-        id,
-        formPurpose: purposeOption,
-      });
+        if (result?.error) {
+          throw new Error("Save failed");
+        }
 
-      if (result?.error) {
+        // Update the template store after successful database update
+        updateField("formPurpose", purposeOption);
+
+        toast.success(savedSuccessMessage);
+      } catch (err) {
+        // Rollback local state on failure
+        setPurposeOption(prev as PurposeOption);
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.FORM_PURPOSE} />, "wide");
-        return;
       }
-
-      toast.success(savedSuccessMessage);
     },
-    [savedSuccessMessage, id, updateField]
+    [savedSuccessMessage, id, updateField, formPurpose]
   );
 
   return (

@@ -8,7 +8,7 @@ import {
 } from "./exceptions";
 import { getAbility } from "@lib/privileges";
 import { AuditLogDetails, AuditLogEvent, logEvent } from "@lib/auditLogs";
-import { notifyOwnersOwnerAdded } from "@lib/templates";
+import { notifyOwnerAdded } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { AccessControlError } from "@lib/auth/errors";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
@@ -96,7 +96,7 @@ export const acceptInvitation = async (invitationId: string) => {
     { userEmail: user.email }
   );
 
-  notifyOwnersOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
+  notifyOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
 
   _deleteInvitation(invitationId).catch((e) => {
     logMessage.error(`Error deleting invitation: ${e}`);
