@@ -10,7 +10,8 @@ import {
   TemplateNotFoundError,
   UserAlreadyHasAccessError,
 } from "@lib/invitations/exceptions";
-import { getTemplateWithAssignedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
+import { removeAssignedUserFromTemplate } from "@lib/templates/mutations/removeAssignedUserFromTemplate";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { serverTranslation } from "@i18n";
 import { logMessage } from "@lib/logger";
 import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
