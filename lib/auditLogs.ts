@@ -151,7 +151,6 @@ export const AuditLogDetails = {
   RemoveClosingDate: "RemoveClosingDate",
   UpdateFormBranding: "UpdateFormBranding",
   RetrieveFormUsers: "Retrieved users associated with Form",
-  RevokeFormAccess: "Access revoked for ${userId}",
   SetDeliveryToVault: "Delivery Option set to the Vault",
   SetSaveAndResume: "SetSaveAndResume",
   SetFormPurpose: "SetFormPurpose",
@@ -236,7 +235,6 @@ type AuditDetailsParams = {
   [AuditLogDetails.UpdateClosingDate]: { closingDate: string };
   [AuditLogDetails.RemoveClosingDate]: never;
   [AuditLogDetails.RetrieveFormUsers]: never;
-  [AuditLogDetails.RevokeFormAccess]: { userId: string };
   [AuditLogDetails.SetDeliveryToVault]: never;
   [AuditLogDetails.SetSaveAndResume]: { saveAndResume: string };
   [AuditLogDetails.SetFormPurpose]: { formPurpose: string };
@@ -249,11 +247,11 @@ type AuditDetailsParams = {
   [AuditLogDetails.AccessGrantedTo]: { userList: string };
   [AuditLogDetails.AccessRevokedFor]: { userList: string };
   [AuditLogDetails.RefreshedApiKey]: {
-    userId: string;
+    userEmail: string;
     serviceAccountId: string;
   };
   [AuditLogDetails.CreatedNewApiKey]: {
-    userId: string;
+    userEmail: string;
     serviceAccountId: string;
   };
   [AuditLogDetails.DeletedServiceAccount]: {

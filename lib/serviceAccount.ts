@@ -33,18 +33,6 @@ export const deleteKey = async (templateId: string) => {
 
     logEvent(
       user.id,
-      { type: "ServiceAccount" },
-      AuditLogEvent.DeleteAPIKey,
-      AuditLogDetails.DeletedServiceAccount,
-      {
-        serviceAccountID: serviceAccountID ?? "",
-        templateId: templateId,
-        userEmail: user.email,
-      }
-    );
-
-    logEvent(
-      user.id,
       { type: "Form", id: templateId },
       AuditLogEvent.DeleteAPIKey,
       AuditLogDetails.DeletedServiceAccount,
@@ -147,22 +135,12 @@ export const createKey = async (templateId: string) => {
 
     logEvent(
       user.id,
-      { type: "ServiceAccount" },
-      AuditLogEvent.CreateAPIKey,
-      AuditLogDetails.CreatedNewApiKey,
-      {
-        serviceAccountId: serviceAccountId,
-        userId: user.id,
-      }
-    );
-    logEvent(
-      user.id,
       { type: "Form", id: templateId },
       AuditLogEvent.CreateAPIKey,
       AuditLogDetails.CreatedNewApiKey,
       {
         serviceAccountId: serviceAccountId,
-        userId: user.id,
+        userEmail: user.email,
       }
     );
 
@@ -220,7 +198,7 @@ export const refreshKey = async (templateId: string) => {
       AuditLogDetails.RefreshedApiKey,
       {
         serviceAccountId: serviceAccountId,
-        userId: user.id,
+        userEmail: user.email,
       }
     );
 
