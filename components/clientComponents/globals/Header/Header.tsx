@@ -7,7 +7,7 @@ import { AccountMenu } from "@formBuilder/components/shared/account-menu/Account
 import { cn } from "@lib/utils";
 import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "./FileName";
-import { ShareButton } from "./ShareButton";
+import { ShareButton } from "./ShareMenu/ShareButton";
 import LanguageToggle from "./LanguageToggle";
 import { Button } from "@clientComponents/globals";
 import Markdown from "markdown-to-jsx";
@@ -47,6 +47,7 @@ export const Header = ({
   const { getFlag } = useFeatureFlags();
   const isEnabled = getFlag(FeatureFlags.topBanner);
   const isZitadelLoginEnabled = getFlag(FeatureFlags.zitadelLogin);
+  const templateVersioningEnabled = getFlag(FeatureFlags.templateVersioning);
 
   useEffect(() => {
     async function fetchBannerData() {
@@ -90,7 +91,9 @@ export const Header = ({
                 {t("title", { ns: "common" })}
               </div>
             )}
-            {isFormBuilder && <FileNameInput />}
+            {isFormBuilder && (
+              <FileNameInput templateVersioningEnabled={templateVersioningEnabled} />
+            )}
           </div>
           <div className="ml-auto rounded-xl bg-white px-4 py-2">
             <nav aria-label={t("mainNavAriaLabel", { ns: "common" })}>

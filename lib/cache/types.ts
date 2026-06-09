@@ -4,6 +4,7 @@ export const UserFeatureFlags = {
   addressComplete: "addressComplete",
   responsesPilot: "responsesPilot",
   userSideAuditLogs: "userSideAuditLogs",
+  templateVersioning: "templateVersioning",
 } as const;
 
 export const FeatureFlags = {

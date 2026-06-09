@@ -1643,7 +1643,7 @@ export const updateClosedData = async (
       "UpdateForm",
       AuditLogDetails.UpdateClosingDate,
       {
-        closingDate: date.toISOString(),
+        closingDate: date.toLocaleDateString("en-CA"),
       }
     );
   } else {
@@ -1798,7 +1798,7 @@ export const getFormJSONConfig = async (formId: string) => {
  * e.g. groups, layouts, elements, etc.
  * Doing so would cause an error in the infra pipeline when processing submissions.
  */
-export const updateFormJsonConfig = async (formId: string, jsonConfig: FormProperties) => {
+export const updateFormBranding = async (formId: string, jsonConfig: FormProperties) => {
   const { user } = await authorization.canEditForm(formId).catch((e) => {
     logEvent(
       e.user.id,
@@ -1860,7 +1860,14 @@ export const updateFormJsonConfig = async (formId: string, jsonConfig: FormPrope
 
   if (formCache.cacheAvailable) formCache.invalidate(formId);
 
-  logEvent(user.id, { type: "Form", id: formId }, "UpdateFormJsonConfig");
+  const brandName = jsonConfig.brand?.name ?? "gc";
+  logEvent(
+    user.id,
+    { type: "Form", id: formId },
+    AuditLogEvent.UpdateFormBranding,
+    AuditLogDetails.UpdateFormBranding,
+    { brand: brandName }
+  );
 
   return _parseTemplate(updatedTemplate);
 };

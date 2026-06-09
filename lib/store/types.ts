@@ -97,6 +97,11 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getSchema: () => string;
   getIsPublished: () => boolean;
   setIsPublished: (isPublished: boolean) => void;
+  setTemplateVersionIds: (versionIds: {
+    currentPublishedVersionId?: string | null;
+    currentDraftVersionId?: string | null;
+    versionNumber?: number | null;
+  }) => void;
   getFormElementById: (id: number) => FormElement | undefined;
   getFormElementWithIndexById: (id: number) => FormElementWithIndex | undefined;
   getFormElementIndexes: (id: number) => Indexes;
@@ -131,6 +136,9 @@ export interface TemplateStoreProps {
   hasTransformed: boolean;
   form: FormProperties;
   isPublished: boolean;
+  currentPublishedVersionId?: string | null;
+  currentDraftVersionId?: string | null;
+  versionNumber?: number | null;
   name: string;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
