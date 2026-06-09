@@ -9,7 +9,7 @@ const AppUpdateContext = createContext({
 });
 
 export const AppUpdateProvider = ({ children }: { children: React.ReactNode }) => {
-  const [updateRequired, setUpdateRequired] = useState(false);
+  const [updateRequired, setUpdateRequired] = useState(true);
 
   const updateTriggered =
     typeof window !== "undefined" ? Boolean(sessionStorage?.getItem("gcFormsUpdate")) : false;
