@@ -37,7 +37,6 @@ interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
   matchedIds: string[];
-  filteredMatchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
   getPreviousGroup: (currentGroup: string) => string;
@@ -91,15 +90,6 @@ export const GCFormsProvider = ({
     i18n: { language },
   } = useTranslation();
 
-  // eslint-disable-next-line react-hooks/refs
-  const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
-  const filteredMatchedIds = matchedIds.filter((id) => {
-    const parentId = id.split(".")[0];
-    if (filteredResponses[parentId]) {
-      return id;
-    }
-  });
-
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
   };
@@ -121,6 +111,14 @@ export const GCFormsProvider = ({
 
   const handleNextAction = () => {
     if (!currentGroup) return;
+
+    const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
+    const filteredMatchedIds = matchedIds.filter((id) => {
+      const parentId = id.split(".")[0];
+      if (filteredResponses[parentId]) {
+        return id;
+      }
+    });
 
     if (hasNextAction(currentGroup)) {
       const nextAction = getNextAction(groups, currentGroup, filteredMatchedIds);
@@ -149,9 +147,9 @@ export const GCFormsProvider = ({
     setCurrentGroup(group);
   };
 
-  const getValues = () => {
-    return values.current as FormValues;
-  };
+  const getValues = useCallback(() => {
+    return values.current;
+  }, []);
 
   const getNonce = () => {
     return nonce || "";
@@ -272,7 +270,6 @@ export const GCFormsProvider = ({
         updateValues,
         getValues,
         matchedIds,
-        filteredMatchedIds,
         groups,
         currentGroup,
         getPreviousGroup,
@@ -312,7 +309,6 @@ export const useGCFormsContext = () => {
       submissionDate: undefined,
       setSubmissionDate: () => void 0,
       matchedIds: [""],
-      filteredMatchedIds: [""],
       groups: {},
       currentGroup: "",
       getPreviousGroup: () => "",

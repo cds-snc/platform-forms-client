@@ -119,3 +119,4 @@ tests/.auth/*.json
 eslint_report.html
 
 /otel
+next-env.d.ts
