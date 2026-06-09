@@ -61,25 +61,10 @@ export const DownloadDialog = ({
   const _filteredIdsWithVersion = _idsForDialog.filter((id) =>
     Boolean(_metaMapForDialog.get(id)?.versionId)
   );
+
   const dialogVersions = Array.from(
     new Set(_filteredIdsWithVersion.map((id) => _metaMapForDialog.get(id)!.versionId) as string[])
   );
-
-  // Default selection: pick the most common version among selected items (mode)
-  React.useEffect(() => {
-    if (dialogVersions.length === 0) {
-      setSelectedVersionForDialog(null);
-      return;
-    }
-    // compute mode
-    const counts: Record<string, number> = {};
-    _filteredIdsWithVersion.forEach((id) => {
-      const v = _metaMapForDialog.get(id)!.versionId as string;
-      counts[v] = (counts[v] || 0) + 1;
-    });
-    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-    setSelectedVersionForDialog(sorted[0][0]);
-  }, [_filteredIdsWithVersion.join("|")]);
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
