@@ -7,8 +7,8 @@ import {
   getFullTemplateByID,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
-  getPublicTemplateByID,
 } from "@lib/templates";
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { NextRequest } from "next/server";
 import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";

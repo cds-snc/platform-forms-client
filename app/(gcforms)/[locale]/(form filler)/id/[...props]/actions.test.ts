@@ -46,7 +46,7 @@ vi.mock("./lib/server/processFormData", () => ({
 
 
 
-import { getPublicTemplateByID } from "@lib/templates";
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { dateHasPast } from "@lib/utils";
