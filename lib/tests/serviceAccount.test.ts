@@ -19,7 +19,6 @@ vi.mock("@lib/auditLogs", async () => {
   };
 });
 
-vi.mock("@lib/templates");
 vi.mock("@lib/privileges");
 const mockedLogEvent = vi.mocked(logEvent);
 
