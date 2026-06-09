@@ -7,7 +7,7 @@ import { Navigation } from "./components/server/Navigation";
 import { Cards } from "./components/server/Cards";
 import { NewFormButton } from "./components/server/NewFormButton";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
-import { TemplateOptions } from "@lib/templates";
+import { TemplateOptions } from "@lib/templates/queries/getAllTemplatesForUser";
 import { getAllTemplatesForUser } from "@lib/templates/queries/getAllTemplatesForUser";
 import { DeliveryOption } from "@lib/types";
 import { getOverdueTemplateIds } from "@lib/overdue";
