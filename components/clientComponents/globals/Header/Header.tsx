@@ -63,7 +63,7 @@ export const Header = ({
 
   return (
     <>
-      <header className={cn("bg-gray-soft relative mb-5 px-2", className, paddingTop)}>
+      <header className={cn("bg-gray-soft relative px-2", className, paddingTop)}>
         <SkipLink />
         {isBannerEnabled && (
           <div className="bg-slate-800 p-4 text-white">
