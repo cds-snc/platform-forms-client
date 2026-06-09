@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { ConfirmDelete } from "./ConfirmDelete";
+import { getFormJson } from "../../actions";
 import "./MoreMenu.css";
 
 export const MoreMenu = ({ id, isPublished }: { id: string; isPublished: boolean }) => {
@@ -32,10 +33,14 @@ export const MoreMenu = ({ id, isPublished }: { id: string; isPublished: boolean
 
   const downloadFormJson = async (evt?: React.MouseEvent) => {
     try {
-      const res = await fetch(`/api/templates/${id}`);
-      if (!res.ok) throw new Error("Failed to fetch form");
-      const json = await res.json();
-      const blob = new Blob([JSON.stringify(json)], { type: "application/json" });
+      const { formRecord, error } = await getFormJson(id);
+
+      if (!formRecord || error) {
+        throw new Error(error || "Form Not Found");
+      }
+
+      const data = JSON.stringify(formRecord.form, null, 2);
+      const blob = new Blob([data], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
