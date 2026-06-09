@@ -16,6 +16,8 @@ import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { getSubmissionsByFormat } from "../../actions";
 import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/form-builder-types";
 import { FormBuilderError } from "../../exceptions";
+import useTemplateVersioning from "./useTemplateVersioning";
+import VersionSelector from "./VersionSelector";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -48,23 +50,7 @@ export const DownloadDialog = ({
     null
   );
 
-  // Compute versions present among currently checked items for the dialog UI
-  const _idsForDialog = Array.from(checkedItems.keys());
-  const _metaMapForDialog = new Map<string, { versionId?: string | null }>();
-  if (checkedMeta && checkedMeta.length > 0) {
-    checkedMeta.forEach((m) => {
-      if (m && m.name) _metaMapForDialog.set(m.name, { versionId: m.versionId });
-    });
-  }
-
-  // Filter out items without a version (we only support downloading items with a matched version)
-  const _filteredIdsWithVersion = _idsForDialog.filter((id) =>
-    Boolean(_metaMapForDialog.get(id)?.versionId)
-  );
-
-  const dialogVersions = Array.from(
-    new Set(_filteredIdsWithVersion.map((id) => _metaMapForDialog.get(id)!.versionId) as string[])
-  );
+  const { dialogVersions, getFilteredIds } = useTemplateVersioning(checkedItems, checkedMeta);
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -128,23 +114,14 @@ export const DownloadDialog = ({
       return;
     }
 
-    const ids = Array.from(checkedItems.keys());
-
     // Validate that CSV/HTML downloads only include responses with a matched version
     // Note: DownloadDialog doesn't receive full submission metadata by default; validation
     // will be performed by the caller when available. If not available, the server may return an error.
 
     const filePrefix = slugify(`${formName}-${getDate()}`) + "-";
 
-    // Build metadata map for selected ids if provided
-    const metaMap = new Map<string, { versionId?: string | null }>();
-    if (checkedMeta && checkedMeta.length > 0) {
-      checkedMeta.forEach((m) => {
-        if (m && m.name) metaMap.set(m.name, { versionId: m.versionId });
-      });
-    }
     // Exclude items without a version; only download responses that have a matched version
-    const filteredIdsWithVersion = ids.filter((id) => Boolean(metaMap.get(id)?.versionId));
+    const filteredIdsWithVersion = getFilteredIds();
     if (
       filteredIdsWithVersion.length === 0 &&
       (selectedFormat === DownloadFormat.CSV || selectedFormat === DownloadFormat.HTML_ZIPPED)
@@ -155,11 +132,7 @@ export const DownloadDialog = ({
     }
 
     // If a version is selected in-dialog, narrow ids to that version; otherwise use all filtered ids
-    const filteredIds = selectedVersionForDialog
-      ? filteredIdsWithVersion.filter(
-          (id) => metaMap.get(id)!.versionId === selectedVersionForDialog
-        )
-      : filteredIdsWithVersion;
+    const filteredIds = getFilteredIds(selectedVersionForDialog);
 
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -289,30 +262,12 @@ export const DownloadDialog = ({
             </p>
 
             <div className="mt-4 flex flex-col gap-6">
-              {/* If selected items include multiple versions show a required selector */}
-              {dialogVersions.length > 1 && (
-                <div className="mb-4">
-                  <label htmlFor="downloadVersion" className="mb-1 block font-medium">
-                    {t("downloadResponsesModals.downloadDialog.chooseVersion")}
-                  </label>
-                  <select
-                    id="downloadVersion"
-                    value={selectedVersionForDialog ?? ""}
-                    onChange={(e) => setSelectedVersionForDialog(e.target.value || null)}
-                    className="gc-select rounded-md border border-slate-300 px-3 py-2"
-                    data-testid="download-dialog-version-filter"
-                  >
-                    <option value="">
-                      {t("downloadResponsesModals.downloadDialog.chooseVersionPlaceholder")}
-                    </option>
-                    {dialogVersions.map((v) => (
-                      <option key={v} value={v}>
-                        {v}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
+              <VersionSelector
+                dialogVersions={dialogVersions}
+                selectedVersion={selectedVersionForDialog}
+                setSelectedVersion={setSelectedVersionForDialog}
+                t={t}
+              />
               <div className="gc-input-radio">
                 <input
                   type="radio"
