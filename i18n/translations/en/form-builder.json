@@ -624,7 +624,7 @@
       "RemoveClosingDate": "Removed closing date.",
       "UpdatedNotificationSettings": "Updated notifications setting to: {{enabled}} for {{userEmail}}",
       "GrantAccess": "Access granted to {{userList}}",
-      "RevokeAccess": "Access revoked for {{userEmail}}",
+      "RevokeAccess": "Access revoked for {{userList}}",
       "UserInvited": "{{userEmail}} invited {{invitationEmail}}",
       "AcceptedInvitation": "Invitation accepted by {{userEmail}}",
       "DeclinedInvitation": "Invitation declined by {{userEmail}}",
