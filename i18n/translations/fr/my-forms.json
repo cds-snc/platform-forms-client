@@ -21,7 +21,7 @@
     "noDraftsForms": "Vous n’avez aucune ébauche enregistrée.",
     "noPublishedForms": "Vous n'avez aucun formulaire publié.",
     "noRecentlyEditedForms": "Vous n'avez aucun formulaire récemment modifié.",
-    "noArchivedForms": "[FR]You have no archived forms."
+    "noArchivedForms": "Vous n'avez aucun formulaire archivé."
   },
   "card": {
     "sharedWith_one": "Partagé avec {{count}} personne",
