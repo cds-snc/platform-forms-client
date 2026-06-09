@@ -1,5 +1,10 @@
 import { authorization } from "@lib/privileges";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
+import {
+  AuditLogAccessDeniedDetails,
+  AuditLogDetails,
+  AuditLogEvent,
+  logEvent,
+} from "@lib/auditLogs";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { logMessage } from "@lib/logger";
 import { TemplateNotFoundError, UserNotFoundError } from "../internal/errors";
@@ -89,9 +94,9 @@ export async function removeAssignedUserFromTemplate(
   logEvent(
     user.id,
     { type: "Form", id: formID },
-    "RevokeFormAccess",
-    AuditLogDetails.RevokeFormAccess,
-    { userId: userID }
+    AuditLogEvent.RevokeFormAccess,
+    AuditLogDetails.AccessRevokedFor,
+    { userList: userToRemove.email }
   );
 
   notifyOwnerRemoved(
