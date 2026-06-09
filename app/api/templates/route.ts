@@ -3,7 +3,7 @@ import { middleware, sessionExists, jsonValidator } from "@lib/middleware";
 import {
   createTemplate,
   getAllTemplatesForUser,
-  onlyIncludePublicProperties,
+  mapTemplateToPublicFormRecord,
 } from "@lib/templates";
 import {
   DeliveryOption,
@@ -54,7 +54,7 @@ export const GET = middleware(
   async (req, props) => {
     try {
       const templates = await getAllTemplatesForUser();
-      const response = templates.map((template) => onlyIncludePublicProperties(template));
+      const response = templates.map((template) => mapTemplateToPublicFormRecord(template));
 
       if (!response) {
         throw new Error(

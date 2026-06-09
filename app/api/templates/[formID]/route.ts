@@ -2,7 +2,7 @@ import {
   deleteTemplate,
   updateTemplate,
   updateIsPublishedForTemplate,
-  updateAssignedUsersForTemplate,
+  syncAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
   getFullTemplateByID,
   removeDeliveryOption,
@@ -201,7 +201,7 @@ export const PUT = middleware(
         if (!users.length) {
           return NextResponse.json({ error: true, message: "mustHaveAtLeastOneUser" });
         }
-        const response = await updateAssignedUsersForTemplate(formID, users);
+        const response = await syncAssignedUsersForTemplate(formID, users);
         if (!response)
           throw new Error(
             `Template API response was null. Request information: method = ${

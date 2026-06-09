@@ -1,0 +1,29 @@
+/* Match MenuDropdown positioning but nudge the popover further away
+   so it doesn't sit flush on top of the trigger. Keep behavior simple
+   and consistent with /forms (no blur/focus visual effects). */
+
+.more-menu-popover {
+  position-area: top span-right;
+  position-try:
+    flip-block,
+    flip-inline,
+    flip-block flip-inline;
+
+  inset: auto;
+  /* slightly larger gap than MenuDropdown */
+  margin: 1.5rem 0 0;
+  opacity: 0;
+  display: none;
+  transition-property: translate, opacity, display;
+  transition-duration: 180ms;
+  transition-behavior: allow-discrete;
+
+  left: auto !important;
+  right: auto !important;
+}
+
+.more-menu-popover:popover-open {
+  opacity: 1;
+  display: block;
+  translate: 0 0;
+}

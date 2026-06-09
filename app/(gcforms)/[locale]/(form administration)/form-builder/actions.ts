@@ -13,7 +13,7 @@ import {
 import {
   createTemplate as createDbTemplate,
   removeDeliveryOption,
-  updateAssignedUsersForTemplate,
+  syncAssignedUsersForTemplate,
   updateClosedData,
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
@@ -444,7 +444,7 @@ export const updateTemplateUsers = AuthenticatedAction(
         templateId: formID,
         userId: session.user.id,
       });
-      const response = await updateAssignedUsersForTemplate(formID, users);
+      const response = await syncAssignedUsersForTemplate(formID, users);
       if (!response) {
         throw new Error(
           `Template API response was null. Request information: { ${formID}, ${users} }`
