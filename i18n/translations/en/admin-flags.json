@@ -44,7 +44,7 @@
     },
     "templateVersioning": {
       "title": "Template versioning",
-      "description": "Enable draft version and re-publish flow for form templates"
+      "description": "Enable draft versions and re-publishing flow for form templates"
     }
   },
   "addFlag": "Add user feature flag",
