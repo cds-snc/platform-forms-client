@@ -4,8 +4,6 @@ import { DeleteIcon, FolderIcon, InboxIcon } from "@serverComponents/icons";
 import { TabNavLink } from "@clientComponents/globals/TabNavLink";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
-import { ManageFormAccessButton } from "../../../components/dialogs/ManageFormAccessDialog/ManageFormAccessButton";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const NavigationTabs = ({ formId }: { formId: string }) => {
   const {
@@ -13,11 +11,6 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
     i18n: { language: locale },
   } = useTranslation("form-builder-responses");
   const pathname = usePathname();
-  const { isPublished } = useTemplateStore((s) => {
-    return {
-      isPublished: s.isPublished,
-    };
-  });
 
   return (
     <nav className="relative mb-10 flex border-b border-black" aria-label={t("responses.navLabel")}>
@@ -51,12 +44,6 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
           <DeleteIcon className="inline-block size-7" /> {t("responses.status.deleted")}
         </span>
       </TabNavLink>
-
-      {isPublished && (
-        <div className="absolute right-5 bottom-4">
-          <ManageFormAccessButton />
-        </div>
-      )}
     </nav>
   );
 };
