@@ -7,7 +7,7 @@ import { authorization } from "@lib/privileges";
 import { getUser } from "@lib/users";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { Metadata } from "next";
-import { getAllTemplates } from "@lib/templates";
+import { getAllTemplates } from "@lib/templates/queries/getAllTemplates";
 import { FormCard } from "./components/server/FormCard";
 import { ManageOwners } from "@formBuilder/[id]/settings/components/manageFormOwners/ManageOwners";
 import ManageOwnersDialogClient from "./components/client/ManageOwnersDialogClient";

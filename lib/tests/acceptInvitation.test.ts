@@ -30,7 +30,7 @@ vi.mock("@lib/auditLogs", () => ({
   logEvent: vi.fn(),
 }));
 
-vi.mock("@lib/templates", () => ({
+vi.mock("@lib/templates/internal/notifications", () => ({
   notifyOwnerAdded: vi.fn(),
 }));
 
@@ -99,6 +99,7 @@ describe("acceptInvitation", () => {
       updated_at: new Date(),
       name: "Test Form",
       jsonConfig: {},
+      users: [{ id: "user-2", email: "owner.two@example.com" }],
       isPublished: false,
       securityAttribute: "Unclassified",
       formPurpose: "test",

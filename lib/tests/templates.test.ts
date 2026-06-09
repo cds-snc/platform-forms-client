@@ -1,23 +1,19 @@
 import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prismaMock } from "@testUtils";
-import {
-  createTemplate,
-  getAllTemplates,
-  getAllTemplatesForUser,
-  getPublicTemplateByID,
-  getFullTemplateByID,
-  updateTemplate,
-  deleteTemplate,
-  updateIsPublishedForTemplate,
-  getTemplateWithAssignedUsers,
-  syncAssignedUsersForTemplate,
-  TemplateAlreadyPublishedError,
-  removeDeliveryOption,
-  TemplateHasUnprocessedSubmissions,
-  mapTemplateToPublicFormRecord,
-} from "../templates";
-
+import { createTemplate } from "@lib/templates/mutations/createTemplate";
+import { getAllTemplates } from "@lib/templates/queries/getAllTemplates";
+import { getAllTemplatesForUser } from "@lib/templates/queries/getAllTemplatesForUser";
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
+import { updateTemplate } from "@lib/templates/mutations/updateTemplate";
+import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
+import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
+import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
+import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
+import { mapTemplateToPublicFormRecord } from "@lib/templates/internal";
+import { TemplateAlreadyPublishedError, TemplateHasUnprocessedSubmissions } from "@lib/templates/internal/errors";
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 

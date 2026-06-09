@@ -7,7 +7,7 @@ import {
   UserAlreadyHasAccessError,
   UserNotFoundError,
 } from "./exceptions";
-import { getTemplateWithAssignedUsers } from "@lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { prisma, Invitation } from "@gcforms/database";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { inviteToCollaborateEmailTemplate } from "@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate";

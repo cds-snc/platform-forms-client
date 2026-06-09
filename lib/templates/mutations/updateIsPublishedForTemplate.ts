@@ -5,7 +5,7 @@ import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { deleteDraftFormResponses } from "@lib/vault";
 import { TemplateAlreadyPublishedError } from "../internal/errors";
-import { getFullTemplateByID } from "../queries/getFullTemplateByID";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { parseTemplate } from "../internal";
 
 /**
