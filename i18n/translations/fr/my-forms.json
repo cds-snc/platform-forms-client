@@ -12,7 +12,7 @@
   },
   "actions": {
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
-    "createNewForm": "[FR]New Form",
+    "createNewForm": "Nouveau formulaire",
     "unarchiveForm": "Désarchiver le formulaire",
     "duplicatePublishedForm": "Modifier le formulaire publié"
   },
