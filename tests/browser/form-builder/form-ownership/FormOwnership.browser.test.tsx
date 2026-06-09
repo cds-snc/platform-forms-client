@@ -34,7 +34,7 @@ describe("<FormOwnership />", () => {
       />
     );
 
-    const heading = page.getByText("Manage ownership");
+    const heading = page.getByText(/Enter form owner[’']s email address/);
     await expect.element(heading).toBeVisible();
   });
 
@@ -51,7 +51,7 @@ describe("<FormOwnership />", () => {
       />
     );
 
-    const heading = page.getByText("Manage ownership");
+    const heading = page.getByText(/Enter form owner[’']s email address/);
     await expect.element(heading).toBeVisible();
 
     const userEmail = page.getByText("john.doe@test.com");
