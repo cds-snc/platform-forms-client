@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteTemplate } from "@lib/templates";
+import { deleteTemplate, getFullTemplateByID } from "@lib/templates";
 import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
@@ -32,5 +32,19 @@ export const deleteForm = AuthenticatedAction(async (session, id: string) => {
     } else {
       throw new Error("Failed to Delete Form");
     }
+  }
+});
+
+export const getFormJson = AuthenticatedAction(async (_, formId: string) => {
+  try {
+    const formRecord = await getFullTemplateByID(formId);
+
+    if (!formRecord) {
+      throw new Error("Form Not Found");
+    }
+
+    return { formRecord };
+  } catch (e) {
+    return { formRecord: null, error: (e as Error).message };
   }
 });

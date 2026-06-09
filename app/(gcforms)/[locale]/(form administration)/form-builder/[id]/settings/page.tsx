@@ -2,7 +2,6 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 
 import { getAppSetting } from "@lib/appSettings";
-import { ManageOwners } from "./components/manageFormOwners/ManageOwners";
 import { FormProfile } from "./components/FormProfile";
 
 export async function generateMetadata(props: {
@@ -18,20 +17,12 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page(props: { params: Promise<{ id: string; locale: string }> }) {
+export default async function Page() {
   const hasBrandingRequestForm = Boolean(await getAppSetting("brandingRequestForm"));
-  const params = await props.params;
-
-  const { id } = params;
 
   return (
     <>
       <FormProfile hasBrandingRequestForm={hasBrandingRequestForm} />
-
-      {/*--------------------------------------------*
-       * Admin components - manage all forms
-       *--------------------------------------------*/}
-      <ManageOwners id={id} />
     </>
   );
 }
