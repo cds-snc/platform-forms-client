@@ -2,7 +2,6 @@ import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prismaMock } from "@testUtils";
 import {
-  createTemplate,
   getAllTemplates,
   getAllTemplatesForUser,
   getPublicTemplateByID,
@@ -17,6 +16,7 @@ import {
   TemplateHasUnprocessedSubmissions,
   mapTemplateToPublicFormRecord,
 } from "../templates";
+import { createTemplate } from "../templates/mutations/createTemplate";
 
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";

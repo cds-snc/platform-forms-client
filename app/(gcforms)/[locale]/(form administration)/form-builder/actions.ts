@@ -11,7 +11,6 @@ import {
   ClosedDetails,
 } from "@lib/types";
 import {
-  createTemplate as createDbTemplate,
   removeDeliveryOption,
   syncAssignedUsersForTemplate,
   updateClosedData,
@@ -23,6 +22,7 @@ import {
   getFormJSONConfig,
   updateFormBranding,
 } from "@lib/templates";
+import { createTemplate as createDbTemplate } from "@lib/templates/mutations/createTemplate";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
