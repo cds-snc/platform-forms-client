@@ -1,0 +1,117 @@
+"use client";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { CDSHTMLDialogElement } from "@lib/types/form-builder-types";
+import { useTranslation } from "@i18n/client";
+import { Button } from "@clientComponents/globals";
+import { Close } from "@serverComponents/icons/Close";
+import { cn } from "@lib/utils";
+import { randomId } from "@lib/client/clientHelpers";
+
+export const useLocalDialogRef = () => {
+  const ref = useRef<CDSHTMLDialogElement>(null);
+  return ref;
+};
+
+export const LocalDialog = ({
+  dialogRef,
+  children,
+  title,
+  actions,
+  className,
+  handleClose,
+}: {
+  dialogRef: React.RefObject<CDSHTMLDialogElement | null>;
+  children: React.ReactElement | React.ReactNode;
+  title?: string;
+  actions?: React.ReactElement | React.ReactNode;
+  className?: string;
+  handleClose?: () => void;
+}) => {
+  const { t } = useTranslation("form-builder");
+  const [isOpen, changeOpen] = useState(true);
+  const close = useCallback(() => {
+    dialogRef.current?.close();
+    handleClose && handleClose();
+    changeOpen(false);
+  }, [dialogRef, handleClose]);
+
+  useEffect(() => {
+    const dialog = dialogRef?.current;
+    if (isOpen) {
+      dialog?.showModal();
+    }
+    return () => dialog?.close();
+    // see: https://github.com/facebook/react/issues/24399
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        handleClose && handleClose();
+        close();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [close, handleClose]);
+
+  const modalRandomId = useRef(randomId());
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  return (
+    <dialog
+      className="size-full bg-transparent bg-clip-padding p-0"
+      {...(title && mounted ? { "aria-labelledby": `modal-title-${modalRandomId.current}` } : {})}
+      ref={dialogRef}
+      data-testid="local-dialog"
+    >
+      <div
+        className={cn(
+          `tablet:mx-auto tablet:mt-8 laptop:mt-24 relative mt-6 max-h-[80%] max-w-230 overflow-visible`,
+          className
+        )}
+      >
+        <div className="absolute inset-0 -z-10 rounded-xl bg-white shadow-md" />
+
+        <div className="relative z-10">
+          {title && (
+            <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
+              <h2
+                className="mt-4! mb-4! ml-2! inline-block px-4 text-2xl!"
+                {...(mounted ? { id: `modal-title-${modalRandomId.current}` } : {})}
+                tabIndex={-1}
+              >
+                {title}
+              </h2>
+            </div>
+          )}
+
+          <div className="overflow-visible">
+            {children}
+            {actions && (
+              <div className="sticky bottom-0 flex border-t-[0.5px] border-slate-500 bg-white p-4">
+                {actions}
+              </div>
+            )}
+          </div>
+
+          <Button
+            theme="link"
+            className="group absolute top-0 right-0 z-1000 mt-4 mr-4"
+            aria-label={t("close")}
+            onClick={close}
+            dataTestId="close-dialog"
+          >
+            <span className="block">
+              <Close className="group-focus:fill-white-default inline-block" />
+            </span>
+          </Button>
+        </div>
+      </div>
+    </dialog>
+  );
+};
