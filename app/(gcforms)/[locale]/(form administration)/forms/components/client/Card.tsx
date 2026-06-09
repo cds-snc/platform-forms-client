@@ -131,7 +131,7 @@ const CardTitle = memo(
       i18n: { language },
     } = useTranslation("my-forms");
     const classes =
-      "mb-0 mr-2 block w-full overflow-hidden pb-0 text-left text-base font-bold line-clamp-3 no-underline text-inherit hover:underline focus:underline active:underline";
+      "mb-0 mr-2 block w-full overflow-hidden pb-0 text-left text-base font-bold line-clamp-3 no-underline text-inherit hover:underline focus:underline active:underline cursor-pointer!";
     const publishedLink = `/${language}/form-builder/${id}/responses`;
     const draftLink = `/${language}/form-builder/${id}/edit/`;
     return isPublished ? (
@@ -234,7 +234,7 @@ const CardFooterDraftEditing = memo(
           <DraftEditLink
             href={`/${language}/form-builder/${cardId}/edit/`}
             formId={cardId}
-            className="block cursor-pointer text-left text-sm underline focus:fill-slate-500 active:fill-slate-500 disabled:opacity-70"
+            className="cursor-pointer! text-left text-sm text-inherit underline focus:text-slate-500 active:text-slate-500"
             collaboratorCount={collaboratorCount}
           >
             {t("editForm")}
