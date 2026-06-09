@@ -81,7 +81,6 @@
     "@opentelemetry/sdk-trace-node": "^2.7.1",
     "@opentelemetry/semantic-conventions": "^1.40.0",
     "@radix-ui/react-alert-dialog": "^1.1.15",
-    "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@types/body-scroll-lock": "^3.1.2",
     "@types/mdx": "^2.0.13",
