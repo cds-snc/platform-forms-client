@@ -5,7 +5,6 @@ import {
   updateTemplate,
   deleteTemplate,
   updateIsPublishedForTemplate,
-  getTemplateWithAssignedUsers,
   syncAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
   removeDeliveryOption,
@@ -17,6 +16,7 @@ import { getAllTemplates } from "@lib/templates/queries/getAllTemplates";
 import { getAllTemplatesForUser } from "@lib/templates/queries/getAllTemplatesForUser";
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";

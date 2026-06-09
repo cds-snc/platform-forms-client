@@ -5,7 +5,7 @@ import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID"
 import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
-import { getTemplateWithAssignedUsers } from "@lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { sendArchivedFormNotifications } from "@lib/notifications";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer

@@ -2,7 +2,7 @@ import type { Mock, MockedFunction } from "vitest";
 import { prismaMock } from "@testUtils";
 import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { getUser } from "@lib/users";
-import { getTemplateWithAssignedUsers } from "@lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import {
   InvalidDomainError,

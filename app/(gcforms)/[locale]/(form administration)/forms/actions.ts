@@ -11,7 +11,7 @@ import { revalidatePath } from "next/cache";
 import { FormRecord } from "@lib/types";
 import { AuthenticatedAction } from "@lib/actions";
 import { sendArchivedFormNotifications } from "@lib/notifications";
-import { getTemplateWithAssignedUsers } from "@lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
