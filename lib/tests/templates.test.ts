@@ -3,7 +3,6 @@ import type { MockedFunction } from "vitest";
 import { prismaMock } from "@testUtils";
 import {
   deleteTemplate,
-  syncAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
@@ -17,6 +16,7 @@ import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID"
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { updateTemplate } from "@lib/templates/mutations/updateTemplate";
 import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
+import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 

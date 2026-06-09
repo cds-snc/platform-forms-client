@@ -12,7 +12,6 @@ import {
 } from "@lib/types";
 import {
   removeDeliveryOption,
-  syncAssignedUsersForTemplate,
   updateClosedData,
   updateSecurityAttribute,
   updateFormPurpose,
@@ -23,6 +22,7 @@ import {
 import { createTemplate as createDbTemplate } from "@lib/templates/mutations/createTemplate";
 import { updateTemplate as updateDbTemplate } from "@lib/templates/mutations/updateTemplate";
 import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
+import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
