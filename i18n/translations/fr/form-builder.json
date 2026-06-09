@@ -599,7 +599,8 @@
       "InvitationAccepted": "Invitation acceptée",
       "UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
       "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
-      "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée"
+      "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée",
+      "InvitationCancelled": "Invitation pour collaborer sur le formulaire annulée"
     },
     "eventDetails": {
       "CreatedForm": "Formulaire créé",
@@ -621,7 +622,7 @@
       "RemoveClosingDate": "Date de fermeture supprimée.",
       "UpdatedNotificationSettings": "Paramètre de notification {{enabled}} pour {{userEmail}}",
       "GrantAccess": "Accès accordé à {{userList}}",
-      "RevokeAccess": "Accès révoqué pour {{userEmail}}",
+      "RevokeAccess": "Accès révoqué pour {{userList}}",
       "UserInvited": "{{userEmail}} a invité {{invitationEmail}}",
       "AcceptedInvitation": "Invitation acceptée par {{userEmail}}",
       "DeclinedInvitation": "Invitation refusée par {{userEmail}}",

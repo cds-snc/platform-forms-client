@@ -600,7 +600,8 @@
       "UpdateFormBranding": "Updated form branding",
       "UpdatedNotificationSettings": "Updated notification settings",
       "DeletedDraftResponses": "Deleted draft form responses",
-      "InvitationCreated": "Invited a user to collaborate on the form"
+      "InvitationCreated": "Invited a user to collaborate on the form",
+      "InvitationCancelled": "Cancelled a collaboration invitation"
     },
     "eventDetails": {
       "CreatedForm": "Created form",
@@ -623,7 +624,7 @@
       "RemoveClosingDate": "Removed closing date.",
       "UpdatedNotificationSettings": "Updated notifications setting to: {{enabled}} for {{userEmail}}",
       "GrantAccess": "Access granted to {{userList}}",
-      "RevokeAccess": "Access revoked for {{userEmail}}",
+      "RevokeAccess": "Access revoked for {{userList}}",
       "UserInvited": "{{userEmail}} invited {{invitationEmail}}",
       "AcceptedInvitation": "Invitation accepted by {{userEmail}}",
       "DeclinedInvitation": "Invitation declined by {{userEmail}}",

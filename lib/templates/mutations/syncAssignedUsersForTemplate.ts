@@ -1,7 +1,12 @@
 import { prisma, prismaErrors } from "@gcforms/database";
 import { FormRecord, FormProperties } from "@lib/types";
 import { authorization } from "@lib/privileges";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
+import {
+  AuditLogAccessDeniedDetails,
+  AuditLogDetails,
+  AuditLogEvent,
+  logEvent,
+} from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 import { notifyOwnerAdded, notifyOwnerRemoved } from "../internal/notifications";
@@ -120,7 +125,7 @@ export async function syncAssignedUsersForTemplate(
     logEvent(
       user.id,
       { type: "Form", id: formID },
-      "GrantFormAccess",
+      AuditLogEvent.GrantFormAccess,
       AuditLogDetails.AccessGrantedTo,
       { userList: usersToAdd.map((user) => user.email ?? user.id).toString() }
     );
@@ -129,7 +134,7 @@ export async function syncAssignedUsersForTemplate(
     logEvent(
       user.id,
       { type: "Form", id: formID },
-      "RevokeFormAccess",
+      AuditLogEvent.RevokeFormAccess,
       AuditLogDetails.AccessRevokedFor,
       { userList: usersToRemove.map((user) => user.email ?? user.id).toString() }
     );
