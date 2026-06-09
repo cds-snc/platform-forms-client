@@ -32,11 +32,12 @@ vi.mock("@lib/integration/zitadelConnector", () => ({
 }));
 
 const userId = "1";
+const userEmail = "test.user@cds-snc.ca";
 
 describe("Service Account functions", () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    mockAuthorizationPass(userId);
+    mockAuthorizationPass(userId, userEmail);
   });
 
   describe("checkMachineUserExists", () => {
@@ -139,10 +140,10 @@ describe("Service Account functions", () => {
       });
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
-        { type: "ServiceAccount" },
+        { type: "Form", id: "templateId" },
         "CreateAPIKey",
         "CreatedNewAPIKey",
-        { serviceAccountId: "serviceAccountUser", userId: "1" }
+        { serviceAccountId: "serviceAccountUser", userEmail: userEmail }
       );
     });
     it("should create a key if an existing user exists", async () => {
@@ -160,10 +161,10 @@ describe("Service Account functions", () => {
       });
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
-        { type: "ServiceAccount" },
+        { type: "Form", id: "templateId" },
         "CreateAPIKey",
         "CreatedNewAPIKey",
-        { serviceAccountId: "templateId", userId: "1" }
+        { serviceAccountId: "templateId", userEmail: userEmail }
       );
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
@@ -192,10 +193,10 @@ describe("Service Account functions", () => {
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
-        { type: "ServiceAccount" },
+        { type: "Form", id: "templateId" },
         "DeleteAPIKey",
         "DeletedAPIKey",
-        { serviceAccountID: serviceAccountID, templateId: "templateId", userEmail: undefined }
+        { serviceAccountID: serviceAccountID, templateId: "templateId", userEmail: userEmail }
       );
     });
     it("should delete a key if there is not an existing user in the IDP", async () => {
@@ -209,10 +210,10 @@ describe("Service Account functions", () => {
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
-        { type: "ServiceAccount" },
+        { type: "Form", id: "templateId" },
         "DeleteAPIKey",
         "DeletedAPIKey",
-        { templateId: "templateId", userEmail: undefined, serviceAccountID: "" }
+        { templateId: "templateId", userEmail: userEmail, serviceAccountID: "" }
       );
     });
     it("should not throw an Error if the key does not exist in the database", async () => {
@@ -230,10 +231,10 @@ describe("Service Account functions", () => {
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
-        { type: "ServiceAccount" },
+        { type: "Form", id: "templateId" },
         "DeleteAPIKey",
         "DeletedAPIKey",
-        { serviceAccountID: serviceAccountID, templateId: "templateId", userEmail: undefined }
+        { serviceAccountID: serviceAccountID, templateId: "templateId", userEmail: userEmail }
       );
     });
 

@@ -249,11 +249,11 @@ type AuditDetailsParams = {
   [AuditLogDetails.AccessGrantedTo]: { userList: string };
   [AuditLogDetails.AccessRevokedFor]: { userList: string };
   [AuditLogDetails.RefreshedApiKey]: {
-    userId: string;
+    userEmail: string;
     serviceAccountId: string;
   };
   [AuditLogDetails.CreatedNewApiKey]: {
-    userId: string;
+    userEmail: string;
     serviceAccountId: string;
   };
   [AuditLogDetails.DeletedServiceAccount]: {
