@@ -599,7 +599,8 @@
       "InvitationAccepted": "Invitation acceptée",
       "UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
       "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
-      "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée"
+      "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée",
+      "InvitationCancelled": "Invitation pour collaborer sur le formulaire annulée"
     },
     "eventDetails": {
       "CreatedForm": "Formulaire créé",
