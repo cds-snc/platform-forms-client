@@ -1,5 +1,4 @@
 // Public templates module API. Keep exports here intentional; prefer internal/* for implementation-only helpers.
-export { updateTemplate } from "./mutations/updateTemplate";
 export { updateIsPublishedForTemplate } from "./mutations/updateIsPublishedForTemplate";
 export { removeAssignedUserFromTemplate } from "./mutations/removeAssignedUserFromTemplate";
 export { addAssignedUserToTemplate } from "./mutations/addAssignedUserToTemplate";

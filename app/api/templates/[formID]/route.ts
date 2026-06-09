@@ -1,6 +1,5 @@
 import {
   deleteTemplate,
-  updateTemplate,
   updateIsPublishedForTemplate,
   syncAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
@@ -9,6 +8,7 @@ import {
 } from "@lib/templates";
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { updateTemplate } from "@lib/templates/mutations/updateTemplate";
 import { NextRequest } from "next/server";
 import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
