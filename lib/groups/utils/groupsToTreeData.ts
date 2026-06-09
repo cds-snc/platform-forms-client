@@ -69,6 +69,7 @@ export const groupsToTreeData = (
 
   const startChildren = [];
   const endChildren = [];
+  const elementsById = new Map(elements.map((element) => [element.id, element]));
 
   for (const [key, value] of Object.entries(formGroups)) {
     const children =
@@ -128,7 +129,7 @@ export const groupsToTreeData = (
     }
 
     children.forEach((childId) => {
-      const element = elements.find((el) => el.id === Number(childId));
+      const element = elementsById.get(Number(childId));
       if (!element) return;
 
       // Build tree data for sub elements if they exist
