@@ -1,6 +1,6 @@
 "use server";
 
-import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
+import { TemplateHasUnprocessedSubmissions } from "@lib/templates/internal/errors";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { cloneTemplate } from "@lib/templates/mutations/cloneTemplate";
 import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";

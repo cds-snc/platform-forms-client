@@ -2,7 +2,7 @@
 
 import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
-import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
+import { TemplateHasUnprocessedSubmissions } from "@lib/templates/internal/errors";
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
