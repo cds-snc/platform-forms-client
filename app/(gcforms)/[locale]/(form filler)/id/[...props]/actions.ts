@@ -18,6 +18,7 @@ import { traceFunction } from "@lib/otel";
 import { MissingFormDataError } from "./lib/client/exceptions";
 import { valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
+import { getTemplateVersion } from "./lib/server/getTemplateVersion";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -111,7 +112,7 @@ export async function submitForm(
       }
 
       const formData = normalizeFormResponses(template, values);
-      const versionId = "4";
+      const versionId = await getTemplateVersion();
 
       const { submissionId, fileURLMap } = await processFormData({
         responses: formData,
