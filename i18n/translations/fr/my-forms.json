@@ -24,8 +24,8 @@
     "noArchivedForms": "[FR]You have no archived forms."
   },
   "card": {
-    "sharedWith_one": "[FR]Shared with {{count}} person",
-    "sharedWith_other": "[FR]Shared with {{count}} people",
+    "sharedWith_one": "Partagé avec {{count}} personne",
+    "sharedWith_other": "Partagé avec {{count}} personnes",
     "states": {
       "draft": "Ébauche",
       "published": "Publié",
