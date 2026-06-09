@@ -59,7 +59,7 @@
       "clone": "Dupliquer",
       "cloneSuccess": "Le formulaire a été dupliqué.",
       "cloneFailed": "Le formulaire n'a pas pu être dupliqué.",
-      "ariaLabel": "[FR]Menu for form {{name}}"
+      "ariaLabel": "Menu pour le formulaire {{name}}"
     },
     "actionRequired": {
       "description": "Action requise : ",
