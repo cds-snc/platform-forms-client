@@ -75,11 +75,14 @@ const CardLinks = memo(
         {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
           <>
             {overdue ? (
-              <span className="text-red mt-4 block text-sm">
-                <MessageIcon className="mr-2 inline-block" />
-                {t("card.actionRequired.description")} {""}
-                <a href={responsesLink}>{t("card.actionRequired.linkText")}</a>
-              </span>
+              <Link
+                className="text-red mt-4 block text-sm hover:text-red-500 focus:text-red-500 active:text-red-500"
+                href={responsesLink}
+                prefetch={false}
+              >
+                <MessageIcon className="mr-2 ml-px inline-block fill-red-500" />
+                {t("card.actionRequired")}
+              </Link>
             ) : (
               <Link
                 className="mt-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
@@ -87,7 +90,7 @@ const CardLinks = memo(
                 prefetch={false}
               >
                 <MessageIcon className="mr-2 ml-px inline-block" />
-                {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
+                {t("card.deliveryOption.vault")}
               </Link>
             )}
           </>
@@ -263,7 +266,7 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
 
   const cardState = useMemo(() => getCardState(card), [card]);
 
-  const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded-md border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : ""}`;
+  const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded-md border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : card.overdue ? "bg-red-50" : ""}`;
 
   return (
     <div className={wrapperClass} data-testid={`card-${card.id}`}>
