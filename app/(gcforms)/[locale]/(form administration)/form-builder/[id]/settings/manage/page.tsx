@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
 import { Session } from "next-auth";
 
-import { checkIfClosed } from "@lib/templates";
+import { getTemplateClosureState } from "@lib/templates";
 import { authorization } from "@lib/privileges";
 import { AuthenticatedPage } from "@lib/pages/auth";
 import { SetClosingDate } from "./components/close/SetClosingDate";
@@ -44,7 +44,7 @@ export default AuthenticatedPage(
         .catch(() => false));
 
     if (canSetClosingDate) {
-      const closedData = await checkIfClosed(id);
+      const closedData = await getTemplateClosureState(id);
       closedDetails = closedData?.closedDetails;
     }
 

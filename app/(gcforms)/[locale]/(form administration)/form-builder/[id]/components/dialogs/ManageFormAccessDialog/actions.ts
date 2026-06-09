@@ -10,7 +10,7 @@ import {
   TemplateNotFoundError,
   UserAlreadyHasAccessError,
 } from "@lib/invitations/exceptions";
-import { getTemplateWithAssociatedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
+import { getTemplateWithAssignedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { logMessage } from "@lib/logger";
 import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
@@ -86,7 +86,7 @@ export const removeUserFromForm = AuthenticatedAction(async (_, userId: string, 
 });
 
 export const getTemplateUsers = AuthenticatedAction(async (_, formId: string) => {
-  const template = await getTemplateWithAssociatedUsers(formId);
+  const template = await getTemplateWithAssignedUsers(formId);
 
   if (!template) {
     throw new TemplateNotFoundError();

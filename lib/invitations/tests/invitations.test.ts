@@ -2,7 +2,7 @@ import type { Mock, MockedFunction } from "vitest";
 import { prismaMock } from "@testUtils";
 import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { getUser } from "@lib/users";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import {
   InvalidDomainError,
@@ -65,7 +65,7 @@ describe("Invitations", () => {
       (getUser as MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValue(mockTemplateWithUsers());
 
       await expect(inviteUserByEmail("test@cds-snc.ca", "form-id", "message")).rejects.toThrow(
@@ -81,7 +81,7 @@ describe("Invitations", () => {
       );
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValue(mockTemplateWithUsers());
 
       await expect(
@@ -93,7 +93,7 @@ describe("Invitations", () => {
       (getUser as MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValue(mockTemplateWithUsers());
 
       await expect(inviteUserByEmail("test@notagovdomain", "form-id", "message")).rejects.toThrow(
@@ -103,7 +103,7 @@ describe("Invitations", () => {
 
     it("should throw TemplateNotFoundError if template is not found", async () => {
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValue(null);
       (getUser as MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
@@ -121,7 +121,7 @@ describe("Invitations", () => {
       ); // sender
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValueOnce(mockTemplateWithUsers());
 
       prismaMock.invitation.create.mockResolvedValueOnce(
@@ -171,7 +171,7 @@ describe("Invitations", () => {
       ); // sender
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValueOnce(mockTemplateWithUsers());
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -227,7 +227,7 @@ describe("Invitations", () => {
       (prismaMock.invitation.delete as Mock).mockResolvedValue(null);
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValueOnce({
         formRecord: {
           id: "form-id",
@@ -392,7 +392,7 @@ describe("Invitations", () => {
       );
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValue(
         mockTemplateWithUsers({
           users: [
