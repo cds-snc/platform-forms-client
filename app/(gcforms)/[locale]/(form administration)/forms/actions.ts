@@ -1,9 +1,10 @@
 "use server";
 
-import { TemplateHasUnprocessedSubmissions, restoreTemplate } from "@lib/templates";
+import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { cloneTemplate } from "@lib/templates/mutations/cloneTemplate";
 import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
+import { restoreTemplate } from "@lib/templates/mutations/restoreTemplate";
 import { revalidatePath } from "next/cache";
 import { FormRecord } from "@lib/types";
 import { AuthenticatedAction } from "@lib/actions";
