@@ -130,7 +130,7 @@
     "step1": "Select form",
     "step2": "Manage access",
     "step3": "Add team members",
-    "descriptionStart": "Forms being edited will be available to read -",
+    "descriptionStart": "Forms being edited will be available for",
     "descriptionBold": "one person can edit at a time",
     "descriptionEnd": "."
   }
