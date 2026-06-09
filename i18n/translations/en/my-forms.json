@@ -10,7 +10,7 @@
     "resumeForm": "Resume editing form",
     "createNewForm": "Create new form",
     "unarchiveForm": "Restore form",
-    "duplicatePublishedForm": "Copy as new draft form"
+    "duplicatePublishedForm": "Edit published form"
   },
   "cards": {
     "noForms": "You have no forms.",
@@ -35,6 +35,7 @@
       "email": "Responses get sent to:",
       "vault": "Responses page"
     },
+    "draftVersion": "Draft - version {{versionNumber}}",
     "menu": {
       "more": "More",
       "save": "Download copy",

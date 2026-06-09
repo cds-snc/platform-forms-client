@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.15.3](https://github.com/cds-snc/platform-forms-client/compare/v4.15.2...v4.15.3) (2026-05-27)
+
+
+### Bug Fixes
+
+* Add missing i18n for Inviting a User to Collaborate on a form ([#7257](https://github.com/cds-snc/platform-forms-client/issues/7257)) ([f062fd8](https://github.com/cds-snc/platform-forms-client/commit/f062fd88f7c6ab92f30ba3146b4a38fd7d445842))
+* Add missing message for deleting draft responses. ([#7252](https://github.com/cds-snc/platform-forms-client/issues/7252)) ([7866d42](https://github.com/cds-snc/platform-forms-client/commit/7866d4212d132cd702031c764cc2d28d2b52c78b))
+* Add Original formID to Event for Duplication of Forms ([#7249](https://github.com/cds-snc/platform-forms-client/issues/7249)) ([64baf90](https://github.com/cds-snc/platform-forms-client/commit/64baf90598b5e959304ac090b46555d736c95e1d))
+* Fix Date Format for Close Form Audit Log Event ([#7251](https://github.com/cds-snc/platform-forms-client/issues/7251)) ([981298c](https://github.com/cds-snc/platform-forms-client/commit/981298ca517f465d79e7b19d92a1fcaa36447735))
+
+
+### Miscellaneous Chores
+
+* add drag hotspot for resume form ([#7258](https://github.com/cds-snc/platform-forms-client/issues/7258)) ([82e4b51](https://github.com/cds-snc/platform-forms-client/commit/82e4b514af9becfcc2039506f6883fd1bfd7ac42))
+* Generate saved progress client side instead of on the server ([#7255](https://github.com/cds-snc/platform-forms-client/issues/7255)) ([ac5f4ad](https://github.com/cds-snc/platform-forms-client/commit/ac5f4adc5ddc92907dff171fbfa25199a6246027))
+
+## [4.15.2](https://github.com/cds-snc/platform-forms-client/compare/v4.15.1...v4.15.2) (2026-05-25)
+
+
+### Bug Fixes
+
+* DateModified sometimes appears to be in the future ([#7246](https://github.com/cds-snc/platform-forms-client/issues/7246)) ([9d60183](https://github.com/cds-snc/platform-forms-client/commit/9d6018363025c5701800d647982df9743607b406))
+* fix stale rules ([#7242](https://github.com/cds-snc/platform-forms-client/issues/7242)) ([797c276](https://github.com/cds-snc/platform-forms-client/commit/797c276acc3dc61d67afa6f112c5741e4426c1b5))
+
+
+### Miscellaneous Chores
+
+* allow continue anyway for saved data mismatch ([#7232](https://github.com/cds-snc/platform-forms-client/issues/7232)) ([f047c75](https://github.com/cds-snc/platform-forms-client/commit/f047c7502c9112375eed47f6184e5120c3882fa7))
+* Fix background colour on rightPanel ([#7235](https://github.com/cds-snc/platform-forms-client/issues/7235)) ([e5f7ee4](https://github.com/cds-snc/platform-forms-client/commit/e5f7ee44d71fa1531a83792cdc06d0d727941a68))
+* Remove locked editing flag ([#7247](https://github.com/cds-snc/platform-forms-client/issues/7247)) ([291fd46](https://github.com/cds-snc/platform-forms-client/commit/291fd46b12e6af3a7ab3f8931b065bdd7535f24c))
+* Remove Responses Category from Audit Log ([#7243](https://github.com/cds-snc/platform-forms-client/issues/7243)) ([9de25fd](https://github.com/cds-snc/platform-forms-client/commit/9de25fd2429e56d1179eddef14087a6c7ee6300a))
+* Swap Audit Log Close to Secondary button. ([#7244](https://github.com/cds-snc/platform-forms-client/issues/7244)) ([f99820e](https://github.com/cds-snc/platform-forms-client/commit/f99820e982e5940446f554fd83b2299bb084a8ee))
+* synced file(s) with cds-snc/site-reliability-engineering ([#7239](https://github.com/cds-snc/platform-forms-client/issues/7239)) ([f4a3df8](https://github.com/cds-snc/platform-forms-client/commit/f4a3df849e3ad9f711e93e38899c965644221ce6))
+* synced local '.github/workflows/ossf-scorecard.yml' with remote 'tools/sre_file_sync/ossf-scorecard.yml' ([f4a3df8](https://github.com/cds-snc/platform-forms-client/commit/f4a3df849e3ad9f711e93e38899c965644221ce6))
+* tweak error message punctuation ([#7245](https://github.com/cds-snc/platform-forms-client/issues/7245)) ([082c025](https://github.com/cds-snc/platform-forms-client/commit/082c025baa78b919c9c270b8a07b7b148e7d930b))
+
 ## [4.15.1](https://github.com/cds-snc/platform-forms-client/compare/v4.15.0...v4.15.1) (2026-05-22)
 
 

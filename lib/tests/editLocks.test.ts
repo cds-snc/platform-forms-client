@@ -58,7 +58,6 @@ describe("editLocks with redis", () => {
     process.env.APP_ENV = "development";
     const redisInstance = await getRedisInstance();
     await redisInstance.flushall();
-    await redisInstance.set("flag:lockedEditing", "1");
     vi.mocked(formCache.check).mockResolvedValue(null);
   });
 
@@ -234,7 +233,6 @@ describe("editLocks with redis", () => {
   it("disables edit locking for draft forms with fewer than two assigned users", () => {
     expect(
       shouldEnableTemplateEditLock({
-        allowLockedEditing: true,
         templateId: "form-8",
         isPublished: false,
         assignedUserCount: 1,
@@ -243,7 +241,6 @@ describe("editLocks with redis", () => {
 
     expect(
       shouldEnableTemplateEditLock({
-        allowLockedEditing: true,
         templateId: "form-8",
         isPublished: false,
         assignedUserCount: 2,
@@ -265,6 +262,23 @@ describe("editLocks with redis", () => {
     });
 
     await expect(shouldEnforceTemplateEditLock("form-8")).resolves.toBe(true);
+  });
+
+  it("enforces edit locking for versioned draft forms even when the template row is marked published", async () => {
+    const findUniqueMock = prisma.template.findUnique as unknown as ReturnType<typeof vi.fn>;
+
+    vi.mocked(formCache.check).mockResolvedValue(null);
+
+    findUniqueMock.mockResolvedValue({
+      isPublished: true,
+      currentDraftVersionId: "draft-version-2",
+      _count: {
+        users: 2,
+        invitations: 0,
+      },
+    });
+
+    await expect(shouldEnforceTemplateEditLock("form-9")).resolves.toBe(true);
   });
 
   it("revalidates a cached multi-user threshold when fresh assigned-user enforcement is required", async () => {
@@ -365,5 +379,4 @@ describe("editLocks with redis", () => {
       expect(prisma.template.findUnique).toHaveBeenCalledTimes(1);
     });
   });
-
 });

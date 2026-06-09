@@ -3,8 +3,8 @@
 export const UserFeatureFlags = {
   addressComplete: "addressComplete",
   responsesPilot: "responsesPilot",
-  lockedEditing: "lockedEditing",
   userSideAuditLogs: "userSideAuditLogs",
+  templateVersioning: "templateVersioning",
 } as const;
 
 export const FeatureFlags = {

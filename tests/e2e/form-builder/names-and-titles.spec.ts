@@ -6,10 +6,12 @@ test.describe("Form builder names and titles", () => {
   });
 
   test("Autocompletes name with title on focus", async ({ page }) => {
-    await page.fill("#formTitle", "Playwright Share Test Form");
-    await page.waitForTimeout(500);
-    await page.press("#formTitle", "Tab");
-    await page.waitForTimeout(500);
+    const input = page.locator("#formTitle");
+    await expect(input).toBeEditable();
+    await input.click();
+    await expect(input).toBeFocused();
+    await input.pressSequentially("Playwright Share Test Form", { delay: 200 });
+    await expect(input).toHaveValue("Playwright Share Test Form");
     await page.click("#fileName");
     await expect(page.locator("#fileName")).toHaveValue("Playwright Share Test Form");
   });

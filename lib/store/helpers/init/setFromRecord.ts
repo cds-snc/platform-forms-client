@@ -24,6 +24,9 @@ export const setFromRecord: TemplateStore<"setFromRecord"> = (set) => (record) =
     }
 
     state.isPublished = record.isPublished;
+    state.currentPublishedVersionId = record.currentPublishedVersionId ?? null;
+    state.currentDraftVersionId = record.currentDraftVersionId ?? null;
+    state.versionNumber = record.versionNumber ?? null;
     state.name = record.name;
     state.securityAttribute = record.securityAttribute;
     state.deliveryOption = record.deliveryOption;
