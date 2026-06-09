@@ -27,6 +27,8 @@ export const FormCard = async ({
     i18n: { language },
   } = await serverTranslation("admin-forms");
   const { ability } = await authCheckAndThrow();
+
+  const formTitle = language === "en" ? titleEn : titleFr;
   return (
     <li
       className="relative z-40 mb-4 max-w-2xl rounded-md border-2 border-black p-4"
@@ -77,7 +79,9 @@ export const FormCard = async ({
           </a>
         </div>
         <div>
-          {ability?.can("update", "FormRecord") && <MoreMenu id={id} isPublished={isPublished} />}
+          {ability?.can("update", "FormRecord") && (
+            <MoreMenu formTitle={formTitle} id={id} isPublished={isPublished} />
+          )}
         </div>
       </div>
     </li>

@@ -2,10 +2,20 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { ConfirmDelete } from "./ConfirmDelete";
+import { slugify } from "@lib/client/clientHelpers";
+
 import { getFormJson } from "../../actions";
 import "./MoreMenu.css";
 
-export const MoreMenu = ({ id, isPublished }: { id: string; isPublished: boolean }) => {
+export const MoreMenu = ({
+  id,
+  formTitle,
+  isPublished,
+}: {
+  id: string;
+  formTitle: string;
+  isPublished: boolean;
+}) => {
   const { t } = useTranslation(["admin-forms", "manage-form-access", "admin-users", "my-forms"]);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -13,6 +23,7 @@ export const MoreMenu = ({ id, isPublished }: { id: string; isPublished: boolean
   const anchorVar = `--more-menu-trigger-${id}`;
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLUListElement | null>(null);
+  const fileName = formTitle ? `${slugify(formTitle)}.json` : `${id}.json`;
 
   useEffect(() => {
     try {
@@ -44,7 +55,7 @@ export const MoreMenu = ({ id, isPublished }: { id: string; isPublished: boolean
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${id}.json`;
+      a.download = `${fileName}.json`;
       a.click();
       URL.revokeObjectURL(url);
 
