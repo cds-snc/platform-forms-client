@@ -1,7 +1,8 @@
 import { AccessControlError } from "@lib/auth/errors";
 import { middleware, sessionExists, jsonValidator } from "@lib/middleware";
-import { getAllTemplatesForUser, mapTemplateToPublicFormRecord } from "@lib/templates";
+import { mapTemplateToPublicFormRecord } from "@lib/templates";
 import { createTemplate } from "@lib/templates/mutations/createTemplate";
+import { getAllTemplatesForUser } from "@lib/templates/queries/getAllTemplatesForUser";
 import {
   DeliveryOption,
   FormProperties,
