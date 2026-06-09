@@ -3,7 +3,7 @@ import { submitForm } from "./actions";
 import { PublicFormRecord, Responses, FormElementTypes } from "@lib/types";
 
 // Mock all the dependencies
-vi.mock("@lib/templates", () => ({
+vi.mock("@lib/templates/queries/getPublicTemplateByID", () => ({
   getPublicTemplateByID: vi.fn(),
 }));
 

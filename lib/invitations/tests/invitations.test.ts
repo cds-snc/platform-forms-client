@@ -31,7 +31,9 @@ vi.mock("@lib/privileges");
 vi.mock("@lib/integration/notifyConnector");
 vi.mock("@lib/logger");
 vi.mock("@lib/users");
-vi.mock("@lib/templates");
+vi.mock("@lib/templates/queries/getTemplateWithAssignedUsers", () => ({
+  getTemplateWithAssignedUsers: vi.fn(),
+}));
 vi.mock("@lib/editLocks", () => ({
   invalidateTemplateEditLockUserCountCache: vi.fn(),
 }));
