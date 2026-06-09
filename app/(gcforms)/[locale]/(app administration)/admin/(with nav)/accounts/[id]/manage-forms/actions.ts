@@ -1,6 +1,7 @@
 "use server";
 
-import { deleteTemplate, getFullTemplateByID } from "@lib/templates";
+import { deleteTemplate } from "@lib/templates";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";

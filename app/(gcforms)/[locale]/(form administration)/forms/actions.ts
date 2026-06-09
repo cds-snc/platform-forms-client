@@ -3,10 +3,10 @@
 import {
   TemplateHasUnprocessedSubmissions,
   deleteTemplate,
-  getFullTemplateByID,
   cloneTemplate,
   restoreTemplate,
 } from "@lib/templates";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { revalidatePath } from "next/cache";
 import { FormRecord } from "@lib/types";
 import { AuthenticatedAction } from "@lib/actions";

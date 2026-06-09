@@ -4,11 +4,11 @@ import {
   updateIsPublishedForTemplate,
   syncAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
-  getFullTemplateByID,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
 } from "@lib/templates";
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { NextRequest } from "next/server";
 import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";

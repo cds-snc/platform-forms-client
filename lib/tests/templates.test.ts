@@ -2,7 +2,6 @@ import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prismaMock } from "@testUtils";
 import {
-  getFullTemplateByID,
   updateTemplate,
   deleteTemplate,
   updateIsPublishedForTemplate,
@@ -17,6 +16,7 @@ import { createTemplate } from "@lib/templates/mutations/createTemplate";
 import { getAllTemplates } from "@lib/templates/queries/getAllTemplates";
 import { getAllTemplatesForUser } from "@lib/templates/queries/getAllTemplatesForUser";
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";

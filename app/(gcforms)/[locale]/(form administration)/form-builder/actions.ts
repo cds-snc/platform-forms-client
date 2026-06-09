@@ -27,7 +27,7 @@ import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
-import { getFullTemplateByID } from "@lib/templates";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { isValidEmail } from "@gcforms/core";
 import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
