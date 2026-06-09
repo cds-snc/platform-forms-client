@@ -14,7 +14,6 @@ import {
   removeDeliveryOption,
   updateClosedData,
   updateSecurityAttribute,
-  updateFormSaveAndResume,
   getFormJSONConfig,
   updateFormBranding,
 } from "@lib/templates";
@@ -23,6 +22,7 @@ import { updateTemplate as updateDbTemplate } from "@lib/templates/mutations/upd
 import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
 import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
 import { updateFormPurpose } from "@lib/templates/mutations/updateFormPurpose";
+import { updateFormSaveAndResume } from "@lib/templates/mutations/updateFormSaveAndResume";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";

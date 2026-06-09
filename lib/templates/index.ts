@@ -1,5 +1,4 @@
 // Public templates module API. Keep exports here intentional; prefer internal/* for imp
-export { updateFormSaveAndResume } from "./mutations/updateFormSaveAndResume";
 export { removeDeliveryOption } from "./mutations/removeDeliveryOption";
 export { cloneTemplate } from "./mutations/cloneTemplate";
 export { deleteTemplate } from "./mutations/deleteTemplate";
