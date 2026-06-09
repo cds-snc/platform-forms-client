@@ -300,7 +300,6 @@ export const PublishButton = ({ locale }: { locale: string }) => {
         popoverTarget="publish-menu-popover"
         popoverTargetAction="toggle"
         interestfor="publish-menu-popover"
-        data-share="form-builder-share"
         aria-label={triggerLabel}
         aria-expanded={isOpen}
         aria-controls="publish-menu-popover"
