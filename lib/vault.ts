@@ -205,7 +205,7 @@ export async function listAllSubmissions(
     // Enrich overviews with VersionId by BatchGet from primary table
     if (accumulatedResponses.length > 0) {
       // This helper handles errors and returns the (possibly unchanged) array
-      // eslint-disable-next-line no-await-in-loop
+
       accumulatedResponses = await enrichOverviewsWithVersionId(formID, accumulatedResponses);
     }
 
