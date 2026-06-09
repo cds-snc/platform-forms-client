@@ -1,5 +1,4 @@
 // Public templates module API. Keep exports here intentional; prefer internal/* for imp
-export { cloneTemplate } from "./mutations/cloneTemplate";
 export { deleteTemplate } from "./mutations/deleteTemplate";
 export { restoreTemplate } from "./mutations/restoreTemplate";
 export { mapTemplateToPublicFormRecord } from "./internal/index";
