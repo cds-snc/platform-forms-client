@@ -126,12 +126,12 @@
   "archivedNotice": "Vous pouvez accéder à vos formulaires archivés pendant 30 jours.",
   "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés.",
   "coEditingHelp": {
-    "title": "[FR]Co-editing forms",
-    "step1": "[FR]Select form",
-    "step2": "[FR]Manage access",
-    "step3": "[FR]Add team members",
-    "descriptionStart": "[FR]Forms being edited will be available to read -",
-    "descriptionBold": "[FR]one person can edit at a time",
-    "descriptionEnd": "[FR]."
+    "title": "Collaborer à modifier des formulaire",
+    "step1": "Sélectionner le formulaire",
+    "step2": "Gérer l'accès",
+    "step3": "Ajoutez des collègues",
+    "descriptionStart": "Les formulaires en cours de modification seront disponibles pour",
+    "descriptionBold": "modification par une seule personne à la fois",
+    "descriptionEnd": "."
   }
 }
