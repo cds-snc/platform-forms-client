@@ -10,7 +10,7 @@ import {
   FormPurpose,
   ClosedDetails,
 } from "@lib/types";
-import { updateFormBranding } from "@lib/templates";
+import { updateFormBranding } from "@lib/templates/mutations/updateFormBranding";
 import { createTemplate as createDbTemplate } from "@lib/templates/mutations/createTemplate";
 import { updateTemplate as updateDbTemplate } from "@lib/templates/mutations/updateTemplate";
 import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
