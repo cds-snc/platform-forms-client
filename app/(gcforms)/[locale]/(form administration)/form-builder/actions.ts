@@ -10,12 +10,7 @@ import {
   FormPurpose,
   ClosedDetails,
 } from "@lib/types";
-import {
-  updateClosedData,
-  updateSecurityAttribute,
-  getFormJSONConfig,
-  updateFormBranding,
-} from "@lib/templates";
+import { updateSecurityAttribute, getFormJSONConfig, updateFormBranding } from "@lib/templates";
 import { createTemplate as createDbTemplate } from "@lib/templates/mutations/createTemplate";
 import { updateTemplate as updateDbTemplate } from "@lib/templates/mutations/updateTemplate";
 import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
@@ -23,6 +18,7 @@ import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssig
 import { updateFormPurpose } from "@lib/templates/mutations/updateFormPurpose";
 import { updateFormSaveAndResume } from "@lib/templates/mutations/updateFormSaveAndResume";
 import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
+import { updateClosedData } from "@lib/templates/mutations/updateClosedData";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
