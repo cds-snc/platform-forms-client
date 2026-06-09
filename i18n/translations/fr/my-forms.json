@@ -30,7 +30,7 @@
       "draft": "Ébauche",
       "published": "Publié",
       "archived": "Archivé",
-      "lastEditedBy": "[FR]By: {{lastEditedBy}}"
+      "lastEditedBy": "par : {{lastEditedBy}}"
     },
     "title": {
       "notTranslatedEn": "Untitled form",
