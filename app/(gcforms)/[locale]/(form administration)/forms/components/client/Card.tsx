@@ -115,7 +115,17 @@ const CardLinks = memo(
 CardLinks.displayName = "CardLinks";
 
 const CardTitle = memo(
-  ({ id, name, isPublished }: { id: string; name: string; isPublished: boolean }) => {
+  ({
+    id,
+    name,
+    isPublished,
+    collaboratorCount,
+  }: {
+    id: string;
+    name: string;
+    isPublished: boolean;
+    collaboratorCount: number;
+  }) => {
     const {
       t,
       i18n: { language },
@@ -129,7 +139,12 @@ const CardTitle = memo(
         {name ? name : t("card.unnamedForm")}
       </Link>
     ) : (
-      <DraftEditLink href={draftLink} formId={id} className={classes}>
+      <DraftEditLink
+        href={draftLink}
+        formId={id}
+        className={classes}
+        collaboratorCount={collaboratorCount}
+      >
         {name ? name : t("card.unnamedForm")}
       </DraftEditLink>
     );
@@ -203,10 +218,12 @@ const CardFooterDraftEditing = memo(
     lockedByName,
     language,
     cardId,
+    collaboratorCount,
   }: {
     lockedByName: string | null;
     language: string;
     cardId: string;
+    collaboratorCount: number;
   }) => {
     const { t } = useTranslation("my-forms");
     return (
@@ -218,6 +235,7 @@ const CardFooterDraftEditing = memo(
             href={`/${language}/form-builder/${cardId}/edit/`}
             formId={cardId}
             className="block cursor-pointer text-left text-sm underline focus:fill-slate-500 active:fill-slate-500 disabled:opacity-70"
+            collaboratorCount={collaboratorCount}
           >
             {t("editForm")}
           </DraftEditLink>
@@ -255,7 +273,12 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
     <div className={wrapperClass} data-testid={`card-${card.id}`}>
       <div className="row-start-1 mt-1 flex flex-col">
         <CardCollaboratorCount collaboratorCount={collaboratorCount} />
-        <CardTitle id={card.id} name={card.name} isPublished={card.isPublished} />
+        <CardTitle
+          id={card.id}
+          name={card.name}
+          isPublished={card.isPublished}
+          collaboratorCount={collaboratorCount}
+        />
         <Suspense fallback={<Skeleton count={2} className="my-3 w-[300px]" />}>
           <CardLinks
             isPublished={card.isPublished}
@@ -281,6 +304,7 @@ const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; stat
               lockedByName={card.editLockInfo?.lockedByName ?? null}
               language={language}
               cardId={card.id}
+              collaboratorCount={collaboratorCount}
             />
           )}
           <CardBanner isPublished={card.isPublished} />
