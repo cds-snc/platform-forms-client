@@ -3,8 +3,7 @@ import { serverTranslation } from "@i18n";
 import { authCheckAndThrow } from "@lib/actions";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getTemplatePublishedStatus } from "@lib/templates";
-
+import { getTemplatePublishedStatus } from "@lib/templates/queries/getTemplatePublishedStatus";
 import { RocketIcon } from "@serverComponents/icons/RocketIcon";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { getOrigin } from "@lib/origin";
@@ -63,7 +62,7 @@ export default async function Page(props: { params: Promise<{ locale: string; id
           </div>
           <div>
             <h2 className="mb-1 pb-0"> {t("publishedTitle")}</h2>
-            <p className="mb-5 mt-0">{t("publishedViewLinks")}</p>
+            <p className="mt-0 mb-5">{t("publishedViewLinks")}</p>
             <p>
               <strong>{t("english")}</strong>{" "}
               <a href={linkEn} data-testid="published-link-en">

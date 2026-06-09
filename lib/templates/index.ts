@@ -1,5 +1,4 @@
 // Public templates module API. Keep exports here intentional; prefer internal/* for implementation-only helpers.
-export { getTemplatePublishedStatus } from "./queries/getTemplatePublishedStatus";
 export { getFullTemplateByID } from "./queries/getFullTemplateByID";
 export { getTemplateWithAssignedUsers } from "./queries/getTemplateWithAssignedUsers";
 export { updateTemplate } from "./mutations/updateTemplate";
