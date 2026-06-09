@@ -4,7 +4,7 @@ import { PublicFormRecord, Responses, SignedURLMap } from "@lib/types";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
 import { logMessage } from "@lib/logger";
-import { getTemplateClosureState } from "@lib/templates";
+import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosureState";
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
