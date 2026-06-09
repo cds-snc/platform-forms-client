@@ -7,7 +7,7 @@ import { AccountMenu } from "@formBuilder/components/shared/account-menu/Account
 import { cn } from "@lib/utils";
 import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "./FileName";
-import { ShareButton } from "./ShareButton";
+import { ShareButton } from "./ShareMenu/ShareButton";
 import LanguageToggle from "./LanguageToggle";
 import { Button } from "@clientComponents/globals";
 import Markdown from "markdown-to-jsx";
