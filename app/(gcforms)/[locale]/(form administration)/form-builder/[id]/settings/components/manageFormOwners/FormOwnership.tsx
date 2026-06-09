@@ -1,11 +1,9 @@
 "use client";
-import React, { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
+import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useTranslation } from "@i18n/client";
 import { Alert } from "@clientComponents/globals";
-import { Button } from "@clientComponents/globals";
 import { FormOwnerSelect, usersToOptions } from "./FormOwnerSelect";
-import { SettingsApplicationsIcon } from "@serverComponents/icons";
-
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import createCache from "@emotion/cache";
 import { FormRecord } from "@lib/types";
@@ -42,9 +40,7 @@ export const FormOwnership = ({
 
   const saveAssignations = async () => {
     setMessage(null);
-    const usersToAssign: { id: string }[] = selectedUsers.map((user) => {
-      return { id: user.value };
-    });
+    const usersToAssign: { id: string }[] = selectedUsers.map((user) => ({ id: user.value }));
 
     const response = await updateTemplateUsers({ id: formRecord.id, users: usersToAssign });
 
@@ -73,13 +69,23 @@ export const FormOwnership = ({
     );
   };
 
+  // Listen for save event from dialog actions
+  const { Event } = useCustomEvent();
+
+  useEffect(() => {
+    const handler = async () => {
+      await saveAssignations();
+    };
+    Event.on("save-manage-owners", handler);
+    return () => {
+      Event.off("save-manage-owners", handler);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedUsers]);
+
   return (
     <>
-      <div className="mb-10" data-testid="form-ownership">
-        <h2>
-          {" "}
-          <SettingsApplicationsIcon className="-mt-10px mr-1 inline-block" /> {t("title")}
-        </h2>
+      <div data-testid="form-ownership">
         {message && message}
         <p className="mb-4">{t("assignUsersToTemplate")}</p>
         <p className="mb-2 font-bold">{t("enterOwnersEmail")} </p>
@@ -92,15 +98,6 @@ export const FormOwnership = ({
             />
           </CacheProvider>
         </div>
-        <br />
-        <Button
-          dataTestId="save-ownership"
-          theme="secondary"
-          type="submit"
-          onClick={() => saveAssignations()}
-        >
-          {t("save")}
-        </Button>
       </div>
     </>
   );
