@@ -5,7 +5,7 @@
     "published": "Publiés",
     "all": "Tous",
     "archived": "Archivés",
-    "recentlyEdited": "Récemment modifié"
+    "recentlyEdited": "Récemment modifiés"
   },
   "account": {
     "viewAccount": "Votre compte"
@@ -126,12 +126,12 @@
   "archivedNotice": "Vous pouvez accéder à vos formulaires archivés pendant 30 jours.",
   "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés.",
   "coEditingHelp": {
-    "title": "Collaborer à modifier des formulaire",
+    "title": "Collaborer à modifier des formulaires",
     "step1": "Sélectionner le formulaire",
     "step2": "Gérer l'accès",
     "step3": "Ajoutez des collègues",
-    "descriptionStart": "Les formulaires en cours de modification seront disponibles pour",
-    "descriptionBold": "modification par une seule personne à la fois",
+    "descriptionStart": "Les formulaires en cours de rédaction seront accessibles à",
+    "descriptionBold": "une seule personne à la fois pour modification",
     "descriptionEnd": "."
   }
 }
