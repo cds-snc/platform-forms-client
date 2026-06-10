@@ -392,14 +392,14 @@
   },
   "appUpdate": {
     "builder": {
-      "title": "GC Forms has been updated.",
-      "description": "Refresh your page to continue to the latest version of the application. Your latest changes will be saved.",
-      "button": "Refresh page"
+      "title": "Update GC Forms to continue",
+      "description": "Review your form after updating and before publishing.",
+      "button": "Update "
     },
     "user": {
-      "title": "This form has been updated. ",
-      "description": "Go to the latest version. The answers you've entered will be saved.",
-      "button": "Refresh page"
+      "title": "To continue, update the software for this form",
+      "description": "Review your answers after updating and before submitting.",
+      "button": "Update"
     }
   }
 }
