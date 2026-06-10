@@ -101,7 +101,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
                   {item.callback ? (
                     <>
                       <button
-                        className="action whitespace-nowrap no-underline hover:underline"
+                        className="action hover:text-gcds-blue-vivid block w-full cursor-pointer text-left whitespace-nowrap no-underline hover:underline"
                         onClick={(e) => {
                           // Shows a success or error status message from a callback
                           if (!item || !item.callback) {
@@ -133,7 +133,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
                   ) : (
                     <a
                       href={item.url}
-                      className="action whitespace-nowrap no-underline hover:underline active:underline"
+                      className="action hover:text-gcds-blue-vivid block w-full whitespace-nowrap no-underline hover:underline active:underline"
                     >
                       {item.title}
                     </a>
