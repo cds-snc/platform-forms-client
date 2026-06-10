@@ -8,7 +8,7 @@ import {
 } from "@lib/cache/throttlingCache";
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
-import { AuditLogDetails, logEvent } from "@lib/auditLogs";
+import { AuditLogEvent, AuditLogDetails, logEvent } from "@lib/auditLogs";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -26,7 +26,7 @@ export const temporarilyIncreaseThrottlingRate = AuthenticatedAction(
       logEvent(
         session.user.id,
         { type: "ServiceAccount" },
-        "IncreaseThrottlingRate",
+        AuditLogEvent.IncreaseThrottlingRate,
         AuditLogDetails.IncreasedThrottling,
         { formId: formId, weeks: weeks.toString(), userId: session.user.id }
       );
@@ -44,7 +44,7 @@ export const permanentlyIncreaseThrottlingRate = AuthenticatedAction(
       logEvent(
         session.user.id,
         { type: "ServiceAccount" },
-        "IncreaseThrottlingRate",
+        AuditLogEvent.IncreaseThrottlingRate,
         AuditLogDetails.PermanentIncreasedThrottling,
         { formId: formId, userId: session.user.id }
       );
@@ -61,7 +61,7 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
     logEvent(
       session.user.id,
       { type: "ServiceAccount" },
-      "ResetThrottlingRate",
+      AuditLogEvent.ResetThrottlingRate,
       AuditLogDetails.ResetThrottling,
       { formId: formId, userId: session.user.id }
     );
