@@ -549,9 +549,9 @@
     "title": "Get a copy of your form"
   },
   "auditDownload": {
-    "description": "Get a spreadsheet with the history of a form's recent key actions. These may take a few minutes to appear in the activity log and will be available for up to 30 days.",
+    "description": "Get a spreadsheet of a form’s recent activity. At this time, GC Forms shows activity for creation, collaboration and API integration only. Allow a few minutes for activity to show on the spreadsheet. You’ll get activity within the last 30 days.",
     "downloadBtnText": "Download recent activity",
-    "title": "View form activity",
+    "title": "View recent form activity",
     "dialog": {
       "title": "Download form activity",
       "downloadBtnText": "Download",
