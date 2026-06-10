@@ -19,7 +19,8 @@ type EditLockResponse = {
 
 // Cap accepted templateIds per request to bound DB/Redis work
 const MAX_TEMPLATE_IDS_PER_REQUEST = 200;
-// Loose sanity check on individual ids (CUIDs, UUIDs, etc. all fit comfortably)
+
+// Loose sanity check on individual ids (UUIDs, etc.)
 const TEMPLATE_ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
 
 /**
@@ -66,6 +67,7 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
             type: "FormRecord",
             scope: { subjectIds: templateIds },
           },
+          allowDeleted: true,
         },
       ]);
     } catch (error) {
