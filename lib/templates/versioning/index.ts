@@ -5,7 +5,7 @@ import {
   TemplateRecordForParsing,
   TemplateVersionConfigSnapshot,
   TemplateVersionSnapshot,
-} from "../internal/types";
+} from "./types";
 import {
   ClosedDetails,
   FormProperties,

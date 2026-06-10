@@ -7,7 +7,7 @@ import {
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
-import { TEMPLATE_VERSION_STATUS } from "../internal/types";
+import { TEMPLATE_VERSION_STATUS } from "../versioning/types";
 import { parseTemplate } from "../versioning";
 
 export async function createDraftVersionForTemplate(formID: string): Promise<FormRecord | null> {
