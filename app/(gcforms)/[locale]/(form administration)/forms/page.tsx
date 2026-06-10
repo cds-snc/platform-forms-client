@@ -168,6 +168,8 @@ export default async function Page(props: {
       ttl: ttl ? new Date(ttl) : null,
       hasEditLock: templateIdsWithEditLocks.has(id),
       isShared,
+      hasDraft: !!template.currentDraftVersionId,
+      currentDraftVersion: 2,
       collaboratorCount: {
         userCount,
         pendingUserCount,
