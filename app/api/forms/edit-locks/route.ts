@@ -62,6 +62,7 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
     }
 
     // Verify user has access to all requested templates using single batch DB query
+    // Note: allowDeleted=null explicitly allows checking both archived and non-archived templates
     try {
       logMessage.debug(
         `[edit-locks] Checking authorization for user ${session.user.id} on templates: ${templateIds.join(", ")}`
@@ -74,6 +75,7 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
             type: "FormRecord",
             scope: { subjectIds: templateIds },
           },
+          allowDeleted: null,
         },
       ]);
     } catch (error) {
