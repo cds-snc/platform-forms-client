@@ -9,7 +9,7 @@ import { DraftEditLink } from "../client/DraftEditLink";
 import { useTranslation } from "@i18n/client";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FormsTemplateWithLockInfo } from "../types";
+import { FormsTemplateWithLockInfo, FormTabStatus } from "../types";
 import {
   getCardState,
   formatDateToYYYYMMDD,
@@ -250,7 +250,13 @@ const CardFooterPublished = memo(({ cardId }: { cardId: string }) => {
 });
 CardFooterPublished.displayName = "CardFooterPublished";
 
-const CardComponent = ({ card, status }: { card: FormsTemplateWithLockInfo; status?: string }) => {
+const CardComponent = ({
+  card,
+  status,
+}: {
+  card: FormsTemplateWithLockInfo;
+  status?: FormTabStatus;
+}) => {
   const params = useParams();
   const language = params?.locale as string;
 

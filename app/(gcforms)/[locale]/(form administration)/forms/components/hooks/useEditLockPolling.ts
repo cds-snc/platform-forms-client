@@ -25,11 +25,13 @@ export function useEditLockPolling({
   displayedCount,
   pollIntervalMs,
   onUpdate,
+  enabled = true,
 }: {
   templates: FormsTemplateWithLockInfo[];
   displayedCount: number;
   pollIntervalMs: number;
   onUpdate: (updater: (prev: FormsTemplateWithLockInfo[]) => FormsTemplateWithLockInfo[]) => void;
+  enabled?: boolean;
 }) {
   const templatesRef = useRef(templates);
   const displayedCountRef = useRef(displayedCount);
@@ -225,7 +227,7 @@ export function useEditLockPolling({
   // Also pause/resume polling based on tab visibility.
   useEffect(() => {
     const startPolling = () => {
-      if (document.hidden) {
+      if (document.hidden || !enabled) {
         return;
       }
 
@@ -239,7 +241,7 @@ export function useEditLockPolling({
     };
 
     const handleVisibilityChange = () => {
-      if (document.hidden) {
+      if (document.hidden || !enabled) {
         // Tab became inactive - pause polling.
         stopPolling();
       } else {
@@ -253,8 +255,10 @@ export function useEditLockPolling({
       markActivity();
     };
 
-    // Start polling on mount.
-    startPolling();
+    // Start polling on mount if enabled
+    if (enabled) {
+      startPolling();
+    }
 
     // Presence detection for progressive backoff
     document.addEventListener("visibilitychange", handleVisibilityChange); // TODO probably not needed since we won't be polling when hidden, could leave just in case
@@ -276,5 +280,5 @@ export function useEditLockPolling({
         abortControllerRef.current.abort();
       }
     };
-  }, [clearScheduledPoll, fetchEditLockUpdates, markActivity, scheduleNextPoll]);
+  }, [clearScheduledPoll, fetchEditLockUpdates, markActivity, scheduleNextPoll, enabled]);
 }

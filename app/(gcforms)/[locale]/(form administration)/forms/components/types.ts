@@ -72,3 +72,18 @@ export type FormsTemplateWithLockInfo = FormsTemplate & {
   editLockInfo?: EditLockInfoClient | null;
   lastEditedBy?: string | null;
 };
+
+/**
+ * Possible tab statuses for filtering forms
+ */
+export type FormTabStatus = "recentlyEdited" | "draft" | "published" | "archived";
+
+/**
+ * Constants for form tab status values
+ */
+export const TAB_STATUS = {
+  RECENTLY_EDITED: "recentlyEdited",
+  DRAFT: "draft",
+  PUBLISHED: "published",
+  ARCHIVED: "archived",
+} as const;
