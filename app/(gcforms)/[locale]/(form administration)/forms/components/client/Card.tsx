@@ -314,6 +314,18 @@ const CardComponent = ({
           )}
           <CardBanner isPublished={card.isPublished} />
           {cardState === "published" && <CardFooterPublished cardId={card.id} />}
+
+          <>
+            {card.hasDraft && card.versionNumber && (
+              <div className="mt-2 ml-4 flex items-center">
+                <span
+                  className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-400"
+                  aria-hidden="true"
+                ></span>
+                {card.versionNumber}
+              </div>
+            )}
+          </>
         </div>
       </div>
       <div className="flex items-start">

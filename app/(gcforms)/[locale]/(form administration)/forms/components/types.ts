@@ -53,6 +53,9 @@ export type FormsTemplate = {
   deliveryOption: DeliveryOption;
   name: string;
   isPublished: boolean;
+  hasDraft: boolean;
+  currentDraftVersion?: number;
+  versionNumber?: number | null;
   ttl: Date | null;
   date: string;
   url: string;
