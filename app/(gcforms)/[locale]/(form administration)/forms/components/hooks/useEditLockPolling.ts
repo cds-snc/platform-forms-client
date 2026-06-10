@@ -75,12 +75,10 @@ export function useEditLockPolling({
       });
 
       if (!response.ok) {
-        // Handle permission errors by filtering out templates we don't have access to
-        // This can happen when:
-        // 1. Templates were deleted between page load and polling
-        // 2. User lost access to shared forms
-        // 3. Stale state from navigation between tabs
-        // 4. Initial SSR included templates that should have been filtered out
+        // Handle permission errors by filtering out "invalid" templates we don't have access to.
+        // This seems to happen mainly with some Archived forms. This seems strange because the initial
+        // templates were pulled on page load without error. Regardless this helps handle invalid
+        // template cases where one invalid template will cause the remaining to fail.
         if (response.status === 403) {
           // Remove all templates from the failed batch to stop infinite 403 loop
           // Note: The authorization check is all-or-nothing, so if ANY template is
