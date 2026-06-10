@@ -5,7 +5,7 @@ import {
   TemplateRecordForParsing,
   TemplateVersionConfigSnapshot,
   TemplateVersionSnapshot,
-} from "./types";
+} from "../internal/types";
 import {
   ClosedDetails,
   FormProperties,
@@ -87,7 +87,7 @@ export const parseTemplate = (
   };
 };
 
-const getBuilderVersion = (
+export const getBuilderVersion = (
   template: Pick<TemplateRecordForParsing, "currentDraftVersion" | "currentPublishedVersion">
 ) => {
   return template.currentDraftVersion ?? template.currentPublishedVersion ?? null;
