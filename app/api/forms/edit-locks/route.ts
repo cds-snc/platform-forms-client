@@ -38,10 +38,6 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
   try {
     const { templateIds } = body;
 
-    logMessage.info(
-      `[edit-locks] Request from user ${session.user.id} for ${Array.isArray(templateIds) ? templateIds.length : "unknown"} templates`
-    );
-
     if (!Array.isArray(templateIds)) {
       return NextResponse.json({ error: "templateIds must be an array" }, { status: 400 });
     }
@@ -63,10 +59,6 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
 
     // Verify user has access to all requested templates using single batch DB query
     try {
-      logMessage.debug(
-        `[edit-locks] Checking authorization for user ${session.user.id} on templates: ${templateIds.join(", ")}`
-      );
-
       await authorization.check([
         {
           action: "view",
@@ -90,10 +82,6 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
     // Lock info only. Collaborator counts are not needed for the polling response
     // and fetching them fanned out one DB query per templateId.
     const lockInfoMap = await getEditLockInfoForTemplates(templateIds);
-
-    logMessage.debug(
-      `[edit-locks] Successfully retrieved lock info for user ${session.user.id}: ${Object.keys(lockInfoMap).length} templates with locks`
-    );
 
     // Build response only for templates with active locks. Iterating the map (vs.
     // the full templateIds list) avoids O(N) work for unlocked templates.
