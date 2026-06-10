@@ -179,7 +179,20 @@ export const Menu = ({
         },
       },
     ],
-    [isPublished, ttl, t, copyLinkCallback, language, id, status, handleDelete, downloadForm, name]
+    [
+      isPublished,
+      ttl,
+      t,
+      copyLinkCallback,
+      templateVersioningEnabled,
+      language,
+      id,
+      creatingDraft,
+      status,
+      downloadForm,
+      name,
+      handleDelete,
+    ]
   );
 
   const menuItemsList: Array<MenuDropdownItemI> = useMemo(

@@ -11,6 +11,7 @@ import { FormRecord } from "@lib/types";
 import { AuthenticatedAction } from "@lib/actions";
 import { sendArchivedFormNotifications } from "@lib/notifications";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
+import { createDraftVersionForTemplate } from "@root/lib/templates/mutations/createDraftForTemplate";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -119,12 +120,10 @@ export const createDraftVersion = AuthenticatedAction(
     error?: string;
   }> => {
     let hasError;
-    const response: FormRecord | null = null;
+    let response: FormRecord | null = null;
 
     try {
-      // @todo
-      // response = await createDraftVersionForTemplate(formID);
-      throw new Error("Not implemented");
+      response = await createDraftVersionForTemplate(formID);
 
       if (!response) {
         throw new Error(`Unable to create a draft version for ${formID}`);
