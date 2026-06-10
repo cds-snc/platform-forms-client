@@ -157,12 +157,12 @@ export const ClosingDateDialog = ({
                     />
                   )}
 
-                  <div className="gcds-input-wrapper !mr-2 flex flex-col">
-                    <label className="!mr-2 mb-2" htmlFor="date-picker-day">
+                  <div className="gcds-input-wrapper mr-2! flex! flex-col!">
+                    <label className="mr-2! mb-2" htmlFor="date-picker-day">
                       {t("scheduleClosingPage.dialog.datePicker.day")}
                     </label>
                     <input
-                      className={"!mr-2 !w-16"}
+                      className={"mr-2! w-16!"}
                       name="date-picker-day"
                       id="date-picker-day"
                       type="number"
@@ -184,12 +184,12 @@ export const ClosingDateDialog = ({
                     />
                   )}
 
-                  <div className="gcds-input-wrapper !mr-2 !flex !flex-col">
-                    <label className="mb-2" htmlFor="date-picker-year">
+                  <div className="gcds-input-wrapper mr-2! flex! flex-col!">
+                    <label className="mb-2!" htmlFor="date-picker-year">
                       {t("scheduleClosingPage.dialog.datePicker.year")}
                     </label>
                     <input
-                      className={"!w-28"}
+                      className={"w-28!"}
                       name="date-picker-year"
                       id="date-picker-year"
                       type="number"
@@ -204,7 +204,7 @@ export const ClosingDateDialog = ({
               </fieldset>
             </div>
 
-            <div className="gcds-input-wrapper !mr-2 !flex !flex-col">
+            <div className="gcds-input-wrapper mr-2! flex! flex-col!">
               <label htmlFor="time-picker" className="mb-2 font-bold">
                 {t("scheduleClosingPage.dialog.timePicker.text1")}
               </label>
@@ -215,7 +215,7 @@ export const ClosingDateDialog = ({
                 {t("scheduleClosingPage.dialog.timePicker.text3")}
               </p>
               <input
-                className="!w-20"
+                className="w-20!"
                 id="time-picker"
                 name="time-picker"
                 role="time"
@@ -261,8 +261,8 @@ const MonthDropdown = ({
 }) => {
   const { t } = useTranslation("form-builder");
   return (
-    <div className="gcds-select-wrapper !mr-2 flex flex-col">
-      <label className="mb-2" htmlFor="date-picker-month">
+    <div className="gcds-select-wrapper mr-2! flex! flex-col!">
+      <label className="mb-2!" htmlFor="date-picker-month">
         {t("scheduleClosingPage.dialog.datePicker.month")}
       </label>
       <select
