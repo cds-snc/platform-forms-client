@@ -45,11 +45,13 @@ export const Cards = ({
     onLoadMore: handleLoadMore,
   });
 
-  // Setup edit lock polling
+  // Setup edit lock polling - only poll for recentlyEdited and draft tabs
+  const shouldPoll = !filter || filter === "recentlyEdited" || filter === "draft";
   useEditLockPolling({
     templates,
     displayedCount,
     pollIntervalMs,
+    enabled: shouldPoll,
     onUpdate: (nextTemplates) => {
       startTransition(() => {
         setTemplates(nextTemplates);
