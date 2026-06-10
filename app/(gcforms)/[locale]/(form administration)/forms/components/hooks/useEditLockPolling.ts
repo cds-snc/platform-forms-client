@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { FormsTemplateWithLockInfo, EditLocksResponse } from "../types";
+import { logMessage } from "@root/lib/logger";
 
 const PROGRESSIVE_BACKOFF = {
   step1: {
@@ -76,6 +77,27 @@ export function useEditLockPolling({
       });
 
       if (!response.ok) {
+        // Handle permission errors by filtering out "invalid" templates we don't have access to.
+        // This seems to happen mainly with some Archived forms. This seems strange because the initial
+        // templates were pulled on page load without error. Regardless this helps handle invalid
+        // template cases where one invalid template will cause the remaining to fail.
+        if (response.status === 403) {
+          // Remove all templates from the failed batch to stop infinite 403 loop
+          // Note: The authorization check is all-or-nothing, so if ANY template is
+          // inaccessible, the entire batch fails. We remove all to be safe.
+          onUpdate((prevTemplates) => {
+            const failedTemplateIds = new Set(templateIds);
+            const filtered = prevTemplates.filter((t) => !failedTemplateIds.has(t.id));
+
+            if (filtered.length !== prevTemplates.length) {
+              logMessage.info(
+                `[useEditLockPolling] Removed ${prevTemplates.length - filtered.length} templates after 403 error. IDs: ${templateIds.join(", ")}`
+              );
+            }
+
+            return filtered;
+          });
+        }
         return;
       }
 
