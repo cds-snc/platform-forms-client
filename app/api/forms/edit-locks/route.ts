@@ -67,7 +67,6 @@ export const POST = middleware([sessionExists()], async (_req: NextRequest, prop
             type: "FormRecord",
             scope: { subjectIds: templateIds },
           },
-          allowDeleted: true,
         },
       ]);
     } catch (error) {
