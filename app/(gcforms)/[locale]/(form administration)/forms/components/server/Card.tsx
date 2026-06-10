@@ -7,6 +7,7 @@ import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { DeliveryOption } from "@lib/types";
 import Skeleton from "react-loading-skeleton";
+import { FormTabStatus } from "../types";
 
 const CardBanner = async ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
   const { t } = await serverTranslation("my-forms");
@@ -168,10 +169,10 @@ export interface CardI {
   date: string;
   url: string;
   overdue: boolean;
-  status?: string;
+  status?: FormTabStatus;
 }
 
-export const Card = async ({ card, status }: { card: CardI; status?: string }) => {
+export const Card = async ({ card, status }: { card: CardI; status?: FormTabStatus }) => {
   const { t } = await serverTranslation("my-forms");
   return (
     <div
