@@ -11,7 +11,7 @@ import {
 } from "@gcforms/types";
 
 export const checkFlag = async (flag: string) => {
-  return (await Promise.all([checkOne(flag), authorization.canAccessBetaComponents(flag)])).reduce(
+  return (await Promise.all([checkOne(flag), authorization.checkUserFlag(flag)])).reduce(
     (prev, curr) => prev || curr
   );
 };
