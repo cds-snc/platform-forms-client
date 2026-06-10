@@ -26,7 +26,7 @@ export const Menu = ({
   name: string;
   isPublished: boolean;
   ttl?: Date;
-  status?: FormTabStatus;
+  status: FormTabStatus;
 }) => {
   const {
     t,

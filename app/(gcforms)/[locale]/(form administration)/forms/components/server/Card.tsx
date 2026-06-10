@@ -169,10 +169,10 @@ export interface CardI {
   date: string;
   url: string;
   overdue: boolean;
-  status?: FormTabStatus;
+  status: FormTabStatus;
 }
 
-export const Card = async ({ card, status }: { card: CardI; status?: FormTabStatus }) => {
+export const Card = async ({ card, status }: { card: CardI; status: FormTabStatus }) => {
   const { t } = await serverTranslation("my-forms");
   return (
     <div

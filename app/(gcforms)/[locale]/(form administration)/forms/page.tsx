@@ -32,7 +32,7 @@ const getStatusTitle = (status: FormTabStatus | undefined, t: (key: string) => s
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ status?: FormTabStatus }>;
+  searchParams: Promise<{ status: FormTabStatus }>;
 }): Promise<Metadata> {
   const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
   const { locale } = params;
@@ -92,7 +92,7 @@ const FALLBACK_DATE = Date.now().toString();
 
 export default async function Page(props: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ status?: FormTabStatus }>;
+  searchParams: Promise<{ status: FormTabStatus }>;
 }) {
   const searchParams = await props.searchParams;
 
