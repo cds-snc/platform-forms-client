@@ -61,10 +61,7 @@
       "cloneFailed": "Le formulaire n'a pas pu être dupliqué.",
       "ariaLabel": "Menu pour le formulaire {{name}}"
     },
-    "actionRequired": {
-      "description": "Action requise : ",
-      "linkText": "Approuver la suppression de réponses"
-    },
+    "actionRequired": "Réponses en retard",
     "editLock": {
       "title": "Ouvrir le formulaire en mode « lecture seule ».",
       "description": "{{name}} modifie actuellement cette ébauche. Si vous continuez, le formulaire restera vérouillé jusqu’à ce que vous décidez de prendre en charge la modification. Seule une personne peut modifier un formulaire à la fois."
