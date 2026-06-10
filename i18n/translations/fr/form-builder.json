@@ -549,7 +549,7 @@
     "title": "Obtenir une copie du formulaire"
   },
   "auditDownload": {
-    "description": "Obtenez une feuille de calcul avec les activités les plus récentes. Formulaires GC affiche des activités de création, de collaboration et d’intégration API seulement.Veuillez permettre quelques minutes pour que les activités apparaissent dans la feuille de calcul. Vous obtiendrez les activités des 30 derniers jours.",
+    "description": "Obtenez une feuille de calcul avec les activités les plus récentes. Formulaires GC affiche des activités de création, de collaboration et d’intégration API seulement. Veuillez permettre quelques minutes pour que les activités apparaissent dans la feuille de calcul. Vous obtiendrez les activités des 30 derniers jours, à partir du 15 juin 2026.",
     "downloadBtnText": "Télécharger l'activité récente",
     "title": "Afficher l’activité récente du formulaire",
     "dialog": {
