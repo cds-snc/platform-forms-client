@@ -4,12 +4,7 @@ import { NavLink } from "./NavLink";
 import { cn } from "@lib/utils";
 import { FormTabStatus, TAB_STATUS } from "../types";
 
-export const Navigation = async ({
-  filter,
-}: {
-  filter?: FormTabStatus;
-  templateCount?: number;
-}) => {
+export const Navigation = async ({ filter }: { filter: FormTabStatus; templateCount?: number }) => {
   const {
     t,
     i18n: { language },
