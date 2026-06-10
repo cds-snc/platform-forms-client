@@ -1,7 +1,12 @@
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { FormRecord } from "@lib/types";
 import { authorization } from "@lib/privileges";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
+import {
+  AuditLogAccessDeniedDetails,
+  AuditLogEvent,
+  AuditLogDetails,
+  logEvent,
+} from "@lib/auditLogs";
 import { TemplateAlreadyPublishedError } from "../internal/errors";
 import { parseTemplate } from "../internal";
 
@@ -59,7 +64,7 @@ export async function updateFormPurpose(
   logEvent(
     user.id,
     { type: "Form", id: formID },
-    "ChangeFormPurpose",
+    AuditLogEvent.ChangeFormPurpose,
     AuditLogDetails.SetFormPurpose,
     { formPurpose: formPurpose }
   );
