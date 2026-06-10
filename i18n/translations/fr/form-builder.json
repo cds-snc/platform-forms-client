@@ -553,7 +553,7 @@
     "downloadBtnText": "Télécharger l'activité récente",
     "title": "Afficher l'activité du formulaire",
     "dialog": {
-      "title": "Télécharger l'activité du formulaire",
+      "title": "Télécharger l'activité récente du formulaire",
       "downloadBtnText": "Télécharger",
       "allEventsTitle": "Tous les événements disponibles",
       "allEventsDescription": "Téléchargez tous les événements qui se sont produits dans le formulaire dans les derniers 30 jours.",
