@@ -22,7 +22,7 @@ export const NewFormButton = () => {
       className={containerClassName}
       aria-labelledby="create-new-form-text"
     >
-      <div className="flex flex-col items-center">
+      <div className="m-6 flex flex-col items-center">
         <div className={circleClassName} aria-hidden="true">
           <span aria-hidden="true" className="">
             +
