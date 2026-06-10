@@ -312,16 +312,17 @@ export const getPrivilege = async (where: Prisma.PrivilegeWhereInput) => {
 const _getSubject = async (subject: {
   type: Extract<Subject, string>;
   id: string;
-  allowDeleted: boolean;
+  allowDeleted?: boolean | null;
 }) => {
-  if (subject.id === "all") {
+  const { id, allowDeleted } = subject;
+  if (id === "all") {
     return {};
   }
   switch (subject.type) {
     case "User":
       return prisma.user.findUniqueOrThrow({
         where: {
-          id: subject.id,
+          id,
         },
         select: {
           id: true,
@@ -334,8 +335,12 @@ const _getSubject = async (subject: {
     case "FormRecord":
       return prisma.template.findUniqueOrThrow({
         where: {
-          id: subject.id,
-          ttl: subject.allowDeleted ? { not: null } : null,
+          id,
+          // Handle TTL filter based on allowDeleted parameter:
+          // - null: no filter (allow both archived and non-archived)
+          // - false (default): only non-archived (ttl: null)
+          // - true: only archived (ttl: { not: null })
+          ...(allowDeleted !== null && { ttl: allowDeleted ? { not: null } : null }),
         },
         select: {
           id: true,
@@ -356,17 +361,17 @@ const _getSubject = async (subject: {
     case "Privilege":
       return prisma.privilege.findUniqueOrThrow({
         where: {
-          id: subject.id,
+          id,
         },
       });
     case "Setting":
       return prisma.setting.findUniqueOrThrow({
         where: {
-          internalId: subject.id,
+          internalId: id,
         },
       });
     case "Flag":
-      return { id: subject.id, value: await checkOne(subject.id) };
+      return { id, value: await checkOne(id) };
     default:
       throw new Error("Subject type not valid for privilege check");
   }
@@ -378,7 +383,7 @@ const _retrieveSubjects = async (
     type: Extract<Subject, string>;
     scope: "all" | { subjectId: string } | { subjectIds: string[] };
   },
-  allowDeleted: boolean
+  allowDeleted?: boolean | null
 ) => {
   if (subject.scope === "all") {
     return [{}];
@@ -421,7 +426,7 @@ const _authorizationCheck = async (
       scope: "all" | { subjectId: string } | { subjectIds: string[] };
     };
     fields?: string[];
-    allowDeleted?: boolean;
+    allowDeleted?: boolean | null;
   }[],
   logic: "all" | "one" = "all"
 ) => {
@@ -559,8 +564,9 @@ export const authorization = {
   /**
    * Can the user view this specific form
    * @param formId The ID of the form
+   * @param allowDeleted false (default) = non-archived only, true = archived only, null = both
    */
-  canViewForm: async (formId: string, allowDeleted?: boolean) => {
+  canViewForm: async (formId: string, allowDeleted?: boolean | null) => {
     return _authorizationCheck([
       {
         action: "view",
@@ -572,8 +578,9 @@ export const authorization = {
   /**
    * Can the user edit this specific form
    * @param formId The ID of the form
+   * @param allowDeleted false (default) = non-archived only, true = archived only, null = both
    */
-  canEditForm: async (formId: string, allowDeleted?: boolean) => {
+  canEditForm: async (formId: string, allowDeleted?: boolean | null) => {
     return _authorizationCheck([
       {
         action: "update",
