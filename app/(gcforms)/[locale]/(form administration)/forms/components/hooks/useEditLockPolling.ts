@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { FormsTemplateWithLockInfo, EditLocksResponse } from "../types";
+import { logMessage } from "@root/lib/logger";
 
 const PROGRESSIVE_BACKOFF = {
   step1: {
@@ -74,6 +75,31 @@ export function useEditLockPolling({
       });
 
       if (!response.ok) {
+        // Handle permission errors by filtering out templates we don't have access to
+        // This can happen when:
+        // 1. Templates were deleted between page load and polling
+        // 2. User lost access to shared forms
+        // 3. Stale state from navigation between tabs
+        // 4. Initial SSR included templates that should have been filtered out
+        if (response.status === 403) {
+          // Remove all templates from the failed batch to stop infinite 403 loop
+          // Note: The authorization check is all-or-nothing, so if ANY template is
+          // inaccessible, the entire batch fails. We remove all to be safe.
+          onUpdate((prevTemplates) => {
+            // Filter out templates that were in the failed request
+            const failedTemplateIds = new Set(templateIds);
+            const filtered = prevTemplates.filter((t) => !failedTemplateIds.has(t.id));
+
+            // Log the cleanup for debugging
+            if (filtered.length !== prevTemplates.length) {
+              logMessage.info(
+                `[useEditLockPolling] Removed ${prevTemplates.length - filtered.length} templates after 403 error. IDs: ${templateIds.join(", ")}`
+              );
+            }
+
+            return filtered;
+          });
+        }
         return;
       }
 
