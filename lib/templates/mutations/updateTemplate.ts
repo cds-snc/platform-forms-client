@@ -15,6 +15,8 @@ import { checkFlag, parseTemplate } from "../internal";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "../internal/errors";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
+import { updateTemplate as updateTemplateVersioningEnabled } from "../versioning/updateTemplate";
+import { isTemplateVersioningEnabled } from "../versioning";
 
 type UpdateTemplateCommand = {
   formID: string;
@@ -35,6 +37,11 @@ type UpdateTemplateCommand = {
  * @returns The updated form template or null if the record does not exist
  */
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
+  const templateVersioningEnabled = await isTemplateVersioningEnabled();
+  if (templateVersioningEnabled) {
+    return updateTemplateVersioningEnabled(command);
+  }
+
   const { user } = await authorization.canEditForm(command.formID).catch((e) => {
     logEvent(
       e.user.id,
