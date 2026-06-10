@@ -1,6 +1,6 @@
 import { Response, SignedURLMap } from "@lib/types";
 import { logMessage } from "@lib/logger";
-import { getPublicTemplateByID } from "@lib/templates";
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { invokeSubmissionLambda } from "./invokeSubmissionLambda";
 import { FormIsClosedError, FormNotFoundError, MissingFormDataError } from "../client/exceptions";
 import { validatePayloadSize } from "@lib/validation/validatePayloadSize";

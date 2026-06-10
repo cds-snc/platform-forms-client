@@ -8,7 +8,7 @@ import {
 } from "./exceptions";
 import { getAbility } from "@lib/privileges";
 import { AuditLogDetails, AuditLogEvent, logEvent } from "@lib/auditLogs";
-import { notifyOwnerAdded } from "@lib/templates";
+import { notifyOwnerAdded } from "@lib/templates/internal/notifications";
 import { logMessage } from "@lib/logger";
 import { AccessControlError } from "@lib/auth/errors";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
