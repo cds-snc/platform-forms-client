@@ -20,12 +20,14 @@ export const Menu = ({
   isPublished,
   ttl,
   status,
+  onRemove,
 }: {
   id: string;
   name: string;
   isPublished: boolean;
   ttl?: Date;
-  status?: FormTabStatus;
+  status: FormTabStatus;
+  onRemove?: (templateId: string) => void;
 }) => {
   const {
     t,
@@ -167,8 +169,10 @@ export const Menu = ({
         {/* {t("card.menu.more")} */}
       </MenuDropdown>
       <ConfirmDelete
-        onDeleted={() => {
+        onDeleted={(deletedId) => {
           setShowConfirm(false);
+          // Remove from polling list to avoid 403 on next poll
+          onRemove?.(deletedId);
         }}
         show={showConfirm}
         id={id}
