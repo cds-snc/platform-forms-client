@@ -1,5 +1,5 @@
 import { prisma, prismaErrors } from "@gcforms/database";
-import { isTemplateVersioningEnabled } from ".";
+import { isTemplateVersioningEnabled } from "../internal";
 
 export async function getTemplateVersionState(formID: string): Promise<{
   isPublished: boolean;

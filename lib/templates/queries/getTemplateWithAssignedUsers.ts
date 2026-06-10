@@ -3,8 +3,8 @@ import { FormRecord } from "@lib/types";
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { parseTemplate } from "../internal";
-import { isTemplateVersioningEnabled } from "../versioning";
-import { getTemplateWithAssignedUsers as getTemplateWithAssignedUsersVersioningEnabled } from "../versioning/getTemplateWithAssignedUsers";
+import { isTemplateVersioningEnabled } from "../versioning/internal";
+import { getTemplateWithAssignedUsers as getTemplateWithAssignedUsersVersioningEnabled } from "../versioning/queries/getTemplateWithAssignedUsers";
 
 export async function getTemplateWithAssignedUsers(formID: string): Promise<{
   formRecord: FormRecord;

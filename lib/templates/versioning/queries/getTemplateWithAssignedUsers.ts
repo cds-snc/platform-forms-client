@@ -2,7 +2,7 @@ import { prisma, prismaErrors } from "@gcforms/database";
 import { FormRecord } from "@lib/types";
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
-import { templateRecordInclude, getBuilderVersion, parseTemplate } from ".";
+import { templateRecordInclude, getBuilderVersion, parseTemplate } from "../internal";
 
 export async function getTemplateWithAssignedUsers(formID: string): Promise<{
   formRecord: FormRecord;

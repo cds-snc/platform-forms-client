@@ -11,11 +11,11 @@ import {
 } from "@lib/auditLogs";
 import { checkForBetaComponentsAsync } from "@lib/validation/betaCheck";
 import { logMessage } from "@lib/logger";
-import { checkFlag } from "../internal";
+import { checkFlag } from "../../internal";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
-import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "../internal/errors";
+import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "../../internal/errors";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
-import { getBuilderVersion, templateRecordInclude, parseTemplate } from ".";
+import { getBuilderVersion, templateRecordInclude, parseTemplate } from "../internal";
 
 type UpdateTemplateCommand = {
   formID: string;

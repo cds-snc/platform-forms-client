@@ -15,8 +15,8 @@ import { checkFlag, parseTemplate } from "../internal";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "../internal/errors";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
-import { updateTemplate as updateTemplateVersioningEnabled } from "../versioning/updateTemplate";
-import { isTemplateVersioningEnabled } from "../versioning";
+import { updateTemplate as updateTemplateVersioningEnabled } from "../versioning/mutations/updateTemplate";
+import { isTemplateVersioningEnabled } from "../versioning/internal";
 
 type UpdateTemplateCommand = {
   formID: string;

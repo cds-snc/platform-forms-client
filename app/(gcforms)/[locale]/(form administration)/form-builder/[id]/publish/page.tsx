@@ -9,7 +9,7 @@ import { cn } from "@lib/utils";
 import { PublishCard } from "./components/PublishCard";
 import { PublishInfo } from "./components/PublishInfo";
 import { redirect } from "next/navigation";
-import { getTemplateVersionState } from "@lib/templates/versioning/getTemplateVersionState";
+import { getTemplateVersionState } from "@root/lib/templates/versioning/queries/getTemplateVersionState";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
