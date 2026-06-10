@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback, useEffect, startTransition, ViewTransition } from "react";
 import { Card } from "./Card";
-import { FormsTemplateWithLockInfo } from "../types";
+import { FormsTemplateWithLockInfo, FormTabStatus, TAB_STATUS } from "../types";
 import { useTranslation } from "@i18n/client";
 import { CARDS_PER_BATCH } from "../constants";
 import { useEditLockPolling } from "../hooks/useEditLockPolling";
@@ -16,10 +16,10 @@ export const Cards = ({
   status,
   pollIntervalMs,
 }: {
-  filter?: string;
+  filter?: FormTabStatus;
   initialTemplates: FormsTemplateWithLockInfo[];
   overdueTemplateIds: string[];
-  status?: string;
+  status?: FormTabStatus;
   pollIntervalMs: number;
 }) => {
   const { t } = useTranslation("my-forms");
@@ -45,11 +45,14 @@ export const Cards = ({
     onLoadMore: handleLoadMore,
   });
 
-  // Setup edit lock polling
+  // Setup edit lock polling - only poll for recentlyEdited and draft tabs
+  const shouldPoll =
+    !filter || filter === TAB_STATUS.RECENTLY_EDITED || filter === TAB_STATUS.DRAFT;
   useEditLockPolling({
     templates,
     displayedCount,
     pollIntervalMs,
+    enabled: shouldPoll,
     onUpdate: (nextTemplates) => {
       startTransition(() => {
         setTemplates(nextTemplates);
@@ -59,10 +62,10 @@ export const Cards = ({
 
   // Get the appropriate message when there are no forms to display
   const emptyStateMessage = useMemo(() => {
-    if (filter === "recentlyEdited" || !filter) return t("cards.noRecentlyEditedForms");
-    if (filter === "draft") return t("cards.noDraftsForms");
-    if (filter === "published") return t("cards.noPublishedForms");
-    if (filter === "archived") return t("cards.noArchivedForms");
+    if (filter === TAB_STATUS.RECENTLY_EDITED || !filter) return t("cards.noRecentlyEditedForms");
+    if (filter === TAB_STATUS.DRAFT) return t("cards.noDraftsForms");
+    if (filter === TAB_STATUS.PUBLISHED) return t("cards.noPublishedForms");
+    if (filter === TAB_STATUS.ARCHIVED) return t("cards.noArchivedForms");
     return t("cards.noForms");
   }, [filter, t]);
 
@@ -85,7 +88,7 @@ export const Cards = ({
         {templates.length > 0 ? (
           <>
             <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
-              {(status === "draft" || status === "published" || !status) && (
+              {(status === TAB_STATUS.DRAFT || status === TAB_STATUS.PUBLISHED || !status) && (
                 <li className="flex h-full w-full max-w-[16em]" key={-1}>
                   <NewFormButton />
                 </li>
