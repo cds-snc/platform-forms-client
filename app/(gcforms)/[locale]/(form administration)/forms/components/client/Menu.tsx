@@ -12,6 +12,7 @@ import {
   MenuDropdownItemCallback,
   MenuDropdownItemI,
 } from "./MenuDropdown/MenuDropdown";
+import { FormTabStatus, TAB_STATUS } from "../types";
 
 export const Menu = ({
   id,
@@ -24,7 +25,7 @@ export const Menu = ({
   name: string;
   isPublished: boolean;
   ttl?: Date;
-  status?: string;
+  status?: FormTabStatus;
 }) => {
   const {
     t,
@@ -110,7 +111,7 @@ export const Menu = ({
           // Start async clone but return immediate callback value to satisfy MenuDropdown
           (async () => {
             try {
-              const res = await cloneForm(id, status === "archived", language);
+              const res = await cloneForm(id, status === TAB_STATUS.ARCHIVED, language);
               if (res && res.formRecord && !res.error) {
                 toast.success(t("card.menu.cloneSuccess"));
                 window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;

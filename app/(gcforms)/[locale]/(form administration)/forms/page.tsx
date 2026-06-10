@@ -16,22 +16,23 @@ import { prisma } from "@gcforms/database";
 import { getTemplateIdsWithEditLocks, getEditLockInfoWithCollaborators } from "@lib/editLockUtils";
 import { EDIT_LOCK_POLL_INTERVAL_MS } from "./components/constants";
 import { CoEditingHelp } from "./components/server/CoEditingHelp";
-import type { FormsTemplate, FormsTemplateWithLockInfo } from "./components/types";
+import type { FormsTemplate, FormsTemplateWithLockInfo, FormTabStatus } from "./components/types";
+import { TAB_STATUS } from "./components/types";
 
-const getStatusTitle = (status: string | undefined, t: (key: string) => string): string => {
+const getStatusTitle = (status: FormTabStatus | undefined, t: (key: string) => string): string => {
   const defaultStatus = t("nav.recentlyEdited");
   const statusTitleMap: Record<string, string> = {
-    draft: t("nav.drafts"),
-    published: t("nav.published"),
-    archived: t("nav.archived"),
-    recentlyEdited: t("nav.recentlyEdited"),
+    [TAB_STATUS.DRAFT]: t("nav.drafts"),
+    [TAB_STATUS.PUBLISHED]: t("nav.published"),
+    [TAB_STATUS.ARCHIVED]: t("nav.archived"),
+    [TAB_STATUS.RECENTLY_EDITED]: t("nav.recentlyEdited"),
   };
   return status ? statusTitleMap[status] : defaultStatus;
 };
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: FormTabStatus }>;
 }): Promise<Metadata> {
   const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
   const { locale } = params;
@@ -91,7 +92,7 @@ const FALLBACK_DATE = Date.now().toString();
 
 export default async function Page(props: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: FormTabStatus }>;
 }) {
   const searchParams = await props.searchParams;
 
@@ -117,8 +118,9 @@ export default async function Page(props: {
   // Moved from Cards to Page to avoid component being cached when navigating back to this page
   const options: TemplateOptions = {
     requestedWhere: {
-      isPublished: status === "published" ? true : status === "draft" ? false : undefined,
-      ttl: status === "archived" ? { not: null } : null,
+      isPublished:
+        status === TAB_STATUS.PUBLISHED ? true : status === TAB_STATUS.DRAFT ? false : undefined,
+      ttl: status === TAB_STATUS.ARCHIVED ? { not: null } : null,
     },
     sortByDateUpdated: "desc",
   };
@@ -178,7 +180,7 @@ export default async function Page(props: {
   // Filter templates based on status
   // For "recentlyEdited", show the 4 most recently updated templates
   const filteredTemplates =
-    status === "recentlyEdited" || !status
+    status === TAB_STATUS.RECENTLY_EDITED || !status
       ? templatesWithEditLocks.slice(0, 4)
       : templatesWithEditLocks;
 
@@ -223,14 +225,14 @@ export default async function Page(props: {
           <Navigation filter={status} />
         </div>
         <div className="mt-6 ml-2">
-          {status == "draft" && <ResumeEditingForm />}
+          {status == TAB_STATUS.DRAFT && <ResumeEditingForm />}
           <CoEditingHelp />
         </div>
       </div>
       <div className="flex h-full min-h-0 flex-col">
         <div className="">
           <Invitations invitations={invitations} />
-          {status == "archived" && (
+          {status == TAB_STATUS.ARCHIVED && (
             <div className="mb-4">
               <div>
                 {t("archivedNotice")}&nbsp;
