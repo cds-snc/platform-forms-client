@@ -86,11 +86,9 @@ export function useEditLockPolling({
           // Note: The authorization check is all-or-nothing, so if ANY template is
           // inaccessible, the entire batch fails. We remove all to be safe.
           onUpdate((prevTemplates) => {
-            // Filter out templates that were in the failed request
             const failedTemplateIds = new Set(templateIds);
             const filtered = prevTemplates.filter((t) => !failedTemplateIds.has(t.id));
 
-            // Log the cleanup for debugging
             if (filtered.length !== prevTemplates.length) {
               logMessage.info(
                 `[useEditLockPolling] Removed ${prevTemplates.length - filtered.length} templates after 403 error. IDs: ${templateIds.join(", ")}`
