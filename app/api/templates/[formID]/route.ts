@@ -1,14 +1,14 @@
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { updateTemplate } from "@lib/templates/mutations/updateTemplate";
+import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
+import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
+import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
+import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
 import {
-  deleteTemplate,
-  updateTemplate,
-  updateIsPublishedForTemplate,
-  syncAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
-  getFullTemplateByID,
-  removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
-  getPublicTemplateByID,
-} from "@lib/templates";
+} from "@lib/templates/internal/errors";
 import { NextRequest } from "next/server";
 import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";

@@ -47,6 +47,20 @@ export async function getAllTemplatesForUser(
           publishDesc: true,
           saveAndResume: true,
           notificationsInterval: true,
+          // only count and not entire user info for privacy etc.
+          _count: {
+            select: {
+              users: true,
+              invitations: {
+                where: {
+                  expires: {
+                    // filter out expired invitations (from the past)
+                    gt: new Date(),
+                  },
+                },
+              },
+            },
+          },
         },
         ...(sortByDateUpdated && {
           orderBy: {

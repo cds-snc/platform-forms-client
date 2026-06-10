@@ -1,6 +1,6 @@
 import { updateTemplateUsers } from "@formBuilder/actions";
 import { authorization } from "@root/lib/privileges";
-import { getTemplateWithAssignedUsers } from "@root/lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { getUsers } from "@lib/users";
 import { FormOwnership } from "./FormOwnership";
 import { headers } from "next/headers";

@@ -4,24 +4,33 @@
     "drafts": "Ébauches",
     "published": "Publiés",
     "all": "Tous",
-    "archived": "Archivés"
+    "archived": "Archivés",
+    "recentlyEdited": "Récents"
+  },
+  "account": {
+    "viewAccount": "Votre compte"
   },
   "actions": {
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
-    "createNewForm": "Créer un nouveau formulaire",
+    "createNewForm": "Nouveau formulaire",
     "unarchiveForm": "Désarchiver le formulaire",
     "duplicatePublishedForm": "Modifier le formulaire publié"
   },
   "cards": {
     "noForms": "Vous n’avez aucun formulaire.",
     "noDraftsForms": "Vous n’avez aucune ébauche enregistrée.",
-    "noPublishedForms": "Vous n’avez aucun formulaire publié."
+    "noPublishedForms": "Vous n'avez aucun formulaire publié.",
+    "noRecentlyEditedForms": "Vous n'avez aucun formulaire récemment modifié.",
+    "noArchivedForms": "Vous n'avez aucun formulaire archivé."
   },
   "card": {
+    "sharedWith_one": "Partagé avec {{count}} personne",
+    "sharedWith_other": "Partagé avec {{count}} personnes",
     "states": {
       "draft": "Ébauche",
       "published": "Publié",
-      "archived": "Archivé"
+      "archived": "Archivé",
+      "lastEditedBy": "par : {{lastEditedBy}}"
     },
     "title": {
       "notTranslatedEn": "Untitled form",
@@ -49,12 +58,10 @@
       "somethingWentWrong": "Quelque chose a mal tourné",
       "clone": "Dupliquer",
       "cloneSuccess": "Le formulaire a été dupliqué.",
-      "cloneFailed": "Le formulaire n'a pas pu être dupliqué."
+      "cloneFailed": "Le formulaire n'a pas pu être dupliqué.",
+      "ariaLabel": "Menu pour le formulaire {{name}}"
     },
-    "actionRequired": {
-      "description": "Action requise : ",
-      "linkText": "Approuver la suppression de réponses"
-    },
+    "actionRequired": "Réponses en retard",
     "editLock": {
       "title": "Ouvrir le formulaire en mode « lecture seule ».",
       "description": "{{name}} modifie actuellement cette ébauche. Si vous continuez, le formulaire restera vérouillé jusqu’à ce que vous décidez de prendre en charge la modification. Seule une personne peut modifier un formulaire à la fois."
@@ -114,5 +121,14 @@
   },
   "continueReadOnly": "Continuer vers le formulaire",
   "archivedNotice": "Vous pouvez accéder à vos formulaires archivés pendant 30 jours.",
-  "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés."
+  "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés.",
+  "coEditingHelp": {
+    "title": "Collaborer à modifier des formulaires",
+    "step1": "Sélectionner le formulaire",
+    "step2": "Gérer l'accès",
+    "step3": "Ajoutez des collègues",
+    "descriptionStart": "Les formulaires en cours de rédaction seront accessibles à",
+    "descriptionBold": "une seule personne à la fois pour modification",
+    "descriptionEnd": "."
+  }
 }

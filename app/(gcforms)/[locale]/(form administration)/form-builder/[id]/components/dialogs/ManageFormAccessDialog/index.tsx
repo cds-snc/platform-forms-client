@@ -10,5 +10,3 @@ export const ManageFormAccessDialogContainer = ({ formId }: { formId: string }) 
     </ManageFormAccessDialogProvider>
   );
 };
-
-export { ManageFormAccessButton } from "./ManageFormAccessButton";

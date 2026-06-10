@@ -23,7 +23,7 @@ import { logMessage } from "./logger";
 import { authorization } from "./privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import { chunkArray } from "@lib/utils";
-import { TemplateAlreadyPublishedError } from "@lib/templates";
+import { TemplateAlreadyPublishedError } from "@lib/templates/internal/errors";
 import { getAppSetting } from "./appSettings";
 import { delay, getExponentialBackoffTimeInMS } from "./utils/retryability";
 

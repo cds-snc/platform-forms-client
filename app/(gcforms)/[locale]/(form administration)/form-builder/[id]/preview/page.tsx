@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Preview } from "./Preview";
 import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
 import { ClientContainer } from "./ClientContainer";
-import { getTemplateClosureState } from "@lib/templates";
+import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosureState";
 import { ClosedDetails } from "@lib/types";
 import { PreviewClosed } from "./PreviewClosed";
 import { Language } from "@lib/types/form-builder-types";

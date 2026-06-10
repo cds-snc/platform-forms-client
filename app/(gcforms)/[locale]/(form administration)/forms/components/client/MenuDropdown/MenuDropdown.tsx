@@ -22,11 +22,12 @@ interface MenuDropdownProps {
   id: string;
   items: Array<MenuDropdownItemI>;
   direction?: string;
+  name?: string;
 }
 
 export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
-  const { children, id, items } = props;
-  const { t } = useTranslation(["common"]);
+  const { children, id, items, name } = props;
+  const { t } = useTranslation(["common", "my-forms"]);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuListRef = useRef<HTMLUListElement>(null);
   const [menuDropdown, setMenuDropdown] = useState({} as Menu);
@@ -66,9 +67,10 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
           }}
           type="button"
           id={`button-${id}`}
-          className="border-white-default aria-expanded:border-black-default flex border-2 py-1 pr-1 pl-0"
+          className="border-white-default aria-expanded:border-black-default flex cursor-pointer border-2 py-1 pr-1 pl-0"
           aria-haspopup="true"
           aria-controls={`menu-${id}`}
+          aria-label={t("card.menu.ariaLabel", { ns: "my-forms", name })}
           ref={menuButtonRef}
         >
           {children}
@@ -99,7 +101,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
                   {item.callback ? (
                     <>
                       <button
-                        className="action whitespace-nowrap no-underline hover:underline"
+                        className="action hover:text-gcds-blue-vivid block w-full cursor-pointer text-left whitespace-nowrap no-underline hover:underline"
                         onClick={(e) => {
                           // Shows a success or error status message from a callback
                           if (!item || !item.callback) {
@@ -131,7 +133,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
                   ) : (
                     <a
                       href={item.url}
-                      className="action whitespace-nowrap no-underline hover:underline active:underline"
+                      className="action hover:text-gcds-blue-vivid block w-full whitespace-nowrap no-underline hover:underline active:underline"
                     >
                       {item.title}
                     </a>

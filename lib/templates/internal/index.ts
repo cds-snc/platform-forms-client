@@ -41,6 +41,10 @@ export const parseTemplate = (template: {
   saveAndResume: boolean;
   notificationsInterval?: number | null;
   ttl?: Date | null;
+  _count?: {
+    users: number;
+    invitations: number;
+  };
 }): FormRecord => {
   return {
     id: template.id,
@@ -76,6 +80,7 @@ export const parseTemplate = (template: {
     saveAndResume: template.saveAndResume,
     notificationsInterval: template.notificationsInterval as NotificationsInterval,
     ...(template.ttl && { ttl: template.ttl }),
+    ...(template._count && { _count: template._count }),
   };
 };
 

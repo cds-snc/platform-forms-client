@@ -8,7 +8,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { cn } from "@lib/utils";
 import { PublishCard } from "./components/PublishCard";
 import { PublishInfo } from "./components/PublishInfo";
-import { getTemplatePublishedStatus } from "@root/lib/templates";
+import { getTemplatePublishedStatus } from "@lib/templates/queries/getTemplatePublishedStatus";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata(props: {

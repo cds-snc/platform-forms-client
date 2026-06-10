@@ -14,7 +14,7 @@ import {
   HtmlZippedResponse,
   JSONResponse,
 } from "@lib/responseDownloadFormats/types";
-import { getFullTemplateByID } from "@lib/templates";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import {
   AddressComponents,
   FormElement,
