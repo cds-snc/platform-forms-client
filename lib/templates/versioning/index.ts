@@ -1,6 +1,6 @@
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
-import { Prisma, prisma, prismaErrors } from "@gcforms/database";
+import { Prisma } from "@gcforms/database";
 import {
   TemplateRecordForParsing,
   TemplateVersionConfigSnapshot,
@@ -136,40 +136,3 @@ const getResolvedTemplateRawConfig = (
 
   return template.jsonConfig;
 };
-
-export async function getTemplateVersionState(formID: string): Promise<{
-  isPublished: boolean;
-  hasDraftVersion: boolean;
-  currentPublishedVersionId?: string | null;
-  currentDraftVersionId?: string | null;
-} | null> {
-  const templateVersioningEnabled = await isTemplateVersioningEnabled();
-
-  const template = await prisma.template
-    .findUnique({
-      where: {
-        id: formID,
-      },
-      select: {
-        isPublished: true,
-        currentPublishedVersionId: true,
-        currentDraftVersionId: true,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (!template) return null;
-
-  return {
-    isPublished: template.isPublished,
-    hasDraftVersion: template.isPublished
-      ? templateVersioningEnabled && Boolean(template.currentDraftVersionId)
-      : Boolean(template.currentDraftVersionId),
-    currentPublishedVersionId:
-      template.isPublished && !templateVersioningEnabled
-        ? null
-        : template.currentPublishedVersionId,
-    currentDraftVersionId:
-      template.isPublished && !templateVersioningEnabled ? null : template.currentDraftVersionId,
-  };
-}
