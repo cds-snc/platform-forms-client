@@ -391,14 +391,14 @@
   },
   "appUpdate": {
     "builder": {
-      "title": "Formulaires GC a eu une mise à jour.",
-      "description": "Actualisez la page pour accéder à la dernière version de l'application. Vos dernières modifications seront enregistrées.",
-      "button": "Actualiser la page"
+      "title": "Veuillez mettre à jour Formulaires GC",
+      "description": "Vérifiez votre formulaire après la mise à jour et avant la publication.",
+      "button": "Mettre à jour"
     },
     "user": {
-      "title": "Ce formulaire a été mis à jour.",
-      "description": "Passez à la nouvelle version. Vos réponses saisies seront conservées.",
-      "button": "Actualiser la page"
+      "title": "Pour continuer, mettez à jour ce formulaire",
+      "description": "Vérifiez vos réponses après la mise à jour et avant de soumettre votre formulaire.",
+      "button": "Mettre à jour"
     }
   }
 }
