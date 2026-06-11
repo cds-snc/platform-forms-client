@@ -255,7 +255,7 @@ const CardComponent = ({
   status,
 }: {
   card: FormsTemplateWithLockInfo;
-  status?: FormTabStatus;
+  status: FormTabStatus;
 }) => {
   const params = useParams();
   const language = params?.locale as string;

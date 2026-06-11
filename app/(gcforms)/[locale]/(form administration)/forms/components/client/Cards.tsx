@@ -16,10 +16,10 @@ export const Cards = ({
   status,
   pollIntervalMs,
 }: {
-  filter?: FormTabStatus;
+  filter: FormTabStatus;
   initialTemplates: FormsTemplateWithLockInfo[];
   overdueTemplateIds: string[];
-  status?: FormTabStatus;
+  status: FormTabStatus;
   pollIntervalMs: number;
 }) => {
   const { t } = useTranslation("my-forms");
