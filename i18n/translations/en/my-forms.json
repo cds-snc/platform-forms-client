@@ -4,7 +4,15 @@
     "drafts": "Drafts",
     "published": "Published",
     "all": "All",
+<<<<<<< HEAD
     "archived": "Archived"
+=======
+    "archived": "Archived",
+    "recentlyEdited": "Recent"
+  },
+  "account": {
+    "viewAccount": "Your account"
+>>>>>>> c586e2491e1742be824d9148801aeef5c47f7e37
   },
   "actions": {
     "resumeForm": "Resume editing form",
@@ -51,10 +59,7 @@
       "cloneSuccess": "Form was duplicated.",
       "cloneFailed": "Form could not be duplicated."
     },
-    "actionRequired": {
-      "description": "Action required: ",
-      "linkText": "Sign off on responses"
-    },
+    "actionRequired": "Responses overdue",
     "editLock": {
       "title": "Open form in progress",
       "description": "{{name}} is currently editing this draft. If you continue, the form will remain locked until you decide to take over editing. Only one person can edit a form at a time."

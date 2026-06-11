@@ -12,6 +12,7 @@ import {
   MenuDropdownItemCallback,
   MenuDropdownItemI,
 } from "./MenuDropdown/MenuDropdown";
+import { FormTabStatus, TAB_STATUS } from "../types";
 
 export const Menu = ({
   id,
@@ -19,12 +20,14 @@ export const Menu = ({
   isPublished,
   ttl,
   status,
+  onRemove,
 }: {
   id: string;
   name: string;
   isPublished: boolean;
   ttl?: Date;
-  status?: string;
+  status: FormTabStatus;
+  onRemove?: (templateId: string) => void;
 }) => {
   const {
     t,
@@ -135,7 +138,84 @@ export const Menu = ({
       message: t("card.menu.somethingWentWrong"),
       isError: true,
     };
+<<<<<<< HEAD
   }
+=======
+    // Note: Same reason as above
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language, id]);
+
+  const unfilteredMenuItemList = useMemo(
+    () => [
+      {
+        filtered: isPublished ? false : true || (ttl ? true : false),
+        title: t("card.menu.copyLink"),
+        callback: copyLinkCallback,
+      },
+      {
+        filtered: (isPublished ? true : false) || (ttl ? true : false),
+        title: t("card.menu.preview"),
+        url: `/${language}/form-builder/${id}/preview`,
+      },
+      {
+        filtered: isPublished || !!ttl,
+        title: t("card.menu.edit"),
+        url: `/${language}/form-builder/${id}/edit`,
+      },
+      {
+        filtered: false,
+        title: t("card.menu.clone"),
+        callback: () => {
+          // Start async clone but return immediate callback value to satisfy MenuDropdown
+          (async () => {
+            try {
+              const res = await cloneForm(id, status === TAB_STATUS.ARCHIVED, language);
+              if (res && res.formRecord && !res.error) {
+                toast.success(t("card.menu.cloneSuccess"));
+                window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;
+                return;
+              }
+              throw new Error(res?.error || "Clone failed");
+            } catch (e) {
+              toast.error(t("card.menu.cloneFailed"));
+            }
+          })();
+
+          return { message: "" };
+        },
+      },
+      {
+        filterd: ttl ? true : false,
+        title: t("card.menu.save"),
+        callback: () => {
+          downloadForm(name, id, ttl);
+          return { message: "" };
+        },
+      },
+      {
+        filtered: ttl ? true : false,
+        title: t("card.menu.settings"),
+        url: `/${language}/form-builder/${id}/settings`,
+      },
+      {
+        filtered: ttl ? true : false,
+        title: t("card.menu.archive"),
+        callback: () => {
+          handleDelete();
+          return {
+            message: "",
+          };
+        },
+      },
+    ],
+    [isPublished, ttl, t, copyLinkCallback, language, id, status, handleDelete, downloadForm, name]
+  );
+
+  const menuItemsList: Array<MenuDropdownItemI> = useMemo(
+    () => unfilteredMenuItemList.filter((item) => !item.filtered) as MenuDropdownItemI[],
+    [unfilteredMenuItemList]
+  );
+>>>>>>> c586e2491e1742be824d9148801aeef5c47f7e37
 
   return (
     <>
@@ -146,8 +226,10 @@ export const Menu = ({
         {t("card.menu.more")}
       </MenuDropdown>
       <ConfirmDelete
-        onDeleted={() => {
+        onDeleted={(deletedId) => {
           setShowConfirm(false);
+          // Remove from polling list to avoid 403 on next poll
+          onRemove?.(deletedId);
         }}
         show={showConfirm}
         id={id}
