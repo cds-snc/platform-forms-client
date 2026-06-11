@@ -65,15 +65,18 @@ describe("cloneTemplate", () => {
 
     const result = await cloneTemplate("src1", false);
 
-    expect(prismaMock.template.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        jsonConfig: sourceTemplate.jsonConfig,
-        name: `Copy of ${sourceTemplate.name}`,
-        users: { connect: [{ id: userID }] },
-        notificationsUsers: { connect: [{ id: userID }] },
-      }),
-      select: expect.any(Object),
-    });
+    expect(prismaMock.template.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          jsonConfig: sourceTemplate.jsonConfig,
+          name: `Copy of ${sourceTemplate.name}`,
+          users: { connect: [{ id: userID }] },
+          // current user is in notificationsUsers in the source so they should be connected
+          notificationsUsers: { connect: [{ id: userID }] },
+        }),
+        select: expect.any(Object),
+      })
+    );
 
     expect(result).toEqual(expect.objectContaining({ id: "new1", form: sourceTemplate.jsonConfig }));
     expect(mockedLogEvent).toHaveBeenCalled();
