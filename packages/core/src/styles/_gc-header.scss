@@ -27,7 +27,7 @@
     container: component brand / inline-size;
     border-block-end: var(--gcds-header-brand-border-width) solid
       var(--gcds-header-brand-border-color);
-    padding: 0.7rem 0;
+    padding: 0.7rem 0 !important;
 
     .brand__container {
       display: grid;
