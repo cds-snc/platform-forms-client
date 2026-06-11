@@ -1013,7 +1013,7 @@
           "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
         },
         "archivedForm": {
-          "subject": "Un formulaire dont vous êtes propriétaire a été archivé | A form you are owner of has been archived",
+          "subject": "Your form has been archived | Votre formulaire a été archivé",
           "paragraph1": "Votre formulaire a été archivé :",
           "paragraph2": "Cette action a été effectuée par :",
           "paragraph3": "Le formulaire peut être désarchivé à partir du dossier d'archives, dans les 30 jours suivant l'archivage.",
