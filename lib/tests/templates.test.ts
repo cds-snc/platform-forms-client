@@ -13,7 +13,10 @@ import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssig
 import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
 import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
 import { mapTemplateToPublicFormRecord } from "@lib/templates/internal";
-import { TemplateAlreadyPublishedError, TemplateHasUnprocessedSubmissions } from "@lib/templates/internal/errors";
+import {
+  TemplateAlreadyPublishedError,
+  TemplateHasUnprocessedSubmissions,
+} from "@lib/templates/internal/errors";
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 
@@ -36,11 +39,12 @@ import {
 vi.mock("@lib/auditLogs", async () => {
   const __actual0 = await vi.importActual<any>("@lib/auditLogs");
   return {
-  __esModule: true,
-  logEvent: vi.fn(),
-  AuditLogDetails: __actual0.AuditLogDetails,
-  AuditLogEvent: __actual0.AuditLogEvent,
-  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+    __esModule: true,
+    logEvent: vi.fn(),
+    AuditLogDetails: __actual0.AuditLogDetails,
+    AuditLogEvent: __actual0.AuditLogEvent,
+    AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,
+  };
 });
 
 vi.mock("@lib/serviceAccount");
@@ -213,7 +217,7 @@ describe("Template CRUD functions", () => {
         { type: "Form" },
         "ReadForm",
         "Accessed Forms: ${formList}",
-        { "formList": "formtestID" }
+        { formList: "formtestID" }
       );
     });
 
@@ -384,7 +388,7 @@ describe("Template CRUD functions", () => {
         expect.objectContaining({
           where: {
             id: "test1",
-            isPublished: false
+            isPublished: false,
           },
           data: {
             jsonConfig: updatedFormConfig as unknown as Prisma.JsonObject,
@@ -492,7 +496,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "GrantAccess",
-        { "userList": "user2@test.ca" }
+        { userList: "user2@test.ca" }
       );
 
       // Template has three users assigned to it to start
@@ -560,7 +564,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "GrantAccess",
-        { "userList": "user1@test.ca" }
+        { userList: "user1@test.ca" }
       );
 
       // Log two removed
@@ -570,7 +574,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "RevokeFormAccess",
         "RevokeAccess",
-        { "userList": "user2@test.ca,user4@test.ca" }
+        { userList: "user2@test.ca,user4@test.ca" }
       );
     });
     it("Updates to published forms are not allowed", async () => {

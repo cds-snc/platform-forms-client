@@ -44,8 +44,6 @@ vi.mock("./lib/server/processFormData", () => ({
   processFormData: vi.fn(),
 }));
 
-
-
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
