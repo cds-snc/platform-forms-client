@@ -596,7 +596,7 @@ describe("Template CRUD functions", () => {
             ttl: expect.any(Date),
             lastEditedByUserId: userID,
           }),
-          select: expect.objectContaining({
+          select: {
             id: true,
             created_at: true,
             updated_at: true,
@@ -604,7 +604,19 @@ describe("Template CRUD functions", () => {
             jsonConfig: true,
             isPublished: true,
             deliveryOption: true,
-          }),
+            formPurpose: true,
+            publishReason: true,
+            publishFormType: true,
+            publishDesc: true,
+            securityAttribute: true,
+            saveAndResume: true,
+            notificationsInterval: true,
+            lastEditedBy: {
+              select: {
+                name: true,
+              },
+            },
+          },
         })
       );
 
@@ -696,6 +708,27 @@ describe("Template CRUD functions", () => {
             ttl: expect.any(Date),
             lastEditedByUserId: userID,
           }),
+          select: {
+            id: true,
+            created_at: true,
+            updated_at: true,
+            name: true,
+            jsonConfig: true,
+            isPublished: true,
+            deliveryOption: true,
+            securityAttribute: true,
+            formPurpose: true,
+            publishReason: true,
+            publishFormType: true,
+            publishDesc: true,
+            saveAndResume: true,
+            notificationsInterval: true,
+            lastEditedBy: {
+              select: {
+                name: true,
+              },
+            },
+          },
         })
       );
     });
