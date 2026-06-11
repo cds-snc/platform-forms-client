@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { FormsTemplateWithLockInfo, EditLocksResponse } from "../types";
 import { logMessage } from "@root/lib/logger";
+import { POLLING_TEMPLATE_CAP } from "../constants";
 
 const PROGRESSIVE_BACKOFF = {
   step1: {
@@ -57,7 +58,7 @@ export function useEditLockPolling({
 
     // Poll only for displayed templates to reduce API payload
     const displayedTemplates = templatesRef.current.slice(0, displayedCountRef.current);
-    const templateIds = displayedTemplates.map((t) => t.id);
+    const templateIds = displayedTemplates.map((t) => t.id).slice(0, POLLING_TEMPLATE_CAP);
 
     if (templateIds.length === 0) {
       return;
