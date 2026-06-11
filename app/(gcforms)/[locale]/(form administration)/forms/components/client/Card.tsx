@@ -99,7 +99,7 @@ const CardLinks = memo(
         {/* Settings link - only for published non-archived forms */}
         {ttl == null && (
           <Link
-            className="mt-2 block text-sm focus:fill-slate-500 active:fill-slate-500"
+            className="mt-2 mb-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
             href={settingsLink}
             prefetch={false}
           >
@@ -159,17 +159,17 @@ const CardDate = memo(({ id, date, ttl }: { id: string; date: string; ttl?: Date
   const daysRemaining = ttl ? daysUntilTTL(ttl) : 0;
 
   return (
-    <div id={`card-date-${id}`} className="mb-1 text-sm">
+    <div id={`card-date-${id}`} className="mb-1 overflow-hidden text-sm">
       {t("card.lastEdited")}: {formattedDate}
       {ttl && (
         <>
           <br />
-          <span>
+          <span className="block min-w-0 truncate">
             {t("card.deleteDate")}
             {formatDateToYYYYMMDD(ttl)}
           </span>
           {showTTLWarning && (
-            <span className="ml-4 text-red-500">
+            <span className="ml-4 block min-w-0 truncate text-red-500">
               {t("card.deletedIn")} {daysRemaining} {t("card.days")}
             </span>
           )}
@@ -246,7 +246,11 @@ const CardFooterDraftEditing = memo(
 CardFooterDraftEditing.displayName = "CardFooterDraftEditing";
 
 const CardFooterPublished = memo(({ cardId }: { cardId: string }) => {
-  return <p className="mt-3 text-xs italic">{cardId}</p>;
+  return (
+    <p className="mt-3 w-full min-w-0 truncate text-xs italic" title={cardId}>
+      {cardId}
+    </p>
+  );
 });
 CardFooterPublished.displayName = "CardFooterPublished";
 
@@ -278,7 +282,7 @@ const CardComponent = ({
 
   return (
     <div className={wrapperClass} data-testid={`card-${card.id}`}>
-      <div className="row-start-1 mt-1 flex flex-col">
+      <div className="row-start-1 mt-1 flex min-w-0 flex-col">
         <CardTitle
           id={card.id}
           name={card.name}
@@ -298,7 +302,7 @@ const CardComponent = ({
           />
         </Suspense>
         <div className="mt-auto">
-          {cardState === "draft-readonly" && (
+          {(cardState === "draft-readonly" || cardState == "published") && (
             <CardFooterDraftReadonly
               cardId={card.id}
               date={card.date}
