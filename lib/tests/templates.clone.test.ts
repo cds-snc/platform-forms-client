@@ -58,6 +58,7 @@ describe("cloneTemplate", () => {
       publishDesc: sourceTemplate.publishDesc,
       saveAndResume: sourceTemplate.saveAndResume,
       notificationsInterval: sourceTemplate.notificationsInterval,
+      lastEditedBy: { name: "Test User" },
     };
 
     (prismaMock.template.create as MockedFunction<any>).mockResolvedValue(createdTemplate);
@@ -70,6 +71,7 @@ describe("cloneTemplate", () => {
           jsonConfig: sourceTemplate.jsonConfig,
           name: `Copy of ${sourceTemplate.name}`,
           users: { connect: [{ id: userID }] },
+          lastEditedByUserId: userID,
           // current user is in notificationsUsers in the source so they should be connected
           notificationsUsers: { connect: [{ id: userID }] },
         }),
