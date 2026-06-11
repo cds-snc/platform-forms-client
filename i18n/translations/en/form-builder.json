@@ -549,22 +549,22 @@
     "title": "Get a copy of your form"
   },
   "auditDownload": {
-    "description": "Get a spreadsheet with the history of a form's recent key actions. These may take a few minutes to appear in the activity log and will be available for up to 30 days.",
+    "description": "Get a spreadsheet of a form’s recent activity. At this time, GC Forms shows activity for creation, collaboration and API integration only. Allow a few minutes for activity to show on the spreadsheet. You’ll be able to get activity from June 15, 2026 onwards.",
     "downloadBtnText": "Download recent activity",
-    "title": "View form activity",
+    "title": "View recent form activity",
     "dialog": {
       "title": "Download form activity",
       "downloadBtnText": "Download",
-      "allEventsTitle": "All available events",
-      "allEventsDescription": "Download all events that have occurred in the form in the last 30 days.",
-      "allEventsCheckbox": "All available events",
-      "specificEventsTitle": "Specific events",
-      "specificEventsDescription": "Choose which events you would like in the CSV file.",
+      "allEventsTitle": "Download all recent activity:",
+      "allEventsDescription": "We only log the last 30 days of activity.",
+      "allEventsCheckbox": "All available activities",
+      "specificEventsTitle": "Specific activities",
+      "specificEventsDescription": "Choose activities to include in the spreadsheet:",
       "specific": {
         "formBuilding": "Creating the form",
-        "formCollaboration": "Form collaborators",
-        "responseDownloads": "Response retrieval",
-        "apiIntegrations": "API integration"
+        "formCollaboration": "Collaborating on a form",
+        "responseDownloads": "Retrieving responses",
+        "apiIntegrations": "Integrating with the API"
       }
     },
     "headers": {
