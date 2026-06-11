@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.2.14] - 2026-05-25
+## [2.2.13] - 2026-05-25
 
 - Update the non-logged in header so that the FIP and language toggle link are vertically aligned within the same row.
 
