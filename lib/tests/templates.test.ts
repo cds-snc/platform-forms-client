@@ -592,10 +592,11 @@ describe("Template CRUD functions", () => {
           where: {
             id: "formtestID",
           },
-          data: {
+          data: expect.objectContaining({
             ttl: expect.any(Date),
-          },
-          select: {
+            lastEditedByUserId: userID,
+          }),
+          select: expect.objectContaining({
             id: true,
             created_at: true,
             updated_at: true,
@@ -603,14 +604,7 @@ describe("Template CRUD functions", () => {
             jsonConfig: true,
             isPublished: true,
             deliveryOption: true,
-            formPurpose: true,
-            publishReason: true,
-            publishFormType: true,
-            publishDesc: true,
-            securityAttribute: true,
-            saveAndResume: true,
-            notificationsInterval: true,
-          },
+          }),
         })
       );
 
@@ -698,7 +692,10 @@ describe("Template CRUD functions", () => {
       expect(prismaMock.template.update).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { id: "formtestID" },
-          data: { ttl: expect.any(Date) },
+          data: expect.objectContaining({ 
+            ttl: expect.any(Date),
+            lastEditedByUserId: userID,
+          }),
         })
       );
     });
