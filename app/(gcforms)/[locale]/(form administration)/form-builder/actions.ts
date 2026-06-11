@@ -1,7 +1,12 @@
 "use server";
 
+import { redirect } from "next/navigation";
+import { serverTranslation } from "@i18n";
+import { revalidatePath } from "next/cache";
+
 import { promises as fs } from "fs";
 import { AuthenticatedAction } from "@lib/actions";
+
 import {
   DeliveryOption,
   FormProperties,
@@ -10,29 +15,20 @@ import {
   FormPurpose,
   ClosedDetails,
 } from "@lib/types";
-import { updateFormBranding } from "@lib/templates/mutations/updateFormBranding";
-import { createTemplate as createDbTemplate } from "@lib/templates/mutations/createTemplate";
-import { updateTemplate as updateDbTemplate } from "@lib/templates/mutations/updateTemplate";
-import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
-import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
-import { updateFormPurpose } from "@lib/templates/mutations/updateFormPurpose";
-import { updateFormSaveAndResume } from "@lib/templates/mutations/updateFormSaveAndResume";
-import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
-import { updateClosedData } from "@lib/templates/mutations/updateClosedData";
-import { serverTranslation } from "@i18n";
-import { revalidatePath } from "next/cache";
-import { isValidDateString } from "@lib/utils/date/isValidDateString";
-import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
-import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
-import { updateSecurityAttribute } from "@lib/templates/mutations/updateSecurityAttribute";
-import { getFormJSONConfig } from "@lib/templates/queries/getFormJSONConfig";
-import { isValidEmail } from "@gcforms/core";
+
+import { BrandProperties, NotificationsInterval } from "@gcforms/types";
+
+import { logMessage } from "@lib/logger";
 import { slugify } from "@lib/client/clientHelpers";
+
+import { isValidEmail } from "@gcforms/core";
+import { isValidDateString } from "@lib/utils/date/isValidDateString";
+import { validateTemplate } from "@lib/utils/form-builder/validate";
+import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
+
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
-import { BrandProperties, NotificationsInterval } from "@gcforms/types";
-import { redirect } from "next/navigation";
-import { logMessage } from "@lib/logger";
+
 import {
   acquireEditLock,
   assertTemplateEditLock,
@@ -40,7 +36,25 @@ import {
   shouldEnforceTemplateEditLockWithVerifiedUserCount,
   TemplateEditLockedError,
 } from "@lib/editLocks";
-import { validateTemplate } from "@lib/utils/form-builder/validate";
+
+/*--------------------------------------------*
+ * Database
+ *--------------------------------------------*/
+import { getFormJSONConfig } from "@lib/templates/queries/getFormJSONConfig";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+
+import { updateFormBranding } from "@lib/templates/mutations/updateFormBranding";
+import { createTemplate as createDbTemplate } from "@lib/templates/mutations/createTemplate";
+
+import { updateTemplate as updateDbTemplate } from "@lib/templates/mutations/updateTemplate";
+import { updateFormPurpose } from "@lib/templates/mutations/updateFormPurpose";
+import { updateFormSaveAndResume } from "@lib/templates/mutations/updateFormSaveAndResume";
+import { updateSecurityAttribute } from "@lib/templates/mutations/updateSecurityAttribute";
+import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
+import { updateClosedData } from "@lib/templates/mutations/updateClosedData";
+import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
+
+import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
 
 const assertTemplateEditLockIfEnabled = async ({
   templateId,

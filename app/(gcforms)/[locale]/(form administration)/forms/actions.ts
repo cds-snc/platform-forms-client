@@ -11,7 +11,7 @@ import { FormRecord } from "@lib/types";
 import { AuthenticatedAction } from "@lib/actions";
 import { sendArchivedFormNotifications } from "@lib/notifications";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
-import { createDraftVersionForTemplate } from "@root/lib/templates/mutations/createDraftForTemplate";
+import { createDraftVersionForTemplate } from "@lib/templates/versioning/mutations/createDraftForTemplate";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 

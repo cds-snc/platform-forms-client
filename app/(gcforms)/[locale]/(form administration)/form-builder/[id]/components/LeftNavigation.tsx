@@ -34,9 +34,14 @@ export const LeftNavigation = ({ id }: { id: string }) => {
     t,
     i18n: { language },
   } = useTranslation("form-builder");
-  const { isPublished, id: storeId } = useTemplateStore((s) => ({
+  const {
+    isPublished,
+    id: storeId,
+    currentDraftVersionId,
+  } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
+    currentDraftVersionId: s.currentDraftVersionId,
   }));
 
   if (storeId && storeId !== id) {
@@ -48,7 +53,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
       <ul className="m-0 list-none p-0">
-        {!isPublished && (
+        {(isPublished || currentDraftVersionId) && (
           <li>
             <LeftNav
               testid="edit"
