@@ -58,7 +58,6 @@ describe("cloneTemplate", () => {
       publishDesc: sourceTemplate.publishDesc,
       saveAndResume: sourceTemplate.saveAndResume,
       notificationsInterval: sourceTemplate.notificationsInterval,
-      lastEditedBy: { name: "Test User" },
     };
 
     (prismaMock.template.create as MockedFunction<any>).mockResolvedValue(createdTemplate);
