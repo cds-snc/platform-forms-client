@@ -212,10 +212,10 @@ describe("Template CRUD functions", () => {
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
         userID,
-        { type: "Form" },
+        { type: "Form", id: "formtestID" },
         "ReadForm",
-        "Accessed Forms: ${formList}",
-        { "formList": "formtestID" }
+        "Accessed Form: ${formId}",
+        { "formId": "formtestID" }
       );
     });
 
