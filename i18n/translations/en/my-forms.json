@@ -22,7 +22,9 @@
     "noPublishedForms": "You have no published forms.",
     "noRecentlyEditedForms": "You have no recently edited forms.",
     "noArchivedForms": "You have no archived forms.",
-    "lastEditedBy": "By: {{lastEditedBy}}"
+    "lastEditedBy": "By: {{lastEditedBy}}",
+    "readOnly": "Read only - ",
+    "editing": "{{name}} editing"
   },
   "card": {
     "sharedWith_one": "Shared with {{count}} person",

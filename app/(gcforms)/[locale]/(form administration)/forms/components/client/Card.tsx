@@ -226,10 +226,10 @@ const CardFooterDraftEditing = memo(
   }) => {
     const { t } = useTranslation("my-forms");
     return (
-      <div>
-        <div className="mb-2 text-sm">{lockedByName} editing</div>
-        <div className="flex items-center">
-          <div className="mr-2 text-sm">Read only -</div>
+      <div className="text-sm">
+        <div className="mb-2">{t("cards.editing", { name: lockedByName })}</div>
+        <div>
+          {t("cards.readOnly")}
           <DraftEditLink
             href={`/${language}/form-builder/${cardId}/edit/`}
             formId={cardId}
