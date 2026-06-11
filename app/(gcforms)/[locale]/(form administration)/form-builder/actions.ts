@@ -388,11 +388,7 @@ export const closeForm = AuthenticatedAction(
       closingDate: string | null;
       closedDetails?: ClosedDetails;
     }
-  ): Promise<{
-    formID: string;
-    closingDate: string | null;
-    error?: string;
-  }> => {
+  ): Promise<FormRecord | { error: string }> => {
     try {
       await assertTemplateEditLockIfEnabled({
         templateId: formID,
@@ -413,9 +409,9 @@ export const closeForm = AuthenticatedAction(
       return response;
     } catch (error) {
       if (error instanceof TemplateEditLockedError) {
-        return { formID: "", closingDate: null, error: "editLocked" };
+        return { error: "editLocked" };
       }
-      return { formID: "", closingDate: null, error: (error as Error).message };
+      return { error: (error as Error).message };
     }
   }
 );

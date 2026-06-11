@@ -4,6 +4,7 @@ import { ClosedDetails } from "@lib/types";
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { isValidISODate } from "@lib/utils/date/isValidISODate";
+import { parseTemplate } from "../internal";
 
 export const updateClosedData = async (
   formID: string,
@@ -33,7 +34,7 @@ export const updateClosedData = async (
     detailsData.messageFr = details?.messageFr || "";
   }
 
-  await prisma.template
+  const updatedTemplate = await prisma.template
     .update({
       where: {
         id: formID,
@@ -44,9 +45,24 @@ export const updateClosedData = async (
       },
       select: {
         id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishDesc: true,
+        publishFormType: true,
+        publishReason: true,
+        saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
+
+  if (updatedTemplate === null) return updatedTemplate;
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
@@ -71,5 +87,5 @@ export const updateClosedData = async (
     );
   }
 
-  return { formID, closingDate };
+  return parseTemplate(updatedTemplate);
 };
