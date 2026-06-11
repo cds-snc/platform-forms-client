@@ -36,7 +36,7 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
   const { locale } = params;
-  const { status } = searchParams;
+  const { status = TAB_STATUS.RECENTLY_EDITED } = searchParams;
   const { t } = await serverTranslation("my-forms", { lang: locale });
   const subtitle = getStatusTitle(status, t);
   return {
@@ -96,7 +96,7 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
 
-  const { status } = searchParams;
+  const { status = TAB_STATUS.RECENTLY_EDITED } = searchParams;
 
   const params = await props.params;
 
@@ -246,10 +246,9 @@ export default async function Page(props: {
         <Cards
           // tell react the state resets when tabs change
           key={status || "default"}
-          filter={status}
+          tabStatus={status}
           initialTemplates={filteredTemplates}
           overdueTemplateIds={overdueTemplateIds}
-          status={status}
           pollIntervalMs={EDIT_LOCK_POLL_INTERVAL_MS}
         />
       </div>

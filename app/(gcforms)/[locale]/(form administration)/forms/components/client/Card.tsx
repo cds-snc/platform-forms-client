@@ -253,9 +253,11 @@ CardFooterPublished.displayName = "CardFooterPublished";
 const CardComponent = ({
   card,
   status,
+  onRemove,
 }: {
   card: FormsTemplateWithLockInfo;
   status: FormTabStatus;
+  onRemove?: (templateId: string) => void;
 }) => {
   const params = useParams();
   const language = params?.locale as string;
@@ -335,6 +337,7 @@ const CardComponent = ({
           isPublished={card.isPublished}
           ttl={card.ttl ? card.ttl : undefined}
           status={status}
+          onRemove={onRemove}
         />
       </div>
     </div>
