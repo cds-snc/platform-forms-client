@@ -1,23 +1,19 @@
 import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prismaMock } from "@testUtils";
-import {
-  createTemplate,
-  getAllTemplates,
-  getAllTemplatesForUser,
-  getPublicTemplateByID,
-  getFullTemplateByID,
-  updateTemplate,
-  deleteTemplate,
-  onlyIncludePublicProperties,
-  updateIsPublishedForTemplate,
-  getTemplateWithAssociatedUsers,
-  updateAssignedUsersForTemplate,
-  TemplateAlreadyPublishedError,
-  removeDeliveryOption,
-  TemplateHasUnprocessedSubmissions,
-} from "../templates";
-
+import { createTemplate } from "@lib/templates/mutations/createTemplate";
+import { getAllTemplates } from "@lib/templates/queries/getAllTemplates";
+import { getAllTemplatesForUser } from "@lib/templates/queries/getAllTemplatesForUser";
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
+import { updateTemplate } from "@lib/templates/mutations/updateTemplate";
+import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
+import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
+import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
+import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
+import { mapTemplateToPublicFormRecord } from "@lib/templates/internal";
+import { TemplateAlreadyPublishedError, TemplateHasUnprocessedSubmissions } from "@lib/templates/internal/errors";
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 
@@ -301,7 +297,7 @@ describe("Template CRUD functions", () => {
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
-      await getTemplateWithAssociatedUsers("formtestID");
+      await getTemplateWithAssignedUsers("formtestID");
 
       expect(prismaMock.template.findUnique).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -418,7 +414,7 @@ describe("Template CRUD functions", () => {
       // We're just adding an additional user (2)
       const users: { id: string }[] = [{ id: "1" }, { id: "2" }];
 
-      await updateAssignedUsersForTemplate("formTestID", users);
+      await syncAssignedUsersForTemplate("formTestID", users);
 
       // Should just connect the new user
       expect(prismaMock.template.update).toHaveBeenCalledWith(
@@ -469,7 +465,7 @@ describe("Template CRUD functions", () => {
       // We're removing two (2,4) and adding one (1)
       const users2: { id: string }[] = [{ id: "1" }, { id: "3" }];
 
-      await updateAssignedUsersForTemplate("formTestID", users2);
+      await syncAssignedUsersForTemplate("formTestID", users2);
 
       // Connect 1, disconnect 2,4
       expect(prismaMock.template.update).toHaveBeenCalledWith(
@@ -713,7 +709,7 @@ describe("Template CRUD functions", () => {
         securityAttribute: "Unclassified",
       };
 
-      const publicFormRecord = onlyIncludePublicProperties(formRecord);
+      const publicFormRecord = mapTemplateToPublicFormRecord(formRecord);
 
       expect(publicFormRecord).toHaveProperty("id");
       expect(publicFormRecord).toHaveProperty("form");

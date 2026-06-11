@@ -4,7 +4,8 @@ import { PublicFormRecord, Responses, SignedURLMap } from "@lib/types";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
 import { logMessage } from "@lib/logger";
-import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
+import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosureState";
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
@@ -22,7 +23,7 @@ import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function isFormClosed(formId: string): Promise<boolean> {
-  const closedDetails = await checkIfClosed(formId);
+  const closedDetails = await getTemplateClosureState(formId);
 
   if (closedDetails && closedDetails.isPastClosingDate) {
     return true;

@@ -1,17 +1,18 @@
 "use server";
 
-import { deleteTemplate, getFullTemplateByID } from "@lib/templates";
-import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
+import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { TemplateHasUnprocessedSubmissions } from "@lib/templates/internal/errors";
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { sendArchivedFormNotifications } from "@lib/notifications";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const deleteForm = AuthenticatedAction(async (session, id: string) => {
   try {
-    const template = await getTemplateWithAssociatedUsers(id);
+    const template = await getTemplateWithAssignedUsers(id);
     if (!template) {
       throw new Error(`Invalid form archive attempt for form ID: ${id}`);
     }

@@ -1,10 +1,8 @@
 import { AccessControlError } from "@lib/auth/errors";
 import { middleware, sessionExists, jsonValidator } from "@lib/middleware";
-import {
-  createTemplate,
-  getAllTemplatesForUser,
-  onlyIncludePublicProperties,
-} from "@lib/templates";
+import { mapTemplateToPublicFormRecord } from "@lib/templates/internal";
+import { createTemplate } from "@lib/templates/mutations/createTemplate";
+import { getAllTemplatesForUser } from "@lib/templates/queries/getAllTemplatesForUser";
 import {
   DeliveryOption,
   FormProperties,
@@ -54,7 +52,7 @@ export const GET = middleware(
   async (req, props) => {
     try {
       const templates = await getAllTemplatesForUser();
-      const response = templates.map((template) => onlyIncludePublicProperties(template));
+      const response = templates.map((template) => mapTemplateToPublicFormRecord(template));
 
       if (!response) {
         throw new Error(
