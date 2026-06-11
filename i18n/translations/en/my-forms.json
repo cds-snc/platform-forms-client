@@ -24,7 +24,9 @@
     "noArchivedForms": "You have no archived forms.",
     "lastEditedBy": "By: {{lastEditedBy}}",
     "readOnly": "Read only - ",
-    "editing": "{{name}} editing"
+    "editing": "{{name}} editing",
+    "announceLocked": "Form with name {{formName}} is now being edited",
+    "announceUnlockedLocked": "Form with name {{formName}} is no longer being edited"
   },
   "card": {
     "sharedWith_one": "Shared with {{count}} person",

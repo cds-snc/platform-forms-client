@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useMemo, memo } from "react";
+import { Suspense, useMemo, memo, useEffect, useRef } from "react";
 import { EnvelopeIcon, MessageIcon, GearIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
 import { Unarchive } from "../client/Unarchive";
@@ -18,6 +18,7 @@ import {
   calculateCollaboratorCount,
   getBannerColor,
 } from "../helpers";
+import { announce, Priority } from "@gcforms/announce";
 
 const CardBanner = memo(({ isPublished }: { isPublished: boolean }) => {
   const { t } = useTranslation("my-forms");
@@ -263,8 +264,22 @@ const CardComponent = ({
   status: FormTabStatus;
   onRemove?: (templateId: string) => void;
 }) => {
+  const { t } = useTranslation("my-forms");
   const params = useParams();
   const language = params?.locale as string;
+  const lockStateRef = useRef<{ hasLock: boolean }>({ hasLock: !!card.editLockInfo });
+
+  // Announce any lock state changes
+  const formLocked = t("cards.announceLocked", { formName: card.name });
+  const formUnlocked = t("cards.announceUnlockedLocked", { formName: card.name });
+  useEffect(() => {
+    const hasLock = !!card.editLockInfo;
+    if (lockStateRef.current.hasLock !== hasLock) {
+      lockStateRef.current = { hasLock };
+      const message = hasLock ? formLocked : formUnlocked;
+      announce(message, Priority.HIGH);
+    }
+  }, [card.editLockInfo, formLocked, formUnlocked]);
 
   // Calculate collaborator count (excluding the owner)
   const collaboratorCount = useMemo(

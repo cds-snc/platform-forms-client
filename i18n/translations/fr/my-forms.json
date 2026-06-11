@@ -24,7 +24,8 @@
     "noArchivedForms": "Vous n'avez aucun formulaire archivé.",
     "lastEditedBy": "[FR]By: {{lastEditedBy}}",
     "readOnly": "[FR]Read only - ",
-    "editing": "[FR]{{name}} editing"
+    "editing": "[FR]{{name}} editing",
+    "announceUnlockedLocked": "[FR]Form with name {{formName}} is no longer being edited"
   },
   "card": {
     "sharedWith_one": "Partagé avec {{count}} personne",
