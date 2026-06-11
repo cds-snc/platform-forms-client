@@ -54,10 +54,8 @@
 @layer wide {
   @container brand (width >= 51em) {
     .gcds-header__container .gcds-header__brand .brand__container {
-      grid-template-areas:
-        "toggle toggle"
-        "signature search";
-      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "signature toggle";
+      grid-template-columns: 1fr;
     }
   }
 }
@@ -141,20 +139,5 @@
 .gc-form-preview-header {
   .brand__container {
     width: 100%;
-  }
-}
-
-@layer brand {
-  .gcds-header__container .gcds-header__brand {
-    padding: 0.7rem 0 !important;
-  }
-}
-
-@layer wide {
-  @container brand (width >= 51em) {
-    .gcds-header__container .gcds-header__brand .brand__container {
-      grid-template-areas: "signature toggle";
-      grid-template-columns: 1fr;
-    }
   }
 }
