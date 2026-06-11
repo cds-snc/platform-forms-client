@@ -77,9 +77,9 @@ export async function getAllTemplatesForUser(
           ability.user.id,
           { type: "Form", id: template.id },
           AuditLogEvent.ReadForm,
-          AuditLogDetails.AccessedForms,
+          AuditLogDetails.AccessedForm,
           {
-            formList: template.id,
+            formId: template.id,
           }
         );
       }
