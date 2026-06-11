@@ -54,6 +54,7 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
       },
       data: {
         ttl: dateIn30Days,
+        lastEditedByUserId: user.id,
       },
       select: {
         id: true,
@@ -70,6 +71,11 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
         publishDesc: true,
         saveAndResume: true,
         notificationsInterval: true,
+        lastEditedBy: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
     .catch((e) => prismaErrors(e, null));

@@ -41,6 +41,7 @@ export const updateClosedData = async (
       data: {
         closingDate,
         closedDetails: detailsData !== null ? (detailsData as Prisma.JsonObject) : Prisma.JsonNull,
+        lastEditedByUserId: user.id,
       },
       select: {
         id: true,

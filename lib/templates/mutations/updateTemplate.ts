@@ -92,6 +92,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
       data: {
         jsonConfig: command.formConfig as Prisma.JsonObject,
         name: command.name,
+        lastEditedByUserId: user.id,
         ...(command.deliveryOption && {
           deliveryOption: {
             upsert: {
@@ -118,6 +119,11 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
       },
       include: {
         deliveryOption: true,
+        lastEditedBy: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
     .catch((e) => prismaErrors(e, null));
