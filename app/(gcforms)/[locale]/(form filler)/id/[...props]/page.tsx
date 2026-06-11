@@ -1,4 +1,4 @@
-import { getPublicTemplateByID } from "@lib/templates";
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { dateHasPast } from "@lib/utils";
 import { getLocalizedProperty } from "@lib/utils";
 import { notFound } from "next/navigation";

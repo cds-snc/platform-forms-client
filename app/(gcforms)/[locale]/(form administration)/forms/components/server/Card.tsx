@@ -7,6 +7,7 @@ import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { DeliveryOption } from "@lib/types";
 import Skeleton from "react-loading-skeleton";
+import { FormTabStatus } from "../types";
 
 const CardBanner = async ({ isPublished, ttl }: { isPublished: boolean; ttl: Date | null }) => {
   const { t } = await serverTranslation("my-forms");
@@ -160,15 +161,19 @@ export interface CardI {
   titleFr: string;
   deliveryOption: DeliveryOption;
   name: string;
+  hasDraft: boolean;
+  currentDraftVersion?: number;
+  versionNumber?: number | null;
   isPublished: boolean;
   ttl: Date | null;
   date: string;
   url: string;
   overdue: boolean;
-  status?: string;
+  status: FormTabStatus;
 }
 
-export const Card = async ({ card, status }: { card: CardI; status?: string }) => {
+export const Card = async ({ card, status }: { card: CardI; status: FormTabStatus }) => {
+  const { t } = await serverTranslation("my-forms");
   return (
     <div
       className="flex h-full flex-col justify-between rounded border-1 border-slate-500 bg-white"
@@ -195,6 +200,17 @@ export const Card = async ({ card, status }: { card: CardI; status?: string }) =
 
       <div className="mb-2 text-xs">
         <p className="ml-4 italic">{card.id}</p>
+        <>
+          {card.hasDraft && card.versionNumber && (
+            <div className="mt-2 ml-4 flex items-center">
+              <span
+                className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-400"
+                aria-hidden="true"
+              ></span>
+              {t("card.draftVersion", { versionNumber: card.versionNumber })}
+            </div>
+          )}
+        </>
       </div>
 
       <div className="mb-4 flex items-center justify-between px-3">

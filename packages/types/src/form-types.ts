@@ -232,12 +232,19 @@ export type FormRecord = {
   name: string;
   form: FormProperties;
   isPublished: boolean;
+  currentPublishedVersionId?: string | null;
+  currentDraftVersionId?: string | null;
+  versionNumber?: number | null;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string;
   closedDetails?: ClosedDetails;
   saveAndResume?: boolean;
   notificationsInterval?: NotificationsInterval;
+  _count?: {
+    users: number;
+    invitations: number;
+  };
   [key: string]:
     | string
     | boolean
@@ -246,6 +253,7 @@ export type FormRecord = {
     | FormProperties
     | DeliveryOption
     | ClosedDetails
+    | { users: number; invitations: number }
     | undefined
     | null;
 };

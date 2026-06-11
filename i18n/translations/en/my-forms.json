@@ -4,20 +4,29 @@
     "drafts": "Drafts",
     "published": "Published",
     "all": "All",
-    "archived": "Archived"
+    "archived": "Archived",
+    "recentlyEdited": "Recent"
+  },
+  "account": {
+    "viewAccount": "Your account"
   },
   "actions": {
     "resumeForm": "Resume editing form",
-    "createNewForm": "Create new form",
+    "createNewForm": "New form",
     "unarchiveForm": "Restore form",
-    "duplicatePublishedForm": "Copy as new draft form"
+    "duplicatePublishedForm": "Edit published form"
   },
   "cards": {
     "noForms": "You have no forms.",
     "noDraftsForms": "You have no draft forms.",
-    "noPublishedForms": "You have no published forms."
+    "noPublishedForms": "You have no published forms.",
+    "noRecentlyEditedForms": "You have no recently edited forms.",
+    "noArchivedForms": "You have no archived forms.",
+    "lastEditedBy": "By: {{lastEditedBy}}"
   },
   "card": {
+    "sharedWith_one": "Shared with {{count}} person",
+    "sharedWith_other": "Shared with {{count}} people",
     "states": {
       "draft": "Draft",
       "published": "Published",
@@ -35,6 +44,7 @@
       "email": "Responses get sent to:",
       "vault": "Responses page"
     },
+    "draftVersion": "Draft - version {{versionNumber}}",
     "menu": {
       "more": "More",
       "save": "Download copy",
@@ -48,12 +58,10 @@
       "somethingWentWrong": "Something went wrong",
       "clone": "Duplicate",
       "cloneSuccess": "Form was duplicated.",
-      "cloneFailed": "Form could not be duplicated."
+      "cloneFailed": "Form could not be duplicated.",
+      "ariaLabel": "Menu for form {{name}}"
     },
-    "actionRequired": {
-      "description": "Action required: ",
-      "linkText": "Sign off on responses"
-    },
+    "actionRequired": "Responses overdue",
     "editLock": {
       "title": "Open form in progress",
       "description": "{{name}} is currently editing this draft. If you continue, the form will remain locked until you decide to take over editing. Only one person can edit a form at a time."
@@ -113,5 +121,14 @@
   },
   "continueReadOnly": "Continue to form",
   "archivedNotice": "You can access archived forms for 30 days.",
-  "archivedNotice2": "After that, forms will be permanently deleted."
+  "archivedNotice2": "After that, forms will be permanently deleted.",
+  "coEditingHelp": {
+    "title": "Co-editing forms",
+    "step1": "Select form",
+    "step2": "Manage access",
+    "step3": "Add team members",
+    "descriptionStart": "Forms being edited will be available for",
+    "descriptionBold": "one person to edit at a time",
+    "descriptionEnd": "."
+  }
 }

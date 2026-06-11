@@ -8,7 +8,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { cn } from "@lib/utils";
 import { PublishCard } from "./components/PublishCard";
 import { PublishInfo } from "./components/PublishInfo";
-import { getTemplatePublishedStatus } from "@root/lib/templates";
+import { getTemplatePublishedStatus } from "@lib/templates/queries/getTemplatePublishedStatus";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata(props: {
@@ -57,7 +57,7 @@ export default async function Page(props: { params: Promise<{ id: string; locale
       <div
         className={cn(
           "grid gap-4",
-          userCanPublish ? "grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3" : "grid-cols-1"
+          userCanPublish ? "tablet:grid-cols-2 laptop:grid-cols-3 grid-cols-1" : "grid-cols-1"
         )}
       >
         <div className={cn(userCanPublish && "tablet:col-span-1 laptop:col-span-2")}>

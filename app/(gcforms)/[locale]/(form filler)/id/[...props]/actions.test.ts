@@ -3,7 +3,7 @@ import { submitForm } from "./actions";
 import { PublicFormRecord, Responses, FormElementTypes } from "@lib/types";
 
 // Mock all the dependencies
-vi.mock("@lib/templates", () => ({
+vi.mock("@lib/templates/queries/getPublicTemplateByID", () => ({
   getPublicTemplateByID: vi.fn(),
 }));
 
@@ -46,7 +46,7 @@ vi.mock("./lib/server/processFormData", () => ({
 
 
 
-import { getPublicTemplateByID } from "@lib/templates";
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { dateHasPast } from "@lib/utils";
