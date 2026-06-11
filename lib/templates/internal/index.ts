@@ -96,6 +96,7 @@ export const mapTemplateToPublicFormRecord = (template: FormRecord): PublicFormR
   return {
     id: template.id,
     updatedAt: template.updatedAt,
+    versionNumber: template.versionNumber,
     closingDate: template.closingDate,
     closedDetails: template.closedDetails,
     form: template.form,

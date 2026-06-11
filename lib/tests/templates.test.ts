@@ -26,6 +26,7 @@ import { logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
 import { AccessControlError } from "@lib/auth/errors";
+import * as versioningInternal from "@lib/templates/versioning/internal";
 import {
   mockAuthorizationPass,
   mockAuthorizationFail,
@@ -107,6 +108,7 @@ describe("Template CRUD functions", () => {
       mockUnprocessedSubmissions.mockReset();
       // Default to no unprocessed submissions unless a test overrides
       mockUnprocessedSubmissions.mockResolvedValue(false);
+      vi.spyOn(versioningInternal, "isTemplateVersioningEnabled").mockResolvedValue(false);
     });
 
     it("Create a Template", async () => {
@@ -240,6 +242,58 @@ describe("Template CRUD functions", () => {
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledTimes(0);
+    });
+
+    it("Get a public template with version number from the published version", async () => {
+      vi.spyOn(versioningInternal, "isTemplateVersioningEnabled").mockResolvedValue(true);
+
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        currentPublishedVersion: {
+          id: "published-version-2",
+          versionNumber: 2,
+          status: "PUBLISHED",
+          jsonConfig: formConfiguration,
+        },
+        currentDraftVersion: null,
+      });
+
+      const template = await getPublicTemplateByID("formTestID");
+
+      expect(template).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: true,
+          securityAttribute: "Unclassified",
+          versionNumber: 2,
+        })
+      );
+    });
+
+    it("Does not include a public template version number when versioning is disabled", async () => {
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        currentPublishedVersion: {
+          id: "published-version-2",
+          versionNumber: 2,
+          status: "PUBLISHED",
+          jsonConfig: formConfiguration,
+        },
+        currentDraftVersion: null,
+      });
+
+      const template = await getPublicTemplateByID("formTestID");
+
+      expect(template).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: true,
+          securityAttribute: "Unclassified",
+        })
+      );
+      expect(template?.versionNumber).toBeUndefined();
     });
 
     it("Get a full template", async () => {

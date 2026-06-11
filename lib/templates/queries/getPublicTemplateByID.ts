@@ -2,6 +2,10 @@ import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { PublicFormRecord } from "@lib/types";
 import { mapTemplateToPublicFormRecord, parseTemplate } from "../internal";
+import {
+  isTemplateVersioningEnabled,
+  parseTemplate as parseVersionedTemplate,
+} from "../versioning/internal";
 import { logMessage } from "@lib/logger";
 
 /**
@@ -11,12 +15,20 @@ import { logMessage } from "@lib/logger";
  */
 export async function getPublicTemplateByID(formID: string): Promise<PublicFormRecord | null> {
   try {
+    const templateVersioningEnabled = await isTemplateVersioningEnabled();
+
     if (formCache.cacheAvailable) {
       // This value will always be the latest if it exists because
       // the cache is invalidated on change of a template
       const cachedValue = await formCache.check(formID);
       if (cachedValue) {
-        return cachedValue;
+        if (!templateVersioningEnabled) {
+          return { ...cachedValue, versionNumber: undefined };
+        }
+
+        if (cachedValue.versionNumber !== undefined && cachedValue.versionNumber !== null) {
+          return cachedValue;
+        }
       }
     }
 
@@ -43,6 +55,22 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
           saveAndResume: true,
           ttl: true,
           notificationsInterval: true,
+          currentPublishedVersion: {
+            select: {
+              id: true,
+              versionNumber: true,
+              status: true,
+              jsonConfig: true,
+            },
+          },
+          currentDraftVersion: {
+            select: {
+              id: true,
+              versionNumber: true,
+              status: true,
+              jsonConfig: true,
+            },
+          },
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -50,7 +78,13 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
     // Short circuit the public record filtering if no form record is found or the form is marked as deleted (ttl != null)
     if (!template || template.ttl) return null;
 
-    const parsedTemplate = parseTemplate(template);
+    const parsedTemplate =
+      templateVersioningEnabled &&
+      (template.currentPublishedVersion || template.currentDraftVersion)
+        ? parseVersionedTemplate(template, {
+            version: template.currentPublishedVersion ?? template.currentDraftVersion,
+          })
+        : parseTemplate(template);
     const publicFormRecord = mapTemplateToPublicFormRecord(parsedTemplate);
 
     if (formCache.cacheAvailable) formCache.set(formID, publicFormRecord);
