@@ -22,10 +22,11 @@
     "noPublishedForms": "Vous n'avez aucun formulaire publié.",
     "noRecentlyEditedForms": "Vous n'avez aucun formulaire récemment modifié.",
     "noArchivedForms": "Vous n'avez aucun formulaire archivé.",
-    "lastEditedBy": "[FR]By: {{lastEditedBy}}",
-    "readOnly": "[FR]Read only - ",
-    "editing": "[FR]{{name}} editing",
-    "announceUnlockedLocked": "[FR]Form with name {{formName}} is no longer being edited"
+    "lastEditedBy": "par : {{lastEditedBy}}",
+    "readOnly": "Ouvert - ",
+    "editing": "{{name}} modifie",
+        "announceLocked": "Le formulaire nommé {{formName}} est en cours de modification",
+    "announceUnlockedLocked": "Le formulaire nommé {{formName}} n'est plus en cours de modification"
   },
   "card": {
     "sharedWith_one": "Partagé avec {{count}} personne",
