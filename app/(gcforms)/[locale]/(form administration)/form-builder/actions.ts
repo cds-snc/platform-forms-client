@@ -29,6 +29,8 @@ import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
 
+import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
+
 import {
   acquireEditLock,
   assertTemplateEditLock,
@@ -45,8 +47,10 @@ import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID"
 
 import { updateFormBranding } from "@lib/templates/mutations/updateFormBranding";
 import { createTemplate as createDbTemplate } from "@lib/templates/mutations/createTemplate";
+import { createTemplate as createDbTemplateV2 } from "@lib/templates/versioning/mutations/createTemplate";
 
 import { updateTemplate as updateDbTemplate } from "@lib/templates/mutations/updateTemplate";
+import { updateTemplate as updateDbTemplateV2 } from "@lib/templates/versioning/mutations/updateTemplate";
 import { updateFormPurpose } from "@lib/templates/mutations/updateFormPurpose";
 import { updateFormSaveAndResume } from "@lib/templates/mutations/updateFormSaveAndResume";
 import { updateSecurityAttribute } from "@lib/templates/mutations/updateSecurityAttribute";
@@ -126,19 +130,28 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       return { formRecord: null, error: "validationError" };
     }
 
+    const versioningEnabled = await isTemplateVersioningEnabled();
+
     try {
       if (id) {
-        return await updateTemplate({
-          id,
+        const updateArgs = {
+          formID: id,
           formConfig,
           name,
           deliveryOption,
           securityAttribute,
           formPurpose,
-        });
+        };
+        const formRecord = versioningEnabled
+          ? await updateDbTemplateV2(updateArgs)
+          : await updateDbTemplate(updateArgs);
+        if (!formRecord) {
+          throw new Error("Failed to update template");
+        }
+        return { formRecord };
       }
 
-      const formRecord = await createDbTemplate({
+      const createArgs = {
         userID: session.user.id,
         formConfig: formConfig,
         name: name,
@@ -146,7 +159,11 @@ export const createOrUpdateTemplate = AuthenticatedAction(
         securityAttribute: securityAttribute,
         formPurpose: formPurpose,
         notificationsInterval,
-      });
+      };
+
+      const formRecord = versioningEnabled
+        ? await createDbTemplateV2(createArgs)
+        : await createDbTemplate(createArgs);
 
       if (!formRecord) {
         throw new Error("Failed to create template");
