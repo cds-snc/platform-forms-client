@@ -57,7 +57,6 @@ export async function restoreTemplate(formID: string): Promise<FormRecord | null
       },
       data: {
         ttl: null,
-        lastEditedByUserId: user.id,
       },
       select: {
         id: true,
@@ -74,11 +73,6 @@ export async function restoreTemplate(formID: string): Promise<FormRecord | null
         publishDesc: true,
         saveAndResume: true,
         notificationsInterval: true,
-        lastEditedBy: {
-          select: {
-            name: true,
-          },
-        },
       },
     })
     .catch((e) => prismaErrors(e, null));

@@ -109,11 +109,6 @@ export async function cloneTemplate(
         publishDesc: true,
         saveAndResume: true,
         notificationsInterval: true,
-        lastEditedBy: {
-          select: {
-            name: true,
-          },
-        },
       },
     })
     .catch((e) => prismaErrors(e, null));
