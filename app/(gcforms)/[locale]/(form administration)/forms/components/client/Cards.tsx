@@ -10,16 +10,14 @@ import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 import { NewFormButton } from "./NewFormButton";
 
 export const Cards = ({
-  filter,
+  tabStatus,
   initialTemplates,
   overdueTemplateIds,
-  status,
   pollIntervalMs,
 }: {
-  filter: FormTabStatus;
+  tabStatus: FormTabStatus;
   initialTemplates: FormsTemplateWithLockInfo[];
   overdueTemplateIds: string[];
-  status: FormTabStatus;
   pollIntervalMs: number;
 }) => {
   const { t } = useTranslation("my-forms");
@@ -45,11 +43,24 @@ export const Cards = ({
     onLoadMore: handleLoadMore,
   });
 
-  // Setup edit lock polling - only poll for recentlyEdited and draft tabs
+  // Handle template removal (e.g., when archived)
+  const handleTemplateRemoved = useCallback((templateId: string) => {
+    startTransition(() => {
+      setTemplates((prev) => prev.filter((t) => t.id !== templateId));
+    });
+  }, []);
+
+  // Setup edit lock polling - only poll for draft forms in the recentlyEdited and draft tabs
   const shouldPoll =
-    !filter || filter === TAB_STATUS.RECENTLY_EDITED || filter === TAB_STATUS.DRAFT;
+    !tabStatus || tabStatus === TAB_STATUS.RECENTLY_EDITED || tabStatus === TAB_STATUS.DRAFT;
+
+  const draftTemplates = useMemo(
+    () => templates.filter((t) => t.isPublished === false && t.ttl === null),
+    [templates]
+  );
+
   useEditLockPolling({
-    templates,
+    templates: draftTemplates,
     displayedCount,
     pollIntervalMs,
     enabled: shouldPoll,
@@ -62,18 +73,18 @@ export const Cards = ({
 
   // Get the appropriate message when there are no forms to display
   const emptyStateMessage = useMemo(() => {
-    if (filter === TAB_STATUS.RECENTLY_EDITED || !filter) return t("cards.noRecentlyEditedForms");
-    if (filter === TAB_STATUS.DRAFT) return t("cards.noDraftsForms");
-    if (filter === TAB_STATUS.PUBLISHED) return t("cards.noPublishedForms");
-    if (filter === TAB_STATUS.ARCHIVED) return t("cards.noArchivedForms");
+    if (tabStatus === TAB_STATUS.RECENTLY_EDITED || !tabStatus)
+      return t("cards.noRecentlyEditedForms");
+    if (tabStatus === TAB_STATUS.DRAFT) return t("cards.noDraftsForms");
+    if (tabStatus === TAB_STATUS.PUBLISHED) return t("cards.noPublishedForms");
+    if (tabStatus === TAB_STATUS.ARCHIVED) return t("cards.noArchivedForms");
     return t("cards.noForms");
-  }, [filter, t]);
+  }, [tabStatus, t]);
 
   // Prepare cards for display with overdue status
   // Memoized to prevent recalculation on every render (e.g. every 5s during polling)
   const displayedCards = useMemo(() => {
     return templates.slice(0, displayedCount).map((card) => {
-      // Add overdue flag without mutating the original card
       if (overdueTemplateIds.includes(card.id)) {
         return { ...card, overdue: true };
       }
@@ -84,18 +95,20 @@ export const Cards = ({
 
   return (
     <ViewTransition name="forms-tab-switch">
-      <div id={`tabpanel-${filter}`} role="tabpanel" aria-labelledby={`tab-${filter}`}>
+      <div id={`tabpanel-${tabStatus}`} role="tabpanel" aria-labelledby={`tab-${tabStatus}`}>
         {templates.length > 0 ? (
           <>
             <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
-              {(status === TAB_STATUS.DRAFT || status === TAB_STATUS.PUBLISHED || !status) && (
+              {(tabStatus === TAB_STATUS.DRAFT ||
+                tabStatus === TAB_STATUS.PUBLISHED ||
+                !tabStatus) && (
                 <li className="flex h-full w-full max-w-[16em]" key={-1}>
                   <NewFormButton />
                 </li>
               )}
               {displayedCards.map((card) => (
                 <li className="flex h-full w-full max-w-[16em]" key={card.id}>
-                  <Card card={card} status={status} />
+                  <Card card={card} status={tabStatus} onRemove={handleTemplateRemoved} />
                 </li>
               ))}
             </ol>
