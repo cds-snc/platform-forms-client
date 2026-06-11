@@ -47,6 +47,11 @@ export async function getAllTemplatesForUser(
           publishDesc: true,
           saveAndResume: true,
           notificationsInterval: true,
+          lastEditedBy: {
+            select: {
+              name: true,
+            },
+          },
           // only count and not entire user info for privacy etc.
           _count: {
             select: {
