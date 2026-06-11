@@ -175,6 +175,7 @@ export const updateTemplate = AuthenticatedAction(
         userId: session.user.id,
       });
       const formRecord = await updateDbTemplate({
+        action: "full",
         formID: formID,
         formConfig: formConfig,
         name: name,

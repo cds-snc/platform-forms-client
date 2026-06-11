@@ -169,6 +169,7 @@ export const PUT = middleware(
 
       if (formConfig) {
         response = await updateTemplate({
+          action: "full",
           formID: formID,
           formConfig: formConfig,
           name: name,
