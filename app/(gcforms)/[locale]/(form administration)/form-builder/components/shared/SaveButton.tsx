@@ -123,7 +123,7 @@ export const SaveButton = () => {
 
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const pathname = usePathname();
-  const timeRef = useRef(new Date().getTime());
+  const timeRef = useRef<number | null>(null);
   const isLockedByOtherRef = useRef(lockedByOther);
   const saveStateRef = useRef(saveState);
 
@@ -139,6 +139,8 @@ export const SaveButton = () => {
     if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
       return;
     }
+
+    timeRef.current = new Date().getTime();
 
     const result = await saveDraft();
 

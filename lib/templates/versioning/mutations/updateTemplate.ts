@@ -15,7 +15,12 @@ import { checkFlag } from "../../internal";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "../../internal/errors";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
-import { getBuilderVersion, templateRecordInclude, parseTemplate } from "../internal";
+import {
+  getBuilderVersion,
+  getTemplateJsonConfigMirrorData,
+  templateRecordInclude,
+  parseTemplate,
+} from "../internal";
 
 type UpdateTemplateCommand = {
   formID: string;
@@ -104,7 +109,9 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
               id: command.formID,
             },
             data: {
-              ...(currentTemplate.isPublished ? {} : (command.formConfig as Prisma.JsonObject)),
+              ...(currentTemplate.isPublished
+                ? {}
+                : getTemplateJsonConfigMirrorData(command.formConfig as Prisma.JsonObject)),
               name: command.name,
               ...(command.deliveryOption && {
                 deliveryOption: {
@@ -143,7 +150,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
               isPublished: false,
             },
             data: {
-              ...(command.formConfig as Prisma.JsonObject),
+              ...getTemplateJsonConfigMirrorData(command.formConfig as Prisma.JsonObject),
               name: command.name,
               ...(command.deliveryOption && {
                 deliveryOption: {
@@ -224,5 +231,6 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
 
   return parseTemplate(updatedTemplate, {
     version: getBuilderVersion(updatedTemplate),
+    isPublished: updatedTemplate.currentDraftVersion ? false : undefined,
   });
 }

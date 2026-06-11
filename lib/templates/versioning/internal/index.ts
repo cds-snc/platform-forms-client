@@ -35,6 +35,10 @@ export const templateRecordInclude = {
   },
 } satisfies Prisma.TemplateInclude;
 
+export const getTemplateJsonConfigMirrorData = (jsonConfig: Prisma.JsonObject) => {
+  return { jsonConfig };
+};
+
 // ******************************************
 // Internal Module Functions
 // ******************************************
@@ -57,7 +61,7 @@ export const parseTemplate = (
     }),
     name: template.name,
     form: version ? parseJsonConfig(version.jsonConfig) : getResolvedTemplateFormConfig(template),
-    isPublished: template.isPublished,
+    isPublished: options?.isPublished ?? template.isPublished,
     currentPublishedVersionId: template.currentPublishedVersionId ?? null,
     currentDraftVersionId: template.currentDraftVersionId ?? null,
     versionNumber: version?.versionNumber ?? null,

@@ -112,4 +112,14 @@ describe("<SaveButton />", () => {
 
     expect(replace).toHaveBeenCalledWith("/en/form-builder/real-form-id/translate");
   });
+
+  it("allows the first manual save immediately after mount", async () => {
+    saveDraft.mockResolvedValueOnce({ status: "saved" as const, formId: "test-form-id" });
+
+    await render(<SaveButtonHarness />);
+
+    await page.getByRole("button", { name: "Save draft" }).click();
+
+    expect(saveDraft).toHaveBeenCalledTimes(1);
+  });
 });

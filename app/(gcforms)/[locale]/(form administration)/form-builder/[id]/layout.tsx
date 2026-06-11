@@ -5,6 +5,7 @@ import { Footer } from "@serverComponents/globals/Footer";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { AccessControlError } from "@lib/auth/errors";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
+import { getTemplateWithAssignedUsers as getTemplateWithAssignedUsersV2 } from "@lib/templates/versioning/queries/getTemplateWithAssignedUsers";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
@@ -29,6 +30,7 @@ import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLoc
 import { EditLockProvider } from "@formBuilder/components/shared/edit-lock/EditLockContext";
 import { AccountMenu } from "@formBuilder/components/shared/account-menu/AccountMenu";
 import { ManageFormAccessDialogContainer } from "./components/dialogs/ManageFormAccessDialog";
+import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -50,6 +52,7 @@ export default async function Layout(props: {
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();
+  const templateVersioningEnabled = await isTemplateVersioningEnabled();
   const shareUsesManageAccess = formID !== "0000";
   const publishFormsEnabled = session
     ? await authorization.hasPublishFormsPrivilege().catch(() => false)
@@ -59,7 +62,11 @@ export default async function Layout(props: {
   );
 
   if (session && formID && formID !== "0000") {
-    const templateWithUsers = await getTemplateWithAssignedUsers(formID).catch((e) => {
+    const getTemplateWithUsers = templateVersioningEnabled
+      ? getTemplateWithAssignedUsersV2
+      : getTemplateWithAssignedUsers;
+
+    const templateWithUsers = await getTemplateWithUsers(formID).catch((e) => {
       if (e instanceof AccessControlError) {
         redirect(`/${locale}/admin/unauthorized`);
       }

@@ -7,15 +7,10 @@ import {
   AuditLogEvent,
   logEvent,
 } from "@lib/auditLogs";
-import { parseTemplate } from "../internal";
-import { isTemplateVersioningEnabled } from "../versioning/internal";
-import { updateSecurityAttribute as updateSecurityAttributeVersioningEnabled } from "../versioning/mutations/updateSecurityAttribute";
+import { TemplateAlreadyPublishedError } from "../../internal/errors";
+import { getBuilderVersion, parseTemplate, templateRecordInclude } from "../internal";
 
 export const updateSecurityAttribute = async (formID: string, securityAttribute: string) => {
-  if (await isTemplateVersioningEnabled()) {
-    return updateSecurityAttributeVersioningEnabled(formID, securityAttribute);
-  }
-
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
       e.user.id,
@@ -26,29 +21,27 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
     throw e;
   });
 
+  const currentTemplate = await prisma.template.findUnique({
+    where: { id: formID },
+    select: {
+      isPublished: true,
+      currentDraftVersionId: true,
+    },
+  });
+
+  if (!currentTemplate) {
+    return null;
+  }
+
+  if (currentTemplate.isPublished && !currentTemplate.currentDraftVersionId) {
+    throw new TemplateAlreadyPublishedError();
+  }
+
   const updatedTemplate = await prisma.template
     .update({
-      where: {
-        id: formID,
-        isPublished: false,
-      },
+      where: { id: formID },
       data: { securityAttribute },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-        saveAndResume: true,
-        notificationsInterval: true,
-      },
+      include: templateRecordInclude,
     })
     .catch((e) => prismaErrors(e, null));
 
@@ -64,5 +57,8 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
     { securityAttribute: securityAttribute ?? "" }
   );
 
-  return parseTemplate(updatedTemplate);
+  return parseTemplate(updatedTemplate, {
+    version: getBuilderVersion(updatedTemplate),
+    isPublished: updatedTemplate.currentDraftVersion ? false : undefined,
+  });
 };

@@ -13,6 +13,8 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { InvalidFormConfigError } from "../internal/errors";
 import { parseTemplate } from "../internal";
+import { isTemplateVersioningEnabled } from "../versioning/internal";
+import { updateFormBranding as updateFormBrandingVersioningEnabled } from "../versioning/mutations/updateFormBranding";
 
 /**
  * WARNING:
@@ -21,6 +23,10 @@ import { parseTemplate } from "../internal";
  * Doing so would cause an error in the infra pipeline when processing submissions.
  */
 export const updateFormBranding = async (formId: string, jsonConfig: FormProperties) => {
+  if (await isTemplateVersioningEnabled()) {
+    return updateFormBrandingVersioningEnabled(formId, jsonConfig);
+  }
+
   const { user } = await authorization.canEditForm(formId).catch((e) => {
     logEvent(
       e.user.id,

@@ -201,18 +201,22 @@ export const updateTemplate = AuthenticatedAction(
     error?: string;
   }> => {
     try {
+      const versioningEnabled = await isTemplateVersioningEnabled();
       await assertTemplateEditLockIfEnabled({
         templateId: formID,
         userId: session.user.id,
       });
-      const formRecord = await updateDbTemplate({
+      const updateArgs = {
         formID: formID,
         formConfig: formConfig,
         name: name,
         deliveryOption: deliveryOption,
         securityAttribute: securityAttribute,
         formPurpose: formPurpose,
-      });
+      };
+      const formRecord = versioningEnabled
+        ? await updateDbTemplateV2(updateArgs)
+        : await updateDbTemplate(updateArgs);
 
       if (!formRecord) {
         throw new Error("Failed to update template");

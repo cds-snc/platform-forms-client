@@ -41,7 +41,7 @@ export async function getTemplateWithAssignedUsers(formID: string): Promise<{
   return {
     formRecord: parseTemplate(templateWithAssociatedUsers, {
       version: getBuilderVersion(templateWithAssociatedUsers),
-      isPublished: undefined,
+      isPublished: templateWithAssociatedUsers.currentDraftVersion ? false : undefined,
     }),
     users: templateWithAssociatedUsers.users,
   };

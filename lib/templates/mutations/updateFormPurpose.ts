@@ -9,11 +9,17 @@ import {
 } from "@lib/auditLogs";
 import { TemplateAlreadyPublishedError } from "../internal/errors";
 import { parseTemplate } from "../internal";
+import { isTemplateVersioningEnabled } from "../versioning/internal";
+import { updateFormPurpose as updateFormPurposeVersioningEnabled } from "../versioning/mutations/updateFormPurpose";
 
 export async function updateFormPurpose(
   formID: string,
   formPurpose: string
 ): Promise<FormRecord | null> {
+  if (await isTemplateVersioningEnabled()) {
+    return updateFormPurposeVersioningEnabled(formID, formPurpose);
+  }
+
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
       e.user.id,

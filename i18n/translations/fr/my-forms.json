@@ -60,7 +60,7 @@
       "cloneSuccess": "Le formulaire a été dupliqué.",
       "cloneFailed": "Le formulaire n'a pas pu être dupliqué.",
       "ariaLabel": "Menu pour le formulaire {{name}}",
-      "createDraftVersion": "Créer une ébauche"
+      "createDraftVersion": "Modifier le formulaire publié"
     },
     "actionRequired": "Réponses en retard",
     "editLock": {

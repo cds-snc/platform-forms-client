@@ -7,6 +7,8 @@ import { deleteDraftFormResponses } from "@lib/vault";
 import { TemplateAlreadyPublishedError } from "../internal/errors";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { parseTemplate } from "../internal";
+import { isTemplateVersioningEnabled } from "../versioning/internal";
+import { updateIsPublishedForTemplate as updateIsPublishedForTemplateVersioningEnabled } from "@lib/templates/versioning/mutations/updateIsPublishedForTemplate";
 
 /**
  * Update `isPublished` value for a specific form.
@@ -18,6 +20,16 @@ export async function updateIsPublishedForTemplate(
   publishFormType: string,
   publishDescription: string
 ): Promise<FormRecord | null> {
+  if (await isTemplateVersioningEnabled()) {
+    return updateIsPublishedForTemplateVersioningEnabled(
+      formID,
+      isPublished,
+      publishReason,
+      publishFormType,
+      publishDescription
+    );
+  }
+
   // Alias the isPublished value to newPublishStatus for clarity within the function
   const newPublishStatus = isPublished;
 
