@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add lastEditedBy to the FormRecord type
 
-
 ## [1.0.33] - 2026-06-03
 
 - Add users and invitations to the FormRecord type
