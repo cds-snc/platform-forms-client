@@ -5,8 +5,8 @@ import { ClosedDetails, NotificationsInterval } from "@gcforms/types";
 import { authorization } from "@lib/privileges";
 import {
   AuditLogAccessDeniedDetails,
-  AuditLogDetails,
-  AuditLogEvent,
+  // AuditLogDetails,
+  // AuditLogEvent,
   logEvent,
 } from "@lib/auditLogs";
 import { checkForBetaComponentsAsync } from "@lib/validation/betaCheck";
@@ -15,6 +15,7 @@ import { checkFlag, parseTemplate } from "../internal";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "../internal/errors";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
+import { isValidISODate } from "@lib/utils/date/isValidISODate";
 
 type UpdateTemplateCommand =
   | GeneralUpdateTemplateCommand
@@ -54,7 +55,7 @@ type GeneralUpdateTemplateCommand = BaseUpdateCommand & {
 type UpdateClosedDataCommand = BaseUpdateCommand & {
   action: "closedData";
   closingDate: string | null;
-  details?: ClosedDetails;
+  closedDetails?: ClosedDetails;
 };
 
 type UpdateFormBrandingCommand = BaseUpdateCommand & {
@@ -152,6 +153,141 @@ const authorizeForCommand = async (
   }
 };
 
+type UpdatePlan = {
+  where: Prisma.TemplateWhereUniqueInput;
+  data: Prisma.TemplateUpdateInput;
+  include: Prisma.TemplateInclude;
+};
+
+const buildUpdatePlan = (command: UpdateTemplateCommand): UpdatePlan => {
+  const basePlan = {
+    where: {
+      id: command.formID,
+    },
+    include: {
+      deliveryOption: true,
+    },
+  };
+
+  switch (command.action) {
+    case "full":
+      return {
+        ...basePlan,
+        data: {
+          jsonConfig: command.formConfig as Prisma.JsonObject,
+          name: command.name,
+          ...(command.deliveryOption && {
+            deliveryOption: {
+              upsert: {
+                create: {
+                  emailAddress: command.deliveryOption.emailAddress,
+                  emailSubjectEn: command.deliveryOption.emailSubjectEn,
+                  emailSubjectFr: command.deliveryOption.emailSubjectFr,
+                },
+                update: {
+                  emailAddress: command.deliveryOption.emailAddress,
+                  emailSubjectEn: command.deliveryOption.emailSubjectEn,
+                  emailSubjectFr: command.deliveryOption.emailSubjectFr,
+                },
+              },
+            },
+          }),
+          ...(command.securityAttribute && {
+            securityAttribute: command.securityAttribute as string,
+          }),
+          ...(command.formPurpose && { formPurpose: command.formPurpose }),
+          ...(command.notificationsInterval !== undefined && {
+            notificationsInterval: command.notificationsInterval as NotificationsInterval,
+          }),
+        },
+      };
+    case "closedData":
+      if (command.closingDate !== null && !isValidISODate(String(command.closingDate))) {
+        throw new Error(`Invalid ISO date ${command.closingDate}`);
+      }
+      return {
+        ...basePlan,
+        data: {
+          closingDate: command.closingDate,
+          ...(command.closedDetails && {
+            closedDetails:
+              command.closedDetails !== null
+                ? (command.closedDetails as Prisma.JsonObject)
+                : Prisma.JsonNull,
+          }),
+        },
+      };
+    case "formBranding":
+      return {
+        ...basePlan,
+        data: {
+          jsonConfig: command.formConfig as Prisma.JsonObject,
+        },
+      };
+    case "formPurpose":
+      return {
+        ...basePlan,
+        data: {
+          formPurpose: command.formPurpose,
+        },
+      };
+    case "formSaveAndResume":
+      return {
+        ...basePlan,
+        data: {
+          saveAndResume: command.saveAndResume,
+        },
+      };
+    case "isPublished":
+      return {
+        ...basePlan,
+        where: {
+          id: command.formID,
+          isPublished: false,
+        },
+        data: {
+          isPublished: command.isPublished,
+        },
+      };
+    case "securityAttribute":
+      return {
+        ...basePlan,
+        where: {
+          id: command.formID,
+          isPublished: false,
+        },
+        data: {
+          securityAttribute: command.securityAttribute as string,
+        },
+      };
+    default:
+      throw new Error(`Unknown command action: ${JSON.stringify(command)}`);
+  }
+};
+
+const executeTemplateUpdate = async (updatePlan: UpdatePlan) => {
+  const updatedTemplate = await prisma.template
+    .update({
+      where: updatePlan.where,
+      data: updatePlan.data,
+      include: updatePlan.include,
+    })
+    .catch((e) => {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === "P2025") {
+          throw new TemplateAlreadyPublishedError();
+        }
+      }
+      return prismaErrors(e, null);
+    });
+
+  if (updatedTemplate === null) return null;
+
+  // if (formCache.cacheAvailable) formCache.invalidate(updatePlan.where.id);
+
+  return parseTemplate(updatedTemplate);
+};
+
 /**
  * Update a form template
  * @param template A Form Record containing updated information
@@ -160,63 +296,25 @@ const authorizeForCommand = async (
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
   const { user } = await authorizeForCommand(command);
 
-  const currentTemplate = await prisma.template.findUnique({
-    where: {
-      id: command.formID,
-    },
-    select: {
-      name: true,
-      deliveryOption: true,
-      securityAttribute: true,
-    },
-  });
+  // const currentTemplate = await prisma.template.findUnique({
+  //   where: {
+  //     id: command.formID,
+  //   },
+  //   select: {
+  //     name: true,
+  //     deliveryOption: true,
+  //     securityAttribute: true,
+  //   },
+  // });
 
-  switch (command.action) {
-    case "full":
-      await validateFormConfig(command.formConfig, user);
-      const updatedTemplate = await prisma.template
-        .update({
-          where: {
-            id: command.formID,
-          },
-          data: {
-            jsonConfig: command.formConfig as Prisma.JsonObject,
-            name: command.name,
-            ...(command.deliveryOption && {
-              deliveryOption: {
-                upsert: {
-                  create: {
-                    emailAddress: command.deliveryOption.emailAddress,
-                    emailSubjectEn: command.deliveryOption.emailSubjectEn,
-                    emailSubjectFr: command.deliveryOption.emailSubjectFr,
-                  },
-                  update: {
-                    emailAddress: command.deliveryOption.emailAddress,
-                    emailSubjectEn: command.deliveryOption.emailSubjectEn,
-                    emailSubjectFr: command.deliveryOption.emailSubjectFr,
-                  },
-                },
-              },
-            }),
-            ...(command.securityAttribute && {
-              securityAttribute: command.securityAttribute as string,
-            }),
-            ...(command.formPurpose && { formPurpose: command.formPurpose }),
-            ...(command.notificationsInterval !== undefined && {
-              notificationsInterval: command.notificationsInterval as NotificationsInterval,
-            }),
-          },
-          include: {
-            deliveryOption: true,
-          },
-        })
-        .catch((e) => prismaErrors(e, null));
-
-      if (updatedTemplate === null) throw new TemplateAlreadyPublishedError();
-
-      return parseTemplate(updatedTemplate);
-      break;
+  if ("formConfig" in command) {
+    await validateFormConfig(command.formConfig, user);
   }
+
+  const updatePlan = buildUpdatePlan(command);
+  const updatedTemplate = await executeTemplateUpdate(updatePlan);
+
+  return updatedTemplate;
 
   if (formCache.cacheAvailable) formCache.invalidate(command.formID);
 
