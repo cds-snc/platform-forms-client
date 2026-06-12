@@ -61,7 +61,7 @@ export const unConfirmedResponsesExist = AuthenticatedAction(async (_, formId: s
 });
 
 export const getFormEvents = AuthenticatedAction(
-  async (session, formId: string, filter: string[] | undefined) => {
+  async (session, formId: string, translated: boolean, filter: string[] | undefined) => {
     try {
       await authorization.canViewForm(formId).catch((e) => {
         if (e instanceof AccessControlError) {
@@ -116,15 +116,23 @@ export const getFormEvents = AuthenticatedAction(
         { callingUserId: userId, formId: formId }
       );
 
-      return events.map((event) => {
-        return {
-          formId: event.subject.split("#")[1],
-          userId: event.userId,
-          event: event.event,
-          timestamp: new Date(event.timestamp).toISOString(),
-          description: event.description,
-        };
-      });
+      return events
+        .map((event) => {
+          const dateOfEvent = new Date(event.timestamp);
+          // Only return if event is after June 15th 2026.
+          if (dateOfEvent < new Date("2026-06-15") && translated) {
+            return null;
+          } else {
+            return {
+              formId: event.subject.split("#")[1],
+              userId: event.userId,
+              event: event.event,
+              timestamp: dateOfEvent.toISOString(),
+              description: event.description,
+            };
+          }
+        })
+        .filter((event) => event !== null);
     } catch (error) {
       logMessage.error(
         `Critical Error fetching form events for formId ${formId}: ${error instanceof Error ? error.message : "Unknown error"}`
