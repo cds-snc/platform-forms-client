@@ -22,7 +22,11 @@
     "noPublishedForms": "You have no published forms.",
     "noRecentlyEditedForms": "You have no recently edited forms.",
     "noArchivedForms": "You have no archived forms.",
-    "lastEditedBy": "By: {{lastEditedBy}}"
+    "lastEditedBy": "By: {{lastEditedBy}}",
+    "readOnly": "Open - ",
+    "editing": "{{name}} is editing",
+    "announceLocked": "Form named {{formName}} is now being edited",
+    "announceUnlockedLocked": "Form named {{formName}} is no longer being edited"
   },
   "card": {
     "sharedWith_one": "Shared with {{count}} person",
