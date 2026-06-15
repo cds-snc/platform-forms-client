@@ -113,14 +113,28 @@ export const createOrUpdateTemplate = AuthenticatedAction(
 
     try {
       if (id) {
-        return await updateTemplate({
-          id,
-          formConfig,
-          name,
-          deliveryOption,
-          securityAttribute,
-          formPurpose,
-        });
+        try {
+          await assertTemplateEditLockIfEnabled({
+            templateId: id,
+            userId: session.user.id,
+          });
+          const formRecord = await updateDbTemplate({
+            action: "full",
+            formID: id,
+            formConfig: formConfig,
+            name: name,
+            deliveryOption: deliveryOption,
+            securityAttribute: securityAttribute,
+            formPurpose: formPurpose,
+          });
+
+          return { formRecord };
+        } catch (e) {
+          if (e instanceof TemplateEditLockedError) {
+            return { formRecord: null, error: "editLocked" };
+          }
+          return { formRecord: null, error: "error" };
+        }
       }
 
       const formRecord = await createDbTemplate({
