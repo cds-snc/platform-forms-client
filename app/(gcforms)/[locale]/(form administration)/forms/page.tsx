@@ -144,6 +144,7 @@ export default async function Page(props: {
       isPublished,
       updatedAt,
       ttl,
+      lastEditedBy,
     } = template;
 
     // Calculate collaborator count from DB data
@@ -172,6 +173,7 @@ export default async function Page(props: {
         userCount,
         pendingUserCount,
       },
+      lastEditedBy,
     };
   });
 

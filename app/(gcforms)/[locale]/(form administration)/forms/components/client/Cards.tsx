@@ -99,9 +99,7 @@ export const Cards = ({
         {templates.length > 0 ? (
           <>
             <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
-              {(tabStatus === TAB_STATUS.DRAFT ||
-                tabStatus === TAB_STATUS.PUBLISHED ||
-                !tabStatus) && (
+              {(tabStatus !== TAB_STATUS.ARCHIVED || !tabStatus) && (
                 <li className="flex h-full w-full max-w-[16em]" key={-1}>
                   <NewFormButton />
                 </li>

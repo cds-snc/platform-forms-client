@@ -549,22 +549,22 @@
     "title": "Obtenir une copie du formulaire"
   },
   "auditDownload": {
-    "description": "Obtenez une feuille de calcul avec l'historique des dernières actions clés effectuées dans un formulaire. Celles-ci pourraient prendre quelques minutes pour apparaître dans le journal d'activité et seront disponibles jusqu'à 30 jours.",
+    "description": "Obtenez une feuille de calcul avec les activités les plus récentes. Formulaires GC affiche des activités de création, de collaboration et d’intégration API seulement. Veuillez permettre quelques minutes pour que les activités apparaissent dans la feuille de calcul. Vous obtiendrez les activités des 30 derniers jours, à partir du 15 juin 2026.",
     "downloadBtnText": "Télécharger l'activité récente",
-    "title": "Afficher l'activité du formulaire",
+    "title": "Afficher l’activité récente du formulaire",
     "dialog": {
-      "title": "Télécharger l'activité du formulaire",
+      "title": "Télécharger l’activité du formulaire",
       "downloadBtnText": "Télécharger",
-      "allEventsTitle": "Tous les événements disponibles",
-      "allEventsDescription": "Téléchargez tous les événements qui se sont produits dans le formulaire dans les derniers 30 jours.",
-      "allEventsCheckbox": "Tous les événements disponibles",
-      "specificEventsTitle": "Événements spécifiques",
-      "specificEventsDescription": "Choisissez les événements que vous souhaitez avoir dans le fichier CSV.",
+      "allEventsTitle": "Télécharger toute activité récente :",
+      "allEventsDescription": "Nous n’enregistrons que l’activité des 30 derniers jours.",
+      "allEventsCheckbox": "Toute activité disponible",
+      "specificEventsTitle": "Activités spécifiques",
+      "specificEventsDescription": "Choisissez les activités à inclure dans le tableau :",
       "specific": {
-        "formBuilding": "Création du formulaires",
-        "formCollaboration": "Collaborateurs sur le formulaire",
+        "formBuilding": "Création du formulaire",
+        "formCollaboration": "Collaboration sur le formulaire",
         "responseDownloads": "Récupération des réponses",
-        "apiIntegrations": "Intégration API"
+        "apiIntegrations": "Intégration avec l’API"
       }
     },
     "headers": {
@@ -889,8 +889,7 @@
         "title": "Configurer l’intégration API",
         "text1": "Cette section s'adresse aux développeur·se·s qui souhaitent utiliser l'API pour extraire les données des soumissions au formulaire vers un système cible avec une intégration sur mesure. Une fois l’API configurée, les réponses pourront être récupérées à partir d'un point de terminaison programmatiquement. Consultez notre site de documentation pour en savoir plus.",
 
-        "text1": "This section is for developers who want to use the API to pull form submission data to a target system with a custom integration. Once set-up, responses can be retrieved from the API endpoint programmatically. Visit our documentation site for more information.",
-
+        "text1": "Cette section s'adresse aux développeur·se·s qui souhaitent utiliser l'API pour extraire les données de soumission de formulaires vers un système cible avec une intégration personnalisée. Une fois la configuration effectuée, les réponses peuvent être récupérées programmatiquement à partir du point de terminaison de l'API. Consultez notre site de documentation pour plus d'informations.",
         "docsButton": {
           "text": "Accéder à la documentation API",
           "link": "https://cds-snc.github.io/forms-api/fr"
@@ -1013,7 +1012,7 @@
           "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
         },
         "archivedForm": {
-          "subject": "Un formulaire dont vous êtes propriétaire a été archivé | A form you are owner of has been archived",
+          "subject": "Your form has been archived | Votre formulaire a été archivé",
           "paragraph1": "Votre formulaire a été archivé :",
           "paragraph2": "Cette action a été effectuée par :",
           "paragraph3": "Le formulaire peut être désarchivé à partir du dossier d'archives, dans les 30 jours suivant l'archivage.",
